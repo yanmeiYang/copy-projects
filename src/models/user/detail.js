@@ -41,7 +41,7 @@ export default {
 
   reducers: {
     querySuccess (state, { payload }) {
-      const { data } = payload
+      const { data } = payload;
       return {
         ...state,
         data,

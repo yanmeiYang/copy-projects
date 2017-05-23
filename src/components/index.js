@@ -1,7 +1,7 @@
 import DataTable from './DataTable'
 import DropOption from './DropOption'
 import Iconfont from './Iconfont'
-import Search from './Search'
+import SearchBox from './SearchBox'
 import Editor from './Editor'
 import FilterItem from './FilterItem'
 import * as Layout from './Layout/index.js'
@@ -13,7 +13,7 @@ export {
   DataTable,
   DropOption,
   Iconfont,
-  Search,
+  SearchBox,
   Editor,
   FilterItem,
   layer,

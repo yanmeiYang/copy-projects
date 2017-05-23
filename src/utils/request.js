@@ -6,7 +6,7 @@ import lodash from 'lodash'
 import pathToRegexp from 'path-to-regexp'
 import { message } from 'antd'
 
-axios.defaults.baseURL = baseURL
+axios.defaults.baseURL = baseURL;
 
 const fetch = (options) => {
   let {

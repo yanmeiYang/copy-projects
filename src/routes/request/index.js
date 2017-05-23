@@ -10,88 +10,88 @@ import {
   Input,
   Button,
 } from 'antd'
-const { api, baseURL } = config
-const { dashboard, users, userLogin, user } = api
+// const { api, baseURL } = config;
+// const { dashboard, users, userLogin, user } = api
 
-const requestOptions = [
-  {
-    url: baseURL + user.replace('/:id', ''),
-    desc: 'intercept request by mock.js',
-  },
-  {
-    url: baseURL + dashboard,
-    desc: 'intercept request by mock.js',
-  },
-  {
-    url: baseURL + userLogin,
-    method: 'post',
-    data: {
-      username: 'guest',
-      password: 'guest',
-    },
-    desc: 'intercept request by mock.js',
-  },
-  {
-    url: baseURL + users,
-    desc: 'intercept request by mock.js',
-  },
-  {
-    url: baseURL + user,
-    desc: 'intercept request by mock.js',
-    data: Mock.mock({
-      id: '@id',
-    }),
-  },
-  {
-    url: baseURL + user.replace('/:id', ''),
-    desc: 'intercept request by mock.js',
-    method: 'post',
-    data: Mock.mock({
-      name: '@cname',
-      nickName: '@last',
-      phone: /^1[34578]\d{9}$/,
-      'age|11-99': 1,
-      address: '@county(true)',
-      isMale: '@boolean',
-      email: '@email',
-      avatar () {
-        return Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', this.nickName.substr(0, 1))
-      },
-    }),
-  },
-  {
-    url: baseURL + user,
-    desc: 'intercept request by mock.js',
-    method: 'patch',
-    data: Mock.mock({
-      id: '@id',
-      name: '@cname',
-    }),
-  },
-  {
-    url: baseURL + user,
-    desc: 'intercept request by mock.js',
-    method: 'delete',
-    data: Mock.mock({
-      id: '@id',
-    }),
-  },
-  {
-    url: `${baseURL}/test`,
-    desc: 'intercept request by mock.js',
-    method: 'get',
-  },
-  {
-    url: 'http://api.asilu.com/weather/',
-    desc: 'cross-domain request, but match config.baseURL(./src/utils/config.js)',
-  },
-  {
-    url: 'http://www.zuimeitianqi.com/zuimei/queryWeather',
-    data: {
-      cityCode: '01010101',
-    },
-    desc: 'cross-domain request by yahoo\'s yql',
-  }]
+// const requestOptions = [
+//   {
+//     url: baseURL + user.replace('/:id', ''),
+//     desc: 'intercept request by mock.js',
+//   },
+//   {
+//     url: baseURL + dashboard,
+//     desc: 'intercept request by mock.js',
+//   },
+//   {
+//     url: baseURL + userLogin,
+//     method: 'post',
+//     data: {
+//       username: 'guest',
+//       password: 'guest',
+//     },
+//     desc: 'intercept request by mock.js',
+//   },
+//   {
+//     url: baseURL + users,
+//     desc: 'intercept request by mock.js',
+//   },
+//   {
+//     url: baseURL + user,
+//     desc: 'intercept request by mock.js',
+//     data: Mock.mock({
+//       id: '@id',
+//     }),
+//   },
+//   {
+//     url: baseURL + user.replace('/:id', ''),
+//     desc: 'intercept request by mock.js',
+//     method: 'post',
+//     data: Mock.mock({
+//       name: '@cname',
+//       nickName: '@last',
+//       phone: /^1[34578]\d{9}$/,
+//       'age|11-99': 1,
+//       address: '@county(true)',
+//       isMale: '@boolean',
+//       email: '@email',
+//       avatar () {
+//         return Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', this.nickName.substr(0, 1))
+//       },
+//     }),
+//   },
+//   {
+//     url: baseURL + user,
+//     desc: 'intercept request by mock.js',
+//     method: 'patch',
+//     data: Mock.mock({
+//       id: '@id',
+//       name: '@cname',
+//     }),
+//   },
+//   {
+//     url: baseURL + user,
+//     desc: 'intercept request by mock.js',
+//     method: 'delete',
+//     data: Mock.mock({
+//       id: '@id',
+//     }),
+//   },
+//   {
+//     url: `${baseURL}/test`,
+//     desc: 'intercept request by mock.js',
+//     method: 'get',
+//   },
+//   {
+//     url: 'http://api.asilu.com/weather/',
+//     desc: 'cross-domain request, but match config.baseURL(./src/utils/config.js)',
+//   },
+//   {
+//     url: 'http://www.zuimeitianqi.com/zuimei/queryWeather',
+//     data: {
+//       cityCode: '01010101',
+//     },
+//     desc: 'cross-domain request by yahoo\'s yql',
+//   }]
 
 export default class RequestPage extends React.Component {
   constructor (props) {

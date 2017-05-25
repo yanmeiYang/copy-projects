@@ -20,3 +20,10 @@ export async function getSeminars(offset, size) {
     url: api.getSeminars.replace(':offset', offset).replace(':size', size),
   });
 }
+
+export async function getRoster() {
+  return request({
+    url: api.getRoster,
+  })
+
+}

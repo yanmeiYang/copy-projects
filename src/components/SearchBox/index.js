@@ -7,39 +7,39 @@ class SearchBox extends React.Component {
   state = {
     clearVisible: false,
     selectValue: (this.props.select && this.props.selectProps) ? this.props.selectProps.defaultValue : '',
-  }
+  };
 
   handleSearch = () => {
     const data = {
       query: ReactDOM.findDOMNode(this.refs.searchInput).value,
-    }
+    };
     if (this.props.select) {
       data.field = this.state.selectValue;
     }
     if (this.props.onSearch) this.props.onSearch(data);
-  }
+  };
 
   handleInputChange = e => {
     this.setState({
       ...this.state,
       clearVisible: e.target.value !== '',
     });
-  }
+  };
 
-  handleSelectChange = value => {
+  handleSelectChange = (value) => {
     this.setState({
       ...this.state,
       selectValue: value,
-    })
-  }
+    });
+  };
 
   handleClearInput = () => {
     ReactDOM.findDOMNode(this.refs.searchInput).value = '';
     this.setState({
       clearVisible: false,
-    })
+    });
     this.handleSearch();
-  }
+  };
   render() {
     const { size, select, selectOptions, selectProps, style, keyword } = this.props;
     const { clearVisible } = this.state;

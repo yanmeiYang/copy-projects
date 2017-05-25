@@ -9,6 +9,7 @@ export default {
     results: [],
     offset: 0,
     query: null,
+    seminars: [],
     isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
     pagination: {
       showSizeChanger: true,
@@ -22,7 +23,11 @@ export default {
 
   subscriptions: {
     setup({ dispatch, history }) {  // eslint-disable-line
-      history.listen(location => {
+      history.listen((location) => {
+        console.log(location);
+        if (location.pathname === '/') {
+          dispatch({ type: 'getSeminars', payload: { offset: 0, size: 10 } });
+        }
         const match = pathToRegexp('/search/:query/:offset/:size').exec(location.pathname);
         if (match) {
           const query = decodeURIComponent(match[1]);
@@ -41,11 +46,18 @@ export default {
       const data = yield call(searchService.searchPerson, query, offset, size);
       yield put({ type: 'searchPersonSuccess', payload: { data } });
     },
+    *getSeminars({ payload }, { call, put }) {
+      const { offset, size } = payload;
+      console.log(payload);
+      const { data } = yield call(searchService.getSeminars, offset, size);
+      console.log(data);
+      yield put({ type: 'getSeminarsSuccess', payload: { data } });
+    },
   },
 
   reducers: {
     setParams(state, { payload: { query, offset, size } }) {
-        return { ...state, query, offset, pagination: { pageSize: size } };
+      return { ...state, query, offset, pagination: { pageSize: size } };
     },
 
     searchPersonSuccess(state, { payload: { data } }) {
@@ -53,6 +65,10 @@ export default {
       const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
       console.log(result, total, current);
       return { ...state, results: result,  pagination: { total, current } };
+    },
+
+    getSeminarsSuccess(state, { payload: { data } }) {
+      return { ...state, seminars: data };
     },
   },
 

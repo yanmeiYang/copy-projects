@@ -9,7 +9,7 @@ import './app.less';
 
 const { prefix } = config;
 
-const { Header, Bread, Footer, Sider, styles } = Layout;
+const { Header, Footer, Sider, styles } = Layout;
 let lastHref;
 
 const App = ({ children, location, dispatch, app, loading }) => {
@@ -44,11 +44,11 @@ const App = ({ children, location, dispatch, app, loading }) => {
     changeOpenKeys(openKeys) {
       dispatch({ type: 'app/handleNavOpenKeys', payload: { navOpenKeys: openKeys } });
     },
-  }
+  };
 
-  const breadProps = {
-    menu,
-  }
+  // const breadProps = {
+  //   menu,
+  // };
 
   const siderProps = {
     menu,

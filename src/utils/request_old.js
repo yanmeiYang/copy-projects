@@ -96,7 +96,7 @@ export default function request (options) {
       message: statusText,
       status,
       ...data,
-    }
+    };
   }).catch((error) => {
     const { response } = error
     let msg
@@ -112,5 +112,5 @@ export default function request (options) {
       msg = 'Network Error'
     }
     return { success: false, status, message: msg, ...otherData }
-  })
+  });
 }

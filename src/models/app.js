@@ -41,19 +41,17 @@ export default {
         });
         if (location.pathname === '/login') {
           yield put(routerRedux.push('/dashboard'));
-        };
-      } else {
-        if (location.pathname !== '/login') {
-          let from = location.pathname;
-          if (location.pathname === '/dashboard') {
-            from = '/dashboard';
-          }
-          // window.location = `${location.origin}/login?from=${from}`;
         }
+      } else if (location.pathname !== '/login') {
+        let from = location.pathname;
+        if (location.pathname === '/dashboard') {
+          from = '/dashboard';
+        }
+        // window.location = `${location.origin}/login?from=${from}`;
       }
     },
 
-    *logout ({
+    *logout({
       payload,
     }, { call, put }) {
       const data = yield call(logout, parse(payload));
@@ -64,7 +62,7 @@ export default {
       }
     },
 
-    *changeNavbar ({
+    *changeNavbar({
       payload,
     }, { put, select }) {
       const { app } = yield(select(_ => _));
@@ -75,6 +73,7 @@ export default {
     },
 
   },
+
   reducers: {
     querySuccess (state, { payload: user }) {
       return {

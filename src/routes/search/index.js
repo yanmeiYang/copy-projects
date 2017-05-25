@@ -1,7 +1,7 @@
 import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
-import { Tabs } from 'antd';
+import { Tabs, Icon, Tag } from 'antd';
 import List from './List';
 import SearchBox from '../../components/SearchBox';
 import styles from './index.less';
@@ -148,6 +148,9 @@ const Search = ({ location, dispatch, search, loading }) => {
           results.map((result) => {
             const name1 = result.name_zh ? result.name_zh : result.name;
             const name2 = result.name_zh ? result.name : null;
+            const position = result.pos && result.pos.length > 0 ? result.pos[0].n : null;
+            const aff = result.contact && result.contact.affiliation ? result.contact.affiliation : null;
+            const address = result.contact && result.contact.address ? result.contact.address : null;
             return (<div className={styles.person} key={result.id}>
               <div className={styles.left}>
                 <img src={`${result.avatar}`} alt="头像" />
@@ -172,6 +175,25 @@ const Search = ({ location, dispatch, search, loading }) => {
                     <span className={styles.label}>引用数:</span>
                     <span>{result.indices.num_citation}</span>
                   </div>
+                </div>
+                <div className={styles.infoWrap}>
+                  {position ? (<p className={styles.infoItem}>
+                    <Icon type="idcard" />
+                    { position }
+                  </p>) : ''}
+                  {aff ? (<p className={styles.infoItem}>
+                    <Icon type="home" />
+                    { aff }
+                  </p>) : ''}
+                  {address ? (<p className={styles.infoItem}>
+                    <Icon type="environment" />
+                    { address }
+                  </p>) : ''}
+                </div>
+                <div className={styles.tagWrap}>
+                  {result.tags.map((tag) => {
+                    return (<Tag>{tag.t}</Tag>);
+                  })}
                 </div>
               </div>
             </div>);

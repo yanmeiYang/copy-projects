@@ -6,7 +6,7 @@ import SearchBox from '../../components/SearchBox';
 
 function IndexPage({ dispatch, search }) {
   const { seminars } = search;
-  console.log(seminars);
+
   function onSearch({ query }) {
     dispatch(routerRedux.push({
       pathname: `/search/${query}/0/30`,

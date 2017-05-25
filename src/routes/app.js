@@ -6,6 +6,7 @@ import { Layout } from '../components';
 import { classnames, config, menu } from '../utils';
 import '../themes/index.less';
 import './app.less';
+
 const { prefix } = config;
 
 const { Header, Bread, Footer, Sider, styles } = Layout;
@@ -89,8 +90,8 @@ const App = ({ children, location, dispatch, app, loading }) => {
         <div className={styles.main}>
           <div className={styles.container}>
             <div className={styles.content}>
-              <Bread {...breadProps} location={location} />
-              {children}
+              {/*<Bread {...breadProps} location={location} />*/}
+              {children}f
             </div>
           </div>
           <Footer />

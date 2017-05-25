@@ -16,10 +16,11 @@ module.exports = {
   apiPrefix: '/api/',
   api: {
     searchPerson: '/search/person',
+    userLogin: '/auth/signin',
     // userLogout: '/user/logout',
     // userInfo: '/userInfo',
     // users: '/users',
     // user: '/user/:id',
     // dashboard: '/dashboard',
   },
-}
+};

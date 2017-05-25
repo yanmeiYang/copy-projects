@@ -33,8 +33,8 @@ export default {
         const match = pathToRegexp('/search/:query/:offset/:size').exec(location.pathname);
         if (match) {
           const query = decodeURIComponent(match[1]);
-          const offset = parseInt(match[2]);
-          const size = parseInt(match[3]);
+          const offset = parseInt(match[2], 10);
+          const size = parseInt(match[3], 10);
           dispatch({ type: 'searchPerson', payload: { query, offset, size } });
           dispatch({ type: 'setParams', payload: { query, offset, size } });
         }
@@ -45,14 +45,12 @@ export default {
   effects: {
     *searchPerson({ payload }, { call, put }) {  // eslint-disable-line
       const { query, offset, size } = payload;
-      const data = yield call(searchService.searchPerson, query, offset, size);
+      const { data } = yield call(searchService.searchPerson, query, offset, size);
       yield put({ type: 'searchPersonSuccess', payload: { data } });
     },
     *getSeminars({ payload }, { call, put }) {
       const { offset, size } = payload;
-      console.log(payload);
       const { data } = yield call(searchService.getSeminars, offset, size);
-      console.log(data);
       yield put({ type: 'getSeminarsSuccess', payload: { data } });
     },
     *getRoster({ payload }, { call, put }) {

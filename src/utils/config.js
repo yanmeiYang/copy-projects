@@ -9,7 +9,7 @@ module.exports = {
   logo: '/logo.png',
   iconFontCSS: '/iconfont.css',
   iconFontJS: '/iconfont.js',
-  baseURL: 'https://api.aminer.org/api/',
+  baseURL: 'https://api.aminer.org/api',
   YQL: ['http://www.zuimeitianqi.com'],
   CORS: ['http://localhost:7000'],
   openPages: ['/login'],

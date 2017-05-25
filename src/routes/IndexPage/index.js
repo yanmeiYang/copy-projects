@@ -9,6 +9,7 @@ function IndexPage({ dispatch, search }) {
   const { seminars, rosters } = search;
   let commonSearch = [ '大数据', '机器学习', '社交媒体', '深度学习', '数据挖掘', '健康医疗', '计算机网络', '人机交互', '人工智能'];
   let organization = [ '高性能计算机协会', '计算机安全协会', '普通计算协会', '高性能计算机协会1', '计算机安全协会1', '普通计算协会1', '高性能计算机协会2', '计算机安全协会2', '普通计算协会2'];
+
   function onSearch({ query }) {
     dispatch(routerRedux.push({
       pathname: `/search/${query}/0/30`,

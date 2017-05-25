@@ -21,8 +21,13 @@ function checkStatus(response) {
  * @param  {object} [options] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-export default async function request({ url, options }) {
-  const newUrl = baseURL + url;
+export default async function request(url, options) {
+  let newUrl = baseURL + url;
+  if (options && options.method.toUpperCase() !== 'POST' && options.data) {
+    const queryList = Object.keys(options.data).map(k => `${k}=${options.data[k]}`);
+    const queryString = queryList.join('&');
+    newUrl = `${newUrl}?${queryString}`;
+  }
   const token = localStorage.getItem('token');
   const header = new Headers();
   if (token) {

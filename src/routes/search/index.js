@@ -115,7 +115,7 @@ const Search = ({ location, dispatch, search, loading }) => {
           <span>分类筛选</span>
         </div>
         <div className={styles.searchWrap}>
-          <h1>云智库搜索</h1>
+          <h3>云智库搜索</h3>
           <SearchBox size="large" style={{ width: 500 }} onSearch={onSearch} />
         </div>
       </div>
@@ -143,8 +143,43 @@ const Search = ({ location, dispatch, search, loading }) => {
           <TabPane tab="论文数" key="num_pubs" />
         </Tabs>
       </div>
+      <div className={styles.personWrap}>
+        {
+          results.map((result) => {
+            const name1 = result.name_zh ? result.name_zh : result.name;
+            const name2 = result.name_zh ? result.name : null;
+            return (<div className={styles.person} key={result.id}>
+              <div className={styles.left}>
+                <img src={`${result.avatar}`} alt="头像" />
+              </div>
+              <div className={styles.right}>
+                <div className={styles.nameWrap}>
+                  <h3>{name1}</h3>
+                  { name2 ? <h4>{`(${name2})`}</h4> : '' }
+                </div>
+                <div className={styles.statWrap}>
+                  <div className={styles.item}>
+                    <span className={styles.label}>h-index:</span>
+                    <span>{result.indices.h_index}</span>
+                  </div>
+                  <span className={styles.split}>|</span>
+                  <div className={styles.item}>
+                    <span className={styles.label}>论文数:</span>
+                    <span>{result.indices.num_pubs}</span>
+                  </div>
+                  <span className={styles.split}>|</span>
+                  <div className={styles.item}>
+                    <span className={styles.label}>引用数:</span>
+                    <span>{result.indices.num_citation}</span>
+                  </div>
+                </div>
+              </div>
+            </div>);
+          })
+        }
+      </div>
       {/*<Filter {...filterProps} />*/}
-      <List {...listProps} />
+      {/*<List {...listProps} />*/}
       {/*{modalVisible && <Modal {...modalProps} />}*/}
     </div>
   );

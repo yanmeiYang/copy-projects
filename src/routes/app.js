@@ -91,7 +91,7 @@ const App = ({ children, location, dispatch, app, loading }) => {
           <div className={styles.container}>
             <div className={styles.content}>
               {/*<Bread {...breadProps} location={location} />*/}
-              {children}f
+              {children}
             </div>
           </div>
           <Footer />

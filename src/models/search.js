@@ -7,7 +7,6 @@ export default {
 
   state: {
     results: [],
-    rosters: [],
     offset: 0,
     query: null,
     seminars: [],
@@ -27,7 +26,7 @@ export default {
       history.listen((location) => {
         console.log(location);
         if (location.pathname === '/') {
-          dispatch({ type: 'getSeminars', payload: { offset: 0, size:5  } });
+          dispatch({ type: 'getSeminars', payload: { offset: 0, size: 5 } });
           dispatch({ type: 'getRoster', });
         }
         const match = pathToRegexp('/search/:query/:offset/:size').exec(location.pathname);
@@ -53,10 +52,6 @@ export default {
       const { data } = yield call(searchService.getSeminars, offset, size);
       yield put({ type: 'getSeminarsSuccess', payload: { data } });
     },
-    *getRoster({ payload }, { call, put }) {
-      const { data } = yield call(searchService.getRoster);
-      yield put({ type: 'getRosterSuccess', payload: { data } });
-    }
   },
 
   reducers: {
@@ -68,16 +63,13 @@ export default {
       const { result, total } = data;
       const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
       console.log(result, total, current);
-      return { ...state, results: result,  pagination: { total, current } };
+      return { ...state, results: result, pagination: { total, current } };
     },
 
     getSeminarsSuccess(state, { payload: { data } }) {
       return { ...state, seminars: data };
     },
 
-    getRosterSuccess(state, { payload: {data} }) {
-      return { ...state, rosters: data };
-    }
   },
 
 };

@@ -17,9 +17,3 @@ export async function getSeminars(offset, size) {
   return request(api.getSeminars.replace(':offset', offset).replace(':size', size));
 }
 
-export async function getRoster() {
-  return request({
-    url: api.getRoster,
-  })
-
-}

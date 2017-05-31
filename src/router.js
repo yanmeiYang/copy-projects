@@ -65,7 +65,7 @@ const Routers = function ({ history, app }) {
             require.ensure([], require => {
               registerModel(app, require('./models/seminar'));
               cb(null, require('./routes/seminar/detailSeminar'));
-            }, 'seminar');
+            }, 'detailSeminar');
           }
         },{
           path: 'seminar/post',

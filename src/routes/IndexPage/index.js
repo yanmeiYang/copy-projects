@@ -50,8 +50,8 @@ function IndexPage({ dispatch, search }) {
           {
             commonSearch.map((query, index) => {
               return (
-                <span>
-                  <Link to={`/search/${query}/0/30`} key={query}>{query}</Link>
+                <span key={query}>
+                  <Link to={`/search/${query}/0/30`}>{query}</Link>
                   <span>{ ( index === commonSearch.length - 1 ) ? '' : ', '}</span>
                 </span>
               )
@@ -81,8 +81,8 @@ function IndexPage({ dispatch, search }) {
                         <ul>
                           <li>
                             {
-                              org.avatars.map((avatar) => {
-                                return (<img src={avatar.avatar}/>)
+                              org.avatars.map((avatar, index) => {
+                                return (<img src={avatar.avatar} key={index}/>)
                               })
                             }
                           </li>

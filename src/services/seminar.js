@@ -10,3 +10,9 @@ export async function getSeminar(offset, size) {
     method: 'GET',
   });
 }
+
+export async function getSeminarById(id) {
+  return request(api.getActivityById.replace(':id', id), {
+    method: 'GET',
+  });
+}

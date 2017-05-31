@@ -1,6 +1,7 @@
 /**
  * Created by yangyanmei on 17/5/26.
  */
+import pathToRegexp from 'path-to-regexp'
 import * as seminarService from '../services/seminar';
 
 export default {
@@ -8,6 +9,8 @@ export default {
 
   state: {
     results: [],
+    id: null,
+    summaryById: [],
     isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
     pagination: {
       showSizeChanger: true,
@@ -21,9 +24,14 @@ export default {
   subscriptions: {
     setup({ dispatch, history }){
       history.listen((location) => {
-        console.log(location);
         if (location.pathname === '/seminar') {
           dispatch({ type: 'getSeminar', payload: { offset: 0, size: 20 } });
+        }
+
+        const match = pathToRegexp('/seminar/:id').exec(location.pathname);
+        if (match) {
+          const id = decodeURIComponent(match[1]);
+          dispatch({ type: 'getSeminarByID', payload: { id } });
         }
       });
 
@@ -36,6 +44,11 @@ export default {
       const { data } = yield call(seminarService.getSeminar, offset, size);
       yield put({ type: 'getSeminarsSuccess', payload: { data } });
     },
+    *getSeminarByID({ payload }, { call, put }){
+      const { id } = payload;
+      const { data } = yield call(seminarService.getSeminarById, id);
+      yield put({ type: 'getSeminarByIDSuccess', payload: { data } });
+    },
 
   },
 
@@ -43,6 +56,11 @@ export default {
     getSeminarsSuccess(state, { payload: { data } }){
       return { ...state, results: data };
     },
+
+    getSeminarByIDSuccess(state, { payload: { data } }){
+      console.log(data);
+      return { ...state, summaryById: data };
+    },
   },
 
-}
+};

@@ -18,6 +18,7 @@ module.exports = {
     searchPerson: '/search/person',
     userLogin: '/auth/signin',
     getSeminars: '/activity/list/offset/:offset/size/:size',
+    getActivityById: '/activity/:id',
     // userLogout: '/user/logout',
     // userInfo: '/userInfo',
     // users: '/users',

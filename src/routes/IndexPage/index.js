@@ -67,7 +67,7 @@ function IndexPage({ dispatch, search }) {
             <div className={styles.headline}>
               <h3>协会组织</h3>
             </div>
-            <Row className={styles.orgList} >
+            <Row className={styles.orgList}>
               <Col>
                 {
                   organization.map((org) => {
@@ -127,7 +127,9 @@ function IndexPage({ dispatch, search }) {
                         </h3>
                         <div className={styles.info}>
                           <p>
-                            <span className={styles.type}>主讲人：{seminar.speaker.name.substring(0, 18)}</span>
+                            <span className={styles.type}>
+                              活动类型：{seminar.type === 0 ? 'seminar' : 'workshop'}
+                            </span>
                             <span>
                               <em>关键字：</em>
                               数据挖掘 机器学习 人工智能

@@ -27,7 +27,6 @@ export default {
         console.log(location);
         if (location.pathname === '/') {
           dispatch({ type: 'getSeminars', payload: { offset: 0, size: 5 } });
-          dispatch({ type: 'getRoster', });
         }
         const match = pathToRegexp('/search/:query/:offset/:size').exec(location.pathname);
         if (match) {

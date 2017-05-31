@@ -82,7 +82,7 @@ const Seminar = ({ location, dispatch, seminar, loading }) => {
                     </div>
                     <div className={styles.con}>
                       <h3>
-                        <a href=''>{result.title}</a>
+                        <a href='javascript:void(0)' onClick={goToDetail.bind(this,result.id)}>{result.title}</a>
                       </h3>
                       <div className={styles.info}>
                         <p>

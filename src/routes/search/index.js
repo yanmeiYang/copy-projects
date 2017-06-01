@@ -1,17 +1,14 @@
 import React from 'react';
-import { routerRedux } from 'dva/router';
+import { routerRedux, Link } from 'dva/router';
 import { connect } from 'dva';
 import { Tabs, Icon, Tag } from 'antd';
-import List from './List';
 import SearchBox from '../../components/SearchBox';
 import styles from './index.less';
-import Filter from './Filter';
-import Modal from './Modal';
 
 const TabPane = Tabs.TabPane;
 
-const Search = ({ location, dispatch, search, loading }) => {
-  const { results, pagination, query } = search;
+const Search = ({ dispatch, search, loading }) => {
+  const { results, pagination, query, aggs } = search;
   const { pageSize } = pagination;
 
   function onSearch({ keyword }) {
@@ -20,119 +17,45 @@ const Search = ({ location, dispatch, search, loading }) => {
     }));
   }
 
-  // const modalProps = {
-  //   item: modalType === 'create' ? {} : currentItem,
-  //   visible: modalVisible,
-  //   maskClosable: false,
-  //   confirmLoading: loading.effects['user/update'],
-  //   title: `${modalType === 'create' ? 'Create User' : 'Update User'}`,
-  //   wrapClassName: 'vertical-center-modal',
-  //   onOk(data) {
-  //     dispatch({
-  //       type: `user/${modalType}`,
-  //       payload: data,
-  //     });
-  //   },
-  //   onCancel() {
-  //     dispatch({
-  //       type: 'user/hideModal',
-  //     });
-  //   },
-  // }
-  //
-  const listProps = {
-    dataSource: results,
-    loading: loading.effects['user/query'],
-    pagination,
-    location,
-    isMotion: true,
-    onChange(page) {
-      console.log('test', page, query);
-      dispatch(routerRedux.push({
-        pathname: `/search/${query}/${(page.current - 1) * page.pageSize}/${page.pageSize}`,
-      }));
-    },
-    // onDeleteItem(id) {
-    //   dispatch({
-    //     type: 'user/delete',
-    //     payload: id,
-    //   });
-    // },
-    // onEditItem(item) {
-    //   dispatch({
-    //     type: 'user/showModal',
-    //     payload: {
-    //       modalType: 'update',
-    //       currentItem: item,
-    //     },
-    //   });
-    // },
-  };
-
-  // const filterProps = {
-  //   isMotion,
-  //   filter: {
-  //     ...location.query,
-  //   },
-  //   onFilterChange(value) {
-  //     dispatch(routerRedux.push({
-  //       pathname: location.pathname,
-  //       query: {
-  //         ...value,
-  //         page: 1,
-  //         pageSize,
-  //       },
-  //     }));
-  //   },
-  //   onSearch(fieldsValue) {
-  //     fieldsValue.keyword.length ? dispatch(routerRedux.push({
-  //       pathname: '/user',
-  //       query: {
-  //         field: fieldsValue.field,
-  //         keyword: fieldsValue.keyword,
-  //       },
-  //     })) : dispatch(routerRedux.push({
-  //       pathname: '/user',
-  //     }));
-  //   },
-  //   onAdd() {
-  //     dispatch({
-  //       type: 'user/showModal',
-  //       payload: {
-  //         modalType: 'create',
-  //       },
-  //     });
-  //   },
-  //   switchIsMotion() {
-  //     dispatch({ type: 'user/switchIsMotion' });
-  //   },
-  // }
-
   return (
     <div className="content-inner">
       <div className={styles.top}>
-        <div>
-          <span>分类筛选</span>
-        </div>
+        {/*<div>*/}
+          {/*<span>分类筛选</span>*/}
+        {/*</div>*/}
         <div className={styles.searchWrap}>
-          <h3>云智库搜索</h3>
-          <SearchBox size="large" style={{ width: 500 }} onSearch={onSearch} />
+          {/*<h3>云智库搜索</h3>*/}
+          <SearchBox size="large" style={{ width: 500 }} btnText="智库搜索" onSearch={onSearch} />
         </div>
       </div>
       <div className={styles.filterWrap}>
         <div className={styles.filter}>
-          <div className={styles.filterRow}>
-            <span>专委会:</span>
-          </div>
-          <div className={styles.filterRow}>
-            <span>标签:</span>
-          </div>
-          <div className={styles.filterRow}>
-            <span>级别:</span>
-          </div>
-          <div className={styles.filterRow}>
-            <span>搜索:</span>
-          </div>
+          {
+            aggs.map((agg) => {
+              console.log(agg);
+              return (<div className={styles.filterRow} key={agg.type}>
+                <span className={styles.filterTitle}>{agg.label}:</span>
+                <ul className={styles.filterItems}>
+                  {
+                    agg.item.map((item) => {
+                      return (<Tag className={styles.filterItem}>
+                        {item.label} (<span className={styles.filterCount}>{item.count}</span>)
+                      </Tag>);
+                    })
+                  }
+                </ul>
+              </div>);
+            })
+          }
+          {/*<div className={styles.filterRow}>*/}
+            {/*<span>标签:</span>*/}
+          {/*</div>*/}
+          {/*<div className={styles.filterRow}>*/}
+            {/*<span>级别:</span>*/}
+          {/*</div>*/}
+          {/*<div className={styles.filterRow}>*/}
+            {/*<span>搜索:</span>*/}
+          {/*</div>*/}
         </div>
         <Tabs defaultActiveKey="contrib" >
           <TabPane tab="贡献度" key="contrib" />
@@ -149,8 +72,10 @@ const Search = ({ location, dispatch, search, loading }) => {
             const name1 = result.name_zh ? result.name_zh : result.name;
             const name2 = result.name_zh ? result.name : null;
             const position = result.pos && result.pos.length > 0 ? result.pos[0].n : null;
-            const aff = result.contact && result.contact.affiliation ? result.contact.affiliation : null;
-            const address = result.contact && result.contact.address ? result.contact.address : null;
+            const aff = result.contact && result.contact.affiliation ?
+              result.contact.affiliation : null;
+            const address = result.contact && result.contact.address ?
+              result.contact.address : null;
             return (<div className={styles.person} key={result.id}>
               <div className={styles.left}>
                 <img src={`${result.avatar}`} alt="头像" />
@@ -192,7 +117,7 @@ const Search = ({ location, dispatch, search, loading }) => {
                 </div>
                 <div className={styles.tagWrap}>
                   {result.tags.map((tag) => {
-                    return (<Tag>{tag.t}</Tag>);
+                    return (<Link to={`/search/${tag.t}/0/30`}><Tag key={Math.random()}>{tag.t}</Tag></Link>);
                   })}
                 </div>
               </div>
@@ -200,9 +125,6 @@ const Search = ({ location, dispatch, search, loading }) => {
           })
         }
       </div>
-      {/*<Filter {...filterProps} />*/}
-      {/*<List {...listProps} />*/}
-      {/*{modalVisible && <Modal {...modalProps} />}*/}
     </div>
   );
 };

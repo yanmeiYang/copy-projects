@@ -23,11 +23,12 @@ function checkStatus(response) {
  */
 export default async function request(url, options) {
   let newUrl = baseURL + url;
-  if (options && options.method.toUpperCase() !== 'POST' && options.data) {
+  if (options.method && options.method.toUpperCase() !== 'POST' && options.data) {
     const queryList = Object.keys(options.data).map(k => `${k}=${options.data[k]}`);
     const queryString = queryList.join('&');
     newUrl = `${newUrl}?${queryString}`;
   }
+  console.log(newUrl);
   const token = localStorage.getItem('token');
   const header = new Headers();
   if (token) {

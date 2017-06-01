@@ -10,6 +10,7 @@ export default {
     offset: 0,
     query: null,
     seminars: [],
+    aggs: [],
     isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
     pagination: {
       showSizeChanger: true,
@@ -24,7 +25,6 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {  // eslint-disable-line
       history.listen((location) => {
-        console.log(location);
         if (location.pathname === '/') {
           dispatch({ type: 'getSeminars', payload: { offset: 0, size: 5 } });
         }
@@ -35,6 +35,7 @@ export default {
           const size = parseInt(match[3], 10);
           dispatch({ type: 'searchPerson', payload: { query, offset, size } });
           dispatch({ type: 'setParams', payload: { query, offset, size } });
+          dispatch({ type: 'searchPersonAgg', payload: { query, offset, size } });
         }
       });
     },
@@ -45,6 +46,11 @@ export default {
       const { query, offset, size } = payload;
       const { data } = yield call(searchService.searchPerson, query, offset, size);
       yield put({ type: 'searchPersonSuccess', payload: { data } });
+    },
+    *searchPersonAgg({ payload }, { call, put }) {
+      const { query, offset, size } = payload;
+      const { data } = yield call(searchService.searchPersonAgg, query, offset, size);
+      yield put({ type: 'searchPersonAggSuccess', payload: { data } });
     },
     *getSeminars({ payload }, { call, put }) {
       const { offset, size } = payload;
@@ -61,8 +67,13 @@ export default {
     searchPersonSuccess(state, { payload: { data } }) {
       const { result, total } = data;
       const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
-      console.log(result, total, current);
       return { ...state, results: result, pagination: { total, current } };
+    },
+
+    searchPersonAggSuccess(state, { payload: { data } }) {
+      const { aggs } = data;
+      console.log(aggs);
+      return { ...state, aggs };
     },
 
     getSeminarsSuccess(state, { payload: { data } }) {

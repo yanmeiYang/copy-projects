@@ -1,138 +1,131 @@
 import React from 'react';
-import { routerRedux } from 'dva/router';
+import { routerRedux, Link } from 'dva/router';
 import { connect } from 'dva';
-import { Tabs, Icon, Tag } from 'antd';
-import List from './List';
+import { Tabs, Icon, Tag, Pagination, Spin } from 'antd';
 import SearchBox from '../../components/SearchBox';
 import styles from './index.less';
-import Filter from './Filter';
-import Modal from './Modal';
 
 const TabPane = Tabs.TabPane;
+const { CheckableTag } = Tag;
 
-const Search = ({ location, dispatch, search, loading }) => {
-  const { results, pagination, query } = search;
-  const { pageSize } = pagination;
+const Search = ({ dispatch, search }) => {
+  const { results, pagination, query, aggs, loading, filters } = search;
+  const { pageSize, total, current } = pagination;
 
-  function onSearch({ keyword }) {
+
+  function onFilterChange(key, value, checked) {
+    if (checked) {
+      filters[key] = value;
+    } else if (filters[key]) {
+      delete filters[key];
+    }
+    dispatch({
+      type: 'search/updateFilters',
+      payload: { filters },
+    });
+    dispatch({
+      type: 'search/searchPerson',
+      payload: {
+        query,
+        offset: 0,
+        size: 30,
+        filters,
+      },
+    });
+    dispatch({
+      type: 'search/searchPersonAgg',
+      payload: {
+        query,
+        offset: 0,
+        size: 30,
+        filters,
+      },
+    });
+  }
+
+
+  function onSearch({ keyword, offset, size }) {
+    const newOffset = offset || 0;
+    const newSize = size || 30;
     dispatch(routerRedux.push({
-      pathname: `/search/${keyword}/0/30`,
+      pathname: `/search/${keyword}/${newOffset}/${newSize}`,
     }));
   }
 
-  // const modalProps = {
-  //   item: modalType === 'create' ? {} : currentItem,
-  //   visible: modalVisible,
-  //   maskClosable: false,
-  //   confirmLoading: loading.effects['user/update'],
-  //   title: `${modalType === 'create' ? 'Create User' : 'Update User'}`,
-  //   wrapClassName: 'vertical-center-modal',
-  //   onOk(data) {
-  //     dispatch({
-  //       type: `user/${modalType}`,
-  //       payload: data,
-  //     });
-  //   },
-  //   onCancel() {
-  //     dispatch({
-  //       type: 'user/hideModal',
-  //     });
-  //   },
-  // }
-  //
-  const listProps = {
-    dataSource: results,
-    loading: loading.effects['user/query'],
-    pagination,
-    location,
-    isMotion: true,
-    onChange(page) {
-      console.log('test', page, query);
-      dispatch(routerRedux.push({
-        pathname: `/search/${query}/${(page.current - 1) * page.pageSize}/${page.pageSize}`,
-      }));
-    },
-    // onDeleteItem(id) {
-    //   dispatch({
-    //     type: 'user/delete',
-    //     payload: id,
-    //   });
-    // },
-    // onEditItem(item) {
-    //   dispatch({
-    //     type: 'user/showModal',
-    //     payload: {
-    //       modalType: 'update',
-    //       currentItem: item,
-    //     },
-    //   });
-    // },
-  };
-
-  // const filterProps = {
-  //   isMotion,
-  //   filter: {
-  //     ...location.query,
-  //   },
-  //   onFilterChange(value) {
-  //     dispatch(routerRedux.push({
-  //       pathname: location.pathname,
-  //       query: {
-  //         ...value,
-  //         page: 1,
-  //         pageSize,
-  //       },
-  //     }));
-  //   },
-  //   onSearch(fieldsValue) {
-  //     fieldsValue.keyword.length ? dispatch(routerRedux.push({
-  //       pathname: '/user',
-  //       query: {
-  //         field: fieldsValue.field,
-  //         keyword: fieldsValue.keyword,
-  //       },
-  //     })) : dispatch(routerRedux.push({
-  //       pathname: '/user',
-  //     }));
-  //   },
-  //   onAdd() {
-  //     dispatch({
-  //       type: 'user/showModal',
-  //       payload: {
-  //         modalType: 'create',
-  //       },
-  //     });
-  //   },
-  //   switchIsMotion() {
-  //     dispatch({ type: 'user/switchIsMotion' });
-  //   },
-  // }
+  function onPageChange(page) {
+    onSearch({
+      keyword: query,
+      offset: (page - 1) * pageSize,
+      size: pageSize,
+    });
+  }
 
   return (
     <div className="content-inner">
       <div className={styles.top}>
-        <div>
-          <span>分类筛选</span>
-        </div>
         <div className={styles.searchWrap}>
-          <h3>云智库搜索</h3>
-          <SearchBox size="large" style={{ width: 500 }} onSearch={onSearch} />
+          <SearchBox size="large" style={{ width: 500 }} btnText="智库搜索" keyword={query} onSearch={onSearch} />
         </div>
       </div>
       <div className={styles.filterWrap}>
         <div className={styles.filter}>
-          <div className={styles.filterRow}>
-            <span>专委会:</span>
-          </div>
-          <div className={styles.filterRow}>
-            <span>标签:</span>
-          </div>
-          <div className={styles.filterRow}>
-            <span>级别:</span>
-          </div>
-          <div className={styles.filterRow}>
-            <span>搜索:</span>
-          </div>
+          {filters && Object.keys(filters).length > 0 &&
+            <div className={styles.filterRow}>
+              <span className={styles.filterTitle}>过滤条件:</span>
+              <ul className={styles.filterItems}>
+                {
+                  Object.keys(filters).map((key) => {
+                    return (<Tag
+                      className={styles.filterItem}
+                      key={key}
+                      closable
+                      afterClose={() => onFilterChange(key, filters[key], false)}
+                      color="blue"
+                    >
+                      {`${key}: ${filters[key]}`}
+                    </Tag>);
+                  })
+                }
+              </ul>
+            </div>
+          }
+          {
+            aggs.map((agg) => {
+              if (filters[agg.label]) {
+                return '';
+              } else {
+                return (
+                  <div className={styles.filterRow} key={agg.type}>
+                    <span className={styles.filterTitle}>{agg.label}:</span>
+                    <ul className={styles.filterItems}>
+                      {
+                        agg.item.map((item) => {
+                          return (
+                            <CheckableTag
+                              className={styles.filterItem}
+                              checked={filters[agg.label] === item.label}
+                              onChange={checked => onFilterChange(agg.label, item.label, checked)}
+                            >
+                              {item.label} (<span className={styles.filterCount}>{item.count}</span>)
+                            </CheckableTag>
+                          );
+                        })
+                      }
+                    </ul>
+                  </div>
+                );
+              }
+            })
+          }
+          {/*<div className={styles.filterRow}>*/}
+            {/*<span>标签:</span>*/}
+          {/*</div>*/}
+          {/*<div className={styles.filterRow}>*/}
+            {/*<span>级别:</span>*/}
+          {/*</div>*/}
+          {/*<div className={styles.filterRow}>*/}
+            {/*<span>搜索:</span>*/}
+          {/*</div>*/}
         </div>
         <Tabs defaultActiveKey="contrib" >
           <TabPane tab="贡献度" key="contrib" />
@@ -143,66 +136,78 @@ const Search = ({ location, dispatch, search, loading }) => {
           <TabPane tab="论文数" key="num_pubs" />
         </Tabs>
       </div>
-      <div className={styles.personWrap}>
-        {
-          results.map((result) => {
-            const name1 = result.name_zh ? result.name_zh : result.name;
-            const name2 = result.name_zh ? result.name : null;
-            const position = result.pos && result.pos.length > 0 ? result.pos[0].n : null;
-            const aff = result.contact && result.contact.affiliation ? result.contact.affiliation : null;
-            const address = result.contact && result.contact.address ? result.contact.address : null;
-            return (<div className={styles.person} key={result.id}>
-              <div className={styles.left}>
-                <img src={`${result.avatar}`} alt="头像" />
-              </div>
-              <div className={styles.right}>
-                <div className={styles.nameWrap}>
-                  <h3>{name1}</h3>
-                  { name2 ? <h4>{`(${name2})`}</h4> : '' }
+      <Spin spinning={loading}>
+        <div className={styles.personWrap}>
+
+          {
+            results.map((result) => {
+              const name1 = result.name_zh ? result.name_zh : result.name;
+              const name2 = result.name_zh ? result.name : null;
+              const position = result.pos && result.pos.length > 0 ? result.pos[0].n : null;
+              const aff = result.contact && result.contact.affiliation ?
+                result.contact.affiliation : null;
+              const address = result.contact && result.contact.address ?
+                result.contact.address : null;
+              return (<div className={styles.person} key={result.id}>
+                <div className={styles.left}>
+                  <img src={`${result.avatar}`} alt="头像" />
                 </div>
-                <div className={styles.statWrap}>
-                  <div className={styles.item}>
-                    <span className={styles.label}>h-index:</span>
-                    <span>{result.indices.h_index}</span>
+                <div className={styles.right}>
+                  <div className={styles.nameWrap}>
+                    <h3>{name1}</h3>
+                    { name2 ? <h4>{`(${name2})`}</h4> : '' }
                   </div>
-                  <span className={styles.split}>|</span>
-                  <div className={styles.item}>
-                    <span className={styles.label}>论文数:</span>
-                    <span>{result.indices.num_pubs}</span>
+                  <div className={styles.statWrap}>
+                    <div className={styles.item}>
+                      <span className={styles.label}>h-index:</span>
+                      <span>{result.indices.h_index}</span>
+                    </div>
+                    <span className={styles.split}>|</span>
+                    <div className={styles.item}>
+                      <span className={styles.label}>论文数:</span>
+                      <span>{result.indices.num_pubs}</span>
+                    </div>
+                    <span className={styles.split}>|</span>
+                    <div className={styles.item}>
+                      <span className={styles.label}>引用数:</span>
+                      <span>{result.indices.num_citation}</span>
+                    </div>
                   </div>
-                  <span className={styles.split}>|</span>
-                  <div className={styles.item}>
-                    <span className={styles.label}>引用数:</span>
-                    <span>{result.indices.num_citation}</span>
+                  <div className={styles.infoWrap}>
+                    {position ? (<p className={styles.infoItem}>
+                      <Icon type="idcard" />
+                      { position }
+                    </p>) : ''}
+                    {aff ? (<p className={styles.infoItem}>
+                      <Icon type="home" />
+                      { aff }
+                    </p>) : ''}
+                    {address ? (<p className={styles.infoItem}>
+                      <Icon type="environment" />
+                      { address }
+                    </p>) : ''}
+                  </div>
+                  <div className={styles.tagWrap}>
+                    {result.tags.map((tag) => {
+                      return (<Link to={`/search/${tag.t}/0/30`}><Tag key={Math.random()} className={styles.tag}>{tag.t}</Tag></Link>);
+                    })}
                   </div>
                 </div>
-                <div className={styles.infoWrap}>
-                  {position ? (<p className={styles.infoItem}>
-                    <Icon type="idcard" />
-                    { position }
-                  </p>) : ''}
-                  {aff ? (<p className={styles.infoItem}>
-                    <Icon type="home" />
-                    { aff }
-                  </p>) : ''}
-                  {address ? (<p className={styles.infoItem}>
-                    <Icon type="environment" />
-                    { address }
-                  </p>) : ''}
-                </div>
-                <div className={styles.tagWrap}>
-                  {result.tags.map((tag) => {
-                    return (<Tag>{tag.t}</Tag>);
-                  })}
-                </div>
-              </div>
-            </div>);
-          })
-        }
-      </div>
-      {/*<Filter {...filterProps} />*/}
-      {/*<List {...listProps} />*/}
-      {/*{modalVisible && <Modal {...modalProps} />}*/}
+              </div>);
+            })
+          }
+          <div className={styles.paginationWrap}>
+            <Pagination
+              showQuickJumper
+              current={current}
+              defaultCurrent={1}
+              defaultPageSize={pageSize}
+              total={total}
+              onChange={onPageChange}
+            />
+          </div>
+        </div>
+      </Spin>
     </div>
   );
 };

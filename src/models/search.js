@@ -10,6 +10,9 @@ export default {
     offset: 0,
     query: null,
     seminars: [],
+    aggs: [],
+    loading: false,
+    filters: {},
     isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
     pagination: {
       showSizeChanger: true,
@@ -24,7 +27,6 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {  // eslint-disable-line
       history.listen((location) => {
-        console.log(location);
         if (location.pathname === '/') {
           dispatch({ type: 'getSeminars', payload: { offset: 0, size: 5 } });
         }
@@ -35,6 +37,7 @@ export default {
           const size = parseInt(match[3], 10);
           dispatch({ type: 'searchPerson', payload: { query, offset, size } });
           dispatch({ type: 'setParams', payload: { query, offset, size } });
+          dispatch({ type: 'searchPersonAgg', payload: { query, offset, size } });
         }
       });
     },
@@ -42,9 +45,15 @@ export default {
 
   effects: {
     *searchPerson({ payload }, { call, put }) {  // eslint-disable-line
-      const { query, offset, size } = payload;
-      const { data } = yield call(searchService.searchPerson, query, offset, size);
+      yield put({ type: 'showLoading' });
+      const { query, offset, size, filters } = payload;
+      const { data } = yield call(searchService.searchPerson, query, offset, size, filters);
       yield put({ type: 'searchPersonSuccess', payload: { data } });
+    },
+    *searchPersonAgg({ payload }, { call, put }) {
+      const { query, offset, size, filters } = payload;
+      const { data } = yield call(searchService.searchPersonAgg, query, offset, size, filters);
+      yield put({ type: 'searchPersonAggSuccess', payload: { data } });
     },
     *getSeminars({ payload }, { call, put }) {
       const { offset, size } = payload;
@@ -58,15 +67,46 @@ export default {
       return { ...state, query, offset, pagination: { pageSize: size } };
     },
 
+    updateFilters(state, { payload: { filters } }) {
+      const newFilters = { ...filters };
+      // filters.forEach((f) => {
+      //   newFilters.push(f);
+      // });
+      return { ...state, filters: newFilters };
+    },
+
     searchPersonSuccess(state, { payload: { data } }) {
       const { result, total } = data;
       const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
-      console.log(result, total, current);
-      return { ...state, results: result, pagination: { total, current } };
+      return {
+        ...state,
+        results: result,
+        pagination: { pageSize: state.pagination.pageSize, total, current },
+        loading: false,
+      };
+    },
+
+    searchPersonAggSuccess(state, { payload: { data } }) {
+      const { aggs } = data;
+      return { ...state, aggs };
     },
 
     getSeminarsSuccess(state, { payload: { data } }) {
       return { ...state, seminars: data };
+    },
+
+    showLoading(state) {
+      console.log('show loading');
+      return {
+        ...state,
+        loading: true,
+      };
+    },
+    hideLoading(state) {
+      return {
+        ...state,
+        loading: false,
+      };
     },
 
   },

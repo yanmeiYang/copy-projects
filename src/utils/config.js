@@ -16,6 +16,8 @@ module.exports = {
   apiPrefix: '/api/',
   api: {
     searchPerson: '/search/person',
+    searchPersonInBase: '/search/roster/:ebid/experts/advanced',
+    searchPersonInBaseAgg: '/search/roster/:ebid/experts/advanced/agg',
     userLogin: '/auth/signin',
     getSeminars: '/activity/list/offset/:offset/size/:size',
     getActivityById: '/activity/:id',

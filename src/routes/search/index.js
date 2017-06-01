@@ -1,14 +1,14 @@
 import React from 'react';
 import { routerRedux, Link } from 'dva/router';
 import { connect } from 'dva';
-import { Tabs, Icon, Tag } from 'antd';
+import { Tabs, Icon, Tag, Pagination, Spin } from 'antd';
 import SearchBox from '../../components/SearchBox';
 import styles from './index.less';
 
 const TabPane = Tabs.TabPane;
 
-const Search = ({ dispatch, search, loading }) => {
-  const { results, pagination, query, aggs } = search;
+const Search = ({ dispatch, search }) => {
+  const { results, pagination, query, aggs, loading } = search;
   const { pageSize } = pagination;
 
   function onSearch({ keyword }) {
@@ -16,6 +16,11 @@ const Search = ({ dispatch, search, loading }) => {
       pathname: `/search/${keyword}/0/30`,
     }));
   }
+
+  function onPageChange(pageNumber) {
+    console.log('Page: ', pageNumber);
+  }
+  console.log('spin', loading);
 
   return (
     <div className="content-inner">
@@ -32,7 +37,6 @@ const Search = ({ dispatch, search, loading }) => {
         <div className={styles.filter}>
           {
             aggs.map((agg) => {
-              console.log(agg);
               return (<div className={styles.filterRow} key={agg.type}>
                 <span className={styles.filterTitle}>{agg.label}:</span>
                 <ul className={styles.filterItems}>
@@ -66,65 +70,71 @@ const Search = ({ dispatch, search, loading }) => {
           <TabPane tab="论文数" key="num_pubs" />
         </Tabs>
       </div>
-      <div className={styles.personWrap}>
-        {
-          results.map((result) => {
-            const name1 = result.name_zh ? result.name_zh : result.name;
-            const name2 = result.name_zh ? result.name : null;
-            const position = result.pos && result.pos.length > 0 ? result.pos[0].n : null;
-            const aff = result.contact && result.contact.affiliation ?
-              result.contact.affiliation : null;
-            const address = result.contact && result.contact.address ?
-              result.contact.address : null;
-            return (<div className={styles.person} key={result.id}>
-              <div className={styles.left}>
-                <img src={`${result.avatar}`} alt="头像" />
-              </div>
-              <div className={styles.right}>
-                <div className={styles.nameWrap}>
-                  <h3>{name1}</h3>
-                  { name2 ? <h4>{`(${name2})`}</h4> : '' }
+      <Spin spinning={loading}>
+        <div className={styles.personWrap}>
+
+          {
+            results.map((result) => {
+              const name1 = result.name_zh ? result.name_zh : result.name;
+              const name2 = result.name_zh ? result.name : null;
+              const position = result.pos && result.pos.length > 0 ? result.pos[0].n : null;
+              const aff = result.contact && result.contact.affiliation ?
+                result.contact.affiliation : null;
+              const address = result.contact && result.contact.address ?
+                result.contact.address : null;
+              return (<div className={styles.person} key={result.id}>
+                <div className={styles.left}>
+                  <img src={`${result.avatar}`} alt="头像" />
                 </div>
-                <div className={styles.statWrap}>
-                  <div className={styles.item}>
-                    <span className={styles.label}>h-index:</span>
-                    <span>{result.indices.h_index}</span>
+                <div className={styles.right}>
+                  <div className={styles.nameWrap}>
+                    <h3>{name1}</h3>
+                    { name2 ? <h4>{`(${name2})`}</h4> : '' }
                   </div>
-                  <span className={styles.split}>|</span>
-                  <div className={styles.item}>
-                    <span className={styles.label}>论文数:</span>
-                    <span>{result.indices.num_pubs}</span>
+                  <div className={styles.statWrap}>
+                    <div className={styles.item}>
+                      <span className={styles.label}>h-index:</span>
+                      <span>{result.indices.h_index}</span>
+                    </div>
+                    <span className={styles.split}>|</span>
+                    <div className={styles.item}>
+                      <span className={styles.label}>论文数:</span>
+                      <span>{result.indices.num_pubs}</span>
+                    </div>
+                    <span className={styles.split}>|</span>
+                    <div className={styles.item}>
+                      <span className={styles.label}>引用数:</span>
+                      <span>{result.indices.num_citation}</span>
+                    </div>
                   </div>
-                  <span className={styles.split}>|</span>
-                  <div className={styles.item}>
-                    <span className={styles.label}>引用数:</span>
-                    <span>{result.indices.num_citation}</span>
+                  <div className={styles.infoWrap}>
+                    {position ? (<p className={styles.infoItem}>
+                      <Icon type="idcard" />
+                      { position }
+                    </p>) : ''}
+                    {aff ? (<p className={styles.infoItem}>
+                      <Icon type="home" />
+                      { aff }
+                    </p>) : ''}
+                    {address ? (<p className={styles.infoItem}>
+                      <Icon type="environment" />
+                      { address }
+                    </p>) : ''}
+                  </div>
+                  <div className={styles.tagWrap}>
+                    {result.tags.map((tag) => {
+                      return (<Link to={`/search/${tag.t}/0/30`}><Tag key={Math.random()}>{tag.t}</Tag></Link>);
+                    })}
                   </div>
                 </div>
-                <div className={styles.infoWrap}>
-                  {position ? (<p className={styles.infoItem}>
-                    <Icon type="idcard" />
-                    { position }
-                  </p>) : ''}
-                  {aff ? (<p className={styles.infoItem}>
-                    <Icon type="home" />
-                    { aff }
-                  </p>) : ''}
-                  {address ? (<p className={styles.infoItem}>
-                    <Icon type="environment" />
-                    { address }
-                  </p>) : ''}
-                </div>
-                <div className={styles.tagWrap}>
-                  {result.tags.map((tag) => {
-                    return (<Link to={`/search/${tag.t}/0/30`}><Tag key={Math.random()}>{tag.t}</Tag></Link>);
-                  })}
-                </div>
-              </div>
-            </div>);
-          })
-        }
-      </div>
+              </div>);
+            })
+          }
+          <div className={styles.paginationWrap}>
+            <Pagination showQuickJumper defaultCurrent={2} total={500} onChange={onPageChange} />
+          </div>
+        </div>
+      </Spin>
     </div>
   );
 };

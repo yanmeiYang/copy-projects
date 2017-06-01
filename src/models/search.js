@@ -11,6 +11,7 @@ export default {
     query: null,
     seminars: [],
     aggs: [],
+    loading: false,
     isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
     pagination: {
       showSizeChanger: true,
@@ -43,6 +44,7 @@ export default {
 
   effects: {
     *searchPerson({ payload }, { call, put }) {  // eslint-disable-line
+      yield put({ type: 'showLoading' });
       const { query, offset, size } = payload;
       const { data } = yield call(searchService.searchPerson, query, offset, size);
       yield put({ type: 'searchPersonSuccess', payload: { data } });
@@ -67,17 +69,30 @@ export default {
     searchPersonSuccess(state, { payload: { data } }) {
       const { result, total } = data;
       const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
-      return { ...state, results: result, pagination: { total, current } };
+      return { ...state, results: result, pagination: { total, current }, loading: false };
     },
 
     searchPersonAggSuccess(state, { payload: { data } }) {
       const { aggs } = data;
-      console.log(aggs);
       return { ...state, aggs };
     },
 
     getSeminarsSuccess(state, { payload: { data } }) {
       return { ...state, seminars: data };
+    },
+
+    showLoading(state) {
+      console.log('show loading');
+      return {
+        ...state,
+        loading: true,
+      };
+    },
+    hideLoading(state) {
+      return {
+        ...state,
+        loading: false,
+      };
     },
 
   },

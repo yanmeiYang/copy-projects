@@ -19,7 +19,6 @@ export async function searchPersonAgg(query, offset, size) {
     offset,
     size,
   };
-  console.log('haha');
   return request(api.searchPersonInBaseAgg.replace(':ebid', '58ddbc229ed5db001ceac2a4'), {
     method: 'GET',
     data,

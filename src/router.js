@@ -60,20 +60,20 @@ const Routers = function ({ history, app }) {
             }, 'seminar');
           }
         },{
-          path: 'seminar/:id',
-          getComponent(nextState, cb) {
-            require.ensure([], require => {
-              registerModel(app, require('./models/seminar'));
-              cb(null, require('./routes/seminar/detailSeminar'));
-            }, 'detailSeminar');
-          }
-        },{
           path: 'seminar/post',
           getComponent(nextState, cb) {
             require.ensure([], require => {
               registerModel(app, require('./models/seminar'));
               cb(null, require('./routes/seminar/addSeminar'));
             }, 'addSeminar');
+          }
+        },{
+          path: 'seminar/:id',
+          getComponent(nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/seminar'));
+              cb(null, require('./routes/seminar/detailSeminar'));
+            }, 'detailSeminar');
           }
         },
       ],

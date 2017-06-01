@@ -14,8 +14,10 @@ const Seminar = ({ location, dispatch, seminar, loading }) => {
   const { pageSize } = pagination;
 
   function addBao() {
-    console.log('add seminar');
-  };
+    dispatch(routerRedux.push({
+      pathname: `/seminar/post`,
+    }));
+  }
 
   function goToDetail(id) {
     dispatch(routerRedux.push({

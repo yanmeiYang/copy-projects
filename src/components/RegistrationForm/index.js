@@ -14,237 +14,322 @@ import {
   Checkbox,
   Button,
   AutoComplete,
-  DatePicker
+  DatePicker,
+  Upload,
+  message
 } from 'antd';
+import { request, config } from '../../utils';
+import styles from './index.less'
+import defaultImg from '../../assets/people/default.jpg';
+import CanlendarInForm from '../../components/seminar/calendar';
+const Dragger = Upload.Dragger;
 const FormItem = Form.Item;
 const Option = Select.Option;
 const AutoCompleteOption = AutoComplete.Option;
 
-const residences = [{
-  value: 'zhejiang',
-  label: 'Zhejiang',
-  children: [{
-    value: 'hangzhou',
-    label: 'Hangzhou',
-    children: [{
-      value: 'xihu',
-      label: 'West Lake',
-    }],
-  }],
-}, {
-  value: 'jiangsu',
-  label: 'Jiangsu',
-  children: [{
-    value: 'nanjing',
-    label: 'Nanjing',
-    children: [{
-      value: 'zhonghuamen',
-      label: 'Zhong Hua Men',
-    }],
-  }],
-}];
+const { api } = config;
+
+let image = null;
+
+const uploadImage = {
+  name: 'file',
+  multiple: false,
+  showUploadList: false,
+  accept: 'image/jpeg,image/png,image/bmp',
+  // action: '/upload.do',
+  onChange(info){
+    const status = info.file.status;
+    if (status !== 'uploading') {
+      image = info.file.originFileObj;
+    }
+    // if (status === 'done') {
+    //   message.success(`$(info.file.name) file uploaded successfully.`);
+    // } else if (status === 'error') {
+    //   message.error(`$(info.file.name) file upload failed.`);
+    // }
+  }
+};
 
 class RegistrationForm extends React.Component {
   state = {
+    addNewTalk: false,
+    selectedType: '0',
     confirmDirty: false,
-    autoCompleteResult: [],
     startValue: null,
     endValue: null,
-    endOpen: false,
   };
 
-  //活动时间开始
-  disabledStartDate = (startValue) => {
-    const endValue = this.state.endValue;
-    if (!startValue || !endvalue) {
-      return false;
-    }
-    return sstartValue.valueOf > endValue.valueOf();
-  };
-  disabledEndDate = (endValue) => {
-    const startValue = this.state.startValue;
-    console.log(startValue.valueOf() > endValue.valueOf());
-    if (!endValue || !startValue) {
-      return false;
-    }
-    return startValue.valueOf() > endValue.valueOf();
-  };
-  onChange = (field, value) => {
-    this.setState({ [field]: value });
-  };
-  onStartChange = (value) => {
-    this.onChange('startValue', value);
-  };
-  onEndChange = (value) => {
-    this.onChange('endValue', value);
-  };
-  handleStartOpenChange = (open) => {
-    if (!open) {
-      this.setState({ endOpen: true });
-    }
-  };
-  handleEndOpenChange = (open) => {
-    this.setState({ endOpen: open });
-  };
-  //活动时间结束
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        let data = values;
+        data.location = { city: '', address: '' };
+        data.time = { from: '', to: '' };
+        data.img = image;
+        data.type = parseInt(values.type);
+        data.location.address = values.address;
+        data.time.from = this.state.startValue.toJSON();
+        data.time.to = this.state.endValue.toJSON();
+        fetch(config.baseURL+config.api.postActivity, {
+          method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+          body: JSON.stringify({data}),
+        });
+        // $http.post api.postActivity,
+        // $scope.seminar
       }
     });
-  }
-  handleWebsiteChange = (value) => {
-    let autoCompleteResult;
-    if (!value) {
-      autoCompleteResult = [];
+  };
+  // 选择活动类型
+  handleChange = (value) => {
+    this.setState({ selectedType: value });
+  };
+
+  //增加嘉宾
+  getImg = (src) => {
+    if (src) {
+      return src;
     } else {
-      autoCompleteResult = ['.com', '.org', '.net'].map(domain => `${value}${domain}`);
+      return defaultImg;
     }
-    this.setState({ autoCompleteResult });
-  }
+  };
+  addTalkData = (state) => {
+    this.setState({ addNewTalk: !state });
+  };
+
+  onChildChanged = (field, value) => {
+    this.setState({ [field]: value });
+  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { autoCompleteResult, startValue, endValue, endOpen } = this.state;
-
+    let { addNewTalk, selectedType } = this.state;
 
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 6 },
+        sm: { span: 3 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 14 },
+        sm: { span: 21 },
       },
     };
-    const tailFormItemLayout = {
-      wrapperCol: {
-        xs: {
-          span: 24,
-          offset: 0,
-        },
-        sm: {
-          span: 14,
-          offset: 6,
-        },
-      },
-    };
-    const prefixSelector = getFieldDecorator('prefix', {
-      initialValue: '86',
-    })(
-      <Select className="icp-selector">
-        <Option value="86">+86</Option>
-      </Select>
-    );
-
-    const websiteOptions = autoCompleteResult.map((website) => {
-      return <AutoCompleteOption key={website}>{website}</AutoCompleteOption>;
-    });
 
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <FormItem {...formItemLayout} label='活动类型' hasFeedback>
-          {getFieldDecorator('type', {
-            rules: [{ required: true, message: '请选择活动类型！' }],
-          })(
-            <Select>
-              <Option value="0">Seminar</Option>
-              <Option value="1">WorkShop</Option>
-              <Option value="2">Poster</Option>
-            </Select>
-          )}
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="活动名称"
-          hasFeedback
-        >
-          {getFieldDecorator('name', {
-            rules: [{
-              required: true, message: '请输入活动名称',
-            }],
-          })(
-            <Input />
-          )}
-        </FormItem>
+      <Row>
+        <Form onSubmit={this.handleSubmit}>
+          <Col className={styles.thumbnail} span={12} offset={6}>
 
-        <FormItem
-          {...formItemLayout}
-          label={(
-            <span>
+            <FormItem {...formItemLayout} label='活动类型' hasFeedback>
+              {getFieldDecorator('type', {
+                  rules: [{ required: true, message: '请选择活动类型！' }],
+                  initialValue: '0'
+                }
+              )(
+                <Select onChange={this.handleChange.bind(this)}>
+                  <Option value='0'>Seminar</Option>
+                  <Option value='1'>WorkShop</Option>
+                </Select>
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="活动名称"
+              hasFeedback
+            >
+              {getFieldDecorator('title', {
+                rules: [{
+                  required: true, message: '请输入活动名称',
+                }],
+              })(
+                <Input placeholder='请输入活动名称'/>
+              )}
+            </FormItem>
+
+            <FormItem
+              {...formItemLayout}
+              label="活动时间"
+              hasFeedback
+            >
+              {getFieldDecorator('time', {
+                rules: [{
+                  message: '请输入活动时间',
+                }],
+              })(
+                <CanlendarInForm callbackParent={this.onChildChanged}/>
+              )}
+
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="活动地点"
+            >
+              {getFieldDecorator('address', {
+                rules: [{
+                  required: true, message: '请输入活动地点',
+                }],
+              })(
+                <Input placeholder='请输入活动地点。。。'/>
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="活动简介"
+            >
+              {getFieldDecorator('abstract', {
+                rules: [{
+                  required: true, message: '请输入活动简介',
+                }],
+              })(
+                <Input type='textarea' rows={4} placeholder='请输入活动简介。。。'/>
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="活动海报"
+            >
+              <Dragger {...uploadImage}>
+                <p className="ant-upload-drag-icon">
+                  <i className="anticon anticon-inbox"></i>
+                </p>
+                <p className="ant-upload-text">点击或将图片拖拽到此区域上传</p>
+                <p className="ant-upload-hint">支持上传JPG/PNG/BMP文件</p>
+              </Dragger>
+            </FormItem>
+
+            <FormItem
+              {...formItemLayout}
+              label="活动标签"
+            >
+              {getFieldDecorator('activityTags', {})(<Input placeholder='活动标签'/>)}
+
+            </FormItem>
+          </Col>
+
+          {/*seminar*/}
+          {selectedType === '0' ?
+            <Col className={styles.thumbnail} span={12} offset={6}>
+              <div>
+                <FormItem>
+                  <Col><label>专家信息</label></Col>
+                  <Col span={6}>
+                    <section>
+                      <div className="people">
+                        <div className="no-padding shadow-10">
+                          <div className={styles.crop}><span className="helper"></span><img src={this.getImg()}/>
+                          </div>
+                        </div>
+                      </div>
+                      <Button size='small'>
+                        <Icon type="cloud-upload"/>&nbsp;Upload
+                      </Button>
+                    </section>
+                  </Col>
+                  <Col span={14}>
+                    <div className={styles.expertProfile}>
+                      <Button type='primary' className={styles.recommendation}>相关嘉宾推荐</Button>
+                      <Input size='large' placeholder='嘉宾姓名'/>
+                      <Input size='large' placeholder='嘉宾职位'/>
+                      <Input size='large' placeholder='嘉宾单位'/>
+                    </div>
+                  </Col>
+                </FormItem>
+              </div>
+            </Col> : ''}
+          {/*workshop*/}
+          {selectedType === '1' ?
+            <Col className={styles.thumbnail} span={12} offset={6}>
+              <Button type='default' onClick={this.addTalkData.bind(this, addNewTalk)}>新增嘉宾</Button>
+              {addNewTalk ?
+                <div>
+                  <FormItem
+                    {...formItemLayout}
+                    label="Title"
+                  >
+                    {getFieldDecorator('name', {
+                      rules: [{
+                        required: true, message: '请输入活动名称',
+                      }],
+                    })(
+                      <Input placeholder='title。。。'/>
+                    )}
+                  </FormItem>
+                  <FormItem>
+                    <Col><label>专家信息</label></Col>
+                    <Col span={6}>
+                      <section>
+                        <div className="people">
+                          <div className="no-padding shadow-10">
+                            <div className={styles.crop}><span className="helper"></span><img src={this.getImg()}/>
+                            </div>
+                          </div>
+                        </div>
+                        <Button size='small'>
+                          <Icon type="cloud-upload"/>&nbsp;Upload
+                        </Button>
+                      </section>
+                    </Col>
+                    <Col span={14}>
+                      <div className={styles.expertProfile}>
+                        <Button type='primary' className={styles.recommendation}>相关嘉宾推荐</Button>
+                        <Input size='large' placeholder='嘉宾姓名'/>
+                        <Input size='large' placeholder='嘉宾职位'/>
+                        <Input size='large' placeholder='嘉宾单位'/>
+                      </div>
+                    </Col>
+                  </FormItem>
+                  <FormItem
+                    {...formItemLayout}
+                    label={(
+                      <span>
               活动时间&nbsp;
             </span>
-          )}
-          hasFeedback
-        >
-          <Row gutter={8}>
-            <Col span={12}>
-              <DatePicker
-                disableDate={this.disabledStartDate}
-                showTime
-                format='YYYY-MM-DD HH:mm:ss'
-                value={startValue}
-                placeholder='Start'
-                onChange={this.onStartChange}
-                onOpenChange={this.handleStartOpenChange}
-              />
-            </Col>
-            <Col span={12}>
-              <DatePicker
-                disableDate={this.disabledEndDate}
-                showTime
-                format='YYYY-MM-DD HH:mm:ss'
-                value={endValue}
-                placeholder='End'
-                onChange={this.onEndChange}
-                open={endOpen}
-                onOpenChange={this.handleEndOpenChange}
-              />
-            </Col>
-          </Row>
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="Habitual Residence"
-        >
-          {getFieldDecorator('residence', {
-            initialValue: ['zhejiang', 'hangzhou', 'xihu'],
-            rules: [{ type: 'array', required: true, message: 'Please select your habitual residence!' }],
-          })(
-            <Cascader options={residences}/>
-          )}
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="Phone Number"
-        >
-          {getFieldDecorator('phone', {
-            rules: [{ required: true, message: 'Please input your phone number!' }],
-          })(
-            <Input addonBefore={prefixSelector}/>
-          )}
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="Website"
-        >
-          {getFieldDecorator('website', {
-            rules: [{ required: true, message: 'Please input website!' }],
-          })(
-            <AutoComplete
-              dataSource={websiteOptions}
-              onChange={this.handleWebsiteChange}
-              placeholder="website"
-            >
-              <Input />
-            </AutoComplete>
-          )}
-        </FormItem>
-      </Form>
+                    )}
+                    hasFeedback
+                  >
+                    <CanlendarInForm />
+                  </FormItem>
+                  <FormItem
+                    {...formItemLayout}
+                    label={(
+                      <span>
+             演讲地点&nbsp;
+            </span>
+                    )}
+                  >
+                    <Input placeholder='请输入活动地点。。。'/>
+                  </FormItem>
+                  <FormItem
+                    {...formItemLayout}
+                    label={(
+                      <span>
+             演讲摘要&nbsp;
+            </span>
+                    )}
+                  >
+                    <Input type='textarea' rows={4} placeholder='请输入演讲摘要。。。'/>
+                  </FormItem>
+                  <Button type='primary' className={styles.saveExpert}>保存</Button>
+                  <Button type='danger'>取消</Button>
+                </div> : ''}
+            </Col> : ''}
+
+          <Col className={styles.formFooter} span={12} offset={6}>
+            <FormItem
+              wrapperCol={{ span: 12, offset: 6 }}>
+              <Button type="primary" onClick={this.handleSubmit}>确定</Button>
+              &nbsp;&nbsp;&nbsp;
+              <Button type="ghost" onClick={this.handleReset}>重置</Button>
+            </FormItem>
+          </Col>
+        </Form>
+      </Row>
     );
   }
 }

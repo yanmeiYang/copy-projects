@@ -6,12 +6,43 @@ import SearchBox from '../../components/SearchBox';
 import styles from './index.less';
 
 const TabPane = Tabs.TabPane;
+const { CheckableTag } = Tag;
 
 const Search = ({ dispatch, search }) => {
-  const { results, pagination, query, aggs, loading } = search;
+  const { results, pagination, query, aggs, loading, filters } = search;
   const { pageSize, total, current } = pagination;
 
-  console.log(current);
+
+  function onFilterChange(key, value, checked) {
+    if (checked) {
+      filters[key] = value;
+    } else if (filters[key]) {
+      delete filters[key];
+    }
+    dispatch({
+      type: 'search/updateFilters',
+      payload: { filters },
+    });
+    dispatch({
+      type: 'search/searchPerson',
+      payload: {
+        query,
+        offset: 0,
+        size: 30,
+        filters,
+      },
+    });
+    dispatch({
+      type: 'search/searchPersonAgg',
+      payload: {
+        query,
+        offset: 0,
+        size: 30,
+        filters,
+      },
+    });
+  }
+
 
   function onSearch({ keyword, offset, size }) {
     const newOffset = offset || 0;
@@ -21,8 +52,7 @@ const Search = ({ dispatch, search }) => {
     }));
   }
 
-  function onPageChange(page, pageSize) {
-    console.log('Page: ', page, pageSize);
+  function onPageChange(page) {
     onSearch({
       keyword: query,
       offset: (page - 1) * pageSize,
@@ -33,30 +63,58 @@ const Search = ({ dispatch, search }) => {
   return (
     <div className="content-inner">
       <div className={styles.top}>
-        {/*<div>*/}
-          {/*<span>分类筛选</span>*/}
-        {/*</div>*/}
         <div className={styles.searchWrap}>
-          {/*<h3>云智库搜索</h3>*/}
-          <SearchBox size="large" style={{ width: 500 }} btnText="智库搜索" onSearch={onSearch} />
+          <SearchBox size="large" style={{ width: 500 }} btnText="智库搜索" keyword={query} onSearch={onSearch} />
         </div>
       </div>
       <div className={styles.filterWrap}>
         <div className={styles.filter}>
+          {filters && Object.keys(filters).length > 0 &&
+            <div className={styles.filterRow}>
+              <span className={styles.filterTitle}>过滤条件:</span>
+              <ul className={styles.filterItems}>
+                {
+                  Object.keys(filters).map((key) => {
+                    return (<Tag
+                      className={styles.filterItem}
+                      key={key}
+                      closable
+                      afterClose={() => onFilterChange(key, filters[key], false)}
+                      color="blue"
+                    >
+                      {`${key}: ${filters[key]}`}
+                    </Tag>);
+                  })
+                }
+              </ul>
+            </div>
+          }
           {
             aggs.map((agg) => {
-              return (<div className={styles.filterRow} key={agg.type}>
-                <span className={styles.filterTitle}>{agg.label}:</span>
-                <ul className={styles.filterItems}>
-                  {
-                    agg.item.map((item) => {
-                      return (<Tag className={styles.filterItem}>
-                        {item.label} (<span className={styles.filterCount}>{item.count}</span>)
-                      </Tag>);
-                    })
-                  }
-                </ul>
-              </div>);
+              if (filters[agg.label]) {
+                return '';
+              } else {
+                return (
+                  <div className={styles.filterRow} key={agg.type}>
+                    <span className={styles.filterTitle}>{agg.label}:</span>
+                    <ul className={styles.filterItems}>
+                      {
+                        agg.item.map((item) => {
+                          return (
+                            <CheckableTag
+                              className={styles.filterItem}
+                              checked={filters[agg.label] === item.label}
+                              onChange={checked => onFilterChange(agg.label, item.label, checked)}
+                            >
+                              {item.label} (<span className={styles.filterCount}>{item.count}</span>)
+                            </CheckableTag>
+                          );
+                        })
+                      }
+                    </ul>
+                  </div>
+                );
+              }
             })
           }
           {/*<div className={styles.filterRow}>*/}

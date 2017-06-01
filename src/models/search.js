@@ -12,6 +12,7 @@ export default {
     seminars: [],
     aggs: [],
     loading: false,
+    filters: {},
     isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
     pagination: {
       showSizeChanger: true,
@@ -45,13 +46,13 @@ export default {
   effects: {
     *searchPerson({ payload }, { call, put }) {  // eslint-disable-line
       yield put({ type: 'showLoading' });
-      const { query, offset, size } = payload;
-      const { data } = yield call(searchService.searchPerson, query, offset, size);
+      const { query, offset, size, filters } = payload;
+      const { data } = yield call(searchService.searchPerson, query, offset, size, filters);
       yield put({ type: 'searchPersonSuccess', payload: { data } });
     },
     *searchPersonAgg({ payload }, { call, put }) {
-      const { query, offset, size } = payload;
-      const { data } = yield call(searchService.searchPersonAgg, query, offset, size);
+      const { query, offset, size, filters } = payload;
+      const { data } = yield call(searchService.searchPersonAgg, query, offset, size, filters);
       yield put({ type: 'searchPersonAggSuccess', payload: { data } });
     },
     *getSeminars({ payload }, { call, put }) {
@@ -63,14 +64,20 @@ export default {
 
   reducers: {
     setParams(state, { payload: { query, offset, size } }) {
-      console.log(size);
       return { ...state, query, offset, pagination: { pageSize: size } };
+    },
+
+    updateFilters(state, { payload: { filters } }) {
+      const newFilters = { ...filters };
+      // filters.forEach((f) => {
+      //   newFilters.push(f);
+      // });
+      return { ...state, filters: newFilters };
     },
 
     searchPersonSuccess(state, { payload: { data } }) {
       const { result, total } = data;
       const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
-      console.log('kkk', current);
       return {
         ...state,
         results: result,

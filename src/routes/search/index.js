@@ -9,18 +9,26 @@ const TabPane = Tabs.TabPane;
 
 const Search = ({ dispatch, search }) => {
   const { results, pagination, query, aggs, loading } = search;
-  const { pageSize } = pagination;
+  const { pageSize, total, current } = pagination;
 
-  function onSearch({ keyword }) {
+  console.log(current);
+
+  function onSearch({ keyword, offset, size }) {
+    const newOffset = offset || 0;
+    const newSize = size || 30;
     dispatch(routerRedux.push({
-      pathname: `/search/${keyword}/0/30`,
+      pathname: `/search/${keyword}/${newOffset}/${newSize}`,
     }));
   }
 
-  function onPageChange(pageNumber) {
-    console.log('Page: ', pageNumber);
+  function onPageChange(page, pageSize) {
+    console.log('Page: ', page, pageSize);
+    onSearch({
+      keyword: query,
+      offset: (page - 1) * pageSize,
+      size: pageSize,
+    });
   }
-  console.log('spin', loading);
 
   return (
     <div className="content-inner">
@@ -123,7 +131,7 @@ const Search = ({ dispatch, search }) => {
                   </div>
                   <div className={styles.tagWrap}>
                     {result.tags.map((tag) => {
-                      return (<Link to={`/search/${tag.t}/0/30`}><Tag key={Math.random()}>{tag.t}</Tag></Link>);
+                      return (<Link to={`/search/${tag.t}/0/30`}><Tag key={Math.random()} className={styles.tag}>{tag.t}</Tag></Link>);
                     })}
                   </div>
                 </div>
@@ -131,7 +139,14 @@ const Search = ({ dispatch, search }) => {
             })
           }
           <div className={styles.paginationWrap}>
-            <Pagination showQuickJumper defaultCurrent={2} total={500} onChange={onPageChange} />
+            <Pagination
+              showQuickJumper
+              current={current}
+              defaultCurrent={1}
+              defaultPageSize={pageSize}
+              total={total}
+              onChange={onPageChange}
+            />
           </div>
         </div>
       </Spin>

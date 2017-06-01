@@ -63,13 +63,20 @@ export default {
 
   reducers: {
     setParams(state, { payload: { query, offset, size } }) {
+      console.log(size);
       return { ...state, query, offset, pagination: { pageSize: size } };
     },
 
     searchPersonSuccess(state, { payload: { data } }) {
       const { result, total } = data;
       const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
-      return { ...state, results: result, pagination: { total, current }, loading: false };
+      console.log('kkk', current);
+      return {
+        ...state,
+        results: result,
+        pagination: { pageSize: state.pagination.pageSize, total, current },
+        loading: false,
+      };
     },
 
     searchPersonAggSuccess(state, { payload: { data } }) {

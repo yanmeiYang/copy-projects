@@ -29,7 +29,7 @@ class PersonPublications extends React.Component {
   //     return false;
   //   }
   // }
-  //
+
   shouldComponentUpdate(nextProps, nextState) {
     // return this.state.personId === nextProps.personId;
     console.log('------------------------------------')
@@ -44,15 +44,14 @@ class PersonPublications extends React.Component {
   }
 
   render() {
-    const { publications } = this.props; // Must not be null.
-    const { test, personId, results } = publications;
+    const { publications } = this.props;
+    const { results } = publications;
     return (
-      <div>
-        <h1>这里显示publications</h1>
-        <p>{results && results.length} items;</p>
+      <div className={styles.person_publications}>
+
+        <p>共 {results && results.length} 条;</p>
 
         <PublicationList pubs={results} />
-
 
       </div>
     );

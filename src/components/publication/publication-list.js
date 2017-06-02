@@ -15,8 +15,11 @@ class PublicationList extends React.Component {
             (<li key={item.id}>
               <a
                 href={pubService.getArchiveUrlByPub(item)} target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener noreferrer" className={styles.title}
               >{item.title}</a>
+              <div className={styles.authors}>
+                {pub.pdf}
+              </div>
             </li>);
         })}
         </ul>

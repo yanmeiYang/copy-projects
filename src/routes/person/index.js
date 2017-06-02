@@ -29,6 +29,7 @@ const Person = ({ dispatch, person, loading }) => {
 
       <ProfileInfo profile={profile} />
 
+      <h1>论文:</h1>
       <PersonPublications personId={profile.id} />
 
     </div>

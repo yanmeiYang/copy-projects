@@ -1,1 +1,19 @@
-.publist { border: solid 1px grey }
+.publist {
+  border: solid 1px rgb(216, 216, 216); padding: 8px;
+
+  ul {
+    display: flex;
+    flex-direction: column;
+
+    li {
+      display: flex;
+      flex-direction: column;
+
+      .title { font-size: 12px; font-weight: bold; color: black; }
+      .title:hover { color: rgb(37, 63, 124); }
+      .authors { }
+
+    }
+  }
+
+}

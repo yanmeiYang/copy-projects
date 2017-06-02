@@ -72,13 +72,13 @@ class RegistrationForm extends React.Component {
         data.location.address = values.address;
         data.time.from = this.state.startValue.toJSON();
         data.time.to = this.state.endValue.toJSON();
-        fetch(config.baseURL+config.api.postActivity, {
+        fetch(config.baseURL + config.api.postActivity, {
           method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-          body: JSON.stringify({data}),
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ data }),
         });
         // $http.post api.postActivity,
         // $scope.seminar

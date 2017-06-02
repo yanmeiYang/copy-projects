@@ -4,9 +4,13 @@ const { api } = config;
 const { userLogin } = api;
 
 export async function login(data) {
-  return request({
-    url: userLogin,
+  data.persist = true;
+  return request(userLogin, {
     method: 'post',
-    data,
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data),
   });
 }

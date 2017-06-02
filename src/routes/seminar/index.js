@@ -47,12 +47,12 @@ const Seminar = ({ location, dispatch, seminar, loading }) => {
                     </div>
                     <div className={styles.con}>
                       <h3>
-                        <a href='javascript:void(0)' onClick={goToDetail.bind(this,result.id)}>{result.title}</a>
+                        <a href='javascript:void(0)' onClick={goToDetail.bind(this, result.id)}>{result.title}</a>
                       </h3>
                       <div className={styles.info}>
                         <p>
                           <span className={styles.type}>
-                              活动类型：{seminar.type === 0 ? 'seminar' : 'workshop'}
+                              活动类型：{result.type === 0 ? 'seminar' : 'workshop'}
                             </span>
                           <span>
                               <em>关键字：</em>
@@ -84,12 +84,12 @@ const Seminar = ({ location, dispatch, seminar, loading }) => {
                     </div>
                     <div className={styles.con}>
                       <h3>
-                        <a href='javascript:void(0)' onClick={goToDetail.bind(this,result.id)}>{result.title}</a>
+                        <a href='javascript:void(0)' onClick={goToDetail.bind(this, result.id)}>{result.title}</a>
                       </h3>
                       <div className={styles.info}>
                         <p>
                           <span className={styles.type}>
-                              活动类型：{seminar.type === 0 ? 'seminar' : 'workshop'}
+                              活动类型：{result.type === 0 ? 'seminar' : 'workshop'}
                             </span>
                           <span>
                               <em>关键字：</em>

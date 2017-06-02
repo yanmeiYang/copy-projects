@@ -24,7 +24,7 @@ module.exports = [
     bpid: 1,
     name: '学术活动',
     icon: 'api',
-    router: '/request',
+    router: '/seminar',
   },
   {
     id: 4,

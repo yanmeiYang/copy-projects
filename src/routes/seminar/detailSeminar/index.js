@@ -94,8 +94,9 @@ const DetailSeminar = ({ seminar }) => {
                 { summaryById.title }
               </strong>
             </h4>
-
-            <ul className={styles.messages}>
+            {summaryById.type === 0 ?
+              <div>
+                <ul className={styles.messages}>
               <span>
                 {summaryById.speaker ?
                   <div>
@@ -123,15 +124,14 @@ const DetailSeminar = ({ seminar }) => {
                   </div>
                   : ''}
               </span>
-              <span>
+                  <span>
                 {summaryById.time ? <li><p>
                   <Icon type="clock-circle-o"/>
                   <strong>Time:&nbsp;</strong>
                   <span>{dateRangeToString(summaryById.time.from, summaryById.time.to)} &nbsp;&nbsp;{timeRangeToString(summaryById.time.from, summaryById.time.to)}</span>
                 </p></li> : ''}
               </span>
-
-              <span>
+                  <span>
                 {
                   summaryById.location ? <div>
                     {summaryById.location.city ?
@@ -156,16 +156,25 @@ const DetailSeminar = ({ seminar }) => {
                     : ''
                 }
               </span>
-            </ul>
-
-            <div>
-              {summaryById.abstract ? <div>
-                <h5>Abstract:</h5>
-                <div className={styles.center}>
-                  <p className='rdw-justify-aligned-block'>{summaryById.abstract}</p>
+                </ul>
+                <div>
+                  {summaryById.abstract ? <div>
+                    <h5>Abstract:</h5>
+                    <div className={styles.center}>
+                      <p className='rdw-justify-aligned-block'>{summaryById.abstract}</p>
+                    </div>
+                  </div> : ''}
                 </div>
-              </div> : ''}
-            </div>
+              </div>
+              : <div className={styles.workshopTetail}>
+                {summaryById.img ? <div>
+                  <h5>{dateRangeToString(summaryById.time.from, summaryById.time.to)}&nbsp&nbsp{timeRangeToString(summaryById.time.from, summaryById.time.to)}. { summaryById.location.address }</h5>
+                  <img src={summaryById.img}/>
+                  <p>{summaryById.abstract}</p>
+                  <hr/>
+                </div> : ''}
+              </div>}
+
 
             <div>
               {summaryById.speaker ? <div>
@@ -177,6 +186,84 @@ const DetailSeminar = ({ seminar }) => {
                 </div> : ''}
               </div> : ''}
             </div>
+            {/*type=workshop*/}
+            {summaryById.type === 1 ? <div>{
+              summaryById.talk.map((aTalk) => {
+                return (
+                  <div key={aTalk.speaker.aid} className={styles.workshop}>
+                    <h5>
+                      <strong>{aTalk.title}</strong>
+                    </h5>
+                    <div>
+                      <div className={styles.speakerAvatar}>
+                        <img src={aTalk.speaker.img} alt='aTalk.speaker.name'/>
+                      </div>
+                    </div>
+                    <ul className={styles.messages}>
+                    <span>
+                      {aTalk.speaker ?
+                        <div>
+                          <li>
+                            <p>
+                              <Icon type='user'/>
+                              <strong>Name:&nbsp;</strong>
+                              <span>{aTalk.speaker.name}</span>
+                            </p>
+                          </li>
+                          <li>
+                            {aTalk.speaker.position ?
+                              <p><Icon type="medicine-box"/>
+                                <strong>Position:&nbsp;</strong>
+                                <span>{aTalk.speaker.position}</span></p>
+                              : ''}
+                          </li>
+                          <li>
+                            {aTalk.speaker.affiliation ?
+                              <p><Icon type="medicine-box"/>
+                                <strong>Position:&nbsp;</strong>
+                                <span>{aTalk.speaker.affiliation}</span></p>
+                              : ''}
+                          </li>
+                        </div>
+                        : ''}
+                      </span>
+                      <span>
+                        {aTalk.time ? <li><p>
+                          <Icon type="clock-circle-o"/>
+                          <strong>Time:&nbsp;</strong>
+                          <span>{dateRangeToString(aTalk.time.from, aTalk.time.to)} &nbsp;&nbsp;{timeRangeToString(summaryById.time.from, summaryById.time.to)}</span>
+                        </p></li> : ''}
+                      </span>
+                      <span>
+                        {aTalk.location ? <span>
+                            {aTalk.location.address ? <li><p>
+                              <Icon type="environment-o"/>
+                              <strong>Time:&nbsp;</strong>
+                              <span>{dateRangeToString(aTalk.time.from, aTalk.time.to)} &nbsp;&nbsp;{timeRangeToString(summaryById.time.from, summaryById.time.to)}</span>
+                            </p></li> : ''}</span> : ''}
+                      </span>
+                    </ul>
+                    <div>
+                      {aTalk.abstract ? <div>
+                        <h5>Abstract:</h5>
+                        <div className={styles.center}>
+                          <p className='rdw-justify-aligned-block'>{aTalk.abstract}</p>
+                        </div>
+                      </div> : ''}
+                    </div>
+                    <div>
+                      {aTalk.speaker.bio ? <div>
+                        <h5>Bio:</h5>
+                        <div className={styles.center}>
+                          <p className='rdw-justify-aligned-block'>{ aTalk.speaker.bio }</p>
+                        </div>
+                      </div> : ''}
+                    </div>
+                    <hr/>
+                  </div>
+                )
+              })}
+            </div> : ''}
 
             {/*<div className={styles.action}>
              <Button>
@@ -189,10 +276,10 @@ const DetailSeminar = ({ seminar }) => {
              </Button>
              </div>*/}
 
-             <div className={styles.rate}>
-               <span>专家评分：</span>
-               <Rate allowHalf defaultValue={2.5} />
-             </div>
+            <div className={styles.rate}>
+              <span>专家评分：</span>
+              <Rate allowHalf defaultValue={2.5}/>
+            </div>
 
             <div className={styles.comment}>
               <Input type='textarea' rows={4} placeholder='请输入评语。。。'/>

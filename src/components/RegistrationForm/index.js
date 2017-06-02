@@ -196,7 +196,7 @@ class RegistrationForm extends React.Component {
             >
               {getFieldDecorator('address', {
                 rules: [{
-                  required: true, message: '请输入活动地点',
+                  message: '请输入活动地点',
                 }],
               })(
                 <Input placeholder='请输入活动地点。。。'/>
@@ -208,7 +208,7 @@ class RegistrationForm extends React.Component {
             >
               {getFieldDecorator('abstract', {
                 rules: [{
-                  required: true, message: '请输入活动简介',
+                  message: '请输入活动简介',
                 }],
               })(
                 <Input type='textarea' rows={4} placeholder='请输入活动简介。。。'/>

@@ -78,6 +78,29 @@ const Routers = function ({ history, app }) {
         },
       ],
     },
+    /* add by bo gao */
+    {
+      path: '/person/:id',
+      component: App,
+      getIndexRoute(nextState, cb) {
+        require.ensure([], (require) => {
+          registerModel(app, require('./models/person'));
+          registerModel(app, require('./models/publications'));
+          cb(null, { component: require('./routes/person') });
+        }, 'persons');
+      },
+      childRoutes: [
+        // {
+        //   path: 'search/:query/:offset/:size',
+        //   getComponent(nextState, cb) {
+        //     require.ensure([], (require) => {
+        //       registerModel(app, require('./models/search'));
+        //       cb(null, require('./routes/search/'));
+        //     }, 'search');
+        //   },
+        // },
+      ],
+    },
     {
       path: '/dashboard',
       component: App,

@@ -10,6 +10,7 @@ module.exports = {
   iconFontCSS: '/iconfont.css',
   iconFontJS: '/iconfont.js',
   baseURL: 'https://api.aminer.org/api',
+  basePageURL: 'https://aminer.org',
   YQL: ['http://www.zuimeitianqi.com'],
   CORS: ['http://localhost:7000'],
   openPages: ['/login'],
@@ -23,6 +24,15 @@ module.exports = {
     getActivityById: '/activity/:id',
     postActivity: '/activity/post_activity',
     speakerSuggest: '/activity/speaker/suggest',
+
+    /* person */
+    personProfile: '/person/summary/:id',
+    personEmailImg: '/person/email/i/',
+    getEmailCrImage: '/person/email-cr/i/',
+
+    /* publications */
+    pubList: '/person/pubs/:id/all/year/:offset/:size',
+
     // userLogout: '/user/logout',
     // userInfo: '/userInfo',
     // users: '/users',

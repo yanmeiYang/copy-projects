@@ -87,7 +87,7 @@ const DetailSeminar = ({ seminar }) => {
   return (
     <div className={styles.detailSeminar}>
       <Row>
-        <Col span={12} offset={6} className={styles.thumbnail}>
+        <Col span={16} offset={4} className={styles.thumbnail}>
           <div className={styles.caption}>
             <h4 className=''>
               <strong>
@@ -116,7 +116,7 @@ const DetailSeminar = ({ seminar }) => {
                     </li>
                     <li>
                       {summaryById.speaker.affiliation ?
-                        <p><Icon type="medicine-box"/>
+                        <p><Icon type="environment-o" />
                           <strong>Position:&nbsp;</strong>
                           <span>{summaryById.speaker.affiliation}</span></p>
                         : ''}
@@ -219,8 +219,8 @@ const DetailSeminar = ({ seminar }) => {
                           </li>
                           <li>
                             {aTalk.speaker.affiliation ?
-                              <p><Icon type="medicine-box"/>
-                                <strong>Position:&nbsp;</strong>
+                              <p><Icon type="environment-o" />
+                                <strong>Affiliation:&nbsp;</strong>
                                 <span>{aTalk.speaker.affiliation}</span></p>
                               : ''}
                           </li>

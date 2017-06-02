@@ -54,9 +54,6 @@ class RegistrationForm extends React.Component {
     startValue: null,
     endValue: null,
     searchExperts: false,
-    speaker: {
-      name: '', position: '', affiliation: ''
-    }
   };
 
 
@@ -109,9 +106,22 @@ class RegistrationForm extends React.Component {
   };
 
   //search experts
-  showModal = (name) => {
-    console.log(name);
-    // dispatch({type:'seminar/getSpeakerSuggest',payload:''});
+  showModal = () => {
+    const payload = {
+      name: this.refs.speakerName.refs.input.value,
+      position: this.refs.speakerPos.refs.input.value,
+      affiliation: this.refs.speakerAff.refs.input.value,
+      title: '',
+    };
+    fetch(config.baseURL+ config.api.speakerSuggest, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('token')
+      },
+      body: JSON.stringify(payload),
+    });
     this.setState({
       searchExperts: true,
     });
@@ -257,17 +267,11 @@ class RegistrationForm extends React.Component {
                   </Col>
                   <Col span={14}>
                     <div className={styles.expertProfile}>
-                      {getFieldDecorator('speaker.name', {})(
-                        <Input size='large' placeholder='嘉宾姓名'/>
-                      )}
-                      {getFieldDecorator('speaker.affiliation', {})(
-                        <Input size='large' placeholder='嘉宾职位'/>
-                      )}
-                      {getFieldDecorator('speaker.position', {})(
-                        <Input size='large' placeholder='嘉宾单位'/>
-                      )}
-                      {/*<Button type='primary' className={styles.recommendation}*/}
-                      {/*onClick={this.showModal.bind(this)}>相关嘉宾推荐</Button>*/}
+                      <Input size='large' placeholder='嘉宾姓名' ref='speakerName' />
+                      <Input size='large' placeholder='嘉宾职位' ref='speakerPos' />
+                      <Input size='large' placeholder='嘉宾单位' ref='speakerAff' />
+                      <Button type='primary' className={styles.recommendation}
+                              onClick={this.showModal.bind(this)}>相关嘉宾推荐</Button>
                       <Modal
                         title="Search Experts"
                         visible={this.state.searchExperts}

@@ -7,10 +7,10 @@ class PublicationList extends React.Component {
   state = {};
 
   render() {
-    const results = this.props.pubs;
+    const pubs = this.props.pubs;
     return (
       <div className={styles.publist}>
-        <ul>{results && results.map((item) => {
+        <ul>{pubs && pubs.map((item) => {
           return item &&
             (<li key={item.id}>
               <a

@@ -25,8 +25,7 @@ const Person = ({ dispatch, person, loading }) => {
 //   }));
 // }
   return (
-    <div className={styles.normal}>
-      <h1>这里显示专家列表</h1>
+    <div className="content-inner">
 
       <ProfileInfo profile={profile} />
 

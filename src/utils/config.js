@@ -22,6 +22,7 @@ module.exports = {
     getSeminars: '/activity/list/offset/:offset/size/:size',
     getActivityById: '/activity/:id',
     postActivity: '/activity/post_activity',
+    speakerSuggest: '/activity/speaker/suggest',
     // userLogout: '/user/logout',
     // userInfo: '/userInfo',
     // users: '/users',

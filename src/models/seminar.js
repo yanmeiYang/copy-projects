@@ -11,6 +11,7 @@ export default {
     results: [],
     id: null,
     summaryById: [],
+    speakerSuggests: [],
     isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
     pagination: {
       showSizeChanger: true,
@@ -50,6 +51,10 @@ export default {
       yield put({ type: 'getSeminarByIDSuccess', payload: { data } });
     },
 
+    *getSpeakerSuggest({ payload }, { call, put }){
+      const { data } = yield call(seminarService.getSpeakerSuggest, payload);
+      yield put({ type: 'getSpeakerSuggestSuccess', payload: { data } });
+    }
   },
 
   reducers: {
@@ -61,6 +66,11 @@ export default {
       console.log(data);
       return { ...state, summaryById: data };
     },
+
+    getSpeakerSuggestSuccess(state, { payload: { data } }){
+      console.log(data);
+      return { ...state, speakerSuggests: data };
+    }
   },
 
 };

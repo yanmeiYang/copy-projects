@@ -16,3 +16,10 @@ export async function getSeminarById(id) {
     method: 'GET',
   });
 }
+
+export async function getSpeakerSuggest(data) {
+  return request(api.speakerSuggest,{
+    method:'POST',
+    body: JSON.stringify(data)
+  })
+}

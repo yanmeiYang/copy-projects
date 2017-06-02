@@ -20,9 +20,9 @@ export default {
       payload,
     }, { put, call }) {
       yield put({ type: 'showLoginLoading' });
-      const data = yield call(login, payload);
+      const { data } = yield call(login, payload);
       yield put({ type: 'hideLoginLoading' });
-      if (data.success) {
+      if (data.status) {
         localStorage.setItem('token', data.token);
         console.log(data);
         const from = queryURL('from');

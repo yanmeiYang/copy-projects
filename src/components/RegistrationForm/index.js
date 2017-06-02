@@ -5,18 +5,14 @@ import React from 'react';
 import {
   Form,
   Input,
-  Tooltip,
   Icon,
-  Cascader,
   Select,
   Row,
   Col,
-  Checkbox,
   Button,
   AutoComplete,
-  DatePicker,
   Upload,
-  message
+  Modal
 } from 'antd';
 import { request, config } from '../../utils';
 import styles from './index.less'
@@ -57,6 +53,10 @@ class RegistrationForm extends React.Component {
     confirmDirty: false,
     startValue: null,
     endValue: null,
+    searchExperts: false,
+    speaker: {
+      name: '', position: '', affiliation: ''
+    }
   };
 
 
@@ -67,18 +67,20 @@ class RegistrationForm extends React.Component {
         let data = values;
         data.location = { city: '', address: '' };
         data.time = { from: '', to: '' };
-        data.img = image;
+        // data.img = image;
         data.type = parseInt(values.type);
         data.location.address = values.address;
         data.time.from = this.state.startValue.toJSON();
         data.time.to = this.state.endValue.toJSON();
+        data.uid = '54f5112e45ce1bc6d563b8d9';
         fetch(config.baseURL + config.api.postActivity, {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('token')
           },
-          body: JSON.stringify({ data }),
+          body: JSON.stringify(data),
         });
         // $http.post api.postActivity,
         // $scope.seminar
@@ -105,6 +107,28 @@ class RegistrationForm extends React.Component {
   onChildChanged = (field, value) => {
     this.setState({ [field]: value });
   };
+
+  //search experts
+  showModal = (name) => {
+    console.log(name);
+    // dispatch({type:'seminar/getSpeakerSuggest',payload:''});
+    this.setState({
+      searchExperts: true,
+    });
+  };
+  handleOk = (e) => {
+    console.log(e);
+    this.setState({
+      searchExperts: false,
+    });
+  };
+  handleCancel = (e) => {
+    console.log(e);
+    this.setState({
+      searchExperts: false,
+    });
+  };
+
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -226,17 +250,34 @@ class RegistrationForm extends React.Component {
                           </div>
                         </div>
                       </div>
-                      <Button size='small'>
-                        <Icon type="cloud-upload"/>&nbsp;Upload
-                      </Button>
+                      {/*<Button size='small'>*/}
+                      {/*<Icon type="cloud-upload"/>&nbsp;Upload*/}
+                      {/*</Button>*/}
                     </section>
                   </Col>
                   <Col span={14}>
                     <div className={styles.expertProfile}>
-                      <Button type='primary' className={styles.recommendation}>相关嘉宾推荐</Button>
-                      <Input size='large' placeholder='嘉宾姓名'/>
-                      <Input size='large' placeholder='嘉宾职位'/>
-                      <Input size='large' placeholder='嘉宾单位'/>
+                      {getFieldDecorator('speaker.name', {})(
+                        <Input size='large' placeholder='嘉宾姓名'/>
+                      )}
+                      {getFieldDecorator('speaker.affiliation', {})(
+                        <Input size='large' placeholder='嘉宾职位'/>
+                      )}
+                      {getFieldDecorator('speaker.position', {})(
+                        <Input size='large' placeholder='嘉宾单位'/>
+                      )}
+                      {/*<Button type='primary' className={styles.recommendation}*/}
+                      {/*onClick={this.showModal.bind(this)}>相关嘉宾推荐</Button>*/}
+                      <Modal
+                        title="Search Experts"
+                        visible={this.state.searchExperts}
+                        onOk={this.handleOk}
+                        onCancel={this.handleCancel}
+                      >
+                        <p>Some contents...</p>
+                        <p>Some contents...</p>
+                        <p>Some contents...</p>
+                      </Modal>
                     </div>
                   </Col>
                 </FormItem>

@@ -7,16 +7,19 @@ class PublicationList extends React.Component {
   state = {};
 
   render() {
-    const results = this.props.pubs;
+    const pubs = this.props.pubs;
     return (
       <div className={styles.publist}>
-        <ul>{results && results.map((item) => {
+        <ul>{pubs && pubs.map((item) => {
           return item &&
             (<li key={item.id}>
               <a
                 href={pubService.getArchiveUrlByPub(item)} target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener noreferrer" className={styles.title}
               >{item.title}</a>
+              <div className={styles.authors}>
+                {pub.pdf}
+              </div>
             </li>);
         })}
         </ul>

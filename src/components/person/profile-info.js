@@ -8,6 +8,12 @@ class ProfileInfo extends React.Component {
 
   render() {
     const profile = this.props.profile;
+    const name = profileUtils.displayNameCNFirst(profile.name, profile.name_zh);
+    const pos = profileUtils.displayPosition(profile.pos);
+    const aff = profileUtils.displayAff(profile);
+    const phone = profile.contact && profile.contact.phone;
+    const email = profileUtils.displayEmailSrc(profile);
+    const homepage = profile.contact && profile.contact.homepage;
 
     return (
       <div className={classnames(styles.profile_info, 'container-wrong')}>
@@ -19,23 +25,18 @@ class ProfileInfo extends React.Component {
         </div>
 
         <div className={styles.info_zone}>
+          {name &&
           <div className={styles.title}>
-            <h1>{profile.name_zh} {profile.name ? '（' + profile.name + '）' : ''}</h1>
-
+            <h1>{name}</h1>
             { false && <span className={styles.rank}>会士</span>}
+          </div>}
+          {name && <div className={styles.spliter} />}
 
-          </div>
-          <div className={styles.spliter} />
-
-          <div>{profileUtils.displayPosition(profile.pos)}</div>
-          <div>{profileUtils.displayAff(profile)}</div>
-
-          <div title="TODO only logined in user can see">
-            {profile.contact && profile.contact.phone}
-          </div>
-
-          <div>{profileUtils.displayEmailSrc(profile)}</div>
-          <div>{profile.contact && profile.contact.homepage}</div>
+          {pos && <span><i className="fa fa-briefcase fa-fw" /> {pos}</span>}
+          {aff && <span><i className="fa fa-institution fa-fw" /> {aff}</span>}
+          {phone && <span><i className="fa fa-phone fa-fw" /> {phone}</span>}
+          {email && <span><i className="fa fa-envelope fa-fw" /> {email}</span>}
+          {homepage && <span><i className="fa fa-globe fa-fw" /> {homepage}</span>}
         </div>
 
         { false && <div>

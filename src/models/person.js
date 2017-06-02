@@ -44,7 +44,6 @@ export default {
       // console.log('effects: getPerson', payload);
       const { personId } = payload;
       const data = yield call(personService.getPerson, personId);
-      console.log('sosososo', data)
       yield put({ type: 'getPersonSuccess', payload: { data } });
     },
   },

@@ -34,7 +34,22 @@ const getAvatar = (src, profileId, size) => {
  * @returns: position string.
  */
 const displayPosition = (pos) => {
-  return pos && pos[pos.length - 1].n ? pos[pos.length - 1].n : '';
+  return pos && pos[pos.length - 1] && pos[pos.length - 1].n ? pos[pos.length - 1].n : '';
+}
+
+const displayNameCNFirst = (name, nameCN) => {
+  const cs = [];
+  if (nameCN) {
+    cs.push(nameCN);
+    if (name) {
+      cs.push('(');
+      cs.push(name);
+      cs.push(')');
+    }
+  } else {
+    cs.push(name);
+  }
+  return cs.join('');
 }
 
 /**
@@ -86,6 +101,7 @@ function displayEmailSrc2(personId, hasEmail, hasEmailCR) {
  */
 module.exports = {
   getAvatar,
+  displayNameCNFirst,
   displayPosition,
   displayAff,
   displayEmailSrc,

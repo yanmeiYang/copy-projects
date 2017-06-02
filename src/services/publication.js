@@ -28,3 +28,53 @@ export function getArchiveUrlByPub(pub) {
   }
   return `${config.basePageURL}/archive/${title}/${pub.id}`;
 }
+
+export function getPubLabels(pub) {
+  const labels = []
+  if (pub.versions) {
+    pub.versions.map((v) => {
+      if (!(v.src == 'mag' || v.src == 'msra')) {
+        if (v.src == 'dblp' || v.src == 'ei' || v.src == 'acm' || v.src == 'ieee') {
+          labels.push('EI');
+        }
+        if (v.src == 'pubmed' || v.src == 'ieee' || v.src == 'sci' || v.src == 'nature' || v.src == 'science' || v.src == 'pnas' || v.src == 'scopus') {
+          labels.push('WOS');
+        }
+        if (v.src == 'science' || v.src == 'nature' || v.src == 'scopus') {
+          labels.push(v.src.toUpperCase());
+        }
+        if (v.src == 'esi_hot') {
+          labels.push('Hot Paper');
+        }
+        if (v.src == 'esi_highlycited') {
+          labels.push('Highly Cited Paper');
+        }
+      }
+      return v;
+    });
+  }
+  return labels;
+}
+
+export function getVenueName(venue) {
+  let venueName = '';
+  if (venue.info) {
+    if (venue.info.name_s) {
+      venueName = venue.info.name_s;
+    } else if (venue.info.name) {
+      venueName = venue.info.name;
+    } else if (venue.info.name_zh) {
+      venueName = venue.info.name_zh;
+    } else if (venue.name) {
+      venueName = venue.name;
+    }
+  }
+  return chop(venueName, 100);
+}
+
+function chop(text, size) {
+  if (text) {
+    return text.length > size ? `${text.substring(0, size)}...` : text;
+  }
+  return '';
+}

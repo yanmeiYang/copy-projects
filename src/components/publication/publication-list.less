@@ -8,10 +8,35 @@
     li {
       display: flex;
       flex-direction: column;
+      margin-bottom: 8px;
 
-      .title { font-size: 12px; font-weight: bold; color: black; }
-      .title:hover { color: rgb(37, 63, 124); }
-      .authors { }
+      .title_line {
+        display: flex;
+        flex-direction: row;
+        flex: 2;
+
+        .title {
+          flex: 2 auto;
+          a { font-size: 13px; font-weight: bold; color: black; }
+          a:hover { color: rgb(37, 63, 124); }
+        }
+
+        .labels {
+          display: flex;
+          flex-direction: row-reverse;
+          flex: 1;
+        }
+      }
+
+      .authors {
+        font-size: 12px;
+        .current { color: red; }
+      }
+
+      .citedby {
+        a { color: #a94442; font-weight: bold; }
+        a:hover { color: rgb(169, 68, 66s) }
+      }
 
     }
   }

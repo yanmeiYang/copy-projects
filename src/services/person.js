@@ -14,3 +14,11 @@ export async function getSeminars(offset, size) {
   return request(api.getSeminars.replace(':offset', offset).replace(':size', size));
 }
 
+export function getProfileUrl(name, id) {
+  let str = '';
+  if (name) {
+    str = name.toLowerCase().match(/[a-zA-Z]+/g).join('-');
+  }
+  // return `/person/${str}/${id}`;
+  return `/person/${id}`;
+}

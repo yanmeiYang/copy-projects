@@ -32,9 +32,6 @@ class PersonPublications extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     // return this.state.personId === nextProps.personId;
-    console.log('------------------------------------')
-    console.log('shouldComponent UPdate: ', nextProps)
-    console.log('shouldComponent UPdate: ', nextState)
     return true;
   }
 

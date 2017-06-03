@@ -78,7 +78,7 @@ const DetailSeminar = ({ seminar }) => {
   }
 
   //share
-  let shareModalDisplay = false
+  let shareModalDisplay = false;
 
   function clipboard(path) {
     shareModalDisplay = !shareModalDisplay;
@@ -97,40 +97,43 @@ const DetailSeminar = ({ seminar }) => {
             {summaryById.type === 0 ?
               <div>
                 <ul className={styles.messages}>
-              <span>
-                {summaryById.speaker ?
-                  <div>
-                    <li>
-                      <p>
-                        <Icon type='user'/>
-                        <strong>Name:&nbsp;</strong>
-                        <span>{summaryById.speaker.name}</span>
-                      </p>
-                    </li>
-                    <li>
-                      {summaryById.speaker.position ?
-                        <p><Icon type="medicine-box"/>
-                          <strong>Position:&nbsp;</strong>
-                          <span>{summaryById.speaker.position}</span></p>
-                        : ''}
-                    </li>
-                    <li>
-                      {summaryById.speaker.affiliation ?
-                        <p><Icon type="environment-o" />
-                          <strong>Position:&nbsp;</strong>
-                          <span>{summaryById.speaker.affiliation}</span></p>
-                        : ''}
-                    </li>
-                  </div>
-                  : ''}
-              </span>
                   <span>
-                {summaryById.time ? <li><p>
-                  <Icon type="clock-circle-o"/>
-                  <strong>Time:&nbsp;</strong>
-                  <span>{dateRangeToString(summaryById.time.from, summaryById.time.to)} &nbsp;&nbsp;{timeRangeToString(summaryById.time.from, summaryById.time.to)}</span>
-                </p></li> : ''}
-              </span>
+                    {summaryById.speaker ?
+                      <div>
+                        {summaryById.speaker.img?<div className={styles.speakerAvatar}>
+                          <img src={summaryById.speaker.img}/>
+                        </div>:''}
+                        <li>
+                          <p>
+                            <Icon type='user'/>
+                            <strong>Name:&nbsp;</strong>
+                            <span>{summaryById.speaker.name}</span>
+                          </p>
+                        </li>
+                        <li>
+                          {summaryById.speaker.position ?
+                            <p><Icon type="medicine-box"/>
+                              <strong>Position:&nbsp;</strong>
+                              <span>{summaryById.speaker.position}</span></p>
+                            : ''}
+                        </li>
+                        <li>
+                          {summaryById.speaker.affiliation ?
+                            <p><Icon type="environment-o"/>
+                              <strong>Position:&nbsp;</strong>
+                              <span>{summaryById.speaker.affiliation}</span></p>
+                            : ''}
+                        </li>
+                      </div>
+                      : ''}
+                  </span>
+                  <span>
+                    {summaryById.time ? <li><p>
+                      <Icon type="clock-circle-o"/>
+                      <strong>Time:&nbsp;</strong>
+                      <span>{dateRangeToString(summaryById.time.from, summaryById.time.to)} &nbsp;&nbsp;{timeRangeToString(summaryById.time.from, summaryById.time.to)}</span>
+                    </p></li> : ''}
+                  </span>
                   <span>
                 {
                   summaryById.location ? <div>
@@ -219,7 +222,7 @@ const DetailSeminar = ({ seminar }) => {
                           </li>
                           <li>
                             {aTalk.speaker.affiliation ?
-                              <p><Icon type="environment-o" />
+                              <p><Icon type="environment-o"/>
                                 <strong>Affiliation:&nbsp;</strong>
                                 <span>{aTalk.speaker.affiliation}</span></p>
                               : ''}

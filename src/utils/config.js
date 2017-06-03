@@ -33,6 +33,9 @@ module.exports = {
     /* publications */
     pubList: '/person/pubs/:id/all/year/:offset/:size',
     pubListByCitation: '/person/pubs/:id/all/citation/:offset/:size',
+    pubListInfo: '/person/pubs/:id/stats',
+    pubListByYear: '/person/pubs/:id/range/year/:year/:offset/:size',
+    pubListLimited: '/person/pubs/:id/range/citation/:nc_lo/:nc_hi/:offset/:size',
     // userLogout: '/user/logout',
     // userInfo: '/userInfo',
     // users: '/users',

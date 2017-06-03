@@ -17,6 +17,23 @@ export async function getPubsList(params) {
   );
 }
 
+export async function getPubListInfo(params) {
+  const { personId } = params;
+  return request(
+    api.pubListInfo.replace(':id', personId), { method: 'GET' },
+  );
+}
+
+export async function getPubsAll(params) {
+  console.log('WARNING: Need Login to see all publications!');
+  return getPubsList(params);
+}
+
+export async function getPubsCiteAll(params) {
+  console.log('WARNING: Need Login to see all publications!');
+  return getPubsMostPo(params);
+}
+
 /** getPubsById, ordered by Year. */
 export async function getPubsById(params) {
   const { personId, offset, size } = params;
@@ -41,14 +58,33 @@ export async function getPubsMostPo(params) {
   );
 }
 
-// $scope.getPubsMostPo = ->
-// pubListByCitation = Profile.pubListByCitation.query({id: $scope.id,size: 20, offset: 0})
-// pubListByCitation.$promise.then ->
-  // $scope.pubsByCite = pubListByCitation
-  // $scope.currentCite = 1
-  // $scope.startOffset = $scope.total
-  // $scope.busy = false
+/** */
+export async function getPubsByYear(params) {
+  const { personId, year, offset, size } = params;
+  return request(
+    api.pubListByYear
+      .replace(':id', personId)
+      .replace(':year', year)
+      .replace(':size', size)
+      .replace(':offset', offset)
+    , { method: 'GET' },
+  );
+}
 
+
+/** getPubsByCite */
+export async function getPubsByCite(params) {
+  const { personId, offset, nc_lo, nc_hi, size } = params;
+  return request(
+    api.pubListLimited
+      .replace(':id', personId)
+      .replace(':nc_lo', nc_lo)
+      .replace(':nc_hi', nc_hi)
+      .replace(':size', size)
+      .replace(':offset', offset)
+    , { method: 'GET' },
+  );
+}
 
 /**
  * TODO this function redirect to aminer.

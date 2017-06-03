@@ -24,13 +24,16 @@ const Person = ({ dispatch, person, loading }) => {
 //     pathname: `/search/${query}/0/30`,
 //   }));
 // }
+  const totalPubs = profile.indices && profile.indices.num_pubs;
   return (
     <div className="content-inner">
 
       <ProfileInfo profile={profile} />
 
-      <h1>论文:</h1>
-      <PersonPublications personId={profile.id} />
+      <h1>论文:
+        <small>({totalPubs})</small>
+      </h1>
+      <PersonPublications personId={profile.id} totalPubs={totalPubs} />
 
     </div>
   );

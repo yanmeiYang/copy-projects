@@ -1,6 +1,7 @@
 /**
  * Created by yangyanmei on 17/5/26.
  */
+import { routerRedux } from 'dva/router';
 import pathToRegexp from 'path-to-regexp'
 import * as seminarService from '../services/seminar';
 
@@ -54,7 +55,14 @@ export default {
     *getSpeakerSuggest({ payload }, { call, put }){
       const { data } = yield call(seminarService.getSpeakerSuggest, payload);
       yield put({ type: 'getSpeakerSuggestSuccess', payload: { data } });
-    }
+    },
+    *postSeminarActivity({ payload }, { call, put }){
+      console.log(payload);
+      const { data } = yield call(seminarService.postSeminarActivity, payload);
+      if (data.status){
+        yield put(routerRedux.push({pathname:`/seminar/`+data.id}))
+      }
+    },
   },
 
   reducers: {
@@ -70,7 +78,7 @@ export default {
     getSpeakerSuggestSuccess(state, { payload: { data } }){
       console.log(data);
       return { ...state, speakerSuggests: data };
-    }
+    },
   },
 
 };

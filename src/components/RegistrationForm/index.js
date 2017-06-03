@@ -93,23 +93,7 @@ class RegistrationForm extends React.Component {
 
         data.activityTags = state.tags;
         data.uid = '54f5112e45ce1bc6d563b8d9';
-        fetch(config.baseURL + config.api.postActivity, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token')
-          },
-          body: JSON.stringify(data),
-        }).then(response => response.json())
-          .then(function (json) {
-            console.log(json.id);
-            // if (json.status===true){
-            //   fetch(routerRedux.push({
-            //     pathname: `/seminar/${json.id}`,
-            //   }));
-            // }
-          });
+        this.props.dispatch({type:'seminar/postSeminarActivity', payload:data});
       }
     });
   };
@@ -146,6 +130,7 @@ class RegistrationForm extends React.Component {
       affiliation: this.refs.speakerAff.refs.input.value,
       title: '',
     };
+    // this.props.dispatch({type:'seminar/getSpeakerSuggest',payload:payload});
 
     fetch(config.baseURL + config.api.speakerSuggest, {
       method: 'POST',
@@ -203,7 +188,6 @@ class RegistrationForm extends React.Component {
         sm: { span: 21 },
       },
     };
-    console.log(this.props);
     return (
       <Row>
         <Form onSubmit={this.handleSubmit}>
@@ -481,6 +465,6 @@ class RegistrationForm extends React.Component {
 
 const WrappedRegistrationForm = Form.create()(RegistrationForm);
 
-export default connect(({ search }) => ({ search }))(WrappedRegistrationForm);
+export default connect(({ seminar }) => ({ seminar }))(WrappedRegistrationForm);
 
 // export default RegistrationForm;

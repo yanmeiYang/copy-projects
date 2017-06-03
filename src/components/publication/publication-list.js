@@ -14,9 +14,10 @@ class PublicationList extends React.Component {
 
     return (
       <div className={styles.publist}>
-        <ul>{pubs && pubs.map((item) => {
+        <ul>{pubs && pubs.map((item, pubindex) => {
           const labels = pubService.getPubLabels(item);
           const venue = pubService.getVenueName(item.venue);
+
           return item &&
             (<li key={item.id}>
               <div className={styles.title_line}>
@@ -32,13 +33,17 @@ class PublicationList extends React.Component {
                   </a>
                 </span>
                 <div className={styles.labels}>
-                  {labels && labels.map((label) => {
-                    return (
+                  {labels && labels.map((label, index) => {
+                    return (<span key={index}>
                       <Badge
-                        count={ label } style={{
-                        backgroundColor: 'darkred',
-                        color: '#fff',
-                      }} />
+                        count={label}
+                        style={{
+                          borderColor: 'darkred',
+                          backgroundColor: 'rgba(132,0,0,0.8)',
+                          color: '#fff',
+                          borderRadius: '5px',
+                        }}
+                      />&nbsp;</span>
                     );
                   })}
                 </div>
@@ -48,11 +53,16 @@ class PublicationList extends React.Component {
               <div className={styles.authors}>
                 {
                   item.authors && item.authors.slice(0, MaxAuthorNumber).map((author, index) => {
+                    // const authorUniqueKey = `${item.id}-${author.id}-${author.name}`;
+                    const authorUniqueKey = `${pubindex}-${index}`;
                     return (
-                      <span key={author.id}>
+                      <span key={authorUniqueKey}>
+                        {author.id &&
                         <a href={personService.getProfileUrl(author.name, author.id)}>
                           {author.name}
                         </a>
+                        }
+                        {!author.id && author.name}
                         {item.authors.length - 1 > index ? ', ' : ''}
                         {index === MaxAuthorNumber - 1 && item.authors.length > MaxAuthorNumber ? '...' : ''}
                       </span>

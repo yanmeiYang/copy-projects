@@ -1,3 +1,6 @@
+/**
+ * Created by BoGao, 2017-05-30;
+ */
 import { request, config } from '../utils';
 
 const { api } = config;
@@ -13,6 +16,39 @@ export async function getPubsList(params) {
     , { method: 'GET' },
   );
 }
+
+/** getPubsById, ordered by Year. */
+export async function getPubsById(params) {
+  const { personId, offset, size } = params;
+  return request(
+    api.pubList
+      .replace(':id', personId)
+      .replace(':size', size)
+      .replace(':offset', offset)
+    , { method: 'GET' },
+  );
+}
+
+/** getPubsMostPo, ordered by citation number. */
+export async function getPubsMostPo(params) {
+  const { personId, offset, size } = params;
+  return request(
+    api.pubListByCitation
+      .replace(':id', personId)
+      .replace(':size', size)
+      .replace(':offset', offset)
+    , { method: 'GET' },
+  );
+}
+
+// $scope.getPubsMostPo = ->
+// pubListByCitation = Profile.pubListByCitation.query({id: $scope.id,size: 20, offset: 0})
+// pubListByCitation.$promise.then ->
+  // $scope.pubsByCite = pubListByCitation
+  // $scope.currentCite = 1
+  // $scope.startOffset = $scope.total
+  // $scope.busy = false
+
 
 /**
  * TODO this function redirect to aminer.

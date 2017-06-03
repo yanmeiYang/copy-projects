@@ -32,7 +32,7 @@ module.exports = {
 
     /* publications */
     pubList: '/person/pubs/:id/all/year/:offset/:size',
-
+    pubListByCitation: '/person/pubs/:id/all/citation/:offset/:size',
     // userLogout: '/user/logout',
     // userInfo: '/userInfo',
     // users: '/users',

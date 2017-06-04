@@ -30,7 +30,15 @@ const Routers = function ({ history, app }) {
         {
           path: 'search/:query/:offset/:size',
           getComponent(nextState, cb) {
-            require.ensure([], require => {
+            require.ensure([], (require) => {
+              registerModel(app, require('./models/search'));
+              cb(null, require('./routes/search/'));
+            }, 'search');
+          },
+        }, {
+          path: 'experts/:offset/:size',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
               registerModel(app, require('./models/search'));
               cb(null, require('./routes/search/'));
             }, 'search');

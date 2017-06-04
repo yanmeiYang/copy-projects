@@ -26,18 +26,28 @@ export default {
 
   subscriptions: {
     setup({ dispatch, history }) {  // eslint-disable-line
-      history.listen((location) => {
+      history.listen((location, query) => {
         if (location.pathname === '/') {
           dispatch({ type: 'getSeminars', payload: { offset: 0, size: 5 } });
         }
-        const match = pathToRegexp('/search/:query/:offset/:size').exec(location.pathname);
+        let match = pathToRegexp('/search/:query/:offset/:size').exec(location.pathname);
         if (match) {
-          const query = decodeURIComponent(match[1]);
+          const keyword = decodeURIComponent(match[1]);
           const offset = parseInt(match[2], 10);
           const size = parseInt(match[3], 10);
-          dispatch({ type: 'searchPerson', payload: { query, offset, size } });
-          dispatch({ type: 'setParams', payload: { query, offset, size } });
-          dispatch({ type: 'searchPersonAgg', payload: { query, offset, size } });
+          dispatch({ type: 'searchPerson', payload: { query: keyword, offset, size } });
+          dispatch({ type: 'setParams', payload: { query: keyword, offset, size } });
+          dispatch({ type: 'searchPersonAgg', payload: { query: keyword, offset, size } });
+          return;
+        }
+        match = pathToRegexp('/experts/:offset/:size').exec(location.pathname);
+        if (match) {
+          const offset = parseInt(match[1], 10);
+          const size = parseInt(match[2], 10);
+          const keyword = (query && query.keyword) || '';
+          dispatch({ type: 'searchPerson', payload: { query: keyword, offset, size } });
+          dispatch({ type: 'setParams', payload: { query: keyword, offset, size } });
+          dispatch({ type: 'searchPersonAgg', payload: { query: keyword, offset, size } });
         }
       });
     },

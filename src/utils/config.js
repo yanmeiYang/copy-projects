@@ -19,6 +19,8 @@ module.exports = {
     searchPerson: '/search/person',
     searchPersonInBase: '/search/roster/:ebid/experts/advanced',
     searchPersonInBaseAgg: '/search/roster/:ebid/experts/advanced/agg',
+    allPersonInBase: '/roster/:ebid/order-by/h_index/offset/:offset/size/:size',
+    allPersonInBaseAgg: '/roster/:ebid/agg?offset=&order=h_index&size=20',
     userLogin: '/auth/signin',
     getSeminars: '/activity/list/offset/:offset/size/:size',
     getActivityById: '/activity/:id',

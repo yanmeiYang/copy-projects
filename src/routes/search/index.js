@@ -102,6 +102,7 @@ const Search = ({ dispatch, search }) => {
                         agg.item.map((item) => {
                           return (
                             <CheckableTag
+                              key={`${item.label}_${agg.label}`}
                               className={styles.filterItem}
                               checked={filters[agg.label] === item.label}
                               onChange={checked => onFilterChange(agg.label, item.label, checked)}
@@ -191,7 +192,7 @@ const Search = ({ dispatch, search }) => {
                   </div>
                   <div className={styles.tagWrap}>
                     {result.tags.map((tag) => {
-                      return (<Link to={`/search/${tag.t}/0/30`}><Tag key={Math.random()} className={styles.tag}>{tag.t}</Tag></Link>);
+                      return (<Link to={`/search/${tag.t}/0/30`} key={Math.random()}><Tag className={styles.tag}>{tag.t}</Tag></Link>);
                     })}
                   </div>
                 </div>

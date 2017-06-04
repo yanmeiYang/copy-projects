@@ -10,7 +10,7 @@ module.exports = [
     bpid: 1,
     name: '学会会员',
     icon: 'user',
-    router: '/user',
+    router: '/experts/0/30',
   },
   // {
   //   id: 21,

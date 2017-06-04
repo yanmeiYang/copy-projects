@@ -150,12 +150,14 @@ const Search = ({ dispatch, search }) => {
                 result.contact.address : null;
               return (<div className={styles.person} key={result.id}>
                 <div className={styles.left}>
-                  <img src={`${result.avatar}`} alt="头像" />
+                  <Link to={`/person/${result.id}`}><img src={`${result.avatar}`} alt="头像" /></Link>
                 </div>
                 <div className={styles.right}>
                   <div className={styles.nameWrap}>
-                    <h3>{name1}</h3>
-                    { name2 ? <h4>{`(${name2})`}</h4> : '' }
+                    <Link to={`/person/${result.id}`}>
+                      <h3>{name1}</h3>
+                      { name2 ? <h4>{`(${name2})`}</h4> : '' }
+                    </Link>
                   </div>
                   <div className={styles.statWrap}>
                     <div className={styles.item}>

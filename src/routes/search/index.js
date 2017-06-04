@@ -157,6 +157,8 @@ const Search = ({ dispatch, search }) => {
                   <div className={styles.nameWrap}>
                     <Link to={`/person/${result.id}`}>
                       <h3>{name1}</h3>
+                    </Link>
+                    <Link to={`/person/${result.id}`}>
                       { name2 ? <h4>{`(${name2})`}</h4> : '' }
                     </Link>
                   </div>

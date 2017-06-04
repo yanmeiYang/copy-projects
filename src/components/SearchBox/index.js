@@ -13,13 +13,14 @@ class SearchBox extends React.Component {
     const data = {
       query: ReactDOM.findDOMNode(this.refs.searchInput).value,
     };
+    console.log(data);
     if (this.props.select) {
       data.field = this.state.selectValue;
     }
     if (this.props.onSearch) this.props.onSearch(data);
   };
 
-  handleInputChange = e => {
+  handleInputChange = (e) => {
     this.setState({
       ...this.state,
       clearVisible: e.target.value !== '',

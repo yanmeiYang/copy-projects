@@ -44,7 +44,7 @@ const Search = ({ dispatch, search }) => {
   }
 
 
-  function onSearch({ keyword, offset, size }) {
+  function onSearch({ query: keyword, offset, size }) {
     const newOffset = offset || 0;
     const newSize = size || 30;
     dispatch(routerRedux.push({

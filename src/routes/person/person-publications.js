@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Tabs, Button, Radio } from 'antd';
+import { Tabs, Button, Radio, Spin } from 'antd';
 import styles from './person-publications.less';
 import { PublicationList } from '../../components/publication';
 
@@ -17,6 +17,7 @@ class PersonPublications extends React.Component {
   }
 
   state = {
+    // loading: false,
     // resultsByYear: this.props && this.props.results,
     // resultsByCitation: [],
   };
@@ -61,7 +62,7 @@ class PersonPublications extends React.Component {
   onOrderTabChange = (key) => {
     this.params.orderBy = key;
     this.loadPublicationList();
-  }
+  };
 
   onByYearTabChange = (e) => {
     const yearTab = e.target.value;
@@ -73,7 +74,7 @@ class PersonPublications extends React.Component {
       this.params.size = 20;
     }
     this.loadPublicationList();
-  }
+  };
 
   onByCitationTabChange = (e) => {
     const citedTab = e.target.value;
@@ -86,7 +87,7 @@ class PersonPublications extends React.Component {
       this.params.size = 20;
     }
     this.loadPublicationList();
-  }
+  };
 
   /** API Call,exactly the parameters used by publication service. and errects:getPublications. */
   params = {
@@ -99,10 +100,12 @@ class PersonPublications extends React.Component {
   };
 
   loadPublicationList() {
+    // this.state = { loading: true };
     this.props.dispatch({
       type: 'publications/getPublications',
       payload: this.params,
     });
+    // this.state = { loading: false };
   }
 
   render() {
@@ -135,7 +138,10 @@ class PersonPublications extends React.Component {
             </RadioGroup>
             }
 
-            <PublicationList pubs={publications.resultsByYear} />
+            <Spin spinning={this.props.publications.loading}>
+              <PublicationList pubs={publications.resultsByYear} />
+            </Spin>
+
           </TabPane>
 
 
@@ -157,15 +163,16 @@ class PersonPublications extends React.Component {
                 if (ncite.size <= 0) {
                   return '';
                 }
-                return <RadioButton value={key} key={key}>{`${ncite.nl}-${ncite.nh}`}</RadioButton>
+                return <RadioButton value={key} key={key}>{`${ncite.nl}-${ncite.nh}`}</RadioButton>;
               })}
             </RadioGroup>
             }
-            <PublicationList pubs={publications.resultsByCitation} />
+            <Spin spinning={this.props.publications.loading}>
+              <PublicationList pubs={publications.resultsByCitation} />
+            </Spin>
           </TabPane>
 
         </Tabs>
-
       </div>
     );
   }

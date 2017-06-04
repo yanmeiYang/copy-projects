@@ -12,6 +12,7 @@ export default {
     pubListInfo: {},
     resultsByYear: [],
     resultsByCitation: [],
+    loading: false,
 
     // not used yet
     results: [],
@@ -51,6 +52,8 @@ export default {
     },
 
     *getPublications({ payload }, { call, put }) {
+      yield put({ type: 'showLoading' });
+
       // console.log('>>> Effects GetPublications. payload is ;', payload);
       const { personId, orderBy, year, citedTab, offset, size } = payload;
 
@@ -92,11 +95,20 @@ export default {
 
     getPublicationSuccess(state, { payload: { orderBy, data } }) {
       if (orderBy === 'byYear') {
-        return { ...state, resultsByYear: data.data };
+        return { ...state, resultsByYear: data.data, loading: false };
       } else if (orderBy === 'byCitation') {
-        return { ...state, resultsByCitation: data.data };
+        return { ...state, resultsByCitation: data.data, loading: false };
       }
     },
+
+    showLoading(state) {
+      return { ...state, loading: true };
+    },
+
+    hideLoading(state) {
+      return { ...state, loading: false };
+    },
   },
+
 
 };

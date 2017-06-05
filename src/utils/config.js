@@ -26,6 +26,7 @@ module.exports = {
     getActivityById: '/activity/:id',
     postActivity: '/activity/post_activity',
     speakerSuggest: '/activity/speaker/suggest',
+    uploadActivityPosterImgFile: '/activity/img',
 
     /* person */
     personProfile: '/person/summary/:id',

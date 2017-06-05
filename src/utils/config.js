@@ -41,7 +41,7 @@ module.exports = {
     // userLogout: '/user/logout',
     // userInfo: '/userInfo',
     // users: '/users',
-    // user: '/user/:id',
+    currentUser: '/user/me',
     // dashboard: '/dashboard',
   },
 };

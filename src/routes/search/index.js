@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { routerRedux, Link } from 'dva/router';
 import { connect } from 'dva';
 import { Tabs, Icon, Tag, Pagination, Spin } from 'antd';
@@ -44,20 +45,21 @@ const Search = ({ dispatch, search }) => {
   }
 
 
-  function onSearch({ query: keyword, offset, size }) {
-    const newOffset = offset || 0;
-    const newSize = size || 30;
+  function onSearch(data) {
+    const newOffset = data.offset || 0;
+    const newSize = data.size || 30;
     dispatch(routerRedux.push({
-      pathname: `/search/${keyword}/${newOffset}/${newSize}`,
+      pathname: `/search/${data.query}/${newOffset}/${newSize}`,
     }));
   }
 
   function onPageChange(page) {
     onSearch({
-      keyword: query,
+      query,
       offset: (page - 1) * pageSize,
       size: pageSize,
     });
+    // ReactDOM.findDOMNode(this.refs.wrap).scrollTo(0, 0);
   }
 
   return (
@@ -139,7 +141,6 @@ const Search = ({ dispatch, search }) => {
       </div>
       <Spin spinning={loading}>
         <div className={styles.personWrap}>
-
           {
             results.map((result) => {
               const name1 = result.name_zh ? result.name_zh : result.name;

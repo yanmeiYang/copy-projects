@@ -20,9 +20,6 @@ export async function getSeminarById(id) {
 export async function getSpeakerSuggest(data) {
   return request(api.speakerSuggest, {
     method: 'POST',
-    headers: {
-      'Authorization': localStorage.getItem('token')
-    },
     body: JSON.stringify(data)
   })
 }
@@ -30,11 +27,6 @@ export async function getSpeakerSuggest(data) {
 export async function postSeminarActivity(data) {
   return request(api.postActivity, {
     method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': localStorage.getItem('token')
-    },
     body: JSON.stringify(data)
   })
 

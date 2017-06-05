@@ -69,7 +69,7 @@ const Routers = function ({ history, app }) {
           },
         },
         {
-          path: 'seminar/post',
+          path: 'seminarpost',
           getComponent(nextState, cb) {
             require.ensure([], require => {
               registerModel(app, require('./models/seminar'));

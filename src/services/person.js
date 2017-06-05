@@ -23,6 +23,15 @@ export function getProfileUrl(name, id) {
   return `/person/${id}`;
 }
 
+export function getAMinerProfileUrl(name, id) {
+  let str = '';
+  if (name) {
+    str = name.toLowerCase().match(/[a-zA-Z]+/g).join('-');
+  }
+  // return `/person/${str}/${id}`;
+  return `${config.basePageURL}/profile/${str}/${id}`;
+}
+
 /** Visualization Data */
 export async function getInterestVisData(personId) {
   return request(api.interests.replace(':id', personId));

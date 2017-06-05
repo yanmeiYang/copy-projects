@@ -91,6 +91,7 @@ const Routers = function ({ history, app }) {
             require.ensure([], (require) => {
               registerModel(app, require('./models/person'));
               registerModel(app, require('./models/publications'));
+              registerModel(app, require('./models/vis/vis-research-interest'));
               cb(null, require('./routes/person'));
             }, 'persons');
           },

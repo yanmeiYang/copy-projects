@@ -70,7 +70,7 @@ export default {
       } else if (orderBy === 'byCitation') {
         if (citedTab === 'all') { // all
           data = yield call(pubsService.getPubsCiteAll, { personId, offset, size });
-        } else if (citedTab === 'top' || citedTab === '' || citedTab === 0) { // default
+        } else if (citedTab === 'top' || !citedTab) { // default
           data = yield call(pubsService.getPubsMostPo, { personId, offset, size });
         } else {
           const splits = citedTab.split('-');

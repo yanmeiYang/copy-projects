@@ -97,6 +97,7 @@ const App = ({ children, location, dispatch, app, loading }) => {
           <Footer />
         </div>
       </div>
+
     </div>
   );
 };

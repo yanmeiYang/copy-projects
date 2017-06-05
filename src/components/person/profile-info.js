@@ -36,12 +36,15 @@ class ProfileInfo extends React.Component {
           {pos && <span><i className="fa fa-briefcase fa-fw" /> {pos}</span>}
           {aff && <span><i className="fa fa-institution fa-fw" /> {aff}</span>}
           {phone && <span><i className="fa fa-phone fa-fw" /> {phone}</span>}
-          {email && <span><i className="fa fa-envelope fa-fw" /> {email}</span>}
+          {email && <span><i className="fa fa-envelope fa-fw" />
+            <img src={`https://api.aminer.org/api/${email}`} alt="email" style={{ verticalAlign: 'middle' }} />
+          </span>}
           {homepage && <span><i className="fa fa-globe fa-fw" /> {homepage}</span>}
 
           <span style={{ marginTop: 16 }} />
           <span className={styles.section_title}><i className="fa fa-area-chart fa-fw" /> 研究兴趣</span>
           <VisResearchInterest personId={profile.id} />
+          {/* TODO 这里放一个可以手工添加修改的tabs. */}
 
         </div>
 

@@ -3,8 +3,12 @@
  */
 import React from 'react';
 import { connect } from 'dva';
+import { Icon } from 'antd';
 import { ProfileInfo } from '../../components/person';
-import PersonPublications from './person-publications';
+import * as personService from '../../services/person';
+import styles from './index.less';
+import PersonFeaturedPapers from './person-featured-papers';
+
 
 const Person = ({ dispatch, person, loading }) => {
   const { profile } = person;
@@ -23,11 +27,35 @@ const Person = ({ dispatch, person, loading }) => {
 
       <ProfileInfo profile={profile} />
 
-      <h1>论文:
-        <small>({totalPubs})</small>
-      </h1>
-      <PersonPublications personId={profile.id} totalPubs={totalPubs} />
+      <div style={{ marginTop: 30 }} />
 
+      <div>
+        <h1 className={styles.sec_header}>参与的活动：</h1>
+        <img src="/temp/WechatIMG2.jpeg" rel="参与的活动" width="700" />
+      </div>
+
+      <div>
+        <div style={{ float: 'right', marginTop: 8 }}>
+          <a
+            href={personService.getAMinerProfileUrl(profile.name, profile.id)}
+            target="_blank" rel="noopener noreferrer"
+          >
+            查看全部 {totalPubs} 篇论文<Icon type="right" />
+          </a>
+        </div>
+
+        <h1 className={styles.sec_header}>代表性论文:</h1>
+
+        <PersonFeaturedPapers personId={profile.id} totalPubs={totalPubs} />
+      </div>
+
+
+      {/* 先不要这个了。需要一个 top 的论文.
+       <h1>论文:
+       <small>({totalPubs})</small>
+       </h1>
+       <PersonPublications personId={profile.id} totalPubs={totalPubs} />
+       */}
     </div>
   );
 };

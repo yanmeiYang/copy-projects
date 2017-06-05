@@ -26,12 +26,12 @@ module.exports = [
     icon: 'api',
     router: '/seminar',
   },
-  {
-    id: 4,
-    bpid: 1,
-    name: '项目管理',
-    icon: 'camera-o',
-  },
+  // {
+  //   id: 4,
+  //   bpid: 1,
+  //   name: '项目管理',
+  //   icon: 'camera-o',
+  // },
   {
     id: 5,
     bpid: 1,

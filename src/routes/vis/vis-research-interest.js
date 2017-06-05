@@ -5,8 +5,10 @@
 import React from 'react';
 import NVD3Chart from 'react-nvd3';
 import { connect } from 'dva';
+import { Tag } from 'antd';
 import styles from './vis-research-interest.less';
 import './nv.d3.css';
+import AddTags from '../../components/seminar/addTags';
 
 
 class VisResearchInterest extends React.Component {
@@ -40,11 +42,24 @@ class VisResearchInterest extends React.Component {
 
   render() {
     const visData = this.props.visResearchInterest && this.props.visResearchInterest.data;
-    console.log('==== data is:', this.data);
+    console.log('==== data is:', visData);
+
+    const Disable_vis_chart = true;
 
     return (
       <div className={styles.vis_research_interest}>
-        {visData.interests &&
+        {visData.interests && visData.interests.map((item) => {
+          console.log(item);
+          return <Tag color="blue" key={item.key}>{item.key}</Tag>;
+        })}
+        {visData.interests_zh && visData.interests_zh.map((item) => {
+          console.log(item);
+          return <Tag color="blue" key={item.key}>{item.key}</Tag>;
+        })}
+        <br />
+        <AddTags tags={[1, 2, 3]} />
+
+        {!Disable_vis_chart && visData.interests &&
         <NVD3Chart
           type="stackedAreaChart" width={500} height={200} duration={200}
           defaultState="Stream"

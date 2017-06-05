@@ -101,4 +101,4 @@ const Login = ({
 
 };
 
-export default connect(({ login }) => ({ login }))(Form.create()(Login))
+export default connect(({ login }) => ({ login }))(Form.create()(Login));

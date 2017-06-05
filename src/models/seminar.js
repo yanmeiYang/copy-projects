@@ -59,8 +59,8 @@ export default {
     *postSeminarActivity({ payload }, { call, put }){
       console.log(payload);
       const { data } = yield call(seminarService.postSeminarActivity, payload);
-      if (data.status){
-        yield put(routerRedux.push({pathname:`/seminar/`+data.id}))
+      if (data.status) {
+        yield put(routerRedux.push({ pathname: `/seminar/` + data.id }))
       }
     },
   },

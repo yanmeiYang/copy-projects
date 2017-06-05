@@ -94,6 +94,7 @@ const DetailSeminar = ({ seminar }) => {
                 { summaryById.title }
               </strong>
             </h4>
+            {/*类型为seminar*/}
             {summaryById.type === 0 ?
               <div>
                 <ul className={styles.messages}>
@@ -168,8 +169,32 @@ const DetailSeminar = ({ seminar }) => {
                     </div>
                   </div> : ''}
                 </div>
+                <div>
+                  {summaryById.speaker ? <div>
+                    {summaryById.speaker.bio ? <div>
+                      <h5>Bio:</h5>
+                      <div className={styles.center}>
+                        <p className='rdw-justify-aligned-block'>{summaryById.speaker.bio}</p>
+                      </div>
+                    </div> : ''}
+                  </div> : ''}
+                </div>
+                <div className={styles.workshopTetail}>
+                  {summaryById.img ? <div>
+                    <img src={summaryById.img}/>
+                    <hr/>
+                  </div> : ''}
+                </div>
+
+                <div className={styles.rate}>
+                  <span>专家评分：</span>
+                  <Rate allowHalf defaultValue={2.5}/>
+                </div>
+
               </div>
-              : <div className={styles.workshopTetail}>
+              :
+              //type ===1时显示图片信息
+              <div className={styles.workshopTetail}>
                 {summaryById.img ? <div>
                   <h5>{dateRangeToString(summaryById.time.from, summaryById.time.to)}&nbsp&nbsp{timeRangeToString(summaryById.time.from, summaryById.time.to)}. { summaryById.location.address }</h5>
                   <img src={summaryById.img}/>
@@ -178,17 +203,6 @@ const DetailSeminar = ({ seminar }) => {
                 </div> : ''}
               </div>}
 
-
-            <div>
-              {summaryById.speaker ? <div>
-                {summaryById.speaker.bio ? <div>
-                  <h5>Bio:</h5>
-                  <div className={styles.center}>
-                    <p className='rdw-justify-aligned-block'>{summaryById.speaker.bio}</p>
-                  </div>
-                </div> : ''}
-              </div> : ''}
-            </div>
             {/*type=workshop*/}
             {summaryById.type === 1 ? <div>{
               summaryById.talk.map((aTalk) => {
@@ -262,33 +276,22 @@ const DetailSeminar = ({ seminar }) => {
                         </div>
                       </div> : ''}
                     </div>
+                    <div className={styles.rate}>
+                      <span>专家评分：</span>
+                      <Rate allowHalf defaultValue={2.5}/>
+                    </div>
                     <hr/>
                   </div>
                 )
               })}
             </div> : ''}
 
-            {/*<div className={styles.action}>
-             <Button>
-             <Icon type="share-alt"/>
-             <span>share</span>
-             </Button>
-             <Button className={styles.marginLeft}>
-             <Icon type="like-o"/>
-             <span>like</span>
-             </Button>
-             </div>*/}
-
-            <div className={styles.rate}>
-              <span>专家评分：</span>
-              <Rate allowHalf defaultValue={2.5}/>
-            </div>
-
-            <div className={styles.comment}>
-              <Input type='textarea' rows={4} placeholder='请输入评语。。。'/>
-              <Button type="primary">发布</Button>
-            </div>
-
+          </div>
+        </Col>
+        <Col span={16} offset={4} className={styles.thumbnail}>
+          <div className={styles.comment}>
+            <Input type='textarea' rows={4} placeholder='请输入评语。。。'/>
+            <Button type="primary">发布</Button>
           </div>
         </Col>
       </Row>

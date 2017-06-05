@@ -26,6 +26,7 @@ module.exports = {
     getActivityById: '/activity/:id',
     postActivity: '/activity/post_activity',
     speakerSuggest: '/activity/speaker/suggest',
+    uploadActivityPosterImgFile: '/activity/img',
 
     /* person */
     personProfile: '/person/summary/:id',
@@ -44,7 +45,7 @@ module.exports = {
     // userLogout: '/user/logout',
     // userInfo: '/userInfo',
     // users: '/users',
-    // user: '/user/:id',
+    currentUser: '/user/me',
     // dashboard: '/dashboard',
   },
 };

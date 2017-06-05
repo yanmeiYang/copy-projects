@@ -85,30 +85,35 @@ const Routers = function ({ history, app }) {
             }, 'detailSeminar');
           },
         },
+        {
+          path: 'person/:id',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('./models/person'));
+              registerModel(app, require('./models/publications'));
+              cb(null, require('./routes/person'));
+            }, 'persons');
+          },
+        },
+        {
+          path: '/admin',
+          component: App,
+          getIndexRoute(nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('./models/vis/vis-research-interest'));
+              cb(null, { component: require('./routes/Admin') });
+            }, 'admin');
+          },
+        },
+        {
+          path: '*',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              cb(null, require('./routes/error/'));
+            }, 'error');
+          },
+        },
       ],
-    },
-    /* add by bo gao */
-    {
-      path: '/person/:id',
-      component: App,
-      getIndexRoute(nextState, cb) {
-        require.ensure([], (require) => {
-          registerModel(app, require('./models/person'));
-          registerModel(app, require('./models/publications'));
-          cb(null, { component: require('./routes/person') });
-        }, 'persons');
-      },
-      childRoutes: [],
-    },
-    {
-      path: '/admin',
-      component: App,
-      getIndexRoute(nextState, cb) {
-        require.ensure([], (require) => {
-          registerModel(app, require('./models/vis/vis-research-interest'));
-          cb(null, { component: require('./routes/Admin') });
-        }, 'admin');
-      },
     },
     {
       path: '/dashboard',

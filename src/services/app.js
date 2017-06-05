@@ -1,27 +1,24 @@
 import { request, config } from '../utils';
 const { api } = config;
-const { user, userLogout, userLogin } = api;
+const { currentUser, userLogout, userLogin } = api;
 
 export async function login(params) {
-  return request({
-    url: userLogin,
+  return request(userLogin, {
     method: 'post',
     data: params,
   });
 }
 
 export async function logout(params) {
-  return request({
-    url: userLogout,
+  return request(userLogout, {
     method: 'get',
     data: params,
   });
 }
 
-// export async function query(params) {
-//   return request({
-//     url: user.replace('/:id', ''),
-//     method: 'get',
-//     data: params,
-//   });
-// }
+export async function getCurrentUserInfo(params) {
+  return request(currentUser, {
+    method: 'get',
+    data: params,
+  });
+}

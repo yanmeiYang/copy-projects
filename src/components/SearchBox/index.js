@@ -53,7 +53,7 @@ class SearchBox extends React.Component {
           )}
         </Select>}
         <Input ref="searchInput" size={size} onChange={this.handleInputChange} onPressEnter={this.handleSearch} defaultValue={keyword} />
-        <Button size={size} type="primary" onClick={this.handleSearch}>{btnText && '搜索'}</Button>
+        <Button size={size} type="primary" onClick={this.handleSearch}>{btnText || '搜索'}</Button>
         {clearVisible && <Icon type="cross" onClick={this.handleClearInput} />}
       </Input.Group>
     );

@@ -35,19 +35,22 @@ let image = null;
 const uploadImage = {
   name: 'file',
   multiple: false,
-  showUploadList: false,
+  showUploadList: true,
   accept: 'image/jpeg,image/png,image/bmp',
-  // action: '/upload.do',
+  action: config.baseURL + config.api.uploadActivityPosterImgFile,
+  listType: 'picture',
+  headers: {
+    //获得登录用户的token
+    'Authorization': localStorage.getItem('token')
+  },
   onChange(info){
     const status = info.file.status;
     if (status !== 'uploading') {
       image = info.file.originFileObj;
     }
-    // if (status === 'done') {
-    //   message.success(`$(info.file.name) file uploaded successfully.`);
-    // } else if (status === 'error') {
-    //   message.error(`$(info.file.name) file upload failed.`);
-    // }
+  },
+  onSuccess(response){
+    image = response.url;
   }
 };
 
@@ -58,9 +61,11 @@ class RegistrationForm extends React.Component {
     confirmDirty: false,
     startValue: null,
     endValue: null,
+    talkStartValue: null,
+    talkEndValue: null,
     searchExperts: false,
     tags: [],
-    talk: [],
+    talks: [],
     suggestSpeakers: [],
   };
 
@@ -75,14 +80,16 @@ class RegistrationForm extends React.Component {
         data.time = { from: '', to: '' };
         data.type = parseInt(values.type);
         if (data.type === 0) {
-          data.speaker = { name: '', position: '', affiliation: '', aid: '', img:''};
+          data.speaker = { name: '', position: '', affiliation: '', aid: '', img: '' };
           data.speaker.name = this.refs.speakerName.refs.input.value;
           data.speaker.position = this.refs.speakerPos.refs.input.value;
           data.speaker.affiliation = this.refs.speakerAff.refs.input.value;
           data.speaker.img = this.refs.speakerImg.src;
 
+        } else {
+          data.talk = state.talks;
         }
-        // data.img = image;
+        data.img = image;
         data.location.address = values.address;
         if (state.startValue) {
           data.time.from = state.startValue.toJSON();
@@ -93,7 +100,7 @@ class RegistrationForm extends React.Component {
 
         data.activityTags = state.tags;
         data.uid = '54f5112e45ce1bc6d563b8d9';
-        this.props.dispatch({type:'seminar/postSeminarActivity', payload:data});
+        this.props.dispatch({ type: 'seminar/postSeminarActivity', payload: data });
       }
     });
   };
@@ -123,13 +130,24 @@ class RegistrationForm extends React.Component {
 
   //search experts
   showModal = () => {
+    const type = this.state.selectedType;
     const t = this;
-    const payload = {
-      name: this.refs.speakerName.refs.input.value,
-      position: this.refs.speakerPos.refs.input.value,
-      affiliation: this.refs.speakerAff.refs.input.value,
-      title: '',
-    };
+    let payload = {};
+    if (type === 0) {
+      payload = {
+        name: this.refs.speakerName.refs.input.value,
+        position: this.refs.speakerPos.refs.input.value,
+        affiliation: this.refs.speakerAff.refs.input.value,
+        title: '',
+      };
+    } else {
+      payload = {
+        name: this.refs.talkSpeakerName.refs.input.value,
+        position: this.refs.talkSpeakerPos.refs.input.value,
+        affiliation: this.refs.talkSpeakerAff.refs.input.value,
+        title: this.refs.talkTitle.refs.input.value,
+      };
+    }
     // this.props.dispatch({type:'seminar/getSpeakerSuggest',payload:payload});
 
     fetch(config.baseURL + config.api.speakerSuggest, {
@@ -164,19 +182,59 @@ class RegistrationForm extends React.Component {
   };
 
   selectedExpert = (speaker) => {
-    this.refs.speakerName.refs.input.value = speaker.payload.name;
-    this.refs.speakerAff.refs.input.value = speaker.payload.org;
-    speaker.pos.length > 0 ? this.refs.speakerPos.refs.input.value = speaker.pos[0].n : this.refs.speakerPos.refs.input.value = ' ';
-    this.refs.speakerAid.value = speaker.payload.id;
-    this.refs.speakerImg.src = speaker.img;
+    const type = this.state.selectedType;
+    if (type === 0) {
+      this.refs.speakerName.refs.input.value = speaker.payload.name;
+      this.refs.speakerAff.refs.input.value = speaker.payload.org;
+      speaker.pos.length > 0 ? this.refs.speakerPos.refs.input.value = speaker.pos[0].n : this.refs.speakerPos.refs.input.value = ' ';
+      this.refs.speakerAid.value = speaker.payload.id;
+      this.refs.speakerImg.src = speaker.img;
+    } else {
+      this.refs.talkSpeakerName.refs.input.value = speaker.payload.name;
+      this.refs.talkSpeakerAff.refs.input.value = speaker.payload.org;
+      speaker.pos.length > 0 ? this.refs.talkSpeakerPos.refs.input.value = speaker.pos[0].n : this.refs.talkSpeakerPos.refs.input.value = ' ';
+      this.refs.talkSpeakerAid.value = speaker.payload.id;
+      this.refs.talkSpeakerImg.src = speaker.img;
+    }
+
     this.setState({
       searchExperts: false,
     });
   };
 
+  //workshop增加演讲嘉宾
+  saveTalkData = () => {
+    let talk = {
+      title: '',
+      speaker: { name: '', position: '', affiliation: '', img: '', aid: '', bio: '' },
+      time: { from: '', to: '' },
+      location: { city: '', address: '' },
+      abstract: ''
+    };
+    talk.title = this.refs.talkTitle.refs.input.value;
+    talk.speaker.name = this.refs.talkSpeakerName.refs.input.value;
+    talk.speaker.position = this.refs.talkSpeakerPos.refs.input.value;
+    talk.speaker.affiliation = this.refs.talkSpeakerAff.refs.input.value;
+    talk.speaker.img = this.refs.talkSpeakerImg.src;
+    talk.speaker.aid = this.refs.talkSpeakerAid.value;
+    talk.time.from = this.state.talkStartValue.toJSON();
+    talk.time.to = this.state.talkEndValue.toJSON();
+    talk.location.address = this.refs.talkLocation.refs.input.value;
+    talk.abstract = this.refs.talkAbstract.refs.input.value;
+    this.setState({ talks: this.state.talks.concat(talk), addNewTalk: false, });
+  };
+
+  cancelTalkData = ()=>{
+    this.setState({ addNewTalk: false, });
+  };
+  onChildTalkChanged = (field, value) => {
+    field === 'startValue' ? this.setState({ talkStartValue: value }) : this.setState({ talkEndValue: value });
+
+  };
+
   render() {
     const { getFieldDecorator } = this.props.form;
-    let { addNewTalk, selectedType, suggestSpeakers } = this.state;
+    let { addNewTalk, selectedType, suggestSpeakers, talks } = this.state;
 
     const formItemLayout = {
       labelCol: {
@@ -289,8 +347,9 @@ class RegistrationForm extends React.Component {
                     <section>
                       <div className="people">
                         <div className="no-padding shadow-10">
-                          <div className={styles.crop}><span className="helper"></span><img src={this.getImg()} ref='speakerImg'/>
-                            <input ref='speakerAid' style={{display:'none'}}/>
+                          <div className={styles.crop}><span className="helper"></span><img src={this.getImg()}
+                                                                                            ref='speakerImg'/>
+                            <input ref='speakerAid' style={{ display: 'none' }}/>
                           </div>
                         </div>
                       </div>
@@ -343,15 +402,15 @@ class RegistrationForm extends React.Component {
                                     </div>
                                   </div>
                                   <div className={styles.infoWrap}>
-                                    <p>{position ? <p className={styles.infoItem}>
+                                    <p>{position ? <span className={styles.infoItem}>
                                       <Icon type="idcard"/>
                                       { position }
-                                    </p> : ''}</p>
+                                    </span> : ''}</p>
 
-                                    <p>{aff ? <p className={styles.infoItem}>
+                                    <p>{aff ? <span className={styles.infoItem}>
                                       <Icon type="home"/>
                                       { aff }
-                                    </p> : ''}</p>
+                                    </span> : ''}</p>
                                   </div>
                                   <div className={styles.tagWrap}>
                                     {speaker.tags.map((tag) => {
@@ -377,6 +436,38 @@ class RegistrationForm extends React.Component {
           {/*workshop*/}
           {selectedType === '1' ?
             <Col className={styles.thumbnail} span={12} offset={6}>
+              {talks.length > 0 ? <div>
+                <div className={styles.addNewExpert}>
+                  <Button type='primary' onClick={this.addTalkData.bind(this, addNewTalk)}>嘉宾信息</Button>
+                </div>
+                {talks.map((talk) => {
+                  return (<div key={Math.random()}>
+                    <li className={styles.talks}>
+                      <div className={styles.left}>
+                        <img src={this.getImg(talk.speaker.img)} alt="头像"/>
+                      </div>
+                      <div className={styles.right}>
+                        <div className={styles.nameWrap}>
+                          <span>演讲嘉宾：</span>
+                          <span>{talk.speaker.name}</span>
+                        </div>
+                        <div className={styles.activityWrap}>
+                          <p>
+                            <span>演讲名称：</span>
+                            <span>{talk.title}</span>
+                          </p>
+                          <p>
+                            <span>演讲地点：</span>
+                            <span>{talk.location.address}</span>
+                          </p>
+                        </div>
+                      </div>
+                      <Button type='danger'>删除</Button>
+                    </li>
+
+                  </div>)
+                })}
+              </div> : ''}
               <div className={styles.addNewExpert}>
                 <Button type='primary' onClick={this.addTalkData.bind(this, addNewTalk)}>新增嘉宾</Button>
               </div>
@@ -387,7 +478,7 @@ class RegistrationForm extends React.Component {
                     {...formItemLayout}
                     label="活动名称"
                   >
-                    <Input placeholder='请输入活动名称。。。'/>
+                    <Input placeholder='请输入活动名称。。。' ref='talkTitle'/>
                   </FormItem>
                   <FormItem>
                     <Col><label>专家信息</label></Col>
@@ -395,7 +486,9 @@ class RegistrationForm extends React.Component {
                       <section>
                         <div className="people">
                           <div className="no-padding shadow-10">
-                            <div className={styles.crop}><span className="helper"></span><img src={this.getImg()}/>
+                            <div className={styles.crop}><span className="helper"></span><img src={this.getImg()}
+                                                                                              ref='talkSpeakerImg'/>
+                              <input ref='talkSpeakerAid' style={{ display: 'none' }}/>
                             </div>
                           </div>
                         </div>
@@ -406,46 +499,94 @@ class RegistrationForm extends React.Component {
                     </Col>
                     <Col span={14}>
                       <div className={styles.expertProfile}>
-                        <Input size='large' placeholder='嘉宾姓名'/>
-                        <Input size='large' placeholder='嘉宾职位'/>
-                        <Input size='large' placeholder='嘉宾单位'/>
-                        <Button type='primary' className={styles.recommendation}>相关嘉宾推荐</Button>
+                        <Input size='large' placeholder='嘉宾姓名' ref='talkSpeakerName'/>
+                        <Input size='large' placeholder='嘉宾职位' ref='talkSpeakerPos'/>
+                        <Input size='large' placeholder='嘉宾单位' ref='talkSpeakerAff'/>
+                        <Button type='primary' className={styles.recommendation} onClick={this.showModal.bind(this)}>相关嘉宾推荐</Button>
+                        <Modal
+                          title="Search Experts"
+                          width="880px"
+                          visible={this.state.searchExperts}
+                          onOk={this.handleOk}
+                          onCancel={this.handleCancel}
+                        >
+                          <div className={styles.personWrap}>
+                            {suggestSpeakers.map((speaker) => {
+                              const position = speaker.pos && speaker.pos.length > 0 ? speaker.pos[0].n : null;
+                              const aff = speaker.payload.aff ? speaker.payload.aff : null;
+                              return (
+                                <li key={speaker.payload.id} className={styles.person}>
+                                  <div className={styles.left}>
+                                    <img src={this.getImg(speaker.img)} alt="头像"/>
+                                  </div>
+                                  <div className={styles.right}>
+                                    <div className={styles.nameWrap}>
+                                      <h3>{speaker.text}</h3>
+                                    </div>
+                                    <div className={styles.statWrap}>
+                                      <div className={styles.item}>
+                                        <span className={styles.label}>h-index:</span>
+                                        <span>{speaker.payload.h_index}</span>
+                                      </div>
+                                      <span className={styles.split}>|</span>
+                                      <div className={styles.item}>
+                                        <span className={styles.label}>论文数:</span>
+                                        <span>{speaker.payload.n_pubs}</span>
+                                      </div>
+                                      <span className={styles.split}>|</span>
+                                      <div className={styles.item}>
+                                        <span className={styles.label}>引用数:</span>
+                                        <span>{speaker.payload.n_citation}</span>
+                                      </div>
+                                    </div>
+                                    <div className={styles.infoWrap}>
+                                      <p>{position ? <span className={styles.infoItem}>
+                                        <Icon type="idcard"/>
+                                        { position }
+                                      </span> : ''}</p>
+
+                                      <p>{aff ? <span className={styles.infoItem}>
+                                        <Icon type="home"/>
+                                        { aff }
+                                      </span> : ''}</p>
+                                    </div>
+                                    <div className={styles.tagWrap}>
+                                      {speaker.tags.map((tag) => {
+                                        return (<Link to={`/search/${tag.t}/0/30`} key={Math.random()}><Tag
+                                          className={styles.tag}>{tag.t}</Tag></Link>);
+                                      })}
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <Button type='primary'
+                                            onClick={this.selectedExpert.bind(this, speaker)}>submit</Button>
+                                  </div>
+                                </li>
+                              )
+                            })}
+                          </div>
+                        </Modal>
                       </div>
                     </Col>
                   </FormItem>
                   <FormItem
                     {...formItemLayout}
-                    label={(
-                      <span>
-              活动时间&nbsp;
-            </span>
-                    )}
-                    hasFeedback
-                  >
-                    <CanlendarInForm />
+                    label={(<span>活动时间&nbsp;</span>)}
+                    hasFeedback>
+                    <CanlendarInForm callbackParent={this.onChildTalkChanged}/>
                   </FormItem>
                   <FormItem
                     {...formItemLayout}
-                    label={(
-                      <span>
-             演讲地点&nbsp;
-            </span>
-                    )}
-                  >
-                    <Input placeholder='请输入活动地点。。。'/>
+                    label={(<span>演讲地点&nbsp;</span>)}>
+                    <Input placeholder='请输入活动地点。。。' ref='talkLocation'/>
                   </FormItem>
                   <FormItem
                     {...formItemLayout}
-                    label={(
-                      <span>
-             演讲摘要&nbsp;
-            </span>
-                    )}
-                  >
-                    <Input type='textarea' rows={4} placeholder='请输入演讲摘要。。。'/>
+                    label={(<span>演讲摘要&nbsp;</span>)}>
+                    <Input type='textarea' rows={4} placeholder='请输入演讲摘要。。。' ref='talkAbstract'/>
                   </FormItem>
-                  <Button type='primary' className={styles.saveExpert}>保存</Button>
-                  <Button type='danger'>取消</Button>
+                  <Button type='primary' className={styles.saveExpert} onClick={this.saveTalkData}>保存</Button>
+                  <Button type='danger' onClick={this.cancelTalkData}>取消</Button>
                 </div> : ''}
             </Col> : ''}
 

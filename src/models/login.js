@@ -38,18 +38,7 @@ export default {
     },
   },
   reducers: {
-    loadToken(state) {
-      const token = localStorage.getItem('token');
-      console.log(token);
-      if (token) {
-        return {
-          ...state,
-          token,
-        };
-      } else {
-        return { ...state };
-      }
-    },
+
     showLoginLoading(state) {
       return {
         ...state,

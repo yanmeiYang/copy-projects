@@ -32,6 +32,12 @@ module.exports = [
     name: '项目管理',
     icon: 'camera-o',
   },
+  {
+    id: 5,
+    bpid: 1,
+    name: '设置',
+    icon: 'camera-o',
+  },
   // {
   //   id: 41,
   //   bpid: 4,

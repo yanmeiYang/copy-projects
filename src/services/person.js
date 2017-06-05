@@ -22,3 +22,8 @@ export function getProfileUrl(name, id) {
   // return `/person/${str}/${id}`;
   return `/person/${id}`;
 }
+
+/** Visualization Data */
+export async function getInterestVisData(personId) {
+  return request(api.interests.replace(':id', personId));
+}

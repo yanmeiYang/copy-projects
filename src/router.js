@@ -85,16 +85,6 @@ const Routers = function ({ history, app }) {
             }, 'detailSeminar');
           },
         },
-        // {
-        //   path: 'person/:id',
-        //   getComponent(nextState, cb) {
-        //     require.ensure([], (require) => {
-        //       registerModel(app, require('./models/person'));
-        //       registerModel(app, require('./models/publications'));
-        //       cb(null, require('./routes/person'));
-        //     }, 'persons');
-        //   },
-        // },
       ],
     },
     /* add by bo gao */
@@ -108,17 +98,17 @@ const Routers = function ({ history, app }) {
           cb(null, { component: require('./routes/person') });
         }, 'persons');
       },
-      childRoutes: [
-        // {
-        //   path: 'search/:query/:offset/:size',
-        //   getComponent(nextState, cb) {
-        //     require.ensure([], (require) => {
-        //       registerModel(app, require('./models/search'));
-        //       cb(null, require('./routes/search/'));
-        //     }, 'search');
-        //   },
-        // },
-      ],
+      childRoutes: [],
+    },
+    {
+      path: '/admin',
+      component: App,
+      getIndexRoute(nextState, cb) {
+        require.ensure([], (require) => {
+          registerModel(app, require('./models/vis/vis-research-interest'));
+          cb(null, { component: require('./routes/Admin') });
+        }, 'admin');
+      },
     },
     {
       path: '/dashboard',
@@ -244,7 +234,7 @@ const Routers = function ({ history, app }) {
     },
   ]
 
-  return <Router history={history} routes={routes}/>;
+  return <Router history={history} routes={routes} />;
 }
 
 export default Routers;

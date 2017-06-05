@@ -1,7 +1,6 @@
 import React from 'react';
 import { Badge } from 'antd';
 import styles from './publication-list.less';
-import * as profileUtils from '../../utils/profile_utils';
 import * as personService from '../../services/person';
 import * as pubService from '../../services/publication';
 

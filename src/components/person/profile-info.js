@@ -2,6 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import styles from './profile-info.less';
 import * as profileUtils from '../../utils/profile_utils';
+import { VisResearchInterest } from '../../routes/vis';
 
 class ProfileInfo extends React.Component {
   state = {};
@@ -37,6 +38,11 @@ class ProfileInfo extends React.Component {
           {phone && <span><i className="fa fa-phone fa-fw" /> {phone}</span>}
           {email && <span><i className="fa fa-envelope fa-fw" /> {email}</span>}
           {homepage && <span><i className="fa fa-globe fa-fw" /> {homepage}</span>}
+
+          <span style={{ marginTop: 16 }} />
+          <span className={styles.section_title}><i className="fa fa-area-chart fa-fw" /> 研究兴趣</span>
+          <VisResearchInterest personId={profile.id} />
+
         </div>
 
         { false && <div>

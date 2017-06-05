@@ -1,30 +1,23 @@
+/**
+ *  Created by BoGao on 2017-05-30;
+ */
 import React from 'react';
 import { connect } from 'dva';
-import styles from './index.less';
 import { ProfileInfo } from '../../components/person';
 import PersonPublications from './person-publications';
 
 const Person = ({ dispatch, person, loading }) => {
   const { profile } = person;
 
-  // for (let key in profile) {
-  //   if ({}.hasOwnProperty.call(profile, key)) {
-  //     // console.log('key is : ', key)
-  //     // console.log('data is : ', summary[key])
-  //     content.push(
-  //       (<p>{key} | </p>),
-  //     );
-  //   }
+  // function onSearch({ query }) {
+  //   console.log('onSearch in PersonPage');
+  //   dispatch(routerRedux.push({
+  //     pathname: `/search/${query}/0/30`,
+  //   }));
   // }
 
-
-// function onSearch({ query }) {
-//   console.log('onSearch in PersonPage');
-//   dispatch(routerRedux.push({
-//     pathname: `/search/${query}/0/30`,
-//   }));
-// }
   const totalPubs = profile.indices && profile.indices.num_pubs;
+
   return (
     <div className="content-inner">
 

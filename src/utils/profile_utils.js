@@ -42,7 +42,7 @@ const displayNameCNFirst = (name, nameCN) => {
   if (nameCN) {
     cs.push(nameCN);
     if (name) {
-      cs.push('(');
+      cs.push(' (');
       cs.push(name);
       cs.push(')');
     }

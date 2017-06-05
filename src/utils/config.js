@@ -38,6 +38,9 @@ module.exports = {
     pubListInfo: '/person/pubs/:id/stats',
     pubListByYear: '/person/pubs/:id/range/year/:year/:offset/:size',
     pubListLimited: '/person/pubs/:id/range/citation/:nc_lo/:nc_hi/:offset/:size',
+
+    // interests vis data
+    interests: '/person/interests/:id',
     // userLogout: '/user/logout',
     // userInfo: '/userInfo',
     // users: '/users',

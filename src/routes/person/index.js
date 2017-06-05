@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Icon } from 'antd';
+import { Icon, InputNumber, Rate } from 'antd';
 import { ProfileInfo } from '../../components/person';
 import * as personService from '../../services/person';
 import styles from './index.less';
@@ -28,6 +28,33 @@ const Person = ({ dispatch, person, loading }) => {
       <ProfileInfo profile={profile} />
 
       <div style={{ marginTop: 30 }} />
+
+      <div>
+        <h1 className={styles.sec_header}>专家评分：</h1>
+        <table style={{ marginBottom: 10 }}>
+          <tr>
+            <td>演讲内容（水平）:</td>
+            <td>
+              <Rate allowHalf defaultValue={4.5} />
+              <span>95</span>
+            </td>
+          </tr>
+          <tr>
+            <td>演讲水平:</td>
+            <td>
+              <Rate allowHalf defaultValue={4.5} />
+              <span>95</span>
+            </td>
+          </tr>
+          <tr>
+            <td>综合评价（其它贡献）:</td>
+            <td>
+              <Rate allowHalf defaultValue={3.5} />
+              <span>75</span>
+            </td>
+          </tr>
+        </table>
+      </div>
 
       <div>
         <h1 className={styles.sec_header}>参与的活动：</h1>

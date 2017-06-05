@@ -492,9 +492,9 @@ class RegistrationForm extends React.Component {
                             </div>
                           </div>
                         </div>
-                        <Button size='small'>
-                          <Icon type="cloud-upload"/>&nbsp;Upload
-                        </Button>
+                        {/*<Button size='small'>*/}
+                          {/*<Icon type="cloud-upload"/>&nbsp;Upload*/}
+                        {/*</Button>*/}
                       </section>
                     </Col>
                     <Col span={14}>

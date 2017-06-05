@@ -1,4 +1,4 @@
-import { query, logout } from '../services/app';
+import { getCurrentUserInfo, logout } from '../services/app';
 import { routerRedux } from 'dva/router';
 import { parse } from 'qs';
 import { config } from '../utils';
@@ -11,43 +11,47 @@ export default {
     menuPopoverVisible: false,
     siderFold: localStorage.getItem(`${prefix}siderFold`) === 'true',
     darkTheme: localStorage.getItem(`${prefix}darkTheme`) === 'true',
+    token: localStorage.getItem('token'),
     isNavbar: false, // document.body.clientWidth < 769,
     navOpenKeys: JSON.parse(localStorage.getItem(`${prefix}navOpenKeys`)) || [],
   },
   subscriptions: {
 
     setup({ dispatch }) {
-      // dispatch({ type: 'query' });
-      // let tid;
-      // window.onresize = () => {
-      //   clearTimeout(tid);
-      //   tid = setTimeout(() => {
-      //     dispatch({ type: 'changeNavbar' });
-      //   }, 300);
-      // };
+      dispatch({ type: 'getCurrentUserInfo' });
+      let tid;
+      window.onresize = () => {
+        clearTimeout(tid);
+        tid = setTimeout(() => {
+          dispatch({ type: 'changeNavbar' });
+        }, 300);
+      };
     },
 
   },
   effects: {
-
-    *query({
+    *getCurrentUserInfo({
       payload,
     }, { call, put }) {
-      const data = yield call(query, parse(payload));
-      if (data.success && data.user) {
-        yield put({
-          type: 'querySuccess',
-          payload: data.user,
-        });
-        if (location.pathname === '/login') {
-          yield put(routerRedux.push('/dashboard'));
+      const token = localStorage.getItem('token');
+      console.log(token, location);
+      if (token) {
+        const data = yield call(getCurrentUserInfo, parse(payload));
+        if (data && data.success && data.user) {
+          yield put({
+            type: 'getCurrentUserInfoSuccess',
+            payload: data.user,
+          });
+          if (location.pathname === '/login') {
+            yield put(routerRedux.push('/'));
+          }
         }
       } else if (location.pathname !== '/login') {
         let from = location.pathname;
-        if (location.pathname === '/dashboard') {
-          from = '/dashboard';
+        if (location.pathname === '/') {
+          from = '/';
         }
-        // window.location = `${location.origin}/login?from=${from}`;
+        window.location = `${location.origin}/login?from=${from}`;
       }
     },
 
@@ -56,7 +60,7 @@ export default {
     }, { call, put }) {
       const data = yield call(logout, parse(payload));
       if (data.success) {
-        yield put({ type: 'query' });
+        yield put({ type: 'getCurrentUserInfo' });
       } else {
         throw (data);
       }
@@ -75,48 +79,48 @@ export default {
   },
 
   reducers: {
-    querySuccess (state, { payload: user }) {
+    getCurrentUserInfoSuccess(state, { payload: user }) {
       return {
         ...state,
         user,
-      }
+      };
     },
 
-    switchSider (state) {
-      localStorage.setItem(`${prefix}siderFold`, !state.siderFold)
+    switchSider(state) {
+      localStorage.setItem(`${prefix}siderFold`, !state.siderFold);
       return {
         ...state,
         siderFold: !state.siderFold,
-      }
+      };
     },
 
-    switchTheme (state) {
-      localStorage.setItem(`${prefix}darkTheme`, !state.darkTheme)
+    switchTheme(state) {
+      localStorage.setItem(`${prefix}darkTheme`, !state.darkTheme);
       return {
         ...state,
         darkTheme: !state.darkTheme,
-      }
+      };
     },
 
-    switchMenuPopver (state) {
+    switchMenuPopver(state) {
       return {
         ...state,
         menuPopoverVisible: !state.menuPopoverVisible,
-      }
+      };
     },
 
-    handleNavbar (state, { payload }) {
+    handleNavbar(state, { payload }) {
       return {
         ...state,
         isNavbar: payload,
-      }
+      };
     },
 
-    handleNavOpenKeys (state, { payload: navOpenKeys }) {
+    handleNavOpenKeys(state, { payload: navOpenKeys }) {
       return {
         ...state,
         ...navOpenKeys,
-      }
+      };
     },
   },
 }

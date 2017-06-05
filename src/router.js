@@ -84,30 +84,36 @@ const Routers = function ({ history, app }) {
               cb(null, require('./routes/seminar/detailSeminar'));
             }, 'detailSeminar');
           },
+        }, {
+          path: 'person/:id',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('./models/person'));
+              registerModel(app, require('./models/publications'));
+              cb(null, require('./routes/person'));
+            }, 'persons');
+          },
+        }, {
+          path: '*',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              cb(null, require('./routes/error/'));
+            }, 'error');
+          },
         },
-        // {
-        //   path: 'person/:id',
-        //   getComponent(nextState, cb) {
-        //     require.ensure([], (require) => {
-        //       registerModel(app, require('./models/person'));
-        //       registerModel(app, require('./models/publications'));
-        //       cb(null, require('./routes/person'));
-        //     }, 'persons');
-        //   },
-        // },
       ],
     },
     /* add by bo gao */
     {
-      path: '/person/:id',
-      component: App,
-      getIndexRoute(nextState, cb) {
-        require.ensure([], (require) => {
-          registerModel(app, require('./models/person'));
-          registerModel(app, require('./models/publications'));
-          cb(null, { component: require('./routes/person') });
-        }, 'persons');
-      },
+      // path: '/person/:id',
+      // component: App,
+      // getIndexRoute(nextState, cb) {
+      //   require.ensure([], (require) => {
+      //     registerModel(app, require('./models/person'));
+      //     registerModel(app, require('./models/publications'));
+      //     cb(null, { component: require('./routes/person') });
+      //   }, 'persons');
+      // },
       childRoutes: [
         // {
         //   path: 'search/:query/:offset/:size',
@@ -232,14 +238,7 @@ const Routers = function ({ history, app }) {
               cb(null, require('./routes/chart/areaChart/'));
             }, 'chart-areaChart');
           },
-        }, {
-          path: '*',
-          getComponent(nextState, cb) {
-            require.ensure([], require => {
-              cb(null, require('./routes/error/'));
-            }, 'error');
-          },
-        },
+        }
       ],
     },
   ]

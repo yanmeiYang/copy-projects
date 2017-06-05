@@ -56,7 +56,7 @@ function IndexPage({ dispatch, search }) {
     <div>
       <div className={styles.normal}>
         <h1>云智库搜索</h1>
-        <SearchBox size="large" style={{ width: 500 }} onSearch={onSearch}/>
+        <SearchBox size="large" style={{ width: 500 }} btnText="智库搜索" onSearch={onSearch}/>
         {/*常用搜索*/}
         <p className={styles.commonSearch}>
           {

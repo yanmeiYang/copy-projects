@@ -28,13 +28,12 @@ export default async function request(url, options) {
     const queryString = queryList.join('&');
     newUrl = `${newUrl}?${queryString}`;
   }
-  console.log(newUrl);
   const token = localStorage.getItem('token');
-  const header = new Headers();
+  const headers = new Headers();
   if (token) {
-    header.append('Authorization', token);
+    headers.append('Authorization', token);
   }
-  const newOption = { ...options, header };
+  const newOption = { ...options, headers };
   const response = await fetch(newUrl, newOption);
 
   checkStatus(response);
@@ -45,10 +44,9 @@ export default async function request(url, options) {
     data,
     headers: {},
   };
-
-  if (response.headers.get('x-total-count')) {
-    ret.headers['x-total-count'] = response.headers.get('x-total-count');
-  }
+  // if (response.headers.get('x-total-count')) {
+  //   ret.headers['x-total-count'] = response.headers.get('x-total-count');
+  // }
 
   return ret;
 }

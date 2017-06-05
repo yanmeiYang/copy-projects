@@ -1,19 +1,24 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Button, Row, Form, Input } from 'antd';
-import { config } from '../../utils';
+import { Helmet } from 'react-helmet';
+
 import styles from './index.less';
+import { Layout } from '../../components';
+import { classnames, config, menu } from '../../utils';
+const { Header, Footer, Sider } = Layout;
 
 const FormItem = Form.Item;
 
 const Login = ({
-  login,
-  dispatch,
-  form: {
-    getFieldDecorator,
-    validateFieldsAndScroll,
-  },
-}) => {
+                 login,
+                 dispatch,
+                 location,
+                 form: {
+                   getFieldDecorator,
+                   validateFieldsAndScroll,
+                 },
+               }) => {
   const { loginLoading } = login;
 
   function handleOk() {
@@ -25,12 +30,14 @@ const Login = ({
     });
   }
 
-  return (
-    <div className={styles.form}>
-      <div className={styles.logo}>
-        <img alt={'logo'} src={config.logo} />
-        <span>{config.name}</span>
-      </div>
+  const headerProps = { location };
+
+  const children = (
+    <div className={styles.form} style={{ top: 528 }}>
+      {/*<div className={styles.logo}>*/}
+      {/*<img alt={'logo'} src={config.logo} />*/}
+      {/*<span>{config.name}</span>*/}
+      {/*</div>*/}
       <form>
         <FormItem hasFeedback>
           {getFieldDecorator('email', {
@@ -63,6 +70,35 @@ const Login = ({
       </form>
     </div>
   );
+
+  const { iconFontJS, iconFontCSS, logo } = config;
+
+  return (
+    <div>
+      <Helmet>
+        <title>CCF 专家云智库</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href={logo} type="image/x-icon" />
+        {iconFontJS && <script src={iconFontJS}></script>}
+        {iconFontCSS && <link rel="stylesheet" href={iconFontCSS} />}
+      </Helmet>
+      <div className={classnames(styles.layout)}>
+        <Header {...headerProps} />
+        <div className={styles.main}>
+          <div className={styles.container}>
+            <div className={styles.content}>
+              <img src="/big_banner2.png" style={{ height: 250, width: '100%' }} />
+              {/*<Bread {...breadProps} location={location} />*/}
+              {children}
+            </div>
+          </div>
+          <div style={{ border: 'solid 0px red', height: 700 }} />
+          <Footer />
+        </div>
+      </div>
+    </div>
+  );
+
 };
 
 export default connect(({ login }) => ({ login }))(Form.create()(Login))

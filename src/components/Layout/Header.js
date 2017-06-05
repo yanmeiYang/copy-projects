@@ -13,6 +13,8 @@ function Header({ location }) {
     <div className={styles.header}>
       <Link className={styles.logo} to="/">
         <img alt={'logo'} src={logoImg} />
+        {/* TODO Move config out of this place */}
+        <div>专家云智库</div>
       </Link>
       <Menu
         selectedKeys={[location.pathname]}
@@ -20,14 +22,17 @@ function Header({ location }) {
         theme="light"
         className={styles.menu}
       >
-        <Menu.Item key="/users">
-          <Link to="/"><Icon type="bars" />语言切换</Link>
-        </Menu.Item>
+        {/*<Menu.Item key="/users">*/}
+        {/*<Link to="/"><Icon type="bars" />语言切换</Link>*/}
+        {/*</Menu.Item>*/}
         <Menu.Item key="/">
           <Link to="/"><Icon type="info-circle-o" />信息中心</Link>
         </Menu.Item>
         <Menu.Item key="/404">
           <Link to="/"><Icon type="frown-circle" />个人账号</Link>
+        </Menu.Item>
+        <Menu.Item key="/hidden">
+          <Link to="/"><Icon type="compass-circle" /></Link>
         </Menu.Item>
       </Menu>
     </div>

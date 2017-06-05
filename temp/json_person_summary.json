@@ -1,0 +1,123 @@
+{
+  "aff": {
+    "desc": "Department of Computer Science and Technology,Tsinghua University",
+    "id": ""
+  },
+  "name": "Jie Tang",
+  "num_viewed": 4275,
+  "avatar": "//static.aminer.org/picture/01823/Jie_Tang_1348889820664.jpg",
+  "indices": {
+    "num_patents": 0,
+    "sociability": 6.1202,
+    "h_index": 48,
+    "num_citation": 8677,
+    "as": 0.0,
+    "diversity": 4.3103,
+    "new_star": 59.2262,
+    "num_pubs": 272,
+    "activity": 174.7173,
+    "g_index": 87
+  },
+  "is_following": false,
+  "revised": {
+    "cname": "",
+    "mid": "58bf3cdf0a3ac5d610e4ff4f",
+    "mtime": "2017-05-25 12:24:54",
+    "cid": "",
+    "mname": "",
+    "ctime": "1970-01-01 00:00:00"
+  },
+  "locks": {
+    "edit": {
+      "status": false
+    }
+  },
+  "tags": [
+    {
+      "t": "Social Network",
+      "w": 65
+    },
+    {
+      "t": "Semantic Web",
+      "w": 25
+    },
+  ],
+  "pos": [
+    {
+      "i": "",
+      "n": "Associate Professor"
+    }
+  ],
+  "hidden": false,
+  "award": [],
+  "bind": true,
+  "contact": {
+    "affiliation": "Department of Computer Science and Technology,Tsinghua University",
+    "has_email_cr": false,
+    "work": "",
+    "bio": "",
+    "edu": "",
+    "fax": "",
+    "homepage": "",
+    "address": "",
+    "has_email": false,
+    "phone": ""
+  },
+  "work": [
+    {
+      "aff": {
+        "id": ""
+      },
+      "pos": {
+        "i": ""
+      },
+      "id": "57e9025e9ed5db5b04f219e0"
+    },
+    {
+      "aff": {
+        "lab": {
+          "i": "552e52ccdabfae7de9fd1ab1",
+          "n": "Department of Computer Science and Technology"
+        },
+        "dept": {
+          "i": "552e52cbdabfae7de9fd14cc",
+          "n_zh": "信息科学与技术学院",
+          "n": "School of Information Science and Technology"
+        },
+        "id": "",
+        "inst": {
+          "i": "552e0adfdabfae7de9e566a0",
+          "n_zh": "清华大学",
+          "n": "Tsinghua University"
+        }
+      },
+      "pos": {
+        "i": ""
+      },
+      "id": ""
+    }
+  ],
+  "links": [],
+  "edu": [],
+  "id": "53f46a3edabfaee43ed05f08",
+  "name_zh": "唐杰",
+  "attr": {
+    "gender": "male",
+    "nation": "China",
+    "ethnic": "Chinese",
+    "lang": "Chinese"
+  },
+  "tags_zh": [
+    {
+      "t": "本体映射",
+      "w": 3
+    },
+    {
+      "t": "CUDA",
+      "w": 3
+    },
+  ],
+  "intr": [],
+  "num_followed": 100,
+  "honor": []
+}

@@ -130,7 +130,7 @@ class RegistrationForm extends React.Component {
 
   //search experts
   showModal = () => {
-    const type = this.state.selectedType;
+    const type = parseInt(this.state.selectedType);
     const t = this;
     let payload = {};
     if (type === 0) {
@@ -182,7 +182,7 @@ class RegistrationForm extends React.Component {
   };
 
   selectedExpert = (speaker) => {
-    const type = this.state.selectedType;
+    const type = parseInt(this.state.selectedType);
     if (type === 0) {
       this.refs.speakerName.refs.input.value = speaker.payload.name;
       this.refs.speakerAff.refs.input.value = speaker.payload.org;

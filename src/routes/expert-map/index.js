@@ -1,28 +1,32 @@
 /**
- *  Created by BoGao on 2017-05-30;
+ *  Created by BoGao on 2017-06-07;
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Icon, InputNumber, Rate } from 'antd';
-import { ProfileInfo } from '../../components/person';
-import * as personService from '../../services/person';
-import styles from './index.less';
+import ExpertMap from './expert-map.js';
+
+class ExpertMapPage extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log('Loading BaiduMap Container');
+  }
+
+  /** 在Component被加载的时候调用的。 */
+  componentDidMount() {
+    console.log('componentDidMount');
+  }
+
+  render() {
+    return (
+      <div className="">
+        <h1>Expert Map</h1>
+
+        <ExpertMap />
+
+      </div>
+    );
+  }
+}
 
 
-const ExpertMap = ({ dispatch, person, loading }) => {
-  // function onSearch({ query }) {
-  //   console.log('onSearch in PersonPage');
-  //   dispatch(routerRedux.push({
-  //     pathname: `/search/${query}/0/30`,
-  //   }));
-  // }
-
-  return (
-    <div className="content-inner">
-      <h1>Expert Map</h1>
-
-    </div>
-  );
-};
-
-export default connect(({ person, loading }) => ({ person, loading }))(ExpertMap);
+export default connect(({ person, loading }) => ({ person, loading }))(ExpertMapPage);

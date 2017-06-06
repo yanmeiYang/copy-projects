@@ -1,0 +1,4657 @@
+[
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "5390a17720f70186a0e5247f",
+        "src": "acm",
+        "sid": "1402008"
+      },
+      {
+        "id": "53a72d4920f7420be8c6010e",
+        "src": "dblp",
+        "sid": "conf/kdd/TangZYLZS08"
+      },
+      {
+        "id": "5485a594582f9e794bce1c7a",
+        "src": "scopus",
+        "sid": "2-s2.0-65449166085"
+      },
+      {
+        "id": "56d812b6dabfae2eee5d06dd",
+        "src": "mag",
+        "sid": "788A3174"
+      },
+      {
+        "id": "58774e3b0a3ac5b5de65a857",
+        "src": "pdf",
+        "sid": "58774e3b0a3ac5b5de65a857"
+      }
+    ],
+    "urls": [
+      "http://dx.doi.org/10.1145/1401890.1402008",
+      "http://doi.acm.org/10.1145/1401890.1402008",
+      "https://static.aminer.org/pdf/20160902/loc-conf/index.txt"
+    ],
+    "pdf": "//static.aminer.org/upload/pdf/985/1447/1704/53e9a5afb7602d9702edacce.pdf",
+    "abstract": "This paper addresses several key issues in the ArnetMiner system, which aims at extracting and mining academic social networks. Specifically, the system focuses on: 1) Extracting researcher profiles automatically from the Web; 2) Integrating the publication data into the network from existing digital libraries; 3) Modeling the entire academic network; and 4) Providing search services for the academic network. So far, 448,470 researcher profiles have been extracted using a unified tagging approach. We integrate publications from online Web databases and propose a probabilistic framework to deal with the name ambiguity problem. Furthermore, we propose a unified modeling approach to simultaneously model topical aspects of papers, authors, and publication venues. Search services such as expertise search and people association search have been provided based on the modeling results. In this paper, we describe the architecture and main features of the system. We also present the empirical evaluation of the proposed methods.",
+    "pages": {
+      "s": "990",
+      "e": "998"
+    },
+    "num_citation": 792,
+    "year": 2008,
+    "keywords_zh": [],
+    "hash": "aeamoasn",
+    "id": "53e9a5afb7602d9702edacce",
+    "authors": [
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Jing Zhang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f48d0adabfaea88777b455",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Limin Yao",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f44128dabfaeecd699d18b",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Juanzi Li",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "5619120945cedb3397d40ba0",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "IBM, Beijing, China",
+          "id": ""
+        },
+        "name": "Li Zhang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f5875edabfaeb2f4f80474",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "IBM, Beijing, China",
+          "id": ""
+        },
+        "name": "Zhong Su",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f364c7dabfae4b34995785",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "labels": [
+      "en_journal"
+    ],
+    "order": 0,
+    "isbn": "",
+    "keywords": [
+      "modeling result",
+      "search service",
+      "academic network",
+      "people association search",
+      "unified modeling approach",
+      "entire academic network",
+      "academic social network",
+      "arnetminer system",
+      "expertise search",
+      "providing search service",
+      "topic modeling",
+      "unified model",
+      "social network",
+      "digital library",
+      "information extraction"
+    ],
+    "title": "ArnetMiner: extraction and mining of academic social networks",
+    "lang": "en",
+    "doi": "10.1145/1401890.1402008",
+    "venue": {
+      "name": "KDD",
+      "indices": {},
+      "mid": "53a72d4220f7420be8c5fa02",
+      "info": {
+        "name": "KDD"
+      },
+      "issue": "",
+      "id": "53a72d4220f7420be8c5fa02",
+      "type": 0,
+      "volume": ""
+    },
+    "issn": ""
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "53a72d4920f7420be8c6013f",
+        "src": "dblp",
+        "sid": "conf/kdd/TangSWY09"
+      },
+      {
+        "id": "5390a4cc20f70186a0e75039",
+        "src": "acm",
+        "sid": "1557108"
+      },
+      {
+        "id": "56d812b7dabfae2eee5d0ea4",
+        "src": "mag",
+        "sid": "7D9ECF09"
+      },
+      {
+        "id": "58774e3b0a3ac5b5de65a8c4",
+        "src": "pdf",
+        "sid": "58774e3b0a3ac5b5de65a8c4"
+      }
+    ],
+    "urls": [
+      "http://dx.doi.org/10.1145/1557019.1557108",
+      "http://doi.acm.org/10.1145/1557019.1557108",
+      "https://static.aminer.org/pdf/20160902/loc-conf/index.txt"
+    ],
+    "pdf": "//static.aminer.org/upload/pdf/321/1244/869/53e9b6eeb7602d970427f098.pdf",
+    "abstract": "In large social networks, nodes (users, entities) are influenced by others for various reasons. For example, the colleagues have strong influence on one's work, while the friends have strong influence on one's daily life. How to differentiate the social influences from different angles(topics)? How to quantify the strength of those social influences? How to estimate the model on real large networks? To address these fundamental questions, we propose Topical Affinity Propagation (TAP) to model the topic-level social influence on large networks. In particular, TAP can take results of any topic modeling and the existing network structure to perform topic-level influence propagation. With the help of the influence analysis, we present several important applications on real data sets such as 1) what are the representative nodes on a given topic? 2) how to identify the social influences of neighboring nodes on a particular node? To scale to real large networks, TAP is designed with efficient distributed learning algorithms that is implemented and tested under the Map-Reduce framework. We further present the common characteristics of distributed learning algorithms for Map-Reduce. Finally, we demonstrate the effectiveness and efficiency of TAP on real large data sets.",
+    "pages": {
+      "s": "807",
+      "e": "816"
+    },
+    "num_citation": 643,
+    "year": 2009,
+    "keywords_zh": [],
+    "hash": "siailn",
+    "id": "53e9b6eeb7602d970427f098",
+    "authors": [
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "IBM TJ Watson Research Center, New York, USA",
+          "id": ""
+        },
+        "name": "Jimeng Sun",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f4d211dabfaeedd877fb9d",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Chi Wang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "54451b41dabfae862da06b40",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Zi Yang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "543111cbdabfae8e15d23652",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "labels": [
+      "en_journal"
+    ],
+    "order": 0,
+    "isbn": "",
+    "keywords": [
+      "social influence analysis",
+      "strong influence",
+      "social influence",
+      "large-scale network",
+      "topic-level influence propagation",
+      "real large network",
+      "real large data set",
+      "large social network",
+      "influence analysis",
+      "topic-level social influence",
+      "large network",
+      "social networks",
+      "social network",
+      "affinity propagation"
+    ],
+    "title": "Social influence analysis in large-scale networks",
+    "lang": "en",
+    "doi": "10.1145/1557019.1557108",
+    "venue": {
+      "name": "KDD",
+      "indices": {},
+      "mid": "53a72d4220f7420be8c5fa02",
+      "info": {
+        "name": "KDD"
+      },
+      "issue": "",
+      "id": "53a72d4220f7420be8c5fa02",
+      "type": 0,
+      "volume": ""
+    },
+    "issn": ""
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "558b06f8e4b037c0875a975f",
+        "src": "ieee",
+        "sid": "4633358"
+      },
+      {
+        "id": "5390a5b020f70186a0e7d656",
+        "src": "acm",
+        "sid": "1592319"
+      },
+      {
+        "id": "5485a6cf582f9e794bd3f2ca",
+        "src": "scopus",
+        "sid": "2-s2.0-67651156071"
+      },
+      {
+        "id": "53e2599820f7fff67772e7d2",
+        "src": "msra",
+        "sid": "6085436"
+      },
+      {
+        "id": "53a72f9220f7420be8cb303a",
+        "src": "dblp",
+        "sid": "journals/tkde/LiTLL09"
+      },
+      {
+        "id": "56d82d7ddabfae2eee0ccbc1",
+        "src": "mag",
+        "sid": "7E094AA3"
+      }
+    ],
+    "urls": [
+      "http://dx.doi.org/10.1109/TKDE.2008.202",
+      "http://ieeexplore.ieee.org/xpl/abstractAuthors.jsp?tp=&arnumber=4633358"
+    ],
+    "pdf": "",
+    "hash_zh": "",
+    "abstract": "Ontology alignment identifies semantically matching entities in different ontologies. Various ontology alignment strategies have been proposed; however, few systems have explored how to automatically combine multiple strategies to improve the matching effectiveness. This paper presents a dynamic multistrategy ontology alignment framework, named RiMOM. The key insight in this framework is that similarity characteristics between ontologies may vary widely. We propose a systematic approach to quantitatively estimate the similarity characteristics for each alignment task and propose a strategy selection method to automatically combine the matching strategies based on two estimated factors. In the approach, we consider both textual and structural characteristics of ontologies. With RiMOM, we participated in the 2006 and 2007 campaigns of the Ontology Alignment Evaluation Initiative (OAEI). Our system is among the top three performers in benchmark data sets.",
+    "pages": {
+      "s": "1218",
+      "e": "1232"
+    },
+    "num_citation": 363,
+    "year": 2008,
+    "keywords_zh": [],
+    "hash": "radmoaf",
+    "id": "53e9ae63b7602d970387c905",
+    "authors": [
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing",
+          "id": ""
+        },
+        "name": "Juanzi Li",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "5619120945cedb3397d40ba0",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing",
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing",
+          "id": ""
+        },
+        "name": "Yi Li",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "54450e60dabfae862da02d62",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing",
+          "id": ""
+        },
+        "name": "Qiong Luo",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f42b0bdabfaeb1a7b6d1f2",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "abstract_zh": "",
+    "labels": [
+      "en_journal"
+    ],
+    "order": 1,
+    "isbn": "",
+    "keywords": [
+      "ontology languages.",
+      "similarity characteristic",
+      "different ontology",
+      "ontology alignment evaluation initiative",
+      "matching effectiveness",
+      "various ontology alignment strategy",
+      "textual ontology characteristics",
+      "heterogeneous databases",
+      "structural ontology characteristics",
+      "ontology languages",
+      "alignment task",
+      "knowledge and data engineering tools and techniques",
+      "rimom",
+      "ontology alignment",
+      "systematic approach",
+      "dynamic multistrategy ontology alignment",
+      "matching strategy",
+      "knowledge reuse",
+      "ontologies (artificial intelligence)",
+      "dynamic multistrategy ontology alignment framework",
+      "databases",
+      "search engines",
+      "data engineering",
+      "ontologies",
+      "natural languages",
+      "semantic web",
+      "taxonomy"
+    ],
+    "title": "RiMOM: A Dynamic Multistrategy Ontology Alignment Framework",
+    "lang": "en",
+    "doi": "10.1109/TKDE.2008.202",
+    "title_zh": "",
+    "venue": {
+      "name": "IEEE Trans. Knowl. Data Eng.",
+      "indices": {},
+      "mid": "555036e57cea80f9541656e5",
+      "info": {
+        "name": "IEEE Trans. Knowl. Data Eng."
+      },
+      "issue": "8",
+      "id": "555036e57cea80f9541656e5",
+      "type": 0,
+      "volume": "21"
+    },
+    "issn": "1041-4347"
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "5390b0ca20f70186a0eda9ce",
+        "src": "acm",
+        "sid": "2020614"
+      },
+      {
+        "id": "5485aa75582f9e794be5749e",
+        "src": "scopus",
+        "sid": "2-s2.0-80052663073"
+      },
+      {
+        "id": "53a7303b20f7420be8ce10c9",
+        "src": "dblp",
+        "sid": "journals/corr/abs-1109-6018"
+      },
+      {
+        "id": "53a72d4920f7420be8c603dd",
+        "src": "dblp",
+        "sid": "conf/kdd/TanLTJZL11"
+      },
+      {
+        "id": "56d812b7dabfae2eee5d0ae6",
+        "src": "mag",
+        "sid": "7FC449DD"
+      },
+      {
+        "id": "58774e3c0a3ac5b5de65aa26",
+        "src": "pdf",
+        "sid": "58774e3c0a3ac5b5de65aa26"
+      }
+    ],
+    "urls": [
+      "http://dx.doi.org/10.1145/2020408.2020614",
+      "http://arxiv.org/abs/1109.6018",
+      "https://static.aminer.org/pdf/20160902/loc-conf/index.txt"
+    ],
+    "pdf": "//static.aminer.org/pdf/20160902/loc-conf/KDD/KDD-2011-874.pdf",
+    "abstract": "We show that information about social relationships can be used to improve user-level sentiment analysis. The main motivation behind our approach is that users that are somehow \"connected\" may be more likely to hold similar opinions; therefore, relationship information can complement what we can extract about a user's viewpoints from their utterances. Employing Twitter as a source for our experimental data, and working within a semi-supervised framework, we propose models that are induced either from the Twitter follower/followee network or from the network in Twitter formed by users referring to each other using \"@\" mentions. Our transductive learning results reveal that incorporating social-network information can indeed lead to statistically significant sentiment classification improvements over the performance of an approach based on Support Vector Machines having access only to textual features.",
+    "pages": {
+      "s": "1397",
+      "e": "1405"
+    },
+    "num_citation": 294,
+    "year": 2011,
+    "keywords_zh": [],
+    "hash": "usaisn",
+    "id": "53e9b69db7602d9704213756",
+    "authors": [
+      {
+        "aff": {
+          "desc": "Cornell University, Ithaca, NY, USA",
+          "id": ""
+        },
+        "name": "Chenhao Tan",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f450afdabfaee02ad42935",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Cornell University, Ithaca, NY, USA",
+          "id": ""
+        },
+        "name": "Lillian Lee",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f486c1dabfaee1c0bac495",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Microsoft Corporation, Beijing, China",
+          "id": ""
+        },
+        "name": "Long Jiang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f44732dabfaee43ec80ebc",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Microsoft Corporation, Beijing, China",
+          "id": ""
+        },
+        "name": "Ming Zhou",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f58f74dabfaedb8ef8045b",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Cornell University, Ithaca, NY, USA",
+          "id": ""
+        },
+        "name": "Ping Li",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f4394cdabfaec22ba9cd10",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "labels": [
+      "en_journal"
+    ],
+    "order": 2,
+    "isbn": "",
+    "keywords": [
+      "social network",
+      "followee network",
+      "main motivation",
+      "support vector machines",
+      "twitter follower",
+      "employing twitter",
+      "user-level sentiment analysis",
+      "significant sentiment classification improvement",
+      "social-network information",
+      "experimental data",
+      "relationship information",
+      "opinion mining",
+      "information retrieval",
+      "social networks",
+      "support vector machine",
+      "data analysis",
+      "transductive learning",
+      "sentiment analysis",
+      "statistical significance"
+    ],
+    "title": "User-level sentiment analysis incorporating social networks",
+    "lang": "en",
+    "doi": "10.1145/2020408.2020614",
+    "venue": {
+      "name": "knowledge discovery and data mining",
+      "indices": {},
+      "mid": "55f96e2dc35f4fb0d21cf452",
+      "info": {
+        "name": "knowledge discovery and data mining",
+        "vtype": 1
+      },
+      "issue": "null",
+      "id": "55f96e2dc35f4fb0d21cf452",
+      "type": 1,
+      "volume": "abs/1109.6018"
+    },
+    "issn": ""
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "53909e8a20f70186a0e2cf09",
+        "src": "acm",
+        "sid": "1222407"
+      },
+      {
+        "id": "53a731b020f7420be8d5865e",
+        "src": "dblp",
+        "sid": "journals/ws/TangLLHLW06"
+      },
+      {
+        "id": "53e2518520f7fff677559425",
+        "src": "msra",
+        "sid": "2518465"
+      },
+      {
+        "id": "5485a3b8582f9e794bc51bbc",
+        "src": "scopus",
+        "sid": "2-s2.0-33750473061"
+      },
+      {
+        "id": "539ffa2e831432abcb5afd0d",
+        "src": "ei",
+        "sid": "-1"
+      },
+      {
+        "id": "56d8de26dabfae2eee009b36",
+        "src": "mag",
+        "sid": "78ABC6FC"
+      }
+    ],
+    "urls": [
+      "http://dx.doi.org/10.1016/j.websem.2006.06.001"
+    ],
+    "pdf": "",
+    "hash_zh": "",
+    "abstract": "Ontology mapping is the key point to reach interoperability over ontologies. In semantic web environment, ontologies are usually distributed and heterogeneous and thus it is necessary to find the mapping between them before processing across them. Many efforts have been conducted to automate the discovery of ontology mapping. However, some problems are still evident. In this paper, ontology mapping is formalized as a problem of decision making. In this way, discovery of optimal mapping is cast as finding the decision with minimal risk. An approach called Risk Minimization based Ontology Mapping (RiMOM) is proposed, which automates the process of discoveries on 1:1, n:1, 1:null and null:1 mappings. Based on the techniques of normalization and NLP, the problem of instance heterogeneity in ontology mapping is resolved to a certain extent. To deal with the problem of name conflict in mapping process, we use thesaurus and statistical technique. Experimental results indicate that the proposed method can significantly outperform the baseline methods, and also obtains improvement over the existing methods.",
+    "pages": {
+      "s": "243",
+      "e": "262"
+    },
+    "num_citation": 220,
+    "year": 2006,
+    "keywords_zh": [],
+    "hash": "ubdfom",
+    "id": "53e99de1b7602d97026a39a7",
+    "authors": [
+      {
+        "aff": {
+          "desc": "Department of Computer Science and Technology, 10-201, East Main Building, Tsinghua University, Beijing 100084, PR China",
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Department of Computer Science and Technology, 10-201, East Main Building, Tsinghua University, Beijing 100084, PR China",
+          "id": ""
+        },
+        "name": "Juanzi Li",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "5619120945cedb3397d40ba0",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Department of Computer Science and Technology, 10-201, East Main Building, Tsinghua University, Beijing 100084, PR China",
+          "id": ""
+        },
+        "name": "Bangyong Liang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f45eb3dabfaee0d9c11ad4",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Department of Computer Science and Technology, 10-201, East Main Building, Tsinghua University, Beijing 100084, PR China",
+          "id": ""
+        },
+        "name": "Xiaotong Huang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f4576edabfaedf4360f948",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Department of Computer Science and Technology, 10-201, East Main Building, Tsinghua University, Beijing 100084, PR China",
+          "id": ""
+        },
+        "name": "Yi Li",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "54450e5bdabfae862da02a37",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Department of Computer Science and Technology, 10-201, East Main Building, Tsinghua University, Beijing 100084, PR China",
+          "id": ""
+        },
+        "name": "Kehong Wang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f43a4cdabfaec09f1a1a2e",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "abstract_zh": "",
+    "labels": [
+      "en_journal"
+    ],
+    "order": 0,
+    "isbn": "",
+    "keywords": [
+      "instance heterogeneity",
+      "ontology mapping",
+      "mapping process",
+      "risk minimization",
+      "bayesian decision",
+      "ontology interoperability",
+      "semantic web",
+      "existing method",
+      "certain extent",
+      "optimal mapping"
+    ],
+    "title": "Using Bayesian decision for ontology mapping",
+    "lang": "en",
+    "doi": "10.1016/j.websem.2006.06.001",
+    "title_zh": "",
+    "venue": {
+      "name": "J. Web Sem.",
+      "indices": {},
+      "mid": "555036cf7cea80f954158d3f",
+      "info": {
+        "name": "J. Web Sem."
+      },
+      "issue": "4",
+      "id": "555036cf7cea80f954158d3f",
+      "type": 0,
+      "volume": "4"
+    },
+    "issn": "Web Semantics: Science, Services and Agents on the World Wide Web"
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "5390ad0620f70186a0eba8ba",
+        "src": "acm",
+        "sid": "1871467"
+      },
+      {
+        "id": "5485a876582f9e794bdbceb4",
+        "src": "scopus",
+        "sid": "2-s2.0-78651275223"
+      },
+      {
+        "id": "53a72c1d20f7420be8c397e1",
+        "src": "dblp",
+        "sid": "conf/cikm/LiuTHJY10"
+      },
+      {
+        "id": "5485a8da582f9e794bddd111",
+        "src": "scopus",
+        "sid": "2-s2.0-78651275223"
+      },
+      {
+        "id": "56d81606dabfae2eee723093",
+        "src": "mag",
+        "sid": "7857440D"
+      }
+    ],
+    "urls": [
+      "http://dx.doi.org/10.1145/1871437.1871467",
+      "http://doi.acm.org/10.1145/1871437.1871467"
+    ],
+    "pdf": "",
+    "hash_zh": "",
+    "abstract": "Influence is a complex and subtle force that governs the dynamics of social networks as well as the behaviors of involved users. Understanding influence can benefit various applications such as viral marketing, recommendation, and information retrieval. However, most existing works on social influence analysis have focused on verifying the existence of social influence. Few works systematically investigate how to mine the strength of direct and indirect influence between nodes in heterogeneous networks. To address the problem, we propose a generative graphical model which utilizes the heterogeneous link information and the textual content associated with each node in the network to mine topic-level direct influence. Based on the learned direct influence, a topic-level influence propagation and aggregation algorithm is proposed to derive the indirect influence between nodes. We further study how the discovered topic-level influence can help the prediction of user behaviors. We validate the approach on three different genres of data sets: Twitter, Digg, and citation networks. Qualitatively, our approach can discover interesting influence patterns in heterogeneous networks. Quantitatively, the learned topic-level influence can greatly improve the accuracy of user behavior prediction.",
+    "pages": {
+      "s": "199",
+      "e": "208"
+    },
+    "num_citation": 216,
+    "year": 2010,
+    "keywords_zh": [],
+    "hash": "mtiihn",
+    "id": "53e9bb36b7602d9704775404",
+    "authors": [
+      {
+        "aff": {
+          "desc": "Tsinghua National Laboratory for Information Science and Technology/ Tsinghua University/ and Capital Medical University, Beijing, China",
+          "id": ""
+        },
+        "name": "Lu Liu",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f56127dabfae5b74f804ca",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "University of Illinois at Urbana-Champaign, Urbana, IL, USA",
+          "id": ""
+        },
+        "name": "Jiawei Han",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f42f36dabfaedce54dcd0c",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua National Laboratory for Information Science and Technology and Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Meng Jiang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f47604dabfaeecd6a48f47",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua National Laboratory for Information Science and Technology and Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Shiqiang Yang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f4db17dabfaee4dc8b7b62",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "abstract_zh": "",
+    "labels": [
+      "en_journal"
+    ],
+    "order": 1,
+    "isbn": "",
+    "keywords": [
+      "social influence analysis",
+      "social influence",
+      "interesting influence pattern",
+      "direct influence",
+      "indirect influence",
+      "understanding influence",
+      "topic-level influence propagation",
+      "mining topic-level influence",
+      "heterogeneous network",
+      "topic-level direct influence",
+      "topic-level influence",
+      "graphical model",
+      "viral marketing",
+      "information retrieval",
+      "social network"
+    ],
+    "title": "Mining topic-level influence in heterogeneous networks",
+    "lang": "en",
+    "doi": "10.1145/1871437.1871467",
+    "title_zh": "",
+    "venue": {
+      "name": "CIKM",
+      "indices": {},
+      "mid": "53a72c0f20f7420be8c3872f",
+      "info": {
+        "name": "CIKM"
+      },
+      "issue": "",
+      "id": "53a72c0f20f7420be8c3872f",
+      "type": 0,
+      "volume": ""
+    },
+    "issn": ""
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "53e2542320f7fff6775fe042",
+        "src": "msra",
+        "sid": "4249663"
+      },
+      {
+        "id": "53a72ea520f7420be8c958c7",
+        "src": "dblp",
+        "sid": "conf/dasfaa/ZhangTL07"
+      },
+      {
+        "id": "5485a529582f9e794bcc0fbe",
+        "src": "scopus",
+        "sid": "2-s2.0-38049115730"
+      },
+      {
+        "id": "5485a55c582f9e794bcd0e5e",
+        "src": "scopus",
+        "sid": "2-s2.0-38049115730"
+      },
+      {
+        "id": "5485a494582f9e794bc93edc",
+        "src": "scopus",
+        "sid": "2-s2.0-38049115730"
+      },
+      {
+        "id": "56d81602dabfae2eee7210fb",
+        "src": "mag",
+        "sid": "084AC9FF"
+      }
+    ],
+    "urls": [
+      "http://dx.doi.org/10.1007/978-3-540-71703-4_106"
+    ],
+    "pdf": "",
+    "hash_zh": "",
+    "abstract": "This paper addresses the issue of expert finding in a social network. The task of expert finding, as one of the most important research issues in social networks, is aimed at identifying persons with relevant expertise or experience for a given topic. In this paper, we propose a propagation-based approach that takes into consideration of both person local information and network information (e.g. relationships between persons). Experimental results show that our approach can outperform the baseline approach.",
+    "pages": {
+      "s": "1066",
+      "e": "1069"
+    },
+    "num_citation": 205,
+    "year": 2007,
+    "keywords_zh": [],
+    "hash": "efiasn",
+    "id": "53e99ceeb7602d97025a5d20",
+    "authors": [
+      {
+        "aff": {
+          "desc": "Department of Computer Science and Technology, Tsinghua University, 10-201, East Main Building, Tsinghua University, Beijing, China, 100084",
+          "id": ""
+        },
+        "name": "Jing Zhang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f48d0adabfaea88777b455",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Department of Computer Science and Technology, Tsinghua University, 10-201, East Main Building, Tsinghua University, Beijing, China, 100084",
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Department of Computer Science and Technology, Tsinghua University, 10-201, East Main Building, Tsinghua University, Beijing, China, 100084",
+          "id": ""
+        },
+        "name": "Juan-zi Li",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "5619120945cedb3397d40ba0",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "abstract_zh": "",
+    "labels": [
+      "en_journal"
+    ],
+    "order": 1,
+    "isbn": "",
+    "keywords": [
+      "social network"
+    ],
+    "title": "Expert Finding in a Social Network",
+    "lang": "en",
+    "doi": "10.1007/978-3-540-71703-4_106",
+    "title_zh": "",
+    "venue": {
+      "name": "DASFAA",
+      "indices": {},
+      "mid": "53a72e9d20f7420be8c94b72",
+      "info": {
+        "name": "DASFAA"
+      },
+      "issue": "",
+      "id": "53a72e9d20f7420be8c94b72",
+      "type": 0,
+      "volume": ""
+    },
+    "issn": "16113349"
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "53a72c1d20f7420be8c39350",
+        "src": "dblp",
+        "sid": "conf/cikm/YangGCTLZS10"
+      },
+      {
+        "id": "5485a871582f9e794bdbbfc2",
+        "src": "scopus",
+        "sid": "2-s2.0-78651286186"
+      },
+      {
+        "id": "5390ad0620f70186a0eba981",
+        "src": "acm",
+        "sid": "1871691"
+      },
+      {
+        "id": "5485a8d4582f9e794bddbed2",
+        "src": "scopus",
+        "sid": "2-s2.0-78651286186"
+      },
+      {
+        "id": "56d81606dabfae2eee722fb2",
+        "src": "mag",
+        "sid": "7A44B2A0"
+      }
+    ],
+    "urls": [
+      "http://dx.doi.org/10.1145/1871437.1871691",
+      "http://doi.acm.org/10.1145/1871437.1871691"
+    ],
+    "pdf": "",
+    "hash_zh": "",
+    "abstract": "Retweeting is an important action (behavior) on Twitter, indicating the behavior that users re-post microblogs of their friends. While much work has been conducted for mining textual content that users generate or analyzing the social network structure, few publications systematically study the underlying mechanism of the retweeting behaviors. In this paper, we perform an interesting analysis for the problem on Twitter. We have found that almost 25.5% of the tweets posted by users are actually retweeted from friends' blog spaces. Our investigation unveils that for the retweet behaviors, some statistics still follows the power law distribution, while some others violate the state-of-the-art distribution for Web. Based on these important observations, we propose a factor graph model to predict users' retweeting behaviors. Experimental results on the Twitter data set show that our method can achieve a precision of 28.81% and recall of 37.33% for prediction of the retweet behaviors.",
+    "pages": {
+      "s": "1633",
+      "e": "1636"
+    },
+    "num_citation": 186,
+    "year": 2010,
+    "keywords_zh": [],
+    "hash": "urbisn",
+    "id": "53e9b991b7602d970458168f",
+    "authors": [
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Zi Yang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "543111cbdabfae8e15d23652",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Jingyi Guo",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f4361cdabfaee0d9b62d7c",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "IBM, China Research Lab, Beijing, China",
+          "id": ""
+        },
+        "name": "Keke Cai",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f42f74dabfaedd74d50f10",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Juanzi Li",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "5619120945cedb3397d40ba0",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "IBM, China Research Lab, Beijing, China",
+          "id": ""
+        },
+        "name": "Li Zhang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f5875edabfaeb2f4f80468",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "IBM, China Research Lab, Beijing, China",
+          "id": ""
+        },
+        "name": "Zhong Su",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f364c7dabfae4b34995785",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "abstract_zh": "",
+    "labels": [
+      "en_journal"
+    ],
+    "order": 3,
+    "isbn": "",
+    "keywords": [
+      "social network",
+      "retweeting behavior",
+      "blog space",
+      "power law distribution",
+      "state-of-the-art distribution",
+      "important observation",
+      "retweet behavior",
+      "twitter data",
+      "important action",
+      "users re-post microblogs",
+      "factor graph",
+      "social influence"
+    ],
+    "title": "Understanding retweeting behaviors in social networks",
+    "lang": "en",
+    "doi": "10.1145/1871437.1871691",
+    "title_zh": "",
+    "venue": {
+      "name": "CIKM",
+      "indices": {},
+      "mid": "53a72c0f20f7420be8c3872f",
+      "info": {
+        "name": "CIKM"
+      },
+      "issue": "",
+      "id": "53a72c0f20f7420be8c3872f",
+      "type": 0,
+      "volume": ""
+    },
+    "issn": ""
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "53e73ad120f7bdb75551566b",
+        "src": "cnki2",
+        "sid": "3172520"
+      },
+      {
+        "id": "5485a3a9582f9e794bc4e05c",
+        "src": "scopus",
+        "sid": "2-s2.0-33846100307"
+      }
+    ],
+    "urls": [
+      "http://dx.doi.org/null",
+      "http://api.elsevier.com/content/abstract/scopus_id/33846100307"
+    ],
+    "pdf": "",
+    "abstract": "Interoperability over distributed ontologies is one of the six challenges for Semantic Web.Ontology mapping is the key point to each the interoperability.In this paper,based on Bayesian decision theory,the authors propose an approach called RiMOM(Risk Minimization based Ontology Mapping) to automatically discover the mapping between ontologies.RiMOM treats the mapping problem as a decision problem and formalizes mapping discovery as that of risk minimization.Based on multiple strategies,RiMOM deals with not only 1∶1 mapping,but also n∶1 mapping.Experiments on several public data sets show that RiMOM can outperform existing methods in terms of precision and recall.",
+    "pages": {
+      "s": "58",
+      "e": "78"
+    },
+    "num_citation": 184,
+    "year": 2006,
+    "keywords_zh": [
+      "本体集成",
+      "语义Web",
+      "本体映射",
+      "最小风险决策"
+    ],
+    "hash": "语义web中的本体自动映射",
+    "id": "53e99af2b7602d970237f411",
+    "authors": [
+      {
+        "aff": {
+          "desc": "Knowledge Engineering Group,Department of Computer Science and Technology,Tsinghua University,Beijing ",
+          "desc_zh": "清华大学计算机科学与技术系知识工程组",
+          "id": ""
+        },
+        "name": "TANG Jie",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "name_zh": "唐杰",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University(Tsinghua University,Tsinghua Univ,Tsinghua Univ.),Beijing,China",
+          "id": ""
+        },
+        "name": "Bangyong Liang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f45eb3dabfaee0d9c11ad4",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Knowledge Engineering Group,Department of Computer Science and Technology,Tsinghua University,Beijing ",
+          "desc_zh": "清华大学计算机科学与技术系知识工程组",
+          "id": ""
+        },
+        "name": "LI Juan-Zi",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "5619120945cedb3397d40ba0",
+        "name_zh": "李涓子",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University(Tsinghua University,Tsinghua Univ,Tsinghua Univ.),Beijing,China",
+          "id": ""
+        },
+        "name": "Kehong Wang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f43a4cdabfaec09f1a1a2e",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "abstract_zh": "分布式语义信息集成是语义Web面临的六大挑战之一.本体映射是语义集成的关键.文章基于贝叶斯决策理论提出最小风险的本体映射模型:RiMOM(Risk Minimization based Ontology Mapping).RiMOM将映射发现问题转换成风险最小化问题,提供了一个多策略的本体映射方法.该方法不仅在1∶1的映射上取得了较好的效果,还实现了n∶1映射.实验表明在几个公开的数据集上,RiMOM可以取得比同类方法更高的查准率和查全率.",
+    "labels": [
+      "cn_journal"
+    ],
+    "order": 0,
+    "isbn": "",
+    "keywords": [
+      "Ontology interoperability",
+      "Ontology mapping",
+      "Risk minimization decision",
+      "Semantic Web"
+    ],
+    "title": "Automatic Ontology Mapping in Semantic Web",
+    "lang": "zh",
+    "doi": "null",
+    "title_zh": "语义Web中的本体自动映射",
+    "venue": {
+      "name": "Chinese Journal of Computers",
+      "indices": {},
+      "mid": "539545d28314d630bc7df75a",
+      "info": {
+        "name": "Chinese Journal of Computers",
+        "name_zh": "计算机学报"
+      },
+      "issue": "11",
+      "id": "539545d28314d630bc7df75a",
+      "type": 0,
+      "volume": "29"
+    },
+    "issn": "null"
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "5390b36120f70186a0ef129b",
+        "src": "acm",
+        "sid": "2124382"
+      },
+      {
+        "id": "53a7264520f7420be8b6ec28",
+        "src": "dblp",
+        "sid": "conf/wsdm/TangLK12"
+      },
+      {
+        "id": "56d81382dabfae2eee61fc32",
+        "src": "mag",
+        "sid": "7892819F"
+      },
+      {
+        "id": "58774e3d0a3ac5b5de65ad86",
+        "src": "pdf",
+        "sid": "58774e3d0a3ac5b5de65ad86"
+      }
+    ],
+    "urls": [
+      "http://dx.doi.org/10.1145/2124295.2124382",
+      "http://doi.acm.org/10.1145/2124295.2124382",
+      "https://static.aminer.org/pdf/20160902/loc-conf/index.txt"
+    ],
+    "pdf": "//static.aminer.org/pdf/20160902/loc-conf/WSDM/WSDM-2012-1745.pdf",
+    "abstract": "It is well known that different types of social ties have essentially different influence on people. However, users in online social networks rarely categorize their contacts into \"family\", \"colleagues\", or \"classmates\". While a bulk of research has focused on inferring particular types of relationships in a specific social network, few publications systematically study the generalization of the problem of inferring social ties over multiple heterogeneous networks. In this work, we develop a framework for classifying the type of social relationships by learning across heterogeneous networks. The framework incorporates social theories into a factor graph model, which effectively improves the accuracy of inferring the type of social relationships in a target network by borrowing knowledge from a different source network. Our empirical study on five different genres of networks validates the effectiveness of the proposed framework. For example, by leveraging information from a coauthor network with labeled advisor-advisee relationships, the proposed framework is able to obtain an F1-score of 90% (8-28% improvements over alternative methods) for inferring manager-subordinate relationships in an enterprise email network.",
+    "pages": {
+      "s": "743",
+      "e": "752"
+    },
+    "num_citation": 177,
+    "year": 2012,
+    "keywords_zh": [],
+    "hash": "istahn",
+    "id": "53e9b8ccb7602d97044aaf91",
+    "authors": [
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Tiancheng Lou",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f44893dabfaee1c0af5887",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Cornell University, Ithaca, NY, USA",
+          "id": ""
+        },
+        "name": "Jon Kleinberg",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f49f78dabfaec18e77c303",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "labels": [
+      "en_journal"
+    ],
+    "order": 0,
+    "isbn": "",
+    "keywords": [
+      "heterogenous network",
+      "coauthor network",
+      "specific social network",
+      "proposed framework",
+      "different source network",
+      "social theory",
+      "social tie",
+      "social relationship",
+      "online social network",
+      "heterogeneous network",
+      "enterprise email network",
+      "factor graph",
+      "prediction model",
+      "social ties",
+      "social influence",
+      "predictive model",
+      "social network",
+      "empirical study",
+      "text mining"
+    ],
+    "title": "Inferring social ties across heterogenous networks",
+    "lang": "en",
+    "doi": "10.1145/2124295.2124382",
+    "venue": {
+      "name": "WSDM",
+      "indices": {},
+      "mid": "53a7264320f7420be8b6e887",
+      "info": {
+        "name": "WSDM"
+      },
+      "issue": "",
+      "id": "53a7264320f7420be8b6e887",
+      "type": 0,
+      "volume": ""
+    },
+    "issn": ""
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "53a72d4920f7420be8c5fc1a",
+        "src": "dblp",
+        "sid": "conf/kdd/WangHJTZYG10"
+      },
+      {
+        "id": "5390ac1720f70186a0eb2873",
+        "src": "acm",
+        "sid": "1835833"
+      },
+      {
+        "id": "56d812b7dabfae2eee5d0db8",
+        "src": "mag",
+        "sid": "787DE05A"
+      },
+      {
+        "id": "58774e3b0a3ac5b5de65a917",
+        "src": "pdf",
+        "sid": "58774e3b0a3ac5b5de65a917"
+      }
+    ],
+    "urls": [
+      "http://dx.doi.org/10.1145/1835804.1835833",
+      "http://doi.acm.org/10.1145/1835804.1835833",
+      "https://static.aminer.org/pdf/20160902/loc-conf/index.txt"
+    ],
+    "pdf": "//static.aminer.org/pdf/20160902/loc-conf/KDD/KDD-2010-603.pdf",
+    "abstract": "Information network contains abundant knowledge about relationships among people or entities. Unfortunately, such kind of knowledge is often hidden in a network where different kinds of relationships are not explicitly categorized. For example, in a research publication network, the advisor-advisee relationships among researchers are hidden in the coauthor network. Discovery of those relationships can benefit many interesting applications such as expert finding and research community analysis. In this paper, we take a computer science bibliographic network as an example, to analyze the roles of authors and to discover the likely advisor-advisee relationships. In particular, we propose a time-constrained probabilistic factor graph model (TPFG), which takes a research publication network as input and models the advisor-advisee relationship mining problem using a jointly likelihood objective function. We further design an efficient learning algorithm to optimize the objective function. Based on that our model suggests and ranks probable advisors for every author. Experimental results show that the proposed approach infer advisor-advisee relationships efficiently and achieves a state-of-the-art accuracy (80-90%). We also apply the discovered advisor-advisee relationships to bole search, a specific expert finding task and empirical study shows that the search performance can be effectively improved (+4.09% by NDCG@5).",
+    "pages": {
+      "s": "203",
+      "e": "212"
+    },
+    "num_citation": 149,
+    "year": 2010,
+    "keywords_zh": [],
+    "hash": "marfrpn",
+    "id": "53e9a10eb7602d97029fb1c4",
+    "authors": [
+      {
+        "aff": {
+          "desc": "University of Illinois at Urbana-Champaign, Urbana, IL, USA",
+          "id": ""
+        },
+        "name": "Chi Wang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "54451b41dabfae862da06b40",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "University of Illinois at Urbana-Champaign, Urbana, IL, USA",
+          "id": ""
+        },
+        "name": "Jiawei Han",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f42f36dabfaedce54dcd0c",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "University of Illinois at Urbana-Champaign, Urbana, IL, USA",
+          "id": ""
+        },
+        "name": "Yuntao Jia",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f44868dabfaeee229ff941",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "University of Illinois at Urbana-Champaign, Urbana, IL, USA",
+          "id": ""
+        },
+        "name": "Duo Zhang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f59a77dabfaeeb81f8045b",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "University of Illinois at Urbana-Champaign, Urbana, IL, USA",
+          "id": ""
+        },
+        "name": "Yintao Yu",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f42f53dabfaedf4352f754",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Jingyi Guo",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f4361cdabfaee0d9b62d7c",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "labels": [
+      "en_journal"
+    ],
+    "order": 3,
+    "isbn": "",
+    "keywords": [
+      "advisor-advisee relationship mining problem",
+      "coauthor network",
+      "computer science bibliographic network",
+      "abundant knowledge",
+      "mining advisor-advisee relationship",
+      "likely advisor-advisee relationship",
+      "research publication network",
+      "advisor-advisee relationship",
+      "information network",
+      "research community analysis",
+      "proposed approach infer advisor-advisee",
+      "factor graph",
+      "objective function",
+      "empirical study"
+    ],
+    "title": "Mining advisor-advisee relationships from research publication networks",
+    "lang": "en",
+    "doi": "10.1145/1835804.1835833",
+    "venue": {
+      "name": "KDD",
+      "indices": {},
+      "mid": "53a72d4220f7420be8c5fa02",
+      "info": {
+        "name": "KDD"
+      },
+      "issue": "",
+      "id": "53a72d4220f7420be8c5fa02",
+      "type": 0,
+      "volume": ""
+    },
+    "issn": ""
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "558af619e4b0b32fcb39eafd",
+        "src": "ieee",
+        "sid": "4470253"
+      },
+      {
+        "id": "5390a1e620f70186a0e5ac2d",
+        "src": "acm",
+        "sid": "1442081"
+      },
+      {
+        "id": "53a72ddc20f7420be8c77042",
+        "src": "dblp",
+        "sid": "conf/icdm/TangZY07"
+      },
+      {
+        "id": "53e2543320f7fff677603999",
+        "src": "msra",
+        "sid": "4272534"
+      },
+      {
+        "id": "56d81617dabfae2eee7298d7",
+        "src": "mag",
+        "sid": "7F01E749"
+      }
+    ],
+    "urls": [
+      "http://dx.doi.org/10.1109/ICDM.2007.30",
+      "http://doi.ieeecomputersociety.org/10.1109/ICDM.2007.30",
+      "http://ieeexplore.ieee.org/xpl/abstractAuthors.jsp?tp=&arnumber=4470253"
+    ],
+    "pdf": "",
+    "hash_zh": "",
+    "abstract": "This paper addresses the issue of extraction of an academic researcher social network. By researcher social network extraction, we are aimed at finding, extracting, and fusing the 'semantic '-based profiling information of a researcher from the Web. Previously, social network extraction was often undertaken separately in an ad-hoc fashion. This paper first gives a formalization of the entire problem. Specifically, it identifies the 'relevant documents' from the Web by a classifier. It then proposes a unified approach to perform the researcher profiling using conditional random fields (CRF). It integrates publications from the existing bibliography datasets. In the integration, it proposes a constraints-based probabilistic model to name disambiguation. Experimental results on an online system show that the unified approach to researcher profiling significantly outperforms the baseline methods of using rule learning or classification. Experimental results also indicate that our method to name disambiguation performs better than the baseline method using unsupervised learning. The methods have been applied to expert finding. Experiments show that the accuracy of expert finding can be significantly improved by using the proposed methods.",
+    "pages": {
+      "s": "292",
+      "e": "301"
+    },
+    "num_citation": 142,
+    "year": 2007,
+    "keywords_zh": [],
+    "hash": "sneoar",
+    "id": "53e9b850b7602d9704413928",
+    "authors": [
+      {
+        "aff": {
+          "desc": "",
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "",
+          "id": ""
+        },
+        "name": "Duo Zhang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f59a77dabfaeeb81f8045b",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "",
+          "id": ""
+        },
+        "name": "Limin Yao",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f44128dabfaeecd699d18b",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "abstract_zh": "",
+    "labels": [
+      "en_journal"
+    ],
+    "order": 0,
+    "isbn": "978-0-7695-3018-5",
+    "keywords": [
+      "researcher social network extraction",
+      "online system show",
+      "social network",
+      "constraints-based probabilistic model",
+      "learning (artificial intelligence)",
+      "bibliography datasets",
+      "unified approach",
+      "academic researchers",
+      "internet",
+      "social network extraction",
+      "expert finding",
+      "online system",
+      "conditional random fields",
+      "profiling information",
+      "academic researcher",
+      "unsupervised learning",
+      "conditional random field",
+      "learning artificial intelligence",
+      "probabilistic model"
+    ],
+    "title": "Social Network Extraction of Academic Researchers",
+    "lang": "en",
+    "doi": "10.1109/ICDM.2007.30",
+    "title_zh": "",
+    "venue": {
+      "name": "ICDM",
+      "indices": {},
+      "mid": "53a72a4320f7420be8bf8d8a",
+      "info": {
+        "name": "ICDM"
+      },
+      "issue": "",
+      "id": "53a72a4320f7420be8bf8d8a",
+      "type": 0,
+      "volume": ""
+    },
+    "issn": "1550-4786"
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "5390b3ae20f70186a0ef388a",
+        "src": "acm",
+        "sid": "2135432"
+      },
+      {
+        "id": "5485a439582f9e794bc78a8c",
+        "src": "scopus",
+        "sid": "2-s2.0-33746080874"
+      },
+      {
+        "id": "53a7295720f7420be8bd122c",
+        "src": "dblp",
+        "sid": "conf/waim/ZhangXTL06"
+      },
+      {
+        "id": "5485a460582f9e794bc8514c",
+        "src": "scopus",
+        "sid": "2-s2.0-33746080874"
+      },
+      {
+        "id": "5485a3b7582f9e794bc518d2",
+        "src": "scopus",
+        "sid": "2-s2.0-33746080874"
+      },
+      {
+        "id": "56d912cfdabfae2eee462aa3",
+        "src": "mag",
+        "sid": "85C20A4D"
+      }
+    ],
+    "urls": [
+      "http://dx.doi.org/10.1007/11775300_8"
+    ],
+    "pdf": "",
+    "hash_zh": "",
+    "abstract": "This paper is concerned with keyword extraction. By keyword extraction, we mean extracting a subset of words/phrases from a document that can describe the ‘meaning' of the document. Keywords are of benefit to many text mining applications. However, a large number of documents do not have keywords and thus it is necessary to assign keywords before enjoying the benefit from it. Several research efforts have been done on keyword extraction. These methods make use of the ‘global context information', which makes the performance of extraction restricted. A thorough and systematic investigation on the issue is thus needed. In this paper, we propose to make use of not only ‘global context information', but also ‘local context information' for extracting keywords from documents. As far as we know, utilizing both ‘global context information' and ‘local context information' in keyword extraction has not been sufficiently investigated previously. Methods for performing the tasks on the basis of Support Vector Machines have also been proposed in this paper. Features in the model have been defined. Experimental results indicate that the proposed SVM based method can significantly outperform the baseline methods for keyword extraction. The proposed method has been applied to document classification, a typical text mining processing. Experimental results show that the accuracy of document classification can be significantly improved by using the keyword extraction method.",
+    "pages": {
+      "s": "85",
+      "e": "96"
+    },
+    "num_citation": 136,
+    "year": 2006,
+    "keywords_zh": [],
+    "hash": "keusvm",
+    "id": "53e9b520b7602d9704052610",
+    "authors": [
+      {
+        "aff": {
+          "desc": "Department of Computer Science and Technology, Tsinghua University, Beijing, P.R.China",
+          "id": ""
+        },
+        "name": "Kuo Zhang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f456f8dabfaedd74e30485",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Department of Computer Science and Technology, Tsinghua University, Beijing, P.R.China",
+          "id": ""
+        },
+        "name": "Hui Xu",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f63f69dabfaee1dc3fa809",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Department of Computer Science and Technology, Tsinghua University, Beijing, P.R.China",
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Department of Computer Science and Technology, Tsinghua University, Beijing, P.R.China",
+          "id": ""
+        },
+        "name": "Juanzi Li",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "5619120945cedb3397d40ba0",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "abstract_zh": "",
+    "labels": [
+      "en_journal"
+    ],
+    "order": 2,
+    "isbn": "3-540-35225-2",
+    "keywords": [
+      "support vector machine",
+      "global context information",
+      "proposed svm",
+      "keyword extraction",
+      "text mining application",
+      "keyword extraction method",
+      "document classification",
+      "local context information",
+      "classification",
+      "modeling",
+      "information extraction",
+      "internet",
+      "database management system",
+      "data mining",
+      "statistical analysis",
+      "text analysis"
+    ],
+    "title": "Keyword extraction using support vector machine",
+    "lang": "en",
+    "doi": "10.1007/11775300_8",
+    "title_zh": "",
+    "venue": {
+      "name": "WAIM",
+      "indices": {},
+      "mid": "555037147cea80f954172020",
+      "info": {
+        "name": "WAIM"
+      },
+      "issue": "",
+      "id": "555037147cea80f954172020",
+      "type": 0,
+      "volume": ""
+    },
+    "issn": ""
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "53a72d4920f7420be8c600c2",
+        "src": "dblp",
+        "sid": "conf/kdd/TangWSS12"
+      },
+      {
+        "id": "5390b71120f70186a0f1e2ee",
+        "src": "acm",
+        "sid": "2339730"
+      },
+      {
+        "id": "56d812b6dabfae2eee5d0636",
+        "src": "mag",
+        "sid": "7ECA85C2"
+      },
+      {
+        "id": "58774e3c0a3ac5b5de65aac7",
+        "src": "pdf",
+        "sid": "58774e3c0a3ac5b5de65aac7"
+      }
+    ],
+    "urls": [
+      "http://dx.doi.org/10.1145/2339530.2339730",
+      "http://doi.acm.org/10.1145/2339530.2339730",
+      "https://static.aminer.org/pdf/20160902/loc-conf/index.txt"
+    ],
+    "pdf": "//static.aminer.org/pdf/PDF/003/445/807/Cross-domain-Collaboration-Recommendation.pdf",
+    "abstract": "Interdisciplinary collaborations have generated huge impact to society. However, it is often hard for researchers to establish such cross-domain collaborations. What are the patterns of cross-domain collaborations? How do those collaborations form? Can we predict this type of collaborations? Cross-domain collaborations exhibit very different patterns compared to traditional collaborations in the same domain: 1) sparse connection: cross-domain collaborations are rare; 2) complementary expertise: cross-domain collaborators often have different expertise and interest; 3) topic skewness: cross-domain collaboration topics are focused on a subset of topics. All these patterns violate fundamental assumptions of traditional recommendation systems. In this paper, we analyze the cross-domain collaboration data from research publications and confirm the above patterns. We propose the Cross-domain Topic Learning (CTL) model to address these challenges. For handling sparse connections, CTL consolidates the existing cross-domain collaborations through topic layers instead of at author layers, which alleviates the sparseness issue. For handling complementary expertise, CTL models topic distributions from source and target domains separately, as well as the correlation across domains. For handling topic skewness, CTL only models relevant topics to the cross-domain collaboration. We compare CTL with several baseline approaches on large publication datasets from different domains. CTL outperforms baselines significantly on multiple recommendation metrics. Beyond accurate recommendation performance, CTL is also insensitive to parameter tuning as confirmed in the sensitivity analysis.",
+    "pages": {
+      "s": "1285",
+      "e": "1293"
+    },
+    "num_citation": 131,
+    "year": 2012,
+    "keywords_zh": [],
+    "hash": "ccr",
+    "id": "53e999ffb7602d9702249bfa",
+    "authors": [
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Sen Wu",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f4546cdabfaeecd69e3d76",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "IBM T.J. Watson Research Center, Hawthorne, New York, USA",
+          "id": ""
+        },
+        "name": "Jimeng Sun",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f4d211dabfaeedd877fb9d",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Hang Su",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f42f23dabfaeb1a7ba1b31",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "labels": [
+      "en_journal"
+    ],
+    "order": 0,
+    "isbn": "",
+    "keywords": [
+      "complementary expertise",
+      "topic skewness",
+      "collaborations form",
+      "cross-domain collaborations exhibit",
+      "cross-domain collaboration data",
+      "existing cross-domain collaboration",
+      "cross-domain collaboration topic",
+      "cross-domain collaboration",
+      "cross-domain collaboration recommendation",
+      "sparse connection",
+      "cross-domain collaborator",
+      "sensitivity analysis",
+      "recommender system",
+      "social network",
+      "social influence"
+    ],
+    "title": "Cross-domain collaboration recommendation",
+    "lang": "en",
+    "doi": "10.1145/2339530.2339730",
+    "venue": {
+      "name": "KDD",
+      "indices": {},
+      "mid": "53a72d4220f7420be8c5fa02",
+      "info": {
+        "name": "KDD"
+      },
+      "issue": "",
+      "id": "53a72d4220f7420be8c5fa02",
+      "type": 0,
+      "volume": ""
+    },
+    "issn": ""
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "53a72c1420f7420be8c38f9f",
+        "src": "dblp",
+        "sid": "conf/cikm/HopcroftLT11"
+      },
+      {
+        "id": "5485aa94582f9e794be61a71",
+        "src": "scopus",
+        "sid": "2-s2.0-83055161701"
+      },
+      {
+        "id": "5485aa2f582f9e794be40c27",
+        "src": "scopus",
+        "sid": "2-s2.0-83055161701"
+      },
+      {
+        "id": "5390b20120f70186a0ee3f78",
+        "src": "acm",
+        "sid": "2063740"
+      },
+      {
+        "id": "56d81605dabfae2eee72268f",
+        "src": "mag",
+        "sid": "807589F1"
+      }
+    ],
+    "urls": [
+      "http://dx.doi.org/10.1145/2063576.2063740",
+      "http://doi.acm.org/10.1145/2063576.2063740"
+    ],
+    "pdf": "",
+    "hash_zh": "",
+    "abstract": "We study the extent to which the formation of a two-way relationship can be predicted in a dynamic social network. A two-way (called reciprocal) relationship, usually developed from a one-way (parasocial) relationship, represents a more trustful relationship between people. Understanding the formation of two-way relationships can provide us insights into the micro-level dynamics of the social network, such as what is the underlying community structure and how users influence each other. Employing Twitter as a source for our experimental data, we propose a learning framework to formulate the problem of reciprocal relationship prediction into a graphical model. The framework incorporates social theories into a machine learning model. We demonstrate that it is possible to accurately infer 90% of reciprocal relationships in a dynamic network. Our study provides strong evidence of the existence of the structural balance among reciprocal relationships. In addition, we have some interesting findings, e.g., the likelihood of two \"elite\" users creating a reciprocal relationships is nearly 8 times higher than the likelihood of two ordinary users. More importantly, our findings have potential implications such as how social structures can be inferred from individuals' behaviors.",
+    "pages": {
+      "s": "1137",
+      "e": "1146"
+    },
+    "num_citation": 122,
+    "year": 2011,
+    "keywords_zh": [],
+    "hash": "wwfybrrp",
+    "id": "53e9abebb7602d97035a7132",
+    "authors": [
+      {
+        "aff": {
+          "desc": "Cornell University, Ithaca, NY, USA",
+          "id": ""
+        },
+        "name": "John Hopcroft",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f31b3edabfae9a84435d77",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Tiancheng Lou",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f44893dabfaee1c0af5887",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing, China",
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "abstract_zh": "",
+    "labels": [
+      "en_journal"
+    ],
+    "order": 2,
+    "isbn": "",
+    "keywords": [
+      "social structure",
+      "social network",
+      "two-way relationship",
+      "dynamic network",
+      "social theory",
+      "reciprocal relationship",
+      "reciprocal relationship prediction",
+      "trustful relationship",
+      "graphical model",
+      "dynamic social network",
+      "community structure",
+      "social influence",
+      "predictive model",
+      "prediction model",
+      "machine learning"
+    ],
+    "title": "Who will follow you back?: reciprocal relationship prediction",
+    "lang": "en",
+    "doi": "10.1145/2063576.2063740",
+    "title_zh": "",
+    "venue": {
+      "name": "CIKM",
+      "indices": {},
+      "mid": "53a72c0f20f7420be8c3872f",
+      "info": {
+        "name": "CIKM"
+      },
+      "issue": "",
+      "id": "53a72c0f20f7420be8c3872f",
+      "type": 0,
+      "volume": ""
+    },
+    "issn": ""
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "558c599f84ae6766fdf29148",
+        "src": "ieee",
+        "sid": "6413904"
+      },
+      {
+        "id": "53a72ddc20f7420be8c76ad4",
+        "src": "dblp",
+        "sid": "conf/icdm/DongTWTCRC12"
+      },
+      {
+        "id": "54859dc2582f9e794ba94775",
+        "src": "scopus",
+        "sid": "2-s2.0-84874032107"
+      },
+      {
+        "id": "5390baa120f70186a0f39ba4",
+        "src": "acm",
+        "sid": "2472671"
+      },
+      {
+        "id": "56d81617dabfae2eee729a1f",
+        "src": "mag",
+        "sid": "8130EFCE"
+      }
+    ],
+    "urls": [
+      "http://dx.doi.org/10.1109/ICDM.2012.140",
+      "http://doi.ieeecomputersociety.org/10.1109/ICDM.2012.140",
+      "http://ieeexplore.ieee.org/xpl/abstractAuthors.jsp?tp=&arnumber=6413904"
+    ],
+    "pdf": "",
+    "hash_zh": "",
+    "abstract": "Link prediction and recommendation is a fundamental problem in social network analysis. The key challenge of link prediction comes from the sparsity of networks due to the strong disproportion of links that they have potential to form to links that do form. Most previous work tries to solve the problem in single network, few research focus on capturing the general principles of link formation across heterogeneous networks. In this work, we give a formal definition of link recommendation across heterogeneous networks. Then we propose a ranking factor graph model (RFG) for predicting links in social networks, which effectively improves the predictive performance. Motivated by the intuition that people make friends in different networks with similar principles, we find several social patterns that are general across heterogeneous networks. With the general social patterns, we develop a transfer-based RFG model that combines them with network structure information. This model provides us insight into fundamental principles that drive the link formation and network evolution. Finally, we verify the predictive performance of the presented transfer model on 12 pairs of transfer cases. Our experimental results demonstrate that the transfer of general social patterns indeed help the prediction of links.",
+    "pages": {
+      "s": "181",
+      "e": "190"
+    },
+    "num_citation": 119,
+    "year": 2012,
+    "keywords_zh": [],
+    "hash": "lparahsn",
+    "id": "53e9a082b7602d970296d7c1",
+    "authors": [
+      {
+        "aff": {
+          "desc": "",
+          "id": ""
+        },
+        "name": "Yuxiao Dong",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f471e2dabfaee02adc1c13",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "",
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "",
+          "id": ""
+        },
+        "name": "Sen Wu",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f4546cdabfaeecd69e3d76",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "",
+          "id": ""
+        },
+        "name": "Jilei Tian",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f4d04edabfaeeee2f819b3",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "",
+          "id": ""
+        },
+        "name": "Nitesh V. Chawla",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f48d14dabfaea7cd1d1283",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "",
+          "id": ""
+        },
+        "name": "Jinghai Rao",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46df9dabfaec09f25d656",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "",
+          "id": ""
+        },
+        "name": "Huanhuan Cao",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f42da0dabfaeb22f40b692",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "abstract_zh": "",
+    "labels": [
+      "en_journal"
+    ],
+    "order": 1,
+    "isbn": "978-1-4673-4649-8",
+    "keywords": [
+      "link prediction",
+      "link formation principles",
+      "social network",
+      "predictive performance",
+      "link recommendation",
+      "social network analysis",
+      "network structure information",
+      "link formation",
+      "social pattern",
+      "recommendation",
+      "general social patterns",
+      "different network",
+      "network evolution",
+      "ranking factor graph model",
+      "heterogeneous networks",
+      "heterogeneous social networks",
+      "graph theory",
+      "heterogeneous network",
+      "social networking (online)",
+      "factor graph",
+      "transfer-based rfg model",
+      "network theory (graphs)",
+      "general social pattern"
+    ],
+    "title": "Link Prediction and Recommendation across Heterogeneous Social Networks",
+    "lang": "en",
+    "doi": "10.1109/ICDM.2012.140",
+    "title_zh": "",
+    "venue": {
+      "name": "ICDM",
+      "indices": {},
+      "mid": "53a72a4320f7420be8bf8d8a",
+      "info": {
+        "name": "ICDM"
+      },
+      "issue": "",
+      "id": "53a72a4320f7420be8bf8d8a",
+      "type": 0,
+      "volume": ""
+    },
+    "issn": "1550-4786"
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "558b1612e4b031bae1fb73c3",
+        "src": "ieee",
+        "sid": "4781224"
+      },
+      {
+        "id": "53e2554520f7fff67764fefb",
+        "src": "msra",
+        "sid": "4716090"
+      },
+      {
+        "id": "5485a5bb582f9e794bceeac0",
+        "src": "scopus",
+        "sid": "2-s2.0-67049097966"
+      },
+      {
+        "id": "53a72de220f7420be8c773ac",
+        "src": "dblp",
+        "sid": "conf/icdm/TangJZ08"
+      },
+      {
+        "id": "5390a30b20f70186a0e6a52b",
+        "src": "acm",
+        "sid": "1511373"
+      },
+      {
+        "id": "56d81617dabfae2eee729807",
+        "src": "mag",
+        "sid": "7FC9C925"
+      }
+    ],
+    "urls": [
+      "http://dx.doi.org/10.1109/ICDM.2008.71",
+      "http://doi.ieeecomputersociety.org/10.1109/ICDM.2008.71",
+      "http://ieeexplore.ieee.org/xpl/abstractAuthors.jsp?tp=&arnumber=4781224"
+    ],
+    "pdf": "",
+    "hash_zh": "",
+    "abstract": "In this paper, we propose a unified topic modeling approach and its integration into the random walk framework for academic search. Specifically, we present a topic model for simultaneously modeling papers, authors, and publication venues. We combine the proposed topic model into the random walk framework. Experimental results show that our proposed approach for academic search significantly outperforms the baseline methods of using BM25 and language model, and those of using the existing topic models (including pLSI, LDA, and the AT model).",
+    "pages": {
+      "s": "1055",
+      "e": "1060"
+    },
+    "num_citation": 119,
+    "year": 2008,
+    "keywords_zh": [],
+    "hash": "atmaaiiitrwffas",
+    "id": "53e9a931b7602d9703284d33",
+    "authors": [
+      {
+        "aff": {
+          "desc": "",
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "",
+          "id": ""
+        },
+        "name": "Ruoming Jin",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f4a245dabfaec3b877b53e",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "",
+          "id": ""
+        },
+        "name": "Jing Zhang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f48d0adabfaea88777b455",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "abstract_zh": "",
+    "labels": [
+      "en_journal"
+    ],
+    "order": 0,
+    "isbn": "978-0-7695-3502-9",
+    "keywords": [
+      "random walk framework",
+      "topic modeling approach",
+      "language model",
+      "proposed topic model",
+      "information retrieval",
+      "existing topic model",
+      "bm25",
+      "unified topic modeling",
+      "data mining",
+      "topic model",
+      "unified topic modeling approach",
+      "search engines",
+      "academic search",
+      "probabilistic logic",
+      "neodymium",
+      "random walk",
+      "computational modeling",
+      "mathematical model",
+      "data models"
+    ],
+    "title": "A Topic Modeling Approach and Its Integration into the Random Walk Framework for Academic Search",
+    "lang": "en",
+    "doi": "10.1109/ICDM.2008.71",
+    "title_zh": "",
+    "venue": {
+      "name": "ICDM",
+      "indices": {},
+      "mid": "53a72a4320f7420be8bf8d8a",
+      "info": {
+        "name": "ICDM"
+      },
+      "issue": "",
+      "id": "53a72a4320f7420be8bf8d8a",
+      "type": 0,
+      "volume": ""
+    },
+    "issn": "1550-4786"
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "53a72f4a20f7420be8c9db01",
+        "src": "dblp",
+        "sid": "books/sp/social2011/SunT11"
+      },
+      {
+        "id": "56d881bfdabfae2eee6d2f40",
+        "src": "mag",
+        "sid": "5E10B2BF"
+      }
+    ],
+    "urls": [
+      "http://dx.doi.org/10.1007/978-1-4419-8462-3_7"
+    ],
+    "pdf": "",
+    "hash_zh": "",
+    "abstract": "",
+    "pages": {
+      "s": "177",
+      "e": "214"
+    },
+    "num_citation": 107,
+    "year": 2011,
+    "keywords_zh": [],
+    "hash": "asomaafsia",
+    "id": "53e9a1c9b7602d9702ac132e",
+    "authors": [
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Jimeng Sun",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f4d211dabfaeedd877fb9d",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "abstract_zh": "",
+    "labels": [
+      "en_journal"
+    ],
+    "order": 1,
+    "isbn": "",
+    "keywords": [
+      "social network analysis",
+      "behavior change",
+      "exponential growth",
+      "social network",
+      "social influence"
+    ],
+    "title": "A Survey of Models and Algorithms for Social Influence Analysis.",
+    "lang": "en",
+    "doi": "10.1007/978-1-4419-8462-3_7",
+    "title_zh": "",
+    "venue": {
+      "name": "Social Network Data Analytics",
+      "indices": {},
+      "mid": "53a72f3f20f7420be8c9d96d",
+      "info": {
+        "name": "Social Network Data Analytics"
+      },
+      "issue": "",
+      "id": "53a72f3f20f7420be8c9d96d",
+      "type": 0,
+      "volume": ""
+    },
+    "issn": ""
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "558be9a1e4b0cfb70a1a8da5",
+        "src": "ieee",
+        "sid": "5680902"
+      },
+      {
+        "id": "5390b4da20f70186a0f00b29",
+        "src": "acm",
+        "sid": "2197145"
+      },
+      {
+        "id": "53a72f9220f7420be8cb3307",
+        "src": "dblp",
+        "sid": "journals/tkde/TangFWZ12"
+      },
+      {
+        "id": "56d82d7cdabfae2eee0cc6f5",
+        "src": "mag",
+        "sid": "7FE7BC0E"
+      }
+    ],
+    "urls": [
+      "http://dx.doi.org/10.1109/TKDE.2011.13",
+      "http://doi.ieeecomputersociety.org/10.1109/TKDE.2011.13",
+      "http://ieeexplore.ieee.org/xpl/abstractAuthors.jsp?tp=&arnumber=5680902"
+    ],
+    "pdf": "",
+    "hash_zh": "",
+    "abstract": "Despite years of research, the name ambiguity problem remains largely unresolved. Outstanding issues include how to capture all information for name disambiguation in a unified approach, and how to determine the number of people K in the disambiguation process. In this paper, we formalize the problem in a unified probabilistic framework, which incorporates both attributes and relationships. Specifically, we define a disambiguation objective function for the problem and propose a two-step parameter estimation algorithm. We also investigate a dynamic approach for estimating the number of people K. Experiments show that our proposed framework significantly outperforms four baseline methods of using clustering algorithms and two other previous methods. Experiments also indicate that the number K automatically found by our method is close to the actual number.",
+    "pages": {
+      "s": "975",
+      "e": "987"
+    },
+    "num_citation": 103,
+    "year": 2011,
+    "keywords_zh": [],
+    "hash": "aupffndidl",
+    "id": "53e99d36b7602d97025ea1ce",
+    "authors": [
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing",
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Auckland University of Technology, Auckland",
+          "id": ""
+        },
+        "name": "Alvis C. M. Fong",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f38a03dabfae4b34a2a84f",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Nanjing University of Aeronautics and Astronautics, Beijing",
+          "id": ""
+        },
+        "name": "Bo Wang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "542a326edabfae646d53dbbe",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Tsinghua University, Beijing",
+          "id": ""
+        },
+        "name": "Jing Zhang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f48d0adabfaea88777b455",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "abstract_zh": "",
+    "labels": [
+      "en_journal"
+    ],
+    "order": 0,
+    "isbn": "",
+    "keywords": [
+      "database applications",
+      "pattern clustering",
+      "digital library",
+      "proposed framework",
+      "parameter estimation",
+      "digital libraries",
+      "people k",
+      "disambiguation objective function",
+      "name disambiguation",
+      "dynamic approach",
+      "unified probabilistic framework",
+      "parameter estimation algorithm",
+      "people k. experiments",
+      "heterogeneous databases.",
+      "name ambiguity problem",
+      "clustering algorithms",
+      "number k",
+      "information search and retrieval",
+      "actual number",
+      "disambiguation process",
+      "probability",
+      "databases",
+      "heuristic algorithm",
+      "hidden markov models",
+      "objective function",
+      "probabilistic logic",
+      "hidden markov model"
+    ],
+    "title": "A Unified Probabilistic Framework for Name Disambiguation in Digital Library",
+    "lang": "en",
+    "doi": "10.1109/TKDE.2011.13",
+    "title_zh": "",
+    "venue": {
+      "name": "IEEE Trans. Knowl. Data Eng.",
+      "indices": {},
+      "mid": "555036e57cea80f9541656e5",
+      "info": {
+        "name": "IEEE Trans. Knowl. Data Eng."
+      },
+      "issue": "6",
+      "id": "555036e57cea80f9541656e5",
+      "type": 0,
+      "volume": "24"
+    },
+    "issn": "1041-4347"
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "5530d0f445ced9cb6a307ba3",
+        "src": "dblp",
+        "sid": ""
+      },
+      {
+        "id": "54859f57582f9e794bb033d3",
+        "src": "scopus",
+        "sid": "2-s2.0-84896061359"
+      },
+      {
+        "id": "5390bded20f70186a0f48d90",
+        "src": "acm",
+        "sid": "2540526"
+      },
+      {
+        "id": "53a72d6d20f7420be8c64f18",
+        "src": "dblp",
+        "sid": "conf/ijcai/ZhangLTCL13"
+      }
+    ],
+    "urls": [],
+    "pdf": "//static.aminer.org/upload/pdf/2002/1351/79/5530d0f445ced9cb6a307ba3.pdf",
+    "hash_zh": "",
+    "abstract": "We study an interesting phenomenon of social influence locality in a large microblogging network, which suggests that users' behaviors are mainly influenced by close friends in their ego networks. We provide a formal definition for the notion of social influence locality and develop two instantiation functions based on pairwise influence and structural diversity. The defined influence locality functions have strong predictive power. Without any additional features, we can obtain a F1-score of 71.65% for predicting users' retweet behaviors by training a logistic regression classifier based on the defined functions. Our analysis also reveals several intriguing discoveries. For example, though the probability of a user retweeting a microblog is positively correlated with the number of friends who have retweeted the microblog, it is surprisingly negatively correlated with the number of connected circles that are formed by those friends.",
+    "pages": {
+      "s": "",
+      "e": ""
+    },
+    "num_citation": 97,
+    "year": 2013,
+    "keywords_zh": [],
+    "hash": "silfmrb",
+    "id": "53e9bab4b7602d97046e48fb",
+    "authors": [
+      {
+        "aff": {
+          "desc": "Department of Computer Science and Technology, Tsinghua University, China",
+          "id": ""
+        },
+        "name": "Jing Zhang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f48d0adabfaea88777b455",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Department of Computer Science and Technology, Tsinghua University, China",
+          "id": ""
+        },
+        "name": "Biao Liu",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53fa0a4edabfae91d3fc6958",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Department of Computer Science and Technology, Tsinghua University, China",
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Department of Computer Science and Technology, Tsinghua University, China",
+          "id": ""
+        },
+        "name": "Ting Chen",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f48094dabfae963d25ae26",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "desc": "Department of Computer Science and Technology, Tsinghua University, China",
+          "id": ""
+        },
+        "name": "Juanzi Li",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "5619120945cedb3397d40ba0",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "abstract_zh": "",
+    "labels": [
+      "en_journal"
+    ],
+    "order": 2,
+    "isbn": "",
+    "keywords": [
+      "retweeting behavior",
+      "ego network",
+      "social influence locality"
+    ],
+    "title": "Social influence locality for modeling retweeting behaviors",
+    "lang": "en",
+    "doi": "",
+    "title_zh": "",
+    "venue": {
+      "name": "IJCAI",
+      "indices": {},
+      "mid": "53a72d6120f7420be8c6352f",
+      "info": {
+        "name": "IJCAI"
+      },
+      "issue": "",
+      "id": "53a72d6120f7420be8c6352f",
+      "type": 0,
+      "volume": ""
+    },
+    "issn": ""
+  }
+]

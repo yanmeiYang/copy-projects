@@ -1,0 +1,1150 @@
+[
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "5915163b9ed5dbc65bf3b5cf",
+        "src": "aminer-ugc",
+        "sid": "5915163b9ed5dbc65bf3b5cf"
+      },
+      {
+        "id": "5915163b9ed5dbc65bf3b5cf",
+        "src": "aminer-ugc",
+        "sid": "5915163b9ed5dbc65bf3b5cf"
+      },
+      {
+        "id": "5915163b9ed5dbc65bf3b5cf",
+        "src": "aminer-ugc",
+        "sid": "5915163b9ed5dbc65bf3b5cf"
+      },
+      {
+        "id": "5915163b9ed5dbc65bf3b5cf",
+        "src": "aminer-ugc",
+        "sid": "5915163b9ed5dbc65bf3b5cf"
+      }
+    ],
+    "urls": [
+      "http://dx.doi.org/10.1002/asi.23681"
+    ],
+    "pdf": "",
+    "abstract": "Abstract With the information overload of user-generated content in microblogging, users find it extremely challenging to browse and find valuable information in their first attempt. In this paper we propose a microblogging recommendation algorithm, TSI-MR (Topic-Level Social Influence-based Microblogging Recommendation), which can significantly improve users' microblogging experiences. The main innovation of this proposed algorithm is that we consider social influences and their indirect structural relationships, which are largely based on social status theory, from the topic level. The primary advantage of this approach is that it can build an accurate description of latent relationships between two users with weak connections, which can improve the performance of the model; furthermore, it can solve sparsity problems of training data to a certain extent. The realization of the model is mainly based on Factor Graph. We also applied a distributed strategy to further improve the efficiency of the model. Finally, we use data from Tencent Weibo, one of the most popular microblogging services in China, to evaluate our methods. The results show that incorporating social influence can improve microblogging performance considerably, and outperform the baseline methods.",
+    "pages": {
+      "s": "",
+      "e": ""
+    },
+    "num_citation": 0,
+    "year": 2017,
+    "keywords_zh": [],
+    "hash": "umrisi",
+    "id": "5915163b9ed5dbc65bf3b5cf",
+    "authors": [
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Daifeng Li",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f43094dabfaee2a1ca54f4",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Zhipeng Luo",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Ying Ding",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f59592dabfaee491f8045b",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Guo-zheng Sun",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Xiaowen Dai",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f4518cdabfaee1c0b1a02f",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "abstract_zh": "",
+    "labels": [
+      "aminer-ugc"
+    ],
+    "order": 3,
+    "isbn": "",
+    "keywords": [],
+    "title": "User-level microblogging recommendation incorporating social influence",
+    "lang": "en",
+    "doi": "10.1002/asi.23681",
+    "venue": {
+      "name": "Journal of the American Society for Information Science and Technology",
+      "indices": {},
+      "mid": "53a7313020f7420be8d2b2cc",
+      "info": {
+        "name": "Journal of the American Society for Information Science and Technology",
+        "vtype": 1
+      },
+      "issue": "3",
+      "id": "53a7313020f7420be8d2b2cc",
+      "type": 1,
+      "volume": "68"
+    },
+    "issn": ""
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "5736977f6e3b12023e66638e",
+        "src": "dblp",
+        "sid": "conf/www/QiuLTLYCYH16"
+      }
+    ],
+    "urls": [
+      "http://doi.acm.org/10.1145/2872427.2882979"
+    ],
+    "pdf": "",
+    "hash_zh": "",
+    "abstract": "",
+    "pages": {
+      "s": "311",
+      "e": "320"
+    },
+    "num_citation": 8,
+    "year": 2016,
+    "keywords_zh": [],
+    "hash": "tlacowsmg",
+    "id": "5736977f6e3b12023e66638e",
+    "authors": [
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Jiezhong Qiu",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Yixuan Li",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Zheng Lu",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Hao Ye",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Bo Chen",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Qiang Yang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "John E. Hopcroft",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "abstract_zh": "",
+    "labels": [],
+    "order": 2,
+    "isbn": "",
+    "keywords": [],
+    "title": "The Lifecycle and Cascade of WeChat Social Messaging Groups.",
+    "lang": "en",
+    "doi": "",
+    "title_zh": "",
+    "venue": {
+      "name": "WWW",
+      "indices": {},
+      "mid": "53907b7720f770854f5eabd8",
+      "info": {
+        "name": "WWW",
+        "vtype": 10
+      },
+      "issue": "",
+      "id": "53907b7720f770854f5eabd8",
+      "type": 10,
+      "volume": ""
+    },
+    "issn": ""
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "573698646e3b12023e72a4b8",
+        "src": "dblp",
+        "sid": "conf/aaai/YangJWT16"
+      }
+    ],
+    "urls": [
+      "http://www.aaai.org/ocs/index.php/AAAI/AAAI16/paper/view/12069"
+    ],
+    "pdf": "",
+    "hash_zh": "",
+    "abstract": "",
+    "pages": {
+      "s": "65",
+      "e": "71"
+    },
+    "num_citation": 0,
+    "year": 2016,
+    "keywords_zh": [],
+    "hash": "sreciisn",
+    "id": "573698646e3b12023e72a4b8",
+    "authors": [
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Yang Yang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "562d52e845cedb3398dc557f",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Jia Jia",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53fa07d4dabfae91d3fc62ec",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Boya Wu",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "abstract_zh": "",
+    "labels": [],
+    "order": 3,
+    "isbn": "",
+    "keywords": [],
+    "title": "Social Role-Aware Emotion Contagion in Image Social Networks.",
+    "lang": "en",
+    "doi": "",
+    "title_zh": "",
+    "venue": {
+      "name": "AAAI",
+      "indices": {},
+      "mid": "53a725ac20f7420be8b556b2",
+      "info": {
+        "name": "AAAI",
+        "vtype": 10
+      },
+      "issue": "",
+      "id": "53a725ac20f7420be8b556b2",
+      "type": 10,
+      "volume": ""
+    },
+    "issn": ""
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "57a4e937ac44365e35c9cdb5",
+        "src": "dblp",
+        "sid": "journals/tois/TangLKW16"
+      }
+    ],
+    "urls": [
+      "http://doi.acm.org/10.1145/2746230"
+    ],
+    "pdf": "",
+    "pages": {
+      "s": "",
+      "e": ""
+    },
+    "num_citation": 10,
+    "year": 2016,
+    "hash": "tltistahn",
+    "id": "57a4e937ac44365e35c9cdb5",
+    "authors": [
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Tiancheng Lou",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Jon M. Kleinberg",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Sen Wu",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "labels": [],
+    "order": 0,
+    "isbn": "",
+    "title": "Transfer Learning to Infer Social Ties across Heterogeneous Networks.",
+    "lang": "en",
+    "doi": "",
+    "venue": {
+      "name": "ACM Trans. Inf. Syst.",
+      "indices": {},
+      "mid": "5736adcdd39c4f40a797012a",
+      "info": {
+        "name": "ACM Trans. Inf. Syst.",
+        "vtype": 11
+      },
+      "issue": "2",
+      "id": "5736adcdd39c4f40a797012a",
+      "type": 11,
+      "volume": "34"
+    },
+    "issn": ""
+  },
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "58069ca5b42f7f562830d651",
+        "src": "db/ps",
+        "sid": "58069ca5b42f7f562830d651"
+      },
+      {
+        "id": "58437785ac44360f10843324",
+        "src": "dblp",
+        "sid": "conf/cikm/TangCSTV016"
+      },
+      {
+        "id": "58069ca5b42f7f562830d651",
+        "src": "MIFS",
+        "sid": "58069ca5b42f7f562830d651"
+      }
+    ],
+    "urls": [],
+    "pdf": "//static.aminer.org/pdf/fa/cikm2016/p2505.pdf",
+    "abstract": "The first ACM international workshop on big network analytics is held in Indianapolis, Indiana, USA on October 24, 2016 and co-located with the ACM 25th Conference on Information and Knowledge Management (CIKM). The main objective of the workshop is to provide a forum for presenting the most recent advances in mining big networks to unearth rich knowledge. It is related to information retrieval, Web mining, social network analysis, and computational advertising. The anticipated outcome includes a fruitful discussion about the emerging challenges in this field, the development of novel theories for mining big networks, and motivating the interesting applications. The broader anticipated outcome includes: fostering future research directions, publishing high quality papers, attracting new researchers to this field, and concrete solutions to the existing problems.",
+    "pages": {
+      "s": "",
+      "e": ""
+    },
+    "num_citation": 0,
+    "year": 2016,
+    "hash": "b2fwobna",
+    "id": "58069ca5b42f7f562830d651",
+    "authors": [
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Jie Tang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f46a3edabfaee43ed05f08",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Keke Cai",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Zhong Su",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Hanghang Tong",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Michalis Vazirgiannis",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f556b7dabfaea7cd1d5889",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      },
+      {
+        "aff": {
+          "id": ""
+        },
+        "name": "Yang Yang",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "labels": [],
+    "order": 0,
+    "isbn": "",
+    "keywords": [
+      "Big network"
+    ],
+    "title": "BigNet 2016: First Workshop on Big Network Analytics",
+    "lang": "en",
+    "doi": "",
+    "venue": {
+      "name": "ACM International Conference on Information and Knowledge Management",
+      "indices": {},
+      "mid": "53a72c0f20f7420be8c3872f",
+      "info": {
+        "name": "ACM International Conference on Information and Knowledge Management",
+        "vtype": 5
+      },
+      "issue": "",
+      "id": "53a72c0f20f7420be8c3872f",
+      "type": 5,
+      "volume": ""
+    },
+    "issn": ""
+  }
+]

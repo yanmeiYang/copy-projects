@@ -97,6 +97,17 @@ const Routers = function ({ history, app }) {
           },
         },
         {
+          path: 'expert-map',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              // registerModel(app, require('./models/person'));
+              // registerModel(app, require('./models/publications'));
+              // registerModel(app, require('./models/vis/vis-research-interest'));
+              cb(null, require('./routes/expert-map'));
+            }, 'expert-map');
+          },
+        },
+        {
           path: '/admin',
           component: App,
           getIndexRoute(nextState, cb) {

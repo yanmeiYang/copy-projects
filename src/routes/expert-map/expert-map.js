@@ -23,14 +23,15 @@ class ExpertMap extends React.Component {
 
   /** 地图的代码 */
   initBaiduMap = function () {
-    console.log('initBaiduMap')
-    // 百度地图API功能
-    var map = new BMap.Map('allmap');
-    var point = new BMap.Point(116.331398, 39.897445);
-    map.centerAndZoom(point, 12);
-    var geoc = new BMap.Geocoder();
+    console.log('initBaiduMap');
 
-    map.addEventListener("click", function (e) {
+    // 百度地图API功能
+    const map = new BMap.Map('allmap');
+    const point = new BMap.Point(116.331398, 39.897445);
+    map.centerAndZoom(point, 12);
+    const geoc = new BMap.Geocoder();
+
+    map.addEventListener('click', function (e) {
       var pt = e.point;
       geoc.getLocation(pt, function (rs) {
         console.log('rs is: ', rs)

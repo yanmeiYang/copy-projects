@@ -1,0 +1,40 @@
+{
+  "results": [
+    {
+      "name": "jie tang",
+      "id": "5390a17720f70186a0e5247f",
+      "location": {
+        "lng": 12093,
+        "lat": 29304,
+        "country": "china",
+        "area": "华中",
+        "city": "Bei Jing",
+        "univ-or-org": 1
+      }
+    },
+    {
+      "name": "jie tang",
+      "id": "5390a17720f70186a0e5247f",
+      "location": {
+        "lng": 12093,
+        "lat": 29304,
+        "country": "china",
+        "area": "华中",
+        "city": "Bei Jing",
+        "univ-or-org": 2
+      }
+    }
+  ],
+  "org-location": [
+    {
+      "name": "tsinghua university",
+      "lng": 12093,
+      "lat": 29304
+    },
+    {
+      "name": "Microsoft Corp.",
+      "lng": 12093,
+      "lat": 29304
+    }
+  ]
+}

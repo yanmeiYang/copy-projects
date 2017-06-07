@@ -79,6 +79,15 @@ const App = ({ children, location, dispatch, app, loading }) => {
         <link rel="icon" href={logo} type="image/x-icon" />
         {iconFontJS && <script src={iconFontJS}></script>}
         {iconFontCSS && <link rel="stylesheet" href={iconFontCSS} />}
+
+        {href.indexOf('/expert-map') > 0 &&
+        //  换成你需要引入的js
+        <script
+          src="http://api.map.baidu.com/api?v=2.0&ak=你的AK&callback=init"
+          type="text/javascript"
+        />
+        }
+
       </Helmet>
       <div className={classnames(styles.layout)}>
         <Header {...headerProps} />

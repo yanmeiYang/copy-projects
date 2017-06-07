@@ -6,10 +6,6 @@ import { connect } from 'dva';
 import Script from 'react-load-script';
 import styles from './expert-map';
 
-/**
- * Hi,邵洲你好。
- * 这里是一个在ReactJS中调用BaiduMap的例子。
- */
 class ExpertMap extends React.Component {
   /** 构造函数： 这里执行初始化*/
   // constructor(props) {
@@ -27,8 +23,16 @@ class ExpertMap extends React.Component {
 
     // 百度地图API功能
     const map = new BMap.Map('allmap');
-    const point = new BMap.Point(116.331398, 39.897445);
-    map.centerAndZoom(point, 12);
+    map.enableScrollWheelZoom()
+    map.addControl(new BMap.NavigationControl())
+    map.addControl(new BMap.ScaleControl())
+    map.addControl(new BMap.OverviewMapControl())
+    map.addControl(new BMap.MapTypeControl())
+    const point = new BMap.Point(116.404, 39.915)
+    map.centerAndZoom(point, 2)
+    const marker = new BMap.Marker(point)
+    map.addOverlay(marker)
+    marker.setAnimation(BMAP_ANIMATION_BOUNCE)
     const geoc = new BMap.Geocoder();
 
     map.addEventListener('click', function (e) {
@@ -46,6 +50,8 @@ class ExpertMap extends React.Component {
     console.log(this.refs.allmap, 'ref');
     // TODO 地图的代码应该放这里!!
     // TODO 你先使用假的json来实现前端的东西，稍后我会给你写一个新框架中调用API的例子。
+    var place = require('../../../external-docs/expert-map/expert-map-example.json');
+    //alert(place.results.length);
 
   }
 
@@ -57,13 +63,14 @@ class ExpertMap extends React.Component {
     return (
       <div className={styles.expert_map}>
         <Script
-          url="http://api.map.baidu.com/api?v=2.0&ak=你的秘钥&callback=initBaiduMap"
+          url="http://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&callback=initBaiduMap"
           onLoad={this.handleScriptLoad.bind(this)} onError={this.handleScriptError.bind(this)}
         />
         <div id="allmap" style={{ width: '100%', height: '500px' }} />
 
         <div className="em_report">
           统计/报表
+          <br /><br /><br /><br /><br />
         </div>
       </div>
     );

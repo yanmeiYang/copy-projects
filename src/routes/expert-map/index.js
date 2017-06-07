@@ -28,5 +28,4 @@ class ExpertMapPage extends React.Component {
   }
 }
 
-
 export default connect(({ person, loading }) => ({ person, loading }))(ExpertMapPage);

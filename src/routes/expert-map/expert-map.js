@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { connect } from 'dva';
+import { Button } from 'antd';
 import Script from 'react-load-script';
 import styles from './expert-map';
 
@@ -59,7 +60,14 @@ class ExpertMap extends React.Component {
     console.log('error');
   }
 
+  onLoadPersonCard = (e) => {
+    const personId = e.target && e.target.getAttribute('data');
+    this.props.dispatch({ type: 'expertMap/getPersonInfo', payload: { personId } });
+  }
+
   render() {
+    const model = this.props && this.props.expertMap;
+    const personInfo = model.personInfo;
     return (
       <div className={styles.expert_map}>
         <Script
@@ -67,6 +75,22 @@ class ExpertMap extends React.Component {
           onLoad={this.handleScriptLoad.bind(this)} onError={this.handleScriptError.bind(this)}
         />
         <div id="allmap" style={{ width: '100%', height: '500px' }} />
+
+        <div style={{ width: 500, height: 300 }}>
+          <h1>测试区</h1>
+          <div style={{ width: 300, height: 100, border: 'solid 1px red' }}>
+            这是漂浮窗口
+            {personInfo &&
+            <div>
+              <p>{personInfo.id}</p>
+              <p>{personInfo.name}</p>
+            </div>
+            }
+          </div>
+
+          <a onClick={this.onLoadPersonCard} data="54088138dabfae8faa649e53">Lawrence Page</a> /
+          <a onClick={this.onLoadPersonCard} data="53f46a3edabfaee43ed05f08">Jie Tang</a>
+        </div>
 
         <div className="em_report">
           统计/报表
@@ -78,4 +102,4 @@ class ExpertMap extends React.Component {
 }
 
 
-export default connect(({ person, loading }) => ({ person, loading }))(ExpertMap);
+export default connect(({ expertMap, loading }) => ({ expertMap, loading }))(ExpertMap);

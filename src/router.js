@@ -100,9 +100,7 @@ const Routers = function ({ history, app }) {
           path: 'expert-map',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
-              // registerModel(app, require('./models/person'));
-              // registerModel(app, require('./models/publications'));
-              // registerModel(app, require('./models/vis/vis-research-interest'));
+              registerModel(app, require('./models/expert-map'));
               cb(null, require('./routes/expert-map'));
             }, 'expert-map');
           },

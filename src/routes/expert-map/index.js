@@ -9,6 +9,7 @@ class ExpertMapPage extends React.Component {
   constructor(props) {
     super(props);
     console.log('Loading BaiduMap Container');
+    // console.log('DEBUG: ', this.props, this.props.expertMap);
   }
 
   /** 在Component被加载的时候调用的。 */
@@ -28,4 +29,4 @@ class ExpertMapPage extends React.Component {
   }
 }
 
-export default connect(({ person, loading }) => ({ person, loading }))(ExpertMapPage);
+export default connect(({ expertMap }) => ({ expertMap }))(ExpertMapPage);

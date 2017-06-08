@@ -31,3 +31,16 @@ export async function postSeminarActivity(data) {
   })
 
 }
+
+export async function searchActivity(query,offset,size) {
+  let data = {
+    query: query,
+    offset,
+    size
+  };
+  return request(api.searchActivity, {
+    method: 'GET',
+    data,
+  })
+
+}

@@ -11,16 +11,13 @@ export default {
   state: {
     results: [],
     id: null,
+    loading: false,
+    offset: 0,
+    sizePerPage: 20,
+    query: '',
     summaryById: [],
     speakerSuggests: [],
     isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
-    pagination: {
-      showSizeChanger: true,
-      showQuickJumper: true,
-      current: 1,
-      pageSize: 30,
-      total: null,
-    },
   },
 
   subscriptions: {
@@ -42,9 +39,10 @@ export default {
 
   effects: {
     *getSeminar({ payload }, { call, put }){
+      yield put({ type: 'showLoading' });
       const { offset, size } = payload;
       const { data } = yield call(seminarService.getSeminar, offset, size);
-      yield put({ type: 'getSeminarsSuccess', payload: { data } });
+      yield put({ type: 'getSeminarsSuccess', payload: { data, offset } });
     },
     *getSeminarByID({ payload }, { call, put }){
       const { id } = payload;
@@ -57,17 +55,22 @@ export default {
       yield put({ type: 'getSpeakerSuggestSuccess', payload: { data } });
     },
     *postSeminarActivity({ payload }, { call, put }){
-      console.log(payload);
       const { data } = yield call(seminarService.postSeminarActivity, payload);
       if (data.status) {
         yield put(routerRedux.push({ pathname: `/seminar/` + data.id }))
       }
     },
+    *searchActivity({ payload }, { call, put }){
+      yield put({ type: 'showLoading' });
+      const { query, offset, size } = payload;
+      const { data } = yield call(seminarService.searchActivity, query, offset, size);
+      yield put({ type: 'searchActivitySuccess', payload: { data, query, offset } });
+    },
   },
 
   reducers: {
-    getSeminarsSuccess(state, { payload: { data } }){
-      return { ...state, results: data };
+    getSeminarsSuccess(state, { payload: { data, offset } }){
+      return { ...state, results: state.results.concat(data), loading: false, offset: offset + state.sizePerPage };
     },
 
     getSeminarByIDSuccess(state, { payload: { data } }){
@@ -79,6 +82,23 @@ export default {
       console.log(data);
       return { ...state, speakerSuggests: data };
     },
+    searchActivitySuccess(state, { payload: { data, query, offset } }){
+      return { ...state, results: state.results.concat(data), query: query, loading: false, offset: offset + state.sizePerPage };
+    },
+
+    showLoading(state) {
+      return {
+        ...state,
+        loading: true,
+      };
+    },
+    hideLoading(state) {
+      return {
+        ...state,
+        loading: false,
+      };
+    },
+
   },
 
 };

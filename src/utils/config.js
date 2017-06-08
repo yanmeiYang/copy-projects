@@ -22,11 +22,14 @@ module.exports = {
     allPersonInBase: '/roster/:ebid/order-by/h_index/offset/:offset/size/:size',
     allPersonInBaseAgg: '/roster/:ebid/agg?offset=&order=h_index&size=20',
     userLogin: '/auth/signin',
+
+    // seminar
     getSeminars: '/activity/list/offset/:offset/size/:size',
     getActivityById: '/activity/:id',
     postActivity: '/activity/post_activity',
     speakerSuggest: '/activity/speaker/suggest',
     uploadActivityPosterImgFile: '/activity/img',
+    searchActivity: '/search/activity',
 
     /* person */
     personProfile: '/person/summary/:id',

@@ -14,7 +14,7 @@ function Header({ location }) {
       <Link className={styles.logo} to="/">
         <img alt={'logo'} src={logoImg} />
         {/* TODO Move config out of this place */}
-        <div>专家云智库</div>
+        <div>CCF 专家库</div>
       </Link>
       <Menu
         selectedKeys={[location.pathname]}

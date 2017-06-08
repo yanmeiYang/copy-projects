@@ -1,13 +1,15 @@
 module.exports = [
   { id: 1, icon: 'laptop', name: '首页', router: '/' },
   { id: 2, bpid: 1, name: '学会活动', icon: 'api', router: '/seminar' },
+  { id: 3, bpid: 1, name: '专业委员会', icon: 'api', router: '/' },
 
-  { id: 5, bpid: 1, name: '设置', icon: 'camera-o' },
+  { id: 4, bpid: 1, name: '设置', icon: 'camera-o' },
   // { id: 52, bpid: 5, mpid: 5, name: 'BarChart', icon: 'bar-chart', router: '/chart/barChart', },
 
+  { id: 5, bpid: 1, name: '--------------', icon: 'environment', router: '/expert-map' },
   { id: 6, bpid: 1, name: '专家地图', icon: 'environment', router: '/expert-map' },
   { id: 8, bpid: 1, name: '隐藏功能', icon: 'camera-o' },
-  { id: 88, bpid: 8, mpid: 8, name: '学会会员', icon: 'user', router: '/experts/0/30' },
+  { id: 88, bpid: 8, mpid: 8, name: '账户设置', icon: 'user', router: '/experts/0/30' },
 
   // {
   //   id: 41,

@@ -74,9 +74,9 @@ const App = ({children, location, dispatch, app, loading}) => {
   return (
     <div>
       <Helmet>
-        <title>CCF 专家云智库</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="icon" href={logo} type="image/x-icon"/>
+        <title>CCF 专家库</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href={logo} type="image/x-icon" />
         {iconFontJS && <script src={iconFontJS}></script>}
         {iconFontCSS && <link rel="stylesheet" href={iconFontCSS}/>}
         if(href.indexOf('/expert-map') > 0){

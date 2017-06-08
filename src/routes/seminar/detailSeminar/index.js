@@ -4,79 +4,12 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Tabs, Button, Icon, Row, Col, Rate, Input, InputNumber } from 'antd';
+import TimeFormat from './time-format'
 import styles from './index.less';
 
 
 const DetailSeminar = ({ seminar }) => {
   const { summaryById } = seminar;
-  const offsetMinutes = (new Date()).getTimezoneOffset() + 480
-
-  function monthToEn(num) {
-    const enmonth = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
-      'November', 'December'];
-    return enmonth[num];
-  }
-
-  function dateToString(time) {
-    let date = new Date(time);
-    let year = date.getFullYear() + '-';
-    let mon = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
-    let day = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' ';
-    return year + mon + day;
-  }
-
-  function dateRangeToString(from, to) {
-    const dateFrom = new Date(from);
-    const dateTo = new Date(to);
-    dateFrom.setMinutes(offsetMinutes);
-    dateTo.setMinutes(offsetMinutes);
-    monthToEn(dateFrom.getMonth());
-    if (dateFrom.getFullYear() === dateTo.getFullYear() && dateFrom.getMonth() === dateTo.getMonth()) {
-      if (dateFrom.getDate() === dateTo.getDate()) {
-        return monthToEn(dateFrom.getMonth()) + ' ' + dateFrom.getDate() + ',' + dateFrom.getFullYear();
-      } else {
-        return monthToEn(dateFrom.getMonth()) + ' ' + dateFrom.getDate() + '-' + dateTo.getDate() + ', ' + dateFrom.getFullYear();
-      }
-    } else {
-      if (dateFrom.getFullYear() === dateTo.getFullYear() && dateFrom.getMonth() !== dateTo.getMonth()) {
-        return monthToEn(dateFrom.getMonth()) + ' ' + dateFrom.getDate() + '-' + monthToEn(dateTo.getMonth()) + ' ' + dateTo.getDate() + ', ' + dateFrom.getFullYear();
-      } else {
-        return dateToString(from) + ' to ' + dateToString(to);
-      }
-    }
-
-  }
-
-  function timeRangeToString(from, to) {
-    const dateFrom = new Date(from);
-    const dateTo = new Date(to);
-    let mfrom, mto;
-
-    if (dateFrom.getMinutes() === 0) {
-      mfrom = "00";
-    } else if (dateFrom.getMinutes() < 10) {
-      mfrom = "0" + dateFrom.getMinutes();
-    } else {
-      mfrom = dateFrom.getMinutes();
-    }
-
-    if (dateTo.getMinutes() === 0) {
-      mto = "00";
-    } else if (dateTo.getMinutes() < 10) {
-      mto = "0" + dateTo.getMinutes();
-    } else {
-      mto = dateTo.getMinutes();
-    }
-
-    if ((dateFrom.getHours() === dateTo.getHours()) && (dateFrom.getMinutes() === dateTo.getMinutes())) {
-      return dateFrom.getHours() + ':' + mfrom;
-    } else if (dateFrom.getHours() === dateTo.getHours() && dateFrom.getMinutes() !== dateTo.getMinutes()) {
-      return dateFrom.getHours() + ':' + mfrom + '-' + dateFrom.getHours() + ":" + mto;
-    } else {
-      return dateFrom.getHours() + ':' + mfrom + '-' + dateTo.getHours() + ':' + mto;
-    }
-  }
-
   //share
   let shareModalDisplay = false;
 
@@ -132,7 +65,8 @@ const DetailSeminar = ({ seminar }) => {
                     {summaryById.time ? <li><p>
                       <Icon type="clock-circle-o" />
                       <strong>Time:&nbsp;</strong>
-                      <span>{dateRangeToString(summaryById.time.from, summaryById.time.to)} &nbsp;&nbsp;{timeRangeToString(summaryById.time.from, summaryById.time.to)}</span>
+                      <TimeFormat {...summaryById.time} />
+                      {/*<span>{dateRangeToString(summaryById.time.from, summaryById.time.to)} &nbsp;&nbsp;{timeRangeToString(summaryById.time.from, summaryById.time.to)}</span>*/}
                     </p></li> : ''}
                   </span>
                   <span>
@@ -218,7 +152,7 @@ const DetailSeminar = ({ seminar }) => {
               //type ===1时显示图片信息
               <div className={styles.workshopTetail}>
                 {summaryById.img ? <div>
-                  <h5>{dateRangeToString(summaryById.time.from, summaryById.time.to)}&nbsp&nbsp{timeRangeToString(summaryById.time.from, summaryById.time.to)}. { summaryById.location.address }</h5>
+                  <h5><TimeFormat {...summaryById.time}/></h5>
                   <img src={summaryById.img} />
                   <p>{summaryById.abstract}</p>
                   <hr />
@@ -235,7 +169,7 @@ const DetailSeminar = ({ seminar }) => {
                     </h5>
                     <div>
                       <div className={styles.speakerAvatar}>
-                        <img src={aTalk.speaker.img} alt='aTalk.speaker.name' />
+                        <img src={aTalk.speaker.img} alt={aTalk.speaker.name} />
                       </div>
                     </div>
                     <ul className={styles.messages}>
@@ -270,7 +204,7 @@ const DetailSeminar = ({ seminar }) => {
                         {aTalk.time ? <li><p>
                           <Icon type="clock-circle-o" />
                           <strong>Time:&nbsp;</strong>
-                          <span>{dateRangeToString(aTalk.time.from, aTalk.time.to)} &nbsp;&nbsp;{timeRangeToString(summaryById.time.from, summaryById.time.to)}</span>
+                          <TimeFormat {...aTalk.time} />
                         </p></li> : ''}
                       </span>
                       <span>
@@ -278,7 +212,7 @@ const DetailSeminar = ({ seminar }) => {
                             {aTalk.location.address ? <li><p>
                               <Icon type="environment-o" />
                               <strong>Time:&nbsp;</strong>
-                              <span>{dateRangeToString(aTalk.time.from, aTalk.time.to)} &nbsp;&nbsp;{timeRangeToString(summaryById.time.from, summaryById.time.to)}</span>
+                              <TimeFormat {...aTalk.time} />
                             </p></li> : ''}</span> : ''}
                       </span>
                     </ul>

@@ -4,11 +4,9 @@
 import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
-import { Tabs, Button, Icon, Input, Spin } from 'antd';
+import { Button, Icon, Spin } from 'antd';
 import styles from './index.less';
 import SearchSeminar from './search-seminar'
-
-const Search = Input.Search;
 
 const Seminar = ({ dispatch, seminar }) => {
   const { results, loading, offset, query, sizePerPage } = seminar;

@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Tabs, Radio, Spin, Input, Button } from 'antd';
+import { Input, Button } from 'antd';
 import styles from './search-seminar.less'
 
 class SearchSeminar extends React.Component {
@@ -15,10 +15,10 @@ class SearchSeminar extends React.Component {
     this.props.seminar.offset = 0;
     this.props.seminar.results = [];
     let size = this.props.seminar.sizePerPage;
-    if (query){
+    if (query) {
       let params = { query: query, offset: 0, size: size };
       this.props.dispatch({ type: 'seminar/searchActivity', payload: params });
-    }else {
+    } else {
       let params = { offset: 0, size: size };
       this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
     }

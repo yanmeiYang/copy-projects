@@ -6,33 +6,8 @@ import styles from './index.less';
 import SearchBox from '../../components/SearchBox';
 
 function IndexPage({ dispatch, search }) {
-  const { seminars } = search;
+  // const { seminars } = search;
   let commonSearch = ['大数据', '机器学习', '社交媒体', '深度学习', '数据挖掘', '健康医疗', '计算机网络', '人机交互', '人工智能'];
-  let organization = [
-    {
-      'title': '多媒体技术专业委员会',
-      'avatars': [
-        { 'name': '李波', 'avatar': 'http://www.ccf.org.cn/upload/resources/image/2016/12/02/25984_120x160c.jpg' },
-        { 'name': '孙立峰', 'avatar': 'http://www.ccf.org.cn/upload/resources/image/2017/03/13/31184_120x160c.jpg' },
-        { 'name': '黄　华', 'avatar': 'http://www.ccf.org.cn/upload/resources/image/2017/03/13/31185_120x160c.jpg' }],
-      'total': 108,
-    },
-    {
-      'title': '服务计算专业委员会',
-      'avatars': [
-        { 'name': '徐晓飞', 'avatar': 'http://www.ccf.org.cn/upload/resources/image/2017/01/20/28143_120x160c.jpg' },
-        { 'name': '苏森', 'avatar': 'http://www.ccf.org.cn/upload/resources/image/2017/01/25/28195_120x160c.jpg' },
-        { 'name': '冯志勇', 'avatar': 'http://www.ccf.org.cn/upload/resources/image/2017/01/25/28195_120x160c.jpg' }],
-      'total': 115,
-    },
-    {
-      'title': '高性能计算专业委员会',
-      'avatars': [
-        { 'name': '孙凝晖', 'avatar': 'http://www.ccf.org.cn/upload/resources/image/2017/02/14/29584_120x160c.jpg' },
-        { 'name': '张云泉', 'avatar': 'http://www.ccf.org.cn/upload/resources/image/2017/02/14/29586_120x160c.png' },
-        { 'name': '迟学斌', 'avatar': 'http://www.ccf.org.cn/upload/resources/image/2017/03/13/31190_120x160c.jpg' }],
-      'total': 111,
-    }];
 
   function onSearch({ query }) {
     dispatch(routerRedux.push({
@@ -40,17 +15,17 @@ function IndexPage({ dispatch, search }) {
     }));
   }
 
-  function goToDetail(id) {
-    dispatch(routerRedux.push({
-      pathname: `/seminar/${id}`,
-    }));
-  }
-
-  function getMoreSeminard() {
-    dispatch(routerRedux.push({
-      pathname: `/seminar`,
-    }));
-  }
+  // function goToDetail(id) {
+  //   dispatch(routerRedux.push({
+  //     pathname: `/seminar/${id}`,
+  //   }));
+  // }
+  //
+  // function getMoreSeminard() {
+  //   dispatch(routerRedux.push({
+  //     pathname: `/seminar`,
+  //   }));
+  // }
 
   return (
     <div>
@@ -72,8 +47,8 @@ function IndexPage({ dispatch, search }) {
         </p>
       </div>
 
-      <div className={styles.container}>
-        <Row type='flex' justify='center'>
+      {/*<div className={styles.container}>*/}
+        {/*<Row type='flex' justify='center'>*/}
           {/*协会组织*/}
           {/*<Col span='10'>*/}
           {/*<div className={styles.headline}>*/}
@@ -116,54 +91,54 @@ function IndexPage({ dispatch, search }) {
           {/*/!*})*!/*/}
           {/*/!*}*!/*/}
           {/*</Col>*/}
-          <Col span='12'>
-            <div className={styles.headline}>
-              <h3>协会活动</h3>
-            </div>
-            <div className={styles.seminar}>
-              {
-                seminars.slice(0, 3).map((seminar) => {
-                  const time = seminar.time.from.split('-');
-                  return (
-                    <li key={seminar.id}>
-                      <div className={styles.time}>
-                        <em>{time[1]}月</em>
-                        <div className={styles.bot}>
-                          <span><b>{time[2].split('T')[0]}</b>日</span>
-                          <strong>{seminar.location.city}</strong>
-                        </div>
-                      </div>
-                      <div className={styles.con}>
-                        <h3>
-                          <a href='javascript:void(0)' onClick={goToDetail.bind(this, seminar.id)}>{seminar.title}</a>
-                        </h3>
-                        <div className={styles.info}>
-                          <p>
-                            <span className={styles.type}>
-                              活动类型：{seminar.type === 0 ? 'seminar' : 'workshop'}
-                            </span>
-                            <span>
-                              <em>关键字：</em>
-                              数据挖掘 机器学习 人工智能
-                            </span>
-                          </p>
-                          <p className={styles.location}>活动地点：{seminar.location.address}</p>
-                        </div>
-                      </div>
-                    </li>
-                  );
-                })
-              }
-              <div className={styles.footer}>
-                <a href='javascript:void(0)' onClick={getMoreSeminard.bind()}>更多活动</a>
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-            </div>
-          </Col>
-        </Row>
-      </div>
+          {/*<Col span='12'>*/}
+            {/*<div className={styles.headline}>*/}
+              {/*<h3>协会活动</h3>*/}
+            {/*</div>*/}
+            {/*<div className={styles.seminar}>*/}
+              {/*{*/}
+                {/*seminars.slice(0, 3).map((seminar) => {*/}
+                  {/*const time = seminar.time.from.split('-');*/}
+                  {/*return (*/}
+                    {/*<li key={seminar.id}>*/}
+                      {/*<div className={styles.time}>*/}
+                        {/*<em>{time[1]}月</em>*/}
+                        {/*<div className={styles.bot}>*/}
+                          {/*<span><b>{time[2].split('T')[0]}</b>日</span>*/}
+                          {/*<strong>{seminar.location.city}</strong>*/}
+                        {/*</div>*/}
+                      {/*</div>*/}
+                      {/*<div className={styles.con}>*/}
+                        {/*<h3>*/}
+                          {/*<a href='javascript:void(0)' onClick={goToDetail.bind(this, seminar.id)}>{seminar.title}</a>*/}
+                        {/*</h3>*/}
+                        {/*<div className={styles.info}>*/}
+                          {/*<p>*/}
+                            {/*<span className={styles.type}>*/}
+                              {/*活动类型：{seminar.type === 0 ? 'seminar' : 'workshop'}*/}
+                            {/*</span>*/}
+                            {/*<span>*/}
+                              {/*<em>关键字：</em>*/}
+                              {/*数据挖掘 机器学习 人工智能*/}
+                            {/*</span>*/}
+                          {/*</p>*/}
+                          {/*<p className={styles.location}>活动地点：{seminar.location.address}</p>*/}
+                        {/*</div>*/}
+                      {/*</div>*/}
+                    {/*</li>*/}
+                  {/*);*/}
+                {/*})*/}
+              {/*}*/}
+              {/*<div className={styles.footer}>*/}
+                {/*<a href='javascript:void(0)' onClick={getMoreSeminard.bind()}>更多活动</a>*/}
+                {/*<span></span>*/}
+                {/*<span></span>*/}
+                {/*<span></span>*/}
+              {/*</div>*/}
+            {/*</div>*/}
+          {/*</Col>*/}
+        {/*</Row>*/}
+      {/*</div>*/}
     </div>
   );
 }

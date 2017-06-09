@@ -13,6 +13,7 @@ export default {
     aggs: [],
     loading: false,
     filters: {},
+    sortKey: 'contrib',
     isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
     pagination: {
       showSizeChanger: true,
@@ -40,6 +41,7 @@ export default {
           dispatch({ type: 'searchPersonAgg', payload: { query: keyword, offset, size } });
           return;
         }
+
         match = pathToRegexp('/experts/:offset/:size').exec(location.pathname);
         if (match) {
           const offset = parseInt(match[1], 10);
@@ -85,6 +87,11 @@ export default {
       return { ...state, filters: newFilters };
     },
 
+    updateSortKey(state, { payload: { key } }) {
+      console.log('reducers, update sort key : ', key)
+      return { ...state, sortKey: key };
+    },
+
     searchPersonSuccess(state, { payload: { data } }) {
       const { result, total } = data;
       const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
@@ -106,7 +113,6 @@ export default {
     },
 
     showLoading(state) {
-      console.log('show loading');
       return {
         ...state,
         loading: true,

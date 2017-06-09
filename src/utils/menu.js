@@ -4,9 +4,10 @@ module.exports = [
   { id: 3, bpid: 1, name: '专业委员会', icon: 'api', router: '/' },
 
   { id: 4, bpid: 1, name: '设置', icon: 'camera-o' },
-  // { id: 52, bpid: 5, mpid: 5, name: 'BarChart', icon: 'bar-chart', router: '/chart/barChart', },
+  { id: 41, bpid: 4, mpid: 4, name: '用户设置', icon: 'bar-chart', router: '/admin/users' },
+  { id: 42, bpid: 4, mpid: 4, name: '系统设置', icon: 'bar-chart', router: '/admin/users' },
 
-  { id: 5, bpid: 1, name: '--------------', icon: 'environment', router: '/expert-map' },
+  { id: 5, bpid: 1, name: '-', icon: '', router: '/expert-map' },
   { id: 6, bpid: 1, name: '专家地图', icon: 'environment', router: '/expert-map' },
   { id: 8, bpid: 1, name: '隐藏功能', icon: 'camera-o' },
   { id: 88, bpid: 8, mpid: 8, name: '账户设置', icon: 'user', router: '/experts/0/30' },

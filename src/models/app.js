@@ -1,7 +1,8 @@
-import { getCurrentUserInfo, logout } from '../services/app';
 import { routerRedux } from 'dva/router';
 import { parse } from 'qs';
+import { getCurrentUserInfo, logout } from '../services/app';
 import { config } from '../utils';
+
 const { prefix } = config;
 
 export default {
@@ -30,11 +31,8 @@ export default {
 
   },
   effects: {
-    *getCurrentUserInfo({
-      payload,
-    }, { call, put }) {
+    *getCurrentUserInfo({ payload }, { call, put }) {
       const token = localStorage.getItem('token');
-      console.log(token, location);
       if (token) {
         const data = yield call(getCurrentUserInfo, parse(payload));
         if (data && data.success && data.user) {
@@ -51,13 +49,13 @@ export default {
         if (location.pathname === '/') {
           from = '/';
         }
-        //window.location = `${location.origin}/login?from=${from}`;
+        window.location = `${location.origin}/login?from=${from}`;
       }
     },
 
     *logout({
-      payload,
-    }, { call, put }) {
+              payload,
+            }, { call, put }) {
       const data = yield call(logout, parse(payload));
       if (data.success) {
         yield put({ type: 'getCurrentUserInfo' });
@@ -66,10 +64,8 @@ export default {
       }
     },
 
-    *changeNavbar({
-      payload,
-    }, { put, select }) {
-      const { app } = yield(select(_ => _));
+    *changeNavbar({ payload }, { put, select }) {
+      const { app } = yield (select(_ => _));
       const isNavbar = false; // document.body.clientWidth < 769
       if (isNavbar !== app.isNavbar) {
         yield put({ type: 'handleNavbar', payload: isNavbar })

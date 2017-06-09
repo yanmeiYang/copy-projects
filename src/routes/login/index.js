@@ -6,8 +6,8 @@ import { Helmet } from 'react-helmet';
 import styles from './index.less';
 import { Layout } from '../../components';
 import { classnames, config, menu } from '../../utils';
-const { Header, Footer, Sider } = Layout;
 
+const { Header, Footer, Sider } = Layout;
 const FormItem = Form.Item;
 
 const Login = ({
@@ -76,10 +76,10 @@ const Login = ({
   return (
     <div>
       <Helmet>
-        <title>CCF 专家云智库</title>
+        <title>CCF 专家库</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href={logo} type="image/x-icon" />
-        {iconFontJS && <script src={iconFontJS}></script>}
+        {iconFontJS && <script src={iconFontJS} />}
         {iconFontCSS && <link rel="stylesheet" href={iconFontCSS} />}
       </Helmet>
       <div className={classnames(styles.layout)}>
@@ -98,7 +98,6 @@ const Login = ({
       </div>
     </div>
   );
-
 };
 
 export default connect(({ login }) => ({ login }))(Form.create()(Login));

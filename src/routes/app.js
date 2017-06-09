@@ -1,19 +1,19 @@
 import React from 'react';
-import {connect} from 'dva';
-import {Helmet} from 'react-helmet';
+import { connect } from 'dva';
+import { Helmet } from 'react-helmet';
 import NProgress from 'nprogress';
-import {Layout} from '../components';
-import {classnames, config, menu} from '../utils';
+import { Layout } from '../components';
+import { classnames, config, menu } from '../utils';
 import '../themes/index.less';
 import './app.less';
 
-const {prefix} = config;
+const { prefix } = config;
 
-const {Header, Footer, Sider, styles} = Layout;
+const { Header, Footer, Sider, styles } = Layout;
 let lastHref;
 
-const App = ({children, location, dispatch, app, loading}) => {
-  const {user, siderFold, darkTheme, isNavbar, menuPopoverVisible, navOpenKeys} = app;
+const App = ({ children, location, dispatch, app, loading }) => {
+  const { user, siderFold, darkTheme, isNavbar, menuPopoverVisible, navOpenKeys } = app;
   const href = window.location.href;
 
   if (lastHref !== href) {
@@ -33,16 +33,16 @@ const App = ({children, location, dispatch, app, loading}) => {
     menuPopoverVisible,
     navOpenKeys,
     switchMenuPopover() {
-      dispatch({type: 'app/switchMenuPopver'});
+      dispatch({ type: 'app/switchMenuPopver' });
     },
     logout() {
-      dispatch({type: 'app/logout'});
+      dispatch({ type: 'app/logout' });
     },
     switchSider() {
-      dispatch({type: 'app/switchSider'});
+      dispatch({ type: 'app/switchSider' });
     },
     changeOpenKeys(openKeys) {
-      dispatch({type: 'app/handleNavOpenKeys', payload: {navOpenKeys: openKeys}});
+      dispatch({ type: 'app/handleNavOpenKeys', payload: { navOpenKeys: openKeys } });
     },
   };
 
@@ -57,11 +57,11 @@ const App = ({children, location, dispatch, app, loading}) => {
     location,
     navOpenKeys,
     changeTheme() {
-      dispatch({type: 'app/switchTheme'});
+      dispatch({ type: 'app/switchTheme' });
     },
     changeOpenKeys(openKeys) {
       localStorage.setItem(`${prefix}navOpenKeys`, JSON.stringify(openKeys));
-      dispatch({type: 'app/handleNavOpenKeys', payload: {navOpenKeys: openKeys}});
+      dispatch({ type: 'app/handleNavOpenKeys', payload: { navOpenKeys: openKeys } });
     },
   }
 
@@ -69,7 +69,7 @@ const App = ({children, location, dispatch, app, loading}) => {
     return <div>{children}</div>;
   }
 
-  const {iconFontJS, iconFontCSS, logo} = config;
+  const { iconFontJS, iconFontCSS, logo } = config;
 
   return (
     <div>
@@ -77,19 +77,22 @@ const App = ({children, location, dispatch, app, loading}) => {
         <title>CCF 专家库</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href={logo} type="image/x-icon" />
-        {iconFontJS && <script src={iconFontJS}></script>}
-        {iconFontCSS && <link rel="stylesheet" href={iconFontCSS}/>}
-        if(href.indexOf('/expert-map') > 0){
-        <script src="/expertmap/TextIconOverlay_min.js" type="text/javascript"/>
-      }
-        if(href.indexOf('/expert-map') > 0){
-        <script src="/expertmap/MarkerClusterer_min.js" type="text/javascript"/>
-      }
+        {iconFontJS && <script src={iconFontJS} />}
+        {iconFontCSS && <link rel="stylesheet" href={iconFontCSS} />}
+
+        { href.indexOf('/expert-map') > 0 &&
+        <script src="/expertmap/TextIconOverlay_min.js" type="text/javascript" />
+        }
+
+        { href.indexOf('/expert-map') > 0 &&
+        <script src="/expertmap/MarkerClusterer_min.js" type="text/javascript" />
+        }
+
       </Helmet>
       <div className={classnames(styles.layout)}>
         <Header {...headerProps} />
         {!isNavbar ?
-          <aside className={classnames(styles.sider, {[styles.light]: !darkTheme})}>
+          <aside className={classnames(styles.sider, { [styles.light]: !darkTheme })}>
             <Sider {...siderProps} />
           </aside> : ''
         }
@@ -109,4 +112,4 @@ const App = ({children, location, dispatch, app, loading}) => {
 };
 
 
-export default connect(({app, loading}) => ({app, loading}))(App);
+export default connect(({ app, loading }) => ({ app, loading }))(App);

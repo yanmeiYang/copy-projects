@@ -13,7 +13,6 @@ class SearchBox extends React.Component {
     const data = {
       query: ReactDOM.findDOMNode(this.refs.searchInput).value,
     };
-    console.log(data);
     if (this.props.select) {
       data.field = this.state.selectValue;
     }
@@ -41,6 +40,7 @@ class SearchBox extends React.Component {
     });
     this.handleSearch();
   };
+
   render() {
     const { size, select, selectOptions, selectProps, style, keyword, btnText } = this.props;
     const { clearVisible } = this.state;
@@ -52,7 +52,8 @@ class SearchBox extends React.Component {
               <Select.Option value={item.value} key={key}>{item.name || item.value}</Select.Option>
           )}
         </Select>}
-        <Input ref="searchInput" size={size} onChange={this.handleInputChange} onPressEnter={this.handleSearch} defaultValue={keyword} />
+        <Input ref="searchInput" size={size} onChange={this.handleInputChange} onPressEnter={this.handleSearch}
+               defaultValue={keyword} />
         <Button size={size} type="primary" onClick={this.handleSearch}>{btnText || '搜索'}</Button>
         {clearVisible && <Icon type="cross" onClick={this.handleClearInput} />}
       </Input.Group>

@@ -81,11 +81,11 @@ const App = ({ children, location, dispatch, app, loading }) => {
         {iconFontCSS && <link rel="stylesheet" href={iconFontCSS} />}
 
         { href.indexOf('/expert-map') > 0 &&
-        <script src="/expertmap/TextIconOverlay_min.js" type="text/javascript" />
+        <script src="/expertmap/TextIconOverlay.js" type="text/javascript" />
         }
 
         { href.indexOf('/expert-map') > 0 &&
-        <script src="/expertmap/MarkerClusterer_min.js" type="text/javascript" />
+        <script src="/expertmap/MarkerClusterer.js" type="text/javascript" />
         }
 
       </Helmet>

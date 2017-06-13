@@ -21,12 +21,13 @@ class ExpertMap extends React.Component {
   };
 
   addClickHandler=(marker,personId)=>{
-    this.props.dispatch({type: 'expertMap/getPersonInfo', payload: {personId}});
+    var a=this.props.dispatch({type: 'expertMap/getPersonInfo', payload: {personId}});
+    console.log(a)
     var sContent =
       "<h4 style='margin:0 0 5px 0;padding:0.2em 0'>天安门</h4>" +
       "<img style='float:right;margin:4px' id='imgDemo' src='http://wiki.lbsyun.baidu.com/cms/logo/lbsyunlogo296-120.png?logo2017' width='139' height='104' title='天安门'/>" +
       "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>天安门坐落在中国北京市中心,故宫的南侧,与天安门广场隔长安街相望,是清朝皇城的大门...</p>" +
-      personId+"</div>";
+      a.expertMap.name+"</div>";
     marker.addEventListener('mouseover',function (e) {
       var infoWindow = new BMap.InfoWindow(sContent);
       this.openInfoWindow(infoWindow);

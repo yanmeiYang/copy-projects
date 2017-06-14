@@ -3,9 +3,10 @@
  */
 
 module.exports = {
-  name: '云智库',
+  name: '专家搜索',
+  source: 'ccf', // AppID, Used in UniversalConfig.
   prefix: 'aminer',
-  footerText: 'AMiner  © 2017 AMiner',
+  footerText: 'AMiner © 2017 AMiner', // not used now.
   logo: '/logo.png',
   iconFontCSS: '/iconfont.css',
   iconFontJS: '/iconfont.js',
@@ -50,5 +51,10 @@ module.exports = {
     // users: '/users',
     currentUser: '/user/me',
     // dashboard: '/dashboard',
+
+    // System config
+    ucListByCategory: '/2b/config/:source/list?category=:category',
+    ucSetByKey: '/2b/config/:source/:category/:key',
+    ucDeleteByKey: '/2b/config/:source/:category/:key',
   },
 };

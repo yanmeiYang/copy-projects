@@ -21,6 +21,11 @@ const tabData = [
     label: '活动承办单位',
     desc: 'CCF 活动的承办单位，包括专委/分部/项目等。',
   },
+  {
+    category: 'activity_type',
+    label: '活动类型',
+    desc: 'CCF 活动的类型。',
+  },
 ];
 
 class SystemConfig extends React.Component {

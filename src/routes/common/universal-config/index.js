@@ -20,6 +20,7 @@ class UniversalConfig extends React.Component {
   componentDidMount() {
     // To disabled submit button at the beginning.
     this.props.form.validateFields();
+    console.log('>>>', this.props.hideValue);
   }
 
   handleSubmit = (e) => {
@@ -90,7 +91,10 @@ class UniversalConfig extends React.Component {
                 {getFieldDecorator('value', {
                   rules: [{ required: false, message: 'Please input value!' }],
                 })(
-                  <Input addonBefore="值" />
+                  <Input
+                    addonBefore={this.props.hideValue ? '' : '值'}
+                    type={this.props.hideValue ? 'hidden' : 'text'}
+                  />,
                 )}
 
                 (类型为:{universalConfig.valueType})
@@ -118,9 +122,11 @@ class UniversalConfig extends React.Component {
             className={styles.unicfg}
           >
             <Column title="名称" dataIndex="key" key="key" />
+            {!this.props.hideValue &&
             <Column title="值" dataIndex="value" key="value" />
+            }
             <Column
-              title="Action"
+              title="操作"
               key="action"
               render={(text, record) => {
                 return (

@@ -10,6 +10,7 @@ export async function listByCategory(category) {
 }
 
 export async function setByKey(category, key, val) {
+  const cleanValue = val !== undefined ? val : '';
   return request(api.ucSetByKey
       .replace(':source', source)
       .replace(':category', category)
@@ -18,7 +19,7 @@ export async function setByKey(category, key, val) {
       method: 'PUT',
       body: JSON.stringify({
         op: 'set',
-        value: val,
+        value: cleanValue,
       }),
     });
 }

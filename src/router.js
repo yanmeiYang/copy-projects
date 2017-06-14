@@ -138,6 +138,16 @@ const Routers = function ({ history, app }) {
       },
     },
     {
+      path: '/technical-committees',
+      component: App,
+      getIndexRoute(nextState, cb) {
+        require.ensure([], (require) => {
+          registerModel(app, require('./models/common/universal-config'));
+          cb(null, { component: require('./routes/technical-committees') });
+        }, 'technicalCommittees');
+      },
+    },
+    {
       path: '*',
       getComponent(nextState, cb) {
         require.ensure([], (require) => {

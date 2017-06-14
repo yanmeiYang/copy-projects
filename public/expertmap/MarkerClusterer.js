@@ -591,22 +591,6 @@ var BMapLib = window.BMapLib = BMapLib || {};
           if(document.getElementById("currentIds").value!=ids){
             document.getElementById("currentIds").value=ids;
 
-            var xmlHttp;
-            if (window.XMLHttpRequest) {
-              xmlHttp = new XMLHttpRequest();
-              if (xmlHttp.overrideMimeType)
-                xmlHttp.overrideMimeType('text/xml');
-            } else if (window.ActiveXObject) {
-              try {
-                xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
-              } catch (e) {
-                try {
-                  xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
-                } catch (e) {
-                }
-              }
-            }
-            return xmlHttp;
           }else{
             return;
           }

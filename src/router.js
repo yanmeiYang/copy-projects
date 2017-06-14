@@ -115,16 +115,37 @@ const Routers = function ({ history, app }) {
             }, 'admin');
           },
         },
-        {
-          path: '*',
-          getComponent(nextState, cb) {
-            require.ensure([], (require) => {
-              cb(null, require('./routes/error/'));
-            }, 'error');
-          },
-        },
       ],
     },
+    {
+      path: '/admin',
+      component: App,
+      getIndexRoute(nextState, cb) {
+        require.ensure([], (require) => {
+          cb(null, { component: require('./routes/IndexPage') });
+        }, 'indexPage');
+      },
+    },
+    {
+      path: '/admin/system-config',
+      component: App,
+      getIndexRoute(nextState, cb) {
+        require.ensure([], (require) => {
+          registerModel(app, require('./models/admin/system-config'));
+          registerModel(app, require('./models/common/universal-config'));
+          cb(null, { component: require('./routes/admin/system-config') });
+        }, 'admin');
+      },
+    },
+    {
+      path: '*',
+      getComponent(nextState, cb) {
+        require.ensure([], (require) => {
+          cb(null, require('./routes/error/'));
+        }, 'error');
+      },
+    },
+
     {
       path: '/dashboard',
       component: App,

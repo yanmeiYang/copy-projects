@@ -5,9 +5,6 @@ import React from 'react';
 import { connect } from 'dva';
 
 class TimeFormat extends React.Component {
-  handlesearch = () => {
-    this.searchSeminar()
-  };
   offsetMinutes = (new Date()).getTimezoneOffset() + 480;
 
   monthToEn = (num) =>{

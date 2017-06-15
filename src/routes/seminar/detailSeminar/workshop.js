@@ -25,20 +25,20 @@ class WorkShop extends React.Component {
               <li>
                 <p>
                   <Icon type='user'/>
-                  <strong>Name:&nbsp;</strong>
+                  <strong>姓名:&nbsp;</strong>
                   <span>{aTalk.speaker.name}</span>
                 </p>
               </li>
               <li>
                 {aTalk.speaker.position &&
                 <p><Icon type="medicine-box"/>
-                  <strong>Position:&nbsp;</strong>
+                  <strong>职称:&nbsp;</strong>
                   <span>{aTalk.speaker.position}</span></p>}
               </li>
               <li>
                 {aTalk.speaker.affiliation &&
                 <p><Icon type="environment-o"/>
-                  <strong>Affiliation:&nbsp;</strong>
+                  <strong>单位:&nbsp;</strong>
                   <span>{aTalk.speaker.affiliation}</span></p>}
               </li>
             </div>}
@@ -46,7 +46,7 @@ class WorkShop extends React.Component {
           <span>
               {aTalk.time ? <li><p>
                 <Icon type="clock-circle-o"/>
-                <strong>Time:&nbsp;</strong>
+                <strong>时间:&nbsp;</strong>
                 <TimeFormat {...aTalk.time} />
               </p></li> : ''}
             </span>
@@ -54,22 +54,22 @@ class WorkShop extends React.Component {
               {aTalk.location ? <span>
                   {aTalk.location.address ? <li><p>
                     <Icon type="environment-o"/>
-                    <strong>Time:&nbsp;</strong>
+                    <strong>时间:&nbsp;</strong>
                     <TimeFormat {...aTalk.time} />
                   </p></li> : ''}</span> : ''}
             </span>
         </ul>
-        <div>
+        <div className={styles.abstract}>
           {aTalk.abstract ? <div>
-            <h5>Abstract:</h5>
+            <h5>报告摘要:</h5>
             <div className={styles.center}>
               <p className='rdw-justify-aligned-block'>{aTalk.abstract}</p>
             </div>
           </div> : ''}
         </div>
-        <div>
+        <div className={styles.bio}>
           {aTalk.speaker.bio ? <div>
-            <h5>Bio:</h5>
+            <h5>报告人简介:</h5>
             <div className={styles.center}>
               <p className='rdw-justify-aligned-block'>{ aTalk.speaker.bio }</p>
             </div>

@@ -31,7 +31,7 @@ function IndexPage({ dispatch, search }) {
     <div>
       <div className={styles.normal}>
         <h1>专家搜索</h1>
-        <SearchBox size="large" style={{ width: 500 }} onSearch={onSearch} />
+        <SearchBox size="large" onSearch={onSearch} />
         {/*常用搜索*/}
         <p className={styles.commonSearch}>
           {
@@ -39,7 +39,7 @@ function IndexPage({ dispatch, search }) {
               return (
                 <span key={query}>
                   <Link to={`/search/${query}/0/30`}>{query}</Link>
-                  <span>{ ( index === commonSearch.length - 1 ) ? '' : ', '}</span>
+                  <span>{ ( index === commonSearch.length - 1 ) ? '' : '， '}</span>
                 </span>
               )
             })

@@ -22,7 +22,7 @@ const DetailSeminar = ({ seminar }) => {
   return (
     <div className={styles.detailSeminar}>
       <Row>
-        <Col span={16} offset={4} className={styles.thumbnail}>
+        <Col md={24} lg={{ span: 16, offset: 4 }} className={styles.thumbnail}>
           <div className={styles.caption}>
             <h4 className=''>
               <strong>
@@ -42,21 +42,21 @@ const DetailSeminar = ({ seminar }) => {
                         <li>
                           <p>
                             <Icon type='user'/>
-                            <strong>Name:&nbsp;</strong>
+                            <strong>姓名:&nbsp;</strong>
                             <span>{summaryById.speaker.name}</span>
                           </p>
                         </li>
                         <li>
                           {summaryById.speaker.position ?
                             <p><Icon type="medicine-box"/>
-                              <strong>Position:&nbsp;</strong>
+                              <strong>职称:&nbsp;</strong>
                               <span>{summaryById.speaker.position}</span></p>
                             : ''}
                         </li>
                         <li>
                           {summaryById.speaker.affiliation ?
                             <p><Icon type="environment-o"/>
-                              <strong>Position:&nbsp;</strong>
+                              <strong>单位:&nbsp;</strong>
                               <span>{summaryById.speaker.affiliation}</span></p>
                             : ''}
                         </li>
@@ -66,7 +66,7 @@ const DetailSeminar = ({ seminar }) => {
                   <span>
                     {summaryById.time ? <li><p>
                       <Icon type="clock-circle-o"/>
-                      <strong>Time:&nbsp;</strong>
+                      <strong>时间:&nbsp;</strong>
                       <TimeFormat {...summaryById.time} />
                       {/*<span>{dateRangeToString(summaryById.time.from, summaryById.time.to)} &nbsp;&nbsp;{timeRangeToString(summaryById.time.from, summaryById.time.to)}</span>*/}
                     </p></li> : ''}
@@ -78,7 +78,7 @@ const DetailSeminar = ({ seminar }) => {
                           <li>
                             <p>
                               <Icon type="car"/>
-                              <strong>City:&nbsp;</strong>
+                              <strong>城市:&nbsp;</strong>
                               <span>{summaryById.location.city}</span>
                             </p>
                           </li>
@@ -87,7 +87,7 @@ const DetailSeminar = ({ seminar }) => {
                           <li>
                             <p>
                               <Icon type="environment-o"/>
-                              <strong>Location:&nbsp;</strong>
+                              <strong>地点:&nbsp;</strong>
                               <span>{summaryById.location.address}</span>
                             </p>
                           </li>
@@ -99,7 +99,7 @@ const DetailSeminar = ({ seminar }) => {
                 </ul>
                 <div>
                   {summaryById.abstract ? <div>
-                    <h5>Abstract:</h5>
+                    <h5><strong>报告摘要:</strong></h5>
                     <div className={styles.center}>
                       <p className='rdw-justify-aligned-block'>{summaryById.abstract}</p>
                     </div>
@@ -108,7 +108,7 @@ const DetailSeminar = ({ seminar }) => {
                 <div>
                   {summaryById.speaker ? <div>
                     {summaryById.speaker.bio ? <div>
-                      <h5>Bio:</h5>
+                      <h5>报告人简介:</h5>
                       <div className={styles.center}>
                         <p className='rdw-justify-aligned-block'>{summaryById.speaker.bio}</p>
                       </div>
@@ -118,7 +118,7 @@ const DetailSeminar = ({ seminar }) => {
                 {/*专家评分*/}
                 <ExpertRating />
               </div>
-              :''}
+              : ''}
 
             {/*type=workshop*/}
             {summaryById.type === 1 ? <div>
@@ -145,7 +145,7 @@ const DetailSeminar = ({ seminar }) => {
 
           </div>
         </Col>
-        <Col span={16} offset={4} className={styles.thumbnail}>
+        <Col md={24} lg={{ span: 16, offset: 4 }} className={styles.thumbnail}>
           <div className={styles.comment}>
             <Input type='textarea' rows={4} placeholder='请输入评语。。。'/>
             <Button type="primary">发布</Button>

@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import { Tabs, Icon, Tag, Pagination, Spin } from 'antd';
 import SearchBox from '../../components/SearchBox';
 import styles from './index.less';
+import { PersonList } from '../../components/person';
 
 const TabPane = Tabs.TabPane;
 const { CheckableTag } = Tag;
@@ -140,7 +141,7 @@ const Search = ({ dispatch, search }) => {
           {/*<span>搜索:</span>*/}
           {/*</div>*/}
         </div>
-        sldfjlasdjflajk::: {search.sortKey}
+        DEBUGINFO:::::sldfjlasdjflajk::: {search.sortKey}
         <Tabs defaultActiveKey="contrib" onChange={onOrderChange}>
           <TabPane tab={filterDisplay('相关度')} key="contrib" />
           <TabPane tab={filterDisplay('学会贡献')} key="contrib2" />
@@ -150,9 +151,15 @@ const Search = ({ dispatch, search }) => {
         </Tabs>
       </div>
       <Spin spinning={loading}>
+
+
         <div className={styles.personWrap}>
+
+          <PersonList persons={results} />
+
+
           {
-            results.map((result) => {
+            results.slice(0, 3).map((result) => {
               const name1 = result.name_zh ? result.name_zh : result.name;
               const name2 = result.name_zh ? result.name : null;
               const position = result.pos && result.pos.length > 0 ? result.pos[0].n : null;
@@ -217,6 +224,7 @@ const Search = ({ dispatch, search }) => {
             <Pagination
               showQuickJumper
               current={current}
+
               defaultCurrent={1}
               defaultPageSize={pageSize}
               total={total}

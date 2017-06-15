@@ -148,6 +148,16 @@ const Routers = function ({ history, app }) {
       },
     },
     {
+      path: '/hidden/testpage',
+      component: App,
+      getIndexRoute(nextState, cb) {
+        require.ensure([], (require) => {
+          registerModel(app, require('./models/testpage'));
+          cb(null, { component: require('./routes/hidden/testpage') });
+        }, 'testpage');
+      },
+    },
+    {
       path: '*',
       getComponent(nextState, cb) {
         require.ensure([], (require) => {

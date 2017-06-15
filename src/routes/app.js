@@ -79,10 +79,6 @@ const App = ({ children, location, dispatch, app, loading }) => {
         <link rel="icon" href={logo} type="image/x-icon" />
         {iconFontJS && <script src={iconFontJS} />}
         {iconFontCSS && <link rel="stylesheet" href={iconFontCSS} />}
-
-
-
-
       </Helmet>
       <div className={classnames(styles.layout)}>
         <Header {...headerProps} />

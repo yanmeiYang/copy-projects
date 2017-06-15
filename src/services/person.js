@@ -36,3 +36,10 @@ export function getAMinerProfileUrl(name, id) {
 export async function getInterestVisData(personId) {
   return request(api.interests.replace(':id', personId));
 }
+
+export async function listPersonByIds(ids) {
+  return request(api.listPersonByIds, {
+    method: 'POST',
+    body: JSON.stringify({ ids }),
+  });
+}

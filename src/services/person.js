@@ -36,3 +36,12 @@ export function getAMinerProfileUrl(name, id) {
 export async function getInterestVisData(personId) {
   return request(api.interests.replace(':id', personId));
 }
+
+export function listPersonByIds(ids) {
+  return request('https://api.aminer.org/api/person/batch-list', {
+      method: 'PUT',
+      body: JSON.stringify({
+        ids: ids,
+      }),
+    });
+}

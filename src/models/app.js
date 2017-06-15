@@ -34,11 +34,11 @@ export default {
     *getCurrentUserInfo({ payload }, { call, put }) {
       const token = localStorage.getItem('token');
       if (token) {
-        const data = yield call(getCurrentUserInfo, parse(payload));
-        if (data && data.success && data.user) {
+        const {data} = yield call(getCurrentUserInfo, parse(payload));
+        if (data) {
           yield put({
             type: 'getCurrentUserInfoSuccess',
-            payload: data.user,
+            payload: data,
           });
           if (location.pathname === '/login') {
             yield put(routerRedux.push('/'));

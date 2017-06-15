@@ -6,7 +6,13 @@ import {connect} from 'dva';
 import {Button} from 'antd';
 import Script from 'react-load-script';
 import styles from './expert-map.less';
+import * as personService from '../../services/person';
 
+function showtop(){
+  var ids=["53f432a6dabfaee0d9b3f93f", "53f42b48dabfaeb1a7b70189", "53f48ceddabfaea7cd1d0a3a"];
+  console.log(personService.listPersonByIds(ids))
+
+}
 
 class ExpertMap extends React.Component {
   /** 构造函数： 这里执行初始化*/
@@ -777,7 +783,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
       }
       if(document.getElementById("currentIds").value!=ids){
         document.getElementById("currentIds").value=ids;
-
+        showtop();
       }else{
         return;
       }

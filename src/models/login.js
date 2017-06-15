@@ -27,6 +27,7 @@ export default {
         console.log(data);
         const from = queryURL('from');
         yield put({ type: 'app/query' });
+        yield put({ type: 'app/getCurrentUserInfo' });
         if (from) {
           yield put(routerRedux.push(from));
         } else {

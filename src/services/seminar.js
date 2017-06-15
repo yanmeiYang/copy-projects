@@ -32,7 +32,7 @@ export async function postSeminarActivity(data) {
 
 }
 
-export async function searchActivity(query,offset,size) {
+export async function searchActivity(query, offset, size) {
   let data = {
     query: query,
     offset,
@@ -43,4 +43,25 @@ export async function searchActivity(query,offset,size) {
     data,
   })
 
+}
+
+export async function deleteActivity(id, body) {
+  return request(api.deleteActivity.replace(':id', id), {
+    method: 'POST',
+    body: JSON.stringify(body)
+  })
+}
+
+export async function getCommentFromActivity(id, offset, size) {
+  return request(api.getCommentFromActivity.replace(':id', id).replace(':offset', offset).replace(':size', size), {
+    method: 'GET',
+  })
+}
+
+export async function addCommentToActivity(id, data) {
+  console.log(data);
+  return request(api.addCommentToActivity.replace(':id', id), {
+    method: 'POST',
+    body: JSON.stringify(data)
+  })
 }

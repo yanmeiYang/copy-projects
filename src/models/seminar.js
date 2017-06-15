@@ -20,6 +20,7 @@ export default {
     speakerSuggests: [],
     activity_organizer_options: [],
     activity_type: [],
+    comments: [],
     isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
   },
 
@@ -38,6 +39,7 @@ export default {
         if (match) {
           const id = decodeURIComponent(match[1]);
           dispatch({ type: 'getSeminarByID', payload: { id } });
+          dispatch({ type: 'getCommentFromActivity', payload: { id: id, offset: 0, size: 10 } });
         }
       });
 
@@ -86,7 +88,25 @@ export default {
       } else {
         console.error('addKeyAndValue Error: ', data);
       }
-
+    },
+    *deleteActivity({ payload }, { call, put }){
+      const { id, body } = payload;
+      const { data } = yield call(seminarService.deleteActivity, id, body);
+      if (data.status) {
+        yield put(routerRedux.push('/seminar'));
+      }
+    },
+    *getCommentFromActivity({ payload }, { call, put }){
+      const { id, offset, size } = payload;
+      const { data } = yield call(seminarService.getCommentFromActivity, id, offset, size);
+      yield  put({ type: 'getCommentFromActivitySuccess', payload: data });
+    },
+    *addCommentToActivity({ payload }, { call, put }){
+      const { id, data } = payload;
+      const result = yield call(seminarService.addCommentToActivity, id, data);
+      //目前只取前10条评论
+      const comments = yield call(seminarService.getCommentFromActivity, id, 0, 10);
+      yield  put({ type: 'getCommentFromActivitySuccess', payload: comments.data });
     },
   },
 
@@ -119,6 +139,14 @@ export default {
 
     updateData(state, { payload: { data } }) {
       return { ...state, activity_organizer_options: data };
+    },
+
+    getCommentFromActivitySuccess(state, { payload: { data } }){
+      return { ...state, comments: data }
+    },
+
+    addCommentToActivitySuccess(state){
+      return { ...state }
     },
 
     showLoading(state) {

@@ -7,11 +7,13 @@ import { Tabs, Button, Icon, Row, Col, Rate, Input, InputNumber } from 'antd';
 import TimeFormat from './time-format';
 import ExpertRating from './expert-rating';
 import WorkShop from './workshop';
+import CommentsByActivity from './comments';
 import styles from './index.less';
 
 
-const DetailSeminar = ({ seminar }) => {
+const DetailSeminar = ({ dispatch, seminar, app }) => {
   const { summaryById } = seminar;
+  const currentUser = app;
   //share
   let shareModalDisplay = false;
 
@@ -19,16 +21,23 @@ const DetailSeminar = ({ seminar }) => {
     shareModalDisplay = !shareModalDisplay;
   }
 
+  function delSeminar() {
+    dispatch({ type: 'seminar/deleteActivity',payload:{id:summaryById.id,body:summaryById}})
+  }
+
   return (
     <div className={styles.detailSeminar}>
       <Row>
         <Col md={24} lg={{ span: 16, offset: 4 }} className={styles.thumbnail}>
           <div className={styles.caption}>
+            {summaryById.uid===currentUser.user.id&&currentUser.token &&
+            <Button type='danger' icon='delete' style={{ float: 'right' }} onClick={delSeminar}>删除</Button>}
             <h4 className=''>
               <strong>
                 { summaryById.title }
               </strong>
             </h4>
+
             {/*类型为seminar*/}
             {summaryById.type === 0 ?
               <div>
@@ -145,14 +154,9 @@ const DetailSeminar = ({ seminar }) => {
 
           </div>
         </Col>
-        <Col md={24} lg={{ span: 16, offset: 4 }} className={styles.thumbnail}>
-          <div className={styles.comment}>
-            <Input type='textarea' rows={4} placeholder='请输入评语。。。'/>
-            <Button type="primary">发布</Button>
-          </div>
-        </Col>
+        <CommentsByActivity  activityId={summaryById.id}/>
       </Row>
     </div>
   );
 };
-export default connect(({ seminar, loading }) => ({ seminar, loading }))(DetailSeminar);
+export default connect(({ seminar, loading, app }) => ({ seminar, loading, app }))(DetailSeminar);

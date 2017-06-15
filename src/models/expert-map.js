@@ -45,7 +45,7 @@ export default {
 
   reducers: {
     getPersonInfoSuccess(state, { payload: { data } }) {
-      console.log('-----------------------------------', data.data);
+      //console.log('-----------------------------------', data.data);
       return { ...state, personInfo: data.data };
     },
   },

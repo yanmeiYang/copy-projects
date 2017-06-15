@@ -9,14 +9,13 @@ import styles from './index.less';
 class ExpertMapPage extends React.Component {
   constructor(props) {
     super(props);
-    console.log('Loading BaiduMap Container');
+    //console.log('Loading BaiduMap Container');
     // console.log('DEBUG: ', this.props, this.props.expertMap);
   }
 
   showtype=(e)=>{
     const typeid = e.target && e.target.getAttribute('data');
     var tli=document.getElementById("menu0").getElementsByTagName("li");
-    //alert(document.getElementById("tabs0").className);
     ExpertMap.test1();
     var currentclass=""
     for(var i=0;i<tli.length;i++){
@@ -35,7 +34,7 @@ class ExpertMapPage extends React.Component {
 
   /** 在Component被加载的时候调用的。 */
   componentDidMount() {
-    console.log('componentDidMount');
+    //console.log('componentDidMount');
   }
 
   render() {

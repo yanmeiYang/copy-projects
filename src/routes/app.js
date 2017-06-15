@@ -80,13 +80,8 @@ const App = ({ children, location, dispatch, app, loading }) => {
         {iconFontJS && <script src={iconFontJS} />}
         {iconFontCSS && <link rel="stylesheet" href={iconFontCSS} />}
 
-        { href.indexOf('/expert-map') > 0 &&
-        <script src="/expertmap/TextIconOverlay.js" type="text/javascript" />
-        }
 
-        { href.indexOf('/expert-map') > 0 &&
-        <script src="/expertmap/MarkerClusterer.js" type="text/javascript" />
-        }
+
 
       </Helmet>
       <div className={classnames(styles.layout)}>

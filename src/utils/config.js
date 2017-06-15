@@ -36,6 +36,7 @@ module.exports = {
     personProfile: '/person/summary/:id',
     personEmailImg: '/person/email/i/',
     getEmailCrImage: '/person/email-cr/i/',
+    listPersonByIds: '/person/batch-list',
 
     /* publications */
     pubList: '/person/pubs/:id/all/year/:offset/:size',

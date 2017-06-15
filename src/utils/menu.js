@@ -10,7 +10,7 @@ module.exports = [
   { id: 5, bpid: 1, name: '-', icon: '', router: '/expert-map' },
   { id: 6, bpid: 1, name: '专家地图', icon: 'environment', router: '/expert-map' },
   { id: 8, bpid: 1, name: '隐藏功能', icon: 'camera-o' },
-  { id: 88, bpid: 8, mpid: 8, name: '账户设置', icon: 'user', router: '/experts/0/30' },
+  { id: 88, bpid: 8, mpid: 8, name: 'TEST', icon: 'user', router: '/hidden/testpage' },
 
   // {
   //   id: 41,

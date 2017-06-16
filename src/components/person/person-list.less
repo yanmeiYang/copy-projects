@@ -4,6 +4,8 @@
 .personList {
   border: solid 0px rgb(216, 216, 216); padding: 0px;
   min-height: 40px;
+  min-width: 750px;
+  max-width: 1228px;
   display: flex;
   flex-direction: column;
 
@@ -29,15 +31,9 @@
       }
 
       .info_zone {
-        display: flex;
-        flex-direction: column;
-        flex: 2 auto;
+        display: flex; flex-direction: column; flex: 1 100%;
         margin-left: 10px;
         font-size: 13px; color: #333;
-
-        div {
-          display: flex;
-        }
 
         .title {
           display: flex;
@@ -45,10 +41,15 @@
           align-items: baseline;
           margin: 8px 0 0 0;
 
-          h2 {
+          h2, h2 a {
             font-size: 15px; font-family: STHeitiSC-Medium;
             font-weight: normal;
             color: #101010;
+
+            .spliter {
+              border-bottom: solid 1px rgb(216, 216, 216);
+              margin: 2px 0 8px 0;
+            }
           }
 
           .rank {
@@ -64,13 +65,27 @@
           margin-bottom: 4px;
         }
 
-        .spliter {
-          border-bottom: solid 1px rgb(216, 216, 216);
-          margin: 4px 0 6px 0;
+        .zone {
+          display: flex; flex-direction: row; flex: 1 100%;
+          //align-items: stretch;
+          .contact_zone {
+            display: flex; flex-direction: column;
+            flex: 2 0px;
+          }
+          .tag_zone {
+            flex: 1 150px;
+            border-left: solid 1px #e9e9e9;
+            padding: 0 0 0 8px;
+            border-radius: 1px;
+            margin: 0 0 4px 8px;
+            .ant-tag { margin-bottom: 1px; }
+            //.ant-tag:hover { text-decoration: underline;}
+          }
         }
 
         .score-line {
           margin-bottom: 8px;
+          display: flex;
           span.score {
             display: flex;
             flex-direction: row;
@@ -113,12 +128,13 @@
 
         .contactLine {
           display: flex; flex-direction: row;
-          >span { margin-right: 24px; }
+          > span { margin-right: 24px; }
         }
         .email {
           img { height: 20px; margin-left: -10px; }
         }
       }
+
     }
   }
 

@@ -97,7 +97,7 @@ class UniversalConfig extends React.Component {
                   />,
                 )}
 
-                (类型为:{universalConfig.valueType})
+                {/*(类型为:{universalConfig.valueType})*/}
               </FormItem>
 
               <FormItem>

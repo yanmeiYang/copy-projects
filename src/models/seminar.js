@@ -108,6 +108,18 @@ export default {
       const comments = yield call(seminarService.getCommentFromActivity, id, 0, 10);
       yield  put({ type: 'getCommentFromActivitySuccess', payload: comments.data });
     },
+    *deleteCommentFromActivity({ payload }, { call, put }){
+      const { cid, id } = payload;
+      const deleteComment = yield call(seminarService.deleteCommentFromActivity, cid);
+      if (deleteComment.data.status) {
+        //目前只取前10条评论
+        const { data } = yield call(seminarService.getCommentFromActivity, id, 0, 10);
+        yield  put({ type: 'getCommentFromActivitySuccess', payload: data });
+      }
+      else {
+        console.log('deleteComment Error:', deleteComment.data)
+      }
+    },
   },
 
   reducers: {

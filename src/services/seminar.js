@@ -59,9 +59,14 @@ export async function getCommentFromActivity(id, offset, size) {
 }
 
 export async function addCommentToActivity(id, data) {
-  console.log(data);
   return request(api.addCommentToActivity.replace(':id', id), {
     method: 'POST',
     body: JSON.stringify(data)
+  })
+}
+
+export async function deleteCommentFromActivity(id) {
+  return request(api.deleteCommentFromActivity.replace(':id', id), {
+    method: 'DELETE'
   })
 }

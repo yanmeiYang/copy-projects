@@ -154,7 +154,7 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
 
           </div>
         </Col>
-        <CommentsByActivity  activityId={summaryById.id}/>
+        <CommentsByActivity  activityId={summaryById.id} currentUser={currentUser}/>
       </Row>
     </div>
   );

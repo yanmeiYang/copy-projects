@@ -147,6 +147,28 @@ const Routers = function ({ history, app }) {
         }, 'technicalCommittees');
       },
     },
+
+    // Experimental Labs
+    {
+      path: '/lab/Admin',
+      component: App,
+      getIndexRoute(nextState, cb) {
+        require.ensure([], (require) => {
+          registerModel(app, require('./models/vis/vis-research-interest'));
+          cb(null, { component: require('./routes/lab/Admin') });
+        }, 'lab/admin');
+      },
+    },
+    {
+      path: '/lab/knowledge-graph-widget',
+      component: App,
+      getIndexRoute(nextState, cb) {
+        require.ensure([], (require) => {
+          registerModel(app, require('./models/vis/vis-research-interest'));
+          cb(null, { component: require('./routes/lab/KnoledgeGraphWidget') });
+        }, 'lab/knowledge-graph-widget');
+      },
+    },
     {
       path: '/hidden/testpage',
       component: App,

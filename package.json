@@ -9,9 +9,9 @@
     "lodash": "^4.17.4",
     "nprogress": "^0.2.0",
     "qs": "^6.2.0",
-    "react": "15.5.4",
+    "react": "^15.6.1",
     "react-countup": "2.1.1",
-    "react-dom": "15.5.4",
+    "react-dom": "^15.6.1",
     "react-draft-wysiwyg": "^1.8.1",
     "react-helmet": "^5.0.0",
     "react-load-script": "0.0.4",
@@ -26,9 +26,8 @@
     "babel-plugin-import": "^1.1.1",
     "babel-plugin-transform-runtime": "^6.9.0",
     "babel-polyfill": "^6.23.0",
-    "babel-runtime": "^6.9.2",
     "draftjs-to-html": "^0.7.0",
-    "eslint": "^3.17.1",
+    "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.1",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^5.0.3",
@@ -38,7 +37,7 @@
     "mockjs": "^1.0.1-beta3",
     "path-to-regexp": "^1.7.0",
     "rc-tween-one": "^1.2.7",
-    "redbox-react": "^1.4.1",
+    "redbox-react": "^1.4.2",
     "roadhog": "0.6.0"
   },
   "pre-commit": [
@@ -48,5 +47,6 @@
     "dev": "set BROWSER=none&&set HOST=0.0.0.0&&roadhog server",
     "lint": "eslint --fix --ext .js src",
     "build": "roadhog build --analyze"
-  }
+  },
+  "false": {}
 }

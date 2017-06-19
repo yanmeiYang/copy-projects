@@ -10,7 +10,10 @@ import styles from './vis-research-interest.less';
 import './nv.d3.css';
 import AddTags from '../../components/seminar/addTags';
 
-
+/**
+ * @param disable_vis_chart - default:false
+ *
+ */
 class VisResearchInterest extends React.Component {
   constructor(props) {
     super(props);
@@ -44,7 +47,7 @@ class VisResearchInterest extends React.Component {
     const visData = this.props.visResearchInterest && this.props.visResearchInterest.data;
     console.log('==== data is:', visData);
 
-    const Disable_vis_chart = true;
+    const disable_vis_chart = this.props.disable_vis_chart;
 
     return (
       <div className={styles.vis_research_interest}>
@@ -59,7 +62,7 @@ class VisResearchInterest extends React.Component {
         <br />
         <AddTags tags={[1, 2, 3]} />
 
-        {!Disable_vis_chart && visData.interests &&
+        {!disable_vis_chart && visData.interests &&
         <NVD3Chart
           type="stackedAreaChart" width={500} height={200} duration={200}
           defaultState="Stream"

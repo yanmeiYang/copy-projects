@@ -79,6 +79,10 @@ const App = ({ children, location, dispatch, app, loading }) => {
         <link rel="icon" href={logo} type="image/x-icon" />
         {iconFontJS && <script src={iconFontJS} />}
         {iconFontCSS && <link rel="stylesheet" href={iconFontCSS} />}
+        {href.indexOf('/lab/knowledge-graph-widget') > 0 &&
+        <link rel="stylesheet" href="https://cdn.rawgit.com/novus/nvd3/v1.8.1/build/nv.d3.css" />
+        }
+
       </Helmet>
       <div className={classnames(styles.layout)}>
         <Header {...headerProps} />

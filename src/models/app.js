@@ -16,7 +16,7 @@ export default {
     isNavbar: false, // document.body.clientWidth < 769,
     navOpenKeys: JSON.parse(localStorage.getItem(`${prefix}navOpenKeys`)) || [],
   },
-  subscriptions: {
+  subscrfiptions: {
 
     setup({ dispatch }) {
       dispatch({ type: 'getCurrentUserInfo' });
@@ -32,9 +32,8 @@ export default {
   },
   effects: {
     *getCurrentUserInfo({ payload }, { call, put }) {
-      const token = localStorage.getItem('token');
       if (token) {
-        const {data} = yield call(getCurrentUserInfo, parse(payload));
+        const { data } = yield call(getCurrentUserInfo, parse(payload));
         if (data) {
           yield put({
             type: 'getCurrentUserInfoSuccess',
@@ -49,7 +48,7 @@ export default {
         if (location.pathname === '/') {
           from = '/';
         }
-        //window.location = `${location.origin}/login?from=${from}`;
+        // window.location = `${location.origin}/login?from=${from}`;
       }
     },
 

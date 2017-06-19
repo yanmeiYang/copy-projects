@@ -84,6 +84,14 @@ const Routers = function ({ history, app }) {
               cb(null, require('./routes/seminar/detailSeminar'));
             }, 'detailSeminar');
           },
+        }, {
+          path: 'statistics',
+          getComponent(nextState, cb){
+            require.ensure([], (require) => {
+              registerModel(app, require('./models/statistics/statistics'));
+              cb(null, require('./routes/statistics'));
+            }, 'statistics');
+          },
         },
         {
           path: 'person/:id',
@@ -290,7 +298,7 @@ const Routers = function ({ history, app }) {
     },
   ]
 
-  return <Router history={history} routes={routes} />;
+  return <Router history={history} routes={routes}/>;
 }
 
 export default Routers;

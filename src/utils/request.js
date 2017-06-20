@@ -52,3 +52,20 @@ export default async function request(url, options) {
 
   return ret;
 }
+
+export async function wget(url) {
+  const token = localStorage.getItem('token');
+  const headers = new Headers();
+  headers.append('Accept', 'application/json');
+  headers.append('Content-Type', 'application/json');
+  if (token) {
+    headers.append('Authorization', token);
+  }
+  const newOption = { headers };
+  const response = await fetch(url, newOption);
+
+  checkStatus(response);
+
+  const data = await response.json();
+  return data
+}

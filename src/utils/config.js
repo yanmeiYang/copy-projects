@@ -35,6 +35,12 @@ module.exports = {
     getCommentFromActivity: '/comment/activity/:id/offset/:offset/size/:size',
     addCommentToActivity: '/comment/activity/:id',
     deleteCommentFromActivity: '/comment/activity/cmid/:id',
+    //score
+    updateOrSaveActivityScore: '/activity/score/me/:src/:actid/:aid/:key/:score/:lvtime',
+    //不知 key, 列出相关的 key 和 scores.
+    listActivityScores: '/activity/score-list/:uid/:src/:actid',
+    //已知 key 获取 一个 score
+    getActivityScore: '/activity/score/:uid/:src/:actid/:aid/:key',
 
     /* person */
     personProfile: '/person/summary/:id',

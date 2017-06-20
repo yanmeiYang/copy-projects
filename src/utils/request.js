@@ -30,8 +30,13 @@ export default async function request(url, options) {
   }
   const token = localStorage.getItem('token');
   const headers = new Headers();
-  headers.append('Accept', 'application/json');
-  headers.append('Content-Type', 'application/json');
+
+  if (options){
+    if (options.data||options.body){
+      headers.append('Accept', 'application/json');
+      headers.append('Content-Type', 'application/json');
+    }
+  }
   if (token) {
     headers.append('Authorization', token);
   }

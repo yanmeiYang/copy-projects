@@ -5,9 +5,10 @@ import { request, config } from '../utils';
 
 const { api } = config;
 
-export async function getSeminar(offset, size) {
+export async function getSeminar(offset, size, data) {
   return request(api.getSeminars.replace(':offset', offset).replace(':size', size), {
     method: 'GET',
+    data,
   });
 }
 
@@ -68,5 +69,23 @@ export async function addCommentToActivity(id, data) {
 export async function deleteCommentFromActivity(id) {
   return request(api.deleteCommentFromActivity.replace(':id', id), {
     method: 'DELETE'
+  })
+}
+
+export async function updateOrSaveActivityScore(src, actid, aid, key, score, lvtime) {
+  return request(api.updateOrSaveActivityScore.replace(':src', src).replace(':actid', actid).replace(':aid', aid).replace(':key', key).replace(':score', score).replace(':lvtime', lvtime), {
+    method: 'POST'
+  })
+}
+
+export async function listActivityScores(uid, src, actid) {
+  return request(api.listActivityScores.replace(':uid', uid).replace(':src', src).replace(':actid', actid), {
+    method: "GET"
+  })
+}
+
+export async function getActivityScore(uid, src, actid, aid, key) {
+  return request(api.getActivityScore.replace(':uid', uid).replace(':src', src).replace(':actid', actid).replace('aid', aid).replace(':key', key), {
+    method: "GET"
   })
 }

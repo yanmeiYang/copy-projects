@@ -11,6 +11,16 @@ class ExpertRating extends React.Component {
     level: 0,
     integrated: 0,
   };
+  //完成首次渲染之前调用，此时仍可以修改组件的sate
+  componentWillMount = () => {
+    const { expertRating } = this.props;
+    expertRating.map((value) => {
+      if (value.aid===this.props.aid){
+        this.setState({ [value.key]: parseInt(value.score) })
+      }
+
+    });
+  };
   onChange = (type, value) => {
     if (value === '') {
       value = 0;
@@ -18,6 +28,15 @@ class ExpertRating extends React.Component {
     if (typeof value === 'string') {
       value = parseInt(value);
     }
+    const params = {
+      src: 'ccf',
+      actid: this.props.actid,
+      aid: this.props.aid,
+      key: type,
+      score: value,
+      lvtime: new Date().getTime(),
+    };
+    this.props.dispatch({ type: 'seminar/updateOrSaveActivityScore', payload: params });
     this.setState({ [type]: value });
   };
 

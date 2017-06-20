@@ -80,7 +80,7 @@ const Seminar = ({ app, dispatch, seminar }) => {
               )
             })
           }
-          {!loading&&<Button type='primary' className={styles.getMoreActivities} onClick={getMoreSeminar.bind()}>More</Button>}
+          {!loading&&results.length>sizePerPage&&<Button type='primary' className={styles.getMoreActivities} onClick={getMoreSeminar.bind()}>More</Button>}
         </div>
       </Spin>
 

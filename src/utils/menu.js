@@ -1,6 +1,7 @@
 module.exports = [
   { id: 1, icon: 'laptop', name: '首页', router: '/' },
   { id: 2, bpid: 1, name: '学会活动', icon: 'api', router: '/seminar' },
+  { id: 21, bpid: 1, name: '活动统计', icon: 'pie-chart', router: '/statistics' },
 
   { id: 3, bpid: 1, name: '专业委员会', icon: 'api', router: '/technical-committees' },
 

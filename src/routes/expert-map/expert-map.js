@@ -3,15 +3,65 @@
  */
 import React from 'react';
 import {connect} from 'dva';
-import {Button} from 'antd';
+import {Button, Icon } from 'antd';
 import Script from 'react-load-script';
 import styles from './expert-map.less';
-import * as personService from '../../services/person';
+import { listPersonByIds } from '../../services/person';
 
-function showtop(){
-  var ids=["53f432a6dabfaee0d9b3f93f", "53f42b48dabfaeb1a7b70189", "53f48ceddabfaea7cd1d0a3a"];
-  console.log(personService.listPersonByIds(ids))
+const ButtonGroup = Button.Group;
 
+function showtop(usersIds,e,map,maindom){
+  var ids=[];
+  var pixel = map.pointToOverlayPixel(e.currentTarget.getPosition());//中心点的位置
+  var width=180;
+  var imgwidth=45;//可得中心点到图像中心点的半径为：width/2-imgwidth/2,圆形的方程为(X-pixel.x)^2+(Y-pixel.y)^2=width/2
+  var oDiv = document.createElement('div');
+  oDiv.innerHTML="<div id='panel' style='height:"+width+"px;width:"+width+"px;position: absolute;left: "+(pixel.x-width/2)+"px;top: "+(pixel.y-width/2)+"px;'></div>";
+  insertAfter(oDiv, maindom);
+  var thisNode=document.getElementById("panel");
+  if(thisNode!=null){
+    thisNode.addEventListener("mouseout", function(event){
+      thisNode.parentNode.removeChild(thisNode);
+      var imgdivs=document.getElementsByName("img");
+      for(var i=0;i<imgdivs.length;){
+        imgdivs[i].parentNode.removeChild(imgdivs[i]);
+      }
+    });
+  }
+  if(usersIds.length>8){
+    ids=usersIds.slice(0,8);
+  }else{
+    ids=usersIds;
+  }
+  const resultPromise = listPersonByIds(ids);
+  resultPromise.then(
+    (data) => {
+      var fenshu=2*Math.PI/ids.length;//共有多少份，每份的夹角，
+      for(var i=0;i<ids.length;i++){
+        var centerX=Math.cos(fenshu*i)*(width/2-imgwidth/2)+pixel.x;
+        var centerY=Math.sin(fenshu*i)*(width/2-imgwidth/2)+pixel.y;
+        var imgdiv = document.createElement('div');
+        var url= data.data.persons[i].avatar;;
+        imgdiv.innerHTML="<div name='img' style='z-index:-1;border:1px solid blue;height:"+imgwidth+"px;width:"+imgwidth+"px;position: absolute;left:"+(centerX-imgwidth/2)+"px;top:"+(centerY-imgwidth/2)+"px; border-radius:50%; overflow:hidden;'><img height='"+imgwidth+"' width='"+imgwidth+"' src='"+url+"'></div>";
+        insertAfter(imgdiv,thisNode);
+      }
+      console.log(data.data);
+    },
+    () => {
+      console.log('failed');
+    },
+  ).catch(() => {
+    console.err('Error occured.');
+  });
+}
+
+function insertAfter(newElement, targetElement){
+  var parent = targetElement.parentNode;
+  if (parent.lastChild == targetElement) {
+    parent.appendChild(newElement);
+  }else {
+    parent.insertBefore(newElement, targetElement.nextSibling);
+  }
 }
 
 class ExpertMap extends React.Component {
@@ -26,7 +76,7 @@ class ExpertMap extends React.Component {
     // resultsByCitation: [],
   };
 
-  addClickHandler=(marker,personId)=>{
+  addMouseoverHandler=(marker,personId)=>{
     const that=this;
     var sContent ="<div id='author_info' style='width: 350px;height: 120px;'></div>";
     var infoWindow = new BMap.InfoWindow(sContent);
@@ -62,7 +112,8 @@ class ExpertMap extends React.Component {
       pt = new BMap.Point(place.results[o].location.lng, place.results[o].location.lat);
       var marker=new BMap.Marker(pt);
       var label=new BMap.Label("<div>"+place.results[o].name+"</div><div style='display: none;'>"+place.results[o].id+"</div>");
-      label.setStyle({ color : "black", fontSize : "12px",border:"none"  });
+      label.setStyle({ color : "red", fontSize : "12px",border:"none",backgroundColor:"transparent",fontWeight :"bold",textAlign:"center",height: "0px",lineHeight: "0px",width: "130px",});
+      label.setOffset(1000,1000);
       marker.setLabel(label);
       var personId=place.results[o].id;
       pId[o]=personId;
@@ -79,7 +130,7 @@ class ExpertMap extends React.Component {
         clearInterval(mapinterval);
         var markerClusterer = new BMapLib.MarkerClusterer(map, {markers: markers});
         for(var m in markers){
-          that.addClickHandler(markers[m],pId[m])
+          that.addMouseoverHandler(markers[m],pId[m])
         }
       }
     },100);
@@ -126,38 +177,26 @@ class ExpertMap extends React.Component {
   }
 
   showtype=(e)=>{
-    const typeid = e.target && e.target.getAttribute('data');
-    var tli=document.getElementById("menu0").getElementsByTagName("li");
-    var currentclass="";
-    for(var i=0;i<tli.length;i++){
-      if(tli[i].className!=""){
-        currentclass=tli[i].className;
-      }
-    }
-    for(var i=0;i<tli.length;i++){
-      if(i==typeid){
-        tli[i].className=currentclass;
-      }else{
-        tli[i].className="";
-      }
-    }
+    const typeid = e.currentTarget && e.currentTarget.value && e.currentTarget.getAttribute('value');
+    console.log(typeid);
   }
 
   render() {
     const model = this.props && this.props.expertMap;
     const personInfo = model.personInfo;
     return (
-      <div className={styles.expert_map}>
+      <div className={styles.expert_map} id="currentmain">
         <div className={styles.main1}>
-          <div className={styles.lab1}><span>按照区域显示：</span></div>
-          <div className={styles.tabs0} id="tabs0">
-            <ul className={styles.menu0} id="menu0">
-              <li onClick={this.showtype} data="0" className={styles.hover}>大区</li>
-              <li onClick={this.showtype} data="1">国家</li>
-              <li onClick={this.showtype} data="2">国内区</li>
-              <li onClick={this.showtype} data="3">城市</li>
-              <li onClick={this.showtype} data="4">机构</li>
-            </ul>
+          <div className={styles.lab1}><span>按照层级显示：</span></div>
+          <div>
+            <ButtonGroup id="sType">
+              <Button onClick={this.showtype} value="0">距离</Button>
+              <Button onClick={this.showtype} value="1">大区</Button>
+              <Button onClick={this.showtype} value="2">国家</Button>
+              <Button onClick={this.showtype} value="3">国内区</Button>
+              <Button onClick={this.showtype} value="4">城市</Button>
+              <Button onClick={this.showtype} value="3">机构</Button>
+            </ButtonGroup>
           </div>
         </div>
         <div className="mapshow">
@@ -188,7 +227,6 @@ class ExpertMap extends React.Component {
 
 
 export default connect(({expertMap, loading}) => ({expertMap, loading}))(ExpertMap);
-
 
 
 /**
@@ -773,6 +811,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
     this._clusterMarker.addEventListener("mouseover", function(event){
       var ids="";
       var userids=[];
+      var map=that._map;
       for(var i=0;i<that._markers.length;i++){
         var userinfo=that._markers[i].getLabel().content;
         var userid =userinfo.substring(userinfo.length-30,userinfo.length-6);
@@ -781,9 +820,10 @@ var BMapLib = window.BMapLib = BMapLib || {};
           ids+=userid+",";
         }
       }
-      if(document.getElementById("currentIds").value!=ids){
-        document.getElementById("currentIds").value=ids;
-        showtop();
+      var maindom=that._clusterMarker._domElement;
+      if(document.getElementById("currentIds").value!=ids) {
+        document.getElementById("currentIds").value = ids;
+        showtop(userids,event,map,maindom);
       }else{
         return;
       }

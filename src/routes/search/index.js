@@ -5,6 +5,8 @@ import { Tabs, Tag, Pagination, Spin } from 'antd';
 import SearchBox from '../../components/SearchBox';
 import styles from './index.less';
 import { PersonList } from '../../components/person';
+import { sysconfig } from '../../systems';
+import { KnowledgeGraphSearchHelper } from '../knowledge-graph';
 
 const TabPane = Tabs.TabPane;
 const { CheckableTag } = Tag;
@@ -14,33 +16,7 @@ const Search = ({ dispatch, search }) => {
   const { pageSize, total, current } = pagination;
 
   //  TODO move to config file.
-  const expertBases = [
-    {
-      id: '592f8af69ed5db8bb68d713b',
-      name: '会士(F)',
-      nperson: 79,
-    },
-    {
-      id: '58ddbc229ed5db001ceac2a4',
-      name: '杰出会员(D)',
-      nperson: 182,
-    },
-    {
-      id: '592f6d219ed5dbf59c1b76d4',
-      name: '高级会员(S)',
-      nperson: 2246,
-    },
-    {
-      id: '58e462db9ed5db3b45bad77e',
-      name: '杰出会员(D)-2',
-      nperson: 6,
-    },
-    {
-      id: '593a6dab9ed5db23ccac5689',
-      name: '高级会员(S)-2',
-      nperson: 610,
-    },
-  ]
+  const expertBases = sysconfig.CCF_expertBases;
 
   function onFilterChange(key, value, checked) {
     if (checked) {
@@ -94,97 +70,109 @@ const Search = ({ dispatch, search }) => {
 
   return (
     <div className="content-inner">
-      <div className={styles.top}>
-        <div className={styles.searchWrap}>
-          <SearchBox size="large" style={{ width: 500 }} btnText="专家搜索" keyword={query} onSearch={onSearch} />
-        </div>
-      </div>
-      <div className={styles.filterWrap}>
 
-        <div className={styles.filter}>
+      <div className={styles.topZone}>
+        <div className="searchZone">
+          {/* 搜索框 */}
+          <div className={styles.top}>
+            <div className={styles.searchWrap}>
+              <SearchBox size="large" style={{ width: 500 }} btnText="专家搜索" keyword={query} onSearch={onSearch} />
+            </div>
+          </div>
 
-          {expertBases &&
-          <div className={styles.filterRow}>
-            <span className={styles.filterTitle}>级别:</span>
-            <ul className={styles.filterItems}>
+          {/* Filter */}
+          <div className={styles.filterWrap}>
+
+            <div className={styles.filter}>
+
+              {expertBases &&
+              <div className={styles.filterRow}>
+                <span className={styles.filterTitle}>级别:</span>
+                <ul className={styles.filterItems}>
+                  {
+                    expertBases.map((ep) => {
+                      return (
+                        <CheckableTag
+                          key={ep.id}
+                          className={styles.filterItem}
+                          checked={filters.eb && (filters.eb.id === ep.id)}
+                          onChange={() => onExpertBaseChange(ep.id, ep.name)}
+                        >
+                          {ep.name} {/* TODO Show Numbers */}
+                        </CheckableTag>
+                      );
+                    })
+                  }
+                </ul>
+              </div>
+              }
+
+              {filters && Object.keys(filters).length > 0 &&
+              <div className={styles.filterRow}>
+                <span className={styles.filterTitle}>过滤条件:</span>
+                <ul className={styles.filterItems}>
+                  {
+                    Object.keys(filters).map((key) => {
+                      const label = key === 'eb' ? filters[key].name : `${key}: ${filters[key]}`;
+
+                      return (
+                        <Tag
+                          className={styles.filterItem}
+                          key={key}
+                          closable
+                          afterClose={() => onFilterChange(key, filters[key], false)}
+                          color="blue"
+                        >{label}</Tag>
+                      );
+                    })
+                  }
+                </ul>
+              </div>
+              }
               {
-                expertBases.map((ep) => {
-                  return (
-                    <CheckableTag
-                      key={ep.id}
-                      className={styles.filterItem}
-                      checked={filters.eb && (filters.eb.id === ep.id)}
-                      onChange={() => onExpertBaseChange(ep.id, ep.name)}
-                    >
-                      {ep.name} {/* TODO Show Numbers */}
-                    </CheckableTag>
-                  );
+                aggs.map((agg) => {
+                  if (filters[agg.label]) {
+                    return '';
+                  } else {
+                    return (
+                      <div className={styles.filterRow} key={agg.type}>
+                        <span className={styles.filterTitle}>{agg.label}:</span>
+                        <ul className={styles.filterItems}>
+                          {
+                            agg.item.map((item) => {
+                              return (
+                                <CheckableTag
+                                  key={`${item.label}_${agg.label}`}
+                                  className={styles.filterItem}
+                                  checked={filters[agg.label] === item.label}
+                                  onChange={checked => onFilterChange(agg.label, item.label, checked)}
+                                >
+                                  {item.label} (<span className={styles.filterCount}>{item.count}</span>)
+                                </CheckableTag>
+                              );
+                            })
+                          }
+                        </ul>
+                      </div>
+                    );
+                  }
                 })
               }
-            </ul>
+
+            </div>
+            <Tabs defaultActiveKey="relevance" onChange={onOrderChange}>
+              <TabPane tab={filterDisplay('相关度')} key="relevance" />
+              <TabPane tab={filterDisplay('学会贡献')} key="contrib" />
+              <TabPane tab={filterDisplay('学术成就')} key="h_index" />
+              <TabPane tab={filterDisplay('学术活跃度')} key="activity" />
+              <TabPane tab={filterDisplay('领域新星')} key="rising_star" />
+            </Tabs>
           </div>
-          }
-
-          {filters && Object.keys(filters).length > 0 &&
-          <div className={styles.filterRow}>
-            <span className={styles.filterTitle}>过滤条件:</span>
-            <ul className={styles.filterItems}>
-              {
-                Object.keys(filters).map((key) => {
-                  const label = key === 'eb' ? filters[key].name : `${key}: ${filters[key]}`;
-
-                  return (
-                    <Tag
-                      className={styles.filterItem}
-                      key={key}
-                      closable
-                      afterClose={() => onFilterChange(key, filters[key], false)}
-                      color="blue"
-                    >{label}</Tag>
-                  );
-                })
-              }
-            </ul>
-          </div>
-          }
-          {
-            aggs.map((agg) => {
-              if (filters[agg.label]) {
-                return '';
-              } else {
-                return (
-                  <div className={styles.filterRow} key={agg.type}>
-                    <span className={styles.filterTitle}>{agg.label}:</span>
-                    <ul className={styles.filterItems}>
-                      {
-                        agg.item.map((item) => {
-                          return (
-                            <CheckableTag
-                              key={`${item.label}_${agg.label}`}
-                              className={styles.filterItem}
-                              checked={filters[agg.label] === item.label}
-                              onChange={checked => onFilterChange(agg.label, item.label, checked)}
-                            >
-                              {item.label} (<span className={styles.filterCount}>{item.count}</span>)
-                            </CheckableTag>
-                          );
-                        })
-                      }
-                    </ul>
-                  </div>
-                );
-              }
-            })
-          }
-
         </div>
-        <Tabs defaultActiveKey="relevance" onChange={onOrderChange}>
-          <TabPane tab={filterDisplay('相关度')} key="relevance" />
-          <TabPane tab={filterDisplay('学会贡献')} key="contrib" />
-          <TabPane tab={filterDisplay('学术成就')} key="h_index" />
-          <TabPane tab={filterDisplay('学术活跃度')} key="activity" />
-          <TabPane tab={filterDisplay('领域新星')} key="rising_star" />
-        </Tabs>
+
+        <div className="rightZone">
+          <KnowledgeGraphSearchHelper query={query} />
+        </div>
       </div>
 
       <Spin spinning={loading}>

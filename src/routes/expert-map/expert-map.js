@@ -10,21 +10,30 @@ import { listPersonByIds } from '../../services/person';
 
 const ButtonGroup = Button.Group;
 
-function showtop(usersIds,e,map,maindom){
+function showtop(usersIds,e,map,maindom,inputids){
   var ids=[];
   var pixel = map.pointToOverlayPixel(e.currentTarget.getPosition());//中心点的位置
   var width=180;
   var imgwidth=45;//可得中心点到图像中心点的半径为：width/2-imgwidth/2,圆形的方程为(X-pixel.x)^2+(Y-pixel.y)^2=width/2
   var oDiv = document.createElement('div');
-  oDiv.innerHTML="<div id='panel' style='height:"+width+"px;width:"+width+"px;position: absolute;left: "+(pixel.x-width/2)+"px;top: "+(pixel.y-width/2)+"px;'></div>";
+  var ostyle="z-index:10;height:"+width+"px;width:"+width+"px;position: absolute;left: "+(pixel.x-width/2)+"px;top: "+(pixel.y-width/2)+"px;"
+  oDiv.setAttribute('id','panel');
+  oDiv.setAttribute('style',ostyle);
   insertAfter(oDiv, maindom);
   var thisNode=document.getElementById("panel");
   if(thisNode!=null){
-    thisNode.addEventListener("mouseout", function(event){
-      thisNode.parentNode.removeChild(thisNode);
-      var imgdivs=document.getElementsByName("img");
-      for(var i=0;i<imgdivs.length;){
-        imgdivs[i].parentNode.removeChild(imgdivs[i]);
+    var pthisNode=thisNode.parentNode;
+    console.log(pthisNode.innerHTML);
+    pthisNode.addEventListener("mouseout", function(event){
+      console.log(document.getElementById("currentIds").value+"$$$$$$"+ids);
+      if(document.getElementById("currentIds").value == inputids){
+        return;
+      }else{
+        thisNode.parentNode.removeChild(thisNode);
+        var imgdivs=document.getElementsByName("img");
+        for(var i=0;i<imgdivs.length;){
+          imgdivs[i].parentNode.removeChild(imgdivs[i]);
+        }
       }
     });
   }
@@ -38,14 +47,37 @@ function showtop(usersIds,e,map,maindom){
     (data) => {
       var fenshu=2*Math.PI/ids.length;//共有多少份，每份的夹角，
       for(var i=0;i<ids.length;i++){
-        var centerX=Math.cos(fenshu*i)*(width/2-imgwidth/2)+pixel.x;
-        var centerY=Math.sin(fenshu*i)*(width/2-imgwidth/2)+pixel.y;
+        var centerX=Math.cos(fenshu*i)*(width/2-imgwidth/2)+width/2;
+        var centerY=Math.sin(fenshu*i)*(width/2-imgwidth/2)+width/2;
         var imgdiv = document.createElement('div');
-        var url= data.data.persons[i].avatar;;
-        imgdiv.innerHTML="<div name='img' style='z-index:-1;border:1px solid blue;height:"+imgwidth+"px;width:"+imgwidth+"px;position: absolute;left:"+(centerX-imgwidth/2)+"px;top:"+(centerY-imgwidth/2)+"px; border-radius:50%; overflow:hidden;'><img height='"+imgwidth+"' width='"+imgwidth+"' src='"+url+"'></div>";
-        insertAfter(imgdiv,thisNode);
+        var cstyle="z-index:9;border:1px solid white;height:"+imgwidth+"px;width:"+imgwidth+"px;position: absolute;left:"+(centerX-imgwidth/2)+"px;top:"+(centerY-imgwidth/2)+"px; border-radius:50%; overflow:hidden;"
+        imgdiv.setAttribute('name','img');
+        imgdiv.setAttribute('style',cstyle);
+        var url= data.data.persons[i].avatar;
+        var authorid= data.data.persons[i].id;
+        imgdiv.innerHTML="<img style='background: white;'  data='"+authorid+"' height='"+imgwidth+"' width='"+imgwidth+"' src='"+url+"' alt='"+i+"'>";
+        //insertAfter(imgdiv,thisNode);
+        thisNode.appendChild(imgdiv);
       }
-      console.log(data.data);
+      var imgdivs=document.getElementsByName("img");
+      for(var j=0;j<imgdivs.length;j++){
+        var cimg=imgdivs[j];
+        cimg.addEventListener("mouseenter", function(event){
+          var idiv=document.getElementById("authorinfo");
+          var info="<div id='authorinfo' style='position: absolute;left:"+50+"px;top:"+50+"px;height:120px;width:350px;background: white;'>"+event.target.innerHTML+"</div>";
+          if(idiv!=null){
+            idiv.style.display="block";
+            idiv.innerHTML=info;
+          }else{
+            var infodiv = document.createElement('div');
+            infodiv.innerHTML=info;
+            insertAfter(infodiv,thisNode);
+          }
+        });
+        cimg.addEventListener("mouseleave", function(event){
+          document.getElementById("authorinfo").style.display="none";
+        });
+      }
     },
     () => {
       console.log('failed');
@@ -821,9 +853,15 @@ var BMapLib = window.BMapLib = BMapLib || {};
         }
       }
       var maindom=that._clusterMarker._domElement;
+      var newarray=userids.sort();
+      var newids="";
+      for(var i=0;i<newarray.length;i++){
+        newids+=newarray[i]+",";
+      }
+      ids=newids;
       if(document.getElementById("currentIds").value!=ids) {
         document.getElementById("currentIds").value = ids;
-        showtop(userids,event,map,maindom);
+        showtop(userids,event,map,maindom,ids);
       }else{
         return;
       }

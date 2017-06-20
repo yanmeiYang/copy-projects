@@ -1,0 +1,50 @@
+
+.vis_container {
+  border: solid 0px darkolivegreen;
+  margin: 1px 8px 1px 1px;
+  padding: 0px;
+  //width: 452px;
+  //height: 300px;
+  width: 0px;
+  height: 0px;
+}
+
+:global {
+
+  .node circle {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 2px;
+  }
+
+  .node text {
+    font: 12px sans-serif;
+  }
+
+  .link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 2px;
+  }
+
+  a.nodeLink { }
+  a.nodeLink:hover {
+    text-decoration: underline;
+  }
+
+  div.tooltip {
+    position: absolute;
+    text-align: left;
+    max-width: 340px;
+    min-height: 28px;
+    padding: 8px 16px;
+    font: 12px sans-serif;
+    color: #ddd;
+    background: black;
+    border: 0px;
+    border-radius: 3px;
+    .title { font-size: 13px; font-weight: Bold; color: white; }
+
+  }
+}
+

@@ -18,6 +18,7 @@ import defaultImg from '../../assets/people/default.jpg';
 import CanlendarInForm from '../../components/seminar/calendar';
 import AddTags from '../../components/seminar/addTags';
 import ExpertBasicInformation from '../../components/seminar/expertBasicInformation/expertBasicInformation';
+import AddExpertModal from '../../components/seminar/addExpertModal';
 const Dragger = Upload.Dragger;
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -69,6 +70,11 @@ class RegistrationForm extends React.Component {
       if (!err) {
         const state = this.state;
         let data = values;
+        if (data.state){
+          data.state = data.state.split('#')[0];
+        }
+        //用于跟aminer的活动区分。默认是aminer
+        data.src='ccf';
         data.location = { city: '', address: '' };
         data.time = { from: '', to: '' };
         data.type = parseInt(values.type);
@@ -92,7 +98,6 @@ class RegistrationForm extends React.Component {
           data.time.to = state.endValue.toJSON();
         }
         data.activityTags = state.tags;
-
         //获取登录用户的uid
         data.uid = this.props.uid;
         this.props.dispatch({ type: 'seminar/postSeminarActivity', payload: data });
@@ -223,7 +228,7 @@ class RegistrationForm extends React.Component {
               )}
             </FormItem>
             <FormItem {...formItemLayout} label='承办单位'>
-              {getFieldDecorator('OrganizedBy', {
+              {getFieldDecorator('organizer', {
                   rules: [{ required: true, message: '请选择承办单位！' }],
                 }
               )(
@@ -312,7 +317,7 @@ class RegistrationForm extends React.Component {
               {...formItemLayout}
               label="贡献类别"
             >
-              {getFieldDecorator('activityType', {})(
+              {getFieldDecorator('state', {})(
                 <Select
                   showSearch
                   style={{ width: 200 }}
@@ -381,6 +386,7 @@ class RegistrationForm extends React.Component {
                 <Button type='primary' onClick={this.addTalkData.bind(this, addNewTalk)}>新增嘉宾</Button>
               </div>
 
+              {/*{addNewTalk&&<AddExpertModal integral={integral} parentProps = {this.props}/>}*/}
               {addNewTalk ?
                 <div>
                   <FormItem

@@ -17,6 +17,7 @@ class ExpertBasicInformation extends React.Component {
     gender: 'male',
     speakerInfo: [],
   };
+  speakerInformation = { name: '', position: '', affiliation: '', aid: '', img: '' };
   //改变性别
   onChangeGender = (e) => {
     this.setState({ gender: e.target.value });
@@ -42,7 +43,15 @@ class ExpertBasicInformation extends React.Component {
     });
   };
 
-  //相关专家推荐
+  saveExpertInfo = (type,e) => {
+    this.speakerInformation[type]=e.target.value;
+    this.setState({
+      speakerInfo: this.speakerInformation,
+    });
+    this.props.callbackParent(this.speakerInformation);
+  };
+
+//相关专家推荐
   showModal = () => {
     const type = parseInt(this.props.selectedType);
     const t = this;
@@ -124,7 +133,7 @@ class ExpertBasicInformation extends React.Component {
             <div className='ant-form-item'>
               <label className="ant-col-3">姓名: </label>
               <div className='ant-col-21'>
-                <Input size='large' placeholder='嘉宾姓名' ref='speakerName'/>
+                <Input size='large' placeholder='嘉宾姓名' ref='speakerName' onBlur={this.saveExpertInfo.bind(this,'name')}/>
               </div>
             </div>
 
@@ -140,13 +149,13 @@ class ExpertBasicInformation extends React.Component {
             <div className='ant-form-item'>
               <label className="ant-col-3">职称: </label>
               <div className='ant-col-21'>
-                <Input size='large' placeholder='嘉宾职称' ref='speakerPos'/>
+                <Input size='large' placeholder='嘉宾职称' ref='speakerPos' onBlur={this.saveExpertInfo.bind(this,'position')}/>
               </div>
             </div>
             <div className='ant-form-item'>
               <label className="ant-col-3">单位: </label>
               <div className='ant-col-21'>
-                <Input size='large' placeholder='嘉宾单位' ref='speakerAff'/>
+                <Input size='large' placeholder='嘉宾单位' ref='speakerAff' onBlur={this.saveExpertInfo.bind(this,'affiliation')}/>
               </div>
             </div>
             <div className='ant-form-item'>

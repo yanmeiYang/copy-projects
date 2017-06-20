@@ -2,60 +2,35 @@ import React from 'react';
 import { connect } from 'dva';
 import styles from './KnoledgeGraphWidget.less';
 import * as d3 from '../../../public/d3/d3.min';
-import * as kgService from '../../services/knoledge-graph-service';
 
 class KnoledgeGraphWidget extends React.Component {
+// function KnoledgeGraphWidget() {
 
   state = {
-    // treeData: {
-    //   name: '信息系统',
-    //   children: [
-    //     {
-    //       name: '万维网',
-    //       children: [
-    //         { name: 'Web Search and Application', level: 3 },
-    //         { name: 'Web Search and Application', level: 3 },
-    //         { name: 'Web Search and Application', level: 3 },
-    //         { name: 'Web Search and Application', level: 3 },
-    //         { name: '在线广告', level: 3 },
-    //         { name: '在线广告', level: 3 },
-    //         { name: '在线广告', level: 3 },
-    //         { name: '在线广告', level: 3 },
-    //         { name: '在线广告', level: 3 },
-    //       ],
-    //     },
-    //     {
-    //       name: '信息系统应用',
-    //       children: [
-    //         { name: '在线广告', level: 3 },
-    //       ],
-    //     }, {
-    //       name: '信息系统应用',
-    //       children: [],
-    //     }, {
-    //       name: '信息系统应用',
-    //       children: [
-    //         { name: '在线广告', level: 3 },
-    //       ],
-    //     },
-    //   ],
-    // },
+    treeData: {
+      name: '信息系统',
+      children: [
+        {
+          name: '万维网',
+          children: [
+            { name: '网页搜索和信息发现' },
+            { name: '在线广告' },
+          ],
+        },
+        { name: '信息系统应用' },
+      ],
+    },
   };
 
 
   componentDidMount() {
-    // this.createD3();
-    kgService.getKGSuggest('data mining', (result) => {
-      this.createD3(result);
-      return console.log('this is call back', result);
-    });
-  };
+    this.createD3();
+  }
 
-
-  createD3 = (data) => {
+  createD3 = () => {
     // Set the dimensions and margins of the diagram
-    const margin = { top: 28, right: 20, bottom: 30, left: 20 };
-    const width = 452 - margin.left - margin.right;
+    const margin = { top: 20, right: 90, bottom: 30, left: 90 };
+    const width = 450 - margin.left - margin.right;
     const height = 300 - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
@@ -67,23 +42,23 @@ class KnoledgeGraphWidget extends React.Component {
       .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
-    let i = 0;
-    const duration = 400;
+    let i = 0,
+      duration = 750,
+      root;
 
     // declares a tree layout and assigns the size
-    const treemap = d3.tree().size([width, height]);
+    const treemap = d3.tree().size([height, width]);
 
 
     // Assigns parent, children, height, depth
-    const root = d3.hierarchy(data, (d) => {
+    root = d3.hierarchy(this.state.treeData, (d) => {
       return d.children;
     });
-    root.x0 = width / 2;
+    root.x0 = height / 2;
     root.y0 = 0;
 
-
     // Collapse after the second level
-    // root.children.forEach(collapse);
+    root.children.forEach(collapse);
 
     update(root);
 
@@ -106,11 +81,7 @@ class KnoledgeGraphWidget extends React.Component {
 
       // Normalize for fixed-depth.
       nodes.forEach((d) => {
-        if (d.data.level !== 3) {
-          d.y = d.depth * 40;
-        } else {
-          d.y = d.depth * 60;
-        }
+        d.y = d.depth * 100;
       });
 
       // ****************** Nodes section ***************************
@@ -125,8 +96,7 @@ class KnoledgeGraphWidget extends React.Component {
       const nodeEnter = node.enter().append('g')
         .attr('class', 'node')
         .attr('transform', (d) => {
-          // return `translate(${source.y0},${source.x0})`;
-          return `translate(${source.x},${source.y})`;
+          return `translate(${source.y0},${source.x0})`;
         })
         .on('click', click);
 
@@ -141,17 +111,14 @@ class KnoledgeGraphWidget extends React.Component {
       // Add labels for the nodes
       nodeEnter.append('text')
         .attr('dy', '.35em')
-        .attr('y', (d) => {
-          return d.children || d._children ? -18 : 18;
+        .attr('x', (d) => {
+          return d.children || d._children ? -13 : 13;
         })
         .attr('text-anchor', (d) => {
-          return d.data.level != 3 ? 'middle' : '';
+          return d.children || d._children ? 'end' : 'start';
         })
         .text((d) => {
           return d.data.name;
-        })
-        .attr('writing-mode', (d) => {
-          return d.data.level === 3 ? 'tb' : '';
         });
 
       // UPDATE
@@ -161,12 +128,12 @@ class KnoledgeGraphWidget extends React.Component {
       nodeUpdate.transition()
         .duration(duration)
         .attr('transform', (d) => {
-          return `translate(${d.x},${d.y})`;
+          return `translate(${d.y},${d.x})`;
         });
 
       // Update the node attributes and style
       nodeUpdate.select('circle.node')
-        .attr('r', 6)
+        .attr('r', 10)
         .style('fill', (d) => {
           return d._children ? 'lightsteelblue' : '#fff';
         })
@@ -177,7 +144,7 @@ class KnoledgeGraphWidget extends React.Component {
       const nodeExit = node.exit().transition()
         .duration(duration)
         .attr('transform', (d) => {
-          return `translate(${source.x},${source.y})`;
+          return `translate(${source.y},${source.x})`;
         })
         .remove();
 
@@ -233,10 +200,10 @@ class KnoledgeGraphWidget extends React.Component {
       // Creates a curved (diagonal) path from parent to the child nodes
       function diagonal(s, d) {
         const path =
-          `M ${s.x} ${s.y} 
-           C ${s.x} ${(s.y + d.y) / 2 },
-             ${d.x} ${(s.y + d.y) / 2 },
-             ${d.x} ${d.y}`;
+          `M ${s.y} ${s.x}
+           C ${(s.y + d.y) / 2} ${s.x},
+             ${(s.y + d.y) / 2} ${d.x},
+             ${d.y} ${d.x}`;
         return path;
       }
 
@@ -252,11 +219,13 @@ class KnoledgeGraphWidget extends React.Component {
         update(d);
       }
     }
-  };
+  }
 
   render() {
     return (
       <div className={styles.container}>
+        <h1>TODO: 先放这个文件。如果好用了再提取出Component来.</h1>
+
         <div id="kgvis" className={styles.vis_container} />
       </div>
     );

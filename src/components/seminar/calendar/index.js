@@ -59,7 +59,7 @@ class CanlendarInForm extends React.Component {
           <DatePicker
             disableDate={this.disabledStartDate}
             showTime
-            format='YYYY-MM-DD HH:mm:ss'
+            format='YYYY-MM-DD HH:mm'
             ref='startValue'
             value={startValue}
             placeholder='Start'
@@ -70,8 +70,8 @@ class CanlendarInForm extends React.Component {
         <Col span={12}>
           <DatePicker
             disableDate={this.disabledEndDate}
-            showTime
-            format='YYYY-MM-DD HH:mm:ss'
+            showTime='<TimePicker format="HH:mm" />'
+            format='YYYY-MM-DD HH:mm'
             ref='endValue'
             value={endValue}
             placeholder='End'

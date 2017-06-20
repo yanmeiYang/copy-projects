@@ -12,7 +12,7 @@ import styles from './index.less';
 
 
 const DetailSeminar = ({ dispatch, seminar, app }) => {
-  const { summaryById } = seminar;
+  const { summaryById, expertRating } = seminar;
   const currentUser = app;
   //share
   let shareModalDisplay = false;
@@ -22,7 +22,7 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
   }
 
   function delSeminar() {
-    dispatch({ type: 'seminar/deleteActivity',payload:{id:summaryById.id,body:summaryById}})
+    dispatch({ type: 'seminar/deleteActivity', payload: { id: summaryById.id, body: summaryById } })
   }
 
   return (
@@ -30,7 +30,7 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
       <Row>
         <Col md={24} lg={{ span: 16, offset: 4 }} className={styles.thumbnail}>
           <div className={styles.caption}>
-            {summaryById.uid===currentUser.user.id&&currentUser.token &&
+            {summaryById.uid === currentUser.user.id && currentUser.token &&
             <Button type='danger' icon='delete' style={{ float: 'right' }} onClick={delSeminar}>删除</Button>}
             <h4 className=''>
               <strong>
@@ -105,6 +105,35 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
                         : ''
                     }
                   </span>
+
+                  {summaryById.organizer && <span>
+                    <li>
+                      <p>
+                        <Icon type="home" />
+                        <strong>承办单位:&nbsp;</strong>
+                        {summaryById.organizer.map((organizer, value) => {
+                          return (
+                            <span key={Math.random()}>
+                              <span>{organizer}
+                                {value < summaryById.organizer.length && <span>;&nbsp;</span>}
+                              </span>
+                            </span>
+                          )
+                        })}
+                      </p>
+                    </li>
+                  </span>}
+
+                  {summaryById.state && <span>
+                    <li>
+                        <p>
+                          <Icon type="tags-o" />
+                          <strong>贡献类别:&nbsp;</strong>
+                          <span>{summaryById.state}</span>
+                        </p>
+                      </li>
+                  </span>}
+
                 </ul>
                 <div>
                   {summaryById.abstract ? <div>
@@ -114,6 +143,9 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
                     </div>
                   </div> : ''}
                 </div>
+                {summaryById.img&&<div>
+                  <img src={summaryById.img} style={{width:'50%'}}/>
+                </div>}
                 <div>
                   {summaryById.speaker ? <div>
                     {summaryById.speaker.bio ? <div>
@@ -122,30 +154,28 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
                         <p className='rdw-justify-aligned-block'>{summaryById.speaker.bio}</p>
                       </div>
                     </div> : ''}
+                    {/*专家评分*/}
+                    <ExpertRating actid={summaryById.id} currentUser={currentUser} aid={summaryById.speaker.aid} expertRating={expertRating}/>
                   </div> : ''}
                 </div>
-                {/*专家评分*/}
-                <ExpertRating />
               </div>
               : ''}
 
             {/*type=workshop*/}
             {summaryById.type === 1 ? <div>
               <div className={styles.workshopTetail}>
-                {summaryById.img ? <div>
-                  <h5><TimeFormat {...summaryById.time}/></h5>
-                  <img src={summaryById.img}/>
-                  <p>{summaryById.abstract}</p>
-                  <hr />
-                </div> : ''}
+                <h5><TimeFormat {...summaryById.time}/></h5>
+                {summaryById.img&&<img src={summaryById.img}/>}
+                <p>{summaryById.abstract}</p>
+                <hr />
               </div>
               {summaryById.talk.map((aTalk) => {
                 return (
-                  <div key={aTalk.speaker.aid} className={styles.workshop}>
+                  <div key={aTalk.speaker.aid + Math.random()} className={styles.workshop}>
                     {/*workshop详情页面*/}
                     <WorkShop {...aTalk}/>
                     {/*专家评分*/}
-                    <ExpertRating />
+                    <ExpertRating actid={summaryById.id} currentUser={currentUser} aid={aTalk.speaker.aid} expertRating={expertRating}/>
                     <hr />
                   </div>
                 )
@@ -154,7 +184,7 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
 
           </div>
         </Col>
-        <CommentsByActivity  activityId={summaryById.id} currentUser={currentUser}/>
+        <CommentsByActivity activityId={summaryById.id} currentUser={currentUser}/>
       </Row>
     </div>
   );

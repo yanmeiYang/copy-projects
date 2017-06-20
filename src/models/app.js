@@ -16,8 +16,7 @@ export default {
     isNavbar: false, // document.body.clientWidth < 769,
     navOpenKeys: JSON.parse(localStorage.getItem(`${prefix}navOpenKeys`)) || [],
   },
-  subscrfiptions: {
-
+  subscriptions: {
     setup({ dispatch }) {
       dispatch({ type: 'getCurrentUserInfo' });
       let tid;
@@ -32,7 +31,7 @@ export default {
   },
   effects: {
     *getCurrentUserInfo({ payload }, { call, put }) {
-      if (token) {
+      if (localStorage.getItem('token')) {
         const { data } = yield call(getCurrentUserInfo, parse(payload));
         if (data) {
           yield put({

@@ -21,6 +21,7 @@ export default {
     activity_organizer_options: [],
     activity_type: [],
     comments: [],
+    expertRating: [],
     isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
   },
 
@@ -28,18 +29,21 @@ export default {
     setup({ dispatch, history }){
       history.listen((location) => {
         if (location.pathname === '/seminar') {
-          dispatch({ type: 'getSeminar', payload: { offset: 0, size: 20 } });
+          dispatch({ type: 'getSeminar', payload: { offset: 0, size: 20, filterBySrc: { src: 'ccf' } } });
         }
         if (location.pathname === '/seminarpost') {
           dispatch({ type: 'getCategory', payload: { category: 'activity_organizer_options' } });
-          dispatch({ type: 'getCategory', payload: { category: 'activity_type' } })
+          dispatch({ type: 'getCategory', payload: { category: 'activity_type' } });
+          dispatch({ type: 'app/getCurrentUserInfo' });
         }
 
         const match = pathToRegexp('/seminar/:id').exec(location.pathname);
         if (match) {
           const id = decodeURIComponent(match[1]);
           dispatch({ type: 'getSeminarByID', payload: { id } });
+          // dispatch({ type: 'listActivityScores', payload: { uid: 'me', src: 'ccf', actid: id } });
           dispatch({ type: 'getCommentFromActivity', payload: { id: id, offset: 0, size: 10 } });
+
         }
       });
 
@@ -49,17 +53,22 @@ export default {
   effects: {
     *getSeminar({ payload }, { call, put }){
       yield put({ type: 'showLoading' });
-      const { offset, size } = payload;
-      const { data } = yield call(seminarService.getSeminar, offset, size);
+      const { offset, size, filterBySrc } = payload;
+      const { data } = yield call(seminarService.getSeminar, offset, size, filterBySrc);
       yield put({ type: 'getSeminarsSuccess', payload: { data, offset } });
     },
     *getSeminarByID({ payload }, { call, put }){
       const { id } = payload;
       const { data } = yield call(seminarService.getSeminarById, id);
+
+      const listActivityScores = yield call(seminarService.listActivityScores, 'me', 'ccf', id);
+      yield put({ type: 'listActivityScoresSuccess', payload: listActivityScores.data });
+
       yield put({ type: 'getSeminarByIDSuccess', payload: { data } });
     },
 
     *getSpeakerSuggest({ payload }, { call, put }){
+      console.log(payload);
       const { data } = yield call(seminarService.getSpeakerSuggest, payload);
       yield put({ type: 'getSpeakerSuggestSuccess', payload: { data } });
     },
@@ -120,11 +129,28 @@ export default {
         console.log('deleteComment Error:', deleteComment.data)
       }
     },
+    *updateOrSaveActivityScore({ payload }, { call, put }){
+      const { src, actid, aid, key, score, lvtime } = payload;
+      yield call(seminarService.updateOrSaveActivityScore, src, actid, aid, key, score, lvtime);
+      const { data } = yield call(seminarService.listActivityScores, 'me', 'ccf', actid);
+      yield put({ type: 'listActivityScoresSuccess', payload: data });
+      },
+    *listActivityScores({ payload }, { call, put }){
+      const { uid, src, actid } = payload;
+      const { data } = yield call(seminarService.listActivityScores, uid, src, actid);
+      yield put({ type: 'listActivityScoresSuccess', payload: data });
+    }
   },
 
   reducers: {
     getSeminarsSuccess(state, { payload: { data, offset } }){
-      return { ...state, results: state.results.concat(data), loading: false, offset: offset + state.sizePerPage };
+      let newData = [];
+      if (state.results.length >= 20) {
+        newData = state.results.concat(data)
+      } else {
+        newData = data
+      }
+      return { ...state, results: newData, loading: false, offset: offset + state.sizePerPage };
     },
 
     getSeminarByIDSuccess(state, { payload: { data } }){
@@ -132,7 +158,6 @@ export default {
     },
 
     getSpeakerSuggestSuccess(state, { payload: { data } }){
-      console.log(data);
       return { ...state, speakerSuggests: data };
     },
     searchActivitySuccess(state, { payload: { data, query, offset } }){
@@ -155,6 +180,10 @@ export default {
 
     getCommentFromActivitySuccess(state, { payload: { data } }){
       return { ...state, comments: data }
+    },
+
+    listActivityScoresSuccess(state, { payload: { data } }){
+      return { ...state, expertRating: data }
     },
 
     addCommentToActivitySuccess(state){

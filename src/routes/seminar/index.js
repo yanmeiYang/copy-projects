@@ -8,8 +8,9 @@ import { Button, Icon, Spin } from 'antd';
 import styles from './index.less';
 import SearchSeminar from './search-seminar'
 
-const Seminar = ({ dispatch, seminar }) => {
+const Seminar = ({ app, dispatch, seminar }) => {
   const { results, loading, offset, query, sizePerPage } = seminar;
+  const { token } = app;
 
   function addBao() {
     dispatch(routerRedux.push({
@@ -38,9 +39,9 @@ const Seminar = ({ dispatch, seminar }) => {
     <div className="content-inner">
       <div className={styles.top}>
         <SearchSeminar />
-        <Button type="primary" onClick={addBao}>
+        {token&&<Button type="primary" onClick={addBao}>
           <Icon type="plus"/>&nbsp;发布新活动
-        </Button>
+        </Button>}
       </div>
       <Spin spinning={loading}>
         <div className={styles.seminar}>
@@ -48,7 +49,7 @@ const Seminar = ({ dispatch, seminar }) => {
             results.map((result) => {
               const time = result.time.from.split('-');
               return (
-                <li key={result.id}>
+                <li key={result.id+Math.random()}>
                   <div className={styles.time}>
                     <em>{time[1]}月</em>
                     <div className={styles.bot}>
@@ -67,10 +68,10 @@ const Seminar = ({ dispatch, seminar }) => {
                       <span className={styles.type}>
                           活动类型：{result.type === 0 ? 'seminar' : 'workshop'}
                         </span>
-                        <span>
-                          <em>关键字：</em>
-                          数据挖掘 机器学习 人工智能
-                        </span>
+                        {/*<span>*/}
+                          {/*<em>关键字：</em>*/}
+                          {/*数据挖掘 机器学习 人工智能*/}
+                        {/*</span>*/}
                       </p>
                       <p className={styles.location}>活动地点：{result.location.address}</p>
                     </div>
@@ -89,4 +90,4 @@ const Seminar = ({ dispatch, seminar }) => {
 };
 
 
-export default connect(({ seminar, loading }) => ({ seminar, loading }))(Seminar);
+export default connect(({ seminar, loading, app }) => ({ seminar, loading, app }))(Seminar);

@@ -1,12 +1,12 @@
 import React from 'react';
-import { Form } from 'antd';
+import { connect } from 'dva';
 import RegistrationForm from '../../../components/RegistrationForm';
 
-const AddSeminar = ({}) => {
-  const props = {
-  };
+const AddSeminar = ({ app }) => {
+  const { user } = app;
+  const props = {};
   return (
-    <RegistrationForm />
+    <RegistrationForm uid={user.id}/>
   );
 };
-export default (AddSeminar);
+export default connect(({ app }) => ({ app }))(AddSeminar);

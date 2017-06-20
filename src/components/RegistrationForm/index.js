@@ -94,7 +94,7 @@ class RegistrationForm extends React.Component {
         data.activityTags = state.tags;
 
         //获取登录用户的uid
-        data.uid = '54f5112e45ce1bc6d563b8d9';
+        data.uid = this.props.uid;
         this.props.dispatch({ type: 'seminar/postSeminarActivity', payload: data });
       }
     });

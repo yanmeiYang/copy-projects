@@ -31,7 +31,7 @@ function IndexPage({ dispatch, search }) {
     <div>
       <div className={styles.normal}>
         <h1>专家搜索</h1>
-        <SearchBox size="large" onSearch={onSearch} />
+        <SearchBox size="large" style={{ width: 500 }} onSearch={onSearch} />
         {/*常用搜索*/}
         <p className={styles.commonSearch}>
           {

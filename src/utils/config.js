@@ -31,6 +31,10 @@ module.exports = {
     speakerSuggest: '/activity/speaker/suggest',
     uploadActivityPosterImgFile: '/activity/img',
     searchActivity: '/search/activity',
+    deleteActivity: '/activity/delete/:id',
+    getCommentFromActivity: '/comment/activity/:id/offset/:offset/size/:size',
+    addCommentToActivity: '/comment/activity/:id',
+    deleteCommentFromActivity: '/comment/activity/cmid/:id',
 
     /* person */
     personProfile: '/person/summary/:id',

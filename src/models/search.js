@@ -1,4 +1,4 @@
-import pathToRegexp from 'path-to-regexp'
+import pathToRegexp from 'path-to-regexp';
 import * as searchService from '../services/search';
 
 export default {
@@ -26,7 +26,7 @@ export default {
   },
 
   subscriptions: {
-    setup({ dispatch, history }) {  // eslint-disable-line
+    setup({ dispatch, history }) {
       history.listen((location, query) => {
         if (location.pathname === '/') {
           dispatch({ type: 'getSeminars', payload: { offset: 0, size: 5 } });
@@ -56,10 +56,10 @@ export default {
   },
 
   effects: {
-    *searchPerson({ payload }, { call, put }) {  // eslint-disable-line
+    *searchPerson({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
-      const { query, offset, size, filters } = payload;
-      const { data } = yield call(searchService.searchPerson, query, offset, size, filters);
+      const { query, offset, size, filters, sort } = payload;
+      const { data } = yield call(searchService.searchPerson, query, offset, size, filters, sort);
       yield put({ type: 'searchPersonSuccess', payload: { data } });
     },
     *searchPersonAgg({ payload }, { call, put }) {

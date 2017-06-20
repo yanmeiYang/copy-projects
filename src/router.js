@@ -84,6 +84,14 @@ const Routers = function ({ history, app }) {
               cb(null, require('./routes/seminar/detailSeminar'));
             }, 'detailSeminar');
           },
+        }, {
+          path: 'statistics',
+          getComponent(nextState, cb){
+            require.ensure([], (require) => {
+              registerModel(app, require('./models/statistics/statistics'));
+              cb(null, require('./routes/statistics'));
+            }, 'statistics');
+          },
         },
         {
           path: 'person/:id',
@@ -145,6 +153,28 @@ const Routers = function ({ history, app }) {
           registerModel(app, require('./models/common/universal-config'));
           cb(null, { component: require('./routes/technical-committees') });
         }, 'technicalCommittees');
+      },
+    },
+
+    // Experimental Labs
+    {
+      path: '/lab/Admin',
+      component: App,
+      getIndexRoute(nextState, cb) {
+        require.ensure([], (require) => {
+          registerModel(app, require('./models/vis/vis-research-interest'));
+          cb(null, { component: require('./routes/lab/Admin') });
+        }, 'lab/admin');
+      },
+    },
+    {
+      path: '/lab/knowledge-graph-widget',
+      component: App,
+      getIndexRoute(nextState, cb) {
+        require.ensure([], (require) => {
+          registerModel(app, require('./models/vis/vis-research-interest'));
+          cb(null, { component: require('./routes/lab/KnoledgeGraphWidget') });
+        }, 'lab/knowledge-graph-widget');
       },
     },
     {
@@ -290,7 +320,7 @@ const Routers = function ({ history, app }) {
     },
   ]
 
-  return <Router history={history} routes={routes} />;
+  return <Router history={history} routes={routes}/>;
 }
 
 export default Routers;

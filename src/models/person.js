@@ -12,6 +12,7 @@ export default {
     profile: {},
 
     results: [],
+    avgScores: [],
     offset: 0,
     query: null,
     isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
@@ -33,6 +34,12 @@ export default {
           const personId = decodeURIComponent(match[1]);
           // console.log('personId is :', personId);
           dispatch({ type: 'getPerson', payload: { personId } });
+          dispatch({ type: 'getActivityAvgScoresByPersonId', payload: { id: personId } });
+          dispatch({
+            type: 'seminar/getSeminar',
+            payload: { offset: 0, size: 5, filter: { src: 'ccf', aid: personId } }
+          });
+
           // dispatch({ type: 'setParams', payload: { personId } });
         }
       });
@@ -46,6 +53,12 @@ export default {
       const data = yield call(personService.getPerson, personId);
       yield put({ type: 'getPersonSuccess', payload: { data } });
     },
+    *getActivityAvgScoresByPersonId({ payload }, { call, put }){
+      const { id } = payload;
+      const { data } = yield call(personService.getActivityAvgScoresByPersonId, id);
+      console.log(data);
+      yield put({ type: 'getActivityAvgScoresByPersonIdSuccess', payload: { data } })
+    }
   },
 
   reducers: {
@@ -60,6 +73,10 @@ export default {
       // console.log('reducers:getPersonSuccess', data.data);
       return { ...state, profile: data.data };
     },
+
+    getActivityAvgScoresByPersonIdSuccess(state, { payload: { data } }){
+      return { ...state, avgScores: data.indices }
+    }
   },
 
 };

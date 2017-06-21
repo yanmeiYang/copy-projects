@@ -23,12 +23,8 @@ function showtop(usersIds,e,map,maindom,inputids){
   var thisNode=document.getElementById("panel");
   if(thisNode!=null){
     var pthisNode=thisNode.parentNode;
-    console.log(pthisNode.innerHTML);
-    pthisNode.addEventListener("mouseout", function(event){
-      console.log(document.getElementById("currentIds").value+"$$$$$$"+ids);
-      if(document.getElementById("currentIds").value == inputids){
-        return;
-      }else{
+    pthisNode.addEventListener("mouseleave", function(event){
+      if(thisNode!=null  && thisNode.parentNode!=null){
         thisNode.parentNode.removeChild(thisNode);
         var imgdivs=document.getElementsByName("img");
         for(var i=0;i<imgdivs.length;){
@@ -50,12 +46,12 @@ function showtop(usersIds,e,map,maindom,inputids){
         var centerX=Math.cos(fenshu*i)*(width/2-imgwidth/2)+width/2;
         var centerY=Math.sin(fenshu*i)*(width/2-imgwidth/2)+width/2;
         var imgdiv = document.createElement('div');
-        var cstyle="z-index:9;border:1px solid white;height:"+imgwidth+"px;width:"+imgwidth+"px;position: absolute;left:"+(centerX-imgwidth/2)+"px;top:"+(centerY-imgwidth/2)+"px; border-radius:50%; overflow:hidden;"
+        var cstyle="z-index:10000;border:1px solid white;height:"+imgwidth+"px;width:"+imgwidth+"px;position: absolute;left:"+(centerX-imgwidth/2)+"px;top:"+(centerY-imgwidth/2)+"px; border-radius:50%; overflow:hidden;"
         imgdiv.setAttribute('name','img');
         imgdiv.setAttribute('style',cstyle);
         var url= data.data.persons[i].avatar;
         var authorid= data.data.persons[i].id;
-        imgdiv.innerHTML="<img style='background: white;'  data='"+authorid+"' height='"+imgwidth+"' width='"+imgwidth+"' src='"+url+"' alt='"+i+"'>";
+        imgdiv.innerHTML="<img style='background: white;'  data='@@@@@@@"+i+"@@@@@@@' height='"+imgwidth+"' width='"+imgwidth+"' src='"+url+"' alt='"+i+"'>";
         //insertAfter(imgdiv,thisNode);
         thisNode.appendChild(imgdiv);
       }
@@ -63,19 +59,36 @@ function showtop(usersIds,e,map,maindom,inputids){
       for(var j=0;j<imgdivs.length;j++){
         var cimg=imgdivs[j];
         cimg.addEventListener("mouseenter", function(event){
-          var idiv=document.getElementById("authorinfo");
-          var info="<div id='authorinfo' style='position: absolute;left:"+50+"px;top:"+50+"px;height:120px;width:350px;background: white;'>"+event.target.innerHTML+"</div>";
-          if(idiv!=null){
-            idiv.style.display="block";
-            idiv.innerHTML=info;
-          }else{
-            var infodiv = document.createElement('div');
-            infodiv.innerHTML=info;
-            insertAfter(infodiv,thisNode);
+          var chtml=event.target.innerHTML;
+          var num=0;
+          if(chtml.split("@@@@@@@").length>1){
+            num=chtml.split("@@@@@@@")[1];
           }
+          var personInfo=data.data.persons[num];
+          var apos=document.getElementById("allmap").getBoundingClientRect();
+          var cpos=event.target.getBoundingClientRect();
+          var newpixel = new BMap.Pixel(cpos.left-apos.left+imgwidth, cpos.top-apos.top);
+          var thispoint= map.pixelToPoint(newpixel);
+          var pos=""
+          if(personInfo.pos==null || personInfo.pos==""){
+            pos="null";
+          }else if(personInfo.pos[0]==null || personInfo.pos[0]==""){
+            pos="";
+          }else{
+            pos=personInfo.pos[0].n;
+          }
+          var sContent="<div id='author_info' style='width: 350px;height: 120px;'><img style='float:left;margin:4px' id='imgDemo' src='http:"+personInfo.avatar+"' width='70' height='80'/>"
+            +"<i class='fa fa-user' style='width: 20px;'> </i><a  target='_blank' href='https://cn.aminer.org/profile/"+personInfo.id+"'>"
+            +personInfo.name+"</a><br /><strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"
+            +personInfo.indices.h_index+"<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Paper:  </strong>"
+            +personInfo.indices.num_pubs+"<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Citation:  </strong>"
+            +personInfo.indices.num_citation+"<br /><i class='fa fa-mortar-board' style='width: 20px;'> </i>"
+            +pos+"<br /><i class='fa fa-institution' style='width: 20px;'> </i>"+personInfo.aff.desc+"</div>";
+          var infoWindow = new BMap.InfoWindow(sContent);
+          map.openInfoWindow(infoWindow,thispoint);
         });
         cimg.addEventListener("mouseleave", function(event){
-          document.getElementById("authorinfo").style.display="none";
+          //document.getElementById("authorinfo").style.display="none";
         });
       }
     },
@@ -840,7 +853,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
     });
 
     var that=this;
-    this._clusterMarker.addEventListener("mouseover", function(event){
+    this._clusterMarker.addEventListener("mouseenter", function(event){
       var ids="";
       var userids=[];
       var map=that._map;
@@ -859,12 +872,8 @@ var BMapLib = window.BMapLib = BMapLib || {};
         newids+=newarray[i]+",";
       }
       ids=newids;
-      if(document.getElementById("currentIds").value!=ids) {
-        document.getElementById("currentIds").value = ids;
-        showtop(userids,event,map,maindom,ids);
-      }else{
-        return;
-      }
+      document.getElementById("currentIds").value = ids;
+      showtop(userids,event,map,maindom,ids);
     });
   };
 
@@ -1937,8 +1946,14 @@ var BMapLib = window.BMapLib = BMapLib || {};
     T.event.on(this._domElement,"mouseover", function(e){
       me.dispatchEvent(eventExtend(e, new BaseEvent("onmouseover")));
     });
+    T.event.on(this._domElement,"mouseenter", function(e){
+      me.dispatchEvent(eventExtend(e, new BaseEvent("onmouseenter")));
+    });
     T.event.on(this._domElement,"mouseout", function(e){
       me.dispatchEvent(eventExtend(e, new BaseEvent("onmouseout")));
+    });
+    T.event.on(this._domElement,"mouseleave", function(e){
+      me.dispatchEvent(eventExtend(e, new BaseEvent("onmouseleave")));
     });
     T.event.on(this._domElement,"click", function(e){
       me.dispatchEvent(eventExtend(e, new BaseEvent("onclick")));

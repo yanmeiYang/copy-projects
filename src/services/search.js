@@ -1,9 +1,10 @@
 import { request, config } from '../utils';
+import { sysconfig } from '../systems';
 
 const { api } = config;
 
 export async function searchPerson(query, offset, size, filters, sort) {
-  let expertBase = '58ddbc229ed5db001ceac2a4';
+  let expertBase = sysconfig.DEFAULT_EXPERT_BASE;
   if (query && query.length > 0) {
     let data = { term: query, offset, size, sort };
     if (filters) {
@@ -30,7 +31,7 @@ export async function searchPerson(query, offset, size, filters, sort) {
 }
 
 export async function searchPersonAgg(query, offset, size, filters) {
-  let expertBase = '58ddbc229ed5db001ceac2a4';
+  let expertBase = sysconfig.DEFAULT_EXPERT_BASE;
   if (query && query.length > 0) {
     let data = { term: query, offset, size };
     if (filters) {

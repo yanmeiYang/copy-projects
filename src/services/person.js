@@ -10,10 +10,6 @@ export async function getPerson(id) {
   });
 }
 
-export async function getSeminars(offset, size) {
-  return request(api.getSeminars.replace(':offset', offset).replace(':size', size));
-}
-
 export function getProfileUrl(name, id) {
   let str = '';
   if (name) {
@@ -42,4 +38,8 @@ export async function listPersonByIds(ids) {
     method: 'POST',
     body: JSON.stringify({ ids }),
   });
+}
+
+export async function getActivityAvgScoresByPersonId(id) {
+  return request(api.getActivityAvgScoresByPersonId.replace(':id',id))
 }

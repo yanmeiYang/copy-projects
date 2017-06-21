@@ -44,7 +44,9 @@ class ProfileInfo extends React.Component {
 
           <span style={{ marginTop: 16 }} />
           <span className={styles.section_title}><i className="fa fa-area-chart fa-fw" /> 研究兴趣</span>
-          <VisResearchInterest personId={profile.id} />
+
+          <VisResearchInterest personId={profile.id} disable_vis_chart={true} />
+
           {/* TODO 这里放一个可以手工添加修改的tabs. */}
 
         </div>

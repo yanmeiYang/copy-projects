@@ -3,7 +3,13 @@
  */
 module.exports = {
 
+  DEFAULT_EXPERT_BASE: '592f8af69ed5db8bb68d713b',
   CCF_expertBases: [
+    {
+      id: '5949c2f99ed5dbc2147fd854',
+      name: 'CCF会员',
+      nperson: 2871,
+    },
     {
       id: '592f8af69ed5db8bb68d713b',
       name: '会士(F)',

@@ -4,6 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Icon } from 'antd';
+import { Link } from 'dva/router';
 import TimeFormat from './time-format';
 import styles from './workshop.less'
 
@@ -15,7 +16,7 @@ class WorkShop extends React.Component {
         {aTalk.title && <h5 className={styles.talkTitle}>{aTalk.title}</h5>}
         <div>
           <div className={styles.speakerAvatar}>
-            <img src={aTalk.speaker.img} alt={aTalk.speaker.name}/>
+            {aTalk.speaker.aid?<Link to={`/person/${aTalk.speaker.aid}`}><img src={aTalk.speaker.img} alt={aTalk.speaker.name}/></Link>:<img src={aTalk.speaker.img} alt={aTalk.speaker.name}/>}
           </div>
         </div>
         <ul className={styles.messages}>
@@ -26,7 +27,7 @@ class WorkShop extends React.Component {
                 <p>
                   <Icon type='user'/>
                   <strong>姓名:&nbsp;</strong>
-                  <span>{aTalk.speaker.name}</span>
+                  {aTalk.speaker.aid?<Link to={`/person/${aTalk.speaker.aid}`}><span>{aTalk.speaker.name}</span></Link>:<span>{aTalk.speaker.name}</span>}
                 </p>
               </li>
               <li>

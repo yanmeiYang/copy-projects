@@ -7,11 +7,8 @@ import styles from './KnowledgeGraphSearchHelper.less';
 import * as d3 from '../../../public/d3/d3.min';
 import * as kgService from '../../services/knoledge-graph-service';
 
+const controlDivId = 'kgvis';
 class KnowledgeGraphSearchHelper extends React.Component {
-  state = {
-    hasSuggest: false,
-    data: null,
-  };
 
   componentDidMount() {
     this.updateD3(this.props.query);
@@ -32,27 +29,26 @@ class KnowledgeGraphSearchHelper extends React.Component {
         this.closeZone();
         return;
       }
-      console.log(' not null, create d3 and show div', result);
       this.createD3(result);
-      // this.setState({ hasSuggest: true, data: result });
     });
   }
 
+  // If no suggestion, hide the whole div.
   showZone = () => {
-    d3.select('#kgvis')
+    d3.select(`#${controlDivId}`)
       .style('width', '452px')
       .style('height', '300px');
   };
 
   emptyD3 = () => {
-    const a = document.getElementById('kgvis');
-    console.log('clean div:', a)
+    const a = document.getElementById(controlDivId);
     if (a) {
-      a.innerHTML = "";
+      a.innerHTML = '';
     }
   }
+
   closeZone = () => {
-    d3.select('#kgvis')
+    d3.select(`#${controlDivId}`)
       .style('width', '0px')
       .style('height', '0px');
   };
@@ -68,7 +64,7 @@ class KnowledgeGraphSearchHelper extends React.Component {
     // append the svg object to the body of the page
     // appends a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
-    const svg = d3.select('#kgvis').append('svg')
+    const svg = d3.select(`#${controlDivId}`).append('svg')
       .attr('width', width + margin.right + margin.left)
       .attr('height', height + margin.top + margin.bottom)
       .append('g')
@@ -91,7 +87,6 @@ class KnowledgeGraphSearchHelper extends React.Component {
     root.x0 = width / 2;
     root.y0 = 0;
 
-
     // Collapse after the second level
     // root.children.forEach(collapse);
 
@@ -105,28 +100,6 @@ class KnowledgeGraphSearchHelper extends React.Component {
         d.children = null;
       }
     }
-
-    // Define the div for the tooltip
-    let nodeId = '';
-    let mouseOnDiv = false;
-    const div = d3.select('body').append('div')
-      .attr('class', 'tooltip')
-      .style('opacity', 0)
-      .on('mouseover', (d) => {
-        // console.log("--- over");
-        mouseOnDiv = true;
-      })
-      .on('mouseout', (d) => {
-        mouseOnDiv = false;
-      });
-    d3.select('#kgvis').on('click', (e) => {
-      div.transition()
-        .duration(500)
-        .style('opacity', 0)
-        .style('display', 'none');
-      mouseOnDiv = false;
-    })
-    ;
 
     function update(source) {
       // Assigns the x and y position for the nodes
@@ -180,11 +153,8 @@ class KnowledgeGraphSearchHelper extends React.Component {
             return d.children || d._children ? -18 : 8;
           }
         })
-        // .attr('x', (d) => {
-        //   return d.data.level === 3 ? -18 : 0;
-        // })
         .attr('text-anchor', (d) => {
-          return d.data.level != 3 ? 'middle' : '';
+          return d.data.level !== 3 ? 'middle' : '';
         })
         .html((d) => {
           return `<a class="nodeLink" href="/search/${d.data.name}/0/30">${d.data.name}</a>`;
@@ -192,30 +162,8 @@ class KnowledgeGraphSearchHelper extends React.Component {
         .attr('writing-mode', (d) => {
           return d.data.level === 3 ? 'tb' : '';
         })
-        .on('mouseover', (d) => {
-          // console.log("mouse over");
-          div.transition()
-            .duration(200)
-            .style('opacity', 0.9)
-            .style('display', '');
-          div.html(`<span class="title">${d.data.name}</span><br/><span class="title">${d.data.zh}</span><br/>${d.data.definition}`)
-            .style('left', `${d3.event.pageX}px`)
-            .style('top', `${d3.event.pageY - 28}px`);
-          nodeId = d.data.name;
-        })
-        .on('mouseout', (d) => {
-          // console.log("mouse out");
-          setTimeout(() => {
-            if (!mouseOnDiv) {
-              div.transition()
-                .duration(500)
-                .style('opacity', 0)
-                .style('display', 'none');
-              mouseOnDiv = false;
-            }
-          }, 200);
-        });
-      ;
+        .on('mouseover', d => bindMouseOver(d))
+        .on('mouseout', d => bindMouseOut(d));
 
       // UPDATE
       const nodeUpdate = nodeEnter.merge(node);
@@ -314,16 +262,71 @@ class KnowledgeGraphSearchHelper extends React.Component {
         }
         update(d);
       }
+    }
 
+    // popup window
+
+    // let nodeId = '';
+    let mouseOnDiv = false;
+
+    const div = d3.select('body').append('div')
+      .attr('class', 'tooltip')
+      .attr('id', 'd3mask')
+      .style('opacity', 0)
+      .on('mouseover', (d) => {
+        mouseOnDiv = true;
+      })
+      .on('mouseout', (d) => {
+        mouseOnDiv = false;
+        hideMask();
+      });
+
+    function showMask(d) {
+      div.transition()
+        .duration(200)
+        .style('opacity', 0.88)
+        .style('display', '');
+      div.html(`<span class="title">${d.data.name}</span><br/><span class="title">${d.data.zh}</span><br/>${d.data.definition}`)
+        .style('left', `${d3.event.pageX + 2}px`)
+        .style('top', `${d3.event.pageY - 28}px`);
+    }
+
+    function hideMask() {
+      div.transition()
+        .duration(300)
+        .style('opacity', 0)
+        .style('display', 'none');
+    }
+
+    // d3.select('#kgvis').on('click', (e) => {
+    //   div.transition()
+    //     .duration(500)
+    //     .style('opacity', 0)
+    //     .style('display', 'none');
+    //   mouseOnDiv = false;
+    // })
+
+    function bindMouseOver(d) {
+      showMask(d);
+    }
+
+    function bindMouseOut(d) {
+      if (!mouseOnDiv) {
+        setTimeout(() => {
+          if (!mouseOnDiv) {
+            hideMask();
+          }
+        }, 80);
+      }
     }
   };
 
   render() {
     return (
-      <div id="kgvis" className={styles.vis_container} />
+      <div id={controlDivId} className={styles.vis_container} />
     );
   }
 
 }
 
-export default connect()(KnowledgeGraphSearchHelper)
+export default connect()(KnowledgeGraphSearchHelper);

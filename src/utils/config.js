@@ -18,6 +18,7 @@ module.exports = {
   apiPrefix: '/api/',
   api: {
     searchPerson: '/search/person',
+    searchPersonAgg: '/search/person/agg',
     searchPersonInBase: '/search/roster/:ebid/experts/advanced',
     searchPersonInBaseAgg: '/search/roster/:ebid/experts/advanced/agg',
     allPersonInBase: '/roster/:ebid/order-by/h_index/offset/:offset/size/:size',

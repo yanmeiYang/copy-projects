@@ -11,6 +11,10 @@ import { listPersonByIds } from '../../services/person';
 const ButtonGroup = Button.Group;
 
 function showtop(usersIds,e,map,maindom,inputids){
+  var ishere=document.getElementById("panel");
+  if(ishere!=null){
+    return;
+  }
   var ids=[];
   var pixel = map.pointToOverlayPixel(e.currentTarget.getPosition());//中心点的位置
   var width=180;
@@ -21,41 +25,47 @@ function showtop(usersIds,e,map,maindom,inputids){
   oDiv.setAttribute('style',ostyle);
   insertAfter(oDiv, maindom);
   var thisNode=document.getElementById("panel");
-  if(thisNode!=null){
+  //开始显示图片
+  if(usersIds.length>8){//只取前面的8个
+    ids=usersIds.slice(0,8);
+  }else{
+    ids=usersIds;
+  }
+  var fenshu=2*Math.PI/ids.length;//共有多少份，每份的夹角
+  for(var i=0;i<ids.length;i++){
+    var centerX=Math.cos(fenshu*i)*(width/2-imgwidth/2)+width/2;
+    var centerY=Math.sin(fenshu*i)*(width/2-imgwidth/2)+width/2;
+    var imgdiv = document.createElement('div');
+    var cstyle="z-index:10000;border:1px solid white;height:"+imgwidth+"px;width:"+imgwidth+"px;position: absolute;left:"+(centerX-imgwidth/2)+"px;top:"+(centerY-imgwidth/2)+"px; border-radius:50%; overflow:hidden;"
+    imgdiv.setAttribute('name','scholarimg');
+    imgdiv.setAttribute('style',cstyle);
+    imgdiv.innerHTML="<img style='background: white;'  data='@@@@@@@0@@@@@@@' height='"+imgwidth+"' width='"+imgwidth+"' src='' alt='0'>";
+    //insertAfter(imgdiv,thisNode);
+    thisNode.appendChild(imgdiv);
+  }
+  var imgdivs=document.getElementsByName("scholarimg");
+  console.log(imgdivs.length)
+  if(thisNode!=null){//准备绑定事件
     var pthisNode=thisNode.parentNode;
     pthisNode.addEventListener("mouseleave", function(event){
       if(thisNode!=null  && thisNode.parentNode!=null){
         thisNode.parentNode.removeChild(thisNode);
-        var imgdivs=document.getElementsByName("img");
+        var imgdivs=document.getElementsByName("scholarimg");
         for(var i=0;i<imgdivs.length;){
           imgdivs[i].parentNode.removeChild(imgdivs[i]);
         }
       }
     });
   }
-  if(usersIds.length>8){
-    ids=usersIds.slice(0,8);
-  }else{
-    ids=usersIds;
-  }
   const resultPromise = listPersonByIds(ids);
   resultPromise.then(
     (data) => {
-      var fenshu=2*Math.PI/ids.length;//共有多少份，每份的夹角，
+      var imgdivs=document.getElementsByName("scholarimg");
       for(var i=0;i<ids.length;i++){
-        var centerX=Math.cos(fenshu*i)*(width/2-imgwidth/2)+width/2;
-        var centerY=Math.sin(fenshu*i)*(width/2-imgwidth/2)+width/2;
-        var imgdiv = document.createElement('div');
-        var cstyle="z-index:10000;border:1px solid white;height:"+imgwidth+"px;width:"+imgwidth+"px;position: absolute;left:"+(centerX-imgwidth/2)+"px;top:"+(centerY-imgwidth/2)+"px; border-radius:50%; overflow:hidden;"
-        imgdiv.setAttribute('name','img');
-        imgdiv.setAttribute('style',cstyle);
-        var url= data.data.persons[i].avatar;
-        var authorid= data.data.persons[i].id;
-        imgdiv.innerHTML="<img style='background: white;'  data='@@@@@@@"+i+"@@@@@@@' height='"+imgwidth+"' width='"+imgwidth+"' src='"+url+"' alt='"+i+"'>";
-        //insertAfter(imgdiv,thisNode);
-        thisNode.appendChild(imgdiv);
+        var cimg=imgdivs[i];
+        var url=data.data.persons[i].avatar;
+        cimg.innerHTML="<img style='background: white;'  data='@@@@@@@"+i+"@@@@@@@' height='"+imgwidth+"' width='"+imgwidth+"' src='"+url+"' alt='"+i+"'>";
       }
-      var imgdivs=document.getElementsByName("img");
       for(var j=0;j<imgdivs.length;j++){
         var cimg=imgdivs[j];
         cimg.addEventListener("mouseenter", function(event){
@@ -69,7 +79,7 @@ function showtop(usersIds,e,map,maindom,inputids){
           var cpos=event.target.getBoundingClientRect();
           var newpixel = new BMap.Pixel(cpos.left-apos.left+imgwidth, cpos.top-apos.top);
           var thispoint= map.pixelToPoint(newpixel);
-          var pos=""
+          var pos="";
           if(personInfo.pos==null || personInfo.pos==""){
             pos="null";
           }else if(personInfo.pos[0]==null || personInfo.pos[0]==""){

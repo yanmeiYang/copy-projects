@@ -4,6 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Tabs, Button, Icon, Row, Col, Rate, Input, InputNumber } from 'antd';
+import { Link } from 'dva/router';
 import TimeFormat from './time-format';
 import ExpertRating from './expert-rating';
 import WorkShop from './workshop';
@@ -46,13 +47,13 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
                     {summaryById.speaker ?
                       <div>
                         {summaryById.speaker.img ? <div className={styles.speakerAvatar}>
-                          <img src={summaryById.speaker.img}/>
+                          {summaryById.speaker.aid?<Link to={`/person/${summaryById.speaker.aid}`}><img src={summaryById.speaker.img}/></Link>:<img src={summaryById.speaker.img}/>}
                         </div> : ''}
                         <li>
                           <p>
                             <Icon type='user'/>
                             <strong>姓名:&nbsp;</strong>
-                            <span>{summaryById.speaker.name}</span>
+                            {summaryById.speaker.aid?<Link to={`/person/${summaryById.speaker.aid}`}><span>{summaryById.speaker.name}</span></Link>:<span>{summaryById.speaker.name}</span>}
                           </p>
                         </li>
                         <li>
@@ -175,7 +176,7 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
                     {/*workshop详情页面*/}
                     <WorkShop {...aTalk}/>
                     {/*专家评分*/}
-                    <ExpertRating actid={summaryById.id} currentUser={currentUser} aid={aTalk.speaker.aid} expertRating={expertRating}/>
+                    {aTalk.speaker.aid&&<ExpertRating actid={summaryById.id} currentUser={currentUser} aid={aTalk.speaker.aid} expertRating={expertRating}/>}
                     <hr />
                   </div>
                 )

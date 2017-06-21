@@ -14,7 +14,7 @@ export default {
     id: null,
     loading: false,
     offset: 0,
-    sizePerPage: 20,
+    sizePerPage: 0,
     query: '',
     summaryById: [],
     speakerSuggests: [],
@@ -29,7 +29,7 @@ export default {
     setup({ dispatch, history }){
       history.listen((location) => {
         if (location.pathname === '/seminar') {
-          dispatch({ type: 'getSeminar', payload: { offset: 0, size: 20, filterBySrc: { src: 'ccf' } } });
+          dispatch({ type: 'getSeminar', payload: { offset: 0, size: 20, filter: { src: 'ccf' } } });
         }
         if (location.pathname === '/seminarpost') {
           dispatch({ type: 'getCategory', payload: { category: 'activity_organizer_options' } });
@@ -53,9 +53,9 @@ export default {
   effects: {
     *getSeminar({ payload }, { call, put }){
       yield put({ type: 'showLoading' });
-      const { offset, size, filterBySrc } = payload;
-      const { data } = yield call(seminarService.getSeminar, offset, size, filterBySrc);
-      yield put({ type: 'getSeminarsSuccess', payload: { data, offset } });
+      const { offset, size, filter } = payload;
+      const { data } = yield call(seminarService.getSeminar, offset, size, filter);
+      yield put({ type: 'getSeminarsSuccess', payload: { data, offset, size } });
     },
     *getSeminarByID({ payload }, { call, put }){
       const { id } = payload;
@@ -134,7 +134,7 @@ export default {
       yield call(seminarService.updateOrSaveActivityScore, src, actid, aid, key, score, lvtime);
       const { data } = yield call(seminarService.listActivityScores, 'me', 'ccf', actid);
       yield put({ type: 'listActivityScoresSuccess', payload: data });
-      },
+    },
     *listActivityScores({ payload }, { call, put }){
       const { uid, src, actid } = payload;
       const { data } = yield call(seminarService.listActivityScores, uid, src, actid);
@@ -143,13 +143,14 @@ export default {
   },
 
   reducers: {
-    getSeminarsSuccess(state, { payload: { data, offset } }){
+    getSeminarsSuccess(state, { payload: { data, offset, size } }){
       let newData = [];
-      if (state.results.length >= 20) {
+      if (state.results.length >= size) {
         newData = state.results.concat(data)
       } else {
         newData = data
       }
+      state.sizePerPage = size;
       return { ...state, results: newData, loading: false, offset: offset + state.sizePerPage };
     },
 

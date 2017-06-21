@@ -47,6 +47,7 @@ module.exports = {
     personEmailImg: '/person/email/i/',
     getEmailCrImage: '/person/email-cr/i/',
     listPersonByIds: '/person/batch-list',
+    getActivityAvgScoresByPersonId: '/person/activity/:id/indices',
 
     /* publications */
     pubList: '/person/pubs/:id/all/year/:offset/:size',

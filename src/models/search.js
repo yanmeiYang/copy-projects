@@ -80,11 +80,7 @@ export default {
     },
 
     updateFilters(state, { payload: { filters } }) {
-      const newFilters = { ...filters };
-      // filters.forEach((f) => {
-      //   newFilters.push(f);
-      // });
-      return { ...state, filters: newFilters };
+      return { ...state, filters };
     },
 
     updateSortKey(state, { payload: { key } }) {

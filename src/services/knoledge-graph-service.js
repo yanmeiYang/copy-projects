@@ -16,7 +16,7 @@ export async function getKGSuggest(query, callback) {
       console.error(err);
     }
   }
-  console.log('>>>>> getKGData from LS:', kgdata);
+  // console.log('>>>>> getKGData from LS:', kgdata);
 
   if (!kgdata) {
     console.log('>>>>> fetch :');

@@ -35,7 +35,7 @@ class PersonList extends React.Component {
                   <img
                     src={profileUtils.getAvatar(person.avatar, '', 90)}
                     className="avatar"
-                    alt={person.avatar}
+                    alt={name}
                     title={name}
                   />
                 </div>

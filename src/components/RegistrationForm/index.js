@@ -214,7 +214,7 @@ class RegistrationForm extends React.Component {
     return (
       <Row>
         <Form onSubmit={this.handleSubmit}>
-          <Col className={styles.thumbnail} span={12} offset={6}>
+          <Col className={styles.thumbnail} md={24} lg={{ span: 16, offset: 4 }}>
             <FormItem {...formItemLayout} label='活动类型' hasFeedback>
               {getFieldDecorator('type', {
                   rules: [{ required: true, message: '请选择活动类型！' }],
@@ -339,7 +339,7 @@ class RegistrationForm extends React.Component {
 
           {/*seminar*/}
           {selectedType === '0' ?
-            <Col className={styles.thumbnail} span={12} offset={6}>
+            <Col className={styles.thumbnail} md={24} lg={{ span: 16, offset: 4 }}>
               <div>
                 <FormItem>
                   <Col><label>专家信息</label></Col>
@@ -349,7 +349,7 @@ class RegistrationForm extends React.Component {
             </Col> : ''}
           {/*workshop*/}
           {selectedType === '1' ?
-            <Col className={styles.thumbnail} span={12} offset={6}>
+            <Col className={styles.thumbnail} md={24} lg={{ span: 16, offset: 4 }}>
               {talks.length > 0 ? <div>
                 <div className={styles.addNewExpert}>
                   <Button type='primary' onClick={this.addTalkData.bind(this, addNewTalk)}>嘉宾信息</Button>
@@ -420,7 +420,7 @@ class RegistrationForm extends React.Component {
                 </div> : ''}
             </Col> : ''}
 
-          <Col className={styles.formFooter} span={12} offset={6}>
+          <Col className={styles.formFooter} md={24} lg={{ span: 16, offset: 4 }}>
             <FormItem
               wrapperCol={{ span: 12, offset: 6 }}>
               <Button type="primary" onClick={this.handleSubmit}>确定</Button>

@@ -13,6 +13,7 @@ export default {
 
     results: [],
     avgScores: [],
+    hideActivityMoreBtn: false,
     offset: 0,
     query: null,
     isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',

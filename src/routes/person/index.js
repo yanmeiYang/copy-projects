@@ -21,6 +21,13 @@ const Person = ({ dispatch, person, loading, seminar }) => {
   //     pathname: `/search/${query}/0/30`,
   //   }));
   // }
+  function getMoreSeminar(e) {
+    e.target.style.display='none';
+    dispatch({
+      type: 'seminar/getSeminar',
+      payload: { offset: 0, size: 10000, filter: { src: 'ccf', aid: profile.id } }
+    })
+  }
 
   const totalPubs = profile.indices && profile.indices.num_pubs;
 
@@ -34,37 +41,44 @@ const Person = ({ dispatch, person, loading, seminar }) => {
       <div>
         <h1 className={styles.sec_header}>专家评分：</h1>
         <table style={{ marginBottom: 10 }}>
-          {avgScores.map((score)=>{
+          {avgScores.map((score) => {
             return (
               <tbody key={score.key}>
-                {score.key==='level'&&<tr>
-                  <td>演讲内容（水平）:</td>
-                  <td>
-                    <Rate disabled defaultValue={score.score}/>
-                    <span>{score.score}</span>
-                  </td></tr>
-                  }
-                {score.key==='content'&&<tr>
-                  <td>演讲水平:</td>
-                  <td>
-                    <Rate disabled defaultValue={score.score}/>
-                    <span>{score.score}</span>
-                  </td>
-                </tr>}
-                {score.key==='integrated'&&<tr>
-                  <td>综合评价（其它贡献）:</td>
-                  <td>
-                    <Rate disabled defaultValue={score.score}/>
-                    <span>{score.score}</span>
-                  </td>
-                </tr>}
+              {score.key === 'level' && <tr>
+                <td>演讲内容（水平）:</td>
+                <td>
+                  <Rate disabled defaultValue={score.score}/>
+                  <span>{score.score}</span>
+                </td>
+              </tr>
+              }
+              {score.key === 'content' && <tr>
+                <td>演讲水平:</td>
+                <td>
+                  <Rate disabled defaultValue={score.score}/>
+                  <span>{score.score}</span>
+                </td>
+              </tr>}
+              {score.key === 'integrated' && <tr>
+                <td>综合评价（其它贡献）:</td>
+                <td>
+                  <Rate disabled defaultValue={score.score}/>
+                  <span>{score.score}</span>
+                </td>
+              </tr>}
               </tbody>
             )
-            })}
+          })}
         </table>
       </div>
 
       <div>
+        {results.length >5 &&<div style={{ float: 'right', marginTop: 8 }}>
+          <a onClick={getMoreSeminar.bind()}>
+            查看全部活动<Icon type="down"/>
+
+          </a>
+        </div>}
         <h1 className={styles.sec_header}>参与的活动：</h1>
         {results.map((activity) => {
           return (
@@ -73,7 +87,6 @@ const Person = ({ dispatch, person, loading, seminar }) => {
             </div>
           )
         })}
-        {/*<img src="/temp/WechatIMG2.jpeg" rel="参与的活动" width="700"/>*/}
       </div>
 
       <div style={{ marginTop: 20 }}>

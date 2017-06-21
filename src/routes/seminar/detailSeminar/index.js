@@ -156,7 +156,7 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
                       </div>
                     </div> : ''}
                     {/*专家评分*/}
-                    <ExpertRating actid={summaryById.id} currentUser={currentUser} aid={summaryById.speaker.aid} expertRating={expertRating}/>
+                    {summaryById.speaker.aid&&<ExpertRating actid={summaryById.id} currentUser={currentUser} aid={summaryById.speaker.aid} expertRating={expertRating}/>}
                   </div> : ''}
                 </div>
               </div>

@@ -14,7 +14,7 @@ export default {
     id: null,
     loading: false,
     offset: 0,
-    sizePerPage: 0,
+    sizePerPage: 20,
     query: '',
     summaryById: [],
     speakerSuggests: [],
@@ -150,7 +150,6 @@ export default {
       } else {
         newData = data
       }
-      state.sizePerPage = size;
       return { ...state, results: newData, loading: false, offset: offset + state.sizePerPage };
     },
 

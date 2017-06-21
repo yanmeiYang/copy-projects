@@ -70,11 +70,11 @@ class RegistrationForm extends React.Component {
       if (!err) {
         const state = this.state;
         let data = values;
-        if (data.state){
+        if (data.state) {
           data.state = data.state.split('#')[0];
         }
         //用于跟aminer的活动区分。默认是aminer
-        data.src='ccf';
+        data.src = 'ccf';
         data.location = { city: '', address: '' };
         data.time = { from: '', to: '' };
         data.type = parseInt(values.type);
@@ -85,11 +85,13 @@ class RegistrationForm extends React.Component {
           data.speaker.affiliation = state.speakerInfo.affiliation;
           data.speaker.img = state.speakerInfo.img;
           data.speaker.aid = state.speakerInfo.aid;
+          data.speaker.bio = state.speakerInfo.bio;
 
         } else {
           data.talk = state.talks;
         }
         data.img = image;
+        data.location.city = values.city;
         data.location.address = values.address;
         if (state.startValue) {
           data.time.from = state.startValue.toJSON();
@@ -159,6 +161,7 @@ class RegistrationForm extends React.Component {
     talk.speaker.affiliation = state.speakerInfo.affiliation;
     talk.speaker.img = state.speakerInfo.img;
     talk.speaker.aid = state.speakerInfo.aid;
+    talk.speaker.bio = state.speakerInfo.bio;
     if (state.talkStartValue) {
       talk.time.from = state.talkStartValue.toJSON();
     }
@@ -168,6 +171,11 @@ class RegistrationForm extends React.Component {
     talk.location.address = this.refs.talkLocation.refs.input.value;
     talk.abstract = this.refs.talkAbstract.refs.input.value;
     this.setState({ talks: this.state.talks.concat(talk), addNewTalk: false, });
+  };
+
+  //删除嘉宾
+  delTheExpert = (i) => {
+    this.setState({ talks: this.state.talks.splice(i, 0) });
   };
 
   cancelTalkData = () => {
@@ -214,7 +222,7 @@ class RegistrationForm extends React.Component {
     return (
       <Row>
         <Form onSubmit={this.handleSubmit}>
-          <Col className={styles.thumbnail} span={12} offset={6}>
+          <Col className={styles.thumbnail} md={24} lg={{ span: 16, offset: 4 }}>
             <FormItem {...formItemLayout} label='活动类型' hasFeedback>
               {getFieldDecorator('type', {
                   rules: [{ required: true, message: '请选择活动类型！' }],
@@ -268,6 +276,18 @@ class RegistrationForm extends React.Component {
                 <CanlendarInForm callbackParent={this.onChildChanged}/>
               )}
 
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="活动城市"
+            >
+              {getFieldDecorator('city', {
+                rules: [{
+                  message: '请输入活动城市',
+                }],
+              })(
+                <Input placeholder='请输入活动地点。。。'/>
+              )}
             </FormItem>
             <FormItem
               {...formItemLayout}
@@ -339,7 +359,7 @@ class RegistrationForm extends React.Component {
 
           {/*seminar*/}
           {selectedType === '0' ?
-            <Col className={styles.thumbnail} span={12} offset={6}>
+            <Col className={styles.thumbnail} md={24} lg={{ span: 16, offset: 4 }}>
               <div>
                 <FormItem>
                   <Col><label>专家信息</label></Col>
@@ -349,12 +369,12 @@ class RegistrationForm extends React.Component {
             </Col> : ''}
           {/*workshop*/}
           {selectedType === '1' ?
-            <Col className={styles.thumbnail} span={12} offset={6}>
+            <Col className={styles.thumbnail} md={24} lg={{ span: 16, offset: 4 }}>
               {talks.length > 0 ? <div>
                 <div className={styles.addNewExpert}>
                   <Button type='primary' onClick={this.addTalkData.bind(this, addNewTalk)}>嘉宾信息</Button>
                 </div>
-                {talks.map((talk) => {
+                {talks.map((talk, index) => {
                   return (<div key={Math.random()}>
                     <li className={styles.talks}>
                       <div className={styles.left}>
@@ -376,7 +396,7 @@ class RegistrationForm extends React.Component {
                           </p>
                         </div>
                       </div>
-                      <Button type='danger'>删除</Button>
+                      <Button type='danger' onClick={this.delTheExpert.bind(this, index)}>删除</Button>
                     </li>
 
                   </div>)
@@ -420,7 +440,7 @@ class RegistrationForm extends React.Component {
                 </div> : ''}
             </Col> : ''}
 
-          <Col className={styles.formFooter} span={12} offset={6}>
+          <Col className={styles.formFooter} md={24} lg={{ span: 16, offset: 4 }}>
             <FormItem
               wrapperCol={{ span: 12, offset: 6 }}>
               <Button type="primary" onClick={this.handleSubmit}>确定</Button>

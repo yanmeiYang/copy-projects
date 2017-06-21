@@ -15,10 +15,16 @@ const Search = ({ dispatch, search }) => {
   const { results, pagination, query, aggs, loading, filters } = search;
   const { pageSize, total, current } = pagination;
 
-  //  TODO move to config file.
   const expertBases = sysconfig.CCF_expertBases;
 
+  // Select default Expert Base.
+  if (filters && !filters.eb) {
+    filters.eb = { id: sysconfig.DEFAULT_EXPERT_BASE, name: 'CCF 会员' };
+  }
+
+  //
   function onFilterChange(key, value, checked) {
+    // if onExpertBaseChanged, all filters is cleared.
     if (checked) {
       filters[key] = value;
     } else if (filters[key]) {
@@ -35,7 +41,14 @@ const Search = ({ dispatch, search }) => {
     });
   }
 
+  // ExpertBase filter 'eb' is a special filter.
+  // On expert base changed, all other filters should be cleared.
+  // sort method is not cleared.
   function onExpertBaseChange(id, name) {
+    // delete all other filters.
+    Object.keys(filters).forEach((f) => {
+      delete filters[f];
+    });
     onFilterChange('eb', { id, name }, true);// Special Filter;
   }
 
@@ -131,6 +144,9 @@ const Search = ({ dispatch, search }) => {
               }
               {
                 aggs.map((agg) => {
+                  if (agg.label === 'Gender') {
+                    return '';
+                  }
                   if (filters[agg.label]) {
                     return '';
                   } else {

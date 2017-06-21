@@ -10,6 +10,7 @@ module.exports = [
   { id: 42, bpid: 4, mpid: 4, name: '系统设置', icon: 'bar-chart', router: '/admin/system-config' },
 
   { id: 6, bpid: 1, name: '专家地图', icon: 'environment', router: '/expert-map' },
+  { id: 7, bpid: 1, name: '关系地图', icon: 'environment', router: 'https://cn.aminer.org/ego' },
 
   // { id: 8, bpid: 1, name: '隐藏功能', icon: 'camera-o' },
   // { id: 88, bpid: 8, mpid: 8, name: 'TEST', icon: 'user', router: '/hidden/testpage' },

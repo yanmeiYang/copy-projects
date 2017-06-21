@@ -17,7 +17,7 @@ class ExpertBasicInformation extends React.Component {
     gender: 'male',
     speakerInfo: [],
   };
-  speakerInformation = { name: '', position: '', affiliation: '', aid: '', img: '' };
+  speakerInformation = { name: '', position: '', affiliation: '', aid: '', img: '', bio: '' };
   //改变性别
   onChangeGender = (e) => {
     this.setState({ gender: e.target.value });
@@ -43,8 +43,8 @@ class ExpertBasicInformation extends React.Component {
     });
   };
 
-  saveExpertInfo = (type,e) => {
-    this.speakerInformation[type]=e.target.value;
+  saveExpertInfo = (type, e) => {
+    this.speakerInformation[type] = e.target.value;
     this.setState({
       speakerInfo: this.speakerInformation,
     });
@@ -93,18 +93,18 @@ class ExpertBasicInformation extends React.Component {
   };
 
   selectedExpert = (speaker) => {
-    let speakerInformation = { name: '', position: '', affiliation: '', aid: '', img: '' };
-    speakerInformation.name = this.refs.speakerName.refs.input.value = speaker.payload.name;
-    speakerInformation.affiliation = this.refs.speakerAff.refs.input.value = speaker.payload.org;
-    speaker.pos.length > 0 ? speakerInformation.position = this.refs.speakerPos.refs.input.value = speaker.pos[0].n : speakerInformation.position = this.refs.speakerPos.refs.input.value = ' ';
-    speakerInformation.aid = this.refs.speakerAid.value = speaker.payload.id;
-    speakerInformation.img = this.refs.speakerImg.src = speaker.img;
+    // let speakerInformation = { name: '', position: '', affiliation: '', aid: '', img: '' };
+    this.speakerInformation.name = this.refs.speakerName.refs.input.value = speaker.payload.name;
+    this.speakerInformation.affiliation = this.refs.speakerAff.refs.input.value = speaker.payload.org;
+    speaker.pos.length > 0 ? this.speakerInformation.position = this.refs.speakerPos.refs.input.value = speaker.pos[0].n : this.speakerInformation.position = this.refs.speakerPos.refs.input.value = ' ';
+    this.speakerInformation.aid = this.refs.speakerAid.value = speaker.payload.id;
+    this.speakerInformation.img = this.refs.speakerImg.src = speaker.img;
 
     this.setState({
-      speakerInfo: speakerInformation,
+      speakerInfo: this.speakerInformation,
       searchExperts: false,
     });
-    this.props.callbackParent(speakerInformation);
+    this.props.callbackParent(this.speakerInformation);
   };
 
   render() {
@@ -128,12 +128,13 @@ class ExpertBasicInformation extends React.Component {
             {/*</Button>*/}
           </section>
         </Col>
-        <Col span={14}>
+        <Col span={18}>
           <div className={styles.expertProfile}>
             <div className='ant-form-item'>
               <label className="ant-col-3">姓名: </label>
               <div className='ant-col-21'>
-                <Input size='large' placeholder='嘉宾姓名' ref='speakerName' onBlur={this.saveExpertInfo.bind(this,'name')}/>
+                <Input size='large' placeholder='嘉宾姓名' ref='speakerName'
+                       onBlur={this.saveExpertInfo.bind(this, 'name')}/>
               </div>
             </div>
 
@@ -149,13 +150,15 @@ class ExpertBasicInformation extends React.Component {
             <div className='ant-form-item'>
               <label className="ant-col-3">职称: </label>
               <div className='ant-col-21'>
-                <Input size='large' placeholder='嘉宾职称' ref='speakerPos' onBlur={this.saveExpertInfo.bind(this,'position')}/>
+                <Input size='large' placeholder='嘉宾职称' ref='speakerPos'
+                       onBlur={this.saveExpertInfo.bind(this, 'position')}/>
               </div>
             </div>
             <div className='ant-form-item'>
               <label className="ant-col-3">单位: </label>
               <div className='ant-col-21'>
-                <Input size='large' placeholder='嘉宾单位' ref='speakerAff' onBlur={this.saveExpertInfo.bind(this,'affiliation')}/>
+                <Input size='large' placeholder='嘉宾单位' ref='speakerAff'
+                       onBlur={this.saveExpertInfo.bind(this, 'affiliation')}/>
               </div>
             </div>
             <div className='ant-form-item'>
@@ -242,6 +245,16 @@ class ExpertBasicInformation extends React.Component {
                 })}
               </div>
             </Modal>
+          </div>
+        </Col>
+        <Col>
+          <div className='ant-form-item'>
+            <label className="ant-col-3" style={{textAlign:'right',paddingRight:10}}>专家简介: </label>
+            <div className='ant-col-21'>
+              <Input type='textarea' rows={4} size='large' placeholder='专家简介' ref='speakerBio'
+                     onBlur={this.saveExpertInfo.bind(this, 'bio')}/>
+
+            </div>
           </div>
         </Col>
       </div>

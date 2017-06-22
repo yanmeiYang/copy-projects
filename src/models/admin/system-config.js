@@ -9,58 +9,41 @@ export default {
   namespace: 'adminSystemConfig',
 
   state: {
-    personId: '',
-    profile: {},
-
-    results: [],
-    offset: 0,
-    query: null,
-    isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
-    pagination: {
-      showSizeChanger: true,
-      showQuickJumper: true,
-      showTotal: total => `共 ${total} 条`,
-      current: 1,
-      pageSize: 30,
-      total: null,
-    },
+    category: '',
   },
 
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
-        const match = pathToRegexp('/person/:id').exec(location.pathname);
+        const match = pathToRegexp('/admin/system-config/:category').exec(location.pathname);
         if (match) {
-          const personId = decodeURIComponent(match[1]);
-          // console.log('personId is :', personId);
-          dispatch({ type: 'getPerson', payload: { personId } });
-          // dispatch({ type: 'setParams', payload: { personId } });
+          const category = decodeURIComponent(match[1]);
+          dispatch({ type: 'setParams', payload: { category } });
         }
       });
     },
   },
 
   effects: {
-    *getPerson({ payload }, { call, put }) {  // eslint-disable-line
-      // console.log('effects: getPerson', payload);
-      const { personId } = payload;
-      const data = yield call(personService.getPerson, personId);
-      yield put({ type: 'getPersonSuccess', payload: { data } });
-    },
+    // *getPerson({ payload }, { call, put }) {  // eslint-disable-line
+    //   // console.log('effects: getPerson', payload);
+    //   const { personId } = payload;
+    //   const data = yield call(personService.getPerson, personId);
+    //   yield put({ type: 'getPersonSuccess', payload: { data } });
+    // },
   },
 
   reducers: {
-    // setParams(state, { payload: { query, offset, size } }) {
-    //   console.log('reducers:setParams ');
-    //   return { ...state, query, offset, pagination: { pageSize: size } };
-    // },
+    setParams(state, { payload: { category } }) {
+      return { ...state, category };
+    },
 
     /* update person profile info. */
     // TODO handel error.
-    getPersonSuccess(state, { payload: { data } }) {
-      // console.log('reducers:getPersonSuccess', data.data);
-      return { ...state, profile: data.data };
-    },
+    // getPersonSuccess(state, { payload: { data } }) {
+    //   // console.log('reducers:getPersonSuccess', data.data);
+    //   return { ...state, profile: data.data };
+    // },
   },
 
 };

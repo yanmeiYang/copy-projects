@@ -17,6 +17,10 @@ module.exports = {
   openPages: ['/login'],
   apiPrefix: '/api/',
   api: {
+    // user system
+    currentUser: '/user/me',
+
+    // search
     searchPerson: '/search/person',
     searchPersonAgg: '/search/person/agg',
     searchPersonInBase: '/search/roster/:ebid/experts/advanced',
@@ -36,11 +40,11 @@ module.exports = {
     getCommentFromActivity: '/comment/activity/:id/offset/:offset/size/:size',
     addCommentToActivity: '/comment/activity/:id',
     deleteCommentFromActivity: '/comment/activity/cmid/:id',
-    //score
+    // score
     updateOrSaveActivityScore: '/activity/score/me/:src/:actid/:aid/:key/:score/:lvtime',
-    //不知 key, 列出相关的 key 和 scores.
+    // 不知 key, 列出相关的 key 和 scores.
     listActivityScores: '/activity/score-list/:uid/:src/:actid',
-    //已知 key 获取 一个 score
+    // 已知 key 获取 一个 score
     getActivityScore: '/activity/score/:uid/:src/:actid/:aid/:key',
 
     /* person */
@@ -50,6 +54,9 @@ module.exports = {
     listPersonByIds: '/person/batch-list',
     getActivityAvgScoresByPersonId: '/person/activity/:id/indices',
 
+    // interests vis data
+    interests: '/person/interests/:id',
+
     /* publications */
     pubList: '/person/pubs/:id/all/year/:offset/:size',
     pubListByCitation: '/person/pubs/:id/all/citation/:offset/:size',
@@ -57,17 +64,16 @@ module.exports = {
     pubListByYear: '/person/pubs/:id/range/year/:year/:offset/:size',
     pubListLimited: '/person/pubs/:id/range/citation/:nc_lo/:nc_hi/:offset/:size',
 
-    // interests vis data
-    interests: '/person/interests/:id',
-    // userLogout: '/user/logout',
-    // userInfo: '/userInfo',
-    // users: '/users',
-    currentUser: '/user/me',
-    // dashboard: '/dashboard',
-
     // System config
     ucListByCategory: '/2b/config/:source/list?category=:category',
     ucSetByKey: '/2b/config/:source/:category/:key',
     ucDeleteByKey: '/2b/config/:source/:category/:key',
+
+
+    // userLogout: '/user/logout',
+    // userInfo: '/userInfo',
+    // users: '/users',
+    // dashboard: '/dashboard',
+
   },
 };

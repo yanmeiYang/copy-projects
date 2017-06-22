@@ -41,4 +41,26 @@ module.exports = {
     //   nperson: 610,
     // },
   ],
-}
+
+
+  SysconfigDefaultCategory: 'activity_type',
+  SysConfigTabs: [
+    {
+      category: 'user_roles',
+      label: '用户角色列表',
+      desc: 'CCF 用户角色列表',
+    },
+    {
+      category: 'activity_organizer_options',
+      label: '活动承办单位',
+      desc: 'CCF 活动的承办单位，包括专委/分部/项目等。',
+    },
+    {
+      category: 'activity_type',
+      label: '活动类型',
+      desc: 'CCF 活动的类型。',
+    },
+  ],
+
+
+};

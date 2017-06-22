@@ -23,8 +23,8 @@ class AddExpertModal extends React.Component {
   };
   speakerInformation = { name: '', position: '', affiliation: '', aid: '', img: '', bio: '' };
 
-  setModalVisible(modalVisible) {
-    this.setState({ modalVisible });
+  setModalVisible() {
+    this.setState({ modalVisible: false });
   }
 
   setStep(step, visible) {
@@ -62,10 +62,11 @@ class AddExpertModal extends React.Component {
     this.setState({
       speakerInfo: this.speakerInformation,
       step4: true,
-      step3: false,
+      step3: true,
       step2: false,
       step1: false,
     });
+    this.props.parentProps.seminar.speakerSuggests=[];
     // this.props.callbackParent(this.speakerInformation);
   };
 
@@ -103,10 +104,10 @@ class AddExpertModal extends React.Component {
     talk.location.address = this.refs.talkLocation.refs.input.value;
     talk.abstract = this.refs.talkAbstract.refs.input.value;
     this.props.callbackParent(talk);
+    this.setState({ modalVisible: false });
   };
 
-  suggestExpert(step, visible) {
-    this.setState({ [step]: visible });
+  suggestExpert() {
     let data = {};
     data = {
       name: this.refs.name.refs.input.value,
@@ -135,11 +136,12 @@ class AddExpertModal extends React.Component {
     const { speakerSuggests } = parentProps.seminar;
     return (
       <Modal
-        title='Add Expert'
+        title='添加演讲者'
         visible={modalVisible}
         width={640}
         footer={null}
         wrapClassName={styles.addExpertModal}
+        onCancel={this.setModalVisible.bind(this)}
       >
         <div className={!step2 && !step4 ? styles.showStep4 : styles.hideStep4}>
           <FormItem
@@ -164,96 +166,95 @@ class AddExpertModal extends React.Component {
             label={(<span>演讲摘要&nbsp;</span>)}>
             <Input type='textarea' rows={4} placeholder='请输入演讲摘要。。。' ref='talkAbstract'/>
           </FormItem>
-          <Button type='primary' className={styles.saveExpert} onClick={this.saveTalkData}>保存</Button>
-          <Button key="submit" type="primary" size="large" onClick={() => this.setStep('step2', true)}>
-            下一步
-          </Button>
-        </div>
-        {step2 && !step3 && !step4 && <div>
-          <Col><label>专家信息</label></Col>
-          <FormItem
-            {...formItemLayout}
-            label={(<span>姓名&nbsp;</span>)}>
-            <Input size='large' placeholder='嘉宾姓名' ref='name'/>
-          </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label={(<span>职称&nbsp;</span>)}>
-            <Input size='large' placeholder='嘉宾职称' ref='pos'/>
-          </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label={(<span>单位&nbsp;</span>)}>
-            <Input size='large' placeholder='嘉宾单位' ref='aff'/>
-          </FormItem>
-          <Button key="submit" type="primary" size="large" onClick={this.suggestExpert.bind(this, 'step3', true)}>
-            下一步
-          </Button>
-        </div>}
-        {step3 && speakerSuggests && !step4 &&
-        <div>
-          <div className={styles.personWrap}>
-            {speakerSuggests.map((speaker) => {
-              const position = speaker.pos && speaker.pos.length > 0 ? speaker.pos[0].n : null;
-              const aff = speaker.payload.aff ? speaker.payload.aff : null;
-              return (
-                <li key={speaker.payload.id} className={styles.person}>
-                  <div className={styles.left}>
-                    <img src={this.getImg(speaker.img)} alt="头像"/>
-                  </div>
-                  <div className={styles.right}>
-                    <div className={styles.nameWrap}>
-                      <h3>{speaker.text}</h3>
-                    </div>
-                    <div className={styles.statWrap}>
-                      <div className={styles.item}>
-                        <span className={styles.label}>h-index:</span>
-                        <span>{speaker.payload.h_index}</span>
-                      </div>
-                      <span className={styles.split}>|</span>
-                      <div className={styles.item}>
-                        <span className={styles.label}>论文数:</span>
-                        <span>{speaker.payload.n_pubs}</span>
-                      </div>
-                      <span className={styles.split}>|</span>
-                      <div className={styles.item}>
-                        <span className={styles.label}>引用数:</span>
-                        <span>{speaker.payload.n_citation}</span>
-                      </div>
-                    </div>
-                    <div className={styles.infoWrap}>
-                      <p>{position ? <span className={styles.infoItem}>
-                                          <Icon type="idcard"/>
-                        { position }
-                                        </span> : ''}</p>
-
-                      <p>{aff && <span className={styles.infoItem}>
-                                          <Icon type="home"/>
-                        { aff }
-                                        </span> }</p>
-                    </div>
-                    <div className={styles.tagWrap}>
-                      {speaker.tags.map((tag) => {
-                        return (<Link to={`/search/${tag.t}/0/30`} key={Math.random()}><Tag
-                          className={styles.tag}>{tag.t}</Tag></Link>);
-                      })}
-                    </div>
-                  </div>
-                  <div>
-                    <Button type='primary' onClick={this.selectedExpert.bind(this, speaker)}>submit</Button>
-                  </div>
-                </li>
-              )
-            })}
-          </div>
-          <div>
-            <Button key="submit" type="primary" size="large" onClick={this.suggestExpert.bind(this, 'step4', true)}>
+          <div style={{height:20}}>
+            <Button key="submit" type="primary" size="large" style={{float:'right'}} onClick={() => this.setStep('step2', true)}>
               下一步
             </Button>
           </div>
-        </div>}
-        <div className={`${step4 ? styles.showStep4 : styles.hideStep4}`}>
+        </div>
+        <div className={`ant-form-item ${step2 && !step3 && !step4?styles.showStep4:styles.hideStep4}`}>
           <Col><label>专家信息</label></Col>
+          <div className="ant-col-7">
+            <Input size='large' placeholder='嘉宾姓名' ref='name'/>
+          </div>
+          <div className="ant-col-7">
+            <Input size='large' placeholder='嘉宾职称' ref='pos'/>
+          </div>
+          <div className="ant-col-7">
+            <Input size='large' placeholder='嘉宾单位' ref='aff'/>
+          </div>
+          <div className="ant-col-3">
+            <Button type='primary' size="large" onClick={this.suggestExpert.bind(this)}>推荐</Button>
+          </div>
+          {speakerSuggests&&
+            <div className={styles.personWrap}>
+              {speakerSuggests.map((speaker) => {
+                const position = speaker.pos && speaker.pos.length > 0 ? speaker.pos[0].n : null;
+                const aff = speaker.payload.aff ? speaker.payload.aff : null;
+                return (
+                  <li key={speaker.payload.id} className={styles.person}>
+                    <div className={styles.left}>
+                      <img src={this.getImg(speaker.img)} alt="头像"/>
+                    </div>
+                    <div className={styles.right}>
+                      <div className={styles.nameWrap}>
+                        <h3>{speaker.text}</h3>
+                      </div>
+                      <div className={styles.statWrap}>
+                        <div className={styles.item}>
+                          <span className={styles.label}>h-index:</span>
+                          <span>{speaker.payload.h_index}</span>
+                        </div>
+                        <span className={styles.split}>|</span>
+                        <div className={styles.item}>
+                          <span className={styles.label}>论文数:</span>
+                          <span>{speaker.payload.n_pubs}</span>
+                        </div>
+                        <span className={styles.split}>|</span>
+                        <div className={styles.item}>
+                          <span className={styles.label}>引用数:</span>
+                          <span>{speaker.payload.n_citation}</span>
+                        </div>
+                      </div>
+                      <div className={styles.infoWrap}>
+                        <p>{position ? <span className={styles.infoItem}>
+                                          <Icon type="idcard"/>
+                          { position }
+                                        </span> : ''}</p>
+
+                        <p>{aff && <span className={styles.infoItem}>
+                                          <Icon type="home"/>
+                          { aff }
+                                        </span> }</p>
+                      </div>
+                      <div className={styles.tagWrap}>
+                        {speaker.tags.map((tag) => {
+                          return (<Link to={`/search/${tag.t}/0/30`} key={Math.random()}><Tag
+                            className={styles.tag}>{tag.t}</Tag></Link>);
+                        })}
+                      </div>
+                    </div>
+                    <div>
+                      <Button type='primary' onClick={this.selectedExpert.bind(this, speaker)}>选中</Button>
+                    </div>
+                  </li>
+                )
+              })}
+          </div>}
+
+          <div style={{height:20}}>
+            <Button key="submit" type="primary" size="large" style={{float:'right', marginTop:10}} onClick={() => this.setStep('step3', true)}>
+              未找到，手工填写信息
+            </Button>
+            <Button type="default" size="large" style={{marginTop:10}}  onClick={() => this.setStep('step2', false)}>
+              上一步
+            </Button>
+          </div>
+        </div>
+
+        <div className={`${step3 ? styles.showStep4 : styles.hideStep4}`} style={{height:350}}>
+          <Col><label>专家信息</label></Col>
+
           <Col span={6}>
             <section>
               <div className="people">
@@ -318,16 +319,19 @@ class AddExpertModal extends React.Component {
               </div>
             </div>
           </Col>
-          <div className='ant-form-item'>
+          <Col span={24}>
             <label className="ant-col-2">专家简介: </label>
             <div className='ant-col-22'>
               <Input type='textarea' rows={4} size='large' placeholder='专家简介' ref='speakerBio'
                      onBlur={this.saveExpertInfo.bind(this, 'bio')}/>
             </div>
-          </div>
-          <Button key="submit" type="primary" size="large" onClick={this.saveTalkData}>
-            提交
-          </Button>
+          </Col>
+
+          <Col span={24} style={{marginTop:25}}>
+            <Button key="submit" type="primary" size="large" style={{float:'right'}} onClick={this.saveTalkData}>
+              提交
+            </Button>
+          </Col>
         </div>
       </Modal>
     )

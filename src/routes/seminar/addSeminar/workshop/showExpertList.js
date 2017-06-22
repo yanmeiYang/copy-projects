@@ -19,7 +19,6 @@ class ShowExpertList extends React.Component {
               <label className='ant-col-4'>演讲嘉宾：</label>
               <div className='ant-col-20'>
                 <span>{talk.speaker.name}</span>
-                {talk.speaker.affiliation && <span>, {talk.speaker.affiliation}</span>}
                 {talk.speaker.position && <span> {talk.speaker.position}</span>}
               </div>
             </div>
@@ -32,9 +31,10 @@ class ShowExpertList extends React.Component {
             <div className='ant-form-item'>
               <label className='ant-col-4'>嘉宾信息：</label>
               <div className='ant-col-20'>
-                <span>性别</span>
-                <span>, 电话</span>
-                <span>, 邮箱</span>
+                {talk.speaker.affiliation && <span>{talk.speaker.affiliation}</span>}
+                {/*<span>性别</span>*/}
+                {/*<span>, 电话</span>*/}
+                {/*<span>, 邮箱</span>*/}
               </div>
             </div>
             {talk.location.address && <div className='ant-form-item' style={{ marginBottom: 5 }}>
@@ -44,11 +44,11 @@ class ShowExpertList extends React.Component {
           </Col>
           <Col span={24} className='ant-form-item' style={{ marginBottom: 5 }}>
             <label className='ant-col-2'>专家简介：</label>
-            <div className='ant-col-22' style={{ maxHeight: 35, overflow: 'auto' }}>{talk.speaker.bio}</div>
+            <div className='ant-col-22'>{talk.speaker.bio}</div>
           </Col>
           <Col span={24} className='ant-form-item' style={{ marginBottom: 5 }}>
             <label className='ant-col-2'>演讲摘要：</label>
-            <div className='ant-col-22' style={{ maxHeight: 35, overflow: 'auto' }}>{talk.abstract}</div>
+            <div className='ant-col-22'>{talk.abstract}</div>
           </Col>
         </div>
         <Button type='danger' onClick={delTheExpert.bind(this, index)}>删除</Button>

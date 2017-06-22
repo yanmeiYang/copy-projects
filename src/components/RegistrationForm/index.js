@@ -179,7 +179,8 @@ class RegistrationForm extends React.Component {
 
   //删除嘉宾
   delTheExpert = (i) => {
-    this.setState({ talks: this.state.talks.splice(i, 0) });
+    this.state.talks.splice(i, 1);
+    this.setState({ talks: this.state.talks });
   };
 
   cancelTalkData = () => {

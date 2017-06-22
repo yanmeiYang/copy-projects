@@ -2,20 +2,26 @@
  * Created by yangyanmei on 17/6/20.
  */
 import React from 'react';
-import { Modal, Button, Input, Form, Col, Tag, Icon } from 'antd';
+import { Modal, Button, Input, Form, Col, Tag, Icon, Radio } from 'antd';
 import { Link } from 'dva/router';
 import CanlendarInForm from '../calendar';
 import ExpertBasicInformation from '../expertBasicInformation/expertBasicInformation';
 import defaultImg from '../../../assets/people/default.jpg';
 import styles from './index.less'
 const FormItem = Form.Item;
+const RadioGroup = Radio.Group;
 class AddExpertModal extends React.Component {
   state = {
     modalVisible: true,
     step2: false,
     step3: false,
     step4: false,
+    talkStartValue: null,
+    talkEndValue: null,
+    speakerInfo: {},
+    gender: 'male',
   };
+  speakerInformation = { name: '', position: '', affiliation: '', aid: '', img: '', bio: '' };
 
   setModalVisible(modalVisible) {
     this.setState({ modalVisible });
@@ -24,6 +30,11 @@ class AddExpertModal extends React.Component {
   setStep(step, visible) {
     this.setState({ [step]: visible });
   }
+
+  //改变性别
+  onChangeGender = (e) => {
+    this.setState({ gender: e.target.value });
+  };
 
   //增加嘉宾
   getImg = (src) => {
@@ -34,37 +45,78 @@ class AddExpertModal extends React.Component {
     }
   };
 
+  //获取演讲时间
+  onChildTalkChanged = (field, value) => {
+    field === 'startValue' ? this.setState({ talkStartValue: value }) : this.setState({ talkEndValue: value });
+
+  };
+
+  //选择一位推荐专家
+  selectedExpert = (speaker) => {
+    this.speakerInformation.name = this.refs.speakerName.refs.input.value = speaker.payload.name;
+    this.speakerInformation.affiliation = this.refs.speakerAff.refs.input.value = speaker.payload.org;
+    speaker.pos.length > 0 ? this.speakerInformation.position = this.refs.speakerPos.refs.input.value = speaker.pos[0].n : this.speakerInformation.position = this.refs.speakerPos.refs.input.value = ' ';
+    this.speakerInformation.aid = this.refs.speakerAid.value = speaker.payload.id;
+    this.speakerInformation.img = this.refs.speakerImg.src = speaker.img;
+    this.speakerInformation.bio = this.refs.speakerBio.refs.input.value = '';
+    this.setState({
+      speakerInfo: this.speakerInformation,
+      step4: true,
+      step3: false,
+      step2: false,
+      step1: false,
+    });
+    // this.props.callbackParent(this.speakerInformation);
+  };
+
+  //修改当前专家信息
+  saveExpertInfo = (type, e) => {
+    this.speakerInformation[type] = e.target.value;
+    this.setState({
+      speakerInfo: this.speakerInformation,
+    });
+    // this.props.callbackParent(this.speakerInformation);
+  };
+
+  saveTalkData = () => {
+    const state = this.state;
+    let talk = {
+      title: '',
+      speaker: { name: '', position: '', affiliation: '', img: '', aid: '', bio: '' },
+      time: { from: '', to: '' },
+      location: { city: '', address: '' },
+      abstract: ''
+    };
+    talk.title = this.refs.talkTitle.refs.input.value;
+    talk.speaker.name = state.speakerInfo.name;
+    talk.speaker.position = state.speakerInfo.position;
+    talk.speaker.affiliation = state.speakerInfo.affiliation;
+    talk.speaker.img = state.speakerInfo.img;
+    talk.speaker.aid = state.speakerInfo.aid;
+    talk.speaker.bio = state.speakerInfo.bio;
+    if (state.talkStartValue) {
+      talk.time.from = state.talkStartValue.toJSON();
+    }
+    if (state.talkEndValue) {
+      talk.time.to = state.talkEndValue.toJSON();
+    }
+    talk.location.address = this.refs.talkLocation.refs.input.value;
+    talk.abstract = this.refs.talkAbstract.refs.input.value;
+    this.props.callbackParent(talk);
+  };
+
   suggestExpert(step, visible) {
-    console.log(this.props);
     this.setState({ [step]: visible });
     let data = {};
     data = {
-      name: this.refs.speakerName.refs.input.value,
-      position: this.refs.speakerPos.refs.input.value,
-      affiliation: this.refs.speakerAff.refs.input.value,
+      name: this.refs.name.refs.input.value,
+      position: this.refs.pos.refs.input.value,
+      affiliation: this.refs.aff.refs.input.value,
       title: '',
     };
     this.props.parentProps.dispatch({ type: 'seminar/getSpeakerSuggest', payload: data });
-    // fetch(config.baseURL + config.api.speakerSuggest, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json',
-    //     'Authorization': localStorage.getItem('token')
-    //   },
-    //   body: JSON.stringify(payload),
-    // }).then(function (response) {
-    //   return response.json().then(function (json) {
-    //     return json;
-    //   }).then(function (json) {
-    //     t.setState({
-    //       suggestSpeakers: json,
-    //       searchExperts: true,
-    //     });
-    //
-    //   });
-    // });
   }
+
 
   render() {
     const formItemLayout = {
@@ -78,7 +130,7 @@ class AddExpertModal extends React.Component {
       },
     };
 
-    const { modalVisible, step2, step3, step4 } = this.state;
+    const { modalVisible, step2, step3, step4, speakerInfo, gender } = this.state;
     const { integral, parentProps } = this.props;
     const { speakerSuggests } = parentProps.seminar;
     return (
@@ -89,17 +141,13 @@ class AddExpertModal extends React.Component {
         footer={null}
         wrapClassName={styles.addExpertModal}
       >
-        {!step2 && <div>
+        <div className={!step2 && !step4 ? styles.showStep4 : styles.hideStep4}>
           <FormItem
             {...formItemLayout}
             label="演讲标题"
           >
             <Input placeholder='请输入活动名称。。。' ref='talkTitle'/>
           </FormItem>
-          {/*<FormItem>*/}
-          {/*<Col><label>专家信息</label></Col>*/}
-          {/*<ExpertBasicInformation integral={integral} callbackParent={this.onExpertInfoChanged}/>*/}
-          {/*</FormItem>*/}
           <FormItem
             {...formItemLayout}
             label={(<span>活动时间&nbsp;</span>)}
@@ -116,27 +164,27 @@ class AddExpertModal extends React.Component {
             label={(<span>演讲摘要&nbsp;</span>)}>
             <Input type='textarea' rows={4} placeholder='请输入演讲摘要。。。' ref='talkAbstract'/>
           </FormItem>
-          {/*<Button type='primary' className={styles.saveExpert} onClick={this.saveTalkData}>保存</Button>*/}
+          <Button type='primary' className={styles.saveExpert} onClick={this.saveTalkData}>保存</Button>
           <Button key="submit" type="primary" size="large" onClick={() => this.setStep('step2', true)}>
             下一步
           </Button>
-        </div>}
-        {step2 && !step3 && <div>
+        </div>
+        {step2 && !step3 && !step4 && <div>
           <Col><label>专家信息</label></Col>
           <FormItem
             {...formItemLayout}
             label={(<span>姓名&nbsp;</span>)}>
-            <Input size='large' placeholder='嘉宾姓名' ref='speakerName'/>
+            <Input size='large' placeholder='嘉宾姓名' ref='name'/>
           </FormItem>
           <FormItem
             {...formItemLayout}
             label={(<span>职称&nbsp;</span>)}>
-            <Input size='large' placeholder='嘉宾职称' ref='speakerPos'/>
+            <Input size='large' placeholder='嘉宾职称' ref='pos'/>
           </FormItem>
           <FormItem
             {...formItemLayout}
             label={(<span>单位&nbsp;</span>)}>
-            <Input size='large' placeholder='嘉宾单位' ref='speakerAff'/>
+            <Input size='large' placeholder='嘉宾单位' ref='aff'/>
           </FormItem>
           <Button key="submit" type="primary" size="large" onClick={this.suggestExpert.bind(this, 'step3', true)}>
             下一步
@@ -192,7 +240,7 @@ class AddExpertModal extends React.Component {
                     </div>
                   </div>
                   <div>
-                    <Button type='primary'>submit</Button>
+                    <Button type='primary' onClick={this.selectedExpert.bind(this, speaker)}>submit</Button>
                   </div>
                 </li>
               )
@@ -204,20 +252,86 @@ class AddExpertModal extends React.Component {
             </Button>
           </div>
         </div>}
-        {step4 && <div>
-          <FormItem>
-            <Col><label>专家信息</label></Col>
-            <ExpertBasicInformation integral={integral} callbackParent={this.onExpertInfoChanged}/>
-          </FormItem>
-          <Button key="submit" type="primary" size="large">
+        <div className={`${step4 ? styles.showStep4 : styles.hideStep4}`}>
+          <Col><label>专家信息</label></Col>
+          <Col span={6}>
+            <section>
+              <div className="people">
+                <div className="no-padding shadow-10">
+                  <div className={styles.crop}><span className="helper"></span><img src={this.getImg()}
+                                                                                    ref='speakerImg'/>
+                    <input ref='speakerAid' style={{ display: 'none' }}/>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </Col>
+          <Col span={18} className={styles.expertProfile}>
+            <div className='ant-form-item'>
+              <label className="ant-col-3">姓名: </label>
+              <div className='ant-col-21'>
+                <Input size='large' placeholder='嘉宾姓名' ref='speakerName'
+                       onBlur={this.saveExpertInfo.bind(this, 'name')}/>
+              </div>
+            </div>
+
+            <div className='ant-form-item'>
+              <label className="ant-col-3">性别: </label>
+              <div className='ant-col-21'>
+                <RadioGroup value={gender} onChange={this.onChangeGender.bind()}>
+                  <Radio value="male" name="gender">男的</Radio>
+                  <Radio value="female" name="gender">女的</Radio>
+                </RadioGroup>
+              </div>
+            </div>
+            <div className='ant-form-item'>
+              <label className="ant-col-3">职称: </label>
+              <div className='ant-col-21'>
+                <Input size='large' placeholder='嘉宾职称' ref='speakerPos'
+                       onBlur={this.saveExpertInfo.bind(this, 'position')}/>
+              </div>
+            </div>
+            <div className='ant-form-item'>
+              <label className="ant-col-3">单位: </label>
+              <div className='ant-col-21'>
+                <Input size='large' placeholder='嘉宾单位' ref='speakerAff'
+                       onBlur={this.saveExpertInfo.bind(this, 'affiliation')}/>
+              </div>
+            </div>
+            <div className='ant-form-item'>
+              <label className="ant-col-3">电话: </label>
+              <div className='ant-col-21'>
+                <Input size='large' placeholder='电话' ref='speakerIphone'/>
+              </div>
+            </div>
+            <div className='ant-form-item'>
+              <label className="ant-col-3">邮箱: </label>
+              <div className='ant-col-21'>
+                <Input size='large' placeholder='邮箱' ref='speakerEmail'/>
+              </div>
+            </div>
+
+            <div className='ant-form-item'>
+              <label className="ant-col-3">积分: </label>
+              <div className='ant-col-21'>
+                <span>{integral}</span>
+              </div>
+            </div>
+          </Col>
+          <div className='ant-form-item'>
+            <label className="ant-col-2">专家简介: </label>
+            <div className='ant-col-22'>
+              <Input type='textarea' rows={4} size='large' placeholder='专家简介' ref='speakerBio'
+                     onBlur={this.saveExpertInfo.bind(this, 'bio')}/>
+            </div>
+          </div>
+          <Button key="submit" type="primary" size="large" onClick={this.saveTalkData}>
             提交
           </Button>
-        </div>}
+        </div>
       </Modal>
     )
   }
 }
 
-export
-
-default(AddExpertModal);
+export default (AddExpertModal);

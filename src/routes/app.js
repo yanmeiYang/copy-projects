@@ -63,7 +63,7 @@ const App = ({ children, location, dispatch, app, loading }) => {
       localStorage.setItem(`${prefix}navOpenKeys`, JSON.stringify(openKeys));
       dispatch({ type: 'app/handleNavOpenKeys', payload: { navOpenKeys: openKeys } });
     },
-  }
+  };
 
   if (config.openPages && config.openPages.indexOf(location.pathname) > -1) {
     return <div>{children}</div>;

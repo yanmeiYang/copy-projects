@@ -19,21 +19,8 @@ export default {
 
   subscriptions: {
     setup({ dispatch, history }) {  // eslint-disable-line
-
-      // Init set test data.
       dispatch({ type: 'setTestData', payload: {} });
-
-      // TODO load url information. should not call this.
-      history.listen((location) => {
-        const match = pathToRegexp('/person/:id').exec(location.pathname);
-        if (match) {
-          const personId = decodeURIComponent(match[1]);
-          // console.log('personId is :', personId);
-          // dispatch({ type: 'getPerson', payload: { personId } });
-          // dispatch({ type: 'setParams', payload: { personId } });
-        }
-      });
-    },
+    }
   },
 
   effects: {

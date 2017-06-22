@@ -19,6 +19,7 @@ import CanlendarInForm from '../../components/seminar/calendar';
 import AddTags from '../../components/seminar/addTags';
 import ExpertBasicInformation from '../../components/seminar/expertBasicInformation/expertBasicInformation';
 import AddExpertModal from '../../components/seminar/addExpertModal';
+import ShowExpertList from '../../routes/seminar/addSeminar/workshop/showExpertList';
 const Dragger = Upload.Dragger;
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -146,32 +147,35 @@ class RegistrationForm extends React.Component {
   };
 
   //workshop增加演讲嘉宾
-  saveTalkData = () => {
-    const state = this.state;
-    let talk = {
-      title: '',
-      speaker: { name: '', position: '', affiliation: '', img: '', aid: '', bio: '' },
-      time: { from: '', to: '' },
-      location: { city: '', address: '' },
-      abstract: ''
-    };
-    talk.title = this.refs.talkTitle.refs.input.value;
-    talk.speaker.name = state.speakerInfo.name;
-    talk.speaker.position = state.speakerInfo.position;
-    talk.speaker.affiliation = state.speakerInfo.affiliation;
-    talk.speaker.img = state.speakerInfo.img;
-    talk.speaker.aid = state.speakerInfo.aid;
-    talk.speaker.bio = state.speakerInfo.bio;
-    if (state.talkStartValue) {
-      talk.time.from = state.talkStartValue.toJSON();
-    }
-    if (state.talkEndValue) {
-      talk.time.to = state.talkEndValue.toJSON();
-    }
-    talk.location.address = this.refs.talkLocation.refs.input.value;
-    talk.abstract = this.refs.talkAbstract.refs.input.value;
+  addTheNewTalk = (talk) => {
     this.setState({ talks: this.state.talks.concat(talk), addNewTalk: false, });
   };
+  // saveTalkData = () => {
+  //   const state = this.state;
+  //   let talk = {
+  //     title: '',
+  //     speaker: { name: '', position: '', affiliation: '', img: '', aid: '', bio: '' },
+  //     time: { from: '', to: '' },
+  //     location: { city: '', address: '' },
+  //     abstract: ''
+  //   };
+  //   talk.title = this.refs.talkTitle.refs.input.value;
+  //   talk.speaker.name = state.speakerInfo.name;
+  //   talk.speaker.position = state.speakerInfo.position;
+  //   talk.speaker.affiliation = state.speakerInfo.affiliation;
+  //   talk.speaker.img = state.speakerInfo.img;
+  //   talk.speaker.aid = state.speakerInfo.aid;
+  //   talk.speaker.bio = state.speakerInfo.bio;
+  //   if (state.talkStartValue) {
+  //     talk.time.from = state.talkStartValue.toJSON();
+  //   }
+  //   if (state.talkEndValue) {
+  //     talk.time.to = state.talkEndValue.toJSON();
+  //   }
+  //   talk.location.address = this.refs.talkLocation.refs.input.value;
+  //   talk.abstract = this.refs.talkAbstract.refs.input.value;
+  //   this.setState({ talks: this.state.talks.concat(talk), addNewTalk: false, });
+  // };
 
   //删除嘉宾
   delTheExpert = (i) => {
@@ -371,34 +375,12 @@ class RegistrationForm extends React.Component {
           {selectedType === '1' ?
             <Col className={styles.thumbnail} md={24} lg={{ span: 16, offset: 4 }}>
               {talks.length > 0 ? <div>
-                <div className={styles.addNewExpert}>
-                  <Button type='primary' onClick={this.addTalkData.bind(this, addNewTalk)}>嘉宾信息</Button>
-                </div>
+                {/*<div className={styles.addNewExpert}>*/}
+                {/*<Button type='primary' onClick={this.addTalkData.bind(this, addNewTalk)}>嘉宾信息</Button>*/}
+                {/*</div>*/}
                 {talks.map((talk, index) => {
                   return (<div key={Math.random()}>
-                    <li className={styles.talks}>
-                      <div className={styles.left}>
-                        <img src={this.getImg(talk.speaker.img)} alt="头像"/>
-                      </div>
-                      <div className={styles.right}>
-                        <div className={styles.nameWrap}>
-                          <span>演讲嘉宾：</span>
-                          <span>{talk.speaker.name}</span>
-                        </div>
-                        <div className={styles.activityWrap}>
-                          <p>
-                            <span>演讲名称：</span>
-                            <span>{talk.title}</span>
-                          </p>
-                          <p>
-                            <span>演讲地点：</span>
-                            <span>{talk.location.address}</span>
-                          </p>
-                        </div>
-                      </div>
-                      <Button type='danger' onClick={this.delTheExpert.bind(this, index)}>删除</Button>
-                    </li>
-
+                    <ShowExpertList talk={talk} index={index} getImg={this.getImg} delTheExpert={this.delTheExpert}/>
                   </div>)
                 })}
               </div> : ''}
@@ -406,38 +388,39 @@ class RegistrationForm extends React.Component {
                 <Button type='primary' onClick={this.addTalkData.bind(this, addNewTalk)}>新增嘉宾</Button>
               </div>
 
-              {/*{addNewTalk&&<AddExpertModal integral={integral} parentProps = {this.props}/>}*/}
-              {addNewTalk ?
-                <div>
-                  <FormItem
-                    {...formItemLayout}
-                    label="活动名称"
-                  >
-                    <Input placeholder='请输入活动名称。。。' ref='talkTitle'/>
-                  </FormItem>
-                  <FormItem>
-                    <Col><label>专家信息</label></Col>
-                    <ExpertBasicInformation integral={integral} callbackParent={this.onExpertInfoChanged}/>
-                  </FormItem>
-                  <FormItem
-                    {...formItemLayout}
-                    label={(<span>活动时间&nbsp;</span>)}
-                    hasFeedback>
-                    <CanlendarInForm callbackParent={this.onChildTalkChanged}/>
-                  </FormItem>
-                  <FormItem
-                    {...formItemLayout}
-                    label={(<span>演讲地点&nbsp;</span>)}>
-                    <Input placeholder='请输入活动地点。。。' ref='talkLocation'/>
-                  </FormItem>
-                  <FormItem
-                    {...formItemLayout}
-                    label={(<span>演讲摘要&nbsp;</span>)}>
-                    <Input type='textarea' rows={4} placeholder='请输入演讲摘要。。。' ref='talkAbstract'/>
-                  </FormItem>
-                  <Button type='primary' className={styles.saveExpert} onClick={this.saveTalkData}>保存</Button>
-                  <Button type='danger' onClick={this.cancelTalkData}>取消</Button>
-                </div> : ''}
+              {addNewTalk &&
+              <AddExpertModal integral={integral} parentProps={this.props} callbackParent={this.addTheNewTalk}/>}
+              {/*{addNewTalk ?*/}
+              {/*<div>*/}
+              {/*<FormItem*/}
+              {/*{...formItemLayout}*/}
+              {/*label="活动名称"*/}
+              {/*>*/}
+              {/*<Input placeholder='请输入活动名称。。。' ref='talkTitle'/>*/}
+              {/*</FormItem>*/}
+              {/*<FormItem>*/}
+              {/*<Col><label>专家信息</label></Col>*/}
+              {/*<ExpertBasicInformation integral={integral} callbackParent={this.onExpertInfoChanged}/>*/}
+              {/*</FormItem>*/}
+              {/*<FormItem*/}
+              {/*{...formItemLayout}*/}
+              {/*label={(<span>活动时间&nbsp;</span>)}*/}
+              {/*hasFeedback>*/}
+              {/*<CanlendarInForm callbackParent={this.onChildTalkChanged}/>*/}
+              {/*</FormItem>*/}
+              {/*<FormItem*/}
+              {/*{...formItemLayout}*/}
+              {/*label={(<span>演讲地点&nbsp;</span>)}>*/}
+              {/*<Input placeholder='请输入活动地点。。。' ref='talkLocation'/>*/}
+              {/*</FormItem>*/}
+              {/*<FormItem*/}
+              {/*{...formItemLayout}*/}
+              {/*label={(<span>演讲摘要&nbsp;</span>)}>*/}
+              {/*<Input type='textarea' rows={4} placeholder='请输入演讲摘要。。。' ref='talkAbstract'/>*/}
+              {/*</FormItem>*/}
+              {/*<Button type='primary' className={styles.saveExpert} onClick={this.saveTalkData}>保存</Button>*/}
+              {/*<Button type='danger' onClick={this.cancelTalkData}>取消</Button>*/}
+              {/*</div> : ''}*/}
             </Col> : ''}
 
           <Col className={styles.formFooter} md={24} lg={{ span: 16, offset: 4 }}>

@@ -8,7 +8,7 @@ import SearchBox from '../../components/SearchBox';
 function IndexPage({ dispatch, search }) {
   // const { seminars } = search;
   let commonSearch = ['人工智能', '机器人', '数据挖掘', '机器学习', '数据建模', '计算机视觉',
-    '计算机网络', '人工智能', '网络', '自然语言处理'];
+    '计算机网络', '网络', '自然语言处理'];
 
   function onSearch({ query }) {
     dispatch(routerRedux.push({

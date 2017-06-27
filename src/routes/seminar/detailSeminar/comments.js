@@ -43,7 +43,7 @@ class CommentsByActivity extends React.Component {
                   <p className={styles.time}>{comment.ts}</p>
                 </span>
                 </li>
-                <hr className={styles.dividingLine} />
+                <hr className={styles.dividingLine}/>
               </div>
 
             )

@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Tabs, Button, Icon, Row, Col, Rate, Input, InputNumber } from 'antd';
+import { Tabs, Button, Icon, Row, Col, Rate, Input, Spin } from 'antd';
 import { Link } from 'dva/router';
 import TimeFormat from './time-format';
 import ExpertRating from './expert-rating';
@@ -13,7 +13,7 @@ import styles from './index.less';
 
 
 const DetailSeminar = ({ dispatch, seminar, app }) => {
-  const { summaryById, expertRating } = seminar;
+  const { summaryById, loading } = seminar;
   const currentUser = app;
   //share
   let shareModalDisplay = false;
@@ -25,10 +25,10 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
   function delSeminar() {
     dispatch({ type: 'seminar/deleteActivity', payload: { id: summaryById.id, body: summaryById } })
   }
-
   return (
     <div className={styles.detailSeminar}>
-      <Row>
+      <Spin spinning={loading}>
+      {typeof(summaryById.length)!=='number'?<Row>
         <Col md={24} lg={{ span: 16, offset: 4 }} className={styles.thumbnail}>
           <div className={styles.caption}>
             {summaryById.uid === currentUser.user.id && currentUser.token &&
@@ -186,7 +186,8 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
           </div>
         </Col>
         <CommentsByActivity activityId={summaryById.id} currentUser={currentUser}/>
-      </Row>
+      </Row>:<div style={{minHeight:300}}></div>}
+      </Spin>
     </div>
   );
 };

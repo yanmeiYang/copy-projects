@@ -59,12 +59,12 @@ export default {
       yield put({ type: 'getSeminarsSuccess', payload: { data, offset, size } });
     },
     *getSeminarByID({ payload }, { call, put }){
+      yield put({ type: 'showLoading' });
+      yield put({ type: 'clearState' });
       const { id } = payload;
       const { data } = yield call(seminarService.getSeminarById, id);
-
       const listActivityScores = yield call(seminarService.listActivityScores, 'me', 'ccf', id);
       yield put({ type: 'listActivityScoresSuccess', payload: listActivityScores.data });
-
       yield put({ type: 'getSeminarByIDSuccess', payload: { data } });
     },
 
@@ -144,6 +144,10 @@ export default {
   },
 
   reducers: {
+    clearState(state){
+      return { ...state, summaryById: [], expertRating: [] }
+    },
+
     getSeminarsSuccess(state, { payload: { data, offset, size } }){
       let newData = [];
       if (state.results.length >= size) {
@@ -155,7 +159,7 @@ export default {
     },
 
     getSeminarByIDSuccess(state, { payload: { data } }){
-      return { ...state, summaryById: data };
+      return { ...state, summaryById: data, loading: false };
     },
 
     getSpeakerSuggestSuccess(state, { payload: { data } }){

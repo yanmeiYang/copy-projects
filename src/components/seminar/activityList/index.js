@@ -48,8 +48,11 @@ class ActivityList extends React.Component {
               <span>
               <span>承办单位：</span>
                 {
-                  result.organizer.map((item)=>{
-                    return (<span key={Math.random()}>{item}</span>)
+                  result.organizer.map((item,index)=>{
+                    return (<span key={Math.random()}>
+                      <span>{item}</span>
+                      {index<result.organizer.length-1&&<span>,&nbsp;</span>}
+                    </span>)
                   })
                 }
               </span>

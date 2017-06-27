@@ -9,6 +9,10 @@ export async function searchPerson(query, offset, size, filters, sort) {
   if (filters && filters.eb && filters.eb.id === 'aminer') {
     return searchPersonGlobal(query, offset, size, filters, sort);
   }
+  // Fix bugs when default search area is 'aminer'
+  if ((!filters || !filters.eb) && sysconfig.DEFAULT_EXPERT_BASE === 'aminer') {
+    return searchPersonGlobal(query, offset, size, filters, sort);
+  }
 
   // let data = { term: query, offset, size, sort };
   // if (filters) {
@@ -53,6 +57,10 @@ export async function searchPersonAgg(query, offset, size, filters) {
   // if search in global experts, jump to another function;
   if (filters && filters.eb && filters.eb.id === 'aminer') {
     return searchPersonAggGlobal(query, offset, size, filters);
+  }
+  // Fix bugs when default search area is 'aminer'
+  if ((!filters || !filters.eb) && sysconfig.DEFAULT_EXPERT_BASE === 'aminer') {
+    return searchPersonGlobal(query, offset, size, filters);
   }
   const { expertBase, data } = prepareParameters(query, offset, size, filters, '');
   return request(

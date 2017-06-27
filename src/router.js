@@ -77,6 +77,15 @@ const Routers = function ({ history, app }) {
             }, 'addSeminar');
           },
         }, {
+          path: 'seminar/expert-rating/:id',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('./models/seminar'));
+              cb(null, require('./routes/seminar/expertRatingPage'));
+            }, 'expertRating');
+          },
+        },
+        {
           path: 'seminar/:id',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {

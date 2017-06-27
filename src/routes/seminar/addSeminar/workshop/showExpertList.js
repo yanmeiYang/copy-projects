@@ -14,7 +14,7 @@ class ShowExpertList extends React.Component {
           <img src={getImg(talk.speaker.img)} alt="头像"/>
         </div>
         <div className={styles.right}>
-          <Col span={12} className={styles.nameWrap}>
+          <Col lg={12} md={24} className={styles.nameWrap}>
             <div className='ant-form-item'>
               <label className='ant-col-4'>演讲嘉宾：</label>
               <div className='ant-col-20'>
@@ -27,7 +27,7 @@ class ShowExpertList extends React.Component {
               <span>{talk.title}</span>
             </div>}
           </Col>
-          <Col span={12} className={styles.nameWrap}>
+          <Col lg={12} md={24} className={styles.nameWrap}>
             <div className='ant-form-item'>
               <label className='ant-col-4'>嘉宾信息：</label>
               <div className='ant-col-20'>

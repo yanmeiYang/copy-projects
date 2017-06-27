@@ -41,6 +41,20 @@ module.exports = {
     //   nperson: 610,
     // },
   ],
+  CCF_activityTypes: [
+    { name: '专委活动' },
+    { name: 'CNCC' },
+    { name: 'ADL78' },
+    { name: 'CCF@U100(走进高校)' },
+    { name: 'YOCSEF' },
+    { name: '论坛' },
+    { name: '报告会' },
+    { name: 'NOI讲座' },
+    { name: '分部活动' },
+    { name: '精英大会' },
+    { name: '女性大会' },
+    { name: 'TF' },
+  ],
 
 
   SysconfigDefaultCategory: 'activity_type',

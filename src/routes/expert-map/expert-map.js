@@ -39,7 +39,7 @@ function showtop(usersIds,e,map,maindom,inputids){
     var cstyle="z-index:10000;border:1px solid white;height:"+imgwidth+"px;width:"+imgwidth+"px;position: absolute;left:"+(centerX-imgwidth/2)+"px;top:"+(centerY-imgwidth/2)+"px; border-radius:50%; overflow:hidden;"
     imgdiv.setAttribute('name','scholarimg');
     imgdiv.setAttribute('style',cstyle);
-    imgdiv.innerHTML="<img style='background: white;'  data='@@@@@@@0@@@@@@@' height='"+imgwidth+"' width='"+imgwidth+"' src='' alt='0'>";
+    imgdiv.innerHTML="<img style='background: white;'  data='@@@@@@@0@@@@@@@' height='"+imgwidth+"' width='"+imgwidth+"' src='/showimg.jpg' alt='0'>";
     //insertAfter(imgdiv,thisNode);
     thisNode.appendChild(imgdiv);
   }
@@ -177,6 +177,134 @@ class ExpertMap extends React.Component {
 
     var cr = new BMap.CopyrightControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT});
     map.addControl(cr);
+    map.addControl(new BMap.NavigationControl());
+    map.addControl(new BMap.ScaleControl());
+    map.addControl(new BMap.OverviewMapControl());
+    //map.addControl(new BMap.MapTypeControl());
+    var mapinterval=setInterval(function(){
+      if (typeof(BMapLib) == "undefined"){
+        console.log("wait for BMapLib")
+      }else{
+        clearInterval(mapinterval);
+        var markerClusterer = new BMapLib.MarkerClusterer(map, {markers: markers});
+        for(var m in markers){
+          that.addMouseoverHandler(markers[m],pId[m])
+        }
+      }
+    },100);
+  }
+
+  findposition=(type,results)=>{
+    var place=[];
+    if(type==0){
+
+    }else if(type==1){
+      var continent=this.findcontinent(results.location.country)
+      if(continent=="Asia"){//以中国返回,先经度，后纬度
+        place=[34.250575,108.98371]
+      }else if(continent=="Europe"){//以德国返回
+        place=[48.7468939,9.0805141]
+      }else if(continent=="Africa"){//以中非返回
+        place=[6.611110999999999,20.939444]
+      }else if(continent=="North American"){//以美国返回
+        place=[37.09024,-95.712891]
+      }else if(continent=="South American"){//以巴西返回
+        place=[-51.92528,-14.235004]
+      }else if(continent=="Oceania"){//以澳大利亚返回
+        place=[-25.274398,133.775136]
+      }
+    }else if(type==2){
+      place=this.findcountries(results.location.country);
+    }else if(type==3){
+
+    }else if(type==4){
+      place=this.findcities(results.location.country)
+    }else if(type==5){
+
+    }
+    return place;
+  }
+
+  findcontinent=(country)=>{
+    var place = require('../../../external-docs/expert-map/continentscountries.json');
+    var flag=true
+    var continent="North American"
+    for(var o in place.results){
+      if(place.results[o].country.indexOf(country)==0){
+        //console.log(place.results[o].country+"####"+country+"&&&&"+place.results[o].continent);
+        flag=false;
+        continent=place.results[o].continent;
+        break;
+      }else if(place.results[o].country.indexOf(country)>0){
+        flag=false;
+        continent=place.results[o].continent;
+        break;
+      }
+    }
+    if(flag){
+      //console.log(country+"**********");
+    }
+    return continent;
+  }
+
+  findcountries=(country)=>{
+    var place = require('../../../external-docs/expert-map/continentscountries.json');
+    var flag=true
+    var location=[]
+    for(var o in place.results){
+      if(place.results[o].country.indexOf(country)==0){
+        flag=false;
+        location=[place.results[o].lat,place.results[o].lng]
+        break;
+      }else if(place.results[o].country.indexOf(country)>0){
+        flag=false;
+        location=[place.results[o].lat,place.results[o].lng]
+        break;
+      }
+    }
+    if(flag){
+      ///
+    }
+    return location;
+  }
+
+  findcities=(city)=>{
+    var location=[10,58];
+
+    return location;
+  }
+
+  showcontinent=(type)=>{
+    var place = require('../../../external-docs/expert-map/expert-map-example1.json');
+    var map = new BMap.Map("allmap");
+    var scale=2;
+    if(type==2){
+      scale=5;
+    }
+    map.centerAndZoom(new BMap.Point(116.404, 39.915), scale);
+    map.enableScrollWheelZoom();
+    var markers = [];
+    const that=this;
+    var pId=[];
+    for(var o in place.results){
+      var pt = null;
+      var newplace=this.findposition(type,place.results[o]);
+      pt = new BMap.Point(newplace[1], newplace[0]);//这里经度和纬度是反着的
+      var marker=new BMap.Marker(pt);
+      var label=new BMap.Label("<div>"+place.results[o].name+"</div><div style='display: none;'>"+place.results[o].id+"</div>");
+      label.setStyle({ color : "red", fontSize : "12px",border:"none",backgroundColor:"transparent",fontWeight :"bold",textAlign:"center",height: "0px",lineHeight: "0px",width: "130px",});
+      label.setOffset(1000,1000);
+      marker.setLabel(label);
+      var personId=place.results[o].id;
+      pId[o]=personId;
+      markers.push(marker);
+    }
+
+    var cr = new BMap.CopyrightControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT});
+    map.addControl(cr);
+    map.addControl(new BMap.NavigationControl());
+    map.addControl(new BMap.ScaleControl());
+    map.addControl(new BMap.OverviewMapControl());
     map.add
     var mapinterval=setInterval(function(){
       if (typeof(BMapLib) == "undefined"){
@@ -233,7 +361,20 @@ class ExpertMap extends React.Component {
 
   showtype=(e)=>{
     const typeid = e.currentTarget && e.currentTarget.value && e.currentTarget.getAttribute('value');
-    console.log(typeid);
+    if(typeid==0){
+      this.showmap();
+    }else if(typeid==1){
+      //简单地读取其城市大区等信息，然后归一到一个地址，然后在地图上显示
+      this.showcontinent(typeid);
+    }else if(typeid==2){
+      this.showcontinent(typeid);
+    }else if(typeid==3){
+      this.showcontinent(typeid);
+    }else if(typeid==4){
+      this.showcontinent(typeid);
+    }else if(typeid==5){
+      this.showcontinent(typeid);
+    }
   }
 
   render() {
@@ -250,7 +391,7 @@ class ExpertMap extends React.Component {
               <Button onClick={this.showtype} value="2">国家</Button>
               <Button onClick={this.showtype} value="3">国内区</Button>
               <Button onClick={this.showtype} value="4">城市</Button>
-              <Button onClick={this.showtype} value="3">机构</Button>
+              <Button onClick={this.showtype} value="5">机构</Button>
             </ButtonGroup>
           </div>
         </div>
@@ -261,19 +402,6 @@ class ExpertMap extends React.Component {
           </div>
           <input id="currentId" type="hidden"/>
           <input id="currentIds" type="hidden"/>
-          <div id="info2" style={{width: 500, height: 300}}>
-            <h1>测试区 {this.state.title}</h1>
-            <div id="info1" style={{width: 300, height: 100, border: 'solid 1px red'}}>
-              这是漂浮窗口
-              {personInfo &&
-              <div>
-                <p>{personInfo.id}</p>
-                <p>{personInfo.name}</p>
-              </div>
-              }
-            </div>
-            <a onClick={this.test}>Jie Tang</a>
-          </div>
         </div>
       </div>
     );

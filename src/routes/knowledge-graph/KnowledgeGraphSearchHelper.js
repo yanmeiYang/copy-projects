@@ -8,6 +8,11 @@ import * as d3 from '../../../public/d3/d3.min';
 import * as kgService from '../../services/knoledge-graph-service';
 
 const controlDivId = 'kgvis';
+
+
+/*
+ * @params: lang: [en|cn]
+ */
 class KnowledgeGraphSearchHelper extends React.Component {
 
   componentDidMount() {
@@ -59,6 +64,8 @@ class KnowledgeGraphSearchHelper extends React.Component {
     const margin = { top: 28, right: 20, bottom: 30, left: 20 };
     const width = 452 - margin.left - margin.right;
     const height = 300 - margin.top - margin.bottom;
+
+    const lang = this.props.lang === 'cn' ? 'cn' : 'en';
 
     this.showZone();
     // append the svg object to the body of the page
@@ -157,7 +164,8 @@ class KnowledgeGraphSearchHelper extends React.Component {
           return d.data.level !== 3 ? 'middle' : '';
         })
         .html((d) => {
-          return `<a class="nodeLink" href="/search/${d.data.name}/0/30">${d.data.name}</a>`;
+          const name = lang === 'cn' ? d.data.zh : d.data.name;
+          return `<a class="nodeLink" href="/search/${name}/0/30">${name}</a>`;
         })
         .attr('writing-mode', (d) => {
           return d.data.level === 3 ? 'tb' : '';

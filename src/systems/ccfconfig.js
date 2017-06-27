@@ -1,15 +1,12 @@
 /**
  * Created by BoGao on 2017/6/20.
  */
+import React from 'react';
+
 module.exports = {
 
   DEFAULT_EXPERT_BASE: '5949c2f99ed5dbc2147fd854', // CCF会员
   CCF_expertBases: [
-    {
-      id: 'aminer',
-      name: '全球专家',
-      nperson: 2871,
-    },
     {
       id: '5949c2f99ed5dbc2147fd854',
       name: 'CCF会员',
@@ -30,6 +27,12 @@ module.exports = {
       name: '高级会员(S)',
       nperson: 2246,
     },
+    {
+      id: 'aminer',
+      name: <span><i className="fa fa-globe fa-fw" />全球专家</span>,
+      nperson: 2871,
+    },
+    // 数据标注未找到的人的库。
     // {
     //   id: '58e462db9ed5db3b45bad77e',
     //   name: '杰出会员(D)-2',

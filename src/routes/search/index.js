@@ -7,9 +7,16 @@ import styles from './index.less';
 import { PersonList } from '../../components/person';
 import { sysconfig } from '../../systems';
 import { KnowledgeGraphSearchHelper } from '../knowledge-graph';
+import { classnames } from '../../utils';
 
 const TabPane = Tabs.TabPane;
 const { CheckableTag } = Tag;
+
+const labelMap = { 'H-Index': 'h指数', Language: '语言', Location: '国家' };
+function showChineseLabel(enLabel) {
+  const cnLabel = labelMap[enLabel];
+  return !cnLabel ? enLabel : cnLabel;
+}
 
 const Search = ({ dispatch, search }) => {
   const { results, pagination, query, aggs, loading, filters } = search;
@@ -89,36 +96,34 @@ const Search = ({ dispatch, search }) => {
           {/* 搜索框 */}
           <div className={styles.top}>
             <div className={styles.searchWrap}>
-              <SearchBox size="large" style={{ width: 500 }} btnText="专家搜索" keyword={query} onSearch={onSearch} />
+              <SearchBox size="large" style={{ width: 680 }} btnText="搜索" keyword={query}
+                         onSearch={onSearch} />
             </div>
           </div>
 
           {/* Filter */}
           <div className={styles.filterWrap}>
-
             <div className={styles.filter}>
 
               {expertBases &&
-              <div className={styles.filterRow}>
-                <span className={styles.filterTitle}>级别:</span>
+              <div className={classnames(styles.filterRow, styles.range)}>
+                <span className={styles.filterTitle}>搜索范围:</span>
                 <ul className={styles.filterItems}>
                   {
                     expertBases.map((ep) => {
+                      const props = {
+                        key: ep.id,
+                        className: styles.filterItem,
+                        onChange: () => onExpertBaseChange(ep.id, ep.name),
+                        checked: filters.eb && (filters.eb.id === ep.id),
+                      }
                       return (
-                        <CheckableTag
-                          key={ep.id}
-                          className={styles.filterItem}
-                          checked={filters.eb && (filters.eb.id === ep.id)}
-                          onChange={() => onExpertBaseChange(ep.id, ep.name)}
-                        >
-                          {ep.name} {/* TODO Show Numbers */}
-                        </CheckableTag>
+                        <CheckableTag {...props}>{ep.name} {/* TODO Show Numbers */}</CheckableTag>
                       );
                     })
                   }
                 </ul>
-              </div>
-              }
+              </div>}
 
               {filters && Object.keys(filters).length > 0 &&
               <div className={styles.filterRow}>
@@ -127,7 +132,6 @@ const Search = ({ dispatch, search }) => {
                   {
                     Object.keys(filters).map((key) => {
                       const label = key === 'eb' ? filters[key].name : `${key}: ${filters[key]}`;
-
                       return (
                         <Tag
                           className={styles.filterItem}
@@ -140,8 +144,8 @@ const Search = ({ dispatch, search }) => {
                     })
                   }
                 </ul>
-              </div>
-              }
+              </div>}
+
               {
                 aggs.map((agg) => {
                   if (agg.label === 'Gender') {
@@ -150,9 +154,10 @@ const Search = ({ dispatch, search }) => {
                   if (filters[agg.label]) {
                     return '';
                   } else {
+                    const cnLabel = showChineseLabel(agg.label);
                     return (
                       <div className={styles.filterRow} key={agg.type}>
-                        <span className={styles.filterTitle}>{agg.label}:</span>
+                        <span className={styles.filterTitle}>{cnLabel}:</span>
                         <ul className={styles.filterItems}>
                           {
                             agg.item.map((item) => {
@@ -163,7 +168,8 @@ const Search = ({ dispatch, search }) => {
                                   checked={filters[agg.label] === item.label}
                                   onChange={checked => onFilterChange(agg.label, item.label, checked)}
                                 >
-                                  {item.label} (<span className={styles.filterCount}>{item.count}</span>)
+                                  {item.label}
+                                  (<span className={styles.filterCount}>{item.count}</span>)
                                 </CheckableTag>
                               );
                             })
@@ -178,20 +184,20 @@ const Search = ({ dispatch, search }) => {
             </div>
             <Tabs defaultActiveKey="relevance" onChange={onOrderChange}>
               <TabPane tab={filterDisplay('相关度')} key="relevance" />
-              <TabPane tab={filterDisplay('学会贡献')} key="contrib" />
               <TabPane tab={filterDisplay('学术成就')} key="h_index" />
               <TabPane tab={filterDisplay('学术活跃度')} key="activity" />
               <TabPane tab={filterDisplay('领域新星')} key="rising_star" />
+              <TabPane tab={filterDisplay('学会贡献')} key="contrib" />
             </Tabs>
           </div>
         </div>
 
         <div className="rightZone">
-          <KnowledgeGraphSearchHelper query={query} />
+          <KnowledgeGraphSearchHelper query={query} lang="cn" />
         </div>
       </div>
 
-      <Spin spinning={loading}>
+      <Spin spinning={loading} size="large">
         <div className={styles.personWrap}>
           <PersonList persons={results} />
 

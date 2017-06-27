@@ -24,7 +24,7 @@ const Seminar = ({ app, dispatch, seminar }) => {
       let params = { query: query, offset: offset, size: sizePerPage };
       dispatch({ type: 'seminar/searchActivity', payload: params });
     } else {
-      let params = { offset: offset, size: sizePerPage };
+      let params = { offset: offset, size: sizePerPage, filter: { src: 'ccf' } };
       dispatch({ type: 'seminar/getSeminar', payload: params });
     }
 

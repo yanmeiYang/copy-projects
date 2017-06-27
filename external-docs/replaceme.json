@@ -1,0 +1,794 @@
+{
+  "RECORDS": [
+    {
+      "id": 3,
+      "abbrev": "FAST",
+      "fullname": "Conference on File and Storage Technologies",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": " 计算机体系结构\/并行与分布计算\/存储系统",
+      "publisher": "USENIX",
+      "website": "https:\/\/www.usenix.org\/conference\/fast17"
+    },
+    {
+      "id": 4,
+      "abbrev": "HPCA",
+      "fullname": "High-Performance Computer Architecture",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": " 计算机体系结构\/并行与分布计算\/存储系统",
+      "publisher": "IEEE",
+      "website": "http:\/\/www.hpcaconf.org\/"
+    },
+    {
+      "id": 8,
+      "abbrev": "SPAA",
+      "fullname": "ACM Symposium on Parallelism in Algorithms and Architectures",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": " 计算机体系结构\/并行与分布计算\/存储系统",
+      "publisher": "ACM",
+      "website": "http:\/\/spaa.acm.org\/"
+    },
+    {
+      "id": 11,
+      "abbrev": "DAC",
+      "fullname": "Design Automation Conference",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": " 计算机体系结构\/并行与分布计算\/存储系统",
+      "publisher": "ACM",
+      "website": "http:\/\/www.dac.com\/"
+    },
+    {
+      "id": 12,
+      "abbrev": "DATE",
+      "fullname": "Design, Automation & Test in Europe Conference",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": " 计算机体系结构\/并行与分布计算\/存储系统",
+      "publisher": "IEEE\/ACM",
+      "website": "http:\/\/www.date-conference.com\/"
+    },
+    {
+      "id": 14,
+      "abbrev": "HPDC",
+      "fullname": "High-Performance Distributed Computing",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": " 计算机体系结构\/并行与分布计算\/存储系统",
+      "publisher": "IEEE",
+      "website": "http:\/\/www.hpdc.org\/"
+    },
+    {
+      "id": 17,
+      "abbrev": "ICCAD",
+      "fullname": "International Conference on Computer-Aided Design",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": " 计算机体系结构\/并行与分布计算\/存储系统",
+      "publisher": "IEEE\/ACM",
+      "website": "http:\/\/www.iccad.com\/"
+    },
+    {
+      "id": 20,
+      "abbrev": "SIGMETRICS",
+      "fullname": "International Conference on Measurement and Modeling of Computer Systems",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": " 计算机体系结构\/并行与分布计算\/存储系统",
+      "publisher": "ACM",
+      "website": "http:\/\/www.sigmetrics.org"
+    },
+    {
+      "id": 24,
+      "abbrev": "FPGA",
+      "fullname": "ACM\/SIGDA International Symposium on Field-Programmable Gate Arrays",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": " 计算机体系结构\/并行与分布计算\/存储系统",
+      "publisher": "ACM",
+      "website": "http:\/\/fpganetworks.org\/"
+    },
+    {
+      "id": 26,
+      "abbrev": "LISA",
+      "fullname": "Large Installation system Administration Conference",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": " 计算机体系结构\/并行与分布计算\/存储系统",
+      "publisher": "USENIX",
+      "website": "https:\/\/www.usenix.org\/conference\/lisa12"
+    },
+    {
+      "id": 28,
+      "abbrev": "PACT",
+      "fullname": "Parallel Architectures and Compilation Techniques",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": " 计算机体系结构\/并行与分布计算\/存储系统",
+      "publisher": "IEEE\/ACM",
+      "website": "http:\/\/www.pactconf.org\/"
+    },
+    {
+      "id": 30,
+      "abbrev": "RTAS",
+      "fullname": "Real-Time and Embedded Technology and Applications Symposium",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": " 计算机体系结构\/并行与分布计算\/存储系统",
+      "publisher": "IEEE",
+      "website": "http:\/\/www.rtas.org\/"
+    },
+    {
+      "id": 31,
+      "abbrev": "USENIX ATC",
+      "fullname": "USENIX Annul Technical Conference",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": " 计算机体系结构\/并行与分布计算\/存储系统",
+      "publisher": "USENIX",
+      "website": "https:\/\/www.usenix.org\/conferences\/byname\/131"
+    },
+    {
+      "id": 59,
+      "abbrev": "MOBICOM",
+      "fullname": "ACM International Conference on Mobile Computing and Networking",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "计算机网络",
+      "publisher": "ACM",
+      "website": "http:\/\/www.sigmobile.org\/mobicom\/"
+    },
+    {
+      "id": 60,
+      "abbrev": "SIGCOMM",
+      "fullname": "ACM International Conference on the applications, technologies, architectures, and protocols for computer communication",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "计算机网络",
+      "publisher": "ACM",
+      "website": "http:\/\/www.sigcomm.org\/"
+    },
+    {
+      "id": 61,
+      "abbrev": "INFOCOM",
+      "fullname": "IEEE International Conference on Computer Communications",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "计算机网络",
+      "publisher": "IEEE",
+      "website": "http:\/\/www.ieee-infocom.org\/"
+    },
+    {
+      "id": 62,
+      "abbrev": "CoNEXT",
+      "fullname": "ACM International Conference on emerging Networking EXperiments and Technologies",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "计算机网络",
+      "publisher": "ACM",
+      "website": "http:\/\/conferences.sigcomm.org\/co-next\/2014\/"
+    },
+    {
+      "id": 64,
+      "abbrev": "IPSN",
+      "fullname": "International Conference on Information Processing in Sensor Networks",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "计算机网络",
+      "publisher": "IEEE\/ACM",
+      "website": "http:\/\/ipsn.acm.org\/"
+    },
+    {
+      "id": 66,
+      "abbrev": "MobiHoc",
+      "fullname": "International Symposium on Mobile Ad Hoc Networking and Computing",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "计算机网络",
+      "publisher": "ACM\/IEEE",
+      "website": "http:\/\/www.sigmobile.org\/mobihoc\/"
+    },
+    {
+      "id": 67,
+      "abbrev": "MobiSys",
+      "fullname": "International Conference on Mobile Systems, Applications, and Services",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "计算机网络",
+      "publisher": "ACM",
+      "website": "http:\/\/www.sigmobile.org\/mobisys\/"
+    },
+    {
+      "id": 71,
+      "abbrev": "NSDI",
+      "fullname": "Symposium on Network System Design and Implementation",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "计算机网络",
+      "publisher": "USENIX",
+      "website": "http:\/\/www.sigcomm.org\/events\/nsdi-conference"
+    },
+    {
+      "id": 91,
+      "abbrev": "EUROCRYPT",
+      "fullname": "European Cryptology Conference",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "网络与信息安全",
+      "publisher": "Springer",
+      "website": "http:\/\/www.iacr.org\/conferences\/"
+    },
+    {
+      "id": 92,
+      "abbrev": "S&P",
+      "fullname": "IEEESymposiumonSecurityandPrivacy",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "网络与信息安全",
+      "publisher": "IEEE",
+      "website": "http:\/\/www.ieee-security.org\/TC\/SP-Index.html"
+    },
+    {
+      "id": 93,
+      "abbrev": "USENIX Security",
+      "fullname": "Usenix Security Symposium",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "网络与信息安全",
+      "publisher": "USENIX Association",
+      "website": "https:\/\/www.usenix.org\/conference\/"
+    },
+    {
+      "id": 94,
+      "abbrev": "ACSAC",
+      "fullname": "Annual Computer Security Applications Conference",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "网络与信息安全",
+      "publisher": "IEEE",
+      "website": "http:\/\/www.acsac.org\/"
+    },
+    {
+      "id": 95,
+      "abbrev": "ASIACRYPT",
+      "fullname": "Annual International Conference on the Theory and Application of Cryptology and Information Security",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "网络与信息安全",
+      "publisher": "Springer",
+      "website": "http:\/\/www.iacr.org\/conferences\/"
+    },
+    {
+      "id": 97,
+      "abbrev": "FSE",
+      "fullname": "Fast Software Encryption",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "网络与信息安全",
+      "publisher": "IACR",
+      "website": "http:\/\/www.iacr.org\/meetings\/fse\/"
+    },
+    {
+      "id": 122,
+      "abbrev": "SOUPS",
+      "fullname": "Symposium On Usable Privacy and Security",
+      "level": "C",
+      "descipline": "cs",
+      "subdescipline": "网络与信息安全",
+      "publisher": "ACM",
+      "website": "https:\/\/cups.cs.cmu.edu\/soups\/"
+    },
+    {
+      "id": 129,
+      "abbrev": "OSDI",
+      "fullname": "USENIX Symposium on Operating Systems Design and Implementations",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "软件工程\/系统软件\/程序设计语言",
+      "publisher": "USENIX",
+      "website": "http:\/\/www.usenix.org\/event\/osdi12"
+    },
+    {
+      "id": 130,
+      "abbrev": "PLDI",
+      "fullname": "ACM SIGPLAN Symposium on Programming Language Design & Implementation",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "软件工程\/系统软件\/程序设计语言",
+      "publisher": "ACM",
+      "website": "http:\/\/www.sigplan.org\/Conferences\/PLDI\/"
+    },
+    {
+      "id": 132,
+      "abbrev": "SOSP",
+      "fullname": "ACM Symposium on Operating Systems Principles",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "软件工程\/系统软件\/程序设计语言",
+      "publisher": "ACM",
+      "website": "http:\/\/sosp.org\/"
+    },
+    {
+      "id": 133,
+      "abbrev": "ECOOP",
+      "fullname": "European Conference on Object-Oriented Programming",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "软件工程\/系统软件\/程序设计语言",
+      "publisher": "AITO",
+      "website": "http:\/\/ecoop.org\/"
+    },
+    {
+      "id": 150,
+      "abbrev": "ISSTA",
+      "fullname": "International Symposium on Software Testing and Analysis",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "软件工程\/系统软件\/程序设计语言",
+      "publisher": "ACM ",
+      "website": "http:\/\/issta11.unl.edu\/"
+    },
+    {
+      "id": 156,
+      "abbrev": "APSEC",
+      "fullname": "Asia-Pacific Software Engineering Conference",
+      "level": "C",
+      "descipline": "cs",
+      "subdescipline": "软件工程\/系统软件\/程序设计语言",
+      "publisher": "IEEE",
+      "website": "http:\/\/www.apsec2017.org\/"
+    },
+    {
+      "id": 159,
+      "abbrev": "SCAM",
+      "fullname": "IEEE International Working Conference on Source Code Analysis and Manipulation",
+      "level": "C",
+      "descipline": "cs",
+      "subdescipline": "软件工程\/系统软件\/程序设计语言",
+      "publisher": "IEEE",
+      "website": "http:\/\/www.ieee-scam.org\/"
+    },
+    {
+      "id": 164,
+      "abbrev": "SEKE",
+      "fullname": "International Conference on Software Engineering and Knowledge Engineering",
+      "level": "C",
+      "descipline": "cs",
+      "subdescipline": "软件工程\/系统软件\/程序设计语言",
+      "publisher": "KSI",
+      "website": "The 25th International Conference on Software Engineering and Knowledge Engineering\r\nSEKE 2013\r\nHyatt Harborside at Logan Int'l Airport, Boston, USA\r\nJune 27 - June 29, 2013\r\nhttp:\/\/www.ksi.edu\/seke\/seke13.html"
+    },
+    {
+      "id": 176,
+      "abbrev": "SIGMOD",
+      "fullname": "ACM Conference on Management of Data",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "数据库\/数据挖掘\/内容检索",
+      "publisher": "ACM",
+      "website": "http:\/\/www.sigmod.org"
+    },
+    {
+      "id": 178,
+      "abbrev": "SIGIR",
+      "fullname": "International Conference on Research an Development in Information Retrieval",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "数据库\/数据挖掘\/内容检索",
+      "publisher": "ACM",
+      "website": "http:\/\/www.acm.org\/sigir\/"
+    },
+    {
+      "id": 179,
+      "abbrev": "VLDB",
+      "fullname": "International Conference on Very Large Data Bases",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "数据库\/数据挖掘\/内容检索",
+      "publisher": "ACM",
+      "website": "http:\/\/www.vldb.org"
+    },
+    {
+      "id": 180,
+      "abbrev": "ICDE",
+      "fullname": "IEEE International Conference on Data Engineering",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "数据库\/数据挖掘\/内容检索",
+      "publisher": "IEEE",
+      "website": "http:\/\/www.icde.org\/"
+    },
+    {
+      "id": 181,
+      "abbrev": "CIKM",
+      "fullname": "ACM International Conference on Information and Knowledge Management",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "数据库\/数据挖掘\/内容检索",
+      "publisher": "ACM",
+      "website": "http:\/\/www.cikm.org\/"
+    },
+    {
+      "id": 183,
+      "abbrev": "DASFAA",
+      "fullname": "Database Systems for Advanced Applications",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "数据库\/数据挖掘\/内容检索",
+      "publisher": null,
+      "website": "http:\/\/www.dasfaa.net\/"
+    },
+    {
+      "id": 186,
+      "abbrev": "ICDM",
+      "fullname": "IEEE International Conference on Data Mining",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "数据库\/数据挖掘\/内容检索",
+      "publisher": "IEEE",
+      "website": "http:\/\/www.cs.uvm.edu\/~icdm\/"
+    },
+    {
+      "id": 187,
+      "abbrev": "ICDT",
+      "fullname": "International Conference on Database Theory",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "数据库\/数据挖掘\/内容检索",
+      "publisher": "Springer",
+      "website": "http:\/\/edbticdt2013.disi.unige.it\/"
+    },
+    {
+      "id": 190,
+      "abbrev": "WWW",
+      "fullname": "International World Wide Web Conferences",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "数据库\/数据挖掘\/内容检索",
+      "publisher": "Springer",
+      "website": "http:\/\/www.www2015.it\/"
+    },
+    {
+      "id": 191,
+      "abbrev": "SDM",
+      "fullname": " International Conference on Data Mining",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "数据库\/数据挖掘\/内容检索",
+      "publisher": "SIAM",
+      "website": "http:\/\/www.siam.org\/"
+    },
+    {
+      "id": 192,
+      "abbrev": "WSDM",
+      "fullname": "ACM International Conference on Web Search and Data Mining",
+      "level": "C",
+      "descipline": "cs",
+      "subdescipline": "数据库\/数据挖掘\/内容检索",
+      "publisher": "ACM",
+      "website": "http:\/\/www.wsdm-conference.org\/"
+    },
+    {
+      "id": 205,
+      "abbrev": "STOC",
+      "fullname": "ACM Symposium on Theory of Computing",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "计算机科学理论",
+      "publisher": "ACM",
+      "website": "http:\/\/www.sigact.org\/stoc.html"
+    },
+    {
+      "id": 206,
+      "abbrev": "FOCS",
+      "fullname": "IEEE Symposium on Foundations of Computer Science",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "计算机科学理论",
+      "publisher": "IEEE",
+      "website": "http:\/\/ieee-focs.org\/"
+    },
+    {
+      "id": 207,
+      "abbrev": "LICS",
+      "fullname": "IEEE Symposium on Logic in Computer Science",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "计算机科学理论",
+      "publisher": "IEEE",
+      "website": "http:\/\/lics.rwth-aachen.de\/index.html"
+    },
+    {
+      "id": 209,
+      "abbrev": "SODA",
+      "fullname": "ACM-SIAM Symposium on Discrete Algorithms",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "计算机科学理论",
+      "publisher": "SIAM",
+      "website": "http:\/\/www.siam.org\/meetings\/da15\/"
+    },
+    {
+      "id": 213,
+      "abbrev": "ICALP",
+      "fullname": "International Colloquium on Automata,Languages and Programming",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "计算机科学理论",
+      "publisher": "Springer",
+      "website": "http:\/\/icalp17.mimuw.edu.pl\/"
+    },
+    {
+      "id": 216,
+      "abbrev": "ESA",
+      "fullname": "European Symposium on Algorithms",
+      "level": "C",
+      "descipline": "cs",
+      "subdescipline": "计算机科学理论",
+      "publisher": "Springer",
+      "website": "http:\/\/esa-symposium.org\/"
+    },
+    {
+      "id": 225,
+      "abbrev": "ACM MM",
+      "fullname": "ACM International Conference on Multimedia",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "计算机图形学与多媒体",
+      "publisher": "ACM",
+      "website": "http:\/\/www.acmmm.org\/"
+    },
+    {
+      "id": 236,
+      "abbrev": "ICME",
+      "fullname": "IEEE International Conference on Multimedia &Expo",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "计算机图形学与多媒体",
+      "publisher": "IEEE",
+      "website": "http:\/\/www.icme2017.org\/"
+    },
+    {
+      "id": 241,
+      "abbrev": "ISMAR",
+      "fullname": "International Symposium on Mixed and Augmented Reality",
+      "level": "C",
+      "descipline": "cs",
+      "subdescipline": "计算机图形学与多媒体",
+      "publisher": "IEEE\/ACM",
+      "website": "http:\/\/ismar.vgtc.org\/"
+    },
+    {
+      "id": 244,
+      "abbrev": "ICIP",
+      "fullname": "International Conference on Image Processing",
+      "level": "C",
+      "descipline": "cs",
+      "subdescipline": "计算机图形学与多媒体",
+      "publisher": "IEEE",
+      "website": "http:\/\/www.ieeeicip.org\/"
+    },
+    {
+      "id": 250,
+      "abbrev": "CVPR",
+      "fullname": "IEEE Conference on Computer Vision and Pattern Recognition",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "人工智能",
+      "publisher": "IEEE",
+      "website": "http:\/\/cvpr2017.thecvf.com\/"
+    },
+    {
+      "id": 251,
+      "abbrev": "ICCV",
+      "fullname": "International Conference on Computer Vision",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "人工智能",
+      "publisher": "IEEE",
+      "website": "http:\/\/iccv2017.thecvf.com\/"
+    },
+    {
+      "id": 253,
+      "abbrev": "IJCAI",
+      "fullname": "International Joint Conference on Artificial Intelligence",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "人工智能",
+      "publisher": "IJCAI",
+      "website": "http:\/\/www.ijcai.org"
+    },
+    {
+      "id": 255,
+      "abbrev": "NIPS",
+      "fullname": "Annual Conference on Neural Information Processing Systems",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "人工智能",
+      "publisher": "MIT Press",
+      "website": "http:\/\/www.nips.cc"
+    },
+    {
+      "id": 256,
+      "abbrev": "ACL",
+      "fullname": "Annual Meeting of the Association for Computational Linguistics",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "人工智能",
+      "publisher": "ACL",
+      "website": "http:\/\/acl2017.org\/"
+    },
+    {
+      "id": 257,
+      "abbrev": "EMNLP",
+      "fullname": "Conference on Empirical Methods in Natural Language Processing",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "人工智能",
+      "publisher": "ACL",
+      "website": "http:\/\/emnlp2017.net\/"
+    },
+    {
+      "id": 258,
+      "abbrev": "ECAI",
+      "fullname": "European Conference on Artificial Intelligence",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "人工智能",
+      "publisher": "IOS Press",
+      "website": "http:\/\/www.ecai2016.org\/"
+    },
+    {
+      "id": 259,
+      "abbrev": "ECCV",
+      "fullname": "European Conference on Computer Vision",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "人工智能",
+      "publisher": "Springer",
+      "website": "http:\/\/www.eccv2016.org\/"
+    },
+    {
+      "id": 260,
+      "abbrev": "ICRA",
+      "fullname": "IEEE International Conference on Robotics and Automation",
+      "level": "B",
+      "descipline": "cs",
+      "subdescipline": "人工智能",
+      "publisher": "IEEE",
+      "website": "http:\/\/www.icra2017.org\/"
+    },
+    {
+      "id": 271,
+      "abbrev": "ALT",
+      "fullname": "International Conference on Algorithmic Learning Theory",
+      "level": "C",
+      "descipline": "cs",
+      "subdescipline": "人工智能",
+      "publisher": "Springer",
+      "website": "http:\/\/www.comp.nus.edu.sg\/~fstephan\/alt\/alt2015\/"
+    },
+    {
+      "id": 284,
+      "abbrev": "CHI",
+      "fullname": "ACM Conference on Human Factors in Computing Systems",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "人工智能",
+      "publisher": "ACM",
+      "website": "http:\/\/chi2017.acm.org\/"
+    },
+    {
+      "id": 304,
+      "abbrev": "RTSS",
+      "fullname": "Real-Time Systems Symposium",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "人工智能",
+      "publisher": "IEEE",
+      "website": "http:\/\/2017.rtss.org\/"
+    },
+    {
+      "id": 313,
+      "abbrev": "AAAI",
+      "fullname": "AAAI Conference on Artificial Intelligence",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "人工智能",
+      "publisher": "AAAI",
+      "website": "http:\/\/www.aaai.org\/Conferences\/AAAI\/aaai.php"
+    },
+    {
+      "id": 315,
+      "abbrev": "COMPSAC",
+      "fullname": "Computer Software and Applications Conference",
+      "level": "C",
+      "descipline": "cs",
+      "subdescipline": "软件工程\/系统软件\/程序设计语言",
+      "publisher": " IEEE",
+      "website": "https:\/\/www.computer.org\/web\/compsac2017"
+    },
+    {
+      "id": 316,
+      "abbrev": "ICSE",
+      "fullname": " \t\r\n\r\nInternational Conference on Software \r\nEngineering",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "软件工程\/系统软件\/程序设计语言",
+      "publisher": " ACM",
+      "website": "http:\/\/www.icse-conferences.org\/"
+    },
+    {
+      "id": 317,
+      "abbrev": "KDD",
+      "fullname": "Knowledge Discovery and Data Mining",
+      "level": "A",
+      "descipline": "cs",
+      "subdescipline": "人工智能",
+      "publisher": "ACM",
+      "website": "http:\/\/www.kdd.org\/"
+    },
+    {
+      "id": 318,
+      "abbrev": "SenSys",
+      "fullname": "International Conference on Embedded Networked Sensor Systems",
+      "level": "C",
+      "descipline": "cs",
+      "subdescipline": "计算机网络",
+      "publisher": "ACM",
+      "website": "http:\/\/sensys.acm.org\/"
+    },
+    {
+      "id": 320,
+      "abbrev": "SC",
+      "fullname": "Conference on High Performance Computing (Supercomputing)",
+      "level": "C",
+      "descipline": "cs",
+      "subdescipline": "计算机体系结构\/并行与分布计算\/存储系统",
+      "publisher": "IEEE",
+      "website": "http:\/\/hipc.org\/"
+    },
+    {
+      "id": 321,
+      "abbrev": "UIST",
+      "fullname": " \t\r\n\r\n User Interface Software and Technology",
+      "level": "C",
+      "descipline": "cs",
+      "subdescipline": "人机交互与普适计算",
+      "publisher": "ACM",
+      "website": "http:\/\/uist.acm.org"
+    },
+    {
+      "id": 322,
+      "abbrev": "CONCUR",
+      "fullname": "International Conference on \r\nConcurrency Theory",
+      "level": "C",
+      "descipline": "cs",
+      "subdescipline": "计算机科学理论",
+      "publisher": null,
+      "website": null
+    },
+    {
+      "id": 324,
+      "abbrev": "SIGCOMM",
+      "fullname": "Conference on Applications, Technologies, Architectures, and Protocols for Computer Communication",
+      "level": "C",
+      "descipline": "cs",
+      "subdescipline": "计算机网络",
+      "publisher": " ACM",
+      "website": "http:\/\/www.sigcomm.org\/events\/sigcomm-conference"
+    },
+    {
+      "id": 325,
+      "abbrev": "ICML",
+      "fullname": " \t\r\n\r\nInternational Conference on Machine \r\nLearning",
+      "level": "C",
+      "descipline": "cs",
+      "subdescipline": "人工智能",
+      "publisher": "IMLS",
+      "website": "https:\/\/2017.icml.cc\/"
+    }
+  ]
+}

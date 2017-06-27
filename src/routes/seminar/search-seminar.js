@@ -19,7 +19,7 @@ class SearchSeminar extends React.Component {
       let params = { query: query, offset: 0, size: size };
       this.props.dispatch({ type: 'seminar/searchActivity', payload: params });
     } else {
-      let params = { offset: 0, size: size };
+      let params = { offset: 0, size: size, filter: { src: 'ccf' } };
       this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
     }
   };

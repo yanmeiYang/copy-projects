@@ -44,7 +44,7 @@ class ExpertRating extends React.Component {
     const { content, level, integrated } = this.state;
     return (
       <div style={{ marginTop: '20px' }}>
-        <span style={{ fontWeight: 'bold' }}>专家评分：</span>
+        {/*<span style={{ fontWeight: 'bold' }}>专家评分：</span>*/}
         <table >
           <tbody>
           <tr>

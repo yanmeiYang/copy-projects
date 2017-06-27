@@ -43,7 +43,7 @@ class CommentsByActivity extends React.Component {
                   <p className={styles.time}>{comment.ts}</p>
                 </span>
                 </li>
-                <hr className={styles.dividingLine} />
+                <hr className={styles.dividingLine}/>
               </div>
 
             )
@@ -51,7 +51,7 @@ class CommentsByActivity extends React.Component {
         </ul>
         <div className={styles.comment}>
           <Input type='textarea' rows={4} placeholder='请输入评语。。。' ref='comment'/>
-          <Button type="primary" onClick={this.submitComment}>发布</Button>
+          <Button type="primary" onClick={this.submitComment}>发布评论</Button>
         </div>
       </Col>
     )

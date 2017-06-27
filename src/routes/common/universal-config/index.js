@@ -20,8 +20,21 @@ class UniversalConfig extends React.Component {
   componentDidMount() {
     // To disabled submit button at the beginning.
     this.props.form.validateFields();
-    console.log('>>>', this.props.hideValue);
   }
+
+  onDelete = (e) => {
+    const key = e.target && e.target.getAttribute('data');
+    this.props.dispatch({
+      type: 'universalConfig/deleteByKey',
+      payload: { category: this.props.universalConfig.category, key },
+    });
+  };
+
+  onEdit = (e) => {
+    const data = e.target && e.target.getAttribute('data');
+    const json = JSON.parse(data);
+    this.props.form.setFieldsValue(json);
+  };
 
   handleSubmit = (e) => {
     const { universalConfig } = this.props;
@@ -42,20 +55,6 @@ class UniversalConfig extends React.Component {
         console.log('Received values of form: ', values);
       }
     });
-  };
-
-  onDelete = (e) => {
-    const key = e.target && e.target.getAttribute('data');
-    this.props.dispatch({
-      type: 'universalConfig/deleteByKey',
-      payload: { category: this.props.universalConfig.category, key },
-    });
-  };
-
-  onEdit = (e) => {
-    const data = e.target && e.target.getAttribute('data');
-    const json = JSON.parse(data);
-    this.props.form.setFieldsValue(json);
   };
 
   render() {
@@ -120,6 +119,8 @@ class UniversalConfig extends React.Component {
             dataSource={universalConfig.data}
             bordered
             className={styles.unicfg}
+            size="small"
+            pagination={false}
           >
             <Column title="名称" dataIndex="key" key="key" />
             {!this.props.hideValue &&

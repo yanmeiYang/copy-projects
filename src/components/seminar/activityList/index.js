@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { routerRedux } from 'dva/router';
+import { Button } from 'antd'
 import { connect } from 'dva';
 import styles from  './index.less';
 
@@ -11,6 +12,12 @@ class ActivityList extends React.Component {
     this.props.dispatch(routerRedux.push({
       pathname: `/seminar/${id}`,
     }));
+  };
+
+  goToRating = (id) => {
+    this.props.dispatch(routerRedux.push({
+      pathname: `/seminar/expert-rating/${id}`,
+    }))
   };
 
   render() {
@@ -27,19 +34,28 @@ class ActivityList extends React.Component {
         </div>
         <div className={styles.con}>
           <h3>
-            <a href='javascript:void(0)' onClick={this.goToDetail.bind(this, result.id)}>
+            <a href='javascript:void(0)' onClick={this.goToRating.bind(this, result.id)}>
               {result.title}
             </a>
           </h3>
+          <Button type='' className={styles.viewTheActivityBtn} size='small'
+                  onClick={this.goToDetail.bind(this, result.id)}>查看活动</Button>
           <div className={styles.info}>
             <p>
                 <span className={styles.type}>
-                    活动类型：{result.type === 0 ? 'seminar' : 'workshop'}
+                    活动类型：{result.category}
                   </span>
-              {/*<span>*/}
-              {/*<em>关键字：</em>*/}
-              {/*数据挖掘 机器学习 人工智能*/}
-              {/*</span>*/}
+              <span>
+              <span>承办单位：</span>
+                {
+                  result.organizer.map((item,index)=>{
+                    return (<span key={Math.random()}>
+                      <span>{item}</span>
+                      {index<result.organizer.length-1&&<span>,&nbsp;</span>}
+                    </span>)
+                  })
+                }
+              </span>
             </p>
             <p className={styles.location}>活动地点：{result.location.address}</p>
           </div>

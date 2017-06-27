@@ -4,17 +4,19 @@ import { getCurrentUserInfo, logout } from '../services/app';
 import { config } from '../utils';
 
 const { prefix } = config;
+const LocalStorage = localStorage;
 
 export default {
   namespace: 'app',
   state: {
     user: {},
+    token: LocalStorage.getItem('token'),
+    roles: { 'admin': true, 'ccf_user': true },// TODO parse roles string into this object.
     menuPopoverVisible: false,
-    siderFold: localStorage.getItem(`${prefix}siderFold`) === 'true',
-    darkTheme: localStorage.getItem(`${prefix}darkTheme`) === 'true',
-    token: localStorage.getItem('token'),
+    siderFold: LocalStorage.getItem(`${prefix}siderFold`) === 'true',
+    darkTheme: LocalStorage.getItem(`${prefix}darkTheme`) === 'true',
     isNavbar: false, // document.body.clientWidth < 769,
-    navOpenKeys: JSON.parse(localStorage.getItem(`${prefix}navOpenKeys`)) || [],
+    navOpenKeys: JSON.parse(LocalStorage.getItem(`${prefix}navOpenKeys`)) || [],
   },
   subscriptions: {
     setup({ dispatch }) {
@@ -31,29 +33,25 @@ export default {
   },
   effects: {
     *getCurrentUserInfo({ payload }, { call, put }) {
-      if (localStorage.getItem('token')) {
+      if (LocalStorage.getItem('token')) {
+        // TODO 每次打开新URL都要访问一次。想办法缓存一下。
         const { data } = yield call(getCurrentUserInfo, parse(payload));
         if (data) {
-          yield put({
-            type: 'getCurrentUserInfoSuccess',
-            payload: data,
-          });
+          yield put({ type: 'getCurrentUserInfoSuccess', payload: data });
           if (location.pathname === '/login') {
             yield put(routerRedux.push('/'));
           }
         }
       } else if (location.pathname !== '/login') {
-        let from = location.pathname;
-        if (location.pathname === '/') {
-          from = '/';
-        }
+        // let from = location.pathname;
+        // if (location.pathname === '/') {
+        //   from = '/';
+        // }
         // window.location = `${location.origin}/login?from=${from}`;
       }
     },
 
-    *logout({
-              payload,
-            }, { call, put }) {
+    *logout({ payload }, { call, put }) {
       const data = yield call(logout, parse(payload));
       if (data.success) {
         yield put({ type: 'getCurrentUserInfo' });
@@ -81,7 +79,7 @@ export default {
     },
 
     switchSider(state) {
-      localStorage.setItem(`${prefix}siderFold`, !state.siderFold);
+      LocalStorage.setItem(`${prefix}siderFold`, !state.siderFold);
       return {
         ...state,
         siderFold: !state.siderFold,
@@ -89,7 +87,7 @@ export default {
     },
 
     switchTheme(state) {
-      localStorage.setItem(`${prefix}darkTheme`, !state.darkTheme);
+      LocalStorage.setItem(`${prefix}darkTheme`, !state.darkTheme);
       return {
         ...state,
         darkTheme: !state.darkTheme,
@@ -117,4 +115,4 @@ export default {
       };
     },
   },
-}
+};

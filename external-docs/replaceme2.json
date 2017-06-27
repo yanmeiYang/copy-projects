@@ -1,0 +1,60 @@
+{
+  "_id" : 1,    // 存序号即可
+  "info" : {
+    "name" : "AAAI (Artificial Intelligence)", // 会议全称fullname
+    "name_a" : [ // 缩写 abbrev
+      "abbr 1",
+      "abbr 2"
+    ],
+    "name_zh" : null, // 会议中文名称
+    "url" : "https:\/\/www.usenix.org\/conference\/fast17", // 官网URL website
+    "publisher": "USENIX",
+    "level" : "A", // 例如 CCF A类，就填写A
+    "cs_area" : [“sss”,”sss"], // 领域
+    "descipline": "cs",
+    "subdescipline": " 计算机体系结构\/并行与分布计算\/存储系统",
+    "type" : 0 // 会议类型，见 Appendix A: venue_type.
+  },
+  "best_papers": [  // 引用排名最高的前三篇+bestpaper
+    {
+      "year": 2009,
+      // 当前论文的年份
+      "title": "xxxx",
+      "authors": [
+        {
+          name: "Author Name"
+        },
+        {
+          name: "author2...."
+        }
+      ],
+      "citation": 40, // citation number.
+      "is_bestpaper": true // 是否是当年的bestpaper
+    },
+    {
+      // papers 2
+    }
+  ]
+}
+
+
+Appendix A: venue_type
+
+Type字段是个枚举类型：在上面的type字段应该填写下面对应会议类型前面的数字。
+============================
+{
+"0" : "unknown",
+"1" : "journal",
+"2" : "conference",
+"3" : "book",
+"4" : "thesis",
+"5" : "technical report",
+"6" : "encyclopedia",
+"7" : "magazine",
+"8" : "newsletter",
+"9" : "play",
+"10" : "inproceedings",
+"11" : "article",
+"12" : "incollection",
+"13" : "www"
+}

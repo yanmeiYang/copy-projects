@@ -9,6 +9,10 @@ import * as profileUtils from '../../utils/profile_utils';
 import * as personService from '../../services/person';
 import * as pubService from '../../services/publication';
 
+/**
+ * @param param
+ *
+ */
 class PersonList extends React.Component {
   state = {};
 
@@ -28,6 +32,8 @@ class PersonList extends React.Component {
             const email = profileUtils.displayEmailSrc(person);
             const homepage = person.contact && person.contact.homepage;
             const indices = person.indices;
+
+            const tags = findTopNTags(person, 8);
 
             return (
               <div key={person.id} className="item">
@@ -97,16 +103,19 @@ class PersonList extends React.Component {
                       }
                     </div>
 
-                    {person.tags &&
+                    {tags &&
                     <div className="tag_zone">
                       <div>
-                        <h5>标签:</h5>
+                        <h4><i className="fa fa-area-chart fa-fw" />研究兴趣:</h4>
                         <div className={styles.tagWrap}>
-                          {person.tags.map((tag) => {
-                            return (
-                              <Link to={`/search/${tag.t}/0/30`} key={Math.random()}><Tag
-                                className={styles.tag}>{tag.t}</Tag></Link>);
-                          })}
+                          {
+                            tags.map((tag) => {
+                              return (
+                                <Link to={`/search/${tag.t}/0/30`} key={Math.random()}>
+                                  <Tag className={styles.tag}>{tag.t}</Tag>
+                                </Link>);
+                            })
+                          }
                         </div>
                       </div>
                     </div>
@@ -126,4 +135,13 @@ class PersonList extends React.Component {
   }
 }
 
+function findTopNTags(person, n) {
+  console.log(person.tags, person.tags_zh);
+  return person.tags_zh;
+  //   if (person.tags_zh || )
+  // /* Find top 8 tags */
+  // if(person.tags_zh && person.tags_zh.length>0){
+  //
+  // }
+}
 export default PersonList;

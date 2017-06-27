@@ -77,6 +77,15 @@ const Routers = function ({ history, app }) {
             }, 'addSeminar');
           },
         }, {
+          path: 'seminar/expert-rating/:id',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('./models/seminar'));
+              cb(null, require('./routes/seminar/expertRatingPage'));
+            }, 'expertRating');
+          },
+        },
+        {
           path: 'seminar/:id',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
@@ -97,7 +106,7 @@ const Routers = function ({ history, app }) {
           path: 'person/:id',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
-              registerModel(app, require('./models/seminar'));//跨命名空间调用有在依赖注册时有先后顺序
+              registerModel(app, require('./models/seminar'));// 跨命名空间调用有在依赖注册时有先后顺序
               registerModel(app, require('./models/person'));
               registerModel(app, require('./models/publications'));
               registerModel(app, require('./models/vis/vis-research-interest'));
@@ -145,6 +154,18 @@ const Routers = function ({ history, app }) {
           cb(null, { component: require('./routes/admin/system-config') });
         }, 'admin');
       },
+      childRoutes: [
+        {
+          path: '/admin/system-config/:category',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('./models/admin/system-config'));
+              registerModel(app, require('./models/common/universal-config'));
+              cb(null, require('./routes/admin/system-config'));
+            }, 'admin');
+          },
+        },
+      ],
     },
     {
       path: '/technical-committees',
@@ -196,6 +217,8 @@ const Routers = function ({ history, app }) {
         }, 'error');
       },
     },
+
+    // examples ----------------------------------------------------------------------
 
     {
       path: '/dashboard',
@@ -321,7 +344,7 @@ const Routers = function ({ history, app }) {
     },
   ]
 
-  return <Router history={history} routes={routes}/>;
+  return <Router history={history} routes={routes} />;
 }
 
 export default Routers;

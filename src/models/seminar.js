@@ -37,9 +37,10 @@ export default {
           dispatch({ type: 'app/getCurrentUserInfo' });
         }
 
+        const expertRating = pathToRegexp('/seminar/expert-rating/:id').exec(location.pathname);
         const match = pathToRegexp('/seminar/:id').exec(location.pathname);
-        if (match) {
-          const id = decodeURIComponent(match[1]);
+        if (match || expertRating) {
+          const id = match ? decodeURIComponent(match[1]) : decodeURIComponent(expertRating[1]);
           dispatch({ type: 'getSeminarByID', payload: { id } });
           // dispatch({ type: 'listActivityScores', payload: { uid: 'me', src: 'ccf', actid: id } });
           dispatch({ type: 'getCommentFromActivity', payload: { id: id, offset: 0, size: 10 } });
@@ -58,17 +59,17 @@ export default {
       yield put({ type: 'getSeminarsSuccess', payload: { data, offset, size } });
     },
     *getSeminarByID({ payload }, { call, put }){
+      yield put({ type: 'showLoading' });
+      yield put({ type: 'clearState' });
       const { id } = payload;
       const { data } = yield call(seminarService.getSeminarById, id);
-
       const listActivityScores = yield call(seminarService.listActivityScores, 'me', 'ccf', id);
       yield put({ type: 'listActivityScoresSuccess', payload: listActivityScores.data });
-
       yield put({ type: 'getSeminarByIDSuccess', payload: { data } });
     },
 
     *getSpeakerSuggest({ payload }, { call, put }){
-      console.log(payload);
+      yield put({ type: 'showLoading' });
       const { data } = yield call(seminarService.getSpeakerSuggest, payload);
       yield put({ type: 'getSpeakerSuggestSuccess', payload: { data } });
     },
@@ -143,6 +144,10 @@ export default {
   },
 
   reducers: {
+    clearState(state){
+      return { ...state, summaryById: [], expertRating: [] }
+    },
+
     getSeminarsSuccess(state, { payload: { data, offset, size } }){
       let newData = [];
       if (state.results.length >= size) {
@@ -154,11 +159,11 @@ export default {
     },
 
     getSeminarByIDSuccess(state, { payload: { data } }){
-      return { ...state, summaryById: data };
+      return { ...state, summaryById: data, loading: false };
     },
 
     getSpeakerSuggestSuccess(state, { payload: { data } }){
-      return { ...state, speakerSuggests: data };
+      return { ...state, speakerSuggests: data, loading: false };
     },
     searchActivitySuccess(state, { payload: { data, query, offset } }){
       return {

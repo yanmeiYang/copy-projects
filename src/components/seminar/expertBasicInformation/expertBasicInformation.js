@@ -14,14 +14,14 @@ class ExpertBasicInformation extends React.Component {
   state = {
     searchExperts: false,
     suggestSpeakers: [],
-    gender: 'male',
+    // gender: "1",
     speakerInfo: [],
   };
-  speakerInformation = { name: '', position: '', affiliation: '', aid: '', img: '', bio: '' };
+  speakerInformation = { name: '', position: '', affiliation: '', aid: '', img: '', bio: '', phone: '', email: '',gender:'1' };
   //改变性别
-  onChangeGender = (e) => {
-    this.setState({ gender: e.target.value });
-  };
+  // onChangeGender = (e) => {
+  //   this.setState({ gender: e.target.value });
+  // };
 
   //增加嘉宾
   getImg = (src) => {
@@ -108,7 +108,7 @@ class ExpertBasicInformation extends React.Component {
   };
 
   render() {
-    let { suggestSpeakers, gender } = this.state;
+    let { suggestSpeakers } = this.state;
 
     let { integral } = this.props;
     return (
@@ -141,9 +141,9 @@ class ExpertBasicInformation extends React.Component {
             <div className='ant-form-item'>
               <label className="ant-col-3">性别: </label>
               <div className='ant-col-21'>
-                <RadioGroup value={gender} onChange={this.onChangeGender.bind()}>
-                  <Radio value="male" name="gender">男的</Radio>
-                  <Radio value="female" name="gender">女的</Radio>
+                <RadioGroup defaultValue="1" onChange={this.saveExpertInfo.bind(this, 'gender')}>
+                  <Radio value="1" name="gender">男的</Radio>
+                  <Radio value="2" name="gender">女的</Radio>
                 </RadioGroup>
               </div>
             </div>
@@ -164,13 +164,13 @@ class ExpertBasicInformation extends React.Component {
             <div className='ant-form-item'>
               <label className="ant-col-3">电话: </label>
               <div className='ant-col-21'>
-                <Input size='large' placeholder='电话' ref='speakerIphone'/>
+                <Input size='large' placeholder='电话' ref='speakerIphone' onBlur={this.saveExpertInfo.bind(this, 'phone')}/>
               </div>
             </div>
             <div className='ant-form-item'>
               <label className="ant-col-3">邮箱: </label>
               <div className='ant-col-21'>
-                <Input size='large' placeholder='邮箱' ref='speakerEmail'/>
+                <Input size='large' placeholder='邮箱' ref='speakerEmail' onBlur={this.saveExpertInfo.bind(this, 'email')}/>
               </div>
             </div>
 

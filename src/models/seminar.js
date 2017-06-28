@@ -145,7 +145,7 @@ export default {
 
   reducers: {
     clearState(state){
-      return { ...state, summaryById: [], expertRating: [] }
+      return { ...state, summaryById: [], expertRating: [], results: [] }
     },
 
     getSeminarsSuccess(state, { payload: { data, offset, size } }){

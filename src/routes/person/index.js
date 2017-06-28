@@ -3,33 +3,124 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Icon, InputNumber, Rate } from 'antd';
+import { Icon, InputNumber, Rate, Tabs, Spin } from 'antd';
 import { ProfileInfo } from '../../components/person';
 import * as personService from '../../services/person';
 import styles from './index.less';
 import PersonFeaturedPapers from './person-featured-papers';
 import ActivityList from '../../components/seminar/activityList';
+const TabPane = Tabs.TabPane;
 
 
-const Person = ({ dispatch, person, loading, seminar }) => {
+const Person = ({ dispatch, person, loading, seminar, publications }) => {
   const { profile, avgScores } = person;
   const { results } = seminar;
+  const totalPubs = profile.indices && profile.indices.num_pubs;
 
-  // function onSearch({ query }) {
-  //   console.log('onSearch in PersonPage');
-  //   dispatch(routerRedux.push({
-  //     pathname: `/search/${query}/0/30`,
-  //   }));
-  // }
+  const profileTabs = [{
+    title: '专家评分',
+    content: <table style={{ marginBottom: 10 }}>
+      {avgScores.map((score) => {
+        return (
+          <tbody key={score.key}>
+          {score.key === 'level' && <tr>
+            <td>演讲内容（水平）:</td>
+            <td>
+              <Rate disabled defaultValue={score.score}/>
+              <span>{score.score}</span>
+            </td>
+          </tr>
+          }
+          {score.key === 'content' && <tr>
+            <td>演讲水平:</td>
+            <td>
+              <Rate disabled defaultValue={score.score}/>
+              <span>{score.score}</span>
+            </td>
+          </tr>}
+          {score.key === 'integrated' && <tr>
+            <td>综合评价（其它贡献）:</td>
+            <td>
+              <Rate disabled defaultValue={score.score}/>
+              <span>{score.score}</span>
+            </td>
+          </tr>}
+          </tbody>
+        )
+      })}
+    </table>
+  }, {
+    title: '参与的活动',
+    content: <Spin spinning={seminar.loading}>
+      <div style={{ minHeight: 150 }}>{results.map((activity) => {
+        return (
+          <div key={activity.id + Math.random()}>
+            <ActivityList result={activity}/>
+          </div>
+        )
+      })}</div>
+    </Spin>
+  }, {
+    title: '代表性论文',
+    content: <Spin spinning={publications.loading}>
+      <div>
+        <div style={{ float: 'right', marginTop: '-36px', position: 'relative' }}>
+          <a
+            href={personService.getAMinerProfileUrl(profile.name, profile.id)}
+            target="_blank" rel="noopener noreferrer"
+          >
+            查看全部 {totalPubs} 篇论文<Icon type="right"/>
+          </a>
+        </div>
+        <PersonFeaturedPapers personId={profile.id} totalPubs={totalPubs}/>
+      </div>
+    </Spin>
+  }];
+
+
   function getMoreSeminar(e) {
-    e.target.style.display='none';
+    e.target.style.display = 'none';
     dispatch({
       type: 'seminar/getSeminar',
       payload: { offset: 0, size: 10000, filter: { src: 'ccf', aid: profile.id } }
     })
   }
 
-  const totalPubs = profile.indices && profile.indices.num_pubs;
+  let personId = '';
+
+  function callback(key) {
+    switch (key) {
+      case '1':
+        if (results.length > 0) {
+          return ''
+        } else {
+          return (
+            <div>
+              {dispatch({ type: 'seminar/clearState' })}
+              {dispatch({
+                type: 'seminar/getSeminar',
+                payload: { offset: 0, size: 5, filter: { src: 'ccf', aid: profile.id } }
+              })}</div>
+          );
+        }
+      case '2':
+        if (publications.resultsByCitation.length > 0) {
+          return ''
+        } else {
+          return dispatch({
+            type: 'publications/getPublications',
+            payload: {
+              personId: profile.id,
+              orderBy: 'byCitation',
+              offset: 0,
+              size: 5,
+            },
+          });
+        }
+      default:
+        return false;
+    }
+  }
 
   return (
     <div className="content-inner">
@@ -39,71 +130,16 @@ const Person = ({ dispatch, person, loading, seminar }) => {
       <div style={{ marginTop: 30 }}/>
 
       <div>
-        <h1 className={styles.sec_header}>专家评分：</h1>
-        <table style={{ marginBottom: 10 }}>
-          {avgScores.map((score) => {
+        <Tabs defaultActiveKey="0" onChange={callback}>
+          {profileTabs.map((item, index) => {
             return (
-              <tbody key={score.key}>
-              {score.key === 'level' && <tr>
-                <td>演讲内容（水平）:</td>
-                <td>
-                  <Rate disabled defaultValue={score.score}/>
-                  <span>{score.score}</span>
-                </td>
-              </tr>
-              }
-              {score.key === 'content' && <tr>
-                <td>演讲水平:</td>
-                <td>
-                  <Rate disabled defaultValue={score.score}/>
-                  <span>{score.score}</span>
-                </td>
-              </tr>}
-              {score.key === 'integrated' && <tr>
-                <td>综合评价（其它贡献）:</td>
-                <td>
-                  <Rate disabled defaultValue={score.score}/>
-                  <span>{score.score}</span>
-                </td>
-              </tr>}
-              </tbody>
+              <TabPane key={index} tab={item.title}>
+                {item.content}
+              </TabPane>
             )
           })}
-        </table>
+        </Tabs>
       </div>
-
-      <div>
-        {results.length >5 &&<div style={{ float: 'right', marginTop: 8 }}>
-          <a onClick={getMoreSeminar.bind()}>
-            查看全部活动<Icon type="down"/>
-
-          </a>
-        </div>}
-        <h1 className={styles.sec_header}>参与的活动：</h1>
-        {results.map((activity) => {
-          return (
-            <div key={activity.id + Math.random()}>
-              <ActivityList result={activity}/>
-            </div>
-          )
-        })}
-      </div>
-
-      <div style={{ marginTop: 20 }}>
-        <div style={{ float: 'right', marginTop: 8 }}>
-          <a
-            href={personService.getAMinerProfileUrl(profile.name, profile.id)}
-            target="_blank" rel="noopener noreferrer"
-          >
-            查看全部 {totalPubs} 篇论文<Icon type="right"/>
-          </a>
-        </div>
-
-        <h1 className={styles.sec_header}>代表性论文:</h1>
-
-        <PersonFeaturedPapers personId={profile.id} totalPubs={totalPubs}/>
-      </div>
-
 
       {/* 先不要这个了。需要一个 top 的论文.
        <h1>论文:
@@ -111,10 +147,16 @@ const Person = ({ dispatch, person, loading, seminar }) => {
        </h1>
        <PersonPublications personId={profile.id} totalPubs={totalPubs} />
        */}
+      {/*<PersonFeaturedPapers personId={profile.id} totalPubs={totalPubs}/>*/}
     </div>
   );
 };
 
 // export default connect()(Person);
 
-export default connect(({ person, loading, seminar }) => ({ person, loading, seminar }))(Person);
+export default connect(({ person, loading, seminar, publications }) => ({
+  person,
+  loading,
+  seminar,
+  publications
+}))(Person);

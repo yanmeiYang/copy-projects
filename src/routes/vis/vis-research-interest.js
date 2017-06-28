@@ -60,7 +60,8 @@ class VisResearchInterest extends React.Component {
           return <Tag color="blue" key={item.key}>{item.key}</Tag>;
         })}
         <br />
-        <AddTags tags={[1, 2, 3]} />
+        {/*目前没有增加tag的功能，先隐藏*/}
+        {/*<AddTags tags={[1, 2, 3]} />*/}
 
         {!disable_vis_chart && visData.interests &&
         <NVD3Chart

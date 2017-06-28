@@ -52,8 +52,10 @@ export default {
     },
 
     *logout({ payload }, { call, put }) {
-      const data = yield call(logout, parse(payload));
-      if (data.success) {
+      const { data } = yield call(logout);
+      if (data.status) {
+        localStorage.removeItem('token');
+        yield put({ type: 'logoutSuccess' });
         yield put({ type: 'getCurrentUserInfo' });
       } else {
         throw (data);
@@ -113,6 +115,10 @@ export default {
         ...state,
         ...navOpenKeys,
       };
+    },
+
+    logoutSuccess(state, { payload }){
+      return { ...state, token: LocalStorage.getItem('token'), user: {} }
     },
   },
 };

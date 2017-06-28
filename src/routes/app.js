@@ -36,6 +36,7 @@ const App = ({ children, location, dispatch, app, loading }) => {
       dispatch({ type: 'app/switchMenuPopver' });
     },
     logout() {
+      console.log(12333);
       dispatch({ type: 'app/logout' });
     },
     switchSider() {

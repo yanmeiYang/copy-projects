@@ -11,6 +11,10 @@ module.exports = [
     router: '/admin/system-config/user_roles',
   },
   {
+    id: 45, bpid: 4, mpid: 4, name: '创建用户', icon: 'api',
+    router: '/admin/system-config/activity_type',
+  },
+  {
     id: 43, bpid: 4, mpid: 4, name: '活动承办单位', icon: 'api',
     router: '/admin/system-config/activity_organizer_options',
   },

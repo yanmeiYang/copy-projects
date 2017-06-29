@@ -21,6 +21,8 @@ module.exports = {
     currentUser: '/user/me',
     userLogin: '/auth/signin',
     userLogout: '/auth/signout',
+    signup: '/auth/signup',
+    checkEmail: '/user/check/:email',
 
     // search
     searchPerson: '/search/person',

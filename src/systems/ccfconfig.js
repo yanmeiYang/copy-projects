@@ -59,6 +59,16 @@ module.exports = {
     { name: 'TF', dataIndex:'tf' },
   ],
 
+  CCF_userPosition:[
+    {name:'教授',value:'1'},
+    {name:'副教授',value:'2'},
+    {name:'助理教授',value:'3'},
+    {name:'研究院',value:'4'},
+    {name:'博士后',value:'5'},
+    {name:'博士生',value:'6'},
+    {name:'研究生',value:'7'},
+    {name:'其他',value:'8'},
+  ],
 
   SysconfigDefaultCategory: 'activity_type',
   SysConfigTabs: [

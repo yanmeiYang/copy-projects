@@ -133,6 +133,15 @@ const Routers = function ({ history, app }) {
             }, 'admin');
           },
         },
+        {
+          path: '/registered',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('./models/auth/auth'));
+              cb(null, require('./routes/admin/signup'));
+            }, 'registered');
+          },
+        },
       ],
     },
     {

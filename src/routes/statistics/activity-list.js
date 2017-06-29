@@ -3,17 +3,22 @@
  */
 import React from 'react';
 import { Table } from 'antd';
+import ccfconfig from '../../systems/ccfconfig';
+
 
 const columns = [{
-  title: '名称',
+  title: '专委会',
   dataIndex: 'name1',
 }, {
-  title: '年度活动次数',
+  title: '举办活动次数（总数）',
   dataIndex: 'activity_count',
-}, {
-  title: '特邀报告次数',
-  dataIndex: 'report_count',
 }];
+ccfconfig.CCF_activityTypes.map((category,i) => {
+  return columns.push({
+      title: `${category.name}`,
+      dataIndex: `${category.dataIndex}`,
+    })
+});
 
 //模拟数据
 const data = [];
@@ -23,7 +28,7 @@ for (let i = 0; i < 10; i++) {
     name1: `转为名称 ${i}`,
     activity_count: i,
     report_count: i,
-  });
+  })
 }
 
 class ActivityList extends React.Component {
@@ -44,7 +49,7 @@ class ActivityList extends React.Component {
     };
     return (
       <div>
-        <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+        <Table rowSelection={rowSelection} columns={columns} dataSource={data}/>
       </div>
     )
   }

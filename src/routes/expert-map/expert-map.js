@@ -44,7 +44,6 @@ function showtop(usersIds,e,map,maindom,inputids){
     thisNode.appendChild(imgdiv);
   }
   var imgdivs=document.getElementsByName("scholarimg");
-  console.log(imgdivs.length)
   if(thisNode!=null){//准备绑定事件
     var pthisNode=thisNode.parentNode;
     pthisNode.addEventListener("mouseleave", function(event){
@@ -270,7 +269,14 @@ class ExpertMap extends React.Component {
 
   findcities=(city)=>{
     var location=[10,58];
-
+    var place = require('../../../external-docs/expert-map/cities.json');
+    console.log(place.results.length)
+    for(var o in place.results){
+      var add=place.results[o].address_components;
+      for(var i in add){
+        //ddsxzc
+      }
+    }
     return location;
   }
 

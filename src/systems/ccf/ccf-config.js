@@ -5,7 +5,15 @@ import React from 'react';
 
 module.exports = {
 
+  // 通用配置。所有System的配置文件必须全部包含这部分的值
+
+  Language: 'cn', // options [cn|en]
+  PreferredLanguage: 'cn', // 默认语言
+
+  SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
   DEFAULT_EXPERT_BASE: '5949c2f99ed5dbc2147fd854', // CCF会员
+  DEFAULT_EXPERT_BASE_NAME: 'CCF会员',
+
   CCF_expertBases: [
     {
       id: '5949c2f99ed5dbc2147fd854',
@@ -88,6 +96,9 @@ module.exports = {
       desc: 'CCF 活动的类型。',
     },
   ],
+
+
+  // 特殊配置，这里是System的自己的配置
 
 
 };

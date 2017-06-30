@@ -5,8 +5,10 @@ const { api } = config;
 
 const LSKEY_KGDATA = 'LSKEY_KGDATA';
 
+// Special Query '__ALL'
+const QUERY_ALL = '__ALL';
+
 export async function getKGSuggest(query, callback) {
-  console.log('>>>>> enter getKGSupport function ...');
   let kgdata;
   const obj = localStorage.getItem(LSKEY_KGDATA);
   if (obj) {
@@ -38,8 +40,13 @@ export async function getKGSuggest(query, callback) {
 function postDone(kgdata, query, callback) {
   // localStorage.removeItem(LSKEY_KGDATA);// debug always remove this.
   // TODO use kgdata to do something.....
-  // i.e. search...and return 3 level things.
-  const findResult = lookup(kgdata, query);
+  // i.e. search...and return 3 level things
+  let findResult;
+  if (QUERY_ALL === query) {
+    findResult = getAll(kgdata);
+  } else {
+    findResult = lookup(kgdata, query);
+  }
   // console.log(kgdata);
   // console.log(findResult);
   if (callback) {
@@ -139,6 +146,89 @@ function lookup(kgdata, query) {
       }
     }
     return node;
+  }
+  return null;
+}
+
+
+function getAll(kgdata) {
+  // return lookupAdvanced(kgdata, 'Mathematics of computing', 2);
+  return lookupAdvanced(kgdata, '_root', 2);
+}
+
+// Now only suport search _root.
+function lookupAdvanced(kgdata, query, depth) {
+  // TODO do some search...
+  // current node.
+  const cleanedQuery = cleanData(query);
+  const idx = kgdata.index[cleanedQuery];
+  if (idx >= 0) {
+    const item = kgdata.data[idx];
+    // 当前 Key
+    let node = {
+      name: item.name,
+      children: [],
+      definition: item.definition,
+      zh: item.zh_name,
+    };
+    // Child keys.
+    appendChilds(kgdata, node, item, 2);
+
+    // parent keys.
+    // TODO
+    if (item.pn && item.pn.length > 0) {
+      // first we load only one parent node.
+      const cleanedParentKey = cleanData(item.pn[0]);
+      const idx = kgdata.index[cleanedParentKey];
+      if (idx >= 0) {
+        const parentItem = kgdata.data[idx];
+        const oldNode = node;
+        node = {
+          name: parentItem.name,
+          children: [],
+          definition: parentItem.definition,
+          zh: parentItem.zh_name,
+        };
+
+        // add two more simblings of search.// TODO ......
+        // if(parentItem.cn && parentItem.cn.length>0){
+        //   const pcIdx = kgdata.index[]
+        // }
+
+
+        node.children.push(oldNode);
+      }
+    }
+    return node;
+  }
+  return null;
+}
+
+// node - generated current node.
+// item - current original data item.
+function appendChilds(kgdata, node, item, level) {
+  // console.log(node.zh, level, item.cn);
+  if (item.cn && item.cn.length > 0) {
+    item.cn.map((childKey) => {
+      const cleanedChildKey = cleanData(childKey);
+      const childIdx = kgdata.index[cleanedChildKey];
+      if (childIdx >= 0) {
+        const childNode = kgdata.data[childIdx];
+        const newNode = {
+          name: childNode.name,
+          level,
+          definition: childNode.definition,
+          zh: childNode.zh_name,
+        };
+        // go recursion
+        appendChilds(kgdata, newNode, childNode, level + 1);
+        if (!node.children) {
+          node.children = [];
+        }
+        node.children.push(newNode);
+      }
+      return null;
+    });
   }
   return null;
 }

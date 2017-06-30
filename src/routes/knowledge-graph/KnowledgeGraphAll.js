@@ -3,10 +3,9 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import styles from './KnowledgeGraphSearchHelper.less';
+import styles from './KnowledgeGraphAll.less';
 import * as d3 from '../../../public/d3/d3.min';
 import * as kgService from '../../services/knoledge-graph-service';
-import { sysconfig } from '../../systems';
 
 const controlDivId = 'kgvis';
 
@@ -42,8 +41,10 @@ class KnowledgeGraphSearchHelper extends React.Component {
   // If no suggestion, hide the whole div.
   showZone = () => {
     d3.select(`#${controlDivId}`)
-      .style('width', '452px')
-      .style('height', '300px');
+      .style('width', 'calc(100vw - 220px)')
+      .style('height', '80vh');
+    // .style('width', '700px')
+    // .style('height', '600px');
   };
 
   emptyD3 = () => {
@@ -59,17 +60,23 @@ class KnowledgeGraphSearchHelper extends React.Component {
       .style('height', '0px');
   };
 
+  getDimension = () => {
+    // const box = document.getElementById(`${controlDivId}`);
+    // if (box) {
+    //   return { width: box.offsetWidth, height: box.offsetHeight };
+    // }
+    return { width: 4000, height: 800 };
+  };
+
   // Create D3 Object.
   createD3 = (data) => {
     // Set the dimensions and margins of the diagram
     const margin = { top: 28, right: 20, bottom: 30, left: 20 };
-    const width = 452 - margin.left - margin.right;
-    const height = 300 - margin.top - margin.bottom;
-
-    let lang = sysconfig.Language;
-    if (this.props.lang) {
-      lang = this.props.lang === 'cn' ? 'cn' : 'en';
-    }
+    let { width, height } = this.getDimension();
+    console.log(width, height);
+    width = width - margin.left - margin.right;
+    height = height - margin.top - margin.bottom;
+    const lang = this.props.lang === 'cn' ? 'cn' : 'en';
 
     this.showZone();
     // append the svg object to the body of the page
@@ -100,6 +107,15 @@ class KnowledgeGraphSearchHelper extends React.Component {
 
     // Collapse after the second level
     // root.children.forEach(collapse);
+    if (root.children) {
+      root.children.forEach((d) => {
+        if (d.children && d.children.length > 0) {
+            d.children.forEach(collapse);
+          // d.children.forEach((d) => {
+          // });
+        }
+      });
+    }
 
     update(root);
 
@@ -122,10 +138,12 @@ class KnowledgeGraphSearchHelper extends React.Component {
 
       // Normalize for fixed-depth.
       nodes.forEach((d) => {
-        if (d.data.level !== 3) {
-          d.y = d.depth * 40;
-        } else {
+        if (d.data.level === 1) {
           d.y = d.depth * 60;
+        } else if (d.data.level < 3) {
+          d.y = d.depth * 60;
+        } else {
+          d.y = d.depth * 130;
         }
       });
 
@@ -158,21 +176,21 @@ class KnowledgeGraphSearchHelper extends React.Component {
       nodeEnter.append('text')
         .attr('dy', '.35em')
         .attr('y', (d) => {
-          if (d.data.level !== 3) {
+          if (d.data.level < 3) {
             return d.children || d._children ? -18 : 18;
           } else {
-            return d.children || d._children ? -18 : 8;
+            return d.children || d._children ? 8 : 8;
           }
         })
         .attr('text-anchor', (d) => {
-          return d.data.level !== 3 ? 'middle' : '';
+          return d.data.level < 3 ? 'middle' : '';
         })
         .html((d) => {
           const name = lang === 'cn' ? d.data.zh : d.data.name;
           return `<a class="nodeLink" href="/search/${name}/0/30">${name}</a>`;
         })
         .attr('writing-mode', (d) => {
-          return d.data.level === 3 ? 'tb' : '';
+          return d.data.level >= 3 ? 'tb' : '';
         })
         .on('mouseover', d => bindMouseOver(d))
         .on('mouseout', d => bindMouseOut(d));

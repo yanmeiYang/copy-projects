@@ -15,6 +15,10 @@ const defaultSystemConfigs = {
 
   DEFAULT_EXPERT_BASE: 'aminer', // 华为默认搜索
   DEFAULT_EXPERT_BASE_NAME: '全球专家',
+
+  PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
+  PersonList_PersonLink_NewTab: true,
+
 };
 
 const sysconfig = defaultSystemConfigs;

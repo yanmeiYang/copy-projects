@@ -4,7 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Form, Input, Icon, Row, Col, Button, Select, Checkbox, AutoComplete } from 'antd';
-import { sysconfig } from '../../systems';
+import { sysconfig } from '../../../systems';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const AutocompleteOption = AutoComplete.Option;

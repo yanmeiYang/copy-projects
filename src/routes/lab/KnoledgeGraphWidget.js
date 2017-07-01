@@ -4,6 +4,9 @@ import styles from './KnoledgeGraphWidget.less';
 import * as d3 from '../../../public/d3/d3.min';
 import * as kgService from '../../services/knoledge-graph-service';
 
+// TODO destory this page.
+// Main content has moved to knowledge-graph/KnowledgeGraphSearchHelper Component.
+
 class KnoledgeGraphWidget extends React.Component {
 
   state = {

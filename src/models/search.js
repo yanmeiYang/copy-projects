@@ -28,9 +28,9 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location, query) => {
-        if (location.pathname === '/') {
-          dispatch({ type: 'getSeminars', payload: { offset: 0, size: 5 } });
-        }
+        // if (location.pathname === '/') {
+        //   dispatch({ type: 'getSeminars', payload: { offset: 0, size: 5 } });
+        // }
         let match = pathToRegexp('/search/:query/:offset/:size').exec(location.pathname);
         if (match) {
           const keyword = decodeURIComponent(match[1]);

@@ -4,6 +4,8 @@
 import React from 'react';
 import { routerRedux, Link } from 'dva/router';
 import { Tooltip, Tag } from 'antd';
+import { sysconfig } from '../../systems';
+import { config } from '../../utils';
 import styles from './person-list.less';
 import * as profileUtils from '../../utils/profile_utils';
 import * as personService from '../../services/person';
@@ -35,6 +37,12 @@ class PersonList extends React.Component {
 
             const tags = findTopNTags(person, 8);
 
+            const personLinkParams = {
+              href: sysconfig.PersonList_PersonLink(person.id),
+            };
+            if (sysconfig.PersonList_PersonLink_NewTab) {
+              personLinkParams.target = '_blank';
+            }
             return (
               <div key={person.id} className="item">
                 <div className="avatar_zone">
@@ -47,19 +55,17 @@ class PersonList extends React.Component {
                 </div>
 
                 <div className="info_zone">
-
-                  <div>
-                    {name &&
-                    <div className="title">
-                      <h2>
-                        <Link to={`/person/${person.id}`}>
-                          {name}
-                        </Link>
-                        { false && <span className="rank">会士</span>}
-                        <div className="spliter" />
-                      </h2>
-                    </div>}
-                  </div>
+                  {name &&
+                  <div className="title">
+                    <h2>
+                      <a {...personLinkParams}>{name}</a>
+                      <Link to={`/person/${person.id}`}>
+                        {/* nothing */}
+                      </Link>
+                      { false && <span className="rank">会士</span>}
+                      <div className="spliter" />
+                    </h2>
+                  </div>}
                   <div className="zone">
                     <div className="contact_zone">
                       {indices &&
@@ -95,7 +101,7 @@ class PersonList extends React.Component {
                       {email &&
                       <span className="email"><i className="fa fa-envelope fa-fw" />
                         <img
-                          src={`https://api.aminer.org/api/${email}`}
+                          src={`${config.baseURL}${email}`}
                           alt="email"
                           style={{ verticalAlign: 'middle' }}
                         />
@@ -136,12 +142,25 @@ class PersonList extends React.Component {
 }
 
 function findTopNTags(person, n) {
-  console.log(person.tags, person.tags_zh);
-  return person.tags_zh;
-  //   if (person.tags_zh || )
-  // /* Find top 8 tags */
-  // if(person.tags_zh && person.tags_zh.length>0){
-  //
+  // let listA = person.tags || [];
+  // let listB = person.tags_zh || [];
+  // if (sysconfig.PreferredLanguage === 'cn') {
+  //   listB = person.tags || [];
+  //   listA = person.tags_zh || [];
   // }
+  // console.log(person.tags, person.tags_zh);
+  // return [...listA.slice(0, n), "---", ...listB.slice(0, n)];
+  let tags = [];
+  if (sysconfig.PreferredLanguage === 'cn') {
+    tags = person.tags_zh ? person.tags_zh.slice(0, n) : null;
+  } else {
+    tags = person.tags ? person.tags.slice(0, n) : null;
+  }
+  if (!tags || tags.length === 0) {
+    tags = person.tags ? person.tags.slice(0, n) : [];
+  }
+  return tags;
 }
+
+
 export default PersonList;

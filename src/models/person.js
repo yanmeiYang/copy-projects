@@ -35,12 +35,7 @@ export default {
           const personId = decodeURIComponent(match[1]);
           // console.log('personId is :', personId);
           dispatch({ type: 'getPerson', payload: { personId } });
-          dispatch({ type: 'getActivityAvgScoresByPersonId', payload: { id: personId } });
-          dispatch({
-            type: 'seminar/getSeminar',
-            payload: { offset: 0, size: 5, filter: { src: 'ccf', aid: personId } }
-          });
-
+          dispatch({ type: 'getActivityAvgScoresByPersonId', payload: { id: personId } })
           // dispatch({ type: 'setParams', payload: { personId } });
         }
       });
@@ -57,7 +52,6 @@ export default {
     *getActivityAvgScoresByPersonId({ payload }, { call, put }){
       const { id } = payload;
       const { data } = yield call(personService.getActivityAvgScoresByPersonId, id);
-      console.log(data);
       yield put({ type: 'getActivityAvgScoresByPersonIdSuccess', payload: { data } })
     }
   },

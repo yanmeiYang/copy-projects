@@ -11,12 +11,14 @@ export default {
   state: {
     user: {},
     token: LocalStorage.getItem('token'),
-    roles: { 'admin': true, 'ccf_user': true },// TODO parse roles string into this object.
+    roles: { admin: true, ccf_user: true },// TODO parse roles string into this object.
     menuPopoverVisible: false,
     siderFold: LocalStorage.getItem(`${prefix}siderFold`) === 'true',
     darkTheme: LocalStorage.getItem(`${prefix}darkTheme`) === 'true',
     isNavbar: false, // document.body.clientWidth < 769,
     navOpenKeys: JSON.parse(LocalStorage.getItem(`${prefix}navOpenKeys`)) || [],
+    hasHeadSearchBox: false,
+    onHeaderSearch: null,
   },
   subscriptions: {
     setup({ dispatch }) {
@@ -52,8 +54,10 @@ export default {
     },
 
     *logout({ payload }, { call, put }) {
-      const data = yield call(logout, parse(payload));
-      if (data.success) {
+      const { data } = yield call(logout);
+      if (data.status) {
+        localStorage.removeItem('token');
+        yield put({ type: 'logoutSuccess' });
         yield put({ type: 'getCurrentUserInfo' });
       } else {
         throw (data);
@@ -113,6 +117,15 @@ export default {
         ...state,
         ...navOpenKeys,
       };
+    },
+
+    layout(state, { payload }) {
+      return { ...state, ...payload };
+    },
+
+
+    logoutSuccess(state, { payload }){
+      return { ...state, token: LocalStorage.getItem('token'), user: {} }
     },
   },
 };

@@ -19,6 +19,10 @@ module.exports = {
   api: {
     // user system
     currentUser: '/user/me',
+    userLogin: '/auth/signin',
+    userLogout: '/auth/signout',
+    signup: '/auth/signup',
+    checkEmail: '/user/check/:email',
 
     // search
     searchPerson: '/search/person',
@@ -27,7 +31,6 @@ module.exports = {
     searchPersonInBaseAgg: '/search/roster/:ebid/experts/advanced/agg',
     allPersonInBase: '/roster/:ebid/order-by/h_index/offset/:offset/size/:size',
     allPersonInBaseAgg: '/roster/:ebid/agg?offset=&order=h_index&size=20',
-    userLogin: '/auth/signin',
 
     // seminar
     getSeminars: '/activity/list/offset/:offset/size/:size',
@@ -70,7 +73,7 @@ module.exports = {
     ucDeleteByKey: '/2b/config/:source/:category/:key',
 
 
-    // userLogout: '/user/logout',
+
     // userInfo: '/userInfo',
     // users: '/users',
     // dashboard: '/dashboard',

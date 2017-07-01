@@ -217,7 +217,7 @@ class ExpertMap extends React.Component {
     }else if(type==3){
 
     }else if(type==4){
-      place=this.findcities(results.location.country)
+      place=this.findcities(results.location.city)
     }else if(type==5){
 
     }
@@ -268,15 +268,11 @@ class ExpertMap extends React.Component {
   }
 
   findcities=(city)=>{
-    var location=[10,58];
+    var location=[];
     var place = require('../../../external-docs/expert-map/cities.json');
-    console.log(place.results.length)
-    for(var o in place.results){
-      var add=place.results[o].address_components;
-      for(var i in add){
-        //ddsxzc
-      }
-    }
+    var thisplace=place.results[city].geometry.location
+    location=[thisplace.lat,thisplace.lng]
+    console.log(location)
     return location;
   }
 
@@ -286,6 +282,8 @@ class ExpertMap extends React.Component {
     var scale=2;
     if(type==2){
       scale=5;
+    }else if(type==4){
+      scale=10;
     }
     map.centerAndZoom(new BMap.Point(116.404, 39.915), scale);
     map.enableScrollWheelZoom();

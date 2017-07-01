@@ -4,7 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Form, Input, Icon, Row, Col, Button, Select, Checkbox, AutoComplete } from 'antd';
-import { CCF_userPosition } from '../../../systems/ccfconfig';
+import { sysconfig } from '../../systems';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const AutocompleteOption = AutoComplete.Option;
@@ -53,7 +53,8 @@ class Registered extends React.Component {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.registered} style={{ marginTop: 30 }}>
-        <FormItem {...formItemLayout} label='邮箱' validateStatus={this.props.auth.validEmail ? '' : 'error'}
+        <FormItem {...formItemLayout} label='邮箱'
+                  validateStatus={this.props.auth.validEmail ? '' : 'error'}
                   help={this.props.auth.validEmail ? '' : '该邮箱已注册'}
                   hasFeedback>
           {
@@ -67,7 +68,7 @@ class Registered extends React.Component {
             }, {
               validateTrigger: 'onBlur'
             })(
-              <Input onBlur={this.checkEmail}/>
+              <Input onBlur={this.checkEmail} />
             )
           }
 
@@ -83,7 +84,7 @@ class Registered extends React.Component {
                 required: true, message: '请输入您的姓氏!',
               }],
             })(
-              <Input type='text'/>
+              <Input type='text' />
             )
           }
         </FormItem>
@@ -134,7 +135,7 @@ class Registered extends React.Component {
             })(
               <Select>
                 {
-                  CCF_userPosition.map((item) => {
+                  sysconfig.CCF_userPosition.map((item) => {
                     return (<Option key={Math.random()} value={item.value}>{item.name}</Option>)
                   })
                 }

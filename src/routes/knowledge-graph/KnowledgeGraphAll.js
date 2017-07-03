@@ -1,70 +1,88 @@
+/**
+ *  Created by BoGao on 2017-06-12;
+ */
 import React from 'react';
 import { connect } from 'dva';
-import styles from './KnoledgeGraphWidget.less';
+import styles from './KnowledgeGraphAll.less';
 import * as d3 from '../../../public/d3/d3.min';
 import * as kgService from '../../services/knoledge-graph-service';
 
-// TODO destory this page.
-// Main content has moved to knowledge-graph/KnowledgeGraphSearchHelper Component.
+const controlDivId = 'kgvis';
 
-class KnoledgeGraphWidget extends React.Component {
 
-  state = {
-    // treeData: {
-    //   name: '信息系统',
-    //   children: [
-    //     {
-    //       name: '万维网',
-    //       children: [
-    //         { name: 'Web Search and Application', level: 3 },
-    //         { name: 'Web Search and Application', level: 3 },
-    //         { name: 'Web Search and Application', level: 3 },
-    //         { name: 'Web Search and Application', level: 3 },
-    //         { name: '在线广告', level: 3 },
-    //         { name: '在线广告', level: 3 },
-    //         { name: '在线广告', level: 3 },
-    //         { name: '在线广告', level: 3 },
-    //         { name: '在线广告', level: 3 },
-    //       ],
-    //     },
-    //     {
-    //       name: '信息系统应用',
-    //       children: [
-    //         { name: '在线广告', level: 3 },
-    //       ],
-    //     }, {
-    //       name: '信息系统应用',
-    //       children: [],
-    //     }, {
-    //       name: '信息系统应用',
-    //       children: [
-    //         { name: '在线广告', level: 3 },
-    //       ],
-    //     },
-    //   ],
-    // },
-  };
-
+/*
+ * @params: lang: [en|cn]
+ */
+class KnowledgeGraphSearchHelper extends React.Component {
 
   componentDidMount() {
-    // this.createD3();
-    kgService.getKGSuggest('data mining', (result) => {
+    this.updateD3(this.props.query);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    this.emptyD3();
+    if (prevProps.query === this.props.query) {
+      return false;
+    }
+    this.updateD3(this.props.query);
+  }
+
+  updateD3(query) {
+    kgService.getKGSuggest(query, (result) => {
+      if (!result) {
+        this.emptyD3();
+        this.closeZone();
+        return;
+      }
       this.createD3(result);
-      return console.log('this is call back', result);
     });
+  }
+
+  // If no suggestion, hide the whole div.
+  showZone = () => {
+    d3.select(`#${controlDivId}`)
+      .style('width', 'calc(100vw - 220px)')
+      .style('height', '80vh');
+    // .style('width', '700px')
+    // .style('height', '600px');
   };
 
+  emptyD3 = () => {
+    const a = document.getElementById(controlDivId);
+    if (a) {
+      a.innerHTML = '';
+    }
+  }
 
+  closeZone = () => {
+    d3.select(`#${controlDivId}`)
+      .style('width', '0px')
+      .style('height', '0px');
+  };
+
+  getDimension = () => {
+    // const box = document.getElementById(`${controlDivId}`);
+    // if (box) {
+    //   return { width: box.offsetWidth, height: box.offsetHeight };
+    // }
+    return { width: 4000, height: 800 };
+  };
+
+  // Create D3 Object.
   createD3 = (data) => {
     // Set the dimensions and margins of the diagram
     const margin = { top: 28, right: 20, bottom: 30, left: 20 };
-    const width = 452 - margin.left - margin.right;
-    const height = 300 - margin.top - margin.bottom;
+    let { width, height } = this.getDimension();
+    console.log(width, height);
+    width = width - margin.left - margin.right;
+    height = height - margin.top - margin.bottom;
+    const lang = this.props.lang === 'cn' ? 'cn' : 'en';
 
+    this.showZone();
     // append the svg object to the body of the page
     // appends a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
-    const svg = d3.select('#kgvis').append('svg')
+    const svg = d3.select(`#${controlDivId}`).append('svg')
       .attr('width', width + margin.right + margin.left)
       .attr('height', height + margin.top + margin.bottom)
       .append('g')
@@ -78,15 +96,26 @@ class KnoledgeGraphWidget extends React.Component {
 
 
     // Assigns parent, children, height, depth
+    if (data == null) {
+      data = {};
+    }
     const root = d3.hierarchy(data, (d) => {
       return d.children;
     });
     root.x0 = width / 2;
     root.y0 = 0;
 
-
     // Collapse after the second level
     // root.children.forEach(collapse);
+    if (root.children) {
+      root.children.forEach((d) => {
+        if (d.children && d.children.length > 0) {
+            d.children.forEach(collapse);
+          // d.children.forEach((d) => {
+          // });
+        }
+      });
+    }
 
     update(root);
 
@@ -109,10 +138,12 @@ class KnoledgeGraphWidget extends React.Component {
 
       // Normalize for fixed-depth.
       nodes.forEach((d) => {
-        if (d.data.level !== 3) {
-          d.y = d.depth * 40;
-        } else {
+        if (d.data.level === 1) {
           d.y = d.depth * 60;
+        } else if (d.data.level < 3) {
+          d.y = d.depth * 60;
+        } else {
+          d.y = d.depth * 130;
         }
       });
 
@@ -145,17 +176,24 @@ class KnoledgeGraphWidget extends React.Component {
       nodeEnter.append('text')
         .attr('dy', '.35em')
         .attr('y', (d) => {
-          return d.children || d._children ? -18 : 18;
+          if (d.data.level < 3) {
+            return d.children || d._children ? -18 : 18;
+          } else {
+            return d.children || d._children ? 8 : 8;
+          }
         })
         .attr('text-anchor', (d) => {
-          return d.data.level != 3 ? 'middle' : '';
+          return d.data.level < 3 ? 'middle' : '';
         })
-        .text((d) => {
-          return d.data.name;
+        .html((d) => {
+          const name = lang === 'cn' ? d.data.zh : d.data.name;
+          return `<a class="nodeLink" href="/search/${name}/0/30">${name}</a>`;
         })
         .attr('writing-mode', (d) => {
-          return d.data.level === 3 ? 'tb' : '';
-        });
+          return d.data.level >= 3 ? 'tb' : '';
+        })
+        .on('mouseover', d => bindMouseOver(d))
+        .on('mouseout', d => bindMouseOut(d));
 
       // UPDATE
       const nodeUpdate = nodeEnter.merge(node);
@@ -255,19 +293,70 @@ class KnoledgeGraphWidget extends React.Component {
         update(d);
       }
     }
+
+    // popup window
+
+    // let nodeId = '';
+    let mouseOnDiv = false;
+
+    const div = d3.select('body').append('div')
+      .attr('class', 'tooltip')
+      .attr('id', 'd3mask')
+      .style('opacity', 0)
+      .on('mouseover', (d) => {
+        mouseOnDiv = true;
+      })
+      .on('mouseout', (d) => {
+        mouseOnDiv = false;
+        hideMask();
+      });
+
+    function showMask(d) {
+      div.transition()
+        .duration(200)
+        .style('opacity', 0.88)
+        .style('display', '');
+      div.html(`<span class="title">${d.data.name}</span><br/><span class="title">${d.data.zh}</span><br/>${d.data.definition}`)
+        .style('left', `${d3.event.pageX + 2}px`)
+        .style('top', `${d3.event.pageY - 28}px`);
+    }
+
+    function hideMask() {
+      div.transition()
+        .duration(300)
+        .style('opacity', 0)
+        .style('display', 'none');
+    }
+
+    // d3.select('#kgvis').on('click', (e) => {
+    //   div.transition()
+    //     .duration(500)
+    //     .style('opacity', 0)
+    //     .style('display', 'none');
+    //   mouseOnDiv = false;
+    // })
+
+    function bindMouseOver(d) {
+      showMask(d);
+    }
+
+    function bindMouseOut(d) {
+      if (!mouseOnDiv) {
+        setTimeout(() => {
+          if (!mouseOnDiv) {
+            hideMask();
+          }
+        }, 80);
+      }
+    }
   };
 
   render() {
     return (
-      <div className={styles.container}>
-        <div id="kgvis" className={styles.vis_container} />
-      </div>
+      <div id={controlDivId} className={styles.vis_container} />
     );
   }
+
 }
 
-function mapStateToProps() {
-  return {};
-}
-
-export default connect(mapStateToProps)(KnoledgeGraphWidget);
+export default connect()(KnowledgeGraphSearchHelper);

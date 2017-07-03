@@ -6,6 +6,7 @@ import { connect } from 'dva';
 import styles from './KnowledgeGraphSearchHelper.less';
 import * as d3 from '../../../public/d3/d3.min';
 import * as kgService from '../../services/knoledge-graph-service';
+import { sysconfig } from '../../systems';
 
 const controlDivId = 'kgvis';
 
@@ -65,7 +66,10 @@ class KnowledgeGraphSearchHelper extends React.Component {
     const width = 452 - margin.left - margin.right;
     const height = 261 - margin.top - margin.bottom;
 
-    const lang = this.props.lang === 'cn' ? 'cn' : 'en';
+    let lang = sysconfig.Language;
+    if (this.props.lang) {
+      lang = this.props.lang === 'cn' ? 'cn' : 'en';
+    }
 
     this.showZone();
     // append the svg object to the body of the page

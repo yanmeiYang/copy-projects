@@ -14,20 +14,6 @@ export async function searchPerson(query, offset, size, filters, sort) {
     return searchPersonGlobal(query, offset, size, filters, sort);
   }
 
-  // let data = { term: query, offset, size, sort };
-  // if (filters) {
-  //   const newFilters = {};
-  //   Object.keys(filters).forEach((k) => {
-  //     if (k === 'eb') {
-  //       expertBase = filters[k].id;
-  //     } else {
-  //       const newKey = `as_${k.toLowerCase().replace(' ', '_').replace('-', '_')}`;
-  //       newFilters[newKey] = filters[k].toLowerCase().replace(' ', '_');
-  //     }
-  //   });
-  //   data = { ...newFilters, term: query, offset, size, sort };
-  // }
-
   const { expertBase, data } = prepareParameters(query, offset, size, filters, sort);
   return request(
     api.searchPersonInBase.replace(':ebid', expertBase),
@@ -60,7 +46,7 @@ export async function searchPersonAgg(query, offset, size, filters) {
   }
   // Fix bugs when default search area is 'aminer'
   if ((!filters || !filters.eb) && sysconfig.DEFAULT_EXPERT_BASE === 'aminer') {
-    return searchPersonGlobal(query, offset, size, filters);
+    return searchPersonAggGlobal(query, offset, size, filters);
   }
   const { expertBase, data } = prepareParameters(query, offset, size, filters, '');
   return request(
@@ -84,7 +70,7 @@ function prepareParameters(query, offset, size, filters, sort) {
         expertBase = filters[k].id;
       } else {
         const newKey = `as_${k.toLowerCase().replace(' ', '_').replace('-', '_')}`;
-        newFilters[newKey] = filters[k].toLowerCase().replace(' ', '_');
+        newFilters[newKey] = filters[k].replace(' ', '_');
       }
     });
     data = { ...newFilters, term: query, offset, size, sort };
@@ -102,7 +88,7 @@ function prepareParametersGlobal(query, offset, size, filters, sort) {
       } else {
         // const newKey = `as_${k.toLowerCase().replace(' ', '_').replace('-', '_')}`;
         // newFilters[newKey] = filters[k].toLowerCase().replace(' ', '_');
-        newFilters[k] = filters[k].toLowerCase().replace(' ', '_');// use old key.
+        newFilters[k] = filters[k].replace(' ', '_');// use old key.
       }
     });
     data = { ...newFilters, query, offset, size, sort };

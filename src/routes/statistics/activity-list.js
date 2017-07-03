@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { Table } from 'antd';
-import ccfconfig from '../../systems/ccfconfig';
+import { sysconfig } from '../../systems';
 
 
 const columns = [{
@@ -13,11 +13,11 @@ const columns = [{
   title: '举办活动次数（总数）',
   dataIndex: 'activity_count',
 }];
-ccfconfig.CCF_activityTypes.map((category,i) => {
+sysconfig.CCF_activityTypes.map((category, i) => {
   return columns.push({
-      title: `${category.name}`,
-      dataIndex: `${category.dataIndex}`,
-    })
+    title: `${category.name}`,
+    dataIndex: `${category.dataIndex}`,
+  });
 });
 
 //模拟数据
@@ -49,7 +49,7 @@ class ActivityList extends React.Component {
     };
     return (
       <div>
-        <Table rowSelection={rowSelection} columns={columns} dataSource={data}/>
+        <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
       </div>
     )
   }

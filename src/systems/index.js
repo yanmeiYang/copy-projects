@@ -3,8 +3,13 @@
  */
 import * as ccfConfig from './ccf/ccf-config';
 import * as huaweiConfig from './huawei/huawei-config';
+import { config } from '../utils';
 
-const CurrentSystemConfig = huaweiConfig; // <-- current config files.
+// All available systems.
+const CurrentSystemConfig = {
+  ccf: ccfConfig, // <-- current config files.
+  huawei: huaweiConfig,
+}
 
 // 默认配置
 const defaultSystemConfigs = {
@@ -24,8 +29,9 @@ const defaultSystemConfigs = {
 };
 
 const sysconfig = defaultSystemConfigs;
-Object.keys(CurrentSystemConfig).map((key) => {
-  sysconfig[key] = huaweiConfig[key];
+const currentSystem = CurrentSystemConfig[config.system];
+Object.keys(currentSystem).map((key) => {
+  sysconfig[key] = currentSystem[key];
   return null;
 });
 

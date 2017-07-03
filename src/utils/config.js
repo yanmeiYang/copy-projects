@@ -4,19 +4,19 @@
 
 module.exports = {
 
+  system: 'ccf', // 默认启动这是哪套系统，启动的时候传入app，之后会在APP里面重新设置。
+  source: 'ccf', // AppID, Used in UniversalConfig.
+
   baseURL: 'https://api.aminer.org/api',
   // baseURL: 'https://166.111.7.105/api',
 
   name: '专家搜索',
-  source: 'ccf', // AppID, Used in UniversalConfig.
   prefix: 'aminer',
   footerText: 'AMiner © 2017 AMiner', // not used now.
   logo: '/logo.png',
   iconFontCSS: '/iconfont.css',
   iconFontJS: '/iconfont.js',
   basePageURL: 'https://aminer.org',
-  YQL: ['http://www.zuimeitianqi.com'],
-  CORS: ['http://localhost:7000'],
   openPages: ['/login'],
   apiPrefix: '/api/',
   api: {

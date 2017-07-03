@@ -124,16 +124,6 @@ const Routers = function ({ history, app }) {
           },
         },
         {
-          path: '/admin',
-          component: App,
-          getIndexRoute(nextState, cb) {
-            require.ensure([], (require) => {
-              registerModel(app, require('./models/vis/vis-research-interest'));
-              cb(null, { component: require('./routes/Admin') });
-            }, 'admin');
-          },
-        },
-        {
           path: '/registered',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
@@ -143,15 +133,6 @@ const Routers = function ({ history, app }) {
           },
         },
       ],
-    },
-    {
-      path: '/admin',
-      component: App,
-      getIndexRoute(nextState, cb) {
-        require.ensure([], (require) => {
-          cb(null, { component: require('./routes/IndexPage') });
-        }, 'indexPage');
-      },
     },
     {
       path: '/admin/system-config',

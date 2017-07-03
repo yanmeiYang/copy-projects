@@ -8,6 +8,8 @@ const CurrentSystemConfig = huaweiConfig; // <-- current config files.
 
 // 默认配置
 const defaultSystemConfigs = {
+  PageTitle: 'AminerB',
+
   Language: 'en', // options [cn|en]
   PreferredLanguage: 'en', // 默认语言
 

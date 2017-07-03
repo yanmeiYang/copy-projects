@@ -3,6 +3,10 @@
  */
 
 module.exports = {
+
+  baseURL: 'https://api.aminer.org/api',
+  // baseURL: 'https://166.111.7.105/api',
+
   name: '专家搜索',
   source: 'ccf', // AppID, Used in UniversalConfig.
   prefix: 'aminer',
@@ -10,7 +14,6 @@ module.exports = {
   logo: '/logo.png',
   iconFontCSS: '/iconfont.css',
   iconFontJS: '/iconfont.js',
-  baseURL: 'https://api.aminer.org/api',
   basePageURL: 'https://aminer.org',
   YQL: ['http://www.zuimeitianqi.com'],
   CORS: ['http://localhost:7000'],
@@ -71,7 +74,6 @@ module.exports = {
     ucListByCategory: '/2b/config/:source/list?category=:category',
     ucSetByKey: '/2b/config/:source/:category/:key',
     ucDeleteByKey: '/2b/config/:source/:category/:key',
-
 
 
     // userInfo: '/userInfo',

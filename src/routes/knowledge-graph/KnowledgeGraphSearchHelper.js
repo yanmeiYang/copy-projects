@@ -42,7 +42,7 @@ class KnowledgeGraphSearchHelper extends React.Component {
   showZone = () => {
     d3.select(`#${controlDivId}`)
       .style('width', '452px')
-      .style('height', '300px');
+      .style('height', '261px');
   };
 
   emptyD3 = () => {
@@ -55,7 +55,7 @@ class KnowledgeGraphSearchHelper extends React.Component {
   closeZone = () => {
     d3.select(`#${controlDivId}`)
       .style('width', '0px')
-      .style('height', '0px');
+      .style('height', '261px');
   };
 
   // Create D3 Object.
@@ -63,7 +63,7 @@ class KnowledgeGraphSearchHelper extends React.Component {
     // Set the dimensions and margins of the diagram
     const margin = { top: 28, right: 20, bottom: 30, left: 20 };
     const width = 452 - margin.left - margin.right;
-    const height = 300 - margin.top - margin.bottom;
+    const height = 261 - margin.top - margin.bottom;
 
     const lang = this.props.lang === 'cn' ? 'cn' : 'en';
 

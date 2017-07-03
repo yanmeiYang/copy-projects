@@ -8,6 +8,7 @@ import { PersonList } from '../../components/person';
 import { sysconfig } from '../../systems';
 import { KnowledgeGraphSearchHelper } from '../knowledge-graph';
 import { classnames } from '../../utils';
+import ExportPersonBtn from '../../components/person/export-person';
 
 const TabPane = Tabs.TabPane;
 const { CheckableTag } = Tag;
@@ -194,6 +195,7 @@ const Search = ({ dispatch, search }) => {
 
         <div className="rightZone">
           <KnowledgeGraphSearchHelper query={query} lang="cn" />
+          <ExportPersonBtn />
         </div>
       </div>
 

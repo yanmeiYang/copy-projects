@@ -4,6 +4,7 @@
 import React from 'react';
 import { routerRedux, Link } from 'dva/router';
 import { Tooltip, Tag } from 'antd';
+import { Indices } from '../../components/widgets';
 import { sysconfig } from '../../systems';
 import { config } from '../../utils';
 import styles from './person-list.less';
@@ -37,12 +38,11 @@ class PersonList extends React.Component {
 
             const tags = findTopNTags(person, 8);
 
-            const personLinkParams = {
-              href: sysconfig.PersonList_PersonLink(person.id),
-            };
+            const personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
             if (sysconfig.PersonList_PersonLink_NewTab) {
               personLinkParams.target = '_blank';
             }
+
             return (
               <div key={person.id} className="item">
                 <div className="avatar_zone">
@@ -57,39 +57,14 @@ class PersonList extends React.Component {
                 <div className="info_zone">
                   {name &&
                   <div className="title">
-                    <h2>
+                    <h2 className="section_header">
                       <a {...personLinkParams}>{name}</a>
-                      <Link to={`/person/${person.id}`}>
-                        {/* nothing */}
-                      </Link>
                       { false && <span className="rank">会士</span>}
-                      <div className="spliter" />
                     </h2>
                   </div>}
                   <div className="zone">
                     <div className="contact_zone">
-                      {indices &&
-                      <div className="score-line">
-                        <Tooltip placement="top" title="CCF活动贡献（C）">
-                          <span className="score blue">
-                            <span className="l">C</span>
-                            <span className="r">{indices.num_citation}</span>
-                          </span>
-                        </Tooltip>
-                        <Tooltip placement="top" title="学术成就（H）">
-                          <span className="score gray">
-                            <span className="l">H</span>
-                            <span className="r">{indices.h_index}</span>
-                          </span>
-                        </Tooltip>
-                        <Tooltip placement="top" title="学术活跃度（A）">
-                          <span className="score pink">
-                            <span className="l">A</span>
-                            <span className="r">{indices.activity.toFixed(2)}</span>
-                          </span>
-                        </Tooltip>
-                      </div>
-                      }
+                      <Indices indices={indices} />
 
                       {pos && <span><i className="fa fa-briefcase fa-fw" /> {pos}</span>}
                       {aff && <span><i className="fa fa-institution fa-fw" /> {aff}</span>}

@@ -20,7 +20,7 @@ import AddTags from '../../components/seminar/addTags';
 // import ExpertBasicInformation from '../../components/seminar/expertBasicInformation/expertBasicInformation';
 import AddExpertModal from '../../components/seminar/addExpertModal';
 import ShowExpertList from '../../routes/seminar/addSeminar/workshop/showExpertList';
-import { sysconfig } from '../../systems';
+import ccfConfig from '../../systems/ccf/ccf-config';
 const Dragger = Upload.Dragger;
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -170,7 +170,7 @@ class RegistrationForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { activity_organizer_options } = this.props.seminar;
-    const activityTypes = sysconfig.CCF_activityTypes;
+    const activityTypes = ccfConfig.CCF_activityTypes;
     let activity_organizer_options_data = {};
     // let activity_type_options = {};
 
@@ -317,26 +317,26 @@ class RegistrationForm extends React.Component {
 
             </FormItem>
             {/*<FormItem*/}
-              {/*{...formItemLayout}*/}
-              {/*label="贡献类别"*/}
+            {/*{...formItemLayout}*/}
+            {/*label="贡献类别"*/}
             {/*>*/}
-              {/*{getFieldDecorator('state', {})(*/}
-                {/*<Select*/}
-                  {/*showSearch*/}
-                  {/*style={{ width: 200 }}*/}
-                  {/*placeholder="请选择贡献类别"*/}
-                  {/*optionFilterProp="children"*/}
-                  {/*onChange={this.activityTypeChange}*/}
-                  {/*filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}*/}
-                {/*>*/}
-                  {/*{*/}
-                    {/*Object.keys(activity_type_options).map((item) => {*/}
-                      {/*return (<Option key={item}*/}
-                                      {/*value={item + '#' + activity_type_options[item]}>{item}</Option>)*/}
-                    {/*})*/}
-                  {/*}*/}
-                {/*</Select>*/}
-              {/*)}*/}
+            {/*{getFieldDecorator('state', {})(*/}
+            {/*<Select*/}
+            {/*showSearch*/}
+            {/*style={{ width: 200 }}*/}
+            {/*placeholder="请选择贡献类别"*/}
+            {/*optionFilterProp="children"*/}
+            {/*onChange={this.activityTypeChange}*/}
+            {/*filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}*/}
+            {/*>*/}
+            {/*{*/}
+            {/*Object.keys(activity_type_options).map((item) => {*/}
+            {/*return (<Option key={item}*/}
+            {/*value={item + '#' + activity_type_options[item]}>{item}</Option>)*/}
+            {/*})*/}
+            {/*}*/}
+            {/*</Select>*/}
+            {/*)}*/}
             {/*</FormItem>*/}
           </Col>
 

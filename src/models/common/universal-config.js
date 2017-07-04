@@ -13,6 +13,7 @@ export default {
     category: '',
     key: '',
     data: [],
+    userRoles: [],
     valueType: '',
     loading: false, // TODO DVA-LOADING 到底怎么用？
   },
@@ -72,7 +73,12 @@ export default {
           }
         }
       }
-      return { ...state, data: newData, loading: false };
+      if (data.data.category === 'user_roles') {
+        return { ...state, userRoles: newData, data: newData, loading: false };
+      }
+      else {
+        return { ...state, data: newData, loading: false };
+      }
     },
 
     updateData(state, { payload: { key, val } }) {

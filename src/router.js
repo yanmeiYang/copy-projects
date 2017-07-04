@@ -137,6 +137,7 @@ const Routers = function ({ history, app }) {
           path: '/registered',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
+              registerModel(app, require('./models/common/universal-config'));
               registerModel(app, require('./models/auth/auth'));
               cb(null, require('./routes/admin/signup'));
             }, 'registered');
@@ -151,6 +152,16 @@ const Routers = function ({ history, app }) {
         require.ensure([], (require) => {
           cb(null, { component: require('./routes/IndexPage') });
         }, 'indexPage');
+      },
+    },
+    {
+      path: '/admin/users',
+      component: App,
+      getIndexRoute(nextState, cb) {
+        require.ensure([], (require) => {
+          registerModel(app, require('./models/auth/auth'));
+          cb(null, { component: require('./routes/admin/user-list') });
+        }, 'users');
       },
     },
     {

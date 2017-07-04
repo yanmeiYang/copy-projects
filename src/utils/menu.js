@@ -12,7 +12,7 @@ module.exports = [
   },
   {
     id: 45, bpid: 4, mpid: 4, name: '创建用户', icon: 'api',
-    router: '/admin/system-config/activity_type',
+    router: '/registered',
   },
   {
     id: 43, bpid: 4, mpid: 4, name: '活动承办单位', icon: 'api',

@@ -38,12 +38,13 @@ class ProfileInfo extends React.Component {
           {phone && <span><i className="fa fa-phone fa-fw" /> {phone}</span>}
           {email &&
           <span><i className="fa fa-envelope fa-fw" />
-            <img src={`https://api.aminer.org/api/${email}`} alt="email" style={{ verticalAlign: 'middle' }} />
+            <img className="emailImg" src={`https://api.aminer.org/api/${email}`} alt="email"
+                 style={{ verticalAlign: 'middle' }} />
           </span>}
           {homepage && <span><i className="fa fa-globe fa-fw" /> {homepage}</span>}
 
           <span style={{ marginTop: 16 }} />
-          <span className={styles.section_title}><i className="fa fa-area-chart fa-fw" /> 研究兴趣</span>
+          <span className="section_title"><i className="fa fa-area-chart fa-fw" /> 研究兴趣</span>
 
           <VisResearchInterest personId={profile.id} disable_vis_chart={true} />
 

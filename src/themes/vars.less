@@ -1,2 +1,16 @@
 @import "./default.less";
 @import "./mixin.less";
+
+// Global Common Web Components. 这些东西放到哪个文件？
+
+:global {
+
+  .section_title {
+    font-size: @font-size-lg;
+    border-bottom: solid 1px @border-color-base;
+    width: 80%;
+    margin-bottom: 6px;
+    padding-bottom: 2px;
+  }
+
+}

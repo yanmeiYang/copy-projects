@@ -1,3 +1,5 @@
+@import "../../themes/vars.less";
+
 .publist {
   border: solid 0px rgb(216, 216, 216); padding: 0px;
   min-height: 40px;
@@ -30,12 +32,13 @@
       }
 
       .authors {
-        font-size: 12px;
+        // font-size: 12px;
         .current { color: red; }
         a:hover { text-decoration: underline; }
       }
 
       .citedby {
+        font-size: @font-size-sm;
         a { color: #a94442; font-weight: bold; }
         a:hover { color: rgb(169, 68, 66s) }
       }

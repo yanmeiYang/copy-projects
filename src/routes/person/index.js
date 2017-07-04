@@ -5,12 +5,13 @@ import React from 'react';
 import { connect } from 'dva';
 import { Icon, InputNumber, Rate, Tabs, Spin } from 'antd';
 import { ProfileInfo } from '../../components/person';
+import { Indices } from '../../components/widgets';
 import * as personService from '../../services/person';
 import styles from './index.less';
 import PersonFeaturedPapers from './person-featured-papers';
 import ActivityList from '../../components/seminar/activityList';
-const TabPane = Tabs.TabPane;
 
+const TabPane = Tabs.TabPane;
 
 const Person = ({ dispatch, person, loading, seminar, publications }) => {
   const { profile, avgScores } = person;
@@ -19,43 +20,48 @@ const Person = ({ dispatch, person, loading, seminar, publications }) => {
 
   const profileTabs = [{
     title: '专家评分',
-    content: <table style={{ marginBottom: 10 }}>
-      {avgScores.map((score) => {
-        return (
-          <tbody key={score.key}>
-          {score.key === 'level' && <tr>
-            <td>演讲内容（水平）:</td>
-            <td>
-              <Rate disabled defaultValue={score.score}/>
-              <span>{score.score}</span>
-            </td>
-          </tr>
-          }
-          {score.key === 'content' && <tr>
-            <td>演讲水平:</td>
-            <td>
-              <Rate disabled defaultValue={score.score}/>
-              <span>{score.score}</span>
-            </td>
-          </tr>}
-          {score.key === 'integrated' && <tr>
-            <td>综合评价（其它贡献）:</td>
-            <td>
-              <Rate disabled defaultValue={score.score}/>
-              <span>{score.score}</span>
-            </td>
-          </tr>}
-          </tbody>
-        )
-      })}
-    </table>
+    content: <div>
+      {profile && profile.indices &&
+      <Indices indices={profile.indices} />
+      }
+      <table style={{ marginBottom: 10 }}>
+        {avgScores.map((score) => {
+          return (
+            <tbody key={score.key}>
+            {score.key === 'level' && <tr>
+              <td>演讲内容（水平）:</td>
+              <td>
+                <Rate disabled defaultValue={score.score} />
+                <span>{score.score}</span>
+              </td>
+            </tr>
+            }
+            {score.key === 'content' && <tr>
+              <td>演讲水平:</td>
+              <td>
+                <Rate disabled defaultValue={score.score} />
+                <span>{score.score}</span>
+              </td>
+            </tr>}
+            {score.key === 'integrated' && <tr>
+              <td>综合评价（其它贡献）:</td>
+              <td>
+                <Rate disabled defaultValue={score.score} />
+                <span>{score.score}</span>
+              </td>
+            </tr>}
+            </tbody>
+          )
+        })}
+      </table>
+    </div>
   }, {
     title: '参与的活动',
     content: <Spin spinning={seminar.loading}>
       <div style={{ minHeight: 150 }}>{results.map((activity) => {
         return (
           <div key={activity.id + Math.random()}>
-            <ActivityList result={activity}/>
+            <ActivityList result={activity} />
           </div>
         )
       })}</div>
@@ -69,10 +75,10 @@ const Person = ({ dispatch, person, loading, seminar, publications }) => {
             href={personService.getAMinerProfileUrl(profile.name, profile.id)}
             target="_blank" rel="noopener noreferrer"
           >
-            查看全部 {totalPubs} 篇论文<Icon type="right"/>
+            查看全部 {totalPubs} 篇论文<Icon type="right" />
           </a>
         </div>
-        <PersonFeaturedPapers personId={profile.id} totalPubs={totalPubs}/>
+        <PersonFeaturedPapers personId={profile.id} totalPubs={totalPubs} />
       </div>
     </Spin>
   }];
@@ -125,9 +131,9 @@ const Person = ({ dispatch, person, loading, seminar, publications }) => {
   return (
     <div className="content-inner">
 
-      <ProfileInfo profile={profile}/>
+      <ProfileInfo profile={profile} />
 
-      <div style={{ marginTop: 30 }}/>
+      <div style={{ marginTop: 30 }} />
 
       <div>
         <Tabs defaultActiveKey="0" onChange={callback}>

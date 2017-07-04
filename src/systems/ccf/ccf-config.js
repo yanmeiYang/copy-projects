@@ -6,6 +6,7 @@ import React from 'react';
 module.exports = {
 
   // 通用配置。所有System的配置文件必须全部包含这部分的值
+  PageTitle: 'CCF 专家云智库',
 
   Language: 'cn', // options [cn|en]
   PreferredLanguage: 'cn', // 默认语言

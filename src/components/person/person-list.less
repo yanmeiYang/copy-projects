@@ -1,6 +1,8 @@
 /**
  *  Created by BoGao on 2017-06-15;
  */
+@import '../../themes/vars.less';
+
 .personList {
   border: solid 0px rgb(216, 216, 216); padding: 0px;
   min-height: 40px;
@@ -39,10 +41,10 @@
           display: flex;
           flex-direction: row;
           align-items: baseline;
-          margin: 8px 0 0 0;
+          margin: 8px 0 4px 0;
 
           h2, h2 a {
-            font-size: 15px; font-family: STHeitiSC-Medium;
+            font-size: @font-size-lg; font-family: @font-family-2;
             font-weight: normal;
             color: #101010;
 
@@ -51,18 +53,15 @@
               margin: 2px 0 8px 0;
             }
           }
+          .section_header {
+            padding-bottom: 0; width: auto;
+          }
 
           .rank {
             margin-left: 18px;
             font-size: 12px;
           }
 
-        }
-
-        .section_title {
-          font-size: 14px; width: 80%;
-          border-bottom: solid 1px #ddd;
-          margin-bottom: 4px;
         }
 
         .zone {
@@ -81,54 +80,11 @@
             .ant-tag { margin-bottom: 1px; }
             h4 {
               border-bottom: solid 1px #ddd;
-              width: 94%; color:#666;
+              width: 94%; color: #666;
               margin-bottom: 6px;
             }
             //.ant-tag:hover { text-decoration: underline;}
           }
-        }
-
-        .score-line {
-          margin-bottom: 8px;
-          display: flex;
-          span.score {
-            display: flex;
-            flex-direction: row;
-
-            span {
-              display: flex; justify-content: center;
-              color: white; font-weight: normal; font-size: 12px;
-              height: 20px; text-shadow: 1px 1px 1px black; padding: 0 4px 0 4px;
-            }
-            .l {
-              width: 20px; font-weight: bold;
-              border: solid 1px rgb(85, 85, 85);
-              border-radius: 2px 0 0 2px;
-              background-color: rgb(85, 85, 85);
-            }
-            .r {
-              min-width: 40px;
-              border: solid 1px rgb(85, 85, 85);
-              border-radius: 0 2px 2px 0;
-              //background-color: black;
-              text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.25);
-              margin-right: 8px;
-              color: rgb(30, 30, 30);
-            }
-          }
-          span.pink {
-            .l { background-color: #fcdbd9; border-color: #fcdbd9; }
-            .r { border-color: #fcdbd9; }
-          }
-          span.blue {
-            .l { background-color: #d2eafb; border-color: #d2eafb; }
-            .r { border-color: #d2eafb; }
-          }
-          span.gray {
-            .l { background-color: #ddd; border-color: #ddd; }
-            .r { border-color: #ddd; }
-          }
-
         }
 
         .contactLine {

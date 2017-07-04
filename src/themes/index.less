@@ -15,6 +15,19 @@ body {
   height: 8px;
 }
 
+// Global Common Web Components. 这些东西放到哪个文件？
+:global {
+
+  .section_header {
+    font-size: @font-size-lg;
+    border-bottom: solid 1px @border-color-base;
+    width: 80%;
+    margin-bottom: 6px;
+    padding-bottom: 2px;
+  }
+
+}
+
 :global {
   .ant-breadcrumb {
     & > span {
@@ -52,7 +65,7 @@ body {
   }
 
   .ant-table-pagination {
-    float: none!important;
+    float: none !important;
     display: table;
     margin: 16px auto !important;
   }
@@ -112,6 +125,7 @@ body {
     text-decoration: none;
   }
 }
+
 @media (min-width: 1600px) {
   :global {
     .ant-col-xl-48 {
@@ -123,6 +137,7 @@ body {
     }
   }
 }
+
 @media (max-width: 767px) {
   :global {
     .ant-card {

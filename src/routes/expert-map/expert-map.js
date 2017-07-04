@@ -330,6 +330,7 @@ class ExpertMap extends React.Component {
   showexpertinfo(){
     const model = this.props && this.props.expertMap;
     const personInfo = model.personInfo;
+
     document.getElementById("currentId").value=personInfo.id;
     var pos=""
     if(personInfo.pos==null || personInfo.pos==""){
@@ -383,14 +384,14 @@ class ExpertMap extends React.Component {
 
   render() {
     const model = this.props && this.props.expertMap;
-    const personInfo = model.personInfo;
+    // const personInfo = model.personInfo;
     return (
       <div className={styles.expert_map} id="currentmain">
         <div className={styles.main1}>
           <div className={styles.lab1}><span>按照层级显示：</span></div>
           <div>
             <ButtonGroup id="sType">
-              <Button onClick={this.showtype} value="0">距离</Button>
+              <Button onClick={this.showtype} value="0">自动</Button>
               <Button onClick={this.showtype} value="1">大区</Button>
               <Button onClick={this.showtype} value="2">国家</Button>
               <Button onClick={this.showtype} value="3">国内区</Button>

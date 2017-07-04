@@ -1,2 +1,2 @@
 # Aminer2b
-CCF
+Support CCF, Huawei, ...

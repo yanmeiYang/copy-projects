@@ -6,11 +6,14 @@ import styles from './index.less';
 import SearchBox from '../../components/SearchBox';
 
 function IndexPage({ dispatch }) {
-  // const { seminars } = search;
-  let commonSearch = ['人工智能', '机器人', '数据挖掘', '机器学习', '数据建模', '计算机视觉',
+
+  const commonSearch = ['人工智能', '机器人', '数据挖掘', '机器学习', '数据建模', '计算机视觉',
     '计算机网络', '网络', '自然语言处理'];
 
   function onSearch({ query }) {
+    if (!query) {
+      return false;
+    }
     dispatch(routerRedux.push({
       pathname: `/search/${query}/0/30`,
     }));
@@ -144,5 +147,4 @@ function IndexPage({ dispatch }) {
   );
 }
 
-
-export default (IndexPage);
+export default connect()(IndexPage);

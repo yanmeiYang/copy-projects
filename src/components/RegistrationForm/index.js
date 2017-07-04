@@ -20,7 +20,7 @@ import AddTags from '../../components/seminar/addTags';
 // import ExpertBasicInformation from '../../components/seminar/expertBasicInformation/expertBasicInformation';
 import AddExpertModal from '../../components/seminar/addExpertModal';
 import ShowExpertList from '../../routes/seminar/addSeminar/workshop/showExpertList';
-import ccfConfig from '../../systems/ccf/ccf-config';
+import {sysconfig} from '../../systems';
 const Dragger = Upload.Dragger;
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -170,7 +170,7 @@ class RegistrationForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { activity_organizer_options } = this.props.seminar;
-    const activityTypes = ccfConfig.CCF_activityTypes;
+    const activityTypes = sysconfig.CCF_activityTypes;
     let activity_organizer_options_data = {};
     // let activity_type_options = {};
 

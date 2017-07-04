@@ -45,18 +45,14 @@ class VisResearchInterest extends React.Component {
 
   render() {
     const visData = this.props.visResearchInterest && this.props.visResearchInterest.data;
-    console.log('==== data is:', visData);
-
     const disable_vis_chart = this.props.disable_vis_chart;
 
     return (
       <div className={styles.vis_research_interest}>
         {visData.interests && visData.interests.map((item) => {
-          console.log(item);
           return <Tag color="blue" key={item.key}>{item.key}</Tag>;
         })}
         {visData.interests_zh && visData.interests_zh.map((item) => {
-          console.log(item);
           return <Tag color="blue" key={item.key}>{item.key}</Tag>;
         })}
         <br />
@@ -68,12 +64,13 @@ class VisResearchInterest extends React.Component {
           type="stackedAreaChart" width={500} height={200} duration={200}
           defaultState="Stream"
           controlOptions={['Stream']}
-          showControls={true} showYAxis={false}
+          showControls={true}
+          showYAxis={false}
           datum={visData.interests}
           useInteractiveGuideline={false}
-          xAxis={{ tickFormat: (d) => d }}
-          x={(d) => d[0]}
-          y={(d) => d[1]}
+          xAxis={{ tickFormat: d => d }}
+          x={d => d[0]}
+          y={d => d[1]}
         />
         }
       </div>

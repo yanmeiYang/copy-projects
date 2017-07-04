@@ -1,11 +1,16 @@
 import React from 'react';
 import classnames from 'classnames';
 import styles from './profile-info.less';
+import { Indices } from '../../components/widgets';
 import * as profileUtils from '../../utils/profile_utils';
 import { VisResearchInterest } from '../../routes/vis';
 
 class ProfileInfo extends React.Component {
   state = {};
+
+  componentWillUpdate(nextProps, nextState) {
+    // console.log('componentWillUpdate', nextProps, nextState);
+  }
 
   render() {
     const profile = this.props.profile;
@@ -38,19 +43,23 @@ class ProfileInfo extends React.Component {
           {phone && <span><i className="fa fa-phone fa-fw" /> {phone}</span>}
           {email &&
           <span><i className="fa fa-envelope fa-fw" />
-            <img src={`https://api.aminer.org/api/${email}`} alt="email" style={{ verticalAlign: 'middle' }} />
+            <img className="emailImg" src={`https://api.aminer.org/api/${email}`} alt="email"
+                 style={{ verticalAlign: 'middle' }} />
           </span>}
           {homepage && <span><i className="fa fa-globe fa-fw" /> {homepage}</span>}
 
           <span style={{ marginTop: 16 }} />
-          <span className={styles.section_title}><i className="fa fa-area-chart fa-fw" /> 研究兴趣</span>
+          <span className="section_header"><i className="fa fa-area-chart fa-fw" /> 研究兴趣</span>
 
           <VisResearchInterest personId={profile.id} disable_vis_chart={true} />
 
           {/* TODO 这里放一个可以手工添加修改的tabs. */}
 
         </div>
-
+        {console.log('=========', profile)}
+        {profile && profile.indices &&
+        <Indices indices={profile.indices} />
+        }
         { false && <div>
           <div>Radar</div>
           <div>Tags</div>

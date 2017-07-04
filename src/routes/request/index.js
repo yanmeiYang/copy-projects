@@ -94,7 +94,7 @@ import {
 //   }]
 
 export default class RequestPage extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       currntRequest: requestOptions[0],
@@ -102,7 +102,8 @@ export default class RequestPage extends React.Component {
       result: '',
     }
   }
-  componentDidMount () {
+
+  componentDidMount() {
     this.handleRequest()
   }
 
@@ -120,7 +121,9 @@ export default class RequestPage extends React.Component {
     })
     request({ ...requestParams }).then((data) => {
       const state = this.state
-      state.result = [this.state.result, <div key="complete"><div>请求完成</div>{JSON.stringify(data)}</div>]
+      state.result = [this.state.result, <div key="complete">
+        <div>请求完成</div>
+        {JSON.stringify(data)}</div>]
       this.setState(state)
     })
   }
@@ -137,7 +140,7 @@ export default class RequestPage extends React.Component {
     this.setState(state)
   }
 
-  render () {
+  render() {
     const colProps = {
       lg: 12,
       md: 24,
@@ -157,8 +160,8 @@ export default class RequestPage extends React.Component {
                   width: '100%',
                   flex: 1,
                 }} defaultValue={`${method.toLocaleUpperCase()}   ${requestOptions[0].url}`}
-                  size="large"
-                  onChange={this.handeleURLChange}
+                        size="large"
+                        onChange={this.handeleURLChange}
                 >
                   {requestOptions.map((item, index) => {
                     const m = item.method || 'get'
@@ -167,11 +170,14 @@ export default class RequestPage extends React.Component {
                     </Select.Option>)
                   })}
                 </Select>
-                <Button type="primary" style={{ width: 100, marginLeft: 16 }} onClick={this.handleRequest}>发送</Button>
+                <Button type="primary" style={{ width: 100, marginLeft: 16 }}
+                        onClick={this.handleRequest}>发送</Button>
               </div>
               <div className={styles.params}>
                 <div className={styles.label}>Params：</div>
-                <Input disabled value={currntRequest.data ? JSON.stringify(currntRequest.data) : 'null'} size="large" style={{ width: 200 }} placeholder="null" />
+                <Input disabled
+                       value={currntRequest.data ? JSON.stringify(currntRequest.data) : 'null'}
+                       size="large" style={{ width: 200 }} placeholder="null" />
                 <div style={{ flex: 1, marginLeft: 16 }}>{currntRequest.desc}</div>
               </div>
               <div className={styles.result}>

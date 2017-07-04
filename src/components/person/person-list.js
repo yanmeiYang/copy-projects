@@ -16,15 +16,20 @@ import * as pubService from '../../services/publication';
  * @param param
  *
  */
-class PersonList extends React.Component {
+class PersonList extends React.PureComponent {
   state = {};
 
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   if (nextProps.pubs && this.props.pubs) {
+  //     if (nextProps.profile.id === this.props.profile.id) {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // }
+
   render() {
-    const pubs = this.props.pubs;
-    const MaxAuthorNumber = 10;
-
     return (
-
       <div className={styles.personList}>
         {
           this.props.persons.map((person) => {
@@ -35,7 +40,6 @@ class PersonList extends React.Component {
             const email = profileUtils.displayEmailSrc(person);
             const homepage = person.contact && person.contact.homepage;
             const indices = person.indices;
-
             const tags = findTopNTags(person, 8);
 
             const personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };

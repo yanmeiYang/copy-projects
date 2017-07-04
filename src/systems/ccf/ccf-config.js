@@ -15,7 +15,7 @@ module.exports = {
   DEFAULT_EXPERT_BASE: '5949c2f99ed5dbc2147fd854', // CCF会员
   DEFAULT_EXPERT_BASE_NAME: 'CCF会员',
 
-  CCF_expertBases: [
+  ExpertBases: [
     {
       id: '5949c2f99ed5dbc2147fd854',
       name: 'CCF会员',

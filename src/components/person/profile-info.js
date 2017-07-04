@@ -8,8 +8,13 @@ import { VisResearchInterest } from '../../routes/vis';
 class ProfileInfo extends React.Component {
   state = {};
 
-  componentWillUpdate(nextProps, nextState) {
-    // console.log('componentWillUpdate', nextProps, nextState);
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.profile && this.props.profile) {
+      if (nextProps.profile.id === this.props.profile.id) {
+        return false;
+      }
+    }
+    return true;
   }
 
   render() {
@@ -56,7 +61,7 @@ class ProfileInfo extends React.Component {
           {/* TODO 这里放一个可以手工添加修改的tabs. */}
 
         </div>
-        {console.log('=========', profile)}
+        {/*{console.log('=========', profile)}*/}
         {profile && profile.indices &&
         <Indices indices={profile.indices} />
         }

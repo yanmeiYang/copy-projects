@@ -22,14 +22,13 @@ const Search = ({ dispatch, search }) => {
   const { results, pagination, query, aggs, loading, filters } = search;
   const { pageSize, total, current } = pagination;
 
-  const expertBases = sysconfig.CCF_expertBases;
+  const expertBases = sysconfig.ExpertBases;
 
   // Select default Expert Base.
   if (filters && !filters.eb) {
     filters.eb = { id: sysconfig.DEFAULT_EXPERT_BASE, name: 'CCF 会员' };
   }
 
-  //
   function onFilterChange(key, value, checked) {
     // if onExpertBaseChanged, all filters is cleared.
     if (checked) {
@@ -64,16 +63,21 @@ const Search = ({ dispatch, search }) => {
       return false;
     }
     // delete all other filters.
-    Object.keys(filters).forEach((f) => {
-      if (f !== 'eb') { // 保留智库，其余filter都清空。
-        delete filters[f];
-      }
-    });
+    // Object.keys(filters).forEach((f) => {
+    //   if (f !== 'eb') { // 保留智库，其余filter都清空。
+    //     delete filters[f];
+    //   }
+    // });
+    const urlQuery = {};
+    if (filters.eb) {
+      urlQuery.eb = filters.eb.id;
+    }
     // redirect to search.
     const newOffset = data.offset || 0;
     const newSize = data.size || 30;
     dispatch(routerRedux.push({
       pathname: `/search/${data.query}/${newOffset}/${newSize}`,
+      query: urlQuery,
     }));
   }
 

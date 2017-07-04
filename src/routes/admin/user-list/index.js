@@ -23,10 +23,10 @@ class UserList extends React.Component {
             pagination={false}
           >
             <Column title="姓名" dataIndex="display_name" key="display_name"/>
-            <Column title="单位" dataIndex="position" key="position"/>
+            <Column title="职称" dataIndex="position" key="position"/>
             <Column title="性别" dataIndex="gender" key="gender"/>
             <Column title="角色" dataIndex="new_role" key="role"/>
-            <Column title="权限" dataIndex="authority" key="committee"/>
+            <Column title="所属部门" dataIndex="authority" key="committee"/>
 
           </Table>
         </Spin>

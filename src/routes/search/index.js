@@ -60,6 +60,16 @@ const Search = ({ dispatch, search }) => {
   }
 
   function onSearch(data) {
+    if (!data.query) {
+      return false;
+    }
+    // delete all other filters.
+    Object.keys(filters).forEach((f) => {
+      if (f !== 'eb') { // 保留智库，其余filter都清空。
+        delete filters[f];
+      }
+    });
+    // redirect to search.
     const newOffset = data.offset || 0;
     const newSize = data.size || 30;
     dispatch(routerRedux.push({
@@ -166,7 +176,7 @@ const Search = ({ dispatch, search }) => {
                                   key={`${item.label}_${agg.label}`}
                                   className={styles.filterItem}
                                   checked={filters[agg.label] === item.label}
-                                  onChange={checked => onFilterChange(agg.label, item.label, checked)}
+                                  onChange={checked => onFilterChange(agg.type, item.label, checked)}
                                 >
                                   {item.label}
                                   (<span className={styles.filterCount}>{item.count}</span>)

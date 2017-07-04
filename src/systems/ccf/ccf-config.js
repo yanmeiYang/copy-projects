@@ -38,7 +38,7 @@ module.exports = {
     },
     {
       id: 'aminer',
-      name: <span><i className="fa fa-globe fa-fw" />全球专家</span>,
+      name: <span><i className="fa fa-globe fa-fw"/>全球专家</span>,
       nperson: 2871,
     },
     // 数据标注未找到的人的库。

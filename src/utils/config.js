@@ -26,6 +26,11 @@ module.exports = {
     userLogout: '/auth/signout',
     signup: '/auth/signup',
     checkEmail: '/user/check/:email',
+    //给user添加label {uid:'',label:''}
+    invoke: '/user/role/invoke',
+    //删除user的label
+    revoke: '/user/role/revoke',
+    listUsersByRole: '/user/role/list/:role/offset/:offset/size/:size',
 
     // search
     searchPerson: '/search/person',

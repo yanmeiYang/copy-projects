@@ -13,7 +13,7 @@ const { Header, Footer, Sider, styles } = Layout;
 let lastHref;
 
 const App = ({ children, location, dispatch, app, loading }) => {
-  const { user, siderFold, darkTheme, isNavbar, menuPopoverVisible, navOpenKeys } = app;
+  const { user, siderFold, darkTheme, isNavbar, menuPopoverVisible, navOpenKeys, roles } = app;
   const href = window.location.href;
 
   if (lastHref !== href) {
@@ -28,6 +28,7 @@ const App = ({ children, location, dispatch, app, loading }) => {
     menu,
     user,
     siderFold,
+    roles,
     location,
     isNavbar,
     menuPopoverVisible,
@@ -53,6 +54,7 @@ const App = ({ children, location, dispatch, app, loading }) => {
   const siderProps = {
     menu,
     siderFold,
+    roles,
     darkTheme,
     location,
     navOpenKeys,

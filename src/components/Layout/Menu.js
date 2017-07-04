@@ -3,13 +3,16 @@ import pathToRegexp from 'path-to-regexp';
 import { Menu, Icon } from 'antd';
 import { Link } from 'dva/router';
 import { arrayToTree, queryArray } from '../../utils';
+import styles from './Menu.less';
 
-const Menus = ({ siderFold, darkTheme, location, handleClickNavMenu,
-                 navOpenKeys, changeOpenKeys, menu,
-}) => {
+const Menus = ({
+                 siderFold, darkTheme, location, handleClickNavMenu,
+                 navOpenKeys, changeOpenKeys, menu, roles,
+               }) => {
   // 生成树状
   const menuTree = arrayToTree(menu.filter(_ => _.mpid !== -1), 'id', 'mpid');
   const levelMap = {};
+  const admin = roles.admin;
 
   // 递归生成菜单
   const getMenus = (menuTreeN, siderFoldN) => {
@@ -22,7 +25,7 @@ const Menus = ({ siderFold, darkTheme, location, handleClickNavMenu,
           <Menu.SubMenu
             key={item.id}
             title={<span>
-              {item.icon && <Icon type={item.icon} />}
+              {item.icon && <Icon type={item.icon}/>}
               {(!siderFoldN || menuTree.indexOf(item) < 0) && item.name}
             </span>}
           >
@@ -31,9 +34,9 @@ const Menus = ({ siderFold, darkTheme, location, handleClickNavMenu,
         );
       }
       return (
-        <Menu.Item key={item.id}>
+        <Menu.Item key={item.id} className={`${item.router === '/registered' && !admin ? styles.hideCreateUser : ''}`}>
           <Link to={item.router}>
-            {item.icon && <Icon type={item.icon} />}
+            {item.icon && <Icon type={item.icon}/>}
             {(!siderFoldN || menuTree.indexOf(item) < 0) && item.name}
           </Link>
         </Menu.Item>

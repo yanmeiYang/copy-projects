@@ -1,5 +1,6 @@
 /**
  *  Created by BoGao on 2017-05-30;
+ *  目前只有ccf再用这个页面。
  */
 import React from 'react';
 import { connect } from 'dva';
@@ -13,7 +14,7 @@ import ActivityList from '../../components/seminar/activityList';
 
 const TabPane = Tabs.TabPane;
 
-const Person = ({ dispatch, person, loading, seminar, publications }) => {
+const Person = ({ dispatch, person, seminar, publications }) => {
   const { profile, avgScores } = person;
   const { results } = seminar;
   const totalPubs = profile.indices && profile.indices.num_pubs;
@@ -21,7 +22,7 @@ const Person = ({ dispatch, person, loading, seminar, publications }) => {
   const profileTabs = [{
     title: '专家评分',
     content: <div>
-      {profile && profile.indices &&
+      {false && profile && profile.indices &&
       <Indices indices={profile.indices} />
       }
       <table style={{ marginBottom: 10 }}>
@@ -128,6 +129,7 @@ const Person = ({ dispatch, person, loading, seminar, publications }) => {
     }
   }
 
+  console.log("|||||||||||| PersonIndex:", person);
   return (
     <div className="content-inner">
 

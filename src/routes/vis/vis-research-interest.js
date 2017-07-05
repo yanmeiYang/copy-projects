@@ -17,7 +17,6 @@ import AddTags from '../../components/seminar/addTags';
 class VisResearchInterest extends React.Component {
   constructor(props) {
     super(props);
-    console.log('VisResearchInterest constructor props:', props);
     console.log(this.props.personId)
     if (this.props.personId) {
       console.log('>>>>>>>>>>>> initial call ', this.props.personId);

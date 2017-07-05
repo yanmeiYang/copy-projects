@@ -8,7 +8,7 @@ module.exports = {
   // 通用配置。所有System的配置文件必须全部包含这部分的值
   PageTitle: 'HUAWEI 知识洞察系统',
 
-  CCF_expertBases: [
+  ExpertBases: [
     {
       id: '595208bd9ed5dbf9cd563c60',
       name: 'IEEE Fellow(2013)',

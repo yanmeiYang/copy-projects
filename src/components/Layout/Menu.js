@@ -36,7 +36,7 @@ const Menus = ({
       return (
         <Menu.Item key={item.id} className={`${item.router === '/registered' && !admin ? styles.hideCreateUser : ''}`}>
           <Link to={item.router}>
-            {item.icon && <Icon type={item.icon}/>}
+            {item.icon && <Icon type={item.icon} />}
             {(!siderFoldN || menuTree.indexOf(item) < 0) && item.name}
           </Link>
         </Menu.Item>

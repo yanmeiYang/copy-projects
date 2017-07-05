@@ -1,5 +1,6 @@
 import pathToRegexp from 'path-to-regexp';
 import * as searchService from '../services/search';
+import { sysconfig } from '../systems';
 
 export default {
 
@@ -36,9 +37,27 @@ export default {
           const keyword = decodeURIComponent(match[1]);
           const offset = parseInt(match[2], 10);
           const size = parseInt(match[3], 10);
-          dispatch({ type: 'searchPerson', payload: { query: keyword, offset, size } });
+
+          // Accept query: eb = expertBaseID.
+          const filters = {};
+          if (location.query) {
+            if (location.query.eb) {
+              sysconfig.ExpertBases.map((expertBase) => {
+                if (expertBase.id === location.query.eb) {
+                  filters.eb = expertBase;
+                  return false;
+                }
+                return true;
+              });
+            }
+          }
+
+          dispatch({ type: 'searchPerson', payload: { query: keyword, offset, size, filters } });
           dispatch({ type: 'setParams', payload: { query: keyword, offset, size } });
-          dispatch({ type: 'searchPersonAgg', payload: { query: keyword, offset, size } });
+          dispatch({
+            type: 'searchPersonAgg',
+            payload: { query: keyword, offset, size, filters },
+          });
           return;
         }
 

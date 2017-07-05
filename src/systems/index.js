@@ -19,6 +19,7 @@ const defaultSystemConfigs = {
   PreferredLanguage: 'en', // 默认语言
 
   SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
+  ExpertBases: [], // must override.
 
   DEFAULT_EXPERT_BASE: 'aminer', // 华为默认搜索
   DEFAULT_EXPERT_BASE_NAME: '全球专家',

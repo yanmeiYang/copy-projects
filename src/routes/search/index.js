@@ -205,7 +205,7 @@ const Search = ({ dispatch, search }) => {
 
         <div className="rightZone">
           <KnowledgeGraphSearchHelper query={query} lang="cn" />
-          <ExportPersonBtn />
+          <ExportPersonBtn {...filters} results={results}/>
         </div>
       </div>
 

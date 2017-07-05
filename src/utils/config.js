@@ -39,6 +39,8 @@ module.exports = {
     searchPersonInBaseAgg: '/search/roster/:ebid/experts/advanced/agg',
     allPersonInBase: '/roster/:ebid/order-by/h_index/offset/:offset/size/:size',
     allPersonInBaseAgg: '/roster/:ebid/agg?offset=&order=h_index&size=20',
+    // export roster
+    rosterExportSimple: '/roster/:id/export/s/offset/:offset/size/:size/:name',
 
     // seminar
     getSeminars: '/activity/list/offset/:offset/size/:size',

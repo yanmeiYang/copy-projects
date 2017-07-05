@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { connect } from 'dva';
+import { routerRedux } from 'dva/router';
 import { Form, Input, Icon, Row, Col, Button, Select, Checkbox, AutoComplete } from 'antd';
 import { sysconfig } from '../../../systems';
 const FormItem = Form.Item;
@@ -24,7 +25,6 @@ class Registered extends React.Component {
   }
 
   selectedRole = (e) => {
-    console.log(e);
     if (e === 'ccf_CCF专委秘书长') {
       this.setState({ committee: true, region: false });
       //获取所有的专委
@@ -271,4 +271,4 @@ class Registered extends React.Component {
 
 const WrappedRegistrationForm = Form.create()(Registered);
 
-export default connect(({ auth, universalConfig }) => ({ auth, universalConfig }))(WrappedRegistrationForm);
+export default connect(({ auth, universalConfig, app }) => ({ auth, universalConfig, app }))(WrappedRegistrationForm);

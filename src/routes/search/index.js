@@ -202,7 +202,7 @@ const Search = ({ dispatch, search }) => {
               <TabPane tab={filterDisplay('学术成就')} key="h_index" />
               <TabPane tab={filterDisplay('学术活跃度')} key="activity" />
               <TabPane tab={filterDisplay('领域新星')} key="rising_star" />
-              <TabPane tab={filterDisplay('学会贡献')} key="contrib" />
+              <TabPane tab={filterDisplay('学会贡献')} key="activity-ranking-contrib" />
             </Tabs>
           </div>
         </div>

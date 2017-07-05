@@ -51,6 +51,13 @@ const Person = ({ dispatch, person, seminar, publications }) => {
                 <span>{score.score}</span>
               </td>
             </tr>}
+            {score.key === 'contrib' && <tr>
+              <td>贡献度:</td>
+              <td>
+                <Rate disabled defaultValue={score.score} />
+                <span>{score.score}</span>
+              </td>
+            </tr>}
             </tbody>
           )
         })}

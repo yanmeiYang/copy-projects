@@ -132,7 +132,7 @@ class AddExpertModal extends React.Component {
   activityTypeChange = (value) => {
     this.setState({ integral: value.split('#')[1] });
     this.speakerInformation.stype.label= value.split('#')[0];
-    this.speakerInformation.stype.score= parseInt(value.split('#')[0]);
+    this.speakerInformation.stype.score= parseInt(value.split('#')[1]);
   };
 
 
@@ -331,8 +331,8 @@ class AddExpertModal extends React.Component {
               <label className="ant-col-3">性别: </label>
               <div className='ant-col-21'>
                 <RadioGroup defaultValue="1" onChange={this.saveExpertInfo.bind(this, 'gender')}>
-                  <Radio value="1" name="gender">男的</Radio>
-                  <Radio value="2" name="gender">女的</Radio>
+                  <Radio value="1" name="gender">男</Radio>
+                  <Radio value="2" name="gender">女</Radio>
                 </RadioGroup>
               </div>
             </div>

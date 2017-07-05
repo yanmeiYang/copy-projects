@@ -32,7 +32,6 @@ export default {
   effects: {
     *searchMap({ payload }, { call, put }) {
       const { query } = payload;
-      console.log(query);
       const data = yield call(searchService.searchMap, query);
       yield put({ type: 'searchMapSuccess', payload: { data } });
     },

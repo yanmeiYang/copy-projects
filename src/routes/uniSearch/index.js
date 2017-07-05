@@ -23,7 +23,7 @@ function showChineseLabel(enLabel) {
 /*
  * http://localhost:8000/search/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/0/30?view=relation
  */
-class Search extends React.Component {
+class Search extends React.PureComponent {
 
   constructor(props) {
     super(props);

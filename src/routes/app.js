@@ -93,6 +93,8 @@ const App = ({ children, location, dispatch, app, loading }) => {
 
   const { iconFontJS, iconFontCSS, logo } = config;
 
+  const mainMarginLeft = sysconfig.ShowSideMenu ? 188 : 0;
+
   return (
     <div>
 
@@ -121,7 +123,7 @@ const App = ({ children, location, dispatch, app, loading }) => {
             <Sider {...siderProps} />
           </aside> : ''
         }
-        <div className={styles.main}>
+        <div className={styles.main} style={{ marginLeft: mainMarginLeft }}>
           <div className={styles.container}>
             <div className={styles.content}>
               {/* <Bread {...breadProps} location={location} /> */}
@@ -129,7 +131,7 @@ const App = ({ children, location, dispatch, app, loading }) => {
             </div>
           </div>
         </div>
-        <Footer />
+        {sysconfig.ShowFooter && <Footer />}
       </div>
 
     </div>

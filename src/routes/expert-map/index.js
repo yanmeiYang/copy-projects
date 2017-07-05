@@ -7,6 +7,7 @@ import { routerRedux } from 'dva/router';
 import ExpertMap from './expert-map.js';
 import styles from './index.less';
 import SearchBox from '../../components/SearchBox';
+import { sysconfig } from '../../systems';
 
 class ExpertMapPage extends React.Component {
 
@@ -64,6 +65,10 @@ class ExpertMapPage extends React.Component {
         />
 
         <ExpertMap query={this.state.query} />
+
+        {sysconfig.SPECIAL_ExpertMapNoHeader &&
+        <div className="HeaderMask" />
+        }
       </div>
     );
   }

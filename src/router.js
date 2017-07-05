@@ -32,10 +32,22 @@ const Routers = function ({ history, app }) {
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
               registerModel(app, require('./models/search'));
+              registerModel(app, require('./models/expert-map'));
               cb(null, require('./routes/search/'));
             }, 'search');
           },
-        }, {
+        },
+        {
+          path: 'uniSearch/:query/:offset/:size',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('./models/search'));
+              registerModel(app, require('./models/expert-map'));
+              cb(null, require('./routes/uniSearch/'));
+            }, 'search');
+          },
+        },
+        {
           path: 'experts/:offset/:size',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {

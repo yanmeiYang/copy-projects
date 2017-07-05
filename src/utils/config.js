@@ -26,9 +26,9 @@ module.exports = {
     userLogout: '/auth/signout',
     signup: '/auth/signup',
     checkEmail: '/user/check/:email',
-    //给user添加label {uid:'',label:''}
+    // 给user添加label {uid:'',label:''}
     invoke: '/user/role/invoke',
-    //删除user的label
+    // 删除user的label
     revoke: '/user/role/revoke',
     listUsersByRole: '/user/role/list/:role/offset/:offset/size/:size',
 
@@ -39,6 +39,8 @@ module.exports = {
     searchPersonInBaseAgg: '/search/roster/:ebid/experts/advanced/agg',
     allPersonInBase: '/roster/:ebid/order-by/h_index/offset/:offset/size/:size',
     allPersonInBaseAgg: '/roster/:ebid/agg?offset=&order=h_index&size=20',
+    searchMap: '/search/person/geo', // ?query=:search
+
     // export roster
     rosterExportSimple: '/roster/:id/export/s/offset/:offset/size/:size/:name',
 

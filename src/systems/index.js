@@ -18,6 +18,10 @@ const defaultSystemConfigs = {
   Language: 'en', // options [cn|en]
   PreferredLanguage: 'en', // 默认语言
 
+  SearchPagePrefix: 'search',
+  ShowSideMenu: true,
+
+  // expert base
   SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
   ExpertBases: [], // must override.
 
@@ -26,7 +30,6 @@ const defaultSystemConfigs = {
 
   PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
   PersonList_PersonLink_NewTab: true,
-
 };
 
 const sysconfig = defaultSystemConfigs;

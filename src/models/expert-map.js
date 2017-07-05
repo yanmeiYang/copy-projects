@@ -2,6 +2,7 @@
 import pathToRegexp from 'path-to-regexp';
 import * as pubsService from '../services/publication';
 import * as personService from '../services/person';
+import * as searchService from '../services/search';
 
 export default {
 
@@ -10,6 +11,7 @@ export default {
   state: {
     personId: '',
     personInfo: {},
+    geoData: {},
   },
 
   subscriptions: {
@@ -28,10 +30,11 @@ export default {
   },
 
   effects: {
-    *getPublistInfoxxxxxxxxxxx({ payload }, { call, put }) {
-      const { personId } = payload;
-      const data = yield call(pubsService.getPubListInfo, { personId });
-      yield put({ type: 'updatePubListInfo', payload: { data } });
+    *searchMap({ payload }, { call, put }) {
+      const { query } = payload;
+      console.log(query);
+      const data = yield call(searchService.searchMap, query);
+      yield put({ type: 'searchMapSuccess', payload: { data } });
     },
 
     *getPersonInfo({ payload }, { call, put }) {  // eslint-disable-line
@@ -47,6 +50,26 @@ export default {
     getPersonInfoSuccess(state, { payload: { data } }) {
       //console.log('-----------------------------------', data.data);
       return { ...state, personInfo: data.data };
+    },
+    searchMapSuccess(state, { payload: { data } }) {
+      // console.log('-----------------------------------', data.data);
+      // TODO translate data into target format.
+      const geoSearchData = [];
+      if (data.data) {
+        data.data.data.map((item) => {
+          geoSearchData.push({
+            name: item.n,
+            id: item.i,
+            location: {
+              lat: item.lat,
+              lng: item.lng,
+            },
+          });
+          return null;
+        });
+      }
+      // console.log('-----------------------------------', geoSearchData);
+      return { ...state, geoData: { results: geoSearchData } };
     },
   },
 

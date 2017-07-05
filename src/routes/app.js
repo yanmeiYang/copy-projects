@@ -116,7 +116,7 @@ const App = ({ children, location, dispatch, app, loading }) => {
 
       <div className={classnames(styles.layout)}>
         <Header {...headerProps} onSearch={onSearch} />
-        {false && !isNavbar ?
+        {sysconfig.ShowSideMenu && !isNavbar ?
           <aside className={classnames(styles.sider, { [styles.light]: !darkTheme })}>
             <Sider {...siderProps} />
           </aside> : ''

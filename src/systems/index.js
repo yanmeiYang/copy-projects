@@ -19,6 +19,9 @@ const defaultSystemConfigs = {
   PreferredLanguage: 'en', // 默认语言
 
   SearchPagePrefix: 'search',
+  ShowSideMenu: true,
+
+  // expert base
   SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
   ExpertBases: [], // must override.
 

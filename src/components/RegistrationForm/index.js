@@ -20,7 +20,7 @@ import AddTags from '../../components/seminar/addTags';
 // import ExpertBasicInformation from '../../components/seminar/expertBasicInformation/expertBasicInformation';
 import AddExpertModal from '../../components/seminar/addExpertModal';
 import ShowExpertList from '../../routes/seminar/addSeminar/workshop/showExpertList';
-import {sysconfig} from '../../systems';
+import { sysconfig } from '../../systems';
 const Dragger = Upload.Dragger;
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -71,42 +71,51 @@ class RegistrationForm extends React.Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         const state = this.state;
-        let data = values;
-        if (data.state) {
-          data.state = data.state.split('#')[0];
+        if (state.startValue === null) {
+          this.setState({ startValue: '' })
         }
-        //用于跟aminer的活动区分。默认是aminer
-        data.src = 'ccf';
-        data.location = { city: '', address: '' };
-        data.time = { from: '', to: '' };
-        data.type = 1;
-        // if (data.type === 0) {
-        //   data.speaker = { name: '', position: '', affiliation: '', aid: '', img: '' };
-        //   data.speaker.name = state.speakerInfo.name;
-        //   data.speaker.position = state.speakerInfo.position;
-        //   data.speaker.affiliation = state.speakerInfo.affiliation;
-        //   data.speaker.img = state.speakerInfo.img;
-        //   data.speaker.aid = state.speakerInfo.aid;
-        //   data.speaker.bio = state.speakerInfo.bio;
-        //   data.speaker.gender = parse(state.speakerInfo.gender);
-        //   data.speaker.phone = state.speakerInfo.phone;
-        //   data.speaker.email = state.speakerInfo.email;
-        // } else {
-        data.talk = state.talks;
-        // }
-        data.img = image;
-        data.location.city = values.city;
-        data.location.address = values.address;
-        if (state.startValue) {
-          data.time.from = state.startValue.toJSON();
+        if (state.endValue === null) {
+          this.setState({ endValue: '' })
         }
-        if (state.endValue) {
-          data.time.to = state.endValue.toJSON();
+        if (state.startValue !== null && state.startValue !== '' && state.endValue !== null && state.endValue !== '') {
+          let data = values;
+          if (data.state) {
+            data.state = data.state.split('#')[0];
+          }
+          //用于跟aminer的活动区分。默认是aminer
+          data.src = 'ccf';
+          data.location = { city: '', address: '' };
+          data.time = { from: '', to: '' };
+          data.type = 1;
+          // if (data.type === 0) {
+          //   data.speaker = { name: '', position: '', affiliation: '', aid: '', img: '' };
+          //   data.speaker.name = state.speakerInfo.name;
+          //   data.speaker.position = state.speakerInfo.position;
+          //   data.speaker.affiliation = state.speakerInfo.affiliation;
+          //   data.speaker.img = state.speakerInfo.img;
+          //   data.speaker.aid = state.speakerInfo.aid;
+          //   data.speaker.bio = state.speakerInfo.bio;
+          //   data.speaker.gender = parse(state.speakerInfo.gender);
+          //   data.speaker.phone = state.speakerInfo.phone;
+          //   data.speaker.email = state.speakerInfo.email;
+          // } else {
+          data.talk = state.talks;
+          // }
+          data.img = image;
+          data.location.city = values.city;
+          data.location.address = values.address;
+          if (state.startValue) {
+            data.time.from = state.startValue.toJSON();
+          }
+          if (state.endValue) {
+            data.time.to = state.endValue.toJSON();
+          }
+          data.activityTags = state.tags;
+          //获取登录用户的uid
+          data.uid = this.props.uid;
+          this.props.dispatch({ type: 'seminar/postSeminarActivity', payload: data });
         }
-        data.activityTags = state.tags;
-        //获取登录用户的uid
-        data.uid = this.props.uid;
-        this.props.dispatch({ type: 'seminar/postSeminarActivity', payload: data });
+
       }
     });
   };
@@ -186,7 +195,7 @@ class RegistrationForm extends React.Component {
     // }
 
 
-    let { addNewTalk, talks, integral } = this.state;
+    let { addNewTalk, talks, integral, startValue, endValue } = this.state;
 
     const formItemLayout = {
       labelCol: {
@@ -247,7 +256,10 @@ class RegistrationForm extends React.Component {
             <FormItem
               {...formItemLayout}
               label="活动时间"
+              validateStatus={(startValue !== '' || endValue !== '') ? '' : 'error'}
+              help={(startValue !== '' || endValue !== '') ? '' : '请选择时间'}
               hasFeedback
+              required
             >
               {getFieldDecorator('time', {
                 rules: [{

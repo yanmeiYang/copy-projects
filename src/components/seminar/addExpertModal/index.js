@@ -89,7 +89,7 @@ class AddExpertModal extends React.Component {
     const state = this.state;
     let talk = {
       title: '',
-      speaker: { name: '', position: '', affiliation: '', img: '', aid: '', bio: '', stype: {label:'',score:0} },
+      speaker: { name: '', position: '', affiliation: '', img: '', aid: '', bio: '', stype: { label: '', score: 0 } },
       time: { from: '', to: '' },
       location: { city: '', address: '' },
       abstract: ''
@@ -131,24 +131,33 @@ class AddExpertModal extends React.Component {
 
   activityTypeChange = (value) => {
     this.setState({ integral: value.split('#')[1] });
-    this.speakerInformation.stype.label= value.split('#')[0];
-    this.speakerInformation.stype.score= parseInt(value.split('#')[1]);
+    this.speakerInformation.stype.label = value.split('#')[0];
+    this.speakerInformation.stype.score = parseInt(value.split('#')[1]);
   };
 
+  jumpToStep2 = () =>{
+    if (this.state.talkStartValue === null) {
+      this.setState({ talkStartValue: '' })
+    } else if (this.state.talkEndValue === null) {
+      this.setState({ talkEndValue: '' })
+    } else if (this.state.talkStartValue !== null && this.state.talkStartValue !== '' && this.state.talkEndValue !== null && this.state.talkEndValue !== '') {
+      this.setStep('step2', true)
+    }
+  };
 
   render() {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 3 },
+        sm: { span: 4 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 21 },
+        sm: { span: 20 },
       },
     };
 
-    const { modalVisible, step2, step3, step4, speakerInfo, integral, stype } = this.state;
+    const { modalVisible, step2, step3, step4, speakerInfo, integral, stype, talkStartValue, talkEndValue } = this.state;
     const { parentProps } = this.props;
     const { speakerSuggests, loading, activity_type } = parentProps.seminar;
     let activity_type_options = {};
@@ -176,18 +185,21 @@ class AddExpertModal extends React.Component {
           </FormItem>
           <FormItem
             {...formItemLayout}
-            label={(<span>活动时间&nbsp;</span>)}
-            hasFeedback>
+            label={(<span>活动时间</span>)}
+            validateStatus={(talkStartValue !== '' || talkEndValue !== '') ? '' : 'error'}
+            help={(talkStartValue !== '' || talkEndValue !== '') ? '' : '请选择时间'}
+            hasFeedback
+            required >
             <CanlendarInForm callbackParent={this.onChildTalkChanged}/>
           </FormItem>
           <FormItem
             {...formItemLayout}
-            label={(<span>演讲地点&nbsp;</span>)}>
+            label={(<span>演讲地点</span>)}>
             <Input placeholder='请输入活动地点。。。' ref='talkLocation'/>
           </FormItem>
           <FormItem
             {...formItemLayout}
-            label={(<span>演讲摘要&nbsp;</span>)}>
+            label={(<span>演讲摘要</span>)}>
             <Input type='textarea' rows={4} placeholder='请输入演讲摘要。。。' ref='talkAbstract'/>
           </FormItem>
           <FormItem
@@ -203,17 +215,17 @@ class AddExpertModal extends React.Component {
               filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
               {
-              Object.keys(activity_type_options).map((item) => {
-                return (<Option key={item}
-                                value={item + '#' + activity_type_options[item]}>{item}</Option>)
-              })
-            }
+                Object.keys(activity_type_options).map((item) => {
+                  return (<Option key={item}
+                                  value={item + '#' + activity_type_options[item]}>{item}</Option>)
+                })
+              }
             </Select>
 
           </FormItem>
           <div style={{ height: 20 }}>
             <Button key="submit" type="primary" size="large" style={{ float: 'right' }}
-                    onClick={() => this.setStep('step2', true)}>
+                    onClick={this.jumpToStep2.bind()}>
               下一步
             </Button>
           </div>

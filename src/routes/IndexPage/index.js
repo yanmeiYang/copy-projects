@@ -6,6 +6,7 @@ import styles from './index.less';
 import SearchBox from '../../components/SearchBox';
 import { sysconfig } from '../../systems';
 import { config } from '../../utils';
+import { KgSearchBox } from '../../components/search';
 
 // function IndexPage({ dispatch, search }) {
 class IndexPage extends React.Component {
@@ -46,7 +47,11 @@ class IndexPage extends React.Component {
       <div>
         <div className={styles.normal}>
           <h1>专家搜索</h1>
-          <SearchBox size="large" style={{ width: 500 }} onSearch={this.onSearch} />
+
+          <KgSearchBox size="large" style={{ width: 500 }} onSearch={this.onSearch} />
+
+          {/*<SearchBox size="large" style={{ width: 500 }} onSearch={this.onSearch} />*/}
+
           {/* 常用搜索 */}
           <p className={styles.commonSearch}>
             {
@@ -61,7 +66,7 @@ class IndexPage extends React.Component {
             }
           </p>
 
-          {config.system === 'huawei' &&
+          {config.system === 'ccf' &&
           <div className={styles.bigNavi}>
             <div className="naviItem">
               <Link to="https://cn.aminer.org/ego">学者关系网络</Link>

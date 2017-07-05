@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Input, Select, Button, Icon } from 'antd';
 import styles from './index.less';
+import { Suggest } from '../../components/search';
 
 class SearchBox extends React.Component {
   state = {
@@ -46,13 +47,16 @@ class SearchBox extends React.Component {
     const { clearVisible } = this.state;
     return (
       <Input.Group compact size={size} className={styles.search} style={style}>
-        {select && <Select ref="searchSelect" onChange={this.handleSelectChange} size={size} {...selectProps}>
+        {select && <Select ref="searchSelect" onChange={this.handleSelectChange}
+                           size={size} {...selectProps}>
           {selectOptions && selectOptions.map(
             (item, key) =>
-              <Select.Option value={item.value} key={key}>{item.name || item.value}</Select.Option>
+              <Select.Option value={item.value}
+                             key={key}>{item.name || item.value}</Select.Option>
           )}
         </Select>}
-        <Input ref="searchInput" size={size} onChange={this.handleInputChange} onPressEnter={this.handleSearch}
+        <Input ref="searchInput" size={size} onChange={this.handleInputChange}
+               onPressEnter={this.handleSearch}
                defaultValue={keyword} />
         <Button size={size} type="primary" onClick={this.handleSearch}>{btnText || '搜索'}</Button>
         {clearVisible && <Icon type="cross" onClick={this.handleClearInput} />}

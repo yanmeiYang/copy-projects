@@ -96,7 +96,8 @@ class PersonList extends React.PureComponent {
                           {
                             tags.map((tag) => {
                               return (
-                                <Link to={`/search/${tag.t}/0/30`} key={Math.random()}>
+                                <Link to={`/${sysconfig.SearchPagePrefix}/${tag.t}/0/30`}
+                                      key={Math.random()}>
                                   <Tag className={styles.tag}>{tag.t}</Tag>
                                 </Link>);
                             })

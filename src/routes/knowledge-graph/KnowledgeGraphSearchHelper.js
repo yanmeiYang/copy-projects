@@ -169,7 +169,7 @@ class KnowledgeGraphSearchHelper extends React.Component {
         })
         .html((d) => {
           const name = lang === 'cn' ? d.data.zh : d.data.name;
-          return `<a class="nodeLink" href="/search/${name}/0/30">${name}</a>`;
+          return `<a class="nodeLink" href="/${sysconfig.SearchPagePrefix}/${name}/0/30">${name}</a>`;
         })
         .attr('writing-mode', (d) => {
           return d.data.level === 3 ? 'tb' : '';

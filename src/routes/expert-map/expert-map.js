@@ -2,55 +2,56 @@
  *  Created by BoGao on 2017-06-07;
  */
 import React from 'react';
-import {connect} from 'dva';
-import {Button, Icon } from 'antd';
-import Script from 'react-load-script';
+import { connect } from 'dva';
+import { Button, Icon } from 'antd';
 import styles from './expert-map.less';
 import { listPersonByIds } from '../../services/person';
 
+// import mapData from'../../../external-docs/expert-map/expert-map-example1.json';
+
 const ButtonGroup = Button.Group;
 
-function showtop(usersIds,e,map,maindom,inputids){
-  var ishere=document.getElementById("panel");
-  if(ishere!=null){
+function showtop(usersIds, e, map, maindom, inputids) {
+  var ishere = document.getElementById("panel");
+  if (ishere != null) {
     return;
   }
-  var ids=[];
+  var ids = [];
   var pixel = map.pointToOverlayPixel(e.currentTarget.getPosition());//中心点的位置
-  var width=180;
-  var imgwidth=45;//可得中心点到图像中心点的半径为：width/2-imgwidth/2,圆形的方程为(X-pixel.x)^2+(Y-pixel.y)^2=width/2
+  var width = 180;
+  var imgwidth = 45;//可得中心点到图像中心点的半径为：width/2-imgwidth/2,圆形的方程为(X-pixel.x)^2+(Y-pixel.y)^2=width/2
   var oDiv = document.createElement('div');
-  var ostyle="z-index:10;height:"+width+"px;width:"+width+"px;position: absolute;left: "+(pixel.x-width/2)+"px;top: "+(pixel.y-width/2)+"px;"
-  oDiv.setAttribute('id','panel');
-  oDiv.setAttribute('style',ostyle);
+  var ostyle = "z-index:10;height:" + width + "px;width:" + width + "px;position: absolute;left: " + (pixel.x - width / 2) + "px;top: " + (pixel.y - width / 2) + "px;"
+  oDiv.setAttribute('id', 'panel');
+  oDiv.setAttribute('style', ostyle);
   insertAfter(oDiv, maindom);
-  var thisNode=document.getElementById("panel");
+  var thisNode = document.getElementById("panel");
   //开始显示图片
-  if(usersIds.length>8){//只取前面的8个
-    ids=usersIds.slice(0,8);
-  }else{
-    ids=usersIds;
+  if (usersIds.length > 8) {//只取前面的8个
+    ids = usersIds.slice(0, 8);
+  } else {
+    ids = usersIds;
   }
-  var fenshu=2*Math.PI/ids.length;//共有多少份，每份的夹角
-  for(var i=0;i<ids.length;i++){
-    var centerX=Math.cos(fenshu*i)*(width/2-imgwidth/2)+width/2;
-    var centerY=Math.sin(fenshu*i)*(width/2-imgwidth/2)+width/2;
+  var fenshu = 2 * Math.PI / ids.length;//共有多少份，每份的夹角
+  for (var i = 0; i < ids.length; i++) {
+    var centerX = Math.cos(fenshu * i) * (width / 2 - imgwidth / 2) + width / 2;
+    var centerY = Math.sin(fenshu * i) * (width / 2 - imgwidth / 2) + width / 2;
     var imgdiv = document.createElement('div');
-    var cstyle="z-index:10000;border:1px solid white;height:"+imgwidth+"px;width:"+imgwidth+"px;position: absolute;left:"+(centerX-imgwidth/2)+"px;top:"+(centerY-imgwidth/2)+"px; border-radius:50%; overflow:hidden;"
-    imgdiv.setAttribute('name','scholarimg');
-    imgdiv.setAttribute('style',cstyle);
-    imgdiv.innerHTML="<img style='background: white;'  data='@@@@@@@0@@@@@@@' height='"+imgwidth+"' width='"+imgwidth+"' src='/showimg.jpg' alt='0'>";
+    var cstyle = "z-index:10000;border:1px solid white;height:" + imgwidth + "px;width:" + imgwidth + "px;position: absolute;left:" + (centerX - imgwidth / 2) + "px;top:" + (centerY - imgwidth / 2) + "px; border-radius:50%; overflow:hidden;"
+    imgdiv.setAttribute('name', 'scholarimg');
+    imgdiv.setAttribute('style', cstyle);
+    imgdiv.innerHTML = "<img style='background: white;'  data='@@@@@@@0@@@@@@@' height='" + imgwidth + "' width='" + imgwidth + "' src='/showimg.jpg' alt='0'>";
     //insertAfter(imgdiv,thisNode);
     thisNode.appendChild(imgdiv);
   }
-  var imgdivs=document.getElementsByName("scholarimg");
-  if(thisNode!=null){//准备绑定事件
-    var pthisNode=thisNode.parentNode;
-    pthisNode.addEventListener("mouseleave", function(event){
-      if(thisNode!=null  && thisNode.parentNode!=null){
+  var imgdivs = document.getElementsByName("scholarimg");
+  if (thisNode != null) {//准备绑定事件
+    var pthisNode = thisNode.parentNode;
+    pthisNode.addEventListener("mouseleave", function (event) {
+      if (thisNode != null && thisNode.parentNode != null) {
         thisNode.parentNode.removeChild(thisNode);
-        var imgdivs=document.getElementsByName("scholarimg");
-        for(var i=0;i<imgdivs.length;){
+        var imgdivs = document.getElementsByName("scholarimg");
+        for (var i = 0; i < imgdivs.length;) {
           imgdivs[i].parentNode.removeChild(imgdivs[i]);
         }
       }
@@ -59,44 +60,44 @@ function showtop(usersIds,e,map,maindom,inputids){
   const resultPromise = listPersonByIds(ids);
   resultPromise.then(
     (data) => {
-      var imgdivs=document.getElementsByName("scholarimg");
-      for(var i=0;i<ids.length;i++){
-        var cimg=imgdivs[i];
-        var url=data.data.persons[i].avatar;
-        cimg.innerHTML="<img style='background: white;'  data='@@@@@@@"+i+"@@@@@@@' height='"+imgwidth+"' width='"+imgwidth+"' src='"+url+"' alt='"+i+"'>";
+      var imgdivs = document.getElementsByName("scholarimg");
+      for (var i = 0; i < ids.length; i++) {
+        var cimg = imgdivs[i];
+        var url = data.data.persons[i].avatar;
+        cimg.innerHTML = "<img style='background: white;'  data='@@@@@@@" + i + "@@@@@@@' height='" + imgwidth + "' width='" + imgwidth + "' src='" + url + "' alt='" + i + "'>";
       }
-      for(var j=0;j<imgdivs.length;j++){
-        var cimg=imgdivs[j];
-        cimg.addEventListener("mouseenter", function(event){
-          var chtml=event.target.innerHTML;
-          var num=0;
-          if(chtml.split("@@@@@@@").length>1){
-            num=chtml.split("@@@@@@@")[1];
+      for (var j = 0; j < imgdivs.length; j++) {
+        var cimg = imgdivs[j];
+        cimg.addEventListener("mouseenter", function (event) {
+          var chtml = event.target.innerHTML;
+          var num = 0;
+          if (chtml.split("@@@@@@@").length > 1) {
+            num = chtml.split("@@@@@@@")[1];
           }
-          var personInfo=data.data.persons[num];
-          var apos=document.getElementById("allmap").getBoundingClientRect();
-          var cpos=event.target.getBoundingClientRect();
-          var newpixel = new BMap.Pixel(cpos.left-apos.left+imgwidth, cpos.top-apos.top);
-          var thispoint= map.pixelToPoint(newpixel);
-          var pos="";
-          if(personInfo.pos==null || personInfo.pos==""){
-            pos="null";
-          }else if(personInfo.pos[0]==null || personInfo.pos[0]==""){
-            pos="";
-          }else{
-            pos=personInfo.pos[0].n;
+          var personInfo = data.data.persons[num];
+          var apos = document.getElementById("allmap").getBoundingClientRect();
+          var cpos = event.target.getBoundingClientRect();
+          var newpixel = new BMap.Pixel(cpos.left - apos.left + imgwidth, cpos.top - apos.top);
+          var thispoint = map.pixelToPoint(newpixel);
+          var pos = "";
+          if (personInfo.pos == null || personInfo.pos == "") {
+            pos = "null";
+          } else if (personInfo.pos[0] == null || personInfo.pos[0] == "") {
+            pos = "";
+          } else {
+            pos = personInfo.pos[0].n;
           }
-          var sContent="<div id='author_info' style='width: 350px;height: 120px;'><img style='float:left;margin:4px' id='imgDemo' src='http:"+personInfo.avatar+"' width='70' height='80'/>"
-            +"<i class='fa fa-user' style='width: 20px;'> </i><a  target='_blank' href='https://cn.aminer.org/profile/"+personInfo.id+"'>"
-            +personInfo.name+"</a><br /><strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"
-            +personInfo.indices.h_index+"<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Paper:  </strong>"
-            +personInfo.indices.num_pubs+"<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Citation:  </strong>"
-            +personInfo.indices.num_citation+"<br /><i class='fa fa-mortar-board' style='width: 20px;'> </i>"
-            +pos+"<br /><i class='fa fa-institution' style='width: 20px;'> </i>"+personInfo.aff.desc+"</div>";
+          var sContent = "<div id='author_info' style='width: 350px;height: 120px;'><img style='float:left;margin:4px' id='imgDemo' src='http:" + personInfo.avatar + "' width='70' height='80'/>"
+            + "<i class='fa fa-user' style='width: 20px;'> </i><a  target='_blank' href='https://cn.aminer.org/profile/" + personInfo.id + "'>"
+            + personInfo.name + "</a><br /><strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"
+            + personInfo.indices.h_index + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Paper:  </strong>"
+            + personInfo.indices.num_pubs + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Citation:  </strong>"
+            + personInfo.indices.num_citation + "<br /><i class='fa fa-mortar-board' style='width: 20px;'> </i>"
+            + pos + "<br /><i class='fa fa-institution' style='width: 20px;'> </i>" + personInfo.aff.desc + "</div>";
           var infoWindow = new BMap.InfoWindow(sContent);
-          map.openInfoWindow(infoWindow,thispoint);
+          map.openInfoWindow(infoWindow, thispoint);
         });
-        cimg.addEventListener("mouseleave", function(event){
+        cimg.addEventListener("mouseleave", function (event) {
           //document.getElementById("authorinfo").style.display="none";
         });
       }
@@ -109,245 +110,276 @@ function showtop(usersIds,e,map,maindom,inputids){
   });
 }
 
-function insertAfter(newElement, targetElement){
+function insertAfter(newElement, targetElement) {
   var parent = targetElement.parentNode;
-  if (parent.lastChild == targetElement) {
+  if (parent.lastChild === targetElement) {
     parent.appendChild(newElement);
-  }else {
+  } else {
     parent.insertBefore(newElement, targetElement.nextSibling);
   }
 }
 
 class ExpertMap extends React.Component {
   /** 构造函数： 这里执行初始化*/
-    // constructor(props) {
-    //   super(props);
-    // }
+  constructor(props) {
+    super(props);
+  }
 
-  state = {
-    title: 'loading...',
-    // resultsByYear: this.props && this.props.results,
-    // resultsByCitation: [],
-  };
+  state = {};
 
-  addMouseoverHandler=(marker,personId)=>{
-    const that=this;
-    var sContent ="<div id='author_info' style='width: 350px;height: 120px;'></div>";
+  componentDidMount() {
+    this.callSearchMap(this.props.query);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.query && nextProps.query !== this.props.query) {
+      this.callSearchMap(this.props.query);
+    }
+    if (nextProps.expertMap.geoData !== this.props.expertMap.geoData) {
+      console.log('>>>> ', nextProps.expertMap.geoData);
+      this.showmap(nextProps.expertMap.geoData);
+    }
+    return true;
+  }
+
+  callSearchMap(query, callback) {
+    console.log('MAP::: searchMap:', query);
+    this.props.dispatch({ type: 'expertMap/searchMap', payload: { query } });
+  }
+
+  addMouseoverHandler = (marker, personId) => {
+    const that = this;
+    var sContent = "<div id='author_info' style='width: 350px;height: 120px;'></div>";
     var infoWindow = new BMap.InfoWindow(sContent);
-    marker.addEventListener('mouseout',function (e) {
+    marker.addEventListener('mouseout', function (e) {
 
 
     })
-    marker.addEventListener('mouseover',function (e) {
+    marker.addEventListener('mouseover', function (e) {
       this.openInfoWindow(infoWindow);
-      if(document.getElementById("currentId").value!=personId){
+      if (document.getElementById("currentId").value != personId) {
         that.onLoadPersonCard(personId);
-      }else{
+      } else {
         that.showexpertinfo();
       }
     })
   }
 
-  componentDidMount() {
-    this.setState({tite: 'DONE'});
-    this.showmap();
-  }
+  showmap = (place) => {
 
-  showmap=()=>{
-    var place = require('../../../external-docs/expert-map/expert-map-example1.json');
-    var map = new BMap.Map("allmap");
+    var map = new BMap.Map('allmap');
     map.centerAndZoom(new BMap.Point(116.404, 39.915), 2);
     map.enableScrollWheelZoom();
     var markers = [];
-    const that=this;
-    var pId=[];
-    for(var o in place.results){
+    const that = this;
+    var pId = [];
+    for (var o in place.results) {
       var pt = null;
       pt = new BMap.Point(place.results[o].location.lng, place.results[o].location.lat);
-      var marker=new BMap.Marker(pt);
-      var label=new BMap.Label("<div>"+place.results[o].name+"</div><div style='display: none;'>"+place.results[o].id+"</div>");
-      label.setStyle({ color : "red", fontSize : "12px",border:"none",backgroundColor:"transparent",fontWeight :"bold",textAlign:"center",height: "0px",lineHeight: "0px",width: "130px",});
-      label.setOffset(1000,1000);
+      var marker = new BMap.Marker(pt);
+      var label = new BMap.Label("<div>" + place.results[o].name + "</div><div style='display: none;'>" + place.results[o].id + "</div>");
+      label.setStyle({
+        color: "red",
+        fontSize: "12px",
+        border: "none",
+        backgroundColor: "transparent",
+        fontWeight: "bold",
+        textAlign: "center",
+        height: "0px",
+        lineHeight: "0px",
+        width: "130px",
+      });
+      label.setOffset(1000, 1000);
       marker.setLabel(label);
-      var personId=place.results[o].id;
-      pId[o]=personId;
+      var personId = place.results[o].id;
+      pId[o] = personId;
       markers.push(marker);
     }
 
-    var cr = new BMap.CopyrightControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT});
+    var cr = new BMap.CopyrightControl({ anchor: BMAP_ANCHOR_BOTTOM_RIGHT });
     map.addControl(cr);
     map.addControl(new BMap.NavigationControl());
     map.addControl(new BMap.ScaleControl());
     map.addControl(new BMap.OverviewMapControl());
     //map.addControl(new BMap.MapTypeControl());
-    var mapinterval=setInterval(function(){
-      if (typeof(BMapLib) == "undefined"){
+    var mapinterval = setInterval(function () {
+      if (typeof(BMapLib) == "undefined") {
         console.log("wait for BMapLib")
-      }else{
+      } else {
         clearInterval(mapinterval);
-        var markerClusterer = new BMapLib.MarkerClusterer(map, {markers: markers});
-        for(var m in markers){
-          that.addMouseoverHandler(markers[m],pId[m])
+        var markerClusterer = new BMapLib.MarkerClusterer(map, { markers: markers });
+        for (var m in markers) {
+          that.addMouseoverHandler(markers[m], pId[m])
         }
       }
-    },100);
+    }, 100);
   }
 
-  findposition=(type,results)=>{
-    var place=[];
-    if(type==0){
+  findposition = (type, results) => {
+    var place = [];
+    if (type == 0) {
 
-    }else if(type==1){
-      var continent=this.findcontinent(results.location.country)
-      if(continent=="Asia"){//以中国返回,先经度，后纬度
-        place=[34.250575,108.98371]
-      }else if(continent=="Europe"){//以德国返回
-        place=[48.7468939,9.0805141]
-      }else if(continent=="Africa"){//以中非返回
-        place=[6.611110999999999,20.939444]
-      }else if(continent=="North American"){//以美国返回
-        place=[37.09024,-95.712891]
-      }else if(continent=="South American"){//以巴西返回
-        place=[-51.92528,-14.235004]
-      }else if(continent=="Oceania"){//以澳大利亚返回
-        place=[-25.274398,133.775136]
+    } else if (type == 1) {
+      var continent = this.findcontinent(results.location.country)
+      if (continent == "Asia") {//以中国返回,先经度，后纬度
+        place = [34.250575, 108.98371]
+      } else if (continent == "Europe") {//以德国返回
+        place = [48.7468939, 9.0805141]
+      } else if (continent == "Africa") {//以中非返回
+        place = [6.611110999999999, 20.939444]
+      } else if (continent == "North American") {//以美国返回
+        place = [37.09024, -95.712891]
+      } else if (continent == "South American") {//以巴西返回
+        place = [-51.92528, -14.235004]
+      } else if (continent == "Oceania") {//以澳大利亚返回
+        place = [-25.274398, 133.775136]
       }
-    }else if(type==2){
-      place=this.findcountries(results.location.country);
-    }else if(type==3){
+    } else if (type == 2) {
+      place = this.findcountries(results.location.country);
+    } else if (type == 3) {
 
-    }else if(type==4){
-      place=this.findcities(results.location.city)
-    }else if(type==5){
+    } else if (type == 4) {
+      place = this.findcities(results.location.city)
+    } else if (type == 5) {
 
     }
     return place;
   }
 
-  findcontinent=(country)=>{
+  findcontinent = (country) => {
     var place = require('../../../external-docs/expert-map/continentscountries.json');
-    var flag=true
-    var continent="North American"
-    for(var o in place.results){
-      if(place.results[o].country.indexOf(country)==0){
+    var flag = true
+    var continent = "North American"
+    for (var o in place.results) {
+      if (place.results[o].country.indexOf(country) == 0) {
         //console.log(place.results[o].country+"####"+country+"&&&&"+place.results[o].continent);
-        flag=false;
-        continent=place.results[o].continent;
+        flag = false;
+        continent = place.results[o].continent;
         break;
-      }else if(place.results[o].country.indexOf(country)>0){
-        flag=false;
-        continent=place.results[o].continent;
+      } else if (place.results[o].country.indexOf(country) > 0) {
+        flag = false;
+        continent = place.results[o].continent;
         break;
       }
     }
-    if(flag){
+    if (flag) {
       //console.log(country+"**********");
     }
     return continent;
   }
 
-  findcountries=(country)=>{
+  findcountries = (country) => {
     var place = require('../../../external-docs/expert-map/continentscountries.json');
-    var flag=true
-    var location=[]
-    for(var o in place.results){
-      if(place.results[o].country.indexOf(country)==0){
-        flag=false;
-        location=[place.results[o].lat,place.results[o].lng]
+    var flag = true
+    var location = []
+    for (var o in place.results) {
+      if (place.results[o].country.indexOf(country) == 0) {
+        flag = false;
+        location = [place.results[o].lat, place.results[o].lng]
         break;
-      }else if(place.results[o].country.indexOf(country)>0){
-        flag=false;
-        location=[place.results[o].lat,place.results[o].lng]
+      } else if (place.results[o].country.indexOf(country) > 0) {
+        flag = false;
+        location = [place.results[o].lat, place.results[o].lng]
         break;
       }
     }
-    if(flag){
+    if (flag) {
       ///
     }
     return location;
   }
 
-  findcities=(city)=>{
-    var location=[];
+  findcities = (city) => {
+    var location = [];
     var place = require('../../../external-docs/expert-map/cities.json');
-    var thisplace=place.results[city].geometry.location
-    location=[thisplace.lat,thisplace.lng]
+    var thisplace = place.results[city].geometry.location
+    location = [thisplace.lat, thisplace.lng]
     console.log(location)
     return location;
   }
 
-  showcontinent=(type)=>{
+  showcontinent = (type) => {
     var place = require('../../../external-docs/expert-map/expert-map-example1.json');
     var map = new BMap.Map("allmap");
-    var scale=2;
-    if(type==2){
-      scale=5;
-    }else if(type==4){
-      scale=10;
+    var scale = 2;
+    if (type == 2) {
+      scale = 5;
+    } else if (type == 4) {
+      scale = 10;
     }
     map.centerAndZoom(new BMap.Point(116.404, 39.915), scale);
     map.enableScrollWheelZoom();
     var markers = [];
-    const that=this;
-    var pId=[];
-    for(var o in place.results){
+    const that = this;
+    var pId = [];
+    for (var o in place.results) {
       var pt = null;
-      var newplace=this.findposition(type,place.results[o]);
+      var newplace = this.findposition(type, place.results[o]);
       pt = new BMap.Point(newplace[1], newplace[0]);//这里经度和纬度是反着的
-      var marker=new BMap.Marker(pt);
-      var label=new BMap.Label("<div>"+place.results[o].name+"</div><div style='display: none;'>"+place.results[o].id+"</div>");
-      label.setStyle({ color : "red", fontSize : "12px",border:"none",backgroundColor:"transparent",fontWeight :"bold",textAlign:"center",height: "0px",lineHeight: "0px",width: "130px",});
-      label.setOffset(1000,1000);
+      var marker = new BMap.Marker(pt);
+      var label = new BMap.Label("<div>" + place.results[o].name + "</div><div style='display: none;'>" + place.results[o].id + "</div>");
+      label.setStyle({
+        color: "red",
+        fontSize: "12px",
+        border: "none",
+        backgroundColor: "transparent",
+        fontWeight: "bold",
+        textAlign: "center",
+        height: "0px",
+        lineHeight: "0px",
+        width: "130px",
+      });
+      label.setOffset(1000, 1000);
       marker.setLabel(label);
-      var personId=place.results[o].id;
-      pId[o]=personId;
+      var personId = place.results[o].id;
+      pId[o] = personId;
       markers.push(marker);
     }
 
-    var cr = new BMap.CopyrightControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT});
+    var cr = new BMap.CopyrightControl({ anchor: BMAP_ANCHOR_BOTTOM_RIGHT });
     map.addControl(cr);
     map.addControl(new BMap.NavigationControl());
     map.addControl(new BMap.ScaleControl());
     map.addControl(new BMap.OverviewMapControl());
     map.add
-    var mapinterval=setInterval(function(){
-      if (typeof(BMapLib) == "undefined"){
+    var mapinterval = setInterval(function () {
+      if (typeof(BMapLib) == "undefined") {
         console.log("wait for BMapLib")
-      }else{
+      } else {
         clearInterval(mapinterval);
-        var markerClusterer = new BMapLib.MarkerClusterer(map, {markers: markers});
-        for(var m in markers){
-          that.addMouseoverHandler(markers[m],pId[m])
+        var markerClusterer = new BMapLib.MarkerClusterer(map, { markers: markers });
+        for (var m in markers) {
+          that.addMouseoverHandler(markers[m], pId[m])
         }
       }
-    },100);
+    }, 100);
   }
 
   componentDidUpdate(prevProps, prevState) {
     this.showexpertinfo();
   }
 
-  showexpertinfo(){
+  showexpertinfo() {
     const model = this.props && this.props.expertMap;
     const personInfo = model.personInfo;
 
-    document.getElementById("currentId").value=personInfo.id;
-    var pos=""
-    if(personInfo.pos==null || personInfo.pos==""){
-      pos="null";
-    }else if(personInfo.pos[0]==null || personInfo.pos[0]==""){
-      pos="";
-    }else{
-      pos=personInfo.pos[0].n;
+    document.getElementById("currentId").value = personInfo.id;
+    var pos = ""
+    if (personInfo.pos == null || personInfo.pos == "") {
+      pos = "null";
+    } else if (personInfo.pos[0] == null || personInfo.pos[0] == "") {
+      pos = "";
+    } else {
+      pos = personInfo.pos[0].n;
     }
-    if(personInfo.name!=null){
-      document.getElementById('author_info').innerHTML="<img style='float:left;margin:4px' id='imgDemo' src='http:"+personInfo.avatar+"' width='70' height='80'/>"
-        +"<i class='fa fa-user' style='width: 20px;'> </i><a  target='_blank' href='https://cn.aminer.org/profile/"+personInfo.id+"'>"
-        +personInfo.name+"</a><br /><strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"
-        +personInfo.indices.h_index+"<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Paper:  </strong>"
-        +personInfo.indices.num_pubs+"<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Citation:  </strong>"
-        +personInfo.indices.num_citation+"<br /><i class='fa fa-mortar-board' style='width: 20px;'> </i>"
-        +pos+"<br /><i class='fa fa-institution' style='width: 20px;'> </i>"+personInfo.aff.desc+"";
+    if (personInfo.name != null) {
+      document.getElementById('author_info').innerHTML = "<img style='float:left;margin:4px' id='imgDemo' src='http:" + personInfo.avatar + "' width='70' height='80'/>"
+        + "<i class='fa fa-user' style='width: 20px;'> </i><a  target='_blank' href='https://cn.aminer.org/profile/" + personInfo.id + "'>"
+        + personInfo.name + "</a><br /><strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"
+        + personInfo.indices.h_index + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Paper:  </strong>"
+        + personInfo.indices.num_pubs + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Citation:  </strong>"
+        + personInfo.indices.num_citation + "<br /><i class='fa fa-mortar-board' style='width: 20px;'> </i>"
+        + pos + "<br /><i class='fa fa-institution' style='width: 20px;'> </i>" + personInfo.aff.desc + "";
     }
   }
 
@@ -361,23 +393,23 @@ class ExpertMap extends React.Component {
   }
 
   onLoadPersonCard = (personId) => {
-    this.props.dispatch({type: 'expertMap/getPersonInfo', payload: {personId}});
+    this.props.dispatch({ type: 'expertMap/getPersonInfo', payload: { personId } });
   }
 
-  showtype=(e)=>{
+  showtype = (e) => {
     const typeid = e.currentTarget && e.currentTarget.value && e.currentTarget.getAttribute('value');
-    if(typeid==0){
-      this.showmap();
-    }else if(typeid==1){
+    if (typeid == 0) {
+      this.showmap(mapData);
+    } else if (typeid == 1) {
       //简单地读取其城市大区等信息，然后归一到一个地址，然后在地图上显示
       this.showcontinent(typeid);
-    }else if(typeid==2){
+    } else if (typeid == 2) {
       this.showcontinent(typeid);
-    }else if(typeid==3){
+    } else if (typeid == 3) {
       this.showcontinent(typeid);
-    }else if(typeid==4){
+    } else if (typeid == 4) {
       this.showcontinent(typeid);
-    }else if(typeid==5){
+    } else if (typeid == 5) {
       this.showcontinent(typeid);
     }
   }
@@ -401,12 +433,12 @@ class ExpertMap extends React.Component {
           </div>
         </div>
         <div className="mapshow">
-          <div id="allmap" style={{width: '100%', height: '800px'}}/>
+          <div id="allmap" style={{ width: '100%', height: '800px' }} />
           <div className="em_report" id="em_report">
             统计/报表
           </div>
-          <input id="currentId" type="hidden"/>
-          <input id="currentIds" type="hidden"/>
+          <input id="currentId" type="hidden" />
+          <input id="currentIds" type="hidden" />
         </div>
       </div>
     );
@@ -414,7 +446,7 @@ class ExpertMap extends React.Component {
 }
 
 
-export default connect(({expertMap, loading}) => ({expertMap, loading}))(ExpertMap);
+export default connect(({ expertMap, loading }) => ({ expertMap, loading }))(ExpertMap);
 
 
 /**
@@ -430,7 +462,7 @@ export default connect(({expertMap, loading}) => ({expertMap, loading}))(ExpertM
  * @namespace BMap的所有library类均放在BMapLib命名空间下
  */
 var BMapLib = window.BMapLib = BMapLib || {};
-(function(){
+(function () {
 
   /**
    * 获取一个扩展的视图范围，把上下左右都扩大一样的像素值。
@@ -440,7 +472,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    *
    * @return {BMap.Bounds} 返回扩大后的视图范围。
    */
-  var getExtendedBounds = function(map, bounds, gridSize){
+  var getExtendedBounds = function (map, bounds, gridSize) {
     bounds = cutBoundsInRange(bounds);
     var pixelNE = map.pointToPixel(bounds.getNorthEast());
     var pixelSW = map.pointToPixel(bounds.getSouthWest());
@@ -498,9 +530,9 @@ var BMapLib = window.BMapLib = BMapLib || {};
    *
    * @return {Number} 如果在数组内，返回索引，否则返回-1
    */
-  var indexOf = function(item, source){
+  var indexOf = function (item, source) {
     var index = -1;
-    if(isArray(source)){
+    if (isArray(source)) {
       if (source.indexOf) {
         index = source.indexOf(item);
       } else {
@@ -532,8 +564,8 @@ var BMapLib = window.BMapLib = BMapLib || {};
      *    isAverangeCenter {Boolean} 聚合点的落脚位置是否是所有聚合在内点的平均值，默认为否，落脚在聚合内的第一个点<br />
      *    styles {Array<IconStyle>} 自定义聚合后的图标风格，请参考TextIconOverlay类<br />
      */
-    BMapLib.MarkerClusterer = function(map, options){
-      if (!map){
+    BMapLib.MarkerClusterer = function (map, options) {
+      if (!map) {
         return;
       }
       this._map = map;
@@ -551,11 +583,11 @@ var BMapLib = window.BMapLib = BMapLib || {};
       this._styles = opts["styles"] || [];
 
       var that = this;
-      this._map.addEventListener("zoomend",function(){
+      this._map.addEventListener("zoomend", function () {
         that._redraw();
       });
 
-      this._map.addEventListener("moveend",function(){
+      this._map.addEventListener("moveend", function () {
         that._redraw();
       });
 
@@ -569,8 +601,8 @@ var BMapLib = window.BMapLib = BMapLib || {};
    *
    * @return 无返回值。
    */
-  MarkerClusterer.prototype.addMarkers = function(markers){
-    for(var i = 0, len = markers.length; i <len ; i++){
+  MarkerClusterer.prototype.addMarkers = function (markers) {
+    for (var i = 0, len = markers.length; i < len; i++) {
       this._pushMarkerTo(markers[i]);
     }
     this._createClusters();
@@ -582,9 +614,9 @@ var BMapLib = window.BMapLib = BMapLib || {};
    *
    * @return 无返回值。
    */
-  MarkerClusterer.prototype._pushMarkerTo = function(marker){
+  MarkerClusterer.prototype._pushMarkerTo = function (marker) {
     var index = indexOf(marker, this._markers);
-    if(index === -1){
+    if (index === -1) {
       marker.isInCluster = false;
       this._markers.push(marker);//Marker拖放后enableDragging不做变化，忽略
     }
@@ -595,7 +627,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * @param {BMap.Marker} marker 要聚合的单个标记。
    * @return 无返回值。
    */
-  MarkerClusterer.prototype.addMarker = function(marker) {
+  MarkerClusterer.prototype.addMarker = function (marker) {
     this._pushMarkerTo(marker);
     this._createClusters();
   };
@@ -604,11 +636,11 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * 根据所给定的标记，创建聚合点
    * @return 无返回值
    */
-  MarkerClusterer.prototype._createClusters = function(){
+  MarkerClusterer.prototype._createClusters = function () {
     var mapBounds = this._map.getBounds();
     var extendedBounds = getExtendedBounds(this._map, mapBounds, this._gridSize);
-    for(var i = 0, marker; marker = this._markers[i]; i++){
-      if(!marker.isInCluster && extendedBounds.containsPoint(marker.getPosition()) ){
+    for (var i = 0, marker; marker = this._markers[i]; i++) {
+      if (!marker.isInCluster && extendedBounds.containsPoint(marker.getPosition())) {
         this._addToClosestCluster(marker);
       }
     }
@@ -620,22 +652,22 @@ var BMapLib = window.BMapLib = BMapLib || {};
    *
    * @return 无返回值。
    */
-  MarkerClusterer.prototype._addToClosestCluster = function (marker){
+  MarkerClusterer.prototype._addToClosestCluster = function (marker) {
     var distance = 4000000;
     var clusterToAddTo = null;
     var position = marker.getPosition();
-    for(var i = 0, cluster; cluster = this._clusters[i]; i++){
+    for (var i = 0, cluster; cluster = this._clusters[i]; i++) {
       var center = cluster.getCenter();
-      if(center){
+      if (center) {
         var d = this._map.getDistance(center, marker.getPosition());
-        if(d < distance){
+        if (d < distance) {
           distance = d;
           clusterToAddTo = cluster;
         }
       }
     }
 
-    if (clusterToAddTo && clusterToAddTo.isMarkerInClusterBounds(marker)){
+    if (clusterToAddTo && clusterToAddTo.isMarkerInClusterBounds(marker)) {
       clusterToAddTo.addMarker(marker);
     } else {
       var cluster = new Cluster(this);
@@ -648,8 +680,8 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * 清除上一次的聚合的结果
    * @return 无返回值。
    */
-  MarkerClusterer.prototype._clearLastClusters = function(){
-    for(var i = 0, cluster; cluster = this._clusters[i]; i++){
+  MarkerClusterer.prototype._clearLastClusters = function () {
+    for (var i = 0, cluster; cluster = this._clusters[i]; i++) {
       cluster.remove();
     }
     this._clusters = [];//置空Cluster数组
@@ -660,8 +692,8 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * 清除某个聚合中的所有标记
    * @return 无返回值
    */
-  MarkerClusterer.prototype._removeMarkersFromCluster = function(){
-    for(var i = 0, marker; marker = this._markers[i]; i++){
+  MarkerClusterer.prototype._removeMarkersFromCluster = function () {
+    for (var i = 0, marker; marker = this._markers[i]; i++) {
       marker.isInCluster = false;
     }
   };
@@ -670,8 +702,8 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * 把所有的标记从地图上清除
    * @return 无返回值
    */
-  MarkerClusterer.prototype._removeMarkersFromMap = function(){
-    for(var i = 0, marker; marker = this._markers[i]; i++){
+  MarkerClusterer.prototype._removeMarkersFromMap = function () {
+    for (var i = 0, marker; marker = this._markers[i]; i++) {
       marker.isInCluster = false;
       var tmplabel = this._markers[i].getLabel();
       this._map.removeOverlay(marker);
@@ -685,7 +717,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    *
    * @return {Boolean} 删除成功返回true，否则返回false
    */
-  MarkerClusterer.prototype._removeMarker = function(marker) {
+  MarkerClusterer.prototype._removeMarker = function (marker) {
     var index = indexOf(marker, this._markers);
     if (index === -1) {
       return false;
@@ -703,7 +735,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    *
    * @return {Boolean} 删除成功返回true，否则返回false
    */
-  MarkerClusterer.prototype.removeMarker = function(marker) {
+  MarkerClusterer.prototype.removeMarker = function (marker) {
     var success = this._removeMarker(marker);
     if (success) {
       this._clearLastClusters();
@@ -718,7 +750,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    *
    * @return {Boolean} 删除成功返回true，否则返回false
    */
-  MarkerClusterer.prototype.removeMarkers = function(markers) {
+  MarkerClusterer.prototype.removeMarkers = function (markers) {
     var success = false;
     for (var i = 0; i < markers.length; i++) {
       var r = this._removeMarker(markers[i]);
@@ -736,7 +768,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * 从地图上彻底清除所有的标记
    * @return 无返回值
    */
-  MarkerClusterer.prototype.clearMarkers = function() {
+  MarkerClusterer.prototype.clearMarkers = function () {
     this._clearLastClusters();
     this._removeMarkersFromMap();
     this._markers = [];
@@ -755,7 +787,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * 获取网格大小
    * @return {Number} 网格大小
    */
-  MarkerClusterer.prototype.getGridSize = function() {
+  MarkerClusterer.prototype.getGridSize = function () {
     return this._gridSize;
   };
 
@@ -764,7 +796,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * @param {Number} size 网格大小
    * @return 无返回值
    */
-  MarkerClusterer.prototype.setGridSize = function(size) {
+  MarkerClusterer.prototype.setGridSize = function (size) {
     this._gridSize = size;
     this._redraw();
   };
@@ -773,7 +805,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * 获取聚合的最大缩放级别。
    * @return {Number} 聚合的最大缩放级别。
    */
-  MarkerClusterer.prototype.getMaxZoom = function() {
+  MarkerClusterer.prototype.getMaxZoom = function () {
     return this._maxZoom;
   };
 
@@ -782,7 +814,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * @param {Number} maxZoom 聚合的最大缩放级别
    * @return 无返回值
    */
-  MarkerClusterer.prototype.setMaxZoom = function(maxZoom) {
+  MarkerClusterer.prototype.setMaxZoom = function (maxZoom) {
     this._maxZoom = maxZoom;
     this._redraw();
   };
@@ -791,7 +823,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * 获取聚合的样式风格集合
    * @return {Array<IconStyle>} 聚合的样式风格集合
    */
-  MarkerClusterer.prototype.getStyles = function() {
+  MarkerClusterer.prototype.getStyles = function () {
     return this._styles;
   };
 
@@ -800,7 +832,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * @param {Array<IconStyle>} styles 样式风格数组
    * @return 无返回值
    */
-  MarkerClusterer.prototype.setStyles = function(styles) {
+  MarkerClusterer.prototype.setStyles = function (styles) {
     this._styles = styles;
     this._redraw();
   };
@@ -809,7 +841,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * 获取单个聚合的最小数量。
    * @return {Number} 单个聚合的最小数量。
    */
-  MarkerClusterer.prototype.getMinClusterSize = function() {
+  MarkerClusterer.prototype.getMinClusterSize = function () {
     return this._minClusterSize;
   };
 
@@ -818,7 +850,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * @param {Number} size 单个聚合的最小数量。
    * @return 无返回值。
    */
-  MarkerClusterer.prototype.setMinClusterSize = function(size) {
+  MarkerClusterer.prototype.setMinClusterSize = function (size) {
     this._minClusterSize = size;
     this._redraw();
   };
@@ -827,7 +859,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * 获取单个聚合的落脚点是否是聚合内所有标记的平均中心。
    * @return {Boolean} true或false。
    */
-  MarkerClusterer.prototype.isAverageCenter = function() {
+  MarkerClusterer.prototype.isAverageCenter = function () {
     return this._isAverageCenter;
   };
 
@@ -835,7 +867,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * 获取聚合的Map实例。
    * @return {Map} Map的示例。
    */
-  MarkerClusterer.prototype.getMap = function() {
+  MarkerClusterer.prototype.getMap = function () {
     return this._map;
   };
 
@@ -843,7 +875,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * 获取所有的标记数组。
    * @return {Array<Marker>} 标记数组。
    */
-  MarkerClusterer.prototype.getMarkers = function() {
+  MarkerClusterer.prototype.getMarkers = function () {
     return this._markers;
   };
 
@@ -851,9 +883,9 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * 获取聚合的总数量。
    * @return {Number} 聚合的总数量。
    */
-  MarkerClusterer.prototype.getClustersCount = function() {
+  MarkerClusterer.prototype.getClustersCount = function () {
     var count = 0;
-    for(var i = 0, cluster; cluster = this._clusters[i]; i++){
+    for (var i = 0, cluster; cluster = this._clusters[i]; i++) {
       cluster.isReal() && count++;
     }
     return count;
@@ -866,7 +898,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * @constructor
    * @param {MarkerClusterer} markerClusterer 一个标记聚合器示例。
    */
-  function Cluster(markerClusterer){
+  function Cluster(markerClusterer) {
     this._markerClusterer = markerClusterer;
     this._map = markerClusterer.getMap();
     this._minClusterSize = markerClusterer.getMinClusterSize();
@@ -876,7 +908,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
     this._gridBounds = null;//以中心点为准，向四边扩大gridSize个像素的范围，也即网格范围
     this._isReal = false; //真的是个聚合
 
-    this._clusterMarker = new BMapLib.TextIconOverlay(this._center, this._markers.length, {"styles":this._markerClusterer.getStyles()});
+    this._clusterMarker = new BMapLib.TextIconOverlay(this._center, this._markers.length, { "styles": this._markerClusterer.getStyles() });
     //this._map.addOverlay(this._clusterMarker);
   }
 
@@ -885,16 +917,16 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * @param {Marker} marker 要添加的标记。
    * @return 无返回值。
    */
-  Cluster.prototype.addMarker = function(marker){
-    if(this.isMarkerInCluster(marker)){
+  Cluster.prototype.addMarker = function (marker) {
+    if (this.isMarkerInCluster(marker)) {
       return false;
     }//也可用marker.isInCluster判断,外面判断OK，这里基本不会命中
 
-    if (!this._center){
+    if (!this._center) {
       this._center = marker.getPosition();
       this.updateGridBounds();//
     } else {
-      if(this._isAverageCenter){
+      if (this._isAverageCenter) {
         var l = this._markers.length + 1;
         var lat = (this._center.lat * (l - 1) + marker.getPosition().lat) / l;
         var lng = (this._center.lng * (l - 1) + marker.getPosition().lng) / l;
@@ -907,7 +939,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
     this._markers.push(marker);
 
     var len = this._markers.length;
-    if(len < this._minClusterSize ){
+    if (len < this._minClusterSize) {
       this._map.addOverlay(marker);
       //this.updateClusterMarker();
       return true;
@@ -930,7 +962,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * @param {Marker} marker 要判断的标记。
    * @return {Boolean} true或false。
    */
-  Cluster.prototype.isMarkerInCluster= function(marker){
+  Cluster.prototype.isMarkerInCluster = function (marker) {
     if (this._markers.indexOf) {
       return this._markers.indexOf(marker) != -1;
     } else {
@@ -948,11 +980,11 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * @param {Marker} marker 要判断的标记。
    * @return {Boolean} true或false。
    */
-  Cluster.prototype.isMarkerInClusterBounds = function(marker) {
+  Cluster.prototype.isMarkerInClusterBounds = function (marker) {
     return this._gridBounds.containsPoint(marker.getPosition());
   };
 
-  Cluster.prototype.isReal = function(marker) {
+  Cluster.prototype.isReal = function (marker) {
     return this._isReal;
   };
 
@@ -960,7 +992,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * 更新该聚合的网格范围。
    * @return 无返回值。
    */
-  Cluster.prototype.updateGridBounds = function() {
+  Cluster.prototype.updateGridBounds = function () {
     var bounds = new BMap.Bounds(this._center, this._center);
     this._gridBounds = getExtendedBounds(this._map, bounds, this._markerClusterer.getGridSize());
   };
@@ -991,32 +1023,32 @@ var BMapLib = window.BMapLib = BMapLib || {};
 
     var thatMap = this._map;
     var thatBounds = this.getBounds();
-    this._clusterMarker.addEventListener("click", function(event){
+    this._clusterMarker.addEventListener("click", function (event) {
       thatMap.setViewport(thatBounds);
     });
 
-    var that=this;
-    this._clusterMarker.addEventListener("mouseenter", function(event){
-      var ids="";
-      var userids=[];
-      var map=that._map;
-      for(var i=0;i<that._markers.length;i++){
-        var userinfo=that._markers[i].getLabel().content;
-        var userid =userinfo.substring(userinfo.length-30,userinfo.length-6);
-        userids[i]=userid;
-        if(ids.indexOf(userid)==-1){
-          ids+=userid+",";
+    var that = this;
+    this._clusterMarker.addEventListener("mouseenter", function (event) {
+      var ids = "";
+      var userids = [];
+      var map = that._map;
+      for (var i = 0; i < that._markers.length; i++) {
+        var userinfo = that._markers[i].getLabel().content;
+        var userid = userinfo.substring(userinfo.length - 30, userinfo.length - 6);
+        userids[i] = userid;
+        if (ids.indexOf(userid) == -1) {
+          ids += userid + ",";
         }
       }
-      var maindom=that._clusterMarker._domElement;
-      var newarray=userids.sort();
-      var newids="";
-      for(var i=0;i<newarray.length;i++){
-        newids+=newarray[i]+",";
+      var maindom = that._clusterMarker._domElement;
+      var newarray = userids.sort();
+      var newids = "";
+      for (var i = 0; i < newarray.length; i++) {
+        newids += newarray[i] + ",";
       }
-      ids=newids;
+      ids = newids;
       document.getElementById("currentIds").value = ids;
-      showtop(userids,event,map,maindom,ids);
+      showtop(userids, event, map, maindom, ids);
     });
   };
 
@@ -1024,7 +1056,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * 删除该聚合。
    * @return 无返回值。
    */
-  Cluster.prototype.remove = function(){
+  Cluster.prototype.remove = function () {
     for (var i = 0, m; m = this._markers[i]; i++) {
       var tmplabel = this._markers[i].getLabel();
       this._markers[i].getMap() && this._map.removeOverlay(this._markers[i]);
@@ -1039,8 +1071,8 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * 获取该聚合所包含的所有标记的最小外接矩形的范围。
    * @return {BMap.Bounds} 计算出的范围。
    */
-  Cluster.prototype.getBounds = function() {
-    var bounds = new BMap.Bounds(this._center,this._center);
+  Cluster.prototype.getBounds = function () {
+    var bounds = new BMap.Bounds(this._center, this._center);
     for (var i = 0, marker; marker = this._markers[i]; i++) {
       bounds.extend(marker.getPosition());
     }
@@ -1051,7 +1083,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * 获取该聚合的落脚点。
    * @return {BMap.Point} 该聚合的落脚点。
    */
-  Cluster.prototype.getCenter = function() {
+  Cluster.prototype.getCenter = function () {
     return this._center;
   };
 
@@ -1079,9 +1111,9 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * 声明baidu包
    */
   var T,
-    baidu = T = baidu || {version: "1.3.8"};
+    baidu = T = baidu || { version: "1.3.8" };
 
-  (function (){
+  (function () {
     //提出guid，防止在与老版本Tangram混用时
     //在下一行错误的修改window[undefined]
     baidu.guid = "$BAIDU$";
@@ -1197,7 +1229,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
        * @shortcut ie
        * @see baidu.browser.firefox,baidu.browser.safari,baidu.browser.opera,baidu.browser.chrome,baidu.browser.maxthon
        */
-      baidu.browser.ie = baidu.ie = document.documentMode || + RegExp['\x241'];
+      baidu.browser.ie = baidu.ie = document.documentMode || +RegExp['\x241'];
     }
 
     /**
@@ -1215,7 +1247,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @returns {string} 目标元素的computed style值
      */
 
-    baidu.dom.getComputedStyle = function(element, key){
+    baidu.dom.getComputedStyle = function (element, key) {
       element = baidu.dom._g(element);
       var doc = baidu.dom.getDocument(element),
         styles;
@@ -1311,7 +1343,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
       // 在取不到值的时候，用fixer进行修正
       if (!value) {
         var fixer = dom._styleFixer[key];
-        if(fixer){
+        if (fixer) {
           value = fixer.get ? fixer.get(element) : baidu.dom.getStyle(element, fixer);
         }
       }
@@ -1336,7 +1368,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
        * @meta standard
        * @see baidu.browser.ie,baidu.browser.firefox,baidu.browser.safari,baidu.browser.chrome
        */
-      baidu.browser.opera = + RegExp['\x241'];
+      baidu.browser.opera = +RegExp['\x241'];
     }
 
     /**
@@ -1388,23 +1420,23 @@ var BMapLib = window.BMapLib = BMapLib || {};
           doc.getBoxObjectFor &&
           getStyle(element, 'position') == 'absolute' &&
           (element.style.top === '' || element.style.left === ''),
-        pos = {"left":0,"top":0},
+        pos = { "left": 0, "top": 0 },
         viewport = (browser.ie && !browser.isStrict) ? doc.body : doc.documentElement,
         parent,
         box;
 
-      if(element == viewport){
+      if (element == viewport) {
         return pos;
       }
 
-      if(element.getBoundingClientRect){ // IE and Gecko 1.9+
+      if (element.getBoundingClientRect) { // IE and Gecko 1.9+
 
         //当HTML或者BODY有border width时, 原生的getBoundingClientRect返回值是不符合预期的
         //考虑到通常情况下 HTML和BODY的border只会设成0px,所以忽略该问题.
         box = element.getBoundingClientRect();
 
         pos.left = Math.floor(box.left) + Math.max(doc.documentElement.scrollLeft, doc.body.scrollLeft);
-        pos.top  = Math.floor(box.top)  + Math.max(doc.documentElement.scrollTop,  doc.body.scrollTop);
+        pos.top = Math.floor(box.top) + Math.max(doc.documentElement.scrollTop, doc.body.scrollTop);
 
         // IE会给HTML元素添加一个border，默认是medium（2px）
         // 但是在IE 6 7 的怪异模式下，可以被html { border: 0; } 这条css规则覆盖
@@ -1412,15 +1444,15 @@ var BMapLib = window.BMapLib = BMapLib || {};
         // 但是。。。在IE 6 7的怪异模式，如果用户使用css覆盖了默认的medium
         // clientTop和clientLeft不会更新
         pos.left -= doc.documentElement.clientLeft;
-        pos.top  -= doc.documentElement.clientTop;
+        pos.top -= doc.documentElement.clientTop;
 
         var htmlDom = doc.body,
           // 在这里，不使用element.style.borderLeftWidth，只有computedStyle是可信的
           htmlBorderLeftWidth = parseInt(getStyle(htmlDom, 'borderLeftWidth')),
           htmlBorderTopWidth = parseInt(getStyle(htmlDom, 'borderTopWidth'));
-        if(browser.ie && !browser.isStrict){
+        if (browser.ie && !browser.isStrict) {
           pos.left -= isNaN(htmlBorderLeftWidth) ? 2 : htmlBorderLeftWidth;
-          pos.top  -= isNaN(htmlBorderTopWidth) ? 2 : htmlBorderTopWidth;
+          pos.top -= isNaN(htmlBorderTopWidth) ? 2 : htmlBorderTopWidth;
         }
       } else {
         // safari/opera/firefox
@@ -1428,12 +1460,12 @@ var BMapLib = window.BMapLib = BMapLib || {};
 
         do {
           pos.left += parent.offsetLeft;
-          pos.top  += parent.offsetTop;
+          pos.top += parent.offsetTop;
 
           // safari里面，如果遍历到了一个fixed的元素，后面的offset都不准了
           if (browser.isWebkit > 0 && getStyle(parent, 'position') == 'fixed') {
             pos.left += doc.body.scrollLeft;
-            pos.top  += doc.body.scrollTop;
+            pos.top += doc.body.scrollTop;
             break;
           }
 
@@ -1441,8 +1473,8 @@ var BMapLib = window.BMapLib = BMapLib || {};
         } while (parent && parent != element);
 
         // 对body offsetTop的修正
-        if(browser.opera > 0 || (browser.isWebkit > 0 && getStyle(element, 'position') == 'absolute')){
-          pos.top  -= doc.body.offsetTop;
+        if (browser.opera > 0 || (browser.isWebkit > 0 && getStyle(element, 'position') == 'absolute')) {
+          pos.top -= doc.body.offsetTop;
         }
 
         // 计算除了body的scroll
@@ -1463,10 +1495,10 @@ var BMapLib = window.BMapLib = BMapLib || {};
     /**
      * @ignore
      * @namespace baidu.event 屏蔽浏览器差异性的事件封装。
-     * @property target 	事件的触发元素
-     * @property pageX 		鼠标事件的鼠标x坐标
-     * @property pageY 		鼠标事件的鼠标y坐标
-     * @property keyCode 	键盘事件的键值
+     * @property target  事件的触发元素
+     * @property pageX    鼠标事件的鼠标x坐标
+     * @property pageY    鼠标事件的鼠标y坐标
+     * @property keyCode  键盘事件的键值
      */
     baidu.event = baidu.event || {};
 
@@ -1511,7 +1543,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
         realType = type;
       type = type.toLowerCase();
       // filter过滤
-      if(filter && filter[type]){
+      if (filter && filter[type]) {
         afterFilter = filter[type](element, type, realListener);
         realType = afterFilter.type;
         realListener = afterFilter.listener;
@@ -1543,12 +1575,12 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @returns {String} 当前页面的唯一标识字符串
      */
 
-    (function(){
+    (function () {
       //不直接使用window，可以提高3倍左右性能
       var guid = window[baidu.guid];
 
-      baidu.lang.guid = function() {
-        return "TANGRAM__" + (guid._counter ++).toString(36);
+      baidu.lang.guid = function () {
+        return "TANGRAM__" + (guid._counter++).toString(36);
       };
 
       guid._counter = guid._counter || 1;
@@ -1582,15 +1614,15 @@ var BMapLib = window.BMapLib = BMapLib || {};
      *
      * @ignore
      * @class  Tangram继承机制提供的一个基类，用户可以通过继承baidu.lang.Class来获取它的属性及方法。
-     * @name 	baidu.lang.Class
+     * @name  baidu.lang.Class
      * @grammar baidu.lang.Class(guid)
-     * @param 	{string}	guid	对象的唯一标识
+     * @param  {string}  guid  对象的唯一标识
      * @meta standard
      * @remark baidu.lang.Class和它的子类的实例均包含一个全局唯一的标识guid。guid是在构造函数中生成的，因此，继承自baidu.lang.Class的类应该直接或者间接调用它的构造函数。<br>baidu.lang.Class的构造函数中产生guid的方式可以保证guid的唯一性，及每个实例都有一个全局唯一的guid。
      * @meta standard
      * @see baidu.lang.inherits,baidu.lang.Event
      */
-    baidu.lang.Class = function(guid) {
+    baidu.lang.Class = function (guid) {
       this.guid = guid || baidu.lang.guid();
       window[baidu.guid]._instances[this.guid] = this;
     };
@@ -1601,10 +1633,10 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @name dispose
      * @grammar obj.dispose()
      */
-    baidu.lang.Class.prototype.dispose = function(){
+    baidu.lang.Class.prototype.dispose = function () {
       delete window[baidu.guid]._instances[this.guid];
 
-      for(var property in this){
+      for (var property in this) {
         if (!baidu.lang.isFunction(this[property])) {
           delete this[property];
         }
@@ -1616,17 +1648,17 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * 重载了默认的toString方法，使得返回信息更加准确一些。
      * @return {string} 对象的String表示形式
      */
-    baidu.lang.Class.prototype.toString = function(){
+    baidu.lang.Class.prototype.toString = function () {
       return "[object " + (this._className || "Object" ) + "]";
     };
 
     /**
      * @ignore
      * @class   自定义的事件对象。
-     * @name 	baidu.lang.Event
+     * @name  baidu.lang.Event
      * @grammar baidu.lang.Event(type[, target])
-     * @param 	{string} type	 事件类型名称。为了方便区分事件和一个普通的方法，事件类型名称必须以"on"(小写)开头。
-     * @param 	{Object} [target]触发事件的对象
+     * @param  {string} type   事件类型名称。为了方便区分事件和一个普通的方法，事件类型名称必须以"on"(小写)开头。
+     * @param  {Object} [target]触发事件的对象
      * @meta standard
      * @remark 引入该模块，会自动为Class引入3个事件扩展方法：addEventListener、removeEventListener和dispatchEvent。
      * @meta standard
@@ -1642,10 +1674,10 @@ var BMapLib = window.BMapLib = BMapLib || {};
     /**
      * 注册对象的事件监听器。引入baidu.lang.Event后，Class的子类实例才会获得该方法。
      * @grammar obj.addEventListener(type, handler[, key])
-     * @param 	{string}   type         自定义事件的名称
-     * @param 	{Function} handler      自定义事件被触发时应该调用的回调函数
-     * @param 	{string}   [key]		为事件监听函数指定的名称，可在移除时使用。如果不提供，方法会默认为它生成一个全局唯一的key。
-     * @remark 	事件类型区分大小写。如果自定义事件名称不是以小写"on"开头，该方法会给它加上"on"再进行判断，即"click"和"onclick"会被认为是同一种事件。
+     * @param  {string}   type         自定义事件的名称
+     * @param  {Function} handler      自定义事件被触发时应该调用的回调函数
+     * @param  {string}   [key]    为事件监听函数指定的名称，可在移除时使用。如果不提供，方法会默认为它生成一个全局唯一的key。
+     * @remark  事件类型区分大小写。如果自定义事件名称不是以小写"on"开头，该方法会给它加上"on"再进行判断，即"click"和"onclick"会被认为是同一种事件。
      */
     baidu.lang.Class.prototype.addEventListener = function (type, handler, key) {
       if (!baidu.lang.isFunction(handler)) {
@@ -1676,13 +1708,13 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @grammar obj.removeEventListener(type, handler)
      * @param {string}   type     事件类型
      * @param {Function|string} handler  要移除的事件监听函数或者监听函数的key
-     * @remark 	如果第二个参数handler没有被绑定到对应的自定义事件中，什么也不做。
+     * @remark  如果第二个参数handler没有被绑定到对应的自定义事件中，什么也不做。
      */
     baidu.lang.Class.prototype.removeEventListener = function (type, handler) {
       if (typeof handler != "undefined") {
-        if ( (baidu.lang.isFunction(handler) && ! (handler = handler.hashCode))
-          || (! baidu.lang.isString(handler))
-        ){
+        if ((baidu.lang.isFunction(handler) && !(handler = handler.hashCode))
+          || (!baidu.lang.isString(handler))
+        ) {
           return;
         }
       }
@@ -1698,7 +1730,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
       if (typeof handler != "undefined") {
         t[type][handler] && delete t[type][handler];
       } else {
-        for(var guid in t[type]){
+        for (var guid in t[type]) {
           delete t[type][guid];
         }
       }
@@ -1707,8 +1739,8 @@ var BMapLib = window.BMapLib = BMapLib || {};
     /**
      * 派发自定义事件，使得绑定到自定义事件上面的函数都会被执行。引入baidu.lang.Event后，Class的子类实例才会获得该方法。
      * @grammar obj.dispatchEvent(event, options)
-     * @param {baidu.lang.Event|String} event 	Event对象，或事件名称(1.1.1起支持)
-     * @param {Object} 					options 扩展参数,所含属性键值会扩展到Event对象上(1.2起支持)
+     * @param {baidu.lang.Event|String} event  Event对象，或事件名称(1.1.1起支持)
+     * @param {Object}          options 扩展参数,所含属性键值会扩展到Event对象上(1.2起支持)
      * @remark 处理会调用通过addEventListenr绑定的自定义事件回调函数之外，还会调用直接绑定到对象上面的自定义事件。例如：<br>
      myobj.onMyEvent = function(){}<br>
      myobj.addEventListener("onMyEvent", function(){});
@@ -1783,7 +1815,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * @type {String}
 
    */
-  var _IMAGE_EXTENSION  = 'png';
+  var _IMAGE_EXTENSION = 'png';
 
   /**
    *@exports TextIconOverlay as BMapLib.TextIconOverlay
@@ -1799,14 +1831,14 @@ var BMapLib = window.BMapLib = BMapLib || {};
      *@param {String} text 表示该覆盖物显示的文字信息。
      *@param {Json Object} options 可选参数，可选项包括：<br />
      *"<b>styles</b>":{Array<IconStyle>} 一组图标风格。单个图表风格包括以下几个属性：<br />
-     *   url	{String}	 图片的url地址。(必选)<br />
-     *   size {Size}	图片的大小。（必选）<br />
+     *   url  {String}   图片的url地址。(必选)<br />
+     *   size {Size}  图片的大小。（必选）<br />
      *   anchor {Size} 图标定位在地图上的位置相对于图标左上角的偏移值，默认偏移值为图标的中心位置。（可选）<br />
      *   offset {Size} 图片相对于可视区域的偏移值，此功能的作用等同于CSS中的background-position属性。（可选）<br />
      *   textSize {Number} 文字的大小。（可选，默认10）<br />
      *   textColor {String} 文字的颜色。（可选，默认black）<br />
      */
-    BMapLib.TextIconOverlay = function(position, text, options){
+    BMapLib.TextIconOverlay = function (position, text, options) {
       this._position = position;
       this._text = text;
       this._options = options || {};
@@ -1816,11 +1848,11 @@ var BMapLib = window.BMapLib = BMapLib || {};
 
   T.lang.inherits(TextIconOverlay, BMap.Overlay, "TextIconOverlay");
 
-  TextIconOverlay.prototype._setupDefaultStyles = function(){
+  TextIconOverlay.prototype._setupDefaultStyles = function () {
     var sizes = [53, 56, 66, 78, 90];
-    for(var i = 0, size; size = sizes[i]; i++){
+    for (var i = 0, size; size = sizes[i]; i++) {
       this._styles.push({
-        url:_IMAGE_PATH + i + '.' + _IMAGE_EXTENSION,
+        url: _IMAGE_PATH + i + '.' + _IMAGE_EXTENSION,
         size: new BMap.Size(size, size)
       });
     }//for循环的简洁写法
@@ -1831,7 +1863,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    *@param {Map} map BMap.Map的实例化对象。
    *@return {HTMLElement} 返回覆盖物对应的HTML元素。
    */
-  TextIconOverlay.prototype.initialize = function(map){
+  TextIconOverlay.prototype.initialize = function (map) {
     this._map = map;
 
     this._domElement = document.createElement('div');
@@ -1849,7 +1881,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    *继承Overlay的draw方法，自定义覆盖物时必须。
    *@return 无返回值。
    */
-  TextIconOverlay.prototype.draw = function(){
+  TextIconOverlay.prototype.draw = function () {
     this._map && this._updatePosition();
   };
 
@@ -1857,7 +1889,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    *获取该覆盖物上的文字。
    *@return {String} 该覆盖物上的文字。
    */
-  TextIconOverlay.prototype.getText = function(){
+  TextIconOverlay.prototype.getText = function () {
     return this._text;
   };
 
@@ -1866,8 +1898,8 @@ var BMapLib = window.BMapLib = BMapLib || {};
    *@param {String} text 要设置的文字，通常是字母A-Z或数字0-9。
    *@return 无返回值。
    */
-  TextIconOverlay.prototype.setText = function(text){
-    if(text && (!this._text || (this._text.toString() != text.toString()))){
+  TextIconOverlay.prototype.setText = function (text) {
+    if (text && (!this._text || (this._text.toString() != text.toString()))) {
       this._text = text;
       this._updateText();
       this._updateCss();
@@ -1889,7 +1921,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    *@return 无返回值。
    */
   TextIconOverlay.prototype.setPosition = function (position) {
-    if(position && (!this._position || !this._position.equals(position))){
+    if (position && (!this._position || !this._position.equals(position))) {
       this._position = position;
       this._updatePosition();
     }
@@ -1903,7 +1935,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    *@param {Array<IconStyle>}  styles 一组图标风格。
    *@return {Number} 对应的索引值。
    */
-  TextIconOverlay.prototype.getStyleByText = function(text, styles){
+  TextIconOverlay.prototype.getStyleByText = function (text, styles) {
     var count = parseInt(text);
     var index = parseInt(count / 10);
     index = Math.max(0, index);
@@ -1915,7 +1947,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    *更新相应的CSS。
    *@return 无返回值。
    */
-  TextIconOverlay.prototype._updateCss = function(){
+  TextIconOverlay.prototype._updateCss = function () {
     var style = this.getStyleByText(this._text, this._styles);
     this._domElement.style.cssText = this._buildCssText(style);
   };
@@ -1924,7 +1956,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    *更新覆盖物的显示文字。
    *@return 无返回值。
    */
-  TextIconOverlay.prototype._updateText = function(){
+  TextIconOverlay.prototype._updateText = function () {
     if (this._domElement) {
       this._domElement.innerHTML = this._text;
     }
@@ -1934,10 +1966,10 @@ var BMapLib = window.BMapLib = BMapLib || {};
    *调整覆盖物在地图上的位置更新覆盖物的显示文字。
    *@return 无返回值。
    */
-  TextIconOverlay.prototype._updatePosition = function(){
+  TextIconOverlay.prototype._updatePosition = function () {
     if (this._domElement && this._position) {
       var style = this._domElement.style;
-      var pixelPosition= this._map.pointToOverlayPixel(this._position);
+      var pixelPosition = this._map.pointToOverlayPixel(this._position);
       pixelPosition.x -= Math.ceil(parseInt(style.width) / 2);
       pixelPosition.y -= Math.ceil(parseInt(style.height) / 2);
       style.left = pixelPosition.x + "px";
@@ -1950,7 +1982,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * @param {IconStyle}  一个图标的风格。
    * @return {String} 构建完成的CSSTEXT。
    */
-  TextIconOverlay.prototype._buildCssText = function(style) {
+  TextIconOverlay.prototype._buildCssText = function (style) {
     //根据style来确定一些默认值
     var url = style['url'];
     var size = style['size'];
@@ -1970,12 +2002,12 @@ var BMapLib = window.BMapLib = BMapLib || {};
       csstext.push('background-position:' + backgroundPosition + ';');
     }
 
-    if (size instanceof BMap.Size){
+    if (size instanceof BMap.Size) {
       if (anchor instanceof BMap.Size) {
         if (anchor.height > 0 && anchor.height < size.height) {
           csstext.push('height:' + (size.height - anchor.height) + 'px; padding-top:' + anchor.height + 'px;');
         }
-        if(anchor.width > 0 && anchor.width < size.width){
+        if (anchor.width > 0 && anchor.width < size.width) {
           csstext.push('width:' + (size.width - anchor.width) + 'px; padding-left:' + anchor.width + 'px;');
         }
       } else {
@@ -2065,8 +2097,8 @@ var BMapLib = window.BMapLib = BMapLib || {};
    * 当前支持click mouseover mouseout
    * @return 无返回值。
    */
-  TextIconOverlay.prototype._bind = function(){
-    if (!this._domElement){
+  TextIconOverlay.prototype._bind = function () {
+    if (!this._domElement) {
       return;
     }
 
@@ -2074,11 +2106,12 @@ var BMapLib = window.BMapLib = BMapLib || {};
     var map = this._map;
 
     var BaseEvent = T.lang.Event;
-    function eventExtend(e, be){
+
+    function eventExtend(e, be) {
       var elem = e.srcElement || e.target;
       var x = e.clientX || e.pageX;
       var y = e.clientY || e.pageY;
-      if (e && be && x && y && elem){
+      if (e && be && x && y && elem) {
         var offset = T.dom.getPosition(map.getContainer());
         be.pixel = new BMap.Pixel(x - offset.left, y - offset.top);
         be.point = map.pixelToPoint(be.pixel);
@@ -2086,19 +2119,19 @@ var BMapLib = window.BMapLib = BMapLib || {};
       return be;
     }//给事件参数增加pixel和point两个值
 
-    T.event.on(this._domElement,"mouseover", function(e){
+    T.event.on(this._domElement, "mouseover", function (e) {
       me.dispatchEvent(eventExtend(e, new BaseEvent("onmouseover")));
     });
-    T.event.on(this._domElement,"mouseenter", function(e){
+    T.event.on(this._domElement, "mouseenter", function (e) {
       me.dispatchEvent(eventExtend(e, new BaseEvent("onmouseenter")));
     });
-    T.event.on(this._domElement,"mouseout", function(e){
+    T.event.on(this._domElement, "mouseout", function (e) {
       me.dispatchEvent(eventExtend(e, new BaseEvent("onmouseout")));
     });
-    T.event.on(this._domElement,"mouseleave", function(e){
+    T.event.on(this._domElement, "mouseleave", function (e) {
       me.dispatchEvent(eventExtend(e, new BaseEvent("onmouseleave")));
     });
-    T.event.on(this._domElement,"click", function(e){
+    T.event.on(this._domElement, "click", function (e) {
       me.dispatchEvent(eventExtend(e, new BaseEvent("onclick")));
     });
   };

@@ -32,11 +32,11 @@ export default {
         // if (location.pathname === '/') {
         //   dispatch({ type: 'getSeminars', payload: { offset: 0, size: 5 } });
         // }
-        let match = pathToRegexp('/search/:query/:offset/:size').exec(location.pathname);
+        let match = pathToRegexp('/(uni)?search/:query/:offset/:size').exec(location.pathname);
         if (match) {
-          const keyword = decodeURIComponent(match[1]);
-          const offset = parseInt(match[2], 10);
-          const size = parseInt(match[3], 10);
+          const keyword = decodeURIComponent(match[2]);
+          const offset = parseInt(match[3], 10);
+          const size = parseInt(match[4], 10);
 
           // Accept query: eb = expertBaseID.
           const filters = {};

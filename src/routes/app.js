@@ -2,7 +2,9 @@ import React from 'react';
 import { connect } from 'dva';
 import { Helmet } from 'react-helmet';
 import NProgress from 'nprogress';
+import { Link, routerRedux } from 'dva/router';
 import { Layout } from '../components';
+import { sysconfig } from '../systems';
 import { classnames, config, menu } from '../utils';
 import '../themes/index.less';
 import './app.less';
@@ -71,12 +73,31 @@ const App = ({ children, location, dispatch, app, loading }) => {
     return <div>{children}</div>;
   }
 
+  // Header 中的搜索
+  const onSearch = (data) => {
+    if (app.onHeaderSearch) {
+      app.onHeaderSearch(data);
+    } else {
+      onSearchDefault(data);
+    }
+  };
+
+  // Header 中的搜索默认会去搜索结果页面. TODO 如何覆盖
+  const onSearchDefault = (data) => {
+    const newOffset = data.offset || 0;
+    const newSize = data.size || 30;
+    dispatch(routerRedux.push({
+      pathname: `/${sysconfig.SearchPagePrefix}/${data.query}/${newOffset}/${newSize}`,
+    }));
+  }
+
   const { iconFontJS, iconFontCSS, logo } = config;
 
   return (
     <div>
+
       <Helmet>
-        <title>CCF 专家库</title>
+        <title>{sysconfig.PageTitle}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href={logo} type="image/x-icon" />
         {iconFontJS && <script src={iconFontJS} />}
@@ -85,10 +106,17 @@ const App = ({ children, location, dispatch, app, loading }) => {
         <link rel="stylesheet" href="https://cdn.rawgit.com/novus/nvd3/v1.8.1/build/nv.d3.css" />
         }
 
+        {href.indexOf('/KnowledgeGraphPage') > 0 &&
+        <script src="http://code.jquery.com/jquery-1.10.2.min.js" />}
+
+        {href.indexOf('/KnowledgeGraphPage') > 0 &&
+        <script src="http://d3js.org/d3.v3.min.js" />}
+
       </Helmet>
+
       <div className={classnames(styles.layout)}>
-        <Header {...headerProps} />
-        {!isNavbar ?
+        <Header {...headerProps} onSearch={onSearch} />
+        {false && !isNavbar ?
           <aside className={classnames(styles.sider, { [styles.light]: !darkTheme })}>
             <Sider {...siderProps} />
           </aside> : ''
@@ -96,12 +124,12 @@ const App = ({ children, location, dispatch, app, loading }) => {
         <div className={styles.main}>
           <div className={styles.container}>
             <div className={styles.content}>
-              {/*<Bread {...breadProps} location={location} />*/}
+              {/* <Bread {...breadProps} location={location} /> */}
               {children}
             </div>
           </div>
-          <Footer />
         </div>
+        <Footer />
       </div>
 
     </div>

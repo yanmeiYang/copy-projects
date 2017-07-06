@@ -81,8 +81,8 @@ export default {
     },
     *searchActivity({ payload }, { call, put }){
       yield put({ type: 'showLoading' });
-      const { query, offset, size } = payload;
-      const { data } = yield call(seminarService.searchActivity, query, offset, size);
+      const { query, offset, size, src} = payload;
+      const { data } = yield call(seminarService.searchActivity, query, offset, size, src);
       yield put({ type: 'searchActivitySuccess', payload: { data, query, offset } });
     },
     *getCategory({ payload }, { call, put }){

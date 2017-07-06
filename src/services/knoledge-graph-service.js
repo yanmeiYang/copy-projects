@@ -103,6 +103,7 @@ function lookup(kgdata, query) {
       children: [],
       definition: item.definition,
       zh: item.zh_name,
+      type: 'current',
     };
     // Child keys.
     if (item.cn && item.cn.length > 0) {
@@ -116,6 +117,7 @@ function lookup(kgdata, query) {
             level: 3,
             definition: childNode.definition,
             zh: childNode.zh_name,
+            type: 'child',
           });
         }
         return null;
@@ -135,11 +137,13 @@ function lookup(kgdata, query) {
           children: [],
           definition: parentItem.definition,
           zh: parentItem.zh_name,
+          type: 'parent',
         };
         // add two more simblings of search.// TODO ......
         // if(parentItem.cn && parentItem.cn.length>0){
         //   const pcIdx = kgdata.index[]
         // }
+        // 推荐词：sibling
 
 
         node.children.push(oldNode);

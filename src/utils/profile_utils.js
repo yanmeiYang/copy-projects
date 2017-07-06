@@ -1,4 +1,5 @@
 import { config } from '../utils';
+import { sysconfig } from '../systems';
 
 const { api } = config;
 
@@ -101,6 +102,18 @@ function displayEmailSrc2(personId, hasEmail, hasEmailCR) {
   }
 }
 
+function findTopNTags(person, n) {
+  let tags = [];
+  if (sysconfig.PreferredLanguage === 'cn') {
+    tags = person.tags_zh ? person.tags_zh.slice(0, n) : null;
+  } else {
+    tags = person.tags ? person.tags.slice(0, n) : null;
+  }
+  if (!tags || tags.length === 0) {
+    tags = person.tags ? person.tags.slice(0, n) : [];
+  }
+  return tags;
+}
 /*
  ----------------------------- exports -------------------------
  */
@@ -112,4 +125,5 @@ module.exports = {
   displayAff,
   displayEmailSrc,
   displayEmailSrc2,
+  findTopNTags,
 };

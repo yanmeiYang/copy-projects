@@ -9,6 +9,7 @@ import { sysconfig } from '../../systems';
 import { KnowledgeGraphSearchHelper } from '../knowledge-graph';
 import { classnames } from '../../utils';
 import ExportPersonBtn from '../../components/person/export-person';
+import { KgSearchBox } from '../../components/search';
 
 const TabPane = Tabs.TabPane;
 const { CheckableTag } = Tag;
@@ -111,8 +112,13 @@ const Search = ({ dispatch, search }) => {
           {/* 搜索框 */}
           <div className={styles.top}>
             <div className={styles.searchWrap}>
-              <SearchBox size="large" style={{ width: 680 }} btnText="搜索" keyword={query}
-                         onSearch={onSearch} />
+              {/*<SearchBox size="large" style={{ width: 680 }} btnText="搜索" keyword={query}*/}
+              {/*onSearch={onSearch} />*/}
+              <KgSearchBox
+                size="large" style={{ width: 680 }} btnText="搜索" keyword={query}
+                onSearch={onSearch}
+              />
+
             </div>
           </div>
 
@@ -209,7 +215,7 @@ const Search = ({ dispatch, search }) => {
 
         <div className="rightZone">
           <KnowledgeGraphSearchHelper query={query} lang="cn" />
-          <ExportPersonBtn {...filters} results={results}/>
+          <ExportPersonBtn {...filters} results={results} />
         </div>
       </div>
 

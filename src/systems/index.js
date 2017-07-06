@@ -1,6 +1,7 @@
 /**
  * Created by BoGao on 2017/6/20.
  */
+import * as alibabaConfig from './alibaba/alibaba-config';
 import * as ccfConfig from './ccf/ccf-config';
 import * as huaweiConfig from './huawei/huawei-config';
 import { config } from '../utils';
@@ -9,6 +10,7 @@ import { config } from '../utils';
 const CurrentSystemConfig = {
   ccf: ccfConfig, // <-- current config files.
   huawei: huaweiConfig,
+  alibaba: alibabaConfig,
 }
 
 // 默认配置
@@ -20,6 +22,7 @@ const defaultSystemConfigs = {
 
   SearchPagePrefix: 'search',
   ShowSideMenu: true,
+  ShowFooter: true,
 
   // expert base
   SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
@@ -30,6 +33,8 @@ const defaultSystemConfigs = {
 
   PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
   PersonList_PersonLink_NewTab: true,
+
+  SPECIAL_ExpertMapNoHeader: false,
 };
 
 const sysconfig = defaultSystemConfigs;

@@ -121,9 +121,9 @@ function insertAfter(newElement, targetElement) {
 
 class ExpertMap extends React.Component {
   /** 构造函数： 这里执行初始化*/
-  constructor(props) {
-    super(props);
-  }
+    // constructor(props) {
+    //   super(props);
+    // }
 
   state = {};
 
@@ -132,8 +132,10 @@ class ExpertMap extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log('compare: ', nextProps.query, ' == ', this.props.query)
     if (nextProps.query && nextProps.query !== this.props.query) {
-      this.callSearchMap(this.props.query);
+      console.log('call searchmap: ', nextProps.query);
+      this.callSearchMap(nextProps.query);
     }
     if (nextProps.expertMap.geoData !== this.props.expertMap.geoData) {
       console.log('>>>> ', nextProps.expertMap.geoData);

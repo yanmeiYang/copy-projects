@@ -92,7 +92,7 @@ const Login = ({
               {children}
             </div>
           </div>
-          <div style={{ border: 'solid 0px red', height: 400 }} />
+          <div style={{ border: 'solid 0px red', height: 280 }} />
           <Footer />
         </div>
       </div>

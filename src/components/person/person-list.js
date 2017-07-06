@@ -40,7 +40,7 @@ class PersonList extends React.PureComponent {
             const email = profileUtils.displayEmailSrc(person);
             const homepage = person.contact && person.contact.homepage;
             const indices = person.indices;
-            const tags = findTopNTags(person, 8);
+            const tags = profileUtils.findTopNTags(person, 8);
 
             const personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
             if (sysconfig.PersonList_PersonLink_NewTab) {
@@ -120,27 +120,5 @@ class PersonList extends React.PureComponent {
     // console.log("persons is ", this.props.persons);
   }
 }
-
-function findTopNTags(person, n) {
-  // let listA = person.tags || [];
-  // let listB = person.tags_zh || [];
-  // if (sysconfig.PreferredLanguage === 'cn') {
-  //   listB = person.tags || [];
-  //   listA = person.tags_zh || [];
-  // }
-  // console.log(person.tags, person.tags_zh);
-  // return [...listA.slice(0, n), "---", ...listB.slice(0, n)];
-  let tags = [];
-  if (sysconfig.PreferredLanguage === 'cn') {
-    tags = person.tags_zh ? person.tags_zh.slice(0, n) : null;
-  } else {
-    tags = person.tags ? person.tags.slice(0, n) : null;
-  }
-  if (!tags || tags.length === 0) {
-    tags = person.tags ? person.tags.slice(0, n) : [];
-  }
-  return tags;
-}
-
 
 export default PersonList;

@@ -43,7 +43,6 @@ class AddExpertModal extends React.Component {
 
   //增加专家
   getImg = (src) => {
-    console.log(src);
     if (src) {
       return src;
     } else {

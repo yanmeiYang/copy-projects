@@ -124,7 +124,6 @@ class RegistrationForm extends React.Component {
   //   this.setState({ selectedType: value });
   // };
   handleOrganizerChange = (value, newArray) => {
-    console.log(newArray);
     newArray.map((tag) => {
       if (JSON.stringify(value).indexOf(tag) < 0) {
         const data = { key: tag, val: '1' };
@@ -188,7 +187,6 @@ class RegistrationForm extends React.Component {
         activity_organizer_options_data = activity_organizer_options.data;
     }
     if (activity_type.data){
-      console.log(activity_type.data);
       activity_type_options_data=activity_type.data;
     }
     // if (activity_type.data) {

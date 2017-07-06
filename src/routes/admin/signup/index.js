@@ -4,7 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Form, Input, Icon, Row, Col, Button, Select, Checkbox, AutoComplete } from 'antd';
+import { Form, Input, Icon, Row, Col, Button, Select, Checkbox, AutoComplete, Modal } from 'antd';
 import { sysconfig } from '../../../systems';
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -57,7 +57,13 @@ class Registered extends React.Component {
       if (!err) {
         values.gender = parseInt(values.gender);
         values.position = parseInt(values.position);
+        values.sub = true;
         this.props.dispatch({ type: 'auth/createUser', payload: values });
+        Modal.success({
+          title: '创建用户',
+          content: '创建成功',
+        });
+        this.props.form.resetFields();
       }
     })
   };
@@ -250,19 +256,20 @@ class Registered extends React.Component {
           }}
           label=''
         >
-          {
-            getFieldDecorator('sub', {})(
-              <Checkbox>
-                我希望收到新的消息和动态提醒
-              </Checkbox>
-            )
-          }
+          {/*{*/}
+          {/*getFieldDecorator('sub', {})(*/}
+          {/*<Checkbox>*/}
+          {/*我希望收到新的消息和动态提醒*/}
+          {/*</Checkbox>*/}
+          {/*)*/}
+          {/*}*/}
         </FormItem>
         <FormItem {...tailFormItemLayout}>
           <Button type='primary' onClick={this.registered}>
-            注册
+            创建
           </Button>
         </FormItem>
+
 
       </Form>
     );

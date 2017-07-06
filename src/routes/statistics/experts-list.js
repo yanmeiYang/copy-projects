@@ -9,7 +9,10 @@ const InputGroup = Input.Group;
 
 const columns = [{
   title: '专家',
-  dataIndex: 'n',
+  dataIndex: '',
+  render(text){
+    return text.n_zh+' ('+text.n+'）'
+  }
 },
 //   {
 //   title: '参加过的活动次数',

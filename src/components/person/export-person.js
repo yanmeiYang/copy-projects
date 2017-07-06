@@ -119,7 +119,8 @@ class ExportPersonBtn extends React.Component {
           <div style={{ minHeight: 300 }}>
             {step1 && !step2 && <div>
               <div style={{ minHeight: 300 }}>
-                <InputNumber placeholder='导出条数' min={1} max={30} defaultValue={1}
+                <span>导出条数：</span>
+                <InputNumber placeholder='导出条数' min={1} max={30} defaultValue={30}
                              style={{ width: '100%' }} onChange={this.onChangeExportSize.bind(this)}/>
               </div>
               <div style={{ height: 20 }}>

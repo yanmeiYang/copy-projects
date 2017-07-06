@@ -145,8 +145,8 @@ class AddExpertModal extends React.Component {
   };
 
   cancelCurrentPerson = () => {
-    this.setState({'step2': true, 'step3': false, speakerInfo: {} });
-    this.refs.speakerName.refs.input.value ='';
+    this.setState({ 'step2': true, 'step3': false, speakerInfo: {} });
+    this.refs.speakerName.refs.input.value = '';
     this.refs.speakerAff.refs.input.value = '';
     this.refs.speakerPos.refs.input.value = '';
     this.refs.speakerAid.value = '';
@@ -172,9 +172,7 @@ class AddExpertModal extends React.Component {
     let activity_type_options = {};
 
     if (activity_type.data) {
-      if (activity_type.data.data) {
-        activity_type_options = activity_type.data.data;
-      }
+      activity_type_options = activity_type.data;
     }
     return (
       <Modal
@@ -294,12 +292,12 @@ class AddExpertModal extends React.Component {
                         <p>
                           {position &&
                           <span className={styles.infoItem}>
-                            <Icon type="idcard" />{ position }
+                            <Icon type="idcard"/>{ position }
                           </span>}
                         </p>
 
                         <p>{aff && <span className={styles.infoItem}>
-                                            <Icon type="home" />
+                                            <Icon type="home"/>
                           { aff }
                                           </span> }</p>
                       </div>

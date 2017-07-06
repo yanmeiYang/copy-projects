@@ -66,7 +66,7 @@ class IndexPage extends React.Component {
             }
           </p>
 
-          {config.system === 'ccf' &&
+          {config.system === 'huawei' &&
           <div className={styles.bigNavi}>
             <div className="naviItem">
               <Link to="https://cn.aminer.org/ego">学者关系网络</Link>

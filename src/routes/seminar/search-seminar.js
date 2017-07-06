@@ -16,7 +16,7 @@ class SearchSeminar extends React.Component {
     this.props.seminar.results = [];
     let size = this.props.seminar.sizePerPage;
     if (query) {
-      let params = { query: query, offset: 0, size: size };
+      let params = { query: query,offset: 0, size: size,src:'ccf' };
       this.props.dispatch({ type: 'seminar/searchActivity', payload: params });
     } else {
       let params = { offset: 0, size: size, filter: { src: 'ccf' } };

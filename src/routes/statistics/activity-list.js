@@ -3,44 +3,40 @@
  */
 import React from 'react';
 import { Table } from 'antd';
+import { connect } from 'dva';
+const { ColumnGroup, Column } = Table;
 import { sysconfig } from '../../systems';
 
-
-const columns = [{
-  title: '专委会',
-  dataIndex: 'name1',
-}, {
-  title: '举办活动次数（总数）',
-  dataIndex: 'activity_count',
-}];
-sysconfig.CCF_activityTypes.map((category, i) => {
-  return columns.push({
-    title: `${category.name}`,
-    dataIndex: `${category.dataIndex}`,
-  });
-});
-
-//模拟数据
-const data = [];
-for (let i = 0; i < 10; i++) {
-  data.push({
-    key: Math.random(),
-    name1: `转为名称 ${i}`,
-    activity_count: i,
-    report_count: i,
-  })
-}
 
 class ActivityList extends React.Component {
   state = {
     selectedRowKeys: [],  // Check here to configure the default column
+  };
+
+  componentWillMount = () => {
+    this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'activity_type' } });
   };
   onSelectChange = (selectedRowKeys) => {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.setState({ selectedRowKeys });
   };
 
+  setCategory = (e) => {
+    if (e === undefined) {
+      return 0
+    } else {
+      return e
+    }
+  };
+
   render() {
+    const {activity_type } = this.props.seminar;
+    let activity_type_options_data = {};
+    if (activity_type.data){
+      activity_type_options_data = activity_type.data
+    }
+
+
     const { selectedRowKeys } = this.state;
     const rowSelection = {
       selectedRowKeys,
@@ -49,10 +45,18 @@ class ActivityList extends React.Component {
     };
     return (
       <div>
-        <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+        {/*rowSelection={rowSelection}*/}
+        <Table dataSource={this.props.activity}>
+          <Column title="承办单位" dataIndex="organizer" key="display_name"/>
+          <Column title="举办活动次数（总数）" dataIndex="total" key="position"/>
+          {Object.keys(activity_type_options_data).map((category) => {
+            const dataIndex = 'category.' + category;
+            return (<Column title={category} dataIndex={dataIndex} key={category} render={this.setCategory.bind()}/>)
+          })}
+        </Table>
       </div>
     )
   }
 }
 
-export default (ActivityList)
+export default connect(({ seminar }) => ({ seminar }))(ActivityList)

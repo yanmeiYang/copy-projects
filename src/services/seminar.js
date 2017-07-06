@@ -33,11 +33,12 @@ export async function postSeminarActivity(data) {
 
 }
 
-export async function searchActivity(query, offset, size) {
+export async function searchActivity(query, offset, size, src) {
   let data = {
     query: query,
     offset,
-    size
+    size,
+    src
   };
   return request(api.searchActivity, {
     method: 'GET',
@@ -87,5 +88,11 @@ export async function listActivityScores(uid, src, actid) {
 export async function getActivityScore(uid, src, actid, aid, key) {
   return request(api.getActivityScore.replace(':uid', uid).replace(':src', src).replace(':actid', actid).replace('aid', aid).replace(':key', key), {
     method: "GET"
+  })
+}
+
+export async function getStatsOfCcfActivities() {
+  return request(api.getStatsOfCcfActivities, {
+    method: 'GET'
   })
 }

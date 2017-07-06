@@ -81,8 +81,8 @@ export default {
     },
     *searchActivity({ payload }, { call, put }){
       yield put({ type: 'showLoading' });
-      const { query, offset, size } = payload;
-      const { data } = yield call(seminarService.searchActivity, query, offset, size);
+      const { query, offset, size, src} = payload;
+      const { data } = yield call(seminarService.searchActivity, query, offset, size, src);
       yield put({ type: 'searchActivitySuccess', payload: { data, query, offset } });
     },
     *getCategory({ payload }, { call, put }){
@@ -176,7 +176,7 @@ export default {
     },
 
     getCategorySuccess(state, { payload: { data, category } }){
-      return { ...state, [category]: data }
+      return { ...state, [category]: data.data }
     },
 
     updateData(state, { payload: { data } }) {

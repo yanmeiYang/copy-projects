@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { Table, Input, Tabs } from 'antd';
+import { connect } from 'dva';
 import ExpertsList from './experts-list';
 import ActivityDetail from './activity-detail';
 import ActivityList from './activity-list';
@@ -39,6 +40,13 @@ const tabData = [
 class Statistics extends React.Component {
 
   componentDidMount() {
+    if (this.props.app.roles.admin){
+      this.props.dispatch({ type: 'statistics/getStatsOfCcfActivities',payload:{} });
+    }else {
+      this.props.statistics.activity={};
+      this.props.statistics.author={}
+    }
+
     this.onTabChange(tabData[0].category);
   }
 
@@ -53,7 +61,7 @@ class Statistics extends React.Component {
 
   render() {
     const activity_list = tabData[0];
-    const activity_detail= tabData[1];
+    const activity_detail = tabData[1];
     const experts_list = tabData[2];
     return (
       <div style={{ marginTop: 10 }}>
@@ -66,25 +74,25 @@ class Statistics extends React.Component {
             onChange={this.onTabChange}
           >
             {/*{tabData.map((item) => {*/}
-              {/*return (*/}
-                {/*<TabPane*/}
-                  {/*key={item.category}*/}
-                  {/*style={{ display: item.isShow }}*/}
-                  {/*tab={item.label}*/}
-                  {/*className={styles.tabContent}*/}
-                {/*>*/}
-                  {/*{item.container}*/}
-                {/*</TabPane>*/}
-              {/*);*/}
+            {/*return (*/}
+            {/*<TabPane*/}
+            {/*key={item.category}*/}
+            {/*style={{ display: item.isShow }}*/}
+            {/*tab={item.label}*/}
+            {/*className={styles.tabContent}*/}
+            {/*>*/}
+            {/*{item.container}*/}
+            {/*</TabPane>*/}
+            {/*);*/}
             {/*})}*/}
-            {activity_list.isShow&&<TabPane
+            {activity_list.isShow && <TabPane
               key={activity_list.category}
               style={{ display: activity_list.isShow }}
               tab={activity_list.label}
             >
-              {activity_list.container}
+              <ActivityList activity={this.props.statistics.activity}/>
             </TabPane>}
-            {activity_detail.isShow&&<TabPane
+            {activity_detail.isShow && <TabPane
               key={activity_detail.category}
               style={{ display: activity_detail.isShow }}
               tab={activity_detail.label}
@@ -92,13 +100,13 @@ class Statistics extends React.Component {
             >
               {activity_detail.container}
             </TabPane>}
-            {experts_list.isShow&&<TabPane
+            {experts_list.isShow && <TabPane
               key={experts_list.category}
               style={{ display: experts_list.isShow }}
               tab={experts_list.label}
               className={styles.tabContent}
             >
-              {experts_list.container}
+              <ExpertsList author={this.props.statistics.author}/>
             </TabPane>}
 
           </Tabs>
@@ -110,4 +118,4 @@ class Statistics extends React.Component {
 
 }
 
-export default (Statistics);
+export default connect(({ statistics, app }) => ({ statistics, app })) (Statistics);

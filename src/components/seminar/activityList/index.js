@@ -15,9 +15,14 @@ class ActivityList extends React.Component {
   };
 
   goToRating = (id) => {
-    this.props.dispatch(routerRedux.push({
-      pathname: `/seminar/expert-rating/${id}`,
-    }))
+    if (this.props.app.roles.admin){
+      this.props.dispatch(routerRedux.push({
+        pathname: `/seminar/expert-rating/${id}`,
+      }))
+    }else{
+      this.goToDetail(id)
+    }
+
   };
 
   render() {
@@ -48,10 +53,10 @@ class ActivityList extends React.Component {
               <span>
               <span>承办单位：</span>
                 {
-                  result.organizer.map((item,index)=>{
+                  result.organizer.map((item, index) => {
                     return (<span key={Math.random()}>
                       <span>{item}</span>
-                      {index<result.organizer.length-1&&<span>,&nbsp;</span>}
+                      {index < result.organizer.length - 1 && <span>,&nbsp;</span>}
                     </span>)
                   })
                 }
@@ -65,4 +70,4 @@ class ActivityList extends React.Component {
   }
 }
 
-export default connect(({ seminar }) => ({ seminar }))(ActivityList);
+export default connect(({ seminar, app }) => ({ seminar, app }))(ActivityList);

@@ -109,6 +109,7 @@ const Routers = function ({ history, app }) {
           path: 'statistics',
           getComponent(nextState, cb){
             require.ensure([], (require) => {
+              registerModel(app, require('./models/seminar'));
               registerModel(app, require('./models/statistics/statistics'));
               cb(null, require('./routes/statistics'));
             }, 'statistics');
@@ -161,6 +162,7 @@ const Routers = function ({ history, app }) {
       component: App,
       getIndexRoute(nextState, cb) {
         require.ensure([], (require) => {
+          registerModel(app, require('./models/common/universal-config'));
           registerModel(app, require('./models/auth/auth'));
           cb(null, { component: require('./routes/admin/user-list') });
         }, 'users');

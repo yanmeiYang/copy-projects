@@ -2,7 +2,7 @@ import lodash from 'lodash';
 import classnames from 'classnames';
 
 import config from './config';
-import menu from './menu';
+import { getMenusByUser } from './menu';
 import request from './request';
 import { color } from './theme';
 
@@ -42,6 +42,30 @@ Date.prototype.format = function (format) {
   return format;
 };
 
+const setLocalStorage = (key, value, roles) => {
+  const curTime = new Date().getTime();
+  localStorage.setItem(key, JSON.stringify({ data: value, roles: roles, time: curTime }));
+};
+
+const getLocalStorage = (key) => {
+  //过期时间为24小时
+  const exp = 1000 * 60 * 60 * 24;
+  const data = localStorage.getItem(key);
+  if (data) {
+    const dataObj = JSON.parse(data);
+    if (new Date().getTime() - dataObj.time > exp) {
+      localStorage.removeItem(key);
+      localStorage.removeItem('token');
+      console.log('信息过期');
+    } else {
+      return dataObj;
+    }
+  } else {
+    return;
+  }
+
+
+};
 
 /**
  * @param   {String}
@@ -103,10 +127,13 @@ const arrayToTree = (array, id = 'id', pid = 'pid', children = 'children') => {
 
 module.exports = {
   config,
-  menu,
+  // menu,
+  getMenusByUser,
   request,
   color,
   classnames,
+  setLocalStorage,
+  getLocalStorage,
   queryURL,
   queryArray,
   arrayToTree,

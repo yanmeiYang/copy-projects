@@ -7,12 +7,11 @@ import styles from './Menu.less';
 
 const Menus = ({
                  siderFold, darkTheme, location, handleClickNavMenu,
-                 navOpenKeys, changeOpenKeys, menu, roles,
+                 navOpenKeys, changeOpenKeys, menu,
                }) => {
   // 生成树状
   const menuTree = arrayToTree(menu.filter(_ => _.mpid !== -1), 'id', 'mpid');
   const levelMap = {};
-  const admin = roles.admin;
 
   // 递归生成菜单
   const getMenus = (menuTreeN, siderFoldN) => {
@@ -34,7 +33,7 @@ const Menus = ({
         );
       }
       return (
-        <Menu.Item key={item.id} className={`${item.router === '/registered' && !admin ? styles.hideCreateUser : ''}`}>
+        <Menu.Item key={item.id}>
           <Link to={item.router}>
             {item.icon && <Icon type={item.icon} />}
             {(!siderFoldN || menuTree.indexOf(item) < 0) && item.name}

@@ -124,7 +124,6 @@ class RegistrationForm extends React.Component {
   //   this.setState({ selectedType: value });
   // };
   handleOrganizerChange = (value, newArray) => {
-    console.log(newArray);
     newArray.map((tag) => {
       if (JSON.stringify(value).indexOf(tag) < 0) {
         const data = { key: tag, val: '1' };
@@ -178,15 +177,17 @@ class RegistrationForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { activity_organizer_options } = this.props.seminar;
+    const { activity_organizer_options,activity_type } = this.props.seminar;
     const activityTypes = sysconfig.CCF_activityTypes;
     let activity_organizer_options_data = {};
+    let activity_type_options_data = {};
     // let activity_type_options = {};
 
     if (activity_organizer_options.data) {
-      if (activity_organizer_options.data.data) {
-        activity_organizer_options_data = activity_organizer_options.data.data;
-      }
+        activity_organizer_options_data = activity_organizer_options.data;
+    }
+    if (activity_type.data){
+      activity_type_options_data=activity_type.data;
     }
     // if (activity_type.data) {
     //   if (activity_type.data.data) {
@@ -218,8 +219,8 @@ class RegistrationForm extends React.Component {
               )(
                 <Select>
                   {
-                    activityTypes.map((item) => {
-                      return (<Option key={Math.random()} value={item.name}>{item.name}</Option>)
+                    Object.keys(activity_type_options_data).map((item) => {
+                      return (<Option key={Math.random()} value={item}>{item}</Option>)
                     })
                   }
                 </Select>

@@ -10,7 +10,7 @@ import UniversalConfig from '../../common/universal-config';
 import { sysconfig } from '../../../systems';
 
 const TabPane = Tabs.TabPane;
-const { SysconfigDefaultCategory, SysConfigTabs } = sysconfig;
+const { SysconfigDefaultCategory, SysConfigTabs, ShowConfigTab } = sysconfig;
 
 class SystemConfig extends React.Component {
   /** 在Component被加载的时候调用的。 */
@@ -18,7 +18,7 @@ class SystemConfig extends React.Component {
     this.updateCategory(this.props.adminSystemConfig.category);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     return this.props.adminSystemConfig.category !== nextProps.adminSystemConfig.category;
   }
 
@@ -40,16 +40,21 @@ class SystemConfig extends React.Component {
       type: 'universalConfig/setCategory',
       payload: { category },
     });
-  }
+  };
 
   render() {
     const sc = this.props.adminSystemConfig;
     const defaultCategory = sc.category || SysconfigDefaultCategory;
+    const tabConfig = SysConfigTabs.filter(item => item.category === defaultCategory);
+
     return (
       <div className="content-inner">
-        <h2>系统参数设置!</h2>
 
-        {SysConfigTabs &&
+        <h2 className={styles.pageTitle}>
+          {tabConfig && tabConfig.length > 0 && (tabConfig[0].label || '系统参数设置！')}
+        </h2>
+
+        {ShowConfigTab && SysConfigTabs &&
         <Tabs
           defaultActiveKey={defaultCategory}
           type="card"

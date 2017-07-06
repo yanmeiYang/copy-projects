@@ -57,20 +57,7 @@ module.exports = {
   PersonList_PersonLink: personId => `/person/${personId}`,
   PersonList_PersonLink_NewTab: false,
 
-  CCF_activityTypes: [
-    { name: '专委活动', dataIndex: 'special-committee' },
-    { name: 'CNCC', dataIndex: 'cncc' },
-    { name: 'ADL78', dataIndex: 'adl' },
-    { name: 'CCF@U100(走进高校)', dataIndex: 'ccf' },
-    { name: 'YOCSEF', dataIndex: 'yocsef' },
-    { name: '论坛', dataIndex: 'forum' },
-    { name: '报告会', dataIndex: 'report-meeting' },
-    { name: 'NOI讲座', dataIndex: 'noi' },
-    { name: '分部活动', dataIndex: 'division-activity' },
-    { name: '精英大会', dataIndex: 'elite-meeting' },
-    { name: '女性大会', dataIndex: 'female-meeting' },
-    { name: 'TF', dataIndex: 'tf' },
-  ],
+  CCF_activityTypes: ['专委活动', 'CNCC', 'ADL78', 'CCF@U100(走进高校)', 'YOCSEF', '论坛', '报告会', 'NOI讲座', '分部活动', '精英大会', '女性大会', 'TF',],
 
   CCF_userPosition: [
     { name: '教授', value: '1' },
@@ -83,6 +70,7 @@ module.exports = {
     { name: '其他', value: '8' },
   ],
 
+  ShowConfigTab: false,
   SysconfigDefaultCategory: 'activity_type',
   SysConfigTabs: [
     {
@@ -101,7 +89,6 @@ module.exports = {
       desc: 'CCF 活动的类型。',
     },
   ],
-
 
   // 特殊配置，这里是System的自己的配置
 

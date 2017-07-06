@@ -176,7 +176,7 @@ export default {
     },
 
     getCategorySuccess(state, { payload: { data, category } }){
-      return { ...state, [category]: data }
+      return { ...state, [category]: data.data }
     },
 
     updateData(state, { payload: { data } }) {

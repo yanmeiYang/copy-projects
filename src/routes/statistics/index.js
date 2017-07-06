@@ -40,7 +40,7 @@ const tabData = [
 class Statistics extends React.Component {
 
   componentDidMount() {
-    if (this.props.app.role.admin){
+    if (this.props.app.roles.admin){
       this.props.dispatch({ type: 'statistics/getStatsOfCcfActivities',payload:{} });
     }else {
       this.props.statistics.activity={};
@@ -60,7 +60,6 @@ class Statistics extends React.Component {
   };
 
   render() {
-    console.log(this.props.statistics.activity);
     const activity_list = tabData[0];
     const activity_detail = tabData[1];
     const experts_list = tabData[2];

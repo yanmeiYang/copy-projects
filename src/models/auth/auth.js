@@ -8,7 +8,15 @@ import * as authService from '../../services/auth';
 export default {
   namespace: 'auth',
   state: { validEmail: true, listUsers: [], loading: false },
-  subscriptions: {},
+  subscriptions: {
+    // setup({ dispatch, history }) {
+    //   history.listen((location, query) => {
+    //     if (location.pathname === '/admin/users') {
+    //       dispatch({ type: 'listUsersByRole', payload: { role: 'ccf', offset: 0, size: 10 } });
+    //     }
+    //   });
+    // },
+  },
   effects: {
     *createUser({ payload }, { call, put }){
       const { email, first_name, gender, last_name, position, sub, role, authority_region, authority } = payload;
@@ -24,6 +32,21 @@ export default {
         yield call(authService.invoke, uid, authority_region);
       }
     },
+
+    *addRoleByUid({ payload }, { call, put }){
+      const { uid, role } = payload;
+      yield call(authService.invoke, uid, role);
+      const { data } = yield call(authService.listUsersByRole, 'ccf', 0, 100);
+      yield put({ type: 'getListUserByRoleSuccess', payload: data });
+    },
+
+    *delRoleByUid({ payload }, { call, put }){
+      const { uid, role } = payload;
+      yield call(authService.revoke, uid, role);
+
+
+    },
+
     *checkEmail({ payload }, { call, put }){
       const { data } = yield call(authService.checkEmail, payload);
       yield put({ type: 'checkEmailSuccess', payload: data.status })

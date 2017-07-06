@@ -1,7 +1,7 @@
 import { routerRedux } from 'dva/router';
 import { parse } from 'qs';
 import { getCurrentUserInfo, logout } from '../services/app';
-import { config } from '../utils';
+import { config, setLocalStorage, getLocalStorage } from '../utils';
 
 const { prefix } = config;
 const LocalStorage = localStorage;
@@ -36,14 +36,21 @@ export default {
   effects: {
     *getCurrentUserInfo({ payload }, { call, put }) {
       if (LocalStorage.getItem('token')) {
+        const userMessage = getLocalStorage('user');
         // TODO 每次打开新URL都要访问一次。想办法缓存一下。
-        const { data } = yield call(getCurrentUserInfo, parse(payload));
-        if (data) {
-          yield put({ type: 'getCurrentUserInfoSuccess', payload: data });
-          if (location.pathname === '/login') {
-            yield put(routerRedux.push('/'));
+        if (userMessage !== '' && userMessage !== null && userMessage !== undefined) {
+          console.log('已经登录');
+          yield put({ type: 'alreadyLoggedIn',  user: userMessage.data, roles: userMessage.roles })
+        } else {
+          const { data } = yield call(getCurrentUserInfo, parse(payload));
+          if (data) {
+            yield put({ type: 'getCurrentUserInfoSuccess', payload: data });
+            if (location.pathname === '/login') {
+              yield put(routerRedux.push('/'));
+            }
           }
         }
+
       } else if (location.pathname !== '/login') {
         // let from = location.pathname;
         // if (location.pathname === '/') {
@@ -57,6 +64,7 @@ export default {
       const { data } = yield call(logout);
       if (data.status) {
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
         yield put({ type: 'logoutSuccess' });
         yield put({ type: 'getCurrentUserInfo' });
       } else {
@@ -91,11 +99,16 @@ export default {
           }
         }
       }
+      setLocalStorage('user', user, roles);
       return {
         ...state,
         user,
         roles: roles
       };
+    },
+
+    alreadyLoggedIn(state, { user, roles }){
+      return { ...state, user, roles };
     },
 
     switchSider(state) {

@@ -36,6 +36,16 @@ export async function invoke(uid, label) {
     body: JSON.stringify(data)
   })
 }
+export async function revoke(uid, label) {
+  const data = {
+    uid: uid,
+    label: label
+  };
+  return request(api.revoke, {
+    method: 'POST',
+    body: JSON.stringify(data)
+  })
+}
 
 export async function listUsersByRole(role, offset, size) {
   return request(api.listUsersByRole.replace(':role', role).replace(':offset', offset).replace(':size', size), {

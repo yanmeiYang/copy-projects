@@ -5,7 +5,7 @@ import NProgress from 'nprogress';
 import { Link, routerRedux } from 'dva/router';
 import { Layout } from '../components';
 import { sysconfig } from '../systems';
-import { classnames, config, menu } from '../utils';
+import { classnames, config, getMenusByUser } from '../utils';
 import '../themes/index.less';
 import './app.less';
 
@@ -17,6 +17,7 @@ let lastHref;
 const App = ({ children, location, dispatch, app, loading }) => {
   const { user, siderFold, darkTheme, isNavbar, menuPopoverVisible, navOpenKeys, roles } = app;
   const href = window.location.href;
+  const menu = getMenusByUser(user,roles)[0];
 
   if (lastHref !== href) {
     NProgress.start();

@@ -5,6 +5,7 @@ import Autosuggest from 'react-autosuggest';
 import styles from './KgSearchBox.less';
 import * as kgService from '../../services/knoledge-graph-service';
 import { classnames } from '../../utils';
+import { sysconfig } from '../../systems';
 
 // Teach Autosuggest how to calculate suggestions for any given input value.
 const getSuggestions = (value) => {
@@ -19,16 +20,20 @@ const getSuggestions = (value) => {
 // When suggestion is clicked, Autosuggest needs to populate the input
 // based on the clicked suggestion. Teach Autosuggest how to calculate the
 // input value for every given suggestion.
-const getSuggestionValue = suggestion => suggestion.name;
+const getSuggestionValue = (suggestion) => {
+  const value = sysconfig.Language === 'cn' ? suggestion.zh : suggestion.name;
+  return value.replace('/', ', ');
+}
 
 // Use your imagination to render suggestions.
 const renderSuggestion = (suggestion) => {
+  const cn = sysconfig.Language === 'cn';
   return (
     <div>
       {suggestion.type === 'parent' && <span className="label">上位词: </span>}
       {suggestion.type === 'sibling' && <span className="label">推荐词: </span>}
       {suggestion.type === 'child' && <span className="label">下位词: </span>}
-      {suggestion.name}
+      { cn ? suggestion.zh : suggestion.name}
     </div>
   );
 };
@@ -129,6 +134,7 @@ class KgSearchBox extends React.PureComponent {
     }
     suggestion.push({
       name: node.name,
+      zh: node.zh,
       type: node.type,
     });
   };

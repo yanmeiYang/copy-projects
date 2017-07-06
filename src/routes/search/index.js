@@ -16,8 +16,21 @@ const { CheckableTag } = Tag;
 
 const labelMap = { 'H-Index': 'h指数', Language: '语言', Location: '国家' };
 function showChineseLabel(enLabel) {
-  const cnLabel = labelMap[enLabel];
-  return !cnLabel ? enLabel : cnLabel;
+  if (sysconfig.Language === 'cn') {
+    const cnLabel = labelMap[enLabel];
+    return !cnLabel ? enLabel : cnLabel;
+  } else {
+    return enLabel;
+  }
+}
+const labelMap2 = { 'h-index': 'h指数', language: '语言', nationality: '国家' };
+function showChineseLabel2(enLabel) {
+  if (sysconfig.Language === 'cn') {
+    const cnLabel = labelMap2[enLabel];
+    return !cnLabel ? enLabel : cnLabel;
+  } else {
+    return enLabel;
+  }
 }
 
 const Search = ({ dispatch, search }) => {
@@ -152,7 +165,7 @@ const Search = ({ dispatch, search }) => {
                 <ul className={styles.filterItems}>
                   {
                     Object.keys(filters).map((key) => {
-                      const label = key === 'eb' ? filters[key].name : `${key}: ${filters[key]}`;
+                      const label = key === 'eb' ? filters[key].name : `${showChineseLabel2(key)}: ${filters[key]}`;
                       return (
                         <Tag
                           className={styles.filterItem}
@@ -172,7 +185,7 @@ const Search = ({ dispatch, search }) => {
                   if (agg.label === 'Gender') {
                     return '';
                   }
-                  if (filters[agg.label]) {
+                  if (filters[agg.type]) {
                     return '';
                   } else {
                     const cnLabel = showChineseLabel(agg.label);

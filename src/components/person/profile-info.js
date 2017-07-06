@@ -51,7 +51,7 @@ class ProfileInfo extends React.Component {
             <img className="emailImg" src={`https://api.aminer.org/api/${email}`} alt="email"
                  style={{ verticalAlign: 'middle' }} />
           </span>}
-          {homepage && <span><i className="fa fa-globe fa-fw" /> {homepage}</span>}
+          {homepage && <span className="hp"><i className="fa fa-globe fa-fw" /> {homepage}</span>}
 
           <span style={{ marginTop: 16 }} />
           <span className="section_header"><i className="fa fa-area-chart fa-fw" /> 研究兴趣</span>

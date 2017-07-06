@@ -38,7 +38,7 @@ module.exports = {
     },
     {
       id: 'aminer',
-      name: <span><i className="fa fa-globe fa-fw"/>全球专家</span>,
+      name: <span><i className="fa fa-globe fa-fw" />全球专家</span>,
       nperson: 2871,
     },
     // 数据标注未找到的人的库。
@@ -70,6 +70,7 @@ module.exports = {
     { name: '其他', value: '8' },
   ],
 
+  ShowConfigTab: false,
   SysconfigDefaultCategory: 'activity_type',
   SysConfigTabs: [
     {
@@ -88,7 +89,6 @@ module.exports = {
       desc: 'CCF 活动的类型。',
     },
   ],
-
 
   // 特殊配置，这里是System的自己的配置
 

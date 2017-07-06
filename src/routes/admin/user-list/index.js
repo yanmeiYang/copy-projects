@@ -2,13 +2,15 @@
  * Created by yangyanmei on 17/7/3.
  */
 import React from 'react';
-import { Table, Spin, Modal, Select, Radio } from 'antd';
+import { routerRedux } from 'dva/router';
+import { Table, Spin, Modal, Select, Radio,Button } from 'antd';
 import { connect } from 'dva';
 import fetch from 'dva/fetch';
 import { config } from '../../../utils';
 const { ColumnGroup, Column } = Table;
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
+import styles from './index.less';
 
 class UserList extends React.Component {
   state = {
@@ -138,11 +140,21 @@ class UserList extends React.Component {
     this.setState({ visible: true, currentRole: role, currentAuthority: authority, currentUid: uid, selectedRole:role,selectedAuthority:authority })
   };
 
+  goCreateUser = () => {
+    this.props.dispatch(routerRedux.push({ pathname: '/registered' }));
+  }
+
   render() {
     const { listUsers, loading } = this.props.auth;
     const { currentRole, currentAuthority, committee, region, selectedAuthority,selectedRole } = this.state;
     return (
-      <div>
+      <div className="content-inner">
+        <div className="toolsArea">
+          <Button type="primary" size="large" style={{}} onClick={this.goCreateUser}>创建账户</Button>
+        </div>
+        <h2 className={styles.pageTitle}>用户设置</h2>
+
+
         <Spin spinning={loading}>
           <Table
             dataSource={listUsers}

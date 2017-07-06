@@ -40,7 +40,13 @@ const tabData = [
 class Statistics extends React.Component {
 
   componentDidMount() {
-    this.props.dispatch({ type: 'statistics/getStatsOfCcfActivities',payload:{} });
+    if (this.props.app.role.admin){
+      this.props.dispatch({ type: 'statistics/getStatsOfCcfActivities',payload:{} });
+    }else {
+      this.props.statistics.activity={};
+      this.props.statistics.author={}
+    }
+
     this.onTabChange(tabData[0].category);
   }
 

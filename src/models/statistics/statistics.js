@@ -3,20 +3,29 @@
  */
 import { routerRedux } from 'dva/router';
 import pathToRegexp from 'path-to-regexp';
+import * as seminarService from '../../services/seminar';
 
 export default {
   namespace: 'statistics',
-  state:{
-
+  state: {
+    activity: [],
+    author: [],
   },
-  subscriptions:{
-    setup(){}
+  subscriptions: {
+    setup(){
+    }
   },
 
-  effects:{
-
+  effects: {
+    *getStatsOfCcfActivities({ payload }, { call, put }){
+      const { data } = yield call(seminarService.getStatsOfCcfActivities);
+      yield put({ type: 'getStatsOfCcfActivitiesSuccess', payload: data })
+    },
   },
-  reducers:{
-
+  reducers: {
+    getStatsOfCcfActivitiesSuccess(state, { payload: data }){
+      console.log(data);
+      return { ...state, activity: data.stats.activity, author: data.stats.author }
+    },
   },
 }

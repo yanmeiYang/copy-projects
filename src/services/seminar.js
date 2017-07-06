@@ -89,3 +89,9 @@ export async function getActivityScore(uid, src, actid, aid, key) {
     method: "GET"
   })
 }
+
+export async function getStatsOfCcfActivities() {
+  return request(api.getStatsOfCcfActivities,{
+    method: 'GET'
+  })
+}

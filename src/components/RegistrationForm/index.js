@@ -219,7 +219,7 @@ class RegistrationForm extends React.Component {
                 <Select>
                   {
                     activityTypes.map((item) => {
-                      return (<Option key={Math.random()} value={item.name}>{item.name}</Option>)
+                      return (<Option key={Math.random()} value={item}>{item}</Option>)
                     })
                   }
                 </Select>

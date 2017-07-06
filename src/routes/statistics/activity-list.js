@@ -3,33 +3,9 @@
  */
 import React from 'react';
 import { Table } from 'antd';
+const { ColumnGroup, Column } = Table;
 import { sysconfig } from '../../systems';
 
-
-const columns = [{
-  title: '专委会',
-  dataIndex: 'name1',
-}, {
-  title: '举办活动次数（总数）',
-  dataIndex: 'activity_count',
-}];
-sysconfig.CCF_activityTypes.map((category, i) => {
-  return columns.push({
-    title: `${category.name}`,
-    dataIndex: `${category.dataIndex}`,
-  });
-});
-
-//模拟数据
-const data = [];
-for (let i = 0; i < 10; i++) {
-  data.push({
-    key: Math.random(),
-    name1: `转为名称 ${i}`,
-    activity_count: i,
-    report_count: i,
-  })
-}
 
 class ActivityList extends React.Component {
   state = {
@@ -40,7 +16,26 @@ class ActivityList extends React.Component {
     this.setState({ selectedRowKeys });
   };
 
+  setCategory= (e) =>{
+    if (e===undefined){
+      return 0
+    }else {
+      return e
+    }
+  };
+
   render() {
+    const data = [];
+    this.props.activity.forEach((item) => {
+      data.push({
+        key: Math.random(),
+        name1: item.organizer,
+        activity_count: item.total,
+        [Object.keys(item.category)[0]]: Object.values(item.category)[0],
+      });
+    });
+
+
     const { selectedRowKeys } = this.state;
     const rowSelection = {
       selectedRowKeys,
@@ -49,7 +44,15 @@ class ActivityList extends React.Component {
     };
     return (
       <div>
-        <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+        {/*rowSelection={rowSelection}*/}
+        <Table dataSource={this.props.activity}>
+          <Column title="专委会" dataIndex="organizer" key="display_name"/>
+          <Column title="举办活动次数（总数）" dataIndex="total" key="position"/>
+          {sysconfig.CCF_activityTypes.map((category) => {
+            const dataIndex = 'category.'+category;
+            return (<Column title={category} dataIndex={dataIndex} key={category} render={this.setCategory.bind()}/>)
+          })}
+        </Table>
       </div>
     )
   }

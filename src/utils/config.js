@@ -61,6 +61,7 @@ module.exports = {
     listActivityScores: '/activity/score-list/:uid/:src/:actid',
     // 已知 key 获取 一个 score
     getActivityScore: '/activity/score/:uid/:src/:actid/:aid/:key',
+    getStatsOfCcfActivities: '/activity/admin/stats',
 
     /* person */
     personProfile: '/person/summary/:id',

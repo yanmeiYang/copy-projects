@@ -9,14 +9,16 @@ const InputGroup = Input.Group;
 
 const columns = [{
   title: '专家',
-  dataIndex: 'name',
-}, {
-  title: '参加过的活动次数',
-  dataIndex: 'activity_count',
-  sorter: (a, b) => a.content - b.content,
-}, {
+  dataIndex: 'n',
+},
+//   {
+//   title: '参加过的活动次数',
+//   dataIndex: 'activity_count',
+//   sorter: (a, b) => a.content - b.content,
+// },
+  {
   title: '总贡献度',
-  dataIndex: 'category',
+  dataIndex: 'contrib',
   sorter: (a, b) => a.level - b.level,
 },{
   title: '演讲内容(平均分)',
@@ -27,23 +29,11 @@ const columns = [{
   dataIndex: 'level',
   sorter: (a, b) => a.level - b.level,
 },{
-  title: '态度',
-  dataIndex: 'attitude',
-  sorter: (a, b) => a.attitude - b.attitude,
+  title: '综合评价(其他贡献)',
+  dataIndex: 'integrated',
+  sorter: (a, b) => a.integrated - b.integrated,
 }];
 
-const data = [];
-for (let i = 0; i < 20; i++) {
-  data.push({
-    key: i,
-    name: `专家名称${i}`,
-    activity_count: i,
-    category: i,
-    content: i,
-    level: 46 - i,
-    attitude: i,
-  });
-}
 
 class ExpertsList extends React.Component {
   state = {
@@ -70,32 +60,32 @@ class ExpertsList extends React.Component {
     const hasSelected = selectedRowKeys.length > 0;
     return (
       <div>
-        <div className={styles.top}>
-          <div style={{ marginBottom: 5 }} className={styles.exportExperts}>
-            <Button
-              type="primary"
-              onClick={this.start}
-              disabled={!hasSelected}
-              size='large'
-            >
-              Export
-            </Button>
-          </div>
+        {/*<div className={styles.top}>*/}
+          {/*<div style={{ marginBottom: 5 }} className={styles.exportExperts}>*/}
+            {/*<Button*/}
+              {/*type="primary"*/}
+              {/*onClick={this.start}*/}
+              {/*disabled={!hasSelected}*/}
+              {/*size='large'*/}
+            {/*>*/}
+              {/*Export*/}
+            {/*</Button>*/}
+          {/*</div>*/}
 
-          <InputGroup className={styles.filterByYear}>
-            <Input size='large' placeholder='输入年份'/>
-            <Button size='large' type='primary'>搜索</Button>
-          </InputGroup>
-          <Button type='default' size='large' className={styles.fixedTime}>去年</Button>
-          <Button type='default' size='large' className={styles.fixedTime}>前年</Button>
+          {/*<InputGroup className={styles.filterByYear}>*/}
+            {/*<Input size='large' placeholder='输入年份'/>*/}
+            {/*<Button size='large' type='primary'>搜索</Button>*/}
+          {/*</InputGroup>*/}
+          {/*<Button type='default' size='large' className={styles.fixedTime}>去年</Button>*/}
+          {/*<Button type='default' size='large' className={styles.fixedTime}>前年</Button>*/}
 
 
-          {/*<span style={{ marginLeft: 8 }}>*/}
-          {/*{hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}*/}
-          {/*</span>*/}
-        </div>
-
-        <Table rowSelection={rowSelection} columns={columns} dataSource={data} style={{ marginTop: 10 }}/>
+          {/*/!*<span style={{ marginLeft: 8 }}>*!/*/}
+          {/*/!*{hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}*!/*/}
+          {/*/!*</span>*!/*/}
+        {/*</div>*/}
+        {/*rowSelection={rowSelection}*/}
+        <Table  columns={columns} dataSource={this.props.author} style={{ marginTop: 10 }}/>
       </div>
     )
   }

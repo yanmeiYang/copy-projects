@@ -86,7 +86,7 @@ export default {
     getCurrentUserInfoSuccess(state, { payload: user }) {
       let roles = { admin: false, ccf_user: false, role: '', authority: '' };
       for (const r of user.role) {
-        if (r === 'ccf_超级管理员') {
+        if (r==='root'||r === 'ccf_超级管理员') {
           roles.admin = true;
         }
         if (r === 'ccf') {

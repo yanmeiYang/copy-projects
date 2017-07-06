@@ -19,6 +19,9 @@ class AddExpertModal extends React.Component {
     talkEndValue: null,
     speakerInfo: {},
     integral: 0,
+    name: '',
+    position: '',
+    affiliation: '',
   };
   speakerInformation = {
     name: '',
@@ -116,7 +119,7 @@ class AddExpertModal extends React.Component {
     this.setState({ modalVisible: false });
   };
 
-  suggestExpert() {
+  suggestExpert(type) {
     let data = {};
     data = {
       name: this.refs.name.refs.input.value,
@@ -124,7 +127,19 @@ class AddExpertModal extends React.Component {
       affiliation: this.refs.aff.refs.input.value,
       title: '',
     };
-    this.props.parentProps.dispatch({ type: 'seminar/getSpeakerSuggest', payload: data });
+    if (type===0){
+      if (this.state.name !== this.refs.name.refs.input.value || this.state.position !== this.refs.pos.refs.input.value || this.state.affiliation !== this.refs.aff.refs.input.value) {
+        this.props.parentProps.dispatch({ type: 'seminar/getSpeakerSuggest', payload: data });
+      }
+    }else{
+      this.props.parentProps.dispatch({ type: 'seminar/getSpeakerSuggest', payload: data });
+    }
+    this.setState({
+      name: this.refs.name.refs.input.value,
+      position: this.refs.pos.refs.input.value,
+      affiliation: this.refs.aff.refs.input.value,
+    });
+
   }
 
   activityTypeChange = (value) => {
@@ -241,19 +256,19 @@ class AddExpertModal extends React.Component {
           <Col><label>专家信息</label></Col>
           <div className="ant-col-7">
             <Input size='large' placeholder='专家姓名' ref='name'
-                   onBlur={this.suggestExpert.bind(this)}/>
+                   onBlur={this.suggestExpert.bind(this,0)}/>
           </div>
           <div className="ant-col-7">
             <Input size='large' placeholder='专家职称' ref='pos'
-                   onBlur={this.suggestExpert.bind(this)}/>
+                   onBlur={this.suggestExpert.bind(this,0)}/>
           </div>
           <div className="ant-col-7">
             <Input size='large' placeholder='专家单位' ref='aff'
-                   onBlur={this.suggestExpert.bind(this)}/>
+                   onBlur={this.suggestExpert.bind(this,0)}/>
           </div>
           <div className="ant-col-3">
             <Button type='primary' size="large"
-                    onClick={this.suggestExpert.bind(this)}>推荐</Button>
+                    onClick={this.suggestExpert.bind(this,1)}>推荐</Button>
           </div>
 
           {speakerSuggests &&
@@ -306,7 +321,7 @@ class AddExpertModal extends React.Component {
                             return '';
                           }
                           return (
-                            <Link to={`/search/${tag.t}/0/30`} key={Math.random()}>
+                            <Link key={Math.random()}>
                               <Tag className={styles.tag}>{tag.t}</Tag>
                             </Link>
                           );

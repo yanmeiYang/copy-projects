@@ -19,7 +19,8 @@ const columns = [{
 }, {
   title: '报告数量',
   dataIndex: 'count',
-},];
+},
+];
 
 //模拟数据
 const data = [];

@@ -5,12 +5,11 @@ import { config } from '../../utils';
 import Menus from './Menu';
 
 const Sider = ({ siderFold, darkTheme, location,
-                 changeTheme, navOpenKeys, changeOpenKeys, menu,roles,
+                 changeTheme, navOpenKeys, changeOpenKeys, menu,
 }) => {
   const menusProps = {
     menu,
     siderFold,
-    roles,
     darkTheme,
     location,
     navOpenKeys,

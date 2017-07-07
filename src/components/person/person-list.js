@@ -40,6 +40,7 @@ class PersonList extends React.PureComponent {
             const email = profileUtils.displayEmailSrc(person);
             const homepage = person.contact && person.contact.homepage;
             const indices = person.indices;
+            const activity_indices = person.activity_indices;
             const tags = profileUtils.findTopNTags(person, 8);
 
             const personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
@@ -68,8 +69,11 @@ class PersonList extends React.PureComponent {
                   </div>}
                   <div className="zone">
                     <div className="contact_zone">
-                      <Indices indices={indices} />
-
+                      <Indices
+                        indices={indices}
+                        activity_indices={activity_indices}
+                        showIndices={sysconfig.PersonList_ShowIndices}
+                      />
                       {pos && <span><i className="fa fa-briefcase fa-fw" /> {pos}</span>}
                       {aff && <span><i className="fa fa-institution fa-fw" /> {aff}</span>}
 

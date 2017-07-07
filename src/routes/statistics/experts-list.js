@@ -88,7 +88,7 @@ class ExpertsList extends React.Component {
           {/*/!*</span>*!/*/}
         {/*</div>*/}
         {/*rowSelection={rowSelection}*/}
-        <Table  columns={columns} dataSource={this.props.author} style={{ marginTop: 10 }}/>
+        <Table bordered  columns={columns} dataSource={this.props.author} style={{ marginTop: 10 }}/>
       </div>
     )
   }

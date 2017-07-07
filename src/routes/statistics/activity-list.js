@@ -46,7 +46,7 @@ class ActivityList extends React.Component {
     return (
       <div>
         {/*rowSelection={rowSelection}*/}
-        <Table dataSource={this.props.activity}>
+        <Table bordered dataSource={this.props.activity}>
           <Column title="承办单位" dataIndex="organizer" key="display_name"/>
           <Column title="举办活动次数（总数）" dataIndex="total" key="position"/>
           {Object.keys(activity_type_options_data).map((category) => {

@@ -33,18 +33,18 @@ const tabData = [
     desc: '专家列表',
     container: <ExpertsList />,
     isShow: true,
-  }
+  },
 ];
 
 
 class Statistics extends React.Component {
 
   componentDidMount() {
-    if (this.props.app.roles.admin){
-      this.props.dispatch({ type: 'statistics/getStatsOfCcfActivities',payload:{} });
-    }else {
-      this.props.statistics.activity={};
-      this.props.statistics.author={}
+    if (this.props.app.roles.admin) {
+      this.props.dispatch({ type: 'statistics/getStatsOfCcfActivities', payload: {} });
+    } else {
+      this.props.statistics.activity = {};
+      this.props.statistics.author = {};
     }
 
     this.onTabChange(tabData[0].category);
@@ -85,28 +85,31 @@ class Statistics extends React.Component {
             {/*</TabPane>*/}
             {/*);*/}
             {/*})}*/}
-            {activity_list.isShow && <TabPane
+            {activity_list.isShow &&
+            <TabPane
               key={activity_list.category}
               style={{ display: activity_list.isShow }}
               tab={activity_list.label}
             >
-              <ActivityList activity={this.props.statistics.activity}/>
+              <ActivityList activity={this.props.statistics.activity} />
             </TabPane>}
-            {activity_detail.isShow && <TabPane
+
+            {activity_detail.isShow &&
+            <TabPane
               key={activity_detail.category}
               style={{ display: activity_detail.isShow }}
               tab={activity_detail.label}
               className={styles.tabContent}
-            >
-              {activity_detail.container}
-            </TabPane>}
-            {experts_list.isShow && <TabPane
+            >{activity_detail.container}</TabPane>}
+
+            {experts_list.isShow &&
+            <TabPane
               key={experts_list.category}
               style={{ display: experts_list.isShow }}
               tab={experts_list.label}
               className={styles.tabContent}
             >
-              <ExpertsList author={this.props.statistics.author}/>
+              <ExpertsList author={this.props.statistics.author} />
             </TabPane>}
 
           </Tabs>
@@ -118,4 +121,4 @@ class Statistics extends React.Component {
 
 }
 
-export default connect(({ statistics, app }) => ({ statistics, app })) (Statistics);
+export default connect(({ statistics, app }) => ({ statistics, app }))(Statistics);

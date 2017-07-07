@@ -35,6 +35,8 @@ const defaultSystemConfigs = {
   PersonList_PersonLink_NewTab: true,
 
   SPECIAL_ExpertMapNoHeader: false,
+
+  // PersonList_ShowIndices: [], // do not override in-component settings.
 };
 
 const sysconfig = defaultSystemConfigs;

@@ -18,14 +18,18 @@ const indicesConfig = {
     letter: 'A',
     tooltip: '学术活跃度（A）',
     color: 'pink',
-    render: activity => activity.toFixed(2),
+    render: (indices) => {
+      return indices.activity.toFixed(2);
+    },
   },
   rising_star: {
     key: 'new_star',
     letter: 'S',
     tooltip: '领域新星（S）',
     color: 'gray',
-    render: activity => activity.toFixed(2),
+    render: (indices) => {
+      return indices.new_star.toFixed(2);
+    },
   },
   citation: {
     key: 'num_citation',
@@ -44,16 +48,19 @@ const indicesConfig = {
     letter: 'C',
     color: 'blue',
     tooltip: 'CCF活动贡献（C）',
+    render: (activity, activity_indices) => {
+      return activity_indices.contrib.toFixed(2);
+    },
   },
 };
 
-const defaultIndices = ['h_index', 'activity', 'rising_star', 'citation', 'num_pubs'];
+const defaultIndices = ['activity-ranking-contrib', 'h_index', 'activity', 'rising_star', 'citation', 'num_pubs'];
 
 /**
  * @param indices - indices node from person.
  * showItems - TODO use this to config which indices to show.
  */
-const Indices = ({ indices, showItems }) => {
+const Indices = ({ indices, activity_indices, showIndices }) => {
   if (!indices) return <span>[][][][][][][][][]</span>;
   let indicesKeys = defaultIndices;
   if (showIndices && showIndices.length > 0) {
@@ -72,8 +79,8 @@ const Indices = ({ indices, showItems }) => {
           <Tooltip key={ic.key} placement="top" title={ic.tooltip}>
             <span className={`score ${ic.color}`}>
               <span className="l">{ic.letter}</span>
-              <span className="r">{activity_indices.contrib}
-                {ic.render ? ic.render(indices[ic.key]) : indices[ic.key]}
+              <span className="r">
+                {ic.render ? ic.render(indices, activity_indices) : indices[ic.key]}
               </span>
             </span>
           </Tooltip>

@@ -15,11 +15,11 @@ class ActivityList extends React.Component {
   };
 
   goToRating = (id) => {
-    if (this.props.app.roles.admin){
+    if (this.props.app.roles.admin) {
       this.props.dispatch(routerRedux.push({
         pathname: `/seminar/expert-rating/${id}`,
       }))
-    }else{
+    } else {
       this.goToDetail(id)
     }
 
@@ -47,11 +47,11 @@ class ActivityList extends React.Component {
                   onClick={this.goToDetail.bind(this, result.id)}>查看活动</Button>
           <div className={styles.info}>
             <p>
-                <span className={styles.type}>
-                    活动类型：{result.category}
-                  </span>
+              <span className={styles.type}>
+                  活动类型：{result.category}
+                </span>
               <span>
-              <span>承办单位：</span>
+                <span>承办单位：</span>
                 {
                   result.organizer.map((item, index) => {
                     return (<span key={Math.random()}>

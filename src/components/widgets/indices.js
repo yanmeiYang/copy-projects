@@ -9,14 +9,14 @@ import styles from './indices.less';
  * @param indices - indices node from person.
  * showItems - TODO use this to config which indices to show.
  */
-const Indices = ({ indices, showItems }) => {
+const Indices = ({ indices, activity_indices, showItems }) => {
   if (!indices) return <span>[][][][][][][][][]</span>;
   return (
     <div className="score-line">
       <Tooltip placement="top" title="CCF活动贡献（C）">
         <span className="score blue">
           <span className="l">C</span>
-          <span className="r">{indices.num_citation}</span>
+          <span className="r">{activity_indices.contrib}</span>
         </span>
       </Tooltip>
       <Tooltip placement="top" title="学术成就（H）">

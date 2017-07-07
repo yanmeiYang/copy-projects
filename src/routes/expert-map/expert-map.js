@@ -49,6 +49,7 @@ function showbystatistics(usersIds, e, map, maindom, inputids){
 
       var infoWindow = new BMap.InfoWindow(sContent);
       infoWindow.setTitle("<div style='font-weight:bold;'>Statistic Info</div>");
+      document.getElementById("currentId").value="";
       map.openInfoWindow(infoWindow, e.currentTarget.getPosition());
     },
     () => {
@@ -63,7 +64,6 @@ function showbystatistics(usersIds, e, map, maindom, inputids){
 }
 
 function showbycircle(usersIds, e, map, maindom, inputids) {
-  console.log("@@@@")
   var ishere = document.getElementById("panel");
   if (ishere != null) {
     return;
@@ -150,6 +150,7 @@ function showbycircle(usersIds, e, map, maindom, inputids) {
               + personInfo.indices.num_citation + "<br /><i class='fa fa-mortar-board' style='width: 20px;'> </i>"
               + pos + "<br /><i class='fa fa-institution' style='width: 20px;'> </i>" + personInfo.aff.desc + "</div>";
             var infoWindow = new BMap.InfoWindow(sContent);
+            document.getElementById("currentId").value="";
             map.openInfoWindow(infoWindow, thispoint);
           });
           cimg.addEventListener("mouseleave", function (event) {
@@ -221,6 +222,7 @@ class ExpertMap extends React.Component {
       } else {
         that.showexpertinfo();
       }
+      document.getElementById("currentIds").value = personId;
       this.openInfoWindow(infoWindow);//将其放在判断语句的后面可以解决显示过程中出现照片更替的事件发生
     })
   }
@@ -255,10 +257,11 @@ class ExpertMap extends React.Component {
           fontSize: "12px",
           border: "none",
           backgroundColor: "transparent",
+          //opacity:0.4,
           fontWeight: "bold",
           textAlign: "center",
           width: "130px",
-          textShadow:"0px 0px 5px #8A8A8A",
+          textShadow:"0px 0px 2px #FFFFFF",
           fontStyle:"italic",
         });
         label.setOffset(new BMap.Size(-63,-12));

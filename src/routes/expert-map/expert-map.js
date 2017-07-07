@@ -25,6 +25,7 @@ function showtop(usersIds, e, map, maindom, inputids) {
 }
 
 function showbystatistics(usersIds, e, map, maindom, inputids){
+  console.log(maindom);
   var sContent="yes!!!";
   const resultPromise = listPersonByIds(usersIds);
   resultPromise.then(
@@ -39,18 +40,22 @@ function showbystatistics(usersIds, e, map, maindom, inputids){
         setObj.add(p[i].attr.nation)
 
       }
+      for (var x in setObj) {
+        location=location+","+x;
+      }
       avgHindex=avgHindex/p.length;
       sContent="<div id='author_info' style='width: 350px;height: 120px;'>"+"<strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"+avgHindex
-        +"<br />countries:"+setObj+"</div>";
-      map.infoWindow.setTitle("Statistic Info");
+        +"<br />countries:"+location+"</div>";
+
       var infoWindow = new BMap.InfoWindow(sContent);
+      infoWindow.setTitle("<div style='font-weight:bold;'>Statistic Info</div>");
       map.openInfoWindow(infoWindow, e.currentTarget.getPosition());
     },
     () => {
       console.log('failed');
     },
   ).catch((error) => {
-    console.err(error);
+    console.log(error);
   });
   maindom.addEventListener("mouseleave", function (event) {
     //map.closeInfoWindow(point);
@@ -58,6 +63,7 @@ function showbystatistics(usersIds, e, map, maindom, inputids){
 }
 
 function showbycircle(usersIds, e, map, maindom, inputids) {
+  console.log("@@@@")
   var ishere = document.getElementById("panel");
   if (ishere != null) {
     return;
@@ -1137,12 +1143,8 @@ var BMapLib = window.BMapLib = BMapLib || {};
         newids += newarray[i] + ",";
       }
       ids = newids;
-      if(document.getElementById("currentIds").value != ids){
-        document.getElementById("currentIds").value = ids;
-        showtop(userids, event, map, maindom, ids);
-      }else{
-        return;
-      }
+      document.getElementById("currentIds").value = ids;
+      showtop(userids, event, map, maindom, ids);
     });
   };
 

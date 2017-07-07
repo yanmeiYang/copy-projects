@@ -14,8 +14,50 @@ import mapData from'../../../external-docs/expert-map/expert-map-example2.json';
 // import mapData from'../../../external-docs/expert-map/expert-map-example1.json';
 
 const ButtonGroup = Button.Group;
+const clustermouseentertype=0;//cluster触发mouseenter事件的时候按照什么方式显示，0为按圈显示，1为按照统计信息显示
 
 function showtop(usersIds, e, map, maindom, inputids) {
+  if(clustermouseentertype==0){
+    showbycircle(usersIds, e, map, maindom, inputids);
+  }else if(clustermouseentertype==1){
+    showbystatistics(usersIds, e, map, maindom, inputids);
+  }
+}
+
+function showbystatistics(usersIds, e, map, maindom, inputids){
+  var sContent="yes!!!";
+  const resultPromise = listPersonByIds(usersIds);
+  resultPromise.then(
+    (data) => {
+      var avgHindex=0;
+      var top8="";
+      var location="";
+      var setObj = new Set();
+      var p=data.data.persons;
+      for(var i=0;i<p.length;i++){
+        avgHindex+=p[i].indices.h_index;
+        setObj.add(p[i].attr.nation)
+
+      }
+      avgHindex=avgHindex/p.length;
+      sContent="<div id='author_info' style='width: 350px;height: 120px;'>"+"<strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"+avgHindex
+        +"<br />countries:"+setObj+"</div>";
+      map.infoWindow.setTitle("Statistic Info");
+      var infoWindow = new BMap.InfoWindow(sContent);
+      map.openInfoWindow(infoWindow, e.currentTarget.getPosition());
+    },
+    () => {
+      console.log('failed');
+    },
+  ).catch((error) => {
+    console.err(error);
+  });
+  maindom.addEventListener("mouseleave", function (event) {
+    //map.closeInfoWindow(point);
+  });
+}
+
+function showbycircle(usersIds, e, map, maindom, inputids) {
   var ishere = document.getElementById("panel");
   if (ishere != null) {
     return;
@@ -53,11 +95,11 @@ function showtop(usersIds, e, map, maindom, inputids) {
     var pthisNode = thisNode.parentNode;
     pthisNode.addEventListener("mouseleave", function (event) {
       if (thisNode != null && thisNode.parentNode != null) {
-        thisNode.parentNode.removeChild(thisNode);
         var imgdivs = document.getElementsByName("scholarimg");
         for (var i = 0; i < imgdivs.length;) {
           imgdivs[i].parentNode.removeChild(imgdivs[i]);
         }
+        thisNode.parentNode.removeChild(thisNode);
       }
     });
   }
@@ -65,52 +107,57 @@ function showtop(usersIds, e, map, maindom, inputids) {
   resultPromise.then(
     (data) => {
       var imgdivs = document.getElementsByName("scholarimg");
-      for (var i = 0; i < ids.length; i++) {
-        var cimg = imgdivs[i];
-        var url = data.data.persons[i].avatar;
-        cimg.innerHTML = "<img style='background: white;'  data='@@@@@@@" + i + "@@@@@@@' height='" + imgwidth + "' width='" + imgwidth + "' src='" + url + "' alt='" + i + "'>";
+      if(imgdivs!=null && imgdivs.length!=0){
+        for (var i = 0; i < ids.length; i++) {
+          var cimg = imgdivs[i];
+          var url = data.data.persons[i].avatar;
+          cimg.innerHTML = "<img style='background: white;'  data='@@@@@@@" + i + "@@@@@@@' height='" + imgwidth + "' width='" + imgwidth + "' src='" + url + "' alt='" + i + "'>";
+        }
+        for (var j = 0; j < imgdivs.length; j++) {
+          var cimg = imgdivs[j];
+          cimg.addEventListener("mouseenter", function (event) {
+            var chtml = event.target.innerHTML;
+            var num = 0;
+            if (chtml.split("@@@@@@@").length > 1) {
+              num = chtml.split("@@@@@@@")[1];
+            }
+            var personInfo = data.data.persons[num];
+            var apos = document.getElementById("allmap").getBoundingClientRect();
+            var cpos = event.target.getBoundingClientRect();
+            var newpixel = new BMap.Pixel(cpos.left - apos.left + imgwidth, cpos.top - apos.top);
+            var thispoint = map.pixelToPoint(newpixel);
+            var pos = "";
+            if (typeof(personInfo.pos)=="undefined"){
+              pos = "null";
+            }else if(personInfo.pos == null || personInfo.pos == "") {
+              pos = "null";
+            } else if (personInfo.pos[0] == null || personInfo.pos[0] == "") {
+              pos = "";
+            } else {
+              pos = personInfo.pos[0].n;
+            }
+            var sContent = "<div id='author_info' style='width: 350px;height: 120px;'><img style='float:left;margin:4px' id='imgDemo' src='http:" + personInfo.avatar + "' width='70' height='80'/>"
+              + "<i class='fa fa-user' style='width: 20px;'> </i><a  target='_blank' href='https://cn.aminer.org/profile/" + personInfo.id + "'>"
+              + personInfo.name + "</a><br /><strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"
+              + personInfo.indices.h_index + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Paper:  </strong>"
+              + personInfo.indices.num_pubs + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Citation:  </strong>"
+              + personInfo.indices.num_citation + "<br /><i class='fa fa-mortar-board' style='width: 20px;'> </i>"
+              + pos + "<br /><i class='fa fa-institution' style='width: 20px;'> </i>" + personInfo.aff.desc + "</div>";
+            var infoWindow = new BMap.InfoWindow(sContent);
+            map.openInfoWindow(infoWindow, thispoint);
+          });
+          cimg.addEventListener("mouseleave", function (event) {
+            //document.getElementById("authorinfo").style.display="none";
+          });
+        }
       }
-      for (var j = 0; j < imgdivs.length; j++) {
-        var cimg = imgdivs[j];
-        cimg.addEventListener("mouseenter", function (event) {
-          var chtml = event.target.innerHTML;
-          var num = 0;
-          if (chtml.split("@@@@@@@").length > 1) {
-            num = chtml.split("@@@@@@@")[1];
-          }
-          var personInfo = data.data.persons[num];
-          var apos = document.getElementById("allmap").getBoundingClientRect();
-          var cpos = event.target.getBoundingClientRect();
-          var newpixel = new BMap.Pixel(cpos.left - apos.left + imgwidth, cpos.top - apos.top);
-          var thispoint = map.pixelToPoint(newpixel);
-          var pos = "";
-          if (personInfo.pos == null || personInfo.pos == "") {
-            pos = "null";
-          } else if (personInfo.pos[0] == null || personInfo.pos[0] == "") {
-            pos = "";
-          } else {
-            pos = personInfo.pos[0].n;
-          }
-          var sContent = "<div id='author_info' style='width: 350px;height: 120px;'><img style='float:left;margin:4px' id='imgDemo' src='http:" + personInfo.avatar + "' width='70' height='80'/>"
-            + "<i class='fa fa-user' style='width: 20px;'> </i><a  target='_blank' href='https://cn.aminer.org/profile/" + personInfo.id + "'>"
-            + personInfo.name + "</a><br /><strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"
-            + personInfo.indices.h_index + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Paper:  </strong>"
-            + personInfo.indices.num_pubs + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Citation:  </strong>"
-            + personInfo.indices.num_citation + "<br /><i class='fa fa-mortar-board' style='width: 20px;'> </i>"
-            + pos + "<br /><i class='fa fa-institution' style='width: 20px;'> </i>" + personInfo.aff.desc + "</div>";
-          var infoWindow = new BMap.InfoWindow(sContent);
-          map.openInfoWindow(infoWindow, thispoint);
-        });
-        cimg.addEventListener("mouseleave", function (event) {
-          //document.getElementById("authorinfo").style.display="none";
-        });
-      }
+
     },
     () => {
       console.log('failed');
     },
-  ).catch(() => {
-    console.err('Error occured.');
+  ).catch((error) => {
+    console.err(error);
   });
 }
 
@@ -136,13 +183,13 @@ class ExpertMap extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('compare: ', nextProps.query, ' == ', this.props.query)
+    //console.log('compare: ', nextProps.query, ' == ', this.props.query)
     if (nextProps.query && nextProps.query !== this.props.query) {
-      console.log('call searchmap: ', nextProps.query);
+      //console.log('call searchmap: ', nextProps.query);
       this.callSearchMap(nextProps.query);
     }
     if (nextProps.expertMap.geoData !== this.props.expertMap.geoData) {
-      console.log('>>>> ', nextProps.expertMap.geoData);
+      //console.log('>>>> ', nextProps.expertMap.geoData);
       var typeid=0;
       this.showmap(nextProps.expertMap.geoData,typeid);
     }
@@ -150,7 +197,7 @@ class ExpertMap extends React.Component {
   }
 
   callSearchMap(query, callback) {
-    console.log('MAP::: searchMap:', query);
+    //console.log('MAP::: searchMap:', query);
     this.props.dispatch({ type: 'expertMap/searchMap', payload: { query } });
   }
 
@@ -163,12 +210,12 @@ class ExpertMap extends React.Component {
 
     })
     marker.addEventListener('mouseover', function (e) {
-      this.openInfoWindow(infoWindow);
       if (document.getElementById("currentId").value != personId) {
-        that.onLoadPersonCard(personId);
+        that.onLoadPersonCard(personId);//更新数据，数据更新之后由componentDidUpdate再调用本函数进行显示
       } else {
         that.showexpertinfo();
       }
+      this.openInfoWindow(infoWindow);//将其放在判断语句的后面可以解决显示过程中出现照片更替的事件发生
     })
   }
 
@@ -189,6 +236,7 @@ class ExpertMap extends React.Component {
     var markers = [];
     const that = this;
     var pId = [];
+    var counts=0;
     for (var o in place.results) {
       var pt = null;
       var newplace = this.findposition(type, place.results[o]);
@@ -197,21 +245,22 @@ class ExpertMap extends React.Component {
         var marker = new BMap.Marker(pt);
         var label = new BMap.Label("<div>" + place.results[o].name + "</div><div style='display: none;'>" + place.results[o].id + "</div>");
         label.setStyle({
-          color: "red",
+          color: "black",
           fontSize: "12px",
           border: "none",
           backgroundColor: "transparent",
           fontWeight: "bold",
           textAlign: "center",
-          height: "0px",
-          lineHeight: "0px",
           width: "130px",
+          textShadow:"0px 0px 5px #8A8A8A",
+          fontStyle:"italic",
         });
-        label.setOffset(1000, 1000);
+        label.setOffset(new BMap.Size(-63,-12));
         marker.setLabel(label);
         var personId = place.results[o].id;
-        pId[o] = personId;
+        pId[counts] = personId;
         markers.push(marker);
+        counts++;
       }
     }
 
@@ -227,7 +276,7 @@ class ExpertMap extends React.Component {
       } else {
         clearInterval(mapinterval);
         var markerClusterer = new BMapLib.MarkerClusterer(map, { markers: markers });
-        for (var m in markers) {
+        for (var m=0;m<pId.length;m++) {
           that.addMouseoverHandler(markers[m], pId[m])
         }
       }
@@ -426,7 +475,7 @@ class ExpertMap extends React.Component {
 
   handleScriptLoad() {
     console.log(this);
-    console.log(this.refs.allmap, 'ref');
+    //console.log(this.refs.allmap, 'ref');
   }
 
   handleScriptError() {
@@ -1082,14 +1131,18 @@ var BMapLib = window.BMapLib = BMapLib || {};
         }
       }
       var maindom = that._clusterMarker._domElement;
-      var newarray = userids.sort();
+      var newarray = userids.sort();//对ID进行排序
       var newids = "";
       for (var i = 0; i < newarray.length; i++) {
         newids += newarray[i] + ",";
       }
       ids = newids;
-      document.getElementById("currentIds").value = ids;
-      showtop(userids, event, map, maindom, ids);
+      if(document.getElementById("currentIds").value != ids){
+        document.getElementById("currentIds").value = ids;
+        showtop(userids, event, map, maindom, ids);
+      }else{
+        return;
+      }
     });
   };
 

@@ -127,11 +127,11 @@ class AddExpertModal extends React.Component {
       affiliation: this.refs.aff.refs.input.value,
       title: '',
     };
-    if (type===0){
+    if (type === 0) {
       if (this.state.name !== this.refs.name.refs.input.value || this.state.position !== this.refs.pos.refs.input.value || this.state.affiliation !== this.refs.aff.refs.input.value) {
         this.props.parentProps.dispatch({ type: 'seminar/getSpeakerSuggest', payload: data });
       }
-    }else{
+    } else {
       this.props.parentProps.dispatch({ type: 'seminar/getSpeakerSuggest', payload: data });
     }
     this.setState({
@@ -183,11 +183,7 @@ class AddExpertModal extends React.Component {
     const { modalVisible, step2, step3, speakerInfo, integral, stype, talkStartValue, talkEndValue } = this.state;
     const { parentProps } = this.props;
     const { speakerSuggests, loading, activity_type } = parentProps.seminar;
-    let activity_type_options = {};
 
-    if (activity_type.data) {
-      activity_type_options = activity_type.data;
-    }
     return (
       <Modal
         title='添加演讲者'
@@ -227,6 +223,7 @@ class AddExpertModal extends React.Component {
             {...formItemLayout}
             label="贡献类别"
           >
+            {activity_type &&
             <Select
               showSearch
               style={{ width: 200 }}
@@ -236,12 +233,12 @@ class AddExpertModal extends React.Component {
               filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
               {
-                Object.keys(activity_type_options).map((item) => {
+                Object.keys(activity_type.data).map((item) => {
                   return (<Option key={item}
-                                  value={item + '#' + activity_type_options[item]}>{item}</Option>)
+                                  value={item + '#' + activity_type.data[item]}>{item}</Option>)
                 })
               }
-            </Select>
+            </Select>}
 
           </FormItem>
           <div style={{ height: 20 }}>
@@ -256,19 +253,19 @@ class AddExpertModal extends React.Component {
           <Col><label>专家信息</label></Col>
           <div className="ant-col-7">
             <Input size='large' placeholder='专家姓名' ref='name'
-                   onBlur={this.suggestExpert.bind(this,0)}/>
+                   onBlur={this.suggestExpert.bind(this, 0)}/>
           </div>
           <div className="ant-col-7">
             <Input size='large' placeholder='专家职称' ref='pos'
-                   onBlur={this.suggestExpert.bind(this,0)}/>
+                   onBlur={this.suggestExpert.bind(this, 0)}/>
           </div>
           <div className="ant-col-7">
             <Input size='large' placeholder='专家单位' ref='aff'
-                   onBlur={this.suggestExpert.bind(this,0)}/>
+                   onBlur={this.suggestExpert.bind(this, 0)}/>
           </div>
           <div className="ant-col-3">
             <Button type='primary' size="large"
-                    onClick={this.suggestExpert.bind(this,1)}>推荐</Button>
+                    onClick={this.suggestExpert.bind(this, 1)}>推荐</Button>
           </div>
 
           {speakerSuggests &&

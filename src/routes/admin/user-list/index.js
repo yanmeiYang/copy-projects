@@ -142,7 +142,7 @@ class UserList extends React.Component {
 
   goCreateUser = () => {
     this.props.dispatch(routerRedux.push({ pathname: '/registered' }));
-  }
+  };
 
   render() {
     const { listUsers, loading } = this.props.auth;
@@ -163,7 +163,8 @@ class UserList extends React.Component {
             pagination={false}
           >
             <Column title="姓名" dataIndex="display_name" key="display_name"/>
-            <Column title="职称" dataIndex="position" key="position"/>
+            <Column title="邮箱" dataIndex="email" key="email"/>
+            {/*<Column title="职称" dataIndex="position" key="position"/>*/}
             <Column title="性别" dataIndex="gender" key="gender" render={(text)=>{
               return text==='male'?'男':text==='female'?'女':'';
             }}/>

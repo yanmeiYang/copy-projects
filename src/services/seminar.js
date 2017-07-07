@@ -33,12 +33,14 @@ export async function postSeminarActivity(data) {
 
 }
 
-export async function searchActivity(query, offset, size, src) {
+export async function searchActivity(query, offset, size, src, category, organizer) {
   let data = {
     query: query,
     offset,
     size,
-    src
+    src,
+    category,
+    organizer
   };
   return request(api.searchActivity, {
     method: 'GET',

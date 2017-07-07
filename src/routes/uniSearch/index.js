@@ -15,11 +15,24 @@ const { CheckableTag } = Tag;
 const expertBases = sysconfig.ExpertBases;
 
 const labelMap = { 'H-Index': 'h指数', Language: '语言', Location: '国家' };
-
 function showChineseLabel(enLabel) {
-  const cnLabel = labelMap[enLabel];
-  return !cnLabel ? enLabel : cnLabel;
+  if (sysconfig.Language === 'cn') {
+    const cnLabel = labelMap[enLabel];
+    return !cnLabel ? enLabel : cnLabel;
+  } else {
+    return enLabel;
+  }
 }
+const labelMap2 = { 'h-index': 'h指数', language: '语言', nationality: '国家' };
+function showChineseLabel2(enLabel) {
+  if (sysconfig.Language === 'cn') {
+    const cnLabel = labelMap2[enLabel];
+    return !cnLabel ? enLabel : cnLabel;
+  } else {
+    return enLabel;
+  }
+}
+
 /*
  * http://localhost:8000/search/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/0/30?view=relation
  */
@@ -129,7 +142,7 @@ class Search extends React.PureComponent {
       type: 'search/searchPerson',
       payload: { query, offset: 0, size: 30, filters, sort: e },
     });
-  }
+  };
 
   onViewTabChange = (key) => {
     const { query } = this.props.search;
@@ -157,10 +170,11 @@ class Search extends React.PureComponent {
           size="small"
         >
           <TabPane tab={this.filterDisplay('相关度')} key="relevance" />
-          <TabPane tab={this.filterDisplay('学术成就')} key="h_index" />
+          <TabPane tab={this.filterDisplay('H-index')} key="h_index" />
           <TabPane tab={this.filterDisplay('学术活跃度')} key="activity" />
           <TabPane tab={this.filterDisplay('领域新星')} key="rising_star" />
-          <TabPane tab={this.filterDisplay('学会贡献')} key="contrib" />
+          <TabPane tab={this.filterDisplay('引用数')} key="citation" />
+          <TabPane tab={this.filterDisplay('论文数')} key="num_pubs" />
         </Tabs>
 
         <PersonList persons={results} />
@@ -244,7 +258,7 @@ class Search extends React.PureComponent {
                   <ul className={styles.filterItems}>
                     {
                       Object.keys(filters).map((key) => {
-                        const label = key === 'eb' ? filters[key].name : `${key}: ${filters[key]}`;// special
+                        const label = key === 'eb' ? filters[key].name : `${showChineseLabel2(key)}: ${filters[key]}`;// special
                         // console.log('- - ', label);
                         return (
                           <Tag
@@ -265,7 +279,7 @@ class Search extends React.PureComponent {
                     if (agg.label === 'Gender') { // skip gender
                       return '';
                     }
-                    if (filters[agg.label]) {
+                    if (filters[agg.type]) {
                       return '';
                     } else {
                       // if agg is empty
@@ -326,10 +340,11 @@ class Search extends React.PureComponent {
               tab={<p><i className="fa fa-map-marker fa-fw" aria-hidden="true" /> 地图视图</p>}
               key="map-view"
             >{''}</TabPane>
-            <TabPane
-              tab={<p><i className="fa fa-users fa-fw" aria-hidden="true" /> 关系视图</p>}
-              key="relation-view"
-            >{''}</TabPane>
+
+            {/*<TabPane*/}
+            {/*tab={<p><i className="fa fa-users fa-fw" aria-hidden="true" /> 关系视图</p>}*/}
+            {/*key="relation-view"*/}
+            {/*>{''}</TabPane>*/}
           </Tabs>
         </div>
 

@@ -40,7 +40,7 @@
     position: absolute;
     overflow: visible;
     padding-bottom: 24px;
-    height: 100vh;
+    height: calc(100vh - 172px);
     transition: @transition-ease-out;
     box-shadow: @shadow-1;
     color: #999;
@@ -158,9 +158,8 @@
   }
 
   .main {
-    justify-content: center;
-    margin-left: 188px;
-    //margin-left: 0;
+    margin-left: 0;
+    display: flex; justify-content: center;
     // overflow: auto;
     // height: 100vh;
     transition: @transition-ease-out;
@@ -175,8 +174,7 @@
     }
 
     .container {
-      //margin: 24px;
-      display: flex; flex: 2;
+      flex: 2 auto;
     }
 
     .content {

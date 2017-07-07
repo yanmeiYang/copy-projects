@@ -57,6 +57,8 @@ module.exports = {
   PersonList_PersonLink: personId => `/person/${personId}`,
   PersonList_PersonLink_NewTab: false,
 
+  PersonList_ShowIndices: ['activityRankingContrib', 'h_index', 'activity'],
+
   CCF_activityTypes: ['专委活动', 'CNCC', 'ADL78', 'CCF@U100(走进高校)', 'YOCSEF', '论坛', '报告会', 'NOI讲座', '分部活动', '精英大会', '女性大会', 'TF',],
 
   CCF_userPosition: [

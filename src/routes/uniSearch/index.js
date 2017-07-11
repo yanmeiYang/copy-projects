@@ -210,8 +210,7 @@ class Search extends React.PureComponent {
 
     this.state.view['relation-view'] = (
       <div>
-        {this.state.currentTab}
-        <RelationGraph />
+        <RelationGraph query={this.props.search.query}/>
       </div>
     );
 

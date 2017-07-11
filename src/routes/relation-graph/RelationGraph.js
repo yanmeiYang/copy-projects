@@ -3,9 +3,11 @@
  */
 import React from 'react';
 import { connect } from 'dva';
+import { Checkbox, Select } from 'antd';
 import styles from './RelationGraph.less';
 import * as d3 from '../../../public/d3/d3.min';
 
+const Option = Select.Option;
 const controlDivId = 'rgvis';
 
 /*
@@ -41,21 +43,31 @@ class RelationGraph extends React.PureComponent {
 
   state = {
     vm: {},
+    describeNodes1: 0,
+    describeNodes2: 0,
+    subnet_selection: false,
+    suspension_adjustment: false,
+    two_paths: false,
+    continuous_path: false,
+    single_extension: false
+    // activities: ['h-Index>0', 'h-Index>10', 'h-Index>30', 'h-Index>60']
   };
 
   componentDidMount() {
-    this.showVis();
+    this.showVis(this);
+    this.redraw(this.props.query)
   }
 
   componentDidUpdate(prevProps, prevState) {
     // this.showVis();
   }
 
-  showVis = () => {
-    this.startup();
+  showVis = (t) => {
+    this.startup(t);
   };
 
   redraw = (type) => {
+    console.log(this.props.query);
     this.count = 0;
     this.pgshow = true;
     this.pglength = 0;
@@ -75,6 +87,7 @@ class RelationGraph extends React.PureComponent {
     return this.drawNet(type);
   };
 
+
   pro = () => {
     if (this.pglength > 85) {
       this.webconnect = '网络状况不佳请耐心等待！';
@@ -89,7 +102,8 @@ class RelationGraph extends React.PureComponent {
   };
 
   // ############################# in big startup file ############################
-  startup = () => {
+  startup = (t) => {
+    const currentThis = t;
     console.log('[debug] startup relation vis.');
 
     let svg = null;
@@ -115,9 +129,9 @@ class RelationGraph extends React.PureComponent {
     let indexShow = 0;
 
     const color = d3.interpolateRgb(d3.rgb('#eeeeee'), d3.rgb(230, 0, 18));
-    const rawSvg = d3.select(`#${controlDivId}`)
-      .style('width', '850px')
-      .style('height', '600px');
+    // const rawSvg = d3.select(`#${controlDivId}`).append('svg')
+    //   .style('width', '850px')
+    //   .style('height', '600px');
 
     let simulation = null;
 
@@ -398,6 +412,8 @@ class RelationGraph extends React.PureComponent {
                                   i++;
                                 }
                                 if (tempEdges.length > 2) {
+                                  console.log('22222222');
+                                  console.log(this);
                                   // $('[data-toggle=\'popover\']').popover('hide');
                                   console.log('popoverHide()!!!!');
 
@@ -512,7 +528,9 @@ class RelationGraph extends React.PureComponent {
     };
 
     const tempzoom = d3.zoom().scaleExtent([1, 2]).on('zoom', this.zoomed);
-    svg = d3.select(rawSvg[0])
+    svg = d3.select(`#${controlDivId}`).append('svg')
+      .style('width', '850px')
+      .style('height', '600px')
       .attr('class', 'jumbotron')
       .attr('bottom', '0px')
       .style('padding', '2px 2px 2px 2px')
@@ -702,8 +720,9 @@ class RelationGraph extends React.PureComponent {
         node,
         nodes_text,
         ticked;
-      this.describeNodes1 = _nodes.length;
-      this.describeNodes2 = _edges.length;
+      // this.describeNodes1 = _nodes.length;
+      // this.describeNodes2 = _edges.length;
+      this.setState({ describeNodes1: _nodes.length, describeNodes2: _edges.length });
       link = svg.append('g').attr('class', 'links').selectAll('line').data(_edges).enter().append('line').style('stroke', '#999999').style('stroke-width', '1px');
       node = svg.append('g').attr('class', 'nodes').selectAll('circle').data(_nodes).enter().append('circle').attr('r', (d) => {
         if (d.indices.hIndex < 400) {
@@ -869,7 +888,7 @@ class RelationGraph extends React.PureComponent {
           if (a.length === 0) {
             k = 0;
             a.push(k);
-            _saveSortAdges[0].push(i);
+            _saveSortAdges.push([i]);
             temp = {
               target: _nodes[k],
               source: _nodes[i],
@@ -887,22 +906,11 @@ class RelationGraph extends React.PureComponent {
       });
     };
 
-    this.redraw('Data Mining');
+    // this.redraw('Data Mining');
     this.toField = (d) => {
       return window.open(`https://cn.aminer.org/search?t=b&q=${d}`);
     };
 
-    this.IndexChange = () => {
-      if (this.engineer.currentActivity === 'h-Index>0') {
-        return indexShow = 0;
-      } else if (this.engineer.currentActivity === 'h-Index>10') {
-        return indexShow = 10;
-      } else if (this.engineer.currentActivity === 'h-Index>30') {
-        return indexShow = 30;
-      } else {
-        return indexShow = 60;
-      }
-    };
 
     this.lockedpeople = (name) => {
       let a = false;
@@ -1016,7 +1024,19 @@ class RelationGraph extends React.PureComponent {
         }
       });
     };
-    console.log('Here is a watch, engineer.currentActivity');
+    this.IndexChange = (e) => {
+      if (e === 'h-Index>0') {
+        indexShow = 0;
+      } else if (e === 'h-Index>10') {
+        indexShow = 10;
+      } else if (e === 'h-Index>30') {
+        indexShow = 30;
+      } else {
+        indexShow = 60;
+      }
+      this.wholeLayout();
+    };
+    // console.log('Here is a watch, engineer.currentActivity');
     // this.$watch('engineer.currentActivity', function (d) {
     //   return $scope.wholeLayout();
     // });
@@ -1024,22 +1044,29 @@ class RelationGraph extends React.PureComponent {
       this.wholeLayout();
     };
 
-    this.changeModle1 = () => {
+    this.changeModle1 = (e) => {
       clearAllChoosed(5);
       _totalLine = [];
       _lastNode = null;
       this.currentModle1 = !this.currentModle1;
       svg.selectAll('line').data(_edges).style('opacity', 0.8);
       svg.selectAll('circle').data(_nodes).style('opacity', 0.8);
-      $('#cb5').attr('checked', false);
+      currentThis.setState({
+        subnet_selection: e.target.checked,
+        two_paths: false,
+        continuous_path: false,
+        single_extension: false
+      });
+      // $('#cb5').attr('checked', false);
       this.currentModle5 = false;
-      $('#cb3').attr('checked', false);
+      // $('#cb3').attr('checked', false);
       this.currentModle3 = false;
-      $('#cb4').attr('checked', false);
+      // $('#cb4').attr('checked', false);
       return this.currentModle4 = false;
     };
-    this.changeModle2 = () => {
-      this.currentModle2 = !this.currentModle2;
+    this.changeModle2 = (e) => {
+      this.currentModle2 = e.target.checked;
+      // this.currentModle2 = !this.currentModle2;
       if (typeof simulation !== 'undefined') {
         if (this.currentModle2 === true) {
           return simulation.stop();
@@ -1048,47 +1075,66 @@ class RelationGraph extends React.PureComponent {
         }
       }
     };
-    this.changeModle3 = () => {
+    this.changeModle3 = (e) => {
       clearAllChoosed(5);
       _totalLine = [];
       _lastNode = null;
       this.currentModle3 = !this.currentModle3;
       svg.selectAll('line').data(_edges).style('opacity', 0.8);
       svg.selectAll('circle').data(_nodes).style('opacity', 0.8);
-      $('#cb1').attr('checked', false);
+      currentThis.setState({
+        subnet_selection: false,
+        two_paths: e.target.checked,
+        continuous_path: false,
+        single_extension: false
+      });
+
+      // $('#cb1').attr('checked', false);
       $scope.currentModle1 = false;
-      $('#cb5').attr('checked', false);
+      // $('#cb5').attr('checked', false);
       $scope.currentModle5 = false;
-      $('#cb4').attr('checked', false);
+      // $('#cb4').attr('checked', false);
       return this.currentModle4 = false;
     };
-    this.changeModle4 = () => {
+    this.changeModle4 = (e) => {
       clearAllChoosed(5);
       _totalLine = [];
       _lastNode = null;
       this.currentModle4 = !this.currentModle4;
       svg.selectAll('line').data(_edges).style('opacity', 0.8);
       svg.selectAll('circle').data(_nodes).style('opacity', 0.8);
-      $('#cb1').attr('checked', false);
+      currentThis.setState({
+        subnet_selection: false,
+        two_paths: false,
+        continuous_path: e.target.checked,
+        single_extension: false
+      });
+      // $('#cb1').attr('checked', false);
       this.currentModle1 = false;
-      $('#cb3').attr('checked', false);
+      // $('#cb3').attr('checked', false);
       this.currentModle3 = false;
-      $('#cb5').attr('checked', false);
+      // $('#cb5').attr('checked', false);
       return this.currentModle5 = false;
     };
 
-    this.changeModle5 = () => {
+    this.changeModle5 = (e) => {
       clearAllChoosed(5);
       _totalLine = [];
       _lastNode = null;
       this.currentModle5 = !this.currentModle5;
       svg.selectAll('line').data(_edges).style('opacity', 0.8);
       svg.selectAll('circle').data(_nodes).style('opacity', 0.8);
-      $('#cb1').attr('checked', false);
+      currentThis.setState({
+        subnet_selection: false,
+        two_paths: false,
+        continuous_path: false,
+        single_extension: e.target.checked
+      });
+      // $('#cb1').attr('checked', false);
       this.currentModle1 = false;
-      $('#cb3').attr('checked', false);
+      // $('#cb3').attr('checked', false);
       this.currentModle3 = false;
-      $('#cb4').attr('checked', false);
+      // $('#cb4').attr('checked', false);
       return this.currentModle4 = false;
     };
     return null;
@@ -1098,10 +1144,31 @@ class RelationGraph extends React.PureComponent {
   // ############################# in big startup file ############################
 
   render() {
+    const { describeNodes1, describeNodes2, subnet_selection, suspension_adjustment, two_paths, continuous_path, single_extension } = this.state;
     return (
       <div className={styles.vis_container}>
-        Relation - Graph body
-        <div id="rgvis" style={{ border: 'solid 1px red' }}>Graph Content should be here.</div>
+        <div style={{ display: 'flex', 'flex-direction': 'row' }}>
+          <h3>{this.props.query}</h3>
+          <div style={{marginLeft:10}}>{describeNodes1} people</div>
+          <div style={{marginLeft:10}}>{describeNodes2} relations</div>
+        </div>
+        <div>
+          <label>相关操作：</label>
+          <Checkbox checked={subnet_selection} onChange={this.changeModle1}>子网选取</Checkbox>
+          <Checkbox checked={suspension_adjustment} onChange={this.changeModle2}>暂停调整</Checkbox>
+          <Checkbox checked={two_paths} onChange={this.changeModle3}>两点路径</Checkbox>
+          <Checkbox checked={continuous_path} onChange={this.changeModle4}>连续路径</Checkbox>
+          <Checkbox checked={single_extension} onChange={this.changeModle5}>单点扩展</Checkbox>
+          <label>过滤器：</label>
+          <Select defaultValue="h-Index>0" style={{ width: 120 }} onChange={this.IndexChange}>
+            {this.activities.map((act) => {
+              return (
+                <Option key={act} value={act}>{act}</Option>
+              )
+            })}
+          </Select>
+        </div>
+        <div id="rgvis"></div>
       </div>
     );
   }

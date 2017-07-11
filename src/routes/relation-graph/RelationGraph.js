@@ -1093,9 +1093,9 @@ class RelationGraph extends React.PureComponent {
       });
 
       // $('#cb1').attr('checked', false);
-      $scope.currentModle1 = false;
+      this.currentModle1 = false;
       // $('#cb5').attr('checked', false);
-      $scope.currentModle5 = false;
+      this.currentModle5 = false;
       // $('#cb4').attr('checked', false);
       return this.currentModle4 = false;
     };

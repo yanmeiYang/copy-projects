@@ -7,12 +7,13 @@ import { routerRedux, Link } from 'dva/router';
 import styles from './index.less';
 import SearchBox from '../../components/SearchBox';
 import { KnowledgeGraphTextTree } from '../knowledge-graph';
+import { sysconfig } from '../../systems';
 
 function KnowledgeGraphPage({ dispatch }) {
 
   function onSearch({ query }) {
     dispatch(routerRedux.push({
-      pathname: `/search/${query}/0/30`,
+      pathname: `/${sysconfig.SearchPagePrefix}/${query}/0/30`,
     }));
   }
 

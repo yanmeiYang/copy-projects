@@ -6,6 +6,7 @@ import { connect } from 'dva';
 import { Link } from 'dva/router';
 import styles from './KnowledgeGraphTextTree.less';
 import * as kgService from '../../services/knoledge-graph-service';
+import { sysconfig } from '../../systems';
 
 
 /*
@@ -57,7 +58,7 @@ class KnowledgeGraphTextTree extends React.Component {
             >
               {level === 0 ? 'Computer Science' : `${node.name} (${node.zh})`}
             </Link>
-            <Link className="search" to={`/search/${node.name}/0/20`}>
+            <Link className="search" to={`/${sysconfig.SearchPagePrefix}/${node.name}/0/20`}>
               SEARCH
             </Link>
           </span>

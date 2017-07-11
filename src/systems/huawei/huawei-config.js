@@ -12,6 +12,11 @@ module.exports = {
 
   ExpertBases: [
     {
+      id: 'aminer',
+      name: <span><i className="fa fa-globe fa-fw" />ALL</span>,
+      nperson: 2871,
+    },
+    {
       id: '595208bd9ed5dbf9cd563c60',
       name: 'IEEE Fellow(2013)',
       nperson: 12,
@@ -51,11 +56,7 @@ module.exports = {
       name: '美国科学院外国专家',
       nperson: 287,
     },
-    {
-      id: 'aminer',
-      name: <span><i className="fa fa-globe fa-fw" />全球专家</span>,
-      nperson: 2871,
-    },
+
   ],
 
 

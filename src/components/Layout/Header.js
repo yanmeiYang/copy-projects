@@ -10,6 +10,7 @@ import styles from './Header.less';
 import SearchBox from '../../components/SearchBox';
 import * as profileUtils from '../../utils/profile_utils';
 import { sysconfig } from '../../systems';
+import { KgSearchBox } from '../../components/search';
 
 function Header({ app, search, location, dispatch, logout, onSearch }) {
   const { hasHeadSearchBox } = app;
@@ -30,10 +31,10 @@ function Header({ app, search, location, dispatch, logout, onSearch }) {
 
       <div className={styles.searchWrapper}>
         {hasHeadSearchBox &&
-        <SearchBox
+        <KgSearchBox
           size="large"
-          btnText="搜索"
           keyword={query}
+          style={{ width: 500 }}
           onSearch={onSearch}
         />
         }

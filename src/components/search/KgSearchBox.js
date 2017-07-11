@@ -49,10 +49,9 @@ class KgSearchBox extends React.PureComponent {
     // Suggestions also need to be provided to the Autosuggest,
     // and they are initially empty because the Autosuggest is closed.
     this.state = {
-      value: '',
+      value: '', // current query
       suggestions: [],
       isLoading: false,
-      currentQuery:''
     };
 
     this.lastRequestId = null;
@@ -64,26 +63,18 @@ class KgSearchBox extends React.PureComponent {
 
   onChange = (event, { newValue, method }) => {
     // console.log('onChange', event, newValue, method);
-    this.setState({currentQuery : newValue});
-    if (method === 'enter') {
-      console.log(newValue);
-    }
-    this.setState({
-      value: newValue,
-    });
+    this.setState({ value: newValue });
   };
 
   // Autosuggest will call this function every time you need to update suggestions.
   // You already implemented this logic above, so just use it.
-  onSuggestionsFetchRequested = ({ value, reason}) => {
+  onSuggestionsFetchRequested = ({ value, reason }) => {
     // Cancel the previous request
     if (this.lastRequestId !== null) {
       clearTimeout(this.lastRequestId);
     }
 
-    this.setState({
-      isLoading: true,
-    });
+    this.setState({ isLoading: true });
 
     // 延时200毫秒再去请求服务器。
     this.lastRequestId = setTimeout(() => {
@@ -141,32 +132,33 @@ class KgSearchBox extends React.PureComponent {
     });
   };
 
-  handleSearch = () => {
-    // 这个不好
-    const kgs = document.getElementsByClassName('kgsuggest');
-    const data = {};
-    if (kgs && kgs.length > 0) {
-      data.query = kgs[0].firstChild.firstChild.value;
-    }
-    // const data = {
-    //   query: ReactDOM.findDOMNode('.findDOMNode').value,
-    // };
-    if (this.props.select) {
-      data.field = this.state.selectValue;
-    }
-    if (this.props.onSearch) this.props.onSearch(data);
-  };
+  // handleSearch = () => {
+  //   // 这个不好
+  //   const kgs = document.getElementsByClassName('kgsuggest');
+  //   const data = {};
+  //   if (kgs && kgs.length > 0) {
+  //     data.query = kgs[0].firstChild.firstChild.value;
+  //   }
+  //   // const data = {
+  //   //   query: ReactDOM.findDOMNode('.findDOMNode').value,
+  //   // };
+  //   if (this.props.select) {
+  //     data.field = this.state.selectValue;
+  //   }
+  //   if (this.props.onSearch) this.props.onSearch(data);
+  // };
   // onSuggestionSelected=(event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method })=>{
   //   console.log(method);
   //   if (method==='enter'){
   //     this.props.onSearch({query:suggestionValue});
   //   }
   // };
-  handleSubmit = (event)=>{
+  handleSubmit = (event) => {
     event.preventDefault();
-    this.props.onSearch({query:this.state.currentQuery});
+    if (this.props.onSearch) {
+      this.props.onSearch({ query: this.state.value });
+    }
   };
-
 
   render() {
     const { value, suggestions } = this.state;
@@ -174,7 +166,7 @@ class KgSearchBox extends React.PureComponent {
 
     // Auto suggest will pass through all these props to the input.
     const inputProps = {
-      placeholder: 'Type a query',
+      placeholder: 'Search',
       value, // : keyword || '',
       onChange: this.onChange,
     };
@@ -182,28 +174,28 @@ class KgSearchBox extends React.PureComponent {
     // Finally, render it!
     return (
       <form onSubmit={this.handleSubmit}>
-      <Input.Group
-        compact
-        size={size}
-        className={classnames(styles.search, 'kgsuggest')}
-        style={style}
-      >
-        <Autosuggest
-          id="kgsuggest"
-          suggestions={suggestions}
-          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-          getSuggestionValue={getSuggestionValue}
-          renderSuggestion={renderSuggestion}
-          inputProps={inputProps}
+        <Input.Group
+          compact
           size={size}
-        />
-        <Button
-          size={size}
-          type="primary"
-          onClick={this.handleSearch}
-        >{btnText || '搜索'}</Button>
-      </Input.Group>
+          className={classnames(styles.search, 'kgsuggest')}
+          style={style}
+        >
+          <Autosuggest
+            id="kgsuggest"
+            suggestions={suggestions}
+            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+            getSuggestionValue={getSuggestionValue}
+            renderSuggestion={renderSuggestion}
+            inputProps={inputProps}
+            size={size}
+          />
+          <Button
+            size={size}
+            type="primary"
+            onClick={this.handleSubmit}
+          >{btnText || '搜索'}</Button>
+        </Input.Group>
       </form>
     );
   }

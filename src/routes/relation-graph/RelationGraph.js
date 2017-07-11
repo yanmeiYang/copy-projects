@@ -73,7 +73,7 @@ class RelationGraph extends React.PureComponent {
     this.pglength = 0;
     this.pgshow = true;
 
-    let max = 10;
+    let max = 100;
     const interval = 200;
     setInterval(() => {
       if (max === 0) { // call then
@@ -1152,8 +1152,8 @@ class RelationGraph extends React.PureComponent {
       <div className={styles.vis_container}>
         <div style={{ display: 'flex', 'flex-direction': 'row' }}>
           <h3>{this.props.query}</h3>
-          <div style={{marginLeft:10}}>{describeNodes1} people</div>
-          <div style={{marginLeft:10}}>{describeNodes2} relations</div>
+          <div style={{ marginLeft: 10 }}>{describeNodes1} people</div>
+          <div style={{ marginLeft: 10 }}>{describeNodes2} relations</div>
         </div>
         <div>
           <label>相关操作：</label>

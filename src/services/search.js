@@ -70,7 +70,7 @@ function prepareParameters(query, offset, size, filters, sort) {
         expertBase = filters[k].id;
       } else {
         const newKey = `as_${k.toLowerCase().replace(' ', '_').replace('-', '_')}`;
-        newFilters[newKey] = filters[k].replace(' ', '_');
+        newFilters[newKey] = filters[k];
       }
     });
     data = { ...newFilters, term: query, offset, size, sort };
@@ -86,9 +86,9 @@ function prepareParametersGlobal(query, offset, size, filters, sort) {
       if (k === 'eb') {
         // ignore;
       } else {
-        // const newKey = `as_${k.toLowerCase().replace(' ', '_').replace('-', '_')}`;
+        const newKey = `as_${k.toLowerCase().replace(' ', '_').replace('-', '_')}`;
         // newFilters[newKey] = filters[k].toLowerCase().replace(' ', '_');
-        newFilters[k] = filters[k].replace(' ', '_');// use old key.
+        newFilters[newKey] = filters[k];
       }
     });
     data = { ...newFilters, query, offset, size, sort };

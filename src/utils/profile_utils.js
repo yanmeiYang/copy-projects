@@ -24,7 +24,7 @@ const getAvatar = (src, profileId, size) => {
   // TODO replace session id here.
   const scopeSessionId = 'todo-replace-scope-session-id';
   if (imgSrc.indexOf('static.aminer.org') >= 0) {
-    return `${imgSrc.replace('static.aminer.org', 'am-cdn-s0.b0.upaiyun.com')}!${imgSize}?ran=${scopeSessionId}`;
+    return `${imgSrc.replace('static.aminer.org', 'am-cdn-s0.b0.upaiyun.com')}!${imgSize}`;//?ran=${scopeSessionId}`;
   } else {
     return `${imgSrc}?ran=${scopeSessionId}`;
   }

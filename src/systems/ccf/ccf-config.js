@@ -62,7 +62,15 @@ module.exports = {
 
   PersonList_ShowIndices: ['activityRankingContrib', 'h_index', 'activity'],
   Header_SubTextLogo: 'CCF 专家库',
-
+  Footer_Content: (
+    <div>
+      <img src="/sys/ccf/footer-btm.png" alt="footer" />
+      <div>
+        版权所有 中国计算机学会技术支持：AMiner.org<br />
+        网站建议或者意见请发送邮件：suggest@ccf.org.cn
+      </div>
+    </div>
+  ),
 
   // 特殊配置，这里是System的自己的配置
 

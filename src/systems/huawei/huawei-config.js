@@ -60,6 +60,7 @@ module.exports = {
   IndexPage_QuickSearchList: ['Artificial intelligence', 'Robotics', 'Data Mining',
     'Machine Learning', 'Data Modeling', 'Computer vision', 'Networks', 'Natural language processing'],
   Header_SubTextLogo: '知识洞察系统',
+  Footer_Content: '',
 
   // 特殊配置，这里是System的自己的配置
 

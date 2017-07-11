@@ -37,9 +37,12 @@ const defaultSystemConfigs = {
 
   SPECIAL_ExpertMapNoHeader: false,
 
+  //
   // Layout related
+  //
   Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
   Header_SubTextLogo: '子标题',
+  Footer_Content: '',
 
   IndexPage_QuickSearchList: ['人工智能', '机器人', '数据挖掘', '机器学习', '数据建模', '计算机视觉',
     '计算机网络', '网络', '自然语言处理'],

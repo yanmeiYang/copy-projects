@@ -10,6 +10,7 @@ import { KnowledgeGraphSearchHelper } from '../knowledge-graph';
 import { classnames } from '../../utils';
 import ExportPersonBtn from '../../components/person/export-person';
 import RelationGraph from '../relation-graph/RelationGraph';
+import { KgSearchBox } from '../../components/search';
 
 const TabPane = Tabs.TabPane;
 const { CheckableTag } = Tag;
@@ -228,6 +229,12 @@ class Search extends React.PureComponent {
              </div>
              </div>
              */}
+
+            {/*<KgSearchBox*/}
+            {/*size="large"*/}
+            {/*style={{ width: 500, marginBottom: 24 }}*/}
+            {/*onSearch={this.onSearch}*/}
+            {/*/>*/}
 
             {/* Filter */}
             <div className={styles.filterWrap}>

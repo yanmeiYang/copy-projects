@@ -17,7 +17,7 @@ let lastHref;
 const App = ({ children, location, dispatch, app, loading }) => {
   const { user, siderFold, darkTheme, isNavbar, menuPopoverVisible, navOpenKeys, roles } = app;
   const href = window.location.href;
-  const menu = getMenusByUser(user,roles)[0];
+  const menu = getMenusByUser(user, roles)[0];
 
   if (lastHref !== href) {
     NProgress.start();
@@ -105,16 +105,10 @@ const App = ({ children, location, dispatch, app, loading }) => {
         <link rel="icon" href={logo} type="image/x-icon" />
         {iconFontJS && <script src={iconFontJS} />}
         {iconFontCSS && <link rel="stylesheet" href={iconFontCSS} />}
+        
         {href.indexOf('/lab/knowledge-graph-widget') > 0 &&
         <link rel="stylesheet" href="https://cdn.rawgit.com/novus/nvd3/v1.8.1/build/nv.d3.css" />
         }
-
-        {href.indexOf('/KnowledgeGraphPage') > 0 &&
-        <script src="http://code.jquery.com/jquery-1.10.2.min.js" />}
-
-        {href.indexOf('/KnowledgeGraphPage') > 0 &&
-        <script src="http://d3js.org/d3.v3.min.js" />}
-
       </Helmet>
 
       <div className={classnames(styles.layout)}>

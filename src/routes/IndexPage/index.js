@@ -40,8 +40,7 @@ class IndexPage extends React.Component {
 
   render() {
     // const { seminars } = search;
-    const commonSearch = ['人工智能', '机器人', '数据挖掘', '机器学习', '数据建模', '计算机视觉',
-      '计算机网络', '网络', '自然语言处理'];
+    const commonSearch = sysconfig.IndexPage_QuickSearchList;
 
     return (
       <div>
@@ -75,7 +74,7 @@ class IndexPage extends React.Component {
               <Link to="/expert-map">全球人才分布图</Link>
             </div>
             <div className="naviItem">
-              <Link to="/KnowledgeGraphPage">知识图谱</Link>
+              <Link to="/knowledge-graph">知识图谱</Link>
             </div>
             <div className="naviItem">
               2016最具影响力

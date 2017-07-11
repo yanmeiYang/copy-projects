@@ -42,6 +42,7 @@ const defaultSystemConfigs = {
   //
   Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
   Header_SubTextLogo: '子标题',
+  Header_UserPageURL: '', // 用户头像点击之后去的页面.
   Footer_Content: '',
 
   IndexPage_QuickSearchList: ['人工智能', '机器人', '数据挖掘', '机器学习', '数据建模', '计算机视觉',

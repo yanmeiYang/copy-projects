@@ -1,11 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { connect } from 'dva';
 import { Input, Button, Icon } from 'antd';
 import Autosuggest from 'react-autosuggest';
 import styles from './KgSearchBox.less';
 import * as kgService from '../../services/knoledge-graph-service';
+import * as suggestService from '../../services/search-suggest';
 import { classnames } from '../../utils';
 import { sysconfig } from '../../systems';
+
+// TODO 这个文件调用了Service，应该移动到routes里面
 
 // Teach Autosuggest how to calculate suggestions for any given input value.
 const getSuggestions = (value) => {
@@ -38,6 +41,15 @@ const renderSuggestion = (suggestion) => {
   );
 };
 
+const renderSectionTitle = (section) => {
+  return (
+    <div className="title">{section.title}</div>
+  );
+};
+
+const getSectionSuggestions = (section) => {
+  return section.suggestions;
+};
 
 class KgSearchBox extends React.PureComponent {
   constructor() {
@@ -78,22 +90,73 @@ class KgSearchBox extends React.PureComponent {
 
     // 延时200毫秒再去请求服务器。
     this.lastRequestId = setTimeout(() => {
-      kgService.getKGSuggest(value, (result) => {
-        // TODO transfer result json.
-        const suggestion = this.kgDataTransferToSuggest(result);
-        // console.log('suggest matches : ', result, suggestion);
-        this.setState({
-          isLoading: false,
-          suggestions: suggestion,
-        });
+      // TODO first call suggest search function.
+      const suggestPromise = suggestService.suggest(value);
+      suggestPromise.then(
+        (data) => {
+          if (data.data && data.data.topic && data.data.topic.length > 0) {
+            const topics = data.data.topic;
+            const stringTopics = [];
+            topics.map((topic) => {
+              return stringTopics.push(topic.text);
+            });
+            this.makeSuggestion(stringTopics);
+          }
+        },
+        (err) => {
+          console.log('failed', err);
+        },
+      ).catch((error) => {
+        console.error(error);
       });
-    }, 200);
+
+    }, 120);
   };
+
 
   // Autosuggest will call this function every time you need to clear suggestions.
   onSuggestionsClearRequested = () => {
-    console.log('onSuggestionsClearRequested');
+    // console.log('onSuggestionsClearRequested');
     this.setState({ suggestions: [] });
+  };
+
+  makeSuggestion = (stringTopics, selectedTopic) => {
+    const querySuggests = [];
+    stringTopics.map((topic) => {
+      return querySuggests.push({
+        name: topic,
+        zh: topic,
+        type: 'suggest',
+      });
+    });
+
+    // call KG search with first suggested topic.
+    const kgtopic = selectedTopic || stringTopics[0];
+    if (kgtopic) {
+      console.log('search kgsuggest with ', kgtopic);
+      kgService.getKGSuggest(kgtopic, (result) => {
+        // TODO transfer result json.
+        const suggestion = this.kgDataTransferToSuggest(result);
+
+        // TODO combine suggestions.
+        const suggestions = [
+          {
+            title: 'Related Topics:',
+            suggestions: querySuggests,
+          },
+          {
+            title: 'Knowledge Graph Suggestions:',
+            suggestions: suggestion,
+          },
+        ];
+
+        // console.log('suggest matches : ', result, JSON.stringify(suggestions));
+        this.setState({
+          isLoading: false,
+          suggestions,
+        });
+      });
+    }
   };
 
   kgDataTransferToSuggest = (kgData) => {
@@ -160,6 +223,7 @@ class KgSearchBox extends React.PureComponent {
     }
   };
 
+
   render() {
     const { value, suggestions } = this.state;
     const { size, select, selectOptions, selectProps, style, btnText } = this.props;
@@ -183,10 +247,13 @@ class KgSearchBox extends React.PureComponent {
           <Autosuggest
             id="kgsuggest"
             suggestions={suggestions}
+            multiSection
             onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
             onSuggestionsClearRequested={this.onSuggestionsClearRequested}
             getSuggestionValue={getSuggestionValue}
             renderSuggestion={renderSuggestion}
+            renderSectionTitle={renderSectionTitle}
+            getSectionSuggestions={getSectionSuggestions}
             inputProps={inputProps}
             size={size}
           />

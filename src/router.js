@@ -23,6 +23,7 @@ const Routers = function ({ history, app }) {
       getIndexRoute(nextState, cb) {
         require.ensure([], (require) => {
           registerModel(app, require('./models/search'));
+          registerModel(app, require('./models/search-suggest'));
           cb(null, { component: require('./routes/IndexPage') });
         }, 'indexPage');
       },
@@ -42,6 +43,7 @@ const Routers = function ({ history, app }) {
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
               registerModel(app, require('./models/search'));
+              registerModel(app, require('./models/search-suggest'));
               registerModel(app, require('./models/expert-map'));
               cb(null, require('./routes/uniSearch/'));
             }, 'search');
@@ -79,7 +81,7 @@ const Routers = function ({ history, app }) {
               cb(null, require('./routes/seminar/'));
             }, 'seminar');
           },
-        },{
+        }, {
           path: 'seminar-my',
           getComponent(nextState, cb) {
             require.ensure([], require => {

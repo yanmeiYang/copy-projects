@@ -1,47 +1,51 @@
 .header {
-  height: 65px;
-  padding: 0 20px;
-  border-bottom: 1px solid #e9e9e9;
-  background: white;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  a {
-    line-height: 63px;
-  }
+  display: flex; flex-direction: row; justify-content: space-between;
+  height: 65px; padding: 0 20px; border-bottom: 1px solid #e9e9e9; background: white;
+  a { line-height: 63px; }
 }
 
 .logo {
+  flex: 0 auto;
   float: left;
-  height: 45px;
   padding: 10px;
+
   img {
-    height: 45px;
-    display: block; float: left;
+    position: relative;
+    float: left;
+    top: -20px;
+    width: 90px;
   }
+
   div {
     display: block; float: left;
     color: rgb(25, 52, 121);
     font-size: 22px;
-    margin-left: -136px;
+    //margin-left: -13px;
     background-color: white;
     height: 33px;
     line-height: 45px;
-    height:45px;
-    padding-left: 30px;
+    height: 45px;
+    //padding-left: 30px;
     margin-top: 4px;
+    font-family: "Microsoft YaHei";
     //padding-top: 8px;
     //border-bottom-width: 200px;
   }
 }
 
+.searchWrapper {
+  display: flex; flex: 2 auto;
+  padding: 20px 28px 0 28px;
+}
+
 .menu {
   border-bottom: none;
   background: transparent;
-  .hideCreateUser{
+  .hideCreateUser {
     display: none;
   }
 }
+
 .roundedX{
   -webkit-border-radius:50%;
   -moz-border-radius:50%;

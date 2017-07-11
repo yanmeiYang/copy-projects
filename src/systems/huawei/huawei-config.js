@@ -56,9 +56,10 @@ module.exports = {
       name: '美国科学院外国专家',
       nperson: 287,
     },
-
   ],
-
+  IndexPage_QuickSearchList: ['Artificial intelligence', 'Robotics', 'Data Mining',
+    'Machine Learning', 'Data Modeling', 'Computer vision', 'Networks', 'Natural language processing'],
+  Header_SubTextLogo: '知识洞察系统',
 
   // 特殊配置，这里是System的自己的配置
 

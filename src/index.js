@@ -12,6 +12,7 @@ const app = dva({
   }),
   history: browserHistory,
   onError(error) {
+    console.log(error);
     message.error(error.message);
   },
 });
@@ -19,7 +20,7 @@ const app = dva({
 // 2. Model
 app.model(require('./models/app'));
 
-// 3. Router
+// 3. Router ; TODO 根据app不同，这里引入不同的router.
 app.router(require('./router'));
 
 // 4. Start

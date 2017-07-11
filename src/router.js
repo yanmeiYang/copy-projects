@@ -232,6 +232,16 @@ const Routers = function ({ history, app }) {
       },
     },
     {
+      path: '/relation-graph-page',
+      component: App,
+      getIndexRoute(nextState, cb) {
+        require.ensure([], (require) => {
+          // registerModel(app, require('./models/vis/vis-research-interest'));
+          cb(null, { component: require('./routes/relation-graph-page') });
+        }, 'relation-graph');
+      },
+    },
+    {
       path: '/knowledge-graph',
       component: App,
       getIndexRoute(nextState, cb) {

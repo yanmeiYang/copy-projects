@@ -11,10 +11,11 @@ const CurrentSystemConfig = {
   ccf: ccfConfig, // <-- current config files.
   huawei: huaweiConfig,
   alibaba: alibabaConfig,
-}
+};
 
 // 默认配置
 const defaultSystemConfigs = {
+  SYSTEM: config.system,
   PageTitle: 'AminerB',
 
   Language: 'en', // options [cn|en]
@@ -35,6 +36,14 @@ const defaultSystemConfigs = {
   PersonList_PersonLink_NewTab: true,
 
   SPECIAL_ExpertMapNoHeader: false,
+
+  // Layout related
+  Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
+  Header_SubTextLogo: '子标题',
+
+  IndexPage_QuickSearchList: ['人工智能', '机器人', '数据挖掘', '机器学习', '数据建模', '计算机视觉',
+    '计算机网络', '网络', '自然语言处理'],
+
 
   // PersonList_ShowIndices: [], // do not override in-component settings.
 };

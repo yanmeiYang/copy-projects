@@ -11,7 +11,7 @@ export default {
   state: {
     user: {},
     token: LocalStorage.getItem('token'),
-    roles: { admin: false, ccf_user: false, role: '', authority: '' },// TODO parse roles string into this object.
+    roles: { admin: false, ccf_user: false, role: '', authority: '' }, // TODO parse roles string into this object.
     menuPopoverVisible: false,
     siderFold: LocalStorage.getItem(`${prefix}siderFold`) === 'true',
     darkTheme: LocalStorage.getItem(`${prefix}darkTheme`) === 'true',
@@ -36,12 +36,11 @@ export default {
   effects: {
     *getCurrentUserInfo({ payload }, { call, put }) {
       if (LocalStorage.getItem('token')) {
-        console.log(1111111);
         const userMessage = getLocalStorage('user');
         // TODO 每次打开新URL都要访问一次。想办法缓存一下。
         if (userMessage !== '' && userMessage !== null && userMessage !== undefined) {
           console.log('已经登录');
-          yield put({ type: 'alreadyLoggedIn',  user: userMessage.data, roles: userMessage.roles })
+          yield put({ type: 'alreadyLoggedIn', user: userMessage.data, roles: userMessage.roles });
         } else {
           const { data } = yield call(getCurrentUserInfo, parse(payload));
           if (data) {
@@ -87,7 +86,7 @@ export default {
     getCurrentUserInfoSuccess(state, { payload: user }) {
       let roles = { admin: false, ccf_user: false, role: '', authority: '' };
       for (const r of user.role) {
-        if (r==='root'||r === 'ccf_超级管理员') {
+        if (r === 'root' || r === 'ccf_超级管理员') {
           roles.admin = true;
         }
         if (r === 'ccf') {

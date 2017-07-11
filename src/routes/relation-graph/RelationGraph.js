@@ -512,8 +512,8 @@ class RelationGraph extends React.PureComponent {
     _drag = d3.drag().on('start', dragstarted).on('drag', dragged).on('end', dragended);
 
     // $scope.zommed.
-    this.zoomed = () => {
-      console.log('[debug] in zommed, this:', this);
+    this.zoomed =function () {
+      // console.log('[debug] in zommed, this:', this);
       const transform = d3.zoomTransform(this);
       svg.attr('transform', `translate(${transform.x},${transform.y}) scale(${transform.k})`);
       svg.selectAll('line').data(_edges).style('stroke-width', 1 / transform.k);
@@ -1067,6 +1067,9 @@ class RelationGraph extends React.PureComponent {
     this.changeModle2 = (e) => {
       this.currentModle2 = e.target.checked;
       // this.currentModle2 = !this.currentModle2;
+      currentThis.setState({
+        suspension_adjustment: e.target.checked,
+      });
       if (typeof simulation !== 'undefined') {
         if (this.currentModle2 === true) {
           return simulation.stop();

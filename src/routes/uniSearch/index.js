@@ -9,6 +9,7 @@ import { sysconfig } from '../../systems';
 import { KnowledgeGraphSearchHelper } from '../knowledge-graph';
 import { classnames } from '../../utils';
 import ExportPersonBtn from '../../components/person/export-person';
+import RelationGraph from '../relation-graph/RelationGraph';
 
 const TabPane = Tabs.TabPane;
 const { CheckableTag } = Tag;
@@ -210,6 +211,7 @@ class Search extends React.PureComponent {
     this.state.view['relation-view'] = (
       <div>
         {this.state.currentTab}
+        <RelationGraph />
       </div>
     );
 
@@ -340,11 +342,10 @@ class Search extends React.PureComponent {
               tab={<p><i className="fa fa-map-marker fa-fw" aria-hidden="true" /> 地图视图</p>}
               key="map-view"
             >{''}</TabPane>
-
-            {/*<TabPane*/}
-            {/*tab={<p><i className="fa fa-users fa-fw" aria-hidden="true" /> 关系视图</p>}*/}
-            {/*key="relation-view"*/}
-            {/*>{''}</TabPane>*/}
+            <TabPane
+              tab={<p><i className="fa fa-users fa-fw" aria-hidden="true" /> 关系视图</p>}
+              key="relation-view"
+            >{''}</TabPane>
           </Tabs>
         </div>
 

@@ -36,6 +36,7 @@ export default {
   effects: {
     *getCurrentUserInfo({ payload }, { call, put }) {
       if (LocalStorage.getItem('token')) {
+        console.log(1111111);
         const userMessage = getLocalStorage('user');
         // TODO 每次打开新URL都要访问一次。想办法缓存一下。
         if (userMessage !== '' && userMessage !== null && userMessage !== undefined) {
@@ -91,12 +92,12 @@ export default {
         }
         if (r === 'ccf') {
           roles.ccf_user = true;
-          if (r.split('_').length === 2) {
-            roles.role = r.split('_')[1];
-          }
-          if (r.split('_').length === 3) {
-            roles.authority = r.split('_')[2];
-          }
+        }
+        if (r.split('_').length === 2) {
+          roles.role = r.split('_')[1];
+        }
+        if (r.split('_').length === 3) {
+          roles.authority = r.split('_')[2];
         }
       }
       setLocalStorage('user', user, roles);

@@ -11,7 +11,7 @@ import ActivityList from '../../components/seminar/activityList';
 
 const Seminar = ({ app, dispatch, seminar }) => {
   const { results, loading, offset, query, sizePerPage } = seminar;
-  const { token } = app;
+  const { token, user, roles } = app;
 
   function addBao() {
     dispatch(routerRedux.push({
@@ -34,7 +34,7 @@ const Seminar = ({ app, dispatch, seminar }) => {
     <div className="content-inner">
       <div className={styles.top}>
         <SearchSeminar />
-        {token && <Button type="primary" onClick={addBao}>
+        {user.hasOwnProperty('first_name') && <Button type="primary" onClick={addBao}>
           <Icon type="plus"/>&nbsp;发布新活动
         </Button>}
       </div>

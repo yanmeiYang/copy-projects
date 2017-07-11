@@ -208,10 +208,11 @@ class UserList extends React.Component {
               </RadioGroup>
             </div>}
             {region && <div><h5>所属部门：</h5>
-              <RadioGroup size="large" style={{width:'100%'}} onChange={this.selectedAuthorityRegion.bind()} value={selectedAuthority}>
-                <Radio value='ccf_authority_上海' className={styles.twoColumnsShowRadio} >上海</Radio>
-                <Radio value='ccf_authority_北京' className={styles.twoColumnsShowRadio} >北京</Radio>
-                <Radio value='ccf_authority_石家庄' className={styles.twoColumnsShowRadio} >石家庄</Radio>
+              <RadioGroup size="large" style={{ width: '100%' }} onChange={this.selectedAuthorityRegion.bind()}
+                          value={selectedAuthority}>
+                <Radio value='ccf_authority_上海' className={styles.twoColumnsShowRadio}>上海</Radio>
+                <Radio value='ccf_authority_北京' className={styles.twoColumnsShowRadio}>北京</Radio>
+                <Radio value='ccf_authority_石家庄' className={styles.twoColumnsShowRadio}>石家庄</Radio>
               </RadioGroup>
             </div>}
           </div>

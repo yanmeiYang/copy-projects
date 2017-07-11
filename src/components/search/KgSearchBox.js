@@ -52,6 +52,7 @@ class KgSearchBox extends React.PureComponent {
       value: '',
       suggestions: [],
       isLoading: false,
+      currentQuery:''
     };
 
     this.lastRequestId = null;
@@ -63,6 +64,7 @@ class KgSearchBox extends React.PureComponent {
 
   onChange = (event, { newValue, method }) => {
     // console.log('onChange', event, newValue, method);
+    this.setState({currentQuery : newValue});
     if (method === 'enter') {
       console.log(newValue);
     }
@@ -73,7 +75,7 @@ class KgSearchBox extends React.PureComponent {
 
   // Autosuggest will call this function every time you need to update suggestions.
   // You already implemented this logic above, so just use it.
-  onSuggestionsFetchRequested = ({ value }) => {
+  onSuggestionsFetchRequested = ({ value, reason}) => {
     // Cancel the previous request
     if (this.lastRequestId !== null) {
       clearTimeout(this.lastRequestId);
@@ -154,6 +156,17 @@ class KgSearchBox extends React.PureComponent {
     }
     if (this.props.onSearch) this.props.onSearch(data);
   };
+  // onSuggestionSelected=(event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method })=>{
+  //   console.log(method);
+  //   if (method==='enter'){
+  //     this.props.onSearch({query:suggestionValue});
+  //   }
+  // };
+  handleSubmit = (event)=>{
+    event.preventDefault();
+    this.props.onSearch({query:this.state.currentQuery});
+  };
+
 
   render() {
     const { value, suggestions } = this.state;
@@ -168,6 +181,7 @@ class KgSearchBox extends React.PureComponent {
 
     // Finally, render it!
     return (
+      <form onSubmit={this.handleSubmit}>
       <Input.Group
         compact
         size={size}
@@ -190,6 +204,7 @@ class KgSearchBox extends React.PureComponent {
           onClick={this.handleSearch}
         >{btnText || '搜索'}</Button>
       </Input.Group>
+      </form>
     );
   }
 }

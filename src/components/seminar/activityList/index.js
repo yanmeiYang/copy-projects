@@ -15,14 +15,9 @@ class ActivityList extends React.Component {
   };
 
   goToRating = (id) => {
-    if (this.props.app.roles.admin) {
-      this.props.dispatch(routerRedux.push({
-        pathname: `/seminar/expert-rating/${id}`,
-      }))
-    } else {
-      this.goToDetail(id)
-    }
-
+    this.props.dispatch(routerRedux.push({
+      pathname: `/seminar/expert-rating/${id}`,
+    }))
   };
 
   render() {
@@ -39,12 +34,13 @@ class ActivityList extends React.Component {
         </div>
         <div className={styles.con}>
           <h3>
-            <a href='javascript:void(0)' onClick={this.goToRating.bind(this, result.id)}>
+            <a href='javascript:void(0)' onClick={this.goToDetail.bind(this, result.id)}>
               {result.title}
             </a>
           </h3>
+          {this.props.app.roles.admin &&
           <Button type='' className={styles.viewTheActivityBtn} size='small'
-                  onClick={this.goToDetail.bind(this, result.id)}>查看活动</Button>
+                  onClick={this.goToRating.bind(this, result.id)}>专家评分</Button>}
           <div className={styles.info}>
             <p>
               <span className={styles.type}>

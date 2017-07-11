@@ -102,9 +102,9 @@ export default {
     *deleteActivity({ payload }, { call, put }){
       const { id, body } = payload;
       const { data } = yield call(seminarService.deleteActivity, id, body);
-      if (data.status) {
-        yield put(routerRedux.push('/seminar'));
-      }
+      // if (data.status) {
+      //   yield put(routerRedux.push('/seminar'));
+      // }
     },
     *getCommentFromActivity({ payload }, { call, put }){
       const { id, offset, size } = payload;

@@ -50,13 +50,13 @@ const Header = ({ app, location, logout }) => {
         {/*}*/}
         {!app.user.hasOwnProperty('first_name') &&
         <Menu.Item key="/login">
-          <Link to="/login"><Icon type="login"/></Link>
+          <Link to={`/login?from=${location.pathname}`}><Icon type="login"/></Link>
         </Menu.Item>
         }
 
         {app.user.hasOwnProperty('first_name') &&
         <Menu.Item key="/account">
-          <Link to={`/person/${app.user.profile}`} title={app.user.display_name}>
+          <Link to='/seminar-my' title={app.user.display_name}>
 
             <img src={profileUtils.getAvatar(app.user.avatar, app.user.id, 30)}  className={styles.roundedX}
                  style={{ marginTop: 5, width: 30, height: 30, verticalAlign: 'middle' }}/>

@@ -79,6 +79,14 @@ const Routers = function ({ history, app }) {
               cb(null, require('./routes/seminar/'));
             }, 'seminar');
           },
+        },{
+          path: 'seminar-my',
+          getComponent(nextState, cb) {
+            require.ensure([], require => {
+              registerModel(app, require('./models/seminar'));
+              cb(null, require('./routes/seminar/mySeminars/'));
+            }, 'mySeminar');
+          },
         },
         {
           path: 'seminarpost',

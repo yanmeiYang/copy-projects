@@ -23,8 +23,8 @@ function Header({ app, search, location, dispatch, logout, onSearch }) {
   return (
     <div className={styles.header}>
 
-      <Link className={sysconfig.SYSTEM==='ccf'?styles.logo_ccf:styles.logo} to="/">
-        <img alt={'logo'} src={`/sys/${sysconfig.SYSTEM}/header_logo.png`} />
+      <Link className={styles.logo} to="/">
+        <img alt={'logo'} src={`/sys/${sysconfig.SYSTEM}/header_logo.png`} style={sysconfig.Header_LogoStyle} />
         {/* TODO Move config out of this place */}
         <div>{sysconfig.Header_SubTextLogo}</div>
       </Link>

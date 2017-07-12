@@ -264,6 +264,15 @@ const Routers = function ({ history, app }) {
       },
     },
     {
+      path: '/forgotpassword',
+      getComponent(nextState, cb) {
+        require.ensure([], (require) => {
+          registerModel(app, require('./models/auth/auth'));
+          cb(null, require('./routes/admin/forgot-password/'));
+        }, 'forgotpassword');
+      },
+    },
+    {
       path: '*',
       getComponent(nextState, cb) {
         require.ensure([], (require) => {

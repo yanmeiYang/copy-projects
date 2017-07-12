@@ -16,6 +16,9 @@ function hasErrors(fieldsError) {
 }
 
 class UniversalConfig extends React.Component {
+  state = {
+    editCurrentData: {},
+  };
 
   componentDidMount() {
     // To disabled submit button at the beginning.
@@ -34,6 +37,7 @@ class UniversalConfig extends React.Component {
     const data = e.target && e.target.getAttribute('data');
     const json = JSON.parse(data);
     this.props.form.setFieldsValue(json);
+    this.setState({ editCurrentData: json })
   };
 
   handleSubmit = (e) => {
@@ -42,6 +46,14 @@ class UniversalConfig extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        //删除修改之前的key
+        if (this.state.editCurrentData.key!==undefined&&(this.state.editCurrentData.key!==values.key||this.state.editCurrentData.value!==values.value)){
+          const key = this.state.editCurrentData.key;
+          this.props.dispatch({
+            type: 'universalConfig/deleteByKey',
+            payload: { category: this.props.universalConfig.category, key },
+          });
+        }
         this.props.dispatch({
           type: 'universalConfig/addKeyAndValue',
           payload: {

@@ -9,6 +9,8 @@ import * as d3 from '../../../public/d3/d3.min';
 
 const Option = Select.Option;
 const controlDivId = 'rgvis';
+const EgoHeight = 800;
+const EgoWidth = document.body.scrollWidth-188-24*2;
 
 /*
  * @params: lang: [en|cn]
@@ -111,8 +113,8 @@ class RelationGraph extends React.PureComponent {
     let _drag;
 
     const vm = this.state.vm;
-    const width = 800;
-    const height = 600;
+    const width = EgoWidth;
+    const height = EgoHeight;
     let _nodes = [];
     let _edges = [];
     const _onclicknodes = [];
@@ -527,10 +529,10 @@ class RelationGraph extends React.PureComponent {
       return svg.selectAll('text').data(_nodes).style('font-size', `${15 / transform.k}px`);
     };
 
-    const tempzoom = d3.zoom().scaleExtent([1, 2]).on('zoom', this.zoomed);
+    const tempzoom = d3.zoom().scaleExtent([1, 10]).on('zoom', this.zoomed);
     svg = d3.select(`#${controlDivId}`).append('svg')
-      .style('width', '850px')
-      .style('height', '600px')
+      .style('width', width)
+      .style('height', height)
       .attr('class', 'jumbotron')
       .attr('bottom', '0px')
       .style('padding', '2px 2px 2px 2px')
@@ -863,7 +865,7 @@ class RelationGraph extends React.PureComponent {
         });
         simulation = d3.forceSimulation(_nodes).velocityDecay(0.3).force('charge', d3.forceManyBody().strength((d) => {
           return d.count;
-        })).force('link', setlink).force('gravity', d3.forceCollide(6).strength(0.6)).alpha(0.2).force('center', d3.forceCenter(width / 2, height / 2));
+        })).force('link', setlink).force('gravity', d3.forceCollide(height/100+5).strength(0.6)).alpha(0.2).force('center', d3.forceCenter(width / 2, height / 2));
         _saveRootAdges = [];
         _edges.forEach((f) => {
           if (f.target.index < snum) {
@@ -1171,7 +1173,7 @@ class RelationGraph extends React.PureComponent {
             })}
           </Select>
         </div>
-        <div id="rgvis"></div>
+        <div id="rgvis" style={{backgroundColor:'#eee', width:EgoWidth, height:EgoHeight}}></div>
       </div>
     );
   }

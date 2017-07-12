@@ -5,6 +5,7 @@ import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import { Button, Icon, Spin } from 'antd';
+import { config } from '../../utils';
 import styles from './index.less';
 import SearchSeminar from './search-seminar'
 import ActivityList from '../../components/seminar/activityList';
@@ -24,7 +25,7 @@ const Seminar = ({ app, dispatch, seminar }) => {
       let params = { query: query, offset: offset, size: sizePerPage };
       dispatch({ type: 'seminar/searchActivity', payload: params });
     } else {
-      let params = { offset: offset, size: sizePerPage, filter: { src: 'ccf' } };
+      let params = { offset: offset, size: sizePerPage, filter: { src: config.source } };
       dispatch({ type: 'seminar/getSeminar', payload: params });
     }
 

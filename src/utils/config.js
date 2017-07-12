@@ -4,8 +4,8 @@
 
 module.exports = {
 
-  system: 'huawei', // 默认启动这是哪套系统，启动的时候传入app，之后会在APP里面重新设置。
-  source: 'huawei', // AppID, Used in UniversalConfig.
+  system: 'ccf', // 默认启动这是哪套系统，启动的时候传入app，之后会在APP里面重新设置。
+  source: 'ccf', // AppID, Used in UniversalConfig.
 
   // system: 'alibaba',
   // source: 'alibaba',

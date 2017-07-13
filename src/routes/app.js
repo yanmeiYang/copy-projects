@@ -115,6 +115,12 @@ const App = ({ children, location, dispatch, app, loading }) => {
         {href.indexOf('/KnowledgeGraphPage') > 0 &&
         <script src="http://d3js.org/d3.v3.min.js" />}
 
+        {href.indexOf('/expert-map')>0 &&
+        <script src="../../expertmap/googlemap/markerclusterer.js"></script>}
+
+        {href.indexOf('/expert-map')>0 &&
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnNB6SXL5JJ0NU8j-Ay8pnnmRC50vsrtw" async defer></script>}
+
       </Helmet>
 
       <div className={classnames(styles.layout)}>

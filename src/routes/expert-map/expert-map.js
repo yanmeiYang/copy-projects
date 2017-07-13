@@ -208,7 +208,7 @@ function clusterdetail(id){
             + personInfo.indices.num_pubs + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Citation:  </strong>"
             + personInfo.indices.num_citation + "<br /><i class='fa fa-mortar-board' style='width: 20px;'> </i>"
             + pos + "<br /><i class='fa fa-institution' style='width: 20px;'> </i>" +aff + "";
-          document.getElementById("flowinfo").innerHTML="<div style='border:1px solid red;margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;'>"+thisinfo+"</div>";
+          document.getElementById("flowinfo").innerHTML="<div style='border:1px solid red;margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;word-wrap: break-word;word-break:break-all;'>"+thisinfo+"</div>";
         },
         () => {
           console.log('failed');
@@ -234,9 +234,10 @@ function clusterdetail(id){
             location=location+","+x;
           }
           avgHindex=avgHindex/p.length;
+          avgHindex=avgHindex.toFixed(2);//保留两位小数
           thisinfo="<div id='author_info' style='width: 350px;height: 120px;'>"+"<strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"+avgHindex
             +"<br />countries:"+location+"</div>";
-          document.getElementById("flowinfo").innerHTML="<div style='border:1px solid red;margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;'>"+thisinfo+"</div>";
+          document.getElementById("flowinfo").innerHTML="<div style='border:1px solid red;margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;word-wrap: break-word;word-break:break-all;'>"+thisinfo+"</div>";
         },
         () => {
           console.log('failed');
@@ -286,16 +287,13 @@ class ExpertMap extends React.Component {
       this.callSearchMap(nextProps.query);
     }
     if (nextProps.expertMap.geoData !== this.props.expertMap.geoData) {
-      //console.log('>>>> ', nextProps.expertMap.geoData);
       var typeid=0;
       this.showmap(nextProps.expertMap.geoData,typeid);
-      this.showgooglemap(nextProps.expertMap.geoData,typeid);
     }
     return true;
   }
 
   callSearchMap(query, callback) {
-    //console.log('MAP::: searchMap:', query);
     this.props.dispatch({ type: 'expertMap/searchMap', payload: { query } });
   }
 
@@ -610,38 +608,10 @@ class ExpertMap extends React.Component {
       this.showmap(mapData,typeid);
     }
   }
-//Google Maps------------------------------------------------------------------------------------------------------------
-  showgooglemap = (place,type) => {
-    var map;
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: 24.397, lng: 140.644},
-      zoom: 3
-    });
-    // Create an array of alphabetical characters used to label the markers.
-    var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-    var locations=[];
-    for (var i = 0; i < place.results.length; i++) {
-      var onepoint={lat:place.results[i].location.lat,lng:place.results[i].location.lng}
-      locations[i]=onepoint;
- /*     console.log(place.results[i].location.lat+" "+place.results[i].location.lng)
-      var latLng = new google.maps.LatLng(place.results[i].location.lat,place.results[i].location.lng);
-      var marker = new google.maps.Marker({
-        position: latLng,
-        map: map
-      });*/
-    }
-
-    var markers = locations.map(function(location, i) {
-      return new google.maps.Marker({
-        position: location,
-        label: labels[i % labels.length]
-      });
-    });
-
-    // Add a marker clusterer to manage the markers.
-    var markerCluster = new MarkerClusterer(map, markers,{imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-
+  goto=()=>{
+    var href=window.location.href;
+    window.location.href=href.replace("expert-map","expert-googlemap");
   }
 
 //page-------------------------------------------------------------------------------------------------------------------
@@ -661,6 +631,9 @@ class ExpertMap extends React.Component {
               <Button onClick={this.showtype} value="4">城市</Button>
               <Button onClick={this.showtype} value="5">机构</Button>
             </ButtonGroup>
+            <div className={styles.switch}>
+              <Button  type="primary" onClick={this.goto}>Go To：Google Map</Button>
+            </div>
           </div>
         </div>
         <div className="mapshow">
@@ -668,7 +641,6 @@ class ExpertMap extends React.Component {
           <div className="em_report" id="em_report">
             统计/报表
           </div>
-          <div id="map" style={{ width: '100%', height: '800px' }} ></div>
           <input id="currentId" type="hidden" />
           <input id="currentIds" type="hidden" />
           <input id="statistic" type="hidden" value="0" />
@@ -679,9 +651,9 @@ class ExpertMap extends React.Component {
   }
 }
 
-//百度插件------------------------------------------------------------------------------------------------------------------------------
 export default connect(({ expertMap, loading }) => ({ expertMap, loading }))(ExpertMap);
 
+//百度插件------------------------------------------------------------------------------------------------------------------------------
 
 /**
  * @fileoverview MarkerClusterer标记聚合器用来解决加载大量点要素到地图上产生覆盖现象的问题，并提高性能。

@@ -142,8 +142,17 @@ const Routers = function ({ history, app }) {
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
               registerModel(app, require('./models/expert-map'));
-              cb(null, require('./routes/expert-map'));
+              cb(null, require('./routes/expert-map/'));
             }, 'expert-map');
+          },
+        },
+        {
+          path: 'expert-googlemap',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('./models/expert-map'));
+              cb(null, require('./routes/expert-map/'));
+            }, 'expert-googlemap');
           },
         },
         {

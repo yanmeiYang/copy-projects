@@ -216,6 +216,34 @@ function clusterdetail(id){
       ).catch((error) => {
         console.err(error);
       });
+    }else{
+      cids=id.split(",").slice(0, id.split(",").length-1);
+      const resultPromise = listPersonByIds(cids);
+      resultPromise.then(
+        (data) => {
+          var avgHindex=0;
+          var top8="";
+          var location="";
+          var setObj = new Set();
+          var p=data.data.persons;
+          for(var i=0;i<p.length;i++){
+            avgHindex+=p[i].indices.h_index;
+            setObj.add(p[i].attr.nation)
+          }
+          for (var x in setObj) {
+            location=location+","+x;
+          }
+          avgHindex=avgHindex/p.length;
+          thisinfo="<div id='author_info' style='width: 350px;height: 120px;'>"+"<strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"+avgHindex
+            +"<br />countries:"+location+"</div>";
+          document.getElementById("flowinfo").innerHTML="<div style='border:1px solid red;margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;'>"+thisinfo+"</div>";
+        },
+        () => {
+          console.log('failed');
+        },
+      ).catch((error) => {
+        console.err(error);
+      });
     }
   }else{//认为是第二次及其以上点击
     if(state==1){//偶数次点击同一个对象

@@ -105,11 +105,10 @@ const App = ({ children, location, dispatch, app, loading }) => {
         <link rel="icon" href={logo} type="image/x-icon" />
         {iconFontJS && <script src={iconFontJS} />}
         {iconFontCSS && <link rel="stylesheet" href={iconFontCSS} />}
-        
+
         {href.indexOf('/lab/knowledge-graph-widget') > 0 &&
         <link rel="stylesheet" href="https://cdn.rawgit.com/novus/nvd3/v1.8.1/build/nv.d3.css" />
         }
-<<<<<<< HEAD
 
         {href.indexOf('/KnowledgeGraphPage') > 0 &&
         <script src="http://code.jquery.com/jquery-1.10.2.min.js" />}
@@ -123,8 +122,6 @@ const App = ({ children, location, dispatch, app, loading }) => {
         {href.indexOf('/expert-map')>0 &&
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnNB6SXL5JJ0NU8j-Ay8pnnmRC50vsrtw" async defer></script>}
 
-=======
->>>>>>> ea91a3b95b23d0fd3b62eaf766a3ef9f0dcfb522
       </Helmet>
 
       <div className={classnames(styles.layout)}>

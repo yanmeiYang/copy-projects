@@ -9,6 +9,8 @@ import { sysconfig } from '../../systems';
 import { KnowledgeGraphSearchHelper } from '../knowledge-graph';
 import { classnames } from '../../utils';
 import ExportPersonBtn from '../../components/person/export-person';
+import RelationGraph from '../relation-graph/RelationGraph';
+import { KgSearchBox } from '../../components/search';
 
 const TabPane = Tabs.TabPane;
 const { CheckableTag } = Tag;
@@ -209,7 +211,7 @@ class Search extends React.PureComponent {
 
     this.state.view['relation-view'] = (
       <div>
-        {this.state.currentTab}
+        <RelationGraph query={this.props.search.query}/>
       </div>
     );
 
@@ -227,6 +229,12 @@ class Search extends React.PureComponent {
              </div>
              </div>
              */}
+
+            {/*<KgSearchBox*/}
+            {/*size="large"*/}
+            {/*style={{ width: 500, marginBottom: 24 }}*/}
+            {/*onSearch={this.onSearch}*/}
+            {/*/>*/}
 
             {/* Filter */}
             <div className={styles.filterWrap}>
@@ -340,11 +348,10 @@ class Search extends React.PureComponent {
               tab={<p><i className="fa fa-map-marker fa-fw" aria-hidden="true" /> 地图视图</p>}
               key="map-view"
             >{''}</TabPane>
-
-            {/*<TabPane*/}
-            {/*tab={<p><i className="fa fa-users fa-fw" aria-hidden="true" /> 关系视图</p>}*/}
-            {/*key="relation-view"*/}
-            {/*>{''}</TabPane>*/}
+            <TabPane
+              tab={<p><i className="fa fa-users fa-fw" aria-hidden="true" /> 关系视图</p>}
+              key="relation-view"
+            >{''}</TabPane>
           </Tabs>
         </div>
 

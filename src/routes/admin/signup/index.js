@@ -266,7 +266,7 @@ class Registered extends React.Component {
         </FormItem>
         <FormItem {...tailFormItemLayout}>
           <Button type='primary' onClick={this.registered}>
-            创建
+            创建用户
           </Button>
         </FormItem>
 

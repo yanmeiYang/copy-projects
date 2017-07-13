@@ -12,6 +12,11 @@ module.exports = {
 
   ExpertBases: [
     {
+      id: 'aminer',
+      name: <span><i className="fa fa-globe fa-fw" />ALL</span>,
+      nperson: 2871,
+    },
+    {
       id: '595208bd9ed5dbf9cd563c60',
       name: 'IEEE Fellow(2013)',
       nperson: 12,
@@ -51,13 +56,13 @@ module.exports = {
       name: '美国科学院外国专家',
       nperson: 287,
     },
-    {
-      id: 'aminer',
-      name: <span><i className="fa fa-globe fa-fw" />全球专家</span>,
-      nperson: 2871,
-    },
   ],
-
+  IndexPage_QuickSearchList: ['Artificial intelligence', 'Robotics', 'Data Mining',
+    'Machine Learning', 'Data Modeling', 'Computer vision', 'Networks', 'Natural language processing'],
+  Header_SubTextLogo: '知识洞察系统',
+  Header_LogoStyle:{top: '-20px',width: '90px',},
+  Header_UserPageURL: '',
+  Footer_Content: '',
 
   // 特殊配置，这里是System的自己的配置
 

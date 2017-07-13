@@ -1,11 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { connect } from 'dva';
 import { Input, Button, Icon } from 'antd';
 import Autosuggest from 'react-autosuggest';
 import styles from './KgSearchBox.less';
 import * as kgService from '../../services/knoledge-graph-service';
+import * as suggestService from '../../services/search-suggest';
 import { classnames } from '../../utils';
 import { sysconfig } from '../../systems';
+
+// TODO 这个文件调用了Service，应该移动到routes里面
 
 // Teach Autosuggest how to calculate suggestions for any given input value.
 const getSuggestions = (value) => {
@@ -38,6 +41,15 @@ const renderSuggestion = (suggestion) => {
   );
 };
 
+const renderSectionTitle = (section) => {
+  return (
+    <div className="title">{section.title}</div>
+  );
+};
+
+const getSectionSuggestions = (section) => {
+  return section.suggestions;
+};
 
 class KgSearchBox extends React.PureComponent {
   constructor() {
@@ -49,7 +61,7 @@ class KgSearchBox extends React.PureComponent {
     // Suggestions also need to be provided to the Autosuggest,
     // and they are initially empty because the Autosuggest is closed.
     this.state = {
-      value: '',
+      value: '', // current query
       suggestions: [],
       isLoading: false,
     };
@@ -63,44 +75,88 @@ class KgSearchBox extends React.PureComponent {
 
   onChange = (event, { newValue, method }) => {
     // console.log('onChange', event, newValue, method);
-    if (method === 'enter') {
-      console.log(newValue);
-    }
-    this.setState({
-      value: newValue,
-    });
+    this.setState({ value: newValue });
   };
 
   // Autosuggest will call this function every time you need to update suggestions.
   // You already implemented this logic above, so just use it.
-  onSuggestionsFetchRequested = ({ value }) => {
+  onSuggestionsFetchRequested = ({ value, reason }) => {
     // Cancel the previous request
     if (this.lastRequestId !== null) {
       clearTimeout(this.lastRequestId);
     }
 
-    this.setState({
-      isLoading: true,
-    });
+    this.setState({ isLoading: true });
 
     // 延时200毫秒再去请求服务器。
     this.lastRequestId = setTimeout(() => {
-      kgService.getKGSuggest(value, (result) => {
-        // TODO transfer result json.
-        const suggestion = this.kgDataTransferToSuggest(result);
-        // console.log('suggest matches : ', result, suggestion);
-        this.setState({
-          isLoading: false,
-          suggestions: suggestion,
-        });
+      // TODO first call suggest search function.
+      const suggestPromise = suggestService.suggest(value);
+      suggestPromise.then(
+        (data) => {
+          if (data.data && data.data.topic && data.data.topic.length > 0) {
+            const topics = data.data.topic;
+            const stringTopics = [];
+            topics.map((topic) => {
+              return stringTopics.push(topic.text);
+            });
+            this.makeSuggestion(stringTopics);
+          }
+        },
+        (err) => {
+          console.log('failed', err);
+        },
+      ).catch((error) => {
+        console.error(error);
       });
-    }, 200);
+
+    }, 120);
   };
+
 
   // Autosuggest will call this function every time you need to clear suggestions.
   onSuggestionsClearRequested = () => {
-    console.log('onSuggestionsClearRequested');
+    // console.log('onSuggestionsClearRequested');
     this.setState({ suggestions: [] });
+  };
+
+  makeSuggestion = (stringTopics, selectedTopic) => {
+    const querySuggests = [];
+    stringTopics.map((topic) => {
+      return querySuggests.push({
+        name: topic,
+        zh: topic,
+        type: 'suggest',
+      });
+    });
+
+    // call KG search with first suggested topic.
+    const kgtopic = selectedTopic || stringTopics[0];
+    if (kgtopic) {
+      console.log('search kgsuggest with ', kgtopic);
+      kgService.getKGSuggest(kgtopic, (result) => {
+        // TODO transfer result json.
+        const suggestion = this.kgDataTransferToSuggest(result);
+
+        // TODO combine suggestions.
+        const suggestions = [
+          {
+            title: 'Related Topics:',
+            suggestions: querySuggests,
+          },
+          {
+            title: 'Knowledge Graph Suggestions:',
+            suggestions: suggestion,
+          },
+        ];
+
+        // console.log('suggest matches : ', result, JSON.stringify(suggestions));
+        this.setState({
+          isLoading: false,
+          suggestions,
+        });
+      });
+    }
   };
 
   kgDataTransferToSuggest = (kgData) => {
@@ -139,21 +195,34 @@ class KgSearchBox extends React.PureComponent {
     });
   };
 
-  handleSearch = () => {
-    // 这个不好
-    const kgs = document.getElementsByClassName('kgsuggest');
-    const data = {};
-    if (kgs && kgs.length > 0) {
-      data.query = kgs[0].firstChild.firstChild.value;
+  // handleSearch = () => {
+  //   // 这个不好
+  //   const kgs = document.getElementsByClassName('kgsuggest');
+  //   const data = {};
+  //   if (kgs && kgs.length > 0) {
+  //     data.query = kgs[0].firstChild.firstChild.value;
+  //   }
+  //   // const data = {
+  //   //   query: ReactDOM.findDOMNode('.findDOMNode').value,
+  //   // };
+  //   if (this.props.select) {
+  //     data.field = this.state.selectValue;
+  //   }
+  //   if (this.props.onSearch) this.props.onSearch(data);
+  // };
+  // onSuggestionSelected=(event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method })=>{
+  //   console.log(method);
+  //   if (method==='enter'){
+  //     this.props.onSearch({query:suggestionValue});
+  //   }
+  // };
+  handleSubmit = (event) => {
+    event.preventDefault();
+    if (this.props.onSearch) {
+      this.props.onSearch({ query: this.state.value });
     }
-    // const data = {
-    //   query: ReactDOM.findDOMNode('.findDOMNode').value,
-    // };
-    if (this.props.select) {
-      data.field = this.state.selectValue;
-    }
-    if (this.props.onSearch) this.props.onSearch(data);
   };
+
 
   render() {
     const { value, suggestions } = this.state;
@@ -161,35 +230,40 @@ class KgSearchBox extends React.PureComponent {
 
     // Auto suggest will pass through all these props to the input.
     const inputProps = {
-      placeholder: 'Type a query',
+      placeholder: 'Search',
       value, // : keyword || '',
       onChange: this.onChange,
     };
 
     // Finally, render it!
     return (
-      <Input.Group
-        compact
-        size={size}
-        className={classnames(styles.search, 'kgsuggest')}
-        style={style}
-      >
-        <Autosuggest
-          id="kgsuggest"
-          suggestions={suggestions}
-          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-          getSuggestionValue={getSuggestionValue}
-          renderSuggestion={renderSuggestion}
-          inputProps={inputProps}
+      <form onSubmit={this.handleSubmit}>
+        <Input.Group
+          compact
           size={size}
-        />
-        <Button
-          size={size}
-          type="primary"
-          onClick={this.handleSearch}
-        >{btnText || '搜索'}</Button>
-      </Input.Group>
+          className={classnames(styles.search, 'kgsuggest')}
+          style={style}
+        >
+          <Autosuggest
+            id="kgsuggest"
+            suggestions={suggestions}
+            multiSection
+            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+            getSuggestionValue={getSuggestionValue}
+            renderSuggestion={renderSuggestion}
+            renderSectionTitle={renderSectionTitle}
+            getSectionSuggestions={getSectionSuggestions}
+            inputProps={inputProps}
+            size={size}
+          />
+          <Button
+            size={size}
+            type="primary"
+            onClick={this.handleSubmit}
+          >{btnText || '搜索'}</Button>
+        </Input.Group>
+      </form>
     );
   }
 }

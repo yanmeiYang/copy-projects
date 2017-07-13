@@ -5,7 +5,10 @@ import { Helmet } from 'react-helmet';
 
 import styles from './index.less';
 import { Layout } from '../../components';
+import { sysconfig } from '../../systems';
 import { classnames, config, menu } from '../../utils';
+
+import leftLogo from '../../assets/login/left-logo.png';
 
 const { Header, Footer, Sider } = Layout;
 const FormItem = Form.Item;
@@ -33,7 +36,7 @@ const Login = ({
   const headerProps = { location };
 
   const children = (
-    <div className={styles.form} style={{ top: 528 }}>
+    <div className={styles.form}>
       {/*<div className={styles.logo}>*/}
       {/*<img alt={'logo'} src={config.logo} />*/}
       {/*<span>{config.name}</span>*/}
@@ -55,15 +58,16 @@ const Login = ({
                 required: true,
               },
             ],
-          })(<Input size="large" type="password" onPressEnter={handleOk} placeholder="Password" />)}
+          })(<Input size="large" type="password" onPressEnter={handleOk}
+                    placeholder="Password" />)}
         </FormItem>
         <Row>
           <Button type="primary" size="large" onClick={handleOk} loading={loginLoading}>
-            Sign in
+            登录
           </Button>
           <p>
-            <span>Username：guest</span>
-            <span>Password：guest</span>
+            {/*<span>Username：guest</span>*/}
+            {/*<span>Password：guest</span>*/}
           </p>
         </Row>
 
@@ -76,7 +80,7 @@ const Login = ({
   return (
     <div>
       <Helmet>
-        <title>CCF 专家库</title>
+        <title>{sysconfig.PageTitle}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href={logo} type="image/x-icon" />
         {iconFontJS && <script src={iconFontJS} />}
@@ -87,7 +91,8 @@ const Login = ({
         <div className={styles.main}>
           <div className={styles.container}>
             <div className={styles.content}>
-              <img src="/big_banner2.png" style={{ height: 250, width: '100%' }} />
+              <img src={leftLogo} />
+              <div className="space">{/*{}*/}</div>
               {/*<Bread {...breadProps} location={location} />*/}
               {children}
             </div>

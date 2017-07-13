@@ -3,8 +3,8 @@
  */
 import React from 'react';
 import { connect } from 'dva';
+import { routerRedux } from 'dva/router';
 import { Tabs, Button, Icon, Row, Col, Rate, Input, Spin } from 'antd';
-import { Link } from 'dva/router';
 import TimeFormat from './time-format';
 import ExpertRating from './expert-rating';
 import WorkShop from './workshop';
@@ -23,7 +23,8 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
   }
 
   function delSeminar() {
-    dispatch({ type: 'seminar/deleteActivity', payload: { id: summaryById.id, body: summaryById } })
+    dispatch({ type: 'seminar/deleteActivity', payload: { id: summaryById.id, body: summaryById } });
+    dispatch(routerRedux.push('/seminar'));
   }
   return (
     <div className={styles.detailSeminar}>
@@ -31,7 +32,7 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
       {typeof(summaryById.length)!=='number'?<Row>
         <Col md={24} lg={{ span: 16, offset: 4 }} className={styles.thumbnail}>
           <div className={styles.caption}>
-            {summaryById.uid === currentUser.user.id && currentUser.token &&
+            {(app.roles.authority.indexOf(summaryById.organizer[0])>=0 || app.roles.admin)&& currentUser.token &&
             <Button type='danger' icon='delete' style={{ float: 'right' }} onClick={delSeminar}>删除</Button>}
             <h4 className=''>
               <strong>

@@ -57,7 +57,24 @@ module.exports = {
   PersonList_PersonLink: personId => `/person/${personId}`,
   PersonList_PersonLink_NewTab: false,
 
+  IndexPage_QuickSearchList: ['人工智能', '机器人', '数据挖掘', '机器学习', '数据建模', '计算机视觉',
+    '计算机网络', '网络', '自然语言处理'],
+
   PersonList_ShowIndices: ['activityRankingContrib', 'h_index', 'activity'],
+  Header_SubTextLogo: 'CCF 专家库',
+  Header_LogoStyle: {width: '50%', lineHeight: '45px', height: '45px'},
+  Header_UserPageURL: '/seminar-my',
+  Footer_Content: (
+    <div>
+      <img src="/sys/ccf/footer-btm.png" alt="footer" />
+      <div>
+        版权所有 中国计算机学会技术支持：AMiner.org<br />
+        网站建议或者意见请发送邮件：suggest@ccf.org.cn
+      </div>
+    </div>
+  ),
+
+  // 特殊配置，这里是System的自己的配置
 
   CCF_activityTypes: ['专委活动', 'CNCC', 'ADL78', 'CCF@U100(走进高校)', 'YOCSEF', '论坛', '报告会', 'NOI讲座', '分部活动', '精英大会', '女性大会', 'TF',],
 
@@ -91,8 +108,6 @@ module.exports = {
       desc: 'CCF 活动的类型。',
     },
   ],
-
-  // 特殊配置，这里是System的自己的配置
 
 
 };

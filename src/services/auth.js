@@ -52,3 +52,10 @@ export async function listUsersByRole(role, offset, size) {
     method: 'GET'
   })
 }
+
+export async function forgot(params) {
+  return request(api.forgot,{
+    method: 'POST',
+    body: JSON.stringify(params)
+  })
+}

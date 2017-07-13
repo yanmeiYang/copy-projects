@@ -3,6 +3,7 @@
  */
 import { routerRedux } from 'dva/router';
 import pathToRegexp from 'path-to-regexp'
+import { config } from '../utils';
 import * as seminarService from '../services/seminar';
 import * as uconfigService from '../services/universal-config';
 
@@ -29,7 +30,7 @@ export default {
     setup({ dispatch, history }){
       history.listen((location) => {
         if (location.pathname === '/seminar') {
-          dispatch({ type: 'getSeminar', payload: { offset: 0, size: 20, filter: { src: 'ccf' } } });
+          dispatch({ type: 'getSeminar', payload: { offset: 0, size: 20, filter: { src: config.source } } });
         }
         if (location.pathname === '/seminarpost') {
           dispatch({ type: 'getCategory', payload: { category: 'activity_organizer_options' } });
@@ -63,7 +64,7 @@ export default {
       yield put({ type: 'clearState' });
       const { id } = payload;
       const { data } = yield call(seminarService.getSeminarById, id);
-      const listActivityScores = yield call(seminarService.listActivityScores, 'me', 'ccf', id);
+      const listActivityScores = yield call(seminarService.listActivityScores, 'me', config.source, id);
       yield put({ type: 'listActivityScoresSuccess', payload: listActivityScores.data });
       yield put({ type: 'getSeminarByIDSuccess', payload: { data } });
     },
@@ -102,9 +103,9 @@ export default {
     *deleteActivity({ payload }, { call, put }){
       const { id, body } = payload;
       const { data } = yield call(seminarService.deleteActivity, id, body);
-      if (data.status) {
-        yield put(routerRedux.push('/seminar'));
-      }
+      // if (data.status) {
+      //   yield put(routerRedux.push('/seminar'));
+      // }
     },
     *getCommentFromActivity({ payload }, { call, put }){
       const { id, offset, size } = payload;
@@ -133,7 +134,7 @@ export default {
     *updateOrSaveActivityScore({ payload }, { call, put }){
       const { src, actid, aid, key, score, lvtime } = payload;
       yield call(seminarService.updateOrSaveActivityScore, src, actid, aid, key, score, lvtime);
-      const { data } = yield call(seminarService.listActivityScores, 'me', 'ccf', actid);
+      const { data } = yield call(seminarService.listActivityScores, 'me', config.source, actid);
       yield put({ type: 'listActivityScoresSuccess', payload: data });
     },
     *listActivityScores({ payload }, { call, put }){

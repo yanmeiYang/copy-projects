@@ -177,17 +177,17 @@ class RegistrationForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { activity_organizer_options,activity_type } = this.props.seminar;
+    const { activity_organizer_options, activity_type } = this.props.seminar;
     const activityTypes = sysconfig.CCF_activityTypes;
     let activity_organizer_options_data = {};
     let activity_type_options_data = {};
     // let activity_type_options = {};
 
     if (activity_organizer_options.data) {
-        activity_organizer_options_data = activity_organizer_options.data;
+      activity_organizer_options_data = activity_organizer_options.data;
     }
-    if (activity_type.data){
-      activity_type_options_data=activity_type.data;
+    if (activity_type.data) {
+      activity_type_options_data = activity_type.data;
     }
     // if (activity_type.data) {
     //   if (activity_type.data.data) {
@@ -374,7 +374,7 @@ class RegistrationForm extends React.Component {
               })}
             </div> : ''}
             <div className={styles.addNewExpert}>
-              <Button type='primary' onClick={this.addTalkData.bind(this, addNewTalk)}>新增专家</Button>
+              <a type='primary' onClick={this.addTalkData.bind(this, addNewTalk)}>新增专家</a>
             </div>
 
             {addNewTalk &&
@@ -383,10 +383,8 @@ class RegistrationForm extends React.Component {
 
           <Col className={styles.formFooter} md={24} lg={{ span: 16, offset: 4 }}>
             <FormItem
-              wrapperCol={{ span: 12, offset: 6 }}>
-              <Button type="primary" onClick={this.handleSubmit}>确定</Button>
-              &nbsp;&nbsp;&nbsp;
-              <Button type="ghost" onClick={this.handleReset}>重置</Button>
+              wrapperCol={{ span: 12, offset: 6 }} style={{ marginBottom: 6 }}>
+              <Button type="primary" onClick={this.handleSubmit} style={{ width: '50%', height: 40 }}>确定</Button>
             </FormItem>
           </Col>
         </Form>

@@ -7,6 +7,9 @@ module.exports = {
   system: 'ccf', // 默认启动这是哪套系统，启动的时候传入app，之后会在APP里面重新设置。
   source: 'ccf', // AppID, Used in UniversalConfig.
 
+  // system: 'alibaba',
+  // source: 'alibaba',
+
   baseURL: 'https://api.aminer.org/api',
   // baseURL: 'https://166.111.7.105/api',
 
@@ -26,6 +29,7 @@ module.exports = {
     userLogout: '/auth/signout',
     signup: '/auth/signup',
     checkEmail: '/user/check/:email',
+    forgot: "/auth/update/forgot",
     // 给user添加label {uid:'',label:''}
     invoke: '/user/role/invoke',
     // 删除user的label
@@ -40,6 +44,9 @@ module.exports = {
     allPersonInBase: '/roster/:ebid/order-by/h_index/offset/:offset/size/:size',
     allPersonInBaseAgg: '/roster/:ebid/agg?offset=&order=h_index&size=20',
     searchMap: '/search/person/geo', // ?query=:search
+
+    // search suggest
+    searchSuggest: '/search/suggest/gen/:query',
 
     // export roster
     rosterExportSimple: '/roster/:id/export/s/offset/:offset/size/:size/:name',

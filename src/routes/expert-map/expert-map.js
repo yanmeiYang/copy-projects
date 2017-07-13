@@ -6,64 +6,14 @@ import { connect } from 'dva';
 import { Button, Icon } from 'antd';
 import styles from './expert-map.less';
 import { listPersonByIds } from '../../services/person';
+import * as profileUtils from '../../utils/profile_utils';
 import continentscountries from '../../../external-docs/expert-map/continentscountries.json';
 import cities from '../../../external-docs/expert-map/cities.json';
 import mapData from'../../../external-docs/expert-map/expert-map-example2.json';
 
-
-// import mapData from'../../../external-docs/expert-map/expert-map-example1.json';
-
 const ButtonGroup = Button.Group;
-const clustermouseentertype=0;//cluster触发mouseenter事件的时候按照什么方式显示，0为按圈显示，1为按照统计信息显示
 
 function showtop(usersIds, e, map, maindom, inputids) {
-  if(clustermouseentertype==0){
-    showbycircle(usersIds, e, map, maindom, inputids);
-  }else if(clustermouseentertype==1){
-    showbystatistics(usersIds, e, map, maindom, inputids);
-  }
-}
-
-function showbystatistics(usersIds, e, map, maindom, inputids){
-  console.log(maindom);
-  var sContent="yes!!!";
-  const resultPromise = listPersonByIds(usersIds);
-  resultPromise.then(
-    (data) => {
-      var avgHindex=0;
-      var top8="";
-      var location="";
-      var setObj = new Set();
-      var p=data.data.persons;
-      for(var i=0;i<p.length;i++){
-        avgHindex+=p[i].indices.h_index;
-        setObj.add(p[i].attr.nation)
-
-      }
-      for (var x in setObj) {
-        location=location+","+x;
-      }
-      avgHindex=avgHindex/p.length;
-      sContent="<div id='author_info' style='width: 350px;height: 120px;'>"+"<strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"+avgHindex
-        +"<br />countries:"+location+"</div>";
-
-      var infoWindow = new BMap.InfoWindow(sContent);
-      infoWindow.setTitle("<div style='font-weight:bold;'>Statistic Info</div>");
-      document.getElementById("currentId").value="";
-      map.openInfoWindow(infoWindow, e.currentTarget.getPosition());
-    },
-    () => {
-      console.log('failed');
-    },
-  ).catch((error) => {
-    console.log(error);
-  });
-  maindom.addEventListener("mouseleave", function (event) {
-    //map.closeInfoWindow(point);
-  });
-}
-
-function showbycircle(usersIds, e, map, maindom, inputids) {
   var ishere = document.getElementById("panel");
   if (ishere != null) {
     return;
@@ -73,7 +23,7 @@ function showbycircle(usersIds, e, map, maindom, inputids) {
   var width = 180;
   var imgwidth = 45;//可得中心点到图像中心点的半径为：width/2-imgwidth/2,圆形的方程为(X-pixel.x)^2+(Y-pixel.y)^2=width/2
   var oDiv = document.createElement('div');
-  var ostyle = "z-index:10;height:" + width + "px;width:" + width + "px;position: absolute;left: " + (pixel.x - width / 2) + "px;top: " + (pixel.y - width / 2) + "px;"
+  var ostyle = "cursor:pointer;z-index:10;height:" + width + "px;width:" + width + "px;position: absolute;left: " + (pixel.x - width / 2) + "px;top: " + (pixel.y - width / 2) + "px;border-radius:50%;"
   oDiv.setAttribute('id', 'panel');
   oDiv.setAttribute('style', ostyle);
   insertAfter(oDiv, maindom);
@@ -95,7 +45,27 @@ function showbycircle(usersIds, e, map, maindom, inputids) {
     imgdiv.innerHTML = "<img style='background: white;'  data='@@@@@@@0@@@@@@@' height='" + imgwidth + "' width='" + imgwidth + "' src='/showimg.jpg' alt='0'>";
     //insertAfter(imgdiv,thisNode);
     thisNode.appendChild(imgdiv);
+    imgdiv.addEventListener("click", function (event) {
+      var chtml=this.innerHTML;
+      var num = 0;
+      if (chtml.split("@@@@@@@").length > 1) {
+        num = chtml.split("@@@@@@@")[1];
+      }
+      clusterdetail(ids[num]);
+    },false);
   }
+  //再在其中间添加一个图像
+  var centerX = width/2;
+  var centerY = width/2;
+  var imgdiv = document.createElement('div');
+  var cstyle = "opacity:0;z-index:10000;border:1px solid white;height:" + imgwidth + "px;width:" + imgwidth + "px;position: absolute;left:" + (centerX - imgwidth / 2) + "px;top:" + (centerY - imgwidth / 2) + "px; border-radius:50%; overflow:hidden;"
+  imgdiv.setAttribute('name', 'center');//中心的一个图片
+  imgdiv.setAttribute('style', cstyle);
+  imgdiv.innerHTML = "<img style='background: white;'  data='' height='" + imgwidth + "' width='" + imgwidth + "' src='/showimg.jpg' alt='-1'>";
+  thisNode.appendChild(imgdiv);
+  imgdiv.addEventListener("click", function (event) {//集体的一个显示
+    clusterdetail(inputids);
+  });
   var imgdivs = document.getElementsByName("scholarimg");
   if (thisNode != null) {//准备绑定事件
     var pthisNode = thisNode.parentNode;
@@ -116,7 +86,10 @@ function showbycircle(usersIds, e, map, maindom, inputids) {
       if(imgdivs!=null && imgdivs.length!=0){
         for (var i = 0; i < ids.length; i++) {
           var cimg = imgdivs[i];
-          var url = data.data.persons[i].avatar;
+          var url ="/showimg.jpg";
+          if( data.data.persons[i].avatar!=null &&  data.data.persons[i].avatar!=""){
+            url=profileUtils.getAvatar(data.data.persons[i].avatar, data.data.persons[i].id, 41)
+          }
           cimg.innerHTML = "<img style='background: white;'  data='@@@@@@@" + i + "@@@@@@@' height='" + imgwidth + "' width='" + imgwidth + "' src='" + url + "' alt='" + i + "'>";
         }
         for (var j = 0; j < imgdivs.length; j++) {
@@ -134,26 +107,38 @@ function showbycircle(usersIds, e, map, maindom, inputids) {
             var thispoint = map.pixelToPoint(newpixel);
             var pos = "";
             if (typeof(personInfo.pos)=="undefined"){
-              pos = "null";
+              pos = "NULL";
             }else if(personInfo.pos == null || personInfo.pos == "") {
-              pos = "null";
+              pos = "NULL";
             } else if (personInfo.pos[0] == null || personInfo.pos[0] == "") {
               pos = "";
             } else {
               pos = personInfo.pos[0].n;
             }
-            var sContent = "<div id='author_info' style='width: 350px;height: 120px;'><img style='float:left;margin:4px' id='imgDemo' src='http:" + personInfo.avatar + "' width='70' height='80'/>"
+            var aff="NULL";
+            if(personInfo.aff!=null){
+              if(personInfo.aff.desc!=null){
+                aff=personInfo.aff.desc;
+              }
+            }
+
+            var photo ="/showimg.jpg";
+            if( personInfo.avatar!=null &&  personInfo.avatar!=""){
+              photo=profileUtils.getAvatar(personInfo.avatar, personInfo.id, 50)
+            }
+            var sContent = "<div id='author_info' style='width: 350px;height: 120px;'><img style='float:left;margin:4px' id='imgDemo' src='http:" + photo + "' width='70' height='80'/>"
               + "<i class='fa fa-user' style='width: 20px;'> </i><a  target='_blank' href='https://cn.aminer.org/profile/" + personInfo.id + "'>"
               + personInfo.name + "</a><br /><strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"
               + personInfo.indices.h_index + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Paper:  </strong>"
               + personInfo.indices.num_pubs + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Citation:  </strong>"
               + personInfo.indices.num_citation + "<br /><i class='fa fa-mortar-board' style='width: 20px;'> </i>"
-              + pos + "<br /><i class='fa fa-institution' style='width: 20px;'> </i>" + personInfo.aff.desc + "</div>";
+              + pos + "<br /><i class='fa fa-institution' style='width: 20px;'> </i>" +aff + "</div>";
             var infoWindow = new BMap.InfoWindow(sContent);
             document.getElementById("currentId").value="";
             map.openInfoWindow(infoWindow, thispoint);
           });
           cimg.addEventListener("mouseleave", function (event) {
+            map.closeInfoWindow();
             //document.getElementById("authorinfo").style.display="none";
           });
         }
@@ -167,6 +152,112 @@ function showbycircle(usersIds, e, map, maindom, inputids) {
     console.err(error);
   });
 }
+
+function clusterdetail(id){
+  var state=document.getElementById("flowstate").value;
+  var statistic=document.getElementById("statistic").value;
+  if(statistic!=id){//一般认为是第一次点击
+    document.getElementById("flowstate").value=1;
+    var theNode=document.getElementById("allmap");
+    var width=200;
+    var height=300;
+    var h = theNode.offsetHeight;  //高度
+    var w = theNode.offsetWidth;  //宽度
+    if(document.getElementById("flowinfo")==null){
+      var flowdiv = document.createElement('div');
+      var cstyle = "z-index:10000;border:1px solid green;height:"+height+"px;width:"+width+"px;position: absolute;left:"+(w-width)+"px;top:"+(h-height)+"px;overflow:hidden;word-wrap: break-word;word-break:break-all;opacity:0.5;background:#FFFFFF;"
+      flowdiv.setAttribute('name', 'flowinfo');//中心的一个图片
+      flowdiv.setAttribute('style', cstyle);
+      flowdiv.setAttribute('id', 'flowinfo');
+      theNode.appendChild(flowdiv);
+    }else{
+      document.getElementById("flowinfo").style.display="";
+    }
+    var cids=[];
+    var thisinfo="";
+    if(id.indexOf(",")==-1){
+      cids[0]=id;
+      const resultPromise = listPersonByIds(cids);
+      resultPromise.then(
+        (data) => {
+          var personInfo=data.data.persons[0];
+          var pos = "";
+          if (typeof(personInfo.pos)=="undefined"){
+            pos = "NULL";
+          }else if(personInfo.pos == null || personInfo.pos == "") {
+            pos = "NULL";
+          } else if (personInfo.pos[0] == null || personInfo.pos[0] == "") {
+            pos = "";
+          } else {
+            pos = personInfo.pos[0].n;
+          }
+          var aff="NULL";
+          if(personInfo.aff!=null){
+            if(personInfo.aff.desc!=null){
+              aff=personInfo.aff.desc;
+            }
+          }
+          var photo ="/showimg.jpg";
+          if( personInfo.avatar!=null &&  personInfo.avatar!=""){
+            photo=profileUtils.getAvatar(personInfo.avatar, personInfo.id, 50)
+          }
+          var thisinfo = "<img style='float:left;margin:4px' id='imgDemo' src='http:" + photo + "' width='70' height='80'/>"
+            + "<i class='fa fa-user' style='width: 20px;'> </i><a  target='_blank' href='https://cn.aminer.org/profile/" + personInfo.id + "'>"
+            + personInfo.name + "</a><br /><strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"
+            + personInfo.indices.h_index + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Paper:  </strong>"
+            + personInfo.indices.num_pubs + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Citation:  </strong>"
+            + personInfo.indices.num_citation + "<br /><i class='fa fa-mortar-board' style='width: 20px;'> </i>"
+            + pos + "<br /><i class='fa fa-institution' style='width: 20px;'> </i>" +aff + "";
+          document.getElementById("flowinfo").innerHTML="<div style='border:1px solid red;margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;word-wrap: break-word;word-break:break-all;'>"+thisinfo+"</div>";
+        },
+        () => {
+          console.log('failed');
+        },
+      ).catch((error) => {
+        console.err(error);
+      });
+    }else{
+      cids=id.split(",").slice(0, id.split(",").length-1);
+      const resultPromise = listPersonByIds(cids);
+      resultPromise.then(
+        (data) => {
+          var avgHindex=0;
+          var top8="";
+          var location="";
+          var setObj = new Set();
+          var p=data.data.persons;
+          for(var i=0;i<p.length;i++){
+            avgHindex+=p[i].indices.h_index;
+            setObj.add(p[i].attr.nation)
+          }
+          for (var x in setObj) {
+            location=location+","+x;
+          }
+          avgHindex=avgHindex/p.length;
+          avgHindex=avgHindex.toFixed(2);//保留两位小数
+          thisinfo="<div id='author_info' style='width: 350px;height: 120px;'>"+"<strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"+avgHindex
+            +"<br />countries:"+location+"</div>";
+          document.getElementById("flowinfo").innerHTML="<div style='border:1px solid red;margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;word-wrap: break-word;word-break:break-all;'>"+thisinfo+"</div>";
+        },
+        () => {
+          console.log('failed');
+        },
+      ).catch((error) => {
+        console.err(error);
+      });
+    }
+  }else{//认为是第二次及其以上点击
+    if(state==1){//偶数次点击同一个对象
+      document.getElementById("flowstate").value=0;
+      document.getElementById("flowinfo").style.display="none";
+    }else{//奇数次点击同一个对象
+      document.getElementById("flowstate").value=1;
+      document.getElementById("flowinfo").style.display="";
+    }
+  }
+  document.getElementById("statistic").value=id;
+}
+
 
 function insertAfter(newElement, targetElement) {
   var parent = targetElement.parentNode;
@@ -196,7 +287,6 @@ class ExpertMap extends React.Component {
       this.callSearchMap(nextProps.query);
     }
     if (nextProps.expertMap.geoData !== this.props.expertMap.geoData) {
-      //console.log('>>>> ', nextProps.expertMap.geoData);
       var typeid=0;
       this.showmap(nextProps.expertMap.geoData,typeid);
     }
@@ -204,7 +294,6 @@ class ExpertMap extends React.Component {
   }
 
   callSearchMap(query, callback) {
-    //console.log('MAP::: searchMap:', query);
     this.props.dispatch({ type: 'expertMap/searchMap', payload: { query } });
   }
 
@@ -212,27 +301,28 @@ class ExpertMap extends React.Component {
     const that = this;
     var sContent = "<div id='author_info' style='width: 350px;height: 120px;'></div>";
     var infoWindow = new BMap.InfoWindow(sContent);
-    marker.addEventListener('mouseout', function (e) {
-
-
-    })
     marker.addEventListener('mouseover', function (e) {
       if (document.getElementById("currentId").value != personId) {
         that.onLoadPersonCard(personId);//更新数据，数据更新之后由componentDidUpdate再调用本函数进行显示
+        this.openInfoWindow(infoWindow);//数据更新是个异步请求一般比较慢，因此先发送更新数据请求，然后再打开一个空的窗口，随后更新的数据来代替其内容
       } else {
-        that.showexpertinfo();
+        this.openInfoWindow(infoWindow);//先打开一个空的信息窗口，然后再改变其内容
+        that.showexpertinfo();//更新信息窗口的内容
       }
       document.getElementById("currentIds").value = personId;
-      this.openInfoWindow(infoWindow);//将其放在判断语句的后面可以解决显示过程中出现照片更替的事件发生
-    })
+    });
+    marker.addEventListener('mouseout', function (e) {
+      this.closeInfoWindow(infoWindow);
+    });
+    marker.addEventListener('click', function (e) {
+      clusterdetail(personId);
+    });
   }
 
   showmap = (place,type) => {
     var map = new BMap.Map("allmap");
-    var scale = 2;
-    if (type == 1) {
-      scale = 4;
-    } else if(type == 2) {
+    var scale = 4;
+    if (type == 2) {
       scale = 6;
     }else if(type == 3) {
       scale = 6;
@@ -458,12 +548,12 @@ class ExpertMap extends React.Component {
     this.showexpertinfo();
   }
 
-  showexpertinfo() {
+  showexpertinfo() {//只是对数据的内容进行更新
     const model = this.props && this.props.expertMap;
     const personInfo = model.personInfo;
 
     document.getElementById("currentId").value = personInfo.id;
-    var pos = ""
+    var pos = "";
     if (personInfo.pos == null || personInfo.pos == "") {
       pos = "null";
     } else if (personInfo.pos[0] == null || personInfo.pos[0] == "") {
@@ -471,15 +561,21 @@ class ExpertMap extends React.Component {
     } else {
       pos = personInfo.pos[0].n;
     }
+    var cinfo="";
     if (personInfo.name != null) {
-      document.getElementById('author_info').innerHTML = "<img style='float:left;margin:4px' id='imgDemo' src='http:" + personInfo.avatar + "' width='70' height='80'/>"
+      var url=profileUtils.getAvatar(personInfo.avatar, personInfo.id, 50)
+      cinfo= "<img style='float:left;margin:4px' id='imgDemo' src='http:" + url + "' width='70' height='80'/>"
         + "<i class='fa fa-user' style='width: 20px;'> </i><a  target='_blank' href='https://cn.aminer.org/profile/" + personInfo.id + "'>"
         + personInfo.name + "</a><br /><strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"
         + personInfo.indices.h_index + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Paper:  </strong>"
         + personInfo.indices.num_pubs + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Citation:  </strong>"
         + personInfo.indices.num_citation + "<br /><i class='fa fa-mortar-board' style='width: 20px;'> </i>"
         + pos + "<br /><i class='fa fa-institution' style='width: 20px;'> </i>" + personInfo.aff.desc + "";
+      document.getElementById('author_info').innerHTML=cinfo;
+    }else{
+
     }
+    return cinfo;
   }
 
   handleScriptLoad() {
@@ -513,6 +609,12 @@ class ExpertMap extends React.Component {
     }
   }
 
+  goto=()=>{
+    var href=window.location.href;
+    window.location.href=href.replace("expert-map","expert-googlemap");
+  }
+
+//page-------------------------------------------------------------------------------------------------------------------
   render() {
     const model = this.props && this.props.expertMap;
     // const personInfo = model.personInfo;
@@ -529,6 +631,9 @@ class ExpertMap extends React.Component {
               <Button onClick={this.showtype} value="4">城市</Button>
               <Button onClick={this.showtype} value="5">机构</Button>
             </ButtonGroup>
+            <div className={styles.switch}>
+              <Button  type="primary" onClick={this.goto}>Go To：Google Map</Button>
+            </div>
           </div>
         </div>
         <div className="mapshow">
@@ -538,15 +643,17 @@ class ExpertMap extends React.Component {
           </div>
           <input id="currentId" type="hidden" />
           <input id="currentIds" type="hidden" />
+          <input id="statistic" type="hidden" value="0" />
+          <input id="flowstate" type="hidden" value="0" />
         </div>
       </div>
     );
   }
 }
 
-
 export default connect(({ expertMap, loading }) => ({ expertMap, loading }))(ExpertMap);
 
+//百度插件------------------------------------------------------------------------------------------------------------------------------
 
 /**
  * @fileoverview MarkerClusterer标记聚合器用来解决加载大量点要素到地图上产生覆盖现象的问题，并提高性能。

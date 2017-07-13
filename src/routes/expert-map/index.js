@@ -4,10 +4,14 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
+import ExpertGoogleMap from './expert-googlemap.js';
 import ExpertMap from './expert-map.js';
 import styles from './index.less';
 import SearchBox from '../../components/SearchBox';
 import { sysconfig } from '../../systems';
+import NProgress from 'nprogress';
+
+const href = window.location.href;
 
 class ExpertMapPage extends React.Component {
 
@@ -64,7 +68,11 @@ class ExpertMapPage extends React.Component {
           onSearch={this.onSearch}
         />
 
-        <ExpertMap query={this.state.query} />
+        {href.indexOf('/expert-googlemap') > 0 &&
+        <ExpertGoogleMap query={this.state.query} />}
+
+        {href.indexOf('/expert-map') > 0 &&
+        <ExpertMap query={this.state.query} />}
 
         {sysconfig.SPECIAL_ExpertMapNoHeader &&
         <div className="HeaderMask" />

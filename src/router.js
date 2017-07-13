@@ -142,8 +142,17 @@ const Routers = function ({ history, app }) {
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
               registerModel(app, require('./models/expert-map'));
-              cb(null, require('./routes/expert-map'));
+              cb(null, require('./routes/expert-map/'));
             }, 'expert-map');
+          },
+        },
+        {
+          path: 'expert-googlemap',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('./models/expert-map'));
+              cb(null, require('./routes/expert-map/'));
+            }, 'expert-googlemap');
           },
         },
         {
@@ -261,6 +270,15 @@ const Routers = function ({ history, app }) {
           registerModel(app, require('./models/testpage'));
           cb(null, { component: require('./routes/hidden/testpage') });
         }, 'testpage');
+      },
+    },
+    {
+      path: '/forgotpassword',
+      getComponent(nextState, cb) {
+        require.ensure([], (require) => {
+          registerModel(app, require('./models/auth/auth'));
+          cb(null, require('./routes/admin/forgot-password/'));
+        }, 'forgotpassword');
       },
     },
     {

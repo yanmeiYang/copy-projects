@@ -59,6 +59,11 @@ export default {
       yield put({ type: 'getListUserByRoleSuccess', payload: data });
 
     },
+
+    *forgotPassword({ payload }, { call, put }){
+      yield call(authService.forgot, payload);
+    //  TODO 提示已经发送邮件
+    },
   },
   reducers: {
     createUserSuccess(state, { payload: { data } }){

@@ -23,7 +23,7 @@ class ActivityList extends React.Component {
 
   setCategory = (e) => {
     if (e === undefined) {
-      return 0
+      return ''
     } else {
       return e
     }

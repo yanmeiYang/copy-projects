@@ -8,6 +8,7 @@ import styles from './expert-googlemap.less';
 import { listPersonByIds } from '../../services/person';
 import * as profileUtils from '../../utils/profile_utils';
 
+
 const ButtonGroup = Button.Group;
 
 
@@ -64,40 +65,61 @@ class ExpertGoogleMap extends React.Component {
   }
 //Google Maps------------------------------------------------------------------------------------------------------------
   showgooglemap = (place,type) => {
-    var map;
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: 24.397, lng: 140.644},
-      zoom: 3
-    });
-    var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var counter=0;
+    var mapinterval = setInterval(function () {
+      if (typeof(google) == "undefined") {
+        console.log("wait for Google");
+        counter++;
+        if(counter>200){
+          clearInterval(mapinterval);
+          document.getElementById("map").innerHTML="Cannot connect to Google Map! Please check the network state!";
+        }
+      } else {
+        clearInterval(mapinterval);
+        var map;
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 24.397, lng: 140.644},
+          zoom: 3
+        });
+        var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-    var locations=[];
-    for (var i = 0; i < place.results.length; i++) {
-      var onepoint={lat:place.results[i].location.lat,lng:place.results[i].location.lng}
-      locations[i]=onepoint;
- /*     console.log(place.results[i].location.lat+" "+place.results[i].location.lng)
-      var latLng = new google.maps.LatLng(place.results[i].location.lat,place.results[i].location.lng);
-      var marker = new google.maps.Marker({
-        position: latLng,
-        map: map
-      });*/
-    }
+        var locations=[];
+        for (var i = 0; i < place.results.length; i++) {
+          var onepoint={lat:place.results[i].location.lat,lng:place.results[i].location.lng}
+          locations[i]=onepoint;
+          /*     console.log(place.results[i].location.lat+" "+place.results[i].location.lng)
+           var latLng = new google.maps.LatLng(place.results[i].location.lat,place.results[i].location.lng);
+           var marker = new google.maps.Marker({
+           position: latLng,
+           map: map
+           });*/
+        }
 
-    var markers = locations.map(function(location, i) {
-      return new google.maps.Marker({
-        position: location,
-        label: labels[i % labels.length]
-      });
-    });
+        var markers = locations.map(function(location, i) {
+          return new google.maps.Marker({
+            position: location,
+            label: labels[i % labels.length]
+          });
+        });
 
-    // Add a marker clusterer to manage the markers.
-    var markerCluster = new MarkerClusterer(map, markers,{imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+        // Add a marker clusterer to manage the markers.
+        var markerCluster = new MarkerClusterer(map, markers,{imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+
+      }
+    }, 100);
+    console.log("run!!");
+    console.log(mapinterval)
 
   }
 
   goto=()=>{
     var href=window.location.href;
     window.location.href=href.replace("expert-googlemap","expert-map");
+  }
+
+  reload=()=>{
+    var href=window.location.href;
+    window.location.href=href;
   }
 //page-------------------------------------------------------------------------------------------------------------------
   render() {
@@ -117,7 +139,10 @@ class ExpertGoogleMap extends React.Component {
               <Button onClick={this.showtype} value="5">机构</Button>
             </ButtonGroup>
             <div className={styles.switch}>
-              <Button  type="primary" onClick={this.goto}>Go To：Baidu Map</Button>
+              <ButtonGroup id="diffmaps">
+                <Button type="primary" onClick={this.goto}>Baidu Map</Button>
+                <Button  onClick={this.reload}>Google Map</Button>
+              </ButtonGroup>
             </div>
           </div>
         </div>

@@ -27,25 +27,6 @@ class ExpertMapPage extends React.Component {
     }
   }
 
-  // showtype = (e) => {
-  //   const typeid = e.target && e.target.getAttribute('data');
-  //   const tli = document.getElementById('menu0').getElementsByTagName('li');
-  //   ExpertMap.test1();
-  //   let currentclass = '';
-  //   for (let i = 0; i < tli.length; i += 1) {
-  //     if (tli[i].className !== '') {
-  //       currentclass = tli[i].className;
-  //     }
-  //   }
-  //   for (let i = 0; i < tli.length; i += 1) {
-  //     if (i === typeid) {
-  //       tli[i].className = currentclass;
-  //     } else {
-  //       tli[i].className = '';
-  //     }
-  //   }
-  // };
-
   onSearch = (data) => {
     if (!data.query) {
       return false;
@@ -83,3 +64,4 @@ class ExpertMapPage extends React.Component {
 }
 
 export default connect(({ expertMap }) => ({ expertMap }))(ExpertMapPage);
+

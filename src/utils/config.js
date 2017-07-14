@@ -2,20 +2,22 @@
  * Created by yutao on 2017/5/22.
  */
 
+const SYS = 'ccf';
+// const SYS = 'huawei';
+// const SYS = 'alibaba';
+// const SYS = 'tencent';
+
 module.exports = {
 
-  system: 'ccf', // 默认启动这是哪套系统，启动的时候传入app，之后会在APP里面重新设置。
-  source: 'ccf', // AppID, Used in UniversalConfig.
-
-  // system: 'alibaba',
-  // source: 'alibaba',
+  system: SYS, // 默认启动这是哪套系统，启动的时候传入app，之后会在APP里面重新设置。
+  source: SYS, // AppID, Used in UniversalConfig.
 
   baseURL: 'https://api.aminer.org/api',
   // baseURL: 'https://166.111.7.105/api',
 
   name: '专家搜索',
   prefix: 'aminer',
-  footerText: 'AMiner © 2017 AMiner', // not used now.
+  // footerText: 'AMiner © 2017 AMiner', // not used now.
   logo: '/logo.png',
   iconFontCSS: '/iconfont.css',
   iconFontJS: '/iconfont.js',

@@ -6,64 +6,15 @@ import { connect } from 'dva';
 import { Button, Icon } from 'antd';
 import styles from './expert-map.less';
 import { listPersonByIds } from '../../services/person';
+import * as profileUtils from '../../utils/profile_utils';
 import continentscountries from '../../../external-docs/expert-map/continentscountries.json';
 import cities from '../../../external-docs/expert-map/cities.json';
 import mapData from'../../../external-docs/expert-map/expert-map-example2.json';
-
-
-// import mapData from'../../../external-docs/expert-map/expert-map-example1.json';
+import googleMap from './expert-googlemap.js';
 
 const ButtonGroup = Button.Group;
-const clustermouseentertype=0;//cluster触发mouseenter事件的时候按照什么方式显示，0为按圈显示，1为按照统计信息显示
 
 function showtop(usersIds, e, map, maindom, inputids) {
-  if(clustermouseentertype==0){
-    showbycircle(usersIds, e, map, maindom, inputids);
-  }else if(clustermouseentertype==1){
-    showbystatistics(usersIds, e, map, maindom, inputids);
-  }
-}
-
-function showbystatistics(usersIds, e, map, maindom, inputids){
-  console.log(maindom);
-  var sContent="yes!!!";
-  const resultPromise = listPersonByIds(usersIds);
-  resultPromise.then(
-    (data) => {
-      var avgHindex=0;
-      var top8="";
-      var location="";
-      var setObj = new Set();
-      var p=data.data.persons;
-      for(var i=0;i<p.length;i++){
-        avgHindex+=p[i].indices.h_index;
-        setObj.add(p[i].attr.nation)
-
-      }
-      for (var x in setObj) {
-        location=location+","+x;
-      }
-      avgHindex=avgHindex/p.length;
-      sContent="<div id='author_info' style='width: 350px;height: 120px;'>"+"<strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"+avgHindex
-        +"<br />countries:"+location+"</div>";
-
-      var infoWindow = new BMap.InfoWindow(sContent);
-      infoWindow.setTitle("<div style='font-weight:bold;'>Statistic Info</div>");
-      document.getElementById("currentId").value="";
-      map.openInfoWindow(infoWindow, e.currentTarget.getPosition());
-    },
-    () => {
-      console.log('failed');
-    },
-  ).catch((error) => {
-    console.log(error);
-  });
-  maindom.addEventListener("mouseleave", function (event) {
-    //map.closeInfoWindow(point);
-  });
-}
-
-function showbycircle(usersIds, e, map, maindom, inputids) {
   var ishere = document.getElementById("panel");
   if (ishere != null) {
     return;
@@ -73,7 +24,7 @@ function showbycircle(usersIds, e, map, maindom, inputids) {
   var width = 180;
   var imgwidth = 45;//可得中心点到图像中心点的半径为：width/2-imgwidth/2,圆形的方程为(X-pixel.x)^2+(Y-pixel.y)^2=width/2
   var oDiv = document.createElement('div');
-  var ostyle = "z-index:10;height:" + width + "px;width:" + width + "px;position: absolute;left: " + (pixel.x - width / 2) + "px;top: " + (pixel.y - width / 2) + "px;"
+  var ostyle = "cursor:pointer;z-index:10000;height:" + width + "px;width:" + width + "px;position: absolute;left: " + (pixel.x - width / 2) + "px;top: " + (pixel.y - width / 2) + "px;border-radius:50%;"
   oDiv.setAttribute('id', 'panel');
   oDiv.setAttribute('style', ostyle);
   insertAfter(oDiv, maindom);
@@ -89,13 +40,33 @@ function showbycircle(usersIds, e, map, maindom, inputids) {
     var centerX = Math.cos(fenshu * i) * (width / 2 - imgwidth / 2) + width / 2;
     var centerY = Math.sin(fenshu * i) * (width / 2 - imgwidth / 2) + width / 2;
     var imgdiv = document.createElement('div');
-    var cstyle = "z-index:10000;border:1px solid white;height:" + imgwidth + "px;width:" + imgwidth + "px;position: absolute;left:" + (centerX - imgwidth / 2) + "px;top:" + (centerY - imgwidth / 2) + "px; border-radius:50%; overflow:hidden;"
+    var cstyle = "z-index:10001;border:1px solid white;height:" + imgwidth + "px;width:" + imgwidth + "px;position: absolute;left:" + (centerX - imgwidth / 2) + "px;top:" + (centerY - imgwidth / 2) + "px; border-radius:50%; overflow:hidden;"
     imgdiv.setAttribute('name', 'scholarimg');
     imgdiv.setAttribute('style', cstyle);
     imgdiv.innerHTML = "<img style='background: white;'  data='@@@@@@@0@@@@@@@' height='" + imgwidth + "' width='" + imgwidth + "' src='/showimg.jpg' alt='0'>";
     //insertAfter(imgdiv,thisNode);
     thisNode.appendChild(imgdiv);
+    imgdiv.addEventListener("click", function (event) {
+      var chtml=this.innerHTML;
+      var num = 0;
+      if (chtml.split("@@@@@@@").length > 1) {
+        num = chtml.split("@@@@@@@")[1];
+      }
+      clusterdetail(ids[num]);
+    },false);
   }
+  //再在其中间添加一个图像
+  var centerX = width/2;
+  var centerY = width/2;
+  var imgdiv = document.createElement('div');
+  var cstyle = "opacity:0;z-index:10001;border:1px solid white;height:" + imgwidth + "px;width:" + imgwidth + "px;position: absolute;left:" + (centerX - imgwidth / 2) + "px;top:" + (centerY - imgwidth / 2) + "px; border-radius:50%; overflow:hidden;"
+  imgdiv.setAttribute('name', 'center');//中心的一个图片
+  imgdiv.setAttribute('style', cstyle);
+  imgdiv.innerHTML = "<img style='background: white;'  data='' height='" + imgwidth + "' width='" + imgwidth + "' src='/showimg.jpg' alt='-1'>";
+  thisNode.appendChild(imgdiv);
+  imgdiv.addEventListener("click", function (event) {//集体的一个显示
+    clusterdetail(inputids);
+  });
   var imgdivs = document.getElementsByName("scholarimg");
   if (thisNode != null) {//准备绑定事件
     var pthisNode = thisNode.parentNode;
@@ -116,7 +87,10 @@ function showbycircle(usersIds, e, map, maindom, inputids) {
       if(imgdivs!=null && imgdivs.length!=0){
         for (var i = 0; i < ids.length; i++) {
           var cimg = imgdivs[i];
-          var url = data.data.persons[i].avatar;
+          var url ="/showimg.jpg";
+          if( data.data.persons[i].avatar!=null &&  data.data.persons[i].avatar!=""){
+            url=profileUtils.getAvatar(data.data.persons[i].avatar, data.data.persons[i].id, 41)
+          }
           cimg.innerHTML = "<img style='background: white;'  data='@@@@@@@" + i + "@@@@@@@' height='" + imgwidth + "' width='" + imgwidth + "' src='" + url + "' alt='" + i + "'>";
         }
         for (var j = 0; j < imgdivs.length; j++) {
@@ -134,26 +108,38 @@ function showbycircle(usersIds, e, map, maindom, inputids) {
             var thispoint = map.pixelToPoint(newpixel);
             var pos = "";
             if (typeof(personInfo.pos)=="undefined"){
-              pos = "null";
+              pos = "NULL";
             }else if(personInfo.pos == null || personInfo.pos == "") {
-              pos = "null";
+              pos = "NULL";
             } else if (personInfo.pos[0] == null || personInfo.pos[0] == "") {
               pos = "";
             } else {
               pos = personInfo.pos[0].n;
             }
-            var sContent = "<div id='author_info' style='width: 350px;height: 120px;'><img style='float:left;margin:4px' id='imgDemo' src='http:" + personInfo.avatar + "' width='70' height='80'/>"
+            var aff="NULL";
+            if(personInfo.aff!=null){
+              if(personInfo.aff.desc!=null){
+                aff=personInfo.aff.desc;
+              }
+            }
+
+            var photo ="/showimg.jpg";
+            if( personInfo.avatar!=null &&  personInfo.avatar!=""){
+              photo=profileUtils.getAvatar(personInfo.avatar, personInfo.id, 50)
+            }
+            var sContent = "<div id='author_info' style='width: 350px;height: 120px;'><img style='float:left;margin:4px' id='imgDemo' src='http:" + photo + "' width='70' height='80'/>"
               + "<i class='fa fa-user' style='width: 20px;'> </i><a  target='_blank' href='https://cn.aminer.org/profile/" + personInfo.id + "'>"
               + personInfo.name + "</a><br /><strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"
               + personInfo.indices.h_index + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Paper:  </strong>"
               + personInfo.indices.num_pubs + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Citation:  </strong>"
               + personInfo.indices.num_citation + "<br /><i class='fa fa-mortar-board' style='width: 20px;'> </i>"
-              + pos + "<br /><i class='fa fa-institution' style='width: 20px;'> </i>" + personInfo.aff.desc + "</div>";
+              + pos + "<br /><i class='fa fa-institution' style='width: 20px;'> </i>" +aff + "</div>";
             var infoWindow = new BMap.InfoWindow(sContent);
             document.getElementById("currentId").value="";
             map.openInfoWindow(infoWindow, thispoint);
           });
           cimg.addEventListener("mouseleave", function (event) {
+            map.closeInfoWindow();
             //document.getElementById("authorinfo").style.display="none";
           });
         }
@@ -167,6 +153,128 @@ function showbycircle(usersIds, e, map, maindom, inputids) {
     console.err(error);
   });
 }
+
+function clusterdetail(id){
+  var state=document.getElementById("flowstate").value;
+  var statistic=document.getElementById("statistic").value;
+  if(statistic!=id){//一般认为是第一次点击
+    document.getElementById("flowstate").value=1;
+    var theNode=document.getElementById("allmap");
+    var h = theNode.offsetHeight;  //高度
+    var w = theNode.offsetWidth;  //宽度
+    var width=200;
+    var height=h*0.8;
+    if(document.getElementById("flowinfo")==null){
+      var flowdiv = document.createElement('div');
+      var cstyle = "z-index:10001;border:1px solid green;height:"+height+"px;width:"+width+"px;position: absolute;left:"+(w-width-10)+"px;top:"+(h-height)/2+"px;overflow:hidden;word-wrap: break-word;word-break:break-all;background-color:rgba(255, 255, 255, 0.3);"
+      flowdiv.setAttribute('name', 'flowinfo');//中心的一个图片
+      flowdiv.setAttribute('style', cstyle);
+      flowdiv.setAttribute('id', 'flowinfo');
+      theNode.appendChild(flowdiv);
+    }else{
+      var cstyle = "z-index:10001;border:1px solid green;height:"+height+"px;width:"+width+"px;position: absolute;left:"+(w-width-10)+"px;top:"+(h-height)/2+"px;overflow:hidden;word-wrap: break-word;word-break:break-all;background-color:rgba(255, 255, 255, 0.3);"
+      document.getElementById("flowinfo").setAttribute('style', cstyle);
+      document.getElementById("flowinfo").style.display="";
+    }
+    var cids=[];
+    var thisinfo="";
+    if(id.indexOf(",")==-1){
+      cids[0]=id;
+      const resultPromise = listPersonByIds(cids);
+      resultPromise.then(
+        (data) => {
+          var personInfo=data.data.persons[0];
+          var pos = "";
+          if (typeof(personInfo.pos)=="undefined"){
+            pos = "NULL";
+          }else if(personInfo.pos == null || personInfo.pos == "") {
+            pos = "NULL";
+          } else if (personInfo.pos[0] == null || personInfo.pos[0] == "") {
+            pos = "";
+          } else {
+            pos = personInfo.pos[0].n;
+          }
+          var aff="NULL";
+          if(personInfo.aff!=null){
+            if(personInfo.aff.desc!=null){
+              aff=personInfo.aff.desc;
+            }
+          }
+          var photo ="/showimg.jpg";
+          if( personInfo.avatar!=null &&  personInfo.avatar!=""){
+            photo=profileUtils.getAvatar(personInfo.avatar, personInfo.id, 50)
+          }
+          var tags="NULL";
+          if(personInfo.tags!=null &&  personInfo.tags!=""){
+            tags="";
+            for(var t in personInfo.tags){
+              tags+=personInfo.tags[t].t+"  |  ";
+            }
+            tags=tags.substring(0,tags.length-3);
+          }
+          var thisinfo = "<img style='float:left;margin:4px' id='imgDemo' src='http:" + photo + "' width='70' height='80'/>"
+            + "<i class='fa fa-user' style='width: 20px;'> </i><a  target='_blank' href='https://cn.aminer.org/profile/" + personInfo.id + "'>"
+            + personInfo.name + "</a><br /><i class='fa fa-mortar-board' style='width: 20px;'> </i>"
+            + pos+ "<br /><i class='fa fa-institution' style='width: 20px;'> </i>"
+            +aff+"<br /><i class='fa fa-header' style='width: 20px;'> </i><strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"
+            + personInfo.indices.h_index + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Paper:  </strong>"
+            + personInfo.indices.num_pubs + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Citation:  </strong>"
+            + personInfo.indices.num_citation + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Activity:  </strong>"
+            + personInfo.indices.activity + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Diversity:  </strong>"
+            + personInfo.indices.diversity + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#G_index:  </strong>"
+            + personInfo.indices.g_index + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Sociability:  </strong>"
+            + personInfo.indices.sociability + "<br /><i class='fa fa-tag' style='width: 20px;'> </i>"
+            +tags+"";
+          document.getElementById("flowinfo").innerHTML="<div style='margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;word-wrap: break-word;word-break:break-all;opacity:1;background-color:#FFFFFF;'><div style='width:100%;margin:10px;'><h2>Detail Info</h2></div><div style='margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;line-height:22px'>"+thisinfo+"</div></div>";
+        },
+        () => {
+          console.log('failed');
+        },
+      ).catch((error) => {
+        console.err(error);
+      });
+    }else{
+      cids=id.split(",").slice(0, id.split(",").length-1);
+      const resultPromise = listPersonByIds(cids);
+      resultPromise.then(
+        (data) => {
+          var avgHindex=0;
+          var top8="";
+          var location="";
+          var setObj = new Set();
+          var p=data.data.persons;
+          for(var i=0;i<p.length;i++){
+            avgHindex+=p[i].indices.h_index;
+            setObj.add(p[i].attr.nation)
+          }
+          for (var x in setObj) {
+            location=location+","+x;
+          }
+          avgHindex=avgHindex/p.length;
+          avgHindex=avgHindex.toFixed(2);//保留两位小数
+          thisinfo="<div id='author_info' style='width: 350px;height: 120px;'>"+"<strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"+avgHindex
+            +"<br />countries:"+location+"</div>";
+          document.getElementById("flowinfo").innerHTML="<div style='margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;word-wrap: break-word;word-break:break-all;opacity:1;background-color:#FFFFFF;'><div style='width:100%;margin:10px;'><h2>Statistic Info</h2></div><div style='margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;line-height:22px'>"+thisinfo+"</div></div>";
+        },
+        () => {
+          console.log('failed');
+        },
+      ).catch((error) => {
+        console.err(error);
+      });
+    }
+  }else{//认为是第二次及其以上点击
+    if(state==1){//偶数次点击同一个对象
+      document.getElementById("flowstate").value=0;
+      document.getElementById("flowinfo").style.display="none";
+    }else{//奇数次点击同一个对象
+      document.getElementById("flowstate").value=1;
+      document.getElementById("flowinfo").style.display="";
+    }
+  }
+  document.getElementById("statistic").value=id;
+}
+
 
 function insertAfter(newElement, targetElement) {
   var parent = targetElement.parentNode;
@@ -196,7 +304,6 @@ class ExpertMap extends React.Component {
       this.callSearchMap(nextProps.query);
     }
     if (nextProps.expertMap.geoData !== this.props.expertMap.geoData) {
-      //console.log('>>>> ', nextProps.expertMap.geoData);
       var typeid=0;
       this.showmap(nextProps.expertMap.geoData,typeid);
     }
@@ -204,7 +311,6 @@ class ExpertMap extends React.Component {
   }
 
   callSearchMap(query, callback) {
-    //console.log('MAP::: searchMap:', query);
     this.props.dispatch({ type: 'expertMap/searchMap', payload: { query } });
   }
 
@@ -212,82 +318,105 @@ class ExpertMap extends React.Component {
     const that = this;
     var sContent = "<div id='author_info' style='width: 350px;height: 120px;'></div>";
     var infoWindow = new BMap.InfoWindow(sContent);
-    marker.addEventListener('mouseout', function (e) {
-
-
-    })
     marker.addEventListener('mouseover', function (e) {
       if (document.getElementById("currentId").value != personId) {
         that.onLoadPersonCard(personId);//更新数据，数据更新之后由componentDidUpdate再调用本函数进行显示
+        this.openInfoWindow(infoWindow);//数据更新是个异步请求一般比较慢，因此先发送更新数据请求，然后再打开一个空的窗口，随后更新的数据来代替其内容
       } else {
-        that.showexpertinfo();
+        this.openInfoWindow(infoWindow);//先打开一个空的信息窗口，然后再改变其内容
+        that.showexpertinfo();//更新信息窗口的内容
       }
       document.getElementById("currentIds").value = personId;
-      this.openInfoWindow(infoWindow);//将其放在判断语句的后面可以解决显示过程中出现照片更替的事件发生
-    })
+    });
+    marker.addEventListener('mouseout', function (e) {
+      this.closeInfoWindow(infoWindow);
+    });
+    marker.addEventListener('click', function (e) {
+      clusterdetail(personId);
+    });
   }
 
   showmap = (place,type) => {
-    var map = new BMap.Map("allmap");
-    var scale = 2;
-    if (type == 1) {
-      scale = 4;
-    } else if(type == 2) {
-      scale = 6;
-    }else if(type == 3) {
-      scale = 6;
-    } else if (type == 4) {
-      scale = 10;
-    }
-    map.centerAndZoom(new BMap.Point(116.404, 39.915), scale);
-    map.enableScrollWheelZoom();
-    var markers = [];
-    const that = this;
-    var pId = [];
-    var counts=0;
-    for (var o in place.results) {
-      var pt = null;
-      var newplace = this.findposition(type, place.results[o]);
-      if((newplace[1]!=null && newplace[1]!=null) && (newplace[1]!=0 && newplace[1]!=0)){//只有经纬度不为空或者0的时候才显示，否则丢弃
-        pt = new BMap.Point(newplace[1], newplace[0]);//这里经度和纬度是反着的
-        var marker = new BMap.Marker(pt);
-        var label = new BMap.Label("<div>" + place.results[o].name + "</div><div style='display: none;'>" + place.results[o].id + "</div>");
-        label.setStyle({
-          color: "black",
-          fontSize: "12px",
-          border: "none",
-          backgroundColor: "transparent",
-          //opacity:0.4,
-          fontWeight: "bold",
-          textAlign: "center",
-          width: "130px",
-          textShadow:"0px 0px 2px #FFFFFF",
-          fontStyle:"italic",
-        });
-        label.setOffset(new BMap.Size(-63,-12));
-        marker.setLabel(label);
-        var personId = place.results[o].id;
-        pId[counts] = personId;
-        markers.push(marker);
-        counts++;
-      }
-    }
-
-    var cr = new BMap.CopyrightControl({ anchor: BMAP_ANCHOR_BOTTOM_RIGHT });
-    map.addControl(cr);
-    map.addControl(new BMap.NavigationControl());
-    map.addControl(new BMap.ScaleControl());
-    map.addControl(new BMap.OverviewMapControl());
-    //map.addControl(new BMap.MapTypeControl());
+    var cthis=this;
+    var counter1=0;
     var mapinterval = setInterval(function () {
-      if (typeof(BMapLib) == "undefined") {
-        console.log("wait for BMapLib")
+      if (typeof(BMap) == "undefined") {
+        console.log("wait for BMap")
+        counter1++;
+        if(counter1>=200){
+          clearInterval(mapinterval);
+          document.getElementById("allmap").innerHTML="Cannot connect to Baidu Map! Please check the network state!";
+        }
       } else {
         clearInterval(mapinterval);
-        var markerClusterer = new BMapLib.MarkerClusterer(map, { markers: markers });
-        for (var m=0;m<pId.length;m++) {
-          that.addMouseoverHandler(markers[m], pId[m])
+        showoverlay();
+        var map = new BMap.Map("allmap");
+        var scale = 4;
+        if (type == 2) {
+          scale = 6;
+        }else if(type == 3) {
+          scale = 6;
+        } else if (type == 4) {
+          scale = 10;
         }
+        map.centerAndZoom(new BMap.Point(116.404, 39.915), scale);
+        map.enableScrollWheelZoom();
+        var markers = [];
+        const that = this;
+        var pId = [];
+        var counts=0;
+        for (var o in place.results) {
+          var pt = null;
+          var newplace = cthis.findposition(type, place.results[o]);
+          if((newplace[1]!=null && newplace[1]!=null) && (newplace[1]!=0 && newplace[1]!=0)){//只有经纬度不为空或者0的时候才显示，否则丢弃
+            pt = new BMap.Point(newplace[1], newplace[0]);//这里经度和纬度是反着的
+            var marker = new BMap.Marker(pt);
+            var label = new BMap.Label("<div>" + place.results[o].name + "</div><div style='display: none;'>" + place.results[o].id + "</div>");
+            label.setStyle({
+              color: "black",
+              fontSize: "12px",
+              border: "none",
+              backgroundColor: "transparent",
+              //opacity:0.4,
+              fontWeight: "bold",
+              textAlign: "center",
+              width: "130px",
+              textShadow:"0px 0px 2px #FFFFFF",
+              fontStyle:"italic",
+            });
+            label.setOffset(new BMap.Size(-63,-12));
+            marker.setLabel(label);
+            var personId = place.results[o].id;
+            pId[counts] = personId;
+            markers.push(marker);
+            counts++;
+          }
+        }
+
+        var cr = new BMap.CopyrightControl({ anchor: BMAP_ANCHOR_BOTTOM_RIGHT });
+        map.addControl(cr);
+        map.addControl(new BMap.NavigationControl());
+        map.addControl(new BMap.ScaleControl());
+        map.addControl(new BMap.OverviewMapControl());
+        map.disableDoubleClickZoom();//静止双击
+        //map.addControl(new BMap.MapTypeControl());
+        var counter2=0;
+        var maplibinterval = setInterval(function () {
+          if (typeof(BMapLib) == "undefined") {
+            console.log("wait for BMapLib")
+            counter2++;
+            if(counter2>=200){
+              clearInterval(mapinterval);
+              document.getElementById("allmap").innerHTML="Cannot connect to Baidu Map! Please check the network state!";
+            }
+          } else {
+            clearInterval(maplibinterval);
+            var markerClusterer = new BMapLib.MarkerClusterer(map, { markers: markers });
+            for (var m=0;m<pId.length;m++) {
+              cthis.addMouseoverHandler(markers[m], pId[m])
+            }
+          }
+        }, 100);
       }
     }, 100);
   }
@@ -458,12 +587,12 @@ class ExpertMap extends React.Component {
     this.showexpertinfo();
   }
 
-  showexpertinfo() {
+  showexpertinfo() {//只是对数据的内容进行更新
     const model = this.props && this.props.expertMap;
     const personInfo = model.personInfo;
 
     document.getElementById("currentId").value = personInfo.id;
-    var pos = ""
+    var pos = "";
     if (personInfo.pos == null || personInfo.pos == "") {
       pos = "null";
     } else if (personInfo.pos[0] == null || personInfo.pos[0] == "") {
@@ -471,15 +600,25 @@ class ExpertMap extends React.Component {
     } else {
       pos = personInfo.pos[0].n;
     }
+    var cinfo="";
     if (personInfo.name != null) {
-      document.getElementById('author_info').innerHTML = "<img style='float:left;margin:4px' id='imgDemo' src='http:" + personInfo.avatar + "' width='70' height='80'/>"
+      var url=profileUtils.getAvatar(personInfo.avatar, personInfo.id, 50)
+      cinfo= "<img style='float:left;margin:4px' id='imgDemo' src='http:" + url + "' width='70' height='80'/>"
         + "<i class='fa fa-user' style='width: 20px;'> </i><a  target='_blank' href='https://cn.aminer.org/profile/" + personInfo.id + "'>"
         + personInfo.name + "</a><br /><strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"
         + personInfo.indices.h_index + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Paper:  </strong>"
         + personInfo.indices.num_pubs + "<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Citation:  </strong>"
         + personInfo.indices.num_citation + "<br /><i class='fa fa-mortar-board' style='width: 20px;'> </i>"
         + pos + "<br /><i class='fa fa-institution' style='width: 20px;'> </i>" + personInfo.aff.desc + "";
+      if(document.getElementById('author_info')!=null){
+        document.getElementById('author_info').innerHTML=cinfo;
+      }else{
+        console.log("BUG???");
+      }
+    }else{
+
     }
+    return cinfo;
   }
 
   handleScriptLoad() {
@@ -513,6 +652,17 @@ class ExpertMap extends React.Component {
     }
   }
 
+  goto=()=>{
+    var href=window.location.href;
+    window.location.href=href.replace("expert-map","expert-googlemap");
+  }
+
+  reload=()=>{
+    var href=window.location.href;
+    window.location.href=href;
+  }
+
+//page-------------------------------------------------------------------------------------------------------------------
   render() {
     const model = this.props && this.props.expertMap;
     // const personInfo = model.personInfo;
@@ -529,6 +679,12 @@ class ExpertMap extends React.Component {
               <Button onClick={this.showtype} value="4">城市</Button>
               <Button onClick={this.showtype} value="5">机构</Button>
             </ButtonGroup>
+            <div className={styles.switch}>
+              <ButtonGroup id="diffmaps">
+                <Button onClick={this.reload}>Baidu Map</Button>
+                <Button  type="primary" onClick={this.goto}>Google Map</Button>
+              </ButtonGroup>
+            </div>
           </div>
         </div>
         <div className="mapshow">
@@ -538,16 +694,18 @@ class ExpertMap extends React.Component {
           </div>
           <input id="currentId" type="hidden" />
           <input id="currentIds" type="hidden" />
+          <input id="statistic" type="hidden" value="0" />
+          <input id="flowstate" type="hidden" value="0" />
         </div>
       </div>
     );
   }
 }
 
-
 export default connect(({ expertMap, loading }) => ({ expertMap, loading }))(ExpertMap);
 
-
+//百度插件------------------------------------------------------------------------------------------------------------------------------
+function showoverlay(){
 /**
  * @fileoverview MarkerClusterer标记聚合器用来解决加载大量点要素到地图上产生覆盖现象的问题，并提高性能。
  * 主入口类是<a href="symbols/BMapLib.MarkerClusterer.html">MarkerClusterer</a>，
@@ -2236,3 +2394,4 @@ var BMapLib = window.BMapLib = BMapLib || {};
   };
 
 })();
+}

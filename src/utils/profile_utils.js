@@ -7,24 +7,28 @@ const { api } = config;
  * Created by BoGao on 2017/5/31.
  */
 
+const cdnDomain = 'am-cdn-s0.b0.upaiyun.com';
 /**
  * Get person avatar image address.
  * @param src
  * @param profileId
  * @param size - width in px.
- * @returns picture url of person avatar.
+ * @returns string - picture url of person avatar.
  */
 const getAvatar = (src, profileId, size) => {
-  const imgSize = size ? size : 160;
+  const imgSize = size || 160;
   const imgSrc = src;
   if (!src) {
     // TODO move this to config.
-    return '//am-cdn-s0.b0.upaiyun.com/default/default.jpg';
+    return '//static.aminer.org/default/default.jpg';
   }
   // TODO replace session id here.
-  const scopeSessionId = 'todo-replace-scope-session-id';
+  const scopeSessionId = Math.random(); // 'todo-replace-scope-session-id';
   if (imgSrc.indexOf('static.aminer.org') >= 0) {
-    return `${imgSrc.replace('static.aminer.org', 'am-cdn-s0.b0.upaiyun.com')}!${imgSize}`;//?ran=${scopeSessionId}`;
+    // 其他域名下CDN图片读取不出来。
+    // return `${imgSrc.replace('static.aminer.org', 'am-cdn-s0.b0.upaiyun.com')}!${imgSize}`;
+    // ?ran=${scopeSessionId}`;
+    return `${imgSrc}?ran=${scopeSessionId}`;
   } else {
     return `${imgSrc}?ran=${scopeSessionId}`;
   }
@@ -33,15 +37,15 @@ const getAvatar = (src, profileId, size) => {
 /**
  * Get the last affiliation to display in page.
  * @params: pos: must be 'pos' node from profile api;
- * @returns: position string.
+ * @returns: string - position string.
  */
 const displayPosition = (pos) => {
   return pos && pos[pos.length - 1] && pos[pos.length - 1].n ? pos[pos.length - 1].n : '';
-}
+};
 
 const displayPositionFirst = (pos) => {
   return pos && pos.length > 0 && pos[0].n;
-}
+};
 
 const displayNameCNFirst = (name, nameCN) => {
   const cs = [];

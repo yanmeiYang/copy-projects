@@ -4,10 +4,14 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
+import ExpertGoogleMap from './expert-googlemap.js';
 import ExpertMap from './expert-map.js';
 import styles from './index.less';
 import SearchBox from '../../components/SearchBox';
 import { sysconfig } from '../../systems';
+import NProgress from 'nprogress';
+
+const href = window.location.href;
 
 class ExpertMapPage extends React.Component {
 
@@ -22,25 +26,6 @@ class ExpertMapPage extends React.Component {
       this.setState({ query });
     }
   }
-
-  // showtype = (e) => {
-  //   const typeid = e.target && e.target.getAttribute('data');
-  //   const tli = document.getElementById('menu0').getElementsByTagName('li');
-  //   ExpertMap.test1();
-  //   let currentclass = '';
-  //   for (let i = 0; i < tli.length; i += 1) {
-  //     if (tli[i].className !== '') {
-  //       currentclass = tli[i].className;
-  //     }
-  //   }
-  //   for (let i = 0; i < tli.length; i += 1) {
-  //     if (i === typeid) {
-  //       tli[i].className = currentclass;
-  //     } else {
-  //       tli[i].className = '';
-  //     }
-  //   }
-  // };
 
   onSearch = (data) => {
     if (!data.query) {
@@ -64,7 +49,11 @@ class ExpertMapPage extends React.Component {
           onSearch={this.onSearch}
         />
 
-        <ExpertMap query={this.state.query} />
+        {href.indexOf('/expert-googlemap') > 0 &&
+        <ExpertGoogleMap query={this.state.query} />}
+
+        {href.indexOf('/expert-map') > 0 &&
+        <ExpertMap query={this.state.query} />}
 
         {sysconfig.SPECIAL_ExpertMapNoHeader &&
         <div className="HeaderMask" />
@@ -75,3 +64,4 @@ class ExpertMapPage extends React.Component {
 }
 
 export default connect(({ expertMap }) => ({ expertMap }))(ExpertMapPage);
+

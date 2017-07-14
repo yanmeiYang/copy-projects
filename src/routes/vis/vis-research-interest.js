@@ -1,9 +1,11 @@
 /**
  *  File Created by BoGao on 2017-06-04;
  *  Moved form aminer-web, on 2017-06-04;
+ *
+ *  TODO 暂时不用这个模块，因此没有引入react-nvd3框架。
  */
 import React from 'react';
-import NVD3Chart from 'react-nvd3';
+// import NVD3Chart from 'react-nvd3';
 import { connect } from 'dva';
 import { Tag } from 'antd';
 import styles from './vis-research-interest.less';
@@ -58,20 +60,24 @@ class VisResearchInterest extends React.Component {
         {/*目前没有增加tag的功能，先隐藏*/}
         {/*<AddTags tags={[1, 2, 3]} />*/}
 
-        {!disable_vis_chart && visData.interests &&
-        <NVD3Chart
-          type="stackedAreaChart" width={500} height={200} duration={200}
-          defaultState="Stream"
-          controlOptions={['Stream']}
-          showControls={true}
-          showYAxis={false}
-          datum={visData.interests}
-          useInteractiveGuideline={false}
-          xAxis={{ tickFormat: d => d }}
-          x={d => d[0]}
-          y={d => d[1]}
-        />
-        }
+        {/*
+
+         {!disable_vis_chart && visData.interests &&
+         <NVD3Chart
+         type="stackedAreaChart" width={500} height={200} duration={200}
+         defaultState="Stream"
+         controlOptions={['Stream']}
+         showControls={true}
+         showYAxis={false}
+         datum={visData.interests}
+         useInteractiveGuideline={false}
+         xAxis={{ tickFormat: d => d }}
+         x={d => d[0]}
+         y={d => d[1]}
+         />
+         }
+
+         */}
       </div>
     );
   }

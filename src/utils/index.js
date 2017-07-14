@@ -1,6 +1,5 @@
-import lodash from 'lodash';
 import classnames from 'classnames';
-
+import { cloneDeep } from 'lodash';
 import config from './config';
 import { getMenusByUser } from './menu';
 import request from './request';
@@ -106,7 +105,7 @@ const queryArray = (array, key, keyAlias = 'key') => {
  * @return  {Array}
  */
 const arrayToTree = (array, id = 'id', pid = 'pid', children = 'children') => {
-  const data = lodash.cloneDeep(array);
+  const data = cloneDeep(array);
   const result = [];
   const hash = {};
   data.forEach((item, index) => {
@@ -125,6 +124,15 @@ const arrayToTree = (array, id = 'id', pid = 'pid', children = 'children') => {
   return result;
 };
 
+// for router
+const cached = {};
+function registerModel(app, model) {
+  if (!cached[model.namespace]) {
+    app.model(model);
+    cached[model.namespace] = 1;
+  }
+}
+
 module.exports = {
   config,
   // menu,
@@ -137,4 +145,6 @@ module.exports = {
   queryURL,
   queryArray,
   arrayToTree,
+
+  registerModel,
 };

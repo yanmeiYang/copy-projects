@@ -29,7 +29,9 @@ module.exports = {
     userLogout: '/auth/signout',
     signup: '/auth/signup',
     checkEmail: '/user/check/:email',
-    forgot: "/auth/update/forgot",
+    forgot: '/auth/update/forgot',
+    // 重置密码
+    retrieve: '/auth/update/token',
     // 给user添加label {uid:'',label:''}
     invoke: '/user/role/invoke',
     // 删除user的label

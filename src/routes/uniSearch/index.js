@@ -74,7 +74,7 @@ class Search extends React.PureComponent {
           const newOffset = data.offset || 0;
           const newSize = data.size || 30;
           this.dispatch(routerRedux.push({
-            pathname: `/${sysconfig.SearchPagePrefix}/${data.query}/${newOffset}/${newSize}?`,//eb=${filters.eb}TODO
+            pathname: `/${sysconfig.SearchPagePrefix}/${data.query}/${newOffset}/${newSize}?`, //eb=${filters.eb}TODO
           }));
         },
       },
@@ -200,18 +200,18 @@ class Search extends React.PureComponent {
           <ExpertMap query={this.props.search.query} />
         </div>
         <div className={styles.quickLinks}>
-          {/*<a>一些快速链接！</a><br />*/}
-          {/*<a>一些快速链接！</a><br />*/}
-          {/*<a>一些快速链接！</a><br />*/}
-          {/*<a>一些快速链接！</a><br />*/}
-          {/*<a>一些快速链接！</a><br />*/}
+          {/* <a>一些快速链接！</a><br />*/}
+          {/* <a>一些快速链接！</a><br />*/}
+          {/* <a>一些快速链接！</a><br />*/}
+          {/* <a>一些快速链接！</a><br />*/}
+          {/* <a>一些快速链接！</a><br />*/}
         </div>
       </div>
     );
 
     this.state.view['relation-view'] = (
       <div>
-        <RelationGraph query={this.props.search.query}/>
+        <RelationGraph query={this.props.search.query} />
       </div>
     );
 
@@ -230,11 +230,11 @@ class Search extends React.PureComponent {
              </div>
              */}
 
-            {/*<KgSearchBox*/}
-            {/*size="large"*/}
-            {/*style={{ width: 500, marginBottom: 24 }}*/}
-            {/*onSearch={this.onSearch}*/}
-            {/*/>*/}
+            {/* <KgSearchBox*/}
+            {/* size="large"*/}
+            {/* style={{ width: 500, marginBottom: 24 }}*/}
+            {/* onSearch={this.onSearch}*/}
+            {/* />*/}
 
             {/* Filter */}
             <div className={styles.filterWrap}>
@@ -364,7 +364,6 @@ class Search extends React.PureComponent {
     );
   }
 }
-;
 
 
 export default connect(({ app, search, loading }) => ({ app, search, loading }))(Search);

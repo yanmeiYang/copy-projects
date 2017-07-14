@@ -48,7 +48,7 @@ const setLocalStorage = (key, value, roles) => {
 };
 
 const getLocalStorage = (key) => {
-  //过期时间为24小时
+  // 过期时间为24小时
   const exp = 1000 * 60 * 60 * 24;
   const data = localStorage.getItem(key);
   if (data) {
@@ -61,7 +61,7 @@ const getLocalStorage = (key) => {
       return dataObj;
     }
   } else {
-    return;
+    return '';
   }
 
 

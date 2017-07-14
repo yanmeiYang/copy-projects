@@ -76,7 +76,7 @@ const Routers = function ({ history, app }) {
         }, {
           path: 'seminar',
           getComponent(nextState, cb) {
-            require.ensure([], require => {
+            require.ensure([], (require) => {
               registerModel(app, require('./models/seminar'));
               cb(null, require('./routes/seminar/'));
             }, 'seminar');
@@ -84,7 +84,7 @@ const Routers = function ({ history, app }) {
         }, {
           path: 'seminar-my',
           getComponent(nextState, cb) {
-            require.ensure([], require => {
+            require.ensure([], (require) => {
               registerModel(app, require('./models/seminar'));
               cb(null, require('./routes/seminar/mySeminars/'));
             }, 'mySeminar');
@@ -93,7 +93,7 @@ const Routers = function ({ history, app }) {
         {
           path: 'seminarpost',
           getComponent(nextState, cb) {
-            require.ensure([], require => {
+            require.ensure([], (require) => {
               registerModel(app, require('./models/seminar'));
               cb(null, require('./routes/seminar/addSeminar'));
             }, 'addSeminar');
@@ -117,7 +117,7 @@ const Routers = function ({ history, app }) {
           },
         }, {
           path: 'statistics',
-          getComponent(nextState, cb){
+          getComponent(nextState, cb) {
             require.ensure([], (require) => {
               registerModel(app, require('./models/seminar'));
               registerModel(app, require('./models/statistics/statistics'));
@@ -269,7 +269,16 @@ const Routers = function ({ history, app }) {
         require.ensure([], (require) => {
           registerModel(app, require('./models/auth/auth'));
           cb(null, require('./routes/admin/forgot-password/'));
-        }, 'forgotpassword');
+        }, 'forgotPassword');
+      },
+    },
+    {
+      path: '/reset-password',
+      getComponent(nextState, cb) {
+        require.ensure([], (require) => {
+          registerModel(app, require('./models/auth/auth'));
+          cb(null, require('./routes/admin/reset-password/'));
+        }, 'resetPassword');
       },
     },
     {
@@ -283,6 +292,6 @@ const Routers = function ({ history, app }) {
   ];
 
   return <Router history={history} routes={routes} />;
-}
+};
 
 export default Routers;

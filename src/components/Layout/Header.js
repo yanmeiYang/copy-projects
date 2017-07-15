@@ -50,9 +50,9 @@ function Header({ app, search, location, dispatch, logout, onSearch }) {
         theme="light"
         className={styles.menu}
       >
-        {/*<Menu.Item key="/users">*/}
-        {/*<Link to="/"><Icon type="bars" />语言切换</Link>*/}
-        {/*</Menu.Item>*/}
+        {/* <Menu.Item key="/users"> */}
+        {/* <Link to="/"><Icon type="bars" />语言切换</Link> */}
+        {/* </Menu.Item> */}
 
         {/*{app.user.hasOwnProperty('first_name') &&*/}
         {/*<Menu.Item key="/welcome">*/}

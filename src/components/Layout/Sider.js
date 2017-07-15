@@ -1,12 +1,13 @@
 import React from 'react';
 import { Icon, Switch } from 'antd';
 import styles from './Layout.less';
-import { config } from '../../utils';
 import Menus from './Menu';
 
-const Sider = ({ siderFold, darkTheme, location,
+const Sider = ({
+                 siderFold, darkTheme, location,
                  changeTheme, navOpenKeys, changeOpenKeys, menu,
-}) => {
+               }) => {
+
   const menusProps = {
     menu,
     siderFold,
@@ -14,17 +15,21 @@ const Sider = ({ siderFold, darkTheme, location,
     location,
     navOpenKeys,
     changeOpenKeys,
-  }
+  };
+
   return (
     <div style={{ paddingTop: 20 }}>
       {/*<div className={styles.logo}>*/}
-        {/*<img alt={'logo'} src={config.logo} />*/}
-        {/*{siderFold ? '' : <span>{config.name}</span>}*/}
+      {/*<img alt={'logo'} src={config.logo} />*/}
+      {/*{siderFold ? '' : <span>{config.name}</span>}*/}
       {/*</div>*/}
+
       <Menus {...menusProps} />
-      {!siderFold ? <div className={styles.switchtheme}>
+
+      {false && !siderFold ? <div className={styles.switchtheme}>
         <span><Icon type="bulb" />Switch Theme</span>
-        <Switch onChange={changeTheme} defaultChecked={darkTheme} checkedChildren="Dark" unCheckedChildren="Light" />
+        <Switch onChange={changeTheme} defaultChecked={darkTheme} checkedChildren="Dark"
+                unCheckedChildren="Light" />
       </div> : ''}
     </div>
   );

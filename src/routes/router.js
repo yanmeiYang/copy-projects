@@ -10,7 +10,7 @@ export default {
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
         // registerModel(app, require('./models/vis/vis-research-interest'));
-        cb(null, { component: require('./relation-graph-page') });
+        cb(null, require('./relation-graph-page'));
       }, 'NormalPages');
     },
   }),
@@ -20,7 +20,7 @@ export default {
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
         registerModel(app, require('../models/vis/vis-research-interest'));
-        cb(null, { component: require('./KnowledgeGraphPage') });
+        cb(null, require('./KnowledgeGraphPage'));
       }, 'NormalPages');
     },
   }),

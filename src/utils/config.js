@@ -2,10 +2,10 @@
  * Created by yutao on 2017/5/22.
  */
 
-const SYS = 'ccf';
+// const SYS = 'ccf';
 // const SYS = 'huawei';
 // const SYS = 'alibaba';
-// const SYS = 'tencent';
+const SYS = 'tencent';
 
 module.exports = {
 

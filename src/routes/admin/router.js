@@ -6,12 +6,12 @@ import { registerModel } from '../../utils';
 export default {
 
   AdminUsers: app => ({
-    path: '/admin/users',
+    path: 'admin/users',
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/common/universal-config'));
         registerModel(app, require('../../models/auth/auth'));
-        cb(null, { component: require('./user-list') });
+        cb(null, require('./user-list'));
       }, 'admin');
     },
   }),
@@ -22,7 +22,7 @@ export default {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/admin/system-config'));
         registerModel(app, require('../../models/common/universal-config'));
-        cb(null, { component: require('./system-config') });
+        cb(null, require('./system-config'));
       }, 'admin');
     },
   }),

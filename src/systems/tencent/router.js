@@ -1,19 +1,9 @@
-/**
- *  Created by BoGao on 2017-07-15;
- */
-import { core } from '../router';
+import React from 'react';
+import { Router } from 'dva/router';
+import { core } from '../../router';
 
-/**
- * 提供Aminer2b系统全部可用的Routes.
- *
- * @param history
- * @param app
- * @returns {XML}
- * @constructor
- */
-const fullRouter = (app, defaultChildRoutes) => {
-  const childRoutes = defaultChildRoutes || [];
-  return [
+const Routers = function ({ history, app }) {
+  const routes = [
     core.IndexPage(app, [
 
       // search
@@ -54,12 +44,12 @@ const fullRouter = (app, defaultChildRoutes) => {
       // KnowledgeGraph
       core.KnowledgeGraph(app),
 
-      ...childRoutes,
-
       // System Default.
       core.Default404(app),
     ]),
   ];
+
+  return <Router history={history} routes={routes} />;
 };
 
-export default fullRouter;
+export default Routers;

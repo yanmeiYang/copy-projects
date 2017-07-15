@@ -45,6 +45,10 @@ const core = {
 
 };
 
+module.exports = { registerModel, core };
+
+// ---------- below are not used -----------------
+
 // 现在不用这个方法。用上面...的方法.
 // function importRoutes(routes) {
 //   if (!routes || routes.length === 0) {
@@ -76,7 +80,7 @@ const Routers = function ({ history, app }) {
       getIndexRoute(nextState, cb) {
         require.ensure([], (require) => {
           registerModel(app, require('./models/vis/vis-research-interest'));
-          cb(null, { component: require('./routes/lab/Admin') });
+          cb(null, require('./routes/lab/Admin'));
         }, 'lab/admin');
       },
     },
@@ -86,7 +90,7 @@ const Routers = function ({ history, app }) {
       getIndexRoute(nextState, cb) {
         require.ensure([], (require) => {
           registerModel(app, require('./models/vis/vis-research-interest'));
-          cb(null, { component: require('./routes/lab/KnoledgeGraphWidget') });
+          cb(null, require('./routes/lab/KnoledgeGraphWidget'));
         }, 'knowledge-graph');
       },
     },
@@ -96,7 +100,7 @@ const Routers = function ({ history, app }) {
       getIndexRoute(nextState, cb) {
         require.ensure([], (require) => {
           registerModel(app, require('./models/testpage'));
-          cb(null, { component: require('./routes/hidden/testpage') });
+          cb(null, require('./routes/hidden/testpage'));
         }, 'testpage');
       },
     },
@@ -104,10 +108,6 @@ const Routers = function ({ history, app }) {
   ];
 };
 
-// export default Routers;
-module.exports = {
-  registerModel, core,
-};
 
 // const registerModel = (app, model) => {
 //   if (!(app._models.filter(m => m.namespace === model.namespace).length === 1)) {

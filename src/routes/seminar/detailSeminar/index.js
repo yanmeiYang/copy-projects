@@ -15,7 +15,7 @@ import styles from './index.less';
 const DetailSeminar = ({ dispatch, seminar, app }) => {
   const { summaryById, loading } = seminar;
   const currentUser = app;
-  //share
+  // share
   let shareModalDisplay = false;
 
   function clipboard(path) {

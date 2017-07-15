@@ -65,24 +65,8 @@ class IndexPage extends React.Component {
             }
           </p>
 
-          {config.system === 'huawei' &&
-          <div className={styles.bigNavi}>
-            <div className="naviItem">
-              <Link to="https://cn.aminer.org/ego">学者关系网络</Link>
-            </div>
-            <div className="naviItem">
-              <Link to="/expert-map">全球人才分布图</Link>
-            </div>
-            <div className="naviItem">
-              <Link to="/knowledge-graph">知识图谱</Link>
-            </div>
-            <div className="naviItem">
-              2016最具影响力
-              <a href="https://cn.aminer.org/mostinfluentialscholar" target="_blank">学者</a>，
-              <a href="https://cn.aminer.org/ranks/org" target="_blank">机构排名</a>
-            </div>
-          </div>
-          }
+          {/* Insert Blocks in Config file. */}
+          {sysconfig.IndexPage_InfoBlocks}
 
         </div>
 

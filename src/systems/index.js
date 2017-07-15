@@ -53,6 +53,7 @@ const defaultSystemConfigs = {
   IndexPage_QuickSearchList: ['Artificial intelligence', 'Robotics',
     'Data Mining', 'Machine Learning', 'Data Modeling', 'Computer vision',
     'Networks', 'Natural language processing'],
+  IndexPage_InfoBlocks: '',
 
   SearchFilterExclude: 'Gender',
 

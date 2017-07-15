@@ -9,7 +9,6 @@ import ExpertMap from './expert-map.js';
 import styles from './index.less';
 import SearchBox from '../../components/SearchBox';
 import { sysconfig } from '../../systems';
-import NProgress from 'nprogress';
 
 const href = window.location.href;
 

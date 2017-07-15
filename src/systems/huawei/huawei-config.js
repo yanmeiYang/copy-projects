@@ -2,6 +2,7 @@
  * Created by BoGao on 2017/6/20.
  */
 import React from 'react';
+import { IndexInfoBox } from './components';
 
 module.exports = {
 
@@ -9,6 +10,14 @@ module.exports = {
   PageTitle: 'HUAWEI 知识洞察系统',
   SearchPagePrefix: 'uniSearch',
   ShowSideMenu: false,
+
+  // IndexPage_QuickSearchList:[], // use default.
+  IndexPage_InfoBlocks: <IndexInfoBox />,
+
+  Header_SubTextLogo: '知识洞察系统',
+  Header_LogoStyle: { top: '-20px', width: '90px', },
+  Header_UserPageURL: '',
+  Footer_Content: '',
 
   ExpertBases: [
     {
@@ -57,12 +66,6 @@ module.exports = {
       nperson: 287,
     },
   ],
-  IndexPage_QuickSearchList: ['Artificial intelligence', 'Robotics', 'Data Mining',
-    'Machine Learning', 'Data Modeling', 'Computer vision', 'Networks', 'Natural language processing'],
-  Header_SubTextLogo: '知识洞察系统',
-  Header_LogoStyle:{top: '-20px',width: '90px',},
-  Header_UserPageURL: '',
-  Footer_Content: '',
 
   // 特殊配置，这里是System的自己的配置
 

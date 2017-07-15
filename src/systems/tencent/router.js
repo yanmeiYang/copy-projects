@@ -1,3 +1,6 @@
+/**
+ * Created by BoGao on 2017/7/15.
+ */
 import React from 'react';
 import { Router } from 'dva/router';
 import { core } from '../../router';

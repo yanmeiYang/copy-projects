@@ -49,7 +49,7 @@ const indicesConfig = {
     color: 'blue',
     tooltip: 'CCF活动贡献（C）',
     render: (activity, activity_indices) => {
-      return activity_indices.contrib.toFixed(2);
+      return activity_indices && activity_indices.contrib.toFixed(2);
     },
   },
 };

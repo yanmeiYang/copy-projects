@@ -1,0 +1,51 @@
+/**
+ *  Created by BoGao on 2017-07-16;
+ */
+
+:global {
+
+  .rightInfoZone {
+    border: solid 0px red;
+
+    .rizPersonInfo {
+      display: flex; flex-direction: column; flex: 0;
+      height: 100%;
+      //background-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 4px white;
+
+      .bg {
+        background-color: rgba(255, 255, 255, 0.85);
+        box-shadow: 0 0 2px white;
+        border-radius: 2px;
+      }
+
+      .name {
+        a { font-size: 18px; font-weight: lighter; color: #101010;
+          font-family: "STHeitiSC-Medium", "STHeiti", "Heiti SC", "Hiragino Sans GB", "Microsoft JhengHei", "Microsoft Yahei", SimHei, "AvenirNext-Regular", "Helvetica Neue", "lucida grande", "PingFangHK-Light", "WenQuanYi Micro Hei", "Droid Sans", "Roboto", Helvetica, Tahoma, Arial, "sans-serif";
+        }
+        a.zh { font-size: 14px; }
+      }
+
+      .img {
+        display: flex; justify-content: center;
+        img { height: 192px; }
+      }
+
+      .info {
+        display: flex; flex-direction: column; flex: 2;
+        padding: 12px 6px; margin: 8px 0 4px 0;
+      }
+      .tag { margin-bottom: 1px; }
+
+      .images {
+        display: flex; justify-content: space-between; flex-wrap: wrap;
+        .imgBox {
+          width: 43px; height: 46px; overflow: hidden; margin-bottom: 4px; border: solid 0px #ddd;
+          img { width: 42px; }
+        }
+
+      }
+    }
+  }
+
+}

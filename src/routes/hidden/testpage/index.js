@@ -21,7 +21,7 @@ class TestPage extends React.Component {
         console.log('failed');
       },
     ).catch(() => {
-      console.err('Error occured.');
+      console.error('Error occured.');
     });
   }
 

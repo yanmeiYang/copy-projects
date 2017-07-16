@@ -22,8 +22,9 @@ const getAvatar = (src, profileId, size) => {
     // TODO move this to config.
     return '//static.aminer.org/default/default.jpg';
   }
-  // TODO replace session id here.
-  const scopeSessionId = Math.random(); // 'todo-replace-scope-session-id';
+  return imgSrc;
+
+  // const scopeSessionId = Math.random(); // 'todo-replace-scope-session-id';
   if (imgSrc.indexOf('static.aminer.org') >= 0) {
     // 其他域名下CDN图片读取不出来。
     // return `${imgSrc.replace('static.aminer.org', 'am-cdn-s0.b0.upaiyun.com')}!${imgSize}`;

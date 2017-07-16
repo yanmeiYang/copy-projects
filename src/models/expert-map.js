@@ -42,14 +42,17 @@ export default {
       const data = yield call(personService.getPerson, personId);
       yield put({ type: 'getPersonInfoSuccess', payload: { data } });
     },
-
   },
 
   reducers: {
     getPersonInfoSuccess(state, { payload: { data } }) {
-      //console.log('-----------------------------------', data.data);
       return { ...state, personInfo: data.data };
     },
+
+    resetPersonInfo(state) {
+      return { ...state, personInfo: {} };
+    },
+
     searchMapSuccess(state, { payload: { data } }) {
       // console.log('-----------------------------------', data.data);
       // TODO translate data into target format.

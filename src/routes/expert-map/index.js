@@ -8,34 +8,33 @@ import ExpertGoogleMap from './expert-googlemap.js';
 import ExpertMap from './expert-map.js';
 import styles from './index.less';
 import SearchBox from '../../components/SearchBox';
-import { sysconfig } from '../../systems';
-
-const href = window.location.href;
 
 class ExpertMapPage extends React.Component {
 
   state = {
     query: 'data mining',
+    mapType: 'baidu', // [baidu|google]
   };
 
   componentWillMount() {
-    const query = this.props.location.query.query;
-    console.log('componentWillMount! update query to :', query);
-    if (query) {
+    const query = this.props.location.query;
+    if (query.query) {
       this.setState({ query });
+    }
+    if (query.type) {
+      this.setState({ mapType: query.type || 'baidu' });
     }
   }
 
   onSearch = (data) => {
-    if (!data.query) {
-      return false;
+    if (data.query) {
+      this.setState({ query: data.query });
+      this.props.dispatch(routerRedux.push({
+        pathname: '/expert-map',
+        query: { query: data.query },
+      }));
     }
-    this.setState({ query: data.query });
-    this.props.dispatch(routerRedux.push({
-      pathname: '/expert-map',
-      query: { query: data.query },
-    }));
-  }
+  };
 
   render() {
     return (
@@ -48,15 +47,14 @@ class ExpertMapPage extends React.Component {
           onSearch={this.onSearch}
         />
 
-        {href.indexOf('/expert-googlemap') > 0 &&
-        <ExpertGoogleMap query={this.state.query} />}
-
-        {href.indexOf('/expert-map') > 0 &&
-        <ExpertMap query={this.state.query} />}
-
-        {sysconfig.SPECIAL_ExpertMapNoHeader &&
-        <div className="HeaderMask" />
+        {this.state.mapType === 'google' &&
+        <ExpertGoogleMap query={this.state.query} mapType={this.state.mapType} />
         }
+
+        {this.state.mapType === 'baidu' &&
+        <ExpertMap query={this.state.query} mapType={this.state.mapType} />
+        }
+
       </div>
     );
   }

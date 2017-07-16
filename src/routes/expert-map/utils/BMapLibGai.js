@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 function GetBMapLib(showTop) {
   return function showOverLay() {
     /**
@@ -570,10 +572,9 @@ function GetBMapLib(showTop) {
 
         this._clusterMarker.setText(this._markers.length);
 
-        const thatMap = this._map;
-        const thatBounds = this.getBounds();
         this._clusterMarker.addEventListener('click', (event) => {
-          thatMap.setViewport(thatBounds);
+          console.log('set view port');
+          this._map.setViewport(this.getBounds());
         });
 
         const that = this;
@@ -598,6 +599,7 @@ function GetBMapLib(showTop) {
           ids = newids;
           document.getElementById('currentIds').value = ids;
 
+          // call function in component.
           showTop(userids, event, map, maindom, ids);
         });
       };

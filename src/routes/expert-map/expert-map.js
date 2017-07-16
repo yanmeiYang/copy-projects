@@ -15,128 +15,6 @@ import { findPosition, getById, waitforBMap, waitforBMapLib } from './utils/map-
 const ButtonGroup = Button.Group;
 const blankAvatar = '/images/blank_avatar.jpg';
 
-function clusterdetail(id) {
-  const state = getById('flowstate').value;
-  const statistic = getById('statistic').value;
-  if (statistic !== id) { // 一般认为是第一次点击
-    getById('flowstate').value = 1;
-    const theNode = getById('allmap');
-    const h = theNode.offsetHeight;  // 高度
-    const w = theNode.offsetWidth;  // 宽度
-    const width = 200;
-    const height = h * 0.8;
-    if (getById('flowinfo') == null) {
-      const flowdiv = document.createElement('div');
-      const cstyle = `z-index:10001;border:1px solid green;height:${height}px;width:${width}px;position: absolute;left:${w - width - 10}px;top:${(h - height) / 2}px;overflow:hidden;word-wrap: break-word;word-break:break-all;background-color:rgba(255, 255, 255, 0.3);`;
-      flowdiv.setAttribute('name', 'flowinfo');// 中心的一个图片
-      flowdiv.setAttribute('style', cstyle);
-      flowdiv.setAttribute('id', 'flowinfo');
-      theNode.appendChild(flowdiv);
-    } else {
-      const cstyle = `z-index:10001;border:1px solid green;height:${height}px;width:${width}px;position: absolute;left:${w - width - 10}px;top:${(h - height) / 2}px;overflow:hidden;word-wrap: break-word;word-break:break-all;background-color:rgba(255, 255, 255, 0.3);`;
-      getById('flowinfo').setAttribute('style', cstyle);
-      getById('flowinfo').style.display = '';
-    }
-    let cids = [];
-    let thisinfo = '';
-    if (id.indexOf(',') === -1) {
-      cids[0] = id;
-      const resultPromise = listPersonByIds(cids);
-      resultPromise.then(
-        (data) => {
-          const personInfo = data.data.persons[0];
-          let pos = '';
-          if (typeof (personInfo.pos) === 'undefined') {
-            pos = 'NULL';
-          } else if (personInfo.pos == null || personInfo.pos === '') {
-            pos = 'NULL';
-          } else if (personInfo.pos[0] == null || personInfo.pos[0] === '') {
-            pos = '';
-          } else {
-            pos = personInfo.pos[0].n;
-          }
-          let aff = 'NULL';
-          if (personInfo.aff != null) {
-            if (personInfo.aff.desc != null) {
-              aff = personInfo.aff.desc;
-            }
-          }
-          let photo = '/showimg.jpg';
-          if (personInfo.avatar != null && personInfo.avatar !== '') {
-            photo = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 50);
-          }
-          let tags = 'NULL';
-          if (personInfo.tags != null && personInfo.tags !== '') {
-            tags = '';
-            for (const t in personInfo.tags) {
-              tags += `${personInfo.tags[t].t}  |  `;
-            }
-            tags = tags.substring(0, tags.length - 3);
-          }
-          const thisinfo = `<img style='float:left;margin:4px' id='imgDemo' src='http:${photo}' width='70' height='80'/>`
-            + `<i class='fa fa-user' style='width: 20px;'> </i><a  target='_blank' href='https://cn.aminer.org/profile/${personInfo.id}'>${
-              personInfo.name}</a><br /><i class='fa fa-mortar-board' style='width: 20px;'> </i>${
-              pos}<br /><i class='fa fa-institution' style='width: 20px;'> </i>${
-              aff}<br /><i class='fa fa-header' style='width: 20px;'> </i><strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>${
-              personInfo.indices.h_index}<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Paper:  </strong>${
-              personInfo.indices.num_pubs}<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Citation:  </strong>${
-              personInfo.indices.num_citation}<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Activity:  </strong>${
-              personInfo.indices.activity}<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Diversity:  </strong>${
-              personInfo.indices.diversity}<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#G_index:  </strong>${
-              personInfo.indices.g_index}<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Sociability:  </strong>${
-              personInfo.indices.sociability}<br /><i class='fa fa-tag' style='width: 20px;'> </i>${
-              tags}`;
-          getById('flowinfo').innerHTML = `<div style='margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;word-wrap: break-word;word-break:break-all;opacity:1;background-color:#FFFFFF;'><div style='width:100%;margin:10px;'><h2>Detail Info</h2></div><div style='margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;line-height:22px'>${thisinfo}</div></div>`;
-        },
-        () => {
-          console.log('failed');
-        },
-      ).catch((error) => {
-        console.error(error);
-      });
-    } else {
-      cids = id.split(',').slice(0, id.split(',').length - 1);
-      const resultPromise = listPersonByIds(cids);
-      resultPromise.then(
-        (data) => {
-          let avgHindex = 0;
-          const top8 = '';
-          let location = '';
-          const setObj = new Set();
-          const p = data.data.persons;
-          for (let i = 0; i < p.length; i++) {
-            avgHindex += p[i].indices.h_index;
-            setObj.add(p[i].attr.nation);
-          }
-          for (const x in setObj) {
-            location = `${location},${x}`;
-          }
-          avgHindex /= p.length;
-          avgHindex = avgHindex.toFixed(2);// 保留两位小数
-          thisinfo = `${"<div id='author_info' style='width: 350px;height: 120px;'>" + "<strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"}${avgHindex
-            }<br />countries:${location}</div>`;
-          getById('flowinfo').innerHTML = `<div style='margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;word-wrap: break-word;word-break:break-all;opacity:1;background-color:#FFFFFF;'><div style='width:100%;margin:10px;'><h2>Statistic Info</h2></div><div style='margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;line-height:22px'>${thisinfo}</div></div>`;
-        },
-        () => {
-          console.log('failed');
-        },
-      ).catch((error) => {
-        console.error(error);
-      });
-    }
-  } else if (state === 1) { // 偶数次点击同一个对象
-    // 认为是第二次及其以上点击
-    getById('flowstate').value = 0;
-    getById('flowinfo').style.display = 'none';
-  } else { // 奇数次点击同一个对象
-    getById('flowstate').value = 1;
-    getById('flowinfo').style.display = '';
-  }
-
-  getById('statistic').value = id;
-}
-
-
 function insertAfter(newElement, targetElement) {
   const parent = targetElement.parentNode;
   if (parent.lastChild === targetElement) {
@@ -210,55 +88,56 @@ class ExpertMap extends React.PureComponent {
     if (ishere != null) {
       return;
     }
-    let ids = [];
+
     const pixel = map.pointToOverlayPixel(e.currentTarget.getPosition());// 中心点的位置
     const width = 180;
     // 可得中心点到图像中心点的半径为：width/2-imgwidth/2,圆形的方程为(X-pixel.x)^2+(Y-pixel.y)^2=width/2
     const imgwidth = 45;
+
     const oDiv = document.createElement('div');
-    const ostyle = `cursor:pointer;z-index:10000;height:${width}px;width:${width}px;position: absolute;left: ${pixel.x - width / 2}px;top: ${pixel.y - width / 2}px;border-radius:50%;`;
+    const ostyle = `height:${width}px;width:${width}px;left: ${pixel.x - (width / 2)}px;top: ${pixel.y - (width / 2)}px;`;
     oDiv.setAttribute('id', 'panel');
     oDiv.setAttribute('style', ostyle);
+    oDiv.setAttribute('class', 'roundImgContainer');
     insertAfter(oDiv, maindom);
     const thisNode = getById('panel');
     // 开始显示图片
-    if (usersIds.length > 8) { // 只取前面的8个
-      ids = usersIds.slice(0, 8);
-    } else {
-      ids = usersIds;
-    }
+    const ids = usersIds.slice(0, 8);
+
     const fenshu = (2 * Math.PI) / ids.length;// 共有多少份，每份的夹角
     for (let i = 0; i < ids.length; i += 1) {
       const centerX = Math.cos(fenshu * i) * (width / 2 - imgwidth / 2) + width / 2;
       const centerY = Math.sin(fenshu * i) * (width / 2 - imgwidth / 2) + width / 2;
       const imgdiv = document.createElement('div');
-      const cstyle = `z-index:10001;border:1px solid white;height:${imgwidth}px;width:${imgwidth}px;position: absolute;left:${centerX - imgwidth / 2}px;top:${centerY - imgwidth / 2}px; border-radius:50%; overflow:hidden;`;
+      const cstyle = `height:${imgwidth}px;width:${imgwidth}px;left:${centerX - (imgwidth / 2)}px;top:${centerY - (imgwidth / 2)}px;`;
       imgdiv.setAttribute('name', 'scholarimg');
       imgdiv.setAttribute('style', cstyle);
-      imgdiv.innerHTML = `<img style='background: white;'  data='@@@@@@@0@@@@@@@' height='${imgwidth}' width='${imgwidth}' src='/showimg.jpg' alt='0'>`;
+      imgdiv.setAttribute('class', 'imgWrapper');
+      imgdiv.innerHTML = `<img data='@@@@@@@0@@@@@@@' height='${imgwidth}' width='${imgwidth}' src='${blankAvatar}' alt='0'>`;
       // insertAfter(imgdiv,thisNode);
       thisNode.appendChild(imgdiv);
-      imgdiv.addEventListener('click', function (event) {
-        const chtml = this.innerHTML;
+      imgdiv.addEventListener('click', (event) => {
+        const chtml = event.target.innerHTML;
         let num = 0;
         if (chtml.split('@@@@s@@@').length > 1) {
           num = chtml.split('@@@@@@@')[1];
         }
-        clusterdetail(ids[num]);
+        this.toggleRightInfoBox(ids[num]);
       }, false);
     }
     // 再在其中间添加一个图像
-    const centerX = width / 2;
-    const centerY = width / 2;
+    const wh = imgwidth + 40;
+    const left = (width / 2) - (wh / 2);
     const imgdiv = document.createElement('div');
-    const cstyle = `opacity:0;z-index:10001;border:1px solid white;height:${imgwidth}px;width:${imgwidth}px;position: absolute;left:${centerX - imgwidth / 2}px;top:${centerY - imgwidth / 2}px; border-radius:50%; overflow:hidden;`;
+    const cstyle = `opacity:0;height:${wh}px;width:${wh}px;left:${left}px;top:${left}px;`;
     imgdiv.setAttribute('name', 'center');// 中心的一个图片
     imgdiv.setAttribute('style', cstyle);
-    imgdiv.innerHTML = `<img style='background: white;'  data='' height='${imgwidth}' width='${imgwidth}' src='/showimg.jpg' alt='-1'>`;
+    imgdiv.setAttribute('class', 'imgWrapper');
     thisNode.appendChild(imgdiv);
     imgdiv.addEventListener('click', (event) => { // 集体的一个显示
-      clusterdetail(inputids);
+      this.toggleRightInfoBox(inputids);
     });
+
     if (thisNode != null) { // 准备绑定事件
       const pthisNode = thisNode.parentNode;
       pthisNode.addEventListener('mouseleave', (event) => {
@@ -323,6 +202,18 @@ class ExpertMap extends React.PureComponent {
     });
   };
 
+  initializeBaiduMap = (map) => {
+    map.enableScrollWheelZoom();
+    const cr = new BMap.CopyrightControl({ anchor: BMAP_ANCHOR_BOTTOM_RIGHT });
+    map.addControl(cr);
+    map.addControl(new BMap.NavigationControl());
+    map.addControl(new BMap.ScaleControl());
+    map.addControl(new BMap.OverviewMapControl());
+    // map.setDefaultCursor();
+    // map.disableDoubleClickZoom();// 静止双击
+    // map.addControl(new BMap.MapTypeControl());
+  };
+
   showMap = (place, type) => {
     waitforBMap(200, 100,
       (BMap) => {
@@ -337,14 +228,7 @@ class ExpertMap extends React.PureComponent {
           scale = 10;
         }
         map.centerAndZoom(new BMap.Point(116.404, 39.915), scale);
-        map.enableScrollWheelZoom();
-        const cr = new BMap.CopyrightControl({ anchor: BMAP_ANCHOR_BOTTOM_RIGHT });
-        map.addControl(cr);
-        map.addControl(new BMap.NavigationControl());
-        map.addControl(new BMap.ScaleControl());
-        map.addControl(new BMap.OverviewMapControl());
-        // map.disableDoubleClickZoom();// 静止双击
-        // map.addControl(new BMap.MapTypeControl());
+        this.initializeBaiduMap(map);
 
         const markers = [];
         const pId = [];
@@ -409,8 +293,131 @@ class ExpertMap extends React.PureComponent {
       e.target.closeInfoWindow(infoWindow);
     });
     marker.addEventListener('click', (e) => {
-      clusterdetail(personId);
+      this.toggleRightInfoBox(personId);
     });
+  };
+
+  toggleRightInfoBox = (id) => {
+    console.log('>>: clusterDetail', id);
+
+    const state = getById('flowstate').value;
+    const statistic = getById('statistic').value;
+    if (statistic !== id) { // 一般认为是第一次点击
+      getById('flowstate').value = 1;
+      const theNode = getById('allmap');
+      const h = theNode.offsetHeight;  // 高度
+      const w = theNode.offsetWidth;  // 宽度
+      const width = 200;
+      const height = h * 0.8;
+      if (getById('flowinfo') == null) {
+        const flowdiv = document.createElement('div');
+        const cstyle = `z-index:10001;border:1px solid green;height:${height}px;width:${width}px;position: absolute;left:${w - width - 10}px;top:${(h - height) / 2}px;overflow:hidden;word-wrap: break-word;word-break:break-all;background-color:rgba(255, 255, 255, 0.3);`;
+        flowdiv.setAttribute('name', 'flowinfo');// 中心的一个图片
+        flowdiv.setAttribute('style', cstyle);
+        flowdiv.setAttribute('id', 'flowinfo');
+        theNode.appendChild(flowdiv);
+      } else {
+        const cstyle = `z-index:10001;border:1px solid green;height:${height}px;width:${width}px;position: absolute;left:${w - width - 10}px;top:${(h - height) / 2}px;overflow:hidden;word-wrap: break-word;word-break:break-all;background-color:rgba(255, 255, 255, 0.3);`;
+        getById('flowinfo').setAttribute('style', cstyle);
+        getById('flowinfo').style.display = '';
+      }
+      let cids = [];
+      let thisinfo = '';
+      if (id.indexOf(',') === -1) {
+        cids[0] = id;
+        const resultPromise = listPersonByIds(cids);
+        resultPromise.then(
+          (data) => {
+            const personInfo = data.data.persons[0];
+            let pos = '';
+            if (typeof (personInfo.pos) === 'undefined') {
+              pos = 'NULL';
+            } else if (personInfo.pos == null || personInfo.pos === '') {
+              pos = 'NULL';
+            } else if (personInfo.pos[0] == null || personInfo.pos[0] === '') {
+              pos = '';
+            } else {
+              pos = personInfo.pos[0].n;
+            }
+            let aff = 'NULL';
+            if (personInfo.aff != null) {
+              if (personInfo.aff.desc != null) {
+                aff = personInfo.aff.desc;
+              }
+            }
+            let photo = blankAvatar;
+            if (personInfo.avatar != null && personInfo.avatar !== '') {
+              photo = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 50);
+            }
+            let tags = 'NULL';
+            if (personInfo.tags != null && personInfo.tags !== '') {
+              tags = '';
+              for (const t in personInfo.tags) {
+                tags += `${personInfo.tags[t].t}  |  `;
+              }
+              tags = tags.substring(0, tags.length - 3);
+            }
+            const thisinfo = `<img style='float:left;margin:4px' id='imgDemo' src='http:${photo}' width='70' height='80'/>`
+              + `<i class='fa fa-user' style='width: 20px;'> </i><a  target='_blank' href='https://cn.aminer.org/profile/${personInfo.id}'>${
+                personInfo.name}</a><br /><i class='fa fa-mortar-board' style='width: 20px;'> </i>${
+                pos}<br /><i class='fa fa-institution' style='width: 20px;'> </i>${
+                aff}<br /><i class='fa fa-header' style='width: 20px;'> </i><strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>${
+                personInfo.indices.h_index}<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Paper:  </strong>${
+                personInfo.indices.num_pubs}<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Citation:  </strong>${
+                personInfo.indices.num_citation}<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Activity:  </strong>${
+                personInfo.indices.activity}<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Diversity:  </strong>${
+                personInfo.indices.diversity}<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#G_index:  </strong>${
+                personInfo.indices.g_index}<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Sociability:  </strong>${
+                personInfo.indices.sociability}<br /><i class='fa fa-tag' style='width: 20px;'> </i>${
+                tags}`;
+            getById('flowinfo').innerHTML = `<div style='margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;word-wrap: break-word;word-break:break-all;opacity:1;background-color:#FFFFFF;'><div style='width:100%;margin:10px;'><h2>Detail Info</h2></div><div style='margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;line-height:22px'>${thisinfo}</div></div>`;
+          },
+          () => {
+            console.log('failed');
+          },
+        ).catch((error) => {
+          console.error(error);
+        });
+      } else {
+        cids = id.split(',').slice(0, id.split(',').length - 1);
+        const resultPromise = listPersonByIds(cids);
+        resultPromise.then(
+          (data) => {
+            let avgHindex = 0;
+            const top8 = '';
+            let location = '';
+            const setObj = new Set();
+            const p = data.data.persons;
+            for (let i = 0; i < p.length; i++) {
+              avgHindex += p[i].indices.h_index;
+              setObj.add(p[i].attr.nation);
+            }
+            for (const x in setObj) {
+              location = `${location},${x}`;
+            }
+            avgHindex /= p.length;
+            avgHindex = avgHindex.toFixed(2);// 保留两位小数
+            thisinfo = `${"<div id='author_info' style='width: 350px;height: 120px;'>" + "<strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"}${avgHindex
+              }<br />countries:${location}</div>`;
+            getById('flowinfo').innerHTML = `<div style='margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;word-wrap: break-word;word-break:break-all;opacity:1;background-color:#FFFFFF;'><div style='width:100%;margin:10px;'><h2>Statistic Info</h2></div><div style='margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;line-height:22px'>${thisinfo}</div></div>`;
+          },
+          () => {
+            console.log('failed');
+          },
+        ).catch((error) => {
+          console.error(error);
+        });
+      }
+    } else if (state === 1) { // 偶数次点击同一个对象
+      // 认为是第二次及其以上点击
+      getById('flowstate').value = 0;
+      getById('flowinfo').style.display = 'none';
+    } else { // 奇数次点击同一个对象
+      getById('flowstate').value = 1;
+      getById('flowinfo').style.display = '';
+    }
+
+    getById('statistic').value = id;
   };
 
   showType = (e) => {
@@ -507,7 +514,7 @@ class ExpertMap extends React.PureComponent {
           <input id="flowstate" type="hidden" value="0" />
         </div>
 
-        <div id="personInfo">
+        <div id="personInfo" style={{ display: 'none' }}>
           <div className="personInfo">
             <div><img className="img" src={url} alt="IMG" /></div>
             <div className="info">
@@ -520,9 +527,14 @@ class ExpertMap extends React.PureComponent {
               {aff && <span><i className="fa fa-institution fa-fw" />{aff}</span>}
             </div>
           </div>
-
-
         </div>
+
+        <div id="rightInfoZone" style={{ display: 'block' }}>
+          <div className="rightInfoZone">
+            infozone
+          </div>
+        </div>
+
       </div>
     );
   }

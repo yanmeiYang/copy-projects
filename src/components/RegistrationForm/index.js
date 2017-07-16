@@ -13,7 +13,7 @@ import {
 } from 'antd';
 import { connect } from 'dva';
 import { config } from '../../utils';
-import styles from './index.less'
+import styles from './index.less';
 import defaultImg from '../../assets/people/default.jpg';
 import CanlendarInForm from '../../components/seminar/calendar';
 import AddTags from '../../components/seminar/addTags';
@@ -21,10 +21,10 @@ import AddTags from '../../components/seminar/addTags';
 import AddExpertModal from '../../components/seminar/addExpertModal';
 import ShowExpertList from '../../routes/seminar/addSeminar/workshop/showExpertList';
 import { sysconfig } from '../../systems';
+
 const Dragger = Upload.Dragger;
 const FormItem = Form.Item;
 const Option = Select.Option;
-
 let image = null;
 
 const uploadImage = {
@@ -35,18 +35,18 @@ const uploadImage = {
   action: config.baseURL + config.api.uploadActivityPosterImgFile,
   listType: 'picture',
   headers: {
-    //获得登录用户的token
-    'Authorization': localStorage.getItem('token')
+    // 获得登录用户的token
+    Authorization: localStorage.getItem('token'),
   },
-  onChange(info){
+  onChange(info) {
     const status = info.file.status;
     if (status !== 'uploading') {
       image = info.file.originFileObj;
     }
   },
-  onSuccess(response){
+  onSuccess(response) {
     image = response.url;
-  }
+  },
 };
 
 class RegistrationForm extends React.Component {
@@ -65,6 +65,10 @@ class RegistrationForm extends React.Component {
     // speakerInfo: {},
     // integral: 0,
   };
+  componentWillMount = () => {
+    this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'activity_organizer_options' } });
+    this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'activity_type' } });
+  }
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -72,17 +76,17 @@ class RegistrationForm extends React.Component {
       if (!err) {
         const state = this.state;
         if (state.startValue === null) {
-          this.setState({ startValue: '' })
+          this.setState({ startValue: '' });
         }
         if (state.endValue === null) {
-          this.setState({ endValue: '' })
+          this.setState({ endValue: '' });
         }
         if (state.startValue !== null && state.startValue !== '' && state.endValue !== null && state.endValue !== '') {
-          let data = values;
+          const data = values;
           if (data.state) {
             data.state = data.state.split('#')[0];
           }
-          //用于跟aminer的活动区分。默认是aminer
+          // 用于跟aminer的活动区分。默认是aminer
           data.src = 'ccf';
           data.location = { city: '', address: '' };
           data.time = { from: '', to: '' };
@@ -111,11 +115,10 @@ class RegistrationForm extends React.Component {
             data.time.to = state.endValue.toJSON();
           }
           data.activityTags = state.tags;
-          //获取登录用户的uid
+          // 获取登录用户的uid
           data.uid = this.props.uid;
           this.props.dispatch({ type: 'seminar/postSeminarActivity', payload: data });
         }
-
       }
     });
   };
@@ -130,11 +133,9 @@ class RegistrationForm extends React.Component {
         this.props.dispatch({ type: 'seminar/addKeyAndValue', payload: data });
       }
     });
-
-
   };
 
-  //增加专家
+  // 增加专家
   getImg = (src) => {
     if (src) {
       return src;
@@ -157,16 +158,22 @@ class RegistrationForm extends React.Component {
   //   this.setState({ speakerInfo: speakerInfo });
   // };
 
-  //workshop增加演讲专家
+  // workshop增加演讲专家
   addTheNewTalk = (talk) => {
-    this.setState({ talks: this.state.talks.concat(talk), addNewTalk: false, });
+    this.setState({ talks: this.state.talks.concat(talk), addNewTalk: false });
   };
 
-  //删除专家
+  // 删除专家
   delTheExpert = (i) => {
     this.state.talks.splice(i, 1);
     this.setState({ talks: this.state.talks });
   };
+
+  getKeywords = () => {
+    const form = this.props.form;
+    const data = { title: form.getFieldValue('title'), content: form.getFieldValue('abstract'), num: '3' };
+    this.props.dispatch({ type: 'seminar/keywordExtraction', payload: data });
+  }
 
   // cancelTalkData = () => {
   //   this.setState({ addNewTalk: false, });
@@ -177,7 +184,7 @@ class RegistrationForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { activity_organizer_options, activity_type } = this.props.seminar;
+    const { activity_organizer_options, activity_type, tags } = this.props.seminar;
     const activityTypes = sysconfig.CCF_activityTypes;
     let activity_organizer_options_data = {};
     let activity_type_options_data = {};
@@ -196,7 +203,7 @@ class RegistrationForm extends React.Component {
     // }
 
 
-    let { addNewTalk, talks, integral, startValue, endValue } = this.state;
+    const { addNewTalk, talks, integral, startValue, endValue } = this.state;
 
     const formItemLayout = {
       labelCol: {
@@ -212,32 +219,32 @@ class RegistrationForm extends React.Component {
       <Row>
         <Form onSubmit={this.handleSubmit}>
           <Col className={styles.thumbnail} md={24} lg={{ span: 16, offset: 4 }}>
-            <FormItem {...formItemLayout} label='活动类型' hasFeedback>
+            <FormItem {...formItemLayout} label="活动类型" hasFeedback>
               {getFieldDecorator('category', {
-                  rules: [{ required: true, message: '请选择活动类型！' }],
-                }
+                rules: [{ required: true, message: '请选择活动类型！' }],
+              },
               )(
                 <Select>
                   {
                     Object.keys(activity_type_options_data).map((item) => {
-                      return (<Option key={Math.random()} value={item}>{item}</Option>)
+                      return (<Option key={Math.random()} value={item}>{item}</Option>);
                     })
                   }
-                </Select>
+                </Select>,
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label='承办单位'>
+            <FormItem {...formItemLayout} label="承办单位">
               {getFieldDecorator('organizer', {
-                  rules: [{ required: true, message: '请选择承办单位！' }],
-                }
+                rules: [{ required: true, message: '请选择承办单位！' }],
+              },
               )(
-                <Select mode='tags' onChange={this.handleOrganizerChange.bind(this, activity_organizer_options_data)}>
+                <Select mode="tags" onChange={this.handleOrganizerChange.bind(this, activity_organizer_options_data)}>
                   {
                     Object.keys(activity_organizer_options_data).map((item) => {
-                      return (<Option key={item} value={item}>{item}</Option>)
+                      return (<Option key={item} value={item}>{item}</Option>);
                     })
                   }
-                </Select>
+                </Select>,
               )}
             </FormItem>
             <FormItem
@@ -250,7 +257,7 @@ class RegistrationForm extends React.Component {
                   required: true, message: '请输入活动名称',
                 }],
               })(
-                <Input placeholder='请输入活动名称'/>
+                <Input placeholder="请输入活动名称" />,
               )}
             </FormItem>
 
@@ -267,7 +274,7 @@ class RegistrationForm extends React.Component {
                   message: '请输入活动时间',
                 }],
               })(
-                <CanlendarInForm callbackParent={this.onChildChanged}/>
+                <CanlendarInForm callbackParent={this.onChildChanged} />,
               )}
 
             </FormItem>
@@ -280,7 +287,7 @@ class RegistrationForm extends React.Component {
                   message: '请输入活动城市',
                 }],
               })(
-                <Input placeholder='请输入活动地点。。。'/>
+                <Input placeholder="请输入活动地点。。。" />,
               )}
             </FormItem>
             <FormItem
@@ -292,7 +299,7 @@ class RegistrationForm extends React.Component {
                   message: '请输入活动地点',
                 }],
               })(
-                <Input placeholder='请输入活动地点。。。'/>
+                <Input placeholder="请输入活动地点。。。" />,
               )}
             </FormItem>
             <FormItem
@@ -306,7 +313,7 @@ class RegistrationForm extends React.Component {
                   message: '请输入活动简介',
                 }, { type: 'string', max: 150, message: '最多150个字符' }],
               })(
-                <Input type='textarea' rows={4} placeholder='请输入活动简介。。。'/>
+                <Input type="textarea" rows={4} placeholder="请输入活动简介。。。" onBlur={this.getKeywords} />,
               )}
             </FormItem>
             <FormItem
@@ -315,7 +322,7 @@ class RegistrationForm extends React.Component {
             >
               <Dragger {...uploadImage}>
                 <p className="ant-upload-drag-icon">
-                  <i className="anticon anticon-inbox"></i>
+                  <i className="anticon anticon-inbox" />
                 </p>
                 <p className="ant-upload-text">点击或将图片拖拽到此区域上传</p>
                 <p className="ant-upload-hint">支持上传JPG/PNG/BMP文件</p>
@@ -326,59 +333,60 @@ class RegistrationForm extends React.Component {
               {...formItemLayout}
               label="活动标签"
             >
-              {getFieldDecorator('activityTags', {})(<AddTags callbackParent={this.onTagsChanged}/>)}
+              {getFieldDecorator('activityTags', {})(<AddTags callbackParent={this.onTagsChanged} tags={tags} />)}
 
             </FormItem>
-            {/*<FormItem*/}
-            {/*{...formItemLayout}*/}
-            {/*label="贡献类别"*/}
-            {/*>*/}
-            {/*{getFieldDecorator('state', {})(*/}
-            {/*<Select*/}
-            {/*showSearch*/}
-            {/*style={{ width: 200 }}*/}
-            {/*placeholder="请选择贡献类别"*/}
-            {/*optionFilterProp="children"*/}
-            {/*onChange={this.activityTypeChange}*/}
-            {/*filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}*/}
-            {/*>*/}
-            {/*{*/}
-            {/*Object.keys(activity_type_options).map((item) => {*/}
-            {/*return (<Option key={item}*/}
-            {/*value={item + '#' + activity_type_options[item]}>{item}</Option>)*/}
-            {/*})*/}
-            {/*}*/}
-            {/*</Select>*/}
-            {/*)}*/}
-            {/*</FormItem>*/}
+            {/* <FormItem*/}
+            {/* {...formItemLayout}*/}
+            {/* label="贡献类别"*/}
+            {/* >*/}
+            {/* {getFieldDecorator('state', {})(*/}
+            {/* <Select*/}
+            {/* showSearch*/}
+            {/* style={{ width: 200 }}*/}
+            {/* placeholder="请选择贡献类别"*/}
+            {/* optionFilterProp="children"*/}
+            {/* onChange={this.activityTypeChange}*/}
+            {/* filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}*/}
+            {/* >*/}
+            {/* {*/}
+            {/* Object.keys(activity_type_options).map((item) => {*/}
+            {/* return (<Option key={item}*/}
+            {/* value={item + '#' + activity_type_options[item]}>{item}</Option>)*/}
+            {/* })*/}
+            {/* }*/}
+            {/* </Select>*/}
+            {/* )}*/}
+            {/* </FormItem>*/}
           </Col>
 
-          {/*seminar*/}
-          {/*{selectedType === '0' ?*/}
-          {/*<Col className={styles.thumbnail} md={24} lg={{ span: 16, offset: 4 }}>*/}
-          {/*<div>*/}
-          {/*<FormItem>*/}
-          {/*<Col><label>专家信息</label></Col>*/}
-          {/*<ExpertBasicInformation integral={integral} callbackParent={this.onExpertInfoChanged}/>*/}
-          {/*</FormItem>*/}
-          {/*</div>*/}
-          {/*</Col> : ''}*/}
-          {/*workshop*/}
+          {/* seminar*/}
+          {/* {selectedType === '0' ?*/}
+          {/* <Col className={styles.thumbnail} md={24} lg={{ span: 16, offset: 4 }}>*/}
+          {/* <div>*/}
+          {/* <FormItem>*/}
+          {/* <Col><label>专家信息</label></Col>*/}
+          {/* <ExpertBasicInformation integral={integral} callbackParent={this.onExpertInfoChanged}/>*/}
+          {/* </FormItem>*/}
+          {/* </div>*/}
+          {/* </Col> : ''}*/}
+          {/* workshop*/}
 
           <Col className={styles.thumbnail} md={24} lg={{ span: 16, offset: 4 }}>
-            {talks.length > 0 ? <div>
+            {talks.length > 0 && <div>
               {talks.map((talk, index) => {
-                return (<div key={Math.random()}>
-                  <ShowExpertList talk={talk} index={index} getImg={this.getImg} delTheExpert={this.delTheExpert}/>
-                </div>)
+                return (
+                  <div key={Math.random()}>
+                    <ShowExpertList talk={talk} index={index} getImg={this.getImg} delTheExpert={this.delTheExpert} />
+                  </div>
+                );
               })}
-            </div> : ''}
+            </div>}
             <div className={styles.addNewExpert}>
-              <a type='primary' onClick={this.addTalkData.bind(this, addNewTalk)}>新增专家</a>
+              <a type="primary" onClick={this.addTalkData.bind(this, addNewTalk)}>新增专家</a>
             </div>
 
-            {addNewTalk &&
-            <AddExpertModal integral={integral} parentProps={this.props} callbackParent={this.addTheNewTalk}/>}
+            {addNewTalk && <AddExpertModal integral={integral} parentProps={this.props} callbackParent={this.addTheNewTalk} />}
           </Col>
 
           <Col className={styles.formFooter} md={24} lg={{ span: 16, offset: 4 }}>

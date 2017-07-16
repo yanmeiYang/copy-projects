@@ -3,7 +3,8 @@
  */
 
 // const SYS = 'ccf';
-const SYS = 'huawei';
+const SYS = 'ccf';
+const baseURL = 'https://api.aminer.org/api';
 // const SYS = 'alibaba';
 // const SYS = 'tencent';
 
@@ -26,75 +27,76 @@ module.exports = {
   apiPrefix: '/api/',
   api: {
     // user system
-    currentUser: '/user/me',
-    userLogin: '/auth/signin',
-    userLogout: '/auth/signout',
-    signup: '/auth/signup',
-    checkEmail: '/user/check/:email',
-    forgot: '/auth/update/forgot',
+    currentUser: `${baseURL}/user/me`,
+    userLogin: `${baseURL}/auth/signin`,
+    userLogout: `${baseURL}/auth/signout`,
+    signup: `${baseURL}/auth/signup`,
+    checkEmail: `${baseURL}/user/check/:email`,
+    forgot: `${baseURL}/auth/update/forgot`,
     // 重置密码
-    retrieve: '/auth/update/token',
+    retrieve: `${baseURL}/auth/update/token`,
     // 给user添加label {uid:'',label:''}
-    invoke: '/user/role/invoke',
+    invoke: `${baseURL}/user/role/invoke`,
     // 删除user的label
-    revoke: '/user/role/revoke',
-    listUsersByRole: '/user/role/list/:role/offset/:offset/size/:size',
+    revoke: `${baseURL}/user/role/revoke`,
+    listUsersByRole: `${baseURL}/user/role/list/:role/offset/:offset/size/:size`,
 
     // search
-    searchPerson: '/search/person',
-    searchPersonAgg: '/search/person/agg',
-    searchPersonInBase: '/search/roster/:ebid/experts/advanced',
-    searchPersonInBaseAgg: '/search/roster/:ebid/experts/advanced/agg',
-    allPersonInBase: '/roster/:ebid/order-by/h_index/offset/:offset/size/:size',
-    allPersonInBaseAgg: '/roster/:ebid/agg?offset=&order=h_index&size=20',
-    searchMap: '/search/person/geo', // ?query=:search
+    searchPerson: `${baseURL}/search/person`,
+    searchPersonAgg: `${baseURL}/search/person/agg`,
+    searchPersonInBase: `${baseURL}/search/roster/:ebid/experts/advanced`,
+    searchPersonInBaseAgg: `${baseURL}/search/roster/:ebid/experts/advanced/agg`,
+    allPersonInBase: `${baseURL}/roster/:ebid/order-by/h_index/offset/:offset/size/:size`,
+    allPersonInBaseAgg: `${baseURL}/roster/:ebid/agg?offset=&order=h_index&size=20`,
+    searchMap: `${baseURL}/search/person/geo`, // ?query=:search
 
     // search suggest
-    searchSuggest: '/search/suggest/gen/:query',
+    searchSuggest: `${baseURL}/search/suggest/gen/:query`,
 
     // export roster
-    rosterExportSimple: '/roster/:id/export/s/offset/:offset/size/:size/:name',
+    rosterExportSimple: `${baseURL}/roster/:id/export/s/offset/:offset/size/:size/:name`,
 
     // seminar
-    getSeminars: '/activity/list/offset/:offset/size/:size',
-    getActivityById: '/activity/:id',
-    postActivity: '/activity/post_activity',
-    speakerSuggest: '/activity/speaker/suggest',
-    uploadActivityPosterImgFile: '/activity/img',
-    searchActivity: '/search/activity',
-    deleteActivity: '/activity/delete/:id',
-    getCommentFromActivity: '/comment/activity/:id/offset/:offset/size/:size',
-    addCommentToActivity: '/comment/activity/:id',
-    deleteCommentFromActivity: '/comment/activity/cmid/:id',
+    getSeminars: `${baseURL}/activity/list/offset/:offset/size/:size`,
+    getActivityById: `${baseURL}/activity/:id`,
+    postActivity: `${baseURL}/activity/post_activity`,
+    speakerSuggest: `${baseURL}/activity/speaker/suggest`,
+    uploadActivityPosterImgFile: `${baseURL}/activity/img`,
+    searchActivity: `${baseURL}/search/activity`,
+    deleteActivity: `${baseURL}/activity/delete/:id`,
+    getCommentFromActivity: `${baseURL}/comment/activity/:id/offset/:offset/size/:size`,
+    addCommentToActivity: `${baseURL}/comment/activity/:id`,
+    deleteCommentFromActivity: `${baseURL}/comment/activity/cmid/:id`,
     // score
-    updateOrSaveActivityScore: '/activity/score/me/:src/:actid/:aid/:key/:score/:lvtime',
+    updateOrSaveActivityScore: `${baseURL}/activity/score/me/:src/:actid/:aid/:key/:score/:lvtime`,
     // 不知 key, 列出相关的 key 和 scores.
-    listActivityScores: '/activity/score-list/:uid/:src/:actid',
+    listActivityScores: `${baseURL}/activity/score-list/:uid/:src/:actid`,
     // 已知 key 获取 一个 score
-    getActivityScore: '/activity/score/:uid/:src/:actid/:aid/:key',
-    getStatsOfCcfActivities: '/activity/admin/stats',
+    getActivityScore: `${baseURL}/activity/score/:uid/:src/:actid/:aid/:key`,
+    getStatsOfCcfActivities: `${baseURL}/activity/admin/stats`,
+    keywordExtraction: 'http://nlp.newsminer.net/rest/nlp/keywords',
 
     /* person */
-    personProfile: '/person/summary/:id',
-    personEmailImg: '/person/email/i/',
-    getEmailCrImage: '/person/email-cr/i/',
-    listPersonByIds: '/person/batch-list',
-    getActivityAvgScoresByPersonId: '/person/activity/:id/indices',
+    personProfile: `${baseURL}/person/summary/:id`,
+    personEmailImg: `${baseURL}/person/email/i/`,
+    getEmailCrImage: `${baseURL}/person/email-cr/i/`,
+    listPersonByIds: `${baseURL}/person/batch-list`,
+    getActivityAvgScoresByPersonId: `${baseURL}/person/activity/:id/indices`,
 
     // interests vis data
-    interests: '/person/interests/:id',
+    interests: `${baseURL}/person/interests/:id`,
 
     /* publications */
-    pubList: '/person/pubs/:id/all/year/:offset/:size',
-    pubListByCitation: '/person/pubs/:id/all/citation/:offset/:size',
-    pubListInfo: '/person/pubs/:id/stats',
-    pubListByYear: '/person/pubs/:id/range/year/:year/:offset/:size',
-    pubListLimited: '/person/pubs/:id/range/citation/:nc_lo/:nc_hi/:offset/:size',
+    pubList: `${baseURL}/person/pubs/:id/all/year/:offset/:size`,
+    pubListByCitation: `${baseURL}/person/pubs/:id/all/citation/:offset/:size`,
+    pubListInfo: `${baseURL}/person/pubs/:id/stats`,
+    pubListByYear: `${baseURL}/person/pubs/:id/range/year/:year/:offset/:size`,
+    pubListLimited: `${baseURL}/person/pubs/:id/range/citation/:nc_lo/:nc_hi/:offset/:size`,
 
     // System config
-    ucListByCategory: '/2b/config/:source/list?category=:category',
-    ucSetByKey: '/2b/config/:source/:category/:key',
-    ucDeleteByKey: '/2b/config/:source/:category/:key',
+    ucListByCategory: `${baseURL}/2b/config/:source/list?category=:category`,
+    ucSetByKey: `${baseURL}/2b/config/:source/:category/:key`,
+    ucDeleteByKey: `${baseURL}/2b/config/:source/:category/:key`,
 
 
     // userInfo: '/userInfo',

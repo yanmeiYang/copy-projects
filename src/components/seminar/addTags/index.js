@@ -10,7 +10,11 @@ class AddTags extends React.Component {
     inputVisible: false,
     inputValue: '',
   };
-
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.tags.length > 0 && this.props.tags.length !== nextProps.tags.length) {
+      this.setState({ tags: nextProps.tags });
+    }
+  }
   handleClose = (removedTag) => {
     const tags = this.state.tags.filter(tag => tag !== removedTag);
     this.setState({ tags });
@@ -49,7 +53,7 @@ class AddTags extends React.Component {
         {tags.map((tag, index) => {
           const isLongTag = tag.length > 20;
           const tagElem = (
-            <Tag key={tag} color='#2db7f5' closable={index !== -1} afterClose={() => this.handleClose(tag)}>
+            <Tag key={tag} color="#2db7f5" closable={index !== -1} afterClose={() => this.handleClose(tag)}>
               {isLongTag ? `${tag.slice(0, 20)}...` : tag}
             </Tag>
           );

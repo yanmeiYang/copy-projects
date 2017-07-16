@@ -36,7 +36,7 @@ export default {
   }),
 
   SeminarPost: app => ({
-    path: 'seminar-my',
+    path: 'seminar-post',
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/seminar'));

@@ -21,80 +21,85 @@ export async function getSeminarById(id) {
 export async function getSpeakerSuggest(data) {
   return request(api.speakerSuggest, {
     method: 'POST',
-    body: JSON.stringify(data)
-  })
+    body: JSON.stringify(data),
+  });
 }
 
 export async function postSeminarActivity(data) {
   return request(api.postActivity, {
     method: 'POST',
-    body: JSON.stringify(data)
-  })
-
+    body: JSON.stringify(data),
+  });
 }
 
 export async function searchActivity(query, offset, size, src, category, organizer) {
-  let data = {
-    query: query,
+  const data = {
+    query,
     offset,
     size,
     src,
     category,
-    organizer
+    organizer,
   };
   return request(api.searchActivity, {
     method: 'GET',
     data,
-  })
-
+  });
 }
 
 export async function deleteActivity(id, body) {
   return request(api.deleteActivity.replace(':id', id), {
     method: 'POST',
-    body: JSON.stringify(body)
-  })
+    body: JSON.stringify(body),
+  });
 }
 
 export async function getCommentFromActivity(id, offset, size) {
   return request(api.getCommentFromActivity.replace(':id', id).replace(':offset', offset).replace(':size', size), {
     method: 'GET',
-  })
+  });
 }
 
 export async function addCommentToActivity(id, data) {
   return request(api.addCommentToActivity.replace(':id', id), {
     method: 'POST',
-    body: JSON.stringify(data)
-  })
+    body: JSON.stringify(data),
+  });
 }
 
 export async function deleteCommentFromActivity(id) {
   return request(api.deleteCommentFromActivity.replace(':id', id), {
-    method: 'DELETE'
-  })
+    method: 'DELETE',
+  });
 }
 
 export async function updateOrSaveActivityScore(src, actid, aid, key, score, lvtime) {
   return request(api.updateOrSaveActivityScore.replace(':src', src).replace(':actid', actid).replace(':aid', aid).replace(':key', key).replace(':score', score).replace(':lvtime', lvtime), {
-    method: 'POST'
-  })
+    method: 'POST',
+  });
 }
 
 export async function listActivityScores(uid, src, actid) {
   return request(api.listActivityScores.replace(':uid', uid).replace(':src', src).replace(':actid', actid), {
-    method: "GET"
-  })
+    method: 'GET',
+  });
 }
 
 export async function getActivityScore(uid, src, actid, aid, key) {
   return request(api.getActivityScore.replace(':uid', uid).replace(':src', src).replace(':actid', actid).replace('aid', aid).replace(':key', key), {
-    method: "GET"
-  })
+    method: 'GET',
+  });
 }
 
 export async function getStatsOfCcfActivities() {
   return request(api.getStatsOfCcfActivities, {
-    method: 'GET'
-  })
+    method: 'GET',
+  });
+}
+
+export async function keywordExtraction(payload) {
+  return request(api.keywordExtraction, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
 }

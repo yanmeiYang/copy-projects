@@ -85,16 +85,15 @@ export default {
       return { ...state, isUpdateForgotPw: data.status };
     },
     getListUserByRoleSuccess(state, { payload: { data } }) {
-      for (const key in data) {
-        data[key].new_role = '';
-        for (const r in data[key].role) {
-          const role = data[key].role[r];
+      for (const [key, value] of data.entries()) {
+        value.new_role = {};
+        for (const role of data[key].role.values()) {
           if (role.indexOf('ccf_') >= 0) {
             if (role.split('_').length === 2) {
-              data[key].new_role = role.split('_')[1];
+              value.new_role = role.split('_')[1];
             }
             if (role.split('_').length === 3) {
-              data[key].authority = role.split('_')[2];
+              value.authority = role.split('_')[2];
             }
           }
         }

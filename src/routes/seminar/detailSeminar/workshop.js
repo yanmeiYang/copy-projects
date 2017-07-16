@@ -6,7 +6,8 @@ import { connect } from 'dva';
 import { Icon } from 'antd';
 import { Link } from 'dva/router';
 import TimeFormat from './time-format';
-import styles from './workshop.less'
+import styles from './workshop.less';
+import * as profileUtils from '../../../utils/profile_utils';
 
 class WorkShop extends React.Component {
   render() {
@@ -16,7 +17,7 @@ class WorkShop extends React.Component {
         {aTalk.title && <h5 className={styles.talkTitle}>{aTalk.title}</h5>}
         <div>
           <div className={styles.speakerAvatar}>
-            {aTalk.speaker.aid?<Link to={`/person/${aTalk.speaker.aid}`}><img src={aTalk.speaker.img} alt={aTalk.speaker.name}/></Link>:<img src={aTalk.speaker.img} alt={aTalk.speaker.name}/>}
+            {aTalk.speaker.aid ? <Link to={`/person/${aTalk.speaker.aid}`}><img src={profileUtils.getAvatar(aTalk.speaker.img, aTalk.speaker.aid, 160)} alt={aTalk.speaker.name} /></Link> : <img src={aTalk.speaker.img} alt={aTalk.speaker.name} />}
           </div>
         </div>
         <ul className={styles.messages}>
@@ -25,46 +26,46 @@ class WorkShop extends React.Component {
             <div>
               <li>
                 <p>
-                  <Icon type='user'/>
+                  <Icon type="user" />
                   <strong>姓名:&nbsp;</strong>
-                  {aTalk.speaker.aid?<Link to={`/person/${aTalk.speaker.aid}`}><span>{aTalk.speaker.name}</span></Link>:<span>{aTalk.speaker.name}</span>}
+                  {aTalk.speaker.aid ? <Link to={`/person/${aTalk.speaker.aid}`}><span>{aTalk.speaker.name}</span></Link> : <span>{aTalk.speaker.name}</span>}
                 </p>
               </li>
               <li>
                 {aTalk.speaker.position &&
-                <p><Icon type="medicine-box"/>
+                <p><Icon type="medicine-box" />
                   <strong>职称:&nbsp;</strong>
                   <span>{aTalk.speaker.position}</span></p>}
               </li>
               <li>
                 {aTalk.speaker.affiliation &&
-                <p><Icon type="environment-o"/>
+                <p><Icon type="environment-o" />
                   <strong>单位:&nbsp;</strong>
                   <span>{aTalk.speaker.affiliation}</span></p>}
               </li>
             </div>}
-            </span>
+          </span>
           <span>
-              {aTalk.time ? <li><p>
-                <Icon type="clock-circle-o"/>
+            {aTalk.time ? <li><p>
+              <Icon type="clock-circle-o" />
+              <strong>时间:&nbsp;</strong>
+              <TimeFormat {...aTalk.time} />
+            </p></li> : ''}
+          </span>
+          <span>
+            {aTalk.location ? <span>
+              {aTalk.location.address ? <li><p>
+                <Icon type="environment-o" />
                 <strong>时间:&nbsp;</strong>
                 <TimeFormat {...aTalk.time} />
-              </p></li> : ''}
-            </span>
-          <span>
-              {aTalk.location ? <span>
-                  {aTalk.location.address ? <li><p>
-                    <Icon type="environment-o"/>
-                    <strong>时间:&nbsp;</strong>
-                    <TimeFormat {...aTalk.time} />
-                  </p></li> : ''}</span> : ''}
-            </span>
+              </p></li> : ''}</span> : ''}
+          </span>
         </ul>
         <div className={styles.abstract}>
           {aTalk.abstract ? <div>
             <h5>报告摘要:</h5>
             <div className={styles.center}>
-              <p className='rdw-justify-aligned-block'>{aTalk.abstract}</p>
+              <p className="rdw-justify-aligned-block">{aTalk.abstract}</p>
             </div>
           </div> : ''}
         </div>
@@ -72,7 +73,7 @@ class WorkShop extends React.Component {
           {aTalk.speaker.bio ? <div>
             <h5>报告人简介:</h5>
             <div className={styles.center}>
-              <p className='rdw-justify-aligned-block'>{ aTalk.speaker.bio }</p>
+              <p className="rdw-justify-aligned-block">{ aTalk.speaker.bio }</p>
             </div>
           </div> : ''}
         </div>

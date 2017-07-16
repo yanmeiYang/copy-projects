@@ -8,10 +8,10 @@ function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
   }
-  if (response.status===401){
+  if (response.status === 401) {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    location.href='/'
+    location.href = '/';
   }
 
   const error = new Error(response.statusText);
@@ -27,7 +27,7 @@ function checkStatus(response) {
  * @return {object}           An object containing either "data" or "err"
  */
 export default async function request(url, options) {
-  let newUrl = baseURL + url;
+  let newUrl = url;
   if (options && !(options.method && options.method.toUpperCase() === 'POST') && options.data) {
     const queryList = Object.keys(options.data).map(k => `${k}=${options.data[k]}`);
     const queryString = queryList.join('&');
@@ -36,8 +36,8 @@ export default async function request(url, options) {
   const token = localStorage.getItem('token');
   const headers = new Headers();
 
-  if (options){
-    if (options.data||options.body){
+  if (options) {
+    if (options.data || options.body) {
       headers.append('Accept', 'application/json');
       headers.append('Content-Type', 'application/json');
     }
@@ -77,5 +77,5 @@ export async function wget(url) {
   checkStatus(response);
 
   const data = await response.json();
-  return data
+  return data;
 }

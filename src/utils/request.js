@@ -27,7 +27,7 @@ function checkStatus(response) {
  * @return {object}           An object containing either "data" or "err"
  */
 export default async function request(url, options) {
-  let newUrl = url;
+  let newUrl = baseURL + url;
   if (options && !(options.method && options.method.toUpperCase() === 'POST') && options.data) {
     const queryList = Object.keys(options.data).map(k => `${k}=${options.data[k]}`);
     const queryString = queryList.join('&');
@@ -52,6 +52,36 @@ export default async function request(url, options) {
 
   const data = await response.json();
 
+  const ret = {
+    data,
+    headers: {},
+  };
+  // if (response.headers.get('x-total-count')) {
+  //   ret.headers['x-total-count'] = response.headers.get('x-total-count');
+  // }
+
+  return ret;
+}
+
+export async function externalRequest(url, options) {
+  let newUrl = url;
+  if (options && !(options.method && options.method.toUpperCase() === 'POST') && options.data) {
+    const queryList = Object.keys(options.data).map(k => `${k}=${options.data[k]}`);
+    const queryString = queryList.join('&');
+    newUrl = `${newUrl}?${queryString}`;
+  }
+  const headers = new Headers();
+
+  if (options) {
+    if (options.data || options.body) {
+      headers.append('Accept', 'application/json');
+      headers.append('Content-Type', 'application/json');
+    }
+  }
+  const newOption = { ...options, headers };
+  const response = await fetch(newUrl, newOption);
+  checkStatus(response);
+  const data = await response.json();
   const ret = {
     data,
     headers: {},

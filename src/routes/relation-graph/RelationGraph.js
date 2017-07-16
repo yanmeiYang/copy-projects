@@ -10,7 +10,7 @@ import * as d3 from '../../../public/d3/d3.min';
 const Option = Select.Option;
 const controlDivId = 'rgvis';
 const EgoHeight = 800;
-const EgoWidth = document.body.scrollWidth-188-24*2;
+const EgoWidth = document.body.scrollWidth - 188 - 24 * 2;
 
 /*
  * @params: lang: [en|cn]
@@ -51,13 +51,13 @@ class RelationGraph extends React.PureComponent {
     suspension_adjustment: false,
     two_paths: false,
     continuous_path: false,
-    single_extension: false
+    single_extension: false,
     // activities: ['h-Index>0', 'h-Index>10', 'h-Index>30', 'h-Index>60']
   };
 
   componentDidMount() {
     this.showVis(this);
-    this.redraw(this.props.query)
+    this.redraw(this.props.query);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -130,7 +130,7 @@ class RelationGraph extends React.PureComponent {
     let dispalyAll = true;
     let indexShow = 0;
 
-    const color = d3.interpolateRgb(d3.rgb('#eeeeee'), d3.rgb(230, 0, 18));
+    const color = d3.interpolateRgb(d3.rgb('blue'), d3.rgb(230, 0, 18));
     // const rawSvg = d3.select(`#${controlDivId}`).append('svg')
     //   .style('width', '850px')
     //   .style('height', '600px');
@@ -149,7 +149,7 @@ class RelationGraph extends React.PureComponent {
     };
 
     const getPaths = (cNode, pNode, sNode, eNode) => {
-      console.log('getpaths')
+      console.log('getpaths');
       let a,
         i,
         nNode;
@@ -438,7 +438,7 @@ class RelationGraph extends React.PureComponent {
                                     return goalsId.indexOf(k.id) === -1;
                                   }).style('opacity', 0);
                                   simulation.restart();
-                                  //return $('[data-toggle=\'popover\']').popover();
+                                  // return $('[data-toggle=\'popover\']').popover();
                                   console.log('popover again()!!!!');
                                   return null;
                                 }
@@ -514,7 +514,7 @@ class RelationGraph extends React.PureComponent {
     _drag = d3.drag().on('start', dragstarted).on('drag', dragged).on('end', dragended);
 
     // $scope.zommed.
-    this.zoomed =function () {
+    this.zoomed = function () {
       // console.log('[debug] in zommed, this:', this);
       const transform = d3.zoomTransform(this);
       svg.attr('transform', `translate(${transform.x},${transform.y}) scale(${transform.k})`);
@@ -524,6 +524,22 @@ class RelationGraph extends React.PureComponent {
           return getRadious(d.indices.hIndex / transform.k);
         } else {
           return getRadious(0);
+        }
+      });
+      svg.selectAll('text').data(_nodes).text((d) => {
+        if (transform.k > 2 && d.index < transform.k * 20) {
+          return d.name.n.en;
+        } else if (d.index < snum) {
+          return d.name.n.en;
+        } else {
+          return '';
+        }
+      }).attr('dy', (d) => {
+        if (d.indices.hIndex > indexShow || d.indices.hIndex < 400) {
+          const top = getRadious(d.indices.hIndex / transform.k) * 2;
+          return top + transform.k;
+        } else {
+          return transform.k;
         }
       });
       return svg.selectAll('text').data(_nodes).style('font-size', `${15 / transform.k}px`);
@@ -735,18 +751,18 @@ class RelationGraph extends React.PureComponent {
       }).style('stroke-width', '0px').attr('fill', (d) => {
         return getColor(d.indices.hIndex);
       }).call(_drag).on('mouseover', (d) => {
+        svg.selectAll('text').data(_nodes).filter((k) => {
+          return k.id === d.id;
+        }).style('fill', 'yellow');
         return svg.selectAll('circle').data(_nodes).filter((k) => {
           return k.id === d.id;
-        }).attr('r', (d) => {
-          let a;
-          a = getRadious(d.indices.hIndex);
-          return a + 2;
         }).attr('fill', 'yellow');
       }).on('mouseout', (d) => {
+        svg.selectAll('text').data(_nodes).filter((k) => {
+          return k.id === d.id;
+        }).style('fill', '#333333');
         return svg.selectAll('circle').data(_nodes).filter((k) => {
           return k.id === d.id;
-        }).attr('r', (d) => {
-          return getRadious(d.indices.hIndex);
         }).attr('fill', (d) => {
           return getColor(d.indices.hIndex);
         });
@@ -765,31 +781,43 @@ class RelationGraph extends React.PureComponent {
       }).on('click', (d) => {
         return nodeclick(d);
       });
-      nodes_text = svg.selectAll('.nodetext').data(_nodes).enter().append('text').style('cursor', ' pointer').style('font-size', '15px').style('fill', '#333333').attr('dx', -20).attr('dy', 20).text((d) => {
-        if (d.index < snum) {
-          return d.name.n.en;
-        } else {
-          return '';
-        }
-      }).on('click', (d) => {
-        return window.open(`https://cn.aminer.org/profile/${d.id}`);
-      }).on('mouseover', (d) => {
-        return svg.selectAll('circle').data(_nodes).filter((k) => {
-          return k.id === d.id;
-        }).attr('r', (d) => {
-          let a;
-          a = getRadious(d.indices.hIndex);
-          return a + 2;
-        }).attr('fill', 'yellow');
-      }).on('mouseout', (d) => {
-        return svg.selectAll('circle').data(_nodes).filter((k) => {
-          return k.id === d.id;
-        }).attr('r', (d) => {
-          return getRadious(d.indices.hIndex);
-        }).attr('fill', (d) => {
-          return getColor(d.indices.hIndex);
+      nodes_text = svg.selectAll('.nodetext').data(_nodes).enter().append('text').style('cursor', ' pointer').style('font-size', '15px')
+        .attr('dy', (d) => {
+          const top = getRadious(d.indices.hIndex) * 2;
+          return top + 10;
+        })
+        .style('fill', '#333333').text((d) => {
+          if (d.index < snum) {
+            return d.name.n.en;
+          } else {
+            return '';
+          }
+        }).attr('text-anchor', (d) => {
+          return 'middle';
+        }).on('click', (d) => {
+          this.currentModle1 = true;
+          return nodeclick(d);
+        })
+        // .on('click', (d) => {
+        //   return window.open(`https://cn.aminer.org/profile/${d.id}`);
+        // })
+        .on('mouseover', (d) => {
+          svg.selectAll('text').data(_nodes).filter((k) => {
+            return k.id === d.id;
+          }).style('fill', 'yellow');
+          return svg.selectAll('circle').data(_nodes).filter((k) => {
+            return k.id === d.id;
+          }).attr('fill', 'yellow');
+        }).on('mouseout', (d) => {
+          svg.selectAll('text').data(_nodes).filter((k) => {
+            return k.id === d.id;
+          }).style('fill', '#333333');
+          return svg.selectAll('circle').data(_nodes).filter((k) => {
+            return k.id === d.id;
+          }).attr('fill', (d) => {
+            return getColor(d.indices.hIndex);
+          });
         });
-      });
       ticked = function () {
         link.attr('x1', (d) => {
           return d.source.x;
@@ -809,7 +837,7 @@ class RelationGraph extends React.PureComponent {
           return d.x;
         });
         return nodes_text.attr('y', (d) => {
-          return d.y + 5;
+          return d.y;
         });
       };
       return simulation.nodes(_nodes).on('tick', ticked);
@@ -817,7 +845,7 @@ class RelationGraph extends React.PureComponent {
 
 
     this.drawNet = (type) => {
-      console.log('this.drawNet::type is:', type)
+      console.log('this.drawNet::type is:', type);
       this.filed = type;
       svg.selectAll('*').remove();
       d3.json(`https://api.aminer.org/api/search/person?query=${type}&size=5&sort=h_index`, (error, graph) => {
@@ -865,7 +893,7 @@ class RelationGraph extends React.PureComponent {
         });
         simulation = d3.forceSimulation(_nodes).velocityDecay(0.3).force('charge', d3.forceManyBody().strength((d) => {
           return d.count;
-        })).force('link', setlink).force('gravity', d3.forceCollide(height/100+5).strength(0.6)).alpha(0.2).force('center', d3.forceCenter(width / 2, height / 2));
+        })).force('link', setlink).force('gravity', d3.forceCollide(height / 100 + 5).strength(0.6)).alpha(0.2).force('center', d3.forceCenter(width / 2, height / 2));
         _saveRootAdges = [];
         _edges.forEach((f) => {
           if (f.target.index < snum) {
@@ -1057,7 +1085,7 @@ class RelationGraph extends React.PureComponent {
         subnet_selection: e.target.checked,
         two_paths: false,
         continuous_path: false,
-        single_extension: false
+        single_extension: false,
       });
       // $('#cb5').attr('checked', false);
       this.currentModle5 = false;
@@ -1091,7 +1119,7 @@ class RelationGraph extends React.PureComponent {
         subnet_selection: false,
         two_paths: e.target.checked,
         continuous_path: false,
-        single_extension: false
+        single_extension: false,
       });
 
       // $('#cb1').attr('checked', false);
@@ -1112,7 +1140,7 @@ class RelationGraph extends React.PureComponent {
         subnet_selection: false,
         two_paths: false,
         continuous_path: e.target.checked,
-        single_extension: false
+        single_extension: false,
       });
       // $('#cb1').attr('checked', false);
       this.currentModle1 = false;
@@ -1133,7 +1161,7 @@ class RelationGraph extends React.PureComponent {
         subnet_selection: false,
         two_paths: false,
         continuous_path: false,
-        single_extension: e.target.checked
+        single_extension: e.target.checked,
       });
       // $('#cb1').attr('checked', false);
       this.currentModle1 = false;
@@ -1169,11 +1197,11 @@ class RelationGraph extends React.PureComponent {
             {this.activities.map((act) => {
               return (
                 <Option key={act} value={act}>{act}</Option>
-              )
+              );
             })}
           </Select>
         </div>
-        <div id="rgvis" style={{backgroundColor:'#eee', width:EgoWidth, height:EgoHeight}}></div>
+        <div id="rgvis" style={{ backgroundColor: '#eee', width: EgoWidth, height: EgoHeight }} />
       </div>
     );
   }

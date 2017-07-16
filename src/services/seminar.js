@@ -2,6 +2,7 @@
  * Created by yangyanmei on 17/5/26.
  */
 import { request, config } from '../utils';
+import { externalRequest } from '../utils/request';
 
 const { api } = config;
 
@@ -98,7 +99,7 @@ export async function getStatsOfCcfActivities() {
 }
 
 export async function keywordExtraction(payload) {
-  return request(api.keywordExtraction, {
+  return externalRequest(api.keywordExtraction, {
     method: 'POST',
     body: JSON.stringify(payload),
   });

@@ -50,7 +50,6 @@ export default {
             }
           }
         }
-
       } else if (location.pathname !== '/login') {
         // let from = location.pathname;
         // if (location.pathname === '/') {
@@ -76,7 +75,7 @@ export default {
       const { app } = yield (select(_ => _));
       const isNavbar = false; // document.body.clientWidth < 769
       if (isNavbar !== app.isNavbar) {
-        yield put({ type: 'handleNavbar', payload: isNavbar })
+        yield put({ type: 'handleNavbar', payload: isNavbar });
       }
     },
 
@@ -84,7 +83,7 @@ export default {
 
   reducers: {
     getCurrentUserInfoSuccess(state, { payload: user }) {
-      let roles = { admin: false, ccf_user: false, role: '', authority: '' };
+      const roles = { admin: false, ccf_user: false, role: '', authority: '' };
       for (const r of user.role) {
         if (r === 'root' || r === 'ccf_超级管理员') {
           roles.admin = true;
@@ -103,11 +102,11 @@ export default {
       return {
         ...state,
         user,
-        roles: roles
+        roles,
       };
     },
 
-    alreadyLoggedIn(state, { user, roles }){
+    alreadyLoggedIn(state, { user, roles }) {
       return { ...state, user, roles };
     },
 
@@ -153,8 +152,8 @@ export default {
     },
 
 
-    logoutSuccess(state, { payload }){
-      return { ...state, token: LocalStorage.getItem('token'), user: {} }
+    logoutSuccess(state, { payload }) {
+      return { ...state, token: LocalStorage.getItem('token'), user: {} };
     },
   },
 };

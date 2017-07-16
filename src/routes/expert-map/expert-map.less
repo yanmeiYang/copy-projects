@@ -1,10 +1,40 @@
-.expert_map {
+.expertMap {
   border-bottom: solid 1px #ddd;
 }
-.mapshow{
 
+:global {
+  .popup {
+    border: solid 0px red; width: 360px; height: 100px;
+  }
+  .personInfo {
+    display: flex; flex-direction: row; flex: 0;
+
+    img.img { width: 80px; }
+
+    .info {
+      display: flex; flex-direction: column; flex: 2;
+      padding-left: 8px;
+
+      .nameLine {
+        //display: flex; flex-direction: row;
+        .name {
+          //flex: 2;
+          font-size: 15px;
+          font-family: "STHeitiSC-Medium", "STHeiti", "Heiti SC", "Hiragino Sans GB", "Microsoft JhengHei", "Microsoft Yahei", SimHei, "AvenirNext-Regular", "Helvetica Neue", "lucida grande", "PingFangHK-Light", "WenQuanYi Micro Hei", "Droid Sans", "Roboto", Helvetica, Tahoma, Arial, "sans-serif";
+          font-weight: normal;
+          color: #101010;
+        }
+        .right { float: right; color: #A52A2A; margin-right: 16px; }
+      }
+
+    }
+  }
 }
-.cont1{
+
+.mapshow {
+}
+
+.cont1 {
   clear: both;
   padding: 8px;
   text-align: center;
@@ -26,8 +56,9 @@
     list-style: none;
   }
 }
-.tabs0{
-  margin-left:100px;
+
+.tabs0 {
+  margin-left: 100px;
   height: 24px;
   width: 230px;
   border: 1px solid #cbcbcb;
@@ -35,9 +66,11 @@
   font: 12px "宋体";
   text-align: center;
 }
+
 .menu0 {
   width: 230px;
 }
+
 .menu0 li {
   display: block;
   float: left;
@@ -46,25 +79,31 @@
   text-align: center;
   cursor: pointer;
   background: #FFFFff;
-  border-right:1px solid #cbcbcb;
+  border-right: 1px solid #cbcbcb;
 }
+
 .menu0 li.hover {
   background: #f2f6fb;
-  font-weight:bold;
+  font-weight: bold;
 }
+
 .main0 ul {
   display: none;
 }
+
 .main0 ul.block {
   display: block;
 }
-.lab1{
+
+.lab1 {
   float: left;
   font-size: 12px;
 }
-.main1{
-  margin:20px  0 5px 0;
+
+.main1 {
+  margin: 20px 0 5px 0;
 }
-.switch{
+
+.switch {
   float: right;
 }

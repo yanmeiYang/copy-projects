@@ -284,7 +284,7 @@ class Search extends React.PureComponent {
 
                 {
                   aggs.map((agg) => {
-                    if (agg.label === 'Gender') { // skip gender
+                    if (agg.label === sysconfig.SearchFilterExclude) { // skip gender
                       return '';
                     }
                     if (filters[agg.type]) {
@@ -300,7 +300,7 @@ class Search extends React.PureComponent {
                           <span className={styles.filterTitle}>{cnLabel}:</span>
                           <ul className={styles.filterItems}>
                             {
-                              agg.item.map((item) => {
+                              agg.item.slice(0, 12).map((item) => {
                                 return (
                                   <CheckableTag
                                     key={`${item.label}_${agg.label}`}

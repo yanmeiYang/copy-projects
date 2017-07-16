@@ -4,6 +4,7 @@
 import * as alibabaConfig from './alibaba/alibaba-config';
 import * as ccfConfig from './ccf/ccf-config';
 import * as huaweiConfig from './huawei/huawei-config';
+import * as tencentConfig from './tencent/tencent-config';
 import { config } from '../utils';
 
 // All available systems.
@@ -11,17 +12,18 @@ const CurrentSystemConfig = {
   ccf: ccfConfig, // <-- current config files.
   huawei: huaweiConfig,
   alibaba: alibabaConfig,
+  tencent: tencentConfig,
 };
 
 // 默认配置
 const defaultSystemConfigs = {
   SYSTEM: config.system,
-  PageTitle: 'AminerB',
+  PageTitle: 'Aminer Business',
 
   Language: 'en', // options [cn|en]
   PreferredLanguage: 'en', // 默认语言
 
-  SearchPagePrefix: 'search',
+  SearchPagePrefix: 'search', // search - 普通搜索; uniSearch - 多合一搜索.
   ShowSideMenu: true,
   ShowFooter: true,
 
@@ -41,15 +43,21 @@ const defaultSystemConfigs = {
   // Layout related
   //
   Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
+  Header_LogoStyle: {},
   Header_SubTextLogo: '子标题',
+  Header_SubTextStyle: {},
   Header_UserPageURL: '', // 用户头像点击之后去的页面.
   Footer_Content: '',
 
-  IndexPage_QuickSearchList: ['人工智能', '机器人', '数据挖掘', '机器学习', '数据建模', '计算机视觉',
-    '计算机网络', '网络', '自然语言处理'],
+  // resources
+  IndexPage_QuickSearchList: ['Artificial intelligence', 'Robotics',
+    'Data Mining', 'Machine Learning', 'Data Modeling', 'Computer vision',
+    'Networks', 'Natural language processing'],
+  IndexPage_InfoBlocks: '',
 
+  SearchFilterExclude: 'Gender',
 
-  // PersonList_ShowIndices: [], // do not override in-component settings.
+// PersonList_ShowIndices: [], // do not override in-component settings.
 };
 
 const sysconfig = defaultSystemConfigs;

@@ -1,21 +1,18 @@
 /**
- * Created by BoGao on 2017/6/20.
+ * Created by BoGao on 2017/7/14.
  */
 import React from 'react';
-import { IndexInfoBox } from './components';
 
 module.exports = {
 
-  // 通用配置。所有System的配置文件必须全部包含这部分的值
-  PageTitle: 'HUAWEI 知识洞察系统',
+  // 通用配置。所有System的配置文件必须全部包含这部分的值。
+  PageTitle: '腾讯人才智库',
   SearchPagePrefix: 'uniSearch',
   ShowSideMenu: false,
 
-  // IndexPage_QuickSearchList:[], // use default.
-  IndexPage_InfoBlocks: <IndexInfoBox />,
-
-  Header_SubTextLogo: '知识洞察系统',
-  Header_LogoStyle: { top: '-20px', width: '90px', },
+  Header_LogoStyle: { top: 2, width: '200px' },
+  Header_SubTextLogo: '人才智库',
+  Header_SubTextStyle: { paddingLeft: 12 },
   Header_UserPageURL: '',
   Footer_Content: '',
 
@@ -66,6 +63,10 @@ module.exports = {
       nperson: 287,
     },
   ],
+
+
+  SearchFilterExclude: '',
+
 
   // 特殊配置，这里是System的自己的配置
 

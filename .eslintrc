@@ -21,7 +21,11 @@
     "no-bitwise": [0],
     "no-cond-assign": [0],
     "import/no-unresolved": [0],
-    "require-yield": [1]
+    "require-yield": [1],
+    "react/jsx-max-props-per-line": [0],
+    "react/jsx-closing-bracket-location":[0],
+    "react/jsx-indent-props":[0],
+    "react/jsx-first-prop-new-line":[0],
   },
   "parserOptions": {
     "ecmaFeatures": {

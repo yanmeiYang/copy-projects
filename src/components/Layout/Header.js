@@ -24,9 +24,13 @@ function Header({ app, search, location, dispatch, logout, onSearch }) {
     <div className={styles.header}>
 
       <Link className={styles.logo} to="/">
-        <img alt={'logo'} src={`/sys/${sysconfig.SYSTEM}/header_logo.png`} style={sysconfig.Header_LogoStyle} />
+        <img
+          src={`/sys/${sysconfig.SYSTEM}/header_logo.png`}
+          style={sysconfig.Header_LogoStyle}
+          alt={'logo'}
+        />
         {/* TODO Move config out of this place */}
-        <div>{sysconfig.Header_SubTextLogo}</div>
+        <div style={sysconfig.Header_SubTextStyle}>{sysconfig.Header_SubTextLogo}</div>
       </Link>
 
       <div className={styles.searchWrapper}>
@@ -46,9 +50,9 @@ function Header({ app, search, location, dispatch, logout, onSearch }) {
         theme="light"
         className={styles.menu}
       >
-        {/*<Menu.Item key="/users">*/}
-        {/*<Link to="/"><Icon type="bars" />语言切换</Link>*/}
-        {/*</Menu.Item>*/}
+        {/* <Menu.Item key="/users"> */}
+        {/* <Link to="/"><Icon type="bars" />语言切换</Link> */}
+        {/* </Menu.Item> */}
 
         {/*{app.user.hasOwnProperty('first_name') &&*/}
         {/*<Menu.Item key="/welcome">*/}

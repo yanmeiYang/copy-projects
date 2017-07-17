@@ -16,10 +16,10 @@ cp ./src/utils/config.js ./bin/old-config.js
 sed 's/const SYS = .*;/const SYS = '\''ccf'\'';/g' ./bin/old-config.js > ./src/utils/config.js
 
 echo 'Building...'
-npm run build
+npm run build || exit
 
 echo 'Restore config file.'
-mv old-config.js ./src/utils/config.js
+mv ./bin/old-config.js ./src/utils/config.js
 
 echo 'Update...'
-scp -r dist root@47.94.231.103:ccf/
+scp -r dist root@47.94.231.103:ccf/ || exit

@@ -4,6 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Checkbox, Select } from 'antd';
+import { displayPositionFirst, displayAff } from '../../utils/profile_utils';
 import styles from './RelationGraph.less';
 import * as d3 from '../../../public/d3/d3.min';
 
@@ -518,24 +519,43 @@ class RelationGraph extends React.PureComponent {
       let posObj,
         tempStr,
         temppos;
-      tempStr = d.desc.n.en;
+      tempStr = d.desc.n.en ? d.desc.n.en : '' ;
       posObj = d.pos[0];
       if (posObj) {
-        temppos = posObj.name.n.en;
+        posObj.name.n.en ? temppos = posObj.name.n.en : temppos = posObj.name.n.zh;
+      } else {
+        temppos = '';
       }
       setTimeout((d, px, py) => {
         document.getElementById('tip').style.display = 'none';
         document.getElementById('tip').style.display = 'block';
         div.transition().duration(500).style('opacity', 0);
         div.transition().duration(20).style('opacity', 1.0);
-        div.html(`<div class="" style="background: #EEEEEE;height: 35px;line-height: 35px; padding-left: 10px; border-radius: 5px">
-<a href='https://cn.aminer.org/profile/${d.id}'>${d.name.n.en}</a><a id="delete" style="float: right; color: red; padding-right: 10px">X</a></div>
-<div style="padding-left: 10px;"><strong style="color: #a94442">h-Index:</strong>${d.indices.hIndex}&nbsp;|&nbsp;<strong style="color: #a94442">#Papers:</strong>${d.indices.numPubs}</br><p><i  class="fa fa-briefcase">&nbsp;</i>${temppos}</p><p><i class="fa fa-map-marker" style="word-break:break-all;text-overflow:ellipsis">&nbsp;${tempStr}</i></p></div>`)
-          .style('left', `${px}px`).style('top', `${py}px`);
-        document.getElementById('delete').onclick = () => {
-          document.getElementById('tip').style.display = 'none';
+        div.html(`<div class="" style="background: #EEEEEE;height: 35px;line-height: 35px; padding-left: 10px; border-radius: 5px; margin-top: 1px;">
+<a href='https://cn.aminer.org/profile/${d.id}'>${d.name.n.en}</a></div>
+<div style="padding-left: 10px;margin-left: 5px;margin-right: 5px;"><strong style="color: #a94442">h-Index:</strong>${d.indices.hIndex}&nbsp;|&nbsp;<strong style="color: #a94442">#Papers:</strong>${d.indices.numPubs}</br><p><i  class="fa fa-briefcase">&nbsp;
+</i>${temppos}</p><p><i class="fa fa-map-marker" style="word-break:break-all;text-overflow:ellipsis">&nbsp;${tempStr}</i></p></div>`)
+          .style('left', `${px + 5}px`).style('top', `${py}px`);
+        document.getElementById('tip').onmouseout = function (e) {
+          if (this === e.relatedTarget) {
+            document.getElementById('tip').style.display = 'none';
+          }
         };
       }, 100, d, pageX, pageY);
+    };
+    const hideInfo = (d) => {
+      const div = document.getElementById('tip');
+      const x = d3.event.pageX;
+      const y = d3.event.pageY;
+      setTimeout((x, y) => {
+        const x1 = div.offsetLeft;
+        const y1 = div.offsetTop;
+        const divx2 = div.offsetLeft + div.offsetWidth;
+        const divy2 = div.offsetTop + div.offsetHeight;
+        if (x < x1 || x > divx2 || y < y1 || y > divy2) {
+          document.getElementById('tip').style.display = 'none';
+        }
+      }, 1500, x, y);
     };
 
     _drag = d3.drag().on('start', dragstarted).on('drag', dragged).on('end', dragended);
@@ -552,9 +572,17 @@ class RelationGraph extends React.PureComponent {
         } else {
           return getRadious(0);
         }
+      }).style('stroke-width', (d) => {
+          if (d.indices.hIndex > 50) {
+            return '1px';
+          } else {
+            return '0.5px';
+          }
       });
       svg.selectAll('text').data(_nodes).text((d) => {
-        if ((transform.k >= 2 && transform.k < 5 && d.index < snum * 2) || transform.k >= 5) {
+        if (transform.k >= 3) {
+          return d.name.n.en;
+        } else if (transform.k >= 2 && d.index < snum*3) {
           return d.name.n.en;
         } else if (d.index < snum) {
           return d.name.n.en;
@@ -777,7 +805,13 @@ class RelationGraph extends React.PureComponent {
         } else {
           return getRadious(0);
         }
-      }).style('stroke', '#fff').style('stroke-width', '1.5px').attr('fill', (d) => {
+      }).style('stroke', '#fff').style('stroke-width', (d) => {
+        if (d.indices.hIndex > 50) {
+          return '1.5px';
+        } else {
+          return '1px';
+        }
+      }).attr('fill', (d) => {
         return getColor(d.indices.hIndex);
       }).call(_drag).on('mouseover', (d) => {
         showInfo(d);
@@ -788,6 +822,7 @@ class RelationGraph extends React.PureComponent {
           return k.id === d.id;
         }).attr('fill', 'yellow');
       }).on('mouseout', (d) => {
+        hideInfo(d);
         svg.selectAll('text').data(_nodes).filter((k) => {
           return k.id === d.id;
         }).style('fill', '#fff');
@@ -838,6 +873,7 @@ class RelationGraph extends React.PureComponent {
             return k.id === d.id;
           }).attr('fill', 'yellow');
         }).on('mouseout', (d) => {
+          hideInfo(d);
           svg.selectAll('text').data(_nodes).filter((k) => {
             return k.id === d.id;
           }).style('fill', '#fff');

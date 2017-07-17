@@ -415,8 +415,6 @@ class RelationGraph extends React.PureComponent {
                                   i++;
                                 }
                                 if (tempEdges.length > 2) {
-                                  console.log('22222222');
-                                  console.log(this);
                                   // $('[data-toggle=\'popover\']').popover('hide');
                                   console.log('popoverHide()!!!!');
 
@@ -484,7 +482,7 @@ class RelationGraph extends React.PureComponent {
         } else {
           return '';
         }
-      }).style('fill', '#333333');
+      }).style('fill', '#fff');
       svg.selectAll('circle').data(_nodes).attr('fill', (d) => {
         return getColor(d.indices.hIndex);
       });
@@ -573,11 +571,11 @@ class RelationGraph extends React.PureComponent {
           return getRadious(0);
         }
       }).style('stroke-width', (d) => {
-          if (d.indices.hIndex > 50) {
-            return '1px';
-          } else {
-            return '0.5px';
-          }
+        if (d.indices.hIndex > 50) {
+          return '1px';
+        } else {
+          return '0.5px';
+        }
       });
       svg.selectAll('text').data(_nodes).text((d) => {
         if (transform.k >= 3) {
@@ -715,6 +713,8 @@ class RelationGraph extends React.PureComponent {
         _edges.forEach((k) => {
           if (k.source.index === d.index) {
             return goalNodes.push(k.target);
+          } else {
+            return goalNodes;
           }
         });
         return expandNet(goalNodes, d);
@@ -844,7 +844,8 @@ class RelationGraph extends React.PureComponent {
         }
         return `<strong class="text-danger">h-Index:</strong>${d.indices.hIndex}|<strong class="text-danger">#Papers:</strong>${d.indices.numPubs}<br><i  class="fa fa-briefcase">&nbsp;</i>${temppos}<br><i class="fa fa-map-marker" style="word-break:break-all;text-overflow:ellipsis">&nbsp;${tempStr}</i>`;
       }).on('click', (d) => {
-        this.currentModle1 = true;
+        console.log('click');
+        this.currentModle1 = !this.currentModle5;
         nodeclick(d);
       });
       nodes_text = svg.selectAll('.nodetext').data(_nodes).enter().append('text').style('cursor', ' pointer').style('font-size', '15px')
@@ -883,7 +884,7 @@ class RelationGraph extends React.PureComponent {
             return getColor(d.indices.hIndex);
           });
         }).on('click', (d) => {
-          this.currentModle1 = true;
+          this.currentModle1 = !this.currentModle5;
           return nodeclick(d);
         });
       ticked = function () {
@@ -1255,7 +1256,7 @@ class RelationGraph extends React.PureComponent {
         </div>
         <div>
           <label>相关操作：</label>
-          <Checkbox checked={subnet_selection} onChange={this.changeModle1}>子网选取</Checkbox>
+          {/*<Checkbox checked={subnet_selection} onChange={this.changeModle1}>子网选取</Checkbox>*/}
           <Checkbox checked={suspension_adjustment} onChange={this.changeModle2}>暂停调整</Checkbox>
           <Checkbox checked={two_paths} onChange={this.changeModle3}>两点路径</Checkbox>
           <Checkbox checked={continuous_path} onChange={this.changeModle4}>连续路径</Checkbox>

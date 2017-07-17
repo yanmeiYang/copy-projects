@@ -15,6 +15,9 @@ module.exports = {
   DEFAULT_EXPERT_BASE: '5949c2f99ed5dbc2147fd854', // CCF会员
   DEFAULT_EXPERT_BASE_NAME: 'CCF会员',
 
+  // Functionality
+  Enable_Export: true,
+
   ExpertBases: [
     {
       id: '5949c2f99ed5dbc2147fd854',
@@ -62,7 +65,7 @@ module.exports = {
 
   PersonList_ShowIndices: ['activityRankingContrib', 'h_index', 'activity'],
   Header_SubTextLogo: 'CCF 专家库',
-  Header_LogoStyle: {width: '50%', lineHeight: '45px', height: '45px'},
+  Header_LogoStyle: { width: '50%', lineHeight: '45px', height: '45px' },
   Header_UserPageURL: '/seminar-my',
   Footer_Content: (
     <div>

@@ -10,7 +10,7 @@ const Routers = function ({ history, app }) {
     core.IndexPage(app, [
 
       // search
-      core.ExpertSearch(app),
+      // core.ExpertSearch(app),
       core.UniSearch(app),
       core.Experts(app),
 
@@ -25,21 +25,21 @@ const Routers = function ({ history, app }) {
       core.ResetPassword(app),
 
       // Admin(Specified by ccf)
-      core.AdminUsers(app),
-      core.AdminSystemConfig(app),
-      core.AdminSystemConfigWithCategory(app),
+      // core.AdminUsers(app),
+      // core.AdminSystemConfig(app),
+      // core.AdminSystemConfigWithCategory(app),
 
       // Activity / Seminar
-      core.Seminar(app),
-      core.SeminarWithId(app),
-      core.SeminarMy(app),
-      core.SeminarPost(app),
-      core.SeminarRating(app),
-      core.Statistic(app),
+      // core.Seminar(app),
+      // core.SeminarWithId(app),
+      // core.SeminarMy(app),
+      // core.SeminarPost(app),
+      // core.SeminarRating(app),
+      // core.Statistic(app),
 
       // expert map
       core.ExpertMap(app),
-      core.ExpertMapGoogle(app),
+      // core.ExpertMapGoogle(app),
 
       // Relation-Graph
       core.RelationGraphPage(app),

@@ -9,6 +9,8 @@ import PersonRouters from './routes/person/router';
 import UserRouters from './routes/user/router';
 import AdminRouters from './routes/admin/router';
 import SeminarRouters from './routes/seminar/router';
+import TrendPredictionRouters from './routes/trend-prediction/router';
+
 import OtherRouters from './routes/router';
 
 const core = {
@@ -41,6 +43,8 @@ const core = {
   ...UserRouters,
   ...AdminRouters,
   ...SeminarRouters,
+  ...TrendPredictionRouters,
+
   ...OtherRouters,
 
 };

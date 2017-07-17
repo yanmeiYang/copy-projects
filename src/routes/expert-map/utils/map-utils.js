@@ -158,7 +158,7 @@ const findcountries = (country) => {
     // /
   }
   return location;
-}
+};
 
 const findCities = (city) => {
   let location = [];

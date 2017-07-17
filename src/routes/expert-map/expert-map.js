@@ -4,13 +4,18 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Button } from 'antd';
-import { routerRedux } from 'dva/router';
+import { routerRedux, Link } from 'dva/router';
+import { Tooltip, Tag } from 'antd';
 import styles from './expert-map.less';
 import { listPersonByIds } from '../../services/person';
 import * as profileUtils from '../../utils/profile_utils';
+import { sysconfig } from '../../systems';
+import { findPosition, getById, waitforBMap, waitforBMapLib } from './utils/map-utils';
+import { Indices } from '../../components/widgets';
+import RightInfoZoneCluster from './RightInfoZoneCluster';
+
 import mapData from '../../../external-docs/expert-map/expert-map-example2.json';
 import GetBMapLib from './utils/BMapLibGai.js';
-import { findPosition, getById, waitforBMap, waitforBMapLib } from './utils/map-utils';
 
 const ButtonGroup = Button.Group;
 const blankAvatar = '/images/blank_avatar.jpg';
@@ -40,15 +45,6 @@ const getInfoWindow = () => {
   }
   return globalInfoWindow;
 };
-
-const syncInfoWindow = () => {
-  const ai = getById('author_info');
-  const pi = getById('personInfo');
-  if (ai && pi) {
-    ai.innerHTML = pi.innerHTML;
-  }
-};
-
 
 /**
  * Component
@@ -80,7 +76,7 @@ class ExpertMap extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    syncInfoWindow();
+    this.syncInfoWindow();
   }
 
   showTop = (usersIds, e, map, maindom, inputids) => {
@@ -113,17 +109,10 @@ class ExpertMap extends React.PureComponent {
       imgdiv.setAttribute('name', 'scholarimg');
       imgdiv.setAttribute('style', cstyle);
       imgdiv.setAttribute('class', 'imgWrapper');
-      imgdiv.innerHTML = `<img data='@@@@@@@0@@@@@@@' height='${imgwidth}' width='${imgwidth}' src='${blankAvatar}' alt='0'>`;
+      imgdiv.innerHTML = `<img width='${imgwidth}' src='${blankAvatar}' alt='0'>`;
       // insertAfter(imgdiv,thisNode);
       thisNode.appendChild(imgdiv);
-      imgdiv.addEventListener('click', (event) => {
-        const chtml = event.target.innerHTML;
-        let num = 0;
-        if (chtml.split('@@@@s@@@').length > 1) {
-          num = chtml.split('@@@@@@@')[1];
-        }
-        this.toggleRightInfoBox(ids[num]);
-      }, false);
+      imgdiv.addEventListener('click', () => this.toggleRightInfoBox(ids[i]), false);
     }
     // 再在其中间添加一个图像
     const wh = imgwidth + 40;
@@ -150,6 +139,7 @@ class ExpertMap extends React.PureComponent {
         }
       });
     }
+
     const resultPromise = listPersonByIds(ids);
     resultPromise.then(
       (data) => {
@@ -185,7 +175,7 @@ class ExpertMap extends React.PureComponent {
               const infoWindow = getInfoWindow();
               this.onSetPersonCard(personInfo);
               map.openInfoWindow(infoWindow, currentPoint);
-              syncInfoWindow();
+              this.syncInfoWindow();
               this.currentPersonId = personInfo.id;
             });
             cimg.addEventListener('mouseleave', (event) => {
@@ -237,7 +227,9 @@ class ExpertMap extends React.PureComponent {
           let pt = null;
           const newplace = findPosition(type, place.results[o]);
           // 只有经纬度不为空或者0的时候才显示，否则丢弃
-          if ((newplace[1] != null && newplace[1] != null) && (newplace[1] != 0 && newplace[1] != 0)) {
+          if ((newplace[1] != null && newplace[1] != null) &&
+            (newplace[1] !== 0 && newplace[1] !== 0)) {
+
             pt = new BMap.Point(newplace[1], newplace[0]);// 这里经度和纬度是反着的
             const marker = new BMap.Marker(pt);
             const label = new BMap.Label(`<div>${place.results[o].name}</div><div style='display: none;'>${place.results[o].id}</div>`);
@@ -282,10 +274,10 @@ class ExpertMap extends React.PureComponent {
         this.onResetPersonCard(); // TODO Load default name
         this.onLoadPersonCard(personId);
         e.target.openInfoWindow(infoWindow);
-        syncInfoWindow();
+        this.syncInfoWindow();
       } else {
         e.target.openInfoWindow(infoWindow);
-        syncInfoWindow();
+        this.syncInfoWindow();
       }
       this.currentPersonId = personId;
     });
@@ -297,6 +289,39 @@ class ExpertMap extends React.PureComponent {
     });
   };
 
+  getRightInfoBox = () => {
+    let riz = getById('flowinfo');
+    if (!riz) {
+      riz = document.createElement('div');
+      riz.setAttribute('id', 'flowinfo');
+      riz.setAttribute('class', 'rightInfoZone');
+      getById('allmap').appendChild(riz);
+    }
+    return riz;
+  };
+
+  // 将内容同步到地图中的控件上。
+  syncInfoWindow = () => {
+    // sync personInfo popup
+    const ai = getById('author_info');
+    const pi = getById('personInfo');
+    if (ai && pi) {
+      ai.innerHTML = pi.innerHTML;
+    }
+
+    // sync rightSideZone
+    const model = this.props && this.props.expertMap;
+    const person = model.personInfo;
+    const shouldRIZUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') === -1 && model.infoZoneIds === person.id;
+    if (shouldRIZUpdate || model.infoZoneIds.indexOf(',') >= 0) {
+      const rsz = getById('rightInfoZone');
+      const flowinfo = getById('flowinfo');
+      if (rsz && flowinfo) {
+        flowinfo.innerHTML = rsz.innerHTML;
+      }
+    }
+  };
+
   toggleRightInfoBox = (id) => {
     console.log('>>: clusterDetail', id);
 
@@ -304,110 +329,19 @@ class ExpertMap extends React.PureComponent {
     const statistic = getById('statistic').value;
     if (statistic !== id) { // 一般认为是第一次点击
       getById('flowstate').value = 1;
-      const theNode = getById('allmap');
-      const h = theNode.offsetHeight;  // 高度
-      const w = theNode.offsetWidth;  // 宽度
-      const width = 200;
-      const height = h * 0.8;
-      if (getById('flowinfo') == null) {
-        const flowdiv = document.createElement('div');
-        const cstyle = `z-index:10001;border:1px solid green;height:${height}px;width:${width}px;position: absolute;left:${w - width - 10}px;top:${(h - height) / 2}px;overflow:hidden;word-wrap: break-word;word-break:break-all;background-color:rgba(255, 255, 255, 0.3);`;
-        flowdiv.setAttribute('name', 'flowinfo');// 中心的一个图片
-        flowdiv.setAttribute('style', cstyle);
-        flowdiv.setAttribute('id', 'flowinfo');
-        theNode.appendChild(flowdiv);
-      } else {
-        const cstyle = `z-index:10001;border:1px solid green;height:${height}px;width:${width}px;position: absolute;left:${w - width - 10}px;top:${(h - height) / 2}px;overflow:hidden;word-wrap: break-word;word-break:break-all;background-color:rgba(255, 255, 255, 0.3);`;
-        getById('flowinfo').setAttribute('style', cstyle);
-        getById('flowinfo').style.display = '';
+
+      this.getRightInfoBox();
+      if (this.props.expertMap.infoZoneIds !== id) { // don't change
+        if (id.indexOf(',') >= 0) { // is cluster
+          const clusterIdList = id.split(',');
+          this.props.dispatch({
+            type: 'expertMap/listPersonByIds',
+            payload: { ids: clusterIdList },
+          });
+        }
+        this.props.dispatch({ type: 'expertMap/setRightInfoZoneIds', payload: { idString: id } });
       }
-      let cids = [];
-      let thisinfo = '';
-      if (id.indexOf(',') === -1) {
-        cids[0] = id;
-        const resultPromise = listPersonByIds(cids);
-        resultPromise.then(
-          (data) => {
-            const personInfo = data.data.persons[0];
-            let pos = '';
-            if (typeof (personInfo.pos) === 'undefined') {
-              pos = 'NULL';
-            } else if (personInfo.pos == null || personInfo.pos === '') {
-              pos = 'NULL';
-            } else if (personInfo.pos[0] == null || personInfo.pos[0] === '') {
-              pos = '';
-            } else {
-              pos = personInfo.pos[0].n;
-            }
-            let aff = 'NULL';
-            if (personInfo.aff != null) {
-              if (personInfo.aff.desc != null) {
-                aff = personInfo.aff.desc;
-              }
-            }
-            let photo = blankAvatar;
-            if (personInfo.avatar != null && personInfo.avatar !== '') {
-              photo = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 50);
-            }
-            let tags = 'NULL';
-            if (personInfo.tags != null && personInfo.tags !== '') {
-              tags = '';
-              for (const t in personInfo.tags) {
-                tags += `${personInfo.tags[t].t}  |  `;
-              }
-              tags = tags.substring(0, tags.length - 3);
-            }
-            const thisinfo = `<img style='float:left;margin:4px' id='imgDemo' src='http:${photo}' width='70' height='80'/>`
-              + `<i class='fa fa-user' style='width: 20px;'> </i><a  target='_blank' href='https://cn.aminer.org/profile/${personInfo.id}'>${
-                personInfo.name}</a><br /><i class='fa fa-mortar-board' style='width: 20px;'> </i>${
-                pos}<br /><i class='fa fa-institution' style='width: 20px;'> </i>${
-                aff}<br /><i class='fa fa-header' style='width: 20px;'> </i><strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>${
-                personInfo.indices.h_index}<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Paper:  </strong>${
-                personInfo.indices.num_pubs}<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Citation:  </strong>${
-                personInfo.indices.num_citation}<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Activity:  </strong>${
-                personInfo.indices.activity}<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Diversity:  </strong>${
-                personInfo.indices.diversity}<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#G_index:  </strong>${
-                personInfo.indices.g_index}<span style='color:grey;'>  |  </span><strong style='color:#A52A2A;'>#Sociability:  </strong>${
-                personInfo.indices.sociability}<br /><i class='fa fa-tag' style='width: 20px;'> </i>${
-                tags}`;
-            getById('flowinfo').innerHTML = `<div style='margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;word-wrap: break-word;word-break:break-all;opacity:1;background-color:#FFFFFF;'><div style='width:100%;margin:10px;'><h2>Detail Info</h2></div><div style='margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;line-height:22px'>${thisinfo}</div></div>`;
-          },
-          () => {
-            console.log('failed');
-          },
-        ).catch((error) => {
-          console.error(error);
-        });
-      } else {
-        cids = id.split(',').slice(0, id.split(',').length - 1);
-        const resultPromise = listPersonByIds(cids);
-        resultPromise.then(
-          (data) => {
-            let avgHindex = 0;
-            const top8 = '';
-            let location = '';
-            const setObj = new Set();
-            const p = data.data.persons;
-            for (let i = 0; i < p.length; i++) {
-              avgHindex += p[i].indices.h_index;
-              setObj.add(p[i].attr.nation);
-            }
-            for (const x in setObj) {
-              location = `${location},${x}`;
-            }
-            avgHindex /= p.length;
-            avgHindex = avgHindex.toFixed(2);// 保留两位小数
-            thisinfo = `${"<div id='author_info' style='width: 350px;height: 120px;'>" + "<strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"}${avgHindex
-              }<br />countries:${location}</div>`;
-            getById('flowinfo').innerHTML = `<div style='margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;word-wrap: break-word;word-break:break-all;opacity:1;background-color:#FFFFFF;'><div style='width:100%;margin:10px;'><h2>Statistic Info</h2></div><div style='margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;line-height:22px'>${thisinfo}</div></div>`;
-          },
-          () => {
-            console.log('failed');
-          },
-        ).catch((error) => {
-          console.error(error);
-        });
-      }
+      this.syncInfoWindow();
     } else if (state === 1) { // 偶数次点击同一个对象
       // 认为是第二次及其以上点击
       getById('flowstate').value = 0;
@@ -464,7 +398,7 @@ class ExpertMap extends React.PureComponent {
     this.props.dispatch({
       type: 'expertMap/getPersonInfoSuccess',
       payload: { data: { data: personInfo } },
-    })
+    });
   };
 
   callSearchMap(query) {
@@ -473,12 +407,35 @@ class ExpertMap extends React.PureComponent {
 
   render() {
     const model = this.props && this.props.expertMap;
-    const personInfo = model.personInfo;
-    const url = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 50);
-    const name = profileUtils.displayNameCNFirst(personInfo.name, personInfo.name_zh);
-    const pos = profileUtils.displayPositionFirst(personInfo.pos);
-    const aff = profileUtils.displayAff(personInfo);
-    const hindex = personInfo && personInfo.indices && personInfo.indices.h_index;
+    const person = model.personInfo;
+    if (!person) {
+      return <div />;
+    }
+
+    // used in person popup info
+    const url = profileUtils.getAvatar(person.avatar, person.id, 50);
+    const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
+    const pos = profileUtils.displayPositionFirst(person.pos);
+    const aff = profileUtils.displayAff(person);
+    const hindex = person && person.indices && person.indices.h_index;
+
+    // used in person right info zone.
+    const personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
+    if (sysconfig.PersonList_PersonLink_NewTab) {
+      personLinkParams.target = '_blank';
+    }
+    const tags = profileUtils.findTopNTags(person, 8);
+
+    // right info
+    const shouldRIZUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') === -1 && model.infoZoneIds === person.id;
+    const shouldRIZClusterUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') > 0;
+    const clusterPersons = model.clusterPersons;
+    // console.log(clusterPersons, shouldRIZClusterUpdate);
+    // info of cluster zone.
+    let clusterJSX = '';
+    if (shouldRIZClusterUpdate) {
+      clusterJSX = <RightInfoZoneCluster persons={clusterPersons} />;
+    }
 
     return (
       <div className={styles.expertMap} id="currentMain">
@@ -529,9 +486,56 @@ class ExpertMap extends React.PureComponent {
           </div>
         </div>
 
-        <div id="rightInfoZone" style={{ display: 'block' }}>
+        <div id="rightInfoZone" style={{ display: 'none' }}>
           <div className="rightInfoZone">
-            infozone
+
+            {shouldRIZUpdate &&
+            <div className="rizPersonInfo">
+              {name &&
+              <div className="name bg">
+                <h2 className="section_header">
+                  <a {...personLinkParams}>{person.name} </a><br />
+                  <a {...personLinkParams} className="zh">{person.name_zh} </a>
+                </h2>
+              </div>
+              }
+
+              <div className="img"><img src={url} alt="IMG" /></div>
+
+              <div className="info bg">
+                {pos && <span><i className="fa fa-briefcase fa-fw" />{pos}</span>}
+                {aff && <span><i className="fa fa-institution fa-fw" />{aff}</span>}
+              </div>
+
+              <div className="info bg">
+                <Indices
+                  indices={person.indices}
+                  activity_indices={person.activity_indices}
+                  showIndices={sysconfig.PersonList_ShowIndices}
+                />
+              </div>
+
+              <div className="info bg">
+                <h4><i className="fa fa-area-chart fa-fw" />研究兴趣:</h4>
+                <div className={styles.tagWrap}>
+                  {
+                    tags.map((tag) => {
+                      return (
+                        <Link to={`/${sysconfig.SearchPagePrefix}/${tag.t}/0/30`}
+                              key={Math.random()}>
+                          <Tag className="tag">{tag.t}</Tag>
+                        </Link>
+                      );
+                    })
+                  }
+                </div>
+              </div>
+
+            </div>
+            }
+
+            {clusterJSX}
+
           </div>
         </div>
 

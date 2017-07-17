@@ -12,6 +12,9 @@ export default {
     personId: '',
     personInfo: {},
     geoData: {},
+    // for rightInfoZone,
+    infoZoneIds: '', // ids as string slitted by ',';
+    clusterPersons: [],
   },
 
   subscriptions: {
@@ -23,7 +26,7 @@ export default {
       // if (match) {
       //   const pid = decodeURIComponent(match[1]);
       //   // 不在初始化的时候就调用读取方法。而是在检测到参数变化的时候再去调用。
-      //dispatch({ type: 'getPublications', payload: { personId: pid, offset: 0, size: 15 } });
+      // dispatch({ type: 'getPublications', payload: { personId: pid, offset: 0, size: 15 } });
       // }
       // });
     },
@@ -42,6 +45,13 @@ export default {
       const data = yield call(personService.getPerson, personId);
       yield put({ type: 'getPersonInfoSuccess', payload: { data } });
     },
+
+    *listPersonByIds({ payload }, { call, put }) {  // eslint-disable-line
+      const { ids } = payload;
+      const data = yield call(personService.listPersonByIds, ids);
+      yield put({ type: 'listPersonByIdsSuccess', payload: { data } });
+    },
+
   },
 
   reducers: {
@@ -53,8 +63,15 @@ export default {
       return { ...state, personInfo: {} };
     },
 
+    listPersonByIdsSuccess(state, { payload: { data } }) {
+      return { ...state, clusterPersons: data.data.persons };
+    },
+
+    setRightInfoZoneIds(state, { payload: { idString } }) {
+      return { ...state, infoZoneIds: idString };
+    },
+
     searchMapSuccess(state, { payload: { data } }) {
-      // console.log('-----------------------------------', data.data);
       // TODO translate data into target format.
       const geoSearchData = [];
       if (data.data) {
@@ -73,7 +90,6 @@ export default {
       // console.log('-----------------------------------', geoSearchData);
       return { ...state, geoData: { results: geoSearchData } };
     },
+
   },
-
-
 };

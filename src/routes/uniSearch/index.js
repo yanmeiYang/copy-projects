@@ -199,13 +199,13 @@ class Search extends React.PureComponent {
         <div className={styles.map}>
           <ExpertMap query={this.props.search.query} />
         </div>
-        <div className={styles.quickLinks}>
+        {/*<div className={styles.quickLinks}>*/}
           {/* <a>一些快速链接！</a><br />*/}
           {/* <a>一些快速链接！</a><br />*/}
           {/* <a>一些快速链接！</a><br />*/}
           {/* <a>一些快速链接！</a><br />*/}
           {/* <a>一些快速链接！</a><br />*/}
-        </div>
+        {/*</div>*/}
       </div>
     );
 

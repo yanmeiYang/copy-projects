@@ -15,7 +15,7 @@ const Routers = function ({ history, app }) {
       core.Experts(app),
 
       // person
-      core.Person(app),
+      // core.Person(app),
 
       // user & auth.
       core.Login(app),

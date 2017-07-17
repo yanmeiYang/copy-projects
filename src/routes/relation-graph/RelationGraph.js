@@ -138,7 +138,7 @@ class RelationGraph extends React.PureComponent {
     let simulation = null;
 
     const getRadious = (d) => {
-      return Math.sqrt(d / 7);
+      return Math.sqrt(d);
     };
 
     const getColor = (d) => {
@@ -510,6 +510,33 @@ class RelationGraph extends React.PureComponent {
       d.fx = null;
       d.fy = null;
     };
+    const div = d3.select('body').append('div').attr('class', 'tooltip').attr('id', 'tip').style('opacity', 0).style('background', 'white').style('color', 'black').style('padding', '0')
+      .style('min-width', '300px').style('border-radius', '5px').style('padding-bottom', '10px');
+    const showInfo = (d) => {
+      const pageX = d3.event.pageX;
+      const pageY = d3.event.pageY;
+      let posObj,
+        tempStr,
+        temppos;
+      tempStr = d.desc.n.en;
+      posObj = d.pos[0];
+      if (posObj) {
+        temppos = posObj.name.n.en;
+      }
+      setTimeout((d, px, py) => {
+        document.getElementById('tip').style.display = 'none';
+        document.getElementById('tip').style.display = 'block';
+        div.transition().duration(500).style('opacity', 0);
+        div.transition().duration(20).style('opacity', 1.0);
+        div.html(`<div class="" style="background: #EEEEEE;height: 35px;line-height: 35px; padding-left: 10px; border-radius: 5px">
+<a href='https://cn.aminer.org/profile/${d.id}'>${d.name.n.en}</a><a id="delete" style="float: right; color: red; padding-right: 10px">X</a></div>
+<div style="padding-left: 10px;"><strong style="color: #a94442">h-Index:</strong>${d.indices.hIndex}&nbsp;|&nbsp;<strong style="color: #a94442">#Papers:</strong>${d.indices.numPubs}</br><p><i  class="fa fa-briefcase">&nbsp;</i>${temppos}</p><p><i class="fa fa-map-marker" style="word-break:break-all;text-overflow:ellipsis">&nbsp;${tempStr}</i></p></div>`)
+          .style('left', `${px}px`).style('top', `${py}px`);
+        document.getElementById('delete').onclick = () => {
+          document.getElementById('tip').style.display = 'none';
+        };
+      }, 100, d, pageX, pageY);
+    };
 
     _drag = d3.drag().on('start', dragstarted).on('drag', dragged).on('end', dragended);
 
@@ -527,7 +554,7 @@ class RelationGraph extends React.PureComponent {
         }
       });
       svg.selectAll('text').data(_nodes).text((d) => {
-        if (transform.k > 2 && d.index < transform.k * 20) {
+        if ((transform.k >= 2 && transform.k < 5 && d.index < snum * 2) || transform.k >= 5) {
           return d.name.n.en;
         } else if (d.index < snum) {
           return d.name.n.en;
@@ -537,7 +564,7 @@ class RelationGraph extends React.PureComponent {
       }).attr('dy', (d) => {
         if (d.indices.hIndex > indexShow || d.indices.hIndex < 400) {
           const top = getRadious(d.indices.hIndex / transform.k) * 2;
-          return top + transform.k;
+          return top + 1.5;
         } else {
           return transform.k;
         }
@@ -546,6 +573,7 @@ class RelationGraph extends React.PureComponent {
     };
 
     const tempzoom = d3.zoom().scaleExtent([1, 10]).on('zoom', this.zoomed);
+
     svg = d3.select(`#${controlDivId}`).append('svg')
       .style('width', width)
       .style('height', height)
@@ -553,6 +581,7 @@ class RelationGraph extends React.PureComponent {
       .attr('bottom', '0px')
       .style('padding', '2px 2px 2px 2px')
       .call(tempzoom)
+      // .call(tip)
       .append('svg:g');
     console.log('svg: is ', svg);
 
@@ -646,7 +675,7 @@ class RelationGraph extends React.PureComponent {
           svg.selectAll('line').data(_edges).style('opacity', 0.3);
           return svg.selectAll('line').data(_edges).filter((e, i) => {
             return e.target.id === d.id || e.source.id === d.id;
-          }).style('stroke', '#880000').style('opacity', 0.8);
+          }).style('stroke', 'yellow').style('opacity', 0.8);
         } else {
           _onclicknodes[_onclicknodes.indexOf(d.id)] = '';
           return svg.selectAll('line').data(_edges).filter((e, i) => {
@@ -741,27 +770,28 @@ class RelationGraph extends React.PureComponent {
       // this.describeNodes1 = _nodes.length;
       // this.describeNodes2 = _edges.length;
       this.setState({ describeNodes1: _nodes.length, describeNodes2: _edges.length });
-      link = svg.append('g').attr('class', 'links').selectAll('line').data(_edges).enter().append('line').style('stroke', '#999999').style('stroke-width', '1px');
+      link = svg.append('g').attr('class', 'links').selectAll('line').data(_edges).enter().append('line').style('stroke', '#999').style('stroke-opacity', '0.6').style('stroke-width', (d) => { return d; });
       node = svg.append('g').attr('class', 'nodes').selectAll('circle').data(_nodes).enter().append('circle').attr('r', (d) => {
         if (d.indices.hIndex < 400) {
           return getRadious(d.indices.hIndex);
         } else {
           return getRadious(0);
         }
-      }).style('stroke-width', '0px').attr('fill', (d) => {
+      }).style('stroke', '#fff').style('stroke-width', '1.5px').attr('fill', (d) => {
         return getColor(d.indices.hIndex);
       }).call(_drag).on('mouseover', (d) => {
+        showInfo(d);
         svg.selectAll('text').data(_nodes).filter((k) => {
           return k.id === d.id;
         }).style('fill', 'yellow');
-        return svg.selectAll('circle').data(_nodes).filter((k) => {
+        svg.selectAll('circle').data(_nodes).filter((k) => {
           return k.id === d.id;
         }).attr('fill', 'yellow');
       }).on('mouseout', (d) => {
         svg.selectAll('text').data(_nodes).filter((k) => {
           return k.id === d.id;
-        }).style('fill', '#333333');
-        return svg.selectAll('circle').data(_nodes).filter((k) => {
+        }).style('fill', '#fff');
+        svg.selectAll('circle').data(_nodes).filter((k) => {
           return k.id === d.id;
         }).attr('fill', (d) => {
           return getColor(d.indices.hIndex);
@@ -779,14 +809,15 @@ class RelationGraph extends React.PureComponent {
         }
         return `<strong class="text-danger">h-Index:</strong>${d.indices.hIndex}|<strong class="text-danger">#Papers:</strong>${d.indices.numPubs}<br><i  class="fa fa-briefcase">&nbsp;</i>${temppos}<br><i class="fa fa-map-marker" style="word-break:break-all;text-overflow:ellipsis">&nbsp;${tempStr}</i>`;
       }).on('click', (d) => {
-        return nodeclick(d);
+        this.currentModle1 = true;
+        nodeclick(d);
       });
       nodes_text = svg.selectAll('.nodetext').data(_nodes).enter().append('text').style('cursor', ' pointer').style('font-size', '15px')
         .attr('dy', (d) => {
           const top = getRadious(d.indices.hIndex) * 2;
           return top + 10;
         })
-        .style('fill', '#333333').text((d) => {
+        .style('fill', '#fff').text((d) => {
           if (d.index < snum) {
             return d.name.n.en;
           } else {
@@ -794,14 +825,12 @@ class RelationGraph extends React.PureComponent {
           }
         }).attr('text-anchor', (d) => {
           return 'middle';
-        }).on('click', (d) => {
-          this.currentModle1 = true;
-          return nodeclick(d);
         })
         // .on('click', (d) => {
         //   return window.open(`https://cn.aminer.org/profile/${d.id}`);
         // })
         .on('mouseover', (d) => {
+          showInfo(d);
           svg.selectAll('text').data(_nodes).filter((k) => {
             return k.id === d.id;
           }).style('fill', 'yellow');
@@ -811,12 +840,15 @@ class RelationGraph extends React.PureComponent {
         }).on('mouseout', (d) => {
           svg.selectAll('text').data(_nodes).filter((k) => {
             return k.id === d.id;
-          }).style('fill', '#333333');
+          }).style('fill', '#fff');
           return svg.selectAll('circle').data(_nodes).filter((k) => {
             return k.id === d.id;
           }).attr('fill', (d) => {
             return getColor(d.indices.hIndex);
           });
+        }).on('click', (d) => {
+          this.currentModle1 = true;
+          return nodeclick(d);
         });
       ticked = function () {
         link.attr('x1', (d) => {
@@ -1201,7 +1233,7 @@ class RelationGraph extends React.PureComponent {
             })}
           </Select>
         </div>
-        <div id="rgvis" style={{ backgroundColor: '#eee', width: EgoWidth, height: EgoHeight }} />
+        <div id="rgvis" style={{ background:'black', width: EgoWidth, height: EgoHeight, border: '1px solid #eee' }} />
       </div>
     );
   }

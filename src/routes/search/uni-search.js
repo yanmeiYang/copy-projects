@@ -2,7 +2,7 @@ import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import { Tabs, Tag, Pagination, Spin, Button } from 'antd';
-import styles from './index.less';
+import styles from './uni-search.less';
 import { PersonList } from '../../components/person';
 import ExpertMap from '../expert-map/expert-map';
 import { sysconfig } from '../../systems';
@@ -38,7 +38,7 @@ function showChineseLabel2(enLabel) {
 /*
  * http://localhost:8000/search/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/0/30?view=relation
  */
-class Search extends React.PureComponent {
+class UniSearch extends React.PureComponent {
 
   constructor(props) {
     super(props);
@@ -81,6 +81,15 @@ class Search extends React.PureComponent {
     });
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log("should component update?");
+    // if (nextProps.profile && this.props.profile) {
+    //   if (nextProps.profile.id === this.props.profile.id) {
+    //     return false;
+    //   }
+    // }
+    return true;
+  }
 
 // const Search = ({ app, search, dispatch }) => {
 
@@ -115,7 +124,7 @@ class Search extends React.PureComponent {
       delete filters[f];
     });
     this.onFilterChange('eb', { id, name }, true);// Special Filter;
-  }
+  };
 //
 // onSearch = (data) => {
 //   const newOffset = data.offset || 0;
@@ -134,7 +143,7 @@ class Search extends React.PureComponent {
       size: pageSize,
     });
     // ReactDOM.findDOMNode(this.refs.wrap).scrollTo(0, 0);
-  }
+  };
 
   onOrderChange = (e) => {
     const { filters, query } = this.props.search;
@@ -162,7 +171,14 @@ class Search extends React.PureComponent {
     const { results, pagination, query, aggs, loading, filters } = this.props.search;
     const { pageSize, total, current } = pagination;
 
-    const exportArea = <ExportPersonBtn />;
+    const exportArea = sysconfig.Enable_Export ? <ExportPersonBtn /> : '';
+
+    const wantedTabs = sysconfig.UniSearch_Tabs;
+    const avaliableTabs = {
+      list: { key: 'list', label: '列表视图', icon: 'fa-list' },
+      map: { key: 'map', label: '地图视图', icon: 'fa-map-marker' },
+      relation: { key: 'relation', label: '关系视图', icon: 'fa-users' },
+    };
 
     this.state.view['list-view'] = (
       <div>
@@ -200,11 +216,11 @@ class Search extends React.PureComponent {
           <ExpertMap query={this.props.search.query} />
         </div>
         {/*<div className={styles.quickLinks}>*/}
-          {/* <a>一些快速链接！</a><br />*/}
-          {/* <a>一些快速链接！</a><br />*/}
-          {/* <a>一些快速链接！</a><br />*/}
-          {/* <a>一些快速链接！</a><br />*/}
-          {/* <a>一些快速链接！</a><br />*/}
+        {/* <a>一些快速链接！</a><br />*/}
+        {/* <a>一些快速链接！</a><br />*/}
+        {/* <a>一些快速链接！</a><br />*/}
+        {/* <a>一些快速链接！</a><br />*/}
+        {/* <a>一些快速链接！</a><br />*/}
         {/*</div>*/}
       </div>
     );
@@ -215,26 +231,13 @@ class Search extends React.PureComponent {
       </div>
     );
 
+    console.log('refresh page');
+
     return (
       <div className="content-inner">
 
         <div className={styles.topZone}>
           <div className="searchZone">
-
-            {/* 搜索框
-             <div className={styles.top}>
-             <div className={styles.searchWrap}>
-             <SearchBox size="large" style={{ width: 680 }} btnText="搜索" keyword={query}
-             onSearch={this.onSearch} />
-             </div>
-             </div>
-             */}
-
-            {/* <KgSearchBox*/}
-            {/* size="large"*/}
-            {/* style={{ width: 500, marginBottom: 24 }}*/}
-            {/* onSearch={this.onSearch}*/}
-            {/* />*/}
 
             {/* Filter */}
             <div className={styles.filterWrap}>
@@ -299,20 +302,19 @@ class Search extends React.PureComponent {
                         <div className={styles.filterRow} key={agg.type}>
                           <span className={styles.filterTitle}>{cnLabel}:</span>
                           <ul className={styles.filterItems}>
-                            {
-                              agg.item.slice(0, 12).map((item) => {
-                                return (
-                                  <CheckableTag
-                                    key={`${item.label}_${agg.label}`}
-                                    className={styles.filterItem}
-                                    checked={filters[agg.label] === item.label}
-                                    onChange={checked => this.onFilterChange(agg.type, item.label, checked)}
-                                  >
-                                    {item.label}
-                                    (<span className={styles.filterCount}>{item.count}</span>)
-                                  </CheckableTag>
-                                );
-                              })
+                            {agg.item.slice(0, 12).map((item) => {
+                              return (
+                                <CheckableTag
+                                  key={`${item.label}_${agg.label}`}
+                                  className={styles.filterItem}
+                                  checked={filters[agg.label] === item.label}
+                                  onChange={checked => this.onFilterChange(agg.type, item.label, checked)}
+                                >
+                                  {item.label}
+                                  (<span className={styles.filterCount}>{item.count}</span>)
+                                </CheckableTag>
+                              );
+                            })
                             }
                           </ul>
                         </div>
@@ -340,18 +342,14 @@ class Search extends React.PureComponent {
             tabBarExtraContent={exportArea}
             defaultActiveKey={this.state.currentTab}
           >
-            <TabPane
-              tab={<p><i className="fa fa-list fa-fw" aria-hidden="true" /> 列表视图</p>}
-              key="list-view"
-            >{''}</TabPane>
-            <TabPane
-              tab={<p><i className="fa fa-map-marker fa-fw" aria-hidden="true" /> 地图视图</p>}
-              key="map-view"
-            >{''}</TabPane>
-            <TabPane
-              tab={<p><i className="fa fa-users fa-fw" aria-hidden="true" /> 关系视图</p>}
-              key="relation-view"
-            >{''}</TabPane>
+            {wantedTabs && wantedTabs.map((key) => {
+              const tab = avaliableTabs[key];
+              const tabJsx = (<p>
+                <i className={`fa ${tab.icon} fa-fw`} aria-hidden="true" />
+                {tab.label}
+              </p>);
+              return tab ? (<TabPane tab={tabJsx} key={`${tab.key}-view`} />) : '';
+            })}
           </Tabs>
         </div>
 
@@ -366,4 +364,4 @@ class Search extends React.PureComponent {
 }
 
 
-export default connect(({ app, search, loading }) => ({ app, search, loading }))(Search);
+export default connect(({ app, search, loading }) => ({ app, search, loading }))(UniSearch);

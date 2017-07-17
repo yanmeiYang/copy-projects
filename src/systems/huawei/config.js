@@ -19,6 +19,9 @@ module.exports = {
   Header_UserPageURL: '',
   Footer_Content: '',
 
+  // Functionality
+  Enable_Export: false,
+
   ExpertBases: [
     {
       id: 'aminer',

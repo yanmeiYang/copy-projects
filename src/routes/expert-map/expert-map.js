@@ -321,8 +321,6 @@ class ExpertMap extends React.PureComponent {
   };
 
   toggleRightInfoBox = (id) => {
-    console.log('>>: clusterDetail', id);
-
     const state = getById('flowstate').value;
     const statistic = getById('statistic').value;
     if (statistic !== id) { // 一般认为是第一次点击

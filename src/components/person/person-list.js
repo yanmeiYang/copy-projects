@@ -29,6 +29,8 @@ class PersonList extends React.PureComponent {
   // }
 
   render() {
+    console.log('refresh person list ');
+
     return (
       <div className={styles.personList}>
         {

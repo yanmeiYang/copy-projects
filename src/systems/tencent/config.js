@@ -23,24 +23,9 @@ module.exports = {
       nperson: 2871,
     },
     {
-      id: '595208bd9ed5dbf9cd563c60',
-      name: 'IEEE Fellow(2013)',
+      id: '595208bd9ed5dbf9cd563c60.593e4ac29ed5db77fc7be728.593beddb9ed5db23ccac7dbf.593b7c889ed5db23ccac68e6',
+      name: 'IEEE Fellow(2013-2016)',
       nperson: 12,
-    },
-    {
-      id: '593e4ac29ed5db77fc7be728',
-      name: 'IEEE Fellow(2014)',
-      nperson: 163,
-    },
-    {
-      id: '593beddb9ed5db23ccac7dbf',
-      name: 'IEEE Fellow(2015)',
-      nperson: 7,
-    },
-    {
-      id: '593b7c889ed5db23ccac68e6',
-      name: 'IEEE Fellow(2016)',
-      nperson: 57,
     },
     {
       id: '5923c0829ed5db1600b942db',
@@ -66,6 +51,7 @@ module.exports = {
 
 
   SearchFilterExclude: '',
+  UniSearch_Tabs: ['list', 'map'],
 
 
   // 特殊配置，这里是System的自己的配置

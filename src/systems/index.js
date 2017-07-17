@@ -1,10 +1,10 @@
 /**
  * Created by BoGao on 2017/6/20.
  */
-import * as alibabaConfig from './alibaba/alibaba-config';
-import * as ccfConfig from './ccf/ccf-config';
-import * as huaweiConfig from './huawei/huawei-config';
-import * as tencentConfig from './tencent/tencent-config';
+import * as alibabaConfig from './alibaba/config';
+import * as ccfConfig from './ccf/config';
+import * as huaweiConfig from './huawei/config';
+import * as tencentConfig from './tencent/config';
 import { config } from '../utils';
 
 // All available systems.
@@ -30,14 +30,11 @@ const defaultSystemConfigs = {
   // expert base
   SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
   ExpertBases: [], // must override.
-
   DEFAULT_EXPERT_BASE: 'aminer', // 华为默认搜索
   DEFAULT_EXPERT_BASE_NAME: '全球专家',
 
   PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
   PersonList_PersonLink_NewTab: true,
-
-  SPECIAL_ExpertMapNoHeader: false,
 
   //
   // Layout related
@@ -57,7 +54,12 @@ const defaultSystemConfigs = {
 
   SearchFilterExclude: 'Gender',
 
-// PersonList_ShowIndices: [], // do not override in-component settings.
+  UniSearch_Tabs: ['list', 'map', 'relation'],
+
+  // Functionality
+  Enable_Export: false,
+
+  // PersonList_ShowIndices: [], // do not override in-component settings.
 };
 
 const sysconfig = defaultSystemConfigs;

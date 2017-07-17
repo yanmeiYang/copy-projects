@@ -13,7 +13,7 @@ import { core } from '../router';
  */
 const fullRouter = (app, defaultChildRoutes) => {
   const childRoutes = defaultChildRoutes || [];
-  return [
+  const allRouters = [
     core.IndexPage(app, [
 
       // search
@@ -48,11 +48,12 @@ const fullRouter = (app, defaultChildRoutes) => {
       core.ExpertMap(app),
       core.ExpertMapGoogle(app),
 
-      // Relation-Graph
+      // Relation-Graph, KnowledgeGraph, TrendPrediction, etc...
       core.RelationGraphPage(app),
-
-      // KnowledgeGraph
       core.KnowledgeGraph(app),
+      core.TrendPredictionPage(app),
+
+      // Your pages should be registered here.
 
       ...childRoutes,
 
@@ -60,6 +61,7 @@ const fullRouter = (app, defaultChildRoutes) => {
       core.Default404(app),
     ]),
   ];
+  return allRouters;
 };
 
 export default fullRouter;

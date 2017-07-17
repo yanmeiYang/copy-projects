@@ -5,14 +5,12 @@ import React from 'react';
 import { connect } from 'dva';
 import { Button } from 'antd';
 import { routerRedux, Link } from 'dva/router';
-import { Tooltip, Tag } from 'antd';
 import styles from './expert-map.less';
 import { listPersonByIds } from '../../services/person';
 import * as profileUtils from '../../utils/profile_utils';
-import { sysconfig } from '../../systems';
 import { findPosition, getById, waitforBMap, waitforBMapLib } from './utils/map-utils';
-import { Indices } from '../../components/widgets';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
+import RightInfoZonePerson from './RightInfoZonePerson';
 
 import mapData from '../../../external-docs/expert-map/expert-map-example2.json';
 import GetBMapLib from './utils/BMapLibGai.js';
@@ -408,34 +406,35 @@ class ExpertMap extends React.PureComponent {
   render() {
     const model = this.props && this.props.expertMap;
     const person = model.personInfo;
-    if (!person) {
-      return <div />;
-    }
 
-    // used in person popup info
-    const url = profileUtils.getAvatar(person.avatar, person.id, 50);
-    const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
-    const pos = profileUtils.displayPositionFirst(person.pos);
-    const aff = profileUtils.displayAff(person);
-    const hindex = person && person.indices && person.indices.h_index;
+    let personPopupJsx;
+    if (person) {
+      const url = profileUtils.getAvatar(person.avatar, person.id, 50);
+      const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
+      const pos = profileUtils.displayPositionFirst(person.pos);
+      const aff = profileUtils.displayAff(person);
+      const hindex = person && person.indices && person.indices.h_index;
 
-    // used in person right info zone.
-    const personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
-    if (sysconfig.PersonList_PersonLink_NewTab) {
-      personLinkParams.target = '_blank';
+      personPopupJsx = (
+        <div className="personInfo">
+          <div><img className="img" src={url} alt="IMG" /></div>
+          <div className="info">
+            <div className="nameLine">
+              <div className="right">H-index:<b> {hindex}</b>
+              </div>
+              <div className="name">{name}</div>
+            </div>
+            {pos && <span><i className="fa fa-briefcase fa-fw" />{pos}</span>}
+            {aff && <span><i className="fa fa-institution fa-fw" />{aff}</span>}
+          </div>
+        </div>
+      );
     }
-    const tags = profileUtils.findTopNTags(person, 8);
 
     // right info
     const shouldRIZUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') === -1 && model.infoZoneIds === person.id;
     const shouldRIZClusterUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') > 0;
     const clusterPersons = model.clusterPersons;
-    // console.log(clusterPersons, shouldRIZClusterUpdate);
-    // info of cluster zone.
-    let clusterJSX = '';
-    if (shouldRIZClusterUpdate) {
-      clusterJSX = <RightInfoZoneCluster persons={clusterPersons} />;
-    }
 
     return (
       <div className={styles.expertMap} id="currentMain">
@@ -472,69 +471,14 @@ class ExpertMap extends React.PureComponent {
         </div>
 
         <div id="personInfo" style={{ display: 'none' }}>
-          <div className="personInfo">
-            <div><img className="img" src={url} alt="IMG" /></div>
-            <div className="info">
-              <div className="nameLine">
-                <div className="right">H-index:<b> {hindex}</b>
-                </div>
-                <div className="name">{name}</div>
-              </div>
-              {pos && <span><i className="fa fa-briefcase fa-fw" />{pos}</span>}
-              {aff && <span><i className="fa fa-institution fa-fw" />{aff}</span>}
-            </div>
-          </div>
+          {personPopupJsx && personPopupJsx}
         </div>
 
         <div id="rightInfoZone" style={{ display: 'none' }}>
           <div className="rightInfoZone">
 
-            {shouldRIZUpdate &&
-            <div className="rizPersonInfo">
-              {name &&
-              <div className="name bg">
-                <h2 className="section_header">
-                  <a {...personLinkParams}>{person.name} </a><br />
-                  <a {...personLinkParams} className="zh">{person.name_zh} </a>
-                </h2>
-              </div>
-              }
-
-              <div className="img"><img src={url} alt="IMG" /></div>
-
-              <div className="info bg">
-                {pos && <span><i className="fa fa-briefcase fa-fw" />{pos}</span>}
-                {aff && <span><i className="fa fa-institution fa-fw" />{aff}</span>}
-              </div>
-
-              <div className="info bg">
-                <Indices
-                  indices={person.indices}
-                  activity_indices={person.activity_indices}
-                  showIndices={sysconfig.PersonList_ShowIndices}
-                />
-              </div>
-
-              <div className="info bg">
-                <h4><i className="fa fa-area-chart fa-fw" />研究兴趣:</h4>
-                <div className={styles.tagWrap}>
-                  {
-                    tags.map((tag) => {
-                      return (
-                        <Link to={`/${sysconfig.SearchPagePrefix}/${tag.t}/0/30`}
-                              key={Math.random()}>
-                          <Tag className="tag">{tag.t}</Tag>
-                        </Link>
-                      );
-                    })
-                  }
-                </div>
-              </div>
-
-            </div>
-            }
-
-            {clusterJSX}
+            {shouldRIZUpdate && <RightInfoZonePerson person={model.personInfo} /> }
+            {shouldRIZClusterUpdate && <RightInfoZoneCluster persons={clusterPersons} />}
 
           </div>
         </div>

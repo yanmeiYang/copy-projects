@@ -72,9 +72,15 @@ class RightInfoZoneCluster extends React.PureComponent {
             const avatarUrl = profileUtils.getAvatar(person.avatar, person.id, 50);
 
             return (
-              <div className="imgBox" key={person.id}>
-                <img src={avatarUrl} />
-                {/*<div key={person.id}>{person.name}</div>*/}
+              <div key={person.id} className="imgOuter">
+                <div className="imgBox">
+                  <img src={avatarUrl} />
+                  {/*<div key={person.id}>{person.name}</div>*/}
+                </div>
+                <div className="tooltip">
+                  {person.name}<br />
+                  Hindex:{person.indices && person.indices.hindex }
+                </div>
               </div>
             );
           })}

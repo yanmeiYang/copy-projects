@@ -11,7 +11,7 @@ class IndexInfoBox extends React.PureComponent {
     return (
       <div className={styles.bigNavi}>
         <div className="naviItem">
-          <Link to="https://cn.aminer.org/ego">学者关系网络</Link>
+          <Link to="/uniSearch/Data%20Mining/0/30?view=relation-view">学者关系网络</Link>
         </div>
         <div className="naviItem">
           <Link to="/expert-map">全球人才分布图</Link>

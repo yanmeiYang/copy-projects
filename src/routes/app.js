@@ -116,17 +116,17 @@ const App = ({ children, location, dispatch, app, loading }) => {
         {href.indexOf('/KnowledgeGraphPage') > 0 &&
         <script src="http://d3js.org/d3.v3.min.js" />}
 
-        {href.indexOf('/expert-map') > 0 &&
-        <script type="text/javascript" src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001"></script>}
+        {(href.indexOf('/expert-map') > 0 || href.indexOf('/uniSearch') > 0) &&
+        <script type="text/javascript" src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />}
 
-        {href.indexOf('/expert-map')>0 &&
-        <script src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1" charset="utf-8" async defer></script>}
+        {(href.indexOf('/expert-map') > 0 || href.indexOf('/uniSearch') > 0) &&
+        <script src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1" charset="utf-8" async defer />}
 
-        {href.indexOf('/expert-googlemap')>0 &&
-        <script src="../../expertmap/googlemap/markerclusterer.js"></script>}
+        {href.indexOf('/expert-googlemap') > 0 &&
+        <script src="../../expertmap/googlemap/markerclusterer.js" />}
 
-        {href.indexOf('/expert-googlemap')>0 &&
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnNB6SXL5JJ0NU8j-Ay8pnnmRC50vsrtw" async defer></script>}
+        {href.indexOf('/expert-googlemap') > 0 &&
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnNB6SXL5JJ0NU8j-Ay8pnnmRC50vsrtw" async defer />}
 
       </Helmet>
 

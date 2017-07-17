@@ -17,18 +17,45 @@ class RightInfoZoneCluster extends React.PureComponent {
 
   render() {
     const persons = this.props.persons;
-
-    let hindexSum = 0;
-    persons.map((person) => {
-      const indices = person.indices;
-      if (indices) {
-        hindexSum += indices.h_index;
-      }
-      return null;
-    });
     if (!persons || persons.length <= 0) {
       return <div />;
     }
+
+    let hindexSum = 0;
+    const interests = {};
+    persons.map((person) => {
+      // console.log(person);
+      const indices = person.indices;
+      // sum hindex
+      if (indices) {
+        hindexSum += indices.h_index;
+      }
+      // interests
+      if (person.tags && person.tags.length > 0) {
+        person.tags.map((tag) => {
+          const count = interests[tag.t] || 0;
+          interests[tag.t] = count + 1;
+          return null;
+        });
+      }
+      if (person.tags_zh && person.tags_zh.length > 0) {
+        person.tags.map((tag) => {
+          const count = interests[tag.t] || 0;
+          interests[tag.t] = count + 1;
+          return null;
+        });
+      }
+      return null;
+    });
+
+    // sort interests.
+    let sortedInterest = Object.keys(interests).map((tag) => {
+      return { key: tag, count: interests[tag] };
+    });
+    sortedInterest = sortedInterest.sort((a, b) => b.count - a.count);
+
+    // TODO 人头按Hindex排序。
+    // TODO 显示Hindex分段.
     return (
       <div className="rizPersonInfo">
         <div className="name bg">
@@ -37,7 +64,7 @@ class RightInfoZoneCluster extends React.PureComponent {
 
         <div className="info bg">
           <span>Sum of H-index: {hindexSum}</span>
-          <span>Avg of H-index: {hindexSum / persons.length}</span>
+          <span>Avg of H-index: {(hindexSum / persons.length).toFixed(0)}</span>
         </div>
 
         <div className="images bg">
@@ -55,6 +82,11 @@ class RightInfoZoneCluster extends React.PureComponent {
 
         <div className="info bg">
           Research Interests:
+          {sortedInterest && sortedInterest.slice(0, 20).map((interest) => {
+            return (
+              <span key={interest.key}>{interest.key} ({interest.count})</span>
+            );
+          })}
         </div>
 
       </div>

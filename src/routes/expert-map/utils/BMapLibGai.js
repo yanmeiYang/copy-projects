@@ -574,7 +574,7 @@ function GetBMapLib(showTop) {
 
         this._clusterMarker.addEventListener('click', (event) => {
           console.log('set view port');
-          this._map.setViewport(this.getBounds());
+          // this._map.setViewport(this.getBounds());
         });
 
         const that = this;

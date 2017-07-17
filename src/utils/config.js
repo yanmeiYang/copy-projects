@@ -3,10 +3,10 @@
  */
 
 // const SYS = 'ccf';
-const SYS = 'ccf';
+// const SYS = 'huawei';
 const baseURL = 'https://api.aminer.org/api';
 // const SYS = 'alibaba';
-// const SYS = 'tencent';
+const SYS = 'tencent';
 
 module.exports = {
 
@@ -78,8 +78,8 @@ module.exports = {
 
     /* person */
     personProfile: `${baseURL}/person/summary/:id`,
-    personEmailImg: `${baseURL}/person/email/i/`,
-    getEmailCrImage: `${baseURL}/person/email-cr/i/`,
+    personEmailImg: `/person/email/i/`,
+    getEmailCrImage: `/person/email-cr/i/`,
     listPersonByIds: `${baseURL}/person/batch-list`,
     getActivityAvgScoresByPersonId: `${baseURL}/person/activity/:id/indices`,
 

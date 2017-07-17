@@ -109,7 +109,7 @@ class ExpertMap extends React.PureComponent {
       imgdiv.setAttribute('name', 'scholarimg');
       imgdiv.setAttribute('style', cstyle);
       imgdiv.setAttribute('class', 'imgWrapper');
-      imgdiv.innerHTML = `<img height='${imgwidth}' width='${imgwidth}' src='${blankAvatar}' alt='0'>`;
+      imgdiv.innerHTML = `<img width='${imgwidth}' src='${blankAvatar}' alt='0'>`;
       // insertAfter(imgdiv,thisNode);
       thisNode.appendChild(imgdiv);
       imgdiv.addEventListener('click', () => this.toggleRightInfoBox(ids[i]), false);
@@ -227,7 +227,9 @@ class ExpertMap extends React.PureComponent {
           let pt = null;
           const newplace = findPosition(type, place.results[o]);
           // 只有经纬度不为空或者0的时候才显示，否则丢弃
-          if ((newplace[1] != null && newplace[1] != null) && (newplace[1] != 0 && newplace[1] != 0)) {
+          if ((newplace[1] != null && newplace[1] != null) &&
+            (newplace[1] !== 0 && newplace[1] !== 0)) {
+
             pt = new BMap.Point(newplace[1], newplace[0]);// 这里经度和纬度是反着的
             const marker = new BMap.Marker(pt);
             const label = new BMap.Label(`<div>${place.results[o].name}</div><div style='display: none;'>${place.results[o].id}</div>`);
@@ -296,18 +298,6 @@ class ExpertMap extends React.PureComponent {
       getById('allmap').appendChild(riz);
     }
     return riz;
-    // if (getById('flowinfo') == null) {
-    //   const flowdiv = document.createElement('div');
-    //   const cstyle = `z-index:10001;border:1px solid green;height:${height}px;width:${width}px;position: absolute;left:${w - width - 10}px;top:${(h - height) / 2}px;overflow:hidden;word-wrap: break-word;word-break:break-all;background-color:rgba(255, 255, 255, 0.3);`;
-    //   flowdiv.setAttribute('name', 'flowinfo');// 中心的一个图片
-    //   flowdiv.setAttribute('style', cstyle);
-    //   flowdiv.setAttribute('id', 'flowinfo');
-    //   theNode.appendChild(flowdiv);
-    // } else {
-    //   const cstyle = `z-index:10001;border:1px solid green;height:${height}px;width:${width}px;position: absolute;left:${w - width - 10}px;top:${(h - height) / 2}px;overflow:hidden;word-wrap: break-word;word-break:break-all;background-color:rgba(255, 255, 255, 0.3);`;
-    //   getById('flowinfo').setAttribute('style', cstyle);
-    //   getById('flowinfo').style.display = '';
-    // }
   };
 
   // 将内容同步到地图中的控件上。
@@ -408,7 +398,7 @@ class ExpertMap extends React.PureComponent {
     this.props.dispatch({
       type: 'expertMap/getPersonInfoSuccess',
       payload: { data: { data: personInfo } },
-    })
+    });
   };
 
   callSearchMap(query) {
@@ -418,6 +408,9 @@ class ExpertMap extends React.PureComponent {
   render() {
     const model = this.props && this.props.expertMap;
     const person = model.personInfo;
+    if (!person) {
+      return <div />;
+    }
 
     // used in person popup info
     const url = profileUtils.getAvatar(person.avatar, person.id, 50);
@@ -443,36 +436,6 @@ class ExpertMap extends React.PureComponent {
     if (shouldRIZClusterUpdate) {
       clusterJSX = <RightInfoZoneCluster persons={clusterPersons} />;
     }
-    // model.clusterPersons();
-
-    // TODO don't use promise.
-    // const resultPromise = listPersonByIds(clusterIdList);
-    // resultPromise.then(
-    //   (data) => {
-    //     let avgHindex = 0;
-    //     const top8 = '';
-    //     let location = '';
-    //     const setObj = new Set();
-    //     const p = data.data.persons;
-    //     for (let i = 0; i < p.length; i++) {
-    //       avgHindex += p[i].indices.h_index;
-    //       setObj.add(p[i].attr.nation);
-    //     }
-    //     for (const x in setObj) {
-    //       location = `${location},${x}`;
-    //     }
-    //     avgHindex /= p.length;
-    //     avgHindex = avgHindex.toFixed(2);// 保留两位小数
-    //     thisinfo = `${"<div id='author_info' style='width: 350px;height: 120px;'>" + "<strong style='color:#A52A2A;'><span style='font-style:italic'>h</span>-index:</strong>"}${avgHindex
-    //       }<br />countries:${location}</div>`;
-    //     getById('flowinfo').innerHTML = `<div style='margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;word-wrap: break-word;word-break:break-all;opacity:1;background-color:#FFFFFF;'><div style='width:100%;margin:10px;'><h2>Statistic Info</h2></div><div style='margin-left:10px;margin-right:10px;margin-top:10px;margin-bottom:10px;line-height:22px'>${thisinfo}</div></div>`;
-    //   },
-    //   () => {
-    //     console.log('failed');
-    //   },
-    // ).catch((error) => {
-    //   console.error(error);
-    // });
 
     return (
       <div className={styles.expertMap} id="currentMain">

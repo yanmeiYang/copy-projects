@@ -615,7 +615,7 @@ class RelationGraph extends React.PureComponent {
         } else {
           return transform.k;
         }
-      });
+      }).style('font-size', `${15 / transform.k}px`).attr('stroke-width', 3 / transform.k );
       svg.selectAll('.finalText').data(_nodes).text((d) => {
         if (transform.k >= 3) {
           return d.name.n.en;
@@ -743,7 +743,7 @@ class RelationGraph extends React.PureComponent {
           svg.selectAll('line').data(_edges).style('opacity', 0.3);
           return svg.selectAll('line').data(_edges).filter((e, i) => {
             return e.target.id === d.id || e.source.id === d.id;
-          }).style('stroke', 'red');
+          }).style('stroke', '#a28eee').style('opacity', 1);
         } else {
           _onclicknodes[_onclicknodes.indexOf(d.id)] = '';
           return svg.selectAll('line').data(_edges).filter((e, i) => {
@@ -1057,7 +1057,7 @@ class RelationGraph extends React.PureComponent {
         });
         simulation = d3.forceSimulation(_nodes).velocityDecay(0.3).force('charge', d3.forceManyBody().strength((d) => {
           return d.count;
-        })).force('link', setlink).force('gravity', d3.forceCollide(height / 100 + 5).strength(0.6)).alpha(0.2).force('center', d3.forceCenter(width / 2, height / 2));
+        })).force('link', setlink).force('gravity', d3.forceCollide(height / 100 + 10).strength(0.6)).alpha(0.2).force('center', d3.forceCenter(width / 2, height / 2));
         _saveRootAdges = [];
         _edges.forEach((f) => {
           if (f.target.index < snum) {
@@ -1367,7 +1367,7 @@ class RelationGraph extends React.PureComponent {
           </Select>
           <RgSearchNameBox size="" style={{ width: 150 }} onSearch={this.onSearch} suggesition={this.state.allNodes} />
         </div>
-        <div id="rgvis" style={{ background: 'white', width: EgoWidth, height: EgoHeight, border: '1px solid #eee', marginTop: 20 }} />
+        <div id="rgvis" style={{ background: '#333', width: EgoWidth, height: EgoHeight, border: '1px solid #eee', marginTop: 20 }} />
         {this.pgshow && <Progress percent={this.state.pgLength} style={{ width: EgoWidth, position: 'relative', top: '-100' }} />}
       </div>
     );

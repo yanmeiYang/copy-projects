@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { Helmet } from 'react-helmet';
 import NProgress from 'nprogress';
-import { Link, routerRedux } from 'dva/router';
+import { routerRedux } from 'dva/router';
 import { Layout } from '../components';
 import { sysconfig } from '../systems';
 import { classnames, config, getMenusByUser } from '../utils';
@@ -117,16 +117,20 @@ const App = ({ children, location, dispatch, app, loading }) => {
         <script src="http://d3js.org/d3.v3.min.js" />}
 
         {(href.indexOf('/expert-map') > 0 || href.indexOf('/uniSearch') > 0) &&
-        <script type="text/javascript" src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />}
+        <script type="text/javascript"
+                src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />}
 
         {(href.indexOf('/expert-map') > 0 || href.indexOf('/uniSearch') > 0) &&
-        <script src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1" charset="utf-8" async defer />}
+        <script src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1"
+                charset="utf-8" async defer />}
 
         {href.indexOf('/expert-googlemap') > 0 &&
         <script src="../../expertmap/googlemap/markerclusterer.js" />}
 
         {href.indexOf('/expert-googlemap') > 0 &&
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnNB6SXL5JJ0NU8j-Ay8pnnmRC50vsrtw" async defer />}
+        <script
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnNB6SXL5JJ0NU8j-Ay8pnnmRC50vsrtw"
+          async defer />}
 
       </Helmet>
 

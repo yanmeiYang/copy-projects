@@ -3,7 +3,6 @@
 import React from 'react';
 import { connect } from 'dva';
 import styles from './trend-prediction.less';
-import child_process from 'child_process'
 
 /**
  * Component

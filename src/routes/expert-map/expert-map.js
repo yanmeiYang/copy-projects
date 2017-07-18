@@ -197,6 +197,7 @@ class ExpertMap extends React.PureComponent {
     map.addControl(new BMap.NavigationControl());
     map.addControl(new BMap.ScaleControl());
     map.addControl(new BMap.OverviewMapControl());
+    // map.disableScrollWheelZoom();
     // map.setDefaultCursor();
     // map.disableDoubleClickZoom();// 静止双击
     // map.addControl(new BMap.MapTypeControl());
@@ -207,6 +208,7 @@ class ExpertMap extends React.PureComponent {
       (BMap) => {
         this.showOverLay();
         const map = new BMap.Map('allmap');
+        this.map = map; // set to global;
         let scale = 4;
         if (type === 2) {
           scale = 6;
@@ -288,12 +290,14 @@ class ExpertMap extends React.PureComponent {
   };
 
   getRightInfoBox = () => {
-    let riz = getById('flowinfo');
+    let riz = getById('flowInfo');
     if (!riz) {
       riz = document.createElement('div');
-      riz.setAttribute('id', 'flowinfo');
+      riz.setAttribute('id', 'flowInfo');
       riz.setAttribute('class', 'rightInfoZone');
       getById('allmap').appendChild(riz);
+      riz.onmouseenter = () => this.map.disableScrollWheelZoom();
+      riz.onmouseleave = () => this.map.enableScrollWheelZoom();
     }
     return riz;
   };
@@ -313,11 +317,12 @@ class ExpertMap extends React.PureComponent {
     const shouldRIZUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') === -1 && model.infoZoneIds === person.id;
     if (shouldRIZUpdate || model.infoZoneIds.indexOf(',') >= 0) {
       const rsz = getById('rightInfoZone');
-      const flowinfo = getById('flowinfo');
-      if (rsz && flowinfo) {
-        flowinfo.innerHTML = rsz.innerHTML;
+      const flowInfo = getById('flowInfo');
+      if (rsz && flowInfo) {
+        flowInfo.innerHTML = rsz.innerHTML;
       }
     }
+    // this.bindMouseScroll();
   };
 
   toggleRightInfoBox = (id) => {
@@ -341,10 +346,10 @@ class ExpertMap extends React.PureComponent {
     } else if (state === 1) { // 偶数次点击同一个对象
       // 认为是第二次及其以上点击
       getById('flowstate').value = 0;
-      getById('flowinfo').style.display = 'none';
+      getById('flowInfo').style.display = 'none';
     } else { // 奇数次点击同一个对象
       getById('flowstate').value = 1;
-      getById('flowinfo').style.display = '';
+      getById('flowInfo').style.display = '';
     }
 
     getById('statistic').value = id;
@@ -401,6 +406,30 @@ class ExpertMap extends React.PureComponent {
     this.props.dispatch({ type: 'expertMap/searchMap', payload: { query } });
   }
 
+  // not used.
+  bindMouseScroll = () => {
+    console.log('binding mouse scroll....');
+    const rizs = document.getElementsByClassName('rightInfoZone');
+    if (rizs && rizs.length > 0) {
+      const riz = rizs[0];
+      if (riz.addEventListener) {
+        console.log('everything is fine.');
+        // IE9, Chrome, Safari, Opera
+        riz.addEventListener('mousewheel', this.onMouseScroll, false);
+        // Firefox
+        riz.addEventListener('DOMMouseScroll', this.onMouseScroll, false);
+      } else {
+        // IE 6/7/8
+        riz.attachEvent('onmousewheel', this.onMouseScroll);
+      }
+    }
+  };
+
+  onMouseScroll = (e) => {
+    // event.preventDefault();
+    // console.log(e);
+  };
+
   render() {
     const model = this.props && this.props.expertMap;
     const person = model.personInfo;
@@ -448,7 +477,7 @@ class ExpertMap extends React.PureComponent {
               <Button onClick={this.showType} value="4">城市</Button>
               <Button onClick={this.showType} value="5">机构</Button>
             </ButtonGroup>
-            <div className={styles.switch} style={{display:'none'}}>
+            <div className={styles.switch} style={{ display: 'none' }}>
               <ButtonGroup id="diffmaps">
                 <Button type="primary" onClick={this.onChangeBaiduMap}>Baidu Map</Button>
                 <Button onClick={this.onChangeGoogleMap}>Google Map</Button>

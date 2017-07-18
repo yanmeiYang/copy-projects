@@ -1,10 +1,12 @@
+/* eslint-disable max-len */
 /**
  *  Created by BoGao on 2017-07-10;
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Checkbox, Select } from 'antd';
-import { displayPositionFirst, displayAff } from '../../utils/profile_utils';
+import { Checkbox, Select, Progress, Input, Button } from 'antd';
+import { RgSearchNameBox } from '../../components/relation-graph';
+// import { displayPositionFirst, displayAff } from '../../utils/profile_utils';
 import styles from './RelationGraph.less';
 import * as d3 from '../../../public/d3/d3.min';
 
@@ -27,6 +29,7 @@ class RelationGraph extends React.PureComponent {
     this.currentModle3 = false;
     this.currentModle4 = false;
     this.currentModle5 = false;
+    this.drag = false;
 
     this.engineer = {
       currentActivity: 'h-Index>0',
@@ -40,12 +43,13 @@ class RelationGraph extends React.PureComponent {
 
 
     this.pgshow = true;
-    this.pglength = 0;
+    // this.pglength = 0;
     this.webconnect = '';
   }
 
   state = {
     vm: {},
+    pgLength: 0,
     describeNodes1: 0,
     describeNodes2: 0,
     subnet_selection: false,
@@ -53,12 +57,20 @@ class RelationGraph extends React.PureComponent {
     two_paths: false,
     continuous_path: false,
     single_extension: false,
+    allNodes: [],
     // activities: ['h-Index>0', 'h-Index>10', 'h-Index>30', 'h-Index>60']
   };
 
   componentDidMount() {
     this.showVis(this);
     this.redraw(this.props.query);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.query !== nextProps.query) {
+      this.showVis(this);
+      this.redraw(nextProps.query);
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -97,11 +109,12 @@ class RelationGraph extends React.PureComponent {
     } else {
       this.webconnect = '';
     }
-    if (this.pglength < 100) {
-      return this.pglength++;
+    if (this.pglength >= 100) {
+      this.pglength = 100;
     } else {
-      return this.pglength = 0;
+      this.pglength = this.pglength + 10;
     }
+    this.setState({ pgLength: this.pglength });
   };
 
   // ############################# in big startup file ############################
@@ -131,7 +144,8 @@ class RelationGraph extends React.PureComponent {
     let dispalyAll = true;
     let indexShow = 0;
 
-    const color = d3.interpolateRgb(d3.rgb('blue'), d3.rgb(230, 0, 18));
+    const color = d3.scaleOrdinal(d3.schemeCategory20);
+    // const color = d3.interpolateRgb(d3.rgb('blue'), d3.rgb(230, 0, 18));
     // const rawSvg = d3.select(`#${controlDivId}`).append('svg')
     //   .style('width', '850px')
     //   .style('height', '600px');
@@ -490,6 +504,7 @@ class RelationGraph extends React.PureComponent {
     };
 
     const dragstarted = (d) => {
+      this.drag = true;
       if (!d3.event.active && this.currentModle2 === false) {
         simulation.alphaTarget(0.2).restart();
       }
@@ -498,11 +513,13 @@ class RelationGraph extends React.PureComponent {
     };
 
     const dragged = (d) => {
+      this.drag = true;
       d.fx = d3.event.x;
       d.fy = d3.event.y;
     };
 
     const dragended = (d) => {
+      this.drag = false;
       if (!d3.event.active) {
         simulation.alphaTarget(0);
       }
@@ -512,34 +529,38 @@ class RelationGraph extends React.PureComponent {
     const div = d3.select('body').append('div').attr('class', 'tooltip').attr('id', 'tip').style('opacity', 0).style('background', 'white').style('color', 'black').style('padding', '0')
       .style('min-width', '300px').style('border-radius', '5px').style('padding-bottom', '10px');
     const showInfo = (d) => {
-      const pageX = d3.event.pageX;
-      const pageY = d3.event.pageY;
-      let posObj,
-        tempStr,
-        temppos;
-      tempStr = d.desc.n.en ? d.desc.n.en : '' ;
-      posObj = d.pos[0];
-      if (posObj) {
-        posObj.name.n.en ? temppos = posObj.name.n.en : temppos = posObj.name.n.zh;
-      } else {
-        temppos = '';
-      }
-      setTimeout((d, px, py) => {
-        document.getElementById('tip').style.display = 'none';
-        document.getElementById('tip').style.display = 'block';
-        div.transition().duration(500).style('opacity', 0);
-        div.transition().duration(20).style('opacity', 1.0);
-        div.html(`<div class="" style="background: #EEEEEE;height: 35px;line-height: 35px; padding-left: 10px; border-radius: 5px; margin-top: 1px;">
+      if (!this.drag) {
+        const pageX = d3.event.pageX;
+        const pageY = d3.event.pageY;
+        let posObj,
+          tempStr,
+          temppos;
+        tempStr = d.desc.n.en ? d.desc.n.en : '';
+        posObj = d.pos[0];
+        if (posObj) {
+          posObj.name.n.en ? temppos = posObj.name.n.en : temppos = posObj.name.n.zh;
+        } else {
+          temppos = '';
+        }
+        setTimeout((d, px, py) => {
+          document.getElementById('tip').style.display = 'none';
+          document.getElementById('tip').style.display = 'block';
+          div.transition().duration(500).style('opacity', 0);
+          div.transition().duration(20).style('opacity', 1.0);
+          div.html(`<div class="" style="background: #EEEEEE;height: 35px;line-height: 35px; padding-left: 10px; border-radius: 5px; margin-top: 1px;">
 <a href='https://cn.aminer.org/profile/${d.id}'>${d.name.n.en}</a></div>
 <div style="padding-left: 10px;margin-left: 5px;margin-right: 5px;"><strong style="color: #a94442">h-Index:</strong>${d.indices.hIndex}&nbsp;|&nbsp;<strong style="color: #a94442">#Papers:</strong>${d.indices.numPubs}</br><p><i  class="fa fa-briefcase">&nbsp;
 </i>${temppos}</p><p><i class="fa fa-map-marker" style="word-break:break-all;text-overflow:ellipsis">&nbsp;${tempStr}</i></p></div>`)
-          .style('left', `${px + 5}px`).style('top', `${py}px`);
-        document.getElementById('tip').onmouseout = function (e) {
-          if (this === e.relatedTarget) {
-            document.getElementById('tip').style.display = 'none';
-          }
-        };
-      }, 100, d, pageX, pageY);
+            .style('left', `${px + 5}px`).style('top', `${py}px`);
+          document.getElementById('tip').onmouseout = function (e) {
+            if (this === e.relatedTarget) {
+              document.getElementById('tip').style.display = 'none';
+            }
+          };
+        }, 100, d, pageX, pageY);
+      } else {
+        document.getElementById('tip').style.display = 'none';
+      }
     };
     const hideInfo = (d) => {
       const div = document.getElementById('tip');
@@ -577,10 +598,10 @@ class RelationGraph extends React.PureComponent {
           return '0.5px';
         }
       });
-      svg.selectAll('text').data(_nodes).text((d) => {
+      svg.selectAll('.initialText').data(_nodes).text((d) => {
         if (transform.k >= 3) {
           return d.name.n.en;
-        } else if (transform.k >= 2 && d.index < snum*3) {
+        } else if (transform.k >= 2 && d.index < snum * 3) {
           return d.name.n.en;
         } else if (d.index < snum) {
           return d.name.n.en;
@@ -594,7 +615,25 @@ class RelationGraph extends React.PureComponent {
         } else {
           return transform.k;
         }
-      });
+      }).style('font-size', `${15 / transform.k}px`).attr('stroke-width', 3 / transform.k );
+      svg.selectAll('.finalText').data(_nodes).text((d) => {
+        if (transform.k >= 3) {
+          return d.name.n.en;
+        } else if (transform.k >= 2 && d.index < snum * 3) {
+          return d.name.n.en;
+        } else if (d.index < snum) {
+          return d.name.n.en;
+        } else {
+          return '';
+        }
+      }).attr('dy', (d) => {
+        if (d.indices.hIndex > indexShow || d.indices.hIndex < 400) {
+          const top = getRadious(d.indices.hIndex / transform.k) * 2;
+          return top + 1.5;
+        } else {
+          return transform.k;
+        }
+      }).attr('stroke-width', '0px').style('font-size', `${15 / transform.k}px`);
       return svg.selectAll('text').data(_nodes).style('font-size', `${15 / transform.k}px`);
     };
 
@@ -690,7 +729,10 @@ class RelationGraph extends React.PureComponent {
       }).transition().duration(1000).style('stroke', 'green');
     };
 
-
+    this.onSearch = (d) => {
+      this.currentModle1 = true;
+      nodeclick(d);
+    };
     const nodeclick = (d) => {
       let goalNodes,
         res,
@@ -701,7 +743,7 @@ class RelationGraph extends React.PureComponent {
           svg.selectAll('line').data(_edges).style('opacity', 0.3);
           return svg.selectAll('line').data(_edges).filter((e, i) => {
             return e.target.id === d.id || e.source.id === d.id;
-          }).style('stroke', 'yellow').style('opacity', 0.8);
+          }).style('stroke', '#a28eee').style('opacity', 1);
         } else {
           _onclicknodes[_onclicknodes.indexOf(d.id)] = '';
           return svg.selectAll('line').data(_edges).filter((e, i) => {
@@ -794,11 +836,12 @@ class RelationGraph extends React.PureComponent {
       let link,
         node,
         nodes_text,
+        final_text,
         ticked;
       // this.describeNodes1 = _nodes.length;
-      // this.describeNodes2 = _edges.length;
+      // this.describeNodes2 = _edges.length; .style('stroke-opacity', '0.6')
       this.setState({ describeNodes1: _nodes.length, describeNodes2: _edges.length });
-      link = svg.append('g').attr('class', 'links').selectAll('line').data(_edges).enter().append('line').style('stroke', '#999').style('stroke-opacity', '0.6').style('stroke-width', (d) => { return d; });
+      link = svg.append('g').attr('class', 'links').selectAll('line').data(_edges).enter().append('line').style('stroke', '#999').style('stroke-width', (d) => { return d; });
       node = svg.append('g').attr('class', 'nodes').selectAll('circle').data(_nodes).enter().append('circle').attr('r', (d) => {
         if (d.indices.hIndex < 400) {
           return getRadious(d.indices.hIndex);
@@ -815,17 +858,17 @@ class RelationGraph extends React.PureComponent {
         return getColor(d.indices.hIndex);
       }).call(_drag).on('mouseover', (d) => {
         showInfo(d);
-        svg.selectAll('text').data(_nodes).filter((k) => {
-          return k.id === d.id;
-        }).style('fill', 'yellow');
+        // svg.selectAll('text').data(_nodes).filter((k) => {
+        //   return k.id === d.id;
+        // }).style('fill', 'yellow');
         svg.selectAll('circle').data(_nodes).filter((k) => {
           return k.id === d.id;
         }).attr('fill', 'yellow');
       }).on('mouseout', (d) => {
         hideInfo(d);
-        svg.selectAll('text').data(_nodes).filter((k) => {
-          return k.id === d.id;
-        }).style('fill', '#fff');
+        // svg.selectAll('text').data(_nodes).filter((k) => {
+        //   return k.id === d.id;
+        // }).style('fill', '#fff');
         svg.selectAll('circle').data(_nodes).filter((k) => {
           return k.id === d.id;
         }).attr('fill', (d) => {
@@ -848,12 +891,12 @@ class RelationGraph extends React.PureComponent {
         this.currentModle1 = !this.currentModle5;
         nodeclick(d);
       });
-      nodes_text = svg.selectAll('.nodetext').data(_nodes).enter().append('text').style('cursor', ' pointer').style('font-size', '15px')
+      nodes_text = svg.selectAll('.nodetext').data(_nodes).enter().append('text').attr('class', 'initialText').style('cursor', ' pointer').style('font-size', '15px')
         .attr('dy', (d) => {
           const top = getRadious(d.indices.hIndex) * 2;
           return top + 10;
         })
-        .style('fill', '#fff').text((d) => {
+        .text((d) => {
           if (d.index < snum) {
             return d.name.n.en;
           } else {
@@ -861,23 +904,24 @@ class RelationGraph extends React.PureComponent {
           }
         }).attr('text-anchor', (d) => {
           return 'middle';
-        })
+        }).style('fill', '#333').attr('font-weight', 600).attr('stroke', '#fff')
+        .attr('stroke-width', '2px').attr('stroke-linecap', 'butt').attr('stroke-linejoin', 'miter')
         // .on('click', (d) => {
         //   return window.open(`https://cn.aminer.org/profile/${d.id}`);
         // })
         .on('mouseover', (d) => {
           showInfo(d);
-          svg.selectAll('text').data(_nodes).filter((k) => {
-            return k.id === d.id;
-          }).style('fill', 'yellow');
+          // svg.selectAll('text').data(_nodes).filter((k) => {
+          //   return k.id === d.id;
+          // }).style('fill', 'yellow');
           return svg.selectAll('circle').data(_nodes).filter((k) => {
             return k.id === d.id;
           }).attr('fill', 'yellow');
         }).on('mouseout', (d) => {
           hideInfo(d);
-          svg.selectAll('text').data(_nodes).filter((k) => {
-            return k.id === d.id;
-          }).style('fill', '#fff');
+          // svg.selectAll('text').data(_nodes).filter((k) => {
+          //   return k.id === d.id;
+          // }).style('fill', '#fff');
           return svg.selectAll('circle').data(_nodes).filter((k) => {
             return k.id === d.id;
           }).attr('fill', (d) => {
@@ -887,6 +931,48 @@ class RelationGraph extends React.PureComponent {
           this.currentModle1 = !this.currentModle5;
           return nodeclick(d);
         });
+
+      final_text = svg.selectAll('.nodetextstyle').data(_nodes).enter().append('text').attr('class', 'finalText').style('cursor', ' pointer').style('font-size', '15px')
+        .attr('dy', (d) => {
+          const top = getRadious(d.indices.hIndex) * 2;
+          return top + 10;
+        })
+        .text((d) => {
+          if (d.index < snum) {
+            return d.name.n.en;
+          } else {
+            return '';
+          }
+        }).attr('font-weight', 600).attr('fill', '#333')
+        .attr('stroke', '#fff').attr('stroke-width', '0px').attr('stroke-linecap', 'butt')
+        .attr('stroke-linejoin', 'miter').attr('text-anchor', 'middle')
+        // .on('click', (d) => {
+        //   return window.open(`https://cn.aminer.org/profile/${d.id}`);
+        // })
+        .on('mouseover', (d) => {
+          showInfo(d);
+          // svg.selectAll('text').data(_nodes).filter((k) => {
+          //   return k.id === d.id;
+          // }).style('fill', 'yellow');
+          return svg.selectAll('circle').data(_nodes).filter((k) => {
+            return k.id === d.id;
+          }).attr('fill', 'yellow');
+        }).on('mouseout', (d) => {
+          hideInfo(d);
+          // svg.selectAll('text').data(_nodes).filter((k) => {
+          //   return k.id === d.id;
+          // }).style('fill', '#fff');
+          return svg.selectAll('circle').data(_nodes).filter((k) => {
+            return k.id === d.id;
+          }).attr('fill', (d) => {
+            return getColor(d.indices.hIndex);
+          });
+        }).on('click', (d) => {
+          this.currentModle1 = !this.currentModle5;
+          return nodeclick(d);
+        });
+
+      // svg.selectAll('text').attr('stroke', 'orange').attr('stroke-width', '0px');
       ticked = function () {
         link.attr('x1', (d) => {
           return d.source.x;
@@ -902,12 +988,19 @@ class RelationGraph extends React.PureComponent {
         }).attr('cy', (d) => {
           return d.y;
         });
+        final_text.attr('x', (d) => {
+          return d.x;
+        });
+        final_text.attr('y', (d) => {
+          return d.y;
+        });
         nodes_text.attr('x', (d) => {
           return d.x;
         });
         return nodes_text.attr('y', (d) => {
           return d.y;
         });
+
       };
       return simulation.nodes(_nodes).on('tick', ticked);
     };
@@ -916,28 +1009,29 @@ class RelationGraph extends React.PureComponent {
     this.drawNet = (type) => {
       console.log('this.drawNet::type is:', type);
       this.filed = type;
+      // d3.select('svg').remove();
       svg.selectAll('*').remove();
-      d3.json(`https://api.aminer.org/api/search/person?query=${type}&size=5&sort=h_index`, (error, graph) => {
-        if (error) {
-          throw error;
-        }
-        this.schoclars = [];
-        const result = graph.result;
-        return result.forEach((d) => {
-          const k = {
-            urlimage: `https:${d.avatar}`,
-            name: d.name,
-            hindex: d.indices.h_index,
-            papers: d.indices.num_pubs,
-            pos: d.aff.desc,
-            sociability: d.indices.sociability,
-            num_citation: d.indices.num_citation,
-            activity: d.indices.activity,
-            filed: d.tags.slice(0, 3),
-          };
-          return this.schoclars.push(k);
-        });
-      });
+      // d3.json(`https://api.aminer.org/api/search/person?query=${type}&size=5&sort=h_index`, (error, graph) => {
+      //   if (error) {
+      //     throw error;
+      //   }
+      //   this.schoclars = [];
+      //   const result = graph.result;
+      //   return result.forEach((d) => {
+      //     const k = {
+      //       urlimage: `https:${d.avatar}`,
+      //       name: d.name,
+      //       hindex: d.indices.h_index,
+      //       papers: d.indices.num_pubs,
+      //       pos: d.aff.desc,
+      //       sociability: d.indices.sociability,
+      //       num_citation: d.indices.num_citation,
+      //       activity: d.indices.activity,
+      //       filed: d.tags.slice(0, 3),
+      //     };
+      //     return this.schoclars.push(k);
+      //   });
+      // });
       return d3.json(`https://api.aminer.org/api/search/person/ego?query=${type}&sort=h_index%20&size=${snum}`, (error, graph) => {
         let a,
           i,
@@ -949,20 +1043,21 @@ class RelationGraph extends React.PureComponent {
         }
         this.pglength = 100;
         this.pgshow = false;
-        _nodes.splice(0, _nodes.length);
+        // _nodes.splice(0, _nodes.length);
         _onclicknodes.splice(0, _onclicknodes.length);
         _showNodes.splice(0, _showNodes.length);
-        _edges.splice(0, _edges.length);
+        // _edges.splice(0, _edges.length);
         showName = 76;
         dispalyAll = true;
         _nodes = graph.nodes;
+        this.setState({ allNodes: _nodes });
         _edges = graph.edges;
         setlink = d3.forceLink(_edges).distance((d) => {
           return (-d.count * 2.5) + 30;
         });
         simulation = d3.forceSimulation(_nodes).velocityDecay(0.3).force('charge', d3.forceManyBody().strength((d) => {
           return d.count;
-        })).force('link', setlink).force('gravity', d3.forceCollide(height / 100 + 5).strength(0.6)).alpha(0.2).force('center', d3.forceCenter(width / 2, height / 2));
+        })).force('link', setlink).force('gravity', d3.forceCollide(height / 100 + 10).strength(0.6)).alpha(0.2).force('center', d3.forceCenter(width / 2, height / 2));
         _saveRootAdges = [];
         _edges.forEach((f) => {
           if (f.target.index < snum) {
@@ -994,8 +1089,9 @@ class RelationGraph extends React.PureComponent {
               count: 20,
             };
             _edges.push(temp);
+          } else {
+            _saveSortAdges.push(a);
           }
-          _saveSortAdges.push(a);
           i++;
         }
         _drawNetOnly(snum);
@@ -1246,7 +1342,7 @@ class RelationGraph extends React.PureComponent {
   // ############################# in big startup file ############################
 
   render() {
-    const { describeNodes1, describeNodes2, subnet_selection, suspension_adjustment, two_paths, continuous_path, single_extension } = this.state;
+    const { describeNodes1, describeNodes2, suspension_adjustment, two_paths, continuous_path, single_extension } = this.state;
     return (
       <div className={styles.vis_container}>
         <div style={{ display: 'flex', 'flex-direction': 'row' }}>
@@ -1256,21 +1352,23 @@ class RelationGraph extends React.PureComponent {
         </div>
         <div>
           <label>相关操作：</label>
-          {/*<Checkbox checked={subnet_selection} onChange={this.changeModle1}>子网选取</Checkbox>*/}
+          {/* <Checkbox checked={subnet_selection} onChange={this.changeModle1}>子网选取</Checkbox>*/}
           <Checkbox checked={suspension_adjustment} onChange={this.changeModle2}>暂停调整</Checkbox>
           <Checkbox checked={two_paths} onChange={this.changeModle3}>两点路径</Checkbox>
           <Checkbox checked={continuous_path} onChange={this.changeModle4}>连续路径</Checkbox>
           <Checkbox checked={single_extension} onChange={this.changeModle5}>单点扩展</Checkbox>
           <label>过滤器：</label>
-          <Select defaultValue="h-Index>0" style={{ width: 120 }} onChange={this.IndexChange}>
+          <Select defaultValue="h-Index>0" style={{ width: 120, marginRight: 10 }} onChange={this.IndexChange}>
             {this.activities.map((act) => {
               return (
                 <Option key={act} value={act}>{act}</Option>
               );
             })}
           </Select>
+          <RgSearchNameBox size="" style={{ width: 150 }} onSearch={this.onSearch} suggesition={this.state.allNodes} />
         </div>
-        <div id="rgvis" style={{ background:'black', width: EgoWidth, height: EgoHeight, border: '1px solid #eee' }} />
+        <div id="rgvis" style={{ background: '#333', width: EgoWidth, height: EgoHeight, border: '1px solid #eee', marginTop: 20 }} />
+        {this.pgshow && <Progress percent={this.state.pgLength} style={{ width: EgoWidth, position: 'relative', top: '-100' }} />}
       </div>
     );
   }

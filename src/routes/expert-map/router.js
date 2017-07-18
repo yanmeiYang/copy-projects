@@ -21,7 +21,7 @@ export default {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/expert-map'));
         cb(null, require('../expert-map/expert-googlemap'));
-      }, 'expert-map');
+      }, 'expert-googlemap');
     },
   }),
 

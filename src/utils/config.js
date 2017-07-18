@@ -3,9 +3,9 @@
  */
 
 // const SYS = 'ccf';
-// const SYS = 'huawei';
+const SYS = 'huawei';
 // const SYS = 'alibaba';
-const SYS = 'tencent';
+// const SYS = 'tencent';
 
 module.exports = {
 
@@ -48,6 +48,7 @@ module.exports = {
     allPersonInBase: '/roster/:ebid/order-by/h_index/offset/:offset/size/:size',
     allPersonInBaseAgg: '/roster/:ebid/agg?offset=&order=h_index&size=20',
     searchMap: '/search/person/geo', // ?query=:search
+    searchExpertNetWithDSL: '/search/person/ego',
 
     // search suggest
     searchSuggest: '/search/suggest/gen/:query',

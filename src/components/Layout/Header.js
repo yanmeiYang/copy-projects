@@ -70,11 +70,11 @@ function Header({ app, search, location, dispatch, logout, onSearch }) {
         {/*<Link to="/"><Icon type="info-circle-o"/>信息中心</Link>*/}
         {/*</Menu.Item>*/}
         {/*}*/}
-        {(!app.user || !app.user.first_name) &&
-        <Menu.Item key="/login">
-          <Link to={`/login?from=${location.pathname}`}><Icon type="login" /></Link>
-        </Menu.Item>
-        }
+        {/*{(!app.user || !app.user.first_name) &&*/}
+        {/*<Menu.Item key="/login">*/}
+          {/*<Link to={`/login?from=${location.pathname}`}><Icon type="login" /></Link>*/}
+        {/*</Menu.Item>*/}
+        {/*}*/}
 
         {app.user.first_name &&
         <Menu.Item key="/account">
@@ -95,7 +95,7 @@ function Header({ app, search, location, dispatch, logout, onSearch }) {
 
         {(!app.user || !app.user.first_name) &&
         <Menu.Item key="/404">
-          <Link to="/login"><Icon type="user" />登录</Link>
+          <Link to={`/login?from=${location.pathname}`}><Icon type="user" />登录</Link>
         </Menu.Item>
         }
 

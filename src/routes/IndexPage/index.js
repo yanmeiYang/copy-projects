@@ -52,7 +52,7 @@ class IndexPage extends React.Component {
 
           <KgSearchBox size="large" style={{ width: 500 }} onSearch={this.onSearch} />
 
-          {/*<SearchBox size="large" style={{ width: 500 }} onSearch={this.onSearch} />*/}
+          {/* <SearchBox size="large" style={{ width: 500 }} onSearch={this.onSearch} /> */}
 
           {/* 常用搜索 */}
           <p className={styles.commonSearch}>

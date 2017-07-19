@@ -9,8 +9,10 @@ const SYS = 'huawei';
 
 module.exports = {
 
-  system: SYS, // 默认启动这是哪套系统，启动的时候传入app，之后会在APP里面重新设置。
-  source: SYS, // AppID, Used in UniversalConfig.
+  // To change SYSTEM settings. Please change /define.js.
+  // TODO remove all use of this config [system,source].
+  system: SYSTEM, // 默认启动这是哪套系统，启动的时候传入app，之后会在APP里面重新设置。
+  source: SYSTEM, // AppID, Used in UniversalConfig.
 
   baseURL: 'https://api.aminer.org/api',
   // baseURL: 'https://166.111.7.105/api',

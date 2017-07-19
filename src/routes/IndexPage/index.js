@@ -14,6 +14,9 @@ class IndexPage extends React.Component {
   constructor(props) {
     super(props);
     this.dispatch = this.props.dispatch;
+    const a = PRODUCTION;
+    window.location
+    console.log('...lllooo',a);
   }
 
   componentWillMount() {

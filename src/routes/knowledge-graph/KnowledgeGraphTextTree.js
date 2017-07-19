@@ -24,7 +24,6 @@ class KnowledgeGraphTextTree extends React.Component {
   };
 
   componentDidMount() {
-    console.log(this.props);
     this.updateD3(this.props.query);
   }
 
@@ -43,6 +42,10 @@ class KnowledgeGraphTextTree extends React.Component {
         this.setState({ tree: '' });
         return;
       }
+      // debug trim
+      console.log(result)
+      result[0].children = result[0].children.slice(0, 1);
+
       this.setState({ tree: result });
     });
   }

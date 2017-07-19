@@ -10,7 +10,7 @@ function escapeRegexCharacters(str) {
 
 function renderSuggestion(suggestion) {
   return (
-    <span>{suggestion.name}</span>
+    <span>{suggestion.name.n.en}</span>
   );
 }
 
@@ -27,7 +27,7 @@ class RgSearchNameBox extends React.Component {
 
   getSuggestionValue = (suggestion) => {
     this.setState({ finalNode: suggestion });
-    return suggestion.name;
+    return suggestion.name.n.en;
   }
 
   getSuggestions = (value) => {
@@ -35,11 +35,11 @@ class RgSearchNameBox extends React.Component {
     const inputValue = value.toLowerCase().trim();
     const inputLength = inputValue.length;
     for (const node of this.props.suggesition) {
-      suggestions.push({ name: node.name.n.en, id: node.id, index: node.index });
+      suggestions.push(node);
     }
 
     return inputLength === 0 ? [] : suggestions.filter(lang =>
-      lang.name.toLowerCase().trim().includes(inputValue),
+      lang.name.n.en.toLowerCase().trim().includes(inputValue),
     );
   }
 

@@ -3,9 +3,10 @@
  *  Created by BoGao on 2017-07-10;
  */
 import React from 'react';
-import { connect } from 'dva';
-import { Checkbox, Select, Progress, Input, Button } from 'antd';
+import { connect, Link } from 'dva';
+import { Checkbox, Select, Progress, Tooltip } from 'antd';
 import { RgSearchNameBox } from '../../components/relation-graph';
+import { getAvatar } from '../../utils/profile_utils';
 // import { displayPositionFirst, displayAff } from '../../utils/profile_utils';
 import styles from './RelationGraph.less';
 import * as d3 from '../../../public/d3/d3.min';
@@ -58,6 +59,7 @@ class RelationGraph extends React.PureComponent {
     continuous_path: false,
     single_extension: false,
     allNodes: [],
+    currentNode: null,
     // activities: ['h-Index>0', 'h-Index>10', 'h-Index>30', 'h-Index>60']
   };
 
@@ -488,8 +490,8 @@ class RelationGraph extends React.PureComponent {
 
     const clearAllChoosed = (k) => {
       svg.selectAll('line').data(_edges).style('stroke', (d) => {
-        return '#888888';
-      });
+        return '#999';
+      }).style('opacity', 1);
       svg.selectAll('text').data(_nodes).text((d) => {
         if (d.index < snum) {
           return d.name.n.en;
@@ -615,7 +617,7 @@ class RelationGraph extends React.PureComponent {
         } else {
           return transform.k;
         }
-      }).style('font-size', `${15 / transform.k}px`).attr('stroke-width', 3 / transform.k );
+      }).style('font-size', `${15 / transform.k}px`).attr('stroke-width', 3 / transform.k);
       svg.selectAll('.finalText').data(_nodes).text((d) => {
         if (transform.k >= 3) {
           return d.name.n.en;
@@ -733,11 +735,18 @@ class RelationGraph extends React.PureComponent {
       this.currentModle1 = true;
       nodeclick(d);
     };
+    this.cancelSelected = () => {
+      this.currentModle1 = false;
+      clearAllChoosed(5);
+      this.setState({ currentNode: null });
+    };
     const nodeclick = (d) => {
+      console.log(this.currentModle1);
       let goalNodes,
         res,
         w;
       if (this.currentModle1 === true) {
+        this.setState({ currentNode: d });
         if (_onclicknodes.indexOf(d.id) === -1) {
           _onclicknodes.push(d.id);
           svg.selectAll('line').data(_edges).style('opacity', 0.3);
@@ -745,10 +754,10 @@ class RelationGraph extends React.PureComponent {
             return e.target.id === d.id || e.source.id === d.id;
           }).style('stroke', '#a28eee').style('opacity', 1);
         } else {
+          this.setState({ currentNode: null });
           _onclicknodes[_onclicknodes.indexOf(d.id)] = '';
-          return svg.selectAll('line').data(_edges).filter((e, i) => {
-            return e.target.id === d.id || e.source.id === d.id;
-          }).style('stroke', d => '#999999');
+          return svg.selectAll('line').data(_edges).style('stroke', '#999999')
+            .style('opacity', 1);
         }
       } else if (this.currentModle5 === true) {
         goalNodes = [];
@@ -1000,7 +1009,6 @@ class RelationGraph extends React.PureComponent {
         return nodes_text.attr('y', (d) => {
           return d.y;
         });
-
       };
       return simulation.nodes(_nodes).on('tick', ticked);
     };
@@ -1342,31 +1350,64 @@ class RelationGraph extends React.PureComponent {
   // ############################# in big startup file ############################
 
   render() {
-    const { describeNodes1, describeNodes2, suspension_adjustment, two_paths, continuous_path, single_extension } = this.state;
+    const { describeNodes1, describeNodes2, suspension_adjustment, two_paths, continuous_path, single_extension, currentNode } = this.state;
+    console.log(currentNode);
     return (
       <div className={styles.vis_container}>
-        <div style={{ display: 'flex', 'flex-direction': 'row' }}>
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
           <h3>{this.props.query}</h3>
           <div style={{ marginLeft: 10 }}>{describeNodes1} people</div>
           <div style={{ marginLeft: 10 }}>{describeNodes2} relations</div>
         </div>
-        <div>
-          <label>相关操作：</label>
-          {/* <Checkbox checked={subnet_selection} onChange={this.changeModle1}>子网选取</Checkbox>*/}
-          <Checkbox checked={suspension_adjustment} onChange={this.changeModle2}>暂停调整</Checkbox>
-          <Checkbox checked={two_paths} onChange={this.changeModle3}>两点路径</Checkbox>
-          <Checkbox checked={continuous_path} onChange={this.changeModle4}>连续路径</Checkbox>
-          <Checkbox checked={single_extension} onChange={this.changeModle5}>单点扩展</Checkbox>
-          <label>过滤器：</label>
-          <Select defaultValue="h-Index>0" style={{ width: 120, marginRight: 10 }} onChange={this.IndexChange}>
-            {this.activities.map((act) => {
-              return (
-                <Option key={act} value={act}>{act}</Option>
-              );
-            })}
-          </Select>
-          <RgSearchNameBox size="" style={{ width: 150 }} onSearch={this.onSearch} suggesition={this.state.allNodes} />
+        <div className={styles.svgTitle} style={{ width: EgoWidth }}>
+          <div>
+            <label>相关操作：</label>
+            {/* <Checkbox checked={subnet_selection} onChange={this.changeModle1}>子网选取</Checkbox>*/}
+            <Checkbox checked={suspension_adjustment} onChange={this.changeModle2}>暂停调整</Checkbox>
+            <Checkbox checked={two_paths} onChange={this.changeModle3}>两点路径</Checkbox>
+            <Checkbox checked={continuous_path} onChange={this.changeModle4}>连续路径</Checkbox>
+            <Checkbox checked={single_extension} onChange={this.changeModle5}>单点扩展</Checkbox>
+            <label>过滤器：</label>
+            <Select defaultValue="h-Index>0" style={{ width: 120, marginRight: 10 }} onChange={this.IndexChange}>
+              {this.activities.map((act) => {
+                return (
+                  <Option key={act} value={act}>{act}</Option>
+                );
+              })}
+            </Select>
+          </div>
+          <RgSearchNameBox size="default" style={{ width: 320 }} onSearch={this.onSearch} suggesition={this.state.allNodes} />
         </div>
+
+        {currentNode !== null && currentNode &&
+          <div id="leftInfoZone" className={styles.leftInfoZone} >
+            <div>
+              {currentNode.avatar &&
+              <div className={styles.avatar} >
+                <img src={getAvatar(currentNode.avatar, currentNode.id, 90)} alt="" />
+              </div>
+              }
+              {currentNode.name &&
+              <h2>{currentNode.name.n.en}</h2>
+              }
+              {currentNode.indices &&
+              <div style={{ marginBottom: 8 }}>
+                <span>h-Index:</span>
+                <span style={{ color: 'orange' }}> &nbsp;{currentNode.indices.hIndex}</span>&nbsp;|&nbsp;
+                <span>#Papers:</span>
+                <span style={{ color: 'orange' }}> &nbsp;{currentNode.indices.numPubs}</span>
+              </div>
+              }
+              {currentNode.pos &&
+              <p><i className="fa fa-briefcase fa-fw" /> {currentNode.pos[0].name.n.en}</p>
+              }
+              {currentNode.desc &&
+                <p><i className="fa fa-institution fa-fw" /> {currentNode.desc.n.en}</p>
+              }
+            </div>
+            <div className={styles.delCurrentNode} onClick={this.cancelSelected}>X</div>
+          </div>
+        }
         <div id="rgvis" style={{ background: '#333', width: EgoWidth, height: EgoHeight, border: '1px solid #eee', marginTop: 20 }} />
         {this.pgshow && <Progress percent={this.state.pgLength} style={{ width: EgoWidth, position: 'relative', top: '-100' }} />}
       </div>

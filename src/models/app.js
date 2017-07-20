@@ -17,8 +17,10 @@ export default {
     darkTheme: LocalStorage.getItem(`${prefix}darkTheme`) === 'true',
     isNavbar: false, // document.body.clientWidth < 769,
     navOpenKeys: JSON.parse(LocalStorage.getItem(`${prefix}navOpenKeys`)) || [],
-    hasHeadSearchBox: false,
-    onHeaderSearch: null,
+
+    // layout switches.
+    headerSearchBox: null, // Header search box parameters.
+
   },
   subscriptions: {
     setup({ dispatch }) {
@@ -34,13 +36,17 @@ export default {
 
   },
   effects: {
-    *getCurrentUserInfo({ payload }, { call, put }) {
+    * getCurrentUserInfo({ payload }, { call, put }) {
       if (LocalStorage.getItem('token')) {
         const userMessage = getLocalStorage('user');
         // TODO 每次打开新URL都要访问一次。想办法缓存一下。
         if (userMessage !== '' && userMessage !== null && userMessage !== undefined) {
           console.log('已经登录');
-          yield put({ type: 'alreadyLoggedIn', user: userMessage.data, roles: userMessage.roles });
+          yield put({
+            type: 'alreadyLoggedIn',
+            user: userMessage.data,
+            roles: userMessage.roles
+          });
         } else {
           const { data } = yield call(getCurrentUserInfo, parse(payload));
           if (data) {
@@ -59,7 +65,7 @@ export default {
       }
     },
 
-    *logout({ payload }, { call, put }) {
+    * logout({ payload }, { call, put }) {
       const { data } = yield call(logout);
       if (data.status) {
         localStorage.removeItem('token');
@@ -71,7 +77,7 @@ export default {
       }
     },
 
-    *changeNavbar({ payload }, { put, select }) {
+    * changeNavbar({ payload }, { put, select }) {
       const { app } = yield (select(_ => _));
       const isNavbar = false; // document.body.clientWidth < 769
       if (isNavbar !== app.isNavbar) {

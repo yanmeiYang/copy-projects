@@ -71,14 +71,14 @@ class UniSearch extends React.PureComponent {
     this.dispatch({
       type: 'app/layout',
       payload: {
-        hasHeadSearchBox: true,
-        // onHeaderSearch: null,// default onHeaderSearch
-        onHeaderSearch: (data) => {
-          const newOffset = data.offset || 0;
-          const newSize = data.size || 30;
-          this.dispatch(routerRedux.push({
-            pathname: `/${sysconfig.SearchPagePrefix}/${data.query}/${newOffset}/${newSize}?`, //eb=${filters.eb}TODO
-          }));
+        headerSearchBox: {
+          onSearch: (data) => {
+            const newOffset = data.offset || 0;
+            const newSize = data.size || 30;
+            this.dispatch(routerRedux.push({
+              pathname: `/${sysconfig.SearchPagePrefix}/${data.query}/${newOffset}/${newSize}?`, //eb=${filters.eb}TODO
+            }));
+          },
         },
       },
     });

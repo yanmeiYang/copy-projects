@@ -15,6 +15,7 @@ const TabPane = Tabs.TabPane;
 const { CheckableTag } = Tag;
 
 const labelMap = { 'H-Index': 'h指数', Language: '语言', Location: '国家' };
+
 function showChineseLabel(enLabel) {
   if (sysconfig.Language === 'cn') {
     const cnLabel = labelMap[enLabel];
@@ -23,7 +24,9 @@ function showChineseLabel(enLabel) {
     return enLabel;
   }
 }
+
 const labelMap2 = { 'h-index': 'h指数', language: '语言', nationality: '国家' };
+
 function showChineseLabel2(enLabel) {
   if (sysconfig.Language === 'cn') {
     const cnLabel = labelMap2[enLabel];
@@ -125,11 +128,9 @@ const Search = ({ dispatch, search }) => {
           {/* 搜索框 */}
           <div className={styles.top}>
             <div className={styles.searchWrap}>
-              {/*<SearchBox size="large" style={{ width: 680 }} btnText="搜索" keyword={query}*/}
-              {/*onSearch={onSearch} />*/}
               <KgSearchBox
-                size="large" style={{ width: 680 }} btnText="搜索" keyword={query}
-                onSearch={onSearch}
+                size="large" style={{ width: 680 }} btnText="搜索"
+                query={query} onSearch={onSearch}
               />
 
             </div>

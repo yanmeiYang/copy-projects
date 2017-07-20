@@ -59,7 +59,8 @@ module.exports = {
     rosterExportSimple: '/roster/:id/export/s/offset/:offset/size/:size/:name',
 
     // seminar
-    getSeminars: '/activity/list/offset/:offset/size/:size',
+    getSeminars: '/activity/list/offset/:offset/size/:size', // src aid uid organizer type category stype
+
     getActivityById: '/activity/:id',
     postActivity: '/activity/post_activity',
     speakerSuggest: '/activity/speaker/suggest',

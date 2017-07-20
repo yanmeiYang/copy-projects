@@ -31,7 +31,6 @@ class RelationGraphPage extends React.Component {
 
           <SearchBox
             size="large" btnText="搜索" style={{ width: 680 }}
-            // keyword={this.query}
             onSearch={this.onSearch}
           />
           <h2>{this.state.currentQuery}</h2>

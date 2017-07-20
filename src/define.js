@@ -10,7 +10,7 @@ const SYSTEM = 'huawei';
 // const SYSTEM = 'tencent';
 
 const define = {
-  SYSTEM,
+  SYSTEM: SYSTEM, // eslint-disable-line object-shorthand
   PRODUCTION: true,
   VERSION: '0.1.0',
   BROWSER_SUPPORTS_HTML5: true,

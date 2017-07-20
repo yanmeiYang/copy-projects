@@ -4,7 +4,7 @@ import jsonp from 'jsonp';
 import lodash from 'lodash';
 import pathToRegexp from 'path-to-regexp';
 import { message } from 'antd';
-import { YQL, CORS, baseURL } from './config';
+import { YQL, CORS, baseURL } from '../../src/utils/config';
 
 axios.defaults.baseURL = baseURL;
 

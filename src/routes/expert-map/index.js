@@ -43,7 +43,7 @@ class ExpertMapPage extends React.Component {
 
         <SearchBox
           size="large" btnText="搜索" style={{ width: 680 }}
-          keyword={this.state.query}
+          query={this.state.query}
           onSearch={this.onSearch}
         />
 

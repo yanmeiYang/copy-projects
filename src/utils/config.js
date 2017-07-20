@@ -2,10 +2,9 @@
  * Created by yutao on 2017/5/22.
  */
 
-// const SYS = 'ccf';
-const SYS = 'huawei';
-// const SYS = 'alibaba';
-// const SYS = 'tencent';
+const param = (key, type, description) => {
+  return { key, type, description };
+};
 
 module.exports = {
 
@@ -101,6 +100,33 @@ module.exports = {
     ucSetByKey: '/2b/config/:source/:category/:key',
     ucDeleteByKey: '/2b/config/:source/:category/:key',
 
+    // Knowledge Graph
+    kgFind: {
+      api: '/knowledge-graph/:entry',
+      param: [ // means param in path.
+        param('entry', 'string', 'query that matches name, name_zh, alias, in kgNode.'),
+      ],
+      query: {
+        rich: param('rich', '1 or others', 'Returns simple result, 1 for all doc, others simple.'),
+        dp: param('dp', 'int', 'depth of parents'),
+        dc: param('dc', 'int', 'depth of children'),
+        ns: param('ns', 'int', 'number of sibling'),
+        nc: param('nc', 'int', 'number of children'),
+      },
+    },
+    kgGetByIds: {
+      api: '/knowledge-graph/:id_chain',
+      param: [
+        param('id_chain', 'string', 'e.g.: id1.id2.id3'),
+      ],
+      query: {
+        rich: param('rich', '1 or others', 'Returns simple result, 1 for all doc, others simple.'),
+        dp: param('dp', 'int', 'depth of parents'),
+        dc: param('dc', 'int', 'depth of children'),
+        ns: param('ns', 'int', 'number of sibling'),
+        nc: param('nc', 'int', 'number of children'),
+      },
+    },
 
     // userInfo: '/userInfo',
     // users: '/users',
@@ -108,3 +134,4 @@ module.exports = {
 
   },
 };
+

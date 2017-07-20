@@ -28,22 +28,23 @@ class KnowledgeGraphTextTree extends React.PureComponent {
     this.queryKG(this.props.query);
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.query === this.props.query) {
-      return false;
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.query !== this.props.query) {
+      return true;
     }
-    this.queryKG(this.props.query);
-    return true;
+    if (nextProps.kgdata !== this.props.kgdata) {
+      return true;
+    }
+    return false;
   }
 
-  queryKG(query) {
-    if (!query) {
-      return;
+  componentDidUpdate(prevProps, prevState) {
+    console.log('.....ll js didupdate', this.props.query, ',', prevProps.query);
+
+    if (this.props.query && this.props.query !== prevProps.query) {
+      console.log('matches?');
+      this.queryKG(this.props.query);
     }
-    this.props.dispatch({
-      type: 'knowledgeGraph/kgFind',
-      payload: { query, rich: 1, dp: 3, dc: 2, ns: 4, nc: 10000 },
-    });
   }
 
   onItemClick = (e, node, level) => {
@@ -58,6 +59,16 @@ class KnowledgeGraphTextTree extends React.PureComponent {
       this.onItemClickCallback(node, level);
     }
   };
+
+  queryKG(query) {
+    if (query) {
+      this.props.dispatch({
+        type: 'knowledgeGraph/kgFind',
+        payload: { query, rich: 1, dp: 3, dc: 2, ns: 4, nc: 10000 },
+      });
+    }
+  }
+
 
   showNode = (node, level) => {
     if (!node) {

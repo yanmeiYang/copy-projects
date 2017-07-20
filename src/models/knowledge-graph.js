@@ -10,11 +10,17 @@ export default {
   namespace: 'knowledgeGraph',
 
   state: {
+    // page state
     query: '',
-    kgdata: {},
-    kgindex: {},
+
+    // second state
+    kgdata: null,
+    kgindex: null,
     kgFetcher: null,
 
+    node: null,
+
+    // third state
     experts: [],
     publications: [],
   },
@@ -42,12 +48,14 @@ export default {
 
     * searchPubs({ payload }, { call, put }) {
       const { query, offset, size, sort } = payload;
-      const { data } = yield call(searchService.searchPublications, query, offset, size, sort);
+      const { data } = yield call(searchService.searchPublications,
+        { query, offset, size, sort });
       yield put({ type: 'searchPubsSuccess', payload: { data } });
     },
+
     * searchExperts({ payload }, { call, put }) {
       const { query, offset, size, sort } = payload;
-      const { data } = yield call(searchService.searchPersonGlobal, query, offset, size, sort);
+      const { data } = yield call(searchService.searchPersonGlobal, query, offset, size, null, sort);
       yield put({ type: 'searchExpertsSuccess', payload: { data } });
     },
   },

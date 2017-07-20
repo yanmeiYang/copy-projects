@@ -104,7 +104,7 @@ export function kgFetcher(kgdata, kgindex) {
     },
     getNode,
     findTops: () => {
-      if (!kgdata.hits) {
+      if (!kgdata || !kgdata.hits) {
         return null;
       }
       const tops = {};
@@ -144,7 +144,6 @@ export async function getKGSuggest(query, callback) {
       console.error(err);
     }
   }
-  // console.log('>>>>> getKGData from LS:', kgdata);
 
   if (!kgdata) {
     console.log('>>>>> fetch :');

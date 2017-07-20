@@ -4,7 +4,6 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Button } from 'antd';
-import { routerRedux, Link } from 'dva/router';
 import styles from './expert-map.less';
 import { listPersonByIds } from '../../services/person';
 import * as profileUtils from '../../utils/profile_utils';
@@ -14,6 +13,7 @@ import RightInfoZonePerson from './RightInfoZonePerson';
 
 import mapData from '../../../external-docs/expert-map/expert-map-example2.json';
 import GetBMapLib from './utils/BMapLibGai.js';
+
 
 const ButtonGroup = Button.Group;
 const blankAvatar = '/images/blank_avatar.jpg';
@@ -198,9 +198,9 @@ class ExpertMap extends React.PureComponent {
     map.addControl(new BMap.ScaleControl());
     map.addControl(new BMap.OverviewMapControl());
     // map.setDefaultCursor();
-    // map.disableDoubleClickZoom();// 静止双击
     // map.addControl(new BMap.MapTypeControl());
   };
+
 
   showMap = (place, type) => {
     waitforBMap(200, 100,
@@ -217,17 +217,16 @@ class ExpertMap extends React.PureComponent {
         }
         map.centerAndZoom(new BMap.Point(116.404, 39.915), scale);
         this.initializeBaiduMap(map);
-
         const markers = [];
         const pId = [];
         let counts = 0;
         for (const o in place.results) {
           let pt = null;
           const newplace = findPosition(type, place.results[o]);
+
           // 只有经纬度不为空或者0的时候才显示，否则丢弃
           if ((newplace[1] != null && newplace[1] != null) &&
             (newplace[1] !== 0 && newplace[1] !== 0)) {
-
             pt = new BMap.Point(newplace[1], newplace[0]);// 这里经度和纬度是反着的
             const marker = new BMap.Marker(pt);
             const label = new BMap.Label(`<div>${place.results[o].name}</div><div style='display: none;'>${place.results[o].id}</div>`);
@@ -260,6 +259,9 @@ class ExpertMap extends React.PureComponent {
             }
           }, showLoadErrorMessage,
         );
+        if(getById('allmap').Child()){
+          map.disableScrollWheelZoom();
+        }
       }, showLoadErrorMessage,
     );
   };
@@ -288,14 +290,25 @@ class ExpertMap extends React.PureComponent {
   };
 
   getRightInfoBox = () => {
-    let riz = getById('flowinfo');
-    if (!riz) {
-      riz = document.createElement('div');
-      riz.setAttribute('id', 'flowinfo');
-      riz.setAttribute('class', 'rightInfoZone');
-      getById('allmap').appendChild(riz);
+  let riz = getById('flowinfo');
+  if (!riz) {
+    riz = document.createElement('div');
+    riz.setAttribute('id', 'flowinfo');
+    riz.setAttribute('class', 'rightInfoZone');
+    getById('allmap').appendChild(riz);
+  }
+  return riz;
+};
+
+  getTipInfoBox = () => {
+    let riz1 = getById('rank');
+    if(!riz1) {
+      riz1 = document.createElement('div');
+      getById('allmap').appendChild(riz1);
+      riz1.setAttribute('class', 'imgWrapper1');
     }
-    return riz;
+    return riz1;
+    riz1.onfocus=function(){console.log("aaa")}
   };
 
   // 将内容同步到地图中的控件上。
@@ -323,9 +336,9 @@ class ExpertMap extends React.PureComponent {
   toggleRightInfoBox = (id) => {
     const state = getById('flowstate').value;
     const statistic = getById('statistic').value;
+    this.getTipInfoBox();
     if (statistic !== id) { // 一般认为是第一次点击
       getById('flowstate').value = 1;
-
       this.getRightInfoBox();
       if (this.props.expertMap.infoZoneIds !== id) { // don't change
         if (id.indexOf(',') >= 0) { // is cluster
@@ -338,6 +351,7 @@ class ExpertMap extends React.PureComponent {
         this.props.dispatch({ type: 'expertMap/setRightInfoZoneIds', payload: { idString: id } });
       }
       this.syncInfoWindow();
+      //this.getTipInfoBox();
     } else if (state === 1) { // 偶数次点击同一个对象
       // 认为是第二次及其以上点击
       getById('flowstate').value = 0;
@@ -468,6 +482,28 @@ class ExpertMap extends React.PureComponent {
           <input id="flowstate" type="hidden" value="0" />
         </div>
 
+        <div className={styles.main2} id="rank">
+          <div className={styles.main3}>
+            <div className="custom-image">
+              <img  width="17%" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m0.png" />
+              <img  width="17%" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m1.png" />
+              <img  width="17%" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m2.png" />
+              <img  width="17%" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m3.png" />
+              <img  width="17%" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m4.png" />
+            </div>
+          </div>
+          <div className="custom-image">
+            <img  src="/images/arrow.png" />
+          </div>
+          <div className={styles.lab2}>人数增加</div>
+          <div className={styles.main3}>
+            <div className="custom-image">
+              <img   src="/images/personsNumber.png" />
+              <div className={styles.lab3}><p>该区域学者人数</p>该学者所在位置</div>
+            </div>
+          </div>
+        </div>
+
         <div id="personInfo" style={{ display: 'none' }}>
           {personPopupJsx && personPopupJsx}
         </div>
@@ -480,6 +516,8 @@ class ExpertMap extends React.PureComponent {
 
           </div>
         </div>
+
+        <div id="rank" style={{ display: 'none' }}></div>
 
       </div>
     );

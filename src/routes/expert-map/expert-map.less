@@ -42,12 +42,28 @@
 
       img { background: white; }
     }
+    .imgWrapper1 {
+      z-index: 10001; border: 1px solid white; position: relative;
+      box-shadow: 0px 0px 5px #333;
+    }
+  }
+
+  #rank {
+    z-index: 10001;
+    position: absolute; overflow: hidden;
+    right: 31px; top: 120px; width: 248px; height: 175px;
+    word-wrap: break-word; word-break: break-all;
+    border: 1px solid #eee; border-radius: 3px;
+    background-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 5px #666;
+    padding: 8px;
+    overflow: scroll;
   }
 
   #flowinfo {
     z-index: 10001;
     position: absolute; overflow: hidden;
-    right: 12px; top: 112px; width: 248px; bottom: 12px;
+    right: 12px; top: 187px; width: 248px; bottom: 12px;
     word-wrap: break-word; word-break: break-all;
     border: 1px solid #eee; border-radius: 3px;
     background-color: rgba(255, 255, 255, 0.4);
@@ -127,10 +143,42 @@
   font-size: 12px;
 }
 
+.lab2 {
+  font-size: 12px;
+  text-align: center;
+}
+
+.lab3 {
+  float: right;
+  font-size: 12px;
+  margin-right: 60px;
+  margin-top: 2px;
+  line-height: 30px;
+}
+
 .main1 {
-  margin: 20px 0 5px 0;
+  margin: 12px 0 5px 0;
+}
+
+.main2 {
+  width: 200px;
+  height: 100px;
+}
+
+.main3 {
+  width: 230px;
 }
 
 .switch {
   float: right;
 }
+
+.custom-image img {
+  display: block;
+  //width: 60px;
+}
+
+
+
+
+

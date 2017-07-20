@@ -12,7 +12,8 @@ class RightInfoZoneCluster extends React.PureComponent {
   componentDidMount() {
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps() {
+
   }
 
   render() {
@@ -29,6 +30,15 @@ class RightInfoZoneCluster extends React.PureComponent {
       // sum hindex
       if (indices) {
         hindexSum += indices.h_index;
+      }
+      for (let i = 0; i < persons.length; i++) {
+        for (let j = persons.length - 1; j > i; j--) {
+          if (persons[j].indices.h_index > persons[j - 1].indices.h_index) {
+            const temp = persons[j];
+            persons[j] = persons[j - 1];
+            persons[j - 1] = temp;
+          }
+        }
       }
       // interests
       if (person.tags && person.tags.length > 0) {
@@ -75,7 +85,7 @@ class RightInfoZoneCluster extends React.PureComponent {
               <div key={person.id} className="imgOuter">
                 <div className="imgBox">
                   <img src={avatarUrl} />
-                  {/*<div key={person.id}>{person.name}</div>*/}
+                  {/* <div key={person.id}>{person.name}</div>*/}
                 </div>
                 <div className="tooltip">
                   {person.name}<br />

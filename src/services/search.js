@@ -111,3 +111,10 @@ export async function relationGraph(data) {
     method: 'GET', data,
   });
 }
+
+// publications:
+
+export async function searchPublications(params) {
+  const { query, offset, size, sort } = params;
+  return request(api.searchPubs, { method: 'GET', data: { query, offset, size, sort } });
+}

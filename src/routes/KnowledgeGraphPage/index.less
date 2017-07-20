@@ -15,12 +15,11 @@
 }
 
 .meat {
-  display: flex; flex-direction: row;
+  display: flex; flex-direction: row; height: e("calc(100vh - 158px)");
 
   .left {
     display: flex; flex: 3;
     overflow: scroll;
-    height: e("calc(100vh - 158px)");
     border-top: solid 1px #ddd;
     border-bottom: solid 1px #ddd;
     box-shadow: 0 0 18px rgba(2, 2, 2, 0.1) inset;
@@ -40,12 +39,12 @@
           h2 { color: white; padding: 2px 16px; font-size: @font-size-lg; }
         }
         .text {
-          padding: 8px;
+          padding: 8px; overflow: scroll; height: 100%
         }
       }
-      .definition { flex: 1; }
-      .experts { flex: 2; }
-      .pubs { flex: 2; }
+      .definition { flex: 1; height: 20%; }
+      .experts { flex: 2; height: 40%; }
+      .pubs { flex: 2; height: 40%; }
     }
   }
 }

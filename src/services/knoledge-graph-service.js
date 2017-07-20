@@ -114,12 +114,11 @@ export function kgFetcher(kgdata, kgindex) {
         while (node && node.parent && getNode(node.parent) && max > 0) {
           node = getNode(node.parent);
           max -= 1;
-          console.log('find ', max);
         }
         tops[node.id] = true;
         return null;
       });
-      console.log('tops is : ', tops);
+      // console.log('tops is : ', tops);
       const topNodes = Object.keys(tops).map(top => getNode(top));
       // TODO sort it.
       return topNodes;

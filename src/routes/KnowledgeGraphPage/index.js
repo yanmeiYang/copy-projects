@@ -7,7 +7,8 @@ import classnames from 'classnames';
 import { routerRedux, Link } from 'dva/router';
 import styles from './index.less';
 import { KnowledgeGraphTextTree } from '../knowledge-graph';
-import { sysconfig } from '../../systems';
+import { PublicationList } from '../../components/publication';
+import { PersonListTiny } from '../../components/person';
 
 class KnowledgeGraphPage extends React.PureComponent {
 
@@ -16,9 +17,7 @@ class KnowledgeGraphPage extends React.PureComponent {
   }
 
   state = {
-    node: {},
-    experts: {},
-    publications: {},
+    node: null,
   };
 
   componentWillMount() {
@@ -44,11 +43,25 @@ class KnowledgeGraphPage extends React.PureComponent {
 
   onItemClick = (node, level) => {
     this.setState({ node });
+    // special query.
+    let query = node.name;
 
+    console.log("Search:>>> ", query);
+    this.props.dispatch({
+      type: 'knowledgeGraph/searchPubs',
+      payload: { query, offset: 0, size: 10, sort: 'relevance' },
+    });
+    this.props.dispatch({
+      type: 'knowledgeGraph/searchExperts',
+      payload: { query, offset: 0, size: 10, sort: 'relevance' },
+    });
   };
+
 
   render() {
     const kg = this.props.knowledgeGraph;
+    console.log('sdfsdf', kg.publications);
+
     return (
       <div className={classnames('content-inner', styles.page)}>
         <div className={styles.title}>
@@ -82,6 +95,7 @@ class KnowledgeGraphPage extends React.PureComponent {
                 <h2>Experts:</h2>
               </div>
               <div className="text">
+                <PersonListTiny persons={kg.experts} />
               </div>
             </div>
             <div className="card pubs">
@@ -89,6 +103,7 @@ class KnowledgeGraphPage extends React.PureComponent {
                 <h2>Publications:</h2>
               </div>
               <div className="text">
+                <PublicationList pubs={kg.publications} />
               </div>
             </div>
           </div>

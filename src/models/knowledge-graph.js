@@ -2,7 +2,6 @@
  * Created by Bo Gao on 2017-07-19
  */
 // import pathToRegexp from 'path-to-regexp';
-import * as personService from '../services/person';
 import * as searchService from '../services/search';
 import * as kgService from '../services/knoledge-graph-service';
 
@@ -15,6 +14,9 @@ export default {
     kgdata: {},
     kgindex: {},
     kgFetcher: null,
+
+    experts: [],
+    publications: [],
   },
 
   subscriptions: {
@@ -37,6 +39,17 @@ export default {
       const data = yield call(kgService.kgFind, query, rich, dp, dc, ns, nc);
       yield put({ type: 'kfFindSuccess', payload: { data } });
     },
+
+    * searchPubs({ payload }, { call, put }) {
+      const { query, offset, size, sort } = payload;
+      const { data } = yield call(searchService.searchPublications, query, offset, size, sort);
+      yield put({ type: 'searchPubsSuccess', payload: { data } });
+    },
+    * searchExperts({ payload }, { call, put }) {
+      const { query, offset, size, sort } = payload;
+      const { data } = yield call(searchService.searchPersonGlobal, query, offset, size, sort);
+      yield put({ type: 'searchExpertsSuccess', payload: { data } });
+    },
   },
 
   reducers: {
@@ -49,8 +62,18 @@ export default {
       const kgindex = kgService.indexingKGData(data);
       const kgFetcher = kgService.kgFetcher(data, kgindex);
       // console.log('success findKG, return date is ', data);
-      console.log('indexing it: ', kgindex);
+      // console.log('indexing it: ', kgindex);
       return { ...state, kgdata: data, kgindex, kgFetcher };
+    },
+    searchPubsSuccess(state, { payload }) {
+      const { data } = payload;
+      console.log('search publications: ', data);
+      return { ...state, publications: data.result };
+    },
+    searchExpertsSuccess(state, { payload }) {
+      const { data } = payload;
+      console.log('search experts: ', data);
+      return { ...state, experts: data.result };
     },
 
   },

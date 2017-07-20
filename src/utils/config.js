@@ -51,6 +51,8 @@ module.exports = {
     searchMap: '/search/person/geo', // ?query=:search
     searchExpertNetWithDSL: '/search/person/ego',
 
+    searchPubs: '/search/pub', // ?query=xxx&size=20&sort=relevance',
+
     // search suggest
     searchSuggest: '/search/suggest/gen/:query',
 

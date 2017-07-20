@@ -3,11 +3,14 @@
  */
 import ProfileInfo from './profile-info';
 import PersonList from './person-list';
+import PersonListTiny from './person-list-tiny';
 
 module.exports = {
 
   ProfileInfo,
 
   PersonList,
+
+  PersonListTiny,
 
 };

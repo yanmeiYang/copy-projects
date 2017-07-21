@@ -7,6 +7,7 @@ export default {
   state: {
     token: null,
     loginLoading: false,
+    errorMessage: '',
   },
 
   subscriptions: {
@@ -24,7 +25,6 @@ export default {
       yield put({ type: 'hideLoginLoading' });
       if (data.status) {
         localStorage.setItem('token', data.token);
-        console.log(data);
         const from = queryURL('from');
         yield put({ type: 'app/query' });
         yield put({ type: 'app/getCurrentUserInfo' });
@@ -34,11 +34,15 @@ export default {
           yield put(routerRedux.push('/'));
         }
       } else {
-        throw data;
+        yield put({ type: 'loginError', data });
+        // throw data;
       }
     },
   },
   reducers: {
+    loginError(state, data) {
+      return { ...state, errorMessage: data.data };
+    },
 
     showLoginLoading(state) {
       return {

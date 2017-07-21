@@ -2,15 +2,16 @@
  * Created by yutao on 2017/5/22.
  */
 
-// const SYS = 'ccf';
- const SYS = 'huawei';
-// const SYS = 'alibaba';
-//const SYS = 'tencent';
+const param = (key, type, description) => {
+  return { key, type, description };
+};
 
 module.exports = {
 
-  system: SYS, // 默认启动这是哪套系统，启动的时候传入app，之后会在APP里面重新设置。
-  source: SYS, // AppID, Used in UniversalConfig.
+  // To change SYSTEM settings. Please change /define.js.
+  // TODO remove all use of this config [system,source].
+  system: SYSTEM, // 默认启动这是哪套系统，启动的时候传入app，之后会在APP里面重新设置。
+  source: SYSTEM, // AppID, Used in UniversalConfig.
 
   baseURL: 'https://api.aminer.org/api',
   // baseURL: 'https://166.111.7.105/api',
@@ -48,6 +49,9 @@ module.exports = {
     allPersonInBase: '/roster/:ebid/order-by/h_index/offset/:offset/size/:size',
     allPersonInBaseAgg: '/roster/:ebid/agg?offset=&order=h_index&size=20',
     searchMap: '/search/person/geo', // ?query=:search
+    searchExpertNetWithDSL: '/search/person/ego',
+
+    searchPubs: '/search/pub', // ?query=xxx&size=20&sort=relevance',
 
     // search suggest
     searchSuggest: '/search/suggest/gen/:query',
@@ -97,6 +101,33 @@ module.exports = {
     ucSetByKey: '/2b/config/:source/:category/:key',
     ucDeleteByKey: '/2b/config/:source/:category/:key',
 
+    // Knowledge Graph
+    kgFind: {
+      api: '/knowledge-graph/:entry',
+      param: [ // means param in path.
+        param('entry', 'string', 'query that matches name, name_zh, alias, in kgNode.'),
+      ],
+      query: {
+        rich: param('rich', '1 or others', 'Returns simple result, 1 for all doc, others simple.'),
+        dp: param('dp', 'int', 'depth of parents'),
+        dc: param('dc', 'int', 'depth of children'),
+        ns: param('ns', 'int', 'number of sibling'),
+        nc: param('nc', 'int', 'number of children'),
+      },
+    },
+    kgGetByIds: {
+      api: '/knowledge-graph/:id_chain',
+      param: [
+        param('id_chain', 'string', 'e.g.: id1.id2.id3'),
+      ],
+      query: {
+        rich: param('rich', '1 or others', 'Returns simple result, 1 for all doc, others simple.'),
+        dp: param('dp', 'int', 'depth of parents'),
+        dc: param('dc', 'int', 'depth of children'),
+        ns: param('ns', 'int', 'number of sibling'),
+        nc: param('nc', 'int', 'number of children'),
+      },
+    },
 
     // userInfo: '/userInfo',
     // users: '/users',
@@ -104,3 +135,4 @@ module.exports = {
 
   },
 };
+

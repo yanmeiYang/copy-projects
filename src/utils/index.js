@@ -1,3 +1,4 @@
+/* eslint-disable no-extend-native */
 import classnames from 'classnames';
 import { cloneDeep } from 'lodash';
 import config from './config';
@@ -126,6 +127,7 @@ const arrayToTree = (array, id = 'id', pid = 'pid', children = 'children') => {
 
 // for router
 const cached = {};
+
 function registerModel(app, model) {
   if (!cached[model.namespace]) {
     app.model(model);

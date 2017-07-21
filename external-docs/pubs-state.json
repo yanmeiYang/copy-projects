@@ -1,111 +1,110 @@
-{
-  "status": true,
-  "years": [
-    {
-      "year": 2017,
-      "size": 1
+[
+  {
+    "num_viewed": 0,
+    "wos_type": [],
+    "num_wos_citation": 0,
+    "classes": [],
+    "versions": [
+      {
+        "id": "55a4fd0665ceb7cb02dde8d0",
+        "src": "pubmed",
+        "sid": "23154310"
+      },
+      {
+        "id": "539087cf20f70186a0d5d3dc",
+        "src": "acm",
+        "sid": "220768"
+      },
+      {
+        "id": "53a7308020f7420be8cf5c31",
+        "src": "dblp",
+        "sid": "journals/aim/Nilsson95"
+      },
+      {
+        "id": "53e24cd120f7fff67740c8f4",
+        "src": "msra",
+        "sid": "348431"
+      },
+      {
+        "id": "56d92035dabfae2eee992768",
+        "src": "mag",
+        "sid": "7DFFBBED"
+      }
+    ],
+    "urls": [
+      "http://dx.doi.org/10.1609/aimag.v16i2.1129",
+      "http://www.aaai.org/ojs/index.php/aimagazine/article/view/1129",
+      "http://www.ncbi.nlm.nih.gov/pubmed/23154310?report=xml&format=text"
+    ],
+    "pdf": "",
+    "hash_zh": "",
+    "abstract": "■ In its early stages, the field of AI had as its main goal the invention of computer programs having the general problem-solving abilities of humans. Along the way, a major shift of emphasis devel- oped from general-purpose programs toward per- formance programs, ones whose competence was highly specialized and limited to particular areas of expertise. In this article, I claim that AI is now at the beginning of another transition, one that will reinvigorate efforts to build programs of gen- eral, humanlike competence. These programs will use specialized performance programs as tools, much like humans do.",
+    "pages": {
+      "s": "3",
+      "e": "3"
     },
-    {
-      "year": 2016,
-      "size": 5
+    "num_citation": 77,
+    "year": 2012,
+    "keywords_zh": [],
+    "hash": "eotp",
+    "id": "53e99a20b7602d97022758cf",
+    "authors": [
+      {
+        "aff": {
+          "desc": "",
+          "id": ""
+        },
+        "name": "Nils Nilsson",
+        "num_viewed": 0,
+        "avatar": "",
+        "indices": {},
+        "is_following": false,
+        "revised": {
+          "cname": "",
+          "mid": "",
+          "mtime": "1970-01-01 00:00:00",
+          "cid": "",
+          "mname": "",
+          "ctime": "1970-01-01 00:00:00"
+        },
+        "locks": {},
+        "pos": [],
+        "hidden": false,
+        "award": [],
+        "bind": false,
+        "contact": {},
+        "work": [],
+        "links": [],
+        "edu": [],
+        "id": "53f4557ddabfaec09f20333e",
+        "intr": [],
+        "num_followed": 0,
+        "honor": []
+      }
+    ],
+    "abstract_zh": "",
+    "labels": [
+      "en_journal"
+    ],
+    "order": 0,
+    "isbn": "",
+    "keywords": [],
+    "title": "Eye on the prize.",
+    "lang": "en",
+    "doi": "10.1609/aimag.v16i2.1129",
+    "title_zh": "",
+    "venue": {
+      "name": "AI Magazine",
+      "indices": {},
+      "mid": "5482641a582fc50b5e2a0615",
+      "info": {
+        "name": "AI Magazine"
+      },
+      "issue": "4",
+      "id": "5482641a582fc50b5e2a0615",
+      "type": 0,
+      "volume": "14"
     },
-    {
-      "year": 2015,
-      "size": 27
-    },
-    {
-      "year": 2014,
-      "size": 25
-    },
-    {
-      "year": 2013,
-      "size": 28
-    },
-    {
-      "year": 2012,
-      "size": 40
-    },
-    {
-      "year": 2011,
-      "size": 34
-    },
-    {
-      "year": 2010,
-      "size": 25
-    },
-    {
-      "year": 2009,
-      "size": 20
-    },
-    {
-      "year": 2008,
-      "size": 18
-    },
-    {
-      "year": 2007,
-      "size": 11
-    },
-    {
-      "year": 2006,
-      "size": 13
-    },
-    {
-      "year": 2005,
-      "size": 10
-    },
-    {
-      "year": 2004,
-      "size": 8
-    },
-    {
-      "year": 2003,
-      "size": 2
-    },
-    {
-      "year": 1999,
-      "size": 1
-    }
-  ],
-  "ncites": [
-    {
-      "nl": 0,
-      "nh": 10,
-      "size": 145
-    },
-    {
-      "nl": 10,
-      "nh": 50,
-      "size": 79
-    },
-    {
-      "nl": 50,
-      "nh": 100,
-      "size": 29
-    },
-    {
-      "nl": 100,
-      "nh": 200,
-      "size": 12
-    },
-    {
-      "nl": 200,
-      "nh": 500,
-      "size": 5
-    },
-    {
-      "nl": 500,
-      "nh": 1000,
-      "size": 2
-    },
-    {
-      "nl": 1000,
-      "nh": 2000,
-      "size": 0
-    },
-    {
-      "nl": 2000,
-      "nh": 0,
-      "size": 0
-    }
-  ]
-}
+    "issn": "1527-3172"
+  }
+]

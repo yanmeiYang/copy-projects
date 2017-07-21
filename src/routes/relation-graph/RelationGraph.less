@@ -10,3 +10,60 @@
 .text-danger {
   color: red;
 }
+:global {
+  .ant-progress-bg {
+    height: 30px !important;
+    -webkit-border-radius: 10px !important;
+    -moz-border-radius: 10px !important;
+    border-radius: 10px !important;
+  }
+  .ant-progress-show-info .ant-progress-outer {
+    padding-right:5.75em;
+  }
+  .ant-progress-text{
+    font-size: 2em;
+    color: #ffffff;
+    margin-left: -1.25em;
+    .anticon{
+      font-size: 1.2em;
+      vertical-align: middle;
+    }
+  }
+
+}
+
+.svgTitle{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.leftInfoZone {
+  width: 200px;
+  position: absolute;
+  background: rgba(255,255,255,0.2);
+  margin-left: 10px;
+  margin-top: 30px;
+  color: #ffffff;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  .avatar{
+    margin: 10px 0;
+    text-align: center;
+    img {
+      width: 90px;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      border-radius: 5px;
+      -webkit-box-shadow: 0 0 5px;
+      -moz-box-shadow: 0 0 5px;
+      box-shadow: 0 0 5px;
+    }
+  }
+  .delCurrentNode{
+    color: red;
+    margin-top: -5px;
+    cursor: pointer;
+  }
+
+}

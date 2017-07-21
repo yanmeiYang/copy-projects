@@ -7,13 +7,18 @@ import { connect } from 'dva';
 import { Menu, Icon } from 'antd';
 import { Link, routerRedux } from 'dva/router';
 import styles from './Header.less';
-import SearchBox from '../../components/SearchBox';
 import * as profileUtils from '../../utils/profile_utils';
 import { sysconfig } from '../../systems';
 import { KgSearchBox } from '../../components/search';
 
 function Header({ app, search, location, dispatch, logout, onSearch }) {
-  const { hasHeadSearchBox } = app;
+  const { headerSearchBox } = app;
+  // Use default search if not supplied.
+  if (headerSearchBox && !headerSearchBox.onSearch) {
+    headerSearchBox.onSearch = onSearch;
+  }
+
+  // TODO Header don't use search model. use app's model.
   const query = search ? search.query : '';
 
   function logoutAuth() {
@@ -34,12 +39,12 @@ function Header({ app, search, location, dispatch, logout, onSearch }) {
       </Link>
 
       <div className={styles.searchWrapper}>
-        {hasHeadSearchBox &&
+        {headerSearchBox &&
         <KgSearchBox
           size="large"
-          keyword={query}
+          query={query}
           style={{ width: 500 }}
-          onSearch={onSearch}
+          {...headerSearchBox}
         />
         }
       </div>
@@ -70,11 +75,11 @@ function Header({ app, search, location, dispatch, logout, onSearch }) {
         {/*<Link to="/"><Icon type="info-circle-o"/>信息中心</Link>*/}
         {/*</Menu.Item>*/}
         {/*}*/}
-        {(!app.user || !app.user.first_name) &&
-        <Menu.Item key="/login">
-          <Link to={`/login?from=${location.pathname}`}><Icon type="login" /></Link>
-        </Menu.Item>
-        }
+        {/*{(!app.user || !app.user.first_name) &&*/}
+        {/*<Menu.Item key="/login">*/}
+        {/*<Link to={`/login?from=${location.pathname}`}><Icon type="login" /></Link>*/}
+        {/*</Menu.Item>*/}
+        {/*}*/}
 
         {app.user.first_name &&
         <Menu.Item key="/account">
@@ -95,7 +100,7 @@ function Header({ app, search, location, dispatch, logout, onSearch }) {
 
         {(!app.user || !app.user.first_name) &&
         <Menu.Item key="/404">
-          <Link to="/login"><Icon type="user" />登录</Link>
+          <Link to={`/login?from=${location.pathname}`}><Icon type="user" />登录</Link>
         </Menu.Item>
         }
 

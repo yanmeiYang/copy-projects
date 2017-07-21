@@ -17,6 +17,7 @@ const { CheckableTag } = Tag;
 const expertBases = sysconfig.ExpertBases;
 
 const labelMap = { 'H-Index': 'h指数', Language: '语言', Location: '国家' };
+
 function showChineseLabel(enLabel) {
   if (sysconfig.Language === 'cn') {
     const cnLabel = labelMap[enLabel];
@@ -25,7 +26,9 @@ function showChineseLabel(enLabel) {
     return enLabel;
   }
 }
+
 const labelMap2 = { 'h-index': 'h指数', language: '语言', nationality: '国家' };
+
 function showChineseLabel2(enLabel) {
   if (sysconfig.Language === 'cn') {
     const cnLabel = labelMap2[enLabel];
@@ -68,14 +71,14 @@ class UniSearch extends React.PureComponent {
     this.dispatch({
       type: 'app/layout',
       payload: {
-        hasHeadSearchBox: true,
-        // onHeaderSearch: null,// default onHeaderSearch
-        onHeaderSearch: (data) => {
-          const newOffset = data.offset || 0;
-          const newSize = data.size || 30;
-          this.dispatch(routerRedux.push({
-            pathname: `/${sysconfig.SearchPagePrefix}/${data.query}/${newOffset}/${newSize}?`, //eb=${filters.eb}TODO
-          }));
+        headerSearchBox: {
+          onSearch: (data) => {
+            const newOffset = data.offset || 0;
+            const newSize = data.size || 30;
+            this.dispatch(routerRedux.push({
+              pathname: `/${sysconfig.SearchPagePrefix}/${data.query}/${newOffset}/${newSize}?`, //eb=${filters.eb}TODO
+            }));
+          },
         },
       },
     });

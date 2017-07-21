@@ -14,10 +14,13 @@ class IndexPage extends React.Component {
   constructor(props) {
     super(props);
     this.dispatch = this.props.dispatch;
+    const a = PRODUCTION;
+    window.location
+    console.log('...lllooo', a);
   }
 
   componentWillMount() {
-    this.dispatch({ type: 'app/layout', payload: { hasHeadSearchBox: false } });
+    this.dispatch({ type: 'app/layout', payload: { headerSearchBox: null } });
   }
 
   onSearch = ({ query }) => {
@@ -49,7 +52,7 @@ class IndexPage extends React.Component {
 
           <KgSearchBox size="large" style={{ width: 500 }} onSearch={this.onSearch} />
 
-          {/*<SearchBox size="large" style={{ width: 500 }} onSearch={this.onSearch} />*/}
+          {/* <SearchBox size="large" style={{ width: 500 }} onSearch={this.onSearch} /> */}
 
           {/* 常用搜索 */}
           <p className={styles.commonSearch}>
@@ -58,7 +61,7 @@ class IndexPage extends React.Component {
                 return (
                   <span key={query}>
                     <Link to={`/${sysconfig.SearchPagePrefix}/${query}/0/30`}>{query}</Link>
-                    <span>{ (index === commonSearch.length - 1) ? '' : '， '}</span>
+                    <span>{(index === commonSearch.length - 1) ? '' : '， '}</span>
                   </span>
                 );
               })

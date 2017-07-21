@@ -4,6 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Button } from 'antd';
+import { routerRedux, Link } from 'dva/router';
 import styles from './expert-map.less';
 import { listPersonByIds } from '../../services/person';
 import * as profileUtils from '../../utils/profile_utils';
@@ -13,7 +14,6 @@ import RightInfoZonePerson from './RightInfoZonePerson';
 
 import mapData from '../../../external-docs/expert-map/expert-map-example2.json';
 import GetBMapLib from './utils/BMapLibGai.js';
-
 
 const ButtonGroup = Button.Group;
 const blankAvatar = '/images/blank_avatar.jpg';
@@ -197,16 +197,18 @@ class ExpertMap extends React.PureComponent {
     map.addControl(new BMap.NavigationControl());
     map.addControl(new BMap.ScaleControl());
     map.addControl(new BMap.OverviewMapControl());
+    // map.disableScrollWheelZoom();
     // map.setDefaultCursor();
+    // map.disableDoubleClickZoom();// 静止双击
     // map.addControl(new BMap.MapTypeControl());
   };
-
 
   showMap = (place, type) => {
     waitforBMap(200, 100,
       (BMap) => {
         this.showOverLay();
         const map = new BMap.Map('allmap');
+        this.map = map; // set to global;
         let scale = 4;
         if (type === 2) {
           scale = 6;
@@ -217,16 +219,17 @@ class ExpertMap extends React.PureComponent {
         }
         map.centerAndZoom(new BMap.Point(116.404, 39.915), scale);
         this.initializeBaiduMap(map);
+
         const markers = [];
         const pId = [];
         let counts = 0;
         for (const o in place.results) {
           let pt = null;
           const newplace = findPosition(type, place.results[o]);
-
           // 只有经纬度不为空或者0的时候才显示，否则丢弃
           if ((newplace[1] != null && newplace[1] != null) &&
             (newplace[1] !== 0 && newplace[1] !== 0)) {
+
             pt = new BMap.Point(newplace[1], newplace[0]);// 这里经度和纬度是反着的
             const marker = new BMap.Marker(pt);
             const label = new BMap.Label(`<div>${place.results[o].name}</div><div style='display: none;'>${place.results[o].id}</div>`);
@@ -287,15 +290,17 @@ class ExpertMap extends React.PureComponent {
   };
 
   getRightInfoBox = () => {
-  let riz = getById('flowinfo');
-  if (!riz) {
-    riz = document.createElement('div');
-    riz.setAttribute('id', 'flowinfo');
-    riz.setAttribute('class', 'rightInfoZone');
-    getById('allmap').appendChild(riz);
-  }
-  return riz;
-};
+    let riz = getById('flowInfo');
+    if (!riz) {
+      riz = document.createElement('div');
+      riz.setAttribute('id', 'flowInfo');
+      riz.setAttribute('class', 'rightInfoZone');
+      getById('allmap').appendChild(riz);
+      riz.onmouseenter = () => this.map.disableScrollWheelZoom();
+      riz.onmouseleave = () => this.map.enableScrollWheelZoom();
+    }
+    return riz;
+  };
 
   getTipInfoBox = () => {
     let riz1 = getById('rank');
@@ -304,7 +309,6 @@ class ExpertMap extends React.PureComponent {
       //getById('allmap').appendChild(riz1);
       riz1.setAttribute('id', 'flowinfo1');
       riz1.setAttribute('class', 'imgWrapper1');
-    }
     return riz1;
   };
 
@@ -323,11 +327,12 @@ class ExpertMap extends React.PureComponent {
     const shouldRIZUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') === -1 && model.infoZoneIds === person.id;
     if (shouldRIZUpdate || model.infoZoneIds.indexOf(',') >= 0) {
       const rsz = getById('rightInfoZone');
-      const flowinfo = getById('flowinfo');
-      if (rsz && flowinfo) {
-        flowinfo.innerHTML = rsz.innerHTML;
+      const flowInfo = getById('flowInfo');
+      if (rsz && flowInfo) {
+        flowInfo.innerHTML = rsz.innerHTML;
       }
     }
+    // this.bindMouseScroll();
   };
 
   toggleRightInfoBox = (id) => {
@@ -336,6 +341,7 @@ class ExpertMap extends React.PureComponent {
     this.getTipInfoBox();
     if (statistic !== id) { // 一般认为是第一次点击
       getById('flowstate').value = 1;
+
       this.getRightInfoBox();
       if (this.props.expertMap.infoZoneIds !== id) { // don't change
         if (id.indexOf(',') >= 0) { // is cluster
@@ -348,14 +354,13 @@ class ExpertMap extends React.PureComponent {
         this.props.dispatch({ type: 'expertMap/setRightInfoZoneIds', payload: { idString: id } });
       }
       this.syncInfoWindow();
-      //this.getTipInfoBox();
     } else if (state === 1) { // 偶数次点击同一个对象
       // 认为是第二次及其以上点击
       getById('flowstate').value = 0;
-      getById('flowinfo').style.display = 'none';
+      getById('flowInfo').style.display = 'none';
     } else { // 奇数次点击同一个对象
       getById('flowstate').value = 1;
-      getById('flowinfo').style.display = '';
+      getById('flowInfo').style.display = '';
     }
 
     getById('statistic').value = id;
@@ -412,6 +417,30 @@ class ExpertMap extends React.PureComponent {
     this.props.dispatch({ type: 'expertMap/searchMap', payload: { query } });
   }
 
+  // not used.
+  bindMouseScroll = () => {
+    console.log('binding mouse scroll....');
+    const rizs = document.getElementsByClassName('rightInfoZone');
+    if (rizs && rizs.length > 0) {
+      const riz = rizs[0];
+      if (riz.addEventListener) {
+        console.log('everything is fine.');
+        // IE9, Chrome, Safari, Opera
+        riz.addEventListener('mousewheel', this.onMouseScroll, false);
+        // Firefox
+        riz.addEventListener('DOMMouseScroll', this.onMouseScroll, false);
+      } else {
+        // IE 6/7/8
+        riz.attachEvent('onmousewheel', this.onMouseScroll);
+      }
+    }
+  };
+
+  onMouseScroll = (e) => {
+    // event.preventDefault();
+    // console.log(e);
+  };
+
   render() {
     const model = this.props && this.props.expertMap;
     const person = model.personInfo;
@@ -459,7 +488,7 @@ class ExpertMap extends React.PureComponent {
               <Button onClick={this.showType} value="4">城市</Button>
               <Button onClick={this.showType} value="5">机构</Button>
             </ButtonGroup>
-            <div className={styles.switch} style={{display:'none'}}>
+            <div className={styles.switch} style={{ display: 'none' }}>
               <ButtonGroup id="diffmaps">
                 <Button type="primary" onClick={this.onChangeBaiduMap}>Baidu Map</Button>
                 <Button onClick={this.onChangeGoogleMap}>Google Map</Button>

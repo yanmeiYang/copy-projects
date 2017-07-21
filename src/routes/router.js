@@ -19,7 +19,7 @@ export default {
     path: '/knowledge-graph',
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
-        registerModel(app, require('../models/vis/vis-research-interest'));
+        registerModel(app, require('../models/knowledge-graph'));
         cb(null, require('./KnowledgeGraphPage'));
       }, 'NormalPages');
     },

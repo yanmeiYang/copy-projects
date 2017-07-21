@@ -1,3 +1,4 @@
+/* eslint-disable no-const-assign */
 import React from 'react';
 import { connect } from 'dva';
 import { Button, Row, Form, Input } from 'antd';
@@ -48,7 +49,12 @@ const Login = ({
                 required: true,
               },
             ],
-          })(<Input size="large" onPressEnter={handleOk} placeholder="Username" />)}
+          })(<Input
+            size="large"
+            onPressEnter={handleOk}
+            placeholder="Username"
+            onChange={() => { login.errorMessage = ''; }}
+          />)}
         </FormItem>
         <FormItem hasFeedback>
           {getFieldDecorator('password', {
@@ -62,8 +68,12 @@ const Login = ({
             type="password"
             onPressEnter={handleOk}
             placeholder="Password"
+            onChange={() => { login.errorMessage = ''; }}
           />)}
         </FormItem>
+        {!login.errorMessage.status && login.errorMessage.status !== undefined &&
+          <div style={{ marginBottom: '20px', color: 'red' }}>{login.errorMessage.status}用户名或密码错误</div>
+        }
         <Row>
           <Button type="primary" size="large" onClick={handleOk} loading={loginLoading}>
             登录

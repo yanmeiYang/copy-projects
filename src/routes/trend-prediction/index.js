@@ -28,7 +28,7 @@ class TrendPredictionPage extends React.Component {
 
   render() {
     return (
-      <div className={styles.content}>
+      <div>
         <h1>技术趋势预测:</h1>
         <TrendPrediction query={this.state.query}/>
       </div>

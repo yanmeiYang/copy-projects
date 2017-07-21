@@ -36,7 +36,7 @@ const renderSuggestion = (suggestion) => {
       {suggestion.type === 'parent' && <span className="label">上位词: </span>}
       {suggestion.type === 'sibling' && <span className="label">推荐词: </span>}
       {suggestion.type === 'child' && <span className="label">下位词: </span>}
-      { cn ? suggestion.zh : suggestion.name}
+      {cn ? suggestion.zh : suggestion.name}
     </div>
   );
 };
@@ -70,7 +70,7 @@ class KgSearchBox extends React.PureComponent {
   }
 
   componentWillMount = () => {
-    this.setState({ value: this.props.keyword || '' });
+    this.setState({ value: this.props.query || '' });
   }
 
   onChange = (event, { newValue, method }) => {
@@ -231,7 +231,7 @@ class KgSearchBox extends React.PureComponent {
     // Auto suggest will pass through all these props to the input.
     const inputProps = {
       placeholder: 'Search',
-      value, // : keyword || '',
+      value, // : query || '',
       onChange: this.onChange,
     };
 

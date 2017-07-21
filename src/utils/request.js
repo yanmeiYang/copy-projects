@@ -11,12 +11,16 @@ function checkStatus(response) {
   if (response.status === 401) {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    location.href = '/';
+    // location.href = '/';
   }
 
   const error = new Error(response.statusText);
   error.response = response;
-  throw error;
+  try {
+    throw error;
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 /**

@@ -68,3 +68,20 @@
 .switch{
   float: right;
 }
+
+.roundImgContainer {
+  // box-shadow: 0px 0px 5px blue;
+  cursor: pointer; z-index: 10000; position: absolute; border-radius: 50%;
+
+  .imgWrapper {
+    z-index: 10001; border: 1px solid white; position: absolute;
+    border-radius: 50%; overflow: hidden;
+    box-shadow: 0px 0px 5px #333;
+
+    img { background: white; }
+  }
+  .imgWrapper1 {
+    z-index: 10001; border: 1px solid white; position: relative;
+    box-shadow: 0px 0px 5px #333;
+  }
+}

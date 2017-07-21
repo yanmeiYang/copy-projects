@@ -259,9 +259,6 @@ class ExpertMap extends React.PureComponent {
             }
           }, showLoadErrorMessage,
         );
-        if(getById('allmap').Child()){
-          map.disableScrollWheelZoom();
-        }
       }, showLoadErrorMessage,
     );
   };
@@ -304,11 +301,11 @@ class ExpertMap extends React.PureComponent {
     let riz1 = getById('rank');
     if(!riz1) {
       riz1 = document.createElement('div');
-      getById('allmap').appendChild(riz1);
+      //getById('allmap').appendChild(riz1);
+      riz1.setAttribute('id', 'flowinfo1');
       riz1.setAttribute('class', 'imgWrapper1');
     }
     return riz1;
-    riz1.onfocus=function(){console.log("aaa")}
   };
 
   // 将内容同步到地图中的控件上。

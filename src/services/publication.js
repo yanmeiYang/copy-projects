@@ -102,7 +102,7 @@ export function getArchiveUrlByPub(pub) {
 }
 
 export function getPubLabels(pub) {
-  const labels = []
+  const labels = [];
   if (pub.versions) {
     pub.versions.map((v) => {
       if (!(v.src == 'mag' || v.src == 'msra')) {

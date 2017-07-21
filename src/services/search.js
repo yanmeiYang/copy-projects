@@ -35,7 +35,10 @@ export async function searchPerson(query, offset, size, filters, sort) {
 }
 
 export async function searchPersonGlobal(query, offset, size, filters, sort) {
+  console.log('---', query, offset, size, filters, sort);
+
   const data = prepareParametersGlobal(query, offset, size, filters, sort);
+  console.log('data', data);
   return request(api.searchPerson, { method: 'GET', data });
 }
 
@@ -110,4 +113,10 @@ export async function relationGraph(data) {
   return request(api.searchExpertNetWithDSL, {
     method: 'GET', data,
   });
+}
+
+// publications:
+
+export async function searchPublications(params) {
+  return request(api.searchPubs, { method: 'GET', data: params });
 }

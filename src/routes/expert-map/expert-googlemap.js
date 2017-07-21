@@ -125,9 +125,9 @@ class ExpertGoogleMap extends React.Component {
         // Add a marker clusterer to manage the markers.
         var markerCluster = new MarkerClusterer(map, markers,{imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
         for(var i=0;i<markers.length;i++){
-          //console.log(markers[i])
-        }
+        //console.log(markers[i])
       }
+    }
     }, 100);
     console.log("run!!");
     console.log(mapinterval)

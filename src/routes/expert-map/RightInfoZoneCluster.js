@@ -31,15 +31,7 @@ class RightInfoZoneCluster extends React.PureComponent {
       if (indices) {
         hindexSum += indices.h_index;
       }
-      for (let i = 0; i < persons.length; i++) {
-        for (let j = persons.length - 1; j > i; j--) {
-          if (persons[j].indices.h_index > persons[j - 1].indices.h_index) {
-            const temp = persons[j];
-            persons[j] = persons[j - 1];
-            persons[j - 1] = temp;
-          }
-        }
-      }
+      persons.sort((a, b) => b.indices.h_index - a.indices.h_index);
       // interests
       if (person.tags && person.tags.length > 0) {
         person.tags.map((tag) => {
@@ -63,7 +55,6 @@ class RightInfoZoneCluster extends React.PureComponent {
       return { key: tag, count: interests[tag] };
     });
     sortedInterest = sortedInterest.sort((a, b) => b.count - a.count);
-
     // TODO 人头按Hindex排序。
     // TODO 显示Hindex分段.
     return (

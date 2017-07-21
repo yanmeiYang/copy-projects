@@ -114,7 +114,7 @@ class RegistrationForm extends React.Component {
           if (state.endValue) {
             data.time.to = state.endValue.toJSON();
           }
-          data.activityTags = state.tags;
+          data.tags = state.tags;
           // 获取登录用户的uid
           data.uid = this.props.uid;
           this.props.dispatch({ type: 'seminar/postSeminarActivity', payload: data });

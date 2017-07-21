@@ -4,11 +4,12 @@
 import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
-import { Button, Icon, Spin } from 'antd';
+import { Button, Icon, Spin, Col } from 'antd';
 import { config } from '../../utils';
 import styles from './index.less';
 import SearchSeminar from './search-seminar';
-import ActivityList from '../../components/seminar/activityList';
+import NewActivityList from '../../components/seminar/newActivityList';
+// import ActivityList from '../../components/seminar/activityList';
 
 const Seminar = ({ app, dispatch, seminar }) => {
   const { results, loading, offset, query, sizePerPage } = seminar;
@@ -39,18 +40,20 @@ const Seminar = ({ app, dispatch, seminar }) => {
         </Button>}
       </div>
       <Spin spinning={loading}>
-        <div className={styles.seminar}>
-          {
-            results.map((result) => {
-              return (
-                <div key={result.id + Math.random()}>
-                  <ActivityList result={result} />
-                </div>
-              );
-            })
-          }
-          {!loading && results.length > sizePerPage &&
-          <Button type="primary" className={styles.getMoreActivities} onClick={getMoreSeminar.bind()}>More</Button>}
+        <div className="seminar">
+          <Col lg={{ span: 12, offset: 3 }}>
+            {
+              results.map((result) => {
+                return (
+                  <div key={result.id + Math.random()}>
+                    <NewActivityList result={result} hidetExpertRating="false" style={{ marginTop: 20 }} />
+                  </div>
+                );
+              })
+            }
+            {!loading && results.length > sizePerPage &&
+            <Button type="primary" className="getMoreActivities" onClick={getMoreSeminar.bind()}>More</Button>}
+          </Col>
         </div>
       </Spin>
 

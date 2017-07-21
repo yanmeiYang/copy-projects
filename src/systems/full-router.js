@@ -43,6 +43,7 @@ const fullRouter = (app, defaultChildRoutes) => {
       core.SeminarPost(app),
       core.SeminarRating(app),
       core.Statistic(app),
+      core.StatisticDetail(app),
 
       // expert map
       core.ExpertMap(app),

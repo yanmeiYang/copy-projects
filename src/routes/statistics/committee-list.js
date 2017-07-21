@@ -7,7 +7,7 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 
 const { Column } = Table;
-class ActivityList extends React.Component {
+class CommitteeList extends React.Component {
   state = {
     selectedRowKeys: [],  // Check here to configure the default column
   };
@@ -58,7 +58,7 @@ class ActivityList extends React.Component {
       <div>
         {/* rowSelection={rowSelection}*/}
         <Table bordered dataSource={this.props.activity}>
-          <Column title="分部名称" dataIndex="organizer" key="display_name" />
+          <Column title="承办单位" dataIndex="organizer" key="display_name" />
           <Column title="举办活动次数（总数）" dataIndex="total" key="position" render={(total, organizer) => <a data={JSON.stringify(organizer)} onClick={this.getSeminarsByCategory.bind(this, total, 'organizer')}> {total} </a>} />
           {Object.keys(activity_type_options_data).map((category) => {
             const dataIndex = `category.${category}`;
@@ -78,4 +78,4 @@ class ActivityList extends React.Component {
   }
 }
 
-export default connect(({ seminar }) => ({ seminar }))(ActivityList);
+export default connect(({ seminar }) => ({ seminar }))(CommitteeList);

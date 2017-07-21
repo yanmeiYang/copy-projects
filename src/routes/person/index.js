@@ -10,7 +10,8 @@ import { Indices } from '../../components/widgets';
 import * as personService from '../../services/person';
 import styles from './index.less';
 import PersonFeaturedPapers from './person-featured-papers';
-import ActivityList from '../../components/seminar/activityList';
+// import ActivityList from '../../components/seminar/activityList';
+import NewActivityList from '../../components/seminar/newActivityList';
 
 const TabPane = Tabs.TabPane;
 
@@ -25,14 +26,14 @@ const Person = ({ dispatch, person, seminar, publications }) => {
     title: '专家评分',
     content: <div>
       {false && profile && profile.indices &&
-      <Indices indices={profile.indices}/>
+      <Indices indices={profile.indices} />
       }
       <table style={{ marginBottom: 10 }}>
         {contrib &&
         <tr>
           <td>贡献度:</td>
           <td>
-            {/*<Rate disabled defaultValue={contrib.score}/>*/}
+            {/* <Rate disabled defaultValue={contrib.score}/>*/}
             <span>{contrib.score}</span>
           </td>
         </tr>
@@ -40,44 +41,47 @@ const Person = ({ dispatch, person, seminar, publications }) => {
         {avgScores.map((score) => {
           return (
             <tbody key={score.key}>
-            {score.key === 'level' && <tr>
-              <td>演讲内容（水平）:</td>
-              <td>
-                <Rate disabled defaultValue={score.score}/>
-                <span>{score.score}</span>
-              </td>
-            </tr>
+              {score.key === 'level' && <tr>
+                <td>演讲内容（水平）:</td>
+                <td>
+                  <Rate disabled defaultValue={score.score} />
+                  <span>{score.score}</span>
+                </td>
+              </tr>
             }
-            {score.key === 'content' && <tr>
-              <td>演讲水平:</td>
-              <td>
-                <Rate disabled defaultValue={score.score}/>
-                <span>{score.score}</span>
-              </td>
-            </tr>}
-            {score.key === 'integrated' && <tr>
-              <td>综合评价（其它贡献）:</td>
-              <td>
-                <Rate disabled defaultValue={score.score}/>
-                <span>{score.score}</span>
-              </td>
-            </tr>}
+              {score.key === 'content' &&
+              <tr>
+                <td>演讲水平:</td>
+                <td>
+                  <Rate disabled defaultValue={score.score} />
+                  <span>{score.score}</span>
+                </td>
+              </tr>
+            }
+              {score.key === 'integrated' && <tr>
+                <td>综合评价（其它贡献）:</td>
+                <td>
+                  <Rate disabled defaultValue={score.score} />
+                  <span>{score.score}</span>
+                </td>
+              </tr>}
             </tbody>
-          )
+          );
         })}
       </table>
-    </div>
+    </div>,
   }, {
     title: '参与的活动',
     content: <Spin spinning={seminar.loading}>
       <div style={{ minHeight: 150 }}>{results.map((activity) => {
         return (
           <div key={activity.id + Math.random()}>
-            <ActivityList result={activity}/>
+            {/* <ActivityList result={activity} />*/}
+            <NewActivityList result={activity} hidetExpertRating="true" style={{ marginTop: 20, maxWidth: 1000 }} />
           </div>
-        )
+        );
       })}</div>
-    </Spin>
+    </Spin>,
   }, {
     title: '代表性论文',
     content: <Spin spinning={publications.loading}>
@@ -87,12 +91,12 @@ const Person = ({ dispatch, person, seminar, publications }) => {
             href={personService.getAMinerProfileUrl(profile.name, profile.id)}
             target="_blank" rel="noopener noreferrer"
           >
-            查看全部 {totalPubs} 篇论文<Icon type="right"/>
+            查看全部 {totalPubs} 篇论文<Icon type="right" />
           </a>
         </div>
-        <PersonFeaturedPapers personId={profile.id} totalPubs={totalPubs}/>
+        <PersonFeaturedPapers personId={profile.id} totalPubs={totalPubs} />
       </div>
-    </Spin>
+    </Spin>,
   }];
 
 
@@ -100,30 +104,30 @@ const Person = ({ dispatch, person, seminar, publications }) => {
     e.target.style.display = 'none';
     dispatch({
       type: 'seminar/getSeminar',
-      payload: { offset: 0, size: 10000, filter: { src: 'ccf', aid: profile.id } }
-    })
+      payload: { offset: 0, size: 10000, filter: { src: 'ccf', aid: profile.id } },
+    });
   }
 
-  let personId = '';
+  const personId = '';
 
   function callback(key) {
     switch (key) {
       case '1':
         if (results.length > 0) {
-          return ''
+          return '';
         } else {
           return (
             <div>
               {dispatch({ type: 'seminar/clearState' })}
               {dispatch({
                 type: 'seminar/getSeminar',
-                payload: { offset: 0, size: 5, filter: { src: 'ccf', aid: profile.id } }
+                payload: { offset: 0, size: 5, filter: { src: 'ccf', aid: profile.id } },
               })}</div>
           );
         }
       case '2':
         if (publications.resultsByCitation.length > 0) {
-          return ''
+          return '';
         } else {
           return dispatch({
             type: 'publications/getPublications',
@@ -140,13 +144,13 @@ const Person = ({ dispatch, person, seminar, publications }) => {
     }
   }
 
-  console.log("|||||||||||| PersonIndex:", person);
+  console.log('|||||||||||| PersonIndex:', person);
   return (
     <div className="content-inner">
 
-      <ProfileInfo profile={profile}/>
+      <ProfileInfo profile={profile} />
 
-      <div style={{ marginTop: 30 }}/>
+      <div style={{ marginTop: 30 }} />
 
       <div>
         <Tabs defaultActiveKey="0" onChange={callback}>
@@ -155,7 +159,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
               <TabPane key={index} tab={item.title}>
                 {item.content}
               </TabPane>
-            )
+            );
           })}
         </Tabs>
       </div>
@@ -166,7 +170,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
        </h1>
        <PersonPublications personId={profile.id} totalPubs={totalPubs} />
        */}
-      {/*<PersonFeaturedPapers personId={profile.id} totalPubs={totalPubs}/>*/}
+      {/* <PersonFeaturedPapers personId={profile.id} totalPubs={totalPubs}/>*/}
     </div>
   );
 };
@@ -177,5 +181,5 @@ export default connect(({ person, loading, seminar, publications }) => ({
   person,
   loading,
   seminar,
-  publications
+  publications,
 }))(Person);

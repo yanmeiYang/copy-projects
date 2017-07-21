@@ -4,8 +4,8 @@
 
 console.log('Using define.js');
 
-// const SYSTEM = 'ccf';
-const SYSTEM = 'huawei';
+const SYSTEM = 'ccf';
+// const SYSTEM = 'huawei';
 // const SYSTEM = 'alibaba';
 // const SYSTEM = 'tencent';
 

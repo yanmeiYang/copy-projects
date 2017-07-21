@@ -93,7 +93,7 @@ class RelationGraph extends React.PureComponent {
     let max = 100;
     const interval = 200;
     setInterval(() => {
-      if (max === 0) { // call then
+      if (max <= 0) { // call then
         this.pgshow = false;
       } else { // call interval function
         this.pro();
@@ -528,8 +528,10 @@ class RelationGraph extends React.PureComponent {
       d.fx = null;
       d.fy = null;
     };
-    const div = d3.select('body').append('div').attr('class', 'tooltip').attr('id', 'tip').style('opacity', 0).style('background', 'white').style('color', 'black').style('padding', '0')
-      .style('min-width', '300px').style('border-radius', '5px').style('padding-bottom', '10px');
+    // const div = d3.select('body').append('div').attr('class', 'tooltip').attr('id', 'tip').style('opacity', 0).style('background', 'white').style('color', 'black').style('padding', '0')
+    //   .style('min-width', '300px').style('border-radius', '5px').style('padding-bottom', '10px');
+    const div = d3.select('body').append('div').attr('class', 'tooltip').attr('id', 'tip').style('opacity', 0).style('padding', '0')
+      .style('background', '#333');
     const showInfo = (d) => {
       if (!this.drag) {
         const pageX = d3.event.pageX;
@@ -549,11 +551,13 @@ class RelationGraph extends React.PureComponent {
           document.getElementById('tip').style.display = 'block';
           div.transition().duration(500).style('opacity', 0);
           div.transition().duration(20).style('opacity', 1.0);
-          div.html(`<div class="" style="background: #EEEEEE;height: 35px;line-height: 35px; padding-left: 10px; border-radius: 5px; margin-top: 1px;">
-<a href='https://cn.aminer.org/profile/${d.id}'>${d.name.n.en}</a></div>
-<div style="padding-left: 10px;margin-left: 5px;margin-right: 5px;"><strong style="color: #a94442">h-Index:</strong>${d.indices.hIndex}&nbsp;|&nbsp;<strong style="color: #a94442">#Papers:</strong>${d.indices.numPubs}</br><p><i  class="fa fa-briefcase">&nbsp;
-</i>${temppos}</p><p><i class="fa fa-map-marker" style="word-break:break-all;text-overflow:ellipsis">&nbsp;${tempStr}</i></p></div>`)
-            .style('left', `${px + 5}px`).style('top', `${py}px`);
+          div.html(`<span>${d.name.n.en}</span>`)
+            .style('left', `${px + 20}px`).style('top', `${py + 10}px`);
+//           div.html(`<div class="" style="background: #EEEEEE;height: 35px;line-height: 35px; padding-left: 10px; border-radius: 5px; margin-top: 1px;">
+// <a href='https://cn.aminer.org/profile/${d.id}'>${d.name.n.en}</a></div>
+// <div style="padding-left: 10px;margin-left: 5px;margin-right: 5px;"><strong style="color: #a94442">h-Index:</strong>${d.indices.hIndex}&nbsp;|&nbsp;<strong style="color: #a94442">#Papers:</strong>${d.indices.numPubs}</br><p><i  class="fa fa-briefcase">&nbsp;
+// </i>${temppos}</p><p><i class="fa fa-map-marker" style="word-break:break-all;text-overflow:ellipsis">&nbsp;${tempStr}</i></p></div>`)
+//             .style('left', `${px + 20}px`).style('top', `${py + 10}px`);
           document.getElementById('tip').onmouseout = function (e) {
             if (this === e.relatedTarget) {
               document.getElementById('tip').style.display = 'none';
@@ -927,7 +931,7 @@ class RelationGraph extends React.PureComponent {
             return k.id === d.id;
           }).attr('fill', 'yellow');
         }).on('mouseout', (d) => {
-          hideInfo(d);
+          // hideInfo(d);
           // svg.selectAll('text').data(_nodes).filter((k) => {
           //   return k.id === d.id;
           // }).style('fill', '#fff');
@@ -967,7 +971,7 @@ class RelationGraph extends React.PureComponent {
             return k.id === d.id;
           }).attr('fill', 'yellow');
         }).on('mouseout', (d) => {
-          hideInfo(d);
+          // hideInfo(d);
           // svg.selectAll('text').data(_nodes).filter((k) => {
           //   return k.id === d.id;
           // }).style('fill', '#fff');
@@ -1351,7 +1355,6 @@ class RelationGraph extends React.PureComponent {
 
   render() {
     const { describeNodes1, describeNodes2, suspension_adjustment, two_paths, continuous_path, single_extension, currentNode } = this.state;
-    console.log(currentNode);
     return (
       <div className={styles.vis_container}>
         <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -1399,13 +1402,15 @@ class RelationGraph extends React.PureComponent {
               </div>
               }
               {currentNode.pos &&
-              <p><i className="fa fa-briefcase fa-fw" /> {currentNode.pos[0].name.n.en}</p>
+              <p><i className="fa fa-briefcase fa-fw" /> {currentNode.pos.length > 0 ? currentNode.pos[0].name.n.en : ''}</p>
               }
               {currentNode.desc &&
-                <p><i className="fa fa-institution fa-fw" /> {currentNode.desc.n.en}</p>
+                <p><i className="fa fa-institution fa-fw" /> {currentNode.desc.n.en ? currentNode.desc.n.en : ''}</p>
               }
             </div>
-            <div className={styles.delCurrentNode} onClick={this.cancelSelected}>X</div>
+            <div className={styles.delCurrentNode} style={{ color: '#a90329' }} onClick={this.cancelSelected}>
+              <i className="fa fa-ban" aria-hidden="true"></i>
+            </div>
           </div>
         }
         <div id="rgvis" style={{ background: '#333', width: EgoWidth, height: EgoHeight, border: '1px solid #eee', marginTop: 20 }} />

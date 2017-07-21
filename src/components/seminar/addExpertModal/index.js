@@ -94,7 +94,6 @@ class AddExpertModal extends React.Component {
     const talk = {
       title: '',
       speaker: { name: '', position: '', affiliation: '', img: '', aid: '', bio: '', stype: { label: '', score: 0 } },
-      time: { from: '', to: '' },
       location: { city: '', address: '' },
       abstract: '',
     };

@@ -1,11 +1,12 @@
 /**
  * Created by yangyanmei on 17/6/21.
  */
+
 import React from 'react';
-import { routerRedux } from 'dva/router';
-import { Button } from 'antd'
+import { routerRedux, Link } from 'dva/router';
+import { Button } from 'antd';
 import { connect } from 'dva';
-import styles from  './index.less';
+import styles from './index.less';
 
 class ActivityList extends React.Component {
   goToDetail = (id) => {
@@ -17,7 +18,7 @@ class ActivityList extends React.Component {
   goToRating = (id) => {
     this.props.dispatch(routerRedux.push({
       pathname: `/seminar/expert-rating/${id}`,
-    }))
+    }));
   };
 
   render() {
@@ -34,35 +35,54 @@ class ActivityList extends React.Component {
         </div>
         <div className={styles.con}>
           <h3>
-            <a href='javascript:void(0)' onClick={this.goToDetail.bind(this, result.id)}>
+            <Link to={`/seminar/expert-rating/${result.id}`}>
               {result.title}
-            </a>
+            </Link>
           </h3>
-          {this.props.app.roles.admin &&
-          <Button type='' className={styles.viewTheActivityBtn} size='small'
+          {this.props.app.roles.admin && !this.props.hidetExpertRating &&
+          <Button type="" className={styles.viewTheActivityBtn} size="small"
                   onClick={this.goToRating.bind(this, result.id)}>专家评分</Button>}
           <div className={styles.info}>
             <p>
               <span className={styles.type}>
                   活动类型：{result.category}
-                </span>
+              </span>
+            </p>
+            <p>
               <span>
                 <span>承办单位：</span>
                 {
                   result.organizer.map((item, index) => {
-                    return (<span key={Math.random()}>
-                      <span>{item}</span>
-                      {index < result.organizer.length - 1 && <span>,&nbsp;</span>}
-                    </span>)
+                    return (
+                      <span key={Math.random()}>
+                        <span>{item}</span>
+                        {index < result.organizer.length - 1 && <span>,&nbsp;</span>}
+                      </span>
+                    );
                   })
                 }
               </span>
             </p>
-            <p className={styles.location}>活动地点：{result.location.address}</p>
+            <p>
+              <span>
+                <span>活动标签：</span>
+                {
+                  result.tags.map((item, index) => {
+                    return (
+                      <span key={Math.random()}>
+                        <span>{item}</span>
+                        {index < result.tags.length - 1 && <span>,&nbsp;</span>}
+                      </span>
+                    );
+                  })
+                }
+              </span>
+            </p>
+            <p>活动地点：{result.location.address}</p>
           </div>
         </div>
       </li>
-    )
+    );
   }
 }
 

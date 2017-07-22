@@ -30,7 +30,7 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
     <div className={styles.detailSeminar}>
       <Spin spinning={loading}>
         { typeof (summaryById.length) !== 'number' ? <Row>
-          <Col md={24} lg={{ span: 16, offset: 4 }} className={styles.thumbnail}>
+          <Col className={styles.thumbnail}>
             <div className={styles.caption}>
               {(app.roles.authority.indexOf(summaryById.organizer[0]) >= 0 || app.roles.admin) && currentUser.token &&
               <Button type="danger" icon="delete" style={{ float: 'right' }} onClick={delSeminar}>删除</Button>}

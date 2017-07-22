@@ -5,6 +5,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Icon, InputNumber, Rate, Tabs, Spin } from 'antd';
+import { getTwoDecimal } from '../../utils';
 import { ProfileInfo } from '../../components/person';
 import { Indices } from '../../components/widgets';
 import * as personService from '../../services/person';
@@ -30,13 +31,13 @@ const Person = ({ dispatch, person, seminar, publications }) => {
       }
       <table style={{ marginBottom: 10 }}>
         {contrib &&
-        <tr>
-          <td>贡献度:</td>
-          <td>
-            {/* <Rate disabled defaultValue={contrib.score}/>*/}
-            <span>{contrib.score}</span>
-          </td>
-        </tr>
+          <tr>
+            <td>贡献度:</td>
+            <td>
+              {/* <Rate disabled defaultValue={contrib.score}/>*/}
+              <span>{contrib.score}</span>
+            </td>
+          </tr>
         }
         {avgScores.map((score) => {
           return (
@@ -45,7 +46,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
                 <td>演讲内容（水平）:</td>
                 <td>
                   <Rate disabled defaultValue={score.score} />
-                  <span>{score.score}</span>
+                  <span>{getTwoDecimal(score.score, 2)}</span>
                 </td>
               </tr>
             }
@@ -54,7 +55,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
                 <td>演讲水平:</td>
                 <td>
                   <Rate disabled defaultValue={score.score} />
-                  <span>{score.score}</span>
+                  <span>{getTwoDecimal(score.score, 2)}</span>
                 </td>
               </tr>
             }
@@ -62,7 +63,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
                 <td>综合评价（其它贡献）:</td>
                 <td>
                   <Rate disabled defaultValue={score.score} />
-                  <span>{score.score}</span>
+                  <span>{getTwoDecimal(score.score, 2)}</span>
                 </td>
               </tr>}
             </tbody>

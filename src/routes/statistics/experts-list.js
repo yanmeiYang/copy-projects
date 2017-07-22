@@ -4,10 +4,10 @@
 import React from 'react';
 import { Button, Input, Table, Icon } from 'antd';
 import { Link } from 'dva';
+import { getTwoDecimal } from '../../utils';
 import styles from './experts-list.less';
+
 const InputGroup = Input.Group;
-
-
 const columns = [
   {
     title: '专家',
@@ -29,18 +29,30 @@ const columns = [
     title: '总贡献度',
     dataIndex: 'contrib',
     sorter: (a, b) => a.level - b.level,
+    render(text, record) {
+      return getTwoDecimal(parseFloat(record.contrib), 2);
+    },
   }, {
     title: '演讲内容(平均分)',
     dataIndex: 'content',
     sorter: (a, b) => a.content - b.content,
+    render(text, record) {
+      return getTwoDecimal(parseFloat(record.content), 2);
+    },
   }, {
     title: '演讲水平',
     dataIndex: 'level',
     sorter: (a, b) => a.level - b.level,
+    render(text, record) {
+      return getTwoDecimal(parseFloat(record.level), 2);
+    },
   }, {
     title: '综合评价(其他贡献)',
     dataIndex: 'integrated',
     sorter: (a, b) => a.integrated - b.integrated,
+    render(text, record) {
+      return getTwoDecimal(parseFloat(record.integrated), 2);
+    },
   }];
 
 

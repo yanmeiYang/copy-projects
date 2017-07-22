@@ -24,6 +24,7 @@ export default {
     comments: [],
     expertRating: [],
     tags: [],
+    topMentionedTags: [],
     isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
   },
 
@@ -32,6 +33,7 @@ export default {
       history.listen((location) => {
         if (location.pathname === '/seminar') {
           dispatch({ type: 'getSeminar', payload: { offset: 0, size: 20, filter: { src: config.source } } });
+          dispatch({ type: 'getTopMentionedTags', payload: { src: config.source, num: 10 } });
         }
         const expertRating = pathToRegexp('/seminar/expert-rating/:id').exec(location.pathname);
         const match = pathToRegexp('/seminar/:id').exec(location.pathname);
@@ -75,7 +77,7 @@ export default {
     *searchActivity({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
       const { query, offset } = payload;
-      const { data } = yield call(seminarService.searchActivity, { ...payload });
+      const { data } = yield call(seminarService.searchActivity, payload);
       yield put({ type: 'searchActivitySuccess', payload: { data, query, offset } });
     },
     *getCategory({ payload }, { call, put }) {
@@ -137,6 +139,11 @@ export default {
       const { data } = yield call(seminarService.keywordExtraction, payload);
       yield put({ type: 'getTagsByContent', payload: data });
     },
+    *getTopMentionedTags({ payload }, { call, put }) {
+      const { src, num } = payload;
+      const data = yield call(seminarService.getTopMentionedTags, src, num);
+      yield put({ type: 'getTopMentionedTagsSuccess', data });
+    },
   },
 
   reducers: {
@@ -162,9 +169,15 @@ export default {
       return { ...state, speakerSuggests: data, loading: false };
     },
     searchActivitySuccess(state, { payload: { data, query, offset } }) {
+      let results = [];
+      if (offset === 0) {
+        results = data;
+      } else {
+        results = state.results.concat(data);
+      }
       return {
         ...state,
-        results: state.results.concat(data),
+        results,
         query,
         loading: false,
         offset: offset + state.sizePerPage,
@@ -197,7 +210,9 @@ export default {
       });
       return { ...state, tags: words };
     },
-
+    getTopMentionedTagsSuccess(state, { data }) {
+      return { ...state, topMentionedTags: data };
+    },
     showLoading(state) {
       return {
         ...state,

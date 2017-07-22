@@ -61,7 +61,6 @@ module.exports = {
 
     // seminar
     getSeminars: '/activity/list/offset/:offset/size/:size', // src aid uid organizer type category stype
-
     getActivityById: '/activity/:id',
     postActivity: '/activity/post_activity',
     speakerSuggest: '/activity/speaker/suggest',
@@ -79,6 +78,7 @@ module.exports = {
     getActivityScore: '/activity/score/:uid/:src/:actid/:aid/:key',
     getStatsOfCcfActivities: '/activity/admin/stats',
     keywordExtraction: 'http://nlp.newsminer.net/rest/nlp/keywords',
+    getTopMentionedTags: '/activity/tags/:src/:num',
 
     /* person */
     personProfile: '/person/summary/:id',

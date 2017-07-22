@@ -34,7 +34,7 @@ class NewActivityList extends React.Component {
       <div className={styles.seminar_item} style={style} >
         <div className={styles.seminar_title}>
           <h2>
-            <Link to={`/seminar/expert-rating/${result.id}`}>
+            <Link to={`/seminar/${result.id}`}>
               {result.title}
             </Link>
           </h2>
@@ -58,32 +58,33 @@ class NewActivityList extends React.Component {
               <div>承办单位：</div>
               <div>
                 {
-                  result.organizer.map((item, index) => {
+                  result.organizer.map((item) => {
                     return (
-                      <span key={Math.random()}>
+                      <p key={Math.random()}>
                         <span>{item}</span>
-                        {index < result.organizer.length - 1 && <span>,&nbsp;</span>}
-                      </span>
+                      </p>
                     );
                   })
                 }
               </div>
             </div>
-            <div className={styles.seminar_orgAndTag}>
-              <div>活动标签：</div>
-              <div>
-                {
-                  result.tags.map((item, index) => {
-                    return (
-                      <span key={Math.random()}>
-                        <span>{item}</span>
-                        {index < result.tags.length - 1 && <span>,&nbsp;</span>}
-                      </span>
-                    );
-                  })
-                }
+            {result.tags.length > 0 &&
+              <div className={styles.seminar_orgAndTag}>
+                <div>活动标签：</div>
+                <div>
+                  {
+                    result.tags.map((item, index) => {
+                      return (
+                        <span key={Math.random()}>
+                          <span>{item}</span>
+                          {index < result.tags.length - 1 && <span>,&nbsp;</span>}
+                        </span>
+                      );
+                    })
+                  }
+                </div>
               </div>
-            </div>
+            }
           </div>
         </div>
       </div>

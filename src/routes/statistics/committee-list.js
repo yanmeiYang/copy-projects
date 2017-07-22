@@ -61,6 +61,9 @@ class CommitteeList extends React.Component {
           <Column title="承办单位" dataIndex="organizer" key="display_name" />
           <Column title="举办活动次数（总数）" dataIndex="total" key="position" render={(total, organizer) => <a data={JSON.stringify(organizer)} onClick={this.getSeminarsByCategory.bind(this, total, 'organizer')}> {total} </a>} />
           {Object.keys(activity_type_options_data).map((category) => {
+            if (category === '撰稿活动' || category === '审稿活动') {
+              return '';
+            }
             const dataIndex = `category.${category}`;
             return (
               <Column title={category} dataIndex={dataIndex} key={category} render={(dataIndex, text) => {

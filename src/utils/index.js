@@ -42,9 +42,15 @@ Date.prototype.format = function (format) {
   return format;
 };
 
+// 保留小数位
+const getTwoDecimal = (text, num) => {
+  const decimal = Math.pow(10, num);
+  return Math.floor(text * decimal) / decimal;
+};
+
 const setLocalStorage = (key, value, roles) => {
   const curTime = new Date().getTime();
-  localStorage.setItem(key, JSON.stringify({ data: value, roles: roles, time: curTime }));
+  localStorage.setItem(key, JSON.stringify({ data: value, roles, time: curTime }));
 };
 
 const getLocalStorage = (key) => {
@@ -63,8 +69,6 @@ const getLocalStorage = (key) => {
   } else {
     return '';
   }
-
-
 };
 
 /**
@@ -147,6 +151,7 @@ module.exports = {
   queryURL,
   queryArray,
   arrayToTree,
+  getTwoDecimal,
 
   registerModel,
 };

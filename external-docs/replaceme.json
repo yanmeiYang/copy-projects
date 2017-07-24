@@ -1,329 +1,5763 @@
-{
-  "people": [],
-  "phrase": [],
-  "pub": [
-    {
-      "text": "Artificial Intelligence: A Modern Approach",
-      "score": 28651.0,
-      "type": "pub",
-      "payload": {
-        "n_citation": 28651,
-        "id": "53e9ab4fb7602d97034e2b21",
-        "title": "Artificial Intelligence: A Modern Approach",
-        "lang": "en",
-        "title_zh": ""
-      }
-    },
-    {
-      "text": "Artificial intelligence: a modern approach",
-      "score": 28256.0,
-      "type": "pub",
-      "payload": {
-        "n_citation": 28256,
-        "id": "53e9ab4fb7602d97034e2b1f",
-        "title": "Artificial intelligence: a modern approach",
-        "lang": "en",
-        "title_zh": ""
-      }
-    },
-    {
-      "text": "Artificial Intelligence: A Guide to Intelligent Systems",
-      "score": 2249.0,
-      "type": "pub",
-      "payload": {
-        "n_citation": 2249,
-        "id": "53e9af53b7602d9703994c9a",
-        "title": "Artificial Intelligence: A Guide to Intelligent Systems",
-        "lang": "en",
-        "title_zh": ""
-      }
-    },
-    {
-      "text": "Artificial intelligence - structures and strategies for complex problem solving (2. ed.)",
-      "score": 1636.0,
-      "type": "pub",
-      "payload": {
-        "n_citation": 1636,
-        "id": "53e9af46b7602d97039863fc",
-        "title": "Artificial intelligence - structures and strategies for complex problem solving (2. ed.)",
-        "lang": "en",
-        "title_zh": ""
-      }
-    },
-    {
-      "text": "Artificial intelligence: a new synthesis",
-      "score": 1621.0,
-      "type": "pub",
-      "payload": {
-        "n_citation": 1621,
-        "id": "53e9ab4fb7602d97034e2b48",
-        "title": "Artificial intelligence: a new synthesis",
-        "lang": "en",
-        "title_zh": ""
-      }
-    },
-    {
-      "text": "Artificial intelligence and mobile robots: case studies of successful robot systems",
-      "score": 427.0,
-      "type": "pub",
-      "payload": {
-        "n_citation": 427,
-        "id": "53e9b783b7602d970432c00a",
-        "title": "Artificial intelligence and mobile robots: case studies of successful robot systems",
-        "lang": "en",
-        "title_zh": ""
-      }
-    },
-    {
-      "text": "Artificial Intelligence Through Simulated Evolution",
-      "score": 420.0,
-      "type": "pub",
-      "payload": {
-        "n_citation": 420,
-        "id": "53e9ab4fb7602d97034e135f",
-        "title": "Artificial Intelligence Through Simulated Evolution",
-        "lang": "en",
-        "title_zh": ""
-      }
-    }
-  ],
-  "topic": [
-    {
-      "payload": {
-        "text": "Artificial Intelligence",
-        "id": "55830bce8c93a0d72698a271"
-      },
-      "score": 5414.0,
-      "text": "Artificial Intelligence",
-      "graph": {
-        "hits": [
+[
+  {
+    "id": 8749,
+    "external_id": "",
+    "name": "image/video manipulation",
+    "alias": [],
+    "name_zh": "",
+    "alias_zh": [],
+    "score": 0.03128796130690258,
+    "level": 6,
+    "definition": "",
+    "definition_zh": "",
+    "wiki_url": "",
+    "child_nodes": [],
+    "parent": 587,
+    "experts": [
+      {
+        "id": "53f49da0dabfaebfa777b6e1",
+        "name": "Shih-Fu Chang",
+        "name_zh": "张世富",
+        "avatar": "//static.aminer.org/093c/0001/0000/53af87d2dabfae456e842f9c.jpg",
+        "position": "Professor",
+        "affiliation": "Electrical Engineering Department\nComputer Science Department\nColumbia University",
+        "homepage": "http://www.ee.columbia.edu/~sfchang/",
+        "score": 147.46157894736842,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 6.9772,
+          "h_index": 93,
+          "num_citation": 37291,
+          "as": 0.0,
+          "diversity": 3.9004,
+          "new_star": 114.8444,
+          "num_pubs": 727,
+          "activity": 390.3886,
+          "g_index": 179
+        },
+        "tags": [
           {
-            "parent": 2224,
-            "name": "Artificial intelligence",
-            "score": 0.0,
-            "child_nodes": [
-              741,
-              729,
-              287,
-              423,
-              658,
-              238,
-              1,
-              902
-            ],
-            "id": 17,
-            "name_zh": "人工智能",
-            "level": 2
+            "t": "Feature Extraction",
+            "w": 57
           },
           {
-            "parent": 419,
-            "name": "artificial intelligence",
-            "score": 0.01243701086694183,
-            "child_nodes": [],
-            "id": 6534,
-            "name_zh": "",
-            "level": 5
-          }
-        ],
-        "ref": [
-          {
-            "parent": 2139,
-            "name": "Computing methodologies",
-            "score": 0.0,
-            "child_nodes": [
-              372,
-              883,
-              43,
-              17,
-              487,
-              365,
-              529,
-              381
-            ],
-            "id": 2224,
-            "name_zh": "计算方法",
-            "level": 0
+            "t": "Image Retrieval",
+            "w": 49
           },
           {
-            "parent": 17,
-            "name": "Search methodologies",
-            "score": 0.0,
-            "child_nodes": [
-              1134,
-              1258,
-              138,
-              2072,
-              555,
-              1499,
-              132
-            ],
-            "id": 741,
-            "name_zh": "搜索方法",
-            "level": 3
+            "t": "Image Segmentation",
+            "w": 32
           },
           {
-            "parent": 17,
-            "name": "Knowledge representation and reasoning",
-            "score": 0.0,
-            "child_nodes": [
-              52,
-              148,
-              641,
-              419,
-              2290,
-              604,
-              1644,
-              210,
-              1228,
-              843,
-              2331,
-              463
-            ],
-            "id": 729,
-            "name_zh": "知识表示和推理",
-            "level": 3
+            "t": "Data Compression",
+            "w": 32
           },
           {
-            "parent": 17,
-            "name": "Computer vision",
-            "score": 0.0,
-            "child_nodes": [
-              772,
-              881,
-              569,
-              216
-            ],
-            "id": 287,
-            "name_zh": "计算机视觉",
-            "level": 3
+            "t": "Image Classification",
+            "w": 29
           },
           {
-            "parent": 17,
-            "name": "Philosophical/theoretical foundations of artificial intelligence",
-            "score": 0.0,
-            "child_nodes": [
-              77,
-              2385
-            ],
-            "id": 423,
-            "name_zh": "人工智能的哲学/理论基础",
-            "level": 3
+            "t": "Layout",
+            "w": 29
           },
           {
-            "parent": 17,
-            "name": "Distributed artificial intelligence",
-            "score": 0.0,
-            "child_nodes": [
-              215,
-              283,
-              319,
-              1575
-            ],
-            "id": 658,
-            "name_zh": "分布式人工智能",
-            "level": 3
+            "t": "Video Compression",
+            "w": 27
           },
           {
-            "parent": 2224,
-            "name": "Concurrent computing methodologies",
-            "score": 0.0,
-            "child_nodes": [
-              2039,
-              59
-            ],
-            "id": 372,
-            "name_zh": "并发计算方法",
-            "level": 2
+            "t": "Indexing",
+            "w": 24
           },
           {
-            "parent": 2224,
-            "name": "Modeling and simulation",
-            "score": 0.0,
-            "child_nodes": [
-              728,
-              393,
-              512,
-              554,
-              876
-            ],
-            "id": 883,
-            "name_zh": "建模与仿真",
-            "level": 2
+            "t": "Indexation",
+            "w": 24
           },
           {
-            "parent": 2224,
-            "name": "Symbolic and algebraic manipulation",
-            "score": 0.0,
-            "child_nodes": [
-              403,
-              113,
-              632
-            ],
-            "id": 43,
-            "name_zh": "符号和代数操作",
-            "level": 2
-          },
-          {
-            "parent": 729,
-            "name": "Cognitive robotics",
-            "score": 0.0,
-            "child_nodes": [
-              9645,
-              3594,
-              5623,
-              9527,
-              12632,
-              6534,
-              9221,
-              10039,
-              14415,
-              6900,
-              14900,
-              9975,
-              9662,
-              10221,
-              7227,
-              4382,
-              8548,
-              13884,
-              11089,
-              14329
-            ],
-            "id": 419,
-            "name_zh": "认知机器人",
-            "level": 4
-          },
-          {
-            "parent": 419,
-            "name": "cognitive models",
-            "score": 0.02604043775676098,
-            "child_nodes": [],
-            "id": 9975,
-            "name_zh": "",
-            "level": 5
-          },
-          {
-            "parent": 419,
-            "name": "neural networks",
-            "score": 0.02404525796831461,
-            "child_nodes": [],
-            "id": 10039,
-            "name_zh": "",
-            "level": 5
-          },
-          {
-            "parent": 419,
-            "name": "cognitive informatics",
-            "score": 0.022000957137903582,
-            "child_nodes": [],
-            "id": 9645,
-            "name_zh": "",
-            "level": 5
+            "t": "Learning Artificial Intelligence",
+            "w": 23
           }
         ]
       },
-      "type": "topic"
-    }
-  ],
-  "inst": []
-}
+      {
+        "id": "53f43442dabfaee43ec1aff2",
+        "name": "A. Murat Tekalp",
+        "name_zh": "",
+        "avatar": "//static.aminer.org/0241/0000/0000/53af9a78dabfae456e96d2a3.gif",
+        "position": "Professor",
+        "affiliation": "Department of Electrical and Computer Engineering\nCenter for Electronic Imaging Systems\nCenter for Future Health",
+        "homepage": "http://home.ku.edu.tr/~mtekalp/",
+        "score": 46.21421052631579,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 5.5909,
+          "h_index": 50,
+          "num_citation": 10097,
+          "as": 0.0,
+          "diversity": 3.3252,
+          "new_star": 1.2544,
+          "num_pubs": 295,
+          "activity": 33.1334,
+          "g_index": 96
+        },
+        "tags": [
+          {
+            "t": "Image Segmentation",
+            "w": 31
+          },
+          {
+            "t": "Motion Estimation",
+            "w": 22
+          },
+          {
+            "t": "Layout",
+            "w": 20
+          },
+          {
+            "t": "Feature Extraction",
+            "w": 20
+          },
+          {
+            "t": "Indexing Terms",
+            "w": 16
+          },
+          {
+            "t": "Tracking",
+            "w": 15
+          },
+          {
+            "t": "Video Compression",
+            "w": 15
+          },
+          {
+            "t": "Image Retrieval",
+            "w": 14
+          },
+          {
+            "t": "Hidden Markov Models",
+            "w": 14
+          },
+          {
+            "t": "Data Compression",
+            "w": 13
+          }
+        ]
+      },
+      {
+        "id": "53f43037dabfaec22ba3c160",
+        "name": "John Y. A. Wang",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 37.53052631578947,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 2.1972,
+          "h_index": 6,
+          "num_citation": 1140,
+          "as": 0.0,
+          "diversity": 1.7478,
+          "new_star": 0.0,
+          "num_pubs": 7,
+          "activity": 0.0,
+          "g_index": 7
+        },
+        "tags": [
+          {
+            "t": "Video",
+            "w": 3
+          },
+          {
+            "t": "Transparency",
+            "w": 3
+          },
+          {
+            "t": "Image Segmentation",
+            "w": 2
+          },
+          {
+            "t": "Data Compression",
+            "w": 2
+          },
+          {
+            "t": "Signal Processing",
+            "w": 2
+          },
+          {
+            "t": "Computer Vision",
+            "w": 2
+          },
+          {
+            "t": "Layout",
+            "w": 2
+          },
+          {
+            "t": "Optical Flow",
+            "w": 2
+          },
+          {
+            "t": "Image Compression",
+            "w": 2
+          },
+          {
+            "t": "Vision System",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "548979f7dabfaed7b5fa3c59",
+        "name": "Edward H. Adelson",
+        "name_zh": "",
+        "avatar": "//static.aminer.org/upload/avatar/179/349/1773/548979f7dabfaed7b5fa3c59.jpeg",
+        "position": "Professor",
+        "affiliation": "MIT",
+        "homepage": "http://persci.mit.edu/people/adelson",
+        "score": 37.53052631578947,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 4.7706,
+          "h_index": 54,
+          "num_citation": 28653,
+          "as": 0.0,
+          "diversity": 3.3116,
+          "new_star": 10.5209,
+          "num_pubs": 130,
+          "activity": 30.5955,
+          "g_index": 130
+        },
+        "tags": [
+          {
+            "t": "Computer Vision",
+            "w": 14
+          },
+          {
+            "t": "Lighting",
+            "w": 10
+          },
+          {
+            "t": "Machine Vision",
+            "w": 9
+          },
+          {
+            "t": "Image Processing",
+            "w": 8
+          },
+          {
+            "t": "Image Segmentation",
+            "w": 8
+          },
+          {
+            "t": "Motion Estimation",
+            "w": 7
+          },
+          {
+            "t": "Visual System",
+            "w": 7
+          },
+          {
+            "t": "Data Compression",
+            "w": 6
+          },
+          {
+            "t": "Illumination",
+            "w": 6
+          },
+          {
+            "t": "Perception",
+            "w": 6
+          }
+        ]
+      },
+      {
+        "id": "54405e5cdabfae805a6b51c9",
+        "name": "Rakesh Kumar",
+        "name_zh": "",
+        "avatar": "//static.aminer.org/upload/avatar/1915/1206/1396/54405e5cdabfae805a6b51c9.png",
+        "position": "Director,Center for Vision Technology",
+        "affiliation": "SRI International",
+        "homepage": "https://www.sri.com/about/people/rakesh-teddy-kumar;https://scholar.google.com/citations?user=HN8BPrEAAAAJ",
+        "score": 34.89473684210526,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 5.5909,
+          "h_index": 48,
+          "num_citation": 8214,
+          "as": 0.0,
+          "diversity": 3.0708,
+          "new_star": 0.5815,
+          "num_pubs": 196,
+          "activity": 45.3357,
+          "g_index": 87
+        },
+        "tags": [
+          {
+            "t": "Robustness",
+            "w": 13
+          },
+          {
+            "t": "Computer Vision",
+            "w": 11
+          },
+          {
+            "t": "Visualization",
+            "w": 10
+          },
+          {
+            "t": "Pose Estimation",
+            "w": 10
+          },
+          {
+            "t": "Motion Estimation",
+            "w": 10
+          },
+          {
+            "t": "Layout",
+            "w": 10
+          },
+          {
+            "t": "Image Segmentation",
+            "w": 8
+          },
+          {
+            "t": "Chip",
+            "w": 8
+          },
+          {
+            "t": "Computer Architecture",
+            "w": 8
+          },
+          {
+            "t": "Solid Modeling",
+            "w": 7
+          }
+        ]
+      },
+      {
+        "id": "540fdc08dabfae450f4ae49d",
+        "name": "Ning Xi",
+        "name_zh": "",
+        "avatar": "//static.aminer.org/upload/avatar/1758/2010/1880/540fdc08dabfae450f4ae49d.jpeg",
+        "position": "Professor",
+        "affiliation": "Michigan State University",
+        "homepage": "http://www.egr.msu.edu/~xin/",
+        "score": 34.1,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 6.871,
+          "h_index": 34,
+          "num_citation": 4966,
+          "as": 0.0,
+          "diversity": 3.9551,
+          "new_star": 15.0421,
+          "num_pubs": 768,
+          "activity": 50.3115,
+          "g_index": 54
+        },
+        "tags": [
+          {
+            "t": "Atomic Force Microscopy",
+            "w": 94
+          },
+          {
+            "t": "Mobile Robots",
+            "w": 61
+          },
+          {
+            "t": "Real Time",
+            "w": 47
+          },
+          {
+            "t": "Path Planning",
+            "w": 45
+          },
+          {
+            "t": "Internet",
+            "w": 44
+          },
+          {
+            "t": "Telerobotics",
+            "w": 42
+          },
+          {
+            "t": "Motion Control",
+            "w": 39
+          },
+          {
+            "t": "Feedback",
+            "w": 36
+          },
+          {
+            "t": "Afm",
+            "w": 35
+          },
+          {
+            "t": "Carbon Nanotubes",
+            "w": 35
+          }
+        ]
+      },
+      {
+        "id": "548c9664dabfae8a11fb4bc6",
+        "name": "A. M. Tekalp",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 33.19,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 4.5849,
+          "h_index": 39,
+          "num_citation": 6500,
+          "as": 0.0,
+          "diversity": 3.0463,
+          "new_star": 0.0,
+          "num_pubs": 95,
+          "activity": 0.0,
+          "g_index": 80
+        },
+        "tags": [
+          {
+            "t": "Feature Extraction",
+            "w": 1
+          },
+          {
+            "t": "Image Registration",
+            "w": 1
+          },
+          {
+            "t": "Motion Estimation",
+            "w": 1
+          },
+          {
+            "t": "Image Reconstruction",
+            "w": 1
+          },
+          {
+            "t": "Kalman Filtering",
+            "w": 1
+          },
+          {
+            "t": "Motion Compensation",
+            "w": 1
+          },
+          {
+            "t": "Image Retrieval",
+            "w": 1
+          },
+          {
+            "t": "System Identification",
+            "w": 1
+          },
+          {
+            "t": "Adaptive Filtering",
+            "w": 1
+          },
+          {
+            "t": "Kalman Filter",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "53f4384cdabfaeb22f4830d6",
+        "name": "Hongjiang Zhang",
+        "name_zh": "张宏江",
+        "avatar": "//static.aminer.org/upload/avatar/2005/1974/126/53f48d41dabfaea88977b46c.jpeg",
+        "position": "CEO",
+        "affiliation": "Kingsoft",
+        "homepage": "https://www.linkedin.com/in/hong-jiang-zhang-%E5%BC%A0%E5%AE%8F%E6%B1%9F%EF%BC%89-06765a1/zh-cn;https://scholar.google.com.hk/citations?user=u6wmNbQAAAAJ&hl=zh-CN",
+        "score": 31.448421052631577,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 8.4204,
+          "h_index": 116,
+          "num_citation": 54228,
+          "as": 0.0,
+          "diversity": 4.2981,
+          "new_star": 0.0468,
+          "num_pubs": 807,
+          "activity": 8.216,
+          "g_index": 217
+        },
+        "tags": [
+          {
+            "t": "Image Retrieval",
+            "w": 102
+          },
+          {
+            "t": "Feature Extraction",
+            "w": 65
+          },
+          {
+            "t": "Image Classification",
+            "w": 48
+          },
+          {
+            "t": "Face Recognition",
+            "w": 48
+          },
+          {
+            "t": "Learning Artificial Intelligence",
+            "w": 40
+          },
+          {
+            "t": "Support Vector Machines",
+            "w": 35
+          },
+          {
+            "t": "Data Mining",
+            "w": 35
+          },
+          {
+            "t": "Image Segmentation",
+            "w": 31
+          },
+          {
+            "t": "Relevance Feedback",
+            "w": 31
+          },
+          {
+            "t": "Information Retrieval",
+            "w": 30
+          }
+        ]
+      },
+      {
+        "id": "53f49d4edabfaec0e0f8045b",
+        "name": "Michal Irani",
+        "name_zh": "",
+        "avatar": "//static.aminer.org/upload/avatar/1852/1208/572/53f49d4edabfaec0e0f8045b.jpeg",
+        "position": "Professor",
+        "affiliation": "Dept. of  Computer Science and Applied Math\nWeizmann Institute of Science",
+        "homepage": "http://www.wisdom.weizmann.ac.il/~irani/",
+        "score": 31.14473684210526,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 4.8828,
+          "h_index": 54,
+          "num_citation": 19319,
+          "as": 0.0,
+          "diversity": 3.2405,
+          "new_star": 2.7152,
+          "num_pubs": 119,
+          "activity": 42.9527,
+          "g_index": 119
+        },
+        "tags": [
+          {
+            "t": "Video Sequence",
+            "w": 15
+          },
+          {
+            "t": "Layout",
+            "w": 15
+          },
+          {
+            "t": "Motion Estimation",
+            "w": 14
+          },
+          {
+            "t": "Space Time",
+            "w": 13
+          },
+          {
+            "t": "Computer Vision",
+            "w": 10
+          },
+          {
+            "t": "Image Segmentation",
+            "w": 8
+          },
+          {
+            "t": "Image Resolution",
+            "w": 8
+          },
+          {
+            "t": "Computer Science",
+            "w": 7
+          },
+          {
+            "t": "Super Resolution",
+            "w": 7
+          },
+          {
+            "t": "Image Sequences",
+            "w": 6
+          }
+        ]
+      },
+      {
+        "id": "53f3597cdabfae4b34969761",
+        "name": "Ruiguo Yang",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 31.128421052631577,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 4.2046,
+          "h_index": 10,
+          "num_citation": 273,
+          "as": 0.0,
+          "diversity": 2.8,
+          "new_star": 4.9446,
+          "num_pubs": 37,
+          "activity": 10.8616,
+          "g_index": 16
+        },
+        "tags": [
+          {
+            "t": "Atomic Force Microscopy",
+            "w": 24
+          },
+          {
+            "t": "Afm",
+            "w": 9
+          },
+          {
+            "t": "Force",
+            "w": 9
+          },
+          {
+            "t": "Carbon Nanotubes",
+            "w": 7
+          },
+          {
+            "t": "Cellular Biophysics",
+            "w": 6
+          },
+          {
+            "t": "Proteins",
+            "w": 6
+          },
+          {
+            "t": "Microscopy",
+            "w": 5
+          },
+          {
+            "t": "Molecular Biophysics",
+            "w": 5
+          },
+          {
+            "t": "Biomechanics",
+            "w": 5
+          },
+          {
+            "t": "Image Reconstruction",
+            "w": 5
+          }
+        ]
+      },
+      {
+        "id": "53f4696bdabfaee4dc85a2df",
+        "name": "King Wai Chiu Lai",
+        "name_zh": "",
+        "avatar": "//static.aminer.org/upload/avatar/1146/671/939/53f4696bdabfaee4dc85a2df.jpeg",
+        "position": "Assistant Professor",
+        "affiliation": "Department of Mechanical and Biomedical Engineering,College of Science and Engineering,City University of Hong Kong",
+        "homepage": "http://www.cityu.edu.hk/mbe/kinglai/",
+        "score": 31.128421052631577,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 5.0498,
+          "h_index": 12,
+          "num_citation": 626,
+          "as": 0.0,
+          "diversity": 3.2483,
+          "new_star": 0.602,
+          "num_pubs": 76,
+          "activity": 10.8267,
+          "g_index": 22
+        },
+        "tags": [
+          {
+            "t": "Atomic Force Microscopy",
+            "w": 21
+          },
+          {
+            "t": "Carbon Nanotubes",
+            "w": 19
+          },
+          {
+            "t": "Carbon Nanotube",
+            "w": 16
+          },
+          {
+            "t": "Force",
+            "w": 12
+          },
+          {
+            "t": "Dielectrophoresis",
+            "w": 8
+          },
+          {
+            "t": "Nanotechnology",
+            "w": 8
+          },
+          {
+            "t": "Afm",
+            "w": 7
+          },
+          {
+            "t": "Infrared Detectors",
+            "w": 7
+          },
+          {
+            "t": "C",
+            "w": 7
+          },
+          {
+            "t": "Electrophoresis",
+            "w": 7
+          }
+        ]
+      },
+      {
+        "id": "542a6607dabfae646d55c365",
+        "name": "Yanlin Guo",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 31.045263157894734,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 4.9558,
+          "h_index": 21,
+          "num_citation": 1418,
+          "as": 0.0,
+          "diversity": 3.4734,
+          "new_star": 0.0,
+          "num_pubs": 68,
+          "activity": 0.0142,
+          "g_index": 37
+        },
+        "tags": [
+          {
+            "t": "In Vivo",
+            "w": 1
+          },
+          {
+            "t": "Cell Death",
+            "w": 1
+          },
+          {
+            "t": "Cell Proliferation",
+            "w": 1
+          },
+          {
+            "t": "Endothelial Cells",
+            "w": 1
+          },
+          {
+            "t": "Epithelial Cells",
+            "w": 1
+          },
+          {
+            "t": "Cell Adhesion",
+            "w": 1
+          },
+          {
+            "t": "Oxidative Stress",
+            "w": 1
+          },
+          {
+            "t": "Epidermal Growth Factor",
+            "w": 1
+          },
+          {
+            "t": "Embryonic Stem Cells",
+            "w": 1
+          },
+          {
+            "t": "Protein Kinase",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "5448b3d8dabfae87b7e6723b",
+        "name": "Harpreet S. Sawhney",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 31.045263157894734,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 5.4161,
+          "h_index": 45,
+          "num_citation": 7874,
+          "as": 0.0,
+          "diversity": 2.1472,
+          "new_star": 8.4648,
+          "num_pubs": 174,
+          "activity": 35.678,
+          "g_index": 87
+        },
+        "tags": [
+          {
+            "t": "Layout",
+            "w": 21
+          },
+          {
+            "t": "Shape",
+            "w": 11
+          },
+          {
+            "t": "Motion Estimation",
+            "w": 10
+          },
+          {
+            "t": "Feature Extraction",
+            "w": 10
+          },
+          {
+            "t": "Computer Vision",
+            "w": 9
+          },
+          {
+            "t": "Image Segmentation",
+            "w": 8
+          },
+          {
+            "t": "Visualization",
+            "w": 7
+          },
+          {
+            "t": "Robustness",
+            "w": 7
+          },
+          {
+            "t": "Pose Estimation",
+            "w": 7
+          },
+          {
+            "t": "Solid Modeling",
+            "w": 7
+          }
+        ]
+      },
+      {
+        "id": "53f432dadabfaee43ec0ae32",
+        "name": "Dan B. Goldman",
+        "name_zh": "",
+        "avatar": "//static.aminer.org/upload/avatar/1297/300/112/53f432dadabfaee43ec0ae32.jpeg",
+        "position": "Researcher ",
+        "affiliation": "Google Daydream team",
+        "homepage": "http://www.danbgoldman.com/",
+        "score": 30.774736842105263,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 3.5553,
+          "h_index": 21,
+          "num_citation": 3002,
+          "as": 0.0,
+          "diversity": 2.0428,
+          "new_star": 2.6889,
+          "num_pubs": 27,
+          "activity": 24.2173,
+          "g_index": 27
+        },
+        "tags": [
+          {
+            "t": "Photometry",
+            "w": 3
+          },
+          {
+            "t": "Computer Vision",
+            "w": 3
+          },
+          {
+            "t": "Real Time",
+            "w": 3
+          },
+          {
+            "t": "Image Reconstruction",
+            "w": 3
+          },
+          {
+            "t": "Image Based Rendering",
+            "w": 2
+          },
+          {
+            "t": "Hdr Reconstruction",
+            "w": 2
+          },
+          {
+            "t": "Nearest Neighbor",
+            "w": 2
+          },
+          {
+            "t": "Random Sampling",
+            "w": 2
+          },
+          {
+            "t": "Predictive Models",
+            "w": 2
+          },
+          {
+            "t": "Patch-based Synthesis",
+            "w": 2
+          }
+        ]
+      },
+      {
+        "id": "5433918fdabfaebba58191ff",
+        "name": "Michael G. Christel",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 30.673684210526314,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 4.7706,
+          "h_index": 32,
+          "num_citation": 3614,
+          "as": 0.0,
+          "diversity": 3.1056,
+          "new_star": 0.0,
+          "num_pubs": 86,
+          "activity": 7.2539,
+          "g_index": 59
+        },
+        "tags": [
+          {
+            "t": "Digital Video",
+            "w": 1
+          },
+          {
+            "t": "Audio And Video",
+            "w": 1
+          },
+          {
+            "t": "Interactive Video",
+            "w": 1
+          },
+          {
+            "t": "Information Access",
+            "w": 1
+          },
+          {
+            "t": "Visual Analytics",
+            "w": 1
+          },
+          {
+            "t": "Audio Analysis",
+            "w": 1
+          },
+          {
+            "t": "On Digital",
+            "w": 1
+          },
+          {
+            "t": "Video Libraries",
+            "w": 1
+          },
+          {
+            "t": "Digital Libraries",
+            "w": 1
+          },
+          {
+            "t": "Digital Image",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "5410baaddabfae44f08d72e0",
+        "name": "Ishwar K. Sethi",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": "Vision and Neural Networks Laboratory, Department of Computer Science, Wayne State University, Detroit, MI 48202, U.S.A.",
+        "homepage": "",
+        "score": 30.393684210526313,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 5.1873,
+          "h_index": 23,
+          "num_citation": 2696,
+          "as": 0.0,
+          "diversity": 3.3029,
+          "new_star": 0.0156,
+          "num_pubs": 152,
+          "activity": 0.0298,
+          "g_index": 50
+        },
+        "tags": [
+          {
+            "t": "Feature Extraction",
+            "w": 1
+          },
+          {
+            "t": "Image Segmentation",
+            "w": 1
+          },
+          {
+            "t": "Artificial Neural Network",
+            "w": 1
+          },
+          {
+            "t": "Image Retrieval",
+            "w": 1
+          },
+          {
+            "t": "Artificial Neural Networks",
+            "w": 1
+          },
+          {
+            "t": "Neural Network",
+            "w": 1
+          },
+          {
+            "t": "Neural Networks",
+            "w": 1
+          },
+          {
+            "t": "Decision Tree",
+            "w": 1
+          },
+          {
+            "t": "Decision Trees",
+            "w": 1
+          },
+          {
+            "t": "Similarity Measure",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "53f4394cdabfaec22ba9ccfe",
+        "name": "Ping Li",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": "School of Information and Control Engineering, Liaoning Shihua University, China\r\n",
+        "homepage": "",
+        "score": 30.379473684210524,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 2.3978,
+          "h_index": 4,
+          "num_citation": 51,
+          "as": 0.0,
+          "diversity": 2.3693,
+          "new_star": 1.2171,
+          "num_pubs": 12,
+          "activity": 1.8496,
+          "g_index": 6
+        },
+        "tags": [
+          {
+            "t": "Video Retexturing",
+            "w": 3
+          },
+          {
+            "t": "Optimization",
+            "w": 3
+          },
+          {
+            "t": "Visualization",
+            "w": 2
+          },
+          {
+            "t": "Underlying Texture Distortion",
+            "w": 2
+          },
+          {
+            "t": "Graphics Hardware",
+            "w": 2
+          },
+          {
+            "t": "Efficient Image",
+            "w": 2
+          },
+          {
+            "t": "Feature-guided Texture Distortion Optimization",
+            "w": 2
+          },
+          {
+            "t": "Video Synopsis",
+            "w": 2
+          },
+          {
+            "t": "Depth Map",
+            "w": 2
+          },
+          {
+            "t": "Gpu",
+            "w": 2
+          }
+        ]
+      },
+      {
+        "id": "542a5698dabfae646d5526b4",
+        "name": "Hanqiu Sun",
+        "name_zh": "孫漢秋",
+        "avatar": "//static.aminer.org/upload/avatar/1853/486/512/542a5698dabfae646d5526b4.jpeg",
+        "position": "Associate Professor",
+        "affiliation": "Department of Computer Science and Engineering,The Chinese University of Hong Kong",
+        "homepage": "http://www.cse.cuhk.edu.hk/~hanqiu/",
+        "score": 30.379473684210524,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 5.1647,
+          "h_index": 19,
+          "num_citation": 1174,
+          "as": 0.0,
+          "diversity": 4.0305,
+          "new_star": 5.4771,
+          "num_pubs": 178,
+          "activity": 10.0664,
+          "g_index": 27
+        },
+        "tags": [
+          {
+            "t": "Virtual Reality",
+            "w": 29
+          },
+          {
+            "t": "Virtual Environment",
+            "w": 18
+          },
+          {
+            "t": "Real Time",
+            "w": 17
+          },
+          {
+            "t": "Shadow Mapping",
+            "w": 10
+          },
+          {
+            "t": "Sun",
+            "w": 9
+          },
+          {
+            "t": "Image Based Rendering",
+            "w": 9
+          },
+          {
+            "t": "Computer Graphics",
+            "w": 8
+          },
+          {
+            "t": "Texture Mapping",
+            "w": 8
+          },
+          {
+            "t": "Image Texture",
+            "w": 6
+          },
+          {
+            "t": "Computer Science",
+            "w": 6
+          }
+        ]
+      },
+      {
+        "id": "562e11d945cedb339904ed84",
+        "name": "Smith, B.C.",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 28.956842105263156,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 0.6931,
+          "h_index": 0,
+          "num_citation": 0,
+          "as": 0.0,
+          "diversity": 0.0,
+          "new_star": 0.0,
+          "num_pubs": 1,
+          "activity": 0.0,
+          "g_index": 0
+        },
+        "tags": []
+      },
+      {
+        "id": "562e11d945cedb339904ed87",
+        "name": "Rowe, L.A.",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 28.956842105263156,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 0.6931,
+          "h_index": 0,
+          "num_citation": 0,
+          "as": 0.0,
+          "diversity": 0.0,
+          "new_star": 0.0,
+          "num_pubs": 1,
+          "activity": 0.0,
+          "g_index": 0
+        },
+        "tags": []
+      },
+      {
+        "id": "53f4272adabfaec09f0d7553",
+        "name": "Lvdi Wang",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": "Tsinghua University",
+        "homepage": "",
+        "score": 28.704210526315787,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 2.5649,
+          "h_index": 8,
+          "num_citation": 261,
+          "as": 0.0,
+          "diversity": 1.2676,
+          "new_star": 0.0,
+          "num_pubs": 10,
+          "activity": 1.5224,
+          "g_index": 10
+        },
+        "tags": [
+          {
+            "t": "Texture Synthesis",
+            "w": 4
+          },
+          {
+            "t": "Hair Modeling",
+            "w": 3
+          },
+          {
+            "t": "Data Structure",
+            "w": 2
+          },
+          {
+            "t": "Distance Function",
+            "w": 2
+          },
+          {
+            "t": "Detail Transfer",
+            "w": 2
+          },
+          {
+            "t": "Spatial Index",
+            "w": 2
+          },
+          {
+            "t": "Hair Clustering",
+            "w": 2
+          },
+          {
+            "t": "Single-view Hair Modeling Technique",
+            "w": 2
+          },
+          {
+            "t": "Hair Model",
+            "w": 2
+          },
+          {
+            "t": "Vector Fields",
+            "w": 2
+          }
+        ]
+      },
+      {
+        "id": "53f4442edabfaefedbb0c628",
+        "name": "Xiaogang Jin",
+        "name_zh": "金小刚",
+        "avatar": "//static.aminer.org/upload/avatar/481/1600/1041/53f4442edabfaefedbb0c628.jpeg",
+        "position": "Professor",
+        "affiliation": "浙江大学计算机学院，CAD&CG国家重点实验室",
+        "homepage": "http://www.cad.zju.edu.cn/home/jin/",
+        "score": 28.704210526315787,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 5.743,
+          "h_index": 25,
+          "num_citation": 2191,
+          "as": 0.0,
+          "diversity": 4.1681,
+          "new_star": 5.2885,
+          "num_pubs": 219,
+          "activity": 15.4116,
+          "g_index": 38
+        },
+        "tags": [
+          {
+            "t": "Implicit Surface",
+            "w": 13
+          },
+          {
+            "t": "Computer Animation",
+            "w": 11
+          },
+          {
+            "t": "Solid Modeling",
+            "w": 9
+          },
+          {
+            "t": "Computational Modeling",
+            "w": 9
+          },
+          {
+            "t": "Real Time",
+            "w": 9
+          },
+          {
+            "t": "Graphics Hardware",
+            "w": 7
+          },
+          {
+            "t": "Convolution Surface",
+            "w": 6
+          },
+          {
+            "t": "Free-form Deformation",
+            "w": 6
+          },
+          {
+            "t": "Radial Basis Function",
+            "w": 6
+          },
+          {
+            "t": "Null",
+            "w": 5
+          }
+        ]
+      },
+      {
+        "id": "53f44885dabfaee1c0af54a5",
+        "name": "Yanlin Weng",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": "Zhejiang University",
+        "homepage": "",
+        "score": 28.704210526315787,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 3.1354,
+          "h_index": 6,
+          "num_citation": 419,
+          "as": 0.0,
+          "diversity": 2.2008,
+          "new_star": 0.0,
+          "num_pubs": 17,
+          "activity": 3.7029,
+          "g_index": 17
+        },
+        "tags": [
+          {
+            "t": "Subdivision Surface",
+            "w": 4
+          },
+          {
+            "t": "Deformation Algorithm",
+            "w": 3
+          },
+          {
+            "t": "Hair Model",
+            "w": 3
+          },
+          {
+            "t": "Previous Work",
+            "w": 2
+          },
+          {
+            "t": "Texture Mapping",
+            "w": 2
+          },
+          {
+            "t": "Embed Texture",
+            "w": 2
+          },
+          {
+            "t": "Memory Usage",
+            "w": 2
+          },
+          {
+            "t": "Control Mesh",
+            "w": 2
+          },
+          {
+            "t": "Embedding Algorithm",
+            "w": 2
+          },
+          {
+            "t": "Texture Mapping Technique",
+            "w": 2
+          }
+        ]
+      },
+      {
+        "id": "53f45a50dabfaefedbb5e7f3",
+        "name": "Menglei Chai",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 28.704210526315787,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 2.3025,
+          "h_index": 4,
+          "num_citation": 59,
+          "as": 0.0,
+          "diversity": 1.0549,
+          "new_star": 0.0,
+          "num_pubs": 5,
+          "activity": 2.5963,
+          "g_index": 5
+        },
+        "tags": [
+          {
+            "t": "Single-view Hair Modeling Technique",
+            "w": 2
+          },
+          {
+            "t": "Hair Model",
+            "w": 2
+          },
+          {
+            "t": "Latter Property",
+            "w": 1
+          },
+          {
+            "t": "Single-view Hair Modeling",
+            "w": 1
+          },
+          {
+            "t": "Null",
+            "w": 1
+          },
+          {
+            "t": "Languages",
+            "w": 1
+          },
+          {
+            "t": "Interesting Portrait Manipulation Result",
+            "w": 1
+          },
+          {
+            "t": "Dynamic Simulation",
+            "w": 1
+          },
+          {
+            "t": "Portrait Manipulation",
+            "w": 1
+          },
+          {
+            "t": "Iterative Hair Generation Algorithm",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "5445475edabfae862da111ee",
+        "name": "Kun Zhou",
+        "name_zh": "周昆",
+        "avatar": "//static.aminer.org/upload/avatar/1040/1191/459/5445475edabfae862da111ee.jpeg",
+        "position": "",
+        "affiliation": "浙江大学计算机科学与技术学院",
+        "homepage": "http://person.zju.edu.cn/kunzhou",
+        "score": 28.704210526315787,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 6.2265,
+          "h_index": 41,
+          "num_citation": 6870,
+          "as": 0.0,
+          "diversity": 4.4953,
+          "new_star": 2.535,
+          "num_pubs": 282,
+          "activity": 14.521,
+          "g_index": 79
+        },
+        "tags": [
+          {
+            "t": "Ray Tracing",
+            "w": 1
+          },
+          {
+            "t": "Global Illumination",
+            "w": 1
+          },
+          {
+            "t": "Texture Synthesis",
+            "w": 1
+          },
+          {
+            "t": "Subdivision Surfaces",
+            "w": 1
+          },
+          {
+            "t": "Inverse Kinematics",
+            "w": 1
+          },
+          {
+            "t": "Soft Shadows",
+            "w": 1
+          },
+          {
+            "t": "Surface Reconstruction",
+            "w": 1
+          },
+          {
+            "t": "Image Retrieval",
+            "w": 1
+          },
+          {
+            "t": "Facial Animation",
+            "w": 1
+          },
+          {
+            "t": "Rendering System",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "53f7df43dabfae92b40ed4ee",
+        "name": "Sidney Fels",
+        "name_zh": "",
+        "avatar": "",
+        "position": "Professor",
+        "affiliation": "Dept. of Electrical and Computer Engineering University of British Columbia",
+        "homepage": "https://www.ece.ubc.ca/~ssfels/",
+        "score": 28.07157894736842,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 5.6347,
+          "h_index": 30,
+          "num_citation": 3116,
+          "as": 0.0,
+          "diversity": 3.9425,
+          "new_star": 1.5195,
+          "num_pubs": 204,
+          "activity": 27.1809,
+          "g_index": 48
+        },
+        "tags": [
+          {
+            "t": "Interface Design",
+            "w": 1
+          },
+          {
+            "t": "User Interfaces",
+            "w": 1
+          },
+          {
+            "t": "Gesture Recognition",
+            "w": 1
+          },
+          {
+            "t": "Multimodal Interaction",
+            "w": 1
+          },
+          {
+            "t": "Computer Vision",
+            "w": 1
+          },
+          {
+            "t": "Virtual Reality",
+            "w": 1
+          },
+          {
+            "t": "Graphical User Interfaces",
+            "w": 1
+          },
+          {
+            "t": "Ubiquitous Computing",
+            "w": 1
+          },
+          {
+            "t": "Augmented Reality",
+            "w": 1
+          },
+          {
+            "t": "Speech Synthesis",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "54088a23dabfae8faa64bed9",
+        "name": "Kenji Mase",
+        "name_zh": "",
+        "avatar": "//static.aminer.org/upload/avatar/52/494/1612/54088a23dabfae8faa64bed9.jpeg",
+        "position": "Professor",
+        "affiliation": "Graduate School of Information Science, Nagoya University",
+        "homepage": "http://mase.itc.nagoya-u.ac.jp/~mase/",
+        "score": 28.07157894736842,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 5.5606,
+          "h_index": 29,
+          "num_citation": 3191,
+          "as": 0.0,
+          "diversity": 4.0609,
+          "new_star": 0.8248,
+          "num_pubs": 211,
+          "activity": 5.405,
+          "g_index": 51
+        },
+        "tags": [
+          {
+            "t": "Ubiquitous Computing",
+            "w": 16
+          },
+          {
+            "t": "Interaction Corpus",
+            "w": 8
+          },
+          {
+            "t": "Visualization",
+            "w": 6
+          },
+          {
+            "t": "Infrared",
+            "w": 6
+          },
+          {
+            "t": "Prototypes",
+            "w": 6
+          },
+          {
+            "t": "Knowledge Sharing",
+            "w": 5
+          },
+          {
+            "t": "Mobile Computer",
+            "w": 5
+          },
+          {
+            "t": "Information Science",
+            "w": 5
+          },
+          {
+            "t": "Multimodal Interaction",
+            "w": 5
+          },
+          {
+            "t": "User Interfaces",
+            "w": 5
+          }
+        ]
+      },
+      {
+        "id": "562fe50445cedb339984c4f8",
+        "name": "Eli Shechtman",
+        "name_zh": "",
+        "avatar": "//static.aminer.org/upload/avatar/544/341/1510/562fe50445cedb339984c4f8.jpeg",
+        "position": "Researcher",
+        "affiliation": "Adobe Advanced Technology Labs",
+        "homepage": "http://www.wisdom.weizmann.ac.il/~elishe/",
+        "score": 27.865263157894738,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 4.043,
+          "h_index": 26,
+          "num_citation": 9461,
+          "as": 0.0,
+          "diversity": 2.3669,
+          "new_star": 3.7592,
+          "num_pubs": 44,
+          "activity": 39.5094,
+          "g_index": 44
+        },
+        "tags": [
+          {
+            "t": "Space Time",
+            "w": 8
+          },
+          {
+            "t": "Video Sequence",
+            "w": 6
+          },
+          {
+            "t": "Image Segmentation",
+            "w": 5
+          },
+          {
+            "t": "Feature Extraction",
+            "w": 4
+          },
+          {
+            "t": "Visualization",
+            "w": 3
+          },
+          {
+            "t": "Image Texture",
+            "w": 3
+          },
+          {
+            "t": "Object Detection",
+            "w": 3
+          },
+          {
+            "t": "Nearest Neighbor",
+            "w": 3
+          },
+          {
+            "t": "Motion Estimation",
+            "w": 3
+          },
+          {
+            "t": "Field Of View",
+            "w": 3
+          }
+        ]
+      },
+      {
+        "id": "53f55f1fdabfae534af8045b",
+        "name": "Bernd Girod",
+        "name_zh": "",
+        "avatar": "//static.aminer.org/picture/02901/Bernd_Girod_1320331521206.JPG",
+        "position": "Professor",
+        "affiliation": "Stanford University",
+        "homepage": "http://www.stanford.edu/~bgirod/",
+        "score": 27.006315789473682,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 5.5909,
+          "h_index": 66,
+          "num_citation": 20948,
+          "as": 0.0,
+          "diversity": 3.4207,
+          "new_star": 17.4079,
+          "num_pubs": 475,
+          "activity": 47.5708,
+          "g_index": 129
+        },
+        "tags": [
+          {
+            "t": "Error Concealment",
+            "w": 1
+          },
+          {
+            "t": "Data Compression",
+            "w": 1
+          },
+          {
+            "t": "Video Compression",
+            "w": 1
+          },
+          {
+            "t": "Video Compression Standards",
+            "w": 1
+          },
+          {
+            "t": "Wireless Channel",
+            "w": 1
+          },
+          {
+            "t": "Motion Compensation",
+            "w": 1
+          },
+          {
+            "t": "Scalable Video Coding",
+            "w": 1
+          },
+          {
+            "t": "Image Compression",
+            "w": 1
+          },
+          {
+            "t": "Low Latency",
+            "w": 1
+          },
+          {
+            "t": "Video Streams",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "53f47340dabfaefedbba16f8",
+        "name": "P. Erhan Eren",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": "",
+        "homepage": "",
+        "score": 26.733684210526313,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 2.8903,
+          "h_index": 3,
+          "num_citation": 177,
+          "as": 0.0,
+          "diversity": 2.0837,
+          "new_star": 2.0812,
+          "num_pubs": 15,
+          "activity": 14.6223,
+          "g_index": 13
+        },
+        "tags": [
+          {
+            "t": "Image Processing",
+            "w": 3
+          },
+          {
+            "t": "Ubiquitous Computing",
+            "w": 3
+          },
+          {
+            "t": "Assisted Living",
+            "w": 3
+          },
+          {
+            "t": "Image Texture",
+            "w": 2
+          },
+          {
+            "t": "Mobile Communication",
+            "w": 2
+          },
+          {
+            "t": "Computer Graphics",
+            "w": 2
+          },
+          {
+            "t": "Consumer Decision Process",
+            "w": 2
+          },
+          {
+            "t": "Message Passing",
+            "w": 2
+          },
+          {
+            "t": "Graphical Model",
+            "w": 2
+          },
+          {
+            "t": "Layout",
+            "w": 2
+          }
+        ]
+      },
+      {
+        "id": "53f436d8dabfaee02accdd2c",
+        "name": "M. Brand",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 26.669999999999998,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 0.0,
+          "h_index": 1,
+          "num_citation": 63,
+          "as": 0.0,
+          "diversity": 0.0,
+          "new_star": 0.0,
+          "num_pubs": 1,
+          "activity": 0.0,
+          "g_index": 1
+        },
+        "tags": [
+          {
+            "t": "Causal Constraint",
+            "w": 1
+          },
+          {
+            "t": "Understanding Manipulation",
+            "w": 1
+          },
+          {
+            "t": "Causal Evolution",
+            "w": 1
+          },
+          {
+            "t": "Manipulation Task",
+            "w": 1
+          },
+          {
+            "t": "Automated Editing",
+            "w": 1
+          },
+          {
+            "t": "Psychologically-based Causal Constraint",
+            "w": 1
+          },
+          {
+            "t": "Coherent Account",
+            "w": 1
+          },
+          {
+            "t": "Causal Semantics",
+            "w": 1
+          },
+          {
+            "t": "Small Causal Model",
+            "w": 1
+          },
+          {
+            "t": "Cartoon Summary",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "53f42fc9dabfaec09f132a21",
+        "name": "Jianbing Shen",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": "",
+        "homepage": "",
+        "score": 26.472105263157893,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 4.5849,
+          "h_index": 15,
+          "num_citation": 680,
+          "as": 0.0,
+          "diversity": 3.7444,
+          "new_star": 79.8308,
+          "num_pubs": 78,
+          "activity": 107.5353,
+          "g_index": 24
+        },
+        "tags": [
+          {
+            "t": "Energy Optimization",
+            "w": 9
+          },
+          {
+            "t": "Optimization",
+            "w": 6
+          },
+          {
+            "t": "Image Segmentation",
+            "w": 5
+          },
+          {
+            "t": "Bilateral Filtering",
+            "w": 5
+          },
+          {
+            "t": "Tone Mapping",
+            "w": 5
+          },
+          {
+            "t": "Image Colour Analysis",
+            "w": 4
+          },
+          {
+            "t": "Image Texture",
+            "w": 4
+          },
+          {
+            "t": "Optimisation",
+            "w": 4
+          },
+          {
+            "t": "Graphics Hardware",
+            "w": 4
+          },
+          {
+            "t": "Mathematical Model",
+            "w": 4
+          }
+        ]
+      },
+      {
+        "id": "53f43090dabfaedce54eda13",
+        "name": "Yongwei Nie",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 26.472105263157893,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 3.3672,
+          "h_index": 4,
+          "num_citation": 53,
+          "as": 0.0,
+          "diversity": 2.2055,
+          "new_star": 1.5419,
+          "num_pubs": 14,
+          "activity": 2.7248,
+          "g_index": 6
+        },
+        "tags": [
+          {
+            "t": "Underlying Texture Distortion",
+            "w": 2
+          },
+          {
+            "t": "Video Retexturing",
+            "w": 2
+          },
+          {
+            "t": "Feature-guided Texture Distortion Optimization",
+            "w": 2
+          },
+          {
+            "t": "Elite Texture Distortion",
+            "w": 2
+          },
+          {
+            "t": "Similar Underlying Texture Distortion",
+            "w": 2
+          },
+          {
+            "t": "Distortion Process",
+            "w": 1
+          },
+          {
+            "t": "Accelerated Joint Bilateral Filter",
+            "w": 1
+          },
+          {
+            "t": "Surveillance",
+            "w": 1
+          },
+          {
+            "t": "Our Method Achieves Better Results. Keywords Texture Synthesis · Global Optimization · Image Upsampling · Bilateral Filter",
+            "w": 1
+          },
+          {
+            "t": "By This Demonstrating That With Low Computational And Mem- Ory Costs",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "53f42672dabfaeb1a7b5579a",
+        "name": "Frédo Durand",
+        "name_zh": "",
+        "avatar": "//static.aminer.org/upload/avatar/1918/30/1849/53f42672dabfaeb1a7b5579a.jpeg",
+        "position": "Professor of Computer Science and Engineering",
+        "affiliation": "Massachusetts Institute of Technology CSAIL EECS",
+        "homepage": "http://people.csail.mit.edu/fredo/",
+        "score": 26.401052631578946,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 5.438,
+          "h_index": 66,
+          "num_citation": 19381,
+          "as": 0.0,
+          "diversity": 2.9759,
+          "new_star": 65.5443,
+          "num_pubs": 185,
+          "activity": 101.2362,
+          "g_index": 138
+        },
+        "tags": [
+          {
+            "t": "Global Illumination",
+            "w": 15
+          },
+          {
+            "t": "Computational Photography",
+            "w": 13
+          },
+          {
+            "t": "Image Processing",
+            "w": 10
+          },
+          {
+            "t": "Bilateral Filtering",
+            "w": 8
+          },
+          {
+            "t": "Frequency Analysis",
+            "w": 8
+          },
+          {
+            "t": "Bilateral Filter",
+            "w": 7
+          },
+          {
+            "t": "Data Structure",
+            "w": 7
+          },
+          {
+            "t": "Computer Graphic",
+            "w": 7
+          },
+          {
+            "t": "Visibility Complex",
+            "w": 6
+          },
+          {
+            "t": "Graphics Hardware",
+            "w": 6
+          }
+        ]
+      },
+      {
+        "id": "53f469b1dabfaeecd6a19a32",
+        "name": "Nuno Roma",
+        "name_zh": "",
+        "avatar": "",
+        "position": "Assistant Professor",
+        "affiliation": "the Department of Computer Science and Engineering (DEI) at Instituto Superior Técnico (IST)",
+        "homepage": "http://sips.inesc-id.pt/~nfvr/",
+        "score": 26.284210526315785,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 3.8501,
+          "h_index": 9,
+          "num_citation": 315,
+          "as": 0.0,
+          "diversity": 3.4573,
+          "new_star": 15.0494,
+          "num_pubs": 60,
+          "activity": 28.0519,
+          "g_index": 14
+        },
+        "tags": [
+          {
+            "t": "Motion Estimation",
+            "w": 1
+          },
+          {
+            "t": "Video Processing",
+            "w": 1
+          },
+          {
+            "t": "Video Encoding",
+            "w": 1
+          },
+          {
+            "t": "Hardware Accelerator",
+            "w": 1
+          },
+          {
+            "t": "Ip Core",
+            "w": 1
+          },
+          {
+            "t": "Hardware Architecture",
+            "w": 1
+          },
+          {
+            "t": "Transform Coding",
+            "w": 1
+          },
+          {
+            "t": "Advanced Video Coding",
+            "w": 1
+          },
+          {
+            "t": "Video Codecs",
+            "w": 1
+          },
+          {
+            "t": "Low Memory",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "543112b3dabfae8f29129e26",
+        "name": "Leonel Sousa",
+        "name_zh": "",
+        "avatar": "//static.aminer.org/upload/avatar/1695/341/1792/543112b3dabfae8f29129e26.jpeg",
+        "position": "Full Professor",
+        "affiliation": "EURASIP Journal on Embedded Systems - a SpringerOpen Journal, IST",
+        "homepage": "https://www.linkedin.com/in/leonels",
+        "score": 26.284210526315785,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 5.1532,
+          "h_index": 24,
+          "num_citation": 1937,
+          "as": 0.0,
+          "diversity": 4.3704,
+          "new_star": 15.9259,
+          "num_pubs": 184,
+          "activity": 29.7438,
+          "g_index": 37
+        },
+        "tags": [
+          {
+            "t": "Parallel Processing",
+            "w": 1
+          },
+          {
+            "t": "Video Processing",
+            "w": 1
+          },
+          {
+            "t": "Task Scheduling",
+            "w": 1
+          },
+          {
+            "t": "Motion Estimation",
+            "w": 1
+          },
+          {
+            "t": "Message Passing Interface",
+            "w": 1
+          },
+          {
+            "t": "Ip Core",
+            "w": 1
+          },
+          {
+            "t": "Image Processing",
+            "w": 1
+          },
+          {
+            "t": "Cluster Computing",
+            "w": 1
+          },
+          {
+            "t": "Reconfigurable Computing",
+            "w": 1
+          },
+          {
+            "t": "Computer Architecture",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "54480773dabfae87b7dc6339",
+        "name": "Bo Shen",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 25.634736842105262,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 0.6931,
+          "h_index": 1,
+          "num_citation": 15,
+          "as": 0.0,
+          "diversity": 0.0,
+          "new_star": 0.0,
+          "num_pubs": 1,
+          "activity": 0.0,
+          "g_index": 1
+        },
+        "tags": [
+          {
+            "t": "M-Jpeg",
+            "w": 1
+          },
+          {
+            "t": "Mpeg",
+            "w": 1
+          },
+          {
+            "t": "Visual Information System",
+            "w": 1
+          },
+          {
+            "t": "Transform-Compressed Image",
+            "w": 1
+          },
+          {
+            "t": "Geometric Transform",
+            "w": 1
+          },
+          {
+            "t": "Multimedia",
+            "w": 1
+          },
+          {
+            "t": "Jpeg",
+            "w": 1
+          },
+          {
+            "t": "Image/Video Manipulation",
+            "w": 1
+          },
+          {
+            "t": "Compressed Domain",
+            "w": 1
+          },
+          {
+            "t": "Block-Based Manipulation",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "53f42806dabfaeb1a7b5d0ee",
+        "name": "Patrick Bas",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 25.465789473684207,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 0.6931,
+          "h_index": 1,
+          "num_citation": 50,
+          "as": 0.0,
+          "diversity": 0.0,
+          "new_star": 0.0,
+          "num_pubs": 1,
+          "activity": 0.0,
+          "g_index": 1
+        },
+        "tags": [
+          {
+            "t": "Visualization",
+            "w": 1
+          },
+          {
+            "t": "Correlation",
+            "w": 1
+          },
+          {
+            "t": "Robustness",
+            "w": 1
+          },
+          {
+            "t": "Object Orientation",
+            "w": 1
+          },
+          {
+            "t": "Video Compression",
+            "w": 1
+          },
+          {
+            "t": "Motion Pictures",
+            "w": 1
+          },
+          {
+            "t": "Shape",
+            "w": 1
+          },
+          {
+            "t": "Image Resolution",
+            "w": 1
+          },
+          {
+            "t": "Predictive Models",
+            "w": 1
+          },
+          {
+            "t": "Cost Function",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "5486059cdabfaed7b5fa26be",
+        "name": "Benoit M. Macq",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 25.465789473684207,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 4.9487,
+          "h_index": 18,
+          "num_citation": 1176,
+          "as": 0.0,
+          "diversity": 3.2051,
+          "new_star": 10.4249,
+          "num_pubs": 77,
+          "activity": 11.3963,
+          "g_index": 31
+        },
+        "tags": [
+          {
+            "t": "Interaction Techniques",
+            "w": 1
+          },
+          {
+            "t": "Signal Processing",
+            "w": 1
+          },
+          {
+            "t": "Finite Elements",
+            "w": 1
+          },
+          {
+            "t": "Image Descriptors",
+            "w": 1
+          },
+          {
+            "t": "User Interfaces",
+            "w": 1
+          },
+          {
+            "t": "Active Contour",
+            "w": 1
+          },
+          {
+            "t": "Linear Phase",
+            "w": 1
+          },
+          {
+            "t": "Discrete Tomography",
+            "w": 1
+          },
+          {
+            "t": "Natural Language",
+            "w": 1
+          },
+          {
+            "t": "Triangle Mesh",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "53f45cfedabfaefedbb67303",
+        "name": "Byungsung Lee",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": "Kyonggi University, Suwon, South Korea",
+        "homepage": "",
+        "score": 24.98,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 2.0794,
+          "h_index": 4,
+          "num_citation": 85,
+          "as": 0.0,
+          "diversity": 1.6094,
+          "new_star": 0.0,
+          "num_pubs": 5,
+          "activity": 0.0,
+          "g_index": 5
+        },
+        "tags": [
+          {
+            "t": "Virtual Object",
+            "w": 2
+          },
+          {
+            "t": "Proposed Hand Mouse",
+            "w": 2
+          },
+          {
+            "t": "Marker-Less System",
+            "w": 2
+          },
+          {
+            "t": "Ar Objects Dynamically",
+            "w": 2
+          },
+          {
+            "t": "Vision-Based Hand Control Interface",
+            "w": 2
+          },
+          {
+            "t": "Marker-Less Ar System",
+            "w": 2
+          },
+          {
+            "t": "Hand Command Initiation",
+            "w": 2
+          },
+          {
+            "t": "Marker-Less Ar System Dynamically",
+            "w": 2
+          },
+          {
+            "t": "Hand Shape Detection",
+            "w": 2
+          },
+          {
+            "t": "Facial Expression",
+            "w": 2
+          }
+        ]
+      },
+      {
+        "id": "53f4c857dabfaee57d77d066",
+        "name": "Junchul Chun",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": "Michigan State Univ., East Lansing, MI\nNational Institutes of Health | U.S. Dept. of Health and Human Services",
+        "homepage": "http://archive.nlm.nih.gov/conf/cbms01/chun1348.php",
+        "score": 24.98,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 3.258,
+          "h_index": 7,
+          "num_citation": 148,
+          "as": 0.0,
+          "diversity": 2.9034,
+          "new_star": 0.0,
+          "num_pubs": 24,
+          "activity": 0.0,
+          "g_index": 11
+        },
+        "tags": [
+          {
+            "t": "Facial Animation",
+            "w": 1
+          },
+          {
+            "t": "Image Retrieval",
+            "w": 1
+          },
+          {
+            "t": "Virtual Object",
+            "w": 1
+          },
+          {
+            "t": "Head Tracking",
+            "w": 1
+          },
+          {
+            "t": "Image Segmentation",
+            "w": 1
+          },
+          {
+            "t": "Motion Tracking",
+            "w": 1
+          },
+          {
+            "t": "Face Detection",
+            "w": 1
+          },
+          {
+            "t": "Stereo Images",
+            "w": 1
+          },
+          {
+            "t": "Facial Expression",
+            "w": 1
+          },
+          {
+            "t": "Optical Flow",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "53f56dc6dabfae72d3f8045b",
+        "name": "Alan F. Smeaton",
+        "name_zh": "",
+        "avatar": "//static.aminer.org/upload/avatar/774/1213/2013/53f56dc6dabfae72d3f8045b.jpeg",
+        "position": "Professor",
+        "affiliation": "INSIGHT Centre for Data Analytics,Dublin City University",
+        "homepage": "http://www.computing.dcu.ie/~asmeaton/asmeaton.html",
+        "score": 24.70736842105263,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 6.8156,
+          "h_index": 56,
+          "num_citation": 13044,
+          "as": 0.0,
+          "diversity": 3.9372,
+          "new_star": 28.777,
+          "num_pubs": 612,
+          "activity": 45.8441,
+          "g_index": 100
+        },
+        "tags": [
+          {
+            "t": "Information Retrieval",
+            "w": 229
+          },
+          {
+            "t": "Image Processing",
+            "w": 74
+          },
+          {
+            "t": "Lifelog",
+            "w": 72
+          },
+          {
+            "t": "Machine Learning",
+            "w": 34
+          },
+          {
+            "t": "Information Technology",
+            "w": 32
+          },
+          {
+            "t": "Indexation",
+            "w": 22
+          },
+          {
+            "t": "Visualization",
+            "w": 19
+          },
+          {
+            "t": "Lifelogging",
+            "w": 18
+          },
+          {
+            "t": "Artificial Intelligence",
+            "w": 17
+          },
+          {
+            "t": "Video Retrieval",
+            "w": 17
+          }
+        ]
+      },
+      {
+        "id": "53f43ffedabfaedf435bac3e",
+        "name": "Douglas W. Cunningham",
+        "name_zh": "",
+        "avatar": "",
+        "position": "professor",
+        "affiliation": "Computer Graphics at the Brandenburgische Technische Universität Cottbus (external link).",
+        "homepage": "http://www.kyb.mpg.de/~dwc",
+        "score": 24.08894736842105,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 4.2046,
+          "h_index": 17,
+          "num_citation": 870,
+          "as": 0.0,
+          "diversity": 2.9602,
+          "new_star": 0.0,
+          "num_pubs": 48,
+          "activity": 1.3456,
+          "g_index": 29
+        },
+        "tags": [
+          {
+            "t": "Facial Expression",
+            "w": 11
+          },
+          {
+            "t": "Facial Expressions",
+            "w": 10
+          },
+          {
+            "t": "Computer Graphics",
+            "w": 8
+          },
+          {
+            "t": "Facial Animation",
+            "w": 8
+          },
+          {
+            "t": "Psychophysics",
+            "w": 8
+          },
+          {
+            "t": "Computer Graphic",
+            "w": 6
+          },
+          {
+            "t": "Virtual Reality",
+            "w": 3
+          },
+          {
+            "t": "Human Perception",
+            "w": 3
+          },
+          {
+            "t": "Facial Motion",
+            "w": 3
+          },
+          {
+            "t": "Conversational Facial Expression",
+            "w": 3
+          }
+        ]
+      },
+      {
+        "id": "53f45536dabfaee43ecb865c",
+        "name": "Christian Wallraven",
+        "name_zh": "",
+        "avatar": "",
+        "position": "Project Leader",
+        "affiliation": "MPI for Biological Cybernetics\nDept. Bülthoff",
+        "homepage": "http://www.kyb.mpg.de/~walli",
+        "score": 24.08894736842105,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 5.0562,
+          "h_index": 26,
+          "num_citation": 2787,
+          "as": 0.0,
+          "diversity": 3.5206,
+          "new_star": 0.0156,
+          "num_pubs": 89,
+          "activity": 2.1935,
+          "g_index": 51
+        },
+        "tags": [
+          {
+            "t": "Object Recognition",
+            "w": 1
+          },
+          {
+            "t": "Face Recognition",
+            "w": 1
+          },
+          {
+            "t": "Computer Vision",
+            "w": 1
+          },
+          {
+            "t": "Human Perception",
+            "w": 1
+          },
+          {
+            "t": "Facial Expressions",
+            "w": 1
+          },
+          {
+            "t": "Computational Modeling",
+            "w": 1
+          },
+          {
+            "t": "Virtual Reality",
+            "w": 1
+          },
+          {
+            "t": "Image Classification",
+            "w": 1
+          },
+          {
+            "t": "Facial Animation",
+            "w": 1
+          },
+          {
+            "t": "Face Perception",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "53f476ecdabfaeee22a919b4",
+        "name": "Mario Kleiner",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": "Max Planck Institute for Biological Cybernetics, Tübingen, Germany",
+        "homepage": "",
+        "score": 24.08894736842105,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 3.8286,
+          "h_index": 9,
+          "num_citation": 407,
+          "as": 0.0,
+          "diversity": 1.6052,
+          "new_star": 0.0,
+          "num_pubs": 13,
+          "activity": 2.5648,
+          "g_index": 13
+        },
+        "tags": [
+          {
+            "t": "Facial Animation",
+            "w": 5
+          },
+          {
+            "t": "Human Perception",
+            "w": 4
+          },
+          {
+            "t": "Facial Motion",
+            "w": 4
+          },
+          {
+            "t": "Computer Graphics",
+            "w": 3
+          },
+          {
+            "t": "Altered Video Sequence",
+            "w": 2
+          },
+          {
+            "t": "Different Expression",
+            "w": 2
+          },
+          {
+            "t": "Facial Expressions",
+            "w": 2
+          },
+          {
+            "t": "Facial Expression",
+            "w": 2
+          },
+          {
+            "t": "Single Facial Area",
+            "w": 2
+          },
+          {
+            "t": "Psychophysics",
+            "w": 2
+          }
+        ]
+      },
+      {
+        "id": "53f55dffdabfae51edf8045b",
+        "name": "Heinrich H. Bülthoff",
+        "name_zh": "",
+        "avatar": "//static.aminer.org/upload/avatar/1387/1965/1247/53f55dffdabfae51edf8045b.jpeg",
+        "position": "Director",
+        "affiliation": "MPI for Biological Cybernetics\r\nDept. Bülthoff",
+        "homepage": "http://www.kyb.mpg.de/~hhb",
+        "score": 24.08894736842105,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 6.2595,
+          "h_index": 54,
+          "num_citation": 12237,
+          "as": 0.0,
+          "diversity": 4.2715,
+          "new_star": 35.2126,
+          "num_pubs": 335,
+          "activity": 97.4807,
+          "g_index": 100
+        },
+        "tags": [
+          {
+            "t": "Virtual Reality",
+            "w": 33
+          },
+          {
+            "t": "Psychophysics",
+            "w": 23
+          },
+          {
+            "t": "Virtual Environment",
+            "w": 20
+          },
+          {
+            "t": "Three Dimensional",
+            "w": 17
+          },
+          {
+            "t": "Object Recognition",
+            "w": 15
+          },
+          {
+            "t": "Motion Perception",
+            "w": 15
+          },
+          {
+            "t": "Visual Perception",
+            "w": 14
+          },
+          {
+            "t": "Mobile Robots",
+            "w": 12
+          },
+          {
+            "t": "Perception",
+            "w": 12
+          },
+          {
+            "t": "Computer Graphic",
+            "w": 12
+          }
+        ]
+      },
+      {
+        "id": "53f42c8edabfaec22ba0b357",
+        "name": "Ujjaval Desai",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 24.047368421052628,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 1.0986,
+          "h_index": 1,
+          "num_citation": 38,
+          "as": 0.0,
+          "diversity": 0.0,
+          "new_star": 0.0,
+          "num_pubs": 1,
+          "activity": 0.0,
+          "g_index": 1
+        },
+        "tags": []
+      },
+      {
+        "id": "5440ef6bdabfae805a70a9e7",
+        "name": "Wayne Luk",
+        "name_zh": "",
+        "avatar": "//static.aminer.org/upload/avatar/653/1304/460/5440ef6bdabfae805a70a9e7.jpeg",
+        "position": "Professor",
+        "affiliation": "Department of Computing|Imperial College London",
+        "homepage": "https://www.doc.ic.ac.uk/~wl/",
+        "score": 23.838421052631578,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 6.1944,
+          "h_index": 48,
+          "num_citation": 7574,
+          "as": 0.0,
+          "diversity": 3.4018,
+          "new_star": 9.5771,
+          "num_pubs": 404,
+          "activity": 25.9162,
+          "g_index": 69
+        },
+        "tags": [
+          {
+            "t": "Design Space Exploration",
+            "w": 1
+          },
+          {
+            "t": "Heuristic Search",
+            "w": 1
+          },
+          {
+            "t": "Hardware Architecture",
+            "w": 1
+          },
+          {
+            "t": "Formal Verification",
+            "w": 1
+          },
+          {
+            "t": "Heterogeneous Computing",
+            "w": 1
+          },
+          {
+            "t": "Random Number Generators",
+            "w": 1
+          },
+          {
+            "t": "Random Number Generation",
+            "w": 1
+          },
+          {
+            "t": "Parallel Processor",
+            "w": 1
+          },
+          {
+            "t": "Parameter Estimation",
+            "w": 1
+          },
+          {
+            "t": "Dimensionality Reduction",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "548677d3dabfae8a11fb32ba",
+        "name": "Peter Y. K. Cheung",
+        "name_zh": "",
+        "avatar": "",
+        "position": "Professor/Head",
+        "affiliation": "Department of Electrical and Electronic Engineering",
+        "homepage": "http://www.imperial.ac.uk/people/p.cheung",
+        "score": 23.838421052631578,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 5.1416,
+          "h_index": 34,
+          "num_citation": 3829,
+          "as": 0.0,
+          "diversity": 3.2326,
+          "new_star": 3.7027,
+          "num_pubs": 220,
+          "activity": 7.8205,
+          "g_index": 54
+        },
+        "tags": [
+          {
+            "t": "Design Space Exploration",
+            "w": 1
+          },
+          {
+            "t": "Heuristic Search",
+            "w": 1
+          },
+          {
+            "t": "Fault Tolerance",
+            "w": 1
+          },
+          {
+            "t": "Fault Tolerant",
+            "w": 1
+          },
+          {
+            "t": "Hardware Architecture",
+            "w": 1
+          },
+          {
+            "t": "Fault Diagnosis",
+            "w": 1
+          },
+          {
+            "t": "Digital Signal Processing",
+            "w": 1
+          },
+          {
+            "t": "Video Processing",
+            "w": 1
+          },
+          {
+            "t": "Image Processing",
+            "w": 1
+          },
+          {
+            "t": "Image Registration",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "53f44adadabfaedd74e00aa2",
+        "name": "Frank Hartung",
+        "name_zh": "",
+        "avatar": "",
+        "position": "I have left University of Erlangen after finishing my PhD",
+        "affiliation": "Institute of Plant Genetics and Crop Plant Research",
+        "homepage": "http://www.frank-hartung.com/FrankHartung.html",
+        "score": 22.389473684210525,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 4.5217,
+          "h_index": 19,
+          "num_citation": 4496,
+          "as": 0.0,
+          "diversity": 3.0933,
+          "new_star": 0.0,
+          "num_pubs": 39,
+          "activity": 0.0,
+          "g_index": 39
+        },
+        "tags": [
+          {
+            "t": "Error Concealment",
+            "w": 1
+          },
+          {
+            "t": "Video Compression",
+            "w": 1
+          },
+          {
+            "t": "Compressed Video",
+            "w": 1
+          },
+          {
+            "t": "Video Coding",
+            "w": 1
+          },
+          {
+            "t": "Http Streaming",
+            "w": 1
+          },
+          {
+            "t": "Digital Watermarking",
+            "w": 1
+          },
+          {
+            "t": "Transmission Rate",
+            "w": 1
+          },
+          {
+            "t": "Channel Model",
+            "w": 1
+          },
+          {
+            "t": "Ambient Networks",
+            "w": 1
+          },
+          {
+            "t": "Homologous Recombination",
+            "w": 1
+          }
+        ]
+      }
+    ],
+    "publications": [
+      {
+        "id": "53e9bdcdb7602d9704a7df8a",
+        "title": "Manipulation and compositing of MC-DCT compressed video",
+        "pdf": "//static.aminer.org/pdf/PDF/000/991/396/manipulation_and_compositing_of_mc_dct_compressed_video.pdf",
+        "score": 223.52455139160156,
+        "authors": [
+          {
+            "id": "53f49da0dabfaebfa777b6e1",
+            "name": "Shih-Fu Chang"
+          },
+          {
+            "id": "5489319fdabfae9b40134833",
+            "name": "David G. Messerschmitt"
+          }
+        ]
+      },
+      {
+        "id": "53e9b1aab7602d9703c35ee8",
+        "title": "Compressed-domain techniques for image/video indexing and manipulation",
+        "pdf": "//static.aminer.org/pdf/PDF/000/316/776/compressed_domain_techniques_for_image_video_indexing_and_manipulation.pdf",
+        "score": 178.3968505859375,
+        "authors": [
+          {
+            "id": "53f49da0dabfaebfa777b6e1",
+            "name": "Shih-Fu Chang"
+          }
+        ]
+      },
+      {
+        "id": "53e9b903b7602d97044e66e9",
+        "title": "High-quality video view interpolation using a layered representation",
+        "pdf": "",
+        "score": 160.48233032226562,
+        "authors": [
+          {
+            "id": "53f43ad0dabfaee43ec5a9b3",
+            "name": "C. Lawrence Zitnick"
+          },
+          {
+            "id": "53f42c35dabfaeb22f3f66f4",
+            "name": "Sing Bing Kang"
+          },
+          {
+            "id": "53f440a6dabfaedd74ddd558",
+            "name": "Matthew Uyttendaele"
+          },
+          {
+            "id": "53f45a3cdabfaedd74e3c9f4",
+            "name": "Simon A. J. Winder"
+          },
+          {
+            "id": "53f4659cdabfaedf43642cc9",
+            "name": "Richard Szeliski"
+          }
+        ]
+      },
+      {
+        "id": "557e4cb7d19faf961d168a6d",
+        "title": "Algorithms for manipulating compressed images",
+        "pdf": "",
+        "score": 136.9139404296875,
+        "authors": [
+          {
+            "id": "562e11d945cedb339904ed84",
+            "name": "Smith, B.C."
+          },
+          {
+            "id": "562e11d945cedb339904ed87",
+            "name": "Rowe, L.A."
+          }
+        ]
+      },
+      {
+        "id": "53e9a4c7b7602d9702de89ed",
+        "title": "Content-Based Video Indexing and Retrieval",
+        "pdf": "",
+        "score": 120.44712829589844,
+        "authors": [
+          {
+            "id": "54885669dabfae8a11fb4231",
+            "name": "Stephen W. Smoliar"
+          },
+          {
+            "id": "53f4384cdabfaeb22f4830d6",
+            "name": "HongJiang Zhang"
+          }
+        ]
+      },
+      {
+        "id": "53e9b641b7602d970419b1f1",
+        "title": "Segmentation-based video coding system allowing the manipulation of objects",
+        "pdf": "",
+        "score": 119.08721160888672,
+        "authors": [
+          {
+            "id": "53f46fdadabfaeee22a76ef9",
+            "name": "P. Salembier"
+          },
+          {
+            "id": "54059370dabfae8faa5e42a1",
+            "name": "F. Marques"
+          },
+          {
+            "id": "53f4464ddabfaeb22f4bf3a8",
+            "name": "M. Pardas"
+          },
+          {
+            "id": "53f44b89dabfaee43ec925b5",
+            "name": "J. R. Morros"
+          },
+          {
+            "id": "53f461b9dabfaee0d9c1c6dc",
+            "name": "I. Corset"
+          },
+          {
+            "id": "53f45d79dabfaee4dc82c1f3",
+            "name": "S. Jeannin"
+          },
+          {
+            "id": "53f4426cdabfaedd74de0ae8",
+            "name": "L. Bouchard"
+          },
+          {
+            "id": "53f43194dabfaeb1a7bc0ae3",
+            "name": "F. Meyer"
+          },
+          {
+            "id": "53f44fa8dabfaee1c0b11eac",
+            "name": "B. Marcotegui"
+          }
+        ]
+      },
+      {
+        "id": "53e99af7b7602d9702384535",
+        "title": "Understanding manipulation in video",
+        "pdf": "",
+        "score": 87.78646087646484,
+        "authors": [
+          {
+            "id": "53f436d8dabfaee02accdd2c",
+            "name": "M. Brand"
+          }
+        ]
+      },
+      {
+        "id": "53e9aa5cb7602d97033c9b53",
+        "title": "Digital watermarking of text, image, and video documents",
+        "pdf": "",
+        "score": 85.37349700927734,
+        "authors": [
+          {
+            "id": "53f4545bdabfaedf43603e9e",
+            "name": "Jonathan K. Su"
+          },
+          {
+            "id": "53f44adadabfaedd74e00aa2",
+            "name": "Frank Hartung"
+          },
+          {
+            "id": "53f55f1fdabfae534af8045b",
+            "name": "Bernd Girod"
+          }
+        ]
+      },
+      {
+        "id": "53e9b24db7602d9703ceba35",
+        "title": "Motion Picture Restoration: Digital Algorithms for Artefact Suppression in Degraded Motion Picture Film and Video",
+        "pdf": "",
+        "score": 84.20663452148438,
+        "authors": [
+          {
+            "id": "5440c534dabfae805a6f4952",
+            "name": "Anil C. Kokaram"
+          }
+        ]
+      },
+      {
+        "id": "53e9ace8b7602d97036c35a1",
+        "title": "Efficient representations of video sequences and their applications",
+        "pdf": "",
+        "score": 81.18626403808594,
+        "authors": [
+          {
+            "id": "53f49d4edabfaec0e0f8045b",
+            "name": "Michal Irani"
+          },
+          {
+            "id": "54406eaadabfae805a6bd3ad",
+            "name": "P. Anandan"
+          },
+          {
+            "id": "53f46468dabfaee02ad8c57f",
+            "name": "Jim Bergen"
+          },
+          {
+            "id": "54405e5cdabfae805a6b51c9",
+            "name": "Rakesh Kumar"
+          },
+          {
+            "id": "53f80899dabfae92b4102ba8",
+            "name": "Steve Hsu"
+          }
+        ]
+      },
+      {
+        "id": "53e9b77cb7602d97043221d4",
+        "title": "A new video-object watermarking scheme robust to object manipulation.",
+        "pdf": "//static.aminer.org/pdf/PDF/000/316/322/a_new_video_object_watermarking_scheme_robust_to_object_manipulation.pdf",
+        "score": 79.18273162841797,
+        "authors": [
+          {
+            "id": "53f42806dabfaeb1a7b5d0ee",
+            "name": "Patrick Bas"
+          },
+          {
+            "id": "5486059cdabfaed7b5fa26be",
+            "name": "Benoit M. Macq"
+          }
+        ]
+      },
+      {
+        "id": "53e9b844b7602d9704407fc3",
+        "title": "Dynamic hair manipulation in images and videos",
+        "pdf": "",
+        "score": 76.25711822509766,
+        "authors": [
+          {
+            "id": "53f45a50dabfaefedbb5e7f3",
+            "name": "Menglei Chai"
+          },
+          {
+            "id": "53f4272adabfaec09f0d7553",
+            "name": "Lvdi Wang"
+          },
+          {
+            "id": "53f44885dabfaee1c0af54a5",
+            "name": "Yanlin Weng"
+          },
+          {
+            "id": "53f4442edabfaefedbb0c628",
+            "name": "Xiaogang Jin"
+          },
+          {
+            "id": "5445475edabfae862da111ee",
+            "name": "Kun Zhou"
+          }
+        ]
+      },
+      {
+        "id": "53e9b38fb7602d9703e72f19",
+        "title": "The TUM Kitchen Data Set of Everyday Manipulation Activities for Motion Tracking and Action Recognition",
+        "pdf": "",
+        "score": 71.85198974609375,
+        "authors": [
+          {
+            "id": "53f42ef7dabfaec09f128cb8",
+            "name": "Moritz Tenorth"
+          },
+          {
+            "id": "53f42f54dabfaeb1a7ba4038",
+            "name": "Jan Bandouch"
+          },
+          {
+            "id": "5434c911dabfaebba58657fe",
+            "name": "Michael Beetz"
+          }
+        ]
+      },
+      {
+        "id": "53e9a0eeb7602d97029daf30",
+        "title": "Light-years from Lena: video and image libraries of the future",
+        "pdf": "//static.aminer.org/pdf/PDF/000/320/482/light_years_from_lena_video_and_image_libraries_of_the.pdf",
+        "score": 71.84514617919922,
+        "authors": [
+          {
+            "id": "53f43399dabfaec09f1614e4",
+            "name": "R. W. Picard"
+          }
+        ]
+      },
+      {
+        "id": "53e9bbcfb7602d970481ac37",
+        "title": "Retargeting images and video for preserving information saliency.",
+        "pdf": "",
+        "score": 71.2646255493164,
+        "authors": [
+          {
+            "id": "53f43abadabfaec09f1a6ab8",
+            "name": "Vidya Setlur"
+          },
+          {
+            "id": "53f46c00dabfaec09f255adf",
+            "name": "Tom Lechner"
+          },
+          {
+            "id": "53f467fadabfaeee22a599b5",
+            "name": "Marc Nienhaus"
+          },
+          {
+            "id": "560b9e8e45cedb339737b9e8",
+            "name": "Bruce Gooch"
+          }
+        ]
+      },
+      {
+        "id": "53e9bcfdb7602d9704985d3a",
+        "title": "Manipulating Video Sequences to Determine the Components of Conversational Facial Expressions",
+        "pdf": "",
+        "score": 70.31275177001953,
+        "authors": [
+          {
+            "id": "53f43ffedabfaedf435bac3e",
+            "name": "Douglas W. Cunningham"
+          },
+          {
+            "id": "53f476ecdabfaeee22a919b4",
+            "name": "Mario Kleiner"
+          },
+          {
+            "id": "53f45536dabfaee43ecb865c",
+            "name": "Christian Wallraven"
+          },
+          {
+            "id": "53f55dffdabfae51edf8045b",
+            "name": "Heinrich H. Bülthoff"
+          }
+        ]
+      },
+      {
+        "id": "53e999a6b7602d97021ed8e5",
+        "title": "Applying Mid-level Vision Techniques for Video Data Compression and Manipulation",
+        "pdf": "",
+        "score": 70.19088745117188,
+        "authors": [
+          {
+            "id": "53f43037dabfaec22ba3c160",
+            "name": "John Y. A. Wang"
+          },
+          {
+            "id": "548979f7dabfaed7b5fa3c59",
+            "name": "Edward H. Adelson"
+          },
+          {
+            "id": "53f42c8edabfaec22ba0b357",
+            "name": "Ujjaval Desai"
+          }
+        ]
+      },
+      {
+        "id": "53e9ab1ab7602d97034a3d25",
+        "title": "A visual search system for video and image databases",
+        "pdf": "//static.aminer.org/pdf/PDF/000/331/395/a_visual_search_system_for_video_and_image_databases.pdf",
+        "score": 68.42146301269531,
+        "authors": [
+          {
+            "id": "54333ac8dabfaeb54217da05",
+            "name": "hongheather yu"
+          },
+          {
+            "id": "",
+            "name": "wayne wolf"
+          }
+        ]
+      },
+      {
+        "id": "53e9a3fbb7602d9702d16a99",
+        "title": "Touch projector: mobile interaction through video",
+        "pdf": "",
+        "score": 67.31659698486328,
+        "authors": [
+          {
+            "id": "5435028bdabfaebba588e384",
+            "name": "Sebastian Boring"
+          },
+          {
+            "id": "53f4307cdabfaee1c0a5b41a",
+            "name": "Dominikus Baur"
+          },
+          {
+            "id": "53f83298dabfae938c7102d7",
+            "name": "Andreas Butz"
+          },
+          {
+            "id": "53f43308dabfaee0d9b434c2",
+            "name": "Sean Gustafson"
+          },
+          {
+            "id": "5609c9a545cedb3396f85b7c",
+            "name": "Patrick Baudisch"
+          }
+        ]
+      },
+      {
+        "id": "53e9a797b7602d97030cfebf",
+        "title": "Video Object Model and Segmentation for Content-Based Video Indexing",
+        "pdf": "//static.aminer.org/pdf/PDF/000/331/597/video_object_segmentation_and_tracking_for_content_based_video_coding.pdf",
+        "score": 66.31839752197266,
+        "authors": [
+          {
+            "id": "53f42db4dabfaedce54c97c5",
+            "name": "D. Zhong"
+          },
+          {
+            "id": "54332b00dabfaeb4c6aaabf6",
+            "name": "S.-F. Chang"
+          }
+        ]
+      },
+      {
+        "id": "55a67908612ca6eebab15d3f",
+        "title": "A video image analyzing system for open-field behavior in the rat focusing on behavioral asymmetries.",
+        "pdf": "",
+        "score": 64.19104766845703,
+        "authors": [
+          {
+            "id": "561707f845ce1e5963bfaecb",
+            "name": "Schwarting R K"
+          },
+          {
+            "id": "561707f845ce1e5963bfaece",
+            "name": "Goldenberg R"
+          },
+          {
+            "id": "561707f845ce1e5963bfaed1",
+            "name": "Steiner H"
+          },
+          {
+            "id": "561707f845ce1e5963bfaed4",
+            "name": "Fornaguera J"
+          },
+          {
+            "id": "561707f845ce1e5963bfaed7",
+            "name": "Huston J P"
+          }
+        ]
+      },
+      {
+        "id": "53e9bd92b7602d9704a3bc3c",
+        "title": "A video image analyzing system for open-field behavior in the rat focusing on behavioral asymmetries",
+        "pdf": "",
+        "score": 64.02561950683594,
+        "authors": [
+          {
+            "id": "53f43c01dabfaee43ec63f43",
+            "name": "R.K.W. Schwarting"
+          },
+          {
+            "id": "53f42d25dabfaec09f111398",
+            "name": "R. Goldenberg"
+          },
+          {
+            "id": "5405bcaadabfae450f3cc7e2",
+            "name": "H. Steiner"
+          },
+          {
+            "id": "53f4429cdabfaedce556c66f",
+            "name": "J. Fornaguera"
+          },
+          {
+            "id": "560c233e45cedb33974a615a",
+            "name": "J.P. Huston"
+          }
+        ]
+      },
+      {
+        "id": "53e99998b7602d97021dc6f0",
+        "title": "Gestures over video streams to support remote collaboration on physical tasks",
+        "pdf": "",
+        "score": 63.67525100708008,
+        "authors": [
+          {
+            "id": "53f56768dabfae644bf8045b",
+            "name": "Susan R. Fussell"
+          },
+          {
+            "id": "53f4c988dabfaee9cbf805b2",
+            "name": "Leslie D. Setlock"
+          },
+          {
+            "id": "53f58d6fdabfaed60cf8045c",
+            "name": "Jie Yang"
+          },
+          {
+            "id": "53f4331adabfaee1c0a7be5f",
+            "name": "Jiazhi Ou"
+          },
+          {
+            "id": "53f470d2dabfaeee22a7a33e",
+            "name": "Elizabeth Mauer"
+          },
+          {
+            "id": "53f42df1dabfaec22ba1f16c",
+            "name": "Adam D. I. Kramer"
+          }
+        ]
+      },
+      {
+        "id": "53e9a06db7602d9702954e16",
+        "title": "Block-based manipulations on transform-compressed images and videos",
+        "pdf": "",
+        "score": 62.91230010986328,
+        "authors": [
+          {
+            "id": "54480773dabfae87b7dc6339",
+            "name": "Bo Shen"
+          },
+          {
+            "id": "5410baaddabfae44f08d72e0",
+            "name": "Ishwar K. Sethi"
+          }
+        ]
+      },
+      {
+        "id": "53e9a1bcb7602d9702ab090c",
+        "title": "Gaze Manipulation for One-to-one Teleconferencing",
+        "pdf": "//static.aminer.org/pdf/PDF/000/292/982/gaze_manipulation_for_one_to_one_teleconferencing.pdf",
+        "score": 62.585975646972656,
+        "authors": [
+          {
+            "id": "53f49d6ddabfaebfa377b4d6",
+            "name": "A. Criminisi"
+          },
+          {
+            "id": "53f556d9dabfae963d25eada",
+            "name": "J. Shotton"
+          },
+          {
+            "id": "53f435fedabfaee43ec2c819",
+            "name": "A. Blake"
+          },
+          {
+            "id": "548fa5a9dabfaef989f09aa6",
+            "name": "P. H. S. Torr"
+          }
+        ]
+      },
+      {
+        "id": "53e9b2e0b7602d9703d93397",
+        "title": "Real-time edge-aware image processing with the bilateral grid",
+        "pdf": "",
+        "score": 62.01520538330078,
+        "authors": [
+          {
+            "id": "53f4bdacdabfaedce565548c",
+            "name": "Jiawen Chen"
+          },
+          {
+            "id": "53f42cd9dabfaee0d9af53da",
+            "name": "Sylvain Paris"
+          },
+          {
+            "id": "53f42672dabfaeb1a7b5579a",
+            "name": "Frédo Durand"
+          }
+        ]
+      },
+      {
+        "id": "53e9b54fb7602d97040852d9",
+        "title": "A model of motion attention for video skimming",
+        "pdf": "//static.aminer.org/pdf/PDF/000/319/510/a_model_of_motion_attention_for_video_skimming.pdf",
+        "score": 61.664127349853516,
+        "authors": [
+          {
+            "id": "53f64d94dabfaea03c3e2f8f",
+            "name": "Yu-fei Ma"
+          },
+          {
+            "id": "53f4384cdabfaeb22f4830d6",
+            "name": "Hongjiang Zhang"
+          }
+        ]
+      },
+      {
+        "id": "53e999b4b7602d97021f6dd1",
+        "title": "Generating photo manipulation tutorials by demonstration",
+        "pdf": "",
+        "score": 59.410892486572266,
+        "authors": [
+          {
+            "id": "53f43319dabfaee4dc76133f",
+            "name": "Floraine Grabler"
+          },
+          {
+            "id": "54487e67dabfae87b7e321d8",
+            "name": "Maneesh Agrawala"
+          },
+          {
+            "id": "53f43204dabfaedce550075d",
+            "name": "Wilmot Li"
+          },
+          {
+            "id": "53f45ceddabfaec09f21cd0e",
+            "name": "Mira Dontcheva"
+          },
+          {
+            "id": "56025c2445cedb3395f787a6",
+            "name": "Takeo Igarashi"
+          }
+        ]
+      },
+      {
+        "id": "53e9a25cb7602d9702b61e2a",
+        "title": "Fast scene change detection using direct feature extraction from MPEG compressed videos",
+        "pdf": "//static.aminer.org/pdf/PDF/001/116/478/fast_scene_change_detection_using_direct_feature_extraction_from_mpeg.pdf",
+        "score": 57.78002166748047,
+        "authors": [
+          {
+            "id": "53f7a90fdabfae90ec111a2e",
+            "name": "Young-Min Kim"
+          },
+          {
+            "id": "53f45cb8dabfaedf4362245d",
+            "name": "Sung Woo Choi"
+          },
+          {
+            "id": "54883331dabfaed7b5fa35fe",
+            "name": "Seong-Whan Lee"
+          }
+        ]
+      },
+      {
+        "id": "53e9be2eb7602d9704ae9fe1",
+        "title": "Face recognition is robust with incongruent image resolution: Relationship to security video images.",
+        "pdf": "",
+        "score": 57.476932525634766,
+        "authors": [
+          {
+            "id": "53f46929dabfaedf436510be",
+            "name": "Chang Hong Liu"
+          },
+          {
+            "id": "53f45240dabfaee4dc801603",
+            "name": "Helge Seetzen"
+          },
+          {
+            "id": "53f42f2adabfaee43ebdc118",
+            "name": "A. Mike Buton"
+          },
+          {
+            "id": "54088a91dabfae92b4248799",
+            "name": "Avi Chaudhuri"
+          }
+        ]
+      },
+      {
+        "id": "53e9ad98b7602d9703792f4e",
+        "title": "Robust video hashing based on radial projections of key frames",
+        "pdf": "",
+        "score": 56.759178161621094,
+        "authors": [
+          {
+            "id": "53f4ce7fdabfaeedd977be5b",
+            "name": "C. De Roover"
+          },
+          {
+            "id": "53f4342fdabfaee43ec1a3e9",
+            "name": "C. De Vleeschouwer"
+          },
+          {
+            "id": "53f456eedabfaee4dc813f0b",
+            "name": "F. Lefebvre"
+          },
+          {
+            "id": "53f42ccadabfaedd74d2e133",
+            "name": "B. Macq"
+          }
+        ]
+      },
+      {
+        "id": "53e9bdc6b7602d9704a74a21",
+        "title": "Generating Robust Digital Signature for Image/Video Authentication",
+        "pdf": "",
+        "score": 55.20244216918945,
+        "authors": [
+          {
+            "id": "53f48d95dabfaea7cd1d3442",
+            "name": "Ching-Yung Lin"
+          },
+          {
+            "id": "53f49da0dabfaebfa777b6e1",
+            "name": "Shih-Fu Chang"
+          }
+        ]
+      },
+      {
+        "id": "53e9bd7bb7602d9704a1f012",
+        "title": "Spatio-Temporal Segmentation of Video Data",
+        "pdf": "",
+        "score": 55.02815246582031,
+        "authors": [
+          {
+            "id": "53f43037dabfaec22ba3c160",
+            "name": "John Y. A. Wang"
+          },
+          {
+            "id": "548979f7dabfaed7b5fa3c59",
+            "name": "Edward H. Adelson"
+          }
+        ]
+      },
+      {
+        "id": "53e9ba95b7602d97046bbfa6",
+        "title": "Trifocal motion modeling for object-based video compression and manipulation",
+        "pdf": "",
+        "score": 53.607295989990234,
+        "authors": [
+          {
+            "id": "53f47797dabfaee43ed39d81",
+            "name": "Zhaohui Sun"
+          },
+          {
+            "id": "548c9664dabfae8a11fb4bc6",
+            "name": "A. M. Tekalp"
+          }
+        ]
+      },
+      {
+        "id": "53e99b5db7602d97024016b0",
+        "title": "A sparse control model for image and video editing",
+        "pdf": "",
+        "score": 53.34414291381836,
+        "authors": [
+          {
+            "id": "53f48f12dabfaedce561e190",
+            "name": "Li Xu"
+          },
+          {
+            "id": "53f4d68bdabfaef460f81604",
+            "name": "Qiong Yan"
+          },
+          {
+            "id": "561b16d045cedb3397ef06c0",
+            "name": "Jiaya Jia"
+          }
+        ]
+      },
+      {
+        "id": "53e9a107b7602d97029f19f0",
+        "title": "An integrated approach for content-based video object segmentation and retrieval",
+        "pdf": "",
+        "score": 51.325340270996094,
+        "authors": [
+          {
+            "id": "53f438addabfaee43ec458de",
+            "name": "Di Zhong"
+          },
+          {
+            "id": "53f49da0dabfaebfa777b6e1",
+            "name": "Shih-Fu Chang"
+          }
+        ]
+      },
+      {
+        "id": "53e9adf7b7602d9703804d15",
+        "title": "Video Image Processing with the Sonic Architecture",
+        "pdf": "",
+        "score": 50.39207077026367,
+        "authors": [
+          {
+            "id": "53f4d42cdabfaeedd67820c8",
+            "name": "Simon D. Haynes"
+          },
+          {
+            "id": "5440a6addabfae7d84b9aa15",
+            "name": "John Stone"
+          },
+          {
+            "id": "548677d3dabfae8a11fb32ba",
+            "name": "Peter Y. K. Cheung"
+          },
+          {
+            "id": "5440ef6bdabfae805a70a9e7",
+            "name": "Wayne Luk"
+          }
+        ]
+      },
+      {
+        "id": "53e9b621b7602d9704177545",
+        "title": "Segmentation of faces in video footage using HSV color for face detection and image retrieval",
+        "pdf": "",
+        "score": 50.33055114746094,
+        "authors": [
+          {
+            "id": "5406d8b9dabfae44f0862539",
+            "name": "Osamu Ikeda"
+          }
+        ]
+      },
+      {
+        "id": "53e9a95eb7602d97032b982d",
+        "title": "Evaluating and Combining Digital Video Shot Boundary Detection Algorithms",
+        "pdf": "",
+        "score": 50.253814697265625,
+        "authors": [
+          {
+            "id": "53f43ad8dabfaee2a1d116bc",
+            "name": "Paul Browne"
+          },
+          {
+            "id": "53f56dc6dabfae72d3f8045b",
+            "name": "Alan F Smeaton"
+          },
+          {
+            "id": "53f43a1edabfaedd74dc2e85",
+            "name": "Noel Murphy"
+          },
+          {
+            "id": "53f42e6ddabfaec22ba255c0",
+            "name": "Noel O'Connor"
+          },
+          {
+            "id": "53f36ce9dabfae4b349b2dc6",
+            "name": "Seán Marlow"
+          },
+          {
+            "id": "53f43234dabfaee1c0a72216",
+            "name": "Catherine Berrut"
+          }
+        ]
+      },
+      {
+        "id": "53e9b648b7602d97041a6f25",
+        "title": "Time-Series Linear Search for Video Copies Based on Compact Signature Manipulation and Containment Relation Modeling",
+        "pdf": "",
+        "score": 50.198482513427734,
+        "authors": [
+          {
+            "id": "5434265edabfaeb4c6ae9489",
+            "name": "Chih-Yi Chiu"
+          },
+          {
+            "id": "54352264dabfaebba58a61f5",
+            "name": "Hsin-Min Wang"
+          }
+        ]
+      },
+      {
+        "id": "53e9a84eb7602d9703199008",
+        "title": "Pixel-Level Hand Detection in Ego-centric Videos",
+        "pdf": "",
+        "score": 50.056678771972656,
+        "authors": [
+          {
+            "id": "54457a10dabfae862da1ffbe",
+            "name": "Cheng Li"
+          },
+          {
+            "id": "53f446b5dabfaeee229f8a54",
+            "name": "Kris M. Kitani"
+          }
+        ]
+      },
+      {
+        "id": "53e9acc3b7602d970369ef98",
+        "title": "Collages as dynamic summaries for news video",
+        "pdf": "//static.aminer.org/pdf/PDF/000/502/141/collages_as_dynamic_summaries_for_news_video.pdf",
+        "score": 49.952579498291016,
+        "authors": [
+          {
+            "id": "5433918fdabfaebba58191ff",
+            "name": "Michael G. Christel"
+          },
+          {
+            "id": "53f48da2dabfaea7cd1d37f6",
+            "name": "Alexander G. Hauptmann"
+          },
+          {
+            "id": "53f42f08dabfaeb2acfff167",
+            "name": "Howard D. Wactlar"
+          },
+          {
+            "id": "53f474ccdabfaeee22a8943d",
+            "name": "Tobun D. Ng"
+          }
+        ]
+      },
+      {
+        "id": "53e9b9c0b7602d97045b2f85",
+        "title": "Imaging and nano-manipulation of single biomolecules.",
+        "pdf": "",
+        "score": 49.674259185791016,
+        "authors": [
+          {
+            "id": "53f42fe2dabfaedd74d562ad",
+            "name": "Takashi Funatsu"
+          },
+          {
+            "id": "53f45eeadabfaee02ad77a76",
+            "name": "Yoshie Harada"
+          },
+          {
+            "id": "53f4377fdabfaee1c0aa73a0",
+            "name": "Hideo Higuchi"
+          },
+          {
+            "id": "53f436b5dabfaee43ec32b1c",
+            "name": "Makio Tokunaga"
+          },
+          {
+            "id": "53f430eedabfaee0d9b2a00a",
+            "name": "Kiwamu Saito"
+          },
+          {
+            "id": "53f79d33dabfae90ec10c2b3",
+            "name": "Yoshiharu Ishii"
+          },
+          {
+            "id": "53f5ac48dabfae22daf8045b",
+            "name": "Ronald D. Vale"
+          },
+          {
+            "id": "54087a17dabfae450f41e772",
+            "name": "Toshio Yanagida"
+          }
+        ]
+      },
+      {
+        "id": "53e9ae1cb7602d97038306b2",
+        "title": "Performance of a Mass-Storage System for Video-on-Demand",
+        "pdf": "",
+        "score": 49.22376251220703,
+        "authors": [
+          {
+            "id": "53f43c5edabfaedf435b3e6e",
+            "name": "J.W. Hsieh"
+          },
+          {
+            "id": "5434289adabfaeb4c6aea938",
+            "name": "M.J. Lin"
+          },
+          {
+            "id": "53f437eedabfaee02acd865a",
+            "name": "J.C.L. Liu"
+          },
+          {
+            "id": "53f4733edabfaee02adc75e8",
+            "name": "D.H.C. Du"
+          },
+          {
+            "id": "53f430c2dabfaedd74d61ad2",
+            "name": "T.M. Ruwart"
+          }
+        ]
+      },
+      {
+        "id": "53e9b189b7602d9703c12f7e",
+        "title": "Efficient Techniques for Feature-Based Image/Video Access and Manipulation",
+        "pdf": "//static.aminer.org/pdf/PDF/000/160/193/efficient_techniques_for_feature_based_image_video_access_and_manipulation.pdf",
+        "score": 48.836585998535156,
+        "authors": [
+          {
+            "id": "53f49da0dabfaebfa777b6e1",
+            "name": "Shih-fu Chang"
+          },
+          {
+            "id": "5448ec3ddabfae87b7e959c0",
+            "name": "John R. Smith"
+          },
+          {
+            "id": "53f452a1dabfaec09f1f8724",
+            "name": "Jianhao Meng"
+          }
+        ]
+      },
+      {
+        "id": "53e9ae1cb7602d97038306b1",
+        "title": "Performance of a mass storage system for video-on-demand",
+        "pdf": "",
+        "score": 48.83652877807617,
+        "authors": [
+          {
+            "id": "54883934dabfaed7b5fa367d",
+            "name": "Jenwei Hsieh"
+          },
+          {
+            "id": "53f45b35dabfaedd74e3fe5b",
+            "name": "Mengjou Lin"
+          },
+          {
+            "id": "53f430e0dabfaec09f140a7a",
+            "name": "Jonathan C. L. Liu"
+          },
+          {
+            "id": "54105409dabfae44f089b184",
+            "name": "David H. C. Du"
+          },
+          {
+            "id": "53f4447adabfaec09f1c203a",
+            "name": "Thomas M. Ruwart"
+          }
+        ]
+      },
+      {
+        "id": "53e9b1ddb7602d9703c6d578",
+        "title": "Two-dimensional mesh-based mosaic representation for manipulation of video objects with occlusion.",
+        "pdf": "",
+        "score": 47.809959411621094,
+        "authors": [
+          {
+            "id": "53f445c3dabfaec09f1c6d60",
+            "name": "C. Toklu"
+          },
+          {
+            "id": "53f43442dabfaee43ec1aff2",
+            "name": "A. Tanju Erdem"
+          },
+          {
+            "id": "",
+            "name": "A. Murat Tekalp"
+          }
+        ]
+      },
+      {
+        "id": "53e9ae90b7602d97038b446c",
+        "title": "Phase-based video motion processing",
+        "pdf": "",
+        "score": 47.790252685546875,
+        "authors": [
+          {
+            "id": "53f43953dabfaedf4359ba82",
+            "name": "Neal Wadhwa"
+          },
+          {
+            "id": "53f4c9cbdabfaee57677ef28",
+            "name": "Michael Rubinstein"
+          },
+          {
+            "id": "53f42672dabfaeb1a7b5579a",
+            "name": "Frédo Durand"
+          },
+          {
+            "id": "53f4bb5adabfaeda9d77b78a",
+            "name": "William T. Freeman"
+          }
+        ]
+      },
+      {
+        "id": "53e9a7f7b7602d9703135db9",
+        "title": "Eyetracking for two-person tasks with manipulation of a virtual world.",
+        "pdf": "",
+        "score": 47.730751037597656,
+        "authors": [
+          {
+            "id": "53f43428dabfaeb22f45c04a",
+            "name": "Jean Carletta"
+          },
+          {
+            "id": "53f4460cdabfaefedbb1348f",
+            "name": "Robin L. Hill"
+          },
+          {
+            "id": "53f430c1dabfaee43ebf099d",
+            "name": "Craig Nicol"
+          },
+          {
+            "id": "54082fe2dabfae44f086ce34",
+            "name": "Tim Taylor"
+          },
+          {
+            "id": "53f39bfadabfae4b34a9991a",
+            "name": "Jan Peter de Ruiter"
+          },
+          {
+            "id": "53f4329cdabfaedce5507e6b",
+            "name": "Ellen Gurman Bard"
+          }
+        ]
+      },
+      {
+        "id": "53e9b41bb7602d9703f152a6",
+        "title": "Video object annotation, navigation, and composition",
+        "pdf": "",
+        "score": 46.9918212890625,
+        "authors": [
+          {
+            "id": "53f432dadabfaee43ec0ae32",
+            "name": "Dan B. Goldman"
+          },
+          {
+            "id": "53f44f77dabfaeecd69d07eb",
+            "name": "Chris Gonterman"
+          },
+          {
+            "id": "53f4669ddabfaee4dc84f011",
+            "name": "Brian Curless"
+          },
+          {
+            "id": "53f438c2dabfaefedbadeef4",
+            "name": "David Salesin"
+          },
+          {
+            "id": "5485d811dabfaed7b5fa2580",
+            "name": "Steven M. Seitz"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 423,
+    "external_id": "#10010216",
+    "name": "Philosophical/theoretical foundations of artificial intelligence",
+    "alias": [],
+    "name_zh": "人工智能的哲学/理论基础",
+    "alias_zh": [],
+    "score": 0.0,
+    "level": 3,
+    "definition": "",
+    "definition_zh": "",
+    "wiki_url": "",
+    "child_nodes": [
+      77,
+      2385
+    ],
+    "parent": 17,
+    "experts": [
+      {
+        "id": "53f44f3adabfaeee22a194f7",
+        "name": "Ron Chrisley",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 50.659,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 2.8332,
+          "h_index": 7,
+          "num_citation": 473,
+          "as": 0.0,
+          "diversity": 1.2731,
+          "new_star": 0.0,
+          "num_pubs": 17,
+          "activity": 0.0,
+          "g_index": 17
+        },
+        "tags": [
+          {
+            "t": "Artificial Intelligent",
+            "w": 2
+          },
+          {
+            "t": "Major Symposium",
+            "w": 1
+          },
+          {
+            "t": "Consciousness",
+            "w": 1
+          },
+          {
+            "t": "Machine Consciousness",
+            "w": 1
+          },
+          {
+            "t": "Computing Anticipatory Systems",
+            "w": 1
+          },
+          {
+            "t": "Synthetic Phenomenology",
+            "w": 1
+          },
+          {
+            "t": "Virtual Machine",
+            "w": 1
+          },
+          {
+            "t": "Biological System",
+            "w": 1
+          },
+          {
+            "t": "Representational Content.",
+            "w": 1
+          },
+          {
+            "t": "Foundational Distinction",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "542eb7b7dabfaed72268c33e",
+        "name": "Xiaoli Liu",
+        "name_zh": "刘晓力",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 27.052,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 0.6931,
+          "h_index": 2,
+          "num_citation": 13,
+          "as": 0.0,
+          "diversity": 1.0986,
+          "new_star": 0.0,
+          "num_pubs": 3,
+          "activity": 0.0,
+          "g_index": 3
+        },
+        "tags": [
+          {
+            "t": "Embodied Cognition",
+            "w": 2
+          },
+          {
+            "t": "Revision To The Computational Theory",
+            "w": 1
+          },
+          {
+            "t": "Embodied Mind",
+            "w": 1
+          },
+          {
+            "t": "Non-Representational-Computational",
+            "w": 1
+          },
+          {
+            "t": "Construction Of Interactive Cognition",
+            "w": 1
+          },
+          {
+            "t": "Phenomenology",
+            "w": 1
+          },
+          {
+            "t": "Cognitive Computationalism",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "56049ff245cedb3396438358",
+        "name": "Wei Meng",
+        "name_zh": "孟伟",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 27.052,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 0.6931,
+          "h_index": 1,
+          "num_citation": 8,
+          "as": 0.0,
+          "diversity": 0.0,
+          "new_star": 0.0,
+          "num_pubs": 1,
+          "activity": 0.0,
+          "g_index": 1
+        },
+        "tags": []
+      },
+      {
+        "id": "53f460dadabfaefedbb73949",
+        "name": "Morton Wagman",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 18.179,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 1.0986,
+          "h_index": 2,
+          "num_citation": 12,
+          "as": 0.0,
+          "diversity": 2.7856,
+          "new_star": 0.0,
+          "num_pubs": 23,
+          "activity": 0.0,
+          "g_index": 3
+        },
+        "tags": [
+          {
+            "t": "Artificial Intelligence",
+            "w": 17
+          },
+          {
+            "t": "Cognitive Science",
+            "w": 7
+          },
+          {
+            "t": "Human Reasoning",
+            "w": 4
+          },
+          {
+            "t": "Intelligent System",
+            "w": 3
+          },
+          {
+            "t": "General Unified Theory",
+            "w": 3
+          },
+          {
+            "t": "Intellectual Development",
+            "w": 3
+          },
+          {
+            "t": "Cognitive Psychology",
+            "w": 3
+          },
+          {
+            "t": "Human Intelligence",
+            "w": 3
+          },
+          {
+            "t": "Human Intellect",
+            "w": 2
+          },
+          {
+            "t": "Computational Science",
+            "w": 2
+          }
+        ]
+      },
+      {
+        "id": "53f42fe3dabfaec09f13400e",
+        "name": "Ben Goertzel",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": "perspective. Virtual So-Cal high school as a post-Singularity metaverse is a kind of transhumanist nightmare",
+        "homepage": "http://www.goertzel.org/blog/blog.htm",
+        "score": 13.452,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 5.1179,
+          "h_index": 15,
+          "num_citation": 839,
+          "as": 0.0,
+          "diversity": 2.7213,
+          "new_star": 0.9375,
+          "num_pubs": 221,
+          "activity": 16.5403,
+          "g_index": 26
+        },
+        "tags": [
+          {
+            "t": "Reinforcement Learning",
+            "w": 1
+          },
+          {
+            "t": "Artificial General Intelligence",
+            "w": 1
+          },
+          {
+            "t": "Knowledge Representation",
+            "w": 1
+          },
+          {
+            "t": "Deep Learning",
+            "w": 1
+          },
+          {
+            "t": "Machine Learning",
+            "w": 1
+          },
+          {
+            "t": "Cognitive Architecture",
+            "w": 1
+          },
+          {
+            "t": "Probabilistic Reasoning",
+            "w": 1
+          },
+          {
+            "t": "Complex Systems",
+            "w": 1
+          },
+          {
+            "t": "Cognitive Architectures",
+            "w": 1
+          },
+          {
+            "t": "Cognitive Computing",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "53f9cc32dabfae92b41b2260",
+        "name": "Pei Wang",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 13.452,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 2.3978,
+          "h_index": 1,
+          "num_citation": 5,
+          "as": 0.0,
+          "diversity": 1.9072,
+          "new_star": 0.0,
+          "num_pubs": 12,
+          "activity": 0.0,
+          "g_index": 1
+        },
+        "tags": [
+          {
+            "t": "Artificial General Intelligence",
+            "w": 6
+          },
+          {
+            "t": "Agi Workshop",
+            "w": 3
+          },
+          {
+            "t": "First Agi Conference",
+            "w": 2
+          },
+          {
+            "t": "Panel Discussion",
+            "w": 2
+          },
+          {
+            "t": "Probability",
+            "w": 1
+          },
+          {
+            "t": "Narrow Ai",
+            "w": 1
+          },
+          {
+            "t": "Frequency",
+            "w": 1
+          },
+          {
+            "t": "Ben Goertzel",
+            "w": 1
+          },
+          {
+            "t": "Human-like General Intelligence",
+            "w": 1
+          },
+          {
+            "t": "Comparative Study",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "53f32416dabfae9a8446701a",
+        "name": "Rajakishore Nath",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 7.009,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 0.0,
+          "h_index": 1,
+          "num_citation": 1,
+          "as": 0.0,
+          "diversity": 0.6931,
+          "new_star": 0.0,
+          "num_pubs": 2,
+          "activity": 0.0,
+          "g_index": 1
+        },
+        "tags": [
+          {
+            "t": "Computing Machinery",
+            "w": 1
+          },
+          {
+            "t": "Mental World",
+            "w": 1
+          },
+          {
+            "t": "Alan Turing",
+            "w": 1
+          },
+          {
+            "t": "Philosophical Study",
+            "w": 1
+          },
+          {
+            "t": "Machine Intelligence",
+            "w": 1
+          },
+          {
+            "t": "Mechanistic Theory",
+            "w": 1
+          },
+          {
+            "t": "Book Deal",
+            "w": 1
+          },
+          {
+            "t": "Human Consciousness",
+            "w": 1
+          },
+          {
+            "t": "Mental Quality",
+            "w": 1
+          },
+          {
+            "t": "Broad Theoretical Framework",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "53f43284dabfaec22ba59d81",
+        "name": "M. Gruninger",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 6.846,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 4.4426,
+          "h_index": 6,
+          "num_citation": 270,
+          "as": 0.0,
+          "diversity": 1.7942,
+          "new_star": 0.0,
+          "num_pubs": 26,
+          "activity": 0.0,
+          "g_index": 16
+        },
+        "tags": [
+          {
+            "t": "Knowledge Engineering",
+            "w": 1
+          },
+          {
+            "t": "Enterprise Engineering",
+            "w": 1
+          },
+          {
+            "t": "Enterprise Modeling",
+            "w": 1
+          },
+          {
+            "t": "Semantic Web",
+            "w": 1
+          },
+          {
+            "t": "Enterprise Modelling",
+            "w": 1
+          },
+          {
+            "t": "Semantic Web Services",
+            "w": 1
+          },
+          {
+            "t": "Information Systems",
+            "w": 1
+          },
+          {
+            "t": "Artificial Intelligence",
+            "w": 1
+          },
+          {
+            "t": "Web Services",
+            "w": 1
+          },
+          {
+            "t": "Formal Ontology",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "54350e45dabfaebba5897417",
+        "name": "C. Eschenbach",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 6.846,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 0.6931,
+          "h_index": 0,
+          "num_citation": 0,
+          "as": 0.0,
+          "diversity": 0.0,
+          "new_star": 0.0,
+          "num_pubs": 1,
+          "activity": 0.0,
+          "g_index": 0
+        },
+        "tags": [
+          {
+            "t": "Geographical Information System",
+            "w": 1
+          },
+          {
+            "t": "Information Systems",
+            "w": 1
+          },
+          {
+            "t": "Artificial Intelligence",
+            "w": 1
+          },
+          {
+            "t": "Fifth International Conference",
+            "w": 1
+          },
+          {
+            "t": "Solid Theoretical Foundation",
+            "w": 1
+          },
+          {
+            "t": "Applied Domain",
+            "w": 1
+          },
+          {
+            "t": "Cognitive Science",
+            "w": 1
+          },
+          {
+            "t": "Computer Science",
+            "w": 1
+          },
+          {
+            "t": "Future Research Direction",
+            "w": 1
+          },
+          {
+            "t": "Formal Ontology",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "53f588cddabfaebcecf804ad",
+        "name": "Edouard Machery",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 0.894,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 4.5747,
+          "h_index": 23,
+          "num_citation": 1873,
+          "as": 0.0,
+          "diversity": 2.3977,
+          "new_star": 0.0156,
+          "num_pubs": 150,
+          "activity": 0.1228,
+          "g_index": 43
+        },
+        "tags": [
+          {
+            "t": "Cognitive Science",
+            "w": 7
+          },
+          {
+            "t": "Evolutionary Psychology",
+            "w": 5
+          },
+          {
+            "t": "Cognitive Psychology",
+            "w": 3
+          },
+          {
+            "t": "Philosophy Of Mind",
+            "w": 3
+          },
+          {
+            "t": "Semantics",
+            "w": 3
+          },
+          {
+            "t": "Epistemology",
+            "w": 3
+          },
+          {
+            "t": "Philosophy",
+            "w": 3
+          },
+          {
+            "t": "Reference",
+            "w": 2
+          },
+          {
+            "t": "Philosophy Of Science",
+            "w": 2
+          },
+          {
+            "t": "Developmental Psychology",
+            "w": 2
+          }
+        ]
+      },
+      {
+        "id": "53f473a3dabfaee4dc882cd7",
+        "name": "Dmitri Loginov",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 0.043,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 0.0,
+          "h_index": 1,
+          "num_citation": 1,
+          "as": 0.0,
+          "diversity": 0.6931,
+          "new_star": 0.0,
+          "num_pubs": 2,
+          "activity": 0.0,
+          "g_index": 1
+        },
+        "tags": [
+          {
+            "t": "Ongoing Research",
+            "w": 2
+          },
+          {
+            "t": "Complex System",
+            "w": 1
+          },
+          {
+            "t": "Creative Part",
+            "w": 1
+          },
+          {
+            "t": "Classical Model",
+            "w": 1
+          },
+          {
+            "t": "Prototype Pattern Vector",
+            "w": 1
+          },
+          {
+            "t": "Synergetic Modelling",
+            "w": 1
+          },
+          {
+            "t": "H. Haken",
+            "w": 1
+          },
+          {
+            "t": "Synergetic Computer Algorithm",
+            "w": 1
+          },
+          {
+            "t": "Autocad Environment",
+            "w": 1
+          },
+          {
+            "t": "Application Possibility",
+            "w": 1
+          }
+        ]
+      }
+    ],
+    "publications": [
+      {
+        "id": "53e9aea3b7602d97038c5313",
+        "title": "Philosophical foundations of artificial consciousness.",
+        "pdf": "",
+        "score": 71.923095703125,
+        "authors": [
+          {
+            "id": "53f44f3adabfaeee22a194f7",
+            "name": "Ron Chrisley"
+          }
+        ]
+      },
+      {
+        "id": "53e9a23fb7602d9702b4981d",
+        "title": "The Constructive Approach of Interactive Cognition and its Phenomenological Philosophical Foundation",
+        "pdf": "",
+        "score": 32.3923454284668,
+        "authors": [
+          {
+            "id": "542eb7b7dabfaed72268c33e",
+            "name": "LIU Xiao-li"
+          },
+          {
+            "id": "56049ff245cedb3396438358",
+            "name": "MENG Wei"
+          }
+        ]
+      },
+      {
+        "id": "53e99bc6b7602d97024718cf",
+        "title": "The Ultimate Objectives of Artificial Intelligence: Theoretical and Research Foundations, Philosophical and Psychological Implications",
+        "pdf": "",
+        "score": 18.178585052490234,
+        "authors": [
+          {
+            "id": "53f460dadabfaefedbb73949",
+            "name": "Morton Wagman"
+          }
+        ]
+      },
+      {
+        "id": "53e9b4e4b7602d970400abd9",
+        "title": "Theoretical Foundations of Artificial General Intelligence",
+        "pdf": "",
+        "score": 13.451691627502441,
+        "authors": [
+          {
+            "id": "53f9cc32dabfae92b41b2260",
+            "name": "Pei Wang"
+          },
+          {
+            "id": "53f42fe3dabfaec09f13400e",
+            "name": "Ben Goertzel"
+          }
+        ]
+      },
+      {
+        "id": "53e9aa9cb7602d97034136d1",
+        "title": "Philosophy of Artificial Intelligence: A Critique of the Mechanistic Theory of Mind",
+        "pdf": "",
+        "score": 7.008592128753662,
+        "authors": [
+          {
+            "id": "53f32416dabfae9a8446701a",
+            "name": "Rajakishore Nath"
+          }
+        ]
+      },
+      {
+        "id": "53e99f70b7602d97028456aa",
+        "title": "Formal Ontology in Information Systems: Proceedings of the Fifth International Conference (FOIS 2008) - Volume 183 Frontiers in Artificial Intelligence and Applications",
+        "pdf": "",
+        "score": 6.846036434173584,
+        "authors": [
+          {
+            "id": "54350e45dabfaebba5897417",
+            "name": "C. Eschenbach"
+          },
+          {
+            "id": "53f43284dabfaec22ba59d81",
+            "name": "M. Gruninger"
+          }
+        ]
+      },
+      {
+        "id": "53e9b5a8b7602d97040ed44c",
+        "title": "T wo Dogmas of Neo-Empiricism",
+        "pdf": "",
+        "score": 1.1995775699615479,
+        "authors": [
+          {
+            "id": "53f588cddabfaebcecf804ad",
+            "name": "Edouard Machery"
+          }
+        ]
+      },
+      {
+        "id": "53e9bd4bb7602d97049dc786",
+        "title": "Synergetic modelling: application possibilities in engineering design",
+        "pdf": "",
+        "score": 0.05076661333441734,
+        "authors": [
+          {
+            "id": "53f473a3dabfaee4dc882cd7",
+            "name": "Dmitri Loginov"
+          }
+        ]
+      },
+      {
+        "id": "53e9aeddb7602d970390938d",
+        "title": "On Reasoning About Other Agents",
+        "pdf": "",
+        "score": 0.013564083725214005,
+        "authors": [
+          {
+            "id": "",
+            "name": "Piotr J. Gmytrasiewicz"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 5200,
+    "external_id": "",
+    "name": "arm gesture recogntion",
+    "alias": [],
+    "name_zh": "",
+    "alias_zh": [],
+    "score": 0.01022946748532796,
+    "level": 5,
+    "definition": "",
+    "definition_zh": "",
+    "wiki_url": "",
+    "child_nodes": [],
+    "parent": 77,
+    "experts": [],
+    "publications"
+  []
+  },
+  {
+    "id": 2224,
+    "external_id": "",
+    "name": "Computing methodologies",
+    "alias": [],
+    "name_zh": "计算方法",
+    "alias_zh": [],
+    "score": 0,
+    "level": 0,
+    "definition": "",
+    "definition_zh": "",
+    "wiki_url": "",
+    "child_nodes": [
+      372,
+      883,
+      43,
+      17,
+      487,
+      365,
+      529,
+      381
+    ],
+    "parent": 139,
+    "experts": [
+      {
+        "id": "54054b2edabfae91d3fd0b9a",
+        "name": "Kumar K. Tamma",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 192.98210526315788,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 4.9487,
+          "h_index": 18,
+          "num_citation": 1320,
+          "as": 0.0,
+          "diversity": 2.185,
+          "new_star": 0.0156,
+          "num_pubs": 250,
+          "activity": 0.3131,
+          "g_index": 30
+        },
+        "tags": [
+          {
+            "t": "Finite Element",
+            "w": 1
+          },
+          {
+            "t": "Finite Element Analysis",
+            "w": 1
+          },
+          {
+            "t": "Finite Elements",
+            "w": 1
+          },
+          {
+            "t": "Thermal Analysis",
+            "w": 1
+          },
+          {
+            "t": "Structural Dynamics",
+            "w": 1
+          },
+          {
+            "t": "Time Stepping",
+            "w": 1
+          },
+          {
+            "t": "Mesh Generation",
+            "w": 1
+          },
+          {
+            "t": "Heat Conduction",
+            "w": 1
+          },
+          {
+            "t": "Geometric Modeling",
+            "w": 1
+          },
+          {
+            "t": "Heat Transfer",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "53f43274dabfaeb1a7bcc12b",
+        "name": "Shahaboddin Shamshirband",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 155.0294736842105,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 5.9295,
+          "h_index": 24,
+          "num_citation": 2088,
+          "as": 0.0,
+          "diversity": 4.1069,
+          "new_star": 63.834,
+          "num_pubs": 197,
+          "activity": 69.1879,
+          "g_index": 32
+        },
+        "tags": [
+          {
+            "t": "Cloud Computing",
+            "w": 2
+          },
+          {
+            "t": "Soft Computing",
+            "w": 2
+          },
+          {
+            "t": "Fuzzy Logic",
+            "w": 2
+          },
+          {
+            "t": "Support Vector Regression",
+            "w": 2
+          },
+          {
+            "t": "Pervasive Computing",
+            "w": 2
+          },
+          {
+            "t": "Estimation",
+            "w": 2
+          },
+          {
+            "t": "Security",
+            "w": 2
+          },
+          {
+            "t": "Mobile Technology",
+            "w": 2
+          },
+          {
+            "t": "Carum Carvi",
+            "w": 1
+          },
+          {
+            "t": "Traditional Artificial Computational Intelligence",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "548c6584dabfaed7b5fa434e",
+        "name": "Kaushik Roy",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 137.98789473684212,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 6.1984,
+          "h_index": 71,
+          "num_citation": 21955,
+          "as": 0.0,
+          "diversity": 4.1428,
+          "new_star": 17.8957,
+          "num_pubs": 720,
+          "activity": 34.3359,
+          "g_index": 128
+        },
+        "tags": [
+          {
+            "t": "Digital Circuits",
+            "w": 1
+          },
+          {
+            "t": "Circuit Simulation",
+            "w": 1
+          },
+          {
+            "t": "Circuit Design",
+            "w": 1
+          },
+          {
+            "t": "Logic Circuits",
+            "w": 1
+          },
+          {
+            "t": "Analog Circuits",
+            "w": 1
+          },
+          {
+            "t": "Ultra Low Power",
+            "w": 1
+          },
+          {
+            "t": "Place And Route",
+            "w": 1
+          },
+          {
+            "t": "Digital Signal Processing",
+            "w": 1
+          },
+          {
+            "t": "Iddq Testing",
+            "w": 1
+          },
+          {
+            "t": "Digital Logic",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "53f492dadabfaee0d9c744d6",
+        "name": "Asim Smailagic",
+        "name_zh": "",
+        "avatar": "//static.aminer.org/01dc/0002/0000/53af8e73dabfae456e8ae7ff.jpg",
+        "position": "Research Professor",
+        "affiliation": "Institute for Complex Engineered Systems\r\nCollege of Engineering",
+        "homepage": "http://www.cs.cmu.edu/~asim/",
+        "score": 132.0078947368421,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 5.5373,
+          "h_index": 25,
+          "num_citation": 3108,
+          "as": 0.0,
+          "diversity": 3.5454,
+          "new_star": 17.3069,
+          "num_pubs": 136,
+          "activity": 38.0488,
+          "g_index": 54
+        },
+        "tags": [
+          {
+            "t": "Wearable Computer",
+            "w": 40
+          },
+          {
+            "t": "Wearable Computers",
+            "w": 26
+          },
+          {
+            "t": "Mobile Computing",
+            "w": 23
+          },
+          {
+            "t": "Design Methodology",
+            "w": 12
+          },
+          {
+            "t": "Mobile Computer",
+            "w": 11
+          },
+          {
+            "t": "Prototypes",
+            "w": 11
+          },
+          {
+            "t": "Human Computer Interaction",
+            "w": 10
+          },
+          {
+            "t": "Pervasive Computing",
+            "w": 8
+          },
+          {
+            "t": "User Interfaces",
+            "w": 8
+          },
+          {
+            "t": "Carnegie Mellon",
+            "w": 7
+          }
+        ]
+      },
+      {
+        "id": "53f44a8ddabfaeecd69bd8ed",
+        "name": "Dalibor Petkovic",
+        "name_zh": "",
+        "avatar": "",
+        "position": "",
+        "affiliation": null,
+        "homepage": {},
+        "score": 129.00526315789475,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 2.9957,
+          "h_index": 7,
+          "num_citation": 174,
+          "as": 0.0,
+          "diversity": 2.0253,
+          "new_star": 1.601,
+          "num_pubs": 10,
+          "activity": 1.7148,
+          "g_index": 10
+        },
+        "tags": [
+          {
+            "t": "Robots",
+            "w": 2
+          },
+          {
+            "t": "Soft Computing",
+            "w": 2
+          },
+          {
+            "t": "Sensors",
+            "w": 2
+          },
+          {
+            "t": "Frechet Distribution",
+            "w": 1
+          },
+          {
+            "t": "Object Recognizing",
+            "w": 1
+          },
+          {
+            "t": "Adaptive Compliant Gripper",
+            "w": 1
+          },
+          {
+            "t": "Artificial Intelligence",
+            "w": 1
+          },
+          {
+            "t": "Embedded Sensors",
+            "w": 1
+          },
+          {
+            "t": "Passively Adaptive Gripper",
+            "w": 1
+          },
+          {
+            "t": "Gumbel Distribution",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "53f34fcfdabfae4b3494446c",
+        "name": "Rafiqul Gani",
+        "name_zh": "",
+        "avatar": "//static.aminer.org/upload/avatar/639/1957/866/53f34fcfdabfae4b3494446c.png",
+        "position": "Professor",
+        "affiliation": "Technical University of Denmark",
+        "homepage": "http://www.dtu.dk/english/Service/Phonebook/Person?id=628&tab=2&qt=dtupublicationquery",
+        "score": 122.99421052631578,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 6.4345,
+          "h_index": 44,
+          "num_citation": 6837,
+          "as": 0.0,
+          "diversity": 2.0753,
+          "new_star": 18.9954,
+          "num_pubs": 555,
+          "activity": 28.2323,
+          "g_index": 75
+        },
+        "tags": [
+          {
+            "t": "Process Design",
+            "w": 1
+          },
+          {
+            "t": "Computer Aided",
+            "w": 1
+          },
+          {
+            "t": "Modelling And Simulation",
+            "w": 1
+          },
+          {
+            "t": "Design Methodology",
+            "w": 1
+          },
+          {
+            "t": "Chemical Process",
+            "w": 1
+          },
+          {
+            "t": "Dynamic Simulation",
+            "w": 1
+          },
+          {
+            "t": "Integrated Design",
+            "w": 1
+          },
+          {
+            "t": "Separation Processes",
+            "w": 1
+          },
+          {
+            "t": "Chemical Processes",
+            "w": 1
+          },
+          {
+            "t": "Optimal Design",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "53f4932adabfaeb15f77b670",
+        "name": "Daniel P. Siewiorek",
+        "name_zh": "",
+        "avatar": "//static.aminer.org/00c5/0001/0000/53b0030cdabfae456efdfa8d.gif",
+        "position": "Director",
+        "affiliation": "Human-Computer Interaction Institute",
+        "homepage": "http://www.cs.cmu.edu/~dps/",
+        "score": 118.29263157894736,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 5.8692,
+          "h_index": 42,
+          "num_citation": 7204,
+          "as": 0.0,
+          "diversity": 3.4744,
+          "new_star": 17.3069,
+          "num_pubs": 289,
+          "activity": 37.2077,
+          "g_index": 83
+        },
+        "tags": [
+          {
+            "t": "Wearable Computer",
+            "w": 29
+          },
+          {
+            "t": "Wearable Computers",
+            "w": 22
+          },
+          {
+            "t": "Mobile Computing",
+            "w": 19
+          },
+          {
+            "t": "Hardware",
+            "w": 13
+          },
+          {
+            "t": "Computer Architecture",
+            "w": 13
+          },
+          {
+            "t": "Application Software",
+            "w": 11
+          },
+          {
+            "t": "Prototypes",
+            "w": 11
+          },
+          {
+            "t": "Mobile Computer",
+            "w": 10
+          },
+          {
+            "t": "Design Automation",
+            "w": 9
+          },
+          {
+            "t": "Design Methodology",
+            "w": 8
+          }
+        ]
+      },
+      {
+        "id": "53f48bd2dabfaea7cd1cd0ec",
+        "name": "Witold Pedrycz",
+        "name_zh": "",
+        "avatar": "//static.aminer.org/097c/0000/0000/53afec93dabfae456ee7e754.jpg",
+        "position": "Professor",
+        "affiliation": "Department of Electrical and\n   Computer Engineering\nUniversity of Alberta ",
+        "homepage": "http://www.ece.ualberta.ca/~pedrycz/index.html",
+        "score": 103.89105263157894,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 6.9196,
+          "h_index": 77,
+          "num_citation": 29077,
+          "as": 0.0,
+          "diversity": 4.497,
+          "new_star": 281.9159,
+          "num_pubs": 1181,
+          "activity": 408.7967,
+          "g_index": 148
+        },
+        "tags": [
+          {
+            "t": "Fuzzy Set",
+            "w": 139
+          },
+          {
+            "t": "Genetic Algorithm",
+            "w": 85
+          },
+          {
+            "t": "Fuzzy Clustering",
+            "w": 70
+          },
+          {
+            "t": "Neural Network",
+            "w": 67
+          },
+          {
+            "t": "Design Methodology",
+            "w": 66
+          },
+          {
+            "t": "Granular Computing",
+            "w": 66
+          },
+          {
+            "t": "Genetics",
+            "w": 62
+          },
+          {
+            "t": "Fuzzy Sets",
+            "w": 61
+          },
+          {
+            "t": "Fuzzy Set Theory",
+            "w": 53
+          },
+          {
+            "t": "Computational Intelligence",
+            "w": 52
+          }
+        ]
+      },
+      {
+        "id": "54872ffbdabfae9b401342fb",
+        "name": "Bernard P. Zeigler",
+        "name_zh": "",
+        "avatar": "//static.aminer.org/upload/avatar/1518/249/1481/54872ffbdabfae9b401342fb.jpeg",
+        "position": "",
+        "affiliation": "Arizona Center for Integrative Modeling and Simulation Joint Interoperability Test Command",
+        "homepage": "http://www.scs.org/zeigler",
+        "score": 98.25947368421053,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 5.908,
+          "h_index": 31,
+          "num_citation": 3324,
+          "as": 0.0,
+          "diversity": 3.7292,
+          "new_star": 5.2543,
+          "num_pubs": 314,
+          "activity": 6.8419,
+          "g_index": 49
+        },
+        "tags": [
+          {
+            "t": "Modeling And Simulation",
+            "w": 1
+          },
+          {
+            "t": "Distributed Systems",
+            "w": 1
+          },
+          {
+            "t": "Dynamic Systems",
+            "w": 1
+          },
+          {
+            "t": "Discrete Event Simulation",
+            "w": 1
+          },
+          {
+            "t": "Modelling And Simulation",
+            "w": 1
+          },
+          {
+            "t": "Design Methodology",
+            "w": 1
+          },
+          {
+            "t": "Intelligent Agents",
+            "w": 1
+          },
+          {
+            "t": "Intelligent Control",
+            "w": 1
+          },
+          {
+            "t": "Complex Systems",
+            "w": 1
+          },
+          {
+            "t": "Knowledge Representation",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "54843c8cdabfaed7b5fa18af",
+        "name": "David J. Lilja",
+        "name_zh": "",
+        "avatar": "//static.aminer.org/upload/avatar/1919/1553/299/54843c8cdabfaed7b5fa18af.jpeg",
+        "position": "Professor",
+        "affiliation": "Minnesota Supercomputing Institute. University of Minnesota",
+        "homepage": "http://www.ece.umn.edu/facultyECE/ECEFACULTYDAVIDLILJA.html",
+        "score": 93.22263157894736,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 5.5721,
+          "h_index": 32,
+          "num_citation": 4294,
+          "as": 0.0,
+          "diversity": 4.0264,
+          "new_star": 2.5126,
+          "num_pubs": 233,
+          "activity": 10.6869,
+          "g_index": 60
+        },
+        "tags": [
+          {
+            "t": "Parallel Processing",
+            "w": 1
+          },
+          {
+            "t": "Data Parallel",
+            "w": 1
+          },
+          {
+            "t": "Design Space Exploration",
+            "w": 1
+          },
+          {
+            "t": "Fault Tolerance",
+            "w": 1
+          },
+          {
+            "t": "Computer Architectures",
+            "w": 1
+          },
+          {
+            "t": "System Architecture",
+            "w": 1
+          },
+          {
+            "t": "Computer Architecture",
+            "w": 1
+          },
+          {
+            "t": "Heterogeneous Computing",
+            "w": 1
+          },
+          {
+            "t": "Distributed Systems",
+            "w": 1
+          },
+          {
+            "t": "Hardware Description Languages",
+            "w": 1
+          }
+        ]
+      },
+      {
+        "id": "53f4305bdabfaedf4353c0e4",
+        "name": "M. S. Obaidat",
+        "name_zh": "",
+        "avatar": "//static.aminer.org/056d/0003/0000/53afa5d1dabfae456ea1ff59.jpg",
+        "position": "Professor",
+        "affiliation": "Department of Computer Science\r\nMonmouth University\r\n\r\n",
+        "homepage": "http://bluehawk.monmouth.edu/mobaidat/",
+        "score": 87.5578947368421,
+        "indices": {
+          "num_patents": 0,
+          "sociability": 4.4773,
+          "h_index": 22,
+          "num_citation": 2022,
+          "as": 0.0,
+          "diversity": 3.4046,
+          "new_star": 0.3125,
+          "num_pubs": 106,
+          "activity": 0.3125,
+          "g_index": 43
+        },
+        "tags": [
+          {
+            "t": "Wireless Sensor Networks",
+            "w": 1
+          },
+          {
+            "t": "Sensor Networks",
+            "w": 1
+          },
+          {
+            "t": "Computer Networks",
+            "w": 1
+          },
+          {
+            "t": "Distributed Systems",
+            "w": 1
+          },
+          {
+            "t": "Communication Networks",
+            "w": 1
+          },
+          {
+            "t": "Computer Communications",
+            "w": 1
+          },
+          {
+            "t": "Data Communication",
+            "w": 1
+          },
+          {
+            "t": "Data Acquisition",
+            "w": 1
+          },
+          {
+            "t": "Local Area Networks",
+            "w": 1
+          },
+          {
+            "t": "Performance Analysis",
+            "w": 1
+            ]
+          },
+          {
+            "id": "53f43702dabfaeb2ac058535",
+            "name": "Raju R. Namburu",
+            "name_zh": "",
+            "avatar": "",
+            "position": "",
+            "affiliation": null,
+            "homepage": {},
+            "score": 85.23210526315789,
+            "indices": {
+              "num_patents": 0,
+              "sociability": 2.8332,
+              "h_index": 10,
+              "num_citation": 346,
+              "as": 0.0,
+              "diversity": 2.2313,
+              "new_star": 0.0,
+              "num_pubs": 24,
+              "activity": 0.0,
+              "g_index": 1
+            },
+            "tags": [
+              {
+                "t": "Finite Element",
+                "w": 1
+              },
+              {
+                "t": "Finite Element Analysis",
+                "w": 1,
+              {
+                "t": "Finite Elements"
+                "w":

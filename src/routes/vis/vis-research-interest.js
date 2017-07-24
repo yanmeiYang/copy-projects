@@ -9,7 +9,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { Tag } from 'antd';
 import styles from './vis-research-interest.less';
-import './nv.d3.css';
+// import './nv.d3.css';
 import AddTags from '../../components/seminar/addTags';
 
 /**

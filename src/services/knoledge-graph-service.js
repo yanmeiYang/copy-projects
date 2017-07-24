@@ -38,22 +38,8 @@ export function indexingKGData(data) {
       oldNode.duplicated = true;
       const oldidx = index[node.id];
 
-      console.warn('Ignore duplicated node! ', idx, '==', oldidx, node, oldNode);
-      // eslint-disable-next-line no-param-reassign
-      // node.duplicated = true;
-      // index[node.id] = idx;
-      // mark duplicated node.
-      // index[node.id] =  idx;
+      // console.warn('Ignore duplicated node! ', idx, '==', oldidx, node, oldNode);
 
-      // const firstId = index[node.id];
-      // if (firstId >= 1000000) {
-      //   // data.hits[firstId - 1000000].duplicated = true;
-      //   // eslint-disable-next-line no-param-reassign
-      //   node.duplicated = true;
-      //   console.log("log:", node);
-      // } else {
-      //   console.warn('Ignore duplicated node! ', idx, '==', index[node.id], node);
-      // }
     } else {
       // add index.
       index[node.id] = base + idx;
@@ -127,7 +113,7 @@ export function kgFetcher(kgdata, kgindex) {
 }
 
 
-// -------------------------------------------------------------
+// ------------------------------------------------------------- deprecated below. ------
 
 const LSKEY_KGDATA = 'LSKEY_KGDATA';
 

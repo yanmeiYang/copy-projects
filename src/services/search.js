@@ -35,8 +35,6 @@ export async function searchPerson(query, offset, size, filters, sort) {
 }
 
 export async function searchPersonGlobal(query, offset, size, filters, sort) {
-  console.log('---', query, offset, size, filters, sort);
-
   const data = prepareParametersGlobal(query, offset, size, filters, sort);
   console.log('data', data);
   return request(api.searchPerson, { method: 'GET', data });

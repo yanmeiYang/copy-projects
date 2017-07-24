@@ -43,13 +43,32 @@ export default {
     }
   },
 
+  "dllPlugin": {
+    "exclude": [
+      "babel-runtime",
+      "antd",
+      // "dva",
+      // "dva/router",
+      // "dva/saga",
+    ],
+    "include": [
+      // "dva/router",
+      // "dva/saga",
+      // "dva/fetch",
+      // "lodash"
+    ]
+  },
+
   // externals: {
-  //   react: 'React',
-  //   lodash: {
-  //     commonjs: "lodash",
-  //     amd: "lodash",
-  //     root: "_" // indicates global variable
-  //   },
+  //   react: 'react',
+  //   // lodash: {
+  //   //   commonjs: "lodash",
+  //   //   amd: "lodash",
+  //   //   root: "_" // indicates global variable
+  //   // },
+  //   // 'react-dom': 'react-dom',
+  //   // 'react-helmet': 'react-helmet',
+  //   // 'react-router': 'react-router',
   // },
 
   // "proxy": {

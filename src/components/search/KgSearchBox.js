@@ -79,7 +79,6 @@ class KgSearchBox extends React.PureComponent {
   };
 
   // Autosuggest will call this function every time you need to update suggestions.
-  // You already implemented this logic above, so just use it.
   onSuggestionsFetchRequested = ({ value, reason }) => {
     // Cancel the previous request
     if (this.lastRequestId !== null) {
@@ -94,6 +93,7 @@ class KgSearchBox extends React.PureComponent {
       const suggestPromise = suggestService.suggest(value);
       suggestPromise.then(
         (data) => {
+          console.log('suggest find data: ',data);
           if (data.data && data.data.topic && data.data.topic.length > 0) {
             const topics = data.data.topic;
             const stringTopics = [];

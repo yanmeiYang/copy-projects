@@ -1,11 +1,8 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Row, Col, Card } from 'antd';
 import styles from './index.less';
-import SearchBox from '../../components/SearchBox';
 import { sysconfig } from '../../systems';
-import { config } from '../../utils';
 import { KgSearchBox } from '../../components/search';
 
 // function IndexPage({ dispatch, search }) {

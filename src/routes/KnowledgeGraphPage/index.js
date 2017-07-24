@@ -20,7 +20,7 @@ class KnowledgeGraphPage extends React.PureComponent {
   }
 
   state = {
-    searchMethod: 'and2', // [direct, and2, or2 ]
+    searchMethod: 'or2', // [direct, and2, or2 ]
   };
 
   componentWillMount() {
@@ -79,9 +79,9 @@ class KnowledgeGraphPage extends React.PureComponent {
       const parent = kg.kgFetcher.getNode(kg.node.parent);
       console.log('>> parent is ', parent);
       if (parent && this.state.searchMethod === 'and2' && nwords <= 2) {
-        query = `(& ${kg.node.name}) (| ${parent.name})`;
-      } else if (parent && this.state.searchMethod === 'or2' && nwords <= 2) {
         query = `(& ${kg.node.name}) ${parent.name}`;
+      } else if (parent && this.state.searchMethod === 'or2' && nwords <= 2) {
+        query = `(& ${kg.node.name}) (| ${parent.name})`;
       }
     }
     console.log('Search Expert & Publications with query: >>> ', query, 'escaped:', encodeURI(query));

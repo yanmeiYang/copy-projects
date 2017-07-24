@@ -199,11 +199,11 @@ class Registered extends React.Component {
             })(
               <Select onChange={this.selectedRole.bind()}>
                 {
-                  this.props.universalConfig.userRoles.map((item) => {
+                  this.props.universalConfig.userRoles.map((key) => {
                     return (<Option
                       key={Math.random()}
-                      value={`ccf_${item.key}`}
-                    >{item.key}</Option>);
+                      value={`ccf_${key.value.key}`}
+                    >{key.value.key}</Option>);
                   })
                 }
               </Select>,

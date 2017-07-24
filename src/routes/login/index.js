@@ -29,7 +29,7 @@ const Login = ({
       if (errors) {
         return;
       }
-      values.src = 'aminer';
+      values.src = config.source;
       dispatch({ type: 'login/login', payload: values });
     });
   }

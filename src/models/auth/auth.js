@@ -18,9 +18,9 @@ export default {
   },
   effects: {
     *createUser({ payload }, { call, put }) {
-      const { email, first_name, gender, last_name, position, sub, role, authority } = payload;
+      const { email, first_name, gender, last_name, position, sub, role, authority, src } = payload;
       const { data } =
-        yield call(authService.createUser, email, first_name, gender, last_name, position, sub);
+        yield call(authService.createUser, email, first_name, gender, last_name, position, sub, src);
       yield put({ type: 'createUserSuccess', payload: data });
       const uid = data.uid;
       yield call(authService.invoke, uid, 'ccf');
@@ -46,7 +46,7 @@ export default {
     },
 
     *checkEmail({ payload }, { call, put }) {
-      const { data } = yield call(authService.checkEmail, payload);
+      const { data } = yield call(authService.checkEmail, payload );
       yield put({ type: 'checkEmailSuccess', payload: data.status });
     },
 

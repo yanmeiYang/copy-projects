@@ -29,6 +29,7 @@ const Login = ({
       if (errors) {
         return;
       }
+      values.src = 'aminer';
       dispatch({ type: 'login/login', payload: values });
     });
   }

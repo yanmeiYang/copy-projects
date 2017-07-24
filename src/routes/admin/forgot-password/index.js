@@ -5,6 +5,7 @@ import React from 'react';
 import { Input, Button, Form, Modal } from 'antd';
 import { connect } from 'dva';
 import { Layout } from '../../../components';
+import { config } from '../../../utils';
 import styles from './index.less';
 
 const { Header, Footer } = Layout;
@@ -31,8 +32,9 @@ class ForgotPassword extends React.Component {
     }
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err && !this.props.auth.validEmail) {
-        values.token = 'aminer';
+        values.token = config.source;
         values.password = ' ';
+        values.src = config.source;
         this.props.dispatch({ type: 'auth/forgotPassword', payload: values });
       }
     })
@@ -77,8 +79,8 @@ class ForgotPassword extends React.Component {
                   <FormItem
                     {...formItemLayout}
                     label="邮箱"
-                    validateStatus={this.state.validEmail ? '' : 'error'}
-                    help={this.state.validEmail ? '' : '该邮箱不存在'}
+                    // validateStatus={this.state.validEmail ? '' : 'error'}
+                    // help={this.state.validEmail ? '' : '该邮箱不存在'}
                     hasFeedback
                   >
                     {getFieldDecorator('identifier', {

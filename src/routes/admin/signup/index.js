@@ -4,6 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Form, Input, Button, Select, Modal } from 'antd';
+import { config } from '../../../utils';
 import { sysconfig } from '../../../systems';
 
 const FormItem = Form.Item;
@@ -20,7 +21,7 @@ class Registered extends React.Component {
     });
   }
   checkEmail = (e) => {
-    this.props.dispatch({ type: 'auth/checkEmail', payload: e.target.value });
+    this.props.dispatch({ type: 'auth/checkEmail', payload: `${e.target.value}@ccf` });
   };
 
   selectedRole = (e) => {
@@ -54,6 +55,7 @@ class Registered extends React.Component {
         values.gender = parseInt(values.gender);
         values.position = parseInt(values.position);
         values.sub = true;
+        values.src = config.source;
         this.props.dispatch({ type: 'auth/createUser', payload: values });
         Modal.success({
           title: '创建用户',

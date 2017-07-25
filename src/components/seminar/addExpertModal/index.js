@@ -225,9 +225,9 @@ class AddExpertModal extends React.Component {
               filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
               {
-                Object.keys(activity_type.data).map((item) => {
-                  return (<Option key={item}
-                                  value={`${item}#${activity_type.data[item]}`}>{item}</Option>);
+                Object.values(activity_type.data).map((item) => {
+                  return (<Option key={item.id}
+                                  value={`${item.key}#${item.value}`}>{item.key}</Option>);
                 })
               }
             </Select>}

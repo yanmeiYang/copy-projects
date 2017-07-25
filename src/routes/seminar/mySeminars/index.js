@@ -16,6 +16,27 @@ class mySeminars extends React.Component {
     currentOrganizer: '',
   };
 
+  componentWillMount = () => {
+    this.props.dispatch({
+      type: 'universalConfig/setCategory',
+      payload: { category: 'user_roles' },
+    });
+  }
+  // componentWillReceiveProps = (nextProps) => {
+  //   if (this.props.universalConfig.data.length !== nextProps.universalConfig.data.length) {
+  //     for (const value of this.props.app.roles.role) {
+  //       const userRole = nextProps.universalConfig.data.filter(item => item.value.id === value.split('_')[1])[0];
+  //       console.log(userRole);
+  //       if (userRole.value.value.id) {
+  //         this.props.dispatch({
+  //           type: 'universalConfig/getOrgCategory',
+  //           payload: { category: userRole.value.value.id },
+  //         });
+  //       }
+  //       console.log(this.props.universalConfig.orgList);
+  //     }
+  //   }
+  // }
   componentDidMount = () => {
     const { user, roles } = this.props.app;
     // 默认显示第一个organizer
@@ -111,4 +132,4 @@ class mySeminars extends React.Component {
 }
 
 
-export default connect(({ seminar, loading, app }) => ({ seminar, loading, app }))(mySeminars);
+export default connect(({ universalConfig, seminar, loading, app }) => ({ universalConfig, seminar, loading, app }))(mySeminars);

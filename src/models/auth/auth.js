@@ -18,19 +18,23 @@ export default {
   },
   effects: {
     *createUser({ payload }, { call, put }) {
-      const { email, first_name, gender, last_name, position, sub, role, authority, src } = payload;
+      const { email, first_name, gender, last_name, position, sub, role, src } = payload;
+      console.log(src);
       const { data } =
         yield call(authService.createUser, email, first_name, gender, last_name, position, sub, src);
       yield put({ type: 'createUserSuccess', payload: data });
       const uid = data.uid;
       yield call(authService.invoke, uid, 'ccf');
-      yield call(authService.invoke, uid, role);
-      if (authority) {
-        yield call(authService.invoke, uid, authority);
+      for (const value of role) {
+        yield call(authService.invoke, uid, value.id);
       }
-      if (payload.authority_region) {
-        yield call(authService.invoke, uid, payload.authority_region);
-      }
+      // yield call(authService.invoke, uid, role);
+      // if (authority) {
+      //   yield call(authService.invoke, uid, authority);
+      // }
+      // if (payload.authority_region) {
+      //   yield call(authService.invoke, uid, payload.authority_region);
+      // }
     },
 
     *addRoleByUid({ payload }, { call, put }) {

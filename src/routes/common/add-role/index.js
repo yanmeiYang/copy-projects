@@ -2,11 +2,13 @@
  *  Created by BoGao on 2017-06-12;
  */
 import React from 'react';
-import { Tabs, Table, Icon, Spin, Input, Form, Button } from 'antd';
+import { Tabs, Table, Icon, Spin, Input, Form, Button, Modal, Select } from 'antd';
 import { connect } from 'dva';
-
+import { Link } from 'dva/router';
+import { config } from '../../../utils';
 import styles from './index.less';
 
+const Option = Select.Option;
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 const { ColumnGroup, Column } = Table;
@@ -15,18 +17,23 @@ function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
 
-class UniversalConfig extends React.Component {
+class AddUserRolesByOrg extends React.Component {
   state = {
     editCurrentData: {},
+    visible: false,
   };
 
   componentDidMount() {
     // To disabled submit button at the beginning.
     this.props.form.validateFields();
+    // this.props.dispatch({
+    //   type: 'universalConfig/setCategory',
+    //   payload: { category: 'orgcategory_ccf' },
+    // });
   }
 
   onDelete = (e) => {
-    const key = e.target && e.target.getAttribute('data');
+    const key = JSON.parse(e.target && e.target.getAttribute('data')).key;
     this.props.dispatch({
       type: 'universalConfig/deleteByKey',
       payload: { category: this.props.universalConfig.category, key },
@@ -42,7 +49,6 @@ class UniversalConfig extends React.Component {
 
   handleSubmit = (e) => {
     const { universalConfig } = this.props;
-
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
@@ -68,62 +74,105 @@ class UniversalConfig extends React.Component {
       }
     });
   };
+  addRole = () => {
+    this.setState({ visible: true });
+    this.props.dispatch({
+      type: 'universalConfig/getOrgCategory',
+      payload: { category: 'orgcategory' },
+    });
+  }
+  handleOk = (e) => {
+    this.setState({ visible: false });
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        const orgName = values.value.split('#')[0];
+        const orgID = values.value.split('#')[1];
+        this.props.dispatch({
+          type: 'universalConfig/addKeyAndValue',
+          payload: {
+            category: 'user_roles',
+            key: values.key,
+            val: { id: `orglist_${orgID}`, name: orgName },
+          },
+        });
+        this.props.dispatch({
+          type: 'universalConfig/addKeyAndValue',
+          payload: {
+            category: 'getallorglist',
+            key: orgName,
+            val: { id: `orglist_${orgID}`, name: orgName },
+          },
+        });
+      }
+    });
+  };
+  handleCancel = () => this.setState({ visible: false });
 
+  handleChange = (value) => {
+    console.log(`selected ${value}`);
+  }
   render() {
     // Form related.
     const { universalConfig } = this.props;
     const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
     const keyError = isFieldTouched('key') && getFieldError('key');
     const valueError = isFieldTouched('value') && getFieldError('value');
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 20 },
+      },
+    };
     return (
       <div>
         {/*DEBUG INFO: Current Category is : {universalConfig.category}*/}
-
-        <div className={styles.edit_zone}>
-          <div className="title">编辑区域：</div>
-          <div>
-            <Form layout="inline" onSubmit={this.handleSubmit}>
+        <Button type="primary" onClick={this.addRole}> 添加角色</Button>
+        <Modal
+          title="添加角色"
+          visible={this.state.visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
+          <div style={{ width: '100%' }}>
+            <Form onSubmit={this.handleSubmit}>
               <FormItem
+                {...formItemLayout}
                 validateStatus={keyError ? 'error' : ''}
                 help={keyError || ''}
+                label="角色名称"
               >
                 {getFieldDecorator('key', {
                   rules: [{ required: true, message: 'Please input key!' }],
                 })(
-                  <Input addonBefore="名称" />
+                  <Input />
                 )}
               </FormItem>
 
               <FormItem
+                {...formItemLayout}
                 validateStatus={valueError ? 'error' : ''}
                 help={valueError || ''}
+                label="选择机构"
               >
                 {getFieldDecorator('value', {
                   rules: [{ required: false, message: 'Please input value!' }],
                 })(
-                  <Input
-                    addonBefore={this.props.hideValue ? '' : '值'}
-                    type={this.props.hideValue ? 'hidden' : 'text'}
-                  />,
+                  <Select onChange={this.handleChange}>
+                    {universalConfig.orgList.map((item) => {
+                      return <Option value={`${item.value.key}#${item.value.id}`} key={item.value.id}>{item.value.key}</Option>
+                    })}
+                  </Select>,
                 )}
-
-                {/*(类型为:{universalConfig.valueType})*/}
               </FormItem>
-
-              <FormItem>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  disabled={hasErrors(getFieldsError())}
-                >
-                  添加/修改
-                </Button>
-              </FormItem>
-
             </Form>
-
           </div>
-        </div>
+        </Modal>
+
 
         <Spin spinning={universalConfig.loading}>
           <Table
@@ -135,7 +184,13 @@ class UniversalConfig extends React.Component {
           >
             <Column title="名称" dataIndex="value.key" key="key" />
             {!this.props.hideValue &&
-            <Column title="值" dataIndex="value.value" key="value" />
+            <Column title="对应机构" dataIndex="value.value" key="value" render={(dataIndex, text) => {
+              if (typeof dataIndex !== 'object') {
+                return dataIndex;
+              } else if (typeof dataIndex === 'object') {
+                return <Link to={`/admin/system-config/${text.value.value.id}`} data={JSON.stringify(text)} > {text.value.value.name} </Link>;
+              }
+            }} />
             }
             <Column
               title="操作"
@@ -145,7 +200,7 @@ class UniversalConfig extends React.Component {
                   <span>
                   <a onClick={this.onEdit} data={JSON.stringify(text)}>编辑</a>
                   <span className="ant-divider" />
-                  <a onClick={this.onDelete} data={text.key}>删除</a>
+                  <a onClick={this.onDelete} data={JSON.stringify(text.value)}>删除</a>
                     {/*<span className="ant-divider" />*/}
                     {/*<a href="#" className="ant-dropdown-link">*/}
                     {/*More actions <Icon type="down" />*/}
@@ -163,4 +218,4 @@ class UniversalConfig extends React.Component {
 
 export default connect(
   ({ universalConfig }) => ({ universalConfig }),
-)(Form.create()(UniversalConfig));
+)(Form.create()(AddUserRolesByOrg));

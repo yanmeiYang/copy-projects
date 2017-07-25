@@ -226,8 +226,8 @@ class RegistrationForm extends React.Component {
               )(
                 <Select>
                   {
-                    Object.keys(activity_type_options_data).map((item) => {
-                      return (<Option key={Math.random()} value={item}>{item}</Option>);
+                    Object.values(activity_type_options_data).map((item) => {
+                      return (<Option key={Math.random()} value={item.key}>{item.key}</Option>);
                     })
                   }
                 </Select>,
@@ -240,8 +240,8 @@ class RegistrationForm extends React.Component {
               )(
                 <Select mode="tags" onChange={this.handleOrganizerChange.bind(this, activity_organizer_options_data)}>
                   {
-                    Object.keys(activity_organizer_options_data).map((item) => {
-                      return (<Option key={item} value={item}>{item}</Option>);
+                    Object.values(activity_organizer_options_data).map((item) => {
+                      return (<Option key={item.id} value={item.key}>{item.key}</Option>);
                     })
                   }
                 </Select>,

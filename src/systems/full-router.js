@@ -34,6 +34,7 @@ const fullRouter = (app, defaultChildRoutes) => {
       // Admin(Specified by ccf)
       core.AdminUsers(app),
       core.AdminSystemConfig(app),
+      core.AdminAddUserRolesByOrg(app),
       core.AdminSystemConfigWithCategory(app),
 
       // Activity / Seminar

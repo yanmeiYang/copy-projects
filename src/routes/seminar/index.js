@@ -163,15 +163,15 @@ class Seminar extends React.Component {
               {activity_organizer_options.data &&
               <ul className={styles.filterItems}>
                 {
-                  Object.keys(activity_organizer_options.data).map((item) => {
+                  Object.values(activity_organizer_options.data).map((item) => {
                     return (
                       <CheckableTag
-                        key={item}
+                        key={item.id}
                         className={styles.filterItem}
-                        checked={organizer === item}
-                        onChange={checked => this.onFilterChange(item, 'organizer', checked)}
+                        checked={organizer === item.key}
+                        onChange={checked => this.onFilterChange(item.key, 'organizer', checked)}
                       >
-                        {item}
+                        {item.key}
                       </CheckableTag>
                     );
                   })
@@ -184,15 +184,15 @@ class Seminar extends React.Component {
               {activity_type.data &&
                 <ul className={styles.filterItems}>
                   {
-                    Object.keys(activity_type.data).map((item) => {
+                    Object.values(activity_type.data).map((item) => {
                       return (
                         <CheckableTag
-                          key={item}
+                          key={item.id}
                           className={styles.filterItem}
-                          checked={category === item}
-                          onChange={checked => this.onFilterChange(item, 'category', checked)}
+                          checked={category === item.key}
+                          onChange={checked => this.onFilterChange(item.key, 'category', checked)}
                         >
-                          {item}
+                          {item.key}
                         </CheckableTag>
                       );
                     })

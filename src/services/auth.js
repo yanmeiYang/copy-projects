@@ -4,7 +4,7 @@
 import { request, config } from '../utils';
 const { api } = config;
 
-export async function createUser(email, first_name, gender, last_name, position, sub) {
+export async function createUser(email, first_name, gender, last_name, position, sub, src) {
   const user = {
     email,
     first_name,
@@ -12,6 +12,7 @@ export async function createUser(email, first_name, gender, last_name, position,
     last_name,
     position,
     sub,
+    src,
   };
   return request(api.signup, {
     method: 'POST',

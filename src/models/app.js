@@ -11,7 +11,7 @@ export default {
   state: {
     user: {},
     token: LocalStorage.getItem('token'),
-    roles: { admin: false, ccf_user: false, role: '', authority: '' }, // TODO parse roles string into this object.
+    roles: { admin: false, ccf_user: false, role: [] }, // TODO parse roles string into this object.
     menuPopoverVisible: false,
     siderFold: LocalStorage.getItem(`${prefix}siderFold`) === 'true',
     darkTheme: LocalStorage.getItem(`${prefix}darkTheme`) === 'true',
@@ -89,7 +89,7 @@ export default {
 
   reducers: {
     getCurrentUserInfoSuccess(state, { payload: user }) {
-      const roles = { admin: false, ccf_user: false, role: '', authority: '' };
+      const roles = { admin: false, ccf_user: false, role: [] };
       for (const r of user.role) {
         if (r === 'root' || r === 'ccf_超级管理员') {
           roles.admin = true;
@@ -97,11 +97,8 @@ export default {
         if (r === 'ccf') {
           roles.ccf_user = true;
         }
-        if (r.split('_').length === 2) {
-          roles.role = r.split('_')[1];
-        }
-        if (r.split('_').length === 3) {
-          roles.authority = r.split('_')[2];
+        if (r.split('_').length >= 2) {
+          roles.role.push(r);
         }
       }
       setLocalStorage('user', user, roles);

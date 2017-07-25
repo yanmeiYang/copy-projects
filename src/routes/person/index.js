@@ -31,41 +31,46 @@ const Person = ({ dispatch, person, seminar, publications }) => {
       }
       <table style={{ marginBottom: 10 }}>
         {contrib &&
-          <tr>
-            <td>贡献度:</td>
-            <td>
-              {/* <Rate disabled defaultValue={contrib.score}/>*/}
-              <span>{contrib.score}</span>
-            </td>
-          </tr>
+        <tr>
+          <td>贡献度:</td>
+          <td>
+            {/* <Rate disabled defaultValue={contrib.score}/>*/}
+            <span>{contrib.score}</span>
+          </td>
+        </tr>
         }
         {avgScores.map((score) => {
           return (
-            <tbody key={score.key}>
-              {score.key === 'level' && <tr>
-                <td>演讲内容（水平）:</td>
-                <td>
-                  <Rate disabled defaultValue={score.score} />
-                  <span>{getTwoDecimal(score.score, 2)}</span>
-                </td>
-              </tr>
+            <tbody key={score.key} className="scoreTable">
+            {score.key === 'level' &&
+            <tr>
+              <td>演讲内容（水平）:</td>
+              <td>
+                <Rate disabled defaultValue={score.score} />
+                <input type="text" className="score" value={getTwoDecimal(score.score, 2)}
+                       disabled />
+              </td>
+            </tr>
             }
-              {score.key === 'content' &&
-              <tr>
-                <td>演讲水平:</td>
-                <td>
-                  <Rate disabled defaultValue={score.score} />
-                  <span>{getTwoDecimal(score.score, 2)}</span>
-                </td>
-              </tr>
+            {score.key === 'content' &&
+            <tr>
+              <td>演讲水平:</td>
+              <td>
+                <Rate disabled defaultValue={score.score} />
+                <input type="text" className="score" value={getTwoDecimal(score.score, 2)}
+                       disabled />
+              </td>
+            </tr>
             }
-              {score.key === 'integrated' && <tr>
-                <td>综合评价（其它贡献）:</td>
-                <td>
-                  <Rate disabled defaultValue={score.score} />
-                  <span>{getTwoDecimal(score.score, 2)}</span>
-                </td>
-              </tr>}
+            {score.key === 'integrated' &&
+            <tr>
+              <td>综合评价（其它贡献）:</td>
+              <td>
+                <Rate disabled defaultValue={score.score} />
+                <input type="text" className="score" value={getTwoDecimal(score.score, 2)}
+                       disabled />
+              </td>
+            </tr>}
             </tbody>
           );
         })}
@@ -78,7 +83,8 @@ const Person = ({ dispatch, person, seminar, publications }) => {
         return (
           <div key={activity.id + Math.random()}>
             {/* <ActivityList result={activity} />*/}
-            <NewActivityList result={activity} hidetExpertRating="true" style={{ marginTop: 20, maxWidth: 1000 }} />
+            <NewActivityList result={activity} hidetExpertRating="true"
+                             style={{ marginTop: 20, maxWidth: 1000 }} />
           </div>
         );
       })}</div>
@@ -145,7 +151,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
     }
   }
 
-  console.log('|||||||||||| PersonIndex:', person);
+  // console.log('|||||||||||| PersonIndex:', person);
   return (
     <div className="content-inner">
 

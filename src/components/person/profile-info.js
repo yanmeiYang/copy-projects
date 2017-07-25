@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import styles from './profile-info.less';
 import { Indices } from '../../components/widgets';
 import * as profileUtils from '../../utils/profile_utils';
+import * as personService from '../../services/person';
 import { VisResearchInterest } from '../../routes/vis';
 
 class ProfileInfo extends React.Component {
@@ -39,33 +40,47 @@ class ProfileInfo extends React.Component {
           {name &&
           <div className={styles.title}>
             <h1>{name}</h1>
-            { false && <span className={styles.rank}>会士</span>}
+            {false && <span className={styles.rank}>会士</span>}
+            {true &&
+            <a
+              href={personService.getAMinerProfileUrl(profile.name, profile.id)}
+              target="_blank" rel="noopener noreferrer"
+            > <span className={styles.rank}>更多</span> </a>}
+
           </div>}
           {name && <div className={styles.spliter} />}
+
+          {profile && profile.indices &&
+          <Indices indices={profile.indices} />
+          }
 
           {pos && <span><i className="fa fa-briefcase fa-fw" /> {pos}</span>}
           {aff && <span><i className="fa fa-institution fa-fw" /> {aff}</span>}
           {phone && <span><i className="fa fa-phone fa-fw" /> {phone}</span>}
           {email &&
-          <span><i className="fa fa-envelope fa-fw" />
+          <span>
+            <i className="fa fa-envelope fa-fw" />
             <img className="emailImg" src={`https://api.aminer.org/api/${email}`} alt="email"
                  style={{ verticalAlign: 'middle' }} />
           </span>}
-          {homepage && <span className="hp"><i className="fa fa-globe fa-fw" /> {homepage}</span>}
+          {homepage &&
+          <span className="hp">
+            <a href={homepage} target="_blank" rel="noopener noreferrer">
+              <i className="fa fa-globe fa-fw" /> {homepage}
+            </a>
+          </span>
+          }
+
 
           <span style={{ marginTop: 16 }} />
           <span className="section_header"><i className="fa fa-area-chart fa-fw" /> 研究兴趣</span>
-
           <VisResearchInterest personId={profile.id} disable_vis_chart={true} />
 
           {/* TODO 这里放一个可以手工添加修改的tabs. */}
 
         </div>
         {/*{console.log('=========', profile)}*/}
-        {profile && profile.indices &&
-        <Indices indices={profile.indices} />
-        }
-        { false && <div>
+        {false && <div>
           <div>Radar</div>
           <div>Tags</div>
         </div>

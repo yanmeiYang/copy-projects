@@ -2,11 +2,10 @@ import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import { Tabs, Tag, Pagination, Spin } from 'antd';
-import SearchBox from '../../components/SearchBox';
 import styles from './index.less';
 import { PersonList } from '../../components/person';
 import { sysconfig } from '../../systems';
-import { KnowledgeGraphSearchHelper } from '../knowledge-graph';
+// import { KnowledgeGraphSearchHelper } from '../knowledge-graph';
 import { classnames } from '../../utils';
 import ExportPersonBtn from '../../components/person/export-person';
 import { KgSearchBox } from '../../components/search';
@@ -129,7 +128,7 @@ const Search = ({ dispatch, search }) => {
           <div className={styles.top}>
             <div className={styles.searchWrap}>
               <KgSearchBox
-                size="large" style={{ width: 680 }} btnText="搜索"
+                size="large" style={{ width: 500 }} btnText="搜索"
                 query={query} onSearch={onSearch}
               />
 
@@ -217,7 +216,7 @@ const Search = ({ dispatch, search }) => {
               }
 
             </div>
-            <Tabs defaultActiveKey="relevance" onChange={onOrderChange}>
+            <Tabs defaultActiveKey="relevance" onChange={onOrderChange} size="small" type="line">
               <TabPane tab={filterDisplay('相关度')} key="relevance" />
               <TabPane tab={filterDisplay('学术成就')} key="h_index" />
               <TabPane tab={filterDisplay('学术活跃度')} key="activity" />
@@ -228,7 +227,7 @@ const Search = ({ dispatch, search }) => {
         </div>
 
         <div className="rightZone">
-          <KnowledgeGraphSearchHelper query={query} lang="cn" />
+          {/* <KnowledgeGraphSearchHelper query={query} lang="cn" /> */}
           {sysconfig.Enable_Export &&
           <ExportPersonBtn {...filters} results={results} />
           }

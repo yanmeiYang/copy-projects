@@ -5,22 +5,20 @@ import React from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
 import { routerRedux, Link } from 'dva/router';
-import { Radio } from 'antd';
+import { Radio, Tabs } from 'antd';
 import styles from './index.less';
 import { KnowledgeGraphTextTree } from '../knowledge-graph';
 import { PublicationList } from '../../components/publication';
 import { PersonListTiny } from '../../components/person';
 
 const RadioGroup = Radio.Group;
+const TabPane = Tabs.TabPane;
 
 class KnowledgeGraphPage extends React.PureComponent {
 
-  constructor(props) {
-    super(props);
-  }
-
   state = {
     searchMethod: 'or2', // [direct, and2, or2 ]
+    infoTab: 'experts',
   };
 
   componentWillMount() {
@@ -35,20 +33,72 @@ class KnowledgeGraphPage extends React.PureComponent {
     this.props.dispatch({ type: 'knowledgeGraph/setState', payload: { query } });
   }
 
+  componentDidMount() {
+
+  }
+
   // shouldComponentUpdate(nextProps, nextState) {
   //
   // }
 
+  // 最佳实践：实验1
   componentDidUpdate(prevProps, prevState) {
     const kg = this.props.knowledgeGraph;
-    if (kg.node && (
-        kg.node !== prevProps.knowledgeGraph.node ||
-        this.state.searchMethod !== prevState.searchMethod
-      )) {
-      this.searchExpertsAndPubs();
+    // 没有node，一切都是扯淡.
+    if (kg.node) {
+      let needEffects = false;
+      let mustEffects = false;
+
+      // 点击左侧node，并且换了新node，要清空右侧三个框的内容。
+      if (kg.node !== prevProps.knowledgeGraph.node) {
+        // this.props.dispatch({ type: 'knowledgeGraph/resetInfoBlock' });
+        mustEffects = true;
+      }
+      // 之后去调用api取当前的。
+      // 在同一个node下，点击右侧标签进来的node一致，不清空.
+      // TODO call search based on info tab? and check if value changed.
+
+      // if searchMethod changed.
+      if (this.state.searchMethod !== prevState.searchMethod) {
+        // this.props.dispatch({ type: 'knowledgeGraph/resetExpertsAndPublications' });
+        mustEffects = true;
+      }
+
+      // if infoTab changed.
+      if (this.state.infoTab !== prevState.infoTab) {
+        needEffects = true;
+      }
+
+      if (needEffects || mustEffects) {
+        // console.log('this.state.infoTab === \'experts\'', this.state.infoTab === 'experts');
+        // console.log('', kg.experts);
+        // console.log('', kg.publications);
+        if (this.state.infoTab === 'info') {
+          // TODO call node.
+          // this.props.dispatch({
+          //   type: 'knowledgeGraph/setState',
+          //   payload: { fullNode: this.props.knowledgeGraph.node },
+          // });
+        } else if ((this.state.infoTab === 'experts')) {
+          if (!kg.experts || mustEffects) {
+            const query = this.getQuery();
+            this.props.dispatch({
+              type: 'knowledgeGraph/searchExperts',
+              payload: { query, offset: 0, size: 10, sort: 'relevance' },
+            });
+          }
+        } else if ((this.state.infoTab === 'publications' )) {
+          if (!kg.publications || mustEffects) {
+            const query = this.getQuery();
+            this.props.dispatch({
+              type: 'knowledgeGraph/searchPubs',
+              payload: { query, offset: 0, size: 10, sort: 'relevance' },
+            });
+          }
+        }
+      }
     }
   }
-
 
   onSearch = ({ query }) => {
     const location = this.props.location;
@@ -70,36 +120,58 @@ class KnowledgeGraphPage extends React.PureComponent {
     });
   };
 
-  searchExpertsAndPubs = () => {
-    const kg = this.props.knowledgeGraph;
+  onInfoTabChange = (e) => {
+    this.setState({ infoTab: e });
+  };
+
+  getQuery = () => {
     // special query.
+    const kg = this.props.knowledgeGraph;
     let query = kg.node.name && kg.node.name.trim();
     const nwords = query.split(' ').length;
     if (this.state.searchMethod !== 'direct') { // just use query
       const parent = kg.kgFetcher.getNode(kg.node.parent);
-      console.log('>> parent is ', parent);
       if (parent && this.state.searchMethod === 'and2' && nwords <= 2) {
         query = `(& ${kg.node.name}) ${parent.name}`;
       } else if (parent && this.state.searchMethod === 'or2' && nwords <= 2) {
         query = `(& ${kg.node.name}) (| ${parent.name})`;
       }
     }
-    console.log('Search Expert & Publications with query: >>> ', query, 'escaped:', encodeURI(query));
+    // console.log('Search : >>> ', query, 'escaped:', encodeURI(query));
     query = encodeURIComponent(query);
-
-    this.props.dispatch({
-      type: 'knowledgeGraph/searchPubs',
-      payload: { query, offset: 0, size: 10, sort: 'relevance' },
-    });
-    this.props.dispatch({
-      type: 'knowledgeGraph/searchExperts',
-      payload: { query, offset: 0, size: 10, sort: 'relevance' },
-    });
+    return query;
   };
+
+  searchExpertsAndPubs = () => {
+    const kg = this.props.knowledgeGraph;
+
+    if (this.state.infoTab === 'info') {
+      // TODO call node.
+      // this.props.dispatch({
+      //   type: 'knowledgeGraph/setState',
+      //   payload: { fullNode: this.props.knowledgeGraph.node },
+      // });
+    } else if (this.state.infoTab === 'experts') {
+      const query = this.getQuery();
+      this.props.dispatch({
+        type: 'knowledgeGraph/searchExperts',
+        payload: { query, offset: 0, size: 10, sort: 'relevance' },
+      });
+    } else if (this.state.infoTab === 'publications') {
+      const query = this.getQuery();
+      this.props.dispatch({
+        type: 'knowledgeGraph/searchPubs',
+        payload: { query, offset: 0, size: 10, sort: 'relevance' },
+      });
+    }
+  };
+
+  EmptyBlock = <span className={styles.emptyBlock}>Please select a node!</span>;
 
   render() {
     const kg = this.props.knowledgeGraph;
 
+    // const searchHeader=<div>search for: {kg.}</div>
     return (
       <div className={classnames('content-inner', styles.page)}>
         <div className={styles.title}>
@@ -126,32 +198,39 @@ class KnowledgeGraphPage extends React.PureComponent {
             />
 
           </div>
-          <div className={styles.right}>
-            <div className="card definition">
-              <div className="header">
-                <h2>Definition:</h2>
-              </div>
-              <div className="text">
-                {this.state.node && this.state.node.definition}
-              </div>
-            </div>
-            <div className="card experts">
-              <div className="header">
-                <h2>Experts:</h2>
-              </div>
-              <div className="text">
-                <PersonListTiny persons={kg.experts} />
-              </div>
-            </div>
-            <div className="card pubs">
-              <div className="header">
-                <h2>Publications:</h2>
-              </div>
-              <div className="text">
-                <PublicationList pubs={kg.publications} />
-              </div>
-            </div>
+
+          <div className={`${styles.right} card-container`}>
+            <Tabs
+              type="card"
+              onChange={this.onInfoTabChange}
+              activeKey={this.state.infoTab}
+            >
+              <TabPane tab="INFO" key="info">
+                <div>
+                  {kg.node && kg.node.name}
+                  {kg.node && kg.node.definition}
+                  {!kg.node && this.EmptyBlock}
+                </div>
+              </TabPane>
+              <TabPane tab="EXPERTS" key="experts">
+                {kg.experts
+                  ? <PersonListTiny persons={kg.experts} />
+                  : this.EmptyBlock
+                }
+              </TabPane>
+              <TabPane tab="PUBLICATIONS" key="publications">
+                {kg.publications
+                  ? <PublicationList pubs={kg.publications} />
+                  : this.EmptyBlock
+                }
+              </TabPane>
+            </Tabs>
+
+            {/*<div className="tabContent">*/}
+            {/*{this.state.view[this.state.infoTab]}*/}
+            {/*</div>*/}
           </div>
+
         </div>
       </div>
     );

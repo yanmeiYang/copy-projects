@@ -15,11 +15,14 @@ class ForgotPassword extends React.Component {
   state = {
     validEmail: true,
   };
+
   componentWillMount = () => {
     this.props.dispatch({ type: 'app/handleNavbar', payload: true });
   };
+
   componentWillUnmount = () => {
     this.props.dispatch({ type: 'app/handleNavbar', payload: false });
+
   };
   // componentWillReceiveProps = (nextProps) => {
   //   if (nextProps.auth.isUpdateForgotPw) {
@@ -86,8 +89,9 @@ class ForgotPassword extends React.Component {
                       <Input type="email" />,
                     )}
                   </FormItem>
-                  <FormItem {...tailFormItemLayout} style={{marginTop: 60}}>
-                    <Button type="primary" htmlType="submit" size="large" style={{width: '100%'}}>确定</Button>
+                  <FormItem {...tailFormItemLayout} style={{ marginTop: 60 }}>
+                    <Button type="primary" htmlType="submit" size="large"
+                            style={{ width: '100%' }}>确定</Button>
                   </FormItem>
                 </Form>
               </div>

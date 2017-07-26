@@ -15,6 +15,7 @@ const app = dva({
   onError(error) {
     console.log(error);
     message.error(error.message);
+    alert(error);
   },
 });
 

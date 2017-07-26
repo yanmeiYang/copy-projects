@@ -67,7 +67,6 @@ class UniSearch extends React.PureComponent {
   componentWillMount() {
     this.state.currentTab = this.query.view ? `${this.query.view}` : 'list-view';
 
-    // const { filters } = this.props.search;
     this.dispatch({
       type: 'app/layout',
       payload: {

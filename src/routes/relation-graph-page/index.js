@@ -25,7 +25,7 @@ class RelationGraphPage extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className={styles.page}>
         <div className={styles.normal}>
           <h1>关系图</h1>
 

@@ -21,8 +21,9 @@ export default {
     node: null,
 
     // third state
-    experts: [],
-    publications: [],
+    experts: null,
+    publications: null,
+    fullNode: null, // TODO
   },
 
   subscriptions: {
@@ -55,7 +56,8 @@ export default {
 
     * searchExperts({ payload }, { call, put }) {
       const { query, offset, size, sort } = payload;
-      const { data } = yield call(searchService.searchPersonGlobal, query, offset, size, null, sort);
+      const { data } = yield call(searchService.searchPersonGlobal,
+        query, offset, size, null, sort);
       yield put({ type: 'searchExpertsSuccess', payload: { data } });
     },
   },
@@ -63,6 +65,14 @@ export default {
   reducers: {
     setState(state, { payload }) {
       return { ...state, ...payload };
+    },
+
+    resetInfoBlock(state) {
+      return { ...state, experts: null, publications: null, fullNode: '' };
+    },
+
+    resetExpertsAndPublications(state) {
+      return { ...state, experts: null, publications: null };
     },
 
     kfFindSuccess(state, { payload }) {
@@ -75,12 +85,12 @@ export default {
     },
     searchPubsSuccess(state, { payload }) {
       const { data } = payload;
-      console.log('search publications: ', data);
+      // console.log('search publications: ', data);
       return { ...state, publications: data.result };
     },
     searchExpertsSuccess(state, { payload }) {
       const { data } = payload;
-      console.log('search experts: ', data);
+      // console.log('search experts: ', data);
       return { ...state, experts: data.result };
     },
 

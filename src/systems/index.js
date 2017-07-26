@@ -40,6 +40,7 @@ const defaultSystemConfigs = {
   // Layout related
   //
   Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
+  Header_LogoWidth: 212,
   Header_LogoStyle: {},
   Header_SubTextLogo: '子标题',
   Header_SubTextStyle: {},
@@ -51,6 +52,7 @@ const defaultSystemConfigs = {
     'Data Mining', 'Machine Learning', 'Data Modeling', 'Computer vision',
     'Networks', 'Natural language processing'],
   IndexPage_InfoBlocks: '',
+  HeaderSearch_TextNavi: null, // use default settings in component.
 
   SearchFilterExclude: 'Gender',
 

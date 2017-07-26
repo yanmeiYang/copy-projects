@@ -11,9 +11,6 @@ class IndexPage extends React.Component {
   constructor(props) {
     super(props);
     this.dispatch = this.props.dispatch;
-    const a = PRODUCTION;
-    window.location
-    console.log('...lllooo', a);
   }
 
   componentWillMount() {
@@ -21,9 +18,11 @@ class IndexPage extends React.Component {
   }
 
   onSearch = ({ query }) => {
-    this.dispatch(routerRedux.push({
-      pathname: `/${sysconfig.SearchPagePrefix}/${query}/0/30`,
-    }));
+    if (query && query.trim() !== '') {
+      this.dispatch(routerRedux.push({
+        pathname: `/${sysconfig.SearchPagePrefix}/${query}/0/30`,
+      }));
+    }
   };
 
   // function goToDetail(id) {

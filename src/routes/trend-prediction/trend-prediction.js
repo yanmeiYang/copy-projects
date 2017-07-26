@@ -16,7 +16,7 @@ class TrendPrediction extends React.PureComponent {
   render() {
     return (
       <div className={styles.trend}>
-        <iframe className={styles.frame} src="http://localhost:8888/templates/trend.htm"></iframe>
+        <iframe className={styles.frame} src="http://47.94.231.103:8877/index.html"></iframe>
       </div>
     );
   }

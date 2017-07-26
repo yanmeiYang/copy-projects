@@ -30,6 +30,7 @@ class ForgotPassword extends React.Component {
   //   }
   // };
   handleSubmit = (e) => {
+    e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         values.token = config.source;
@@ -37,7 +38,7 @@ class ForgotPassword extends React.Component {
         values.src = config.source;
         this.props.dispatch({ type: 'auth/forgotPassword', payload: values });
       }
-    })
+    });
   };
   // handleConfirmBlur = (e) => {
   //   this.props.dispatch({ type: 'auth/checkEmail', payload: { email: e.target.value } });
@@ -63,8 +64,6 @@ class ForgotPassword extends React.Component {
         sm: { span: 14, offset: 6 },
       },
     };
-    const headerProps = { location };
-    const { validEmail } = this.props.auth;
     return (
       <div>
         <div className={styles.container}>
@@ -95,9 +94,8 @@ class ForgotPassword extends React.Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
-
 }
 
-export default connect(({ app, auth }) => ({ app, auth }))(Form.create()(ForgotPassword))
+export default connect(({ app, auth }) => ({ app, auth }))(Form.create()(ForgotPassword));

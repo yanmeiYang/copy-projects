@@ -15,7 +15,7 @@ const Option = Select.Option;
 class Registered extends React.Component {
   state = {
     addRoleModalVisible: false,
-    currentRoleAndOrg: [],
+    currentRoleAndOrg: '',
   };
 
   componentDidMount() {
@@ -31,6 +31,7 @@ class Registered extends React.Component {
   selectedRole = (e) => {
     this.props.universalConfig.orgList = [];
     const data = JSON.parse(e);
+    this.setState({ currentRoleAndOrg: `${data.key}` });
     if (data.value !== '') {
       this.props.dispatch({
         type: 'universalConfig/getOrgCategory',
@@ -39,32 +40,36 @@ class Registered extends React.Component {
     }
   };
   selectedOrg = (e) => {
-    console.log(e);
-  };
-  addRole = () => {
-    this.setState({ addRoleModalVisible: true });
-    this.props.dispatch({
-      type: 'universalConfig/setCategory',
-      payload: { category: 'user_roles' },
-    });
-  }
-  setCurrentRoleAndOrg = (role, org) => {
-    let name = '';
-    let id = '';
-    if (org.name === undefined) {
-      name = role.name;
-      id = `${config.source}_${role.id}`;
-    } else {
-      name = `${role.name} ${org.name}`;
-      id = `${config.source}_${role.id}_${org.id}`;
+    const arr = this.state.currentRoleAndOrg.split('_');
+    if (arr.length > 2) {
+      arr.pop();
     }
-    const data = [...this.state.currentRoleAndOrg, { name, id }];
-    this.setState({ currentRoleAndOrg: data, addRoleModalVisible: false });
+    this.setState({ currentRoleAndOrg: `${arr.join('_')}_${JSON.parse(e).key}` });
   };
-  delRole = (value) => {
-    const currentRoleAndOrg = this.state.currentRoleAndOrg.filter(tag => tag.id !== value.id);
-    this.setState({ currentRoleAndOrg });
-  }
+  // addRole = () => {
+  //   this.setState({ addRoleModalVisible: true });
+  //   this.props.dispatch({
+  //     type: 'universalConfig/setCategory',
+  //     payload: { category: 'user_roles' },
+  //   });
+  // }
+  // setCurrentRoleAndOrg = (role, org) => {
+  //   let name = '';
+  //   let id = '';
+  //   if (org.name === undefined) {
+  //     name = role.name;
+  //     id = `${config.source}_${role.id}`;
+  //   } else {
+  //     name = `${role.name} ${org.name}`;
+  //     id = `${config.source}_${role.id}_${org.id}`;
+  //   }
+  //   const data = [...this.state.currentRoleAndOrg, { name, id }];
+  //   this.setState({ currentRoleAndOrg: data, addRoleModalVisible: false });
+  // };
+  // delRole = (value) => {
+  //   const currentRoleAndOrg = this.state.currentRoleAndOrg.filter(tag => tag.id !== value.id);
+  //   this.setState({ currentRoleAndOrg });
+  // }
 
 
   registered = (e) => {
@@ -75,6 +80,7 @@ class Registered extends React.Component {
         values.position = 8;
         values.sub = true;
         values.src = config.source;
+        values.role = this.state.currentRoleAndOrg;
         this.props.dispatch({ type: 'auth/createUser', payload: values });
         Modal.success({
           title: '创建用户',

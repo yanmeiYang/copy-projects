@@ -53,7 +53,7 @@ export default {
       const { id } = payload;
       const { data } = yield call(personService.getActivityAvgScoresByPersonId, id);
       yield put({ type: 'getActivityAvgScoresByPersonIdSuccess', payload: { data } })
-    }
+    },
   },
 
   reducers: {

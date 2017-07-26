@@ -28,7 +28,6 @@ class UserList extends React.Component {
     currentAuthority: '',
     currentUid: '',
     committee: false,
-    region: false,
     isModifyRegion: false,
     selectedRole: '',
     selectedAuthority: '',
@@ -57,16 +56,21 @@ class UserList extends React.Component {
 
     // TODO HardCode-CCF
     if (role === 'ccf_CCF专委秘书长') {
-      this.setState({ committee: true, region: false });
+      this.setState({ committee: true });
       // 获取所有的专委
       this.props.dispatch({
         type: 'universalConfig/setCategory',
-        payload: { category: 'technical-committee' },
+        payload: { category: 'orglist_5976bb068ef7a2e824adca67' },
       });
     } else if (role === 'ccf_分部秘书长') {
-      this.setState({ region: true, committee: false });
+      // 获取所有的专委
+      this.props.dispatch({
+        type: 'universalConfig/setCategory',
+        payload: { category: 'orglist_5976ba688ef7a2e824adc28a' },
+      });
+      this.setState({ committee: true });
     } else {
-      this.setState({ region: false, committee: false });
+      this.setState({ committee: false });
     }
     this.setState({
       visible: true,
@@ -80,7 +84,7 @@ class UserList extends React.Component {
 
   selectedAuthorityRegion = (e) => {
     const role = e.target.value;
-    this.setState({ selectedAuthority: role });
+    this.setState({ selectedAuthority: role, committee: true });
   };
 
   delCurrentRoleByUid = (uid, roles) => {
@@ -136,19 +140,30 @@ class UserList extends React.Component {
   handleCancel = () => this.setState({ visible: false });
 
   selectedRole = (e) => {
-    const role = e.target.value;
-    if (role === 'ccf_CCF专委秘书长') {
-      this.setState({ committee: true, region: false, isModifyRegion: true, selectedRole: role });
+    const data = e.target.data;
+    const role = `ccf_${data.key}`;
+    if (data.value !== '') {
+      this.props.dispatch({
+        type: 'universalConfig/getOrgCategory',
+        payload: { category: data.value.id },
+      });
+    }
+    if (role === 'ccf_专委秘书长') {
+      this.setState({ committee: true, isModifyRegion: true, selectedRole: role });
       // 获取所有的专委
       this.props.dispatch({
         type: 'universalConfig/setCategory',
-        payload: { category: 'technical-committee' },
+        payload: { category: 'orglist_5976bb068ef7a2e824adca67' },
       });
     } else if (role === 'ccf_分部秘书长') {
-      this.setState({ region: true, committee: false, isModifyRegion: true, selectedRole: role });
+      this.setState({ committee: true, isModifyRegion: true, selectedRole: role });
+      // 获取所有的专委
+      this.props.dispatch({
+        type: 'universalConfig/setCategory',
+        payload: { category: 'orglist_5976ba688ef7a2e824adc28a' },
+      });
     } else {
       this.setState({
-        region: false,
         committee: false,
         isModifyRegion: false,
         selectedRole: role,
@@ -171,9 +186,10 @@ class UserList extends React.Component {
   };
 
   render() {
-    console.log('lsdkjfa;sjdf;ajsd;lfkjas;ldkj')
+    console.log('lsdkjfa;sjdf;ajsd;lfkjas;ldkj');
     const { listUsers, loading } = this.props.auth;
-    const { committee, region, selectedAuthority, selectedRole } = this.state;
+    const { universalConfig } = this.props;
+    const { committee, selectedAuthority, selectedRole } = this.state;
     return (
       <div className="content-inner">
         <div className="toolsArea">
@@ -209,39 +225,40 @@ class UserList extends React.Component {
             <h5>角色：</h5>
             <RadioGroup onChange={this.selectedRole.bind()} value={selectedRole}>
               {
-                this.props.universalConfig.userRoles.map((item) => {
+                universalConfig.userRoles.map((item) => {
                   return (<Radio key={Math.random()}
-                                 value={'ccf_' + item.key}>{item.key}</Radio>)
+                                 value={`ccf_${item.value.key}`} data={item.value}>{item.value.key}</Radio>)
                 })
               }
             </RadioGroup>
-            {committee && <div><h5>所属部门：</h5>
+            {committee &&
+            <div><h5>所属部门：</h5>
               <RadioGroup size="large" onChange={this.selectedAuthorityRegion.bind()}
                           value={selectedAuthority}>
                 {
-                  this.props.universalConfig.data.map((item) => {
+                  universalConfig.data.map((item) => {
                     return (
                       <Radio key={Math.random()} className={styles.twoColumnsShowRadio}
-                             value={`ccf_authority_${item.key}`}>{item.key}</Radio>
+                             value={`ccf_authority_${item.value.key}`}>{item.value.key}</Radio>
                     );
                   })
                 }
               </RadioGroup>
             </div>}
-            {region && <div><h5>所属部门：</h5>
-              <RadioGroup
-                size="large"
-                style={{ width: '100%' }}
-                onChange={this.selectedAuthorityRegion.bind()}
-                value={selectedAuthority}
-              >
-                <Radio value="ccf_authority_上海" className={styles.twoColumnsShowRadio}>上海</Radio>
-                <Radio value="ccf_authority_北京" className={styles.twoColumnsShowRadio}>北京</Radio>
-                <Radio value="ccf_authority_石家庄" className={styles.twoColumnsShowRadio}>
-                  石家庄
-                </Radio>
-              </RadioGroup>
-            </div>}
+            {/*{region && <div><h5>所属部门：</h5>*/}
+              {/*<RadioGroup*/}
+                {/*size="large"*/}
+                {/*style={{ width: '100%' }}*/}
+                {/*onChange={this.selectedAuthorityRegion.bind()}*/}
+                {/*value={selectedAuthority}*/}
+              {/*>*/}
+                {/*<Radio value="ccf_authority_上海" className={styles.twoColumnsShowRadio}>上海</Radio>*/}
+                {/*<Radio value="ccf_authority_北京" className={styles.twoColumnsShowRadio}>北京</Radio>*/}
+                {/*<Radio value="ccf_authority_石家庄" className={styles.twoColumnsShowRadio}>*/}
+                  {/*石家庄*/}
+                {/*</Radio>*/}
+              {/*</RadioGroup>*/}
+            {/*</div>}*/}
           </div>
         </Modal>
       </div>

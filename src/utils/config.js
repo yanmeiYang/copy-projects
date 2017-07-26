@@ -1,6 +1,10 @@
 /**
  * Created by yutao on 2017/5/22.
  */
+const SYS = 'ccf';
+// const SYS = 'huawei';
+// const SYS = 'alibaba';
+// const SYS = 'tencent';
 
 const param = (key, type, description) => {
   return { key, type, description };
@@ -10,8 +14,8 @@ module.exports = {
 
   // To change SYSTEM settings. Please change /define.js.
   // TODO remove all use of this config [system,source].
-  system: SYSTEM, // 默认启动这是哪套系统，启动的时候传入app，之后会在APP里面重新设置。
-  source: SYSTEM, // AppID, Used in UniversalConfig.
+  system: SYS, // 默认启动这是哪套系统，启动的时候传入app，之后会在APP里面重新设置。
+  source: SYS, // AppID, Used in UniversalConfig.
 
   baseURL: 'https://api.aminer.org/api',
   // baseURL: 'https://166.111.7.105/api',
@@ -31,7 +35,7 @@ module.exports = {
     userLogin: '/auth/signin',
     userLogout: '/auth/signout',
     signup: '/auth/signup',
-    checkEmail: '/user/check/:email',
+    checkEmail: '/user/check/src/:src/email/:email',
     forgot: '/auth/update/forgot',
     // 重置密码
     retrieve: '/auth/update/token',
@@ -60,7 +64,7 @@ module.exports = {
     rosterExportSimple: '/roster/:id/export/s/offset/:offset/size/:size/:name',
 
     // seminar
-    getSeminars: '/activity/list/offset/:offset/size/:size',
+    getSeminars: '/activity/list/offset/:offset/size/:size', // src aid uid organizer type category stype
     getActivityById: '/activity/:id',
     postActivity: '/activity/post_activity',
     speakerSuggest: '/activity/speaker/suggest',
@@ -78,6 +82,7 @@ module.exports = {
     getActivityScore: '/activity/score/:uid/:src/:actid/:aid/:key',
     getStatsOfCcfActivities: '/activity/admin/stats',
     keywordExtraction: 'http://nlp.newsminer.net/rest/nlp/keywords',
+    getTopMentionedTags: '/activity/tags/:src/:num',
 
     /* person */
     personProfile: '/person/summary/:id',

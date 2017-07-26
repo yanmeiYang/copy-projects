@@ -74,7 +74,7 @@ class UserList extends React.Component {
       currentAuthority: authority,
       currentUid: uid,
       selectedRole: role,
-      selectedAuthority: authority
+      selectedAuthority: authority,
     });
   };
 

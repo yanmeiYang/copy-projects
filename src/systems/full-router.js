@@ -30,10 +30,12 @@ const fullRouter = (app, defaultChildRoutes) => {
       core.User(app),
       core.ForgotPassword(app),
       core.ResetPassword(app),
+      core.Retrieve(app),
 
       // Admin(Specified by ccf)
       core.AdminUsers(app),
       core.AdminSystemConfig(app),
+      core.AdminAddUserRolesByOrg(app),
       core.AdminSystemConfigWithCategory(app),
 
       // Activity / Seminar
@@ -43,6 +45,7 @@ const fullRouter = (app, defaultChildRoutes) => {
       core.SeminarPost(app),
       core.SeminarRating(app),
       core.Statistic(app),
+      core.StatisticDetail(app),
 
       // expert map
       core.ExpertMap(app),

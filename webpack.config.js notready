@@ -1,0 +1,114 @@
+/* eslint-disable no-param-reassign */
+import webpack from 'webpack';
+import { join, resolve } from 'path';
+import { pullAll, uniq } from 'lodash';
+
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const ExtractTextPlugin = require('extract-text-webpack-plugin');
+// const CommonsTrunkPlugin = require('commons-chunk-plugin');
+
+const vendors = {
+  react: [
+    'react',
+    'react-dom',
+    'react-helmet',
+    'react-router',
+    'prop-types',
+    'redux-saga',
+    'core-js',
+  ],
+  dva_core: ['dva', 'dva-loading', 'dva/router'],
+  lib: [
+    'lodash',
+    'moment',
+    'nprogress',
+  ],
+  // 'antd', // antd 太大永远不打包。用什么打什么然后用CommonTrunks取公共部分。
+};
+
+export default function (config, env) {
+  // console.log('config is : \n', config);
+  // console.log('env', env);
+  console.log('----------------------------');
+
+  if (config.entry.index) {
+    // console.log('This is Build process');
+    // config.output.filename = '[name].[chunkhash:5].js';
+    // config.output.filename = '[name].js';
+    // config.output.chunkFilename = '[name].[chunkhash:5].chunk.js';
+  } else {
+    // console.log('This is build:dll process');
+    config.entry = vendors;
+    // config.output.filename = '[name].[chunkhash:5].js';
+    // config.output.chunkFilename = '[name].[chunkhash:5].chunk.js';
+    // config.output.path = resolve(__dirname, 'dist');
+  }
+  console.log('========================================================');
+
+  // if (false) { // not ready
+  if (env === 'production') {
+    config.plugins.push(
+      // new HtmlWebpackPlugin(),
+      new HtmlWebpackPlugin({
+        template: 'src/index.ejs',
+        inject: true,
+        minify: { collapseWhitespace: true },
+        production: true,
+      }),
+      // new WebpackChunkHash({ algorithm: 'md5' }),
+      // new webpack.NoErrorsPlugin(),
+    );
+  } else {
+    config.plugins.push(
+      new HtmlWebpackPlugin({
+        // template: 'src/index.ejs',
+        //inject: true,
+      }),
+    );
+  }
+  // }
+
+
+  return config;
+
+  // config.output.publicPath = '';
+  // config.output.library='[name]'
+  // config.plugins[3] = new ExtractTextPlugin('[contenthash:8].css');   // 注 2
+
+  // ---------------------------------------------------------------
+  // const appBuild = paths.dllNodeModule;
+  // const pkg = require(join(paths.appDirectory, 'package.json')); // eslint-disable-line
+  //
+  // const { include, exclude } = rcConfig.dllPlugin || {};
+  //
+  // const dependencyNames = Object.keys(pkg.dependencies);
+  // const includeDependencies = uniq(dependencyNames.concat(include || []));
+  //
+  // return {
+  //   entry: {
+  //     rrrrrro: pullAll(includeDependencies, exclude),
+  //   },
+  //   output: {
+  //     path: appBuild,
+  //     filename: '[name].dll.js',
+  //     library: '[name]',
+  //   },
+  //   plugins: [
+  //     new webpack.DllPlugin({
+  //       path: join(appBuild, '[name].json'),
+  //       name: '[name]',
+  //       context: paths.appSrc,
+  //     }),
+  //   ],
+  //   resolve: {
+  //     modules: [
+  //       paths.appDirectory,
+  //       'node_modules',
+  //       paths.ownNodeModules,
+  //     ],
+  //   },
+  // };
+  // console.log('After Config is :\n', config);
+  // console.log('----------------------------');
+
+}

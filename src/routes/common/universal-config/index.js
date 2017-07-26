@@ -36,8 +36,8 @@ class UniversalConfig extends React.Component {
   onEdit = (e) => {
     const data = e.target && e.target.getAttribute('data');
     const json = JSON.parse(data);
-    this.props.form.setFieldsValue(json);
-    this.setState({ editCurrentData: json })
+    this.props.form.setFieldsValue(json.value);
+    this.setState({ editCurrentData: json.value });
   };
 
   handleSubmit = (e) => {
@@ -46,7 +46,7 @@ class UniversalConfig extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        //删除修改之前的key
+        // 删除修改之前的key
         if (this.state.editCurrentData.key!==undefined&&(this.state.editCurrentData.key!==values.key||this.state.editCurrentData.value!==values.value)){
           const key = this.state.editCurrentData.key;
           this.props.dispatch({
@@ -75,7 +75,6 @@ class UniversalConfig extends React.Component {
     const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
     const keyError = isFieldTouched('key') && getFieldError('key');
     const valueError = isFieldTouched('value') && getFieldError('value');
-
     return (
       <div>
         {/*DEBUG INFO: Current Category is : {universalConfig.category}*/}
@@ -134,9 +133,9 @@ class UniversalConfig extends React.Component {
             size="small"
             pagination={false}
           >
-            <Column title="名称" dataIndex="key" key="key" />
+            <Column title="名称" dataIndex="value.key" key="key" />
             {!this.props.hideValue &&
-            <Column title="值" dataIndex="value" key="value" />
+            <Column title="值" dataIndex="value.value" key="value" />
             }
             <Column
               title="操作"

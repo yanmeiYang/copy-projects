@@ -29,6 +29,7 @@ const Login = ({
       if (errors) {
         return;
       }
+      values.src = config.source;
       dispatch({ type: 'login/login', payload: values });
     });
   }

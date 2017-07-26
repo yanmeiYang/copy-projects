@@ -1,11 +1,11 @@
 /**
  * Created by BoGao on 2017/7/19.
+ *
+ * 由于需要支持在线切换各种系统。云支持。因此暂时不用define功能。
  */
 
-console.log('Using define.js');
-
-// const SYSTEM = 'ccf';
-const SYSTEM = 'huawei';
+const SYSTEM = 'ccf';
+// const SYSTEM = 'huawei';
 // const SYSTEM = 'alibaba';
 // const SYSTEM = 'tencent';
 

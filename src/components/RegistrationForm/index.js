@@ -114,7 +114,7 @@ class RegistrationForm extends React.Component {
           if (state.endValue) {
             data.time.to = state.endValue.toJSON();
           }
-          data.activityTags = state.tags;
+          data.tags = state.tags;
           // 获取登录用户的uid
           data.uid = this.props.uid;
           this.props.dispatch({ type: 'seminar/postSeminarActivity', payload: data });
@@ -216,9 +216,9 @@ class RegistrationForm extends React.Component {
       },
     };
     return (
-      <Row>
-        <Form onSubmit={this.handleSubmit}>
-          <Col className={styles.thumbnail} md={24} lg={{ span: 16, offset: 4 }}>
+      <Row className={styles.add_seminar_block}>
+        <Form onSubmit={this.handleSubmit} className={styles.add_seminar_form} >
+          <Col className={styles.thumbnail}>
             <FormItem {...formItemLayout} label="活动类型" hasFeedback>
               {getFieldDecorator('category', {
                 rules: [{ required: true, message: '请选择活动类型！' }],
@@ -226,8 +226,8 @@ class RegistrationForm extends React.Component {
               )(
                 <Select>
                   {
-                    Object.keys(activity_type_options_data).map((item) => {
-                      return (<Option key={Math.random()} value={item}>{item}</Option>);
+                    Object.values(activity_type_options_data).map((item) => {
+                      return (<Option key={Math.random()} value={item.key}>{item.key}</Option>);
                     })
                   }
                 </Select>,
@@ -240,8 +240,8 @@ class RegistrationForm extends React.Component {
               )(
                 <Select mode="tags" onChange={this.handleOrganizerChange.bind(this, activity_organizer_options_data)}>
                   {
-                    Object.keys(activity_organizer_options_data).map((item) => {
-                      return (<Option key={item} value={item}>{item}</Option>);
+                    Object.values(activity_organizer_options_data).map((item) => {
+                      return (<Option key={item.id} value={item.key}>{item.key}</Option>);
                     })
                   }
                 </Select>,
@@ -372,7 +372,7 @@ class RegistrationForm extends React.Component {
           {/* </Col> : ''}*/}
           {/* workshop*/}
 
-          <Col className={styles.thumbnail} md={24} lg={{ span: 16, offset: 4 }}>
+          <Col className={styles.thumbnail}>
             {talks.length > 0 && <div>
               {talks.map((talk, index) => {
                 return (
@@ -389,7 +389,7 @@ class RegistrationForm extends React.Component {
             {addNewTalk && <AddExpertModal integral={integral} parentProps={this.props} callbackParent={this.addTheNewTalk} />}
           </Col>
 
-          <Col className={styles.formFooter} md={24} lg={{ span: 16, offset: 4 }}>
+          <Col className={styles.formFooter}>
             <FormItem
               wrapperCol={{ span: 12, offset: 6 }} style={{ marginBottom: 6 }}>
               <Button type="primary" onClick={this.handleSubmit} style={{ width: '50%', height: 40 }}>确定</Button>

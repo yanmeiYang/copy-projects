@@ -5,6 +5,7 @@ import React from 'react';
 import { Input, Button, Form, Modal } from 'antd';
 import { connect } from 'dva';
 import { Layout } from '../../../components';
+import { config } from '../../../utils';
 import styles from './index.less';
 
 const { Header, Footer } = Layout;
@@ -14,35 +15,36 @@ class ForgotPassword extends React.Component {
   state = {
     validEmail: true,
   };
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.auth.isUpdateForgotPw) {
-      Modal.success({
-        title: '成功',
-        content: '请查看你的邮箱',
-      });
-    }
+  componentWillMount = () => {
+    this.props.dispatch({ type: 'app/handleNavbar', payload: true });
   };
+  componentWillUnmount = () => {
+    this.props.dispatch({ type: 'app/handleNavbar', payload: false });
+  };
+  // componentWillReceiveProps = (nextProps) => {
+  //   if (nextProps.auth.isUpdateForgotPw) {
+  //     Modal.success({
+  //       title: '成功',
+  //       content: '请查看你的邮箱',
+  //     });
+  //   }
+  // };
   handleSubmit = (e) => {
-    e.preventDefault()
-    if (this.props.auth.validEmail) {
-      this.setState({ validEmail: false });
-    } else {
-      this.setState({ validEmail: true });
-    }
     this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err && !this.props.auth.validEmail) {
-        values.token = 'aminer';
-        values.password = ' ';
+      if (!err) {
+        values.token = config.source;
+        values.password = '1';
+        values.src = config.source;
         this.props.dispatch({ type: 'auth/forgotPassword', payload: values });
       }
     })
   };
-  handleConfirmBlur = (e) => {
-    this.props.dispatch({ type: 'auth/checkEmail', payload: e.target.value });
-  };
-  cancalFeedback = (e) => {
-    this.setState({ validEmail: true });
-  };
+  // handleConfirmBlur = (e) => {
+  //   this.props.dispatch({ type: 'auth/checkEmail', payload: { email: e.target.value } });
+  // };
+  // cancalFeedback = (e) => {
+  //   this.setState({ validEmail: true });
+  // };
   render() {
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
@@ -65,7 +67,6 @@ class ForgotPassword extends React.Component {
     const { validEmail } = this.props.auth;
     return (
       <div>
-        <Header {...headerProps} />
         <div className={styles.container}>
           <div className={styles.content}>
             <section className={styles.codeBox}>
@@ -77,16 +78,12 @@ class ForgotPassword extends React.Component {
                   <FormItem
                     {...formItemLayout}
                     label="邮箱"
-                    validateStatus={this.state.validEmail ? '' : 'error'}
-                    help={this.state.validEmail ? '' : '该邮箱不存在'}
+                    // validateStatus={this.state.validEmail ? '' : 'error'}
+                    // help={this.state.validEmail ? '' : '该邮箱不存在'}
                     hasFeedback
                   >
-                    {getFieldDecorator('identifier', {
-                      rules: [{
-                        required: true, message: '请输入您的邮箱!',
-                      }],
-                    })(
-                      <Input type="email" onBlur={this.handleConfirmBlur} onChange={this.cancalFeedback} />,
+                    {getFieldDecorator('identifier', {})(
+                      <Input type="email" />,
                     )}
                   </FormItem>
                   <FormItem {...tailFormItemLayout} style={{marginTop: 60}}>
@@ -94,11 +91,9 @@ class ForgotPassword extends React.Component {
                   </FormItem>
                 </Form>
               </div>
-
             </section>
           </div>
         </div>
-        <Footer />
       </div>
     )
   }

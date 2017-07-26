@@ -15,11 +15,18 @@ class ResetPassword extends React.Component {
   state = {
     confirmDirty: false,
   };
+  componentWillMount = () => {
+    this.props.dispatch({ type: 'app/handleNavbar', payload: true });
+  };
+  componentWillUnmount = () => {
+    this.props.dispatch({ type: 'app/handleNavbar', payload: false });
+  };
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      values.identifier = queryURL('email');
+      values.identifier = decodeURIComponent(queryURL('email'));
       values.token = queryURL('token');
+      values.src = queryURL('src');
       delete values.confirm;
       if (!err) {
         this.props.dispatch({ type: 'auth/retrievePw', payload: values });
@@ -67,7 +74,6 @@ class ResetPassword extends React.Component {
 
     return (
       <div>
-        <Header {...headerProps} />
         <div className={styles.container}>
           <div className={styles.content}>
             <section className={styles.codeBox}>
@@ -111,11 +117,9 @@ class ResetPassword extends React.Component {
                   </FormItem>
                 </Form>
               </div>
-
             </section>
           </div>
         </div>
-        <Footer />
       </div>
     );
   }

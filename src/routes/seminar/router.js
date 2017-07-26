@@ -29,6 +29,7 @@ export default {
     path: 'seminar-my',
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
+        registerModel(app, require('../../models/common/universal-config'));
         registerModel(app, require('../../models/seminar'));
         cb(null, require('./mySeminars'));
       }, 'seminar');
@@ -63,6 +64,17 @@ export default {
         registerModel(app, require('../../models/seminar'));
         registerModel(app, require('../../models/statistics/statistics'));
         cb(null, require('../statistics'));
+      }, 'seminar');
+    },
+  }),
+
+  StatisticDetail: app => ({
+    path: 'statistics/detail',
+    getComponent(nextState, cb) {
+      require.ensure([], (require) => {
+        registerModel(app, require('../../models/seminar'));
+        registerModel(app, require('../../models/statistics/statistics'));
+        cb(null, require('../statistics/detail'));
       }, 'seminar');
     },
   }),

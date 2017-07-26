@@ -5,49 +5,43 @@ import React from 'react';
 import { Table, Input, Tabs } from 'antd';
 import { connect } from 'dva';
 import ExpertsList from './experts-list';
-import ActivityDetail from './activity-detail';
-import ActivityList from './activity-list';
-import styles from './index.less'
+import CommitteeList from './committee-list';
+import styles from './index.less';
 
 
 const TabPane = Tabs.TabPane;
-
 const tabData = [
   {
     category: 'activity_lists',
-    label: '活动列表',
-    desc: '活动列表',
-    container: <ActivityList />,
-    isShow: true,
+    label: '专委列表',
+    desc: '专委列表',
   },
   {
     category: 'activity_detail',
-    label: '活动详情',
-    desc: '活动详情',
-    container: <ActivityDetail />,
-    isShow: false,
+    label: '分部列表',
+    desc: '分部列表',
   },
   {
     category: 'experts_list',
     label: '专家列表',
     desc: '专家列表',
-    container: <ExpertsList />,
-    isShow: true,
   },
 ];
 
-
 class Statistics extends React.Component {
-
-  componentDidMount() {
-    if (this.props.app.roles.admin) {
-      this.props.dispatch({ type: 'statistics/getStatsOfCcfActivities', payload: {} });
+  state = {
+    defaultTabKey: tabData[0].category,
+  }
+  componentWillMount() {
+    const roles = this.props.app.roles;
+    if (roles.admin || roles.role.includes('专委')) {
+      this.setState({ defaultTabKey: tabData[0].category });
     } else {
-      this.props.statistics.activity = {};
-      this.props.statistics.author = {};
+      this.setState({ defaultTabKey: tabData[1].category });
     }
-
-    this.onTabChange(tabData[0].category);
+  }
+  componentDidMount() {
+    this.props.dispatch({ type: 'statistics/getStatsOfCcfActivities', payload: {} });
   }
 
   onTabChange = (activeKey) => {
@@ -60,49 +54,61 @@ class Statistics extends React.Component {
   };
 
   render() {
+    const { roles } = this.props.app;
     const activity_list = tabData[0];
     const activity_detail = tabData[1];
     const experts_list = tabData[2];
+    let committee = [];
+    let division = [];
+    if (this.props.app.roles.admin) {
+      committee = this.props.statistics.activity.filter(item => item.organizer.includes('专业委员会'));
+      division = this.props.statistics.activity.filter(item => !item.organizer.includes('专业委员会'));
+    } else {
+      committee = this.props.statistics.activity;
+      division = this.props.statistics.activity;
+    }
     return (
       <div style={{ marginTop: 10 }}>
         <div className="content-inner">
           {tabData &&
           <Tabs
-            defaultActiveKey={tabData[0].category}
+            defaultActiveKey={this.state.defaultTabKey}
             type="card"
             className={styles.tabs}
             onChange={this.onTabChange}
           >
-            {/*{tabData.map((item) => {*/}
-            {/*return (*/}
-            {/*<TabPane*/}
-            {/*key={item.category}*/}
-            {/*style={{ display: item.isShow }}*/}
-            {/*tab={item.label}*/}
-            {/*className={styles.tabContent}*/}
-            {/*>*/}
-            {/*{item.container}*/}
-            {/*</TabPane>*/}
-            {/*);*/}
-            {/*})}*/}
-            {activity_list.isShow &&
+            {/* {tabData.map((item) => {*/}
+            {/* return (*/}
+            {/* <TabPane*/}
+            {/* key={item.category}*/}
+            {/* style={{ display: item.isShow }}*/}
+            {/* tab={item.label}*/}
+            {/* className={styles.tabContent}*/}
+            {/* >*/}
+            {/* {item.container}*/}
+            {/* </TabPane>*/}
+            {/* );*/}
+            {/* })}*/}
+            {(roles.admin || roles.role.includes('专委')) &&
             <TabPane
               key={activity_list.category}
               style={{ display: activity_list.isShow }}
               tab={activity_list.label}
             >
-              <ActivityList activity={this.props.statistics.activity} />
-            </TabPane>}
+              <CommitteeList activity={committee} />
+            </TabPane>
+            }
 
-            {activity_detail.isShow &&
+            {(roles.admin || !roles.role.includes('专委')) &&
             <TabPane
               key={activity_detail.category}
               style={{ display: activity_detail.isShow }}
               tab={activity_detail.label}
               className={styles.tabContent}
-            >{activity_detail.container}</TabPane>}
-
-            {experts_list.isShow &&
+            >
+              <CommitteeList activity={division} />
+            </TabPane>
+            }
             <TabPane
               key={experts_list.category}
               style={{ display: experts_list.isShow }}
@@ -110,13 +116,13 @@ class Statistics extends React.Component {
               className={styles.tabContent}
             >
               <ExpertsList author={this.props.statistics.author} />
-            </TabPane>}
+            </TabPane>
 
           </Tabs>
           }
         </div>
       </div>
-    )
+    );
   }
 
 }

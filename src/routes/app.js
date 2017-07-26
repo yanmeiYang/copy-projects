@@ -90,7 +90,7 @@ const App = ({ children, location, dispatch, app, loading }) => {
     dispatch(routerRedux.push({
       pathname: `/${sysconfig.SearchPagePrefix}/${data.query}/${newOffset}/${newSize}`,
     }));
-  }
+  };
 
   const { iconFontJS, iconFontCSS, logo } = config;
 

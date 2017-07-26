@@ -91,12 +91,30 @@
           background: #fff;
           color: #108ee9;
         }
+
+        .ant-tabs-tab:hover { color: white; }
+        .ant-tabs-tab-active:hover { color: #108ee9; }
       }
     }
   }
 
-  .tabContent {
+  .tabContent { // no use
     padding: 8px; overflow: scroll; height: 100%;
+  }
+
+  .ant-tabs-extra-content {
+    line-height: 22px;padding-right:8px;
+    a {
+      color: #ddd;
+      border-radius: 2px;
+      font-size: 12px;
+      line-height: 12px;
+      font-weight: 600;
+      .fa { padding-left: 2px; }
+    }
+    a:hover {
+      color: white;
+    }
   }
 
 }

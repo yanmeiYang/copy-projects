@@ -6,6 +6,10 @@ import { message } from 'antd';
 import './index.html';
 import { system } from './utils/config';
 
+if (ENABLE_PREF) { // eslint-disable-line no-undef
+  window.Perf = require('react-addons-perf');
+}
+
 // 1. Initialize
 const app = dva({
   ...createLoading({

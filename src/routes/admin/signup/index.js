@@ -25,10 +25,11 @@ class Registered extends React.Component {
     });
   }
   checkEmail = (e) => {
-    this.props.dispatch({ type: 'auth/checkEmail', payload: `${e.target.value}@ccf` });
+    this.props.dispatch({ type: 'auth/checkEmail', payload: { email: e.target.value } });
   };
 
   selectedRole = (e) => {
+    this.props.universalConfig.orgList = [];
     const data = JSON.parse(e);
     if (data.value !== '') {
       this.props.dispatch({
@@ -36,6 +37,9 @@ class Registered extends React.Component {
         payload: { category: data.value.id },
       });
     }
+  };
+  selectedOrg = (e) => {
+    console.log(e);
   };
   addRole = () => {
     this.setState({ addRoleModalVisible: true });
@@ -71,7 +75,6 @@ class Registered extends React.Component {
         values.position = 8;
         values.sub = true;
         values.src = config.source;
-        values.role = this.state.currentRoleAndOrg;
         this.props.dispatch({ type: 'auth/createUser', payload: values });
         Modal.success({
           title: '创建用户',
@@ -164,15 +167,84 @@ class Registered extends React.Component {
           }
         </FormItem>
         {/* 选择的角色 */}
-        <FormItem {...tailFormItemLayout}>
-          {currentRoleAndOrg.map((item, index) => {
-            return <Tag closable afterClose={this.delRole.bind(this, item)} key={item.id} >{item.name}</Tag>;
-          })}
+        {/* <FormItem {...tailFormItemLayout}>*/}
+        {/* {currentRoleAndOrg.map((item, index) => {*/}
+        {/* return <Tag closable afterClose={this.delRole.bind(this, item)} key={item.id} >{item.name}</Tag>;*/}
+        {/* })}*/}
+        {/* </FormItem>*/}
+        {/* <FormItem {...tailFormItemLayout}>*/}
+        {/* <Button type="" onClick={this.addRole} style={{ backgroundColor: '#1aaa55', borderColor: '#168f48', color: '#fff' }}>添加角色</Button>*/}
+        {/* </FormItem>*/}
+        {/* <AddRoleModal visible={this.state.addRoleModalVisible} handleOk={this.setCurrentRoleAndOrg} />*/}
+        <FormItem
+          {...formItemLayout}
+          label="角色"
+          hasFeedback
+        >
+          {
+            getFieldDecorator('role', {
+              rules: [{
+                required: true, message: '请选择角色!',
+              }],
+            })(
+              <Select onChange={this.selectedRole}>
+                {
+                  universalConfig.userRoles.map((key) => {
+                    return (<Option
+                      key={Math.random()}
+                      value={JSON.stringify(key.value)}
+                    >{key.value.key}</Option>);
+                  })
+                }
+              </Select>,
+            )
+          }
         </FormItem>
-        <FormItem {...tailFormItemLayout}>
-          <Button type="" onClick={this.addRole} style={{ backgroundColor: '#1aaa55', borderColor: '#168f48', color: '#fff' }}>添加角色</Button>
-        </FormItem>
-        <AddRoleModal visible={this.state.addRoleModalVisible} handleOk={this.setCurrentRoleAndOrg} />
+        {universalConfig.orgList.length > 0 && <FormItem
+          {...formItemLayout}
+          label="权限"
+          hasFeedback
+        >
+          {
+            getFieldDecorator('authority', {
+              rules: [{
+                required: true, message: '请选择权限!',
+              }],
+            })(
+              <Select onChange={this.selectedOrg.bind()}>
+                {
+                  universalConfig.orgList.map((item) => {
+                    return (<Option
+                      key={Math.random()}
+                      value={JSON.stringify(item.value)}
+                    >{item.value.key}</Option>);
+                  })
+                }
+              </Select>,
+            )
+          }
+        </FormItem>}
+        {/*<FormItem*/}
+          {/*{...{*/}
+            {/*wrapperCol: {*/}
+              {/*xs: { span: 24 },*/}
+              {/*sm: { span: 14, offset: 6 },*/}
+            {/*},*/}
+          {/*}}*/}
+          {/*label=""*/}
+        {/*>*/}
+          {/*{*/}
+            {/*getFieldDecorator('sub', {})(*/}
+              {/*<Checkbox>*/}
+         {/*我希望收到新的消息和动态提醒*/}
+              {/*</Checkbox>,*/}
+            {/*)*/}
+          {/*}*/}
+        {/*</FormItem>*/}
+        {/*<FormItem {...tailFormItemLayout}>*/}
+          {/*<Button type="" onClick={this.addRole} style={{ backgroundColor: '#1aaa55', borderColor: '#168f48', color: '#fff' }}>添加角色</Button>*/}
+        {/*</FormItem>*/}
+        {/*<AddRoleModal visible={this.state.addRoleModalVisible} handleOk={this.setCurrentRoleAndOrg} />*/}
 
         <FormItem {...tailFormItemLayout} style={{ textAlign: 'center' }}>
           <Button type="primary" onClick={this.registered} style={{ width: '50%' }}>

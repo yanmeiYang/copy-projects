@@ -1,5 +1,5 @@
 /**
- * Created by yangyanmei on 17/7/14.
+ * Created by yangyanmei on 17/7/25.
  */
 import React from 'react';
 import { connect } from 'dva';
@@ -11,7 +11,7 @@ import styles from './index.less';
 const { Header, Footer } = Layout;
 const FormItem = Form.Item;
 
-class ResetPassword extends React.Component {
+class Retrieve extends React.Component {
   state = {
     confirmDirty: false,
   };
@@ -28,6 +28,7 @@ class ResetPassword extends React.Component {
       values.token = queryURL('token');
       values.src = queryURL('src');
       delete values.confirm;
+      delete values.email;
       if (!err) {
         this.props.dispatch({ type: 'auth/retrievePw', payload: values });
       }
@@ -71,17 +72,29 @@ class ResetPassword extends React.Component {
         sm: { span: 14, offset: 6 },
       },
     };
-
+    const email = queryURL('email');
     return (
       <div>
+        {/*<Header {...headerProps} />*/}
         <div className={styles.container}>
           <div className={styles.content}>
             <section className={styles.codeBox}>
               <div className={styles.forgot_top}>
-                <h3>密码重置</h3>
+                <h3>初始化密码</h3>
               </div>
               <div className={styles.form_mod}>
                 <Form onSubmit={this.handleSubmit}>
+                  <FormItem
+                    {...formItemLayout}
+                    label="邮箱"
+                    hasFeedback
+                  >
+                    {getFieldDecorator('email', {
+                      rules: [],
+                    })(
+                      <span>{ email }</span>,
+                    )}
+                  </FormItem>
                   <FormItem
                     {...formItemLayout}
                     label="密码"
@@ -113,16 +126,18 @@ class ResetPassword extends React.Component {
                     )}
                   </FormItem>
                   <FormItem {...tailFormItemLayout} style={{ marginTop: 60 }}>
-                    <Button type="primary" htmlType="submit" size="large" style={{ width: '100%' }}>重置</Button>
+                    <Button type="primary" htmlType="submit" size="large" style={{ width: '100%' }}>确定</Button>
                   </FormItem>
                 </Form>
               </div>
+
             </section>
           </div>
         </div>
+        <Footer />
       </div>
     );
   }
 }
 
-export default connect(({ auth }) => ({ auth }))((Form.create())(ResetPassword));
+export default connect(({ auth }) => ({ auth }))((Form.create())(Retrieve));

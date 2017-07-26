@@ -20,8 +20,8 @@ export async function createUser(email, first_name, gender, last_name, position,
   });
 }
 
-export async function checkEmail(email) {
-  return request(api.checkEmail.replace(':email', email), {
+export async function checkEmail(src, email) {
+  return request(api.checkEmail.replace(':src', src).replace(':email', email), {
     method: 'GET',
   });
 }

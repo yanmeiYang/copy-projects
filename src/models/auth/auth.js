@@ -2,6 +2,7 @@
  * Created by yangyanmei on 17/6/29.
  */
 import { routerRedux } from 'dva/router';
+import { config } from '../../utils';
 import * as authService from '../../services/auth';
 
 export default {
@@ -50,7 +51,7 @@ export default {
     },
 
     *checkEmail({ payload }, { call, put }) {
-      const { data } = yield call(authService.checkEmail, payload );
+      const { data } = yield call(authService.checkEmail, config.source, payload.email);
       yield put({ type: 'checkEmailSuccess', payload: data.status });
     },
 

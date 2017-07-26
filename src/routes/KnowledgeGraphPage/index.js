@@ -11,7 +11,6 @@ import styles from './index.less';
 import { KnowledgeGraphTextTree } from '../knowledge-graph';
 import { PublicationList } from '../../components/publication';
 import { PersonListTiny } from '../../components/person';
-import { sysconfig } from '../../systems';
 
 const RadioGroup = Radio.Group;
 const TabPane = Tabs.TabPane;
@@ -245,7 +244,7 @@ class KnowledgeGraphPage extends React.PureComponent {
               <TabPane tab="PUBLICATIONS" key="publications">
                 <Spinner loading={load || false} />
                 {kg.publications
-                  ? <PublicationList pubs={kg.publications} />
+                  ? <PublicationList pubs={kg.publications} showLabels={false} />
                   : this.EmptyBlock
                 }
               </TabPane>

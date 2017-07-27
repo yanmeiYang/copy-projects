@@ -46,6 +46,8 @@ class RelationGraph extends React.PureComponent {
     this.pgshow = true;
     // this.pglength = 0;
     this.webconnect = '';
+
+    this.loadingInterval = null; // used to disable interval.
   }
 
   state = {
@@ -79,6 +81,12 @@ class RelationGraph extends React.PureComponent {
     // this.showVis();
   }
 
+  componentWillUnmount() {
+    if (this.loadingInterval) {
+      clearInterval(this.loadingInterval);
+    }
+  }
+
   showVis = (t) => {
     this.startup(t);
   };
@@ -92,7 +100,7 @@ class RelationGraph extends React.PureComponent {
 
     let max = 100;
     const interval = 200;
-    setInterval(() => {
+    this.loadingInterval = setInterval(() => {
       if (max <= 0) { // call then
         this.pgshow = false;
       } else { // call interval function
@@ -854,7 +862,9 @@ class RelationGraph extends React.PureComponent {
       // this.describeNodes1 = _nodes.length;
       // this.describeNodes2 = _edges.length; .style('stroke-opacity', '0.6')
       this.setState({ describeNodes1: _nodes.length, describeNodes2: _edges.length });
-      link = svg.append('g').attr('class', 'links').selectAll('line').data(_edges).enter().append('line').style('stroke', '#999').style('stroke-width', (d) => { return d; });
+      link = svg.append('g').attr('class', 'links').selectAll('line').data(_edges).enter().append('line').style('stroke', '#999').style('stroke-width', (d) => {
+        return d;
+      });
       node = svg.append('g').attr('class', 'nodes').selectAll('circle').data(_nodes).enter().append('circle').attr('r', (d) => {
         if (d.indices.hIndex < 400) {
           return getRadious(d.indices.hIndex);
@@ -1371,7 +1381,8 @@ class RelationGraph extends React.PureComponent {
             <Checkbox checked={continuous_path} onChange={this.changeModle4}>连续路径</Checkbox>
             <Checkbox checked={single_extension} onChange={this.changeModle5}>单点扩展</Checkbox>
             <label>过滤器：</label>
-            <Select defaultValue="h-Index>0" style={{ width: 120, marginRight: 10 }} onChange={this.IndexChange}>
+            <Select defaultValue="h-Index>0" style={{ width: 120, marginRight: 10 }}
+                    onChange={this.IndexChange}>
               {this.activities.map((act) => {
                 return (
                   <Option key={act} value={act}>{act}</Option>
@@ -1379,42 +1390,59 @@ class RelationGraph extends React.PureComponent {
               })}
             </Select>
           </div>
-          <RgSearchNameBox size="default" style={{ width: 320 }} onSearch={this.onSearch} suggesition={this.state.allNodes} />
+          <RgSearchNameBox size="default" style={{ width: 320 }} onSearch={this.onSearch}
+                           suggesition={this.state.allNodes} />
         </div>
 
         {currentNode !== null && currentNode &&
-          <div id="leftInfoZone" className={styles.leftInfoZone} >
-            <div>
-              {currentNode.avatar &&
-              <div className={styles.avatar} >
-                <img src={getAvatar(currentNode.avatar, currentNode.id, 90)} alt="" />
-              </div>
-              }
-              {currentNode.name &&
-              <h2>{currentNode.name.n.en}</h2>
-              }
-              {currentNode.indices &&
-              <div style={{ marginBottom: 8 }}>
-                <span>h-Index:</span>
-                <span style={{ color: 'orange' }}> &nbsp;{currentNode.indices.hIndex}</span>&nbsp;|&nbsp;
-                <span>#Papers:</span>
-                <span style={{ color: 'orange' }}> &nbsp;{currentNode.indices.numPubs}</span>
-              </div>
-              }
-              {currentNode.pos &&
-              <p><i className="fa fa-briefcase fa-fw" /> {currentNode.pos.length > 0 ? currentNode.pos[0].name.n.en : ''}</p>
-              }
-              {currentNode.desc &&
-                <p><i className="fa fa-institution fa-fw" /> {currentNode.desc.n.en ? currentNode.desc.n.en : ''}</p>
-              }
+        <div id="leftInfoZone" className={styles.leftInfoZone}>
+          <div>
+            {currentNode.avatar &&
+            <div className={styles.avatar}>
+              <img src={getAvatar(currentNode.avatar, currentNode.id, 90)} alt="" />
             </div>
-            <div className={styles.delCurrentNode} style={{ color: '#a90329' }} onClick={this.cancelSelected}>
-              <i className="fa fa-ban" aria-hidden="true"></i>
+            }
+            {currentNode.name &&
+            <h2>{currentNode.name.n.en}</h2>
+            }
+            {currentNode.indices &&
+            <div style={{ marginBottom: 8 }}>
+              <span>h-Index:</span>
+              <span style={{ color: 'orange' }}> &nbsp;{currentNode.indices.hIndex}</span>&nbsp;
+              |&nbsp;
+              <span>#Papers:</span>
+              <span style={{ color: 'orange' }}> &nbsp;{currentNode.indices.numPubs}</span>
             </div>
+            }
+            {currentNode.pos &&
+            <p><i
+              className="fa fa-briefcase fa-fw" /> {currentNode.pos.length > 0 ? currentNode.pos[0].name.n.en : ''}
+            </p>
+            }
+            {currentNode.desc &&
+            <p><i
+              className="fa fa-institution fa-fw" /> {currentNode.desc.n.en ? currentNode.desc.n.en : ''}
+            </p>
+            }
           </div>
+          <div className={styles.delCurrentNode} style={{ color: '#a90329' }}
+               onClick={this.cancelSelected}>
+            <i className="fa fa-ban" aria-hidden="true"></i>
+          </div>
+        </div>
         }
-        <div id="rgvis" style={{ background: '#333', width: EgoWidth, height: EgoHeight, border: '1px solid #eee', marginTop: 20 }} />
-        {this.pgshow && <Progress percent={this.state.pgLength} style={{ width: EgoWidth, position: 'relative', top: '-100' }} />}
+        <div id="rgvis" style={{
+          background: '#333',
+          width: EgoWidth,
+          height: EgoHeight,
+          border: '1px solid #eee',
+          marginTop: 20
+        }} />
+        {this.pgshow && <Progress percent={this.state.pgLength} style={{
+          width: EgoWidth,
+          position: 'relative',
+          top: '-100'
+        }} />}
       </div>
     );
   }

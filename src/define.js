@@ -10,9 +10,12 @@ const SYSTEM = 'ccf';
 // const SYSTEM = 'tencent';
 
 const define = {
+  ENABLE_PREF: true,
+  VERSION: '0.1.0',
+
+  // No Use.
   SYSTEM: SYSTEM, // eslint-disable-line object-shorthand
   PRODUCTION: true,
-  VERSION: '0.1.0',
   BROWSER_SUPPORTS_HTML5: true,
   TWO: '1+1', // like marco
   'typeof window': 'object',

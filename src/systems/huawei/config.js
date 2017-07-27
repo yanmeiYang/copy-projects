@@ -16,7 +16,13 @@ module.exports = {
   IndexPage_InfoBlocks: <IndexInfoBox />,
 
   Header_SubTextLogo: '知识洞察系统',
-  Header_LogoStyle: { top: '-20px', width: '90px' },
+  Header_LogoStyle: {
+    top: '-10px',
+    width: '75px',
+    backgroundSize: 'auto 75px',
+    backgroundPosition: '0px -10px',
+  },
+  Header_LogoWidth: 194,
   Header_UserPageURL: '/user-info',
   Footer_Content: '',
 

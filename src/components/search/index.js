@@ -1,5 +1,7 @@
 import KgSearchBox from './KgSearchBox';
+import SearchTypeWidgets from './SearchTypeWidgets';
 
-export {
+module.exports = {
   KgSearchBox,
+  SearchTypeWidgets,
 };

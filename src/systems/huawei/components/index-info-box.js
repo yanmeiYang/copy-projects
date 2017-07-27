@@ -6,15 +6,15 @@ import { Link } from 'dva/router';
 import styles from './index-info-box.less';
 
 class IndexInfoBox extends React.PureComponent {
-
   render() {
     return (
       <div className={styles.bigNavi}>
         <div className="naviItem">
-          <Link to="/uniSearch/Data%20Mining/0/30?view=relation-view">学者关系网络</Link>
+          {/* <Link to="/uniSearch/Data%20Mining/0/30?view=relation-view">学者关系</Link> */}
+          <Link to="/relation-graph-page">学者关系</Link>
         </div>
         <div className="naviItem">
-          <Link to="/expert-map">全球人才分布图</Link>
+          <Link to="/expert-map">人才地图</Link>
         </div>
         <div className="naviItem">
           <Link to="/knowledge-graph">知识图谱</Link>

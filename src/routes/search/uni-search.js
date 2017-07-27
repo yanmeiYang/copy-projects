@@ -85,7 +85,7 @@ class UniSearch extends React.PureComponent {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log("should component update?");
+    // console.log("should component update?");
     // if (nextProps.profile && this.props.profile) {
     //   if (nextProps.profile.id === this.props.profile.id) {
     //     return false;

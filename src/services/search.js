@@ -74,7 +74,7 @@ function prepareParameters(query, offset, size, filters, sort) {
         newFilters[newKey] = filters[k];
       }
     });
-    data = { ...newFilters, term: query, offset, size, sort };
+    data = { ...newFilters, term: query, offset, size, sort: sort || '' };
   }
   return { expertBase, data };
 }
@@ -92,7 +92,7 @@ function prepareParametersGlobal(query, offset, size, filters, sort) {
         newFilters[newKey] = filters[k];
       }
     });
-    data = { ...newFilters, query, offset, size, sort };
+    data = { ...newFilters, query, offset, size, sort: sort || '' };
   }
   return data;
 }

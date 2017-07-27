@@ -6,6 +6,7 @@ import * as ccfConfig from './ccf/config';
 import * as huaweiConfig from './huawei/config';
 import * as tencentConfig from './tencent/config';
 import { config } from '../utils';
+import Footer from '../components/Footers/default';
 
 // All available systems.
 const CurrentSystemConfig = {
@@ -45,7 +46,7 @@ const defaultSystemConfigs = {
   Header_SubTextLogo: '子标题',
   Header_SubTextStyle: {},
   Header_UserPageURL: '', // 用户头像点击之后去的页面.
-  Footer_Content: '',
+  Footer_Content: (<Footer />),
   ShowRegisteredRole: true, // 注册页面是否显示角色配置
 
   // resources

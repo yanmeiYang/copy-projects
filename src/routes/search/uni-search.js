@@ -11,6 +11,7 @@ import { classnames } from '../../utils';
 import ExportPersonBtn from '../../components/person/export-person';
 import RelationGraph from '../relation-graph/RelationGraph';
 import { KgSearchBox } from '../../components/search';
+import { Spinner } from '../../components';
 
 const TabPane = Tabs.TabPane;
 const { CheckableTag } = Tag;

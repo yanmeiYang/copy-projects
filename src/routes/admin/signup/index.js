@@ -182,6 +182,7 @@ class Registered extends React.Component {
         {/* <Button type="" onClick={this.addRole} style={{ backgroundColor: '#1aaa55', borderColor: '#168f48', color: '#fff' }}>添加角色</Button>*/}
         {/* </FormItem>*/}
         {/* <AddRoleModal visible={this.state.addRoleModalVisible} handleOk={this.setCurrentRoleAndOrg} />*/}
+        {sysconfig.ShowRegisteredRole &&
         <FormItem
           {...formItemLayout}
           label="角色"
@@ -206,6 +207,7 @@ class Registered extends React.Component {
             )
           }
         </FormItem>
+        }
         {universalConfig.orgList.length > 0 && <FormItem
           {...formItemLayout}
           label="权限"

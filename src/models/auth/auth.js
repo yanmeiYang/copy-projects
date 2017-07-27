@@ -7,7 +7,13 @@ import * as authService from '../../services/auth';
 
 export default {
   namespace: 'auth',
-  state: { validEmail: true, listUsers: [], loading: false, isUpdateForgotPw: false },
+  state: {
+    validEmail: true,
+    listUsers: [],
+    loading: false,
+    isUpdateForgotPw: false,
+    message: null,
+  },
   subscriptions: {
     // setup({ dispatch, history }) {
     //   history.listen((location, query) => {
@@ -23,13 +29,17 @@ export default {
       const { data } =
         yield call(authService.createUser, email, first_name, gender, last_name, position, sub, src);
       yield put({ type: 'createUserSuccess', payload: data });
-      const uid = data.uid;
-      yield call(authService.invoke, uid, config.source);
-      const arr = role.split('_');
-      if (arr.length === 3) {
-        yield call(authService.invoke, uid, `ccf_authority${arr[2]}`);
-      } else if (arr.length === 2) {
-        yield call(authService.invoke, uid, `ccf_${arr[1]}`);
+      if (data.status) {
+        const uid = data.uid;
+        yield call(authService.invoke, uid, config.source);
+        if (config.ShowRegisteredRole) {
+          const arr = role.split('_');
+          if (arr.length === 3) {
+            yield call(authService.invoke, uid, `${config.source}_authority${arr[2]}`);
+          } else if (arr.length === 2) {
+            yield call(authService.invoke, uid, `${config.source}_${arr[1]}`);
+          }
+        }
       }
       // for (const value of role) {
       //   yield call(authService.invoke, uid, value.id);
@@ -46,7 +56,7 @@ export default {
     *addRoleByUid({ payload }, { call, put }) {
       const { uid, role } = payload;
       yield call(authService.invoke, uid, role);
-      const { data } = yield call(authService.listUsersByRole, 'ccf', 0, 100);
+      const { data } = yield call(authService.listUsersByRole, 0, 100);
       yield put({ type: 'getListUserByRoleSuccess', payload: data });
     },
 
@@ -63,7 +73,7 @@ export default {
     *listUsersByRole({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
       const { role, offset, size } = payload;
-      const { data } = yield call(authService.listUsersByRole, role, offset, size);
+      const { data } = yield call(authService.listUsersByRole, offset, size);
       yield put({ type: 'getListUserByRoleSuccess', payload: data });
     },
 
@@ -81,6 +91,11 @@ export default {
         throw data;
       }
     },
+    *updateProfile({ payload }, { call, put }) {
+      const { uid, name } = payload;
+      const { data } = yield call(authService.updateProfile, uid, name);
+    },
+
   },
   reducers: {
     createUserSuccess(state) {
@@ -92,13 +107,13 @@ export default {
     },
 
     forgotPasswordSuccess(state, { data }) {
-      return { ...state, isUpdateForgotPw: data.status };
+      return { ...state, isUpdateForgotPw: data.status, message: data.message };
     },
     getListUserByRoleSuccess(state, { payload: { data } }) {
       for (const [key, value] of data.entries()) {
         value.new_role = {};
         for (const role of data[key].role.values()) {
-          if (role.indexOf('ccf_') >= 0) {
+          if (role.indexOf(`${config.source}_`) >= 0) {
             if (role.split('_').length === 2) {
               value.new_role = role.split('_')[1];
             }

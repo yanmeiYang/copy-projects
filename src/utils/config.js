@@ -36,6 +36,7 @@ module.exports = {
     userLogout: '/auth/signout',
     signup: '/auth/signup',
     checkEmail: '/user/check/src/:src/email/:email',
+    updateProfile: '/user/:id',
     forgot: '/auth/update/forgot',
     // 重置密码
     retrieve: '/auth/update/token',

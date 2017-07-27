@@ -1,6 +1,7 @@
 /* eslint-disable no-const-assign */
 import React from 'react';
 import { connect } from 'dva';
+import { Link } from 'dva/router';
 import { Button, Row, Form, Input } from 'antd';
 import { Helmet } from 'react-helmet';
 import styles from './index.less';
@@ -76,7 +77,8 @@ const Login = ({
           <div style={{ marginBottom: '20px', color: 'red' }}>{login.errorMessage.status}用户名或密码错误</div>
         }
         <Row>
-          <Button type="primary" size="large" onClick={handleOk} loading={loginLoading}>
+          <Link to="/forgot-password" className={styles.forgotpwbtn} >忘记密码</Link>
+          <Button type="primary" size="large" onClick={handleOk} loading={loginLoading} style={{ marginTop: 10 }}>
             登录
           </Button>
           <p>

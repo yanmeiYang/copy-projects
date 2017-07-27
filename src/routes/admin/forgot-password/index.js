@@ -21,14 +21,21 @@ class ForgotPassword extends React.Component {
   componentWillUnmount = () => {
     this.props.dispatch({ type: 'app/handleNavbar', payload: false });
   };
-  // componentWillReceiveProps = (nextProps) => {
-  //   if (nextProps.auth.isUpdateForgotPw) {
-  //     Modal.success({
-  //       title: '成功',
-  //       content: '请查看你的邮箱',
-  //     });
-  //   }
-  // };
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.auth.isUpdateForgotPw) {
+      Modal.success({
+        title: '成功',
+        content: '请查看你的邮箱',
+      });
+    } else if (nextProps.auth.message) {
+      if (nextProps.auth.message.includes('seconds_later')) {
+        Modal.warning({
+          title: '警告',
+          content: `请${nextProps.auth.message.split('_')[1]}s后再试`,
+        });
+      }
+    }
+  };
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {

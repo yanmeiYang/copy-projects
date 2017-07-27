@@ -10,13 +10,14 @@ module.exports = {
   PageTitle: 'HUAWEI 知识洞察系统',
   SearchPagePrefix: 'uniSearch',
   ShowSideMenu: false,
+  ShowRegisteredRole: false,
 
   // IndexPage_QuickSearchList:[], // use default.
   IndexPage_InfoBlocks: <IndexInfoBox />,
 
   Header_SubTextLogo: '知识洞察系统',
-  Header_LogoStyle: { top: '-20px', width: '90px', },
-  Header_UserPageURL: '',
+  Header_LogoStyle: { top: '-20px', width: '90px' },
+  Header_UserPageURL: '/user-info',
   Footer_Content: '',
 
   // Functionality

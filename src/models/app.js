@@ -45,7 +45,7 @@ export default {
           yield put({
             type: 'alreadyLoggedIn',
             user: userMessage.data,
-            roles: userMessage.roles
+            roles: userMessage.roles,
           });
         } else {
           const { data } = yield call(getCurrentUserInfo, parse(payload));
@@ -91,7 +91,7 @@ export default {
     getCurrentUserInfoSuccess(state, { payload: user }) {
       const roles = { admin: false, ccf_user: false, role: [], authority: [] };
       for (const r of user.role) {
-        if (r === 'root' || r === 'ccf_超级管理员') {
+        if (r === 'root' || r === `${config.source}_超级管理员`) {
           roles.admin = true;
         }
         if (r === 'ccf') {

@@ -1,7 +1,7 @@
+
 import { request, config } from '../utils';
 
 const { api, source } = config;
-
 export async function listByCategory(category) {
   return request(api.ucListByCategory
       .replace(':source', source)

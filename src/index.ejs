@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<!-- 暂时不用html-webpack-plugin 生成index文件 -->
-
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="stylesheet" href="/index.css" />
+  <title><%= htmlWebpackPlugin.options.title %></title>
 
   <!--[if lte IE 10]>
   <script
@@ -14,14 +12,10 @@
   <![endif]-->
 
   <link rel="stylesheet" href="/fa/css/font-awesome.min.css" />
-  <!--<link rel="stylesheet" href="/css/badprojector.css" />-->
+
 </head>
 
 <body>
 <div id="root"></div>
-
-<script src="/index.js"></script>
-
 </body>
-
 </html>

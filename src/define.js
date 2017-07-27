@@ -9,8 +9,8 @@ const SYSTEM = 'ccf';
 // const SYSTEM = 'alibaba';
 // const SYSTEM = 'tencent';
 
-const define = {
-  ENABLE_PREF: true,
+const defines = {
+  ENABLE_PERF: true,
   VERSION: '0.1.0',
 
   // No Use.
@@ -22,12 +22,15 @@ const define = {
   API_BASE_URL: 'http://dev.example.com',
 };
 
-module.exports = () => {
-  // System's config will override the default.
-  const overrides = require('./systems/' + SYSTEM + '/define.js'); // eslint-disable-line
-  Object.keys(overrides).map((key) => {
-    define[key] = overrides[key];
-    return true;
-  });
-  return define;
-};
+// System's config will override the default.
+const overrides = require('./systems/' + SYSTEM + '/define.js'); // eslint-disable-line
+Object.keys(overrides).map((key) => {
+  defines[key] = overrides[key];
+  return true;
+});
+
+// defines['process.env'] = {
+//   NODE_ENV: 'production',
+// };
+
+module.exports = { defines };

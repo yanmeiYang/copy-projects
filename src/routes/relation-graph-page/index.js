@@ -12,9 +12,27 @@ import SearchBox from '../../components/SearchBox';
 
 
 class RelationGraphPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.dispatch = this.props.dispatch;
+  }
+
   state = {
     currentQuery: 'data mining',
+  };
+
+  componentWillMount() {
+    const query = (this.props.location && this.props.location.query
+      && this.props.location.query.query) || '';
+    this.dispatch({
+      type: 'app/layout',
+      payload: {
+        headerSearchBox: { query, onSearch: this.onSearch },
+        showFooter: false,
+      },
+    });
   }
+
   onSearch = ({ query }) => {
     this.setState({ currentQuery: query });
     // dispatch(routerRedux.push({
@@ -28,16 +46,8 @@ class RelationGraphPage extends React.Component {
       <div className={styles.page}>
         <div className={styles.normal}>
           <h1>关系图</h1>
-
-          <SearchBox
-            size="large" btnText="搜索" style={{ width: 680 }}
-            onSearch={this.onSearch}
-          />
-          <h2>{this.state.currentQuery}</h2>
           <div className={styles.overBox}>
-
             <RelationGraph query={this.state.currentQuery} />
-
           </div>
         </div>
       </div>

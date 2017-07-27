@@ -198,7 +198,7 @@ class UniSearch extends React.PureComponent {
           <TabPane tab={this.filterDisplay('论文数')} key="num_pubs" />
         </Tabs>
 
-        <PersonList persons={results} />
+        <PersonList persons={results} personLabel={sysconfig.Person_PersonLabelBlock} />
 
         <div className={styles.paginationWrap}>
           <Pagination
@@ -215,16 +215,7 @@ class UniSearch extends React.PureComponent {
 
     this.state.view['map-view'] = (
       <div className={styles.mapView}>
-        <div className={styles.map}>
-          <ExpertMap query={this.props.search.query} />
-        </div>
-        {/*<div className={styles.quickLinks}>*/}
-        {/* <a>一些快速链接！</a><br />*/}
-        {/* <a>一些快速链接！</a><br />*/}
-        {/* <a>一些快速链接！</a><br />*/}
-        {/* <a>一些快速链接！</a><br />*/}
-        {/* <a>一些快速链接！</a><br />*/}
-        {/*</div>*/}
+        <ExpertMap query={this.props.search.query} />
       </div>
     );
 

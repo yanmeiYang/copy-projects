@@ -20,6 +20,10 @@ class IndexInfoBox extends React.PureComponent {
           <Link to="/knowledge-graph">知识图谱</Link>
         </div>
         <div className="naviItem">
+          <Link to="/trend-prediction">技术趋势</Link>
+        </div>
+
+        <div className="naviItem" style={{ display: 'none' }}>
           2016最具影响力
           <a href="https://cn.aminer.org/mostinfluentialscholar"
              target="_blank" rel="noopener noreferrer">学者</a>，

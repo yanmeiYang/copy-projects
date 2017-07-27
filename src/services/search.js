@@ -3,7 +3,6 @@ import { sysconfig } from '../systems';
 
 const { api } = config;
 
-
 export async function searchPerson(query, offset, size, filters, sort) {
   // if search in global experts, jump to another function;
   if (filters && filters.eb && filters.eb.id === 'aminer') {
@@ -19,24 +18,11 @@ export async function searchPerson(query, offset, size, filters, sort) {
     api.searchPersonInBase.replace(':ebid', expertBase),
     { method: 'GET', data },
   );
-
-  // 现在没有搜索全库的功能了。
-  // if (query && query.length > 0) {
-  // } else {
-  //   // not used
-  //   return request(
-  //     api.allPersonInBase
-  //       .replace(':ebid', expertBase)
-  //       .replace(':offset', offset)
-  //       .replace(':size', size),
-  //     { method: 'GET' },
-  //   );
-  // }
 }
 
 export async function searchPersonGlobal(query, offset, size, filters, sort) {
   const data = prepareParametersGlobal(query, offset, size, filters, sort);
-  console.log('data', data);
+  // console.log('data', data);
   return request(api.searchPerson, { method: 'GET', data });
 }
 
@@ -76,6 +62,9 @@ function prepareParameters(query, offset, size, filters, sort) {
     });
     data = { ...newFilters, term: query, offset, size, sort: sort || '' };
   }
+  if (sysconfig.Search_EnablePin) {
+    data.pin = 1;
+  }
   return { expertBase, data };
 }
 
@@ -93,6 +82,9 @@ function prepareParametersGlobal(query, offset, size, filters, sort) {
       }
     });
     data = { ...newFilters, query, offset, size, sort: sort || '' };
+  }
+  if (sysconfig.Search_EnablePin) {
+    data.pin = 1;
   }
   return data;
 }

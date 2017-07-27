@@ -20,6 +20,7 @@ export default {
 
     // layout switches.
     headerSearchBox: null, // Header search box parameters.
+    showFooter: true,
 
   },
   subscriptions: {

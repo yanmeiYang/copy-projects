@@ -96,6 +96,8 @@ const App = ({ children, location, dispatch, app, loading }) => {
 
   const mainMarginLeft = sysconfig.ShowSideMenu ? 188 : 0;
 
+  const { showFooter } = app;
+
   return (
     <div>
 
@@ -149,7 +151,9 @@ const App = ({ children, location, dispatch, app, loading }) => {
             </div>
           </div>
         </div>
-        {sysconfig.ShowFooter && <Footer />}
+
+        {showFooter && sysconfig.ShowFooter && <Footer />}
+
       </div>
 
     </div>

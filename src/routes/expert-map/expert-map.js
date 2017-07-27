@@ -4,7 +4,6 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Button } from 'antd';
-import { routerRedux, Link } from 'dva/router';
 import styles from './expert-map.less';
 import { listPersonByIds } from '../../services/person';
 import * as profileUtils from '../../utils/profile_utils';
@@ -466,9 +465,11 @@ class ExpertMap extends React.PureComponent {
     return (
       <div className={styles.expertMap} id="currentMain">
 
-        <div className={styles.main1}>
-          <div className={styles.lab1}><span>按照层级显示：</span></div>
-          <div>
+        <div className={styles.headerLine}>
+          <div className="left">{this.props.title}</div>
+
+          <div className={styles.scopes}>
+            <span>按照层级显示：</span>
             <ButtonGroup id="sType">
               <Button onClick={this.showType} value="0">自动</Button>
               <Button onClick={this.showType} value="1">大区</Button>
@@ -487,7 +488,7 @@ class ExpertMap extends React.PureComponent {
         </div>
 
         <div className="mapshow">
-          <div id="allmap" style={{ width: '100%', height: '800px' }} />
+          <div id="allmap" />
           <div className="em_report" id="em_report">
             统计/报表
           </div>
@@ -504,7 +505,7 @@ class ExpertMap extends React.PureComponent {
         <div id="rightInfoZone" style={{ display: 'none' }}>
           <div className="rightInfoZone">
 
-            {shouldRIZUpdate && <RightInfoZonePerson person={model.personInfo} /> }
+            {shouldRIZUpdate && <RightInfoZonePerson person={model.personInfo} />}
             {shouldRIZClusterUpdate && <RightInfoZoneCluster persons={clusterPersons} />}
 
           </div>

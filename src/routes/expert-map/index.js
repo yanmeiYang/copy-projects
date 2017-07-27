@@ -7,9 +7,13 @@ import { routerRedux } from 'dva/router';
 import ExpertGoogleMap from './expert-googlemap.js';
 import ExpertMap from './expert-map.js';
 import styles from './index.less';
-import SearchBox from '../../components/SearchBox';
 
 class ExpertMapPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.dispatch = this.props.dispatch;
+    // this.query = this.props.location.query;
+  }
 
   state = {
     query: 'data mining',
@@ -24,7 +28,18 @@ class ExpertMapPage extends React.Component {
     if (query.type) {
       this.setState({ mapType: query.type || 'baidu' });
     }
+    this.dispatch({
+      type: 'app/layout',
+      payload: {
+        headerSearchBox: { query: query.query, onSearch: this.onSearch },
+        showFooter: false,
+      },
+    });
   }
+
+  componentWillUnmount() {
+    this.dispatch({ type: 'app/layout', payload: { showFooter: true } });
+  };
 
   onSearch = (data) => {
     if (data.query) {
@@ -36,23 +51,20 @@ class ExpertMapPage extends React.Component {
     }
   };
 
+  // Tips: 不会根据state变化的jsx block放到外面。这样多次渲染的时候不会多次初始化;
+  titleBlock = <h1>专家地图:</h1>;
+
   render() {
     return (
       <div className={styles.content}>
-        <h1>专家地图:</h1>
 
-        <SearchBox
-          size="large" btnText="搜索" style={{ width: 680 }}
-          query={this.state.query}
-          onSearch={this.onSearch}
-        />
+        {this.state.mapType === 'baidu' &&
+        <ExpertMap query={this.state.query} mapType={this.state.mapType}
+                   title={this.titleBlock} />
+        }
 
         {this.state.mapType === 'google' &&
         <ExpertGoogleMap query={this.state.query} mapType={this.state.mapType} />
-        }
-
-        {this.state.mapType === 'baidu' &&
-        <ExpertMap query={this.state.query} mapType={this.state.mapType} />
         }
 
       </div>

@@ -24,15 +24,23 @@ class ForgotPassword extends React.Component {
     this.props.dispatch({ type: 'app/handleNavbar', payload: false });
 
   };
-  // componentWillReceiveProps = (nextProps) => {
-  //   if (nextProps.auth.isUpdateForgotPw) {
-  //     Modal.success({
-  //       title: '成功',
-  //       content: '请查看你的邮箱',
-  //     });
-  //   }
-  // };
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.auth.isUpdateForgotPw) {
+      Modal.success({
+        title: '成功',
+        content: '请查看你的邮箱',
+      });
+    } else if (nextProps.auth.message) {
+      if (nextProps.auth.message.includes('seconds_later')) {
+        Modal.warning({
+          title: '警告',
+          content: `请${nextProps.auth.message.split('_')[1]}s后再试`,
+        });
+      }
+    }
+  };
   handleSubmit = (e) => {
+    e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         values.token = config.source;
@@ -40,7 +48,7 @@ class ForgotPassword extends React.Component {
         values.src = config.source;
         this.props.dispatch({ type: 'auth/forgotPassword', payload: values });
       }
-    })
+    });
   };
   // handleConfirmBlur = (e) => {
   //   this.props.dispatch({ type: 'auth/checkEmail', payload: { email: e.target.value } });
@@ -66,8 +74,6 @@ class ForgotPassword extends React.Component {
         sm: { span: 14, offset: 6 },
       },
     };
-    const headerProps = { location };
-    const { validEmail } = this.props.auth;
     return (
       <div>
         <div className={styles.container}>
@@ -99,9 +105,8 @@ class ForgotPassword extends React.Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
-
 }
 
-export default connect(({ app, auth }) => ({ app, auth }))(Form.create()(ForgotPassword))
+export default connect(({ app, auth }) => ({ app, auth }))(Form.create()(ForgotPassword));

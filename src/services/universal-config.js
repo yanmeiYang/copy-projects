@@ -1,7 +1,7 @@
+
 import { request, config } from '../utils';
 
 const { api, source } = config;
-
 export async function listByCategory(category) {
   return request(api.ucListByCategory
       .replace(':source', source)
@@ -35,3 +35,16 @@ export async function deleteByKey(category, key) {
       body: JSON.stringify({ op: 'set', value: 0 }),
     });
 }
+
+export async function updateByKey(src, category, key, newKey) {
+  return request(api.ucUpdateByKey
+      .replace(':src', src)
+      .replace(':category', category)
+      .replace(':key', key)
+      .replace(':newKey', newKey)
+    , {
+      method: 'PUT',
+      body: JSON.stringify({ op: 'set', value: 0 }),
+    });
+}
+

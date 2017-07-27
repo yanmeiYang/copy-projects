@@ -209,6 +209,7 @@ class Seminar extends React.Component {
                 results.map((result) => {
                   return (
                     <div key={result.id + Math.random()}>
+                      <Button type="danger" icon="delete" size="small" style={{ float: 'right' }} >删除</Button>
                       <NewActivityList result={result} hidetExpertRating="false" style={{ marginTop: 20 }} />
                     </div>
                   );

@@ -66,5 +66,15 @@ export default {
     },
   }),
 
+  UserInfo: app => ({
+    path: '/user-info',
+    getComponent(nextState, cb) {
+      require.ensure([], (require) => {
+        registerModel(app, require('../../models/auth/auth'));
+        cb(null, require('./user-info/'));
+      }, 'user');
+    },
+  }),
+
 };
 

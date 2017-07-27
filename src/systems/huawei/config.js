@@ -10,6 +10,7 @@ module.exports = {
   PageTitle: 'HUAWEI 知识洞察系统',
   SearchPagePrefix: 'uniSearch',
   ShowSideMenu: false,
+  ShowRegisteredRole: false,
 
   // IndexPage_QuickSearchList:[], // use default.
   IndexPage_InfoBlocks: <IndexInfoBox />,
@@ -22,7 +23,7 @@ module.exports = {
     backgroundPosition: '0px -10px',
   },
   Header_LogoWidth: 194,
-  Header_UserPageURL: '',
+  Header_UserPageURL: '/user-info',
   Footer_Content: '',
 
   // Functionality

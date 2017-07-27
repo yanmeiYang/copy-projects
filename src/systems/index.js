@@ -46,6 +46,7 @@ const defaultSystemConfigs = {
   Header_SubTextStyle: {},
   Header_UserPageURL: '', // 用户头像点击之后去的页面.
   Footer_Content: '',
+  ShowRegisteredRole: true, // 注册页面是否显示角色配置
 
   // resources
   IndexPage_QuickSearchList: ['Artificial intelligence', 'Robotics',

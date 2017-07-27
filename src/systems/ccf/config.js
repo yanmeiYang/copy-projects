@@ -10,6 +10,7 @@ module.exports = {
 
   Language: 'cn', // options [cn|en]
   PreferredLanguage: 'cn', // 默认语言
+  ShowRegisteredRole: true,
 
   SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
   DEFAULT_EXPERT_BASE: '5949c2f99ed5dbc2147fd854', // CCF会员

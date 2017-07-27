@@ -22,7 +22,7 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {  // eslint-disable-line
       dispatch({ type: 'setTestData', payload: {} });
-    }
+    },
   },
 
   effects: {
@@ -60,7 +60,7 @@ export default {
     },
 
     *deleteByKey({ payload }, { call, put }) {
-      const { category, key } = payload;
+      const { category, key, idx } = payload;
       const data = yield call(uconfigService.deleteByKey, category, key);
       console.log('data: ', data);
       if (data.data && data.data.status === true) {
@@ -68,7 +68,16 @@ export default {
       } else {
         console.error('deleteByKey Error: ', data);
       }
-      yield put({ type: 'deleteByKeySuccess', payload: { key } });
+      yield put({ type: 'deleteByKeySuccess', payload: { idx } });
+    },
+    *updateByKey({ payload }, { call, put }) {
+      const { src, category, key, newKey } = payload;
+      const data = yield call(uconfigService.updateByKey, src, category, key, newKey);
+      if (data.data && data.data.status === true) {
+        yield put({ type: 'updateByKeySuccess', payload: { key, newKey } });
+      } else {
+        console.error('updateByKey Error: ', data);
+      }
     },
 
   },
@@ -121,13 +130,20 @@ export default {
       return { ...state, data: newData };
     },
 
-    deleteByKeySuccess(state, { payload: { key } }) {
-      const idx = findUniversalConfig(state.data, key);
+    deleteByKeySuccess(state, { payload: { idx } }) {
+      // const idx = findUniversalConfig(state.data, key);
       state.data.splice(idx, 1);
       return { ...state, data: state.data };
     },
 
-
+    updateByKeySuccess(state, { payload: { key, newKey } }) {
+      for (let i = 0; i < state.data.length; i++) {
+        if (state.data[i].value.key === key) {
+          state.data[i].value.key = newKey;
+        }
+      }
+      return { ...state, data: state.data };
+    },
     /* update person profile info. */
     // TODO handel error.
     getPersonSuccess(state, { payload: { data } }) {
@@ -160,4 +176,4 @@ function findUniversalConfig(data, targetKey) {
     });
   }
   return idx;
-};
+}

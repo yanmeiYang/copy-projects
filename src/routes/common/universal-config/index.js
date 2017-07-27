@@ -18,26 +18,61 @@ function hasErrors(fieldsError) {
 class UniversalConfig extends React.Component {
   state = {
     editCurrentData: {},
+    editCurrentId: '',
+    newKey: '',
   };
 
   componentDidMount() {
     // To disabled submit button at the beginning.
     this.props.form.validateFields();
-  }
+  };
 
   onDelete = (e) => {
-    const key = e.target && e.target.getAttribute('data');
+    const data = e.target && e.target.getAttribute('data');
+    const json = JSON.parse(data);
+    const key = json.value.key;
+    const idx = json.key;
     this.props.dispatch({
       type: 'universalConfig/deleteByKey',
-      payload: { category: this.props.universalConfig.category, key },
+      payload: { category: this.props.universalConfig.category, key, idx },
     });
   };
 
   onEdit = (e) => {
     const data = e.target && e.target.getAttribute('data');
     const json = JSON.parse(data);
-    this.props.form.setFieldsValue(json.value);
-    this.setState({ editCurrentData: json.value });
+    this.setState({
+      editCurrentId: json.value.id,
+      newKey: json.value.key,
+    });
+    // const json = JSON.parse(data);
+    // this.props.form.setFieldsValue(json.value);
+    // this.setState({ editCurrentData: json.value });
+  };
+  onChangeNewKey = (e) => {
+    const newkey = e.target.value.trim();
+    this.setState({
+      newKey: newkey,
+    });
+  };
+
+  onSave = (e) => {
+    const data = e.target && e.target.getAttribute('data');
+    const json = JSON.parse(data);
+    if (json.value.key !== this.state.newKey && this.state.newKey !== '') {
+      const src = json.value.src;
+      const category = json.value.category;
+      const key = json.value.key;
+      const newKey = this.state.newKey;
+      this.props.dispatch({
+        type: 'universalConfig/updateByKey',
+        payload: { src, category, key, newKey },
+      });
+    }
+    ;
+    this.setState({
+      editCurrentId: '',
+    });
   };
 
   handleSubmit = (e) => {
@@ -47,7 +82,7 @@ class UniversalConfig extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         // 删除修改之前的key
-        if (this.state.editCurrentData.key!==undefined&&(this.state.editCurrentData.key!==values.key||this.state.editCurrentData.value!==values.value)){
+        if (this.state.editCurrentData.key !== undefined && (this.state.editCurrentData.key !== values.key || this.state.editCurrentData.value !== values.value)) {
           const key = this.state.editCurrentData.key;
           this.props.dispatch({
             type: 'universalConfig/deleteByKey',
@@ -133,7 +168,23 @@ class UniversalConfig extends React.Component {
             size="small"
             pagination={false}
           >
-            <Column title="名称" dataIndex="value.key" key="key" />
+            <Column
+              title="名称"
+              dataIndex="value.key"
+              key="key"
+              render={(text, record) => {
+                return (
+                  <div>
+                    {this.state.editCurrentId !== record.value.id &&
+                    <span style={{ paddingLeft: 7 }}>{text}</span>
+                    }
+                    {this.state.editCurrentId === record.value.id &&
+                    <Input defaultValue={text}  onChange={this.onChangeNewKey} />
+                    }
+                  </div>
+                );
+              }}
+            />
             {!this.props.hideValue &&
             <Column title="值" dataIndex="value.value" key="value" />
             }
@@ -143,22 +194,27 @@ class UniversalConfig extends React.Component {
               render={(text, record) => {
                 return (
                   <span>
-                  <a onClick={this.onEdit} data={JSON.stringify(text)}>编辑</a>
-                  <span className="ant-divider" />
-                  <a onClick={this.onDelete} data={text.key}>删除</a>
+                    {this.state.editCurrentId !== record.value.id &&
+                    <a onClick={this.onEdit} data={JSON.stringify(text)}>编辑</a>
+                    }
+                    {this.state.editCurrentId === record.value.id &&
+                    <a onClick={this.onSave} data={JSON.stringify(text)}>保存</a>
+                    }
+                    <span className="ant-divider" />
+                    <a onClick={this.onDelete} data={JSON.stringify(text)}>删除</a>
                     {/*<span className="ant-divider" />*/}
                     {/*<a href="#" className="ant-dropdown-link">*/}
                     {/*More actions <Icon type="down" />*/}
                     {/*</a>*/}
-                </span>
-                )
+                  </span>
+                );
               }}
             />
           </Table>
         </Spin>
       </div>
     );
-  };
+  }
 }
 
 export default connect(

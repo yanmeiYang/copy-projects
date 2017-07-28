@@ -20,7 +20,7 @@ class Registered extends React.Component {
 
   componentDidMount() {
     this.props.dispatch({
-      type: 'universalConfig/setCategory',
+      type: 'auth/getCategoryByUserRoles',
       payload: { category: 'user_roles' },
     });
   }
@@ -31,7 +31,7 @@ class Registered extends React.Component {
   selectedRole = (e) => {
     this.props.universalConfig.orgList = [];
     const data = JSON.parse(e);
-    this.setState({ currentRoleAndOrg: `${data.key}` });
+    this.setState({ currentRoleAndOrg: `ccf_${data.key}` });
     if (data.value !== '') {
       this.props.dispatch({
         type: 'universalConfig/getOrgCategory',
@@ -196,7 +196,7 @@ class Registered extends React.Component {
             })(
               <Select onChange={this.selectedRole}>
                 {
-                  universalConfig.userRoles.map((key) => {
+                  auth.userRoles.map((key) => {
                     return (<Option
                       key={Math.random()}
                       value={JSON.stringify(key.value)}

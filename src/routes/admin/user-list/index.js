@@ -38,7 +38,7 @@ class UserList extends React.Component {
   componentDidMount() {
     console.log('>>>>>>>>>>>>>>>>>>>');
     this.props.dispatch({
-      type: 'universalConfig/setCategory',
+      type: 'auth/getCategoryByUserRoles',
       payload: { category: 'user_roles' },
     });
     this.props.dispatch({
@@ -217,7 +217,12 @@ class UserList extends React.Component {
 
   render() {
     console.log('lsdkjfa;sjdf;ajsd;lfkjas;ldkj');
-    const { listUsers, loading } = this.props.auth;
+    const { loading } = this.props.auth;
+    let listUsers = [];
+    if (this.props.auth.listUsers) {
+      listUsers = this.props.auth.listUsers.filter(item => !item.role.includes(`${config.source}_超级管理员`));
+    }
+
     const { universalConfig } = this.props;
     const { committee, selectedAuthority, selectedRole } = this.state;
     return (
@@ -259,7 +264,7 @@ class UserList extends React.Component {
             <h5>角色：</h5>
             <RadioGroup onChange={this.selectedRole.bind()} value={selectedRole}>
               {
-                universalConfig.userRoles.map((item) => {
+                this.props.auth.userRoles.map((item) => {
                   return (<Radio key={Math.random()}
                                  value={`ccf_${item.value.key}`}
                                  data={item.value}>{item.value.key}</Radio>);

@@ -107,7 +107,7 @@ class Retrieve extends React.Component {
                     {getFieldDecorator('email', {
                       rules: [],
                     })(
-                      <span>{ email }</span>,
+                      <span>{ decodeURIComponent(email) }</span>,
                     )}
                   </FormItem>
                   <FormItem

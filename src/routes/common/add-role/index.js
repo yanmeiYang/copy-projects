@@ -2,10 +2,9 @@
  *  Created by BoGao on 2017-06-12;
  */
 import React from 'react';
-import { Tabs, Table, Icon, Spin, Input, Form, Button, Modal, Select } from 'antd';
+import { Tabs, Table, Spin, Input, Form, Button, Modal, Select } from 'antd';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
-import { config } from '../../../utils';
 import styles from './index.less';
 
 const Option = Select.Option;
@@ -26,17 +25,20 @@ class AddUserRolesByOrg extends React.Component {
   componentDidMount() {
     // To disabled submit button at the beginning.
     this.props.form.validateFields();
-    // this.props.dispatch({
-    //   type: 'universalConfig/setCategory',
-    //   payload: { category: 'orgcategory_ccf' },
-    // });
   }
 
   onDelete = (e) => {
     const key = JSON.parse(e.target && e.target.getAttribute('data')).key;
-    this.props.dispatch({
-      type: 'universalConfig/deleteByKey',
-      payload: { category: this.props.universalConfig.category, key },
+    Modal.confirm({
+      title: '删除',
+      content: '确定删除吗？',
+      onOk() {
+        this.props.dispatch({
+          type: 'universalConfig/deleteByKey',
+          payload: { category: this.props.universalConfig.category, key },
+        });
+      },
+      onCancel() {},
     });
   };
 
@@ -97,7 +99,7 @@ class AddUserRolesByOrg extends React.Component {
           },
         });
         this.props.dispatch({
-          type: 'universalConfig/addKeyAndValue',
+          type: 'auth/addOrgCategory',
           payload: {
             category: 'getallorglist',
             key: orgName,
@@ -198,9 +200,11 @@ class AddUserRolesByOrg extends React.Component {
               render={(text, record) => {
                 return (
                   <span>
-                  <a onClick={this.onEdit} data={JSON.stringify(text)}>编辑</a>
-                  <span className="ant-divider" />
-                  <a onClick={this.onDelete} data={JSON.stringify(text.value)}>删除</a>
+                    {(text.value.key !== '超级管理员' && text.value.key !== '分部专员' && text.value.key !== 'CCF专委专员') && <span>
+                      <a onClick={this.onEdit} data={JSON.stringify(text)}>编辑</a>
+                      <span className="ant-divider" />
+                      <a onClick={this.onDelete} data={JSON.stringify(text.value)}>删除</a></span>
+                    }
                     {/*<span className="ant-divider" />*/}
                     {/*<a href="#" className="ant-dropdown-link">*/}
                     {/*More actions <Icon type="down" />*/}

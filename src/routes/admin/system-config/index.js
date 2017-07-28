@@ -76,11 +76,8 @@ class SystemConfig extends React.Component {
           })}
         </Tabs>
         }
-        {sc.category === 'orgcategory' &&
-        <UniversalConfig hideValue />
-        }
-        {sc.category !== 'orgcategory' &&
-        <UniversalConfig />
+        {sc.category === 'contribution_type' ?
+          <UniversalConfig /> : <UniversalConfig hideValue />
         }
 
 

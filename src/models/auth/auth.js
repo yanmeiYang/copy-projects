@@ -4,6 +4,7 @@
 import { routerRedux } from 'dva/router';
 import { config } from '../../utils';
 import * as authService from '../../services/auth';
+import * as uconfigService from '../../services/universal-config';
 
 export default {
   namespace: 'auth',
@@ -14,6 +15,7 @@ export default {
     isUpdateForgotPw: false,
     message: null,
     retrieve: {},
+    userRoles: [],
   },
   subscriptions: {
     // setup({ dispatch, history }) {
@@ -36,9 +38,9 @@ export default {
         if (config.ShowRegisteredRole) {
           const arr = role.split('_');
           if (arr.length === 3) {
-            yield call(authService.invoke, uid, `${config.source}_authority${arr[2]}`);
+            yield call(authService.invoke, uid, `${config.source}_authority${arr[1]}`);
           } else if (arr.length === 2) {
-            yield call(authService.invoke, uid, `${config.source}_${arr[1]}`);
+            yield call(authService.invoke, uid, `${config.source}_${arr[0]}`);
           }
         }
       }
@@ -95,7 +97,16 @@ export default {
       const { uid, name } = payload;
       const { data } = yield call(authService.updateProfile, uid, name);
     },
-
+    *addOrgCategory({ payload }, { call, put }) {
+      const { category, key, val } = payload;
+      yield call(uconfigService.setByKey, category, key, val);
+    },
+    // 获取注册用户列表
+    *getCategoryByUserRoles({ payload }, { call, put }) {
+      const { category } = payload;
+      const data = yield call(uconfigService.listByCategory, category);
+      yield put({ type: 'setData', payload: { data } });
+    },
   },
   reducers: {
     createUserSuccess(state) {
@@ -127,6 +138,17 @@ export default {
     },
     retrievePsSuccess(state, { data }) {
       return { ...state, retrieve: data };
+    },
+    setData(state, { payload: { data } }) {
+      const newData = [];
+      if (data.data.data) {
+        for (const item in data.data.data) {
+          if (item) {
+            newData.push({ key: item, value: data.data.data[item] });
+          }
+        }
+      }
+      return { ...state, userRoles: newData, loading: false };
     },
     showLoading(state) {
       return {

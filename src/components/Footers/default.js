@@ -15,7 +15,7 @@ const Footer = () => {
           {/*<div style={{ height: 20, lineHeight: '30px' }}><img src="/sys/ccf/foot-p.png" alt="京公网安备" style={{ width: 20 }} /></div>*/}
         </div>
         <div>
-          <img src="/aminer_logo.png" alt="AMiner logo" style={{ height: 46, marginTop: 4 }}/>
+          <img src="/aminer_logo.png" alt="AMiner logo" style={{ height: 46 }} />
         </div>
       </div>
     </div>

@@ -231,11 +231,12 @@ class Seminar extends React.Component {
                 results.map((result, index) => {
                   return (
                     <div key={result.id + Math.random()}>
+                      {this.props.app.token && (this.props.app.roles.authority.indexOf(result.organizer[0]) >= 0 || this.props.app.roles.admin) &&
                       <Button type="danger" icon="delete" size="small"
                               onClick={this.delTheSeminar.bind(this, result, index)} style={{
                         float: 'right',
                         margin: '15px 10px 0 10px',
-                      }}>删除</Button>
+                      }}>删除</Button>}
                       <NewActivityList result={result} hidetExpertRating="false"
                                        style={{ marginTop: 20 }} />
                     </div>
@@ -257,5 +258,5 @@ class Seminar extends React.Component {
 export default connect(({ seminar, loading, app }) => ({
   seminar,
   loading,
-  app
+  app,
 }))(Seminar);

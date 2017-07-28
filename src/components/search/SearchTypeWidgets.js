@@ -25,7 +25,7 @@ class SearchTypeWidgets extends React.PureComponent {
   componentWillMount() {
     this.config = this.props.config || config;
 
-    // match
+    // match current label based on url.
     const path = window.location.pathname;
     if (this.config) {
       this.config.map((conf) => {

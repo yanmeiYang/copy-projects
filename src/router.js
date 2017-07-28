@@ -20,7 +20,6 @@ const core = {
     component: App,
     getIndexRoute(nextState, cb) {
       require.ensure([], (require) => {
-        registerModel(app, require('./models/search'));
         registerModel(app, require('./models/search-suggest'));
         cb(null, { component: require('./routes/IndexPage') });
       }, 'indexPage');

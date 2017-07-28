@@ -16,22 +16,23 @@ class ExpertMapPage extends React.Component {
   }
 
   state = {
-    query: 'data mining',
+    query: '',
     mapType: 'baidu', // [baidu|google]
   };
 
   componentWillMount() {
-    const query = this.props.location.query;
-    if (query.query) {
+    const { query, type } = this.props.location.query;
+    if (query) {
+      // this.props.dispatch({ type: 'app/setQuery', query });
       this.setState({ query });
     }
-    if (query.type) {
-      this.setState({ mapType: query.type || 'baidu' });
+    if (type) {
+      this.setState({ mapType: type || 'baidu' });
     }
     this.dispatch({
       type: 'app/layout',
       payload: {
-        headerSearchBox: { query: query.query, onSearch: this.onSearch },
+        headerSearchBox: { query, onSearch: this.onSearch },
         showFooter: false,
       },
     });
@@ -39,7 +40,7 @@ class ExpertMapPage extends React.Component {
 
   componentWillUnmount() {
     this.dispatch({ type: 'app/layout', payload: { showFooter: true } });
-  };
+  }
 
   onSearch = (data) => {
     if (data.query) {
@@ -72,5 +73,5 @@ class ExpertMapPage extends React.Component {
   }
 }
 
-export default connect(({ expertMap }) => ({ expertMap }))(ExpertMapPage);
+export default connect(({ app, expertMap }) => ({ app, expertMap }))(ExpertMapPage);
 

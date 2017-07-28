@@ -9,20 +9,27 @@ const LocalStorage = localStorage;
 export default {
   namespace: 'app',
   state: {
+    // query: '', // query shared in different pages.
+
+    // User/auth token related.
     user: {},
     token: LocalStorage.getItem('token'),
-    roles: { admin: false, ccf_user: false, role: [], authority: [] }, // TODO parse roles string into this object.
-    menuPopoverVisible: false,
-    siderFold: LocalStorage.getItem(`${prefix}siderFold`) === 'true',
-    darkTheme: LocalStorage.getItem(`${prefix}darkTheme`) === 'true',
-    isNavbar: false, // document.body.clientWidth < 769,
-    navOpenKeys: JSON.parse(LocalStorage.getItem(`${prefix}navOpenKeys`)) || [],
+    // TODO parse roles string into this object.
+    roles: { admin: false, ccf_user: false, role: [], authority: [] },
+
 
     // layout switches.
     headerSearchBox: null, // Header search box parameters.
     showFooter: true,
 
+    // Layout related, not used.
+    menuPopoverVisible: false,
+    siderFold: LocalStorage.getItem(`${prefix}siderFold`) === 'true',
+    darkTheme: LocalStorage.getItem(`${prefix}darkTheme`) === 'true',
+    isNavbar: false, // document.body.clientWidth < 769,
+    navOpenKeys: JSON.parse(LocalStorage.getItem(`${prefix}navOpenKeys`)) || [],
   },
+
   subscriptions: {
     setup({ dispatch }) {
       dispatch({ type: 'getCurrentUserInfo' });
@@ -157,6 +164,10 @@ export default {
     layout(state, { payload }) {
       return { ...state, ...payload };
     },
+
+    // setQuery(state, { query }) {
+    //   return { ...state, query };
+    // },
 
 
     logoutSuccess(state, { payload }) {

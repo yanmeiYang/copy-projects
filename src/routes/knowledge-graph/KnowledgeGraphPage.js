@@ -4,13 +4,13 @@
 import React from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
-import { routerRedux, Link } from 'dva/router';
+import { routerRedux } from 'dva/router';
 import { Radio, Tabs } from 'antd';
-import { Spinner } from '../../components';
-import styles from './index.less';
-import { KnowledgeGraphTextTree } from '../knowledge-graph';
-import { PublicationList } from '../../components/publication';
-import { PersonListTiny } from '../../components/person';
+import { Spinner } from '../../components/index';
+import styles from './KnowledgeGraphPage.less';
+import { KnowledgeGraphTextTree } from './index';
+import { PublicationList } from '../../components/publication/index';
+import { PersonListTiny } from '../../components/person/index';
 
 const RadioGroup = Radio.Group;
 const TabPane = Tabs.TabPane;

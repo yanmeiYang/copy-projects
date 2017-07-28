@@ -29,8 +29,4 @@ Object.keys(overrides).map((key) => {
   return true;
 });
 
-// defines['process.env'] = {
-//   NODE_ENV: 'production',
-// };
-
 module.exports = { defines };

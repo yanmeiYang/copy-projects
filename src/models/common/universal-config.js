@@ -11,6 +11,7 @@ export default {
   state: {
     source: '', // If don't set, service will get value from config.
     category: '',
+    tabList: [],
     key: '',
     data: [],
     orgList: [],
@@ -33,6 +34,18 @@ export default {
       yield put({ type: 'setCategorySuccess', payload: { category } });
       yield put({ type: 'setData', payload: { data } });
     },
+    *setTabList({ payload }, { call, put }) {
+      yield put({ type: 'showLoading' });
+      const { category } = payload;
+      const data = yield call(uconfigService.listByCategory, category);
+      yield put({ type: 'setTabListSuccess', payload: { data } });
+      if (data.data.data.length > 0) {
+        const ct = `orglist_${data.data.data[0].id}`;
+        const dt = yield call(uconfigService.listByCategory, ct);
+        yield put({ type: 'setCategorySuccess', payload: { category: ct } });
+        yield put({ type: 'setData', payload: { data: dt } });
+      }
+    },
 
     *getOrgCategory({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
@@ -46,6 +59,7 @@ export default {
       // yield put({ type: 'showLoading' });
       const { category, key, val } = payload;
       const data = yield call(uconfigService.setByKey, category, key, val);
+      console.log(data);
       if (data.data && data.data.status === true) {
         // do nothing....
       } else {
@@ -60,19 +74,18 @@ export default {
     },
 
     *deleteByKey({ payload }, { call, put }) {
-      const { category, key, idx } = payload;
+      const { category, key } = payload;
       const data = yield call(uconfigService.deleteByKey, category, key);
-      console.log('data: ', data);
       if (data.data && data.data.status === true) {
         // do nothing....
       } else {
         console.error('deleteByKey Error: ', data);
       }
-      yield put({ type: 'deleteByKeySuccess', payload: { idx } });
+      yield put({ type: 'deleteByKeySuccess', payload: { key } });
     },
     *updateByKey({ payload }, { call, put }) {
-      const { src, category, key, newKey } = payload;
-      const data = yield call(uconfigService.updateByKey, src, category, key, newKey);
+      const { category, key, newKey } = payload;
+      const data = yield call(uconfigService.updateByKey, category, key, newKey);
       if (data.data && data.data.status === true) {
         yield put({ type: 'updateByKeySuccess', payload: { key, newKey } });
       } else {
@@ -83,6 +96,7 @@ export default {
   },
 
   reducers: {
+
     setCategorySuccess(state, { payload: { category } }) {
       return { ...state, category };
     },
@@ -117,21 +131,28 @@ export default {
 
     updateData(state, { payload: { key, val } }) {
       // TODO 这里编辑会有问题,报bug.
-      let newData = [];
-      const idx = findUniversalConfig(state.data, key);
+      // const idx = findUniversalConfig(state.data, key);
+      // if (idx === -1) {
+      //   newData = [...state.data, { key, value: val }];
+      // } else {
+      //   newData = state.data;
+      //   if (newData && newData[idx] && newData[idx].key === key) {
+      //     newData[idx].value = val;
+      //   }
+      // }
+      const idx = findIndexByKey(state.data, key);
       if (idx === -1) {
-        newData = [...state.data, { key, value: val }];
+        let newData = [];
+        const value = { key, value: val, category: state.category };
+        newData = [...state.data, { key: state.data.length + 1, value }];
+        return { ...state, data: newData };
       } else {
-        newData = state.data;
-        if (newData && newData[idx] && newData[idx].key === key) {
-          newData[idx].value = val;
-        }
+        return { ...state };
       }
-      return { ...state, data: newData };
     },
 
-    deleteByKeySuccess(state, { payload: { idx } }) {
-      // const idx = findUniversalConfig(state.data, key);
+    deleteByKeySuccess(state, { payload: { key } }) {
+      const idx = findIndexByKey(state.data, key);
       state.data.splice(idx, 1);
       return { ...state, data: state.data };
     },
@@ -144,6 +165,20 @@ export default {
       }
       return { ...state, data: state.data };
     },
+
+    setTabListSuccess(state, { payload: { data } }) {
+      const tabList = [];
+      if (data.data.data) {
+        for (const item in data.data.data) {
+          if (item) {
+            const category = `orglist_${data.data.data[item].id}`;
+            tabList.push({ name: data.data.data[item].key, category });
+          }
+        }
+      }
+      return { ...state, tabList };
+    },
+
     /* update person profile info. */
     // TODO handel error.
     getPersonSuccess(state, { payload: { data } }) {
@@ -164,16 +199,27 @@ export default {
 
 };
 
-function findUniversalConfig(data, targetKey) {
+// function findUniversalConfig(data, targetKey) {
+//   let idx = -1;
+//   if (data) {
+//     data.find((item, index) => {
+//       if (item && item.key === targetKey) {
+//         idx = index;
+//         return true;
+//       }
+//       return false;
+//     });
+//   }
+//   return idx;
+// }
+// 获取满足条件的数组下标
+function findIndexByKey(data, targetKey) {
   let idx = -1;
-  if (data) {
-    data.find((item, index) => {
-      if (item && item.key === targetKey) {
-        idx = index;
-        return true;
-      }
-      return false;
-    });
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].value.key === targetKey) {
+      idx = i;
+      break;
+    }
   }
   return idx;
 }

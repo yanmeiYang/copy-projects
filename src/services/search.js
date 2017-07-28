@@ -62,10 +62,19 @@ function prepareParameters(query, offset, size, filters, sort) {
     });
     data = { ...newFilters, term: query, offset, size, sort: sort || '' };
   }
-  if (sysconfig.Search_EnablePin) {
-    data.pin = 1;
-  }
+  data = addAdditionParameterToData(data, sort);
   return { expertBase, data };
+}
+
+function addAdditionParameterToData(data, sort) {
+  const newData = data;
+  // 置顶acm fellow和高校top100
+  if (sysconfig.Search_EnablePin) {
+    if (!sort || sort === 'relevance') {
+      newData.pin = 1;
+    }
+  }
+  return newData;
 }
 
 function prepareParametersGlobal(query, offset, size, filters, sort) {
@@ -83,9 +92,7 @@ function prepareParametersGlobal(query, offset, size, filters, sort) {
     });
     data = { ...newFilters, query, offset, size, sort: sort || '' };
   }
-  if (sysconfig.Search_EnablePin) {
-    data.pin = 1;
-  }
+  data = addAdditionParameterToData(data, sort);
   return data;
 }
 

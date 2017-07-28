@@ -21,13 +21,24 @@ const allMenus = [{ id: 1, icon: 'laptop', name: '首页', router: '/' },
     id: 44, bpid: 4, mpid: 4, name: '活动类型', icon: 'api',
     router: '/admin/system-config/activity_type',
   },
-  { id: 48, bpid: 4, mpid: 4, name: '专业委员会', icon: 'api', router: '/technical-committees' },];
+  // {
+  //   id: 48, bpid: 4, mpid: 4, name: '专业委员会', icon: 'api',
+  //   router: '/technical-committees',
+  // },
+  {
+    id: 46, bpid: 4, mpid: 4, name: '机构名称', icon: 'api',
+    router: '/admin/system-config/orgcategory',
+  },
+  {
+    id: 49, bpid: 4, mpid: 4, name: '机构列表', icon: 'api',
+    router: '/admin/org-category',
+  },];
 
-const getMenusByUser = (user,role) => {
+const getMenusByUser = (user, role) => {
   const menus = [];
   if (role.admin) {
     menus.push(allMenus)
-  } else if (role.admin === false&&user.hasOwnProperty('first_name')) {
+  } else if (role.admin === false && user.hasOwnProperty('first_name')) {
     menus.push(allMenus.slice(0, 3));
   } else {
     menus.push(allMenus.slice(0, 1))

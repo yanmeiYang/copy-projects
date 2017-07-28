@@ -19,19 +19,19 @@ class Seminar extends React.Component {
     category: '',
     tag: '',
     query: '',
-  }
+  };
 
   componentWillMount = () => {
-    this.props.dispatch({
-      type: 'universalConfig/setCategory',
-      payload: { category: 'orglist_5976bb068ef7a2e824adca67' },
-    });
-    this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'activity_type' } });
+    this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'orgcategory' } });
   };
   addBao = () => {
     this.props.dispatch(routerRedux.push({
       pathname: '/seminar-post',
     }));
+  };
+  delTheSeminar = (result, i) => {
+    this.props.dispatch({ type: 'seminar/deleteActivity', payload: { id: result.id } });
+    this.props.seminar.results.splice(i, 1);
   };
   getMoreSeminar = () => {
     const { offset, query, sizePerPage } = this.props.seminar;
@@ -43,7 +43,7 @@ class Seminar extends React.Component {
         size: sizePerPage,
         src: config.source,
         organizer,
-        category
+        category,
       };
       this.props.dispatch({ type: 'seminar/searchActivity', payload: params });
     } else {
@@ -83,7 +83,13 @@ class Seminar extends React.Component {
     }
   };
 
-  onFilterChange = (key, type, checked) => {
+  onFilterChange = (key, item, type, checked) => {
+    if (type === 'category') {
+      this.props.dispatch({
+        type: 'seminar/getCategory',
+        payload: { category: `orglist_${item.id}` },
+      });
+    }
     const sizePerPage = this.props.seminar.sizePerPage;
     let organizer = '';
     let category = '';
@@ -118,9 +124,8 @@ class Seminar extends React.Component {
   };
 
   render() {
-    const { results, loading, sizePerPage, activity_type, activity_organizer_options, topMentionedTags } =
+    const { results, loading, sizePerPage, orgcategory, activity_organizer_options, topMentionedTags, orgByActivity } =
       this.props.seminar;
-    const { universalConfig } = this.props;
     const { organizer, category } = this.state;
     return (
       <div className="content-inner">
@@ -166,7 +171,7 @@ class Seminar extends React.Component {
                         key={item.l}
                         className={styles.filterItem}
                         checked={organizer === item.l}
-                        onChange={checked => this.onFilterChange(item.l, 'tag', checked)}
+                        onChange={checked => this.onFilterChange(item.l, item, 'tag', checked)}
                       >
                         {item.l}
                         (<span className={styles.filterCount}>{item.f}</span>)
@@ -177,40 +182,18 @@ class Seminar extends React.Component {
               </ul>
             </div>
             }
-
-            <div className={styles.filterRow}>
-              <span className={styles.filterTitle}>承办单位:</span>
-              {universalConfig.data &&
-              <ul className={styles.filterItems}>
-                {
-                  Object.values(universalConfig.data).map((item) => {
-                    return (
-                      <CheckableTag
-                        key={item.value.id}
-                        className={styles.filterItem}
-                        checked={organizer === item.value.key}
-                        onChange={checked => this.onFilterChange(item.value.key, 'organizer', checked)}
-                      >
-                        {item.value.key}
-                      </CheckableTag>
-                    );
-                  })
-                }
-              </ul>
-              }
-            </div>
             <div className={styles.filterRow}>
               <span className={styles.filterTitle}>活动类型:</span>
-              {activity_type.data &&
+              {orgcategory.data &&
               <ul className={styles.filterItems}>
                 {
-                  Object.values(activity_type.data).map((item) => {
+                  Object.values(orgcategory.data).map((item) => {
                     return (
                       <CheckableTag
                         key={item.id}
                         className={styles.filterItem}
                         checked={category === item.key}
-                        onChange={checked => this.onFilterChange(item.key, 'category', checked)}
+                        onChange={checked => this.onFilterChange(item.key, item, 'category', checked)}
                       >
                         {item.key}
                       </CheckableTag>
@@ -220,16 +203,36 @@ class Seminar extends React.Component {
               </ul>
               }
             </div>
+            {orgByActivity.data && <div className={styles.filterRow}>
+              <span className={styles.filterTitle}>承办单位:</span>
+              <ul className={styles.filterItems}>
+                {
+                  Object.values(orgByActivity.data).map((item) => {
+                    return (
+                      <CheckableTag
+                        key={`${item.id}_${Math.random()}`}
+                        className={styles.filterItem}
+                        checked={organizer === item.key}
+                        onChange={checked => this.onFilterChange(item.key, item, 'organizer', checked)}
+                      >
+                        {item.key}
+                      </CheckableTag>
+                    );
+                  })
+                }
+              </ul>
+            </div>}
           </div>
         </div>
         <Spin spinning={loading}>
           <div className="seminar">
             <div className="seminar_outbox">
               {
-                results.map((result) => {
+                results.map((result, index) => {
                   return (
                     <div key={result.id + Math.random()}>
-                      <Button type="danger" icon="delete" size="small" style={{
+                      <Button type="danger" icon="delete" size="small"
+                              onClick={this.delTheSeminar.bind(this, result, index)} style={{
                         float: 'right',
                         margin: '15px 10px 0 10px',
                       }}>删除</Button>
@@ -251,4 +254,8 @@ class Seminar extends React.Component {
 }
 
 
-export default connect(({ seminar, loading, universalConfig, app }) => ({ seminar, loading, universalConfig, app }))(Seminar);
+export default connect(({ seminar, loading, app }) => ({
+  seminar,
+  loading,
+  app
+}))(Seminar);

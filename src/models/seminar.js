@@ -19,9 +19,11 @@ export default {
     query: '',
     summaryById: [],
     speakerSuggests: [],
-    activity_organizer_options: [],
-    postSeminarOrganizer: [],
-    activity_type: [],
+    activity_organizer_options: [], // 用户手动输入的org
+    postSeminarOrganizer: [], // 所有活动类型的合集
+    orgcategory: {}, // 活动类型
+    orgByActivity: [],
+    contribution_type: [],
     comments: [],
     expertRating: [],
     tags: [],
@@ -160,7 +162,7 @@ export default {
       if (suggestCategory.data.categories.length > 0) {
         for (const orgList of suggestCategory.data.categories) {
           const { data } = yield call(uconfigService.listByCategory, orgList);
-          yield put({ type: 'getCategorySuccess', payload: { data, orgList } });
+          yield put({ type: 'getAllOrgSuccess', payload: { data, orgList } });
         }
       }
     },
@@ -205,17 +207,19 @@ export default {
     },
 
     getCategorySuccess(state, { payload: { data, category } }) {
-      if (category === 'activity_type' || category === 'activity_organizer_options') {
+      if (category === 'orgcategory' || category === 'activity_organizer_options' || category === 'contribution_type') {
         return { ...state, [category]: data.data };
-      } else {
-        const org = state.postSeminarOrganizer.concat(data.data);
-        return {
-          ...state,
-          postSeminarOrganizer: org,
-        };
+      } else if (category.includes('orglist_')) {
+        return { ...state, orgByActivity: data.data };
       }
     },
-
+    getAllOrgSuccess(state, { payload: { data } }) {
+      const org = state.postSeminarOrganizer.concat(data.data);
+      return {
+        ...state,
+        postSeminarOrganizer: org,
+      };
+    },
     updateData(state, { payload: { data } }) {
       const newOrgList = state.activity_organizer_options.data.concat(data.data);
       return {

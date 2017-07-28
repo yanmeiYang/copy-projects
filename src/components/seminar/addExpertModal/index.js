@@ -180,7 +180,7 @@ class AddExpertModal extends React.Component {
     };
     const { modalVisible, step2, step3, integral } = this.state;
     const { parentProps } = this.props;
-    const { speakerSuggests, loading, activity_type } = parentProps.seminar;
+    const { speakerSuggests, loading, contribution_type } = parentProps.seminar;
     const { getFieldDecorator } = parentProps.form;
 
     return (
@@ -215,7 +215,7 @@ class AddExpertModal extends React.Component {
             label={(<span>演讲摘要</span>)}>
             <Input type="textarea" rows={4} placeholder="请输入演讲摘要。。。" ref="talkAbstract" />
           </FormItem>
-          {activity_type && <FormItem
+          {contribution_type && <FormItem
             {...formItemLayout}
             label="贡献类别"
           >
@@ -233,7 +233,7 @@ class AddExpertModal extends React.Component {
                   filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                 >
                 {
-                    Object.values(activity_type.data).map((item) => {
+                    Object.values(contribution_type.data).map((item) => {
                       return (<Option key={item.id}
                                       value={`${item.key}#${item.value}`}>{item.key}</Option>);
                     })

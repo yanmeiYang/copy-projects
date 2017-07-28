@@ -62,6 +62,7 @@ export default {
           return;
         }
 
+        // another page not used.
         match = pathToRegexp('/experts/:offset/:size').exec(location.pathname);
         if (match) {
           const offset = parseInt(match[1], 10);
@@ -82,6 +83,8 @@ export default {
       yield put({ type: 'showLoading' });
       const { query, offset, size, filters, sort } = payload;
       const { data } = yield call(searchService.searchPerson, query, offset, size, filters, sort);
+      yield put({ type: 'updateFilters', payload: { filters } });
+      yield put({ type: 'updateSortKey', payload: { sort } });
       yield put({ type: 'searchPersonSuccess', payload: { data } });
     },
     * searchPersonAgg({ payload }, { call, put }) {
@@ -106,8 +109,8 @@ export default {
     },
 
     updateSortKey(state, { payload: { key } }) {
-      console.log('reducers, update sort key : ', key)
-      return { ...state, sortKey: key };
+      console.log('reducers, update sort key : ', key);
+      return { ...state, sortKey: key || '' };
     },
 
     searchPersonSuccess(state, { payload: { data } }) {

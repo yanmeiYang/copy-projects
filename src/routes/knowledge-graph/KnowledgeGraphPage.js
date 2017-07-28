@@ -40,10 +40,6 @@ class KnowledgeGraphPage extends React.PureComponent {
     this.dispatch({ type: 'knowledgeGraph/setState', payload: { query } });
   }
 
-  componentWillUnmount() {
-    this.dispatch({ type: 'app/layout', payload: { showFooter: true } });
-  };
-
   // componentDidMount() {
   //
   // }
@@ -108,6 +104,10 @@ class KnowledgeGraphPage extends React.PureComponent {
         }
       }
     }
+  }
+
+  componentWillUnmount() {
+    this.dispatch({ type: 'app/layout', payload: { showFooter: true } });
   }
 
   onSearch = ({ query }) => {

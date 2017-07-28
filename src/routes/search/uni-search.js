@@ -13,6 +13,8 @@ import ExportPersonBtn from '../../components/person/export-person';
 // import RelationGraph from '../relation-graph/RelationGraph';
 // import { KgSearchBox } from '../../components/search';
 
+// TODO Extract Search Filter into new Component.
+// TODO Combine search and uniSearch into one.
 const TabPane = Tabs.TabPane;
 const { CheckableTag } = Tag;
 const expertBases = sysconfig.ExpertBases;
@@ -95,7 +97,6 @@ class UniSearch extends React.PureComponent {
     return true;
   }
 
-// const Search = ({ app, search, dispatch }) => {
   onFilterChange = (key, value, checked) => {
     const { filters, query } = this.props.search;
 
@@ -105,46 +106,15 @@ class UniSearch extends React.PureComponent {
     } else if (filters[key]) {
       delete filters[key];
     }
-    this.dispatch({ type: 'search/updateFilters', payload: { filters } });
-    this.dispatch({
-      type: 'search/searchPerson',
-      payload: { query, offset: 0, size: 30, filters },
-    });
-    this.dispatch({
-      type: 'search/searchPersonAgg',
-      payload: { query, offset: 0, size: 30, filters },
-    });
+    this.doSearch(query, 0, 20, filters, '');
   };
 
-// ExpertBase filter 'eb' is a special filter.
-// On expert base changed, all other filters should be cleared.
-// sort method is not cleared.
-  onExpertBaseChange = (id, name) => {
-    const { filters, query } = this.props.search;
-    // delete all other filters.
-    Object.keys(filters).forEach((f) => {
-      delete filters[f];
-    });
-    this.onFilterChange('eb', { id, name }, true);// Special Filter;
-  };
-//
-// onSearch = (data) => {
-//   const newOffset = data.offset || 0;
-//   const newSize = data.size || 30;
-//   this.dispatch(routerRedux.push({
-//     pathname: `/search/${data.query}/${newOffset}/${newSize}`,
-//   }));
-// }
-
-  onPageChange = (page) => {
-    const { pagination, query } = this.props.search;
-    const { pageSize, total, current } = pagination;
-    this.onSearch({
-      query,
-      offset: (page - 1) * pageSize,
-      size: pageSize,
-    });
-    // ReactDOM.findDOMNode(this.refs.wrap).scrollTo(0, 0);
+  onViewTabChange = (key) => {
+    const { query } = this.props.search;
+    this.setState({ currentTab: key });
+    this.props.dispatch(routerRedux.push({
+      pathname: `/${sysconfig.SearchPagePrefix}/${query}/0/30?view=${key}`,
+    }));
   };
 
   onOrderChange = (e) => {
@@ -157,13 +127,36 @@ class UniSearch extends React.PureComponent {
     });
   };
 
-  onViewTabChange = (key) => {
-    const { query } = this.props.search;
-    this.setState({ currentTab: key });
-    this.props.dispatch(routerRedux.push({
-      pathname: `/${sysconfig.SearchPagePrefix}/${query}/0/30?view=${key}`,
-    }));
+  onPageChange = (page) => {
+    const { query, filters, sort, pagination } = this.props.search;
+    const { pageSize } = pagination;
+    this.doSearch(query, (page - 1) * pageSize, pageSize, filters, sort);
+    // ReactDOM.findDOMNode(this.refs.wrap).scrollTo(0, 0);
   };
+
+  // ExpertBase filter 'eb' is a special filter.
+  // On expert base changed, all other filters should be cleared.
+  // sort method is not cleared.
+  onExpertBaseChange = (id, name) => {
+    const { filters } = this.props.search;
+    // delete all other filters.
+    Object.keys(filters).forEach((f) => {
+      delete filters[f];
+    });
+    this.onFilterChange('eb', { id, name }, true);// Special Filter;
+  };
+
+  doSearch = (query, offset, size, filters, sort) => {
+    this.dispatch({
+      type: 'search/searchPerson',
+      payload: { query, offset, size, filters, sort },
+    });
+    this.dispatch({
+      type: 'search/searchPersonAgg',
+      payload: { query, offset, size, filters, sort },
+    });
+  };
+
 
   filterDisplay = (name) => {
     return <span>{name} <i className="fa fa-sort-amount-desc" /></span>;
@@ -182,7 +175,6 @@ class UniSearch extends React.PureComponent {
       map: { key: 'map', label: '地图视图', icon: 'fa-map-marker' },
       relation: { key: 'relation', label: '关系视图', icon: 'fa-users' },
     };
-
     this.state.view['list-view'] = (
       <div>
         <Tabs

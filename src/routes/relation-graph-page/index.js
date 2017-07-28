@@ -31,6 +31,7 @@ class RelationGraphPage extends React.Component {
         showFooter: false,
       },
     });
+    this.setState({ query });
   }
 
   onSearch = ({ query }) => {

@@ -68,10 +68,10 @@ const Footer = () => {
           2017 © 中国计算机学会.
           <span className={styles.footer_aminer_icp}>京ICP备13000930号-4</span>
           <span className={styles.footer_aminer_bpn}>京公网安备11010802017125号</span>
-          <div style={{ height: 20, lineHeight: '30px' }}><img src="/sys/ccf/foot-p.png" alt="京公网安备" style={{ width: 20 }} /></div>
+          <div style={{ height: 20 }}><img src="/sys/ccf/foot-p.png" alt="京公网安备" style={{ width: 20 }} /></div>
         </div>
         <div>
-          <img src="/aminer_logo.png" alt="AMiner logo" style={{ height: 46, marginTop: 4 }}/>
+          <img src="/aminer_logo.png" alt="AMiner logo" style={{ height: 46 }} />
         </div>
       </div>
     </div>

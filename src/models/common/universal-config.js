@@ -15,7 +15,6 @@ export default {
     key: '',
     data: [],
     orgList: [],
-    userRoles: [],
     valueType: '',
     loading: false, // TODO DVA-LOADING 到底怎么用？
   },
@@ -67,11 +66,6 @@ export default {
       }
       yield put({ type: 'updateData', payload: { key, val } });
     },
-    *addOrgCategoryByKeyAndValue({ payload }, { call, put }) {
-      // yield put({ type: 'showLoading' });
-      const { category, key, val } = payload;
-      yield call(uconfigService.setByKey, category, key, val);
-    },
 
     *deleteByKey({ payload }, { call, put }) {
       const { category, key } = payload;
@@ -110,11 +104,7 @@ export default {
           }
         }
       }
-      if (data.data.category === 'user_roles') {
-        return { ...state, userRoles: newData, data: newData, loading: false };
-      } else {
-        return { ...state, data: newData, loading: false };
-      }
+      return { ...state, data: newData, loading: false };
     },
 
     setOrgList(state, { payload: { data } }) {

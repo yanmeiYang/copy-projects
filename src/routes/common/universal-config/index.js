@@ -2,7 +2,7 @@
  *  Created by BoGao on 2017-06-12;
  */
 import React from 'react';
-import { Tabs, Table, Icon, Spin, Input, Form, Button } from 'antd';
+import { Tabs, Table, Modal, Spin, Input, Form, Button } from 'antd';
 import { connect } from 'dva';
 
 import styles from './index.less';
@@ -31,9 +31,16 @@ class UniversalConfig extends React.Component {
     const data = e.target && e.target.getAttribute('data');
     const json = JSON.parse(data);
     const key = json.value.key;
-    this.props.dispatch({
-      type: 'universalConfig/deleteByKey',
-      payload: { category: this.props.universalConfig.category, key },
+    Modal.confirm({
+      title: '删除',
+      content: '确定删除吗？',
+      onOk() {
+        this.props.dispatch({
+          type: 'universalConfig/deleteByKey',
+          payload: { category: this.props.universalConfig.category, key },
+        });
+      },
+      onCancel() {},
     });
   };
 

@@ -201,13 +201,12 @@ class RegistrationForm extends React.Component {
       activity_organizer_options, orgcategory, tags,
       postSeminarOrganizer, contribution_type
     } = this.props.seminar;
-    const activityTypes = sysconfig.CCF_activityTypes;
     let activity_organizer_options_data = {};
     let activity_type_options_data = {};
     // let activity_type_options = {};
 
     if (activity_organizer_options.data) {
-      activity_organizer_options_data = activity_organizer_options.data;
+      activity_organizer_options_data = activity_organizer_options.data.concat(postSeminarOrganizer);
     }
 
 
@@ -236,7 +235,7 @@ class RegistrationForm extends React.Component {
                 <Select>
                   {
                     orgcategory.data.map((item) => {
-                      return (<Option key={Math.random()} value={item.key}>{item.key}</Option>);
+                      return (<Option key={`activity_${Math.random()}`} value={item.key}>{item.key}</Option>);
                     })
                   }
                 </Select>,
@@ -248,10 +247,10 @@ class RegistrationForm extends React.Component {
                   rules: [{ required: true, message: '请选择承办单位！' }],
                 },
               )(
-                <Select multiple>
+                <Select>
                   {
                     postSeminarOrganizer.map((item) => {
-                      return (<Option key={`org_${item.key}_${item.id}`}
+                      return (<Option key={`org_${Math.random()}`}
                                       value={item.key}>{item.key}</Option>);
                     })
                   }
@@ -268,7 +267,7 @@ class RegistrationForm extends React.Component {
                   {
                     Object.values(activity_organizer_options_data).map((item) => {
                       return (
-                        <Option key={`co_org_${item.key}`} value={item.key}>{item.key}</Option>);
+                        <Option key={`co_${item.key}_${Math.random(10)}`} value={item.key}>{item.key}</Option>);
                     })
                   }
                 </Select>,

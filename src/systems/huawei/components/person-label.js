@@ -31,7 +31,7 @@ class PersonLabel extends React.PureComponent {
             ) : '';
           }
           return (
-            <div className="tag" key={label}>
+            <div className="tag" key={ebid}>
               {label}
             </div>
           );

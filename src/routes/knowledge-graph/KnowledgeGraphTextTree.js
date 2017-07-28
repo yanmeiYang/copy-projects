@@ -39,8 +39,6 @@ class KnowledgeGraphTextTree extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('.....ll js didupdate', this.props.query, ',', prevProps.query);
-
     if (this.props.query && this.props.query !== prevProps.query) {
       console.log('matches?');
       this.queryKG(this.props.query);

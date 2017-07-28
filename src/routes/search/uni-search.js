@@ -190,7 +190,7 @@ class UniSearch extends React.PureComponent {
           onChange={this.onOrderChange}
           size="small"
         >
-          <TabPane tab={this.filterDisplay('相关度')} key="relevance" />
+          <TabPane tab={this.filterDisplay('综合排序')} key="relevance" />
           <TabPane tab={this.filterDisplay('H-index')} key="h_index" />
           <TabPane tab={this.filterDisplay('学术活跃度')} key="activity" />
           <TabPane tab={this.filterDisplay('领域新星')} key="rising_star" />
@@ -328,7 +328,7 @@ class UniSearch extends React.PureComponent {
         </div>
 
         {/* 这里可是添加TAB */}
-{/*
+        {/*
         <div className={styles.viewTab}>
           <Tabs
             onChange={this.onViewTabChange}

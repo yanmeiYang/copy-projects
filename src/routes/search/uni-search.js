@@ -1,17 +1,17 @@
 import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
-import { Tabs, Tag, Pagination, Spin, Button } from 'antd';
+import { Tabs, Tag, Pagination } from 'antd';
 import styles from './uni-search.less';
 import { PersonList } from '../../components/person';
-import ExpertMap from '../expert-map/expert-map';
+import { Spinner } from '../../components';
 import { sysconfig } from '../../systems';
 import { KnowledgeGraphSearchHelper } from '../knowledge-graph';
 import { classnames } from '../../utils';
 import ExportPersonBtn from '../../components/person/export-person';
-import RelationGraph from '../relation-graph/RelationGraph';
+// import ExpertMap from '../expert-map/expert-map';
+// import RelationGraph from '../relation-graph/RelationGraph';
 // import { KgSearchBox } from '../../components/search';
-// import { Spinner } from '../../components';
 
 const TabPane = Tabs.TabPane;
 const { CheckableTag } = Tag;
@@ -40,10 +40,9 @@ function showChineseLabel2(enLabel) {
 }
 
 /*
- * http://localhost:8000/search/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/0/30?view=relation
+ * http://localhost:8000/search/%83...%BD/0/30?view=relation
  */
 class UniSearch extends React.PureComponent {
-
   constructor(props) {
     super(props);
     this.dispatch = this.props.dispatch;
@@ -67,11 +66,12 @@ class UniSearch extends React.PureComponent {
 
   componentWillMount() {
     this.state.currentTab = this.query.view ? `${this.query.view}` : 'list-view';
-
+    const { query } = this.props.search;
     this.dispatch({
       type: 'app/layout',
       payload: {
         headerSearchBox: {
+          query,
           onSearch: (data) => {
             const newOffset = data.offset || 0;
             const newSize = data.size || 30;
@@ -79,6 +79,7 @@ class UniSearch extends React.PureComponent {
               pathname: `/${sysconfig.SearchPagePrefix}/${data.query}/${newOffset}/${newSize}?`, //eb=${filters.eb}TODO
             }));
           },
+          // query: 'sdflkj',
         },
       },
     });
@@ -95,8 +96,6 @@ class UniSearch extends React.PureComponent {
   }
 
 // const Search = ({ app, search, dispatch }) => {
-
-
   onFilterChange = (key, value, checked) => {
     const { filters, query } = this.props.search;
 
@@ -171,8 +170,9 @@ class UniSearch extends React.PureComponent {
   };
 
   render() {
-    const { results, pagination, query, aggs, loading, filters } = this.props.search;
+    const { results, pagination, query, aggs, filters } = this.props.search;
     const { pageSize, total, current } = pagination;
+    const load = this.props.loading.models.search;
 
     const exportArea = sysconfig.Enable_Export ? <ExportPersonBtn /> : '';
 
@@ -213,20 +213,21 @@ class UniSearch extends React.PureComponent {
       </div>
     );
 
-    this.state.view['map-view'] = (
-      <div className={styles.mapView}>
-        <ExpertMap query={this.props.search.query} />
-      </div>
-    );
+    /*
+        this.state.view['map-view'] = (
+          <div className={styles.mapView}>
+            <ExpertMap query={this.props.search.query} />
+          </div>
+        );
 
-    this.state.view['relation-view'] = (
-      <div>
-        <RelationGraph query={this.props.search.query} />
-      </div>
-    );
+        this.state.view['relation-view'] = (
+          <div>
+            <RelationGraph query={this.props.search.query} />
+          </div>
+        );
+    */
 
-    console.log('refresh page');
-
+    console.log('refresh page', load);
     return (
       <div className="content-inner">
 
@@ -348,11 +349,10 @@ class UniSearch extends React.PureComponent {
         </div>
 */}
 
-        <Spin spinning={loading} size="large">
-          <div className={styles.view}>
-            {this.state.view[this.state.currentTab]}
-          </div>
-        </Spin>
+        <div className={styles.view}>
+          <Spinner loading={load} />
+          {this.state.view[this.state.currentTab]}
+        </div>
       </div>
     );
   }

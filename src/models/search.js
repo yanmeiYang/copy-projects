@@ -12,7 +12,7 @@ export default {
     query: null,
     seminars: [],
     aggs: [],
-    loading: false,
+    loading: false, // TODO remove loading, use global loading compoennt.
     filters: {},
     sortKey: 'contrib',
     isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
@@ -51,6 +51,7 @@ export default {
               });
             }
           }
+          dispatch({ type: 'app/setQuery', query: keyword });
 
           dispatch({ type: 'searchPerson', payload: { query: keyword, offset, size, filters } });
           dispatch({ type: 'setParams', payload: { query: keyword, offset, size } });
@@ -66,6 +67,8 @@ export default {
           const offset = parseInt(match[1], 10);
           const size = parseInt(match[2], 10);
           const keyword = (query && query.keyword) || '';
+
+          dispatch({ type: 'app/setQuery', query: keyword });
           dispatch({ type: 'searchPerson', payload: { query: keyword, offset, size } });
           dispatch({ type: 'setParams', payload: { query: keyword, offset, size } });
           dispatch({ type: 'searchPersonAgg', payload: { query: keyword, offset, size } });
@@ -75,18 +78,18 @@ export default {
   },
 
   effects: {
-    *searchPerson({ payload }, { call, put }) {
+    * searchPerson({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
       const { query, offset, size, filters, sort } = payload;
       const { data } = yield call(searchService.searchPerson, query, offset, size, filters, sort);
       yield put({ type: 'searchPersonSuccess', payload: { data } });
     },
-    *searchPersonAgg({ payload }, { call, put }) {
+    * searchPersonAgg({ payload }, { call, put }) {
       const { query, offset, size, filters } = payload;
       const { data } = yield call(searchService.searchPersonAgg, query, offset, size, filters);
       yield put({ type: 'searchPersonAggSuccess', payload: { data } });
     },
-    *getSeminars({ payload }, { call, put }) {
+    * getSeminars({ payload }, { call, put }) {
       const { offset, size } = payload;
       const { data } = yield call(searchService.getSeminars, offset, size);
       yield put({ type: 'getSeminarsSuccess', payload: { data } });

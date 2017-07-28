@@ -37,8 +37,8 @@ class Spinner extends React.PureComponent {
   }
 }
 
-// Spinner.propTypes = {
-//   loading: PropTypes.bool.isRequired,
-// };
+Spinner.propTypes = {
+  loading: PropTypes.bool.isRequired,
+};
 
 export default Spinner;

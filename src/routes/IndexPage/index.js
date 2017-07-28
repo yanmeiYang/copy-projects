@@ -17,6 +17,10 @@ class IndexPage extends React.Component {
     this.dispatch({ type: 'app/layout', payload: { headerSearchBox: null } });
   }
 
+  // componentWillUnmount() {
+  //   this.dispatch({ type: 'app/layout', payload: { showFooter: true } });
+  // };
+
   onSearch = ({ query }) => {
     if (query && query.trim() !== '') {
       this.dispatch(routerRedux.push({

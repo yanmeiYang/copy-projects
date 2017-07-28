@@ -1,5 +1,6 @@
 import React from 'react';
-import { Input, Button, Icon } from 'antd';
+import { connect } from 'dva';
+import { Input, Button } from 'antd';
 import Autosuggest from 'react-autosuggest';
 import styles from './KgSearchBox.less';
 import * as kgService from '../../services/knoledge-graph-service';
@@ -256,6 +257,7 @@ class KgSearchBox extends React.PureComponent {
   //     this.props.onSearch({query:suggestionValue});
   //   }
   // };
+
   handleSubmit = (event) => {
     event.preventDefault();
     if (this.props.onSearch) {
@@ -308,4 +310,4 @@ class KgSearchBox extends React.PureComponent {
   }
 }
 
-export default KgSearchBox;
+export default connect()(KgSearchBox);

@@ -67,7 +67,7 @@ module.exports = {
   PersonList_ShowIndices: ['activityRankingContrib', 'h_index', 'activity'],
   Header_SubTextLogo: 'CCF 专家库',
   Header_LogoStyle: { width: '50%', lineHeight: '45px', height: '45px' },
-  Header_UserPageURL: '/seminar-my',
+  Header_UserPageURL: '',
   Footer_Content: (
     <Footer />
   ),

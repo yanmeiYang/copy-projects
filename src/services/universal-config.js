@@ -1,4 +1,3 @@
-
 import { request, config } from '../utils';
 
 const { api, source } = config;
@@ -48,3 +47,11 @@ export async function updateByKey(src, category, key, newKey) {
     });
 }
 
+export async function getCategoriesHint(category) {
+  return request(api.getCategoriesHint
+      .replace(':source', source)
+      .replace(':category', category),
+    {
+      method: 'GET',
+    });
+}

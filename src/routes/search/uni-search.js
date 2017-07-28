@@ -10,8 +10,8 @@ import { KnowledgeGraphSearchHelper } from '../knowledge-graph';
 import { classnames } from '../../utils';
 import ExportPersonBtn from '../../components/person/export-person';
 import RelationGraph from '../relation-graph/RelationGraph';
-import { KgSearchBox } from '../../components/search';
-import { Spinner } from '../../components';
+// import { KgSearchBox } from '../../components/search';
+// import { Spinner } from '../../components';
 
 const TabPane = Tabs.TabPane;
 const { CheckableTag } = Tag;
@@ -328,7 +328,7 @@ class UniSearch extends React.PureComponent {
         </div>
 
         {/* 这里可是添加TAB */}
-
+{/*
         <div className={styles.viewTab}>
           <Tabs
             onChange={this.onViewTabChange}
@@ -346,6 +346,7 @@ class UniSearch extends React.PureComponent {
             })}
           </Tabs>
         </div>
+*/}
 
         <Spin spinning={loading} size="large">
           <div className={styles.view}>

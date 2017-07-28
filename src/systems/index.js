@@ -63,7 +63,7 @@ const defaultSystemConfigs = {
 
   SearchFilterExclude: 'Gender',
 
-  UniSearch_Tabs: ['list', 'map', 'relation'],
+  UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // Don't use this.
 
   // Functionality
   Enable_Export: false,

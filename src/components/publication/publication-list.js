@@ -16,7 +16,6 @@ class PublicationList extends React.Component {
         <ul>{pubs && pubs.map((item, pubindex) => {
           const labels = pubService.getPubLabels(item);
           const venue = pubService.getVenueName(item.venue);
-
           return item &&
             (<li key={item.id}>
               <div className={styles.title_line}>
@@ -33,16 +32,18 @@ class PublicationList extends React.Component {
                 </span>
                 <div className={styles.labels}>
                   {this.props.showLabels && labels && labels.map((label, index) => {
-                    return (<span key={index}>
-                      <Badge
-                        count={label}
-                        style={{
-                          borderColor: 'darkred',
-                          backgroundColor: 'rgba(132,0,0,0.8)',
-                          color: '#fff',
-                          borderRadius: '5px',
-                        }}
-                      />&nbsp;</span>
+                    return (
+                      <span key={index}>
+                        <Badge
+                          count={label}
+                          style={{
+                            borderColor: 'darkred',
+                            backgroundColor: 'rgba(132,0,0,0.8)',
+                            color: '#fff',
+                            borderRadius: '5px',
+                          }}
+                        />&nbsp;
+                      </span>
                     );
                   })}
                 </div>

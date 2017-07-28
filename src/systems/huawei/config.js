@@ -2,13 +2,13 @@
  * Created by BoGao on 2017/6/20.
  */
 import React from 'react';
-import { IndexInfoBox } from './components';
+import { IndexInfoBox, PersonLabel } from './components';
 
 module.exports = {
 
   // 通用配置。所有System的配置文件必须全部包含这部分的值
   PageTitle: 'HUAWEI 知识洞察系统',
-  SearchPagePrefix: 'uniSearch',
+  SearchPagePrefix: 'uniSearch', // search, uniSearch
   ShowSideMenu: false,
   ShowRegisteredRole: false,
 
@@ -28,6 +28,9 @@ module.exports = {
 
   // Functionality
   Enable_Export: false,
+  Search_EnablePin: true,
+
+  Person_PersonLabelBlock: person => <PersonLabel person={person} />,
 
   ExpertBases: [
     {

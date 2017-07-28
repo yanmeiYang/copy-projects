@@ -5,7 +5,7 @@ import config from './config';
 import { getMenusByUser } from './menu';
 import request from './request';
 import { color } from './theme';
-
+import * as TopExpertBase from './expert-base';
 
 // 连字符转驼峰
 String.prototype.hyphenToHump = function () {
@@ -154,4 +154,5 @@ module.exports = {
   getTwoDecimal,
 
   registerModel,
+  TopExpertBase,
 };

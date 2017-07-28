@@ -13,7 +13,8 @@ const config = [
     data: 'query',
     pageSignature: 'relation-graph-page',
   },
-  { label: '图谱', url: '/knowledge-graph', data: 'query', pageSignature: 'knowledge-graph' },
+  { label: '知识图谱', url: '/knowledge-graph', data: 'query', pageSignature: 'knowledge-graph' },
+  { label: '技术趋势', url: '/trend-prediction', data: 'query', pageSignature: 'trend-prediction' },
 ];
 
 class SearchTypeWidgets extends React.PureComponent {

@@ -1,8 +1,8 @@
 /**
  * Created by yutao on 2017/5/22.
  */
-const SYS = 'ccf';
-// const SYS = 'huawei';
+// const SYS = 'ccf';
+const SYS = 'huawei';
 // const SYS = 'alibaba';
 // const SYS = 'tencent';
 
@@ -47,7 +47,7 @@ module.exports = {
     listUsersByRole: '/user/role/list/:role/offset/:offset/size/:size',
 
     // search
-    searchPerson: '/search/person',
+    searchPerson: '/search/person', // pin=1 huawei mode.
     searchPersonAgg: '/search/person/agg',
     searchPersonInBase: '/search/roster/:ebid/experts/advanced',
     searchPersonInBaseAgg: '/search/roster/:ebid/experts/advanced/agg',

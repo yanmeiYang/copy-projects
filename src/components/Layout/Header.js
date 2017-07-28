@@ -74,11 +74,11 @@ function Header({ app, search, location, dispatch, logout, onSearch }) {
 
           {app.user.first_name &&
           <Menu.Item key="/account">
-            <Link to={sysconfig.Header_UserPageURL} title={app.user.display_name}>
+            <Link to={sysconfig.Header_UserPageURL} title={app.user.display_name} style={{ lineHeight: '46px' }}>
               <img
                 src={profileUtils.getAvatar(app.user.avatar, app.user.id, 30)}
                 className={styles.roundedX}
-                style={{ marginTop: 5, width: 30, height: 30, verticalAlign: 'middle' }} />
+                style={{ width: 30, height: 30, verticalAlign: 'middle' }} />
               {/*<Icon type="frown-circle"/>个人账号*/}
             </Link>
           </Menu.Item>
@@ -86,13 +86,13 @@ function Header({ app, search, location, dispatch, logout, onSearch }) {
 
           {app.user.first_name &&
           <Menu.Item key="/logout">
-            <div onClick={logoutAuth} style={{ lineHeight: '63px' }}><Icon type="logout" /></div>
+            <div onClick={logoutAuth}><Icon type="logout" /></div>
           </Menu.Item>
           }
 
           {(!app.user || !app.user.first_name) &&
           <Menu.Item key="/404">
-            <Link to={`/login?from=${location.pathname}`}><Icon type="user" />登录</Link>
+            <Link to={`/login?from=${location.pathname}`} style={{ lineHeight: '46px' }}><Icon type="user" />登录</Link>
           </Menu.Item>
           }
 

@@ -20,6 +20,7 @@ export default {
     summaryById: [],
     speakerSuggests: [],
     activity_organizer_options: [],
+    postSeminarOrganizer: [],
     activity_type: [],
     comments: [],
     expertRating: [],
@@ -32,8 +33,17 @@ export default {
     setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname === '/seminar') {
-          dispatch({ type: 'getSeminar', payload: { offset: 0, size: 20, filter: { src: config.source } } });
+          dispatch({
+            type: 'getSeminar',
+            payload: { offset: 0, size: 20, filter: { src: config.source } },
+          });
           dispatch({ type: 'getTopMentionedTags', payload: { src: config.source, num: 10 } });
+        }
+        if (location.pathname === '/seminar-post') {
+          dispatch({
+            type: 'getCategoriesHint',
+            payload: { category: 'orglist_' },
+          });
         }
         const expertRating = pathToRegexp('/seminar/expert-rating/:id').exec(location.pathname);
         const match = pathToRegexp('/seminar/:id').exec(location.pathname);
@@ -88,11 +98,11 @@ export default {
     *addKeyAndValue({ payload }, { call, put }) {
       const { key, val } = payload;
       const data = yield call(uconfigService.setByKey, 'activity_organizer_options', decodeURI(key), val);
-      if (data.data && data.data.status === true) {
-        yield put({ type: 'updateData', payload: { data } });
-      } else {
-        console.error('addKeyAndValue Error: ', data);
-      }
+      // if (data.data && data.data.status === true) {
+      //   yield put({ type: 'updateData', payload: { data } });
+      // } else {
+      //   console.error('addKeyAndValue Error: ', data);
+      // }
     },
     *deleteActivity({ payload }, { call }) {
       const { id, body } = payload;
@@ -144,6 +154,16 @@ export default {
       const data = yield call(seminarService.getTopMentionedTags, src, num);
       yield put({ type: 'getTopMentionedTagsSuccess', data });
     },
+    *getCategoriesHint({ payload }, { call, put }) {
+      const { category } = payload;
+      const suggestCategory = yield call(uconfigService.getCategoriesHint, category);
+      if (suggestCategory.data.categories.length > 0) {
+        for (const orgList of suggestCategory.data.categories) {
+          const { data } = yield call(uconfigService.listByCategory, orgList);
+          yield put({ type: 'getCategorySuccess', payload: { data, orgList } });
+        }
+      }
+    },
   },
 
   reducers: {
@@ -185,11 +205,23 @@ export default {
     },
 
     getCategorySuccess(state, { payload: { data, category } }) {
-      return { ...state, [category]: data.data };
+      if (category === 'activity_type' || category === 'activity_organizer_options') {
+        return { ...state, [category]: data.data };
+      } else {
+        const org = state.postSeminarOrganizer.concat(data.data);
+        return {
+          ...state,
+          postSeminarOrganizer: org,
+        };
+      }
     },
 
     updateData(state, { payload: { data } }) {
-      return { ...state, activity_organizer_options: data };
+      const newOrgList = state.activity_organizer_options.data.concat(data.data);
+      return {
+        ...state,
+        activity_organizer_options: newOrgList,
+      };
     },
 
     getCommentFromActivitySuccess(state, { payload: { data } }) {

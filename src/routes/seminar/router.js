@@ -9,6 +9,7 @@ export default {
     path: 'seminar',
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
+        registerModel(app, require('../../models/common/universal-config'));
         registerModel(app, require('../../models/seminar'));
         cb(null, require('./'));
       }, 'seminar');

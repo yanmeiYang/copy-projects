@@ -51,7 +51,7 @@ export default {
               });
             }
           }
-          dispatch({ type: 'app/setQuery', query: keyword });
+          // dispatch({ type: 'app/setQuery', query: keyword });
 
           dispatch({ type: 'searchPerson', payload: { query: keyword, offset, size, filters } });
           dispatch({ type: 'setParams', payload: { query: keyword, offset, size } });

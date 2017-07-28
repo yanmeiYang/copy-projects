@@ -5,39 +5,108 @@ import React from 'react';
 import { connect } from 'dva';
 import styles from './KnowledgeGraphSearchHelper.less';
 import * as d3 from '../../../public/d3/d3.min';
-import * as kgService from '../../services/knoledge-graph-service';
 import { sysconfig } from '../../systems';
 
 const controlDivId = 'kgvis';
 
-
 /*
  * @params: lang: [en|cn]
  */
-class KnowledgeGraphSearchHelper extends React.Component {
-
+class KnowledgeGraphSearchHelper extends React.PureComponent {
   componentDidMount() {
-    this.updateD3(this.props.query);
+    this.searchKG(this.props.query);
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    this.emptyD3();
-    if (prevProps.query === this.props.query) {
+  shouldComponentUpdate(nextProps) {
+    // console.log('-----', nextProps);
+    if (this.props.query !== nextProps.query) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('KG: query updated to ', nextProps.query);
+      }
+      this.searchKG(nextProps.query);
       return false;
     }
-    this.updateD3(this.props.query);
+
+    if (this.props.knowledgeGraph.kgdata !== nextProps.knowledgeGraph.kgdata) {
+      return true;
+    }
+    return false;
   }
 
-  updateD3(query) {
-    kgService.getKGSuggest(query, (result) => {
-      if (!result) {
-        this.emptyD3();
-        this.closeZone();
-        return;
-      }
-      this.createD3(result);
-    });
+  componentDidUpdate() {
+    const { kgdata } = this.props.knowledgeGraph;
+
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('KG: kgdata: ', kgdata);
+    }
+    if (!kgdata) {
+      this.emptyD3();
+      this.closeZone();
+    } else {
+      // TODO change mode
+      const targetData = this.convertToHelperData();
+      this.emptyD3();
+      this.createD3(targetData);
+    }
   }
+
+  convertToHelperData = () => {
+    const { kgdata, kgFetcher } = this.props.knowledgeGraph;
+    if (kgdata && kgdata.hits && kgdata.hits.length > 0) {
+      // TODO we need to find a high level node.
+      // find node with score 0, this is root node.
+      let rootNode;
+      const rootNodes = kgdata.hits.filter(item => item.score === 0);
+      if (rootNodes && rootNodes.length > 0) {
+        rootNode = rootNodes[0];
+      } else {
+        // TODO sort and find node with highest score.
+        rootNode = kgdata.hits[0]; // implement this.
+      }
+      // construct a target node.
+      const topNode = kgFetcher.findTop(rootNode);
+      console.log('topNode is ', topNode);
+      let targetNode = this.createNode(topNode, null, 1);
+      console.log(',,,', targetNode);
+      return targetNode;
+    }
+  };
+
+  maxLevel = 3;
+
+  createNode = (node, targetNode, level) => {
+    const { kgFetcher } = this.props.knowledgeGraph;
+    // let tn = targetNode;
+    const currentNode = {
+      name: node.name,
+      children: [],
+      definition: node.definition,
+      zh: node.name_zh,
+      level,
+    };
+    if (targetNode) {
+      targetNode.children.push(currentNode);
+    }
+    if (this.maxLevel > level
+      && node.child_nodes && node.child_nodes.length > 0) {
+      node.child_nodes.map((childId) => {
+        const child = kgFetcher.getNode(childId);
+        // console.log('>', childId, child);
+        if (child) {
+          this.createNode(child, currentNode, level ? level + 1 : 1);
+        }
+        return false;
+      });
+    }
+    return currentNode;
+  };
+
+  searchKG = (query) => {
+    this.props.dispatch({
+      type: 'knowledgeGraph/kgFind',
+      payload: { query, rich: 1, dp: 1, dc: 1, ns: 3, nc: 4 },
+    });
+  };
 
   // If no suggestion, hide the whole div.
   showZone = () => {
@@ -51,7 +120,7 @@ class KnowledgeGraphSearchHelper extends React.Component {
     if (a) {
       a.innerHTML = '';
     }
-  }
+  };
 
   closeZone = () => {
     d3.select(`#${controlDivId}`)
@@ -151,7 +220,7 @@ class KnowledgeGraphSearchHelper extends React.Component {
         .attr('class', 'node')
         .attr('r', 1e-6)
         .style('fill', (d) => {
-          return d._children ? 'lightsteelblue' : '#fff';
+          return d.children || d._children ? 'lightsteelblue' : '#fff';
         });
 
       // Add labels for the nodes
@@ -159,20 +228,30 @@ class KnowledgeGraphSearchHelper extends React.Component {
         .attr('dy', '.35em')
         .attr('y', (d) => {
           if (d.data.level !== 3) {
+            if (d.data.level === 2 && !(d.children || d._children)) {
+              return 8;
+            }
             return d.children || d._children ? -18 : 18;
           } else {
             return d.children || d._children ? -18 : 8;
           }
         })
         .attr('text-anchor', (d) => {
-          return d.data.level !== 3 ? 'middle' : '';
+          if (d.data.level === 2) {
+            return d.children || d._children ? 'middle' : '';
+          }
+          if (d.data.level !== 3) {
+            return 'middle';
+          }
+          return '';
         })
         .html((d) => {
           const name = lang === 'cn' ? d.data.zh : d.data.name;
           return `<a class="nodeLink" href="/${sysconfig.SearchPagePrefix}/${name}/0/30">${name}</a>`;
         })
         .attr('writing-mode', (d) => {
-          return d.data.level === 3 ? 'tb' : '';
+          return d.data.level === 3 || (d.data.level === 2 && !(d.children || d._children))
+            ? 'tb' : '';
         })
         .on('mouseover', d => bindMouseOver(d))
         .on('mouseout', d => bindMouseOut(d));
@@ -299,8 +378,8 @@ class KnowledgeGraphSearchHelper extends React.Component {
         .style('opacity', 0.88)
         .style('display', '');
       div.html(`<span class="title">${d.data.name}</span><br/><span class="title">${d.data.zh}</span><br/>${d.data.definition}`)
-        .style('left', `${d3.event.pageX + 2}px`)
-        .style('top', `${d3.event.pageY - 28}px`);
+        .style('left', `${d3.event.pageX + 16}px`)
+        .style('top', `${d3.event.pageY - 2}px`);
     }
 
     function hideMask() {
@@ -341,4 +420,4 @@ class KnowledgeGraphSearchHelper extends React.Component {
 
 }
 
-export default connect()(KnowledgeGraphSearchHelper);
+export default connect((knowledgeGraph) => (knowledgeGraph))(KnowledgeGraphSearchHelper);

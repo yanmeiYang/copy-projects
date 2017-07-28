@@ -4,8 +4,8 @@
 import React from 'react';
 import { connect } from 'dva';
 import styles from './KnowledgeGraphAll.less';
-import * as d3 from '../../../public/d3/d3.min';
-import * as kgService from '../../services/knoledge-graph-service';
+import * as d3 from '../../public/d3/d3.min';
+import * as kgService from '../../src/services/knoledge-graph-service';
 
 const controlDivId = 'kgvis';
 

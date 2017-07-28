@@ -21,7 +21,7 @@ export default {
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/search'));
-        registerModel(app, require('../../models/expert-map'));
+        registerModel(app, require('../../models/knowledge-graph'));
         cb(null, require('./uni-search'));
       }, 'search');
     },

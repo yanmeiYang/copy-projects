@@ -31,6 +31,7 @@ const fullRouter = (app, defaultChildRoutes) => {
       core.ForgotPassword(app),
       core.ResetPassword(app),
       core.Retrieve(app),
+      core.UserInfo(app),
 
       // Admin(Specified by ccf)
       core.AdminUsers(app),

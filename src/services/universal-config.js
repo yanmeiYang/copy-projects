@@ -1,7 +1,6 @@
 import { request, config } from '../utils';
 
 const { api, source } = config;
-
 export async function listByCategory(category) {
   return request(api.ucListByCategory
       .replace(':source', source)
@@ -48,3 +47,11 @@ export async function updateByKey(category, key, newKey) {
     });
 }
 
+export async function getCategoriesHint(category) {
+  return request(api.getCategoriesHint
+      .replace(':source', source)
+      .replace(':category', category),
+    {
+      method: 'GET',
+    });
+}

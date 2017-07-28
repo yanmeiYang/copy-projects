@@ -14,7 +14,7 @@ import NewActivityList from '../../components/seminar/newActivityList';
 const { CheckableTag } = Tag;
 
 class Seminar extends React.Component {
-  state={
+  state = {
     organizer: '',
     category: '',
     tag: '',
@@ -22,7 +22,10 @@ class Seminar extends React.Component {
   }
 
   componentWillMount = () => {
-    this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'activity_organizer_options' } });
+    this.props.dispatch({
+      type: 'seminar/getCategory',
+      payload: { category: 'activity_organizer_options' }
+    });
     this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'activity_type' } });
   };
   addBao = () => {
@@ -34,10 +37,21 @@ class Seminar extends React.Component {
     const { offset, query, sizePerPage } = this.props.seminar;
     const { organizer, category } = this.state;
     if (query) {
-      const params = { query, offset, size: sizePerPage, src: config.source, organizer, category };
+      const params = {
+        query,
+        offset,
+        size: sizePerPage,
+        src: config.source,
+        organizer,
+        category
+      };
       this.props.dispatch({ type: 'seminar/searchActivity', payload: params });
     } else {
-      const params = { offset, size: sizePerPage, filter: { src: config.source, organizer, category } };
+      const params = {
+        offset,
+        size: sizePerPage,
+        filter: { src: config.source, organizer, category }
+      };
       this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
     }
   };
@@ -59,7 +73,11 @@ class Seminar extends React.Component {
       const params = {
         offset: 0,
         size: sizePerPage,
-        filter: { src: config.source, organizer: this.state.organizer, category: this.state.category },
+        filter: {
+          src: config.source,
+          organizer: this.state.organizer,
+          category: this.state.category
+        },
       };
       this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
     }
@@ -107,7 +125,8 @@ class Seminar extends React.Component {
       <div className="content-inner">
         <div className={styles.top}>
           <SearchSeminar onSearch={this.onSearch.bind()} />
-          {this.props.app.user.hasOwnProperty('first_name') && <Button type="primary" onClick={this.addBao.bind()}>
+          {this.props.app.user.hasOwnProperty('first_name') &&
+          <Button type="primary" onClick={this.addBao.bind()}>
             <Icon type="plus" />&nbsp;发布新活动
           </Button>}
         </div>
@@ -115,47 +134,47 @@ class Seminar extends React.Component {
         <div className={styles.filterWrap}>
           <div className={styles.filter}>
             {/*<div className={styles.filterRow}>*/}
-              {/*<span className={styles.filterTitle}>过滤条件:</span>*/}
-              {/*<ul className={styles.filterItems}>*/}
-                {/*{Object.entries(this.state).map((item) => {*/}
-                  {/*console.log(item);*/}
-                  {/*if (item[1] === '') {*/}
-                    {/*return '';*/}
-                  {/*}*/}
-                  {/*return (*/}
-                    {/*<Tag*/}
-                      {/*className={styles.filterItem}*/}
-                      {/*key={item[1]}*/}
-                      {/*closable*/}
-                      {/*afterClose={() => this.onFilterChange(item[1], item[0], false)}*/}
-                      {/*color="blue"*/}
-                      {/*style={{ width: 'auto' }}*/}
-                    {/*>{item[1]}</Tag>*/}
-                  {/*);*/}
-                {/*})}*/}
-              {/*</ul>*/}
+            {/*<span className={styles.filterTitle}>过滤条件:</span>*/}
+            {/*<ul className={styles.filterItems}>*/}
+            {/*{Object.entries(this.state).map((item) => {*/}
+            {/*console.log(item);*/}
+            {/*if (item[1] === '') {*/}
+            {/*return '';*/}
+            {/*}*/}
+            {/*return (*/}
+            {/*<Tag*/}
+            {/*className={styles.filterItem}*/}
+            {/*key={item[1]}*/}
+            {/*closable*/}
+            {/*afterClose={() => this.onFilterChange(item[1], item[0], false)}*/}
+            {/*color="blue"*/}
+            {/*style={{ width: 'auto' }}*/}
+            {/*>{item[1]}</Tag>*/}
+            {/*);*/}
+            {/*})}*/}
+            {/*</ul>*/}
             {/*</div>*/}
             {topMentionedTags.data && topMentionedTags.data.tags.length > 0 &&
-              <div className={styles.filterRow}>
-                <span className={styles.filterTitle}>前5个标签:</span>
-                <ul className={styles.filterItems}>
-                  {
-                    topMentionedTags.data.tags.map((item) => {
-                      return (
-                        <CheckableTag
-                          key={item.l}
-                          className={styles.filterItem}
-                          checked={organizer === item.l}
-                          onChange={checked => this.onFilterChange(item.l, 'tag', checked)}
-                        >
-                          {item.l}
-                          (<span className={styles.filterCount}>{item.f}</span>)
-                        </CheckableTag>
-                      );
-                    })
-                  }
-                </ul>
-              </div>
+            <div className={styles.filterRow}>
+              <span className={styles.filterTitle}>前5个标签:</span>
+              <ul className={styles.filterItems}>
+                {
+                  topMentionedTags.data.tags.map((item) => {
+                    return (
+                      <CheckableTag
+                        key={item.l}
+                        className={styles.filterItem}
+                        checked={organizer === item.l}
+                        onChange={checked => this.onFilterChange(item.l, 'tag', checked)}
+                      >
+                        {item.l}
+                        (<span className={styles.filterCount}>{item.f}</span>)
+                      </CheckableTag>
+                    );
+                  })
+                }
+              </ul>
+            </div>
             }
 
             <div className={styles.filterRow}>
@@ -182,23 +201,23 @@ class Seminar extends React.Component {
             <div className={styles.filterRow}>
               <span className={styles.filterTitle}>活动类型:</span>
               {activity_type.data &&
-                <ul className={styles.filterItems}>
-                  {
-                    Object.values(activity_type.data).map((item) => {
-                      return (
-                        <CheckableTag
-                          key={item.id}
-                          className={styles.filterItem}
-                          checked={category === item.key}
-                          onChange={checked => this.onFilterChange(item.key, 'category', checked)}
-                        >
-                          {item.key}
-                        </CheckableTag>
-                      );
-                    })
-                  }
-                </ul>
+              <ul className={styles.filterItems}>
+                {
+                  Object.values(activity_type.data).map((item) => {
+                    return (
+                      <CheckableTag
+                        key={item.id}
+                        className={styles.filterItem}
+                        checked={category === item.key}
+                        onChange={checked => this.onFilterChange(item.key, 'category', checked)}
+                      >
+                        {item.key}
+                      </CheckableTag>
+                    );
+                  })
                 }
+              </ul>
+              }
             </div>
           </div>
         </div>
@@ -209,13 +228,19 @@ class Seminar extends React.Component {
                 results.map((result) => {
                   return (
                     <div key={result.id + Math.random()}>
-                      <NewActivityList result={result} hidetExpertRating="false" style={{ marginTop: 20 }} />
+                      <Button type="danger" icon="delete" size="small" style={{
+                        float: 'right',
+                        margin: '15px 10px 0 10px',
+                      }}>删除</Button>
+                      <NewActivityList result={result} hidetExpertRating="false"
+                                       style={{ marginTop: 20 }} />
                     </div>
                   );
                 })
               }
               {!loading && results.length > sizePerPage &&
-              <Button type="primary" className="getMoreActivities" onClick={this.getMoreSeminar.bind()}>More</Button>}
+              <Button type="primary" className="getMoreActivities"
+                      onClick={this.getMoreSeminar.bind()}>More</Button>}
             </div>
           </div>
         </Spin>

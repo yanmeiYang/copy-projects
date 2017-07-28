@@ -2,6 +2,7 @@
  * Created by BoGao on 2017/6/20.
  */
 import React from 'react';
+import Footer from '../../components/Footers/ccf';
 
 module.exports = {
 
@@ -65,17 +66,10 @@ module.exports = {
 
   PersonList_ShowIndices: ['activityRankingContrib', 'h_index', 'activity'],
   Header_SubTextLogo: 'CCF 专家库',
-  Header_SubTextStyle: { width: 100 },
-  Header_LogoStyle: { backgroundSize: 'auto 57px', width: 86, margin: 8 },
-  Header_UserPageURL: '/seminar-my',
+  Header_LogoStyle: { width: '50%', lineHeight: '45px', height: '45px' },
+  Header_UserPageURL: '',
   Footer_Content: (
-    <div>
-      <img src="/sys/ccf/footer-btm.png" alt="footer" />
-      <div>
-        版权所有 中国计算机学会技术支持：AMiner.org<br />
-        网站建议或者意见请发送邮件：suggest@ccf.org.cn
-      </div>
-    </div>
+    <Footer />
   ),
 
   // 特殊配置，这里是System的自己的配置

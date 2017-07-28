@@ -17,6 +17,11 @@ const TabPane = Tabs.TabPane;
 
 class KnowledgeGraphPage extends React.PureComponent {
 
+  constructor(props) {
+    super(props);
+    this.dispatch = this.props.dispatch;
+  }
+
   state = {
     searchMethod: 'or2', // [direct, and2, or2 ]
     infoTab: 'experts',
@@ -25,14 +30,19 @@ class KnowledgeGraphPage extends React.PureComponent {
   componentWillMount() {
     const query = (this.props.location && this.props.location.query
       && this.props.location.query.query) || '';
-    this.props.dispatch({
+    this.dispatch({
       type: 'app/layout',
       payload: {
         headerSearchBox: { query, onSearch: this.onSearch },
+        showFooter: false,
       },
     });
-    this.props.dispatch({ type: 'knowledgeGraph/setState', payload: { query } });
+    this.dispatch({ type: 'knowledgeGraph/setState', payload: { query } });
   }
+
+  componentWillUnmount() {
+    this.dispatch({ type: 'app/layout', payload: { showFooter: true } });
+  };
 
   // componentDidMount() {
   //
@@ -43,7 +53,6 @@ class KnowledgeGraphPage extends React.PureComponent {
 
   // 最佳实践：实验1
   componentDidUpdate(prevProps, prevState) {
-
     const kg = this.props.knowledgeGraph;
     // 没有node，一切都是扯淡.
     if (kg.node) {
@@ -88,7 +97,7 @@ class KnowledgeGraphPage extends React.PureComponent {
               payload: { query, offset: 0, size: 10, sort: 'relevance' },
             });
           }
-        } else if ((this.state.infoTab === 'publications' )) {
+        } else if ((this.state.infoTab === 'publications')) {
           if (!kg.publications || mustEffects) {
             const query = this.getQuery();
             this.props.dispatch({
@@ -174,7 +183,7 @@ class KnowledgeGraphPage extends React.PureComponent {
     const kg = this.props.knowledgeGraph;
 
     let infoExtra;
-    //<a href={`/${sysconfig.SearchPagePrefix}/${this.getQuery()}/0/30`}
+    // <a href={`/${sysconfig.SearchPagePrefix}/${this.getQuery()}/0/30`}
     if (this.state.infoTab === 'experts' && kg.node) {
       infoExtra = (
         <a href={`http://aminer.org/search?t=b&q=${this.getQuery()}`}
@@ -234,7 +243,7 @@ class KnowledgeGraphPage extends React.PureComponent {
                 </div>
               </TabPane>
               <TabPane tab="EXPERTS" key="experts">
-                <Spinner loading={load || false} />
+                <Spinner loading={load} />
                 {kg.experts
                   ? <PersonListTiny persons={kg.experts} />
                   : this.EmptyBlock
@@ -242,7 +251,7 @@ class KnowledgeGraphPage extends React.PureComponent {
 
               </TabPane>
               <TabPane tab="PUBLICATIONS" key="publications">
-                <Spinner loading={load || false} />
+                <Spinner loading={load} />
                 {kg.publications
                   ? <PublicationList pubs={kg.publications} showLabels={false} />
                   : this.EmptyBlock
@@ -250,9 +259,9 @@ class KnowledgeGraphPage extends React.PureComponent {
               </TabPane>
             </Tabs>
 
-            {/*<div className="tabContent">*/}
-            {/*{this.state.view[this.state.infoTab]}*/}
-            {/*</div>*/}
+            {/* <div className="tabContent"> */}
+            {/* {this.state.view[this.state.infoTab]} */}
+            {/* </div> */}
           </div>
 
         </div>
@@ -261,7 +270,6 @@ class KnowledgeGraphPage extends React.PureComponent {
   }
 }
 
-export default connect(({ knowledgeGraph, loading }) => ({
-  knowledgeGraph,
-  loading,
-}))(KnowledgeGraphPage);
+export default connect(
+  ({ knowledgeGraph, loading }) => ({ knowledgeGraph, loading }),
+)(KnowledgeGraphPage);

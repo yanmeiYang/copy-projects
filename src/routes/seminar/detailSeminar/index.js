@@ -33,7 +33,7 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
         { typeof (summaryById.length) !== 'number' ? <Row>
           <Col className={styles.thumbnail}>
             <div className={styles.caption}>
-              {(app.roles.authority.indexOf(summaryById.organizer[0]) >= 0 || app.roles.admin) && currentUser.token &&
+              {currentUser.token && (app.roles.authority.indexOf(summaryById.organizer[0]) >= 0 || app.roles.admin) &&
               <Button type="danger" icon="delete" style={{ float: 'right' }} onClick={delSeminar}>删除</Button>}
               <div style={{ float: 'right', marginRight: 10 }}>
                 <Button type="default" className={styles.show_QRCode}>

@@ -134,7 +134,6 @@ class Retrieve extends React.Component {
             </section>
           </div>
         </div>
-        <Footer />
       </div>
     );
   }

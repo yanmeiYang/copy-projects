@@ -11,6 +11,7 @@ import { classnames } from '../../utils';
 import ExportPersonBtn from '../../components/person/export-person';
 import RelationGraph from '../relation-graph/RelationGraph';
 import { KgSearchBox } from '../../components/search';
+import { Spinner } from '../../components';
 
 const TabPane = Tabs.TabPane;
 const { CheckableTag } = Tag;
@@ -84,7 +85,7 @@ class UniSearch extends React.PureComponent {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log("should component update?");
+    // console.log("should component update?");
     // if (nextProps.profile && this.props.profile) {
     //   if (nextProps.profile.id === this.props.profile.id) {
     //     return false;
@@ -197,7 +198,7 @@ class UniSearch extends React.PureComponent {
           <TabPane tab={this.filterDisplay('论文数')} key="num_pubs" />
         </Tabs>
 
-        <PersonList persons={results} />
+        <PersonList persons={results} personLabel={sysconfig.Person_PersonLabelBlock} />
 
         <div className={styles.paginationWrap}>
           <Pagination
@@ -214,16 +215,7 @@ class UniSearch extends React.PureComponent {
 
     this.state.view['map-view'] = (
       <div className={styles.mapView}>
-        <div className={styles.map}>
-          <ExpertMap query={this.props.search.query} />
-        </div>
-        {/*<div className={styles.quickLinks}>*/}
-        {/* <a>一些快速链接！</a><br />*/}
-        {/* <a>一些快速链接！</a><br />*/}
-        {/* <a>一些快速链接！</a><br />*/}
-        {/* <a>一些快速链接！</a><br />*/}
-        {/* <a>一些快速链接！</a><br />*/}
-        {/*</div>*/}
+        <ExpertMap query={this.props.search.query} />
       </div>
     );
 

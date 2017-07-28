@@ -11,7 +11,7 @@ export default {
   state: {
     user: {},
     token: LocalStorage.getItem('token'),
-    roles: { admin: false, ccf_user: false, role: [] }, // TODO parse roles string into this object.
+    roles: { admin: false, ccf_user: false, role: [], authority: [] }, // TODO parse roles string into this object.
     menuPopoverVisible: false,
     siderFold: LocalStorage.getItem(`${prefix}siderFold`) === 'true',
     darkTheme: LocalStorage.getItem(`${prefix}darkTheme`) === 'true',
@@ -20,6 +20,7 @@ export default {
 
     // layout switches.
     headerSearchBox: null, // Header search box parameters.
+    showFooter: true,
 
   },
   subscriptions: {
@@ -45,7 +46,7 @@ export default {
           yield put({
             type: 'alreadyLoggedIn',
             user: userMessage.data,
-            roles: userMessage.roles
+            roles: userMessage.roles,
           });
         } else {
           const { data } = yield call(getCurrentUserInfo, parse(payload));
@@ -89,16 +90,19 @@ export default {
 
   reducers: {
     getCurrentUserInfoSuccess(state, { payload: user }) {
-      const roles = { admin: false, ccf_user: false, role: [] };
+      const roles = { admin: false, ccf_user: false, role: [], authority: [] };
       for (const r of user.role) {
-        if (r === 'root' || r === 'ccf_超级管理员') {
+        if (r === 'root' || r === `${config.source}_超级管理员`) {
           roles.admin = true;
         }
         if (r === 'ccf') {
           roles.ccf_user = true;
         }
-        if (r.split('_').length >= 2) {
-          roles.role.push(r);
+        if (r.split('_').length === 2) {
+          roles.role.push(r.split('_')[1]);
+        }
+        if (r.split('_').length === 3) {
+          roles.authority.push(r.split('_')[2]);
         }
       }
       setLocalStorage('user', user, roles);

@@ -1,8 +1,8 @@
 /**
  * Created by yutao on 2017/5/22.
  */
-const SYS = 'ccf';
-// const SYS = 'huawei';
+// const SYS = 'ccf';
+const SYS = 'huawei';
 // const SYS = 'alibaba';
 // const SYS = 'tencent';
 
@@ -36,6 +36,7 @@ module.exports = {
     userLogout: '/auth/signout',
     signup: '/auth/signup',
     checkEmail: '/user/check/src/:src/email/:email',
+    updateProfile: '/user/:id',
     forgot: '/auth/update/forgot',
     // 重置密码
     retrieve: '/auth/update/token',
@@ -46,7 +47,7 @@ module.exports = {
     listUsersByRole: '/user/role/list/:role/offset/:offset/size/:size',
 
     // search
-    searchPerson: '/search/person',
+    searchPerson: '/search/person', // pin=1 huawei mode.
     searchPersonAgg: '/search/person/agg',
     searchPersonInBase: '/search/roster/:ebid/experts/advanced',
     searchPersonInBaseAgg: '/search/roster/:ebid/experts/advanced/agg',
@@ -106,6 +107,7 @@ module.exports = {
     ucSetByKey: '/2b/config/:source/:category/:key',
     ucDeleteByKey: '/2b/config/:source/:category/:key',
     ucUpdateByKey: '/2b/config/:source/:category/rename/:key/:newKey',
+    getCategoriesHint: '/2b/config/:source/category/suggest/:category',
 
     // Knowledge Graph
     kgFind: {

@@ -1,13 +1,16 @@
 const path = require('path');
-const defines = require('./src/define.js');
+const { defines } = require('./src/define.js');
 
 const svgSpriteDirs = [
   path.resolve(__dirname, 'src/svg/'),
   require.resolve('antd').replace(/index\.js$/, ''),
 ];
 
+// console.log('>>> ', defines);
+// console.log('-----------------');
+
 export default {
-  "define": defines(),
+  "define": defines,
 
   entry: 'src/index.js',
   svgSpriteLoaderDirs: svgSpriteDirs,

@@ -17,20 +17,20 @@ import * as pubService from '../../services/publication';
  *
  */
 class PersonList extends React.PureComponent {
-  state = {};
+  constructor(props) {
+    super(props);
+    this.personLabel = props.personLabel;
+  }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   if (nextProps.pubs && this.props.pubs) {
-  //     if (nextProps.profile.id === this.props.profile.id) {
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // }
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.persons === this.props.persons) {
+      return false;
+    }
+    return true;
+  }
 
   render() {
     console.log('refresh person list ');
-
     return (
       <div className={styles.personList}>
         {
@@ -66,8 +66,9 @@ class PersonList extends React.PureComponent {
                   <div className="title">
                     <h2 className="section_header">
                       <a {...personLinkParams}>{name}</a>
-                      { false && <span className="rank">会士</span>}
+                      {false && <span className="rank">会士</span>}
                     </h2>
+                    {this.personLabel && this.personLabel(person)}
                   </div>}
                   <div className="zone">
                     <div className="contact_zone">

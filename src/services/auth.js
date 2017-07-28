@@ -2,7 +2,8 @@
  * Created by yangyanmei on 17/6/29.
  */
 import { request, config } from '../utils';
-const { api } = config;
+
+const { api, source } = config;
 
 export async function createUser(email, first_name, gender, last_name, position, sub, src) {
   const user = {
@@ -48,8 +49,8 @@ export async function revoke(uid, label) {
   });
 }
 
-export async function listUsersByRole(role, offset, size) {
-  return request(api.listUsersByRole.replace(':role', role).replace(':offset', offset).replace(':size', size), {
+export async function listUsersByRole(offset, size) {
+  return request(api.listUsersByRole.replace(':role', source).replace(':offset', offset).replace(':size', size), {
     method: 'GET',
   });
 }
@@ -64,6 +65,15 @@ export async function forgot(params) {
 export async function retrieve(data) {
   return request(api.retrieve, {
     method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function updateProfile(id, name) {
+  // f的取值可以是 "addr", "fname", "lname", "name", "gender", "org", "sub", "title", "tags"
+  const data = { m: [{ f: 'name', v: name }] };
+  return request(api.updateProfile.replace(':id', id), {
+    method: 'PATCH',
     body: JSON.stringify(data),
   });
 }

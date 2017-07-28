@@ -6,7 +6,7 @@ import { message } from 'antd';
 import './index.html';
 import { system } from './utils/config';
 
-if (ENABLE_PREF) { // eslint-disable-line no-undef
+if (ENABLE_PERF) { // eslint-disable-line no-undef
   window.Perf = require('react-addons-perf');
 }
 
@@ -19,7 +19,7 @@ const app = dva({
   onError(error) {
     console.log(error);
     message.error(error.message);
-    alert(error);
+    // alert(error);
   },
 });
 

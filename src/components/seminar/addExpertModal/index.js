@@ -150,7 +150,11 @@ class AddExpertModal extends React.Component {
   };
 
   jumpToStep2 = () => {
-    this.setStep('step2', true);
+    this.props.parentProps.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        this.setStep('step2', true);
+      }
+    });
   };
 
   cancelCurrentPerson = () => {
@@ -174,10 +178,10 @@ class AddExpertModal extends React.Component {
         sm: { span: 20 },
       },
     };
-
-    const { modalVisible, step2, step3, integral, } = this.state;
+    const { modalVisible, step2, step3, integral } = this.state;
     const { parentProps } = this.props;
     const { speakerSuggests, loading, activity_type } = parentProps.seminar;
+    const { getFieldDecorator } = parentProps.form;
 
     return (
       <Modal
@@ -211,28 +215,32 @@ class AddExpertModal extends React.Component {
             label={(<span>演讲摘要</span>)}>
             <Input type="textarea" rows={4} placeholder="请输入演讲摘要。。。" ref="talkAbstract" />
           </FormItem>
-          <FormItem
+          {activity_type && <FormItem
             {...formItemLayout}
             label="贡献类别"
           >
-            {activity_type &&
-            <Select
-              showSearch
-              style={{ width: 200 }}
-              placeholder="请选择贡献类别"
-              optionFilterProp="children"
-              onChange={this.activityTypeChange}
-              filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-            >
-              {
-                Object.values(activity_type.data).map((item) => {
-                  return (<Option key={item.id}
-                                  value={`${item.key}#${item.value}`}>{item.key}</Option>);
-                })
-              }
-            </Select>}
-
-          </FormItem>
+            {getFieldDecorator('email', {
+              rules: [{
+                required: true, message: '请选择贡献类别',
+              }],
+            })(
+              <Select
+                  showSearch
+                  style={{ width: 200 }}
+                  placeholder="请选择贡献类别"
+                  optionFilterProp="children"
+                  onChange={this.activityTypeChange}
+                  filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                >
+                {
+                    Object.values(activity_type.data).map((item) => {
+                      return (<Option key={item.id}
+                                      value={`${item.key}#${item.value}`}>{item.key}</Option>);
+                    })
+                  }
+              </Select>,
+              )}
+          </FormItem>}
           <div style={{ height: 20 }}>
             <Button key="submit" type="primary" size="large" style={{ float: 'right' }}
                     onClick={this.jumpToStep2.bind()}>

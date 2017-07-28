@@ -18,7 +18,7 @@ function hasErrors(fieldsError) {
 class UniversalConfig extends React.Component {
   state = {
     editCurrentData: {},
-    editCurrentId: '',
+    editCurrentKey: '',
     newKey: '',
   };
 
@@ -31,10 +31,9 @@ class UniversalConfig extends React.Component {
     const data = e.target && e.target.getAttribute('data');
     const json = JSON.parse(data);
     const key = json.value.key;
-    const idx = json.key;
     this.props.dispatch({
       type: 'universalConfig/deleteByKey',
-      payload: { category: this.props.universalConfig.category, key, idx },
+      payload: { category: this.props.universalConfig.category, key },
     });
   };
 
@@ -42,7 +41,7 @@ class UniversalConfig extends React.Component {
     const data = e.target && e.target.getAttribute('data');
     const json = JSON.parse(data);
     this.setState({
-      editCurrentId: json.value.id,
+      editCurrentKey: json.value.key,
       newKey: json.value.key,
     });
     // const json = JSON.parse(data);
@@ -60,18 +59,17 @@ class UniversalConfig extends React.Component {
     const data = e.target && e.target.getAttribute('data');
     const json = JSON.parse(data);
     if (json.value.key !== this.state.newKey && this.state.newKey !== '') {
-      const src = json.value.src;
       const category = json.value.category;
       const key = json.value.key;
       const newKey = this.state.newKey;
       this.props.dispatch({
         type: 'universalConfig/updateByKey',
-        payload: { src, category, key, newKey },
+        payload: { category, key, newKey },
       });
     }
     ;
     this.setState({
-      editCurrentId: '',
+      editCurrentKey: '',
     });
   };
 
@@ -82,13 +80,13 @@ class UniversalConfig extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         // 删除修改之前的key
-        if (this.state.editCurrentData.key !== undefined && (this.state.editCurrentData.key !== values.key || this.state.editCurrentData.value !== values.value)) {
-          const key = this.state.editCurrentData.key;
-          this.props.dispatch({
-            type: 'universalConfig/deleteByKey',
-            payload: { category: this.props.universalConfig.category, key },
-          });
-        }
+        // if (this.state.editCurrentData.key !== undefined && (this.state.editCurrentData.key !== values.key || this.state.editCurrentData.value !== values.value)) {
+        //   const key = this.state.editCurrentData.key;
+        //   this.props.dispatch({
+        //     type: 'universalConfig/deleteByKey',
+        //     payload: { category: this.props.universalConfig.category, key },
+        //   });¬
+        // }
         this.props.dispatch({
           type: 'universalConfig/addKeyAndValue',
           payload: {
@@ -151,7 +149,7 @@ class UniversalConfig extends React.Component {
                   htmlType="submit"
                   disabled={hasErrors(getFieldsError())}
                 >
-                  添加/修改
+                  添加
                 </Button>
               </FormItem>
 
@@ -175,11 +173,11 @@ class UniversalConfig extends React.Component {
               render={(text, record) => {
                 return (
                   <div>
-                    {this.state.editCurrentId !== record.value.id &&
+                    {this.state.editCurrentKey !== record.value.key &&
                     <span style={{ paddingLeft: 7 }}>{text}</span>
                     }
-                    {this.state.editCurrentId === record.value.id &&
-                    <Input defaultValue={text}  onChange={this.onChangeNewKey} />
+                    {this.state.editCurrentKey === record.value.key &&
+                    <Input defaultValue={text} onChange={this.onChangeNewKey} />
                     }
                   </div>
                 );
@@ -194,10 +192,10 @@ class UniversalConfig extends React.Component {
               render={(text, record) => {
                 return (
                   <span>
-                    {this.state.editCurrentId !== record.value.id &&
+                    {this.state.editCurrentKey !== record.value.key &&
                     <a onClick={this.onEdit} data={JSON.stringify(text)}>编辑</a>
                     }
-                    {this.state.editCurrentId === record.value.id &&
+                    {this.state.editCurrentKey === record.value.key &&
                     <a onClick={this.onSave} data={JSON.stringify(text)}>保存</a>
                     }
                     <span className="ant-divider" />

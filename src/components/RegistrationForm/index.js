@@ -70,7 +70,11 @@ class RegistrationForm extends React.Component {
       type: 'seminar/getCategory',
       payload: { category: 'activity_organizer_options' },
     });
-    this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'activity_type' } });
+    this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'orgcategory' } });
+    this.props.dispatch({
+      type: 'seminar/getCategory',
+      payload: { category: 'contribution_type' }
+    });
   };
 
   handleSubmit = (e) => {
@@ -194,8 +198,8 @@ class RegistrationForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const {
-      activity_organizer_options, activity_type, tags,
-      postSeminarOrganizer,
+      activity_organizer_options, orgcategory, tags,
+      postSeminarOrganizer, contribution_type
     } = this.props.seminar;
     const activityTypes = sysconfig.CCF_activityTypes;
     let activity_organizer_options_data = {};
@@ -205,14 +209,6 @@ class RegistrationForm extends React.Component {
     if (activity_organizer_options.data) {
       activity_organizer_options_data = activity_organizer_options.data;
     }
-    if (activity_type.data) {
-      activity_type_options_data = activity_type.data;
-    }
-    // if (activity_type.data) {
-    //   if (activity_type.data.data) {
-    //     activity_type_options = activity_type.data.data;
-    //   }
-    // }
 
 
     const { addNewTalk, talks, integral, startValue, endValue } = this.state;
@@ -231,6 +227,7 @@ class RegistrationForm extends React.Component {
       <Row className={styles.add_seminar_block}>
         <Form onSubmit={this.handleSubmit} className={styles.add_seminar_form}>
           <Col className={styles.thumbnail}>
+            {orgcategory.data &&
             <FormItem {...formItemLayout} label="活动类型" hasFeedback>
               {getFieldDecorator('category', {
                   rules: [{ required: true, message: '请选择活动类型！' }],
@@ -238,13 +235,13 @@ class RegistrationForm extends React.Component {
               )(
                 <Select>
                   {
-                    Object.values(activity_type_options_data).map((item) => {
+                    orgcategory.data.map((item) => {
                       return (<Option key={Math.random()} value={item.key}>{item.key}</Option>);
                     })
                   }
                 </Select>,
               )}
-            </FormItem>
+            </FormItem>}
             {postSeminarOrganizer.length > 0 &&
             <FormItem {...formItemLayout} label="承办单位">
               {getFieldDecorator('organizer', {
@@ -254,7 +251,7 @@ class RegistrationForm extends React.Component {
                 <Select multiple>
                   {
                     postSeminarOrganizer.map((item) => {
-                      return (<Option key={`${item.key}_${item.id}`}
+                      return (<Option key={`org_${item.key}_${item.id}`}
                                       value={item.key}>{item.key}</Option>);
                     })
                   }
@@ -263,14 +260,15 @@ class RegistrationForm extends React.Component {
             </FormItem>}
             <FormItem {...formItemLayout} label="协办单位">
               {getFieldDecorator('co_org', {
-                // rules: [{ required: true, message: '请选择承办单位！' }],
+                  // rules: [{ required: true, message: '请选择承办单位！' }],
                 },
               )(
                 <Select mode="tags"
                         onChange={this.handleOrganizerChange.bind(this, activity_organizer_options_data)}>
                   {
                     Object.values(activity_organizer_options_data).map((item) => {
-                      return (<Option key={`co_org_${item.key}`} value={item.key}>{item.key}</Option>);
+                      return (
+                        <Option key={`co_org_${item.key}`} value={item.key}>{item.key}</Option>);
                     })
                   }
                 </Select>,

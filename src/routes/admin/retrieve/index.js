@@ -3,12 +3,11 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Form, Button, Input } from 'antd';
-import { Layout } from '../../../components';
+import { Form, Button, Input, Modal } from 'antd';
+import { routerRedux, Link } from 'dva/router';
 import { queryURL } from '../../../utils';
 import styles from './index.less';
 
-const { Header, Footer } = Layout;
 const FormItem = Form.Item;
 
 class Retrieve extends React.Component {
@@ -17,6 +16,22 @@ class Retrieve extends React.Component {
   };
   componentWillMount = () => {
     this.props.dispatch({ type: 'app/handleNavbar', payload: true });
+  };
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.auth.retrieve.token) {
+      const outerThis = this;
+      Modal.success({
+        title: '成功',
+        content: '初始化密码成功',
+        onOk() {
+          localStorage.setItem('token', outerThis.props.auth.retrieve.token);
+          location.href = '/login';
+          outerThis.props.dispatch(routerRedux.push({
+            pathname: '/',
+          }));
+        },
+      });
+    }
   };
   componentWillUnmount = () => {
     this.props.dispatch({ type: 'app/handleNavbar', payload: false });

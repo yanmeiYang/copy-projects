@@ -13,6 +13,7 @@ export default {
     loading: false,
     isUpdateForgotPw: false,
     message: null,
+    retrieve: {},
   },
   subscriptions: {
     // setup({ dispatch, history }) {
@@ -85,8 +86,7 @@ export default {
     *retrievePw({ payload }, { call, put }) {
       const { data } = yield call(authService.retrieve, payload);
       if (data.status) {
-        localStorage.setItem('token', data.token);
-        yield put(routerRedux.push('/'));
+        yield put({ type: 'retrievePsSuccess', data });
       } else {
         throw data;
       }
@@ -125,7 +125,9 @@ export default {
       }
       return { ...state, listUsers: data, loading: false };
     },
-
+    retrievePsSuccess(state, { data }) {
+      return { ...state, retrieve: data };
+    },
     showLoading(state) {
       return {
         ...state,

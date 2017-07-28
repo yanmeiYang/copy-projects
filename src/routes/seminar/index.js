@@ -23,8 +23,8 @@ class Seminar extends React.Component {
 
   componentWillMount = () => {
     this.props.dispatch({
-      type: 'seminar/getCategory',
-      payload: { category: 'activity_organizer_options' }
+      type: 'universalConfig/setCategory',
+      payload: { category: 'orglist_5976bb068ef7a2e824adca67' },
     });
     this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'activity_type' } });
   };
@@ -50,7 +50,7 @@ class Seminar extends React.Component {
       const params = {
         offset,
         size: sizePerPage,
-        filter: { src: config.source, organizer, category }
+        filter: { src: config.source, organizer, category },
       };
       this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
     }
@@ -76,7 +76,7 @@ class Seminar extends React.Component {
         filter: {
           src: config.source,
           organizer: this.state.organizer,
-          category: this.state.category
+          category: this.state.category,
         },
       };
       this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
@@ -120,6 +120,7 @@ class Seminar extends React.Component {
   render() {
     const { results, loading, sizePerPage, activity_type, activity_organizer_options, topMentionedTags } =
       this.props.seminar;
+    const { universalConfig } = this.props;
     const { organizer, category } = this.state;
     return (
       <div className="content-inner">
@@ -179,18 +180,18 @@ class Seminar extends React.Component {
 
             <div className={styles.filterRow}>
               <span className={styles.filterTitle}>承办单位:</span>
-              {activity_organizer_options.data &&
+              {universalConfig.data &&
               <ul className={styles.filterItems}>
                 {
-                  Object.values(activity_organizer_options.data).map((item) => {
+                  Object.values(universalConfig.data).map((item) => {
                     return (
                       <CheckableTag
-                        key={item.id}
+                        key={item.value.id}
                         className={styles.filterItem}
-                        checked={organizer === item.key}
-                        onChange={checked => this.onFilterChange(item.key, 'organizer', checked)}
+                        checked={organizer === item.value.key}
+                        onChange={checked => this.onFilterChange(item.value.key, 'organizer', checked)}
                       >
-                        {item.key}
+                        {item.value.key}
                       </CheckableTag>
                     );
                   })
@@ -250,4 +251,4 @@ class Seminar extends React.Component {
 }
 
 
-export default connect(({ seminar, loading, app }) => ({ seminar, loading, app }))(Seminar);
+export default connect(({ seminar, loading, universalConfig, app }) => ({ seminar, loading, universalConfig, app }))(Seminar);

@@ -36,9 +36,9 @@ export async function deleteByKey(category, key) {
     });
 }
 
-export async function updateByKey(src, category, key, newKey) {
+export async function updateByKey(category, key, newKey) {
   return request(api.ucUpdateByKey
-      .replace(':src', src)
+      .replace(':source', source)
       .replace(':category', category)
       .replace(':key', key)
       .replace(':newKey', newKey)

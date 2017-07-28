@@ -49,6 +49,17 @@ export default {
     },
   }),
 
+  AdminSystemOrgCategory: app => ({
+    path: '/admin/org-category',
+    getComponent(nextState, cb) {
+      require.ensure([], (require) => {
+        registerModel(app, require('../../models/admin/system-config'));
+        registerModel(app, require('../../models/common/universal-config'));
+        cb(null, require('./org-category'));
+      }, 'admin');
+    },
+  }),
+
 
 };
 

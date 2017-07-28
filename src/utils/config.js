@@ -105,7 +105,7 @@ module.exports = {
     ucListByCategory: '/2b/config/:source/list?category=:category',
     ucSetByKey: '/2b/config/:source/:category/:key',
     ucDeleteByKey: '/2b/config/:source/:category/:key',
-    ucUpdateByKey: '/2b/config/:src/:category/rename/:key/:newKey',
+    ucUpdateByKey: '/2b/config/:source/:category/rename/:key/:newKey',
 
     // Knowledge Graph
     kgFind: {

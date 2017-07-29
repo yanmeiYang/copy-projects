@@ -65,12 +65,25 @@ module.exports = {
     '计算机网络', '网络', '自然语言处理'],
 
   PersonList_ShowIndices: ['activityRankingContrib', 'h_index', 'activity'],
+
+  //
+  // Layout related
+  //
+  // Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
+  Header_LogoWidth: 212,
+  Header_LogoStyle: {
+    width: '86px',
+    backgroundPosition: '8px 2px',
+    backgroundSize: ' auto 54px',
+    backgroundRepeat: 'no-repeat',
+    backgroundColor: 'white',
+  },
   Header_SubTextLogo: 'CCF 专家库',
-  Header_LogoStyle: { width: '350px', backgroundSize: '370px 38px', backgroundRepeat: 'no-repeat' },
-  Header_UserPageURL: '',
-  Footer_Content: (
-    <Footer />
-  ),
+  Header_SubTextStyle: { marginLeft: 12 },
+  Header_UserPageURL: '', // 用户头像点击之后去的页面.
+  Footer_Content: <Footer />,
+  ShowSideMenu: true,
+  ShowFooter: true,
 
   // 特殊配置，这里是System的自己的配置
 

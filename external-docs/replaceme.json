@@ -1,58 +1,3165 @@
 {
-  "name": "Information systems applications",
-  "children": [
+  "data": [
     {
-      "name": "Data mining",
-      "children": [
-        {
-          "name": "Data cleaning",
-          "level": 3,
-          "definition": "'''Data cleansing''', '''data cleaning''', or '''data scrubbing''' is the process of detecting and correcting  corrupt or inaccurate records from a record set, table, or database.'''Data cleansing''', '''data cleaning''', or '''data scrubbing''' is the process of detecting and correcting  corrupt or inaccurate records from a record set, table, or database.",
-          "zh": "数据清理",
-          "type": "child"
-        },
-        {
-          "name": "Data stream mining",
-          "level": 3,
-          "definition": "'''Data Stream Mining''' is the process of extracting knowledge structures from continuous, rapid data records.",
-          "zh": "数据流挖掘",
-          "type": "child"
-        },
-        {
-          "name": "Association rules",
-          "level": 3,
-          "definition": "'''Association rule learning''' is a method for discovering interesting relations between variables in large databases.",
-          "zh": "关联规则",
-          "type": "child"
-        },
-        {
-          "name": "Clustering",
-          "level": 3,
-          "definition": "clustering is the task of grouping a set of objects in such a way that objects in the same group (called a cluster) are more similar (in some sense or another) to each other than to those in other groups (clusters). It is a main task of exploratory data mining, and a common technique for statistical data analysis, used in many fields, including machine learning, pattern recognition, image analysis, information retrieval, bioinformatics, data compression, and computer graphics.",
-          "zh": "聚类",
-          "type": "child"
-        },
-        {
-          "name": "Collaborative filtering",
-          "level": 3,
-          "definition": "'''Collaborative filtering'''  is a technique used by recommender systems.'''Collaborative filtering'''  is a technique used by recommender systems.",
-          "zh": "协同过滤",
-          "type": "child"
-        },
-        {
-          "name": "Nearest-neighbor search",
-          "level": 3,
-          "definition": "      '''Nearest neighbor search''' , also known as '''proximity search''', '''similarity search''' or '''closest point search''',  is an optimization problem for finding closest  points.",
-          "zh": "最近邻搜索",
-          "type": "child"
-        }
-      ],
-      "definition": "",
-      "zh": "数据挖掘",
-      "type": "current"
+      "lng": -122.1733617,
+      "n": "Nils Nilsson",
+      "a": "//static.aminer.org/0a95/0006/0000/53afec49dabfae456ee79e06.jpg",
+      "i": "53f4557ddabfaec09f20333e",
+      "n_zh": "",
+      "h": 39,
+      "lat": 37.4300473
+    },
+    {
+      "lng": -79.9564292,
+      "n": "Bruce G. Buchanan",
+      "a": "//static.aminer.org/upload/avatar/1224/622/1538/53f429d2dabfaeb22f3d68eb.jpeg",
+      "i": "53f429d2dabfaeb22f3d68eb",
+      "n_zh": "",
+      "h": 48,
+      "lat": 40.441541
+    },
+    {
+      "lng": -122.0840575,
+      "n": "Peter Norvig",
+      "a": "//static.aminer.org/upload/avatar/1430/101/1961/5484eef6dabfae8a11fb24bb.jpeg",
+      "i": "5484eef6dabfae8a11fb24bb",
+      "n_zh": "",
+      "h": 21,
+      "lat": 37.4219999
+    },
+    {
+      "lng": -79.3969707,
+      "n": "John Mylopoulos",
+      "a": "//static.aminer.org/upload/avatar/665/2020/388/53f4ae26dabfaee0d9c771a0.jpeg",
+      "i": "53f4ae26dabfaee0d9c771a0",
+      "n_zh": "",
+      "h": 87,
+      "lat": 43.6590717
+    },
+    {
+      "lng": 116.6823389,
+      "n": "Feiyue Wang",
+      "a": "//static.aminer.org/upload/avatar/1637/989/1394/53f4d370dabfaee0d9c78017.jpeg",
+      "i": "53f4d370dabfaee0d9c78017",
+      "n_zh": "王飞跃",
+      "h": 58,
+      "lat": 40.4080231
+    },
+    {
+      "lng": -112.0707974,
+      "n": "Edward H. Shortliffe",
+      "a": "//static.aminer.org/upload/avatar/134/668/944/53f45107dabfaee1c0b17bfa.jpeg",
+      "i": "53f45107dabfaee1c0b17bfa",
+      "n_zh": "",
+      "h": 58,
+      "lat": 33.4537243
+    },
+    {
+      "lng": -71.09416,
+      "n": "Rodney A. Brooks",
+      "a": "//static.aminer.org/upload/avatar/461/1854/2029/53f437a3dabfaee2a1cf1c62.gif",
+      "i": "53f437a3dabfaee2a1cf1c62",
+      "n_zh": "",
+      "h": 44,
+      "lat": 42.360091
+    },
+    {
+      "lng": -0.0890873,
+      "n": "Dov M. Gabbay",
+      "a": "//static.aminer.org/upload/avatar/1687/255/1242/548743fcdabfae9b401344a3.jpeg",
+      "i": "548743fcdabfae9b401344a3",
+      "n_zh": "",
+      "h": 59,
+      "lat": 51.4699486
+    },
+    {
+      "lng": -122.169719,
+      "n": "John Mccarthy",
+      "a": "//static.aminer.org/picture/02469/John_McCarthy_1382538989047.gif",
+      "i": "53f43402dabfaeecd6947e36",
+      "n_zh": "",
+      "h": 31,
+      "lat": 37.4274745
+    },
+    {
+      "lng": 116.3264439,
+      "n": "Hsinchun Chen",
+      "a": "//static.aminer.org/upload/avatar/1452/106/107/53f48be3dabfaea7cd1cd4e8.jpeg",
+      "i": "53f48be3dabfaea7cd1cd4e8",
+      "n_zh": "",
+      "h": 77,
+      "lat": 39.9996674
+    },
+    {
+      "lng": 8.550981199999999,
+      "n": "Rolf Pfeifer",
+      "a": "",
+      "i": "53f43a3cdabfaec22baa4e71",
+      "n_zh": "",
+      "h": 39,
+      "lat": 47.3743221
+    },
+    {
+      "lng": -1.9358352,
+      "n": "Aaron Sloman",
+      "a": "//static.aminer.org/upload/avatar/1680/1404/1651/54858a44dabfae8a11fb2adc.jpeg",
+      "i": "54858a44dabfae8a11fb2adc",
+      "n_zh": "",
+      "h": 44,
+      "lat": 52.4501886
+    },
+    {
+      "lng": -79.9445377,
+      "n": "Jaime G. Carbonell",
+      "a": "//static.aminer.org/upload/avatar/1355/422/1276/53f42a9ddabfaeb22f3da334.jpeg",
+      "i": "53f42a9ddabfaeb22f3da334",
+      "n_zh": "",
+      "h": 63,
+      "lat": 40.4434917
+    },
+    {
+      "lng": -122.2585399,
+      "n": "Lotfi A. Zadeh",
+      "a": "//static.aminer.org/upload/avatar/779/702/218/5405bf45dabfae450f3cd80d.jpeg",
+      "i": "5405bf45dabfae450f3cd80d",
+      "n_zh": "",
+      "h": 96,
+      "lat": 37.8718992
+    },
+    {
+      "lng": -71.0905626,
+      "n": "Michael L. Brodie",
+      "a": "//static.aminer.org/upload/avatar/265/543/574/53f48458dabfaee43ed5c724.jpeg",
+      "i": "53f48458dabfaee43ed5c724",
+      "n_zh": "",
+      "h": 25,
+      "lat": 42.3618641
+    },
+    {
+      "lng": 4.394886,
+      "n": "Luc Steels",
+      "a": "",
+      "i": "53f43270dabfaeb22f44892f",
+      "n_zh": "",
+      "h": 56,
+      "lat": 50.821658
+    },
+    {
+      "lng": -1.7100328,
+      "n": "Henri Prade",
+      "a": "//static.aminer.org/picture/486/1225200380170.gif",
+      "i": "53f566aedabfae6329f80468",
+      "n_zh": "",
+      "h": 96,
+      "lat": 48.1269985
+    },
+    {
+      "lng": -79.94301279999999,
+      "n": "Tom M. Mitchell",
+      "a": "//static.aminer.org/0734/0001/0000/53af84d0dabfae456e81304a.jpg",
+      "i": "53f4650ddabfaedf43640b76",
+      "n_zh": "",
+      "h": 63,
+      "lat": 40.4428081
+    },
+    {
+      "lng": -73.67880300000002,
+      "n": "Selmer Bringsjord",
+      "a": "",
+      "i": "53f7d620dabfae8faa4baa82",
+      "n_zh": "",
+      "h": 15,
+      "lat": 42.730172
+    },
+    {
+      "lng": -123.2489257,
+      "n": "Alan K. Mackworth",
+      "a": "//static.aminer.org/picture/491/1225202730273.jpeg",
+      "i": "53f4322bdabfaee02ac9d7e2",
+      "n_zh": "",
+      "h": 34,
+      "lat": 49.2611453
+    },
+    {
+      "lng": 149.118527,
+      "n": "Marcus Hutter",
+      "a": "//static.aminer.org/upload/avatar/1917/428/951/53f43925dabfaee02ace4fa9.jpeg",
+      "i": "53f43925dabfaee02ace4fa9",
+      "n_zh": "",
+      "h": 21,
+      "lat": -35.2776999
+    },
+    {
+      "lng": -118.285117,
+      "n": "Daniel E. O'Leary",
+      "a": "//static.aminer.org/upload/avatar/815/888/303/5441137fdabfae805a727949.jpeg",
+      "i": "5441137fdabfae805a727949",
+      "n_zh": "",
+      "h": 30,
+      "lat": 34.0223519
+    },
+    {
+      "lng": 0.0,
+      "n": "Dennis H. Smith",
+      "a": "",
+      "i": "5487d28fdabfae8a11fb3def",
+      "n_zh": "",
+      "h": 11,
+      "lat": 0.0
+    },
+    {
+      "lng": -122.1369208,
+      "n": "Eric Horvitz",
+      "a": "//static.aminer.org/0ae3/0000/0000/53afe740dabfae456ee29ee2.jpg",
+      "i": "53f48d8bdabfaea7cd1d315a",
+      "n_zh": "",
+      "h": 94,
+      "lat": 47.6424099
+    },
+    {
+      "lng": 151.1873473,
+      "n": "John S. Gero",
+      "a": "",
+      "i": "548465eedabfae8a11fb20af",
+      "n_zh": "",
+      "h": 46,
+      "lat": -33.888584
+    },
+    {
+      "lng": -79.94301279999999,
+      "n": "Herbert Alexander Simon",
+      "a": "//static.aminer.org/upload/avatar/791/62/1376/56300a2f45cedb33998dc583.jpeg",
+      "i": "56300a2f45cedb33998dc583",
+      "h": 105,
+      "lat": 40.4428081
+    },
+    {
+      "lng": 0.0,
+      "n": "Freddie C. Hamdy",
+      "a": "",
+      "i": "548f0617dabfaef989f0973c",
+      "n_zh": "",
+      "h": 34,
+      "lat": 0.0
+    },
+    {
+      "lng": -97.7340567,
+      "n": "Andrew B. Whinston",
+      "a": "//static.aminer.org/upload/avatar/1545/712/1631/53f63b0edabfaea3ccc71628.jpeg",
+      "i": "53f63b0edabfaea3ccc71628",
+      "n_zh": "",
+      "h": 77,
+      "lat": 30.2849185
+    },
+    {
+      "lng": 151.2005362,
+      "n": "Chengqi Zhang",
+      "a": "//static.aminer.org/upload/avatar/1487/1084/505/53f48f57dabfaee4dc8b3a05.jpeg",
+      "i": "53f48f57dabfaee4dc8b3a05",
+      "n_zh": "张成奇",
+      "h": 41,
+      "lat": -33.8829343
+    },
+    {
+      "lng": -0.1748772,
+      "n": "Nicholas R. Jennings",
+      "a": "//static.aminer.org/upload/avatar/417/674/1672/548d8a37dabfaed7b5fa4915.jpeg",
+      "i": "548d8a37dabfaed7b5fa4915",
+      "n_zh": "",
+      "h": 100,
+      "lat": 51.49879970000001
+    },
+    {
+      "lng": -117.16883,
+      "n": "Diane J. Cook",
+      "a": "//static.aminer.org/upload/avatar/1802/974/850/53f4a61adabfaee0d9c76017.jpeg",
+      "i": "53f4a61adabfaee0d9c76017",
+      "n_zh": "",
+      "h": 48,
+      "lat": 46.7304904
+    },
+    {
+      "lng": 23.6530238,
+      "n": "Ilias Maglogiannis",
+      "a": "//static.aminer.org/upload/avatar/976/1279/1032/5489a1b3dabfaed7b5fa3d86.jpeg",
+      "i": "5489a1b3dabfaed7b5fa3d86",
+      "n_zh": "",
+      "h": 21,
+      "lat": 37.9416261
+    },
+    {
+      "lng": 0.0,
+      "n": "Hani Hagras",
+      "a": "//static.aminer.org/upload/avatar/74/1863/1109/54898c33dabfae8a11fb45f6.jpeg",
+      "i": "54898c33dabfae8a11fb45f6",
+      "n_zh": "",
+      "h": 31,
+      "lat": 0.0
+    },
+    {
+      "lng": 0.0,
+      "n": "Brahim Chaib-Draa",
+      "a": "//static.aminer.org/upload/avatar/711/2010/810/548e5c81dabfaef989f09378.png",
+      "i": "548e5c81dabfaef989f09378",
+      "n_zh": "",
+      "h": 25,
+      "lat": 0.0
+    },
+    {
+      "lng": 9.1582069,
+      "n": "Riccardo Bellazzi",
+      "a": "//static.aminer.org/050c/0003/0000/53afa53bdabfae456ea16b5b.jpg",
+      "i": "53f42b6edabfaeb22f3e981c",
+      "n_zh": "",
+      "h": 35,
+      "lat": 45.1847248
+    },
+    {
+      "lng": 16.1971806,
+      "n": "Maciej Majewski",
+      "a": "",
+      "i": "53f42d35dabfaec09f112137",
+      "n_zh": "",
+      "h": 8,
+      "lat": 54.2036014
+    },
+    {
+      "lng": 7.833992299999998,
+      "n": "Bernhard Nebel",
+      "a": "//static.aminer.org/upload/avatar/901/727/88/5486b8b1dabfaed7b5fa2b95.jpeg",
+      "i": "5486b8b1dabfaed7b5fa2b95",
+      "n_zh": "",
+      "h": 54,
+      "lat": 48.0131461
+    },
+    {
+      "lng": -1.4799678,
+      "n": "Yorick Wilks",
+      "a": "//static.aminer.org/0b64/0003/0000/53afaf90dabfae456eaba66d.jpg",
+      "i": "53f43347dabfaeb1a7bd4b02",
+      "n_zh": "",
+      "h": 54,
+      "lat": 53.38103419999999
+    },
+    {
+      "lng": 14.4689205,
+      "n": "Ivan Bratko",
+      "a": "//static.aminer.org/picture/01620/Ivan_Bratko_1334980269459.jpeg",
+      "i": "53f48cd6dabfaea7cd1d05ba",
+      "n_zh": "",
+      "h": 45,
+      "lat": 46.0501557
+    },
+    {
+      "lng": -5.666925099999999,
+      "n": "Juan M. Corchado",
+      "a": "//static.aminer.org/upload/avatar/508/896/827/5448a584dabfae87b7e5857d.jpeg",
+      "i": "5448a584dabfae87b7e5857d",
+      "n_zh": "",
+      "h": 28,
+      "lat": 40.9613376
+    },
+    {
+      "lng": -73.9556889,
+      "n": "Joshua Lederberg",
+      "a": "//static.aminer.org/upload/avatar/685/1933/782/53f43728dabfaee4dc789546.jpeg",
+      "i": "53f43728dabfaee4dc789546",
+      "n_zh": "",
+      "h": 17,
+      "lat": 40.7625706
+    },
+    {
+      "lng": -71.09416,
+      "n": "Duvvuru Sriram",
+      "a": "",
+      "i": "53f4cb24dabfaee579780e7b",
+      "n_zh": "",
+      "h": 13,
+      "lat": 42.360091
+    },
+    {
+      "lng": -111.8283473,
+      "n": "Ameen Abu-Hanna",
+      "a": "//static.aminer.org/0981/0006/0000/53afea47dabfae456ee5a5ab.jpg",
+      "i": "53f43607dabfaee02acc712a",
+      "n_zh": "",
+      "h": 25,
+      "lat": 40.7587621
+    },
+    {
+      "lng": -122.2590219,
+      "n": "Jerome Feldman",
+      "a": "//static.aminer.org/upload/avatar/695/1584/178/53f453f7dabfaee43ecb383e.jpeg",
+      "i": "53f453f7dabfaee43ecb383e",
+      "h": 34,
+      "lat": 37.8738176
+    },
+    {
+      "lng": -71.0924047,
+      "n": "Soteris A. Kalogirou",
+      "a": "//static.aminer.org/upload/avatar/1647/1600/1887/5434c907dabfaebba58657c4.jpeg",
+      "i": "5434c907dabfaebba58657c4",
+      "n_zh": "",
+      "h": 29,
+      "lat": 42.3589376
+    },
+    {
+      "lng": -76.9425543,
+      "n": "Jim Hendler (James A. Hendler)",
+      "a": "//static.aminer.org/upload/avatar/1823/1299/151/53f5b5f2dabfae4b5bf8045b.jpeg",
+      "i": "53f5b5f2dabfae4b5bf8045b",
+      "h": 78,
+      "lat": 38.9869183
+    },
+    {
+      "lng": -80.24818800000001,
+      "n": "Ruth Aylett",
+      "a": "//static.aminer.org/upload/avatar/715/558/1063/54853ac6dabfae8a11fb26f9.jpeg",
+      "i": "54853ac6dabfae8a11fb26f9",
+      "n_zh": "",
+      "h": 29,
+      "lat": 26.127189
+    },
+    {
+      "lng": 19.1115524,
+      "n": "Leszek Rutkowski",
+      "a": "//static.aminer.org/upload/avatar/714/1819/1814/548780c1dabfaed7b5fa30cf.jpeg",
+      "i": "548780c1dabfaed7b5fa30cf",
+      "n_zh": "",
+      "h": 23,
+      "lat": 50.8210865
+    },
+    {
+      "lng": 8.550981199999999,
+      "n": "Fumiya Iida",
+      "a": "",
+      "i": "5484d929dabfaed7b5fa1c68",
+      "n_zh": "",
+      "h": 26,
+      "lat": 47.3743221
+    },
+    {
+      "lng": -0.1340401,
+      "n": "Shane Legg",
+      "a": "//static.aminer.org/0056/0009/0000/53b01f60dabfae456e19c794.jpg",
+      "i": "53f3b0b8dabfae4b34b1a718",
+      "n_zh": "",
+      "h": 9,
+      "lat": 51.52455920000001
+    },
+    {
+      "lng": 9.2485038,
+      "n": "Enzo Grossi",
+      "a": "",
+      "i": "54087aa4dabfae450f41ea79",
+      "n_zh": "",
+      "h": 26,
+      "lat": 45.4808139
+    },
+    {
+      "lng": -79.3959928,
+      "n": "Mark S. Fox",
+      "a": "//static.aminer.org/upload/avatar/482/573/1539/53f44a82dabfaedd74dff45a.jpeg",
+      "i": "53f44a82dabfaedd74dff45a",
+      "n_zh": "",
+      "h": 46,
+      "lat": 43.660131
+    },
+    {
+      "lng": -71.0905626,
+      "n": "Marvin Minsky",
+      "a": "//static.aminer.org/picture/02689/M_Minsky_1382539202348.jpg",
+      "i": "53f43919dabfaec09f197397",
+      "n_zh": "",
+      "h": 17,
+      "lat": 42.3618641
+    },
+    {
+      "lng": 0.0,
+      "n": "Les Gasser",
+      "a": "",
+      "i": "548c9a55dabfaed7b5fa44d2",
+      "n_zh": "",
+      "h": 28,
+      "lat": 0.0
+    },
+    {
+      "lng": -9.1393366,
+      "n": "Vitorino Ramos",
+      "a": "",
+      "i": "53f49946dabfaebbd677b3ba",
+      "n_zh": "",
+      "h": 19,
+      "lat": 38.7222524
+    },
+    {
+      "lng": 147.3267247,
+      "n": "Michael Negnevitsky",
+      "a": "",
+      "i": "53f43175dabfaedce54f9541",
+      "n_zh": "",
+      "h": 10,
+      "lat": -42.9034739
+    },
+    {
+      "lng": -81.60688909999999,
+      "n": "Gilles Klopman",
+      "a": "//static.aminer.org/upload/avatar/1461/96/1356/53f7b5a8dabfae9060adf400.jpeg",
+      "i": "53f7b5a8dabfae9060adf400",
+      "n_zh": "",
+      "h": 21,
+      "lat": 41.5038131
+    },
+    {
+      "lng": -73.9598192,
+      "n": "Salvatore J. Stolfo",
+      "a": "//static.aminer.org/upload/avatar/846/1035/1921/53f48ba5dabfaea7cd1cc69b.png",
+      "i": "53f48ba5dabfaea7cd1cc69b",
+      "n_zh": "",
+      "h": 78,
+      "lat": 40.809057
+    },
+    {
+      "lng": -74.5950225,
+      "n": "David L. Waltz",
+      "a": "//static.aminer.org/upload/avatar/1638/642/752/53f439b3dabfaedd74dbf393.jpeg",
+      "i": "53f439b3dabfaedd74dbf393",
+      "n_zh": "",
+      "h": 18,
+      "lat": 40.3598182
+    },
+    {
+      "lng": -122.3058022,
+      "n": "William J. Rapaport",
+      "a": "//static.aminer.org/03a6/0008/0000/53b00dcedabfae456e087a07.jpg",
+      "i": "53f4425ddabfaefedbb07cf0",
+      "n_zh": "",
+      "h": 25,
+      "lat": 47.6532255
+    },
+    {
+      "lng": -104.58849,
+      "n": "Yiyu Yao",
+      "a": "//static.aminer.org/upload/avatar/461/1999/1691/53f4b834dabfaed4b577b4df.jpeg",
+      "i": "53f4b834dabfaed4b577b4df",
+      "n_zh": "姚一豫",
+      "h": 68,
+      "lat": 50.41701339999999
+    },
+    {
+      "lng": -97.73676209999999,
+      "n": "John A. Campbell",
+      "a": "",
+      "i": "53f43407dabfaee43ec184f5",
+      "n_zh": "",
+      "h": 13,
+      "lat": 30.2852384
+    },
+    {
+      "lng": 13.8534593,
+      "n": "Tom Ziemke",
+      "a": "",
+      "i": "5440f7cadabfae805a713445",
+      "n_zh": "",
+      "h": 29,
+      "lat": 58.3936496
+    },
+    {
+      "lng": 0.0,
+      "n": "Shusaku Tsumoto",
+      "a": "//static.aminer.org/upload/avatar/999/878/1485/548a62d8dabfae8a11fb49e3.jpeg",
+      "i": "548a62d8dabfae8a11fb49e3",
+      "n_zh": "",
+      "h": 22,
+      "lat": 0.0
+    },
+    {
+      "lng": 1.4720178,
+      "n": "Guy Theraulaz",
+      "a": "",
+      "i": "548a660fdabfae8a11fb49f7",
+      "n_zh": "",
+      "h": 45,
+      "lat": 43.559597
+    },
+    {
+      "lng": 16.3600504,
+      "n": "Robert Trappl",
+      "a": "",
+      "i": "5448c819dabfae87b7e79174",
+      "n_zh": "",
+      "h": 10,
+      "lat": 48.21318549999999
+    },
+    {
+      "lng": -71.09416,
+      "n": "Tomaso Poggio",
+      "a": "//static.aminer.org/05fb/0000/0000/53afcfe1dabfae456ecb877a.jpg",
+      "i": "53f48043dabfae963d259202",
+      "h": 128,
+      "lat": 42.360091
+    },
+    {
+      "lng": -71.0905626,
+      "n": "Patrick H. Winston",
+      "a": "//static.aminer.org/upload/avatar/1444/856/1738/53f43c64dabfaedce5563b1a.jpeg",
+      "i": "53f43c64dabfaedce5563b1a",
+      "n_zh": "",
+      "h": 9,
+      "lat": 42.3618641
+    },
+    {
+      "lng": -1.4879469,
+      "n": "Derek A. Linkens",
+      "a": "",
+      "i": "53f7ffb4dabfae9060b02e71",
+      "n_zh": "",
+      "h": 15,
+      "lat": 53.3809409
+    },
+    {
+      "lng": 0.0,
+      "n": "Gerhard Brewka",
+      "a": "//static.aminer.org/upload/avatar/830/1096/698/5488725ddabfae8a11fb4369.gif",
+      "i": "5488725ddabfae8a11fb4369",
+      "n_zh": "",
+      "h": 36,
+      "lat": 0.0
+    },
+    {
+      "lng": -74.44679579999999,
+      "n": "N. S. Sridharan",
+      "a": "",
+      "i": "53f46a30dabfaeb22f54d71b",
+      "n_zh": "",
+      "h": 10,
+      "lat": 40.4981958
+    },
+    {
+      "lng": 0.9442817,
+      "n": "Vic Callaghan",
+      "a": "",
+      "i": "53f38f6edabfae4b34a4bdee",
+      "n_zh": "",
+      "h": 15,
+      "lat": 51.8761393
+    },
+    {
+      "lng": 16.1971806,
+      "n": "Wojciech Kacalak",
+      "a": "",
+      "i": "53f4681edabfaedf4364cf61",
+      "n_zh": "",
+      "h": 8,
+      "lat": 54.2036014
+    },
+    {
+      "lng": -74.65220699999999,
+      "n": "Michael Mateas",
+      "a": "//static.aminer.org/07bd/0004/0000/53afbca0dabfae456eb89baf.gif",
+      "i": "53f556cddabfaea7cd1d8bf5",
+      "n_zh": "",
+      "h": 38,
+      "lat": 40.350211
+    },
+    {
+      "lng": -9.206661,
+      "n": "Luís Moniz Pereira",
+      "a": "//static.aminer.org/upload/avatar/1885/1736/58/53f7f1d3dabfae8faa4c6fa6.jpeg",
+      "i": "53f7f1d3dabfae8faa4c6fa6",
+      "n_zh": "",
+      "h": 39,
+      "lat": 38.6615119
+    },
+    {
+      "lng": -76.4735027,
+      "n": "Bart Selman",
+      "a": "//static.aminer.org/upload/avatar/1644/773/213/53f48f28dabfaee1c0bacf2c.png",
+      "i": "53f48f28dabfaee1c0bacf2c",
+      "n_zh": "",
+      "h": 64,
+      "lat": 42.4534492
+    },
+    {
+      "lng": 116.355664,
+      "n": "Xiaojuan Ban",
+      "a": "//static.aminer.org/upload/avatar/1704/409/1052/54313682dabfae8dd88afd71.jpeg",
+      "i": "54313682dabfae8dd88afd71",
+      "n_zh": "班晓娟",
+      "h": 9,
+      "lat": 39.99215
+    },
+    {
+      "lng": -86.9118999,
+      "n": "G. N. Saridis",
+      "a": "",
+      "i": "53f438d1dabfaeb2ac06a1ce",
+      "n_zh": "",
+      "h": 14,
+      "lat": 40.4286296
+    },
+    {
+      "lng": -71.09416,
+      "n": "Pattie Maes",
+      "a": "//static.aminer.org/0065/0008/0000/53b0070adabfae456e01db1f.jpg",
+      "i": "53f46782dabfaec09f244235",
+      "n_zh": "",
+      "h": 62,
+      "lat": 42.360091
+    },
+    {
+      "lng": -83.69142389999999,
+      "n": "H. Van Dyke Parunak",
+      "a": "//static.aminer.org/upload/avatar/1367/365/69/53f43890dabfaee0d9b78fc4.jpeg",
+      "i": "53f43890dabfaee0d9b78fc4",
+      "n_zh": "",
+      "h": 46,
+      "lat": 42.3006292
+    },
+    {
+      "lng": 0.0,
+      "n": "Peter Szolovits",
+      "a": "//static.aminer.org/upload/avatar/682/1798/490/5487cf52dabfaed7b5fa3308.jpeg",
+      "i": "5487cf52dabfaed7b5fa3308",
+      "n_zh": "",
+      "h": 25,
+      "lat": 0.0
+    },
+    {
+      "lng": -122.0840575,
+      "n": "Steve Chien",
+      "a": "//static.aminer.org/upload/avatar/401/990/663/53f569d7dabfae6836f8045b.bmp",
+      "i": "53f569d7dabfae6836f8045b",
+      "n_zh": "",
+      "h": 28,
+      "lat": 37.4219999
+    },
+    {
+      "lng": 13.35292,
+      "n": "S. Gaglio",
+      "a": "",
+      "i": "53f45193dabfaee0d9be0acc",
+      "n_zh": "",
+      "h": 12,
+      "lat": 38.12425
+    },
+    {
+      "lng": -118.396402,
+      "n": "Thomas Dean",
+      "a": "//static.aminer.org/048c/0005/0000/53afcb8adabfae456ec741ea.gif",
+      "i": "53f43299dabfaedd74d796a9",
+      "n_zh": "",
+      "h": 40,
+      "lat": 34.073869
+    },
+    {
+      "lng": -83.3746927,
+      "n": "Hamid R. Arabnia",
+      "a": "//static.aminer.org/upload/avatar/559/1151/1069/548793f8dabfae8a11fb3bfb.gif",
+      "i": "548793f8dabfae8a11fb3bfb",
+      "n_zh": "",
+      "h": 21,
+      "lat": 33.9460233
+    },
+    {
+      "lng": 0.0,
+      "n": "Gordon I. Mccalla",
+      "a": "//static.aminer.org/upload/avatar/233/596/287/54875043dabfaed7b5fa2f0f.gif",
+      "i": "54875043dabfaed7b5fa2f0f",
+      "n_zh": "",
+      "h": 22,
+      "lat": 0.0
+    },
+    {
+      "lng": 4.7005176,
+      "n": "Luc De Raedt",
+      "a": "//static.aminer.org/0204/0007/0000/53aff261dabfae456eed953f.jpg",
+      "i": "53f48bbadabfaea7cd1ccb54",
+      "n_zh": "",
+      "h": 59,
+      "lat": 50.8798438
+    },
+    {
+      "lng": -73.9964609,
+      "n": "Julian Togelius",
+      "a": "//static.aminer.org/upload/avatar/1163/219/1857/53f8007ddabfae8faa4ced19.jpeg",
+      "i": "53f8007ddabfae8faa4ced19",
+      "n_zh": "",
+      "h": 38,
+      "lat": 40.72951339999999
+    },
+    {
+      "lng": -1.9305135,
+      "n": "Xin Yao",
+      "a": "//static.aminer.org/upload/avatar/609/2043/460/53f48396dabfaee0d9c73415.gif",
+      "i": "53f48396dabfaee0d9c73415",
+      "n_zh": "姚新",
+      "h": 79,
+      "lat": 52.4508168
+    },
+    {
+      "lng": 2.2639934,
+      "n": "Gian Piero Zarri",
+      "a": "",
+      "i": "53f479cedabfae8a6845c182",
+      "n_zh": "",
+      "h": 12,
+      "lat": 48.8476037
+    },
+    {
+      "lng": -0.035408,
+      "n": "Ephraim Nissan",
+      "a": "",
+      "i": "53f443d7dabfaeee229ee0a4",
+      "n_zh": "",
+      "h": 9,
+      "lat": 51.47427099999999
+    },
+    {
+      "lng": -78.7874198,
+      "n": "Stuart C. Shapiro",
+      "a": "//static.aminer.org/upload/avatar/1086/47/470/53f63950dabfae02893fa719.jpeg",
+      "i": "53f63950dabfae02893fa719",
+      "n_zh": "",
+      "h": 26,
+      "lat": 43.0027625
+    },
+    {
+      "lng": -79.39565640000001,
+      "n": "Geoffrey Hinton",
+      "a": "//static.aminer.org/picture/02762/Geoffrey_E_Hinton_1316056033379.png",
+      "i": "53f366a7dabfae4b3499c6fe",
+      "n_zh": "",
+      "h": 127,
+      "lat": 43.6628917
+    },
+    {
+      "lng": 101.6547581,
+      "n": "Farouq S. Mjalli",
+      "a": "",
+      "i": "53f444d9dabfaee4dc7caf6c",
+      "n_zh": "",
+      "h": 12,
+      "lat": 3.1173007
+    },
+    {
+      "lng": 2.3432774,
+      "n": "Patrick Brézillon",
+      "a": "",
+      "i": "53f33487dabfaec7344acc7a",
+      "n_zh": "",
+      "h": 25,
+      "lat": 48.8484556
+    },
+    {
+      "lng": -2.6029792,
+      "n": "Peter A. Flach",
+      "a": "//static.aminer.org/017e/0008/0000/53b00951dabfae456e04154c.gif",
+      "i": "53f48cecdabfaea7cd1d09e5",
+      "n_zh": "",
+      "h": 45,
+      "lat": 51.4584172
+    },
+    {
+      "lng": 5.686401699999999,
+      "n": "Gerhard Weiss",
+      "a": "//static.aminer.org/upload/avatar/1168/348/435/53f4711adabfaee02adbeb09.jpeg",
+      "i": "53f4711adabfaee02adbeb09",
+      "n_zh": "",
+      "h": 24,
+      "lat": 50.8471422
+    },
+    {
+      "lng": 0.0,
+      "n": "Drew Mcdermott",
+      "a": "",
+      "i": "5485606fdabfae9b4013366b",
+      "n_zh": "",
+      "h": 24,
+      "lat": 0.0
+    },
+    {
+      "lng": 120.207912,
+      "n": "Chang-Shing Lee",
+      "a": "//static.aminer.org/0774/0005/0000/53afd0f8dabfae456ecc9ee7.jpg",
+      "i": "53f42e25dabfaee4dc72389c",
+      "n_zh": "",
+      "h": 24,
+      "lat": 22.9842184
+    },
+    {
+      "lng": -118.40417,
+      "n": "Michael Van Lent",
+      "a": "",
+      "i": "53f56c55dabfae703bf8045c",
+      "n_zh": "",
+      "h": 12,
+      "lat": 33.9832526
+    },
+    {
+      "lng": 0.0,
+      "n": "Iyad Rahwan",
+      "a": "//static.aminer.org/upload/avatar/1768/531/877/54860a38dabfae9b40133b70.jpeg",
+      "i": "54860a38dabfae9b40133b70",
+      "n_zh": "",
+      "h": 33,
+      "lat": 0.0
+    },
+    {
+      "lng": 116.3554305,
+      "n": "Xuyan Tu",
+      "a": "",
+      "i": "542c30d0dabfae2b4e1ee116",
+      "n_zh": "涂序彦",
+      "h": 8,
+      "lat": 39.9924047
+    },
+    {
+      "lng": -72.5267121,
+      "n": "Victor R. Lesser",
+      "a": "//static.aminer.org/upload/avatar/125/1624/811/544081fedabfae805a6c85ba.jpeg",
+      "i": "544081fedabfae805a6c85ba",
+      "n_zh": "",
+      "h": 75,
+      "lat": 42.3911569
+    },
+    {
+      "lng": 0.9472069000000001,
+      "n": "Victor Callaghan",
+      "a": "",
+      "i": "54085145dabfae8faa640b76",
+      "n_zh": "",
+      "h": 21,
+      "lat": 51.87772589999999
+    },
+    {
+      "lng": -2.9821428,
+      "n": "Jeremy C. Wyatt",
+      "a": "",
+      "i": "540931ecdabfae92b426115d",
+      "n_zh": "",
+      "h": 25,
+      "lat": 56.45824469999999
+    },
+    {
+      "lng": -113.5263186,
+      "n": "Witold Pedrycz",
+      "a": "//static.aminer.org/097c/0000/0000/53afec93dabfae456ee7e754.jpg",
+      "i": "53f48bd2dabfaea7cd1cd0ec",
+      "n_zh": "",
+      "h": 77,
+      "lat": 53.5232189
+    },
+    {
+      "lng": -122.0756592,
+      "n": "Steve A. Chien",
+      "a": "",
+      "i": "53f582fbdabfaeaad9f8045b",
+      "n_zh": "",
+      "h": 21,
+      "lat": 37.4160809
+    },
+    {
+      "lng": -122.3058022,
+      "n": "Daniel S. Weld",
+      "a": "//static.aminer.org/04f9/0005/0000/53afcc6bdabfae456ec821fd.gif",
+      "i": "53f47ec3dabfae9126cc4656",
+      "n_zh": "",
+      "h": 81,
+      "lat": 47.6532255
+    },
+    {
+      "lng": -79.3969707,
+      "n": "Craig Boutilier",
+      "a": "//static.aminer.org/upload/avatar/1224/455/48/5441011cdabfae805a71b594.jpeg",
+      "i": "5441011cdabfae805a71b594",
+      "n_zh": "",
+      "h": 63,
+      "lat": 43.6590717
+    },
+    {
+      "lng": -3.1870091,
+      "n": "Austin Tate",
+      "a": "//static.aminer.org/upload/avatar/164/1868/116/54480a37dabfae87b7dc961b.jpeg",
+      "i": "54480a37dabfae87b7dc961b",
+      "n_zh": "",
+      "h": 33,
+      "lat": 55.9443771
+    },
+    {
+      "lng": 0.0,
+      "n": "Joan Cabestany",
+      "a": "",
+      "i": "5489d595dabfae9b40134ddb",
+      "n_zh": "",
+      "h": 11,
+      "lat": 0.0
+    },
+    {
+      "lng": -118.2892808,
+      "n": "Michael A. Arbib",
+      "a": "",
+      "i": "54100725dabfae450f4c594c",
+      "n_zh": "",
+      "h": 55,
+      "lat": 34.0194716
+    },
+    {
+      "lng": -98.31537019999999,
+      "n": "Luis Enrique Sucar",
+      "a": "//static.aminer.org/upload/avatar/1334/1275/425/54324ec3dabfaeb54214dcf0.jpeg",
+      "i": "54324ec3dabfaeb54214dcf0",
+      "n_zh": "",
+      "h": 24,
+      "lat": 19.0323107
+    },
+    {
+      "lng": 114.3643219,
+      "n": "Liangpei Zhang",
+      "a": "//static.aminer.org/picture/extend_data/cj2/2007/images/2007083.jpg",
+      "i": "53f79d2bdabfae8faa49f9f5",
+      "n_zh": "张良培",
+      "h": 38,
+      "lat": 30.5360485
+    },
+    {
+      "lng": -117.8442962,
+      "n": "Rina Dechter",
+      "a": "//static.aminer.org/upload/avatar/163/1349/1447/53f43518dabfaedd74d9554a.jpeg",
+      "i": "53f43518dabfaedd74d9554a",
+      "h": 58,
+      "lat": 33.6404952
+    },
+    {
+      "lng": -71.3995384,
+      "n": "Eugene Charniak",
+      "a": "//static.aminer.org/0a60/0004/0000/53afc155dabfae456ebd2d74.gif",
+      "i": "53f56639dabfae6294f80487",
+      "n_zh": "",
+      "h": 46,
+      "lat": 41.8270166
+    },
+    {
+      "lng": -92.0734389,
+      "n": "Xindong Wu",
+      "a": "//static.aminer.org/0ba4/0009/0000/53b03a52dabfae456e328b51.jpg",
+      "i": "53f4aae6dabfaecc1b77b3f5",
+      "n_zh": "",
+      "h": 52,
+      "lat": 32.539908
+    },
+    {
+      "lng": 0.0,
+      "n": "Tu Bao Ho",
+      "a": "//static.aminer.org/upload/avatar/389/1231/1267/548ca312dabfae9b4013539e.jpeg",
+      "i": "548ca312dabfae9b4013539e",
+      "n_zh": "",
+      "h": 26,
+      "lat": 0.0
+    },
+    {
+      "lng": 0.0,
+      "n": "Norman I. Badler",
+      "a": "//static.aminer.org/upload/avatar/1017/1563/1679/548698d3dabfae9b40133ed5.jpeg",
+      "i": "548698d3dabfae9b40133ed5",
+      "n_zh": "",
+      "h": 69,
+      "lat": 0.0
+    },
+    {
+      "lng": -74.46845499999999,
+      "n": "Gaetano T. Montelione",
+      "a": "//static.aminer.org/upload/avatar/721/294/246/53f4e99adabfae014377b3ba.jpeg",
+      "i": "53f4e99adabfae014377b3ba",
+      "n_zh": "",
+      "h": 55,
+      "lat": 40.5245979
+    },
+    {
+      "lng": -83.7131595,
+      "n": "John E. Laird",
+      "a": "//static.aminer.org/upload/avatar/1268/51/535/53f59124dabfaede0bf8045b.png",
+      "i": "53f59124dabfaede0bf8045b",
+      "n_zh": "",
+      "h": 36,
+      "lat": 42.2923113
+    },
+    {
+      "lng": -2.9655722,
+      "n": "T. J. M. Bench-Capon",
+      "a": "",
+      "i": "53f43ac1dabfaee0d9b8e45a",
+      "n_zh": "",
+      "h": 21,
+      "lat": 53.405936
+    },
+    {
+      "lng": -5.6611195,
+      "n": "Antonio Bahamonde",
+      "a": "//static.aminer.org/upload/avatar/364/234/163/548733f0dabfae9b4013437b.jpeg",
+      "i": "548733f0dabfae9b4013437b",
+      "n_zh": "",
+      "h": 18,
+      "lat": 43.5322015
+    },
+    {
+      "lng": -97.7430608,
+      "n": "Joydeep Ghosh",
+      "a": "//static.aminer.org/upload/avatar/1421/232/449/53f64247dabfaed4cc0f3cc3.jpeg",
+      "i": "53f64247dabfaed4cc0f3cc3",
+      "n_zh": "戈什",
+      "h": 53,
+      "lat": 30.267153
+    },
+    {
+      "lng": 0.0,
+      "n": "Anca L. Ralescu",
+      "a": "",
+      "i": "5486f752dabfae8a11fb350a",
+      "n_zh": "",
+      "h": 10,
+      "lat": 0.0
+    },
+    {
+      "lng": -34.94509310000001,
+      "n": "Ronaldo R. B. De Aquino",
+      "a": "",
+      "i": "53f43ad3dabfaee1c0ac830b",
+      "n_zh": "",
+      "h": 9,
+      "lat": -8.052330500000002
+    },
+    {
+      "lng": -0.1494424,
+      "n": "George Rzevski",
+      "a": "",
+      "i": "53f44c93dabfaee0d9bccb8a",
+      "n_zh": "",
+      "h": 9,
+      "lat": 51.5064602
+    },
+    {
+      "lng": 13.3144875,
+      "n": "Thomas F. Gordon",
+      "a": "",
+      "i": "54328f3adabfaeb4c6a8d6b4",
+      "n_zh": "",
+      "h": 23,
+      "lat": 52.526
+    },
+    {
+      "lng": 118.778763,
+      "n": "Zhihua Zhou",
+      "a": "//static.aminer.org/upload/avatar/1836/63/2/53f48bc7dabfaea7cd1cce70.jpeg",
+      "i": "53f48bc7dabfaea7cd1cce70",
+      "n_zh": "周志华",
+      "h": 79,
+      "lat": 32.055295
+    },
+    {
+      "lng": -118.3041182,
+      "n": "Haym Hirsh",
+      "a": "//static.aminer.org/upload/avatar/1213/119/628/53f482ccdabfaee1c0bac096.jpeg",
+      "i": "53f482ccdabfaee1c0bac096",
+      "n_zh": "",
+      "h": 37,
+      "lat": 33.8095174
+    },
+    {
+      "lng": -86.2353388,
+      "n": "K. M. Passino",
+      "a": "",
+      "i": "53f46cbfdabfaeee22a6b8bc",
+      "n_zh": "",
+      "h": 36,
+      "lat": 41.7055716
+    },
+    {
+      "lng": -122.1733617,
+      "n": "Gio Wiederhold",
+      "a": "//static.aminer.org/01b9/0003/0000/53afa024dabfae456e9c6be6.gif",
+      "i": "53f49871dabfaeb6ca77baf9",
+      "n_zh": "",
+      "h": 54,
+      "lat": 37.4300473
+    },
+    {
+      "lng": 15.450342,
+      "n": "Wolfgang Slany",
+      "a": "",
+      "i": "5440c485dabfae805a6f428b",
+      "n_zh": "",
+      "h": 18,
+      "lat": 47.0692742
+    },
+    {
+      "lng": -93.6499446,
+      "n": "Leonard Uhr",
+      "a": "",
+      "i": "53f4778adabfaeee22a92dab",
+      "n_zh": "",
+      "h": 12,
+      "lat": 42.0282286
+    },
+    {
+      "lng": -82.8380191,
+      "n": "Mashrur Chowdhury",
+      "a": "",
+      "i": "53f433d0dabfaeb1a7bdadfc",
+      "n_zh": "",
+      "h": 11,
+      "lat": 34.6753805
+    },
+    {
+      "lng": 80.9383379,
+      "n": "Floriana Esposito",
+      "a": "//static.aminer.org/06b9/0003/0000/53afa7fadabfae456ea41eab.jpg",
+      "i": "53f46fe4dabfaee43ed1be68",
+      "n_zh": "",
+      "h": 31,
+      "lat": 26.8658014
+    },
+    {
+      "lng": -0.1748772,
+      "n": "Robert A. Kowalski",
+      "a": "",
+      "i": "53f436b8dabfaeb2ac055cb2",
+      "n_zh": "",
+      "h": 26,
+      "lat": 51.49879970000001
+    },
+    {
+      "lng": -118.4907507,
+      "n": "Jeff Rothenberg",
+      "a": "",
+      "i": "53f47896dabfaec09f28656b",
+      "n_zh": "",
+      "h": 8,
+      "lat": 34.0096038
+    },
+    {
+      "lng": -98.31537019999999,
+      "n": "Carlos A. Reyes García",
+      "a": "",
+      "i": "5486ebefdabfaed7b5fa2cf9",
+      "n_zh": "",
+      "h": 10,
+      "lat": 19.0323107
+    },
+    {
+      "lng": -71.09256409999999,
+      "n": "Leslie Pack Kaelbling",
+      "a": "//static.aminer.org/upload/avatar/1852/1531/1151/54899fb1dabfaed7b5fa3d73.jpeg",
+      "i": "54899fb1dabfaed7b5fa3d73",
+      "n_zh": "",
+      "h": 48,
+      "lat": 42.3608876
+    },
+    {
+      "lng": 0.0,
+      "n": "Jörg H. Siekmann",
+      "a": "",
+      "i": "5484e43edabfae9b401331fd",
+      "n_zh": "",
+      "h": 18,
+      "lat": 0.0
+    },
+    {
+      "lng": -46.3424677,
+      "n": "Leandro N. De Castro",
+      "a": "//static.aminer.org/picture/494/1225204451478.jpeg",
+      "i": "53f4d485dabfaeedd1781f99",
+      "h": 12,
+      "lat": -23.9651252
+    },
+    {
+      "lng": -73.61375919999999,
+      "n": "Claude Frasson",
+      "a": "//static.aminer.org/0337/0007/0000/53aff4c7dabfae456eefee6c.gif",
+      "i": "53f436d0dabfaeb2ac056965",
+      "n_zh": "",
+      "h": 25,
+      "lat": 45.5056156
+    },
+    {
+      "lng": -74.4666383,
+      "n": "Zenon W. Pylyshyn",
+      "a": "",
+      "i": "544101d1dabfae805a71bfcb",
+      "n_zh": "",
+      "h": 22,
+      "lat": 40.5228524
+    },
+    {
+      "lng": -122.1733617,
+      "n": "Yoav Shoham",
+      "a": "//static.aminer.org/008e/0009/0000/53b01fe4dabfae456e1a419c.jpg",
+      "i": "53f44ac2dabfaedd74e00440",
+      "n_zh": "",
+      "h": 56,
+      "lat": 37.4300473
+    },
+    {
+      "lng": -79.94301279999999,
+      "n": "Scott E. Fahlman",
+      "a": "//static.aminer.org/upload/avatar/1664/493/1832/53f4361edabfaee4dc780d6d.jpeg",
+      "i": "53f4361edabfaee4dc780d6d",
+      "n_zh": "",
+      "h": 22,
+      "lat": 40.4428081
+    },
+    {
+      "lng": 2.3543572,
+      "n": "Jean-Pierre Briot",
+      "a": "",
+      "i": "54055791dabfae91d3fd71f6",
+      "n_zh": "",
+      "h": 24,
+      "lat": 48.846954
+    },
+    {
+      "lng": 19.0521075,
+      "n": "L. Monostori",
+      "a": "",
+      "i": "53f4618ddabfaee02ad80c94",
+      "n_zh": "",
+      "h": 23,
+      "lat": 47.4782828
+    },
+    {
+      "lng": -62.27023219999999,
+      "n": "Guillermo Ricardo Simari",
+      "a": "//static.aminer.org/upload/avatar/276/1545/401/548cb593dabfae8a11fb4c4e.jpeg",
+      "i": "548cb593dabfae8a11fb4c4e",
+      "n_zh": "",
+      "h": 30,
+      "lat": -38.7018411
+    },
+    {
+      "lng": -77.100911,
+      "n": "James R. Slagle",
+      "a": "",
+      "i": "54871e0bdabfae9b401341fa",
+      "n_zh": "",
+      "h": 19,
+      "lat": 39.0023443
+    },
+    {
+      "lng": 9.194584299999999,
+      "n": "Antonio Camurri",
+      "a": "",
+      "i": "53f4346fdabfaee02acb75d8",
+      "n_zh": "",
+      "h": 26,
+      "lat": 45.4601435
+    },
+    {
+      "lng": -9.1569588,
+      "n": "Helder Coelho",
+      "a": "//static.aminer.org/upload/avatar/1597/1800/547/53f42eafdabfaeb1a7b9c1bc.gif",
+      "i": "53f42eafdabfaeb1a7b9c1bc",
+      "n_zh": "",
+      "h": 21,
+      "lat": 38.7559991
+    },
+    {
+      "lng": 139.730269,
+      "n": "Hiroaki Kitano",
+      "a": "//static.aminer.org/0805/0003/0000/53afa9c3dabfae456ea5e61a.jpg",
+      "i": "53f3a216dabfae4b34ac073b",
+      "n_zh": "",
+      "h": 55,
+      "lat": 35.6260339
+    },
+    {
+      "lng": -74.44739910000001,
+      "n": "Christopher Tong",
+      "a": "",
+      "i": "53f43568dabfaedf435773af",
+      "n_zh": "",
+      "h": 12,
+      "lat": 40.5008186
+    },
+    {
+      "lng": 0.0,
+      "n": "Vitoantonio Bevilacqua",
+      "a": "",
+      "i": "548d2603dabfae8a11fb4e41",
+      "n_zh": "",
+      "h": 12,
+      "lat": 0.0
+    },
+    {
+      "lng": 151.1185824,
+      "n": "Mehmet A. Orgun",
+      "a": "//static.aminer.org/upload/avatar/2012/526/549/54845331dabfaed7b5fa1962.png",
+      "i": "54845331dabfaed7b5fa1962",
+      "n_zh": "",
+      "h": 19,
+      "lat": -33.7775092
+    },
+    {
+      "lng": -2.23899,
+      "n": "Bruce Edmonds",
+      "a": "",
+      "i": "53f43315dabfaee02aca7fdc",
+      "n_zh": "",
+      "h": 19,
+      "lat": 53.47097249999999
+    },
+    {
+      "lng": 103.776611,
+      "n": "Stephen W. Smoliar",
+      "a": "",
+      "i": "54885669dabfae8a11fb4231",
+      "n_zh": "",
+      "h": 19,
+      "lat": 1.292248
+    },
+    {
+      "lng": 23.7289531,
+      "n": "L. Ekonomou",
+      "a": "",
+      "i": "53f4715ddabfaee2a1dd9fbe",
+      "n_zh": "",
+      "h": 10,
+      "lat": 37.9862838
+    },
+    {
+      "lng": 4.955726299999999,
+      "n": "Loet Leydesdorff",
+      "a": "//static.aminer.org/upload/avatar/1332/872/790/5448dbd7dabfae87b7e884bf.jpeg",
+      "i": "5448dbd7dabfae87b7e884bf",
+      "n_zh": "",
+      "h": 80,
+      "lat": 52.35581819999999
+    },
+    {
+      "lng": 0.0,
+      "n": "Gerhard Lakemeyer",
+      "a": "//static.aminer.org/upload/avatar/1040/591/302/54885ac3dabfaed7b5fa378d.jpeg",
+      "i": "54885ac3dabfaed7b5fa378d",
+      "n_zh": "",
+      "h": 31,
+      "lat": 0.0
+    },
+    {
+      "lng": -34.9506023,
+      "n": "Aida A. Ferreira",
+      "a": "",
+      "i": "53f452b3dabfaee2a1d65af4",
+      "n_zh": "",
+      "h": 8,
+      "lat": -8.059489800000001
+    },
+    {
+      "lng": -95.4718244,
+      "n": "Reid G. Smith",
+      "a": "//static.aminer.org/07d2/0006/0000/53afe726dabfae456ee284a7.jpg",
+      "i": "53f45daddabfaee0d9c0e450",
+      "n_zh": "",
+      "h": 16,
+      "lat": 29.7493374
+    },
+    {
+      "lng": 114.2654655,
+      "n": "Qiang Yang",
+      "a": "//static.aminer.org/picture/01378/Qiang_Yang_1297509296709.jpg",
+      "i": "53f48041dabfae963d25910a",
+      "n_zh": "楊強",
+      "h": 84,
+      "lat": 22.3363998
+    },
+    {
+      "lng": 11.6232985,
+      "n": "Jürgen Schmidhuber",
+      "a": "//static.aminer.org/upload/avatar/352/281/840/53f48665dabfaeb1a7cd1883.png",
+      "i": "53f48665dabfaeb1a7cd1883",
+      "n_zh": "",
+      "h": 65,
+      "lat": 48.25019
+    },
+    {
+      "lng": 0.0,
+      "n": "Yunlong Zhu",
+      "a": "//static.aminer.org/upload/avatar/202/1263/1743/548cb4d7dabfae8a11fb4c33.jpeg",
+      "i": "548cb4d7dabfae8a11fb4c33",
+      "n_zh": "朱云龙",
+      "h": 13,
+      "lat": 0.0
+    },
+    {
+      "lng": 81.8522775,
+      "n": "Alok Singh",
+      "a": "",
+      "i": "53f42eaedabfaee1c0a44292",
+      "n_zh": "",
+      "h": 10,
+      "lat": 25.4591844
+    },
+    {
+      "lng": -111.9280527,
+      "n": "Nicholas V. Findler",
+      "a": "",
+      "i": "5484e58adabfae9b4013321b",
+      "n_zh": "",
+      "h": 11,
+      "lat": 33.4242399
+    },
+    {
+      "lng": -98.4830686,
+      "n": "David Kortenkamp",
+      "a": "//static.aminer.org/upload/avatar/1314/1116/1471/53f45719dabfaec09f2091c6.jpeg",
+      "i": "53f45719dabfaec09f2091c6",
+      "n_zh": "",
+      "h": 24,
+      "lat": 29.519632
+    },
+    {
+      "lng": -95.0931863,
+      "n": "R. Peter Bonasso",
+      "a": "",
+      "i": "53f42d29dabfaec22ba14a14",
+      "n_zh": "",
+      "h": 13,
+      "lat": 29.5528391
+    },
+    {
+      "lng": -117.16883,
+      "n": "Lawrence B. Holder",
+      "a": "//static.aminer.org/upload/avatar/1120/2018/1414/53f49265dabfaedce561e8dd.jpeg",
+      "i": "53f49265dabfaedce561e8dd",
+      "n_zh": "",
+      "h": 27,
+      "lat": 46.7304904
+    },
+    {
+      "lng": 138.606326,
+      "n": "Peter Rossini",
+      "a": "",
+      "i": "53f433a6dabfaee43ec13de8",
+      "n_zh": "",
+      "h": 12,
+      "lat": -34.92141
+    },
+    {
+      "lng": -96.3388087,
+      "n": "Thomas R. Ioerger",
+      "a": "//static.aminer.org/05b5/0001/0000/53af82dbdabfae456e7f44f2.jpg",
+      "i": "53f44eecdabfaee0d9bd5d10",
+      "n_zh": "",
+      "h": 28,
+      "lat": 30.619006
+    },
+    {
+      "lng": -2.1015257,
+      "n": "Jim Hunter",
+      "a": "",
+      "i": "54087f59dabfae450f421561",
+      "n_zh": "",
+      "h": 18,
+      "lat": 57.16475999999999
+    },
+    {
+      "lng": -81.6747185,
+      "n": "Toshinori Munakata",
+      "a": "//static.aminer.org/051d/0006/0000/53afe1d2dabfae456edd3be3.jpg",
+      "i": "53f4c802dabfaee57677cdfc",
+      "n_zh": "",
+      "h": 12,
+      "lat": 41.50249729999999
+    },
+    {
+      "lng": 0.0,
+      "n": "Herbert S. Rosenkranz",
+      "a": "",
+      "i": "548d494cdabfae8a11fb4f88",
+      "n_zh": "",
+      "h": 14,
+      "lat": 0.0
+    },
+    {
+      "lng": 12.5144384,
+      "n": "Daniele Nardi",
+      "a": "//static.aminer.org/upload/avatar/752/885/397/54488d9edabfae87b7e42098.jpeg",
+      "i": "54488d9edabfae87b7e42098",
+      "n_zh": "",
+      "h": 46,
+      "lat": 41.9037626
+    },
+    {
+      "lng": -0.08791399999999999,
+      "n": "I. Harvey",
+      "a": "",
+      "i": "54408183dabfae805a6c8174",
+      "n_zh": "",
+      "h": 10,
+      "lat": 50.86708950000001
+    },
+    {
+      "lng": 103.6824005,
+      "n": "Lipo Wang",
+      "a": "//static.aminer.org/picture/492/1225203154531.jpeg",
+      "i": "53f42f4edabfaee1c0a4c690",
+      "n_zh": "",
+      "h": 25,
+      "lat": 1.3470191
+    },
+    {
+      "lng": -0.0403745,
+      "n": "Geraint  Wiggins",
+      "a": "//static.aminer.org/upload/avatar/45/830/1187/54092a9bdabfae92b425f260.jpeg",
+      "i": "54092a9bdabfae92b425f260",
+      "n_zh": "",
+      "h": 31,
+      "lat": 51.5240671
+    },
+    {
+      "lng": -2.9655722,
+      "n": "Paul E. Dunne",
+      "a": "//static.aminer.org/picture/03619/Paul_E_Dunne_1302374121132.png",
+      "i": "53f3a986dabfae4b34aee21c",
+      "n_zh": "",
+      "h": 25,
+      "lat": 53.405936
+    },
+    {
+      "lng": -73.68319009999999,
+      "n": "Nicholas L. Cassimatis",
+      "a": "",
+      "i": "53f435f9dabfaedd74d9d0bc",
+      "n_zh": "",
+      "h": 8,
+      "lat": 42.7304525
+    },
+    {
+      "lng": -79.943168,
+      "n": "Kenneth R. Koedinger",
+      "a": "//static.aminer.org/0040/0000/0000/53af8a4edabfae456e86a605.jpg",
+      "i": "53f49e80dabfaec18b77b3f2",
+      "n_zh": "",
+      "h": 57,
+      "lat": 40.443562
+    },
+    {
+      "lng": 2.357499,
+      "n": "Jean-Charles Pomerol",
+      "a": "",
+      "i": "53f7adecdabfae92b40d5fc4",
+      "n_zh": "",
+      "h": 15,
+      "lat": 48.8471036
+    },
+    {
+      "lng": 121.529021,
+      "n": "Chun-Tian Cheng",
+      "a": "",
+      "i": "544552b7dabfae862da16187",
+      "n_zh": "程春田",
+      "h": 24,
+      "lat": 38.880381
+    },
+    {
+      "lng": 6.5650821,
+      "n": "Dario Floreano",
+      "a": "//static.aminer.org/picture/491/1225202815545.jpeg",
+      "i": "53f4c9a8dabfaee57777f081",
+      "n_zh": "",
+      "h": 58,
+      "lat": 46.5191488
+    },
+    {
+      "lng": 11.6261625,
+      "n": "Evelina Lamma",
+      "a": "//static.aminer.org/upload/avatar/129/624/1132/540599d9dabfae450f3bb703.jpeg",
+      "i": "540599d9dabfae450f3bb703",
+      "n_zh": "",
+      "h": 28,
+      "lat": 44.8334234
+    },
+    {
+      "lng": 0.0,
+      "n": "Michael R. Genesereth",
+      "a": "",
+      "i": "5484a25ddabfaed7b5fa1a8a",
+      "n_zh": "",
+      "h": 26,
+      "lat": 0.0
+    },
+    {
+      "lng": 10.4020771,
+      "n": "Keith L. Downing",
+      "a": "//static.aminer.org/0155/0003/0000/53af9f8bdabfae456e9bd876.jpg",
+      "i": "53f43a78dabfaee2a1d0d690",
+      "n_zh": "",
+      "h": 9,
+      "lat": 63.41949899999999
+    },
+    {
+      "lng": -74.44739910000001,
+      "n": "Z. W. Pylyshyn",
+      "a": "",
+      "i": "53f4637bdabfaefedbb7d993",
+      "n_zh": "",
+      "h": 10,
+      "lat": 40.5008186
+    },
+    {
+      "lng": -118.2899987,
+      "n": "Kai Hwang",
+      "a": "//static.aminer.org/upload/avatar/1431/924/525/53f5918fdabfaedea4f8047f.jpeg",
+      "i": "53f5918fdabfaedea4f8047f",
+      "n_zh": "",
+      "h": 49,
+      "lat": 34.0197157
+    },
+    {
+      "lng": 7.042171,
+      "n": "Oliver Scheuer",
+      "a": "",
+      "i": "5448b736dabfae87b7e6ac30",
+      "n_zh": "",
+      "h": 9,
+      "lat": 49.256811
+    },
+    {
+      "lng": -121.8731426,
+      "n": "Neil C. Rowe",
+      "a": "",
+      "i": "54850541dabfaed7b5fa1e46",
+      "n_zh": "",
+      "h": 19,
+      "lat": 36.5973387
+    },
+    {
+      "lng": -122.3058022,
+      "n": "S. L. Tanimoto",
+      "a": "//static.aminer.org/020b/0003/0000/53afa0a2dabfae456e9ce581.jpg",
+      "i": "53f4391edabfaeb22f48bb69",
+      "n_zh": "",
+      "h": 8,
+      "lat": 47.6532255
+    },
+    {
+      "lng": 0.0,
+      "n": "Ulrich Furbach",
+      "a": "",
+      "i": "548a2f9edabfaed7b5fa3fea",
+      "n_zh": "",
+      "h": 18,
+      "lat": 0.0
+    },
+    {
+      "lng": 9.1868777,
+      "n": "Michael R. Berthold",
+      "a": "//static.aminer.org/picture/00679/Michael_R_Berthold_1297509469264.jpg",
+      "i": "53f42fb1dabfaec09f131972",
+      "n_zh": "",
+      "h": 21,
+      "lat": 47.6894259
+    },
+    {
+      "lng": 9.9708462,
+      "n": "Cristiano Castelfranchi",
+      "a": "",
+      "i": "5406aaa5dabfae92b421cf55",
+      "n_zh": "",
+      "h": 46,
+      "lat": 49.7830083
+    },
+    {
+      "lng": -86.52022029999999,
+      "n": "Olaf Sporns",
+      "a": "//static.aminer.org/upload/avatar/1082/1175/1692/53f39816dabfae4b34a7fb9c.jpeg",
+      "i": "53f39816dabfae4b34a7fb9c",
+      "n_zh": "",
+      "h": 47,
+      "lat": 39.1720024
+    },
+    {
+      "lng": 9.2194907,
+      "n": "Stefania Bandini",
+      "a": "//static.aminer.org/upload/avatar/640/1029/1675/54893272dabfaed7b5fa3a0a.gif",
+      "i": "54893272dabfaed7b5fa3a0a",
+      "n_zh": "",
+      "h": 21,
+      "lat": 45.52369239999999
+    },
+    {
+      "lng": -79.3969707,
+      "n": "Fahiem Bacchus",
+      "a": "//static.aminer.org/upload/avatar/1133/532/656/54352f24dabfaebba58ae1a6.jpeg",
+      "i": "54352f24dabfaebba58ae1a6",
+      "n_zh": "",
+      "h": 45,
+      "lat": 43.6590717
+    },
+    {
+      "lng": 7.412838600000001,
+      "n": "Katharina Morik",
+      "a": "//static.aminer.org/upload/avatar/1399/1928/212/53f49e5cdabfaec18977b3ba.jpeg",
+      "i": "53f49e5cdabfaec18977b3ba",
+      "n_zh": "",
+      "h": 25,
+      "lat": 51.4926981
+    },
+    {
+      "lng": -122.1733617,
+      "n": "B. Hayes-Roth",
+      "a": "//static.aminer.org/0b0d/0009/0000/53b0391cdabfae456e315ee1.jpg",
+      "i": "53f43464dabfaeb22f45e7b7",
+      "n_zh": "",
+      "h": 12,
+      "lat": 37.4300473
+    },
+    {
+      "lng": -87.60415739999999,
+      "n": "Kenji Suzuki",
+      "a": "",
+      "i": "544802ccdabfae87b7dc233d",
+      "n_zh": "",
+      "h": 22,
+      "lat": 41.7882365
+    },
+    {
+      "lng": 0.0,
+      "n": "John  Slaney",
+      "a": "//static.aminer.org/upload/avatar/230/625/695/548f2a1cdabfaef989f09829.jpeg",
+      "i": "548f2a1cdabfaef989f09829",
+      "n_zh": "",
+      "h": 23,
+      "lat": 0.0
+    },
+    {
+      "lng": 114.109497,
+      "n": "Zhao Yang Dong",
+      "a": "",
+      "i": "53f799b9dabfae9060ad11ee",
+      "n_zh": "",
+      "h": 33,
+      "lat": 22.396428
+    },
+    {
+      "lng": -74.1746234,
+      "n": "Amruth N. Kumar",
+      "a": "",
+      "i": "53f46220dabfaedd74e584ce",
+      "n_zh": "",
+      "h": 16,
+      "lat": 41.0815079
+    },
+    {
+      "lng": -119.8130724,
+      "n": "Bobby D. Bryant",
+      "a": "",
+      "i": "53f43f6ddabfaeecd699a076",
+      "n_zh": "",
+      "h": 9,
+      "lat": 39.5399048
+    },
+    {
+      "lng": 121.5045889,
+      "n": "Rucheng Xiao",
+      "a": "",
+      "i": "542a082cdabfae5848a8d81a",
+      "n_zh": "肖汝诚",
+      "h": 11,
+      "lat": 31.2823103
+    },
+    {
+      "lng": 9.9747281,
+      "n": "Klaus-Dieter Althoff",
+      "a": "//static.aminer.org/upload/avatar/53/656/1457/53f48d4bdabfaea7cd1d1f0d.jpeg",
+      "i": "53f48d4bdabfaea7cd1d1f0d",
+      "n_zh": "",
+      "h": 26,
+      "lat": 52.133746
+    },
+    {
+      "lng": 108.98371,
+      "n": "Nanning Zheng",
+      "a": "//static.aminer.org/upload/avatar/1978/1349/1596/542dfe70dabfae4b91c3aac8.jpeg",
+      "i": "542dfe70dabfae4b91c3aac8",
+      "n_zh": "郑南宁",
+      "h": 39,
+      "lat": 34.250575
+    },
+    {
+      "lng": -1.2584726,
+      "n": "Michael Wooldridge",
+      "a": "//static.aminer.org/upload/avatar/1147/352/1327/53f433e7dabfaedd74d87b8a.jpeg",
+      "i": "53f433e7dabfaedd74d87b8a",
+      "n_zh": "",
+      "h": 61,
+      "lat": 51.7598207
+    },
+    {
+      "lng": -73.9598192,
+      "n": "Gail E. Kaiser",
+      "a": "//static.aminer.org/upload/avatar/2017/339/510/5448d527dabfae87b7e82924.jpeg",
+      "i": "5448d527dabfae87b7e82924",
+      "n_zh": "",
+      "h": 44,
+      "lat": 40.809057
+    },
+    {
+      "lng": -73.9407372,
+      "n": "Vimla L. Patel",
+      "a": "//static.aminer.org/upload/avatar/533/219/259/54326cf3dabfaeb4c6a841c3.jpeg",
+      "i": "54326cf3dabfaeb4c6a841c3",
+      "n_zh": "",
+      "h": 56,
+      "lat": 40.8411547
+    },
+    {
+      "lng": -76.9363082,
+      "n": "James Reggia",
+      "a": "//static.aminer.org/07f7/0008/0000/53b01652dabfae456e10d4bc.jpg",
+      "i": "53f4565bdabfaee0d9bf4048",
+      "n_zh": "",
+      "h": 26,
+      "lat": 38.9908416
+    },
+    {
+      "lng": -97.73653469999999,
+      "n": "Tom Bylander",
+      "a": "//static.aminer.org/upload/avatar/706/395/238/53f7c754dabfae92b40e274c.png",
+      "i": "53f7c754dabfae92b40e274c",
+      "n_zh": "",
+      "h": 21,
+      "lat": 30.2862283
+    },
+    {
+      "lng": -97.7340567,
+      "n": "Daniel P. Miranker",
+      "a": "//static.aminer.org/upload/avatar/597/12/396/562d611945cedb3398de1115.jpeg",
+      "i": "562d611945cedb3398de1115",
+      "n_zh": "",
+      "h": 26,
+      "lat": 30.2849185
+    },
+    {
+      "lng": 4.8657199,
+      "n": "Peter Van Den Besselaar",
+      "a": "//static.aminer.org/picture/500/1225208870405.jpeg",
+      "i": "53f44409dabfaedf435c3644",
+      "n_zh": "",
+      "h": 31,
+      "lat": 52.3337568
+    },
+    {
+      "lng": 20.94025,
+      "n": "Janusz Kacprzyk",
+      "a": "//static.aminer.org/upload/avatar/164/95/36/543322fedabfaeb4c6aa9c7e.jpeg",
+      "i": "543322fedabfaeb4c6aa9c7e",
+      "n_zh": "",
+      "h": 49,
+      "lat": 52.24588499999999
+    },
+    {
+      "lng": -122.1743497,
+      "n": "John R. Koza",
+      "a": "//static.aminer.org/03bc/0009/0000/53b026f4dabfae456e2096e2.jpg",
+      "i": "53f48711dabfaeb22f570f41",
+      "n_zh": "",
+      "h": 39,
+      "lat": 37.4278441
+    },
+    {
+      "lng": -122.1479632,
+      "n": "John Seely Brown",
+      "a": "",
+      "i": "5448e6c8dabfae87b7e90206",
+      "n_zh": "",
+      "h": 26,
+      "lat": 37.4024532
+    },
+    {
+      "lng": -0.3410670000000001,
+      "n": "José Hernández-Orallo",
+      "a": "//static.aminer.org/upload/avatar/480/878/2007/543346a4dabfaeb54218312f.jpeg",
+      "i": "543346a4dabfaeb54218312f",
+      "n_zh": "",
+      "h": 18,
+      "lat": 39.48105899999999
+    },
+    {
+      "lng": -113.526999,
+      "n": "Robert C. Holte",
+      "a": "//static.aminer.org/0ae1/0002/0000/53af9c3ddabfae456e989663.jpg",
+      "i": "53f4950cdabfaeb4c377b54c",
+      "n_zh": "",
+      "h": 31,
+      "lat": 53.5267284
+    },
+    {
+      "lng": 18.6163277,
+      "n": "Marek Czachor",
+      "a": "",
+      "i": "54058472dabfae91d3fec2da",
+      "n_zh": "",
+      "h": 12,
+      "lat": 54.3716751
+    },
+    {
+      "lng": 78.1733495,
+      "n": "K. V. Arya",
+      "a": "",
+      "i": "53f468c9dabfaeee22a5c879",
+      "n_zh": "",
+      "h": 13,
+      "lat": 26.2493849
+    },
+    {
+      "lng": -78.9323553,
+      "n": "Oliviero Stock",
+      "a": "//static.aminer.org/upload/avatar/1819/1389/1600/5484ffa4dabfae8a11fb2614.jpeg",
+      "i": "5484ffa4dabfae8a11fb2614",
+      "n_zh": "",
+      "h": 29,
+      "lat": 39.6511942
+    },
+    {
+      "lng": -84.3973208,
+      "n": "Ashok K. Goel",
+      "a": "//static.aminer.org/upload/avatar/588/1933/810/53f441d2dabfaedce556b257.jpeg",
+      "i": "53f441d2dabfaedce556b257",
+      "n_zh": "",
+      "h": 37,
+      "lat": 33.7774349
+    },
+    {
+      "lng": 24.068491,
+      "n": "Pavlos S. Georgilakis",
+      "a": "",
+      "i": "53f436abdabfaeee229ad74a",
+      "n_zh": "",
+      "h": 22,
+      "lat": 35.529893
+    },
+    {
+      "lng": 0.0,
+      "n": "Thomas Christaller",
+      "a": "",
+      "i": "548cda73dabfae8a11fb4d23",
+      "n_zh": "",
+      "h": 9,
+      "lat": 0.0
+    },
+    {
+      "lng": -73.5771511,
+      "n": "Susanne P. Lajoie",
+      "a": "",
+      "i": "54894d38dabfae9b40134916",
+      "n_zh": "",
+      "h": 8,
+      "lat": 45.50478469999999
+    },
+    {
+      "lng": -79.9710916,
+      "n": "Tim Menzies",
+      "a": "//static.aminer.org/0730/0008/0000/53b014cedabfae456e0f5ab0.jpg",
+      "i": "53f4e3b5dabfaefc1f77b769",
+      "n_zh": "",
+      "h": 38,
+      "lat": 39.6460576
+    },
+    {
+      "lng": -2.9654484,
+      "n": "Frans Coenen",
+      "a": "//static.aminer.org/upload/avatar/84/1551/449/53f55e8fdabfae529ef8045b.jpeg",
+      "i": "53f55e8fdabfae529ef8045b",
+      "n_zh": "",
+      "h": 27,
+      "lat": 53.4063402
+    },
+    {
+      "lng": -81.6083838,
+      "n": "K. A. Loparo",
+      "a": "",
+      "i": "53f44869dabfaedd74df68e3",
+      "n_zh": "",
+      "h": 22,
+      "lat": 41.5043413
+    },
+    {
+      "lng": 0.0,
+      "n": "Ryszard S. Michalski",
+      "a": "//static.aminer.org/upload/avatar/1961/1841/813/53f43087dabfaeb22f42ff6c.jpeg",
+      "i": "53f43087dabfaeb22f42ff6c",
+      "n_zh": "",
+      "h": 34,
+      "lat": 0.0
+    },
+    {
+      "lng": 17.6300093,
+      "n": "Gerard J. Kleywegt",
+      "a": "",
+      "i": "53f43513dabfaee2a1cdadf3",
+      "n_zh": "",
+      "h": 22,
+      "lat": 59.85090049999999
+    },
+    {
+      "lng": -92.0835669,
+      "n": "James H. Fetzer",
+      "a": "",
+      "i": "5484c148dabfae9b4013310f",
+      "n_zh": "",
+      "h": 7,
+      "lat": 46.8186613
+    },
+    {
+      "lng": 15.450342,
+      "n": "Franz Wotawa",
+      "a": "//static.aminer.org/upload/avatar/1843/492/1436/53f644c0dabfaec4773fa719.gif",
+      "i": "53f644c0dabfaec4773fa719",
+      "n_zh": "",
+      "h": 27,
+      "lat": 47.0692742
+    },
+    {
+      "lng": -122.1283833,
+      "n": "David Heckerman",
+      "a": "//static.aminer.org/0080/0003/0000/53af9e41dabfae456e9a9308.jpg",
+      "i": "53f48d85dabfaea7cd1d2fda",
+      "n_zh": "",
+      "h": 77,
+      "lat": 47.6393225
+    },
+    {
+      "lng": -106.905611,
+      "n": "Andrew H. Sung",
+      "a": "//static.aminer.org/0160/0000/0000/53af8b77dabfae456e87d257.gif",
+      "i": "53f562c3dabfae5d9bf8045b",
+      "n_zh": "",
+      "h": 30,
+      "lat": 34.065993
+    },
+    {
+      "lng": 0.0,
+      "n": "Agostino Poggi",
+      "a": "",
+      "i": "54895f53dabfae8a11fb44da",
+      "n_zh": "",
+      "h": 20,
+      "lat": 0.0
+    },
+    {
+      "lng": 5.686401699999999,
+      "n": "Pieter Spronck",
+      "a": "",
+      "i": "548cb2cfdabfae9b4013545f",
+      "n_zh": "",
+      "h": 24,
+      "lat": 50.8471422
+    },
+    {
+      "lng": -48.5195857,
+      "n": "Ricardo Azambuja Silveira",
+      "a": "",
+      "i": "54880922dabfaed7b5fa3473",
+      "n_zh": "",
+      "h": 9,
+      "lat": -27.6003609
+    },
+    {
+      "lng": -7.5023331,
+      "n": "Joaquim Filipe",
+      "a": "",
+      "i": "5487506fdabfaed7b5fa2f16",
+      "n_zh": "",
+      "h": 8,
+      "lat": 41.7397476
+    },
+    {
+      "lng": 5.686401699999999,
+      "n": "Jaap Van Den Herik",
+      "a": "",
+      "i": "53f468acdabfaee4dc8573b0",
+      "n_zh": "",
+      "h": 8,
+      "lat": 50.8471422
+    },
+    {
+      "lng": -83.7131595,
+      "n": "Elliot Soloway",
+      "a": "//static.aminer.org/upload/avatar/690/281/155/53f439addabfaedce554d702.jpeg",
+      "i": "53f439addabfaedce554d702",
+      "n_zh": "",
+      "h": 56,
+      "lat": 42.2923113
+    },
+    {
+      "lng": -86.1763393,
+      "n": "Russell C. Eberhart",
+      "a": "//static.aminer.org/0423/0000/0000/53afa6e5dabfae456ea31119.jpg",
+      "i": "53f477eadabfaedf4368a588",
+      "h": 21,
+      "lat": 39.7738832
+    },
+    {
+      "lng": -75.15535059999999,
+      "n": "Elliot B. Koffman",
+      "a": "",
+      "i": "54323feddabfaeb54214b082",
+      "n_zh": "",
+      "h": 12,
+      "lat": 39.9811932
+    },
+    {
+      "lng": 139.6835302,
+      "n": "Takao Terano",
+      "a": "",
+      "i": "5435332ddabfaebba58b12a4",
+      "n_zh": "",
+      "h": 14,
+      "lat": 35.6051229
+    },
+    {
+      "lng": -88.79437659999999,
+      "n": "Samuel H. Russ",
+      "a": "",
+      "i": "53f42c7edabfaeb22f3faec7",
+      "n_zh": "",
+      "h": 8,
+      "lat": 33.4551742
+    },
+    {
+      "lng": 117.029014,
+      "n": "Dongfeng Yuan",
+      "a": "//static.aminer.org/upload/avatar/1438/1823/1289/54058e97dabfae8faa5e1c13.jpeg",
+      "i": "54058e97dabfae8faa5e1c13",
+      "n_zh": "",
+      "h": 21,
+      "lat": 36.64893
+    },
+    {
+      "lng": -1.2584726,
+      "n": "Georg Gottlob",
+      "a": "//static.aminer.org/0763/0000/0000/53afc43fdabfae456ec00fbd.gif",
+      "i": "53f4c9c5dabfaee9c4f80a47",
+      "n_zh": "",
+      "h": 69,
+      "lat": 51.7598207
+    },
+    {
+      "lng": 0.0,
+      "n": "Wolfgang Wahlster",
+      "a": "//static.aminer.org/upload/avatar/1692/1737/1398/548cd8b9dabfae8a11fb4d0c.jpeg",
+      "i": "548cd8b9dabfae8a11fb4d0c",
+      "n_zh": "",
+      "h": 28,
+      "lat": 0.0
+    },
+    {
+      "lng": 9.2324209,
+      "n": "Viola Schiaffonati",
+      "a": "//static.aminer.org/upload/avatar/1258/1497/269/53f43412dabfaedf43568ef1.png",
+      "i": "53f43412dabfaedf43568ef1",
+      "n_zh": "",
+      "h": 9,
+      "lat": 45.4786698
+    },
+    {
+      "lng": 0.0,
+      "n": "Seref Sagiroglu",
+      "a": "",
+      "i": "548c9b4ddabfaed7b5fa44ed",
+      "n_zh": "",
+      "h": 12,
+      "lat": 0.0
+    },
+    {
+      "lng": 0.120673,
+      "n": "Zoubin Ghahramani",
+      "a": "//static.aminer.org/picture/39/1225198691066.jpeg",
+      "i": "53f55fd9dabfae5608f8046c",
+      "n_zh": "",
+      "h": 79,
+      "lat": 52.198361
+    },
+    {
+      "lng": -73.9834916,
+      "n": "Simon Parsons",
+      "a": "//static.aminer.org/upload/avatar/47/962/225/540687fadabfae8faa60d1ec.png",
+      "i": "540687fadabfae8faa60d1ec",
+      "n_zh": "",
+      "h": 39,
+      "lat": 40.748449
+    },
+    {
+      "lng": -88.7903868,
+      "n": "Roger L. King",
+      "a": "//static.aminer.org/upload/avatar/1053/1530/1858/5440d418dabfae805a6fd068.jpeg",
+      "i": "5440d418dabfae805a6fd068",
+      "n_zh": "",
+      "h": 17,
+      "lat": 33.4555279
+    },
+    {
+      "lng": 151.2311228,
+      "n": "Michael Thielscher",
+      "a": "//static.aminer.org/upload/avatar/1212/288/254/53f42e14dabfaee4dc722a68.jpeg",
+      "i": "53f42e14dabfaee4dc722a68",
+      "n_zh": "",
+      "h": 24,
+      "lat": -33.9189798
+    },
+    {
+      "lng": 103.6815499,
+      "n": "Pramod Kumar Meher",
+      "a": "",
+      "i": "53f44c3cdabfaee2a1d4c4b2",
+      "n_zh": "",
+      "h": 20,
+      "lat": 1.3461952
+    },
+    {
+      "lng": 11.5678602,
+      "n": "W. Bibel",
+      "a": "",
+      "i": "53f79cb8dabfae9060ad27f9",
+      "n_zh": "",
+      "h": 12,
+      "lat": 48.14966
+    },
+    {
+      "lng": -1.262247,
+      "n": "Nick Bostrom",
+      "a": "",
+      "i": "53f433fddabfaee0d9b4e170",
+      "n_zh": "",
+      "h": 24,
+      "lat": 51.76013
+    },
+    {
+      "lng": -122.1758023,
+      "n": "Oscar Firschein",
+      "a": "",
+      "i": "53f3af88dabfae4b34b137fb",
+      "n_zh": "",
+      "h": 9,
+      "lat": 37.4573796
+    },
+    {
+      "lng": 151.2005362,
+      "n": "Shichao Zhang",
+      "a": "//static.aminer.org/upload/avatar/476/1664/440/53f4abcfdabfaecc2077b460.jpeg",
+      "i": "53f4abcfdabfaecc2077b460",
+      "n_zh": "张师超",
+      "h": 37,
+      "lat": -33.8829343
+    },
+    {
+      "lng": 100.3012103,
+      "n": "Chee Peng Lim",
+      "a": "//static.aminer.org/upload/avatar/634/857/418/5486ee55dabfaed7b5fa2d1f.jpeg",
+      "i": "5486ee55dabfaed7b5fa2d1f",
+      "n_zh": "",
+      "h": 23,
+      "lat": 5.3547737
+    },
+    {
+      "lng": 0.0,
+      "n": "Toly Chen",
+      "a": "",
+      "i": "548ccb84dabfae8a11fb4c97",
+      "n_zh": "",
+      "h": 22,
+      "lat": 0.0
+    },
+    {
+      "lng": -47.0659788,
+      "n": "Fernando J. Von Zuben",
+      "a": "//static.aminer.org/upload/avatar/500/1652/865/53f44783dabfaeb2ac09e127.jpeg",
+      "i": "53f44783dabfaeb2ac09e127",
+      "n_zh": "",
+      "h": 24,
+      "lat": -22.8211779
+    },
+    {
+      "lng": -80.42341669999999,
+      "n": "Thomas W. Rondeau",
+      "a": "",
+      "i": "53f43320dabfaedce550d420",
+      "n_zh": "",
+      "h": 11,
+      "lat": 37.22838429999999
+    },
+    {
+      "lng": -79.94301279999999,
+      "n": "Manuela M. Veloso",
+      "a": "//static.aminer.org/upload/avatar/1407/1943/1507/53f4a45fdabfaeb22f573dc0.jpeg",
+      "i": "53f4a45fdabfaeb22f573dc0",
+      "n_zh": "",
+      "h": 68,
+      "lat": 40.4428081
+    },
+    {
+      "lng": 17.9493105,
+      "n": "Magnus Boman",
+      "a": "",
+      "i": "548a3362dabfae9b40135041",
+      "n_zh": "",
+      "h": 15,
+      "lat": 59.40482129999999
+    },
+    {
+      "lng": 103.428906,
+      "n": "K. Kadirgama",
+      "a": "",
+      "i": "53f42c4edabfaedf43506470",
+      "n_zh": "",
+      "h": 13,
+      "lat": 3.5437018
+    },
+    {
+      "lng": -0.1340401,
+      "n": "Antonis Bikakis",
+      "a": "//static.aminer.org/04e4/0004/0000/53afb7bcdabfae456eb3b7f0.jpg",
+      "i": "53f44f76dabfaeb22f4e5213",
+      "n_zh": "",
+      "h": 14,
+      "lat": 51.52455920000001
+    },
+    {
+      "lng": 149.0840869,
+      "n": "Dharmendra Sharma",
+      "a": "//static.aminer.org/upload/avatar/1675/558/1778/54892d39dabfaed7b5fa3964.jpeg",
+      "i": "54892d39dabfaed7b5fa3964",
+      "n_zh": "",
+      "h": 14,
+      "lat": -35.2381609
+    },
+    {
+      "lng": -84.2994246,
+      "n": "Abraham Kandel",
+      "a": "//static.aminer.org/upload/avatar/916/302/980/53f4911edabfaeb0bbf8045b.jpeg",
+      "i": "53f4911edabfaeb0bbf8045b",
+      "n_zh": "",
+      "h": 31,
+      "lat": 30.4461123
+    },
+    {
+      "lng": 138.616853,
+      "n": "Zbigniew Michalewicz",
+      "a": "//static.aminer.org/upload/avatar/576/1844/1342/53f42f7edabfaeb2ac004aa8.jpeg",
+      "i": "53f42f7edabfaeb2ac004aa8",
+      "n_zh": "",
+      "h": 48,
+      "lat": -34.9197912
+    },
+    {
+      "lng": 135.5244676,
+      "n": "Hiroshi Motoda",
+      "a": "//static.aminer.org/0957/0005/0000/53afd483dabfae456ed01ffd.jpg",
+      "i": "53f48bcfdabfaea7cd1cd055",
+      "n_zh": "",
+      "h": 31,
+      "lat": 34.8220139
+    },
+    {
+      "lng": 9.194584299999999,
+      "n": "Vincenzo Piuri",
+      "a": "//static.aminer.org/upload/avatar/1772/90/469/53f78540dabfae90ec101ae0.jpeg",
+      "i": "53f78540dabfae90ec101ae0",
+      "n_zh": "",
+      "h": 27,
+      "lat": 45.4601435
+    },
+    {
+      "lng": -74.6514481,
+      "n": "S. Y. Kung",
+      "a": "",
+      "i": "540839c5dabfae92b4232565",
+      "n_zh": "",
+      "h": 23,
+      "lat": 40.3439888
+    },
+    {
+      "lng": 114.413666,
+      "n": "Duoqian Miao",
+      "a": "//static.aminer.org/upload/avatar/1533/1731/1845/542e0f66dabfae11fc4c0634.jpeg",
+      "i": "542e0f66dabfae11fc4c0634",
+      "n_zh": "苗夺谦",
+      "h": 25,
+      "lat": 30.507905
+    },
+    {
+      "lng": 100.3012103,
+      "n": "Rosni Abdullah",
+      "a": "",
+      "i": "5410d753dabfae44f08e7d7c",
+      "n_zh": "",
+      "h": 12,
+      "lat": 5.3547737
+    },
+    {
+      "lng": 78.1733495,
+      "n": "Harish Sharma",
+      "a": "",
+      "i": "53f42dfadabfaee2a1c83e1b",
+      "n_zh": "",
+      "h": 8,
+      "lat": 26.2493849
+    },
+    {
+      "lng": 0.0,
+      "n": "Michael G. Dyer",
+      "a": "//static.aminer.org/upload/avatar/1703/1889/1098/548c658ddabfaed7b5fa4350.jpeg",
+      "i": "548c658ddabfaed7b5fa4350",
+      "n_zh": "",
+      "h": 17,
+      "lat": 0.0
+    },
+    {
+      "lng": -0.1732294,
+      "n": "David J. Hand",
+      "a": "//static.aminer.org/upload/avatar/184/803/1839/53f439f8dabfaedf435a04d6.jpeg",
+      "i": "53f439f8dabfaedf435a04d6",
+      "n_zh": "",
+      "h": 29,
+      "lat": 51.5177246
+    },
+    {
+      "lng": -86.92119459999999,
+      "n": "A. B. Whinston",
+      "a": "",
+      "i": "53f4786fdabfaec09f285e57",
+      "n_zh": "",
+      "h": 16,
+      "lat": 40.4237054
+    },
+    {
+      "lng": 22.3716588,
+      "n": "Manolis Wallace",
+      "a": "//static.aminer.org/098b/0001/0000/53af8847dabfae456e84a40c.jpg",
+      "i": "53f42ba8dabfaedf434fc0d0",
+      "n_zh": "",
+      "h": 15,
+      "lat": 37.527072
+    },
+    {
+      "lng": 16.9154021,
+      "n": "Z. Kowalczuk",
+      "a": "",
+      "i": "53f42d97dabfaeb22f40afd3",
+      "n_zh": "",
+      "h": 8,
+      "lat": 52.4083974
+    },
+    {
+      "lng": 24.671431,
+      "n": "Enn Tyugu",
+      "a": "",
+      "i": "53f48b0adabfaec09f2b13d9",
+      "n_zh": "",
+      "h": 11,
+      "lat": 59.395884
+    },
+    {
+      "lng": -75.3385078,
+      "n": "Sven F. Crone",
+      "a": "//static.aminer.org/0404/0009/0000/53b02785dabfae456e211739.jpg",
+      "i": "53f479ccdabfae8a6845c0d9",
+      "n_zh": "",
+      "h": 14,
+      "lat": 40.034567
+    },
+    {
+      "lng": 8.5504907,
+      "n": "Rodney J. Douglas",
+      "a": "",
+      "i": "53f64513dabfaec0a73fa719",
+      "n_zh": "",
+      "h": 24,
+      "lat": 47.3984854
+    },
+    {
+      "lng": -60.67205070000001,
+      "n": "Georgina Stegmayer",
+      "a": "//static.aminer.org/upload/avatar/1792/901/793/53f32060dabfae9a84452748.png",
+      "i": "53f32060dabfae9a84452748",
+      "n_zh": "",
+      "h": 10,
+      "lat": -31.6399458
+    },
+    {
+      "lng": -118.4400979,
+      "n": "Kevin Knight",
+      "a": "//static.aminer.org/picture/01419/Kevin_Knight_1342450417751.jpg",
+      "i": "53f38cf3dabfae4b34a3c68b",
+      "n_zh": "武凯文",
+      "h": 55,
+      "lat": 33.9803182
+    },
+    {
+      "lng": 8.259699099999999,
+      "n": "Steffen Staab",
+      "a": "//static.aminer.org/024d/0009/0000/53b0235adabfae456e1d61bf.jpg",
+      "i": "53f49b68dabfaee0d9c75613",
+      "n_zh": "",
+      "h": 83,
+      "lat": 50.0030742
+    },
+    {
+      "lng": 0.0,
+      "n": "Bernard P. Zeigler",
+      "a": "//static.aminer.org/upload/avatar/1518/249/1481/54872ffbdabfae9b401342fb.jpeg",
+      "i": "54872ffbdabfae9b401342fb",
+      "n_zh": "",
+      "h": 31,
+      "lat": 0.0
+    },
+    {
+      "lng": 0.0,
+      "n": "Alex M. Andrew",
+      "a": "",
+      "i": "5484b5b4dabfae8a11fb2252",
+      "n_zh": "",
+      "h": 4,
+      "lat": 0.0
+    },
+    {
+      "lng": -52.7329053,
+      "n": "Wolfgang Banzhaf",
+      "a": "//static.aminer.org/upload/avatar/771/1986/41/53f59c8cdabfaeeed6f8045b.jpeg",
+      "i": "53f59c8cdabfaeeed6f8045b",
+      "n_zh": "",
+      "h": 48,
+      "lat": 47.5737975
+    },
+    {
+      "lng": 0.0,
+      "n": "Sigeru Omatu",
+      "a": "//static.aminer.org/upload/avatar/782/713/673/548a30bfdabfae9b40134fd0.jpeg",
+      "i": "548a30bfdabfae9b40134fd0",
+      "n_zh": "",
+      "h": 17,
+      "lat": 0.0
+    },
+    {
+      "lng": -97.1325081,
+      "n": "Douglas N. Walton",
+      "a": "",
+      "i": "53f43b3ddabfaee02acfa060",
+      "n_zh": "",
+      "h": 22,
+      "lat": 49.8111959
+    },
+    {
+      "lng": 0.0,
+      "n": "Xinghuo Yu",
+      "a": "//static.aminer.org/upload/avatar/1045/1578/237/54895a85dabfaed7b5fa3b99.jpeg",
+      "i": "54895a85dabfaed7b5fa3b99",
+      "n_zh": "余星火",
+      "h": 50,
+      "lat": 0.0
+    },
+    {
+      "lng": 9.156233499999999,
+      "n": "Silvana Quaglini",
+      "a": "",
+      "i": "53f453b5dabfaee0d9be95a4",
+      "n_zh": "",
+      "h": 27,
+      "lat": 45.1878756
+    },
+    {
+      "lng": 0.0,
+      "n": "Byeong Ho Kang",
+      "a": "",
+      "i": "54883b08dabfaed7b5fa369b",
+      "n_zh": "",
+      "h": 12,
+      "lat": 0.0
+    },
+    {
+      "lng": 15.24923,
+      "n": "Alessandro Saffiotti",
+      "a": "",
+      "i": "53f43762dabfaee2a1cef41f",
+      "n_zh": "",
+      "h": 37,
+      "lat": 59.254276
+    },
+    {
+      "lng": -1.9358352,
+      "n": "Volker Sorge",
+      "a": "",
+      "i": "5440f66ddabfae805a711aa7",
+      "n_zh": "",
+      "h": 20,
+      "lat": 52.4501886
+    },
+    {
+      "lng": 22.9592224,
+      "n": "Ioannis Vlahavas",
+      "a": "//static.aminer.org/09c1/0002/0000/53af9a68dabfae456e96c2b8.jpg",
+      "i": "53f484d2dabfaeb1a7cd17c7",
+      "n_zh": "",
+      "h": 28,
+      "lat": 40.6308283
+    },
+    {
+      "lng": -0.1198916,
+      "n": "Robert J. Howlett",
+      "a": "//static.aminer.org/upload/avatar/1569/35/903/5486244fdabfaed7b5fa274f.jpeg",
+      "i": "5486244fdabfaed7b5fa274f",
+      "n_zh": "",
+      "h": 7,
+      "lat": 50.8420449
+    },
+    {
+      "lng": -93.2323048,
+      "n": "Loren Terveen",
+      "a": "//static.aminer.org/upload/avatar/992/1966/1794/53f4b66fdabfaedd74eba7e3.jpeg",
+      "i": "53f4b66fdabfaedd74eba7e3",
+      "n_zh": "",
+      "h": 47,
+      "lat": 44.974567
+    },
+    {
+      "lng": -48.5195857,
+      "n": "Rosina Weber",
+      "a": "",
+      "i": "54879127dabfaed7b5fa3115",
+      "n_zh": "",
+      "h": 13,
+      "lat": -27.6003609
+    },
+    {
+      "lng": -46.7229286,
+      "n": "Jaime Simão Sichman",
+      "a": "//static.aminer.org/05f7/0000/0000/53afcf6cdabfae456ecb12ca.gif",
+      "i": "53f455c3dabfaee4dc80f766",
+      "n_zh": "",
+      "h": 28,
+      "lat": -23.562743
+    },
+    {
+      "lng": -96.7500993,
+      "n": "Dan I. Moldovan",
+      "a": "//static.aminer.org/upload/avatar/1366/147/357/54409a09dabfae805a6dae6b.jpeg",
+      "i": "54409a09dabfae805a6dae6b",
+      "n_zh": "",
+      "h": 46,
+      "lat": 32.9857619
+    },
+    {
+      "lng": 9.984619499999999,
+      "n": "Stefan Wermter",
+      "a": "//static.aminer.org/upload/avatar/356/436/666/54053f04dabfae92b41b95e8.jpeg",
+      "i": "54053f04dabfae92b41b95e8",
+      "n_zh": "",
+      "h": 21,
+      "lat": 53.5665641
+    },
+    {
+      "lng": -43.9663841,
+      "n": "R. M. Palhares",
+      "a": "",
+      "i": "53f4309ddabfaeb2ac012c82",
+      "n_zh": "",
+      "h": 10,
+      "lat": -19.8690878
+    },
+    {
+      "lng": -118.4451811,
+      "n": "Demetri Terzopoulos",
+      "a": "//static.aminer.org/upload/avatar/1945/966/866/53f4d0c3dabfaeedd377e1fd.jpeg",
+      "i": "53f4d0c3dabfaeedd377e1fd",
+      "n_zh": "",
+      "h": 72,
+      "lat": 34.068921
+    },
+    {
+      "lng": -113.526999,
+      "n": "Richard S. Sutton",
+      "a": "//static.aminer.org/upload/avatar/382/1476/1480/53f4c5a7dabfaee4dc8b581a.jpeg",
+      "i": "53f4c5a7dabfaee4dc8b581a",
+      "n_zh": "",
+      "h": 63,
+      "lat": 53.5267284
+    },
+    {
+      "lng": -72.531313,
+      "n": "E. M. Riseman",
+      "a": "//static.aminer.org/060c/0000/0000/53afd18cdabfae456ecd2e59.jpg",
+      "i": "53f46121dabfaee2a1d9a142",
+      "n_zh": "",
+      "h": 36,
+      "lat": 42.39508
+    },
+    {
+      "lng": -84.38528190000001,
+      "n": "Veda C. Storey",
+      "a": "//static.aminer.org/upload/avatar/1178/170/1398/53f4a6acdabfaee0d9c76182.jpeg",
+      "i": "53f4a6acdabfaee0d9c76182",
+      "n_zh": "",
+      "h": 30,
+      "lat": 33.753068
+    },
+    {
+      "lng": 26.036643,
+      "n": "Mihaela Oprea",
+      "a": "",
+      "i": "53f43019dabfaee2a1c9ebe4",
+      "n_zh": "",
+      "h": 11,
+      "lat": 44.9143301
+    },
+    {
+      "lng": 145.1339078,
+      "n": "Geoffrey I. Webb",
+      "a": "//static.aminer.org/097f/0007/0000/53b0017bdabfae456efc74cb.jpg",
+      "i": "53f48c79dabfaea7cd1ceeab",
+      "n_zh": "",
+      "h": 39,
+      "lat": -37.9106374
+    },
+    {
+      "lng": 138.636,
+      "n": "H. M. Collins",
+      "a": "",
+      "i": "54082c6cdabfae92b422b103",
+      "n_zh": "",
+      "h": 26,
+      "lat": -34.967
+    },
+    {
+      "lng": 13.7289964,
+      "n": "Sebastian Bader",
+      "a": "//static.aminer.org/0568/0008/0000/53b01129dabfae456e0bcf50.jpg",
+      "i": "53f43036dabfaee1c0a57aaf",
+      "n_zh": "",
+      "h": 9,
+      "lat": 51.02927340000001
+    },
+    {
+      "lng": 114.3643219,
+      "n": "Pingxiang Li",
+      "a": "",
+      "i": "53f433f6dabfaec22ba698a4",
+      "n_zh": "",
+      "h": 19,
+      "lat": 30.5360485
+    },
+    {
+      "lng": 2.3554313,
+      "n": "L. N. De Castro",
+      "a": "",
+      "i": "53f43cdbdabfaee02ad0074c",
+      "n_zh": "",
+      "h": 9,
+      "lat": 48.86674600000001
+    },
+    {
+      "lng": 23.7275388,
+      "n": "M. Santamouris",
+      "a": "",
+      "i": "5486073fdabfae9b40133b42",
+      "n_zh": "",
+      "h": 54,
+      "lat": 37.9838096
+    },
+    {
+      "lng": 116.4204495,
+      "n": "Zhen Zhang",
+      "a": "",
+      "i": "542be696dabfae2b4e1b4594",
+      "n_zh": "张震",
+      "h": 8,
+      "lat": 39.970839
+    },
+    {
+      "lng": -8.417254699999999,
+      "n": "Pedro U. Lima",
+      "a": "",
+      "i": "53f640e3dabfae8d4e9bf120",
+      "n_zh": "",
+      "h": 21,
+      "lat": 40.1864307
+    },
+    {
+      "lng": 0.0,
+      "n": "Stellan Ohlsson",
+      "a": "",
+      "i": "54858758dabfae8a11fb2aa3",
+      "n_zh": "",
+      "h": 20,
+      "lat": 0.0
+    },
+    {
+      "lng": 0.0,
+      "n": "Kostas S. Metaxiotis",
+      "a": "",
+      "i": "54860513dabfaed7b5fa26a7",
+      "n_zh": "",
+      "h": 14,
+      "lat": 0.0
+    },
+    {
+      "lng": -82.34518159999999,
+      "n": "Mark Bishop",
+      "a": "",
+      "i": "53f4518bdabfaeee22a220ba",
+      "n_zh": "",
+      "h": 10,
+      "lat": 29.641755
+    },
+    {
+      "lng": -88.44503809999999,
+      "n": "Pedro Domingos",
+      "a": "//static.aminer.org/picture/487/1225200792104.jpeg",
+      "i": "53f48bc4dabfaea7cd1ccdc3",
+      "n_zh": "",
+      "h": 70,
+      "lat": 47.25868639999999
+    },
+    {
+      "lng": -87.62558670000001,
+      "n": "Bamshad Mobasher",
+      "a": "//static.aminer.org/upload/avatar/1572/539/161/53f42fd9dabfaeb22f427224.jpeg",
+      "i": "53f42fd9dabfaeb22f427224",
+      "n_zh": "",
+      "h": 57,
+      "lat": 41.8784523
+    },
+    {
+      "lng": -79.94301279999999,
+      "n": "K. M. Carley",
+      "a": "",
+      "i": "53f471acdabfaee4dc87ad2e",
+      "n_zh": "",
+      "h": 9,
+      "lat": 40.4428081
+    },
+    {
+      "lng": -85.46463059999999,
+      "n": "Hamid R. Nemati",
+      "a": "",
+      "i": "53f3b30edabfae4b34b279e9",
+      "h": 8,
+      "lat": 39.8786784
+    },
+    {
+      "lng": -8.2973961,
+      "n": "Manuel Filipe Santos",
+      "a": "",
+      "i": "5448b82ddabfae87b7e6c02b",
+      "n_zh": "",
+      "h": 15,
+      "lat": 41.4548226
+    },
+    {
+      "lng": 6.5667576,
+      "n": "Claudio Mattiussi",
+      "a": "",
+      "i": "543244f6dabfaeb4c6a7c32a",
+      "n_zh": "",
+      "h": 24,
+      "lat": 46.5190557
+    },
+    {
+      "lng": 88.3711045,
+      "n": "Amit Konar",
+      "a": "//static.aminer.org/upload/avatar/948/1714/1136/54090ba4dabfae92b42563b8.jpeg",
+      "i": "54090ba4dabfae92b42563b8",
+      "n_zh": "",
+      "h": 30,
+      "lat": 22.4965655
+    },
+    {
+      "lng": 35.0231271,
+      "n": "Moshe Tennenholtz",
+      "a": "//static.aminer.org/upload/avatar/1781/1041/1884/54863441dabfaed7b5fa2826.jpeg",
+      "i": "54863441dabfaed7b5fa2826",
+      "n_zh": "",
+      "h": 46,
+      "lat": 32.7767783
+    },
+    {
+      "lng": -86.6396956,
+      "n": "Jatinder N. D. Gupta",
+      "a": "",
+      "i": "54323f2bdabfaeb54214ada0",
+      "n_zh": "",
+      "h": 39,
+      "lat": 34.726523
+    },
+    {
+      "lng": 82.9995254,
+      "n": "Shyam Sundar",
+      "a": "",
+      "i": "53f42ec9dabfaee02ac72f88",
+      "n_zh": "",
+      "h": 50,
+      "lat": 25.2744547
+    },
+    {
+      "lng": 116.3090627,
+      "n": "Wansen Wang",
+      "a": "",
+      "i": "54317566dabfae8cf2ee83b2",
+      "n_zh": "王万森",
+      "h": 8,
+      "lat": 39.936596
+    },
+    {
+      "lng": -66.8755735,
+      "n": "Blai Bonet",
+      "a": "//static.aminer.org/upload/avatar/47/288/833/53f42c3bdabfaee02ac4f8c0.jpeg",
+      "i": "53f42c3bdabfaee02ac4f8c0",
+      "n_zh": "",
+      "h": 28,
+      "lat": 10.408363
+    },
+    {
+      "lng": 121.211282,
+      "n": "Yongsheng Ding",
+      "a": "",
+      "i": "53f436a0dabfaeee229ad136",
+      "n_zh": "丁永生",
+      "h": 25,
+      "lat": 31.05687
+    },
+    {
+      "lng": -88.79437659999999,
+      "n": "Susan M. Bridges",
+      "a": "",
+      "i": "53f48ed6dabfaeae6377b3ef",
+      "n_zh": "",
+      "h": 21,
+      "lat": 33.4551742
+    },
+    {
+      "lng": -121.755104,
+      "n": "Kwan-Liu Ma",
+      "a": "//static.aminer.org/upload/avatar/1224/339/910/53f48dcadabfaea7cd1d457c.jpeg",
+      "i": "53f48dcadabfaea7cd1d457c",
+      "n_zh": "",
+      "h": 58,
+      "lat": 38.5369148
+    },
+    {
+      "lng": -2.3310408,
+      "n": "Fotios Pasiouras",
+      "a": "",
+      "i": "53f448b4dabfaee43ec87043",
+      "n_zh": "",
+      "h": 25,
+      "lat": 51.3798152
+    },
+    {
+      "lng": -71.0888571,
+      "n": "Gregory Stephanopoulos",
+      "a": "//static.aminer.org/upload/avatar/1643/1326/458/543277d1dabfaeb4c6a8675d.jpeg",
+      "i": "543277d1dabfaeb4c6a8675d",
+      "n_zh": "",
+      "h": 63,
+      "lat": 42.3609683
+    },
+    {
+      "lng": -1.5614704,
+      "n": "Sarabjot Singh Anand",
+      "a": "",
+      "i": "53f46e2cdabfaedf43664307",
+      "n_zh": "",
+      "h": 10,
+      "lat": 52.3792525
+    },
+    {
+      "lng": -75.15535059999999,
+      "n": "Ranan B. Banerji",
+      "a": "",
+      "i": "53f4456edabfaee02ad14fdd",
+      "n_zh": "",
+      "h": 8,
+      "lat": 39.9811932
+    },
+    {
+      "lng": 116.355664,
+      "n": "Yixin Yin",
+      "a": "",
+      "i": "542ca8cbdabfae216e630d5d",
+      "n_zh": "尹怡欣",
+      "h": 12,
+      "lat": 39.99215
+    },
+    {
+      "lng": -1.2543668,
+      "n": "Alex Rogers",
+      "a": "//static.aminer.org/upload/avatar/1818/920/1990/544895acdabfae87b7e486b2.jpeg",
+      "i": "544895acdabfae87b7e486b2",
+      "n_zh": "",
+      "h": 38,
+      "lat": 51.7548164
+    },
+    {
+      "lng": -119.8426442,
+      "n": "Max Lungarella",
+      "a": "",
+      "i": "5435020ddabfaebba588dd3e",
+      "n_zh": "",
+      "h": 22,
+      "lat": 34.4119825
+    },
+    {
+      "lng": -73.5764372,
+      "n": "Roger Nkambou",
+      "a": "//static.aminer.org/0431/0007/0000/53aff6cadabfae456ef1e510.jpg",
+      "i": "53f4d05edabfaeeee5f81b3d",
+      "n_zh": "",
+      "h": 21,
+      "lat": 45.5060969
+    },
+    {
+      "lng": -122.0816563,
+      "n": "Alon Halevy",
+      "a": "//static.aminer.org/0445/0009/0000/53b0281fdabfae456e219f42.gif",
+      "i": "53f47eb1dabfae9126cc3f93",
+      "n_zh": "",
+      "h": 102,
+      "lat": 37.3906727
+    },
+    {
+      "lng": -47.0647708,
+      "n": "Jacques Wainer",
+      "a": "",
+      "i": "5405e5a4dabfae44f08323bc",
+      "n_zh": "",
+      "h": 26,
+      "lat": -22.8148374
+    },
+    {
+      "lng": 126.6202132,
+      "n": "Xia Li",
+      "a": "",
+      "i": "53f5b2f4dabfae3a03f8045b",
+      "n_zh": "李霞",
+      "h": 36,
+      "lat": 45.7003851
+    },
+    {
+      "lng": 106.606363,
+      "n": "Guoyin Wang",
+      "a": "//static.aminer.org/upload/avatar/690/47/1464/542a5574dabfae646d551a73.jpeg",
+      "i": "542a5574dabfae646d551a73",
+      "n_zh": "王国胤",
+      "h": 30,
+      "lat": 29.531943
+    },
+    {
+      "lng": 114.413666,
+      "n": "Renbin Xiao",
+      "a": "",
+      "i": "53f44be7dabfaeb22f4d69e9",
+      "n_zh": "",
+      "h": 9,
+      "lat": 30.507905
     }
   ],
-  "definition": "",
-  "zh": "信息系统应用",
-  "type": "parent"
+  "status": true
 }

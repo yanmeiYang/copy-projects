@@ -32,6 +32,7 @@ class Statistics extends React.Component {
   state = {
     defaultTabKey: tabData[0].category,
   }
+
   componentWillMount() {
     const roles = this.props.app.roles;
     if (roles.admin || roles.role.includes('专委')) {
@@ -40,6 +41,7 @@ class Statistics extends React.Component {
       this.setState({ defaultTabKey: tabData[1].category });
     }
   }
+
   componentDidMount() {
     this.props.dispatch({ type: 'statistics/getStatsOfCcfActivities', payload: {} });
   }
@@ -61,8 +63,8 @@ class Statistics extends React.Component {
     let committee = [];
     let division = [];
     if (this.props.app.roles.admin) {
-      committee = this.props.statistics.activity.filter(item => item.organizer.includes('专业委员会'));
-      division = this.props.statistics.activity.filter(item => !item.organizer.includes('专业委员会'));
+      committee = this.props.statistics.activity.filter(item => item.organizer.includes('专业委员会') || item.organizer.includes('专委会'));
+      division = this.props.statistics.activity.filter(item => !item.organizer.includes('专业委员会') && !item.organizer.includes('专委会'));
     } else {
       committee = this.props.statistics.activity;
       division = this.props.statistics.activity;

@@ -13,7 +13,7 @@ class AddRoleModal extends React.PureComponent {
     visible: false,
     currentRole: {},
     currentOrg: {},
-  };
+  }
   handleOk = (e) => {
     this.props.handleOk(this.state.currentRole, this.state.currentOrg);
     this.props.form.setFieldsValue({ role: '', value: '' });
@@ -23,7 +23,7 @@ class AddRoleModal extends React.PureComponent {
   handleChange = (value) => {
     const data = JSON.parse(value);
     this.setState({ currentOrg: { name: data.key, id: data.id } });
-  };
+  }
   selectedRole = (e) => {
     this.setState({
       currentRole: {},

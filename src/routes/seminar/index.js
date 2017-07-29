@@ -84,7 +84,7 @@ class Seminar extends React.Component {
   };
 
   onFilterChange = (key, item, type, checked) => {
-    if (type === 'category') {
+    if (checked && type === 'category') {
       this.props.dispatch({
         type: 'seminar/getCategory',
         payload: { category: `orglist_${item.id}` },
@@ -98,6 +98,7 @@ class Seminar extends React.Component {
       organizer = type === 'organizer' ? key : this.state.organizer;
       category = type === 'category' ? key : this.state.category;
     } else {
+      this.props.seminar.orgByActivity = [];
       this.setState({ [type]: '' });
       organizer = type === 'organizer' ? '' : this.state.organizer;
       category = type === 'category' ? '' : this.state.category;

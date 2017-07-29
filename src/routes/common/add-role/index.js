@@ -20,6 +20,7 @@ class AddUserRolesByOrg extends React.Component {
   state = {
     editCurrentData: {},
     visible: false,
+    disabledKey: true,
   };
 
   componentDidMount() {
@@ -85,13 +86,13 @@ class AddUserRolesByOrg extends React.Component {
     });
   }
   handleOk = (e) => {
-    this.setState({ visible: false });
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         if (values.key === '超级管理员') {
-          console.log('提示错误');
+          this.setState({ disabledKey: false });
         } else {
+          this.setState({ visible: false });
           let value = {};
           if (values.value !== undefined) {
             const orgName = values.value.split('#')[0];
@@ -153,12 +154,13 @@ class AddUserRolesByOrg extends React.Component {
             <Form onSubmit={this.handleSubmit}>
               <FormItem
                 {...formItemLayout}
-                validateStatus={keyError ? 'error' : ''}
-                help={keyError || ''}
+                validateStatus={this.state.disabledKey ? '' : 'error'}
+                help={this.state.disabledKey ? '' : "禁止添加超级管理员"}
                 label="角色名称"
               >
                 {getFieldDecorator('key', {
-                  rules: [{ required: true, message: 'Please input key!' }],
+                  rules: [{ required: true, message: 'Please input key!' },
+                    { type: 'string', message: 'Please input key!' }],
                 })(
                   <Input />
                 )}

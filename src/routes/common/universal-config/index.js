@@ -31,13 +31,14 @@ class UniversalConfig extends React.Component {
     const data = e.target && e.target.getAttribute('data');
     const json = JSON.parse(data);
     const key = json.value.key;
+    const props = this.props;
     Modal.confirm({
       title: '删除',
       content: '确定删除吗？',
       onOk() {
-        this.props.dispatch({
+        props.dispatch({
           type: 'universalConfig/deleteByKey',
-          payload: { category: this.props.universalConfig.category, key },
+          payload: { category: props.universalConfig.category, key },
         });
       },
       onCancel() {},

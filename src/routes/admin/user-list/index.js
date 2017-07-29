@@ -223,6 +223,7 @@ class UserList extends React.Component {
       listUsers = this.props.auth.listUsers.filter(item => !item.role.includes(`${config.source}_超级管理员`));
     }
 
+    const pagination = { pageSize: 20, showQuickJumper: true };
     const { universalConfig } = this.props;
     const { committee, selectedAuthority, selectedRole } = this.state;
     return (
@@ -237,7 +238,7 @@ class UserList extends React.Component {
             dataSource={listUsers}
             bordered
             size="small"
-            pagination={false}
+            pagination={pagination}
           >
             <Column title="姓名" dataIndex="" key="display_name"
                     render={this.showUpdateName} />
@@ -250,7 +251,6 @@ class UserList extends React.Component {
             <Column title="所属部门" dataIndex="authority" key="committee" />}
             {sysconfig.ShowRegisteredRole &&
             <Column title="操作" dataIndex="" key="action" render={this.operatorRender} />}
-
           </Table>
         </Spin>
         <Modal

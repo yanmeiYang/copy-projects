@@ -122,7 +122,7 @@ class RegistrationForm extends React.Component {
             data.time.to = state.endValue.toJSON();
           }
           data.tags = state.tags;
-          data.organizer = data.organizer.concat(data.co_org);
+          data.organizer = [data.organizer].concat(data.co_org);
           delete data.co_org;
           // 获取登录用户的uid
           data.uid = this.props.uid;
@@ -131,7 +131,7 @@ class RegistrationForm extends React.Component {
       }
     });
   };
-  // 选择活动类型
+  // 选择活动类型 orglist_5976bb068ef7a2e824adca67
   // handleChange = (value) => {
   //   this.setState({ selectedType: value });
   // };

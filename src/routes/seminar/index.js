@@ -55,6 +55,18 @@ class Seminar extends React.Component {
       this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
     }
   };
+  getSeminar = (sizePerPage, filter, status) => {
+    if (status) {
+      this.props.seminar.orgByActivity = [];
+    }
+    this.setState({ organizer: '', category: '', tag: '' });
+    const params = {
+      offset: 0,
+      size: sizePerPage,
+      filter,
+    };
+    this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
+  };
   onSearch = (searchQuery) => {
     this.setState({ query: searchQuery });
     this.props.seminar.results = [];
@@ -70,16 +82,13 @@ class Seminar extends React.Component {
       };
       this.props.dispatch({ type: 'seminar/searchActivity', payload: params });
     } else {
-      const params = {
-        offset: 0,
-        size: sizePerPage,
-        filter: {
-          src: config.source,
-          organizer: this.state.organizer,
-          category: this.state.category,
-        },
+      const filter = {
+        src: config.source,
+        organizer: this.state.organizer,
+        category: this.state.category,
       };
-      this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
+      this.getSeminar(sizePerPage, filter, false);
+      // this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
     }
   };
 
@@ -137,7 +146,7 @@ class Seminar extends React.Component {
             <Icon type="plus" />&nbsp;发布新活动
           </Button>}
         </div>
-        {/* filter*/}
+        {/* filter */}
         <div className={styles.filterWrap}>
           <div className={styles.filter}>
             {/*<div className={styles.filterRow}>*/}
@@ -163,7 +172,7 @@ class Seminar extends React.Component {
             {/*</div>*/}
             {topMentionedTags.data && topMentionedTags.data.tags.length > 0 &&
             <div className={styles.filterRow}>
-              <span className={styles.filterTitle}>前5个标签:</span>
+              <span className={styles.filterTitle}>标签:</span>
               <ul className={styles.filterItems}>
                 {
                   topMentionedTags.data.tags.map((item) => {
@@ -175,7 +184,7 @@ class Seminar extends React.Component {
                         onChange={checked => this.onFilterChange(item.l, item, 'tag', checked)}
                       >
                         {item.l}
-                        (<span className={styles.filterCount}>{item.f}</span>)
+                        (<span className={styles.filterCount}>{item.f + 1}</span>)
                       </CheckableTag>
                     );
                   })
@@ -187,6 +196,12 @@ class Seminar extends React.Component {
               <span className={styles.filterTitle}>活动类型:</span>
               {orgcategory.data &&
               <ul className={styles.filterItems}>
+                <CheckableTag
+                  className={styles.filterItem}
+                  checked={category === ''}
+                  onChange={checked => this.getSeminar(sizePerPage, {src: config.source}, checked)}
+                >All
+                </CheckableTag>
                 {
                   Object.values(orgcategory.data).map((item) => {
                     return (

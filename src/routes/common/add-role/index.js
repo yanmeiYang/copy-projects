@@ -143,7 +143,8 @@ class AddUserRolesByOrg extends React.Component {
     return (
       <div>
         {/*DEBUG INFO: Current Category is : {universalConfig.category}*/}
-        <Button type="primary" onClick={this.addRole}> 添加角色</Button>
+        <Button type="primary" onClick={this.addRole} style={{ float: 'right' }}> 添加角色</Button>
+        <h2 className={styles.pageTitle}>用户设置</h2>
         <Modal
           title="添加角色"
           visible={this.state.visible}
@@ -197,11 +198,12 @@ class AddUserRolesByOrg extends React.Component {
           >
             <Column title="名称" dataIndex="value.key" key="key" />
             {!this.props.hideValue &&
-            <Column title="对应机构" dataIndex="value.value" key="value" render={(dataIndex, text) => {
+            <Column title="对应机构列表" dataIndex="value.value" key="value" render={(dataIndex, text) => {
               if (typeof dataIndex !== 'object') {
                 return dataIndex;
               } else if (typeof dataIndex === 'object') {
-                return <Link to={`/admin/system-config/${text.value.value.id}`} data={JSON.stringify(text)} > {text.value.value.name} </Link>;
+                // return <Link to={`/admin/system-config/${text.value.value.id}`} data={JSON.stringify(text)} > {text.value.value.name} </Link>;
+                return text.value.value.name;
               }
             }} />
             }
@@ -212,8 +214,8 @@ class AddUserRolesByOrg extends React.Component {
                 return (
                   <span>
                     {(text.value.key !== '超级管理员' && text.value.key !== '分部专员' && text.value.key !== 'CCF专委专员') && <span>
-                      <a onClick={this.onEdit} data={JSON.stringify(text)}>编辑</a>
-                      <span className="ant-divider" />
+                      {/*<a onClick={this.onEdit} data={JSON.stringify(text)}>编辑</a>*/}
+                      {/*<span className="ant-divider" />*/}
                       <a onClick={this.onDelete} data={JSON.stringify(text.value)}>删除</a></span>
                     }
                     {/*<span className="ant-divider" />*/}

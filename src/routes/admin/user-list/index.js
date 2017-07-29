@@ -231,7 +231,7 @@ class UserList extends React.Component {
         <div className="toolsArea">
           <Button type="primary" size="large" style={{}} onClick={this.goCreateUser}>创建用户</Button>
         </div>
-        <h2 className={styles.pageTitle}>用户设置</h2>
+        <h2 className={styles.pageTitle}>用户列表</h2>
 
         <Spin spinning={loading}>
           <Table

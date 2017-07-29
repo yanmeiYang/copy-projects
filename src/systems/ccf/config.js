@@ -110,7 +110,7 @@ module.exports = {
     },
     {
       category: 'activity_organizer_options',
-      label: '活动承办单位',
+      label: '协办单位',
       desc: 'CCF 活动的承办单位，包括专委/分部/项目等。',
     },
     {

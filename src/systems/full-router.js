@@ -37,6 +37,8 @@ const fullRouter = (app, defaultChildRoutes) => {
       core.AdminUsers(app),
       core.AdminSystemConfig(app),
       core.AdminAddUserRolesByOrg(app),
+      core.AdminContributionType(app),
+      core.AdminActivityType(app),
       core.AdminSystemConfigWithCategory(app),
       core.AdminSystemOrgCategory(app),
 

@@ -14,7 +14,7 @@ export async function createUser(email, first_name, gender, last_name, position,
     last_name,
     position,
     sub,
-    src: sysconfig.AccountType,
+    src: source,
   };
   return request(api.signup, {
     method: 'POST',

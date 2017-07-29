@@ -15,6 +15,11 @@ function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
 
+const categoryTitle = {
+contribution_type: '贡献类别',
+  orgcategory: '活动类型',
+};
+
 class UniversalConfig extends React.Component {
   state = {
     editCurrentData: {},
@@ -200,13 +205,14 @@ class UniversalConfig extends React.Component {
               render={(text, record) => {
                 return (
                   <span>
-                    {this.state.editCurrentKey !== record.value.key &&
-                    <a onClick={this.onEdit} data={JSON.stringify(text)}>编辑</a>
-                    }
-                    {this.state.editCurrentKey === record.value.key &&
-                    <a onClick={this.onSave} data={JSON.stringify(text)}>保存</a>
-                    }
-                    <span className="ant-divider" />
+                    {/*// TODO 系统升级以后有编辑*/}
+                    {/*{this.state.editCurrentKey !== record.value.key &&*/}
+                    {/*<a onClick={this.onEdit} data={JSON.stringify(text)}>编辑</a>*/}
+                    {/*}*/}
+                    {/*{this.state.editCurrentKey === record.value.key &&*/}
+                    {/*<a onClick={this.onSave} data={JSON.stringify(text)}>保存</a>*/}
+                    {/*}*/}
+                    {/*<span className="ant-divider" />*/}
                     <a onClick={this.onDelete} data={JSON.stringify(text)}>删除</a>
                     {/*<span className="ant-divider" />*/}
                     {/*<a href="#" className="ant-dropdown-link">*/}

@@ -8,7 +8,6 @@ import styles from './index.less';
 import { Layout } from '../../components';
 import { sysconfig } from '../../systems';
 import { classnames, config } from '../../utils';
-
 import leftLogo from '../../assets/login/left-logo.png';
 
 const { Header, Footer } = Layout;
@@ -30,7 +29,6 @@ const Login = ({
       if (errors) {
         return;
       }
-      values.src = config.source;
       dispatch({ type: 'login/login', payload: values });
     });
   }
@@ -108,8 +106,8 @@ const Login = ({
           <div className={styles.container}>
             <div className={styles.content}>
               <img src={leftLogo} />
-              <div className="space">{/* {}*/}</div>
-              {/* <Bread {...breadProps} location={location} />*/}
+              <div className="space">{/* {} */}</div>
+              {/* <Bread {...breadProps} location={location} /> */}
               {children}
             </div>
           </div>

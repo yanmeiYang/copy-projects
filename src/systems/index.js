@@ -28,6 +28,9 @@ const defaultSystemConfigs = {
   SearchPagePrefix: 'search', // search - 普通搜索; uniSearch - 多合一搜索.
   Search_EnablePin: true,
 
+  UserAuthSystem: config.system, // aminer 或者是 system.config
+  UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签
+
   // expert base
   SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
   ExpertBases: [], // must override.

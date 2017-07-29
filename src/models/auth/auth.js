@@ -28,9 +28,9 @@ export default {
   },
   effects: {
     *createUser({ payload }, { call, put }) {
-      const { email, first_name, gender, last_name, position, sub, role, src } = payload;
+      const { email, first_name, gender, last_name, position, sub, role } = payload;
       const { data } =
-        yield call(authService.createUser, email, first_name, gender, last_name, position, sub, src);
+        yield call(authService.createUser, email, first_name, gender, last_name, position, sub);
       yield put({ type: 'createUserSuccess', payload: data });
       if (data.status) {
         const uid = data.uid;

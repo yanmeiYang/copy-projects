@@ -2,6 +2,7 @@ import { routerRedux } from 'dva/router';
 import { parse } from 'qs';
 import { getCurrentUserInfo, logout } from '../services/app';
 import { config, setLocalStorage, getLocalStorage } from '../utils';
+import * as authService from '../services/auth';
 
 const { prefix } = config;
 const LocalStorage = localStorage;
@@ -49,12 +50,14 @@ export default {
         const userMessage = getLocalStorage('user');
         // TODO 每次打开新URL都要访问一次。想办法缓存一下。
         if (userMessage !== '' && userMessage !== null && userMessage !== undefined) {
-          console.log('已经登录');
           yield put({
             type: 'alreadyLoggedIn',
             user: userMessage.data,
             roles: userMessage.roles,
           });
+          // if (!userMessage.roles.role.includes(config.source)) {
+          //   yield call(authService.invoke, userMessage.data.id, config.source);
+          // }
         } else {
           const { data } = yield call(getCurrentUserInfo, parse(payload));
           if (data) {

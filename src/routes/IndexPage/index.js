@@ -24,7 +24,7 @@ class IndexPage extends React.Component {
   onSearch = ({ query }) => {
     if (query && query.trim() !== '') {
       this.dispatch(routerRedux.push({
-        pathname: `/${sysconfig.SearchPagePrefix}/${query}/0/30`,
+        pathname: `/${sysconfig.SearchPagePrefix}/${query}/0/20`,
       }));
     }
   };

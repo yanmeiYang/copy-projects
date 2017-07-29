@@ -44,8 +44,7 @@ class ForgotPassword extends React.Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         values.token = config.source;
-        values.password = '1';
-        values.src = config.source;
+        values.password = ' ';
         this.props.dispatch({ type: 'auth/forgotPassword', payload: values });
       }
     });

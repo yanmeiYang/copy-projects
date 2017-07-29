@@ -2,6 +2,7 @@
  * Created by yangyanmei on 17/6/29.
  */
 import { request, config } from '../utils';
+import { sysconfig } from '../systems';
 
 const { api, source } = config;
 
@@ -13,7 +14,7 @@ export async function createUser(email, first_name, gender, last_name, position,
     last_name,
     position,
     sub,
-    src,
+    src: sysconfig.AccountType,
   };
   return request(api.signup, {
     method: 'POST',
@@ -56,6 +57,7 @@ export async function listUsersByRole(offset, size) {
 }
 
 export async function forgot(params) {
+  params.src = sysconfig.UserAuthSystem;
   return request(api.forgot, {
     method: 'POST',
     body: JSON.stringify(params),

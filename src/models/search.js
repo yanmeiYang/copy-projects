@@ -21,7 +21,7 @@ export default {
       showQuickJumper: true,
       showTotal: total => `共 ${total} 条`,
       current: 1,
-      pageSize: 30,
+      pageSize: 20,
       total: null,
     },
   },

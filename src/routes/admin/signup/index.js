@@ -79,7 +79,6 @@ class Registered extends React.Component {
         values.gender = 3;
         values.position = 8;
         values.sub = true;
-        values.src = config.source;
         values.role = this.state.currentRoleAndOrg;
         this.props.dispatch({ type: 'auth/createUser', payload: values });
         Modal.success({

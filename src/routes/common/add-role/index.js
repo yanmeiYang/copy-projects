@@ -29,13 +29,14 @@ class AddUserRolesByOrg extends React.Component {
 
   onDelete = (e) => {
     const key = JSON.parse(e.target && e.target.getAttribute('data')).key;
+    const props = this.props;
     Modal.confirm({
       title: '删除',
       content: '确定删除吗？',
       onOk() {
-        this.props.dispatch({
+        props.dispatch({
           type: 'universalConfig/deleteByKey',
-          payload: { category: this.props.universalConfig.category, key },
+          payload: { category: props.universalConfig.category, key },
         });
       },
       onCancel() {},
@@ -88,24 +89,32 @@ class AddUserRolesByOrg extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        const orgName = values.value.split('#')[0];
-        const orgID = values.value.split('#')[1];
-        this.props.dispatch({
-          type: 'universalConfig/addKeyAndValue',
-          payload: {
-            category: 'user_roles',
-            key: values.key,
-            val: { id: `orglist_${orgID}`, name: orgName },
-          },
-        });
-        this.props.dispatch({
-          type: 'auth/addOrgCategory',
-          payload: {
-            category: 'getallorglist',
-            key: orgName,
-            val: { id: `orglist_${orgID}`, name: orgName },
-          },
-        });
+        if (values.key === '超级管理员') {
+          console.log('提示错误');
+        } else {
+          let value = {};
+          if (values.value !== undefined) {
+            const orgName = values.value.split('#')[0];
+            const orgID = values.value.split('#')[1];
+            value = { id: `orglist_${orgID}`, name: orgName };
+            this.props.dispatch({
+              type: 'auth/addOrgCategory',
+              payload: {
+                category: 'getallorglist',
+                key: orgName,
+                val: { id: `orglist_${orgID}`, name: orgName },
+              },
+            });
+          }
+          this.props.dispatch({
+            type: 'universalConfig/addKeyAndValue',
+            payload: {
+              category: 'user_roles',
+              key: values.key,
+              val: value,
+            },
+          });
+        }
       }
     });
   };

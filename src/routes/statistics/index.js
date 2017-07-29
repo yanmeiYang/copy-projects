@@ -13,8 +13,8 @@ const TabPane = Tabs.TabPane;
 const tabData = [
   {
     category: 'activity_lists',
-    label: '专委列表',
-    desc: '专委列表',
+    label: '活动列表',
+    desc: '活动列表',
   },
   {
     category: 'activity_detail',
@@ -91,26 +91,23 @@ class Statistics extends React.Component {
             {/* </TabPane>*/}
             {/* );*/}
             {/* })}*/}
-            {(roles.admin || roles.role.includes('专委')) &&
             <TabPane
               key={activity_list.category}
-              style={{ display: activity_list.isShow }}
               tab={activity_list.label}
             >
-              <CommitteeList activity={committee} />
+              <CommitteeList activity={this.props.statistics.activity} />
             </TabPane>
-            }
 
-            {(roles.admin || !roles.role.includes('专委')) &&
-            <TabPane
-              key={activity_detail.category}
-              style={{ display: activity_detail.isShow }}
-              tab={activity_detail.label}
-              className={styles.tabContent}
-            >
-              <CommitteeList activity={division} />
-            </TabPane>
-            }
+            {/*{(roles.admin || !roles.role.includes('专委')) &&*/}
+            {/*<TabPane*/}
+              {/*key={activity_detail.category}*/}
+              {/*style={{ display: activity_detail.isShow }}*/}
+              {/*tab={activity_detail.label}*/}
+              {/*className={styles.tabContent}*/}
+            {/*>*/}
+              {/*<CommitteeList activity={division} />*/}
+            {/*</TabPane>*/}
+            {/*}*/}
             <TabPane
               key={experts_list.category}
               style={{ display: experts_list.isShow }}

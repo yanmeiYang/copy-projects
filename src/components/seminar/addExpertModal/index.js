@@ -110,10 +110,10 @@ class AddExpertModal extends React.Component {
     talk.speaker.stype = state.speakerInfo.stype;
     // talk.stype[xxx]='1';
     if (state.talkStartValue) {
-      talk.time.from = state.talkStartValue.toJSON();
+      talk['time.from'] = state.talkStartValue.toJSON();
     }
     if (state.talkEndValue) {
-      talk.time.to = state.talkEndValue.toJSON();
+      talk['time.to'] = state.talkEndValue.toJSON();
     }
     talk.location.address = this.refs.talkLocation.refs.input.value;
     talk.abstract = this.refs.talkAbstract.refs.input.value;

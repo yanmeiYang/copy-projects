@@ -3,6 +3,7 @@
  */
 import { routerRedux } from 'dva/router';
 import { config } from '../../utils';
+import { sysconfig } from '../../systems';
 import * as authService from '../../services/auth';
 import * as uconfigService from '../../services/universal-config';
 
@@ -28,19 +29,20 @@ export default {
   },
   effects: {
     *createUser({ payload }, { call, put }) {
-      const { email, first_name, gender, last_name, position, sub, role } = payload;
+      const { email, first_name, gender, last_name, position, sub, role, src } = payload;
       const { data } =
         yield call(authService.createUser, email, first_name, gender, last_name, position, sub);
       yield put({ type: 'createUserSuccess', payload: data });
       if (data.status) {
         const uid = data.uid;
         yield call(authService.invoke, uid, config.source);
-        if (config.ShowRegisteredRole) {
+        if (sysconfig.ShowRegisteredRole) {
           const arr = role.split('_');
           if (arr.length === 3) {
-            yield call(authService.invoke, uid, `${config.source}_authority${arr[1]}`);
+            yield call(authService.invoke, uid, `${config.source}_${arr[1]}`);
+            yield call(authService.invoke, uid, `${config.source}_authority_${arr[2]}`);
           } else if (arr.length === 2) {
-            yield call(authService.invoke, uid, `${config.source}_${arr[0]}`);
+            yield call(authService.invoke, uid, `${config.source}_${arr[1]}`);
           }
         }
       }

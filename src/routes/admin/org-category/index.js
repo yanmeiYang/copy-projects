@@ -35,8 +35,9 @@ class OrgCategory extends React.Component {
     console.log(tabData)
     console.log("=======")
     return (
-      <div>
-        {tabData.length>0 &&
+      <div style={{ paddingLeft: 24 }}>
+        <h2 style={{ marginBottom: 12 }}>机构列表</h2>
+        {tabData.length > 0 &&
         <Tabs
           defaultActiveKey={tabData[0].category}
           type="card"
@@ -55,7 +56,7 @@ class OrgCategory extends React.Component {
           })}
         </Tabs>
         }
-        <UniversalConfig hideValue/>
+        <UniversalConfig hideValue />
       </div>
     );
   }

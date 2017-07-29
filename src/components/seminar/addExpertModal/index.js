@@ -22,6 +22,7 @@ class AddExpertModal extends React.Component {
     name: '',
     position: '',
     affiliation: '',
+    talkAbstract: '',
   };
   speakerInformation = {
     name: '',
@@ -66,7 +67,7 @@ class AddExpertModal extends React.Component {
   selectedExpert = (speaker) => {
     this.speakerInformation.name = this.refs.speakerName.refs.input.value = speaker.payload.name;
     this.speakerInformation.affiliation = this.refs.speakerAff.refs.input.value = speaker.payload.org;
-    speaker.pos.length > 0 ? this.speakerInformation.position = this.refs.speakerPos.refs.input.value = speaker.pos[0].n : this.speakerInformation.position = this.refs.speakerPos.refs.input.value = ' ';
+    speaker.pos.length > 0 && speaker.pos.n ? this.speakerInformation.position = this.refs.speakerPos.refs.input.value = speaker.pos[0].n : this.speakerInformation.position = this.refs.speakerPos.refs.input.value = ' ';
     this.speakerInformation.aid = this.refs.speakerAid.value = speaker.payload.id;
     this.speakerInformation.img = this.refs.speakerImg.src = speaker.img;
     this.speakerInformation.bio = this.refs.speakerBio.refs.input.value = '';
@@ -88,7 +89,9 @@ class AddExpertModal extends React.Component {
     });
     // this.props.callbackParent(this.speakerInformation);
   };
-
+  setTalkAbstrack = (e) => {
+    this.setState({ talkAbstract: e.target.value });
+  };
   saveTalkData = () => {
     const state = this.state;
     const talk = {
@@ -116,7 +119,7 @@ class AddExpertModal extends React.Component {
       talk['time.to'] = state.talkEndValue.toJSON();
     }
     talk.location.address = this.refs.talkLocation.refs.input.value;
-    talk.abstract = this.refs.talkAbstract.refs.input.value;
+    talk.abstract = state.talkAbstract;
     this.props.callbackParent(talk);
     this.setState({ modalVisible: false });
   };
@@ -185,7 +188,7 @@ class AddExpertModal extends React.Component {
 
     return (
       <Modal
-        title="添加演讲者"
+        title="添加专家"
         visible={modalVisible}
         width={640}
         footer={null}
@@ -197,7 +200,7 @@ class AddExpertModal extends React.Component {
             {...formItemLayout}
             label="演讲标题"
           >
-            <Input placeholder="请输入活动名称。。。" ref="talkTitle" />
+            <Input placeholder="请输入演讲标题。。。" ref="talkTitle" />
           </FormItem>
           <FormItem
             {...formItemLayout}
@@ -213,7 +216,7 @@ class AddExpertModal extends React.Component {
           <FormItem
             {...formItemLayout}
             label={(<span>演讲摘要</span>)}>
-            <Input type="textarea" rows={4} placeholder="请输入演讲摘要。。。" ref="talkAbstract" />
+            <Input type="textarea" rows={4} placeholder="请输入演讲摘要。。。" ref="talkAbstract" onBlur={this.setTalkAbstrack}/>
           </FormItem>
           {contribution_type && <FormItem
             {...formItemLayout}
@@ -408,13 +411,6 @@ class AddExpertModal extends React.Component {
               <div className="ant-col-21">
                 <Input size="large" placeholder="邮箱" ref="speakerEmail"
                        onBlur={this.saveExpertInfo.bind(this, 'email')} />
-              </div>
-            </div>
-
-            <div className="ant-form-item">
-              <label className="ant-col-3">积分: </label>
-              <div className="ant-col-21">
-                <span>{integral}</span>
               </div>
             </div>
           </Col>

@@ -61,6 +61,7 @@ class RegistrationForm extends React.Component {
     // searchExperts: false,
     tags: [],
     talks: [],
+    editTheTalk: {},
     // suggestSpeakers: [],
     // speakerInfo: {},
     // integral: 0,
@@ -94,7 +95,7 @@ class RegistrationForm extends React.Component {
             data.state = data.state.split('#')[0];
           }
           // 用于跟aminer的活动区分。默认是aminer
-          data.src = 'ccf';
+          data.src = config.source;
           data.location = { city: '', address: '' };
           data.time = { from: '', to: '' };
           data.type = 1;
@@ -177,6 +178,9 @@ class RegistrationForm extends React.Component {
     this.state.talks.splice(i, 1);
     this.setState({ talks: this.state.talks });
   };
+  editTheExpert = (i) => {
+    this.setState({ editTheTalk: this.state.talks[i], addNewTalk: true });
+  };
 
   getKeywords = () => {
     const form = this.props.form;
@@ -210,7 +214,7 @@ class RegistrationForm extends React.Component {
     }
 
 
-    const { addNewTalk, talks, integral, startValue, endValue } = this.state;
+    const { addNewTalk, talks, integral, startValue, endValue, editTheTalk } = this.state;
 
     const formItemLayout = {
       labelCol: {
@@ -415,7 +419,7 @@ class RegistrationForm extends React.Component {
               <a type="primary" onClick={this.addTalkData.bind(this, addNewTalk)}>新增专家</a>
             </div>
 
-            {addNewTalk && <AddExpertModal integral={integral} parentProps={this.props}
+            {addNewTalk && <AddExpertModal talk={editTheTalk} integral={integral} parentProps={this.props}
                                            callbackParent={this.addTheNewTalk} />}
           </Col>
 

@@ -24,7 +24,7 @@ class ExportPersonBtn extends React.Component {
     checkedList: defaultCheckedList,
     indeterminate: true,
     checkAll: false,
-    exportSize: 1,
+    exportSize: 30,
   };
 
   setExport = (value) => {

@@ -273,7 +273,7 @@ class ExpertMap extends React.PureComponent {
         this.syncInfoWindow();
       } else {
         e.target.openInfoWindow(infoWindow);
-       this.syncInfoWindow();
+        this.syncInfoWindow();
       }
       this.currentPersonId = personId;
     });
@@ -308,7 +308,7 @@ class ExpertMap extends React.PureComponent {
       return riz1;
     }
   };
-    // 将内容同步到地图中的控件上。
+  // 将内容同步到地图中的控件上。
   syncInfoWindow = () => {
     // sync personInfo popup
     const ai = getById('author_info');
@@ -327,7 +327,7 @@ class ExpertMap extends React.PureComponent {
         flowInfo.innerHTML = rsz.innerHTML;
       }
     }
-      // this.bindMouseScroll();
+    // this.bindMouseScroll();
   };
 
   toggleRightInfoBox = (id) => {
@@ -342,14 +342,14 @@ class ExpertMap extends React.PureComponent {
           const clusterIdList = id.split(',');
           this.props.dispatch({
             type: 'expertMap/listPersonByIds',
-            payload: {ids: clusterIdList},
+            payload: { ids: clusterIdList },
           });
         }
         this.props.dispatch({type: 'expertMap/setRightInfoZoneIds', payload: {idString: id}});
       }
       this.syncInfoWindow();
     } else if (state === 1) { // 偶数次点击同一个对象
-        // 认为是第二次及其以上点击
+      // 认为是第二次及其以上点击
       getById('flowstate').value = 0;
       getById('flowInfo').style.display = 'none';
     } else { // 奇数次点击同一个对象
@@ -378,10 +378,10 @@ class ExpertMap extends React.PureComponent {
     }
   };
   onChangeGoogleMap = () => {
-      // this.props.dispatch(routerRedux.push({
-      //   pathname: '/expert-map',
-      //   data: { type: 'google' },
-      // }));
+    // this.props.dispatch(routerRedux.push({
+    //   pathname: '/expert-map',
+    //   data: { type: 'google' },
+    // }));
     const href = window.location.href;
     window.location.href = href.replace('expert-map', 'expert-googlemap');
   };
@@ -410,7 +410,7 @@ class ExpertMap extends React.PureComponent {
     this.props.dispatch({ type: 'expertMap/searchMap', payload: { query } });
   }
 
-    // not used.
+  // not used.
   bindMouseScroll = () => {
     console.log('binding mouse scroll....');
     const rizs = document.getElementsByClassName('rightInfoZone');
@@ -425,13 +425,13 @@ class ExpertMap extends React.PureComponent {
       } else {
         // IE 6/7/8
         riz.attachEvent('onmousewheel', this.onMouseScroll);
-       }
+      }
     }
   };
 
   onMouseScroll = (e) => {
-      // event.preventDefault();
-      // console.log(e);
+    // event.preventDefault();
+    // console.log(e);
   };
 
   render() {
@@ -462,7 +462,7 @@ class ExpertMap extends React.PureComponent {
       );
     }
 
-      // right info
+    // right info
     const shouldRIZUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') === -1 && model.infoZoneIds === person.id;
     const shouldRIZClusterUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') > 0;
     const clusterPersons = model.clusterPersons;

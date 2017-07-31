@@ -158,7 +158,7 @@ class UserList extends React.Component {
       // 获取所有的专委
       this.props.dispatch({
         type: 'universalConfig/setCategory',
-        payload: { category: 'orglist_5976bb068ef7a2e824adca67' },
+        payload: { category: 'orglist_597c36218ef7a2e824fe6b5c' },
       });
     } else if (role === 'ccf_分部秘书长') {
       this.setState({ committee: true, isModifyRegion: true, selectedRole: role });

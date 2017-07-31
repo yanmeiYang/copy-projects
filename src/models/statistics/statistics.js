@@ -40,7 +40,7 @@ export default {
     },
 
     getSeminarsByOrgAndCatSuccess(state, { data, size }) {
-      return { ...state, seminarsByOrgAndCat: data, loading: false, getSeminarOffset: size, getSeminarSize: state.getSeminarSize + size };
+      return { ...state, seminarsByOrgAndCat: data, loading: false, getSeminarSize: state.getSeminarSize + size };
     },
 
     showLoading(state) {

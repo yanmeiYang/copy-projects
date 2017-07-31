@@ -176,7 +176,7 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
               {summaryById.type === 1 ? <div>
                 <div className={styles.workshopTetail}>
                   <h5><TimeFormat {...summaryById.time} /></h5>
-                  {summaryById.img && <img src={summaryById.img} alt="" />}
+                  {summaryById.img && <div style={{ textAlign: 'center' }}><img src={summaryById.img} alt="" style={{ width: '80%' }} /></div>}
                   <p>{summaryById.abstract}</p>
                   <hr />
                 </div>

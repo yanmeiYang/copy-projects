@@ -21,6 +21,15 @@ const expertBases = sysconfig.ExpertBases;
 
 const labelMap = { 'H-Index': 'h指数', Language: '语言', Location: '国家' };
 
+const searchSorts = [
+  { label: '综合排序', key: 'relevance' },
+  { label: 'H-index', key: 'h_index' },
+  { label: '学术活跃度', key: 'activity' },
+  { label: '领域新星', key: 'rising_star' },
+  { label: '引用数', key: 'citation' },
+  { label: '论文数', key: 'num_pubs' },
+];
+
 function showChineseLabel(enLabel) {
   if (sysconfig.Language === 'cn') {
     const cnLabel = labelMap[enLabel];
@@ -157,24 +166,19 @@ class UniSearch extends React.PureComponent {
     });
   };
 
-
-  filterDisplay = (name) => {
-    return <span>{name} <i className="fa fa-sort-amount-desc" /></span>;
-  };
-
   render() {
     const { results, pagination, query, aggs, filters } = this.props.search;
     const { pageSize, total, current } = pagination;
     const load = this.props.loading.models.search;
 
     const exportArea = sysconfig.Enable_Export ? <ExportPersonBtn /> : '';
-
     const wantedTabs = sysconfig.UniSearch_Tabs;
     const avaliableTabs = {
       list: { key: 'list', label: '列表视图', icon: 'fa-list' },
       map: { key: 'map', label: '地图视图', icon: 'fa-map-marker' },
       relation: { key: 'relation', label: '关系视图', icon: 'fa-users' },
     };
+
     this.state.view['list-view'] = (
       <div>
         <Tabs
@@ -182,25 +186,28 @@ class UniSearch extends React.PureComponent {
           onChange={this.onOrderChange}
           size="small"
         >
-          <TabPane tab={this.filterDisplay('综合排序')} key="relevance" />
-          <TabPane tab={this.filterDisplay('H-index')} key="h_index" />
-          <TabPane tab={this.filterDisplay('学术活跃度')} key="activity" />
-          <TabPane tab={this.filterDisplay('领域新星')} key="rising_star" />
-          <TabPane tab={this.filterDisplay('引用数')} key="citation" />
-          <TabPane tab={this.filterDisplay('论文数')} key="num_pubs" />
+          {searchSorts.map((sortItem) => {
+            const icon = sortItem.key === this.state.sortType ?
+              <i className="fa fa-sort-amount-desc" /> : '';
+            const tab = <span>{sortItem.label} {icon}</span>;
+            return <TabPane tab={tab} key={sortItem.key} />;
+          })}
         </Tabs>
 
-        <PersonList persons={results} personLabel={sysconfig.Person_PersonLabelBlock} />
+        <div>
+          <Spinner loading={load} />
 
-        <div className={styles.paginationWrap}>
-          <Pagination
-            showQuickJumper
-            current={current}
-            defaultCurrent={1}
-            defaultPageSize={pageSize}
-            total={total}
-            onChange={this.onPageChange}
-          />
+          <PersonList persons={results} personLabel={sysconfig.Person_PersonLabelBlock} />
+          <div className={styles.paginationWrap}>
+            <Pagination
+              showQuickJumper
+              current={current}
+              defaultCurrent={1}
+              defaultPageSize={pageSize}
+              total={total}
+              onChange={this.onPageChange}
+            />
+          </div>
         </div>
       </div>
     );
@@ -279,7 +286,7 @@ class UniSearch extends React.PureComponent {
                 </div>}
 
                 {
-                  aggs.map((agg) => {
+                  aggs.map((agg, index) => {
                     if (agg.label === sysconfig.SearchFilterExclude) { // skip gender
                       return '';
                     }
@@ -292,7 +299,10 @@ class UniSearch extends React.PureComponent {
                       }
                       const cnLabel = showChineseLabel(agg.label);
                       return (
-                        <div className={styles.filterRow} key={agg.type}>
+                        <div
+                          className={classnames(styles.filterRow, (index === aggs.length - 1) ? 'last' : '')}
+                          key={agg.type}
+                        >
                           <span className={styles.filterTitle}>{cnLabel}:</span>
                           <ul className={styles.filterItems}>
                             {agg.item.slice(0, 12).map((item) => {
@@ -303,8 +313,8 @@ class UniSearch extends React.PureComponent {
                                   checked={filters[agg.label] === item.label}
                                   onChange={checked => this.onFilterChange(agg.type, item.label, checked)}
                                 >
-                                  {item.label}
-                                  (<span className={styles.filterCount}>{item.count}</span>)
+                                  {item.label} (<span
+                                  className={styles.filterCount}>{item.count}</span>)
                                 </CheckableTag>
                               );
                             })
@@ -348,7 +358,7 @@ class UniSearch extends React.PureComponent {
 */}
 
         <div className={styles.view}>
-          <Spinner loading={load} />
+          {/* <Spinner loading={load} /> */}
           {this.state.view[this.state.currentTab]}
         </div>
       </div>

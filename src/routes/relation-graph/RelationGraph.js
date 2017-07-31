@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Checkbox, Select, Progress } from 'antd';
+import { Checkbox, Select, Progress, message } from 'antd';
 import { RgSearchNameBox } from '../../components/relation-graph';
 import { getAvatar } from '../../utils/profile_utils';
 import styles from './RelationGraph.less';
@@ -1069,7 +1069,7 @@ class RelationGraph extends React.PureComponent {
 
         // special:
         if (!graph.nodes || graph.nodes.length <= 0) {
-          alert('No data, please change a query.');
+          message.info('No data, please change a query.', 50);
           return;
         }
 

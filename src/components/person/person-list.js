@@ -2,15 +2,13 @@
  *  Created by BoGao on 2017-06-15;
  */
 import React from 'react';
-import { routerRedux, Link } from 'dva/router';
-import { Tooltip, Tag } from 'antd';
+import { Link } from 'dva/router';
+import { Tag } from 'antd';
 import { Indices } from '../../components/widgets';
 import { sysconfig } from '../../systems';
 import { config } from '../../utils';
 import styles from './person-list.less';
 import * as profileUtils from '../../utils/profile_utils';
-import * as personService from '../../services/person';
-import * as pubService from '../../services/publication';
 
 /**
  * @param param
@@ -85,12 +83,12 @@ class PersonList extends React.PureComponent {
                         <i className="fa fa-phone fa-fw" /> {phone}
                       </span>}
                       {email &&
-                      <span className="email"><i className="fa fa-envelope fa-fw" />
-                        <img
-                          src={`${config.baseURL}${email}`}
-                          alt="email"
-                          style={{ verticalAlign: 'middle' }}
-                        />
+                      <span className="email">
+                        <i className="fa fa-envelope fa-fw" /> <img
+                        src={`${config.baseURL}${email}`}
+                        alt="email"
+                        style={{ verticalAlign: 'middle' }}
+                      />
                       </span>
                       }
                     </div>
@@ -98,7 +96,7 @@ class PersonList extends React.PureComponent {
                     {tags &&
                     <div className="tag_zone">
                       <div>
-                        <h4><i className="fa fa-area-chart fa-fw" />研究兴趣:</h4>
+                        <h4><i className="fa fa-area-chart fa-fw" /> 研究兴趣:</h4>
                         <div className={styles.tagWrap}>
                           {
                             tags.map((tag) => {

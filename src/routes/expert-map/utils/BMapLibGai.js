@@ -14,6 +14,7 @@ function GetBMapLib(showTop) {
     /**
      * @namespace BMap的所有library类均放在BMapLib命名空间下
      */
+
     var BMapLib = window.BMapLib = BMapLib || {};
     (function () {
       /**
@@ -1659,3 +1660,6 @@ function GetBMapLib(showTop) {
 }
 
 export default GetBMapLib;
+
+
+

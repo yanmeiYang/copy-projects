@@ -1,9 +1,83 @@
 .expert_map {
   border-bottom: solid 1px #ddd;
 }
+
+:global {
+  .popup {
+    border: solid 0px red; width: 360px; height: 100px;
+  }
+
+  .personInfo {
+    display: flex; flex-direction: row; flex: 0;
+
+    img.img { width: 80px; }
+
+    .info {
+      display: flex; flex-direction: column; flex: 2;
+      padding-left: 8px;
+
+      .nameLine {
+        //display: flex; flex-direction: row;
+        .name {
+          //flex: 2;
+          font-size: 15px;
+          font-family: "STHeitiSC-Medium", "STHeiti", "Heiti SC", "Hiragino Sans GB", "Microsoft JhengHei", "Microsoft Yahei", SimHei, "AvenirNext-Regular", "Helvetica Neue", "lucida grande", "PingFangHK-Light", "WenQuanYi Micro Hei", "Droid Sans", "Roboto", Helvetica, Tahoma, Arial, "sans-serif";
+          font-weight: normal;
+          color: #101010;
+        }
+        .right { float: right; color: #A52A2A; margin-right: 16px; }
+      }
+
+    }
+  }
+
+  .roundImgContainer {
+    // box-shadow: 0px 0px 5px blue;
+    cursor: pointer; z-index: 10000; position: absolute; border-radius: 50%;
+
+    .imgWrapper {
+      z-index: 10001; border: 1px solid white; position: absolute;
+      border-radius: 50%; overflow: hidden;
+      box-shadow: 0px 0px 5px #333;
+
+      img { background: white; }
+    }
+    .imgWrapper1 {
+      z-index: 10001; border: 1px solid white; position: relative;
+      box-shadow: 0px 0px 5px #333;
+    }
+  }
+
+  #rank {
+    z-index: 10001;
+    position: absolute; overflow: hidden;
+    right: 31px; top: 120px; width: 248px; height: 175px;
+    word-wrap: break-word; word-break: break-all;
+    border: 1px solid #eee; border-radius: 3px;
+    background-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 5px #666;
+    padding: 8px;
+    overflow: scroll;
+  }
+
+  #flowInfo {
+    z-index: 10001;
+    position: absolute; overflow: hidden;
+    right: 12px; top: 187px; width: 248px; bottom: 12px;
+    word-wrap: break-word; word-break: break-all;
+    border: 1px solid #eee; border-radius: 3px;
+    background-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 5px #666;
+    padding: 8px;
+    overflow: scroll;
+  }
+
+}
+
 .mapshow{
 
 }
+
 .cont1{
   clear: both;
   padding: 8px;
@@ -84,4 +158,17 @@
     z-index: 10001; border: 1px solid white; position: relative;
     box-shadow: 0px 0px 5px #333;
   }
+}
+
+.labels {
+  color: black;
+  fontSize: '12px';
+  border: none;
+  backgroundColor: 'transparent';
+  // opacity:0.4,
+  fontWeight: 'bold';
+  textAlign: 'center';
+  width: 130px;
+  textShadow: '1px 1px 2px white, -1px -1px 2px white';
+  fontStyle: 'italic';
 }

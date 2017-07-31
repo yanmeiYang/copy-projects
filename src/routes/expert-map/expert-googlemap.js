@@ -64,10 +64,6 @@ class ExpertGoogleMap extends React.Component {
     if (ishere != null) {
       return;
     }
-    //const pixel=map.fromLatLngToDivPixel(e.getPoint());
-    //const pixelx = e.clientX;
-    //const pixely = e.clientY;
-    //const pixel = projection.fromDivPixelToLatLng(e);
     const width = 180;
     // 可得中心点到图像中心点的半径为：width/2-imgwidth/2,圆形的方程为(X-pixel.x)^2+(Y-pixel.y)^2=width/2
     const imgwidth = 45;

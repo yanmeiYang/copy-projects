@@ -162,7 +162,6 @@ class ExpertMap extends React.PureComponent {
               const newPixel = new BMap.Pixel(cpos.left - apos.left + imgwidth, cpos.top - apos.top); // eslint-disable-line
               const currentPoint = map.pixelToPoint(newPixel);
               // get personInfo data.
-              console.log(currentPoint)
               const chtml = event.target.innerHTML;
               let num = 0;
               if (chtml.split('@@@@@@@').length > 1) {
@@ -254,7 +253,6 @@ class ExpertMap extends React.PureComponent {
 
         waitforBMapLib(200, 100,
           (BMapLib) => {
-          console.log(BMapLib)
             const _ = new BMapLib.MarkerClusterer(map, { markers });
             for (let m = 0; m < pId.length; m += 1) {
               this.addMouseoverHandler(markers[m], pId[m]);
@@ -336,14 +334,12 @@ class ExpertMap extends React.PureComponent {
   toggleRightInfoBox = (id) => {
     const state = getById('flowstate').value;
     const statistic = getById('statistic').value;
-    console.log(state)
     this.getTipInfoBox();
     if (statistic !== id) { // 一般认为是第一次点击
-      //getById('flowstate').value = 1;
-      //this.getRightInfoBox();
+      getById('flowstate').value = 1;
+      this.getRightInfoBox();
       if (this.props.expertMap.infoZoneIds !== id) { // don't change
         if (id.indexOf(',') >= 0) { // is cluster
-          console.log("ffffffffffffffffffffff")
           const clusterIdList = id.split(',');
           this.props.dispatch({
             type: 'expertMap/listPersonByIds',

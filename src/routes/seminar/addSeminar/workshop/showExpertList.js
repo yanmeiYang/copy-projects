@@ -8,6 +8,12 @@ import styles from './showExpertList.less';
 class ShowExpertList extends React.Component {
   render() {
     const { talk, index, getImg, delTheExpert } = this.props;
+    let timeFrom = '';
+    let timeTo = '';
+    if (talk.time) {
+      timeFrom = new Date(talk.time.from);
+      timeTo = new Date(talk.time.to);
+    }
     return (
       <li className={styles.talks}>
         <div className={styles.left}>
@@ -21,17 +27,21 @@ class ShowExpertList extends React.Component {
             </tr>
             <tr>
               <td>演讲时间：</td>
-              <td style={{ width: '42%' }}>2017</td>
-              <td style={{ textAlign: 'right', verticalAlign: 'top' }}>演讲地点：</td>
+              {timeFrom !== '' ? <td style={{ width: '42%' }}>
+                {timeFrom.format('yyyy年MM月dd日')}
+                {timeTo !== '' && timeFrom.getDate() < timeTo.getDate() &&
+                <span>~ {timeTo.getDate()}日</span>}
+              </td> : <td style={{ width: '42%' }}> </td>}
+              <td style={{ textAlign: 'right', verticalAlign: 'top', width: '9%' }}>演讲地点：</td>
               <td style={{ width: '42%' }}>{talk.location.address}</td>
             </tr>
             <tr>
-              <td>姓名：</td>
-              <td style={{ width: '42%' }}>
+              <td>专家姓名：</td>
+              <td style={{ width: '42%', verticalAlign: 'top' }}>
                 <span>{talk.speaker.name}</span>
                 {talk.speaker.position && <span> {talk.speaker.position}</span>}
               </td>
-              <td>单位：</td>
+              <td>专家单位：</td>
               <td style={{ width: '42%' }}>
                 {talk.speaker.affiliation && <span>{talk.speaker.affiliation}</span>}
               </td>

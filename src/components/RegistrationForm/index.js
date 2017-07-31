@@ -74,7 +74,7 @@ class RegistrationForm extends React.Component {
     this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'orgcategory' } });
     this.props.dispatch({
       type: 'seminar/getCategory',
-      payload: { category: 'contribution_type' }
+      payload: { category: 'contribution_type' },
     });
   };
 
@@ -203,10 +203,10 @@ class RegistrationForm extends React.Component {
     const { getFieldDecorator } = this.props.form;
     const {
       activity_organizer_options, orgcategory, tags,
-      postSeminarOrganizer, contribution_type
+      postSeminarOrganizer, contribution_type,
     } = this.props.seminar;
     let activity_organizer_options_data = {};
-    let activity_type_options_data = {};
+    const activity_type_options_data = {};
     // let activity_type_options = {};
 
     if (activity_organizer_options.data) {

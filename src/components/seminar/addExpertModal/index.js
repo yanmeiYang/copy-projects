@@ -112,11 +112,14 @@ class AddExpertModal extends React.Component {
     talk.speaker.phone = state.speakerInfo.phone;
     talk.speaker.stype = state.speakerInfo.stype;
     // talk.stype[xxx]='1';
+    if (state.talkStartValue || state.talkEndValue) {
+      talk['time'] = {};
+    }
     if (state.talkStartValue) {
-      talk['time.from'] = state.talkStartValue.toJSON();
+      talk['time'].from = state.talkStartValue.toJSON();
     }
     if (state.talkEndValue) {
-      talk['time.to'] = state.talkEndValue.toJSON();
+      talk['time'].to = state.talkEndValue.toJSON();
     }
     talk.location.address = this.refs.talkLocation.refs.input.value;
     talk.abstract = state.talkAbstract;
@@ -351,7 +354,7 @@ class AddExpertModal extends React.Component {
           </div>
         </div>
 
-        <div className={`${step3 ? styles.showStep4 : styles.hideStep4}`} style={{ minHeight: 378, maxHeight: 800 }}>
+        <div className={`${step3 ? styles.showStep4 : styles.hideStep4}`} style={{ minHeight: 392, maxHeight: 800 }}>
           <Col><label>专家信息</label></Col>
 
           <Col span={6}>

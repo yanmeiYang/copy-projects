@@ -8,6 +8,7 @@ function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
   }
+  // TODO move out, don't process auth here.
   if (response.status === 401) {
     localStorage.removeItem('token');
     localStorage.removeItem('user');

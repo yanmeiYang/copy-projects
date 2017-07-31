@@ -10,7 +10,14 @@ module.exports = {
   SearchPagePrefix: 'uniSearch',
   ShowSideMenu: false,
 
-  Header_LogoStyle: { top: 2, width: '200px' },
+  Header_LogoWidth: 212,
+  Header_LogoStyle: {
+    width: 185,
+    backgroundPosition: '8px 2px',
+    backgroundSize: 'auto 40px',
+    backgroundRepeat: 'no-repeat',
+    backgroundColor: 'white',
+  },
   Header_SubTextLogo: '人才智库',
   Header_SubTextStyle: { paddingLeft: 12 },
   Header_UserPageURL: '',

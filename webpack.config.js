@@ -33,6 +33,7 @@ module.exports = function (config, env) {
           inject: true,
           minify: { collapseWhitespace: true },
           production: true,
+          title: 'Loading...',
         }),
         new WebpackChunkHash({ algorithm: 'md5' }),
       );

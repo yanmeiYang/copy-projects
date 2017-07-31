@@ -92,7 +92,7 @@ const App = ({ children, location, dispatch, app, loading }) => {
     }));
   };
 
-  const { iconFontJS, iconFontCSS, logo } = config;
+  const { iconFontJS, iconFontCSS } = config;
 
   const mainMarginLeft = sysconfig.ShowSideMenu ? 188 : 0;
 
@@ -105,7 +105,8 @@ const App = ({ children, location, dispatch, app, loading }) => {
       <Helmet>
         <title>{sysconfig.PageTitle}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" href={logo} type="image/x-icon" />
+        <link rel="icon" href={`/sys/${sysconfig.SYSTEM}/favicon.ico`} type="image/x-icon" />
+
         {iconFontJS && <script src={iconFontJS} />}
         {iconFontCSS && <link rel="stylesheet" href={iconFontCSS} />}
 

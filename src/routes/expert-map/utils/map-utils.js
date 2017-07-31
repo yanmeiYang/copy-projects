@@ -216,3 +216,4 @@ function waitforBMapLib(tryTimes, interval, success, failed) {
 module.exports = {
   findPosition, getById, waitforBMap, waitforBMapLib,
 }
+

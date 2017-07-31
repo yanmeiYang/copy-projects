@@ -219,7 +219,10 @@ class UniSearch extends React.PureComponent {
         );
     */
 
-    console.log('refresh page', load);
+    DEBUGLog && console.log('refresh pagesdf', load);
+    // DEBUGLog('refresh pagesdf', load); // TODO define a function.
+
+    // TODO extract filter into component.
     return (
       <div className="content-inner">
 
@@ -243,7 +246,10 @@ class UniSearch extends React.PureComponent {
                           checked: filters.eb && (filters.eb.id === ep.id),
                         };
                         return (
-                          <CheckableTag {...props}>{ep.name} {/* TODO Show Numbers */}</CheckableTag>
+                          <CheckableTag {...props}>
+                            {ep.name}
+                            {/* TODO Show Numbers */}
+                          </CheckableTag>
                         );
                       })
                     }

@@ -873,6 +873,8 @@ Cluster.prototype.addMarker = function(marker) {
   }
 
   this.updateIcon();
+  this.markerClusterer_.setMap(this.map_);
+  //this.updateClusterMarker();
   return true;
 };
 
@@ -901,7 +903,13 @@ Cluster.prototype.getBounds = function() {
   return bounds;
 };
 
-
+const that = this;
+Cluster.prototype.updateClusterMarker = function () {
+  google.maps.event.addDomListener(that.clusterMarker_, 'mouseenter', function(event) {
+    console.log("set view port");
+    // this._map.setViewport(this.getBounds());
+  });
+}
 /**
  * Removes the cluster
  */
@@ -1077,6 +1085,7 @@ ClusterIcon.prototype.onAdd = function() {
       that.triggerClusterClick(event);
     }
   });
+
   google.maps.event.addDomListener(this.div_, 'mousedown', function() {
     isDragging = false;
   });

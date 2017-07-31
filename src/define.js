@@ -12,6 +12,8 @@ const SYSTEM = 'ccf';
 const defines = {
   ENABLE_PERF: true,
   VERSION: '0.1.0',
+  DEBUGLog: JSON.stringify('process.env.NODE_ENV !== "production" && console.log'),
+  // DEBUGLog: JSON.stringify('process.env.NODE_ENV !== "production" && console.log'),
 
   // No Use.
   SYSTEM: SYSTEM, // eslint-disable-line object-shorthand

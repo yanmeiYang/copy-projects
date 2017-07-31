@@ -1,8 +1,8 @@
 /**
  * Created by yutao on 2017/5/22.
  */
-const SYS = 'ccf';
-// const SYS = 'huawei';
+// const SYS = 'ccf';
+const SYS = 'huawei';
 // const SYS = 'alibaba';
 // const SYS = 'tencent';
 
@@ -23,7 +23,7 @@ module.exports = {
   name: '专家搜索',
   prefix: 'aminer',
   // footerText: 'AMiner © 2017 AMiner', // not used now.
-  logo: '/logo.png',
+  // logo: '/logo.png',
   iconFontCSS: '/iconfont.css',
   iconFontJS: '/iconfont.js',
   basePageURL: 'https://aminer.org',

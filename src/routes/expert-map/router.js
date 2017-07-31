@@ -11,7 +11,7 @@ export default {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/expert-map'));
         cb(null, require('./'));
-      }, 'expert-map');
+      }, 'map');
     },
   }),
 
@@ -21,8 +21,19 @@ export default {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/expert-map'));
         cb(null, require('../expert-map/expert-googlemap'));
-      }, 'expert-googlemap');
+      }, 'map-google');
     },
   }),
+
+  ExpertTrajectoryPage: app => ({
+    path: 'expert-trajectory',
+    getComponent(nextState, cb) {
+      require.ensure([], (require) => {
+        // registerModel(app, require('../../models/expert-map'));
+        cb(null, require('../expert-trajectory/ExpertTrajectoryPage'));
+      }, 'map');
+    },
+  }),
+
 
 };

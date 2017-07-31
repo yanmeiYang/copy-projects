@@ -85,7 +85,12 @@ class ExportPersonBtn extends React.Component {
               return expertPersonInfo += ',';
             }
           case 'aff':
-            return expertPersonInfo += (person.aff.desc_zh ? person.aff.desc_zh.replace(/,/g, ';') : person.aff.desc.replace(/,/g, ';')) + ',';
+            if (person.aff.desc_zh || person.aff.desc) {
+              return expertPersonInfo += (person.aff.desc_zh ? person.aff.desc_zh.replace(/,/g, ';') : person.aff.desc.replace(/,/g, ';')) + ',';
+            } else {
+              return expertPersonInfo += ',';
+            }
+
           case 'gender':
             return expertPersonInfo += person.attr.gender + ',';
           case 'name_zh':

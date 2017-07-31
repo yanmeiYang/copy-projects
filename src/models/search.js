@@ -85,7 +85,7 @@ export default {
       const { data } = yield call(searchService.searchPerson, query, offset, size, filters, sort);
       yield put({ type: 'updateFilters', payload: { filters } });
       yield put({ type: 'updateSortKey', payload: { sort } });
-      yield put({ type: 'searchPersonSuccess', payload: { data } });
+      yield put({ type: 'searchPersonSuccess', payload: { data, query } });
     },
     * searchPersonAgg({ payload }, { call, put }) {
       const { query, offset, size, filters } = payload;
@@ -113,7 +113,7 @@ export default {
       return { ...state, sortKey: key || '' };
     },
 
-    searchPersonSuccess(state, { payload: { data } }) {
+    searchPersonSuccess(state, { payload: { data, query } }) {
       const { result, total } = data;
       const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
       return {

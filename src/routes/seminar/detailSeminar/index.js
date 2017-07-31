@@ -36,9 +36,9 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
               {currentUser.token && (app.roles.authority.indexOf(summaryById.organizer[0]) >= 0 || app.roles.admin) &&
               <Button type="danger" icon="delete" style={{ float: 'right' }} onClick={delSeminar}>删除</Button>}
               <div style={{ float: 'right', marginRight: 10 }}>
-                <Button type="default" className={styles.show_QRCode}>
-                  <i className="fa fa-1x fa-qrcode" aria-hidden="true" /> 手机查看
-                </Button>
+                <span type="default" className={styles.show_QRCode}>
+                  <i className="fa fa-2x fa-qrcode" aria-hidden="true" />
+                </span>
                 <div className={styles.qrCode}>
                   <QRCode value={window.location.href} />
                 </div>

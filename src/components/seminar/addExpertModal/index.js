@@ -67,7 +67,7 @@ class AddExpertModal extends React.Component {
   selectedExpert = (speaker) => {
     this.speakerInformation.name = this.refs.speakerName.refs.input.value = speaker.payload.name;
     this.speakerInformation.affiliation = this.refs.speakerAff.refs.input.value = speaker.payload.org;
-    speaker.pos.length > 0 && speaker.pos.n ? this.speakerInformation.position = this.refs.speakerPos.refs.input.value = speaker.pos[0].n : this.speakerInformation.position = this.refs.speakerPos.refs.input.value = ' ';
+    speaker.pos.length > 0 && speaker.pos[0].n ? this.speakerInformation.position = this.refs.speakerPos.refs.input.value = speaker.pos[0].n : this.speakerInformation.position = this.refs.speakerPos.refs.input.value = ' ';
     this.speakerInformation.aid = this.refs.speakerAid.value = speaker.payload.id;
     this.speakerInformation.img = this.refs.speakerImg.src = speaker.img;
     this.speakerInformation.bio = this.refs.speakerBio.refs.input.value = '';
@@ -351,7 +351,7 @@ class AddExpertModal extends React.Component {
           </div>
         </div>
 
-        <div className={`${step3 ? styles.showStep4 : styles.hideStep4}`} style={{ minHeight: 355, maxHeight: 800 }}>
+        <div className={`${step3 ? styles.showStep4 : styles.hideStep4}`} style={{ minHeight: 378, maxHeight: 800 }}>
           <Col><label>专家信息</label></Col>
 
           <Col span={6}>
@@ -368,7 +368,7 @@ class AddExpertModal extends React.Component {
             </section>
           </Col>
           <Col span={18} className={styles.expertProfile}>
-            <div className="ant-form-item">
+            <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
               <label className="ant-col-3">姓名: </label>
               <div className="ant-col-21">
                 <Input size="large" placeholder="专家姓名" ref="speakerName"
@@ -376,7 +376,7 @@ class AddExpertModal extends React.Component {
               </div>
             </div>
 
-            <div className="ant-form-item">
+            <div className="ant-form-item" style={{ paddingBottom: '20px' }}>
               <label className="ant-col-3">性别: </label>
               <div className="ant-col-21">
                 <RadioGroup defaultValue="1" onChange={this.saveExpertInfo.bind(this, 'gender')}>
@@ -385,28 +385,28 @@ class AddExpertModal extends React.Component {
                 </RadioGroup>
               </div>
             </div>
-            <div className="ant-form-item">
+            <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
               <label className="ant-col-3">职称: </label>
               <div className="ant-col-21">
                 <Input size="large" placeholder="专家职称" ref="speakerPos"
                        onBlur={this.saveExpertInfo.bind(this, 'position')} />
               </div>
             </div>
-            <div className="ant-form-item">
+            <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
               <label className="ant-col-3">单位: </label>
               <div className="ant-col-21">
                 <Input size="large" placeholder="专家单位" ref="speakerAff"
                        onBlur={this.saveExpertInfo.bind(this, 'affiliation')} />
               </div>
             </div>
-            <div className="ant-form-item">
+            <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
               <label className="ant-col-3">电话: </label>
               <div className="ant-col-21">
                 <Input size="large" placeholder="电话" ref="speakerIphone"
                        onBlur={this.saveExpertInfo.bind(this, 'phone')} />
               </div>
             </div>
-            <div className="ant-form-item">
+            <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
               <label className="ant-col-3">邮箱: </label>
               <div className="ant-col-21">
                 <Input size="large" placeholder="邮箱" ref="speakerEmail"

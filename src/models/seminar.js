@@ -19,11 +19,15 @@ export default {
     query: '',
     summaryById: [],
     speakerSuggests: [],
-    activity_organizer_options: [],
-    activity_type: [],
+    activity_organizer_options: [], // 用户手动输入的org
+    postSeminarOrganizer: [], // 所有活动类型的合集
+    orgcategory: {}, // 活动类型
+    orgByActivity: [],
+    contribution_type: [],
     comments: [],
     expertRating: [],
     tags: [],
+    topMentionedTags: [],
     isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
   },
 
@@ -31,7 +35,17 @@ export default {
     setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname === '/seminar') {
-          dispatch({ type: 'getSeminar', payload: { offset: 0, size: 20, filter: { src: config.source } } });
+          dispatch({
+            type: 'getSeminar',
+            payload: { offset: 0, size: 20, filter: { src: config.source } },
+          });
+          dispatch({ type: 'getTopMentionedTags', payload: { src: config.source, num: 10 } });
+        }
+        if (location.pathname === '/seminar-post') {
+          dispatch({
+            type: 'getCategoriesHint',
+            payload: { category: 'orglist_' },
+          });
         }
         const expertRating = pathToRegexp('/seminar/expert-rating/:id').exec(location.pathname);
         const match = pathToRegexp('/seminar/:id').exec(location.pathname);
@@ -75,7 +89,7 @@ export default {
     *searchActivity({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
       const { query, offset } = payload;
-      const { data } = yield call(seminarService.searchActivity, { ...payload });
+      const { data } = yield call(seminarService.searchActivity, payload);
       yield put({ type: 'searchActivitySuccess', payload: { data, query, offset } });
     },
     *getCategory({ payload }, { call, put }) {
@@ -86,11 +100,11 @@ export default {
     *addKeyAndValue({ payload }, { call, put }) {
       const { key, val } = payload;
       const data = yield call(uconfigService.setByKey, 'activity_organizer_options', decodeURI(key), val);
-      if (data.data && data.data.status === true) {
-        yield put({ type: 'updateData', payload: { data } });
-      } else {
-        console.error('addKeyAndValue Error: ', data);
-      }
+      // if (data.data && data.data.status === true) {
+      //   yield put({ type: 'updateData', payload: { data } });
+      // } else {
+      //   console.error('addKeyAndValue Error: ', data);
+      // }
     },
     *deleteActivity({ payload }, { call }) {
       const { id, body } = payload;
@@ -137,6 +151,21 @@ export default {
       const { data } = yield call(seminarService.keywordExtraction, payload);
       yield put({ type: 'getTagsByContent', payload: data });
     },
+    *getTopMentionedTags({ payload }, { call, put }) {
+      const { src, num } = payload;
+      const data = yield call(seminarService.getTopMentionedTags, src, num);
+      yield put({ type: 'getTopMentionedTagsSuccess', data });
+    },
+    *getCategoriesHint({ payload }, { call, put }) {
+      const { category } = payload;
+      const suggestCategory = yield call(uconfigService.getCategoriesHint, category);
+      if (suggestCategory.data.categories.length > 0) {
+        for (const orgList of suggestCategory.data.categories) {
+          const { data } = yield call(uconfigService.listByCategory, orgList);
+          yield put({ type: 'getAllOrgSuccess', payload: { data, orgList } });
+        }
+      }
+    },
   },
 
   reducers: {
@@ -162,9 +191,15 @@ export default {
       return { ...state, speakerSuggests: data, loading: false };
     },
     searchActivitySuccess(state, { payload: { data, query, offset } }) {
+      let results = [];
+      if (offset === 0) {
+        results = data;
+      } else {
+        results = state.results.concat(data);
+      }
       return {
         ...state,
-        results: state.results.concat(data),
+        results,
         query,
         loading: false,
         offset: offset + state.sizePerPage,
@@ -172,11 +207,25 @@ export default {
     },
 
     getCategorySuccess(state, { payload: { data, category } }) {
-      return { ...state, [category]: data.data };
+      if (category === 'orgcategory' || category === 'activity_organizer_options' || category === 'contribution_type') {
+        return { ...state, [category]: data.data };
+      } else if (category.includes('orglist_')) {
+        return { ...state, orgByActivity: data.data };
+      }
     },
-
+    getAllOrgSuccess(state, { payload: { data } }) {
+      const org = state.postSeminarOrganizer.concat(data.data);
+      return {
+        ...state,
+        postSeminarOrganizer: org,
+      };
+    },
     updateData(state, { payload: { data } }) {
-      return { ...state, activity_organizer_options: data };
+      const newOrgList = state.activity_organizer_options.data.concat(data.data);
+      return {
+        ...state,
+        activity_organizer_options: newOrgList,
+      };
     },
 
     getCommentFromActivitySuccess(state, { payload: { data } }) {
@@ -197,7 +246,9 @@ export default {
       });
       return { ...state, tags: words };
     },
-
+    getTopMentionedTagsSuccess(state, { data }) {
+      return { ...state, topMentionedTags: data };
+    },
     showLoading(state) {
       return {
         ...state,

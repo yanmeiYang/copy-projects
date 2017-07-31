@@ -1,11 +1,8 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { Row, Col, Card } from 'antd';
 import styles from './index.less';
-import SearchBox from '../../components/SearchBox';
 import { sysconfig } from '../../systems';
-import { config } from '../../utils';
 import { KgSearchBox } from '../../components/search';
 
 // function IndexPage({ dispatch, search }) {
@@ -14,19 +11,22 @@ class IndexPage extends React.Component {
   constructor(props) {
     super(props);
     this.dispatch = this.props.dispatch;
-    const a = PRODUCTION;
-    window.location
-    console.log('...lllooo', a);
   }
 
   componentWillMount() {
     this.dispatch({ type: 'app/layout', payload: { headerSearchBox: null } });
   }
 
+  // componentWillUnmount() {
+  //   this.dispatch({ type: 'app/layout', payload: { showFooter: true } });
+  // };
+
   onSearch = ({ query }) => {
-    this.dispatch(routerRedux.push({
-      pathname: `/${sysconfig.SearchPagePrefix}/${query}/0/30`,
-    }));
+    if (query && query.trim() !== '') {
+      this.dispatch(routerRedux.push({
+        pathname: `/${sysconfig.SearchPagePrefix}/${query}/0/20`,
+      }));
+    }
   };
 
   // function goToDetail(id) {

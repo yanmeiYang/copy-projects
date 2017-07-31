@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Input, Button, Icon } from 'antd';
+import { Input, Button } from 'antd';
 import Autosuggest from 'react-autosuggest';
 import styles from './KgSearchBox.less';
 import * as kgService from '../../services/knoledge-graph-service';
@@ -26,7 +26,7 @@ const getSuggestions = (value) => {
 const getSuggestionValue = (suggestion) => {
   const value = sysconfig.Language === 'cn' ? suggestion.zh : suggestion.name;
   return value.replace('/', ', ');
-}
+};
 
 // Use your imagination to render suggestions.
 const renderSuggestion = (suggestion) => {
@@ -79,7 +79,6 @@ class KgSearchBox extends React.PureComponent {
   };
 
   // Autosuggest will call this function every time you need to update suggestions.
-  // You already implemented this logic above, so just use it.
   onSuggestionsFetchRequested = ({ value, reason }) => {
     // Cancel the previous request
     if (this.lastRequestId !== null) {
@@ -90,17 +89,19 @@ class KgSearchBox extends React.PureComponent {
 
     // 延时200毫秒再去请求服务器。
     this.lastRequestId = setTimeout(() => {
+      const t = new Date().getTime();
+      this.latestT = t;
+
       // TODO first call suggest search function.
       const suggestPromise = suggestService.suggest(value);
       suggestPromise.then(
         (data) => {
+          if (t < this.latestT) {
+            return false; // out of date, canceled;
+          }
+          // console.log('suggest find data: ', data);
           if (data.data && data.data.topic && data.data.topic.length > 0) {
-            const topics = data.data.topic;
-            const stringTopics = [];
-            topics.map((topic) => {
-              return stringTopics.push(topic.text);
-            });
-            this.makeSuggestion(stringTopics);
+            this.makeSuggestion(data.data.topic);
           }
         },
         (err) => {
@@ -109,8 +110,7 @@ class KgSearchBox extends React.PureComponent {
       ).catch((error) => {
         console.error(error);
       });
-
-    }, 120);
+    }, 200);
   };
 
 
@@ -120,49 +120,90 @@ class KgSearchBox extends React.PureComponent {
     this.setState({ suggestions: [] });
   };
 
-  makeSuggestion = (stringTopics, selectedTopic) => {
+  // deprecated
+  makeSuggestion = (topics, selectedTopic) => {
+    // console.log('suggest find data: ', topics);
+    if (!topics && topics.length <= 0) {
+      return false;
+    }
+
     const querySuggests = [];
-    stringTopics.map((topic) => {
+    topics.map((topic) => {
       return querySuggests.push({
-        name: topic,
-        zh: topic,
+        name: topic.text,
+        zh: topic.text,
         type: 'suggest',
       });
     });
 
-    // call KG search with first suggested topic.
-    const kgtopic = selectedTopic || stringTopics[0];
-    if (kgtopic) {
-      console.log('search kgsuggest with ', kgtopic);
-      kgService.getKGSuggest(kgtopic, (result) => {
-        // TODO transfer result json.
-        const suggestion = this.kgDataTransferToSuggest(result);
+    const topicGraph = topics[0];
+    if (topicGraph && topicGraph.graph && topicGraph.graph.hits) {
+      //   const parents = [];
+      //   topicGraph.graph.hits.map((hit) => {
+      //     parents.push(hit.parent);
+      //     if (hit.child_nodes && hit.child_nodes) {
+      //       childs.push(...hit.child_nodes);
+      //     }
+      //     return false;
+      //   });
+      //
+      //   console.log(parents, childs);
+      // TODO generate kg suggestions json.
+      const suggestion = this.kgDataTransferToSuggest(topicGraph.graph);
 
-        // TODO combine suggestions.
-        const suggestions = [
-          {
-            title: 'Related Topics:',
-            suggestions: querySuggests,
-          },
-          {
-            title: 'Knowledge Graph Suggestions:',
-            suggestions: suggestion,
-          },
-        ];
-
-        // console.log('suggest matches : ', result, JSON.stringify(suggestions));
-        this.setState({
-          isLoading: false,
-          suggestions,
-        });
+      // Finally generate suggest json.
+      const suggestions = [
+        {
+          title: 'Related Topics:',
+          suggestions: querySuggests,
+        },
+        {
+          title: 'Knowledge Graph Suggestions:',
+          suggestions: suggestion,
+        },
+      ];
+      this.setState({
+        isLoading: false,
+        suggestions,
       });
     }
   };
 
+  // TODO sort parents and childs.
   kgDataTransferToSuggest = (kgData) => {
+    const kgindex = kgService.indexingKGData(kgData);
+    const kgFetcher = kgService.kgFetcher(kgData, kgindex);
+    // console.log('kg', kgindex, kgFetcher);
+
     const suggestion = [];
     if (kgData) {
-      console.log(kgData);
+      // console.log(kgData);
+      if (kgData.hits) {
+        const childs = [];
+        let maxParent = 3;
+        kgData.hits.map((hit) => {
+          if (maxParent > 0) {
+            this.pushToSuggestion(suggestion, kgFetcher.getNode(hit.parent), 'parent');
+            maxParent -= 1;
+          }
+          if (hit.child_nodes && hit.child_nodes) {
+            childs.push(...hit.child_nodes);
+          }
+          return null;
+        });
+
+        childs.slice(0, 5).map((childId) => {
+          return this.pushToSuggestion(suggestion, kgFetcher.getNode(childId), 'child');
+        });
+      }
+    }
+    return suggestion;
+  };
+
+  kgDataTransferToSuggest2 = (kgData) => {
+    const suggestion = [];
+    if (kgData) {
+      // console.log(kgData);
       if (kgData.name !== '_root') {
         this.pushToSuggestion(suggestion, kgData);
       }
@@ -184,14 +225,14 @@ class KgSearchBox extends React.PureComponent {
     return suggestion;
   };
 
-  pushToSuggestion = (suggestion, node) => {
-    if (node.type === 'current') {
+  pushToSuggestion = (suggestion, node, type) => {
+    if (!node) {
       return null;
     }
     suggestion.push({
       name: node.name,
-      zh: node.zh,
-      type: node.type,
+      zh: node.name_zh,
+      type,
     });
   };
 
@@ -216,6 +257,7 @@ class KgSearchBox extends React.PureComponent {
   //     this.props.onSearch({query:suggestionValue});
   //   }
   // };
+
   handleSubmit = (event) => {
     event.preventDefault();
     if (this.props.onSearch) {
@@ -268,4 +310,4 @@ class KgSearchBox extends React.PureComponent {
   }
 }
 
-export default KgSearchBox;
+export default connect()(KgSearchBox);

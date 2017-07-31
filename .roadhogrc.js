@@ -1,13 +1,16 @@
 const path = require('path');
-const defines = require('./src/define.js');
+const { defines } = require('./src/define.js');
 
 const svgSpriteDirs = [
   path.resolve(__dirname, 'src/svg/'),
   require.resolve('antd').replace(/index\.js$/, ''),
 ];
 
+// console.log('>>> ', defines);
+// console.log('-----------------');
+
 export default {
-  "define": defines(),
+  "define": defines,
 
   entry: 'src/index.js',
   svgSpriteLoaderDirs: svgSpriteDirs,
@@ -43,13 +46,32 @@ export default {
     }
   },
 
+  "dllPlugin": {
+    "exclude": [
+      "babel-runtime",
+      "antd",
+      // "dva",
+      // "dva/router",
+      // "dva/saga",
+    ],
+    "include": [
+      // "dva/router",
+      // "dva/saga",
+      // "dva/fetch",
+      // "lodash"
+    ]
+  },
+
   // externals: {
-  //   react: 'React',
-  //   lodash: {
-  //     commonjs: "lodash",
-  //     amd: "lodash",
-  //     root: "_" // indicates global variable
-  //   },
+  //   react: 'react',
+  //   // lodash: {
+  //   //   commonjs: "lodash",
+  //   //   amd: "lodash",
+  //   //   root: "_" // indicates global variable
+  //   // },
+  //   // 'react-dom': 'react-dom',
+  //   // 'react-helmet': 'react-helmet',
+  //   // 'react-router': 'react-router',
   // },
 
   // "proxy": {

@@ -5,18 +5,18 @@
  */
 import React from 'react';
 import { routerRedux } from 'dva/router';
-import { Table, Spin, Modal, Select, Radio, Button } from 'antd';
+import { Table, Spin, Modal, Input, Radio, Button } from 'antd';
 import { connect } from 'dva';
 import styles from './index.less';
 import { config } from '../../../utils';
-import { classnames } from '../../../utils';
+import { sysconfig } from '../../../systems';
+// import { classnames } from '../../../utils';
 
 const { Column } = Table;
 const RadioGroup = Radio.Group;
 console.log('sajdf;lasjd;flj;');
 
 class UserList extends React.Component {
-
   constructor(props) {
     super(props);
     console.log('>>>>>>>>>>>>>>>>>>>');
@@ -28,59 +28,68 @@ class UserList extends React.Component {
     currentAuthority: '',
     currentUid: '',
     committee: false,
-    region: false,
     isModifyRegion: false,
     selectedRole: '',
     selectedAuthority: '',
+    editUserId: '',
+    editUserNewName: '',
   };
 
   componentDidMount() {
     console.log('>>>>>>>>>>>>>>>>>>>');
     this.props.dispatch({
-      type: 'universalConfig/setCategory',
+      type: 'auth/getCategoryByUserRoles',
       payload: { category: 'user_roles' },
     });
     this.props.dispatch({
       type: 'auth/listUsersByRole',
-      payload: { role: 'ccf', offset: 0, size: 100 },
+      payload: { offset: 0, size: 100 },
     });
   }
 
   onEdit = (type, e) => {
     const data = JSON.parse(e.target.getAttribute('data'));
-    if (!data) {
-      console.warn('onEdit: attribute data not valid ',);
-    }
-    const uid = data.id;
-    const role = `ccf_${data.new_role}`;
-    const authority = `ccf_authority_${data.authority}`;
+    if (type === 'role') {
+      if (!data) {
+        console.warn('onEdit: attribute data not valid ');
+      }
+      const uid = data.id;
+      const role = `ccf_${data.new_role}`;
+      const authority = `ccf_authority_${data.authority}`;
 
-    // TODO HardCode-CCF
-    if (role === 'ccf_CCF专委秘书长') {
-      this.setState({ committee: true, region: false });
-      // 获取所有的专委
-      this.props.dispatch({
-        type: 'universalConfig/setCategory',
-        payload: { category: 'technical-committee' },
+      // TODO HardCode-CCF
+      if (role === 'ccf_CCF专委秘书长') {
+        this.setState({ committee: true });
+        // 获取所有的专委
+        this.props.dispatch({
+          type: 'universalConfig/setCategory',
+          payload: { category: 'orglist_5976bb068ef7a2e824adca67' },
+        });
+      } else if (role === 'ccf_分部秘书长') {
+        // 获取所有的专委
+        this.props.dispatch({
+          type: 'universalConfig/setCategory',
+          payload: { category: 'orglist_5976ba688ef7a2e824adc28a' },
+        });
+        this.setState({ committee: true });
+      } else {
+        this.setState({ committee: false });
+      }
+      this.setState({
+        visible: true,
+        currentRole: role,
+        currentAuthority: authority,
+        currentUid: uid,
+        selectedRole: role,
+        selectedAuthority: authority,
       });
-    } else if (role === 'ccf_分部秘书长') {
-      this.setState({ region: true, committee: false });
-    } else {
-      this.setState({ region: false, committee: false });
+    } else if (type === 'info') {
+      this.setState({ editUserId: data.id });
     }
-    this.setState({
-      visible: true,
-      currentRole: role,
-      currentAuthority: authority,
-      currentUid: uid,
-      selectedRole: role,
-      selectedAuthority: authority
-    });
   };
-
   selectedAuthorityRegion = (e) => {
     const role = e.target.value;
-    this.setState({ selectedAuthority: role });
+    this.setState({ selectedAuthority: role, committee: true });
   };
 
   delCurrentRoleByUid = (uid, roles) => {
@@ -136,19 +145,30 @@ class UserList extends React.Component {
   handleCancel = () => this.setState({ visible: false });
 
   selectedRole = (e) => {
-    const role = e.target.value;
-    if (role === 'ccf_CCF专委秘书长') {
-      this.setState({ committee: true, region: false, isModifyRegion: true, selectedRole: role });
+    const data = e.target.data;
+    const role = `ccf_${data.key}`;
+    if (data.value !== '') {
+      this.props.dispatch({
+        type: 'universalConfig/getOrgCategory',
+        payload: { category: data.value.id },
+      });
+    }
+    if (role === 'ccf_专委秘书长') {
+      this.setState({ committee: true, isModifyRegion: true, selectedRole: role });
       // 获取所有的专委
       this.props.dispatch({
         type: 'universalConfig/setCategory',
-        payload: { category: 'technical-committee' },
+        payload: { category: 'orglist_5976bb068ef7a2e824adca67' },
       });
     } else if (role === 'ccf_分部秘书长') {
-      this.setState({ region: true, committee: false, isModifyRegion: true, selectedRole: role });
+      this.setState({ committee: true, isModifyRegion: true, selectedRole: role });
+      // 获取所有的专委
+      this.props.dispatch({
+        type: 'universalConfig/setCategory',
+        payload: { category: 'orglist_5976ba688ef7a2e824adc28a' },
+      });
     } else {
       this.setState({
-        region: false,
         committee: false,
         isModifyRegion: false,
         selectedRole: role,
@@ -165,37 +185,72 @@ class UserList extends React.Component {
   operatorRender = (text, record) => {
     return (
       <span>
-        <a onClick={this.onEdit.bind(this, 'role')} data={JSON.stringify(text)}>修改</a>
+        {/*<a onClick={this.onEdit.bind(this, 'info')} data={JSON.stringify(text)}>修改信息</a>*/}
+        {/*<span className="ant-divider" />*/}
+        <a onClick={this.onEdit.bind(this, 'role')} data={JSON.stringify(text)}>修改角色</a>
       </span>
+    );
+  };
+  updateName = () => {
+    console.log(this.state.editUserNewName);
+    this.props.dispatch({
+      type: 'auth/updateProfile',
+      payload: { uid: this.state.editUserId, name: this.state.editUserNewName },
+    });
+    this.setState({ editUserId: '' });
+  };
+  getNewName = (e) => {
+    this.setState({ editUserNewName: e.target.value });
+  };
+  showUpdateName = (e) => {
+    return (
+      <div >
+        {e.id === this.state.editUserId ?
+          <div style={{ display: 'flex' }}>
+            <Input defaultValue={e.display_name} onBlur={this.getNewName} />
+            <Button onClick={this.updateName}>保存</Button ></div>
+          : e.display_name
+        }
+      </div>
     );
   };
 
   render() {
-    console.log('lsdkjfa;sjdf;ajsd;lfkjas;ldkj')
-    const { listUsers, loading } = this.props.auth;
-    const { committee, region, selectedAuthority, selectedRole } = this.state;
+    console.log('lsdkjfa;sjdf;ajsd;lfkjas;ldkj');
+    const { loading } = this.props.auth;
+    let listUsers = [];
+    if (this.props.auth.listUsers) {
+      listUsers = this.props.auth.listUsers.filter(item => !item.role.includes(`${config.source}_超级管理员`));
+    }
+
+    const pagination = { pageSize: 20, showQuickJumper: true };
+    const { universalConfig } = this.props;
+    const { committee, selectedAuthority, selectedRole } = this.state;
     return (
       <div className="content-inner">
         <div className="toolsArea">
           <Button type="primary" size="large" style={{}} onClick={this.goCreateUser}>创建用户</Button>
         </div>
-        <h2 className={styles.pageTitle}>用户设置</h2>
+        <h2 className={styles.pageTitle}>用户列表</h2>
 
         <Spin spinning={loading}>
           <Table
             dataSource={listUsers}
             bordered
             size="small"
-            pagination={false}
+            pagination={pagination}
           >
-            <Column title="姓名" dataIndex="display_name" key="display_name" />
+            <Column title="姓名" dataIndex="" key="display_name"
+                    render={this.showUpdateName} />
             <Column title="邮箱" dataIndex="email" key="email" />
             {/* <Column title="职称" dataIndex="position" key="position"/> */}
-            <Column title="性别" dataIndex="gender" key="gender" render={this.i18nGender} />
-            <Column title="角色" dataIndex="new_role" key="role" />
-            <Column title="所属部门" dataIndex="authority" key="committee" />
-            <Column title="操作" dataIndex="" key="action" render={this.operatorRender} />
-
+            {/* <Column title="性别" dataIndex="gender" key="gender" render={this.i18nGender} />*/}
+            {sysconfig.ShowRegisteredRole &&
+            <Column title="角色" dataIndex="new_role" key="role" />}
+            {sysconfig.ShowRegisteredRole &&
+            <Column title="所属部门" dataIndex="authority" key="committee" />}
+            {sysconfig.ShowRegisteredRole &&
+            <Column title="操作" dataIndex="" key="action" render={this.operatorRender} />}
           </Table>
         </Spin>
         <Modal
@@ -209,39 +264,41 @@ class UserList extends React.Component {
             <h5>角色：</h5>
             <RadioGroup onChange={this.selectedRole.bind()} value={selectedRole}>
               {
-                this.props.universalConfig.userRoles.map((item) => {
+                this.props.auth.userRoles.map((item) => {
                   return (<Radio key={Math.random()}
-                                 value={'ccf_' + item.key}>{item.key}</Radio>)
+                                 value={`ccf_${item.value.key}`}
+                                 data={item.value}>{item.value.key}</Radio>);
                 })
               }
             </RadioGroup>
-            {committee && <div><h5>所属部门：</h5>
+            {committee &&
+            <div><h5>所属部门：</h5>
               <RadioGroup size="large" onChange={this.selectedAuthorityRegion.bind()}
                           value={selectedAuthority}>
                 {
-                  this.props.universalConfig.data.map((item) => {
+                  universalConfig.data.map((item) => {
                     return (
                       <Radio key={Math.random()} className={styles.twoColumnsShowRadio}
-                             value={`ccf_authority_${item.key}`}>{item.key}</Radio>
+                             value={`ccf_authority_${item.value.key}`}>{item.value.key}</Radio>
                     );
                   })
                 }
               </RadioGroup>
             </div>}
-            {region && <div><h5>所属部门：</h5>
-              <RadioGroup
-                size="large"
-                style={{ width: '100%' }}
-                onChange={this.selectedAuthorityRegion.bind()}
-                value={selectedAuthority}
-              >
-                <Radio value="ccf_authority_上海" className={styles.twoColumnsShowRadio}>上海</Radio>
-                <Radio value="ccf_authority_北京" className={styles.twoColumnsShowRadio}>北京</Radio>
-                <Radio value="ccf_authority_石家庄" className={styles.twoColumnsShowRadio}>
-                  石家庄
-                </Radio>
-              </RadioGroup>
-            </div>}
+            {/* {region && <div><h5>所属部门：</h5>*/}
+            {/* <RadioGroup*/}
+            {/* size="large"*/}
+            {/* style={{ width: '100%' }}*/}
+            {/* onChange={this.selectedAuthorityRegion.bind()}*/}
+            {/* value={selectedAuthority}*/}
+            {/* >*/}
+            {/* <Radio value="ccf_authority_上海" className={styles.twoColumnsShowRadio}>上海</Radio>*/}
+            {/* <Radio value="ccf_authority_北京" className={styles.twoColumnsShowRadio}>北京</Radio>*/}
+            {/* <Radio value="ccf_authority_石家庄" className={styles.twoColumnsShowRadio}>*/}
+            {/* 石家庄*/}
+            {/* </Radio>*/}
+            {/* </RadioGroup>*/}
+            {/* </div>}*/}
           </div>
         </Modal>
       </div>

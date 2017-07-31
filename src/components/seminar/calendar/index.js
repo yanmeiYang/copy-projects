@@ -2,6 +2,7 @@
  * Created by yangyanmei on 17/6/1.
  */
 import React from 'react';
+import moment from 'moment';
 import {
   Row,
   Col,
@@ -58,11 +59,11 @@ class CanlendarInForm extends React.Component {
         <Col span={12}>
           <DatePicker
             disableDate={this.disabledStartDate}
-            showTime
-            format='YYYY-MM-DD HH:mm'
-            ref='startValue'
+            showTime={{ defaultValue: moment('09:00', 'HH:mm') }}
+            format="YYYY-MM-DD HH:mm"
+            ref="startValue"
             value={startValue}
-            placeholder='Start'
+            placeholder="Start"
             onChange={this.onStartChange}
             onOpenChange={this.handleStartOpenChange}
           />
@@ -70,11 +71,11 @@ class CanlendarInForm extends React.Component {
         <Col span={12}>
           <DatePicker
             disableDate={this.disabledEndDate}
-            showTime='<TimePicker format="HH:mm" />'
-            format='YYYY-MM-DD HH:mm'
-            ref='endValue'
+            showTime={{ defaultValue: moment('09:00', 'HH:mm') }}
+            format="YYYY-MM-DD HH:mm"
+            ref="endValue"
             value={endValue}
-            placeholder='End'
+            placeholder="End"
             onChange={this.onEndChange}
             open={endOpen}
             onOpenChange={this.handleEndOpenChange}

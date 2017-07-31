@@ -5,6 +5,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Icon, InputNumber, Rate, Tabs, Spin } from 'antd';
+import { getTwoDecimal } from '../../utils';
 import { ProfileInfo } from '../../components/person';
 import { Indices } from '../../components/widgets';
 import * as personService from '../../services/person';
@@ -40,29 +41,31 @@ const Person = ({ dispatch, person, seminar, publications }) => {
         }
         {avgScores.map((score) => {
           return (
-            <tbody key={score.key}>
-              {score.key === 'level' && <tr>
+            <tbody key={score.key} className="scoreTable">
+              {score.key === 'level' &&
+              <tr>
                 <td>演讲内容（水平）:</td>
                 <td>
                   <Rate disabled defaultValue={score.score} />
-                  <span>{score.score}</span>
+                  <input type="text" className="score" value={getTwoDecimal(score.score, 2)} disabled />
                 </td>
               </tr>
-            }
+              }
               {score.key === 'content' &&
               <tr>
                 <td>演讲水平:</td>
                 <td>
                   <Rate disabled defaultValue={score.score} />
-                  <span>{score.score}</span>
+                  <input type="text" className="score" value={getTwoDecimal(score.score, 2)} disabled />
                 </td>
               </tr>
-            }
-              {score.key === 'integrated' && <tr>
+              }
+              {score.key === 'integrated' &&
+              <tr>
                 <td>综合评价（其它贡献）:</td>
                 <td>
                   <Rate disabled defaultValue={score.score} />
-                  <span>{score.score}</span>
+                  <input type="text" className="score" value={getTwoDecimal(score.score, 2)} disabled />
                 </td>
               </tr>}
             </tbody>
@@ -144,7 +147,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
     }
   }
 
-  console.log('|||||||||||| PersonIndex:', person);
+  // console.log('|||||||||||| PersonIndex:', person);
   return (
     <div className="content-inner">
 

@@ -16,7 +16,6 @@ class PublicationList extends React.Component {
         <ul>{pubs && pubs.map((item, pubindex) => {
           const labels = pubService.getPubLabels(item);
           const venue = pubService.getVenueName(item.venue);
-
           return item &&
             (<li key={item.id}>
               <div className={styles.title_line}>
@@ -28,21 +27,23 @@ class PublicationList extends React.Component {
                     {item.pdf && item.pdf.length > 0 && (
                       <i className="fa fa-file-pdf-o fa-fw" style={{ color: '#a94442' }} />
                     )}
-                    {((item.lang === 'zh') ? item.title_zh : item.title) }
+                    {((item.lang === 'zh') ? item.title_zh : item.title)}
                   </a>
                 </span>
                 <div className={styles.labels}>
-                  {labels && labels.map((label, index) => {
-                    return (<span key={index}>
-                      <Badge
-                        count={label}
-                        style={{
-                          borderColor: 'darkred',
-                          backgroundColor: 'rgba(132,0,0,0.8)',
-                          color: '#fff',
-                          borderRadius: '5px',
-                        }}
-                      />&nbsp;</span>
+                  {this.props.showLabels && labels && labels.map((label, index) => {
+                    return (
+                      <span key={index}>
+                        <Badge
+                          count={label}
+                          style={{
+                            borderColor: 'darkred',
+                            backgroundColor: 'rgba(132,0,0,0.8)',
+                            color: '#fff',
+                            borderRadius: '5px',
+                          }}
+                        />&nbsp;
+                      </span>
                     );
                   })}
                 </div>
@@ -70,10 +71,11 @@ class PublicationList extends React.Component {
                 }
               </div>
 
-              {venue && <div className="">{venue} { item.year && <span>({item.year})</span>}</div>}
+              {venue && <div className="">{venue} {item.year && <span>({item.year})</span>}</div>}
 
               {item.num_citation > 0 && <div className={styles.citedby}>
-                <a href={item.urls[item.urls.length - 1]} target="_blank" rel="noopener noreferrer">
+                <a href={item.urls[item.urls.length - 1]} target="_blank"
+                   rel="noopener noreferrer">
                   <span>Cited by: {item.num_citation}</span>
                 </a>
               </div>}

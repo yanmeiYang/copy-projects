@@ -60,7 +60,13 @@
 :global {
   .seminar {
     min-height: 500px;
-    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    flex-shrink: 1;
+    .seminar_outbox{
+      max-width: 1000px;
+      width: 100%;
+    }
     li {
       list-style: none;
       overflow: hidden;
@@ -74,5 +80,63 @@
       text-align: center;
     }
 
+  }
+}
+.filterWrap {
+  .filter {
+    display: flex;
+    flex-direction: column;
+    //padding: 0 10px;
+    //box-shadow: 0 1px 2px whitesmoke, 0 1px 2px;
+    //border: 1px solid #e9e9e9;
+    box-shadow: 0 0 1px #d3d3d3;
+    margin-bottom: 10px;
+    .filterRow {
+      border-bottom: 1px solid #e9e9e9;
+      padding: 8px;
+      display: flex;
+      flex: 1;
+      align-items: center;
+      flex-direction: row;
+      .filterTitle {
+        color: darkgray;
+        font-weight: bold;
+        width: 70px;
+        text-align: right;
+        vertical-align: middle;
+        margin-right: 10px;
+        flex: none;
+      }
+      .filterItem {
+        margin: 0 5px;
+        width: 230px;
+      }
+      .filterCount {
+        font-weight: bold;
+      }
+    }
+    .filterRow.range {
+      background-color: #d3d3d3;
+      .filterItem { color: #555; font-weight: bold; }
+      .filterTitle { color: #555; }
+      :global {
+        .ant-tag-checkable:hover, .ant-tag-checkable:active, .ant-tag-checkable-checked { color: white; }
+      }
+    }
+
+  }
+  :global {
+    .ant-tabs-bar {
+      //box-shadow: 0 1px 2px whitesmoke, 0 1px 2px;
+      border: 1px solid #e9e9e9;
+      .ant-tabs-tab {
+        //font-size: 8px;
+        padding: 12px 25px;
+      }
+      .ant-tabs-tab-active {
+        background: #108ee9;
+        color: white;
+      }
+    }
   }
 }

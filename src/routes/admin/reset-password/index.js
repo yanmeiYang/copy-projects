@@ -3,23 +3,45 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Form, Button, Input } from 'antd';
-import { Layout } from '../../../components';
+import { Form, Button, Input, Modal } from 'antd';
+import { routerRedux } from 'dva/router';
 import { queryURL } from '../../../utils';
 import styles from './index.less';
 
-const { Header, Footer } = Layout;
 const FormItem = Form.Item;
 
 class ResetPassword extends React.Component {
   state = {
     confirmDirty: false,
   };
+  componentWillMount = () => {
+    this.props.dispatch({ type: 'app/handleNavbar', payload: true });
+  };
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.auth.retrieve.token) {
+      const outerThis = this;
+      Modal.success({
+        title: '成功',
+        content: '密码重置成功',
+        onOk() {
+          localStorage.setItem('token', outerThis.props.auth.retrieve.token);
+          location.href = '/login';
+          outerThis.props.dispatch(routerRedux.push({
+            pathname: '/',
+          }));
+        },
+      });
+    }
+  };
+  componentWillUnmount = () => {
+    this.props.dispatch({ type: 'app/handleNavbar', payload: false });
+  };
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      values.identifier = queryURL('email');
+      values.identifier = decodeURIComponent(queryURL('email'));
       values.token = queryURL('token');
+      values.src = queryURL('src');
       delete values.confirm;
       if (!err) {
         this.props.dispatch({ type: 'auth/retrievePw', payload: values });
@@ -45,6 +67,7 @@ class ResetPassword extends React.Component {
     }
     callback();
   };
+
   render() {
     const headerProps = { location };
     const { getFieldDecorator } = this.props.form;
@@ -67,7 +90,6 @@ class ResetPassword extends React.Component {
 
     return (
       <div>
-        <Header {...headerProps} />
         <div className={styles.container}>
           <div className={styles.content}>
             <section className={styles.codeBox}>
@@ -107,15 +129,14 @@ class ResetPassword extends React.Component {
                     )}
                   </FormItem>
                   <FormItem {...tailFormItemLayout} style={{ marginTop: 60 }}>
-                    <Button type="primary" htmlType="submit" size="large" style={{ width: '100%' }}>重置</Button>
+                    <Button type="primary" htmlType="submit" size="large"
+                            style={{ width: '100%' }}>重置</Button>
                   </FormItem>
                 </Form>
               </div>
-
             </section>
           </div>
         </div>
-        <Footer />
       </div>
     );
   }

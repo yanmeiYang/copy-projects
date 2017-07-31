@@ -1,10 +1,22 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
 import 'babel-polyfill';
 import dva from 'dva';
-import createLoading from 'dva-loading';
 import { browserHistory } from 'dva/router';
 import { message } from 'antd';
+import { IntlProvider } from 'react-intl';
+import createLoading from 'dva-loading';
 import './index.html';
 import { system } from './utils/config';
+
+if (ENABLE_PERF) { // eslint-disable-line no-undef
+  window.Perf = require('react-addons-perf');
+}
+
+message.config({
+  top: 100,
+  duration: 4,
+});
 
 // 1. Initialize
 const app = dva({
@@ -13,8 +25,9 @@ const app = dva({
   }),
   history: browserHistory,
   onError(error) {
-    console.log(error);
+    console.error('Global Error:', error);
     message.error(error.message);
+    // alert(error);
   },
 });
 
@@ -23,9 +36,12 @@ app.model(require('./models/app'));
 
 // 3. Router
 app.router(require('./systems/' + system + '/router')); // eslint-disable-line
-
-// old backup
 // app.router(require('./router'));
 
 // 4. Start
-app.start('#root');
+const App = app.start();
+ReactDOM.render(
+  <IntlProvider><App /></IntlProvider>,
+  document.getElementById('root'),
+);
+

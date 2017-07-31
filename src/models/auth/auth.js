@@ -2,11 +2,22 @@
  * Created by yangyanmei on 17/6/29.
  */
 import { routerRedux } from 'dva/router';
+import { config } from '../../utils';
+import { sysconfig } from '../../systems';
 import * as authService from '../../services/auth';
+import * as uconfigService from '../../services/universal-config';
 
 export default {
   namespace: 'auth',
-  state: { validEmail: true, listUsers: [], loading: false, isUpdateForgotPw: false },
+  state: {
+    validEmail: true,
+    listUsers: [],
+    loading: false,
+    isUpdateForgotPw: false,
+    message: null,
+    retrieve: {},
+    userRoles: [],
+  },
   subscriptions: {
     // setup({ dispatch, history }) {
     //   history.listen((location, query) => {
@@ -18,25 +29,39 @@ export default {
   },
   effects: {
     *createUser({ payload }, { call, put }) {
-      const { email, first_name, gender, last_name, position, sub, role, authority } = payload;
+      const { email, first_name, gender, last_name, position, sub, role, src } = payload;
       const { data } =
         yield call(authService.createUser, email, first_name, gender, last_name, position, sub);
       yield put({ type: 'createUserSuccess', payload: data });
-      const uid = data.uid;
-      yield call(authService.invoke, uid, 'ccf');
-      yield call(authService.invoke, uid, role);
-      if (authority) {
-        yield call(authService.invoke, uid, authority);
+      if (data.status) {
+        const uid = data.uid;
+        yield call(authService.invoke, uid, config.source);
+        if (sysconfig.ShowRegisteredRole) {
+          const arr = role.split('_');
+          if (arr.length === 3) {
+            yield call(authService.invoke, uid, `${config.source}_${arr[1]}`);
+            yield call(authService.invoke, uid, `${config.source}_authority_${arr[2]}`);
+          } else if (arr.length === 2) {
+            yield call(authService.invoke, uid, `${config.source}_${arr[1]}`);
+          }
+        }
       }
-      if (payload.authority_region) {
-        yield call(authService.invoke, uid, payload.authority_region);
-      }
+      // for (const value of role) {
+      //   yield call(authService.invoke, uid, value.id);
+      // }
+      // yield call(authService.invoke, uid, role);
+      // if (authority) {
+      //   yield call(authService.invoke, uid, authority);
+      // }
+      // if (payload.authority_region) {
+      //   yield call(authService.invoke, uid, payload.authority_region);
+      // }
     },
 
     *addRoleByUid({ payload }, { call, put }) {
       const { uid, role } = payload;
       yield call(authService.invoke, uid, role);
-      const { data } = yield call(authService.listUsersByRole, 'ccf', 0, 100);
+      const { data } = yield call(authService.listUsersByRole, 0, 100);
       yield put({ type: 'getListUserByRoleSuccess', payload: data });
     },
 
@@ -46,14 +71,14 @@ export default {
     },
 
     *checkEmail({ payload }, { call, put }) {
-      const { data } = yield call(authService.checkEmail, payload);
+      const { data } = yield call(authService.checkEmail, config.source, payload.email);
       yield put({ type: 'checkEmailSuccess', payload: data.status });
     },
 
     *listUsersByRole({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
       const { role, offset, size } = payload;
-      const { data } = yield call(authService.listUsersByRole, role, offset, size);
+      const { data } = yield call(authService.listUsersByRole, offset, size);
       yield put({ type: 'getListUserByRoleSuccess', payload: data });
     },
 
@@ -65,11 +90,24 @@ export default {
     *retrievePw({ payload }, { call, put }) {
       const { data } = yield call(authService.retrieve, payload);
       if (data.status) {
-        localStorage.setItem('token', data.token);
-        yield put(routerRedux.push('/'));
+        yield put({ type: 'retrievePsSuccess', data });
       } else {
         throw data;
       }
+    },
+    *updateProfile({ payload }, { call, put }) {
+      const { uid, name } = payload;
+      const { data } = yield call(authService.updateProfile, uid, name);
+    },
+    *addOrgCategory({ payload }, { call, put }) {
+      const { category, key, val } = payload;
+      yield call(uconfigService.setByKey, category, key, val);
+    },
+    // 获取注册用户列表
+    *getCategoryByUserRoles({ payload }, { call, put }) {
+      const { category } = payload;
+      const data = yield call(uconfigService.listByCategory, category);
+      yield put({ type: 'setData', payload: { data } });
     },
   },
   reducers: {
@@ -82,13 +120,13 @@ export default {
     },
 
     forgotPasswordSuccess(state, { data }) {
-      return { ...state, isUpdateForgotPw: data.status };
+      return { ...state, isUpdateForgotPw: data.status, message: data.message };
     },
     getListUserByRoleSuccess(state, { payload: { data } }) {
       for (const [key, value] of data.entries()) {
         value.new_role = {};
         for (const role of data[key].role.values()) {
-          if (role.indexOf('ccf_') >= 0) {
+          if (role.indexOf(`${config.source}_`) >= 0) {
             if (role.split('_').length === 2) {
               value.new_role = role.split('_')[1];
             }
@@ -100,7 +138,20 @@ export default {
       }
       return { ...state, listUsers: data, loading: false };
     },
-
+    retrievePsSuccess(state, { data }) {
+      return { ...state, retrieve: data };
+    },
+    setData(state, { payload: { data } }) {
+      const newData = [];
+      if (data.data.data) {
+        for (const item in data.data.data) {
+          if (item) {
+            newData.push({ key: item, value: data.data.data[item] });
+          }
+        }
+      }
+      return { ...state, userRoles: newData, loading: false };
+    },
     showLoading(state) {
       return {
         ...state,

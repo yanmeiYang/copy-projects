@@ -37,7 +37,7 @@ export default {
   }),
 
   ForgotPassword: app => ({
-    path: '/forgotpassword',
+    path: '/forgot-password',
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/auth/auth'));
@@ -52,6 +52,26 @@ export default {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/auth/auth'));
         cb(null, require('../admin/reset-password/'));
+      }, 'user');
+    },
+  }),
+
+  Retrieve: app => ({
+    path: '/retrieve',
+    getComponent(nextState, cb) {
+      require.ensure([], (require) => {
+        registerModel(app, require('../../models/auth/auth'));
+        cb(null, require('../admin/retrieve/'));
+      }, 'user');
+    },
+  }),
+
+  UserInfo: app => ({
+    path: '/user-info',
+    getComponent(nextState, cb) {
+      require.ensure([], (require) => {
+        registerModel(app, require('../../models/auth/auth'));
+        cb(null, require('./user-info/'));
       }, 'user');
     },
   }),

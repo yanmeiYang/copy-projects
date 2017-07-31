@@ -36,17 +36,11 @@
     .filterRow {
       border-bottom: 1px solid #e9e9e9;
       padding: 8px;
-      display: flex;
-      flex: 1;
-      align-items: center;
-      flex-direction: row;
+      display: flex; flex-direction: row; flex: 1; align-items: center;
       .filterTitle {
-        color: darkgray;
+        color: #333333;
         font-weight: bold;
-        width: 70px;
-        text-align: right;
-        vertical-align: middle;
-        margin-right: 10px
+        display: flex; flex: 0 72px;
       }
       .filterItem {
         margin: 0 5px;
@@ -54,11 +48,12 @@
       .filterCount {
         font-weight: bold;
       }
+      > ul { display: flex; flex-direction: row; flex: 2; flex-flow: row wrap; }
     }
     .filterRow.range {
-      background-color: #d3d3d3;
+      background-color: #eee;
       .filterItem { color: #555; font-weight: bold; }
-      .filterTitle { color: #555; }
+      .filterTitle { color: #555; width: 110px; }
       :global {
         .ant-tag-checkable:hover, .ant-tag-checkable:active, .ant-tag-checkable-checked { color: white; }
       }

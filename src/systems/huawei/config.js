@@ -2,25 +2,38 @@
  * Created by BoGao on 2017/6/20.
  */
 import React from 'react';
-import { IndexInfoBox } from './components';
+import { IndexInfoBox, PersonLabel } from './components';
 
 module.exports = {
 
   // 通用配置。所有System的配置文件必须全部包含这部分的值
   PageTitle: 'HUAWEI 知识洞察系统',
-  SearchPagePrefix: 'uniSearch',
+  SearchPagePrefix: 'uniSearch', // search, uniSearch
   ShowSideMenu: false,
+  ShowRegisteredRole: false,
+
+  UserAuthSystem: 'aminer', // aminer 或者是 system.config
+  UserAuthSystem_AddSysTagAuto: true, // 登录时自动添加system的标签
 
   // IndexPage_QuickSearchList:[], // use default.
   IndexPage_InfoBlocks: <IndexInfoBox />,
 
   Header_SubTextLogo: '知识洞察系统',
-  Header_LogoStyle: { top: '-20px', width: '90px', },
-  Header_UserPageURL: '',
-  Footer_Content: '',
+  Header_LogoStyle: {
+    top: '-10px',
+    width: '75px',
+    backgroundSize: 'auto 75px',
+    backgroundPosition: '0px -10px',
+  },
+  Header_LogoWidth: 194,
+  Header_UserPageURL: '/user-info',
+  // Footer_Content: '',
 
   // Functionality
   Enable_Export: false,
+  Search_EnablePin: true,
+
+  Person_PersonLabelBlock: person => <PersonLabel person={person} />,
 
   ExpertBases: [
     {

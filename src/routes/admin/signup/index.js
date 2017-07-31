@@ -3,61 +3,94 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button, Select, Modal } from 'antd';
+import { routerRedux } from 'dva/router';
+import { Form, Input, Button, Select, Modal, Tag } from 'antd';
+import { config } from '../../../utils';
 import { sysconfig } from '../../../systems';
+import AddRoleModal from '../add-user-role-modal';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 // const AutocompleteOption = AutoComplete.Option;
 
 class Registered extends React.Component {
-  state = { committee: false, region: false };
+  state = {
+    addRoleModalVisible: false,
+    currentRoleAndOrg: '',
+  };
 
   componentDidMount() {
     this.props.dispatch({
-      type: 'universalConfig/setCategory',
+      type: 'auth/getCategoryByUserRoles',
       payload: { category: 'user_roles' },
     });
   }
   checkEmail = (e) => {
-    this.props.dispatch({ type: 'auth/checkEmail', payload: e.target.value });
+    this.props.dispatch({ type: 'auth/checkEmail', payload: { email: e.target.value } });
   };
 
   selectedRole = (e) => {
-    if (e === 'ccf_CCF专委秘书长') {
-      this.setState({ committee: true, region: false });
-      // 获取所有的专委
-      this.props.dispatch(
-        {
-          type: 'universalConfig/setCategory',
-          payload: { category: 'technical-committee' },
-        });
-    } else if (e === 'ccf_分部秘书长') {
-      this.setState({ region: true, committee: false });
-    } else {
-      this.setState({ region: false, committee: false });
+    this.props.universalConfig.orgList = [];
+    const data = JSON.parse(e);
+    this.setState({ currentRoleAndOrg: `ccf_${data.key}` });
+    if (data.value !== '') {
+      this.props.dispatch({
+        type: 'universalConfig/getOrgCategory',
+        payload: { category: data.value.id },
+      });
     }
   };
-
-  selectedAuthority = (e) => {
-    console.log(e);
+  selectedOrg = (e) => {
+    const arr = this.state.currentRoleAndOrg.split('_');
+    if (arr.length > 2) {
+      arr.pop();
+    }
+    this.setState({ currentRoleAndOrg: `${arr.join('_')}_${JSON.parse(e).key}` });
   };
-  selectedAuthorityRegion = (e) => {
-    console.log(e);
-  };
+  // addRole = () => {
+  //   this.setState({ addRoleModalVisible: true });
+  //   this.props.dispatch({
+  //     type: 'universalConfig/setCategory',
+  //     payload: { category: 'user_roles' },
+  //   });
+  // }
+  // setCurrentRoleAndOrg = (role, org) => {
+  //   let name = '';
+  //   let id = '';
+  //   if (org.name === undefined) {
+  //     name = role.name;
+  //     id = `${config.source}_${role.id}`;
+  //   } else {
+  //     name = `${role.name} ${org.name}`;
+  //     id = `${config.source}_${role.id}_${org.id}`;
+  //   }
+  //   const data = [...this.state.currentRoleAndOrg, { name, id }];
+  //   this.setState({ currentRoleAndOrg: data, addRoleModalVisible: false });
+  // };
+  // delRole = (value) => {
+  //   const currentRoleAndOrg = this.state.currentRoleAndOrg.filter(tag => tag.id !== value.id);
+  //   this.setState({ currentRoleAndOrg });
+  // }
 
 
   registered = (e) => {
     e.preventDefault();
+    const props = this.props;
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        values.gender = parseInt(values.gender);
-        values.position = parseInt(values.position);
+        values.gender = 3;
+        values.position = 8;
         values.sub = true;
+        values.role = this.state.currentRoleAndOrg;
         this.props.dispatch({ type: 'auth/createUser', payload: values });
         Modal.success({
           title: '创建用户',
           content: '创建成功',
+          onOk() {
+            props.dispatch(routerRedux.push({
+              pathname: '/admin/users',
+            }));
+          },
         });
         this.props.form.resetFields();
       }
@@ -87,193 +120,155 @@ class Registered extends React.Component {
         },
       },
     };
-    const { committee, region } = this.state;
+    const { currentRoleAndOrg } = this.state;
     const { getFieldDecorator } = this.props.form;
+    const { universalConfig, auth } = this.props;
     return (
-      <Form onSubmit={this.registered} style={{ marginTop: 30 }}>
-        <FormItem
-          {...formItemLayout}
-          label="邮箱"
-          validateStatus={this.props.auth.validEmail ? '' : 'error'}
-          help={this.props.auth.validEmail ? '' : '该邮箱已注册'}
-          hasFeedback
-        >
-          {
-            getFieldDecorator('email', {
-              rules: [{ type: 'email', message: '邮箱格式错误!' }, {
-                required: true,
-                message: '请输入邮箱!',
+      <div>
+        <h2 style={{ paddingLeft: 24 }}>创建用户</h2>
+        <Form onSubmit={this.registered} style={{ marginTop: 30 }}>
+          <FormItem
+            {...formItemLayout}
+            label="邮箱"
+            validateStatus={auth.validEmail ? '' : 'error'}
+            help={auth.validEmail ? '' : '该邮箱已注册'}
+            hasFeedback
+          >
+            {
+              getFieldDecorator('email', {
+                rules: [{ type: 'email', message: '邮箱格式错误!' }, {
+                  required: true,
+                  message: '请输入邮箱!',
+                }, {
+                  validator: auth.validEmail ? '' : '邮箱已注册',
+                }],
               }, {
-                validator: this.props.auth.validEmail ? '' : '邮箱已注册',
-              }],
-            }, {
-              validateTrigger: 'onBlur',
-            })(
-              <Input onBlur={this.checkEmail} />,
-            )
-          }
+                validateTrigger: 'onBlur',
+              })(
+                <Input onBlur={this.checkEmail} />,
+              )
+            }
 
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="姓氏"
-          hasFeedback
-        >
-          {
-            getFieldDecorator('first_name', {
-              rules: [{
-                required: true, message: '请输入您的姓氏!',
-              }],
-            })(
-              <Input type="text" />,
-            )
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label="姓氏"
+            hasFeedback
+          >
+            {
+              getFieldDecorator('first_name', {
+                rules: [{
+                  required: true, message: '请输入您的姓氏!',
+                }],
+              })(
+                <Input type="text" />,
+              )
+            }
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label="名字"
+            hasFeedback
+          >
+            {
+              getFieldDecorator('last_name', {
+                rules: [{
+                  required: true, message: '请输入您的名字!',
+                }],
+              })(
+                <Input />,
+              )
+            }
+          </FormItem>
+          {/* 选择的角色 */}
+          {/* <FormItem {...tailFormItemLayout}>*/}
+          {/* {currentRoleAndOrg.map((item, index) => {*/}
+          {/* return <Tag closable afterClose={this.delRole.bind(this, item)} key={item.id} >{item.name}</Tag>;*/}
+          {/* })}*/}
+          {/* </FormItem>*/}
+          {/* <FormItem {...tailFormItemLayout}>*/}
+          {/* <Button type="" onClick={this.addRole} style={{ backgroundColor: '#1aaa55', borderColor: '#168f48', color: '#fff' }}>添加角色</Button>*/}
+          {/* </FormItem>*/}
+          {/* <AddRoleModal visible={this.state.addRoleModalVisible} handleOk={this.setCurrentRoleAndOrg} />*/}
+          {sysconfig.ShowRegisteredRole &&
+          <FormItem
+            {...formItemLayout}
+            label="角色"
+            hasFeedback
+          >
+            {
+              getFieldDecorator('role', {
+                rules: [{
+                  required: true, message: '请选择角色!',
+                }],
+              })(
+                <Select onChange={this.selectedRole}>
+                  {
+                    auth.userRoles.map((key) => {
+                      return (<Option
+                        key={Math.random()}
+                        value={JSON.stringify(key.value)}
+                      >{key.value.key}</Option>);
+                    })
+                  }
+                </Select>,
+              )
+            }
+          </FormItem>
           }
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="名字"
-          hasFeedback
-        >
-          {
-            getFieldDecorator('last_name', {
-              rules: [{
-                required: true, message: '请输入您的名字!',
-              }],
-            })(
-              <Input />,
-            )
-          }
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="性别"
-          hasFeedback
-        >
-          {
-            getFieldDecorator('gender', {
-              rules: [{
-                required: true, message: '请输入您的性别!',
-              }],
-            })(
-              <Select>
-                <Option value="1">男</Option>
-                <Option value="2">女</Option>
-                <Option value="3">保密</Option>
-              </Select>,
-            )
-          }
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="职位"
-          hasFeedback
-        >
-          {
-            getFieldDecorator('position', {
-              rules: [{
-                required: true, message: '请输入您的职位!',
-              }],
-            })(
-              <Select>
-                {
-                  sysconfig.CCF_userPosition.map((item) => {
-                    return (<Option key={Math.random()} value={item.value}>{item.name}</Option>);
-                  })
-                }
-              </Select>,
-            )
-          }
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="角色"
-          hasFeedback
-        >
-          {
-            getFieldDecorator('role', {
-              rules: [{
-                required: true, message: '请选择角色!',
-              }],
-            })(
-              <Select onChange={this.selectedRole.bind()}>
-                {
-                  this.props.universalConfig.userRoles.map((item) => {
-                    return (<Option
-                      key={Math.random()}
-                      value={`ccf_${item.key}`}
-                    >{item.key}</Option>);
-                  })
-                }
-              </Select>,
-            )
-          }
-        </FormItem>
-        {committee && <FormItem
-          {...formItemLayout}
-          label="权限"
-          hasFeedback
-        >
-          {
-            getFieldDecorator('authority', {
-              rules: [{
-                required: true, message: '请选择权限!',
-              }],
-            })(
-              <Select onChange={this.selectedAuthority.bind()}>
-                {
-                  this.props.universalConfig.data.map((item) => {
-                    return (<Option key={Math.random()} value={`ccf_authority_${item.key}`}>{item.key}</Option>);
-                  })
-                }
-              </Select>,
-            )
-          }
-        </FormItem>}
-        {region && <FormItem
-          {...formItemLayout}
-          label="权限"
-          hasFeedback
-        >
-          {
-            getFieldDecorator('authority_region', {
-              rules: [{
-                required: true, message: '请选择权限!',
-              }],
-            })(
-              <Select onChange={this.selectedAuthorityRegion.bind()}>
-                <Option value="ccf_authority_上海">上海</Option>
-                <Option value="ccf_authority_北京">北京</Option>
-                <Option value="ccf_authority_石家庄">石家庄</Option>
-              </Select>,
-            )
-          }
+          {universalConfig.orgList.length > 0 && <FormItem
+            {...formItemLayout}
+            label="权限"
+            hasFeedback
+          >
+            {
+              getFieldDecorator('authority', {
+                rules: [{
+                  required: true, message: '请选择权限!',
+                }],
+              })(
+                <Select onChange={this.selectedOrg.bind()}>
+                  {
+                    universalConfig.orgList.map((item) => {
+                      return (<Option
+                        key={Math.random()}
+                        value={JSON.stringify(item.value)}
+                      >{item.value.key}</Option>);
+                    })
+                  }
+                </Select>,
+              )
+            }
+          </FormItem>}
+          {/*<FormItem*/}
+            {/*{...{*/}
+              {/*wrapperCol: {*/}
+                {/*xs: { span: 24 },*/}
+                {/*sm: { span: 14, offset: 6 },*/}
+              {/*},*/}
+            {/*}}*/}
+            {/*label=""*/}
+          {/*>*/}
+            {/*{*/}
+              {/*getFieldDecorator('sub', {})(*/}
+                {/*<Checkbox>*/}
+           {/*我希望收到新的消息和动态提醒*/}
+                {/*</Checkbox>,*/}
+              {/*)*/}
+            {/*}*/}
+          {/*</FormItem>*/}
+          {/*<FormItem {...tailFormItemLayout}>*/}
+            {/*<Button type="" onClick={this.addRole} style={{ backgroundColor: '#1aaa55', borderColor: '#168f48', color: '#fff' }}>添加角色</Button>*/}
+          {/*</FormItem>*/}
+          {/*<AddRoleModal visible={this.state.addRoleModalVisible} handleOk={this.setCurrentRoleAndOrg} />*/}
 
-        </FormItem>}
-        <FormItem
-          {...{
-            wrapperCol: {
-              xs: { span: 24 },
-              sm: { span: 14, offset: 6 },
-            },
-          }}
-          label=""
-        >
-          {/* {*/}
-          {/* getFieldDecorator('sub', {})(*/}
-          {/* <Checkbox>*/}
-          {/* 我希望收到新的消息和动态提醒*/}
-          {/* </Checkbox>*/}
-          {/* )*/}
-          {/* }*/}
-        </FormItem>
-        <FormItem {...tailFormItemLayout}>
-          <Button type="primary" onClick={this.registered}>
-            创建用户
-          </Button>
-        </FormItem>
-
-
-      </Form>
+          <FormItem {...tailFormItemLayout} style={{ textAlign: 'center' }}>
+            <Button type="primary" onClick={this.registered} style={{ width: '50%' }}>
+              创建用户
+            </Button>
+          </FormItem>
+        </Form>
+      </div>
     );
   }
 }

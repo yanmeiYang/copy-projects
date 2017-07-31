@@ -2,6 +2,7 @@ import { routerRedux } from 'dva/router';
 import { parse } from 'qs';
 import { getCurrentUserInfo, logout } from '../services/app';
 import { config, setLocalStorage, getLocalStorage } from '../utils';
+import * as authService from '../services/auth';
 
 const { prefix } = config;
 const LocalStorage = localStorage;
@@ -9,19 +10,27 @@ const LocalStorage = localStorage;
 export default {
   namespace: 'app',
   state: {
+    // query: '', // query shared in different pages.
+
+    // User/auth token related.
     user: {},
     token: LocalStorage.getItem('token'),
-    roles: { admin: false, ccf_user: false, role: '', authority: '' }, // TODO parse roles string into this object.
+    // TODO parse roles string into this object.
+    roles: { admin: false, ccf_user: false, role: [], authority: [] },
+
+
+    // layout switches.
+    headerSearchBox: null, // Header search box parameters.
+    showFooter: true,
+
+    // Layout related, not used.
     menuPopoverVisible: false,
     siderFold: LocalStorage.getItem(`${prefix}siderFold`) === 'true',
     darkTheme: LocalStorage.getItem(`${prefix}darkTheme`) === 'true',
     isNavbar: false, // document.body.clientWidth < 769,
     navOpenKeys: JSON.parse(LocalStorage.getItem(`${prefix}navOpenKeys`)) || [],
-
-    // layout switches.
-    headerSearchBox: null, // Header search box parameters.
-
   },
+
   subscriptions: {
     setup({ dispatch }) {
       dispatch({ type: 'getCurrentUserInfo' });
@@ -41,12 +50,14 @@ export default {
         const userMessage = getLocalStorage('user');
         // TODO 每次打开新URL都要访问一次。想办法缓存一下。
         if (userMessage !== '' && userMessage !== null && userMessage !== undefined) {
-          console.log('已经登录');
           yield put({
             type: 'alreadyLoggedIn',
             user: userMessage.data,
-            roles: userMessage.roles
+            roles: userMessage.roles,
           });
+          // if (!userMessage.roles.role.includes(config.source)) {
+          //   yield call(authService.invoke, userMessage.data.id, config.source);
+          // }
         } else {
           const { data } = yield call(getCurrentUserInfo, parse(payload));
           if (data) {
@@ -89,19 +100,19 @@ export default {
 
   reducers: {
     getCurrentUserInfoSuccess(state, { payload: user }) {
-      const roles = { admin: false, ccf_user: false, role: '', authority: '' };
+      const roles = { admin: false, ccf_user: false, role: [], authority: [] };
       for (const r of user.role) {
-        if (r === 'root' || r === 'ccf_超级管理员') {
+        if (r === 'root' || r === `${config.source}_超级管理员`) {
           roles.admin = true;
         }
         if (r === 'ccf') {
           roles.ccf_user = true;
         }
         if (r.split('_').length === 2) {
-          roles.role = r.split('_')[1];
+          roles.role.push(r.split('_')[1]);
         }
         if (r.split('_').length === 3) {
-          roles.authority = r.split('_')[2];
+          roles.authority.push(r.split('_')[2]);
         }
       }
       setLocalStorage('user', user, roles);
@@ -156,6 +167,10 @@ export default {
     layout(state, { payload }) {
       return { ...state, ...payload };
     },
+
+    // setQuery(state, { query }) {
+    //   return { ...state, query };
+    // },
 
 
     logoutSuccess(state, { payload }) {

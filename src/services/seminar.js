@@ -33,15 +33,7 @@ export async function postSeminarActivity(data) {
   });
 }
 
-export async function searchActivity(query, offset, size, src, category, organizer) {
-  const data = {
-    query,
-    offset,
-    size,
-    src,
-    category,
-    organizer,
-  };
+export async function searchActivity(data) {
   return request(api.searchActivity, {
     method: 'GET',
     data,
@@ -102,5 +94,11 @@ export async function keywordExtraction(payload) {
   return externalRequest(api.keywordExtraction, {
     method: 'POST',
     body: JSON.stringify(payload),
+  });
+}
+
+export async function getTopMentionedTags(src, num) {
+  return request(api.getTopMentionedTags.replace(':src', src).replace(':num', num), {
+    method: 'GET',
   });
 }

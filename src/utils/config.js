@@ -1,6 +1,10 @@
 /**
  * Created by yutao on 2017/5/22.
  */
+// const SYS = 'ccf';
+const SYS = 'huawei';
+// const SYS = 'alibaba';
+// const SYS = 'tencent';
 
 const param = (key, type, description) => {
   return { key, type, description };
@@ -10,8 +14,8 @@ module.exports = {
 
   // To change SYSTEM settings. Please change /define.js.
   // TODO remove all use of this config [system,source].
-  system: SYSTEM, // 默认启动这是哪套系统，启动的时候传入app，之后会在APP里面重新设置。
-  source: SYSTEM, // AppID, Used in UniversalConfig.
+  system: SYS, // 默认启动这是哪套系统，启动的时候传入app，之后会在APP里面重新设置。
+  source: SYS, // AppID, Used in UniversalConfig.
 
   baseURL: 'https://api.aminer.org/api',
   // baseURL: 'https://166.111.7.105/api',
@@ -19,7 +23,7 @@ module.exports = {
   name: '专家搜索',
   prefix: 'aminer',
   // footerText: 'AMiner © 2017 AMiner', // not used now.
-  logo: '/logo.png',
+  // logo: '/logo.png',
   iconFontCSS: '/iconfont.css',
   iconFontJS: '/iconfont.js',
   basePageURL: 'https://aminer.org',
@@ -31,7 +35,8 @@ module.exports = {
     userLogin: '/auth/signin',
     userLogout: '/auth/signout',
     signup: '/auth/signup',
-    checkEmail: '/user/check/:email',
+    checkEmail: '/user/check/src/:src/email/:email',
+    updateProfile: '/user/:id',
     forgot: '/auth/update/forgot',
     // 重置密码
     retrieve: '/auth/update/token',
@@ -42,7 +47,7 @@ module.exports = {
     listUsersByRole: '/user/role/list/:role/offset/:offset/size/:size',
 
     // search
-    searchPerson: '/search/person',
+    searchPerson: '/search/person', // pin=1 huawei mode.
     searchPersonAgg: '/search/person/agg',
     searchPersonInBase: '/search/roster/:ebid/experts/advanced',
     searchPersonInBaseAgg: '/search/roster/:ebid/experts/advanced/agg',
@@ -61,7 +66,6 @@ module.exports = {
 
     // seminar
     getSeminars: '/activity/list/offset/:offset/size/:size', // src aid uid organizer type category stype
-
     getActivityById: '/activity/:id',
     postActivity: '/activity/post_activity',
     speakerSuggest: '/activity/speaker/suggest',
@@ -79,6 +83,7 @@ module.exports = {
     getActivityScore: '/activity/score/:uid/:src/:actid/:aid/:key',
     getStatsOfCcfActivities: '/activity/admin/stats',
     keywordExtraction: 'http://nlp.newsminer.net/rest/nlp/keywords',
+    getTopMentionedTags: '/activity/tags/:src/:num',
 
     /* person */
     personProfile: '/person/summary/:id',
@@ -101,6 +106,8 @@ module.exports = {
     ucListByCategory: '/2b/config/:source/list?category=:category',
     ucSetByKey: '/2b/config/:source/:category/:key',
     ucDeleteByKey: '/2b/config/:source/:category/:key',
+    ucUpdateByKey: '/2b/config/:source/:category/rename/:key/:newKey',
+    getCategoriesHint: '/2b/config/:source/category/suggest/:category',
 
     // Knowledge Graph
     kgFind: {

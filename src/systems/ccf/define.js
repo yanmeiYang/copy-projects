@@ -3,6 +3,4 @@
  */
 
 // Override config of src/define.js
-module.exports = {
-  PRODUCTION: false,
-};
+module.exports = {};

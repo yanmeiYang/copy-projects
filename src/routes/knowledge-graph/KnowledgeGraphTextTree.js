@@ -39,8 +39,6 @@ class KnowledgeGraphTextTree extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('.....ll js didupdate', this.props.query, ',', prevProps.query);
-
     if (this.props.query && this.props.query !== prevProps.query) {
       console.log('matches?');
       this.queryKG(this.props.query);
@@ -130,7 +128,7 @@ class KnowledgeGraphTextTree extends React.PureComponent {
     const tops = this.kgFetcher.findTops();
     return (
       <div className={styles.kgContainer}>
-        Search for: {query}
+        {/* Search for: {query} */}
 
         {tops && tops.map((node) => {
           return <div key={node.id}> {this.showNode(node, 0)} </div>;

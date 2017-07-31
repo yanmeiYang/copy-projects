@@ -22,6 +22,7 @@ class AddExpertModal extends React.Component {
     name: '',
     position: '',
     affiliation: '',
+    talkAbstract: '',
   };
   speakerInformation = {
     name: '',
@@ -66,7 +67,7 @@ class AddExpertModal extends React.Component {
   selectedExpert = (speaker) => {
     this.speakerInformation.name = this.refs.speakerName.refs.input.value = speaker.payload.name;
     this.speakerInformation.affiliation = this.refs.speakerAff.refs.input.value = speaker.payload.org;
-    speaker.pos.length > 0 ? this.speakerInformation.position = this.refs.speakerPos.refs.input.value = speaker.pos[0].n : this.speakerInformation.position = this.refs.speakerPos.refs.input.value = ' ';
+    speaker.pos.length > 0 && speaker.pos[0].n ? this.speakerInformation.position = this.refs.speakerPos.refs.input.value = speaker.pos[0].n : this.speakerInformation.position = this.refs.speakerPos.refs.input.value = ' ';
     this.speakerInformation.aid = this.refs.speakerAid.value = speaker.payload.id;
     this.speakerInformation.img = this.refs.speakerImg.src = speaker.img;
     this.speakerInformation.bio = this.refs.speakerBio.refs.input.value = '';
@@ -88,7 +89,9 @@ class AddExpertModal extends React.Component {
     });
     // this.props.callbackParent(this.speakerInformation);
   };
-
+  setTalkAbstrack = (e) => {
+    this.setState({ talkAbstract: e.target.value });
+  };
   saveTalkData = () => {
     const state = this.state;
     const talk = {
@@ -109,14 +112,17 @@ class AddExpertModal extends React.Component {
     talk.speaker.phone = state.speakerInfo.phone;
     talk.speaker.stype = state.speakerInfo.stype;
     // talk.stype[xxx]='1';
+    if (state.talkStartValue || state.talkEndValue) {
+      talk['time'] = {};
+    }
     if (state.talkStartValue) {
-      talk.time.from = state.talkStartValue.toJSON();
+      talk['time'].from = state.talkStartValue.toJSON();
     }
     if (state.talkEndValue) {
-      talk.time.to = state.talkEndValue.toJSON();
+      talk['time'].to = state.talkEndValue.toJSON();
     }
     talk.location.address = this.refs.talkLocation.refs.input.value;
-    talk.abstract = this.refs.talkAbstract.refs.input.value;
+    talk.abstract = state.talkAbstract;
     this.props.callbackParent(talk);
     this.setState({ modalVisible: false });
   };
@@ -150,7 +156,11 @@ class AddExpertModal extends React.Component {
   };
 
   jumpToStep2 = () => {
-    this.setStep('step2', true);
+    this.props.parentProps.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        this.setStep('step2', true);
+      }
+    });
   };
 
   cancelCurrentPerson = () => {
@@ -174,14 +184,14 @@ class AddExpertModal extends React.Component {
         sm: { span: 20 },
       },
     };
-
-    const { modalVisible, step2, step3, integral, } = this.state;
+    const { modalVisible, step2, step3, integral } = this.state;
     const { parentProps } = this.props;
-    const { speakerSuggests, loading, activity_type } = parentProps.seminar;
+    const { speakerSuggests, loading, contribution_type } = parentProps.seminar;
+    const { getFieldDecorator } = parentProps.form;
 
     return (
       <Modal
-        title="添加演讲者"
+        title="添加专家"
         visible={modalVisible}
         width={640}
         footer={null}
@@ -193,7 +203,7 @@ class AddExpertModal extends React.Component {
             {...formItemLayout}
             label="演讲标题"
           >
-            <Input placeholder="请输入活动名称。。。" ref="talkTitle" />
+            <Input placeholder="请输入演讲标题。。。" ref="talkTitle" />
           </FormItem>
           <FormItem
             {...formItemLayout}
@@ -209,30 +219,34 @@ class AddExpertModal extends React.Component {
           <FormItem
             {...formItemLayout}
             label={(<span>演讲摘要</span>)}>
-            <Input type="textarea" rows={4} placeholder="请输入演讲摘要。。。" ref="talkAbstract" />
+            <Input type="textarea" rows={4} placeholder="请输入演讲摘要。。。" ref="talkAbstract" onBlur={this.setTalkAbstrack}/>
           </FormItem>
-          <FormItem
+          {contribution_type && <FormItem
             {...formItemLayout}
             label="贡献类别"
           >
-            {activity_type &&
-            <Select
-              showSearch
-              style={{ width: 200 }}
-              placeholder="请选择贡献类别"
-              optionFilterProp="children"
-              onChange={this.activityTypeChange}
-              filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-            >
-              {
-                Object.keys(activity_type.data).map((item) => {
-                  return (<Option key={item}
-                                  value={`${item}#${activity_type.data[item]}`}>{item}</Option>);
-                })
-              }
-            </Select>}
-
-          </FormItem>
+            {getFieldDecorator('email', {
+              rules: [{
+                required: true, message: '请选择贡献类别',
+              }],
+            })(
+              <Select
+                  showSearch
+                  style={{ width: 200 }}
+                  placeholder="请选择贡献类别"
+                  optionFilterProp="children"
+                  onChange={this.activityTypeChange}
+                  filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                >
+                {
+                    Object.values(contribution_type.data).map((item) => {
+                      return (<Option key={item.id}
+                                      value={`${item.key}#${item.value}`}>{item.key}</Option>);
+                    })
+                  }
+              </Select>,
+              )}
+          </FormItem>}
           <div style={{ height: 20 }}>
             <Button key="submit" type="primary" size="large" style={{ float: 'right' }}
                     onClick={this.jumpToStep2.bind()}>
@@ -340,7 +354,7 @@ class AddExpertModal extends React.Component {
           </div>
         </div>
 
-        <div className={`${step3 ? styles.showStep4 : styles.hideStep4}`} style={{ minHeight: 355, maxHeight: 800 }}>
+        <div className={`${step3 ? styles.showStep4 : styles.hideStep4}`} style={{ minHeight: 392, maxHeight: 800 }}>
           <Col><label>专家信息</label></Col>
 
           <Col span={6}>
@@ -357,7 +371,7 @@ class AddExpertModal extends React.Component {
             </section>
           </Col>
           <Col span={18} className={styles.expertProfile}>
-            <div className="ant-form-item">
+            <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
               <label className="ant-col-3">姓名: </label>
               <div className="ant-col-21">
                 <Input size="large" placeholder="专家姓名" ref="speakerName"
@@ -365,7 +379,7 @@ class AddExpertModal extends React.Component {
               </div>
             </div>
 
-            <div className="ant-form-item">
+            <div className="ant-form-item" style={{ paddingBottom: '20px' }}>
               <label className="ant-col-3">性别: </label>
               <div className="ant-col-21">
                 <RadioGroup defaultValue="1" onChange={this.saveExpertInfo.bind(this, 'gender')}>
@@ -374,39 +388,32 @@ class AddExpertModal extends React.Component {
                 </RadioGroup>
               </div>
             </div>
-            <div className="ant-form-item">
+            <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
               <label className="ant-col-3">职称: </label>
               <div className="ant-col-21">
                 <Input size="large" placeholder="专家职称" ref="speakerPos"
                        onBlur={this.saveExpertInfo.bind(this, 'position')} />
               </div>
             </div>
-            <div className="ant-form-item">
+            <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
               <label className="ant-col-3">单位: </label>
               <div className="ant-col-21">
                 <Input size="large" placeholder="专家单位" ref="speakerAff"
                        onBlur={this.saveExpertInfo.bind(this, 'affiliation')} />
               </div>
             </div>
-            <div className="ant-form-item">
+            <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
               <label className="ant-col-3">电话: </label>
               <div className="ant-col-21">
                 <Input size="large" placeholder="电话" ref="speakerIphone"
                        onBlur={this.saveExpertInfo.bind(this, 'phone')} />
               </div>
             </div>
-            <div className="ant-form-item">
+            <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
               <label className="ant-col-3">邮箱: </label>
               <div className="ant-col-21">
                 <Input size="large" placeholder="邮箱" ref="speakerEmail"
                        onBlur={this.saveExpertInfo.bind(this, 'email')} />
-              </div>
-            </div>
-
-            <div className="ant-form-item">
-              <label className="ant-col-3">积分: </label>
-              <div className="ant-col-21">
-                <span>{integral}</span>
               </div>
             </div>
           </Col>

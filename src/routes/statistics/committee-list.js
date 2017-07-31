@@ -13,7 +13,7 @@ class CommitteeList extends React.Component {
   };
 
   componentWillMount = () => {
-    this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'activity_type' } });
+    this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'orgcategory' } });
   };
   onSelectChange = (selectedRowKeys) => {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
@@ -41,11 +41,11 @@ class CommitteeList extends React.Component {
   };
 
   render() {
-    const { activity_type } = this.props.seminar;
+    const { orgcategory } = this.props.seminar;
     let activity_type_options_data = {};
-    if (activity_type.data) {
-      activity_type_options_data = activity_type.data;
-    }
+    // if (activity_type.data) {
+    //   activity_type_options_data = activity_type.data;
+    // }
 
 
     const { selectedRowKeys } = this.state;
@@ -57,22 +57,29 @@ class CommitteeList extends React.Component {
     return (
       <div>
         {/* rowSelection={rowSelection}*/}
-        <Table bordered dataSource={this.props.activity}>
+        {orgcategory.data && <Table bordered dataSource={this.props.activity}>
           <Column title="承办单位" dataIndex="organizer" key="display_name" />
-          <Column title="举办活动次数（总数）" dataIndex="total" key="position" render={(total, organizer) => <a data={JSON.stringify(organizer)} onClick={this.getSeminarsByCategory.bind(this, total, 'organizer')}> {total} </a>} />
-          {Object.keys(activity_type_options_data).map((category) => {
-            const dataIndex = `category.${category}`;
+          <Column title="举办活动次数（总数）" dataIndex="total" key="position"
+                  render={(total, organizer) => <a data={JSON.stringify(organizer)}
+                                                   onClick={this.getSeminarsByCategory.bind(this, total, 'organizer')}> {total} </a>} />
+          {Object.values(orgcategory.data).map((category) => {
+            if (category.key === '撰稿活动' || category.key === '审稿活动') {
+              return '';
+            }
+            const dataIndex = `category.${category.key}`;
             return (
-              <Column title={category} dataIndex={dataIndex} key={category} render={(dataIndex, text) => {
-                if (dataIndex === undefined) {
-                  return '';
-                } else {
-                  return <a target="_blank" data={JSON.stringify(text)} onClick={this.getSeminarsByCategory.bind(this, category, 'category')}> {dataIndex} </a>;
-                }
-              }} />
+              <Column title={category.key} dataIndex={dataIndex} key={category.id}
+                      render={(dataIndex, text) => {
+                        if (dataIndex === undefined) {
+                          return '';
+                        } else {
+                          return <a target="_blank" data={JSON.stringify(text)}
+                                    onClick={this.getSeminarsByCategory.bind(this, category, 'category')}> {dataIndex} </a>;
+                        }
+                      }} />
             );
           })}
-        </Table>
+        </Table>}
       </div>
     );
   }

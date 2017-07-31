@@ -99,7 +99,7 @@ class PersonListTiny extends React.PureComponent {
                             {
                               tags.map((tag) => {
                                 return (
-                                  <Link to={`/${sysconfig.SearchPagePrefix}/${tag.t}/0/30`}
+                                  <Link to={`/${sysconfig.SearchPagePrefix}/${tag.t}/0/20`}
                                         key={Math.random()}>
                                     <Tag className={styles.tag}>{tag.t}</Tag>
                                   </Link>);

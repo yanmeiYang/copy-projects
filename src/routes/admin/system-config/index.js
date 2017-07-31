@@ -46,7 +46,6 @@ class SystemConfig extends React.Component {
     const sc = this.props.adminSystemConfig;
     const defaultCategory = sc.category || SysconfigDefaultCategory;
     const tabConfig = SysConfigTabs.filter(item => item.category === defaultCategory);
-
     return (
       <div className="content-inner">
 
@@ -77,8 +76,10 @@ class SystemConfig extends React.Component {
           })}
         </Tabs>
         }
+        {sc.category === 'contribution_type' ?
+          <UniversalConfig /> : <UniversalConfig hideValue />
+        }
 
-        <UniversalConfig />
 
       </div>
     );

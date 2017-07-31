@@ -7,6 +7,7 @@ import FilterItem from './FilterItem';
 import * as Layout from './Layout/index.js';
 
 import layer from './layer';
+import Spinner from './Spinner';
 
 export {
   Layout,
@@ -17,4 +18,5 @@ export {
   // Editor,
   FilterItem,
   layer,
+  Spinner,
 };

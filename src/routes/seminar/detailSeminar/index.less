@@ -10,6 +10,9 @@
 .detailSeminar {
   font-size: 13px;
   margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  flex-shrink: 1;
   h4 {
     text-align: center;
     font-size: 18px;
@@ -51,8 +54,10 @@
   .rate {
     .marginTop;
   }
-
-
+}
+.detailSeminar > div:nth-child(1) {
+  max-width: 1000px;
+  width: 100%;
 }
 
 .thumbnail {
@@ -89,6 +94,8 @@
   }
   img {
     width: 100%;
+    //box-shadow: 0px 0px 10px #428bca;
+    margin-bottom: 20px;
   }
   hr {
     .hr;
@@ -107,4 +114,12 @@
   hr {
     .hr;
   }
+}
+.qrCode{
+  display: none;
+  z-index: 1;
+  position: absolute;
+}
+.show_QRCode:hover+.qrCode{
+  display: block !important;
 }

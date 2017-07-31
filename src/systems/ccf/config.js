@@ -2,6 +2,7 @@
  * Created by BoGao on 2017/6/20.
  */
 import React from 'react';
+import Footer from '../../components/Footers/ccf';
 
 module.exports = {
 
@@ -64,18 +65,25 @@ module.exports = {
     '计算机网络', '网络', '自然语言处理'],
 
   PersonList_ShowIndices: ['activityRankingContrib', 'h_index', 'activity'],
+
+  //
+  // Layout related
+  //
+  // Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
+  Header_LogoWidth: 212,
+  Header_LogoStyle: {
+    width: '86px',
+    backgroundPosition: '8px 2px',
+    backgroundSize: ' auto 54px',
+    backgroundRepeat: 'no-repeat',
+    backgroundColor: 'white',
+  },
   Header_SubTextLogo: 'CCF 专家库',
-  Header_LogoStyle: { width: '50%', lineHeight: '45px', height: '45px' },
-  Header_UserPageURL: '/seminar-my',
-  Footer_Content: (
-    <div>
-      <img src="/sys/ccf/footer-btm.png" alt="footer" />
-      <div>
-        版权所有 中国计算机学会技术支持：AMiner.org<br />
-        网站建议或者意见请发送邮件：suggest@ccf.org.cn
-      </div>
-    </div>
-  ),
+  Header_SubTextStyle: { marginLeft: 12 },
+  Header_UserPageURL: '', // 用户头像点击之后去的页面.
+  Footer_Content: <Footer />,
+  ShowSideMenu: true,
+  ShowFooter: true,
 
   // 特殊配置，这里是System的自己的配置
 
@@ -102,7 +110,7 @@ module.exports = {
     },
     {
       category: 'activity_organizer_options',
-      label: '活动承办单位',
+      label: '协办单位',
       desc: 'CCF 活动的承办单位，包括专委/分部/项目等。',
     },
     {

@@ -135,7 +135,7 @@ const App = ({ children, location, dispatch, app, loading }) => {
 
         {href.indexOf('/expert-googlemap') > 0 &&
         <script
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnNB6SXL5JJ0NU8j-Ay8pnnmRC50vsrtw"
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlzpf4YyjOBGYOhfUaNvQZENXEWBgDkS0"
           async defer />}
 
       </Helmet>

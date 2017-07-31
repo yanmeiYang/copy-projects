@@ -12,7 +12,8 @@ class RightInfoZoneCluster extends React.PureComponent {
   componentDidMount() {
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps() {
+
   }
 
   render() {
@@ -30,6 +31,7 @@ class RightInfoZoneCluster extends React.PureComponent {
       if (indices) {
         hindexSum += indices.h_index;
       }
+      persons.sort((a, b) => b.indices.h_index - a.indices.h_index);
       // interests
       if (person.tags && person.tags.length > 0) {
         person.tags.map((tag) => {
@@ -53,7 +55,6 @@ class RightInfoZoneCluster extends React.PureComponent {
       return { key: tag, count: interests[tag] };
     });
     sortedInterest = sortedInterest.sort((a, b) => b.count - a.count);
-
     // TODO 人头按Hindex排序。
     // TODO 显示Hindex分段.
     return (
@@ -75,7 +76,7 @@ class RightInfoZoneCluster extends React.PureComponent {
               <div key={person.id} className="imgOuter">
                 <div className="imgBox">
                   <img src={avatarUrl} />
-                  {/*<div key={person.id}>{person.name}</div>*/}
+                  {/* <div key={person.id}>{person.name}</div>*/}
                 </div>
                 <div className="tooltip">
                   {person.name}<br />

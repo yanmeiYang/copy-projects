@@ -31,7 +31,7 @@ const tabData = [
 class Statistics extends React.Component {
   state = {
     defaultTabKey: tabData[0].category,
-  }
+  };
 
   componentWillMount() {
     const roles = this.props.app.roles;

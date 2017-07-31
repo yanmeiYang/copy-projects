@@ -12,7 +12,7 @@ import NewActivityList from '../../../components/seminar/newActivityList';
 class StatisticsDetail extends React.Component {
   state = {
     filter: {},
-  }
+  };
   componentWillMount = () => {
     let payload = {};
     if (queryURL('category') === null) {
@@ -29,7 +29,7 @@ class StatisticsDetail extends React.Component {
       size,
       payload,
     });
-  }
+  };
   getMoreSeminar = () => {
     const offset = this.props.statistics.getSeminarOffset;
     const size = this.props.statistics.getSeminarSize;

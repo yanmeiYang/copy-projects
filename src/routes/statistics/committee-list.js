@@ -32,7 +32,7 @@ class CommitteeList extends React.Component {
     const data = JSON.parse(e.target && e.target.getAttribute('data'));
     let params = `?organizer=${data.organizer}`;
     if (type === 'category') {
-      params += `&category=${v}`;
+      params += `&category=${v.key}`;
     }
     this.props.dispatch(routerRedux.push({
       pathname: '/statistics/detail',

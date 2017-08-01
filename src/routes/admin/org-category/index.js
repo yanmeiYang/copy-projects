@@ -32,8 +32,6 @@ class OrgCategory extends React.Component {
 
   render() {
     const tabData = this.props.universalConfig.tabList;
-    console.log(tabData)
-    console.log("=======")
     return (
       <div style={{ paddingLeft: 24 }}>
         <h2 style={{ marginBottom: 12 }}>机构列表</h2>

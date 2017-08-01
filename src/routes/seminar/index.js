@@ -4,8 +4,8 @@
 import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
-import { Button, Icon, Spin, Tag } from 'antd';
-import { config, classnames } from '../../utils';
+import { Button, Icon, Spin, Tag, Modal } from 'antd';
+import { config } from '../../utils';
 import styles from './index.less';
 import SearchSeminar from './search-seminar';
 import NewActivityList from '../../components/seminar/newActivityList';
@@ -30,8 +30,18 @@ class Seminar extends React.Component {
     }));
   };
   delTheSeminar = (result, i) => {
-    this.props.dispatch({ type: 'seminar/deleteActivity', payload: { id: result.id } });
-    this.props.seminar.results.splice(i, 1);
+    const props = this.props;
+    Modal.confirm({
+      title: '删除',
+      content: '确定删除吗？',
+      onOk() {
+        props.dispatch({ type: 'seminar/deleteActivity', payload: { id: result.id } });
+        props.seminar.results.splice(i, 1);
+      },
+      onCancel() {
+      },
+    });
+
   };
   getMoreSeminar = () => {
     const { offset, query, sizePerPage } = this.props.seminar;

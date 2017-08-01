@@ -272,7 +272,7 @@ class KgSearchBox extends React.PureComponent {
 
     // Auto suggest will pass through all these props to the input.
     const inputProps = {
-      placeholder: 'Search',
+      placeholder: '搜索',
       value, // : query || '',
       onChange: this.onChange,
     };

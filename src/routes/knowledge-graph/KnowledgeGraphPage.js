@@ -16,7 +16,6 @@ const RadioGroup = Radio.Group;
 const TabPane = Tabs.TabPane;
 
 class KnowledgeGraphPage extends React.PureComponent {
-
   constructor(props) {
     super(props);
     this.dispatch = this.props.dispatch;
@@ -29,7 +28,7 @@ class KnowledgeGraphPage extends React.PureComponent {
 
   componentWillMount() {
     const query = (this.props.location && this.props.location.query
-      && this.props.location.query.query) || '';
+      && this.props.location.query.query) || 'data mining';
     this.dispatch({
       type: 'app/layout',
       payload: {
@@ -205,14 +204,18 @@ class KnowledgeGraphPage extends React.PureComponent {
       <div className={classnames('content-inner', styles.page)}>
         <div className={styles.title}>
           <h1> 知识图谱 </h1>
-          <div className="toolbox">
-            <span>Search Method:</span>
+
+          {process.env.NODE_ENV !== 'production' &&
+          <div className="toolbox" style={{ border: 'dashed 1px green' }}>
+            <span>DEV: Search Method:</span>
             <RadioGroup onChange={this.onSearchMethodChange} value={this.state.searchMethod}>
               <Radio value="direct">Direct</Radio>
               <Radio value="and2">AND&lt;2</Radio>
               <Radio value="or2">OR&lt;2</Radio>
             </RadioGroup>
           </div>
+          }
+
         </div>
 
         <div className={styles.meat}>

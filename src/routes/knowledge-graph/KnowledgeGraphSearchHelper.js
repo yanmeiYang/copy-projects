@@ -39,7 +39,7 @@ class KnowledgeGraphSearchHelper extends React.PureComponent {
     if (process.env.NODE_ENV !== 'production') {
       console.log('KG: kgdata: ', kgdata);
     }
-    if (!kgdata) {
+    if (!kgdata || (kgdata.status === false && !kgdata.hits)) {
       this.emptyD3();
       this.closeZone();
     } else {
@@ -125,7 +125,7 @@ class KnowledgeGraphSearchHelper extends React.PureComponent {
   closeZone = () => {
     d3.select(`#${controlDivId}`)
       .style('width', '0px')
-      .style('height', '261px');
+      .style('height', '0px');
   };
 
   // Create D3 Object.

@@ -17,6 +17,8 @@ const config = [
   { label: '技术趋势', url: '/trend-prediction', data: 'query', pageSignature: 'trend-prediction' },
 ];
 
+const defaultQuery = 'data mining';
+
 class SearchTypeWidgets extends React.PureComponent {
   state = {
     current: '',
@@ -42,16 +44,17 @@ class SearchTypeWidgets extends React.PureComponent {
   }
 
   onClick = conf => (e) => {
+    const theQuery = this.props.query || defaultQuery;
     this.setState({ current: conf.label });
     if (conf && conf.data) {
       const query = {};
-      query[conf.data] = this.props.query;
+      query[conf.data] = theQuery;
       this.props.dispatch(routerRedux.push({
         pathname: conf.url, query,
       }));
     } else {
       this.props.dispatch(routerRedux.push({
-        pathname: conf.url.replace(':query', this.props.query),
+        pathname: conf.url.replace(':query', theQuery),
       }));
     }
   };

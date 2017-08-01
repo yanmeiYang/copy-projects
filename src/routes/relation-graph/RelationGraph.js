@@ -1069,7 +1069,7 @@ class RelationGraph extends React.PureComponent {
 
         // special:
         if (!graph.nodes || graph.nodes.length <= 0) {
-          message.info('No data, please change a query.', 50);
+          message.info('No data, please change a query.');
           return;
         }
 

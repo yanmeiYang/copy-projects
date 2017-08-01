@@ -1,7 +1,8 @@
 import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
-import { Tabs, Tag, Pagination } from 'antd';
+import classnames from 'classnames';
+import { Tabs, Tag, Pagination, message } from 'antd';
 import styles from './uni-search.less';
 import { PersonList } from '../../components/person';
 import { Spinner } from '../../components';
@@ -210,10 +211,10 @@ class UniSearch extends React.PureComponent {
 
     // TODO extract filter into component.
     return (
-      <div className="content-inner">
+      <div className={classnames('content-inner', styles.page)}>
 
         <div className={styles.topZone}>
-          <div className="searchZone">
+          <div className={styles.searchZone}>
             <SearchFilter
               filters={filters}
               aggs={aggs}
@@ -222,7 +223,7 @@ class UniSearch extends React.PureComponent {
             />
           </div>
 
-          <div className="rightZone">
+          <div className={styles.rightZone}>
             <KnowledgeGraphSearchHelper query={query} />
           </div>
         </div>

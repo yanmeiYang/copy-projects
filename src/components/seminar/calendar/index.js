@@ -16,14 +16,22 @@ class CanlendarInForm extends React.Component {
     endValue: null,
     endOpen: false,
   };
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.startValue) {
+      this.setState({ startValue: moment(nextProps.startValue) });
+    }
+    if (nextProps.endValue) {
+      this.setState({ endValue: moment(nextProps.endValue) });
+    }
+  }
 
   //活动时间开始
   disabledStartDate = (startValue) => {
     const endValue = this.state.endValue;
-    if (!startValue || !endvalue) {
+    if (!startValue || !endValue) {
       return false;
     }
-    return sstartValue.valueOf > endValue.valueOf();
+    return startValue.valueOf > endValue.valueOf();
   };
   disabledEndDate = (endValue) => {
     const startValue = this.state.startValue;
@@ -34,7 +42,7 @@ class CanlendarInForm extends React.Component {
   };
   onChange = (field, value) => {
     this.setState({ [field]: value });
-    this.props.callbackParent(field,value);
+    this.props.callbackParent(field, value);
   };
   onStartChange = (value) => {
     this.onChange('startValue', value);
@@ -63,7 +71,7 @@ class CanlendarInForm extends React.Component {
             format="YYYY-MM-DD HH:mm"
             ref="startValue"
             value={startValue}
-            placeholder="Start"
+            placeholder="开始"
             onChange={this.onStartChange}
             onOpenChange={this.handleStartOpenChange}
           />
@@ -75,7 +83,7 @@ class CanlendarInForm extends React.Component {
             format="YYYY-MM-DD HH:mm"
             ref="endValue"
             value={endValue}
-            placeholder="End"
+            placeholder="结束"
             onChange={this.onEndChange}
             open={endOpen}
             onOpenChange={this.handleEndOpenChange}

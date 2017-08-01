@@ -71,7 +71,7 @@ class AddTags extends React.Component {
             onPressEnter={this.handleInputConfirm}
           />
         )}
-        {!inputVisible && <Button size="small" type="dashed" onClick={this.showInput}>+ New Tag</Button>}
+        {!inputVisible && <Button size="small" type="dashed" onClick={this.showInput}>+ 新标签</Button>}
       </div>
     );
   }

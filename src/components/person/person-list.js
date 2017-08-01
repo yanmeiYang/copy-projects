@@ -81,14 +81,12 @@ class PersonList extends React.PureComponent {
                       {phone &&
                       <span style={{ minWidth: '158px' }}>
                         <i className="fa fa-phone fa-fw" /> {phone}
-                      </span>}
+                      </span>
+                      }
                       {email &&
-                      <span className="email">
-                        <i className="fa fa-envelope fa-fw" /> <img
-                        src={`${config.baseURL}${email}`}
-                        alt="email"
-                        style={{ verticalAlign: 'middle' }}
-                      />
+                      <span className="email"
+                            style={{ backgroundImage: `url(${config.baseURL}${email})` }}>
+                        <i className="fa fa-envelope fa-fw" />
                       </span>
                       }
                     </div>

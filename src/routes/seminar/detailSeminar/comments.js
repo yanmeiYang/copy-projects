@@ -2,7 +2,8 @@
  * Created by yangyanmei on 17/6/15.
  */
 import React from 'react';
-import { Col, Input, Button } from 'antd';
+import ReactDOM from 'react-dom';
+import { Col, Input, Button, Modal } from 'antd';
 import { Link } from 'dva/router';
 import { connect } from 'dva';
 import styles from './comments.less';
@@ -13,14 +14,26 @@ class CommentsByActivity extends React.Component {
   submitComment = () => {
     this.props.dispatch({
       type: 'seminar/addCommentToActivity',
-      payload: { id: this.props.activityId, data: { body: this.refs.comment.refs.input.value } },
+      payload: {
+        id: this.props.activityId,
+        data: { body: ReactDOM.findDOMNode(this.refs.comment).value },
+      },
     });
-    this.refs.comment.refs.input.value = '';
+    ReactDOM.findDOMNode(this.refs.comment).value = '';
   };
   deleteTheComment = (cid) => {
-    this.props.dispatch({
-      type: 'seminar/deleteCommentFromActivity',
-      payload: { cid, id: this.props.activityId },
+    const outerThis = this;
+    Modal.confirm({
+      title: '删除',
+      content: '确定删除吗？',
+      onOk() {
+        outerThis.props.dispatch({
+          type: 'seminar/deleteCommentFromActivity',
+          payload: { cid, id: outerThis.props.activityId },
+        });
+      },
+      onCancel() {
+      },
     });
   };
 
@@ -36,7 +49,8 @@ class CommentsByActivity extends React.Component {
                 <li>
                   <img src={comment.user.avatar} alt={comment.user.avatar} />
                   {comment.user.id === currentUser.user.id &&
-                  <span className={styles.delete} onClick={this.deleteTheComment.bind(this, comment.id)}>
+                  <span className={styles.delete}
+                        onClick={this.deleteTheComment.bind(this, comment.id)}>
                     删除
                   </span>
                   }

@@ -41,11 +41,24 @@ export default {
     path: 'seminar-post',
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
+        registerModel(app, require('../../models/person'));
         registerModel(app, require('../../models/seminar'));
         cb(null, require('./addSeminar'));
       }, 'seminar');
     },
   }),
+
+  SeminarByEdit: app => ({
+    path: 'seminar-edit/:id',
+    getComponent(nextState, cb) {
+      require.ensure([], (require) => {
+        registerModel(app, require('../../models/person'));
+        registerModel(app, require('../../models/seminar'));
+        cb(null, require('./editSeminar'));
+      }, 'seminar');
+    },
+  }),
+
 
   SeminarRating: app => ({
     path: 'seminar/expert-rating/:id',

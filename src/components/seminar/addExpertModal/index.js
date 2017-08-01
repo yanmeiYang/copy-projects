@@ -2,10 +2,12 @@
  * Created by yangyanmei on 17/6/20.
  */
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { Modal, Button, Input, Form, Col, Tag, Icon, Radio, Spin, Select } from 'antd';
 import { Link } from 'dva/router';
 import CanlendarInForm from '../calendar';
 import defaultImg from '../../../assets/people/default.jpg';
+import ExpertBasicInfo from './expertBasicInfo';
 import styles from './index.less';
 
 const FormItem = Form.Item;
@@ -18,11 +20,11 @@ class AddExpertModal extends React.Component {
     talkStartValue: null,
     talkEndValue: null,
     speakerInfo: {},
-    integral: 0,
     name: '',
     position: '',
     affiliation: '',
     talkAbstract: '',
+    isEdit: false,
   };
   speakerInformation = {
     name: '',
@@ -37,8 +39,56 @@ class AddExpertModal extends React.Component {
     stype: {},
   };
 
+  componentDidMount() {
+    if (this.props.editTheTalk.speaker) {
+      const editTheTalk = this.props.editTheTalk;
+      this.setState({
+        isEdit: true,
+        speakerInfo: editTheTalk.speaker,
+        talkStartValue: editTheTalk.time ? editTheTalk.time.from : '',
+        talkEndValue: editTheTalk.time ? editTheTalk.time.to : '',
+      });
+      this.speakerInformation = this.props.editTheTalk.speaker;
+      ReactDOM.findDOMNode(this.refs.talkTitle).value = editTheTalk.title;
+      ReactDOM.findDOMNode(this.refs.talkLocation).value = editTheTalk.location ? editTheTalk.location.address : '';
+      ReactDOM.findDOMNode(this.refs.talkAbstract).value = editTheTalk.abstract;
+      this.props.parentProps.form.setFieldsValue({ contrib: editTheTalk.speaker.stype.label });
+      ReactDOM.findDOMNode(this.refs.name).value = editTheTalk.speaker.name;
+      ReactDOM.findDOMNode(this.refs.speakerName).value = editTheTalk.speaker.name;
+      ReactDOM.findDOMNode(this.refs.speakerPos).value = editTheTalk.speaker.position;
+      ReactDOM.findDOMNode(this.refs.speakerAff).value = editTheTalk.speaker.affiliation;
+      ReactDOM.findDOMNode(this.refs.speakerIphone).value = editTheTalk.speaker.phone;
+      ReactDOM.findDOMNode(this.refs.speakerEmail).value = editTheTalk.speaker.email;
+      ReactDOM.findDOMNode(this.refs.speakerBio).value = editTheTalk.speaker.bio;
+      ReactDOM.findDOMNode(this.refs.speakerImg).src = editTheTalk.speaker.img;
+    }
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    if (nextProps.parentProps.seminar.selectedSuggestSpeaker === this.props.parentProps.seminar.selectedSuggestSpeaker) {
+      return false;
+    }
+    const selectedExpert = nextProps.parentProps.seminar.selectedSuggestSpeaker;
+    this.speakerInformation.name = this.refs.speakerName.refs.input.value = selectedExpert.payload.name;
+    this.speakerInformation.affiliation = this.refs.speakerAff.refs.input.value = selectedExpert.payload.org;
+    selectedExpert.pos.length > 0 && selectedExpert.pos[0].n ? this.speakerInformation.position = this.refs.speakerPos.refs.input.value = selectedExpert.pos[0].n : this.speakerInformation.position = this.refs.speakerPos.refs.input.value = ' ';
+    this.speakerInformation.aid = this.refs.speakerAid.value = selectedExpert.payload.id;
+    this.speakerInformation.img = this.refs.speakerImg.src = selectedExpert.img;
+    this.speakerInformation.bio = selectedExpert.bio;
+    this.speakerInformation.phone = selectedExpert.phone;
+    this.speakerInformation.email = selectedExpert.email;
+    ReactDOM.findDOMNode(this.refs.speakerBio).value = selectedExpert.bio;
+    ReactDOM.findDOMNode(this.refs.speakerIphone).value = selectedExpert.phone;
+    ReactDOM.findDOMNode(this.refs.speakerEmail).value = selectedExpert.email;
+    this.setState({
+      speakerInfo: this.speakerInformation,
+    });
+    return true;
+  }
+
   setModalVisible() {
     this.setState({ modalVisible: false });
+    this.props.callbackParentSetAddNewTalk();
   }
 
   setStep(step, visible) {
@@ -65,20 +115,13 @@ class AddExpertModal extends React.Component {
 
   // 选择一位推荐专家
   selectedExpert = (speaker) => {
-    this.speakerInformation.name = this.refs.speakerName.refs.input.value = speaker.payload.name;
-    this.speakerInformation.affiliation = this.refs.speakerAff.refs.input.value = speaker.payload.org;
-    speaker.pos.length > 0 && speaker.pos[0].n ? this.speakerInformation.position = this.refs.speakerPos.refs.input.value = speaker.pos[0].n : this.speakerInformation.position = this.refs.speakerPos.refs.input.value = ' ';
-    this.speakerInformation.aid = this.refs.speakerAid.value = speaker.payload.id;
-    this.speakerInformation.img = this.refs.speakerImg.src = speaker.img;
-    this.speakerInformation.bio = this.refs.speakerBio.refs.input.value = '';
+    this.props.parentProps.dispatch({ type: 'seminar/saveSuggestExpert', payload: { speaker } });
     this.setState({
-      speakerInfo: this.speakerInformation,
       step3: true,
       step2: false,
       step1: false,
     });
     this.props.parentProps.seminar.speakerSuggests = [];
-    // this.props.callbackParent(this.speakerInformation);
   };
 
   // 修改当前专家信息
@@ -87,7 +130,6 @@ class AddExpertModal extends React.Component {
     this.setState({
       speakerInfo: this.speakerInformation,
     });
-    // this.props.callbackParent(this.speakerInformation);
   };
   setTalkAbstrack = (e) => {
     this.setState({ talkAbstract: e.target.value });
@@ -96,34 +138,33 @@ class AddExpertModal extends React.Component {
     const state = this.state;
     const talk = {
       title: '',
-      speaker: { name: '', position: '', affiliation: '', img: '', aid: '', bio: '', stype: { label: '', score: 0 } },
+      speaker: {
+        name: '',
+        position: '',
+        affiliation: '',
+        img: '',
+        aid: '',
+        bio: '',
+        stype: { label: '', score: 0 },
+      },
       location: { city: '', address: '' },
       abstract: '',
     };
     talk.title = this.refs.talkTitle.refs.input.value;
-    talk.speaker.name = state.speakerInfo.name;
-    talk.speaker.position = state.speakerInfo.position;
-    talk.speaker.affiliation = state.speakerInfo.affiliation;
-    talk.speaker.img = state.speakerInfo.img;
-    talk.speaker.aid = state.speakerInfo.aid;
-    talk.speaker.bio = state.speakerInfo.bio;
-    talk.speaker.gender = parseInt(state.speakerInfo.gender);
-    talk.speaker.email = state.speakerInfo.email;
-    talk.speaker.phone = state.speakerInfo.phone;
-    talk.speaker.stype = state.speakerInfo.stype;
-    // talk.stype[xxx]='1';
+    talk.speaker = state.speakerInfo;
+    talk.speaker.gender = state.speakerInfo.gender === '' ? 1 : parseInt(state.speakerInfo.gender);
     if (state.talkStartValue || state.talkEndValue) {
-      talk['time'] = {};
+      talk.time = {};
     }
     if (state.talkStartValue) {
-      talk['time'].from = state.talkStartValue.toJSON();
+      talk.time.from = typeof state.talkStartValue === 'string' ? state.talkStartValue : state.talkStartValue.toJSON();
     }
     if (state.talkEndValue) {
-      talk['time'].to = state.talkEndValue.toJSON();
+      talk.time.to = typeof state.talkStartValue === 'string' ? state.talkEndValue : state.talkEndValue.toJSON();
     }
     talk.location.address = this.refs.talkLocation.refs.input.value;
-    talk.abstract = state.talkAbstract;
-    this.props.callbackParent(talk);
+    talk.abstract = ReactDOM.findDOMNode(this.refs.talkAbstract).value;
+    this.props.callbackParent(talk, state.isEdit);
     this.setState({ modalVisible: false });
   };
 
@@ -150,27 +191,27 @@ class AddExpertModal extends React.Component {
   }
 
   activityTypeChange = (value) => {
-    this.setState({ integral: value.split('#')[1] });
     this.speakerInformation.stype.label = value.split('#')[0];
     this.speakerInformation.stype.score = parseInt(value.split('#')[1]);
   };
 
   jumpToStep2 = () => {
-    this.props.parentProps.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        this.setStep('step2', true);
-      }
-    });
+    this.setStep('step2', true);
+    // this.props.parentProps.form.validateFieldsAndScroll((err, values) => {
+    //   if (!err) {
+    //     this.setStep('step2', true);
+    //   }
+    // });
   };
 
   cancelCurrentPerson = () => {
-    this.setState({ step2: true, step3: false, speakerInfo: {} });
-    this.refs.speakerName.refs.input.value = '';
-    this.refs.speakerAff.refs.input.value = '';
-    this.refs.speakerPos.refs.input.value = '';
-    this.refs.speakerAid.value = '';
-    this.refs.speakerImg.src = defaultImg;
-    this.refs.speakerBio.refs.input.value = '';
+    this.setState({ step2: true, step3: false });
+    // this.refs.speakerName.refs.input.value = '';
+    // this.refs.speakerAff.refs.input.value = '';
+    // this.refs.speakerPos.refs.input.value = '';
+    // this.refs.speakerAid.value = '';
+    // this.refs.speakerImg.src = defaultImg;
+    // this.refs.speakerBio.refs.input.value = '';
   };
 
   render() {
@@ -184,15 +225,15 @@ class AddExpertModal extends React.Component {
         sm: { span: 20 },
       },
     };
-    const { modalVisible, step2, step3, integral } = this.state;
-    const { parentProps } = this.props;
+    const { modalVisible, step2, step3, isEdit, speakerInfo } = this.state;
+    const { parentProps, editTheTalk } = this.props;
     const { speakerSuggests, loading, contribution_type } = parentProps.seminar;
     const { getFieldDecorator } = parentProps.form;
-
     return (
       <Modal
         title="添加专家"
         visible={modalVisible}
+        maskClosable={false}
         width={640}
         footer={null}
         wrapClassName={styles.addExpertModal}
@@ -209,7 +250,9 @@ class AddExpertModal extends React.Component {
             {...formItemLayout}
             label={(<span>活动时间</span>)}
             hasFeedback>
-            <CanlendarInForm callbackParent={this.onChildTalkChanged} />
+            <CanlendarInForm callbackParent={this.onChildTalkChanged}
+                             startValue={this.state.talkStartValue}
+                             endValue={this.state.talkEndValue} />
           </FormItem>
           <FormItem
             {...formItemLayout}
@@ -219,33 +262,34 @@ class AddExpertModal extends React.Component {
           <FormItem
             {...formItemLayout}
             label={(<span>演讲摘要</span>)}>
-            <Input type="textarea" rows={4} placeholder="请输入演讲摘要。。。" ref="talkAbstract" onBlur={this.setTalkAbstrack}/>
+            <Input type="textarea" rows={4} placeholder="请输入演讲摘要。。。" ref="talkAbstract"
+                   onBlur={this.setTalkAbstrack} />
           </FormItem>
           {contribution_type && <FormItem
             {...formItemLayout}
             label="贡献类别"
           >
-            {getFieldDecorator('email', {
+            {getFieldDecorator('contrib', {
               rules: [{
                 required: true, message: '请选择贡献类别',
               }],
             })(
               <Select
-                  showSearch
-                  style={{ width: 200 }}
-                  placeholder="请选择贡献类别"
-                  optionFilterProp="children"
-                  onChange={this.activityTypeChange}
-                  filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                >
+                showSearch
+                style={{ width: 200 }}
+                placeholder="请选择贡献类别"
+                optionFilterProp="children"
+                onChange={this.activityTypeChange}
+                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+              >
                 {
-                    Object.values(contribution_type.data).map((item) => {
-                      return (<Option key={item.id}
-                                      value={`${item.key}#${item.value}`}>{item.key}</Option>);
-                    })
-                  }
+                  Object.values(contribution_type.data).map((item) => {
+                    return (<Option key={item.id}
+                                    value={`${item.key}#${item.value}`}>{item.key}</Option>);
+                  })
+                }
               </Select>,
-              )}
+            )}
           </FormItem>}
           <div style={{ height: 20 }}>
             <Button key="submit" type="primary" size="large" style={{ float: 'right' }}
@@ -273,9 +317,8 @@ class AddExpertModal extends React.Component {
             <Button type="primary" size="large"
                     onClick={this.suggestExpert.bind(this, 1)}>推荐</Button>
           </div>
-
-          {speakerSuggests &&
           <div className={styles.personWrap}>
+            {speakerSuggests.length > 0 &&
             <Spin spinning={loading} style={{ marginTop: 30 }}>
               {speakerSuggests.map((speaker) => {
                 const position = speaker.pos && speaker.pos.length > 0 ? speaker.pos[0].n : null;
@@ -310,13 +353,13 @@ class AddExpertModal extends React.Component {
                           {position &&
                           <span className={styles.infoItem}>
                             <Icon type="idcard" />{ position }
-                          </span>}
+                            </span>}
                         </p>
 
                         <p>{aff && <span className={styles.infoItem}>
                           <Icon type="home" />
                           { aff }
-                        </span> }</p>
+                          </span> }</p>
                       </div>
                       <div className={styles.tagWrap}>
                         {speaker.tags && speaker.tags.slice(0, 5).map((tag) => {
@@ -337,16 +380,26 @@ class AddExpertModal extends React.Component {
                   </li>
                 );
               })}
-            </Spin>
-          </div>}
-
-
+            </Spin>}
+            {isEdit && this.props.editTheTalk &&
+            <ExpertBasicInfo currentExpert={editTheTalk.speaker} />
+            }
+            {speakerSuggests.length === 0 && !isEdit && speakerInfo.name &&
+            <ExpertBasicInfo currentExpert={speakerInfo} />
+            }
+          </div>
           <div style={{ height: 20 }}>
-            <Button key="submit" type="primary" size="large"
-                    style={{ float: 'right', marginTop: 10 }}
-                    onClick={() => this.setStep('step3', true)}>
-              未找到，手工填写信息
-            </Button>
+            {!isEdit && speakerSuggests.length > 0 ?
+              <Button key="submit" type="primary" size="large"
+                      style={{ float: 'right', marginTop: 10 }}
+                      onClick={() => this.setStep('step3', true)}>
+                未找到，手工填写信息
+              </Button> : <Button key="submit" type="primary" size="large"
+                                  style={{ float: 'right', marginTop: 10 }}
+                                  onClick={() => this.setStep('step3', true)}>
+                下一步
+              </Button>
+            }
             <Button type="default" size="large" style={{ marginTop: 10 }}
                     onClick={() => this.setStep('step2', false)}>
               上一步
@@ -354,7 +407,8 @@ class AddExpertModal extends React.Component {
           </div>
         </div>
 
-        <div className={`${step3 ? styles.showStep4 : styles.hideStep4}`} style={{ minHeight: 392, maxHeight: 800 }}>
+        <div className={`${step3 ? styles.showStep4 : styles.hideStep4}`}
+             style={{ minHeight: 392, maxHeight: 800 }}>
           <Col><label>专家信息</label></Col>
 
           <Col span={6}>

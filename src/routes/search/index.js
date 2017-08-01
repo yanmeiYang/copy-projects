@@ -2,38 +2,21 @@ import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import { Tabs, Tag, Pagination, Spin } from 'antd';
-import styles from './index.less';
+import styles from './uni-search.less';
 import { PersonList } from '../../components/person';
 import { sysconfig } from '../../systems';
-// import { KnowledgeGraphSearchHelper } from '../knowledge-graph';
-import { classnames } from '../../utils';
 import ExportPersonBtn from '../../components/person/export-person';
-import { KgSearchBox } from '../../components/search';
+import { KgSearchBox, SearchFilter } from '../../components/search';
 
 const TabPane = Tabs.TabPane;
-const { CheckableTag } = Tag;
 
-const labelMap = { 'H-Index': 'h指数', Language: '语言', Location: '国家' };
-
-function showChineseLabel(enLabel) {
-  if (sysconfig.Language === 'cn') {
-    const cnLabel = labelMap[enLabel];
-    return !cnLabel ? enLabel : cnLabel;
-  } else {
-    return enLabel;
-  }
-}
-
-const labelMap2 = { 'h-index': 'h指数', language: '语言', nationality: '国家' };
-
-function showChineseLabel2(enLabel) {
-  if (sysconfig.Language === 'cn') {
-    const cnLabel = labelMap2[enLabel];
-    return !cnLabel ? enLabel : cnLabel;
-  } else {
-    return enLabel;
-  }
-}
+const searchSorts = [
+  { label: '相关度', key: 'relevance' },
+  { label: '学术成就', key: 'h_index' },
+  { label: '学术活跃度', key: 'activity' },
+  { label: '领域新星', key: 'rising_star' },
+  { label: '学会贡献', key: 'activity-ranking-contrib' },
+];
 
 const Search = ({ dispatch, search }) => {
   const { results, pagination, query, aggs, loading, filters } = search;
@@ -131,99 +114,16 @@ const Search = ({ dispatch, search }) => {
                 size="large" style={{ width: 500 }} btnText="搜索"
                 query={query} onSearch={onSearch}
               />
-
             </div>
           </div>
 
-          {/* Filter */}
-          <div className={styles.filterWrap}>
-            <div className={styles.filter}>
+          <SearchFilter
+            filters={filters}
+            aggs={aggs}
+            onFilterChange={onFilterChange}
+            onExpertBaseChange={onExpertBaseChange}
+          />
 
-              {expertBases &&
-              <div className={classnames(styles.filterRow, styles.range)}>
-                <span className={styles.filterTitle}>搜索范围:</span>
-                <ul className={styles.filterItems}>
-                  {
-                    expertBases.map((ep) => {
-                      const props = {
-                        key: ep.id,
-                        className: styles.filterItem,
-                        onChange: () => onExpertBaseChange(ep.id, ep.name),
-                        checked: filters.eb && (filters.eb.id === ep.id),
-                      }
-                      return (
-                        <CheckableTag {...props}>{ep.name} {/* TODO Show Numbers */}</CheckableTag>
-                      );
-                    })
-                  }
-                </ul>
-              </div>}
-
-              {filters && Object.keys(filters).length > 0 &&
-              <div className={styles.filterRow}>
-                <span className={styles.filterTitle}>过滤条件:</span>
-                <ul className={styles.filterItems}>
-                  {
-                    Object.keys(filters).map((key) => {
-                      const label = key === 'eb' ? filters[key].name : `${showChineseLabel2(key)}: ${filters[key]}`;
-                      return (
-                        <Tag
-                          className={styles.filterItem}
-                          key={key}
-                          closable
-                          afterClose={() => onFilterChange(key, filters[key], false)}
-                          color="blue"
-                        >{label}</Tag>
-                      );
-                    })
-                  }
-                </ul>
-              </div>}
-
-              {
-                aggs.map((agg) => {
-                  if (agg.label === 'Gender') {
-                    return '';
-                  }
-                  if (filters[agg.type]) {
-                    return '';
-                  } else {
-                    const cnLabel = showChineseLabel(agg.label);
-                    return (
-                      <div className={styles.filterRow} key={agg.type}>
-                        <span className={styles.filterTitle}>{cnLabel}:</span>
-                        <ul className={styles.filterItems}>
-                          {
-                            agg.item.map((item) => {
-                              return (
-                                <CheckableTag
-                                  key={`${item.label}_${agg.label}`}
-                                  className={styles.filterItem}
-                                  checked={filters[agg.label] === item.label}
-                                  onChange={checked => onFilterChange(agg.type, item.label, checked)}
-                                >
-                                  {item.label}
-                                  (<span className={styles.filterCount}>{item.count}</span>)
-                                </CheckableTag>
-                              );
-                            })
-                          }
-                        </ul>
-                      </div>
-                    );
-                  }
-                })
-              }
-
-            </div>
-            <Tabs defaultActiveKey="relevance" onChange={onOrderChange} size="small" type="line">
-              <TabPane tab={filterDisplay('相关度')} key="relevance" />
-              <TabPane tab={filterDisplay('学术成就')} key="h_index" />
-              <TabPane tab={filterDisplay('学术活跃度')} key="activity" />
-              <TabPane tab={filterDisplay('领域新星')} key="rising_star" />
-              <TabPane tab={filterDisplay('学会贡献')} key="activity-ranking-contrib" />
-            </Tabs>
-          </div>
         </div>
 
         <div className="rightZone">
@@ -236,6 +136,20 @@ const Search = ({ dispatch, search }) => {
 
       <Spin spinning={loading} size="large">
         <div className={styles.personWrap}>
+
+          <Tabs
+            defaultActiveKey="relevance"
+            onChange={onOrderChange}
+            size="small"
+          >
+            {searchSorts.map((sortItem) => {
+              const icon = sortItem.key === 'this.state.sortType' ?
+                <i className="fa fa-sort-amount-desc" /> : '';
+              const tab = <span>{sortItem.label} {icon}</span>;
+              return <TabPane tab={tab} key={sortItem.key} />;
+            })}
+          </Tabs>
+
           <PersonList persons={results} />
 
           <div className={styles.paginationWrap}>

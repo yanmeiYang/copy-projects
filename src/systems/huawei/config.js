@@ -25,7 +25,7 @@ module.exports = {
     backgroundSize: 'auto 75px',
     backgroundPosition: '0px -10px',
   },
-  Header_LogoWidth: 194,
+  Header_LogoWidth: 217,
   Header_UserPageURL: '/user-info',
   // Footer_Content: '',
 

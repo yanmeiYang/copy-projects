@@ -14,7 +14,7 @@ if (ENABLE_PERF) { // eslint-disable-line no-undef
 }
 
 message.config({
-  top: 100,
+  // top: 100,
   duration: 4,
 });
 

@@ -1,21 +1,23 @@
+@import "../../themes/vars.less";
 
 :global {
   .naviLine {
     padding: 0; display: flex; flex-direction: row;
-    background-color: #f4f4f4; border-bottom: solid 1px #f4f4f4;
+    background-color: @background-color-gray;
+    border-bottom: solid 1px @background-color-gray;
     .navi {
       padding: 0 12px;
-      font-weight: bold;
+      font-weight: 600;
       border-left: solid 1px #f4f4f4;
       border-right: solid 1px #f4f4f4;
-      a { color: #666; line-height: 24px; }
+      a { color: @dark-gray; line-height: 24px; }
     }
     .navi.current {
       // background: rgba(16, 142, 233, 0.2);
       background: white;
       box-shadow: 0 0 2px #ddd inset;
-      border-left: solid 1px orange;
-      border-right: solid 1px orange;
+      border-left: solid 1px @orange;
+      border-right: solid 1px @orange;
 
       a { color: #333; }
     }

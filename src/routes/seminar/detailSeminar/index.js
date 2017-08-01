@@ -5,7 +5,7 @@ import React from 'react';
 import QRCode from 'qrcode.react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Tabs, Button, Icon, Row, Col, Rate, Input, Spin } from 'antd';
+import { Tabs, Button, Icon, Row, Col, Rate, Modal, Spin } from 'antd';
 import TimeFormat from './time-format';
 import ExpertRating from './expert-rating';
 import WorkShop from './workshop';
@@ -24,8 +24,19 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
   }
 
   function delSeminar() {
-    dispatch({ type: 'seminar/deleteActivity', payload: { id: summaryById.id, body: summaryById } });
-    dispatch(routerRedux.push('/seminar'));
+    Modal.confirm({
+      title: '删除',
+      content: '确定删除吗？',
+      onOk() {
+        dispatch({ type: 'seminar/deleteActivity', payload: { id: summaryById.id, body: summaryById } });
+        dispatch(routerRedux.push('/seminar'));
+      },
+      onCancel() {},
+    });
+  }
+
+  function editSeminar() {
+    dispatch(routerRedux.push(`/seminar-edit/${summaryById.id}`));
   }
   return (
     <div className={styles.detailSeminar}>
@@ -34,7 +45,10 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
           <Col className={styles.thumbnail}>
             <div className={styles.caption}>
               {currentUser.token && (app.roles.authority.indexOf(summaryById.organizer[0]) >= 0 || app.roles.admin) &&
-              <Button type="danger" icon="delete" style={{ float: 'right' }} onClick={delSeminar}>删除</Button>}
+              <a type="danger" style={{ float: 'right', fontSize: '20px', color: '#f04134' }} onClick={delSeminar} title="删除">
+                <Icon type="delete" /></a>}
+              <a style={{ float: 'right', marginRight: '10px', fontSize: '20px' }} onClick={editSeminar} title="编辑">
+                <Icon type="edit" /></a>
               <div style={{ float: 'right', marginRight: 10 }}>
                 <span type="default" className={styles.show_QRCode}>
                   <i className="fa fa-2x fa-qrcode" aria-hidden="true" />
@@ -175,7 +189,7 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
               {/* type=workshop*/}
               {summaryById.type === 1 ? <div>
                 <div className={styles.workshopTetail}>
-                  <h5><TimeFormat {...summaryById.time} /></h5>
+                  <h5 style={{ marginRight: '86px' }}><TimeFormat {...summaryById.time} /></h5>
                   {summaryById.img && <div style={{ textAlign: 'center' }}><img src={summaryById.img} alt="" style={{ width: '80%' }} /></div>}
                   <p>{summaryById.abstract}</p>
                   <hr />

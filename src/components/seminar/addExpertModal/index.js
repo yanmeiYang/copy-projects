@@ -45,12 +45,12 @@ class AddExpertModal extends React.Component {
       this.setState({
         isEdit: true,
         speakerInfo: editTheTalk.speaker,
-        talkStartValue: editTheTalk.time.from,
-        talkEndValue: editTheTalk.time.to,
+        talkStartValue: editTheTalk.time ? editTheTalk.time.from : '',
+        talkEndValue: editTheTalk.time ? editTheTalk.time.to : '',
       });
       this.speakerInformation = this.props.editTheTalk.speaker;
       ReactDOM.findDOMNode(this.refs.talkTitle).value = editTheTalk.title;
-      ReactDOM.findDOMNode(this.refs.talkLocation).value = editTheTalk.location.address;
+      ReactDOM.findDOMNode(this.refs.talkLocation).value = editTheTalk.location ? editTheTalk.location.address : '';
       ReactDOM.findDOMNode(this.refs.talkAbstract).value = editTheTalk.abstract;
       this.props.parentProps.form.setFieldsValue({ contrib: editTheTalk.speaker.stype.label });
       ReactDOM.findDOMNode(this.refs.name).value = editTheTalk.speaker.name;
@@ -62,6 +62,28 @@ class AddExpertModal extends React.Component {
       ReactDOM.findDOMNode(this.refs.speakerBio).value = editTheTalk.speaker.bio;
       ReactDOM.findDOMNode(this.refs.speakerImg).src = editTheTalk.speaker.img;
     }
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    if (nextProps.parentProps.seminar.selectedSuggestSpeaker === this.props.parentProps.seminar.selectedSuggestSpeaker) {
+      return false;
+    }
+    const selectedExpert = nextProps.parentProps.seminar.selectedSuggestSpeaker;
+    this.speakerInformation.name = this.refs.speakerName.refs.input.value = selectedExpert.payload.name;
+    this.speakerInformation.affiliation = this.refs.speakerAff.refs.input.value = selectedExpert.payload.org;
+    selectedExpert.pos.length > 0 && selectedExpert.pos[0].n ? this.speakerInformation.position = this.refs.speakerPos.refs.input.value = selectedExpert.pos[0].n : this.speakerInformation.position = this.refs.speakerPos.refs.input.value = ' ';
+    this.speakerInformation.aid = this.refs.speakerAid.value = selectedExpert.payload.id;
+    this.speakerInformation.img = this.refs.speakerImg.src = selectedExpert.img;
+    this.speakerInformation.bio = selectedExpert.bio;
+    this.speakerInformation.phone = selectedExpert.phone;
+    this.speakerInformation.email = selectedExpert.email;
+    ReactDOM.findDOMNode(this.refs.speakerBio).value = selectedExpert.bio;
+    ReactDOM.findDOMNode(this.refs.speakerIphone).value = selectedExpert.phone;
+    ReactDOM.findDOMNode(this.refs.speakerEmail).value = selectedExpert.email;
+    this.setState({
+      speakerInfo: this.speakerInformation,
+    });
+    return true;
   }
 
   setModalVisible() {
@@ -93,23 +115,13 @@ class AddExpertModal extends React.Component {
 
   // 选择一位推荐专家
   selectedExpert = (speaker) => {
-    this.speakerInformation.name = this.refs.speakerName.refs.input.value = speaker.payload.name;
-    this.speakerInformation.affiliation = this.refs.speakerAff.refs.input.value = speaker.payload.org;
-    speaker.pos.length > 0 && speaker.pos[0].n ? this.speakerInformation.position = this.refs.speakerPos.refs.input.value = speaker.pos[0].n : this.speakerInformation.position = this.refs.speakerPos.refs.input.value = ' ';
-    this.speakerInformation.aid = this.refs.speakerAid.value = speaker.payload.id;
-    this.speakerInformation.img = this.refs.speakerImg.src = speaker.img;
-    this.speakerInformation.bio = '';
-    ReactDOM.findDOMNode(this.refs.speakerBio).value = '';
-    ReactDOM.findDOMNode(this.refs.speakerIphone).value = '';
-    ReactDOM.findDOMNode(this.refs.speakerEmail).value = '';
+    this.props.parentProps.dispatch({ type: 'seminar/saveSuggestExpert', payload: { speaker } });
     this.setState({
-      speakerInfo: this.speakerInformation,
       step3: true,
       step2: false,
       step1: false,
     });
     this.props.parentProps.seminar.speakerSuggests = [];
-    // this.props.callbackParent(this.speakerInformation);
   };
 
   // 修改当前专家信息
@@ -118,7 +130,6 @@ class AddExpertModal extends React.Component {
     this.setState({
       speakerInfo: this.speakerInformation,
     });
-    // this.props.callbackParent(this.speakerInformation);
   };
   setTalkAbstrack = (e) => {
     this.setState({ talkAbstract: e.target.value });
@@ -134,33 +145,22 @@ class AddExpertModal extends React.Component {
         img: '',
         aid: '',
         bio: '',
-        stype: { label: '', score: 0 }
+        stype: { label: '', score: 0 },
       },
       location: { city: '', address: '' },
       abstract: '',
     };
     talk.title = this.refs.talkTitle.refs.input.value;
-    talk.speaker.name = state.speakerInfo.name;
-    talk.speaker.position = state.speakerInfo.position;
-    talk.speaker.affiliation = state.speakerInfo.affiliation;
-    talk.speaker.img = state.speakerInfo.img;
-    talk.speaker.aid = state.speakerInfo.aid;
-    talk.speaker.bio = state.speakerInfo.bio;
-    talk.speaker.gender = parseInt(state.speakerInfo.gender);
-    talk.speaker.email = state.speakerInfo.email;
-    talk.speaker.phone = state.speakerInfo.phone;
-    talk.speaker.stype.label = state.speakerInfo.stype.label;
-    talk.speaker.stype.score = state.speakerInfo.stype.score;
-    // talk.stype[xxx]='1';
+    talk.speaker = state.speakerInfo;
+    talk.speaker.gender = state.speakerInfo.gender === '' ? 1 : parseInt(state.speakerInfo.gender);
     if (state.talkStartValue || state.talkEndValue) {
-      talk['time'] = {};
+      talk.time = {};
     }
     if (state.talkStartValue) {
-      console.log(typeof state.talkStartValue);
-      talk['time'].from = typeof state.talkStartValue === 'string' ? state.talkStartValue : state.talkStartValue.toJSON();
+      talk.time.from = typeof state.talkStartValue === 'string' ? state.talkStartValue : state.talkStartValue.toJSON();
     }
     if (state.talkEndValue) {
-      talk['time'].to = typeof state.talkStartValue === 'string' ? state.talkEndValue : state.talkEndValue.toJSON();
+      talk.time.to = typeof state.talkStartValue === 'string' ? state.talkEndValue : state.talkEndValue.toJSON();
     }
     talk.location.address = this.refs.talkLocation.refs.input.value;
     talk.abstract = ReactDOM.findDOMNode(this.refs.talkAbstract).value;
@@ -319,68 +319,68 @@ class AddExpertModal extends React.Component {
           </div>
           <div className={styles.personWrap}>
             {speakerSuggests.length > 0 &&
-              <Spin spinning={loading} style={{ marginTop: 30 }}>
-                {speakerSuggests.map((speaker) => {
-                  const position = speaker.pos && speaker.pos.length > 0 ? speaker.pos[0].n : null;
-                  const aff = speaker.payload.aff ? speaker.payload.aff : null;
-                  return (
-                    <li key={speaker.payload.id} className={styles.person}>
-                      <div className={styles.left}>
-                        <img src={this.getImg(speaker.img)} alt="头像" />
+            <Spin spinning={loading} style={{ marginTop: 30 }}>
+              {speakerSuggests.map((speaker) => {
+                const position = speaker.pos && speaker.pos.length > 0 ? speaker.pos[0].n : null;
+                const aff = speaker.payload.aff ? speaker.payload.aff : null;
+                return (
+                  <li key={speaker.payload.id} className={styles.person}>
+                    <div className={styles.left}>
+                      <img src={this.getImg(speaker.img)} alt="头像" />
+                    </div>
+                    <div className={styles.right}>
+                      <div className={styles.nameWrap}>
+                        <h3>{speaker.text}</h3>
                       </div>
-                      <div className={styles.right}>
-                        <div className={styles.nameWrap}>
-                          <h3>{speaker.text}</h3>
+                      <div className={styles.statWrap}>
+                        <div className={styles.item}>
+                          <span className={styles.label}>h-index:</span>
+                          <span>{speaker.payload.h_index}</span>
                         </div>
-                        <div className={styles.statWrap}>
-                          <div className={styles.item}>
-                            <span className={styles.label}>h-index:</span>
-                            <span>{speaker.payload.h_index}</span>
-                          </div>
-                          <span className={styles.split}>|</span>
-                          <div className={styles.item}>
-                            <span className={styles.label}>论文数:</span>
-                            <span>{speaker.payload.n_pubs}</span>
-                          </div>
-                          <span className={styles.split}>|</span>
-                          <div className={styles.item}>
-                            <span className={styles.label}>引用数:</span>
-                            <span>{speaker.payload.n_citation}</span>
-                          </div>
+                        <span className={styles.split}>|</span>
+                        <div className={styles.item}>
+                          <span className={styles.label}>论文数:</span>
+                          <span>{speaker.payload.n_pubs}</span>
                         </div>
-                        <div className={styles.infoWrap}>
-                          <p>
-                            {position &&
-                            <span className={styles.infoItem}>
-                              <Icon type="idcard" />{ position }
+                        <span className={styles.split}>|</span>
+                        <div className={styles.item}>
+                          <span className={styles.label}>引用数:</span>
+                          <span>{speaker.payload.n_citation}</span>
+                        </div>
+                      </div>
+                      <div className={styles.infoWrap}>
+                        <p>
+                          {position &&
+                          <span className={styles.infoItem}>
+                            <Icon type="idcard" />{ position }
                             </span>}
-                          </p>
+                        </p>
 
-                          <p>{aff && <span className={styles.infoItem}>
-                            <Icon type="home" />
-                            { aff }
+                        <p>{aff && <span className={styles.infoItem}>
+                          <Icon type="home" />
+                          { aff }
                           </span> }</p>
-                        </div>
-                        <div className={styles.tagWrap}>
-                          {speaker.tags && speaker.tags.slice(0, 5).map((tag) => {
-                            if (tag === 'Null') {
-                              return '';
-                            }
-                            return (
-                              <Link key={Math.random()}>
-                                <Tag className={styles.tag}>{tag.t}</Tag>
-                              </Link>
-                            );
-                          })}
-                        </div>
                       </div>
-                      <div>
-                        <Button type="primary" onClick={this.selectedExpert.bind(this, speaker)}>添加此人</Button>
+                      <div className={styles.tagWrap}>
+                        {speaker.tags && speaker.tags.slice(0, 5).map((tag) => {
+                          if (tag === 'Null') {
+                            return '';
+                          }
+                          return (
+                            <Link key={Math.random()}>
+                              <Tag className={styles.tag}>{tag.t}</Tag>
+                            </Link>
+                          );
+                        })}
                       </div>
-                    </li>
-                  );
-                })}
-              </Spin>}
+                    </div>
+                    <div>
+                      <Button type="primary" onClick={this.selectedExpert.bind(this, speaker)}>添加此人</Button>
+                    </div>
+                  </li>
+                );
+              })}
+            </Spin>}
             {isEdit && this.props.editTheTalk &&
             <ExpertBasicInfo currentExpert={editTheTalk.speaker} />
             }

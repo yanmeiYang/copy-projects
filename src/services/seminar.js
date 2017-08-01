@@ -33,6 +33,13 @@ export async function postSeminarActivity(data) {
   });
 }
 
+export async function updateSeminarActivity(data) {
+  return request(api.updateActivity, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
 export async function searchActivity(data) {
   return request(api.searchActivity, {
     method: 'GET',

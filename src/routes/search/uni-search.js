@@ -7,7 +7,7 @@ import { PersonList } from '../../components/person';
 import { Spinner } from '../../components';
 import { sysconfig } from '../../systems';
 import { KnowledgeGraphSearchHelper } from '../knowledge-graph';
-import { classnames } from '../../utils';
+import { SearchFilter } from '../../components/search';
 import ExportPersonBtn from '../../components/person/export-person';
 // import ExpertMap from '../expert-map/expert-map';
 // import RelationGraph from '../relation-graph/RelationGraph';
@@ -16,10 +16,6 @@ import ExportPersonBtn from '../../components/person/export-person';
 // TODO Extract Search Filter into new Component.
 // TODO Combine search and uniSearch into one.
 const TabPane = Tabs.TabPane;
-const { CheckableTag } = Tag;
-const expertBases = sysconfig.ExpertBases;
-
-const labelMap = { 'H-Index': 'h指数', Language: '语言', Location: '国家' };
 
 const searchSorts = [
   { label: '综合排序', key: 'relevance' },
@@ -30,27 +26,8 @@ const searchSorts = [
   { label: '论文数', key: 'num_pubs' },
 ];
 
-function showChineseLabel(enLabel) {
-  if (sysconfig.Language === 'cn') {
-    const cnLabel = labelMap[enLabel];
-    return !cnLabel ? enLabel : cnLabel;
-  } else {
-    return enLabel;
-  }
-}
-
-const labelMap2 = { 'h-index': 'h指数', language: '语言', nationality: '国家' };
-
-function showChineseLabel2(enLabel) {
-  if (sysconfig.Language === 'cn') {
-    const cnLabel = labelMap2[enLabel];
-    return !cnLabel ? enLabel : cnLabel;
-  } else {
-    return enLabel;
-  }
-}
-
-/*
+/**
+ * UniSearch Page
  * http://localhost:8000/search/%83...%BD/0/30?view=relation
  */
 class UniSearch extends React.PureComponent {
@@ -171,6 +148,7 @@ class UniSearch extends React.PureComponent {
     const { pageSize, total, current } = pagination;
     const load = this.props.loading.models.search;
 
+    // Deprecated search result tab.
     const exportArea = sysconfig.Enable_Export ? <ExportPersonBtn /> : '';
     const wantedTabs = sysconfig.UniSearch_Tabs;
     const avaliableTabs = {
@@ -198,6 +176,7 @@ class UniSearch extends React.PureComponent {
           <Spinner loading={load} />
 
           <PersonList persons={results} personLabel={sysconfig.Person_PersonLabelBlock} />
+
           <div className={styles.paginationWrap}>
             <Pagination
               showQuickJumper
@@ -235,100 +214,12 @@ class UniSearch extends React.PureComponent {
 
         <div className={styles.topZone}>
           <div className="searchZone">
-
-            {/* Filter */}
-            <div className={styles.filterWrap}>
-              <div className={styles.filter}>
-
-                {sysconfig.SHOW_ExpertBase && expertBases &&
-                <div className={classnames(styles.filterRow, styles.range)}>
-                  <span className={styles.filterTitle}>搜索范围:</span>
-                  <ul className={styles.filterItems}>
-                    {
-                      expertBases.map((ep) => {
-                        const props = {
-                          key: ep.id,
-                          className: styles.filterItem,
-                          onChange: () => this.onExpertBaseChange(ep.id, ep.name),
-                          checked: filters.eb && (filters.eb.id === ep.id),
-                        };
-                        return (
-                          <CheckableTag {...props}>
-                            {ep.name}
-                            {/* TODO Show Numbers */}
-                          </CheckableTag>
-                        );
-                      })
-                    }
-                  </ul>
-                </div>}
-
-                {filters && Object.keys(filters).length > 0 &&
-                <div className={styles.filterRow}>
-                  <span className={styles.filterTitle}>过滤条件:</span>
-                  <ul className={styles.filterItems}>
-                    {
-                      Object.keys(filters).map((key) => {
-                        const label = key === 'eb' ? filters[key].name : `${showChineseLabel2(key)}: ${filters[key]}`;// special
-                        // console.log('- - ', label);
-                        return (
-                          <Tag
-                            className={styles.filterItem}
-                            key={key}
-                            closable
-                            afterClose={() => this.onFilterChange(key, filters[key], false)}
-                            color="blue"
-                          >{label}</Tag>
-                        );
-                      })
-                    }
-                  </ul>
-                </div>}
-
-                {
-                  aggs.map((agg, index) => {
-                    if (agg.label === sysconfig.SearchFilterExclude) { // skip gender
-                      return '';
-                    }
-                    if (filters[agg.type]) {
-                      return '';
-                    } else {
-                      // if agg is empty
-                      if (!agg.item || agg.item.length === 0) {
-                        return '';
-                      }
-                      const cnLabel = showChineseLabel(agg.label);
-                      return (
-                        <div
-                          className={classnames(styles.filterRow, (index === aggs.length - 1) ? 'last' : '')}
-                          key={agg.type}
-                        >
-                          <span className={styles.filterTitle}>{cnLabel}:</span>
-                          <ul className={styles.filterItems}>
-                            {agg.item.slice(0, 12).map((item) => {
-                              return (
-                                <CheckableTag
-                                  key={`${item.label}_${agg.label}`}
-                                  className={styles.filterItem}
-                                  checked={filters[agg.label] === item.label}
-                                  onChange={checked => this.onFilterChange(agg.type, item.label, checked)}
-                                >
-                                  {item.label} (<span
-                                  className={styles.filterCount}>{item.count}</span>)
-                                </CheckableTag>
-                              );
-                            })
-                            }
-                          </ul>
-                        </div>
-                      );
-                    }
-                  })
-                }
-
-              </div>
-
-            </div>
+            <SearchFilter
+              filters={filters}
+              aggs={aggs}
+              onFilterChange={this.onFilterChange}
+              onExpertBaseChange={this.onExpertBaseChange}
+            />
           </div>
 
           <div className="rightZone">

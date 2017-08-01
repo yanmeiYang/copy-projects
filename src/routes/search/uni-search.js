@@ -9,11 +9,10 @@ import { PersonList } from '../../components/person';
 import { Spinner } from '../../components';
 import { sysconfig } from '../../systems';
 import { KnowledgeGraphSearchHelper } from '../knowledge-graph';
-import { SearchFilter } from '../../components/search';
+import { SearchFilter, KgSearchBox } from '../../components/search';
 import ExportPersonBtn from '../../components/person/export-person';
 // import ExpertMap from '../expert-map/expert-map';
 // import RelationGraph from '../relation-graph/RelationGraph';
-// import { KgSearchBox } from '../../components/search';
 
 // TODO Extract Search Filter into new Component.
 // TODO Combine search and uniSearch into one.
@@ -59,27 +58,18 @@ class UniSearch extends React.PureComponent {
   componentWillMount() {
     this.state.currentTab = this.query.view ? `${this.query.view}` : 'list-view';
     const { query } = this.props.search;
-    this.dispatch({
-      type: 'app/layout',
-      payload: {
-        headerSearchBox: {
-          query,
-          onSearch: (data) => {
-            console.log('Enter query is ', data);
-            const newOffset = data.offset || 0;
-            const newSize = data.size || sysconfig.MainListSize;
-            this.dispatch(routerRedux.push({
-              pathname: `/${sysconfig.SearchPagePrefix}/${data.query}/${newOffset}/${newSize}?`, //eb=${filters.eb}TODO
-            }));
-            // this.doSearchUseProps(); // another approach;
-          },
-        },
-      },
-    });
 
-    // Init search.
-    this.doSearchUseProps();
+    if (sysconfig.SearchBarInHeader) {
+      this.dispatch({
+        type: 'app/layout',
+        payload: {
+          headerSearchBox: { query, onSearch: this.onSearchBarSearch },
+        },
+      });
+    }
+    this.doSearchUseProps(); // Init search.
   }
+
 
   // componentWillReceiveProps(nextProps) {
   // }
@@ -97,9 +87,19 @@ class UniSearch extends React.PureComponent {
     ) {
       // console.log('>>>>> ', search.query, search.offset, search.pagination);
       this.doSearchUseProps();
-      window.scrollTo(0, 0);
+      window.scrollTo(0, 0); // go top
     }
   }
+
+  onSearchBarSearch = (data) => {
+    console.log('Enter query is ', data);
+    const newOffset = data.offset || 0;
+    const newSize = data.size || sysconfig.MainListSize;
+    this.dispatch(routerRedux.push({
+      pathname: `/${sysconfig.SearchPagePrefix}/${data.query}/${newOffset}/${newSize}?`, //eb=${filters.eb}TODO
+    }));
+    // this.doSearchUseProps(); // another approach;
+  };
 
   // will reset pager and sort.
   onFilterChange = (key, value, checked) => {
@@ -117,8 +117,9 @@ class UniSearch extends React.PureComponent {
   onViewTabChange = (key) => {
     const { query } = this.props.search;
     this.setState({ currentTab: key });
+    const pageSize = sysconfig.MainListSize;
     this.props.dispatch(routerRedux.push({
-      pathname: `/${sysconfig.SearchPagePrefix}/${query}/0/30?view=${key}`,
+      pathname: `/${sysconfig.SearchPagePrefix}/${query}/0/${pageSize}?view=${key}`,
     }));
   };
 
@@ -132,11 +133,12 @@ class UniSearch extends React.PureComponent {
     });
   };
 
-  onPageChange = (page) => { // TODO change to update url.
+  // TODO spiner fade too earlier when navi by url.
+  onPageChange = (page) => {
     const { query, pagination } = this.props.search;
     const { pageSize } = pagination;
     this.dispatch(routerRedux.push({
-      pathname: `/${sysconfig.SearchPagePrefix}/${query}/${(page - 1) * pageSize}/${pageSize}?`,
+      pathname: `/${sysconfig.SearchPagePrefix}/${query}/${(page - 1) * pageSize}/${pageSize}`,
     }));
   };
 
@@ -177,13 +179,14 @@ class UniSearch extends React.PureComponent {
     const load = this.props.loading.models.search;
 
     // Deprecated search result tab.
-    const exportArea = sysconfig.Enable_Export ? <ExportPersonBtn /> : '';
-    const wantedTabs = sysconfig.UniSearch_Tabs;
-    const avaliableTabs = {
-      list: { key: 'list', label: '列表视图', icon: 'fa-list' },
-      map: { key: 'map', label: '地图视图', icon: 'fa-map-marker' },
-      relation: { key: 'relation', label: '关系视图', icon: 'fa-users' },
-    };
+
+    // const exportArea = sysconfig.Enable_Export ? <ExportPersonBtn /> : '';
+    // const wantedTabs = sysconfig.UniSearch_Tabs;
+    // const avaliableTabs = {
+    //   list: { key: 'list', label: '列表视图', icon: 'fa-list' },
+    //   map: { key: 'map', label: '地图视图', icon: 'fa-map-marker' },
+    //   relation: { key: 'relation', label: '关系视图', icon: 'fa-users' },
+    // };
 
     this.state.view['list-view'] = (
       <div>
@@ -234,14 +237,24 @@ class UniSearch extends React.PureComponent {
     */
 
     DEBUGLog && console.log('refresh pagesdf', load);
-    // DEBUGLog('refresh pagesdf', load); // TODO define a function.
 
-    // TODO extract filter into component.
     return (
       <div className={classnames('content-inner', styles.page)}>
 
         <div className={styles.topZone}>
           <div className={styles.searchZone}>
+
+            {/* 搜索框 */}
+            <div className={styles.top}>
+              <div className={styles.searchWrap}>
+                <KgSearchBox
+                  size="large" style={{ width: 500 }} btnText="搜索"
+                  query={query} onSearch={this.onSearchBarSearch}
+                />
+              </div>
+            </div>
+
+            {/* Filter */}
             <SearchFilter
               filters={filters}
               aggs={aggs}

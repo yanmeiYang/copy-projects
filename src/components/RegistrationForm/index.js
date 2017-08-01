@@ -10,6 +10,7 @@ import {
   Col,
   Button,
   Upload,
+  Modal,
 } from 'antd';
 import { connect } from 'dva';
 import { config } from '../../utils';
@@ -62,6 +63,7 @@ class RegistrationForm extends React.Component {
     tags: [],
     talks: [],
     editTheTalk: {},
+    editTheTalkIndex: -1,
     // suggestSpeakers: [],
     // speakerInfo: {},
     // integral: 0,
@@ -123,7 +125,12 @@ class RegistrationForm extends React.Component {
             data.time.to = state.endValue.toJSON();
           }
           data.tags = state.tags;
-          data.organizer = [data.organizer].concat(data.co_org);
+          if (data.co_org.length > 0) {
+            data.organizer = [data.organizer].concat(data.co_org);
+          } else {
+            data.organizer = [data.organizer];
+          }
+
           delete data.co_org;
           // 获取登录用户的uid
           data.uid = this.props.uid;
@@ -154,9 +161,11 @@ class RegistrationForm extends React.Component {
     }
   };
   addTalkData = (state) => {
-    this.setState({ addNewTalk: !state });
+    this.setState({ editTheTalk: [], addNewTalk: !state });
   };
-
+  setAddNewTalk = () => {
+    this.setState({ addNewTalk: false });
+  };
   onChildChanged = (field, value) => {
     this.setState({ [field]: value });
   };
@@ -169,17 +178,30 @@ class RegistrationForm extends React.Component {
   // };
 
   // workshop增加演讲专家
-  addTheNewTalk = (talk) => {
-    this.setState({ talks: this.state.talks.concat(talk), addNewTalk: false });
+  addTheNewTalk = (talk, isEdit) => {
+    if (isEdit) {
+      this.state.talks.splice(this.state.editTheTalkIndex, 1, talk);
+      this.setState({ talks: this.state.talks, addNewTalk: false });
+    } else {
+      this.setState({ talks: this.state.talks.concat(talk), addNewTalk: false });
+    }
   };
 
   // 删除专家
   delTheExpert = (i) => {
-    this.state.talks.splice(i, 1);
-    this.setState({ talks: this.state.talks });
+    Modal.confirm({
+      title: '删除',
+      content: '确定删除吗？',
+      onOk() {
+        this.state.talks.splice(i, 1);
+        this.setState({ talks: this.state.talks });
+      },
+      onCancel() {},
+    });
+
   };
   editTheExpert = (i) => {
-    this.setState({ editTheTalk: this.state.talks[i], addNewTalk: true });
+    this.setState({ editTheTalk: this.state.talks[i], addNewTalk: true, editTheTalkIndex: i });
   };
 
   getKeywords = () => {
@@ -214,7 +236,7 @@ class RegistrationForm extends React.Component {
     }
 
 
-    const { addNewTalk, talks, integral, startValue, endValue, editTheTalk } = this.state;
+    const { addNewTalk, talks, startValue, endValue, editTheTalk } = this.state;
 
     const formItemLayout = {
       labelCol: {
@@ -239,7 +261,8 @@ class RegistrationForm extends React.Component {
                 <Select>
                   {
                     orgcategory.data.map((item) => {
-                      return (<Option key={`activity_${Math.random()}`} value={item.key}>{item.key}</Option>);
+                      return (<Option key={`activity_${Math.random()}`}
+                                      value={item.key}>{item.key}</Option>);
                     })
                   }
                 </Select>,
@@ -271,7 +294,8 @@ class RegistrationForm extends React.Component {
                   {
                     Object.values(activity_organizer_options_data).map((item) => {
                       return (
-                        <Option key={`co_${item.key}_${Math.random(10)}`} value={item.key}>{item.key}</Option>);
+                        <Option key={`co_${item.key}_${Math.random(10)}`}
+                                value={item.key}>{item.key}</Option>);
                     })
                   }
                 </Select>,
@@ -410,7 +434,8 @@ class RegistrationForm extends React.Component {
                 return (
                   <div key={Math.random()}>
                     <ShowExpertList talk={talk} index={index} getImg={this.getImg}
-                                    delTheExpert={this.delTheExpert} />
+                                    delTheExpert={this.delTheExpert}
+                                    editTheExpert={this.editTheExpert} />
                   </div>
                 );
               })}
@@ -419,8 +444,9 @@ class RegistrationForm extends React.Component {
               <a type="primary" onClick={this.addTalkData.bind(this, addNewTalk)}>新增专家</a>
             </div>
 
-            {addNewTalk && <AddExpertModal talk={editTheTalk} integral={integral} parentProps={this.props}
-                                           callbackParent={this.addTheNewTalk} />}
+            {addNewTalk && <AddExpertModal editTheTalk={editTheTalk} parentProps={this.props}
+                                           callbackParent={this.addTheNewTalk}
+                                           callbackParentSetAddNewTalk={this.setAddNewTalk} />}
           </Col>
 
           <Col className={styles.formFooter}>

@@ -2,12 +2,12 @@
  * Created by yangyanmei on 17/6/22.
  */
 import React from 'react';
-import { Col, Button } from 'antd';
+import { Button, Icon } from 'antd';
 import styles from './showExpertList.less';
 
 class ShowExpertList extends React.Component {
   render() {
-    const { talk, index, getImg, delTheExpert } = this.props;
+    const { talk, index, getImg, delTheExpert, editTheExpert } = this.props;
     let timeFrom = '';
     let timeTo = '';
     if (talk.time) {
@@ -55,7 +55,12 @@ class ShowExpertList extends React.Component {
               <td colSpan={3}>{talk.abstract}</td></tr>
           </table>
         </div>
-        <Button type="danger" onClick={delTheExpert.bind(this, index)}>删除</Button>
+        <a style={{ fontSize: '16px' }} onClick={editTheExpert.bind(this, index)}>
+          <Icon type="edit" onClick={editTheExpert.bind(this, index)} />
+        </a>
+        <a style={{ marginLeft: 10, fontSize: '16px', color: '#f04134' }} onClick={delTheExpert.bind(this, index)}>
+          <Icon type="delete" />
+        </a>
       </li>
     );
   }

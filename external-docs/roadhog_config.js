@@ -1,4 +1,5 @@
-{ bail: true,
+{
+  bail: true,
   devtool: false,
   entry: { index: [ './src/index.js' ] },
   output:
@@ -8,19 +9,20 @@
     libraryTarget: 'var',
     chunkFilename: '[name].async.js' },
   resolve:
-  { modules:
-    [ '/Users/bogao/develop/aminer/aminer2b/node_modules/roadhog/node_modules',
-      '/Users/bogao/develop/aminer/aminer2b/node_modules' ],
-      extensions:
-    [ '.web.js',
-      '.web.jsx',
-      '.web.ts',
-      '.web.tsx',
-      '.js',
-      '.json',
-      '.jsx',
-      '.ts',
-      '.tsx' ] },
+    { modules:
+      [ '/Users/bogao/develop/aminer/aminer2b/node_modules/roadhog/node_modules',
+        '/Users/bogao/develop/aminer/aminer2b/node_modules' ],
+        extensions:
+      [ '.web.js',
+        '.web.jsx',
+        '.web.ts',
+        '.web.tsx',
+        '.js',
+        '.json',
+        '.jsx',
+        '.ts',
+        '.tsx' ]
+    },
   resolveLoader:
   { modules:
     [ '/Users/bogao/develop/aminer/aminer2b/node_modules/roadhog/node_modules',

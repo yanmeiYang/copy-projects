@@ -2,6 +2,7 @@ import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import classnames from 'classnames';
+import { isEqual } from 'lodash';
 import { Tabs, Tag, Pagination, message } from 'antd';
 import styles from './uni-search.less';
 import { PersonList } from '../../components/person';
@@ -18,7 +19,7 @@ import ExportPersonBtn from '../../components/person/export-person';
 // TODO Combine search and uniSearch into one.
 const TabPane = Tabs.TabPane;
 
-const searchSorts = [
+const defaultSearchSorts = [
   { label: '综合排序', key: 'relevance' },
   { label: 'H-index', key: 'h_index' },
   { label: '学术活跃度', key: 'activity' },
@@ -36,6 +37,8 @@ class UniSearch extends React.PureComponent {
     super(props);
     this.dispatch = this.props.dispatch;
     this.query = this.props.location.query;
+
+    this.searchSorts = sysconfig.Search_SortOptions || defaultSearchSorts;
 
     // Select default Expert Base.
     const { filters } = this.props.search;
@@ -62,28 +65,43 @@ class UniSearch extends React.PureComponent {
         headerSearchBox: {
           query,
           onSearch: (data) => {
+            console.log('Enter query is ', data);
             const newOffset = data.offset || 0;
-            const newSize = data.size || 30;
+            const newSize = data.size || sysconfig.MainListSize;
             this.dispatch(routerRedux.push({
               pathname: `/${sysconfig.SearchPagePrefix}/${data.query}/${newOffset}/${newSize}?`, //eb=${filters.eb}TODO
             }));
+            // this.doSearchUseProps(); // another approach;
           },
-          // query: 'sdflkj',
         },
       },
     });
+
+    // Init search.
+    this.doSearchUseProps();
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    // console.log("should component update?");
-    // if (nextProps.profile && this.props.profile) {
-    //   if (nextProps.profile.id === this.props.profile.id) {
-    //     return false;
-    //   }
-    // }
-    return true;
+  // componentWillReceiveProps(nextProps) {
+  // }
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  // }
+
+  // URL改变引起的props变化，在这里刷新搜索。其余的action导致的数据更新都在action后面调用了search方法。
+  componentDidUpdate(prevProps, prevState) {
+    const search = this.props.search;
+    const prevSearch = prevProps.search;
+    if (search.query !== prevSearch.query
+      || search.offset !== prevSearch.offset
+      || !isEqual(search.pagination.pageSize, prevSearch.pagination.pageSize)
+    ) {
+      // console.log('>>>>> ', search.query, search.offset, search.pagination);
+      this.doSearchUseProps();
+      window.scrollTo(0, 0);
+    }
   }
 
+  // will reset pager and sort.
   onFilterChange = (key, value, checked) => {
     const { filters, query } = this.props.search;
 
@@ -93,7 +111,7 @@ class UniSearch extends React.PureComponent {
     } else if (filters[key]) {
       delete filters[key];
     }
-    this.doSearch(query, 0, 20, filters, '');
+    this.doSearch(query, 0, sysconfig.MainListSize, filters, '');
   };
 
   onViewTabChange = (key) => {
@@ -110,15 +128,16 @@ class UniSearch extends React.PureComponent {
     this.dispatch({ type: 'search/updateSortKey', payload: { key: e } });
     this.dispatch({
       type: 'search/searchPerson',
-      payload: { query, offset: 0, size: 30, filters, sort: e },
+      payload: { query, offset: 0, size: sysconfig.MainListSize, filters, sort: e },
     });
   };
 
-  onPageChange = (page) => {
-    const { query, filters, sort, pagination } = this.props.search;
+  onPageChange = (page) => { // TODO change to update url.
+    const { query, pagination } = this.props.search;
     const { pageSize } = pagination;
-    this.doSearch(query, (page - 1) * pageSize, pageSize, filters, sort);
-    // ReactDOM.findDOMNode(this.refs.wrap).scrollTo(0, 0);
+    this.dispatch(routerRedux.push({
+      pathname: `/${sysconfig.SearchPagePrefix}/${query}/${(page - 1) * pageSize}/${pageSize}?`,
+    }));
   };
 
   // ExpertBase filter 'eb' is a special filter.
@@ -133,6 +152,13 @@ class UniSearch extends React.PureComponent {
     this.onFilterChange('eb', { id, name }, true);// Special Filter;
   };
 
+  // keep every thing, just call search;
+  doSearchUseProps = () => {
+    const { query, offset, pagination, filters, sortKey } = this.props.search;
+    const { pageSize, total, current } = pagination;
+    this.doSearch(query, offset, pageSize, filters, sortKey);
+  };
+
   doSearch = (query, offset, size, filters, sort) => {
     this.dispatch({
       type: 'search/searchPerson',
@@ -143,6 +169,7 @@ class UniSearch extends React.PureComponent {
       payload: { query, offset, size, filters, sort },
     });
   };
+
 
   render() {
     const { results, pagination, query, aggs, filters } = this.props.search;
@@ -165,7 +192,7 @@ class UniSearch extends React.PureComponent {
           onChange={this.onOrderChange}
           size="small"
         >
-          {searchSorts.map((sortItem) => {
+          {this.searchSorts.map((sortItem) => {
             const icon = sortItem.key === this.state.sortType ?
               <i className="fa fa-sort-amount-desc" /> : '';
             const tab = <span>{sortItem.label} {icon}</span>;

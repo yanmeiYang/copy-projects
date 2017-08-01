@@ -16,6 +16,8 @@ const CurrentSystemConfig = {
   alibaba: alibabaConfig,
   tencent: tencentConfig,
 };
+const IN_APP_DEFAULT = null;
+const EMPTY_JSX = '';
 
 // 默认配置
 const defaultSystemConfigs = {
@@ -25,11 +27,14 @@ const defaultSystemConfigs = {
   Language: 'en', // options [cn|en]
   PreferredLanguage: 'en', // 默认语言
 
-  SearchPagePrefix: 'search', // search - 普通搜索; uniSearch - 多合一搜索.
+  SearchPagePrefix: 'uniSearch', // search - 普通搜索; uniSearch - 多合一搜索.
   Search_EnablePin: true,
+  Search_SortOptions: IN_APP_DEFAULT,
 
   UserAuthSystem: config.system, // aminer 或者是 system.config
   UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签
+
+  MainListSize: 20,
 
   // expert base
   SHOW_ExpertBase: true, // 是否需要有按智库的Filter。

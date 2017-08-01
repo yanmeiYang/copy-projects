@@ -8,14 +8,12 @@ export default {
 
   state: {
     results: [],
-    offset: 0,
-    query: null,
-    seminars: [],
     aggs: [],
-    loading: false, // TODO remove loading, use global loading compoennt.
     filters: {},
+
+    query: null,
+    offset: 0,
     sortKey: 'contrib',
-    isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
     pagination: {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -24,6 +22,11 @@ export default {
       pageSize: 20,
       total: null,
     },
+
+    isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
+    loading: false, // TODO remove loading, use global loading compoennt.
+
+    seminars: [], // TODO move out.
   },
 
   subscriptions: {
@@ -37,42 +40,30 @@ export default {
           const keyword = decodeURIComponent(match[2]);
           const offset = parseInt(match[3], 10);
           const size = parseInt(match[4], 10);
+          // update fillings.
+          dispatch({ type: 'setParams', payload: { query: keyword, offset, size } });
 
           // Accept query: eb = expertBaseID.
-          const filters = {};
-          if (location.query) {
-            if (location.query.eb) {
-              sysconfig.ExpertBases.map((expertBase) => {
-                if (expertBase.id === location.query.eb) {
-                  filters.eb = expertBase;
-                  return false;
-                }
-                return true;
-              });
-            }
-          }
+          // const filters = {};
+          // if (location.query) {
+          //   if (location.query.eb) {
+          //     sysconfig.ExpertBases.map((expertBase) => {
+          //       if (expertBase.id === location.query.eb) {
+          //         filters.eb = expertBase;
+          //         return false;
+          //       }
+          //       return true;
+          //     });
+          //   }
+          // }
+
           // dispatch({ type: 'app/setQuery', query: keyword });
-
-          dispatch({ type: 'searchPerson', payload: { query: keyword, offset, size, filters } });
-          dispatch({ type: 'setParams', payload: { query: keyword, offset, size } });
-          dispatch({
-            type: 'searchPersonAgg',
-            payload: { query: keyword, offset, size, filters },
-          });
-          return;
-        }
-
-        // another page not used.
-        match = pathToRegexp('/experts/:offset/:size').exec(location.pathname);
-        if (match) {
-          const offset = parseInt(match[1], 10);
-          const size = parseInt(match[2], 10);
-          const keyword = (query && query.keyword) || '';
-
-          dispatch({ type: 'app/setQuery', query: keyword });
-          dispatch({ type: 'searchPerson', payload: { query: keyword, offset, size } });
-          dispatch({ type: 'setParams', payload: { query: keyword, offset, size } });
-          dispatch({ type: 'searchPersonAgg', payload: { query: keyword, offset, size } });
+          // dispatch({ type: 'searchPerson', payload: { query: keyword, offset, size, filters } });
+          // dispatch({
+          //   type: 'searchPersonAgg',
+          //   payload: { query: keyword, offset, size, filters },
+          // });
+          // return;
         }
       });
     },
@@ -97,6 +88,7 @@ export default {
       const { data } = yield call(searchService.getSeminars, offset, size);
       yield put({ type: 'getSeminarsSuccess', payload: { data } });
     },
+
   },
 
   reducers: {
@@ -109,7 +101,7 @@ export default {
     },
 
     updateSortKey(state, { payload: { key } }) {
-      console.log('reducers, update sort key : ', key);
+      // console.log('reducers, update sort key : ', key);
       return { ...state, sortKey: key || '' };
     },
 

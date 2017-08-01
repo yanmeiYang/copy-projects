@@ -15,6 +15,13 @@ module.exports = {
   SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
   DEFAULT_EXPERT_BASE: '5949c2f99ed5dbc2147fd854', // CCF会员
   DEFAULT_EXPERT_BASE_NAME: 'CCF会员',
+  Search_SortOptions: [
+    { label: '相关度', key: 'relevance' },
+    { label: '学术成就', key: 'h_index' },
+    { label: '学术活跃度', key: 'activity' },
+    { label: '领域新星', key: 'rising_star' },
+    { label: '学会贡献', key: 'activity-ranking-contrib' },
+  ],
 
   // Functionality
   Enable_Export: true,

@@ -82,6 +82,8 @@ class Seminar extends React.Component {
     this.props.seminar.results = [];
     const sizePerPage = this.props.seminar.sizePerPage;
     if (searchQuery) {
+      this.props.seminar.orgByActivity = [];
+      this.setState({ organizer: '', category: '', tag: '' });
       const params = {
         query: searchQuery,
         organizer: this.state.organizer,
@@ -110,20 +112,20 @@ class Seminar extends React.Component {
       });
     }
     const sizePerPage = this.props.seminar.sizePerPage;
-    let organizer = '';
-    let category = '';
+    const stype = {
+      organizer: this.state.organizer,
+      category: this.state.category,
+      tag: this.state.tag,
+    };
     if (checked) {
       this.setState({ [type]: key });
-      organizer = type === 'organizer' ? key : this.state.organizer;
-      category = type === 'category' ? key : this.state.category;
+      stype[type] = key;
     } else {
-      this.props.seminar.orgByActivity = [];
       this.setState({ [type]: '' });
-      organizer = type === 'organizer' ? '' : this.state.organizer;
-      category = type === 'category' ? '' : this.state.category;
+      stype[type] = '';
     }
     this.props.seminar.results = [];
-    if (organizer === '' && category === '' && this.state.query === '') {
+    if (stype.organizer === '' && stype.category === '' && stype.tag === '' && this.state.query === '') {
       const params = {
         offset: 0,
         size: sizePerPage,
@@ -133,8 +135,9 @@ class Seminar extends React.Component {
     } else {
       const params = {
         query: this.state.query,
-        organizer,
-        category,
+        organizer: stype.organizer,
+        category: stype.category,
+        tag: stype.tag,
         offset: 0,
         size: sizePerPage,
         src: config.source,
@@ -144,9 +147,9 @@ class Seminar extends React.Component {
   };
 
   render() {
-    const { results, loading, sizePerPage, orgcategory, activity_organizer_options, topMentionedTags, orgByActivity } =
+    const { results, loading, sizePerPage, orgcategory, topMentionedTags, orgByActivity } =
       this.props.seminar;
-    const { organizer, category } = this.state;
+    const { organizer, category, tag } = this.state;
     return (
       <div className="content-inner">
         <div className={styles.top}>
@@ -190,7 +193,7 @@ class Seminar extends React.Component {
                       <CheckableTag
                         key={item.l}
                         className={styles.filterItem}
-                        checked={organizer === item.l}
+                        checked={tag === item.l}
                         onChange={checked => this.onFilterChange(item.l, item, 'tag', checked)}
                       >
                         {item.l}
@@ -209,7 +212,7 @@ class Seminar extends React.Component {
                 <CheckableTag
                   className={styles.filterItem}
                   checked={category === ''}
-                  onChange={checked => this.getSeminar(sizePerPage, {src: config.source}, checked)}
+                  onChange={checked => this.getSeminar(sizePerPage, { src: config.source }, checked)}
                 >All
                 </CheckableTag>
                 {
@@ -252,27 +255,29 @@ class Seminar extends React.Component {
         </div>
         <Spin spinning={loading}>
           <div className="seminar">
-            <div className="seminar_outbox">
-              {
-                results.map((result, index) => {
-                  return (
-                    <div key={result.id + Math.random()}>
-                      {this.props.app.token && (this.props.app.roles.authority.indexOf(result.organizer[0]) >= 0 || this.props.app.roles.admin) &&
-                      <Button type="danger" icon="delete" size="small"
-                              onClick={this.delTheSeminar.bind(this, result, index)} style={{
-                        float: 'right',
-                        margin: '15px 10px 0 10px',
-                      }}>删除</Button>}
-                      <NewActivityList result={result} hidetExpertRating="false"
-                                       style={{ marginTop: 20 }} />
-                    </div>
-                  );
-                })
-              }
-              {!loading && results.length > sizePerPage &&
-              <Button type="primary" className="getMoreActivities"
-                      onClick={this.getMoreSeminar.bind()}>More</Button>}
-            </div>
+            {results.length > 0 ?
+              <div className="seminar_outbox">
+                {
+                  results.map((result, index) => {
+                    return (
+                      <div key={result.id + Math.random()}>
+                        {this.props.app.token && (this.props.app.roles.authority.indexOf(result.organizer[0]) >= 0 || this.props.app.roles.admin) &&
+                        <Button type="danger" icon="delete" size="small"
+                                onClick={this.delTheSeminar.bind(this, result, index)} style={{
+                          float: 'right',
+                          margin: '15px 10px 0 10px',
+                        }}>删除</Button>}
+                        <NewActivityList result={result} hidetExpertRating="false"
+                                         style={{ marginTop: 20 }} />
+                      </div>
+                    );
+                  })
+                }
+                {!loading && results.length > sizePerPage &&
+                <Button type="primary" className="getMoreActivities"
+                        onClick={this.getMoreSeminar.bind()}>More</Button>}
+              </div> : <div style={{ marginTop: '20px' }}><span
+                style={{ fontSize: '32px', color: '#aaa' }}>暂无数据</span></div>}
           </div>
         </Spin>
       </div>

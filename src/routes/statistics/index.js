@@ -118,9 +118,10 @@ class Statistics extends React.Component {
 
   render() {
     // const { roles } = this.props.app;
-    const activity_list = tabData[0];
-    const experts_list = tabData[2];
-    // const activity_detail = tabData[1];
+
+    const activityList = tabData[0];
+    // const activityDetail = tabData[1];
+    const expertsList = tabData[2];
     // let committee = [];
     // let division = [];
     // if (this.props.app.roles.admin) {
@@ -140,7 +141,7 @@ class Statistics extends React.Component {
               <a onClick={this.clickDownload.bind(this)} download="data.csv" href="#">导出</a>
             </Button>
             <Tabs
-              defaultActiveKey={activity_list.category}
+              defaultActiveKey={activityList.category}
               type="card"
               style={{ clear: 'both', paddingTop: 0 }}
               className={styles.tabs}

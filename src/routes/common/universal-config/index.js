@@ -16,7 +16,7 @@ function hasErrors(fieldsError) {
 }
 
 const categoryTitle = {
-contribution_type: '贡献类别',
+  contribution_type: '贡献类别',
   orgcategory: '活动类型',
 };
 
@@ -46,7 +46,8 @@ class UniversalConfig extends React.Component {
           payload: { category: props.universalConfig.category, key },
         });
       },
-      onCancel() {},
+      onCancel() {
+      },
     });
   };
 
@@ -122,7 +123,7 @@ class UniversalConfig extends React.Component {
     const keyError = isFieldTouched('key') && getFieldError('key');
     const valueError = isFieldTouched('value') && getFieldError('value');
     return (
-      <div>
+      <div style={{ marginBottom: 30 }}>
         {/*DEBUG INFO: Current Category is : {universalConfig.category}*/}
 
         <div className={styles.edit_zone}>

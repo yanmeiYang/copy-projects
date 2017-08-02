@@ -4,9 +4,9 @@ const allMenus = [{ id: 1, icon: 'laptop', name: '首页', router: '/' },
 
 
   { id: 4, bpid: 1, name: '设置', icon: 'setting' },
-  { id: 41, bpid: 4, mpid: 4, name: '用户设置', icon: 'usergroup-add', router: '/admin/users' },
+  { id: 41, bpid: 4, mpid: 4, name: '用户管理', icon: 'usergroup-add', router: '/admin/users' },
   {
-    id: 42, bpid: 4, mpid: 4, name: '角色设置', icon: 'bar-chart',
+    id: 42, bpid: 4, mpid: 4, name: '角色管理', icon: 'bar-chart',
     router: '/admin/system-config/user_roles',
   },
   // {

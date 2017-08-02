@@ -69,6 +69,7 @@ class ExpertRatingPage extends React.Component {
 
   render() {
     const { summaryById, expertRating } = this.props.seminar;
+    const { roles } = this.props.app;
     // 评分数据处理
     const expertData = [];
 
@@ -112,7 +113,7 @@ class ExpertRatingPage extends React.Component {
                 {summaryById.organizer && <div>
                   <h7><strong>承办单位：</strong></h7>
                   <span>{summaryById.organizer.map((item) => {
-                    return <span key={Math.random()}>{item}</span>;
+                    return <span key={Math.random()}>{item} </span>;
                   })}</span>
                 </div>}
                 {summaryById.location && <div>
@@ -207,8 +208,9 @@ class ExpertRatingPage extends React.Component {
                   render={(text, record) => {
                     return (
                       <div>
+                        {(roles.admin || roles.authority.includes(summaryById.organizer[0])) &&
                         <Button type="primary" onClick={this.showModal(text)}
-                                data={JSON.stringify(text)}>评分</Button>
+                                data={JSON.stringify(text)}>评分</Button>}
                         <Modal
                           title={this.state.speaker.name}
                           visible={this.state.visible}
@@ -262,5 +264,5 @@ class ExpertRatingPage extends React.Component {
   }
 }
 export default
-connect(({ seminar }) => ({ seminar }))(ExpertRatingPage);
+connect(({ seminar, app }) => ({ seminar, app }))(ExpertRatingPage);
 

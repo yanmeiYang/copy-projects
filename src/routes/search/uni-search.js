@@ -29,7 +29,7 @@ const defaultSearchSorts = [
 
 /**
  * UniSearch Page
- * http://localhost:8000/search/%83...%BD/0/30?view=relation
+ * http://localhost:8000/search/%83...%BD/0/20?view=relation
  */
 class UniSearch extends React.PureComponent {
   constructor(props) {
@@ -71,8 +71,11 @@ class UniSearch extends React.PureComponent {
   }
 
 
-  // componentWillReceiveProps(nextProps) {
-  // }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.search.query !== this.props.search.query) {
+      console.log('COMPARE:', nextProps.search.query, this.props.search.query);
+    }
+  }
 
   // shouldComponentUpdate(nextProps, nextState) {
   // }
@@ -237,7 +240,7 @@ class UniSearch extends React.PureComponent {
     */
 
     DEBUGLog && console.log('refresh pagesdf', load);
-
+    const { headerSearchBox } = this.props.app;
     return (
       <div className={classnames('content-inner', styles.page)}>
 
@@ -245,6 +248,7 @@ class UniSearch extends React.PureComponent {
           <div className={styles.searchZone}>
 
             {/* 搜索框 */}
+            {!headerSearchBox &&
             <div className={styles.top}>
               <div className={styles.searchWrap}>
                 <KgSearchBox
@@ -253,6 +257,7 @@ class UniSearch extends React.PureComponent {
                 />
               </div>
             </div>
+            }
 
             {/* Filter */}
             <SearchFilter

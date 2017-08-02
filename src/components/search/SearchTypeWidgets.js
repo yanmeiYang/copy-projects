@@ -5,7 +5,11 @@ import styles from './SearchTypeWidgets.less';
 import { sysconfig } from '../../systems';
 
 const defaultConfig = [
-  { label: '专家', url: '/uniSearch/:query/0/30', pageSignature: 'uniSearch' },
+  {
+    label: '专家',
+    url: `/uniSearch/:query/0/${sysconfig.MainListSize}`,
+    pageSignature: 'uniSearch',
+  },
   { label: '地图', url: '/expert-map', data: 'query', pageSignature: 'expert-map' },
   {
     label: '关系',

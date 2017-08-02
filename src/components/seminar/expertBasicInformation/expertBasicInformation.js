@@ -2,10 +2,11 @@
  * Created by yangyanmei on 17/6/14.
  */
 import React from 'react';
+import fetch from 'dva/fetch';
 import { Input, Col, Radio, Button, Modal, Tag, Icon, } from 'antd';
 import { routerRedux, Link } from 'dva/router';
 import { request, config } from '../../../utils';
-import fetch from 'dva/fetch';
+import { sysconfig } from '../../systems';
 import defaultImg from '../../../assets/people/default.jpg';
 import styles from './expertBasicInformation.less';
 const RadioGroup = Radio.Group;
@@ -231,8 +232,11 @@ class ExpertBasicInformation extends React.Component {
                         </div>
                         <div className={styles.tagWrap}>
                           {speaker.tags.map((tag) => {
-                            return (<Link to={`/search/${tag.t}/0/30`} key={Math.random()}><Tag
-                              className={styles.tag}>{tag.t}</Tag></Link>);
+                            return (
+                              <Link to={`/search/${tag.t}/0/${sysconfig.MainListSize}`} key={Math.random()}>
+                                <Tag className={styles.tag}>{tag.t}</Tag>
+                              </Link>
+                            );
                           })}
                         </div>
                       </div>

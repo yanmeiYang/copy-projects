@@ -5,6 +5,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { Menu, Icon } from 'antd';
 import { Link } from 'dva/router';
+import { isEqual } from 'lodash';
 import styles from './Header.less';
 import * as profileUtils from '../../utils/profile_utils';
 import { sysconfig } from '../../systems';
@@ -25,12 +26,18 @@ class Header extends React.PureComponent {
   // }
 
   componentWillReceiveProps = (nextProps) => {
-    if (nextProps.app.headerSearchBox &&
-      nextProps.app.headerSearchBox !== this.props.app.headerSearchBox) {
+    if (nextProps.app.headerSearchBox && (
+        nextProps.app.headerSearchBox !== this.props.app.headerSearchBox
+        || this.props.app.headerSearchBox.query !== this.state.query)) {
       if (nextProps.app.headerSearchBox.query) {
-        this.setState({ query: nextProps.app.headerSearchBox.query });
+        console.log('>>>>>>>>>>>>>>>>> ', nextProps.app.headerSearchBox.query);
+        this.setQuery(nextProps.app.headerSearchBox.query);
       }
     }
+  };
+
+  setQuery = (query) => {
+    this.setState({ query });
   };
 
   logoutAuth = () => {

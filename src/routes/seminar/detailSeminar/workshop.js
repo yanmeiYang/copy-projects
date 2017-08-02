@@ -19,7 +19,10 @@ class WorkShop extends React.Component {
         <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
           <div>
             <div className={styles.speakerAvatar}>
-              {aTalk.speaker.aid ? <Link to={`/person/${aTalk.speaker.aid}`}><img src={profileUtils.getAvatar(aTalk.speaker.img, aTalk.speaker.aid, 90)} alt={aTalk.speaker.name} /></Link> : <img src={aTalk.speaker.img} alt={aTalk.speaker.name} />}
+              {aTalk.speaker.aid ? <Link to={`/person/${aTalk.speaker.aid}`}><img
+                src={profileUtils.getAvatar(aTalk.speaker.img, aTalk.speaker.aid, 90)}
+                alt={aTalk.speaker.name} /></Link> :
+                <img src={aTalk.speaker.img} alt={aTalk.speaker.name} />}
             </div>
           </div>
           <ul className={styles.messages}>
@@ -28,9 +31,11 @@ class WorkShop extends React.Component {
               <div>
                 <li>
                   <p>
-                    <Icon type="user"  />
+                    <Icon type="user" />
                     <strong>姓名:&nbsp;</strong>
-                    {aTalk.speaker.aid ? <Link to={`/person/${aTalk.speaker.aid}`}><span>{aTalk.speaker.name}</span></Link> : <span>{aTalk.speaker.name}</span>}
+                    {aTalk.speaker.aid ?
+                      <Link to={`/person/${aTalk.speaker.aid}`}><span>{aTalk.speaker.name}</span></Link> :
+                      <span>{aTalk.speaker.name}</span>}
                   </p>
                 </li>
                 <li>
@@ -48,19 +53,26 @@ class WorkShop extends React.Component {
               </div>}
             </span>
             <span>
-              {aTalk.time ? <li><p>
-                <Icon type="clock-circle-o" />
-                <strong>时间:&nbsp;</strong>
-                <TimeFormat {...aTalk.time} />
-              </p></li> : ''}
-            </span>
-            <span>
-              {aTalk.location ? <span>
-                {aTalk.location.address ? <li><p>
-                  <Icon type="environment-o" />
+              {aTalk.time &&
+              <li>
+                <p>
+                  <Icon type="clock-circle-o" />
                   <strong>时间:&nbsp;</strong>
                   <TimeFormat {...aTalk.time} />
-                </p></li> : ''}</span> : ''}
+                </p>
+              </li>}
+            </span>
+            <span>
+              {aTalk.location && <span>
+                {aTalk.location.address &&
+                <li>
+                  <p>
+                    <Icon type="environment-o" />
+                    <strong>地点:&nbsp;</strong>
+                    <span>{aTalk.location.address}</span>
+                  </p>
+                </li>}
+              </span>}
             </span>
           </ul>
         </div>

@@ -42,6 +42,8 @@ class AddExpertModal extends React.Component {
   componentDidMount() {
     if (this.props.editTheTalk.speaker) {
       const editTheTalk = this.props.editTheTalk;
+      console.log(1111);
+      console.log(editTheTalk.speaker);
       this.setState({
         isEdit: true,
         speakerInfo: editTheTalk.speaker,
@@ -152,7 +154,7 @@ class AddExpertModal extends React.Component {
     };
     talk.title = this.refs.talkTitle.refs.input.value;
     talk.speaker = state.speakerInfo;
-    talk.speaker.gender = state.speakerInfo.gender === '' ? 1 : parseInt(state.speakerInfo.gender);
+    talk.speaker.gender = state.speakerInfo.gender === '' ? 1 : parseInt(state.speakerInfo.gender.i);
     if (state.talkStartValue || state.talkEndValue) {
       talk.time = {};
     }

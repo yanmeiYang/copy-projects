@@ -188,7 +188,7 @@ class Seminar extends React.Component {
               <span className={styles.filterTitle}>标签:</span>
               <ul className={styles.filterItems}>
                 {
-                  topMentionedTags.data.tags.map((item) => {
+                  topMentionedTags.data.tags.slice(0, 5).map((item) => {
                     return (
                       <CheckableTag
                         key={item.l}

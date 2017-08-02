@@ -28,16 +28,21 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
       title: '删除',
       content: '确定删除吗？',
       onOk() {
-        dispatch({ type: 'seminar/deleteActivity', payload: { id: summaryById.id, body: summaryById } });
+        dispatch({
+          type: 'seminar/deleteActivity',
+          payload: { id: summaryById.id, body: summaryById }
+        });
         dispatch(routerRedux.push('/seminar'));
       },
-      onCancel() {},
+      onCancel() {
+      },
     });
   }
 
   function editSeminar() {
     dispatch(routerRedux.push(`/seminar-edit/${summaryById.id}`));
   }
+
   return (
     <div className={styles.detailSeminar}>
       <Spin spinning={loading}>
@@ -45,9 +50,11 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
           <Col className={styles.thumbnail}>
             <div className={styles.caption}>
               {currentUser.token && (app.roles.authority.indexOf(summaryById.organizer[0]) >= 0 || app.roles.admin) &&
-              <a type="danger" style={{ float: 'right', fontSize: '20px', color: '#f04134' }} onClick={delSeminar} title="删除">
+              <a type="danger" style={{ float: 'right', fontSize: '20px', color: '#f04134' }}
+                 onClick={delSeminar} title="删除">
                 <Icon type="delete" /></a>}
-              <a style={{ float: 'right', marginRight: '10px', fontSize: '20px' }} onClick={editSeminar} title="编辑">
+              <a style={{ float: 'right', marginRight: '10px', fontSize: '20px' }}
+                 onClick={editSeminar} title="编辑">
                 <Icon type="edit" /></a>
               <div style={{ float: 'right', marginRight: 10 }}>
                 <span type="default" className={styles.show_QRCode}>
@@ -189,18 +196,37 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
               {/* type=workshop*/}
               {summaryById.type === 1 ? <div>
                 <div className={styles.workshopTetail}>
-                  <h5 style={{ marginRight: '86px' }}><TimeFormat {...summaryById.time} /></h5>
-                  {summaryById.img && <div style={{ textAlign: 'center' }}><img src={summaryById.img} alt="" style={{ width: '80%' }} /></div>}
+                  <h5 style={{ marginRight: '86px' }}>
+                    <TimeFormat {...summaryById.time} />
+                  </h5>
+                  {summaryById.img &&
+                  <div style={{ textAlign: 'center' }}>
+                    <img src={summaryById.img} alt="" style={{ width: '80%' }} />
+                  </div>}
+                  <p>
+                    <strong>活动类型: </strong>
+                    <span>&nbsp;{summaryById.category}</span>
+                  </p>
+                  <p>
+                    <strong>承办单位: &nbsp;</strong>
+                    {summaryById.organizer.map(item => {
+                      return <span key={`${item}_${Math.random()}`}>{item} &nbsp;</span>;
+                    })}
+                  </p>
+                  <p>
+                    <strong>活动地点: </strong>
+                    {summaryById.location &&
+                    <span>&nbsp;{summaryById.location.city}</span>}
+                    {summaryById.location &&
+                    <span>&nbsp;{summaryById.location.address}</span>}
+                  </p>
                   <p>{summaryById.abstract}</p>
                   <hr />
                 </div>
                 {summaryById.talk.map((aTalk) => {
                   return (
                     <div key={aTalk.speaker.aid + Math.random()} className={styles.workshop}>
-                      {/* workshop详情页面*/}
                       <WorkShop {...aTalk} />
-                      {/* /!*专家评分*!/*/}
-                      {/* {aTalk.speaker.aid&&<ExpertRating actid={summaryById.id} currentUser={currentUser} aid={aTalk.speaker.aid} expertRating={expertRating}/>}*/}
                       <hr />
                     </div>
                   );

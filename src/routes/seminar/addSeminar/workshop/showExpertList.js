@@ -47,6 +47,16 @@ class ShowExpertList extends React.Component {
               </td>
             </tr>
             <tr>
+              <td>专家电话：</td>
+              <td style={{ width: '42%', verticalAlign: 'top' }}>
+                {talk.speaker.phone && <span>{talk.speaker.phone}</span>}
+              </td>
+              <td>专家邮箱：</td>
+              <td style={{ width: '42%' }}>
+                {talk.speaker.email && <span>{talk.speaker.email}</span>}
+              </td>
+            </tr>
+            <tr>
               <td>专家简介：</td>
               <td colSpan={3}>{talk.speaker.bio}</td>
             </tr>

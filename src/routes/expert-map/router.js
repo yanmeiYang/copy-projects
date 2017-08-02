@@ -29,7 +29,7 @@ export default {
     path: 'expert-trajectory',
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
-        // registerModel(app, require('../../models/expert-map'));
+        registerModel(app, require('../../models/expert-trajectory'));
         cb(null, require('../expert-trajectory/ExpertTrajectoryPage'));
       }, 'map');
     },

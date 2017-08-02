@@ -7,7 +7,7 @@ import { connect } from 'dva';
 import ExpertsList from './experts-list';
 import CommitteeList from './committee-list';
 import styles from './index.less';
-
+import { getTwoDecimal } from '../../utils';
 
 const TabPane = Tabs.TabPane;
 const tabData = [
@@ -86,7 +86,7 @@ class Statistics extends React.Component {
     }
 
     if (this.state.defaultTabKey === 'experts_list') {
-      title = '专家,审稿活动,撰稿活动,总贡献度,演讲内容,演讲水平,综合评价,';
+      title = '专家,审稿次数,撰稿次数,总贡献度,演讲内容(平均分),演讲水平,综合评价(其他贡献),';
       title += '\n';
       this.props.statistics.author.map((item) => {
         if (item.n_zh) {
@@ -98,12 +98,12 @@ class Statistics extends React.Component {
           info += ',';
         }
 
-        info += item['撰稿次数'] ? (`${item['撰稿次数']},`) : ',';
+        info += item['审稿活动'] ? (`${item['审稿活动']},`) : ',';
         info += item['撰稿活动'] ? (`${item['撰稿活动']},`) : ',';
-        info += item.contrib ? (`${item.contrib},`) : ',';
-        info += item.content ? (`${item.content},`) : ',';
-        info += item.level ? (`${item.level},`) : ',';
-        info += item.integrated ? (`${item.integrated},`) : ',';
+        info += item.contrib ? `${getTwoDecimal(parseFloat(item.contrib), 2)},` : ',';
+        info += item.content ? `${getTwoDecimal(parseFloat(item.content), 2)},` : ',';
+        info += item.level ? `${getTwoDecimal(parseFloat(item.level), 2)},` : ',';
+        info += item.integrated ? `${getTwoDecimal(parseFloat(item.integrated), 2)},` : ',';
         info += '\n';
         return true;
       });
@@ -130,7 +130,6 @@ class Statistics extends React.Component {
     //   committee = this.props.statistics.activity;
     //   division = this.props.statistics.activity;
     // }
-    console.log(this.state.defaultTabKey);
     return (
       <div style={{ marginTop: 10 }}>
         <div className="content-inner">
@@ -160,8 +159,8 @@ class Statistics extends React.Component {
               {/* ); */}
               {/* })} */}
               <TabPane
-                key={activity_list.category}
-                tab={activity_list.label}
+                key={activityList.category}
+                tab={activityList.label}
               >
                 <CommitteeList activity={this.props.statistics.activity} />
               </TabPane>
@@ -177,9 +176,9 @@ class Statistics extends React.Component {
               {/* </TabPane> */}
               {/* } */}
               <TabPane
-                key={experts_list.category}
-                style={{ display: experts_list.isShow }}
-                tab={experts_list.label}
+                key={expertsList.category}
+                style={{ display: expertsList.isShow }}
+                tab={expertsList.label}
                 className={styles.tabContent}
               >
 

@@ -67,7 +67,7 @@ class RightInfoZonePerson extends React.PureComponent {
             {
               tags.map((tag) => {
                 return (
-                  <Link to={`/${sysconfig.SearchPagePrefix}/${tag.t}/0/30`}
+                  <Link to={`/${sysconfig.SearchPagePrefix}/${tag.t}/0/${sysconfig.MainListSize}`}
                         key={Math.random()}>
                     <Tag className="tag">{tag.t}</Tag>
                   </Link>

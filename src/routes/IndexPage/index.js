@@ -60,7 +60,9 @@ class IndexPage extends React.Component {
               commonSearch.map((query, index) => {
                 return (
                   <span key={query}>
-                    <Link to={`/${sysconfig.SearchPagePrefix}/${query}/0/30`}>{query}</Link>
+                    <Link
+                      to={`/${sysconfig.SearchPagePrefix}/${query}/0/${sysconfig.MainListSize}`}
+                    >{query}</Link>
                     <span>{(index === commonSearch.length - 1) ? '' : ', '}</span>
                   </span>
                 );

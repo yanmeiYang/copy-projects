@@ -120,7 +120,7 @@ const App = ({ children, location, dispatch, app, loading }) => {
 
         {href.indexOf('/KnowledgeGraphPage') > 0 &&
         <script src="http://d3js.org/d3.v3.min.js" />}
-*/}
+        */}
 
         {(href.indexOf('/expert-map') > 0) && // || href.indexOf('/uniSearch') > 0
         <script type="text/javascript"

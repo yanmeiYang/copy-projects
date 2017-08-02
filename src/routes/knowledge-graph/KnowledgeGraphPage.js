@@ -182,7 +182,6 @@ class KnowledgeGraphPage extends React.PureComponent {
     const kg = this.props.knowledgeGraph;
 
     let infoExtra;
-    // <a href={`/${sysconfig.SearchPagePrefix}/${this.getQuery()}/0/30`}
     if (this.state.infoTab === 'experts' && kg.node) {
       infoExtra = (
         <a href={`http://aminer.org/search?t=b&q=${this.getQuery()}`}

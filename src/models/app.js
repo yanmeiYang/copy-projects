@@ -168,6 +168,16 @@ export default {
       return { ...state, ...payload };
     },
 
+    setQueryInHeaderIfExist(state, { payload }) {
+      const { query } = payload;
+      if (state.headerSearchBox) {
+        const newState = state;
+        newState.headerSearchBox.query = query;
+        return newState;
+      } else {
+        return state;
+      }
+    },
     // setQuery(state, { query }) {
     //   return { ...state, query };
     // },

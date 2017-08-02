@@ -337,7 +337,7 @@ class RegistrationForm extends React.PureComponent {
                   rules: [{ required: true, message: '请选择承办单位！' }],
                 },
               )(
-                <Select>
+                <Select showSearch>
                   {
                     postSeminarOrganizer.map((item) => {
                       return (<Option key={`org_${Math.random()}`}

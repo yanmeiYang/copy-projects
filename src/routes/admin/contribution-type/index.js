@@ -8,7 +8,7 @@ class ContributionTyps extends React.Component {
   state = {};
   render() {
     return (
-      <div>
+      <div style={{ maxWidth: '1228px' }}>
         <h2 style={{ paddingLeft: 24, marginBottom: '-20px' }}>贡献类别</h2>
         <SystemConfig />
       </div>

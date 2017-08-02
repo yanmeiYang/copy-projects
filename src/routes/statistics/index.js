@@ -33,14 +33,14 @@ class Statistics extends React.Component {
     defaultTabKey: tabData[0].category,
   };
 
-  componentWillMount() {
-    const roles = this.props.app.roles;
-    if (roles.admin || roles.role.includes('专委')) {
-      this.setState({ defaultTabKey: tabData[0].category });
-    } else {
-      this.setState({ defaultTabKey: tabData[1].category });
-    }
-  }
+  // componentWillMount() {
+  //   const roles = this.props.app.roles;
+  //   if (roles.admin || roles.role.includes('专委')) {
+  //     this.setState({ defaultTabKey: tabData[0].category });
+  //   } else {
+  //     this.setState({ defaultTabKey: tabData[1].category });
+  //   }
+  // }
 
   componentDidMount() {
     this.props.dispatch({ type: 'statistics/getStatsOfCcfActivities', payload: {} });
@@ -86,7 +86,7 @@ class Statistics extends React.Component {
     }
 
     if (this.state.defaultTabKey === 'experts_list') {
-      title = '专家,审稿活动,撰稿活动,总贡献度,演讲内容(平均分),演讲水平,综合评价(其他贡献),';
+      title = '专家,审稿活动,撰稿活动,总贡献度,演讲内容,演讲水平,综合评价,';
       title += '\n';
       this.props.statistics.author.map((item) => {
         if (item.n_zh) {
@@ -117,19 +117,20 @@ class Statistics extends React.Component {
 
 
   render() {
-    const { roles } = this.props.app;
+    // const { roles } = this.props.app;
     const activity_list = tabData[0];
-    const activity_detail = tabData[1];
     const experts_list = tabData[2];
-    let committee = [];
-    let division = [];
-    if (this.props.app.roles.admin) {
-      committee = this.props.statistics.activity.filter(item => item.organizer.includes('专业委员会') || item.organizer.includes('专委会'));
-      division = this.props.statistics.activity.filter(item => !item.organizer.includes('专业委员会') && !item.organizer.includes('专委会'));
-    } else {
-      committee = this.props.statistics.activity;
-      division = this.props.statistics.activity;
-    }
+    // const activity_detail = tabData[1];
+    // let committee = [];
+    // let division = [];
+    // if (this.props.app.roles.admin) {
+    //   committee = this.props.statistics.activity.filter(item => item.organizer.includes('专业委员会') || item.organizer.includes('专委会'));
+    //   division = this.props.statistics.activity.filter(item => !item.organizer.includes('专业委员会') && !item.organizer.includes('专委会'));
+    // } else {
+    //   committee = this.props.statistics.activity;
+    //   division = this.props.statistics.activity;
+    // }
+    console.log(this.state.defaultTabKey);
     return (
       <div style={{ marginTop: 10 }}>
         <div className="content-inner">
@@ -140,7 +141,7 @@ class Statistics extends React.Component {
               <a onClick={this.clickDownload.bind(this)} download="data.csv" href="#">导出</a>
             </Button>
             <Tabs
-              defaultActiveKey={this.state.defaultTabKey}
+              defaultActiveKey={activity_list.category}
               type="card"
               style={{ clear: 'both', paddingTop: 0 }}
               className={styles.tabs}

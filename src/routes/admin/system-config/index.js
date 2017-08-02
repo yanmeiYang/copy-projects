@@ -47,7 +47,7 @@ class SystemConfig extends React.Component {
     const defaultCategory = sc.category || SysconfigDefaultCategory;
     const tabConfig = SysConfigTabs.filter(item => item.category === defaultCategory);
     return (
-      <div className="content-inner">
+      <div className="content-inner" style={{ maxWidth: '1228px' }}>
 
         <h2 className={styles.pageTitle}>
           {tabConfig && tabConfig.length > 0 && (tabConfig[0].label || '系统参数设置！')}

@@ -124,7 +124,7 @@ class Registered extends React.Component {
     const { getFieldDecorator } = this.props.form;
     const { universalConfig, auth } = this.props;
     return (
-      <div>
+      <div style={{ maxWidth: '1228px' }}>
         <h2 style={{ paddingLeft: 24 }}>创建用户</h2>
         <Form onSubmit={this.registered} style={{ marginTop: 30 }}>
           <FormItem

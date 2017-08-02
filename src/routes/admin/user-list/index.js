@@ -199,22 +199,21 @@ class UserList extends React.Component {
       listUsers = this.props.auth.listUsers.filter(item => !item.role.includes(`${config.source}_超级管理员`));
     }
 
-    const pagination = { pageSize: 20, showQuickJumper: true };
     const { universalConfig } = this.props;
     const { committee, selectedAuthority, selectedRole } = this.state;
     return (
-      <div className="content-inner">
+      <div className="content-inner" style={{ maxWidth: '1228px' }}>
         <div className="toolsArea">
           <Button type="primary" size="large" style={{}} onClick={this.goCreateUser}>创建用户</Button>
         </div>
-        <h2 className={styles.pageTitle}>用户列表</h2>
+        <h2 className={styles.pageTitle}>用户设置</h2>
 
         <Spin spinning={loading}>
           <Table
             dataSource={listUsers}
             bordered
             size="small"
-            pagination={pagination}
+            pagination={false}
           >
             <Column title="姓名" dataIndex="" key="display_name"
                     render={this.showUpdateName} />

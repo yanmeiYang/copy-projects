@@ -45,7 +45,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
             <tbody key={score.key} className="scoreTable">
               {score.key === 'level' &&
               <tr>
-                <td>演讲内容（水平）:</td>
+                <td>演讲内容:</td>
                 <td>
                   <Rate disabled defaultValue={score.score} />
                   <input type="text" className="score" value={getTwoDecimal(score.score, 2)} disabled />
@@ -63,7 +63,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
               }
               {score.key === 'integrated' &&
               <tr>
-                <td>综合评价（其它贡献）:</td>
+                <td>综合评价:</td>
                 <td>
                   <Rate disabled defaultValue={score.score} />
                   <input type="text" className="score" value={getTwoDecimal(score.score, 2)} disabled />

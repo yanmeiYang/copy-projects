@@ -41,6 +41,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+  max-width: 1228px;
   .searchWrap {
     width: 70%;
     float: left;
@@ -53,18 +54,18 @@
     }
   }
 }
-.top > button {
-  margin-right: 30%;
-}
+//.top > button {
+//  margin-right: 30%;
+//}
 
 :global {
   .seminar {
     min-height: 500px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     flex-shrink: 1;
     .seminar_outbox{
-      max-width: 1000px;
+      max-width: 1228px;
       width: 100%;
     }
     li {
@@ -83,6 +84,7 @@
   }
 }
 .filterWrap {
+  max-width: 1228px;
   .filter {
     display: flex;
     flex-direction: column;
@@ -109,7 +111,7 @@
       }
       .filterItem {
         margin: 0 5px;
-        width: 230px;
+        width: 216px;
       }
       .filterCount {
         font-weight: bold;

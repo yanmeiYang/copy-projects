@@ -57,7 +57,7 @@ class AddUserRolesByOrg extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         // 删除修改之前的key
-        if (this.state.editCurrentData.key!==undefined&&(this.state.editCurrentData.key!==values.key||this.state.editCurrentData.value!==values.value)){
+        if (this.state.editCurrentData.key !== undefined && (this.state.editCurrentData.key !== values.key || this.state.editCurrentData.value !== values.value)) {
           const key = this.state.editCurrentData.key;
           this.props.dispatch({
             type: 'universalConfig/deleteByKey',
@@ -142,9 +142,9 @@ class AddUserRolesByOrg extends React.Component {
     };
     return (
       <div>
-        {/*DEBUG INFO: Current Category is : {universalConfig.category}*/}
+        {/* DEBUG INFO: Current Category is : {universalConfig.category} */}
         <Button type="primary" onClick={this.addRole} style={{ float: 'right' }}> 添加角色</Button>
-        <h2 className={styles.pageTitle}>用户设置</h2>
+        <h2 className={styles.pageTitle}>角色管理</h2>
         <Modal
           title="添加角色"
           visible={this.state.visible}
@@ -156,14 +156,14 @@ class AddUserRolesByOrg extends React.Component {
               <FormItem
                 {...formItemLayout}
                 validateStatus={this.state.disabledKey ? '' : 'error'}
-                help={this.state.disabledKey ? '' : "禁止添加超级管理员"}
+                help={this.state.disabledKey ? '' : '禁止添加超级管理员'}
                 label="角色名称"
               >
                 {getFieldDecorator('key', {
                   rules: [{ required: true, message: 'Please input key!' },
                     { type: 'string', message: 'Please input key!' }],
                 })(
-                  <Input />
+                  <Input />,
                 )}
               </FormItem>
 
@@ -178,7 +178,7 @@ class AddUserRolesByOrg extends React.Component {
                 })(
                   <Select onChange={this.handleChange}>
                     {universalConfig.orgList.map((item) => {
-                      return <Option value={`${item.value.key}#${item.value.id}`} key={item.value.id}>{item.value.key}</Option>
+                      return <Option value={`${item.value.key}#${item.value.id}`} key={item.value.id}>{item.value.key}</Option>;
                     })}
                   </Select>,
                 )}
@@ -213,24 +213,26 @@ class AddUserRolesByOrg extends React.Component {
               render={(text, record) => {
                 return (
                   <span>
-                    {(text.value.key !== '超级管理员' && text.value.key !== '分部专员' && text.value.key !== 'CCF专委专员') && <span>
-                      {/*<a onClick={this.onEdit} data={JSON.stringify(text)}>编辑</a>*/}
-                      {/*<span className="ant-divider" />*/}
-                      <a onClick={this.onDelete} data={JSON.stringify(text.value)}>删除</a></span>
+                    {(text.value.key !== '超级管理员' && text.value.key !== '分部专员' && text.value.key !== 'CCF专委专员') &&
+                    <span>
+                      {/* <a onClick={this.onEdit} data={JSON.stringify(text)}>编辑</a> */}
+                      {/* <span className="ant-divider" /> */}
+                      <a onClick={this.onDelete} data={JSON.stringify(text.value)}>删除</a>
+                    </span>
                     }
-                    {/*<span className="ant-divider" />*/}
-                    {/*<a href="#" className="ant-dropdown-link">*/}
-                    {/*More actions <Icon type="down" />*/}
-                    {/*</a>*/}
-                </span>
-                )
+                    {/* <span className="ant-divider" /> */}
+                    {/* <a href="#" className="ant-dropdown-link"> */}
+                    {/* More actions <Icon type="down" /> */}
+                    {/* </a> */}
+                  </span>
+                );
               }}
             />
           </Table>
         </Spin>
       </div>
     );
-  };
+  }
 }
 
 export default connect(

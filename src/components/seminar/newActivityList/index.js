@@ -30,7 +30,14 @@ class NewActivityList extends React.Component {
     if (result.organizer.length > 0) {
       style.borderLeft = result.organizer[0].includes('专业委员会') ? CommitteeColor : DivisionColor;
     }
-    const expertRating = app.roles.admin || app.roles.authority.indexOf(result.organizer[0]) >= 0;
+    let expertRating;
+    if (app.roles.admin) {
+      expertRating = true;
+    } else if (app.roles.role[0] && app.roles.role[0].includes('专员') && app.roles.role[0].includes(result.category)) {
+      expertRating = true;
+    } else {
+      expertRating = app.roles.authority.includes(result.organizer[0]);
+    }
     return (
       <div className={styles.seminar_item} style={style}>
         <div className={styles.seminar_title}>
@@ -77,9 +84,9 @@ class NewActivityList extends React.Component {
                   result.tags.map((item, index) => {
                     return (
                       <span key={Math.random()}>
-                          <span>{item}</span>
+                        <span>{item}</span>
                         {index < result.tags.length - 1 && <span>,&nbsp;</span>}
-                        </span>
+                      </span>
                     );
                   })
                 }

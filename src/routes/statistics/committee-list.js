@@ -5,6 +5,8 @@ import React from 'react';
 import { Table } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
+import styles from './committee-list.less';
+
 
 const { Column } = Table;
 class CommitteeList extends React.Component {
@@ -46,6 +48,12 @@ class CommitteeList extends React.Component {
     return first - second;
   };
 
+  organizerSorter = (a, b) => {
+    const first = a === undefined ? 'zz' : a;
+    const second = b === undefined ? 'zz' : b;
+    return first.localeCompare(second);
+  };
+
   render() {
     const { orgcategory } = this.props.seminar;
     let activity_type_options_data = {};
@@ -60,13 +68,26 @@ class CommitteeList extends React.Component {
     //   onChange: this.onSelectChange,
     //   onSelection: this.onSelection,
     // };
+
+    // 排序 dict 数组 可以抽出一个公用方法
+    const compare = (property) => {
+      return (a, b) => {
+        const val1 = a[property];
+        const val2 = b[property];
+        return val2 - val1;
+      };
+    };
+
+    this.props.activity.sort(compare('total'));
     return (
       <div>
         {/* rowSelection={rowSelection}*/}
-        {orgcategory.data && <Table bordered dataSource={this.props.activity}>
+        {orgcategory.data &&
+        <Table bordered size="small" pagination={false} dataSource={this.props.activity}
+               className={styles.committee}>
           <Column title="承办单位" dataIndex="organizer" key="display_name"
-                  sorter={(a, b) => this.activitySorter(a.organizer.length, b.organizer.length)} />
-          <Column title="举办活动次数（总数）" dataIndex="total" key="position"
+                  sorter={(a, b) => this.organizerSorter(a.organizer, b.organizer)} />
+          <Column title="活动总数" dataIndex="total" key="position" className={styles.comTotal}
                   sorter={(a, b) => this.activitySorter(a.total, b.total)}
                   render={(total, organizer) => <a data={JSON.stringify(organizer)}
                                                    onClick={this.getSeminarsByCategory.bind(this, total, 'organizer')}> {total} </a>} />

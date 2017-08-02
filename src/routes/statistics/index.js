@@ -61,7 +61,7 @@ class Statistics extends React.Component {
     let info = '';
     let title = '';
     if (this.state.defaultTabKey === 'activity_lists') {
-      title = '承办单位	,举办活动次数(总数),分部,NOI,ADL,CCCF,年度报告,CSP,走进高校,TF,	CCD,女工作者会议,精英大会,未来教育峰会,专委,YOCSEF,';
+      title = '承办单位	,活动总数,分部,NOI,ADL,CCCF,年度报告,CSP,走进高校,TF,	CCD,女工作者会议,精英大会,未来教育峰会,专委,YOCSEF,';
       title += '\n';
       this.props.statistics.activity.map((item) => {
         info += item.organizer ? (`${item.organizer},`) : ',';
@@ -86,7 +86,7 @@ class Statistics extends React.Component {
     }
 
     if (this.state.defaultTabKey === 'experts_list') {
-      title = '专家,审稿次数,撰稿次数,总贡献度,演讲内容(平均分),演讲水平,综合评价(其他贡献),';
+      title = '专家,总功效度,审稿次数,撰稿次数,总贡献度,演讲内容,演讲水平,综合评价,';
       title += '\n';
       this.props.statistics.author.map((item) => {
         if (item.n_zh) {
@@ -98,9 +98,9 @@ class Statistics extends React.Component {
           info += ',';
         }
 
+        info += item.contrib ? `${getTwoDecimal(parseFloat(item.contrib), 2)},` : ',';
         info += item['审稿活动'] ? (`${item['审稿活动']},`) : ',';
         info += item['撰稿活动'] ? (`${item['撰稿活动']},`) : ',';
-        info += item.contrib ? `${getTwoDecimal(parseFloat(item.contrib), 2)},` : ',';
         info += item.content ? `${getTwoDecimal(parseFloat(item.content), 2)},` : ',';
         info += item.level ? `${getTwoDecimal(parseFloat(item.level), 2)},` : ',';
         info += item.integrated ? `${getTwoDecimal(parseFloat(item.integrated), 2)},` : ',';

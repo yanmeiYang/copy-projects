@@ -22,6 +22,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
   const totalPubs = profile.indices && profile.indices.num_pubs;
 
   const contrib = avgScores.filter(score => score.key === 'contrib')[0];
+  const activity_indices = { contrib: contrib === undefined ? 0 : contrib.score };
 
   const profileTabs = [{
     title: '专家评分',
@@ -76,14 +77,15 @@ const Person = ({ dispatch, person, seminar, publications }) => {
   }, {
     title: '参与的活动',
     content: <Spin spinning={seminar.loading}>
-      <div style={{ minHeight: 150 }}>{results.map((activity) => {
+      {results.length > 0 ? <div style={{ minHeight: 150 }}>{results.map((activity) => {
         return (
           <div key={activity.id + Math.random()}>
             {/* <ActivityList result={activity} />*/}
-            <NewActivityList result={activity} hidetExpertRating="true" style={{ marginTop: 20, maxWidth: 1000 }} />
+            <NewActivityList result={activity} hidetExpertRating="true"
+                             style={{ marginTop: 20, maxWidth: 1000 }} />
           </div>
         );
-      })}</div>
+      })}</div> : <div style={{ minHeight: 150, textAlign: 'center' }}><span style={{ fontSize: '32px', color: '#aaa' }}>没有数据</span></div>}
     </Spin>,
   }, {
     title: '代表性论文',
@@ -151,7 +153,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
   return (
     <div className="content-inner">
 
-      <ProfileInfo profile={profile} />
+      <ProfileInfo profile={profile} activity_indices={activity_indices} />
 
       <div style={{ marginTop: 30 }} />
 

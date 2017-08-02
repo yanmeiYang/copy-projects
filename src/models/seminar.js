@@ -158,6 +158,7 @@ export default {
       const data = yield call(seminarService.getTopMentionedTags, src, num);
       yield put({ type: 'getTopMentionedTagsSuccess', data });
     },
+    // TODO 输入多个id，返回所有承办单位
     *getCategoriesHint({ payload }, { call, put }) {
       const { category } = payload;
       const suggestCategory = yield call(uconfigService.getCategoriesHint, category);

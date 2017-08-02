@@ -75,11 +75,10 @@ class ExpertRatingPage extends React.Component {
     if (summaryById.talk && summaryById.talk !== undefined) {
       summaryById.talk.map((item) => {
         const aid = item.speaker.aid;
-        let actId = '';
+        const actId = summaryById.id;
         const valList = [0, 0, 0];
         expertRating.map((value) => {
           if (value.aid === aid) {
-            actId = value.act_id;
             if (value.key === 'level') {
               valList[0] = value.score;
             }
@@ -93,6 +92,7 @@ class ExpertRatingPage extends React.Component {
           return true;
         });
         expertData.push({ key: aid, speaker: item.speaker, score: valList, actId });
+        return true;
       });
     }
 
@@ -188,13 +188,13 @@ class ExpertRatingPage extends React.Component {
                         <div>
                           <div>演讲水平:&nbsp;&nbsp;<Rate disabled defaultValue={score[0]}
                                                       value={score[0]} />
-                            <span className="ant-rate-text">{score[0]} stars</span></div>
+                            <span className="ant-rate-text">{score[0]} 星</span></div>
                           <div>演讲内容:&nbsp;&nbsp;<Rate disabled defaultValue={score[1]}
                                                       value={score[1]} />
-                            <span className="ant-rate-text">{score[1]} stars</span></div>
+                            <span className="ant-rate-text">{score[1]} 星</span></div>
                           <div>综合评价:&nbsp;&nbsp;<Rate disabled defaultValue={score[2]}
                                                       value={score[2]} />
-                            <span className="ant-rate-text">{score[2]} stars</span></div>
+                            <span className="ant-rate-text">{score[2]} 星</span></div>
                         </div>
                         }
                       </div>

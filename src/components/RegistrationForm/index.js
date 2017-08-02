@@ -249,7 +249,7 @@ class RegistrationForm extends React.PureComponent {
     this.setState({ image: img });
   };
   delCurrentImg = () => {
-    this.setState({ image: null });
+    this.setState({ image: '' });
   };
 
   // cancelTalkData = () => {
@@ -434,7 +434,7 @@ class RegistrationForm extends React.PureComponent {
               {...formItemLayout}
               label="活动海报"
             >
-              {image === null ?
+              {image === null || image === '' ?
                 <Dragger {...uploadImage}>
                   <p className="ant-upload-drag-icon">
                     <i className="anticon anticon-inbox" />

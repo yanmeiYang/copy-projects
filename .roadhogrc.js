@@ -62,17 +62,17 @@ export default {
     ]
   },
 
-  // externals: {
-  //   react: 'react',
-  //   // lodash: {
-  //   //   commonjs: "lodash",
-  //   //   amd: "lodash",
-  //   //   root: "_" // indicates global variable
-  //   // },
-  //   // 'react-dom': 'react-dom',
-  //   // 'react-helmet': 'react-helmet',
-  //   // 'react-router': 'react-router',
-  // },
+  externals: {
+    //   react: 'react',
+    //   // lodash: {
+    //   //   commonjs: "lodash",
+    //   //   amd: "lodash",
+    //   //   root: "_" // indicates global variable
+    //   // },
+    //   // 'react-dom': 'react-dom',
+    //   // 'react-helmet': 'react-helmet',
+    //   // 'react-router': 'react-router',
+  },
 
   // "proxy": {
   //   "/api": {

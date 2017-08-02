@@ -12,9 +12,6 @@ module.exports = {
   Language: 'cn', // options [cn|en]
   PreferredLanguage: 'cn', // 默认语言
 
-  SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
-  DEFAULT_EXPERT_BASE: '5949c2f99ed5dbc2147fd854', // CCF会员
-  DEFAULT_EXPERT_BASE_NAME: 'CCF会员',
   Search_SortOptions: [
     { label: '相关度', key: 'relevance' },
     { label: '学术成就', key: 'h_index' },
@@ -23,9 +20,42 @@ module.exports = {
     { label: '学会贡献', key: 'activity-ranking-contrib' },
   ],
 
+  PersonList_PersonLink: personId => `/person/${personId}`,
+  PersonList_PersonLink_NewTab: false,
+
+  IndexPage_QuickSearchList: ['人工智能', '机器人', '数据挖掘', '机器学习', '数据建模', '计算机视觉',
+    '计算机网络', '网络', '自然语言处理'],
+
+  PersonList_ShowIndices: ['activityRankingContrib', 'h_index', 'activity'],
+
+  //
+  // Layout related
+  //
+  // Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
+  Header_LogoWidth: 213,
+  Header_LogoStyle: {
+    width: '86px',
+    backgroundPosition: '8px 2px',
+    backgroundSize: ' auto 54px',
+    backgroundRepeat: 'no-repeat',
+    backgroundColor: 'white',
+  },
+  Header_SubTextLogo: 'CCF 专家库',
+  Header_SubTextStyle: { marginLeft: 12 },
+  Header_UserPageURL: '', // 用户头像点击之后去的页面.
+  Footer_Content: <Footer />,
+  ShowSideMenu: true,
+  ShowFooter: true,
+
+  // > Search related
+  SearchBarInHeader: false,
+
   // Functionality
   Enable_Export: true,
 
+  SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
+  DEFAULT_EXPERT_BASE: '5949c2f99ed5dbc2147fd854', // CCF会员
+  DEFAULT_EXPERT_BASE_NAME: 'CCF会员',
   ExpertBases: [
     {
       id: '5949c2f99ed5dbc2147fd854',
@@ -65,32 +95,6 @@ module.exports = {
     // },
   ],
 
-  PersonList_PersonLink: personId => `/person/${personId}`,
-  PersonList_PersonLink_NewTab: false,
-
-  IndexPage_QuickSearchList: ['人工智能', '机器人', '数据挖掘', '机器学习', '数据建模', '计算机视觉',
-    '计算机网络', '网络', '自然语言处理'],
-
-  PersonList_ShowIndices: ['activityRankingContrib', 'h_index', 'activity'],
-
-  //
-  // Layout related
-  //
-  // Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
-  Header_LogoWidth: 212,
-  Header_LogoStyle: {
-    width: '86px',
-    backgroundPosition: '8px 2px',
-    backgroundSize: ' auto 54px',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor: 'white',
-  },
-  Header_SubTextLogo: 'CCF 专家库',
-  Header_SubTextStyle: { marginLeft: 12 },
-  Header_UserPageURL: '', // 用户头像点击之后去的页面.
-  Footer_Content: <Footer />,
-  ShowSideMenu: true,
-  ShowFooter: true,
 
   // 特殊配置，这里是System的自己的配置
 

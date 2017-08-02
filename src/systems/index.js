@@ -17,39 +17,24 @@ const CurrentSystemConfig = {
   tencent: tencentConfig,
 };
 const IN_APP_DEFAULT = null;
-const EMPTY_JSX = '';
+const EMPTY_BLOCK = '';
+const EMPTY_BLOCK_FUNC = () => '';
 
 // 默认配置
 const defaultSystemConfigs = {
   SYSTEM: config.system,
-  PageTitle: 'Aminer Business',
 
+  //
+  // Systems Preference
+  //
   Language: 'en', // options [cn|en]
   PreferredLanguage: 'en', // 默认语言
-
-  SearchPagePrefix: 'uniSearch', // search - 普通搜索; uniSearch - 多合一搜索.
-  Search_EnablePin: true,
-  Search_SortOptions: IN_APP_DEFAULT,
-
-  UserAuthSystem: config.system, // aminer 或者是 system.config
-  UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签
-
   MainListSize: 20,
-
-  // expert base
-  SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
-  ExpertBases: [], // must override.
-  DEFAULT_EXPERT_BASE: 'aminer', // 华为默认搜索
-  DEFAULT_EXPERT_BASE_NAME: '全球专家',
-
-  // Page specified config.
-  PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
-  PersonList_PersonLink_NewTab: true,
-  Person_PersonLabelBlock: profile => '',
 
   //
   // Layout related
   //
+  PageTitle: 'Aminer Business',
   Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
   Header_LogoWidth: 212,
   Header_LogoStyle: {},
@@ -60,25 +45,53 @@ const defaultSystemConfigs = {
   ShowSideMenu: true,
   ShowFooter: true,
 
+  //
+  // Functionality
+  //
+  Enable_Export: false,
   ShowRegisteredRole: true, // 注册页面是否显示角色配置
 
-  // resources
+  SearchPagePrefix: 'uniSearch', // search - 普通搜索(deleted); uniSearch - 多合一搜索.
+  Search_EnablePin: true,
+  Search_SortOptions: IN_APP_DEFAULT,
+
+  UserAuthSystem: config.system, // aminer 或者是 system.config
+  UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签
+
+  //
+  // Page specified config.
+  //
+  // > PersonList
+  PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
+  PersonList_PersonLink_NewTab: true,
+  Person_PersonLabelBlock: EMPTY_BLOCK_FUNC, // profile => 'jsx',
+
+  // > Search
+  // expert base
+  SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
+  ExpertBases: [], // must override.
+  DEFAULT_EXPERT_BASE: 'aminer', // 华为默认搜索
+  DEFAULT_EXPERT_BASE_NAME: '全球专家',
+
+  // > Search related
+  SearchBarInHeader: true,
+  HeaderSearch_TextNavi: IN_APP_DEFAULT, // use default settings in component.
+  SearchFilterExclude: 'Gender',
+  UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // deprecated! Don't use this.
+
+  // > IndexPage
   IndexPage_QuickSearchList: ['Artificial intelligence', 'Robotics',
     'Data Mining', 'Machine Learning', 'Data Modeling', 'Computer vision',
     'Networks', 'Natural language processing'],
-  IndexPage_InfoBlocks: '',
-  HeaderSearch_TextNavi: null, // use default settings in component.
+  IndexPage_InfoBlocks: EMPTY_BLOCK,
 
-  SearchFilterExclude: 'Gender',
 
-  UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // Don't use this.
-
-  // Functionality
-  Enable_Export: false,
-
-  // PersonList_ShowIndices: [], // do not override in-component settings.
+  // PersonList_ShowIndices: [], // do not override in-component settings. // TODO
 };
 
+/** *************************************************
+ * Combine
+ ************************************************* */
 const sysconfig = defaultSystemConfigs;
 const currentSystem = CurrentSystemConfig[config.system];
 Object.keys(currentSystem).map((key) => {

@@ -53,35 +53,25 @@ class UserList extends React.Component {
       if (!data) {
         console.warn('onEdit: attribute data not valid ');
       }
-      const uid = data.id;
-      const role = `ccf_${data.new_role}`;
-      const authority = `ccf_authority_${data.authority}`;
-
-      // TODO HardCode-CCF
-      if (role === 'ccf_CCF专委秘书长') {
-        this.setState({ committee: true });
-        // 获取所有的专委
-        this.props.dispatch({
-          type: 'universalConfig/setCategory',
-          payload: { category: 'orglist_5976bb068ef7a2e824adca67' },
-        });
-      } else if (role === 'ccf_分部秘书长') {
-        // 获取所有的专委
-        this.props.dispatch({
-          type: 'universalConfig/setCategory',
-          payload: { category: 'orglist_5976ba688ef7a2e824adc28a' },
-        });
-        this.setState({ committee: true });
-      } else {
-        this.setState({ committee: false });
+      const currentOrg = this.props.auth.userRoles.filter(item => item.value.key === data.new_role);
+      if (currentOrg.length > 0) {
+        if (currentOrg[0].value.value.id) {
+          this.props.dispatch({
+            type: 'universalConfig/setCategory',
+            payload: { category: currentOrg[0].value.value.id },
+          });
+          this.setState({ committee: true });
+        } else {
+          this.setState({ committee: false });
+        }
       }
       this.setState({
         visible: true,
-        currentRole: role,
-        currentAuthority: authority,
-        currentUid: uid,
-        selectedRole: role,
-        selectedAuthority: authority,
+        currentRole: data.new_role,
+        currentAuthority: `authority_${data.authority}`,
+        currentUid: data.id,
+        selectedRole: data.new_role,
+        selectedAuthority: `authority_${data.authority}`,
       });
     } else if (type === 'info') {
       this.setState({ editUserId: data.id });
@@ -146,26 +136,12 @@ class UserList extends React.Component {
 
   selectedRole = (e) => {
     const data = e.target.data;
-    const role = `ccf_${data.key}`;
+    const role = data.key;
     if (data.value !== '') {
+      this.setState({ committee: true, isModifyRegion: true, selectedRole: role });
       this.props.dispatch({
-        type: 'universalConfig/getOrgCategory',
+        type: 'universalConfig/setCategory',
         payload: { category: data.value.id },
-      });
-    }
-    if (role === 'ccf_专委秘书长') {
-      this.setState({ committee: true, isModifyRegion: true, selectedRole: role });
-      // 获取所有的专委
-      this.props.dispatch({
-        type: 'universalConfig/setCategory',
-        payload: { category: 'orglist_597c36218ef7a2e824fe6b5c' },
-      });
-    } else if (role === 'ccf_分部秘书长') {
-      this.setState({ committee: true, isModifyRegion: true, selectedRole: role });
-      // 获取所有的专委
-      this.props.dispatch({
-        type: 'universalConfig/setCategory',
-        payload: { category: 'orglist_5976ba688ef7a2e824adc28a' },
       });
     } else {
       this.setState({
@@ -266,7 +242,7 @@ class UserList extends React.Component {
               {
                 this.props.auth.userRoles.map((item) => {
                   return (<Radio key={Math.random()}
-                                 value={`ccf_${item.value.key}`}
+                                 value={`${item.value.key}`}
                                  data={item.value}>{item.value.key}</Radio>);
                 })
               }
@@ -279,7 +255,7 @@ class UserList extends React.Component {
                   universalConfig.data.map((item) => {
                     return (
                       <Radio key={Math.random()} className={styles.twoColumnsShowRadio}
-                             value={`ccf_authority_${item.value.key}`}>{item.value.key}</Radio>
+                             value={`authority_${item.value.key}`}>{item.value.key}</Radio>
                     );
                   })
                 }

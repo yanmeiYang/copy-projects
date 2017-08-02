@@ -140,7 +140,11 @@ class RegistrationForm extends React.PureComponent {
           data.type = 1;
           data.talk = state.talks;
           data.talk.map((item) => {
-            return item.speaker.gender = item.speaker.gender.i ? item.speaker.gender.i : 0;
+            if (item.speaker.gender) {
+              return item.speaker.gender = item.speaker.gender.i ? item.speaker.gender.i : 0;
+            } else {
+              return item.speaker.gender = 0;
+            }
           });
           data.img = state.image;
           data.location.city = values.city;
@@ -152,7 +156,7 @@ class RegistrationForm extends React.PureComponent {
             data.time.to = typeof state.endValue === 'string' ? state.endValue : state.endValue.toJSON();
           }
           data.tags = state.tags;
-          if (data.co_org.length > 0) {
+          if (data.co_org !== undefined && data.co_org.length > 0) {
             data.organizer = [data.organizer].concat(data.co_org);
           } else {
             data.organizer = [data.organizer];
@@ -232,7 +236,6 @@ class RegistrationForm extends React.PureComponent {
       onCancel() {
       },
     });
-
   };
   editTheExpert = (i) => {
     this.setState({ editTheTalk: this.state.talks[i], addNewTalk: true, editTheTalkIndex: i });

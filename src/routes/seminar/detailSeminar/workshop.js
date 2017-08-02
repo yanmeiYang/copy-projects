@@ -16,6 +16,20 @@ class WorkShop extends React.Component {
     return (
       <div className={styles.workshopDetail}>
         {aTalk.title && <h5 className={styles.talkTitle}>{aTalk.title}</h5>}
+        <p style={{ marginBottom: 10 }}>
+          {aTalk.time &&
+          <span>
+            <strong>时间:&nbsp;</strong>
+            <TimeFormat {...aTalk.time} />
+          </span>}
+          {aTalk.location && <span style={{ marginLeft: 10 }}>
+            {aTalk.location.address &&
+            <span>
+              <strong>地点:&nbsp;</strong>
+              <span>{aTalk.location.address}</span>
+            </span>}
+          </span>}
+        </p>
         <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
           <div>
             <div className={styles.speakerAvatar}>
@@ -53,26 +67,24 @@ class WorkShop extends React.Component {
               </div>}
             </span>
             <span>
-              {aTalk.time &&
+              {aTalk.speaker.phone &&
               <li>
                 <p>
-                  <Icon type="clock-circle-o" />
-                  <strong>时间:&nbsp;</strong>
-                  <TimeFormat {...aTalk.time} />
+                  <Icon type="phone" />
+                  <strong>电话:&nbsp;</strong>
+                  <span>{aTalk.speaker.phone}</span>
                 </p>
               </li>}
             </span>
             <span>
-              {aTalk.location && <span>
-                {aTalk.location.address &&
+              {aTalk.speaker.email &&
                 <li>
                   <p>
-                    <Icon type="environment-o" />
-                    <strong>地点:&nbsp;</strong>
-                    <span>{aTalk.location.address}</span>
+                    <Icon type="mail" />
+                    <strong>邮箱:&nbsp;</strong>
+                    <span>{aTalk.speaker.email}</span>
                   </p>
                 </li>}
-              </span>}
             </span>
           </ul>
         </div>

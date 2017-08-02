@@ -5,6 +5,7 @@ import { Indices } from '../../components/widgets';
 import * as profileUtils from '../../utils/profile_utils';
 import * as personService from '../../services/person';
 import { VisResearchInterest } from '../../routes/vis';
+import { sysconfig } from '../../systems';
 
 class ProfileInfo extends React.Component {
   state = {};
@@ -45,13 +46,18 @@ class ProfileInfo extends React.Component {
             <a
               href={personService.getAMinerProfileUrl(profile.name, profile.id)}
               target="_blank" rel="noopener noreferrer"
-            > <span className={styles.rank}>更多</span> </a>}
+            >
+              <span className={styles.rank}>
+                更多 <i className="fa fa-share" aria-hidden="true"></i>
+              </span>
+            </a>}
 
           </div>}
           {name && <div className={styles.spliter} />}
 
           {profile && profile.indices &&
-          <Indices indices={profile.indices} />
+          <Indices indices={profile.indices} activity_indices={this.props.activity_indices}
+                   showIndices={sysconfig.PersonList_ShowIndices} />
           }
 
           {pos && <span><i className="fa fa-briefcase fa-fw" /> {pos}</span>}

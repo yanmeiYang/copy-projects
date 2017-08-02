@@ -4,7 +4,7 @@ import { routerRedux } from 'dva/router';
 import styles from './SearchTypeWidgets.less';
 import { sysconfig } from '../../systems';
 
-const config = [
+const defaultConfig = [
   { label: '专家', url: '/uniSearch/:query/0/30', pageSignature: 'uniSearch' },
   { label: '地图', url: '/expert-map', data: 'query', pageSignature: 'expert-map' },
   {
@@ -17,6 +17,17 @@ const config = [
   { label: '技术趋势', url: '/trend-prediction', data: 'query', pageSignature: 'trend-prediction' },
 ];
 
+if (process.env.NODE_ENV !== 'production') {
+  defaultConfig.push(
+    {
+      label: 'DEV:ExpertTrajectory',
+      url: '/expert-trajectory',
+      data: 'query',
+      pageSignature: 'expert-trajectory',
+    },
+  );
+}
+
 const defaultQuery = 'data mining';
 
 class SearchTypeWidgets extends React.PureComponent {
@@ -25,7 +36,7 @@ class SearchTypeWidgets extends React.PureComponent {
   };
 
   componentWillMount() {
-    this.config = this.props.config || config;
+    this.config = this.props.config || defaultConfig;
 
     // match current label based on url.
     const path = window.location.pathname;

@@ -12,23 +12,28 @@ const columns = [
   {
     title: '专家',
     dataIndex: '',
+    sorter: (a, b) => {
+      const aName = `${a.n_zh} (${a.n})`;
+      const bName = `${b.n_zh} (${b.n})`;
+      return aName.length - bName.length;
+    },
     render(text) {
       return <a href={`/person/${text.id}`} target="_blank"> {text.n_zh} ({text.n}) </a>;
     },
   }, {
     title: '审稿次数',
     dataIndex: '审稿活动',
-    sorter: (a, b) => a.content - b.content,
+    sorter: (a, b) => a.审稿活动 - b.审稿活动,
   },
   {
     title: '撰稿次数',
     dataIndex: '撰稿活动',
-    sorter: (a, b) => a.content - b.content,
+    sorter: (a, b) => a.撰稿活动 - b.撰稿活动,
   },
   {
     title: '总贡献度',
     dataIndex: 'contrib',
-    sorter: (a, b) => a.level - b.level,
+    sorter: (a, b) => a.contrib - b.contrib,
     render(text, record) {
       return getTwoDecimal(parseFloat(record.contrib), 2);
     },
@@ -105,7 +110,8 @@ class ExpertsList extends React.Component {
         {/* /!*</span>*!/*/}
         {/* </div>*/}
         {/* rowSelection={rowSelection}*/}
-        <Table bordered columns={columns} dataSource={this.props.author} style={{ marginTop: 10 }} />
+        <Table bordered columns={columns} dataSource={this.props.author}
+               style={{ marginTop: 10 }} />
       </div>
     );
   }

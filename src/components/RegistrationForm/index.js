@@ -110,7 +110,7 @@ class RegistrationForm extends React.PureComponent {
         talks: currentSeminar.talk,
         editStatus: true,
         organizer: currentSeminar.organizer[0],
-        image: currentSeminar.img ? currentSeminar.img : ''
+        image: currentSeminar.img ? currentSeminar.img : '',
       });
       this.props.form.setFieldsValue(data);
     }
@@ -139,6 +139,9 @@ class RegistrationForm extends React.PureComponent {
           data.time = { from: '', to: '' };
           data.type = 1;
           data.talk = state.talks;
+          data.talk.map((item) => {
+            return item.speaker.gender = item.speaker.gender.i ? item.speaker.gender.i : 0;
+          });
           data.img = state.image;
           data.location.city = values.city;
           data.location.address = values.address;
@@ -249,7 +252,7 @@ class RegistrationForm extends React.PureComponent {
     this.setState({ image: img });
   };
   delCurrentImg = () => {
-    this.setState({ image: null });
+    this.setState({ image: '' });
   };
 
   // cancelTalkData = () => {
@@ -434,7 +437,7 @@ class RegistrationForm extends React.PureComponent {
               {...formItemLayout}
               label="活动海报"
             >
-              {image === null ?
+              {image === null || image === '' ?
                 <Dragger {...uploadImage}>
                   <p className="ant-upload-drag-icon">
                     <i className="anticon anticon-inbox" />

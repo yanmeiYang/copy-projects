@@ -4,6 +4,8 @@
 import React from 'react';
 import { Link } from 'dva/router';
 import { Button, Modal, InputNumber, Checkbox, Row, Col } from 'antd';
+import { sysconfig } from '../../systems';
+import styles from './expert-person.less';
 
 const CheckboxGroup = Checkbox.Group;
 
@@ -14,6 +16,7 @@ const plainOptions = [{ id: 1, label: '姓名', desc: 'name_zh' }, {
 },
   { id: 3, label: '职称', desc: 'pos' }, { id: 4, label: '单位', desc: 'aff' }];
 const defaultCheckedList = ['name_zh', 'gender', 'pos', 'aff'];
+
 class ExportPersonBtn extends React.Component {
   state = {
     isExport: false,
@@ -24,7 +27,7 @@ class ExportPersonBtn extends React.Component {
     checkedList: defaultCheckedList,
     indeterminate: true,
     checkAll: false,
-    exportSize: 20,
+    exportSize: sysconfig.MainListSize,
   };
 
   setExport = (value) => {
@@ -50,12 +53,12 @@ class ExportPersonBtn extends React.Component {
   onChangeExportSize = (e) => {
     this.setState({ exportSize: e });
   };
-  //选择导出字段
+  // 选择导出字段
   onChange = (checkedList) => {
     this.setState({
       checkedList,
       indeterminate: !!checkedList.length && (checkedList.length < plainOptions.length),
-      checkAll: checkedList.length === plainOptions.length
+      checkAll: checkedList.length === plainOptions.length,
     });
   };
 
@@ -68,6 +71,7 @@ class ExportPersonBtn extends React.Component {
   //   })
   // };
 
+  i18nGenderTable = { male: '男', female: '女' };
   clickDownload = (e) => {
     const selectedItem = this.state.checkedList;
     let expertPersonInfo = '';
@@ -80,44 +84,49 @@ class ExportPersonBtn extends React.Component {
         switch (item) {
           case 'pos':
             if (person.pos.length > 0) {
-              return expertPersonInfo += (person.pos[0].n_zh ? person.pos[0].n_zh.replace(/,/g, ';') : person.pos[0].n.replace(/,/g, ';')) + ',';
+              return expertPersonInfo += `${person.pos[0].n_zh ? person.pos[0].n_zh.replace(/,/g, ';') : person.pos[0].n.replace(/,/g, ';')},`;
             } else {
               return expertPersonInfo += ',';
             }
           case 'aff':
             if (person.aff.desc_zh || person.aff.desc) {
-              return expertPersonInfo += (person.aff.desc_zh ? person.aff.desc_zh.replace(/,/g, ';') : person.aff.desc.replace(/,/g, ';')) + ',';
+              return expertPersonInfo += `${person.aff.desc_zh ? person.aff.desc_zh.replace(/,/g, ';') : person.aff.desc.replace(/,/g, ';')},`;
             } else {
               return expertPersonInfo += ',';
             }
 
           case 'gender':
-            return expertPersonInfo += person.attr.gender.replace(/female/g, '女').replace(/male/, '男') + ',';
+            const gender = person.attr.gender;
+            const i18nGender = this.i18nGenderTable[gender] || '';
+            return expertPersonInfo += `${i18nGender},`;
           case 'name_zh':
-            return expertPersonInfo += (person.name_zh ? person.name_zh : person.name) + ',';
+            return expertPersonInfo += `${person.name_zh ? person.name_zh : person.name},`;
           default:
             return false;
         }
       });
       expertPersonInfo += '\n';
+      return true;
     });
     const fristRow = this.state.checkedList.toString().replace(/name_zh/, '姓名').replace(/gender/, '性别').replace(/pos/, '职称').replace(/aff/, '单位');
-    let str = fristRow + '\n' + expertPersonInfo;
+    let str = `${fristRow}\n${expertPersonInfo}`;
     const bom = '\uFEFF';
     str = encodeURIComponent(str);
-    e.target.href = 'data:text/csv;charset=utf-8,' + bom + str;
+    e.target.href = `data:text/csv;charset=utf-8,${bom}${str}`;
   };
 
+
+  // i18nGender = gender => this.i18nGenderTable[gender] || '';
 
   render() {
     const { isExport, modalVisible } = this.state;
     return (
       <div style={{ float: 'right' }}>
-        {isExport && <Button type='primary' style={{ marginLeft: 5, marginRight: 5 }}
+        {isExport && <Button type="primary" className={styles.exportPersonBtn}
                              onClick={this.exportSearchResult.bind()}>导出当前页</Button>}
-        {/*{isExport &&*/}
-        {/*<Button type='primary' style={{ marginLeft: 5, marginRight: 5 }} onClick={this.exportSelectedResult.bind()}>导出已选结果</Button>}*/}
-        <Button  style={{ marginLeft: 5, marginRight: 5 }}
+        {/* {isExport && */}
+        {/* <Button type='primary' style={{ marginLeft: 5, marginRight: 5 }} onClick={this.exportSelectedResult.bind()}>导出已选结果</Button>} */}
+        <Button className={styles.exportPersonBtn}
                 onClick={this.setExport.bind(this, isExport)}>导出</Button>
 
         <Modal
@@ -130,7 +139,8 @@ class ExportPersonBtn extends React.Component {
         >
           <div>
             <label htmlFor="" style={{ margin: '0px 15px 10px 20px' }}>导出数据:</label>
-            <InputNumber placeholder="导出条数" min={1} max={30} defaultValue={20}
+            <InputNumber placeholder="导出条数" min={1} max={sysconfig.MainListSize}
+                         defaultValue={sysconfig.MainListSize}
                          style={{ width: '80%' }}
                          onChange={this.onChangeExportSize.bind(this)} />
 

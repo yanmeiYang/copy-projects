@@ -38,11 +38,11 @@ export default {
         yield call(authService.invoke, uid, config.source);
         if (sysconfig.ShowRegisteredRole) {
           const arr = role.split('_');
-          if (arr.length === 3) {
-            yield call(authService.invoke, uid, `${config.source}_${arr[1]}`);
-            yield call(authService.invoke, uid, `${config.source}_authority_${arr[2]}`);
-          } else if (arr.length === 2) {
-            yield call(authService.invoke, uid, `${config.source}_${arr[1]}`);
+          if (arr.length === 2) {
+            yield call(authService.invoke, uid, `${arr[0]}`);
+            yield call(authService.invoke, uid, `authority_${arr[1]}`);
+          } else if (arr.length === 1) {
+            yield call(authService.invoke, uid, `${arr[0]}`);
           }
         }
       }

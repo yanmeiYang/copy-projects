@@ -32,7 +32,7 @@ class Registered extends React.Component {
   selectedRole = (e) => {
     this.props.universalConfig.orgList = [];
     const data = JSON.parse(e);
-    this.setState({ currentRoleAndOrg: `ccf_${data.key}` });
+    this.setState({ currentRoleAndOrg: `${data.key}` });
     if (data.value !== '') {
       this.props.dispatch({
         type: 'universalConfig/getOrgCategory',

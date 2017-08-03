@@ -49,13 +49,15 @@ const DetailSeminar = ({ dispatch, seminar, app }) => {
         { typeof (summaryById.length) !== 'number' ? <Row>
           <Col className={styles.thumbnail}>
             <div className={styles.caption}>
-              {currentUser.token && (app.roles.authority.indexOf(summaryById.organizer[0]) >= 0 || app.roles.admin) &&
-              <a type="danger" style={{ float: 'right', fontSize: '20px', color: '#f04134' }}
-                 onClick={delSeminar} title="删除">
-                <Icon type="delete" /></a>}
-              <a style={{ float: 'right', marginRight: '10px', fontSize: '20px' }}
-                 onClick={editSeminar} title="编辑">
-                <Icon type="edit" /></a>
+              {(app.roles.authority.includes(summaryById.organizer[0]) || app.roles.admin) &&
+              <span>
+                <a type="danger" style={{ float: 'right', fontSize: '20px', color: '#f04134' }}
+                   onClick={delSeminar} title="删除">
+                  <Icon type="delete" /></a>
+                <a style={{ float: 'right', marginRight: '10px', fontSize: '20px' }}
+                   onClick={editSeminar} title="编辑">
+                  <Icon type="edit" /></a>
+              </span>}
               <div style={{ float: 'right', marginRight: 10 }}>
                 <span type="default" className={styles.show_QRCode}>
                   <i className="fa fa-2x fa-qrcode" aria-hidden="true" />

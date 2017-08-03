@@ -182,7 +182,7 @@ class RegistrationForm extends React.PureComponent {
   handleOrganizerChange = (value, newArray) => {
     newArray.map((tag) => {
       if (JSON.stringify(value).indexOf(tag) < 0) {
-        const data = { key: tag, val: '1' };
+        const data = { key: tag, val: ' ' };
         this.props.dispatch({ type: 'seminar/addKeyAndValue', payload: data });
       }
     });
@@ -286,7 +286,6 @@ class RegistrationForm extends React.PureComponent {
         sm: { span: 21 },
       },
     };
-
     const outerThis = this;
     const uploadImage = {
       name: 'file',
@@ -312,7 +311,7 @@ class RegistrationForm extends React.PureComponent {
 
     return (
       <Row className={styles.add_seminar_block}>
-        <Form onSubmit={this.handleSubmit} className={styles.add_seminar_form}>
+        <Form horizontal onSubmit={this.handleSubmit} className={styles.add_seminar_form}>
           <Col className={styles.thumbnail}>
             {orgcategory.data &&
             <FormItem {...formItemLayout} label="活动类型" hasFeedback>
@@ -377,38 +376,42 @@ class RegistrationForm extends React.PureComponent {
                 <Input placeholder="请输入活动名称" />,
               )}
             </FormItem>
-
-            <FormItem
-              {...formItemLayout}
-              label="活动时间"
-              validateStatus={(startValue !== '' || endValue !== '') ? '' : 'error'}
-              help={(startValue !== '' || endValue !== '') ? '' : '请选择时间'}
-              hasFeedback
-              required
-            >
-              {getFieldDecorator('time', {
-                rules: [{
-                  message: '请输入活动时间',
-                }],
-              })(
-                <CanlendarInForm callbackParent={this.onChildChanged}
-                                 startValue={this.state.talkStartValue}
-                                 endValue={this.state.talkEndValue} />,
-              )}
-
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label="活动城市"
-            >
-              {getFieldDecorator('city', {
-                rules: [{
-                  message: '请输入活动城市',
-                }],
-              })(
-                <Input placeholder="请输入活动地点。。。" />,
-              )}
-            </FormItem>
+            <Col xs={{ span: 24 }} sm={{ span: 12 }}>
+              <FormItem
+                label="活动时间"
+                labelCol={{ xs: { span: 24 }, sm: { span: 6 } }}
+                wrapperCol={{ xs: { span: 24 }, sm: { span: 18 } }}
+                validateStatus={(startValue !== '' || endValue !== '') ? '' : 'error'}
+                help={(startValue !== '' || endValue !== '') ? '' : '请选择时间'}
+                hasFeedback
+                required
+              >
+                {getFieldDecorator('time', {
+                  rules: [{
+                    message: '请输入活动时间',
+                  }],
+                })(
+                  <CanlendarInForm callbackParent={this.onChildChanged}
+                                   startValue={this.state.talkStartValue}
+                                   endValue={this.state.talkEndValue} />,
+                )}
+              </FormItem>
+            </Col>
+            <Col xs={{ span: 24 }} sm={{ span: 12 }}>
+              <FormItem
+                label="活动城市"
+                labelCol={{ xs: { span: 24 }, sm: { span: 6 } }}
+                wrapperCol={{ xs: { span: 24 }, sm: { span: 18 } }}
+              >
+                {getFieldDecorator('city', {
+                  rules: [{
+                    message: '请输入活动城市',
+                  }],
+                })(
+                  <Input placeholder="请输入活动地点。。。" />,
+                )}
+              </FormItem>
+            </Col>
             <FormItem
               {...formItemLayout}
               label="活动地点"

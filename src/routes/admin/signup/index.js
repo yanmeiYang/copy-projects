@@ -17,6 +17,7 @@ class Registered extends React.Component {
   state = {
     addRoleModalVisible: false,
     currentRoleAndOrg: '',
+    errorMessageByEmail: '',
   };
 
   componentDidMount() {
@@ -25,14 +26,24 @@ class Registered extends React.Component {
       payload: { category: 'user_roles' },
     });
   }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.auth.validEmail !== this.props.auth.validEmail) {
+      this.setState({ errorMessageByEmail: '邮箱已注册' });
+    }
+  };
+
   checkEmail = (e) => {
-    this.props.dispatch({ type: 'auth/checkEmail', payload: { email: e.target.value } });
+    this.setState({ errorMessageByEmail: '' });
+    if (e.target.value !== '') {
+      this.props.dispatch({ type: 'auth/checkEmail', payload: { email: e.target.value } });
+    }
   };
 
   selectedRole = (e) => {
     this.props.universalConfig.orgList = [];
     const data = JSON.parse(e);
-    this.setState({ currentRoleAndOrg: `ccf_${data.key}` });
+    this.setState({ currentRoleAndOrg: `${data.key}` });
     if (data.value !== '') {
       this.props.dispatch({
         type: 'universalConfig/getOrgCategory',
@@ -77,6 +88,16 @@ class Registered extends React.Component {
     e.preventDefault();
     const props = this.props;
     this.props.form.validateFieldsAndScroll((err, values) => {
+      if (err) {
+        if (err.email) {
+          this.props.auth.validEmail = false;
+          if (err.email.errors.length > 0){
+            this.setState({ errorMessageByEmail: err.email.errors[0].message });
+          } else {
+            this.setState({ errorMessageByEmail: '' });
+          }
+        }
+      }
       if (!err) {
         values.gender = 3;
         values.position = 8;
@@ -120,7 +141,7 @@ class Registered extends React.Component {
         },
       },
     };
-    const { currentRoleAndOrg } = this.state;
+    const { errorMessageByEmail } = this.state;
     const { getFieldDecorator } = this.props.form;
     const { universalConfig, auth } = this.props;
     return (
@@ -131,17 +152,15 @@ class Registered extends React.Component {
             {...formItemLayout}
             label="邮箱"
             validateStatus={auth.validEmail ? '' : 'error'}
-            help={auth.validEmail ? '' : '该邮箱已注册'}
+            help={auth.validEmail ? '' : errorMessageByEmail}
             hasFeedback
           >
             {
               getFieldDecorator('email', {
-                rules: [{ type: 'email', message: '邮箱格式错误!' }, {
-                  required: true,
-                  message: '请输入邮箱!',
-                }, {
-                  validator: auth.validEmail ? '' : '邮箱已注册',
-                }],
+                rules: [{ type: 'email', message: '邮箱格式错误!' },
+                  {
+                    required: true, message: '请输入邮箱!',
+                  }],
               }, {
                 validateTrigger: 'onBlur',
               })(
@@ -275,4 +294,8 @@ class Registered extends React.Component {
 
 const WrappedRegistrationForm = Form.create()(Registered);
 
-export default connect(({ auth, universalConfig, app }) => ({ auth, universalConfig, app }))(WrappedRegistrationForm);
+export default connect(({ auth, universalConfig, app }) => ({
+  auth,
+  universalConfig,
+  app,
+}))(WrappedRegistrationForm);

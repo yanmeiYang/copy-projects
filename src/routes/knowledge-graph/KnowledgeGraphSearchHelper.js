@@ -246,7 +246,7 @@ class KnowledgeGraphSearchHelper extends React.PureComponent {
           return '';
         })
         .html((d) => {
-          const name = lang === 'cn' ? d.data.zh : d.data.name;
+          const name = lang === 'cn' ? (d.data.zh || d.data.name) : d.data.name;
           return `<a class="nodeLink" href="/${sysconfig.SearchPagePrefix}/${name}/0/${sysconfig.MainListSize}">${name}</a>`;
         })
         .attr('writing-mode', (d) => {

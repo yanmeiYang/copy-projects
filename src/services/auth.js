@@ -30,10 +30,17 @@ export async function checkEmail(src, email) {
 
 
 export async function invoke(uid, label) {
+  let setLabel;
+  if (label === source) {
+    setLabel = label;
+  } else {
+    setLabel = `${source}_${label}`;
+  }
   const data = {
     uid,
-    label: `${source}_${label}`,
+    label: setLabel,
   };
+
   return request(api.invoke, {
     method: 'POST',
     body: JSON.stringify(data),

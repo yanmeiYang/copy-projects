@@ -5,7 +5,7 @@ import React from 'react';
 import { Button, Input, Table, Icon } from 'antd';
 import { Link } from 'dva';
 import { getTwoDecimal } from '../../utils';
-import { displayNameCNFirst } from '../../utils/profile_utils';
+import { displayNameCNFirst } from '../../utils/profile-utils';
 import styles from './experts-list.less';
 
 const InputGroup = Input.Group;

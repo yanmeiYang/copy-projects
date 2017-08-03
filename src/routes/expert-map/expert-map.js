@@ -6,7 +6,7 @@ import { connect } from 'dva';
 import { Button } from 'antd';
 import styles from './expert-map.less';
 import { listPersonByIds } from '../../services/person';
-import * as profileUtils from '../../utils/profile_utils';
+import * as profileUtils from '../../utils/profile-utils';
 import { findPosition, getById, waitforBMap, waitforBMapLib } from './utils/map-utils';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
 import RightInfoZonePerson from './RightInfoZonePerson';

@@ -7,7 +7,7 @@ import { Menu, Icon } from 'antd';
 import { Link } from 'dva/router';
 import { isEqual } from 'lodash';
 import styles from './Header.less';
-import * as profileUtils from '../../utils/profile_utils';
+import * as profileUtils from '../../utils/profile-utils';
 import { sysconfig } from '../../systems';
 import { KgSearchBox, SearchTypeWidgets } from '../../components/search';
 

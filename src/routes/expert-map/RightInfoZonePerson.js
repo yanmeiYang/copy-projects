@@ -8,7 +8,7 @@ import { Tag } from 'antd';
 import styles from './RightInfoZonePerson.less';
 import { sysconfig } from '../../systems';
 import { Indices } from '../../components/widgets';
-import * as profileUtils from '../../utils/profile_utils';
+import * as profileUtils from '../../utils/profile-utils';
 
 
 class RightInfoZonePerson extends React.PureComponent {

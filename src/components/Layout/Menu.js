@@ -24,7 +24,7 @@ const Menus = ({
           <Menu.SubMenu
             key={item.id}
             title={<span>
-              {item.icon && <Icon type={item.icon}/>}
+              {item.icon && <Icon type={item.icon} />}
               {(!siderFoldN || menuTree.indexOf(item) < 0) && item.name}
             </span>}
           >
@@ -90,6 +90,7 @@ const Menus = ({
       break;
     }
   }
+
   const getPathArray = (array, current, pid, id) => {
     const result = [String(current[id])];
     const getPath = (item) => {

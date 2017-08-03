@@ -10,8 +10,7 @@ import * as profileUtils from '../../utils/profile_utils';
 import { findPosition, getById, waitforBMap, waitforBMapLib } from './utils/map-utils';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
 import RightInfoZonePerson from './RightInfoZonePerson';
-import * as d3 from '../../../public/d3/d3.min';
-import mapData from '../../../external-docs/expert-map/expert-map-example2.json';
+
 import GetBMapLib from './utils/BMapLibGai.js';
 import { HindexGraph } from '../../components/widgets';
 
@@ -67,7 +66,7 @@ class ExpertMap extends React.PureComponent {
       this.callSearchMap(nextProps.query);
     }
     if (nextProps.expertMap.geoData !== this.props.expertMap.geoData) {
-      const typeId = 0;
+      const typeId = '0';
       this.showMap(nextProps.expertMap.geoData, typeId);
     }
     return true;
@@ -206,16 +205,23 @@ class ExpertMap extends React.PureComponent {
     waitforBMap(200, 100,
       (BMap) => {
         this.showOverLay();
-        const map = new BMap.Map('allmap');
-        this.map = map; // set to global;
         let scale = 4;
-        if (type === 2) {
-          scale = 6;
-        } else if (type === 3) {
-          scale = 6;
-        } else if (type === 4) {
-          scale = 10;
+        let minscale = 3;
+        let maxscale = 19;
+        if (type === '0') {
+          scale = 4;
+          minscale = 4;
+        } else if (type === '1' || type === '2' || type === '3') {
+          scale = 4;
+          minscale = 4;
+          maxscale = 5;
+        } else if (type === '4' || type === '5') {
+          scale = 7;
+          minscale = 5;
+          maxscale = 7;
         }
+        const map = new BMap.Map('allmap', { minZoom: minscale, maxZoom: maxscale });
+        this.map = map; // set to global;
         map.centerAndZoom(new BMap.Point(116.404, 39.915), scale);
         this.initializeBaiduMap(map);
         const markers = [];
@@ -363,19 +369,19 @@ class ExpertMap extends React.PureComponent {
 
   showType = (e) => {
     const typeid = e.currentTarget && e.currentTarget.value && e.currentTarget.getAttribute('value');
-    if (typeid === 0) {
+    if (typeid === '0') {
       this.showMap(this.props.expertMap.geoData, typeid);
-    } else if (typeid === 1) {
+    } else if (typeid === '1') {
       // 简单地读取其城市大区等信息，然后归一到一个地址，然后在地图上显示
-      this.showMap(mapData, typeid);
-    } else if (typeid === 2) {
-      this.showMap(mapData, typeid);
-    } else if (typeid === 3) {
-      this.showMap(mapData, typeid);
-    } else if (typeid === 4) {
-      this.showMap(mapData, typeid);
-    } else if (typeid === 5) {
-      this.showMap(mapData, typeid);
+      this.showMap(this.props.expertMap.geoData, typeid);
+    } else if (typeid === '2') {
+      this.showMap(this.props.expertMap.geoData, typeid);
+    } else if (typeid === '3') {
+      this.showMap(this.props.expertMap.geoData, typeid);
+    } else if (typeid === '4') {
+      this.showMap(this.props.expertMap.geoData, typeid);
+    } else if (typeid === '5') {
+      this.showMap(this.props.expertMap.geoData, typeid);
     }
   };
   onChangeGoogleMap = () => {
@@ -393,11 +399,11 @@ class ExpertMap extends React.PureComponent {
   };
 
   onLoadPersonCard = (personId) => {
-    this.props.dispatch({type: 'expertMap/getPersonInfo', payload: {personId}});
+    this.props.dispatch({ type: 'expertMap/getPersonInfo', payload: { personId } });
   };
 
   onResetPersonCard = () => {
-    this.props.dispatch({type: 'expertMap/resetPersonInfo'});
+    this.props.dispatch({ type: 'expertMap/resetPersonInfo' });
   };
 
   onSetPersonCard = (personInfo) => {
@@ -559,6 +565,7 @@ class ExpertMap extends React.PureComponent {
 
           </div>
         </div>
+        <div id="rank" style={{ display: 'none' }} ></div>
 
       </div>
     );

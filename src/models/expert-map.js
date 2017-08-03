@@ -62,10 +62,19 @@ export default {
       // TODO translate data into target format.
       const geoSearchData = [];
       if (data.data) {
+        const geomap = {};
+        data.data.cities.map((item) => {
+          geomap[item.id] = item;
+          return null;
+        })
         data.data.data.map((item) => {
           geoSearchData.push({
             name: item.n,
             id: item.i,
+            country: geomap[item.country],
+            city: geomap[item.city],
+            name_zh: item.n_zh,
+            hindex: item.h,
             location: {
               lat: item.lat,
               lng: item.lng,

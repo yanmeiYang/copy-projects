@@ -4,7 +4,7 @@
 import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
-import { Button, Icon, Spin, Tag, Modal } from 'antd';
+import { Button, Tabs, Icon, Spin, Tag, Modal } from 'antd';
 import { config } from '../../utils';
 import styles from './index.less';
 import SearchSeminar from './search-seminar';
@@ -12,6 +12,7 @@ import NewActivityList from '../../components/seminar/newActivityList';
 // import ActivityList from '../../components/seminar/activityList';
 
 const { CheckableTag } = Tag;
+const TabPane = Tabs.TabPane;
 
 class Seminar extends React.Component {
   state = {
@@ -19,6 +20,7 @@ class Seminar extends React.Component {
     category: '',
     tag: '',
     query: '',
+    sortType: 'subtime',
   };
 
   componentWillMount = () => {
@@ -41,7 +43,6 @@ class Seminar extends React.Component {
       onCancel() {
       },
     });
-
   };
   getMoreSeminar = () => {
     const { offset, query, sizePerPage } = this.props.seminar;
@@ -146,10 +147,26 @@ class Seminar extends React.Component {
     }
   };
 
+  onTabsChange = (key) => {
+    this.setState({ sortType: key });
+  }
+
   render() {
     const { results, loading, sizePerPage, orgcategory, topMentionedTags, orgByActivity } =
       this.props.seminar;
-    const { organizer, category, tag } = this.state;
+    const { organizer, category, tag, sortType } = this.state;
+    const compare = (property) => {
+      return (a, b) => {
+        let val1 = a[property];
+        let val2 = b[property];
+        if (property === 'time') {
+          val1 = a[property].from;
+          val2 = b[property].from;
+        }
+        return new Date(val2) - new Date(val1);
+      };
+    };
+    results.sort(compare(sortType));
     return (
       <div className="content-inner">
         <div className={styles.top}>
@@ -253,6 +270,17 @@ class Seminar extends React.Component {
             </div>}
           </div>
         </div>
+
+        <div>
+          <Tabs defaultActiveKey={this.state.sortType} onChange={this.onTabsChange}
+                className={styles.maxWidth}>
+            <TabPane tab={<span>最后修改时间<i className="fa fa-sort-amount-desc" /></span>}
+                     key="subtime" />
+            <TabPane tab={<span>会议开始时间<i className="fa fa-sort-amount-desc" /></span>}
+                     key="time" />
+          </Tabs>
+        </div>
+
         <Spin spinning={loading}>
           <div className="seminar">
             {results.length > 0 ?

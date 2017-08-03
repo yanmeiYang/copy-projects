@@ -7,7 +7,7 @@ import { Icon } from 'antd';
 import { Link } from 'dva/router';
 import TimeFormat from './time-format';
 import styles from './workshop.less';
-import * as profileUtils from '../../../utils/profile_utils';
+import * as profileUtils from '../../../utils/profile-utils';
 
 class WorkShop extends React.Component {
   render() {

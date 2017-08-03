@@ -6,7 +6,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { Checkbox, Select, Progress, message } from 'antd';
 import { RgSearchNameBox } from '../../components/relation-graph';
-import { getAvatar } from '../../utils/profile_utils';
+import { getAvatar } from '../../utils/profile-utils';
 import styles from './RelationGraph.less';
 import * as d3 from '../../../public/d3/d3.min';
 

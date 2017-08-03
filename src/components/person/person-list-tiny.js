@@ -8,7 +8,7 @@ import { Indices } from '../../components/widgets';
 import { sysconfig } from '../../systems';
 import { config } from '../../utils';
 import styles from './person-list-tiny.less';
-import * as profileUtils from '../../utils/profile_utils';
+import * as profileUtils from '../../utils/profile-utils';
 
 /**
  * @param param

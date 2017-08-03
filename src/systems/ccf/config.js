@@ -110,7 +110,7 @@ module.exports = {
     { name: '研究生', value: '7' },
     { name: '其他', value: '8' },
   ],
-
+  ApplyUserBtn: true,
   ShowConfigTab: false,
   SysconfigDefaultCategory: 'activity_type',
   SysConfigTabs: [

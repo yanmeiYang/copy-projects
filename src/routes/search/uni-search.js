@@ -3,7 +3,7 @@ import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import classnames from 'classnames';
 import { isEqual } from 'lodash';
-import { Tabs, Tag, Pagination, message } from 'antd';
+import { Tabs, Button, Tag, Pagination, message } from 'antd';
 import styles from './uni-search.less';
 import { PersonList } from '../../components/person';
 import { Spinner } from '../../components';
@@ -99,7 +99,7 @@ class UniSearch extends React.PureComponent {
     const newOffset = data.offset || 0;
     const newSize = data.size || sysconfig.MainListSize;
     this.dispatch(routerRedux.push({
-      pathname: `/${sysconfig.SearchPagePrefix}/${data.query}/${newOffset}/${newSize}?`, //eb=${filters.eb}TODO
+      pathname: `/${sysconfig.SearchPagePrefix}/${data.query}/${newOffset}/${newSize}?`, // eb=${filters.eb}TODO
     }));
     // this.doSearchUseProps(); // another approach;
   };
@@ -180,6 +180,7 @@ class UniSearch extends React.PureComponent {
     const { results, pagination, query, aggs, filters } = this.props.search;
     const { pageSize, total, current } = pagination;
     const load = this.props.loading.models.search;
+    const operations = <ExportPersonBtn results={results} />;
 
     // Deprecated search result tab.
 
@@ -197,6 +198,8 @@ class UniSearch extends React.PureComponent {
           defaultActiveKey={this.state.sortType}
           onChange={this.onOrderChange}
           size="small"
+          className={styles.maxWidth}
+          tabBarExtraContent={operations}
         >
           {this.searchSorts.map((sortItem) => {
             const icon = sortItem.key === this.state.sortType ?
@@ -208,9 +211,7 @@ class UniSearch extends React.PureComponent {
 
         <div>
           <Spinner loading={load} />
-
           <PersonList persons={results} personLabel={sysconfig.Person_PersonLabelBlock} />
-
           <div className={styles.paginationWrap}>
             <Pagination
               showQuickJumper
@@ -226,18 +227,18 @@ class UniSearch extends React.PureComponent {
     );
 
     /*
-        this.state.view['map-view'] = (
-          <div className={styles.mapView}>
-            <ExpertMap query={this.props.search.query} />
-          </div>
-        );
+     this.state.view['map-view'] = (
+     <div className={styles.mapView}>
+     <ExpertMap query={this.props.search.query} />
+     </div>
+     );
 
-        this.state.view['relation-view'] = (
-          <div>
-            <RelationGraph query={this.props.search.query} />
-          </div>
-        );
-    */
+     this.state.view['relation-view'] = (
+     <div>
+     <RelationGraph query={this.props.search.query} />
+     </div>
+     );
+     */
 
     DEBUGLog && console.log('refresh pagesdf', load);
     const { headerSearchBox } = this.props.app;
@@ -275,24 +276,24 @@ class UniSearch extends React.PureComponent {
 
         {/* 这里可是添加TAB */}
         {/*
-        <div className={styles.viewTab}>
-          <Tabs
-            onChange={this.onViewTabChange}
-            type="card"
-            tabBarExtraContent={exportArea}
-            defaultActiveKey={this.state.currentTab}
-          >
-            {wantedTabs && wantedTabs.map((key) => {
-              const tab = avaliableTabs[key];
-              const tabJsx = (<p>
-                <i className={`fa ${tab.icon} fa-fw`} aria-hidden="true" />
-                {tab.label}
-              </p>);
-              return tab ? (<TabPane tab={tabJsx} key={`${tab.key}-view`} />) : '';
-            })}
-          </Tabs>
-        </div>
-*/}
+         <div className={styles.viewTab}>
+         <Tabs
+         onChange={this.onViewTabChange}
+         type="card"
+         tabBarExtraContent={exportArea}
+         defaultActiveKey={this.state.currentTab}
+         >
+         {wantedTabs && wantedTabs.map((key) => {
+         const tab = avaliableTabs[key];
+         const tabJsx = (<p>
+         <i className={`fa ${tab.icon} fa-fw`} aria-hidden="true" />
+         {tab.label}
+         </p>);
+         return tab ? (<TabPane tab={tabJsx} key={`${tab.key}-view`} />) : '';
+         })}
+         </Tabs>
+         </div>
+         */}
 
         <div className={styles.view}>
           {/* <Spinner loading={load} /> */}

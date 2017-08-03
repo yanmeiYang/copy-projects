@@ -77,12 +77,13 @@ export default {
     },
 
     * logout({ payload }, { call, put }) {
-      const { data } = yield call(logout);
-      if (data.status) {
+      const data = yield call(logout);
+      if (data.data.status) {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         yield put({ type: 'logoutSuccess' });
         yield put({ type: 'getCurrentUserInfo' });
+        window.location.href = '/login';
       } else {
         throw (data);
       }

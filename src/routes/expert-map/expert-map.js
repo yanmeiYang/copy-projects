@@ -10,7 +10,7 @@ import * as profileUtils from '../../utils/profile_utils';
 import { findPosition, getById, waitforBMap, waitforBMapLib } from './utils/map-utils';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
 import RightInfoZonePerson from './RightInfoZonePerson';
-
+import * as d3 from '../../../public/d3/d3.min';
 import mapData from '../../../external-docs/expert-map/expert-map-example2.json';
 import GetBMapLib from './utils/BMapLibGai.js';
 
@@ -356,7 +356,6 @@ class ExpertMap extends React.PureComponent {
       getById('flowstate').value = 1;
       getById('flowInfo').style.display = '';
     }
-
     getById('statistic').value = id;
   };
 
@@ -507,11 +506,11 @@ class ExpertMap extends React.PureComponent {
         <div className={styles.main2} id="rank">
           <div className={styles.main3}>
             <div className="custom-image">
-              <img width="17%" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m0.png" />
-              <img width="17%" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m1.png" />
-              <img width="17%" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m2.png" />
-              <img width="17%" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m3.png" />
-              <img width="17%" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m4.png" />
+              <img width="17%" src="/images/map/m0.png" />
+              <img width="17%" src="/images/map/m1.png" />
+              <img width="17%" src="images/map/m2.png" />
+              <img width="17%" src="/images/map/m3.png" />
+              <img width="17%" src="/images/map/m4.png" />
             </div>
           </div>
           <div className="custom-image">
@@ -526,6 +525,14 @@ class ExpertMap extends React.PureComponent {
           </div>
         </div>
 
+        <div className={styles.container}>
+          <div className={styles.item1}>1</div>
+          <div className={styles.item2}>2</div>
+          <div className={styles.item1}>3</div>
+          <div className={styles.item2}>4</div>
+          <div className={styles.item1}>5</div>
+        </div>
+
         <div id="personInfo" style={{ display: 'none' }} >
           {personPopupJsx && personPopupJsx}
         </div>
@@ -538,7 +545,7 @@ class ExpertMap extends React.PureComponent {
 
           </div>
         </div>
-        //<div id="rank" style={{ display: 'none' }} ></div>
+        <div id="rank" style={{ display: 'none' }} ></div>
 
       </div>
     );

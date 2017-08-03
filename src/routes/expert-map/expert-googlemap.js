@@ -46,6 +46,10 @@ class ExpertGoogleMap extends React.Component {
     return true;
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    this.syncInfoWindow();
+  }
+
   callSearchMap(query, callback) {
     this.props.dispatch({ type: 'expertMap/searchMap', payload: { query } });
   }
@@ -103,7 +107,7 @@ class ExpertGoogleMap extends React.Component {
     imgdiv.setAttribute('style', cstyle);
     imgdiv.setAttribute('class', 'imgWrapper');
     thisNode.appendChild(imgdiv);
-    google.maps.event.addDomListener(imgdiv,'click', function( ) { // 集体的一个显示
+    google.maps.event.addDomListener(imgdiv,'click', function(event) { // 集体的一个显示
       that.toggleRightInfoBox(inputids);
     });
 
@@ -150,16 +154,14 @@ class ExpertGoogleMap extends React.Component {
                 num = chtml.split('@@@@@@@')[1];
               }
               const personInfo = data.data.persons[num];
-              console.log(newPixel)
-              //console.log(currentPoint)
               const myLatLng = new google.maps.LatLng({lat: 47, lng:112});
               const infowindow = new google.maps.InfoWindow({
                 content: "<div class='popup'>oooooooooooo</div>"
               });
               infowindow.setPosition(myLatLng);
               that.onSetPersonCard(personInfo);
-              infowindow.open(map);
-              that.syncInfoWindow();
+              //infowindow.open(map);
+              //that.syncInfoWindow();
 
               //that.currentPersonId = personInfo.id;
             });
@@ -232,7 +234,7 @@ class ExpertGoogleMap extends React.Component {
               map: map,
               label: {
                 text: place.results[o].id,
-                color: 'black',
+                color: 'transparent',
                 fontSize: '12px',
                 border: 'none',
                 backgroundColor: 'transparent',
@@ -284,10 +286,11 @@ class ExpertGoogleMap extends React.Component {
   toggleRightInfoBox = (id) => {
     const state = getById('flowstate').value;
     const statistic = getById('statistic').value;
-    //this.getTipInfoBox();
+    this.getTipInfoBox();
     if (statistic !== id) { // 一般认为是第一次点击
       getById('flowstate').value = 1;
       this.getRightInfoBox();
+      this.syncInfoWindow();
       if (this.props.expertMap.infoZoneIds !== id) { // don't change
         if (id.indexOf(',') >= 0) { // is cluster
           const clusterIdList = id.split(',');
@@ -298,7 +301,7 @@ class ExpertGoogleMap extends React.Component {
         }
         this.props.dispatch({type: 'expertMap/setRightInfoZoneIds', payload: {idString: id}});
       }
-      this.syncInfoWindow();
+      //this.syncInfoWindow();
     } else if (state === 1) { // 偶数次点击同一个对象
       // 认为是第二次及其以上点击
       getById('flowstate').value = 0;
@@ -309,6 +312,7 @@ class ExpertGoogleMap extends React.Component {
     }
 
     getById('statistic').value = id;
+    console.log(getById('statistic').value)
   };
 
   addMouseoverHandler = (map, marker, personId) => {
@@ -318,7 +322,7 @@ class ExpertGoogleMap extends React.Component {
     });
     google.maps.event.addListener(marker, 'mouseover', function (e) {
       if (that.currentPersonId !== personId) {
-        //that.onResetPersonCard();
+        that.onResetPersonCard();
         that.onLoadPersonCard(personId);
         infoWindow.open(map, marker);
         that.syncInfoWindow();
@@ -348,6 +352,17 @@ class ExpertGoogleMap extends React.Component {
       riz.onmouseleave = () => this.map.enableScrollWheelZoom();
     }
     return riz;
+  };
+
+  getTipInfoBox = () => {
+    let riz1 = getById('rank');
+    if (!riz1) {
+      riz1 = document.createElement('div');
+      getById('map').appendChild(riz1);
+      riz1.setAttribute('id', 'flowinfo1');
+      riz1.setAttribute('class', 'imgWrapper1');
+      return riz1;
+    }
   };
 
   onSetPersonCard = (personInfo) => {
@@ -439,6 +454,29 @@ class ExpertGoogleMap extends React.Component {
           <input id="statistic" type="hidden" value="0" />
           <input id="flowstate" type="hidden" value="0" />
         </div>
+
+        <div className={styles.main2} id="rank">
+          <div className={styles.main3}>
+            <div className="custom-image">
+              <img width="17%" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m0.png" />
+              <img width="17%" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m1.png" />
+              <img width="17%" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m2.png" />
+              <img width="17%" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m3.png" />
+              <img width="17%" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m4.png" />
+            </div>
+          </div>
+          <div className="custom-image">
+            <img src="/images/arrow.png" />
+          </div>
+          <div className={styles.lab2}>人数增加</div>
+          <div className={styles.main3}>
+            <div className="custom-image">
+              <img src="/images/personsNumber.png"/>
+              <div className={styles.lab3}><p>该区域学者人数</p>该学者所在位置</div>
+            </div>
+          </div>
+        </div>
+
         <div id="personInfo" style={{ display: 'none' }} >
           {personPopupJsx && personPopupJsx}
         </div>

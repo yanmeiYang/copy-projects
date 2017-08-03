@@ -83,6 +83,9 @@ export default {
         localStorage.removeItem('user');
         yield put({ type: 'logoutSuccess' });
         yield put({ type: 'getCurrentUserInfo' });
+        // TODO 这里写死了会跳转到登录页面。单并不是所有系统登出后都不能继续
+        // 访问当前页面。所以这里要改成等出后刷新当前页面。
+        // 如果发现没有权限，则跳转到登录页面。
         window.location.href = '/login';
       } else {
         throw (data);

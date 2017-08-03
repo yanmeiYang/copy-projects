@@ -27,8 +27,8 @@ class Header extends React.PureComponent {
 
   componentWillReceiveProps = (nextProps) => {
     if (nextProps.app.headerSearchBox && (
-      nextProps.app.headerSearchBox !== this.props.app.headerSearchBox
-      || this.props.app.headerSearchBox.query !== this.state.query)) {
+        nextProps.app.headerSearchBox !== this.props.app.headerSearchBox
+        || this.props.app.headerSearchBox.query !== this.state.query)) {
       if (nextProps.app.headerSearchBox.query) {
         console.log('>>>>>>>>>>>>>>>>> ', nextProps.app.headerSearchBox.query);
         this.setQuery(nextProps.app.headerSearchBox.query);
@@ -136,7 +136,7 @@ class Header extends React.PureComponent {
 
         {headerSearchBox &&
         <SearchTypeWidgets
-          config={sysconfig.HeaderSearch_TextNavi}
+          navis={sysconfig.HeaderSearch_TextNavi}
           query={this.state.query}
         />
         }

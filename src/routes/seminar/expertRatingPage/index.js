@@ -189,13 +189,13 @@ class ExpertRatingPage extends React.Component {
                         <div>
                           <div>演讲水平:&nbsp;&nbsp;<Rate disabled defaultValue={score[0]}
                                                       value={score[0]} />
-                            <span className="ant-rate-text">{score[0]} 星</span></div>
+                            <span className="ant-rate-text">{score[0]} 分</span></div>
                           <div>演讲内容:&nbsp;&nbsp;<Rate disabled defaultValue={score[1]}
                                                       value={score[1]} />
-                            <span className="ant-rate-text">{score[1]} 星</span></div>
+                            <span className="ant-rate-text">{score[1]} 分</span></div>
                           <div>综合评价:&nbsp;&nbsp;<Rate disabled defaultValue={score[2]}
                                                       value={score[2]} />
-                            <span className="ant-rate-text">{score[2]} 星</span></div>
+                            <span className="ant-rate-text">{score[2]} 分</span></div>
                         </div>
                         }
                       </div>

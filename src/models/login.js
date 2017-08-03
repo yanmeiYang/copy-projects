@@ -17,9 +17,7 @@ export default {
   },
 
   effects: {
-    *login({
-      payload,
-    }, { put, call }) {
+    * login({ payload }, { put, call }) {
       yield put({ type: 'showLoginLoading' });
       const { data } = yield call(login, payload);
       yield put({ type: 'hideLoginLoading' });
@@ -45,16 +43,10 @@ export default {
     },
 
     showLoginLoading(state) {
-      return {
-        ...state,
-        loginLoading: true,
-      };
+      return { ...state, loginLoading: true };
     },
     hideLoginLoading(state) {
-      return {
-        ...state,
-        loginLoading: false,
-      };
+      return { ...state, loginLoading: false };
     },
   },
 };

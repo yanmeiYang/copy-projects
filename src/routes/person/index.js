@@ -22,6 +22,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
   const totalPubs = profile.indices && profile.indices.num_pubs;
 
   const contrib = avgScores.filter(score => score.key === 'contrib')[0];
+  const integrated = avgScores.filter(score => score.key === 'integrated')[0];
   const activity_indices = { contrib: contrib === undefined ? 0 : contrib.score };
 
   const profileTabs = [{
@@ -30,7 +31,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
       {false && profile && profile.indices &&
       <Indices indices={profile.indices} />
       }
-      <table style={{ marginBottom: 10 }}>
+      <table style={{ marginBottom: 10 }} className="scoreTable">
         {contrib &&
         <tr>
           <td>贡献度:</td>
@@ -42,7 +43,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
         }
         {avgScores.map((score) => {
           return (
-            <tbody key={score.key} className="scoreTable">
+            <tbody key={score.key}>
             {score.key === 'level' &&
             <tr>
               <td>演讲内容:</td>
@@ -63,18 +64,19 @@ const Person = ({ dispatch, person, seminar, publications }) => {
               </td>
             </tr>
             }
-            {score.key === 'integrated' &&
-            <tr>
-              <td>综合评价:</td>
-              <td>
-                <Rate disabled defaultValue={score.score} />
-                <input type="text" className="score" value={getTwoDecimal(score.score, 2)}
-                       disabled />
-              </td>
-            </tr>}
             </tbody>
           );
         })}
+        {integrated &&
+        <tr>
+          <td>综合评价:</td>
+          <td>
+            <Rate disabled defaultValue={integrated.score} />
+            <input type="text" className="score" value={getTwoDecimal(integrated.score, 2)}
+                   disabled />
+          </td>
+        </tr>
+        }
       </table>
     </div>,
   }, {

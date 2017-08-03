@@ -210,6 +210,7 @@ class UserList extends React.Component {
 
         <Spin spinning={loading}>
           <Table
+            className={styles.userListTable}
             dataSource={listUsers}
             bordered
             size="small"

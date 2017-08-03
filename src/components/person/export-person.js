@@ -24,7 +24,7 @@ class ExportPersonBtn extends React.Component {
     checkedList: defaultCheckedList,
     indeterminate: true,
     checkAll: false,
-    exportSize: 30,
+    exportSize: 20,
   };
 
   setExport = (value) => {
@@ -92,7 +92,7 @@ class ExportPersonBtn extends React.Component {
             }
 
           case 'gender':
-            return expertPersonInfo += person.attr.gender + ',';
+            return expertPersonInfo += person.attr.gender.replace(/female/g, '女').replace(/male/, '男') + ',';
           case 'name_zh':
             return expertPersonInfo += (person.name_zh ? person.name_zh : person.name) + ',';
           default:
@@ -110,15 +110,14 @@ class ExportPersonBtn extends React.Component {
 
 
   render() {
-    const { isExport, modalVisible, step1, step2, step3, exportSize } = this.state;
-
+    const { isExport, modalVisible } = this.state;
     return (
       <div style={{ float: 'right' }}>
         {isExport && <Button type='primary' style={{ marginLeft: 5, marginRight: 5 }}
                              onClick={this.exportSearchResult.bind()}>导出当前页</Button>}
         {/*{isExport &&*/}
         {/*<Button type='primary' style={{ marginLeft: 5, marginRight: 5 }} onClick={this.exportSelectedResult.bind()}>导出已选结果</Button>}*/}
-        <Button type='primary' style={{ marginLeft: 5, marginRight: 5 }}
+        <Button  style={{ marginLeft: 5, marginRight: 5 }}
                 onClick={this.setExport.bind(this, isExport)}>导出</Button>
 
         <Modal
@@ -131,7 +130,7 @@ class ExportPersonBtn extends React.Component {
         >
           <div>
             <label htmlFor="" style={{ margin: '0px 15px 10px 20px' }}>导出数据:</label>
-            <InputNumber placeholder='导出条数' min={1} max={30} defaultValue={30}
+            <InputNumber placeholder="导出条数" min={1} max={30} defaultValue={20}
                          style={{ width: '80%' }}
                          onChange={this.onChangeExportSize.bind(this)} />
 

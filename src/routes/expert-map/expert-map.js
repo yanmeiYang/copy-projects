@@ -13,6 +13,7 @@ import RightInfoZonePerson from './RightInfoZonePerson';
 import * as d3 from '../../../public/d3/d3.min';
 import mapData from '../../../external-docs/expert-map/expert-map-example2.json';
 import GetBMapLib from './utils/BMapLibGai.js';
+import { HindexGraph } from '../../components/widgets';
 
 const ButtonGroup = Button.Group;
 const blankAvatar = '/images/blank_avatar.jpg';
@@ -356,6 +357,7 @@ class ExpertMap extends React.PureComponent {
       getById('flowstate').value = 1;
       getById('flowInfo').style.display = '';
     }
+
     getById('statistic').value = id;
   };
 
@@ -444,21 +446,37 @@ class ExpertMap extends React.PureComponent {
       const pos = profileUtils.displayPositionFirst(person.pos);
       const aff = profileUtils.displayAff(person);
       const hindex = person && person.indices && person.indices.h_index;
-
-      personPopupJsx = (
-        <div className="personInfo">
-          <div><img className="img" src={url} alt="IMG"/></div>
-          <div className="info">
-            <div className="nameLine">
-              <div className="right">H-index:<b> {hindex}</b>
+      console.log(url)
+      if( url !== '//static.aminer.org/default/default.jpg') {
+        personPopupJsx = (
+          <div className="personInfo">
+            <div><img className="img" src={url} alt="IMG"/></div>
+            <div className="info">
+              <div className="nameLine">
+                <div className="right">H-index:<b> {hindex}</b>
+                </div>
+                <div className="name">{name}</div>
               </div>
-              <div className="name">{name}</div>
+              {pos && <span><i className="fa fa-briefcase fa-fw"/>{pos}</span>}
+              {aff && <span><i className="fa fa-institution fa-fw"/>{aff}</span>}
             </div>
-            {pos && <span><i className="fa fa-briefcase fa-fw"/>{pos}</span>}
-            {aff && <span><i className="fa fa-institution fa-fw"/>{aff}</span>}
           </div>
-        </div>
-      );
+        );
+      } else{
+        personPopupJsx = (
+          <div className="personInfo">
+            <div className="info">
+              <div className="nameLine">
+                <div className="right">H-index:<b> {hindex}</b>
+                </div>
+                <div className="name">{name}</div>
+              </div>
+              {pos && <span><i className="fa fa-briefcase fa-fw"/>{pos}</span>}
+              {aff && <span><i className="fa fa-institution fa-fw"/>{aff}</span>}
+            </div>
+          </div>
+        );
+      }
     }
 
       // right info
@@ -525,12 +543,8 @@ class ExpertMap extends React.PureComponent {
           </div>
         </div>
 
-        <div className={styles.container}>
-          <div className={styles.item1}>1</div>
-          <div className={styles.item2}>2</div>
-          <div className={styles.item1}>3</div>
-          <div className={styles.item2}>4</div>
-          <div className={styles.item1}>5</div>
+        <div>
+          <HindexGraph />
         </div>
 
         <div id="personInfo" style={{ display: 'none' }} >
@@ -540,12 +554,11 @@ class ExpertMap extends React.PureComponent {
         <div id="rightInfoZone" style={{ display: 'none' }} >
           <div className="rightInfoZone">
 
-            {shouldRIZUpdate && <RightInfoZonePerson person={model.personInfo} />}
+            {shouldRIZUpdate && <RightInfoZonePerson person={model.personInfo} /> }
             {shouldRIZClusterUpdate && <RightInfoZoneCluster persons={clusterPersons} />}
 
           </div>
         </div>
-        <div id="rank" style={{ display: 'none' }} ></div>
 
       </div>
     );

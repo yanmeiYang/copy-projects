@@ -46,10 +46,6 @@ class ExpertGoogleMap extends React.Component {
     return true;
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    this.syncInfoWindow();
-  }
-
   callSearchMap(query, callback) {
     this.props.dispatch({ type: 'expertMap/searchMap', payload: { query } });
   }
@@ -107,7 +103,7 @@ class ExpertGoogleMap extends React.Component {
     imgdiv.setAttribute('style', cstyle);
     imgdiv.setAttribute('class', 'imgWrapper');
     thisNode.appendChild(imgdiv);
-    google.maps.event.addDomListener(imgdiv,'click', function(event) { // 集体的一个显示
+    google.maps.event.addDomListener(imgdiv,'click', function( ) { // 集体的一个显示
       that.toggleRightInfoBox(inputids);
     });
 
@@ -154,14 +150,16 @@ class ExpertGoogleMap extends React.Component {
                 num = chtml.split('@@@@@@@')[1];
               }
               const personInfo = data.data.persons[num];
+              console.log(newPixel)
+              //console.log(currentPoint)
               const myLatLng = new google.maps.LatLng({lat: 47, lng:112});
               const infowindow = new google.maps.InfoWindow({
                 content: "<div class='popup'>oooooooooooo</div>"
               });
               infowindow.setPosition(myLatLng);
               that.onSetPersonCard(personInfo);
-              //infowindow.open(map);
-              //that.syncInfoWindow();
+              infowindow.open(map);
+              that.syncInfoWindow();
 
               //that.currentPersonId = personInfo.id;
             });
@@ -234,7 +232,7 @@ class ExpertGoogleMap extends React.Component {
               map: map,
               label: {
                 text: place.results[o].id,
-                color: 'transparent',
+                color: 'black',
                 fontSize: '12px',
                 border: 'none',
                 backgroundColor: 'transparent',
@@ -288,9 +286,9 @@ class ExpertGoogleMap extends React.Component {
     const statistic = getById('statistic').value;
     this.getTipInfoBox();
     if (statistic !== id) { // 一般认为是第一次点击
+      console.log("1----"+state)
       getById('flowstate').value = 1;
       this.getRightInfoBox();
-      this.syncInfoWindow();
       if (this.props.expertMap.infoZoneIds !== id) { // don't change
         if (id.indexOf(',') >= 0) { // is cluster
           const clusterIdList = id.split(',');
@@ -301,18 +299,19 @@ class ExpertGoogleMap extends React.Component {
         }
         this.props.dispatch({type: 'expertMap/setRightInfoZoneIds', payload: {idString: id}});
       }
-      //this.syncInfoWindow();
+      this.syncInfoWindow();
     } else if (state === 1) { // 偶数次点击同一个对象
       // 认为是第二次及其以上点击
+      console.log("2----"+state)
       getById('flowstate').value = 0;
       getById('flowInfo').style.display = 'none';
     } else { // 奇数次点击同一个对象
+      console.log("3-----"+state)
       getById('flowstate').value = 1;
       getById('flowInfo').style.display = '';
     }
 
     getById('statistic').value = id;
-    console.log(getById('statistic').value)
   };
 
   addMouseoverHandler = (map, marker, personId) => {
@@ -478,8 +477,8 @@ class ExpertGoogleMap extends React.Component {
         </div>
 
         <div id="personInfo" style={{ display: 'none' }} >
-          {personPopupJsx && personPopupJsx}
-        </div>
+        {personPopupJsx && personPopupJsx}
+      </div>
 
         <div id="rightInfoZone" style={{ display: 'none' }} >
           <div className="rightInfoZone">

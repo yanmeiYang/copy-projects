@@ -25,7 +25,6 @@ class RightInfoZoneCluster extends React.PureComponent {
     let hindexSum = 0;
     const interests = {};
     persons.map((person) => {
-      // console.log(person);
       const indices = person.indices;
       // sum hindex
       if (indices) {
@@ -44,6 +43,13 @@ class RightInfoZoneCluster extends React.PureComponent {
         person.tags.map((tag) => {
           const count = interests[tag.t] || 0;
           interests[tag.t] = count + 1;
+          return null;
+        });
+      }
+      if (person.tags_zh && person.tags_zh && person.tags_zh.length > 0) {
+        person.tags.map((tag) => {
+          const count = interests[tag.t] || 0;
+          interests[tag.t] = count - 1;
           return null;
         });
       }

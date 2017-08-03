@@ -34,29 +34,40 @@ class StatisticsDetail extends React.Component {
     const offset = this.props.statistics.getSeminarOffset;
     const size = this.props.statistics.getSeminarSize;
     const payload = this.state.filter;
-    this.props.dispatch({ type: 'seminar/getSeminar',
+    this.props.dispatch({
+      type: 'seminar/getSeminar',
       offset,
       size,
       payload,
     });
-  }
+  };
+
   render() {
     const { loading, seminarsByOrgAndCat, sizePerPage } = this.props.statistics;
     return (
-      <div>
+      <div style={{ width: '100%' }}>
+        <h3>
+          {queryURL('category') &&
+          <span><strong>活动类型：</strong> {queryURL('category')}</span>}
+          {queryURL('organizer') &&
+          <span style={{ marginLeft: 15 }}>
+            <strong>承办单位：</strong> {queryURL('organizer')} </span>}
+        </h3>
         <Spin spinning={loading}>
           <div className="seminar" style={{ minHeight: '350px', marginTop: 20 }}>
             {
               seminarsByOrgAndCat.map((result) => {
                 return (
-                  <div key={result.id + Math.random()}>
-                    <NewActivityList result={result} hidetExpertRating="true" style={{ marginTop: 10, maxWidth: 1000 }} />
+                  <div key={`${result.id}_${Math.random()}`}>
+                    <NewActivityList result={result} hidetExpertRating="true"
+                                     style={{ marginTop: 10, maxWidth: 1000 }} />
                   </div>
                 );
               })
             }
             {!loading && seminarsByOrgAndCat.length > sizePerPage &&
-            <Button type="primary" className="getMoreActivities" onClick={this.getMoreSeminar.bind()}>More</Button>}
+            <Button type="primary" className="getMoreActivities"
+                    onClick={this.getMoreSeminar.bind()}>More</Button>}
           </div>
         </Spin>
       </div>

@@ -21,36 +21,34 @@ import AddTags from '../../components/seminar/addTags';
 // import ExpertBasicInformation from '../../components/seminar/expertBasicInformation/expertBasicInformation';
 import AddExpertModal from '../../components/seminar/addExpertModal';
 import ShowExpertList from '../../routes/seminar/addSeminar/workshop/showExpertList';
-import { sysconfig } from '../../systems';
 
 const Dragger = Upload.Dragger;
 const FormItem = Form.Item;
 const Option = Select.Option;
-let image = null;
+// let image = null;
+// const uploadImage = {
+//   name: 'file',
+//   multiple: false,
+//   showUploadList: true,
+//   accept: 'image/jpeg,image/png,image/bmp',
+//   action: config.baseURL + config.api.uploadActivityPosterImgFile,
+//   listType: 'picture',
+//   headers: {
+//     // 获得登录用户的token
+//     Authorization: localStorage.getItem('token'),
+//   },
+//   onChange(info) {
+//     const status = info.file.status;
+//     if (status !== 'uploading') {
+//       image = info.file.originFileObj;
+//     }
+//   },
+//   onSuccess(response) {
+//     image = response.url;
+//   },
+// };
 
-const uploadImage = {
-  name: 'file',
-  multiple: false,
-  showUploadList: true,
-  accept: 'image/jpeg,image/png,image/bmp',
-  action: config.baseURL + config.api.uploadActivityPosterImgFile,
-  listType: 'picture',
-  headers: {
-    // 获得登录用户的token
-    Authorization: localStorage.getItem('token'),
-  },
-  onChange(info) {
-    const status = info.file.status;
-    if (status !== 'uploading') {
-      image = info.file.originFileObj;
-    }
-  },
-  onSuccess(response) {
-    image = response.url;
-  },
-};
-
-class RegistrationForm extends React.Component {
+class RegistrationForm extends React.PureComponent {
   state = {
     addNewTalk: false,
     // selectedType: '0',
@@ -64,11 +62,19 @@ class RegistrationForm extends React.Component {
     talks: [],
     editTheTalk: {},
     editTheTalkIndex: -1,
+    editStatus: false, // 是否是编辑状态
+    organizer: '', // componentWillUpdate设置organizer不起作用
+    previewVisible: false,
+    image: null,
     // suggestSpeakers: [],
     // speakerInfo: {},
     // integral: 0,
   };
   componentWillMount = () => {
+    this.props.dispatch({
+      type: 'seminar/getCategoriesHint',
+      payload: { category: 'orglist_' },
+    });
     this.props.dispatch({
       type: 'seminar/getCategory',
       payload: { category: 'activity_organizer_options' },
@@ -79,6 +85,37 @@ class RegistrationForm extends React.Component {
       payload: { category: 'contribution_type' },
     });
   };
+
+  componentWillUpdate(nextProps, nextState) {
+    if (nextProps.editTheSeminar === this.props.editTheSeminar) {
+      return false;
+    }
+    if (nextProps.editTheSeminar.title) {
+      const currentSeminar = nextProps.editTheSeminar;
+      const data = {
+        category: currentSeminar.category,
+        organizer: currentSeminar.organizer[0],
+        co_org: currentSeminar.organizer.slice(1, currentSeminar.organizer.length),
+        title: currentSeminar.title,
+        city: currentSeminar.location.city ? currentSeminar.location.city : '',
+        address: currentSeminar.location.address ? currentSeminar.location.address : '',
+        abstract: currentSeminar.abstract,
+      };
+      this.setState({
+        talkStartValue: currentSeminar.time.from,
+        talkEndValue: currentSeminar.time.to,
+        startValue: currentSeminar.time.from,
+        endValue: currentSeminar.time.to,
+        tags: currentSeminar.tags,
+        talks: currentSeminar.talk,
+        editStatus: true,
+        organizer: currentSeminar.organizer[0],
+        image: currentSeminar.img ? currentSeminar.img : '',
+      });
+      this.props.form.setFieldsValue(data);
+    }
+    return true;
+  }
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -101,31 +138,25 @@ class RegistrationForm extends React.Component {
           data.location = { city: '', address: '' };
           data.time = { from: '', to: '' };
           data.type = 1;
-          // if (data.type === 0) {
-          //   data.speaker = { name: '', position: '', affiliation: '', aid: '', img: '' };
-          //   data.speaker.name = state.speakerInfo.name;
-          //   data.speaker.position = state.speakerInfo.position;
-          //   data.speaker.affiliation = state.speakerInfo.affiliation;
-          //   data.speaker.img = state.speakerInfo.img;
-          //   data.speaker.aid = state.speakerInfo.aid;
-          //   data.speaker.bio = state.speakerInfo.bio;
-          //   data.speaker.gender = parse(state.speakerInfo.gender);
-          //   data.speaker.phone = state.speakerInfo.phone;
-          //   data.speaker.email = state.speakerInfo.email;
-          // } else {
           data.talk = state.talks;
-          // }
-          data.img = image;
+          data.talk.map((item) => {
+            if (item.speaker.gender) {
+              return item.speaker.gender = item.speaker.gender.i ? item.speaker.gender.i : 0;
+            } else {
+              return item.speaker.gender = 0;
+            }
+          });
+          data.img = state.image;
           data.location.city = values.city;
           data.location.address = values.address;
           if (state.startValue) {
-            data.time.from = state.startValue.toJSON();
+            data.time.from = typeof state.startValue === 'string' ? state.startValue : state.startValue.toJSON();
           }
           if (state.endValue) {
-            data.time.to = state.endValue.toJSON();
+            data.time.to = typeof state.endValue === 'string' ? state.endValue : state.endValue.toJSON();
           }
           data.tags = state.tags;
-          if (data.co_org.length > 0) {
+          if (data.co_org !== undefined && data.co_org.length > 0) {
             data.organizer = [data.organizer].concat(data.co_org);
           } else {
             data.organizer = [data.organizer];
@@ -134,7 +165,12 @@ class RegistrationForm extends React.Component {
           delete data.co_org;
           // 获取登录用户的uid
           data.uid = this.props.uid;
-          this.props.dispatch({ type: 'seminar/postSeminarActivity', payload: data });
+          if (state.editStatus) {
+            data.id = this.props.seminarId;
+            this.props.dispatch({ type: 'seminar/updateSeminarActivity', payload: data });
+          } else {
+            this.props.dispatch({ type: 'seminar/postSeminarActivity', payload: data });
+          }
         }
       }
     });
@@ -189,16 +225,17 @@ class RegistrationForm extends React.Component {
 
   // 删除专家
   delTheExpert = (i) => {
+    const outerThis = this;
     Modal.confirm({
       title: '删除',
       content: '确定删除吗？',
       onOk() {
-        this.state.talks.splice(i, 1);
-        this.setState({ talks: this.state.talks });
+        outerThis.state.talks.splice(i, 1);
+        outerThis.setState({ talks: outerThis.state.talks });
       },
-      onCancel() {},
+      onCancel() {
+      },
     });
-
   };
   editTheExpert = (i) => {
     this.setState({ editTheTalk: this.state.talks[i], addNewTalk: true, editTheTalkIndex: i });
@@ -214,6 +251,13 @@ class RegistrationForm extends React.Component {
     this.props.dispatch({ type: 'seminar/keywordExtraction', payload: data });
   };
 
+  uploadImgSuccess = (img) => {
+    this.setState({ image: img });
+  };
+  delCurrentImg = () => {
+    this.setState({ image: '' });
+  };
+
   // cancelTalkData = () => {
   //   this.setState({ addNewTalk: false, });
   // };
@@ -225,19 +269,13 @@ class RegistrationForm extends React.Component {
     const { getFieldDecorator } = this.props.form;
     const {
       activity_organizer_options, orgcategory, tags,
-      postSeminarOrganizer, contribution_type,
+      postSeminarOrganizer,
     } = this.props.seminar;
     let activity_organizer_options_data = {};
-    const activity_type_options_data = {};
-    // let activity_type_options = {};
-
     if (activity_organizer_options.data) {
       activity_organizer_options_data = activity_organizer_options.data.concat(postSeminarOrganizer);
     }
-
-
-    const { addNewTalk, talks, startValue, endValue, editTheTalk } = this.state;
-
+    const { addNewTalk, talks, startValue, endValue, editTheTalk, image } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -248,6 +286,30 @@ class RegistrationForm extends React.Component {
         sm: { span: 21 },
       },
     };
+
+    const outerThis = this;
+    const uploadImage = {
+      name: 'file',
+      multiple: false,
+      showUploadList: false,
+      accept: 'image/jpeg,image/png,image/bmp',
+      action: config.baseURL + config.api.uploadActivityPosterImgFile,
+      // listType: 'text',
+      headers: {
+        // 获得登录用户的token
+        Authorization: localStorage.getItem('token'),
+      },
+      onChange(info) {
+        const status = info.file.status;
+        if (status !== 'uploading') {
+          console.log(info.file.originFileOb);
+        }
+      },
+      onSuccess(response) {
+        outerThis.uploadImgSuccess(response.url);
+      },
+    };
+
     return (
       <Row className={styles.add_seminar_block}>
         <Form onSubmit={this.handleSubmit} className={styles.add_seminar_form}>
@@ -271,10 +333,11 @@ class RegistrationForm extends React.Component {
             {postSeminarOrganizer.length > 0 &&
             <FormItem {...formItemLayout} label="承办单位">
               {getFieldDecorator('organizer', {
+                  initialValue: this.state.organizer,
                   rules: [{ required: true, message: '请选择承办单位！' }],
                 },
               )(
-                <Select>
+                <Select showSearch>
                   {
                     postSeminarOrganizer.map((item) => {
                       return (<Option key={`org_${Math.random()}`}
@@ -328,7 +391,9 @@ class RegistrationForm extends React.Component {
                   message: '请输入活动时间',
                 }],
               })(
-                <CanlendarInForm callbackParent={this.onChildChanged} />,
+                <CanlendarInForm callbackParent={this.onChildChanged}
+                                 startValue={this.state.talkStartValue}
+                                 endValue={this.state.talkEndValue} />,
               )}
 
             </FormItem>
@@ -375,13 +440,23 @@ class RegistrationForm extends React.Component {
               {...formItemLayout}
               label="活动海报"
             >
-              <Dragger {...uploadImage}>
-                <p className="ant-upload-drag-icon">
-                  <i className="anticon anticon-inbox" />
-                </p>
-                <p className="ant-upload-text">点击或将图片拖拽到此区域上传</p>
-                <p className="ant-upload-hint">支持上传JPG/PNG/BMP文件</p>
-              </Dragger>
+              {image === null || image === '' ?
+                <Dragger {...uploadImage}>
+                  <p className="ant-upload-drag-icon">
+                    <i className="anticon anticon-inbox" />
+                  </p>
+                  <p className="ant-upload-text">点击或将图片拖拽到此区域上传</p>
+                  <p className="ant-upload-hint">支持上传JPG/PNG/BMP文件</p>
+                </Dragger> :
+                <div className={styles.uploadImgSuccess}>
+                  <img src={image} style={{ height: '150px' }} />
+                  <Dragger {...uploadImage}
+                           style={{
+                             width: '76',
+                             border: '1px solid #428bca',
+                           }}>
+                    <p className="ant-upload-text">更换图片</p>
+                  </Dragger> <Button onClick={this.delCurrentImg}>删除图片</Button></div>}
             </FormItem>
 
             <FormItem
@@ -464,4 +539,4 @@ class RegistrationForm extends React.Component {
 
 const WrappedRegistrationForm = Form.create()(RegistrationForm);
 
-export default connect(({ seminar }) => ({ seminar }))(WrappedRegistrationForm);
+export default connect(({ seminar, person }) => ({ seminar, person }))(WrappedRegistrationForm);

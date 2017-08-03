@@ -16,10 +16,27 @@ class WorkShop extends React.Component {
     return (
       <div className={styles.workshopDetail}>
         {aTalk.title && <h5 className={styles.talkTitle}>{aTalk.title}</h5>}
+        <p style={{ marginBottom: 10 }}>
+          {aTalk.time &&
+          <span>
+            <strong>时间:&nbsp;</strong>
+            <TimeFormat {...aTalk.time} />
+          </span>}
+          {aTalk.location && <span style={{ marginLeft: 10 }}>
+            {aTalk.location.address &&
+            <span>
+              <strong>地点:&nbsp;</strong>
+              <span>{aTalk.location.address}</span>
+            </span>}
+          </span>}
+        </p>
         <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
           <div>
             <div className={styles.speakerAvatar}>
-              {aTalk.speaker.aid ? <Link to={`/person/${aTalk.speaker.aid}`}><img src={profileUtils.getAvatar(aTalk.speaker.img, aTalk.speaker.aid, 90)} alt={aTalk.speaker.name} /></Link> : <img src={aTalk.speaker.img} alt={aTalk.speaker.name} />}
+              {aTalk.speaker.aid ? <Link to={`/person/${aTalk.speaker.aid}`}><img
+                src={profileUtils.getAvatar(aTalk.speaker.img, aTalk.speaker.aid, 90)}
+                alt={aTalk.speaker.name} /></Link> :
+                <img src={aTalk.speaker.img} alt={aTalk.speaker.name} />}
             </div>
           </div>
           <ul className={styles.messages}>
@@ -28,9 +45,11 @@ class WorkShop extends React.Component {
               <div>
                 <li>
                   <p>
-                    <Icon type="user"  />
+                    <Icon type="user" />
                     <strong>姓名:&nbsp;</strong>
-                    {aTalk.speaker.aid ? <Link to={`/person/${aTalk.speaker.aid}`}><span>{aTalk.speaker.name}</span></Link> : <span>{aTalk.speaker.name}</span>}
+                    {aTalk.speaker.aid ?
+                      <Link to={`/person/${aTalk.speaker.aid}`}><span>{aTalk.speaker.name}</span></Link> :
+                      <span>{aTalk.speaker.name}</span>}
                   </p>
                 </li>
                 <li>
@@ -48,19 +67,24 @@ class WorkShop extends React.Component {
               </div>}
             </span>
             <span>
-              {aTalk.time ? <li><p>
-                <Icon type="clock-circle-o" />
-                <strong>时间:&nbsp;</strong>
-                <TimeFormat {...aTalk.time} />
-              </p></li> : ''}
+              {aTalk.speaker.phone &&
+              <li>
+                <p>
+                  <Icon type="phone" />
+                  <strong>电话:&nbsp;</strong>
+                  <span>{aTalk.speaker.phone}</span>
+                </p>
+              </li>}
             </span>
             <span>
-              {aTalk.location ? <span>
-                {aTalk.location.address ? <li><p>
-                  <Icon type="environment-o" />
-                  <strong>时间:&nbsp;</strong>
-                  <TimeFormat {...aTalk.time} />
-                </p></li> : ''}</span> : ''}
+              {aTalk.speaker.email &&
+                <li>
+                  <p>
+                    <Icon type="mail" />
+                    <strong>邮箱:&nbsp;</strong>
+                    <span>{aTalk.speaker.email}</span>
+                  </p>
+                </li>}
             </span>
           </ul>
         </div>

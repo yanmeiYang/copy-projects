@@ -1,13 +1,14 @@
 @import "../../themes/vars.less";
 
-.topZone {
-  display: flex; flex-direction: row;
-  max-width: 1228px;
+.page {
+  display: flex; flex-direction: column; min-width: 800px;
+}
 
-  :global {
-    .searchZone { width: 100% }
-    .rightZone { }
-  }
+.topZone {
+  display: flex; flex-direction: row; justify-content: flex-start;
+  max-width: 1228px;
+  .searchZone { width: 100%; }
+  .rightZone { }
 }
 
 .top {

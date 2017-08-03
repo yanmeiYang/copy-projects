@@ -24,14 +24,22 @@ class NewActivityList extends React.Component {
   };
 
   render() {
-    const { result, style } = this.props;
+    const { result, style, app } = this.props;
     const timeFrom = new Date(result.time.from);
     const timeTo = new Date(result.time.to);
     if (result.organizer.length > 0) {
       style.borderLeft = result.organizer[0].includes('专业委员会') ? CommitteeColor : DivisionColor;
     }
+    let expertRating;
+    if (app.roles.admin) {
+      expertRating = true;
+    } else if (app.roles.role[0] && app.roles.role[0].includes('专员') && app.roles.role[0].includes(result.category)) {
+      expertRating = true;
+    } else {
+      expertRating = app.roles.authority.includes(result.organizer[0]);
+    }
     return (
-      <div className={styles.seminar_item} style={style} >
+      <div className={styles.seminar_item} style={style}>
         <div className={styles.seminar_title}>
           <h2>
             <Link to={`/seminar/${result.id}`}>
@@ -39,7 +47,7 @@ class NewActivityList extends React.Component {
             </Link>
           </h2>
           <div>
-            {this.props.app.roles.admin && !JSON.parse(this.props.hidetExpertRating) &&
+            {expertRating && !JSON.parse(this.props.hidetExpertRating) &&
             <Button type="primary" className={styles.viewTheActivityBtn} size="small"
                     onClick={this.goToRating.bind(this, result.id)}>专家评分</Button>}
           </div>
@@ -69,21 +77,21 @@ class NewActivityList extends React.Component {
               </div>
             </div>
             {result.tags.length > 0 &&
-              <div className={styles.seminar_orgAndTag}>
-                <div>活动标签：</div>
-                <div>
-                  {
-                    result.tags.map((item, index) => {
-                      return (
-                        <span key={Math.random()}>
-                          <span>{item}</span>
-                          {index < result.tags.length - 1 && <span>,&nbsp;</span>}
-                        </span>
-                      );
-                    })
-                  }
-                </div>
+            <div className={styles.seminar_orgAndTag}>
+              <div>活动标签：</div>
+              <div>
+                {
+                  result.tags.map((item, index) => {
+                    return (
+                      <span key={Math.random()}>
+                        <span>{item}</span>
+                        {index < result.tags.length - 1 && <span>,&nbsp;</span>}
+                      </span>
+                    );
+                  })
+                }
               </div>
+            </div>
             }
           </div>
         </div>

@@ -48,7 +48,7 @@ class ExpertRating extends React.Component {
         <table >
           <tbody>
           <tr>
-            <td>演讲内容（水平）:</td>
+            <td>演讲内容:</td>
             <td>
               <Rate value={content} onChange={this.onChange.bind(this, 'content')}/>
               <InputNumber min={0} max={5} step={1} value={content} defaultValue={content}
@@ -64,7 +64,7 @@ class ExpertRating extends React.Component {
             </td>
           </tr>
           <tr>
-            <td>综合评价（其它贡献）:</td>
+            <td>综合评价:</td>
             <td>
               <Rate value={integrated} onChange={this.onChange.bind(this, 'integrated')}/>
               <InputNumber min={0} max={5} step={1} value={integrated}

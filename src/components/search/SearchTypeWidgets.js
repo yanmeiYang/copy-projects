@@ -4,8 +4,12 @@ import { routerRedux } from 'dva/router';
 import styles from './SearchTypeWidgets.less';
 import { sysconfig } from '../../systems';
 
-const config = [
-  { label: '专家', url: '/uniSearch/:query/0/30', pageSignature: 'uniSearch' },
+const defaultConfig = [
+  {
+    label: '专家',
+    url: `/uniSearch/:query/0/${sysconfig.MainListSize}`,
+    pageSignature: 'uniSearch',
+  },
   { label: '地图', url: '/expert-map', data: 'query', pageSignature: 'expert-map' },
   {
     label: '关系',
@@ -17,13 +21,26 @@ const config = [
   { label: '技术趋势', url: '/trend-prediction', data: 'query', pageSignature: 'trend-prediction' },
 ];
 
+if (process.env.NODE_ENV !== 'production') {
+  defaultConfig.push(
+    {
+      label: 'DEV:ExpertTrajectory',
+      url: '/expert-trajectory',
+      data: 'query',
+      pageSignature: 'expert-trajectory',
+    },
+  );
+}
+
+const defaultQuery = 'data mining';
+
 class SearchTypeWidgets extends React.PureComponent {
   state = {
     current: '',
   };
 
   componentWillMount() {
-    this.config = this.props.config || config;
+    this.config = this.props.config || defaultConfig;
 
     // match current label based on url.
     const path = window.location.pathname;
@@ -42,16 +59,17 @@ class SearchTypeWidgets extends React.PureComponent {
   }
 
   onClick = conf => (e) => {
+    const theQuery = this.props.query || defaultQuery;
     this.setState({ current: conf.label });
     if (conf && conf.data) {
       const query = {};
-      query[conf.data] = this.props.query;
+      query[conf.data] = theQuery;
       this.props.dispatch(routerRedux.push({
         pathname: conf.url, query,
       }));
     } else {
       this.props.dispatch(routerRedux.push({
-        pathname: conf.url.replace(':query', this.props.query),
+        pathname: conf.url.replace(':query', theQuery),
       }));
     }
   };

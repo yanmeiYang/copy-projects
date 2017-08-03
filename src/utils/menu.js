@@ -4,9 +4,9 @@ const allMenus = [{ id: 1, icon: 'laptop', name: '首页', router: '/' },
 
 
   { id: 4, bpid: 1, name: '设置', icon: 'setting' },
-  { id: 41, bpid: 4, mpid: 4, name: '用户列表', icon: 'bar-chart', router: '/admin/users' },
+  { id: 41, bpid: 4, mpid: 4, name: '用户管理', icon: 'usergroup-add', router: '/admin/users' },
   {
-    id: 42, bpid: 4, mpid: 4, name: '角色设置', icon: 'bar-chart',
+    id: 42, bpid: 4, mpid: 4, name: '角色管理', icon: 'bar-chart',
     router: '/admin/system-config/user_roles',
   },
   // {
@@ -18,7 +18,7 @@ const allMenus = [{ id: 1, icon: 'laptop', name: '首页', router: '/' },
     router: '/admin/system-config/activity_organizer_options',
   },
   {
-    id: 44, bpid: 4, mpid: 4, name: '贡献类别', icon: 'api',
+    id: 44, bpid: 4, mpid: 4, name: '贡献类别', icon: 'hourglass',
     router: '/admin/system-config/contribution_type',
   },
   // {
@@ -26,11 +26,11 @@ const allMenus = [{ id: 1, icon: 'laptop', name: '首页', router: '/' },
   //   router: '/technical-committees',
   // },
   {
-    id: 46, bpid: 4, mpid: 4, name: '活动类型', icon: 'api',
+    id: 46, bpid: 4, mpid: 4, name: '活动类型', icon: 'tool',
     router: '/admin/system-config/orgcategory',
   },
   {
-    id: 49, bpid: 4, mpid: 4, name: '机构列表', icon: 'api',
+    id: 49, bpid: 4, mpid: 4, name: '机构列表', icon: 'compass',
     router: '/admin/category-list',
   },];
 

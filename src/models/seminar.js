@@ -6,6 +6,7 @@ import pathToRegexp from 'path-to-regexp';
 import { config } from '../utils';
 import * as seminarService from '../services/seminar';
 import * as uconfigService from '../services/universal-config';
+import * as personService from '../services/person';
 
 export default {
   namespace: 'seminar',
@@ -17,8 +18,9 @@ export default {
     offset: 0,
     sizePerPage: 20,
     query: '',
-    summaryById: [],
+    summaryById: {},
     speakerSuggests: [],
+    selectedSuggestSpeaker: {},
     activity_organizer_options: [], // 用户手动输入的org
     postSeminarOrganizer: [], // 所有活动类型的合集
     orgcategory: {}, // 活动类型
@@ -41,12 +43,12 @@ export default {
           });
           dispatch({ type: 'getTopMentionedTags', payload: { src: config.source, num: 10 } });
         }
-        if (location.pathname === '/seminar-post') {
-          dispatch({
-            type: 'getCategoriesHint',
-            payload: { category: 'orglist_' },
-          });
-        }
+        // if (location.pathname === '/seminar-post') {
+        //   dispatch({
+        //     type: 'getCategoriesHint',
+        //     payload: { category: 'orglist_' },
+        //   });
+        // }
         const expertRating = pathToRegexp('/seminar/expert-rating/:id').exec(location.pathname);
         const match = pathToRegexp('/seminar/:id').exec(location.pathname);
         if (match || expertRating) {
@@ -156,6 +158,7 @@ export default {
       const data = yield call(seminarService.getTopMentionedTags, src, num);
       yield put({ type: 'getTopMentionedTagsSuccess', data });
     },
+    // TODO 输入多个id，返回所有承办单位
     *getCategoriesHint({ payload }, { call, put }) {
       const { category } = payload;
       const suggestCategory = yield call(uconfigService.getCategoriesHint, category);
@@ -166,6 +169,26 @@ export default {
         }
       }
     },
+    *updateSeminarActivity({ payload }, { call, put }) {
+      const seminarId = payload.id;
+      const { data } = yield call(seminarService.updateSeminarActivity, payload);
+      if (data.status) {
+        yield put(routerRedux.push({ pathname: `/seminar/${seminarId}` }));
+      }
+    },
+    *saveSuggestExpert({ payload }, { call, put }){
+      const { speaker } = payload;
+      const id = speaker.payload.id;
+      const { data } = yield call(personService.getPerson, id);
+      const emailStr = yield call(personService.personEmailStr, id);
+      console.log(emailStr.data.email);
+      if (data && emailStr.data.status) {
+        const email = emailStr.data.email;
+        yield put({ type: 'saveSuggestExpertSuccess', payload: { speaker, data, email },
+      })
+        ;
+      }
+    }
   },
 
   reducers: {
@@ -248,6 +271,12 @@ export default {
     },
     getTopMentionedTagsSuccess(state, { data }) {
       return { ...state, topMentionedTags: data };
+    },
+    saveSuggestExpertSuccess(state, { payload: { speaker, data, email } }) {
+      speaker['bio'] = data.contact.bio ? data.contact.bio : '';
+      speaker['phone'] = data.contact.phone ? data.contact.phone : '';
+      speaker['email'] = email;
+      return { ...state, selectedSuggestSpeaker: speaker };
     },
     showLoading(state) {
       return {

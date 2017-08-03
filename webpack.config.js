@@ -6,9 +6,9 @@ const WebpackChunkHash = require('webpack-chunk-hash');
 
 module.exports = function (config, env) {
   // if (config.module) {
-  //   console.log('-------------------------------------------');
-  //   console.log(config.plugins[3].definitions);
-  //   console.log('-------------------------------------------');
+  console.log('-------------------------------------------');
+  console.log(config);
+  console.log('-------------------------------------------');
   //   config.plugins.map((p) => {
   //     console.log('>', p);
   //   });

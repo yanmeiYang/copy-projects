@@ -13,7 +13,7 @@ const plainOptions = [{ id: 1, label: '姓名', desc: 'name_zh' }, {
   desc: 'gender',
 },
   { id: 3, label: '职称', desc: 'pos' }, { id: 4, label: '单位', desc: 'aff' }];
-const defaultCheckedList = [];
+const defaultCheckedList = ['name_zh', 'gender', 'pos', 'aff'];
 class ExportPersonBtn extends React.Component {
   state = {
     isExport: false,

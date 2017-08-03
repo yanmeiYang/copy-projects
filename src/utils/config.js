@@ -68,6 +68,7 @@ module.exports = {
     getSeminars: '/activity/list/offset/:offset/size/:size', // src aid uid organizer type category stype
     getActivityById: '/activity/:id',
     postActivity: '/activity/post_activity',
+    updateActivity: '/activity/update',
     speakerSuggest: '/activity/speaker/suggest',
     uploadActivityPosterImgFile: '/activity/img',
     searchActivity: '/search/activity',
@@ -88,6 +89,7 @@ module.exports = {
     /* person */
     personProfile: '/person/summary/:id',
     personEmailImg: '/person/email/i/',
+    personEmailStr: '/person/email/s/:id',
     getEmailCrImage: '/person/email-cr/i/',
     listPersonByIds: '/person/batch-list',
     getActivityAvgScoresByPersonId: '/person/activity/:id/indices',

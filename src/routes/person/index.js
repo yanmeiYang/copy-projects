@@ -22,6 +22,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
   const totalPubs = profile.indices && profile.indices.num_pubs;
 
   const contrib = avgScores.filter(score => score.key === 'contrib')[0];
+  const activity_indices = { contrib: contrib === undefined ? 0 : contrib.score };
 
   const profileTabs = [{
     title: '专家评分',
@@ -34,7 +35,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
         <tr>
           <td>贡献度:</td>
           <td>
-            {/* <Rate disabled defaultValue={contrib.score}/>*/}
+            {/* <Rate disabled defaultValue={contrib.score}/> */}
             <span>{contrib.score}</span>
           </td>
         </tr>
@@ -42,32 +43,35 @@ const Person = ({ dispatch, person, seminar, publications }) => {
         {avgScores.map((score) => {
           return (
             <tbody key={score.key} className="scoreTable">
-              {score.key === 'level' &&
-              <tr>
-                <td>演讲内容（水平）:</td>
-                <td>
-                  <Rate disabled defaultValue={score.score} />
-                  <input type="text" className="score" value={getTwoDecimal(score.score, 2)} disabled />
-                </td>
-              </tr>
-              }
-              {score.key === 'content' &&
-              <tr>
-                <td>演讲水平:</td>
-                <td>
-                  <Rate disabled defaultValue={score.score} />
-                  <input type="text" className="score" value={getTwoDecimal(score.score, 2)} disabled />
-                </td>
-              </tr>
-              }
-              {score.key === 'integrated' &&
-              <tr>
-                <td>综合评价（其它贡献）:</td>
-                <td>
-                  <Rate disabled defaultValue={score.score} />
-                  <input type="text" className="score" value={getTwoDecimal(score.score, 2)} disabled />
-                </td>
-              </tr>}
+            {score.key === 'level' &&
+            <tr>
+              <td>演讲内容:</td>
+              <td>
+                <Rate disabled defaultValue={score.score} />
+                <input type="text" className="score" value={getTwoDecimal(score.score, 2)}
+                       disabled />
+              </td>
+            </tr>
+            }
+            {score.key === 'content' &&
+            <tr>
+              <td>演讲水平:</td>
+              <td>
+                <Rate disabled defaultValue={score.score} />
+                <input type="text" className="score" value={getTwoDecimal(score.score, 2)}
+                       disabled />
+              </td>
+            </tr>
+            }
+            {score.key === 'integrated' &&
+            <tr>
+              <td>综合评价:</td>
+              <td>
+                <Rate disabled defaultValue={score.score} />
+                <input type="text" className="score" value={getTwoDecimal(score.score, 2)}
+                       disabled />
+              </td>
+            </tr>}
             </tbody>
           );
         })}
@@ -76,14 +80,16 @@ const Person = ({ dispatch, person, seminar, publications }) => {
   }, {
     title: '参与的活动',
     content: <Spin spinning={seminar.loading}>
-      <div style={{ minHeight: 150 }}>{results.map((activity) => {
+      {results.length > 0 ? <div style={{ minHeight: 150 }}>{results.map((activity) => {
         return (
           <div key={activity.id + Math.random()}>
-            {/* <ActivityList result={activity} />*/}
-            <NewActivityList result={activity} hidetExpertRating="true" style={{ marginTop: 20, maxWidth: 1000 }} />
+            {/* <ActivityList result={activity} /> */}
+            <NewActivityList result={activity} hidetExpertRating="true"
+                             style={{ marginTop: 20, maxWidth: 1000 }} />
           </div>
         );
-      })}</div>
+      })}</div> : <div style={{ minHeight: 150, textAlign: 'center' }}><span
+        style={{ fontSize: '32px', color: '#aaa' }}>没有数据</span></div>}
     </Spin>,
   }, {
     title: '代表性论文',
@@ -151,7 +157,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
   return (
     <div className="content-inner">
 
-      <ProfileInfo profile={profile} />
+      <ProfileInfo profile={profile} activity_indices={activity_indices} />
 
       <div style={{ marginTop: 30 }} />
 
@@ -173,7 +179,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
        </h1>
        <PersonPublications personId={profile.id} totalPubs={totalPubs} />
        */}
-      {/* <PersonFeaturedPapers personId={profile.id} totalPubs={totalPubs}/>*/}
+      {/* <PersonFeaturedPapers personId={profile.id} totalPubs={totalPubs}/> */}
     </div>
   );
 };

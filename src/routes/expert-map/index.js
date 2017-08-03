@@ -21,7 +21,9 @@ class ExpertMapPage extends React.Component {
   };
 
   componentWillMount() {
-    const { query, type } = this.props.location.query;
+    const query = (this.props.location && this.props.location.query
+      && this.props.location.query.query) || 'data mining';
+    const { type } = this.props.location.query;
     if (query) {
       // this.props.dispatch({ type: 'app/setQuery', query });
       this.setState({ query });

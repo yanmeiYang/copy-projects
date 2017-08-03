@@ -32,7 +32,7 @@ export async function checkEmail(src, email) {
 export async function invoke(uid, label) {
   const data = {
     uid,
-    label,
+    label: `${source}_${label}`,
   };
   return request(api.invoke, {
     method: 'POST',
@@ -42,7 +42,7 @@ export async function invoke(uid, label) {
 export async function revoke(uid, label) {
   const data = {
     uid,
-    label,
+    label: `${source}_${label}`,
   };
   return request(api.revoke, {
     method: 'POST',

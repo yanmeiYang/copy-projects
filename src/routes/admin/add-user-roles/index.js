@@ -20,7 +20,7 @@ class AddUserRoles extends React.Component {
 
   render() {
     return (
-      <div className="content-inner">
+      <div className="content-inner" style={{ maxWidth: '1228px' }}>
         <AddUserRolesByOrg />
       </div>
     );

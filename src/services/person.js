@@ -43,3 +43,7 @@ export async function listPersonByIds(ids) {
 export async function getActivityAvgScoresByPersonId(id) {
   return request(api.getActivityAvgScoresByPersonId.replace(':id', id));
 }
+
+export async function personEmailStr(id) {
+  return request(api.personEmailStr.replace(':id', id));
+}

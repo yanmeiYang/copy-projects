@@ -22,6 +22,7 @@ class UserList extends React.Component {
     console.log('>>>>>>>>>>>>>>>>>>>');
   }
 
+  // FIXME yanmei: 没用的东西不要放到state里面。（可能都有用，我只是测试你能不能看到FIXME）;
   state = {
     visible: false,
     currentRole: '',
@@ -180,11 +181,11 @@ class UserList extends React.Component {
   };
   showUpdateName = (e) => {
     return (
-      <div >
+      <div>
         {e.id === this.state.editUserId ?
           <div style={{ display: 'flex' }}>
             <Input defaultValue={e.display_name} onBlur={this.getNewName} />
-            <Button onClick={this.updateName}>保存</Button ></div>
+            <Button onClick={this.updateName}>保存</Button></div>
           : e.display_name
         }
       </div>

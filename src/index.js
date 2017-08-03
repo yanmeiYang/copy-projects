@@ -41,7 +41,7 @@ app.router(require('./systems/' + system + '/router')); // eslint-disable-line
 // 4. Start
 const App = app.start();
 ReactDOM.render(
-  <IntlProvider><App /></IntlProvider>,
+  <IntlProvider locale="en"><App /></IntlProvider>,
   document.getElementById('root'),
 );
 

@@ -75,7 +75,7 @@ class KgSearchBox extends React.PureComponent {
 
   componentWillReceiveProps = (nextProps) => {
     if (nextProps.query !== this.state.value) {
-      this.setState({ value: nextProps.query });
+      this.setState({ value: nextProps.query || '' });
     }
   };
 

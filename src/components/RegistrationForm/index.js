@@ -182,7 +182,7 @@ class RegistrationForm extends React.PureComponent {
   handleOrganizerChange = (value, newArray) => {
     newArray.map((tag) => {
       if (JSON.stringify(value).indexOf(tag) < 0) {
-        const data = { key: tag, val: '1' };
+        const data = { key: tag, val: ' ' };
         this.props.dispatch({ type: 'seminar/addKeyAndValue', payload: data });
       }
     });

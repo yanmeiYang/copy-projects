@@ -1,4 +1,54 @@
-@import "../../../themes/vars.less";
+.hr {
+  padding-top: 0;
+  margin: 30px 0;
+  border: 0;
+  border-top: 1px solid #eee;
+}
+.workshop {
+  hr {
+    .hr;
+  }
+  .posterShow {
+    display: flex;
+    justify-content: flex-start;
+    hr {
+      .hr;
+    }
+    .expertAvatar {
+      img {
+        width: 90px;
+      }
+    }
+    .expertMessage {
+      margin-left: 10px;
+      .expert_name_pos {
+        display: flex;
+        justify-content: flex-start;
+        margin-bottom: 10px;
+        h2 {
+          font-weight: normal;
+        }
+        span {
+          font-style: italic;
+          margin-left: 10px;
+          line-height: 2;
+        }
+      }
+      .expert_poster_info{
+        margin-top: 5px;
+        span:nth-child(2){
+          margin-left: 5px;
+          font-weight: 700;
+        }
+        p{
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+}
+
+
 
 .marginTop {
   margin-top: 20px;
@@ -8,14 +58,7 @@
   margin-left: 10px;
 }
 
-.setMaxWidth {
-  max-width: @max-width-page;
-  width: 100%;
-  padding: 0 20px;
-}
-
 .detailSeminar {
-  width: 100%;
   font-size: 13px;
   margin-top: 20px;
   display: flex;
@@ -26,32 +69,11 @@
     font-size: 18px;
     //font-weight: 300;
   }
-  .messages {
-    i {
-      width: 20px;
-    }
-    li p {
-      margin: 0 0 10px;
-    }
-    .center {
-      display: block;
-      text-align: -webkit-center;
-    }
-  }
   h5 {
     line-height: 20px;
     font-size: 17px;
     font-weight: 300;
     margin: 10px 0;
-  }
-
-  .action {
-    float: right;
-    .marginTop;
-  }
-
-  .rate {
-    .marginTop;
   }
 }
 
@@ -72,16 +94,8 @@
   }
 }
 
-.text-muted {
-  color: #777;
-}
 
-.hr {
-  padding-top: 0;
-  margin: 30px 0;
-  border: 0;
-  border-top: 1px solid #eee;
-}
+
 
 .workshopTetail {
   h5 {
@@ -100,27 +114,13 @@
   }
 }
 
-.workshop {
-  .speakerAvatar {
-    text-align: center;
-    img {
-      width: 160px;
-      border-radius: 5px 5px;
-    }
-  }
-  hr {
-    .hr;
-  }
-}
 
-.qrCode {
+.qrCode{
   display: none;
   z-index: 1;
   position: absolute;
 }
-.show_QRCode{
-  cursor: pointer;
-}
-.show_QRCode:hover + .qrCode {
+.show_QRCode:hover+.qrCode{
   display: block !important;
 }
+

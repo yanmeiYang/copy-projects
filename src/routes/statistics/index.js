@@ -8,7 +8,7 @@ import ExpertsList from './experts-list';
 import CommitteeList from './committee-list';
 import styles from './index.less';
 import { getTwoDecimal } from '../../utils';
-import { displayNameCNFirst } from '../../utils/profile_utils';
+import { displayNameCNFirst } from '../../utils/profile-utils';
 
 const TabPane = Tabs.TabPane;
 const tabData = [

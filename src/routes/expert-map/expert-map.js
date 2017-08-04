@@ -6,7 +6,7 @@ import { connect } from 'dva';
 import { Button } from 'antd';
 import styles from './expert-map.less';
 import { listPersonByIds } from '../../services/person';
-import * as profileUtils from '../../utils/profile_utils';
+import * as profileUtils from '../../utils/profile-utils';
 import { findPosition, getById, waitforBMap, waitforBMapLib } from './utils/map-utils';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
 import RightInfoZonePerson from './RightInfoZonePerson';
@@ -485,7 +485,7 @@ class ExpertMap extends React.PureComponent {
               <Button onClick={this.showType} value="0">自动</Button>
               <Button onClick={this.showType} value="1">大区</Button>
               <Button onClick={this.showType} value="2">国家</Button>
-              <Button onClick={this.showType} value="3">国内区</Button>
+              <Button onClick={this.showType} value="3" style={{ display: 'none' }}>国内区</Button>
               <Button onClick={this.showType} value="4">城市</Button>
               <Button onClick={this.showType} value="5">机构</Button>
             </ButtonGroup>

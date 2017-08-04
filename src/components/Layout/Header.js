@@ -7,7 +7,7 @@ import { Menu, Icon } from 'antd';
 import { Link } from 'dva/router';
 import { isEqual } from 'lodash';
 import styles from './Header.less';
-import * as profileUtils from '../../utils/profile_utils';
+import * as profileUtils from '../../utils/profile-utils';
 import { sysconfig } from '../../systems';
 import { KgSearchBox, SearchTypeWidgets } from '../../components/search';
 
@@ -27,8 +27,8 @@ class Header extends React.PureComponent {
 
   componentWillReceiveProps = (nextProps) => {
     if (nextProps.app.headerSearchBox && (
-      nextProps.app.headerSearchBox !== this.props.app.headerSearchBox
-      || this.props.app.headerSearchBox.query !== this.state.query)) {
+        nextProps.app.headerSearchBox !== this.props.app.headerSearchBox
+        || this.props.app.headerSearchBox.query !== this.state.query)) {
       if (nextProps.app.headerSearchBox.query) {
         console.log('>>>>>>>>>>>>>>>>> ', nextProps.app.headerSearchBox.query);
         this.setQuery(nextProps.app.headerSearchBox.query);
@@ -136,7 +136,7 @@ class Header extends React.PureComponent {
 
         {headerSearchBox &&
         <SearchTypeWidgets
-          config={sysconfig.HeaderSearch_TextNavi}
+          navis={sysconfig.HeaderSearch_TextNavi}
           query={this.state.query}
         />
         }

@@ -415,6 +415,7 @@ class RegistrationForm extends React.PureComponent {
             <FormItem
               {...formItemLayout}
               label="活动地点"
+              style={{ position: 'inherit' }}
             >
               {getFieldDecorator('address', {
                 rules: [{

@@ -102,7 +102,7 @@ const Login = ({
           }
           <div>
             <Link to="/forgot-password" className={styles.forgotpwbtn}>忘记密码</Link>
-            { sysconfig.ApplyUserBtn &&
+            {sysconfig.ApplyUserBtn &&
             <span className={styles.applyUserbtn} onClick={applyUser}>申请新用户</span>
             }
           </div>

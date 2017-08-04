@@ -8,7 +8,7 @@ import { InputNumber, Rate, Button, Row, Col, Table, Modal } from 'antd';
 const { Column } = Table;
 import { Link } from 'dva/router';
 import TimeFormat from '../detailSeminar/time-format';
-import * as profileUtils from '../../../utils/profile_utils';
+import * as profileUtils from '../../../utils/profile-utils';
 import styles from './index.less';
 
 class ExpertRatingPage extends React.Component {

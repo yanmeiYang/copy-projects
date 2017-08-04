@@ -21,19 +21,20 @@ export default {
 
   subscriptions: {
     setup({ dispatch, history }) {  // eslint-disable-line
-      dispatch({ type: 'setTestData', payload: {} });
+      // dispatch({ type: 'setTestData', payload: {} });
     },
   },
 
   effects: {
-    *setCategory({ payload }, { call, put }) {
+    * setCategory({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
       const { category } = payload;
       const data = yield call(uconfigService.listByCategory, category);
       yield put({ type: 'setCategorySuccess', payload: { category } });
       yield put({ type: 'setData', payload: { data } });
     },
-    *setTabList({ payload }, { call, put }) {
+
+    * setTabList({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
       const { category } = payload;
       const data = yield call(uconfigService.listByCategory, category);
@@ -46,7 +47,7 @@ export default {
       }
     },
 
-    *getOrgCategory({ payload }, { call, put }) {
+    * getOrgCategory({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
       const { category } = payload;
       const data = yield call(uconfigService.listByCategory, category);
@@ -54,7 +55,7 @@ export default {
       yield put({ type: 'setOrgList', payload: { data } });
     },
 
-    *addKeyAndValue({ payload }, { call, put }) {
+    * addKeyAndValue({ payload }, { call, put }) {
       // yield put({ type: 'showLoading' });
       const { category, key, val } = payload;
       const data = yield call(uconfigService.setByKey, category, key, val);
@@ -67,7 +68,7 @@ export default {
       yield put({ type: 'updateData', payload: { key, val } });
     },
 
-    *deleteByKey({ payload }, { call, put }) {
+    * deleteByKey({ payload }, { call, put }) {
       const { category, key } = payload;
       const data = yield call(uconfigService.deleteByKey, category, key);
       if (data.data && data.data.status === true) {
@@ -77,7 +78,7 @@ export default {
       }
       yield put({ type: 'deleteByKeySuccess', payload: { key } });
     },
-    *updateByKey({ payload }, { call, put }) {
+    * updateByKey({ payload }, { call, put }) {
       const { category, key, newKey } = payload;
       const data = yield call(uconfigService.updateByKey, category, key, newKey);
       if (data.data && data.data.status === true) {
@@ -90,7 +91,6 @@ export default {
   },
 
   reducers: {
-
     setCategorySuccess(state, { payload: { category } }) {
       return { ...state, category };
     },
@@ -173,10 +173,6 @@ export default {
     // TODO handel error.
     getPersonSuccess(state, { payload: { data } }) {
       return { ...state, profile: data.data };
-    },
-
-    setTestData(state, { payload: {} }) {
-      return { ...state, data: [{ key: 'key', value: 'value' }] };
     },
 
     showLoading(state) {

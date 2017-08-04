@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import styles from './profile-info.less';
 import { Indices } from '../../components/widgets';
-import * as profileUtils from '../../utils/profile_utils';
+import * as profileUtils from '../../utils/profile-utils';
 import * as personService from '../../services/person';
 import { VisResearchInterest } from '../../routes/vis';
 import { sysconfig } from '../../systems';

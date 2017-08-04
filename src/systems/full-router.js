@@ -33,7 +33,7 @@ const fullRouter = (app, defaultChildRoutes) => {
       core.Retrieve(app),
       core.UserInfo(app),
 
-      // Admin(Specified by ccf)
+      // Admin(Specified by ccf) TODO some are only used by ccf, move out.
       core.AdminUsers(app),
       core.AdminSystemConfig(app),
       core.AdminAddUserRolesByOrg(app),

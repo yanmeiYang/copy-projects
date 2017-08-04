@@ -70,7 +70,6 @@ class UniSearch extends React.PureComponent {
     this.doSearchUseProps(); // Init search.
   }
 
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.search.query !== this.props.search.query) {
       console.log('COMPARE:', nextProps.search.query, this.props.search.query);
@@ -269,9 +268,12 @@ class UniSearch extends React.PureComponent {
             />
           </div>
 
+          {sysconfig.Search_EnableKnowledgeGraphHelper &&
           <div className={styles.rightZone}>
             <KnowledgeGraphSearchHelper query={query} />
           </div>
+          }
+
         </div>
 
         {/* 这里可是添加TAB */}

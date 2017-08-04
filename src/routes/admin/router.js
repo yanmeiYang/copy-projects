@@ -69,6 +69,7 @@ export default {
     },
   }),
 
+  // TODO yanmei:
   AdminSystemOrgCategory: app => ({
     path: '/admin/category-list',
     getComponent(nextState, cb) {

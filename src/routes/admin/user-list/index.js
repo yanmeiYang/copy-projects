@@ -5,13 +5,14 @@
  */
 import React from 'react';
 import { routerRedux } from 'dva/router';
-import { Table, Spin, Modal, Input, Radio, Button } from 'antd';
+import { Table, Tabs, Spin, Modal, Input, Radio, Button } from 'antd';
 import { connect } from 'dva';
 import styles from './index.less';
 import { config } from '../../../utils';
 import { sysconfig } from '../../../systems';
-// import { classnames } from '../../../utils';
 
+// import { classnames } from '../../../utils';
+const TabPane = Tabs.TabPane;
 const { Column } = Table;
 const RadioGroup = Radio.Group;
 console.log('sajdf;lasjd;flj;');
@@ -34,6 +35,7 @@ class UserList extends React.Component {
     selectedAuthority: '',
     editUserId: '',
     editUserNewName: '',
+    defaultTabKey: 'active',
   };
 
   componentDidMount() {
@@ -157,15 +159,45 @@ class UserList extends React.Component {
     this.props.dispatch(routerRedux.push({ pathname: '/registered' }));
   };
 
+  onForbidUser = (e) => {
+    const data = JSON.parse(e.target.getAttribute('data'));
+    const uid = data.id;
+    const role = 'forbid';
+    this.props.dispatch({
+      type: 'auth/addForbidByUid',
+      payload: { uid, role },
+    });
+  };
+  openForbid = (e) => {
+    const data = JSON.parse(e.target.getAttribute('data'));
+    const uid = data.id;
+    const role = 'forbid';
+    this.props.dispatch({
+      type: 'auth/delRoleByUid',
+      payload: { uid, role },
+    });
+  }
+
   i18nGenderTable = { male: '男', female: '女' };
   i18nGender = gender => this.i18nGenderTable[gender] || '';
   operatorRender = (text, record) => {
     return (
-      <span>
-        {/*<a onClick={this.onEdit.bind(this, 'info')} data={JSON.stringify(text)}>修改信息</a>*/}
-        {/*<span className="ant-divider" />*/}
-        <a onClick={this.onEdit.bind(this, 'role')} data={JSON.stringify(text)}>修改角色</a>
-      </span>
+      <div>
+        {this.state.defaultTabKey === 'active' &&
+        <span>
+          {/*<a onClick={this.onEdit.bind(this, 'info')} data={JSON.stringify(text)}>修改信息</a>*/}
+          {/*<span className="ant-divider" />*/}
+          <a onClick={this.onEdit.bind(this, 'role')} data={JSON.stringify(text)}>修改角色</a>
+          <span className="ant-divider" />
+          <a onClick={this.onForbidUser.bind(this)} data={JSON.stringify(text)}>禁用</a>
+        </span>
+        }
+        {this.state.defaultTabKey === 'forbid' &&
+        <span>
+          <a onClick={this.openForbid.bind(this)} data={JSON.stringify(text)}>启用</a>
+        </span>
+        }
+      </div>
     );
   };
   updateName = () => {
@@ -192,12 +224,24 @@ class UserList extends React.Component {
     );
   };
 
+  onTabChange = (key) => {
+    this.setState({ defaultTabKey: key });
+  };
+
   render() {
     console.log('lsdkjfa;sjdf;ajsd;lfkjas;ldkj');
     const { loading } = this.props.auth;
-    let listUsers = [];
+    const listUsers = [];
     if (this.props.auth.listUsers) {
-      listUsers = this.props.auth.listUsers.filter(item => !item.role.includes(`${config.source}_超级管理员`));
+      this.props.auth.listUsers.map((item) => {
+        if (this.state.defaultTabKey === 'active' && !(item.role.includes(`${config.source}_超级管理员`) || item.role.includes(`${config.source}_forbid`))) {
+          listUsers.push(item);
+        }
+        if (this.state.defaultTabKey === 'forbid' && item.role.includes(`${config.source}_forbid`)) {
+          listUsers.push(item);
+        }
+        return true;
+      });
     }
 
     const { universalConfig } = this.props;
@@ -208,6 +252,12 @@ class UserList extends React.Component {
           <Button type="primary" size="large" style={{}} onClick={this.goCreateUser}>创建用户</Button>
         </div>
         <h2 className={styles.pageTitle}>用户管理</h2>
+
+
+        <Tabs defaultActiveKey={this.state.defaultTabKey} type="card" onChange={this.onTabChange}>
+          <TabPane tab="活跃用户" key="active"></TabPane>
+          <TabPane tab="禁用用户" key="forbid"></TabPane>
+        </Tabs>
 
         <Spin spinning={loading}>
           <Table

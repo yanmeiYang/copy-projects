@@ -91,7 +91,7 @@ class Registered extends React.Component {
       if (err) {
         if (err.email) {
           this.props.auth.validEmail = false;
-          if (err.email.errors.length > 0){
+          if (err.email.errors.length > 0) {
             this.setState({ errorMessageByEmail: err.email.errors[0].message });
           } else {
             this.setState({ errorMessageByEmail: '' });

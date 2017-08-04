@@ -6,10 +6,9 @@ import { connect } from 'dva';
 import { Button } from 'antd';
 import styles from './expert-googlemap.less';
 import { listPersonByIds } from '../../services/person';
-import * as profileUtils from '../../utils/profile_utils';
+import * as profileUtils from '../../utils/profile-utils';
 import { findPosition, getById } from './utils/map-utils';
 import GetGoogleMapLib from './utils/googleMapGai.js';
-import mapData from '../../../external-docs/expert-map/expert-map-example2.json';
 import RightInfoZonePerson from './RightInfoZonePerson';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
 const ButtonGroup = Button.Group;
@@ -183,15 +182,15 @@ class ExpertGoogleMap extends React.Component {
       this.showmap(this.props.expertMap.geoData,typeid);
     } else if (typeid === 1) {
       //简单地读取其城市大区等信息，然后归一到一个地址，然后在地图上显示
-      this.showmap(mapData,typeid);
+      this.showmap(this.props.expertMap.geoData,typeid);
     } else if (typeid === 2) {
-      this.showmap(mapData,typeid);
+      this.showmap(this.props.expertMap.geoData,typeid);
     } else if (typeid === 3) {
-      this.showmap(mapData,typeid);
+      this.showmap(this.props.expertMap.geoData,typeid);
     } else if (typeid === 4) {
-      this.showmap(mapData,typeid);
+      this.showmap(this.props.expertMap.geoData,typeid);
     } else if (typeid === 5) {
-      this.showmap(mapData,typeid);
+      this.showmap(this.props.expertMap.geoData,typeid);
     }
   }
 //Google Maps------------------------------------------------------------------------------------------------------------

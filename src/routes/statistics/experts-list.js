@@ -5,6 +5,7 @@ import React from 'react';
 import { Button, Input, Table, Icon } from 'antd';
 import { Link } from 'dva';
 import { getTwoDecimal } from '../../utils';
+import { displayNameCNFirst } from '../../utils/profile-utils';
 import styles from './experts-list.less';
 
 const InputGroup = Input.Group;
@@ -18,7 +19,8 @@ const columns = [
       return aName.localeCompare(bName);
     },
     render(text) {
-      return <a href={`/person/${text.id}`} target="_blank"> {text.n_zh} ({text.n}) </a>;
+      return (<a href={`/person/${text.id}`}
+                 target="_blank"> {displayNameCNFirst(text.n, text.n_zh)} </a>);
     },
   },
   {

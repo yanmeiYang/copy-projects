@@ -5,6 +5,7 @@ const SYS = 'ccf';
 // const SYS = 'huawei';
 // const SYS = 'alibaba';
 // const SYS = 'tencent';
+// const SYS = '2017-8';
 
 const param = (key, type, description) => {
   return { key, type, description };

@@ -5,7 +5,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { Button } from 'antd';
-import * as profileUtils from '../../../utils/profile_utils';
+import * as profileUtils from '../../../utils/profile-utils';
 import styles from './index.less';
 
 class UserInfo extends React.Component {

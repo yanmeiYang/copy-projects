@@ -7,7 +7,7 @@ import Footer from '../../components/Footers/ccf';
 module.exports = {
 
   // 通用配置。所有System的配置文件必须全部包含这部分的值
-  PageTitle: 'CCF 专家云智库',
+  PageTitle: 'CCF 专家库',
 
   Language: 'cn', // options [cn|en]
   PreferredLanguage: 'cn', // 默认语言
@@ -110,7 +110,7 @@ module.exports = {
     { name: '研究生', value: '7' },
     { name: '其他', value: '8' },
   ],
-
+  ApplyUserBtn: true,
   ShowConfigTab: false,
   SysconfigDefaultCategory: 'activity_type',
   SysConfigTabs: [

@@ -176,19 +176,19 @@ export default {
         yield put(routerRedux.push({ pathname: `/seminar/${seminarId}` }));
       }
     },
-    *saveSuggestExpert({ payload }, { call, put }){
+    *saveSuggestExpert({ payload }, { call, put }) {
       const { speaker } = payload;
       const id = speaker.payload.id;
       const { data } = yield call(personService.getPerson, id);
       const emailStr = yield call(personService.personEmailStr, id);
-      console.log(emailStr.data.email);
       if (data && emailStr.data.status) {
         const email = emailStr.data.email;
-        yield put({ type: 'saveSuggestExpertSuccess', payload: { speaker, data, email },
-      })
+        yield put({
+          type: 'saveSuggestExpertSuccess', payload: { speaker, data, email },
+        })
         ;
       }
-    }
+    },
   },
 
   reducers: {
@@ -271,6 +271,9 @@ export default {
     },
     getTopMentionedTagsSuccess(state, { data }) {
       return { ...state, topMentionedTags: data };
+    },
+    cancleSuggestExpert(state, { payload }) {
+      return { ...state, selectedSuggestSpeaker: payload };
     },
     saveSuggestExpertSuccess(state, { payload: { speaker, data, email } }) {
       speaker['bio'] = data.contact.bio ? data.contact.bio : '';

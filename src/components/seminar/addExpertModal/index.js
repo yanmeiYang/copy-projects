@@ -25,6 +25,7 @@ class AddExpertModal extends React.Component {
     affiliation: '',
     talkAbstract: '',
     isEdit: false,
+    isSearched: false, // 是否搜索过，没有搜索到结果显示'没有推荐专家'
   };
   speakerInformation = {
     name: '',
@@ -42,8 +43,7 @@ class AddExpertModal extends React.Component {
   componentDidMount() {
     if (this.props.editTheTalk.speaker) {
       const editTheTalk = this.props.editTheTalk;
-      console.log(1111);
-      console.log(editTheTalk.speaker);
+      this.props.parentProps.seminar.speakerSuggests = [];
       this.setState({
         isEdit: true,
         speakerInfo: editTheTalk.speaker,
@@ -73,7 +73,7 @@ class AddExpertModal extends React.Component {
     const selectedExpert = nextProps.parentProps.seminar.selectedSuggestSpeaker;
     this.speakerInformation.name = this.refs.speakerName.refs.input.value = selectedExpert.payload.name;
     this.speakerInformation.affiliation = this.refs.speakerAff.refs.input.value = selectedExpert.payload.org;
-    selectedExpert.pos.length > 0 && selectedExpert.pos[0].n ? this.speakerInformation.position = this.refs.speakerPos.refs.input.value = selectedExpert.pos[0].n : this.speakerInformation.position = this.refs.speakerPos.refs.input.value = ' ';
+    selectedExpert.pos.length > 0 && selectedExpert.pos[0].n ? this.speakerInformation.position = this.refs.speakerPos.refs.input.value = selectedExpert.pos[0].n : this.speakerInformation.position = this.refs.speakerPos.refs.input.value = '';
     this.speakerInformation.aid = this.refs.speakerAid.value = selectedExpert.payload.id;
     this.speakerInformation.img = this.refs.speakerImg.src = selectedExpert.img;
     this.speakerInformation.bio = selectedExpert.bio;
@@ -114,9 +114,23 @@ class AddExpertModal extends React.Component {
       this.setState({ talkEndValue: value });
     }
   };
+  // 清空已选择的专家
+  notFoundSuggestExpert = () => {
+    this.setStep('step3', true);
+    const data = {
+      payload: { name: '', aff: '', aff_zh: '', id: '', org: '', org_zh: '', position: '' },
+      bio: '',
+      email: '',
+      img: defaultImg,
+      phone: '',
+      pos: [],
+    };
+    this.props.parentProps.dispatch({ type: 'seminar/cancleSuggestExpert', payload: data });
+  };
 
   // 选择一位推荐专家
   selectedExpert = (speaker) => {
+    this.notFoundSuggestExpert();
     this.props.parentProps.dispatch({ type: 'seminar/saveSuggestExpert', payload: { speaker } });
     this.setState({
       step3: true,
@@ -185,10 +199,15 @@ class AddExpertModal extends React.Component {
     } else {
       this.props.parentProps.dispatch({ type: 'seminar/getSpeakerSuggest', payload: data });
     }
+    if (this.props.editTheTalk.speaker !== undefined) {
+      this.props.editTheTalk.speaker = {};
+    }
     this.setState({
       name: this.refs.name.refs.input.value,
       position: this.refs.pos.refs.input.value,
       affiliation: this.refs.aff.refs.input.value,
+      isSearched: true,
+      speakerInfo: {},
     });
   }
 
@@ -207,7 +226,8 @@ class AddExpertModal extends React.Component {
   };
 
   cancelCurrentPerson = () => {
-    this.setState({ step2: true, step3: false });
+    this.props.parentProps.seminar.speakerSuggests = [];
+    this.setState({ step2: true, step3: false, isSearched: false, });
     // this.refs.speakerName.refs.input.value = '';
     // this.refs.speakerAff.refs.input.value = '';
     // this.refs.speakerPos.refs.input.value = '';
@@ -227,7 +247,7 @@ class AddExpertModal extends React.Component {
         sm: { span: 20 },
       },
     };
-    const { modalVisible, step2, step3, isEdit, speakerInfo } = this.state;
+    const { modalVisible, step2, step3, isEdit, speakerInfo, isSearched } = this.state;
     const { parentProps, editTheTalk } = this.props;
     const { speakerSuggests, loading, contribution_type } = parentProps.seminar;
     const { getFieldDecorator } = parentProps.form;
@@ -320,88 +340,98 @@ class AddExpertModal extends React.Component {
                     onClick={this.suggestExpert.bind(this, 1)}>推荐</Button>
           </div>
           <div className={styles.personWrap}>
-            {speakerSuggests.length > 0 &&
             <Spin spinning={loading} style={{ marginTop: 30 }}>
-              {speakerSuggests.map((speaker) => {
-                const position = speaker.pos && speaker.pos.length > 0 ? speaker.pos[0].n : null;
-                const aff = speaker.payload.aff ? speaker.payload.aff : null;
-                return (
-                  <li key={speaker.payload.id} className={styles.person}>
-                    <div className={styles.left}>
-                      <img src={this.getImg(speaker.img)} alt="头像" />
-                    </div>
-                    <div className={styles.right}>
-                      <div className={styles.nameWrap}>
-                        <h3>{speaker.text}</h3>
-                      </div>
-                      <div className={styles.statWrap}>
-                        <div className={styles.item}>
-                          <span className={styles.label}>h-index:</span>
-                          <span>{speaker.payload.h_index}</span>
+              {speakerSuggests.length > 0 ?
+                <div>
+                  {speakerSuggests.map((speaker) => {
+                    const position = speaker.pos && speaker.pos.length > 0 ? speaker.pos[0].n : null;
+                    const aff = speaker.payload.aff ? speaker.payload.aff : null;
+                    return (
+                      <li key={speaker.payload.id} className={styles.person}>
+                        <div className={styles.left}>
+                          <img src={this.getImg(speaker.img)} alt="头像" />
                         </div>
-                        <span className={styles.split}>|</span>
-                        <div className={styles.item}>
-                          <span className={styles.label}>论文数:</span>
-                          <span>{speaker.payload.n_pubs}</span>
-                        </div>
-                        <span className={styles.split}>|</span>
-                        <div className={styles.item}>
-                          <span className={styles.label}>引用数:</span>
-                          <span>{speaker.payload.n_citation}</span>
-                        </div>
-                      </div>
-                      <div className={styles.infoWrap}>
-                        <p>
-                          {position &&
-                          <span className={styles.infoItem}>
+                        <div className={styles.right}>
+                          <div className={styles.nameWrap}>
+                            <h3>{speaker.text}</h3>
+                          </div>
+                          <div className={styles.statWrap}>
+                            <div className={styles.item}>
+                              <span className={styles.label}>h-index:</span>
+                              <span>{speaker.payload.h_index}</span>
+                            </div>
+                            <span className={styles.split}>|</span>
+                            <div className={styles.item}>
+                              <span className={styles.label}>论文数:</span>
+                              <span>{speaker.payload.n_pubs}</span>
+                            </div>
+                            <span className={styles.split}>|</span>
+                            <div className={styles.item}>
+                              <span className={styles.label}>引用数:</span>
+                              <span>{speaker.payload.n_citation}</span>
+                            </div>
+                          </div>
+                          <div className={styles.infoWrap}>
+                            <p>
+                              {position &&
+                              <span className={styles.infoItem}>
                             <Icon type="idcard" />{ position }
                             </span>}
-                        </p>
+                            </p>
 
-                        <p>{aff && <span className={styles.infoItem}>
+                            <p>{aff && <span className={styles.infoItem}>
                           <Icon type="home" />
-                          { aff }
+                              { aff }
                           </span> }</p>
-                      </div>
-                      <div className={styles.tagWrap}>
-                        {speaker.tags && speaker.tags.slice(0, 5).map((tag) => {
-                          if (tag === 'Null') {
-                            return '';
-                          }
-                          return (
-                            <Link key={Math.random()}>
-                              <Tag className={styles.tag}>{tag.t}</Tag>
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    </div>
-                    <div>
-                      <Button type="primary" onClick={this.selectedExpert.bind(this, speaker)}>添加此人</Button>
-                    </div>
-                  </li>
-                );
-              })}
-            </Spin>}
-            {isEdit && this.props.editTheTalk &&
+                          </div>
+                          <div className={styles.tagWrap}>
+                            {speaker.tags && speaker.tags.slice(0, 5).map((tag) => {
+                              if (tag === 'Null') {
+                                return '';
+                              }
+                              return (
+                                <Link key={Math.random()}>
+                                  <Tag className={styles.tag}>{tag.t}</Tag>
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        </div>
+                        <div>
+                          <Button type="primary"
+                                  onClick={this.selectedExpert.bind(this, speaker)}>添加此人</Button>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </div> :
+                <div>
+                  {isSearched &&
+                  <div className={styles.noExpertsRecomm}><span>没有推荐专家</span></div>}
+                </div>
+              }
+            </Spin>
+            {/* 活动页面点编辑展示的内容 */}
+            {isEdit && editTheTalk.speaker !== undefined && editTheTalk.speaker.name !== undefined &&
             <ExpertBasicInfo currentExpert={editTheTalk.speaker} />
             }
+            {/* 非活动详情页面编辑 */}
             {speakerSuggests.length === 0 && !isEdit && speakerInfo.name &&
             <ExpertBasicInfo currentExpert={speakerInfo} />
             }
           </div>
           <div style={{ height: 20 }}>
-            {!isEdit && speakerSuggests.length > 0 ?
-              <Button key="submit" type="primary" size="large"
-                      style={{ float: 'right', marginTop: 10 }}
-                      onClick={() => this.setStep('step3', true)}>
-                未找到，手工填写信息
-              </Button> : <Button key="submit" type="primary" size="large"
-                                  style={{ float: 'right', marginTop: 10 }}
-                                  onClick={() => this.setStep('step3', true)}>
-                下一步
-              </Button>
-            }
+            {!isSearched && speakerInfo.name !== undefined && speakerInfo.name !== '' &&
+            <Button key="" type="primary" size="large"
+                    style={{ float: 'right', marginTop: 10, marginLeft: 10 }}
+                    onClick={() => this.setStep('step3', true)}>
+              下一步
+            </Button>}
+            <Button key="submit" type="primary" size="large"
+                    style={{ float: 'right', marginTop: 10 }}
+                    onClick={() => this.notFoundSuggestExpert()}>
+              未找到，手工填写信息
+            </Button>
             <Button type="default" size="large" style={{ marginTop: 10 }}
                     onClick={() => this.setStep('step2', false)}>
               上一步
@@ -417,9 +447,8 @@ class AddExpertModal extends React.Component {
             <section>
               <div className="people">
                 <div className="no-padding shadow-10">
-                  <div className={styles.crop}><span className="helper" /><img
-                    src={this.getImg()}
-                    ref="speakerImg" />
+                  <div className={styles.crop}><span className="helper" />
+                    <img src={this.getImg()} ref="speakerImg" alt="" />
                     <input ref="speakerAid" style={{ display: 'none' }} />
                   </div>
                 </div>

@@ -8,6 +8,7 @@ import {
   Col,
   DatePicker,
 } from 'antd';
+import styles from './index.less';
 
 class CanlendarInForm extends React.Component {
   state = {
@@ -90,7 +91,7 @@ class CanlendarInForm extends React.Component {
           />
         </Col>
       </Row>
-    )
+    );
   }
 }
 export default CanlendarInForm;

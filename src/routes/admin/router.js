@@ -37,6 +37,7 @@ export default {
       }, 'admin');
     },
   }),
+
   AdminContributionType: app => ({
     path: '/admin/system-config/contribution_type',
     getComponent(nextState, cb) {
@@ -47,6 +48,7 @@ export default {
       }, 'admin');
     },
   }),
+
   AdminActivityType: app => ({
     path: '/admin/system-config/orgcategory',
     getComponent(nextState, cb) {
@@ -80,8 +82,6 @@ export default {
       }, 'admin');
     },
   }),
-
-
 
 
 };

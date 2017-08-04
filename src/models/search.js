@@ -42,7 +42,7 @@ export default {
           const size = parseInt(match[4], 10);
           // update fillings.
           dispatch({ type: 'setParams', payload: { query: keyword, offset, size } });
-          console.log('Success::::sdfsdf ', keyword);
+          // console.log('Success::::sdfsdf ', keyword);
           dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: keyword } });
 
           // Accept query: eb = expertBaseID.

@@ -57,6 +57,13 @@ export default {
       //   yield call(authService.invoke, uid, payload.authority_region);
       // }
     },
+    *addForbidByUid({ payload }, { call, put }) {
+      const { uid, role } = payload;
+      const data = yield call(authService.invoke, uid, role);
+      if (data.data.status) {
+        yield put({ type: 'addForbidSuccess', payload });
+      }
+    },
 
     *addRoleByUid({ payload }, { call, put }) {
       const { uid, role } = payload;
@@ -65,9 +72,12 @@ export default {
       yield put({ type: 'getListUserByRoleSuccess', payload: data });
     },
 
-    *delRoleByUid({ payload }, { call }) {
+    *delRoleByUid({ payload }, { call, put }) {
       const { uid, role } = payload;
-      yield call(authService.revoke, uid, role);
+      const data = yield call(authService.revoke, uid, role);
+      if (data.data.status) {
+        yield put({ type: 'delRoleSuccess', payload });
+      }
     },
 
     *checkEmail({ payload }, { call, put }) {
@@ -115,6 +125,31 @@ export default {
       // TODO 注册成功以后的提示信息
       return { ...state };
     },
+    delRoleSuccess(state, { payload }) {
+      const { uid } = payload;
+      const listUsers = [];
+      state.listUsers.map((item) => {
+        if (item.id === uid) {
+          const role = item.role.filter(term => term !== `${config.source}_forbid`);
+          item.role = role;
+        }
+        listUsers.push(item);
+        return true;
+      });
+      return { ...state, listUsers };
+    },
+    addForbidSuccess(state, { payload }) {
+      const { uid } = payload;
+      const listUsers = [];
+      state.listUsers.map((item) => {
+        if (item.id === uid) {
+          item.role.push(`${config.source}_forbid`);
+        }
+        listUsers.push(item);
+        return true;
+      });
+      return { ...state, listUsers };
+    },
     checkEmailSuccess(state, { payload }) {
       return { ...state, validEmail: payload };
     },
@@ -127,7 +162,7 @@ export default {
         value.new_role = {};
         for (const role of data[key].role.values()) {
           if (role.indexOf(`${config.source}_`) >= 0) {
-            if (role.split('_').length === 2) {
+            if (role.split('_').length === 2 && role.split('_')[1] !== 'forbid') {
               value.new_role = role.split('_')[1];
             }
             if (role.split('_').length === 3) {
@@ -161,3 +196,5 @@ export default {
   },
 
 };
+
+

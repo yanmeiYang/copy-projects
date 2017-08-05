@@ -106,12 +106,6 @@ class Seminar extends React.Component {
   };
 
   onFilterChange = (key, item, type, checked) => {
-    if (checked && type === 'category') {
-      this.props.dispatch({
-        type: 'seminar/getCategory',
-        payload: { category: `orglist_${item.id}` },
-      });
-    }
     const sizePerPage = this.props.seminar.sizePerPage;
     const stype = {
       organizer: this.state.organizer,
@@ -119,11 +113,21 @@ class Seminar extends React.Component {
       tag: this.state.tag,
     };
     if (checked) {
+      if (type === 'category') {
+        this.props.dispatch({
+          type: 'seminar/getCategory',
+          payload: { category: `orglist_${item.id}` },
+        });
+      }
       this.setState({ [type]: key });
       stype[type] = key;
     } else {
       this.setState({ [type]: '' });
       stype[type] = '';
+      if (type === 'category') {
+        // 活动类型取消后 承办单位置为空
+        this.props.seminar.orgByActivity = {};
+      }
     }
     this.props.seminar.results = [];
     if (stype.organizer === '' && stype.category === '' && stype.tag === '' && this.state.query === '') {

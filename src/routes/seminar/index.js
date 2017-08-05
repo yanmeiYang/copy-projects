@@ -20,7 +20,7 @@ class Seminar extends React.Component {
     category: '',
     tag: '',
     query: '',
-    sortType: 'subtime',
+    sortType: 'time',
   };
 
   componentWillMount = () => {
@@ -274,10 +274,13 @@ class Seminar extends React.Component {
         <div>
           <Tabs defaultActiveKey={this.state.sortType} onChange={this.onTabsChange}
                 className={styles.maxWidth}>
-            <TabPane tab={<span>最后修改时间<i className="fa fa-sort-amount-desc" /></span>}
-                     key="subtime" />
-            <TabPane tab={<span>会议开始时间<i className="fa fa-sort-amount-desc" /></span>}
+
+            <TabPane tab={<span>开始时间<i className="fa fa-sort-amount-desc" /></span>}
                      key="time" />
+            <TabPane tab={<span>创建时间<i className="fa fa-sort-amount-desc" /></span>}
+                     key="createtime" />
+            <TabPane tab={<span>修改时间<i className="fa fa-sort-amount-desc" /></span>}
+                     key="updatetime" />
           </Tabs>
         </div>
 

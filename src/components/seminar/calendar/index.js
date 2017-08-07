@@ -7,6 +7,7 @@ import { DatePicker } from 'antd';
 import styles from './index.less';
 
 const { RangePicker } = DatePicker;
+const dFormat = 'yyyy-MM-dd HH:mm';
 class CanlendarInForm extends React.Component {
   state = {
     startValue: `${(new Date()).format('yyyy-MM-dd')} 09:00`,
@@ -19,12 +20,11 @@ class CanlendarInForm extends React.Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    const dateFormat = 'yyyy-MM-dd HH:mm';
     if (nextProps.startValue !== this.props.startValue) {
-      this.setState({ startValue: new Date(nextProps.startValue).format(dateFormat) });
+      this.setState({ startValue: new Date(nextProps.startValue).format(dFormat) });
     }
     if (nextProps.endValue !== this.props.endValue) {
-      this.setState({ endValue: new Date(nextProps.endValue).format(dateFormat) });
+      this.setState({ endValue: new Date(nextProps.endValue).format(dFormat) });
     }
   };
 

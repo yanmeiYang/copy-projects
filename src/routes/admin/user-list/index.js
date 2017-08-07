@@ -165,15 +165,16 @@ class UserList extends React.Component {
     const role = 'forbid';
     const props = this.props;
     Modal.confirm({
-      title: '删除',
-      content: '确定删除吗？',
+      title: '禁用',
+      content: '确定禁用吗？',
       onOk() {
         props.dispatch({
           type: 'auth/addForbidByUid',
           payload: { uid, role },
         });
       },
-      onCancel() {},
+      onCancel() {
+      },
     });
   };
 

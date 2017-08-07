@@ -35,8 +35,13 @@ const Login = ({
 
   function applyUser() {
     Modal.info({
-      title: '申请新用户',
-      content: '请联系余遐,邮件xiayu@ccf.org.cn',
+      title: '新用户申请',
+      content: (
+        <div>
+          <div>请联系系统管理员</div>
+          <div className={styles.emailLogin}>xiayu@ccf.org.cn</div>
+        </div>
+        ),
       onOk() {
       },
     });
@@ -103,7 +108,7 @@ const Login = ({
           <div>
             <Link to="/forgot-password" className={styles.forgotpwbtn}>忘记密码</Link>
             {sysconfig.ApplyUserBtn &&
-            <span className={styles.applyUserbtn} onClick={applyUser}>申请新用户</span>
+            <span className={styles.applyUserbtn} onClick={applyUser}>新用户申请</span>
             }
           </div>
           <p>

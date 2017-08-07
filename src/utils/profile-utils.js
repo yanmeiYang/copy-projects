@@ -17,12 +17,7 @@ const cdnDomain = 'am-cdn-s0.b0.upaiyun.com';
  */
 const getAvatar = (src, profileId, size) => {
   const imgSize = size || 160;
-  const imgSrc = src;
-  if (!src) {
-    // TODO move this to config.
-    return '//static.aminer.org/default/default.jpg';
-  }
-  // return imgSrc;
+  const imgSrc = src || '//static.aminer.org/default/default.jpg';
 
   // const scopeSessionId = Math.random(); // 'todo-replace-scope-session-id';
   if (imgSrc.indexOf('static.aminer.org') >= 0) {
@@ -32,6 +27,7 @@ const getAvatar = (src, profileId, size) => {
     // return `${imgSrc}?ran=${scopeSessionId}`;
   } else {
     // return `${imgSrc}?ran=${scopeSessionId}`;
+    return imgSrc;
   }
 };
 

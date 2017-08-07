@@ -4,12 +4,11 @@
 import React from 'react';
 import { connect } from 'dva';
 import { InputNumber, Rate, Button, Row, Col, Table, Modal } from 'antd';
-
-const { Column } = Table;
 import { Link } from 'dva/router';
-import TimeFormat from '../detailSeminar/time-format';
 import * as profileUtils from '../../../utils/profile-utils';
 import styles from './index.less';
+
+const { Column } = Table;
 
 class ExpertRatingPage extends React.Component {
   state = {
@@ -122,7 +121,7 @@ class ExpertRatingPage extends React.Component {
                 </div>}
                 {summaryById.time && <div>
                   <h7><strong>活动时间：</strong></h7>
-                  <span><TimeFormat {...summaryById.time} /></span>
+                  <span>{new Date(summaryById.time.from).format('yyyy年MM月dd日')}</span>
                 </div>}
               </div>
 

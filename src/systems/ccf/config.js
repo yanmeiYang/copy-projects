@@ -34,9 +34,10 @@ module.exports = {
   // Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
   Header_LogoWidth: 213,
   Header_LogoStyle: {
-    width: '86px',
+    width: '60px',
+    height: '38px',
     backgroundPosition: '8px 2px',
-    backgroundSize: ' auto 54px',
+    backgroundSize: ' auto 36px',
     backgroundRepeat: 'no-repeat',
     backgroundColor: 'white',
   },

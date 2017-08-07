@@ -14,6 +14,7 @@ const FormItem = Form.Item;
 class ForgotPassword extends React.Component {
   state = {
     validEmail: true,
+    errorMessageByEmail: '',
   };
 
   componentWillMount = () => {
@@ -22,9 +23,14 @@ class ForgotPassword extends React.Component {
 
   componentWillUnmount = () => {
     this.props.dispatch({ type: 'app/handleNavbar', payload: false });
-
   };
   componentWillReceiveProps = (nextProps) => {
+    if (nextProps.auth.message === 'user.not_found') {
+      this.setState({
+        validEmail: false,
+        errorMessageByEmail: '用户不存在',
+      });
+    }
     if (nextProps.auth.isUpdateForgotPw) {
       Modal.success({
         title: '成功',
@@ -39,9 +45,25 @@ class ForgotPassword extends React.Component {
       }
     }
   };
+  cancelError = () => {
+    this.props.auth.message = '';
+    this.setState({ validEmail: true, errorMessageByEmail: '' });
+  };
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
+      if (err) {
+        if (err.email) {
+          if (err.email.errors.length > 0) {
+            this.setState({
+              validEmail: false,
+              errorMessageByEmail: err.email.errors[0].message,
+            });
+          } else {
+            this.setState({ errorMessageByEmail: '' });
+          }
+        }
+      }
       if (!err) {
         values.token = config.source;
         values.password = ' ';
@@ -57,6 +79,7 @@ class ForgotPassword extends React.Component {
   // };
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { validEmail } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -86,12 +109,12 @@ class ForgotPassword extends React.Component {
                   <FormItem
                     {...formItemLayout}
                     label="邮箱"
-                    // validateStatus={this.state.validEmail ? '' : 'error'}
-                    // help={this.state.validEmail ? '' : '该邮箱不存在'}
+                    validateStatus={validEmail ? '' : 'error'}
+                    help={validEmail ? '' : this.state.errorMessageByEmail}
                     hasFeedback
                   >
                     {getFieldDecorator('identifier', {})(
-                      <Input type="email" />,
+                      <Input type="email" onChange={this.cancelError} />,
                     )}
                   </FormItem>
                   <FormItem {...tailFormItemLayout} style={{ marginTop: 60 }}>

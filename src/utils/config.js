@@ -12,6 +12,7 @@ const param = (key, type, description) => {
 };
 
 module.exports = {
+  // FIXME yanmei: 配置email template
 
   // To change SYSTEM settings. Please change /define.js.
   // TODO remove all use of this config [system,source].

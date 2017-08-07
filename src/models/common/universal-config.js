@@ -5,15 +5,18 @@ import pathToRegexp from 'path-to-regexp';
 import * as uconfigService from '../../services/universal-config';
 
 export default {
-
   namespace: 'universalConfig',
 
   state: {
     source: '', // If don't set, service will get value from config.
     category: '',
-    tabList: [],
     key: '',
     data: [],
+
+    // 一组 categories, 用来支撑一个页面中多tab切换的功能。 原来的 tabList: [],
+    categories: [],
+
+    // TODO 通用化
     orgList: [],
     valueType: '',
     loading: false, // TODO DVA-LOADING 到底怎么用？
@@ -26,6 +29,74 @@ export default {
   },
 
   effects: {
+    // --------------------------------------
+    // 操作cateories， 也就是groups
+    // --------------------------------------
+
+    // 根据一个category，获取所有下面的数据，并且作为另一个一个列表的KEY.
+    // categoryTemplate - support {key}, {id}，{value}
+    * getCategoryGroup({ payload }, { call, put }) {
+      const { groupCategory, categoryTemplate } = payload;
+      // callback data.
+      const data = yield call(uconfigService.listByCategory, groupCategory);
+      if (data && data.data && data.data.data) {
+        const categories = [];
+        data.data.data.map((item) => {
+          const newCategory = categoryTemplate
+            .replace('{id}', item.id)
+            .replace('{key}', item.key)
+            .replace('{value}', item.value);
+          categories.push({ id: item.id, name: item.key, category: newCategory });
+          // console.log('data is: ', item, 'key is : ', newCategory);
+          return true;
+        });
+        yield put({ type: 'setCategories', payload: { categories } });
+      }
+    },
+
+    // Add category groups; refresh after add.
+    * addCategoryGroup({ payload }, { call, put }) {
+      const { category, key, val, categoryTemplate } = payload;
+      // TODO yu 这个api添加成功后没有返回ID。
+      const data = yield call(uconfigService.setByKey, category, key, val);
+      if (data.data && data.data.status === true) {
+      } else {
+        console.error('addKeyAndValue Error: ', data);
+      }
+      // reload list;
+      yield put({
+        type: 'getCategoryGroup',
+        payload: { groupCategory: category, categoryTemplate },
+      });
+    },
+
+    // TODO yu need delete by id. now delete key by key.
+    * deleteCategoryGroup({ payload }, { call, put }) {
+      const { category, key } = payload;
+      const data = yield call(uconfigService.deleteByKey, category, key);
+      if (process.env.NODE_ENV !== 'production') {
+        // TODO check returned results.
+        console.log('delete category group: result is: ', data);
+      }
+      yield put({ type: 'deleteCategoryGroupSuccess', payload: { key } });
+    },
+
+    // TODO
+    * updateCategoryGroup({ payload }, { call, put }) {
+      const { category, key, newKey } = payload;
+      const data = yield call(uconfigService.updateByKey, category, key, newKey);
+      if (data.data && data.data.status === true) {
+        yield put({ type: 'updateCategoryGroupSuccess', payload: { key, newKey } });
+      } else {
+        console.error('updateByKey Error: ', data);
+      }
+    },
+
+    // --------------------------------------
+    // 操作某个Category下面的List
+    // --------------------------------------
+
+    // 取出一个category 下面所有的 key,value 列表。
     * setCategory({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
       const { category } = payload;
@@ -34,19 +105,8 @@ export default {
       yield put({ type: 'setData', payload: { data } });
     },
 
-    * setTabList({ payload }, { call, put }) {
-      yield put({ type: 'showLoading' });
-      const { category } = payload;
-      const data = yield call(uconfigService.listByCategory, category);
-      yield put({ type: 'setTabListSuccess', payload: { data } });
-      if (data.data.data.length > 0) {
-        const ct = `orglist_${data.data.data[0].id}`;
-        const dt = yield call(uconfigService.listByCategory, ct);
-        yield put({ type: 'setCategorySuccess', payload: { category: ct } });
-        yield put({ type: 'setData', payload: { data: dt } });
-      }
-    },
 
+    // TODO change this just like getCategoryGroup
     * getOrgCategory({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
       const { category } = payload;
@@ -78,6 +138,7 @@ export default {
       }
       yield put({ type: 'deleteByKeySuccess', payload: { key } });
     },
+
     * updateByKey({ payload }, { call, put }) {
       const { category, key, newKey } = payload;
       const data = yield call(uconfigService.updateByKey, category, key, newKey);
@@ -91,6 +152,27 @@ export default {
   },
 
   reducers: {
+    // --------------------------------------
+    // 操作cateories， 也就是groups
+    // --------------------------------------
+    setCategories(state, { payload: { categories } }) {
+      return { ...state, categories };
+    },
+
+    deleteCategoryGroupSuccess(state, { payload: { key } }) {
+      return { ...state, categories: state.categories.filter(group => group.name !== key) };
+    },
+
+    updateCategoryGroupSuccess(state, { payload: { key, newKey } }) {
+      const categories = state.categories.map((group) => {
+        return group.name === key ? { ...group, name: newKey } : group;
+      });
+      return { ...state, categories };
+    },
+
+    // --------------------------------------
+    // 操作某个Category下面的List
+    // --------------------------------------
     setCategorySuccess(state, { payload: { category } }) {
       return { ...state, category };
     },
@@ -148,25 +230,14 @@ export default {
     },
 
     updateByKeySuccess(state, { payload: { key, newKey } }) {
+      // TODO 谁说sate里面一定有data的？
       for (let i = 0; i < state.data.length; i++) {
         if (state.data[i].value.key === key) {
+          // TODO yanmei 不可以修改state, 弄一个新的然后return.
           state.data[i].value.key = newKey;
         }
       }
       return { ...state, data: state.data };
-    },
-
-    setTabListSuccess(state, { payload: { data } }) {
-      const tabList = [];
-      if (data.data.data) {
-        for (const item in data.data.data) {
-          if (item) {
-            const category = `orglist_${data.data.data[item].id}`;
-            tabList.push({ name: data.data.data[item].key, category });
-          }
-        }
-      }
-      return { ...state, tabList };
     },
 
     /* update person profile info. */
@@ -201,7 +272,7 @@ export default {
 // 获取满足条件的数组下标
 function findIndexByKey(data, targetKey) {
   let idx = -1;
-  for (let i = 0; i < data.length; i++) {
+  for (let i = 0; i < data.length; i += 1) {
     if (data[i].value.key === targetKey) {
       idx = i;
       break;

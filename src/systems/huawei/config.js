@@ -22,8 +22,9 @@ module.exports = {
   Header_SubTextStyle: { width: 128 },
   Header_LogoStyle: {
     top: '-10px',
-    width: '75px',
-    backgroundSize: 'auto 75px',
+    width: '60px',
+    height: '36px',
+    backgroundSize: 'auto 56px',
     backgroundPosition: '0px -10px',
   },
   Header_LogoWidth: 214,

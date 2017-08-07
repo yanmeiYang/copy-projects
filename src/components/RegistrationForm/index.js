@@ -25,28 +25,6 @@ import ShowExpertList from '../../routes/seminar/addSeminar/workshop/showExpertL
 const Dragger = Upload.Dragger;
 const FormItem = Form.Item;
 const Option = Select.Option;
-// let image = null;
-// const uploadImage = {
-//   name: 'file',
-//   multiple: false,
-//   showUploadList: true,
-//   accept: 'image/jpeg,image/png,image/bmp',
-//   action: config.baseURL + config.api.uploadActivityPosterImgFile,
-//   listType: 'picture',
-//   headers: {
-//     // 获得登录用户的token
-//     Authorization: localStorage.getItem('token'),
-//   },
-//   onChange(info) {
-//     const status = info.file.status;
-//     if (status !== 'uploading') {
-//       image = info.file.originFileObj;
-//     }
-//   },
-//   onSuccess(response) {
-//     image = response.url;
-//   },
-// };
 
 class RegistrationForm extends React.PureComponent {
   state = {
@@ -336,7 +314,7 @@ class RegistrationForm extends React.PureComponent {
                   rules: [{ required: true, message: '请选择承办单位！' }],
                 },
               )(
-                <Select showSearch>
+                <Select showSearch placeholder="请选择承办单位">
                   {
                     postSeminarOrganizer.map((item) => {
                       return (<Option key={`org_${Math.random()}`}
@@ -351,7 +329,7 @@ class RegistrationForm extends React.PureComponent {
                   // rules: [{ required: true, message: '请选择承办单位！' }],
                 },
               )(
-                <Select mode="tags"
+                <Select mode="tags" placeholder="请选择协办单位"
                         onChange={this.handleOrganizerChange.bind(this, activity_organizer_options_data)}>
                   {
                     Object.values(activity_organizer_options_data).map((item) => {

@@ -125,7 +125,7 @@ class Statistics extends React.Component {
     //   division = this.props.statistics.activity;
     // }
     return (
-      <div style={{ marginTop: 10 }}>
+      <div style={{ marginTop: 10, minWidth: '1120px', overflow: 'scroll' }}>
         <div className="content-inner">
           {tabData &&
           <div>

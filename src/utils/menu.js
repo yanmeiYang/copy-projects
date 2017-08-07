@@ -27,7 +27,7 @@ const allMenus = [{ id: 1, icon: 'laptop', name: '首页', router: '/' },
   // },
   {
     id: 46, bpid: 4, mpid: 4, name: '活动类型', icon: 'tool',
-    router: '/admin/system-config/orgcategory',
+    router: '/admin/system-config/activity_type',
   },
   {
     id: 49, bpid: 4, mpid: 4, name: '机构列表', icon: 'compass',

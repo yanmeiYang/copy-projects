@@ -80,6 +80,11 @@ const DetailPage = ({ dispatch, seminar, app, pad }) => {
                             <strong>报告时间:&nbsp;</strong>
                             {pad(new Date(aTalk.time.from).getHours(), 2)}:
                             {pad(new Date(aTalk.time.from).getMinutes(), 2)}
+                            {aTalk.time.to &&
+                            <span>&nbsp;~&nbsp;
+                              {pad(new Date(aTalk.time.to).getHours(), 2)}:
+                              {pad(new Date(aTalk.time.to).getMinutes(), 2)}
+                            </span>}
                           </span>}
                           {aTalk.location && <span style={{ marginLeft: 10 }}>
                             {aTalk.location.address &&

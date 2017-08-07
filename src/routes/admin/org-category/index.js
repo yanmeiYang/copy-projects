@@ -182,7 +182,7 @@ class OrgCategory extends React.Component {
         <div className={styles.main}>
           <div className={styles.left}>
 
-            <div className={styles.toolbox} style={{ display: 'flex' }}>
+            <div className={styles.toolbox} style={{ display: 'flex', marginRight: '16px' }}>
               <a onClick={this.onAddOrgList}>添加</a>
               {/*<span className="spliter">|</span>*/}
 

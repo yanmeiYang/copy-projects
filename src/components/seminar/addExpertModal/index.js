@@ -3,11 +3,12 @@
  */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Modal, Button, Input, Form, Col, Tag, Icon, Radio, Spin, Select } from 'antd';
+import { Modal, Button, Input, Form, Col, Tag, Icon, Radio, Spin, Select, Upload } from 'antd';
 import { Link } from 'dva/router';
 import CanlendarInForm from '../calendar';
 import defaultImg from '../../../assets/people/default.jpg';
 import ExpertBasicInfo from './expertBasicInfo';
+import { config } from '../../../utils';
 import styles from './index.less';
 
 const FormItem = Form.Item;
@@ -247,6 +248,22 @@ class AddExpertModal extends React.Component {
         sm: { span: 20 },
       },
     };
+    const outerThis = this;
+    const changeExpertAvatar = {
+      name: 'file',
+      action: config.baseURL + config.api.uploadActivityPosterImgFile,
+      headers: {
+        Authorization: localStorage.getItem('token'),
+      },
+      onChange(info) {
+        info.file.status = 'done';
+      },
+      onSuccess(response) {
+        outerThis.refs.speakerImg.src = response.url;
+        const data = { target: { value: response.url } };
+        outerThis.saveExpertInfo('img', data);
+      },
+    };
     const { modalVisible, step2, step3, isEdit, speakerInfo, isSearched } = this.state;
     const { parentProps, editTheTalk } = this.props;
     const { speakerSuggests, loading, contribution_type } = parentProps.seminar;
@@ -447,10 +464,16 @@ class AddExpertModal extends React.Component {
             <section>
               <div className="people">
                 <div className="no-padding shadow-10">
-                  <div className={styles.crop}><span className="helper" />
+                  <div className={styles.crop}>
+                    <span className="helper" />
                     <img src={this.getImg()} ref="speakerImg" alt="" />
                     <input ref="speakerAid" style={{ display: 'none' }} />
                   </div>
+                  <Upload {...changeExpertAvatar}>
+                    <button type="button" className="ant-btn ant-btn-ghost">
+                      <i className="anticon anticon-upload"></i> 修改头像
+                    </button>
+                  </Upload>
                 </div>
               </div>
             </section>

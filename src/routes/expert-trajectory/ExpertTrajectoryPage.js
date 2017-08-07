@@ -49,6 +49,11 @@ class ExpertTrajectoryPage extends React.Component {
     });
   }
 
+  componentDidMount() {
+    this.showTrajectory();
+    this.setHeatmap();
+  }
+
   onSearch = (data) => {
     if (data.query) {
       this.setState({ query: data.query });
@@ -60,19 +65,59 @@ class ExpertTrajectoryPage extends React.Component {
     }
   };
 
-  componentDidMount() {
-    this.showworld();
-    this.setHeatmap();
+  setHeatmap = () => { // draw the background and map
+    option2 = {
+      backgroundColor: '#404a59',
+       title: {
+        text: '历年学者热力图',
+        subtext: 'data from aminer',
+        // sublink: 'http://www.pm25.in',
+        left: 'center',
+        textStyle: {
+          color: '#fff',
+        },
+      },
+      tooltip: {
+        trigger: 'item',
+      },
+      legend: {
+        orient: 'vertical',
+        y: 'bottom',
+        x: 'right',
+        data: ['location'],
+        textStyle: {
+          color: '#fff',
+        },
+      },
+      geo: {
+        map: 'world',
+        label: {
+          emphasis: {
+            show: true,
+          },
+        },
+        roam: true,
+        itemStyle: {
+          normal: {
+            areaColor: '#323c48',
+            borderColor: '#111',
+          },
+          emphasis: {
+            areaColor: '#2a333d',
+          },
+        },
+      },
+     };
+    const myChart2 = echarts.init(document.getElementById('heatmap'));
+    myChart2.setOption(option2);
   }
 
-  showworld = () => {
-    // const v = [10, 20, 13, 7, 6, 5, 5, 4, 4, 3, 3];
-
+  showTrajectory = () => {
     const address2 = mapData.addresses;
     const trajectory = mapData.trajectory;
-    console.log("address",address2);
-    console.log("trajectory",trajectory);
-    console.log("hhh",trajectory.length);
+    console.log('address', address2);
+    console.log('trajectory', trajectory);
+    console.log('hhh', trajectory.length);
     const record = [];
 
 
@@ -113,62 +158,44 @@ class ExpertTrajectoryPage extends React.Component {
         i = j + 1;
       }
     }
-    const geoCoordMap = {};
-    console.log(record);
-    for (let i = 0; i < record.length; i += 1) {
-      const onenode = [address2[record[i][0]].lat, address2[record[i][0]].lng];
-      geoCoordMap[address2[record[i][0]].addr] = onenode;
+    const geoCoordMap = {}; // geoCoordMap = {tsinghua unversity : [120,40] }
+    for (const onerecord of record) {
+      const onenode = [address2[onerecord[0]].lat, address2[onerecord[0]].lng];
+      geoCoordMap[address2[onerecord[0]].addr] = onenode;
     }
-    console.log('geoCoordMap', geoCoordMap);
+    console.log('geoCoordMap222', geoCoordMap);
 
-    const data = [];
-    for (let i = 0; i < record.length; i += 1) {
-      const years = record[i][1][1] - record[i][1][0]+1;
-      const onewhere = { name: address2[record[i][0]].addr, value: years*3 };
+    const data = []; // data = [{name: tsinghua university, value : 6(years)}]
+    for (const onerecord of record) {
+      const years = onerecord[1][1] - onerecord[1][0] + 1;
+      const onewhere = { name: address2[onerecord[0]].addr, value: years * 3 };
       data.push(onewhere);
     }
-    console.log('data', data);
-    /* const geoCoordMap = {
-      'fudan university': [121.3, 31.17],
-      'tsinghua university': [116.33, 40.0],
-      'haha university': [35.296, -50.345],
+  console.log('data222', data);
 
-    }; */
-
-   /* const data = [{
-      name: 'fudan university',
-      value: 2,
-    }, {
-      name: 'tsinghua university',
-      value: 2,
-    },
-    {
-      name: 'haha university',
-      value: 1,
-    }]; */
-
-    function formtGCData(geoData, data,  dest) {
+    function formtGCData(geoData, data) {
       const tGeoDt = [];
-        for (let i = 0, len = data.length-1; i < len; i++) {
-          console.log("dataaaaaa[0]",data[i].name);
-          console.log("geooooo",geoData[data[i].name]);
-            tGeoDt.push({
-              coords: [geoData[data[i].name], geoData[data[i+1].name]],
-            });
-        }
-      console.log("&&&&&&&&")
+      for (let i = 0, len = data.length - 1; i < len; i++) {
+        console.log('dataaaaaa[0]', data[i].name);
+        console.log('geooooo', geoData[data[i].name]);
+        tGeoDt.push({
+          coords: [geoData[data[i].name], geoData[data[i + 1].name]],
+        });
+      }
+      console.log('&&&&&&&&');
       return tGeoDt;
     }
 
     function formtVData(geoData, data, srcNam) {
       const tGeoDt = [];
-      for (let i = 0, len = data.length; i < len; i++) {
-        const tNam = data[i].name;
+      let i = 0;
+      for (const dataset of data) {
+        const tNam = dataset.name;
         if (srcNam !== tNam) {
           tGeoDt.push({
-            name: tNam + " "+ record[i][1][0]+ "-"+record[i][1][1],
+            name: `${tNam} ${record[i][1][0]}-${record[i][1][1]}`, // ?
             value: geoData[tNam],
-            symbolSize:data[i].value ,
+            symbolSize: dataset.value,
             itemStyle: {
 
               normal: {
@@ -178,6 +205,7 @@ class ExpertTrajectoryPage extends React.Component {
             },
           });
         }
+        i += 1;
       }
       tGeoDt.push({
         name: srcNam,
@@ -265,7 +293,7 @@ class ExpertTrajectoryPage extends React.Component {
               curveness: 0,
             },
           },
-          data: formtGCData(geoCoordMap, data, false),
+          data: formtGCData(geoCoordMap, data),
         },
         {
           type: 'effectScatter',
@@ -293,63 +321,8 @@ class ExpertTrajectoryPage extends React.Component {
           data: formtVData(geoCoordMap, data, data),
         }],
     };
-     /* for (let i = 0; i < data.length - 1; i++) {
-        setTimeout(() => {
-        option["series"][0].data = formtGCData(geoCoordMap, data[i], data[i + 1].name, false);
-
-          const myChart = echarts.init(document.getElementById('world'));
-         myChart.setOption(option);
-        }, i * 5000);
-     } */
-     const myChart = echarts.init(document.getElementById('world'));
-     myChart.setOption(option);
-  }
-
-  setHeatmap = () => { // draw the background and map
-    option2 = {
-      backgroundColor: '#404a59',
-       title: {
-        text: '历年学者热力图',
-        subtext: 'data from aminer',
-        // sublink: 'http://www.pm25.in',
-        left: 'center',
-        textStyle: {
-          color: '#fff',
-        },
-      },
-      tooltip: {
-        trigger: 'item',
-      },
-      legend: {
-        orient: 'vertical',
-        y: 'bottom',
-        x: 'right',
-        data: ['location'],
-        textStyle: {
-          color: '#fff',
-        },
-      },
-      geo: {
-        map: 'world',
-        label: {
-          emphasis: {
-            show: true,
-          },
-        },
-        roam: true,
-        itemStyle: {
-          normal: {
-            areaColor: '#323c48',
-            borderColor: '#111',
-          },
-          emphasis: {
-            areaColor: '#2a333d',
-          },
-        },
-      },
-     };
-    const myChart2 = echarts.init(document.getElementById('heatmap'));
-    myChart2.setOption(option2);
+    const myChart = echarts.init(document.getElementById('world'));
+    myChart.setOption(option);
   }
 
   onChange = (value) => {
@@ -366,6 +339,15 @@ class ExpertTrajectoryPage extends React.Component {
         // this.haha(temp);
       }, i * 2000);
     }
+
+    /* for (const temp of (startYear, endYear)) {
+      console.log(temp);
+      setTimeout(() => {
+        this.onChange(temp);
+        this.onAfterChange(temp);
+        // this.haha(temp);
+      }, (temp - startYear) * 2000);
+    } */
   }
 
   onAfterChange = (value) => {
@@ -378,7 +360,7 @@ class ExpertTrajectoryPage extends React.Component {
     const data = [];
     const geoCoordMap = {};
 
-    for (const key in location) { // 地点经纬度
+    for (const key in location) { // 地点经纬度???
       const onewhere = [];
       if (key !== '0') {
         onewhere.push(location[key].lat);
@@ -403,7 +385,7 @@ class ExpertTrajectoryPage extends React.Component {
 
     for (const key in merge) {
       console.log('key', key);
-      const onenode = { name: key, value: merge[key]*20 };
+      const onenode = { name: key, value: merge[key] * 20 };
       data.push(onenode);
     }
     console.log('data', data);
@@ -432,7 +414,7 @@ class ExpertTrajectoryPage extends React.Component {
     };
 
     option2.series = [
-      /*{
+      /* {
         name: 'location',
         type: 'scatter',
         coordinateSystem: 'geo',
@@ -455,9 +437,9 @@ class ExpertTrajectoryPage extends React.Component {
             color: '#ddb926',
           },
         },
-      },*/
+      }, */
       {
-        name:'location',
+        name: 'location',
         type: 'effectScatter',
         coordinateSystem: 'geo',
         data: convertData(data),
@@ -465,9 +447,9 @@ class ExpertTrajectoryPage extends React.Component {
           return val[2] / 10;
         },
         showEffectOn: 'render',
-        /*rippleEffect: {
+        /* rippleEffect: {
           brushType: 'stroke',
-        },*/
+        }, */
         hoverAnimation: true,
         label: {
           normal: {

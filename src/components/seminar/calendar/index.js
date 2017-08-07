@@ -1,96 +1,53 @@
 /**
- * Created by yangyanmei on 17/6/1.
+ * Created by ranyanchuan on 17/8/5.
  */
 import React from 'react';
 import moment from 'moment';
-import {
-  Row,
-  Col,
-  DatePicker,
-} from 'antd';
-import styles from './index.less';
+import { DatePicker } from 'antd';
 
+const { RangePicker } = DatePicker;
 class CanlendarInForm extends React.Component {
   state = {
-    confirmDirty: false,
-    startValue: null,
-    endValue: null,
-    endOpen: false,
+    startValue: `${(new Date()).format('yyyy-MM-dd')} 09:00`,
+    endValue: `${(new Date()).format('yyyy-MM-dd')} 09:00`,
   };
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.startValue) {
-      this.setState({ startValue: moment(nextProps.startValue) });
+      this.setState({ startValue: nextProps.startValue });
     }
     if (nextProps.endValue) {
-      this.setState({ endValue: moment(nextProps.endValue) });
+      this.setState({ endValue: nextProps.endValue });
     }
   }
 
-  //活动时间开始
-  disabledStartDate = (startValue) => {
-    const endValue = this.state.endValue;
-    if (!startValue || !endValue) {
-      return false;
-    }
-    return startValue.valueOf > endValue.valueOf();
+  onChange = (value, dataString) => {
+    this.setState({ startValue: dataString[0] });
+    this.setState({ endValue: dataString[1] });
   };
-  disabledEndDate = (endValue) => {
-    const startValue = this.state.startValue;
-    if (!endValue || !startValue) {
-      return false;
-    }
-    return startValue.valueOf() > endValue.valueOf();
+
+  onOk = (value) => {
+    this.props.callbackParent('startValue', value[0]);
+    this.props.callbackParent('endValue', value[1]);
   };
-  onChange = (field, value) => {
-    this.setState({ [field]: value });
-    this.props.callbackParent(field, value);
-  };
-  onStartChange = (value) => {
-    this.onChange('startValue', value);
-  };
-  onEndChange = (value) => {
-    this.onChange('endValue', value);
-  };
-  handleStartOpenChange = (open) => {
-    if (!open) {
-      this.setState({ endOpen: true });
-    }
-  };
-  handleEndOpenChange = (open) => {
-    this.setState({ endOpen: open });
-  };
-  //活动时间结束
 
   render() {
-    const { startValue, endValue, endOpen } = this.state;
+    const { startValue, endValue } = this.state;
+    const dateFormat = 'YYYY-MM-DD HH:mm:ss';
     return (
-      <Row gutter={8}>
-        <Col span={12}>
-          <DatePicker
-            disableDate={this.disabledStartDate}
-            showTime={{ defaultValue: moment('09:00', 'HH:mm') }}
-            format="YYYY-MM-DD HH:mm"
-            ref="startValue"
-            value={startValue}
-            placeholder="开始"
-            onChange={this.onStartChange}
-            onOpenChange={this.handleStartOpenChange}
-          />
-        </Col>
-        <Col span={12}>
-          <DatePicker
-            disableDate={this.disabledEndDate}
-            showTime={{ defaultValue: moment('09:00', 'HH:mm') }}
-            format="YYYY-MM-DD HH:mm"
-            ref="endValue"
-            value={endValue}
-            placeholder="结束"
-            onChange={this.onEndChange}
-            open={endOpen}
-            onOpenChange={this.handleEndOpenChange}
-          />
-        </Col>
-      </Row>
+      <div>
+        {startValue && endValue &&
+        <RangePicker
+          showTime={{ format: 'HH:mm' }}
+          format="YYYY-MM-DD HH:mm"
+          placeholder={['开始时间', '结束时间']}
+          // value={[startValue,endValue]}
+          defaultValue={[moment(startValue, dateFormat), moment(endValue, dateFormat)]}
+          onChange={this.onChange}
+          onOk={this.onOk}
+        />
+        }
+      </div>
     );
   }
 }

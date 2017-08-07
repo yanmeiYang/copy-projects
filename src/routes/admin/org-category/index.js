@@ -182,14 +182,14 @@ class OrgCategory extends React.Component {
         <div className={styles.main}>
           <div className={styles.left}>
 
-            <div className={styles.toolbox}>
+            <div className={styles.toolbox} style={{ display: 'flex' }}>
               <a onClick={this.onAddOrgList}>添加</a>
-              <span className="spliter">|</span>
+              {/*<span className="spliter">|</span>*/}
 
-              <a onClick={this.onEditOrgList}>编辑</a>
-              <span className="spliter">|</span>
+              {/*<a onClick={this.onEditOrgList}>编辑</a>*/}
+              {/*<span className="spliter">|</span>*/}
 
-              <a onClick={this.onDeleteOrgList}>删除</a>
+              {/*<a onClick={this.onDeleteOrgList}>删除</a>*/}
             </div>
 
             <Tabs type="line" size="small" tabPosition="left"
@@ -197,7 +197,15 @@ class OrgCategory extends React.Component {
                   onChange={this.onTabChange}>
               {categories && categories.map((item) => {
                 // TODO how to match ya.
-                return <TabPane key={item.category} tab={item.name} />;
+                return <TabPane key={item.category} tab={
+                  <div style={{ display: 'inline' }}>
+                    {item.name}
+                    <div className={styles.toolbox}
+                         style={this.state.currentGroupId === item.id ? { display: 'flex' } : { display: 'none' }}>
+                      <a onClick={this.onEditOrgList}>编辑</a>
+                      <span className="spliter">|</span>
+                      <a onClick={this.onDeleteOrgList}>删除</a></div>
+                  </div>} />;
               })}
             </Tabs>
           </div>

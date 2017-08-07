@@ -18,6 +18,7 @@ class Seminar extends React.Component {
   state = {
     organizer: '',
     category: '',
+    orgType: '',
     tag: '',
     query: '',
     sortType: 'time',
@@ -25,6 +26,7 @@ class Seminar extends React.Component {
 
   componentWillMount = () => {
     this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'orgcategory' } });
+    this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'activity_type' } });
   };
   addBao = () => {
     this.props.dispatch(routerRedux.push({
@@ -113,7 +115,7 @@ class Seminar extends React.Component {
       tag: this.state.tag,
     };
     if (checked) {
-      if (type === 'category') {
+      if (type === 'orgType') {
         this.props.dispatch({
           type: 'seminar/getCategory',
           payload: { category: `orglist_${item.id}` },
@@ -124,7 +126,7 @@ class Seminar extends React.Component {
     } else {
       this.setState({ [type]: '' });
       stype[type] = '';
-      if (type === 'category') {
+      if (type === 'orgType') {
         // 活动类型取消后 承办单位置为空
         this.props.seminar.orgByActivity = {};
       }
@@ -156,9 +158,9 @@ class Seminar extends React.Component {
   }
 
   render() {
-    const { results, loading, sizePerPage, orgcategory, topMentionedTags, orgByActivity } =
+    const { results, loading, sizePerPage, orgcategory, activity_type, topMentionedTags, orgByActivity } =
       this.props.seminar;
-    const { organizer, category, tag, sortType } = this.state;
+    const { organizer, category, tag, orgType, sortType } = this.state;
     const compare = (property) => {
       return (a, b) => {
         let val1 = a[property];
@@ -228,11 +230,38 @@ class Seminar extends React.Component {
             }
             <div className={styles.filterRow}>
               <span className={styles.filterTitle}>活动类型:</span>
-              {orgcategory.data &&
+              {activity_type.data &&
               <ul className={styles.filterItems}>
                 <CheckableTag
                   className={styles.filterItem}
                   checked={category === ''}
+                  onChange={checked => this.getSeminar(sizePerPage, { src: config.source }, checked)}
+                >All
+                </CheckableTag>
+                {
+                  Object.values(activity_type.data).map((item) => {
+                    return (
+                      <CheckableTag
+                        key={item.id}
+                        className={styles.filterItem}
+                        checked={category === item.key}
+                        onChange={checked => this.onFilterChange(item.key, item, 'category', checked)}
+                      >
+                        {item.key}
+                      </CheckableTag>
+                    );
+                  })
+                }
+              </ul>
+              }
+            </div>
+            <div className={styles.filterRow}>
+              <span className={styles.filterTitle}>机构类型:</span>
+              {orgcategory.data &&
+              <ul className={styles.filterItems}>
+                <CheckableTag
+                  className={styles.filterItem}
+                  checked={orgType === ''}
                   onChange={checked => this.getSeminar(sizePerPage, { src: config.source }, checked)}
                 >All
                 </CheckableTag>
@@ -242,8 +271,8 @@ class Seminar extends React.Component {
                       <CheckableTag
                         key={item.id}
                         className={styles.filterItem}
-                        checked={category === item.key}
-                        onChange={checked => this.onFilterChange(item.key, item, 'category', checked)}
+                        checked={orgType === item.key}
+                        onChange={checked => this.onFilterChange(item.key, item, 'orgType', checked)}
                       >
                         {item.key}
                       </CheckableTag>

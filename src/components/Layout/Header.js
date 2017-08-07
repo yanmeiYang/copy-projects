@@ -45,7 +45,7 @@ class Header extends React.PureComponent {
   };
 
   render() {
-    const { headerSearchBox, user } = this.props.app;
+    const { headerSearchBox, user, roles } = this.props.app;
 
     // Use default search if not supplied.
     if (headerSearchBox) {
@@ -113,7 +113,19 @@ class Header extends React.PureComponent {
               </Link>
             </Menu.Item>
             }
-
+            {/* TODO 不确定是否其他系统也需要显示角色 */}
+            {sysconfig.SYSTEM === 'ccf' &&
+            <Menu.Item key="" className={styles.showRoles}>
+              <p className={roles.authority[0] !== undefined ? styles.isAuthority : ''}>
+                <span>{roles.role[0]}</span>
+                {roles.authority[0] !== undefined &&
+                <span>
+                  <br />
+                  <span>{roles.authority[0]}</span>
+                </span>}
+              </p>
+            </Menu.Item>
+            }
             {user.first_name &&
             <Menu.Item key="/logout">
               <div onClick={this.logoutAuth}><Icon type="logout" /></div>

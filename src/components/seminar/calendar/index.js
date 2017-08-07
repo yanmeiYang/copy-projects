@@ -13,14 +13,19 @@ class CanlendarInForm extends React.Component {
     endValue: `${(new Date()).format('yyyy-MM-dd')} 18:00`,
   };
 
+  componentWillMount = () => {
+    this.props.callbackParent('startValue', moment(this.state.startValue));
+    this.props.callbackParent('endValue', moment(this.state.endValue));
+  };
+
   componentWillReceiveProps(nextProps) {
-    if (nextProps.startValue) {
-      this.setState({ startValue: nextProps.startValue });
+    if (nextProps.startValue !== this.props.startValue) {
+      this.setState({ startValue: new Date(nextProps.startValue).format('yyyy-MM-dd HH:mm') });
     }
-    if (nextProps.endValue) {
-      this.setState({ endValue: nextProps.endValue });
+    if (nextProps.endValue !== this.props.endValue) {
+      this.setState({ endValue: new Date(nextProps.endValue).format('yyyy-MM-dd HH:mm') });
     }
-  }
+  };
 
   onChange = (value, dataString) => {
     this.setState({ startValue: dataString[0] });
@@ -40,10 +45,11 @@ class CanlendarInForm extends React.Component {
         {startValue && endValue &&
         <RangePicker
           className={styles.calendar}
-          showTime={dateFormat}
+          showTime={{ format: 'HH:mm' }}
           format={dateFormat}
           placeholder={['开始时间', '结束时间']}
-          defaultValue={[moment(startValue, dateFormat), moment(endValue, dateFormat)]}
+          value={[moment(startValue, dateFormat), moment(endValue, dateFormat)]}
+          // defaultValue={[moment(startValue, dateFormat), moment(endValue, dateFormat)]}
           onChange={this.onChange}
           onOk={this.onOk}
         />

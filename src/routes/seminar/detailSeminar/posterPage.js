@@ -25,6 +25,7 @@ class PosterPage extends React.Component {
                   <h2 style={{ fontWeight: 600, marginBottom: '15px' }}>特邀讲者</h2>
                   {summaryById.talk.map((aTalk) => {
                     const startTime = aTalk.time ? new Date(aTalk.time.from) : '';
+                    const endTime = aTalk.time ? new Date(aTalk.time.to) : '';
                     return (
                       <div key={aTalk.speaker.aid + Math.random()} className={styles.workshop}>
                         <div className={styles.posterShow}>
@@ -54,6 +55,11 @@ class PosterPage extends React.Component {
                               <span>
                                 {this.props.pad(startTime.getHours(), 2)}:
                                 {this.props.pad(startTime.getMinutes(), 2)}
+                                {aTalk.time.to &&
+                                <span>&nbsp;~&nbsp;
+                                  {this.props.pad(endTime.getHours(), 2)}:
+                                  {this.props.pad(endTime.getMinutes(), 2)}
+                                </span>}
                               </span>}
                             </div>
                             <div className={styles.expert_poster_info}>

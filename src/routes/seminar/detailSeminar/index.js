@@ -31,16 +31,18 @@ class DetailSeminar extends React.PureComponent {
     const { showPosterType } = this.state;
     return (
       <div className={styles.setMaxWidth}>
-        {this.props.app.token &&
-        <div style={{ textAlign: 'center' }}>
-          {showPosterType ?
-            <Button type="primary" style={{ width: '50%' }}
-                    onClick={this.changeTab.bind(this, showPosterType)}>查看全部信息</Button>
-            : <Button type="primary" style={{ width: '50%' }}
-                      onClick={this.changeTab.bind(this, showPosterType)}>查看简单版</Button>}
-        </div>}
-        { showPosterType ?
-          <PosterPage pad={this.pad} /> : <DetailPage pad={this.pad} /> }
+        {/*TODO 海报格式先隐藏*/}
+        {/*{this.props.app.token &&*/}
+        {/*<div style={{ textAlign: 'center' }}>*/}
+          {/*{showPosterType ?*/}
+            {/*<Button type="primary" style={{ width: '50%' }}*/}
+                    {/*onClick={this.changeTab.bind(this, showPosterType)}>查看全部信息</Button>*/}
+            {/*: <Button type="primary" style={{ width: '50%' }}*/}
+                      {/*onClick={this.changeTab.bind(this, showPosterType)}>查看简单版</Button>}*/}
+        {/*</div>}*/}
+        {/*{ showPosterType ?*/}
+          {/*<PosterPage pad={this.pad} /> : <DetailPage pad={this.pad} /> }*/}
+        <DetailPage pad={this.pad} />
       </div>
     );
   }

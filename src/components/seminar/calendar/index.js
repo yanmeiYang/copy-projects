@@ -19,11 +19,12 @@ class CanlendarInForm extends React.Component {
   };
 
   componentWillReceiveProps(nextProps) {
+    const dateFormat = 'yyyy-MM-dd HH:mm';
     if (nextProps.startValue !== this.props.startValue) {
-      this.setState({ startValue: new Date(nextProps.startValue).format('yyyy-MM-dd HH:mm') });
+      this.setState({ startValue: new Date(nextProps.startValue).format(dateFormat) });
     }
     if (nextProps.endValue !== this.props.endValue) {
-      this.setState({ endValue: new Date(nextProps.endValue).format('yyyy-MM-dd HH:mm') });
+      this.setState({ endValue: new Date(nextProps.endValue).format(dateFormat) });
     }
   };
 

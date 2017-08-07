@@ -163,11 +163,20 @@ class UserList extends React.Component {
     const data = JSON.parse(e.target.getAttribute('data'));
     const uid = data.id;
     const role = 'forbid';
-    this.props.dispatch({
-      type: 'auth/addForbidByUid',
-      payload: { uid, role },
+    const props = this.props;
+    Modal.confirm({
+      title: '删除',
+      content: '确定删除吗？',
+      onOk() {
+        props.dispatch({
+          type: 'auth/addForbidByUid',
+          payload: { uid, role },
+        });
+      },
+      onCancel() {},
     });
   };
+
   openForbid = (e) => {
     const data = JSON.parse(e.target.getAttribute('data'));
     const uid = data.id;

@@ -17,10 +17,14 @@ export default {
 
   "theme": "./theme.config.js",
 
+  "hash": true,
   // disableCSSModules: false,
+  // "cssModulesExclude": [],
   // "publicPath": "/",
   // "outputPath": "./dist",
   // "extraPostCSSPlugins": [],
+  // "sass": false,
+  // "hash": false,
   // "autoprefixer": null,
   // "library": null,
   // "libraryTarget": "var",

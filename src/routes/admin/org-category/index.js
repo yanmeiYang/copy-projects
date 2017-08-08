@@ -2,7 +2,7 @@
  *  Created by ranyanchuan on 2017-06-09;
  */
 import React from 'react';
-import { Tabs, Modal } from 'antd';
+import { Tabs, Modal, Icon } from 'antd';
 import { connect } from 'dva';
 import { isEqual } from 'lodash';
 import UniversalConfig from '../../common/universal-config/index';
@@ -182,14 +182,8 @@ class OrgCategory extends React.Component {
         <div className={styles.main}>
           <div className={styles.left}>
 
-            <div className={styles.toolbox} style={{ display: 'flex', marginRight: '16px' }}>
+            <div className={styles.toolbox} style={{ display: 'flex', marginRight: '5px' }}>
               <a onClick={this.onAddOrgList}>添加</a>
-              {/*<span className="spliter">|</span>*/}
-
-              {/*<a onClick={this.onEditOrgList}>编辑</a>*/}
-              {/*<span className="spliter">|</span>*/}
-
-              {/*<a onClick={this.onDeleteOrgList}>删除</a>*/}
             </div>
 
             <Tabs type="line" size="small" tabPosition="left"
@@ -198,13 +192,17 @@ class OrgCategory extends React.Component {
               {categories && categories.map((item) => {
                 // TODO how to match ya.
                 return <TabPane key={item.category} tab={
-                  <div style={{ display: 'inline' }}>
+                  <div className={styles.leftTab}>
                     {item.name}
                     <div className={styles.toolbox}
-                         style={this.state.currentGroupId === item.id ? { display: 'flex' } : { display: 'none' }}>
-                      <a onClick={this.onEditOrgList}>编辑</a>
+                         style={this.state.currentGroupId === item.id ? { display: 'inline-block' } : { display: 'none' }}>
+                      <a onClick={this.onEditOrgList}>
+                        <Icon type="edit" />
+                      </a>
                       <span className="spliter">|</span>
-                      <a onClick={this.onDeleteOrgList}>删除</a></div>
+                      <a className={styles.actionByDel} onClick={this.onDeleteOrgList}>
+                        <Icon type="delete" />
+                      </a></div>
                   </div>} />;
               })}
             </Tabs>

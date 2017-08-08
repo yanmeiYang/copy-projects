@@ -20,10 +20,10 @@ class CanlendarInForm extends React.Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.startValue !== this.props.startValue) {
+    if (nextProps.startValue !== this.props.startValue && nextProps.startValue) {
       this.setState({ startValue: new Date(nextProps.startValue).format(dFormat) });
     }
-    if (nextProps.endValue !== this.props.endValue) {
+    if (nextProps.endValue !== this.props.endValue && nextProps.endValue ) {
       this.setState({ endValue: new Date(nextProps.endValue).format(dFormat) });
     }
   };

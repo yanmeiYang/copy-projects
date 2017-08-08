@@ -43,12 +43,37 @@ const DetailPage = ({ dispatch, seminar, app, pad }) => {
     dispatch(routerRedux.push(`/seminar-edit/${summaryById.id}`));
   }
 
+  const compare = (property) => {
+    return (a, b) => {
+      const val1 = a[property].from;
+      const val2 = b[property].from;
+      return new Date(val1) - new Date(val2);
+    };
+  };
+
   let guestSpeakers = [];
   let presidents = [];
   if (summaryById.talk) {
     guestSpeakers = summaryById.talk.filter(item => item.speaker.role === undefined || !item.speaker.role.includes('president'));
     presidents = summaryById.talk.filter(item => item.speaker.role && item.speaker.role.includes('president'));
   }
+
+  let timeTalk = [];
+  const noTimeTalk = [];
+  if (guestSpeakers.length>0) {
+    guestSpeakers.map((item) => {
+      if (item.time !== undefined) {
+        timeTalk.push(item);
+      } else {
+        noTimeTalk.push(item);
+      }
+      return true;
+    });
+  }
+  if (timeTalk.length > 0) {
+    timeTalk = timeTalk.sort(compare('time'));
+  }
+  guestSpeakers = timeTalk.concat(noTimeTalk);
 
   return (
     <div className={styles.detailSeminar}>

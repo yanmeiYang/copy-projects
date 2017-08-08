@@ -17,6 +17,11 @@ import { Slider, Switch, InputNumber, Row, Col, Icon, Button } from 'antd';
 const startYear = heatData.startYear;
 const endYear = heatData.endYear;
 let option2 = {};
+const location = heatData.locations;
+const table = heatData.table;
+const address2 = mapData.addresses;
+const trajectory = mapData.trajectory;
+let aaa = 0;
 // const myChart2 = echarts.init(document.getElementById('world'));
 class ExpertTrajectoryPage extends React.Component {
   constructor(props) {
@@ -27,7 +32,7 @@ class ExpertTrajectoryPage extends React.Component {
   state = {
     query: 'data mining',
     mapType: 'google', // [baidu|google]
-    inputValue: 1,
+    inputValue: startYear,
   };
 
   componentWillMount() {
@@ -50,8 +55,8 @@ class ExpertTrajectoryPage extends React.Component {
   }
 
   componentDidMount() {
-    this.showTrajectory();
-    this.setHeatmap();
+    this.showTrajectory(); // 迁移图
+    this.setHeatmap(); // 热力图
   }
 
   onSearch = (data) => {
@@ -59,19 +64,126 @@ class ExpertTrajectoryPage extends React.Component {
       this.setState({ query: data.query });
       // TODO change this, 不能用
       this.props.dispatch(routerRedux.push({
-        pathname: '/expert-map',
+        pathname: '/expert-trajectory',
         query: { query: data.query },
       }));
     }
   };
 
-  setHeatmap = () => { // draw the background and map
+  onChange = (value) => { // 点击滑动条或数字框
+    this.setState({
+      inputValue: value,
+    });
+  }
+
+  onClick=() => { // 点击热力图按钮
+    for (const temp of _.range(startYear, (endYear + 1))) {
+      setTimeout(() => {
+        this.onChange(temp);
+        this.onButtoon(temp);
+      }, (temp - startYear) * 4000);
+    }
+  }
+
+  onButtoon = (value) => { // 按下热力图的播放按钮
+    console.log('value', value);
+    const index = value - startYear;
+    const data = [];
+    let geoCoordMap = {};
+
+    geoCoordMap = this.doHeatGeoMap();
+
+    const merge = {};
+    const merge2 = {};
+    for (const temp of table) { // 计算当年该地点学者数
+      if (temp[index] !== 0) {
+        if (temp[index] in merge) {
+          merge[temp[index]] += 1;
+        } else {
+          merge[temp[index]] = 1;
+        }
+      }
+      if ((index + 1) <= temp.length && temp[index + 1] !== 0) { // 计算明年有今年没的地点人数
+        if (temp[index + 1] in merge2) {
+          merge2[temp[index + 1]] += 1;
+        } else {
+          merge2[temp[index + 1]] = 1;
+        }
+      }
+    }
+
+    const piece = 19; // 每隔一年插入20个变化人数时间段
+    for (const key in merge) {
+      let middle;
+      if (key in merge2) {
+        middle = (merge2[key] - merge[key]) / (piece + 1); // 插入渐变值
+      } else {
+        middle = (0 - merge[key]) / (piece + 1);
+      }
+      const onenode = { name: key, value: [merge[key] * 20, middle * 20] }; // 实际数据中乘20应删去
+      data.push(onenode);
+    }
+
+    for (const key in merge2) { // 今年没有明年有的
+      let middle;
+      if (!(key in merge)) {
+        middle = (merge2[key] - 0) / (piece + 1);
+        const onenode = { name: key, value: [0, middle * 20] };
+        data.push(onenode);
+      }
+    }
+    for (const j of _.range(piece)) {
+      setTimeout(() => { // 每隔0.2秒刷新一次，每隔4秒换一年
+        option2.series = this.getHeatSeries(geoCoordMap, data, j, true);
+        console.log('EEEEE');
+        const myChart2 = echarts.init(document.getElementById('heatmap'));
+        myChart2.setOption(option2);
+      }, j * 200);
+    }
+  }
+
+  onInputNum = (value) => { // 数字框输入年份
+    this.setState({
+      inputValue: value,
+    });
+    this.onAfterChange(value);
+  }
+
+  onAfterChange = (value) => { // 数字框或滑动条数字改变，热力图改变（年份变了）
+    const index = value - startYear;
+    // console.log('index', index);
+    const data = [];
+    let geoCoordMap = {};
+
+    geoCoordMap = this.doHeatGeoMap();
+
+    const merge = {};
+
+    for (const temp of table) { // 计算当年该地点专家数
+      if (temp[index] !== 0) {
+        if (temp[index] in merge) {
+          merge[temp[index]] += 1;
+        } else {
+          merge[temp[index]] = 1;
+        }
+      }
+    }
+    for (const key in merge) {
+      // console.log('key', key);
+      const onenode = { name: key, value: merge[key] * 20 }; // 实际数据中乘20应删去！
+      data.push(onenode);
+    }
+    option2.series = this.getHeatSeries(geoCoordMap, data, 0, false);
+    const myChart2 = echarts.init(document.getElementById('heatmap'));
+    myChart2.setOption(option2);
+  }
+
+  setHeatmap = () => { // 设置热力图参数
     option2 = {
       backgroundColor: '#404a59',
        title: {
         text: '历年学者热力图',
         subtext: 'data from aminer',
-        // sublink: 'http://www.pm25.in',
         left: 'center',
         textStyle: {
           color: '#fff',
@@ -96,7 +208,7 @@ class ExpertTrajectoryPage extends React.Component {
             show: true,
           },
         },
-        roam: true,
+        roam: 'scale',
         itemStyle: {
           normal: {
             areaColor: '#323c48',
@@ -112,87 +224,27 @@ class ExpertTrajectoryPage extends React.Component {
     myChart2.setOption(option2);
   }
 
-  showTrajectory = () => {
-    const address2 = mapData.addresses;
-    const trajectory = mapData.trajectory;
-    console.log('address', address2);
-    console.log('trajectory', trajectory);
-    console.log('hhh', trajectory.length);
-    const record = [];
-
-    let lastYear;
-    let lastArea;
-    let beginYear;
-    let counter1 = 0;
-    for (const temp of trajectory) {
-      console.log("ddddddd")
-      const theYear = [];
-      const theArea = [];
-      if (counter1 === 0) {
-        beginYear = temp[0];
-        lastYear = temp[0];
-        lastArea = temp[1];
-        console.log()
-      } else {
-          if (lastArea === temp[1]) {
-            lastYear = temp[0];
-          } else {
-            theYear.push(beginYear);
-            theYear.push(lastYear);
-            console.log("the year",theYear);
-            theArea.push(lastArea);
-            theArea.push(theYear);
-            beginYear = temp[0];
-            lastYear = temp[0];
-            lastArea = temp[1];
-            record.push(theArea);
-          }
-      }
-      counter1 =1;
-    }
-
-    console.log("record111",record);
-
-    const geoCoordMap = {}; // geoCoordMap = {tsinghua unversity : [120,40] }
-    for (const onerecord of record) {
-      const onenode = [address2[onerecord[0]].lat, address2[onerecord[0]].lng];
-      geoCoordMap[address2[onerecord[0]].addr] = onenode;
-    }
-    //console.log('geoCoordMap222', geoCoordMap);
-
-    const data = []; // data = [{name: tsinghua university, value : 6(years)}]
-    for (const onerecord of record) {
-      const years = onerecord[1][1] - onerecord[1][0] + 1;
-      const onewhere = { name: address2[onerecord[0]].addr, value: years * 3 };
-      data.push(onewhere);
-    }
-  //console.log('data222', data);
-
-    function formtGCData(geoData, data) {
+  getTrajSeries = (geoCoordMap, data, record, i) => { // 画出迁移图的路线
+    function formtGCData(geoData, data, count) { // 画线
       const tGeoDt = [];
-      for (let i = 0, len = data.length - 1; i < len; i++) {
-        //console.log('dataaaaaa[0]', data[i].name);
-        //console.log('geooooo', geoData[data[i].name]);
+      for (const j of _.range(count + 1)) {
         tGeoDt.push({
-          coords: [geoData[data[i].name], geoData[data[i + 1].name]],
+          coords: [geoData[data[j].name], geoData[data[j + 1].name]],
         });
       }
-      //console.log('&&&&&&&&');
       return tGeoDt;
     }
 
-    function formtVData(geoData, data, srcNam) {
+    function formtVData(geoData, data, srcNam, count) { // 显示迁移图地点和年份
       const tGeoDt = [];
-      let i = 0;
-      for (const dataset of data) {
-        const tNam = dataset.name;
+      for (const j of _.range(count + 2)) {
+        const tNam = data[j].name;
         if (srcNam !== tNam) {
           tGeoDt.push({
-            name: `${tNam} ${record[i][1][0]}-${record[i][1][1]}`, // ?
-            value: geoData[tNam],
-            symbolSize: dataset.value,
+            name: `${tNam}`,
+            value: geoData[tNam].concat(record[j][1][0].toString()+" - "+record[j][1][1].toString()),
+            symbolSize: data[j].value,
             itemStyle: {
-
               normal: {
                 color: '#FFD24D',
                 borderColor: 'gold',
@@ -200,34 +252,147 @@ class ExpertTrajectoryPage extends React.Component {
             },
           });
         }
-        i += 1;
       }
-      tGeoDt.push({
-        name: srcNam,
-        value: geoData[srcNam],
-        symbolSize: 8,
-        itemStyle: {
-          normal: {
-            color: '#4DFFFF',
-            borderColor: '#fff',
-          },
-        },
-      });
       return tGeoDt;
     }
-
-
-    // var planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
     const planePath = 'arrow';
+    const series = [ // 配置迁移图线和点的属性
+      {
+        type: 'effectScatter',
+        coordinateSystem: 'geo',
+        zlevel: 5,
+        rippleEffect: {
+          period: 4,
+          scale: 2,
+          brushType: 'stroke',
+        },
+        label: {
+          normal: {
+            show: true,
+            position: 'right',
+            formatter: '{b}',
+          },
+          emphasis: {
+            show: true,
+          },
+        },
+        symbolSize: 5,
+        itemStyle: {
+          normal: {
+            color: '#fff',
+            borderColor: 'gold',
+          },
+        },
+        data: formtVData(geoCoordMap, data, data, i),
+      },
+      {
+        type: 'lines',
+        zlevel: 2,
+        effect: {
+          show: true,
+          period: 6,
+          trailLength: 0.1,
+          color: '#9CE6FE',
+          symbol: planePath,
+          symbolSize: 5,
+          animation: true,
+        },
+        lineStyle: {
+          normal: {
+            color: '#65A2C2',
+            width: 1.5,
+            opacity: 0.4,
+            curveness: 0.2,
+          },
+        },
+        data: formtGCData(geoCoordMap, data, i),
+      }];
 
-    const option = {
+    return series;
+  }
+
+  quickLine =() => { // 点击迁移图画出完整路线
+    aaa = 1;
+    const record = this.getTrajRecord();
+    const geoCoordMap = this.doTrajGeoMap(record); // geoCoordMap = {tsinghua unversity : [120,40] }
+    const data = this.getTrajData(record); // data = [{name: tsinghua university, value : 6(years)}]
+    const option = this.drawTrajMap();
+    option.series = this.getTrajSeries(geoCoordMap, data, record, (data.length - 2));
+    const myChart = echarts.init(document.getElementById('world'));
+    myChart.setOption(option);
+  }
+
+  doTrajGeoMap =(record) => { // 计算迁移图经纬度数据
+    const geoCoordMap = {}; // geoCoordMap = {tsinghua unversity : [120,40] }
+    for (const onerecord of record) {
+      const onenode = [address2[onerecord[0]].lat, address2[onerecord[0]].lng];
+      geoCoordMap[address2[onerecord[0]].addr] = onenode;
+    }
+    return geoCoordMap;
+  }
+
+  getTrajRecord =() => { // 得到迁移图合并数据
+    const record = [];
+    let lastYear;
+    let lastArea;
+    let beginYear;
+    let counter1 = 0;
+    for (const temp of trajectory) { // 合并地址相同的连续年份
+      const theYear = [];
+      const theArea = [];
+      if (counter1 === 0) {
+        beginYear = temp[0];
+        lastYear = temp[0];
+        lastArea = temp[1];
+      } else if (lastArea === temp[1]) {
+        lastYear = temp[0];
+      } else {
+        theYear.push(beginYear);
+        theYear.push(lastYear);
+        theArea.push(lastArea);
+        theArea.push(theYear);
+        beginYear = temp[0];
+        lastYear = temp[0];
+        lastArea = temp[1];
+        record.push(theArea);
+      }
+      counter1 = 1;
+    }
+
+    console.log('record111', record);
+    return record;
+  }
+
+  getTrajData =(record) => { // 得到迁移图的data
+    const data = []; // data = [{name: tsinghua university, value : 6(years)}]
+    for (const onerecord of record) {
+      const years = onerecord[1][1] - onerecord[1][0] + 1;
+      const onewhere = { name: address2[onerecord[0]].addr, value: years * 3 }; // 实际数据中乘3应删去
+      data.push(onewhere);
+    }
+    return data;
+  }
+
+  drawTrajMap =() => { // 画出迁移图北京
+    const option = { // 地图属性
       backgroundColor: '#013769',
+      title: {
+        text: '专家迁移图',
+        subtext: 'data from aminer',
+        left: 'center',
+        textStyle: {
+          color: '#fff',
+        },
+      },
+      tooltip: {
+        trigger: 'item',
+      },
       geo: {
 
         name: 'trajectory',
         type: 'map',
         map: 'world',
-        roam: true,
+        roam: 'scale',
         label: {
           emphasis: {
             show: false,
@@ -235,8 +400,6 @@ class ExpertTrajectoryPage extends React.Component {
         },
         itemStyle: {
           normal: {
-            /* shadowBlur: 30,
-             shadowColor: 'rgba(0, 0, 0,0.8)', */
             areaColor: '#022548',
             borderColor: '#0DABEA',
           },
@@ -245,118 +408,31 @@ class ExpertTrajectoryPage extends React.Component {
           },
         },
       },
-      series: [/* {
-
-        type: 'lines',
-        zlevel: 2,
-
-        effect: {
-          show: true,
-          period: 6,
-          trailLength: 0.1,
-          color: '#FFB973',
-          symbol: planePath,
-          symbolSize: 5,
-        },
-        lineStyle: {
-          normal: {
-            color: '#FFB973',
-            width: 0,
-            opacity: 0.2,
-            curveness: 0,
-          },
-        },
-        data: formtGCData(geoCoordMap, data, 'tsinghua university', true),
-      }, */
-        {
-
-          type: 'lines',
-          zlevel: 2,
-          effect: {
-            show: true,
-            period: 6,
-            trailLength: 0.1,
-            color: '#9CE6FE',
-            symbol: planePath,
-            symbolSize: 5,
-          },
-          lineStyle: {
-            normal: {
-              color: '#65A2C2',
-              width: 0.2,
-              opacity: 0.4,
-              curveness: 0,
-            },
-          },
-          data: formtGCData(geoCoordMap, data),
-        },
-        {
-          type: 'effectScatter',
-          coordinateSystem: 'geo',
-          zlevel: 5,
-          rippleEffect: {
-            period: 4,
-            scale: 2,
-            brushType: 'stroke',
-          },
-          label: {
-            normal: {
-              show: true,
-              position: 'right',
-              formatter: '{b}',
-            },
-          },
-          symbolSize: 5,
-          itemStyle: {
-            normal: {
-              color: '#fff',
-              borderColor: 'gold',
-            },
-          },
-          data: formtVData(geoCoordMap, data, data),
-        }],
     };
-    const myChart = echarts.init(document.getElementById('world'));
-    myChart.setOption(option);
+    return option;
   }
 
-  onChange = (value) => {
-    this.setState({
-      inputValue: value,
-    });
-  }
-
-  onClick=() => { // click the button
-    /* for (let temp = startYear, i = 0; temp <= endYear; temp += 1, i++) {
+  showTrajectory = () => { // 展示迁移图
+    const record = this.getTrajRecord();
+    const geoCoordMap = this.doTrajGeoMap(record); // geoCoordMap = {tsinghua unversity : [120,40] }
+    const data = this.getTrajData(record); // data = [{name: tsinghua university, value : 6(years)}]
+    const option = this.drawTrajMap();
+    for (const i of _.range(data.length - 1)) { // 每隔4秒画一条线
       setTimeout(() => {
-        this.onChange(temp);
-        this.onAfterChange(temp);
-        // this.haha(temp);
-      }, i * 2000);
-
-
-    } */
-
-    for (const temp of _.range(startYear, endYear)) {
-      setTimeout(() => {
-        this.onChange(temp);
-        this.onAfterChange(temp);
-        // this.haha(temp);
-      }, (temp - startYear) * 2000);
+        if (aaa === 0) {
+          option.series = this.getTrajSeries(geoCoordMap, data, record, i);
+          const myChart = echarts.init(document.getElementById('world'));
+          myChart.setOption(option);
+        } else {
+          clearTimeout();
+        }
+      }, i * 4000);
     }
   }
 
-  onAfterChange = (value) => {
-    const location = heatData.locations;
-    console.log('location', location);
-    const table = heatData.table;
-    console.log('table', table[0]);
-    const index = value - startYear;
-    console.log('index', index);
-    const data = [];
+  doHeatGeoMap=() => { // 存储经纬度 geoCoordMap = [[123[116,40]],   ]
     const geoCoordMap = {};
-
-    for (const key in location) { // 地点经纬度???
+    for (const key in location) { // 地点经纬度
       const onewhere = [];
       if (key !== '0') {
         onewhere.push(location[key].lat);
@@ -364,78 +440,47 @@ class ExpertTrajectoryPage extends React.Component {
         geoCoordMap[key] = onewhere;
       }
     }
-    console.log('geo', geoCoordMap);
+    // console.log("geo",geoCoordMap);
+    return geoCoordMap;
+  }
 
-    const merge = {};
-   /* for (let i = 0; i < table.length; i += 1) { // 计算当年该地点学者数
-      if (table[i][index] !== 0) {
-        // console.log(merge);
-        // console.log("table[0]",table[i][index]);
-        if (table[i][index] in merge) {
-          merge[table[i][index]] += 1;
-        } else {
-          merge[table[i][index]] = 1;
-        }
-      }
-    } */
-
-    for (const temp of table) { // 计算当年该地点学者数
-      if (temp[index] !== 0) {
-        if (temp[index] in merge) {
-          merge[temp[index]] += 1;
-        } else {
-          merge[temp[index]] = 1;
-        }
-      }
-    }
-
-    for (const key in merge) {
-      console.log('key', key);
-      const onenode = { name: key, value: merge[key] * 20 };
-      data.push(onenode);
-    }
-    console.log('data', data);
-
-    const convertData = function (data) {
+  getHeatSeries = (geoCoordMap, data, j, choose) => { // j是一年中第几个插值
+    console.log('jjjjj', j);
+    const convertData = function (datas, counter) { // 画出热力图上的圈并标出地名
       const res = [];
-      /* for (let i = 0; i < data.length; i++) {
-        const geoCoord = geoCoordMap[data[i].name];
+      for (const i of _.range(datas.length)) {
+        const geoCoord = geoCoordMap[datas[i].name];
         if (geoCoord) {
-          res.push({
-            name: data[i].name,
-            value: geoCoord.concat(data[i].value),
-          });
-        }
-      } */
-
-      for (const temp of data) {
-        const geoCoord = geoCoordMap[temp.name];
-        if (geoCoord) {
-          res.push({
-            name: temp.name,
-            value: geoCoord.concat(temp.value),
-          });
+          if (choose !== false) {
+            res.push({
+              name: datas[i].name,
+              value: geoCoord.concat(datas[i].value[0] + (datas[i].value[1] * counter)),
+            });
+          } else {
+            console.log('dddddd', geoCoord.concat(datas[i].value));
+            res.push({
+              name: datas[i].name,
+              value: geoCoord.concat(datas[i].value),
+              //value:[2,3],
+            });
+          }
         }
       }
       return res;
     };
 
-    option2.series = [
-      {
+    const series = [
+      { // 人数最多的5个地点
         name: 'Top 5',
         type: 'effectScatter',
-        // type: 'scatter',
         coordinateSystem: 'geo',
         data: convertData(data.sort((a, b) => {
           return b.value - a.value;
-        }).slice(0, 5)),
+        }).slice(0, 5), j),
         symbolSize(val) {
           return val[2] / 10;
         },
         showEffectOn: 'render',
-        rippleEffect: {
-          brushType: 'stroke',
-        },
         hoverAnimation: true,
         label: {
           normal: {
@@ -453,11 +498,11 @@ class ExpertTrajectoryPage extends React.Component {
         },
         zlevel: 1,
       },
-      {
-        name: 'pm2.5',
+      { // 当年所有地点
+        name: 'location',
         type: 'scatter',
         coordinateSystem: 'geo',
-        data: convertData(data),
+        data: convertData(data, j),
         symbolSize(val) {
           return val[2] / 10;
         },
@@ -479,15 +524,16 @@ class ExpertTrajectoryPage extends React.Component {
       },
 
     ];
-    const myChart2 = echarts.init(document.getElementById('heatmap'));
-    myChart2.setOption(option2);
+
+    return series;
   }
+
 
   render() {
     return (
       <div className={classnames('content-inner', styles.page)}>
-        <div id="world" style={{ height: '500px' }} />
-        <div id="heatmap" style={{ height: '500px' }} />
+        <div id="world" style={{ height: '600px' }} onClick={this.quickLine} />
+        <div id="heatmap" style={{ height: '600px' }} />
 
         <Row>
           <Col span={12}>
@@ -497,9 +543,9 @@ class ExpertTrajectoryPage extends React.Component {
             <InputNumber
               min={startYear}
               max={endYear}
-              style={{ marginLeft: 16 }}
+              style={{ marginLeft: 100 }}
               value={this.state.inputValue}
-              onChange={this.onChange}
+              onChange={this.onInputNum}
             />
           </Col>
         </Row>

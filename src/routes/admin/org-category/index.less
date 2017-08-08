@@ -5,18 +5,30 @@
   .main {
     display: flex; flex-direction: row;
     .left {
-      width: 138px;
+      width: 168px;
       .toolbox {
-        display:none;
+        display: none;
         //display: flex;
         flex-direction: row; justify-content: flex-end;
         //margin: 4px 12px;
         :global .spliter { width: 16px; text-align: center }
       }
+      .leftTab {
+        display: flex;
+        justify-content: space-between;
+        margin-right: -24px;
+        .actionByDel{
+          color: #F24134;
+          margin-left: 8px;
+        }
+      }
 
       :global {
         .ant-tabs-nav-container {
-          width: 128px; margin-right: 0;
+          width: 166px; margin-right: 0;
+          .ant-tabs-nav-animated {
+            width: 100%;
+          }
         }
 
         .ant-tabs-vertical.ant-tabs-left {

@@ -36,6 +36,12 @@ const core = {
     },
   }),
 
+  // // roadhog.dll.js, ignore this file in product mode.
+  // RoadhogDllJsPlaceHolder: {
+  //   path: 'roadhog.dll.js',
+  //   component: require('./components/widgets/RoadhogDllJsPlaceHolder'),
+  // },
+
   ...ExpertMapRouters,
   ...SearchRouters,
   ...PersonRouters,

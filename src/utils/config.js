@@ -29,7 +29,7 @@ module.exports = {
   iconFontCSS: '/iconfont.css',
   iconFontJS: '/iconfont.js',
   basePageURL: 'https://aminer.org',
-  openPages: ['/login'],
+  openPages: ['/login', '/roadhog.dll.js'],
   apiPrefix: '/api/',
   api: {
     // user system

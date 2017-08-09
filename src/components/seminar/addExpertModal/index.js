@@ -12,6 +12,7 @@ import { config } from '../../../utils';
 import * as profileUtils from '../../../utils/profile-utils';
 import styles from './index.less';
 
+const Option = Select.Option;
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 class AddExpertModal extends React.Component {
@@ -180,7 +181,7 @@ class AddExpertModal extends React.Component {
     if (state.talkStartValue || state.talkEndValue) {
       talk.time = {};
     }
-    talk.speaker.role = [state.speakerInfo.role];
+    talk.speaker.role = state.speakerInfo.role !== undefined ? [state.speakerInfo.role] : [];
     if (state.talkStartValue) {
       talk.time.from = typeof state.talkStartValue === 'string' ? state.talkStartValue : state.talkStartValue.toJSON();
     }

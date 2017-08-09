@@ -92,7 +92,7 @@ class SearchFilter extends React.PureComponent {
                     <Tag
                       className={styles.filterItem}
                       key={key}
-                      closable
+                      closable={key !== 'eb'}
                       afterClose={() => this.onFilterChange(key, filters[key], false)}
                       color="blue"
                     >{label}</Tag>

@@ -80,6 +80,8 @@ class Header extends React.PureComponent {
             }
           </div>
 
+          <span>DEV: -- </span>
+
           <Menu
             selectedKeys={[location.pathname]}
             mode="horizontal"
@@ -100,6 +102,8 @@ class Header extends React.PureComponent {
             {/*<Link to={`/login?from=${location.pathname}`}><Icon type="login" /></Link>*/}
             {/*</Menu.Item>*/}
             {/*}*/}
+
+
 
             {user.first_name &&
             <Menu.Item key="/account">

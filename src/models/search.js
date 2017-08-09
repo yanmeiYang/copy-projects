@@ -13,7 +13,7 @@ export default {
 
     query: null,
     offset: 0,
-    sortKey: 'contrib',
+    sortKey: '',
     pagination: {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -41,7 +41,8 @@ export default {
           const offset = parseInt(match[3], 10);
           const size = parseInt(match[4], 10);
           // update fillings.
-          dispatch({ type: 'setParams', payload: { query: keyword, offset, size } });
+          dispatch({ type: 'emptyResults' });
+          dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
           // console.log('Success::::sdfsdf ', keyword);
           dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: keyword } });
 
@@ -94,7 +95,18 @@ export default {
   },
 
   reducers: {
-    setParams(state, { payload: { query, offset, size } }) {
+    updateUrlParams(state, { payload: { query, offset, size } }) {
+      if (state.query !== query) {
+        const filters = state.filters.eb
+          ? { eb: state.filters.eb }
+          : {
+            eb: {
+              id: sysconfig.DEFAULT_EXPERT_BASE,
+              name: sysconfig.DEFAULT_EXPERT_BASE_NAME,
+            },
+          };
+        return { ...state, query, offset, filters, pagination: { pageSize: size } };
+      }
       return { ...state, query, offset, pagination: { pageSize: size } };
     },
 
@@ -116,6 +128,10 @@ export default {
         pagination: { pageSize: state.pagination.pageSize, total, current },
         loading: false,
       };
+    },
+
+    emptyResults(state) {
+      return { ...state, results: [] };
     },
 
     searchPersonAggSuccess(state, { payload: { data } }) {

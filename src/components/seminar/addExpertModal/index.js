@@ -12,6 +12,7 @@ import { config } from '../../../utils';
 import * as profileUtils from '../../../utils/profile-utils';
 import styles from './index.less';
 
+const Option = Select.Option;
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 class AddExpertModal extends React.Component {

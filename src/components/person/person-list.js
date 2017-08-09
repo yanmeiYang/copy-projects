@@ -6,6 +6,7 @@ import { Link } from 'dva/router';
 import { Tag } from 'antd';
 import { Indices } from '../../components/widgets';
 import { sysconfig } from '../../systems';
+import * as personService from '../../services/person';
 import { config } from '../../utils';
 import styles from './person-list.less';
 import * as profileUtils from '../../utils/profile-utils';
@@ -18,6 +19,14 @@ class PersonList extends React.PureComponent {
   constructor(props) {
     super(props);
     this.personLabel = props.personLabel;
+  }
+
+  state = { interestsI18n: {} };
+
+  componentWillMount() {
+    personService.getInterestsI18N((result) => {
+      this.setState({ interestsI18n: result });
+    });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -41,7 +50,7 @@ class PersonList extends React.PureComponent {
             const homepage = person.contact && person.contact.homepage;
             const indices = person.indices;
             const activity_indices = person.activity_indices;
-            const tags = profileUtils.findTopNTags(person, 8);
+            // const tags = profileUtils.findTopNTags(person, 8);
 
             const personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
             if (sysconfig.PersonList_PersonLink_NewTab) {
@@ -91,18 +100,19 @@ class PersonList extends React.PureComponent {
                       }
                     </div>
 
-                    {tags &&
+                    {person.tags &&
                     <div className="tag_zone">
                       <div>
                         <h4><i className="fa fa-area-chart fa-fw" /> 研究兴趣:</h4>
                         <div className={styles.tagWrap}>
                           {
-                            tags.map((tag) => {
+                            person.tags.slice(0, 8).map((item) => {
+                              const tag = personService.returnKeyByLanguage(this.state.interestsI18n, item.t);
                               return (
                                 <Link
-                                  to={`/${sysconfig.SearchPagePrefix}/${tag.t}/0/${sysconfig.MainListSize}`}
+                                  to={`/${sysconfig.SearchPagePrefix}/${tag}/0/${sysconfig.MainListSize}`}
                                   key={Math.random()}>
-                                  <Tag className={styles.tag}>{tag.t}</Tag>
+                                  <Tag className={styles.tag}>{tag}</Tag>
                                 </Link>);
                             })
                           }

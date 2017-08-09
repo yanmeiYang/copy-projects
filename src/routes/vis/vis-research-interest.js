@@ -8,6 +8,7 @@ import React from 'react';
 // import NVD3Chart from 'react-nvd3';
 import { connect } from 'dva';
 import { Tag } from 'antd';
+import * as personService from '../../services/person';
 import styles from './vis-research-interest.less';
 // import './nv.d3.css';
 import AddTags from '../../components/seminar/addTags';
@@ -24,6 +25,14 @@ class VisResearchInterest extends React.Component {
       console.log('>>>>>>>>>>>> initial call ', this.props.personId);
       this.loadData(this.props.personId);
     }
+  }
+
+  state = { interestsI18n: {} };
+
+  componentWillMount() {
+    personService.getInterestsI18N((result) => {
+      this.setState({ interestsI18n: result });
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -51,11 +60,12 @@ class VisResearchInterest extends React.Component {
     return (
       <div className={styles.vis_research_interest}>
         {visData.interests && visData.interests.map((item) => {
-          return <Tag color="blue" key={item.key}>{item.key}</Tag>;
+          const interest = personService.returnKeyByLanguage(this.state.interestsI18n, item.key);
+          return <Tag color="blue" key={item.key}>{interest}</Tag>;
         })}
-        {visData.interests_zh && visData.interests_zh.map((item) => {
-          return <Tag color="blue" key={item.key}>{item.key}</Tag>;
-        })}
+        {/*{visData.interests_zh && visData.interests_zh.map((item) => {*/}
+        {/*return <Tag color="blue" key={item.key}>{item.key}</Tag>;*/}
+        {/*})}*/}
         <br />
         {/*目前没有增加tag的功能，先隐藏*/}
         {/*<AddTags tags={[1, 2, 3]} />*/}
@@ -82,6 +92,5 @@ class VisResearchInterest extends React.Component {
     );
   }
 }
-;
 
 export default connect(({ visResearchInterest }) => ({ visResearchInterest }))(VisResearchInterest);

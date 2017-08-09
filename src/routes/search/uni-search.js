@@ -244,7 +244,7 @@ class UniSearch extends React.PureComponent {
      );
      */
 
-    DEBUGLog && console.log('refresh pagesdf', load);
+    DEBUGLog && console.log('DEV-ONLY:refresh pagesdf', load);
     const { headerSearchBox } = this.props.app;
     return (
       <div className={classnames('content-inner', styles.page)}>

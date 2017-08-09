@@ -5,14 +5,21 @@ import React from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
 import { routerRedux } from 'dva/router';
-import styles from './ExpertTrajectoryPage.less';
-import echarts from 'echarts';
-import world from 'echarts/map/js/world';
-import china from 'echarts/map/js/china';
+import { Slider, Switch, InputNumber, Row, Col, Icon, Button } from 'antd';
 
+import echarts from 'echarts/lib/echarts'; // 必须
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/legend';
+import 'echarts/lib/component/geo';
+import 'echarts/lib/chart/map'; // 引入地图
+import 'echarts/lib/chart/lines';
+import 'echarts/lib/chart/effectScatter';
+import 'echarts/map/js/china'; // 引入中国地图//
+import 'echarts/map/js/world';
+
+import styles from './ExpertTrajectoryPage.less';
 import mapData from '../../../external-docs/expert-trajectory/testData.json';
 import heatData from '../../../external-docs/expert-trajectory/heatData.json';
-import { Slider, Switch, InputNumber, Row, Col, Icon, Button } from 'antd';
 
 const startYear = heatData.startYear;
 const endYear = heatData.endYear;
@@ -23,6 +30,7 @@ const table = heatData.table;
 const address2 = mapData.addresses;
 const trajectory = mapData.trajectory;
 let aaa = 0;
+
 // const myChart2 = echarts.init(document.getElementById('world'));
 class ExpertTrajectoryPage extends React.Component {
   constructor(props) {
@@ -77,7 +85,7 @@ class ExpertTrajectoryPage extends React.Component {
     });
   }
 
-  onClick=() => { // 点击热力图按钮
+  onClick = () => { // 点击热力图按钮
     for (const temp of _.range(startYear, (endYear + 1))) {
       setTimeout(() => {
         this.onChange(temp);
@@ -181,8 +189,8 @@ class ExpertTrajectoryPage extends React.Component {
 
   setHeatmap = () => { // 设置热力图参数
     option2 = {
-      backgroundColor:'#ebe9e7' ,
-       title: {
+      backgroundColor: '#ebe9e7',
+      title: {
         text: '历年学者热力图',
         subtext: 'data from aminer',
         left: 'center',
@@ -221,12 +229,12 @@ class ExpertTrajectoryPage extends React.Component {
           },
         },
       },
-     };
+    };
     const myChart2 = echarts.init(document.getElementById('heatmap'));
     myChart2.setOption(option2);
   }
 
-  doHeatGeoMap=() => { // 存储经纬度 geoCoordMap = {123:[116,40]}
+  doHeatGeoMap = () => { // 存储经纬度 geoCoordMap = {123:[116,40]}
     const geoCoordMap = {};
     console.log('&&&&&&&', geoCoordMap);
     for (const key in location) { // 地点经纬度
@@ -356,6 +364,7 @@ class ExpertTrajectoryPage extends React.Component {
       }
       return tGeoDt;
     }
+
     const planePath = 'arrow';
     const series = [ // 配置迁移图线和点的属性
       {
@@ -412,7 +421,7 @@ class ExpertTrajectoryPage extends React.Component {
     return series;
   }
 
-  quickLine =() => { // 点击迁移图画出完整路线
+  quickLine = () => { // 点击迁移图画出完整路线
     aaa = 1;
     const record = this.getTrajRecord();
     const geoCoordMap = this.doTrajGeoMap(record); // geoCoordMap = {tsinghua unversity : [120,40] }
@@ -423,7 +432,7 @@ class ExpertTrajectoryPage extends React.Component {
     myChart.setOption(option);
   }
 
-  doTrajGeoMap =(record) => { // 计算迁移图经纬度数据
+  doTrajGeoMap = (record) => { // 计算迁移图经纬度数据
     const geoCoordMap = {}; // geoCoordMap = {tsinghua unversity : [120,40] }
     for (const onerecord of record) {
       const onenode = [address2[onerecord[0]].lat, address2[onerecord[0]].lng];
@@ -432,7 +441,7 @@ class ExpertTrajectoryPage extends React.Component {
     return geoCoordMap;
   }
 
-  getTrajRecord =() => { // 得到迁移图合并数据
+  getTrajRecord = () => { // 得到迁移图合并数据
     const record = [];
     let lastYear;
     let lastArea;
@@ -464,7 +473,7 @@ class ExpertTrajectoryPage extends React.Component {
     return record;
   }
 
-  getTrajData =(record) => { // 得到迁移图的data
+  getTrajData = (record) => { // 得到迁移图的data
     const data = []; // data = [{name: tsinghua university, value : 6(years)}]
     for (const onerecord of record) {
       const years = onerecord[1][1] - onerecord[1][0] + 1;
@@ -474,7 +483,7 @@ class ExpertTrajectoryPage extends React.Component {
     return data;
   }
 
-  drawTrajMap =() => { // 画出迁移图背景
+  drawTrajMap = () => { // 画出迁移图背景
     option = { // 地图属性
       backgroundColor: '#abc1db',
       title: {
@@ -485,7 +494,7 @@ class ExpertTrajectoryPage extends React.Component {
           color: '#404040',
         },
         subtextStyle: {
-          color:'#5a5a5a',
+          color: '#5a5a5a',
         }
       },
       tooltip: {
@@ -586,22 +595,39 @@ class ExpertTrajectoryPage extends React.Component {
       <div className={classnames('content-inner', styles.page)}>
         <div id="world" style={{ height: '500px' }} onClick={this.quickLine} />
         <div>
-          <Button type="primary" ghost icon="plus" style={{ fontSize: 16, color: '#08c', position: 'absolute', left: '35px', top: '150px' }} onClick={this.plusTrajZoom} />
+          <Button type="primary" ghost icon="plus" style={{
+            fontSize: 16,
+            color: '#08c',
+            position: 'absolute',
+            left: '35px',
+            top: '150px'
+          }} onClick={this.plusTrajZoom} />
         </div>
         <div>
-          <Button type="primary" ghost icon="minus" style={{ fontSize: 16, color: '#08c', position: 'absolute', left: '35px', top: '330px' }} onClick={this.minusTrajZoom} />
+          <Button type="primary" ghost icon="minus" style={{
+            fontSize: 16,
+            color: '#08c',
+            position: 'absolute',
+            left: '35px',
+            top: '330px'
+          }} onClick={this.minusTrajZoom} />
         </div>
         <div id="heatmap" style={{ height: '500px' }} />
         <div>
-          <Button ghost icon="plus" style={{ fontSize: 16, position: 'absolute', left: '35px', top: '650px' }} onClick={this.plusHeatZoom} />
+          <Button ghost icon="plus"
+                  style={{ fontSize: 16, position: 'absolute', left: '35px', top: '650px' }}
+                  onClick={this.plusHeatZoom} />
         </div>
         <div>
-          <Button ghost icon="minus" style={{ fontSize: 16, position: 'absolute', left: '35px', top: '830px' }} onClick={this.minusHeatZoom} />
+          <Button ghost icon="minus"
+                  style={{ fontSize: 16, position: 'absolute', left: '35px', top: '830px' }}
+                  onClick={this.minusHeatZoom} />
         </div>
 
         <Row>
           <Col span={12}>
-            <Slider min={startYear} max={endYear} onChange={this.onChange} onAfterChange={this.onAfterChange} value={this.state.inputValue} />
+            <Slider min={startYear} max={endYear} onChange={this.onChange}
+                    onAfterChange={this.onAfterChange} value={this.state.inputValue} />
           </Col>
           <Col span={4}>
             <InputNumber
@@ -615,7 +641,8 @@ class ExpertTrajectoryPage extends React.Component {
         </Row>
 
         <div>
-          <Button icon="play-circle" style={{ fontSize: 16, color: '#08c' }} onClick={this.onClick} />
+          <Button icon="play-circle" style={{ fontSize: 16, color: '#08c' }}
+                  onClick={this.onClick} />
         </div>
 
       </div>

@@ -160,10 +160,10 @@ class UniSearch extends React.PureComponent {
   doSearchUseProps = () => {
     const { query, offset, pagination, filters, sortKey } = this.props.search;
     const { pageSize, total, current } = pagination;
-    this.doSearch(query, offset, pageSize, filters, sortKey);
+    this.doSearch(query, offset, pageSize, filters, sortKey, true);
   };
 
-  doSearch = (query, offset, size, filters, sort) => {
+  doSearch = (query, offset, size, filters, sort, dontRefreshUrl) => {
     this.dispatch({
       type: 'search/searchPerson',
       payload: { query, offset, size, filters, sort },
@@ -172,6 +172,11 @@ class UniSearch extends React.PureComponent {
       type: 'search/searchPersonAgg',
       payload: { query, offset, size, filters, sort },
     });
+    if (!dontRefreshUrl) {
+      this.dispatch(routerRedux.push({
+        pathname: `/${sysconfig.SearchPagePrefix}/${query}/0/${size}`,
+      }));
+    }
   };
 
 

@@ -180,7 +180,7 @@ class AddExpertModal extends React.Component {
     if (state.talkStartValue || state.talkEndValue) {
       talk.time = {};
     }
-    talk.speaker.role = [state.speakerInfo.role];
+    talk.speaker.role = state.speakerInfo.role !== undefined ? [state.speakerInfo.role] : [];
     if (state.talkStartValue) {
       talk.time.from = typeof state.talkStartValue === 'string' ? state.talkStartValue : state.talkStartValue.toJSON();
     }

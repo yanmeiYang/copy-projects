@@ -13,7 +13,7 @@ export default {
 
     query: null,
     offset: 0,
-    sortKey: 'contrib',
+    sortKey: '',
     pagination: {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -105,7 +105,7 @@ export default {
               name: sysconfig.DEFAULT_EXPERT_BASE_NAME,
             },
           };
-        return { ...state, query, offset, filters, pagination: { pageSize: size }};
+        return { ...state, query, offset, filters, pagination: { pageSize: size } };
       }
       return { ...state, query, offset, pagination: { pageSize: size } };
     },

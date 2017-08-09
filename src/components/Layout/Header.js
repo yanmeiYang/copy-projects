@@ -80,7 +80,9 @@ class Header extends React.PureComponent {
             }
           </div>
 
+          {process.env.NODE_ENV !== 'production' &&
           <span>DEV: -- </span>
+          }
 
           <Menu
             selectedKeys={[location.pathname]}
@@ -102,7 +104,6 @@ class Header extends React.PureComponent {
             {/*<Link to={`/login?from=${location.pathname}`}><Icon type="login" /></Link>*/}
             {/*</Menu.Item>*/}
             {/*}*/}
-
 
 
             {user.first_name &&

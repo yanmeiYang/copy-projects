@@ -7,6 +7,7 @@ import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { Tabs, Button, Icon, Row, Col, Rate, Modal, Spin } from 'antd';
 import ActivityInfo from './activityInfo';
+import ExpertAllInfo from './expertAllInfo';
 import CommentsByActivity from './comments';
 import * as profileUtils from '../../../utils/profile-utils';
 import styles from './index.less';
@@ -42,6 +43,38 @@ const DetailPage = ({ dispatch, seminar, app, pad }) => {
     dispatch(routerRedux.push(`/seminar-edit/${summaryById.id}`));
   }
 
+  const compare = (property) => {
+    return (a, b) => {
+      const val1 = a[property].from;
+      const val2 = b[property].from;
+      return new Date(val1) - new Date(val2);
+    };
+  };
+
+  let guestSpeakers = [];
+  let presidents = [];
+  if (summaryById.talk) {
+    guestSpeakers = summaryById.talk.filter(item => item.speaker.role === undefined || !item.speaker.role.includes('president'));
+    presidents = summaryById.talk.filter(item => item.speaker.role && item.speaker.role.includes('president'));
+  }
+
+  let timeTalk = [];
+  const noTimeTalk = [];
+  if (guestSpeakers.length>0) {
+    guestSpeakers.map((item) => {
+      if (item.time !== undefined) {
+        timeTalk.push(item);
+      } else {
+        noTimeTalk.push(item);
+      }
+      return true;
+    });
+  }
+  if (timeTalk.length > 0) {
+    timeTalk = timeTalk.sort(compare('time'));
+  }
+  guestSpeakers = timeTalk.concat(noTimeTalk);
+
   return (
     <div className={styles.detailSeminar}>
       <Spin spinning={loading}>
@@ -67,114 +100,19 @@ const DetailPage = ({ dispatch, seminar, app, pad }) => {
                 </div>
               </div>
               {/* type=workshop*/}
-              {summaryById.type === 1 ? <div>
+              <div className={styles.speakerMessage}>
                 <ActivityInfo summaryById={summaryById} />
-                {summaryById.talk.map((aTalk) => {
-                  return (
-                    <div key={aTalk.speaker.aid + Math.random()} className={styles.workshop}>
-                      <div className={styles.workshopDetail}>
-                        {aTalk.title && <h5 className={styles.talkTitle}>主题: {aTalk.title}</h5>}
-                        <p style={{ marginBottom: 10 }}>
-                          {aTalk.time &&
-                          <span>
-                            <strong>报告时间:&nbsp;</strong>
-                            {pad(new Date(aTalk.time.from).getHours(), 2)}:
-                            {pad(new Date(aTalk.time.from).getMinutes(), 2)}
-                          </span>}
-                          {aTalk.location && <span style={{ marginLeft: 10 }}>
-                            {aTalk.location.address &&
-                            <span>
-                              <strong>报告地点:&nbsp;</strong>
-                              <span>{aTalk.location.address}</span>
-                            </span>}
-                          </span>}
-                        </p>
-                        <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-                          <div className={styles.speakerAvatar}>
-                            {aTalk.speaker.aid ?
-                              <Link to={`/person/${aTalk.speaker.aid}`}>
-                                <img
-                                  src={profileUtils.getAvatar(aTalk.speaker.img, aTalk.speaker.aid, 160)}
-                                  alt={aTalk.speaker.name} />
-                              </Link> :
-                              <img src={aTalk.speaker.img} alt={aTalk.speaker.name} />}
-                          </div>
-                          <ul className={styles.messages}>
-                            <span>
-                              {aTalk.speaker &&
-                              <div>
-                                <li>
-                                  <p>
-                                    <Icon type="user" />
-                                    <strong>姓名:&nbsp;</strong>
-                                    {aTalk.speaker.aid ?
-                                      <Link to={`/person/${aTalk.speaker.aid}`}>
-                                        <span>{aTalk.speaker.name}</span>
-                                      </Link> : <span>{aTalk.speaker.name}</span>}
-                                  </p>
-                                </li>
-                                <li>
-                                  {aTalk.speaker.position && aTalk.speaker.position !== ' ' &&
-                                  <p><Icon type="medicine-box" />
-                                    <strong>职称:&nbsp;</strong>
-                                    <span>{aTalk.speaker.position}</span></p>}
-                                </li>
-                                <li>
-                                  {aTalk.speaker.affiliation &&
-                                  <p>
-                                    <Icon type="environment-o" />
-                                    <strong>单位:&nbsp;</strong>
-                                    <span>{aTalk.speaker.affiliation}</span>
-                                  </p>}
-                                </li>
-                              </div>}
-                            </span>
-                            <span>
-                              {aTalk.speaker.phone &&
-                              <li>
-                                <p>
-                                  <Icon type="phone" />
-                                  <strong>电话:&nbsp;</strong>
-                                  <span>{aTalk.speaker.phone}</span>
-                                </p>
-                              </li>}
-                            </span>
-                            <span>
-                              {aTalk.speaker.email &&
-                              <li>
-                                <p>
-                                  <Icon type="mail" />
-                                  <strong>邮箱:&nbsp;</strong>
-                                  <span>{aTalk.speaker.email}</span>
-                                </p>
-                              </li>}
-                            </span>
-                          </ul>
-                        </div>
-                        <div className={styles.bio}>
-                          {aTalk.speaker.bio ? <div>
-                            <h5>个人简介:</h5>
-                            <div className={styles.center}>
-                              <p className="rdw-justify-aligned-block">{ aTalk.speaker.bio }</p>
-                            </div>
-                          </div> : ''}
-                        </div>
+                {presidents.length > 0 &&
+                <div>
+                  <h2><strong>会议主席</strong></h2>
+                  <hr />
+                  <ExpertAllInfo speakers={presidents} pad={pad} />
+                </div>}
 
-                        <div className={styles.abstract}>
-                          {aTalk.abstract ? <div>
-                            <h5>主题简介:</h5>
-                            <div className={styles.center}>
-                              <p className="rdw-justify-aligned-block">{aTalk.abstract}</p>
-                            </div>
-                          </div> : ''}
-                        </div>
-                      </div>
-                      <hr />
-                    </div>
-                  );
-                })}
-              </div> : ''}
-
+                <h2><strong>特邀嘉宾</strong></h2>
+                <hr />
+                <ExpertAllInfo speakers={guestSpeakers} pad={pad} />
+              </div>
             </div>
           </Col>
           <CommentsByActivity activityId={summaryById.id} currentUser={currentUser} />

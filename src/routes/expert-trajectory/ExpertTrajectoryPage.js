@@ -17,6 +17,7 @@ import { Slider, Switch, InputNumber, Row, Col, Icon, Button } from 'antd';
 const startYear = heatData.startYear;
 const endYear = heatData.endYear;
 let option2 = {};
+let option = {};
 const location = heatData.locations;
 const table = heatData.table;
 const address2 = mapData.addresses;
@@ -81,7 +82,7 @@ class ExpertTrajectoryPage extends React.Component {
       setTimeout(() => {
         this.onChange(temp);
         this.onButtoon(temp);
-      }, (temp - startYear) * 4000);
+      }, (temp - startYear) * 5000);
     }
   }
 
@@ -112,7 +113,7 @@ class ExpertTrajectoryPage extends React.Component {
       }
     }
 
-    const piece = 19; // 每隔一年插入20个变化人数时间段
+    const piece = 24; // 每隔一年插入20个变化人数时间段
     for (const key in merge) {
       let middle;
       if (key in merge2) {
@@ -180,13 +181,13 @@ class ExpertTrajectoryPage extends React.Component {
 
   setHeatmap = () => { // 设置热力图参数
     option2 = {
-      backgroundColor: '#404a59',
+      backgroundColor:'#ebe9e7' ,
        title: {
         text: '历年学者热力图',
         subtext: 'data from aminer',
         left: 'center',
         textStyle: {
-          color: '#fff',
+          color: '#5a5a5a',
         },
       },
       tooltip: {
@@ -202,26 +203,126 @@ class ExpertTrajectoryPage extends React.Component {
         },
       },
       geo: {
+        zoom: 1,
         map: 'world',
         label: {
           emphasis: {
             show: true,
           },
         },
-        roam: 'scale',
+        roam: true,
         itemStyle: {
           normal: {
-            areaColor: '#323c48',
-            borderColor: '#111',
+            areaColor: '#c1bfbd',
+            borderColor: '#91a0ae',
           },
           emphasis: {
-            areaColor: '#2a333d',
+            areaColor: '#8a98a5',
           },
         },
       },
      };
     const myChart2 = echarts.init(document.getElementById('heatmap'));
     myChart2.setOption(option2);
+  }
+
+  doHeatGeoMap=() => { // 存储经纬度 geoCoordMap = {123:[116,40]}
+    const geoCoordMap = {};
+    console.log('&&&&&&&', geoCoordMap);
+    for (const key in location) { // 地点经纬度
+      const onewhere = [];
+      if (key !== '0') {
+        onewhere.push(location[key].lat);
+        onewhere.push(location[key].lng);
+        geoCoordMap[key] = onewhere;
+      }
+    }
+    // console.log("geo",geoCoordMap);
+    return geoCoordMap;
+  }
+
+  getHeatSeries = (geoCoordMap, data, j, choose) => { // j是一年中第几个插值
+    console.log('jjjjj', j);
+    const convertData = function (datas, counter) { // 画出热力图上的圈并标出地名
+      const res = [];
+      for (const i of _.range(datas.length)) {
+        const geoCoord = geoCoordMap[datas[i].name];
+        if (geoCoord) {
+          if (choose !== false) {
+            res.push({
+              name: datas[i].name,
+              value: geoCoord.concat(datas[i].value[0] + (datas[i].value[1] * counter)),
+            });
+          } else {
+            console.log('dddddd', geoCoord.concat(datas[i].value));
+            res.push({
+              name: datas[i].name,
+              value: geoCoord.concat(datas[i].value),
+              // value:[2,3],
+            });
+          }
+        }
+      }
+      return res;
+    };
+
+    const series = [
+      { // 人数最多的5个地点
+        name: 'Top 5',
+        type: 'effectScatter',
+        coordinateSystem: 'geo',
+        data: convertData(data.sort((a, b) => {
+          return b.value - a.value;
+        }).slice(0, 5), j),
+        symbolSize(val) {
+          return val[2] / 10;
+        },
+        showEffectOn: 'render',
+        hoverAnimation: true,
+        label: {
+          normal: {
+            formatter: '{b}',
+            position: 'right',
+            show: true,
+          },
+        },
+        itemStyle: {
+          normal: {
+            color: '#f4e925',
+            shadowBlur: 10,
+            shadowColor: '#333',
+          },
+        },
+        zlevel: 1,
+      },
+      { // 当年所有地点
+        name: 'location',
+        type: 'scatter',
+        coordinateSystem: 'geo',
+        data: convertData(data, j),
+        symbolSize(val) {
+          return val[2] / 10;
+        },
+        label: {
+          normal: {
+            formatter: '{b}',
+            position: 'right',
+            show: true,
+          },
+          emphasis: {
+            show: true,
+          },
+        },
+        itemStyle: {
+          normal: {
+            color: '#ddb926',
+          },
+        },
+      },
+
+    ];
+
+    return series;
   }
 
   getTrajSeries = (geoCoordMap, data, record, i) => { // 画出迁移图的路线
@@ -242,12 +343,12 @@ class ExpertTrajectoryPage extends React.Component {
         if (srcNam !== tNam) {
           tGeoDt.push({
             name: `${tNam}`,
-            value: geoData[tNam].concat(record[j][1][0].toString()+" - "+record[j][1][1].toString()),
+            value: geoData[tNam].concat(`${record[j][1][0].toString()} - ${record[j][1][1].toString()}`),
             symbolSize: data[j].value,
             itemStyle: {
               normal: {
-                color: '#FFD24D',
-                borderColor: 'gold',
+                color: '#f04134',
+                borderColor: '#d73435',
               },
             },
           });
@@ -292,14 +393,14 @@ class ExpertTrajectoryPage extends React.Component {
           show: true,
           period: 6,
           trailLength: 0.1,
-          color: '#9CE6FE',
+          color: '#f46e65',
           symbol: planePath,
           symbolSize: 5,
           animation: true,
         },
         lineStyle: {
           normal: {
-            color: '#65A2C2',
+            color: '#f46e65',
             width: 1.5,
             opacity: 0.4,
             curveness: 0.2,
@@ -373,26 +474,29 @@ class ExpertTrajectoryPage extends React.Component {
     return data;
   }
 
-  drawTrajMap =() => { // 画出迁移图北京
-    const option = { // 地图属性
-      backgroundColor: '#013769',
+  drawTrajMap =() => { // 画出迁移图背景
+    option = { // 地图属性
+      backgroundColor: '#abc1db',
       title: {
         text: '专家迁移图',
         subtext: 'data from aminer',
         left: 'center',
         textStyle: {
-          color: '#fff',
+          color: '#404040',
         },
+        subtextStyle: {
+          color:'#5a5a5a',
+        }
       },
       tooltip: {
         trigger: 'item',
       },
       geo: {
-
+        zoom: 1,
         name: 'trajectory',
         type: 'map',
         map: 'world',
-        roam: 'scale',
+        roam: true,
         label: {
           emphasis: {
             show: false,
@@ -400,11 +504,11 @@ class ExpertTrajectoryPage extends React.Component {
         },
         itemStyle: {
           normal: {
-            areaColor: '#022548',
-            borderColor: '#0DABEA',
+            areaColor: '#f5f3f0',
+            borderColor: '#91a0ae',
           },
           emphasis: {
-            areaColor: '#011B34',
+            areaColor: '#bcbab8',
           },
         },
       },
@@ -430,110 +534,70 @@ class ExpertTrajectoryPage extends React.Component {
     }
   }
 
-  doHeatGeoMap=() => { // 存储经纬度 geoCoordMap = [[123[116,40]],   ]
-    const geoCoordMap = {};
-    for (const key in location) { // 地点经纬度
-      const onewhere = [];
-      if (key !== '0') {
-        onewhere.push(location[key].lat);
-        onewhere.push(location[key].lng);
-        geoCoordMap[key] = onewhere;
-      }
+  plusTrajZoom = () => {
+    option.geo.zoom += 0.1;
+    if (option.geo.zoom - 0.1 < 0.7) {
+      const record = this.getTrajRecord();
+      const geoCoordMap = this.doTrajGeoMap(record); // geoCoordMap = {tsinghua unversity : [120,40] }
+      const data = this.getTrajData(record);
+      option.series = this.getTrajSeries(geoCoordMap, data, record, (data.length - 2));
     }
-    // console.log("geo",geoCoordMap);
-    return geoCoordMap;
+    const myChart = echarts.init(document.getElementById('world'));
+    myChart.setOption(option);
   }
 
-  getHeatSeries = (geoCoordMap, data, j, choose) => { // j是一年中第几个插值
-    console.log('jjjjj', j);
-    const convertData = function (datas, counter) { // 画出热力图上的圈并标出地名
-      const res = [];
-      for (const i of _.range(datas.length)) {
-        const geoCoord = geoCoordMap[datas[i].name];
-        if (geoCoord) {
-          if (choose !== false) {
-            res.push({
-              name: datas[i].name,
-              value: geoCoord.concat(datas[i].value[0] + (datas[i].value[1] * counter)),
-            });
-          } else {
-            console.log('dddddd', geoCoord.concat(datas[i].value));
-            res.push({
-              name: datas[i].name,
-              value: geoCoord.concat(datas[i].value),
-              //value:[2,3],
-            });
-          }
-        }
-      }
-      return res;
-    };
-
-    const series = [
-      { // 人数最多的5个地点
-        name: 'Top 5',
-        type: 'effectScatter',
-        coordinateSystem: 'geo',
-        data: convertData(data.sort((a, b) => {
-          return b.value - a.value;
-        }).slice(0, 5), j),
-        symbolSize(val) {
-          return val[2] / 10;
-        },
-        showEffectOn: 'render',
-        hoverAnimation: true,
-        label: {
+  minusTrajZoom = () => {
+    option.geo.zoom -= 0.1;
+    if (option.geo.zoom < 0.7) {
+      aaa = 1;
+      console.log('FFFF', option.series);
+      option.series = [{
+        type: 'lines',
+        zlevel: 0,
+        lineStyle: {
           normal: {
-            formatter: '{b}',
-            position: 'right',
-            show: true,
+            color: '#65A2C2',
+            width: 0,
+            opacity: 0,
+            curveness: 0.2,
           },
         },
-        itemStyle: {
-          normal: {
-            color: '#f4e925',
-            shadowBlur: 10,
-            shadowColor: '#333',
-          },
-        },
-        zlevel: 1,
-      },
-      { // 当年所有地点
-        name: 'location',
-        type: 'scatter',
-        coordinateSystem: 'geo',
-        data: convertData(data, j),
-        symbolSize(val) {
-          return val[2] / 10;
-        },
-        label: {
-          normal: {
-            formatter: '{b}',
-            position: 'right',
-            show: true,
-          },
-          emphasis: {
-            show: true,
-          },
-        },
-        itemStyle: {
-          normal: {
-            color: '#ddb926',
-          },
-        },
-      },
-
-    ];
-
-    return series;
+      }];
+    }
+    const myChart = echarts.init(document.getElementById('world'));
+    myChart.setOption(option);
   }
 
+  plusHeatZoom = () => {
+    option2.geo.zoom += 0.1;
+    const myChart2 = echarts.init(document.getElementById('heatmap'));
+    myChart2.setOption(option2);
+  }
 
+  minusHeatZoom = () => {
+    option2.geo.zoom -= 0.1;
+    const myChart2 = echarts.init(document.getElementById('heatmap'));
+    myChart2.setOption(option2);
+  }
+
+// <canvas width="1560" height="1000" data-zr-dom-id="zr_0" style="position: absolute; left: 0px; top: 0px; width: 780px; height: 500px; user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); padding: 0px; margin: 0px; border-width: 0px;"></canvas>
   render() {
     return (
       <div className={classnames('content-inner', styles.page)}>
-        <div id="world" style={{ height: '600px' }} onClick={this.quickLine} />
-        <div id="heatmap" style={{ height: '600px' }} />
+        <div id="world" style={{ height: '500px' }} onClick={this.quickLine} />
+        <div>
+          <Button type="primary" ghost icon="plus" style={{ fontSize: 16, color: '#08c', position: 'absolute', left: '35px', top: '150px' }} onClick={this.plusTrajZoom} />
+        </div>
+        <div>
+          <Button type="primary" ghost icon="minus" style={{ fontSize: 16, color: '#08c', position: 'absolute', left: '35px', top: '330px' }} onClick={this.minusTrajZoom} />
+        </div>
+        <div id="heatmap" style={{ height: '500px' }} />
+        <div>
+          <Button ghost icon="plus" style={{ fontSize: 16, position: 'absolute', left: '35px', top: '650px' }} onClick={this.plusHeatZoom} />
+        </div>
+        <div>
+          <Button ghost icon="minus" style={{ fontSize: 16, position: 'absolute', left: '35px', top: '830px' }} onClick={this.minusHeatZoom} />
+        </div>
 
         <Row>
           <Col span={12}>

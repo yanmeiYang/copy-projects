@@ -128,10 +128,10 @@ class RegistrationForm extends React.PureComponent {
           data.location.city = values.city;
           data.location.address = values.address;
           if (state.startValue) {
-            data.time.from = typeof state.startValue === 'string' ? state.startValue : state.startValue.toJSON();
+            data.time.from = typeof state.startValue === 'string' ? state.startValue : state.startValue;
           }
           if (state.endValue) {
-            data.time.to = typeof state.endValue === 'string' ? state.endValue : state.endValue.toJSON();
+            data.time.to = typeof state.endValue === 'string' ? state.endValue : state.endValue;
           }
           data.tags = state.tags;
           if (data.co_org !== undefined && data.co_org.length > 0) {

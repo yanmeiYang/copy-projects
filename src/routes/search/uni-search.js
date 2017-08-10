@@ -104,12 +104,12 @@ class UniSearch extends React.PureComponent {
   };
 
   // will reset pager and sort.
-  onFilterChange = (key, value, checked) => {
+  onFilterChange = (key, value, checked, total) => {
     const { filters, query } = this.props.search;
 
     // if onExpertBaseChanged, all filters is cleared.
     if (checked) {
-      filters[key] = value;
+      filters[key] = total ? `${value}#${total}` : value;
     } else if (filters[key]) {
       delete filters[key];
     }
@@ -164,9 +164,15 @@ class UniSearch extends React.PureComponent {
   };
 
   doSearch = (query, offset, size, filters, sort, dontRefreshUrl) => {
+    let filtersLength = 0;
+    for (const item of Object.values(filters)) {
+      if (typeof item === 'string') {
+        filtersLength = item.split('#')[1];
+      }
+    }
     this.dispatch({
       type: 'search/searchPerson',
-      payload: { query, offset, size, filters, sort },
+      payload: { query, offset, size, filters, sort, total: parseInt(filtersLength) },
     });
     this.dispatch({
       type: 'search/searchPersonAgg',

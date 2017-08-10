@@ -3,7 +3,7 @@ import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import classnames from 'classnames';
 import { isEqual } from 'lodash';
-import { Tabs, Button, Tag, Pagination, message } from 'antd';
+import { Tabs, Pagination } from 'antd';
 import styles from './uni-search.less';
 import { PersonList } from '../../components/person';
 import { Spinner } from '../../components';

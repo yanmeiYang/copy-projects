@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router';
-import { login } from '../services/login';
+import { login } from '../services/auth';
 import { queryURL } from '../utils';
 
 export default {
@@ -24,7 +24,7 @@ export default {
       if (data.status) {
         localStorage.setItem('token', data.token);
         const from = queryURL('from');
-        yield put({ type: 'app/query' });
+        // yield put({ type: 'app/query' });
         yield put({ type: 'app/getCurrentUserInfo' });
         if (from) {
           yield put(routerRedux.push(from));
@@ -37,6 +37,7 @@ export default {
       }
     },
   },
+
   reducers: {
     loginError(state, data) {
       return { ...state, errorMessage: data.data };

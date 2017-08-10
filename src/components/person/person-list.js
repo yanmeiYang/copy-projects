@@ -107,13 +107,17 @@ class PersonList extends React.PureComponent {
                         <div className={styles.tagWrap}>
                           {
                             person.tags.slice(0, 8).map((item) => {
-                              const tag = personService.returnKeyByLanguage(this.state.interestsI18n, item.t);
-                              return (
-                                <Link
-                                  to={`/${sysconfig.SearchPagePrefix}/${tag}/0/${sysconfig.MainListSize}`}
-                                  key={Math.random()}>
-                                  <Tag className={styles.tag}>{tag}</Tag>
-                                </Link>);
+                              if (item.t === null || item.t === 'Null') {
+                                return;
+                              } else {
+                                const tag = personService.returnKeyByLanguage(this.state.interestsI18n, item.t);
+                                return (
+                                  <Link
+                                    to={`/${sysconfig.SearchPagePrefix}/${tag}/0/${sysconfig.MainListSize}`}
+                                    key={Math.random()}>
+                                    <Tag className={styles.tag}>{tag}</Tag>
+                                  </Link>);
+                               }
                             })
                           }
                         </div>

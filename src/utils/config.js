@@ -47,6 +47,8 @@ module.exports = {
     // 删除user的label
     revoke: '/user/role/revoke',
     listUsersByRole: '/user/role/list/:role/offset/:offset/size/:size',
+    // 创建邮件模板
+    emailTemplate: '/user/mail/template/:src/:type',
 
     // search
     searchPerson: '/search/person', // pin=1 huawei mode.

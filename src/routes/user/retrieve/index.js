@@ -4,7 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Form, Button, Input, Modal } from 'antd';
-import { routerRedux, Link } from 'dva/router';
+import { routerRedux } from 'dva/router';
 import { queryURL } from '../../../utils';
 import styles from './index.less';
 

@@ -41,6 +41,7 @@ const fullRouter = (app, defaultChildRoutes) => {
       core.AdminActivityType(app),
       core.AdminSystemConfigWithCategory(app),
       core.AdminSystemOrgCategory(app),
+      core.EmailTemplate(app),
 
       // Activity / Seminar
       core.Seminar(app),

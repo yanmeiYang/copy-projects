@@ -1,0 +1,163 @@
+/**
+ * Created by yangyanmei on 17/8/10.
+ */
+import React from 'react';
+import { connect } from 'dva';
+import { routerRedux } from 'dva/router';
+import { Form, Input, Button, Select } from 'antd';
+import { sysconfig } from '../../../systems';
+
+const Option = Select.Option;
+const { TextArea } = Input;
+const FormItem = Form.Item;
+const BodyTemplate = '\n你好 {{name}},\n\n此电子邮件地址请求重设密码。\n\n要重设密码，请点击下面的链接。' +
+  '如果连接无法点击请复制连接在浏览器中打开。。\n' +
+  'http://ali.aminer.org/reset-password?email={{email}}&src={{src}}&token={{token}}' +
+  '\n\n这将允许您创建一个新密码，然后您可以登录到您的帐户。\n\n该链接将在12小时内到期。\n\n如果您已经完成了此操作，' +
+  '或者您自己没有请求，请忽略此电子邮件\n\n此致\n\n阿里巴巴学术资源地图客户团队\n\n注意：\n此电子邮件地址无法接受回复' +
+  '\n若要解决问题或了解有关帐户的更多信息，请访问我们的网站。\n';
+class EmailTemplate extends React.Component {
+  state = {};
+  componentWillMount = () => {
+    this.props.dispatch({ type: 'app/handleNavbar', payload: true });
+  };
+  componentWillUnmount = () => {
+    this.props.dispatch({ type: 'app/handleNavbar', payload: false });
+  };
+  registered = (e) => {
+    e.preventDefault();
+    const props = this.props;
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        console.log(values);
+        this.props.dispatch({ type: 'systemSetting/setEmailTemplate', payload: values });
+        // Modal.success({
+        //   title: '创建用户',
+        //   content: '创建成功',
+        //   onOk() {
+        //     props.dispatch(routerRedux.push({
+        //       pathname: '/admin/users',
+        //     }));
+        //   },
+        // });
+        // this.props.form.resetFields();
+      }
+    });
+  };
+
+  selectedType = (e) => {
+    console.log(e);
+  };
+
+  render() {
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 6 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 14 },
+      },
+    };
+    const tailFormItemLayout = {
+      wrapperCol: {
+        xs: {
+          span: 24,
+          offset: 0,
+        },
+        sm: {
+          span: 14,
+          offset: 6,
+        },
+      },
+    };
+    const { getFieldDecorator } = this.props.form;
+    return (
+      <div style={{ maxWidth: '1228px' }}>
+        <Form onSubmit={this.registered} style={{ marginTop: 30 }}>
+          <FormItem
+            {...formItemLayout}
+            label="类型"
+          >
+            {
+              getFieldDecorator('type', {
+                rules: [
+                  {
+                    required: true, message: '请输入发件人!',
+                  }],
+              })(
+                <Select onChange={this.selectedType}>
+                  <Option value="reset-password">reset-password</Option>
+                  <Option value="welcome">welcome</Option>
+                </Select>,
+              )
+            }
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label="发件人"
+          >
+            {
+              getFieldDecorator('sender', {
+                rules: [
+                  {
+                    required: true, message: '请输入发件人!',
+                  }],
+              })(
+                <Input />,
+              )
+            }
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label="主题"
+          >
+            {
+              getFieldDecorator('subject', {
+                rules: [{
+                  required: true, message: '请输入主题!',
+                }],
+              })(
+                <Input type="text" />,
+              )
+            }
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label="内容"
+            hasFeedback
+          >
+            {
+              getFieldDecorator('body', {
+                rules: [{
+                  required: true, message: '请输入内容',
+                }],
+              })(
+                <TextArea placeholder="请输入发送内容" autosize={{ minRows: 2, maxRows: 6 }} />,
+              )
+            }
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label="内容例子"
+          >
+            <span>{BodyTemplate}</span>
+          </FormItem>
+
+          <FormItem {...tailFormItemLayout} style={{ textAlign: 'center' }}>
+            <Button type="primary" onClick={this.registered} style={{ width: '50%' }}>
+              定制邮件内容
+            </Button>
+          </FormItem>
+        </Form>
+        {/*<Col xs={{ span: 24 }} sm={{ span: 14, offset: 6 }}>*/}
+          {/*<h4>内容例子：</h4>*/}
+          {/*<span>{BodyTemplate}</span>*/}
+        {/*</Col>*/}
+      </div>
+    );
+  }
+}
+
+export default connect(({ systemSetting }) => ({ systemSetting }))((Form.create())(EmailTemplate));

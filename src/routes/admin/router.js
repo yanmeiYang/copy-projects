@@ -83,6 +83,16 @@ export default {
     },
   }),
 
+  EmailTemplate: app => ({
+    path: '/email-template',
+    getComponent(nextState, cb) {
+      require.ensure([], (require) => {
+        registerModel(app, require('../../models/system-setting'));
+        cb(null, require('./emailTemplate'));
+      }, 'admin');
+    },
+  }),
+
 
 };
 

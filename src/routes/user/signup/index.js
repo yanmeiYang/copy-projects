@@ -7,7 +7,7 @@ import { routerRedux } from 'dva/router';
 import { Form, Input, Button, Select, Modal, Tag } from 'antd';
 import { config } from '../../../utils';
 import { sysconfig } from '../../../systems';
-import AddRoleModal from '../add-user-role-modal';
+// import AddRoleModal from '../add-user-role-modal';
 
 const FormItem = Form.Item;
 const Option = Select.Option;

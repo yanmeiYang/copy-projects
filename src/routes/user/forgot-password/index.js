@@ -4,11 +4,9 @@
 import React from 'react';
 import { Input, Button, Form, Modal } from 'antd';
 import { connect } from 'dva';
-import { Layout } from '../../../components';
 import { config } from '../../../utils';
 import styles from './index.less';
 
-const { Header, Footer } = Layout;
 const FormItem = Form.Item;
 
 class ForgotPassword extends React.Component {

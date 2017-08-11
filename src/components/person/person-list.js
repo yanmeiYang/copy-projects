@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { Link } from 'dva/router';
-import { Tag } from 'antd';
+import { Tag, Tooltip } from 'antd';
 import { Indices } from '../../components/widgets';
 import { sysconfig } from '../../systems';
 import * as personService from '../../services/person';
@@ -111,13 +111,23 @@ class PersonList extends React.PureComponent {
                                 return;
                               } else {
                                 const tag = personService.returnKeyByLanguage(this.state.interestsI18n, item.t);
+                                const showTag = tag.zh !== '' ? tag.zh : tag.en;
                                 return (
-                                  <Link
-                                    to={`/${sysconfig.SearchPagePrefix}/${tag}/0/${sysconfig.MainListSize}`}
-                                    key={Math.random()}>
-                                    <Tag className={styles.tag}>{tag}</Tag>
-                                  </Link>);
-                               }
+                                  <span key={Math.random()}>
+                                    {tag.zh ? <Tooltip placement="top" title={tag.en}>
+                                      <Link
+                                        to={`/${sysconfig.SearchPagePrefix}/${showTag}/0/${sysconfig.MainListSize}`}
+                                        key={Math.random()}>
+                                        <Tag className={styles.tag}>{showTag}</Tag>
+                                      </Link>
+                                    </Tooltip> : <Link
+                                      to={`/${sysconfig.SearchPagePrefix}/${showTag}/0/${sysconfig.MainListSize}`}
+                                      key={Math.random()}>
+                                      <Tag className={styles.tag}>{showTag}</Tag>
+                                    </Link>}
+                                  </span>
+                                );
+                              }
                             })
                           }
                         </div>

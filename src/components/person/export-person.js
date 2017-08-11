@@ -9,21 +9,20 @@ import styles from './expert-person.less';
 
 const CheckboxGroup = Checkbox.Group;
 
-const plainOptions = [{ id: 1, label: '姓名', desc: 'name_zh' }, {
-  id: 2,
-  label: '性别',
-  desc: 'gender',
-},
-  { id: 3, label: '职称', desc: 'pos' }, { id: 4, label: '单位', desc: 'aff' }];
-const defaultCheckedList = ['name_zh', 'gender', 'pos', 'aff'];
+const plainOptions = [
+  { id: 1, label: '姓名' },
+  { id: 2, label: '性别' },
+  { id: 3, label: '职称' },
+  { id: 4, label: '单位' },
+  { id: 5, label: '学术成就' },
+  { id: 6, label: '学术活跃度' },
+];
+const defaultCheckedList = ['姓名', '性别', '职称', '单位', '学术成就', '学术活跃度'];
 
 class ExportPersonBtn extends React.Component {
   state = {
     isExport: false,
     modalVisible: false,
-    step1: true,
-    step2: false,
-    step3: false,
     checkedList: defaultCheckedList,
     indeterminate: true,
     checkAll: false,
@@ -35,19 +34,11 @@ class ExportPersonBtn extends React.Component {
   };
 
   setModalVisible = () => {
-    this.setState({ modalVisible: false, step1: true, step2: false, step3: false });
+    this.setState({ modalVisible: false });
   };
 
   exportSearchResult = () => {
-    console.log('导出搜索结果');
     this.setState({ modalVisible: true });
-  };
-  exportSelectedResult = () => {
-    console.log('导出选择结果');
-  };
-
-  setStep = (type, value) => {
-    this.setState({ [type]: value, step1: false });
   };
 
   onChangeExportSize = (e) => {
@@ -62,14 +53,6 @@ class ExportPersonBtn extends React.Component {
     });
   };
 
-  // onCheckAllChange = (e) => {
-  //   console.log(e);
-  //   this.setState({
-  //     checkedList: e.target.checked ? plainOptions : [],
-  //     indeterminate: false,
-  //     checkAll: e.target.checked,
-  //   })
-  // };
 
   i18nGenderTable = { male: '男', female: '女' };
   clickDownload = (e) => {
@@ -82,25 +65,36 @@ class ExportPersonBtn extends React.Component {
     results.map((person) => {
       selectedItem.map((item) => {
         switch (item) {
-          case 'pos':
+          case '职称':
             if (person.pos.length > 0) {
               return expertPersonInfo += `${person.pos[0].n_zh ? person.pos[0].n_zh.replace(/,/g, ';') : person.pos[0].n.replace(/,/g, ';')},`;
             } else {
               return expertPersonInfo += ',';
             }
-          case 'aff':
+          case '单位':
             if (person.aff.desc_zh || person.aff.desc) {
               return expertPersonInfo += `${person.aff.desc_zh ? person.aff.desc_zh.replace(/,/g, ';') : person.aff.desc.replace(/,/g, ';')},`;
             } else {
               return expertPersonInfo += ',';
             }
-
-          case 'gender':
+          case '性别':
             const gender = person.attr.gender;
             const i18nGender = this.i18nGenderTable[gender] || '';
             return expertPersonInfo += `${i18nGender},`;
-          case 'name_zh':
+          case '姓名':
             return expertPersonInfo += `${person.name_zh ? person.name_zh : person.name},`;
+          case '学术成就':
+            if (person.indices.h_index) {
+              return expertPersonInfo += `${person.indices.h_index},`;
+            } else {
+              return expertPersonInfo += ',';
+            }
+          case '学术活跃度':
+            if (person.indices.activity) {
+              return expertPersonInfo += `${person.indices.activity},`;
+            } else {
+              return expertPersonInfo += ',';
+            }
           default:
             return false;
         }
@@ -108,7 +102,8 @@ class ExportPersonBtn extends React.Component {
       expertPersonInfo += '\n';
       return true;
     });
-    const fristRow = this.state.checkedList.toString().replace(/name_zh/, '姓名').replace(/gender/, '性别').replace(/pos/, '职称').replace(/aff/, '单位');
+
+    const fristRow = this.state.checkedList.toString();
     let str = `${fristRow}\n${expertPersonInfo}`;
     const bom = '\uFEFF';
     str = encodeURIComponent(str);
@@ -156,7 +151,7 @@ class ExportPersonBtn extends React.Component {
                 {plainOptions.map((item) => {
                   return (
                     <Col span={8} key={item.id}><Checkbox
-                      value={item.desc}>{item.label}</Checkbox></Col>
+                      value={item.label}>{item.label}</Checkbox></Col>
                   );
                 })}
 

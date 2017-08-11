@@ -13,9 +13,9 @@ import { KgSearchBox, SearchTypeWidgets } from '../../components/search';
 
 class Header extends React.PureComponent {
   // function Header({ app, location, dispatch, logout, onSearch }) {
-  constructor(props) {
-    super(props);
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
 
   state = {
     query: 'test',
@@ -58,6 +58,15 @@ class Header extends React.PureComponent {
       };
     }
 
+    if (process.env.NODE_ENV !== 'production') {
+      const { app } = this.props;
+      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+      console.log('app.user:', app.user);
+      console.log('app.token:', app.token ? app.token.slice(0, 10) : app.token);
+      console.log('app.roles:', app.roles);
+      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+    }
+
     return (
       <div className={styles.header}>
         <div className={styles.logoLine}>
@@ -81,7 +90,7 @@ class Header extends React.PureComponent {
           </div>
 
           {process.env.NODE_ENV !== 'production' &&
-          <span>DEV: -- </span>
+          <span>DEV: </span>
           }
 
           <Menu

@@ -2,7 +2,7 @@
  *  Created by ranyanchuan on 2017-06-09;
  */
 import React from 'react';
-import { Tabs, Modal, Icon } from 'antd';
+import { Tabs, Input, Modal, Icon } from 'antd';
 import { connect } from 'dva';
 import { isEqual } from 'lodash';
 import UniversalConfig from '../../common/universal-config/index';
@@ -80,7 +80,7 @@ class OrgCategory extends React.Component {
     Modal.confirm({
       title: '添加机构列表：',
       content: (
-        <input className="orgNameInput" placeholder="请输入新机构的名字"
+        <Input className="orgNameInput" placeholder="请输入新机构的名字"
                onBlur={this.onModalInputBlur} />
       ),
       onOk() {

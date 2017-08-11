@@ -3,7 +3,8 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button, Select } from 'antd';
+import { Form, Input, Button, Select, Modal } from 'antd';
+import { sysconfig } from '../../../systems';
 
 const Option = Select.Option;
 const { TextArea } = Input;
@@ -23,11 +24,24 @@ class EmailTemplate extends React.Component {
   componentWillUnmount = () => {
     this.props.dispatch({ type: 'app/handleNavbar', payload: false });
   };
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.systemSetting.status !== this.props.systemSetting.status) {
+      if (!nextProps.systemSetting.status) {
+        Modal.error({
+          title: '您没有权限',
+        });
+      } else {
+        Modal.success({
+          title: '邮箱模板定制成功',
+        });
+      }
+      this.props.form.resetFields();
+    }
+  };
   registered = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log(values);
         this.props.dispatch({ type: 'systemSetting/setEmailTemplate', payload: values });
         // Modal.success({
         //   title: '创建用户',
@@ -41,10 +55,6 @@ class EmailTemplate extends React.Component {
         // this.props.form.resetFields();
       }
     });
-  };
-
-  selectedType = (e) => {
-    console.log(e);
   };
 
   render() {
@@ -76,6 +86,27 @@ class EmailTemplate extends React.Component {
         <Form onSubmit={this.registered} style={{ marginTop: 30 }}>
           <FormItem
             {...formItemLayout}
+            label="系统"
+          >
+            {
+              getFieldDecorator('src', {
+                rules: [
+                  {
+                    required: true, message: '请输入系统!',
+                  }],
+              })(
+                <Select>
+                  {
+                    sysconfig.AllOptionalSystems.map((sys) => {
+                      return <Option key={sys} value={sys}>{sys}</Option>;
+                    })
+                  }
+                </Select>,
+              )
+            }
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
             label="类型"
           >
             {
@@ -85,7 +116,7 @@ class EmailTemplate extends React.Component {
                     required: true, message: '请输入发件人!',
                   }],
               })(
-                <Select onChange={this.selectedType}>
+                <Select>
                   <Option value="reset-password">reset-password</Option>
                   <Option value="welcome">welcome</Option>
                 </Select>,

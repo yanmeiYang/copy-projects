@@ -25,6 +25,9 @@ const CurrentSystemConfig = {
 const defaultSystemConfigs = {
   SYSTEM: config.system,
 
+  // 所有可选系统
+  AllOptionalSystems: ['ccf', 'huawei', 'alibaba', 'tencent', 'cie'],
+
   //
   // Systems Preference
   //

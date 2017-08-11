@@ -16,8 +16,8 @@ const Footer = () => {
             <div>CopyRight @ 2007-2008 中国电子学会 All Rights Reserved</div>
             <div> 地址：北京市海淀区玉渊潭南路普惠南里13号楼 通信地址：北京165信箱 邮编：100036 联系电话：68283461</div>
             <div>技术支持： <a href="https://cn.aminer.org/">AMiner.org</a></div>
-            <div> 京ICP备12041980号</div>
-            <div>京公网安备110108003006号</div>
+            {/*<div> 京ICP备12041980号</div>*/}
+            {/*<div>京公网安备110108003006号</div>*/}
           </div>
         </div>
       </div>

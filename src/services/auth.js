@@ -46,6 +46,7 @@ export async function invoke(uid, label) {
     body: JSON.stringify(data),
   });
 }
+
 export async function revoke(uid, label) {
   const data = {
     uid,
@@ -64,10 +65,9 @@ export async function listUsersByRole(offset, size) {
 }
 
 export async function forgot(params) {
-  params.src = sysconfig.UserAuthSystem;
   return request(api.forgot, {
     method: 'POST',
-    body: JSON.stringify(params),
+    body: JSON.stringify({ ...params, src: sysconfig.UserAuthSystem }),
   });
 }
 
@@ -84,5 +84,16 @@ export async function updateProfile(id, name) {
   return request(api.updateProfile.replace(':id', id), {
     method: 'PATCH',
     body: JSON.stringify(data),
+  });
+}
+
+export async function login(data) {
+  return request(api.userLogin, {
+    method: 'post',
+    body: JSON.stringify({
+      ...data,
+      persist: true,
+      src: sysconfig.UserAuthSystem,
+    }),
   });
 }

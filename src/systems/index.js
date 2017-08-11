@@ -60,6 +60,7 @@ const defaultSystemConfigs = {
   UserAuthSystem: config.system, // aminer 或者是 system.config
   UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签
 
+  Auth_AllowAnonymousAccess: false,
   //
   // Page specified config.
   //

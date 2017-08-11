@@ -46,6 +46,7 @@ export default {
   },
   effects: {
     * getCurrentUserInfo({ payload }, { call, put }) {
+      console.log('~~~~>>> ', getCurrentUserInfo);
       if (LocalStorage.getItem('token')) {
         const userMessage = getLocalStorage('user');
         // TODO 每次打开新URL都要访问一次。想办法缓存一下。
@@ -103,18 +104,26 @@ export default {
   },
 
   reducers: {
+    // TODO 这里没有通用化.
     getCurrentUserInfoSuccess(state, { payload: user }) {
       const roles = { admin: false, ccf_user: false, role: [], authority: [] };
       for (const r of user.role) {
+        // Examples Roles
+        // root, ccf_超级管理员,
         if (r === 'root' || r === `${config.source}_超级管理员`) {
           roles.admin = true;
         }
+        // ccf -- TODO 改成有没有这个系统的权限.
         if (r === 'ccf') {
           roles.ccf_user = true;
         }
+
+        // ccf only -- Need an example
         if (r.split('_').length === 2) {
           roles.role.push(r.split('_')[1]);
         }
+
+        // ccf only -- Need an example
         if (r.split('_').length === 3) {
           roles.authority.push(r.split('_')[2]);
         }

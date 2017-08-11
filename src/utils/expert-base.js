@@ -55,6 +55,7 @@ const TopExpertBase = {
     { index: 46, name: 'University of California--Irvine', id: '59069e479ed5dbd227274c04', abbr: '' },
     { index: 47, name: 'University of Michigan--Ann Arbor', id: '5906fb049ed5dbd22727551e', abbr: '' },
     { index: 48, name: 'National Cheng Kung University', id: '5907298c9ed5dbd2272757d2', abbr: '' },
+    // where is 49?
     { index: 50, name: 'University of Washington', id: '590948709ed5dbd227279fcc', abbr: '' },
   ],
 };
@@ -70,5 +71,16 @@ TopExpertBase.TopUniversity2015.map((eb) => {
   return null;
 });
 
+// tools.
+function toIDDotString(ebs) {
+  return ebs.reduce((result, eb) => {
+    return `${result.id}.${eb.id}`;
+  });
+}
 
-module.exports = { TopExpertBase, ACMFellowExpertBaseIndex, TopUnivExpertBaseIndex };
+module.exports = {
+  TopExpertBase,
+  ACMFellowExpertBaseIndex,
+  TopUnivExpertBaseIndex,
+  toIDDotString,
+};

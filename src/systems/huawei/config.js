@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { IndexInfoBox, PersonLabel } from './components';
+import { toIDDotString, TopExpertBase } from '../../utils/expert-base';
 
 module.exports = {
 
@@ -49,9 +50,9 @@ module.exports = {
       nperson: 0,
     },
     {
-      id: '596c130f9ed5db449d3fbe83',
+      id: toIDDotString(TopExpertBase.ACMFellow),
       name: 'ACM Fellow',
-      nperson: 53,
+      nperson: 53 + 809,
     },
     {
       id: '5923c0829ed5db1600b942db',

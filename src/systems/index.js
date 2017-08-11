@@ -83,6 +83,8 @@ const defaultSystemConfigs = {
     'Data Mining', 'Machine Learning', 'Data Modeling', 'Computer vision',
     'Networks', 'Natural language processing'],
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
+  // 地图中心点
+  CentralPosition: {},
 
 
   // PersonList_ShowIndices: [], // do not override in-component settings. // TODO

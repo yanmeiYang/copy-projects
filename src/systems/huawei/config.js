@@ -35,7 +35,8 @@ module.exports = {
   // Functionality
   Enable_Export: false,
   Search_EnablePin: true,
-
+  // 地图中心点
+  CentralPosition: { lat: 37.09024, lng: -95.712891 },
   Person_PersonLabelBlock: person => <PersonLabel person={person} />,
 
   ExpertBases: [

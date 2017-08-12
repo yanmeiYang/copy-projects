@@ -64,6 +64,8 @@ const defaultSystemConfigs = {
   UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签
 
   Auth_AllowAnonymousAccess: false,
+  Auth_LoginPage: '/login',
+
   //
   // Page specified config.
   //

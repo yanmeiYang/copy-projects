@@ -2,6 +2,7 @@ import { routerRedux } from 'dva/router';
 import { parse } from 'qs';
 import { getCurrentUserInfo, logout } from '../services/app';
 import { config, setLocalStorage, getLocalStorage } from '../utils';
+import { sysconfig } from '../systems';
 import * as authService from '../services/auth';
 
 const { prefix } = config;
@@ -34,6 +35,7 @@ export default {
   subscriptions: {
     setup({ dispatch }) {
       dispatch({ type: 'getCurrentUserInfo' });
+
       let tid;
       window.onresize = () => {
         clearTimeout(tid);
@@ -42,11 +44,10 @@ export default {
         }, 300);
       };
     },
-
   },
+
   effects: {
     * getCurrentUserInfo({ payload }, { call, put }) {
-      console.log('~~~~>>> ', getCurrentUserInfo);
       if (LocalStorage.getItem('token')) {
         const userMessage = getLocalStorage('user');
         // TODO 每次打开新URL都要访问一次。想办法缓存一下。
@@ -87,7 +88,7 @@ export default {
         // TODO 这里写死了会跳转到登录页面。单并不是所有系统登出后都不能继续
         // 访问当前页面。所以这里要改成等出后刷新当前页面。
         // 如果发现没有权限，则跳转到登录页面。
-        window.location.href = '/login';
+        window.location.href = sysconfig.Auth_LoginPage;
       } else {
         throw (data);
       }

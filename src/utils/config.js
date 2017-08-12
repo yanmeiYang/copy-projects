@@ -7,6 +7,7 @@ const SYS = 'huawei';
 // const SYS = 'tencent';
 // const SYS = '2017-8';
 // const SYS = 'cie';
+// const SYS = 'demo';
 
 const param = (key, type, description) => {
   return { key, type, description };

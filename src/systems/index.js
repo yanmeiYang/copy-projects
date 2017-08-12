@@ -7,6 +7,8 @@ import * as ccfConfig from './ccf/config';
 import * as huaweiConfig from './huawei/config';
 import * as tencentConfig from './tencent/config';
 import * as cieConfig from './cie/config';
+import * as demoConfig from './demo/config';
+
 
 import { config } from '../utils';
 import Footer from '../components/Footers/default';
@@ -19,6 +21,7 @@ const CurrentSystemConfig = {
   alibaba: alibabaConfig,
   tencent: tencentConfig,
   cie: cieConfig,
+  demo: demoConfig,
 };
 
 // 默认配置

@@ -55,7 +55,6 @@ class ExpertMapPage extends React.Component {
         type: 'app/setQueryInHeaderIfExist',
         payload: { query: data.query },
       });
-
     }
   };
 

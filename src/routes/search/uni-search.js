@@ -1,8 +1,8 @@
 import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
-import classnames from 'classnames';
 import { isEqual } from 'lodash';
+import classnames from 'classnames';
 import { Tabs, Pagination } from 'antd';
 import styles from './uni-search.less';
 import { PersonList } from '../../components/person';
@@ -13,6 +13,7 @@ import { SearchFilter, KgSearchBox } from '../../components/search';
 import ExportPersonBtn from '../../components/person/export-person';
 // import ExpertMap from '../expert-map/expert-map';
 // import RelationGraph from '../relation-graph/RelationGraph';
+import { Auth } from '../../hoc';
 
 // TODO Extract Search Filter into new Component.
 // TODO Combine search and uniSearch into one.
@@ -31,16 +32,15 @@ const defaultSearchSorts = [
  * UniSearch Page
  * http://localhost:8000/search/%83...%BD/0/20?view=relation
  */
-class UniSearch extends React.PureComponent {
+@connect(({ app, search, loading }) => ({ app, search, loading }))
+@Auth
+export default class UniSearch extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.dispatch = this.props.dispatch;
-    this.query = this.props.location.query;
-
+    this.dispatch = props.dispatch;
     this.searchSorts = sysconfig.Search_SortOptions || defaultSearchSorts;
-
     // Select default Expert Base.
-    const { filters } = this.props.search;
+    const { filters } = props.search;
     if (filters && !filters.eb) {
       filters.eb = {
         id: sysconfig.DEFAULT_EXPERT_BASE,
@@ -56,6 +56,7 @@ class UniSearch extends React.PureComponent {
   };
 
   componentWillMount() {
+    this.query = this.props.location.query;
     this.state.currentTab = this.query.view ? `${this.query.view}` : 'list-view';
     const { query } = this.props.search;
 
@@ -318,4 +319,5 @@ class UniSearch extends React.PureComponent {
 }
 
 
-export default connect(({ app, search, loading }) => ({ app, search, loading }))(UniSearch);
+// export default connect(({ app, search, loading }) => ({ app, search, loading }))(UniSearch);
+// export default hoc(connect(({ app, search, loading }) => ({ app, search, loading }))(UniSearch));

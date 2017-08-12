@@ -24,6 +24,7 @@
     "amdefine": "^1.0.1",
     "atool-l10n": "^0.2.2",
     "axios": "^0.16.2",
+    "d3": "^4.10.0",
     "babel-eslint": "^7.2.3",
     "babel-plugin-dev-expression": "^0.2.1",
     "babel-plugin-dva-hmr": "^0.3.2",

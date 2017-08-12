@@ -3,6 +3,8 @@
  */
 import React from 'react';
 import Footer from '../../components/Footers/cie';
+import { toIDDotString, TopExpertBase } from '../../utils/expert-base';
+
 
 module.exports = {
 
@@ -55,30 +57,17 @@ module.exports = {
   // Functionality
   Enable_Export: true,
 
-  SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
-  DEFAULT_EXPERT_BASE: '592f8af69ed5db8bb68d713b', // CIE
-  DEFAULT_EXPERT_BASE_NAME: '会士',
   ExpertBases: [
-    {
-      id: '592f8af69ed5db8bb68d713b',
-      name: '会士(F)',
-      nperson: 79,
-    },
-    {
-      id: '58ddbc229ed5db001ceac2a4',
-      name: '杰出会员(D)',
-      nperson: 182,
-    },
-    {
-      id: '592f6d219ed5dbf59c1b76d4',
-      name: '高级会员(S)',
-      nperson: 2246,
-    },
     {
       id: 'aminer',
       name: <span><i className="fa fa-globe fa-fw" />全球专家</span>,
       nperson: 2871,
     },
+    {
+      id: '598bf2a19ed5db236b1062ea',
+      name: '中国电子学会测试专家组',
+      nperson: 77,
+    }
 
   ],
 

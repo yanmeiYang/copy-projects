@@ -1,9 +1,8 @@
 /* eslint-disable react/no-multi-comp */
 
 import React from 'react';
-import { routerRedux } from 'dva/router';
 import { sysconfig } from '../systems';
-import { isLogin } from '../utils/auth';
+import { isLogin, dispatchToLogin } from '../utils/auth';
 
 function hoc(ComponentClass) {
   return class HOC extends React.Component {
@@ -27,30 +26,22 @@ function hoc(ComponentClass) {
 function Auth(ComponentClass) {
   return class AuthHoc extends React.Component {
     componentWillMount = () => {
-      if (!sysconfig.Auth_AllowAnonymousAccess) {
-        // this.props.app.user.lo
+      if (!sysconfig.Auth_AllowAnonymousAccess) { // 当不允许匿名登录时
+        this.authenticated = false;
+        // 必须是登录用户.
         this.isLogin = isLogin(this.props.app && this.props.app.user);
         if (!this.isLogin) {
-          let from = location.pathname;
-          if (location.pathname === '/') {
-            from = '/';
-          }
-          this.props.dispatch(routerRedux.push({
-            pathname: sysconfig.Auth_LoginPage,
-            data: { from },
-          }));
-          // window.location = `${location.origin}/login?from=${from}`;
+          dispatchToLogin(this.props.dispatch);
         }
+        // 必须有当前系统的角色.
+
+        // Final authenticated.
+        this.authenticated = this.isLogin;
       }
     };
 
-
-    componentDidMount() {
-      console.log('Auth: it is only an example');
-    }
-
     render() {
-      if (sysconfig.Auth_AllowAnonymousAccess || this.isLogin) {
+      if (sysconfig.Auth_AllowAnonymousAccess || this.authenticated) {
         return <ComponentClass {...this.props} />;
       } else {
         return null;
@@ -59,6 +50,12 @@ function Auth(ComponentClass) {
   };
 }
 
+/**
+ * 忽略 sysconfig.Auth_AllowAnonymousAccess， 严格按照要求验证。
+ * @param ComponentClass
+ * @returns {RequireLoginHoc}
+ * @constructor
+ */
 function RequireLogin(ComponentClass) {
   return class RequireLoginHoc extends React.Component {
     componentDidMount() {

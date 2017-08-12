@@ -1,5 +1,6 @@
 /* eslint-disable no-extend-native */
-import classnames from 'classnames';
+import { routerRedux } from 'dva/router';
+import { sysconfig } from '../systems';
 import { cloneDeep } from 'lodash';
 import config from './config';
 
@@ -14,4 +15,32 @@ function isLogin(user) {
   return false;
 }
 
-module.exports = { isLogin };
+/**
+ *
+ * @param dispatch
+ */
+function dispatchToLogin(dispatch) {
+  let from = location.pathname;
+  if (location.pathname === '/') {
+    from = '/';
+  }
+
+  dispatch(routerRedux.push({
+    pathname: sysconfig.Auth_LoginPage,
+    data: { from },
+  }));
+}
+
+/**
+ *
+ * @param dispatch
+ */
+function redirectToLogin() {
+  let from = location.pathname;
+  if (location.pathname === '/') {
+    from = '/';
+  }
+  window.location = `${location.origin}${sysconfig.Auth_LoginPage}?from=${from}`;
+}
+
+module.exports = { isLogin, dispatchToLogin, redirectToLogin };

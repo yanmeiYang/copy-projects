@@ -6,6 +6,43 @@ import { sysconfig } from '../systems';
 
 const { api, source } = config;
 
+// export async function login(params) {
+//   return request(api.userLogin, {
+//     method: 'post',
+//     data: params,
+//   });
+// }
+
+export async function login(data) {
+  // TODO yanmei: 额....
+  // const src = location.pathname === '/login' ? sysconfig.UserAuthSystem : '';
+  return request(api.userLogin, {
+    method: 'post',
+    body: JSON.stringify({
+      ...data,
+      persist: true,
+      src: sysconfig.UserAuthSystem,
+    }),
+  });
+}
+
+export async function logout(optionalToken) {
+  const options = { method: 'post' };
+  if (optionalToken) {
+    // override toke when call request.
+    options.token = optionalToken;
+  }
+  return request(api.userLogout, options);
+}
+
+export async function getCurrentUserInfo(params) {
+  return request(api.currentUser, {
+    method: 'get',
+    data: params,
+  });
+}
+
+// TODO should in use service.
 export async function createUser(email, first_name, gender, last_name, position, sub, src) {
   const user = {
     email,
@@ -84,19 +121,5 @@ export async function updateProfile(id, name) {
   return request(api.updateProfile.replace(':id', id), {
     method: 'PATCH',
     body: JSON.stringify(data),
-  });
-}
-
-export async function login(data) {
-  console.log(11111);
-  console.log(location.pathname);
-  const src = location.pathname === '/login' ? sysconfig.UserAuthSystem : '';
-  return request(api.userLogin, {
-    method: 'post',
-    body: JSON.stringify({
-      ...data,
-      persist: true,
-      src,
-    }),
   });
 }

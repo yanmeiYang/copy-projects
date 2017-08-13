@@ -36,9 +36,9 @@ const allMenus = [{ id: 1, icon: 'laptop', name: '首页', router: '/' },
 
 const getMenusByUser = (user, role) => {
   const menus = [];
-  if (role.admin) {
-    menus.push(allMenus)
-  } else if (role.admin === false && user.hasOwnProperty('first_name')) {
+  if (role && role.admin) {
+    menus.push(allMenus);
+  } else if (role && role.admin === false && user.hasOwnProperty('first_name')) {
     menus.push(allMenus.slice(0, 3));
   } else {
     menus.push(allMenus.slice(0, 1));

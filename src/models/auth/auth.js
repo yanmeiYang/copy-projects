@@ -28,7 +28,7 @@ export default {
     // },
   },
   effects: {
-    *createUser({ payload }, { call, put }) {
+    * createUser({ payload }, { call, put }) {
       const { email, first_name, gender, last_name, position, sub, role, src } = payload;
       const { data } =
         yield call(authService.createUser, email, first_name, gender, last_name, position, sub);
@@ -57,7 +57,7 @@ export default {
       //   yield call(authService.invoke, uid, payload.authority_region);
       // }
     },
-    *addForbidByUid({ payload }, { call, put }) {
+    * addForbidByUid({ payload }, { call, put }) {
       const { uid, role } = payload;
       const data = yield call(authService.invoke, uid, role);
       if (data.data.status) {
@@ -65,14 +65,14 @@ export default {
       }
     },
 
-    *addRoleByUid({ payload }, { call, put }) {
+    * addRoleByUid({ payload }, { call, put }) {
       const { uid, role } = payload;
       yield call(authService.invoke, uid, role);
       const { data } = yield call(authService.listUsersByRole, 0, 100);
       yield put({ type: 'getListUserByRoleSuccess', payload: data });
     },
 
-    *delRoleByUid({ payload }, { call, put }) {
+    * delRoleByUid({ payload }, { call, put }) {
       const { uid, role } = payload;
       const data = yield call(authService.revoke, uid, role);
       if (data.data.status) {
@@ -80,24 +80,24 @@ export default {
       }
     },
 
-    *checkEmail({ payload }, { call, put }) {
+    * checkEmail({ payload }, { call, put }) {
       const { data } = yield call(authService.checkEmail, config.source, payload.email);
       yield put({ type: 'checkEmailSuccess', payload: data.status });
     },
 
-    *listUsersByRole({ payload }, { call, put }) {
+    * listUsersByRole({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
       const { role, offset, size } = payload;
       const { data } = yield call(authService.listUsersByRole, offset, size);
       yield put({ type: 'getListUserByRoleSuccess', payload: data });
     },
 
-    *forgotPassword({ payload }, { call, put }) {
+    * forgotPassword({ payload }, { call, put }) {
       const { data } = yield call(authService.forgot, payload);
       yield put({ type: 'forgotPasswordSuccess', data });
     },
 
-    *retrievePw({ payload }, { call, put }) {
+    * retrievePw({ payload }, { call, put }) {
       const { data } = yield call(authService.retrieve, payload);
       if (data.status) {
         yield put({ type: 'retrievePsSuccess', data });
@@ -105,16 +105,16 @@ export default {
         throw data;
       }
     },
-    *updateProfile({ payload }, { call, put }) {
+    * updateProfile({ payload }, { call, put }) {
       const { uid, name } = payload;
       const { data } = yield call(authService.updateProfile, uid, name);
     },
-    *addOrgCategory({ payload }, { call, put }) {
+    * addOrgCategory({ payload }, { call, put }) {
       const { category, key, val } = payload;
       yield call(uconfigService.setByKey, category, key, val);
     },
     // 获取注册用户列表
-    *getCategoryByUserRoles({ payload }, { call, put }) {
+    * getCategoryByUserRoles({ payload }, { call, put }) {
       const { category } = payload;
       const data = yield call(uconfigService.listByCategory, category);
       yield put({ type: 'setData', payload: { data } });
@@ -157,6 +157,7 @@ export default {
     forgotPasswordSuccess(state, { data }) {
       return { ...state, isUpdateForgotPw: data.status, message: data.message };
     },
+
     getListUserByRoleSuccess(state, { payload: { data } }) {
       for (const [key, value] of data.entries()) {
         value.new_role = {};
@@ -173,9 +174,11 @@ export default {
       }
       return { ...state, listUsers: data, loading: false };
     },
+
     retrievePsSuccess(state, { data }) {
       return { ...state, retrieve: data };
     },
+    
     setData(state, { payload: { data } }) {
       const newData = [];
       if (data.data.data) {

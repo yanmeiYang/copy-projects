@@ -29,29 +29,36 @@ function checkStatus(response) {
  *
  * @param  {string} url       The URL we want to request
  * @param  {object} [options] The options we want to pass to "fetch"
+ * @param  {boolean} withToken True if request with token.
  * @return {object}           An object containing either "data" or "err"
  */
 export default async function request(url, options) {
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('@@request ', url, options);
+  }
+
   let newUrl = baseURL + url;
-  if (options && !(options.method && options.method.toUpperCase() === 'POST') && options.data) {
+
+  // process !post mode data.
+  if (options &&
+    !(options.method && options.method.toUpperCase() === 'POST')
+    && options.data) {
     const queryList = Object.keys(options.data).map(k => `${k}=${options.data[k]}`);
     const queryString = queryList.join('&');
     newUrl = `${newUrl}?${queryString}`;
   }
-  const token = localStorage.getItem('token');
-  const headers = new Headers();
 
-  if (options) {
-    if (options.data || options.body) {
-      headers.append('Accept', 'application/json');
-      headers.append('Content-Type', 'application/json');
-    }
+  const headers = new Headers();
+  if (options && (options.data || options.body)) {
+    headers.append('Accept', 'application/json');
+    headers.append('Content-Type', 'application/json');
   }
+
+  const token = (options && options.token) || localStorage.getItem('token');
   if (token) {
     headers.append('Authorization', token);
   }
-  console.log('requst=============');
-  console.log(options);
+
   const newOption = { ...options, headers };
   const response = await fetch(newUrl, newOption);
 
@@ -59,14 +66,10 @@ export default async function request(url, options) {
 
   const data = await response.json();
 
-  const ret = {
-    data,
-    headers: {},
-  };
+  const ret = { data, headers: {} };
   // if (response.headers.get('x-total-count')) {
   //   ret.headers['x-total-count'] = response.headers.get('x-total-count');
   // }
-
   return ret;
 }
 

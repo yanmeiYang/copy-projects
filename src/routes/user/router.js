@@ -5,16 +5,6 @@ import { registerModel } from '../../utils';
 
 export default {
 
-  Login: app => ({
-    path: 'login',
-    getComponent(nextState, cb) {
-      require.ensure([], (require) => {
-        registerModel(app, require('../../models/login'));
-        cb(null, require('../login/'));
-      }, 'auth');
-    },
-  }),
-
   Register: app => ({
     path: '/registered',
     getComponent(nextState, cb) {

@@ -10,11 +10,15 @@ import styles from './index.less';
 import SearchSeminar from './search-seminar';
 import NewActivityList from '../../components/seminar/newActivityList';
 // import ActivityList from '../../components/seminar/activityList';
+import * as auth from '../../utils/auth';
+import { Auth } from '../../hoc';
 
 const { CheckableTag } = Tag;
 const TabPane = Tabs.TabPane;
 
-class Seminar extends React.Component {
+@connect(({ app, seminar, loading }) => ({ app, seminar, loading }))
+@Auth
+export default class Seminar extends React.Component {
   state = {
     organizer: '',
     category: '',
@@ -28,11 +32,13 @@ class Seminar extends React.Component {
     this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'orgcategory' } });
     this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'activity_type' } });
   };
+
   addBao = () => {
     this.props.dispatch(routerRedux.push({
       pathname: '/seminar-post',
     }));
   };
+
   delTheSeminar = (result, i) => {
     const props = this.props;
     Modal.confirm({
@@ -46,6 +52,7 @@ class Seminar extends React.Component {
       },
     });
   };
+
   getMoreSeminar = () => {
     const { offset, query, sizePerPage } = this.props.seminar;
     const { organizer, category } = this.state;
@@ -68,6 +75,7 @@ class Seminar extends React.Component {
       this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
     }
   };
+
   getSeminar = (sizePerPage, filter, status) => {
     if (status) {
       this.props.seminar.orgByActivity = [];
@@ -80,6 +88,7 @@ class Seminar extends React.Component {
     };
     this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
   };
+
   onSearch = (searchQuery) => {
     this.setState({ query: searchQuery });
     this.props.seminar.results = [];
@@ -155,11 +164,14 @@ class Seminar extends React.Component {
 
   onTabsChange = (key) => {
     this.setState({ sortType: key });
-  }
+  };
 
   render() {
-    const { results, loading, sizePerPage, orgcategory, activity_type, topMentionedTags, orgByActivity } =
-      this.props.seminar;
+    const { app } = this.props;
+    const {
+      results, loading, sizePerPage, orgcategory, activity_type,
+      topMentionedTags, orgByActivity,
+    } = this.props.seminar;
     const { organizer, category, tag, orgType, sortType } = this.state;
     const compare = (property) => {
       return (a, b) => {
@@ -177,7 +189,7 @@ class Seminar extends React.Component {
       <div className="content-inner">
         <div className={styles.top}>
           <SearchSeminar onSearch={this.onSearch.bind()} />
-          {this.props.app.user.hasOwnProperty('first_name') &&
+          {auth.isAuthed(app.user) &&
           <Button type="primary" onClick={this.addBao.bind()}>
             <Icon type="plus" />&nbsp;发布新活动
           </Button>}
@@ -349,9 +361,6 @@ class Seminar extends React.Component {
   }
 }
 
-
-export default connect(({ seminar, loading, app }) => ({
-  seminar,
-  loading,
-  app,
-}))(Seminar);
+//
+// export default connect(
+//   ({ seminar, loading, app }) => ({ seminar, loading, app, }))(Seminar);

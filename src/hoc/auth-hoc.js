@@ -1,21 +1,7 @@
 /* eslint-disable react/no-multi-comp */
-
 import React from 'react';
 import { sysconfig } from '../systems';
-import { isLogin, dispatchToLogin } from '../utils/auth';
-
-function hoc(ComponentClass) {
-  return class HOC extends React.Component {
-    componentDidMount() {
-      console.log('hoc: it is only an example');
-      console.log('component: ', ComponentClass, this.props);
-    }
-
-    render() {
-      return <ComponentClass {...this.props} />;
-    }
-  };
-}
+import * as authUtil from '../utils/auth';
 
 /**
  * 会根据 sysconfig.Auth_AllowAnonymousAccess 的值来判断是否进行登录权限判断。
@@ -27,16 +13,17 @@ function Auth(ComponentClass) {
   return class AuthHoc extends React.Component {
     componentWillMount = () => {
       if (!sysconfig.Auth_AllowAnonymousAccess) { // 当不允许匿名登录时
-        this.authenticated = false;
-        // 必须是登录用户.
-        this.isLogin = isLogin(this.props.app && this.props.app.user);
-        if (!this.isLogin) {
-          dispatchToLogin(this.props.dispatch);
+        if (!this.props.app) {
+          console.warn('Must connect `app` models when use @Auth! in component: ', ComponentClass.displayName);
+        } else {
+          const { user, roles } = this.props.app;
+          this.isLogin = authUtil.isLogin(user); // 必须是登录用户.
+          this.isAuthed = authUtil.isAuthed(roles); // 必须有当前系统的角色.
         }
-        // 必须有当前系统的角色.
-
-        // Final authenticated.
-        this.authenticated = this.isLogin;
+        this.authenticated = this.isLogin && this.isAuthed;
+        if (!this.authenticated) {
+          authUtil.dispatchToLogin(this.props.dispatch);
+        }
       }
     };
 
@@ -58,15 +45,77 @@ function Auth(ComponentClass) {
  */
 function RequireLogin(ComponentClass) {
   return class RequireLoginHoc extends React.Component {
-    componentDidMount() {
-      console.log('hoc: it is only an example');
-      console.log('component: ', ComponentClass, this.props);
-    }
+    componentWillMount = () => {
+      if (!this.props.app) {
+        console.warn('Must connect `app` models when use @Auth! in component: ', ComponentClass.displayName);
+        return false;
+      }
+      const { user, roles } = this.props.app;
+      this.isLogin = authUtil.isLogin(user); // 必须是登录用户.
+      this.isAuthed = authUtil.isAuthed(roles); // 必须有当前系统的角色.
+
+      this.authenticated = this.isLogin && this.isAuthed;
+      if (!this.authenticated) {
+        authUtil.dispatchToLogin(this.props.dispatch);
+      }
+    };
 
     render() {
-      return <ComponentClass {...this.props} />;
+      if (this.authenticated) {
+        return <ComponentClass {...this.props} />;
+      } else {
+        return null;
+      }
     }
   };
 }
 
-module.exports = { hoc, Auth, RequireLogin };
+function RequireAdmin(ComponentClass) {
+  return class RequireAdminHoc extends React.Component {
+    componentWillMount = () => {
+      if (!this.props.app) {
+        console.warn('Must connect `app` models when use @Auth! in component: ', ComponentClass.displayName);
+        return false;
+      }
+      const { user, roles } = this.props.app;
+      this.authenticated = authUtil.isLogin(user) && authUtil.isSuperAdmin(roles);
+      if (!this.authenticated) {
+        authUtil.dispatchToLogin(this.props.dispatch);
+      }
+    };
+
+    render() {
+      if (this.authenticated) {
+        return <ComponentClass {...this.props} />;
+      } else {
+        return null;
+      }
+    }
+  };
+}
+
+function RequireGod(ComponentClass) {
+  return class RequireGodHoc extends React.Component {
+    componentWillMount = () => {
+      if (!this.props.app) {
+        console.warn('Must connect `app` models when use @Auth! in component: ', ComponentClass.displayName);
+        return false;
+      }
+      const { user, roles } = this.props.app;
+      this.authenticated = authUtil.isLogin(user) && authUtil.isGod(roles);
+      if (!this.authenticated) {
+        authUtil.dispatchToLogin(this.props.dispatch);
+      }
+    };
+
+    render() {
+      if (this.authenticated) {
+        return <ComponentClass {...this.props} />;
+      } else {
+        return null;
+      }
+    }
+  };
+}
+
+module.exports = { Auth, RequireLogin, RequireAdmin, RequireGod };

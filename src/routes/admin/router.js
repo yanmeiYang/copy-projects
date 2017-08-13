@@ -11,7 +11,7 @@ export default {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/common/universal-config'));
         registerModel(app, require('../../models/auth/auth'));
-        cb(null, require('./user-list'));
+        cb(null, require('./user/Users'));
       }, 'admin');
     },
   }),

@@ -50,6 +50,8 @@ export default async function request(url, options) {
   if (token) {
     headers.append('Authorization', token);
   }
+  console.log('requst=============');
+  console.log(options);
   const newOption = { ...options, headers };
   const response = await fetch(newUrl, newOption);
 

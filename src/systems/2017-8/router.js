@@ -1,11 +1,12 @@
 import React from 'react';
 import { Router } from 'dva/router';
 import { registerModel } from '../../utils';
-// import FullRouter from '../full-router';
+import { router2b } from '../full-router';
 import { core } from '../../router';
 
 const Routers = function ({ history, app }) {
   const routes = [
+    ...router2b(app),
     core.IndexPage(app, [
 
       // search

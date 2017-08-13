@@ -9,13 +9,13 @@ import { sysconfig } from '../../../systems';
 const Option = Select.Option;
 const { TextArea } = Input;
 const FormItem = Form.Item;
-const BodyTemplate = '你好 {{name}},\\n此电子邮件地址请求重设密码。\n要重设密码，请点击下面的链接。' +
-  '如果连接无法点击请复制连接在浏览器中打开。。。\\n' +
+const BodyTemplate = '你好 {{name}},<br>此电子邮件地址请求重设密码。<br>要重设密码，请点击下面的链接。' +
+  '如果连接无法点击请复制连接在浏览器中打开。。。<br>' +
   'http://<span style="background-color: yellow">ali.aminer.org</span>' +
   '/<span style="background-color: yellow">reset-password</span>?email={{email}}&src={{src}}&token={{token}}' +
-  '\\n这将允许您创建一个新密码，然后您可以登录到您的帐户。\\n该链接将在12小时内到期。\\n如果您已经完成了此操作，' +
-  '或者您自己没有请求，请忽略此电子邮件。\\n此致\n阿里巴巴学术资源地图客户团队\n注意：\\n此电子邮件地址无法接受回复' +
-  '\\n若要解决问题或了解有关帐户的更多信息，请访问我们的网站。\\n';
+  '<br>这将允许您创建一个新密码，然后您可以登录到您的帐户。<br>该链接将在12小时内到期。<br>如果您已经完成了此操作，' +
+  '或者您自己没有请求，请忽略此电子邮件。<br>此致<br>阿里巴巴学术资源地图客户团队<br>注意：<br>此电子邮件地址无法接受回复' +
+  '<br>若要解决问题或了解有关帐户的更多信息，请访问我们的网站。<br>';
 class EmailTemplate extends React.Component {
   state = {};
   componentWillMount = () => {
@@ -42,6 +42,8 @@ class EmailTemplate extends React.Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+        console.log('12222');
+        console.log(values.body);
         this.props.dispatch({ type: 'systemSetting/setEmailTemplate', payload: values });
         // Modal.success({
         //   title: '创建用户',

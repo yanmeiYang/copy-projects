@@ -1,7 +1,7 @@
 /**
- * Created by yangyanmei on 17/8/10.
+ * Created by yangyanmei on 17/8/12.
  */
-import { emailTemplate } from '../services/system-setting';
+import { emailTemplate } from '../services/2b';
 
 export default {
   namespace: 'systemSetting',

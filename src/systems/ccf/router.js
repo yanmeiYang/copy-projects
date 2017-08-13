@@ -1,10 +1,10 @@
 import React from 'react';
 import { Router } from 'dva/router';
 import { registerModel } from '../../utils';
-import FullRouter from '../full-router';
+import { fullRouter } from '../full-router';
 
 const Routers = function ({ history, app }) {
-  const routes = FullRouter(app, [
+  const routes = fullRouter(app, [
     // System specified routes config.
     {
       path: '/technical-committees',

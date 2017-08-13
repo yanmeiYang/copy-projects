@@ -11,11 +11,22 @@ import { core } from '../router';
  * @returns {XML}
  * @constructor
  */
+const router2b = (app, defaultChildRoutes) => {
+  const childRoutes = defaultChildRoutes || [];
+  const routers2b = [
+    core.IndexPage2b(app, [
+      core.Login2b(app),
+      core.EmailTemplate(app),
+      ...childRoutes,
+    ]),
+  ];
+  return routers2b;
+};
 const fullRouter = (app, defaultChildRoutes) => {
   const childRoutes = defaultChildRoutes || [];
   const allRouters = [
+    ...router2b(app, []),
     core.IndexPage(app, [
-
       // search
       core.ExpertSearch(app),
       core.UniSearch(app),
@@ -41,7 +52,6 @@ const fullRouter = (app, defaultChildRoutes) => {
       core.AdminActivityType(app),
       core.AdminSystemConfigWithCategory(app),
       core.AdminSystemOrgCategory(app),
-      core.EmailTemplate(app),
 
       // Activity / Seminar
       core.Seminar(app),
@@ -75,4 +85,4 @@ const fullRouter = (app, defaultChildRoutes) => {
   return allRouters;
 };
 
-export default fullRouter;
+module.exports = { fullRouter, router2b };

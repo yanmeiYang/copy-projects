@@ -88,12 +88,15 @@ export async function updateProfile(id, name) {
 }
 
 export async function login(data) {
+  console.log(11111);
+  console.log(location.pathname);
+  const src = location.pathname === '/login' ? sysconfig.UserAuthSystem : '';
   return request(api.userLogin, {
     method: 'post',
     body: JSON.stringify({
       ...data,
       persist: true,
-      src: sysconfig.UserAuthSystem,
+      src,
     }),
   });
 }

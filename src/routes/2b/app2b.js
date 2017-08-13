@@ -5,15 +5,15 @@ import React from 'react';
 import { connect } from 'dva';
 import { Helmet } from 'react-helmet';
 import NProgress from 'nprogress';
-import { TobLayout } from '../components';
-import { sysconfig } from '../systems';
-import { classnames, config } from '../utils';
-import '../themes/index.less';
-import './app.less';
+import { TobLayout } from '../../components/index';
+import { sysconfig } from '../../systems/index';
+import { classnames, config } from '../../utils/index';
+import '../../themes/index.less';
+import './app2b.less';
 
 const { prefix } = config;
 
-const { Header, styles } = TobLayout;
+const { Header2b, styles } = TobLayout;
 let lastHref;
 
 const App2b = ({ children, location, dispatch, app, loading }) => {
@@ -67,7 +67,6 @@ const App2b = ({ children, location, dispatch, app, loading }) => {
   // TODO Config Helmet out of app.js
   return (
     <div>
-
       <Helmet>
         <title>后台管理系统</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -78,7 +77,7 @@ const App2b = ({ children, location, dispatch, app, loading }) => {
       </Helmet>
 
       <div className={classnames(styles.layout)}>
-        <Header {...headerProps} />
+        <Header2b {...headerProps} />
         <div className={styles.main} style={{ marginLeft: mainMarginLeft }}>
           <div className={styles.container}>
             <div className={styles.content}>

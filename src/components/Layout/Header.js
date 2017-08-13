@@ -156,9 +156,9 @@ class Header extends React.PureComponent {
             </Menu.Item>
             }
 
-            {isGod(user) &&
+            {isGod(roles) &&
             <Menu.Item key="/hidden">
-              <Link to="/"><Icon type="appstore-o" className="noTextIcon" /></Link>
+              <Link to="/2b"><Icon type="appstore-o" className="noTextIcon" /></Link>
             </Menu.Item>}
 
             {isLogin(user) &&

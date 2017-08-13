@@ -22,10 +22,11 @@ const router2b = (app, defaultChildRoutes) => {
   ];
   return routers2b;
 };
+
 const fullRouter = (app, defaultChildRoutes) => {
   const childRoutes = defaultChildRoutes || [];
   const allRouters = [
-    ...router2b(app, []),
+    ...router2b(app),
     core.IndexPage(app, [
       // search
       core.ExpertSearch(app),

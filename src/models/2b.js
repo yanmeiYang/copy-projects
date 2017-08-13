@@ -1,5 +1,6 @@
 /**
  * Created by yangyanmei on 17/8/12.
+ * TODO 欠整理, move to 2b
  */
 import { emailTemplate } from '../services/2b';
 
@@ -10,7 +11,7 @@ export default {
   },
   subscriptions: {},
   effects: {
-    *setEmailTemplate({ payload }, { call, put }) {
+    * setEmailTemplate({ payload }, { call, put }) {
       // const { type, sender, subject, body } = payload;
       const data = yield call(emailTemplate, payload);
       yield put({ type: 'setEmailTemplateSuccess', payload: { data } });

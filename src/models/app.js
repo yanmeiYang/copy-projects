@@ -165,6 +165,10 @@ export default {
       return { ...state, ...payload };
     },
 
+    hideHeaderSearch(state) {
+      return { ...state, headerSearchBox: undefined };
+    },
+
     setQueryInHeaderIfExist(state, { payload }) {
       const { query } = payload;
       if (state.headerSearchBox) {

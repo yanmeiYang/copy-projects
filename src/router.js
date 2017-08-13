@@ -10,7 +10,7 @@ import PersonRouters from './routes/person/router';
 import UserRouters from './routes/user/router';
 import AdminRouters from './routes/admin/router';
 import TrendPredictionRouters from './routes/trend-prediction/router';
-import TobRouters from './routes/2b/router';
+import TobRouters from './routes/2b/2b-router';
 
 import OtherRouters from './routes/router';
 
@@ -21,9 +21,9 @@ const core = {
     component: App2b,
     getIndexRoute(nextState, cb) {
       require.ensure([], (require) => {
-        registerModel(app, require('./models/login'));
+        registerModel(app, require('./models/auth'));
         cb(null, { component: require('./routes/2b/login') });
-      }, 'indexPage2b');
+      }, '2b');
     },
     childRoutes,
   }),

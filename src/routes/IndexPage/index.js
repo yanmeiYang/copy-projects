@@ -4,9 +4,12 @@ import { routerRedux, Link } from 'dva/router';
 import styles from './index.less';
 import { sysconfig } from '../../systems';
 import { KgSearchBox } from '../../components/search';
+import { hoc } from '../../hoc';
 
 // function IndexPage({ dispatch, search }) {
-class IndexPage extends React.Component {
+@hoc
+@connect()
+export default class IndexPage extends React.Component {
 
   constructor(props) {
     super(props);
@@ -172,4 +175,4 @@ class IndexPage extends React.Component {
   }
 }
 
-export default connect()(IndexPage);
+// export default connect()(IndexPage);

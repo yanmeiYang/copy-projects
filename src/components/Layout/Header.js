@@ -19,6 +19,8 @@ class Header extends React.PureComponent {
 
   state = {
     query: 'test',
+
+    logoutLoading: false,
   };
 
   // componentWillMount() {
@@ -41,7 +43,10 @@ class Header extends React.PureComponent {
   };
 
   logoutAuth = () => {
+    this.setState({ logoutLoading: true });
+    // this.forceUpdate(() => console.log('forceUpdate Done!'));
     this.props.logout();
+    // this.setState({ logoutLoading: false });
   };
 
   render() {
@@ -62,11 +67,10 @@ class Header extends React.PureComponent {
       const { app } = this.props;
       console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
       console.log('app.user:', app.user);
-      console.log('app.token:', app.token ? app.token.slice(0, 10) : app.token);
+      // console.log('app.token:', app.token ? app.token.slice(0, 10) : app.token);
       console.log('app.roles:', app.roles);
       console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     }
-
     return (
       <div className={styles.header}>
         <div className={styles.logoLine}>
@@ -90,8 +94,12 @@ class Header extends React.PureComponent {
           </div>
 
           {process.env.NODE_ENV !== 'production' &&
-          <span>DEV: </span>
+          <span className="debug_area" style={{ marginRight: 20 }}>
+            DEV:{JSON.stringify(user.roles)}
+          </span>
           }
+
+          {/* --------------- 菜单栏 -------------- */}
 
           <Menu
             selectedKeys={[location.pathname]}
@@ -118,15 +126,14 @@ class Header extends React.PureComponent {
             {user.first_name &&
             <Menu.Item key="/account">
               <Link to={sysconfig.Header_UserPageURL} title={user.display_name}
-                    style={{ lineHeight: '46px' }}>
-                <img
-                  src={profileUtils.getAvatar(user.avatar, user.id, 30)}
-                  className={styles.roundedX}
-                  style={{ width: 30, height: 30, verticalAlign: 'middle' }} />
-                {/*<Icon type="frown-circle"/>个人账号*/}
+                    className="headerAvatar">
+                <img src={profileUtils.getAvatar(user.avatar, user.id, 30)}
+                     alt={user.display_name} />
+                {/* <Icon type="frown-circle"/>个人账号 */}
               </Link>
             </Menu.Item>
             }
+
             {/* TODO 不确定是否其他系统也需要显示角色 */}
             {sysconfig.SYSTEM === 'ccf' &&
             <Menu.Item key="" className={styles.showRoles}>
@@ -140,15 +147,22 @@ class Header extends React.PureComponent {
               </p>
             </Menu.Item>
             }
+
             {user.first_name &&
             <Menu.Item key="/logout">
-              <div onClick={this.logoutAuth}><Icon type="logout" /></div>
+              <div onClick={this.logoutAuth}>
+                {this.state.logoutLoading ?
+                  <Icon type="loading" /> :
+                  <Icon type="logout" />
+                }
+                退出登录
+              </div>
             </Menu.Item>
             }
 
             {(!user || !user.first_name) &&
             <Menu.Item key="/404">
-              <Link to={`/login?from=${location.pathname}`} style={{ lineHeight: '46px' }}>
+              <Link to={`/login?from=${location.pathname}`}>
                 <Icon type="user" /> 登录
               </Link>
             </Menu.Item>

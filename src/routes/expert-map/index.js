@@ -12,7 +12,6 @@ class ExpertMapPage extends React.Component {
   constructor(props) {
     super(props);
     this.dispatch = this.props.dispatch;
-    // this.query = this.props.location.query;
   }
 
   state = {

@@ -8,6 +8,7 @@ import { message } from 'antd';
 import { browserHistory } from 'dva/router';
 import createLoading from 'dva-loading';
 import { system } from './utils/config';
+import { ReduxLoggerEnabled } from './utils/debug';
 import './index.html';
 
 const log = ::console.log;
@@ -30,7 +31,9 @@ const app = dva({
 });
 
 if (process.env.NODE_ENV !== 'production') {
-  app.use({ onAction: createLogger() });
+  if (ReduxLoggerEnabled) {
+    app.use({ onAction: createLogger() });
+  }
 }
 
 // 2. Model

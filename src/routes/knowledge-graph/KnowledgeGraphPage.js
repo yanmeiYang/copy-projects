@@ -5,12 +5,13 @@ import React from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
 import { routerRedux } from 'dva/router';
-import { Radio, Tabs } from 'antd';
+import { Radio, Tabs, message } from 'antd';
 import { Spinner } from '../../components/index';
 import styles from './KnowledgeGraphPage.less';
 import { KnowledgeGraphTextTree } from './index';
 import { PublicationList } from '../../components/publication/index';
 import { PersonListTiny } from '../../components/person/index';
+import { Message } from '../../components/ui';
 
 const RadioGroup = Radio.Group;
 const TabPane = Tabs.TabPane;
@@ -22,6 +23,7 @@ class KnowledgeGraphPage extends React.PureComponent {
   }
 
   state = {
+    // query: '',
     searchMethod: 'or2', // [direct, and2, or2 ]
     infoTab: 'experts',
   };
@@ -29,6 +31,9 @@ class KnowledgeGraphPage extends React.PureComponent {
   componentWillMount() {
     const query = (this.props.location && this.props.location.query
       && this.props.location.query.query) || 'data mining';
+    // if (query) {
+    //   this.setState({ query });
+    // }
     this.dispatch({
       type: 'app/layout',
       payload: {
@@ -113,6 +118,7 @@ class KnowledgeGraphPage extends React.PureComponent {
     const location = this.props.location;
     const pathname = location.pathname;
     this.props.dispatch({ type: 'knowledgeGraph/setState', payload: { query } });
+    this.props.dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query } });
     this.props.dispatch(routerRedux.push({
       pathname, query: { ...location.query, query },
     }));
@@ -152,8 +158,6 @@ class KnowledgeGraphPage extends React.PureComponent {
   };
 
   searchExpertsAndPubs = () => {
-    const kg = this.props.knowledgeGraph;
-
     if (this.state.infoTab === 'info') {
       // TODO call node.
       // this.props.dispatch({
@@ -180,6 +184,7 @@ class KnowledgeGraphPage extends React.PureComponent {
   render() {
     const load = this.props.loading.models.knowledgeGraph;
     const kg = this.props.knowledgeGraph;
+    const { popupErrorMessage } = kg;
 
     let infoExtra;
     if (this.state.infoTab === 'experts' && kg.node) {
@@ -201,6 +206,8 @@ class KnowledgeGraphPage extends React.PureComponent {
     // const searchHeader=<div>search for: {kg.}</div>
     return (
       <div className={classnames('content-inner', styles.page)}>
+        <Message message={popupErrorMessage} />
+
         <div className={styles.title}>
           <h1> 知识图谱 </h1>
 

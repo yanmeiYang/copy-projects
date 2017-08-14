@@ -3,11 +3,13 @@
  */
 import fetch from 'dva/fetch';
 import { baseURL } from './config';
+import * as debug from './debug';
 
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
   }
+
   // TODO move out, don't process auth here.
   if (response.status === 401) {
     localStorage.removeItem('token');
@@ -15,12 +17,19 @@ function checkStatus(response) {
     // location.href = '/';
   }
 
+  if (response.status >= 404 && response.statusText === 'Not Found') {
+    throw error;
+  }
+
+  // Special case: for knowledge graph, query not found will return
+  // {"status":false,"message":"data.not_found"} // code 404
+
   const error = new Error(response.statusText);
   error.response = response;
   try {
     throw error;
   } catch (e) {
-    console.log(e);
+    console.error('---- Catch Error: ---- ', e);
   }
 }
 
@@ -34,7 +43,7 @@ function checkStatus(response) {
  */
 export default async function request(url, options) {
   if (process.env.NODE_ENV !== 'production') {
-    console.log('@@request ', url, options);
+    debug.log('@@request ', url, options);
   }
 
   let newUrl = baseURL + url;

@@ -2,9 +2,10 @@
  *  Created by BoGao on 2017-06-12;
  */
 import { request, config } from '../utils';
-import { wget } from '../utils/request';
 
 const { api } = config;
+
+const BASE_SPLITER = 1000000; // 1000000 Hits的节点是 一百万+index.
 
 export async function kgFind(query, rich, dp, dc, ns, nc) {
   const apimeta = api.kgFind;
@@ -20,7 +21,7 @@ export async function kgFind(query, rich, dp, dc, ns, nc) {
  * @param data
  *
  * map: id -> index
- * index: 100000000 Hits的节点是 一百万+index.
+ * index: 1000000 Hits的节点是 一百万+index.
  */
 export function indexingKGData(data) {
   const index = {};
@@ -32,8 +33,8 @@ export function indexingKGData(data) {
     }
     if (index[node.id]) {
       const rawindex = index[node.id];
-      const oldNode = rawindex && rawindex >= 1000000 ?
-        data.hits[rawindex - 1000000] :
+      const oldNode = rawindex && rawindex >= BASE_SPLITER ?
+        data.hits[rawindex - BASE_SPLITER] :
         data.ref[rawindex];
       oldNode.duplicated = true;
       const oldidx = index[node.id];
@@ -51,7 +52,7 @@ export function indexingKGData(data) {
     data.hits.map((node, idx) => {
       // eslint-disable-next-line no-param-reassign
       node.hit = true;
-      return add(node, idx, 1000000);
+      return add(node, idx, BASE_SPLITER);
     });
     if (data.ref) {
       data.ref.map((node, idx) => {
@@ -68,8 +69,8 @@ export function kgFetcher(kgdata, kgindex) {
 
   const getNode = (nodeId) => {
     const rawIndex = this.kgindex[nodeId];
-    return rawIndex && rawIndex >= 1000000 ?
-      this.kgdata.hits[rawIndex - 1000000] :
+    return rawIndex && rawIndex >= BASE_SPLITER ?
+      this.kgdata.hits[rawIndex - BASE_SPLITER] :
       this.kgdata.ref[rawIndex];
   };
 
@@ -81,8 +82,8 @@ export function kgFetcher(kgdata, kgindex) {
         return node.child_nodes.map((cid) => {
           // console.log('------------', cid, this.kgindex[cid]);
           const rawindex = this.kgindex[cid];
-          return rawindex && rawindex >= 1000000 ?
-            this.kgdata.hits[rawindex - 1000000] :
+          return rawindex && rawindex >= BASE_SPLITER ?
+            this.kgdata.hits[rawindex - BASE_SPLITER] :
             this.kgdata.ref[rawindex];
         });
       }

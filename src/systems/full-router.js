@@ -80,7 +80,6 @@ const fullRouter = (app, defaultChildRoutes) => {
       ...childRoutes,
 
       // System Default.
-      // core.RoadhogDllJsPlaceHolder,
       core.Default404(app), // must be last one.
     ]),
   ];

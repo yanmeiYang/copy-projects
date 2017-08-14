@@ -17,6 +17,10 @@ function checkStatus(response) {
     // location.href = '/';
   }
 
+  if (response.status >= 404 && response.statusText === 'Not Found') {
+    throw error;
+  }
+
   // Special case: for knowledge graph, query not found will return
   // {"status":false,"message":"data.not_found"} // code 404
 

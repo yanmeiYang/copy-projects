@@ -1,3 +1,7 @@
+/**
+ *  Created by BoGao on 2017-08-14;
+ */
+const ReduxLoggerEnabled = false;
 const DebugLogEnabled = true;
 
 function log(...data) {
@@ -7,5 +11,9 @@ function log(...data) {
 }
 
 module.exports = {
+  // configs
+  ReduxLoggerEnabled,
+
+  // methods
   log,
 };

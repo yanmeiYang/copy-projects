@@ -2,23 +2,14 @@
  * Created by ranyanchuan on 2017/8/11.
  */
 import React from 'react';
-
+import { toIDDotString, TopExpertBase } from '../../utils/expert-base';
 
 module.exports = {
 
-  // 通用配置。所有System的配置文件必须全部包含这部分的值
   PageTitle: '专家库',
 
   Language: 'cn', // options [cn|en]
   PreferredLanguage: 'cn', // 默认语言
-
-  Search_SortOptions: [
-    { label: '相关度', key: 'relevance' },
-    { label: '学术成就', key: 'h_index' },
-    { label: '学术活跃度', key: 'activity' },
-    { label: '领域新星', key: 'rising_star' },
-    { label: '学会贡献', key: 'activity-ranking-contrib' },
-  ],
 
   PersonList_PersonLink: personId => `/person/${personId}`,
   PersonList_PersonLink_NewTab: false,
@@ -60,29 +51,15 @@ module.exports = {
       name: <span><i className="fa fa-globe fa-fw" />全球专家</span>,
       nperson: 2871,
     },
-
-  ],
-
-
-  // 特殊配置，这里是System的自己的配置
-
-  ShowConfigTab: false,
-  SysconfigDefaultCategory: 'activity_type',
-  SysConfigTabs: [
     {
-      category: 'user_roles',
-      label: '用户角色列表',
-      desc: 'DEMO 用户角色列表',
+      id: toIDDotString(TopExpertBase.ACMFellow),
+      name: 'ACM Fellow',
+      nperson: 53 + 809,
     },
     {
-      category: 'activity_organizer_options',
-      label: '协办单位',
-      desc: 'DEMO 活动的承办单位，包括专委/分部/项目等。',
-    },
-    {
-      category: 'activity_type',
-      label: '活动类型',
-      desc: 'DEMO 活动的类型。',
+      id: '595208bd9ed5dbf9cd563c60.593e4ac29ed5db77fc7be728.593beddb9ed5db23ccac7dbf.593b7c889ed5db23ccac68e6',
+      name: 'IEEE Fellow(2013-2016)',
+      nperson: 0,
     },
   ],
 

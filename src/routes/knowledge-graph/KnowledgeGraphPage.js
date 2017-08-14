@@ -22,6 +22,7 @@ class KnowledgeGraphPage extends React.PureComponent {
   }
 
   state = {
+    // query: '',
     searchMethod: 'or2', // [direct, and2, or2 ]
     infoTab: 'experts',
   };
@@ -29,6 +30,9 @@ class KnowledgeGraphPage extends React.PureComponent {
   componentWillMount() {
     const query = (this.props.location && this.props.location.query
       && this.props.location.query.query) || 'data mining';
+    // if (query) {
+    //   this.setState({ query });
+    // }
     this.dispatch({
       type: 'app/layout',
       payload: {
@@ -113,6 +117,7 @@ class KnowledgeGraphPage extends React.PureComponent {
     const location = this.props.location;
     const pathname = location.pathname;
     this.props.dispatch({ type: 'knowledgeGraph/setState', payload: { query } });
+    this.props.dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query } });
     this.props.dispatch(routerRedux.push({
       pathname, query: { ...location.query, query },
     }));

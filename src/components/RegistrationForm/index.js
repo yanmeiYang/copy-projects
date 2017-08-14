@@ -58,6 +58,7 @@ class RegistrationForm extends React.PureComponent {
       payload: { category: 'activity_organizer_options' },
     });
     this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'orgcategory' } });
+    this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'activity_type' } });
     this.props.dispatch({
       type: 'seminar/getCategory',
       payload: { category: 'contribution_type' },
@@ -247,7 +248,7 @@ class RegistrationForm extends React.PureComponent {
     const { getFieldDecorator } = this.props.form;
     const {
       activity_organizer_options, orgcategory, tags,
-      postSeminarOrganizer,
+      postSeminarOrganizer, activity_type,
     } = this.props.seminar;
     let activity_organizer_options_data = {};
     if (activity_organizer_options.data) {
@@ -291,7 +292,7 @@ class RegistrationForm extends React.PureComponent {
       <Row className={styles.add_seminar_block}>
         <Form horizontal onSubmit={this.handleSubmit} className={styles.add_seminar_form}>
           <Col className={styles.thumbnail}>
-            {orgcategory.data &&
+            {activity_type.data &&
             <FormItem {...formItemLayout} label="活动类型" hasFeedback>
               {getFieldDecorator('category', {
                   rules: [{ required: true, message: '请选择活动类型！' }],
@@ -299,7 +300,7 @@ class RegistrationForm extends React.PureComponent {
               )(
                 <Select>
                   {
-                    orgcategory.data.map((item) => {
+                    activity_type.data.map((item) => {
                       return (<Option key={`activity_${Math.random()}`}
                                       value={item.key}>{item.key}</Option>);
                     })

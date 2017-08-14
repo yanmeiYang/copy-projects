@@ -191,7 +191,9 @@ export default class UniSearch extends React.PureComponent {
     const { results, pagination, query, aggs, filters } = this.props.search;
     const { pageSize, total, current } = pagination;
     const load = this.props.loading.models.search;
-    const operations = <ExportPersonBtn results={results} />;
+    const operations = <ExportPersonBtn query={query} pageSize={pageSize} current={current}
+                                        filters={filters}
+                                        sort={this.state.sortType} />;
 
     // Deprecated search result tab.
 

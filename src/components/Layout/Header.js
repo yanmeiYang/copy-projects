@@ -10,6 +10,7 @@ import styles from './Header.less';
 import * as profileUtils from '../../utils/profile-utils';
 import { sysconfig } from '../../systems';
 import { KgSearchBox, SearchTypeWidgets } from '../../components/search';
+import { isLogin, isGod } from '../../utils/auth';
 
 class Header extends React.PureComponent {
   // function Header({ app, location, dispatch, logout, onSearch }) {
@@ -19,6 +20,7 @@ class Header extends React.PureComponent {
 
   state = {
     query: 'test',
+    logoutLoading: false,
   };
 
   // componentWillMount() {
@@ -41,7 +43,16 @@ class Header extends React.PureComponent {
   };
 
   logoutAuth = () => {
+    this.setState({ logoutLoading: true });
+    // this.forceUpdate(() => console.log('forceUpdate Done!'));
     this.props.logout();
+    // this.setState({ logoutLoading: false });
+  };
+
+  loginPageUrl = () => {
+    return location.pathname !== sysconfig.Auth_LoginPage
+      ? `/login?from=${location.pathname}`
+      : '/login';
   };
 
   render() {
@@ -58,11 +69,11 @@ class Header extends React.PureComponent {
       };
     }
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== 'production' && false) {
       const { app } = this.props;
       console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
       console.log('app.user:', app.user);
-      console.log('app.token:', app.token ? app.token.slice(0, 10) : app.token);
+      // console.log('app.token:', app.token ? app.token.slice(0, 10) : app.token);
       console.log('app.roles:', app.roles);
       console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     }
@@ -77,7 +88,9 @@ class Header extends React.PureComponent {
             }} />
 
             {/* TODO Move config out of this place */}
-            <div style={sysconfig.Header_SubTextStyle}>{sysconfig.Header_SubTextLogo}</div>
+            <div style={sysconfig.Header_SubTextStyle}>
+              {sysconfig.Header_SubTextLogo}
+            </div>
           </Link>
 
           <div className={styles.searchWrapper}>
@@ -89,10 +102,13 @@ class Header extends React.PureComponent {
             }
           </div>
 
-          {process.env.NODE_ENV !== 'production' &&
-          <span>DEV: </span>
+          {process.env.NODE_ENV !== 'production' && false &&
+          <span className="debug_area" style={{ marginRight: 20 }}>
+            DEV:{JSON.stringify(this.props.app.roles)}
+          </span>
           }
 
+          {/* --------------- 菜单栏 -------------- */}
           <Menu
             selectedKeys={[location.pathname]}
             mode="horizontal"
@@ -115,20 +131,19 @@ class Header extends React.PureComponent {
             {/*}*/}
 
 
-            {user.first_name &&
+            {isLogin(user) &&
             <Menu.Item key="/account">
               <Link to={sysconfig.Header_UserPageURL} title={user.display_name}
-                    style={{ lineHeight: '46px' }}>
-                <img
-                  src={profileUtils.getAvatar(user.avatar, user.id, 30)}
-                  className={styles.roundedX}
-                  style={{ width: 30, height: 30, verticalAlign: 'middle' }} />
-                {/*<Icon type="frown-circle"/>个人账号*/}
+                    className="headerAvatar">
+                <img src={profileUtils.getAvatar(user.avatar, user.id, 30)}
+                     alt={user.display_name} />
+                {/* <Icon type="frown-circle"/>个人账号 */}
               </Link>
             </Menu.Item>
             }
+
             {/* TODO 不确定是否其他系统也需要显示角色 */}
-            {sysconfig.SYSTEM === 'ccf' &&
+            {sysconfig.SYSTEM === 'ccf' && roles &&
             <Menu.Item key="" className={styles.showRoles}>
               <p className={roles.authority[0] !== undefined ? styles.isAuthority : ''}>
                 <span>{roles.role[0]}</span>
@@ -140,23 +155,31 @@ class Header extends React.PureComponent {
               </p>
             </Menu.Item>
             }
-            {user.first_name &&
+
+            {isGod(roles) &&
+            <Menu.Item key="/hidden">
+              <Link to="/2b"><Icon type="appstore-o" className="noTextIcon" /></Link>
+            </Menu.Item>}
+
+            {isLogin(user) &&
             <Menu.Item key="/logout">
-              <div onClick={this.logoutAuth}><Icon type="logout" /></div>
+              <div onClick={this.logoutAuth}>
+                {this.state.logoutLoading ?
+                  <Icon type="loading" /> :
+                  <Icon type="logout" />
+                }
+                退出登录
+              </div>
             </Menu.Item>
             }
 
-            {(!user || !user.first_name) &&
-            <Menu.Item key="/404">
-              <Link to={`/login?from=${location.pathname}`} style={{ lineHeight: '46px' }}>
+            {!isLogin(user) &&
+            <Menu.Item key="/login">
+              <Link to={this.loginPageUrl()}>
                 <Icon type="user" /> 登录
               </Link>
             </Menu.Item>
             }
-
-            {/*<Menu.Item key="/hidden">*/}
-            {/*<Link to="/"><Icon type="compass-circle" /></Link>*/}
-            {/*</Menu.Item>*/}
           </Menu>
         </div>
 

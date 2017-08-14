@@ -28,6 +28,9 @@ const CurrentSystemConfig = {
 const defaultSystemConfigs = {
   SYSTEM: config.system,
 
+  // 所有可选系统
+  AllOptionalSystems: ['ccf', 'huawei', 'alibaba', 'tencent', 'cie'],
+
   //
   // Systems Preference
   //
@@ -64,6 +67,8 @@ const defaultSystemConfigs = {
   UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签
 
   Auth_AllowAnonymousAccess: false,
+  Auth_LoginPage: '/login',
+
   //
   // Page specified config.
   //

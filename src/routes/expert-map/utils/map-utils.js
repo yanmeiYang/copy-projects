@@ -116,6 +116,8 @@ const findhuaweidistrict = (results, place) => {
     place = [61.52401, 105.318756];// 以俄罗斯返回
   }else if (results.country.name === 'Israel') { // 以色列
     place = [31.046051, 34.851612];// 以以色列返回
+  } else if (results.country.name === 'United States') { // 美国
+    console.log(results)
   }
   return place;
 }

@@ -11,7 +11,7 @@ export default {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/common/universal-config'));
         registerModel(app, require('../../models/auth/auth'));
-        cb(null, require('./user-list'));
+        cb(null, require('./user/Users'));
       }, 'admin');
     },
   }),
@@ -79,16 +79,6 @@ export default {
         registerModel(app, require('../../models/admin/system-config'));
         registerModel(app, require('../../models/common/universal-config'));
         cb(null, require('./org-category'));
-      }, 'admin');
-    },
-  }),
-
-  EmailTemplate: app => ({
-    path: '/email-template',
-    getComponent(nextState, cb) {
-      require.ensure([], (require) => {
-        registerModel(app, require('../../models/system-setting'));
-        cb(null, require('./emailTemplate'));
       }, 'admin');
     },
   }),

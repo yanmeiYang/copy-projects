@@ -49,6 +49,10 @@ const NaviConfig = {
 };
 
 const defaultNavis = ['ExpertSearch', 'ExpertMap', 'Relation', 'KnowledgeGraph'];
+// Function in development.
+if (process.env.NODE_ENV !== 'production') {
+  defaultNavis.push('ExpertTrajectory');
+}
 
 const defaultQuery = 'data mining';
 
@@ -59,11 +63,6 @@ class SearchTypeWidgets extends React.PureComponent {
 
   componentWillMount() {
     this.navis = this.props.navis || defaultNavis;
-
-    // Function in development.
-    if (process.env.NODE_ENV !== 'production') {
-      this.navis.push('ExpertTrajectory');
-    }
 
     // match current label based on url.
     const path = window.location.pathname;

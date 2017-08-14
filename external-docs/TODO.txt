@@ -1,0 +1,5 @@
+            // TODO move this action to login page.
+            // if (location.pathname === '/login') {
+            //   yield put(routerRedux.push('/'));
+            // }
+

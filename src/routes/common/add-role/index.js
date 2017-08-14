@@ -4,7 +4,6 @@
 import React from 'react';
 import { Tabs, Table, Spin, Input, Form, Button, Modal, Select } from 'antd';
 import { connect } from 'dva';
-import { Link } from 'dva/router';
 import styles from './index.less';
 
 const Option = Select.Option;

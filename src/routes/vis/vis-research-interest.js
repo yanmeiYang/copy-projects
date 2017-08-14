@@ -7,7 +7,7 @@
 import React from 'react';
 // import NVD3Chart from 'react-nvd3';
 import { connect } from 'dva';
-import { Tag } from 'antd';
+import { Tag, Tooltip } from 'antd';
 import * as personService from '../../services/person';
 import styles from './vis-research-interest.less';
 // import './nv.d3.css';
@@ -61,7 +61,16 @@ class VisResearchInterest extends React.Component {
       <div className={styles.vis_research_interest}>
         {visData.interests && visData.interests.map((item) => {
           const interest = personService.returnKeyByLanguage(this.state.interestsI18n, item.key);
-          return <Tag color="blue" key={item.key}>{interest}</Tag>;
+          const tag = interest.zh ? interest.zh : interest.en;
+          return (
+            <span key={Math.random()}>
+              {interest.zh ?
+                <Tooltip placement="top" title={interest.en}>
+                  <Tag color="blue" key={Math.random()}>{tag}</Tag>
+                </Tooltip>
+                : <Tag color="blue" key={Math.random()}>{tag}</Tag>}
+            </span>
+          );
         })}
         {/*{visData.interests_zh && visData.interests_zh.map((item) => {*/}
         {/*return <Tag color="blue" key={item.key}>{item.key}</Tag>;*/}

@@ -1,28 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import 'babel-polyfill';
 import dva from 'dva';
-import { browserHistory } from 'dva/router';
-import { message } from 'antd';
+import 'babel-polyfill';
 import { IntlProvider } from 'react-intl';
+import { createLogger } from 'redux-logger';
+import { message } from 'antd';
+import { browserHistory } from 'dva/router';
 import createLoading from 'dva-loading';
-import './index.html';
 import { system } from './utils/config';
+import './index.html';
+
+const log = ::console.log;
 
 if (ENABLE_PERF) { // eslint-disable-line no-undef
   window.Perf = require('react-addons-perf');
 }
 
-message.config({
-  // top: 100,
-  duration: 4,
-});
+configAntd();
 
 // 1. Initialize
 const app = dva({
-  ...createLoading({
-    effects: true,
-  }),
+  ...createLoading({ effects: true }),
   history: browserHistory,
   onError(error) {
     console.error('Global Error:', error);
@@ -30,6 +28,10 @@ const app = dva({
     // alert(error);
   },
 });
+
+if (process.env.NODE_ENV !== 'production') {
+  app.use({ onAction: createLogger() });
+}
 
 // 2. Model
 app.model(require('./models/app'));
@@ -45,3 +47,9 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 
+/**
+ * Config AntD.
+ */
+function configAntd() {
+  message.config({ duration: 4 });
+}

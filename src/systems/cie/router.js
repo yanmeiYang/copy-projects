@@ -1,9 +1,9 @@
 import React from 'react';
 import { Router } from 'dva/router';
-import FullRouter from '../full-router';
+import { fullRouter } from '../full-router';
 
 const Routers = function ({ history, app }) {
-  const routes = FullRouter(app, [
+  const routes = fullRouter(app, [
   ]);
   return <Router history={history} routes={routes} />;
 };

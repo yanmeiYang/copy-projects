@@ -73,6 +73,7 @@ const fullRouter = (app, defaultChildRoutes) => {
       core.RelationGraphPage(app),
       core.KnowledgeGraph(app),
       core.TrendPredictionPage(app),
+      core.RanksHelp(app),
 
       // Your pages should be registered here.
 

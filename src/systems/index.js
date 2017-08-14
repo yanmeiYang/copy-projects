@@ -48,7 +48,7 @@ const defaultSystemConfigs = {
   Footer_Content: <Footer />,
   ShowSideMenu: true,
   ShowFooter: true,
-
+  ShowHelpDoc: false, // 显示帮助文档
   //
   // Functionality
   //

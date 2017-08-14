@@ -31,6 +31,7 @@ module.exports = {
   Header_LogoWidth: 214,
   Header_UserPageURL: '/user-info',
   // Footer_Content: '',
+  ShowHelpDoc: true,
 
   // Functionality
   Enable_Export: false,

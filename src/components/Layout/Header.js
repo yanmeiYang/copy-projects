@@ -161,6 +161,11 @@ class Header extends React.PureComponent {
               <Link to="/2b"><Icon type="appstore-o" className="noTextIcon" /></Link>
             </Menu.Item>}
 
+            {sysconfig.ShowHelpDoc &&
+            <Menu.Item key="/help">
+              <Link to="/help">帮助文档</Link>
+            </Menu.Item>}
+
             {isLogin(user) &&
             <Menu.Item key="/logout">
               <div onClick={this.logoutAuth}>

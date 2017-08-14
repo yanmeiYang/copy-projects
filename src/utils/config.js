@@ -14,8 +14,6 @@ const param = (key, type, description) => {
 };
 
 module.exports = {
-  // FIXME yanmei: 配置email template
-
   // To change SYSTEM settings. Please change /define.js.
   // TODO remove all use of this config [system,source].
   system: SYS, // 默认启动这是哪套系统，启动的时候传入app，之后会在APP里面重新设置。

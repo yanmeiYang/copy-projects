@@ -1,22 +1,13 @@
-/**
- * Created by yutao on 2017/5/22.
- */
 import React from 'react';
 import { connect } from 'dva';
 import { Menu, Icon } from 'antd';
 import { Link } from 'dva/router';
-import { isEqual } from 'lodash';
-import styles from './Header.less';
+import styles from './Header2b.less';
 import * as profileUtils from '../../utils/profile-utils';
 import { sysconfig } from '../../systems';
-import { KgSearchBox, SearchTypeWidgets } from '../../components/search';
+import { SearchTypeWidgets } from '../../components/search';
 
-class Header extends React.PureComponent {
-  // function Header({ app, location, dispatch, logout, onSearch }) {
-  // constructor(props) {
-  //   super(props);
-  // }
-
+class Header2b extends React.PureComponent {
   state = {
     query: 'test',
   };
@@ -148,4 +139,4 @@ class Header extends React.PureComponent {
   }
 }
 
-export default connect(({ app }) => ({ app }))(Header);
+export default connect(({ app }) => ({ app }))(Header2b);

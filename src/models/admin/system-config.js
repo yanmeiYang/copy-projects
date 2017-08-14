@@ -2,10 +2,8 @@
  * Bo Gao on 2017-06-09
  */
 import pathToRegexp from 'path-to-regexp';
-import * as personService from '../../services/person';
 
 export default {
-
   namespace: 'adminSystemConfig',
 
   state: {

@@ -1,41 +1,39 @@
-import { routerRedux } from 'dva/router';
 import { parse } from 'qs';
-import { getCurrentUserInfo, logout } from '../services/app';
-import { config, setLocalStorage, getLocalStorage } from '../utils';
-import { sysconfig } from '../systems';
+import { routerRedux } from 'dva/router';
+import { config, queryURL } from '../utils';
+import * as auth from '../utils/auth';
 import * as authService from '../services/auth';
+import { sysconfig } from '../systems';
 
 const { prefix } = config;
-const LocalStorage = localStorage;
 
 export default {
   namespace: 'app',
   state: {
-    // query: '', // query shared in different pages.
-
-    // User/auth token related.
+    // User/auth token related. TODO move to auth module.
     user: {},
-    token: LocalStorage.getItem('token'),
-    // TODO parse roles string into this object.
-    roles: { admin: false, ccf_user: false, role: [], authority: [] },
-
+    token: auth.getLocalToken(),
+    roles: auth.createEmptyRoles(), // { admin: false, ccf_user: false, role: [], authority: [] },
+    loading: false,
 
     // layout switches.
     headerSearchBox: null, // Header search box parameters.
     showFooter: true,
 
-    // Layout related, not used.
+    // Layout related, not used. TODO remove them.
     menuPopoverVisible: false,
-    siderFold: LocalStorage.getItem(`${prefix}siderFold`) === 'true',
-    darkTheme: LocalStorage.getItem(`${prefix}darkTheme`) === 'true',
+    siderFold: localStorage.getItem(`${prefix}siderFold`) === 'true',
+    darkTheme: localStorage.getItem(`${prefix}darkTheme`) === 'true',
     isNavbar: false, // document.body.clientWidth < 769,
-    navOpenKeys: JSON.parse(LocalStorage.getItem(`${prefix}navOpenKeys`)) || [],
+    navOpenKeys: JSON.parse(localStorage.getItem(`${prefix}navOpenKeys`)) || [],
   },
 
   subscriptions: {
     setup({ dispatch }) {
-      dispatch({ type: 'getCurrentUserInfo' });
+      // 刷新页面第一次调用。
+      auth.ensureUserAuthFromAppModel(dispatch);
 
+      // TODO remove this.
       let tid;
       window.onresize = () => {
         clearTimeout(tid);
@@ -47,48 +45,56 @@ export default {
   },
 
   effects: {
-    * getCurrentUserInfo({ payload }, { call, put }) {
-      if (LocalStorage.getItem('token')) {
-        const userMessage = getLocalStorage('user');
-        // TODO 每次打开新URL都要访问一次。想办法缓存一下。
-        if (userMessage !== '' && userMessage !== null && userMessage !== undefined) {
-          yield put({
-            type: 'alreadyLoggedIn',
-            user: userMessage.data,
-            roles: userMessage.roles,
-          });
-          // if (!userMessage.roles.role.includes(config.source)) {
-          //   yield call(authService.invoke, userMessage.data.id, config.source);
-          // }
-        } else {
-          const { data } = yield call(getCurrentUserInfo, parse(payload));
-          if (data) {
-            yield put({ type: 'getCurrentUserInfoSuccess', payload: data });
-            if (location.pathname === '/login') {
-              yield put(routerRedux.push('/'));
-            }
+    // make sure app.user is filled.
+    * getMe({ payload }, { call, put }) {
+      const { data } = yield call(authService.getCurrentUserInfo, parse(payload));
+      if (data) {
+        yield put({ type: 'getMeSuccess', payload: data });
+      }
+    },
+
+    * login({ payload }, { put, call }) {
+      const { data } = yield call(authService.login, payload);
+      if (data.status) {
+        auth.saveLocalToken(data.token);
+        // update me info.
+        const getMeData = yield call(authService.getCurrentUserInfo);
+        if (getMeData && getMeData.data) {
+          yield put({ type: 'getMeSuccess', payload: getMeData.data });
+          yield put({ type: 'auth/hideLoading' });
+          // yield auth.dispatchAfterLogin(put);
+          const from = queryURL('from') || '/';
+          if (process.env.NODE_ENV !== 'production') {
+            console.log('Login Success, Dispatch to ', decodeURIComponent(from));
           }
+          yield put(routerRedux.push({ pathname: decodeURIComponent(from) }));
+
+          console.log('--------------------------------------- done');
+          // yield put(routerRedux.push({ pathname: '/' }));// temp
         }
-      } else if (location.pathname !== '/login') {
-        // let from = location.pathname;
-        // if (location.pathname === '/') {
-        //   from = '/';
-        // }
-        // window.location = `${location.origin}/login?from=${from}`;
+      } else {
+        console.error('Login error:', data);
+        yield put({ type: 'auth/loginError', data });
       }
     },
 
     * logout({ payload }, { call, put }) {
-      const data = yield call(logout);
+      // 先logout，再调用api.
+      const token = auth.getLocalToken();
+      yield put({ type: 'logoutSuccess' });
+      // yield auth.dispatchToLogin(put); // don't work
+
+      yield put(routerRedux.push({
+        pathname: sysconfig.Auth_LoginPage,
+        query: { from: auth.getLoginFromURL() },
+      }));
+
+      // last call api.
+      const data = yield call(authService.logout, token);
       if (data.data.status) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        yield put({ type: 'logoutSuccess' });
-        yield put({ type: 'getCurrentUserInfo' });
-        // TODO 这里写死了会跳转到登录页面。单并不是所有系统登出后都不能继续
-        // 访问当前页面。所以这里要改成等出后刷新当前页面。
-        // 如果发现没有权限，则跳转到登录页面。
-        window.location.href = sysconfig.Auth_LoginPage;
+        if (process.env.NODE_ENV !== 'production') {
+          console.log('Logout successful');
+        }
       } else {
         throw (data);
       }
@@ -101,40 +107,17 @@ export default {
         yield put({ type: 'handleNavbar', payload: isNavbar });
       }
     },
-
   },
 
   reducers: {
-    // TODO 这里没有通用化.
-    getCurrentUserInfoSuccess(state, { payload: user }) {
-      const roles = { admin: false, ccf_user: false, role: [], authority: [] };
-      for (const r of user.role) {
-        // Examples Roles
-        // root, ccf_超级管理员,
-        if (r === 'root' || r === `${config.source}_超级管理员`) {
-          roles.admin = true;
-        }
-        // ccf -- TODO 改成有没有这个系统的权限.
-        if (r === 'ccf') {
-          roles.ccf_user = true;
-        }
+    getMeSuccess(state, { payload: user }) {
+      const roles = auth.parseRoles(user);
+      auth.saveLocalAuth(user, roles);
+      return { ...state, user, roles };
+    },
 
-        // ccf only -- Need an example
-        if (r.split('_').length === 2) {
-          roles.role.push(r.split('_')[1]);
-        }
-
-        // ccf only -- Need an example
-        if (r.split('_').length === 3) {
-          roles.authority.push(r.split('_')[2]);
-        }
-      }
-      setLocalStorage('user', user, roles);
-      return {
-        ...state,
-        user,
-        roles,
-      };
+    emptyAuthInfo(state) {
+      return { ...state, user: undefined, roles: undefined, token: undefined };
     },
 
     alreadyLoggedIn(state, { user, roles }) {
@@ -142,7 +125,7 @@ export default {
     },
 
     switchSider(state) {
-      LocalStorage.setItem(`${prefix}siderFold`, !state.siderFold);
+      localStorage.setItem(`${prefix}siderFold`, !state.siderFold);
       return {
         ...state,
         siderFold: !state.siderFold,
@@ -150,7 +133,7 @@ export default {
     },
 
     switchTheme(state) {
-      LocalStorage.setItem(`${prefix}darkTheme`, !state.darkTheme);
+      localStorage.setItem(`${prefix}darkTheme`, !state.darkTheme);
       return {
         ...state,
         darkTheme: !state.darkTheme,
@@ -182,6 +165,10 @@ export default {
       return { ...state, ...payload };
     },
 
+    hideHeaderSearch(state) {
+      return { ...state, headerSearchBox: undefined };
+    },
+
     setQueryInHeaderIfExist(state, { payload }) {
       const { query } = payload;
       if (state.headerSearchBox) {
@@ -192,13 +179,19 @@ export default {
         return state;
       }
     },
-    // setQuery(state, { query }) {
-    //   return { ...state, query };
-    // },
 
-
-    logoutSuccess(state, { payload }) {
-      return { ...state, token: LocalStorage.getItem('token'), user: {} };
+    logoutSuccess(state) {
+      auth.removeLocalAuth();
+      return { ...state, user: {}, token: null, roles: auth.createEmptyRoles() };
     },
+
+    showLoading(state) {
+      return { ...state, loading: true };
+    },
+
+    hideLoading(state) {
+      return { ...state, loading: false };
+    },
+
   },
 };

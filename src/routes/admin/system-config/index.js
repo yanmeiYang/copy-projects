@@ -3,25 +3,22 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { routerRedux, withRouter, applyRouterMiddleware } from 'dva/router';
+import { routerRedux } from 'dva/router';
 import { Tabs } from 'antd';
 import styles from './index.less';
 import UniversalConfig from '../../common/universal-config';
 import { sysconfig } from '../../../systems';
-import { hoc } from '../../../hoc';
+import { RequireAdmin } from '../../../hoc';
 
 const TabPane = Tabs.TabPane;
 const { SysconfigDefaultCategory, SysConfigTabs, ShowConfigTab } = sysconfig;
 
-@hoc
-@connect(({ adminSystemConfig, loading }) => ({ adminSystemConfig, loading }))
-@withRouter
+@connect(({ app, adminSystemConfig, loading }) => ({ app, adminSystemConfig, loading }))
+@RequireAdmin
 export default class SystemConfig extends React.Component {
-  constructor(props) {
-    super(props);
-    console.log('----', props);
-  }
-
+  // constructor(props) {
+  //   super(props);
+  // }
 
   /** 在Component被加载的时候调用的。 */
   componentDidMount() {

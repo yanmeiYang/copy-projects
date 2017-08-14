@@ -1,5 +1,7 @@
-import { hoc, Auth, RequireLogin } from './auth-hoc';
+import { Auth, RequireLogin, RequireAdmin, RequireGod } from './auth-hoc';
 
 module.exports = {
-  hoc, Auth, RequireLogin,
+  Auth, RequireLogin, RequireAdmin, RequireGod,
+
+
 };

@@ -1,11 +1,11 @@
-import { request, config } from '../utils'
-const { api } = config
-const { users } = api
+import { request, config } from '../../src/utils/index';
+
+const { api } = config;
 
 export async function query(params) {
   return request(
     {
-      url: users,
+      url: api.users,
       method: 'get',
       data: params,
     });

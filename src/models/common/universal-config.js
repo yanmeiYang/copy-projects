@@ -98,13 +98,14 @@ export default {
 
     // 取出一个category 下面所有的 key,value 列表。
     * setCategory({ payload }, { call, put }) {
+      // empty list ?????
+      yield put({ type: 'setData', payload: { data: { data: {} } } });
       yield put({ type: 'showLoading' });
       const { category } = payload;
       const data = yield call(uconfigService.listByCategory, category);
       yield put({ type: 'setCategorySuccess', payload: { category } });
       yield put({ type: 'setData', payload: { data } });
     },
-
 
     // TODO change this just like getCategoryGroup
     * getOrgCategory({ payload }, { call, put }) {

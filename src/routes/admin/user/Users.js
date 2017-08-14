@@ -1,27 +1,25 @@
 /**
  * Created by yangyanmei on 17/7/3.
- *
- * Formatted by bogao on 17/7/15. -_-
  */
 import React from 'react';
 import { routerRedux } from 'dva/router';
 import { Table, Tabs, Spin, Modal, Input, Radio, Button } from 'antd';
 import { connect } from 'dva';
-import styles from './index.less';
+import styles from './Users.less';
 import { config } from '../../../utils';
 import { sysconfig } from '../../../systems';
+import { RequireAdmin } from '../../../hoc';
 
-// import { classnames } from '../../../utils';
 const TabPane = Tabs.TabPane;
 const { Column } = Table;
 const RadioGroup = Radio.Group;
-console.log('sajdf;lasjd;flj;');
 
-class UserList extends React.Component {
-  constructor(props) {
-    super(props);
-    console.log('>>>>>>>>>>>>>>>>>>>');
-  }
+@connect(({ app, auth, universalConfig }) => ({ app, auth, universalConfig }))
+@RequireAdmin
+export default class Users extends React.Component {
+  // constructor(props) {
+  //   super(props);
+  // }
 
   // FIXME yanmei: 没用的东西不要放到state里面。（可能都有用，我只是测试你能不能看到FIXME）;
   state = {
@@ -39,7 +37,6 @@ class UserList extends React.Component {
   };
 
   componentDidMount() {
-    console.log('>>>>>>>>>>>>>>>>>>>');
     this.props.dispatch({
       type: 'auth/getCategoryByUserRoles',
       payload: { category: 'user_roles' },
@@ -80,6 +77,7 @@ class UserList extends React.Component {
       this.setState({ editUserId: data.id });
     }
   };
+
   selectedAuthorityRegion = (e) => {
     const role = e.target.value;
     this.setState({ selectedAuthority: role, committee: true });
@@ -239,7 +237,6 @@ class UserList extends React.Component {
   };
 
   render() {
-    console.log('lsdkjfa;sjdf;ajsd;lfkjas;ldkj');
     const { loading } = this.props.auth;
     const listUsers = [];
     if (this.props.auth.listUsers) {
@@ -342,5 +339,3 @@ class UserList extends React.Component {
     );
   }
 }
-
-export default connect(({ auth, universalConfig }) => ({ auth, universalConfig }))(UserList);

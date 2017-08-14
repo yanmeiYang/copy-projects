@@ -30,7 +30,7 @@ const app = dva({
 });
 
 if (process.env.NODE_ENV !== 'production') {
-  // app.use({ onAction: createLogger() });
+  app.use({ onAction: createLogger() });
 }
 
 // 2. Model

@@ -9,6 +9,7 @@ import { sysconfig } from '../../systems';
 import styles from './expert-person.less';
 import * as searchService from '../../services/search';
 import { getTwoDecimal } from '../../utils';
+import * as profileUtils from '../../utils/profile-utils';
 
 
 const CheckboxGroup = Checkbox.Group;
@@ -97,7 +98,7 @@ class ExportPersonBtn extends React.Component {
               case 'pos':
                 return expertPersonInfo += person.pos[0].n_zh ? `${person.pos[0].n_zh.replace(/,/g, ';')},` : (person.pos[0].n ? `${person.pos[0].n.replace(/,/g, ';')},` : ',');
               case 'aff':
-                return expertPersonInfo += person.aff.desc_zh ? `${person.aff.desc_zh.replace(/,/g, ';')},` : (person.aff.desc ? `${person.aff.desc.replace(/,/g, ';')},` : ',');
+                return expertPersonInfo += `${profileUtils.displayAff(person).replace(/,/g, ';')},`;
               case 'h_index':
                 return expertPersonInfo += person.indices.h_index ? `${person.indices.h_index},` : ',';
               case 'activity':

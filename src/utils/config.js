@@ -2,11 +2,11 @@
  * Created by yutao on 2017/5/22.
  */
 // const SYS = 'ccf';
-const SYS = 'huawei';
+// const SYS = 'huawei';
 // const SYS = 'alibaba';
 // const SYS = 'tencent';
 // const SYS = '2017-8';
-// const SYS = 'cie';
+const SYS = 'cie';
 // const SYS = 'demo';
 
 const param = (key, type, description) => {

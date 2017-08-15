@@ -122,7 +122,7 @@ class SearchFilter extends React.PureComponent {
                     key={agg.type}
                   >
                     <span className={styles.filterTitle}>{cnLabel}:</span>
-                    <ul className={styles.filterItems}>
+                    <ul>
                       {agg.item.slice(0, 12).map((item) => {
                         return (
                           <CheckableTag

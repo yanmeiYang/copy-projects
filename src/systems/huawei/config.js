@@ -67,6 +67,11 @@ module.exports = {
       nperson: 287,
     },
     {
+      id: '590fcaa59ed5db67cf85a129',
+      name: '美国科学院',
+      nperson: 2206,
+    },
+    {
       id: '5923c0829ed5db1600b942db',
       name: '英国皇家科学院－Research Fellows Directory',
       nperson: 976,

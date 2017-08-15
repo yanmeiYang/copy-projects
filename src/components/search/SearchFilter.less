@@ -17,7 +17,11 @@
         color: @text-color; font-weight: bold;
       }
       .filterItem { margin: 0 5px; }
-      .filterItem:hover .filterCount { color: #eee; }
+      .filterItem:hover {
+        background: #49a9ee;
+        color: white;
+        .filterCount { color: white; }
+      }
       .filterCount { font-weight: 600; color: darkgreen; }
       > ul { display: flex; flex-direction: row; flex: 2; flex-flow: row wrap; }
     }
@@ -27,6 +31,7 @@
       //.filterItem { color: #555; font-weight: bold; }
       //.filterTitle { color: #555; width: 110px; }
       :global {
+        .ant-tag-checkable:hover { background: #49a9ee; }
         .ant-tag-checkable:hover, .ant-tag-checkable:active, .ant-tag-checkable-checked { color: white; }
       }
     }

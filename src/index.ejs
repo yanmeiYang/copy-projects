@@ -18,7 +18,6 @@
 <body>
 
 <div id="root"></div>
-<script src="/roadhog.dll.js"></script>
-
+<%= process.env.NODE_ENV === 'development' ? '<script type="text/javascript" src="/roadhog.dll.js"></script>' : undefined %>
 </body>
 </html>

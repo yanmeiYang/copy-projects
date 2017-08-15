@@ -99,7 +99,7 @@ module.exports = {
     getActivityAvgScoresByPersonId: '/person/activity/:id/indices',
 
     // interests vis data
-    interests: '/person/interests/:id',
+    interests: '/person/interests/:id', // 这个是vis图中单独调用的。和人下面的可能不一样.
 
     /* publications */
     pubList: '/person/pubs/:id/all/year/:offset/:size',

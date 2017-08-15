@@ -6,6 +6,7 @@ import styles from './Header2b.less';
 import * as profileUtils from '../../utils/profile-utils';
 import { sysconfig } from '../../systems';
 import { SearchTypeWidgets } from '../../components/search';
+import { isLogin, isGod } from '../../utils/auth';
 
 class Header2b extends React.PureComponent {
   state = {
@@ -82,15 +83,13 @@ class Header2b extends React.PureComponent {
             {/*}*/}
 
 
-            {user.first_name &&
+            {isLogin(user) &&
             <Menu.Item key="/account">
               <Link to={sysconfig.Header_UserPageURL} title={user.display_name}
-                    style={{ lineHeight: '46px' }}>
-                <img
-                  src={profileUtils.getAvatar(user.avatar, user.id, 30)}
-                  className={styles.roundedX}
-                  style={{ width: 30, height: 30, verticalAlign: 'middle' }} />
-                {/*<Icon type="frown-circle"/>个人账号*/}
+                    className="headerAvatar">
+                <img src={profileUtils.getAvatar(user.avatar, user.id, 30)}
+                     alt={user.display_name} />
+                {/* <Icon type="frown-circle"/>个人账号 */}
               </Link>
             </Menu.Item>
             }
@@ -107,13 +106,13 @@ class Header2b extends React.PureComponent {
               </p>
             </Menu.Item>
             }
-            {user.first_name &&
+            {isLogin(user) &&
             <Menu.Item key="/logout">
               <div onClick={this.logoutAuth}><Icon type="logout" /></div>
             </Menu.Item>
             }
 
-            {(!user || !user.first_name) &&
+            {!isLogin(user)&&
             <Menu.Item key="/404">
               <Link to={`/login?from=${location.pathname}`} style={{ lineHeight: '46px' }}>
                 <Icon type="user" /> 登录

@@ -1,12 +1,12 @@
-/* eslint-disable react/no-unused-prop-types */
+/* eslint-disable react/no-unused-prop-types,react/require-default-props */
 /**
  *  Created by BoGao on 2017-08-14;
  */
-import React from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import { message } from 'antd';
-import PropTypes from 'prop-types';
+
 // TODO add property norepeat="3", don't repeat in 3s.
-export default class Message extends React.PureComponent {
+export default class Message extends PureComponent {
   state = {
     errorMessage: '',
   };

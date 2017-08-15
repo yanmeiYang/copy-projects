@@ -453,26 +453,20 @@ class ExpertGoogleMap extends React.Component {
           <input id="flowstate" type="hidden" value="0" />
         </div>
 
-        <div className={styles.main2} id="rank">
+        <div id="rank">
           <div className={styles.main3}>
-            <div className="custom-image">
-              <img width="17%" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m0.png" />
-              <img width="17%" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m1.png" />
-              <img width="17%" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m2.png" />
-              <img width="17%" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m3.png" />
-              <img width="17%" src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m4.png" />
-            </div>
+            <img width="13%" src="/images/personsNumber.png"/>
+            <div className={styles.lab3}><p>该区域学者人数</p>该学者所在位置</div>
           </div>
-          <div className="custom-image">
-            <img src="/images/arrow.png" />
+          <div className={styles.container}>
+            <div className={styles.item1}> 1</div>
+            <div className={styles.item2}> 2</div>
+            <div className={styles.item3}> 3</div>
+            <div className={styles.item4}> 4</div>
+            <div className={styles.item5}> 5</div>
           </div>
+            <img width="80%" src="/images/arrow.png" />
           <div className={styles.lab2}>人数增加</div>
-          <div className={styles.main3}>
-            <div className="custom-image">
-              <img src="/images/personsNumber.png"/>
-              <div className={styles.lab3}><p>该区域学者人数</p>该学者所在位置</div>
-            </div>
-          </div>
         </div>
 
         <div id="personInfo" style={{ display: 'none' }} >

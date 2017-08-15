@@ -5,7 +5,7 @@ import React from 'react';
 import { connect } from 'dva';
 import styles from './RightInfoZoneCluster.less';
 import * as profileUtils from '../../utils/profile_utils';
-
+import { HindexGraph } from '../../components/widgets';
 
 class RightInfoZoneCluster extends React.PureComponent {
 
@@ -72,6 +72,10 @@ class RightInfoZoneCluster extends React.PureComponent {
         <div className="info bg">
           <span>Sum of H-index: {hindexSum}</span>
           <span>Avg of H-index: {(hindexSum / persons.length).toFixed(0)}</span>
+        </div>
+
+        <div>
+          <HindexGraph persons={persons} />
         </div>
 
         <div className="images bg">

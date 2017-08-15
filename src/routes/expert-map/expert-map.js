@@ -10,9 +10,8 @@ import * as profileUtils from '../../utils/profile_utils';
 import { findPosition, getById, waitforBMap, waitforBMapLib } from './utils/map-utils';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
 import RightInfoZonePerson from './RightInfoZonePerson';
-
+import RightInfoZoneAll from './RightInfoZoneAll';
 import GetBMapLib from './utils/BMapLibGai.js';
-import { HindexGraph } from '../../components/widgets';
 
 const ButtonGroup = Button.Group;
 const blankAvatar = '/images/blank_avatar.jpg';
@@ -51,7 +50,6 @@ class ExpertMap extends React.PureComponent {
   /** 构造函数： 这里执行初始化*/
   constructor(props) {
     super(props);
-
     this.showOverLay = GetBMapLib(this.showTop)
     this.currentPersonId = 0;
   }
@@ -184,7 +182,7 @@ class ExpertMap extends React.PureComponent {
         console.log('failed');
       },
     ).catch((error) => {
-      console.error(error);
+      //console.error(error);
     });
   };
 
@@ -297,6 +295,7 @@ class ExpertMap extends React.PureComponent {
     if (!riz) {
       riz = document.createElement('div');
       riz.setAttribute('id', 'flowInfo');
+      console.log(riz)
       riz.setAttribute('class', 'rightInfoZone');
       getById('allmap').appendChild(riz);
       riz.onmouseenter = () => this.map.disableScrollWheelZoom();
@@ -305,16 +304,6 @@ class ExpertMap extends React.PureComponent {
     return riz;
   };
 
-  getTipInfoBox = () => {
-    let riz1 = getById('rank');
-    if (!riz1) {
-      riz1 = document.createElement('div');
-      getById('allmap').appendChild(riz1);
-      riz1.setAttribute('id', 'flowinfo1');
-      riz1.setAttribute('class', 'imgWrapper1');
-      return riz1;
-    }
-  };
     // 将内容同步到地图中的控件上。
   syncInfoWindow = () => {
     // sync personInfo popup
@@ -340,7 +329,6 @@ class ExpertMap extends React.PureComponent {
   toggleRightInfoBox = (id) => {
     const state = getById('flowstate').value;
     const statistic = getById('statistic').value;
-    this.getTipInfoBox();
     if (statistic !== id) { // 一般认为是第一次点击
       getById('flowstate').value = 1;
       this.getRightInfoBox();
@@ -444,7 +432,17 @@ class ExpertMap extends React.PureComponent {
   render() {
     const model = this.props && this.props.expertMap;
     const person = model.personInfo;
-
+    const persons = this.props.expertMap.geoData.results;
+    let count = 0;
+    let hIndexSum = 0;
+    if (persons) {
+      persons.map((person1) => {
+        hIndexSum += person1.hindex;
+        count += 1;
+        return hIndexSum;
+      });
+    }
+    const avg = (hIndexSum / count).toFixed(0);
     let personPopupJsx;
     if (person) {
       const url = profileUtils.getAvatar(person.avatar, person.id, 50);
@@ -452,7 +450,6 @@ class ExpertMap extends React.PureComponent {
       const pos = profileUtils.displayPositionFirst(person.pos);
       const aff = profileUtils.displayAff(person);
       const hindex = person && person.indices && person.indices.h_index;
-      console.log(url)
       if( url !== '//static.aminer.org/default/default.jpg') {
         personPopupJsx = (
           <div className="personInfo">
@@ -489,7 +486,6 @@ class ExpertMap extends React.PureComponent {
     const shouldRIZUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') === -1 && model.infoZoneIds === person.id;
     const shouldRIZClusterUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') > 0;
     const clusterPersons = model.clusterPersons;
-
     return (
       <div className={styles.expertMap} id="currentMain">
 
@@ -527,46 +523,38 @@ class ExpertMap extends React.PureComponent {
           <input id="flowstate" type="hidden" value="0" />
         </div>
 
-        <div className={styles.main2} id="rank">
+        <div id="rank">
           <div className={styles.main3}>
-            <div className="custom-image">
-              <img width="17%" src="/images/map/m0.png" />
-              <img width="17%" src="/images/map/m1.png" />
-              <img width="17%" src="images/map/m2.png" />
-              <img width="17%" src="/images/map/m3.png" />
-              <img width="17%" src="/images/map/m4.png" />
-            </div>
+            <img width="14%" src="/images/personsNumber.png"/>
+            <div className={styles.lab3}><p>该区域学者人数</p>该学者所在位置</div>
           </div>
-          <div className="custom-image">
-            <img src="/images/arrow.png" />
+          <div className={styles.container}>
+            <div className={styles.item1}> 1</div>
+            <div className={styles.item2}> 2</div>
+            <div className={styles.item3}> 3</div>
+            <div className={styles.item4}> 4</div>
+            <div className={styles.item5}> 5</div>
           </div>
+          <img width="100%" src="/images/arrow.png" />
           <div className={styles.lab2}>人数增加</div>
-          <div className={styles.main3}>
-            <div className="custom-image">
-              <img src="/images/personsNumber.png"/>
-              <div className={styles.lab3}><p>该区域学者人数</p>该学者所在位置</div>
-            </div>
+        </div>
+
+        <div id="flowInfoAll" >
+          <div className="rightInfoZone">
+            <RightInfoZoneAll count={count} hIndexSum={hIndexSum} avg={avg} persons={persons} />
           </div>
         </div>
-
-        <div>
-          <HindexGraph />
-        </div>
-
         <div id="personInfo" style={{ display: 'none' }} >
           {personPopupJsx && personPopupJsx}
         </div>
 
-        <div id="rightInfoZone" style={{ display: 'none' }} >
+        <div id="rightInfoZone" style={{ display: 'none' }}>
           <div className="rightInfoZone">
 
             {shouldRIZUpdate && <RightInfoZonePerson person={model.personInfo} /> }
             {shouldRIZClusterUpdate && <RightInfoZoneCluster persons={clusterPersons} />}
-
           </div>
         </div>
-        <div id="rank" style={{ display: 'none' }} ></div>
-
       </div>
     );
   }

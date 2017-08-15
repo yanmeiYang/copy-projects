@@ -24,6 +24,7 @@ export default {
     activity_organizer_options: [], // 用户手动输入的org
     postSeminarOrganizer: [], // 所有活动类型的合集
     orgcategory: {}, // 活动类型
+    activity_type: {}, // 活动类型
     orgByActivity: [],
     contribution_type: [],
     comments: [],
@@ -176,19 +177,19 @@ export default {
         yield put(routerRedux.push({ pathname: `/seminar/${seminarId}` }));
       }
     },
-    *saveSuggestExpert({ payload }, { call, put }){
+    *saveSuggestExpert({ payload }, { call, put }) {
       const { speaker } = payload;
       const id = speaker.payload.id;
       const { data } = yield call(personService.getPerson, id);
       const emailStr = yield call(personService.personEmailStr, id);
-      console.log(emailStr.data.email);
       if (data && emailStr.data.status) {
         const email = emailStr.data.email;
-        yield put({ type: 'saveSuggestExpertSuccess', payload: { speaker, data, email },
-      })
+        yield put({
+          type: 'saveSuggestExpertSuccess', payload: { speaker, data, email },
+        })
         ;
       }
-    }
+    },
   },
 
   reducers: {
@@ -230,7 +231,7 @@ export default {
     },
 
     getCategorySuccess(state, { payload: { data, category } }) {
-      if (category === 'orgcategory' || category === 'activity_organizer_options' || category === 'contribution_type') {
+      if (category === 'orgcategory' || category === 'activity_type' || category === 'activity_organizer_options' || category === 'contribution_type') {
         return { ...state, [category]: data.data };
       } else if (category.includes('orglist_')) {
         return { ...state, orgByActivity: data.data };
@@ -271,6 +272,9 @@ export default {
     },
     getTopMentionedTagsSuccess(state, { data }) {
       return { ...state, topMentionedTags: data };
+    },
+    cancleSuggestExpert(state, { payload }) {
+      return { ...state, selectedSuggestSpeaker: payload };
     },
     saveSuggestExpertSuccess(state, { payload: { speaker, data, email } }) {
       speaker['bio'] = data.contact.bio ? data.contact.bio : '';

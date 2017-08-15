@@ -25,28 +25,6 @@ import ShowExpertList from '../../routes/seminar/addSeminar/workshop/showExpertL
 const Dragger = Upload.Dragger;
 const FormItem = Form.Item;
 const Option = Select.Option;
-// let image = null;
-// const uploadImage = {
-//   name: 'file',
-//   multiple: false,
-//   showUploadList: true,
-//   accept: 'image/jpeg,image/png,image/bmp',
-//   action: config.baseURL + config.api.uploadActivityPosterImgFile,
-//   listType: 'picture',
-//   headers: {
-//     // 获得登录用户的token
-//     Authorization: localStorage.getItem('token'),
-//   },
-//   onChange(info) {
-//     const status = info.file.status;
-//     if (status !== 'uploading') {
-//       image = info.file.originFileObj;
-//     }
-//   },
-//   onSuccess(response) {
-//     image = response.url;
-//   },
-// };
 
 class RegistrationForm extends React.PureComponent {
   state = {
@@ -80,6 +58,7 @@ class RegistrationForm extends React.PureComponent {
       payload: { category: 'activity_organizer_options' },
     });
     this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'orgcategory' } });
+    this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'activity_type' } });
     this.props.dispatch({
       type: 'seminar/getCategory',
       payload: { category: 'contribution_type' },
@@ -150,10 +129,10 @@ class RegistrationForm extends React.PureComponent {
           data.location.city = values.city;
           data.location.address = values.address;
           if (state.startValue) {
-            data.time.from = typeof state.startValue === 'string' ? state.startValue : state.startValue.toJSON();
+            data.time.from = typeof state.startValue === 'string' ? state.startValue : state.startValue;
           }
           if (state.endValue) {
-            data.time.to = typeof state.endValue === 'string' ? state.endValue : state.endValue.toJSON();
+            data.time.to = typeof state.endValue === 'string' ? state.endValue : state.endValue;
           }
           data.tags = state.tags;
           if (data.co_org !== undefined && data.co_org.length > 0) {
@@ -269,7 +248,7 @@ class RegistrationForm extends React.PureComponent {
     const { getFieldDecorator } = this.props.form;
     const {
       activity_organizer_options, orgcategory, tags,
-      postSeminarOrganizer,
+      postSeminarOrganizer, activity_type,
     } = this.props.seminar;
     let activity_organizer_options_data = {};
     if (activity_organizer_options.data) {
@@ -313,7 +292,7 @@ class RegistrationForm extends React.PureComponent {
       <Row className={styles.add_seminar_block}>
         <Form horizontal onSubmit={this.handleSubmit} className={styles.add_seminar_form}>
           <Col className={styles.thumbnail}>
-            {orgcategory.data &&
+            {activity_type.data &&
             <FormItem {...formItemLayout} label="活动类型" hasFeedback>
               {getFieldDecorator('category', {
                   rules: [{ required: true, message: '请选择活动类型！' }],
@@ -321,7 +300,7 @@ class RegistrationForm extends React.PureComponent {
               )(
                 <Select>
                   {
-                    orgcategory.data.map((item) => {
+                    activity_type.data.map((item) => {
                       return (<Option key={`activity_${Math.random()}`}
                                       value={item.key}>{item.key}</Option>);
                     })
@@ -336,7 +315,7 @@ class RegistrationForm extends React.PureComponent {
                   rules: [{ required: true, message: '请选择承办单位！' }],
                 },
               )(
-                <Select showSearch>
+                <Select showSearch placeholder="请选择承办单位">
                   {
                     postSeminarOrganizer.map((item) => {
                       return (<Option key={`org_${Math.random()}`}
@@ -351,7 +330,7 @@ class RegistrationForm extends React.PureComponent {
                   // rules: [{ required: true, message: '请选择承办单位！' }],
                 },
               )(
-                <Select mode="tags"
+                <Select mode="tags" placeholder="请选择协办单位"
                         onChange={this.handleOrganizerChange.bind(this, activity_organizer_options_data)}>
                   {
                     Object.values(activity_organizer_options_data).map((item) => {
@@ -415,6 +394,7 @@ class RegistrationForm extends React.PureComponent {
             <FormItem
               {...formItemLayout}
               label="活动地点"
+              style={{ position: 'inherit' }}
             >
               {getFieldDecorator('address', {
                 rules: [{

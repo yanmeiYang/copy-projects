@@ -4,31 +4,41 @@
 import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
-import { Button, Icon, Spin, Tag, Modal } from 'antd';
+import { Button, Tabs, Icon, Spin, Tag, Modal } from 'antd';
 import { config } from '../../utils';
 import styles from './index.less';
 import SearchSeminar from './search-seminar';
 import NewActivityList from '../../components/seminar/newActivityList';
 // import ActivityList from '../../components/seminar/activityList';
+import * as auth from '../../utils/auth';
+import { Auth } from '../../hoc';
 
 const { CheckableTag } = Tag;
+const TabPane = Tabs.TabPane;
 
-class Seminar extends React.Component {
+@connect(({ app, seminar, loading }) => ({ app, seminar, loading }))
+@Auth
+export default class Seminar extends React.Component {
   state = {
     organizer: '',
     category: '',
+    orgType: '',
     tag: '',
     query: '',
+    sortType: 'time',
   };
 
   componentWillMount = () => {
     this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'orgcategory' } });
+    this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'activity_type' } });
   };
+
   addBao = () => {
     this.props.dispatch(routerRedux.push({
       pathname: '/seminar-post',
     }));
   };
+
   delTheSeminar = (result, i) => {
     const props = this.props;
     Modal.confirm({
@@ -41,8 +51,8 @@ class Seminar extends React.Component {
       onCancel() {
       },
     });
-
   };
+
   getMoreSeminar = () => {
     const { offset, query, sizePerPage } = this.props.seminar;
     const { organizer, category } = this.state;
@@ -65,6 +75,7 @@ class Seminar extends React.Component {
       this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
     }
   };
+
   getSeminar = (sizePerPage, filter, status) => {
     if (status) {
       this.props.seminar.orgByActivity = [];
@@ -77,6 +88,7 @@ class Seminar extends React.Component {
     };
     this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
   };
+
   onSearch = (searchQuery) => {
     this.setState({ query: searchQuery });
     this.props.seminar.results = [];
@@ -105,12 +117,6 @@ class Seminar extends React.Component {
   };
 
   onFilterChange = (key, item, type, checked) => {
-    if (checked && type === 'category') {
-      this.props.dispatch({
-        type: 'seminar/getCategory',
-        payload: { category: `orglist_${item.id}` },
-      });
-    }
     const sizePerPage = this.props.seminar.sizePerPage;
     const stype = {
       organizer: this.state.organizer,
@@ -118,11 +124,21 @@ class Seminar extends React.Component {
       tag: this.state.tag,
     };
     if (checked) {
+      if (type === 'orgType') {
+        this.props.dispatch({
+          type: 'seminar/getCategory',
+          payload: { category: `orglist_${item.id}` },
+        });
+      }
       this.setState({ [type]: key });
       stype[type] = key;
     } else {
       this.setState({ [type]: '' });
       stype[type] = '';
+      if (type === 'orgType') {
+        // 活动类型取消后 承办单位置为空
+        this.props.seminar.orgByActivity = {};
+      }
     }
     this.props.seminar.results = [];
     if (stype.organizer === '' && stype.category === '' && stype.tag === '' && this.state.query === '') {
@@ -146,15 +162,34 @@ class Seminar extends React.Component {
     }
   };
 
+  onTabsChange = (key) => {
+    this.setState({ sortType: key });
+  };
+
   render() {
-    const { results, loading, sizePerPage, orgcategory, topMentionedTags, orgByActivity } =
-      this.props.seminar;
-    const { organizer, category, tag } = this.state;
+    const { app } = this.props;
+    const {
+      results, loading, sizePerPage, orgcategory, activity_type,
+      topMentionedTags, orgByActivity,
+    } = this.props.seminar;
+    const { organizer, category, tag, orgType, sortType } = this.state;
+    const compare = (property) => {
+      return (a, b) => {
+        let val1 = a[property];
+        let val2 = b[property];
+        if (property === 'time') {
+          val1 = a[property].from;
+          val2 = b[property].from;
+        }
+        return new Date(val2) - new Date(val1);
+      };
+    };
+    results.sort(compare(sortType));
     return (
       <div className="content-inner">
         <div className={styles.top}>
           <SearchSeminar onSearch={this.onSearch.bind()} />
-          {this.props.app.user.hasOwnProperty('first_name') &&
+          {auth.isAuthed(app.user) &&
           <Button type="primary" onClick={this.addBao.bind()}>
             <Icon type="plus" />&nbsp;发布新活动
           </Button>}
@@ -207,11 +242,38 @@ class Seminar extends React.Component {
             }
             <div className={styles.filterRow}>
               <span className={styles.filterTitle}>活动类型:</span>
-              {orgcategory.data &&
+              {activity_type.data &&
               <ul className={styles.filterItems}>
                 <CheckableTag
                   className={styles.filterItem}
                   checked={category === ''}
+                  onChange={checked => this.getSeminar(sizePerPage, { src: config.source }, checked)}
+                >All
+                </CheckableTag>
+                {
+                  Object.values(activity_type.data).map((item) => {
+                    return (
+                      <CheckableTag
+                        key={item.id}
+                        className={styles.filterItem}
+                        checked={category === item.key}
+                        onChange={checked => this.onFilterChange(item.key, item, 'category', checked)}
+                      >
+                        {item.key}
+                      </CheckableTag>
+                    );
+                  })
+                }
+              </ul>
+              }
+            </div>
+            <div className={styles.filterRow}>
+              <span className={styles.filterTitle}>机构类型:</span>
+              {orgcategory.data &&
+              <ul className={styles.filterItems}>
+                <CheckableTag
+                  className={styles.filterItem}
+                  checked={orgType === ''}
                   onChange={checked => this.getSeminar(sizePerPage, { src: config.source }, checked)}
                 >All
                 </CheckableTag>
@@ -221,8 +283,8 @@ class Seminar extends React.Component {
                       <CheckableTag
                         key={item.id}
                         className={styles.filterItem}
-                        checked={category === item.key}
-                        onChange={checked => this.onFilterChange(item.key, item, 'category', checked)}
+                        checked={orgType === item.key}
+                        onChange={checked => this.onFilterChange(item.key, item, 'orgType', checked)}
                       >
                         {item.key}
                       </CheckableTag>
@@ -253,6 +315,20 @@ class Seminar extends React.Component {
             </div>}
           </div>
         </div>
+
+        <div>
+          <Tabs defaultActiveKey={this.state.sortType} onChange={this.onTabsChange}
+                className={styles.maxWidth}>
+
+            <TabPane tab={<span>开始时间<i className="fa fa-sort-amount-desc" /></span>}
+                     key="time" />
+            <TabPane tab={<span>创建时间<i className="fa fa-sort-amount-desc" /></span>}
+                     key="createtime" />
+            <TabPane tab={<span>修改时间<i className="fa fa-sort-amount-desc" /></span>}
+                     key="updatetime" />
+          </Tabs>
+        </div>
+
         <Spin spinning={loading}>
           <div className="seminar">
             {results.length > 0 ?
@@ -261,7 +337,7 @@ class Seminar extends React.Component {
                   results.map((result, index) => {
                     return (
                       <div key={result.id + Math.random()}>
-                        {this.props.app.token && (this.props.app.roles.authority.indexOf(result.organizer[0]) >= 0 || this.props.app.roles.admin) &&
+                        {(this.props.app.roles.authority.indexOf(result.organizer[0]) >= 0 || this.props.app.roles.admin) &&
                         <Button type="danger" icon="delete" size="small"
                                 onClick={this.delTheSeminar.bind(this, result, index)} style={{
                           float: 'right',
@@ -285,9 +361,6 @@ class Seminar extends React.Component {
   }
 }
 
-
-export default connect(({ seminar, loading, app }) => ({
-  seminar,
-  loading,
-  app,
-}))(Seminar);
+//
+// export default connect(
+//   ({ seminar, loading, app }) => ({ seminar, loading, app, }))(Seminar);

@@ -5,23 +5,13 @@ import { registerModel } from '../../utils';
 
 export default {
 
-  Login: app => ({
-    path: 'login',
-    getComponent(nextState, cb) {
-      require.ensure([], (require) => {
-        registerModel(app, require('../../models/login'));
-        cb(null, require('../login/'));
-      }, 'auth');
-    },
-  }),
-
   Register: app => ({
     path: '/registered',
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/common/universal-config'));
         registerModel(app, require('../../models/auth/auth'));
-        cb(null, require('../admin/signup'));
+        cb(null, require('./signup'));
       }, 'auth');
     },
   }),
@@ -41,7 +31,7 @@ export default {
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/auth/auth'));
-        cb(null, require('../admin/forgot-password/'));
+        cb(null, require('./forgot-password/'));
       }, 'user');
     },
   }),
@@ -51,7 +41,7 @@ export default {
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/auth/auth'));
-        cb(null, require('../admin/reset-password/'));
+        cb(null, require('./reset-password/'));
       }, 'user');
     },
   }),
@@ -61,7 +51,7 @@ export default {
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/auth/auth'));
-        cb(null, require('../admin/retrieve/'));
+        cb(null, require('./retrieve/'));
       }, 'user');
     },
   }),

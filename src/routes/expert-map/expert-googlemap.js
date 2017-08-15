@@ -6,7 +6,7 @@ import { connect } from 'dva';
 import { Button } from 'antd';
 import styles from './expert-googlemap.less';
 import { listPersonByIds } from '../../services/person';
-import * as profileUtils from '../../utils/profile_utils';
+import * as profileUtils from '../../utils/profile-utils';
 import { findPosition, getById } from './utils/map-utils';
 import GetGoogleMapLib from './utils/googleMapGai.js';
 import RightInfoZonePerson from './RightInfoZonePerson';

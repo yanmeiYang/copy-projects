@@ -11,11 +11,23 @@ import { core } from '../router';
  * @returns {XML}
  * @constructor
  */
+const router2b = (app, defaultChildRoutes) => {
+  const childRoutes = defaultChildRoutes || [];
+  const routers2b = [
+    core.IndexPage2b(app, [
+      core.Login2b(app),
+      core.EmailTemplate(app),
+      ...childRoutes,
+    ]),
+  ];
+  return routers2b;
+};
+
 const fullRouter = (app, defaultChildRoutes) => {
   const childRoutes = defaultChildRoutes || [];
   const allRouters = [
+    ...router2b(app),
     core.IndexPage(app, [
-
       // search
       core.ExpertSearch(app),
       core.UniSearch(app),
@@ -33,7 +45,7 @@ const fullRouter = (app, defaultChildRoutes) => {
       core.Retrieve(app),
       core.UserInfo(app),
 
-      // Admin(Specified by ccf)
+      // Admin(Specified by ccf) TODO some are only used by ccf, move out.
       core.AdminUsers(app),
       core.AdminSystemConfig(app),
       core.AdminAddUserRolesByOrg(app),
@@ -61,16 +73,17 @@ const fullRouter = (app, defaultChildRoutes) => {
       core.RelationGraphPage(app),
       core.KnowledgeGraph(app),
       core.TrendPredictionPage(app),
+      core.RanksHelp(app),
 
       // Your pages should be registered here.
 
       ...childRoutes,
 
       // System Default.
-      core.Default404(app),
+      core.Default404(app), // must be last one.
     ]),
   ];
   return allRouters;
 };
 
-export default fullRouter;
+module.exports = { fullRouter, router2b };

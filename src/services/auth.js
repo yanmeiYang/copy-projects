@@ -6,6 +6,43 @@ import { sysconfig } from '../systems';
 
 const { api, source } = config;
 
+// export async function login(params) {
+//   return request(api.userLogin, {
+//     method: 'post',
+//     data: params,
+//   });
+// }
+
+export async function login(data) {
+  // TODO yanmei: 额....
+  // const src = location.pathname === '/login' ? sysconfig.UserAuthSystem : '';
+  return request(api.userLogin, {
+    method: 'post',
+    body: JSON.stringify({
+      ...data,
+      persist: true,
+      src: sysconfig.UserAuthSystem,
+    }),
+  });
+}
+
+export async function logout(optionalToken) {
+  const options = { method: 'post' };
+  if (optionalToken) {
+    // override toke when call request.
+    options.token = optionalToken;
+  }
+  return request(api.userLogout, options);
+}
+
+export async function getCurrentUserInfo(params) {
+  return request(api.currentUser, {
+    method: 'get',
+    data: params,
+  });
+}
+
+// TODO should in use service.
 export async function createUser(email, first_name, gender, last_name, position, sub, src) {
   const user = {
     email,
@@ -46,6 +83,7 @@ export async function invoke(uid, label) {
     body: JSON.stringify(data),
   });
 }
+
 export async function revoke(uid, label) {
   const data = {
     uid,
@@ -64,10 +102,9 @@ export async function listUsersByRole(offset, size) {
 }
 
 export async function forgot(params) {
-  params.src = sysconfig.UserAuthSystem;
   return request(api.forgot, {
     method: 'POST',
-    body: JSON.stringify(params),
+    body: JSON.stringify({ ...params, src: sysconfig.UserAuthSystem }),
   });
 }
 

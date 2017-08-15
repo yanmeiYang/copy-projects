@@ -1,3 +1,5 @@
+@import "../../themes/vars.less";
+
 #components-tabs-demo-card-top .code-box-demo {
   background: #ececec;
   overflow: hidden;
@@ -41,7 +43,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
-  max-width: 1228px;
+  max-width: @max-width-page;
   .searchWrap {
     width: 70%;
     float: left;
@@ -65,7 +67,7 @@
     justify-content: flex-start;
     flex-shrink: 1;
     .seminar_outbox{
-      max-width: 1228px;
+      max-width: @max-width-page;
       width: 100%;
     }
     li {
@@ -84,7 +86,7 @@
   }
 }
 .filterWrap {
-  max-width: 1228px;
+  max-width: @max-width-page;
   .filter {
     display: flex;
     flex-direction: column;
@@ -141,4 +143,8 @@
       }
     }
   }
+}
+
+.maxWidth{
+  max-width: @max-width-page;
 }

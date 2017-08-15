@@ -4,7 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import styles from './RightInfoZoneCluster.less';
-import * as profileUtils from '../../utils/profile_utils';
+import * as profileUtils from '../../utils/profile-utils';
 import { HindexGraph } from '../../components/widgets';
 
 class RightInfoZoneCluster extends React.PureComponent {

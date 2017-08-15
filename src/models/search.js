@@ -13,7 +13,7 @@ export default {
 
     query: null,
     offset: 0,
-    sortKey: 'contrib',
+    sortKey: '',
     pagination: {
       showSizeChanger: true,
       showQuickJumper: true,
@@ -41,8 +41,9 @@ export default {
           const offset = parseInt(match[3], 10);
           const size = parseInt(match[4], 10);
           // update fillings.
-          dispatch({ type: 'setParams', payload: { query: keyword, offset, size } });
-          console.log('Success::::sdfsdf ', keyword);
+          dispatch({ type: 'emptyResults' });
+          dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
+          // console.log('Success::::sdfsdf ', keyword);
           dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: keyword } });
 
           // Accept query: eb = expertBaseID.
@@ -74,15 +75,31 @@ export default {
   effects: {
     * searchPerson({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
-      const { query, offset, size, filters, sort } = payload;
-      const { data } = yield call(searchService.searchPerson, query, offset, size, filters, sort);
+      const { query, offset, size, filters, sort, total } = payload;
+      const noTotalFilters = {};
+      for (const [key, item] of Object.entries(filters)) {
+        if (typeof item === 'string') {
+          noTotalFilters[key] = item.split('#')[0];
+        } else {
+          noTotalFilters[key] = item;
+        }
+      }
+      const { data } = yield call(searchService.searchPerson, query, offset, size, noTotalFilters, sort);
       yield put({ type: 'updateFilters', payload: { filters } });
       yield put({ type: 'updateSortKey', payload: { sort } });
-      yield put({ type: 'searchPersonSuccess', payload: { data, query } });
+      yield put({ type: 'searchPersonSuccess', payload: { data, query, total } });
     },
     * searchPersonAgg({ payload }, { call, put }) {
       const { query, offset, size, filters } = payload;
-      const { data } = yield call(searchService.searchPersonAgg, query, offset, size, filters);
+      const noTotalFilters = {};
+      for (const [key, item] of Object.entries(filters)) {
+        if (typeof item === 'string') {
+          noTotalFilters[key] = item.split('#')[0];
+        } else {
+          noTotalFilters[key] = item;
+        }
+      }
+      const { data } = yield call(searchService.searchPersonAgg, query, offset, size, noTotalFilters);
       yield put({ type: 'searchPersonAggSuccess', payload: { data } });
     },
     * getSeminars({ payload }, { call, put }) {
@@ -94,7 +111,18 @@ export default {
   },
 
   reducers: {
-    setParams(state, { payload: { query, offset, size } }) {
+    updateUrlParams(state, { payload: { query, offset, size } }) {
+      if (state.query !== query) {
+        const filters = state.filters.eb
+          ? { eb: state.filters.eb }
+          : {
+            eb: {
+              id: sysconfig.DEFAULT_EXPERT_BASE,
+              name: sysconfig.DEFAULT_EXPERT_BASE_NAME,
+            },
+          };
+        return { ...state, query, offset, filters, pagination: { pageSize: size } };
+      }
       return { ...state, query, offset, pagination: { pageSize: size } };
     },
 
@@ -107,15 +135,20 @@ export default {
       return { ...state, sortKey: key || '' };
     },
 
-    searchPersonSuccess(state, { payload: { data, query } }) {
-      const { result, total } = data;
+    searchPersonSuccess(state, { payload: { data, query, total } }) {
+      const { result } = data;
+      const currentTotal = total || data.total;
       const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
       return {
         ...state,
         results: result,
-        pagination: { pageSize: state.pagination.pageSize, total, current },
+        pagination: { pageSize: state.pagination.pageSize, total: currentTotal, current },
         loading: false,
       };
+    },
+
+    emptyResults(state) {
+      return { ...state, results: [] };
     },
 
     searchPersonAggSuccess(state, { payload: { data } }) {

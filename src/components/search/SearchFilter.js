@@ -86,14 +86,15 @@ class SearchFilter extends React.PureComponent {
             <ul className={styles.filterItems}>
               {
                 Object.keys(filters).map((key) => {
-                  const label = key === 'eb' ? filters[key].name : `${showChineseLabel2(key)}: ${filters[key]}`;// special
+                  const label = key === 'eb' ? filters[key].name : `${showChineseLabel2(key)}: ${filters[key].split('#')[0]}`;// special
                   // console.log('- - ', label);
+                  const newFilters = key === 'eb' ? filters[key] : filters[key].split('#')[1];
                   return (
                     <Tag
                       className={styles.filterItem}
                       key={key}
-                      closable
-                      afterClose={() => this.onFilterChange(key, filters[key], false)}
+                      closable={key !== 'eb'}
+                      afterClose={() => this.onFilterChange(key, newFilters, false)}
                       color="blue"
                     >{label}</Tag>
                   );
@@ -121,14 +122,14 @@ class SearchFilter extends React.PureComponent {
                     key={agg.type}
                   >
                     <span className={styles.filterTitle}>{cnLabel}:</span>
-                    <ul className={styles.filterItems}>
+                    <ul>
                       {agg.item.slice(0, 12).map((item) => {
                         return (
                           <CheckableTag
                             key={`${item.label}_${agg.label}`}
                             className={styles.filterItem}
                             checked={filters[agg.label] === item.label}
-                            onChange={checked => this.onFilterChange(agg.type, item.label, checked)}
+                            onChange={checked => this.onFilterChange(agg.type, item.label, checked, item.count)}
                           >
                             {item.label} (<span
                             className={styles.filterCount}>{item.count}</span>)

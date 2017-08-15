@@ -27,7 +27,7 @@ const allMenus = [{ id: 1, icon: 'laptop', name: '首页', router: '/' },
   // },
   {
     id: 46, bpid: 4, mpid: 4, name: '活动类型', icon: 'tool',
-    router: '/admin/system-config/orgcategory',
+    router: '/admin/system-config/activity_type',
   },
   {
     id: 49, bpid: 4, mpid: 4, name: '机构列表', icon: 'compass',
@@ -36,9 +36,9 @@ const allMenus = [{ id: 1, icon: 'laptop', name: '首页', router: '/' },
 
 const getMenusByUser = (user, role) => {
   const menus = [];
-  if (role.admin) {
-    menus.push(allMenus)
-  } else if (role.admin === false && user.hasOwnProperty('first_name')) {
+  if (role && role.admin) {
+    menus.push(allMenus);
+  } else if (role && role.admin === false && user.hasOwnProperty('first_name')) {
     menus.push(allMenus.slice(0, 3));
   } else {
     menus.push(allMenus.slice(0, 1));

@@ -5,13 +5,15 @@
 const SYS = 'huawei';
 // const SYS = 'alibaba';
 // const SYS = 'tencent';
+// const SYS = '2017-8';
+// const SYS = 'cie';
+// const SYS = 'demo';
 
 const param = (key, type, description) => {
   return { key, type, description };
 };
 
 module.exports = {
-
   // To change SYSTEM settings. Please change /define.js.
   // TODO remove all use of this config [system,source].
   system: SYS, // 默认启动这是哪套系统，启动的时候传入app，之后会在APP里面重新设置。
@@ -45,6 +47,8 @@ module.exports = {
     // 删除user的label
     revoke: '/user/role/revoke',
     listUsersByRole: '/user/role/list/:role/offset/:offset/size/:size',
+    // 创建邮件模板
+    emailTemplate: '/user/mail/template/:src/:type',
 
     // search
     searchPerson: '/search/person', // pin=1 huawei mode.
@@ -95,7 +99,7 @@ module.exports = {
     getActivityAvgScoresByPersonId: '/person/activity/:id/indices',
 
     // interests vis data
-    interests: '/person/interests/:id',
+    interests: '/person/interests/:id', // 这个是vis图中单独调用的。和人下面的可能不一样.
 
     /* publications */
     pubList: '/person/pubs/:id/all/year/:offset/:size',

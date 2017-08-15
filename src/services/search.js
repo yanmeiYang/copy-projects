@@ -67,6 +67,7 @@ function prepareParameters(query, offset, size, filters, sort) {
 }
 
 function addAdditionParameterToData(data, sort) {
+  // console.log('>>>>>>>>>>>>>>>>> ', data, sort);
   const newData = data;
   // 置顶acm fellow和高校top100
   if (sysconfig.Search_EnablePin) {

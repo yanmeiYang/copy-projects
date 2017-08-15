@@ -8,6 +8,7 @@ import ExpertsList from './experts-list';
 import CommitteeList from './committee-list';
 import styles from './index.less';
 import { getTwoDecimal } from '../../utils';
+import { displayNameCNFirst } from '../../utils/profile-utils';
 
 const TabPane = Tabs.TabPane;
 const tabData = [
@@ -64,7 +65,7 @@ class Statistics extends React.Component {
       title = '承办单位	,活动总数,分部,NOI,ADL,CCCF,年度报告,CSP,走进高校,TF,	CCD,女工作者会议,精英大会,未来教育峰会,专委,YOCSEF,';
       title += '\n';
       this.props.statistics.activity.map((item) => {
-        info += item.organizer ? (`${item.organizer},`) : ',';
+        info += item.organizer ? (`${item.organizer.replace(/,/g, ';')},`) : ',';
         info += item.total ? (`${item.total},`) : ',';
         info += item.category['分部'] ? (`${item.category['分部']},`) : ',';
         info += item.category.NOI ? (`${item.category.NOI},`) : ',';
@@ -89,15 +90,7 @@ class Statistics extends React.Component {
       title = '专家,总功效度,审稿次数,撰稿次数,总贡献度,演讲内容,演讲水平,综合评价,';
       title += '\n';
       this.props.statistics.author.map((item) => {
-        if (item.n_zh) {
-          info += item.n_zh;
-        }
-        if (item.n) {
-          info += `(${item.n}),`;
-        } else {
-          info += ',';
-        }
-
+        info += `${displayNameCNFirst(item.n, item.n_zh).replace(/,/g, ';')},`;
         info += item.contrib ? `${getTwoDecimal(parseFloat(item.contrib), 2)},` : ',';
         info += item['审稿活动'] ? (`${item['审稿活动']},`) : ',';
         info += item['撰稿活动'] ? (`${item['撰稿活动']},`) : ',';
@@ -132,7 +125,7 @@ class Statistics extends React.Component {
     //   division = this.props.statistics.activity;
     // }
     return (
-      <div style={{ marginTop: 10 }}>
+      <div style={{ marginTop: 10, minWidth: '1120px', overflow: 'scroll' }}>
         <div className="content-inner">
           {tabData &&
           <div>

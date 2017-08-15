@@ -11,7 +11,7 @@ export default {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/common/universal-config'));
         registerModel(app, require('../../models/auth/auth'));
-        cb(null, require('./user-list'));
+        cb(null, require('./user/Users'));
       }, 'admin');
     },
   }),
@@ -37,6 +37,7 @@ export default {
       }, 'admin');
     },
   }),
+
   AdminContributionType: app => ({
     path: '/admin/system-config/contribution_type',
     getComponent(nextState, cb) {
@@ -47,6 +48,7 @@ export default {
       }, 'admin');
     },
   }),
+
   AdminActivityType: app => ({
     path: '/admin/system-config/orgcategory',
     getComponent(nextState, cb) {
@@ -69,6 +71,7 @@ export default {
     },
   }),
 
+  // TODO yanmei:
   AdminSystemOrgCategory: app => ({
     path: '/admin/category-list',
     getComponent(nextState, cb) {
@@ -79,8 +82,6 @@ export default {
       }, 'admin');
     },
   }),
-
-
 
 
 };

@@ -12,7 +12,6 @@ class ExpertMapPage extends React.Component {
   constructor(props) {
     super(props);
     this.dispatch = this.props.dispatch;
-    // this.query = this.props.location.query;
   }
 
   state = {
@@ -51,6 +50,10 @@ class ExpertMapPage extends React.Component {
         pathname: '/expert-map',
         query: { query: data.query },
       }));
+      this.props.dispatch({
+        type: 'app/setQueryInHeaderIfExist',
+        payload: { query: data.query },
+      });
     }
   };
 

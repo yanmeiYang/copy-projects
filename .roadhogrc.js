@@ -6,9 +6,6 @@ const svgSpriteDirs = [
   require.resolve('antd').replace(/index\.js$/, ''),
 ];
 
-// console.log('>>> ', defines);
-// console.log('-----------------');
-
 export default {
   "define": defines,
 
@@ -18,9 +15,12 @@ export default {
   "theme": "./theme.config.js",
 
   // disableCSSModules: false,
+  // "cssModulesExclude": [],
   // "publicPath": "/",
   // "outputPath": "./dist",
   // "extraPostCSSPlugins": [],
+  // "sass": false,
+  "hash": true,
   // "autoprefixer": null,
   // "library": null,
   // "libraryTarget": "var",
@@ -35,12 +35,14 @@ export default {
       "extraBabelPlugins": [
         "dva-hmr",
         "transform-runtime",
+        "transform-decorators-legacy",
         ["import", { "libraryName": "antd", "style": true }]
       ]
     },
     "production": {
       "extraBabelPlugins": [
         "transform-runtime",
+        "transform-decorators-legacy",
         ["import", { "libraryName": "antd", "style": true }]
       ]
     }
@@ -62,17 +64,17 @@ export default {
     ]
   },
 
-  externals: {
-    //   react: 'react',
-    //   // lodash: {
-    //   //   commonjs: "lodash",
-    //   //   amd: "lodash",
-    //   //   root: "_" // indicates global variable
-    //   // },
-    //   // 'react-dom': 'react-dom',
-    //   // 'react-helmet': 'react-helmet',
-    //   // 'react-router': 'react-router',
-  },
+  // externals: {
+  //   react: 'react',
+  //   // lodash: {
+  //   //   commonjs: "lodash",
+  //   //   amd: "lodash",
+  //   //   root: "_" // indicates global variable
+  //   // },
+  //   // 'react-dom': 'react-dom',
+  //   // 'react-helmet': 'react-helmet',
+  //   // 'react-router': 'react-router',
+  // },
 
   // "proxy": {
   //   "/api": {

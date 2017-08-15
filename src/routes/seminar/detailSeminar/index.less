@@ -1,3 +1,4 @@
+@import "../../../themes/vars.less";
 
 .marginTop {
   margin-top: 20px;
@@ -7,27 +8,25 @@
   margin-left: 10px;
 }
 
+.setMaxWidth {
+  max-width: @max-width-page;
+  width: 100%;
+  padding: 0 20px;
+}
+
 .detailSeminar {
+  width: 100%;
   font-size: 13px;
   margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  flex-shrink: 1;
+  //display: flex;
+  //justify-content: flex-start;
+  //flex-shrink: 1;
   h4 {
     text-align: center;
     font-size: 18px;
     //font-weight: 300;
   }
   .messages {
-    .marginTop;
-    .speakerAvatar {
-      text-align: center;
-      img {
-        width: 160px;
-        height: 160px;
-        border-radius: 10px 10px;
-      }
-    }
     i {
       width: 20px;
     }
@@ -54,10 +53,14 @@
   .rate {
     .marginTop;
   }
-}
-.detailSeminar > div:nth-child(1) {
-  max-width: 1000px;
-  width: 100%;
+  .speakerMessage {
+    hr {
+      padding-top: 0;
+      margin: 10px 0 30px 0;
+      border: 0;
+      border-top: 1px solid #eee;
+    }
+  }
 }
 
 .thumbnail {
@@ -106,23 +109,28 @@
 }
 
 .workshop {
+  margin-bottom: 20px;
   .speakerAvatar {
     text-align: center;
+    margin-right: 5px;
     img {
-      width: 160px;
-      height: 160px;
-      border-radius: 10px 10px;
+      width: 90px;
+      border-radius: 5px 5px;
     }
   }
   hr {
     .hr;
   }
 }
-.qrCode{
+
+.qrCode {
   display: none;
   z-index: 1;
   position: absolute;
 }
-.show_QRCode:hover+.qrCode{
+.show_QRCode{
+  cursor: pointer;
+}
+.show_QRCode:hover + .qrCode {
   display: block !important;
 }

@@ -3,12 +3,13 @@
  */
 import React from 'react';
 import { Link } from 'dva/router';
-import { Tag } from 'antd';
+import { Tag, Tooltip } from 'antd';
 import { Indices } from '../../components/widgets';
 import { sysconfig } from '../../systems';
+import * as personService from '../../services/person';
 import { config } from '../../utils';
 import styles from './person-list.less';
-import * as profileUtils from '../../utils/profile_utils';
+import * as profileUtils from '../../utils/profile-utils';
 
 /**
  * @param param
@@ -18,6 +19,14 @@ class PersonList extends React.PureComponent {
   constructor(props) {
     super(props);
     this.personLabel = props.personLabel;
+  }
+
+  state = { interestsI18n: {} };
+
+  componentWillMount() {
+    personService.getInterestsI18N((result) => {
+      this.setState({ interestsI18n: result });
+    });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -41,7 +50,7 @@ class PersonList extends React.PureComponent {
             const homepage = person.contact && person.contact.homepage;
             const indices = person.indices;
             const activity_indices = person.activity_indices;
-            const tags = profileUtils.findTopNTags(person, 8);
+            // const tags = profileUtils.findTopNTags(person, 8);
 
             const personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
             if (sysconfig.PersonList_PersonLink_NewTab) {
@@ -91,19 +100,34 @@ class PersonList extends React.PureComponent {
                       }
                     </div>
 
-                    {tags &&
+                    {person.tags &&
                     <div className="tag_zone">
                       <div>
                         <h4><i className="fa fa-area-chart fa-fw" /> 研究兴趣:</h4>
                         <div className={styles.tagWrap}>
                           {
-                            tags.map((tag) => {
-                              return (
-                                <Link
-                                  to={`/${sysconfig.SearchPagePrefix}/${tag.t}/0/${sysconfig.MainListSize}`}
-                                  key={Math.random()}>
-                                  <Tag className={styles.tag}>{tag.t}</Tag>
-                                </Link>);
+                            person.tags.slice(0, 8).map((item) => {
+                              if (item.t === null || item.t === 'Null') {
+                                return;
+                              } else {
+                                const tag = personService.returnKeyByLanguage(this.state.interestsI18n, item.t);
+                                const showTag = tag.zh !== '' ? tag.zh : tag.en;
+                                return (
+                                  <span key={Math.random()}>
+                                    {tag.zh ? <Tooltip placement="top" title={tag.en}>
+                                      <Link
+                                        to={`/${sysconfig.SearchPagePrefix}/${showTag}/0/${sysconfig.MainListSize}`}
+                                        key={Math.random()}>
+                                        <Tag className={styles.tag}>{showTag}</Tag>
+                                      </Link>
+                                    </Tooltip> : <Link
+                                      to={`/${sysconfig.SearchPagePrefix}/${showTag}/0/${sysconfig.MainListSize}`}
+                                      key={Math.random()}>
+                                      <Tag className={styles.tag}>{showTag}</Tag>
+                                    </Link>}
+                                  </span>
+                                );
+                              }
                             })
                           }
                         </div>

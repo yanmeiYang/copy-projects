@@ -8,11 +8,18 @@ import { Tabs } from 'antd';
 import styles from './index.less';
 import UniversalConfig from '../../common/universal-config';
 import { sysconfig } from '../../../systems';
+import { RequireAdmin } from '../../../hoc';
 
 const TabPane = Tabs.TabPane;
 const { SysconfigDefaultCategory, SysConfigTabs, ShowConfigTab } = sysconfig;
 
-class SystemConfig extends React.Component {
+@connect(({ app, adminSystemConfig, loading }) => ({ app, adminSystemConfig, loading }))
+@RequireAdmin
+export default class SystemConfig extends React.Component {
+  // constructor(props) {
+  //   super(props);
+  // }
+
   /** 在Component被加载的时候调用的。 */
   componentDidMount() {
     this.updateCategory(this.props.adminSystemConfig.category);
@@ -85,8 +92,7 @@ class SystemConfig extends React.Component {
     );
   }
 }
-;
 
-export default connect(
-  ({ adminSystemConfig, loading }) => ({ adminSystemConfig, loading }),
-)(SystemConfig);
+// export default hoc(connect(
+//   ({ adminSystemConfig, loading }) => ({ adminSystemConfig, loading }),
+// )(SystemConfig));

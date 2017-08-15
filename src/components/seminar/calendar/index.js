@@ -1,96 +1,62 @@
 /**
- * Created by yangyanmei on 17/6/1.
+ * Created by ranyanchuan on 17/8/5.
  */
 import React from 'react';
 import moment from 'moment';
-import {
-  Row,
-  Col,
-  DatePicker,
-} from 'antd';
+import { DatePicker } from 'antd';
+import styles from './index.less';
 
+const { RangePicker } = DatePicker;
+const dFormat = 'yyyy-MM-dd HH:mm';
 class CanlendarInForm extends React.Component {
   state = {
-    confirmDirty: false,
-    startValue: null,
-    endValue: null,
-    endOpen: false,
+    startValue: `${(new Date()).format('yyyy-MM-dd')} 09:00`,
+    endValue: `${(new Date()).format('yyyy-MM-dd')} 18:00`,
   };
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.startValue) {
-      this.setState({ startValue: moment(nextProps.startValue) });
-    }
-    if (nextProps.endValue) {
-      this.setState({ endValue: moment(nextProps.endValue) });
-    }
-  }
 
-  //活动时间开始
-  disabledStartDate = (startValue) => {
-    const endValue = this.state.endValue;
-    if (!startValue || !endValue) {
-      return false;
+  componentWillMount = () => {
+    this.props.callbackParent('startValue', moment(this.state.startValue));
+    this.props.callbackParent('endValue', moment(this.state.endValue));
+  };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.startValue !== this.props.startValue && nextProps.startValue) {
+      this.setState({ startValue: new Date(nextProps.startValue).format(dFormat) });
     }
-    return startValue.valueOf > endValue.valueOf();
-  };
-  disabledEndDate = (endValue) => {
-    const startValue = this.state.startValue;
-    if (!endValue || !startValue) {
-      return false;
-    }
-    return startValue.valueOf() > endValue.valueOf();
-  };
-  onChange = (field, value) => {
-    this.setState({ [field]: value });
-    this.props.callbackParent(field, value);
-  };
-  onStartChange = (value) => {
-    this.onChange('startValue', value);
-  };
-  onEndChange = (value) => {
-    this.onChange('endValue', value);
-  };
-  handleStartOpenChange = (open) => {
-    if (!open) {
-      this.setState({ endOpen: true });
+    if (nextProps.endValue !== this.props.endValue && nextProps.endValue ) {
+      this.setState({ endValue: new Date(nextProps.endValue).format(dFormat) });
     }
   };
-  handleEndOpenChange = (open) => {
-    this.setState({ endOpen: open });
+
+  onChange = (value, dataString) => {
+    this.setState({ startValue: dataString[0] });
+    this.setState({ endValue: dataString[1] });
   };
-  //活动时间结束
+
+  onOk = (value) => {
+    this.props.callbackParent('startValue', value[0]);
+    this.props.callbackParent('endValue', value[1]);
+  };
 
   render() {
-    const { startValue, endValue, endOpen } = this.state;
+    const { startValue, endValue } = this.state;
+    const dateFormat = 'YYYY-MM-DD HH:mm';
     return (
-      <Row gutter={8}>
-        <Col span={12}>
-          <DatePicker
-            disableDate={this.disabledStartDate}
-            showTime={{ defaultValue: moment('09:00', 'HH:mm') }}
-            format="YYYY-MM-DD HH:mm"
-            ref="startValue"
-            value={startValue}
-            placeholder="开始"
-            onChange={this.onStartChange}
-            onOpenChange={this.handleStartOpenChange}
-          />
-        </Col>
-        <Col span={12}>
-          <DatePicker
-            disableDate={this.disabledEndDate}
-            showTime={{ defaultValue: moment('09:00', 'HH:mm') }}
-            format="YYYY-MM-DD HH:mm"
-            ref="endValue"
-            value={endValue}
-            placeholder="结束"
-            onChange={this.onEndChange}
-            open={endOpen}
-            onOpenChange={this.handleEndOpenChange}
-          />
-        </Col>
-      </Row>
-    )
+      <div>
+        {startValue && endValue &&
+        <RangePicker
+          className={styles.calendar}
+          showTime={{ format: 'HH:mm' }}
+          format={dateFormat}
+          placeholder={['开始时间', '结束时间']}
+          value={[moment(startValue, dateFormat), moment(endValue, dateFormat)]}
+          // defaultValue={[moment(startValue, dateFormat), moment(endValue, dateFormat)]}
+          onChange={this.onChange}
+          onOk={this.onOk}
+        />
+        }
+      </div>
+    );
   }
 }
 export default CanlendarInForm;

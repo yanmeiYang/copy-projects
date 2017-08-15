@@ -4,7 +4,6 @@
 import React from 'react';
 import { connect } from 'dva';
 import styles from './RightInfoZoneAll.less';
-import * as profileUtils from '../../utils/profile_utils';
 import { HindexGraph } from '../../components/widgets';
 
 class RightInfoZoneAll extends React.PureComponent {

@@ -7,7 +7,7 @@ import Footer from '../../components/Footers/ccf';
 module.exports = {
 
   // 通用配置。所有System的配置文件必须全部包含这部分的值
-  PageTitle: 'CCF 专家云智库',
+  PageTitle: 'CCF 专家库',
 
   Language: 'cn', // options [cn|en]
   PreferredLanguage: 'cn', // 默认语言
@@ -34,9 +34,10 @@ module.exports = {
   // Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
   Header_LogoWidth: 213,
   Header_LogoStyle: {
-    width: '86px',
+    width: '60px',
+    height: '38px',
     backgroundPosition: '8px 2px',
-    backgroundSize: ' auto 54px',
+    backgroundSize: ' auto 36px',
     backgroundRepeat: 'no-repeat',
     backgroundColor: 'white',
   },
@@ -110,7 +111,7 @@ module.exports = {
     { name: '研究生', value: '7' },
     { name: '其他', value: '8' },
   ],
-
+  ApplyUserBtn: true,
   ShowConfigTab: false,
   SysconfigDefaultCategory: 'activity_type',
   SysConfigTabs: [

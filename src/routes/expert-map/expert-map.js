@@ -47,10 +47,11 @@ const getInfoWindow = () => {
  * @param id
  */
 class ExpertMap extends React.PureComponent {
-  /** 构造函数： 这里执行初始化*/
+  /** 构造函数： 这里执行初始化 */
   constructor(props) {
     super(props);
-    this.showOverLay = GetBMapLib(this.showTop)
+
+    this.showOverLay = GetBMapLib(this.showTop);
     this.currentPersonId = 0;
   }
 
@@ -105,7 +106,7 @@ class ExpertMap extends React.PureComponent {
       imgdiv.setAttribute('style', cstyle);
       imgdiv.setAttribute('class', 'imgWrapper');
       imgdiv.innerHTML = `<img width='${imgwidth}' src='${blankAvatar}' alt='0'>`;
-      insertAfter(imgdiv,thisNode);
+      insertAfter(imgdiv, thisNode);
       thisNode.appendChild(imgdiv);
       imgdiv.addEventListener('click', () => this.toggleRightInfoBox(ids[i]), false);
     }
@@ -182,7 +183,7 @@ class ExpertMap extends React.PureComponent {
         console.log('failed');
       },
     ).catch((error) => {
-      //console.error(error);
+      console.error(error);
     });
   };
 
@@ -197,6 +198,15 @@ class ExpertMap extends React.PureComponent {
     // map.setDefaultCursor();
     // map.disableDoubleClickZoom();// 静止双击
     // map.addControl(new BMap.MapTypeControl());
+  };
+
+  onChangeGoogleMap = () => {
+    // this.props.dispatch(routerRedux.push({
+    //   pathname: '/expert-map',
+    //   data: { type: 'google' },
+    // }));
+    const href = window.location.href;
+    window.location.href = href.replace('expert-map', 'expert-googlemap');
   };
 
   showMap = (place, type) => {
@@ -295,7 +305,6 @@ class ExpertMap extends React.PureComponent {
     if (!riz) {
       riz = document.createElement('div');
       riz.setAttribute('id', 'flowInfo');
-      console.log(riz)
       riz.setAttribute('class', 'rightInfoZone');
       getById('allmap').appendChild(riz);
       riz.onmouseenter = () => this.map.disableScrollWheelZoom();
@@ -304,6 +313,16 @@ class ExpertMap extends React.PureComponent {
     return riz;
   };
 
+  // getTipInfoBox = () => {
+  //   let riz1 = getById('rank');
+  //   if (!riz1) {
+  //     riz1 = document.createElement('div');
+  //     getById('allmap').appendChild(riz1);
+  //     riz1.setAttribute('id', 'flowinfo1');
+  //     riz1.setAttribute('class', 'imgWrapper1');
+  //     return riz1;
+  //   }
+  // };
     // 将内容同步到地图中的控件上。
   syncInfoWindow = () => {
     // sync personInfo popup
@@ -329,6 +348,7 @@ class ExpertMap extends React.PureComponent {
   toggleRightInfoBox = (id) => {
     const state = getById('flowstate').value;
     const statistic = getById('statistic').value;
+    // this.getTipInfoBox();
     if (statistic !== id) { // 一般认为是第一次点击
       getById('flowstate').value = 1;
       this.getRightInfoBox();
@@ -340,7 +360,7 @@ class ExpertMap extends React.PureComponent {
             payload: { ids: clusterIdList },
           });
         }
-        this.props.dispatch({type: 'expertMap/setRightInfoZoneIds', payload: {idString: id}});
+        this.props.dispatch({ type: 'expertMap/setRightInfoZoneIds', payload: { idString: id } });
       }
       this.syncInfoWindow();
     } else if (state === 1) { // 偶数次点击同一个对象
@@ -372,14 +392,7 @@ class ExpertMap extends React.PureComponent {
       this.showMap(this.props.expertMap.geoData, typeid);
     }
   };
-  onChangeGoogleMap = () => {
-    // this.props.dispatch(routerRedux.push({
-    //   pathname: '/expert-map',
-    //   data: { type: 'google' },
-    // }));
-    const href = window.location.href;
-    window.location.href = href.replace('expert-map', 'expert-googlemap');
-  };
+
 
   onChangeBaiduMap = () => {
     const href = window.location.href;
@@ -450,42 +463,28 @@ class ExpertMap extends React.PureComponent {
       const pos = profileUtils.displayPositionFirst(person.pos);
       const aff = profileUtils.displayAff(person);
       const hindex = person && person.indices && person.indices.h_index;
-      if( url !== '//static.aminer.org/default/default.jpg') {
-        personPopupJsx = (
-          <div className="personInfo">
-            <div><img className="img" src={url} alt="IMG"/></div>
-            <div className="info">
-              <div className="nameLine">
-                <div className="right">H-index:<b> {hindex}</b>
-                </div>
-                <div className="name">{name}</div>
+
+      personPopupJsx = (
+        <div className="personInfo">
+          <div><img className="img" src={url} alt="IMG" /></div>
+          <div className="info">
+            <div className="nameLine">
+              <div className="right">H-index:<b> {hindex}</b>
               </div>
-              {pos && <span><i className="fa fa-briefcase fa-fw"/>{pos}</span>}
-              {aff && <span><i className="fa fa-institution fa-fw"/>{aff}</span>}
+              <div className="name">{name}</div>
             </div>
+            {pos && <span><i className="fa fa-briefcase fa-fw" />{pos}</span>}
+            {aff && <span><i className="fa fa-institution fa-fw" />{aff}</span>}
           </div>
-        );
-      } else{
-        personPopupJsx = (
-          <div className="personInfo">
-            <div className="info">
-              <div className="nameLine">
-                <div className="right">H-index:<b> {hindex}</b>
-                </div>
-                <div className="name">{name}</div>
-              </div>
-              {pos && <span><i className="fa fa-briefcase fa-fw"/>{pos}</span>}
-              {aff && <span><i className="fa fa-institution fa-fw"/>{aff}</span>}
-            </div>
-          </div>
-        );
-      }
+        </div>
+      );
     }
 
     // right info
     const shouldRIZUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') === -1 && model.infoZoneIds === person.id;
     const shouldRIZClusterUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') > 0;
     const clusterPersons = model.clusterPersons;
+
     return (
       <div className={styles.expertMap} id="currentMain">
 
@@ -502,7 +501,7 @@ class ExpertMap extends React.PureComponent {
               <Button onClick={this.showType} value="4">城市</Button>
               <Button onClick={this.showType} value="5">机构</Button>
             </ButtonGroup>
-            <div className={styles.switch} style={{display: 'none'}}>
+            <div className={styles.switch} style={{ display: 'none' }}>
               <ButtonGroup id="diffmaps">
                 <Button type="primary" onClick={this.onChangeBaiduMap}>Baidu Map</Button>
                 <Button onClick={this.onChangeGoogleMap}>Google Map</Button>
@@ -511,12 +510,13 @@ class ExpertMap extends React.PureComponent {
           </div>
         </div>
 
-        <div className="mapshow">
+        <div className={styles.map}>
 
           <div id="allmap" />
-          <div className="em_report" id="em_report">
-            统计/报表
-          </div>
+
+          <div className={styles.right}>right</div>
+
+          <div className="em_report" id="em_report">统计/报表</div>
           <input id="currentId" type="hidden" />
           <input id="currentIds" type="hidden" />
           <input id="statistic" type="hidden" value="0" />
@@ -539,7 +539,7 @@ class ExpertMap extends React.PureComponent {
           <div className={styles.lab2}>人数增加</div>
         </div>
 
-        <div id="flowInfoAll" >
+        <div id="flowInfoAlls" >
           <div className="rightInfoZone">
             <RightInfoZoneAll count={count} hIndexSum={hIndexSum} avg={avg} persons={persons} />
           </div>
@@ -551,13 +551,17 @@ class ExpertMap extends React.PureComponent {
         <div id="rightInfoZone" style={{ display: 'none' }}>
           <div className="rightInfoZone">
 
-            {shouldRIZUpdate && <RightInfoZonePerson person={model.personInfo} /> }
+            {shouldRIZUpdate && <RightInfoZonePerson person={model.personInfo} />}
             {shouldRIZClusterUpdate && <RightInfoZoneCluster persons={clusterPersons} />}
           </div>
         </div>
+
+        <div id="rank" style={{ display: 'none' }}></div>
+
       </div>
     );
   }
 }
+
 export default connect(({ expertMap, loading }) => ({ expertMap, loading }))(ExpertMap);
 

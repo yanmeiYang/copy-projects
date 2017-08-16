@@ -4,7 +4,7 @@
 import App from './routes/app';
 import App2b from './routes/2b/app2b';
 import { registerModel } from './utils';
-import ExpertMapRouters from './routes/expert-map/router';
+import ExpertMapRouters from './routes/expert-map/router-map';
 import SearchRouters from './routes/search/router';
 import PersonRouters from './routes/person/router';
 import UserRouters from './routes/user/router';

@@ -355,42 +355,47 @@ class RegistrationForm extends React.PureComponent {
                 <Input placeholder="请输入活动名称" />,
               )}
             </FormItem>
-            <Col xs={{ span: 24 }} sm={{ span: 12 }}>
-              <FormItem
-                label="活动时间"
-                labelCol={{ xs: { span: 24 }, sm: { span: 6 } }}
-                wrapperCol={{ xs: { span: 24 }, sm: { span: 18 } }}
-                validateStatus={(startValue !== '' || endValue !== '') ? '' : 'error'}
-                help={(startValue !== '' || endValue !== '') ? '' : '请选择时间'}
-                hasFeedback
-                required
-              >
-                {getFieldDecorator('time', {
-                  rules: [{
-                    message: '请输入活动时间',
-                  }],
-                })(
-                  <CanlendarInForm callbackParent={this.onChildChanged}
-                                   startValue={this.state.talkStartValue}
-                                   endValue={this.state.talkEndValue} />,
-                )}
-              </FormItem>
-            </Col>
-            <Col xs={{ span: 24 }} sm={{ span: 12 }}>
-              <FormItem
-                label="活动城市"
-                labelCol={{ xs: { span: 24 }, sm: { span: 6 } }}
-                wrapperCol={{ xs: { span: 24 }, sm: { span: 18 } }}
-              >
-                {getFieldDecorator('city', {
-                  rules: [{
-                    message: '请输入活动城市',
-                  }],
-                })(
-                  <Input placeholder="请输入活动地点。。。" />,
-                )}
-              </FormItem>
-            </Col>
+
+            <Row>
+              <Col xs={{ span: 24 }} sm={{ span: 12 }}>
+                <FormItem
+                  label="活动时间"
+                  labelCol={{ xs: { span: 24 }, sm: { span: 6 } }}
+                  wrapperCol={{ xs: { span: 24 }, sm: { span: 18 } }}
+                  validateStatus={(startValue !== '' || endValue !== '') ? '' : 'error'}
+                  help={(startValue !== '' || endValue !== '') ? '' : '请选择时间'}
+                  hasFeedback
+                  required
+                >
+                  {getFieldDecorator('time', {
+                    rules: [{
+                      message: '请输入活动时间',
+                    }],
+                  })(
+                    <CanlendarInForm callbackParent={this.onChildChanged}
+                                     startValue={this.state.talkStartValue}
+                                     endValue={this.state.talkEndValue} />,
+                  )}
+                </FormItem>
+              </Col>
+
+              <Col xs={{ span: 24 }} sm={{ span: 12 }}>
+                <FormItem
+                  label="活动城市"
+                  labelCol={{ xs: { span: 24 }, sm: { span: 6 } }}
+                  wrapperCol={{ xs: { span: 24 }, sm: { span: 18 } }}
+                >
+                  {getFieldDecorator('city', {
+                    rules: [{
+                      message: '请输入活动城市',
+                    }],
+                  })(
+                    <Input placeholder="请输入活动地点。。。" />,
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
+
             <FormItem
               {...formItemLayout}
               label="活动地点"
@@ -404,6 +409,7 @@ class RegistrationForm extends React.PureComponent {
                 <Input placeholder="请输入活动地点。。。" />,
               )}
             </FormItem>
+
             <FormItem
               {...formItemLayout}
               label="活动简介"

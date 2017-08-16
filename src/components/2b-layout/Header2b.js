@@ -46,7 +46,7 @@ class Header2b extends React.PureComponent {
     return (
       <div className={styles.header}>
         <div className={styles.logoLine}>
-          <Link className={styles.logo} to="/">
+          <Link className={styles.logo} to="/2b">
             <div className="logoImg" style={{
               background: 'url("/aminer_logo.png")',
               width: '80px',
@@ -112,7 +112,7 @@ class Header2b extends React.PureComponent {
             </Menu.Item>
             }
 
-            {!isLogin(user)&&
+            {!isLogin(user) &&
             <Menu.Item key="/404">
               <Link to={`/login?from=${location.pathname}`} style={{ lineHeight: '46px' }}>
                 <Icon type="user" /> 登录

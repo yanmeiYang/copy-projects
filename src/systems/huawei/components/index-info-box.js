@@ -9,21 +9,39 @@ class IndexInfoBox extends React.PureComponent {
   render() {
     return (
       <div className={styles.bigNavi}>
-        <div className="naviItem">
-          {/* <Link to="/uniSearch/Data%20Mining/0/30?view=relation-view">学者关系</Link> */}
-          {/*<img src="/sys/huawei/relation-graph-page.png" alt="学者关系" />*/}
-          <Link to="/relation-graph-page">学者关系</Link>
-        </div>
-        <div className="naviItem">
-          <Link to="/expert-map">人才地图</Link>
-        </div>
-        <div className="naviItem">
-          <Link to="/knowledge-graph">知识图谱</Link>
-        </div>
-        <div className="naviItem">
-          <Link to="/trend-prediction">技术趋势</Link>
-        </div>
-
+        <Link to="/relation-graph-page">
+          <div className={styles.blockItem}>
+            {/* <Link to="/uniSearch/Data%20Mining/0/30?view=relation-view">学者关系</Link> */}
+            <div className={styles.blockImg}>
+              <img src="/sys/huawei/relation-graph-page.png" alt="学者关系" />
+            </div>
+            <span>学者关系</span>
+          </div>
+        </Link>
+        <Link to="/expert-map">
+          <div className={styles.blockItem}>
+            <div className={styles.blockImg}>
+              <img src="/sys/huawei/expert-map.png" alt="学者关系" />
+            </div>
+            <span>人才地图</span>
+          </div>
+        </Link>
+        <Link to="/knowledge-graph">
+          <div className={styles.blockItem}>
+            <div className={styles.blockImg}>
+              <img src="/sys/huawei/knowledge-graph.png" alt="学者关系" />
+            </div>
+            <span>知识图谱</span>
+          </div>
+        </Link>
+        <Link to="/trend-prediction">
+          <div className={styles.blockItem}>
+            <div className={styles.blockImg}>
+              <img src="/sys/huawei/trend-prediction.png" alt="学者关系" />
+            </div>
+            <span>技术趋势</span>
+          </div>
+        </Link>
         <div className="naviItem" style={{ display: 'none' }}>
           2016最具影响力
           <a href="https://cn.aminer.org/mostinfluentialscholar"

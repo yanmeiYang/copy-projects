@@ -52,7 +52,7 @@
   #rank {
     z-index: 10001;
     position: absolute; overflow: hidden;
-    right: 31px; top: 120px; width: 248px; height: 175px;
+    right: 47px; top: 60px; width: 180px; height: 140px;
     word-wrap: break-word; word-break: break-all;
     border: 1px solid #eee; border-radius: 3px;
     background-color: rgba(255, 255, 255, 0.4);
@@ -142,16 +142,13 @@
 }
 
 .lab2 {
-  font-size: 12px;
   text-align: center;
+  height: 12px;
 }
 
 .lab3 {
   float: right;
-  font-size: 12px;
-  margin-right: 60px;
-  margin-top: 2px;
-  line-height: 30px;
+  margin-right: 32px;
 }
 
 .main1 {
@@ -165,8 +162,9 @@
 }
 
 .main3 {
-  width: 230px;
+  width: 180px;
 }
+
 
 .headerLine {
   display: flex; flex-direction: row; justify-content: space-between;
@@ -177,11 +175,6 @@
 
 .switch {
   float: right;
-}
-
-.custom-image img {
-  display: block;
-  //width: 60px;
 }
 
 :global {
@@ -195,3 +188,52 @@
   }
 
 }
+
+.container {
+  height: 20px;
+  width: 180px;
+  align-items: flex-end;
+  display: flex;
+  margin-left: 3px;
+  .item1 {
+    background-color: #008cff;
+    border-radius: 5px;
+    margin: 0 5px;
+    width: 20px;
+    height: 20px;
+    color:#008cff;
+  }
+  .item2 {
+    background-color: #ffbf00;
+    border-radius: 5px;
+    margin: 0 5px;
+    color: #ffbf00 ;
+    width: 20px;
+    height: 20px;
+  }
+  .item3 {
+    background-color: #ff0000;
+    border-radius: 5px;
+    margin: 0 5px;
+    color: #ff0000;
+    width: 20px;
+    height: 20px;
+  }
+  .item4 {
+    background-color: #ff00ed;
+    border-radius: 5px;
+    margin: 0 5px;
+    color: #ff00ed;
+    width: 20px;
+    height: 20px;
+  }
+  .item5 {
+    background-color: #9c00ff;
+    border-radius: 5px;
+    margin: 0 5px;
+    color: #9c00ff;
+    width: 20px;
+    height: 20px;
+  }
+}
+

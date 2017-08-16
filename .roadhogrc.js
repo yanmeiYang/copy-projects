@@ -6,9 +6,6 @@ const svgSpriteDirs = [
   require.resolve('antd').replace(/index\.js$/, ''),
 ];
 
-// console.log('>>> ', defines);
-// console.log('-----------------');
-
 export default {
   "define": defines,
 
@@ -17,14 +14,13 @@ export default {
 
   "theme": "./theme.config.js",
 
-  "hash": true,
   // disableCSSModules: false,
   // "cssModulesExclude": [],
   // "publicPath": "/",
   // "outputPath": "./dist",
   // "extraPostCSSPlugins": [],
   // "sass": false,
-  // "hash": false,
+  "hash": true,
   // "autoprefixer": null,
   // "library": null,
   // "libraryTarget": "var",
@@ -68,17 +64,17 @@ export default {
     ]
   },
 
-  externals: {
-    //   react: 'react',
-    //   // lodash: {
-    //   //   commonjs: "lodash",
-    //   //   amd: "lodash",
-    //   //   root: "_" // indicates global variable
-    //   // },
-    //   // 'react-dom': 'react-dom',
-    //   // 'react-helmet': 'react-helmet',
-    //   // 'react-router': 'react-router',
-  },
+  // externals: {
+  //   react: 'react',
+  //   // lodash: {
+  //   //   commonjs: "lodash",
+  //   //   amd: "lodash",
+  //   //   root: "_" // indicates global variable
+  //   // },
+  //   // 'react-dom': 'react-dom',
+  //   // 'react-helmet': 'react-helmet',
+  //   // 'react-router': 'react-router',
+  // },
 
   // "proxy": {
   //   "/api": {

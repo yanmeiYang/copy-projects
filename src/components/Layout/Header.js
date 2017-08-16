@@ -11,6 +11,7 @@ import * as profileUtils from '../../utils/profile-utils';
 import { sysconfig } from '../../systems';
 import { KgSearchBox, SearchTypeWidgets } from '../../components/search';
 import { isLogin, isGod } from '../../utils/auth';
+import { TobButton, DevMenu } from '../../components/2b';
 
 class Header extends React.PureComponent {
   // function Header({ app, location, dispatch, logout, onSearch }) {
@@ -32,7 +33,7 @@ class Header extends React.PureComponent {
         nextProps.app.headerSearchBox !== this.props.app.headerSearchBox
         || this.props.app.headerSearchBox.query !== this.state.query)) {
       if (nextProps.app.headerSearchBox.query) {
-        console.log('>>>>>>>>>>>>>>>>> ', nextProps.app.headerSearchBox.query);
+        // console.log('>>>>>>>>>>>>>>>>> ', nextProps.app.headerSearchBox.query);
         this.setQuery(nextProps.app.headerSearchBox.query);
       }
     }
@@ -157,8 +158,18 @@ class Header extends React.PureComponent {
             }
 
             {isGod(roles) &&
-            <Menu.Item key="/hidden">
-              <Link to="/2b"><Icon type="appstore-o" className="noTextIcon" /></Link>
+            <Menu.Item key="/devMenu">
+              <DevMenu />
+            </Menu.Item>}
+
+            {isGod(roles) &&
+            <Menu.Item key="/2bbtn">
+              <Link to="/2b"><TobButton /></Link>
+            </Menu.Item>}
+
+            {sysconfig.ShowHelpDoc &&
+            <Menu.Item key="/help">
+              <Link to="/help">帮助文档</Link>
             </Menu.Item>}
 
             {isLogin(user) &&

@@ -20,7 +20,7 @@ export default {
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/auth'));
-        cb(null, require('./login/'));
+        cb(null, require('./login'));
       }, 'tob');
     },
   }),

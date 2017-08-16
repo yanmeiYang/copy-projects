@@ -25,5 +25,14 @@ export default {
     },
   }),
 
+  RanksHelp: () => ({
+    path: '/help',
+    getComponent(nextState, cb) {
+      require.ensure([], (require) => {
+        cb(null, require('./help'));
+      }, 'NormalPages');
+    },
+  }),
+
 };
 

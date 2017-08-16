@@ -31,6 +31,7 @@ module.exports = {
   Header_LogoWidth: 214,
   Header_UserPageURL: '/user-info',
   // Footer_Content: '',
+  ShowHelpDoc: true,
 
   // Functionality
   Enable_Export: false,
@@ -64,6 +65,11 @@ module.exports = {
       id: '5912aa3a9ed5db655182ffde',
       name: '美国科学院外国专家',
       nperson: 287,
+    },
+    {
+      id: '590fcaa59ed5db67cf85a129',
+      name: '美国科学院',
+      nperson: 2206,
     },
     {
       id: '5923c0829ed5db1600b942db',

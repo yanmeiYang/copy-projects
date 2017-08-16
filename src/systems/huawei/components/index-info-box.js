@@ -11,6 +11,7 @@ class IndexInfoBox extends React.PureComponent {
       <div className={styles.bigNavi}>
         <div className="naviItem">
           {/* <Link to="/uniSearch/Data%20Mining/0/30?view=relation-view">学者关系</Link> */}
+          {/*<img src="/sys/huawei/relation-graph-page.png" alt="学者关系" />*/}
           <Link to="/relation-graph-page">学者关系</Link>
         </div>
         <div className="naviItem">

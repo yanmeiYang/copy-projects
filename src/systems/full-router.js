@@ -73,13 +73,13 @@ const fullRouter = (app, defaultChildRoutes) => {
       core.RelationGraphPage(app),
       core.KnowledgeGraph(app),
       core.TrendPredictionPage(app),
+      core.RanksHelp(app),
 
       // Your pages should be registered here.
 
       ...childRoutes,
 
       // System Default.
-      // core.RoadhogDllJsPlaceHolder,
       core.Default404(app), // must be last one.
     ]),
   ];

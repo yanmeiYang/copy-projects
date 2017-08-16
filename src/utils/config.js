@@ -1,8 +1,8 @@
 /**
  * Created by yutao on 2017/5/22.
  */
-const SYS = 'ccf';
-// const SYS = 'huawei';
+// const SYS = 'ccf';
+const SYS = 'huawei';
 // const SYS = 'alibaba';
 // const SYS = 'tencent';
 // const SYS = '2017-8';
@@ -14,8 +14,6 @@ const param = (key, type, description) => {
 };
 
 module.exports = {
-  // FIXME yanmei: 配置email template
-
   // To change SYSTEM settings. Please change /define.js.
   // TODO remove all use of this config [system,source].
   system: SYS, // 默认启动这是哪套系统，启动的时候传入app，之后会在APP里面重新设置。
@@ -101,7 +99,7 @@ module.exports = {
     getActivityAvgScoresByPersonId: '/person/activity/:id/indices',
 
     // interests vis data
-    interests: '/person/interests/:id',
+    interests: '/person/interests/:id', // 这个是vis图中单独调用的。和人下面的可能不一样.
 
     /* publications */
     pubList: '/person/pubs/:id/all/year/:offset/:size',

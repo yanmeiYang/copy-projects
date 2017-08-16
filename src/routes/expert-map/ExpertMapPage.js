@@ -6,13 +6,15 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import ExpertGoogleMap from './expert-googlemap.js';
 import ExpertMap from './expert-map.js';
-import styles from './index.less';
+import styles from './ExpertMapPage.less';
+import { Auth } from '../../hoc';
 
-class ExpertMapPage extends React.Component {
+@connect(({ app, expertMap }) => ({ app, expertMap }))
+@Auth
+export default class ExpertMapPage extends React.Component {
   constructor(props) {
     super(props);
     this.dispatch = this.props.dispatch;
-    // this.query = this.props.location.query;
   }
 
   state = {
@@ -62,22 +64,17 @@ class ExpertMapPage extends React.Component {
   titleBlock = <h1>专家地图:</h1>;
 
   render() {
+    // 这代码写的太漂亮了。 -- someone 2017-8-16
+    const { query, mapType } = this.state;
+    const options = { query, mapType, title: this.titleBlock };
+    const mainBlock = mapType === 'google'
+      ? <ExpertGoogleMap {...options} />
+      : <ExpertMap {...options} />;
+
     return (
       <div className={styles.content}>
-
-        {this.state.mapType === 'baidu' &&
-        <ExpertMap query={this.state.query} mapType={this.state.mapType}
-                   title={this.titleBlock} />
-        }
-
-        {this.state.mapType === 'google' &&
-        <ExpertGoogleMap query={this.state.query} mapType={this.state.mapType} />
-        }
-
+        {mainBlock}
       </div>
     );
   }
 }
-
-export default connect(({ app, expertMap }) => ({ app, expertMap }))(ExpertMapPage);
-

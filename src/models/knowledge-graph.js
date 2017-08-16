@@ -24,6 +24,8 @@ export default {
     experts: null,
     publications: null,
     fullNode: null, // TODO
+
+    popupErrorMessage: '',
   },
 
   subscriptions: {
@@ -43,8 +45,16 @@ export default {
     * kgFind({ payload }, { call, put }) {
       // console.log("enter kfFind, with query:", payload);
       const { query, rich, dp, dc, ns, nc } = payload;
-      const data = yield call(kgService.kgFind, query, rich, dp, dc, ns, nc);
-      yield put({ type: 'kfFindSuccess', payload: { data } });
+      try {
+        const data = yield call(kgService.kgFind, query, rich, dp, dc, ns, nc);
+        yield put({ type: 'kgFindSuccess', payload: { data } });
+      } catch (e) {
+        console.error('---- Catch Error: ---- ', e);
+        yield put({
+          type: 'kgNotFound',
+          payload: { message: `'${query}' Not Found ${e || ''}` },
+        });
+      }
     },
 
     * searchPubs({ payload }, { call, put }) {
@@ -75,7 +85,7 @@ export default {
       return { ...state, experts: null, publications: null };
     },
 
-    kfFindSuccess(state, { payload }) {
+    kgFindSuccess(state, { payload }) {
       const data = payload.data && payload.data.data;
       const kgindex = kgService.indexingKGData(data);
       const kgFetcher = kgService.kgFetcher(data, kgindex);
@@ -83,11 +93,18 @@ export default {
       // console.log('indexing it: ', kgindex);
       return { ...state, kgdata: data, kgindex, kgFetcher };
     },
+
+    kgNotFound(state, { payload }) {
+      console.log('message:', payload.message);
+      return { ...state, popupErrorMessage: payload.message };
+    },
+
     searchPubsSuccess(state, { payload }) {
       const { data } = payload;
       // console.log('search publications: ', data);
       return { ...state, publications: data.result };
     },
+
     searchExpertsSuccess(state, { payload }) {
       const { data } = payload;
       // console.log('search experts: ', data);

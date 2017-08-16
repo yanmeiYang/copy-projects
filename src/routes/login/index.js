@@ -8,7 +8,7 @@ import styles from './index.less';
 import { Layout } from '../../components';
 import { sysconfig } from '../../systems';
 import { classnames, config } from '../../utils';
-import leftLogo from '../../assets/login/left-logo.png';
+import PageBg from './pageBackground';
 
 const { Header, Footer } = Layout;
 const FormItem = Form.Item;
@@ -55,49 +55,52 @@ class Login extends React.Component {
     const { errorMessage, loading } = auth;
     const { getFieldDecorator, validateFieldsAndScroll } = form;
     const children = (
-      <div className={styles.form}>
-        <form>
-          <FormItem hasFeedback>
-            {getFieldDecorator('email',
-              { rules: [{ required: true, message: '邮箱不能为空' }] },
-            )(
-              <Input onPressEnter={this.handleOk}
-                     placeholder="用户名" size="large"
-                     onChange={() => this.setErrorMessage('')}
-              />)}
-          </FormItem>
-          <FormItem hasFeedback>
-            {getFieldDecorator('password',
-              { rules: [{ required: true, message: '密码不能为空' }] },
-            )(
-              <Input type="password" placeholder="密码不能为空"
-                     size="large" onPressEnter={this.handleOk}
-                     onChange={() => this.setErrorMessage('')}
-              />)}
-          </FormItem>
-          <Row>
-            <Button type="primary" size="large" onClick={this.handleOk}
-                    loading={loading} className={styles.loginBtn}> 登录
-            </Button>
+      <div className={styles.loginPage}>
+        <div className={styles.form}>
+          <Form layout={'vertical'}>
+            <Row className={styles.formHeader}>
+              <div>
+                <h1>登录</h1>
+                <p>使用您的 {sysconfig.PageTitle} 账号</p>
+              </div>
+            </Row>
+            <FormItem label="电子邮件地址" hasFeedback>
+              {getFieldDecorator('email',
+                { rules: [{ required: true, message: '邮箱不能为空' }] },
+              )(
+                <Input onPressEnter={this.handleOk}
+                       placeholder="用户名" size="large"
+                       onChange={() => this.setErrorMessage('')}
+                />)}
+            </FormItem>
+            <FormItem label="密码" hasFeedback>
+              {getFieldDecorator('password',
+                { rules: [{ required: true, message: '密码不能为空' }] },
+              )(
+                <Input type="password" placeholder="密码不能为空"
+                       size="large" onPressEnter={this.handleOk}
+                       onChange={() => this.setErrorMessage('')}
+                />)}
+            </FormItem>
+            <Row>
+              {errorMessage && errorMessage.status === false &&
+              <div className={styles.errors}>
+                {errorMessage.status}用户名或密码错误({errorMessage.message})
+              </div>}
 
-            {errorMessage && errorMessage.status === false &&
-            <div style={{ marginBottom: '20px', color: 'red' }}>
-              {errorMessage.status}用户名或密码错误({errorMessage.message})
-            </div>}
-
-            <div>
-              <Link to="/forgot-password" className={styles.forgotpwbtn}>忘记密码</Link>
-              {sysconfig.ApplyUserBtn &&
-              <span className={styles.applyUserbtn} onClick={this.applyUser}>新用户申请</span>
-              }
-            </div>
-            <p>
-              {/* <span>Username：guest</span>*/}
-              {/* <span>Password：guest</span>*/}
-            </p>
-          </Row>
-
-        </form>
+              <div>
+                <Link to="/forgot-password" className={styles.forgotpwbtn}>忘记密码?</Link>
+                {sysconfig.ApplyUserBtn &&
+                <span className={styles.applyUserbtn} onClick={this.applyUser}>新用户申请</span>
+                }
+              </div>
+              <Button type="primary" size="large" onClick={this.handleOk}
+                      loading={loading} className={styles.loginBtn}> 登录
+              </Button>
+            </Row>
+          </Form>
+        </div>
+        <PageBg />
       </div>
     );
 
@@ -109,7 +112,7 @@ class Login extends React.Component {
     };
 
     return (
-      <div>
+      <div style={{ height: '100vh' }}>
         <Helmet>
           <title>{sysconfig.PageTitle}</title>
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -122,15 +125,11 @@ class Login extends React.Component {
           <div className={styles.main}>
             <div className={styles.container}>
               <div className={styles.content}>
-                <img src={leftLogo} />
-                <div className="space">{/* {} */}</div>
-                {/* <Bread {...breadProps} location={location} /> */}
                 {children}
               </div>
             </div>
-            <div style={{ border: 'solid 0px red', height: 280 }} />
-            <Footer />
           </div>
+          {/*<Footer />*/}
         </div>
       </div>
     );

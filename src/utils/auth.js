@@ -109,6 +109,11 @@ const parseRoles = (user) => {
         roles.admin = true;
       }
 
+      // is authed
+      if (r === config.source) {
+        roles.authed = true;
+      }
+
       // ccf -- TODO 改成有没有这个系统的权限.
       if (r === 'ccf') {
         roles.ccf_user = true;

@@ -185,11 +185,12 @@ export default class Seminar extends React.Component {
       };
     };
     results.sort(compare(sortType));
+
     return (
       <div className="content-inner">
         <div className={styles.top}>
           <SearchSeminar onSearch={this.onSearch.bind()} />
-          {auth.isAuthed(app.user) &&
+          {auth.isAuthed(app.roles) &&
           <Button type="primary" onClick={this.addBao.bind()}>
             <Icon type="plus" />&nbsp;发布新活动
           </Button>}

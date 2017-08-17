@@ -132,10 +132,13 @@ const parseRoles = (user) => {
     });
   }
 
-  // 不可以这样，不然同一个账号可以登录搜索的系统
-  // if (user.src === config.source) {
-  //   roles.authed = true;
-  // }
+  // 不可以这样，不然同一个账号可以登录搜索的系统 ???
+  if (user.src === config.source) {
+    roles.authed = true;
+  }
+  if (sysconfig.UserAuthSystem === 'aminer' && user.src === 'aminer') {
+    roles.authed = true;
+  }
   // special
   if (user.email === 'elivoa@gmail.com') {
     roles.god = true;

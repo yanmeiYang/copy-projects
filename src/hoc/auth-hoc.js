@@ -17,7 +17,7 @@ function Auth(ComponentClass) {
 
       if (process.env.NODE_ENV !== 'production') {
         if (debug.LogHOC) {
-          console.warn('%c@@Hoc: Auth: Component is ', 'color:orange',
+          console.log('%c@@HOC: Auth: Component is ', 'color:orange',
             reflect.GetComponentName(ComponentClass));
         }
       }

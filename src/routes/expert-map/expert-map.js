@@ -166,7 +166,7 @@ class ExpertMap extends React.PureComponent {
             const personInfo = data.data.persons[i];
             let url = blankAvatar;
             if (personInfo.avatar != null && personInfo.avatar !== '') {
-              url = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 41);
+              url = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 50);
             }
             cimg.innerHTML = `<img style='background: white;'  data='@@@@@@@${i}@@@@@@@' height='${imgwidth}' width='${imgwidth}' src='${url}' alt='${i}'>`;
           }

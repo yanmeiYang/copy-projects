@@ -63,21 +63,21 @@ class RightInfoZoneCluster extends React.PureComponent {
     // TODO 人头按Hindex排序。
     // TODO 显示Hindex分段.
     return (
-      <div className="rizPersonInfo">
+      <div className="rizCluster">
         <div className="name bg">
           <h2 className="section_header">Cluster of {persons.length} experts.</h2>
         </div>
 
         <div className="info bg">
-          <span>Sum of H-index: {hindexSum}</span>
-          <span>Avg of H-index: {(hindexSum / persons.length).toFixed(0)}</span>
+          <div>Sum of H-index: {hindexSum}</div>
+          <div>Avg of H-index: {(hindexSum / persons.length).toFixed(0)}</div>
         </div>
 
-        <div>
+        <div className="info">
           <HindexGraph persons={persons} />
         </div>
 
-        <div className="images bg">
+        <div className="info images">
           {persons && persons.slice(0, 20).map((person) => {
             const avatarUrl = profileUtils.getAvatar(person.avatar, person.id, 50);
 
@@ -89,7 +89,7 @@ class RightInfoZoneCluster extends React.PureComponent {
                 </div>
                 <div className="tooltip">
                   {person.name}<br />
-                  Hindex:{person.indices && person.indices.hindex }
+                  Hindex:{person.indices && person.indices.hindex}
                 </div>
               </div>
             );
@@ -97,7 +97,7 @@ class RightInfoZoneCluster extends React.PureComponent {
         </div>
 
         <div className="info bg">
-          Research Interests:
+          <h4 className="section_header"> Research Interests: </h4>
           {sortedInterest && sortedInterest.slice(0, 20).map((interest) => {
             return (
               <span key={interest.key}>{interest.key} ({interest.count})</span>

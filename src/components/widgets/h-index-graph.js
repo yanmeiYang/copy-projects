@@ -4,48 +4,42 @@
 
 import React from 'react';
 import styles from './h-index-graph.less';
-/**
- * @param param
- *
- */
+
+function group(hindex) {
+  let g = 0;
+  switch (true) {
+    case hindex >= 0 && hindex < 10:
+      g = 0;
+      break;
+    case hindex >= 10 && hindex < 20:
+      g = 1;
+      break;
+    case hindex >= 20 && hindex < 40:
+      g = 2;
+      break;
+    case hindex >= 40 && hindex < 60:
+      g = 3;
+      break;
+    case hindex >= 60 :
+      g = 4;
+      break;
+    default:
+      g = 0;
+  }
+  return g;
+}
+
 class HindexGraph extends React.PureComponent {
   render() {
     const persons = this.props.persons;
     const groupNumTemp = [0, 0, 0, 0, 0];
     persons.map((person) => {
       if (person.indices) {
-        const indices = person.indices;
-        if (indices.h_index >= 0 && indices.h_index <= 10) {
-          groupNumTemp[0] += 1;
-        }
-        if (indices.h_index > 10 && indices.h_index <= 20) {
-          groupNumTemp[1] += 1;
-        }
-        if (indices.h_index > 20 && indices.h_index <= 30) {
-          groupNumTemp[2] += 1;
-        }
-        if (indices.h_index > 30 && indices.h_index <= 40) {
-          groupNumTemp[3] += 1;
-        }
-        if (indices.h_index > 40) {
-          groupNumTemp[4] += 1;
-        }
+        const g = group(person.indices.h_index);
+        groupNumTemp[g] += 1;
       } else {
-        if (person.hindex >= 0 && person.hindex <= 10) {
-          groupNumTemp[0] += 1;
-        }
-        if (person.hindex > 10 && person.hindex) {
-          groupNumTemp[1] += 1;
-        }
-        if (person.hindex > 20 && person.hindex) {
-          groupNumTemp[2] += 1;
-        }
-        if (person.hindex > 30 && person.hindex <= 40) {
-          groupNumTemp[3] += 1;
-        }
-        if (person.hindex > 40) {
-          groupNumTemp[4] += 1;
-        }
+        const g = group(person.hindex);
+        groupNumTemp[g] += 1;
       }
       return groupNumTemp;
     });
@@ -66,23 +60,23 @@ class HindexGraph extends React.PureComponent {
       <div className={styles.container}>
         <div className={styles.lab}>H-index分布图</div>
         <div className={styles.container1}>
-          <div className={styles.itema} style={{ width: '52px' }}>小于10</div>
+          <div className={styles.itema}>&lt;10</div>
           <div className={styles.item1} style={{ width: groupHeight[0] }}>{groupNumTemp[0]}</div>
         </div>
         <div className={styles.container1}>
-          <div className={styles.itema} style={{ width: '52px' }}>10~20</div>
+          <div className={styles.itema}>10~20</div>
           <div className={styles.item2} style={{ width: groupHeight[1] }}>{groupNumTemp[1]}</div>
         </div>
         <div className={styles.container1}>
-          <div className={styles.itema} style={{ width: '52px' }}>20~30</div>
+          <div className={styles.itema}>20~40</div>
           <div className={styles.item3} style={{ width: groupHeight[2] }}>{groupNumTemp[2]}</div>
         </div>
         <div className={styles.container1}>
-          <div className={styles.itema} style={{ width: '52px' }}>30~40</div>
+          <div className={styles.itema}>40~60</div>
           <div className={styles.item4} style={{ width: groupHeight[3] }}>{groupNumTemp[3]}</div>
         </div>
         <div className={styles.container1}>
-          <div className={styles.itema} style={{ width: '52px' }}>大于40</div>
+          <div className={styles.itema}>&gt;60</div>
           <div className={styles.item5} style={{ width: groupHeight[4] }}>{groupNumTemp[4]}</div>
         </div>
       </div>

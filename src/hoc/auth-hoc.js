@@ -14,7 +14,6 @@ import debug from '../utils/debug';
 function Auth(ComponentClass) {
   return class AuthHoc extends React.Component {
     componentWillMount = () => {
-
       if (process.env.NODE_ENV !== 'production') {
         if (debug.LogHOC) {
           console.log('%c@@HOC: Auth: Component is ', 'color:orange',

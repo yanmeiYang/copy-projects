@@ -69,7 +69,8 @@ export default class RelationGraph extends React.PureComponent {
 
   componentDidMount() {
     this.showVis(this);
-    this.redraw(this.props.query);
+    const query = this.props.query || 'data mining';
+    this.redraw(query);
   }
 
   componentWillReceiveProps(nextProps) {

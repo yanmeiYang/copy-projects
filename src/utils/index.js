@@ -6,6 +6,7 @@ import { getMenusByUser } from './menu';
 import request from './request';
 import { color } from './theme';
 import * as TopExpertBase from './expert-base';
+import * as reflect from './reflect';
 
 // 连字符转驼峰
 String.prototype.hyphenToHump = function () {
@@ -116,6 +117,7 @@ function registerModel(app, model) {
   }
 }
 
+
 module.exports = {
   config,
   // menu,
@@ -130,4 +132,7 @@ module.exports = {
 
   registerModel,
   TopExpertBase,
+
+  // library
+  reflect,
 };

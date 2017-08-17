@@ -1,12 +1,17 @@
-/**
- */
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 // import styles from './index.less';
 import TrendPrediction from './trend-prediction.js';
+import { Auth } from '../../hoc';
 
-class TrendPredictionPage extends React.Component {
+@connect(({ app }) => ({ app }))
+@Auth
+export default class TrendPredictionPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.dispatch = this.props.dispatch;
+  }
 
   state = {
     query: 'data mining',
@@ -14,15 +19,27 @@ class TrendPredictionPage extends React.Component {
   };
 
   componentWillMount() {
+    const query = (this.props.location && this.props.location.query
+      && this.props.location.query.query) || 'data mining';
+    if (query) {
+      this.setState({ query });
+    }
+    this.dispatch({
+      type: 'app/layout',
+      payload: {
+        headerSearchBox: { query, onSearch: this.onSearch },
+        // showFooter: false,
+      },
+    });
   }
 
   onSearch = (data) => {
-    if (data.query) {
-      this.setState({ query: data.query });
-      this.props.dispatch(routerRedux.push({
-        pathname: '/expert-map',
-        query: { query: data.query },
-      }));
+    const { dispatch } = this.props;
+    const { query } = data;
+    if (query) {
+      this.setState({ query });
+      dispatch(routerRedux.push({ pathname: '/trend-prediction', query: { query } }));
+      dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query } });
     }
   };
 
@@ -35,6 +52,3 @@ class TrendPredictionPage extends React.Component {
     );
   }
 }
-
-export default connect(({ expertMap }) => ({ expertMap }))(TrendPredictionPage);
-

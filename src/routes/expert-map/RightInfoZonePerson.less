@@ -6,45 +6,46 @@
 
   .rightInfoZone {
     border: solid 0px red; width: 230px;
+  }
+  .rizPersonInfo {
+    display: flex; flex-direction: column; flex: 0;
+    height: 100%;
+    //background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 4px white;
 
-    .rizPersonInfo {
-      display: flex; flex-direction: column; flex: 0;
-      height: 100%;
-      //background-color: rgba(255, 255, 255, 0.2);
-      box-shadow: 0 0 4px white;
-
-      .bg {
-        background-color: rgba(255, 255, 255, 0.85);
-        box-shadow: 0 0 2px white;
-        border-radius: 2px;
-      }
-
-      .name {
-
-        a { font-size: 18px; font-weight: lighter; color: #101010;
-          font-family: "STHeitiSC-Medium", "STHeiti", "Heiti SC", "Hiragino Sans GB", "Microsoft JhengHei", "Microsoft Yahei", SimHei, "AvenirNext-Regular", "Helvetica Neue", "lucida grande", "PingFangHK-Light", "WenQuanYi Micro Hei", "Droid Sans", "Roboto", Helvetica, Tahoma, Arial, "sans-serif";
-        }
-        a.zh { font-size: 14px; }
-      }
-
-      .img {
-        display: flex; justify-content: center;
-        img { height: 192px; }
-      }
-
-      .info {
-        display: flex; flex-direction: column; flex: 2;
-        padding: 12px 6px; margin: 8px 0 4px 0;
-      }
-      .indicesInfo {
-        .score-line {
-          flex-wrap: wrap;
-          .score { margin-bottom: 2px; }
-        }
-      }
-
-      .tag { margin-bottom: 1px; }
+    .bgxx {
+      background-color: rgba(255, 255, 255, 0.85);
+      box-shadow: 0 0 2px white;
+      border-radius: 2px;
     }
+
+    .name {
+      a {
+        font-size: 18px; font-weight: lighter; color: #101010;
+        font-family: "STHeitiSC-Medium", "STHeiti", "Heiti SC", "Hiragino Sans GB", "Microsoft JhengHei", "Microsoft Yahei", SimHei, "AvenirNext-Regular", "Helvetica Neue", "lucida grande", "PingFangHK-Light", "WenQuanYi Micro Hei", "Droid Sans", "Roboto", Helvetica, Tahoma, Arial, "sans-serif";
+      }
+      a.zh { font-size: 14px; }
+      a:hover { color: #108ee9; }
+      h2 { width: 100% }
+    }
+
+    .img {
+      display: flex; justify-content: center;
+      img { height: 192px; }
+    }
+
+    .info {
+      display: flex; flex-direction: column; flex: 2;
+      padding: 12px 6px; margin: 8px 0 4px 0;
+    }
+    .indicesInfo {
+      .score-line {
+        flex-wrap: wrap;
+        .score { margin-bottom: 2px; }
+      }
+    }
+
+    .tag { margin-bottom: 1px; }
   }
 
 }

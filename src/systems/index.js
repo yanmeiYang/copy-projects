@@ -66,7 +66,7 @@ const defaultSystemConfigs = {
   Search_SortOptions: defaults.IN_APP_DEFAULT,
 
   UserAuthSystem: config.system, // aminer 或者是 system.config
-  UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签
+  UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签, 目前没用到
 
   Auth_AllowAnonymousAccess: false,
   Auth_LoginPage: '/login',

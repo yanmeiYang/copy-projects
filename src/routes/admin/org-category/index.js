@@ -196,7 +196,7 @@ export default class OrgCategory extends React.Component {
                 // TODO how to match ya.
                 return <TabPane key={item.category} tab={
                   <div className={styles.leftTab}>
-                    {item.name}
+                    <span className={styles.wrapOverWidth}>{item.name}</span>
                     <div className={styles.toolbox}
                          style={this.state.currentGroupId === item.id ? { display: 'inline-block' } : { display: 'none' }}>
                       <a onClick={this.onEditOrgList}>

@@ -38,6 +38,7 @@ class Retrieve extends React.Component {
   };
   handleSubmit = (e) => {
     e.preventDefault();
+    const { dispatch } = this.props;
     this.props.form.validateFieldsAndScroll((err, values) => {
       values.identifier = decodeURIComponent(queryURL('email'));
       values.token = queryURL('token');
@@ -45,7 +46,7 @@ class Retrieve extends React.Component {
       delete values.confirm;
       delete values.email;
       if (!err) {
-        this.props.dispatch({ type: 'auth/retrievePw', payload: values });
+        dispatch({ type: 'auth/retrievePw', payload: values });
       }
     });
   };

@@ -5,7 +5,7 @@ import { Tabs, Icon, Slider } from 'antd';
 import { connect } from 'dva';
 import d3 from 'd3';
 import d3sankey from './utils/sankey';
-import trend from '../../../external-docs/trend-prediction/trend_out.json';
+import trend from '../../../external-docs/trend-prediction/trend_out1.json';
 import styles from './trend-prediction.less';
 
 let ball_radius, bar_pos, chart, color, format, formatNumber, height, hist_height,margin, render_topic, root, timeline, timeline_item_offset, width;
@@ -349,7 +349,7 @@ class TrendPrediction extends React.PureComponent {
     force.on("tick", function () {
       node.attr("transform", function (d) {
         d.x = d.pos * (width / energy.time_slides.length);
-        return "translate(" + (d.x + 50) + "," + d.y + ")";
+        return "translate(" + (d.x + 50) + "," + d.y + ")";//需调整参数，人图离左边的距离
       });
       sankey.relayout();
       link.attr("d", path);
@@ -394,7 +394,7 @@ class TrendPrediction extends React.PureComponent {
       var channels, count, i, people_flow;
       flow.remove();
       flow = chart.append("g").attr("transform", function (d) {
-        return "translate(" + [100, 350] + ")rotate(" + 0 + ")";//宽度的起始和旋转
+        return "translate(" + [-500, 350] + ")rotate(" + 0 + ")";//需调整参数，人图的left和top，宽度的起始和旋转
       });
       d3.select(".strong").remove();
       d3.select("#term-" + data.idx).append("rect").attr("class", "strong").attr("x", "0px").attr("y", function (d) {

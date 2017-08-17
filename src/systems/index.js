@@ -6,6 +6,7 @@ import * as alibabaConfig from './alibaba/config';
 import * as ccfConfig from './ccf/config';
 import * as huaweiConfig from './huawei/config';
 import * as tencentConfig from './tencent/config';
+import * as cipscConfig from './cipsc/config';
 import * as cieConfig from './cie/config';
 import * as demoConfig from './demo/config';
 import * as cietestConfig from './cietest/config';
@@ -22,6 +23,7 @@ const CurrentSystemConfig = {
   alibaba: alibabaConfig,
   tencent: tencentConfig,
   cie: cieConfig,
+  cipsc: cipscConfig,
   demo: demoConfig,
   cietest: cietestConfig,
 };
@@ -31,7 +33,7 @@ const defaultSystemConfigs = {
   SYSTEM: config.system,
 
   // 所有可选系统
-  AllOptionalSystems: ['ccf', 'huawei', 'alibaba', 'tencent', 'cie', 'demo', 'cietest'],
+  AllOptionalSystems: ['ccf', 'huawei', 'alibaba', 'tencent', 'cie', 'cipsc', 'demo', 'cietest'],
 
   //
   // Systems Preference

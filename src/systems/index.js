@@ -8,6 +8,7 @@ import * as huaweiConfig from './huawei/config';
 import * as tencentConfig from './tencent/config';
 import * as cieConfig from './cie/config';
 import * as demoConfig from './demo/config';
+import * as cietestConfig from './cietest/config';
 
 
 import { config } from '../utils';
@@ -22,6 +23,7 @@ const CurrentSystemConfig = {
   tencent: tencentConfig,
   cie: cieConfig,
   demo: demoConfig,
+  cietest: cietestConfig,
 };
 
 // 默认配置
@@ -29,7 +31,7 @@ const defaultSystemConfigs = {
   SYSTEM: config.system,
 
   // 所有可选系统
-  AllOptionalSystems: ['ccf', 'huawei', 'alibaba', 'tencent', 'cie'],
+  AllOptionalSystems: ['ccf', 'huawei', 'alibaba', 'tencent', 'cie', 'demo', 'cietest'],
 
   //
   // Systems Preference

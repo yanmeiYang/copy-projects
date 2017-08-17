@@ -13,6 +13,8 @@ import styles from './index.less';
 import PersonFeaturedPapers from './person-featured-papers';
 // import ActivityList from '../../components/seminar/activityList';
 import NewActivityList from '../../components/seminar/newActivityList';
+import { sysconfig } from '../../systems';
+
 
 const TabPane = Tabs.TabPane;
 
@@ -26,6 +28,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
   const activity_indices = { contrib: contrib === undefined ? 0 : contrib.score };
 
   const profileTabs = [{
+    isShow: sysconfig.ShowRating,
     title: '专家评分',
     content: <div>
       {false && profile && profile.indices &&
@@ -155,17 +158,17 @@ const Person = ({ dispatch, person, seminar, publications }) => {
     }
   }
 
+
   // console.log('|||||||||||| PersonIndex:', person);
   return (
     <div className="content-inner">
 
       <ProfileInfo profile={profile} activity_indices={activity_indices} />
-
       <div style={{ marginTop: 30 }} />
 
       <div>
         <Tabs defaultActiveKey="0" onChange={callback}>
-          {profileTabs.map((item, index) => {
+          {profileTabs.filter(item => (item.isShow !== false)).map((item, index) => {
             return (
               <TabPane key={index} tab={item.title}>
                 {item.content}

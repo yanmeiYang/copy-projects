@@ -7,8 +7,13 @@ import { routerRedux, Link } from 'dva/router';
 import { Button } from 'antd';
 import { connect } from 'dva';
 import styles from './index.less';
+import { sysconfig } from '../../../systems';
+import * as auth from '../../../utils/auth';
+import { Auth } from '../../../hoc';
 
-class ActivityList extends React.Component {
+@connect(({ seminar, app }) => ({ seminar, app }))
+@Auth
+export default class ActivityList extends React.Component {
   goToDetail = (id) => {
     this.props.dispatch(routerRedux.push({
       pathname: `/seminar/${id}`,
@@ -22,7 +27,7 @@ class ActivityList extends React.Component {
   };
 
   render() {
-    const { result } = this.props;
+    const { result, app } = this.props;
     const time = result.time.from.split('-');
     return (
       <li>
@@ -39,7 +44,7 @@ class ActivityList extends React.Component {
               {result.title}
             </Link>
           </h3>
-          {this.props.app.roles.admin && !this.props.hidetExpertRating &&
+          {auth.isAuthed(app.roles) && !this.props.hidetExpertRating && sysconfig.ShowRating &&
           <Button type="" className={styles.viewTheActivityBtn} size="small"
                   onClick={this.goToRating.bind(this, result.id)}>专家评分</Button>}
           <div className={styles.info}>
@@ -85,5 +90,3 @@ class ActivityList extends React.Component {
     );
   }
 }
-
-export default connect(({ seminar, app }) => ({ seminar, app }))(ActivityList);

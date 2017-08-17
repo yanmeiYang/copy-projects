@@ -132,7 +132,7 @@ class Header extends React.PureComponent {
             {/*}*/}
 
 
-            {isLogin(user) && isAuthed(roles) &&
+            {isAuthed(roles) &&
             <Menu.Item key="/account">
               <Link to={sysconfig.Header_UserPageURL} title={user.display_name}
                     className="headerAvatar">
@@ -167,12 +167,12 @@ class Header extends React.PureComponent {
               <Link to="/2b"><TobButton /></Link>
             </Menu.Item>}
 
-            {sysconfig.ShowHelpDoc &&
+            {isLogin(user) && sysconfig.ShowHelpDoc &&
             <Menu.Item key="/help">
               <Link to="/help">帮助文档</Link>
             </Menu.Item>}
 
-            {isLogin(user) && isAuthed(roles) &&
+            {isAuthed(roles) &&
             <Menu.Item key="/logout">
               <div onClick={this.logoutAuth}>
                 {this.state.logoutLoading ?

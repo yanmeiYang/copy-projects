@@ -155,7 +155,7 @@ function isGod(roles) {
 }
 
 function isSuperAdmin(roles) {
-  return roles && (roles.god || roles.admin);
+  return roles && (roles.god || roles.admin) && !roles.forbid;
 }
 
 function isExactSuperAdmin(roles) {

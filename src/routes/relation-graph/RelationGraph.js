@@ -9,6 +9,7 @@ import { RgSearchNameBox } from '../../components/relation-graph';
 import { getAvatar } from '../../utils/profile-utils';
 import styles from './RelationGraph.less';
 import * as d3 from '../../../public/d3/d3.min';
+import { Auth } from '../../hoc';
 
 const Option = Select.Option;
 const controlDivId = 'rgvis';
@@ -18,7 +19,9 @@ const EgoWidth = document.body.scrollWidth - (24 * 2);
 /*
  * @params: lang: [en|cn]
  */
-class RelationGraph extends React.PureComponent {
+@connect(({ app }) => ({ app }))
+@Auth
+export default class RelationGraph extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -1474,4 +1477,4 @@ class RelationGraph extends React.PureComponent {
 
 }
 
-export default connect()(RelationGraph);
+// export default connect()(RelationGraph);

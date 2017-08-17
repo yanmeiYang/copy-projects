@@ -5,7 +5,7 @@ import React from 'react';
 import { connect } from 'dva';
 import styles from './RightInfoZoneCluster.less';
 import * as profileUtils from '../../utils/profile-utils';
-
+import { HindexGraph } from '../../components/widgets';
 
 class RightInfoZoneCluster extends React.PureComponent {
 
@@ -25,7 +25,6 @@ class RightInfoZoneCluster extends React.PureComponent {
     let hindexSum = 0;
     const interests = {};
     persons.map((person) => {
-      // console.log(person);
       const indices = person.indices;
       // sum hindex
       if (indices) {
@@ -44,6 +43,13 @@ class RightInfoZoneCluster extends React.PureComponent {
         person.tags.map((tag) => {
           const count = interests[tag.t] || 0;
           interests[tag.t] = count + 1;
+          return null;
+        });
+      }
+      if (person.tags_zh && person.tags_zh && person.tags_zh.length > 0) {
+        person.tags.map((tag) => {
+          const count = interests[tag.t] || 0;
+          interests[tag.t] = count - 1;
           return null;
         });
       }
@@ -66,6 +72,10 @@ class RightInfoZoneCluster extends React.PureComponent {
         <div className="info bg">
           <span>Sum of H-index: {hindexSum}</span>
           <span>Avg of H-index: {(hindexSum / persons.length).toFixed(0)}</span>
+        </div>
+
+        <div>
+          <HindexGraph persons={persons} />
         </div>
 
         <div className="images bg">

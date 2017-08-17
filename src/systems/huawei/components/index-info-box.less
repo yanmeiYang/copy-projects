@@ -3,10 +3,50 @@
  */
 .bigNavi {
   width: 680px; height: 168px; padding: 4px;
-  margin-top: 20px;
+  margin-top: 50px;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  flex-wrap: wrap;
+  .blockItem {
+    cursor: pointer;
+    //padding: 62px 12px 0 12px;
+    width: 160px;
+    .blockImg {
+      width: 130px;
+      height: 130px;
+      margin-left: 15px;
+      img {
+        width: 100%;
+        filter: grayscale(99%);
+      }
+    }
+    span {
+      font-size: 18px;
+      //filter: grayscale(100%);
+    }
+  }
+  .blockItem:hover {
+    //box-shadow: 0 0 5px #F1EBEB;
+    .blockImg {
+      transform: scale(1.2);
+      transition: all linear .3s;
+      img {
+        filter: grayscale(0);
+      }
+    }
+    span{
+      //filter: grayscale(0);
+    }
+  }
+
+  a:nth-child(2) {
+    .blockItem {
+      img {
+        margin-top: 20px;
+      }
+    }
+  }
 
   :global {
     .naviItem {
@@ -17,7 +57,7 @@
       padding: 62px 12px 0 12px;
       box-shadow: 0 1px 3px #b9b7b9;
 
-      a { color: #666 }
+      a { color: #666; }
     }
 
   }

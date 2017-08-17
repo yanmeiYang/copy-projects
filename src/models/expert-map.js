@@ -1,8 +1,9 @@
 /** Created by Bo Gao on 2017-06-07 */
-import pathToRegexp from 'path-to-regexp';
-import * as pubsService from '../services/publication';
 import * as personService from '../services/person';
 import * as searchService from '../services/search';
+
+
+const cache = {};
 
 export default {
 
@@ -13,9 +14,11 @@ export default {
     personInfo: {},
     geoData: {},
     // for rightInfoZone,
-    infoZoneIds: '', // ids as string slitted by ',';
+    rightInfoType: 'global', // global, person, cluster
+    infoZoneIds: '', // ids as string splitted by ',' or one id.;
     clusterPersons: [],
   },
+
 
   subscriptions: {},
 
@@ -27,15 +30,22 @@ export default {
     },
 
     * getPersonInfo({ payload }, { call, put }) {  // eslint-disable-line
-      // console.log('effects: getPerson', payload);
       const { personId } = payload;
-      const data = yield call(personService.getPerson, personId);
+      let data = cache[personId];
+      if (!data) {
+        data = yield call(personService.getPerson, personId);
+        cache[personId] = data;
+      }
       yield put({ type: 'getPersonInfoSuccess', payload: { data } });
     },
 
     * listPersonByIds({ payload }, { call, put }) {  // eslint-disable-line
       const { ids } = payload;
-      const data = yield call(personService.listPersonByIds, ids);
+      let data = cache[ids];
+      if (!data) {
+        data = yield call(personService.listPersonByIds, ids);
+        cache[ids] = data;
+      }
       yield put({ type: 'listPersonByIdsSuccess', payload: { data } });
     },
 
@@ -56,6 +66,10 @@ export default {
 
     setRightInfoZoneIds(state, { payload: { idString } }) {
       return { ...state, infoZoneIds: idString };
+    },
+
+    setRightInfo(state, { payload: { idString, rightInfoType } }) {
+      return { ...state, infoZoneIds: idString, rightInfoType };
     },
 
     searchMapSuccess(state, { payload: { data } }) {

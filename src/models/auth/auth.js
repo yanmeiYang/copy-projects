@@ -178,7 +178,7 @@ export default {
     retrievePsSuccess(state, { data }) {
       return { ...state, retrieve: data };
     },
-    
+
     setData(state, { payload: { data } }) {
       const newData = [];
       if (data.data.data) {

@@ -48,24 +48,25 @@ class ForgotPassword extends React.Component {
     this.setState({ validEmail: true, errorMessageByEmail: '' });
   };
   handleSubmit = (e) => {
+    const that = this;
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (err) {
         if (err.email) {
           if (err.email.errors.length > 0) {
-            this.setState({
+            that.setState({
               validEmail: false,
               errorMessageByEmail: err.email.errors[0].message,
             });
           } else {
-            this.setState({ errorMessageByEmail: '' });
+            that.setState({ errorMessageByEmail: '' });
           }
         }
       }
       if (!err) {
         values.token = config.source;
         values.password = ' ';
-        this.props.dispatch({ type: 'auth/forgotPassword', payload: values });
+        that.props.dispatch({ type: 'auth/forgotPassword', payload: values });
       }
     });
   };

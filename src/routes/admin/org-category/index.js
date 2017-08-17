@@ -8,12 +8,15 @@ import { isEqual } from 'lodash';
 import UniversalConfig from '../../common/universal-config/index';
 import styles from './index.less';
 import { classnames } from '../../../utils';
+import { RequireAdmin } from '../../../hoc';
 
 const TabPane = Tabs.TabPane;
 const OrgListGroupCategoryKey = 'orgcategory';
 const OrgListPrefix = 'orglist_';
 
-class OrgCategory extends React.Component {
+@connect(({ app, universalConfig, loading }) => ({ app, universalConfig, loading }))
+@RequireAdmin
+export default class OrgCategory extends React.Component {
   state = {
     // 不带前缀的ID, {id:?, name:?, category: orglist_?}
     currentGroupId: null,
@@ -193,7 +196,7 @@ class OrgCategory extends React.Component {
                 // TODO how to match ya.
                 return <TabPane key={item.category} tab={
                   <div className={styles.leftTab}>
-                    {item.name}
+                    <span className={styles.wrapOverWidth}>{item.name}</span>
                     <div className={styles.toolbox}
                          style={this.state.currentGroupId === item.id ? { display: 'inline-block' } : { display: 'none' }}>
                       <a onClick={this.onEditOrgList}>
@@ -218,6 +221,6 @@ class OrgCategory extends React.Component {
   }
 }
 
-export default connect(
-  ({ universalConfig, loading }) => ({ universalConfig, loading }),
-)(OrgCategory);
+// export default connect(
+//   ({ universalConfig, loading }) => ({ universalConfig, loading }),
+// )(OrgCategory);

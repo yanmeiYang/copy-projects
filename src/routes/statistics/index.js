@@ -9,6 +9,7 @@ import CommitteeList from './committee-list';
 import styles from './index.less';
 import { getTwoDecimal } from '../../utils';
 import { displayNameCNFirst } from '../../utils/profile-utils';
+import { Auth } from '../../hoc';
 
 const TabPane = Tabs.TabPane;
 const tabData = [
@@ -28,8 +29,9 @@ const tabData = [
     desc: '专家列表',
   },
 ];
-
-class Statistics extends React.Component {
+@connect(({ statistics, app }) => ({ statistics, app }))
+@Auth
+export default class Statistics extends React.Component {
   state = {
     defaultTabKey: tabData[0].category,
   };
@@ -188,4 +190,4 @@ class Statistics extends React.Component {
   }
 }
 
-export default connect(({ statistics, app }) => ({ statistics, app }))(Statistics);
+// export default connect(({ statistics, app }) => ({ statistics, app }))(Statistics);

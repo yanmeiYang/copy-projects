@@ -1,3 +1,4 @@
+import config from './config';
 const allMenus = [{ id: 1, icon: 'laptop', name: '首页', router: '/' },
   { id: 2, bpid: 1, name: '学会活动', icon: 'api', router: '/seminar' },
   { id: 21, bpid: 1, name: '活动统计', icon: 'pie-chart', router: '/statistics' },
@@ -36,12 +37,17 @@ const allMenus = [{ id: 1, icon: 'laptop', name: '首页', router: '/' },
 
 const getMenusByUser = (user, role) => {
   const menus = [];
+  const all = allMenus.slice();
   if (role && role.admin) {
-    menus.push(allMenus);
+    menus.push(all);
   } else if (role && role.admin === false && user.hasOwnProperty('first_name')) {
-    menus.push(allMenus.slice(0, 3));
+    menus.push(all.slice(0, 3));
   } else {
-    menus.push(allMenus.slice(0, 1));
+    menus.push(all.slice(0, 1));
+  }
+  // todo 通过配置文件完成
+  if (config.source !== 'ccf') {
+    menus[0].splice(2, 1);
   }
   return menus;
 };

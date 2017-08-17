@@ -38,13 +38,14 @@ class ResetPassword extends React.Component {
   };
   handleSubmit = (e) => {
     e.preventDefault();
+    const { dispatch } = this.props;
     this.props.form.validateFieldsAndScroll((err, values) => {
       values.identifier = decodeURIComponent(queryURL('email'));
       values.token = queryURL('token');
       values.src = queryURL('src');
       delete values.confirm;
       if (!err) {
-        this.props.dispatch({ type: 'auth/retrievePw', payload: values });
+        dispatch({ type: 'auth/retrievePw', payload: values });
       }
     });
   };

@@ -1,15 +1,13 @@
 /**
- * Created by BoGao on 2017/6/20.
+ * Created by ranyancbuan  on 2017/8/17.
  */
 import React from 'react';
 import Footer from '../../components/Footers/cie';
-import { toIDDotString, TopExpertBase } from '../../utils/expert-base';
-
 
 module.exports = {
 
   // 通用配置。所有System的配置文件必须全部包含这部分的值
-  PageTitle: 'CIE 专家库',
+  PageTitle: 'CIEtest 专家库',
 
   Language: 'en', // options [cn|en]
   PreferredLanguage: 'en', // 默认语言
@@ -35,7 +33,7 @@ module.exports = {
     backgroundRepeat: 'no-repeat',
     backgroundColor: 'white',
   },
-  Header_SubTextLogo: 'CIE 专家库',
+  Header_SubTextLogo: 'CIEtest 专家库',
   Header_SubTextStyle: { marginLeft: 12 },
   Header_UserPageURL: '', // 用户头像点击之后去的页面.
   Footer_Content: <Footer />,
@@ -73,17 +71,17 @@ module.exports = {
     {
       category: 'user_roles',
       label: '用户角色列表',
-      desc: 'CIE 用户角色列表',
+      desc: 'CIEtest 用户角色列表',
     },
     {
       category: 'activity_organizer_options',
       label: '协办单位',
-      desc: 'CIE 活动的承办单位，包括专委/分部/项目等。',
+      desc: 'CIEtest 活动的承办单位，包括专委/分部/项目等。',
     },
     {
       category: 'activity_type',
       label: '活动类型',
-      desc: 'CIE 活动的类型。',
+      desc: 'CIEtest 活动的类型。',
     },
   ],
 

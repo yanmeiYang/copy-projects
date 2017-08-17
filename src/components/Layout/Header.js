@@ -10,7 +10,7 @@ import styles from './Header.less';
 import * as profileUtils from '../../utils/profile-utils';
 import { sysconfig } from '../../systems';
 import { KgSearchBox, SearchTypeWidgets } from '../../components/search';
-import { isLogin, isGod } from '../../utils/auth';
+import { isLogin, isGod, isAuthed } from '../../utils/auth';
 import { TobButton, DevMenu } from '../../components/2b';
 
 class Header extends React.PureComponent {
@@ -132,7 +132,7 @@ class Header extends React.PureComponent {
             {/*}*/}
 
 
-            {isLogin(user) &&
+            {isLogin(user) && isAuthed(roles) &&
             <Menu.Item key="/account">
               <Link to={sysconfig.Header_UserPageURL} title={user.display_name}
                     className="headerAvatar">
@@ -144,7 +144,7 @@ class Header extends React.PureComponent {
             }
 
             {/* TODO 不确定是否其他系统也需要显示角色 */}
-            {sysconfig.SYSTEM === 'ccf' && roles &&
+            {sysconfig.SYSTEM === 'ccf' && roles && isAuthed(roles) &&
             <Menu.Item key="" className={styles.showRoles}>
               <p className={roles.authority[0] !== undefined ? styles.isAuthority : ''}>
                 <span>{roles.role[0]}</span>
@@ -172,7 +172,7 @@ class Header extends React.PureComponent {
               <Link to="/help">帮助文档</Link>
             </Menu.Item>}
 
-            {isLogin(user) &&
+            {isLogin(user) && isAuthed(roles) &&
             <Menu.Item key="/logout">
               <div onClick={this.logoutAuth}>
                 {this.state.logoutLoading ?
@@ -184,7 +184,7 @@ class Header extends React.PureComponent {
             </Menu.Item>
             }
 
-            {!isLogin(user) &&
+            {(!isLogin(user) || !isAuthed(roles)) &&
             <Menu.Item key="/login">
               <Link to={this.loginPageUrl()}>
                 <Icon type="user" /> 登录

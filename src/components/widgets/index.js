@@ -3,6 +3,6 @@
  */
 import Indices from './indices';
 import HindexGraph from './h-index-graph';
-import RoadhogDllJsPlaceHolder from './RoadhogDllJsPlaceHolder';
-module.exports = { Indices, HindexGraph, RoadhogDllJsPlaceHolder };
+
+module.exports = { Indices, HindexGraph };
 

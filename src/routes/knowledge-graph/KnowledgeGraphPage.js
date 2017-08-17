@@ -17,7 +17,7 @@ import { Auth } from '../../hoc';
 const RadioGroup = Radio.Group;
 const TabPane = Tabs.TabPane;
 
-@connect(({ knowledgeGraph, loading }) => ({ knowledgeGraph, loading }))
+@connect(({ app, knowledgeGraph, loading }) => ({ app, knowledgeGraph, loading }))
 @Auth
 export default class KnowledgeGraphPage extends React.PureComponent {
   constructor(props) {

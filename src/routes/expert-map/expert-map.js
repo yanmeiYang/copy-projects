@@ -480,9 +480,9 @@ class ExpertMap extends React.PureComponent {
     }
 
     // right info
-    const shouldRIZUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') === -1
-      && model.infoZoneIds === person.id;
-    const shouldRIZClusterUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') > 0;
+    // const shouldRIZUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') === -1
+    //   && model.infoZoneIds === person.id;
+    // const shouldRIZClusterUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') > 0;
 
     const rightInfos = {
       global: () => (

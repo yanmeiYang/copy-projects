@@ -2,6 +2,8 @@
 import React from 'react';
 import { sysconfig } from '../systems';
 import * as authUtil from '../utils/auth';
+import { reflect } from '../utils';
+import debug from '../utils/debug';
 
 /**
  * 会根据 sysconfig.Auth_AllowAnonymousAccess 的值来判断是否进行登录权限判断。
@@ -12,9 +14,19 @@ import * as authUtil from '../utils/auth';
 function Auth(ComponentClass) {
   return class AuthHoc extends React.Component {
     componentWillMount = () => {
+
+      if (process.env.NODE_ENV !== 'production') {
+        if (debug.LogHOC) {
+          console.warn('%c@@Hoc: Auth: Component is ', 'color:orange',
+            reflect.GetComponentName(ComponentClass));
+        }
+      }
+
       if (!sysconfig.Auth_AllowAnonymousAccess) { // 当不允许匿名登录时
         if (!this.props.app) {
-          console.warn('Must connect `app` models when use @Auth! in component: ', ComponentClass.displayName);
+          console.warn('Must connect `app` models when use @Auth! in component: ',
+            reflect.GetComponentName(ComponentClass));
+          console.error(ComponentClass);
         } else {
           const { user, roles } = this.props.app;
           this.isLogin = authUtil.isLogin(user); // 必须是登录用户.

@@ -6,10 +6,12 @@
 const ReduxLoggerEnabled = false;
 const DebugLogEnabled = true;
 const LogRequest = true;
+const LogHOC = true;
 
 // Log common message.
 function log(...data) {
   if (DebugLogEnabled) {
+    // add color automatically.
     console.log(...data);
   }
 }
@@ -23,7 +25,7 @@ function logRequest(...data) {
 
 module.exports = {
   // configs
-  ReduxLoggerEnabled,
+  ReduxLoggerEnabled, DebugLogEnabled, LogRequest, LogHOC,
 
   // methods
   log, logRequest,

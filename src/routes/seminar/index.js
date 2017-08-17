@@ -338,7 +338,7 @@ export default class Seminar extends React.Component {
                   results.map((result, index) => {
                     return (
                       <div key={result.id + Math.random()}>
-                        {(app.roles.authority.indexOf(result.organizer[0]) >= 0 || auth.isExactSuperAdmin(app.roles)) &&
+                        {(app.roles.authority.indexOf(result.organizer[0]) >= 0 || auth.isSuperAdmin(app.roles)) &&
                         <Button type="danger" icon="delete" size="small"
                                 onClick={this.delTheSeminar.bind(this, result, index)} style={{
                           float: 'right',
@@ -362,6 +362,3 @@ export default class Seminar extends React.Component {
   }
 }
 
-//
-// export default connect(
-//   ({ seminar, loading, app }) => ({ seminar, loading, app, }))(Seminar);

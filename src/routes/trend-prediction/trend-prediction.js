@@ -381,12 +381,12 @@ export default class TrendPrediction extends React.PureComponent {
     node = svg.append('g').selectAll('.node').data(energy.nodes).enter().append('a').attr('href', '#').attr('class', 'popup').attr('rel', 'popuprel').append('g').attr('class', 'node').call(force.drag).on('mouseover', function (d, event) {
       let xPosition, yPosition;
       d3.select(this).attr('opacity', 0.6);
-      xPosition = d3.event.layerX + 50;
-      yPosition = d3.event.layerY + 30;
+      xPosition = d3.event.layerX + 150;
+      yPosition = d3.event.layerY + 130;
       // if (xPosition > 900) {
       //     xPosition = d3.event.layerX - 200;
       // }
-      d3.select('#tooltip').style('left', `${xPosition}px`).style('top', `${yPosition}px`).select('#value').text(() => {
+      d3.select('#tooltip').style('left', `${xPosition}px`).style('top', `${yPosition}px`).style('position', 'absolute').style('border-width', '1px').style('background-color', '#0ed6ff').style('border-color','black').style('z-index','1000').style('border-radius','20px').style('height','70px').style('width','180px').style('padding','5px').select('#value').text(() => {
         return `${d.name}：  ${format(d.value)} ${d.y}`;
       });
       d3.select('#tooltip').classed('hidden', false);

@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { connect } from 'dva';
+import { Tooltip } from 'antd';
 import styles from './RightInfoZoneCluster.less';
 import * as profileUtils from '../../utils/profile-utils';
 import { HindexGraph } from '../../components/widgets';
@@ -81,15 +82,17 @@ class RightInfoZoneCluster extends React.PureComponent {
           {persons && persons.slice(0, 20).map((person) => {
             const avatarUrl = profileUtils.getAvatar(person.avatar, person.id, 50);
 
+            const tooltip = (
+              <div className="tooltip">
+                {person.name}<br />
+                Hindex: {person.indices && person.indices.h_index}
+              </div>);
             return (
               <div key={person.id} className="imgOuter">
                 <div className="imgBox">
-                  <img src={avatarUrl} />
-                  {/* <div key={person.id}>{person.name}</div>*/}
-                </div>
-                <div className="tooltip">
-                  {person.name}<br />
-                  Hindex:{person.indices && person.indices.hindex}
+                  <Tooltip title={tooltip}>
+                    <img src={avatarUrl} />
+                  </Tooltip>
                 </div>
               </div>
             );

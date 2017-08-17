@@ -10,8 +10,8 @@ import { routerRedux, Link } from 'dva/router';
 import styles from './RelationGraphPage.less';
 import RelationGraph from './RelationGraph';
 
-
-class RelationGraphPage extends React.Component {
+@connect()
+export default class RelationGraphPage extends React.Component {
   constructor(props) {
     super(props);
     this.dispatch = this.props.dispatch;
@@ -22,8 +22,7 @@ class RelationGraphPage extends React.Component {
   };
 
   componentWillMount() {
-    const query = this.getQueryFromURL(this.props) || '';
-    console.log('>>>>>>>>>>>>>> query is ', query);
+    const query = this.getQueryFromURL(this.props) || 'data mining';
     this.dispatch({
       type: 'app/layout',
       payload: {
@@ -57,12 +56,10 @@ class RelationGraphPage extends React.Component {
   // }
 
   onSearch = ({ query }) => {
-    console.log('>>> Search for', query);
+    const { dispatch } = this.props;
     this.setState({ query });
-    this.props.dispatch(routerRedux.push({
-      pathname: '/relation-graph-page',
-      query: { query },
-    }));
+    dispatch(routerRedux.push({ pathname: '/relation-graph-page', query: { query } }));
+    dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query } });
   };
 
   getQueryFromURL = (props) => {
@@ -81,5 +78,3 @@ class RelationGraphPage extends React.Component {
     );
   }
 }
-
-export default connect(({}) => ({}))(RelationGraphPage);

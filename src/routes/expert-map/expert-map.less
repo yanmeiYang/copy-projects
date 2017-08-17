@@ -1,6 +1,45 @@
+@import "../../themes/vars.less";
+
 .expertMap {
-  border-bottom: solid 1px #ddd;
   display: flex; flex-direction: column; flex-grow: 2;
+  border-bottom: solid 1px #ddd;
+
+  .headerLine {
+    display: flex; flex-direction: row; justify-content: space-between;
+    flex: 0;
+    margin: 12px 0 5px 0;
+    .scopes { display: flex; align-items: baseline; align-self: center; }
+  }
+
+  .map {
+    display: flex; flex-direction: row; flex: 3; margin-bottom: 24px;
+    box-shadow: 1px 1px 5px 4px #eee, 0 0 3px black;
+
+    :global #allmap {
+      display: flex; flex: 2; background-color: rgb(245, 243, 240);
+    }
+
+    .right {
+      display: flex; flex-direction: column;
+      width: 250px; background-color: rgb(245, 243, 240); // rgb(171, 193, 219);
+
+      .scrollable {
+        display: flex; flex: 3; height: 50px;
+        overflow-y: visible; overflow-x: hidden; overflow-y: scroll;
+        background-color: #fefefe;
+
+        .border {
+          padding: 8px;
+        }
+      }
+    }
+
+    :global {
+      .em_report { display: none }
+    }
+
+  }
+
 }
 
 :global {
@@ -49,18 +88,6 @@
     }
   }
 
-  #rank {
-    z-index: 10001;
-    position: absolute; overflow: hidden;
-    right: 31px; top: 120px; width: 248px; height: 175px;
-    word-wrap: break-word; word-break: break-all;
-    border: 1px solid #eee; border-radius: 3px;
-    background-color: rgba(255, 255, 255, 0.4);
-    box-shadow: 0 0 5px #666;
-    padding: 8px;
-    overflow: scroll;
-  }
-
   #flowInfo {
     z-index: 10001;
     position: absolute; overflow: hidden;
@@ -75,123 +102,34 @@
 
 }
 
-.cont1 {
-  clear: both;
-  padding: 8px;
-  text-align: center;
-  margin: 0 auto;
-  padding: 0;
-  a:link {
-    color: #00F;
-    text-decoration: none;
-  }
-  a:visited {
-    color: #00F;
-    text-decoration: none;
-  }
-  a:hover {
-    color: #c00;
-    text-decoration: underline;
-  }
-  ul {
-    list-style: none;
-  }
-}
+.legend {
+  display: flex; flex-direction: column; flex: 0 auto;
+  background-color: #fefefe;
+  word-wrap: break-word; word-break: break-all;
+  border-bottom: #666; padding: 8px 16px 8px 8px;
+  margin-bottom: 8px;
+  overflow: hidden;
 
-.tabs0 {
-  margin-left: 100px;
-  height: 24px;
-  width: 230px;
-  border: 1px solid #cbcbcb;
-  background-color: #f2f6fb;
-  font: 12px "宋体";
-  text-align: center;
-}
-
-.menu0 {
-  width: 230px;
-}
-
-.menu0 li {
-  display: block;
-  float: left;
-  padding: 4px 0;
-  width: 45.5px;
-  text-align: center;
-  cursor: pointer;
-  background: #FFFFff;
-  border-right: 1px solid #cbcbcb;
-}
-
-.menu0 li.hover {
-  background: #f2f6fb;
-  font-weight: bold;
-}
-
-.main0 ul {
-  display: none;
-}
-
-.main0 ul.block {
-  display: block;
-}
-
-.lab1 {
-  float: left;
-  font-size: 12px;
-}
-
-.lab2 {
-  font-size: 12px;
-  text-align: center;
-}
-
-.lab3 {
-  float: right;
-  font-size: 12px;
-  margin-right: 60px;
-  margin-top: 2px;
-  line-height: 30px;
-}
-
-.main1 {
-  margin: 12px 0 5px 0;
-}
-
-.main2 {
-  width: 200px;
-  height: 100px;
-  display: none;
-}
-
-.main3 {
-  width: 230px;
-}
-
-.headerLine {
-  display: flex; flex-direction: row; justify-content: space-between;
-  flex: 0;
-  margin: 12px 0 5px 0;
-  .scopes { display: flex; align-items: baseline; align-self: center; }
-}
-
-.switch {
-  float: right;
-}
-
-.custom-image img {
-  display: block;
-  //width: 60px;
-}
-
-:global {
-  .em_report { display: none }
-  .mapshow {
-    display: flex; flex: 2; margin-bottom: 24px;
-    box-shadow: 1px 1px 5px 4px #eee, 0 0 3px black;
-    #allmap {
-      display: flex; flex: 2;
+  .title { font-weight: bold; margin-left: 7px; }
+  .t { margin-bottom: 3px;
+    img { float: left; margin-left: 2px; }
+    div {
+      float: left; line-height: 24px; padding-left: 10px; padding-top: 5px;
     }
   }
+  .container {
+    display: flex; width: 180px; height: 20px;
+    align-items: flex-end; margin-left: 3px;
 
+    div {
+      width: 20px; height: 20px; margin: 0 5px;
+      border-radius: 5px; color: #008cff;
+    }
+    .item1 { background-color: #008cff; color: #008cff; }
+    .item2 { background-color: #ffbf00; color: #ffbf00; }
+    .item3 { background-color: #ff0000; color: #ff0000; }
+    .item4 { background-color: #ff00ed; color: #ff00ed; }
+    .item5 { background-color: #9c00ff; color: #9c00ff; }
+  }
 }
+

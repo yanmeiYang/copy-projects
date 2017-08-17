@@ -8,12 +8,15 @@ import { isEqual } from 'lodash';
 import UniversalConfig from '../../common/universal-config/index';
 import styles from './index.less';
 import { classnames } from '../../../utils';
+import { RequireAdmin } from '../../../hoc';
 
 const TabPane = Tabs.TabPane;
 const OrgListGroupCategoryKey = 'orgcategory';
 const OrgListPrefix = 'orglist_';
 
-class OrgCategory extends React.Component {
+@connect(({ app, universalConfig, loading }) => ({ app, universalConfig, loading }))
+@RequireAdmin
+export default class OrgCategory extends React.Component {
   state = {
     // 不带前缀的ID, {id:?, name:?, category: orglist_?}
     currentGroupId: null,
@@ -218,6 +221,6 @@ class OrgCategory extends React.Component {
   }
 }
 
-export default connect(
-  ({ universalConfig, loading }) => ({ universalConfig, loading }),
-)(OrgCategory);
+// export default connect(
+//   ({ universalConfig, loading }) => ({ universalConfig, loading }),
+// )(OrgCategory);

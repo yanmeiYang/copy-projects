@@ -12,7 +12,7 @@ import PageBg from './pageBackground';
 
 const { Header, Footer } = Layout;
 const FormItem = Form.Item;
-const { iconFontJS, iconFontCSS, logo } = config;
+const { iconFontJS, iconFontCSS } = config;
 
 class Login extends React.Component {
   componentWillMount() {
@@ -116,7 +116,7 @@ class Login extends React.Component {
         <Helmet>
           <title>{sysconfig.PageTitle}</title>
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <link rel="icon" href={logo} type="image/x-icon" />
+          <link rel="icon" href={`/sys/${sysconfig.SYSTEM}/favicon.ico`} type="image/x-icon" />
           {iconFontJS && <script src={iconFontJS} />}
           {iconFontCSS && <link rel="stylesheet" href={iconFontCSS} />}
         </Helmet>
@@ -129,7 +129,7 @@ class Login extends React.Component {
               </div>
             </div>
           </div>
-          <Footer />
+          {/*<Footer />*/}
         </div>
       </div>
     );

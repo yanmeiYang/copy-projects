@@ -23,14 +23,14 @@ class RightInfoZoneAll extends React.PureComponent {
     if (!persons) {
       return <div />;
     }
-    return(
-      <div className="rizPersonInfo">
+    return (
+      <div className="rizAll">
         <div className="name bg">
-          <h2 className="section_header">Cluster of {count} experts.</h2>
+          <h2 className="section_header">Show {count} experts in map.</h2>
         </div>
         <div className="info bg">
           <span>Sum of H-index: {hIndexSum}</span>
-          <span>Avg of H-index: {avg}</span>
+          <span>Avg. of H-index: {avg}</span>
         </div>
         <div>
           <HindexGraph persons={persons} />

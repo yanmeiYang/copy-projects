@@ -168,7 +168,8 @@ class ExpertMap extends React.PureComponent {
             if (personInfo.avatar != null && personInfo.avatar !== '') {
               url = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 50);
             }
-            cimg.innerHTML = `<img style='background: white;'  data='@@@@@@@${i}@@@@@@@' height='${imgwidth}' width='${imgwidth}' src='${url}' alt='${i}'>`;
+            const style = url === '/images/blank_avatar.jpg' ? '' : 'margin-top:-5px;';
+            cimg.innerHTML = `<img style='background: white;${style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='${url}' alt='${i}'>`;
           }
 
           for (let j = 0; j < imgdivs.length; j += 1) {
@@ -457,7 +458,7 @@ class ExpertMap extends React.PureComponent {
     let personPopupJsx;
     const person = model.personInfo;
     if (person) {
-      const url = profileUtils.getAvatar(person.avatar, person.id, 50);
+      const url = profileUtils.getAvatar(person.avatar, person.id, 90);
       const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
       const pos = profileUtils.displayPositionFirst(person.pos);
       const aff = profileUtils.displayAff(person);
@@ -526,18 +527,21 @@ class ExpertMap extends React.PureComponent {
             <div className={styles.legend}>
               <div className={styles.title}>Legend:</div>
               <div className={styles.t}>
-                <img width="14%" src="/images/personsNumber.png" alt="legend" />
-                <div className={styles.t}><p>该区域学者人数</p>该学者所在位置</div>
+                <img className={styles.icon} width="42" src="/images/map/marker_red_sprite.png"
+                     alt="legend" />
+                <div className={styles.t}>专家</div>
+                <img className={styles.icon2} width="32" src="/images/map/m0.png" alt="legend" />
+                <div className={styles.t}>一组专家</div>
               </div>
               <div className={styles.container}>
+                <div className={styles.text}> 少</div>
                 <div className={styles.item1}> 1</div>
                 <div className={styles.item2}> 2</div>
                 <div className={styles.item3}> 3</div>
                 <div className={styles.item4}> 4</div>
                 <div className={styles.item5}> 5</div>
+                <div className={styles.text}> 多</div>
               </div>
-              <img width="100%" src="/images/arrow.png" alt="legend" />
-              <div className={styles.lab2}>人数增加</div>
             </div>
 
             <div className={styles.scrollable}>

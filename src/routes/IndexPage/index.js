@@ -55,7 +55,9 @@ export default class IndexPage extends React.Component {
         <div className={styles.normal}>
           <h1 className={styles.title}>专家搜索</h1>
 
-          <KgSearchBox size="large" style={{ width: 500 }} onSearch={this.onSearch} />
+          <KgSearchBox
+            size="large" onSearch={this.onSearch}
+            style={{ width: 500, boxShadow: '0 0 8px 0px rgba(99, 99, 99, 0.5)' }} />
 
           {/* <SearchBox size="large" style={{ width: 500 }} onSearch={this.onSearch} /> */}
 

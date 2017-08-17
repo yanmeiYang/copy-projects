@@ -43,7 +43,7 @@ function checkStatus(response) {
  */
 export default async function request(url, options) {
   if (process.env.NODE_ENV !== 'production') {
-    debug.log('@@request ', url, options);
+    debug.logRequest('@@request ', url, options);
   }
 
   let newUrl = baseURL + url;

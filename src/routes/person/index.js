@@ -30,6 +30,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
   const profileTabs = [{
     isShow: sysconfig.ShowRating,
     title: '专家评分',
+    desc: 'expert-rating',
     content: <div>
       {false && profile && profile.indices &&
       <Indices indices={profile.indices} />
@@ -84,6 +85,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
     </div>,
   }, {
     title: '参与的活动',
+    desc: 'seminar',
     content: <Spin spinning={seminar.loading}>
       {results.length > 0 ? <div style={{ minHeight: 150 }}>{results.map((activity) => {
         return (
@@ -98,6 +100,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
     </Spin>,
   }, {
     title: '代表性论文',
+    desc: 'pub',
     content: <Spin spinning={publications.loading}>
       <div>
         <div style={{ float: 'right', marginTop: '-36px', position: 'relative' }}>
@@ -118,15 +121,15 @@ const Person = ({ dispatch, person, seminar, publications }) => {
     e.target.style.display = 'none';
     dispatch({
       type: 'seminar/getSeminar',
-      payload: { offset: 0, size: 10000, filter: { src: 'ccf', aid: profile.id } },
+      payload: { offset: 0, size: 10000, filter: { src: sysconfig.SYSTEM, aid: profile.id } },
     });
   }
 
   const personId = '';
 
-  function callback(key) {
-    switch (key) {
-      case '1':
+  function callback(desc) {
+    switch (desc) {
+      case 'seminar':
         if (results.length > 0) {
           return '';
         } else {
@@ -135,11 +138,11 @@ const Person = ({ dispatch, person, seminar, publications }) => {
               {dispatch({ type: 'seminar/clearState' })}
               {dispatch({
                 type: 'seminar/getSeminar',
-                payload: { offset: 0, size: 5, filter: { src: 'ccf', aid: profile.id } },
+                payload: { offset: 0, size: 5, filter: { src: sysconfig.SYSTEM, aid: profile.id } },
               })}</div>
           );
         }
-      case '2':
+      case 'pub':
         if (publications.resultsByCitation.length > 0) {
           return '';
         } else {
@@ -167,10 +170,10 @@ const Person = ({ dispatch, person, seminar, publications }) => {
       <div style={{ marginTop: 30 }} />
 
       <div>
-        <Tabs defaultActiveKey="0" onChange={callback}>
-          {profileTabs.filter(item => (item.isShow !== false)).map((item, index) => {
+        <Tabs defaultActiveKey="0" onTabClick={callback}>
+          {profileTabs.filter(item => (item.isShow !== false)).map((item) => {
             return (
-              <TabPane key={index} tab={item.title}>
+              <TabPane key={item.desc} tab={item.title}>
                 {item.content}
               </TabPane>
             );

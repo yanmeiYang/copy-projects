@@ -17,9 +17,10 @@ import dl from '../../../external-docs/trend-prediction/deep learning.json';
 import gd from '../../../external-docs/trend-prediction/graph database.json';
 import iot from '../../../external-docs/trend-prediction/Internet of Things.json';
 import ml from '../../../external-docs/trend-prediction/Machine Learning.json';
-import nlp from '../../../external-docs/trend-prediction/Natural language processing.json';
-import net from '../../../external-docs/trend-prediction/Networks.json';
-import nn from '../../../external-docs/trend-prediction/neural network.json';
+// 这三个文件里面有的会导致程序build失败。无法上线。我debug了4个小时。。。
+// import nlp from '../../../external-docs/trend-prediction/Natural language processing.json';
+// import net from '../../../external-docs/trend-prediction/Networks.json';
+// import nn from '../../../external-docs/trend-prediction/neural network.json';
 import rb from '../../../external-docs/trend-prediction/Robotics.json';
 import styles from './trend-prediction.less';
 import { Auth } from '../../hoc';
@@ -616,9 +617,9 @@ export default class TrendPrediction extends React.PureComponent {
             <Button type="dashed" onClick={this.seeword} value="gd" className={styles.hotword}>Graph Databases</Button>
             <Button type="dashed" onClick={this.seeword} value="iot" className={styles.hotword}>Internet of Things</Button>
             <Button type="dashed" onClick={this.seeword} value="ml" className={styles.hotword}>Machine Learning</Button>
-            <Button type="dashed" onClick={this.seeword} value="nlp" className={styles.hotword}>Natural Language Processing</Button>
-            <Button type="dashed" onClick={this.seeword} value="net" className={styles.hotword}>Networks</Button>
-            <Button type="dashed" onClick={this.seeword} value="nn" className={styles.hotword}>Neural Network</Button>
+            {/*<Button type="dashed" onClick={this.seeword} value="nlp" className={styles.hotword}>Natural Language Processing</Button>*/}
+            {/*<Button type="dashed" onClick={this.seeword} value="net" className={styles.hotword}>Networks</Button>*/}
+            {/*<Button type="dashed" onClick={this.seeword} value="nn" className={styles.hotword}>Neural Network</Button>*/}
             <Button type="dashed" onClick={this.seeword} value="rb" className={styles.hotword}>Robotics</Button>
           </Button.Group>
         </div>

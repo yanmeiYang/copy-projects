@@ -13,7 +13,6 @@ class RightInfoZoneCluster extends React.PureComponent {
   }
 
   componentWillReceiveProps() {
-
   }
 
   render() {

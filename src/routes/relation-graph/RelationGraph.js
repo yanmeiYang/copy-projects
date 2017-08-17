@@ -172,8 +172,8 @@ export default class RelationGraph extends React.PureComponent {
       return color(d / 100);
     };
     const getClusteringColor = (d) => {
-      const s = _edges.filter((item) => item.source.name.n.en === d.name.n.en);
-      const t = _edges.filter((item) => item.target.name.n.en === d.name.n.en);
+      const s = _edges.filter(item => item.source.name.n.en === d.name.n.en);
+      const t = _edges.filter(item => item.target.name.n.en === d.name.n.en);
       if (s.length > 0) {
         return color(s[0].source.index + 1);
       } else if (t.length > 0) {
@@ -244,7 +244,7 @@ export default class RelationGraph extends React.PureComponent {
         } else {
           return false;
         }
-      }).style('stroke', 'green');
+      }).style('stroke', 'black');
       return flag;
     };
 
@@ -698,14 +698,16 @@ export default class RelationGraph extends React.PureComponent {
         } else {
           return false;
         }
-      }).style('stroke-width', '1px').transition().duration(1000).style('stroke', 'green').style('opacity', 0.8);
+      }).style('stroke-width', '1px').transition().duration(1000).style('stroke', 'black')
+        .style('opacity', 0.8);
+      svg.append('g').attr('class', 'ceter').enter().append('text').attr('dx', (d)=> {return -20}).text('s');
       svg.selectAll('circle').data(_nodes).filter((j) => {
         if (ds.indexOf(j.index) !== -1) {
           return true;
         } else {
           return false;
         }
-      }).transition().duration(1000).attr('fill', 'yellow').style('opacity', 0.8);
+      }).transition().duration(1000).style('stroke', 'yellow').style('stroke-width', '5px').style('opacity', 0.8);
       return svg.selectAll('text').data(_nodes).filter((j) => {
         if (ds.indexOf(j.index) !== -1) {
           return true;
@@ -714,7 +716,7 @@ export default class RelationGraph extends React.PureComponent {
         }
       }).text((d) => {
         return d.name.n.en;
-      }).transition().duration(1000).style('fill', 'green').style('opacity', 0.8);
+      }).transition().duration(1000).style('fill', 'black').style('opacity', 0.8);
     };
 
     const orderdraw2 = (ds) => {
@@ -739,20 +741,29 @@ export default class RelationGraph extends React.PureComponent {
           return false;
         }
       }).transition().duration(1000).attr('fill', 'yellow').style('opacity', 0.8);
-      return svg.selectAll('text').data(_nodes).filter((j) => {
-        if (ds.indexOf(j.index) !== -1) {
-          return true;
-        } else {
-          return false;
-        }
-      }).text((d) => {
-        return d.name.n.en;
-      }).transition().duration(1000).style('stroke', 'green');
+      // return svg.selectAll('text').data(_nodes).filter((j) => {
+      //   if (ds.indexOf(j.index) !== -1) {
+      //     return true;
+      //   } else {
+      //     return false;
+      //   }
+      // }).text((d) => {
+      //   return d.name.n.en;
+      // }).transition().duration(1000).style('stroke', 'green');
     };
 
     this.onSearch = (d) => {
       this.currentModle1 = true;
       nodeclick(d);
+      simulation.alphaTarget(0.1).restart();
+      d.fx = EgoWidth / 2;
+      d.fy = EgoHeight / 2;
+      setTimeout((d) => {
+        simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+      }, 2000, d);
+      _onclicknodes.splice(_onclicknodes.indexOf(d.id), 1);
     };
     this.cancelSelected = () => {
       this.currentModle1 = false;
@@ -760,7 +771,6 @@ export default class RelationGraph extends React.PureComponent {
       this.setState({ currentNode: null });
     };
     const nodeclick = (d) => {
-      console.log(this.currentModle1);
       let goalNodes,
         res,
         w;
@@ -769,8 +779,19 @@ export default class RelationGraph extends React.PureComponent {
         if (_onclicknodes.indexOf(d.id) === -1) {
           _onclicknodes.push(d.id);
           // svg.selectAll('line').data(_edges).style('opacity', 0.3);
+          /* 清除样式开始 */
+          svg.selectAll('circle').data(_nodes).style('stroke', '#fff').style('stroke-width', (d) => {
+            if (d.indices.hIndex > 50) {
+              return '1.5px';
+            } else {
+              return '1px';
+            }
+          });
+          svg.selectAll('line').data(_edges).style('stroke', '#999').style('opacity', 1);
+          /* 清除样式结束 */
+
           svg.selectAll('circle').data(_nodes).filter((k) => {
-            return k.name.n.en === d.name.n.en;
+            return d.name.n.en && k.name.n.en === d.name.n.en;
           }).style('stroke', 'yellow').style('stroke-width', '5px');
           svg.selectAll('line').data(_edges).filter((e, i) => {
             return e.target.id === d.id || e.source.id === d.id;
@@ -804,9 +825,9 @@ export default class RelationGraph extends React.PureComponent {
           _lastNode = d.index;
           clearAllChoosed(5);
           returndraw(5);
-          return svg.selectAll('circle').data(_nodes).filter((k) => {
+          svg.selectAll('circle').data(_nodes).filter((k) => {
             return k.id === d.id;
-          }).attr('fill', '#ffff00');
+          }).style('stroke', 'black').style('stroke-width', '5px').style('fill', 'white');
         } else {
           if (_lastNode !== null) {
             _endOfSortAdges = [];
@@ -840,7 +861,7 @@ export default class RelationGraph extends React.PureComponent {
           returndraw(5);
           svg.selectAll('circle').data(_nodes).filter((k) => {
             return k.id === d.id;
-          }).attr('fill', '#ffff00');
+          }).style('stroke', 'black').style('stroke-width', '5px').style('fill', 'white');
         } else {
           _endOfSortAdges = [];
           stack = [];
@@ -929,7 +950,9 @@ export default class RelationGraph extends React.PureComponent {
         }
         return `<strong class="text-danger">h-Index:</strong>${d.indices.hIndex}|<strong class="text-danger">#Papers:</strong>${d.indices.numPubs}<br><i  class="fa fa-briefcase">&nbsp;</i>${temppos}<br><i class="fa fa-map-marker" style="word-break:break-all;text-overflow:ellipsis">&nbsp;${tempStr}</i>`;
       }).on('click', (d) => {
-        this.currentModle1 = !this.currentModle5;
+        if (!this.currentModle3 && !this.currentModle4) {
+          this.currentModle1 = !this.currentModle5;
+        }
         return nodeclick(d);
       });
       nodes_text = svg.selectAll('.nodetext').data(_nodes).enter().append('text').attr('class', 'initialText').style('cursor', ' pointer').style('font-size', '15px')
@@ -969,7 +992,9 @@ export default class RelationGraph extends React.PureComponent {
             return getClusteringColor(d);
           });
         }).on('click', (d) => {
-          this.currentModle1 = !this.currentModle5;
+          if (!this.currentModle3 && !this.currentModle4) {
+            this.currentModle1 = !this.currentModle5;
+          }
           return nodeclick(d);
         });
 
@@ -1009,7 +1034,9 @@ export default class RelationGraph extends React.PureComponent {
             return getClusteringColor(d);
           });
         }).on('click', (d) => {
-          this.currentModle1 = !this.currentModle5;
+          if (!this.currentModle3 && !this.currentModle4) {
+            this.currentModle1 = !this.currentModle5;
+          }
           return nodeclick(d);
         });
 
@@ -1395,28 +1422,28 @@ export default class RelationGraph extends React.PureComponent {
     return (
       <div className={styles.vis_container}>
         <div style={{ display: 'flex', flexDirection: 'row' }}>
-          {/*<h3>{this.props.query}</h3>*/}
+          {/* <h3>{this.props.query}</h3> */}
           There are
           <div style={{ marginLeft: 10 }}>{describeNodes1} people</div>
           <div style={{ marginLeft: 10 }}>{describeNodes2} relations</div>
         </div>
         <div className={styles.svgTitle} style={{ width: EgoWidth }}>
           <div>
-            {/*<label>相关操作：</label>*/}
-            {/*/!* <Checkbox checked={subnet_selection} onChange={this.changeModle1}>子网选取</Checkbox>*!/*/}
-            {/*<Checkbox checked={suspension_adjustment} onChange={this.changeModle2}>暂停调整</Checkbox>*/}
-            {/*<Checkbox checked={two_paths} onChange={this.changeModle3}>两点路径</Checkbox>*/}
-            {/*<Checkbox checked={continuous_path} onChange={this.changeModle4}>连续路径</Checkbox>*/}
+             <label>相关操作：</label>
+            {/* <Checkbox checked={subnet_selection} onChange={this.changeModle1}>子网选取</Checkbox>*/}
+            <Checkbox checked={suspension_adjustment} onChange={this.changeModle2}>暂停调整</Checkbox>
+            <Checkbox checked={two_paths} onChange={this.changeModle3}>两点路径</Checkbox>
+            <Checkbox checked={continuous_path} onChange={this.changeModle4}>连续路径</Checkbox>
             {/*<Checkbox checked={single_extension} onChange={this.changeModle5}>单点扩展</Checkbox>*/}
-            {/*<label>过滤器：</label>*/}
-            {/*<Select defaultValue="h-Index>0" style={{ width: 120, marginRight: 10 }}*/}
-                    {/*onChange={this.IndexChange}>*/}
-              {/*{this.activities.map((act) => {*/}
-                {/*return (*/}
-                  {/*<Option key={act} value={act}>{act}</Option>*/}
-                {/*);*/}
-              {/*})}*/}
-            {/*</Select>*/}
+            <label>过滤器：</label>
+            <Select defaultValue="h-Index>0" style={{ width: 120, marginRight: 10 }}
+                    onChange={this.IndexChange}>
+              {this.activities.map((act) => {
+                return (
+                  <Option key={act} value={act}>{act}</Option>
+                );
+              })}
+            </Select>
           </div>
           <RgSearchNameBox size="default" style={{ width: 320 }} onSearch={this.onSearch}
                            suggesition={this.state.allNodes} />
@@ -1443,24 +1470,25 @@ export default class RelationGraph extends React.PureComponent {
             </div>
             }
             {currentNode.pos &&
-            <p><i
-              className="fa fa-briefcase fa-fw" /> {currentNode.pos.length > 0 ? currentNode.pos[0].name.n.en : ''}
+            <p>
+              <i className="fa fa-briefcase fa-fw" />
+              {currentNode.pos.length > 0 ? currentNode.pos[0].name.n.en : ''}
             </p>
             }
             {currentNode.desc &&
-            <p><i
-              className="fa fa-institution fa-fw" /> {currentNode.desc.n.en ? currentNode.desc.n.en : ''}
+            <p>
+              <i className="fa fa-institution fa-fw" />
+              {currentNode.desc.n.en ? currentNode.desc.n.en : ''}
             </p>
             }
           </div>
           <div className={styles.delCurrentNode} style={{ color: '#a90329' }}
                onClick={this.cancelSelected}>
-            <i className="fa fa-ban" aria-hidden="true"></i>
+            <i className="fa fa-ban" aria-hidden="true" />
           </div>
         </div>
         }
         <div id="rgvis" style={{
-          // background: '#333',
           width: EgoWidth,
           height: EgoHeight,
           border: '1px solid #eee',
@@ -1475,7 +1503,6 @@ export default class RelationGraph extends React.PureComponent {
       </div>
     );
   }
-
 }
 
 // export default connect()(RelationGraph);

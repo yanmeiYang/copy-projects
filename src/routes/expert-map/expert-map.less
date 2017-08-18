@@ -79,7 +79,7 @@
     .imgWrapper {
       z-index: 10001; border: 1px solid white; position: absolute;
       border-radius: 50%; overflow: hidden;
-      box-shadow: 0px 0px 5px #333;
+      box-shadow: 0px 0px 5px #333, 0 0 5px #333 inset;
 
       img { background: white; }
     }
@@ -114,18 +114,18 @@
   .title { font-weight: bold; margin-left: 7px; }
   .t { margin-bottom: 3px;
     img { float: left; margin-left: 2px; }
-    div {
-      float: left; line-height: 24px; padding-left: 10px; padding-top: 5px;
-    }
+    img.icon { }
+    img.icon2 { margin-left: 12px; }
+    div { float: left; line-height: 24px; padding-left: 10px; padding-top: 5px; }
   }
   .container {
     display: flex; width: 180px; height: 20px;
     align-items: flex-end; margin-left: 3px;
 
     div {
-      width: 20px; height: 20px; margin: 0 5px;
-      border-radius: 5px; color: #008cff;
+      width: 40px; height: 15px; color: #008cff; text-align: center; border-right: white;
     }
+    .text { color: #333333 }
     .item1 { background-color: #008cff; color: #008cff; }
     .item2 { background-color: #ffbf00; color: #ffbf00; }
     .item3 { background-color: #ff0000; color: #ff0000; }

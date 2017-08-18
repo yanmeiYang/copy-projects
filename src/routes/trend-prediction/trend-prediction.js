@@ -2,18 +2,33 @@
 /**
  */
 import React from 'react';
-import { Tabs, Icon, Slider } from 'antd';
+import { Tabs, Icon, Slider, Button } from 'antd';
 import { connect } from 'dva';
 import d3 from 'd3';
 import d3sankey from './utils/sankey';
-import trend from '../../../external-docs/trend-prediction/trend_out1.json';
+import am from '../../../external-docs/trend-prediction/answer machine.json';
+import ai from '../../../external-docs/trend-prediction/artificial intelligence.json';
+import au from '../../../external-docs/trend-prediction/autopilot.json';
+import bc from '../../../external-docs/trend-prediction/BlockChain.json';
+import cv from '../../../external-docs/trend-prediction/Computer vision.json';
+import dm from '../../../external-docs/trend-prediction/Data Mining.json';
+import dml from '../../../external-docs/trend-prediction/Data Modeling.json';
+import dl from '../../../external-docs/trend-prediction/deep learning.json';
+import gd from '../../../external-docs/trend-prediction/graph database.json';
+import iot from '../../../external-docs/trend-prediction/Internet of Things.json';
+import ml from '../../../external-docs/trend-prediction/Machine Learning.json';
+// 这三个文件里面有的会导致程序build失败。无法上线。我debug了4个小时。。。
+// import nlp from '../../../external-docs/trend-prediction/Natural language processing.json';
+// import net from '../../../external-docs/trend-prediction/Networks.json';
+// import nn from '../../../external-docs/trend-prediction/neural network.json';
+import rb from '../../../external-docs/trend-prediction/Robotics.json';
 import styles from './trend-prediction.less';
 import { Auth } from '../../hoc';
 
 let ball_radius, bar_pos, chart, color, format, formatNumber, height, hist_height, margin,
   render_topic, root, timeline, timeline_item_offset, width;
 let area, path, sankey, svg, y;
-const energy = trend;
+let energy = dm;
 let axis, basis, draw_flow, draw_right_box, flow, force, item, link, max_freq, max_sum, node,
   people, terms, time_slides_dict, time_slides_offset, time_window, x;
 let query;
@@ -49,8 +64,69 @@ export default class TrendPrediction extends React.PureComponent {
     }
     return false;
   }
+  seeword = (e) => {
+    const word = e.currentTarget && e.currentTarget.value && e.currentTarget.getAttribute('value');
+    const href = window.location.href.split('?query=')[0] + '?query=' + word;
+    window.location.href = href;
+  }
 
   showtrend = () => {
+    const loc=window.location.href.split("query=");
+    let word="dm";
+    if(loc!=null){
+      if(loc[1]!=null){
+        word = loc[1];
+      }
+    }
+    switch(word){
+      case "am":
+        energy = am;
+        break;
+      case "ai":
+        energy = ai;
+        break;
+      case "au":
+        energy = au;
+        break;
+      case "bc":
+        energy = bc;
+        break;
+      case "cv":
+        energy = cv;
+        break;
+      case "dm":
+        energy = dm;
+        break;
+      case "dml":
+        energy = dml;
+        break;
+      case "dl":
+        energy = dl;
+        break;
+      case "gd":
+        energy = gd;
+        break;
+      case "iot":
+        energy = iot;
+        break;
+      case "ml":
+        energy = ml;
+        break;
+      case "nlp":
+        energy = nlp;
+        break;
+      case "net":
+        energy = net;
+        break;
+      case "nn":
+        energy = nn;
+        break;
+      case "rb":
+        energy = rb;
+        break;
+      default:
+        energy = dm;
+    }
     root = void 0;
     margin = {
       top: 1,
@@ -59,7 +135,7 @@ export default class TrendPrediction extends React.PureComponent {
       left: 1,
     };
     width = 1300; // 需调整参数，容器宽度
-    height = 1300 - margin.top - margin.bottom; // 需调整参数，容器高度
+    height = 900 - margin.top - margin.bottom; // 需调整参数，容器高度
     // console.log(height);
     formatNumber = d3.format(',.0f');
     format = function (d) { // 格式化为整数，点出现的次数
@@ -306,12 +382,12 @@ export default class TrendPrediction extends React.PureComponent {
     node = svg.append('g').selectAll('.node').data(energy.nodes).enter().append('a').attr('href', '#').attr('class', 'popup').attr('rel', 'popuprel').append('g').attr('class', 'node').call(force.drag).on('mouseover', function (d, event) {
       let xPosition, yPosition;
       d3.select(this).attr('opacity', 0.6);
-      xPosition = d3.event.layerX + 50;
-      yPosition = d3.event.layerY + 30;
+      xPosition = d3.event.layerX + 150;
+      yPosition = d3.event.layerY + 130;
       // if (xPosition > 900) {
       //     xPosition = d3.event.layerX - 200;
       // }
-      d3.select('#tooltip').style('left', `${xPosition}px`).style('top', `${yPosition}px`).select('#value').text(() => {
+      d3.select('#tooltip').style('left', `${xPosition}px`).style('top', `${yPosition}px`).style('position', 'absolute').style('border-width', '1px').style('background-color', '#0ed6ff').style('border-color','black').style('z-index','1000').style('border-radius','20px').style('height','70px').style('width','180px').style('padding','5px').select('#value').text(() => {
         return `${d.name}：  ${format(d.value)} ${d.y}`;
       });
       d3.select('#tooltip').classed('hidden', false);
@@ -321,10 +397,7 @@ export default class TrendPrediction extends React.PureComponent {
       });
       d3.select('#tooltip').classed('hidden', true);
     }).on('click', (d) => {
-      $('#myModal').modal('show');
-      d3.select('#detailInfo').text(() => {
-        return `${d.name}：  ${format(d.value)}\n`;
-      });
+
     });
     node.append('a').attr('class', 'border-fade').append('rect').attr('height', (d) => {
       return d.dy;
@@ -391,12 +464,12 @@ export default class TrendPrediction extends React.PureComponent {
       if (d.d < 30) {
         return 200 - d.d * 5;
       }
-      return 200 - 30 / 21.35 * Math.pow(d.d, 0.9) * 5;
+      return 50;//200 - 30 / 21.35 * Math.pow(d.d, 0.9) * 5
     }).y1((d) => {
       if (d.d < 30) {
         return 200 + d.d * 5;
       }
-      return 200 + 30 / 21.35 * Math.pow(d.d, 0.9) * 5;
+      return 350;//200 + 30 / 21.35 * Math.pow(d.d, 0.9) * 5
     }).interpolate('basis');
     flow = chart.append('g').attr('transform', (d) => {
       return `translate(${[0, 350]})rotate(${0})`;
@@ -409,7 +482,7 @@ export default class TrendPrediction extends React.PureComponent {
       let channels, count, i, people_flow;
       flow.remove();
       flow = chart.append('g').attr('transform', (d) => {
-        return `translate(${[-500, 350]})rotate(${0})`;// 需调整参数，人图的left和top，宽度的起始和旋转
+        return `translate(${[-300, 350]})rotate(${0})`;// 需调整参数，人图的left和top，宽度的起始和旋转
       });
       d3.select('.strong').remove();
       d3.select(`#term-${data.idx}`).append('rect').attr('class', 'strong').attr('x', '0px').attr('y', (d) => {
@@ -481,7 +554,6 @@ export default class TrendPrediction extends React.PureComponent {
 
   onChange = (key) => {
     if (key == 1) {
-      console.log('@@@@###');
       d3.select('.active').classed('active', false);
       d3.select(this.parentNode).classed('active', true);
       d3.selectAll('.term').remove();
@@ -495,7 +567,6 @@ export default class TrendPrediction extends React.PureComponent {
       d3.select('.active').classed('active', false);
       d3.select(this.parentNode).classed('active', 'true');
       d3.selectAll('.term').remove();
-      const energy = trend;
       energy.terms.sort((a, b) => {
         return b.freq - a.freq;
       });
@@ -529,7 +600,29 @@ export default class TrendPrediction extends React.PureComponent {
   render() {
     return (
       <div className={styles.trend}>
-        <Slider marks={marks} step={10} range defaultValue={[20, 50]} disabled={false} />
+        <div className={styles.year}>
+          <Slider marks={marks} step={10} range defaultValue={[20, 50]} disabled={false} />
+        </div>
+        <div className={styles.hotwords}>
+          <p>HOT WORDS</p>
+          <Button.Group>
+            <Button type="dashed" onClick={this.seeword} value="am" className={styles.hotword}>Answer Machine</Button>
+            <Button type="dashed" onClick={this.seeword} value="ai" className={styles.hotword}>Artificial Intelligence</Button>
+            <Button type="dashed" onClick={this.seeword} value="au" className={styles.hotword}>Autopilot</Button>
+            <Button type="dashed" onClick={this.seeword} value="bc" className={styles.hotword}>BlockChain</Button>
+            <Button type="dashed" onClick={this.seeword} value="cv" className={styles.hotword}>Computer Vision</Button>
+            <Button type="dashed" onClick={this.seeword} value="dm" className={styles.hotword}>Data Mining</Button>
+            <Button type="dashed" onClick={this.seeword} value="dml" className={styles.hotword}>Data Modeling</Button>
+            <Button type="dashed" onClick={this.seeword} value="dl" className={styles.hotword}>Deep Learning</Button>
+            <Button type="dashed" onClick={this.seeword} value="gd" className={styles.hotword}>Graph Databases</Button>
+            <Button type="dashed" onClick={this.seeword} value="iot" className={styles.hotword}>Internet of Things</Button>
+            <Button type="dashed" onClick={this.seeword} value="ml" className={styles.hotword}>Machine Learning</Button>
+            {/*<Button type="dashed" onClick={this.seeword} value="nlp" className={styles.hotword}>Natural Language Processing</Button>*/}
+            {/*<Button type="dashed" onClick={this.seeword} value="net" className={styles.hotword}>Networks</Button>*/}
+            {/*<Button type="dashed" onClick={this.seeword} value="nn" className={styles.hotword}>Neural Network</Button>*/}
+            <Button type="dashed" onClick={this.seeword} value="rb" className={styles.hotword}>Robotics</Button>
+          </Button.Group>
+        </div>
         <div className={styles.nav} id="right-box">
           <Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange}>
             <TabPane tab={<span><Icon type="calendar" />Current Hotspot</span>} key="1"

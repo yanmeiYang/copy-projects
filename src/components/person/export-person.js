@@ -1,5 +1,5 @@
 /**
- * Created by yangyanmei on 17/7/3.
+ * Created by ranyanchuan on 17/8/18.
  */
 import React from 'react';
 // import { Link } from 'dva/router';
@@ -10,37 +10,30 @@ import styles from './expert-person.less';
 import * as searchService from '../../services/search';
 import { getTwoDecimal } from '../../utils';
 import * as profileUtils from '../../utils/profile-utils';
+import * as personService from '../../services/person';
 
 
 const CheckboxGroup = Checkbox.Group;
 
-const plainOptions = [
-  { id: 1, label: '姓名', desc: 'name' },
-  { id: 2, label: '性别', desc: 'gender' },
-  { id: 3, label: '职称', desc: 'pos' },
-  { id: 4, label: '单位', desc: 'aff' },
-  { id: 5, label: 'h-index', desc: 'h_index' },
-  { id: 6, label: '学术活跃度', desc: 'activity' },
-  { id: 7, label: '领域新星', desc: 'new_star' },
-  { id: 8, label: '引用数', desc: 'num_citation' },
-  { id: 9, label: '论文数', desc: 'num_pubs' },
-];
+const plainOptions = ['name', 'gender', 'pos', 'aff', 'h_index', 'activity', 'new_star', 'num_citation', 'num_pubs', 'interest'];
 
 const keyValue = {
   name: '姓名',
   gender: '性别',
   pos: '职称',
   aff: '单位',
-  h_index: 'h-index',
+  h_index: 'h指数',
   activity: '学术活跃度',
   new_star: '领域新星',
   num_citation: '引用数',
   num_pubs: '论文数',
   male: '男',
   female: '女',
+  translate: '翻译',
+  interest: '研究兴趣',
 };
 
-const defaultCheckedList = ['name', 'gender', 'pos', 'aff', 'h_index', 'activity', 'new_star', 'num_citation', 'num_pubs'];
+const defaultCheckedList = ['name', 'pos', 'aff', 'h_index'];
 class ExportPersonBtn extends React.Component {
   state = {
     loading: false,
@@ -51,7 +44,16 @@ class ExportPersonBtn extends React.Component {
     checkAll: false,
     exportSize: 100,
     maxExportSize: 100,
+    interestsI18n: {},
   };
+
+  componentWillMount() {
+    personService.getInterestsI18N((result) => {
+      this.setState({ interestsI18n: result });
+    });
+    this.setState({ exportSize: this.props.pageSize });
+  }
+
   setExport = (value) => {
     this.setState({ isExport: !value });
   };
@@ -81,49 +83,61 @@ class ExportPersonBtn extends React.Component {
     e.preventDefault();
     const { query, pageSize, current, filters, sort } = this.props;
     const offset = pageSize * (current - 1);
-    const size = this.state.exportSize;
-    const selected = this.state.checkedList;
+    const size = this.state.exportSize + 10;
+    const selected = plainOptions.filter((x) => {
+      return this.state.checkedList.includes(x);
+    });
+
+    //  添加中文翻译
+    if (sysconfig.PreferredLanguage === 'cn') {
+      selected.push('translate');
+    }
     searchService.searchPerson(query, offset, size, filters, sort).then((res) => {
       const selectedItem = selected;
       let expertPersonInfo = '';
-      const results = res.data.result;
       if (res.data.result.length > 0) {
+        const results = res.data.result.slice(0, this.state.exportSize);
         results.map((person) => {
+          const personInfo = [];
+          const basic = {
+            name: profileUtils.displayNameCNFirst(person.name, person.name_zh),
+            gender: person.attr.gender ? personService.returnGender(person.attr.gender) : ' ',
+            pos: profileUtils.displayPositionFirst(person.pos),
+            aff: profileUtils.displayAff(person),
+            h_index: person.indices.h_index ? person.indices.h_index : ' ',
+            activity: person.indices.activity ? getTwoDecimal(parseFloat(person.indices.activity), 2) : ' ',
+            new_star: person.indices.new_star ? getTwoDecimal(parseFloat(person.indices.new_star), 2) : ' ',
+            num_citation: person.indices.num_citation ? getTwoDecimal(parseFloat(person.indices.num_citation), 2) : ' ',
+            num_pubs: person.indices.num_pubs ? getTwoDecimal(parseFloat(person.indices.num_pubs), 2) : ' ',
+            interest: person.tags.length > 0 ? person.tags.slice(0, 8).map(item => item.t).join(';') : ' ',
+            translate: person.tags.length > 0 ? person.tags.slice(0, 8).map((item) => {
+              const tag = personService.returnKeyByLanguage(this.state.interestsI18n, item.t);
+              const showTag = tag.zh !== '' ? tag.zh : tag.en;
+              return showTag;
+            }).join(';') : ' ',
+          };
+
           selectedItem.map((item) => {
-            switch (item) {
-              case 'name':
-                return expertPersonInfo += person.name_zh ? `${person.name_zh},` : (person.name ? `${person.name},` : ',');
-              case 'gender':
-                return expertPersonInfo += person.attr.gender ? `${keyValue[person.attr.gender]},` : ',';
-              case 'pos':
-                return expertPersonInfo += person.pos[0].n_zh ? `${person.pos[0].n_zh.replace(/,/g, ';')},` : (person.pos[0].n ? `${person.pos[0].n.replace(/,/g, ';')},` : ',');
-              case 'aff':
-                return expertPersonInfo += `${profileUtils.displayAff(person).replace(/,/g, ';')},`;
-              case 'h_index':
-                return expertPersonInfo += person.indices.h_index ? `${person.indices.h_index},` : ',';
-              case 'activity':
-                return expertPersonInfo += person.indices.activity ? `${getTwoDecimal(parseFloat(person.indices.activity), 2)},` : ',';
-              case 'new_star':
-                return expertPersonInfo += person.indices.new_star ? `${getTwoDecimal(parseFloat(person.indices.new_star), 2)},` : ',';
-              case 'num_citation':
-                return expertPersonInfo += person.indices.num_citation ? `${getTwoDecimal(parseFloat(person.indices.num_citation), 2)},` : ',';
-              case 'num_pubs':
-                return expertPersonInfo += person.indices.num_pubs ? `${getTwoDecimal(parseFloat(person.indices.num_pubs), 2)},` : ',';
-              default:
-                return true;
+            let value = basic[item];
+            if (typeof value === 'string') {
+              value = value.replace(/,|\n|\r/g, ' '); // 对空格、回车和逗号处理
             }
+            personInfo.push(value);
+            return true;
           });
+          expertPersonInfo += personInfo.join(',');
           expertPersonInfo += '\n';
           return true;
         });
-        let fristRow = '';
-        selected.map((item) => {
-          fristRow += `${keyValue[item]},`;
-          return true;
-        });
+
+        let temp = selectedItem;
+        if (sysconfig.PreferredLanguage === 'cn') {
+          temp = temp.map(item => keyValue[item]);
+        }
+        const fristRow = temp.join(',');
         let str = `${fristRow}\n${expertPersonInfo}`;
         const bom = '\uFEFF';
-        str = encodeURIComponent(str);
+        str = encodeURI(str);
         location.href = `data:text/csv;charset=utf-8,${bom}${str}`;
         this.setState({ loading: false });
       }
@@ -151,7 +165,7 @@ class ExportPersonBtn extends React.Component {
           <div>
             <label htmlFor="" style={{ margin: '0px 15px 10px 20px' }}>导出数据:</label>
             <InputNumber placeholder="导出条数" min={1} max={this.state.maxExportSize}
-                         defaultValue={this.state.maxExportSize}
+                         defaultValue={this.state.exportSize}
                          style={{ width: '80%' }}
                          onChange={this.onChangeExportSize.bind(this)} />
 
@@ -166,18 +180,25 @@ class ExportPersonBtn extends React.Component {
               <Row style={{ paddingLeft: 20 }}>
                 {plainOptions.map((item) => {
                   return (
-                    <Col span={8} key={item.id}><Checkbox
-                      value={item.desc}>{item.label}</Checkbox></Col>
+                    <Col span={8} key={item}><Checkbox
+                      value={item}>{keyValue[item]}</Checkbox></Col>
                   );
                 })}
 
               </Row>
             </CheckboxGroup>
             <div style={{ height: 20 }}>
-              <Button key="submit" type="primary" size="large" style={{ float: 'right' }}
-                      loading={this.state.loading}>
+              {!this.state.loading &&
+              <Button key="submit" type="primary" size="large" style={{ float: 'right' }}>
                 <a onClick={this.clickDownload.bind(this)} download="data.csv" href="#">导出</a>
               </Button>
+              }
+              {this.state.loading &&
+              <Button key="submit" type="primary" size="large" style={{ float: 'right' }}
+                      loading={this.state.loading}>导出
+              </Button>
+              }
+
             </div>
           </div>
 

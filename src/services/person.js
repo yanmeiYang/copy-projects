@@ -100,3 +100,11 @@ export function returnKeyByLanguage(interestsData, key) {
     return tag;
   }
 }
+
+export function returnGender(value) {
+  let gender = value;
+  if (sysconfig.PreferredLanguage === 'cn') {
+    gender = value.toLowerCase() === 'male' ? '男' : '女';
+  }
+  return gender;
+}

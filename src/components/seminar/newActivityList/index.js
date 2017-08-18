@@ -6,6 +6,8 @@ import { routerRedux, Link } from 'dva/router';
 import { Button } from 'antd';
 import { connect } from 'dva';
 import styles from './index.less';
+import { sysconfig } from '../../../systems';
+
 
 const CommitteeColor = '3px outset #ff7f0e';
 const DivisionColor = '3px outset #1f77b4';
@@ -47,7 +49,7 @@ class NewActivityList extends React.Component {
             </Link>
           </h2>
           <div>
-            {expertRating && !JSON.parse(this.props.hidetExpertRating) &&
+            {sysconfig.ShowRating && expertRating && !JSON.parse(this.props.hidetExpertRating) &&
             <Button type="primary" className={styles.viewTheActivityBtn} size="small"
                     onClick={this.goToRating.bind(this, result.id)}>专家评分</Button>}
           </div>

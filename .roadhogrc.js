@@ -14,6 +14,16 @@ export default {
 
   "theme": "./theme.config.js",
 
+  // "proxy": {
+  //   "/api": {
+  //     "target": "https://trajectory.aminer.org/",
+  //     "changeOrigin": true,
+  //     "pathRewrite": { "^/tapi": "" }
+  //   }
+  // },
+
+  // NOTE: access: request('/tapi/trajecotry/go')
+
   // disableCSSModules: false,
   // "cssModulesExclude": [],
   // "publicPath": "/",
@@ -74,14 +84,6 @@ export default {
   //   // 'react-dom': 'react-dom',
   //   // 'react-helmet': 'react-helmet',
   //   // 'react-router': 'react-router',
-  // },
-
-  // "proxy": {
-  //   "/api": {
-  //     "target": "http://jsonplaceholder.typicode.com/",
-  //     "changeOrigin": true,
-  //     "pathRewrite": { "^/api": "" }
-  //   }
   // },
 
 

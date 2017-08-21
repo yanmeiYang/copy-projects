@@ -46,7 +46,14 @@ export default async function request(url, options) {
     debug.log('@@request ', url, options);
   }
 
-  let newUrl = baseURL + url;
+  console.log("baseurl",baseURL);
+
+  let base = baseURL;
+  if (options && options.baseURL !== undefined) {
+    base = options.baseURL;
+  }
+  let newUrl = base + url;
+
 
   // process !post mode data.
   if (options &&

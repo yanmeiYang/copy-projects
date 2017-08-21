@@ -76,13 +76,11 @@ export default {
   //   // 'react-router': 'react-router',
   // },
 
-  // "proxy": {
-  //   "/api": {
-  //     "target": "http://jsonplaceholder.typicode.com/",
-  //     "changeOrigin": true,
-  //     "pathRewrite": { "^/api": "" }
-  //   }
-  // },
-
-
+  "proxy": {
+     "/tapi": {
+       "target": "http://trajectory.aminer.org",
+       "changeOrigin": true,
+       "pathRewrite": { "^/tapi": "http://trajectory.aminer.org" }
+     }
+  },
 }

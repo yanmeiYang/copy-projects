@@ -3,77 +3,71 @@ import pathToRegexp from 'path-to-regexp';
 import * as pubsService from '../services/publication';
 import * as personService from '../services/person';
 import * as searchService from '../services/search';
+import * as traDataFindService from '../services/expert-trajectory-service';
 
 export default {
 
   namespace: 'expertTrajectory',
 
   state: {
-    query: '',
+    results: [],
+    personId: '',
+    personInfo: {},
     geoData: {},
+    // for rightInfoZone,
+    infoZoneIds: '', // ids as string slitted by ',';
+    clusterPersons: [],
   },
 
   subscriptions: {},
 
   effects: {
     // 直接抄expert-map的，所有剩下的东西都要改。
-    * searchMap({ payload }, { call, put }) {
+    * searchPerson({ payload }, { call, put }) {
+      yield put({ type: 'showLoading' });
       const { query } = payload;
-      const data = yield call(searchService.searchMap, query);
-      yield put({ type: 'searchMapSuccess', payload: { data } });
+      const { data } = yield call(searchService.searchPerson, query);
+      yield put({ type: 'searchPersonSuccess', payload: { data, query } });
     },
 
-    * getPersonInfo({ payload }, { call, put }) {  // eslint-disable-line
-      // console.log('effects: getPerson', payload);
+    * dataFind({ payload }, { call, put }) {
+      console.log('enter kfFind, with query:', payload);
       const { personId } = payload;
-      const data = yield call(personService.getPerson, personId);
-      yield put({ type: 'getPersonInfoSuccess', payload: { data } });
-    },
-
-    * listPersonByIds({ payload }, { call, put }) {  // eslint-disable-line
-      const { ids } = payload;
-      const data = yield call(personService.listPersonByIds, ids);
-      yield put({ type: 'listPersonByIdsSuccess', payload: { data } });
+         try {
+           const data = yield call(traDataFindService.dataFind, personId);
+           console.log("(((((((((((((((((((")
+           yield put({ type: 'dataFindSuccess', payload: { data } });
+         } catch (e) {
+           console.error('---- Catch Error: ---- ', e);
+           yield put({
+             type: 'dataNotFound',
+             payload: { message: `'${personId}' Not Found ${e || ''}` },
+           });
+         }
     },
 
   },
 
   reducers: {
-    getPersonInfoSuccess(state, { payload: { data } }) {
-      return { ...state, personInfo: data.data };
+    searchPersonSuccess(state, { payload: { data, query } }) { // state?
+      const { result, total } = data;
+      console.log('result', result);
+      return {
+        ...state,
+        results: result,
+        // pagination: { pageSize: state.pagination.pageSize, total, current },
+        loading: false,
+      };
     },
 
-    resetPersonInfo(state) {
-      return { ...state, personInfo: {} };
+    dataFindSuccess(state, { payload }) {
+      console.log("hahahahahahhaah", payload);
+      /*      const data = payload.data && payload.data.data;
+      const kgindex = kgService.indexingKGData(data);
+      const kgFetcher = kgService.kgFetcher(data, kgindex);
+      // console.log('success findKG, return date is ', data);
+      // console.log('indexing it: ', kgindex);
+      return { ...state, kgdata: data, kgindex, kgFetcher }; */
     },
-
-    listPersonByIdsSuccess(state, { payload: { data } }) {
-      return { ...state, clusterPersons: data.data.persons };
-    },
-
-    setRightInfoZoneIds(state, { payload: { idString } }) {
-      return { ...state, infoZoneIds: idString };
-    },
-
-    searchMapSuccess(state, { payload: { data } }) {
-      // TODO translate data into target format.
-      const geoSearchData = [];
-      if (data.data) {
-        data.data.data.map((item) => {
-          geoSearchData.push({
-            name: item.n,
-            id: item.i,
-            location: {
-              lat: item.lat,
-              lng: item.lng,
-            },
-          });
-          return null;
-        });
-      }
-      // console.log('-----------------------------------', geoSearchData);
-      return { ...state, geoData: { results: geoSearchData } };
-    },
-
   },
 };

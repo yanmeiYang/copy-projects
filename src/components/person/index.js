@@ -4,6 +4,7 @@
 import ProfileInfo from './profile-info';
 import PersonList from './person-list';
 import PersonListTiny from './person-list-tiny';
+import PersonListLittle from './person-list-little';
 
 module.exports = {
 
@@ -12,5 +13,7 @@ module.exports = {
   PersonList,
 
   PersonListTiny,
+
+  PersonListLittle,
 
 };

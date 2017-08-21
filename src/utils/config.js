@@ -2,10 +2,10 @@
  * Created by yutao on 2017/5/22.
  */
 // const SYS = 'ccf';
-// const SYS = 'huawei';
+const SYS = 'huawei';
 // const SYS = 'alibaba';
 // const SYS = 'tencent';
-const SYS = 'cie';
+// const SYS = 'cie';
 // const SYS = 'cipsc';
 // const SYS = '2017-8';
 // const SYS = 'demo';
@@ -51,6 +51,7 @@ module.exports = {
     listUsersByRole: '/user/role/list/:role/offset/:offset/size/:size',
     // 创建邮件模板
     emailTemplate: '/user/mail/template/:src/:type',
+    getTemplate: '/user/mail/template/:src/:type ',
 
     // search
     searchPerson: '/search/person', // pin=1 huawei mode.

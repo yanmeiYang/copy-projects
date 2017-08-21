@@ -262,7 +262,7 @@ export default class Users extends React.Component {
 
 
         <Tabs defaultActiveKey={this.state.defaultTabKey} type="card" onChange={this.onTabChange}>
-          <TabPane tab="活跃用户" key="active" />
+          <TabPane tab="活动用户" key="active" />
           <TabPane tab="禁用用户" key="forbid" />
         </Tabs>
 

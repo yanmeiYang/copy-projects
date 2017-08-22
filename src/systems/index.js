@@ -10,6 +10,7 @@ import * as cipscConfig from './cipsc/config';
 import * as cieConfig from './cie/config';
 import * as demoConfig from './demo/config';
 import * as cietestConfig from './cietest/config';
+import * as medrobConfig from './medrob/config';
 
 import { System, Source } from '../utils/system';
 import Footer from '../components/Footers/default';
@@ -25,6 +26,7 @@ const CurrentSystemConfig = {
   cipsc: cipscConfig,
   demo: demoConfig,
   cietest: cietestConfig,
+  medrob: medrobConfig,
 };
 
 // 默认配置

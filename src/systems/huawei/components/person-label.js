@@ -4,9 +4,7 @@
 import React from 'react';
 import { Tag } from 'antd';
 import styles from './person-label.less';
-import { TopExpertBase } from '../../../utils/expert-base';
-
-const { ACMFellowExpertBaseIndex, TopUnivExpertBaseIndex } = TopExpertBase;
+import { ACMFellowExpertBaseIndex, TopUnivExpertBaseIndex } from '../../../utils/expert-base';
 
 class PersonLabel extends React.PureComponent {
   shouldComponentUpdate(nextProps) {

@@ -1,6 +1,7 @@
 /**
  *  Created by BoGao on 2017-06-15;
  */
+/* eslint-disable camelcase */
 import React from 'react';
 import { Link } from 'dva/router';
 import { Tag, Tooltip } from 'antd';
@@ -108,7 +109,7 @@ class PersonList extends React.PureComponent {
                           {
                             person.tags.slice(0, 8).map((item) => {
                               if (item.t === null || item.t === 'Null') {
-                                return;
+                                return false;
                               } else {
                                 const tag = personService.returnKeyByLanguage(this.state.interestsI18n, item.t);
                                 const showTag = tag.zh !== '' ? tag.zh : tag.en;

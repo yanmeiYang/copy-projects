@@ -3,8 +3,6 @@
  */
 import React from 'react';
 import Footer from '../../components/Footers/cie';
-import { toIDDotString, TopExpertBase } from '../../utils/expert-base';
-
 
 module.exports = {
 

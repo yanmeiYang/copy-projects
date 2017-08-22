@@ -13,11 +13,12 @@ const AvailableSystems = [
   'cipsc',
   'demo',
   'cietest',
+  'medrob',
 ];
 
 let System;
 // const System = 'ccf';
-System = 'huawei';
+// System = 'huawei';
 // const System = 'alibaba';
 // const System = 'tencent';
 // const System = 'cie';
@@ -25,6 +26,7 @@ System = 'huawei';
 // const System = '2017-8';
 // const System = 'demo';
 // const System = 'cietest';
+System = 'medrob';
 
 let Source = System; // AppID, Used in UniversalConfig.
 

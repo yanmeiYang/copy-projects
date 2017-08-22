@@ -43,7 +43,7 @@ function loadSavedSystem() {
   const data = localStorage.getItem(USER_LOCAL_KEY);
   if (data) {
     const dataObj = JSON.parse(data);
-    console.log('userInSession', dataObj);
+    // console.log('userInSession', dataObj);
     // only god can switch system.
     if (dataObj && dataObj.roles && dataObj.roles.god
       && dataObj.data && dataObj.data.email === ss.user) {

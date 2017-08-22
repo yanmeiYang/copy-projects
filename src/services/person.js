@@ -1,4 +1,3 @@
-import fetch from 'dva/fetch';
 import { request, config } from '../utils';
 import { wget } from '../utils/request';
 import { sysconfig } from '../systems';
@@ -10,6 +9,13 @@ export async function getPerson(id) {
   // TODO Make this transparency to developers.
   return request(api.personProfile.replace(':id', id), {
     method: 'GET',
+  });
+}
+
+export async function listPersonByIds(ids) {
+  return request(api.listPersonByIds, {
+    method: 'POST',
+    body: JSON.stringify({ ids }),
   });
 }
 
@@ -36,13 +42,6 @@ export async function getInterestVisData(personId) {
   return request(api.interests.replace(':id', personId));
 }
 
-export async function listPersonByIds(ids) {
-  return request(api.listPersonByIds, {
-    method: 'POST',
-    body: JSON.stringify({ ids }),
-  });
-}
-
 export async function getActivityAvgScoresByPersonId(id) {
   return request(api.getActivityAvgScoresByPersonId.replace(':id', id));
 }
@@ -52,6 +51,7 @@ export async function personEmailStr(id) {
 }
 
 const LSKEY_INTERESTS = 'INTERESTS_I18N';
+
 export function getInterestsI18N(callback) {
   let interestsData;
   const obj = localStorage.getItem(LSKEY_INTERESTS);

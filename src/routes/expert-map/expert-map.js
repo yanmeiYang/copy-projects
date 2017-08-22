@@ -534,6 +534,7 @@ class ExpertMap extends React.PureComponent {
                 <div className={styles.t}>一组专家</div>
               </div>
               <div className={styles.container}>
+                <div className={styles.label}>人数：</div>
                 <div className={styles.text}> 少</div>
                 <div className={styles.item1}> 1</div>
                 <div className={styles.item2}> 2</div>

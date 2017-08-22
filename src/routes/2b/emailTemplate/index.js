@@ -3,12 +3,14 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Form, Input, Tabs, Select, Modal } from 'antd';
+import { Tabs, Button, Modal } from 'antd';
 import { sysconfig } from '../../../systems';
 import EmailContent from './emailCotent';
 import styles from './index.less';
 
+
 const TabPane = Tabs.TabPane;
+
 class EmailTemplate extends React.Component {
   state = { src: '' };
   componentWillMount = () => {

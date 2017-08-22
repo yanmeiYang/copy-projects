@@ -241,10 +241,10 @@ export default class Users extends React.Component {
     const listUsers = [];
     if (this.props.auth.listUsers) {
       this.props.auth.listUsers.map((item) => {
-        if (this.state.defaultTabKey === 'active' && !(item.role.includes(`${config.source}_超级管理员`) || item.role.includes(`${config.source}_forbid`))) {
+        if (this.state.defaultTabKey === 'active' && !(item.role.includes(`${sysconfig.SOURCE}_超级管理员`) || item.role.includes(`${sysconfig.SOURCE}_forbid`))) {
           listUsers.push(item);
         }
-        if (this.state.defaultTabKey === 'forbid' && item.role.includes(`${config.source}_forbid`)) {
+        if (this.state.defaultTabKey === 'forbid' && item.role.includes(`${sysconfig.SOURCE}_forbid`)) {
           listUsers.push(item);
         }
         return true;
@@ -278,7 +278,7 @@ export default class Users extends React.Component {
                     render={this.showUpdateName} />
             <Column title="邮箱" dataIndex="email" key="email" />
             {/* <Column title="职称" dataIndex="position" key="position"/> */}
-            {/* <Column title="性别" dataIndex="gender" key="gender" render={this.i18nGender} />*/}
+            {/* <Column title="性别" dataIndex="gender" key="gender" render={this.i18nGender} /> */}
             {sysconfig.ShowRegisteredRole &&
             <Column title="角色" dataIndex="new_role" key="role" />}
             {sysconfig.ShowRegisteredRole &&

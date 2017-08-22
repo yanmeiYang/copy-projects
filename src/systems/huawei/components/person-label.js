@@ -4,7 +4,7 @@
 import React from 'react';
 import { Tag } from 'antd';
 import styles from './person-label.less';
-import { TopExpertBase } from '../../../utils';
+import { TopExpertBase } from '../../../utils/expert-base';
 
 const { ACMFellowExpertBaseIndex, TopUnivExpertBaseIndex } = TopExpertBase;
 

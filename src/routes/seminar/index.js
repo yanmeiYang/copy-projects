@@ -6,6 +6,7 @@ import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import { Button, Tabs, Icon, Spin, Tag, Modal } from 'antd';
 import { config } from '../../utils';
+import { sysconfig } from '../../systems';
 import styles from './index.less';
 import SearchSeminar from './search-seminar';
 import NewActivityList from '../../components/seminar/newActivityList';
@@ -61,7 +62,7 @@ export default class Seminar extends React.Component {
         query,
         offset,
         size: sizePerPage,
-        src: config.source,
+        src: sysconfig.SOURCE,
         organizer,
         category,
       };
@@ -70,7 +71,7 @@ export default class Seminar extends React.Component {
       const params = {
         offset,
         size: sizePerPage,
-        filter: { src: config.source, organizer, category },
+        filter: { src: sysconfig.SOURCE, organizer, category },
       };
       this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
     }
@@ -102,12 +103,12 @@ export default class Seminar extends React.Component {
         category: this.state.category,
         offset: 0,
         size: sizePerPage,
-        src: config.source,
+        src: sysconfig.SOURCE,
       };
       this.props.dispatch({ type: 'seminar/searchActivity', payload: params });
     } else {
       const filter = {
-        src: config.source,
+        src: sysconfig.SOURCE,
         organizer: this.state.organizer,
         category: this.state.category,
       };
@@ -145,7 +146,7 @@ export default class Seminar extends React.Component {
       const params = {
         offset: 0,
         size: sizePerPage,
-        filter: { src: config.source },
+        filter: { src: sysconfig.SOURCE },
       };
       this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
     } else {
@@ -156,7 +157,7 @@ export default class Seminar extends React.Component {
         tag: stype.tag,
         offset: 0,
         size: sizePerPage,
-        src: config.source,
+        src: sysconfig.SOURCE,
       };
       this.props.dispatch({ type: 'seminar/searchActivity', payload: params });
     }
@@ -248,7 +249,7 @@ export default class Seminar extends React.Component {
                 <CheckableTag
                   className={styles.filterItem}
                   checked={category === ''}
-                  onChange={checked => this.getSeminar(sizePerPage, { src: config.source }, checked)}
+                  onChange={checked => this.getSeminar(sizePerPage, { src: sysconfig.SOURCE }, checked)}
                 >All
                 </CheckableTag>
                 {
@@ -275,7 +276,7 @@ export default class Seminar extends React.Component {
                 <CheckableTag
                   className={styles.filterItem}
                   checked={orgType === ''}
-                  onChange={checked => this.getSeminar(sizePerPage, { src: config.source }, checked)}
+                  onChange={checked => this.getSeminar(sizePerPage, { src: sysconfig.SOURCE }, checked)}
                 >All
                 </CheckableTag>
                 {

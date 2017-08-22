@@ -1,26 +1,11 @@
 /**
  * Created by yutao on 2017/5/22.
  */
-// const SYS = 'ccf';
-const SYS = 'huawei';
-// const SYS = 'alibaba';
-// const SYS = 'tencent';
-// const SYS = 'cie';
-// const SYS = 'cipsc';
-// const SYS = '2017-8';
-// const SYS = 'demo';
-//  const SYS = 'cietest';
-
 const param = (key, type, description) => {
   return { key, type, description };
 };
 
-module.exports = {
-  // To change SYSTEM settings. Please change /define.js.
-  // TODO remove all use of this config [system,source].
-  system: SYS, // 默认启动这是哪套系统，启动的时候传入app，之后会在APP里面重新设置。
-  source: SYS, // AppID, Used in UniversalConfig.
-
+ module.exports = {
   baseURL: 'https://api.aminer.org/api',
   // baseURL: 'https://166.111.7.105/api',
 

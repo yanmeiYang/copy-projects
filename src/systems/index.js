@@ -11,8 +11,7 @@ import * as cieConfig from './cie/config';
 import * as demoConfig from './demo/config';
 import * as cietestConfig from './cietest/config';
 
-
-import { config } from '../utils';
+import { System, Source } from '../utils/system';
 import Footer from '../components/Footers/default';
 import defaults from './utils';
 
@@ -30,10 +29,8 @@ const CurrentSystemConfig = {
 
 // 默认配置
 const defaultSystemConfigs = {
-  SYSTEM: config.system,
-
-  // 所有可选系统
-  AllOptionalSystems: ['ccf', 'huawei', 'alibaba', 'tencent', 'cie', 'cipsc', 'demo', 'cietest'],
+  SYSTEM: System,
+  SOURCE: Source,
 
   //
   // Systems Preference
@@ -67,7 +64,7 @@ const defaultSystemConfigs = {
   Search_EnableKnowledgeGraphHelper: true,
   Search_SortOptions: defaults.IN_APP_DEFAULT,
 
-  UserAuthSystem: config.system, // aminer 或者是 system.config
+  UserAuthSystem: System, // aminer 或者是 system.config
   UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签, 目前没用到
 
   Auth_AllowAnonymousAccess: false,
@@ -110,7 +107,7 @@ const defaultSystemConfigs = {
  * Combine
  ************************************************* */
 const sysconfig = defaultSystemConfigs;
-const currentSystem = CurrentSystemConfig[config.system];
+const currentSystem = CurrentSystemConfig[System];
 Object.keys(currentSystem).map((key) => {
   sysconfig[key] = currentSystem[key];
   return null;

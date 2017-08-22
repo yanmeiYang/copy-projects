@@ -34,15 +34,6 @@ class Header2b extends React.PureComponent {
       };
     }
 
-    if (process.env.NODE_ENV !== 'production') {
-      const { app } = this.props;
-      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-      console.log('app.user:', app.user);
-      console.log('app.token:', app.token ? app.token.slice(0, 10) : app.token);
-      console.log('app.roles:', app.roles);
-      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-    }
-
     return (
       <div className={styles.header}>
         <div className={styles.logoLine}>
@@ -60,6 +51,18 @@ class Header2b extends React.PureComponent {
             {/* TODO Move config out of this place */}
             <div>后台管理界面</div>
           </Link>
+
+          <div className={styles.middleArea}>
+            <Link className={styles.backToSystem} to="/">
+              <div>
+                Back to {sysconfig.SYSTEM}
+              </div>
+              <img alt=""
+                   className={styles.img}
+                   src={`/sys/${sysconfig.SYSTEM}/header_logo.png`}
+              />
+            </Link>
+          </div>
 
           <Menu
             selectedKeys={[location.pathname]}

@@ -64,7 +64,7 @@ class ForgotPassword extends React.Component {
         }
       }
       if (!err) {
-        values.token = config.source;
+        values.token = sysconfig.SOURCE;
         values.password = ' ';
         that.props.dispatch({ type: 'auth/forgotPassword', payload: values });
       }

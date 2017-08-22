@@ -35,7 +35,7 @@ export default {
       yield put({ type: 'createUserSuccess', payload: data });
       if (data.status) {
         const uid = data.uid;
-        yield call(authService.invoke, uid, config.source);
+        yield call(authService.invoke, uid, sysconfig.SOURCE);
         if (sysconfig.ShowRegisteredRole) {
           const arr = role.split('_');
           if (arr.length === 2) {
@@ -81,7 +81,7 @@ export default {
     },
 
     * checkEmail({ payload }, { call, put }) {
-      const { data } = yield call(authService.checkEmail, config.source, payload.email);
+      const { data } = yield call(authService.checkEmail, sysconfig.SOURCE, payload.email);
       yield put({ type: 'checkEmailSuccess', payload: data.status });
     },
 
@@ -130,7 +130,7 @@ export default {
       const listUsers = [];
       state.listUsers.map((item) => {
         if (item.id === uid) {
-          const role = item.role.filter(term => term !== `${config.source}_forbid`);
+          const role = item.role.filter(term => term !== `${sysconfig.SOURCE}_forbid`);
           item.role = role;
         }
         listUsers.push(item);
@@ -143,7 +143,7 @@ export default {
       const listUsers = [];
       state.listUsers.map((item) => {
         if (item.id === uid) {
-          item.role.push(`${config.source}_forbid`);
+          item.role.push(`${sysconfig.SOURCE}_forbid`);
         }
         listUsers.push(item);
         return true;
@@ -162,7 +162,7 @@ export default {
       for (const [key, value] of data.entries()) {
         value.new_role = {};
         for (const role of data[key].role.values()) {
-          if (role.indexOf(`${config.source}_`) >= 0) {
+          if (role.indexOf(`${sysconfig.SOURCE}_`) >= 0) {
             if (role.split('_').length === 2 && role.split('_')[1] !== 'forbid') {
               value.new_role = role.split('_')[1];
             }

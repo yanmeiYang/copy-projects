@@ -12,6 +12,7 @@ import { sysconfig } from '../../systems';
 import { KgSearchBox, SearchTypeWidgets } from '../../components/search';
 import { isLogin, isGod, isAuthed } from '../../utils/auth';
 import { TobButton, DevMenu } from '../../components/2b';
+import * as seminarService from '../../services/seminar';
 
 class Header extends React.PureComponent {
   // function Header({ app, location, dispatch, logout, onSearch }) {
@@ -151,7 +152,7 @@ class Header extends React.PureComponent {
                 {roles.authority[0] !== undefined &&
                 <span>
                   <br />
-                  <span>{roles.authority[0]}</span>
+                  <span>{seminarService.getValueByJointer(roles.authority[0])}</span>
                 </span>}
               </p>
             </Menu.Item>

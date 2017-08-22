@@ -11,7 +11,9 @@ class AddCoOrgModal extends React.Component {
   state = { modalVisible: false, currentOrg: [], tags: [] };
 
   componentDidMount() {
-    this.setState({ tags: this.props.coOrg });
+    if (this.props.coOrg !== '') {
+      this.setState({ tags: this.props.coOrg, currentOrg: this.props.coOrg });
+    }
   }
 
   setModalVisible = () => {

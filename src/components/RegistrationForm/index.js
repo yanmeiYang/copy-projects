@@ -46,7 +46,6 @@ class RegistrationForm extends React.PureComponent {
     editTheTalkIndex: -1,
     editStatus: false, // 是否是编辑状态
     organizer: '',
-    coOrg: '',
     previewVisible: false,
     image: null,
     currentOrg: [],
@@ -104,10 +103,11 @@ class RegistrationForm extends React.PureComponent {
         talks: currentSeminar.talk,
         editStatus: true,
         organizer: currentSeminar.organizer[0].split('^&*'),
-        coOrg: currentSeminar.organizer.slice(1),
+        currentOrg: currentSeminar.organizer.slice(1),
         image: currentSeminar.img ? currentSeminar.img : '',
       });
       this.props.form.setFieldsValue(data);
+      console.log(currentSeminar.organizer.slice(1));
     }
     return true;
   }
@@ -281,7 +281,7 @@ class RegistrationForm extends React.PureComponent {
     // if (activity_organizer_options.data) {
     //   activity_organizer_options_data = activity_organizer_options.data.concat(postSeminarOrganizer);
     // }
-    const { addNewTalk, talks, startValue, endValue, editTheTalk, image, coOrg } = this.state;
+    const { addNewTalk, talks, startValue, endValue, editTheTalk, image, currentOrg } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -335,17 +335,18 @@ class RegistrationForm extends React.PureComponent {
                 </Select>,
               )}
             </FormItem>}
-            {postSeminarOrganizer.length > 0 &&
+            {postSeminarOrganizer.length > 0 && this.state.organizer.length > 0 &&
             <FormItem {...formItemLayout} label="承办单位">
               {getFieldDecorator('organizer', {
                   initialValue: this.state.organizer,
                   rules: [{ required: true, message: '请选择承办单位！' }],
                 },
               )(
-                <Cascader options={postSeminarOrganizer} showSearch placeholder="请选择承办单位" />,
+                <Cascader options={postSeminarOrganizer}
+                          showSearch placeholder="请选择承办单位" />,
               )}
             </FormItem>}
-            {activity_organizer_options.length > 0 &&
+            {activity_organizer_options.length > 0 && currentOrg.length > 0 &&
             <FormItem {...formItemLayout} label="协办单位">
               {getFieldDecorator('co_org', {
                   // rules: [{ required: true, message: '请选择承办单位！' }],
@@ -354,7 +355,7 @@ class RegistrationForm extends React.PureComponent {
                 <div>
                   <AddCoOrgModal orgList={activity_organizer_options}
                                  dispatch={this.props.dispatch}
-                                 callbackParent={this.addNewCoOrg} coOrg={coOrg} />
+                                 callbackParent={this.addNewCoOrg} coOrg={currentOrg} />
                 </div>,
               )}
             </FormItem>

@@ -2,6 +2,7 @@
  * Created by yangyanmei on 17/8/4.
  */
 import React from 'react';
+import * as seminarService from '../../../services/seminar';
 import styles from './index.less';
 
 
@@ -29,7 +30,7 @@ class ActivityInfo extends React.PureComponent {
         <p>
           <strong>承办单位: &nbsp;</strong>
           {summaryById.organizer.map((item) => {
-            return <span key={`${item}_${Math.random()}`}>{item} &nbsp;</span>;
+            return <span key={`${item}_${Math.random()}`}>{seminarService.getValueByJointer(item)} &nbsp;</span>;
           })}
         </p>
         <p>

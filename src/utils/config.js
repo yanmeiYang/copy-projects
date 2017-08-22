@@ -1,8 +1,8 @@
 /**
  * Created by yutao on 2017/5/22.
  */
-// const SYS = 'ccf';
-const SYS = 'huawei';
+const SYS = 'ccf';
+// const SYS = 'huawei';
 // const SYS = 'alibaba';
 // const SYS = 'tencent';
 // const SYS = 'cie';
@@ -117,6 +117,7 @@ module.exports = {
     ucDeleteByKey: '/2b/config/:source/:category/:key',
     ucUpdateByKey: '/2b/config/:source/:category/rename/:key/:newKey',
     getCategoriesHint: '/2b/config/:source/category/suggest/:category',
+    listConfigsByCategoryList: '/2b/config/:source/by-category',
 
     // Knowledge Graph
     kgFind: {

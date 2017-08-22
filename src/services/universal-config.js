@@ -55,3 +55,12 @@ export async function getCategoriesHint(category) {
       method: 'GET',
     });
 }
+
+export async function listConfigsByCategoryList(category) {
+  return request(api.listConfigsByCategoryList
+      .replace(':source', source),
+    {
+      method: 'GET',
+      data: { category },
+    });
+}

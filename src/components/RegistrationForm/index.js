@@ -11,6 +11,7 @@ import {
   Button,
   Upload,
   Modal,
+  Cascader,
 } from 'antd';
 import { connect } from 'dva';
 import { config } from '../../utils';
@@ -18,6 +19,7 @@ import styles from './index.less';
 import defaultImg from '../../assets/people/default.jpg';
 import CanlendarInForm from '../../components/seminar/calendar';
 import AddTags from '../../components/seminar/addTags';
+import AddCoOrgModal from '../../components/seminar/addCoOrgModal';
 // import ExpertBasicInformation from '../../components/seminar/expertBasicInformation/expertBasicInformation';
 import AddExpertModal from '../../components/seminar/addExpertModal';
 import ShowExpertList from '../../routes/seminar/addSeminar/workshop/showExpertList';
@@ -25,7 +27,9 @@ import ShowExpertList from '../../routes/seminar/addSeminar/workshop/showExpertL
 const Dragger = Upload.Dragger;
 const FormItem = Form.Item;
 const Option = Select.Option;
-
+const OrgListGroupCategoryKey = 'orgcategory';
+const OrgListPrefix = 'orglist_';
+const OrgJoiner = '^&*';
 class RegistrationForm extends React.PureComponent {
   state = {
     addNewTalk: false,
@@ -41,23 +45,34 @@ class RegistrationForm extends React.PureComponent {
     editTheTalk: {},
     editTheTalkIndex: -1,
     editStatus: false, // 是否是编辑状态
-    organizer: '', // componentWillUpdate设置organizer不起作用
+    organizer: '',
+    coOrg: '',
     previewVisible: false,
     image: null,
+    currentOrg: [],
+    addCoOrgModalVisible: false,
     // suggestSpeakers: [],
     // speakerInfo: {},
     // integral: 0,
   };
   componentWillMount = () => {
     this.props.dispatch({
-      type: 'seminar/getCategoriesHint',
-      payload: { category: 'orglist_' },
+      type: 'seminar/getCategoryGroup',
+      payload: {
+        groupCategory: OrgListGroupCategoryKey,
+        categoryTemplate: `${OrgListPrefix}{id}`,
+        coOrgCategory: 'activity_organizer_options',
+      },
     });
-    this.props.dispatch({
-      type: 'seminar/getCategory',
-      payload: { category: 'activity_organizer_options' },
-    });
-    this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'orgcategory' } });
+    // this.props.dispatch({
+    //   type: 'seminar/getCategoriesHint',
+    //   payload: { category: 'orglist_' },
+    // });
+    // this.props.dispatch({
+    //   type: 'seminar/getCategory',
+    //   payload: { category: 'activity_organizer_options' },
+    // });
+    // this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'orgcategory' } });
     this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'activity_type' } });
     this.props.dispatch({
       type: 'seminar/getCategory',
@@ -88,7 +103,8 @@ class RegistrationForm extends React.PureComponent {
         tags: currentSeminar.tags,
         talks: currentSeminar.talk,
         editStatus: true,
-        organizer: currentSeminar.organizer[0],
+        organizer: currentSeminar.organizer[0].split('^&*'),
+        coOrg: currentSeminar.organizer.slice(1),
         image: currentSeminar.img ? currentSeminar.img : '',
       });
       this.props.form.setFieldsValue(data);
@@ -135,12 +151,13 @@ class RegistrationForm extends React.PureComponent {
             data.time.to = typeof state.endValue === 'string' ? state.endValue : state.endValue;
           }
           data.tags = state.tags;
-          if (data.co_org !== undefined && data.co_org.length > 0) {
-            data.organizer = [data.organizer].concat(data.co_org);
+          data.organizer = data.organizer.join(OrgJoiner);
+          // data.organizer.shift();
+          if (state.currentOrg !== undefined && state.currentOrg.length > 0) {
+            data.organizer = [data.organizer].concat(state.currentOrg);
           } else {
             data.organizer = [data.organizer];
           }
-
           delete data.co_org;
           // 获取登录用户的uid
           data.uid = this.props.uid;
@@ -158,14 +175,20 @@ class RegistrationForm extends React.PureComponent {
   // handleChange = (value) => {
   //   this.setState({ selectedType: value });
   // };
-  handleOrganizerChange = (value, newArray) => {
-    newArray.map((tag) => {
-      if (JSON.stringify(value).indexOf(tag) < 0) {
-        const data = { key: tag, val: ' ' };
-        this.props.dispatch({ type: 'seminar/addKeyAndValue', payload: data });
-      }
-    });
-  };
+  // handleOrganizerChange = (newArray, value) => {
+  //   let isExist = [];
+  //   if (!this.state.currentOrg.includes(value[0])) {
+  //     this.setState({ currentOrg: this.state.currentOrg.concat(value[0]) });
+  //   }
+  //   newArray.map((tag) => {
+  //     if (tag.children.filter(item => item.value === value[0]).length > 0) {
+  //       isExist = tag.children.filter(item => item.value === value[0]);
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   });
+  // };
 
   // 增加专家
   getImg = (src) => {
@@ -236,6 +259,10 @@ class RegistrationForm extends React.PureComponent {
   delCurrentImg = () => {
     this.setState({ image: '' });
   };
+  // 存储协办单位
+  addNewCoOrg = (value) => {
+    this.setState({ currentOrg: value });
+  };
 
   // cancelTalkData = () => {
   //   this.setState({ addNewTalk: false, });
@@ -247,14 +274,14 @@ class RegistrationForm extends React.PureComponent {
   render() {
     const { getFieldDecorator } = this.props.form;
     const {
-      activity_organizer_options, orgcategory, tags,
+      activity_organizer_options, tags,
       postSeminarOrganizer, activity_type,
     } = this.props.seminar;
-    let activity_organizer_options_data = {};
-    if (activity_organizer_options.data) {
-      activity_organizer_options_data = activity_organizer_options.data.concat(postSeminarOrganizer);
-    }
-    const { addNewTalk, talks, startValue, endValue, editTheTalk, image } = this.state;
+    // let activity_organizer_options_data = {};
+    // if (activity_organizer_options.data) {
+    //   activity_organizer_options_data = activity_organizer_options.data.concat(postSeminarOrganizer);
+    // }
+    const { addNewTalk, talks, startValue, endValue, editTheTalk, image, coOrg } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -315,33 +342,23 @@ class RegistrationForm extends React.PureComponent {
                   rules: [{ required: true, message: '请选择承办单位！' }],
                 },
               )(
-                <Select showSearch placeholder="请选择承办单位">
-                  {
-                    postSeminarOrganizer.map((item) => {
-                      return (<Option key={`org_${Math.random()}`}
-                                      value={item.key}>{item.key}</Option>);
-                    })
-                  }
-                </Select>,
+                <Cascader options={postSeminarOrganizer} showSearch placeholder="请选择承办单位" />,
               )}
             </FormItem>}
+            {activity_organizer_options.length > 0 &&
             <FormItem {...formItemLayout} label="协办单位">
               {getFieldDecorator('co_org', {
                   // rules: [{ required: true, message: '请选择承办单位！' }],
                 },
               )(
-                <Select mode="tags" placeholder="请选择协办单位"
-                        onChange={this.handleOrganizerChange.bind(this, activity_organizer_options_data)}>
-                  {
-                    Object.values(activity_organizer_options_data).map((item) => {
-                      return (
-                        <Option key={`co_${item.key}_${Math.random(10)}`}
-                                value={item.key}>{item.key}</Option>);
-                    })
-                  }
-                </Select>,
+                <div>
+                  <AddCoOrgModal orgList={activity_organizer_options}
+                                 dispatch={this.props.dispatch}
+                                 callbackParent={this.addNewCoOrg} coOrg={coOrg} />
+                </div>,
               )}
             </FormItem>
+            }
             <FormItem
               {...formItemLayout}
               label="活动名称"

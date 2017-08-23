@@ -86,5 +86,4 @@ export default {
   //   // 'react-router': 'react-router',
   // },
 
-
 }

@@ -31,7 +31,17 @@ export default {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/expert-trajectory'));
         cb(null, require('../expert-trajectory/ExpertTrajectoryPage'));
-      }, 'map');
+      }, 'expert-trajectory');
+    },
+  }),
+
+  ExpertHeatmapPage: app => ({
+    path: 'expert-heatmap',
+    getComponent(nextState, cb) {
+      require.ensure([], (require) => {
+        registerModel(app, require('../../models/expert-trajectory'));
+        cb(null, require('../expert-trajectory/ExpertHeatmapPage'));
+      }, 'expert-heatmap');
     },
   }),
 

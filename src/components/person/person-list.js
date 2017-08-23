@@ -33,11 +33,12 @@ class PersonList extends React.PureComponent {
   }
 
   render() {
-    console.log('>> refresh person list ');
+    const { persons } = this.props;
+    console.log('refresh person list ');
     return (
       <div className={styles.personList}>
         {
-          this.props.persons.map((person) => {
+          persons && persons.map((person) => {
             const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
             const pos = profileUtils.displayPositionFirst(person.pos);
             const aff = profileUtils.displayAff(person);

@@ -25,7 +25,6 @@ class ResetPassword extends React.Component {
         content: '密码重置成功',
         onOk() {
           localStorage.setItem('token', outerThis.props.auth.retrieve.token);
-          location.href = '/login';
           outerThis.props.dispatch(routerRedux.push({
             pathname: '/',
           }));

@@ -4,7 +4,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Modal, Cascader, Input, Row, Col, Button, Tag } from 'antd';
-import * as seminarService from '../../../services/seminar';
+import { contactByJoint, getValueByJoint } from '../../../services/seminar';
 import styles from './index.less';
 
 class AddCoOrgModal extends React.Component {
@@ -18,7 +18,7 @@ class AddCoOrgModal extends React.Component {
 
   onOrgChange = (value) => {
     if (value[1]) {
-      const data = value.join('^&*');
+      const data = contactByJoint(value[0], value[1]);
       this.setState({ currentOrg: this.state.currentOrg.concat(data) });
     }
   };
@@ -50,7 +50,9 @@ class AddCoOrgModal extends React.Component {
       this.props.dispatch({ type: 'seminar/addKeyAndValue', payload: data });
       this.setState({ currentOrg: value === '' ? this.state.currentOrg : this.state.currentOrg.concat(value) });
     } else if (isExist.length > 0) {
-      this.setState({ currentOrg: this.state.currentOrg.concat(`${parent.value}^&*${isExist[0].value}`) });
+      this.setState({
+        currentOrg: this.state.currentOrg.concat(contactByJoint(parent.value, isExist[0].value)),
+      });
     }
   };
 
@@ -82,7 +84,7 @@ class AddCoOrgModal extends React.Component {
           return (
             <Tag key={org} color="#2db7f5" closable
                  onClose={this.deleteTag.bind(this, org, index)}>
-              {seminarService.getValueByJointer(org)}
+              {getValueByJoint(org)}
             </Tag>
           );
         })}

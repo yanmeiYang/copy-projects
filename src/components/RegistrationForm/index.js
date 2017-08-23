@@ -29,7 +29,7 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const OrgListGroupCategoryKey = 'orgcategory';
 const OrgListPrefix = 'orglist_';
-const OrgJoiner = '^&*';
+const OrgJoiner = '---'; // 拆分的两个变量都要
 class RegistrationForm extends React.PureComponent {
   state = {
     addNewTalk: false,
@@ -96,7 +96,7 @@ class RegistrationForm extends React.PureComponent {
         tags: currentSeminar.tags,
         talks: currentSeminar.talk,
         editStatus: true,
-        organizer: currentSeminar.organizer[0].split('^&*'),
+        organizer: currentSeminar.organizer[0].split(OrgJoiner),
         currentOrg: currentSeminar.organizer.slice(1),
         image: currentSeminar.img || '',
       });
@@ -238,7 +238,7 @@ class RegistrationForm extends React.PureComponent {
     if (this.state.editStatus && currentSeminar.title) {
       const data = {
         category: currentSeminar.category,
-        organizer: currentSeminar.organizer[0].split('^&*'),
+        organizer: currentSeminar.organizer[0].split(OrgJoiner),
         co_org: currentSeminar.organizer.slice(1, currentSeminar.organizer.length),
         title: currentSeminar.title,
         city: currentSeminar.location.city || '',

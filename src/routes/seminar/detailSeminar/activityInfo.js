@@ -30,7 +30,7 @@ class ActivityInfo extends React.PureComponent {
         <p>
           <strong>承办单位: &nbsp;</strong>
           {summaryById.organizer.map((item) => {
-            return <span key={`${item}_${Math.random()}`}>{seminarService.getValueByJointer(item)} &nbsp;</span>;
+            return <span key={`${item}_${Math.random()}`}>{seminarService.getValueByJoint(item)} &nbsp;</span>;
           })}
         </p>
         <p>

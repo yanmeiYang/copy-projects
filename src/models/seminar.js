@@ -270,12 +270,11 @@ export default {
       if (category === 'orgcategory' || category === 'activity_type'
         || category === 'activity_organizer_options' || category === 'contribution_type') {
         return { ...state, [category]: data.data };
+      } else if (category.includes('orglist_')) {
+        return { ...state, orgByActivity: data.data };
       } else {
         return { ...state };
       }
-      // else if (category.includes('orglist_')) {
-      //   return { ...state, orgByActivity: data.data };
-      // }
     },
     // getAllOrgSuccess(state, { payload: { data } }) {
     //   const org = state.postSeminarOrganizer.concat(data.data);
@@ -322,7 +321,7 @@ export default {
       speaker.email = email;
       return { ...state, selectedSuggestSpeaker: speaker };
     },
-    setCoOrg(state, { payload: {coOrgCategory, getOrgByCategoryList, parentOptions } }) {
+    setCoOrg(state, { payload: { coOrgCategory, getOrgByCategoryList, parentOptions } }) {
       parentOptions.map((item) => {
         getOrgByCategoryList.data.data[item.id].map((children) => {
           item.children.push({ label: children.key, value: children.key, id: children.id });

@@ -7,6 +7,7 @@ import { routerRedux } from 'dva/router';
 import { Form, Input, Button, Select, Modal, Tag } from 'antd';
 import { config } from '../../../utils';
 import { sysconfig } from '../../../systems';
+import { contactByJoint, getValueByJoint } from '../../../services/seminar';
 // import AddRoleModal from '../add-user-role-modal';
 
 const FormItem = Form.Item;
@@ -60,7 +61,7 @@ class Registered extends React.Component {
     }
     let currentRoleAndOrg = '';
     if (this.state.selectedOrgName !== '') {
-      currentRoleAndOrg = `${arr.join('_')}_${this.state.selectedOrgName}^&*${JSON.parse(e).key}`;
+      currentRoleAndOrg = `${arr.join('_')}_${contactByJoint(this.state.selectedOrgName, JSON.parse(e).key)}`;
     } else {
       currentRoleAndOrg = `${arr.join('_')}_${JSON.parse(e).key}`;
     }

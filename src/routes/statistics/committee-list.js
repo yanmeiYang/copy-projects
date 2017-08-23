@@ -89,7 +89,7 @@ class CommitteeList extends React.Component {
           <Column title="承办单位" dataIndex="organizer" key="display_name"
                   sorter={(a, b) => this.organizerSorter(a.organizer, b.organizer)}
                   render={(organizer) => {
-                    return seminarService.getValueByJointer(organizer);
+                    return seminarService.getValueByJoint(organizer);
                   }}
           />
           <Column title="活动总数" dataIndex="total" key="position" className={styles.comTotal}

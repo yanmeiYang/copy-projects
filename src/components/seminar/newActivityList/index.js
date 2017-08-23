@@ -72,7 +72,7 @@ class NewActivityList extends React.Component {
                   result.organizer.map((item) => {
                     return (
                       <p key={Math.random()}>
-                        <span>{seminarService.getValueByJointer(item)}</span>
+                        <span>{seminarService.getValueByJoint(item)}</span>
                       </p>
                     );
                   })

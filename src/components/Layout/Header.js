@@ -152,7 +152,7 @@ class Header extends React.PureComponent {
                 {roles.authority[0] !== undefined &&
                 <span>
                   <br />
-                  <span>{seminarService.getValueByJointer(roles.authority[0])}</span>
+                  <span>{seminarService.getValueByJoint(roles.authority[0])}</span>
                 </span>}
               </p>
             </Menu.Item>

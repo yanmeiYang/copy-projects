@@ -5,7 +5,7 @@ import { request, config } from '../utils';
 import { externalRequest } from '../utils/request';
 
 const { api } = config;
-const jointer = '^&*';
+const joint = '---';
 export async function getSeminar(offset, size, data) {
   return request(api.getSeminars.replace(':offset', offset).replace(':size', size), {
     method: 'GET',
@@ -110,11 +110,14 @@ export async function getTopMentionedTags(src, num) {
   });
 }
 
-export function getValueByJointer(name) {
-  const str = name.split(jointer);
+export function getValueByJoint(name) {
+  const str = name.split(joint);
   if (str.length > 0) {
     return str[str.length - 1];
   } else {
     return name;
   }
+}
+export function contactByJoint(first, second) {
+  return `${first}${joint}${second}`;
 }

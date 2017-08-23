@@ -24,11 +24,12 @@ const defines = {
   API_BASE_URL: 'http://dev.example.com',
 };
 
+// Deprecated, don't use system specified define.js.
 // System's config will override the default.
-const overrides = require('./systems/' + SYSTEM + '/define.js'); // eslint-disable-line
-Object.keys(overrides).map((key) => {
-  defines[key] = overrides[key];
-  return true;
-});
+// const overrides = require('./systems/' + SYSTEM + '/define.js'); // eslint-disable-line
+// Object.keys(overrides).map((key) => {
+//   defines[key] = overrides[key];
+//   return true;
+// });
 
 module.exports = { defines };

@@ -6,6 +6,7 @@
 // 所有可选系统
 const AvailableSystems = [
   'ccf',
+  'ccftest',
   'huawei',
   'alibaba',
   'tencent',
@@ -17,16 +18,16 @@ const AvailableSystems = [
 ];
 
 let System;
-// const System = 'ccf';
+// System = 'ccf';
+System = 'ccftest';
 // System = 'huawei';
 // const System = 'alibaba';
 // const System = 'tencent';
 // const System = 'cie';
 // const System = 'cipsc';
-// const System = '2017-8';
 // const System = 'demo';
 // const System = 'cietest';
-System = 'ccf';
+// System = 'medrob';
 
 let Source = System; // AppID, Used in UniversalConfig.
 
@@ -43,7 +44,7 @@ function loadSavedSystem() {
   const data = localStorage.getItem(USER_LOCAL_KEY);
   if (data) {
     const dataObj = JSON.parse(data);
-    console.log('userInSession', dataObj);
+    // console.log('userInSession', dataObj);
     // only god can switch system.
     if (dataObj && dataObj.roles && dataObj.roles.god
       && dataObj.data && dataObj.data.email === ss.user) {

@@ -50,13 +50,18 @@ class ExpertMap extends React.PureComponent {
   /** 构造函数： 这里执行初始化 */
   constructor(props) {
     super(props);
-
+    this.cache = {};
     this.showOverLay = GetBMapLib(this.showTop);
     this.currentPersonId = 0;
   }
 
   componentDidMount() {
-    this.callSearchMap(this.props.query);
+    const { query, dispatch } = this.props;
+    this.callSearchMap(query);
+    dispatch({
+      type: 'expertMap/setRightInfo',
+      payload: { idString: '', rightInfoType: 'global' },
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -68,7 +73,6 @@ class ExpertMap extends React.PureComponent {
       const typeId = '0';
       this.showMap(nextProps.expertMap.geoData, typeId);
     }
-    return true;
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -139,8 +143,8 @@ class ExpertMap extends React.PureComponent {
     imgdiv.setAttribute('class', 'imgWrapper');
     thisNode.appendChild(imgdiv);
     imgdiv.addEventListener('click', (event) => { // 集体的一个显示
-      // this.toggleRightInfoBox(inputids);
       this.toggleRightInfo('cluster', inputids);
+      event.stopPropagation();
     });
 
     if (thisNode != null) { // 准备绑定事件
@@ -156,56 +160,69 @@ class ExpertMap extends React.PureComponent {
       });
     }
 
-    const resultPromise = listPersonByIds(ids);
-    resultPromise.then(
-      (data) => {
-        const imgdivs = document.getElementsByName('scholarimg');
-        if (imgdivs != null && imgdivs.length !== 0) {
-          for (let i = 0; i < ids.length; i += 1) {
-            const cimg = imgdivs[i];
-            const personInfo = data.data.persons[i];
-            let url = blankAvatar;
-            if (personInfo.avatar != null && personInfo.avatar !== '') {
-              url = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 50);
-            }
-            const style = url === '/images/blank_avatar.jpg' ? '' : 'margin-top:-5px;';
-            cimg.innerHTML = `<img style='background: white;${style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='${url}' alt='${i}'>`;
-          }
+    // cached.
+    const cached = this.cache[ids];
+    if (cached) {
+      this.listPersonDone(map, ids, cached);
+    } else {
+      const resultPromise = listPersonByIds(ids);
+      resultPromise.then(
+        (data) => {
+          this.cache[ids] = data;
+          this.listPersonDone(map, ids, data);
+        },
+        () => {
+          console.log('failed');
+        },
+      ).catch((error) => {
+        console.error(error);
+      });
+    }
+  };
 
-          for (let j = 0; j < imgdivs.length; j += 1) {
-            const cimg = imgdivs[j];
-            cimg.addEventListener('mouseenter', (event) => {
-              // get current point.
-              const apos = getById('allmap').getBoundingClientRect();
-              const cpos = event.target.getBoundingClientRect();
-              const newPixel = new BMap.Pixel(cpos.left - apos.left + imgwidth, cpos.top - apos.top); // eslint-disable-line
-              const currentPoint = map.pixelToPoint(newPixel);
-              // get personInfo data.
-              const chtml = event.target.innerHTML;
-              let num = 0;
-              if (chtml.split('@@@@@@@').length > 1) {
-                num = chtml.split('@@@@@@@')[1];
-              }
-              const personInfo = data.data.persons[num];
+  listPersonDone = (map, ids, data) => {
+    const imgwidth = 45;
 
-              const infoWindow = getInfoWindow();
-              this.onSetPersonCard(personInfo);
-              map.openInfoWindow(infoWindow, currentPoint);
-              this.syncInfoWindow();
-              this.currentPersonId = personInfo.id;
-            });
-            cimg.addEventListener('mouseleave', (event) => {
-              map.closeInfoWindow();
-            });
-          }
+    const imgdivs = document.getElementsByName('scholarimg');
+    if (imgdivs != null && imgdivs.length !== 0) {
+      for (let i = 0; i < ids.length; i += 1) {
+        const cimg = imgdivs[i];
+        const personInfo = data.data.persons[i];
+        let url = blankAvatar;
+        if (personInfo.avatar != null && personInfo.avatar !== '') {
+          url = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 50);
         }
-      },
-      () => {
-        console.log('failed');
-      },
-    ).catch((error) => {
-      console.error(error);
-    });
+        const style = url === '/images/blank_avatar.jpg' ? '' : 'margin-top:-5px;';
+        cimg.innerHTML = `<img style='background: white;${style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='${url}' alt='${i}'>`;
+      }
+
+      for (let j = 0; j < imgdivs.length; j += 1) {
+        const cimg = imgdivs[j];
+        cimg.addEventListener('mouseenter', (event) => {
+          // get current point.
+          const apos = getById('allmap').getBoundingClientRect();
+          const cpos = event.target.getBoundingClientRect();
+          const newPixel = new BMap.Pixel(cpos.left - apos.left + imgwidth, cpos.top - apos.top); // eslint-disable-line
+          const currentPoint = map.pixelToPoint(newPixel);
+          // get personInfo data.
+          const chtml = event.target.innerHTML;
+          let num = 0;
+          if (chtml.split('@@@@@@@').length > 1) {
+            num = chtml.split('@@@@@@@')[1];
+          }
+          const personInfo = data.data.persons[num];
+
+          const infoWindow = getInfoWindow();
+          this.onSetPersonCard(personInfo);
+          map.openInfoWindow(infoWindow, currentPoint);
+          this.syncInfoWindow();
+          this.currentPersonId = personInfo.id;
+        });
+        cimg.addEventListener('mouseleave', (event) => {
+          map.closeInfoWindow();
+        });
+      }
+    }
   };
 
   initializeBaiduMap = (map) => {

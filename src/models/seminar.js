@@ -3,7 +3,8 @@
  */
 import { routerRedux } from 'dva/router';
 import pathToRegexp from 'path-to-regexp';
-import { config } from '../utils';
+import { sysconfig } from '../systems';
+// import { config } from '../utils';
 import * as seminarService from '../services/seminar';
 import * as uconfigService from '../services/universal-config';
 import * as personService from '../services/person';
@@ -40,9 +41,9 @@ export default {
         if (location.pathname === '/seminar') {
           dispatch({
             type: 'getSeminar',
-            payload: { offset: 0, size: 20, filter: { src: config.source } },
+            payload: { offset: 0, size: 20, filter: { src: sysconfig.SOURCE } },
           });
-          dispatch({ type: 'getTopMentionedTags', payload: { src: config.source, num: 10 } });
+          dispatch({ type: 'getTopMentionedTags', payload: { src: sysconfig.SOURCE, num: 10 } });
         }
         // if (location.pathname === '/seminar-post') {
         //   dispatch({
@@ -62,45 +63,45 @@ export default {
   },
 
   effects: {
-    *getSeminar({ payload }, { call, put }) {
+    * getSeminar({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
       const { offset, size, filter } = payload;
       const { data } = yield call(seminarService.getSeminar, offset, size, filter);
       yield put({ type: 'getSeminarsSuccess', payload: { data, offset, size } });
     },
-    *getSeminarByID({ payload }, { call, put }) {
+    * getSeminarByID({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
       yield put({ type: 'clearState' });
       const { id } = payload;
       const { data } = yield call(seminarService.getSeminarById, id);
-      const listActivityScores = yield call(seminarService.listActivityScores, 'me', config.source, id);
+      const listActivityScores = yield call(seminarService.listActivityScores, 'me', sysconfig.SOURCE, id);
       yield put({ type: 'listActivityScoresSuccess', payload: listActivityScores.data });
       yield put({ type: 'getSeminarByIDSuccess', payload: { data } });
     },
 
-    *getSpeakerSuggest({ payload }, { call, put }) {
+    * getSpeakerSuggest({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
       const { data } = yield call(seminarService.getSpeakerSuggest, payload);
       yield put({ type: 'getSpeakerSuggestSuccess', payload: { data } });
     },
-    *postSeminarActivity({ payload }, { call, put }) {
+    * postSeminarActivity({ payload }, { call, put }) {
       const { data } = yield call(seminarService.postSeminarActivity, payload);
       if (data.status) {
         yield put(routerRedux.push({ pathname: `/seminar/${data.id}` }));
       }
     },
-    *searchActivity({ payload }, { call, put }) {
+    * searchActivity({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
       const { query, offset } = payload;
       const { data } = yield call(seminarService.searchActivity, payload);
       yield put({ type: 'searchActivitySuccess', payload: { data, query, offset } });
     },
-    *getCategory({ payload }, { call, put }) {
+    * getCategory({ payload }, { call, put }) {
       const { category } = payload;
       const data = yield call(uconfigService.listByCategory, category);
       yield put({ type: 'getCategorySuccess', payload: { data, category } });
     },
-    *addKeyAndValue({ payload }, { call, put }) {
+    * addKeyAndValue({ payload }, { call, put }) {
       const { key, val } = payload;
       const data = yield call(uconfigService.setByKey, 'activity_organizer_options', decodeURI(key), val);
       // if (data.data && data.data.status === true) {
@@ -109,26 +110,26 @@ export default {
       //   console.error('addKeyAndValue Error: ', data);
       // }
     },
-    *deleteActivity({ payload }, { call }) {
+    * deleteActivity({ payload }, { call }) {
       const { id, body } = payload;
       yield call(seminarService.deleteActivity, id, body);
       // if (data.status) {
       //   yield put(routerRedux.push('/seminar'));
       // }
     },
-    *getCommentFromActivity({ payload }, { call, put }) {
+    * getCommentFromActivity({ payload }, { call, put }) {
       const { id, offset, size } = payload;
       const { data } = yield call(seminarService.getCommentFromActivity, id, offset, size);
       yield put({ type: 'getCommentFromActivitySuccess', payload: data });
     },
-    *addCommentToActivity({ payload }, { call, put }) {
+    * addCommentToActivity({ payload }, { call, put }) {
       const { id, data } = payload;
       yield call(seminarService.addCommentToActivity, id, data);
       // 目前只取前10条评论
       const comments = yield call(seminarService.getCommentFromActivity, id, 0, 10);
       yield put({ type: 'getCommentFromActivitySuccess', payload: comments.data });
     },
-    *deleteCommentFromActivity({ payload }, { call, put }) {
+    * deleteCommentFromActivity({ payload }, { call, put }) {
       const { cid, id } = payload;
       const deleteComment = yield call(seminarService.deleteCommentFromActivity, cid);
       if (deleteComment.data.status) {
@@ -139,37 +140,72 @@ export default {
         console.log('deleteComment Error:', deleteComment.data);
       }
     },
-    *updateOrSaveActivityScore({ payload }, { call, put }) {
+    * updateOrSaveActivityScore({ payload }, { call, put }) {
       const { src, actid, aid, key, score, lvtime } = payload;
       yield call(seminarService.updateOrSaveActivityScore, src, actid, aid, key, score, lvtime);
-      const { data } = yield call(seminarService.listActivityScores, 'me', config.source, actid);
+      const { data } = yield call(seminarService.listActivityScores, 'me', sysconfig.SOURCE, actid);
       yield put({ type: 'listActivityScoresSuccess', payload: data });
     },
-    *listActivityScores({ payload }, { call, put }) {
+    * listActivityScores({ payload }, { call, put }) {
       const { uid, src, actid } = payload;
       const { data } = yield call(seminarService.listActivityScores, uid, src, actid);
       yield put({ type: 'listActivityScoresSuccess', payload: data });
     },
-    *keywordExtraction({ payload }, { call, put }) {
+    * keywordExtraction({ payload }, { call, put }) {
       const { data } = yield call(seminarService.keywordExtraction, payload);
       yield put({ type: 'getTagsByContent', payload: data });
     },
-    *getTopMentionedTags({ payload }, { call, put }) {
+    * getTopMentionedTags({ payload }, { call, put }) {
       const { src, num } = payload;
       const data = yield call(seminarService.getTopMentionedTags, src, num);
       yield put({ type: 'getTopMentionedTagsSuccess', data });
     },
-    // TODO 输入多个id，返回所有承办单位
-    *getCategoriesHint({ payload }, { call, put }) {
-      const { category } = payload;
-      const suggestCategory = yield call(uconfigService.getCategoriesHint, category);
-      if (suggestCategory.data.categories.length > 0) {
-        for (const orgList of suggestCategory.data.categories) {
-          const { data } = yield call(uconfigService.listByCategory, orgList);
-          yield put({ type: 'getAllOrgSuccess', payload: { data, orgList } });
+    // 输入多个id，返回对应的承办单位
+    * getCategoryGroup({ payload }, { call, put }) {
+      const { groupCategory, categoryTemplate, coOrgCategory } = payload;
+      const data = yield call(uconfigService.listByCategory, groupCategory);
+      if (data && data.data && data.data.data) {
+        let categories = '';
+        const parentOptions = [];
+        data.data.data.map((item) => {
+          const newCategory = categoryTemplate
+            .replace('{id}', item.id);
+          categories += `${newCategory}.`;
+          parentOptions.push({
+            value: item.key,
+            label: item.key,
+            children: [],
+            id: categoryTemplate.replace('{id}', item.id),
+          });
+          return true;
+        });
+        if (coOrgCategory) {
+          parentOptions.push({
+            value: '协办单位',
+            label: '协办单位',
+            children: [],
+            id: coOrgCategory,
+          });
+          categories += coOrgCategory;
         }
+        const getOrgByCategoryList =
+          yield call(uconfigService.listConfigsByCategoryList, categories);
+        yield put({
+          type: 'setCoOrg',
+          payload: { coOrgCategory, parentOptions, getOrgByCategoryList },
+        });
       }
     },
+    // *getCategoriesHint({ payload }, { call, put }) {
+    //   const { category } = payload;
+    //   const suggestCategory = yield call(uconfigService.getCategoriesHint, category);
+    //   if (suggestCategory.data.categories.length > 0) {
+    //     for (const orgList of suggestCategory.data.categories) {
+    //       const { data } = yield call(uconfigService.listByCategory, orgList);
+    //       yield put({ type: 'getAllOrgSuccess', payload: { data, orgList } });
+    //     }
+    //   }
+    // },
     *updateSeminarActivity({ payload }, { call, put }) {
       const seminarId = payload.id;
       const { data } = yield call(seminarService.updateSeminarActivity, payload);
@@ -177,7 +213,7 @@ export default {
         yield put(routerRedux.push({ pathname: `/seminar/${seminarId}` }));
       }
     },
-    *saveSuggestExpert({ payload }, { call, put }) {
+    * saveSuggestExpert({ payload }, { call, put }) {
       const { speaker } = payload;
       const id = speaker.payload.id;
       const { data } = yield call(personService.getPerson, id);
@@ -194,7 +230,7 @@ export default {
 
   reducers: {
     clearState(state) {
-      return { ...state, summaryById: [], expertRating: [], results: [] };
+      return { ...state, summaryById: {}, expertRating: [], results: [] };
     },
 
     getSeminarsSuccess(state, { payload: { data, offset, size } }) {
@@ -231,19 +267,23 @@ export default {
     },
 
     getCategorySuccess(state, { payload: { data, category } }) {
-      if (category === 'orgcategory' || category === 'activity_type' || category === 'activity_organizer_options' || category === 'contribution_type') {
+      if (category === 'orgcategory' || category === 'activity_type'
+        || category === 'activity_organizer_options' || category === 'contribution_type') {
         return { ...state, [category]: data.data };
-      } else if (category.includes('orglist_')) {
-        return { ...state, orgByActivity: data.data };
+      } else {
+        return { ...state };
       }
+      // else if (category.includes('orglist_')) {
+      //   return { ...state, orgByActivity: data.data };
+      // }
     },
-    getAllOrgSuccess(state, { payload: { data } }) {
-      const org = state.postSeminarOrganizer.concat(data.data);
-      return {
-        ...state,
-        postSeminarOrganizer: org,
-      };
-    },
+    // getAllOrgSuccess(state, { payload: { data } }) {
+    //   const org = state.postSeminarOrganizer.concat(data.data);
+    //   return {
+    //     ...state,
+    //     postSeminarOrganizer: org,
+    //   };
+    // },
     updateData(state, { payload: { data } }) {
       const newOrgList = state.activity_organizer_options.data.concat(data.data);
       return {
@@ -277,10 +317,24 @@ export default {
       return { ...state, selectedSuggestSpeaker: payload };
     },
     saveSuggestExpertSuccess(state, { payload: { speaker, data, email } }) {
-      speaker['bio'] = data.contact.bio ? data.contact.bio : '';
-      speaker['phone'] = data.contact.phone ? data.contact.phone : '';
-      speaker['email'] = email;
+      speaker.bio = data.contact.bio ? data.contact.bio : '';
+      speaker.phone = data.contact.phone ? data.contact.phone : '';
+      speaker.email = email;
       return { ...state, selectedSuggestSpeaker: speaker };
+    },
+    setCoOrg(state, { payload: {coOrgCategory, getOrgByCategoryList, parentOptions } }) {
+      parentOptions.map((item) => {
+        getOrgByCategoryList.data.data[item.id].map((children) => {
+          item.children.push({ label: children.key, value: children.key, id: children.id });
+          return true;
+        });
+        return true;
+      });
+      return {
+        ...state,
+        postSeminarOrganizer: parentOptions.filter(item => item.id !== coOrgCategory),
+        activity_organizer_options: parentOptions,
+      };
     },
     showLoading(state) {
       return {

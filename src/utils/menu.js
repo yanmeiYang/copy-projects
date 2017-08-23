@@ -1,8 +1,8 @@
-import config from './config';
+import { sysconfig } from '../systems';
+
 const allMenus = [{ id: 1, icon: 'laptop', name: '首页', router: '/' },
   { id: 2, bpid: 1, name: '学会活动', icon: 'api', router: '/seminar' },
   { id: 21, bpid: 1, name: '活动统计', icon: 'pie-chart', router: '/statistics' },
-
 
   { id: 4, bpid: 1, name: '设置', icon: 'setting' },
   { id: 41, bpid: 4, mpid: 4, name: '用户管理', icon: 'usergroup-add', router: '/admin/users' },
@@ -46,7 +46,7 @@ const getMenusByUser = (user, role) => {
     menus.push(all.slice(0, 1));
   }
   // todo 通过配置文件完成
-  if (config.source !== 'ccf') {
+  if (sysconfig.SOURCE !== 'ccf') {
     menus[0].splice(2, 1);
   }
   return menus;

@@ -161,16 +161,19 @@ export default class RelationGraph extends React.PureComponent {
 
     let simulation = null;
 
+    // 设置圆的半径
     const getRadious = (d) => {
       return Math.sqrt(d);
     };
 
+    // 随机颜色 目前
     const getColor = (d) => {
       if (d > 100) {
         d = 100;
       }
       return color(d / 100);
     };
+    // 聚类颜色
     const getClusteringColor = (d) => {
       const s = _edges.filter(item => item.source.name.n.en === d.name.n.en);
       const t = _edges.filter(item => item.target.name.n.en === d.name.n.en);
@@ -183,6 +186,7 @@ export default class RelationGraph extends React.PureComponent {
       }
     };
 
+    // 根据操作获取点与点之间的路径
     const getPaths = (cNode, pNode, sNode, eNode) => {
       console.log('getpaths');
       let a,
@@ -233,9 +237,11 @@ export default class RelationGraph extends React.PureComponent {
         return false;
       }
     };
-
+    // 两点之间的直线距离
     const isstraight = (a, b) => {
       let flag = false;
+      svg.selectAll('line').data(_edges).style('opacity', 0.3);
+      svg.selectAll('circle').data(_nodes).style('opacity', 0.3);
       svg.selectAll('line').data(_edges).filter((e, i) => {
         if ((e.target.index === a && e.source.index === b)
           || (e.target.index === b && e.source.index === a)) {
@@ -285,6 +291,7 @@ export default class RelationGraph extends React.PureComponent {
       return res;
     };
 
+    // 单点扩展
     const expandNet = (goals, d) => {
       let edgeIndex,
         goalsId,
@@ -606,16 +613,35 @@ export default class RelationGraph extends React.PureComponent {
 
     // $scope.zommed.
     this.zoomed = function () {
+      console.log('zoom===========');
       // console.log('[debug] in zommed, this:', this);
       const transform = d3.zoomTransform(this);
       svg.attr('transform', `translate(${transform.x},${transform.y}) scale(${transform.k})`);
-      svg.selectAll('line').data(_edges).style('stroke-width', 1 / transform.k);
-      svg.selectAll('circle').data(_nodes).attr('r', (d) => {
-        if (d.indices.hIndex < 400) {
-          return getRadious(d.indices.hIndex + 32);
+      svg.selectAll('line').data(_edges).style('stroke-width', (d) => {
+        if (indexShow >= 10) {
+          if (d.source.indices.hIndex > indexShow) {
+            return 1 / transform.k;
+          } else {
+            return 0;
+          }
         } else {
-          return getRadious(16);
+          return 1 / transform.k;
         }
+      });
+      svg.selectAll('circle').data(_nodes).attr('r', (d) => {
+        console.log(indexShow);
+        if (indexShow >= 10) {
+          console.log(2222222222);
+          if (d.indices.hIndex > indexShow) {
+            return getRadious(d.indices.hIndex + 32);
+          } else {
+            return 0;
+          }
+        } else if (d.indices.hIndex < 400) {
+            return getRadious(d.indices.hIndex + 32);
+          } else {
+            return getRadious(16);
+          }
       }).style('stroke-width', (d) => {
         if (d.indices.hIndex > 50) {
           return '1px';
@@ -624,13 +650,23 @@ export default class RelationGraph extends React.PureComponent {
         }
       });
       svg.selectAll('.initialText').data(_nodes).text((d) => {
-        if (transform.k >= 2) {
-          return d.name.n.en;
-        } else if (d.index < snum) {
-          return d.name.n.en;
-        } else {
-          return '';
-        }
+        if (indexShow >= 10) {
+          if (d.source.indices.hIndex > indexShow) {
+            return d.name.n.en;
+          } else if (transform.k >= 2) {
+            console.log("放大到一定程度显示名字");
+            console.log(transform.k);
+              return d.name.n.en;
+            } else {
+              return '';
+            }
+        } else if (transform.k >= 2) {
+            return d.name.n.en;
+          } else if (d.index < snum) {
+            return d.name.n.en;
+          } else {
+            return '';
+          }
       }).attr('dy', (d) => {
         if (d.indices.hIndex > indexShow || d.indices.hIndex < 400) {
           const top = getRadious(d.indices.hIndex + 32) * 2;
@@ -640,13 +676,21 @@ export default class RelationGraph extends React.PureComponent {
         }
       }).style('font-size', `${15 / transform.k}px`).attr('stroke-width', 3 / transform.k);
       svg.selectAll('.finalText').data(_nodes).text((d) => {
-        if (transform.k >= 2) {
-          return d.name.n.en;
-        } else if (d.index < snum) {
-          return d.name.n.en;
-        } else {
-          return '';
-        }
+        if (indexShow >= 10) {
+          if (d.source.indices.hIndex > indexShow) {
+            return d.name.n.en;
+          } else if (transform.k >= 2) {
+              return d.name.n.en;
+            } else {
+              return '';
+            }
+        } else if (transform.k >= 2) {
+            return d.name.n.en;
+          } else if (d.index < snum) {
+            return d.name.n.en;
+          } else {
+            return '';
+          }
       }).attr('dy', (d) => {
         if (d.indices.hIndex > indexShow || d.indices.hIndex < 400) {
           const top = getRadious(d.indices.hIndex + 32) * 2;
@@ -700,7 +744,7 @@ export default class RelationGraph extends React.PureComponent {
         }
       }).style('stroke-width', '1px').transition().duration(1000).style('stroke', 'black')
         .style('opacity', 0.8);
-      svg.append('g').attr('class', 'ceter').enter().append('text').attr('dx', (d)=> {return -20}).text('s');
+      svg.append('g').attr('class', 'ceter').enter().append('text').attr('dx', (d) => { return -20; }).text('s');
       svg.selectAll('circle').data(_nodes).filter((j) => {
         if (ds.indexOf(j.index) !== -1) {
           return true;
@@ -805,7 +849,7 @@ export default class RelationGraph extends React.PureComponent {
               return '1.5px';
             } else {
               return '1px';
-            };
+            }
             });
           return svg.selectAll('line').data(_edges).style('stroke', '#999')
             .style('opacity', 1);
@@ -1270,6 +1314,7 @@ export default class RelationGraph extends React.PureComponent {
         });
       }
     };
+    // 筛选h-index
     this.wholeLayout = () => {
       console.log('[debug] enter -> wholeLayout');
       dispalyAll = true;
@@ -1284,16 +1329,16 @@ export default class RelationGraph extends React.PureComponent {
         if (d.indices.hIndex > indexShow) {
           return getRadious(d.indices.hIndex + 32);
         } else {
-          return 16;
+          return 0;
         }
       });
-      return svg.selectAll('.nodetext').data(_nodes).text((d) => {
-        if (d.indices.hIndex > showName && d.indices.hIndex > indexShow) {
-          return d.name.n.en + d.indices.hIndex;
-        } else {
-          return '';
-        }
-      });
+      // return svg.selectAll('.nodetext').data(_nodes).text((d) => {
+      //   if (d.indices.hIndex > showName && d.indices.hIndex > indexShow) {
+      //     return d.name.n.en + d.indices.hIndex;
+      //   } else {
+      //     return '';
+      //   }
+      // });
     };
     this.IndexChange = (e) => {
       if (e === 'h-Index>0') {
@@ -1311,6 +1356,7 @@ export default class RelationGraph extends React.PureComponent {
     // this.$watch('engineer.currentActivity', function (d) {
     //   return $scope.wholeLayout();
     // });
+    // 没有作用
     this.currentActivityChanged = () => {
       this.wholeLayout();
     };
@@ -1429,8 +1475,8 @@ export default class RelationGraph extends React.PureComponent {
         </div>
         <div className={styles.svgTitle} style={{ width: EgoWidth }}>
           <div>
-             <label>相关操作：</label>
-            {/* <Checkbox checked={subnet_selection} onChange={this.changeModle1}>子网选取</Checkbox>*/}
+            <label>相关操作：</label>
+            {/* <Checkbox checked={subnet_selection} onChange={this.changeModle1}>子网选取</Checkbox> */}
             <Checkbox checked={suspension_adjustment} onChange={this.changeModle2}>暂停调整</Checkbox>
             <Checkbox checked={two_paths} onChange={this.changeModle3}>两点路径</Checkbox>
             <Checkbox checked={continuous_path} onChange={this.changeModle4}>连续路径</Checkbox>

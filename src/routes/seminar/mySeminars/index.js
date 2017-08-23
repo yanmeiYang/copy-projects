@@ -45,7 +45,7 @@ class mySeminars extends React.Component {
       payload: {
         offset: 0,
         size: this.props.seminar.sizePerPage,
-        filter: { src: config.source, uid: user.id, organizer: roles.authority },
+        filter: { src: sysconfig.SOURCE, uid: user.id, organizer: roles.authority },
       },
     });
   };
@@ -59,7 +59,7 @@ class mySeminars extends React.Component {
     const params = {
       offset,
       size: sizePerPage,
-      filter: { src: config.source, uid: user.id, organizer: this.state.currentOrganizer },
+      filter: { src: sysconfig.SOURCE, uid: user.id, organizer: this.state.currentOrganizer },
     };
     this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
   };
@@ -72,7 +72,7 @@ class mySeminars extends React.Component {
       payload: {
         offset: 0,
         size: sizePerPage,
-        filter: { src: config.source, uid: user.id, organizer: activeKey },
+        filter: { src:sysconfig.SOURCE, uid: user.id, organizer: activeKey },
       },
     });
   };

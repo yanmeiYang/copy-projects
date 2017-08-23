@@ -13,7 +13,7 @@ module.exports = {
   ShowSideMenu: false,
   ShowRegisteredRole: false,
 
-  UserAuthSystem: 'aminer', // aminer 或者是 system.config
+  UserAuthSystem: 'huawei', // aminer 或者是 system.config
   UserAuthSystem_AddSysTagAuto: true, // 登录时自动添加system的标签
 
   // IndexPage_QuickSearchList:[], // use default.

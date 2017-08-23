@@ -17,11 +17,11 @@ const DetailPage = ({ dispatch, seminar, app, pad }) => {
   const { summaryById, loading } = seminar;
   const currentUser = app;
   // share
-  let shareModalDisplay = false;
+  // let shareModalDisplay = false;
 
-  function clipboard(path) {
-    shareModalDisplay = !shareModalDisplay;
-  }
+  // function clipboard(path) {
+  //   shareModalDisplay = !shareModalDisplay;
+  // }
 
   function delSeminar() {
     Modal.confirm({

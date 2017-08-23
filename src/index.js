@@ -7,7 +7,7 @@ import { createLogger } from 'redux-logger';
 import { message } from 'antd';
 import { browserHistory } from 'dva/router';
 import createLoading from 'dva-loading';
-import { system } from './utils/config';
+import { System } from './utils/system';
 import { ReduxLoggerEnabled } from './utils/debug';
 import './index.html';
 
@@ -40,7 +40,7 @@ if (process.env.NODE_ENV !== 'production') {
 app.model(require('./models/app'));
 
 // 3. Router
-app.router(require('./systems/' + system + '/router')); // eslint-disable-line
+app.router(require('./systems/' + System + '/router')); // eslint-disable-line
 // app.router(require('./router'));
 
 // 4. Start

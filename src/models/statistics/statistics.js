@@ -30,7 +30,7 @@ export default {
     *getSeminarsByOrgAndCat({ offset, size, payload }, { call, put }) {
       yield put({ type: 'showLoading' });
       const { data } = yield call(seminarService.getSeminar, offset, size,
-        { src: config.source, ...payload });
+        { src: sysconfig.SOURCE, ...payload });
       yield put({ type: 'getSeminarsByOrgAndCatSuccess', data, offset, size });
     },
   },

@@ -3,6 +3,7 @@
  */
 import fetch from 'dva/fetch';
 import { baseURL } from './config';
+import * as auth from './auth';
 import * as debug from './debug';
 
 function checkStatus(response) {
@@ -12,8 +13,7 @@ function checkStatus(response) {
 
   // TODO move out, don't process auth here.
   if (response.status === 401) {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    auth.removeLocalAuth();
     // location.href = '/';
   }
 
@@ -89,6 +89,7 @@ export default async function request(url, options) {
   return ret;
 }
 
+// TODO merge to request, use options.baseURL instead.
 export async function externalRequest(url, options) {
   let newUrl = url;
   if (options && !(options.method && options.method.toUpperCase() === 'POST') && options.data) {

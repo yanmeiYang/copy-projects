@@ -1,9 +1,12 @@
 import { request, config } from '../utils';
+import { sysconfig } from '../systems';
+// console.log('>>>>>>>>>>>>>>>>>>>>>>>>>', sysconfig);
 
-const { api, source } = config;
+const { api } = config;
+
 export async function listByCategory(category) {
   return request(api.ucListByCategory
-      .replace(':source', source)
+      .replace(':source', sysconfig.SOURCE)
       .replace(':category', category)
     , { method: 'GET' });
 }
@@ -11,7 +14,7 @@ export async function listByCategory(category) {
 export async function setByKey(category, key, val) {
   const cleanValue = val !== undefined ? val : '';
   return request(api.ucSetByKey
-      .replace(':source', source)
+      .replace(':source', sysconfig.SOURCE)
       .replace(':category', category)
       .replace(':key', key)
     , {
@@ -26,7 +29,7 @@ export async function setByKey(category, key, val) {
 export async function deleteByKey(category, key) {
   console.log('service delete key: ', key);
   return request(api.ucDeleteByKey
-      .replace(':source', source)
+      .replace(':source', sysconfig.SOURCE)
       .replace(':category', category)
       .replace(':key', key)
     , {
@@ -37,7 +40,7 @@ export async function deleteByKey(category, key) {
 
 export async function updateByKey(category, key, newKey) {
   return request(api.ucUpdateByKey
-      .replace(':source', source)
+      .replace(':source', sysconfig.SOURCE)
       .replace(':category', category)
       .replace(':key', key)
       .replace(':newKey', newKey)
@@ -49,9 +52,18 @@ export async function updateByKey(category, key, newKey) {
 
 export async function getCategoriesHint(category) {
   return request(api.getCategoriesHint
-      .replace(':source', source)
+      .replace(':source', sysconfig.SOURCE)
       .replace(':category', category),
     {
       method: 'GET',
+    });
+}
+
+export async function listConfigsByCategoryList(category) {
+  return request(api.listConfigsByCategoryList
+      .replace(':source', sysconfig.SOURCE),
+    {
+      method: 'GET',
+      data: { category },
     });
 }

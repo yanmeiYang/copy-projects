@@ -4,7 +4,7 @@
 import { request, config } from '../utils';
 import { sysconfig } from '../systems';
 
-const { api, source } = config;
+const { api } = config;
 
 // export async function login(params) {
 //   return request(api.userLogin, {
@@ -51,7 +51,7 @@ export async function createUser(email, first_name, gender, last_name, position,
     last_name,
     position,
     sub,
-    src: source,
+    src: sysconfig.SOURCE,
   };
   return request(api.signup, {
     method: 'POST',
@@ -68,10 +68,10 @@ export async function checkEmail(src, email) {
 
 export async function invoke(uid, label) {
   let setLabel;
-  if (label === source) {
+  if (label === sysconfig.SOURCE) {
     setLabel = label;
   } else {
-    setLabel = `${source}_${label}`;
+    setLabel = `${sysconfig.SOURCE}_${label}`;
   }
   const data = {
     uid,
@@ -87,7 +87,7 @@ export async function invoke(uid, label) {
 export async function revoke(uid, label) {
   const data = {
     uid,
-    label: `${source}_${label}`,
+    label: `${sysconfig.SOURCE}_${label}`,
   };
   return request(api.revoke, {
     method: 'POST',
@@ -96,7 +96,7 @@ export async function revoke(uid, label) {
 }
 
 export async function listUsersByRole(offset, size) {
-  return request(api.listUsersByRole.replace(':role', source).replace(':offset', offset).replace(':size', size), {
+  return request(api.listUsersByRole.replace(':role', sysconfig.SOURCE).replace(':offset', offset).replace(':size', size), {
     method: 'GET',
   });
 }

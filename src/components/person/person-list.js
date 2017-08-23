@@ -1,6 +1,7 @@
 /**
  *  Created by BoGao on 2017-06-15;
  */
+/* eslint-disable camelcase */
 import React from 'react';
 import { Link } from 'dva/router';
 import { Tag, Tooltip } from 'antd';
@@ -11,25 +12,20 @@ import { config } from '../../utils';
 import styles from './person-list.less';
 import * as profileUtils from '../../utils/profile-utils';
 
-/**
- * @param param
- *
- */
 class PersonList extends React.PureComponent {
   constructor(props) {
     super(props);
     this.personLabel = props.personLabel;
-  }
 
-  state = { interestsI18n: {} };
-
-  componentWillMount() {
+    // TODO 临时措施，国际化Interest应该从server端入手。
     personService.getInterestsI18N((result) => {
-      this.setState({ interestsI18n: result });
+      this.interestsI18n = result;
     });
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  state = {};
+
+  shouldComponentUpdate(nextProps) {
     if (nextProps.persons === this.props.persons) {
       return false;
     }
@@ -48,7 +44,7 @@ class PersonList extends React.PureComponent {
             const aff = profileUtils.displayAff(person);
             const phone = person.contact && person.contact.phone;
             const email = profileUtils.displayEmailSrc(person);
-            const homepage = person.contact && person.contact.homepage;
+            // const homepage = person.contact && person.contact.homepage;
             const indices = person.indices;
             const activity_indices = person.activity_indices;
             // const tags = profileUtils.findTopNTags(person, 8);
@@ -59,27 +55,23 @@ class PersonList extends React.PureComponent {
             }
 
             return (
-              <div key={person.id} className="item">
-                <div className="avatar_zone">
-                  <img
-                    src={profileUtils.getAvatar(person.avatar, '', 90)}
-                    className="avatar"
-                    alt={name}
-                    title={name}
-                  />
+              <div key={person.id} className={styles.person}>
+                <div className={styles.avatar_zone}>
+                  <img src={profileUtils.getAvatar(person.avatar, '', 90)}
+                       className={styles.avatar} alt={name} title={name} />
                 </div>
 
-                <div className="info_zone">
+                <div className={styles.info_zone}>
                   {name &&
-                  <div className="title">
+                  <div className={styles.title}>
                     <h2 className="section_header">
                       <a {...personLinkParams}>{name}</a>
-                      {false && <span className="rank">会士</span>}
+                      {false && <span className={styles.rank}>会士</span>}
                     </h2>
                     {this.personLabel && this.personLabel(person)}
                   </div>}
-                  <div className="zone">
-                    <div className="contact_zone">
+                  <div className={styles.zone}>
+                    <div className={styles.contact_zone}>
                       <Indices
                         indices={indices}
                         activity_indices={activity_indices}
@@ -94,24 +86,23 @@ class PersonList extends React.PureComponent {
                       </span>
                       }
                       {email &&
-                      <span className="email"
-                            style={{ backgroundImage: `url(${config.baseURL}${email})` }}>
-                        <i className="fa fa-envelope fa-fw" />
+                      <span style={{ backgroundImage: `url(${config.baseURL}${email})` }}
+                            className="email"><i className="fa fa-envelope fa-fw" />
                       </span>
                       }
                     </div>
 
                     {person.tags &&
-                    <div className="tag_zone">
+                    <div className={styles.tag_zone}>
                       <div>
                         <h4><i className="fa fa-area-chart fa-fw" /> 研究兴趣:</h4>
                         <div className={styles.tagWrap}>
                           {
                             person.tags.slice(0, 8).map((item) => {
                               if (item.t === null || item.t === 'Null') {
-                                return;
+                                return false;
                               } else {
-                                const tag = personService.returnKeyByLanguage(this.state.interestsI18n, item.t);
+                                const tag = personService.returnKeyByLanguage(this.interestsI18n, item.t);
                                 const showTag = tag.zh !== '' ? tag.zh : tag.en;
                                 return (
                                   <span key={Math.random()}>

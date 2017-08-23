@@ -1,28 +1,11 @@
 /**
  * Created by yutao on 2017/5/22.
  */
-// const SYS = 'ccf';
-const SYS = 'huawei';
-// const SYS = 'alibaba';
-// const SYS = 'tencent';
-// const SYS = '2017-8';
-// const SYS = 'cie';
-// const SYS = 'cie';
-// const SYS = 'cipsc';
-// const SYS = '2017-8';
-// const SYS = 'demo';
-//  const SYS = 'cietest';
-
 const param = (key, type, description) => {
   return { key, type, description };
 };
 
-module.exports = {
-  // To change SYSTEM settings. Please change /define.js.
-  // TODO remove all use of this config [system,source].
-  system: SYS, // 默认启动这是哪套系统，启动的时候传入app，之后会在APP里面重新设置。
-  source: SYS, // AppID, Used in UniversalConfig.
-
+ module.exports = {
   baseURL: 'https://api.aminer.org/api',
   // baseURL: 'https://166.111.7.105/api',
 
@@ -53,6 +36,7 @@ module.exports = {
     listUsersByRole: '/user/role/list/:role/offset/:offset/size/:size',
     // 创建邮件模板
     emailTemplate: '/user/mail/template/:src/:type',
+    getTemplate: '/user/mail/template/:src/:type ',
 
     // search
     searchPerson: '/search/person', // pin=1 huawei mode.
@@ -118,6 +102,7 @@ module.exports = {
     ucDeleteByKey: '/2b/config/:source/:category/:key',
     ucUpdateByKey: '/2b/config/:source/:category/rename/:key/:newKey',
     getCategoriesHint: '/2b/config/:source/category/suggest/:category',
+    listConfigsByCategoryList: '/2b/config/:source/by-category',
 
     // Knowledge Graph
     kgFind: {

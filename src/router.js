@@ -4,16 +4,7 @@
 import App from './routes/app';
 import App2b from './routes/2b/app2b';
 import { registerModel } from './utils';
-import ExpertMapRouters from './routes/expert-map/router-map';
-import SearchRouters from './routes/search/router';
-import PersonRouters from './routes/person/router';
-import UserRouters from './routes/user/router';
-import AdminRouters from './routes/admin/router';
-import TrendPredictionRouters from './routes/trend-prediction/router';
-import TobRouters from './routes/2b/router-2b';
-import TobProfileRouters from './routes/2b-profile/route';
 
-import OtherRouters from './routes/router';
 
 const core = {
 
@@ -50,18 +41,18 @@ const core = {
     },
   }),
 
-  ...ExpertMapRouters,
-  ...SearchRouters,
-  ...PersonRouters,
-  ...UserRouters,
-  ...AdminRouters,
+  ...require('./routes/expert-map/router-map'),
+  ...require('./routes/search/router'),
+  ...require('./routes/person/router'),
+  ...require('./routes/user/router'),
+  ...require('./routes/admin/router'),
   ...require('./routes/seminar/router'),
   ...require('./routes/auth/auth-router'),
-  ...TrendPredictionRouters,
-  ...TobRouters,
-  ...TobProfileRouters,
-
-  ...OtherRouters,
+  ...require('./routes/trend-prediction/router'),
+  ...require('./routes/2b/router-2b'),
+  ...require('./routes/2b-profile/route'),
+  ...require('./routes/recommendation/router-recommendation'),
+  ...require('./routes/router'), // Other routes.
 
 };
 

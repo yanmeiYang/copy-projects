@@ -4,7 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Tabs, Button, Modal } from 'antd';
-import { sysconfig } from '../../../systems';
+import { system } from '../../../utils';
 import EmailContent from './emailCotent';
 import styles from './index.less';
 
@@ -16,27 +16,26 @@ class EmailTemplate extends React.Component {
   componentWillMount = () => {
     this.props.dispatch({
       type: 'systemSetting/getTemplateContent',
-      payload: { src: sysconfig.AllOptionalSystems[0], type: 'welcome' },
+      payload: { src: system.AvailableSystems[0], type: 'welcome' },
     });
-    this.setState({ src: sysconfig.AllOptionalSystems[0], type: 'welcome' });
+    this.setState({ src: system.AvailableSystems[0], type: 'welcome' });
     this.props.dispatch({ type: 'app/handleNavbar', payload: true });
   };
+  // componentWillReceiveProps = (nextProps) => {
+  //   if (nextProps.systemSetting.status !== this.props.systemSetting.status) {
+  //     if (!nextProps.systemSetting.status) {
+  //       Modal.error({
+  //         title: '您没有权限',
+  //       });
+  //     } else {
+  //       Modal.success({
+  //         title: '邮箱模板定制成功',
+  //       });
+  //     }
+  //   }
+  // };
   componentWillUnmount = () => {
     this.props.dispatch({ type: 'app/handleNavbar', payload: false });
-  };
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.systemSetting.status !== this.props.systemSetting.status) {
-      if (!nextProps.systemSetting.status) {
-        Modal.error({
-          title: '您没有权限',
-        });
-      } else {
-        Modal.success({
-          title: '邮箱模板定制成功',
-        });
-      }
-      this.props.form.resetFields();
-    }
   };
 
   onTabChange = (e) => {
@@ -66,8 +65,8 @@ class EmailTemplate extends React.Component {
             tabPosition="left"
             onChange={this.onTabChange}
           >
-            {sysconfig.AllOptionalSystems &&
-            sysconfig.AllOptionalSystems.map((sys) => {
+            {system.AvailableSystems &&
+            system.AvailableSystems.map((sys) => {
               return <TabPane tab={sys} key={sys}>
                 <Tabs
                   defaultActiveKey="welcome"

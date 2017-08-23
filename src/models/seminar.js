@@ -31,7 +31,7 @@ export default {
     comments: [],
     expertRating: [],
     tags: [],
-    topMentionedTags: [],
+    topMentionedTags: {},
     isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
   },
 

@@ -53,6 +53,7 @@ class CanlendarInForm extends React.Component {
           // defaultValue={[moment(startValue, dateFormat), moment(endValue, dateFormat)]}
           onChange={this.onChange}
           onOk={this.onOk}
+          allowClear={false}
         />
         }
       </div>

@@ -86,11 +86,4 @@ export default {
   //   // 'react-router': 'react-router',
   // },
 
-  // "proxy": {
-  //    "/tapi": {
-  //      "target": "http://trajectory.aminer.org",
-  //      "changeOrigin": true,
-  //      "pathRewrite": { "^/tapi": "http://trajectory.aminer.org" }
-  //    }
-  // },
 }

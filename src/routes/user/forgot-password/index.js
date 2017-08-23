@@ -4,7 +4,6 @@
 import React from 'react';
 import { Input, Button, Form, Modal } from 'antd';
 import { connect } from 'dva';
-import { sysconfig } from '../../../systems';
 import styles from './index.less';
 
 const FormItem = Form.Item;
@@ -64,7 +63,6 @@ class ForgotPassword extends React.Component {
         }
       }
       if (!err) {
-        values.token = sysconfig.SOURCE;
         values.password = ' ';
         that.props.dispatch({ type: 'auth/forgotPassword', payload: values });
       }

@@ -102,9 +102,10 @@ export async function listUsersByRole(offset, size) {
 }
 
 export async function forgot(params) {
+  const data = { ...params, token: sysconfig.SOURCE };
   return request(api.forgot, {
     method: 'POST',
-    body: JSON.stringify({ ...params, src: sysconfig.UserAuthSystem }),
+    body: JSON.stringify({ ...data, src: sysconfig.UserAuthSystem }),
   });
 }
 

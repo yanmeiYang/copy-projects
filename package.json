@@ -3,7 +3,6 @@
   "dependencies": {
     "antd": "^2.12.6",
     "classnames": "^2.2.5",
-    "cors": "^2.8.4",
     "dva": "^1.2.1",
     "dva-loading": "^0.2.1",
     "immutable": "^3.8.1",
@@ -47,7 +46,6 @@
     "extract-text-webpack-plugin": "^3.0.0",
     "has-flag": "^2.0.0",
     "html-webpack-plugin": "^2.29.0",
-    "http-proxy-middleware": "^0.17.4",
     "is-utf8": "^0.2.1",
     "jsonp": "^0.2.1",
     "less-vars-to-js": "^1.2.0",

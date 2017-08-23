@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { connect } from 'dva';
+import { FormattedMessage } from 'react-intl';
 import styles from './RecommendationPage.less';
 import { Auth } from '../../hoc';
 
@@ -59,7 +60,13 @@ export default class ExpertMapPage extends React.Component {
   render() {
     return (
       <div className={styles.content}>
-        test pages
+        <FormattedMessage
+          id="app.greeting"
+          defaultMessage="Hello, {name}!"
+          values={{
+            name: 'Eric',
+          }}
+        />
       </div>
     );
   }

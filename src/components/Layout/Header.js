@@ -5,6 +5,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { Menu, Icon } from 'antd';
 import { Link } from 'dva/router';
+import { FormattedMessage } from 'react-intl';
 import { isEqual } from 'lodash';
 import styles from './Header.less';
 import * as profileUtils from '../../utils/profile-utils';
@@ -170,7 +171,9 @@ class Header extends React.PureComponent {
 
             {isLogin(user) && sysconfig.ShowHelpDoc &&
             <Menu.Item key="/help">
-              <Link to="/help">帮助文档</Link>
+              <Link to="/help">
+                <FormattedMessage id="header.label.help" defaultMessage="Help" />
+              </Link>
             </Menu.Item>}
 
             {isAuthed(roles) &&
@@ -180,7 +183,7 @@ class Header extends React.PureComponent {
                   <Icon type="loading" /> :
                   <Icon type="logout" />
                 }
-                退出登录
+                <FormattedMessage id="header.exit_login" defaultMessage="Exit Login" />
               </div>
             </Menu.Item>
             }

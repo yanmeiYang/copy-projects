@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
+import { FormattedMessage } from 'react-intl';
 import styles from './index.less';
 import { sysconfig } from '../../systems';
 import { KgSearchBox } from '../../components/search';
@@ -53,7 +54,9 @@ export default class IndexPage extends React.Component {
     return (
       <div>
         <div className={styles.normal}>
-          <h1 className={styles.title}>专家搜索</h1>
+          <h1 className={styles.title}>
+            <FormattedMessage id="index.title" defaultMessage="Expert Search" />
+          </h1>
 
           <KgSearchBox
             size="large" onSearch={this.onSearch}

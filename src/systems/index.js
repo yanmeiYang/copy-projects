@@ -1,7 +1,11 @@
 /**
  * Created by BoGao on 2017/6/20.
  */
+/* eslint-disable prefer-template,import/no-dynamic-require */
 import React from 'react';
+import { addLocaleData } from 'react-intl';
+import { loadSavedLocale } from '../utils/locale';
+
 import * as alibabaConfig from './alibaba/config';
 import * as ccfConfig from './ccf/config';
 import * as ccftestConfig from './ccftest/config';
@@ -39,8 +43,11 @@ const defaultSystemConfigs = {
   //
   // Systems Preference
   //
-  Language: 'en', // options [cn|en]
-  PreferredLanguage: 'en', // 默认语言
+  Locale: 'en', // en_US, zh_CN, ...
+  EnableLocalLocale: true,
+  Language: 'en', // options [cn|en] // TODO change to locale.
+  PreferredLanguage: 'en', // 默认语言 // TODO delete this.
+
   MainListSize: 20,
 
   //
@@ -103,7 +110,6 @@ const defaultSystemConfigs = {
   // 地图中心点
   CentralPosition: {},
 
-
   // PersonList_ShowIndices: [], // do not override in-component settings. // TODO
 };
 
@@ -116,5 +122,11 @@ Object.keys(currentSystem).map((key) => {
   sysconfig[key] = currentSystem[key];
   return null;
 });
+
+// load & Override language from localStorage.
+if (sysconfig.EnableLocalLocale) {
+  sysconfig.Locale = loadSavedLocale(sysconfig.SYSTEM, sysconfig.Locale);
+}
+addLocaleData('react-intl/locale-data/' + sysconfig.Locale);
 
 module.exports = { sysconfig };

@@ -12,11 +12,14 @@ import { KnowledgeGraphTextTree } from './index';
 import { PublicationList } from '../../components/publication/index';
 import { PersonListTiny } from '../../components/person/index';
 import { Message } from '../../components/ui';
+import { Auth } from '../../hoc';
 
 const RadioGroup = Radio.Group;
 const TabPane = Tabs.TabPane;
 
-class KnowledgeGraphPage extends React.PureComponent {
+@connect(({ app, knowledgeGraph, loading }) => ({ app, knowledgeGraph, loading }))
+@Auth
+export default class KnowledgeGraphPage extends React.PureComponent {
   constructor(props) {
     super(props);
     this.dispatch = this.props.dispatch;
@@ -278,7 +281,3 @@ class KnowledgeGraphPage extends React.PureComponent {
     );
   }
 }
-
-export default connect(
-  ({ knowledgeGraph, loading }) => ({ knowledgeGraph, loading }),
-)(KnowledgeGraphPage);

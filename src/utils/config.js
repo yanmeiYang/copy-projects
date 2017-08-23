@@ -7,7 +7,11 @@ const SYS = 'huawei';
 // const SYS = 'tencent';
 // const SYS = '2017-8';
 // const SYS = 'cie';
+// const SYS = 'cie';
+// const SYS = 'cipsc';
+// const SYS = '2017-8';
 // const SYS = 'demo';
+//  const SYS = 'cietest';
 
 const param = (key, type, description) => {
   return { key, type, description };

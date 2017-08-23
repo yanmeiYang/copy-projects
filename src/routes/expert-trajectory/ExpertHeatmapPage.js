@@ -8,15 +8,19 @@ import { routerRedux } from 'dva/router';
 import styles from './ExpertHeatmapPage.less';
 import echarts from 'echarts';
 import world from 'echarts/map/js/world';
+import LeftInfoZoneCluster from './LeftInfoZoneCluster';
 import mapData from '../../../external-docs/expert-trajectory/testData.json';
 import heatData from '../../../external-docs/expert-trajectory/heatData.json';
-import { Slider, Switch, InputNumber, Row, Col, Icon, Button, message } from 'antd';
+import { Slider, Layout, InputNumber, Row, Col, Icon, Button, message } from 'antd';
+// import expert
 
+const { Content, Sider } = Layout;
 const startYear = heatData.startYear;
 const endYear = heatData.endYear;
 let option2 = {};
 const location = heatData.locations;
 const table = heatData.table;
+const ecConfig = echarts.config;
 // const myChart2 = echarts.init(document.getElementById('world'));
 message.config({
   top: 110,
@@ -34,7 +38,7 @@ class ExpertHeatmapPage extends React.Component {
     query: 'data mining',
     mapType: 'google', // [baidu|google]
     inputValue: startYear,
-    ifPlay:'play-circle'
+    ifPlay: 'play-circle',
   };
 
   componentWillMount() {
@@ -57,9 +61,18 @@ class ExpertHeatmapPage extends React.Component {
   }
 
   componentDidMount() {
+    const testPeople = this.test();
+    this.callClusterPerson(testPeople);
     this.playon = startYear;
     this.myChart2 = echarts.init(document.getElementById('heatmap'));
     this.setHeatmap(); // 热力图
+  }
+
+  test = () => {
+    const haha = [];
+    haha.push('53f4895cdabfaedd74eb27aa');
+    haha.push('53f4a75cdabfaeb22f57430a');
+    return haha;
   }
 
   onSearch = (data) => {
@@ -88,7 +101,7 @@ class ExpertHeatmapPage extends React.Component {
       inputValue: value,
     });
     this.playon = value;
-    console.log("value",value,this.playon);
+    console.log('value', value, this.playon);
     yearNow = this.playon;
     const index = value - startYear;
     // console.log('index', index);
@@ -114,7 +127,17 @@ class ExpertHeatmapPage extends React.Component {
       data.push(onenode);
     }
     option2.series = this.getHeatSeries(geoCoordMap, data, 0, false);
+    // this.myChart.option2.series.on('click', function (param) {
+    //   alert('点击了我！');
+    // });
     this.myChart2.setOption(option2);
+    this.myChart2.on('click', function (params) {
+       if (params.componentType === 'series') {
+          if (params.seriesIndex === 0 || (params.seriesIndex === 1 && params.seriesIndex !== 0)) {
+            alert(1);
+          }
+       }
+    });
   }
 
   /* getZoom=()=>{
@@ -127,6 +150,10 @@ class ExpertHeatmapPage extends React.Component {
     this.myChart2.setOption(option2);
     return option2.geo.zoom;
   } */
+
+
+  // 在这里做一个点击事件的监听，绑定的是eConsole方法
+  // this.myChart2.on(ecConfig.EVENT.CLICK, eConsole);
 
   onClick=() => { // 点击热力图按钮
     if (!play) {
@@ -142,7 +169,7 @@ class ExpertHeatmapPage extends React.Component {
     this.onButtoon(this.playon);
     const mapinterval = setInterval(() => {
       if (play && this.playon < endYear) {
-        console.log("play")
+        console.log('play');
         this.playon += 1;
         yearNow = this.playon;
         // this.setState({
@@ -157,13 +184,11 @@ class ExpertHeatmapPage extends React.Component {
           play = false;
         }
 
-        //ifPlay = 'play-circle';
+        // ifPlay = 'play-circle';
         clearInterval(mapinterval);
       }
     }, 4000);
-
   }
-
 
 
   onButtoon = (value) => { // 按下热力图的播放按钮
@@ -204,7 +229,7 @@ class ExpertHeatmapPage extends React.Component {
       }
     }
 
-    console.log("merge2",merge2)
+    console.log('merge2', merge2);
 
     const piece = 19; // 每隔一年插入20个变化人数时间段
     for (const key in merge) {
@@ -216,7 +241,7 @@ class ExpertHeatmapPage extends React.Component {
         middle = (merge[key] - 0) / (piece + 1);
       }
       const onenode = { name: key, value: [merge[key] * 40, middle * 40] }; // 实际数据中乘20应删去
-      console.log("middle",onenode.value);
+      console.log('middle', onenode.value);
       data.push(onenode);
     }
 
@@ -231,9 +256,9 @@ class ExpertHeatmapPage extends React.Component {
     }
     // console.log("onenode",data);
 
-    for (const j of _.range(piece+2)) {
+    for (const j of _.range(piece + 2)) {
       setTimeout(() => { // 每隔0.2秒刷新一次，每隔4秒换一年
-        option2.series = this.getHeatSeries(geoCoordMap, data, (piece+1-j), true);
+        option2.series = this.getHeatSeries(geoCoordMap, data, (piece + 1 - j), true);
         // option2.series = this.getHeatSeries(geoCoordMap, data, j, true);
         // console.log("piece=j",piece+1-j)
         this.myChart2.setOption(option2);
@@ -301,19 +326,19 @@ class ExpertHeatmapPage extends React.Component {
   doHeatGeoMap=() => { // 存储经纬度 geoCoordMap = {123:[116,40]}
     const geoCoordMap = {};
     // console.log('&&&&&&&', geoCoordMap);
-    /*for (const key in location) { // 地点经纬度
+    /* for (const key in location) { // 地点经纬度
       const onewhere = [];
       if (key !== '0') {
         onewhere.push(location[key].lat);
         onewhere.push(location[key].lng);
         geoCoordMap[key] = onewhere;
       }
-    }*/
+    } */
 
-    for (const i of _.range(1,location.length)){
+    for (const i of _.range(1, location.length)) {
       geoCoordMap[i] = location[i];
     }
-    console.log("geo",geoCoordMap);
+    console.log('geo', geoCoordMap);
     return geoCoordMap;
   }
 
@@ -375,10 +400,10 @@ class ExpertHeatmapPage extends React.Component {
           },
         },
         data: convertData(data.sort((a, b) => {
-        return b.value - a.value;
-      }).slice(0, 6), j),
+          return b.value - a.value;
+        }).slice(0, 6), j),
         symbolSize(val) {
-          return (val[2] / 10) * option2.geo.zoom;
+          return (val[2] / 10);
         },
       },
       { // 当年所有地点
@@ -387,7 +412,7 @@ class ExpertHeatmapPage extends React.Component {
         coordinateSystem: 'geo',
         data: convertData(data, j),
         symbolSize(val) {
-          return (val[2] / 10) * option2.geo.zoom;
+          return (val[2] / 10);
         },
         label: {
           normal: {
@@ -411,6 +436,10 @@ class ExpertHeatmapPage extends React.Component {
     return series;
   }
 
+  callClusterPerson =(clusterIdList) => {
+    this.props.dispatch({ type: 'expertTrajectory/listPersonByIds', payload: { ids: clusterIdList } });
+  }
+
   plusHeatZoom = () => {
     option2.geo.zoom += 0.1;
     this.myChart2.setOption(option2);
@@ -423,39 +452,52 @@ class ExpertHeatmapPage extends React.Component {
 
   render() {
     const ifPlay = this.state.ifPlay;
+    const clusterPersons = this.props.expertTrajectory.clusterPersons;
     return (
       <div className={classnames('content-inner', styles.page)}>
-        <div className={styles.heat} id="heatmap" style={{ height: '600px', width:'1200px'}} />
-        <div>
-          <Button className={styles.plus} type="primary" ghost icon="plus" onClick={this.plusHeatZoom} />
-        </div>
-        <div>
-          <Button className={styles.minus} type="primary" ghost icon="minus" onClick={this.minusHeatZoom} />
-        </div>
 
-        <div className={styles.two} id="showYear">
-          <h1> {yearNow}</h1>
-        </div>
+        <Layout >
+          <Sider className={styles.left} width={250} style={{ backgroundColor: '#fff' }}>
+            <LeftInfoZoneCluster persons={clusterPersons} />
+          </Sider>
+
+          <Layout className={styles.right} >
+            <Content className={styles.content}>
+
+              <div className={styles.heat} id="heatmap" style={{ height: '600px', width: '1200px' }} />
+              <div>
+                <Button className={styles.plus} type="primary" ghost icon="plus" onClick={this.plusHeatZoom} />
+              </div>
+              <div>
+                <Button className={styles.minus} type="primary" ghost icon="minus" onClick={this.minusHeatZoom} />
+              </div>
+
+              <div className={styles.two} id="showYear">
+                <h1> {yearNow}</h1>
+              </div>
 
 
-        <Row>
-          <Col span={12}>
-            <Slider min={startYear} max={endYear} onChange={this.onChange} onAfterChange={this.onAfterChange}value={this.state.inputValue} />
-          </Col>
-          <Col span={4}>
-            <InputNumber
-              min={startYear}
-              max={endYear}
-              style={{ marginLeft: 100 }}
-              value={this.state.inputValue}
-              onChange={this.onInputNum}
-            />
-          </Col>
-        </Row>
+              <Row>
+                <Col span={12}>
+                  <Slider min={startYear} max={endYear} onChange={this.onChange} onAfterChange={this.onAfterChange}value={this.state.inputValue} />
+                </Col>
+                <Col span={4}>
+                  <InputNumber
+                    min={startYear}
+                    max={endYear}
+                    style={{ marginLeft: 100 }}
+                    value={this.state.inputValue}
+                    onChange={this.onInputNum}
+                  />
+                </Col>
+              </Row>
 
-        <div>
-          <Button className={styles.play} icon={ifPlay} onClick={this.onClick} />
-        </div>
+              <div>
+                <Button className={styles.play} icon={ifPlay} onClick={this.onClick} />
+              </div>
+            </Content>
+          </Layout>
+        </Layout>
 
 
       </div>

@@ -11,8 +11,8 @@ module.exports = {
   // 通用配置。所有System的配置文件必须全部包含这部分的值
   PageTitle: 'CIE 专家库',
 
-  Language: 'cn', // options [cn|en]
-  PreferredLanguage: 'cn', // 默认语言
+  Language: 'en', // options [cn|en]
+  PreferredLanguage: 'en', // 默认语言
 
   Search_SortOptions: [
     { label: '相关度', key: 'relevance' },
@@ -25,14 +25,6 @@ module.exports = {
   PersonList_PersonLink: personId => `/person/${personId}`,
   PersonList_PersonLink_NewTab: false,
 
-  IndexPage_QuickSearchList: ['人工智能', '机器人', '数据挖掘', '机器学习', '数据建模', '计算机视觉',
-    '计算机网络', '网络', '自然语言处理'],
-
-  PersonList_ShowIndices: ['activityRankingContrib', 'h_index', 'activity'],
-
-  //
-  // Layout related
-  //
   // Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
   Header_LogoWidth: 213,
   Header_LogoStyle: {
@@ -52,8 +44,9 @@ module.exports = {
 
   // > Search related
   SearchBarInHeader: false,
-  // 是否显示创建新用户btn
-  ApplyUserBtn: false,
+  ApplyUserBtn: false, // 是否显示创建新用户btn
+  ShowRating: false, // 显示评分
+  showMenustatistics: false, // 显示活动统计
   // Functionality
   Enable_Export: true,
 
@@ -65,9 +58,9 @@ module.exports = {
     },
     {
       id: '598bf2a19ed5db236b1062ea',
-      name: '中国电子学会测试专家组',
+      name: '中国电子学会专家',
       nperson: 77,
-    }
+    },
 
   ],
 

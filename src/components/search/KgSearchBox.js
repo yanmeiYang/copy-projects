@@ -305,6 +305,7 @@ class KgSearchBox extends React.PureComponent {
             inputProps={inputProps}
             size={size}
           />
+
           <Button
             size={size}
             type="primary"

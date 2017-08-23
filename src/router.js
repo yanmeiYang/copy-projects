@@ -4,13 +4,13 @@
 import App from './routes/app';
 import App2b from './routes/2b/app2b';
 import { registerModel } from './utils';
-import ExpertMapRouters from './routes/expert-map/router';
+import ExpertMapRouters from './routes/expert-map/router-map';
 import SearchRouters from './routes/search/router';
 import PersonRouters from './routes/person/router';
 import UserRouters from './routes/user/router';
 import AdminRouters from './routes/admin/router';
 import TrendPredictionRouters from './routes/trend-prediction/router';
-import TobRouters from './routes/2b/2b-router';
+import TobRouters from './routes/2b/router-2b';
 
 import OtherRouters from './routes/router';
 

@@ -3,9 +3,10 @@
  */
 import React from 'react';
 import { connect } from 'dva';
+import { Tooltip } from 'antd';
 import styles from './RightInfoZoneCluster.less';
 import * as profileUtils from '../../utils/profile-utils';
-
+import { HindexGraph } from '../../components/widgets';
 
 class RightInfoZoneCluster extends React.PureComponent {
 
@@ -13,7 +14,6 @@ class RightInfoZoneCluster extends React.PureComponent {
   }
 
   componentWillReceiveProps() {
-
   }
 
   render() {
@@ -25,7 +25,6 @@ class RightInfoZoneCluster extends React.PureComponent {
     let hindexSum = 0;
     const interests = {};
     persons.map((person) => {
-      // console.log(person);
       const indices = person.indices;
       // sum hindex
       if (indices) {
@@ -47,6 +46,13 @@ class RightInfoZoneCluster extends React.PureComponent {
           return null;
         });
       }
+      if (person.tags_zh && person.tags_zh && person.tags_zh.length > 0) {
+        person.tags.map((tag) => {
+          const count = interests[tag.t] || 0;
+          interests[tag.t] = count - 1;
+          return null;
+        });
+      }
       return null;
     });
 
@@ -58,29 +64,35 @@ class RightInfoZoneCluster extends React.PureComponent {
     // TODO 人头按Hindex排序。
     // TODO 显示Hindex分段.
     return (
-      <div className="rizPersonInfo">
+      <div className="rizCluster">
         <div className="name bg">
           <h2 className="section_header">Cluster of {persons.length} experts.</h2>
         </div>
 
         <div className="info bg">
-          <span>Sum of H-index: {hindexSum}</span>
-          <span>Avg of H-index: {(hindexSum / persons.length).toFixed(0)}</span>
+          <div>Sum of H-index: {hindexSum}</div>
+          <div>Avg of H-index: {(hindexSum / persons.length).toFixed(0)}</div>
         </div>
 
-        <div className="images bg">
+        <div className="info">
+          <HindexGraph persons={persons} />
+        </div>
+
+        <div className="info images">
           {persons && persons.slice(0, 20).map((person) => {
             const avatarUrl = profileUtils.getAvatar(person.avatar, person.id, 50);
 
+            const tooltip = (
+              <div className="tooltip">
+                {person.name}<br />
+                Hindex: {person.indices && person.indices.h_index}
+              </div>);
             return (
               <div key={person.id} className="imgOuter">
                 <div className="imgBox">
-                  <img src={avatarUrl} />
-                  {/* <div key={person.id}>{person.name}</div>*/}
-                </div>
-                <div className="tooltip">
-                  {person.name}<br />
-                  Hindex:{person.indices && person.indices.hindex }
+                  <Tooltip title={tooltip}>
+                    <img src={avatarUrl} />
+                  </Tooltip>
                 </div>
               </div>
             );
@@ -88,7 +100,7 @@ class RightInfoZoneCluster extends React.PureComponent {
         </div>
 
         <div className="info bg">
-          Research Interests:
+          <h4 className="section_header"> Research Interests: </h4>
           {sortedInterest && sortedInterest.slice(0, 20).map((interest) => {
             return (
               <span key={interest.key}>{interest.key} ({interest.count})</span>

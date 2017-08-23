@@ -283,8 +283,9 @@ class ExpertGoogleMap extends React.Component {
   toggleRightInfoBox = (id) => {
     const state = getById('flowstate').value;
     const statistic = getById('statistic').value;
-    //this.getTipInfoBox();
+    this.getTipInfoBox();
     if (statistic !== id) { // 一般认为是第一次点击
+      console.log("1----"+state)
       getById('flowstate').value = 1;
       this.getRightInfoBox();
       if (this.props.expertMap.infoZoneIds !== id) { // don't change
@@ -300,9 +301,11 @@ class ExpertGoogleMap extends React.Component {
       this.syncInfoWindow();
     } else if (state === 1) { // 偶数次点击同一个对象
       // 认为是第二次及其以上点击
+      console.log("2----"+state)
       getById('flowstate').value = 0;
       getById('flowInfo').style.display = 'none';
     } else { // 奇数次点击同一个对象
+      console.log("3-----"+state)
       getById('flowstate').value = 1;
       getById('flowInfo').style.display = '';
     }
@@ -317,7 +320,7 @@ class ExpertGoogleMap extends React.Component {
     });
     google.maps.event.addListener(marker, 'mouseover', function (e) {
       if (that.currentPersonId !== personId) {
-        //that.onResetPersonCard();
+        that.onResetPersonCard();
         that.onLoadPersonCard(personId);
         infoWindow.open(map, marker);
         that.syncInfoWindow();
@@ -347,6 +350,17 @@ class ExpertGoogleMap extends React.Component {
       riz.onmouseleave = () => this.map.enableScrollWheelZoom();
     }
     return riz;
+  };
+
+  getTipInfoBox = () => {
+    let riz1 = getById('rank');
+    if (!riz1) {
+      riz1 = document.createElement('div');
+      getById('map').appendChild(riz1);
+      riz1.setAttribute('id', 'flowinfo1');
+      riz1.setAttribute('class', 'imgWrapper1');
+      return riz1;
+    }
   };
 
   onSetPersonCard = (personInfo) => {
@@ -438,9 +452,26 @@ class ExpertGoogleMap extends React.Component {
           <input id="statistic" type="hidden" value="0" />
           <input id="flowstate" type="hidden" value="0" />
         </div>
-        <div id="personInfo" style={{ display: 'none' }} >
-          {personPopupJsx && personPopupJsx}
+
+        <div id="rank">
+          <div className={styles.main3}>
+            <img width="13%" src="/images/personsNumber.png"/>
+            <div className={styles.lab3}><p>该区域学者人数</p>该学者所在位置</div>
+          </div>
+          <div className={styles.container}>
+            <div className={styles.item1}> 1</div>
+            <div className={styles.item2}> 2</div>
+            <div className={styles.item3}> 3</div>
+            <div className={styles.item4}> 4</div>
+            <div className={styles.item5}> 5</div>
+          </div>
+            <img width="80%" src="/images/arrow.png" />
+          <div className={styles.lab2}>人数增加</div>
         </div>
+
+        <div id="personInfo" style={{ display: 'none' }} >
+        {personPopupJsx && personPopupJsx}
+      </div>
 
         <div id="rightInfoZone" style={{ display: 'none' }} >
           <div className="rightInfoZone">

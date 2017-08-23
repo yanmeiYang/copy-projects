@@ -1,3 +1,7 @@
+.layout {
+  height: 100vh;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -22,41 +26,60 @@
   }
 }
 
-.form {
-  display: flex; flex: 1;
-  //position: absolute;
-  //top: 528
-  //top: 50%;
-  //left: 50%;
-  //margin: -160px 0 0 -160px;
-  width: 320px;
-  height: 320px;
-  padding: 36px;
-  box-shadow: 0 0 100px rgba(0, 0, 0, .08);
+.loginPage {
+  .form {
+    display: flex; flex: 1;
+    background: #ffffff;
+    width: 450px;
+    height: auto;
+    min-height: 500px;
+    //position: absolute;
+    //top: 528
+    //top: 50%;
+    //left: 50%;
+    //margin: -160px 0 0 -160px;
+    padding: 36px;
+    //box-shadow: 0 0 100px rgba(0, 0, 0, .08);
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 2;
+    //button {
+    //  width: 100%;
+    //}
 
-  button {
-    width: 100%;
-  }
+    p {
+      color: rgb(204, 204, 204);
+      text-align: center;
+      margin-top: 16px;
 
-  p {
-    color: rgb(204, 204, 204);
-    text-align: center;
-    margin-top: 16px;
-
-    span {
-      &:first-child {
-        margin-right: 16px;
+      span {
+        &:first-child {
+          margin-right: 16px;
+        }
       }
     }
-  }
-  :global form {
-    width: 100%;
+    :global form {
+      width: 100%;
+    }
+    .formHeader {
+      margin-bottom: 30px;
+      p {
+        margin-top: 0;
+        text-align: left;
+        color: rgba(0,0,0,.87);
+      }
+    }
+    .errors{
+      margin-bottom: 20px;
+      color: red;
+    }
   }
 }
 
-.forgotpwbtn {
-  color: #808080;
-}
+//.forgotpwbtn {
+//  color: #808080;
+//}
 
 .forgotpwbtn:hover {
   color: #108ee9;
@@ -70,10 +93,10 @@
 .applyUserbtn:hover {
   cursor: pointer;
   color: #108ee9;
-
 }
 
 .loginBtn {
+  float: right;
   margin-top: 10px;
   margin-bottom: 10px;
 }
@@ -102,7 +125,8 @@
 .ant-spin-nested-loading {
   height: 100%;
 }
-.emailLogin{
+
+.emailLogin {
   color: #108ee9;
   margin-top: 5px;
 }

@@ -6,8 +6,10 @@ import * as alibabaConfig from './alibaba/config';
 import * as ccfConfig from './ccf/config';
 import * as huaweiConfig from './huawei/config';
 import * as tencentConfig from './tencent/config';
+import * as cipscConfig from './cipsc/config';
 import * as cieConfig from './cie/config';
 import * as demoConfig from './demo/config';
+import * as cietestConfig from './cietest/config';
 
 
 import { config } from '../utils';
@@ -21,7 +23,9 @@ const CurrentSystemConfig = {
   alibaba: alibabaConfig,
   tencent: tencentConfig,
   cie: cieConfig,
+  cipsc: cipscConfig,
   demo: demoConfig,
+  cietest: cietestConfig,
 };
 
 // 默认配置
@@ -29,7 +33,7 @@ const defaultSystemConfigs = {
   SYSTEM: config.system,
 
   // 所有可选系统
-  AllOptionalSystems: ['ccf', 'huawei', 'alibaba', 'tencent', 'cie'],
+  AllOptionalSystems: ['ccf', 'huawei', 'alibaba', 'tencent', 'cie', 'cipsc', 'demo', 'cietest'],
 
   //
   // Systems Preference
@@ -64,7 +68,7 @@ const defaultSystemConfigs = {
   Search_SortOptions: defaults.IN_APP_DEFAULT,
 
   UserAuthSystem: config.system, // aminer 或者是 system.config
-  UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签
+  UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签, 目前没用到
 
   Auth_AllowAnonymousAccess: false,
   Auth_LoginPage: '/login',

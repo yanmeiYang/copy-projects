@@ -90,9 +90,9 @@ function createEmptyRoles() {
     admin: false, // system 的系统管理员，也叫超级管理员。一个system内的最高权限。
     authed: false, // 认证用户，有某个system的权限。
     systems: [], // TODO 标记这个用户有哪些system的访问权限。
-    ccf_user: false, // TODO remove this. 用authed可以替换这个.
     role: [], // 具体细节的role.
     authority: [], // 目前ccf在用。
+    forbid: false, // 禁用用户。
   };
 }
 
@@ -114,9 +114,9 @@ const parseRoles = (user) => {
         roles.authed = true;
       }
 
-      // ccf -- TODO 改成有没有这个系统的权限.
-      if (r === 'ccf') {
-        roles.ccf_user = true;
+      // is forbid
+      if (r === `${config.source}_forbid`) {
+        roles.forbid = true;
       }
 
       // ccf only -- Need an example
@@ -131,6 +131,14 @@ const parseRoles = (user) => {
       return false;
     });
   }
+
+  // 不可以这样，不然同一个账号可以登录搜索的系统 ???
+  if (user.src === config.source) {
+    roles.authed = true;
+  }
+  if (sysconfig.UserAuthSystem === 'aminer' && user.src === 'aminer') {
+    roles.authed = true;
+  }
   // special
   if (user.email === 'elivoa@gmail.com') {
     roles.god = true;
@@ -139,7 +147,7 @@ const parseRoles = (user) => {
 };
 
 function isAuthed(roles) {
-  return roles && (roles.god || roles.admin || roles.authed);
+  return roles && (roles.god || roles.admin || roles.authed) && !roles.forbid;
 }
 
 function isGod(roles) {
@@ -147,7 +155,7 @@ function isGod(roles) {
 }
 
 function isSuperAdmin(roles) {
-  return roles && (roles.god || roles.admin);
+  return roles && (roles.god || roles.admin) && !roles.forbid;
 }
 
 function isExactSuperAdmin(roles) {

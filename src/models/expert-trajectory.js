@@ -4,6 +4,7 @@ import * as pubsService from '../services/publication';
 import * as personService from '../services/person';
 import * as searchService from '../services/search';
 import * as traDataFindService from '../services/expert-trajectory-service';
+const cache = {};
 
 export default {
 
@@ -35,7 +36,7 @@ export default {
       const { personId } = payload;
          try {
            const data = yield call(traDataFindService.dataFind, personId);
-           console.log("(((((((((((((((((((")
+           console.log('(((((((((((((((((((');
            yield put({ type: 'dataFindSuccess', payload: { data } });
          } catch (e) {
            console.error('---- Catch Error: ---- ', e);
@@ -44,6 +45,16 @@ export default {
              payload: { message: `'${personId}' Not Found ${e || ''}` },
            });
          }
+    },
+
+    * listPersonByIds({ payload }, { call, put }) {  // eslint-disable-line
+      const { ids } = payload;
+      let data = cache[ids];
+      if (!data) {
+        data = yield call(personService.listPersonByIds, ids);
+        cache[ids] = data;
+      }
+      yield put({ type: 'listPersonByIdsSuccess', payload: { data } });
     },
 
   },
@@ -61,13 +72,17 @@ export default {
     },
 
     dataFindSuccess(state, { payload }) {
-      console.log("hahahahahahhaah", payload);
+      console.log('hahahahahahhaah', payload);
       /*      const data = payload.data && payload.data.data;
       const kgindex = kgService.indexingKGData(data);
       const kgFetcher = kgService.kgFetcher(data, kgindex);
       // console.log('success findKG, return date is ', data);
       // console.log('indexing it: ', kgindex);
       return { ...state, kgdata: data, kgindex, kgFetcher }; */
+    },
+
+    listPersonByIdsSuccess(state, { payload: { data } }) {
+      return { ...state, clusterPersons: data.data.persons };
     },
   },
 };

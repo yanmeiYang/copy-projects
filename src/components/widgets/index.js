@@ -2,6 +2,7 @@
  *  Created by BoGao on 2017-07-04;
  */
 import Indices from './indices';
-import RoadhogDllJsPlaceHolder from './RoadhogDllJsPlaceHolder';
+import HindexGraph from './h-index-graph';
 
-module.exports = { Indices, RoadhogDllJsPlaceHolder };
+module.exports = { Indices, HindexGraph };
+

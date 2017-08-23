@@ -237,7 +237,7 @@ export default class Users extends React.Component {
   };
 
   render() {
-    const { loading } = this.props.auth;
+    const { loading, userRoles } = this.props.auth;
     const listUsers = [];
     if (this.props.auth.listUsers) {
       this.props.auth.listUsers.map((item) => {
@@ -262,8 +262,8 @@ export default class Users extends React.Component {
 
 
         <Tabs defaultActiveKey={this.state.defaultTabKey} type="card" onChange={this.onTabChange}>
-          <TabPane tab="活跃用户" key="active"></TabPane>
-          <TabPane tab="禁用用户" key="forbid"></TabPane>
+          <TabPane tab="活跃用户" key="active" />
+          <TabPane tab="禁用用户" key="forbid" />
         </Tabs>
 
         <Spin spinning={loading}>
@@ -294,11 +294,12 @@ export default class Users extends React.Component {
           onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
+          {userRoles &&
           <div style={{ width: '100%' }}>
             <h5>角色：</h5>
             <RadioGroup onChange={this.selectedRole.bind()} value={selectedRole}>
               {
-                this.props.auth.userRoles.map((item) => {
+                userRoles.map((item) => {
                   return (<Radio key={Math.random()}
                                  value={`${item.value.key}`}
                                  data={item.value}>{item.value.key}</Radio>);
@@ -319,21 +320,8 @@ export default class Users extends React.Component {
                 }
               </RadioGroup>
             </div>}
-            {/* {region && <div><h5>所属部门：</h5>*/}
-            {/* <RadioGroup*/}
-            {/* size="large"*/}
-            {/* style={{ width: '100%' }}*/}
-            {/* onChange={this.selectedAuthorityRegion.bind()}*/}
-            {/* value={selectedAuthority}*/}
-            {/* >*/}
-            {/* <Radio value="ccf_authority_上海" className={styles.twoColumnsShowRadio}>上海</Radio>*/}
-            {/* <Radio value="ccf_authority_北京" className={styles.twoColumnsShowRadio}>北京</Radio>*/}
-            {/* <Radio value="ccf_authority_石家庄" className={styles.twoColumnsShowRadio}>*/}
-            {/* 石家庄*/}
-            {/* </Radio>*/}
-            {/* </RadioGroup>*/}
-            {/* </div>}*/}
           </div>
+          }
         </Modal>
       </div>
     );

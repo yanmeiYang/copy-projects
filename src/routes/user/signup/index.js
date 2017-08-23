@@ -86,15 +86,15 @@ class Registered extends React.Component {
 
   registered = (e) => {
     e.preventDefault();
-    const props = this.props;
+    const that = this;
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (err) {
         if (err.email) {
-          this.props.auth.validEmail = false;
+          that.props.auth.validEmail = false;
           if (err.email.errors.length > 0) {
-            this.setState({ errorMessageByEmail: err.email.errors[0].message });
+            that.setState({ errorMessageByEmail: err.email.errors[0].message });
           } else {
-            this.setState({ errorMessageByEmail: '' });
+            that.setState({ errorMessageByEmail: '' });
           }
         }
       }
@@ -103,17 +103,17 @@ class Registered extends React.Component {
         values.position = 8;
         values.sub = true;
         values.role = this.state.currentRoleAndOrg;
-        this.props.dispatch({ type: 'auth/createUser', payload: values });
+        that.props.dispatch({ type: 'auth/createUser', payload: values });
         Modal.success({
           title: '创建用户',
           content: '创建成功',
           onOk() {
-            props.dispatch(routerRedux.push({
+            that.props.dispatch(routerRedux.push({
               pathname: '/admin/users',
             }));
           },
         });
-        this.props.form.resetFields();
+        that.props.form.resetFields();
       }
     });
   };

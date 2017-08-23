@@ -5,7 +5,7 @@ const { api } = config;
 const BASE_SPLITER = 1000000; // 1000000 Hits的节点是 一百万+index.
 
 export async function dataFind(id) {
-  return request('/tapi/go/', {
+  return request('/go2/', {
     method: 'POST',
     data: {
       aid: id, // from form
@@ -13,6 +13,6 @@ export async function dataFind(id) {
       isapi: true,
     },
     dataType: 'jsonp',
-    baseURL: '',
+    baseURL: 'https://trajectory.aminer.org',
   });
 }

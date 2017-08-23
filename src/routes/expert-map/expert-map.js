@@ -81,7 +81,6 @@ class ExpertMap extends React.PureComponent {
     if (this.props.expertMap.infoZoneIds !== id) { // don't change
       if (id.indexOf(',') >= 0) { // is cluster
         const clusterIdList = id.split(',');
-        console.log("idlist",clusterIdList)
         this.props.dispatch({
           type: 'expertMap/listPersonByIds',
           payload: { ids: clusterIdList },
@@ -94,7 +93,7 @@ class ExpertMap extends React.PureComponent {
     }
   };
 
-  showTop = (usersIds, e, map, maindom, inputids) => {  ////////
+  showTop = (usersIds, e, map, maindom, inputids) => {
     const ishere = getById('panel');
     if (ishere != null) {
       return;

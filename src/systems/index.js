@@ -4,6 +4,7 @@
 import React from 'react';
 import * as alibabaConfig from './alibaba/config';
 import * as ccfConfig from './ccf/config';
+import * as ccftestConfig from './ccftest/config';
 import * as huaweiConfig from './huawei/config';
 import * as tencentConfig from './tencent/config';
 import * as cipscConfig from './cipsc/config';
@@ -19,6 +20,7 @@ import defaults from './utils';
 // All available systems.
 const CurrentSystemConfig = {
   ccf: ccfConfig, // <-- current config files.
+  ccftest: ccftestConfig,
   huawei: huaweiConfig,
   alibaba: alibabaConfig,
   tencent: tencentConfig,

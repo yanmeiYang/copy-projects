@@ -56,7 +56,12 @@ class ExpertMap extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.callSearchMap(this.props.query);
+    const { query, dispatch } = this.props;
+    this.callSearchMap(query);
+    dispatch({
+      type: 'expertMap/setRightInfo',
+      payload: { idString: '', rightInfoType: 'global' },
+    });
   }
 
   componentWillReceiveProps(nextProps) {

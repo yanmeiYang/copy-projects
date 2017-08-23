@@ -25,7 +25,6 @@ class Retrieve extends React.Component {
         content: '初始化密码成功',
         onOk() {
           localStorage.setItem('token', outerThis.props.auth.retrieve.token);
-          location.href = '/login';
           outerThis.props.dispatch(routerRedux.push({
             pathname: '/',
           }));

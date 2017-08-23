@@ -24,12 +24,15 @@ class ForgotPassword extends React.Component {
         validEmail: false,
         errorMessageByEmail: '用户不存在',
       });
-    }
-    if (nextProps.auth.isUpdateForgotPw) {
+    } else if (nextProps.auth.isUpdateForgotPw !== this.props.auth.isUpdateForgotPw) {
       Modal.success({
         title: '成功',
         content: '请查看你的邮箱',
-      });
+        onOk() {
+          location.href = '/';
+        },
+      })
+      ;
     } else if (nextProps.auth.message) {
       if (nextProps.auth.message.includes('seconds_later')) {
         Modal.warning({

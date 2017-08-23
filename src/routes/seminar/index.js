@@ -83,7 +83,7 @@ export default class Seminar extends React.Component {
     if (status) {
       this.props.seminar.orgByActivity = [];
     }
-    this.setState({ organizer: '', category: '', tag: '' });
+    this.setState({ organizer: '', category: '', tag: '', orgType: '' });
     const params = {
       offset: 0,
       size: sizePerPage,

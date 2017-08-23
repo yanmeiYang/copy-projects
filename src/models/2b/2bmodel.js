@@ -14,8 +14,6 @@ export default {
   effects: {
     * setEmailTemplate({ payload }, { call, put }) {
       // const { type, sender, subject, body } = payload;
-      console.log(11111122222);
-      console.log(payload);
       const data = yield call(emailTemplate, payload);
       yield put({ type: 'setEmailTemplateSuccess', payload: { data } });
     },

@@ -89,7 +89,7 @@ class AddCoOrgModal extends React.Component {
 
         <Button onClick={this.showAddCoOrgModal} size="small">添加</Button>
         <Modal
-          title="添加机构"
+          title="添加协办单位"
           visible={modalVisible}
           width={640}
           footer={null}
@@ -101,14 +101,14 @@ class AddCoOrgModal extends React.Component {
             {!manual &&
             <Row style={{ maxHeight: '555vh' }}>
               <Col span={4}>
-                选择机构
+                选择协办单位
               </Col>
               <Col span={20}>
                 <Cascader options={orgList} onChange={this.onOrgChange} ref="cascader"
                           showSearch placeholder="请选择承办单位" style={{ width: '100%' }} />
               </Col>
               <Col span={24} className={styles.action}>
-                <Button type="primary" onClick={this.jumpToManual}>未找到手工填写</Button>
+                <Button type="primary" onClick={this.jumpToManual}>未找到，手动填写</Button>
                 <Button type="primary" onClick={this.handleOk}>提交</Button>
               </Col>
             </Row>

@@ -18,8 +18,8 @@ const AvailableSystems = [
 ];
 
 let System;
-// System = 'ccf';
-System = 'ccftest';
+System = 'ccf';
+// System = 'ccftest';
 // System = 'huawei';
 // const System = 'alibaba';
 // const System = 'tencent';

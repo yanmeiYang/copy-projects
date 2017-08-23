@@ -21,7 +21,7 @@ export async function login(data) {
     body: JSON.stringify({
       ...data,
       persist: true,
-      src: sysconfig.UserAuthSystem,
+      src: data.src || sysconfig.UserAuthSystem,
     }),
   });
 }

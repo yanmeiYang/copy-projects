@@ -17,11 +17,11 @@ const DetailPage = ({ dispatch, seminar, app, pad }) => {
   const { summaryById, loading } = seminar;
   const currentUser = app;
   // share
-  // let shareModalDisplay = false;
+  let shareModalDisplay = false;
 
-  // function clipboard(path) {
-  //   shareModalDisplay = !shareModalDisplay;
-  // }
+  function clipboard(path) {
+    shareModalDisplay = !shareModalDisplay;
+  }
 
   function delSeminar() {
     Modal.confirm({
@@ -60,7 +60,7 @@ const DetailPage = ({ dispatch, seminar, app, pad }) => {
 
   let timeTalk = [];
   const noTimeTalk = [];
-  if (guestSpeakers.length>0) {
+  if (guestSpeakers.length > 0) {
     guestSpeakers.map((item) => {
       if (item.time !== undefined) {
         timeTalk.push(item);
@@ -78,11 +78,11 @@ const DetailPage = ({ dispatch, seminar, app, pad }) => {
   return (
     <div className={styles.detailSeminar}>
       <Spin spinning={loading}>
-        { typeof (summaryById.length) !== 'number' ? <Row>
+        {summaryById.title ? <Row>
           <Col className={styles.thumbnail}>
             <div className={styles.caption}>
-              {(app.roles.authority.includes(summaryById.organizer[0]) || app.roles.admin) &&
-              <span>
+              {(app.roles.authority.includes(summaryById.organizer[0]) || app.roles.admin)
+              && <span>
                 <a type="danger" style={{ float: 'right', fontSize: '20px', color: '#f04134' }}
                    onClick={delSeminar} title="删除">
                   <Icon type="delete" /></a>

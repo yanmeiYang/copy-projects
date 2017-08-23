@@ -6,6 +6,7 @@ import { routerRedux, Link } from 'dva/router';
 import { Button } from 'antd';
 import { connect } from 'dva';
 import styles from './index.less';
+import * as seminarService from '../../../services/seminar';
 import { sysconfig } from '../../../systems';
 
 
@@ -71,7 +72,7 @@ class NewActivityList extends React.Component {
                   result.organizer.map((item) => {
                     return (
                       <p key={Math.random()}>
-                        <span>{item}</span>
+                        <span>{seminarService.getValueByJointer(item)}</span>
                       </p>
                     );
                   })

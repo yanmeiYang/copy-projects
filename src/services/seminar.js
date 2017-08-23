@@ -5,7 +5,7 @@ import { request, config } from '../utils';
 import { externalRequest } from '../utils/request';
 
 const { api } = config;
-
+const jointer = '^&*';
 export async function getSeminar(offset, size, data) {
   return request(api.getSeminars.replace(':offset', offset).replace(':size', size), {
     method: 'GET',
@@ -108,4 +108,13 @@ export async function getTopMentionedTags(src, num) {
   return request(api.getTopMentionedTags.replace(':src', src).replace(':num', num), {
     method: 'GET',
   });
+}
+
+export function getValueByJointer(name) {
+  const str = name.split(jointer);
+  if (str.length > 0) {
+    return str[str.length - 1];
+  } else {
+    return name;
+  }
 }

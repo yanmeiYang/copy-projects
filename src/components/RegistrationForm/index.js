@@ -11,22 +11,25 @@ import {
   Button,
   Upload,
   Modal,
+  Cascader,
 } from 'antd';
 import { connect } from 'dva';
-// import { config } from '../../utils';
+import { config } from '../../utils';
 import { sysconfig } from '../../systems';
 import styles from './index.less';
 import defaultImg from '../../assets/people/default.jpg';
 import CanlendarInForm from '../../components/seminar/calendar';
 import AddTags from '../../components/seminar/addTags';
-// import ExpertBasicInformation from '../../components/seminar/expertBasicInformation/expertBasicInformation';
+import AddCoOrgModal from '../../components/seminar/addCoOrgModal';
 import AddExpertModal from '../../components/seminar/addExpertModal';
 import ShowExpertList from '../../routes/seminar/addSeminar/workshop/showExpertList';
 
 const Dragger = Upload.Dragger;
 const FormItem = Form.Item;
 const Option = Select.Option;
-
+const OrgListGroupCategoryKey = 'orgcategory';
+const OrgListPrefix = 'orglist_';
+const OrgJoiner = '^&*';
 class RegistrationForm extends React.PureComponent {
   state = {
     addNewTalk: false,
@@ -42,23 +45,32 @@ class RegistrationForm extends React.PureComponent {
     editTheTalk: {},
     editTheTalkIndex: -1,
     editStatus: false, // 是否是编辑状态
-    organizer: '', // componentWillUpdate设置organizer不起作用
+    organizer: '',
     previewVisible: false,
     image: null,
+    currentOrg: [],
+    addCoOrgModalVisible: false,
     // suggestSpeakers: [],
     // speakerInfo: {},
     // integral: 0,
   };
   componentWillMount = () => {
     this.props.dispatch({
-      type: 'seminar/getCategoriesHint',
-      payload: { category: 'orglist_' },
+      type: 'seminar/getCategoryGroup',
+      payload: {
+        groupCategory: OrgListGroupCategoryKey,
+        categoryTemplate: `${OrgListPrefix}{id}`,
+        coOrgCategory: 'activity_organizer_options',
+      },
     });
-    this.props.dispatch({
-      type: 'seminar/getCategory',
-      payload: { category: 'activity_organizer_options' },
-    });
-    this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'orgcategory' } });
+    // 编辑状态调用的请求
+    if (this.props.seminarId) {
+      this.props.dispatch({
+        type: 'seminar/getSeminarByID',
+        payload: { id: this.props.seminarId },
+      });
+      this.setState({ editStatus: true });
+    }
     this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'activity_type' } });
     this.props.dispatch({
       type: 'seminar/getCategory',
@@ -66,21 +78,16 @@ class RegistrationForm extends React.PureComponent {
     });
   };
 
-  componentWillUpdate(nextProps, nextState) {
-    if (nextProps.editTheSeminar === this.props.editTheSeminar) {
+  componentDidMount() {
+    this.initializationForm(this.props.seminar.summaryById);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.seminar.summaryById === this.props.seminar.summaryById) {
       return false;
     }
-    if (nextProps.editTheSeminar.title) {
-      const currentSeminar = nextProps.editTheSeminar;
-      const data = {
-        category: currentSeminar.category,
-        organizer: currentSeminar.organizer[0],
-        co_org: currentSeminar.organizer.slice(1, currentSeminar.organizer.length),
-        title: currentSeminar.title,
-        city: currentSeminar.location.city ? currentSeminar.location.city : '',
-        address: currentSeminar.location.address ? currentSeminar.location.address : '',
-        abstract: currentSeminar.abstract,
-      };
+    if (nextProps.seminar.summaryById.title) {
+      const currentSeminar = nextProps.seminar.summaryById;
       this.setState({
         talkStartValue: currentSeminar.time.from,
         talkEndValue: currentSeminar.time.to,
@@ -89,12 +96,18 @@ class RegistrationForm extends React.PureComponent {
         tags: currentSeminar.tags,
         talks: currentSeminar.talk,
         editStatus: true,
-        organizer: currentSeminar.organizer[0],
-        image: currentSeminar.img ? currentSeminar.img : '',
+        organizer: currentSeminar.organizer[0].split('^&*'),
+        currentOrg: currentSeminar.organizer.slice(1),
+        image: currentSeminar.img || '',
       });
-      this.props.form.setFieldsValue(data);
     }
-    return true;
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.seminar.summaryById === this.props.seminar.summaryById) {
+      return false;
+    }
+    this.initializationForm(this.props.seminar.summaryById);
   }
 
   handleSubmit = (e) => {
@@ -120,11 +133,8 @@ class RegistrationForm extends React.PureComponent {
           data.type = 1;
           data.talk = state.talks;
           data.talk.map((item) => {
-            if (item.speaker.gender) {
-              return item.speaker.gender = item.speaker.gender.i ? item.speaker.gender.i : 0;
-            } else {
-              return item.speaker.gender = 0;
-            }
+            item.speaker.gender = item.speaker.gender.i || (item.speaker.gender || 0);
+            return item.speaker.gender;
           });
           data.img = state.image;
           data.location.city = values.city;
@@ -136,12 +146,13 @@ class RegistrationForm extends React.PureComponent {
             data.time.to = typeof state.endValue === 'string' ? state.endValue : state.endValue;
           }
           data.tags = state.tags;
-          if (data.co_org !== undefined && data.co_org.length > 0) {
-            data.organizer = [data.organizer].concat(data.co_org);
+          data.organizer = data.organizer.join(OrgJoiner);
+          // data.organizer.shift();
+          if (state.currentOrg !== undefined && state.currentOrg.length > 0) {
+            data.organizer = [data.organizer].concat(state.currentOrg);
           } else {
             data.organizer = [data.organizer];
           }
-
           delete data.co_org;
           // 获取登录用户的uid
           data.uid = this.props.uid;
@@ -152,18 +163,6 @@ class RegistrationForm extends React.PureComponent {
             this.props.dispatch({ type: 'seminar/postSeminarActivity', payload: data });
           }
         }
-      }
-    });
-  };
-  // 选择活动类型 orglist_5976bb068ef7a2e824adca67
-  // handleChange = (value) => {
-  //   this.setState({ selectedType: value });
-  // };
-  handleOrganizerChange = (value, newArray) => {
-    newArray.map((tag) => {
-      if (JSON.stringify(value).indexOf(tag) < 0) {
-        const data = { key: tag, val: ' ' };
-        this.props.dispatch({ type: 'seminar/addKeyAndValue', payload: data });
       }
     });
   };
@@ -182,9 +181,11 @@ class RegistrationForm extends React.PureComponent {
   setAddNewTalk = () => {
     this.setState({ addNewTalk: false });
   };
+  // 存储活动开始、结束时间
   onChildChanged = (field, value) => {
     this.setState({ [field]: value });
   };
+  // 存储活动标签
   onTagsChanged = (value) => {
     this.setState({ tags: value });
   };
@@ -217,10 +218,11 @@ class RegistrationForm extends React.PureComponent {
       },
     });
   };
+  // 修改专家信息
   editTheExpert = (i) => {
     this.setState({ editTheTalk: this.state.talks[i], addNewTalk: true, editTheTalkIndex: i });
   };
-
+  // 根据title和abstract获取tag
   getKeywords = () => {
     const form = this.props.form;
     const data = {
@@ -231,31 +233,43 @@ class RegistrationForm extends React.PureComponent {
     this.props.dispatch({ type: 'seminar/keywordExtraction', payload: data });
   };
 
+  // 初始化form表单
+  initializationForm = (currentSeminar) => {
+    if (this.state.editStatus && currentSeminar.title) {
+      const data = {
+        category: currentSeminar.category,
+        organizer: currentSeminar.organizer[0].split('^&*'),
+        co_org: currentSeminar.organizer.slice(1, currentSeminar.organizer.length),
+        title: currentSeminar.title,
+        city: currentSeminar.location.city || '',
+        address: currentSeminar.location.address || '',
+        abstract: currentSeminar.abstract,
+      };
+      this.props.form.setFieldsValue(data);
+    }
+  };
+  /* 更新删除海报开始 */
   uploadImgSuccess = (img) => {
     this.setState({ image: img });
   };
   delCurrentImg = () => {
     this.setState({ image: '' });
   };
+  /* 更新删除海报结束 */
 
-  // cancelTalkData = () => {
-  //   this.setState({ addNewTalk: false, });
-  // };
-  // activityTypeChange = (value) => {
-  //   this.setState({ integral: value.split('#')[1] })
-  // };
+  // 存储协办单位
+  addNewCoOrg = (value) => {
+    this.setState({ currentOrg: value });
+  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const {
-      activity_organizer_options, orgcategory, tags,
-      postSeminarOrganizer, activity_type,
+    const { activity_organizer_options, postSeminarOrganizer, activity_type, summaryById
     } = this.props.seminar;
-    let activity_organizer_options_data = {};
-    if (activity_organizer_options.data) {
-      activity_organizer_options_data = activity_organizer_options.data.concat(postSeminarOrganizer);
-    }
-    const { addNewTalk, talks, startValue, endValue, editTheTalk, image } = this.state;
+    const {
+      addNewTalk, talks, startValue, endValue, editTheTalk, image, currentOrg,
+      editStatus, organizer, tags,
+    } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -288,13 +302,12 @@ class RegistrationForm extends React.PureComponent {
         outerThis.uploadImgSuccess(response.url);
       },
     };
-
     return (
       <Row className={styles.add_seminar_block}>
         <Form horizontal onSubmit={this.handleSubmit} className={styles.add_seminar_form}>
           <Col className={styles.thumbnail}>
-            {activity_type.data &&
-            <FormItem {...formItemLayout} label="活动类型" hasFeedback>
+            {activity_type.data && ((editStatus && summaryById.category) || !editStatus)
+            && <FormItem {...formItemLayout} label="活动类型" hasFeedback>
               {getFieldDecorator('category', {
                   rules: [{ required: true, message: '请选择活动类型！' }],
                 },
@@ -302,47 +315,36 @@ class RegistrationForm extends React.PureComponent {
                 <Select>
                   {
                     activity_type.data.map((item) => {
-                      return (<Option key={`activity_${Math.random()}`}
-                                      value={item.key}>{item.key}</Option>);
+                      return (
+                        <Option key={`activity_${Math.random()}`}
+                                value={item.key}>{item.key}</Option>
+                      );
                     })
                   }
                 </Select>,
               )}
             </FormItem>}
-            {postSeminarOrganizer.length > 0 &&
-            <FormItem {...formItemLayout} label="承办单位">
+            {postSeminarOrganizer.length > 0
+            && ((editStatus && organizer.length > 0) || !editStatus)
+            && <FormItem {...formItemLayout} label="承办单位">
               {getFieldDecorator('organizer', {
-                  initialValue: this.state.organizer,
+                  initialValue: organizer,
                   rules: [{ required: true, message: '请选择承办单位！' }],
                 },
               )(
-                <Select showSearch placeholder="请选择承办单位">
-                  {
-                    postSeminarOrganizer.map((item) => {
-                      return (<Option key={`org_${Math.random()}`}
-                                      value={item.key}>{item.key}</Option>);
-                    })
-                  }
-                </Select>,
+                <Cascader options={postSeminarOrganizer}
+                          showSearch placeholder="请选择承办单位" />,
               )}
             </FormItem>}
-            <FormItem {...formItemLayout} label="协办单位">
-              {getFieldDecorator('co_org', {
-                  // rules: [{ required: true, message: '请选择承办单位！' }],
-                },
+            {activity_organizer_options.length > 0
+            && ((editStatus && currentOrg.length > 0) || !editStatus)
+            && <FormItem {...formItemLayout} label="协办单位">
+              {getFieldDecorator('co_org', {},
               )(
-                <Select mode="tags" placeholder="请选择协办单位"
-                        onChange={this.handleOrganizerChange.bind(this, activity_organizer_options_data)}>
-                  {
-                    Object.values(activity_organizer_options_data).map((item) => {
-                      return (
-                        <Option key={`co_${item.key}_${Math.random(10)}`}
-                                value={item.key}>{item.key}</Option>);
-                    })
-                  }
-                </Select>,
+                <AddCoOrgModal orgList={activity_organizer_options} dispatch={this.props.dispatch}
+                               callbackParent={this.addNewCoOrg} coOrg={currentOrg} />,
               )}
-            </FormItem>
+            </FormItem>}
             <FormItem
               {...formItemLayout}
               label="活动名称"

@@ -102,6 +102,7 @@ const param = (key, type, description) => {
     ucDeleteByKey: '/2b/config/:source/:category/:key',
     ucUpdateByKey: '/2b/config/:source/:category/rename/:key/:newKey',
     getCategoriesHint: '/2b/config/:source/category/suggest/:category',
+    listConfigsByCategoryList: '/2b/config/:source/by-category',
 
     // Knowledge Graph
     kgFind: {

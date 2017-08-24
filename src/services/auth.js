@@ -43,14 +43,9 @@ export async function getCurrentUserInfo(params) {
 }
 
 // TODO should in use service.
-export async function createUser(email, first_name, gender, last_name, position, sub, src) {
+export async function createUser(data) {
   const user = {
-    email,
-    first_name,
-    gender,
-    last_name,
-    position,
-    sub,
+    ...data,
     src: sysconfig.SOURCE,
   };
   return request(api.signup, {
@@ -66,7 +61,7 @@ export async function checkEmail(src, email) {
 }
 
 
-export async function invoke(uid, label) {
+export async function invoke(uid, label, token) {
   let setLabel;
   if (label === sysconfig.SOURCE) {
     setLabel = label;
@@ -78,10 +73,11 @@ export async function invoke(uid, label) {
     label: setLabel,
   };
 
-  return request(api.invoke, {
-    method: 'POST',
-    body: JSON.stringify(data),
-  });
+  const param = { method: 'POST', body: JSON.stringify(data) };
+  if (token !== undefined && token !== null && token !== '') {
+    param.token = token;
+  }
+  return request(api.invoke, param);
 }
 
 export async function revoke(uid, label) {

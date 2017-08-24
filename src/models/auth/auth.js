@@ -10,7 +10,7 @@ import * as uconfigService from '../../services/universal-config';
 export default {
   namespace: 'auth',
   state: {
-    validEmail: true,
+    validEmail: null,
     listUsers: [],
     loading: false,
     isUpdateForgotPw: false,
@@ -56,6 +56,17 @@ export default {
       // if (payload.authority_region) {
       //   yield call(authService.invoke, uid, payload.authority_region);
       // }
+    },
+
+    * create3rdUser({ payload }, { call, put }) {
+      const { role, token } = payload;
+      const { data } = yield call(authService.createUser, payload);
+      yield put({ type: 'createUserSuccess', payload: data });
+      if (data.status) {
+        const uid = data.uid;
+        yield call(authService.invoke, uid, sysconfig.SOURCE, token);
+        yield call(authService.invoke, uid, `${sysconfig.SOURCE}_${role}`, token);
+      }
     },
     * addForbidByUid({ payload }, { call, put }) {
       const { uid, role } = payload;
@@ -199,5 +210,4 @@ export default {
   },
 
 };
-
 

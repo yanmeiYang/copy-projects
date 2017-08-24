@@ -19,10 +19,10 @@ const AvailableSystems = [
 
 let System;
 // System = 'ccf';
-System = 'ccftest';
+// System = 'ccftest';
 // System = 'huawei';
 // const System = 'alibaba';
-// const System = 'tencent';
+System = 'tencent';
 // const System = 'cie';
 // const System = 'cipsc';
 // const System = 'demo';

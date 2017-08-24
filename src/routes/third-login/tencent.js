@@ -4,10 +4,11 @@
 import React from 'react';
 import browserHistory from 'react-router/lib/browserHistory';
 import { connect } from 'dva';
-import CryptoJS from '../../../node_modules/crypto-js';
-import * as auth from '../../utils/auth';
+import CryptoJS from 'crypto-js';
+import * as authUtil from '../../utils/auth';
 
 const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyLUZLaE1WZjR5YjR0SmFTMVNXRzlRd0dOQnhRMlZmZnI3SWNBU2g1ajRIWWN1RXZtenFvbHQ4T05ZRUdSUzlIbnhBWVJMczhUT0VXK1dGQ3pueURcL0lJamVobzNLTkZHZHBET3B5OXpEamQyeStzZE9EaHdBMiIsImlzcyI6InBsYXktYW5ndWxhci1zaWxob3VldHRlIiwiZXhwIjoxNTA2MTQ5MjE1LCJpYXQiOjE1MDM1NTcyMTUsImp0aSI6IjhiZTAyZTNkMGFhNTIzN2JiNjhlZTE1MGMyNzVkMTRlN2JhZmJmOWFmOGQ4MmM2NmY1MDBjNzgzZWZlYzc5NzZlOTlmYTIxODc0ODRmNDVhMDU5NjRmZWI1ZGY1YjM5OWEwNWE1OWU1OGU1MmU5OGZjYmE5NzViZjAwY2YwYTVlMWI4ODk5NGJiNDM1YjRhYmYzNTE4ZmFmNzc4MDg0MTc2NTNhOWE2OTFjOGU5NGJiYWVhNGIwODc0MzAyNjljMDFkYWUzMzcwNTA4MmZiODc1NTBjMzEyYWUzMGM1ZTFiNjdlZjIwMTQ0YjkzMDljZTgwNjYxMGM2MTVhNDM0NWEifQ.xvAw1Dw_cGnUUtB1fukV1bFwhUuzV2rtQQRfvJ3hVaI';
+
 class Tencent3rd extends React.Component {
   state = {
     email: '',
@@ -80,7 +81,7 @@ class Tencent3rd extends React.Component {
     // console.log('nextProps', nextProps.auth.validEmail);
 
     if (nextProps.auth.validEmail === false) {
-      if (auth.getLocalToken() !== true && auth.getLocalUser().email !== this.state.email) {
+      if (authUtil.getLocalToken() !== true && authUtil.getLocalUser().email !== this.state.email) {
         this.props.dispatch({
           type: 'app/login',
           payload: { email: this.state.email, password: this.state.password },
@@ -89,7 +90,7 @@ class Tencent3rd extends React.Component {
     }
   }
 
-// 解密
+  // 解密
   render() {
     if (auth.getLocalToken() && auth.getLocalUser().email === this.state.email) {
       browserHistory.push('/');

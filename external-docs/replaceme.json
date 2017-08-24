@@ -1,1 +1,393 @@
-sdfsdf
+{
+  "querytype": "advc",
+  "time1": 2.0,
+  "topics":
+],
+  "result": [
+    {
+      "aff": {
+        "desc": "Department of Computer Science and Technology,Tsinghua University",
+        "id": ""
+      },
+      "name": "Jie Tang",
+      "num_viewed": 8151,
+      "avatar": "//static.aminer.org/picture/01823/Jie_Tang_1348889820664.jpg",
+      "indices": {
+        "num_patents": 0,
+        "sociability": 6.1398,
+        "h_index": 48,
+        "num_citation": 9007,
+        "as": 0.0,
+        "diversity": 4.3303,
+        "new_star": 74.0423,
+        "num_pubs": 278,
+        "activity": 185.59,
+        "g_index": 89
+      },
+      "is_following": false,
+      "revised": {
+        "cname": "",
+        "mid": "5949cdee9ed5dbc2147fd9c7",
+        "mtime": "2017-07-17 07:49:12",
+        "cid": "",
+        "mname": "meng zhang mengzhang",
+        "ctime": "1970-01-01 00:00:00"
+      },
+      "locks": {},
+      "tags": [
+        {
+          "t": "Social Network",
+          "w": 65
+        },
+        {
+          "t": "Semantic Web",
+          "w": 25
+        },
+        {
+          "t": "Social Influence",
+          "w": 25
+        },
+        {
+          "t": "Data Mining",
+          "w": 18
+        },
+        {
+          "t": "Topic Model",
+          "w": 17
+        },
+        {
+          "t": "Predictive Model",
+          "w": 17
+        },
+        {
+          "t": "Recommender System",
+          "w": 13
+        },
+        {
+          "t": "Ontology",
+          "w": 13
+        },
+        {
+          "t": "Heterogenous Network",
+          "w": 13
+        },
+        {
+          "t": "Web Page",
+          "w": 12
+        }
+      ],
+      "pos": [
+        {
+          "i": "",
+          "n": "Associate Professor"
+        }
+      ],
+      "score": 601.673,
+      "hidden": false,
+      "award": [],
+      "bind": true,
+      "contact": {
+        "affiliation": "Department of Computer Science and Technology,Tsinghua University",
+        "has_email_cr": true,
+        "work": "2011",
+        "bio": "I am an associate professor in Department of Computer Science and Technology of Tsinghua. I obtained my Ph.D. in DCST of Tsinghua University in 2006. I became ACM Professional member in 2006 and IEEE member in 2007. My research interests include social network analysis, data mining, machine learning, and semantic web. <br /><br />I have been visiting scholar at Cornell University (working with John Hopcroft), University of Illinois at Urbana-Champaign (short term, working with Jiawei Han), Chinese University of Hong Kong (working with Jeffrey Yu), and Hong Kong University of Science and Technology (working with Qiong Luo). During my graduate career, I have been an intern at NLC group of Microsoft Research Asia from 2004 to 2005. I also have attended the internship program of IBM China Research Lab in 2004.",
+        "edu": "2006, Tsinghua University, Ph.D..",
+        "fax": "",
+        "homepage": "http://keg.cs.tsinghua.edu.cn/jietang/",
+        "address": "1-308, FIT Building, Tsinghua University, Beijing, 100084. China PR.",
+        "has_email": true,
+        "phone": "+8610-62788788-20"
+      },
+      "work": [
+        {
+          "aff": {
+            "id": ""
+          },
+          "pos": {
+            "i": ""
+          },
+          "id": "57e9025e9ed5db5b04f219e0"
+        },
+        {
+          "aff": {
+            "lab": {
+              "i": "552e52ccdabfae7de9fd1ab1",
+              "n": "Department of Computer Science and Technology"
+            },
+            "dept": {
+              "i": "552e52cbdabfae7de9fd14cc",
+              "n_zh": "信息科学与技术学院",
+              "n": "School of Information Science and Technology"
+            },
+            "id": "",
+            "inst": {
+              "i": "552e0adfdabfae7de9e566a0",
+              "n_zh": "清华大学",
+              "n": "Tsinghua University"
+            }
+          },
+          "pos": {
+            "i": ""
+          },
+          "id": ""
+        }
+      ],
+      "links": [
+        {
+          "type": "nsfc_id",
+          "url": "",
+          "id": "583833"
+        }
+      ],
+      "edu": [],
+      "id": "53f46a3edabfaee43ed05f08",
+      "is_holding": false,
+      "name_zh": "唐杰",
+      "src": [],
+      "attr": {
+        "gender": "male",
+        "nation": "China",
+        "ethnic": "Chinese",
+        "lang": "Chinese"
+      },
+      "activity_indices": {
+        "compre": 4.0,
+        "content": 4.0,
+        "contrib": 4.0,
+        "integrated": 4.0,
+        "level": 4.0
+      },
+      "tags_zh": [
+        {
+          "t": "本体映射",
+          "w": 3
+        },
+        {
+          "t": "CUDA",
+          "w": 3
+        },
+        {
+          "t": "语义Web",
+          "w": 3
+        },
+        {
+          "t": "本体",
+          "w": 2
+        },
+        {
+          "t": "网络视频监管",
+          "w": 2
+        },
+        {
+          "t": "Social Network",
+          "w": 2
+        },
+        {
+          "t": "三角网格",
+          "w": 2
+        },
+        {
+          "t": "Web信息抽取",
+          "w": 2
+        },
+        {
+          "t": "话题模型",
+          "w": 2
+        },
+        {
+          "t": "Hypersaline",
+          "w": 1
+        }
+      ],
+      "intr": [],
+      "num_followed": 106,
+      "honor": []
+    },
+    {
+      "aff": {
+        "desc": ".National Laboratory of Biomacromolecules,Center for Infection and Immunity,Institute of Biophysics,Chinese Academy of Sciences,Beijing ,China",
+        "desc_zh": "中国科学院生物物理研究所",
+        "id": ""
+      },
+      "name": "Jie Tang",
+      "num_viewed": 36,
+      "avatar": "",
+      "indices": {
+        "num_patents": 0,
+        "sociability": 5.7525,
+        "h_index": 20,
+        "num_citation": 1579,
+        "as": 0.0,
+        "diversity": 3.7292,
+        "new_star": 0.0,
+        "num_pubs": 122,
+        "activity": 11.6936,
+        "g_index": 37
+      },
+      "is_following": false,
+      "revised": {
+        "cname": "",
+        "mid": "54ddb20c45ce6200dd437aa2",
+        "mtime": "2016-01-14 11:19:19",
+        "cid": "",
+        "mname": "neozhangthe1",
+        "ctime": "1970-01-01 00:00:00"
+      },
+      "locks": {},
+      "tags": [
+        {
+          "t": "Ultrasound",
+          "w": 27
+        },
+        {
+          "t": "Ultrasonography",
+          "w": 21
+        },
+        {
+          "t": "Liver",
+          "w": 10
+        },
+        {
+          "t": "Contrast-enhanced Ultrasound",
+          "w": 10
+        },
+        {
+          "t": "Contrast-enhanced Ultrasonography",
+          "w": 9
+        },
+        {
+          "t": "Diagnosis",
+          "w": 8
+        },
+        {
+          "t": "Trauma",
+          "w": 7
+        },
+        {
+          "t": "Prostate Cancer",
+          "w": 4
+        },
+        {
+          "t": "Contrast Agent",
+          "w": 4
+        },
+        {
+          "t": "Sonography",
+          "w": 4
+        }
+      ],
+      "pos": [],
+      "score": 245.594,
+      "hidden": false,
+      "award": [],
+      "bind": false,
+      "contact": {
+        "affiliation": "",
+        "has_email_cr": false,
+        "work": "",
+        "bio": "",
+        "edu": "",
+        "fax": "",
+        "homepage": "",
+        "address": "",
+        "has_email": false,
+        "phone": ""
+      },
+      "work": [],
+      "links": [
+        {
+          "type": "nsfc_id",
+          "url": "",
+          "id": "543524"
+        }
+      ],
+      "edu": [],
+      "id": "542edff0dabfae498ae3c756",
+      "is_holding": false,
+      "name_zh": "唐捷",
+      "src": [],
+      "attr": {
+        "gender": "male",
+        "nation": "China",
+        "ethnic": "Chinese",
+        "lang": "Chinese"
+      },
+      "activity_indices": {
+        "compre": 0.0,
+        "content": 0.0,
+        "contrib": 0.0,
+        "integrated": 0.0,
+        "level": 0.0
+      },
+      "tags_zh": [
+        {
+          "t": "脊柱炎",
+          "w": 4
+        },
+        {
+          "t": "强直性",
+          "w": 4
+        },
+        {
+          "t": "肿瘤坏死因子",
+          "w": 3
+        },
+        {
+          "t": "受体",
+          "w": 2
+        },
+        {
+          "t": "肿瘤坏死因子α",
+          "w": 2
+        },
+        {
+          "t": "酵母展示",
+          "w": 2
+        },
+        {
+          "t": "Src",
+          "w": 1
+        },
+        {
+          "t": "肿瘤坏死因子类",
+          "w": 1
+        },
+        {
+          "t": "树突状细胞",
+          "w": 1
+        },
+        {
+          "t": "中和性抗体",
+          "w": 1
+        }
+      ],
+      "intr": [],
+      "num_followed": 0,
+      "honor": [],
+    {
+      "aff": {
+        "desc": "College of Environment and Resources,Jilin University,Changchun ,China",
+        "desc_zh": "吉林大学环境与资源学院",
+        "id": ""
+      },
+      "name": "Jie Tang",
+      "num_viewed": 31,
+      "avatar": "",
+      "indices": {
+        "num_patents": 0,
+        "sociability": 5.1298,
+        "h_index": 17,
+        "num_citation": 820,
+        "as": 0.0,
+        "diversity": 3.6844,
+        "new_star": 0.0,
+        "num_pubs": 105,
+        "activity": 0.758,
+        "g_index": 23
+      },
+      "is_following": false
+      "revised": {
+        "cname": "",
+        "mid": "",
+        "mtime": "1970-01-01 00:00:00",
+        "cid": "

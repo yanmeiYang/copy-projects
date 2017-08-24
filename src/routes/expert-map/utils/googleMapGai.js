@@ -67,125 +67,125 @@ function GetGoogleMapLib(showTop) {
        */
       const MarkerClusterer =
         googleMap.MarkerClusterer = function (map,opt_options) {
-        // MarkerClusterer implements google.maps.OverlayView interface. We use the
-        // extend function to extend MarkerClusterer with google.maps.OverlayView
-        // because it might not always be available when the code is defined so we
-        // look for it at the last possible moment. If it doesn't exist now then
-        // there is no point going ahead :)
-        this.extend(MarkerClusterer, google.maps.OverlayView);
-        this.map_ = map;
+          // MarkerClusterer implements google.maps.OverlayView interface. We use the
+          // extend function to extend MarkerClusterer with google.maps.OverlayView
+          // because it might not always be available when the code is defined so we
+          // look for it at the last possible moment. If it doesn't exist now then
+          // there is no point going ahead :)
+          this.extend(MarkerClusterer, google.maps.OverlayView);
+          this.map_ = map;
 
-        /**
-         * @type {Array.<google.maps.Marker>}
-         * @private
-         */
-        this.markers_ = [];
+          /**
+           * @type {Array.<google.maps.Marker>}
+           * @private
+           */
+          this.markers_ = [];
 
-        /**
-         *  @type {Array.<Cluster>}
-         */
-        this.clusters_ = [];
+          /**
+           *  @type {Array.<Cluster>}
+           */
+          this.clusters_ = [];
 
-        this.sizes = [53, 56, 66, 78, 90];
+          this.sizes = [53, 56, 66, 78, 90];
 
-        /**
-         * @private
-         */
-        this.styles_ = [];
+          /**
+           * @private
+           */
+          this.styles_ = [];
 
-        /**
-         * @type {boolean}
-         * @private
-         */
-        this.ready_ = false;
+          /**
+           * @type {boolean}
+           * @private
+           */
+          this.ready_ = false;
 
-        var options = opt_options || {};
+          var options = opt_options || {};
 
-        /**
-         * @type {number}
-         * @private
-         */
-        this.gridSize_ = options['gridSize'] || 60;
+          /**
+           * @type {number}
+           * @private
+           */
+          this.gridSize_ = options['gridSize'] || 60;
 
-        /**
-         * @private
-         */
-        this.minClusterSize_ = options['minimumClusterSize'] || 2;
+          /**
+           * @private
+           */
+          this.minClusterSize_ = options['minimumClusterSize'] || 2;
 
 
-        /**
-         * @type {?number}
-         * @private
-         */
-        this.maxZoom_ = options['maxZoom'] || null;
+          /**
+           * @type {?number}
+           * @private
+           */
+          this.maxZoom_ = options['maxZoom'] || null;
 
-        this.styles_ = options['styles'] || [];
+          this.styles_ = options['styles'] || [];
 
-        /**
-         * @type {string}
-         * @private
-         */
-        this.imagePath_ = options['imagePath'] ||
-          this.MARKER_CLUSTER_IMAGE_PATH_;
+          /**
+           * @type {string}
+           * @private
+           */
+          this.imagePath_ = options['imagePath'] ||
+            this.MARKER_CLUSTER_IMAGE_PATH_;
 
-        /**
-         * @type {string}
-         * @private
-         */
-        this.imageExtension_ = options['imageExtension'] ||
-          this.MARKER_CLUSTER_IMAGE_EXTENSION_;
+          /**
+           * @type {string}
+           * @private
+           */
+          this.imageExtension_ = options['imageExtension'] ||
+            this.MARKER_CLUSTER_IMAGE_EXTENSION_;
 
-        /**
-         * @type {boolean}
-         * @private
-         */
-        this.zoomOnClick_ = true;
+          /**
+           * @type {boolean}
+           * @private
+           */
+          this.zoomOnClick_ = true;
 
-        if (options['zoomOnClick'] != undefined) {
-          this.zoomOnClick_ = options['zoomOnClick'];
-        }
-
-        /**
-         * @type {boolean}
-         * @private
-         */
-        this.averageCenter_ = false;
-
-        if (options['averageCenter'] != undefined) {
-          this.averageCenter_ = options['averageCenter'];
-        }
-
-        this.setupStyles_();
-
-        this.setMap(map);
-
-        /**
-         * @type {number}
-         * @private
-         */
-        this.prevZoom_ = this.map_.getZoom();
-
-        // Add the map event listeners
-        var that = this;
-        google.maps.event.addListener(this.map_, 'zoom_changed', function() {
-          var zoom = that.map_.getZoom();
-
-          if (that.prevZoom_ != zoom) {
-            that.prevZoom_ = zoom;
-            that.resetViewport();
+          if (options['zoomOnClick'] != undefined) {
+            this.zoomOnClick_ = options['zoomOnClick'];
           }
-        });
 
-        google.maps.event.addListener(this.map_, 'idle', function() {
-          that.redraw();
-        });
+          /**
+           * @type {boolean}
+           * @private
+           */
+          this.averageCenter_ = false;
 
-        const mkrs = options.markers;
-        // Finally, add the markers
-        if ( mkrs && mkrs.length) {
-          this.addMarkers(mkrs, false);
+          if (options['averageCenter'] != undefined) {
+            this.averageCenter_ = options['averageCenter'];
+          }
+
+          this.setupStyles_();
+
+          this.setMap(map);
+
+          /**
+           * @type {number}
+           * @private
+           */
+          this.prevZoom_ = this.map_.getZoom();
+
+          // Add the map event listeners
+          var that = this;
+          google.maps.event.addListener(this.map_, 'zoom_changed', function() {
+            var zoom = that.map_.getZoom();
+
+            if (that.prevZoom_ != zoom) {
+              that.prevZoom_ = zoom;
+              that.resetViewport();
+            }
+          });
+
+          google.maps.event.addListener(this.map_, 'idle', function() {
+            that.redraw();
+          });
+
+          const mkrs = options.markers;
+          // Finally, add the markers
+          if ( mkrs && mkrs.length) {
+            this.addMarkers(mkrs, false);
+          }
         }
-      }
 
 
       /**
@@ -1095,7 +1095,7 @@ function GetGoogleMapLib(showTop) {
           const map = that._map;
           const markers = that.cluster_.getMarkers();
           for (var i = 0; i < that.cluster_.getSize(); i++) {
-            const userinfo = markers[i].getLabel().text;
+            const userinfo = markers[i].getTitle();
             userids[i] = userinfo;
             if (ids.indexOf(userinfo) == -1) {
               ids += `${userinfo},`;
@@ -1111,7 +1111,7 @@ function GetGoogleMapLib(showTop) {
           document.getElementById('currentIds').value = ids;
           // call function in component.
           showTop(userids, pos, map, maindom, ids);
-      });
+        });
 
         google.maps.event.addDomListener(this.div_, 'mousedown', function() {
           isDragging = false;

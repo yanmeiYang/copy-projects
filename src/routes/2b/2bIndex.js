@@ -18,6 +18,9 @@ export default class SystemConfig extends React.Component {
   // constructor(props) {
   //   super(props);
   // }
+  componentWillMount() {
+    this.props.dispatch({ type: 'app/hideHeaderSearch' });
+  }
 
   // componentDidMount() {
   // }

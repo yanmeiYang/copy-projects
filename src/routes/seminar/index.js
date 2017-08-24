@@ -348,14 +348,15 @@ export default class Seminar extends React.Component {
                   results.map((result, index) => {
                     return (
                       <div key={result.id + Math.random()}>
-                        {(app.roles.authority.indexOf(result.organizer[0]) >= 0 || auth.isSuperAdmin(app.roles)) &&
-                        <Button type="danger" icon="delete" size="small"
-                                onClick={this.delTheSeminar.bind(this, result, index)} style={{
-                          float: 'right',
-                          margin: '15px 10px 0 10px',
-                        }}>删除</Button>}
+                        {(app.roles.authority.indexOf(result.organizer[0]) >= 0
+                        || auth.isSuperAdmin(app.roles))
+                        && <Button type="danger" icon="delete" size="small"
+                                   className={styles.delSeminarBtn}
+                                   onClick={this.delTheSeminar.bind(this, result, index)}>
+                          删除
+                        </Button>}
                         <NewActivityList result={result} hidetExpertRating="false"
-                                         style={{ marginTop: 20 }} />
+                                         style={{ marginTop: '20px' }} />
                       </div>
                     );
                   })
@@ -363,8 +364,10 @@ export default class Seminar extends React.Component {
                 {!loading && results.length > sizePerPage &&
                 <Button type="primary" className="getMoreActivities"
                         onClick={this.getMoreSeminar.bind()}>More</Button>}
-              </div> : <div style={{ marginTop: '20px' }}><span
-                style={{ fontSize: '32px', color: '#aaa' }}>暂无数据</span></div>}
+              </div>
+              : <div className={styles.noDataMessage}>
+                <span>暂无数据</span>
+              </div>}
           </div>
         </Spin>
       </div>

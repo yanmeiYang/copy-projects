@@ -7,10 +7,11 @@ import { Button } from 'antd';
 import styles from './expert-googlemap.less';
 import { listPersonByIds } from '../../services/person';
 import * as profileUtils from '../../utils/profile-utils';
-import { findPosition, getById } from './utils/map-utils';
+import { getById } from './utils/map-utils';
 import GetGoogleMapLib from './utils/googleMapGai.js';
 import RightInfoZonePerson from './RightInfoZonePerson';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
+import RightInfoZoneAll from './RightInfoZoneAll';
 const ButtonGroup = Button.Group;
 const blankAvatar = '/images/blank_avatar.jpg';
 
@@ -45,15 +46,32 @@ class ExpertGoogleMap extends React.Component {
     return true;
   }
 
-  callSearchMap(query, callback) {
-    this.props.dispatch({ type: 'expertMap/searchMap', payload: { query } });
+  componentDidUpdate(prevProps, prevState) {
+    this.syncInfoWindow();
   }
+
+  toggleRightInfo = (type, id) => {
+    // TODO cache it.
+    if (this.props.expertMap.infoZoneIds !== id) { // don't change
+      if (id.indexOf(',') >= 0) { // is cluster
+        const clusterIdList = id.split(',');
+        this.props.dispatch({
+          type: 'expertMap/listPersonByIds',
+          payload: { ids: clusterIdList },
+        });
+      }
+      this.props.dispatch({
+        type: 'expertMap/setRightInfo',
+        payload: { idString: id, rightInfoType: type },
+      });
+    }
+  };
 
   handleScriptLoad() {
     console.log(this);
   }
 
-  handleScriptError() {
+  handleScriptError = () => {
     console.log('error');
   }
 
@@ -68,7 +86,7 @@ class ExpertGoogleMap extends React.Component {
     const imgwidth = 45;
 
     const oDiv = document.createElement('div');
-    const ostyle = `height:${width}px;width:${width}px;left: ${e.x + 23 - (width / 2)}px;top: ${e.y +23 - (width / 2)}px;`;
+    const ostyle = `height:${width}px;width:${width}px;left: ${e.x + 27 - (width / 2)}px;top: ${e.y +27 - (width / 2)}px;`;
     oDiv.setAttribute('id', 'panel');
     oDiv.setAttribute('style', ostyle);
     oDiv.setAttribute('class', 'roundImgContainer');
@@ -79,6 +97,7 @@ class ExpertGoogleMap extends React.Component {
     const ids = usersIds.slice(0, 8);
 
     const fenshu = (2 * Math.PI) / ids.length;// 共有多少份，每份的夹角
+    console.log(fenshu)
     for (let i = 0; i < ids.length; i += 1) {
       const centerX = Math.cos(fenshu * i) * (width / 2 - imgwidth / 2) + width / 2;
       const centerY = Math.sin(fenshu * i) * (width / 2 - imgwidth / 2) + width / 2;
@@ -90,7 +109,8 @@ class ExpertGoogleMap extends React.Component {
       imgdiv.innerHTML = `<img width='${imgwidth}' src='${blankAvatar}' alt='0'>`;
       insertAfter(imgdiv,thisNode);
       thisNode.appendChild(imgdiv);
-      imgdiv.addEventListener('click', () => that.toggleRightInfoBox(ids[i]), false);
+      //imgdiv.addEventListener('click', () => that.toggleRightInfoBox(ids[i]), false);
+      imgdiv.addEventListener('click', () => that.toggleRightInfo('person', ids[i]), false);
     }
 
     // 再在其中间添加一个图像
@@ -103,7 +123,7 @@ class ExpertGoogleMap extends React.Component {
     imgdiv.setAttribute('class', 'imgWrapper');
     thisNode.appendChild(imgdiv);
     google.maps.event.addDomListener(imgdiv,'click', function( ) { // 集体的一个显示
-      that.toggleRightInfoBox(inputids);
+      that.toggleRightInfo('cluster', inputids);
     });
 
     if (thisNode != null) { // 准备绑定事件
@@ -138,7 +158,7 @@ class ExpertGoogleMap extends React.Component {
             const cimg = imgdivs[j];
             google.maps.event.addDomListener(cimg, 'mouseenter', function(event) {
               // get current point.
-              const apos = getById('map').getBoundingClientRect();
+              const apos = getById('allmap').getBoundingClientRect();
               const cpos = event.target.getBoundingClientRect();
               const newPixel = new google.maps.Point(cpos.left - apos.left + imgwidth, cpos.top - apos.top); // eslint-disable-line
 
@@ -150,21 +170,15 @@ class ExpertGoogleMap extends React.Component {
               }
               const personInfo = data.data.persons[num];
               console.log(newPixel)
-              //console.log(currentPoint)
-              const myLatLng = new google.maps.LatLng({lat: 47, lng:112});
+              const myLatLng = new google.maps.LatLng({ lat: 47, lng: 112 });
               const infowindow = new google.maps.InfoWindow({
-                content: "<div class='popup'>oooooooooooo</div>"
+                content: "<div class='popup'>oooooooooooo</div>",
               });
               infowindow.setPosition(myLatLng);
               that.onSetPersonCard(personInfo);
               infowindow.open(map);
               that.syncInfoWindow();
-
-              //that.currentPersonId = personInfo.id;
             });
-            //google.maps.event.addDomListener(cimg, 'mouseleave', function(event) {
-              //map.closeInfoWindow();
-            //});
           }
         }
       },
@@ -195,61 +209,56 @@ class ExpertGoogleMap extends React.Component {
   }
 //Google Maps------------------------------------------------------------------------------------------------------------
   showgooglemap = (place,type) => {
-    var counter=0;
-    const that=this;
+    var counter = 0;
+    const that = this;
     that.showOverLay();
     var mapinterval = setInterval(function () {
-      if (typeof(google) == "undefined") {
-        console.log("wait for Google");
+      if (typeof (google) === 'undefined') {
+        console.log('wait for Google');
         counter++;
-        if(counter>200){
+        if (counter > 200) {
           clearInterval(mapinterval);
-          document.getElementById("map").innerHTML="Cannot connect to Google Map! Please check the network state!";
+          document.getElementById('allmap').innerHTML='Cannot connect to Google Map! Please check the network state!';
         }
       } else {
-        clearInternpmval(mapinterval);
-        const map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 24.397, lng: 140.644},
-          zoom: 3
+        clearInterval(mapinterval);
+        const map = new google.maps.Map(document.getElementById('allmap'), {
+          center: { lat: 24.397, lng: 140.644 },
+          zoom: 3,
         });
         this.map = map;
 
-        var locations=[];
+        var locations = [];
         for (var i = 0; i < place.results.length; i++) {
-          var onepoint={lat:place.results[i].location.lat,lng:place.results[i].location.lng}
-          locations[i]=onepoint;
+          var onepoint = { lat: place.results[i].location.lat, lng: place.results[i].location.lng }
+          locations[i] = onepoint;
         }
         const markers = [];
-        const pId= [] ;
+        const pId = [];
         let counts = 0;
-        for(const o in place.results){
-          const newplace = findPosition(type, place.results[o]);
-          if ((newplace[1] != null && newplace[1] != null) &&
-            (newplace[1] !== 0 && newplace[1] !== 0)) {
-            const marker = new google.maps.Marker({
-              position:{lat:place.results[o].location.lat,lng:place.results[o].location.lng},
-              map: map,
-              label: {
-                text: place.results[o].id,
-                color: 'black',
-                fontSize: '12px',
-                border: 'none',
-                backgroundColor: 'transparent',
-                // opacity:0.4,
-                fontWeight: 'bold',
-                textAlign: 'center',
-                width: '130px',
-                textShadow: '1px 1px 2px white, -1px -1px 2px white',
-                fontStyle: 'italic',
-              },
-            });
-
-
-            const personId = place.results[o].id;
-            pId[counts] = personId;
-            markers.push(marker);
-            counts += 1;
-          }
+        for (const o in place.results) {
+          const marker = new google.maps.Marker({
+            position:{ lat: place.results[o].location.lat, lng: place.results[o].location.lng },
+            map: map,
+            label: {
+              text: place.results[o].name,
+              color: 'black',
+              fontSize: '12px',
+              border: 'none',
+              backgroundColor: 'transparent',
+              // opacity:0.4,
+              fontWeight: 'bold',
+              textAlign: 'center',
+              width: '130px',
+              textShadow: '1px 1px 2px white, -1px -1px 2px white',
+              fontStyle: 'italic',
+            },
+            title: place.results[o].id,
+          });
+          const personId = place.results[o].id;
+          pId[counts] = personId;
+          markers.push(marker);
+          counts += 1;
         }
         // Add a marker clusterer to manage the markers.
         const _ = new googleMap.MarkerClusterer(map, { markers });
@@ -268,57 +277,57 @@ class ExpertGoogleMap extends React.Component {
       ai.innerHTML = pi.innerHTML;
     }
     // this.bindMouseScroll();
-    const model = this.props && this.props.expertMap;
-    const person = model.personInfo;
-    const shouldRIZUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') === -1 && model.infoZoneIds === person.id;
-    if (shouldRIZUpdate || model.infoZoneIds.indexOf(',') >= 0) {
-      const rsz = getById('rightInfoZone');
-      const flowInfo = getById('flowInfo');
-      if (rsz && flowInfo) {
-        flowInfo.innerHTML = rsz.innerHTML;
-      }
-    }
+    // const model = this.props && this.props.expertMap;
+    // const person = model.personInfo;
+    // const shouldRIZUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') === -1 && model.infoZoneIds === person.id;
+    // if (shouldRIZUpdate || model.infoZoneIds.indexOf(',') >= 0) {
+    //   const rsz = getById('rightInfoZone');
+    //   const flowInfo = getById('flowInfo');
+    //   if (rsz && flowInfo) {
+    //     flowInfo.innerHTML = rsz.innerHTML;
+    //   }
+    // }
   };
 
-  toggleRightInfoBox = (id) => {
-    const state = getById('flowstate').value;
-    const statistic = getById('statistic').value;
-    this.getTipInfoBox();
-    if (statistic !== id) { // 一般认为是第一次点击
-      console.log("1----"+state)
-      getById('flowstate').value = 1;
-      this.getRightInfoBox();
-      if (this.props.expertMap.infoZoneIds !== id) { // don't change
-        if (id.indexOf(',') >= 0) { // is cluster
-          const clusterIdList = id.split(',');
-          this.props.dispatch({
-            type: 'expertMap/listPersonByIds',
-            payload: {ids: clusterIdList},
-          });
-        }
-        this.props.dispatch({type: 'expertMap/setRightInfoZoneIds', payload: {idString: id}});
-      }
-      this.syncInfoWindow();
-    } else if (state === 1) { // 偶数次点击同一个对象
-      // 认为是第二次及其以上点击
-      console.log("2----"+state)
-      getById('flowstate').value = 0;
-      getById('flowInfo').style.display = 'none';
-    } else { // 奇数次点击同一个对象
-      console.log("3-----"+state)
-      getById('flowstate').value = 1;
-      getById('flowInfo').style.display = '';
-    }
-
-    getById('statistic').value = id;
-  };
+  // toggleRightInfoBox = (id) => {
+  //   const state = getById('flowstate').value;
+  //   const statistic = getById('statistic').value;
+  //   this.getTipInfoBox();
+  //   if (statistic !== id) { // 一般认为是第一次点击
+  //     console.log("1----"+state)
+  //     getById('flowstate').value = 1;
+  //     this.getRightInfoBox();
+  //     if (this.props.expertMap.infoZoneIds !== id) { // don't change
+  //       if (id.indexOf(',') >= 0) { // is cluster
+  //         const clusterIdList = id.split(',');
+  //         this.props.dispatch({
+  //           type: 'expertMap/listPersonByIds',
+  //           payload: {ids: clusterIdList},
+  //         });
+  //       }
+  //       this.props.dispatch({type: 'expertMap/setRightInfoZoneIds', payload: {idString: id}});
+  //     }
+  //     this.syncInfoWindow();
+  //   } else if (state === 1) { // 偶数次点击同一个对象
+  //     // 认为是第二次及其以上点击
+  //     console.log("2----"+state)
+  //     getById('flowstate').value = 0;
+  //     getById('flowInfo').style.display = 'none';
+  //   } else { // 奇数次点击同一个对象
+  //     console.log("3-----"+state)
+  //     getById('flowstate').value = 1;
+  //     getById('flowInfo').style.display = '';
+  //   }
+  //
+  //   getById('statistic').value = id;
+  // };
 
   addMouseoverHandler = (map, marker, personId) => {
     const that = this;
     const infoWindow = new google.maps.InfoWindow({
       content: "<div id='author_info' class='popup'></div>"
     });
-    google.maps.event.addListener(marker, 'mouseover', function (e) {
+    google.maps.event.addListener(marker, 'mouseover', function(e) {
       if (that.currentPersonId !== personId) {
         that.onResetPersonCard();
         that.onLoadPersonCard(personId);
@@ -335,7 +344,8 @@ class ExpertGoogleMap extends React.Component {
       infoWindow.close(map,marker);
     });
     google.maps.event.addListener(marker,'click', function (e) {
-      that.toggleRightInfoBox(personId);
+      //that.toggleRightInfoBox(personId);
+      that.toggleRightInfo('person', personId);
     });
   };
 
@@ -363,6 +373,10 @@ class ExpertGoogleMap extends React.Component {
     }
   };
 
+  callSearchMap(query) {
+    this.props.dispatch({ type: 'expertMap/searchMap', payload: { query } });
+  }
+
   onSetPersonCard = (personInfo) => {
     this.props.dispatch({
       type: 'expertMap/getPersonInfoSuccess',
@@ -371,30 +385,40 @@ class ExpertGoogleMap extends React.Component {
   };
 
   onLoadPersonCard = (personId) => {
-    this.props.dispatch({type: 'expertMap/getPersonInfo', payload: {personId}});
+    this.props.dispatch({ type: 'expertMap/getPersonInfo', payload: { personId } });
   };
 
   onResetPersonCard = () => {
-    this.props.dispatch({type: 'expertMap/resetPersonInfo'});
+    this.props.dispatch({ type: 'expertMap/resetPersonInfo' });
   };
 
-  goto=()=>{
-    var href=window.location.href;
-    window.location.href=href.replace("expert-googlemap","expert-map");
+  goto=() => {
+    const href = window.location.href;
+    window.location.href = href.replace('expert-googlemap', 'expert-map');
   }
 
-  reload=()=>{
-    var href=window.location.href;
-    window.location.href=href;
+  reload=() => {
+    const href = window.location.href;
+    window.location.href = href;
   }
 //page-------------------------------------------------------------------------------------------------------------------
   render() {
     const model = this.props && this.props.expertMap;
-    const person = model.personInfo;
-
+    const persons = model.geoData.results;
+    let count = 0;
+    let hIndexSum = 0;
+    if (persons) {
+      persons.map((person1) => {
+        hIndexSum += person1.hindex;
+        count += 1;
+        return hIndexSum;
+      });
+    }
+    const avg = (hIndexSum / count).toFixed(0);
     let personPopupJsx;
+    const person = model.personInfo;
     if (person) {
-      const url = profileUtils.getAvatar(person.avatar, person.id, 50);
+      const url = profileUtils.getAvatar(person.avatar, person.id, 90);
       const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
       const pos = profileUtils.displayPositionFirst(person.pos);
       const aff = profileUtils.displayAff(person);
@@ -402,85 +426,104 @@ class ExpertGoogleMap extends React.Component {
 
       personPopupJsx = (
         <div className="personInfo">
-          <div><img className="img" src={url} alt="IMG"/></div>
+          <div><img className="img" src={url} alt="IMG" /></div>
           <div className="info">
             <div className="nameLine">
               <div className="right">H-index:<b> {hindex}</b>
               </div>
               <div className="name">{name}</div>
             </div>
-            {pos && <span><i className="fa fa-briefcase fa-fw"/>{pos}</span>}
-            {aff && <span><i className="fa fa-institution fa-fw"/>{aff}</span>}
+            {pos && <span><i className="fa fa-briefcase fa-fw" />{pos}</span>}
+            {aff && <span><i className="fa fa-institution fa-fw" />{aff}</span>}
           </div>
         </div>
       );
     }
 
     // right info
-    const shouldRIZUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') === -1 && model.infoZoneIds === person.id;
-    const shouldRIZClusterUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') > 0;
-    const clusterPersons = model.clusterPersons;
+    // const shouldRIZUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') === -1
+    //   && model.infoZoneIds === person.id;
+    // const shouldRIZClusterUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') > 0;
 
+    const rightInfos = {
+      global: () => (
+        <RightInfoZoneAll count={count} hIndexSum={hIndexSum} avg={avg} persons={persons} />
+      ),
+      person: () => (<RightInfoZonePerson person={model.personInfo} />),
+      cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),
+    };
     return (
-      <div className={styles.expert_map} id="currentmain">
-        <div className={styles.main1}>
-          <div className={styles.lab1}><span>按照层级显示：</span></div>
-          <div>
+      <div className={styles.expertMap} id="currentMain">
+
+        <div className={styles.headerLine}>
+          <div className="left">{this.props.title}</div>
+
+          <div className={styles.scopes}>
+            <span>按照层级显示：</span>
             <ButtonGroup id="sType">
-              <Button onClick={this.showtype} value="0">自动</Button>
-              <Button onClick={this.showtype} value="1">大区</Button>
-              <Button onClick={this.showtype} value="2">国家</Button>
-              <Button onClick={this.showtype} value="3">国内区</Button>
-              <Button onClick={this.showtype} value="4">城市</Button>
-              <Button onClick={this.showtype} value="5">机构</Button>
+              <Button onClick={this.showType} value="0">自动</Button>
+              <Button onClick={this.showType} value="1">大区</Button>
+              <Button onClick={this.showType} value="2">国家</Button>
+              <Button onClick={this.showType} value="3" style={{ display: 'none' }}>国内区</Button>
+              <Button onClick={this.showType} value="4">城市</Button>
+              <Button onClick={this.showType} value="5">机构</Button>
             </ButtonGroup>
-            <div className={styles.switch}>
+
+            <div className={styles.switch} style={{ display: 'none' }}>
               <ButtonGroup id="diffmaps">
-                <Button type="primary" onClick={this.goto}>Baidu Map</Button>
-                <Button  onClick={this.reload}>Google Map</Button>
+                <Button type="primary" onClick={this.onChangeBaiduMap}>Baidu Map</Button>
+                <Button onClick={this.onChangeGoogleMap}>Google Map</Button>
               </ButtonGroup>
             </div>
-          </div>
-        </div>
-        <div className="mapshow">
-          <div id="map" style={{ width: '100%', height: '800px' }} />
-          <div className="em_report" id="em_report">
-            统计/报表
-          </div>
-          <input id="currentId" type="hidden" />
-          <input id="currentIds" type="hidden" />
-          <input id="statistic" type="hidden" value="0" />
-          <input id="flowstate" type="hidden" value="0" />
-        </div>
-
-        <div id="rank">
-          <div className={styles.main3}>
-            <img width="13%" src="/images/personsNumber.png"/>
-            <div className={styles.lab3}><p>该区域学者人数</p>该学者所在位置</div>
-          </div>
-          <div className={styles.container}>
-            <div className={styles.item1}> 1</div>
-            <div className={styles.item2}> 2</div>
-            <div className={styles.item3}> 3</div>
-            <div className={styles.item4}> 4</div>
-            <div className={styles.item5}> 5</div>
-          </div>
-            <img width="80%" src="/images/arrow.png" />
-          <div className={styles.lab2}>人数增加</div>
-        </div>
-
-        <div id="personInfo" style={{ display: 'none' }} >
-        {personPopupJsx && personPopupJsx}
-      </div>
-
-        <div id="rightInfoZone" style={{ display: 'none' }} >
-          <div className="rightInfoZone">
-
-            {shouldRIZUpdate && <RightInfoZonePerson person={model.personInfo} /> }
-            {shouldRIZClusterUpdate && <RightInfoZoneCluster persons={clusterPersons} />}
 
           </div>
         </div>
+
+        <div className={styles.map}>
+
+          <div id="allmap" />
+
+          <div className={styles.right}>
+            <div className={styles.legend}>
+              <div className={styles.title}>Legend:</div>
+              <div className={styles.t}>
+                <img className={styles.icon} width="42" src="/images/map/marker_red_sprite.png"
+                     alt="legend" />
+                <div className={styles.t}>专家</div>
+                <img className={styles.icon2} width="32" src="/images/map/m0.png" alt="legend" />
+                <div className={styles.t}>一组专家</div>
+              </div>
+              <div className={styles.container}>
+                <div className={styles.text}> 少</div>
+                <div className={styles.item1}> 1</div>
+                <div className={styles.item2}> 2</div>
+                <div className={styles.item3}> 3</div>
+                <div className={styles.item4}> 4</div>
+                <div className={styles.item5}> 5</div>
+                <div className={styles.text}> 多</div>
+              </div>
+            </div>
+
+            <div className={styles.scrollable}>
+              <div className={styles.border}>
+                {rightInfos[model.rightInfoType]()}
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div id="personInfo" style={{ display: 'none' }}>
+          {personPopupJsx && personPopupJsx}
+        </div>
+
+        <div className="em_report" id="em_report">统计/报表</div>
+
+        {/* TODO what's this for? */}
+        <input id="currentId" type="hidden" />
+        <input id="currentIds" type="hidden" />
+        <input id="statistic" type="hidden" value="0" />
+        <input id="flowstate" type="hidden" value="0" />
 
       </div>
     );

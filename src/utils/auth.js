@@ -141,7 +141,7 @@ const parseRoles = (user) => {
     roles.authed = true;
   }
   // special
-  if (user.email === 'elivoa@gmail.com') {
+  if (user.email === 'elivoa@gmail.com' || user.email === 'hd_yangym@sina.com') {
     roles.god = true;
   }
   return roles;

@@ -109,9 +109,12 @@ const DetailPage = ({ dispatch, seminar, app, pad }) => {
                   <ExpertAllInfo speakers={presidents} pad={pad} />
                 </div>}
 
-                <h2><strong>特邀嘉宾</strong></h2>
-                <hr />
-                <ExpertAllInfo speakers={guestSpeakers} pad={pad} />
+                {guestSpeakers.length > 0 &&
+                <div>
+                  <h2><strong>特邀嘉宾</strong></h2>
+                  <hr />
+                  <ExpertAllInfo speakers={guestSpeakers} pad={pad} />
+                </div>}
               </div>
             </div>
           </Col>

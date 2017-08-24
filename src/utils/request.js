@@ -46,8 +46,6 @@ export default async function request(url, options) {
     debug.logRequest('@@request ', url, options);
   }
 
-  console.log("baseurl",baseURL);
-
   let base = baseURL;
   if (options && options.baseURL !== undefined) {
     base = options.baseURL;

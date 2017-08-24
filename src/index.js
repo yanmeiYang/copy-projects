@@ -1,15 +1,16 @@
+/* eslint-disable prefer-template,import/no-dynamic-require */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import dva from 'dva';
 import 'babel-polyfill';
-import { IntlProvider } from 'react-intl';
+import { IntlProvider, addLocaleData } from 'react-intl';
 import { createLogger } from 'redux-logger';
 import { message } from 'antd';
 import { browserHistory } from 'dva/router';
 import createLoading from 'dva-loading';
-import { System } from './utils/system';
+// import { System } from './utils/system';
+import { sysconfig } from './systems';
 import { ReduxLoggerEnabled } from './utils/debug';
-import './index.html';
 
 const log = ::console.log;
 
@@ -40,13 +41,19 @@ if (process.env.NODE_ENV !== 'production') {
 app.model(require('./models/app'));
 
 // 3. Router
-app.router(require('./systems/' + System + '/router')); // eslint-disable-line
+app.router(require('./systems/' + sysconfig.SYSTEM + '/router'));
 // app.router(require('./router'));
+
+// Locale
+const messages = require('./locales/' + sysconfig.Locale);
+addLocaleData(require('react-intl/locale-data/' + sysconfig.Locale));
 
 // 4. Start
 const App = app.start();
 ReactDOM.render(
-  <IntlProvider locale="en"><App /></IntlProvider>,
+  <IntlProvider locale={sysconfig.Locale} messages={messages}>
+    <App />
+  </IntlProvider>,
   document.getElementById('root'),
 );
 

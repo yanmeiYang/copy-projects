@@ -5,7 +5,7 @@ const param = (key, type, description) => {
   return { key, type, description };
 };
 
- module.exports = {
+module.exports = {
   baseURL: 'https://api.aminer.org/api',
   // baseURL: 'https://166.111.7.105/api',
 
@@ -103,6 +103,29 @@ const param = (key, type, description) => {
     ucUpdateByKey: '/2b/config/:source/:category/rename/:key/:newKey',
     getCategoriesHint: '/2b/config/:source/category/suggest/:category',
     listConfigsByCategoryList: '/2b/config/:source/by-category',
+
+    // Recommendation APIs
+    getAllOrgs: '/reviewer/orgs/get/all/:offset/:size',
+    // listOrgs: API_BASE+"reviewer/orgs/get/:offset/:size"
+    // addOrg: API_BASE+"reviewer/org/add"
+    // getAllOrgs: API_BASE+"reviewer/orgs/get/all/:offset/:size"
+    // removeOrgById: API_BASE+"reviewer/org/remove/:id"
+    // addUserToOrg: API_BASE+"reviewer/user/add"
+    // SearchUserByEmail:API_BASE+"reviewer/user/get/:email"
+    //
+    // onlineSearch:API_BASE+"search/person"
+    //
+    // searchReviewer: "https://api.aminer.org/api/"+"reviewer/search"
+    // searchRosterAdvc: API_BASE+"search/roster/:id/experts/advanced"
+    //
+    // removeTaskById: API_BASE+"reviewer/task/remove/:id"
+    // removeProjectById: API_BASE+"reviewer/project/remove/:id"
+    //
+    // addTaskToProject: API_BASE+"reviewer/task/add/:pid"
+    // saveTask: API_BASE+"reviewer/task/save/:tid"
+    // # Protected
+    // addInstAsProtectedByIid: API_BASE + "aff/person/protected/:iid"
+
 
     // Knowledge Graph
     kgFind: {

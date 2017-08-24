@@ -54,6 +54,9 @@ const fullRouter = (app, defaultChildRoutes) => {
       core.AdminSystemConfigWithCategory(app),
       core.AdminSystemOrgCategory(app),
 
+      // Recommendation/rcd
+      core.RecommendationHome(app),
+
       // Activity / Seminar
       core.Seminar(app),
       core.SeminarWithId(app),

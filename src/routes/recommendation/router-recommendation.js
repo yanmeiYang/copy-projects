@@ -9,7 +9,7 @@ export default {
     path: 'rcd',
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
-        // registerModel(app, require('../../models/expert-map'));
+        registerModel(app, require('../../models/recommendation/recommendation'));
         cb(null, require('./RecommendationPage'));
       }, 'recommendation');
     },

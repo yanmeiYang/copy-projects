@@ -11,4 +11,7 @@ export default {
   // Components
   'com.KgSearchBox.placeholder': '请输入姓名或者搜索词',
   'com.KgSearchBox.searchBtn': '搜索',
+
+  // Recommendation
+  'rcd.home.pageTitle': '机构列表',
 };

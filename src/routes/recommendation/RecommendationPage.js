@@ -3,11 +3,14 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { FormattedMessage } from 'react-intl';
+import { routerRedux, Link } from 'dva/router';
+import { FormattedMessage as FM } from 'react-intl';
+import { sysconfig } from '../../systems';
 import styles from './RecommendationPage.less';
 import { Auth } from '../../hoc';
+import { RCDOrgList } from '../../components/recommendation';
 
-@connect(({ app }) => ({ app }))
+@connect(({ app, recommendation }) => ({ app, recommendation }))
 @Auth
 export default class ExpertMapPage extends React.Component {
   constructor(props) {
@@ -19,54 +22,60 @@ export default class ExpertMapPage extends React.Component {
     query: '',
   };
 
-  // componentWillMount() {
-  //   const query = (this.props.location && this.props.location.query
-  //     && this.props.location.query.query) || 'data mining';
-  //   const { type } = this.props.location.query;
-  //   if (query) {
-  //     // this.props.dispatch({ type: 'app/setQuery', query });
-  //     this.setState({ query });
-  //   }
-  //   if (type) {
-  //     this.setState({ mapType: type || 'baidu' });
-  //   }
-  //   this.dispatch({
-  //     type: 'app/layout',
-  //     payload: {
-  //       headerSearchBox: { query, onSearch: this.onSearch },
-  //       showFooter: false,
-  //     },
-  //   });
-  // }
-  //
+  componentWillMount() {
+    const query = (this.props.location && this.props.location.query
+      && this.props.location.query.query);
+    if (query) {
+      // this.props.dispatch({ type: 'app/setQuery', query });
+      this.setState({ query });
+    }
+    this.dispatch({
+      type: 'app/layout',
+      payload: {
+        headerSearchBox: { query, onSearch: this.onSearch },
+      },
+    });
+    // call data
+    this.loadOrgs();
+  }
+
+
   // componentWillUnmount() {
   //   this.dispatch({ type: 'app/layout', payload: { showFooter: true } });
   // }
   //
-  // onSearch = (data) => {
-  //   if (data.query) {
-  //     this.setState({ query: data.query });
-  //     this.props.dispatch(routerRedux.push({
-  //       pathname: '/expert-map',
-  //       query: { query: data.query },
-  //     }));
-  //     this.props.dispatch({
-  //       type: 'app/setQueryInHeaderIfExist',
-  //       payload: { query: data.query },
-  //     });
-  //   }
-  // };
+  onSearch = (data) => {
+    if (data.query) {
+      return;
+    }
+    const { dispatch } = this.props;
+    this.setState({ query: data.query });
+    dispatch(routerRedux.push({ pathname: '/rcd', query: { query: data.query } }));
+    dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: data.query } });
+  };
+
+
+  loadOrgs = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'recommendation/getAllOrgs',
+      payload: { offset: 0, size: sysconfig.MainListSize },
+    });
+  };
 
   render() {
+    const rcd = this.props.recommendation;
+    console.log('>> ', rcd.orgs);
     return (
       <div className={styles.content}>
-        <FormattedMessage
-          id="app.greeting"
-          defaultMessage="Hello, {name}!"
-          values={{
-            name: 'Eric',
-          }}
-        />
+
+        <FM id="rcd.home.pageTitle" defaultMessage="Organization List"
+            values={{ name: 'This is a test' }} />
+
+        {rcd.orgs &&
+        <RCDOrgList orgs={rcd.orgs} />
+        }
+
       </div>
     );
   }

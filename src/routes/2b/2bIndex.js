@@ -82,6 +82,12 @@ export default class SystemConfig extends React.Component {
           })}
         </div>
 
+        <ul>
+          <li>
+            <Link to="/rcd">Recommendation</Link>
+          </li>
+        </ul>
+
         TODO quick choose system.<br />
         TODO on error redirect.<br />
       </div>

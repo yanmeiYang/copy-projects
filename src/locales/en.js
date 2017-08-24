@@ -11,4 +11,8 @@ export default {
   // Components
   'com.KgSearchBox.placeholder': 'Input expert name or query',
   'com.KgSearchBox.searchBtn': 'Search',
+
+  // Recommendation
+  'rcd.home.pageTitle': 'Organization List',
+
 };

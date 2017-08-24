@@ -52,6 +52,7 @@ const core = {
   ...require('./routes/2b/router-2b'),
   ...require('./routes/2b-profile/route'),
   ...require('./routes/recommendation/router-recommendation'),
+  ...require('./routes/third-login/router'),
   ...require('./routes/router'), // Other routes.
 
 };

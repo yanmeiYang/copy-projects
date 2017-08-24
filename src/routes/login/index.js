@@ -1,7 +1,7 @@
 /* eslint-disable no-const-assign */
 import React from 'react';
 import { connect } from 'dva';
-import { Link } from 'dva/router';
+import { Link, routerRedux } from 'dva/router';
 import { Button, Modal, Row, Form, Input } from 'antd';
 import { Helmet } from 'react-helmet';
 import styles from './index.less';
@@ -49,6 +49,11 @@ class Login extends React.Component {
       },
     });
   };
+  jumpToForgot= () => {
+    this.props.dispatch(routerRedux.push({
+      pathname: '/forgot-password',
+    }));
+  }
 
   render() {
     const { dispatch, auth, form } = this.props;
@@ -89,7 +94,8 @@ class Login extends React.Component {
               </div>}
 
               <div>
-                <Link to="/forgot-password" className={styles.forgotpwbtn}>忘记密码?</Link>
+                {/*<Link onClick={this.jumpToForgot} className={styles.forgotpwbtn}>忘记密码?</Link>*/}
+                <a href="/forgot-password" className={styles.forgotpwbtn}>忘记密码?</a>
                 {sysconfig.ApplyUserBtn &&
                 <span className={styles.applyUserbtn} onClick={this.applyUser}>新用户申请</span>
                 }

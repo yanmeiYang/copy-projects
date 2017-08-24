@@ -32,6 +32,7 @@ module.exports = {
   Header_UserPageURL: '/user-info',
   // Footer_Content: '',
   ShowHelpDoc: true,
+  Header_UserName: true,
 
   // Functionality
   Enable_Export: false,

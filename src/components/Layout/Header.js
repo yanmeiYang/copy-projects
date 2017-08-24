@@ -144,9 +144,14 @@ class Header extends React.PureComponent {
             </Menu.Item>
             }
 
+            {isAuthed(roles) && sysconfig.Header_UserName &&
+            <Menu.Item key="/name" className={styles.emptyMenuStyle}>
+              <span>{user.display_name}</span>
+            </Menu.Item>
+            }
             {/* TODO 不确定是否其他系统也需要显示角色 */}
             {sysconfig.SYSTEM === 'ccf' && roles && isAuthed(roles) &&
-            <Menu.Item key="" className={styles.showRoles}>
+            <Menu.Item key="" className={styles.emptyMenuStyle}>
               <p className={roles.authority[0] !== undefined ? styles.isAuthority : ''}>
                 <span>{roles.role[0]}</span>
                 {roles.authority[0] !== undefined &&

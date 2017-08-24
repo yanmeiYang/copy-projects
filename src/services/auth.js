@@ -43,14 +43,9 @@ export async function getCurrentUserInfo(params) {
 }
 
 // TODO should in use service.
-export async function createUser(email, first_name, gender, last_name, position, sub, src) {
+export async function createUser(data) {
   const user = {
-    email,
-    first_name,
-    gender,
-    last_name,
-    position,
-    sub,
+    ...data,
     src: sysconfig.SOURCE,
   };
   return request(api.signup, {

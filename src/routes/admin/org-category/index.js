@@ -2,6 +2,7 @@
  *  Created by ranyanchuan on 2017-06-09;
  */
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { Tabs, Input, Modal, Icon } from 'antd';
 import { connect } from 'dva';
 import { isEqual } from 'lodash';
@@ -20,6 +21,7 @@ export default class OrgCategory extends React.Component {
   state = {
     // 不带前缀的ID, {id:?, name:?, category: orglist_?}
     currentGroupId: null,
+    addOrgModalVisible: false,
   };
 
   /** 在Component被加载的时候调用的。 */
@@ -53,7 +55,8 @@ export default class OrgCategory extends React.Component {
       }
       return true;
     }
-    if (nextState.currentGroupId !== this.state.currentGroupId) {
+    if (nextState.currentGroupId !== this.state.currentGroupId
+      || nextState.addOrgModalVisible !== this.state.addOrgModalVisible) {
       return true;
     }
     return false;
@@ -77,34 +80,8 @@ export default class OrgCategory extends React.Component {
     this.newOrgName = e.target.value;
   };
 
-  onAddOrgList = () => {
-    const { dispatch } = this.props;
-    const that = this;
-    Modal.confirm({
-      title: '添加机构列表：',
-      content: (
-        <Input className="orgNameInput" placeholder="请输入新机构的名字"
-               onBlur={this.onModalInputBlur} />
-      ),
-      onOk() {
-        const newOrgName = that.newOrgName && that.newOrgName.trim();
-        if (!newOrgName) {
-          alert('机构名称不能为空！');
-        } else {
-          dispatch({
-            type: 'universalConfig/addCategoryGroup',
-            payload: {
-              category: OrgListGroupCategoryKey,
-              key: newOrgName,
-              val: 1,
-              categoryTemplate: `${OrgListPrefix}{id}`,
-            },
-          });
-        }
-      },
-      onCancel() {
-      },
-    });
+  onSetOrgModalVisible = () => {
+    this.setState({ addOrgModalVisible: true });
   };
 
   onEditOrgList = () => {
@@ -175,6 +152,31 @@ export default class OrgCategory extends React.Component {
       });
     }
   };
+  onAddOrgList = (value) => {
+    let orgName = '';
+    if (typeof value === 'string') {
+      orgName = value && value.trim();
+    } else {
+      orgName = this.newOrgName && this.newOrgName.trim();
+    }
+    if (!orgName) {
+      alert('机构名称不能为空！');
+    } else {
+      this.props.dispatch({
+        type: 'universalConfig/addCategoryGroup',
+        payload: {
+          category: OrgListGroupCategoryKey,
+          key: orgName,
+          val: 1,
+          categoryTemplate: `${OrgListPrefix}{id}`,
+        },
+      });
+      ReactDOM.findDOMNode(this.refs.addOrgInput).value = '';
+    }
+  };
+  cancelHandle = () => {
+    this.setState({ addOrgModalVisible: false });
+  };
 
   render() {
     const { categories } = this.props.universalConfig;
@@ -186,7 +188,18 @@ export default class OrgCategory extends React.Component {
           <div className={styles.left}>
 
             <div className={styles.toolbox} style={{ display: 'flex', marginRight: '5px' }}>
-              <a onClick={this.onAddOrgList}>添加</a>
+              <a onClick={this.onSetOrgModalVisible}>添加</a>
+              <Modal
+                title="添加机构列表："
+                visible={this.state.addOrgModalVisible}
+                onOk={this.onAddOrgList.bind(this)}
+                onCancel={this.cancelHandle}
+              >
+                <Input className="orgNameInput" placeholder="请输入新机构的名字" ref="addOrgInput"
+                       onBlur={this.onModalInputBlur}
+                       onPressEnter={e => this.onAddOrgList(e.target.value)}
+                />
+              </Modal>
             </div>
 
             <Tabs type="line" size="small" tabPosition="left"

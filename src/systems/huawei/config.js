@@ -53,8 +53,8 @@ module.exports = {
       nperson: 53 + 809,
     },
     {
-      id: '595208bd9ed5dbf9cd563c60.593e4ac29ed5db77fc7be728.593beddb9ed5db23ccac7dbf.593b7c889ed5db23ccac68e6',
-      name: 'IEEE Fellow(2013-2016)',
+      id: TopExpertBase.IEEEFellow[0].id,
+      name: 'IEEE Fellow', // (2013-2016)
       nperson: 0,
     },
     {

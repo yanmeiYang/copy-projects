@@ -1,3 +1,4 @@
+/* eslint-disable key-spacing */
 /**
  *  Created by BoGao on 2017-07-27;
  */
@@ -12,6 +13,17 @@ const TopExpertBase = {
       name: 'IEEE Fellow',
     },
   ],
+  TuringAward: [{ id: '58997b589ed5db58de40a152', name: '图灵奖' }],
+  CAS: [{ id: '55ebd8b945cea17ff0c53d5a', name: '中国科学院' }],
+  NAS: [{ id: '590fcaa59ed5db67cf85a129', name: '美国科学院' }],
+  CAE: [{ id: '55e6573845ce9da5c99535a9', name: '中国工程院' }],
+  NAE: [{ id: '58997c889ed5db58de40a171', name: '美国工程院' }],
+  TR35:             [{ name: 'TR35', id: '591fa8cb9ed5db409e22a8eb.591fa7999ed5db409e22a8e2.5927b06c9ed5db8c189f16e7' }],
+  ChangJiangXueZhe: [{ name: '长江学者', id: '58e5e2d99ed5db076b9b8cb2' }],
+  JieQing:          [{ name: '杰青', id: '57a837809ed5dba7786c3f9f.59267feb9ed5db8c189eefea' }],
+  QingNianQianRen:  [{ name: '青年千人', id: '577afb029ed5db2cefd14110.58dc96a79ed5db7f4ee661c9.573e6b9876d9113b9d9aaa5d.58b8f04f9ed5dbe5bbb4124c.58cba2509ed5dbd455abcd39' }],
+  YouQing:          [{ name: '优青', id: '58d86b749ed5db79c99c06b1.5943cfd69ed5db38b4b514f6.592259589ed5db409e230cf9.59225f829ed5db409e2310ee.58cb97559ed5dbd455abcb42' }],
+
   TopUniversity2015: [
     { index: 1, name: 'Massachusetts Institute of Technology', id: '58f4b0ab9ed5dbe8d7c85803', abbr: 'MIT' },
     { index: 2, name: 'Tsinghua University', id: '58f46d249ed5dbe8d7c841f1', abbr: '清华大学计算机科学与技术系' },
@@ -77,16 +89,27 @@ TopExpertBase.TopUniversity2015.map((eb) => {
   return null;
 });
 
-// tools. TODO 支持多个库的 concat.
-function toIDDotString(ebs) {
-  return ebs.reduce((result, eb) => {
-    return `${result.id}.${eb.id}`;
-  });
+// tools.
+function toIDDotString(...ebs) {
+  const ids = [];
+  if (ebs && ebs.length > 0) {
+    ebs.map((eb) => {
+      ids.push(...eb.map(e => e.id));
+      return true;
+    });
+  }
+  // console.log('DotString:', ids.join('.'));
+  return ids.join('.');
 }
+
+function TopNUniversity2015(n) {
+  return TopExpertBase.TopUniversity2015.filter(u => u.index <= n);
+};
 
 module.exports = {
   TopExpertBase,
   ACMFellowExpertBaseIndex,
   TopUnivExpertBaseIndex,
   toIDDotString,
+  TopNUniversity2015,
 };

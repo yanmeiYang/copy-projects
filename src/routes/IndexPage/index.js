@@ -48,6 +48,7 @@ export default class IndexPage extends React.Component {
   // }
 
   render() {
+    console.log('>>> ', sysconfig.ExpertBases);
     // const { seminars } = search;
     const commonSearch = sysconfig.IndexPage_QuickSearchList;
 

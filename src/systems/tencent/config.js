@@ -2,7 +2,7 @@
  * Created by BoGao on 2017/7/14.
  */
 import React from 'react';
-import { toIDDotString, TopExpertBase } from '../../utils/expert-base';
+import { toIDDotString, TopExpertBase as EB, TopNUniversity2015 } from '../../utils/expert-base';
 
 module.exports = {
 
@@ -41,43 +41,43 @@ module.exports = {
       name: '腾讯合作者',
       nperson: 0,
     },
-    // {
-    //   id: TopExpertBase.IEEEFellow[0].id,
-    //   name: 'IEEE Fellow', // (2013-2016)
-    //   nperson: 0,
-    // },
-    // {
-    //   id: '595208bd9ed5dbf9cd563c60.593e4ac29ed5db77fc7be728.593beddb9ed5db23ccac7dbf',
-    //   name: '高级专家人才',
-    //   nperson: 12,
-    // },
-    // {
-    //   id: '5923c0829ed5db1600b942db',
-    //   name: '英国皇家科学院－Research Fellows Directory',
-    //   nperson: 976,
-    // },
-    // {
-    //   id: '5923bfee9ed5db1600b941f2',
-    //   name: '英国皇家科学院－Fellows Directory',
-    //   nperson: 287,
-    // },
-    // {
-    //   id: '55ebd8b945cea17ff0c53d5a',
-    //   name: '中国科学院院士',
-    //   nperson: 287,
-    // },
-    // {
-    //   id: '5912aa3a9ed5db655182ffde',
-    //   name: '美国科学院外国专家',
-    //   nperson: 287,
-    // },
+    /*
+    高级专家人才
+    美国、中国科学院/工程院院士；
+    计算机学科全球Top 20大学Full Prof.；TODO 没分出 Full Prof.
+    IEEE Fellow, ACM Fellow，
+    TODO 以及H-index>45的专家学者
+    */
+    {
+      id: toIDDotString(
+        EB.IEEEFellow, EB.ACMFellow,
+        EB.CAS, EB.NAS, EB.CAE, EB.NAE,
+        TopNUniversity2015(20),
+      ),
+      name: '高级专家人才',
+      nperson: 0,
+    },
+    /*
+    专家人才
+    TODO 活跃在科研一线，最近三年仍然在学术圈活跃（发文章），H-index>35；
+    TODO 没分出: 全球Top 50大学的Associate Prof.；
+    国内千人/长江学者/杰青
+    */
+    {
+      id: toIDDotString(
+        EB.ChangJiangXueZhe, EB.JieQing, EB.QingNianQianRen, EB.YouQing,
+        TopNUniversity2015(50),
+      ),
+      name: '专家人才',
+      nperson: 0,
+    },
+    /*
+     青年人才 TODO
+     计算机科学领域的博士毕业生，在读博士，博士后
+     */
   ],
 
   SearchFilterExclude: '',
   UniSearch_Tabs: ['list', 'map'],
-
-
-  // 特殊配置，这里是System的自己的配置
-
 
 };

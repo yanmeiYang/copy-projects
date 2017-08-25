@@ -6,6 +6,12 @@ const TopExpertBase = {
     { id: '5976aa479ed5dbca0866aa4a', name: 'ACM Fellows<2015' },
     { id: '596c130f9ed5db449d3fbe83', name: 'ACM Fellows 53 2016' },
   ],
+  IEEEFellow: [
+    {
+      id: '595208bd9ed5dbf9cd563c60.593e4ac29ed5db77fc7be728.593beddb9ed5db23ccac7dbf.593b7c889ed5db23ccac68e6',
+      name: 'IEEE Fellow',
+    },
+  ],
   TopUniversity2015: [
     { index: 1, name: 'Massachusetts Institute of Technology', id: '58f4b0ab9ed5dbe8d7c85803', abbr: 'MIT' },
     { index: 2, name: 'Tsinghua University', id: '58f46d249ed5dbe8d7c841f1', abbr: '清华大学计算机科学与技术系' },
@@ -71,7 +77,7 @@ TopExpertBase.TopUniversity2015.map((eb) => {
   return null;
 });
 
-// tools.
+// tools. TODO 支持多个库的 concat.
 function toIDDotString(ebs) {
   return ebs.reduce((result, eb) => {
     return `${result.id}.${eb.id}`;

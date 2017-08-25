@@ -185,7 +185,7 @@ export default class UniSearch extends React.PureComponent {
   render() {
     const { results, pagination, query, aggs, filters } = this.props.search;
     const { pageSize, total, current } = pagination;
-    const load = this.props.loading.models.search;
+    const load = this.props.loading.effects['search/searchPerson'];
     const operations = (
       <ExportPersonBtn
         query={query} pageSize={pageSize} current={current}

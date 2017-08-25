@@ -24,7 +24,6 @@ export default {
     },
 
     isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
-    loading: false, // TODO remove loading, use global loading compoennt.
 
     seminars: [], // TODO move out.
   },
@@ -74,7 +73,6 @@ export default {
 
   effects: {
     * searchPerson({ payload }, { call, put }) {
-      yield put({ type: 'showLoading' });
       const { query, offset, size, filters, sort, total } = payload;
       const noTotalFilters = {};
       for (const [key, item] of Object.entries(filters)) {
@@ -143,7 +141,6 @@ export default {
         ...state,
         results: result,
         pagination: { pageSize: state.pagination.pageSize, total: currentTotal, current },
-        loading: false,
       };
     },
 
@@ -158,19 +155,6 @@ export default {
 
     getSeminarsSuccess(state, { payload: { data } }) {
       return { ...state, seminars: data };
-    },
-
-    showLoading(state) {
-      return {
-        ...state,
-        loading: true,
-      };
-    },
-    hideLoading(state) {
-      return {
-        ...state,
-        loading: false,
-      };
     },
 
   },

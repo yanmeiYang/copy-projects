@@ -4,12 +4,20 @@
 import React from 'react';
 import { Link } from 'dva/router';
 import { Tag, Tooltip } from 'antd';
+import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
+
 import { Indices } from '../../components/widgets';
 import { sysconfig } from '../../systems';
 import * as personService from '../../services/person';
 import { config } from '../../utils';
 import styles from './RCDOrgList.less';
 import * as profileUtils from '../../utils/profile-utils';
+
+function clamp(text, length) {
+  return text && text.length <= length
+    ? text
+    : `${text.slice(0, length)}...`;
+}
 
 export default class RCDOrgList extends React.PureComponent {
   constructor(props) {
@@ -20,41 +28,32 @@ export default class RCDOrgList extends React.PureComponent {
   state = {};
 
   shouldComponentUpdate(nextProps) {
-    if (nextProps.persons === this.props.persons) {
+    if (nextProps.orgs === this.props.orgs) {
       return false;
     }
     return true;
   }
 
   render() {
-    const { persons } = this.props;
-    console.log('refresh person list ');
+    const { orgs } = this.props;
+    console.log('refresh Org list. ');
     return (
-      <div className={styles.personList}>
-        {
-          persons && persons.map((person) => {
-            const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
-            const pos = profileUtils.displayPositionFirst(person.pos);
-            const aff = profileUtils.displayAff(person);
-            const phone = person.contact && person.contact.phone;
-            const email = profileUtils.displayEmailSrc(person);
-            // const homepage = person.contact && person.contact.homepage;
-            const indices = person.indices;
-            const activity_indices = person.activity_indices;
-            // const tags = profileUtils.findTopNTags(person, 8);
+      <div className={styles.orgs}>
+        <div className={styles.box}>
+          {
+            orgs && orgs.map((org) => {
+              console.log('loop org: ', org.desc);
+              return (
+                <div key={org.id} className={styles.org}>
+                  <div className={styles.titleArea}>
+                    <h2 className={styles.title}><Link to="/rcd">{clamp(org.name, 40)}</Link></h2>
+                  </div>
+                  <div className={styles.desc}>{clamp(org.desc, 50)}</div>
+                  <div className={styles.info}>
+                    <FD value={org.create_time} />
+                  </div>
 
-            const personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
-            if (sysconfig.PersonList_PersonLink_NewTab) {
-              personLinkParams.target = '_blank';
-            }
-
-            return (
-              <div key={person.id} className={styles.person}>
-                <div className={styles.avatar_zone}>
-                  <img src={profileUtils.getAvatar(person.avatar, '', 90)}
-                       className={styles.avatar} alt={name} title={name} />
-                </div>
-
+                  {/*
                 <div className={styles.info_zone}>
                   {name &&
                   <div className={styles.title}>
@@ -123,11 +122,13 @@ export default class RCDOrgList extends React.PureComponent {
 
                   </div>
                 </div>
+                */}
+                </div>
 
-              </div>
-            );
-          })
-        }
+              );
+            })
+          }
+        </div>
       </div>
     );
 

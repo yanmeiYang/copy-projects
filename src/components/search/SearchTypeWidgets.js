@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
+import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import styles from './SearchTypeWidgets.less';
 import { sysconfig } from '../../systems';
 
@@ -104,7 +105,10 @@ class SearchTypeWidgets extends React.PureComponent {
           const currentClass = c.label === this.state.current ? 'current' : '';
           return (
             <div key={c.label} className={`navi ${currentClass}`}>
-              <a onClick={this.onClick(c)}>{c.label}</a>
+              <a onClick={this.onClick(c)}>
+                <FM id={`com.searchTypeWidget.label.${c.key}`}
+                    defaultMessage={c.label} />
+              </a>
             </div>);
         })}
       </div>

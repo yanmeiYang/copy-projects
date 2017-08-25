@@ -53,8 +53,14 @@ export default {
   effects: {
     * getAllOrgs({ payload }, { call, put }) {
       const { offset, size } = payload;
-      const data = yield call(rcdService.getAllOrgs(offset, size);
-      yield put({ type: 'getAllOrgsSuccess', payload: { data } });
+      const data = yield call(rcdService.getAllOrgs, offset, size);
+      console.log('data:', data);
+      if (data && data.data && data.data.status) {
+        yield put({ type: 'getAllOrgsSuccess', payload: { data: data.data } });
+      } else {
+        // TODO 要在这里做错误处理么?
+        console.error('Error:', data.status);
+      }
     },
 
     // * getPublications({ payload }, { call, put }) {

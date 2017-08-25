@@ -13,6 +13,8 @@ module.exports = {
   ShowSideMenu: false,
   ShowRegisteredRole: false,
 
+  EnableLocalLocale: true,
+
   UserAuthSystem: 'huawei', // aminer 或者是 system.config
   UserAuthSystem_AddSysTagAuto: true, // 登录时自动添加system的标签
 

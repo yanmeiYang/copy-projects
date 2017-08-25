@@ -44,7 +44,7 @@ const defaultSystemConfigs = {
   // Systems Preference
   //
   Locale: 'en', // en_US, zh_CN, ...
-  EnableLocalLocale: true,
+  EnableLocalLocale: false,
   // Language: 'en', // options [cn|en] // TODO change to locale.
   // PreferredLanguage: 'en', // 默认语言 // TODO delete this.
 

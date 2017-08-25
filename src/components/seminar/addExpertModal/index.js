@@ -177,11 +177,17 @@ class AddExpertModal extends React.Component {
     };
     talk.title = this.refs.talkTitle.refs.input.value;
     talk.speaker = state.speakerInfo;
-    talk.speaker.gender = state.speakerInfo.gender === '' ? 1 : parseInt(state.speakerInfo.gender.i);
+    if (typeof state.speakerInfo.gender === 'number') {
+      return talk.speaker.gender;
+    } else if (typeof state.speakerInfo.gender === 'object') {
+      talk.speaker.gender = parseInt(state.speakerInfo.gender.i);
+    } else {
+      talk.speaker.gender = 1;
+    }
     if (state.talkStartValue || state.talkEndValue) {
       talk.time = {};
     }
-    talk.speaker.role = state.speakerInfo.role !== undefined ? [state.speakerInfo.role] : [];
+    talk.speaker.role = state.speakerInfo.role !== undefined ? state.speakerInfo.role : [];
     if (state.talkStartValue) {
       talk.time.from = typeof state.talkStartValue === 'string' ? state.talkStartValue : state.talkStartValue.toJSON();
     }
@@ -294,6 +300,18 @@ class AddExpertModal extends React.Component {
         <div className={!step2 && !step3 ? styles.showStep4 : styles.hideStep4}>
           <FormItem
             {...formItemLayout}
+            label={(<span>专家角色</span>)}>
+            {getFieldDecorator('role', {})(<Select
+              style={{ width: 200 }}
+              placeholder="请选择专家角色"
+              onChange={this.expertRoleChange}
+            >
+              <Option value="president">会议主席</Option>
+              <Option value="talker">特邀讲者</Option>
+            </Select>)}
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
             label="演讲标题"
           >
             <Input placeholder="请输入演讲标题。。。" ref="talkTitle" />
@@ -316,18 +334,6 @@ class AddExpertModal extends React.Component {
             label={(<span>演讲摘要</span>)}>
             <Input type="textarea" rows={4} placeholder="请输入演讲摘要。。。" ref="talkAbstract"
                    onBlur={this.setTalkAbstrack} />
-          </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label={(<span>专家角色</span>)}>
-            {getFieldDecorator('role', {})(<Select
-              style={{ width: 200 }}
-              placeholder="请选择专家角色"
-              onChange={this.expertRoleChange}
-            >
-              <Option value="president">会议主席</Option>
-              <Option value="talker">特邀讲者</Option>
-            </Select>)}
           </FormItem>
           {contribution_type && <FormItem
             {...formItemLayout}
@@ -365,21 +371,23 @@ class AddExpertModal extends React.Component {
         <div
           className={`ant-form-item ${step2 && !step3 ? styles.showStep4 : styles.hideStep4}`}>
           <Col><label>专家信息</label></Col>
-          <div className="ant-col-7">
-            <Input size="large" placeholder="专家姓名" ref="name"
-                   onBlur={this.suggestExpert.bind(this, 0)} />
-          </div>
-          <div className="ant-col-7">
-            <Input size="large" placeholder="专家职称" ref="pos"
-                   onBlur={this.suggestExpert.bind(this, 0)} />
-          </div>
-          <div className="ant-col-7">
-            <Input size="large" placeholder="专家单位" ref="aff"
-                   onBlur={this.suggestExpert.bind(this, 0)} />
-          </div>
-          <div className="ant-col-3">
-            <Button type="primary" size="large"
-                    onClick={this.suggestExpert.bind(this, 1)}>推荐</Button>
+          <div className={styles.searchExpertBtn}>
+            <div className="ant-col-7">
+              <Input size="large" placeholder="专家姓名" ref="name"
+                     onBlur={this.suggestExpert.bind(this, 0)} />
+            </div>
+            <div className="ant-col-7">
+              <Input size="large" placeholder="专家职称" ref="pos"
+                     onBlur={this.suggestExpert.bind(this, 0)} />
+            </div>
+            <div className="ant-col-7">
+              <Input size="large" placeholder="专家单位" ref="aff"
+                     onBlur={this.suggestExpert.bind(this, 0)} />
+            </div>
+            <div className="ant-col-2">
+              <Button type="primary" size="large"
+                      onClick={this.suggestExpert.bind(this, 1)}>推荐</Button>
+            </div>
           </div>
           <div className={styles.personWrap}>
             <Spin spinning={loading} style={{ marginTop: 30 }}>

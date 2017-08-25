@@ -185,6 +185,7 @@ class Header extends React.PureComponent {
               </p>
             </Menu.Item>
             }
+            {sysconfig.EnableLocalLocale &&
             <Menu.Item>
               <Dropdown overlay={menu} placement="bottomLeft">
                 <a className="ant-dropdown-link">
@@ -193,6 +194,7 @@ class Header extends React.PureComponent {
                 </a>
               </Dropdown>
             </Menu.Item>
+            }
 
             {isGod(roles) &&
             <Menu.Item key="/devMenu">

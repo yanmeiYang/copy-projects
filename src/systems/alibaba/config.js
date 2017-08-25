@@ -10,8 +10,7 @@ module.exports = {
   //
   // Systems Preference
   //
-  Language: 'cn', // options [cn|en]
-  PreferredLanguage: 'cn', // 默认语言
+  EnableLocalLocale: true,
   // MainListSize: 20,
 
   //

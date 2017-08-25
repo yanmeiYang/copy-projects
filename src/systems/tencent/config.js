@@ -10,6 +10,8 @@ module.exports = {
   SearchPagePrefix: 'uniSearch',
   ShowSideMenu: false,
 
+  EnableLocalLocale: true,
+
   Header_LogoWidth: 212,
   Header_LogoStyle: {
     width: 185,

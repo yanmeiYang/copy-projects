@@ -8,8 +8,7 @@ module.exports = {
 
   PageTitle: '专家库',
 
-  Language: 'cn', // options [cn|en]
-  PreferredLanguage: 'cn', // 默认语言
+  Locale: 'zh',
 
   PersonList_PersonLink: personId => `/person/${personId}`,
   PersonList_PersonLink_NewTab: false,

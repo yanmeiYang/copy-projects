@@ -105,7 +105,7 @@ function displayEmailSrc2(personId, hasEmail, hasEmailCR) {
 
 function findTopNTags(person, n) {
   let tags = [];
-  if (sysconfig.PreferredLanguage === 'cn') {
+  if (sysconfig.Locale === 'zh') {
     tags = person.tags_zh ? person.tags_zh.slice(0, n) : null;
   } else {
     tags = person.tags ? person.tags.slice(0, n) : null;

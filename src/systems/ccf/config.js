@@ -9,8 +9,7 @@ module.exports = {
   // 通用配置。所有System的配置文件必须全部包含这部分的值
   PageTitle: 'CCF 专家库',
 
-  Language: 'cn', // options [cn|en]
-  PreferredLanguage: 'cn', // 默认语言
+  Locale: 'zh',
 
   Search_SortOptions: [
     { label: '相关度', key: 'relevance' },

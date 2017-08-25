@@ -13,7 +13,7 @@ const expertBases = sysconfig.ExpertBases;
 const labelMap = { 'H-Index': 'h指数', Language: '语言', Location: '国家' };
 
 function showChineseLabel(enLabel) {
-  if (sysconfig.Language === 'cn') {
+  if (sysconfig.Locale === 'zh') {
     const cnLabel = labelMap[enLabel];
     return !cnLabel ? enLabel : cnLabel;
   } else {
@@ -24,7 +24,7 @@ function showChineseLabel(enLabel) {
 const labelMap2 = { 'h-index': 'h指数', language: '语言', nationality: '国家' };
 
 function showChineseLabel2(enLabel) {
-  if (sysconfig.Language === 'cn') {
+  if (sysconfig.Locale === 'zh') {
     const cnLabel = labelMap2[enLabel];
     return !cnLabel ? enLabel : cnLabel;
   } else {

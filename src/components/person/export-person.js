@@ -89,7 +89,7 @@ class ExportPersonBtn extends React.Component {
     });
 
     //  添加中文翻译
-    if (sysconfig.PreferredLanguage === 'cn') {
+    if (sysconfig.Locale === 'zh') {
       selected.push('translate');
     }
     searchService.searchPerson(query, offset, size, filters, sort).then((res) => {
@@ -131,7 +131,7 @@ class ExportPersonBtn extends React.Component {
         });
 
         let temp = selectedItem;
-        if (sysconfig.PreferredLanguage === 'cn') {
+        if (sysconfig.Locale === 'zh') {
           temp = temp.map(item => keyValue[item]);
         }
         const fristRow = temp.join(',');

@@ -11,9 +11,6 @@ module.exports = {
   // 通用配置。所有System的配置文件必须全部包含这部分的值
   PageTitle: 'CIPSC 专家库',
 
-  Language: 'en', // options [cn|en]
-  PreferredLanguage: 'en', // 默认语言
-
   PersonList_PersonLink: personId => `/person/${personId}`,
   PersonList_PersonLink_NewTab: false,
 

@@ -92,7 +92,7 @@ class Tencent3rd extends React.Component {
 
   // 解密
   render() {
-    if (auth.getLocalToken() && auth.getLocalUser().email === this.state.email) {
+    if (authUtil.getLocalToken() && authUtil.getLocalUser().email === this.state.email) {
       browserHistory.push('/');
     }
     return (<div />);

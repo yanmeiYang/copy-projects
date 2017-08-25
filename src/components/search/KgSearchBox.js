@@ -37,13 +37,13 @@ const getSuggestions = (value) => {
 // based on the clicked suggestion. Teach Autosuggest how to calculate the
 // input value for every given suggestion.
 const getSuggestionValue = (suggestion) => {
-  const value = sysconfig.Language === 'cn' ? suggestion.zh : suggestion.name;
+  const value = sysconfig.Locale === 'zh' ? suggestion.zh : suggestion.name;
   return value.replace('/', ', ');
 };
 
 // Use your imagination to render suggestions.
 const renderSuggestion = (suggestion) => {
-  const cn = sysconfig.Language === 'cn';
+  const cn = sysconfig.Locale === 'zh';
   return (
     <div>
       {suggestion.type === 'parent' && <span className="label">上位词: </span>}

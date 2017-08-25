@@ -135,9 +135,9 @@ class KnowledgeGraphSearchHelper extends React.PureComponent {
     const width = 452 - margin.left - margin.right;
     const height = 261 - margin.top - margin.bottom;
 
-    let lang = sysconfig.Language;
+    let lang = sysconfig.Locale;
     if (this.props.lang) {
-      lang = this.props.lang === 'cn' ? 'cn' : 'en';
+      lang = this.props.lang === 'zh' ? 'zh' : 'en';
     }
 
     this.showZone();
@@ -246,7 +246,7 @@ class KnowledgeGraphSearchHelper extends React.PureComponent {
           return '';
         })
         .html((d) => {
-          const name = lang === 'cn' ? (d.data.zh || d.data.name) : d.data.name;
+          const name = lang === 'zh' ? (d.data.zh || d.data.name) : d.data.name;
           return `<a class="nodeLink" href="/${sysconfig.SearchPagePrefix}/${name}/0/${sysconfig.MainListSize}">${name}</a>`;
         })
         .attr('writing-mode', (d) => {

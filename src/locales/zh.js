@@ -4,6 +4,9 @@ export default {
   // Layout::Header
   'header.label.help': '帮助文档',
   'header.exit_login': '退出登录',
+  'system.lang.show': '语言',
+  'system.lang.option_en': 'English',
+  'system.lang.option_zh': '简体中文',
 
   // Index
   'index.title': '专家搜索',

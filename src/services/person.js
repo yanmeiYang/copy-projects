@@ -93,7 +93,7 @@ function keyToLowerCase(data) {
 
 export function returnKeyByLanguage(interestsData, key) {
   const tag = { en: key, zh: '' };
-  if (interestsData && sysconfig.PreferredLanguage === 'cn') {
+  if (interestsData && sysconfig.Locale === 'zh') {
     tag.zh = interestsData[key.toLowerCase()] ? interestsData[key.toLowerCase()] : '';
     return tag;
   } else {
@@ -103,7 +103,7 @@ export function returnKeyByLanguage(interestsData, key) {
 
 export function returnGender(value) {
   let gender = value;
-  if (sysconfig.PreferredLanguage === 'cn') {
+  if (sysconfig.Locale === 'zh') {
     gender = value.toLowerCase() === 'male' ? '男' : '女';
   }
   return gender;

@@ -65,6 +65,7 @@ const defaultSystemConfigs = {
   ShowFooter: true,
   ShowHelpDoc: false, // 显示帮助文档
   Header_UserName: false, // 显示登录用户名
+
   //
   // Functionality
   //

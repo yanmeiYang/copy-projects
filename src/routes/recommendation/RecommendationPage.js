@@ -3,14 +3,22 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { routerRedux, Link } from 'dva/router';
+import { routerRedux } from 'dva/router';
 import { FormattedMessage as FM } from 'react-intl';
+import { gql, graphql } from 'react-apollo';
 import { sysconfig } from '../../systems';
 import styles from './RecommendationPage.less';
 import { Auth } from '../../hoc';
 import { RCDOrgList } from '../../components/recommendation';
 
+const gqlAllOrgs = gql`
+  query ExpertMapPage{
+    random
+  }
+`;
+
 @connect(({ app, recommendation }) => ({ app, recommendation }))
+@graphql(gqlAllOrgs)
 @Auth
 export default class ExpertMapPage extends React.Component {
   constructor(props) {
@@ -44,6 +52,7 @@ export default class ExpertMapPage extends React.Component {
   //   this.dispatch({ type: 'app/layout', payload: { showFooter: true } });
   // }
   //
+
   onSearch = (data) => {
     if (data.query) {
       return;
@@ -53,7 +62,6 @@ export default class ExpertMapPage extends React.Component {
     dispatch(routerRedux.push({ pathname: '/rcd', query: { query: data.query } }));
     dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: data.query } });
   };
-
 
   loadOrgs = () => {
     const { dispatch } = this.props;
@@ -65,7 +73,8 @@ export default class ExpertMapPage extends React.Component {
 
   render() {
     const rcd = this.props.recommendation;
-    console.log('>> ', rcd.orgs);
+    // console.log('>> ', rcd.orgs);
+    console.log('================', this.props.data);
     return (
       <div className={styles.content}>
 

@@ -27,7 +27,13 @@
         h2.title a { color: @text-color; }
       }
       .desc { text-align: center; height: 5em; }
-      .info { text-align: center; }
+      .info {
+        display: flex; flex-direction: row; justify-content: space-around;
+        text-align: center;
+        font-size: @font-size-sm;
+        .user { }
+        .time { }
+      }
     }
     .org:hover { background-color: @background-color-gray }
   }

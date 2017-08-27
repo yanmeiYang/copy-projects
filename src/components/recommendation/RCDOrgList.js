@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { Link } from 'dva/router';
-import { Tag, Tooltip } from 'antd';
+import { Tag, Tooltip, Icon } from 'antd';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 
 import { Indices } from '../../components/widgets';
@@ -50,7 +50,12 @@ export default class RCDOrgList extends React.PureComponent {
                   </div>
                   <div className={styles.desc}>{clamp(org.desc, 50)}</div>
                   <div className={styles.info}>
-                    <FD value={org.create_time} />
+                    <div className={styles.user}>
+                      <Icon type="user" />{org.creatorName}
+                    </div>
+                    <div className={styles.time}>
+                      <FD value={org.createTime} />
+                    </div>
                   </div>
 
                   {/*

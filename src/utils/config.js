@@ -6,18 +6,23 @@ const param = (key, type, description) => {
 };
 
 module.exports = {
+  // URLs
+  basePageURL: 'https://aminer.org',
   baseURL: 'https://api.aminer.org/api',
   // baseURL: 'https://166.111.7.105/api',
+  graphqlAPI: 'http://localhost:4005/gql',
+  // graphqlAPI: 'http://localhost:4000/gql/',
 
-  name: '专家搜索',
-  prefix: 'aminer',
-  // footerText: 'AMiner © 2017 AMiner', // not used now.
-  // logo: '/logo.png',
+  openPages: ['/login'],
+
+  name: '专家搜索', // TODO Don't use this.
+  prefix: 'aminer', // ???
   iconFontCSS: '/iconfont.css',
   iconFontJS: '/iconfont.js',
-  basePageURL: 'https://aminer.org',
-  openPages: ['/login'],
-  apiPrefix: '/api/',
+  // apiPrefix: '/api/',
+
+
+  // AMiner restful API.
   api: {
     // user system
     currentUser: '/user/me',

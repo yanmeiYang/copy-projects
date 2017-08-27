@@ -10,6 +10,7 @@ import { browserHistory } from 'dva/router';
 import createLoading from 'dva-loading';
 import { ApolloClient, createNetworkInterface, ApolloProvider } from 'react-apollo';
 import { sysconfig } from './systems';
+import { config } from './utils';
 import { ReduxLoggerEnabled } from './utils/debug';
 
 // const log = ::console.log;
@@ -51,7 +52,7 @@ addLocaleData(require('react-intl/locale-data/' + sysconfig.Locale));
 // Graphql
 const client = new ApolloClient({
   networkInterface: createNetworkInterface({
-    uri: 'http://0.0.0.0:4000/graphql/',
+    uri: config.graphqlAPI,
   }),
 });
 

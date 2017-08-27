@@ -12,8 +12,16 @@ import { Auth } from '../../hoc';
 import { RCDOrgList } from '../../components/recommendation';
 
 const gqlAllOrgs = gql`
-  query ExpertMapPage{
-    random
+  query ExpertMapPage {
+    rcdorgs {
+      id
+      name
+      desc
+      creatorID
+      creatorName
+      createTime
+      updateTime
+    }
   }
 `;
 
@@ -64,25 +72,30 @@ export default class ExpertMapPage extends React.Component {
   };
 
   loadOrgs = () => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'recommendation/getAllOrgs',
-      payload: { offset: 0, size: sysconfig.MainListSize },
-    });
+    // const { dispatch } = this.props;
+    // dispatch({
+    //   type: 'recommendation/getAllOrgs',
+    //   payload: { offset: 0, size: sysconfig.MainListSize },
+    // });
   };
 
   render() {
-    const rcd = this.props.recommendation;
-    // console.log('>> ', rcd.orgs);
-    console.log('================', this.props.data);
+    // const rcd = this.props.recommendation;
+    const { data } = this.props;
+    // console.log('>> ', data);
+    console.log('>> ', data.rcdorgs);
     return (
       <div className={styles.content}>
 
         <FM id="rcd.home.pageTitle" defaultMessage="Organization List"
             values={{ name: 'This is a test' }} />
 
-        {rcd.orgs &&
-        <RCDOrgList orgs={rcd.orgs} />
+        {data.loading &&
+        <div>Loading...</div>
+        }
+
+        {!data.loading &&
+        <RCDOrgList orgs={data.rcdorgs} />
         }
 
       </div>

@@ -81,7 +81,7 @@ const fullRouter = (app, defaultChildRoutes) => {
 
       // 2b profile
       core.TobProfile(app),
-
+      core.Addition(app),
       // Your pages should be registered here.
 
       ...childRoutes,

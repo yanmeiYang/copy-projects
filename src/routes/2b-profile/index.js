@@ -34,8 +34,6 @@ class TobProfile extends React.Component {
   };
   addProfile = () => {
     this.props.dispatch(routerRedux.push({ pathname: '/addition' }));
-    this.props.extraData = '';
-    console.log('哈哈哈哈', this.props.extraData);
   };
   editProfile = (record) => {
     this.props.dispatch(routerRedux.push({ pathname: '/addition', query: { id: record.id } }));

@@ -96,7 +96,6 @@ class Addition extends React.Component {
     const { extraData } = this.props.tobProfile;
     const profile = extraData && extraData.length > 0 && extraData[0];
     const name = (profile && profile.name) || '';
-    // const name = (profile && profile.name) || '';
     const nameZh = (profile && profile.name_zh) || '';
     const sid = (profile && profile.sid) || '';
     const gender = (profile && profile.gender) + '' || '';

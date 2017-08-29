@@ -15,15 +15,17 @@ export default {
     },
   }),
 
-  // ExpertMapGoogle: app => ({
-  //   path: 'expert-googlemap',
-  //   getComponent(nextState, cb) {
-  //     require.ensure([], (require) => {
-  //       registerModel(app, require('../../models/expert-map'));
-  //       cb(null, require('../expert-map/expert-googlemap'));
-  //     }, 'map-google');
-  //   },
-  // }),
+  ProjectPage: app => ({
+    path: 'rcd/projects/:id',
+    getComponent(nextState, cb) {
+      require.ensure([], (require) => {
+        registerModel(app, require('../../models/recommendation/recommendation'));
+        cb(null, require('./projects/ProjectPage'));
+      }, 'recommendation');
+    },
+  }),
+
+
   //
   // ExpertTrajectoryPage: app => ({
   //   path: 'expert-trajectory',

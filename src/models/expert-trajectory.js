@@ -18,6 +18,7 @@ export default {
     // for rightInfoZone,
     infoZoneIds: '', // ids as string slitted by ',';
     clusterPersons: [],
+    loading: false, // TODO remove loading, use global loading compoennt.
   },
 
   subscriptions: {},
@@ -48,6 +49,7 @@ export default {
     },
 
     * listPersonByIds({ payload }, { call, put }) {  // eslint-disable-line
+      yield put({ type: 'showLoading' });
       const { ids } = payload;
       let data = cache[ids];
       if (!data) {
@@ -60,6 +62,10 @@ export default {
   },
 
   reducers: {
+    setRightInfo(state, { payload: { rightInfoType } }) {
+      return { ...state, infoZoneIds: rightInfoType };
+    },
+
     searchPersonSuccess(state, { payload: { data, query } }) { // state?
       const { result, total } = data;
       console.log('result', result);
@@ -82,7 +88,21 @@ export default {
     },
 
     listPersonByIdsSuccess(state, { payload: { data } }) {
-      return { ...state, clusterPersons: data.data.persons };
+      return { ...state, clusterPersons: data.data.persons, loading: false, };
     },
+
+    showLoading(state) {
+      return {
+        ...state,
+        loading: true,
+      };
+    },
+    hideLoading(state) {
+      return {
+        ...state,
+        loading: false,
+      };
+    },
+
   },
 };

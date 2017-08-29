@@ -289,7 +289,7 @@ export default class KgSearchBox extends React.PureComponent {
   render() {
     const { value, suggestions } = this.state;
     const { intl } = this.props;
-    const { size, select, selectOptions, selectProps, style, btnText } = this.props;
+    const { size, className, style, btnText } = this.props;
 
     // Auto suggest will pass through all these props to the input.
     const inputProps = {
@@ -300,12 +300,10 @@ export default class KgSearchBox extends React.PureComponent {
 
     // Finally, render it!
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form className={className} onSubmit={this.handleSubmit}>
         <Input.Group
-          compact
-          size={size}
+          compact size={size} style={style}
           className={classnames(styles.search, 'kgsuggest')}
-          style={style}
         >
           <Autosuggest
             id="kgsuggest"

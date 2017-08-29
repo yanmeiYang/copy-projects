@@ -6,6 +6,7 @@ import { externalRequest } from '../utils/request';
 
 const { api } = config;
 const joint = '---';
+
 export async function getSeminar(offset, size, data) {
   return request(api.getSeminars.replace(':offset', offset).replace(':size', size), {
     method: 'GET',
@@ -111,13 +112,16 @@ export async function getTopMentionedTags(src, num) {
 }
 
 export function getValueByJoint(name) {
-  const str = name.split(joint);
-  if (str.length > 0) {
-    return str[str.length - 1];
-  } else {
-    return name;
+  if (name) {
+    const str = name.split(joint);
+    if (str.length > 0) {
+      return str[str.length - 1];
+    } else {
+      return name;
+    }
   }
 }
+
 export function contactByJoint(first, second) {
   return `${first}${joint}${second}`;
 }

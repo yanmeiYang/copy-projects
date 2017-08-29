@@ -34,7 +34,7 @@ class PersonListTiny extends React.PureComponent {
         {
           this.props.persons.map((person) => {
             const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
-            const pos = profileUtils.displayPositionFirst(person.pos);
+            const pos = profileUtils.displayPosition(person.pos);
             const aff = profileUtils.displayAff(person);
             const phone = '';// = person.contact && person.contact.phone;
             const email = '';// profileUtils.displayEmailSrc(person);

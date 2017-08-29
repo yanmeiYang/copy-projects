@@ -52,7 +52,6 @@ export default async function request(url, options) {
   }
   let newUrl = base + url;
 
-
   // process !post mode data.
   if (options &&
     !(options.method && options.method.toUpperCase() === 'POST')
@@ -64,8 +63,11 @@ export default async function request(url, options) {
 
   const headers = new Headers();
   if (options && (options.data || options.body)) {
-    headers.append('Accept', 'application/json');
-    headers.append('Content-Type', 'application/json');
+    // Fix a bug
+    if (options.method && options.method !== 'FETCH') {
+      headers.append('Accept', 'application/json');
+      headers.append('Content-Type', 'application/json');
+    }
   }
 
   const token = (options && options.token) || localStorage.getItem('token');

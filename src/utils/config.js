@@ -111,6 +111,17 @@ module.exports = {
 
     // Recommendation APIs
     getAllOrgs: '/reviewer/orgs/get/all/:offset/:size',
+    // getOrgById: '/reviewer/org/get/:id',
+
+    // getProjects: API_BASE+"reviewer/projects/get/:offset/:size"
+    // addProject: API_BASE+"reviewer/project/add"
+    // getProjectById: API_BASE+"reviewer/project/get/:id"
+
+    // getTaskById: API_BASE+"reviewer/task/get/:id"
+    // recommend: API_BASE+"reviewer/recommend"
+    // addExpertIDtoTask: API_BASE+"reviewer/addExpertIDtoTask"
+    // getExpertsOfTask: API_BASE+"reviewer/getExpertsOfTask"
+    //
     // listOrgs: API_BASE+"reviewer/orgs/get/:offset/:size"
     // addOrg: API_BASE+"reviewer/org/add"
     // getAllOrgs: API_BASE+"reviewer/orgs/get/all/:offset/:size"

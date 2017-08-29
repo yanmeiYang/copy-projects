@@ -64,7 +64,7 @@ const defaultSystemConfigs = {
   ShowSideMenu: true,
   ShowFooter: true,
   ShowHelpDoc: false, // 显示帮助文档
-  Header_UserName: false, // 显示登录用户名
+  Header_UserNameBlock: defaults.IN_APP_DEFAULT, // 显示登录用户名
 
   //
   // Functionality
@@ -101,7 +101,7 @@ const defaultSystemConfigs = {
   // > Search related
   SearchBarInHeader: true,
   HeaderSearch_TextNavi: defaults.IN_APP_DEFAULT, // use default settings in component.
-  SearchFilterExclude: 'Gender',
+  SearchFilterExclude: '', // 'Gender',
   UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // deprecated! Don't use this.
 
   // > IndexPage

@@ -102,7 +102,7 @@ class ExportPersonBtn extends React.Component {
           const basic = {
             name: profileUtils.displayNameCNFirst(person.name, person.name_zh),
             gender: person.attr.gender ? personService.returnGender(person.attr.gender) : ' ',
-            pos: profileUtils.displayPositionFirst(person.pos),
+            pos: profileUtils.displayPosition(person.pos),
             aff: profileUtils.displayAff(person),
             h_index: person.indices.h_index ? person.indices.h_index : ' ',
             activity: person.indices.activity ? getTwoDecimal(parseFloat(person.indices.activity), 2) : ' ',

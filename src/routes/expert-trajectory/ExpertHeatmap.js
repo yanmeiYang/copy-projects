@@ -22,12 +22,8 @@ let author2 = {};
 const location = heatData.locations;
 const table = heatData.table;
 const authors = heatData.authors;
-const ecConfig = echarts.config;
+const planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
 // const myChart2 = echarts.init(document.getElementById('world'));
-message.config({
-  top: 110,
-  duration: 2,
-});
 let play = false;
 let yearNow;
 class ExpertHeatmap extends React.Component {
@@ -58,6 +54,7 @@ class ExpertHeatmap extends React.Component {
   }
 
   onChange = (value) => { // 点击滑动条或数字框
+    console.log("onchange")
     this.setState({
       inputValue: value,
     });
@@ -145,28 +142,23 @@ class ExpertHeatmap extends React.Component {
     yearNow = this.playon;
     // console.log('playon', this.playon, yearNow);
     this.onChange(this.playon);
-    this.onButtoon(this.playon);
+    // this.onButtoon(this.playon);
     const mapinterval = setInterval(() => {
       if (play && this.playon < endYear) {
-        // console.log('play');
         this.playon += 1;
         yearNow = this.playon;
-        // this.setState({
-        //   inputValue: this.playon,
-        // });
         this.onChange(this.playon);
-        this.onButtoon(this.playon);
-        // yearNow = this.playon;
+        // this.onButtoon(this.playon);
       } else {
         if (this.playon >= endYear) {
+          console.log("daole")
           this.playon = startYear;
           play = false;
+          this.setState({ ifPlay: 'play-circle' });
         }
-
-        // ifPlay = 'play-circle';
         clearInterval(mapinterval);
       }
-    }, 4000);
+    }, 1200);
   }
 
 
@@ -177,9 +169,11 @@ class ExpertHeatmap extends React.Component {
     let geoCoordMap = {};
 
     geoCoordMap = this.doHeatGeoMap();
-
     const merge = {};
     const merge2 = {};
+    const nextYear = {};
+    author = {};
+    author2 = {};
     for (const temp of table) { // 计算当年该地点学者数
       if (temp[index] !== 0) {
         if (temp[index] in merge) {
@@ -188,6 +182,7 @@ class ExpertHeatmap extends React.Component {
           merge[temp[index]] = 1;
         }
       }
+      console.log('merge1', merge);
       /* if ((index + 1) <= temp.length && temp[index + 1] !== 0) { // 计算明年有今年没的地点人数
         if (temp[index + 1] in merge2) {
           merge2[temp[index + 1]] += 1;
@@ -206,21 +201,55 @@ class ExpertHeatmap extends React.Component {
           merge2[temp[index - 1]] = 1;
         }
       }
+
+
     }
 
-    // console.log('merge2', merge2);
+    console.log('merge2', merge2);
 
-    const piece = 19; // 每隔一年插入20个变化人数时间段
+    // for (const aid in _.range(table.length)) {
+    //   if (table[aid][index] !== 0) {
+    //     if (table[aid][index] in merge) {
+    //       merge[table[aid][index]] += 1;
+    //     } else {
+    //       merge[table[aid][index]] = 1;
+    //     }
+    //
+    //     if (table[aid][index] in author) {
+    //       author[table[aid][index]].push(authors[aid]);
+    //     } else {
+    //       author[table[aid][index]] = [];
+    //       author[table[aid][index]].push(authors[aid]);
+    //     }
+    //     // console.log('author', author);
+    //   }
+    //
+    //   if (index < (endYear - startYear)) {
+    //     if (table[aid][index + 1] !== 0) {
+    //       if (!(table[aid][index + 1] in nextYear)) {
+    //         nextYear[table[aid][index + 1]] = 1;
+    //       }
+    //     }
+    //
+    //     if (table[aid][index + 1] in author2) {
+    //       author2[table[aid][index + 1]].push(authors[aid]);
+    //     } else {
+    //       author2[table[aid][index + 1]] = [];
+    //       author2[table[aid][index + 1]].push(authors[aid]);
+    //     }
+    //     // console.log('author2', author2);
+    //   }
+    // }
+
+    const piece = 1; // 每隔一年插入20个变化人数时间段
     for (const key in merge) {
       let middle;
       if (key in merge2) {
-        // middle = (merge2[key] - merge[key]) / (piece + 1); // 插入渐变值
         middle = (merge[key] - merge2[key]) / (piece + 1); // 插入渐变值
       } else {
         middle = (merge[key] - 0) / (piece + 1);
       }
       const onenode = { name: key, value: [merge[key], middle] }; // 实际数据中乘20应删去
-      // console.log('middle', onenode.value);
       data.push(onenode);
     }
 
@@ -233,13 +262,11 @@ class ExpertHeatmap extends React.Component {
         data.push(onenode);
       }
     }
-    // console.log("onenode",data);
+    console.log("onenode",data);
 
     for (const j of _.range(piece + 2)) {
       setTimeout(() => { // 每隔0.2秒刷新一次，每隔4秒换一年
         option2.series = this.getHeatSeries(geoCoordMap, data, (piece + 1 - j), true);
-        // option2.series = this.getHeatSeries(geoCoordMap, data, j, true);
-        // console.log("piece=j",piece+1-j)
         this.myChart2.setOption(option2);
       }, j * 200);
     }
@@ -290,8 +317,8 @@ class ExpertHeatmap extends React.Component {
         roam: true,
         itemStyle: {
           normal: {
-            areaColor: '#6699CC',
-            borderColor: '#91a0ae',
+            areaColor: '#cccccc',
+            borderColor: '#c9c9c9',
           },
           emphasis: {
             areaColor: '#666666',
@@ -336,7 +363,9 @@ class ExpertHeatmap extends React.Component {
                         show: true,
                       },
                     },
-                    symbolSize: 5,
+                    tooltip:{
+                      show: false,
+                    },
                     itemStyle: {
                       normal: {
                         color: '#ff7636',
@@ -347,7 +376,7 @@ class ExpertHeatmap extends React.Component {
                       value: params.value,
                     }],
                     symbolSize(val) {
-                      return (val[2] / 10);
+                      return ((10 + val[2] / 4));
                     },
                   },
                 );
@@ -362,9 +391,9 @@ class ExpertHeatmap extends React.Component {
                   effect: {
                     show: true,
                     period: 6,
-                    trailLength: 0.1,
+                    trailLength: 0,
                     color: '#ff2f31',
-                    symbol: 'arrow',
+                    symbol: planePath,
                     symbolSize: 4,
                     animation: true,
                   },
@@ -411,6 +440,9 @@ class ExpertHeatmap extends React.Component {
                       show: true,
                     },
                   },
+                  tooltip:{
+                    show: false,
+                  },
                   symbolSize: 5,
                   itemStyle: {
                     normal: {
@@ -422,7 +454,7 @@ class ExpertHeatmap extends React.Component {
                     value: params.value,
                   }],
                   symbolSize(val) {
-                    return (val[2] / 10);
+                    return ((10 + val[2] / 4));
                   },
                 },
               );
@@ -431,16 +463,16 @@ class ExpertHeatmap extends React.Component {
               this.myChart2.setOption(option2);
               // console.log('begin', option2.series);
             } else if (params.componentSubType === 'lines') {
-              // console.log('hahahhahahahhahahah', params.data.coords);
+              console.log('hahahhahahahhahahah', params);
               option2.series.push({
                 type: 'lines',
                 zlevel: 2,
                 effect: {
                   show: true,
                   period: 6,
-                  trailLength: 0.1,
+                  trailLength: 0,
                   color: '#ff2f31',
-                  symbol: 'arrow',
+                  symbol: planePath,
                   symbolSize: 4,
                   animation: true,
                 },
@@ -500,12 +532,14 @@ class ExpertHeatmap extends React.Component {
   }
 
   getHeatSeries = (geoCoordMap, data, j, choose, year, nextYearData) => { // j是一年中第几个插值
-    // console.log('geoCoordMap', geoCoordMap);
-    // console.log('data', data);
+    console.log('nextYearData', nextYearData);
+    console.log('data', data);
     // console.log('jjjjj', j);
     const convertData = function (datas, counter) { // 画出热力图上的圈并标出地名
+      console.log("datasaaaaa",datas)
       const res = [];
       for (const i of _.range(datas.length)) {
+        console.log("heng")
         const geoCoord = geoCoordMap[datas[i].name];
         if (geoCoord) {
           if (choose !== false) {
@@ -514,14 +548,12 @@ class ExpertHeatmap extends React.Component {
             res.push({
               name: datas[i].name,
               value: geoCoord.concat(datas[i].value[0] - (datas[i].value[1] * counter)),
-              // value: geoCoord.concat(datas[i].value[0] + (datas[i].value[1] * counter)),
             });
           } else {
             // console.log('dddddd', geoCoord.concat(datas[i].value));
             res.push({
               name: datas[i].name,
               value: geoCoord.concat(datas[i].value),
-              // value:[2,3],
             });
           }
         }
@@ -567,7 +599,7 @@ class ExpertHeatmap extends React.Component {
         let flag = 0;
         for (const distance of arr) {
           // console.log("distawnce",distance)
-          if ( _.difference(distance, t.name).length === 0 && _.difference(t.name, distance).length === 0) {
+          if (_.difference(distance, t.name).length === 0 && _.difference(t.name, distance).length === 0) {
             // console.log("ddhahaaahidfosjifjdiojij")
             flag = 1;
           }
@@ -581,6 +613,17 @@ class ExpertHeatmap extends React.Component {
      // tGeoDt = this.unique(tGeoDt);
       // console.log('tgeodt', tGeoDt2);
       return tGeoDt2;
+    }
+
+    function getNum(value) {
+      let temp;
+      if (value > 1) {
+        temp = value;
+      } else {
+        temp = ' ';
+      }
+      console.log('temp', temp);
+      return temp;
     }
 
     const series = [
@@ -598,26 +641,47 @@ class ExpertHeatmap extends React.Component {
         label: {
           normal: {
             show: true,
-            position: 'right',
-            formatter: '{b}',
+            formatter: (params) => { console.log('ddd', params); return (getNum(params.value[2])); },
+            position: 'inside',
+            color: '#111',
+            textStyle: {
+              fontSize: 1,
+            },
           },
           emphasis: {
-            show: true,
+            show: false,
           },
         },
-        symbolSize: 5,
         itemStyle: {
           normal: {
             color: '#fff753',
             borderColor: 'gold',
             opacity: 1,
           },
+          emphasis:{
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+          }
+        },
+        tooltip: {
+          formatter: (params) => {
+            console.log('dfewfefef',params);
+            return '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">'
+              + params.seriesId
+              + '</div>'
+              + params.name + '：' + params.value[2] + '<br>';
+          },
         },
         data: convertData(data.sort((a, b) => {
           return b.value - a.value;
         }).slice(0, 6), j),
         symbolSize(val) {
-          return (val[2] / 10);
+          if (val[2] !== 1){
+            return (10 + val[2] / 4);
+          } else {
+            return ((10 + val[2] / 4)/2);
+          }
         },
       },
       { // 当年所有地点
@@ -626,13 +690,18 @@ class ExpertHeatmap extends React.Component {
         coordinateSystem: 'geo',
         data: convertData(data, j),
         symbolSize(val) {
-          return (val[2] / 10);
+          if (val[2] !== 1){
+            return (10 + val[2] / 4);
+          } else {
+            return ((10 + val[2] / 4)/2);
+          }
         },
         label: {
           normal: {
-            formatter: '{b}',
-            position: 'right',
-            show: true,
+            // formatter: '{b}',
+            // position: 'right',
+            // show: true,
+            show: false,
           },
           emphasis: {
             show: true,
@@ -641,7 +710,16 @@ class ExpertHeatmap extends React.Component {
         itemStyle: {
           normal: {
             color: '#FFBA00',
-            opacity: 0.4,
+            opacity: 1,
+          },
+        },
+        tooltip: {
+          formatter: (params) => {
+            console.log('dfewfefef',params);
+            return '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">'
+              + params.seriesId
+              + '</div>'
+              + params.name + '：' + params.value[2] + '<br>';
           },
         },
       },
@@ -651,15 +729,13 @@ class ExpertHeatmap extends React.Component {
         type: 'scatter',
         coordinateSystem: 'geo',
         data: convertData(nextYearData, j),
-        symbolSize: 7,
+        symbolSize: 2,
         label: {
           normal: {
-            formatter: '{b}',
-            position: 'right',
-            show: true,
-          },
-          emphasis: {
-            show: true,
+            // formatter: '{b}',
+            // position: 'right',
+            // show: true,
+            show: false,
           },
         },
         itemStyle: {
@@ -672,22 +748,33 @@ class ExpertHeatmap extends React.Component {
 
       {
         type: 'lines',
+        animationDuration: 700,
         zlevel: 1,
         effect: {
           show: true,
           period: 6,
-          trailLength: 0.1,
-          color: '#f78e3d',
-          symbol: 'arrow',
-          symbolSize: 4,
+          trailLength: 0,
+          // color: '#f78e3d',
+          symbol: planePath,
+          symbolSize: 13,
           animation: true,
         },
         lineStyle: {
           normal: {
             color: '#f78e3d',
             width: 1,
-            opacity: 0.3,
+            opacity: 0.6,
             curveness: 0.2,
+          },
+          emphasis: {
+            color: '#fff635',
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+            shadowBlur: 10,
+          },
+        },
+        tooltip: {
+          formatter: (params) => {
+            return "Number of people: " + (_.intersection(author[params.name[0]], author2[params.name[1]])).length;
           },
         },
         data: formtGCData(),

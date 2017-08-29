@@ -1,5 +1,32 @@
 .action{
-  margin-top: 50px;
-  display: flex;
+  margin-top: 20px;
+  //display: flex;
   justify-content: space-between;
+  display: inline-block;
+  float:right;
+  width:auto;
 }
+.title{
+   :global{
+    .ant-modal-header {
+      padding: 13px 16px 10px;
+    }
+  }
+}
+.label{
+  display: inline-block;
+  width:88px;
+  height: 28px;
+  line-height: 28px;
+  text-align: right;
+  margin-right:5px;
+}
+.addAssistMenu{
+  :global{
+    .ant-cascader-menu{
+      min-width: 200px;
+      height: 300px;
+    }
+  }
+}
+

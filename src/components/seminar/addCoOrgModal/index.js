@@ -91,6 +91,7 @@ class AddCoOrgModal extends React.Component {
 
         <Button onClick={this.showAddCoOrgModal} size="small">添加</Button>
         <Modal
+          className={styles.title}
           title="添加协办单位"
           visible={modalVisible}
           width={640}
@@ -100,32 +101,23 @@ class AddCoOrgModal extends React.Component {
           onCancel={this.setModalVisible.bind()}
         >
           <div>
-            {!manual &&
             <Row style={{ maxHeight: '555vh' }}>
-              <Col span={4}>
-                选择协办单位
+              <Col span={4} className={styles.label}>
+                选择协办单位:
               </Col>
               <Col span={20}>
                 <Cascader options={orgList} onChange={this.onOrgChange} ref="cascader"
-                          showSearch placeholder="请选择承办单位" style={{ width: '100%' }} />
+                          showSearch placeholder="请键入搜索协办单位" popupClassName={styles.addAssistMenu}
+                          style={{ width: '100%' }}/>
               </Col>
+            </Row>
+            <Row style={{ marginTop: '10px' }}>
+              <Col span={4} className={styles.label}>手动填写:</Col>
+              <Col span={20}> <Input onBlur={this.addOrg} ref="manualValue"/></Col>
               <Col span={24} className={styles.action}>
-                <Button type="primary" onClick={this.jumpToManual}>未找到，手动填写</Button>
                 <Button type="primary" onClick={this.handleOk}>提交</Button>
               </Col>
             </Row>
-            }
-            {manual &&
-            <Row style={{ marginTop: '10px' }}>
-              <Col span={4}>手动填写</Col>
-              <Col span={20}>
-                <Input onBlur={this.addOrg} ref="manualValue" />
-              </Col>
-              <Col span={24} className={styles.action}>
-                <Button type="primary" onClick={this.jumpToManual}>返回</Button>
-                <Button type="primary" onClick={this.handleOk}>提交</Button>
-              </Col>
-            </Row>}
           </div>
         </Modal>
       </div>

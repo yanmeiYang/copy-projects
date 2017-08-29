@@ -11,7 +11,7 @@
   max-width: @max-width-page;
 
   .person {
-    display: flex; flex-direction: row; justify-content: flex-start;
+    display: flex; flex-direction: row; justify-content: flex-start; flex: 1;
     border: solid 1px @default-border-color;
     box-shadow: 0 2px 6px rgba(200, 200, 200, 0.4); border-radius: 2px;
     margin-bottom: 16px;
@@ -27,7 +27,7 @@
     }
 
     .info_zone {
-      //display: flex; flex-direction: column; flex: 1 auto;
+      display: flex; flex-direction: column; flex: 1;
       margin-left: 10px;
       font-size: 13px; color: #333;
 
@@ -61,6 +61,8 @@
         .contact_zone {
           display: flex; flex-direction: column;
           flex: 2 0px;
+
+          .views { color: #3e3e3e }
         }
         .tag_zone {
           flex: 1 150px;
@@ -80,6 +82,17 @@
 
           //.ant-tag:hover { text-decoration: underline;}
         }
+
+        &.interestColumn {
+          flex-direction: column;
+          .contact_zone { flex: auto; }
+          .tag_zone {
+            flex: auto; border-left: none; padding-left: 0; margin-left: 0;
+            h4 { display: none }
+            &div { border: solid 1px red; }
+          }
+        }
+
       }
 
     }

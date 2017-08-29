@@ -56,6 +56,7 @@ const fullRouter = (app, defaultChildRoutes) => {
 
       // Recommendation/rcd
       core.RecommendationHome(app),
+      core.ProjectPage(app),
 
       // Activity / Seminar
       core.Seminar(app),
@@ -81,7 +82,7 @@ const fullRouter = (app, defaultChildRoutes) => {
 
       // 2b profile
       core.TobProfile(app),
-
+      core.Addition(app),
       // Your pages should be registered here.
 
       ...childRoutes,

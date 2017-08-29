@@ -45,6 +45,9 @@ module.exports = {
   // > Search related
   SearchBarInHeader: false,
 
+  // > Admin Users
+  Admin_Users_ShowAdmin: false,
+
   // Functionality
   Enable_Export: true,
 

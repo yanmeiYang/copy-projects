@@ -486,7 +486,7 @@ class ExpertMap extends React.PureComponent {
     if (person) {
       const url = profileUtils.getAvatar(person.avatar, person.id, 90);
       const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
-      const pos = profileUtils.displayPositionFirst(person.pos);
+      const pos = profileUtils.displayPosition(person.pos);
       const aff = profileUtils.displayAff(person);
       const hindex = person && person.indices && person.indices.h_index;
 

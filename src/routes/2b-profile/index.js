@@ -2,13 +2,13 @@
  * Created by yangyanmei on 17/8/21.
  */
 import React from 'react';
-import { connect } from 'dva';
-import { Table, Modal, Button, Input } from 'antd';
-import { routerRedux } from 'dva/router';
+import {connect} from 'dva';
+import {Table, Modal, Button, Input} from 'antd';
+import {routerRedux} from 'dva/router';
 import styles from './index.less';
 
 const Search = Input.Search;
-const { Column } = Table;
+const {Column} = Table;
 
 class TobProfile extends React.Component {
   state = {
@@ -17,15 +17,15 @@ class TobProfile extends React.Component {
 
   onDeleteItem = (record) => {
     const key = record.id;
-    const src = 'ccf';
     const props = this.props;
     Modal.confirm({
       title: '删除',
       content: '确定删除吗？',
       onOk() {
         props.dispatch({
-          type: 'tobProfile/deleteItemById',
-          payload: { src, key },
+          type: 'tobProfile/deleteProfileById',
+          payload: { key },
+          // payload: { src: '', key },
         });
       },
       onCancel() {
@@ -33,10 +33,10 @@ class TobProfile extends React.Component {
     });
   };
   addProfile = () => {
-    this.props.dispatch(routerRedux.push({ pathname: '/addition' }));
+    this.props.dispatch(routerRedux.push({pathname: '/addition'}));
   };
   editProfile = (record) => {
-    this.props.dispatch(routerRedux.push({ pathname: '/addition', query: { id: record.id } }));
+    this.props.dispatch(routerRedux.push({pathname: '/addition', query: {id: record.id}}));
   };
   handleOk = () => {
     this.props.dispatch({
@@ -53,8 +53,9 @@ class TobProfile extends React.Component {
   searchByName = (values) => {
     if (values) {
       this.props.dispatch({
-        type: 'tobProfile/searchItemByName',
-        payload: { src: 'ccf', name: values },
+        type: 'tobProfile/search',
+        payload: { name: values },
+        // payload: { src: '', name: values },
       });
     } else {
       this.props.dispatch(routerRedux.push({
@@ -64,13 +65,13 @@ class TobProfile extends React.Component {
   };
 
   render() {
-    const { results } = this.props.tobProfile;
-    const localeText = { emptyText: '数据正在加载' };
+    const {results} = this.props.tobProfile;
+    const localeText = {emptyText: '数据正在加载'};
     const values = '';
     return (
       <div>
         <Button icon="plus" className={styles.buttonArea} onClick={this.addProfile}>Add</Button>
-        <Search placeholder="input name" className={styles.searchArea} onSearch={this.searchByName.bind(values)} />
+        <Search placeholder="input name" className={styles.searchArea} onSearch={this.searchByName.bind(values)}/>
         <Table dataSource={results.data} locale={localeText} className={styles.tableArea}>
           <Column title="Name"
                   dataIndex="name"
@@ -113,5 +114,5 @@ class TobProfile extends React.Component {
   }
 }
 
-export default connect(({ tobProfile }) => ({ tobProfile }))(TobProfile);
+export default connect(({tobProfile}) => ({tobProfile}))(TobProfile);
 

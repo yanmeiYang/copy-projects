@@ -2,23 +2,23 @@
  * Created by yangyanmei on 17/8/21.
  */
 import { request, config } from '../utils';
+import { sysconfig } from '../systems';
 
 const { api } = config;
 
-export async function getExpertInfo(src, offset, size) {
+export async function getProfileSuccess(offset, size) {
   return request(api.getExpertInfo
-      .replace(':src', src)
+      .replace(':src', sysconfig.SOURCE)
       .replace(':offset', offset)
       .replace(':size', size),
     {
       method: 'GET',
     });
-
 }
-export async function searchEveryInfo(payload) {
-  const { src, name } = payload;
+export async function searchSuccess(payload) {
+  const { name } = payload;
   return request(api.searchItemByName
-      .replace(':src', src)
+      .replace(':src', sysconfig.SOURCE)
       .replace(':offset', '0')
       .replace(':size', '10'),
     {
@@ -28,19 +28,19 @@ export async function searchEveryInfo(payload) {
       },
     });
 }
-export async function getEveryInfo(payload) {
-  const { src, key } = payload;
+export async function getProfileByIdSuccess(payload) {
+  const { key } = payload;
   return request(api.editItemByKey
-      .replace(':src', src)
+      .replace(':src', sysconfig.SOURCE)
       .replace(':id', key),
     {
       method: 'GET',
     });
 }
 
-export async function updateByKey(src, key, data) {
+export async function updateProfileSuccess(key, data) {
   return request(api.updateItemById
-      .replace(':src', src)
+      .replace(':src', sysconfig.SOURCE)
       .replace(':id', key),
     {
       method: 'PATCH',
@@ -55,19 +55,19 @@ export async function updateByKey(src, key, data) {
     });
 }
 
-export async function deleteByKey(src, key) {
+export async function deleteByKey(key) {
   return request(api.deleteItemByKey
-      .replace(':src', src)
+      .replace(':src', sysconfig.SOURCE)
       .replace(':id', key)
     , {
       method: 'DELETE',
     });
 }
 
-export async function addExpertInfo(src, newData) {
+export async function addProfileSuccess(newData) {
   const { name, name_zh, gender, aff, email } = newData;
   return request(api.addExpertInfoApi
-      .replace(':src', src)
+      .replace(':src', sysconfig.SOURCE)
     , {
       method: 'POST',
       body: JSON.stringify({

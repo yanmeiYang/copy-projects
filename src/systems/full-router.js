@@ -78,7 +78,7 @@ const fullRouter = (app, defaultChildRoutes) => {
       core.KnowledgeGraph(app),
       core.TrendPredictionPage(app),
       core.RanksHelp(app),
-      
+
       // 2b profile
       core.TobProfile(app),
       core.Addition(app),

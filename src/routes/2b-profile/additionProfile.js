@@ -20,10 +20,9 @@ class Addition extends React.Component {
     const queryItem = this.props.location.query.id;
     if (queryItem) {
       this.setState({ query: queryItem });
-      const src = 'ccf';
       this.dispatch({
-        type: 'tobProfile/getItemById',
-        payload: { src, key: queryItem },
+        type: 'tobProfile/getProfileById',
+        payload: { key: queryItem },
       });
     }
   }
@@ -38,7 +37,6 @@ class Addition extends React.Component {
   };
   addition = (e) => {
     e.preventDefault();
-    const src = 'ccf';
     const that = this;
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (err) {
@@ -51,11 +49,11 @@ class Addition extends React.Component {
         }
       }
       if (!err) {
-        console.log('更新者的信息:', values);
         if (this.state.query) {
           that.props.dispatch({
-            type: 'tobProfile/updateInfo',
-            payload: { src, key: this.state.query, data: values },
+            type: 'tobProfile/updateProfile',
+            payload: { key: this.state.query, data: values },
+            // payload: { src: '', key: this.state.query, data: values },
           });
           Modal.success({
             title: '添加信息',
@@ -68,7 +66,7 @@ class Addition extends React.Component {
           });
         } else {
           that.props.dispatch({
-            type: 'tobProfile/addInfo',
+            type: 'tobProfile/addProfile',
             payload: values,
           });
           Modal.success({

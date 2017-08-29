@@ -163,7 +163,6 @@ module.exports = {
     // userInfo: '/userInfo',
     // users: '/users',
     // dashboard: '/dashboard',
-    
     // expert info
     getExpertInfo: '/2b/profile/:src/offset/:offset/size/:size',
     deleteItemByKey: '/2b/profile/:src/:id',

@@ -8,10 +8,7 @@ export default {
 
   state: {
     results: [],
-    flag: 0,
-    extraData: [],
-    item: [],
-    profile: '',
+    extraData: '',
   },
 
   subscriptions: {
@@ -19,8 +16,9 @@ export default {
       history.listen((location) => {
         if (location.pathname === '/tobprofile') {
           dispatch({
-            type: 'getExpert',
-            payload: { src: 'ccf', offset: 0, size: 20 },
+            type: 'getProfile',
+            payload: { offset: 0, size: 20 },
+            // payload: { src: '', offset: 0, size: 20 },
           });
         }
       });
@@ -28,75 +26,78 @@ export default {
   },
 
   effects: {
-    * getExpert({ payload }, { call, put }) {
-      const { src, offset, size } = payload;
-      const { data } = yield call(tobProfileService.getExpertInfo, src, offset, size);
-      yield put({ type: 'getExpertList', payload: { data } });
+    * getProfile({ payload }, { call, put }) {
+      const { offset, size } = payload;
+      console.log('haha',payload);
+      // const { src, offset, size } = payload;
+      const { data } = yield call(tobProfileService.getProfileSuccess, offset, size);
+      // const { data } = yield call(tobProfileService.getProfileSuccess, src, offset, size);
+      yield put({ type: 'getProfileSuccess', payload: { data } });
     },
-    *getItemById({ payload }, { call, put }) {
-      const { data } = yield call(tobProfileService.getEveryInfo, payload);
+    * getProfileById({ payload }, { call, put }) {
+      const { data } = yield call(tobProfileService.getProfileByIdSuccess, payload);
       yield put({
-        type: 'getItem', payload: { data: data.data },
+        type: 'getProfilesById', payload: { data: data.data },
       })
       ;
     },
-    * searchItemByName({ payload }, { call, put }) {
-      console.log('searchItemByName', payload);
-      const { data } = yield call(tobProfileService.searchEveryInfo, payload);
+    * search({ payload }, { call, put }) {
+      const { data } = yield call(tobProfileService.searchSuccess, payload);
       yield put({
-        type: 'searchInfo', payload: { data: data.data },
+        type: 'searchProfile', payload: { data: data.data },
       })
       ;
     },
-    * deleteItemById({ payload }, { call, put }) {
-      const { src, key } = payload;
-      const { data } = yield call(tobProfileService.deleteByKey, src, key);
+    * deleteProfileById({ payload }, { call, put }) {
+      const { key } = payload;
+      // const { src, key } = payload;
+      const { data } = yield call(tobProfileService.deleteByKey, key);
+      // const { data } = yield call(tobProfileService.deleteByKey,src, key);
       if (data.status) {
-        yield put({ type: 'deleteItem', payload });
+        yield put({ type: 'deleteProfile', payload });
       } else {
         console.log('数据操作失败！');
       }
     },
 
-    * addInfo({ payload }, { call, put }) {
-      const src = 'ccf';
+    * addProfile({ payload }, { call, put }) {
       const newData = payload;
        newData.email = payload.email.split(';');
-      const { data } = yield call(tobProfileService.addExpertInfo, src, newData);
+      const { data } = yield call(tobProfileService.addProfileSuccess, newData);
+      // const { data } = yield call(tobProfileService.addProfileSuccess, src, newData);
       if (data.status) {
-        const addedGetData = yield call(tobProfileService.getExpertInfo, src, 0, 10);
-        yield put({ type: 'getExpertList', payload: { data: addedGetData.data } });
+        const addedGetData = yield call(tobProfileService.addProfileSuccess, 0, 10);
+        // const addedGetData = yield call(tobProfileService.addProfileSuccess, src, 0, 10);
+        yield put({ type: 'getProfile', payload: { data: addedGetData.data } });
       }
-      console.log(data);
       yield put({ type: 'addition', payload: { data } });
     },
-    * updateInfo({ payload }, { call, put }) {
-      const { src, key } = payload;
+    * updateProfile({ payload }, { call, put }) {
+      const { key } = payload;
+      // const { src,key } = payload;
       const updata = payload.data;
       updata.gender = parseInt(payload.data.gender);
-      // updata.email = payload.data.email.join('.');
-      const updateData = yield call(tobProfileService.updateByKey, src, key, updata);
-      console.log('这里这里这里',updateData);
-      yield put({ type: 'updateItem', payload: { updateData } });
+      const updateData = yield call(tobProfileService.updateProfileSuccess, key, updata);
+      // const updateData = yield call(tobProfileService.updateProfileSuccess,src, key, updata);
+      yield put({ type: 'updateProfiles', payload: { updateData } });
     },
   },
   reducers: {
-    updateItem(state, { payload: { updateData } }) {
+    updateProfiles(state, { payload: { updateData } }) {
       return { ...state, loading: true };
     },
-    getExpertList(state, { payload: { data } }) {
-      console.log('整个数据:', data);
+    getProfileSuccess(state, { payload: { data } }) {
       return { ...state, results: data, loading: true };
     },
-    getItem(state, { payload: { data } }) {
+    getProfilesById(state, { payload: { data } }) {
       return { ...state, extraData: data, loading: true };
     },
-    searchInfo(state, { payload: { data } }) {
+    searchProfile(state, { payload: { data } }) {
       const searchState = { ...state };
       searchState.results.data = data;
       return searchState;
     },
-    deleteItem(state, { payload }) {
+    deleteProfile(state, { payload }) {
       const data = state.results.data.filter(item => item.id !== payload.key);
       const newState = { ...state };
       newState.results.data = data;

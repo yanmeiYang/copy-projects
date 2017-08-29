@@ -10,6 +10,9 @@ export default {
 
   // Index
   'index.title': '专家搜索',
+  'search.translateSearchMessage.1': 'We also search "{enQuery}" for you.',
+  'search.translateSearchMessage.2': 'Search "{cnQuery}" only.',
+  'search.translateSearchMessage.reverse': 'You can also search with both "{enQuery}" and "{cnQuery}".',
 
   // Components
   'com.KgSearchBox.placeholder': '请输入姓名或者搜索词',

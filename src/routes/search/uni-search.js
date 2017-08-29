@@ -1,19 +1,17 @@
 import React from 'react';
-import { routerRedux } from 'dva/router';
+import { routerRedux, Link } from 'dva/router';
 import { connect } from 'dva';
 import { isEqual } from 'lodash';
+import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import classnames from 'classnames';
 import { Tabs, Pagination } from 'antd';
 import styles from './uni-search.less';
-import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { PersonList } from '../../components/person';
 import { Spinner } from '../../components';
 import { sysconfig } from '../../systems';
 import { KnowledgeGraphSearchHelper } from '../knowledge-graph';
 import { SearchFilter, KgSearchBox } from '../../components/search';
 import ExportPersonBtn from '../../components/person/export-person';
-// import ExpertMap from '../expert-map/expert-map';
-// import RelationGraph from '../relation-graph/RelationGraph';
 import { Auth } from '../../hoc';
 
 // TODO Extract Search Filter into new Component.
@@ -159,6 +157,11 @@ export default class UniSearch extends React.PureComponent {
     this.doSearch(query, offset, pageSize, filters, sortKey, true);
   };
 
+  doTranslateSearch = (useTranslate) => {
+    this.dispatch({ type: 'search/setTranslateSearch', payload: { useTranslate } });
+    this.doSearchUseProps();
+  };
+
   doSearch = (query, offset, size, filters, sort, dontRefreshUrl) => {
     let filtersLength = 0;
     for (const item of Object.values(filters)) {
@@ -166,6 +169,7 @@ export default class UniSearch extends React.PureComponent {
         filtersLength = item.split('#')[1];
       }
     }
+    this.dispatch({ type: 'search/translateSearch', payload: { query } });
     this.dispatch({
       type: 'search/searchPerson',
       payload: { query, offset, size, filters, sort, total: parseInt(filtersLength) },
@@ -255,8 +259,9 @@ export default class UniSearch extends React.PureComponent {
      );
      */
 
-    DEBUGLog && console.log('DEV-ONLY:refresh pagesdf', load);
+    // DEBUGLog && console.log('DEV-ONLY:refresh pagesdf', load);
     const { headerSearchBox } = this.props.app;
+    const { useTranslateSearch, translatedQuery } = this.props.search;
     return (
       <div className={classnames('content-inner', styles.page)}>
 
@@ -274,6 +279,30 @@ export default class UniSearch extends React.PureComponent {
               </div>
             </div>
             }
+
+            {/* Translate Search */}
+            {useTranslateSearch && translatedQuery &&
+            <div className="message">
+              <FM defaultMessage="We also search '{enQuery}' for you."
+                  id="search.translateSearchMessage.1"
+                  values={{ enQuery: translatedQuery }}
+              />&nbsp;
+              <Link onClick={this.doTranslateSearch.bind(this, false)}>
+                <FM defaultMessage="Search '{cnQuery}' only."
+                    id="search.translateSearchMessage.2"
+                    values={{ cnQuery: query }} />
+              </Link>
+            </div>}
+
+            {!useTranslateSearch && translatedQuery &&
+            <div className="message">
+              <Link onClick={this.doTranslateSearch.bind(this, true)}>
+                <FM defaultMessage="You can also search with both '{enQuery}' and '{cnQuery}'."
+                    id="search.translateSearchMessage.reverse"
+                    values={{ enQuery: translatedQuery, cnQuery: query }}
+                />
+              </Link>
+            </div>}
 
             {/* Filter */}
             <SearchFilter

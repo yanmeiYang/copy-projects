@@ -58,6 +58,9 @@ module.exports = {
     // search suggest
     searchSuggest: '/search/suggest/gen/:query',
 
+    // misc services
+    translateTerm: '/abbreviation/mapping/:term',
+
     // export roster
     rosterExportSimple: '/roster/:id/export/s/offset/:offset/size/:size/:name',
 

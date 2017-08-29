@@ -56,7 +56,12 @@ class ExpertMap extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.callSearchMap(this.props.query);
+    const { query, dispatch } = this.props;
+    this.callSearchMap(query);
+    dispatch({
+      type: 'expertMap/setRightInfo',
+      payload: { idString: '', rightInfoType: 'global' },
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -80,7 +85,6 @@ class ExpertMap extends React.PureComponent {
     if (this.props.expertMap.infoZoneIds !== id) { // don't change
       if (id.indexOf(',') >= 0) { // is cluster
         const clusterIdList = id.split(',');
-        console.log("idlist",clusterIdList)
         this.props.dispatch({
           type: 'expertMap/listPersonByIds',
           payload: { ids: clusterIdList },
@@ -93,10 +97,12 @@ class ExpertMap extends React.PureComponent {
     }
   };
 
-  showTop = (usersIds, e, map, maindom, inputids) => {  ////////
+  showTop = (usersIds, e, map, maindom, inputids, onLeave) => {
     const ishere = getById('panel');
     if (ishere != null) {
-      return;
+      // return;
+      // changed to close panel;
+      this.detachCluster(ishere);
     }
 
     const pixel = map.pointToOverlayPixel(e.currentTarget.getPosition());// 中心点的位置
@@ -146,13 +152,10 @@ class ExpertMap extends React.PureComponent {
     if (thisNode != null) { // 准备绑定事件
       const pthisNode = thisNode.parentNode;
       pthisNode.addEventListener('mouseleave', (event) => {
-        if (thisNode != null && thisNode.parentNode != null) {
-          const imgdivs = document.getElementsByName('scholarimg');
-          for (let i = 0; i < imgdivs.length;) {
-            imgdivs[i].parentNode.removeChild(imgdivs[i]);
-          }
-          thisNode.parentNode.removeChild(thisNode);
+        if (onLeave) {
+          onLeave();
         }
+        this.detachCluster(thisNode);
       });
     }
 
@@ -175,6 +178,16 @@ class ExpertMap extends React.PureComponent {
       });
     }
   };
+
+  detachCluster = (clusterPanel) => {
+    if (clusterPanel != null && clusterPanel.parentNode != null) {
+      const imgdivs = document.getElementsByName('scholarimg');
+      for (let i = 0; i < imgdivs.length;) {
+        imgdivs[i].parentNode.removeChild(imgdivs[i]);
+      }
+      clusterPanel.parentNode.removeChild(clusterPanel);
+    }
+  }
 
   listPersonDone = (map, ids, data) => {
     const imgwidth = 45;

@@ -5,6 +5,7 @@ import { isEqual } from 'lodash';
 import classnames from 'classnames';
 import { Tabs, Pagination } from 'antd';
 import styles from './uni-search.less';
+import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { PersonList } from '../../components/person';
 import { Spinner } from '../../components';
 import { sysconfig } from '../../systems';
@@ -19,14 +20,8 @@ import { Auth } from '../../hoc';
 // TODO Combine search and uniSearch into one.
 const TabPane = Tabs.TabPane;
 
-const defaultSearchSorts = [
-  { label: '综合排序', key: 'relevance' },
-  { label: 'H-index', key: 'h_index' },
-  { label: '学术活跃度', key: 'activity' },
-  { label: '领域新星', key: 'rising_star' },
-  { label: '引用数', key: 'citation' },
-  { label: '论文数', key: 'num_pubs' },
-];
+const defaultSearchSorts = ['relevance', 'h_index',
+  'activity', 'rising_star', 'citation', 'num_pubs'];
 
 /**
  * UniSearch Page
@@ -190,10 +185,12 @@ export default class UniSearch extends React.PureComponent {
   render() {
     const { results, pagination, query, aggs, filters } = this.props.search;
     const { pageSize, total, current } = pagination;
-    const load = this.props.loading.models.search;
-    const operations = <ExportPersonBtn query={query} pageSize={pageSize} current={current}
-                                        filters={filters}
-                                        sort={this.state.sortType} />;
+    const load = this.props.loading.effects['search/searchPerson'];
+    const operations = (
+      <ExportPersonBtn
+        query={query} pageSize={pageSize} current={current}
+        filters={filters} sort={this.state.sortType} />
+    );
 
     // Deprecated search result tab.
 
@@ -215,10 +212,15 @@ export default class UniSearch extends React.PureComponent {
           tabBarExtraContent={operations}
         >
           {this.searchSorts.map((sortItem) => {
-            const icon = sortItem.key === this.state.sortType ?
+            const icon = sortItem === this.state.sortType ?
               <i className="fa fa-sort-amount-desc" /> : '';
-            const tab = <span>{sortItem.label} {icon}</span>;
-            return <TabPane tab={tab} key={sortItem.key} />;
+            const tab = (
+              <span>
+                <FM id={`com.search.sort.label.${sortItem}`}
+                    defaultMessage={sortItem} /> {icon}
+              </span>
+            );
+            return <TabPane tab={tab} key={sortItem} />;
           })}
         </Tabs>
 
@@ -266,7 +268,7 @@ export default class UniSearch extends React.PureComponent {
             <div className={styles.top}>
               <div className={styles.searchWrap}>
                 <KgSearchBox
-                  size="large" style={{ width: 500 }} btnText="搜索"
+                  size="large" style={{ width: 500 }}
                   query={query} onSearch={this.onSearchBarSearch}
                 />
               </div>
@@ -275,8 +277,7 @@ export default class UniSearch extends React.PureComponent {
 
             {/* Filter */}
             <SearchFilter
-              filters={filters}
-              aggs={aggs}
+              filters={filters} aggs={aggs}
               onFilterChange={this.onFilterChange}
               onExpertBaseChange={this.onExpertBaseChange}
             />
@@ -319,7 +320,3 @@ export default class UniSearch extends React.PureComponent {
     );
   }
 }
-
-
-// export default connect(({ app, search, loading }) => ({ app, search, loading }))(UniSearch);
-// export default hoc(connect(({ app, search, loading }) => ({ app, search, loading }))(UniSearch));

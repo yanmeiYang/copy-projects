@@ -7,20 +7,10 @@ import Footer from '../../components/Footers/cie';
 
 
 module.exports = {
+  Locale: 'zh', // en_US, zh_CN, ...
 
   // 通用配置。所有System的配置文件必须全部包含这部分的值
   PageTitle: 'CIPSC 专家库',
-
-  Language: 'en', // options [cn|en]
-  PreferredLanguage: 'en', // 默认语言
-
-  Search_SortOptions: [
-    { label: '相关度', key: 'relevance' },
-    { label: '学术成就', key: 'h_index' },
-    { label: '学术活跃度', key: 'activity' },
-    { label: '领域新星', key: 'rising_star' },
-    { label: '学会贡献', key: 'activity-ranking-contrib' },
-  ],
 
   PersonList_PersonLink: personId => `/person/${personId}`,
   PersonList_PersonLink_NewTab: false,

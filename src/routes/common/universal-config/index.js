@@ -135,9 +135,9 @@ class UniversalConfig extends React.Component {
                 help={keyError || ''}
               >
                 {getFieldDecorator('key', {
-                  rules: [{ required: true, message: 'Please input key!' }],
+                  rules: [{ required: true, message: '请输入名称!' }],
                 })(
-                  <Input addonBefore="名称" />
+                  <Input addonBefore="名称" />,
                 )}
               </FormItem>
 
@@ -146,7 +146,7 @@ class UniversalConfig extends React.Component {
                 help={valueError || ''}
               >
                 {getFieldDecorator('value', {
-                  rules: [{ required: false, message: 'Please input value!' }],
+                  rules: [{ required: false, message: '请输入值!' }],
                 })(
                   <Input
                     addonBefore={this.props.hideValue ? '' : '值'}

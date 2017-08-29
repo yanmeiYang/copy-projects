@@ -18,7 +18,7 @@ class SearchSeminar extends React.Component {
   render() {
     return (
       <div className={styles.searchWrap}>
-        <Input placeholder="搜索会议。。。" ref="query" onPressEnter={this.handlesearch} />
+        <Input placeholder="搜索活动" ref="query" onPressEnter={this.handlesearch} />
         <Button type="primary" onClick={this.searchSeminar}>搜索</Button>
       </div>
     );

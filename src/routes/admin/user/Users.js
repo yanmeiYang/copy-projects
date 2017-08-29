@@ -9,6 +9,7 @@ import styles from './Users.less';
 import { config } from '../../../utils';
 import { sysconfig } from '../../../systems';
 import { RequireAdmin } from '../../../hoc';
+import { contactByJoint, getValueByJoint } from '../../../services/seminar';
 
 const TabPane = Tabs.TabPane;
 const { Column } = Table;
@@ -34,6 +35,7 @@ export default class Users extends React.Component {
     editUserId: '',
     editUserNewName: '',
     defaultTabKey: 'active',
+    parentOrg: null,
   };
 
   componentDidMount() {
@@ -67,6 +69,7 @@ export default class Users extends React.Component {
       }
       this.setState({
         visible: true,
+        parentOrg: currentOrg[0].value.value.name,
         currentRole: data.new_role,
         currentAuthority: `authority_${data.authority}`,
         currentUid: data.id,
@@ -282,7 +285,8 @@ export default class Users extends React.Component {
             {sysconfig.ShowRegisteredRole &&
             <Column title="角色" dataIndex="new_role" key="role" />}
             {sysconfig.ShowRegisteredRole &&
-            <Column title="所属部门" dataIndex="authority" key="committee" />}
+            <Column title="所属部门" dataIndex="authority" key="committee"
+                    render={key => getValueByJoint(key)} />}
             {sysconfig.ShowRegisteredRole &&
             <Column title="操作" dataIndex="" key="action" render={this.operatorRender} />}
           </Table>
@@ -312,9 +316,10 @@ export default class Users extends React.Component {
                           value={selectedAuthority}>
                 {
                   universalConfig.data.map((item) => {
+                    const val = `authority_${contactByJoint(this.state.parentOrg, item.value.key)}`;
                     return (
                       <Radio key={Math.random()} className={styles.twoColumnsShowRadio}
-                             value={`authority_${item.value.key}`}>{item.value.key}</Radio>
+                             value={val}>{item.value.key}</Radio>
                     );
                   })
                 }

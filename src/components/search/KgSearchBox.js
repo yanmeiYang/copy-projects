@@ -2,11 +2,24 @@ import React from 'react';
 import { connect } from 'dva';
 import { Input, Button } from 'antd';
 import Autosuggest from 'react-autosuggest';
+import { defineMessages, injectIntl } from 'react-intl';
 import styles from './KgSearchBox.less';
 import * as kgService from '../../services/knoledge-graph-service';
 import * as suggestService from '../../services/search-suggest';
 import { classnames } from '../../utils';
 import { sysconfig } from '../../systems';
+
+const messages = defineMessages({
+  placeholder: {
+    id: 'com.KgSearchBox.placeholder',
+    defaultMessage: 'Input expert name or query',
+  },
+  searchBtn: {
+    id: 'com.KgSearchBox.searchBtn',
+    defaultMessage: 'Search',
+  },
+});
+
 
 // TODO 这个文件调用了Service，应该移动到routes里面
 
@@ -24,13 +37,13 @@ const getSuggestions = (value) => {
 // based on the clicked suggestion. Teach Autosuggest how to calculate the
 // input value for every given suggestion.
 const getSuggestionValue = (suggestion) => {
-  const value = sysconfig.Language === 'cn' ? suggestion.zh : suggestion.name;
+  const value = sysconfig.Locale === 'zh' ? suggestion.zh : suggestion.name;
   return value.replace('/', ', ');
 };
 
 // Use your imagination to render suggestions.
 const renderSuggestion = (suggestion) => {
-  const cn = sysconfig.Language === 'cn';
+  const cn = sysconfig.Locale === 'zh';
   return (
     <div>
       {suggestion.type === 'parent' && <span className="label">上位词: </span>}
@@ -51,7 +64,9 @@ const getSectionSuggestions = (section) => {
   return section.suggestions;
 };
 
-class KgSearchBox extends React.PureComponent {
+@connect()
+@injectIntl
+export default class KgSearchBox extends React.PureComponent {
   constructor() {
     super();
 
@@ -271,14 +286,14 @@ class KgSearchBox extends React.PureComponent {
     }
   };
 
-
   render() {
     const { value, suggestions } = this.state;
+    const { intl } = this.props;
     const { size, select, selectOptions, selectProps, style, btnText } = this.props;
 
     // Auto suggest will pass through all these props to the input.
     const inputProps = {
-      placeholder: '搜索',
+      placeholder: intl.formatMessage(messages.placeholder),
       value, // : query || '',
       onChange: this.onChange,
     };
@@ -310,11 +325,10 @@ class KgSearchBox extends React.PureComponent {
             size={size}
             type="primary"
             onClick={this.handleSubmit}
-          >{btnText || '搜索'}</Button>
+          >{btnText || intl.formatMessage(messages.searchBtn)}</Button>
         </Input.Group>
       </form>
     );
   }
 }
 
-export default connect()(KgSearchBox);

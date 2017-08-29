@@ -20,12 +20,13 @@ class ShowExpertList extends React.Component {
           <img src={getImg(talk.speaker.img)} alt="头像" />
         </div>
         <div className={styles.right}>
+          {talk.title &&
           <div className={styles.specialInfo}>
             <span>演讲标题：</span>
             <span>
               {talk.title}
             </span>
-          </div>
+          </div>}
           <table>
             <tr>
               <td>演讲时间：</td>

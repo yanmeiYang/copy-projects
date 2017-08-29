@@ -5,6 +5,7 @@ import React from 'react';
 import { Table } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
+import * as seminarService from '../../services/seminar';
 import styles from './committee-list.less';
 
 
@@ -86,7 +87,11 @@ class CommitteeList extends React.Component {
         <Table bordered size="small" pagination={false} dataSource={this.props.activity}
                className={styles.committee}>
           <Column title="承办单位" dataIndex="organizer" key="display_name"
-                  sorter={(a, b) => this.organizerSorter(a.organizer, b.organizer)} />
+                  sorter={(a, b) => this.organizerSorter(a.organizer, b.organizer)}
+                  render={(organizer) => {
+                    return seminarService.getValueByJoint(organizer);
+                  }}
+          />
           <Column title="活动总数" dataIndex="total" key="position" className={styles.comTotal}
                   sorter={(a, b) => this.activitySorter(a.total, b.total)}
                   render={(total, organizer) => <a data={JSON.stringify(organizer)}

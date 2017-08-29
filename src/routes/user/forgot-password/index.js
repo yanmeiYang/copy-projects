@@ -4,7 +4,6 @@
 import React from 'react';
 import { Input, Button, Form, Modal } from 'antd';
 import { connect } from 'dva';
-import { config } from '../../../utils';
 import styles from './index.less';
 
 const FormItem = Form.Item;
@@ -19,21 +18,21 @@ class ForgotPassword extends React.Component {
     this.props.dispatch({ type: 'app/handleNavbar', payload: true });
   };
 
-  componentWillUnmount = () => {
-    this.props.dispatch({ type: 'app/handleNavbar', payload: false });
-  };
   componentWillReceiveProps = (nextProps) => {
     if (nextProps.auth.message === 'user.not_found') {
       this.setState({
         validEmail: false,
         errorMessageByEmail: '用户不存在',
       });
-    }
-    if (nextProps.auth.isUpdateForgotPw) {
+    } else if (nextProps.auth.isUpdateForgotPw !== this.props.auth.isUpdateForgotPw) {
       Modal.success({
         title: '成功',
         content: '请查看你的邮箱',
-      });
+        onOk() {
+          location.href = '/';
+        },
+      })
+      ;
     } else if (nextProps.auth.message) {
       if (nextProps.auth.message.includes('seconds_later')) {
         Modal.warning({
@@ -42,6 +41,9 @@ class ForgotPassword extends React.Component {
         });
       }
     }
+  };
+  componentWillUnmount = () => {
+    this.props.dispatch({ type: 'app/handleNavbar', payload: false });
   };
   cancelError = () => {
     this.props.auth.message = '';
@@ -64,7 +66,6 @@ class ForgotPassword extends React.Component {
         }
       }
       if (!err) {
-        values.token = sysconfig.SOURCE;
         values.password = ' ';
         that.props.dispatch({ type: 'auth/forgotPassword', payload: values });
       }
@@ -96,33 +97,29 @@ class ForgotPassword extends React.Component {
       },
     };
     return (
-      <div>
-        <div className={styles.container}>
-          <div className={styles.content}>
-            <section className={styles.codeBox}>
-              <div className={styles.forgot_top}>
-                <h3>找回账号密码</h3>
-              </div>
-              <div className={styles.form_mod}>
-                <Form onSubmit={this.handleSubmit}>
-                  <FormItem
-                    {...formItemLayout}
-                    label="邮箱"
-                    validateStatus={validEmail ? '' : 'error'}
-                    help={validEmail ? '' : this.state.errorMessageByEmail}
-                    hasFeedback
-                  >
-                    {getFieldDecorator('identifier', {})(
-                      <Input type="email" onChange={this.cancelError} />,
-                    )}
-                  </FormItem>
-                  <FormItem {...tailFormItemLayout} style={{ marginTop: 60 }}>
-                    <Button type="primary" htmlType="submit" size="large"
-                            style={{ width: '100%' }}>确定</Button>
-                  </FormItem>
-                </Form>
-              </div>
-            </section>
+      <div className={styles.container}>
+        <div className={styles.codeBox}>
+          <div className={styles.forgot_top}>
+            <h3>找回账号密码</h3>
+          </div>
+          <div className={styles.form_mod}>
+            <Form onSubmit={this.handleSubmit}>
+              <FormItem
+                {...formItemLayout}
+                label="邮箱"
+                validateStatus={validEmail ? '' : 'error'}
+                help={validEmail ? '' : this.state.errorMessageByEmail}
+                hasFeedback
+              >
+                {getFieldDecorator('identifier', {})(
+                  <Input type="email" onChange={this.cancelError} />,
+                )}
+              </FormItem>
+              <FormItem {...tailFormItemLayout} style={{ marginTop: 60 }}>
+                <Button type="primary" htmlType="submit" size="large"
+                        style={{ width: '100%' }}>确定</Button>
+              </FormItem>
+            </Form>
           </div>
         </div>
       </div>

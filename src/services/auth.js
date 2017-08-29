@@ -21,7 +21,7 @@ export async function login(data) {
     body: JSON.stringify({
       ...data,
       persist: true,
-      src: sysconfig.UserAuthSystem,
+      src: data.src || sysconfig.UserAuthSystem,
     }),
   });
 }
@@ -43,7 +43,7 @@ export async function getCurrentUserInfo(params) {
 }
 
 // TODO should in use service.
-export async function createUser(email, first_name, gender, last_name, position, sub, src) {
+export async function createUser(email, first_name, gender, last_name, position, sub, password) {
   const user = {
     email,
     first_name,
@@ -53,6 +53,9 @@ export async function createUser(email, first_name, gender, last_name, position,
     sub,
     src: sysconfig.SOURCE,
   };
+  if (password) {
+    user.password = password;
+  }
   return request(api.signup, {
     method: 'POST',
     body: JSON.stringify(user),
@@ -66,7 +69,7 @@ export async function checkEmail(src, email) {
 }
 
 
-export async function invoke(uid, label) {
+export async function invoke(uid, label, token) {
   let setLabel;
   if (label === sysconfig.SOURCE) {
     setLabel = label;
@@ -77,11 +80,11 @@ export async function invoke(uid, label) {
     uid,
     label: setLabel,
   };
-
-  return request(api.invoke, {
-    method: 'POST',
-    body: JSON.stringify(data),
-  });
+  const param = { method: 'POST', body: JSON.stringify(data) };
+  if (token) {
+    param.token = token;
+  }
+  return request(api.invoke, param);
 }
 
 export async function revoke(uid, label) {
@@ -102,9 +105,10 @@ export async function listUsersByRole(offset, size) {
 }
 
 export async function forgot(params) {
+  const data = { ...params, token: sysconfig.SOURCE };
   return request(api.forgot, {
     method: 'POST',
-    body: JSON.stringify({ ...params, src: sysconfig.UserAuthSystem }),
+    body: JSON.stringify({ ...data, src: sysconfig.UserAuthSystem }),
   });
 }
 

@@ -13,6 +13,8 @@ module.exports = {
   ShowSideMenu: false,
   ShowRegisteredRole: false,
 
+  EnableLocalLocale: true,
+
   UserAuthSystem: 'huawei', // aminer 或者是 system.config
   UserAuthSystem_AddSysTagAuto: true, // 登录时自动添加system的标签
 
@@ -28,10 +30,11 @@ module.exports = {
     backgroundSize: 'auto 56px',
     backgroundPosition: '0px -10px',
   },
-  Header_LogoWidth: 214,
+  Header_LogoWidth: 199,
   Header_UserPageURL: '/user-info',
   // Footer_Content: '',
   ShowHelpDoc: true,
+  Header_UserName: true,
 
   // Functionality
   Enable_Export: false,
@@ -52,8 +55,8 @@ module.exports = {
       nperson: 53 + 809,
     },
     {
-      id: '595208bd9ed5dbf9cd563c60.593e4ac29ed5db77fc7be728.593beddb9ed5db23ccac7dbf.593b7c889ed5db23ccac68e6',
-      name: 'IEEE Fellow(2013-2016)',
+      id: TopExpertBase.IEEEFellow[0].id,
+      name: 'IEEE Fellow', // (2013-2016)
       nperson: 0,
     },
     {

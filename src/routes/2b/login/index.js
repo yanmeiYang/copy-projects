@@ -26,6 +26,7 @@ class Login2b extends React.Component {
     this.props.dispatch({ type: 'auth/showLoading' });
     this.props.form.validateFieldsAndScroll((errors, values) => {
       if (!errors) {
+        values.src = 'aminer';
         this.props.dispatch({ type: 'app/login', payload: values });
       }
     });

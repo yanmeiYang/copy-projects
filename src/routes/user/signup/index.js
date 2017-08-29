@@ -7,6 +7,7 @@ import { routerRedux } from 'dva/router';
 import { Form, Input, Button, Select, Modal, Tag } from 'antd';
 import { config } from '../../../utils';
 import { sysconfig } from '../../../systems';
+import { contactByJoint, getValueByJoint } from '../../../services/seminar';
 // import AddRoleModal from '../add-user-role-modal';
 
 const FormItem = Form.Item;
@@ -18,6 +19,7 @@ class Registered extends React.Component {
     addRoleModalVisible: false,
     currentRoleAndOrg: '',
     errorMessageByEmail: '',
+    selectedOrgName: '',
   };
 
   componentDidMount() {
@@ -45,6 +47,7 @@ class Registered extends React.Component {
     const data = JSON.parse(e);
     this.setState({ currentRoleAndOrg: `${data.key}` });
     if (data.value !== '') {
+      this.setState({ selectedOrgName: data.value.name });
       this.props.dispatch({
         type: 'universalConfig/getOrgCategory',
         payload: { category: data.value.id },
@@ -56,7 +59,13 @@ class Registered extends React.Component {
     if (arr.length > 2) {
       arr.pop();
     }
-    this.setState({ currentRoleAndOrg: `${arr.join('_')}_${JSON.parse(e).key}` });
+    let currentRoleAndOrg = '';
+    if (this.state.selectedOrgName !== '') {
+      currentRoleAndOrg = `${arr.join('_')}_${contactByJoint(this.state.selectedOrgName, JSON.parse(e).key)}`;
+    } else {
+      currentRoleAndOrg = `${arr.join('_')}_${JSON.parse(e).key}`;
+    }
+    this.setState({ currentRoleAndOrg });
   };
   // addRole = () => {
   //   this.setState({ addRoleModalVisible: true });
@@ -260,24 +269,24 @@ class Registered extends React.Component {
             }
           </FormItem>}
           {/*<FormItem*/}
-            {/*{...{*/}
-              {/*wrapperCol: {*/}
-                {/*xs: { span: 24 },*/}
-                {/*sm: { span: 14, offset: 6 },*/}
-              {/*},*/}
-            {/*}}*/}
-            {/*label=""*/}
+          {/*{...{*/}
+          {/*wrapperCol: {*/}
+          {/*xs: { span: 24 },*/}
+          {/*sm: { span: 14, offset: 6 },*/}
+          {/*},*/}
+          {/*}}*/}
+          {/*label=""*/}
           {/*>*/}
-            {/*{*/}
-              {/*getFieldDecorator('sub', {})(*/}
-                {/*<Checkbox>*/}
-           {/*我希望收到新的消息和动态提醒*/}
-                {/*</Checkbox>,*/}
-              {/*)*/}
-            {/*}*/}
+          {/*{*/}
+          {/*getFieldDecorator('sub', {})(*/}
+          {/*<Checkbox>*/}
+          {/*我希望收到新的消息和动态提醒*/}
+          {/*</Checkbox>,*/}
+          {/*)*/}
+          {/*}*/}
           {/*</FormItem>*/}
           {/*<FormItem {...tailFormItemLayout}>*/}
-            {/*<Button type="" onClick={this.addRole} style={{ backgroundColor: '#1aaa55', borderColor: '#168f48', color: '#fff' }}>添加角色</Button>*/}
+          {/*<Button type="" onClick={this.addRole} style={{ backgroundColor: '#1aaa55', borderColor: '#168f48', color: '#fff' }}>添加角色</Button>*/}
           {/*</FormItem>*/}
           {/*<AddRoleModal visible={this.state.addRoleModalVisible} handleOk={this.setCurrentRoleAndOrg} />*/}
 

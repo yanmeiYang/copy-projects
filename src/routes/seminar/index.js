@@ -13,6 +13,7 @@ import NewActivityList from '../../components/seminar/newActivityList';
 // import ActivityList from '../../components/seminar/activityList';
 import * as auth from '../../utils/auth';
 import { Auth } from '../../hoc';
+import { contactByJoint, getValueByJoint } from '../../services/seminar';
 
 const { CheckableTag } = Tag;
 const TabPane = Tabs.TabPane;
@@ -27,6 +28,7 @@ export default class Seminar extends React.Component {
     tag: '',
     query: '',
     sortType: 'time',
+    parentOrg: '',
   };
 
   componentWillMount = () => {
@@ -81,7 +83,7 @@ export default class Seminar extends React.Component {
     if (status) {
       this.props.seminar.orgByActivity = [];
     }
-    this.setState({ organizer: '', category: '', tag: '' });
+    this.setState({ organizer: '', category: '', tag: '', orgType: '' });
     const params = {
       offset: 0,
       size: sizePerPage,
@@ -123,6 +125,7 @@ export default class Seminar extends React.Component {
       organizer: this.state.organizer,
       category: this.state.category,
       tag: this.state.tag,
+      parentOrg: this.state.parentOrg,
     };
     if (checked) {
       if (type === 'orgType') {
@@ -130,9 +133,15 @@ export default class Seminar extends React.Component {
           type: 'seminar/getCategory',
           payload: { category: `orglist_${item.id}` },
         });
+        this.setState({ [type]: key, parentOrg: item.key });
+        stype[type] = key;
+      } else if (type === 'organizer' && this.state.parentOrg) {
+        this.setState({ [type]: contactByJoint(this.state.parentOrg, key) });
+        stype[type] = contactByJoint(this.state.parentOrg, key);
+      } else {
+        this.setState({ [type]: key });
+        stype[type] = key;
       }
-      this.setState({ [type]: key });
-      stype[type] = key;
     } else {
       this.setState({ [type]: '' });
       stype[type] = '';
@@ -305,7 +314,7 @@ export default class Seminar extends React.Component {
                       <CheckableTag
                         key={`${item.id}_${Math.random()}`}
                         className={styles.filterItem}
-                        checked={organizer === item.key}
+                        checked={getValueByJoint(organizer) === item.key}
                         onChange={checked => this.onFilterChange(item.key, item, 'organizer', checked)}
                       >
                         {item.key}
@@ -339,14 +348,15 @@ export default class Seminar extends React.Component {
                   results.map((result, index) => {
                     return (
                       <div key={result.id + Math.random()}>
-                        {(app.roles.authority.indexOf(result.organizer[0]) >= 0 || auth.isSuperAdmin(app.roles)) &&
-                        <Button type="danger" icon="delete" size="small"
-                                onClick={this.delTheSeminar.bind(this, result, index)} style={{
-                          float: 'right',
-                          margin: '15px 10px 0 10px',
-                        }}>删除</Button>}
+                        {(app.roles.authority.indexOf(result.organizer[0]) >= 0
+                        || auth.isSuperAdmin(app.roles))
+                        && <Button type="danger" icon="delete" size="small"
+                                   className={styles.delSeminarBtn}
+                                   onClick={this.delTheSeminar.bind(this, result, index)}>
+                          删除
+                        </Button>}
                         <NewActivityList result={result} hidetExpertRating="false"
-                                         style={{ marginTop: 20 }} />
+                                         style={{ marginTop: '20px' }} />
                       </div>
                     );
                   })
@@ -354,8 +364,10 @@ export default class Seminar extends React.Component {
                 {!loading && results.length > sizePerPage &&
                 <Button type="primary" className="getMoreActivities"
                         onClick={this.getMoreSeminar.bind()}>More</Button>}
-              </div> : <div style={{ marginTop: '20px' }}><span
-                style={{ fontSize: '32px', color: '#aaa' }}>暂无数据</span></div>}
+              </div>
+              : <div className={styles.noDataMessage}>
+                <span>暂无数据</span>
+              </div>}
           </div>
         </Spin>
       </div>

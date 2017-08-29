@@ -24,8 +24,8 @@
   border-color: #fff;
 }
 
-.margin-top-10 {
-  margin-top: 10px;
+.margin_top_20 {
+  margin-top: 20px;
 }
 
 .addSeminar {
@@ -56,9 +56,15 @@
     }
   }
 }
+
 //.top > button {
 //  margin-right: 30%;
 //}
+
+.delSeminarBtn {
+  float: right;
+  margin: 15px 10px 0 10px;
+}
 
 :global {
   .seminar {
@@ -66,7 +72,7 @@
     display: flex;
     justify-content: flex-start;
     flex-shrink: 1;
-    .seminar_outbox{
+    .seminar_outbox {
       max-width: @max-width-page;
       width: 100%;
     }
@@ -85,6 +91,7 @@
 
   }
 }
+
 .filterWrap {
   max-width: @max-width-page;
   .filter {
@@ -145,6 +152,16 @@
   }
 }
 
-.maxWidth{
+.maxWidth {
   max-width: @max-width-page;
+}
+
+.noDataMessage {
+  max-width: @max-width-page;
+  width: 100%;
+  text-align: center;
+  span {
+    font-size: 32px;
+    color: #aaa;
+  }
 }

@@ -2,6 +2,7 @@
 
 function GetBMapLib(showTop) {
   return function showOverLay() {
+    let me = {};
     /**
      * @fileoverview MarkerClusterer标记聚合器用来解决加载大量点要素到地图上产生覆盖现象的问题，并提高性能。
      * 主入口类是<a href="symbols/BMapLib.MarkerClusterer.html">MarkerClusterer</a>，
@@ -574,12 +575,19 @@ function GetBMapLib(showTop) {
         this._clusterMarker.setText(this._markers.length);
 
         this._clusterMarker.addEventListener('click', (event) => {
-          console.log('set view port');
+          // console.log('set view port');
           // this._map.setViewport(this.getBounds());
         });
 
         const that = this;
-        this._clusterMarker.addEventListener('mouseenter', (event) => {
+        this._clusterMarker.addEventListener('mouseover', (event) => {
+          if (me.target === event.target) {
+            // console.log('match, pass', me.target._text);
+            return;
+          }
+          me.target = event.target;
+          // console.log('over new: ', me.target && me.target._text);
+
           let ids = '';
           const userids = [];
           const map = that._map;
@@ -600,9 +608,21 @@ function GetBMapLib(showTop) {
           ids = newids;
           document.getElementById('currentIds').value = ids;
 
+          const onLeave = () => {
+            me.target = null;
+          };
           // call function in component.
-          showTop(userids, event, map, maindom, ids);
+          showTop(userids, event, map, maindom, ids, onLeave);
         });
+
+        // this._clusterMarker.addEventListener('mouseover', (event) => {
+        //   if (this.target === event.target) {
+        //     console.log('match');
+        //   } else {
+        //     this.target = event.target;
+        //     console.log('event:', event);
+        //   }
+        // });
       };
 
       /**
@@ -1637,7 +1657,7 @@ function GetBMapLib(showTop) {
             be.point = map.pixelToPoint(be.pixel);
           }
           return be;
-        }// 给事件参数增加pixel和point两个值
+        } // 给事件参数增加pixel和point两个值
 
         T.event.on(this._domElement, 'mouseover', (e) => {
           me.dispatchEvent(eventExtend(e, new BaseEvent('onmouseover')));

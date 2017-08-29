@@ -41,15 +41,9 @@ class EmailTemplate extends React.Component {
         values.src = this.props.source;
         values.type = this.props.type;
         this.props.dispatch({ type: 'systemSetting/setEmailTemplate', payload: values });
-        // Modal.success({
-        //   title: '创建用户',
-        //   content: '创建成功',
-        //   onOk() {
-        //     props.dispatch(routerRedux.push({
-        //       pathname: '/admin/users',
-        //     }));
-        //   },
-        // });
+        Modal.success({
+          title: '邮箱模板定制成功',
+        });
         this.props.form.resetFields();
       }
     });

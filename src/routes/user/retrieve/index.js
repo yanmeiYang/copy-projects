@@ -25,7 +25,6 @@ class Retrieve extends React.Component {
         content: '初始化密码成功',
         onOk() {
           localStorage.setItem('token', outerThis.props.auth.retrieve.token);
-          location.href = '/login';
           outerThis.props.dispatch(routerRedux.push({
             pathname: '/',
           }));
@@ -69,8 +68,8 @@ class Retrieve extends React.Component {
     }
     callback();
   };
+
   render() {
-    const headerProps = { location };
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -90,64 +89,59 @@ class Retrieve extends React.Component {
     };
     const email = queryURL('email');
     return (
-      <div>
-        {/*<Header {...headerProps} />*/}
-        <div className={styles.container}>
-          <div className={styles.content}>
-            <section className={styles.codeBox}>
-              <div className={styles.forgot_top}>
-                <h3>初始化密码</h3>
-              </div>
-              <div className={styles.form_mod}>
-                <Form onSubmit={this.handleSubmit}>
-                  <FormItem
-                    {...formItemLayout}
-                    label="邮箱"
-                    hasFeedback
-                  >
-                    {getFieldDecorator('email', {
-                      rules: [],
-                    })(
-                      <span>{ decodeURIComponent(email) }</span>,
-                    )}
-                  </FormItem>
-                  <FormItem
-                    {...formItemLayout}
-                    label="密码"
-                    hasFeedback
-                  >
-                    {getFieldDecorator('password', {
-                      rules: [{
-                        required: true, message: '请输入密码!',
-                      }, {
-                        validator: this.checkConfirm,
-                      }],
-                    })(
-                      <Input type="password" />,
-                    )}
-                  </FormItem>
-                  <FormItem
-                    {...formItemLayout}
-                    label="确认密码"
-                    hasFeedback
-                  >
-                    {getFieldDecorator('confirm', {
-                      rules: [{
-                        required: true, message: '请输入密码!',
-                      }, {
-                        validator: this.checkPassword,
-                      }],
-                    })(
-                      <Input type="password" onBlur={this.handleConfirmBlur} />,
-                    )}
-                  </FormItem>
-                  <FormItem {...tailFormItemLayout} style={{ marginTop: 60 }}>
-                    <Button type="primary" htmlType="submit" size="large" style={{ width: '100%' }}>确定</Button>
-                  </FormItem>
-                </Form>
-              </div>
-
-            </section>
+      <div className={styles.container}>
+        <div className={styles.codeBox}>
+          <div className={styles.forgot_top}>
+            <h3>初始化密码</h3>
+          </div>
+          <div className={styles.form_mod}>
+            <Form onSubmit={this.handleSubmit}>
+              <FormItem
+                {...formItemLayout}
+                label="邮箱"
+                hasFeedback
+              >
+                {getFieldDecorator('email', {
+                  rules: [],
+                })(
+                  <span>{ decodeURIComponent(email) }</span>,
+                )}
+              </FormItem>
+              <FormItem
+                {...formItemLayout}
+                label="密码"
+                hasFeedback
+              >
+                {getFieldDecorator('password', {
+                  rules: [{
+                    required: true, message: '请输入密码!',
+                  }, {
+                    validator: this.checkConfirm,
+                  }],
+                })(
+                  <Input type="password" />,
+                )}
+              </FormItem>
+              <FormItem
+                {...formItemLayout}
+                label="确认密码"
+                hasFeedback
+              >
+                {getFieldDecorator('confirm', {
+                  rules: [{
+                    required: true, message: '请输入密码!',
+                  }, {
+                    validator: this.checkPassword,
+                  }],
+                })(
+                  <Input type="password" onBlur={this.handleConfirmBlur} />,
+                )}
+              </FormItem>
+              <FormItem {...tailFormItemLayout} style={{ marginTop: 60 }}>
+                <Button type="primary" htmlType="submit" size="large"
+                        style={{ width: '100%' }}>确定</Button>
+              </FormItem>
+            </Form>
           </div>
         </div>
       </div>

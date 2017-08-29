@@ -7,8 +7,10 @@ import { Button } from 'antd';
 import { routerRedux, Link } from 'dva/router';
 import styles from './2bIndex.less';
 import { sysconfig } from '../../systems';
+import locales from '../../locales';
 import { RequireGod } from '../../hoc';
 import { system } from '../../utils';
+import { saveLocale } from '../../utils/locale';
 
 @connect(({ app }) => ({ app }))
 @RequireGod
@@ -16,6 +18,9 @@ export default class SystemConfig extends React.Component {
   // constructor(props) {
   //   super(props);
   // }
+  componentWillMount() {
+    this.props.dispatch({ type: 'app/hideHeaderSearch' });
+  }
 
   // componentDidMount() {
   // }
@@ -31,7 +36,11 @@ export default class SystemConfig extends React.Component {
     console.log('on change sys', sys);
     system.saveSystem(sys, user);
     window.location.reload();
-    // localStorage.setItem('')
+  };
+
+  onChangeLocale = (locale) => {
+    saveLocale(sysconfig.SYSTEM, locale);
+    window.location.reload();
   };
 
   render() {
@@ -59,6 +68,29 @@ export default class SystemConfig extends React.Component {
             );
           })}
         </div>
+
+        <div className={styles.changer}>
+          {locales && locales.map((locale) => {
+            const options = {
+              onClick: this.onChangeLocale.bind(this, locale),
+            };
+            if (sysconfig.Locale === locale) {
+              options.type = 'primary';
+            }
+            return (
+              <div key={locale} className={styles.sysbtn}>
+                <Button {...options}>{locale}</Button>
+              </div>
+            );
+          })}
+        </div>
+
+        <ul>
+          <li>
+            <Link to="/rcd">Recommendation</Link>
+          </li>
+        </ul>
+
         TODO quick choose system.<br />
         TODO on error redirect.<br />
       </div>

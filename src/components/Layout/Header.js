@@ -3,8 +3,9 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Menu, Icon } from 'antd';
+import { Menu, Icon, Dropdown } from 'antd';
 import { Link } from 'dva/router';
+import { FormattedMessage as FM } from 'react-intl';
 import { isEqual } from 'lodash';
 import styles from './Header.less';
 import * as profileUtils from '../../utils/profile-utils';
@@ -12,6 +13,10 @@ import { sysconfig } from '../../systems';
 import { KgSearchBox, SearchTypeWidgets } from '../../components/search';
 import { isLogin, isGod, isAuthed } from '../../utils/auth';
 import { TobButton, DevMenu } from '../../components/2b';
+import * as seminarService from '../../services/seminar';
+import locales from '../../locales';
+import { saveLocale } from '../../utils/locale';
+
 
 class Header extends React.PureComponent {
   // function Header({ app, location, dispatch, logout, onSearch }) {
@@ -30,13 +35,18 @@ class Header extends React.PureComponent {
 
   componentWillReceiveProps = (nextProps) => {
     if (nextProps.app.headerSearchBox && (
-        nextProps.app.headerSearchBox !== this.props.app.headerSearchBox
-        || this.props.app.headerSearchBox.query !== this.state.query)) {
+      nextProps.app.headerSearchBox !== this.props.app.headerSearchBox
+      || this.props.app.headerSearchBox.query !== this.state.query)) {
       if (nextProps.app.headerSearchBox.query) {
         // console.log('>>>>>>>>>>>>>>>>> ', nextProps.app.headerSearchBox.query);
         this.setQuery(nextProps.app.headerSearchBox.query);
       }
     }
+  };
+
+  onChangeLocale = (locale) => {
+    saveLocale(sysconfig.SYSTEM, locale);
+    window.location.reload();
   };
 
   setQuery = (query) => {
@@ -78,6 +88,20 @@ class Header extends React.PureComponent {
       console.log('app.roles:', app.roles);
       console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     }
+    const menu = (
+      <Menu style={{ boxShadow: '0 0 1px' }} selectedKeys={[sysconfig.Locale]}>
+        {locales && locales.map((local) => {
+          return (
+            <Menu.Item key={local}>
+              <span onClick={this.onChangeLocale.bind(this, local)}>
+                <FM id={`system.lang.option_${local}`}
+                    defaultMessage={`system.lang.option_${local}`} />
+              </span>
+            </Menu.Item>
+          );
+        })}
+      </Menu>
+    );
 
     return (
       <div className={styles.header}>
@@ -143,17 +167,32 @@ class Header extends React.PureComponent {
             </Menu.Item>
             }
 
+            {isAuthed(roles) && sysconfig.Header_UserName &&
+            <Menu.Item key="/name" className={styles.emptyMenuStyle}>
+              <span>{user.display_name}</span>
+            </Menu.Item>
+            }
             {/* TODO 不确定是否其他系统也需要显示角色 */}
             {sysconfig.SYSTEM === 'ccf' && roles && isAuthed(roles) &&
-            <Menu.Item key="" className={styles.showRoles}>
+            <Menu.Item key="" className={styles.emptyMenuStyle}>
               <p className={roles.authority[0] !== undefined ? styles.isAuthority : ''}>
                 <span>{roles.role[0]}</span>
                 {roles.authority[0] !== undefined &&
                 <span>
                   <br />
-                  <span>{roles.authority[0]}</span>
+                  <span>{seminarService.getValueByJoint(roles.authority[0])}</span>
                 </span>}
               </p>
+            </Menu.Item>
+            }
+            {sysconfig.EnableLocalLocale &&
+            <Menu.Item>
+              <Dropdown overlay={menu} placement="bottomLeft">
+                <a className="ant-dropdown-link">
+                  <FM id="system.lang.show" defaultMessage="system.lang.show" />&nbsp;
+                  <Icon type="down" />
+                </a>
+              </Dropdown>
             </Menu.Item>
             }
 
@@ -169,7 +208,9 @@ class Header extends React.PureComponent {
 
             {isLogin(user) && sysconfig.ShowHelpDoc &&
             <Menu.Item key="/help">
-              <Link to="/help">帮助文档</Link>
+              <Link to="/help">
+                <FM id="header.label.help" defaultMessage="Help" />
+              </Link>
             </Menu.Item>}
 
             {isAuthed(roles) &&
@@ -179,7 +220,7 @@ class Header extends React.PureComponent {
                   <Icon type="loading" /> :
                   <Icon type="logout" />
                 }
-                退出登录
+                <FM id="header.exit_login" defaultMessage="Exit Login" />
               </div>
             </Menu.Item>
             }

@@ -25,6 +25,7 @@ const Routers = function ({ history, app }) {
       core.User(app),
       core.ForgotPassword(app),
       core.ResetPassword(app),
+      core.ThirdLogin(app),
 
       // Admin(Specified by ccf)
       // core.AdminUsers(app),

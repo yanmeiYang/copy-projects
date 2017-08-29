@@ -5,19 +5,24 @@ const param = (key, type, description) => {
   return { key, type, description };
 };
 
- module.exports = {
+module.exports = {
+  // URLs
+  basePageURL: 'https://aminer.org',
   baseURL: 'https://api.aminer.org/api',
   // baseURL: 'https://166.111.7.105/api',
+  graphqlAPI: 'http://localhost:4005/gql',
+  // graphqlAPI: 'http://localhost:4000/gql/',
 
-  name: '专家搜索',
-  prefix: 'aminer',
-  // footerText: 'AMiner © 2017 AMiner', // not used now.
-  // logo: '/logo.png',
+  openPages: ['/login'],
+
+  name: '专家搜索', // TODO Don't use this.
+  prefix: 'aminer', // ???
   iconFontCSS: '/iconfont.css',
   iconFontJS: '/iconfont.js',
-  basePageURL: 'https://aminer.org',
-  openPages: ['/login'],
-  apiPrefix: '/api/',
+  // apiPrefix: '/api/',
+
+
+  // AMiner restful API.
   api: {
     // user system
     currentUser: '/user/me',
@@ -102,6 +107,30 @@ const param = (key, type, description) => {
     ucDeleteByKey: '/2b/config/:source/:category/:key',
     ucUpdateByKey: '/2b/config/:source/:category/rename/:key/:newKey',
     getCategoriesHint: '/2b/config/:source/category/suggest/:category',
+    listConfigsByCategoryList: '/2b/config/:source/by-category',
+
+    // Recommendation APIs
+    getAllOrgs: '/reviewer/orgs/get/all/:offset/:size',
+    // listOrgs: API_BASE+"reviewer/orgs/get/:offset/:size"
+    // addOrg: API_BASE+"reviewer/org/add"
+    // getAllOrgs: API_BASE+"reviewer/orgs/get/all/:offset/:size"
+    // removeOrgById: API_BASE+"reviewer/org/remove/:id"
+    // addUserToOrg: API_BASE+"reviewer/user/add"
+    // SearchUserByEmail:API_BASE+"reviewer/user/get/:email"
+    //
+    // onlineSearch:API_BASE+"search/person"
+    //
+    // searchReviewer: "https://api.aminer.org/api/"+"reviewer/search"
+    // searchRosterAdvc: API_BASE+"search/roster/:id/experts/advanced"
+    //
+    // removeTaskById: API_BASE+"reviewer/task/remove/:id"
+    // removeProjectById: API_BASE+"reviewer/project/remove/:id"
+    //
+    // addTaskToProject: API_BASE+"reviewer/task/add/:pid"
+    // saveTask: API_BASE+"reviewer/task/save/:tid"
+    // # Protected
+    // addInstAsProtectedByIid: API_BASE + "aff/person/protected/:iid"
+
 
     // Knowledge Graph
     kgFind: {

@@ -76,6 +76,9 @@ const fullRouter = (app, defaultChildRoutes) => {
       core.TrendPredictionPage(app),
       core.RanksHelp(app),
 
+      // 2b profile
+      core.TobProfile(app),
+
       // Your pages should be registered here.
 
       ...childRoutes,

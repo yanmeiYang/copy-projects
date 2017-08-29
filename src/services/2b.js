@@ -17,3 +17,10 @@ export async function emailTemplate(params) {
     body: JSON.stringify(data),
   });
 }
+
+export async function getTemplate(params) {
+  const { src, type } = params;
+  return request(api.getTemplate.replace(':src', src).replace(':type', type), {
+    method: 'GET',
+  });
+}

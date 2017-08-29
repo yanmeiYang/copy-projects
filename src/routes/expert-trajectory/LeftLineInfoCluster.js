@@ -8,7 +8,7 @@ import styles from './LeftInfoZoneCluster.less';
 import * as profileUtils from '../../utils/profile-utils';
 import { HindexGraph } from '../../components/widgets';
 
-class LeftInfoZoneCluster extends React.PureComponent {
+class LeftLineInfoCluster extends React.PureComponent {
 
   componentDidMount() {
   }
@@ -65,8 +65,8 @@ class LeftInfoZoneCluster extends React.PureComponent {
         </div>
 
         <div className={styles.info_bg}>
-          <div>Sum of H_index : {hindexSum}</div>
-          <div>Avg of H_index : {(hindexSum / persons.length).toFixed(0)}</div>
+          <div>From : {hindexSum}</div>
+          <div>To : {(hindexSum / persons.length).toFixed(0)}</div>
         </div>
 
         <div className={styles.info}>
@@ -108,4 +108,4 @@ class LeftInfoZoneCluster extends React.PureComponent {
   }
 }
 
-export default connect()(LeftInfoZoneCluster);
+export default connect()(LeftLineInfoCluster);

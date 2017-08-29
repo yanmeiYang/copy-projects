@@ -207,7 +207,7 @@ class ExpertGoogleMap extends React.Component {
           document.getElementById("map").innerHTML="Cannot connect to Google Map! Please check the network state!";
         }
       } else {
-        clearInterval(mapinterval);
+        clearInternpmval(mapinterval);
         const map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 24.397, lng: 140.644},
           zoom: 3

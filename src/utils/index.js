@@ -7,6 +7,7 @@ import request from './request';
 import { color } from './theme';
 import * as TopExpertBase from './expert-base';
 import * as reflect from './reflect';
+import * as system from './system';
 
 // 连字符转驼峰
 String.prototype.hyphenToHump = function () {
@@ -120,6 +121,7 @@ function registerModel(app, model) {
 
 module.exports = {
   config,
+  system,
   // menu,
   getMenusByUser,
   request,
@@ -135,4 +137,5 @@ module.exports = {
 
   // library
   reflect,
+
 };

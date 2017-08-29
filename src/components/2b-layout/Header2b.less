@@ -6,6 +6,20 @@
     border-bottom: 1px solid #e9e9e9; background: white;
     height: 46px;
 
+    .middleArea {
+      display: flex; flex-direction: row; flex: 2;
+      .backToSystem {
+        display: flex; flex-direction: row;
+        margin-left: 20px;
+        .img {
+          height: 40px; border: solid 1px #ddd;
+          background-size: auto 40px;
+          margin: 3px 0 0 4px;
+        }
+      }
+      .backToSystem:hover { text-decoration: underline; }
+    }
+
     a { line-height: 55px; }
     :global {
       .ant-menu { margin-right: 12px; }
@@ -70,7 +84,8 @@
   -moz-border-radius: 50%;
   border-radius: 50%;
 }
-.showRoles{
+
+.showRoles {
   border: 0px !important;
   padding-left: 0px !important;
   color: #1d2129 !important;

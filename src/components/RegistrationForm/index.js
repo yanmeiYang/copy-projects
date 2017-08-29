@@ -13,7 +13,8 @@ import {
   Modal,
 } from 'antd';
 import { connect } from 'dva';
-import { config } from '../../utils';
+// import { config } from '../../utils';
+import { sysconfig } from '../../systems';
 import styles from './index.less';
 import defaultImg from '../../assets/people/default.jpg';
 import CanlendarInForm from '../../components/seminar/calendar';
@@ -113,7 +114,7 @@ class RegistrationForm extends React.PureComponent {
             data.state = data.state.split('#')[0];
           }
           // 用于跟aminer的活动区分。默认是aminer
-          data.src = config.source;
+          data.src = sysconfig.SOURCE;
           data.location = { city: '', address: '' };
           data.time = { from: '', to: '' };
           data.type = 1;

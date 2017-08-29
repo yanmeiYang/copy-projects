@@ -2,7 +2,8 @@
 import { routerRedux } from 'dva/router';
 import { sysconfig } from '../systems';
 import { queryURL } from './index';
-import config from './config';
+
+// import config from './config';
 
 /**
  * user in app model.
@@ -105,17 +106,17 @@ const parseRoles = (user) => {
         roles.god = true;
       }
       // root, ccf_超级管理员,
-      if (r === 'root' || r === `${config.source}_超级管理员`) {
+      if (r === 'root' || r === `${sysconfig.SOURCE}_超级管理员`) {
         roles.admin = true;
       }
 
       // is authed
-      if (r === config.source) {
+      if (r === sysconfig.SOURCE) {
         roles.authed = true;
       }
 
       // is forbid
-      if (r === `${config.source}_forbid`) {
+      if (r === `${sysconfig.SOURCE}_forbid`) {
         roles.forbid = true;
       }
 
@@ -133,7 +134,7 @@ const parseRoles = (user) => {
   }
 
   // 不可以这样，不然同一个账号可以登录搜索的系统 ???
-  if (user.src === config.source) {
+  if (user.src === sysconfig.SOURCE) {
     roles.authed = true;
   }
   if (sysconfig.UserAuthSystem === 'aminer' && user.src === 'aminer') {
@@ -188,8 +189,8 @@ function ensureUserAuthFromAppModel(dispatch) {
       user: userMessage.data,
       roles: userMessage.roles,
     });
-    // if (!userMessage.roles.role.includes(config.source)) {
-    //   yield call(authService.invoke, userMessage.data.id, config.source);
+    // if (!userMessage.roles.role.includes(sysconfig.SOURCE)) {
+    //   yield call(authService.invoke, userMessage.data.id, sysconfig.SOURCE);
     // }
   }
   // no user in localStorage.
@@ -216,8 +217,8 @@ function afterLogin(dispatch) {
       user: userMessage.data,
       roles: userMessage.roles,
     });
-    // if (!userMessage.roles.role.includes(config.source)) {
-    //   yield call(authService.invoke, userMessage.data.id, config.source);
+    // if (!userMessage.roles.role.includes(sysconfig.SOURCE)) {
+    //   yield call(authService.invoke, userMessage.data.id, sysconfig.SOURCE);
     // }
   }
   // no user in localStorage.

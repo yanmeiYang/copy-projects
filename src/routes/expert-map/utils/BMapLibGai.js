@@ -1652,7 +1652,7 @@ function GetBMapLib(showTop) {
           me.dispatchEvent(eventExtend(e, new BaseEvent('onmouseleave')));
         });
         T.event.on(this._domElement, 'click', (e) => {
-          me.dispatchEvent(eventExtend(e, new BaseEvent('onclick')));
+          me.dispatchEvent(eventExstend(e, new BaseEvent('onclick')));
         });
       };
     }());

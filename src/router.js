@@ -11,6 +11,7 @@ import UserRouters from './routes/user/router';
 import AdminRouters from './routes/admin/router';
 import TrendPredictionRouters from './routes/trend-prediction/router';
 import TobRouters from './routes/2b/router-2b';
+import TobProfileRouters from './routes/2b-profile/route';
 
 import OtherRouters from './routes/router';
 
@@ -58,6 +59,7 @@ const core = {
   ...require('./routes/auth/auth-router'),
   ...TrendPredictionRouters,
   ...TobRouters,
+  ...TobProfileRouters,
 
   ...OtherRouters,
 

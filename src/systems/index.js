@@ -50,25 +50,27 @@ const defaultSystemConfigs = {
 
   MainListSize: 20,
 
-  //
-  // Layout related
-  //
+  /**
+   * Layout related
+   */
   PageTitle: 'Aminer Business',
+  // header
   Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
   Header_LogoWidth: 212,
   Header_LogoStyle: {},
   Header_SubTextLogo: '子标题',
   Header_SubTextStyle: {},
   Header_UserPageURL: '', // 用户头像点击之后去的页面.
-  Footer_Content: <Footer />,
-  ShowSideMenu: true,
-  ShowFooter: true,
   ShowHelpDoc: false, // 显示帮助文档
   Header_UserNameBlock: defaults.IN_APP_DEFAULT, // 显示登录用户名
+  // footer and sidebar
+  ShowFooter: true,
+  Footer_Content: <Footer />,
+  ShowSideMenu: true,
 
-  //
-  // Functionality
-  //
+  /**
+   * Functionality
+   */
   Enable_Export: false,
   ShowRegisteredRole: true, // 注册页面是否显示角色配置
 
@@ -83,10 +85,10 @@ const defaultSystemConfigs = {
   Auth_AllowAnonymousAccess: false,
   Auth_LoginPage: '/login',
 
-  //
-  // Page specified config.
-  //
-  // > PersonList
+  /**
+   * Page specified config.
+   */
+  // PersonList
   PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
   PersonList_PersonLink_NewTab: true,
   Person_PersonLabelBlock: defaults.EMPTY_BLOCK_FUNC, // profile => 'jsx',
@@ -112,6 +114,8 @@ const defaultSystemConfigs = {
   // 地图中心点
   CentralPosition: {},
 
+  // > Admin Users
+  Admin_Users_ShowAdmin: true,
   // PersonList_ShowIndices: [], // do not override in-component settings. // TODO
 };
 

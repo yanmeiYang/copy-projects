@@ -26,7 +26,8 @@
     "react-intl": "^2.3.0",
     "react-load-script": "0.0.6",
     "redux-logger": "^3.0.6",
-    "zrender": "^3.6.0"
+    "zrender": "^3.6.0",
+    "lib-qqwry":"^1.0.2"
   },
   "devDependencies": {
     "amdefine": "^1.0.1",

@@ -5,6 +5,8 @@
 import React from 'react';
 import { Link } from 'dva/router';
 import { Tag, Tooltip } from 'antd';
+import classnames from 'classnames';
+import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { Indices } from '../../components/widgets';
 import { sysconfig } from '../../systems';
 import * as personService from '../../services/person';
@@ -35,15 +37,20 @@ class PersonList extends React.PureComponent {
   render() {
     const { persons } = this.props;
     console.log('refresh person list ');
+
+    const showPrivacy = false;
+
     return (
       <div className={styles.personList}>
         {
           persons && persons.map((person) => {
             const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
-            const pos = profileUtils.displayPositionFirst(person.pos);
+            const pos = profileUtils.displayPosition(person.pos);
             const aff = profileUtils.displayAff(person);
-            const phone = person.contact && person.contact.phone;
-            const email = profileUtils.displayEmailSrc(person);
+
+            const phone = showPrivacy && person.contact && person.contact.phone;
+            const email = showPrivacy && profileUtils.displayEmailSrc(person);
+
             // const homepage = person.contact && person.contact.homepage;
             const indices = person.indices;
             const activity_indices = person.activity_indices;
@@ -70,7 +77,7 @@ class PersonList extends React.PureComponent {
                     </h2>
                     {this.personLabel && this.personLabel(person)}
                   </div>}
-                  <div className={styles.zone}>
+                  <div className={classnames(styles.zone, styles.interestColumn)}>
                     <div className={styles.contact_zone}>
                       <Indices
                         indices={indices}
@@ -85,11 +92,19 @@ class PersonList extends React.PureComponent {
                         <i className="fa fa-phone fa-fw" /> {phone}
                       </span>
                       }
+
                       {email &&
                       <span style={{ backgroundImage: `url(${config.baseURL}${email})` }}
                             className="email"><i className="fa fa-envelope fa-fw" />
                       </span>
                       }
+
+                      {person.num_viewed > 0 &&
+                      <span className={styles.views}>
+                        <i className="fa fa-eye fa-fw" />{person.num_viewed}&nbsp;
+                        <FM id="com.PersonList.label.views" defaultMessage="views" />
+                      </span>}
+
                     </div>
 
                     {person.tags &&

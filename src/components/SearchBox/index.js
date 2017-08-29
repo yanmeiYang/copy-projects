@@ -4,6 +4,7 @@ import { Input, Select, Button, Icon } from 'antd';
 import styles from './index.less';
 import { Suggest } from '../../components/search';
 
+// Deprecated, use search/kgSearchBox instead.
 class SearchBox extends React.Component {
   state = {
     clearVisible: false,

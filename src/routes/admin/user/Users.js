@@ -187,7 +187,7 @@ export default class Users extends React.Component {
       type: 'auth/delRoleByUid',
       payload: { uid, role },
     });
-  }
+  };
 
   i18nGenderTable = { male: '男', female: '女' };
   i18nGender = gender => this.i18nGenderTable[gender] || '';
@@ -262,8 +262,9 @@ export default class Users extends React.Component {
           <Button type="primary" size="large" style={{}} onClick={this.goCreateUser}>创建用户</Button>
         </div>
         <h2 className={styles.pageTitle}>用户管理</h2>
-
-
+        {sysconfig.UserAuthSystem === 'aminer' &&
+        <div>也可以使用AMiner账号登录</div>
+        }
         <Tabs defaultActiveKey={this.state.defaultTabKey} type="card" onChange={this.onTabChange}>
           <TabPane tab="活动用户" key="active" />
           <TabPane tab="禁用用户" key="forbid" />

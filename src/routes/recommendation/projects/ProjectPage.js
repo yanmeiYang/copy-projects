@@ -1,20 +1,21 @@
 /**
- *  Created by BoGao on 2017-08-23;
+ *  Created by BoGao on 2017-08-28;
  */
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { FormattedMessage as FM } from 'react-intl';
+import { Icon } from 'antd';
+import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { gql, graphql } from 'react-apollo';
-import { sysconfig } from '../../systems';
-import { classnames } from '../../utils';
-import styles from './RecommendationPage.less';
-import { Auth } from '../../hoc';
-import { RCDOrgList } from '../../components/recommendation';
+import { sysconfig } from '../../../systems';
+import { classnames } from '../../../utils';
+import styles from './ProjectPage.less';
+import { Auth } from '../../../hoc';
+import { RCDOrgList } from '../../../components/recommendation';
 
-const gqlAllOrgs = gql`
-  query gqlAllOrgs {
-    rcdorgs {
+const gqlGetOrgByID = gql`
+  query gqlGetOrgByID ($id:ID!) {
+    rcdorg (id: $id){
       id
       name
       desc
@@ -27,9 +28,19 @@ const gqlAllOrgs = gql`
 `;
 
 @connect(({ app, recommendation }) => ({ app, recommendation }))
-@graphql(gqlAllOrgs)
+@graphql(gqlGetOrgByID, {
+  options({ params }) {
+    // console.log('--------------', params);
+    return {
+      variables: { id: `${params.id}` },
+    };
+  },
+  // props({ data: { loading, currentUser, entry } }) {
+  //   return { loading, currentUser, entry };
+  // },
+})
 @Auth
-export default class RecommendationPage extends React.Component {
+export default class ProjectPage extends React.Component {
   constructor(props) {
     super(props);
     this.dispatch = this.props.dispatch;
@@ -52,8 +63,6 @@ export default class RecommendationPage extends React.Component {
         headerSearchBox: { query, onSearch: this.onSearch },
       },
     });
-    // call data
-    this.loadOrgs();
   }
 
 
@@ -72,24 +81,28 @@ export default class RecommendationPage extends React.Component {
     dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: data.query } });
   };
 
-  loadOrgs = () => {
-    // const { dispatch } = this.props;
-    // dispatch({
-    //   type: 'recommendation/getAllOrgs',
-    //   payload: { offset: 0, size: sysconfig.MainListSize },
-    // });
-  };
-
   render() {
     // const rcd = this.props.recommendation;
     const { data } = this.props;
-    console.log('>> ', data.rcdorgs);
+    // console.log('>> ', data);
+    console.log('>>--<< ', data);
     return (
       <div className={styles.content}>
-        <h1 className={classnames('section_header', styles.header)}>
-          <FM id="rcd.home.pageTitle" defaultMessage="Organization List"
-              values={{ name: 'This is a test' }} />
-        </h1>
+
+        {data.rcdorg &&
+        <div className={classnames('', styles.titleBox)}>
+          <h1>{data.rcdorg.name}</h1>
+          <div className={styles.info}>
+            <div className={styles.user}>
+              <Icon type="user" />{data.rcdorg.creatorName}
+            </div>
+            <div className={styles.time}>
+              <FD value={data.rcdorg.createTime} />
+            </div>
+          </div>
+          {/*<FM id="rcd.home.pageTitle" defaultMessage="Organization List"*/}
+          {/*values={{ name: 'This is a test' }} />*/}
+        </div>}
 
         {data.loading &&
         <div>Loading...</div>

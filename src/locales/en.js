@@ -17,13 +17,15 @@ export default {
 
   'com.search.filter.searchRange': 'Range:',
   'com.search.filter.Filters': 'Filters:',
-  'com.search.filter.label.h_index': 'h-index',
+  'com.search.filter.label.h_index': 'H-Index',
   'com.search.filter.label.language': 'Language',
   'com.search.filter.label.nationality': 'Location',
+  'com.search.filter.label.gender': 'Gender',
 
   'com.search.filter.label2.H-Index': 'H-Index',
   'com.search.filter.label2.Language': 'Language',
   'com.search.filter.label2.Location': 'Location',
+  'com.search.filter.label2.Gender': 'Gender',
 
   'com.search.sort.label.relevance': 'Relevance',
   'com.search.sort.label.h_index': 'h-index',
@@ -39,6 +41,8 @@ export default {
   'com.searchTypeWidget.label.KnowledgeGraph': 'Knowledge Graph',
   'com.searchTypeWidget.label.TrendPrediction': 'Topic Trend',
   'com.searchTypeWidget.label.ExpertTrajectory': 'Expert Trajectory',
+
+  'com.PersonList.label.views': 'views',
 
   // Recommendation
   'rcd.home.pageTitle': 'Organization List',

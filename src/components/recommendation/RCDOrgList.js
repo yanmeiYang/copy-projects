@@ -46,7 +46,9 @@ export default class RCDOrgList extends React.PureComponent {
               return (
                 <div key={org.id} className={styles.org}>
                   <div className={styles.titleArea}>
-                    <h2 className={styles.title}><Link to="/rcd">{clamp(org.name, 40)}</Link></h2>
+                    <h2 className={styles.title}>
+                      <Link to={`/rcd/projects/${org.id}`}>{clamp(org.name, 40)}</Link>
+                    </h2>
                   </div>
                   <div className={styles.desc}>{clamp(org.desc, 50)}</div>
                   <div className={styles.info}>

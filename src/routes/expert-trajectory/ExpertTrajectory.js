@@ -90,6 +90,8 @@ class ExpertTrajectory extends React.Component {
 
   getTrajSeries = (geoCoordMap, data, record, i) => { // 设置点和线的参数
     function formtGCData(geoData, data, count) { // 画线
+      // console.log("geoData",geoData)
+      // console.log("data",data)
       const tGeoDt = [];
       let index;
       if (data[count + 1] === undefined) {

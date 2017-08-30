@@ -36,6 +36,8 @@ module.exports = {
   ShowHelpDoc: true,
   Header_UserName: true,
 
+  Signup_Password: true,
+
   // Functionality
   Enable_Export: false,
   Search_EnablePin: true,

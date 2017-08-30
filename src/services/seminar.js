@@ -111,8 +111,8 @@ export async function getTopMentionedTags(src, num) {
 }
 
 export function getValueByJoint(name) {
-  const str = name.split(joint);
-  if (str.length > 0) {
+  const str = name && name.split(joint);
+  if (str && str.length > 0) {
     return str[str.length - 1];
   } else {
     return name;

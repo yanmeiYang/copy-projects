@@ -26,7 +26,7 @@ export default {
     postSeminarOrganizer: [], // 所有活动类型的合集
     orgcategory: {}, // 活动类型
     activity_type: {}, // 活动类型
-    orgByActivity: [],
+    orgByActivity: {},
     contribution_type: [],
     comments: [],
     expertRating: [],
@@ -38,13 +38,13 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
-        if (location.pathname === '/seminar') {
-          dispatch({
-            type: 'getSeminar',
-            payload: { offset: 0, size: 20, filter: { src: sysconfig.SOURCE } },
-          });
-          dispatch({ type: 'getTopMentionedTags', payload: { src: sysconfig.SOURCE, num: 10 } });
-        }
+        // if (location.pathname === '/seminar') {
+        //   dispatch({
+        //     type: 'getSeminar',
+        //     payload: { offset: 0, size: 20, filter: { src: sysconfig.SOURCE } },
+        //   });
+        //   dispatch({ type: 'getTopMentionedTags', payload: { src: sysconfig.SOURCE, num: 10 } });
+        // }
         // if (location.pathname === '/seminar-post') {
         //   dispatch({
         //     type: 'getCategoriesHint',
@@ -230,7 +230,7 @@ export default {
 
   reducers: {
     clearState(state) {
-      return { ...state, summaryById: {}, expertRating: [], results: [] };
+      return { ...state, summaryById: {}, expertRating: [], results: [], orgByActivity: {} };
     },
 
     getSeminarsSuccess(state, { payload: { data, offset, size } }) {

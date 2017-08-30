@@ -95,6 +95,7 @@ function prepareParametersGlobal(query, offset, size, filters, sort, useTranslat
         newFilters[newKey] = filters[k];
       }
     });
+    // console.log('=====================',newFilters );
     data = { ...newFilters, query, offset, size, sort: sort || '' };
   }
   data = addAdditionParameterToData(data, sort);

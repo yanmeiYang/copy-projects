@@ -36,6 +36,7 @@ export default class SearchFilter extends React.PureComponent {
       <div className={styles.filterWrap}>
         <div className={styles.filter}>
 
+          {/* ------ 搜索范围 ------ */}
           {sysconfig.SHOW_ExpertBase && expertBases &&
           <div className={classnames(styles.filterRow, styles.range)}>
             <span className={styles.filterTitle}>
@@ -61,6 +62,7 @@ export default class SearchFilter extends React.PureComponent {
             </ul>
           </div>}
 
+          {/* ------ 过滤条件 ------ */}
           {filters && Object.keys(filters).length > 0 &&
           <div className={styles.filterRow}>
             <span className={styles.filterTitle}>
@@ -114,14 +116,16 @@ export default class SearchFilter extends React.PureComponent {
                     </span>
                     <ul>
                       {agg.item.slice(0, 12).map((item) => {
+                        // console.log('>>>>>>>>>>>>>>>>>>>>>>', item);
+                        const onChange = checked =>
+                          this.onFilterChange(agg.type, item.value, checked, item.count);
                         return (
                           <CheckableTag
                             key={`${item.label}_${agg.label}`}
                             className={styles.filterItem}
                             checked={filters[agg.label] === item.label}
-                            onChange={checked => this.onFilterChange(agg.type, item.label, checked, item.count)}
-                          >
-                            {item.label} (<span className={styles.filterCount}>{item.count}</span>)
+                            onChange={onChange}
+                          >{item.label} (<span className={styles.filterCount}>{item.count}</span>)
                           </CheckableTag>
                         );
                       })

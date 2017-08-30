@@ -37,10 +37,9 @@ export default class Seminar extends React.Component {
   };
   componentDidMount = () => {
     this.setState({ organizer: '', category: '', tag: '', orgType: '' });
-    const { offset, sizePerPage } = this.props.seminar;
     const params = {
-      offset,
-      size: sizePerPage,
+      offset: 0,
+      size: this.props.seminar.sizePerPage,
       filter: { src: sysconfig.SOURCE, organizer: '', category: '' },
     };
     this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
@@ -88,10 +87,8 @@ export default class Seminar extends React.Component {
     }
   };
 
-  getSeminar = (sizePerPage, filter, status) => {
-    if (status) {
-      this.props.seminar.orgByActivity = [];
-    }
+  getSeminar = (sizePerPage, filter) => {
+    this.props.dispatch({ type: 'seminar/clearState' });
     this.setState({ organizer: '', category: '', tag: '', orgType: '' });
     const params = {
       offset: 0,
@@ -208,10 +205,10 @@ export default class Seminar extends React.Component {
     return (
       <div className="content-inner">
         <div className={styles.top}>
-          <SearchSeminar onSearch={this.onSearch.bind()}/>
+          <SearchSeminar onSearch={this.onSearch.bind()} />
           {auth.isAuthed(app.roles) &&
           <Button type="primary" onClick={this.addBao.bind()}>
-            <Icon type="plus"/>&nbsp;发布新活动
+            <Icon type="plus" />&nbsp;创建新活动
           </Button>}
         </div>
         {/* filter */}
@@ -340,12 +337,12 @@ export default class Seminar extends React.Component {
           <Tabs defaultActiveKey={this.state.sortType} onChange={this.onTabsChange}
                 className={styles.maxWidth}>
 
-            <TabPane tab={<span>开始时间<i className="fa fa-sort-amount-desc"/></span>}
-                     key="time"/>
-            <TabPane tab={<span>创建时间<i className="fa fa-sort-amount-desc"/></span>}
-                     key="createtime"/>
-            <TabPane tab={<span>修改时间<i className="fa fa-sort-amount-desc"/></span>}
-                     key="updatetime"/>
+            <TabPane tab={<span>开始时间<i className="fa fa-sort-amount-desc" /></span>}
+                     key="time" />
+            <TabPane tab={<span>创建时间<i className="fa fa-sort-amount-desc" /></span>}
+                     key="createtime" />
+            <TabPane tab={<span>修改时间<i className="fa fa-sort-amount-desc" /></span>}
+                     key="updatetime" />
           </Tabs>
         </div>
 
@@ -358,14 +355,14 @@ export default class Seminar extends React.Component {
                     return (
                       <div key={result.id + Math.random()}>
                         {(app.roles.authority.indexOf(result.organizer[0]) >= 0
-                          || auth.isSuperAdmin(app.roles))
+                        || auth.isSuperAdmin(app.roles))
                         && <Button type="danger" icon="delete" size="small"
                                    className={styles.delSeminarBtn}
                                    onClick={this.delTheSeminar.bind(this, result, index)}>
                           删除
                         </Button>}
                         <NewActivityList result={result} hidetExpertRating="false"
-                                         style={{ marginTop: '20px' }}/>
+                                         style={{ marginTop: '20px' }} />
                       </div>
                     );
                   })

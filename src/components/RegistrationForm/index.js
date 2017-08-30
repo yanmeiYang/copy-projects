@@ -14,9 +14,9 @@ import {
   Cascader,
   Icon,
 } from 'antd';
-import {connect} from 'dva';
-import {config} from '../../utils';
-import {sysconfig} from '../../systems';
+import { connect } from 'dva';
+import { config } from '../../utils';
+import { sysconfig } from '../../systems';
 import styles from './index.less';
 import defaultImg from '../../assets/people/default.jpg';
 import CanlendarInForm from '../../components/seminar/calendar';
@@ -68,14 +68,14 @@ class RegistrationForm extends React.PureComponent {
     if (this.props.seminarId) {
       this.props.dispatch({
         type: 'seminar/getSeminarByID',
-        payload: {id: this.props.seminarId},
+        payload: { id: this.props.seminarId },
       });
-      this.setState({editStatus: true});
+      this.setState({ editStatus: true });
     }
-    this.props.dispatch({type: 'seminar/getCategory', payload: {category: 'activity_type'}});
+    this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'activity_type' } });
     this.props.dispatch({
       type: 'seminar/getCategory',
-      payload: {category: 'contribution_type'},
+      payload: { category: 'contribution_type' },
     });
   };
 
@@ -117,10 +117,10 @@ class RegistrationForm extends React.PureComponent {
       if (!err) {
         const state = this.state;
         if (state.startValue === null) {
-          this.setState({startValue: ''});
+          this.setState({ startValue: '' });
         }
         if (state.endValue === null) {
-          this.setState({endValue: ''});
+          this.setState({ endValue: '' });
         }
         if (state.startValue !== null && state.startValue !== '' && state.endValue !== null && state.endValue !== '') {
           const data = values;
@@ -129,8 +129,8 @@ class RegistrationForm extends React.PureComponent {
           }
           // 用于跟aminer的活动区分。默认是aminer
           data.src = sysconfig.SOURCE;
-          data.location = {city: '', address: ''};
-          data.time = {from: '', to: ''};
+          data.location = { city: '', address: '' };
+          data.time = { from: '', to: '' };
           data.type = 1;
           data.talk = state.talks;
           data.talk.map((item) => {
@@ -159,9 +159,9 @@ class RegistrationForm extends React.PureComponent {
           data.uid = this.props.uid;
           if (state.editStatus) {
             data.id = this.props.seminarId;
-            this.props.dispatch({type: 'seminar/updateSeminarActivity', payload: data});
+            this.props.dispatch({ type: 'seminar/updateSeminarActivity', payload: data });
           } else {
-            this.props.dispatch({type: 'seminar/postSeminarActivity', payload: data});
+            this.props.dispatch({ type: 'seminar/postSeminarActivity', payload: data });
           }
         }
       }
@@ -177,18 +177,18 @@ class RegistrationForm extends React.PureComponent {
     }
   };
   addTalkData = (state) => {
-    this.setState({editTheTalk: [], addNewTalk: !state});
+    this.setState({ editTheTalk: [], addNewTalk: !state });
   };
   setAddNewTalk = () => {
-    this.setState({addNewTalk: false});
+    this.setState({ addNewTalk: false });
   };
   // 存储活动开始、结束时间
   onChildChanged = (field, value) => {
-    this.setState({[field]: value});
+    this.setState({ [field]: value });
   };
   // 存储活动标签
   onTagsChanged = (value) => {
-    this.setState({tags: value});
+    this.setState({ tags: value });
   };
 
   // onExpertInfoChanged = (speakerInfo) => {
@@ -199,9 +199,9 @@ class RegistrationForm extends React.PureComponent {
   addTheNewTalk = (talk, isEdit) => {
     if (isEdit) {
       this.state.talks.splice(this.state.editTheTalkIndex, 1, talk);
-      this.setState({talks: this.state.talks, addNewTalk: false});
+      this.setState({ talks: this.state.talks, addNewTalk: false });
     } else {
-      this.setState({talks: this.state.talks.concat(talk), addNewTalk: false});
+      this.setState({ talks: this.state.talks.concat(talk), addNewTalk: false });
     }
   };
 
@@ -213,7 +213,7 @@ class RegistrationForm extends React.PureComponent {
       content: '确定删除吗？',
       onOk() {
         outerThis.state.talks.splice(i, 1);
-        outerThis.setState({talks: outerThis.state.talks});
+        outerThis.setState({ talks: outerThis.state.talks });
       },
       onCancel() {
       },
@@ -221,7 +221,7 @@ class RegistrationForm extends React.PureComponent {
   };
   // 修改专家信息
   editTheExpert = (i) => {
-    this.setState({editTheTalk: this.state.talks[i], addNewTalk: true, editTheTalkIndex: i});
+    this.setState({ editTheTalk: this.state.talks[i], addNewTalk: true, editTheTalkIndex: i });
   };
   // 根据title和abstract获取tag
   getKeywords = () => {
@@ -231,7 +231,7 @@ class RegistrationForm extends React.PureComponent {
       content: form.getFieldValue('abstract'),
       num: '3',
     };
-    this.props.dispatch({type: 'seminar/keywordExtraction', payload: data});
+    this.props.dispatch({ type: 'seminar/keywordExtraction', payload: data });
   };
 
   // 初始化form表单
@@ -251,20 +251,20 @@ class RegistrationForm extends React.PureComponent {
   };
   /* 更新删除海报开始 */
   uploadImgSuccess = (img) => {
-    this.setState({image: img});
+    this.setState({ image: img });
   };
   delCurrentImg = () => {
-    this.setState({image: ''});
+    this.setState({ image: '' });
   };
   /* 更新删除海报结束 */
 
   // 存储协办单位
   addNewCoOrg = (value) => {
-    this.setState({currentOrg: value});
+    this.setState({ currentOrg: value });
   };
 
   render() {
-    const {getFieldDecorator} = this.props.form;
+    const { getFieldDecorator } = this.props.form;
     const {
       activity_organizer_options, postSeminarOrganizer, activity_type, summaryById
     } = this.props.seminar;
@@ -274,12 +274,12 @@ class RegistrationForm extends React.PureComponent {
     } = this.state;
     const formItemLayout = {
       labelCol: {
-        xs: {span: 24},
-        sm: {span: 3},
+        xs: { span: 24 },
+        sm: { span: 3 },
       },
       wrapperCol: {
-        xs: {span: 24},
-        sm: {span: 21},
+        xs: { span: 24 },
+        sm: { span: 21 },
       },
     };
     const outerThis = this;
@@ -319,7 +319,7 @@ class RegistrationForm extends React.PureComponent {
           <Col className={styles.thumbnail}>
             <FormItem {...formItemLayout} label="活动类型" hasFeedback>
               {getFieldDecorator('category', {
-                  rules: [{ required: true, message: '请选择活动类型！'}],
+                  rules: [{ required: true, message: '请选择活动类型！' }],
                 },
               )(
                 <Select>
@@ -338,7 +338,7 @@ class RegistrationForm extends React.PureComponent {
             <FormItem {...formItemLayout} label="承办单位">
               {getFieldDecorator('organizer', {
                   initialValue: organizer,
-                  rules: [{required: true, message: '请选择承办单位'}],
+                  rules: [{ required: true, message: '请选择承办单位' }],
                 },
               )(
                 <Cascader options={psOrganizer} showSearch placeholder="键入搜索承办单位"
@@ -350,7 +350,7 @@ class RegistrationForm extends React.PureComponent {
               {getFieldDecorator('co_org', {},
               )(
                 <AddCoOrgModal orgList={psActivity} dispatch={this.props.dispatch}
-                               callbackParent={this.addNewCoOrg} coOrg={currentOrg}/>,
+                               callbackParent={this.addNewCoOrg} coOrg={currentOrg} />,
               )}
             </FormItem>
 
@@ -364,16 +364,16 @@ class RegistrationForm extends React.PureComponent {
                   required: true, message: '请输入活动名称',
                 }],
               })(
-                <Input placeholder="请输入活动名称"/>,
+                <Input placeholder="请输入活动名称" />,
               )}
             </FormItem>
 
             <Row>
-              <Col xs={{span: 24}} sm={{span: 12}}>
+              <Col xs={{ span: 24 }} sm={{ span: 12 }}>
                 <FormItem
                   label="活动时间"
-                  labelCol={{xs: {span: 24}, sm: {span: 6}}}
-                  wrapperCol={{xs: {span: 24}, sm: {span: 18}}}
+                  labelCol={{ xs: { span: 24 }, sm: { span: 6 } }}
+                  wrapperCol={{ xs: { span: 24 }, sm: { span: 18 } }}
                   validateStatus={(startValue !== '' || endValue !== '') ? '' : 'error'}
                   help={(startValue !== '' || endValue !== '') ? '' : '请选择时间'}
                   hasFeedback
@@ -386,23 +386,23 @@ class RegistrationForm extends React.PureComponent {
                   })(
                     <CanlendarInForm callbackParent={this.onChildChanged}
                                      startValue={this.state.talkStartValue}
-                                     endValue={this.state.talkEndValue}/>,
+                                     endValue={this.state.talkEndValue} />,
                   )}
                 </FormItem>
               </Col>
 
-              <Col xs={{span: 24}} sm={{span: 12}}>
+              <Col xs={{ span: 24 }} sm={{ span: 12 }}>
                 <FormItem
                   label="活动城市"
-                  labelCol={{xs: {span: 24}, sm: {span: 6}}}
-                  wrapperCol={{xs: {span: 24}, sm: {span: 18}}}
+                  labelCol={{ xs: { span: 24 }, sm: { span: 6 } }}
+                  wrapperCol={{ xs: { span: 24 }, sm: { span: 18 } }}
                 >
                   {getFieldDecorator('city', {
                     rules: [{
                       message: '请输入活动城市',
                     }],
                   })(
-                    <Input placeholder="请输入活动地点"/>,
+                    <Input placeholder="请输入活动地点" />,
                   )}
                 </FormItem>
               </Col>
@@ -411,14 +411,14 @@ class RegistrationForm extends React.PureComponent {
             <FormItem
               {...formItemLayout}
               label="活动地点"
-              style={{position: 'inherit'}}
+              style={{ position: 'inherit' }}
             >
               {getFieldDecorator('address', {
                 rules: [{
                   message: '请输入活动地点',
                 }],
               })(
-                <Input placeholder="请输入活动地点"/>,
+                <Input placeholder="请输入活动地点" />,
               )}
             </FormItem>
 
@@ -431,10 +431,10 @@ class RegistrationForm extends React.PureComponent {
                 rules: [{
                   required: true,
                   message: '请输入活动简介',
-                }, {type: 'string', max: 150, message: '最多150个字符'}],
+                }, { type: 'string', max: 150, message: '最多150个字符' }],
               })(
                 <Input type="textarea" rows={4} placeholder="请输入活动简介"
-                       onBlur={this.getKeywords}/>,
+                       onBlur={this.getKeywords} />,
               )}
             </FormItem>
             <FormItem
@@ -444,13 +444,13 @@ class RegistrationForm extends React.PureComponent {
               {image === null || image === '' ?
                 <Dragger {...uploadImage}>
                   <p className="ant-upload-drag-icon">
-                    <i className="anticon anticon-inbox"/>
+                    <i className="anticon anticon-inbox" />
                   </p>
                   <p className="ant-upload-text">点击或将图片拖拽到此区域上传</p>
                   <p className="ant-upload-hint">支持上传JPG/PNG/BMP文件</p>
                 </Dragger> :
                 <div className={styles.uploadImgSuccess}>
-                  <img src={image} style={{height: '150px'}}/>
+                  <img src={image} style={{ height: '150px' }} />
                   <Dragger {...uploadImage}
                            style={{
                              width: '76',
@@ -465,7 +465,7 @@ class RegistrationForm extends React.PureComponent {
               label="活动标签"
             >
               {getFieldDecorator('activityTags', {})(<AddTags callbackParent={this.onTagsChanged}
-                                                              tags={tags}/>)}
+                                                              tags={tags} />)}
 
             </FormItem>
             {/* <FormItem */}
@@ -511,7 +511,7 @@ class RegistrationForm extends React.PureComponent {
                   <div key={Math.random()}>
                     <ShowExpertList talk={talk} index={index} getImg={this.getImg}
                                     delTheExpert={this.delTheExpert}
-                                    editTheExpert={this.editTheExpert}/>
+                                    editTheExpert={this.editTheExpert} />
                   </div>
                 );
               })}
@@ -522,14 +522,14 @@ class RegistrationForm extends React.PureComponent {
 
             {addNewTalk && <AddExpertModal editTheTalk={editTheTalk} parentProps={this.props}
                                            callbackParent={this.addTheNewTalk}
-                                           callbackParentSetAddNewTalk={this.setAddNewTalk}/>}
+                                           callbackParentSetAddNewTalk={this.setAddNewTalk} />}
           </Col>
 
           <Col className={styles.formFooter}>
             <FormItem
-              wrapperCol={{span: 12, offset: 6}} style={{marginBottom: 6}}>
+              wrapperCol={{ span: 12, offset: 6 }} style={{ marginBottom: 6 }}>
               <Button type="primary" onClick={this.handleSubmit}
-                      style={{width: '50%', height: 40}}>确定</Button>
+                      style={{ width: '50%', height: 40 }}>确定</Button>
             </FormItem>
           </Col>
         </Form>
@@ -540,4 +540,4 @@ class RegistrationForm extends React.PureComponent {
 
 const WrappedRegistrationForm = Form.create()(RegistrationForm);
 
-export default connect(({seminar, person}) => ({seminar, person}))(WrappedRegistrationForm);
+export default connect(({ seminar, person }) => ({ seminar, person }))(WrappedRegistrationForm);

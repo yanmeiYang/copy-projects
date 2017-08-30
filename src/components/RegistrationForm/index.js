@@ -55,6 +55,7 @@ class RegistrationForm extends React.PureComponent {
     // speakerInfo: {},
     // integral: 0,
     loading: false,
+    address: '',
   };
   componentWillMount = () => {
     this.props.dispatch({
@@ -179,7 +180,13 @@ class RegistrationForm extends React.PureComponent {
     }
   };
   addTalkData = (state) => {
+
     this.setState({ editTheTalk: [], addNewTalk: !state });
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        this.setState({ address: values.address });
+      }
+    });
   };
   setAddNewTalk = () => {
     this.setState({ addNewTalk: false });
@@ -522,9 +529,11 @@ class RegistrationForm extends React.PureComponent {
               <a type="primary" onClick={this.addTalkData.bind(this, addNewTalk)}>新增专家</a>
             </div>
 
-            {addNewTalk && <AddExpertModal editTheTalk={editTheTalk} parentProps={this.props}
-                                           callbackParent={this.addTheNewTalk}
-                                           callbackParentSetAddNewTalk={this.setAddNewTalk}/>}
+            {addNewTalk &&
+            <AddExpertModal startTalkDate={this.state.talkStartValue} endTalkDate={this.state.talkEndValue}
+                            editTheTalk={editTheTalk} parentProps={this.props} editTalkAddress={this.state.address}
+                            callbackParent={this.addTheNewTalk}
+                            callbackParentSetAddNewTalk={this.setAddNewTalk} />}
           </Col>
 
           <Col className={styles.formFooter}>

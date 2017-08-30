@@ -29,8 +29,10 @@ class AddExpertModal extends React.Component {
     affiliation: '',
     talkAbstract: '',
     isEdit: false,
-    isSearched: false, // 是否搜索过，没有搜索到结果显示'没有推荐专家'
+    isSearched: false, // 是否搜索过，没有搜索到结果显示'没有推荐专家',
+    talkAddress: '',
   };
+
   speakerInformation = {
     name: '',
     position: '',
@@ -46,6 +48,13 @@ class AddExpertModal extends React.Component {
   };
 
   componentDidMount() {
+    this.setState({ talkAddress: this.props.editTalkAddress });
+    this.setState({ talkStartValue: this.props.startTalkDate });
+    this.setState({ talkEndValue: this.props.endTalkDate });
+    // this.props.form.setFieldsValue({
+    //   address: this.state.talkAddress,
+    // });
+    // ReactDOM.findDOMNode( this.refs.talkLocation).value = this.state.talkAddress;
     if (this.props.editTheTalk.speaker) {
       const editTheTalk = this.props.editTheTalk;
       const setFormFieldsVale = this.props.parentProps.form;
@@ -58,7 +67,7 @@ class AddExpertModal extends React.Component {
       });
       this.speakerInformation = this.props.editTheTalk.speaker;
       ReactDOM.findDOMNode(this.refs.talkTitle).value = editTheTalk.title;
-      ReactDOM.findDOMNode(this.refs.talkLocation).value = editTheTalk.location ? editTheTalk.location.address : '';
+      // ReactDOM.findDOMNode(this.refs.talkLocation).value = editTheTalk.location ? editTheTalk.location.address : '';
       ReactDOM.findDOMNode(this.refs.talkAbstract).value = editTheTalk.abstract;
       setFormFieldsVale.setFieldsValue({ contrib: editTheTalk.speaker.stype.label });
       editTheTalk.speaker.role !== undefined ? setFormFieldsVale.setFieldsValue({ role: editTheTalk.speaker.role[0] }) : '';
@@ -175,6 +184,7 @@ class AddExpertModal extends React.Component {
       },
       location: { city: '', address: '' },
       abstract: '',
+      address:this.state.talkAddress,
     };
     talk.title = this.refs.talkTitle.refs.input.value;
     talk.speaker = state.speakerInfo;
@@ -195,7 +205,7 @@ class AddExpertModal extends React.Component {
     if (state.talkEndValue) {
       talk.time.to = typeof state.talkStartValue === 'string' ? state.talkEndValue : state.talkEndValue.toJSON();
     }
-    talk.location.address = this.refs.talkLocation.refs.input.value;
+    // talk.location.address = this.refs.talkLocation.refs.input.value;
     talk.abstract = ReactDOM.findDOMNode(this.refs.talkAbstract).value;
     this.props.callbackParent(talk, state.isEdit);
     this.setState({ modalVisible: false });
@@ -284,7 +294,7 @@ class AddExpertModal extends React.Component {
         outerThis.saveExpertInfo('img', data);
       },
     };
-    const { modalVisible, step2, step3, isEdit, speakerInfo, isSearched } = this.state;
+    const { modalVisible, step2, step3, isEdit, speakerInfo, isSearched, talkStartValue, talkEndValue } = this.state;
     const { parentProps, editTheTalk } = this.props;
     const { speakerSuggests, loading, contribution_type } = parentProps.seminar;
     const { getFieldDecorator } = parentProps.form;
@@ -319,16 +329,21 @@ class AddExpertModal extends React.Component {
           </FormItem>
           <FormItem
             {...formItemLayout}
-            label={(<span>活动时间</span>)}
+            label={(<span>演讲时间</span>)}
             hasFeedback>
             <CanlendarInForm callbackParent={this.onChildTalkChanged}
-                             startValue={this.state.talkStartValue}
-                             endValue={this.state.talkEndValue}/>
+                             startValue={talkStartValue}
+                             endValue={talkEndValue}/>
           </FormItem>
           <FormItem
             {...formItemLayout}
             label={(<span>演讲地点</span>)}>
-            <Input placeholder="请输入活动地点。。。" ref="talkLocation"/>
+            {getFieldDecorator('address', {
+              rules: [{ required: true }],
+            })(
+              <Input placeholder="请输入活动地点" />
+              // <Input placeholder="请输入活动地点" ref="talkLocation" />
+            )}
           </FormItem>
           <FormItem
             {...formItemLayout}

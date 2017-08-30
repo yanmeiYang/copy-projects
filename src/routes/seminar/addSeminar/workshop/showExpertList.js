@@ -36,7 +36,7 @@ class ShowExpertList extends React.Component {
                 <span>~ {timeTo.getDate()}日</span>}
               </td> : <td></td>}
               <td style={{ textAlign: 'right', verticalAlign: 'top' }}>演讲地点：</td>
-              {talk.location && <td style={{}}>{talk.location.address}</td>}
+              <td style={{}}>{talk.address}</td>
             </tr>
             <tr>
               <td>专家姓名：</td>

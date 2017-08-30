@@ -305,10 +305,9 @@ export default class UniSearch extends React.PureComponent {
             </div>}
 
             {/* Filter */}
-            <SearchFilter
-              filters={filters} aggs={aggs}
-              onFilterChange={this.onFilterChange}
-              onExpertBaseChange={this.onExpertBaseChange}
+            <SearchFilter filters={filters} aggs={aggs}
+                          onFilterChange={this.onFilterChange}
+                          onExpertBaseChange={this.onExpertBaseChange}
             />
           </div>
 

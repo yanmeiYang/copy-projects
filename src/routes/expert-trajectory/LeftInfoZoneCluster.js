@@ -7,7 +7,6 @@ import { Tooltip } from 'antd';
 import styles from './LeftInfoZoneCluster.less';
 import * as profileUtils from '../../utils/profile-utils';
 import { HindexGraph } from '../../components/widgets';
-
 class LeftInfoZoneCluster extends React.PureComponent {
 
   componentDidMount() {
@@ -25,6 +24,11 @@ class LeftInfoZoneCluster extends React.PureComponent {
     let hindexSum = 0;
     const interests = {};
     persons.map((person) => {
+      const indices = person.indices;
+      // sum hindex
+      if (indices) {
+        hindexSum += indices.h_index;
+      }
       persons.sort((a, b) => b.indices.h_index - a.indices.h_index);
       // interests
       if (person.tags && person.tags.length > 0) {
@@ -65,8 +69,8 @@ class LeftInfoZoneCluster extends React.PureComponent {
         </div>
 
         <div className={styles.info_bg}>
-          <div>Sum of H_index : {hindexSum}</div>
-          <div>Avg of H_index : {(hindexSum / persons.length).toFixed(0)}</div>
+          <div>Sum of H-index: {hindexSum}</div>
+          <div>Avg of H-index: {(hindexSum / persons.length).toFixed(0)}</div>
         </div>
 
         <div className={styles.info}>

@@ -487,10 +487,10 @@ class ExpertMap extends React.PureComponent {
     // const ipChange = ipFinal.replace(/\./g,"_")
     // console.log(ipChange);
     // console.log('value', ips[ip]);
-    const lang = navigator.language;
-    if (lang !== 'zh-CN') {
-      window.location.href = 'http://localhost:8000/expert-googlemap';
-    }
+    // const lang = navigator.language;
+    // if (lang !== 'zh-CN') {
+    //   window.location.href = 'http://localhost:8000/expert-googlemap';
+    // }
     const model = this.props && this.props.expertMap;
     const persons = model.geoData.results;
     let count = 0;

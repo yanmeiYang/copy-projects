@@ -351,7 +351,7 @@ class RegistrationForm extends React.PureComponent {
                 },
               )(
                 <Cascader options={psOrganizer} showSearch placeholder="键入搜索承办单位"
-                          popupClassName={styles.menu}/>,
+                          popupClassName={styles.menu} />,
               )}
             </FormItem>
 
@@ -359,7 +359,7 @@ class RegistrationForm extends React.PureComponent {
               {getFieldDecorator('co_org', {},
               )(
                 <AddCoOrgModal orgList={psActivity} dispatch={this.props.dispatch}
-                               callbackParent={this.addNewCoOrg} coOrg={currentOrg}/>,
+                               callbackParent={this.addNewCoOrg} coOrg={currentOrg} />,
               )}
             </FormItem>
 
@@ -373,7 +373,7 @@ class RegistrationForm extends React.PureComponent {
                   required: true, message: '请输入活动名称',
                 }],
               })(
-                <Input placeholder="请输入活动名称"/>,
+                <Input placeholder="请输入活动名称" />,
               )}
             </FormItem>
 
@@ -395,7 +395,7 @@ class RegistrationForm extends React.PureComponent {
                   })(
                     <CanlendarInForm callbackParent={this.onChildChanged}
                                      startValue={this.state.talkStartValue}
-                                     endValue={this.state.talkEndValue}/>,
+                                     endValue={this.state.talkEndValue} />,
                   )}
                 </FormItem>
               </Col>
@@ -411,7 +411,7 @@ class RegistrationForm extends React.PureComponent {
                       message: '请输入活动城市',
                     }],
                   })(
-                    <Input placeholder="请输入活动地点"/>,
+                    <Input placeholder="请输入活动地点" />,
                   )}
                 </FormItem>
               </Col>
@@ -427,7 +427,7 @@ class RegistrationForm extends React.PureComponent {
                   message: '请输入活动地点',
                 }],
               })(
-                <Input placeholder="请输入活动地点"/>,
+                <Input placeholder="请输入活动地点" />,
               )}
             </FormItem>
 
@@ -443,7 +443,7 @@ class RegistrationForm extends React.PureComponent {
                 }, { type: 'string', max: 150, message: '最多150个字符' }],
               })(
                 <Input type="textarea" rows={4} placeholder="请输入活动简介"
-                       onBlur={this.getKeywords}/>,
+                       onBlur={this.getKeywords} />,
               )}
             </FormItem>
             <FormItem
@@ -453,7 +453,7 @@ class RegistrationForm extends React.PureComponent {
               {image === null || image === '' ?
                 <Dragger {...uploadImage}>
                   <p className="ant-upload-drag-icon">
-                    <i className="anticon anticon-inbox"/>
+                    <i className="anticon anticon-inbox" />
                   </p>
                   <p className="ant-upload-text">点击或将图片拖拽到此区域上传</p>
                   <p className="ant-upload-hint">支持上传JPG/PNG/BMP文件</p>
@@ -474,7 +474,7 @@ class RegistrationForm extends React.PureComponent {
               label="活动标签"
             >
               {getFieldDecorator('activityTags', {})(<AddTags callbackParent={this.onTagsChanged}
-                                                              tags={tags}/>)}
+                                                              tags={tags} />)}
 
             </FormItem>
             {/* <FormItem */}
@@ -520,7 +520,7 @@ class RegistrationForm extends React.PureComponent {
                   <div key={Math.random()}>
                     <ShowExpertList talk={talk} index={index} getImg={this.getImg}
                                     delTheExpert={this.delTheExpert}
-                                    editTheExpert={this.editTheExpert}/>
+                                    editTheExpert={this.editTheExpert} />
                   </div>
                 );
               })}

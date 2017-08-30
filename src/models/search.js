@@ -98,6 +98,7 @@ export default {
     * translateSearch({ payload }, { call, put, select }) {
       // yield put({ type: 'clearTranslateSearch' });
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
+      console.log("==================", useTranslateSearch);
       if (useTranslateSearch) {
         const { query } = payload;
         const { data } = yield call(translateService.translateTerm, query);
@@ -113,7 +114,7 @@ export default {
       }
     },
 
-    * searchPersonAgg({ payload }, { call, put }) {
+    * searchPersonAgg({ payload }, { call, put, select }) {
       const { query, offset, size, filters } = payload;
       const noTotalFilters = {};
       for (const [key, item] of Object.entries(filters)) {
@@ -123,7 +124,8 @@ export default {
           noTotalFilters[key] = item;
         }
       }
-      const { data } = yield call(searchService.searchPersonAgg, query, offset, size, noTotalFilters);
+      const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
+      const { data } = yield call(searchService.searchPersonAgg, query, offset, size, noTotalFilters, useTranslateSearch);
       yield put({ type: 'searchPersonAggSuccess', payload: { data } });
     },
 

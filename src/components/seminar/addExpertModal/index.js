@@ -95,7 +95,7 @@ class AddExpertModal extends React.Component {
     this.speakerInformation.bio = selectedExpert.bio;
     this.speakerInformation.phone = selectedExpert.phone;
     this.speakerInformation.email = selectedExpert.email;
-    this.speakerInformation.role = selectedExpert.role;
+    this.speakerInformation.role = [selectedExpert.role];
     ReactDOM.findDOMNode(this.refs.speakerBio).value = selectedExpert.bio;
     ReactDOM.findDOMNode(this.refs.speakerIphone).value = selectedExpert.phone;
     ReactDOM.findDOMNode(this.refs.speakerEmail).value = selectedExpert.email;
@@ -184,7 +184,7 @@ class AddExpertModal extends React.Component {
       },
       location: { city: '', address: '' },
       abstract: '',
-      address:this.state.talkAddress,
+      address: this.state.talkAddress,
     };
     talk.title = this.refs.talkTitle.refs.input.value;
     talk.speaker = state.speakerInfo;

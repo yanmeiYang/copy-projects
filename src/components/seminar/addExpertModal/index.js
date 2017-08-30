@@ -32,7 +32,6 @@ class AddExpertModal extends React.Component {
     isSearched: false, // 是否搜索过，没有搜索到结果显示'没有推荐专家',
     talkAddress: '',
   };
-
   speakerInformation = {
     name: '',
     position: '',

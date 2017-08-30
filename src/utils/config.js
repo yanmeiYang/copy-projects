@@ -6,18 +6,23 @@ const param = (key, type, description) => {
 };
 
 module.exports = {
+  // URLs
+  basePageURL: 'https://aminer.org',
   baseURL: 'https://api.aminer.org/api',
   // baseURL: 'https://166.111.7.105/api',
+  graphqlAPI: 'http://localhost:4005/gql',
+  // graphqlAPI: 'http://localhost:4000/gql/',
 
-  name: '专家搜索',
-  prefix: 'aminer',
-  // footerText: 'AMiner © 2017 AMiner', // not used now.
-  // logo: '/logo.png',
+  openPages: ['/login'],
+
+  name: '专家搜索', // TODO Don't use this.
+  prefix: 'aminer', // ???
   iconFontCSS: '/iconfont.css',
   iconFontJS: '/iconfont.js',
-  basePageURL: 'https://aminer.org',
-  openPages: ['/login'],
-  apiPrefix: '/api/',
+  // apiPrefix: '/api/',
+
+
+  // AMiner restful API.
   api: {
     // user system
     currentUser: '/user/me',
@@ -52,6 +57,9 @@ module.exports = {
 
     // search suggest
     searchSuggest: '/search/suggest/gen/:query',
+
+    // misc services
+    translateTerm: '/abbreviation/mapping/:term',
 
     // export roster
     rosterExportSimple: '/roster/:id/export/s/offset/:offset/size/:size/:name',
@@ -106,6 +114,17 @@ module.exports = {
 
     // Recommendation APIs
     getAllOrgs: '/reviewer/orgs/get/all/:offset/:size',
+    // getOrgById: '/reviewer/org/get/:id',
+
+    // getProjects: API_BASE+"reviewer/projects/get/:offset/:size"
+    // addProject: API_BASE+"reviewer/project/add"
+    // getProjectById: API_BASE+"reviewer/project/get/:id"
+
+    // getTaskById: API_BASE+"reviewer/task/get/:id"
+    // recommend: API_BASE+"reviewer/recommend"
+    // addExpertIDtoTask: API_BASE+"reviewer/addExpertIDtoTask"
+    // getExpertsOfTask: API_BASE+"reviewer/getExpertsOfTask"
+    //
     // listOrgs: API_BASE+"reviewer/orgs/get/:offset/:size"
     // addOrg: API_BASE+"reviewer/org/add"
     // getAllOrgs: API_BASE+"reviewer/orgs/get/all/:offset/:size"
@@ -158,7 +177,13 @@ module.exports = {
     // userInfo: '/userInfo',
     // users: '/users',
     // dashboard: '/dashboard',
-
+    // expert info
+    getExpertInfo: '/2b/profile/:src/offset/:offset/size/:size',
+    deleteItemByKey: '/2b/profile/:src/:id',
+    editItemByKey: '/2b/profile/:src/:id',
+    addExpertInfoApi: '/2b/profile/:src',
+    updateItemById: '/2b/profile/:src/:id',
+    searchItemByName: '/2b/profile/:src/offset/:offset/size/:size',
   },
 };
 

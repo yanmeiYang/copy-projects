@@ -37,12 +37,20 @@ const getAvatar = (src, profileId, size) => {
  * @returns: string - position string.
  */
 const displayPosition = (pos) => {
-  return pos && pos[pos.length - 1] && pos[pos.length - 1].n ? pos[pos.length - 1].n : '';
+  let position;
+  if (sysconfig.Locale === 'zh') {
+    position = pos && pos[pos.length - 1] && pos[pos.length - 1].n_zh ? pos[pos.length - 1].n_zh : '';
+  }
+  if (!position) {
+    position = pos && pos[pos.length - 1] && pos[pos.length - 1].n ? pos[pos.length - 1].n : '';
+  }
+  return position;
 };
 
-const displayPositionFirst = (pos) => {
-  return pos && pos.length > 0 && pos[0].n;
-};
+// deprecated
+// const displayPositionFirst = (pos) => {
+//   return pos && pos.length > 0 && pos[0].n;
+// };
 
 const displayNameCNFirst = (name, nameCN) => {
   const cs = [];
@@ -57,7 +65,7 @@ const displayNameCNFirst = (name, nameCN) => {
     cs.push(name);
   }
   return cs.join('');
-}
+};
 
 /**
  * Get profile's affiliation string
@@ -123,7 +131,7 @@ module.exports = {
   getAvatar,
   displayNameCNFirst,
   displayPosition,
-  displayPositionFirst,
+  // displayPositionFirst,
   displayAff,
   displayEmailSrc,
   displayEmailSrc2,

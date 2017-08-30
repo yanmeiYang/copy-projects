@@ -3,6 +3,7 @@
  */
 function GetGoogleMapLib(showTop) {
   return function showOverLay() {
+    let me = {};
     var googleMap = window.googleMap = googleMap || {};
     (function () {
       /**
@@ -1089,7 +1090,13 @@ function GetGoogleMapLib(showTop) {
           }
         });
         var that = this;
-        google.maps.event.addDomListener(this.div_, 'mouseenter', function(event) {
+        google.maps.event.addDomListener(this.div_, 'mouseover', function(event) {
+          if (me.target === event.target) {
+            // console.log('match, pass', me.target._text);
+            return;
+          }
+          me.target = event.target;
+          // console.log('over new: ', me.target && me.target._text);
           let ids = '';
           const userids = [];
           const map = that._map;
@@ -1109,8 +1116,11 @@ function GetGoogleMapLib(showTop) {
           }
           ids = newids;
           document.getElementById('currentIds').value = ids;
+          const onLeave = () => {
+            me.target = null;
+          };
           // call function in component.
-          showTop(userids, pos, map, maindom, ids);
+          showTop(userids, pos, map, maindom, ids, onLeave);
         });
 
         google.maps.event.addDomListener(this.div_, 'mousedown', function() {

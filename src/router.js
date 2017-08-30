@@ -51,7 +51,7 @@ const core = {
   ...require('./routes/trend-prediction/router'),
   ...require('./routes/2b/router-2b'),
   ...require('./routes/2b-profile/route'),
-  ...require('./routes/recommendation/router-recommendation'),
+  ...require('./routes/recommendation/router-rcd'),
   ...require('./routes/third-login/router'),
   ...require('./routes/router'), // Other routes.
 

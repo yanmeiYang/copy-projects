@@ -2,7 +2,7 @@
 
 ## Development Environment
 
-IDE：WebStrom Latest version.
+IDE：WebStorm Latest version.
 
 ### IDE Settings
 1. Open webstrom preference page: WebStrom -> Preferences -> Languages & Frameworks -> JavaScript: 

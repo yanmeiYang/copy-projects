@@ -48,7 +48,9 @@ class Tencent3rd extends React.Component {
 
     const code = params[3].split('=')[1];
     const encrypted = window.atob(code);
-    const decrypted = JSON.parse(CryptoJS.AES.decrypt(encrypted, 'aminer&tencent', { format: CryptoJSAesJson }).toString(CryptoJS.enc.Utf8));
+    const de = CryptoJS.AES.decrypt(encrypted, 'aminer&tencent', { format: CryptoJSAesJson })
+    const deString = de.toString(CryptoJS.enc.Utf8);
+    const decrypted = JSON.parse(deString);
     const dParams = decrypted.split('&');
     const dID = dParams[0].split('=')[1];
     const dRole = dParams[1].split('=')[1];

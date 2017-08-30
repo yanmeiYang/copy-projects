@@ -7,6 +7,7 @@ import Footer from '../../components/Footers/cie';
 
 
 module.exports = {
+  Locale: 'zh', // en_US, zh_CN, ...
 
   // 通用配置。所有System的配置文件必须全部包含这部分的值
   PageTitle: 'CIPSC 专家库',

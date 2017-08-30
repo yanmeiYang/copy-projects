@@ -469,6 +469,28 @@ class ExpertMap extends React.PureComponent {
   };
 
   render() {
+    // const ips = {
+    //    "255.255.255.1": "255_255_255_1",
+    //    "255.255.255.2": "255_255_255_2",
+    // }
+    //
+    // const ip = '213.135.165.223';
+    // const mask = '255.255.255.0';
+    // const ipArr = ip.split('.');
+    // const maskArr = mask.split('.');
+    // const res = {};
+    // res[0] = String(parseInt(ipArr[0], 10) & parseInt(maskArr[0], 10));
+    // res[1] = String(parseInt(ipArr[1], 10) & parseInt(maskArr[1], 10));
+    // res[2] = String(parseInt(ipArr[2], 10) & parseInt(maskArr[2], 10));
+    // res[3] = String(parseInt(ipArr[3], 10) & parseInt(maskArr[3], 10));
+    // const ipFinal = res[0].concat('.', res[1], '.', res[2], '.', res[3]);
+    // const ipChange = ipFinal.replace(/\./g,"_")
+    // console.log(ipChange);
+    // console.log('value', ips[ip]);
+    const lang = navigator.language;
+    if (lang !== 'zh-CN') {
+      window.location.href = 'http://localhost:8000/expert-googlemap';
+    }
     const model = this.props && this.props.expertMap;
     const persons = model.geoData.results;
     let count = 0;
@@ -486,7 +508,7 @@ class ExpertMap extends React.PureComponent {
     if (person) {
       const url = profileUtils.getAvatar(person.avatar, person.id, 90);
       const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
-      const pos = profileUtils.displayPositionFirst(person.pos);
+      const pos = profileUtils.displayPosition(person.pos);
       const aff = profileUtils.displayAff(person);
       const hindex = person && person.indices && person.indices.h_index;
 

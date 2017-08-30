@@ -21,13 +21,13 @@ class PersonListLittle extends React.PureComponent {
 
   onClick = (id) => {
     // alert(id);
-    this.props.onClick(id);
+    if( this.props.onClick){
+      this.props.onClick(id);
+    }
   }
 
   render() {
     const { persons } = this.props;
-    console.log('ddd', persons);
-    console.log('refresh person list ');
     return (
       <div className={styles.personList}>
         {

@@ -8,11 +8,12 @@ import { createLogger } from 'redux-logger';
 import { message } from 'antd';
 import { browserHistory } from 'dva/router';
 import createLoading from 'dva-loading';
-// import { System } from './utils/system';
+import { ApolloClient, createNetworkInterface, ApolloProvider } from 'react-apollo';
 import { sysconfig } from './systems';
+import { config } from './utils';
 import { ReduxLoggerEnabled } from './utils/debug';
 
-const log = ::console.log;
+// const log = ::console.log;
 
 if (ENABLE_PERF) { // eslint-disable-line no-undef
   window.Perf = require('react-addons-perf');
@@ -48,12 +49,20 @@ app.router(require('./systems/' + sysconfig.SYSTEM + '/router'));
 const messages = require('./locales/' + sysconfig.Locale);
 addLocaleData(require('react-intl/locale-data/' + sysconfig.Locale));
 
-// 4. Start
+// Graphql
+const client = new ApolloClient({
+  networkInterface: createNetworkInterface({
+    uri: config.graphqlAPI,
+  }),
+});
+
 const App = app.start();
 ReactDOM.render(
-  <IntlProvider locale={sysconfig.Locale} messages={messages}>
-    <App />
-  </IntlProvider>,
+  <ApolloProvider client={client}>
+    <IntlProvider locale={sysconfig.Locale} messages={messages}>
+      <App />
+    </IntlProvider>
+  </ApolloProvider>,
   document.getElementById('root'),
 );
 

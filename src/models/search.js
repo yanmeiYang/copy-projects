@@ -1,5 +1,6 @@
 import pathToRegexp from 'path-to-regexp';
 import * as searchService from '../services/search';
+import * as translateService from '../services/translate';
 import { sysconfig } from '../systems';
 
 export default {
@@ -10,8 +11,12 @@ export default {
     results: [],
     aggs: [],
     filters: {},
-
     query: null,
+
+    // use translate search?
+    useTranslateSearch: true,
+    translatedQuery: '',
+
     offset: 0,
     sortKey: '',
     pagination: {
@@ -24,7 +29,6 @@ export default {
     },
 
     isMotion: localStorage.getItem('antdAdminUserIsMotion') === 'true',
-    loading: false, // TODO remove loading, use global loading compoennt.
 
     seminars: [], // TODO move out.
   },
@@ -35,13 +39,13 @@ export default {
         // if (location.pathname === '/') {
         //   dispatch({ type: 'getSeminars', payload: { offset: 0, size: 5 } });
         // }
-        let match = pathToRegexp('/(uni)?search/:query/:offset/:size').exec(location.pathname);
+        const match = pathToRegexp('/(uni)?search/:query/:offset/:size').exec(location.pathname);
         if (match) {
           const keyword = decodeURIComponent(match[2]);
           const offset = parseInt(match[3], 10);
           const size = parseInt(match[4], 10);
           // update fillings.
-          dispatch({ type: 'emptyResults' });
+          // dispatch({ type: 'emptyResults' });
           dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
           // console.log('Success::::sdfsdf ', keyword);
           dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: keyword } });
@@ -73,8 +77,7 @@ export default {
   },
 
   effects: {
-    * searchPerson({ payload }, { call, put }) {
-      yield put({ type: 'showLoading' });
+    * searchPerson({ payload }, { call, put, select }) {
       const { query, offset, size, filters, sort, total } = payload;
       const noTotalFilters = {};
       for (const [key, item] of Object.entries(filters)) {
@@ -84,11 +87,32 @@ export default {
           noTotalFilters[key] = item;
         }
       }
-      const { data } = yield call(searchService.searchPerson, query, offset, size, noTotalFilters, sort);
+      const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
+      const { data } = yield call(searchService.searchPerson,
+        query, offset, size, noTotalFilters, sort, useTranslateSearch);
       yield put({ type: 'updateFilters', payload: { filters } });
       yield put({ type: 'updateSortKey', payload: { sort } });
       yield put({ type: 'searchPersonSuccess', payload: { data, query, total } });
     },
+
+    * translateSearch({ payload }, { call, put, select }) {
+      // yield put({ type: 'clearTranslateSearch' });
+      const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
+      if (useTranslateSearch) {
+        const { query } = payload;
+        const { data } = yield call(translateService.translateTerm, query);
+        console.log('||translateSearch', payload, '>>', data);
+        if (data && data.status) {
+          const q = query.trim().toLowerCase();
+          const en = data.en && data.en.trim().toLowerCase();
+          // console.log('>>>> query', q, ' == ', en);
+          if (q !== en) {
+            yield put({ type: 'translateSearchSuccess', payload: { data } });
+          }
+        }
+      }
+    },
+
     * searchPersonAgg({ payload }, { call, put }) {
       const { query, offset, size, filters } = payload;
       const noTotalFilters = {};
@@ -102,6 +126,7 @@ export default {
       const { data } = yield call(searchService.searchPersonAgg, query, offset, size, noTotalFilters);
       yield put({ type: 'searchPersonAggSuccess', payload: { data } });
     },
+
     * getSeminars({ payload }, { call, put }) {
       const { offset, size } = payload;
       const { data } = yield call(searchService.getSeminars, offset, size);
@@ -143,7 +168,6 @@ export default {
         ...state,
         results: result,
         pagination: { pageSize: state.pagination.pageSize, total: currentTotal, current },
-        loading: false,
       };
     },
 
@@ -160,17 +184,16 @@ export default {
       return { ...state, seminars: data };
     },
 
-    showLoading(state) {
-      return {
-        ...state,
-        loading: true,
-      };
+    translateSearchSuccess(state, { payload: { data } }) {
+      return { ...state, translatedQuery: data.en };
     },
-    hideLoading(state) {
-      return {
-        ...state,
-        loading: false,
-      };
+
+    setTranslateSearch(state, { payload: { useTranslate } }) {
+      return { ...state, useTranslateSearch: useTranslate };
+    },
+
+    clearTranslateSearch(state) {
+      return { ...state, useTranslateSearch: true, translatedQuery: '' };
     },
 
   },

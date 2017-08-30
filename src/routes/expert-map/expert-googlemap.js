@@ -75,11 +75,12 @@ class ExpertGoogleMap extends React.Component {
     console.log('error');
   }
 
-  showTop = (usersIds, e, map, maindom, inputids) => {
+  showTop = (usersIds, e, map, maindom, inputids, onLeave) => {
     const that = this;
     const ishere = getById('panel');
     if (ishere != null) {
-      return;
+      //return;
+      that.detachCluster(ishere);
     }
     const width = 180;
     // 可得中心点到图像中心点的半径为：width/2-imgwidth/2,圆形的方程为(X-pixel.x)^2+(Y-pixel.y)^2=width/2
@@ -97,7 +98,6 @@ class ExpertGoogleMap extends React.Component {
     const ids = usersIds.slice(0, 8);
 
     const fenshu = (2 * Math.PI) / ids.length;// 共有多少份，每份的夹角
-    console.log(fenshu)
     for (let i = 0; i < ids.length; i += 1) {
       const centerX = Math.cos(fenshu * i) * (width / 2 - imgwidth / 2) + width / 2;
       const centerY = Math.sin(fenshu * i) * (width / 2 - imgwidth / 2) + width / 2;
@@ -128,14 +128,11 @@ class ExpertGoogleMap extends React.Component {
 
     if (thisNode != null) { // 准备绑定事件
       const pthisNode = thisNode.parentNode;
-      google.maps.event.addDomListener(pthisNode, 'mouseleave', function(event) {
-        if (thisNode != null && thisNode.parentNode != null) {
-          const imgdivs = document.getElementsByName('scholarimg');
-          for (let i = 0; i < imgdivs.length;) {
-            imgdivs[i].parentNode.removeChild(imgdivs[i]);
-          }
-          thisNode.parentNode.removeChild(thisNode);
+      pthisNode.addEventListener('mouseleave', (event) => {
+        if (onLeave) {
+          onLeave();
         }
+        this.detachCluster(thisNode);
       });
     }
 
@@ -190,6 +187,16 @@ class ExpertGoogleMap extends React.Component {
     });
   };
 
+  detachCluster = (clusterPanel) => {
+    if (clusterPanel != null && clusterPanel.parentNode != null) {
+      const imgdivs = document.getElementsByName('scholarimg');
+      for (let i = 0; i < imgdivs.length;) {
+        imgdivs[i].parentNode.removeChild(imgdivs[i]);
+      }
+      clusterPanel.parentNode.removeChild(clusterPanel);
+    }
+  }
+
   showtype = (e) => {
     const typeid = e.currentTarget && e.currentTarget.value && e.currentTarget.getAttribute('value');
     if (typeid === 0) {
@@ -223,47 +230,71 @@ class ExpertGoogleMap extends React.Component {
       } else {
         clearInterval(mapinterval);
         const map = new google.maps.Map(document.getElementById('allmap'), {
-          center: { lat: 24.397, lng: 140.644 },
-          zoom: 3,
+          //center: { lat: 24.397, lng: 140.644 },
+          center: { lat: 39.915, lng: 116.404 },
+          zoom: 4,
+          gestureHandling: 'greedy',
         });
-        this.map = map;
-
-        var locations = [];
+        //this.map = map;
+        let locations = [];
         for (var i = 0; i < place.results.length; i++) {
-          var onepoint = { lat: place.results[i].location.lat, lng: place.results[i].location.lng }
+          const onepoint = { lat: place.results[i].location.lat, lng: place.results[i].location.lng }
           locations[i] = onepoint;
         }
-        const markers = [];
-        const pId = [];
-        let counts = 0;
-        for (const o in place.results) {
-          const marker = new google.maps.Marker({
-            position:{ lat: place.results[o].location.lat, lng: place.results[o].location.lng },
-            map: map,
+        // const markers = [];
+        // const pId = [];
+        // let counts = 0;
+        // for (const o in place.results) {
+        //   const marker = new google.maps.Marker({
+        //     position:{ lat: place.results[o].location.lat, lng: place.results[o].location.lng },
+        //     map: map,
+        //     label: {
+        //       text: place.results[o].name,
+        //       color: 'black',
+        //       fontSize: '12px',
+        //       border: 'none',
+        //       backgroundColor: 'transparent',
+        //       // opacity:0.4,
+        //       fontWeight: 'bold',
+        //       textAlign: 'center',
+        //       width: '130px',
+        //       textShadow: '1px 1px 2px white, -1px -1px 2px white',
+        //       fontStyle: 'italic',
+        //     },
+        //     title: place.results[o].id,
+        //   });
+        //   const personId = place.results[o].id;
+        //   pId[counts] = personId;
+        //   markers.push(marker);
+        //   counts += 1;
+        // }
+        const markers = locations.map(function(location, i) {
+          return new google.maps.Marker({
+            position: location,
             label: {
-              text: place.results[o].name,
-              color: 'black',
+              text: place.results[i].name,
+              color: '#cc6613',
               fontSize: '12px',
-              border: 'none',
               backgroundColor: 'transparent',
-              // opacity:0.4,
               fontWeight: 'bold',
-              textAlign: 'center',
-              width: '130px',
-              textShadow: '1px 1px 2px white, -1px -1px 2px white',
               fontStyle: 'italic',
             },
-            title: place.results[o].id,
+            icon: {
+              url: '/images/map/marker_red_sprite.png',
+              //fillColor: 'red',
+              size: new google.maps.Size(20, 70),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(0, 25),
+            },
+            //labelText: place.results[i].name,
+            //labelClass: 'labels',
+            title: place.results[i].id,
           });
-          const personId = place.results[o].id;
-          pId[counts] = personId;
-          markers.push(marker);
-          counts += 1;
-        }
+        });
         // Add a marker clusterer to manage the markers.
         const _ = new googleMap.MarkerClusterer(map, { markers });
-        for (let m = 0; m < pId.length; m += 1) {
-          that.addMouseoverHandler(map,markers[m], pId[m]);
+        for (let m = 0; m < place.results.length; m += 1) {
+          that.addMouseoverHandler(map, markers[m], place.results[m].id);
         }
       }
     }, 100);
@@ -420,7 +451,7 @@ class ExpertGoogleMap extends React.Component {
     if (person) {
       const url = profileUtils.getAvatar(person.avatar, person.id, 90);
       const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
-      const pos = profileUtils.displayPositionFirst(person.pos);
+      const pos = profileUtils.displayPosition(person.pos);
       const aff = profileUtils.displayAff(person);
       const hindex = person && person.indices && person.indices.h_index;
 

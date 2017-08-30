@@ -12,6 +12,7 @@ import {
   Upload,
   Modal,
   Cascader,
+  Icon,
 } from 'antd';
 import { connect } from 'dva';
 import { config } from '../../utils';

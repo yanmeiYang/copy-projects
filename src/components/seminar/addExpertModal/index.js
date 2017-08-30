@@ -86,7 +86,7 @@ class AddExpertModal extends React.Component {
     this.speakerInformation.bio = selectedExpert.bio;
     this.speakerInformation.phone = selectedExpert.phone;
     this.speakerInformation.email = selectedExpert.email;
-    this.speakerInformation.role = selectedExpert.role;
+    this.speakerInformation.role = [selectedExpert.role];
     ReactDOM.findDOMNode(this.refs.speakerBio).value = selectedExpert.bio;
     ReactDOM.findDOMNode(this.refs.speakerIphone).value = selectedExpert.phone;
     ReactDOM.findDOMNode(this.refs.speakerEmail).value = selectedExpert.email;
@@ -315,7 +315,7 @@ class AddExpertModal extends React.Component {
             {...formItemLayout}
             label="演讲标题"
           >
-            <Input placeholder="请输入演讲标题。。。" ref="talkTitle"/>
+            <Input placeholder="请输入演讲标题" ref="talkTitle"/>
           </FormItem>
           <FormItem
             {...formItemLayout}
@@ -328,12 +328,12 @@ class AddExpertModal extends React.Component {
           <FormItem
             {...formItemLayout}
             label={(<span>演讲地点</span>)}>
-            <Input placeholder="请输入活动地点。。。" ref="talkLocation"/>
+            <Input placeholder="请输入活动地点" ref="talkLocation"/>
           </FormItem>
           <FormItem
             {...formItemLayout}
             label={(<span>演讲摘要</span>)}>
-            <Input type="textarea" rows={4} placeholder="请输入演讲摘要。。。" ref="talkAbstract"
+            <Input type="textarea" rows={4} placeholder="请输入演讲摘要" ref="talkAbstract"
                    onBlur={this.setTalkAbstrack}/>
           </FormItem>
           {contribution_type && <FormItem

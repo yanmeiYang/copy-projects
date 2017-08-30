@@ -167,7 +167,7 @@ class Registered extends React.Component {
           <FormItem
             {...formItemLayout}
             label="邮箱"
-            validateStatus={auth.validEmail ? '' : 'error'}
+            validateStatus={auth.validEmail === false ? 'error' : ''}
             help={auth.validEmail ? '' : errorMessageByEmail}
             hasFeedback
           >

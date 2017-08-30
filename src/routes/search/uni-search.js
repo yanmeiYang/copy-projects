@@ -311,11 +311,11 @@ export default class UniSearch extends React.PureComponent {
             />
           </div>
 
-          {sysconfig.Search_EnableKnowledgeGraphHelper &&
-          <div className={styles.rightZone}>
-            <KnowledgeGraphSearchHelper query={query} />
-          </div>
-          }
+          {/*{sysconfig.Search_EnableKnowledgeGraphHelper &&*/}
+          {/*<div className={styles.rightZone}>*/}
+            {/*<KnowledgeGraphSearchHelper query={query} />*/}
+          {/*</div>*/}
+          {/*}*/}
 
         </div>
 

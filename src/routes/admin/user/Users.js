@@ -198,8 +198,11 @@ export default class Users extends React.Component {
         <span>
           {/*<a onClick={this.onEdit.bind(this, 'info')} data={JSON.stringify(text)}>修改信息</a>*/}
           {/*<span className="ant-divider" />*/}
-          <a onClick={this.onEdit.bind(this, 'role')} data={JSON.stringify(text)}>修改角色</a>
-          <span className="ant-divider" />
+          {sysconfig.ShowRegisteredRole &&
+          <sapn>
+            <a onClick={this.onEdit.bind(this, 'role')} data={JSON.stringify(text)}>修改角色</a>
+            <span className="ant-divider" />
+          </sapn>}
           <a onClick={this.onForbidUser.bind(this)} data={JSON.stringify(text)}>禁用</a>
         </span>
         }
@@ -244,8 +247,12 @@ export default class Users extends React.Component {
     const listUsers = [];
     if (this.props.auth.listUsers) {
       this.props.auth.listUsers.map((item) => {
-        if (this.state.defaultTabKey === 'active' && !(item.role.includes(`${sysconfig.SOURCE}_超级管理员`) || item.role.includes(`${sysconfig.SOURCE}_forbid`))) {
-          listUsers.push(item);
+        if (this.state.defaultTabKey === 'active' && !item.role.includes(`${sysconfig.SOURCE}_forbid`)) {
+          if (!sysconfig.Admin_Users_ShowAdmin && !item.role.includes(`${sysconfig.SOURCE}_超级管理员`)) {
+            listUsers.push(item);
+          } else if (sysconfig.Admin_Users_ShowAdmin) {
+            listUsers.push(item);
+          }
         }
         if (this.state.defaultTabKey === 'forbid' && item.role.includes(`${sysconfig.SOURCE}_forbid`)) {
           listUsers.push(item);
@@ -283,13 +290,11 @@ export default class Users extends React.Component {
             <Column title="邮箱" dataIndex="email" key="email" />
             {/* <Column title="职称" dataIndex="position" key="position"/> */}
             {/* <Column title="性别" dataIndex="gender" key="gender" render={this.i18nGender} /> */}
-            {sysconfig.ShowRegisteredRole &&
-            <Column title="角色" dataIndex="new_role" key="role" />}
+            <Column title="角色" dataIndex="new_role" key="role" />
             {sysconfig.ShowRegisteredRole &&
             <Column title="所属部门" dataIndex="authority" key="committee"
                     render={key => getValueByJoint(key)} />}
-            {sysconfig.ShowRegisteredRole &&
-            <Column title="操作" dataIndex="" key="action" render={this.operatorRender} />}
+            <Column title="操作" dataIndex="" key="action" render={this.operatorRender} />
           </Table>
         </Spin>
         <Modal

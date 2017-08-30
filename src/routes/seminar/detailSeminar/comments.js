@@ -66,7 +66,7 @@ class CommentsByActivity extends React.Component {
           })}
         </ul>
         <div className={styles.comment}>
-          <Input type="textarea" rows={4} placeholder="请输入评语。。。" ref="comment" />
+          <Input type="textarea" rows={4} placeholder="请输入评语" ref="comment" />
           <Button type="primary" onClick={this.submitComment}>发布评论</Button>
         </div>
       </Col>

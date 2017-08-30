@@ -37,7 +37,7 @@ class KnowledgeGraphSearchHelper extends React.PureComponent {
     const { kgdata } = this.props.knowledgeGraph;
 
     if (process.env.NODE_ENV !== 'production') {
-      console.log('KG: kgdata: ', kgdata);
+      // console.log('KG: kgdata: ', kgdata);
     }
     if (!kgdata || (kgdata.status === false && !kgdata.hits)) {
       this.emptyD3();
@@ -65,9 +65,9 @@ class KnowledgeGraphSearchHelper extends React.PureComponent {
       }
       // construct a target node.
       const topNode = kgFetcher.findTop(rootNode);
-      console.log('topNode is ', topNode);
+      // console.log('topNode is ', topNode);
       let targetNode = this.createNode(topNode, null, 1);
-      console.log(',,,', targetNode);
+      // console.log(',,,', targetNode);
       return targetNode;
     }
   };

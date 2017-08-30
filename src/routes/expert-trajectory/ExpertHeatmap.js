@@ -645,29 +645,6 @@ class ExpertHeatmap extends React.Component {
               },
             },
           });
-          // temp.push({
-          //   symbol: 'image://https://' + authorImg[(key[0])],
-          //   symbolSize: [32,40],
-          //   symbolOffset:[0,'-70%'],
-          //   label: {
-          //     normal: {
-          //       show: false,
-          //     },
-          //     emphasis: {
-          //       show: false,
-          //     },
-          //   },
-          //   itemStyle: {
-          //     normal: {
-          //       borderColor: '#fff',
-          //       borderWidth: 5,
-          //     },
-          //   },
-          //   data:[{
-          //     name: 'Author',
-          //     coord: geoCoordMap[key[j]],
-          //   }],
-          // });
         }
       });
 

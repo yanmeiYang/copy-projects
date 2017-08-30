@@ -108,14 +108,21 @@ class Registered extends React.Component {
         }
       }
       if (!err) {
-        values.gender = 3;
-        values.position = 8;
-        values.sub = true;
-        values.role = this.state.currentRoleAndOrg;
-        that.props.dispatch({ type: 'auth/createUser', payload: values });
+        const data = values;
+        data.gender = 3;
+        data.position = 8;
+        data.sub = true;
+        data.role = this.state.currentRoleAndOrg;
+        data.password = values.password || ' ';
+        that.props.dispatch({ type: 'auth/createUser', payload: data });
         Modal.success({
           title: '创建用户',
-          content: '创建成功',
+          content: sysconfig.Signup_Password ?
+            <div>
+              <p>创建成功, 请发邮件告知Royce.lee@argcv.com</p>
+              <p>登录密码: 123456</p>
+            </div>
+            : '创建成功',
           onOk() {
             that.props.dispatch(routerRedux.push({
               pathname: '/admin/users',
@@ -208,6 +215,22 @@ class Registered extends React.Component {
               )
             }
           </FormItem>
+          {sysconfig.Signup_Password &&
+          <FormItem
+            {...formItemLayout}
+            label="登录密码"
+            hasFeedback
+          >
+            {
+              getFieldDecorator('password', {
+                rules: [{
+                  required: true, message: '请输入密码!',
+                }],
+              })(
+                <Input />,
+              )
+            }
+          </FormItem>}
           {/* 选择的角色 */}
           {/* <FormItem {...tailFormItemLayout}>*/}
           {/* {currentRoleAndOrg.map((item, index) => {*/}

@@ -82,12 +82,6 @@ class ExpertTrajectory extends React.Component {
     return true;
   }
 
-  // callSearchMap = (query) => {
-  //   this.props.dispatch({ type: 'expertTrajectory/searchPerson', payload: { query } });
-  // }
-
-
-
   getTrajSeries = (geoCoordMap, data, record, i) => { // 设置点和线的参数
     function formtGCData(geoData, data, count) { // 画线
       // console.log("geoData",geoData)

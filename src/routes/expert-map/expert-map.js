@@ -690,7 +690,7 @@ class ExpertMap extends React.PureComponent {
           {personPopupJsx && personPopupJsx}
         </div>
 
-        <div className="em_report" id="em_report">统计/报表</div>
+        {/* <div className="em_report" id="em_report">统计/报表</div> */}
 
         {/* TODO what's this for? */}
         <input id="currentId" type="hidden" />

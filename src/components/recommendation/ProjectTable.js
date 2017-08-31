@@ -74,19 +74,12 @@ export default class ProjectTable extends React.PureComponent {
 
   render() {
     const { projects } = this.props;
-    console.log('亲们！projects is: ', projects);
     return (
       <div className={styles.orgs}>
         <div className={styles.box}>
           <Table dataSource={projects} columns={this.columns} rowKey={record => record.id}
-                 bordered
+                 bordered size="small"
           />
-
-          {
-            projects && projects.map((project) => {
-              console.log('loop project: ', project.desc);
-            })
-          }
         </div>
       </div>
     );

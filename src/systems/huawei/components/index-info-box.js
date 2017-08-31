@@ -18,10 +18,10 @@ class IndexInfoBox extends React.PureComponent {
             <span>学者关系</span>
           </div>
         </Link>
-        <Link to="/expert-map">
+        <Link to="/expert-map-dispatch">
           <div className={styles.blockItem}>
             <div className={styles.blockImg}>
-              <img src="/sys/huawei/expert-map.png" alt="学者关系" />
+              <img src="/sys/huawei/expert-map.png" alt="人才地图" />
             </div>
             <span>人才地图</span>
           </div>
@@ -29,7 +29,7 @@ class IndexInfoBox extends React.PureComponent {
         <Link to="/knowledge-graph">
           <div className={styles.blockItem}>
             <div className={styles.blockImg}>
-              <img src="/sys/huawei/knowledge-graph.png" alt="学者关系" />
+              <img src="/sys/huawei/knowledge-graph.png" alt="知识图谱" />
             </div>
             <span>知识图谱</span>
           </div>
@@ -37,11 +37,12 @@ class IndexInfoBox extends React.PureComponent {
         <Link to="/trend-prediction">
           <div className={styles.blockItem}>
             <div className={styles.blockImg}>
-              <img src="/sys/huawei/trend-prediction.png" alt="学者关系" />
+              <img src="/sys/huawei/trend-prediction.png" alt="技术趋势" />
             </div>
             <span>技术趋势</span>
           </div>
         </Link>
+
         <div className="naviItem" style={{ display: 'none' }}>
           2016最具影响力
           <a href="https://cn.aminer.org/mostinfluentialscholar"
@@ -49,6 +50,7 @@ class IndexInfoBox extends React.PureComponent {
           <a href="https://cn.aminer.org/ranks/org"
              target="_blank" rel="noopener noreferrer">机构排名</a>
         </div>
+
       </div>
     );
   }

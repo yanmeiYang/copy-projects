@@ -280,40 +280,44 @@ export default class UniSearch extends React.PureComponent {
             </div>
             }
 
-            {/* Translate Search */}
-            {useTranslateSearch && translatedQuery &&
+            {sysconfig.Search_EnableTranslateSearch &&
             <div className="message">
-              <FM defaultMessage="We also search '{enQuery}' for you."
-                  id="search.translateSearchMessage.1"
-                  values={{ enQuery: translatedQuery }}
-              />&nbsp;
-              <Link onClick={this.doTranslateSearch.bind(this, false)}>
-                <FM defaultMessage="Search '{cnQuery}' only."
-                    id="search.translateSearchMessage.2"
-                    values={{ cnQuery: query }} />
-              </Link>
-            </div>}
+              {/* Translate Search */}
+              {useTranslateSearch && translatedQuery &&
+              <div>
+                <FM defaultMessage="We also search '{enQuery}' for you."
+                    id="search.translateSearchMessage.1"
+                    values={{ enQuery: translatedQuery }}
+                />&nbsp;
+                <Link onClick={this.doTranslateSearch.bind(this, false)}>
+                  <FM defaultMessage="Search '{cnQuery}' only."
+                      id="search.translateSearchMessage.2"
+                      values={{ cnQuery: query }} />
+                </Link>
+              </div>
+              }
 
-            {!useTranslateSearch && translatedQuery &&
-            <div className="message">
+              {!useTranslateSearch && translatedQuery &&
               <Link onClick={this.doTranslateSearch.bind(this, true)}>
                 <FM defaultMessage="You can also search with both '{enQuery}' and '{cnQuery}'."
                     id="search.translateSearchMessage.reverse"
                     values={{ enQuery: translatedQuery, cnQuery: query }}
                 />
               </Link>
-            </div>}
+              }
+            </div>
+            }
 
             {/* Filter */}
-            <SearchFilter filters={filters} aggs={aggs}
-                          onFilterChange={this.onFilterChange}
-                          onExpertBaseChange={this.onExpertBaseChange}
+            <SearchFilter
+              filters={filters} aggs={aggs}
+              onFilterChange={this.onFilterChange}
+              onExpertBaseChange={this.onExpertBaseChange}
             />
           </div>
-
           {/*{sysconfig.Search_EnableKnowledgeGraphHelper &&*/}
           {/*<div className={styles.rightZone}>*/}
-            {/*<KnowledgeGraphSearchHelper query={query} />*/}
+          {/*<KnowledgeGraphSearchHelper query={query} />*/}
           {/*</div>*/}
           {/*}*/}
 

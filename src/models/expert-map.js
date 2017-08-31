@@ -83,7 +83,7 @@ export default {
         data.data.data.map((item) => {
           const add = [];
           let c = item.city;
-          console.log(geomap[c]);
+          // console.log(geomap[c]);
           while (true) {
             add.push(geomap[c].name);
             if (geomap[c].parent_id === 0 || typeof (geomap[c].parent_id) === 'undefined') {

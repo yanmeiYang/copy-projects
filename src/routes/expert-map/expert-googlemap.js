@@ -7,7 +7,7 @@ import { Button } from 'antd';
 import styles from './expert-googlemap.less';
 import { listPersonByIds } from '../../services/person';
 import * as profileUtils from '../../utils/profile-utils';
-import { getById } from './utils/map-utils';
+import { findPosition, getById } from './utils/map-utils';
 import GetGoogleMapLib from './utils/googleMapGai.js';
 import RightInfoZonePerson from './RightInfoZonePerson';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
@@ -158,24 +158,26 @@ class ExpertGoogleMap extends React.Component {
               const apos = getById('allmap').getBoundingClientRect();
               const cpos = event.target.getBoundingClientRect();
               const newPixel = new google.maps.Point(cpos.left - apos.left + imgwidth, cpos.top - apos.top); // eslint-disable-line
-
               // get personInfo data.
+              //const currentPoint = that.getProjection().fromDivPixelToLatLng(newPixel);
               const chtml = event.target.innerHTML;
               let num = 0;
               if (chtml.split('@@@@@@@').length > 1) {
                 num = chtml.split('@@@@@@@')[1];
               }
               const personInfo = data.data.persons[num];
-              console.log(newPixel)
               const myLatLng = new google.maps.LatLng({ lat: 47, lng: 112 });
               const infowindow = new google.maps.InfoWindow({
-                content: "<div class='popup'>oooooooooooo</div>",
+                content: "<div id='author_info' class='popup'></div>",
               });
               infowindow.setPosition(myLatLng);
               that.onSetPersonCard(personInfo);
               infowindow.open(map);
               that.syncInfoWindow();
             });
+            // cimg.addEventListener('mouseleave', (event) => {
+            //   map.closeInfoWindow();
+            // });
           }
         }
       },
@@ -197,21 +199,21 @@ class ExpertGoogleMap extends React.Component {
     }
   }
 
-  showtype = (e) => {
+  showType = (e) => {
     const typeid = e.currentTarget && e.currentTarget.value && e.currentTarget.getAttribute('value');
-    if (typeid === 0) {
-      this.showmap(this.props.expertMap.geoData,typeid);
-    } else if (typeid === 1) {
+    if (typeid === '0') {
+      this.showgooglemap(this.props.expertMap.geoData, typeid);
+    } else if (typeid === '1') {
       //简单地读取其城市大区等信息，然后归一到一个地址，然后在地图上显示
-      this.showmap(this.props.expertMap.geoData,typeid);
-    } else if (typeid === 2) {
-      this.showmap(this.props.expertMap.geoData,typeid);
-    } else if (typeid === 3) {
-      this.showmap(this.props.expertMap.geoData,typeid);
-    } else if (typeid === 4) {
-      this.showmap(this.props.expertMap.geoData,typeid);
-    } else if (typeid === 5) {
-      this.showmap(this.props.expertMap.geoData,typeid);
+      this.showgooglemap(this.props.expertMap.geoData, typeid);
+    } else if (typeid === '2') {
+      this.showgooglemap(this.props.expertMap.geoData, typeid);
+    } else if (typeid === '3') {
+      this.showgooglemap(this.props.expertMap.geoData, typeid);
+    } else if (typeid === '4') {
+      this.showgooglemap(this.props.expertMap.geoData, typeid);
+    } else if (typeid === '5') {
+      this.showgooglemap(this.props.expertMap.geoData, typeid);
     }
   }
 //Google Maps------------------------------------------------------------------------------------------------------------
@@ -229,17 +231,39 @@ class ExpertGoogleMap extends React.Component {
         }
       } else {
         clearInterval(mapinterval);
+        let scale = 3;
+        let minscale = 1;
+        let maxscale = 19;
+        if (type === '0') {
+          scale = 3;
+          minscale = 3;
+        } else if (type === '1' || type === '2' || type === '3') {
+          scale = 3;
+          minscale = 3;
+          maxscale = 4;
+        } else if (type === '4' || type === '5') {
+          scale = 6;
+          minscale = 6;
+          maxscale = 7;
+        }
         const map = new google.maps.Map(document.getElementById('allmap'), {
           //center: { lat: 24.397, lng: 140.644 },
           center: { lat: 39.915, lng: 116.404 },
-          zoom: 4,
+          zoom: scale,
           gestureHandling: 'greedy',
+          minZoom: minscale,
+          maxZoom: maxscale,
         });
         //this.map = map;
         let locations = [];
-        for (var i = 0; i < place.results.length; i++) {
-          const onepoint = { lat: place.results[i].location.lat, lng: place.results[i].location.lng }
-          locations[i] = onepoint;
+        for (const i in place.results) {
+          const newplace = findPosition(type, place.results[i]);
+          //if ((newplace[1] != null && newplace[1] != null) &&
+            //(newplace[1] !== 0 && newplace[1] !== 0)) {
+            const onepoint = { lat: place.results[i].location.lat, lng: place.results[i].location.lng }
+            //const onepoint = {lat: newplace[0], lng: newplace[1]}
+            locations[i] = onepoint;
+          //}
         }
         // const markers = [];
         // const pId = [];
@@ -408,6 +432,13 @@ class ExpertGoogleMap extends React.Component {
     this.props.dispatch({ type: 'expertMap/searchMap', payload: { query } });
   }
 
+  onChangeBaiduMap = () => {
+    // TODO don't change page, use dispatch.
+    localStorage.setItem("maptype","baidu");
+    const href = window.location.href;
+    window.location.href = href.replace('expert-googlemap', 'expert-map');
+  };
+
   onSetPersonCard = (personInfo) => {
     this.props.dispatch({
       type: 'expertMap/getPersonInfoSuccess',
@@ -500,10 +531,10 @@ class ExpertGoogleMap extends React.Component {
               <Button onClick={this.showType} value="5">机构</Button>
             </ButtonGroup>
 
-            <div className={styles.switch} style={{ display: 'none' }}>
+            <div className={styles.switch} >
               <ButtonGroup id="diffmaps">
-                <Button type="primary" onClick={this.onChangeBaiduMap}>Baidu Map</Button>
-                <Button onClick={this.onChangeGoogleMap}>Google Map</Button>
+                <Button onClick={this.onChangeBaiduMap}>Baidu Map</Button>
+                <Button type="primary" onClick={this.onChangeGoogleMap}>Google Map</Button>
               </ButtonGroup>
             </div>
 

@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import defaults from '../utils';
-import { toIDDotString, TopExpertBase } from '../../utils/expert-base';
+import { toIDDotString, TopExpertBase as EB, TopNUniversity2015 } from '../../utils/expert-base';
 
 module.exports = {
 
@@ -82,37 +82,51 @@ module.exports = {
       name: <span><i className="fa fa-globe fa-fw" />ALL</span>,
       nperson: 2871,
     },
+    /*
+    高端科学家
+    图灵奖；美国、中国科学院/工程院院士；
+    计算机学科全球Top 20大学Full Prof.；TODO 没分出 Full Prof.
+    IEEE Fellow, ACM Fellow
+    */
     {
-      id: '595208bd9ed5dbf9cd563c60.593e4ac29ed5db77fc7be728.593beddb9ed5db23ccac7dbf.593b7c889ed5db23ccac68e6',
-      name: 'IEEE Fellow(2013-2016)',
-      nperson: 0,
+      name: '高端科学家',
+      id: toIDDotString(
+        EB.TuringAward,
+        EB.IEEEFellow, EB.ACMFellow,
+        EB.CAS, EB.NAS, EB.CAE, EB.NAE,
+        TopNUniversity2015(20),
+      ),
     },
+    /*
+    专家人才
+    活跃在科研一线，最近三年仍然在学术圈活跃（发文章）// TODO 没做
+    H-index>40(35)；// TODO 没做
+    全球Top 50大学的Associate Prof.；// TODO 没分出: 全球Top 50大学的Associate Prof.；
+    国内千人/长江学者/杰青
+    */
     {
-      id: toIDDotString(TopExpertBase.ACMFellow),
-      name: 'ACM Fellow',
-      nperson: 53 + 809,
+      id: toIDDotString(
+        EB.ChangJiangXueZhe, EB.JieQing, EB.YouQing,
+        TopNUniversity2015(50),
+      ),
+      name: '一线中青年科学家',
     },
+    /*
+     明日之星
+     - TR35；
+     - CCF青年科学家奖；// TODO 没有
+     - 全球Top 50大学的Assistant Prof.；// TODO 没分出 Associate Prof.；
+     - 国内青年千人；优青；
+     - H-Index>15 // TODO 没有
+     - 从事科研10年之内（第一篇论文），最近三年仍然在学术圈活跃（发文章），H-index>10 (或者15，对于热门领域)；原则上每个领域保留前50 // TODO 没有
+     */
     {
-      id: '5923c0829ed5db1600b942db',
-      name: '英国皇家科学院－Research Fellows Directory',
-      nperson: 976,
-    },
-    {
-      id: '5923bfee9ed5db1600b941f2',
-      name: '英国皇家科学院－Fellows Directory',
-      nperson: 287,
-    },
-    {
-      id: '55ebd8b945cea17ff0c53d5a',
-      name: '中国科学院院士',
-      nperson: 287,
-    },
-    {
-      id: '5912aa3a9ed5db655182ffde',
-      name: '美国科学院外国专家',
-      nperson: 287,
+      id: toIDDotString(
+        EB.TR35, EB.QingNianQianRen, EB.YouQing,
+        TopNUniversity2015(50),
+      ),
+      name: '明日之星',
     },
   ],
-
 
 };

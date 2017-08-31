@@ -10,6 +10,9 @@ export default {
 
   // Index
   'index.title': '专家搜索',
+  'search.translateSearchMessage.1': 'We also search "{enQuery}" for you.',
+  'search.translateSearchMessage.2': 'Search "{cnQuery}" only.',
+  'search.translateSearchMessage.reverse': 'You can also search with both "{enQuery}" and "{cnQuery}".',
 
   // Components
   'com.KgSearchBox.placeholder': '请输入姓名或者搜索词',
@@ -46,6 +49,11 @@ export default {
 
   // Recommendation
   'rcd.home.pageTitle': '机构列表',
-
-
+  'rcd.projectTable.header.projectName': '项目名称',
+  'rcd.projectTable.header.taskCount': '任务数',
+  'rcd.projectTable.header.progress': '完成进度',
+  'rcd.projectTable.header.status': '当前状态',
+  'rcd.projectTable.header.createTime': '创建时间',
+  'rcd.projectTable.header.updateTime': '更新时间',
+  'rcd.projectTable.header.actions': '操作',
 };

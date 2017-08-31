@@ -25,7 +25,7 @@ export default {
         let body = '';
         if (payload.type === 'welcome') {
           body = ' \n你好 {{name}},\n\n此邮件用来重置或初始化密码.\n\n点击下面链接设置' +
-            `您的密码\nhttps://${payload.src}.aminer.org/reset-password?email` +
+            `您的密码\nhttps://${payload.src}.aminer.org/retrieve?email` +
             '={{email}}&src={{src}}&token={{token}}\n\n这将允许您创建一个新的密码，' +
             '之后您可以登录到您的帐户。\n\n该链接在12小时内到期。\n\n如果您已经完成此操作，' +
             `或者您自己没有要求，请忽略此电子邮件。\n\n致！\n\n${payload.src.toUpperCase()}` +

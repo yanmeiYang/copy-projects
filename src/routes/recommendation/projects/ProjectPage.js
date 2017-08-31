@@ -8,10 +8,11 @@ import { Icon } from 'antd';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { gql, graphql } from 'react-apollo';
 import { sysconfig } from '../../../systems';
+import { Spinner } from '../../../components';
 import { classnames } from '../../../utils';
 import styles from './ProjectPage.less';
 import { Auth } from '../../../hoc';
-import { RCDOrgList } from '../../../components/recommendation';
+import { ProjectTable } from '../../../components/recommendation';
 
 const gqlGetOrgByID = gql`
   query gqlGetOrgByID ($id:ID!) {
@@ -23,7 +24,23 @@ const gqlGetOrgByID = gql`
       creatorName
       createTime
       updateTime
+      projects {
+        ... projectFields
+        taskCount
+      }
     }
+  }
+  
+  fragment projectFields on RcdProject {
+    id
+    desc
+    title
+    progress
+    status
+    creatorID
+    creatorName
+    createTime
+    updateTime
   }
 `;
 
@@ -104,13 +121,12 @@ export default class ProjectPage extends React.Component {
           {/*values={{ name: 'This is a test' }} />*/}
         </div>}
 
-        {data.loading &&
-        <div>Loading...</div>
-        }
-
-        {!data.loading &&
-        <RCDOrgList orgs={data.rcdorgs} />
-        }
+        <div>
+          <Spinner loading={data.loading} nomask />
+          {!data.loading && data.rcdorg &&
+          <ProjectTable projects={data.rcdorg.projects} />
+          }
+        </div>
 
       </div>
     );

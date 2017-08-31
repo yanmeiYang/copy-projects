@@ -35,7 +35,15 @@ export default class Seminar extends React.Component {
     this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'orgcategory' } });
     this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'activity_type' } });
   };
-
+  componentDidMount = () => {
+    this.setState({ organizer: '', category: '', tag: '', orgType: '' });
+    const params = {
+      offset: 0,
+      size: this.props.seminar.sizePerPage,
+      filter: { src: sysconfig.SOURCE, organizer: '', category: '' },
+    };
+    this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
+  };
   addBao = () => {
     this.props.dispatch(routerRedux.push({
       pathname: '/seminar-post',
@@ -79,10 +87,8 @@ export default class Seminar extends React.Component {
     }
   };
 
-  getSeminar = (sizePerPage, filter, status) => {
-    if (status) {
-      this.props.seminar.orgByActivity = [];
-    }
+  getSeminar = (sizePerPage, filter) => {
+    this.props.dispatch({ type: 'seminar/clearState' });
     this.setState({ organizer: '', category: '', tag: '', orgType: '' });
     const params = {
       offset: 0,
@@ -202,7 +208,7 @@ export default class Seminar extends React.Component {
           <SearchSeminar onSearch={this.onSearch.bind()} />
           {auth.isAuthed(app.roles) &&
           <Button type="primary" onClick={this.addBao.bind()}>
-            <Icon type="plus" />&nbsp;发布新活动
+            <Icon type="plus" />&nbsp;创建新活动
           </Button>}
         </div>
         {/* filter */}

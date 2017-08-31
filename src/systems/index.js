@@ -73,6 +73,7 @@ const defaultSystemConfigs = {
    */
   Enable_Export: false,
   ShowRegisteredRole: true, // 注册页面是否显示角色配置
+  Signup_Password: false, // 注册页面password
 
   SearchPagePrefix: 'uniSearch', // search - 普通搜索(deleted); uniSearch - 多合一搜索.
   Search_EnablePin: false,

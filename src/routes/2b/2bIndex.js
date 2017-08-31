@@ -47,8 +47,6 @@ export default class SystemConfig extends React.Component {
     return (
       <div className="content-inner" style={{ maxWidth: '1228px' }}>
         AMiner 2b system config homepage.
-        <br />
-        <Link to="/2b/email-template">Email Template 设置</Link>, <br />
 
         <div className={styles.changer}>
           {system.AvailableSystems.map((sys) => {
@@ -83,6 +81,11 @@ export default class SystemConfig extends React.Component {
               </div>
             );
           })}
+        </div>
+
+        <div className={styles.changer}>
+          <Link to="/2b/email-template">Email Template 设置</Link>, <br />
+
         </div>
 
         <ul>

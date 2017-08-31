@@ -16,12 +16,14 @@ class EmailTemplate extends React.Component {
         Modal.error({
           title: '您没有权限',
         });
-      } else {
+      } else if (nextProps.systemSetting.status !== null) {
         Modal.success({
           title: '邮箱模板定制成功',
+          onOk() {
+            location.href = '/2b';
+          },
         });
       }
-      this.props.form.resetFields();
     }
     if (nextProps.setFormValue !== this.props.setFormValue) {
       const content = nextProps.setFormValue;
@@ -41,10 +43,6 @@ class EmailTemplate extends React.Component {
         values.src = this.props.source;
         values.type = this.props.type;
         this.props.dispatch({ type: 'systemSetting/setEmailTemplate', payload: values });
-        Modal.success({
-          title: '邮箱模板定制成功',
-        });
-        this.props.form.resetFields();
       }
     });
   };
@@ -74,7 +72,6 @@ class EmailTemplate extends React.Component {
     };
     const { getFieldDecorator } = this.props.form;
     return (
-      <div>
       <Form onSubmit={this.registered} style={{ marginTop: 30 }}>
         <FormItem
           {...formItemLayout}
@@ -127,7 +124,6 @@ class EmailTemplate extends React.Component {
           </Button>
         </FormItem>
       </Form>
-      </div>
     );
   }
 }

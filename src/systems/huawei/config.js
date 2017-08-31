@@ -35,6 +35,8 @@ module.exports = {
   // Footer_Content: '',
   ShowHelpDoc: true,
 
+  Signup_Password: true,
+
   // Functionality
   Enable_Export: false,
   Search_EnablePin: true,

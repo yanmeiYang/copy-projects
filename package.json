@@ -11,6 +11,7 @@
     "echarts": "^3.7.0",
     "graphql-tag": "^2.4.2",
     "immutable": "^3.8.1",
+    "lib-qqwry": "^1.0.2",
     "lodash": "^4.17.4",
     "nprogress": "^0.2.0",
     "prop-types": "^15.5.10",
@@ -26,8 +27,7 @@
     "react-intl": "^2.3.0",
     "react-load-script": "0.0.6",
     "redux-logger": "^3.0.6",
-    "zrender": "^3.6.0",
-    "lib-qqwry":"^1.0.2"
+    "zrender": "^3.6.0"
   },
   "devDependencies": {
     "amdefine": "^1.0.1",

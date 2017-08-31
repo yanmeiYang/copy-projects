@@ -46,5 +46,12 @@ export default {
 
   // Recommendation
   'rcd.home.pageTitle': 'Organization List',
+  'rcd.projectTable.header.projectName': 'Project Name',
+  'rcd.projectTable.header.taskCount': 'Task Count',
+  'rcd.projectTable.header.progress': 'Progress',
+  'rcd.projectTable.header.status': 'Status',
+  'rcd.projectTable.header.createTime': 'Create Time',
+  'rcd.projectTable.header.updateTime': 'Update Time',
+  'rcd.projectTable.header.actions': 'Actions',
 
 };

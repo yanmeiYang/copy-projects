@@ -16,7 +16,7 @@ export default {
 
   // "proxy": {
   //   "/api": {
-  //     "target": "https://trajectory.aminer.org/",
+  //     "target": "https://api.aminer.org/",r
   //     "changeOrigin": true,
   //     "pathRewrite": { "^/tapi": "" }
   //   }

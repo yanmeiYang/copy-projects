@@ -2,57 +2,75 @@
  *  Created by BoGao on 2017-08-23;
  */
 import React from 'react';
+import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { Table, Tooltip, Icon } from 'antd';
-import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
+import {
+  defineMessages,
+  injectIntl,
+  FormattedMessage as FM,
+  FormattedRelative as FR,
+} from 'react-intl';
 import styles from './ProjectTable.less';
 
-const columns = [{
-  title: 'Project Name',
-  dataIndex: 'title',
-  key: 'projectName',
-}, {
-  title: 'Task Count',
-  dataIndex: 'taskCount',
-  key: 'taskCount',
-}, {
-  title: 'Progress',
-  dataIndex: 'progress',
-  key: 'progress',
-}, {
-  title: 'Status',
-  dataIndex: 'status',
-  key: 'status',
-}, {
-  title: 'Create Time',
-  dataIndex: 'createTime',
-  key: 'createTime',
-}, {
-  title: 'Update Time',
-  dataIndex: 'updateTime',
-  key: 'updateTime',
-}, {
-  title: 'Action',
-  dataIndex: 'address',
-  key: 'action',
-}];
+const messages = defineMessages({
+  projectName: { id: 'rcd.projectTable.header.projectName', defaultMessage: 'Project Name' },
+  taskCount: { id: 'rcd.projectTable.header.taskCount', defaultMessage: 'Task Count' },
+  progress: { id: 'rcd.projectTable.header.progress', defaultMessage: 'Progress' },
+  status: { id: 'rcd.projectTable.header.status', defaultMessage: 'Status' },
+  createTime: { id: 'rcd.projectTable.header.createTime', defaultMessage: 'Create Time' },
+  updateTime: { id: 'rcd.projectTable.header.updateTime', defaultMessage: 'Update Time' },
+  actions: { id: 'rcd.projectTable.header.actions', defaultMessage: 'Actions' },
+});
 
-
+@injectIntl
 export default class ProjectTable extends React.PureComponent {
-  // constructor(props) {
-  //   super(props);
-  //   // this.personLabel = props.personLabel;
-  // }
+  constructor(props) {
+    super(props);
+    const { intl } = props;
+    this.intl = intl;
+
+    this.columns = [{
+      title: intl.formatMessage(messages.projectName),
+      dataIndex: 'title',
+      key: 'projectName',
+    }, {
+      title: intl.formatMessage(messages.taskCount),
+      dataIndex: 'taskCount',
+      key: 'taskCount',
+    }, {
+      title: intl.formatMessage(messages.progress),
+      dataIndex: 'progress',
+      key: 'progress',
+    }, {
+      title: intl.formatMessage(messages.status),
+      dataIndex: 'status',
+      key: 'status',
+    }, {
+      title: intl.formatMessage(messages.createTime),
+      dataIndex: 'createTime',
+      key: 'createTime',
+      render: (text, record) => (intl.formatRelative(record.createTime)),
+    }, {
+      title: intl.formatMessage(messages.updateTime),
+      dataIndex: 'updateTime',
+      key: 'updateTime',
+      render: (text, record) => (intl.formatRelative(record.updateTime) )
+    }, {
+      title: intl.formatMessage(messages.actions),
+      dataIndex: 'address',
+      key: 'action',
+    }];
+  }
 
   state = {};
 
   shouldComponentUpdate(nextProps) {
-    if (nextProps.orgs === this.props.orgs) {
+    if (nextProps.projects === this.props.projects) {
       return false;
     }
     return true;
   }
-
 
   render() {
     const { projects } = this.props;
@@ -60,8 +78,9 @@ export default class ProjectTable extends React.PureComponent {
     return (
       <div className={styles.orgs}>
         <div className={styles.box}>
-          <Table dataSource={projects} columns={columns}
-                 rowKey={record => record.id} />
+          <Table dataSource={projects} columns={this.columns} rowKey={record => record.id}
+                 bordered
+          />
 
           {
             projects && projects.map((project) => {

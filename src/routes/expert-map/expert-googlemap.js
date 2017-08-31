@@ -158,24 +158,26 @@ class ExpertGoogleMap extends React.Component {
               const apos = getById('allmap').getBoundingClientRect();
               const cpos = event.target.getBoundingClientRect();
               const newPixel = new google.maps.Point(cpos.left - apos.left + imgwidth, cpos.top - apos.top); // eslint-disable-line
-
               // get personInfo data.
+              //const currentPoint = that.getProjection().fromDivPixelToLatLng(newPixel);
               const chtml = event.target.innerHTML;
               let num = 0;
               if (chtml.split('@@@@@@@').length > 1) {
                 num = chtml.split('@@@@@@@')[1];
               }
               const personInfo = data.data.persons[num];
-              console.log(newPixel)
               const myLatLng = new google.maps.LatLng({ lat: 47, lng: 112 });
               const infowindow = new google.maps.InfoWindow({
-                content: "<div class='popup'>oooooooooooo</div>",
+                content: "<div id='author_info' class='popup'></div>",
               });
               infowindow.setPosition(myLatLng);
               that.onSetPersonCard(personInfo);
               infowindow.open(map);
               that.syncInfoWindow();
             });
+            // cimg.addEventListener('mouseleave', (event) => {
+            //   map.closeInfoWindow();
+            // });
           }
         }
       },
@@ -408,6 +410,13 @@ class ExpertGoogleMap extends React.Component {
     this.props.dispatch({ type: 'expertMap/searchMap', payload: { query } });
   }
 
+  onChangeBaiduMap = () => {
+    // TODO don't change page, use dispatch.
+    localStorage.setItem("maptype","baidu");
+    const href = window.location.href;
+    window.location.href = href.replace('expert-googlemap', 'expert-map');
+  };
+
   onSetPersonCard = (personInfo) => {
     this.props.dispatch({
       type: 'expertMap/getPersonInfoSuccess',
@@ -500,10 +509,10 @@ class ExpertGoogleMap extends React.Component {
               <Button onClick={this.showType} value="5">机构</Button>
             </ButtonGroup>
 
-            <div className={styles.switch} style={{ display: 'none' }}>
+            <div className={styles.switch} >
               <ButtonGroup id="diffmaps">
-                <Button type="primary" onClick={this.onChangeBaiduMap}>Baidu Map</Button>
-                <Button onClick={this.onChangeGoogleMap}>Google Map</Button>
+                <Button onClick={this.onChangeBaiduMap}>Baidu Map</Button>
+                <Button type="primary" onClick={this.onChangeGoogleMap}>Google Map</Button>
               </ButtonGroup>
             </div>
 

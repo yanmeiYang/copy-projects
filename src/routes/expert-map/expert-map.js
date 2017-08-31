@@ -252,6 +252,7 @@ class ExpertMap extends React.PureComponent {
     //   pathname: '/expert-map',
     //   data: { type: 'google' },
     // }));
+    localStorage.setItem("maptype","google");
     const href = window.location.href;
     window.location.href = href.replace('expert-map', 'expert-googlemap');
   };
@@ -557,9 +558,9 @@ class ExpertMap extends React.PureComponent {
               <Button onClick={this.showType} value="5">机构</Button>
             </ButtonGroup>
 
-            <div className={styles.switch} style={{ display: 'none' }}>
+            <div className={styles.switch} >
               <ButtonGroup id="diffmaps">
-                <Button type="primary" onClick={this.onChangeBaiduMap}>Baidu Map</Button>
+                <Button type="primary" onClick={this.onChangeBaiduMap} >Baidu Map</Button>
                 <Button onClick={this.onChangeGoogleMap}>Google Map</Button>
               </ButtonGroup>
             </div>

@@ -73,6 +73,7 @@ const fullRouter = (app, defaultChildRoutes) => {
       core.ExpertMapGoogle(app),
       core.ExpertTrajectoryPage(app),
       core.ExpertHeatmapPage(app),
+      core.ExpertMapDispatch(app),
 
       // Relation-Graph, KnowledgeGraph, TrendPrediction, etc...
       core.RelationGraphPage(app),

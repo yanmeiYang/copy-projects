@@ -537,7 +537,7 @@ class RegistrationForm extends React.PureComponent {
                             editTheTalk={editTheTalk} parentProps={this.props}
                             editTalkAddress={this.state.location}
                             callbackParent={this.addTheNewTalk}
-                            callbackParentSetAddNewTalk={this.setAddNewTalk} editTime={this.state.time}/>}
+                            callbackParentSetAddNewTalk={this.setAddNewTalk}/>}
           </Col>
 
           <Col className={styles.formFooter}>

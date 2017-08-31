@@ -47,8 +47,8 @@ class AddExpertModal extends React.Component {
   };
   componentDidMount() {
     this.setState({ talkAddress: this.props.editTalkAddress });
-    this.setState({ talkStartValue: this.props.editTime.from });
-    this.setState({ talkEndValue: this.props.editTime.to });
+    this.setState({ talkStartValue: this.props.startTalkDate });
+    this.setState({ talkEndValue: this.props.endTalkDate});
     if (this.props.editTheTalk.speaker) {
       const editTheTalk = this.props.editTheTalk;
       const setFormFieldsVale = this.props.parentProps.form;

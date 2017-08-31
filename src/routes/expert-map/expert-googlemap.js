@@ -324,7 +324,7 @@ class ExpertGoogleMap extends React.Component {
         }
       }
     }, 100);
-  }
+  };
 
   syncInfoWindow = () => {
     // sync personInfo popup
@@ -467,6 +467,8 @@ class ExpertGoogleMap extends React.Component {
   }
 //page-------------------------------------------------------------------------------------------------------------------
   render() {
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>.',this.props );
+
     const model = this.props && this.props.expertMap;
     const persons = model.geoData.results;
     let count = 0;
@@ -503,7 +505,6 @@ class ExpertGoogleMap extends React.Component {
         </div>
       );
     }
-
     // right info
     // const shouldRIZUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') === -1
     //   && model.infoZoneIds === person.id;
@@ -581,7 +582,7 @@ class ExpertGoogleMap extends React.Component {
           {personPopupJsx && personPopupJsx}
         </div>
 
-        <div className="em_report" id="em_report">统计/报表</div>
+        {/* <div className="em_report" id="em_report">统计/报表</div> */}
 
         {/* TODO what's this for? */}
         <input id="currentId" type="hidden" />

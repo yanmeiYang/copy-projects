@@ -112,6 +112,9 @@ module.exports = {
     getCategoriesHint: '/2b/config/:source/category/suggest/:category',
     listConfigsByCategoryList: '/2b/config/:source/by-category',
 
+    // topic
+    getTopicByMention: '/topic/summary/m/:mention',
+
     // Recommendation APIs
     getAllOrgs: '/reviewer/orgs/get/all/:offset/:size',
     // getOrgById: '/reviewer/org/get/:id',

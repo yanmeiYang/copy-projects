@@ -45,15 +45,10 @@ class AddExpertModal extends React.Component {
     stype: {},
     role: 'talker',
   };
-
   componentDidMount() {
     this.setState({ talkAddress: this.props.editTalkAddress });
-    this.setState({ talkStartValue: this.props.startTalkDate });
-    this.setState({ talkEndValue: this.props.endTalkDate });
-    // this.props.form.setFieldsValue({
-    //   address: this.state.talkAddress,
-    // });
-    // ReactDOM.findDOMNode( this.refs.talkLocation).value = this.state.talkAddress;
+    this.setState({ talkStartValue: this.props.editTime.from });
+    this.setState({ talkEndValue: this.props.editTime.to });
     if (this.props.editTheTalk.speaker) {
       const editTheTalk = this.props.editTheTalk;
       const setFormFieldsVale = this.props.parentProps.form;
@@ -66,7 +61,7 @@ class AddExpertModal extends React.Component {
       });
       this.speakerInformation = this.props.editTheTalk.speaker;
       ReactDOM.findDOMNode(this.refs.talkTitle).value = editTheTalk.title;
-      // ReactDOM.findDOMNode(this.refs.talkLocation).value = editTheTalk.location ? editTheTalk.location.address : '';
+      ReactDOM.findDOMNode(this.refs.talkLocation).value = this.state.talkAddress;
       ReactDOM.findDOMNode(this.refs.talkAbstract).value = editTheTalk.abstract;
       setFormFieldsVale.setFieldsValue({ contrib: editTheTalk.speaker.stype.label });
       editTheTalk.speaker.role !== undefined ? setFormFieldsVale.setFieldsValue({ role: editTheTalk.speaker.role[0] }) : '';
@@ -78,7 +73,7 @@ class AddExpertModal extends React.Component {
       ReactDOM.findDOMNode(this.refs.speakerEmail).value = editTheTalk.speaker.email;
       ReactDOM.findDOMNode(this.refs.speakerBio).value = editTheTalk.speaker.bio;
       ReactDOM.findDOMNode(this.refs.speakerImg).src = editTheTalk.speaker.img;
-    }
+    };
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -183,8 +178,10 @@ class AddExpertModal extends React.Component {
       },
       location: { city: '', address: '' },
       abstract: '',
-      address: this.state.talkAddress,
+      talkAddress: this.state.talkAddress,
+
     };
+
     talk.title = this.refs.talkTitle.refs.input.value;
     talk.speaker = state.speakerInfo;
     if (typeof state.speakerInfo.gender === 'number') {
@@ -293,10 +290,11 @@ class AddExpertModal extends React.Component {
         outerThis.saveExpertInfo('img', data);
       },
     };
-    const { modalVisible, step2, step3, isEdit, speakerInfo, isSearched, talkStartValue, talkEndValue } = this.state;
+    const { modalVisible, step2, step3, isEdit, speakerInfo, isSearched, talkStartValue, talkEndValue, talkAddress } = this.state;
     const { parentProps, editTheTalk } = this.props;
     const { speakerSuggests, loading, contribution_type } = parentProps.seminar;
-    const { getFieldDecorator } = parentProps.form;
+    const { getFieldDecorator} = parentProps.form;
+
     return (
       <Modal
         title="添加专家"
@@ -324,7 +322,7 @@ class AddExpertModal extends React.Component {
             {...formItemLayout}
             label="演讲标题"
           >
-            <Input placeholder="请输入演讲标题。。。" ref="talkTitle"/>
+            <Input placeholder="请输入演讲标题" ref="talkTitle"/>
           </FormItem>
           <FormItem
             {...formItemLayout}
@@ -337,17 +335,18 @@ class AddExpertModal extends React.Component {
           <FormItem
             {...formItemLayout}
             label={(<span>演讲地点</span>)}>
-            {getFieldDecorator('address', {
+            {getFieldDecorator('talkAddress', {
+              initialValue: talkAddress,
               rules: [{ required: true }],
             })(
-              <Input placeholder="请输入活动地点" />
+              <Input placeholder="请输入活动地点" />,
               // <Input placeholder="请输入活动地点" ref="talkLocation" />
             )}
           </FormItem>
           <FormItem
             {...formItemLayout}
             label={(<span>演讲摘要</span>)}>
-            <Input type="textarea" rows={4} placeholder="请输入演讲摘要。。。" ref="talkAbstract"
+            <Input type="textarea" rows={4} placeholder="请输入演讲摘要" ref="talkAbstract"
                    onBlur={this.setTalkAbstrack}/>
           </FormItem>
           {contribution_type && <FormItem

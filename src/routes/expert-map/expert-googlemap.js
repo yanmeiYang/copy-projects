@@ -5,6 +5,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { Button } from 'antd';
 import styles from './expert-googlemap.less';
+import * as huaweiConfig  from '../../systems/huawei/config';
 import { listPersonByIds } from '../../services/person';
 import * as profileUtils from '../../utils/profile-utils';
 import { findPosition, getById } from './utils/map-utils';
@@ -248,7 +249,7 @@ class ExpertGoogleMap extends React.Component {
         }
         const map = new google.maps.Map(document.getElementById('allmap'), {
           //center: { lat: 24.397, lng: 140.644 },
-          center: { lat: 39.915, lng: 116.404 },
+          center: { lat: huaweiConfig.CentralPosition.lat, lng: huaweiConfig.CentralPosition.lng },
           zoom: scale,
           gestureHandling: 'greedy',
           minZoom: minscale,
@@ -258,6 +259,7 @@ class ExpertGoogleMap extends React.Component {
         let locations = [];
         for (const i in place.results) {
           const newplace = findPosition(type, place.results[i]);
+          console.log(place.results[i].location,newplace)
           //if ((newplace[1] != null && newplace[1] != null) &&
             //(newplace[1] !== 0 && newplace[1] !== 0)) {
             const onepoint = { lat: place.results[i].location.lat, lng: place.results[i].location.lng }

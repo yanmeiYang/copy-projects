@@ -5,6 +5,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { Button } from 'antd';
 import styles from './expert-map.less';
+import * as huaweiConfig  from '../../systems/huawei/config';
 import { listPersonByIds } from '../../services/person';
 import * as profileUtils from '../../utils/profile-utils';
 import { findPosition, getById, waitforBMap, waitforBMapLib } from './utils/map-utils';
@@ -278,7 +279,8 @@ class ExpertMap extends React.PureComponent {
         }
         const map = new BMap.Map('allmap', { minZoom: minscale, maxZoom: maxscale });
         this.map = map; // set to global;
-        map.centerAndZoom(new BMap.Point(116.404, 39.915), scale);
+        //map.centerAndZoom(new BMap.Point(45, 45), scale);
+        map.centerAndZoom(new BMap.Point(huaweiConfig.CentralPosition.lng, huaweiConfig.CentralPosition.lat), scale);
         this.initializeBaiduMap(map);
         const markers = [];
         const pId = [];
@@ -289,7 +291,7 @@ class ExpertMap extends React.PureComponent {
           }
           map.addOverlay(new BMap.Label("中国", opts1));
           const opts2 = {
-            position : new BMap.Point(135.5, 33),
+            position : new BMap.Point(136, 32),
           }
           map.addOverlay(new BMap.Label("日本", opts2));
           const opts3 = {
@@ -305,7 +307,7 @@ class ExpertMap extends React.PureComponent {
           }
           map.addOverlay(new BMap.Label("香港", opts5));
           const opts6 = {
-            position : new BMap.Point(100, -2),
+            position : new BMap.Point(100, -3),
           }
           map.addOverlay(new BMap.Label("新加坡", opts6));
           const opts7 = {
@@ -317,11 +319,11 @@ class ExpertMap extends React.PureComponent {
           }
           map.addOverlay(new BMap.Label("中亚", opts8));
           const opts9 = {
-            position : new BMap.Point(110, 5),
+            position : new BMap.Point(118.5, 9),
           }
           map.addOverlay(new BMap.Label("东南亚", opts9));
           const opts10 = {
-            position : new BMap.Point(30, 54),
+            position : new BMap.Point(29, 45),
           }
           map.addOverlay(new BMap.Label("东欧", opts10));
           const opts11 = {
@@ -329,7 +331,7 @@ class ExpertMap extends React.PureComponent {
           }
           map.addOverlay(new BMap.Label("西欧", opts11));
           const opts12 = {
-            position : new BMap.Point(16.5, 57),
+            position : new BMap.Point(16, 58),
           }
           map.addOverlay(new BMap.Label("北欧", opts12));
           const opts13 = {
@@ -345,7 +347,7 @@ class ExpertMap extends React.PureComponent {
           }
           map.addOverlay(new BMap.Label("以色列", opts15));
           const opts16 = {
-            position : new BMap.Point(130, -30),
+            position : new BMap.Point(130, -31),
           }
           map.addOverlay(new BMap.Label("大洋洲", opts16));
           const opts17 = {
@@ -357,7 +359,7 @@ class ExpertMap extends React.PureComponent {
           }
           map.addOverlay(new BMap.Label("加拿大", opts18));
           const opts19 = {
-            position : new BMap.Point(-127, 34),
+            position : new BMap.Point(-126.5, 33.5),
           }
           map.addOverlay(new BMap.Label("美国西部", opts19));
           const opts20 = {
@@ -365,7 +367,7 @@ class ExpertMap extends React.PureComponent {
           }
           map.addOverlay(new BMap.Label("东部", opts20));
           const opts21 = {
-            position : new BMap.Point(-107, 35),
+            position : new BMap.Point(-107.5, 34.5),
           }
           map.addOverlay(new BMap.Label("中部", opts21));
         }

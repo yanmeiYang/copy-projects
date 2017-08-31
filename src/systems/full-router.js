@@ -71,6 +71,8 @@ const fullRouter = (app, defaultChildRoutes) => {
       // expert map
       core.ExpertMap(app),
       core.ExpertMapGoogle(app),
+      core.ExpertMapDispatch(app),
+
       core.ExpertTrajectoryPage(app),
       core.ExpertHeatmapPage(app),
 

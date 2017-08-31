@@ -2,7 +2,6 @@
 import * as personService from '../services/person';
 import * as searchService from '../services/search';
 
-
 const cache = {};
 
 export default {
@@ -82,12 +81,24 @@ export default {
           return null;
         })
         data.data.data.map((item) => {
+          const add = [];
+          let c = item.city;
+          // console.log(geomap[c]);
+          while (true) {
+            add.push(geomap[c].name);
+            if (geomap[c].parent_id === 0 || typeof (geomap[c].parent_id) === 'undefined') {
+              break;
+            } else {
+              c = geomap[c].parent_id;
+            }
+          }
           geoSearchData.push({
             name: item.n,
             id: item.i,
             country: geomap[item.country],
             city: geomap[item.city],
             name_zh: item.n_zh,
+            longaddress: add,
             hindex: item.h,
             location: {
               lat: item.lat,

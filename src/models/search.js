@@ -16,7 +16,7 @@ export default {
     query: null,
 
     // use translate search?
-    useTranslateSearch: true,
+    useTranslateSearch: sysconfig.Search_DefaultTranslateSearch,
     translatedQuery: '',
 
     offset: 0,

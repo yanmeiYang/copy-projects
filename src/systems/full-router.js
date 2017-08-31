@@ -57,6 +57,7 @@ const fullRouter = (app, defaultChildRoutes) => {
       // Recommendation/rcd
       core.RecommendationHome(app),
       core.ProjectPage(app),
+      core.ProjectTaskPage(app),
 
       // Activity / Seminar
       core.Seminar(app),

@@ -106,7 +106,7 @@ module.exports = {
     */
     {
       id: toIDDotString(
-        EB.ChangJiangXueZhe, EB.JieQing, EB.YouQing,
+        EB.JieQing, EB.YouQing,
         TopNUniversity2015(50),
       ),
       name: '一线中青年科学家',

@@ -24,7 +24,7 @@ let mapinterval;
 const location = heatData.locations;
 const table = heatData.table;
 const authors = heatData.authors;
-const authorImage = heatData.authorImage;
+// const authorImage = heatData.authorImage;
 const planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
 const jietang = 'am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90';
 // const myChart2 = echarts.init(document.getElementById('world'));
@@ -102,14 +102,14 @@ class ExpertHeatmap extends React.Component {
           author[table[aid][index]].push(authors[aid]);
         }
 
-        if (authorImage[aid] !== 0) {
-          if (table[aid][index] in authorImg) { // 取今年各地点的作者id
-            authorImg[table[aid][index]].push(authorImage[aid]);
-          } else {
-            authorImg[table[aid][index]] = [];
-            authorImg[table[aid][index]].push(authorImage[aid]);
-          }
-        }
+        // if (authorImage[aid] !== 0) {
+        //   if (table[aid][index] in authorImg) { // 取今年各地点的作者id
+        //     authorImg[table[aid][index]].push(authorImage[aid]);
+        //   } else {
+        //     authorImg[table[aid][index]] = [];
+        //     authorImg[table[aid][index]].push(authorImage[aid]);
+        //   }
+        // }
 
         // console.log('image', authorImg);
         // console.log('author', author);
@@ -343,13 +343,13 @@ class ExpertHeatmap extends React.Component {
       },
       visualMap: {
         min: 0,
-        max: 20,
+        max: 120,
         // splitNumber: 5,
         type: 'continuous',
         // seriesIndex: 0,
         inRange: {
-          // color: ['#eb3323','#EC5428','#F19436','#F8D247','#eeee4f','#cbfa50','#84da62','#00a854'].reverse(),
-          color: ['#eb3323','#EC5428','#F19436','#F8D247','#eeee4f','#108ee9','#0c60aa'].reverse(),
+          color: ['#eb3323','#EC5428','#F19436','#F8D247','#eeee4f','#cbfa50','#00a854'].reverse(),
+          // color: ['#eb3323','#EC5428','#F19436','#F8D247','#eeee4f','#108ee9','#0c60aa'].reverse(),
         },
         textStyle: {
           color: '#fff',
@@ -381,9 +381,6 @@ class ExpertHeatmap extends React.Component {
           normal: {
             areaColor: '#f5f3f0',
             borderColor: '#91a0ae',
-          },
-          emphasis: {
-            areaColor: '#bcbab8',
           },
         },
       },
@@ -622,7 +619,7 @@ class ExpertHeatmap extends React.Component {
     const geoCoordMap = {};
 
     for (const i of _.range(1, location.length)) {
-      geoCoordMap[i] = location[i];
+      geoCoordMap[i] = location[i]
     }
     // console.log('geo', geoCoordMap);
     return geoCoordMap;
@@ -812,7 +809,7 @@ class ExpertHeatmap extends React.Component {
           normal: {
             color: '#f78e3d',
             // borderColor: '#f78e3d',
-            opacity: 1,
+            opacity: 0.85,
           },
           emphasis: {
             color: '#ff2f31',
@@ -947,18 +944,18 @@ class ExpertHeatmap extends React.Component {
         type: 'lines',
         animationDuration: 1000,
         // zlevel: 1,
-        effect: {
-          show: true,
-          period: 6,
-          trailLength: 0,
-          // color: '#f78e3d',
-          symbol: 'arrow',
-          symbolSize: 3,
-          animation: false,
-        },
-        symbol: planePath,
+        // effect: {
+        //   show: true,
+        //   period: 6,
+        //   trailLength: 0,
+        //   // color: '#f78e3d',
+        //   symbol: 'arrow',
+        //   symbolSize: 3,
+        //   animation: false,
+        // },
+        // symbol: planePath,
         // symbol: 'image://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
-        symbolSize: 13,
+        // symbolSize: 13,
         // symbolOffset:[0, '50%'],
         lineStyle: {
           normal: {
@@ -982,39 +979,40 @@ class ExpertHeatmap extends React.Component {
         data: formtGCData(),
       },
 
-      {
-        name: 'image',
-        type: 'scatter',
-        zlevel: 2,
-        coordinateSystem: 'geo',
-        markPoint: {
-          z: 5,
-          symbol: 'rect',
-          symbolSize: [40, 60],
-          color: '#fff',
-          // symbolOffset:[0,'-70%'],
-          label: {
-            normal: {
-              show: false,
-            },
-            emphasis: {
-              show: false,
-            },
-          },
-          itemStyle: {
-            normal: {
-              borderColor: '#fff',
-              borderWidth: 10,
-            },
-          },
-          data: getImage(),
-        },
-      },
+      // {
+      //   name: 'image',
+      //   type: 'scatter',
+      //   zlevel: 2,
+      //   coordinateSystem: 'geo',
+      //   markPoint: {
+      //     z: 5,
+      //     symbol: 'rect',
+      //     symbolSize: [40, 60],
+      //     color: '#fff',
+      //     // symbolOffset:[0,'-70%'],
+      //     label: {
+      //       normal: {
+      //         show: false,
+      //       },
+      //       emphasis: {
+      //         show: false,
+      //       },
+      //     },
+      //     itemStyle: {
+      //       normal: {
+      //         borderColor: '#fff',
+      //         borderWidth: 10,
+      //       },
+      //     },
+      //     data: getImage(),
+      //   },
+      // },
 
       {
         name: 'AQI',
         type: 'heatmap',
         coordinateSystem: 'geo',
+        blurSize:20,
         zlevel: 1,
         data: convertData(data, j),
       },

@@ -84,12 +84,19 @@ const DetailPage = ({ dispatch, seminar, app, pad }) => {
               {(app.roles.authority.includes(summaryById.organizer[0]) || app.roles.admin)
               && <span>
                 <a type="danger"
-                   style={{ float: 'right', marginLeft: '8px', marginRight: '5px', fontSize: '20px', color: '#f04134' }}
+                   style={{
+                     float: 'right',
+                     marginLeft: '8px',
+                     marginRight: '5px',
+                     fontSize: '20px',
+                     color: '#f04134',
+                   }}
                    onClick={delSeminar} title="删除">
-                  <Icon type="delete"/></a>
+                  <Icon type="delete" /></a>
                 <a style={{ float: 'right', marginRight: '10px', fontSize: '20px' }}
                    onClick={editSeminar} title="编辑">
-                  <Icon type="edit"/></a>
+                  <Icon type="edit" />
+                </a>
               </span>}
             </div>
           </Col>
@@ -97,30 +104,30 @@ const DetailPage = ({ dispatch, seminar, app, pad }) => {
             <div className={styles.caption}>
               <div style={{ float: 'right', marginRight: 10, marginTop: '10px' }}>
                 <div>
-                  <QRCode value={window.location.href}/>
+                  <QRCode value={window.location.href} />
                 </div>
               </div>
               {/* type=workshop*/}
               <div className={styles.speakerMessage}>
-                <ActivityInfo summaryById={summaryById}/>
+                <ActivityInfo summaryById={summaryById} />
                 {presidents.length > 0 &&
                 <div>
                   <h2><strong>会议主席</strong></h2>
-                  <hr/>
-                  <ExpertAllInfo speakers={presidents} pad={pad}/>
+                  <hr />
+                  <ExpertAllInfo speakers={presidents} pad={pad} />
                 </div>}
 
                 {guestSpeakers.length > 0 &&
                 <div>
                   <h2><strong>特邀嘉宾</strong></h2>
-                  <hr/>
-                  <ExpertAllInfo speakers={guestSpeakers} pad={pad}/>
+                  <hr />
+                  <ExpertAllInfo speakers={guestSpeakers} pad={pad} />
                 </div>}
               </div>
             </div>
           </Col>
-          <CommentsByActivity activityId={summaryById.id} currentUser={currentUser}/>
-        </Row> : <div style={{ minHeight: 300 }}/>}
+          <CommentsByActivity activityId={summaryById.id} currentUser={currentUser} />
+        </Row> : <div style={{ minHeight: 300 }} />}
       </Spin>
     </div>
   );

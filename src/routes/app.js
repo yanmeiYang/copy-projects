@@ -138,6 +138,10 @@ const App = ({ children, location, dispatch, app, loading }) => {
           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlzpf4YyjOBGYOhfUaNvQZENXEWBgDkS0"
           async defer />}
 
+        {href.indexOf('/expert-heatmap') > 0 &&
+        <script
+          src="https://cdnjs.cloudflare.com/ajax/libs/echarts/3.7.1/echarts.js"/>}
+
       </Helmet>
 
       <div className={classnames(styles.layout)}>

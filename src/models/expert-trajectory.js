@@ -37,7 +37,6 @@ export default {
       const { personId } = payload;
          try {
            const data = yield call(traDataFindService.dataFind, personId);
-           console.log('(((((((((((((((((((');
            yield put({ type: 'dataFindSuccess', payload: { data } });
          } catch (e) {
            console.error('---- Catch Error: ---- ', e);
@@ -68,7 +67,6 @@ export default {
 
     searchPersonSuccess(state, { payload: { data, query } }) { // state?
       const { result, total } = data;
-      console.log('result', result);
       return {
         ...state,
         results: result,
@@ -78,7 +76,6 @@ export default {
     },
 
     dataFindSuccess(state, { payload }) {
-      console.log('hahahahahahhaah', payload);
       /*      const data = payload.data && payload.data.data;
       const kgindex = kgService.indexingKGData(data);
       const kgFetcher = kgService.kgFetcher(data, kgindex);

@@ -3,8 +3,9 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Button } from 'antd';
+import { Button, Select } from 'antd';
 import styles from './expert-map.less';
+import { sysconfig } from '../../systems';
 import { listPersonByIds } from '../../services/person';
 import * as profileUtils from '../../utils/profile-utils';
 import { findPosition, getById, waitforBMap, waitforBMapLib } from './utils/map-utils';
@@ -12,6 +13,7 @@ import RightInfoZoneCluster from './RightInfoZoneCluster';
 import RightInfoZonePerson from './RightInfoZonePerson';
 import RightInfoZoneAll from './RightInfoZoneAll';
 import GetBMapLib from './utils/BMapLibGai.js';
+import { TopExpertBase } from '../../utils/expert-base';
 
 const ButtonGroup = Button.Group;
 const blankAvatar = '/images/blank_avatar.jpg';
@@ -53,11 +55,13 @@ class ExpertMap extends React.PureComponent {
     this.cache = {};
     this.showOverLay = GetBMapLib(this.showTop);
     this.currentPersonId = 0;
+    localStorage.setItem("lasttype", "0");
   }
 
   componentDidMount() {
     const { query, dispatch } = this.props;
     this.callSearchMap(query);
+    localStorage.setItem("lasttype", "0");
     dispatch({
       type: 'expertMap/setRightInfo',
       payload: { idString: '', rightInfoType: 'global' },
@@ -252,7 +256,7 @@ class ExpertMap extends React.PureComponent {
     //   pathname: '/expert-map',
     //   data: { type: 'google' },
     // }));
-    localStorage.setItem("maptype","google");
+    localStorage.setItem("maptype", "google");
     const href = window.location.href;
     window.location.href = href.replace('expert-map', 'expert-googlemap');
   };
@@ -264,32 +268,43 @@ class ExpertMap extends React.PureComponent {
         let scale = 4;
         let minscale = 3;
         let maxscale = 19;
-        if (type === '0') {
+        let newtype;
+        //console.log(localStorage.getItem("lasttype"),'||',localStorage.getItem("isClick"))
+        if(localStorage.getItem("lasttype")!=='0' && localStorage.getItem("isClick")==='0') {
+          newtype = localStorage.getItem("lasttype");
+        } else {
+          newtype = type;
+        }
+        if (newtype === '0') {
           scale = 4;
           minscale = 4;
-        } else if (type === '1' || type === '2' || type === '3') {
+        } else if (newtype === '1' || newtype === '2' || newtype === '3') {
           scale = 4;
           minscale = 4;
           maxscale = 5;
-        } else if (type === '4' || type === '5') {
+        } else if (newtype === '4' || newtype === '5') {
           scale = 7;
           minscale = 5;
           maxscale = 7;
         }
+        localStorage.setItem("lasttype", newtype);
         const map = new BMap.Map('allmap', { minZoom: minscale, maxZoom: maxscale });
         this.map = map; // set to global;
-        map.centerAndZoom(new BMap.Point(116.404, 39.915), scale);
+        // map.centerAndZoom(new BMap.Point(45, 45), scale);
+        map.centerAndZoom(new BMap.Point(
+          sysconfig.CentralPosition.lng, sysconfig.CentralPosition.lat
+        ), scale);
         this.initializeBaiduMap(map);
         const markers = [];
         const pId = [];
         let counts = 0;
-        if (type === '1') {
+        if (newtype === '1') {
           const opts1 = {
-            position : new BMap.Point(102, 38)
+            position: new BMap.Point(102, 38)
           }
           map.addOverlay(new BMap.Label("中国", opts1));
           const opts2 = {
-            position : new BMap.Point(135.5, 33),
+            position : new BMap.Point(136, 32),
           }
           map.addOverlay(new BMap.Label("日本", opts2));
           const opts3 = {
@@ -305,7 +320,7 @@ class ExpertMap extends React.PureComponent {
           }
           map.addOverlay(new BMap.Label("香港", opts5));
           const opts6 = {
-            position : new BMap.Point(100, -2),
+            position : new BMap.Point(100, -3),
           }
           map.addOverlay(new BMap.Label("新加坡", opts6));
           const opts7 = {
@@ -317,11 +332,11 @@ class ExpertMap extends React.PureComponent {
           }
           map.addOverlay(new BMap.Label("中亚", opts8));
           const opts9 = {
-            position : new BMap.Point(110, 5),
+            position : new BMap.Point(118.5, 9),
           }
           map.addOverlay(new BMap.Label("东南亚", opts9));
           const opts10 = {
-            position : new BMap.Point(30, 54),
+            position : new BMap.Point(29, 45),
           }
           map.addOverlay(new BMap.Label("东欧", opts10));
           const opts11 = {
@@ -329,7 +344,7 @@ class ExpertMap extends React.PureComponent {
           }
           map.addOverlay(new BMap.Label("西欧", opts11));
           const opts12 = {
-            position : new BMap.Point(16.5, 57),
+            position : new BMap.Point(16, 58),
           }
           map.addOverlay(new BMap.Label("北欧", opts12));
           const opts13 = {
@@ -345,7 +360,7 @@ class ExpertMap extends React.PureComponent {
           }
           map.addOverlay(new BMap.Label("以色列", opts15));
           const opts16 = {
-            position : new BMap.Point(130, -30),
+            position : new BMap.Point(130, -31),
           }
           map.addOverlay(new BMap.Label("大洋洲", opts16));
           const opts17 = {
@@ -357,7 +372,7 @@ class ExpertMap extends React.PureComponent {
           }
           map.addOverlay(new BMap.Label("加拿大", opts18));
           const opts19 = {
-            position : new BMap.Point(-127, 34),
+            position : new BMap.Point(-126.5, 33.5),
           }
           map.addOverlay(new BMap.Label("美国西部", opts19));
           const opts20 = {
@@ -365,13 +380,13 @@ class ExpertMap extends React.PureComponent {
           }
           map.addOverlay(new BMap.Label("东部", opts20));
           const opts21 = {
-            position : new BMap.Point(-107, 35),
+            position : new BMap.Point(-107.5, 34.5),
           }
           map.addOverlay(new BMap.Label("中部", opts21));
         }
         for (const o in place.results) {
           let pt = null;
-          const newplace = findPosition(type, place.results[o]);
+          const newplace = findPosition(newtype, place.results[o]);
           // 只有经纬度不为空或者0的时候才显示，否则丢弃
           if ((newplace[1] != null && newplace[1] != null) &&
             (newplace[1] !== 0 && newplace[1] !== 0)) {
@@ -398,7 +413,6 @@ class ExpertMap extends React.PureComponent {
             counts += 1;
           }
         }
-
         waitforBMapLib(200, 100,
           (BMapLib) => {
             const _ = new BMapLib.MarkerClusterer(map, { markers });
@@ -512,6 +526,7 @@ class ExpertMap extends React.PureComponent {
   // };
 
   showType = (e) => {
+    localStorage.setItem("isClick", "1");
     const typeid = e.currentTarget && e.currentTarget.value && e.currentTarget.getAttribute('value');
     if (typeid === '0') {
       this.showMap(this.props.expertMap.geoData, typeid);
@@ -555,26 +570,18 @@ class ExpertMap extends React.PureComponent {
     this.props.dispatch({ type: 'expertMap/searchMap', payload: { query } });
   };
 
-  render() {
-    // const ips = {
-    //    "255.255.255.1": "255_255_255_1",
-    //    "255.255.255.2": "255_255_255_2",
-    // }
-    //
-    // const ip = '213.135.165.223';
-    // const mask = '255.255.255.0';
-    // const ipArr = ip.split('.');
-    // const maskArr = mask.split('.');
-    // const res = {};
-    // res[0] = String(parseInt(ipArr[0], 10) & parseInt(maskArr[0], 10));
-    // res[1] = String(parseInt(ipArr[1], 10) & parseInt(maskArr[1], 10));
-    // res[2] = String(parseInt(ipArr[2], 10) & parseInt(maskArr[2], 10));
-    // res[3] = String(parseInt(ipArr[3], 10) & parseInt(maskArr[3], 10));
-    // const ipFinal = res[0].concat('.', res[1], '.', res[2], '.', res[3]);
-    // const ipChange = ipFinal.replace(/\./g,"_")
-    // console.log(ipChange);
-    // console.log('value', ips[ip]);
+  domainChanged = (value) => {
+    if (value) {
+      const { dispatch } = this.props;
+      //console.log(`selected ${value}`);
+      localStorage.setItem("isClick", "0");
+      dispatch({ type: 'app/clearQueryInHeaderIfExist' });
+      dispatch({ type: 'expertMap/searchExpertBaseMap', payload: { eb: value } });
+    }
+  };
 
+  render() {
+    console.log(this.props.expertMap)
     const model = this.props && this.props.expertMap;
     const persons = model.geoData.results;
     let count = 0;
@@ -624,11 +631,24 @@ class ExpertMap extends React.PureComponent {
       person: () => (<RightInfoZonePerson person={model.personInfo} />),
       cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),
     };
+    const Domains = TopExpertBase.RandomTop100InDomain;
+
     return (
       <div className={styles.expertMap} id="currentMain">
 
         <div className={styles.headerLine}>
-          <div className="left">{this.props.title}</div>
+          <div className={styles.left}>
+            {this.props.title}
+
+            <Select defaultValue="" className={styles.domainSelector} style={{ width: 120 }}
+                    onChange={this.domainChanged}>
+              <Select.Option key="none" value="">选择领域</Select.Option>
+              {Domains.map(domain =>
+                (<Select.Option key={domain.id} value={domain.id}>{domain.name}</Select.Option>),
+              )}
+            </Select>
+
+          </div>
 
           <div className={styles.scopes}>
             <span>按照层级显示：</span>
@@ -641,9 +661,9 @@ class ExpertMap extends React.PureComponent {
               <Button onClick={this.showType} value="5">机构</Button>
             </ButtonGroup>
 
-            <div className={styles.switch} >
+            <div className={styles.switch}>
               <ButtonGroup id="diffmaps">
-                <Button type="primary" onClick={this.onChangeBaiduMap} >Baidu Map</Button>
+                <Button type="primary" onClick={this.onChangeBaiduMap}>Baidu Map</Button>
                 <Button onClick={this.onChangeGoogleMap}>Google Map</Button>
               </ButtonGroup>
             </div>

@@ -51,6 +51,7 @@ module.exports = {
     allPersonInBase: '/roster/:ebid/order-by/h_index/offset/:offset/size/:size',
     allPersonInBaseAgg: '/roster/:ebid/agg?offset=&order=h_index&size=20',
     searchMap: '/search/person/geo', // ?query=:search
+    searchExpertBaseMap: '/roster/:id/geo/offset/:offset/size/:size',
     searchExpertNetWithDSL: '/search/person/ego',
 
     searchPubs: '/search/pub', // ?query=xxx&size=20&sort=relevance',

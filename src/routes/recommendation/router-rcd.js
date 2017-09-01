@@ -25,6 +25,15 @@ export default {
     },
   }),
 
+  ProjectTaskPage: app => ({
+    path: 'rcd/project/tasks/:id',
+    getComponent(nextState, cb) {
+      require.ensure([], (require) => {
+        registerModel(app, require('../../models/recommendation/recommendation'));
+        cb(null, require('./projects/ProjectTaskPage'));
+      }, 'recommendation');
+    },
+  }),
 
   //
   // ExpertTrajectoryPage: app => ({

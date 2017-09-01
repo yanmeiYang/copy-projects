@@ -180,6 +180,16 @@ export default {
       }
     },
 
+    clearQueryInHeaderIfExist(state) {
+      if (state.headerSearchBox) {
+        const newState = state;
+        newState.headerSearchBox.query = ' ';
+        return newState;
+      } else {
+        return state;
+      }
+    },
+
     logoutSuccess(state) {
       auth.removeLocalAuth();
       return { ...state, user: {}, token: null, roles: auth.createEmptyRoles() };

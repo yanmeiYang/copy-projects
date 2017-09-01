@@ -54,4 +54,11 @@ export default {
   'rcd.projectTable.header.updateTime': 'Update Time',
   'rcd.projectTable.header.actions': 'Actions',
 
+  'rcd.taskTable.header.taskName': 'Task Name',
+  'rcd.taskTable.header.createTime': 'Create Time',
+  'rcd.taskTable.header.updateTime': 'Update Time',
+  'rcd.taskTable.header.progress': 'Progress',
+  'rcd.taskTable.header.status': 'Status',
+  'rcd.taskTable.header.actions': 'Actions',
+
 };

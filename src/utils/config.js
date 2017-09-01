@@ -51,6 +51,7 @@ module.exports = {
     allPersonInBase: '/roster/:ebid/order-by/h_index/offset/:offset/size/:size',
     allPersonInBaseAgg: '/roster/:ebid/agg?offset=&order=h_index&size=20',
     searchMap: '/search/person/geo', // ?query=:search
+    searchExpertBaseMap: '/roster/:id/geo/offset/:offset/size/:size',
     searchExpertNetWithDSL: '/search/person/ego',
 
     searchPubs: '/search/pub', // ?query=xxx&size=20&sort=relevance',
@@ -111,6 +112,9 @@ module.exports = {
     ucUpdateByKey: '/2b/config/:source/:category/rename/:key/:newKey',
     getCategoriesHint: '/2b/config/:source/category/suggest/:category',
     listConfigsByCategoryList: '/2b/config/:source/by-category',
+
+    // topic
+    getTopicByMention: '/topic/summary/m/:mention',
 
     // Recommendation APIs
     getAllOrgs: '/reviewer/orgs/get/all/:offset/:size',

@@ -130,8 +130,8 @@ const App = ({ children, location, dispatch, app, loading }) => {
         <script src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1"
                 charSet="utf-8" async defer />}
 
-        {href.indexOf('/expert-googlemap') > 0 &&
-        <script src="../../expertmap/googlemap/markerclusterer.js" />}
+        {/*{href.indexOf('/expert-googlemap') > 0 &&*/}
+        {/*<script src="../../expertmap/googlemap/markerclusterer.js" />}*/}
 
         {href.indexOf('/expert-googlemap') > 0 &&
         <script

@@ -1,7 +1,6 @@
 /** Created by Bo Gao on 2017-06-07 */
 import * as personService from '../services/person';
-import * as searchService from '../services/search';
-
+import * as mapService from '../services/expert-map-service';
 
 const cache = {};
 
@@ -25,7 +24,13 @@ export default {
   effects: {
     * searchMap({ payload }, { call, put }) {
       const { query } = payload;
-      const data = yield call(searchService.searchMap, query);
+      const data = yield call(mapService.searchMap, query);
+      yield put({ type: 'searchMapSuccess', payload: { data } });
+    },
+
+    * searchExpertBaseMap({ payload }, { call, put }) {
+      const { eb } = payload;
+      const data = yield call(mapService.searchExpertBaseMap, eb, 0, 200);
       yield put({ type: 'searchMapSuccess', payload: { data } });
     },
 
@@ -82,12 +87,24 @@ export default {
           return null;
         })
         data.data.data.map((item) => {
+          const add = [];
+          let c = item.city;
+          // console.log(geomap[c]);
+          while (true) {
+            add.push(geomap[c].name);
+            if (geomap[c].parent_id === 0 || typeof (geomap[c].parent_id) === 'undefined') {
+              break;
+            } else {
+              c = geomap[c].parent_id;
+            }
+          }
           geoSearchData.push({
             name: item.n,
             id: item.i,
             country: geomap[item.country],
             city: geomap[item.city],
             name_zh: item.n_zh,
+            longaddress: add,
             hindex: item.h,
             location: {
               lat: item.lat,

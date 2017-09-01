@@ -57,6 +57,7 @@ const fullRouter = (app, defaultChildRoutes) => {
       // Recommendation/rcd
       core.RecommendationHome(app),
       core.ProjectPage(app),
+      core.ProjectTaskPage(app),
 
       // Activity / Seminar
       core.Seminar(app),
@@ -71,6 +72,8 @@ const fullRouter = (app, defaultChildRoutes) => {
       // expert map
       core.ExpertMap(app),
       core.ExpertMapGoogle(app),
+      core.ExpertMapDispatch(app),
+
       core.ExpertTrajectoryPage(app),
       core.ExpertHeatmapPage(app),
 

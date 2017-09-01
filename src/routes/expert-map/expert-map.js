@@ -55,11 +55,13 @@ class ExpertMap extends React.PureComponent {
     this.cache = {};
     this.showOverLay = GetBMapLib(this.showTop);
     this.currentPersonId = 0;
+    localStorage.setItem("lasttype", "0");
   }
 
   componentDidMount() {
     const { query, dispatch } = this.props;
     this.callSearchMap(query);
+    localStorage.setItem("lasttype", "0");
     dispatch({
       type: 'expertMap/setRightInfo',
       payload: { idString: '', rightInfoType: 'global' },
@@ -266,18 +268,26 @@ class ExpertMap extends React.PureComponent {
         let scale = 4;
         let minscale = 3;
         let maxscale = 19;
-        if (type === '0') {
+        let newtype;
+        //console.log(localStorage.getItem("lasttype"),'||',localStorage.getItem("isClick"))
+        if(localStorage.getItem("lasttype")!=='0' && localStorage.getItem("isClick")==='0') {
+          newtype = localStorage.getItem("lasttype");
+        } else {
+          newtype = type;
+        }
+        if (newtype === '0') {
           scale = 4;
           minscale = 4;
-        } else if (type === '1' || type === '2' || type === '3') {
+        } else if (newtype === '1' || newtype === '2' || newtype === '3') {
           scale = 4;
           minscale = 4;
           maxscale = 5;
-        } else if (type === '4' || type === '5') {
+        } else if (newtype === '4' || newtype === '5') {
           scale = 7;
           minscale = 5;
           maxscale = 7;
         }
+        localStorage.setItem("lasttype", newtype);
         const map = new BMap.Map('allmap', { minZoom: minscale, maxZoom: maxscale });
         this.map = map; // set to global;
         // map.centerAndZoom(new BMap.Point(45, 45), scale);
@@ -288,95 +298,95 @@ class ExpertMap extends React.PureComponent {
         const markers = [];
         const pId = [];
         let counts = 0;
-        if (type === '1') {
+        if (newtype === '1') {
           const opts1 = {
             position: new BMap.Point(102, 38)
           }
           map.addOverlay(new BMap.Label("中国", opts1));
           const opts2 = {
-            position: new BMap.Point(135.5, 33),
+            position : new BMap.Point(136, 32),
           }
           map.addOverlay(new BMap.Label("日本", opts2));
           const opts3 = {
-            position: new BMap.Point(125, 33),
+            position : new BMap.Point(125, 33),
           }
           map.addOverlay(new BMap.Label("韩国", opts3));
           const opts4 = {
-            position: new BMap.Point(76.5, 16),
+            position : new BMap.Point(76.5, 16),
           }
           map.addOverlay(new BMap.Label("印度", opts4));
           const opts5 = {
-            position: new BMap.Point(114, 22),
+            position : new BMap.Point(114, 22),
           }
           map.addOverlay(new BMap.Label("香港", opts5));
           const opts6 = {
-            position: new BMap.Point(100, -2),
+            position : new BMap.Point(100, -3),
           }
           map.addOverlay(new BMap.Label("新加坡", opts6));
           const opts7 = {
-            position: new BMap.Point(121, 25),
+            position : new BMap.Point(121, 25),
           }
           map.addOverlay(new BMap.Label("台湾", opts7));
           const opts8 = {
-            position: new BMap.Point(64, 48),
+            position : new BMap.Point(64, 48),
           }
           map.addOverlay(new BMap.Label("中亚", opts8));
           const opts9 = {
-            position: new BMap.Point(110, 5),
+            position : new BMap.Point(118.5, 9),
           }
           map.addOverlay(new BMap.Label("东南亚", opts9));
           const opts10 = {
-            position: new BMap.Point(30, 54),
+            position : new BMap.Point(29, 45),
           }
           map.addOverlay(new BMap.Label("东欧", opts10));
           const opts11 = {
-            position: new BMap.Point(7, 44),
+            position : new BMap.Point(7, 44),
           }
           map.addOverlay(new BMap.Label("西欧", opts11));
           const opts12 = {
-            position: new BMap.Point(16.5, 57),
+            position : new BMap.Point(16, 58),
           }
           map.addOverlay(new BMap.Label("北欧", opts12));
           const opts13 = {
-            position: new BMap.Point(-6.1, 52),
+            position : new BMap.Point(-6.1, 52),
           }
           map.addOverlay(new BMap.Label("英国", opts13));
           const opts14 = {
-            position: new BMap.Point(101.5, 59.2),
+            position : new BMap.Point(101.5, 59.2),
           }
           map.addOverlay(new BMap.Label("俄罗斯", opts14));
           const opts15 = {
-            position: new BMap.Point(31, 28),
+            position : new BMap.Point(31, 28),
           }
           map.addOverlay(new BMap.Label("以色列", opts15));
           const opts16 = {
-            position: new BMap.Point(130, -30),
+            position : new BMap.Point(130, -31),
           }
           map.addOverlay(new BMap.Label("大洋洲", opts16));
           const opts17 = {
-            position: new BMap.Point(-60, -10),
+            position : new BMap.Point(-60, -10),
           }
           map.addOverlay(new BMap.Label("拉丁美洲", opts17));
           const opts18 = {
-            position: new BMap.Point(-109.5, 56.5),
+            position : new BMap.Point(-109.5, 56.5),
           }
           map.addOverlay(new BMap.Label("加拿大", opts18));
           const opts19 = {
-            position: new BMap.Point(-127, 34),
+            position : new BMap.Point(-126.5, 33.5),
           }
           map.addOverlay(new BMap.Label("美国西部", opts19));
           const opts20 = {
-            position: new BMap.Point(-79.5, 34),
+            position : new BMap.Point(-79.5, 34),
           }
           map.addOverlay(new BMap.Label("东部", opts20));
           const opts21 = {
-            position: new BMap.Point(-107, 35),
+            position : new BMap.Point(-107.5, 34.5),
           }
           map.addOverlay(new BMap.Label("中部", opts21));
         }
         for (const o in place.results) {
           let pt = null;
-          const newplace = findPosition(type, place.results[o]);
+          const newplace = findPosition(newtype, place.results[o]);
           // 只有经纬度不为空或者0的时候才显示，否则丢弃
           if ((newplace[1] != null && newplace[1] != null) &&
             (newplace[1] !== 0 && newplace[1] !== 0)) {
@@ -403,7 +413,6 @@ class ExpertMap extends React.PureComponent {
             counts += 1;
           }
         }
-
         waitforBMapLib(200, 100,
           (BMapLib) => {
             const _ = new BMapLib.MarkerClusterer(map, { markers });
@@ -517,6 +526,7 @@ class ExpertMap extends React.PureComponent {
   // };
 
   showType = (e) => {
+    localStorage.setItem("isClick", "1");
     const typeid = e.currentTarget && e.currentTarget.value && e.currentTarget.getAttribute('value');
     if (typeid === '0') {
       this.showMap(this.props.expertMap.geoData, typeid);
@@ -563,13 +573,15 @@ class ExpertMap extends React.PureComponent {
   domainChanged = (value) => {
     if (value) {
       const { dispatch } = this.props;
-      console.log(`selected ${value}`);
+      //console.log(`selected ${value}`);
+      localStorage.setItem("isClick", "0");
       dispatch({ type: 'app/clearQueryInHeaderIfExist' });
       dispatch({ type: 'expertMap/searchExpertBaseMap', payload: { eb: value } });
     }
   };
 
   render() {
+    console.log(this.props.expertMap)
     const model = this.props && this.props.expertMap;
     const persons = model.geoData.results;
     let count = 0;

@@ -117,7 +117,7 @@ const defaultSystemConfigs = {
     'Networks', 'Natural language processing'],
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
   // 地图中心点
-  CentralPosition: {},
+  CentralPosition: {lat: 37.09024, lng: -95.712891},
 
   // > Admin Users
   Admin_Users_ShowAdmin: true,

@@ -257,13 +257,100 @@ class ExpertGoogleMap extends React.Component {
         });
         //this.map = map;
         let locations = [];
+        if (type === '1') {
+          const opts1 = {
+            position : new google.maps.Point(102, 38)
+          }
+          map.addOverlay(new google.maps.Label("中国", opts1));
+          // const opts2 = {
+          //   position : new BMap.Point(136, 32),
+          // }
+          // map.addOverlay(new BMap.Label("日本", opts2));
+          // const opts3 = {
+          //   position : new BMap.Point(125, 33),
+          // }
+          // map.addOverlay(new BMap.Label("韩国", opts3));
+          // const opts4 = {
+          //   position : new BMap.Point(76.5, 16),
+          // }
+          // map.addOverlay(new BMap.Label("印度", opts4));
+          // const opts5 = {
+          //   position : new BMap.Point(114, 22),
+          // }
+          // map.addOverlay(new BMap.Label("香港", opts5));
+          // const opts6 = {
+          //   position : new BMap.Point(100, -3),
+          // }
+          // map.addOverlay(new BMap.Label("新加坡", opts6));
+          // const opts7 = {
+          //   position : new BMap.Point(121, 25),
+          // }
+          // map.addOverlay(new BMap.Label("台湾", opts7));
+          // const opts8 = {
+          //   position : new BMap.Point(64, 48),
+          // }
+          // map.addOverlay(new BMap.Label("中亚", opts8));
+          // const opts9 = {
+          //   position : new BMap.Point(118.5, 9),
+          // }
+          // map.addOverlay(new BMap.Label("东南亚", opts9));
+          // const opts10 = {
+          //   position : new BMap.Point(29, 45),
+          // }
+          // map.addOverlay(new BMap.Label("东欧", opts10));
+          // const opts11 = {
+          //   position : new BMap.Point(7, 44),
+          // }
+          // map.addOverlay(new BMap.Label("西欧", opts11));
+          // const opts12 = {
+          //   position : new BMap.Point(16, 58),
+          // }
+          // map.addOverlay(new BMap.Label("北欧", opts12));
+          // const opts13 = {
+          //   position : new BMap.Point(-6.1, 52),
+          // }
+          // map.addOverlay(new BMap.Label("英国", opts13));
+          // const opts14 = {
+          //   position : new BMap.Point(101.5, 59.2),
+          // }
+          // map.addOverlay(new BMap.Label("俄罗斯", opts14));
+          // const opts15 = {
+          //   position : new BMap.Point(31, 28),
+          // }
+          // map.addOverlay(new BMap.Label("以色列", opts15));
+          // const opts16 = {
+          //   position : new BMap.Point(130, -31),
+          // }
+          // map.addOverlay(new BMap.Label("大洋洲", opts16));
+          // const opts17 = {
+          //   position : new BMap.Point(-60, -10),
+          // }
+          // map.addOverlay(new BMap.Label("拉丁美洲", opts17));
+          // const opts18 = {
+          //   position : new BMap.Point(-109.5, 56.5),
+          // }
+          // map.addOverlay(new BMap.Label("加拿大", opts18));
+          // const opts19 = {
+          //   position : new BMap.Point(-126.5, 33.5),
+          // }
+          // map.addOverlay(new BMap.Label("美国西部", opts19));
+          // const opts20 = {
+          //   position : new BMap.Point(-79.5, 34),
+          // }
+          // map.addOverlay(new BMap.Label("东部", opts20));
+          // const opts21 = {
+          //   position : new BMap.Point(-107.5, 34.5),
+          // }
+          // map.addOverlay(new BMap.Label("中部", opts21));
+        }
         for (const i in place.results) {
-          const newplace = findPosition(type, place.results[i]);
+          const typeid = String(type);
+          const newplace = findPosition(typeid, place.results[i]);
           console.log(place.results[i].location,newplace)
           //if ((newplace[1] != null && newplace[1] != null) &&
             //(newplace[1] !== 0 && newplace[1] !== 0)) {
-            const onepoint = { lat: place.results[i].location.lat, lng: place.results[i].location.lng }
-            //const onepoint = {lat: newplace[0], lng: newplace[1]}
+            //const onepoint = { lat: place.results[i].location.lat, lng: place.results[i].location.lng }
+            const onepoint = { lat: newplace[0], lng: newplace[1]}
             locations[i] = onepoint;
           //}
         }
@@ -299,7 +386,7 @@ class ExpertGoogleMap extends React.Component {
             position: location,
             label: {
               text: place.results[i].name,
-              color: '#cc6613',
+              color: '#000000',
               fontSize: '12px',
               backgroundColor: 'transparent',
               fontWeight: 'bold',

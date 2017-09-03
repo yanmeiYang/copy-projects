@@ -9,7 +9,7 @@ import styles from './ExpertHeatmap.less';
 // import echarts from 'echarts';
 // import world from 'echarts/map/js/world';
 import mapData from '../../../external-docs/expert-trajectory/testData.json';
-import heatData from '../../../external-docs/expert-trajectory/heatData.json';
+// import heatData from '../../../external-docs/expert-trajectory/heatData.json';
 import { Slider, Layout, InputNumber, Row, Col, Icon, Button, message } from 'antd';
 // import expert
 
@@ -30,6 +30,7 @@ const jietang = 'am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.j
 // const myChart2 = echarts.init(document.getElementById('world'));
 let play = false;
 let yearNow;
+
 class ExpertHeatmap extends React.Component {
   constructor(props) {
     super(props);
@@ -58,7 +59,7 @@ class ExpertHeatmap extends React.Component {
   }
 
   onDbChange = (value) => {
-    console.log('onDbChange: ', value);
+    // console.log('onDbChange: ', value);
   }
 
   onChange = (value) => { // 点击滑动条或数字框
@@ -87,20 +88,21 @@ class ExpertHeatmap extends React.Component {
     author = {};
     author2 = {};
     authorImg = {};
-    for (const aid in _.range(table.length)) {
-      if (table[aid][index] !== 0) {
-        if (table[aid][index] in merge) {
-          merge[table[aid][index]] += 1;
-        } else {
-          merge[table[aid][index]] = 1;
-        }
 
-        if (table[aid][index] in author) { // 取今年各地点的作者id
-          author[table[aid][index]].push(authors[aid]);
-        } else {
-          author[table[aid][index]] = [];
-          author[table[aid][index]].push(authors[aid]);
+    console.log('||||| start merge.');
+    let start = new Date().getTime();
+    for (const aid in _.range(table.length)) { // TODO 性能问题
+      const addressID = table[aid][index];
+      if (addressID) {
+        if (!merge[addressID]) {
+          merge[addressID] = 0;
         }
+        merge[addressID] += 1;
+
+        if (!author[addressID]) {
+          author[addressID] = [];
+        }
+        author[addressID].push(authors[aid]);
 
         // if (authorImage[aid] !== 0) {
         //   if (table[aid][index] in authorImg) { // 取今年各地点的作者id
@@ -110,33 +112,36 @@ class ExpertHeatmap extends React.Component {
         //     authorImg[table[aid][index]].push(authorImage[aid]);
         //   }
         // }
-
-        // console.log('image', authorImg);
-        // console.log('author', author);
       }
 
+      // 第二年的数据
       if (index < (endYear - startYear)) {
-        if (table[aid][index + 1] !== 0) {
-          if (!(table[aid][index + 1] in nextYear)) {
-            nextYear[table[aid][index + 1]] = 1;
+        const addressID2 = table[aid][index + 1];
+        if (addressID2) {
+          if (!nextYear[addressID2]) {
+            nextYear[addressID2] = 0;
           }
+          nextYear[addressID2] += 1;
         }
 
-        if (table[aid][index + 1] in author2) {
-          author2[table[aid][index + 1]].push(authors[aid]);
-        } else {
-          author2[table[aid][index + 1]] = [];
-          author2[table[aid][index + 1]].push(authors[aid]);
+        if (!author2[addressID2]) {
+          author2[addressID2] = [];
         }
-        // console.log('author2', author2);
+        author2[addressID2].push(authors[aid]);
       }
     }
+    console.log('||||| end merge. use: ', (new Date().getTime() - start), 'ms');
+
+    console.log('||||| start 2.');
+    start = new Date().getTime();
 
     for (const key in merge) {
       // console.log('key', key);
       const onenode = { name: key, value: merge[key] }; // 实际数据中乘20应删去！
       data.push(onenode);
     }
+
+    console.log('||||| end 2. ##1: ', (new Date().getTime() - start), 'ms');
 
     if (index < (endYear - startYear)) {
       for (const key in nextYear) {
@@ -145,13 +150,18 @@ class ExpertHeatmap extends React.Component {
         nextYearData.push(onenode);
       }
     }
+    console.log('||||| end 2. ##2: ', (new Date().getTime() - start), 'ms');
+
     // console.log('nextYear Data', nextYearData);
     option2.series = this.getHeatSeries(geoCoordMap, data, 0, false, index, nextYearData);
     this.myChart2.setOption(option2, true);
+
+    console.log('||||| end 2. total: ', (new Date().getTime() - start), 'ms');
+
   }
 
 
-  onClick=() => { // 点击热力图按钮
+  onClick = () => { // 点击热力图按钮
     if (!play) {
       play = true;
       this.setState({ ifPlay: 'pause' });
@@ -286,12 +296,12 @@ class ExpertHeatmap extends React.Component {
   getDownPlay = (params) => {
     this.myChart2.dispatchAction({
       type: 'downplay',
-      seriesIndex: [0,1,2],
+      seriesIndex: [0, 1, 2],
       name: (`${params.name[0]}`),
     });
     this.myChart2.dispatchAction({
       type: 'downplay',
-      seriesIndex: [0,1,2],
+      seriesIndex: [0, 1, 2],
       name: (`${params.name[1]}`),
     });
   }
@@ -299,12 +309,12 @@ class ExpertHeatmap extends React.Component {
   getHighLight = (params) => {
     this.myChart2.dispatchAction({
       type: 'highlight',
-      seriesIndex: [0,1,2],
+      seriesIndex: [0, 1, 2],
       name: (`${params.name[0]}`),
     });
     this.myChart2.dispatchAction({
       type: 'highlight',
-      seriesIndex: [0,1,2],
+      seriesIndex: [0, 1, 2],
       name: (`${params.name[1]}`),
     });
     // this.myChart2.dispatchAction({
@@ -348,7 +358,7 @@ class ExpertHeatmap extends React.Component {
         type: 'continuous',
         // seriesIndex: 0,
         inRange: {
-          color: ['#eb3323','#EC5428','#F19436','#F8D247','#eeee4f','#cbfa50','#00a854'].reverse(),
+          color: ['#eb3323', '#EC5428', '#F19436', '#F8D247', '#eeee4f', '#cbfa50', '#00a854'].reverse(),
           // color: ['#eb3323','#EC5428','#F19436','#F8D247','#eeee4f','#108ee9','#0c60aa'].reverse(),
         },
         textStyle: {
@@ -615,7 +625,7 @@ class ExpertHeatmap extends React.Component {
   }
 
 
-  doHeatGeoMap=() => { // 存储经纬度 geoCoordMap = {123:[116,40]}
+  doHeatGeoMap = () => { // 存储经纬度 geoCoordMap = {123:[116,40]}
     const geoCoordMap = {};
 
     for (const i of _.range(1, location.length)) {
@@ -646,7 +656,7 @@ class ExpertHeatmap extends React.Component {
     } else {
       temp = '';
     }
-    console.log('temp', temp);
+    // console.log('temp', temp);
     return temp;
   }
 
@@ -691,60 +701,56 @@ class ExpertHeatmap extends React.Component {
     };
 
     function formtGCData() { // 画线
+      console.log('||||| 画线');
+      let start = new Date().getTime();
+
+      console.log('||||| end 画线: ', (new Date().getTime() - start), 'ms');
+
+      const dup = {};
       const tGeoDt = [];
-      let arr = [];
       const index = table.length;
-      for (const j of _.range(index)) {
-        const back = 1;
-        // if (table[j][year] === 0 && table[j][year + 1] !== undefined) { // 当前年份地址为0 且不是最后一年
-        //   if (year !== 0 && geoCoordMap[table[j][year + 1]] !== undefined) { // 不是第一年且下一年不是0
-        //     console.log('1');
-        //     while (year - back >= 0 && table[j][year] === 0) {
-        //       table[j][year] = table[j][year - back];
-        //       back += 1;
-        //     }
-        //     tGeoDt.push({
-        //       name: [table[j][year], table[j][year + 1]],
-        //       coords: [geoCoordMap[table[j][year]], geoCoordMap[table[j][year + 1]]],
-        //     });
-        //   }
-        // } else if (table[j][year] !== 0 && table[j][year + 1] !== 0 && table[j][year + 1] !== undefined) {
-        //   console.log('2');
-        //   tGeoDt.push({
-        //     name: [table[j][year], table[j][year + 1]],
-        //     coords: [geoCoordMap[table[j][year]], geoCoordMap[table[j][year + 1]]],
-        //   });
-        // }
-        if (table[j][year] !== 0 && table[j][year + 1] !== 0 && table[j][year + 1] !== undefined) {
-          tGeoDt.push({
-            name: [table[j][year], table[j][year + 1]],
-            coords: [geoCoordMap[table[j][year]], geoCoordMap[table[j][year + 1]]],
-          });
+      for (let j = 0; j < index; j += 1) {
+        const add = table[j][year];
+        const add2 = table[j][year + 1];
+        if (add && add2) {
+          const key = [add, add2].join('_');
+          const v = dup[key];
+          if (!v) {
+            tGeoDt.push({
+              name: [add, add2],
+              coords: [geoCoordMap[add], geoCoordMap[add2]],
+            });
+            dup[key] = true;
+          }
         }
       }
 
-      const tGeoDt2 = [];
-      const tem = tGeoDt;
-      // console.log('tem', tem);
-      const len = tem.length;
-      arr = [];
-      for (const i of _.range(len)) {
-        // console.log('arr', arr);
-        const t = tem[i];
-        // console.log("t['name']", t.name);
-        let flag = 0;
-        for (const distance of arr) {
-          // console.log("distawnce",distance)
-          if (_.difference(distance, t.name).length === 0 && _.difference(t.name, distance).length === 0) {
-            flag = 1;
-          }
-        }
-        if (flag === 0) {
-          arr.push(t.name);
-          tGeoDt2.push(t);
-        }
-      }
-      return tGeoDt2;
+      console.log('||||| end 画线: ', (new Date().getTime() - start), 'ms');
+      //
+      // const tGeoDt2 = []; // target
+      // const tem = tGeoDt; // [{name:, coords:}]
+      // const len = tem.length;
+      // arr = [];
+      // for (const i of _.range(len)) {
+      //   // console.log('arr', arr);
+      //   const t = tem[i];
+      //   // console.log("t['name']", t.name);
+      //   let flag = 0;
+      //   for (const distance of arr) {
+      //     // console.log("distawnce",distance)
+      //     if (_.difference(distance, t.name).length === 0 && _.difference(t.name, distance).length === 0) {
+      //       flag = 1;
+      //     }
+      //   }
+      //   if (flag === 0) {
+      //     arr.push(t.name);
+      //     tGeoDt2.push(t);
+      //   }
+      // }
+
+      console.log('||||| end 画线: ', (new Date().getTime() - start), 'ms');
+
+      return tGeoDt;
     }
 
     function getImage() {
@@ -794,7 +800,7 @@ class ExpertHeatmap extends React.Component {
         label: {
           normal: {
             show: true,
-            formatter: (params) => { console.log('ddd', params); return (this.getNum(params.value[2])); },
+            formatter: params => this.getNum(params.value[2]),
             position: 'inside',
             color: '#111',
             textStyle: {
@@ -823,9 +829,9 @@ class ExpertHeatmap extends React.Component {
           formatter: (params) => {
             console.log('dfewfefef', params);
             return `<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">${
-               params.seriesName
-               }</div>${
-               params.name}：${params.value[2]}<br>`;
+              params.seriesName
+              }</div>${
+              params.name}：${params.value[2]}<br>`;
           },
         },
         data: convertData(data.sort((a, b) => {
@@ -855,7 +861,7 @@ class ExpertHeatmap extends React.Component {
         label: {
           normal: {
             show: true,
-            formatter: (params) => { console.log('ddd', params); return (this.getNum(params.value[2])); },
+            formatter: params => this.getNum(params.value[2]),
             position: 'inside',
             color: '#111',
             textStyle: {
@@ -905,9 +911,9 @@ class ExpertHeatmap extends React.Component {
           formatter: (params) => {
             console.log('dfewfefef', params);
             return `<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">${
-               params.seriesName
-               }</div>${
-               params.name}：${params.value[2]}<br>`;
+              params.seriesName
+              }</div>${
+              params.name}：${params.value[2]}<br>`;
           },
         },
       },
@@ -1012,7 +1018,7 @@ class ExpertHeatmap extends React.Component {
         name: 'AQI',
         type: 'heatmap',
         coordinateSystem: 'geo',
-        blurSize:20,
+        blurSize: 20,
         zlevel: 1,
         data: convertData(data, j),
       },
@@ -1089,12 +1095,15 @@ class ExpertHeatmap extends React.Component {
     const ifPlay = this.state.ifPlay;
     return (
       <div>
-        <div className={styles.heat} id="heatmap" style={{ height: '600px', width: '1140px' }} onClick={this.onMapClick} />
+        <div className={styles.heat} id="heatmap" style={{ height: '600px', width: '1140px' }}
+             onClick={this.onMapClick} />
         <div>
-          <Button className={styles.plus} type="primary" ghost icon="plus" onClick={this.plusHeatZoom} />
+          <Button className={styles.plus} type="primary" ghost icon="plus"
+                  onClick={this.plusHeatZoom} />
         </div>
         <div>
-          <Button className={styles.minus} type="primary" ghost icon="minus" onClick={this.minusHeatZoom} />
+          <Button className={styles.minus} type="primary" ghost icon="minus"
+                  onClick={this.minusHeatZoom} />
         </div>
 
         <div className={styles.two} id="showYear">
@@ -1104,7 +1113,8 @@ class ExpertHeatmap extends React.Component {
 
         <Row>
           <Col span={22}>
-            <Slider min={startYear} max={endYear} onChange={this.onChange} onAfterChange={this.onAfterChange}value={this.state.inputValue} />
+            <Slider min={startYear} max={endYear} onChange={this.onChange}
+                    onAfterChange={this.onAfterChange} value={this.state.inputValue} />
             {/*<Slider min={startYear} max={endYear} range step={1} defaultValue={[1999, 1999]} onChange={this.onDbChange} />*/}
           </Col>
           <Col span={1}>

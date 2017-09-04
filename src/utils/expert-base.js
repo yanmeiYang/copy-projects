@@ -92,6 +92,7 @@ const TopExpertBase = {
     { id: '59a7c78c9ed5db1ed20328c6', name: '图像与视频处理' },
     { id: '59a7cfd79ed5db1ed2032f75', name: '分布式与并行计算' },
     { id: '59a7eb3d9ed5db1ed2034305', name: '物联网' },
+    { id: '59a77a809ed5db1ed202dbd6', name: '信息检索' },
   ],
 
 };

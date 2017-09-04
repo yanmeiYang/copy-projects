@@ -5,26 +5,17 @@ import React from 'react';
 import Footer from '../../components/Footers/ccf';
 
 module.exports = {
-
-  // 通用配置。所有System的配置文件必须全部包含这部分的值
-  PageTitle: 'CCF 专家库',
-
+  /**
+   * Systems Preference
+   */
   Locale: 'zh',
+  // EnableLocalLocale: false,
+  // MainListSize: 20,
 
-  Search_SortOptions: ['relevance', 'h_index',
-    'activity', 'rising_star', 'activity-ranking-contrib'],
-
-  PersonList_PersonLink: personId => `/person/${personId}`,
-  PersonList_PersonLink_NewTab: false,
-
-  IndexPage_QuickSearchList: ['人工智能', '机器人', '数据挖掘', '机器学习', '数据建模', '计算机视觉',
-    '计算机网络', '网络', '自然语言处理'],
-
-  PersonList_ShowIndices: ['activityRankingContrib', 'h_index', 'activity'],
-
-  //
-  // Layout related
-  //
+  /**
+   * Layout related
+   */
+  PageTitle: 'CCF 专家库',
   // Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
   Header_LogoWidth: 213,
   Header_LogoStyle: {
@@ -42,14 +33,48 @@ module.exports = {
   ShowSideMenu: true,
   ShowFooter: true,
 
+  /**
+   * Functionality
+   */
+  Enable_Export: true,
+  ShowRegisteredRole: true, // 注册页面是否显示角色配置
+  // Signup_Password: false, // 注册页面password
+
+  // SearchPagePrefix: 'uniSearch', // search - 普通搜索(deleted); uniSearch - 多合一搜索.
+  // Search_EnablePin: false, // TODO bad：Huawei PIN
+  Search_EnableCCFPin: true, // TODO bad：CCF PIN
+  Search_EnableTranslateSearch: true, // 启用翻译搜索，显示提示信息;
+  Search_DefaultTranslateSearch: true, // 默认不使用翻译搜索;
+
+  Search_EnableKnowledgeGraphHelper: false,
+  // Search_SortOptions: defaults.IN_APP_DEFAULT,
+
+  // UserAuthSystem: System, // aminer 或者是 system.config
+  // UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签, 目前没用到
+
+  // Auth_AllowAnonymousAccess: false,
+  // Auth_LoginPage: '/login',
+
+
+  // /////////////////////////////////
+
+  Search_SortOptions: ['relevance', 'h_index',
+    'activity', 'rising_star', 'activity-ranking-contrib'],
+
+  PersonList_PersonLink: personId => `/person/${personId}`,
+  PersonList_PersonLink_NewTab: false,
+
+  IndexPage_QuickSearchList: ['人工智能', '机器人', '数据挖掘', '机器学习', '数据建模', '计算机视觉',
+    '计算机网络', '网络', '自然语言处理'],
+
+  PersonList_ShowIndices: ['activityRankingContrib', 'h_index', 'activity'],
+
+
   // > Search related
   SearchBarInHeader: false,
 
   // > Admin Users
   Admin_Users_ShowAdmin: false,
-
-  // Functionality
-  Enable_Export: true,
 
   SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
   DEFAULT_EXPERT_BASE: '5949c2f99ed5dbc2147fd854', // CCF会员

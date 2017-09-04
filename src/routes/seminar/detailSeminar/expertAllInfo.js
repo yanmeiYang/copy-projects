@@ -19,6 +19,7 @@ class ExpertAllInfo extends React.PureComponent {
             <div key={aTalk.speaker.aid + Math.random()} className={styles.workshop}>
               <div className={styles.workshopDetail}>
                 {aTalk.title && <h5 className={styles.talkTitle}>主题: {aTalk.title}</h5>}
+                {!aTalk.speaker.role.includes('president') &&
                 <p style={{ marginBottom: 10 }}>
                   {aTalk.time &&
                   <span>
@@ -38,7 +39,7 @@ class ExpertAllInfo extends React.PureComponent {
                       <span>{aTalk.location.address}</span>
                     </span>}
                   </span>}
-                </p>
+                </p>}
                 <div style={{
                   display: 'flex',
                   justifyContent: 'flex-start',
@@ -114,6 +115,7 @@ class ExpertAllInfo extends React.PureComponent {
                       </div> : ''}
                     </div>
 
+                    {!aTalk.speaker.role.includes('president') &&
                     <div className={styles.abstract}>
                       {aTalk.abstract ? <div>
                         <h5>主题简介:</h5>
@@ -121,10 +123,10 @@ class ExpertAllInfo extends React.PureComponent {
                           <p className="rdw-justify-aligned-block">{aTalk.abstract}</p>
                         </div>
                       </div> : ''}
-                    </div>
-                  </div>
+                    </div>}
                   </div>
                 </div>
+              </div>
 
               {/*<hr />*/}
             </div>

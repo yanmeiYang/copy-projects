@@ -15,8 +15,15 @@ class CanlendarInForm extends React.Component {
   };
 
   componentWillMount = () => {
-    this.props.callbackParent('startValue', moment(this.state.startValue));
-    this.props.callbackParent('endValue', moment(this.state.endValue));
+    if (!this.props.forbidCallback) {
+      this.props.callbackParent('startValue', moment(this.state.startValue));
+      this.props.callbackParent('endValue', moment(this.state.endValue));
+    } else {
+      this.setState({
+        startValue: new Date(this.props.startValue).format(dFormat),
+        endValue: new Date(this.props.endValue).format(dFormat),
+      });
+    }
   };
 
   componentWillReceiveProps(nextProps) {

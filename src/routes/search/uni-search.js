@@ -249,9 +249,7 @@ export default class UniSearch extends React.PureComponent {
               />
             </div>
           </div>
-          {topic.label &&
-          <SearchKnowledge topic={topic} />
-          }
+          {topic.label && <SearchKnowledge topic={topic} />}
         </div>
       </div>
 

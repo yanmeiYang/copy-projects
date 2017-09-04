@@ -10,22 +10,21 @@ import { wget } from '../../utils/request';
 // import echarts from 'echarts';
 // import world from 'echarts/map/js/world';
 import mapData from '../../../external-docs/expert-trajectory/testData.json';
-// import heatData from '../../../external-docs/expert-trajectory/heatData.json';
+import heatData from '../../../external-docs/expert-trajectory/heatData.json';
 import { Slider, Layout, InputNumber, Row, Col, Icon, Button, message } from 'antd';
 // import expert
 
 const { Content, Sider } = Layout;
 let startYear;
 let endYear;
-let location;
-let table;
-let authors;
 let option2 = {};
 let author = {};
 let author2 = {};
 let authorImg = {};
 let mapinterval;
-
+let location = [];
+let table = [];
+let authors;
 // const authorImage = heatData.authorImage;
 const planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
 const jietang = 'am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90';
@@ -41,23 +40,17 @@ class ExpertHeatmap extends React.Component {
   state = {
     inputValue: startYear,
     ifPlay: 'play-circle',
-    startYear: '1978',
-    endYear: '2016',
+    startYear: 1979,
+    endYear:2016,
   };
 
+
   componentDidMount() {
-    this.getHeatmapData();
     this.seriesNo = false;
     this.type = '';
     this.personList = '';
     this.myChart2 = echarts.init(document.getElementById('heatmap'));
-
-  }
-
-  onAfterChange = (value) => {
-    // if (value === startYear) {
-    //   this.onChange(value);
-    // }
+    this.getHeatmapData(); // 热力图
   }
 
   getHeatmapData = () => {
@@ -65,17 +58,17 @@ class ExpertHeatmap extends React.Component {
     let heatData;
     if (!heatData) {
       const pms = wget('/lab/heatData.json');
-      console.log("okay",pms)
       pms.then((data) => {
         heatData = data;
-        this.setState({startYear:heatData.startYear, endYear: heatData.endYear});
+        this.setState({startYear: heatData.startYear, endYear: heatData.endYear});
+        // startYear = heatData.startYear;
+        // endYear = heatData.endYear;
         location = heatData.locations;
         table = heatData.table;
         authors = heatData.authors;
-        this.playon = startYear;
+        this.playon = this.state.startYear;
         this.setHeatmap(); // 热力图
         // this.authorImage = heatData.authorImage;
-        console.log("hhhh",this.table);
 
         // return interestsData;
       }).catch((error) => {
@@ -83,6 +76,12 @@ class ExpertHeatmap extends React.Component {
         return undefined;
       });
     }
+  }
+
+  onAfterChange = (value) => {
+    // if (value === startYear) {
+    //   this.onChange(value);
+    // }
   }
 
   onDbChange = (value) => {
@@ -100,7 +99,7 @@ class ExpertHeatmap extends React.Component {
     this.playon = value;
     // console.log('value', value, this.playon);
     yearNow = this.playon;
-    const index = value - startYear;
+    const index = value - this.state.startYear;
     // console.log('index', index);
     const data = [];
     const nextYearData = [];
@@ -134,11 +133,10 @@ class ExpertHeatmap extends React.Component {
         // }
 
         // console.log('image', authorImg);
-        // console.log('author', author);
       }
 
       // 第二年数据
-      if (index < (endYear - startYear)) {
+      if (index < (this.state.endYear - this.state.startYear)) {
         const addressID2 = table[aid][index + 1];
         if (addressID2) {
           if (!nextYear[addressID2]) {
@@ -160,7 +158,7 @@ class ExpertHeatmap extends React.Component {
       data.push(onenode);
     }
 
-    if (index < (endYear - startYear)) {
+    if (index < (this.state.endYear - this.state.startYear)) {
       for (const key in nextYear) {
         // console.log('key', key);
         const onenode = { name: key, value: nextYear[key] }; // 实际数据中乘20应删去！
@@ -190,7 +188,7 @@ class ExpertHeatmap extends React.Component {
     // this.onButtoon(this.playon);
     if (play) {
       mapinterval = setInterval(() => {
-        if (play && this.playon < endYear) {
+        if (play && this.playon < this.state.endYear) {
           this.playon += 1;
           yearNow = this.playon;
           this.onChange(this.playon);
@@ -199,9 +197,9 @@ class ExpertHeatmap extends React.Component {
           // });
           // this.onButtoon(this.playon);
         } else {
-          if (this.playon >= endYear) {
+          if (this.playon >= this.state.endYear) {
             // console.log('daole');
-            this.playon = startYear;
+            this.playon = this.state.startYear;
             play = false;
             this.setState({ ifPlay: 'play-circle' });
           }
@@ -216,7 +214,7 @@ class ExpertHeatmap extends React.Component {
 
   onButtoon = (value) => { // 按下热力图的播放按钮
     // console.log('value', value);
-    const index = value - startYear;
+    const index = value - this.state.startYear;
     const data = [];
     const nextYearData = [];
     let geoCoordMap = {};
@@ -247,7 +245,7 @@ class ExpertHeatmap extends React.Component {
     }
 
     for (let aid = 0; aid < table.length; i += 1) {
-      if (index < (endYear - startYear)) {
+      if (index < (this.state.endYear - this.state.startYear)) {
         if (table[aid][index + 1] !== 0) {
           if (!(table[aid][index + 1] in nextYear)) {
             nextYear[table[aid][index + 1]] = 1;
@@ -278,7 +276,7 @@ class ExpertHeatmap extends React.Component {
       }
     }
 
-    if (index < (endYear - startYear)) {
+    if (index < (this.state.endYear - this.state.startYear)) {
       for (const key in nextYear) {
         // console.log('key', key);
         const onenode = { name: key, value: nextYear[key] }; // 实际数据中乘20应删去！
@@ -465,9 +463,6 @@ class ExpertHeatmap extends React.Component {
                     normal: {
                       color: '#ff2c37',
                       borderColor: '#ff2f31',
-                    },
-                    emphasis: {
-                      show: false,
                     },
                   },
                   data: [{
@@ -1123,13 +1118,13 @@ class ExpertHeatmap extends React.Component {
 
         <Row>
           <Col span={22}>
-            <Slider min={startYear} max={endYear} onChange={this.onChange} onAfterChange={this.onAfterChange}value={this.state.inputValue} />
+            <Slider min={this.state.startYear} max={this.state.endYear} onChange={this.onChange} onAfterChange={this.onAfterChange}value={this.state.inputValue} />
             {/* <Slider min={startYear} max={endYear} range step={1} defaultValue={[1999, 1999]} onChange={this.onDbChange} /> */}
           </Col>
           <Col span={1}>
             <InputNumber
-              min={startYear}
-              max={endYear}
+              min={this.state.startYear}
+              max={this.state.endYear}
               style={{ marginLeft: 0 }}
               value={this.state.inputValue}
               onChange={this.onInputNum}

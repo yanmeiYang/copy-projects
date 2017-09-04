@@ -79,7 +79,7 @@ const DetailPage = ({ dispatch, seminar, app, pad }) => {
     <div className={styles.detailSeminar}>
       <Spin spinning={loading}>
         {summaryById.title ? <Row>
-          <Col>
+          <Col className={styles.seminar_action}>
             <div>
               {(app.roles.authority.includes(summaryById.organizer[0]) || app.roles.admin)
               && <span>
@@ -102,9 +102,9 @@ const DetailPage = ({ dispatch, seminar, app, pad }) => {
           </Col>
           <Col className={styles.thumbnail}>
             <div className={styles.caption}>
-              <div style={{ float: 'right', marginRight: 10, marginTop: '10px' }}>
+              <div className={styles.qrcode}>
                 <div>
-                  <QRCode value={window.location.href} />
+                  <QRCode value={window.location.href} size={90} />
                 </div>
               </div>
               {/* type=workshop*/}

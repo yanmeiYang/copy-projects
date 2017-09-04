@@ -33,8 +33,10 @@
 
     .main { margin-left: 42px; border: solid 1px red; }
   }
+  .main_margin_188 { margin-left: 0 !important; }
 
   .sider {
+    display: none;
     width: 180px;
     background: #3e3e3e;
     position: absolute;
@@ -258,6 +260,10 @@
 // Responsive
 
 @media (min-width: 568px) {
+  .layout .main_margin_188 { margin-left: 188px !important; }
+
+  .layout .sider { display: block; }
+
   :global {
     .gt1 { display: inherit }
   }

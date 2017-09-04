@@ -40,11 +40,7 @@ class ExpertAllInfo extends React.PureComponent {
                     </span>}
                   </span>}
                 </p>}
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'flex-start',
-                  // flexWrap: 'wrap',
-                }}>
+                <div className={styles.expert_content} >
                   <div className={styles.speakerAvatar}>
                     {aTalk.speaker.aid ?
                       <Link to={`/person/${aTalk.speaker.aid}`}>
@@ -59,7 +55,8 @@ class ExpertAllInfo extends React.PureComponent {
                       <span>
                         {aTalk.speaker &&
                         <div>
-                          {aTalk.speaker.name && <li>
+                          {aTalk.speaker.name &&
+                          <li>
                             <p>
                               <Icon type="user" />
                               <strong>姓名:&nbsp;</strong>

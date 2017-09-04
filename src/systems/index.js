@@ -76,7 +76,11 @@ const defaultSystemConfigs = {
   Signup_Password: false, // 注册页面password
 
   SearchPagePrefix: 'uniSearch', // search - 普通搜索(deleted); uniSearch - 多合一搜索.
-  Search_EnablePin: false,
+  Search_EnablePin: false, // TODO bad：Huawei PIN
+  Search_EnableCCFPin: false, // TODO bad：CCF PIN
+  Search_EnableTranslateSearch: true, // 启用翻译搜索，显示提示信息;
+  Search_DefaultTranslateSearch: false, // 默认使用翻译搜索;
+
   Search_EnableKnowledgeGraphHelper: true,
   Search_SortOptions: defaults.IN_APP_DEFAULT,
 
@@ -113,7 +117,7 @@ const defaultSystemConfigs = {
     'Networks', 'Natural language processing'],
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
   // 地图中心点
-  CentralPosition: {},
+  CentralPosition: { lat: 37.09024, lng: -95.712891 },
 
   // > Admin Users
   Admin_Users_ShowAdmin: true,

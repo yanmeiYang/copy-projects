@@ -85,11 +85,8 @@ class ExpertHeatmapPage extends React.Component {
   render() {
     const load = this.props.loading.models.expertTrajectory;
     const rightType = this.props.expertTrajectory.infoZoneIds;
-    console.log("rightType",rightType)
-    console.log('load', load);
     const ifPlay = this.state.ifPlay;
     const clusterPersons = this.props.expertTrajectory.clusterPersons;
-    console.log('cluster', clusterPersons);
     const rightInfos = {
        scatter: () => (<LeftInfoZoneCluster persons={clusterPersons} />),
        lines: () => (<LeftLineInfoCluster persons={clusterPersons} />),

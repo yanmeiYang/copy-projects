@@ -7,6 +7,7 @@ import { routerRedux } from 'dva/router';
 import { FormattedMessage as FM } from 'react-intl';
 import { gql, graphql } from 'react-apollo';
 import { sysconfig } from '../../systems';
+import { Spinner } from '../../components';
 import { classnames } from '../../utils';
 import styles from './RecommendationPage.less';
 import { Auth } from '../../hoc';
@@ -90,15 +91,12 @@ export default class RecommendationPage extends React.Component {
           <FM id="rcd.home.pageTitle" defaultMessage="Organization List"
               values={{ name: 'This is a test' }} />
         </h1>
-
-        {data.loading &&
-        <div>Loading...</div>
-        }
-
-        {!data.loading &&
-        <RCDOrgList orgs={data.rcdorgs} />
-        }
-
+        <div className={styles.table}>
+          <Spinner loading={data.loading} nomask />
+          {!data.loading &&
+          <RCDOrgList orgs={data.rcdorgs} />
+          }
+        </div>
       </div>
     );
   }

@@ -1,0 +1,20 @@
+@import "../../../themes/vars.less";
+
+.content {
+  display: flex; flex-direction: column; flex-grow: 2; align-self: center;
+  max-width: @max-width-page; min-width: @min-width-page;
+  width: 98%; height: 100%;
+  border: solid 0px red;
+
+  .titleBox {
+    display: flex; flex-direction: column;
+    border: 1px solid @default-border-color; border-radius: @border-radius-base;
+    padding: 12px; margin-top: 8px;
+    .info {
+      display: flex; flex-direction: row; color: @text-color-gray;
+      .time { margin-left: 12px; }
+    }
+  }
+  .table { margin-top: 24px; }
+}
+

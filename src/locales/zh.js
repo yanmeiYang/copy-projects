@@ -49,6 +49,18 @@ export default {
 
   // Recommendation
   'rcd.home.pageTitle': '机构列表',
+  'rcd.projectTable.header.projectName': '项目名称',
+  'rcd.projectTable.header.taskCount': '任务数',
+  'rcd.projectTable.header.progress': '完成进度',
+  'rcd.projectTable.header.status': '当前状态',
+  'rcd.projectTable.header.createTime': '创建时间',
+  'rcd.projectTable.header.updateTime': '更新时间',
+  'rcd.projectTable.header.actions': '操作',
 
-
+  'rcd.taskTable.header.taskName': '项目任务',
+  'rcd.taskTable.header.createTime': '创建时间',
+  'rcd.taskTable.header.updateTime': '更新时间',
+  'rcd.taskTable.header.progress': '完成进度',
+  'rcd.taskTable.header.status': '状态',
+  'rcd.taskTable.header.actions': '操作',
 };

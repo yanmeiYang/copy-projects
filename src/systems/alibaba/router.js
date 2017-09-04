@@ -11,7 +11,7 @@ const Routers = function ({ history, app }) {
     core.IndexPage(app, [
 
       // search
-      // core.ExpertSearch(app),
+      // core.ExpertSearch(app), // deprecated.
       core.UniSearch(app),
       core.Experts(app),
 
@@ -49,6 +49,7 @@ const Routers = function ({ history, app }) {
       // expert map
       core.ExpertMap(app),
       core.ExpertMapGoogle(app),
+      core.ExpertMapDispatch(app),
       // core.ExpertTrajectoryPage(app),
 
       // Relation-Graph, KnowledgeGraph, TrendPrediction, etc...

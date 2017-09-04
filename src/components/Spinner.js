@@ -5,18 +5,24 @@ import classnames from 'classnames';
 import styles from './Spinner.less';
 
 class Spinner extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.nomask = props.nomask;
+  }
 
-  componentWillUpdate(nextProps, nextState) {
-    const me = ReactDOM.findDOMNode(this);
-    if (me) {
-      window.me = me;
-      const parent = me.parentElement;
-      if (nextProps.loading) {
-        if (parent.className.indexOf('filterBlur') < 0) {
-          parent.className += ' filterBlur';
+  componentWillUpdate(nextProps) {
+    if (!this.nomask) {
+      const me = ReactDOM.findDOMNode(this);
+      if (me) {
+        window.me = me;
+        const parent = me.parentElement;
+        if (nextProps.loading) {
+          if (parent.className.indexOf('filterBlur') < 0) {
+            parent.className += ' filterBlur';
+          }
+        } else {
+          parent.className = parent.className.replace('filterBlur', '');
         }
-      } else {
-        parent.className = parent.className.replace('filterBlur', '');
       }
     }
   }

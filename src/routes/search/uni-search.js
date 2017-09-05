@@ -195,7 +195,6 @@ export default class UniSearch extends React.PureComponent {
         query={query} pageSize={pageSize} current={current}
         filters={filters} sort={this.state.sortType} />
     );
-
     // Deprecated search result tab.
 
     // const exportArea = sysconfig.Enable_Export ? <ExportPersonBtn /> : '';

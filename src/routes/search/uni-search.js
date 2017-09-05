@@ -237,7 +237,8 @@ export default class UniSearch extends React.PureComponent {
         <Spinner loading={load} />
         <div className={styles.personAndKg}>
           <div>
-            <PersonList persons={results} personLabel={sysconfig.Person_PersonLabelBlock} />
+            <PersonList persons={results} personLabel={sysconfig.Person_PersonLabelBlock}
+                        personRightButton={sysconfig.Person_PersonRightButton}/>
             <div className={styles.paginationWrap}>
               <Pagination
                 showQuickJumper
@@ -252,7 +253,6 @@ export default class UniSearch extends React.PureComponent {
           {topic.label && <SearchKnowledge topic={topic} />}
         </div>
       </div>
-
     );
 
     /*
@@ -302,7 +302,7 @@ export default class UniSearch extends React.PureComponent {
                 <Link onClick={this.doTranslateSearch.bind(this, false)}>
                   <FM defaultMessage="Search '{cnQuery}' only."
                       id="search.translateSearchMessage.2"
-                      values={{ cnQuery: query }} />
+                      values={{ cnQuery: query }}/>
                 </Link>
               </div>
               }

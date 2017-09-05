@@ -1,0 +1,44 @@
+/**
+ *  Created by zhanglimin on 2017-09-01;
+ */
+@import '../../themes/vars.less';
+
+.orgs {
+  display: flex; flex-direction: column; flex: 1; justify-content: flex-start;
+  border: solid 0px @default-border-color; padding: 0px;
+  min-height: 40px;
+  min-width: 750px;
+  margin: 0 auto;
+  max-width:1000px;
+
+  .box {
+    display: flex; flex-direction: row; flex-wrap: wrap;
+    .org {
+      width: 12em; height: 27em; margin: 0.4em; padding: 0.4em;
+      border: 1px solid @default-border-color; border-radius: @border-radius-base;
+      box-shadow: 0 2px 6px rgba(200, 200, 200, 0.4);
+
+      .titleArea {
+        display: flex; flex-direction: row; justify-items: center; height: 12em;
+        margin-bottom: 0.5em;position: relative;
+        .closeModal{font-weight:bolder;position: absolute;right: -10px;top: -9px;cursor:pointer;color:#008cff;}
+        h2.title {
+          display: flex; align-self: center; flex: 1; justify-content: center;
+          text-align: center;
+          //.img{margin-top:33px}
+        }
+        h2.title a { color: @text-color; }
+      }
+      .desc { text-align: center; height: 9em; }
+      .info {
+        display: flex; flex-direction: row; justify-content: space-around;
+        text-align: center;
+        font-size: @font-size-sm;
+        .user { }
+        .time { }
+      }
+    }
+    .org:hover { background-color: @background-color-gray }
+  }
+
+}

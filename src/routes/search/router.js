@@ -22,6 +22,7 @@ export default {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/search'));
         registerModel(app, require('../../models/knowledge-graph'));
+        registerModel(app, require('../../models/expert-base/expert'));
         cb(null, require('./uni-search'));
       }, 'search');
     },

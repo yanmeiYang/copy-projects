@@ -44,6 +44,7 @@ export default {
   'com.searchTypeWidget.label.KnowledgeGraph': '知识图谱',
   'com.searchTypeWidget.label.TrendPrediction': '技术趋势',
   'com.searchTypeWidget.label.ExpertTrajectory': '专家迁移',
+  'com.searchTypeWidget.label.ExpertBase': '我的专家库',
 
   'com.PersonList.label.views': '次查看',
 

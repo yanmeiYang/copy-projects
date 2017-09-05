@@ -41,6 +41,8 @@ export default {
   'com.searchTypeWidget.label.KnowledgeGraph': 'Knowledge Graph',
   'com.searchTypeWidget.label.TrendPrediction': 'Topic Trend',
   'com.searchTypeWidget.label.ExpertTrajectory': 'Expert Trajectory',
+  'com.searchTypeWidget.label.ExpertBase': 'My Experts',
+
 
   'com.PersonList.label.views': 'views',
 

@@ -45,44 +45,50 @@ const fullRouter = (app, defaultChildRoutes) => {
       core.Retrieve(app),
       core.UserInfo(app),
 
-      // Admin(Specified by ccf) TODO some are only used by ccf, move out.
-      core.AdminUsers(app),
-      core.AdminSystemConfig(app),
-      core.AdminAddUserRolesByOrg(app),
-      core.AdminContributionType(app),
-      core.AdminActivityType(app),
-      core.AdminSystemConfigWithCategory(app),
-      core.AdminSystemOrgCategory(app),
+      core.ExpertBase(app),
+      core.AddExpertBase(app),
+      core.ExpertDetailList(app),
+      core.AddExpertDetail(app),
+      core.ExpertProfileInfo(app),
 
-      // Recommendation/rcd
-      core.RecommendationHome(app),
-      core.ProjectPage(app),
+      // Admin(Specified by ccf) TODO some are only used by ccf, move out.
+      // core.AdminUsers(app),
+      // core.AdminSystemConfig(app),
+      // core.AdminAddUserRolesByOrg(app),
+      // core.AdminContributionType(app),
+      // core.AdminActivityType(app),
+      // core.AdminSystemConfigWithCategory(app),
+      // core.AdminSystemOrgCategory(app),
+      //
+      // // Recommendation/rcd
+      // core.RecommendationHome(app),
+      // core.ProjectPage(app),
 
       // Activity / Seminar
-      core.Seminar(app),
-      core.SeminarWithId(app),
-      core.SeminarMy(app),
-      core.SeminarPost(app),
-      core.SeminarRating(app),
-      core.Statistic(app),
-      core.StatisticDetail(app),
-      core.SeminarByEdit(app),
+      // core.Seminar(app),
+      // core.SeminarWithId(app),
+      // core.SeminarMy(app),
+      // core.SeminarPost(app),
+      // core.SeminarRating(app),
+      // core.Statistic(app),
+      // core.StatisticDetail(app),
+      // core.SeminarByEdit(app),
 
       // expert map
-      core.ExpertMap(app),
-      core.ExpertMapGoogle(app),
-      core.ExpertTrajectoryPage(app),
-      core.ExpertHeatmapPage(app),
-      core.ExpertMapDispatch(app),
+      // core.ExpertMap(app),
+      // core.ExpertMapGoogle(app),
+      // core.ExpertTrajectoryPage(app),
+      // core.ExpertHeatmapPage(app),
+      // core.ExpertMapDispatch(app),
 
       // Relation-Graph, KnowledgeGraph, TrendPrediction, etc...
-      core.RelationGraphPage(app),
-      core.KnowledgeGraph(app),
-      core.TrendPredictionPage(app),
-      core.RanksHelp(app),
+      // core.RelationGraphPage(app),
+      // core.KnowledgeGraph(app),
+      // core.TrendPredictionPage(app),
+      // core.RanksHelp(app),
 
       // 2b profile
-      core.TobProfile(app),
+      // core.TobProfile(app),
       core.Addition(app),
       // Your pages should be registered here.
 

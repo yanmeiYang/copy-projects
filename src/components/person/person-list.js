@@ -18,6 +18,7 @@ class PersonList extends React.PureComponent {
   constructor(props) {
     super(props);
     this.personLabel = props.personLabel;
+    this.personRightButton = props.personRightButton;
 
     // TODO 临时措施，国际化Interest应该从server端入手。
     personService.getInterestsI18N((result) => {
@@ -60,7 +61,6 @@ class PersonList extends React.PureComponent {
             if (sysconfig.PersonList_PersonLink_NewTab) {
               personLinkParams.target = '_blank';
             }
-
             return (
               <div key={person.id} className={styles.person}>
                 <div className={styles.avatar_zone}>
@@ -76,6 +76,7 @@ class PersonList extends React.PureComponent {
                       {false && <span className={styles.rank}>会士</span>}
                     </h2>
                     {this.personLabel && this.personLabel(person)}
+                    {this.personRightButton && this.personRightButton(person)}
                   </div>}
                   <div className={classnames(styles.zone, styles.interestColumn)}>
                     <div className={styles.contact_zone}>

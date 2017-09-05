@@ -185,7 +185,6 @@ export default class UniSearch extends React.PureComponent {
     }
   };
 
-
   render() {
     const { results, pagination, query, aggs, filters } = this.props.search;
     const { pageSize, total, current } = pagination;
@@ -193,7 +192,7 @@ export default class UniSearch extends React.PureComponent {
     const operations = (
       <ExportPersonBtn
         query={query} pageSize={pageSize} current={current}
-        filters={filters} sort={this.state.sortType} />
+        filters={filters} sort={this.state.sortType}/>
     );
 
     // Deprecated search result tab.
@@ -217,20 +216,21 @@ export default class UniSearch extends React.PureComponent {
         >
           {this.searchSorts.map((sortItem) => {
             const icon = sortItem === this.state.sortType ?
-              <i className="fa fa-sort-amount-desc" /> : '';
+              <i className="fa fa-sort-amount-desc"/> : '';
             const tab = (
               <span>
                 <FM id={`com.search.sort.label.${sortItem}`}
-                    defaultMessage={sortItem} /> {icon}
+                    defaultMessage={sortItem}/> {icon}
               </span>
             );
-            return <TabPane tab={tab} key={sortItem} />;
+            return <TabPane tab={tab} key={sortItem}/>;
           })}
         </Tabs>
 
         <div>
-          <Spinner loading={load} />
-          <PersonList persons={results} personLabel={sysconfig.Person_PersonLabelBlock} />
+          <Spinner loading={load}/>
+          <PersonList persons={results} personLabel={sysconfig.Person_PersonLabelBlock}
+                      personRightButton={sysconfig.Person_PersonRightButton} />
           <div className={styles.paginationWrap}>
             <Pagination
               showQuickJumper
@@ -290,7 +290,7 @@ export default class UniSearch extends React.PureComponent {
               <Link onClick={this.doTranslateSearch.bind(this, false)}>
                 <FM defaultMessage="Search '{cnQuery}' only."
                     id="search.translateSearchMessage.2"
-                    values={{ cnQuery: query }} />
+                    values={{ cnQuery: query }}/>
               </Link>
             </div>}
 
@@ -313,7 +313,7 @@ export default class UniSearch extends React.PureComponent {
 
           {/*{sysconfig.Search_EnableKnowledgeGraphHelper &&*/}
           {/*<div className={styles.rightZone}>*/}
-            {/*<KnowledgeGraphSearchHelper query={query} />*/}
+          {/*<KnowledgeGraphSearchHelper query={query} />*/}
           {/*</div>*/}
           {/*}*/}
 

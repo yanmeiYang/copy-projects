@@ -1,0 +1,99 @@
+/**
+ * Created by zhanglimin on 17/9/1.
+ */
+import * as expertBase from '../../services/expert-base';
+
+export default {
+  namespace: 'expertBase',
+
+  state: {
+    results: [],
+    detailResults: [],
+    addStatus:{},
+  },
+
+  subscriptions: {
+    setup({ dispatch, history }) {
+      history.listen((location) => {
+        if (location.pathname === '/expert-base') {
+          dispatch({
+            type: 'getExpert',
+            payload: { offset: 0, size: 20 },
+          });
+        }
+        // if (location.pathname === '/expert-base-list') {
+        //   dispatch({
+        //     type: 'expertBase/getExpertDetailList',
+        //     payload: { key, offset: 0, size: 20 },
+        //   });
+        // }
+      });
+    },
+  },
+  effects: {
+    * getExpert({ payload }, { call, put }) {
+      const { offset, size } = payload;
+      const { data } = yield call(expertBase.getExpert, offset, size);
+      yield put({ type: 'getExpertSuccess', payload: { data } });
+    },
+    * addExpert({ payload }, { call, put }) {
+      const { title, desc } = payload;
+      const pub = payload.public;
+      const { data } = yield call(expertBase.addExpertBase, { title, desc, pub });
+      yield put({ type: 'addExpertSuccess', payload: { data } });
+    },
+    * deleteExpert({ payload }, { call, put }) {
+      const { key } = payload;
+      console.log('hahahha', key);
+      // const { id } = payload;
+      const { data } = yield call(expertBase.deleteByKey, key);
+      if (data.status) {
+        yield put({ type: 'deleteExpertSuccess', payload });
+      } else {
+        console.log('数据操作失败！');
+      }
+    },
+    * getExpertDetailList({ payload }, { call, put }) {
+      const { id, offset, size } = payload;
+      const { data } = yield call(expertBase.getExpertDetail, id, offset, size);
+      yield put({ type: 'getExpertDetailSuccess', payload: { data } });
+    },
+    * addExpertDetail({ payload }, { call, put }) {
+      const { data } = yield call(expertBase.addExpertDetailInfo, { payload });
+      console.log('znemehuishi',data);
+      yield put({ type: 'addExpertDetailSuccess', payload: { data } });
+    },
+    * searchExpertItem({ payload }, { call, put }) {
+      const { data } = yield call(expertBase.searchExpert, { payload });
+      yield put({
+        type: 'searchExpertSuccess', payload: { data },
+      })
+      ;
+    },
+
+  },
+  reducers: {
+    getExpertSuccess(state, { payload: { data } }) {
+      return { ...state, results: data, loading: true };
+    },
+    getExpertDetailSuccess(state, { payload: { data } }) {
+      return { ...state, detailResults: data, loading: true };
+    },
+    addExpertSuccess(state, { payload: { data } }) {
+      return { ...state, loading: true };
+    },
+    deleteExpertSuccess(state, { payload }) {
+      const data = state.results.data.filter(item => item.id !== payload.key);
+      const newState = { ...state };
+      newState.results.data = data;
+      return { ...state, newState };
+    },
+    addExpertDetailSuccess(state, { payload: { data } }) {
+      return { ...state,loading: true };
+    },
+    searchExpertSuccess(state, { payload: { data } }) {
+      return { ...state, detailResults: data, loading: true };
+    },
+  },
+};
+

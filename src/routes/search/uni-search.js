@@ -10,7 +10,7 @@ import { PersonList } from '../../components/person';
 import { Spinner } from '../../components';
 import { sysconfig } from '../../systems';
 import { KnowledgeGraphSearchHelper } from '../knowledge-graph';
-import { SearchFilter, KgSearchBox } from '../../components/search';
+import { SearchFilter, KgSearchBox, SearchKnowledge } from '../../components/search';
 import ExportPersonBtn from '../../components/person/export-person';
 import { Auth } from '../../hoc';
 
@@ -178,6 +178,12 @@ export default class UniSearch extends React.PureComponent {
       type: 'search/searchPersonAgg',
       payload: { query, offset, size, filters, sort },
     });
+    this.dispatch({
+      type: 'search/getTopicByMention',
+      payload: {
+        mention: query,
+      },
+    });
     if (!dontRefreshUrl) {
       this.dispatch(routerRedux.push({
         pathname: `/${sysconfig.SearchPagePrefix}/${query}/0/${size}`,
@@ -187,7 +193,7 @@ export default class UniSearch extends React.PureComponent {
 
 
   render() {
-    const { results, pagination, query, aggs, filters } = this.props.search;
+    const { results, pagination, query, aggs, filters, topic } = this.props.search;
     const { pageSize, total, current } = pagination;
     const load = this.props.loading.effects['search/searchPerson'];
     const operations = (
@@ -195,6 +201,7 @@ export default class UniSearch extends React.PureComponent {
         query={query} pageSize={pageSize} current={current}
         filters={filters} sort={this.state.sortType} />
     );
+
     // Deprecated search result tab.
 
     // const exportArea = sysconfig.Enable_Export ? <ExportPersonBtn /> : '';
@@ -227,20 +234,23 @@ export default class UniSearch extends React.PureComponent {
           })}
         </Tabs>
 
-        <div>
-          <Spinner loading={load} />
-          <PersonList persons={results} personLabel={sysconfig.Person_PersonLabelBlock}
-                      personRightButton={sysconfig.Person_PersonRightButton} />
-          <div className={styles.paginationWrap}>
-            <Pagination
-              showQuickJumper
-              current={current}
-              defaultCurrent={1}
-              defaultPageSize={pageSize}
-              total={total}
-              onChange={this.onPageChange}
-            />
+        <Spinner loading={load} />
+        <div className={styles.personAndKg}>
+          <div>
+            <PersonList persons={results} personLabel={sysconfig.Person_PersonLabelBlock}
+                        personRightButton={sysconfig.Person_PersonRightButton}/>
+            <div className={styles.paginationWrap}>
+              <Pagination
+                showQuickJumper
+                current={current}
+                defaultCurrent={1}
+                defaultPageSize={pageSize}
+                total={total}
+                onChange={this.onPageChange}
+              />
+            </div>
           </div>
+          {topic.label && <SearchKnowledge topic={topic} />}
         </div>
       </div>
     );
@@ -280,40 +290,44 @@ export default class UniSearch extends React.PureComponent {
             </div>
             }
 
-            {/* Translate Search */}
-            {useTranslateSearch && translatedQuery &&
+            {sysconfig.Search_EnableTranslateSearch &&
             <div className="message">
-              <FM defaultMessage="We also search '{enQuery}' for you."
-                  id="search.translateSearchMessage.1"
-                  values={{ enQuery: translatedQuery }}
-              />&nbsp;
-              <Link onClick={this.doTranslateSearch.bind(this, false)}>
-                <FM defaultMessage="Search '{cnQuery}' only."
-                    id="search.translateSearchMessage.2"
-                    values={{ cnQuery: query }} />
-              </Link>
-            </div>}
+              {/* Translate Search */}
+              {useTranslateSearch && translatedQuery &&
+              <div>
+                <FM defaultMessage="We also search '{enQuery}' for you."
+                    id="search.translateSearchMessage.1"
+                    values={{ enQuery: translatedQuery }}
+                />&nbsp;
+                <Link onClick={this.doTranslateSearch.bind(this, false)}>
+                  <FM defaultMessage="Search '{cnQuery}' only."
+                      id="search.translateSearchMessage.2"
+                      values={{ cnQuery: query }}/>
+                </Link>
+              </div>
+              }
 
-            {!useTranslateSearch && translatedQuery &&
-            <div className="message">
+              {!useTranslateSearch && translatedQuery &&
               <Link onClick={this.doTranslateSearch.bind(this, true)}>
                 <FM defaultMessage="You can also search with both '{enQuery}' and '{cnQuery}'."
                     id="search.translateSearchMessage.reverse"
                     values={{ enQuery: translatedQuery, cnQuery: query }}
                 />
               </Link>
-            </div>}
+              }
+            </div>
+            }
 
             {/* Filter */}
-            <SearchFilter filters={filters} aggs={aggs}
-                          onFilterChange={this.onFilterChange}
-                          onExpertBaseChange={this.onExpertBaseChange}
+            <SearchFilter
+              filters={filters} aggs={aggs}
+              onFilterChange={this.onFilterChange}
+              onExpertBaseChange={this.onExpertBaseChange}
             />
           </div>
-
           {/*{sysconfig.Search_EnableKnowledgeGraphHelper &&*/}
           {/*<div className={styles.rightZone}>*/}
-            {/*<KnowledgeGraphSearchHelper query={query} />*/}
+          {/*<KnowledgeGraphSearchHelper query={query} />*/}
           {/*</div>*/}
           {/*}*/}
 

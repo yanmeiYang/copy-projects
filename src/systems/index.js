@@ -123,6 +123,7 @@ const defaultSystemConfigs = {
   // > Admin Users
   Admin_Users_ShowAdmin: true,
   // PersonList_ShowIndices: [], // do not override in-component settings. // TODO
+
 };
 
 /** *************************************************

@@ -9,20 +9,37 @@ import styles from './person-right-button.less';
 
 
 class PersonRightButton extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state.dataIdItem = props.ExpertBase;
+  }
+
   state = {
     visible: false,
     dataIdItem: '',
     value: 1,
-    };
+    personData: '',
+  };
   // shouldComponentUpdate(nextProps) {
   //   return this.props.person !== nextProps.person;
   // }
-  add = (per) => {
-    this.setState({ visible: true });
+  add = (id) => {
+    // this.setState({ visible: true });
+    // this.props.dispatch({
+    //   type: 'expertBase/getExpert',
+    //   payload: { offset: 0, size: 20 },
+    // });
+    // const ebid = '59a8e5879ed5db1fc4b762ad';
+    const ebid = this.state.dataIdItem;
+    const aids = id.split(';');
     this.props.dispatch({
-      type: 'expertBase/getExpert',
-      payload: { offset: 0, size: 20 },
+      type: 'expertBase/addExpertDetail',
+      payload: { ebid, aids },
     });
+    // const personData = this.props.person.id;
+    this.setState({ personData: this.props.person.id });
+    // console.log('111', this.props);
+    // console.log('addStatus是', personData);
   };
   handleOk = (id) => {
     const ebid = this.state.dataIdItem;
@@ -35,9 +52,9 @@ class PersonRightButton extends React.PureComponent {
     this.setState({
       visible: false,
     });
-    this.props.dispatch(routerRedux.push({
-      pathname: `/expert-base-list/${ebid}`,
-    }));
+    // this.props.dispatch(routerRedux.push({
+    //   pathname: `/expert-base-list/${ebid}`,
+    // }));
   };
   handleCancel = () => {
     this.setState({
@@ -64,9 +81,9 @@ class PersonRightButton extends React.PureComponent {
     const orgData = results.data;
     return (
       <div className={styles.buttonArea}>
-        <Button onClick={this.add.bind(this, per)}>
-          <Icon type="plus"></Icon>
-          add
+        <Button onClick={this.add.bind(this, per.id)}>
+          {this.state.personData ? '添加成功'
+            : '添加'}
         </Button>
 
         <Modal title="智库列表"

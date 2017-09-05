@@ -39,7 +39,7 @@ module.exports = {
 
   // > Search related
   SearchBarInHeader: true,
-  HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertMap'],
+  HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertBase'], // ExpertBase bole专有
   // SearchFilterExclude: 'Gender',
   // UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // deprecated! Don't use this.
 
@@ -50,7 +50,7 @@ module.exports = {
 
   IndexPage_QuickSearchList: ['Medical Robotics', 'Surgical Robots', 'Robot Kinematics',
     'Computer Assisted Surgery', 'Surgical Navigation', 'Minimally Invasive Surgery'],
-  Person_PersonRightButton: person => <PersonRightButton person={person} />,
+  Person_PersonRightButton: person => <PersonRightButton person={person} ExpertBase="59a8e5879ed5db1fc4b762ad" />,
   ExpertBases: [
     {
       id: 'aminer',
@@ -64,4 +64,7 @@ module.exports = {
     },
 
   ],
+  // bole系统独有设置
+
+  ExpertBase: '59a8e5879ed5db1fc4b762ad',
 };

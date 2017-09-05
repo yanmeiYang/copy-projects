@@ -10,27 +10,20 @@ const Search = Input.Search;
 class ExpertDetailList extends React.Component {
   state = {
   };
-  componentWillMount() {
-    const id = this.props.routeParams.id;
+  componentDidMount() {
+    const id = '59a8e5879ed5db1fc4b762ad';
     this.props.dispatch({
       type: 'expertBase/getExpertDetailList',
       payload: { id, offset: 0, size: 100 },
     });
   }
-  componentDidMount() {
-    const id = this.props.routeParams.id;
-    // this.props.dispatch({
-    //   type: 'expertBase/getExpertDetailList',
-    //   payload: { id, offset: 0, size: 50 },
-    // });
-  }
-
   addExpertDetailInfo = (dataId) => {
     const id = dataId;
     this.props.dispatch(routerRedux.push({ pathname: `/add-expert-detail/${id}` }));
   };
   searchExpertByName = (value) => {
-    const id = this.props.routeParams.id;
+    // const id = this.props.routeParams.id;
+    const id = '59a8e5879ed5db1fc4b762ad';
     this.props.dispatch({
       type: 'expertBase/searchExpertItem',
       payload: { id, name: value },
@@ -46,8 +39,8 @@ class ExpertDetailList extends React.Component {
         {/*<Button onClick={this.addExpertDetailInfo.bind(this, dataId)}*/}
         {/*className={styles.addButton}>添加专家</Button>*/}
         <Search placeholder="input name" className={styles.searchArea}
-                onSearch={this.searchExpertByName.bind(value)}/>
-        <ExpertList orgs={detailResults.result}/>
+                onSearch={this.searchExpertByName.bind(value)} />
+        <ExpertList orgs={detailResults.result} />
       </div>
     );
   }

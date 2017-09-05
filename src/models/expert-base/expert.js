@@ -60,7 +60,7 @@ export default {
     },
     * addExpertDetail({ payload }, { call, put }) {
       const { data } = yield call(expertBase.addExpertDetailInfo, { payload });
-      console.log('znemehuishi',data);
+      console.log('znemehuishi',payload);
       yield put({ type: 'addExpertDetailSuccess', payload: { data } });
     },
     * searchExpertItem({ payload }, { call, put }) {
@@ -89,7 +89,8 @@ export default {
       return { ...state, newState };
     },
     addExpertDetailSuccess(state, { payload: { data } }) {
-      return { ...state,loading: true };
+      console.log('添加成功data',data)
+      return { ...state, addStatus: data ,loading: true };
     },
     searchExpertSuccess(state, { payload: { data } }) {
       return { ...state, detailResults: data, loading: true };

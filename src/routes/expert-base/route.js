@@ -24,7 +24,7 @@ export default {
     },
   }),
   ExpertDetailList: app => ({
-    path: '/expert-base-list/:id',
+    path: '/expert-base-list',
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/expert-base/expert'));

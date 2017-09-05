@@ -3,4 +3,6 @@
  */
 import * as config from '../ccf/config';
 
+config.Admin_Users_ShowAdmin = true;
+
 export default config;

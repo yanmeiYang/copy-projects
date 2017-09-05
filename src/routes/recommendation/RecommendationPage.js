@@ -91,7 +91,7 @@ export default class RecommendationPage extends React.Component {
           <FM id="rcd.home.pageTitle" defaultMessage="Organization List"
               values={{ name: 'This is a test' }} />
         </h1>
-        <div>
+        <div className={styles.table}>
           <Spinner loading={data.loading} nomask />
           {!data.loading &&
           <RCDOrgList orgs={data.rcdorgs} />

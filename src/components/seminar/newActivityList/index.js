@@ -3,10 +3,11 @@
  */
 import React from 'react';
 import { routerRedux, Link } from 'dva/router';
-import { Button } from 'antd';
+import { Button, Tooltip } from 'antd';
 import { connect } from 'dva';
 import styles from './index.less';
 import * as seminarService from '../../../services/seminar';
+import * as profileUtils from '../../../utils/profile-utils';
 import { sysconfig } from '../../../systems';
 
 
@@ -63,6 +64,24 @@ class NewActivityList extends React.Component {
               <span>~ {timeTo.getDate()}日</span>}
             </p>
             <p>活动地点：{result.location.city} {result.location.address}</p>
+            {result.talk.filter(item => item.speaker.role && item.speaker.role.includes('president'))
+              .map((talk) => {
+                return <div key={talk.speaker.aid} className={styles.seminar_expert_president}>
+                  <Tooltip title={talk.speaker.name}>
+                    <img src={profileUtils.getAvatar(talk.speaker.img, talk.speaker.aid, 80)}
+                         alt={talk.speaker.name} />
+                  </Tooltip>
+                </div>;
+              })}
+            {result.talk.filter(item => item.speaker.role && !item.speaker.role.includes('president'))
+              .map((talk) => {
+                return <div key={talk.speaker.aid} className={styles.seminar_expert_common}>
+                  <Tooltip title={talk.speaker.name}>
+                    <img src={profileUtils.getAvatar(talk.speaker.img, talk.speaker.aid, 80)}
+                         alt={talk.speaker.name} />
+                  </Tooltip>
+                </div>;
+              })}
           </div>
           <div>
             <div className={styles.seminar_orgAndTag}>

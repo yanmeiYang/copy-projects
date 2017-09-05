@@ -1,6 +1,7 @@
 import pathToRegexp from 'path-to-regexp';
 import * as searchService from '../services/search';
 import * as translateService from '../services/translate';
+import * as topicService from '../services/topic';
 import { sysconfig } from '../systems';
 
 export default {
@@ -9,12 +10,13 @@ export default {
 
   state: {
     results: [],
+    topic: {},
     aggs: [],
     filters: {},
     query: null,
 
     // use translate search?
-    useTranslateSearch: true,
+    useTranslateSearch: sysconfig.Search_DefaultTranslateSearch,
     translatedQuery: '',
 
     offset: 0,
@@ -135,6 +137,12 @@ export default {
       yield put({ type: 'getSeminarsSuccess', payload: { data } });
     },
 
+    * getTopicByMention({ payload }, { call, put }){
+      const { mention } = payload;
+      const { data } = yield call(topicService.getTopicByMention, mention);
+      yield put({ type: 'getTopicByMentionSuccess', payload: { data } });
+    },
+
   },
 
   reducers: {
@@ -196,6 +204,10 @@ export default {
 
     clearTranslateSearch(state) {
       return { ...state, useTranslateSearch: true, translatedQuery: '' };
+    },
+
+    getTopicByMentionSuccess(state, { payload: { data } }) {
+      return { ...state, topic: data.data };
     },
 
   },

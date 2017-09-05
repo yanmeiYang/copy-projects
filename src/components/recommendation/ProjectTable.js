@@ -34,6 +34,7 @@ export default class ProjectTable extends React.PureComponent {
       title: intl.formatMessage(messages.projectName),
       dataIndex: 'title',
       key: 'projectName',
+      render: (_, r) => (<Link to={`/rcd/project/tasks/${r.id}`}>{r.title}</Link>),
     }, {
       title: intl.formatMessage(messages.taskCount),
       dataIndex: 'taskCount',
@@ -42,6 +43,7 @@ export default class ProjectTable extends React.PureComponent {
       title: intl.formatMessage(messages.progress),
       dataIndex: 'progress',
       key: 'progress',
+      render: text => `${text} %`,
     }, {
       title: intl.formatMessage(messages.status),
       dataIndex: 'status',
@@ -74,19 +76,12 @@ export default class ProjectTable extends React.PureComponent {
 
   render() {
     const { projects } = this.props;
-    console.log('亲们！projects is: ', projects);
     return (
       <div className={styles.orgs}>
         <div className={styles.box}>
           <Table dataSource={projects} columns={this.columns} rowKey={record => record.id}
-                 bordered
+                 bordered size="small"
           />
-
-          {
-            projects && projects.map((project) => {
-              console.log('loop project: ', project.desc);
-            })
-          }
         </div>
       </div>
     );

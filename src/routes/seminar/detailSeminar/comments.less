@@ -1,5 +1,5 @@
 .thumbnail {
-  display: block;
+  display: none;
   padding: 10px;
   margin-bottom: 20px;
   line-height: 1.42857143;
@@ -30,12 +30,12 @@
         color: #808080;
       }
     }
-    .delete{
+    .delete {
       cursor: pointer;
       float: right;
       color: #f04134;
     }
-    .dividingLine{
+    .dividingLine {
       border: 1px solid #eee;
       margin: 10px 0 10px 0;
     }
@@ -50,3 +50,6 @@
   }
 }
 
+@media (min-width: 568px) {
+  .thumbnail { display: block; }
+}

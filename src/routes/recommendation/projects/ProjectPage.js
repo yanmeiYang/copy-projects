@@ -121,7 +121,7 @@ export default class ProjectPage extends React.Component {
           {/*values={{ name: 'This is a test' }} />*/}
         </div>}
 
-        <div>
+        <div className={styles.table}>
           <Spinner loading={data.loading} nomask />
           {!data.loading && data.rcdorg &&
           <ProjectTable projects={data.rcdorg.projects} />

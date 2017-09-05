@@ -109,11 +109,6 @@ export async function getSeminars(offset, size) {
   return request(api.getSeminars.replace(':offset', offset).replace(':size', size));
 }
 
-
-export async function searchMap(query) {
-  return request(api.searchMap, { method: 'GET', data: { query } });
-}
-
 export async function relationGraph(data) {
   return request(api.searchExpertNetWithDSL, {
     method: 'GET', data,

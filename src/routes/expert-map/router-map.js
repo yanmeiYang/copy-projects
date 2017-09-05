@@ -20,7 +20,7 @@ export default {
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/expert-map'));
-        cb(null, require('../expert-map/expert-googlemap'));
+        cb(null, require('../expert-map/expert-googlemap')); // What the
       }, 'map-google');
     },
   }),

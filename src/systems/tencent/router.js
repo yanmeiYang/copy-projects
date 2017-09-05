@@ -42,7 +42,8 @@ const Routers = function ({ history, app }) {
 
       // expert map
       core.ExpertMap(app),
-      // core.ExpertMapGoogle(app),
+      core.ExpertMapGoogle(app),
+      core.ExpertMapDispatch(app),
 
       // Relation-Graph
       core.RelationGraphPage(app),

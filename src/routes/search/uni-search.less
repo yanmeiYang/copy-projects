@@ -54,3 +54,14 @@
 .maxWidth{
   max-width: @max-width-page;
 }
+.personAndKg {
+  max-width: @max-width-page;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap-reverse;
+}
+@media (min-width: 767px) {
+  .personAndKg {
+    flex-wrap: nowrap;
+  }
+}

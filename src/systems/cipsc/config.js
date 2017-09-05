@@ -47,7 +47,7 @@ module.exports = {
       nperson: 2871,
     },
     {
-      id: '598bf2a19ed5db236b1062ea',
+      id: '59952d689ed5dbb2ddb9a5d8,59955e629ed5dbb2ddb9bbdb',
       name: '中国中文信息学会',
       nperson: 77,
     },

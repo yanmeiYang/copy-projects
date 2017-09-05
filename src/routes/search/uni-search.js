@@ -274,7 +274,8 @@ export default class UniSearch extends React.PureComponent {
     const { headerSearchBox } = this.props.app;
     const { useTranslateSearch, translatedQuery } = this.props.search;
     return (
-      <div className={classnames('content-inner', styles.page)}>
+      <div>
+        <div className={classnames('content-inner', styles.page)}>
 
         <div className={styles.topZone}>
           <div className={styles.searchZone}>
@@ -330,7 +331,6 @@ export default class UniSearch extends React.PureComponent {
           {/*}*/}
 
         </div>
-
         {/* 这里可是添加TAB */}
         {/*
          <div className={styles.viewTab}>

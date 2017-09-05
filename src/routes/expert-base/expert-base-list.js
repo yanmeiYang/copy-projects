@@ -10,7 +10,7 @@ const Search = Input.Search;
 class ExpertDetailList extends React.Component {
   state = {
   };
-  componentDidMount() {
+  componentWillMount() {
     const id = '59a8e5879ed5db1fc4b762ad';
     this.props.dispatch({
       type: 'expertBase/getExpertDetailList',

@@ -49,7 +49,7 @@ const NaviConfig = {
   },
   ExpertBase: {   // bole 专有
     key: 'ExpertBase',
-    label: '专家库',
+    label: '我的专家库',
     url: '/expert-base-list',
     data: 'query',
     pageSignature: 'expert-base-list',

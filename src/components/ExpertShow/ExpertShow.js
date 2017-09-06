@@ -71,7 +71,7 @@ class ExpertShow extends React.PureComponent {
                         <Icon type="user"/>{org.creator_name}
                       </div>
                       <div className={styles.time}>
-                        <FD value={org.last_updated}/>
+                        <FD value={org.last_updated} />
                       </div>
                     </div>
                   </div>

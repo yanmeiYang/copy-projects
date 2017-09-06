@@ -4,6 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Button, Icon, Modal } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import { routerRedux } from 'dva/router';
 import styles from './person-right-button.less';
 
@@ -82,8 +83,9 @@ class PersonRightButton extends React.PureComponent {
     return (
       <div className={styles.buttonArea}>
         <Button onClick={this.add.bind(this, per.id)}>
-          {this.state.personData ? '添加成功'
-            : '添加'}
+          {this.state.personData ? <FM id="com.bole.AddedSuccessfully"
+                                       defaultMessage="添加成功"></FM>
+            : <FM id="com.bole.AddButton" defaultMessage="添加"></FM>}
         </Button>
 
         <Modal title="智库列表"

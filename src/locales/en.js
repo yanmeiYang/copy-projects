@@ -46,6 +46,11 @@ export default {
   'com.searchTypeWidget.label.ExpertTrajectory': 'Expert Trajectory',
   'com.searchTypeWidget.label.ExpertBase': 'My Experts',
 
+  // bole avart
+  'com.bole.ExpertPhoto': 'No Avatar',
+  // bole add button
+  'com.bole.AddButton': 'Add',
+  'com.bole.AddedSuccessfully': 'Added Successfully',
 
   'com.PersonList.label.views': 'views',
 

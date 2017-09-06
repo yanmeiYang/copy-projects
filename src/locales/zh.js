@@ -48,6 +48,13 @@ export default {
 
   'com.PersonList.label.views': '次查看',
 
+  // bole avatar
+  'com.bole.ExpertPhoto': '暂无头像',
+  // bole add button
+  'com.bole.AddButton': '添加',
+  'com.bole.com.bole.AddedSuccessfully': '添加成功',
+
+
   // Recommendation
   'rcd.home.pageTitle': '机构列表',
   'rcd.projectTable.header.projectName': '项目名称',

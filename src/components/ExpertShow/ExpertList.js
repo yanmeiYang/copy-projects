@@ -42,7 +42,7 @@ class ExpertList extends React.PureComponent {
                         {org.avatar ? <img width="94%" height="150"
                                            src={org.avatar} alt="0" className={styles.img} />
                           : <img width="94%" height="150"
-                                src="/images/boleAvatar.jpg" alt="no avatar" className={styles.img} /> }
+                                src="/images/blank_avatar.jpg" alt="no avatar" className={styles.img} /> }
                       </h2>
                       {/*<Icon type="close" className={styles.closeModal}></Icon>*/}
                     </div>

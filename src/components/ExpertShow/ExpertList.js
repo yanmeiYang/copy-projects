@@ -39,11 +39,10 @@ class ExpertList extends React.PureComponent {
                     {/*<div key={org.id} className={styles.org} onClick={this.showExpertDetailInfo.bind(this,org)}>*/}
                     <div className={styles.titleArea}>
                       <h2 className={styles.title}>
-                        {org.avatar ? <img width="100%" height="150"
+                        {org.avatar ? <img width="94%" height="150"
                                            src={org.avatar} alt="0" className={styles.img} />
-                          : <h6 className={styles.img}>
-                            <FM id="com.bole.ExpertPhoto" defaultMessage="该专家没有照片"></FM></h6>}
-
+                          : <img width="94%" height="150"
+                                src="/images/boleAvatar.jpg" alt="no avatar" className={styles.img} /> }
                       </h2>
                       {/*<Icon type="close" className={styles.closeModal}></Icon>*/}
                     </div>

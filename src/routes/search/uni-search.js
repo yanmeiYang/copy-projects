@@ -239,6 +239,7 @@ export default class UniSearch extends React.PureComponent {
           <div>
             <PersonList persons={results} personLabel={sysconfig.Person_PersonLabelBlock}
                         rightZoneFuncs={sysconfig.PersonList_RightZone} />
+                        {/*personRightButton={sysconfig.Person_PersonRightButton} />*/}
             <div className={styles.paginationWrap}>
               <Pagination
                 showQuickJumper
@@ -253,7 +254,6 @@ export default class UniSearch extends React.PureComponent {
           {topic.label && <SearchKnowledge topic={topic} />}
         </div>
       </div>
-
     );
 
     /*

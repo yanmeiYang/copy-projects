@@ -28,10 +28,7 @@ export default {
   effects: {
     * getProfile({ payload }, { call, put }) {
       const { offset, size } = payload;
-      console.log('haha',payload);
-      // const { src, offset, size } = payload;
       const { data } = yield call(tobProfileService.getProfileSuccess, offset, size);
-      // const { data } = yield call(tobProfileService.getProfileSuccess, src, offset, size);
       yield put({ type: 'getProfileSuccess', payload: { data } });
     },
     * getProfileById({ payload }, { call, put }) {
@@ -50,9 +47,7 @@ export default {
     },
     * deleteProfileById({ payload }, { call, put }) {
       const { key } = payload;
-      // const { src, key } = payload;
       const { data } = yield call(tobProfileService.deleteByKey, key);
-      // const { data } = yield call(tobProfileService.deleteByKey,src, key);
       if (data.status) {
         yield put({ type: 'deleteProfile', payload });
       } else {
@@ -74,11 +69,9 @@ export default {
     },
     * updateProfile({ payload }, { call, put }) {
       const { key } = payload;
-      // const { src,key } = payload;
       const updata = payload.data;
       updata.gender = parseInt(payload.data.gender);
       const updateData = yield call(tobProfileService.updateProfileSuccess, key, updata);
-      // const updateData = yield call(tobProfileService.updateProfileSuccess,src, key, updata);
       yield put({ type: 'updateProfiles', payload: { updateData } });
     },
   },

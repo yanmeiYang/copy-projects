@@ -16,6 +16,7 @@ import * as cieConfig from './cie/config';
 import * as demoConfig from './demo/config';
 import * as cietestConfig from './cietest/config';
 import * as medrobConfig from './medrob/config';
+import * as boleConfig from './bole/config';
 
 import { System, Source } from '../utils/system';
 import Footer from '../components/Footers/default';
@@ -34,13 +35,13 @@ const CurrentSystemConfig = {
   demo: demoConfig,
   cietest: cietestConfig,
   medrob: medrobConfig,
+  bole: boleConfig,
 };
 
 // 默认配置
 const defaultSystemConfigs = {
   SYSTEM: System,
   SOURCE: Source,
-
   //
   // Systems Preference
   //
@@ -104,7 +105,7 @@ const defaultSystemConfigs = {
   PersonList_RightZone: [
     person => <ViewExpertInfo person={person} key="1" />,
   ],
-
+  Person_PersonRightButton: defaults.EMPTY_BLOCK_FUNC,
   // > Search
   // expert base
   SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
@@ -129,6 +130,7 @@ const defaultSystemConfigs = {
   // > Admin Users
   Admin_Users_ShowAdmin: true,
   // PersonList_ShowIndices: [], // do not override in-component settings. // TODO
+
 };
 
 /** *************************************************

@@ -10,6 +10,9 @@ export default {
 
   // Index
   'index.title': 'Expert Search',
+  'search.translateSearchMessage.1': '同时搜索了 "{enQuery}".',
+  'search.translateSearchMessage.2': '您也可以只搜索 "{cnQuery}".',
+  'search.translateSearchMessage.reverse': '您可以同时搜索 "{enQuery}" 和 "{cnQuery}".',
 
   // Components
   'com.KgSearchBox.placeholder': 'Input expert name or query',
@@ -41,6 +44,13 @@ export default {
   'com.searchTypeWidget.label.KnowledgeGraph': 'Knowledge Graph',
   'com.searchTypeWidget.label.TrendPrediction': 'Topic Trend',
   'com.searchTypeWidget.label.ExpertTrajectory': 'Expert Trajectory',
+  'com.searchTypeWidget.label.ExpertBase': 'My Experts',
+
+  // bole avart
+  'com.bole.ExpertPhoto': 'No Avatar',
+  // bole add button
+  'com.bole.AddButton': 'Add',
+  'com.bole.AddedSuccessfully': 'Added Successfully',
 
   'com.PersonList.label.views': 'views',
   'com.PersonList.label.homepage': 'Homepage',

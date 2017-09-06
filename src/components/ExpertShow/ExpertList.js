@@ -35,15 +35,16 @@ class ExpertList extends React.PureComponent {
             {
               orgs && orgs.map((org) => {
                 return (
-                  <a href="https://aminer.org/">
+
                   <div key={org.id} className={styles.org} >
                     {/*<div key={org.id} className={styles.org} onClick={this.showExpertDetailInfo.bind(this,org)}>*/}
                     <div className={styles.titleArea}>
                       <h2 className={styles.title}>
-                        {org.avatar ? <img width="94%" height="150"
-                                           src={org.avatar} alt="0" className={styles.img} />
-                          : <img width="94%" height="150"
-                                src="/images/blank_avatar.jpg" alt="no avatar" className={styles.img} /> }
+                        {org.avatar ? <a href="https://aminer.org/"><img width="94%" height="150"
+                                           src={org.avatar} alt="0" className={styles.img} /> </a>
+                          : <a href="https://aminer.org/"><img width="94%" height="150"
+                                                               src="/images/blank_avatar.jpg" alt="no avatar"
+                                                               className={styles.img} /></a> }
                       </h2>
                       {/*<Icon type="close" className={styles.closeModal}></Icon>*/}
                     </div>
@@ -56,7 +57,7 @@ class ExpertList extends React.PureComponent {
                       <div className={styles.desc}> {org.aff.desc}</div>
                     </div>
                   </div>
-                  </a>
+
                 );
               })
             }

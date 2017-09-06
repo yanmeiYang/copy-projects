@@ -8,10 +8,11 @@
     "d3": "^3.5.17",
     "dva": "^1.2.1",
     "dva-loading": "^0.2.3",
+    "echarts": "^3.7.1",
     "echarts-for-react": "^1.4.4",
+    "echarts-gl": "^1.0.0-beta.4",
     "graphql-tag": "^2.4.2",
     "immutable": "^3.8.1",
-    "lib-qqwry": "^1.0.2",
     "lodash": "^4.17.4",
     "nprogress": "^0.2.0",
     "prop-types": "^15.5.10",
@@ -66,8 +67,6 @@
     "fsevents": "^1.1.2"
   },
   "not_used_packages": {
-    "echarts": "^3.7.1",
-    "echarts-gl": "^1.0.0-beta.4",
     "d3-sankey": "^0.7.1"
   },
   "pre-commit": [

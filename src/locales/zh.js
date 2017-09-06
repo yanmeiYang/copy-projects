@@ -46,6 +46,9 @@ export default {
   'com.searchTypeWidget.label.ExpertTrajectory': '专家迁移',
 
   'com.PersonList.label.views': '次查看',
+  'com.PersonList.label.homepage': '个人主页',
+  'com.PersonList.label.sendEmail': '发送邮件',
+  'com.PersonList.label.qrcode': '二维码',
 
   // Recommendation
   'rcd.home.pageTitle': '机构列表',

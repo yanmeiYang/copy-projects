@@ -7,7 +7,7 @@
   display: flex; flex-direction: column; flex: 1; justify-content: flex-start;
   border: solid 0px @default-border-color; padding: 0px;
   min-height: 40px;
-  min-width: 58.3%;
+  min-width: 70%;
   //max-width: @max-width-page;
 
   .person {
@@ -30,6 +30,7 @@
       //display: flex; flex-direction: column; flex: 1;
       margin-left: 10px;
       font-size: 13px; color: #333;
+      flex: 2;
 
       .title {
         display: flex; flex-direction: row; align-items: baseline; justify-content: flex-start;
@@ -96,7 +97,11 @@
       }
 
     }
-
+    .person_right_zone {
+      min-width: 15%;
+      padding: 5px 5px 5px 10px;
+      border-left: 1px solid #cccccc;
+    }
   }
   //border: solid 1px red;
 }

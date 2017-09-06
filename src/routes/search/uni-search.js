@@ -237,7 +237,8 @@ export default class UniSearch extends React.PureComponent {
         <Spinner loading={load} />
         <div className={styles.personAndKg}>
           <div>
-            <PersonList persons={results} personLabel={sysconfig.Person_PersonLabelBlock} />
+            <PersonList persons={results} personLabel={sysconfig.Person_PersonLabelBlock}
+                        rightZoneFuncs={sysconfig.PersonList_RightZone} />
             <div className={styles.paginationWrap}>
               <Pagination
                 showQuickJumper

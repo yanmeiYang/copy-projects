@@ -35,7 +35,8 @@ class ExpertList extends React.PureComponent {
             {
               orgs && orgs.map((org) => {
                 return (
-                  <div key={org.id} className={styles.org}>
+                  <a href="https://aminer.org/">
+                  <div key={org.id} className={styles.org} >
                     {/*<div key={org.id} className={styles.org} onClick={this.showExpertDetailInfo.bind(this,org)}>*/}
                     <div className={styles.titleArea}>
                       <h2 className={styles.title}>
@@ -55,6 +56,7 @@ class ExpertList extends React.PureComponent {
                       <div className={styles.desc}> {org.aff.desc}</div>
                     </div>
                   </div>
+                  </a>
                 );
               })
             }

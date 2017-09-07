@@ -54,7 +54,7 @@ module.exports = {
     'Computer Assisted Surgery', 'Surgical Navigation', 'Minimally Invasive Surgery'],
   Person_PersonRightButton: person => <PersonRightButton person={person} ExpertBase="59a8e5879ed5db1fc4b762ad" />,
   PersonList_RightZone: [
-    person => <ViewExpertInfo person={person} key="1" />,
+    // person => <ViewExpertInfo person={person} key="1" />,
     person => <PersonRightButton person={person} key="2" ExpertBase="59a8e5879ed5db1fc4b762ad" />,
   ],
   ExpertBases: [
@@ -63,11 +63,11 @@ module.exports = {
       name: <span><i className="fa fa-globe fa-fw" />全球专家</span>,
       nperson: 2871,
     },
-    {
-      id: '599bc0a49ed5db3ea1b61c60',
+    // {
+      // id: '599bc0a49ed5db3ea1b61c60',
       // name: 'bo le',
-      nperson: 50,
-    },
+      // nperson: 50,
+    // },
 
   ],
   // bole系统独有设置

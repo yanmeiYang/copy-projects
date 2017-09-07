@@ -13,8 +13,8 @@ function checkStatus(response) {
 
   // TODO move out, don't process auth here.
   if (response.status === 401) {
-    console.log('xxxxxxxxxx', response);
-    throw error;
+    // console.log('xxxxxxxxxx', response);
+    // throw error;
     // auth.removeLocalAuth();
     // location.href = '/';
   }
@@ -28,11 +28,11 @@ function checkStatus(response) {
 
   const error = new Error(response.statusText);
   error.response = response;
-  try {
-    throw error;
-  } catch (e) {
-    console.error('---- Catch Error: ---- ', e);
-  }
+  // try {
+  //   throw error;
+  // } catch (e) {
+  //   console.error('---- Catch Error: ---- ', e);
+  // }
 }
 
 /**

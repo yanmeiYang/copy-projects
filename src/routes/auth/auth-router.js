@@ -6,6 +6,6 @@ export default {
   Login: {
     path: '/login',
     models: () => [import('models/auth')],
-    component: () => import('../login'),
+    component: () => import('./login'),
   },
 };

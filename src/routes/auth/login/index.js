@@ -4,10 +4,10 @@ import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import { Button, Modal, Row, Form, Input } from 'antd';
 import { Helmet } from 'react-helmet';
+import { Layout } from 'components';
+import { sysconfig } from 'systems';
+import { classnames, config } from 'utils';
 import styles from './index.less';
-import { Layout } from '../../components';
-import { sysconfig } from '../../systems';
-import { classnames, config } from '../../utils';
 import PageBg from './pageBackground';
 
 const { Header, Footer } = Layout;
@@ -49,11 +49,11 @@ class Login extends React.Component {
       },
     });
   };
-  jumpToForgot= () => {
+  jumpToForgot = () => {
     this.props.dispatch(routerRedux.push({
       pathname: '/forgot-password',
     }));
-  }
+  };
 
   render() {
     const { dispatch, auth, form } = this.props;
@@ -90,7 +90,7 @@ class Login extends React.Component {
             <Row>
               {errorMessage && errorMessage.status === false &&
               <div className={styles.errors}>
-                {errorMessage.status}用户名或密码错误({errorMessage.message})
+                {errorMessage.status}用户名或密码错误
               </div>}
 
               <div>

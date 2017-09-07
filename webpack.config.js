@@ -32,31 +32,32 @@ module.exports = (webpackConfig, env) => {
     // new CopyWebpackPlugin([
     //   {
     //     from: 'src/public',
-    //     to: production ? '../' : webpackConfig.output.outputPath,
+    //     to: production ? '../dist' : webpackConfig.output.outputPath,
     //   },
     // ]),
-    new HtmlWebpackPlugin({
-      hash: true,
-      mobile: true,
-      title: 'Loading...',
-      inject: false,
-      appMountId: 'root',
-      template: `!!ejs-loader!${HtmlWebpackTemplate}`,
-      filename: production ? '../index.html' : 'index.html',
-      minify: {
-        collapseWhitespace: true,
-      },
-      scripts: production ? null : ['/roadhog.dll.js'],
-      meta: [
-        {
-          name: 'description',
-          content: 'AMiner to Business.',
-        }, {
-          name: 'viewport',
-          content: 'width=device-width, initial-scale=1.0',
-        },
-      ],
-    }),
+
+    // new HtmlWebpackPlugin({
+    //   hash: true,
+    //   mobile: true,
+    //   title: 'Loading...',
+    //   inject: false,
+    //   appMountId: 'root',
+    //   template: `!!ejs-loader!${HtmlWebpackTemplate}`,
+    //   filename: production ? '../dist/index.html' : 'index.html',
+    //   minify: {
+    //     collapseWhitespace: true,
+    //   },
+    //   scripts: production ? null : ['/roadhog.dll.js'],
+    //   meta: [
+    //     {
+    //       name: 'description',
+    //       content: 'AMiner to Business.',
+    //     }, {
+    //       name: 'viewport',
+    //       content: 'width=device-width, initial-scale=1.0',
+    //     },
+    //   ],
+    // }),
   ]);
 
   // Alias

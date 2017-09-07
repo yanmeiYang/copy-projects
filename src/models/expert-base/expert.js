@@ -44,7 +44,6 @@ export default {
     },
     * deleteExpert({ payload }, { call, put }) {
       const { key } = payload;
-      console.log('hahahha', key);
       // const { id } = payload;
       const { data } = yield call(expertBase.deleteByKey, key);
       if (data.status) {
@@ -89,7 +88,6 @@ export default {
       return { ...state, newState };
     },
     addExpertDetailSuccess(state, { payload: { data } }) {
-      console.log('添加成功data',data)
       return { ...state, addStatus: data ,loading: true };
     },
     searchExpertSuccess(state, { payload: { data } }) {

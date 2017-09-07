@@ -47,12 +47,12 @@ const NaviConfig = {
     data: 'query',
     pageSignature: 'expert-trajectory',
   },
-  ExpertBase: {   // bole 专有
+  ExpertBase: { // bole 专有
     key: 'ExpertBase',
     label: '我的专家库',
-    url: '/expert-base-list',
+    url: '/eb/59a8e5879ed5db1fc4b762ad',
     data: 'query',
-    pageSignature: 'expert-base-list',
+    pageSignature: '/eb/59a8e5879ed5db1fc4b762ad',
   },
 };
 

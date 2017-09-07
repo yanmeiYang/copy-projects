@@ -1,19 +1,11 @@
 /**
  *  Created by BoGao on 2017-08-13;
+ *  Refactored by BoGao on 2017-09-07; dva@2.0 react-router-4
  */
-import { registerModel } from '../../utils';
-
 export default {
-
-  Login: app => ({
-    path: 'login',
-    getComponent(nextState, cb) {
-      require.ensure([], (require) => {
-        registerModel(app, require('../../models/auth'));
-        cb(null, require('../login'));
-      }, 'auth');
-    },
-  }),
-
+  Login: {
+    path: '/login',
+    models: () => [import('models/auth')],
+    component: () => import('../login'),
+  },
 };
-

@@ -3,6 +3,7 @@ import { routerRedux, Link } from 'dva/router';
 import { connect } from 'dva';
 import { isEqual } from 'lodash';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
+import queryString from 'query-string';
 import classnames from 'classnames';
 import { Tabs, Pagination } from 'antd';
 import styles from './uni-search.less';
@@ -49,12 +50,13 @@ export default class UniSearch extends React.PureComponent {
   };
 
   componentWillMount() {
-    this.query = this.props.location.query;
-    this.state.currentTab = this.query.view ? `${this.query.view}` : 'list-view';
+    const { location, dispatch } = this.props;
+    const { view } = queryString.parse(location.search);
+    this.state.currentTab = view || 'list-view';
     const { query } = this.props.search;
 
     if (sysconfig.SearchBarInHeader) {
-      this.dispatch({
+      dispatch({
         type: 'app/layout',
         payload: {
           headerSearchBox: { query, onSearch: this.onSearchBarSearch },
@@ -197,10 +199,10 @@ export default class UniSearch extends React.PureComponent {
     const { pageSize, total, current } = pagination;
     const load = this.props.loading.effects['search/searchPerson'];
     const operations = (
-      <ExportPersonBtn
-        query={query} pageSize={pageSize} current={current}
-        filters={filters} sort={this.state.sortType}/>
-  )
+        <ExportPersonBtn
+          query={query} pageSize={pageSize} current={current}
+          filters={filters} sort={this.state.sortType} />
+      )
     ;
 
     // Deprecated search result tab.
@@ -225,23 +227,22 @@ export default class UniSearch extends React.PureComponent {
         >
           {this.searchSorts.map((sortItem) => {
             const icon = sortItem === this.state.sortType ?
-              <i className="fa fa-sort-amount-desc"/> : '';
+              <i className="fa fa-sort-amount-desc" /> : '';
             const tab = (
               <span>
                 <FM id={`com.search.sort.label.${sortItem}`}
-                    defaultMessage={sortItem}/> {icon}
+                    defaultMessage={sortItem} /> {icon}
               </span>
             );
-            return <TabPane tab={tab} key={sortItem}/>;
+            return <TabPane tab={tab} key={sortItem} />;
           })}
         </Tabs>
 
-        <Spinner loading={load}/>
+        <Spinner loading={load} />
         <div className={styles.personAndKg}>
           <div>
             <PersonList persons={results} personLabel={sysconfig.Person_PersonLabelBlock}
                         rightZoneFuncs={sysconfig.PersonList_RightZone} />
-                        {/*personRightButton={sysconfig.Person_PersonRightButton} />*/}
             <div className={styles.paginationWrap}>
               <Pagination
                 showQuickJumper
@@ -253,7 +254,7 @@ export default class UniSearch extends React.PureComponent {
               />
             </div>
           </div>
-          {topic.label && <SearchKnowledge topic={topic}/>}
+          {topic.label && <SearchKnowledge topic={topic} />}
         </div>
       </div>
     );

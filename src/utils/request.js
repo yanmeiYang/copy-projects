@@ -63,7 +63,7 @@ export default async function request(url, options) {
   }
 
   const headers = new Headers();
-  if (options.specialContentType) {
+  if (options && options.specialContentType) {
     headers.append('Accept', 'application/json');
     // headers.append('Content-Type', 'text/plain');
   } else if (options && (options.data || options.body)) {

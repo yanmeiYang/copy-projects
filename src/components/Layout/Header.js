@@ -29,10 +29,10 @@ export default class Header extends React.PureComponent {
   // }
 
   componentWillReceiveProps = (nextProps) => {
-    console.log('>>>>>>>>>>>>>>>>> ', nextProps.app.headerSearchBox);
+    // console.log('>>>>>>>>>>>>>>>>> ', nextProps.app.headerSearchBox);
     if (nextProps.app.headerSearchBox) {
-      console.log('>>>>>>>>>>>>>>>>> ', nextProps.app.headerSearchBox.query);
-      console.log('>>>>>>>>>>>>>>>>> ', nextProps.app.headerSearchBox !== this.props.app.headerSearchBox);
+      // console.log('>>>>>>>>>>>>>>>>> ', nextProps.app.headerSearchBox.query);
+      // console.log('>>>>>>>>>>>>>>>>> ', nextProps.app.headerSearchBox !== this.props.app.headerSearchBox);
       if (nextProps.app.headerSearchBox !== this.props.app.headerSearchBox
         || this.props.app.headerSearchBox.query !== this.state.query) {
         // if (nextProps.app.headerSearchBox.query) {

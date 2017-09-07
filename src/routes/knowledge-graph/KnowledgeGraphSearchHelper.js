@@ -3,8 +3,8 @@
  */
 import React from 'react';
 import { connect } from 'dva';
+import * as d3 from 'd3';
 import styles from './KnowledgeGraphSearchHelper.less';
-import * as d3 from '../../../public/d3/d3.min';
 import { sysconfig } from '../../systems';
 
 const controlDivId = 'kgvis';

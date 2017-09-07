@@ -1,5 +1,8 @@
+/**
+ * Default routes with all router available.
+ */
 import App from 'routes/app';
-import { RouterRegistry, RouterRegistry2b, RouterJSXFunc } from '../router-registry';
+import { RouterRegistry, RouterRegistry2b, RouterJSXFunc } from './router-registry';
 
 const routes = [
   ...RouterRegistry2b,

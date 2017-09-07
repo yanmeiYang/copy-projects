@@ -4,6 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
+import queryString from 'query-string';
 import { routerRedux } from 'dva/router';
 import styles from './ExpertHeatmapPage.less';
 import LeftInfoZoneCluster from './LeftInfoZoneCluster';
@@ -25,9 +26,7 @@ class ExpertHeatmapPage extends React.Component {
   };
 
   componentWillMount() {
-    const query = (this.props.location && this.props.location.query
-      && this.props.location.query.query) || 'data mining';
-    const { type } = this.props.location.query;
+    const { query, type } = queryString.parse(location.search);
     if (query) {
       this.setState({ query });
     }

@@ -2,21 +2,24 @@
  *  Created by BoGao on 2017-06-15;
  */
 /* eslint-disable camelcase */
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { Link } from 'dva/router';
 import { Tag, Tooltip } from 'antd';
 import classnames from 'classnames';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
-import { Indices } from '../../components/widgets';
-import { sysconfig } from '../../systems';
+import * as personService from 'services/person';
+import { sysconfig } from 'systems';
+import { config } from 'utils';
+import * as profileUtils from 'utils/profile-utils';
+import { Indices } from 'components/widgets';
 import ViewExpertInfo from './view-expert-info';
-import * as personService from '../../services/person';
-import { config } from '../../utils';
 import styles from './person-list.less';
-import * as profileUtils from '../../utils/profile-utils';
 
-const DEFAULT_RIGHT_CONTENT = <ViewExpertInfo />;
-class PersonList extends React.PureComponent {
+const DefaultRightZoneFuncs = [
+  person => <ViewExpertInfo person={person} key="1" />,
+];
+
+export default class PersonList extends PureComponent {
   constructor(props) {
     super(props);
     this.personLabel = props.personLabel;
@@ -42,7 +45,7 @@ class PersonList extends React.PureComponent {
     console.log('refresh person list ');
 
     const showPrivacy = false;
-
+    const RightZoneFuncs = rightZoneFuncs || DefaultRightZoneFuncs;
     return (
       <div className={styles.personList}>
         {
@@ -94,21 +97,21 @@ class PersonList extends React.PureComponent {
 
                         {phone &&
                         <span style={{ minWidth: '158px' }}>
-                        <i className="fa fa-phone fa-fw" /> {phone}
-                      </span>
+                          <i className="fa fa-phone fa-fw" /> {phone}
+                        </span>
                         }
 
                         {email &&
                         <span style={{ backgroundImage: `url(${config.baseURL}${email})` }}
                               className="email"><i className="fa fa-envelope fa-fw" />
-                      </span>
+                        </span>
                         }
 
                         {person.num_viewed > 0 &&
                         <span className={styles.views}>
-                        <i className="fa fa-eye fa-fw" />{person.num_viewed}&nbsp;
+                          <i className="fa fa-eye fa-fw" />{person.num_viewed}&nbsp;
                           <FM id="com.PersonList.label.views" defaultMessage="views" />
-                      </span>}
+                        </span>}
 
                       </div>
 
@@ -150,17 +153,14 @@ class PersonList extends React.PureComponent {
                     </div>
                   </div>
                 </div>
+                {RightZoneFuncs && RightZoneFuncs.length > 0 &&
                 <div className={styles.person_right_zone}>
-                  {
-                    (rightZoneFuncs && rightZoneFuncs.length > 0) ? rightZoneFuncs.map((item) => {
-                      if (item) {
-                        return item(person);
-                      } else {
-                        return '';
-                      }
-                    }) : DEFAULT_RIGHT_CONTENT
-                  }
+                  {RightZoneFuncs.map((blockFunc) => {
+                    // TODO is function
+                    return blockFunc ? blockFunc(person) : false;
+                  })}
                 </div>
+                }
               </div>
             );
           })
@@ -171,5 +171,3 @@ class PersonList extends React.PureComponent {
     // console.log("persons is ", this.props.persons);
   }
 }
-
-export default PersonList;

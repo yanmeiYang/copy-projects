@@ -1,15 +1,15 @@
 /**
  * Created by zlm on 2017/8/31.
  */
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Button, Icon, Modal } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import { routerRedux } from 'dva/router';
-import styles from './person-right-button.less';
+import styles from './AddToEBButton.less';
 
-
-class PersonRightButton extends React.PureComponent {
+@connect(({ expertBase }) => ({ expertBase }))
+export default class AddToEBButton extends PureComponent {
   constructor(props) {
     super(props);
     this.state.dataIdItem = props.ExpertBase;
@@ -21,9 +21,11 @@ class PersonRightButton extends React.PureComponent {
     value: 1,
     personData: '',
   };
+
   // shouldComponentUpdate(nextProps) {
   //   return this.props.person !== nextProps.person;
   // }
+
   add = (id) => {
     // this.setState({ visible: true });
     // this.props.dispatch({
@@ -42,6 +44,7 @@ class PersonRightButton extends React.PureComponent {
     // console.log('111', this.props);
     // console.log('addStatus是', personData);
   };
+
   handleOk = (id) => {
     const ebid = this.state.dataIdItem;
     const aids = id.split(';');
@@ -57,11 +60,13 @@ class PersonRightButton extends React.PureComponent {
     //   pathname: `/expert-base-list/${ebid}`,
     // }));
   };
+
   handleCancel = () => {
     this.setState({
       visible: false,
     });
   };
+
   selectTitleArea = (id, e) => {
     // this.props.dispatch(routerRedux.push({
     //   pathname: `/expert-base-list/${id}`,
@@ -83,9 +88,10 @@ class PersonRightButton extends React.PureComponent {
     return (
       <div className={styles.buttonArea}>
         <Button onClick={this.add.bind(this, per.id)}>
-          {this.state.personData ? <FM id="com.bole.AddedSuccessfully"
-                                       defaultMessage="添加成功"></FM>
-            : <FM id="com.bole.AddButton" defaultMessage="添加"></FM>}
+          {this.state.personData
+            ? <FM id="com.bole.AddedSuccessfully" defaultMessage="添加成功" />
+            : <FM id="com.bole.AddButton" defaultMessage="添加" />
+          }
         </Button>
 
         <Modal title="智库列表"
@@ -107,5 +113,3 @@ class PersonRightButton extends React.PureComponent {
     );
   }
 }
-
-export default connect(({ expertBase }) => ({ expertBase }))(PersonRightButton);

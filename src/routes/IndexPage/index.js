@@ -7,7 +7,6 @@ import { sysconfig } from '../../systems';
 import { KgSearchBox } from '../../components/search';
 import { Auth } from '../../hoc';
 
-// function IndexPage({ dispatch, search }) {
 @connect(({ app }) => ({ app }))
 @Auth
 export default class IndexPage extends React.Component {
@@ -48,7 +47,7 @@ export default class IndexPage extends React.Component {
   // }
 
   render() {
-    console.log('>>> ', sysconfig.ExpertBases);
+    // console.log('>>> ', sysconfig.ExpertBases);
     // const { seminars } = search;
     const commonSearch = sysconfig.IndexPage_QuickSearchList;
 

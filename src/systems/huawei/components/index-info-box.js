@@ -18,7 +18,7 @@ class IndexInfoBox extends React.PureComponent {
             <span>学者关系</span>
           </div>
         </Link>
-        <Link to="/expert-map-dispatch">
+        <Link to="/dispatch-expert-map">
           <div className={styles.blockItem}>
             <div className={styles.blockImg}>
               <img src="/sys/huawei/expert-map.png" alt="人才地图" />

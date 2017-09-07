@@ -61,7 +61,7 @@ const defaultIndices = ['activity-ranking-contrib', 'h_index', 'activity', 'risi
  * showItems - TODO use this to config which indices to show.
  */
 const Indices = ({ indices, activity_indices, showIndices }) => {
-  if (!indices) return <span>[][][][][][][][][]</span>;
+  if (!indices) return <span></span>;
   let indicesKeys = defaultIndices;
   if (showIndices && showIndices.length > 0) {
     indicesKeys = showIndices;

@@ -20,7 +20,7 @@ class ShowExpertList extends React.Component {
           <img src={getImg(talk.speaker.img)} alt="头像" />
         </div>
         <div className={styles.right}>
-          {talk.title &&
+          {talk.title && !talk.speaker.role.includes('president') &&
           <div className={styles.specialInfo}>
             <span>演讲标题：</span>
             <span>
@@ -28,6 +28,7 @@ class ShowExpertList extends React.Component {
             </span>
           </div>}
           <table>
+            {!talk.speaker.role.includes('president') &&
             <tr>
               <td>演讲时间：</td>
               {timeFrom !== '' ? <td>
@@ -37,7 +38,7 @@ class ShowExpertList extends React.Component {
               </td> : <td></td>}
               <td style={{ textAlign: 'right', verticalAlign: 'top' }}>演讲地点：</td>
               {talk.location && <td style={{}}>{talk.location.address}</td>}
-            </tr>
+            </tr>}
             <tr>
               <td>专家姓名：</td>
               <td style={{ verticalAlign: 'top' }}>
@@ -64,10 +65,11 @@ class ShowExpertList extends React.Component {
             <span>专家简介：</span>
             <span>{talk.speaker.bio}</span>
           </div>
+          {!talk.speaker.role.includes('president') &&
           <div className={styles.specialInfo}>
             <span>演讲摘要：</span>
             <span>{talk.abstract}</span>
-          </div>
+          </div>}
         </div>
         <a style={{ fontSize: '16px' }} onClick={editTheExpert.bind(this, index)}>
           <Icon type="edit" onClick={editTheExpert.bind(this, index)} />

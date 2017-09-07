@@ -115,12 +115,12 @@ const App = ({ children, location, dispatch, app, loading }) => {
         }
 
         {/*
-        {href.indexOf('/KnowledgeGraphPage') > 0 &&
-        <script src="http://code.jquery.com/jquery-1.10.2.min.js" />}
+         {href.indexOf('/KnowledgeGraphPage') > 0 &&
+         <script src="http://code.jquery.com/jquery-1.10.2.min.js" />}
 
-        {href.indexOf('/KnowledgeGraphPage') > 0 &&
-        <script src="http://d3js.org/d3.v3.min.js" />}
-        */}
+         {href.indexOf('/KnowledgeGraphPage') > 0 &&
+         <script src="http://d3js.org/d3.v3.min.js" />}
+         */}
 
         {(href.indexOf('/expert-map') > 0) && // || href.indexOf('/uniSearch') > 0
         <script type="text/javascript"
@@ -138,6 +138,10 @@ const App = ({ children, location, dispatch, app, loading }) => {
           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlzpf4YyjOBGYOhfUaNvQZENXEWBgDkS0"
           async defer />}
 
+        {href.indexOf('/expert-heatmap') > 0 &&
+        <script
+          src="https://cdnjs.cloudflare.com/ajax/libs/echarts/3.7.1/echarts.js" />}
+
       </Helmet>
 
       <div className={classnames(styles.layout)}>
@@ -147,7 +151,8 @@ const App = ({ children, location, dispatch, app, loading }) => {
             <Sider {...siderProps} />
           </aside> : ''
         }
-        <div className={styles.main} style={{ marginLeft: mainMarginLeft }}>
+        <div
+          className={classnames(styles.main, sysconfig.ShowSideMenu && styles.main_margin_188)}>
           <div className={styles.container}>
             <div className={styles.content}>
               {/* <Bread {...breadProps} location={location} /> */}

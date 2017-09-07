@@ -9,7 +9,7 @@ import styles from './2bIndex.less';
 import { sysconfig } from '../../systems';
 import locales from '../../locales';
 import { RequireGod } from '../../hoc';
-import { system } from '../../utils';
+import { config, system } from '../../utils';
 import { saveLocale } from '../../utils/locale';
 
 @connect(({ app }) => ({ app }))
@@ -84,8 +84,11 @@ export default class SystemConfig extends React.Component {
         </div>
 
         <div className={styles.changer}>
-          <Link to="/2b/email-template">Email Template 设置</Link>, <br />
-
+          <ul>
+            <li><a href={config.graphqlAPI}>GraphiQL</a></li>
+            <li><Link to="/2b/email-template">Email Template 设置</Link></li>
+            <li><Link to="/rcd">Recommendation</Link></li>
+          </ul>
         </div>
 
         <ul>

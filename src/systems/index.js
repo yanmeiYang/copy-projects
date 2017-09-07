@@ -16,9 +16,11 @@ import * as cieConfig from './cie/config';
 import * as demoConfig from './demo/config';
 import * as cietestConfig from './cietest/config';
 import * as medrobConfig from './medrob/config';
+import * as boleConfig from './bole/config';
 
 import { System, Source } from '../utils/system';
 import Footer from '../components/Footers/default';
+import ViewExpertInfo from '../components/person/view-expert-info';
 import defaults from './utils';
 
 // All available systems.
@@ -33,13 +35,13 @@ const CurrentSystemConfig = {
   demo: demoConfig,
   cietest: cietestConfig,
   medrob: medrobConfig,
+  bole: boleConfig,
 };
 
 // 默认配置
 const defaultSystemConfigs = {
   SYSTEM: System,
   SOURCE: Source,
-
   //
   // Systems Preference
   //
@@ -79,7 +81,7 @@ const defaultSystemConfigs = {
   Search_EnablePin: false, // TODO bad：Huawei PIN
   Search_EnableCCFPin: false, // TODO bad：CCF PIN
   Search_EnableTranslateSearch: true, // 启用翻译搜索，显示提示信息;
-  Search_DefaultTranslateSearch: false, // 默认不使用翻译搜索;
+  Search_DefaultTranslateSearch: false, // 默认使用翻译搜索;
 
   Search_EnableKnowledgeGraphHelper: true,
   Search_SortOptions: defaults.IN_APP_DEFAULT,
@@ -93,11 +95,17 @@ const defaultSystemConfigs = {
   /**
    * Page specified config.
    */
-  // PersonList
+  /**
+   * PersonList
+   * PersonList_RightZone 右侧显示内容
+   * */
   PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
   PersonList_PersonLink_NewTab: true,
   Person_PersonLabelBlock: defaults.EMPTY_BLOCK_FUNC, // profile => 'jsx',
-
+  PersonList_RightZone: [
+    person => <ViewExpertInfo person={person} key="1" />,
+  ],
+  Person_PersonRightButton: defaults.EMPTY_BLOCK_FUNC,
   // > Search
   // expert base
   SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
@@ -117,11 +125,12 @@ const defaultSystemConfigs = {
     'Networks', 'Natural language processing'],
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
   // 地图中心点
-  CentralPosition: {lat: 37.09024, lng: -95.712891},
+  CentralPosition: { lat: 37.09024, lng: -95.712891 },
 
   // > Admin Users
   Admin_Users_ShowAdmin: true,
   // PersonList_ShowIndices: [], // do not override in-component settings. // TODO
+
 };
 
 /** *************************************************

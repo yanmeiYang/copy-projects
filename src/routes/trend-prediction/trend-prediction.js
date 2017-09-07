@@ -2,13 +2,10 @@ import React from 'react';
 import { Tabs, Icon, Slider, Button } from 'antd';
 import { connect } from 'dva';
 import d3 from 'd3';
+import { wget } from '../../utils/request';
 import d3sankey from './utils/sankey';
 
 // 这三个文件里面有的会导致程序build失败。无法上线。我debug了4个小时。。。
-// import nlp from '../../../external-docs/trend-prediction/Natural language processing.json';
-// import net from '../../../external-docs/trend-prediction/Networks.json';
-// import nn from '../../../external-docs/trend-prediction/neural network.json';
-import rb from '../../../external-docs/trend-prediction/Robotics.json';
 import styles from './trend-prediction.less';
 import { Auth } from '../../hoc';
 
@@ -155,51 +152,51 @@ export default class TrendPrediction extends React.PureComponent {
     let ml;
     switch (word) {
       case 'am':
-        am = require('../../../external-docs/trend-prediction/answer machine.json');
+        am = wget('../../../external-docs/trend-prediction/answer machine.json');
         energy = am;
         break;
       case 'ai':
-        ai = require('../../../external-docs/trend-prediction/artificial intelligence.json');
+        ai = wget('../../../external-docs/trend-prediction/artificial intelligence.json');
         energy = ai;
         break;
       case 'au':
-        au = require('../../../external-docs/trend-prediction/autopilot.json');
+        au = wget('../../../external-docs/trend-prediction/autopilot.json');
         energy = au;
         break;
       case 'bc':
-        bc = require('../../../external-docs/trend-prediction/BlockChain.json');
+        bc = wget('../../../external-docs/trend-prediction/BlockChain.json');
         energy = bc;
         break;
       case 'cv':
-        cv = require('../../../external-docs/trend-prediction/Computer vision.json');
+        cv = wget('../../../external-docs/trend-prediction/Computer vision.json');
         energy = cv;
         break;
       case 'dm':
-        dm = require('../../../external-docs/trend-prediction/Data Mining.json');
+        dm = wget('../../../external-docs/trend-prediction/Data Mining.json');
         energy = dm;
         break;
       case 'dml':
-        dml = require('../../../external-docs/trend-prediction/Data Modeling.json');
+        dml = wget('../../../external-docs/trend-prediction/Data Modeling.json');
         energy = dml;
         break;
       case 'dl':
-        dl = require('../../../external-docs/trend-prediction/deep learning.json');
+        dl = wget('../../../external-docs/trend-prediction/deep learning.json');
         energy = dl;
         break;
       case 'gd':
-        gd = require('../../../external-docs/trend-prediction/graph database.json');
+        gd = wget('../../../external-docs/trend-prediction/graph database.json');
         energy = gd;
         break;
       case 'iot':
-        iot = require('../../../external-docs/trend-prediction/Internet of Things.json');
+        iot = wget('../../../external-docs/trend-prediction/Internet of Things.json');
         energy = iot;
         break;
       case 'ml':
-        ml = require('../../../external-docs/trend-prediction/Machine Learning.json');
+        ml = wget('../../../external-docs/trend-prediction/Machine Learning.json');
         energy = ml;
         break;
       default:
-        am = require('../../../external-docs/trend-prediction/answer machine.json');
+        am = wget('../../../external-docs/trend-prediction/answer machine.json');
         energy = am;
     }
     margin = {

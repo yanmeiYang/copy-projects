@@ -14,10 +14,10 @@ const TopExpertBase = {
     },
   ],
   TuringAward: [{ id: '58997b589ed5db58de40a152', name: '图灵奖' }],
-  CAS: [{ id: '55ebd8b945cea17ff0c53d5a', name: '中国科学院' }],
-  NAS: [{ id: '590fcaa59ed5db67cf85a129', name: '美国科学院' }],
-  CAE: [{ id: '55e6573845ce9da5c99535a9', name: '中国工程院' }],
-  NAE: [{ id: '58997c889ed5db58de40a171', name: '美国工程院' }],
+  CAS:         [{ id: '55ebd8b945cea17ff0c53d5a', name: '中国科学院' }],
+  NAS:         [{ id: '590fcaa59ed5db67cf85a129', name: '美国科学院' }],
+  CAE:         [{ id: '55e6573845ce9da5c99535a9', name: '中国工程院' }],
+  NAE:         [{ id: '58997c889ed5db58de40a171', name: '美国工程院' }],
   TR35:             [{ name: 'TR35', id: '591fa8cb9ed5db409e22a8eb.591fa7999ed5db409e22a8e2.5927b06c9ed5db8c189f16e7' }],
   ChangJiangXueZhe: [{ name: '长江学者', id: '58e5e2d99ed5db076b9b8cb2' }],
   JieQing:          [{ name: '杰青', id: '57a837809ed5dba7786c3f9f.59267feb9ed5db8c189eefea' }],
@@ -92,6 +92,7 @@ const TopExpertBase = {
     { id: '59a7c78c9ed5db1ed20328c6', name: '图像与视频处理' },
     { id: '59a7cfd79ed5db1ed2032f75', name: '分布式与并行计算' },
     { id: '59a7eb3d9ed5db1ed2034305', name: '物联网' },
+    { id: '59a77a809ed5db1ed202dbd6', name: '信息检索' },
   ],
 
 };

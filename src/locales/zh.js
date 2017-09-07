@@ -44,8 +44,19 @@ export default {
   'com.searchTypeWidget.label.KnowledgeGraph': '知识图谱',
   'com.searchTypeWidget.label.TrendPrediction': '技术趋势',
   'com.searchTypeWidget.label.ExpertTrajectory': '专家迁移',
+  'com.searchTypeWidget.label.ExpertBase': '我的专家库',
 
   'com.PersonList.label.views': '次查看',
+  'com.PersonList.label.homepage': '个人主页',
+  'com.PersonList.label.sendEmail': '发送邮件',
+  'com.PersonList.label.qrcode': '二维码',
+
+  // bole avatar
+  'com.bole.ExpertPhoto': '暂无头像',
+  // bole add button
+  'com.bole.AddButton': '添加',
+  'com.bole.com.bole.AddedSuccessfully': '添加成功',
+
 
   // Recommendation
   'rcd.home.pageTitle': '机构列表',
@@ -56,4 +67,11 @@ export default {
   'rcd.projectTable.header.createTime': '创建时间',
   'rcd.projectTable.header.updateTime': '更新时间',
   'rcd.projectTable.header.actions': '操作',
+
+  'rcd.taskTable.header.taskName': '项目任务',
+  'rcd.taskTable.header.createTime': '创建时间',
+  'rcd.taskTable.header.updateTime': '更新时间',
+  'rcd.taskTable.header.progress': '完成进度',
+  'rcd.taskTable.header.status': '状态',
+  'rcd.taskTable.header.actions': '操作',
 };

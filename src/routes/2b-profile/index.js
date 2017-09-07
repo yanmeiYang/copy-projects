@@ -2,13 +2,13 @@
  * Created by yangyanmei on 17/8/21.
  */
 import React from 'react';
-import {connect} from 'dva';
-import {Table, Modal, Button, Input} from 'antd';
-import {routerRedux} from 'dva/router';
+import { connect } from 'dva';
+import { Table, Modal, Button, Input } from 'antd';
+import { routerRedux } from 'dva/router';
 import styles from './index.less';
 
 const Search = Input.Search;
-const {Column} = Table;
+const { Column } = Table;
 
 class TobProfile extends React.Component {
   state = {
@@ -33,10 +33,10 @@ class TobProfile extends React.Component {
     });
   };
   addProfile = () => {
-    this.props.dispatch(routerRedux.push({pathname: '/addition'}));
+    this.props.dispatch(routerRedux.push({ pathname: '/addition' }));
   };
   editProfile = (record) => {
-    this.props.dispatch(routerRedux.push({pathname: '/addition', query: {id: record.id}}));
+    this.props.dispatch(routerRedux.push({ pathname: '/addition', query: { id: record.id } }));
   };
   handleOk = () => {
     this.props.dispatch({
@@ -65,8 +65,8 @@ class TobProfile extends React.Component {
   };
 
   render() {
-    const {results} = this.props.tobProfile;
-    const localeText = {emptyText: '数据正在加载'};
+    const { results } = this.props.tobProfile;
+    const localeText = { emptyText: '数据正在加载' };
     const values = '';
     return (
       <div>
@@ -114,5 +114,5 @@ class TobProfile extends React.Component {
   }
 }
 
-export default connect(({tobProfile}) => ({tobProfile}))(TobProfile);
+export default connect(({ tobProfile }) => ({ tobProfile }))(TobProfile);
 

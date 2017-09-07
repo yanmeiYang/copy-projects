@@ -10,6 +10,9 @@ export default {
 
   // Index
   'index.title': 'Expert Search',
+  'search.translateSearchMessage.1': '同时搜索了 "{enQuery}".',
+  'search.translateSearchMessage.2': '您也可以只搜索 "{cnQuery}".',
+  'search.translateSearchMessage.reverse': '您可以同时搜索 "{enQuery}" 和 "{cnQuery}".',
 
   // Components
   'com.KgSearchBox.placeholder': 'Input expert name or query',
@@ -41,8 +44,18 @@ export default {
   'com.searchTypeWidget.label.KnowledgeGraph': 'Knowledge Graph',
   'com.searchTypeWidget.label.TrendPrediction': 'Topic Trend',
   'com.searchTypeWidget.label.ExpertTrajectory': 'Expert Trajectory',
+  'com.searchTypeWidget.label.ExpertBase': 'My Experts',
+
+  // bole avart
+  'com.bole.ExpertPhoto': 'No Avatar',
+  // bole add button
+  'com.bole.AddButton': 'Add',
+  'com.bole.AddedSuccessfully': 'Added Successfully',
 
   'com.PersonList.label.views': 'views',
+  'com.PersonList.label.homepage': 'Homepage',
+  'com.PersonList.label.sendEmail': 'Send Email',
+  'com.PersonList.label.qrcode': 'QR Code',
 
   // Recommendation
   'rcd.home.pageTitle': 'Organization List',
@@ -53,5 +66,12 @@ export default {
   'rcd.projectTable.header.createTime': 'Create Time',
   'rcd.projectTable.header.updateTime': 'Update Time',
   'rcd.projectTable.header.actions': 'Actions',
+
+  'rcd.taskTable.header.taskName': 'Task Name',
+  'rcd.taskTable.header.createTime': 'Create Time',
+  'rcd.taskTable.header.updateTime': 'Update Time',
+  'rcd.taskTable.header.progress': 'Progress',
+  'rcd.taskTable.header.status': 'Status',
+  'rcd.taskTable.header.actions': 'Actions',
 
 };

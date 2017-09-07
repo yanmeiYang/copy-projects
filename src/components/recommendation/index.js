@@ -3,7 +3,8 @@
  */
 import RCDOrgList from './RCDOrgList';
 import ProjectTable from './ProjectTable';
+import ProjectTaskTable from './ProjectTaskTable';
 
 module.exports = {
-  RCDOrgList, ProjectTable,
+  RCDOrgList, ProjectTable, ProjectTaskTable,
 }

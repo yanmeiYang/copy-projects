@@ -45,6 +45,12 @@ const fullRouter = (app, defaultChildRoutes) => {
       core.Retrieve(app),
       core.UserInfo(app),
 
+      core.ExpertBase(app),
+      core.AddExpertBase(app),
+      core.ExpertDetailList(app),
+      core.AddExpertDetail(app),
+      core.ExpertProfileInfo(app),
+
       // Admin(Specified by ccf) TODO some are only used by ccf, move out.
       core.AdminUsers(app),
       core.AdminSystemConfig(app),
@@ -71,10 +77,9 @@ const fullRouter = (app, defaultChildRoutes) => {
       // expert map
       core.ExpertMap(app),
       core.ExpertMapGoogle(app),
-      core.ExpertMapDispatch(app),
-
       core.ExpertTrajectoryPage(app),
       core.ExpertHeatmapPage(app),
+      core.ExpertMapDispatch(app),
 
       // Relation-Graph, KnowledgeGraph, TrendPrediction, etc...
       core.RelationGraphPage(app),

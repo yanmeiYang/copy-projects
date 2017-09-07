@@ -367,7 +367,7 @@ export default class Seminar extends React.Component {
                     );
                   })
                 }
-                {!loading && results.length > sizePerPage &&
+                {!loading &&
                 <Button type="primary" className="getMoreActivities"
                         onClick={this.getMoreSeminar.bind()}>More</Button>}
               </div>

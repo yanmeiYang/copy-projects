@@ -31,7 +31,9 @@ const Option = Select.Option;
 const OrgListGroupCategoryKey = 'orgcategory';
 const OrgListPrefix = 'orglist_';
 const OrgJoiner = '---'; // 拆分的两个变量都要
-class RegistrationForm extends React.PureComponent {
+
+// TODO 这个不可以变成pureComponent
+class RegistrationForm extends React.Component {
   state = {
     addNewTalk: false,
     // selectedType: '0',
@@ -55,6 +57,7 @@ class RegistrationForm extends React.PureComponent {
     // speakerInfo: {},
     // integral: 0,
   };
+  expertExtendAddress = null;
   componentWillMount = () => {
     this.props.dispatch({
       type: 'seminar/getCategoryGroup',
@@ -263,6 +266,11 @@ class RegistrationForm extends React.PureComponent {
     this.setState({ currentOrg: value });
   };
 
+  // 存储活动地点，新增专家需要继承
+  saveAddress = (e) => {
+    this.expertExtendAddress = e.target.value;
+  };
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const {
@@ -322,7 +330,7 @@ class RegistrationForm extends React.PureComponent {
                   rules: [{ required: true, message: '请选择活动类型！' }],
                 },
               )(
-                <Select>
+                <Select placeholder="请选择活动类型">
                   {
                     activityType.map((item) => {
                       return (
@@ -402,7 +410,7 @@ class RegistrationForm extends React.PureComponent {
                       message: '请输入活动城市',
                     }],
                   })(
-                    <Input placeholder="请输入活动地点" />,
+                    <Input placeholder="请输入活动城市" />,
                   )}
                 </FormItem>
               </Col>
@@ -418,7 +426,7 @@ class RegistrationForm extends React.PureComponent {
                   message: '请输入活动地点',
                 }],
               })(
-                <Input placeholder="请输入活动地点" />,
+                <Input placeholder="请输入活动地点" onBlur={this.saveAddress} />,
               )}
             </FormItem>
 
@@ -520,9 +528,12 @@ class RegistrationForm extends React.PureComponent {
               <a type="primary" onClick={this.addTalkData.bind(this, addNewTalk)}>新增专家</a>
             </div>
 
-            {addNewTalk && <AddExpertModal editTheTalk={editTheTalk} parentProps={this.props}
-                                           callbackParent={this.addTheNewTalk}
-                                           callbackParentSetAddNewTalk={this.setAddNewTalk} />}
+            {addNewTalk &&
+            <AddExpertModal editTheTalk={editTheTalk} parentProps={this.props}
+                            startValue={this.state.startValue} endValue={this.state.endValue}
+                            address={this.expertExtendAddress}
+                            callbackParent={this.addTheNewTalk}
+                            callbackParentSetAddNewTalk={this.setAddNewTalk} />}
           </Col>
 
           <Col className={styles.formFooter}>

@@ -20,6 +20,7 @@ import * as boleConfig from './bole/config';
 
 import { System, Source } from '../utils/system';
 import Footer from '../components/Footers/default';
+import ViewExpertInfo from '../components/person/view-expert-info';
 import defaults from './utils';
 
 // All available systems.
@@ -94,10 +95,16 @@ const defaultSystemConfigs = {
   /**
    * Page specified config.
    */
-  // PersonList
+  /**
+   * PersonList
+   * PersonList_RightZone 右侧显示内容
+   * */
   PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
   PersonList_PersonLink_NewTab: true,
   Person_PersonLabelBlock: defaults.EMPTY_BLOCK_FUNC, // profile => 'jsx',
+  PersonList_RightZone: [
+    person => <ViewExpertInfo person={person} key="1" />,
+  ],
   Person_PersonRightButton: defaults.EMPTY_BLOCK_FUNC,
   // > Search
   // expert base

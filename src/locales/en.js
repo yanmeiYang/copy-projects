@@ -53,6 +53,9 @@ export default {
   'com.bole.AddedSuccessfully': 'Added Successfully',
 
   'com.PersonList.label.views': 'views',
+  'com.PersonList.label.homepage': 'Homepage',
+  'com.PersonList.label.sendEmail': 'Send Email',
+  'com.PersonList.label.qrcode': 'QR Code',
 
   // Recommendation
   'rcd.home.pageTitle': 'Organization List',

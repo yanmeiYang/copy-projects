@@ -47,6 +47,9 @@ export default {
   'com.searchTypeWidget.label.ExpertBase': '我的专家库',
 
   'com.PersonList.label.views': '次查看',
+  'com.PersonList.label.homepage': '个人主页',
+  'com.PersonList.label.sendEmail': '发送邮件',
+  'com.PersonList.label.qrcode': '二维码',
 
   // bole avatar
   'com.bole.ExpertPhoto': '暂无头像',

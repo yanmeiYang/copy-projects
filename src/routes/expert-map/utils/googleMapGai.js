@@ -1,6 +1,7 @@
 /**
  * Created by Administrator on 2017/7/26.
  */
+import { findPosition } from './map-utils';
 function GetGoogleMapLib(showTop) {
   return function showOverLay() {
     let me = {};
@@ -548,7 +549,6 @@ function GetGoogleMapLib(showTop) {
         return this.clusters_.length;
       };
 
-
       /**
        * Returns the google map that the clusterer is associated with.
        *
@@ -1074,10 +1074,12 @@ function GetGoogleMapLib(showTop) {
         this.div_ = document.createElement('DIV');
         if (this.visible_) {
           var pos = this.getPosFromLatLng_(this.center_);
+          const position = this.getProjection().fromLatLngToDivPixel(this.center_);
+          const pos1 = this.getProjection().fromDivPixelToLatLng(position);
+          //console.log(this.cluster_)
           this.div_.style.cssText = this.createCss(pos);
           this.div_.innerHTML = this.sums_.text;
         }
-
         var panes = this.getPanes();
         panes.overlayMouseTarget.appendChild(this.div_);
 

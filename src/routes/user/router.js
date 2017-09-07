@@ -10,7 +10,7 @@ export default {
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/common/universal-config'));
-        registerModel(app, require('../../models/auth/auth'));
+        registerModel(app, require('../../models/auth'));
         cb(null, require('./signup'));
       }, 'auth');
     },
@@ -30,7 +30,7 @@ export default {
     path: '/forgot-password',
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
-        registerModel(app, require('../../models/auth/auth'));
+        registerModel(app, require('../../models/auth'));
         cb(null, require('./forgot-password/'));
       }, 'user');
     },
@@ -40,7 +40,7 @@ export default {
     path: '/reset-password',
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
-        registerModel(app, require('../../models/auth/auth'));
+        registerModel(app, require('../../models/auth'));
         cb(null, require('./reset-password/'));
       }, 'user');
     },
@@ -50,7 +50,7 @@ export default {
     path: '/retrieve',
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
-        registerModel(app, require('../../models/auth/auth'));
+        registerModel(app, require('../../models/auth'));
         cb(null, require('./retrieve/'));
       }, 'user');
     },
@@ -60,7 +60,7 @@ export default {
     path: '/user-info',
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
-        registerModel(app, require('../../models/auth/auth'));
+        registerModel(app, require('../../models/auth'));
         cb(null, require('./user-info/'));
       }, 'user');
     },

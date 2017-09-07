@@ -10,7 +10,7 @@ export default {
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/common/universal-config'));
-        registerModel(app, require('../../models/auth/auth'));
+        registerModel(app, require('../../models/auth'));
         cb(null, require('./user/Users'));
       }, 'admin');
     },
@@ -21,7 +21,7 @@ export default {
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
         registerModel(app, require('../../models/common/universal-config'));
-        registerModel(app, require('../../models/auth/auth'));
+        registerModel(app, require('../../models/auth'));
         cb(null, require('./add-user-roles'));
       }, 'admin');
     },

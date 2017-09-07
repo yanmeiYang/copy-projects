@@ -9,7 +9,7 @@ export default {
     path: 'auth',
     getComponent(nextState, cb) {
       require.ensure([], (require) => {
-        registerModel(app, require('../../models/auth/auth'));
+        registerModel(app, require('../../models/auth'));
         cb(null, require('./'));
       }, 'thirdLogin');
     },

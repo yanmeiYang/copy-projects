@@ -29,6 +29,20 @@ export async function getExpertDetail(id, offset, size) {
     });
 }
 
+export async function rosterManage({ payload }) {
+  const { id, name, email, perm } = payload;
+  return request(api.invokeRoster
+      .replace(':id', id),
+    {
+      method: 'PUT',
+      body: JSON.stringify({
+        name,
+        email,
+        perm,
+      }),
+    });
+}
+
 export async function addExpertBase({ title, desc, pub }) {
   const formData = new FormData();
   formData.append('title', title);

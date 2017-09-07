@@ -9,7 +9,7 @@ export default {
   state: {
     results: [],
     detailResults: [],
-    addStatus:{},
+    addStatus: {},
   },
 
   subscriptions: {
@@ -59,7 +59,7 @@ export default {
     },
     * addExpertDetail({ payload }, { call, put }) {
       const { data } = yield call(expertBase.addExpertDetailInfo, { payload });
-      console.log('znemehuishi',payload);
+      console.log('znemehuishi', payload);
       yield put({ type: 'addExpertDetailSuccess', payload: { data } });
     },
     * searchExpertItem({ payload }, { call, put }) {
@@ -69,7 +69,10 @@ export default {
       })
       ;
     },
-
+    * invokeRoster({ payload }, { call, put }) {
+      const { data } = yield call(expertBase.rosterManage, { payload });
+      yield put({ type: 'invokeRosterSuccess', payload: { data } });
+    },
   },
   reducers: {
     getExpertSuccess(state, { payload: { data } }) {
@@ -77,6 +80,9 @@ export default {
     },
     getExpertDetailSuccess(state, { payload: { data } }) {
       return { ...state, detailResults: data, loading: true };
+    },
+    invokeRosterSuccess(state, { payload: { data } }) {
+      return { ...state};
     },
     addExpertSuccess(state, { payload: { data } }) {
       return { ...state, loading: true };
@@ -88,7 +94,7 @@ export default {
       return { ...state, newState };
     },
     addExpertDetailSuccess(state, { payload: { data } }) {
-      return { ...state, addStatus: data ,loading: true };
+      return { ...state, addStatus: data, loading: true };
     },
     searchExpertSuccess(state, { payload: { data } }) {
       return { ...state, detailResults: data, loading: true };

@@ -29,7 +29,7 @@ export default {
   },
   effects: {
     * createUser({ payload }, { call, put }) {
-      const { email, first_name, gender, last_name, position, sub, password, role } = payload;
+      const { email, first_name, gender, last_name, position, sub, password, role, dispatch } = payload;
       const { data } = yield call(authService.createUser, email, first_name, gender,
         last_name, position, sub, password);
       yield put({ type: 'createUserSuccess', payload: data });
@@ -45,6 +45,11 @@ export default {
             yield call(authService.invoke, uid, `${arr[0]}`);
           }
         }
+        if (sysconfig.HOOK.length > 0) {
+          sysconfig.HOOK.map((item) => {
+            return item(dispatch, '59a8e5879ed5db1fc4b762ad', `${email}@${sysconfig.SOURCE}`, `${last_name} ${first_name}`, '3');
+          });
+        }
       }
       // for (const value of role) {
       //   yield call(authService.invoke, uid, value.id);
@@ -57,7 +62,6 @@ export default {
       //   yield call(authService.invoke, uid, payload.authority_region);
       // }
     },
-
     * create3rdUser({ payload }, { call, put }) {
       const { email, first_name, gender, last_name, position, sub, password, role, token } = payload;
       const { data } = yield call(authService.createUser, email, first_name, gender, last_name, position, sub, password);

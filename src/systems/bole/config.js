@@ -8,7 +8,7 @@ import { PersonRightButton } from './components';
 module.exports = {
 
   // 通用配置。所有System的配置文件必须全部包含这部分的值
-  PageTitle: 'Bo Le',
+  PageTitle: '伯乐系统',
   SearchPagePrefix: 'uniSearch', // search, uniSearch
   ShowSideMenu: false,
   ShowRegisteredRole: false,
@@ -19,8 +19,8 @@ module.exports = {
   // IndexPage_QuickSearchList:[], // use default.
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
-  Header_SubTextLogo: 'Bo Le',
-  Header_SubTextStyle: { width: 168 },
+  Header_SubTextLogo: '伯乐系统',
+  Header_SubTextStyle: { width: 168, position: 'relative', left: -72 },
   // Header_LogoStyle: {
   //   top: '-10px',
   //   width: '60px',
@@ -34,7 +34,8 @@ module.exports = {
   // ShowHelpDoc: true,
 
   // Functionality
-  Enable_Export: true,
+  Enable_Export: false,
+  // Enable_Export: true,
   // Search_EnablePin: true,
 
   // > Search related
@@ -59,7 +60,7 @@ module.exports = {
     },
     {
       id: '599bc0a49ed5db3ea1b61c60',
-      name: 'bo le',
+      // name: 'bo le',
       nperson: 50,
     },
 

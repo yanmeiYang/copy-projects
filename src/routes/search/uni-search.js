@@ -199,11 +199,13 @@ export default class UniSearch extends React.PureComponent {
     const operations = (
       <ExportPersonBtn
         query={query} pageSize={pageSize} current={current}
-        filters={filters} sort={this.state.sortType} />
-    );
+        filters={filters} sort={this.state.sortType}/>
+  )
+    ;
 
     // Deprecated search result tab.
 
+    const exportArea = sysconfig.Enable_Export ? operations : '';
     // const exportArea = sysconfig.Enable_Export ? <ExportPersonBtn /> : '';
     // const wantedTabs = sysconfig.UniSearch_Tabs;
     // const avaliableTabs = {
@@ -219,22 +221,22 @@ export default class UniSearch extends React.PureComponent {
           onChange={this.onOrderChange}
           size="small"
           className={styles.maxWidth}
-          tabBarExtraContent={operations}
+          tabBarExtraContent={exportArea}
         >
           {this.searchSorts.map((sortItem) => {
             const icon = sortItem === this.state.sortType ?
-              <i className="fa fa-sort-amount-desc" /> : '';
+              <i className="fa fa-sort-amount-desc"/> : '';
             const tab = (
               <span>
                 <FM id={`com.search.sort.label.${sortItem}`}
-                    defaultMessage={sortItem} /> {icon}
+                    defaultMessage={sortItem}/> {icon}
               </span>
             );
-            return <TabPane tab={tab} key={sortItem} />;
+            return <TabPane tab={tab} key={sortItem}/>;
           })}
         </Tabs>
 
-        <Spinner loading={load} />
+        <Spinner loading={load}/>
         <div className={styles.personAndKg}>
           <div>
             <PersonList persons={results} personLabel={sysconfig.Person_PersonLabelBlock}
@@ -250,7 +252,7 @@ export default class UniSearch extends React.PureComponent {
               />
             </div>
           </div>
-          {topic.label && <SearchKnowledge topic={topic} />}
+          {topic.label && <SearchKnowledge topic={topic}/>}
         </div>
       </div>
     );
@@ -347,7 +349,7 @@ export default class UniSearch extends React.PureComponent {
          const tabJsx = (<p>
          <i className={`fa ${tab.icon} fa-fw`} aria-hidden="true" />
          {tab.label}
-         </p>);
+         </p>);F
          return tab ? (<TabPane tab={tabJsx} key={`${tab.key}-view`} />) : '';
          })}
          </Tabs>

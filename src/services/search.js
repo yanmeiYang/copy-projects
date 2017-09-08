@@ -2,7 +2,14 @@ import { request, config } from '../utils';
 import { sysconfig } from '../systems';
 
 const { api } = config;
+/* 目前搜索的各种坑
+   全局搜索：
+   智库高级搜索：
+     /api/search/roster/59..08/experts/advanced?name=&offset=0&org=&size=20&sort=n_citation&term=jie
+     sort = relevance, h_index, a_index, activity, diversity, rising_star, n_citation, n_pubs,
+   智库无缓存查询：
 
+ */
 export async function searchPerson(query, offset, size, filters, sort, useTranslateSearch) {
   // if search in global experts, jump to another function;
   if (filters && filters.eb && filters.eb.id === 'aminer') {

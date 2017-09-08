@@ -19,7 +19,7 @@ import { Auth } from '../../hoc';
 // TODO Combine search and uniSearch into one.
 const TabPane = Tabs.TabPane;
 
-const defaultSorts = ['relevance', 'h_index', 'activity', 'rising_star', 'citation', 'num_pubs'];
+const defaultSorts = ['relevance', 'h_index', 'activity', 'rising_star', 'n_citation', 'n_pubs'];
 
 @connect(({ app, search, loading }) => ({ app, search, loading }))
 @Auth
@@ -162,10 +162,10 @@ export default class SearchComponent extends Component {
 
 
   render() {
+    console.log('>>-->nnmn^o^ Referesh too mach!!', this.props.showSearchBox);
     const { className } = this.props;
     const sorts = this.props.sorts || defaultSorts;
     const { sortType } = this.state;
-
     // .........
     const { results, pagination, query, aggs, filters, topic } = this.props.search;
     const { pageSize, total, current } = pagination;
@@ -187,7 +187,7 @@ export default class SearchComponent extends Component {
           <div className={styles.searchZone}>
 
             {/* 搜索框 */}
-            {!this.props.searchBox &&
+            {this.props.showSearchBox &&
             <div className={styles.top}>
               <div className={styles.searchWrap}>
                 <KgSearchBox
@@ -242,6 +242,7 @@ export default class SearchComponent extends Component {
           <Tabs defaultActiveKey={sortType} size="small" className={styles.maxWidth}
                 onChange={this.onOrderChange} tabBarExtraContent={exportArea}>
             {sorts && sorts.map((sortItem) => {
+              console.log('sortItem:::::::::::::;', sortItem);
               const icon = sortItem === sortType ? <i className="fa fa-sort-amount-desc" /> : '';
               const tab = (<span><FM id={`com.search.sort.label.${sortItem}`}
                                      defaultMessage={sortItem} /> {icon}</span>);
@@ -282,5 +283,5 @@ SearchComponent.propTypes = {
   className: PropTypes.string,
   sorts: PropTypes.array,
   onSearchBarSearch: PropTypes.func,
-  searchBox: PropTypes.bool, // has search box?
+  showSearchBox: PropTypes.bool, // has search box?
 };

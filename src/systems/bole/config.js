@@ -59,6 +59,7 @@ module.exports = {
     // person => <ViewExpertInfo person={person} key="1" />,
     person => <AddToEBButton person={person} key="2" ExpertBase="59a8e5879ed5db1fc4b762ad" />,
   ],
+
   ExpertBases: [
     {
       id: 'aminer',
@@ -66,11 +67,13 @@ module.exports = {
       nperson: 2871,
     },
     // {
-    //   id: '59a8e5879ed5db1fc4b762ad', // medrob eb id: 599bc0a49ed5db3ea1b61c60
-    //   name: '我的专家库',
-    //   nperson: 50,
+    // id: '599bc0a49ed5db3ea1b61c60',
+    // name: 'bo le',
+    // nperson: 50,
     // },
+
   ],
+
   // bole系统独有设置
   ExpertBase: '59a8e5879ed5db1fc4b762ad',
 

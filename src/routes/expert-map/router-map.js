@@ -1,57 +1,35 @@
 /**
  *  Created by BoGao on 2017-07-14;
+ *  Refactored by BoGao on 2017-09-07; dva@2.0 react-router-4
  */
-import { registerModel } from '../../utils';
-
 export default {
+  ExpertMap: {
+    path: '/expert-map',
+    models: () => [import('models/expert-map')],
+    component: () => import('./ExpertMapPage'),
+  },
 
-  ExpertMap: app => ({
-    path: 'expert-map',
-    getComponent(nextState, cb) {
-      require.ensure([], (require) => {
-        registerModel(app, require('../../models/expert-map'));
-        cb(null, require('./ExpertMapPage'));
-      }, 'map');
-    },
-  }),
+  ExpertMapGoogle: {
+    path: '/expert-googlemap',
+    models: () => [import('models/expert-map')],
+    component: () => import('./ExpertGoogleMapPage'),
+  },
 
-  ExpertMapGoogle: app => ({
-    path: 'expert-googlemap',
-    getComponent(nextState, cb) {
-      require.ensure([], (require) => {
-        registerModel(app, require('../../models/expert-map'));
-        cb(null, require('./ExpertGoogleMapPage')); // What the
-      }, 'map-google');
-    },
-  }),
+  ExpertTrajectoryPage: {
+    path: '/expert-trajectory',
+    models: () => [import('models/expert-trajectory')],
+    component: () => import('routes/expert-trajectory/ExpertTrajectoryPage'),
+  },
 
-  ExpertTrajectoryPage: app => ({
-    path: 'expert-trajectory',
-    getComponent(nextState, cb) {
-      require.ensure([], (require) => {
-        registerModel(app, require('../../models/expert-trajectory'));
-        cb(null, require('../expert-trajectory/ExpertTrajectoryPage'));
-      }, 'expert-trajectory');
-    },
-  }),
+  ExpertHeatmapPage: {
+    path: '/expert-heatmap',
+    models: () => [import('models/expert-trajectory')],
+    component: () => import('routes/expert-trajectory/ExpertHeatmapPage'),
+  },
 
-  ExpertHeatmapPage: app => ({
-    path: 'expert-heatmap',
-    getComponent(nextState, cb) {
-      require.ensure([], (require) => {
-        registerModel(app, require('../../models/expert-trajectory'));
-        cb(null, require('../expert-trajectory/ExpertHeatmapPage'));
-      }, 'expert-heatmap');
-    },
-  }),
-
-  ExpertMapDispatch: app => ({
-    path: 'expert-map-dispatch',
-    getComponent(nextState, cb) {
-      require.ensure([], (require) => {
-        registerModel(app, require('../../models/expert-map'));
-        cb(null, require('../expert-map/expert-map-dispatch'));
-      }, 'map-dispatch');
-    },
-  }),
+  ExpertMapDispatch: {
+    path: '/dispatch-expert-map',
+    models: () => [import('models/expert-map')],
+    component: () => import('./expert-map-dispatch'),
+  },
 };

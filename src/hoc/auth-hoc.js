@@ -1,9 +1,11 @@
 /* eslint-disable react/no-multi-comp */
-import React from 'react';
+import React, { Component, PureComponent, PropTypes } from 'react';
 import { sysconfig } from '../systems';
 import * as authUtil from '../utils/auth';
 import { reflect } from '../utils';
 import debug from '../utils/debug';
+
+const ENABLED = sysconfig.GLOBAL_ENABLE_HOC;
 
 /**
  * 会根据 sysconfig.Auth_AllowAnonymousAccess 的值来判断是否进行登录权限判断。
@@ -12,8 +14,12 @@ import debug from '../utils/debug';
  * @constructor
  */
 function Auth(ComponentClass) {
-  return class AuthHoc extends React.Component {
+  return class AuthHoc extends Component {
     componentWillMount = () => {
+      if (!ENABLED) {
+        return false;
+      }
+
       if (process.env.NODE_ENV !== 'production') {
         if (debug.LogHOC) {
           console.log('%c@@HOC: Auth: Component is ', 'color:orange',
@@ -39,7 +45,7 @@ function Auth(ComponentClass) {
     };
 
     render() {
-      if (sysconfig.Auth_AllowAnonymousAccess || this.authenticated) {
+      if (!ENABLED || sysconfig.Auth_AllowAnonymousAccess || this.authenticated) {
         return <ComponentClass {...this.props} />;
       } else {
         return null;
@@ -55,8 +61,11 @@ function Auth(ComponentClass) {
  * @constructor
  */
 function RequireLogin(ComponentClass) {
-  return class RequireLoginHoc extends React.Component {
+  return class RequireLoginHoc extends Component {
     componentWillMount = () => {
+      if (!ENABLED) {
+        return false;
+      }
       if (!this.props.app) {
         console.warn('Must connect `app` models when use @Auth! in component: ', ComponentClass.displayName);
         return false;
@@ -72,7 +81,7 @@ function RequireLogin(ComponentClass) {
     };
 
     render() {
-      if (this.authenticated) {
+      if (!ENABLED || this.authenticated) {
         return <ComponentClass {...this.props} />;
       } else {
         return null;
@@ -82,8 +91,11 @@ function RequireLogin(ComponentClass) {
 }
 
 function RequireAdmin(ComponentClass) {
-  return class RequireAdminHoc extends React.Component {
+  return class RequireAdminHoc extends Component {
     componentWillMount = () => {
+      if (!ENABLED) {
+        return false;
+      }
       if (!this.props.app) {
         console.warn('Must connect `app` models when use @Auth! in component: ', ComponentClass.displayName);
         return false;
@@ -96,7 +108,7 @@ function RequireAdmin(ComponentClass) {
     };
 
     render() {
-      if (this.authenticated) {
+      if (!ENABLED || this.authenticated) {
         return <ComponentClass {...this.props} />;
       } else {
         return null;
@@ -106,8 +118,11 @@ function RequireAdmin(ComponentClass) {
 }
 
 function RequireGod(ComponentClass) {
-  return class RequireGodHoc extends React.Component {
+  return class RequireGodHoc extends Component {
     componentWillMount = () => {
+      if (!ENABLED) {
+        return false;
+      }
       if (!this.props.app) {
         console.warn('Must connect `app` models when use @Auth! in component: ', ComponentClass.displayName);
         return false;
@@ -120,7 +135,7 @@ function RequireGod(ComponentClass) {
     };
 
     render() {
-      if (this.authenticated) {
+      if (!ENABLED || this.authenticated) {
         return <ComponentClass {...this.props} />;
       } else {
         return null;

@@ -163,7 +163,6 @@ class ExpertGoogleMap extends React.Component {
               name = str;
             } else {
               let tmp = personInfo.name.match(/\b(\w)/g);
-              console.log(tmp.length)
               if (tmp.length > 3) {
                 tmp = tmp[0].concat(tmp[1],tmp[2]);
                 name = tmp;
@@ -299,7 +298,6 @@ class ExpertGoogleMap extends React.Component {
         let locations = [];
         const typeid = String(type);
         const newTypeString = String(newtype);
-        console.log(typeof(typeid),'||',typeof(newtype))
         for (const i in place.results) {
           const newplace = findPosition(newTypeString, place.results[i]);
           //if ((newplace[1] != null && newplace[1] != null) &&

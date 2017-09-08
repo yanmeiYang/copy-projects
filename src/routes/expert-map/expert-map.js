@@ -614,7 +614,6 @@ class ExpertMap extends React.PureComponent {
   };
 
   render() {
-    console.log(this.props.expertMap)
     const model = this.props && this.props.expertMap;
     const persons = model.geoData.results;
     let count = 0;

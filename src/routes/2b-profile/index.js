@@ -71,7 +71,8 @@ class TobProfile extends React.Component {
     return (
       <div>
         <Button icon="plus" className={styles.buttonArea} onClick={this.addProfile}>Add</Button>
-        <Search placeholder="input name" className={styles.searchArea} onSearch={this.searchByName.bind(values)}/>
+        <Search placeholder="input name" className={styles.searchArea}
+                onSearch={this.searchByName.bind(values)} />
         <Table dataSource={results.data} locale={localeText} className={styles.tableArea}>
           <Column title="Name"
                   dataIndex="name"
@@ -101,11 +102,11 @@ class TobProfile extends React.Component {
             key="action"
             render={(text, record) => (
               <span>
-             <span/>
-          <a onClick={this.onDeleteItem.bind(this, record)}>Delete</a>
-          <span className="ant-divider"/>
-               <a onClick={this.editProfile.bind(this, record)}>Edit</a>
-        </span>
+                <span />
+                <a onClick={this.onDeleteItem.bind(this, record)}>Delete</a>
+                <span className="ant-divider" />
+                <a onClick={this.editProfile.bind(this, record)}>Edit</a>
+              </span>
             )}
           />
         </Table>

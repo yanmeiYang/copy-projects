@@ -1,5 +1,6 @@
 const path = require('path');
 const { defines } = require('./src/define.js');
+// const { version } = require('./package.json')
 
 const svgSpriteDirs = [
   path.resolve(__dirname, 'src/svg/'),
@@ -11,18 +12,20 @@ export default {
 
   entry: 'src/index.js',
   svgSpriteLoaderDirs: svgSpriteDirs,
-
-  "theme": "./theme.config.js",
+  theme: "./theme.config.js",
 
   // "proxy": {
+  //   "/api/v1/weather": {
+  //     "target": "https://api.seniverse.com/",
+  //     "changeOrigin": true,
+  //     "pathRewrite": { "^/api/v1/weather": "/v3/weather" }
+  //   },
   //   "/api": {
   //     "target": "https://api.aminer.org/",r
   //     "changeOrigin": true,
   //     "pathRewrite": { "^/tapi": "" }
   //   }
   // },
-
-  // NOTE: access: request('/tapi/trajecotry/go')
 
   // disableCSSModules: false,
   // "cssModulesExclude": [],
@@ -38,7 +41,7 @@ export default {
 
   "extraBabelPlugins": [
     "transform-runtime",
-    ["import", { "libraryName": "antd", "style": true }]
+    ["import", { "libraryName": "antd", "style": true }],
   ],
   "env": {
     "development": {
@@ -46,33 +49,23 @@ export default {
         "dva-hmr",
         "transform-runtime",
         "transform-decorators-legacy",
-        ["import", { "libraryName": "antd", "style": true }]
+        ["import", { "libraryName": "antd", "style": true }],
       ]
     },
     "production": {
       "extraBabelPlugins": [
         "transform-runtime",
         "transform-decorators-legacy",
-        ["import", { "libraryName": "antd", "style": true }]
+        ["import", { "libraryName": "antd", "style": true }],
       ]
     }
   },
 
-  "dllPlugin": {
-    "exclude": [
-      "babel-runtime",
-      "antd",
-      // "dva",
-      // "dva/router",
-      // "dva/saga",
-    ],
-    "include": [
-      // "dva/router",
-      // "dva/saga",
-      // "dva/fetch",
-      // "lodash"
-    ]
+  dllPlugin: {
+    exclude: ["babel-runtime", "roadhog", "cross-env"],
+    include: ["dva/router", "dva/saga", "dva/fetch"]
   },
+
 
   // externals: {
   //   react: 'react',

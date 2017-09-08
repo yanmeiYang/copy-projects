@@ -2,14 +2,12 @@
  * Created by Administrator on 2017/8/30.
  */
 import React from 'react';
-import { connect } from 'dva';
 
 class ExpertMapDispatch extends React.Component {
   componentDidMount() {
   }
 
   componentWillReceiveProps() {
-
   }
 
   render() {

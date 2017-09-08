@@ -1,3 +1,3 @@
-import PersonRightButton from './person-right-button';
+import AddToEBButton from './AddToEBButton';
 
-module.exports = { PersonRightButton };
+module.exports = { AddToEBButton };

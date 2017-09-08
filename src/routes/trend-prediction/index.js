@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
+import queryString from 'query-string';
 // import styles from './index.less';
 import TrendPrediction from './trend-prediction.js';
 import { Auth } from '../../hoc';
@@ -19,8 +20,7 @@ export default class TrendPredictionPage extends React.Component {
   };
 
   componentWillMount() {
-    const query = (this.props.location && this.props.location.query
-      && this.props.location.query.query) || 'data mining';
+    const { query } = queryString.parse(location.search);
     if (query) {
       this.setState({ query });
     }

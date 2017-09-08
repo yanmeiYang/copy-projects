@@ -29,9 +29,11 @@ export default class ViewExpertInfo extends React.PureComponent {
 
   render() {
     const person = this.props.person;
+    if (!person) {
+      return false;
+    }
     return (
       <div className={styles.right_zone}>
-
         {person.num_viewed > 0 &&
         <p className={styles.views}>
           <i className="fa fa-eye fa-fw" />&nbsp;

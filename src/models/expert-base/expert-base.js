@@ -1,7 +1,7 @@
 /**
  * Created by zhanglimin on 17/9/1.
  */
-import * as expertBase from '../../services/expert-base';
+import * as expertBaseService from '../../services/expert-base';
 
 export default {
   namespace: 'expertBase',
@@ -9,7 +9,7 @@ export default {
   state: {
     results: [],
     detailResults: [],
-    addStatus:{},
+    addStatus: {},
   },
 
   subscriptions: {
@@ -33,20 +33,19 @@ export default {
   effects: {
     * getExpert({ payload }, { call, put }) {
       const { offset, size } = payload;
-      const { data } = yield call(expertBase.getExpert, offset, size);
+      const { data } = yield call(expertBaseService.getExpert, offset, size);
       yield put({ type: 'getExpertSuccess', payload: { data } });
     },
     * addExpert({ payload }, { call, put }) {
       const { title, desc } = payload;
       const pub = payload.public;
-      const { data } = yield call(expertBase.addExpertBase, { title, desc, pub });
+      const { data } = yield call(expertBaseService.addExpertBase, { title, desc, pub });
       yield put({ type: 'addExpertSuccess', payload: { data } });
     },
     * deleteExpert({ payload }, { call, put }) {
       const { key } = payload;
-      console.log('hahahha', key);
       // const { id } = payload;
-      const { data } = yield call(expertBase.deleteByKey, key);
+      const { data } = yield call(expertBaseService.deleteByKey, key);
       if (data.status) {
         yield put({ type: 'deleteExpertSuccess', payload });
       } else {
@@ -55,16 +54,16 @@ export default {
     },
     * getExpertDetailList({ payload }, { call, put }) {
       const { id, offset, size } = payload;
-      const { data } = yield call(expertBase.getExpertDetail, id, offset, size);
+      const { data } = yield call(expertBaseService.getExpertDetail, id, offset, size);
       yield put({ type: 'getExpertDetailSuccess', payload: { data } });
     },
     * addExpertDetail({ payload }, { call, put }) {
-      const { data } = yield call(expertBase.addExpertDetailInfo, { payload });
-      console.log('znemehuishi',payload);
+      const { data } = yield call(expertBaseService.addExpertDetailInfo, { payload });
+      console.log('znemehuishi', payload);
       yield put({ type: 'addExpertDetailSuccess', payload: { data } });
     },
     * searchExpertItem({ payload }, { call, put }) {
-      const { data } = yield call(expertBase.searchExpert, { payload });
+      const { data } = yield call(expertBaseService.searchExpert, { payload });
       yield put({
         type: 'searchExpertSuccess', payload: { data },
       })
@@ -89,8 +88,7 @@ export default {
       return { ...state, newState };
     },
     addExpertDetailSuccess(state, { payload: { data } }) {
-      console.log('添加成功data',data)
-      return { ...state, addStatus: data ,loading: true };
+      return { ...state, addStatus: data, loading: true };
     },
     searchExpertSuccess(state, { payload: { data } }) {
       return { ...state, detailResults: data, loading: true };

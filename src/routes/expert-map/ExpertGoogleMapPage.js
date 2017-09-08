@@ -8,6 +8,7 @@ import ExpertGoogleMap from './expert-googlemap.js';
 import ExpertMap from './expert-map.js';
 import styles from './ExpertMapPage.less';
 import { Auth } from '../../hoc';
+import queryString from 'query-string';
 
 @connect(({ app, expertgoogleMap }) => ({ app, expertgoogleMap }))
 @Auth
@@ -23,15 +24,15 @@ export default class ExpertGoogleMapPage extends React.Component {
   };
 
   componentWillMount() {
-    const query = (this.props.location && this.props.location.query
-      && this.props.location.query.query) || 'data mining';
-    const { type } = this.props.location.query;
+    let { query, type } = queryString.parse(location.search);
+    query = query || 'data mining';
+    type = type || 'google';
     if (query) {
       // this.props.dispatch({ type: 'app/setQuery', query });
       this.setState({ query });
     }
     if (type) {
-      this.setState({ mapType: type || 'google' });
+      this.setState({ mapType: type });
     }
     this.dispatch({
       type: 'app/layout',

@@ -1,62 +1,101 @@
 /**
  * Created by BoGao on 2017/7/15.
  */
-import React from 'react';
-import { Router } from 'dva/router';
-import { core } from '../../router';
-import { router2b } from '../full-router';
+import core from 'routes/router-core';
+import search from 'routes/search/router-search';
+import expertBase from 'routes/expert-base/route-eb';
+import person from 'routes/person/router-person';
+import user from 'routes/user/router-user';
+import auth from 'routes/auth/auth-router';
+import admin from 'routes/admin/router-admin';
+import rcd from 'routes/recommendation/router-rcd';
+import map from 'routes/expert-map/router-map';
+import trend from 'routes/trend-prediction/router-trend';
+import seminar from 'routes/seminar/router-seminar';
+import tencent from 'routes/third-login/router';
+import router2bprofile from 'routes/2b-profile/router-2bprofile';
 
-const Routers = function ({ history, app }) {
-  const routes = [
-    ...router2b(app),
-    core.IndexPage(app, [
+import App from 'routes/app';
+import { RouterRegistry, RouterRegistry2b, RouterJSXFunc } from '../router-registry';
 
-      // search
-      // core.ExpertSearch(app),
-      core.UniSearch(app),
-      core.Experts(app),
+const routes = [
+  ...RouterRegistry2b,
+  // ...RouterRegistry,
+  core.IndexPage,
 
-      // person
-      // core.Person(app),
+  // search
+  // search.ExpertSearch,
+  search.UniSearch,
+  //   core.Experts(app),
 
-      // user & auth.
-      core.Login(app),
-      core.Register(app),
-      core.User(app),
-      core.ForgotPassword(app),
-      core.ResetPassword(app),
-      core.ThirdLogin(app),
+  // person
+  // person.Person,
 
-      // Admin(Specified by ccf)
-      // core.AdminUsers(app),
-      // core.AdminSystemConfig(app),
-      // core.AdminSystemConfigWithCategory(app),
+  // user & auth.
+  auth.Login,
+  user.Register,
+  user.User,
+  user.ForgotPassword,
+  user.ResetPassword,
+  user.Retrieve,
+  user.UserInfo,
 
-      // Activity / Seminar
-      // core.Seminar(app),
-      // core.SeminarWithId(app),
-      // core.SeminarMy(app),
-      // core.SeminarPost(app),
-      // core.SeminarRating(app),
-      // core.Statistic(app),
+  // expertBase.ExpertBase,
+  // expertBase.ExpertBaseExpertsPage,
+  // expertBase.AddExpertBase,
+  // expertBase.AddExpertDetail,
+  // expertBase.ExpertProfileInfo,
 
-      // expert map
-      core.ExpertMap(app),
-      core.ExpertMapGoogle(app),
-      core.ExpertMapDispatch(app),
+  // Admin(Specified by ccf) TODO some are only used by ccf, move out.
+  admin.AdminUsers,
+  // admin.AdminSystemConfig,
+  // admin.AdminAddUserRolesByOrg,
+  // admin.AdminContributionType,
+  // admin.AdminActivityType,
+  // admin.AdminSystemConfigWithCategory,
+  // admin.AdminSystemOrgCategory,
 
-      // Relation-Graph
-      core.RelationGraphPage(app),
+  // Recommendation/rcd
+  // rcd.RecommendationHome,
+  // rcd.ProjectPage,
+  // rcd.ProjectTaskPage,
 
-      // KnowledgeGraph
-      core.KnowledgeGraph(app),
+  // Activity / Seminar
+  // seminar.Seminar,
+  // seminar.SeminarWithId,
+  // seminar.SeminarMy,
+  // seminar.SeminarPost,
+  // seminar.SeminarRating,
+  // seminar.Statistic,
+  // seminar.StatisticDetail,
+  // seminar.SeminarByEdit,
 
-      // System Default.
-      core.Default404(app),
-    ]),
-  ];
+  // expert map
+  map.ExpertMap,
+  map.ExpertMapGoogle,
+  map.ExpertTrajectoryPage,
+  map.ExpertHeatmapPage,
+  map.ExpertMapDispatch,
 
-  return <Router history={history} routes={routes} />;
+  // Relation-Graph, KnowledgeGraph, TrendPrediction, etc...
+  core.RelationGraphPage, // TODO BUG
+  core.KnowledgeGraph, // TODO BUG
+  core.RanksHelp,
+
+  trend.TrendPredictionPage,
+
+  // 2b profile
+  router2bprofile.TobProfile,
+  router2bprofile.Addition,
+
+  tencent.ThirdLogin,
+
+  // System Default.
+  core.Error404, // must be last one.
+];
+
+const Routers = ({ history, app }) => {
+  return RouterJSXFunc(history, app, routes, App);
 };
 
 export default Routers;

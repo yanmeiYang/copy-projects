@@ -14,7 +14,7 @@ class Addition extends React.Component {
 
   state = {
     query: '',
-};
+  };
 
   componentWillMount() {
     const queryItem = this.props.location.query.id;
@@ -134,7 +134,8 @@ class Addition extends React.Component {
             <Input type="text" />)}
         </FormItem>
         <FormItem {...formItemLayout} label="工号" hasFeedback>
-          {getFieldDecorator('sid', { rules: [{ required: true }], initialValue: sid })(<Input type="text"/>)}
+          {getFieldDecorator('sid', { rules: [{ required: true }], initialValue: sid })(<Input
+            type="text" />)}
         </FormItem>
         <FormItem {...formItemLayout} label="性别" hasFeedback>
           {getFieldDecorator('gender', { rules: [{ required: true }], initialValue: gender })(
@@ -151,7 +152,8 @@ class Addition extends React.Component {
               required: true,
               message: '邮箱格式错误!',
             }],
-            initialValue: email })(<Input type="email" />)}
+            initialValue: email
+          })(<Input type="email" />)}
         </FormItem>
         <FormItem {...formItemLayout} label="单位" hasFeedback>
           {getFieldDecorator('aff', { rules: [{ required: true }], initialValue: aff })(<Input
@@ -161,7 +163,8 @@ class Addition extends React.Component {
           <Button type="primary" onClick={this.addition} style={{ width: '10%' }}>
             添加
           </Button>
-          <Button type="cancel" onClick={this.cancel} style={{ width: '10%', marginLeft: '10px' }}>
+          <Button type="cancel" onClick={this.cancel}
+                  style={{ width: '10%', marginLeft: '10px' }}>
             取消
           </Button>
         </FormItem>

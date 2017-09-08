@@ -6,33 +6,22 @@ import React from 'react';
 import { addLocaleData } from 'react-intl';
 import { loadSavedLocale } from '../utils/locale';
 
-import * as alibabaConfig from './alibaba/config';
-import * as ccfConfig from './ccf/config';
-import * as ccftestConfig from './ccftest/config';
-import * as huaweiConfig from './huawei/config';
-import * as tencentConfig from './tencent/config';
-import * as cipscConfig from './cipsc/config';
-import * as cieConfig from './cie/config';
-import * as demoConfig from './demo/config';
-import * as cietestConfig from './cietest/config';
-import * as medrobConfig from './medrob/config';
-
 import { System, Source } from '../utils/system';
 import Footer from '../components/Footers/default';
 import defaults from './utils';
 
 // All available systems.
 const CurrentSystemConfig = {
-  ccf: ccfConfig, // <-- current config files.
-  ccftest: ccftestConfig,
-  huawei: huaweiConfig,
-  alibaba: alibabaConfig,
-  tencent: tencentConfig,
-  cie: cieConfig,
-  cipsc: cipscConfig,
-  demo: demoConfig,
-  cietest: cietestConfig,
-  medrob: medrobConfig,
+  ccf: require('./ccf/config'),
+  ccftest: require('./ccftest/config'),
+  huawei: require('./huawei/config'),
+  alibaba: require('./alibaba/config'),
+  tencent: require('./tencent/config'),
+  cie: require('./cie/config'),
+  cipsc: require('./cipsc/config'),
+  demo: require('./demo/config'),
+  cietest: require('./cietest/config'),
+  bole: require('./bole/config'),
 };
 
 // 默认配置
@@ -47,7 +36,7 @@ const defaultSystemConfigs = {
   EnableLocalLocale: false,
   // Language: 'en', // options [cn|en] // TODO change to locale.
   // PreferredLanguage: 'en', // 默认语言 // TODO delete this.
-
+  GLOBAL_ENABLE_HOC: false,
   MainListSize: 20,
 
   /**
@@ -93,10 +82,14 @@ const defaultSystemConfigs = {
   /**
    * Page specified config.
    */
-  // PersonList
+  /**
+   * PersonList
+   * PersonList_RightZone 右侧显示内容
+   * */
   PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
   PersonList_PersonLink_NewTab: true,
   Person_PersonLabelBlock: defaults.EMPTY_BLOCK_FUNC, // profile => 'jsx',
+  PersonList_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST, // [()=><COMP>]
 
   // > Search
   // expert base
@@ -122,6 +115,7 @@ const defaultSystemConfigs = {
   // > Admin Users
   Admin_Users_ShowAdmin: true,
   // PersonList_ShowIndices: [], // do not override in-component settings. // TODO
+
 };
 
 /** *************************************************

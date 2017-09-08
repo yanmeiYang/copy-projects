@@ -6,6 +6,7 @@ import * as profileUtils from '../../utils/profile-utils';
 import * as personService from '../../services/person';
 import { VisResearchInterest } from '../../routes/vis';
 import { sysconfig } from '../../systems';
+import ViewExpertInfo from '../../components/person/view-expert-info';
 
 class ProfileInfo extends React.Component {
   state = {};
@@ -51,37 +52,39 @@ class ProfileInfo extends React.Component {
                 更多 <i className="fa fa-share" aria-hidden="true"></i>
               </span>
             </a>}
-
           </div>}
           {name && <div className={styles.spliter} />}
+          <div className={styles.expert_basic_info}>
+            <div className={styles.expert_basic_info_left}>
+              {profile && profile.indices &&
+              <Indices indices={profile.indices} activity_indices={this.props.activity_indices}
+                       showIndices={sysconfig.PersonList_ShowIndices} />
+              }
 
-          {profile && profile.indices &&
-          <Indices indices={profile.indices} activity_indices={this.props.activity_indices}
-                   showIndices={sysconfig.PersonList_ShowIndices} />
-          }
-
-          {pos && <span><i className="fa fa-briefcase fa-fw" /> {pos}</span>}
-          {aff && <span><i className="fa fa-institution fa-fw" /> {aff}</span>}
-          {phone && <span><i className="fa fa-phone fa-fw" /> {phone}</span>}
-          {email &&
-          <span>
-            <i className="fa fa-envelope fa-fw" />
-            <img className="emailImg" src={`https://api.aminer.org/api/${email}`} alt="email"
-                 style={{ verticalAlign: 'middle' }} />
-          </span>}
-          {homepage &&
-          <span className="hp">
-            <a href={homepage} target="_blank" rel="noopener noreferrer">
-              <i className="fa fa-globe fa-fw" /> {homepage}
-            </a>
-          </span>
-          }
-
-
-          <span style={{ marginTop: 16 }} />
-          <span className="section_header"><i className="fa fa-area-chart fa-fw" /> 研究兴趣</span>
-          <VisResearchInterest personId={profile.id} disable_vis_chart={true} />
-
+              {pos && <p><i className="fa fa-briefcase fa-fw" /> {pos}</p>}
+              {aff && <p><i className="fa fa-institution fa-fw" /> {aff}</p>}
+              {phone && <p><i className="fa fa-phone fa-fw" /> {phone}</p>}
+              {email &&
+              <p>
+                <i className="fa fa-envelope fa-fw" />
+                <img className="emailImg" src={`https://api.aminer.org/api/${email}`} alt="email"
+                     style={{ verticalAlign: 'middle' }} />
+              </p>}
+              {homepage &&
+              <p className="hp">
+                <a href={homepage} target="_blank" rel="noopener noreferrer">
+                  <i className="fa fa-globe fa-fw" /> {homepage}
+                </a>
+              </p>
+              }
+              <span style={{ marginTop: 16 }} />
+              <p className="section_header"><i className="fa fa-area-chart fa-fw" /> 研究兴趣</p>
+              <VisResearchInterest personId={profile.id} disable_vis_chart={true} />
+            </div>
+            <div>
+              <ViewExpertInfo person={profile} />
+            </div>
+          </div>
           {/* TODO 这里放一个可以手工添加修改的tabs. */}
 
         </div>

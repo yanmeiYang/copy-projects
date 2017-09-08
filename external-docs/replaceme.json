@@ -1,44 +1,25 @@
 {
-  "data": {
-    "rcdorg": {
-      "id": "58fd99299ed5dbf4cae2f14e",
-      "name": "中国工程科学",
-      "desc": "《中国工程科学》是由中国工程院主管、中国工程院战略咨询中心和高等教育出版社有限公司共同主办战略咨询性学术期刊。",
-      "creatorID": "57fb8e409ed5db321f55ddf9",
-      "creatorName": "hui",
-      "createTime": "2017-04-24 06:20:25",
-      "updateTime": "2017-08-04 06:19:33",
-      "projects": [
-        {
-          "id": "58fd995f9ed5dbf4cae2f17e",
-          "desc": "2017年第1期",
-          "title": "2017_1",
-          "progress": 0,
-          "status": 0,
-          "creatorID": "57fb8e409ed5db321f55ddf9",
-          "creatorName": "hui",
-          "createTime": "2017-04-24 06:21:19",
-          "updateTime": "2017-04-25 06:12:17",
-          "__typename": "RcdProject",
-          "taskCount": 19,
-          "__typename": "RcdProject"
-        },
-        {
-          "id": "598411f59ed5db808684f5a3",
-          "desc": "",
-          "title": "2017_3",
-          "progress": 0,
-          "status": 0,
-          "creatorID": "57f9ed429ed5dbd78af2a05d",
-          "creatorName": "博泓 王",
-          "createTime": "2017-08-04 06:19:33",
-          "updateTime": "2017-08-04 06:22:07",
-          "__typename": "RcdProject",
-          "taskCount": 21,
-          "__typename": "RcdProject"
-        }
-      ],
-      "__typename": "RcdOrg"
-    }
-  }
+  "first_name": "bo",
+  "avatar": "//cdn.v2ex.com/gravatar/e9b4a42e4bf3d2f5793e695b6b907a56.png?s=80&r=g&d=retro",
+  "email": "elivoa@gmail.com",
+  "role": [
+    "bole_超级管理员",
+    "root"
+  ],
+  "tags": [],
+  "display_name": "bo gao",
+  "social": {},
+  "reg_ip": "113.208.113.50",
+  "id": "59ae89cf9ed5dbe93110a61a",
+  "profile": "",
+  "last_name": "gao",
+  "status": true,
+  "src": "bole",
+  "addr": "",
+  "position": "Associate Professor",
+  "sub": true,
+  "reg_time": "2017-09-05T11:26:07Z",
+  "org": "",
+  "is_social": false,
+  "gender": "male"
 }

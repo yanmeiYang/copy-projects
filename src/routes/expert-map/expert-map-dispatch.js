@@ -2,14 +2,12 @@
  * Created by Administrator on 2017/8/30.
  */
 import React from 'react';
-import { connect } from 'dva';
 
 class ExpertMapDispatch extends React.Component {
   componentDidMount() {
   }
 
   componentWillReceiveProps() {
-
   }
 
   render() {
@@ -31,9 +29,9 @@ class ExpertMapDispatch extends React.Component {
       }
     }
     if (target === 'baidu') {
-      window.location.href = 'http://localhost:8000/expert-map?type=baidu';
+      window.location.href = '/expert-map?type=baidu';
     } else {
-      window.location.href = 'http://localhost:8000/expert-googlemap';
+      window.location.href = '/expert-googlemap';
     }
 
     return (

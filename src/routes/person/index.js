@@ -166,7 +166,8 @@ const Person = ({ dispatch, person, seminar, publications }) => {
   return (
     <div className="content-inner">
 
-      <ProfileInfo profile={profile} activity_indices={activity_indices} />
+      <ProfileInfo profile={profile} activity_indices={activity_indices}
+                   rightZoneFuncs={sysconfig.PersonList_RightZone} />
       <div style={{ marginTop: 30 }} />
 
       <div>

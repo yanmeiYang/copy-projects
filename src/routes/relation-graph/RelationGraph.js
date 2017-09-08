@@ -4,11 +4,11 @@
  */
 import React from 'react';
 import { connect } from 'dva';
+import * as d3 from 'd3';
 import { Checkbox, Select, Progress, message } from 'antd';
 import { RgSearchNameBox } from '../../components/relation-graph';
 import { getAvatar } from '../../utils/profile-utils';
 import styles from './RelationGraph.less';
-import * as d3 from '../../../public/d3/d3.min';
 import { Auth } from '../../hoc';
 
 const Option = Select.Option;
@@ -638,10 +638,10 @@ export default class RelationGraph extends React.PureComponent {
             return 0;
           }
         } else if (d.indices.hIndex < 400) {
-            return getRadious(d.indices.hIndex + 32);
-          } else {
-            return getRadious(16);
-          }
+          return getRadious(d.indices.hIndex + 32);
+        } else {
+          return getRadious(16);
+        }
       }).style('stroke-width', (d) => {
         if (d.indices.hIndex > 50) {
           return '1px';
@@ -656,17 +656,17 @@ export default class RelationGraph extends React.PureComponent {
           } else if (transform.k >= 2) {
             console.log("放大到一定程度显示名字");
             console.log(transform.k);
-              return d.name.n.en;
-            } else {
-              return '';
-            }
-        } else if (transform.k >= 2) {
-            return d.name.n.en;
-          } else if (d.index < snum) {
             return d.name.n.en;
           } else {
             return '';
           }
+        } else if (transform.k >= 2) {
+          return d.name.n.en;
+        } else if (d.index < snum) {
+          return d.name.n.en;
+        } else {
+          return '';
+        }
       }).attr('dy', (d) => {
         if (d.indices.hIndex > indexShow || d.indices.hIndex < 400) {
           const top = getRadious(d.indices.hIndex + 32) * 2;
@@ -680,17 +680,17 @@ export default class RelationGraph extends React.PureComponent {
           if (d.source.indices.hIndex > indexShow) {
             return d.name.n.en;
           } else if (transform.k >= 2) {
-              return d.name.n.en;
-            } else {
-              return '';
-            }
-        } else if (transform.k >= 2) {
-            return d.name.n.en;
-          } else if (d.index < snum) {
             return d.name.n.en;
           } else {
             return '';
           }
+        } else if (transform.k >= 2) {
+          return d.name.n.en;
+        } else if (d.index < snum) {
+          return d.name.n.en;
+        } else {
+          return '';
+        }
       }).attr('dy', (d) => {
         if (d.indices.hIndex > indexShow || d.indices.hIndex < 400) {
           const top = getRadious(d.indices.hIndex + 32) * 2;
@@ -744,7 +744,9 @@ export default class RelationGraph extends React.PureComponent {
         }
       }).style('stroke-width', '1px').transition().duration(1000).style('stroke', 'black')
         .style('opacity', 0.8);
-      svg.append('g').attr('class', 'ceter').enter().append('text').attr('dx', (d) => { return -20; }).text('s');
+      svg.append('g').attr('class', 'ceter').enter().append('text').attr('dx', (d) => {
+        return -20;
+      }).text('s');
       svg.selectAll('circle').data(_nodes).filter((j) => {
         if (ds.indexOf(j.index) !== -1) {
           return true;
@@ -845,11 +847,11 @@ export default class RelationGraph extends React.PureComponent {
           _onclicknodes[_onclicknodes.indexOf(d.id)] = '';
           svg.selectAll('circle').data(_nodes).style('stroke', '#fff')
             .style('stroke-width', (d) => {
-            if (d.indices.hIndex > 50) {
-              return '1.5px';
-            } else {
-              return '1px';
-            }
+              if (d.indices.hIndex > 50) {
+                return '1.5px';
+              } else {
+                return '1px';
+              }
             });
           return svg.selectAll('line').data(_edges).style('stroke', '#999')
             .style('opacity', 1);

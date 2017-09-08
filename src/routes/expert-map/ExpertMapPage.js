@@ -4,6 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
+import queryString from 'query-string';
 import ExpertGoogleMap from './expert-googlemap.js';
 import ExpertMap from './expert-map.js';
 import styles from './ExpertMapPage.less';
@@ -23,15 +24,15 @@ export default class ExpertMapPage extends React.Component {
   };
 
   componentWillMount() {
-    const query = (this.props.location && this.props.location.query
-      && this.props.location.query.query) || 'data mining';
-    const { type } = this.props.location.query;
+    let { query, type } = queryString.parse(location.search);
+    query = query || 'data mining';
+    type = type || 'baidu';
     if (query) {
       // this.props.dispatch({ type: 'app/setQuery', query });
       this.setState({ query });
     }
     if (type) {
-      this.setState({ mapType: type || 'baidu' });
+      this.setState({ mapType: type });
     }
     this.dispatch({
       type: 'app/layout',

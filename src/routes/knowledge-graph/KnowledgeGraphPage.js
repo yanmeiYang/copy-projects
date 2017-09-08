@@ -4,6 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
+import queryString from 'query-string';
 import { routerRedux } from 'dva/router';
 import { Radio, Tabs, message } from 'antd';
 import { Spinner } from '../../components/index';
@@ -32,8 +33,7 @@ export default class KnowledgeGraphPage extends React.PureComponent {
   };
 
   componentWillMount() {
-    const query = (this.props.location && this.props.location.query
-      && this.props.location.query.query) || 'data mining';
+    const { query } = queryString.parse(location.search);
     // if (query) {
     //   this.setState({ query });
     // }

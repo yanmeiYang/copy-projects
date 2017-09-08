@@ -1,40 +1,25 @@
 /**
  *  Created by BoGao on 2017-07-15;
+ *  Refactored by BoGao on 2017-09-07; dva@2.0 react-router-4
  */
-import { registerModel } from '../../utils';
-
 export default {
+  IndexPage2b: {
+    path: '/2b',
+    models: () => [import('models/auth')],
+    component: () => import('routes/2b/2bIndex'),
+  },
 
-  // TobIndex: app => ({
-  //   path: '2b',
-  //   getComponent(nextState, cb) {
-  //     require.ensure([], (require) => {
-  //       // registerModel(app, require('../../models/auth'));
-  //       cb(null, require('./login/'));
-  //     }, 'tob');
-  //   },
-  // }),
+  Login2b: {
+    path: '/2b/login',
+    models: () => [import('models/auth')],
+    component: () => import('routes/2b/login'),
+  },
 
-  Login2b: app => ({
-    path: 'login',
-    getComponent(nextState, cb) {
-      require.ensure([], (require) => {
-        registerModel(app, require('../../models/auth'));
-        cb(null, require('./login'));
-      }, 'tob');
-    },
-  }),
-
-  EmailTemplate: app => ({
-    path: 'email-template',
-    getComponent(nextState, cb) {
-      require.ensure([], (require) => {
-        registerModel(app, require('../../models/2b/2bmodel'));
-        cb(null, require('./emailTemplate'));
-      }, 'tob');
-    },
-  }),
-
+  EmailTemplate: {
+    path: '/2b/email-template',
+    models: () => [import('models/2b/2bmodel')],
+    component: () => import('routes/2b/emailTemplate'),
+  },
 
 };
 

@@ -12,7 +12,6 @@
     "echarts-for-react": "^1.4.4",
     "graphql-tag": "^2.4.2",
     "immutable": "^3.8.1",
-    "lib-qqwry": "^1.0.2",
     "lodash": "^4.17.4",
     "nprogress": "^0.2.0",
     "prop-types": "^15.5.10",

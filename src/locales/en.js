@@ -34,8 +34,8 @@ export default {
   'com.search.sort.label.h_index': 'h-index',
   'com.search.sort.label.activity': 'Activity',
   'com.search.sort.label.rising_star': 'Rising Star',
-  'com.search.sort.label.citation': '#Citation',
-  'com.search.sort.label.num_pubs': '#Paper',
+  'com.search.sort.label.n_citation': '#Citation',
+  'com.search.sort.label.n_pubs': '#Paper',
   'com.search.sort.label.activity-ranking-contrib': 'Contrib',
 
   'com.searchTypeWidget.label.ExpertSearch': 'Experts',

@@ -5,5 +5,6 @@ module.exports = {
   IN_APP_DEFAULT: null,
   EMPTY_BLOCK: '',
   EMPTY_BLOCK_FUNC: () => '',
+  EMPTY_BLOCK_FUNC_LIST: [],
 };
 

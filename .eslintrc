@@ -30,7 +30,10 @@
     "react/jsx-closing-bracket-location":[0],
     "react/jsx-indent-props":[0],
     "react/jsx-first-prop-new-line":[0],
+    "react/require-default-props":[0],
     "jsx-a11y/href-no-hash":[0],
+    "spaced-comment":[0],
+    "object-property-newline":[0],
     "indent": [0]
   },
   "parserOptions": {

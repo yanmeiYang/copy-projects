@@ -1,4 +1,4 @@
-import PersonRightButton from './person-right-button';
+import AddToEBButton from './AddToEBButton';
 import PersonRemoveButton from './person-remove-button';
 
-module.exports = { PersonRightButton, PersonRemoveButton };
+module.exports = { AddToEBButton, PersonRemoveButton };

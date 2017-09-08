@@ -1,9 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Icon, Modal } from 'antd';
-import { Link, routerRedux } from 'dva/router';
-import { FormattedMessage as FM } from 'react-intl';
-// import { FormattedDate as FD } from 'react-intl';
+import { routerRedux } from 'dva/router';
+import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import styles from './ExpertList.less';
 
 class ExpertList extends React.PureComponent {

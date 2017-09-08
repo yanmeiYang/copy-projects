@@ -1,12 +1,14 @@
+/* eslint-disable react/require-default-props */
 import React from 'react';
 import { connect } from 'dva';
 import { Helmet } from 'react-helmet';
+import PropTypes from 'prop-types'
 import NProgress from 'nprogress';
-import { routerRedux } from 'dva/router';
-import { Layout } from '../components';
-import { sysconfig } from '../systems';
-import { classnames, config, getMenusByUser } from '../utils';
-import '../themes/index.less';
+import { routerRedux, withRouter } from 'dva/router';
+import { Layout } from 'components';
+import { sysconfig } from 'systems';
+import { classnames, config, getMenusByUser } from 'utils';
+import 'themes/index.less';
 import './app.less';
 
 const { prefix } = config;
@@ -169,5 +171,12 @@ const App = ({ children, location, dispatch, app, loading }) => {
   );
 };
 
+App.propTypes = {
+  children: PropTypes.element.isRequired,
+  location: PropTypes.object,
+  dispatch: PropTypes.func,
+  app: PropTypes.object,
+  loading: PropTypes.object,
+};
 
-export default connect(({ app, loading }) => ({ app, loading }))(App);
+export default withRouter(connect(({ app, loading }) => ({ app, loading }))(App));

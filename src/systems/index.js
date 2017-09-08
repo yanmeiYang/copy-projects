@@ -6,18 +6,6 @@ import React from 'react';
 import { addLocaleData } from 'react-intl';
 import { loadSavedLocale } from '../utils/locale';
 
-import * as alibabaConfig from './alibaba/config';
-import * as ccfConfig from './ccf/config';
-import * as ccftestConfig from './ccftest/config';
-import * as huaweiConfig from './huawei/config';
-import * as tencentConfig from './tencent/config';
-import * as cipscConfig from './cipsc/config';
-import * as cieConfig from './cie/config';
-import * as demoConfig from './demo/config';
-import * as cietestConfig from './cietest/config';
-import * as medrobConfig from './medrob/config';
-import * as boleConfig from './bole/config';
-
 import { System, Source } from '../utils/system';
 import Footer from '../components/Footers/default';
 import ViewExpertInfo from '../components/person/view-expert-info';
@@ -25,23 +13,23 @@ import defaults from './utils';
 
 // All available systems.
 const CurrentSystemConfig = {
-  ccf: ccfConfig, // <-- current config files.
-  ccftest: ccftestConfig,
-  huawei: huaweiConfig,
-  alibaba: alibabaConfig,
-  tencent: tencentConfig,
-  cie: cieConfig,
-  cipsc: cipscConfig,
-  demo: demoConfig,
-  cietest: cietestConfig,
-  medrob: medrobConfig,
-  bole: boleConfig,
+  ccf: require('./ccf/config'),
+  ccftest: require('./ccftest/config'),
+  huawei: require('./huawei/config'),
+  alibaba: require('./alibaba/config'),
+  tencent: require('./tencent/config'),
+  cie: require('./cie/config'),
+  cipsc: require('./cipsc/config'),
+  demo: require('./demo/config'),
+  cietest: require('./cietest/config'),
+  bole: require('./bole/config'),
 };
 
 // 默认配置
 const defaultSystemConfigs = {
   SYSTEM: System,
   SOURCE: Source,
+
   //
   // Systems Preference
   //
@@ -49,7 +37,7 @@ const defaultSystemConfigs = {
   EnableLocalLocale: false,
   // Language: 'en', // options [cn|en] // TODO change to locale.
   // PreferredLanguage: 'en', // 默认语言 // TODO delete this.
-
+  GLOBAL_ENABLE_HOC: false,
   MainListSize: 20,
 
   /**
@@ -105,10 +93,9 @@ const defaultSystemConfigs = {
   PersonList_RightZone: [
     person => <ViewExpertInfo person={person} key="1" />,
   ],
-  Person_PersonRightButton: defaults.EMPTY_BLOCK_FUNC,
+  Person_AddToEBButton: defaults.EMPTY_BLOCK_FUNC,
   Person_PersonRemoveButton: defaults.EMPTY_BLOCK_FUNC,
-
-  // > Search
+  // > Search`
   // expert base
   SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
   ExpertBases: [], // must override.

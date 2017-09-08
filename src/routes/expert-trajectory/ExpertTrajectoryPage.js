@@ -5,6 +5,7 @@ import React from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
 import { routerRedux } from 'dva/router';
+import queryString from 'query-string';
 // import { Slider, Switch, InputNumber, Row, Col, Icon, Button } from 'antd';
 import echarts from 'echarts/lib/echarts'; // 必须
 import 'echarts/lib/component/tooltip';
@@ -41,9 +42,7 @@ class ExpertTrajectoryPage extends React.Component {
   };
 
   componentWillMount(nextProps) {
-    const query = (this.props.location && this.props.location.query
-      && this.props.location.query.query) || 'data mining';
-    const { type } = this.props.location.query;
+    const { query, type } = queryString.parse(location.search);
     if (query) {
       this.setState({ query });
     }
@@ -89,7 +88,10 @@ class ExpertTrajectoryPage extends React.Component {
     if (data.query) {
       this.setState({ query: data.query });
       // TODO change this, 涓嶈兘鐢?
-      this.props.dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: data.query } });
+      this.props.dispatch({
+        type: 'app/setQueryInHeaderIfExist',
+        payload: { query: data.query }
+      });
       this.props.dispatch(routerRedux.push({
         pathname: '/expert-trajectory',
         query: { query: data.query },
@@ -111,12 +113,12 @@ class ExpertTrajectoryPage extends React.Component {
     return (
       <div className={classnames('content-inner', styles.page)}>
 
-        <Layout >
-          <Sider className={styles.left} width={250} >
+        <Layout>
+          <Sider className={styles.left} width={250}>
             <PersonListLittle persons={persons} onClick={this.onPersonClick} />
           </Sider>
 
-          <Layout className={styles.right} >
+          <Layout className={styles.right}>
             <Content className={styles.content}>
               <ExpertTrajectory />
             </Content>

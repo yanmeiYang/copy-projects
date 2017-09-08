@@ -3,6 +3,7 @@ import { routerRedux, Link } from 'dva/router';
 import { connect } from 'dva';
 import { isEqual } from 'lodash';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
+import queryString from 'query-string';
 import classnames from 'classnames';
 import { Tabs, Pagination } from 'antd';
 import styles from './uni-search.less';
@@ -49,12 +50,13 @@ export default class UniSearch extends React.PureComponent {
   };
 
   componentWillMount() {
-    this.query = this.props.location.query;
-    this.state.currentTab = this.query.view ? `${this.query.view}` : 'list-view';
+    const { location, dispatch } = this.props;
+    const { view } = queryString.parse(location.search);
+    this.state.currentTab = view || 'list-view';
     const { query } = this.props.search;
 
     if (sysconfig.SearchBarInHeader) {
-      this.dispatch({
+      dispatch({
         type: 'app/layout',
         payload: {
           headerSearchBox: { query, onSearch: this.onSearchBarSearch },
@@ -241,7 +243,6 @@ export default class UniSearch extends React.PureComponent {
           <div>
             <PersonList persons={results} personLabel={sysconfig.Person_PersonLabelBlock}
                         rightZoneFuncs={sysconfig.PersonList_RightZone} />
-                        {/*personRightButton={sysconfig.Person_PersonRightButton} />*/}
             <div className={styles.paginationWrap}>
               <Pagination
                 showQuickJumper

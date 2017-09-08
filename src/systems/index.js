@@ -89,7 +89,8 @@ const defaultSystemConfigs = {
   PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
   PersonList_PersonLink_NewTab: true,
   Person_PersonLabelBlock: defaults.EMPTY_BLOCK_FUNC, // profile => 'jsx',
-  PersonList_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST, // [()=><COMP>]
+  PersonList_RightZone: defaults.IN_APP_DEFAULT, // [()=><COMP>]
+  Search_CheckEB: true,
 
   // > Search
   // expert base
@@ -109,6 +110,7 @@ const defaultSystemConfigs = {
     'Data Mining', 'Machine Learning', 'Data Modeling', 'Computer vision',
     'Networks', 'Natural language processing'],
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
+
   // 地图中心点
   CentralPosition: { lat: 37.09024, lng: -95.712891 },
 

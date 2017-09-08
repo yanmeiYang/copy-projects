@@ -64,12 +64,12 @@ export default {
       ;
     },
     * invokeRoster({ payload }, { call, put }) {
-      const { data } = yield call(expertBase.rosterManage, { payload });
+      const { data } = yield call(expertBaseService.rosterManage, { payload });
       yield put({ type: 'invokeRosterSuccess', payload: { data } });
     },
     * removeExpertItem({ payload }, { call, put }) {
       const { pid, rid } = payload;
-      const { data } = yield call(expertBase.removeByPid, { pid, rid });
+      const { data } = yield call(expertBaseService.removeByPid, { pid, rid });
       if (data.status) {
         yield put({ type: 'removeSuccess', payload });
       }

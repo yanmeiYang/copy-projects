@@ -34,6 +34,7 @@ const dims = {
 
 const { Content, Sider } = Layout;
 let startYear;
+let locationName;
 let endYear;
 let option2 = {};
 let author = {};
@@ -97,6 +98,7 @@ class ExpertHeatmap extends React.Component {
   };
 
   componentWillMount() {
+    console.log("---------")
     const theme = (queryURL('theme'));
     if (theme) {
       this.setState({ theme });
@@ -108,6 +110,8 @@ class ExpertHeatmap extends React.Component {
     this.seriesNo = false;
     this.type = '';
     this.personList = '';
+    this.from = '';
+    this.to = '';
     this.ifLarge = false;
     this.ifButton = false;
     this.myChart2 = echarts.init(document.getElementById('heatmap'));
@@ -128,6 +132,7 @@ class ExpertHeatmap extends React.Component {
         table = heatData.table;
         authors = heatData.authors;
         authorImage = heatData.authorImage;
+        locationName = heatData.locationName;
 
         this.playon = this.state.startYear;
         this.setHeatmap(); // 热力图
@@ -618,6 +623,8 @@ class ExpertHeatmap extends React.Component {
               this.myChart2.setOption(option2, true);
             } else if (params.componentSubType === 'lines') {
               this.personList = _.intersection(author[params.name[0]], author2[params.name[1]]);
+              this.from = params.name[0];
+              this.to = params.name[1];
               // console.log('yoyoyoyoyo');
               option2.series.push({
                 type: 'lines',
@@ -750,6 +757,8 @@ class ExpertHeatmap extends React.Component {
             // console.log('begin', option2.series);
           } else if (params.componentSubType === 'lines') {
             this.personList = _.intersection(author[params.name[0]], author2[params.name[1]]);
+            this.from = params.name[0];
+            this.to = params.name[1];
             option2.series.push({
               type: 'lines',
               // zlevel: 2,
@@ -1111,10 +1120,8 @@ class ExpertHeatmap extends React.Component {
         tooltip: {
           confine: true,
           formatter: (params) => {
-            return `<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">${
-              params.seriesName
-              }</div>${
-              params.name}：${params.value[2]}<br>`;
+            return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
+              locationName[parseInt(params.name)-1].toLowerCase()}<br>`;
           },
         },
         data: convertData(data1.sort((a, b) => {
@@ -1198,10 +1205,8 @@ class ExpertHeatmap extends React.Component {
         tooltip: {
           confine: true,
           formatter: (params) => {
-            return `<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">${
-              params.seriesName
-              }</div>${
-              params.name}：${params.value[2]}<br>`;
+            return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
+              locationName[parseInt(params.name)-1].toLowerCase()}<br>`;
           },
         },
         blendMode: themes[this.state.theme].pointBlendMode,
@@ -1243,10 +1248,8 @@ class ExpertHeatmap extends React.Component {
         tooltip: {
           confine: true,
           formatter: (params) => {
-            return `<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">${
-              params.seriesName
-              }</div>${
-              params.name}：${params.value[2]}<br>`;
+            return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
+              locationName[parseInt(params.name)-1].toLowerCase()}<br>`;
           },
         },
         blendMode: themes[this.state.theme].pointBlendMode,
@@ -1320,9 +1323,15 @@ class ExpertHeatmap extends React.Component {
         },
         tooltip: {
           confine: true,
+
           formatter: (params) => {
-            return `Number of people: ${(_.intersection(author[params.name[0]], author2[params.name[1]])).length}`;
+            return `<div style="font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">Number of People: ${
+              (_.intersection(author[params.name[0]], author2[params.name[1]])).length}<br/>From: ${
+              locationName[params.name[0]-1].toLowerCase()}<br/>To: ${locationName[params.name[1]-1].toLowerCase()}<br>`;
           },
+          // formatter: (params) => {
+          //   return `Number of people: ${(_.intersection(author[params.name[0]], author2[params.name[1]])).length}`;
+          // },
         },
         data: formtGCData(),
         // data: [
@@ -1494,7 +1503,12 @@ class ExpertHeatmap extends React.Component {
 
   onMapClick = () => {
     if (this.props.onPageClick) {
-      this.props.onPageClick(this.personList, this.type);
+      // this.props.onPageClick(this.personList, this.type);
+      if(this.from){
+        this.props.onPageClick(this.personList, locationName[this.from-1].toLowerCase(), locationName[this.to-1].toLowerCase(), this.type);
+      } else {
+        this.props.onPageClick(this.personList, this.type);
+      }
     }
   }
 

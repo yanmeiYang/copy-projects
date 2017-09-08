@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
+import * as d3 from 'd3';
 import styles from './KnoledgeGraphWidget.less';
-import * as d3 from '../../../public/d3/d3.min';
 
 class KnoledgeGraphWidget extends React.Component {
 // function KnoledgeGraphWidget() {

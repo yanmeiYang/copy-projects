@@ -13,7 +13,9 @@ function checkStatus(response) {
 
   // TODO move out, don't process auth here.
   if (response.status === 401) {
-    auth.removeLocalAuth();
+    // console.log('xxxxxxxxxx', response);
+    // throw error;
+    // auth.removeLocalAuth();
     // location.href = '/';
   }
 
@@ -26,11 +28,11 @@ function checkStatus(response) {
 
   const error = new Error(response.statusText);
   error.response = response;
-  try {
-    throw error;
-  } catch (e) {
-    console.error('---- Catch Error: ---- ', e);
-  }
+  // try {
+  //   throw error;
+  // } catch (e) {
+  //   console.error('---- Catch Error: ---- ', e);
+  // }
 }
 
 /**
@@ -62,7 +64,10 @@ export default async function request(url, options) {
   }
 
   const headers = new Headers();
-  if (options && (options.data || options.body)) {
+  if (options && options.specialContentType) {
+    headers.append('Accept', 'application/json');
+    // headers.append('Content-Type', 'text/plain');
+  } else if (options && (options.data || options.body)) {
     // Fix a bug
     if (options.method && options.method !== 'FETCH') {
       headers.append('Accept', 'application/json');

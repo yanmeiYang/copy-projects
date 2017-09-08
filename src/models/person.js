@@ -49,10 +49,10 @@ export default {
       const data = yield call(personService.getPerson, personId);
       yield put({ type: 'getPersonSuccess', payload: { data } });
     },
-    *getActivityAvgScoresByPersonId({ payload }, { call, put }){
+    *getActivityAvgScoresByPersonId({ payload }, { call, put }) {
       const { id } = payload;
       const { data } = yield call(personService.getActivityAvgScoresByPersonId, id);
-      yield put({ type: 'getActivityAvgScoresByPersonIdSuccess', payload: { data } })
+      yield put({ type: 'getActivityAvgScoresByPersonIdSuccess', payload: { data } });
     },
   },
 
@@ -69,9 +69,9 @@ export default {
       return { ...state, profile: data.data };
     },
 
-    getActivityAvgScoresByPersonIdSuccess(state, { payload: { data } }){
-      return { ...state, avgScores: data.indices }
-    }
+    getActivityAvgScoresByPersonIdSuccess(state, { payload: { data } }) {
+      return { ...state, avgScores: data.indices };
+    },
   },
 
 };

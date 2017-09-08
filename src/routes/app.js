@@ -1,12 +1,14 @@
+/* eslint-disable react/require-default-props */
 import React from 'react';
 import { connect } from 'dva';
 import { Helmet } from 'react-helmet';
+import PropTypes from 'prop-types'
 import NProgress from 'nprogress';
-import { routerRedux } from 'dva/router';
-import { Layout } from '../components';
-import { sysconfig } from '../systems';
-import { classnames, config, getMenusByUser } from '../utils';
-import '../themes/index.less';
+import { routerRedux, withRouter } from 'dva/router';
+import { Layout } from 'components';
+import { sysconfig } from 'systems';
+import { classnames, config, getMenusByUser } from 'utils';
+import 'themes/index.less';
 import './app.less';
 
 const { prefix } = config;
@@ -115,12 +117,12 @@ const App = ({ children, location, dispatch, app, loading }) => {
         }
 
         {/*
-        {href.indexOf('/KnowledgeGraphPage') > 0 &&
-        <script src="http://code.jquery.com/jquery-1.10.2.min.js" />}
+         {href.indexOf('/KnowledgeGraphPage') > 0 &&
+         <script src="http://code.jquery.com/jquery-1.10.2.min.js" />}
 
-        {href.indexOf('/KnowledgeGraphPage') > 0 &&
-        <script src="http://d3js.org/d3.v3.min.js" />}
-        */}
+         {href.indexOf('/KnowledgeGraphPage') > 0 &&
+         <script src="http://d3js.org/d3.v3.min.js" />}
+         */}
 
         {(href.indexOf('/expert-map') > 0) && // || href.indexOf('/uniSearch') > 0
         <script type="text/javascript"
@@ -140,7 +142,7 @@ const App = ({ children, location, dispatch, app, loading }) => {
 
         {href.indexOf('/expert-heatmap') > 0 &&
         <script
-          src="https://cdnjs.cloudflare.com/ajax/libs/echarts/3.7.1/echarts.js"/>}
+          src="https://cdnjs.cloudflare.com/ajax/libs/echarts/3.7.1/echarts.js" />}
 
       </Helmet>
 
@@ -151,7 +153,8 @@ const App = ({ children, location, dispatch, app, loading }) => {
             <Sider {...siderProps} />
           </aside> : ''
         }
-        <div className={styles.main} style={{ marginLeft: mainMarginLeft }}>
+        <div
+          className={classnames(styles.main, sysconfig.ShowSideMenu && styles.main_margin_188)}>
           <div className={styles.container}>
             <div className={styles.content}>
               {/* <Bread {...breadProps} location={location} /> */}
@@ -168,5 +171,12 @@ const App = ({ children, location, dispatch, app, loading }) => {
   );
 };
 
+App.propTypes = {
+  children: PropTypes.element.isRequired,
+  location: PropTypes.object,
+  dispatch: PropTypes.func,
+  app: PropTypes.object,
+  loading: PropTypes.object,
+};
 
-export default connect(({ app, loading }) => ({ app, loading }))(App);
+export default withRouter(connect(({ app, loading }) => ({ app, loading }))(App));

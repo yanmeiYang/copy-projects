@@ -47,6 +47,13 @@ const NaviConfig = {
     data: 'query',
     pageSignature: 'expert-trajectory',
   },
+  ExpertBase: { // bole 专有
+    key: 'ExpertBase',
+    label: '我的专家库',
+    url: '/eb/59a8e5879ed5db1fc4b762ad',
+    data: 'query',
+    pageSignature: '/eb/59a8e5879ed5db1fc4b762ad',
+  },
 };
 
 const defaultNavis = ['ExpertSearch', 'ExpertMap', 'Relation', 'KnowledgeGraph', 'TrendPrediction'];

@@ -4,6 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
+import queryString from 'query-string';
 import { Icon } from 'antd';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { gql, graphql } from 'react-apollo';
@@ -72,8 +73,7 @@ export default class ProjectTaskPage extends React.Component {
   };
 
   componentWillMount() {
-    const query = (this.props.location && this.props.location.query
-      && this.props.location.query.query);
+    const { query } = queryString.parse(location.search);
     if (query) {
       // this.props.dispatch({ type: 'app/setQuery', query });
       this.setState({ query });

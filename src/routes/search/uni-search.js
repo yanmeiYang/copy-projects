@@ -3,6 +3,7 @@ import { routerRedux, Link } from 'dva/router';
 import { connect } from 'dva';
 import { isEqual } from 'lodash';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
+import queryString from 'query-string';
 import classnames from 'classnames';
 import { Tabs, Pagination } from 'antd';
 import styles from './uni-search.less';
@@ -49,12 +50,13 @@ export default class UniSearch extends React.PureComponent {
   };
 
   componentWillMount() {
-    this.query = this.props.location.query;
-    this.state.currentTab = this.query.view ? `${this.query.view}` : 'list-view';
+    const { location, dispatch } = this.props;
+    const { view } = queryString.parse(location.search);
+    this.state.currentTab = view || 'list-view';
     const { query } = this.props.search;
 
     if (sysconfig.SearchBarInHeader) {
-      this.dispatch({
+      dispatch({
         type: 'app/layout',
         payload: {
           headerSearchBox: { query, onSearch: this.onSearchBarSearch },
@@ -197,13 +199,15 @@ export default class UniSearch extends React.PureComponent {
     const { pageSize, total, current } = pagination;
     const load = this.props.loading.effects['search/searchPerson'];
     const operations = (
-      <ExportPersonBtn
-        query={query} pageSize={pageSize} current={current}
-        filters={filters} sort={this.state.sortType} />
-    );
+        <ExportPersonBtn
+          query={query} pageSize={pageSize} current={current}
+          filters={filters} sort={this.state.sortType} />
+      )
+    ;
 
     // Deprecated search result tab.
 
+    const exportArea = sysconfig.Enable_Export ? operations : '';
     // const exportArea = sysconfig.Enable_Export ? <ExportPersonBtn /> : '';
     // const wantedTabs = sysconfig.UniSearch_Tabs;
     // const avaliableTabs = {
@@ -219,7 +223,7 @@ export default class UniSearch extends React.PureComponent {
           onChange={this.onOrderChange}
           size="small"
           className={styles.maxWidth}
-          tabBarExtraContent={operations}
+          tabBarExtraContent={exportArea}
         >
           {this.searchSorts.map((sortItem) => {
             const icon = sortItem === this.state.sortType ?
@@ -237,7 +241,8 @@ export default class UniSearch extends React.PureComponent {
         <Spinner loading={load} />
         <div className={styles.personAndKg}>
           <div>
-            <PersonList persons={results} personLabel={sysconfig.Person_PersonLabelBlock} />
+            <PersonList persons={results} personLabel={sysconfig.Person_PersonLabelBlock}
+                        rightZoneFuncs={sysconfig.PersonList_RightZone} />
             <div className={styles.paginationWrap}>
               <Pagination
                 showQuickJumper
@@ -252,7 +257,6 @@ export default class UniSearch extends React.PureComponent {
           {topic.label && <SearchKnowledge topic={topic} />}
         </div>
       </div>
-
     );
 
     /*
@@ -347,7 +351,7 @@ export default class UniSearch extends React.PureComponent {
          const tabJsx = (<p>
          <i className={`fa ${tab.icon} fa-fw`} aria-hidden="true" />
          {tab.label}
-         </p>);
+         </p>);F
          return tab ? (<TabPane tab={tabJsx} key={`${tab.key}-view`} />) : '';
          })}
          </Tabs>

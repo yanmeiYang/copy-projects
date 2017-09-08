@@ -188,6 +188,14 @@ module.exports = {
     addExpertInfoApi: '/2b/profile/:src',
     updateItemById: '/2b/profile/:src/:id',
     searchItemByName: '/2b/profile/:src/offset/:offset/size/:size',
+
+    getExpertBase: '/roster/list/:type/offset/:offset/size/:size',
+    addExpertBaseApi: '/roster',
+    addExpertDetailApi: '/roster/:ebid/a',
+    deleteExpertBaseApi: '/roster/:rid',
+    getExpertDetailList: '/roster/:ebid/order-by/h_index/offset/:offset/size/:size',
+    // searchExpertByName: '/2b/profile/:src/offset/:offset/size/:size',
+    searchExpertByName: '/search/roster/:ebid/experts/advanced',
   },
 };
 

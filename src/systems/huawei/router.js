@@ -1,13 +1,14 @@
-import React from 'react';
-import { Router } from 'dva/router';
-import { registerModel } from '../../utils';
-import { fullRouter } from '../full-router';
+import App from 'routes/app';
+import { RouterRegistry, RouterRegistry2b, RouterJSXFunc } from '../router-registry';
 
-const Routers = function ({ history, app }) {
-  const routes = fullRouter(app, [
-    // System specified routes config.
-  ]);
-  return <Router history={history} routes={routes} />;
+const routes = [
+  ...RouterRegistry2b,
+  ...RouterRegistry,
+  // Add you own route registry.
+];
+
+const Routers = ({ history, app }) => {
+  return RouterJSXFunc(history, app, routes, App);
 };
 
 export default Routers;

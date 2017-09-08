@@ -1,7 +1,8 @@
 @import "../../themes/vars.less";
 
 .footer_aminer {
-  display: flex;
+  display: none;
+  //display: flex;
   justify-content: space-between;
   height: 46px; margin-bottom: 2px;
   background: #111;
@@ -22,7 +23,8 @@
 }
 
 .footer_main {
-  display: flex;
+  display: none;
+  //display: flex;
   justify-content: space-around;
   min-height: 120px;
   background: rgba(0, 0, 0, 0.9);
@@ -71,3 +73,6 @@
   margin-right: 10px;
 }
 
+@media (min-width: 568px) {
+  .footer_aminer, .footer_main { display: flex; }
+}

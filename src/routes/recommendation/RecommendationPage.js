@@ -4,6 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
+import queryString from 'query-string';
 import { FormattedMessage as FM } from 'react-intl';
 import { gql, graphql } from 'react-apollo';
 import { sysconfig } from '../../systems';
@@ -41,8 +42,7 @@ export default class RecommendationPage extends React.Component {
   };
 
   componentWillMount() {
-    const query = (this.props.location && this.props.location.query
-      && this.props.location.query.query);
+    const { query } = queryString.parse(location.search);
     if (query) {
       // this.props.dispatch({ type: 'app/setQuery', query });
       this.setState({ query });

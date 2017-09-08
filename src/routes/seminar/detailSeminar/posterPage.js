@@ -43,15 +43,12 @@ class PosterPage extends React.Component {
                               </Link>
                               <span>{aTalk.speaker.position}</span>
                             </div>
-                            <div className={styles.expert_poster_info}>
+                            {aTalk.title && <div className={styles.expert_poster_info}>
                               <strong>报告主题: </strong>
-                              {aTalk.title &&
                               <span>{aTalk.title}</span>
-                              }
-                            </div>
-                            <div className={styles.expert_poster_info}>
+                            </div>}
+                            {startTime !== '' && <div className={styles.expert_poster_info}>
                               <strong>报告时间: </strong>
-                              {startTime !== '' &&
                               <span>
                                 {this.props.pad(startTime.getHours(), 2)}:
                                 {this.props.pad(startTime.getMinutes(), 2)}
@@ -60,8 +57,8 @@ class PosterPage extends React.Component {
                                   {this.props.pad(endTime.getHours(), 2)}:
                                   {this.props.pad(endTime.getMinutes(), 2)}
                                 </span>}
-                              </span>}
-                            </div>
+                              </span>
+                            </div>}
                             <div className={styles.expert_poster_info}>
                               <strong>主题简介: </strong>
                               <p style={{ display: 'inline' }}>{aTalk.abstract}</p>

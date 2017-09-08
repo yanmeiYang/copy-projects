@@ -88,6 +88,9 @@ const fullRouter = (app, defaultChildRoutes) => {
       core.Addition(app),
       // Your pages should be registered here.
 
+      // Tools
+      core.DataCleaningClustering(app),
+
       ...childRoutes,
 
       // System Default.

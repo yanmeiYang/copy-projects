@@ -51,6 +51,9 @@ export default {
   // bole add button
   'com.bole.AddButton': 'Add',
   'com.bole.AddedSuccessfully': 'Added Successfully',
+  // bole remove button
+  'com.bole.PersonRemoveButton': 'Remove',
+
 
   'com.PersonList.label.views': 'views',
   'com.PersonList.label.homepage': 'Homepage',

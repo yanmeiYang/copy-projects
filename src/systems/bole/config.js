@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import defaults from '../utils';
-import { PersonRightButton } from './components';
+import { PersonRightButton, PersonRemoveButton } from './components';
 import ViewExpertInfo from '../../components/person/view-expert-info';
 import { createRoster } from '../../hooks';
 
@@ -53,9 +53,9 @@ module.exports = {
 
   IndexPage_QuickSearchList: ['Medical Robotics', 'Surgical Robots', 'Robot Kinematics',
     'Computer Assisted Surgery', 'Surgical Navigation', 'Minimally Invasive Surgery'],
-  Person_PersonRightButton: person => <PersonRightButton person={person}
-                                                         ExpertBase="59a8e5879ed5db1fc4b762ad" />,
-  PersonList_RightZone: [
+  Person_PersonRemoveButton: person => <PersonRemoveButton person={person} ExpertBase="59a8e5879ed5db1fc4b762ad" />,
+  //   Person_PersonRightButton: person => <PersonRightButton person={person} ExpertBase="59a8e5879ed5db1fc4b762ad" />,
+   PersonList_RightZone: [
     // person => <ViewExpertInfo person={person} key="1" />,
     person => <PersonRightButton person={person} key="2" ExpertBase="59a8e5879ed5db1fc4b762ad" />,
   ],

@@ -29,7 +29,8 @@ class ExpertCard extends React.PureComponent {
     const orgs = this.props.orgs;
     return (
       <div className={styles.content}>
-        <PersonList persons={orgs} personLabel={sysconfig.Person_PersonLabelBlock}/>
+        <PersonList persons={orgs} personLabel={sysconfig.Person_PersonLabelBlock}
+                    personRemove={sysconfig.Person_PersonRemoveButton} />
       </div>
 
     );

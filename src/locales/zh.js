@@ -56,6 +56,8 @@ export default {
   // bole add button
   'com.bole.AddButton': '添加',
   'com.bole.com.bole.AddedSuccessfully': '添加成功',
+  // bole remove button
+  'com.bole.PersonRemoveButton': '移除',
 
 
   // Recommendation

@@ -197,6 +197,7 @@ module.exports = {
     // searchExpertByName: '/2b/profile/:src/offset/:offset/size/:size',
     searchExpertByName: '/search/roster/:ebid/experts/advanced',
     invokeRoster: '/roster/:id/members/u',
+    removeByPidApi: '/roster/:rid/d/:pid',
   },
 };
 

@@ -197,10 +197,10 @@ export default class UniSearch extends React.PureComponent {
     const { pageSize, total, current } = pagination;
     const load = this.props.loading.effects['search/searchPerson'];
     const operations = (
-      <ExportPersonBtn
-        query={query} pageSize={pageSize} current={current}
-        filters={filters} sort={this.state.sortType}/>
-  )
+        <ExportPersonBtn
+          query={query} pageSize={pageSize} current={current}
+          filters={filters} sort={this.state.sortType} />
+      )
     ;
 
     // Deprecated search result tab.
@@ -225,18 +225,18 @@ export default class UniSearch extends React.PureComponent {
         >
           {this.searchSorts.map((sortItem) => {
             const icon = sortItem === this.state.sortType ?
-              <i className="fa fa-sort-amount-desc"/> : '';
+              <i className="fa fa-sort-amount-desc" /> : '';
             const tab = (
               <span>
                 <FM id={`com.search.sort.label.${sortItem}`}
-                    defaultMessage={sortItem}/> {icon}
+                    defaultMessage={sortItem} /> {icon}
               </span>
             );
-            return <TabPane tab={tab} key={sortItem}/>;
+            return <TabPane tab={tab} key={sortItem} />;
           })}
         </Tabs>
 
-        <Spinner loading={load}/>
+        <Spinner loading={load} />
         <div className={styles.personAndKg}>
           <div>
             <PersonList persons={results} personLabel={sysconfig.Person_PersonLabelBlock}
@@ -253,7 +253,7 @@ export default class UniSearch extends React.PureComponent {
               />
             </div>
           </div>
-          {topic.label && <SearchKnowledge topic={topic}/>}
+          {topic.label && <SearchKnowledge topic={topic} />}
         </div>
       </div>
     );

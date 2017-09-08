@@ -44,7 +44,6 @@ class ExpertDetailList extends React.Component {
 
   render() {
     const { detailResults } = this.props.expertBase;
-    const dataId = this.props.routeParams.id;
     const value = '';
     const { flag } = this.state;
     const load = this.props.loading.effects['expertBase/getExpertDetailList'];
@@ -55,7 +54,7 @@ class ExpertDetailList extends React.Component {
         <div className={styles.orgArea}>
           <Spinner loading={load} nomask/>
           {detailResults.result && detailResults.result.length > 0 ?
-            <ExpertCard orgs={detailResults.result}/> :
+            <ExpertCard orgs={detailResults.result} /> :
             <div>
               {flag && <div className={styles.noResult}> 没有搜索到该专家 </div>}</div>
           }

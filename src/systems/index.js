@@ -106,6 +106,8 @@ const defaultSystemConfigs = {
     person => <ViewExpertInfo person={person} key="1" />,
   ],
   Person_PersonRightButton: defaults.EMPTY_BLOCK_FUNC,
+  Person_PersonRemoveButton: defaults.EMPTY_BLOCK_FUNC,
+
   // > Search
   // expert base
   SHOW_ExpertBase: true, // 是否需要有按智库的Filter。

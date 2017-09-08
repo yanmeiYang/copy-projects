@@ -21,12 +21,6 @@ export default {
             payload: { offset: 0, size: 20 },
           });
         }
-        // if (location.pathname === '/expert-base-list') {
-        //   dispatch({
-        //     type: 'expertBase/getExpertDetailList',
-        //     payload: { key, offset: 0, size: 20 },
-        //   });
-        // }
       });
     },
   },
@@ -59,7 +53,6 @@ export default {
     },
     * addExpertDetail({ payload }, { call, put }) {
       const { data } = yield call(expertBase.addExpertDetailInfo, { payload });
-      console.log('znemehuishi', payload);
       yield put({ type: 'addExpertDetailSuccess', payload: { data } });
     },
     * searchExpertItem({ payload }, { call, put }) {
@@ -73,6 +66,13 @@ export default {
       const { data } = yield call(expertBase.rosterManage, { payload });
       yield put({ type: 'invokeRosterSuccess', payload: { data } });
     },
+    * removeExpertItem({ payload }, { call, put }) {
+      const { pid, rid } = payload;
+      const { data } = yield call(expertBase.removeByPid, { pid, rid });
+      if (data.status) {
+        yield put({ type: 'removeSuccess', payload });
+      }
+    },
   },
   reducers: {
     getExpertSuccess(state, { payload: { data } }) {
@@ -82,7 +82,7 @@ export default {
       return { ...state, detailResults: data, loading: true };
     },
     invokeRosterSuccess(state, { payload: { data } }) {
-      return { ...state};
+      return { ...state };
     },
     addExpertSuccess(state, { payload: { data } }) {
       return { ...state, loading: true };
@@ -93,6 +93,13 @@ export default {
       newState.results.data = data;
       return { ...state, newState };
     },
+    removeSuccess(state, { payload }) {
+      const data = state.detailResults.result.filter(item => item.id !== payload.pid);
+      const newState = { ...state };
+      newState.detailResults.result = data;
+      return newState;
+    },
+
     addExpertDetailSuccess(state, { payload: { data } }) {
       return { ...state, addStatus: data, loading: true };
     },

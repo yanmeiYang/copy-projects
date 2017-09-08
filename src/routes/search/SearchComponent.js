@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PureComponent, PropTypes } from 'react';
 import { routerRedux, Link } from 'dva/router';
 import { connect } from 'dva';
 import { isEqual } from 'lodash';
@@ -6,7 +6,7 @@ import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import queryString from 'query-string';
 import classnames from 'classnames';
 import { Tabs, Pagination } from 'antd';
-import styles from './uni-search.less';
+import styles from './SearchComponent.less';
 import { PersonList } from '../../components/person';
 import { Spinner } from '../../components';
 import { sysconfig } from '../../systems';
@@ -19,20 +19,14 @@ import { Auth } from '../../hoc';
 // TODO Combine search and uniSearch into one.
 const TabPane = Tabs.TabPane;
 
-const defaultSearchSorts = ['relevance', 'h_index',
-  'activity', 'rising_star', 'citation', 'num_pubs'];
+const defaultSorts = ['relevance', 'h_index', 'activity', 'rising_star', 'citation', 'num_pubs'];
 
-/**
- * UniSearch Page
- * http://localhost:8000/search/%83...%BD/0/20?view=relation
- */
 @connect(({ app, search, loading }) => ({ app, search, loading }))
 @Auth
-export default class UniSearch extends React.PureComponent {
+export default class SearchComponent extends Component {
   constructor(props) {
     super(props);
-    this.dispatch = props.dispatch;
-    this.searchSorts = sysconfig.Search_SortOptions || defaultSearchSorts;
+    this.dispatch = props.dispatch;// TODO remove
     // Select default Expert Base.
     const { filters } = props.search;
     if (filters && !filters.eb) {
@@ -45,32 +39,17 @@ export default class UniSearch extends React.PureComponent {
 
   state = {
     sortType: 'relevance',
-    currentTab: 'list-view',
-    view: {},
   };
 
   componentWillMount() {
-    const { location, dispatch } = this.props;
-    const { view } = queryString.parse(location.search);
-    this.state.currentTab = view || 'list-view';
-    const { query } = this.props.search;
-
-    if (sysconfig.SearchBarInHeader) {
-      dispatch({
-        type: 'app/layout',
-        payload: {
-          headerSearchBox: { query, onSearch: this.onSearchBarSearch },
-        },
-      });
-    }
     this.doSearchUseProps(); // Init search.
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.search.query !== this.props.search.query) {
-      console.log('COMPARE:', nextProps.search.query, this.props.search.query);
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.search.query !== this.props.search.query) {
+  //     console.log('COMPARE:', nextProps.search.query, this.props.search.query);
+  //   }
+  // }
 
   // shouldComponentUpdate(nextProps, nextState) {
   // }
@@ -83,21 +62,10 @@ export default class UniSearch extends React.PureComponent {
       || search.offset !== prevSearch.offset
       || !isEqual(search.pagination.pageSize, prevSearch.pagination.pageSize)
     ) {
-      // console.log('>>>>> ', search.query, search.offset, search.pagination);
       this.doSearchUseProps();
       window.scrollTo(0, 0); // go top
     }
   }
-
-  onSearchBarSearch = (data) => {
-    console.log('Enter query is ', data);
-    const newOffset = data.offset || 0;
-    const newSize = data.size || sysconfig.MainListSize;
-    this.dispatch(routerRedux.push({
-      pathname: `/${sysconfig.SearchPagePrefix}/${data.query}/${newOffset}/${newSize}?`, // eb=${filters.eb}TODO
-    }));
-    // this.doSearchUseProps(); // another approach;
-  };
 
   // will reset pager and sort.
   onFilterChange = (key, value, checked, total) => {
@@ -112,14 +80,14 @@ export default class UniSearch extends React.PureComponent {
     this.doSearch(query, 0, sysconfig.MainListSize, filters, '');
   };
 
-  onViewTabChange = (key) => {
-    const { query } = this.props.search;
-    this.setState({ currentTab: key });
-    const pageSize = sysconfig.MainListSize;
-    this.props.dispatch(routerRedux.push({
-      pathname: `/${sysconfig.SearchPagePrefix}/${query}/0/${pageSize}?view=${key}`,
-    }));
-  };
+  // onViewTabChange = (key) => {
+  //   const { query } = this.props.search;
+  //   this.setState({ currentTab: key });
+  //   const pageSize = sysconfig.MainListSize;
+  //   this.props.dispatch(routerRedux.push({
+  //     pathname: `/${sysconfig.SearchPagePrefix}/${query}/0/${pageSize}?view=${key}`,
+  //   }));
+  // };
 
   onOrderChange = (e) => {
     const { filters, query } = this.props.search;
@@ -131,7 +99,6 @@ export default class UniSearch extends React.PureComponent {
     });
   };
 
-  // TODO spiner fade too earlier when navi by url.
   onPageChange = (page) => {
     const { query, pagination } = this.props.search;
     const { pageSize } = pagination;
@@ -195,100 +162,37 @@ export default class UniSearch extends React.PureComponent {
 
 
   render() {
+    const { className } = this.props;
+    const sorts = this.props.sorts || defaultSorts;
+    const { sortType } = this.state;
+
+    // .........
     const { results, pagination, query, aggs, filters, topic } = this.props.search;
     const { pageSize, total, current } = pagination;
     const load = this.props.loading.effects['search/searchPerson'];
     const operations = (
-        <ExportPersonBtn
-          query={query} pageSize={pageSize} current={current}
-          filters={filters} sort={this.state.sortType} />
-      )
-    ;
-
-    // Deprecated search result tab.
-
-    const exportArea = sysconfig.Enable_Export ? operations : '';
-    // const exportArea = sysconfig.Enable_Export ? <ExportPersonBtn /> : '';
-    // const wantedTabs = sysconfig.UniSearch_Tabs;
-    // const avaliableTabs = {
-    //   list: { key: 'list', label: '列表视图', icon: 'fa-list' },
-    //   map: { key: 'map', label: '地图视图', icon: 'fa-map-marker' },
-    //   relation: { key: 'relation', label: '关系视图', icon: 'fa-users' },
-    // };
-
-    this.state.view['list-view'] = (
-      <div>
-        <Tabs
-          defaultActiveKey={this.state.sortType}
-          onChange={this.onOrderChange}
-          size="small"
-          className={styles.maxWidth}
-          tabBarExtraContent={exportArea}
-        >
-          {this.searchSorts.map((sortItem) => {
-            const icon = sortItem === this.state.sortType ?
-              <i className="fa fa-sort-amount-desc" /> : '';
-            const tab = (
-              <span>
-                <FM id={`com.search.sort.label.${sortItem}`}
-                    defaultMessage={sortItem} /> {icon}
-              </span>
-            );
-            return <TabPane tab={tab} key={sortItem} />;
-          })}
-        </Tabs>
-
-        <Spinner loading={load} />
-        <div className={styles.personAndKg}>
-          <div>
-            <PersonList persons={results} personLabel={sysconfig.Person_PersonLabelBlock}
-                        rightZoneFuncs={sysconfig.PersonList_RightZone} />
-            <div className={styles.paginationWrap}>
-              <Pagination
-                showQuickJumper
-                current={current}
-                defaultCurrent={1}
-                defaultPageSize={pageSize}
-                total={total}
-                onChange={this.onPageChange}
-              />
-            </div>
-          </div>
-          {topic.label && <SearchKnowledge topic={topic} />}
-        </div>
-      </div>
+      <ExportPersonBtn
+        query={query} pageSize={pageSize} current={current}
+        filters={filters} sort={this.state.sortType} />
     );
 
-    /*
-     this.state.view['map-view'] = (
-     <div className={styles.mapView}>
-     <ExpertMap query={this.props.search.query} />
-     </div>
-     );
+    // TODO move translate search out.
+    const exportArea = sysconfig.Enable_Export ? operations : '';
 
-     this.state.view['relation-view'] = (
-     <div>
-     <RelationGraph query={this.props.search.query} />
-     </div>
-     );
-     */
-
-    // DEBUGLog && console.log('DEV-ONLY:refresh pagesdf', load);
-    const { headerSearchBox } = this.props.app;
     const { useTranslateSearch, translatedQuery } = this.props.search;
     return (
-      <div className={classnames('content-inner', styles.page)}>
+      <div className={classnames(styles.component, className)}>
 
         <div className={styles.topZone}>
           <div className={styles.searchZone}>
 
             {/* 搜索框 */}
-            {!headerSearchBox &&
+            {!this.props.searchBox &&
             <div className={styles.top}>
               <div className={styles.searchWrap}>
                 <KgSearchBox
                   size="large" style={{ width: 500 }}
-                  query={query} onSearch={this.onSearchBarSearch}
+                  query={query} onSearch={this.props.onSearchBarSearch}
                 />
               </div>
             </div>
@@ -329,40 +233,54 @@ export default class UniSearch extends React.PureComponent {
               onExpertBaseChange={this.onExpertBaseChange}
             />
           </div>
-          {/*{sysconfig.Search_EnableKnowledgeGraphHelper &&*/}
-          {/*<div className={styles.rightZone}>*/}
-          {/*<KnowledgeGraphSearchHelper query={query} />*/}
-          {/*</div>*/}
-          {/*}*/}
 
         </div>
 
-        {/* 这里可是添加TAB */}
-        {/*
-         <div className={styles.viewTab}>
-         <Tabs
-         onChange={this.onViewTabChange}
-         type="card"
-         tabBarExtraContent={exportArea}
-         defaultActiveKey={this.state.currentTab}
-         >
-         {wantedTabs && wantedTabs.map((key) => {
-         const tab = avaliableTabs[key];
-         const tabJsx = (<p>
-         <i className={`fa ${tab.icon} fa-fw`} aria-hidden="true" />
-         {tab.label}
-         </p>);F
-         return tab ? (<TabPane tab={tabJsx} key={`${tab.key}-view`} />) : '';
-         })}
-         </Tabs>
-         </div>
-         */}
-
+        {/* Sort */}
         <div className={styles.view}>
-          {/* <Spinner loading={load} /> */}
-          {this.state.view[this.state.currentTab]}
+          {sorts && sorts.length > 0 &&
+          <Tabs defaultActiveKey={sortType} size="small" className={styles.maxWidth}
+                onChange={this.onOrderChange} tabBarExtraContent={exportArea}>
+            {sorts && sorts.map((sortItem) => {
+              const icon = sortItem === sortType ? <i className="fa fa-sort-amount-desc" /> : '';
+              const tab = (<span><FM id={`com.search.sort.label.${sortItem}`}
+                                     defaultMessage={sortItem} /> {icon}</span>);
+              return <TabPane tab={tab} key={sortItem} />;
+            })}
+          </Tabs>
+          }
+
+          <Spinner loading={load} />
+          <div className={styles.personAndKg}>
+            <div>
+              <PersonList persons={results}
+                          personLabel={sysconfig.Person_PersonLabelBlock}
+                          rightZoneFuncs={sysconfig.PersonList_RightZone}
+              />
+              <div className={styles.paginationWrap}>
+                <Pagination
+                  showQuickJumper
+                  current={current}
+                  defaultCurrent={1}
+                  defaultPageSize={pageSize}
+                  total={total}
+                  onChange={this.onPageChange}
+                />
+              </div>
+            </div>
+            {topic.label && <SearchKnowledge topic={topic} />}
+          </div>
         </div>
+
       </div>
     );
   }
 }
+
+SearchComponent.propTypes = {
+  // className: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  className: PropTypes.string,
+  sorts: PropTypes.array,
+  onSearchBarSearch: PropTypes.func,
+  searchBox: PropTypes.bool, // has search box?
+};

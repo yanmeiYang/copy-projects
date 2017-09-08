@@ -18,7 +18,7 @@ export default {
       import('models/search'),
       import('models/expert-base/expert-base'),
     ],
-    component: () => import('routes/search/uni-search'),
+    component: () => import('routes/search/SearchPage'),
   },
 
   // ExpertSearch: app => ({

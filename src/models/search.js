@@ -1,8 +1,9 @@
+import { sysconfig } from 'systems';
 import pathToRegexp from 'path-to-regexp';
-import * as searchService from '../services/search';
-import * as translateService from '../services/translate';
-import * as topicService from '../services/topic';
-import { sysconfig } from '../systems';
+import queryString from 'query-string';
+import * as searchService from 'services/search';
+import * as translateService from 'services/translate';
+import * as topicService from 'services/topic';
 
 export default {
 
@@ -37,10 +38,14 @@ export default {
 
   subscriptions: {
     setup({ dispatch, history }) {
-      history.listen((location, query) => {
-        // if (location.pathname === '/') {
-        //   dispatch({ type: 'getSeminars', payload: { offset: 0, size: 5 } });
-        // }
+      history.listen((location, search) => {
+        const query = queryString.parse(search);
+        // console.log('----------------------------------------------------');
+        // console.log('query', query);
+        // console.log('location', location);
+        // console.log('', query);
+        // console.log('----------------------------------------------------');
+
         const match = pathToRegexp('/(uni)?search/:query/:offset/:size').exec(location.pathname);
         if (match) {
           const keyword = decodeURIComponent(match[2]);
@@ -51,28 +56,6 @@ export default {
           dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
           // console.log('Success::::sdfsdf ', keyword);
           dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: keyword } });
-
-          // Accept query: eb = expertBaseID.
-          // const filters = {};
-          // if (location.query) {
-          //   if (location.query.eb) {
-          //     sysconfig.ExpertBases.map((expertBase) => {
-          //       if (expertBase.id === location.query.eb) {
-          //         filters.eb = expertBase;
-          //         return false;
-          //       }
-          //       return true;
-          //     });
-          //   }
-          // }
-
-          // dispatch({ type: 'app/setQuery', query: keyword });
-          // dispatch({ type: 'searchPerson', payload: { query: keyword, offset, size, filters } });
-          // dispatch({
-          //   type: 'searchPersonAgg',
-          //   payload: { query: keyword, offset, size, filters },
-          // });
-          // return;
         }
       });
     },
@@ -137,7 +120,7 @@ export default {
       yield put({ type: 'getSeminarsSuccess', payload: { data } });
     },
 
-    * getTopicByMention({ payload }, { call, put }){
+    * getTopicByMention({ payload }, { call, put }) {
       const { mention } = payload;
       const { data } = yield call(topicService.getTopicByMention, mention);
       yield put({ type: 'getTopicByMentionSuccess', payload: { data } });

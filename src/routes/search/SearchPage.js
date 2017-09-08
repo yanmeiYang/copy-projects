@@ -43,7 +43,7 @@ export default class SearchPage extends Component {
         },
       });
     }
-    console.log('nnmn^O^ $ ^O^nMn...... ');
+    // console.log('nnmn^O^ $ ^O^nMn...... ');
   }
 
   componentWillReceiveProps(nextProps) {
@@ -64,13 +64,14 @@ export default class SearchPage extends Component {
   };
 
   render() {
+    // console.log('nnmn^o^ ', this.props.app.headerSearchBox);
     return (
       <div className={classnames('content-inner', styles.page)}>
         <SearchComponent // Example: include all props.
           className={styles.SearchBorder} // additional className
           sorts={sysconfig.Search_SortOptions}
           onSearchBarSearch={this.onSearchBarSearch}
-          searchBox={this.props.app.headerSearchBox ? false : true}
+          showSearchBox={this.props.app.headerSearchBox ? false : true}
         />
       </div>
     );

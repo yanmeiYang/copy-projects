@@ -7,7 +7,7 @@ import classnames from 'classnames';
 import { routerRedux } from 'dva/router';
 import styles from './ExpertHeatmap.less';
 import { wget } from '../../utils/request';
-import '../../../external-docs/echarts/map/js/world';
+// import '../../../external-docs/echarts/map/js/world';
 // import echarts from '../../../external-docs/echarts';
 // import echarts from '../../../external-docs/echarts/lib/echarts';
 // import heatmap from '../../../external-docs/echarts/lib/chart/heatmap';
@@ -17,7 +17,7 @@ import '../../../external-docs/echarts/map/js/world';
 // import scatter from '../../../external-docs/echarts/lib/chart/scatter';
 // import VisualMap from '../../../external-docs/echarts/lib/component/visualMap';
 import { queryURL } from '../../utils';
-// import world from 'echarts/map/js/world';
+import world from 'echarts/map/js/world';
 import echarts from 'echarts/lib/echarts';
 import { Slider, Layout, InputNumber, Row, Col, Icon, Button, message } from 'antd';
 // import expert

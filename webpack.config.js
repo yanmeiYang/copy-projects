@@ -6,7 +6,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = (webpackConfig, env) => {
-  const debug = true;
+  const debug = false;
   const production = env === 'production';
   const buildDllMode = webpackConfig.module ? false : true;
   if (debug) {

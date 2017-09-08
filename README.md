@@ -77,3 +77,21 @@ const { view } = queryString.parse(location.search);
 const { view } = queryString.parse(location.hash);
 
 ```
+
+##### Advanced usages of classes
+```javascript
+import classnames from 'classnames';
+const App = (props) => {
+  const cls = classnames({
+    btn: true,
+    btnLarge: props.type === 'submit',
+    btnSmall: props.type === 'edit',
+  });
+  return <div className={ cls } />;
+}
+```
+
+##### Advanced usages of dva/connect
+```javascript
+TODO 
+```

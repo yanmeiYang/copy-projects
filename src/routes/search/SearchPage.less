@@ -4,6 +4,8 @@
   display: flex; flex-direction: column; min-width: 800px;
 }
 
+.SearchBorder { border: solid 0px red; }
+
 .topZone {
   display: flex; flex-direction: row; justify-content: flex-start;
   max-width: @max-width-page;
@@ -51,17 +53,21 @@
   padding: 30px 50px;
   margin: 20px 0;
 }
-.maxWidth{
+
+.maxWidth {
   max-width: @max-width-page;
 }
+
 .personAndKg {
   max-width: @max-width-page;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap-reverse;
 }
+
 @media (min-width: 767px) {
   .personAndKg {
     flex-wrap: nowrap;
   }
 }
+

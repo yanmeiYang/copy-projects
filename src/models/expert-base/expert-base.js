@@ -52,12 +52,8 @@ export default {
       yield put({ type: 'getExpertDetailSuccess', payload: { data } });
     },
     * addExpertDetail({ payload }, { call, put }) {
-<<<<<<< HEAD:src/models/expert-base/expert.js
-      const { data } = yield call(expertBase.addExpertDetailInfo, { payload });
-=======
       const { data } = yield call(expertBaseService.addExpertDetailInfo, { payload });
       console.log('znemehuishi', payload);
->>>>>>> 7a90b026937ec62f6779f18122db138373a02266:src/models/expert-base/expert-base.js
       yield put({ type: 'addExpertDetailSuccess', payload: { data } });
     },
     * searchExpertItem({ payload }, { call, put }) {

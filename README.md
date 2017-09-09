@@ -9,6 +9,7 @@ IDE：WebStorm Latest version.
 1. Under [JavaScript language version], select "React JSX".
 1. Under [Node.js and NPM] Enable Node.js Core library.
 1. Under "Code Quality Tools", Enable "ESLint".
+1. Open preference, search webpack, change configuration file to webpack.config.webstorm.js
 
 ### DVA2.0 Updates
 

@@ -18,6 +18,8 @@ export default class AddToEBButton extends PureComponent {
       value: 1,
       personData: '',
     };
+    const isInThisEB = props.person && props.person.locks && props.person.locks.roster;
+    console.log('====================', isInThisEB, props.person.locks);
   }
 
   // shouldComponentUpdate(nextProps) {
@@ -85,7 +87,7 @@ export default class AddToEBButton extends PureComponent {
     return (
       <div className={styles.buttonArea}>
         <Button onClick={this.add.bind(this, per.id)}>
-          {this.state.personData
+          {this.state.personData // TODO: Default message should be english.
             ? <FM id="com.bole.AddedSuccessfully" defaultMessage="添加成功" />
             : <FM id="com.bole.AddButton" defaultMessage="添加" />
           }

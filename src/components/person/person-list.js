@@ -42,8 +42,6 @@ export default class PersonList extends PureComponent {
   render() {
     const { persons, rightZoneFuncs, personRemove, titleRightBlock } = this.props;
     console.log('refresh person list ');
-    console.log('rightZoneFuncs', rightZoneFuncs);
-    console.log('titleRightBlock', titleRightBlock);
 
     const showPrivacy = false;
     const RightZoneFuncs = rightZoneFuncs || DefaultRightZoneFuncs;

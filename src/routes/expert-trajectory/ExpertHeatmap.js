@@ -194,6 +194,7 @@ class ExpertHeatmap extends React.Component {
     this.setState({
       inputValue: value,
     });
+    this.seriesNo = false;
     // if (this.seriesNo === true) {
     //   option2.series.pop();
     //   this.seriesNo = false;
@@ -1023,6 +1024,35 @@ class ExpertHeatmap extends React.Component {
       return temp;
     };
 
+    function haveTry() {
+      console.log("============----------------")
+      const temp = [];
+      temp.push({
+        name: 'Author',
+        value: geoCoordMap[key],
+        // symbol: `image://https://${imageData[key][0]}`,
+        symbol: 'image://https://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
+        symbolSize: [32, 40],
+        symbolOffset: [0, '-70%'],
+        label: {
+          normal: {
+            show: false,
+          },
+          emphasis: {
+            show: false,
+          },
+        },
+        itemStyle: {
+          normal: {
+            borderColor: '#fff',
+            borderWidth: 5,
+          },
+        },
+      });
+      return temp
+    }
+
+
     function getArrow() {
       const curveness = 1;
       const res = [];
@@ -1077,274 +1107,274 @@ class ExpertHeatmap extends React.Component {
 
 
     const series = [
-      {
-        name: 'TOP 6',
-        // type: 'effectScatter',
-        type: 'scatter',
-        coordinateSystem: 'geo',
-        zlevel: 3,
-        rippleEffect: {
-          period: 4,
-          scale: 2,
-          brushType: 'stroke',
-        },
-        label: {
-          normal: {
-            show: true,
-            formatter: params => this.getNum(params.value[2]),
-            position: 'inside',
-            color: themes[this.state.theme].labelColor,
-            textStyle: {
-              fontSize: 10,
-            },
-          },
-          emphasis: {
-            show: false,
-          },
-        },
-        itemStyle: {
-          normal: {
-            color: '#f78e3d',
-            // borderColor: '#f78e3d',
-            opacity: 0.8,
-            shadowColor: 'rgba(198, 198, 198, 0.3)',
-            shadowBlur: 10,
-          },
-          emphasis: {
-            color: '#ff2f31',
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-          },
-        },
-        tooltip: {
-          confine: true,
-          formatter: (params) => {
-            return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
-              locationName[parseInt(params.name)-1].toLowerCase()}<br>`;
-          },
-        },
-        data: convertData(data1.sort((a, b) => {
-          return b.value - a.value;
-        }).slice(0, 6)),
-        symbolSize(val) {
-          const size = 10 + val[2] / 4;
-          if (size > 25) {
-            return (26);
-          } else {
-            return (size);
-          }
-        },
-        // blendMode: 'screen',
-      },
-      { // 当年所有地点
-        name: 'location',
-        type: 'scatter',
-        zlevel: 2,
-        coordinateSystem: 'geo',
-        data: convertData(data1),
-        symbolSize(val) {
-          const size = 10 + val[2] / 4;
-          if (size > 25) {
-            return (26);
-          } else {
-            return (size);
-          }
-          // return ((10 + val[2] / 4));
-        },
-        label: {
-          normal: {
-            show: true,
-            formatter: params => this.getNum(params.value[2]),
-            position: 'inside',
-            color: themes[this.state.theme].labelColor,
-            textStyle: {
-              fontSize: 10,
-            },
-          },
-          emphasis: {
-            show: true,
-          },
-        },
-        itemStyle: {
-          normal: {
-            color: '#FFBA00',
-            opacity: 1,
-            shadowColor: 'rgba(198, 198, 198, 0.3)',
-            shadowBlur: 10,
-          },
-          emphasis: {
-            color: '#ff2f31',
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-          },
-        },
-        // markPoint: {
-        //   z:5,
-        //   symbol: 'rect',
-        //   symbolSize: [40,60],
-        //   color: '#fff',
-        //   // symbolOffset:[0,'-70%'],
-        //   label: {
-        //     normal: {
-        //       show: false,
-        //     },
-        //     emphasis: {
-        //       show: false,
-        //     },
-        //   },
-        //   itemStyle: {
-        //     normal: {
-        //       borderColor: '#fff',
-        //       borderWidth: 10,
-        //     },
-        //   },
-        //   data:getImage(),
-        // },
-        tooltip: {
-          confine: true,
-          formatter: (params) => {
-            return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
-              locationName[parseInt(params.name)-1].toLowerCase()}<br>`;
-          },
-        },
-        blendMode: themes[this.state.theme].pointBlendMode,
-      },
-
-      { // 当年所有单点
-        name: 'single location',
-        type: 'scatter',
-        large: true,
-        largeThreshold: 1000,
-        zlevel: 1,
-        z: 6,
-        coordinateSystem: 'geo',
-        data: convertData(data2),
-        // symbolSize: 4,
-        symbolSize(val) {
-          const size = 3 + val[2];
-          return size;
-        },
-        label: {
-          normal: {
-            show: false,
-          },
-        },
-        itemStyle: {
-          normal: {
-            color: '#00A854',
-            opacity: 1,
-            shadowColor: 'rgba(198, 198, 198, 0.3)',
-            shadowBlur: 10,
-          },
-          emphasis: {
-            color: '#ff2f31',
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-          },
-        },
-        tooltip: {
-          confine: true,
-          formatter: (params) => {
-            return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
-              locationName[parseInt(params.name)-1].toLowerCase()}<br>`;
-          },
-        },
-        blendMode: themes[this.state.theme].pointBlendMode,
-      },
-
-      { // 下一年所有地点
-        name: 'nextYear',
-        type: 'scatter',
-        large: true,
-        largeThreshold: 1000,
-        coordinateSystem: 'geo',
-        data: convertData(nextYearData),
-        // data: convertData2(nextYearData),
-        symbolSize: 3,
-        label: {
-          normal: {
-            // formatter: '{b}',
-            // position: 'right',
-            // show: true,
-            show: false,
-          },
-        },
-        itemStyle: {
-          normal: {
-            opacity: 1,
-            color: '#ffee66',
-            // borderColor:'#fe9b46',
-          },
-          emphasis: {
-            color: '#ff2f31',
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-          },
-        },
-      },
-      {
-        type: 'lines',
-        large: this.ifLarge,
-        largeThreshold: 400,
-        // animation: true,
-        // animationDuration: 0,
-        // zlevel: 1,
-        effect: {
-          show: true,
-          period: 3,
-          trailLength: 0,
-          color: themes[this.state.theme].symbolColor,
-          symbol: 'arrow',
-          symbolSize: 5,
-          animation: false,
-          // animationThreshold:10000,
-        },
-        symbol: ['', planePath],
-        // symbol: 'arrow',
-        // symbol: 'image://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
-        symbolSize: 3,
-        lineStyle: {
-          normal: {
-            color: themes[this.state.theme].lineColor,
-            // width: 10,
-            width: 1.6,
-            opacity: 0.7,
-            curveness: 0.2,
-          },
-          emphasis: {
-            color: '#ff2f31',
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-            shadowBlur: 10,
-          },
-        },
-        tooltip: {
-          confine: true,
-
-          formatter: (params) => {
-            return `<div style="font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">Number of People: ${
-              (_.intersection(author[params.name[0]], author2[params.name[1]])).length}<br/>From: ${
-              locationName[params.name[0]-1].toLowerCase()}<br/>To: ${locationName[params.name[1]-1].toLowerCase()}<br>`;
-          },
-          // formatter: (params) => {
-          //   return `Number of people: ${(_.intersection(author[params.name[0]], author2[params.name[1]])).length}`;
-          // },
-        },
-        data: formtGCData(),
-        // data: [
-        //   {
-        //     name: [1234, 41710],
-        //     coords: [ geoCoordMap[14],geoCoordMap[30000]],
-        //     // coords:[[123,41],[123,41]],
-        //     value:10,
-        //   },
-        // ],
-        animationThreshold: 1000000,
-        blendMode: themes[this.state.theme].lineBlendMode, // screen
-      },
+      // {
+      //   name: 'TOP 6',
+      //   // type: 'effectScatter',
+      //   type: 'scatter',
+      //   coordinateSystem: 'geo',
+      //   zlevel: 3,
+      //   rippleEffect: {
+      //     period: 4,
+      //     scale: 2,
+      //     brushType: 'stroke',
+      //   },
+      //   label: {
+      //     normal: {
+      //       show: true,
+      //       formatter: params => this.getNum(params.value[2]),
+      //       position: 'inside',
+      //       color: themes[this.state.theme].labelColor,
+      //       textStyle: {
+      //         fontSize: 10,
+      //       },
+      //     },
+      //     emphasis: {
+      //       show: false,
+      //     },
+      //   },
+      //   itemStyle: {
+      //     normal: {
+      //       color: '#f78e3d',
+      //       // borderColor: '#f78e3d',
+      //       opacity: 0.8,
+      //       shadowColor: 'rgba(198, 198, 198, 0.3)',
+      //       shadowBlur: 10,
+      //     },
+      //     emphasis: {
+      //       color: '#ff2f31',
+      //       shadowBlur: 10,
+      //       shadowOffsetX: 0,
+      //       shadowColor: 'rgba(0, 0, 0, 0.5)',
+      //     },
+      //   },
+      //   tooltip: {
+      //     confine: true,
+      //     formatter: (params) => {
+      //       return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
+      //         locationName[parseInt(params.name)-1].toLowerCase()}<br>`;
+      //     },
+      //   },
+      //   data: convertData(data1.sort((a, b) => {
+      //     return b.value - a.value;
+      //   }).slice(0, 6)),
+      //   symbolSize(val) {
+      //     const size = 10 + val[2] / 4;
+      //     if (size > 25) {
+      //       return (26);
+      //     } else {
+      //       return (size);
+      //     }
+      //   },
+      //   // blendMode: 'screen',
+      // },
+      // { // 当年所有地点
+      //   name: 'location',
+      //   type: 'scatter',
+      //   zlevel: 2,
+      //   coordinateSystem: 'geo',
+      //   data: convertData(data1),
+      //   symbolSize(val) {
+      //     const size = 10 + val[2] / 4;
+      //     if (size > 25) {
+      //       return (26);
+      //     } else {
+      //       return (size);
+      //     }
+      //     // return ((10 + val[2] / 4));
+      //   },
+      //   label: {
+      //     normal: {
+      //       show: true,
+      //       formatter: params => this.getNum(params.value[2]),
+      //       position: 'inside',
+      //       color: themes[this.state.theme].labelColor,
+      //       textStyle: {
+      //         fontSize: 10,
+      //       },
+      //     },
+      //     emphasis: {
+      //       show: true,
+      //     },
+      //   },
+      //   itemStyle: {
+      //     normal: {
+      //       color: '#FFBA00',
+      //       opacity: 1,
+      //       shadowColor: 'rgba(198, 198, 198, 0.3)',
+      //       shadowBlur: 10,
+      //     },
+      //     emphasis: {
+      //       color: '#ff2f31',
+      //       shadowBlur: 10,
+      //       shadowOffsetX: 0,
+      //       shadowColor: 'rgba(0, 0, 0, 0.5)',
+      //     },
+      //   },
+      //   // markPoint: {
+      //   //   z:5,
+      //   //   symbol: 'rect',
+      //   //   symbolSize: [40,60],
+      //   //   color: '#fff',
+      //   //   // symbolOffset:[0,'-70%'],
+      //   //   label: {
+      //   //     normal: {
+      //   //       show: false,
+      //   //     },
+      //   //     emphasis: {
+      //   //       show: false,
+      //   //     },
+      //   //   },
+      //   //   itemStyle: {
+      //   //     normal: {
+      //   //       borderColor: '#fff',
+      //   //       borderWidth: 10,
+      //   //     },
+      //   //   },
+      //   //   data:getImage(),
+      //   // },
+      //   tooltip: {
+      //     confine: true,
+      //     formatter: (params) => {
+      //       return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
+      //         locationName[parseInt(params.name)-1].toLowerCase()}<br>`;
+      //     },
+      //   },
+      //   blendMode: themes[this.state.theme].pointBlendMode,
+      // },
+      //
+      // { // 当年所有单点
+      //   name: 'single location',
+      //   type: 'scatter',
+      //   large: true,
+      //   largeThreshold: 1000,
+      //   zlevel: 1,
+      //   z: 6,
+      //   coordinateSystem: 'geo',
+      //   data: convertData(data2),
+      //   // symbolSize: 4,
+      //   symbolSize(val) {
+      //     const size = 3 + val[2];
+      //     return size;
+      //   },
+      //   label: {
+      //     normal: {
+      //       show: false,
+      //     },
+      //   },
+      //   itemStyle: {
+      //     normal: {
+      //       color: '#00A854',
+      //       opacity: 1,
+      //       shadowColor: 'rgba(198, 198, 198, 0.3)',
+      //       shadowBlur: 10,
+      //     },
+      //     emphasis: {
+      //       color: '#ff2f31',
+      //       shadowBlur: 10,
+      //       shadowOffsetX: 0,
+      //       shadowColor: 'rgba(0, 0, 0, 0.5)',
+      //     },
+      //   },
+      //   tooltip: {
+      //     confine: true,
+      //     formatter: (params) => {
+      //       return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
+      //         locationName[parseInt(params.name)-1].toLowerCase()}<br>`;
+      //     },
+      //   },
+      //   blendMode: themes[this.state.theme].pointBlendMode,
+      // },
+      //
+      // { // 下一年所有地点
+      //   name: 'nextYear',
+      //   type: 'scatter',
+      //   large: true,
+      //   largeThreshold: 1000,
+      //   coordinateSystem: 'geo',
+      //   data: convertData(nextYearData),
+      //   // data: convertData2(nextYearData),
+      //   symbolSize: 3,
+      //   label: {
+      //     normal: {
+      //       // formatter: '{b}',
+      //       // position: 'right',
+      //       // show: true,
+      //       show: false,
+      //     },
+      //   },
+      //   itemStyle: {
+      //     normal: {
+      //       opacity: 1,
+      //       color: '#ffee66',
+      //       // borderColor:'#fe9b46',
+      //     },
+      //     emphasis: {
+      //       color: '#ff2f31',
+      //       shadowBlur: 10,
+      //       shadowOffsetX: 0,
+      //       shadowColor: 'rgba(0, 0, 0, 0.5)',
+      //     },
+      //   },
+      // },
+      // {
+      //   type: 'lines',
+      //   large: this.ifLarge,
+      //   largeThreshold: 400,
+      //   // animation: true,
+      //   // animationDuration: 0,
+      //   // zlevel: 1,
+      //   effect: {
+      //     show: true,
+      //     period: 3,
+      //     trailLength: 0,
+      //     color: themes[this.state.theme].symbolColor,
+      //     symbol: 'arrow',
+      //     symbolSize: 5,
+      //     animation: false,
+      //     // animationThreshold:10000,
+      //   },
+      //   symbol: ['', planePath],
+      //   // symbol: 'arrow',
+      //   // symbol: 'image://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
+      //   symbolSize: 3,
+      //   lineStyle: {
+      //     normal: {
+      //       color: themes[this.state.theme].lineColor,
+      //       // width: 10,
+      //       width: 1.6,
+      //       opacity: 0.7,
+      //       curveness: 0.2,
+      //     },
+      //     emphasis: {
+      //       color: '#ff2f31',
+      //       shadowColor: 'rgba(0, 0, 0, 0.5)',
+      //       shadowBlur: 10,
+      //     },
+      //   },
+      //   tooltip: {
+      //     confine: true,
+      //
+      //     formatter: (params) => {
+      //       return `<div style="font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">Number of People: ${
+      //         (_.intersection(author[params.name[0]], author2[params.name[1]])).length}<br/>From: ${
+      //         locationName[params.name[0]-1].toLowerCase()}<br/>To: ${locationName[params.name[1]-1].toLowerCase()}<br>`;
+      //     },
+      //     // formatter: (params) => {
+      //     //   return `Number of people: ${(_.intersection(author[params.name[0]], author2[params.name[1]])).length}`;
+      //     // },
+      //   },
+      //   data: formtGCData(),
+      //   // data: [
+      //   //   {
+      //   //     name: [1234, 41710],
+      //   //     coords: [ geoCoordMap[14],geoCoordMap[30000]],
+      //   //     // coords:[[123,41],[123,41]],
+      //   //     value:10,
+      //   //   },
+      //   // ],
+      //   animationThreshold: 1000000,
+      //   blendMode: themes[this.state.theme].lineBlendMode, // screen
+      // },
 
       // {
       //   name: 'image',
@@ -1375,6 +1405,52 @@ class ExpertHeatmap extends React.Component {
       //     data: getImage(),
       //   },
       // },
+
+      {
+        type: 'custom',
+        zlevel: 6,
+        // data:[123,41],
+        coordinateSystem: 'geo',
+        renderItem(params, api) {
+          const point = api.coord([api.value(0), api.value(1)]);
+          // const point = [api.value(0), api.value(1)];
+          // console.log('point', point);
+          const arrowSize = 18;
+          return {
+            type: 'image',
+            shape: {
+              image: jietang,
+              x: -arrowSize / 2,
+              y: -arrowSize / 2,
+              width: arrowSize,
+              height: arrowSize,
+            },
+            rotation: 0.2,
+             position: point,
+            style: api.style({
+              // stroke: '#555',
+              // lineWidth: 1
+            }),
+          };
+        },
+        itemStyle: {
+          normal: {
+            color: '#ff2c37',
+          },
+        },
+        // encode: {
+        //   x: dims.time,
+        //   y: dims.windSpeed
+        // },
+        // data: data,
+        data: [{
+          value: [120,30,200],
+        },{
+          value: [100,30,200],
+        }],
+        // data: getArrow(),
+        z: 10,
+      },
 
       {
         name: 'AQI',

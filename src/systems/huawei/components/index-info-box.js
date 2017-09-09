@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { Link } from 'dva/router';
+import { FormattedMessage as FM } from 'react-intl';
 import styles from './index-info-box.less';
 
 class IndexInfoBox extends React.PureComponent {
@@ -15,31 +16,39 @@ class IndexInfoBox extends React.PureComponent {
             <div className={styles.blockImg}>
               <img src="/sys/huawei/relation-graph-page.png" alt="学者关系" />
             </div>
-            <span>学者关系</span>
+            <span>
+              <FM id="com.searchTypeWidget.label.Relation" defaultMessage="Relations" />
+            </span>
           </div>
         </Link>
         <Link to="/dispatch-expert-map">
           <div className={styles.blockItem}>
             <div className={styles.blockImg}>
-              <img src="/sys/huawei/expert-map.png" alt="人才地图" />
+              <img src="/sys/huawei/expert-map.png" alt="" />
             </div>
-            <span>人才地图</span>
+            <span>
+              <FM id="com.searchTypeWidget.label.ExpertMap" defaultMessage="Maps" />
+            </span>
           </div>
         </Link>
         <Link to="/knowledge-graph">
           <div className={styles.blockItem}>
             <div className={styles.blockImg}>
-              <img src="/sys/huawei/knowledge-graph.png" alt="知识图谱" />
+              <img src="/sys/huawei/knowledge-graph.png" alt="" />
             </div>
-            <span>知识图谱</span>
+            <span>
+              <FM id="com.searchTypeWidget.label.KnowledgeGraph" defaultMessage="Knowledge Graph" />
+            </span>
           </div>
         </Link>
         <Link to="/trend-prediction">
           <div className={styles.blockItem}>
             <div className={styles.blockImg}>
-              <img src="/sys/huawei/trend-prediction.png" alt="技术趋势" />
+              <img src="/sys/huawei/trend-prediction.png" alt="" />
             </div>
-            <span>技术趋势</span>
+            <span>
+              <FM id="com.searchTypeWidget.label.TrendPrediction" defaultMessage="Topic Trend" />
+            </span>
           </div>
         </Link>
 

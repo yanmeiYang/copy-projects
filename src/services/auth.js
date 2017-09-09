@@ -14,8 +14,6 @@ const { api } = config;
 // }
 
 export async function login(data) {
-  // TODO yanmei: 额....
-  // const src = location.pathname === '/login' ? sysconfig.UserAuthSystem : '';
   return request(api.userLogin, {
     method: 'post',
     body: JSON.stringify({

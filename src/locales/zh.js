@@ -18,6 +18,8 @@ export default {
   'com.KgSearchBox.placeholder': '请输入姓名或者搜索词',
   'com.KgSearchBox.searchBtn': '搜索',
 
+  'com.RgSearchNameBox.placeholder': '请输入姓名',
+
   'com.search.filter.searchRange': '搜索范围:',
   'com.search.filter.Filters': '过滤条件:',
   'com.search.filter.label.h_index': 'h指数',

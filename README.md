@@ -110,6 +110,56 @@ TODO
 }
 ```
 
+## 挖坑
+
+### systems/index.js
+
+1. 命名规定
+```javascript
+// component名字_驼峰式的名字
+// Block: component是一个组件的命名为 xxxBlock
+// zone: component为一组组件的命名为 xxxZone
+PersonList_TitleRightBlock: defaults.EMPTY_BLOCK_FUNC, // profile => 'jsx',
+PersonList_RightZone: defaults.IN_APP_DEFAULT, // [()=><COMP>]
+```
+
+2. 默认参数的含义以及使用
+> IN_APP_DEFAULT: null
+
+> EMPTY_BLOCK: ''
+
+> EMPTY_BLOCK_FUNC: () => false
+> function使用时需要判断是否为function
+
+> EMPTY_BLOCK_FUNC_LIST: []
+> 数组在使用时需要判断参数是否存在以及length是否大于0，例如：
+```javascript
+{RightZoneFuncs && RightZoneFuncs.length > 0 &&
+<div className={styles.person_right_zone}>
+    {RightZoneFuncs.map((blockFunc) => {
+      return blockFunc ? blockFunc(person) : false;
+    })}
+</div>
+}
+````
+
+3. 默认参数定义的位置
+> 通用的默认参数可以写到index.js中
+```javascript
+Auth_LoginPage: '/login',
+```
+
+> 非通用的默认参数写到component中，例如：
+```javascript
+const RightZoneFuncs = rightZoneFuncs || DefaultRightZoneFuncs;
+```
+
+### component不引入systems配置文件，一律从最外层通过参数形式传入component中
+```javascript
+<PersonList persons={orgs} titleRightBlock={sysconfig.PersonList_TitleRightBlock}
+personRemove={sysconfig.Person_PersonRemoveButton} />
+```
+
 ##### Formater of ternary expression (? expression)
 
 ```javascript

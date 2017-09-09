@@ -10,6 +10,7 @@ import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import * as personService from 'services/person';
 import { sysconfig } from 'systems';
 import { config } from 'utils';
+import * as profileUtils from 'utils/profile-utils';
 import { Indices } from 'components/widgets';
 import ViewExpertInfo from './view-expert-info';
 import styles from './person-list.less';
@@ -178,5 +179,7 @@ export default class PersonList extends PureComponent {
         }
       </div>
     );
+
+    // console.log("persons is ", this.props.persons);
   }
 }

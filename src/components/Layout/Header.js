@@ -123,6 +123,7 @@ export default class Header extends React.PureComponent {
             </div>
           </Link>
 
+          {/* --------------- Search Box -------------- */}
           <div className={styles.searchWrapper}>
             {headerSearchBox &&
             <KgSearchBox
@@ -131,6 +132,13 @@ export default class Header extends React.PureComponent {
               {...headerSearchBox}
             />}
           </div>
+
+          {/* --------------- Search Box -------------- */}
+          {sysconfig.Header_RightZone && sysconfig.Header_RightZone.length > 0 &&
+          <div className={styles.xxx}>
+            {sysconfig.Header_RightZone.map(zoneFunc => (zoneFunc ? zoneFunc() : false))}
+          </div>
+          }
 
           {process.env.NODE_ENV !== 'production' && false &&
           <span className="debug_area" style={{ marginRight: 20 }}>

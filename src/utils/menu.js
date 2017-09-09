@@ -1,4 +1,4 @@
-import { sysconfig } from '../systems';
+import { sysconfig } from 'systems';
 
 const allMenus = [{ id: 1, icon: 'laptop', name: '首页', router: '/' },
   { id: 2, bpid: 1, name: '学会活动', icon: 'api', router: '/seminar' },

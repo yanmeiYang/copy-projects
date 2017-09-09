@@ -109,3 +109,18 @@ TODO
 <div>blabla</div>
 }
 ```
+
+##### Formater of ternary expression (? expression)
+
+```javascript
+// If the expression can in one line.
+const A = hasValue ? 'has value' : 'no';
+
+// Multiline
+<Bundle load={loadSomething}>
+  {(Comp) => (Comp
+    ? <Comp/>
+    : <Loading/>
+  )}
+</Bundle>
+···

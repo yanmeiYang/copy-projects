@@ -1,25 +1,25 @@
 /*
  * created by Xinyi Xu on 2017-8-16.
  */
-import React from 'react';
-import { connect } from 'dva';
-import classnames from 'classnames';
-import { routerRedux } from 'dva/router';
-// import { Slider, Switch, InputNumber, Row, Col, Icon, Button } from 'antd';
-import echarts from 'echarts/lib/echarts'; // 必须
-import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/legend';
-import 'echarts/lib/component/geo';
-import 'echarts/lib/chart/map'; // 引入地图
-import 'echarts/lib/chart/lines';
-import 'echarts/lib/chart/effectScatter';
-import 'echarts/map/js/china'; // 引入中国地图//
-import 'echarts/map/js/world';
-import styles from './ExpertTrajectory.less';
-import { Button, Layout } from 'antd';
-import { PersonListLittle } from '../../components/person/index';
-import mapData from '../../../external-docs/expert-trajectory/testData.json';
-// import world from 'echarts/map/js/world';
+// import React from 'react';
+// import { connect } from 'dva';
+// import classnames from 'classnames';
+// import { routerRedux } from 'dva/router';
+// // import { Slider, Switch, InputNumber, Row, Col, Icon, Button } from 'antd';
+// import echarts from 'echarts/lib/echarts'; // 必须
+// import 'echarts/lib/component/tooltip';
+// import 'echarts/lib/component/legend';
+// import 'echarts/lib/component/geo';
+// import 'echarts/lib/chart/map'; // 引入地图
+// import 'echarts/lib/chart/lines';
+// import 'echarts/lib/chart/effectScatter';
+// import 'echarts/map/js/china'; // 引入中国地图//
+// import 'echarts/map/js/world';
+// import styles from './ExpertTrajectory.less';
+// import { Button, Layout } from 'antd';
+// import { PersonListLittle } from '../../components/person/index';
+// import mapData from '../../../external-docs/expert-trajectory/testData.json';
+// // import world from 'echarts/map/js/world';
 const { Content, Sider } = Layout;
 let option = {};
 const address2 = mapData.addresses;
@@ -39,24 +39,24 @@ class ExpertTrajectory extends React.Component {
     // results: [],
   };
 
-  /* componentWillMount(nextProps) {
-    const query = (this.props.location && this.props.location.query
-      && this.props.location.query.query) || 'data mining';
-    const { type } = this.props.location.query;
-    if (query) {
-      this.setState({ query });
-    }
-    if (type) {
-      this.setState({ mapType: type || 'google' });
-    }
-    this.dispatch({
-      type: 'app/layout',
-      payload: {
-        headerSearchBox: { query, onSearch: this.onSearch },
-        showFooter: false,
-      },
-    });
-  } */
+  //  componentWillMount(nextProps) {
+  //   const query = (this.props.location && this.props.location.query
+  //     && this.props.location.query.query) || 'data mining';
+  //   const { type } = this.props.location.query;
+  //   if (query) {
+  //     this.setState({ query });
+  //   }
+  //   if (type) {
+  //     this.setState({ mapType: type || 'google' });
+  //   }
+  //   this.dispatch({
+  //     type: 'app/layout',
+  //     payload: {
+  //       headerSearchBox: { query, onSearch: this.onSearch },
+  //       showFooter: false,
+  //     },
+  //   });
+  // }
 
   componentDidMount() {
     // this.callSearchMap(this.state.query);

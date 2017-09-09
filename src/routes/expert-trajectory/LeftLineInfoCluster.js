@@ -4,7 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Tooltip } from 'antd';
-import styles from './LeftInfoZoneCluster.less';
+import styles from './LeftLineInfoCluster.less';
 import * as profileUtils from '../../utils/profile-utils';
 import { HindexGraph } from '../../components/widgets';
 
@@ -18,6 +18,9 @@ class LeftLineInfoCluster extends React.PureComponent {
 
   render() {
     const persons = this.props.persons;
+    const from = this.props.from;
+    const to = this.props.to;
+    console.log("--------------=============",from,to)
     if (!persons || persons.length <= 0) {
       return <div />;
     }
@@ -65,8 +68,8 @@ class LeftLineInfoCluster extends React.PureComponent {
         </div>
 
         <div className={styles.info_bg}>
-          <div>From : {hindexSum}</div>
-          <div>To : {(hindexSum / persons.length).toFixed(0)}</div>
+          <div><h3>From: </h3><div><h4>{from}</h4></div></div>
+          <div><h3>To: </h3><div><h4>{to}</h4></div></div>
         </div>
 
         <div className={styles.info}>

@@ -15,6 +15,7 @@ import RightInfoZoneAll from './RightInfoZoneAll';
 import GetBMapLib from './utils/BMapLibGai.js';
 import { TopExpertBase } from '../../utils/expert-base';
 
+let map1;
 const ButtonGroup = Button.Group;
 const blankAvatar = '/images/blank_avatar.jpg';
 
@@ -201,12 +202,27 @@ class ExpertMap extends React.PureComponent {
       for (let i = 0; i < ids.length; i += 1) {
         const cimg = imgdivs[i];
         const personInfo = data.data.persons[i];
-        let url = blankAvatar;
+        //let url = blankAvatar;
+        let url;
         if (personInfo.avatar != null && personInfo.avatar !== '') {
           url = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 50);
         }
-        const style = url === '/images/blank_avatar.jpg' ? '' : 'margin-top:-5px;';
-        cimg.innerHTML = `<img style='background: white;${style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='${url}' alt='${i}'>`;
+        //const style = url === '/images/blank_avatar.jpg' ? '' : 'margin-top:-5px;';
+        const style = 'line-height:45px;text-align:center;display: block;margin:auto;';
+        let name;
+        if (personInfo.name_zh) {
+          const str = personInfo.name_zh.substr(1, 2);
+          name = str;
+        } else {
+          let tmp = personInfo.name.match(/\b(\w)/g);
+          if (tmp.length > 3) {
+            tmp = tmp[0].concat(tmp[1],tmp[2]);
+            name = tmp;
+          } else {
+            name = tmp.join('');
+          }
+        }
+        cimg.innerHTML = `<img style='${style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='${url}' alt='${name}'>`;
       }
 
       for (let j = 0; j < imgdivs.length; j += 1) {
@@ -265,12 +281,18 @@ class ExpertMap extends React.PureComponent {
     waitforBMap(200, 100,
       (BMap) => {
         this.showOverLay();
+        let centerx;
+        let centery;
         let scale = 4;
         let minscale = 3;
         let maxscale = 19;
         let newtype;
-        //console.log(localStorage.getItem("lasttype"),'||',localStorage.getItem("isClick"))
-        if(localStorage.getItem("lasttype")!=='0' && localStorage.getItem("isClick")==='0') {
+        //if (localStorage.getItem("lasttype") === '0') {
+          centerx = sysconfig.CentralPosition.lng;
+          centery = sysconfig.CentralPosition.lat;
+        //}
+        console.log(localStorage.getItem("lasttype"),'||',localStorage.getItem("isClick"))
+        if (localStorage.getItem("lasttype") !== '0' && localStorage.getItem("isClick") === '0') {
           newtype = localStorage.getItem("lasttype");
         } else {
           newtype = type;
@@ -287,12 +309,23 @@ class ExpertMap extends React.PureComponent {
           minscale = 5;
           maxscale = 7;
         }
+        if (map1) {
+          centerx = map1.getCenter().lng;
+          centery = map1.getCenter().lat;
+        } else {
+          centerx = sysconfig.CentralPosition.lng;
+          centery = sysconfig.CentralPosition.lat;
+        }
         localStorage.setItem("lasttype", newtype);
         const map = new BMap.Map('allmap', { minZoom: minscale, maxZoom: maxscale });
         this.map = map; // set to global;
+        map1 = this.map;
         // map.centerAndZoom(new BMap.Point(45, 45), scale);
+        // map.centerAndZoom(new BMap.Point(
+        //   sysconfig.CentralPosition.lng, sysconfig.CentralPosition.lat
+        // ), scale);
         map.centerAndZoom(new BMap.Point(
-          sysconfig.CentralPosition.lng, sysconfig.CentralPosition.lat
+          centerx, centery
         ), scale);
         this.initializeBaiduMap(map);
         const markers = [];
@@ -368,11 +401,11 @@ class ExpertMap extends React.PureComponent {
           }
           map.addOverlay(new BMap.Label("拉丁美洲", opts17));
           const opts18 = {
-            position : new BMap.Point(-109.5, 56.5),
+            position : new BMap.Point(-108.5, 56.5),
           }
           map.addOverlay(new BMap.Label("加拿大", opts18));
           const opts19 = {
-            position : new BMap.Point(-126.5, 33.5),
+            position : new BMap.Point(-126, 33.5),
           }
           map.addOverlay(new BMap.Label("美国西部", opts19));
           const opts20 = {
@@ -581,7 +614,6 @@ class ExpertMap extends React.PureComponent {
   };
 
   render() {
-    console.log(this.props.expertMap)
     const model = this.props && this.props.expertMap;
     const persons = model.geoData.results;
     let count = 0;
@@ -626,7 +658,7 @@ class ExpertMap extends React.PureComponent {
 
     const rightInfos = {
       global: () => (
-        <RightInfoZoneAll count={count} hIndexSum={hIndexSum} avg={avg} persons={persons} />
+        <RightInfoZoneAll count={count} avg={avg} persons={persons} />
       ),
       person: () => (<RightInfoZonePerson person={model.personInfo} />),
       cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),

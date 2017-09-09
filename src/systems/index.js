@@ -91,6 +91,8 @@ const defaultSystemConfigs = {
   Person_PersonLabelBlock: defaults.EMPTY_BLOCK_FUNC, // profile => 'jsx',
   PersonList_RightZone: defaults.IN_APP_DEFAULT, // [()=><COMP>]
   Search_CheckEB: true,
+  Person_AddToEBButton: defaults.EMPTY_BLOCK_FUNC, // TODO >>>>
+  Person_PersonRemoveButton: defaults.EMPTY_BLOCK_FUNC,// TODO >>>>
 
   // > Search
   // expert base
@@ -117,6 +119,8 @@ const defaultSystemConfigs = {
   // > Admin Users
   Admin_Users_ShowAdmin: true,
   // PersonList_ShowIndices: [], // do not override in-component settings. // TODO
+
+  HOOK: [],// TODO >>>>????????
 
 };
 

@@ -196,6 +196,8 @@ module.exports = {
     getExpertDetailList: '/roster/:ebid/order-by/h_index/offset/:offset/size/:size',
     // searchExpertByName: '/2b/profile/:src/offset/:offset/size/:size',
     searchExpertByName: '/search/roster/:ebid/experts/advanced',
+    invokeRoster: '/roster/:id/members/u',
+    removeByPidApi: '/roster/:rid/d/:pid',
   },
 };
 

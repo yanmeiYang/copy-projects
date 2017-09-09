@@ -1,3 +1,4 @@
 import AddToEBButton from './AddToEBButton';
+import PersonRemoveButton from './person-remove-button';
 
-module.exports = { AddToEBButton };
+module.exports = { AddToEBButton, PersonRemoveButton };

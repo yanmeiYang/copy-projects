@@ -41,10 +41,16 @@ webpackConfig.resolve.alias = {
 ### Development Guides
 
 #### Development tips:
+
+##### General
 + Always fork aminer-web prject，then submit a Merge Request.
 + Use i18n on all text.
 + dva@2: Use this.props.match to get parameters in url.
 + Redirect: <Route path={`${match.url}/:id`} component={Person}/>
+
+##### JSX
++ Never use Math.random() as key in JXS loop.
++ Don't use <span></span> to include multiline jsx, indentation not work in webstorm with multiline span.
 
 
 #### Coding Conventions / 编码规范
@@ -94,4 +100,11 @@ const App = (props) => {
 ##### Advanced usages of dva/connect
 ```javascript
 TODO 
+```
+
+##### Condition JSX, { and conditions in one line to reduce indentation.
+```javascript
+{person.tags &&
+<div>blabla</div>
+}
 ```

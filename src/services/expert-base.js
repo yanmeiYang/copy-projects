@@ -18,7 +18,6 @@ export async function getExpert(offset, size) {
 }
 
 export async function getExpertDetail(id, offset, size) {
-  console.log('得到专家库的具体专家列表service', id, offset, size);
   return request(api.getExpertDetailList
       .replace(':ebid', id)
       .replace(':offset', offset)
@@ -26,6 +25,20 @@ export async function getExpertDetail(id, offset, size) {
 
     {
       method: 'GET',
+    });
+}
+
+export async function rosterManage({ payload }) {
+  const { id, name, email, perm } = payload;
+  return request(api.invokeRoster
+      .replace(':id', id),
+    {
+      method: 'PUT',
+      body: JSON.stringify({
+        name,
+        email,
+        perm,
+      }),
     });
 }
 
@@ -56,6 +69,16 @@ export async function addExpertDetailInfo({ payload }) {
 export async function deleteByKey(key) {
   return request(api.deleteExpertBaseApi
       .replace(':rid', key)
+    , {
+      method: 'DELETE',
+    });
+}
+
+export async function removeByPid({ pid, rid }) {
+
+  return request(api.removeByPidApi
+      .replace(':rid', rid)
+      .replace(':pid', pid)
     , {
       method: 'DELETE',
     });

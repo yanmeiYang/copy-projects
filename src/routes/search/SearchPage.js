@@ -64,7 +64,6 @@ export default class SearchPage extends Component {
   };
 
   render() {
-    // console.log('nnmn^o^ ', this.props.app.headerSearchBox);
     return (
       <div className={classnames('content-inner', styles.page)}>
         <SearchComponent // Example: include all props.

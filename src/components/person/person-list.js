@@ -107,7 +107,7 @@ export default class PersonList extends PureComponent {
                         </span>
                         }
 
-                        {person.num_viewed > 0 &&
+                        {false && person.num_viewed > 0 &&
                         <span className={styles.views}>
                           <i className="fa fa-eye fa-fw" />{person.num_viewed}&nbsp;
                           <FM id="com.PersonList.label.views" defaultMessage="views" />

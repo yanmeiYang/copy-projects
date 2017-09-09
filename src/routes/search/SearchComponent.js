@@ -242,7 +242,6 @@ export default class SearchComponent extends Component {
           <Tabs defaultActiveKey={sortType} size="small" className={styles.maxWidth}
                 onChange={this.onOrderChange} tabBarExtraContent={exportArea}>
             {sorts && sorts.map((sortItem) => {
-              console.log('sortItem:::::::::::::;', sortItem);
               const icon = sortItem === sortType ? <i className="fa fa-sort-amount-desc" /> : '';
               const tab = (<span><FM id={`com.search.sort.label.${sortItem}`}
                                      defaultMessage={sortItem} /> {icon}</span>);

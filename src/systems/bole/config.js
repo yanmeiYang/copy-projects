@@ -59,7 +59,7 @@ module.exports = {
   PersonList_TitleRightBlock:
     person => <AddToEBButton person={person} key="2" ExpertBase="59a8e5879ed5db1fc4b762ad" />,
   PersonList_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
-  Search_CheckEB: true,
+  Search_CheckEB: true, // Check ExpertBase.
 
   // 地图中心点
   // CentralPosition: { lat: 37.09024, lng: -95.712891 },
@@ -67,7 +67,7 @@ module.exports = {
   IndexPage_QuickSearchList: ['Medical Robotics', 'Surgical Robots', 'Robot Kinematics',
     'Computer Assisted Surgery', 'Surgical Navigation', 'Minimally Invasive Surgery'],
 
-  // research
+  // research TODO ???????? Should be in add button.
   Person_PersonPerson_PersonRemoveButtonRemoveButton: person => <PersonRemoveButton
     person={person}
     ExpertBase="59a8e5879ed5db1fc4b762ad" />,

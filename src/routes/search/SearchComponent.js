@@ -254,7 +254,7 @@ export default class SearchComponent extends Component {
           <div className={styles.personAndKg}>
             <div>
               <PersonList persons={results}
-                          personLabel={sysconfig.Person_PersonLabelBlock}
+                          titleRightBlock={sysconfig.PersonList_TitleRightBlock}
                           rightZoneFuncs={sysconfig.PersonList_RightZone}
               />
               <div className={styles.paginationWrap}>

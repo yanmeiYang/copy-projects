@@ -55,9 +55,9 @@ export async function addExpertBase({ title, desc, pub }) {
     });
 }
 
-export async function addExpertDetailInfo({ payload }) {
+export async function addExpertToEB({ payload }) {
   const { ebid, aids } = payload;
-  return request(api.addExpertDetailApi.replace(':ebid', ebid),
+  return request(api.addExpertToEB.replace(':ebid', ebid),
     {
       method: 'PUT',
       body: JSON.stringify({

@@ -24,18 +24,21 @@ export default {
       });
     },
   },
+
   effects: {
     * getExpert({ payload }, { call, put }) {
       const { offset, size } = payload;
       const { data } = yield call(expertBaseService.getExpert, offset, size);
       yield put({ type: 'getExpertSuccess', payload: { data } });
     },
+
     * addExpert({ payload }, { call, put }) {
       const { title, desc } = payload;
       const pub = payload.public;
       const { data } = yield call(expertBaseService.addExpertBase, { title, desc, pub });
       yield put({ type: 'addExpertSuccess', payload: { data } });
     },
+
     * deleteExpert({ payload }, { call, put }) {
       const { key } = payload;
       // const { id } = payload;
@@ -46,16 +49,22 @@ export default {
         console.log('数据操作失败！');
       }
     },
+
     * getExpertDetailList({ payload }, { call, put }) {
       const { id, offset, size } = payload;
       const { data } = yield call(expertBaseService.getExpertDetail, id, offset, size);
       yield put({ type: 'getExpertDetailSuccess', payload: { data } });
     },
-    * addExpertDetail({ payload }, { call, put }) {
-      const { data } = yield call(expertBaseService.addExpertDetailInfo, { payload });
-      console.log('znemehuishi', payload);
-      yield put({ type: 'addExpertDetailSuccess', payload: { data } });
+
+    * addExpertToEB({ payload }, { call, put }) {
+      const { data } = yield call(expertBaseService.addExpertToEB, { payload });
+      if (data.status) {
+        yield put({ type: 'addExpertToEBSuccess', payload: { data } });
+      } else {
+        throw   new Error('添加智库失败');
+      }
     },
+
     * searchExpertItem({ payload }, { call, put }) {
       const { data } = yield call(expertBaseService.searchExpert, { payload });
       yield put({
@@ -63,10 +72,12 @@ export default {
       })
       ;
     },
+
     * invokeRoster({ payload }, { call, put }) {
       const { data } = yield call(expertBaseService.rosterManage, { payload });
       yield put({ type: 'invokeRosterSuccess', payload: { data } });
     },
+
     * removeExpertItem({ payload }, { call, put }) {
       const { pid, rid } = payload;
       const { data } = yield call(expertBaseService.removeByPid, { pid, rid });
@@ -77,23 +88,28 @@ export default {
   },
   reducers: {
     getExpertSuccess(state, { payload: { data } }) {
-      return { ...state, results: data, loading: true };
+      return { ...state, results: data };
     },
+
     getExpertDetailSuccess(state, { payload: { data } }) {
-      return { ...state, detailResults: data, loading: true };
+      return { ...state, detailResults: data };
     },
+
     invokeRosterSuccess(state, { payload: { data } }) {
+      return { ...state }; // TODO ???????
+    },
+
+    addExpertSuccess(state, { payload: { data } }) {
       return { ...state };
     },
-    addExpertSuccess(state, { payload: { data } }) {
-      return { ...state, loading: true };
-    },
+
     deleteExpertSuccess(state, { payload }) {
       const data = state.results.data.filter(item => item.id !== payload.key);
       const newState = { ...state };
       newState.results.data = data;
       return { ...state, newState };
     },
+
     removeSuccess(state, { payload }) {
       const data = state.detailResults.result.filter(item => item.id !== payload.pid);
       const newState = { ...state };
@@ -101,11 +117,12 @@ export default {
       return newState;
     },
 
-    addExpertDetailSuccess(state, { payload: { data } }) {
-      return { ...state, addStatus: data, loading: true };
+    addExpertToEBSuccess(state, { payload: { data } }) {
+      return { ...state, addStatus: data };
     },
+
     searchExpertSuccess(state, { payload: { data } }) {
-      return { ...state, detailResults: data, loading: true };
+      return { ...state, detailResults: data };
     },
   },
 };

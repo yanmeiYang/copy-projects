@@ -14,7 +14,6 @@ import * as profileUtils from 'utils/profile-utils';
 import { Indices } from 'components/widgets';
 import ViewExpertInfo from './view-expert-info';
 import styles from './person-list.less';
-import * as profileUtils from '../../utils/profile-utils';
 import { PersonRemoveButton } from '../../systems/bole/components';
 
 const DEFAULT_RIGHT_CONTENT = <ViewExpertInfo />;
@@ -25,9 +24,6 @@ const DefaultRightZoneFuncs = [
 export default class PersonList extends PureComponent {
   constructor(props) {
     super(props);
-    this.personLabel = props.personLabel;
-    // this.personRightButton = props.personRightButton;
-
     // TODO 临时措施，国际化Interest应该从server端入手。
     personService.getInterestsI18N((result) => {
       this.interestsI18n = result;
@@ -44,8 +40,10 @@ export default class PersonList extends PureComponent {
   }
 
   render() {
-    const { persons, rightZoneFuncs, personRemove } = this.props;
+    const { persons, rightZoneFuncs, personRemove, titleRightBlock } = this.props;
     console.log('refresh person list ');
+    console.log('rightZoneFuncs', rightZoneFuncs);
+    console.log('titleRightBlock', titleRightBlock);
 
     const showPrivacy = false;
     const RightZoneFuncs = rightZoneFuncs || DefaultRightZoneFuncs;
@@ -84,7 +82,9 @@ export default class PersonList extends PureComponent {
                       <a {...personLinkParams}>{name}</a>
                       {false && <span className={styles.rank}>会士</span>}
                     </h2>
-                    {this.personLabel && this.personLabel(person)}
+
+                    {/* ---- TitleRightBlock ---- */}
+                    {titleRightBlock && titleRightBlock(person)}
                     {/*{this.personRightButton && this.personRightButton(person)}*/}
                   </div>}
                   <div className={classnames(styles.zone, styles.interestColumn)}>
@@ -136,7 +136,7 @@ export default class PersonList extends PureComponent {
                                 <span key={key}>
                                   {tag.zh
                                     ? <Tooltip placement="top" title={tag.en}>{linkJSX}</Tooltip>
-                                    : { linkJSX }
+                                    : linkJSX
                                   }
                                 </span>
                               );

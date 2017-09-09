@@ -82,17 +82,16 @@ const defaultSystemConfigs = {
   /**
    * Page specified config.
    */
+
   /**
    * PersonList
    * PersonList_RightZone 右侧显示内容
    * */
   PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
   PersonList_PersonLink_NewTab: true,
-  Person_PersonLabelBlock: defaults.EMPTY_BLOCK_FUNC, // profile => 'jsx',
+  PersonList_TitleRightBlock: defaults.EMPTY_BLOCK_FUNC, // profile => 'jsx',
   PersonList_RightZone: defaults.IN_APP_DEFAULT, // [()=><COMP>]
-  Search_CheckEB: true,
-  Person_AddToEBButton: defaults.EMPTY_BLOCK_FUNC, // TODO >>>>
-  Person_PersonRemoveButton: defaults.EMPTY_BLOCK_FUNC,// TODO >>>>
+  Search_CheckEB: false,
 
   // > Search
   // expert base

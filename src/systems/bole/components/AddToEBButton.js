@@ -12,15 +12,13 @@ import styles from './AddToEBButton.less';
 export default class AddToEBButton extends PureComponent {
   constructor(props) {
     super(props);
-    this.state.dataIdItem = props.ExpertBase;
+    this.state = {
+      visible: false,
+      dataIdItem: props.ExpertBase,
+      value: 1,
+      personData: '',
+    };
   }
-
-  state = {
-    visible: false,
-    dataIdItem: '',
-    value: 1,
-    personData: '',
-  };
 
   // shouldComponentUpdate(nextProps) {
   //   return this.props.person !== nextProps.person;
@@ -32,11 +30,10 @@ export default class AddToEBButton extends PureComponent {
     //   type: 'expertBase/getExpert',
     //   payload: { offset: 0, size: 20 },
     // });
-    // const ebid = '59a8e5879ed5db1fc4b762ad';
     const ebid = this.state.dataIdItem;
     const aids = id.split(';');
     this.props.dispatch({
-      type: 'expertBase/addExpertDetail',
+      type: 'expertBase/addExpertToEB',
       payload: { ebid, aids },
     });
     // const personData = this.props.person.id;
@@ -49,7 +46,7 @@ export default class AddToEBButton extends PureComponent {
     const ebid = this.state.dataIdItem;
     const aids = id.split(';');
     this.props.dispatch({
-      type: 'expertBase/addExpertDetail',
+      type: 'expertBase/addExpertToEB',
       payload: { ebid, aids },
     });
 

@@ -36,8 +36,8 @@ export default {
   'com.search.sort.label.h_index': 'h指数',
   'com.search.sort.label.activity': '学术活跃度',
   'com.search.sort.label.rising_star': '领域新星',
-  'com.search.sort.label.citation': '引用数',
-  'com.search.sort.label.num_pubs': '论文数',
+  'com.search.sort.label.n_citation': '引用数',
+  'com.search.sort.label.n_pubs': '论文数',
   'com.search.sort.label.activity-ranking-contrib': '学会贡献', // CCF Only
 
   'com.searchTypeWidget.label.ExpertSearch': '专家',
@@ -58,6 +58,8 @@ export default {
   // bole add button
   'com.bole.AddButton': '添加',
   'com.bole.com.bole.AddedSuccessfully': '添加成功',
+  // bole remove button
+  'com.bole.PersonRemoveButton': '移除',
 
 
   // Recommendation

@@ -51,7 +51,7 @@ const NaviConfig = {
     key: 'ExpertBase',
     label: '我的专家库',
     url: '/eb/59a8e5879ed5db1fc4b762ad',
-    data: 'query',
+    // data: 'query',
     pageSignature: '/eb/59a8e5879ed5db1fc4b762ad',
   },
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import { Tabs, Tag, Pagination, Spin } from 'antd';
-import styles from './uni-search.less';
+import styles from './SearchComponent.less';
 import { PersonList } from '../../components/person';
 import { sysconfig } from '../../systems';
 import ExportPersonBtn from '../../components/person/export-person';
@@ -16,6 +16,7 @@ const searchSorts = [
   { label: '学术活跃度', key: 'activity' },
   { label: '领域新星', key: 'rising_star' },
   { label: '学会贡献', key: 'activity-ranking-contrib' },
+
 ];
 
 const Search = ({ dispatch, search }) => {

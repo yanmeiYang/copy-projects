@@ -36,8 +36,8 @@ export default {
   'com.search.sort.label.h_index': 'h-index',
   'com.search.sort.label.activity': 'Activity',
   'com.search.sort.label.rising_star': 'Rising Star',
-  'com.search.sort.label.citation': '#Citation',
-  'com.search.sort.label.num_pubs': '#Paper',
+  'com.search.sort.label.n_citation': '#Citation',
+  'com.search.sort.label.n_pubs': '#Paper',
   'com.search.sort.label.activity-ranking-contrib': 'Contrib',
 
   'com.searchTypeWidget.label.ExpertSearch': 'Experts',
@@ -53,6 +53,9 @@ export default {
   // bole add button
   'com.bole.AddButton': 'Add',
   'com.bole.AddedSuccessfully': 'Added Successfully',
+  // bole remove button
+  'com.bole.PersonRemoveButton': 'Remove',
+
 
   'com.PersonList.label.views': 'views',
   'com.PersonList.label.homepage': 'Homepage',

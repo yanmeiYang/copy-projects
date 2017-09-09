@@ -14,7 +14,9 @@ import * as profileUtils from 'utils/profile-utils';
 import { Indices } from 'components/widgets';
 import ViewExpertInfo from './view-expert-info';
 import styles from './person-list.less';
+import { PersonRemoveButton } from '../../systems/bole/components';
 
+const DEFAULT_RIGHT_CONTENT = <ViewExpertInfo />;
 const DefaultRightZoneFuncs = [
   person => <ViewExpertInfo person={person} key="1" />,
 ];
@@ -22,9 +24,6 @@ const DefaultRightZoneFuncs = [
 export default class PersonList extends PureComponent {
   constructor(props) {
     super(props);
-    this.personLabel = props.personLabel;
-    // this.personRightButton = props.personRightButton;
-
     // TODO 临时措施，国际化Interest应该从server端入手。
     personService.getInterestsI18N((result) => {
       this.interestsI18n = result;
@@ -41,129 +40,128 @@ export default class PersonList extends PureComponent {
   }
 
   render() {
-    const { persons, rightZoneFuncs } = this.props;
+    const { persons, rightZoneFuncs, personRemove, titleRightBlock } = this.props;
     console.log('refresh person list ');
+    console.log('rightZoneFuncs', rightZoneFuncs);
+    console.log('titleRightBlock', titleRightBlock);
 
     const showPrivacy = false;
     const RightZoneFuncs = rightZoneFuncs || DefaultRightZoneFuncs;
     return (
       <div className={styles.personList}>
-        {
-          persons && persons.map((person) => {
-            const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
-            const pos = profileUtils.displayPosition(person.pos);
-            const aff = profileUtils.displayAff(person);
+        {persons && persons.map((person) => {
+          const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
+          const pos = profileUtils.displayPosition(person.pos);
+          const aff = profileUtils.displayAff(person);
 
-            const phone = showPrivacy && person.contact && person.contact.phone;
-            const email = showPrivacy && profileUtils.displayEmailSrc(person);
+          const phone = showPrivacy && person.contact && person.contact.phone;
+          const email = showPrivacy && profileUtils.displayEmailSrc(person);
 
-            // const homepage = person.contact && person.contact.homepage;
-            const indices = person.indices;
-            const activity_indices = person.activity_indices;
-            // const tags = profileUtils.findTopNTags(person, 8);
+          // const homepage = person.contact && person.contact.homepage;
+          const indices = person.indices;
+          const activity_indices = person.activity_indices;
+          // const tags = profileUtils.findTopNTags(person, 8);
 
-            const personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
-            if (sysconfig.PersonList_PersonLink_NewTab) {
-              personLinkParams.target = '_blank';
-            }
+          const personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
+          if (sysconfig.PersonList_PersonLink_NewTab) {
+            personLinkParams.target = '_blank';
+          }
 
-            return (
-              <div key={person.id} className={styles.person}>
-                <div className={styles.avatar_zone}>
-                  <img src={profileUtils.getAvatar(person.avatar, '', 160)}
-                       className={styles.avatar} alt={name} title={name} />
-                </div>
+          return (
+            <div key={person.id} className={styles.person}>
+              <div className={styles.avatar_zone}>
+                <img src={profileUtils.getAvatar(person.avatar, '', 160)}
+                     className={styles.avatar} alt={name} title={name} />
+              </div>
 
-                <div className={styles.info_zone}>
-                  <div>
-                    {name &&
-                    <div className={styles.title}>
-                      <h2 className="section_header">
-                        <a {...personLinkParams}>{name}</a>
-                        {false && <span className={styles.rank}>会士</span>}
-                      </h2>
-                      {this.personLabel && this.personLabel(person)}
-                      {/*{this.personRightButton && this.personRightButton(person)}*/}
-                    </div>}
-                    <div className={classnames(styles.zone, styles.interestColumn)}>
-                      <div className={styles.contact_zone}>
-                        <Indices
-                          indices={indices}
-                          activity_indices={activity_indices}
-                          showIndices={sysconfig.PersonList_ShowIndices}
-                        />
-                        {pos && <span><i className="fa fa-briefcase fa-fw" /> {pos}</span>}
-                        {aff && <span><i className="fa fa-institution fa-fw" /> {aff}</span>}
+              <div className={styles.info_zone}>
+                <div className={styles.info_zone_detail}>
+                  {name &&
+                  <div className={styles.title}>
+                    <h2 className="section_header">
+                      <a {...personLinkParams}>{name}</a>
+                      {false && <span className={styles.rank}>会士</span>}
+                    </h2>
 
-                        {phone &&
-                        <span style={{ minWidth: '158px' }}>
-                          <i className="fa fa-phone fa-fw" /> {phone}
-                        </span>
-                        }
+                    {/* ---- TitleRightBlock ---- */}
+                    {titleRightBlock && titleRightBlock(person)}
+                    {/*{this.personRightButton && this.personRightButton(person)}*/}
+                  </div>}
+                  <div className={classnames(styles.zone, styles.interestColumn)}>
+                    <div className={styles.contact_zone}>
+                      <Indices
+                        indices={indices}
+                        activity_indices={activity_indices}
+                        showIndices={sysconfig.PersonList_ShowIndices}
+                      />
+                      {pos && <span><i className="fa fa-briefcase fa-fw" /> {pos}</span>}
+                      {aff && <span><i className="fa fa-institution fa-fw" /> {aff}</span>}
 
-                        {email &&
-                        <span style={{ backgroundImage: `url(${config.baseURL}${email})` }}
-                              className="email"><i className="fa fa-envelope fa-fw" />
-                        </span>
-                        }
-
-                        {person.num_viewed > 0 &&
-                        <span className={styles.views}>
-                          <i className="fa fa-eye fa-fw" />{person.num_viewed}&nbsp;
-                          <FM id="com.PersonList.label.views" defaultMessage="views" />
-                        </span>}
-
-                      </div>
-
-                      {person.tags &&
-                      <div className={styles.tag_zone}>
-                        <div>
-                          <h4><i className="fa fa-area-chart fa-fw" /> 研究兴趣:</h4>
-                          <div className={styles.tagWrap}>
-                            {
-                              person.tags.slice(0, 8).map((item) => {
-                                if (item.t === null || item.t === 'Null') {
-                                  return false;
-                                } else {
-                                  const tag = personService.returnKeyByLanguage(this.interestsI18n, item.t);
-                                  const showTag = tag.zh !== '' ? tag.zh : tag.en;
-                                  return (
-                                    <span key={Math.random()}>
-                                    {tag.zh ? <Tooltip placement="top" title={tag.en}>
-                                      <Link
-                                        to={`/${sysconfig.SearchPagePrefix}/${showTag}/0/${sysconfig.MainListSize}`}
-                                        key={Math.random()}>
-                                        <Tag className={styles.tag}>{showTag}</Tag>
-                                      </Link>
-                                    </Tooltip> : <Link
-                                      to={`/${sysconfig.SearchPagePrefix}/${showTag}/0/${sysconfig.MainListSize}`}
-                                      key={Math.random()}>
-                                      <Tag className={styles.tag}>{showTag}</Tag>
-                                    </Link>}
-                                  </span>
-                                  );
-                                }
-                              })
-                            }
-                          </div>
-                        </div>
-                      </div>
+                      {phone &&
+                      <span style={{ minWidth: '158px' }}><i
+                        className="fa fa-phone fa-fw" /> {phone}</span>
                       }
 
+                      {email &&
+                      <span style={{ backgroundImage: `url(${config.baseURL}${email})` }}
+                            className="email"><i className="fa fa-envelope fa-fw" />
+                        </span>
+                      }
+
+                      {false && person.num_viewed > 0 &&
+                      <span className={styles.views}><i
+                        className="fa fa-eye fa-fw" />{person.num_viewed} <FM
+                        id="com.PersonList.label.views" defaultMessage="views" /></span>}
+
                     </div>
+
+                    {person.tags &&
+                    <div className={styles.tag_zone}>
+                      <div>
+                        <h4><i className="fa fa-area-chart fa-fw" /> 研究兴趣:</h4>
+                        <div className={styles.tagWrap}>
+                          {person.tags.slice(0, 8).map((item, idx) => {
+                            if (item.t === null || item.t === 'Null') {
+                              return false;
+                            } else {
+                              const tag = personService.returnKeyByLanguage(this.interestsI18n, item.t);
+                              const showTag = tag.zh !== '' ? tag.zh : tag.en;
+                              const key = `${showTag}_${idx}`;
+                              const linkJSX = (
+                                <Link
+                                  to={`/${sysconfig.SearchPagePrefix}/${showTag}/0/${sysconfig.MainListSize}`}>
+                                  <Tag className={styles.tag}>{showTag}</Tag>
+                                </Link>);
+                              return (
+                                <span key={key}>
+                                  {tag.zh
+                                    ? <Tooltip placement="top" title={tag.en}>{linkJSX}</Tooltip>
+                                    : linkJSX
+                                  }
+                                </span>
+                              );
+                            }
+                          })
+                          }
+                        </div>
+                      </div>
+                    </div>
+                    }
+
                   </div>
                 </div>
-                {RightZoneFuncs && RightZoneFuncs.length > 0 &&
-                <div className={styles.person_right_zone}>
-                  {RightZoneFuncs.map((blockFunc) => {
-                    // TODO is function
-                    return blockFunc ? blockFunc(person) : false;
-                  })}
-                </div>
-                }
               </div>
-            );
-          })
+              {RightZoneFuncs && RightZoneFuncs.length > 0 &&
+              <div className={styles.person_right_zone}>
+                {RightZoneFuncs.map((blockFunc) => {
+                  // TODO is function
+                  return blockFunc ? blockFunc(person) : false;
+                })}
+              </div>
+              }
+            </div>
+          );
+        })
         }
       </div>
     );

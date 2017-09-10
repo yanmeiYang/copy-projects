@@ -50,6 +50,7 @@ const defaultSystemConfigs = {
   Header_SubTextLogo: '子标题',
   Header_SubTextStyle: {},
   Header_UserPageURL: '', // 用户头像点击之后去的页面.
+  Header_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
   ShowHelpDoc: false, // 显示帮助文档
   Header_UserNameBlock: defaults.IN_APP_DEFAULT, // 显示登录用户名
   // footer and sidebar

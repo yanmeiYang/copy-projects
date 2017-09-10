@@ -71,7 +71,7 @@ function prepareParameters(query, offset, size, filters, sort, useTranslateSearc
     });
     data = { ...newFilters, term: query, offset, size, sort: sort || '' };
   }
-  data = addAdditionParameterToData(data, sort);
+  data = addAdditionParameterToData(data, sort, 'eb');
   if (useTranslateSearch && data.term) {
     data.term = `cross:${data.term}`;
   }
@@ -94,15 +94,15 @@ function prepareParametersGlobal(query, offset, size, filters, sort, useTranslat
     // console.log('=====================',newFilters );
     data = { ...newFilters, query, offset, size, sort: sort || '' };
   }
-  data = addAdditionParameterToData(data, sort);
+  data = addAdditionParameterToData(data, sort, 'global');
   if (useTranslateSearch && data.query) {
     data.query = `cross:${data.query}`;
   }
   return data;
 }
 
-// Additional parameters.
-function addAdditionParameterToData(data, sort) {
+// Additional parameters. range=[eb|global]
+function addAdditionParameterToData(data, sort, range) {
   const newData = data;
 
   // 置顶acm fellow和高校top100
@@ -113,7 +113,7 @@ function addAdditionParameterToData(data, sort) {
   }
 
   // with search in expert-base.
-  if (sysconfig.Search_CheckEB) {
+  if (sysconfig.Search_CheckEB && range === 'global') {
     newData.lk_roster = sysconfig.ExpertBase;
   }
   return newData;

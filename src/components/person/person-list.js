@@ -43,6 +43,9 @@ export default class PersonList extends PureComponent {
     const { persons, rightZoneFuncs, personRemove, titleRightBlock } = this.props;
     console.log('refresh person list ');
 
+    // is search in global or in eb.
+
+
     const showPrivacy = false;
     const RightZoneFuncs = rightZoneFuncs || DefaultRightZoneFuncs;
     return (

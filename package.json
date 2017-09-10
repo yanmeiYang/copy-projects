@@ -18,7 +18,7 @@
     "nprogress": "^0.2.0",
     "prop-types": "^15.5.10",
     "qrcode.react": "^0.7.1",
-    "qs": "^6.5.0",
+    "qs": "^6.5.1",
     "query-string": "^5.0.0",
     "react": "^15.6.1",
     "react-addons-perf": "^15.4.2",

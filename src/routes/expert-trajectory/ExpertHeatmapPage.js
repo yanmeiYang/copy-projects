@@ -23,6 +23,8 @@ class ExpertHeatmapPage extends React.Component {
   state = {
     query: 'data mining',
     mapType: 'google', // [baidu|google]
+    from: '',
+    to: '',
   };
 
   componentWillMount() {
@@ -75,20 +77,26 @@ class ExpertHeatmapPage extends React.Component {
     this.props.dispatch({ type: 'expertTrajectory/searchPerson', payload: { query } });
   }
 
-  callClusterPerson =(clusterIdList, type) => {
+  callClusterPerson =(clusterIdList, from1, to1, type) => {
     console.log('id', clusterIdList);
     this.props.dispatch({ type: 'expertTrajectory/listPersonByIds', payload: { ids: clusterIdList } });
     this.props.dispatch({ type: 'expertTrajectory/setRightInfo', payload: { rightInfoType: type } });
+    if(from1 && to1){
+      this.setState({ from: from1, to: to1});
+    }
   }
 
   render() {
     const load = this.props.loading.models.expertTrajectory;
     const rightType = this.props.expertTrajectory.infoZoneIds;
     const ifPlay = this.state.ifPlay;
+    const from = this.state.from;
+    const to = this.state.to;
     const clusterPersons = this.props.expertTrajectory.clusterPersons;
     const rightInfos = {
        scatter: () => (<LeftInfoZoneCluster persons={clusterPersons} />),
-       lines: () => (<LeftLineInfoCluster persons={clusterPersons} />),
+       // lines: () => (<LeftLineInfoCluster persons={clusterPersons} />),
+       lines: () => (<LeftLineInfoCluster persons={clusterPersons} from={from} to={to}/>),
     };
     return (
       <div className={classnames('content-inner', styles.page)}>

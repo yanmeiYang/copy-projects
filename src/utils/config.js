@@ -191,7 +191,7 @@ module.exports = {
 
     getExpertBase: '/roster/list/:type/offset/:offset/size/:size',
     addExpertBaseApi: '/roster',
-    addExpertDetailApi: '/roster/:ebid/a',
+    addExpertToEB: '/roster/:ebid/a',
     deleteExpertBaseApi: '/roster/:rid',
     getExpertDetailList: '/roster/:ebid/order-by/h_index/offset/:offset/size/:size',
     // searchExpertByName: '/2b/profile/:src/offset/:offset/size/:size',

@@ -5,11 +5,12 @@
 import React from 'react';
 import { connect } from 'dva';
 import * as d3 from 'd3';
-import { Checkbox, Select, Progress, message } from 'antd';
+import { Checkbox, Select, Progress, message, Button } from 'antd';
 import { RgSearchNameBox } from '../../components/relation-graph';
 import { getAvatar } from '../../utils/profile-utils';
 import styles from './RelationGraph.less';
 import { Auth } from '../../hoc';
+
 
 const Option = Select.Option;
 const controlDivId = 'rgvis';
@@ -188,7 +189,6 @@ export default class RelationGraph extends React.PureComponent {
 
     // 根据操作获取点与点之间的路径
     const getPaths = (cNode, pNode, sNode, eNode) => {
-      console.log('getpaths');
       let a,
         i,
         nNode;
@@ -209,7 +209,6 @@ export default class RelationGraph extends React.PureComponent {
         } else {
           nNode = _saveSortAdges[cNode][i];
           while (nNode !== null) {
-            console.log(nNode);
             if (pNode !== null &&
               (nNode === sNode || nNode === pNode || stack.indexOf(nNode) !== -1)) {
               if (i >= _saveSortAdges[cNode].length) {
@@ -524,7 +523,15 @@ export default class RelationGraph extends React.PureComponent {
           return '';
         }
       }).style('fill', '#fff');
-      svg.selectAll('circle').data(_nodes).attr('fill', (d) => {
+      svg.selectAll('circle').data(_nodes)
+        .style('stroke', '#fff')
+        .style('stroke-width', (d) => {
+        if (d.indices.hIndex > 50) {
+          return '1.5px';
+        } else {
+          return '1px';
+        }
+      }).attr('fill', (d, index) => {
         return getClusteringColor(d);
       });
       return _onclicknodes.slice(0, _onclicknodes.length);
@@ -555,66 +562,42 @@ export default class RelationGraph extends React.PureComponent {
     };
     // const div = d3.select('body').append('div').attr('class', 'tooltip').attr('id', 'tip').style('opacity', 0).style('background', 'white').style('color', 'black').style('padding', '0')
     //   .style('min-width', '300px').style('border-radius', '5px').style('padding-bottom', '10px');
-    const div = d3.select('body').append('div').attr('class', 'tooltip').attr('id', 'tip').style('opacity', 0).style('padding', '0')
-      .style('background', '#333').style('position', 'absolute');
+    let mouseOnDiv = false;
+
+    const div = d3.select('body').append('div')
+      .attr('class', 'tooltip')
+      .attr('id', 'tip')
+      .on('mouseover', (d) => {
+        mouseOnDiv = true;
+      })
+      .on('mouseout', (d) => {
+        mouseOnDiv = false;
+        document.getElementById('tip').style.display = 'none';
+      });
+
     const showInfo = (d) => {
       if (!this.drag) {
-        const pageX = d3.event.pageX;
-        const pageY = d3.event.pageY;
-        let posObj,
-          tempStr,
-          temppos;
-        tempStr = d.desc.n.en ? d.desc.n.en : '';
-        posObj = d.pos[0];
-        if (posObj) {
-          posObj.name.n.en ? temppos = posObj.name.n.en : temppos = posObj.name.n.zh;
-        } else {
-          temppos = '';
-        }
-        setTimeout((d, px, py) => {
-          document.getElementById('tip').style.display = 'none';
-          document.getElementById('tip').style.display = 'block';
-          div.transition().duration(500).style('opacity', 0);
-          div.transition().duration(20).style('opacity', 1.0);
-          div.html(`<span>${d.name.n.en}</span>`)
-            .style('left', `${px + 20}px`).style('top', `${py + 10}px`).style('color', '#fff')
-            .style('padding', '2px 5px');
-//           div.html(`<div class="" style="background: #EEEEEE;height: 35px;line-height: 35px; padding-left: 10px; border-radius: 5px; margin-top: 1px;">
-// <a href='https://cn.aminer.org/profile/${d.id}'>${d.name.n.en}</a></div>
-// <div style="padding-left: 10px;margin-left: 5px;margin-right: 5px;"><strong style="color: #a94442">h-Index:</strong>${d.indices.hIndex}&nbsp;|&nbsp;<strong style="color: #a94442">#Papers:</strong>${d.indices.numPubs}</br><p><i  class="fa fa-briefcase">&nbsp;
-// </i>${temppos}</p><p><i class="fa fa-map-marker" style="word-break:break-all;text-overflow:ellipsis">&nbsp;${tempStr}</i></p></div>`)
-//             .style('left', `${px + 20}px`).style('top', `${py + 10}px`);
-          document.getElementById('tip').onmouseout = function (e) {
-            if (this === e.relatedTarget) {
-              document.getElementById('tip').style.display = 'none';
-            }
-          };
-        }, 100, d, pageX, pageY);
+        document.getElementById('tip').style.display = 'block';
+        div.transition().duration(20).style('opacity', 1.0);
+        div.html(`<span class="title">${d.name.n.en}</span>`)
+          .style('left', `${d3.event.pageX + 10}px`)
+          .style('top', `${d3.event.pageY + 10}px`);
       } else {
         document.getElementById('tip').style.display = 'none';
       }
     };
     const hideInfo = (d) => {
-      const div = document.getElementById('tip');
-      const x = d3.event.pageX;
-      const y = d3.event.pageY;
-      setTimeout((x, y) => {
-        const x1 = div.offsetLeft;
-        const y1 = div.offsetTop;
-        const divx2 = div.offsetLeft + div.offsetWidth;
-        const divy2 = div.offsetTop + div.offsetHeight;
-        if (x < x1 || x > divx2 || y < y1 || y > divy2) {
+      setTimeout(() => {
+        if (!mouseOnDiv) {
           document.getElementById('tip').style.display = 'none';
         }
-      }, 1500, x, y);
+      }, 80);
     };
 
     _drag = d3.drag().on('start', dragstarted).on('drag', dragged).on('end', dragended);
 
     // $scope.zommed.
     this.zoomed = function () {
-      console.log('zoom===========');
-      // console.log('[debug] in zommed, this:', this);
       const transform = d3.zoomTransform(this);
       svg.attr('transform', `translate(${transform.x},${transform.y}) scale(${transform.k})`);
       svg.selectAll('line').data(_edges).style('stroke-width', (d) => {
@@ -629,9 +612,7 @@ export default class RelationGraph extends React.PureComponent {
         }
       });
       svg.selectAll('circle').data(_nodes).attr('r', (d) => {
-        console.log(indexShow);
         if (indexShow >= 10) {
-          console.log(2222222222);
           if (d.indices.hIndex > indexShow) {
             return getRadious(d.indices.hIndex + 32);
           } else {
@@ -730,8 +711,8 @@ export default class RelationGraph extends React.PureComponent {
 
     const orderdraw = (ds) => {
       ds = removeDuplicatedItem(ds);
-      svg.selectAll('line').data(_edges).style('opacity', 0.3);
-      svg.selectAll('circle').data(_nodes).style('opacity', 0.3);
+      svg.selectAll('line').data(_edges).style('opacity', 0.3).style('stroke', '#999999');
+      svg.selectAll('circle').data(_nodes).style('opacity', 0.3).style('stroke', '#fff');
       svg.selectAll('line').data(_edges).filter((e, i) => {
         let a,
           b;
@@ -800,6 +781,8 @@ export default class RelationGraph extends React.PureComponent {
 
     this.onSearch = (d) => {
       this.currentModle1 = true;
+      this.currentModle3 = false;
+      currentThis.setState({ two_paths: false });
       nodeclick(d);
       simulation.alphaTarget(0.1).restart();
       d.fx = EgoWidth / 2;
@@ -815,6 +798,9 @@ export default class RelationGraph extends React.PureComponent {
       this.currentModle1 = false;
       clearAllChoosed(5);
       this.setState({ currentNode: null });
+    };
+    this.onSearchTwoPaths = (d) => {
+      nodeclick(d);
     };
     const nodeclick = (d) => {
       let goalNodes,
@@ -873,7 +859,7 @@ export default class RelationGraph extends React.PureComponent {
           returndraw(5);
           svg.selectAll('circle').data(_nodes).filter((k) => {
             return k.id === d.id;
-          }).style('stroke', 'black').style('stroke-width', '5px').style('fill', 'white');
+          }).style('stroke', 'black').style('stroke-width', '5px');
         } else {
           if (_lastNode !== null) {
             _endOfSortAdges = [];
@@ -899,7 +885,7 @@ export default class RelationGraph extends React.PureComponent {
               }
             }
           }
-          return _lastNode = null;
+          // return _lastNode = null;
         }
       } else if (this.currentModle4 === true) {
         if (_lastNode === null) {
@@ -964,20 +950,13 @@ export default class RelationGraph extends React.PureComponent {
         }
       }).attr('fill', (d, index) => {
         return getClusteringColor(d);
-        // return color(_edges[index].source.index);
       }).call(_drag).on('mouseover', (d) => {
         showInfo(d);
-        // svg.selectAll('text').data(_nodes).filter((k) => {
-        //   return k.id === d.id;
-        // }).style('fill', 'yellow');
         svg.selectAll('circle').data(_nodes).filter((k) => {
           return k.id === d.id && _onclicknodes.indexOf(d.id) === -1;
         }).attr('fill', 'yellow');
       }).on('mouseout', (d) => {
         hideInfo(d);
-        // svg.selectAll('text').data(_nodes).filter((k) => {
-        //   return k.id === d.id;
-        // }).style('fill', '#fff');
         svg.selectAll('circle').data(_nodes).filter((k) => {
           return k.id === d.id;
         }).attr('fill', (d) => {
@@ -1021,17 +1000,10 @@ export default class RelationGraph extends React.PureComponent {
         // })
         .on('mouseover', (d) => {
           showInfo(d);
-          // svg.selectAll('text').data(_nodes).filter((k) => {
-          //   return k.id === d.id;
-          // }).style('fill', 'yellow');
           return svg.selectAll('circle').data(_nodes).filter((k) => {
             return k.id === d.id;
           }).attr('fill', 'yellow');
         }).on('mouseout', (d) => {
-          // hideInfo(d);
-          // svg.selectAll('text').data(_nodes).filter((k) => {
-          //   return k.id === d.id;
-          // }).style('fill', '#fff');
           return svg.selectAll('circle').data(_nodes).filter((k) => {
             return k.id === d.id;
           }).attr('fill', (d) => {
@@ -1469,6 +1441,7 @@ export default class RelationGraph extends React.PureComponent {
     const { describeNodes1, describeNodes2, suspension_adjustment, two_paths, continuous_path, single_extension, currentNode } = this.state;
     return (
       <div className={styles.vis_container}>
+        {/* 搜索结果 */}
         <div style={{ display: 'flex', flexDirection: 'row' }}>
           {/* <h3>{this.props.query}</h3> */}
           There are
@@ -1481,7 +1454,18 @@ export default class RelationGraph extends React.PureComponent {
             {/* <Checkbox checked={subnet_selection} onChange={this.changeModle1}>子网选取</Checkbox> */}
             <Checkbox checked={suspension_adjustment} onChange={this.changeModle2}>暂停调整</Checkbox>
             <Checkbox checked={two_paths} onChange={this.changeModle3}>两点路径</Checkbox>
-            <Checkbox checked={continuous_path} onChange={this.changeModle4}>连续路径</Checkbox>
+            {this.currentModle3 &&
+            <span>
+              <RgSearchNameBox size="default" style={{ width: 260 }} onSearch={this.onSearchTwoPaths}
+                                  suggesition={this.state.allNodes} hideSearchBtn={true} />
+              &nbsp;-&nbsp;
+              <RgSearchNameBox size="default" style={{ width: 260 }} onSearch={this.onSearchTwoPaths}
+                               suggesition={this.state.allNodes} hideSearchBtn={true} />
+              &nbsp;
+              <Button type="primary" size="small" onClick={this.changeModle3}>取消选择</Button>
+            </span>}
+
+            {/*<Checkbox checked={continuous_path} onChange={this.changeModle4}>连续路径</Checkbox>*/}
             {/*<Checkbox checked={single_extension} onChange={this.changeModle5}>单点扩展</Checkbox>*/}
             <label>过滤器：</label>
             <Select defaultValue="h-Index>0" style={{ width: 120, marginRight: 10 }}
@@ -1497,6 +1481,7 @@ export default class RelationGraph extends React.PureComponent {
                            suggesition={this.state.allNodes} />
         </div>
 
+        {/* 左侧显示的专家信息 */}
         {currentNode !== null && currentNode &&
         <div id="leftInfoZone" className={styles.leftInfoZone}>
           <div>
@@ -1505,8 +1490,7 @@ export default class RelationGraph extends React.PureComponent {
               <img src={getAvatar(currentNode.avatar, currentNode.id, 90)} alt="" />
             </div>
             }
-            {currentNode.name &&
-            <h2>{currentNode.name.n.en}</h2>
+            {currentNode.name && <h2>{currentNode.name.n.en}</h2>
             }
             {currentNode.indices &&
             <div style={{ marginBottom: 8 }}>
@@ -1536,12 +1520,14 @@ export default class RelationGraph extends React.PureComponent {
           </div>
         </div>
         }
+        {/* 关系图 */}
         <div id="rgvis" style={{
           width: EgoWidth,
           height: EgoHeight,
           border: '1px solid #eee',
           marginTop: 20,
         }} />
+        {/* 进度条 */}
         {this.pgshow && <Progress percent={this.state.pgLength} style={{
           width: EgoWidth / 2,
           position: 'relative',

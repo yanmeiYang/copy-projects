@@ -18,6 +18,8 @@ export default {
   'com.KgSearchBox.placeholder': 'Input expert name or query',
   'com.KgSearchBox.searchBtn': 'Search',
 
+  'com.RgSearchNameBox.placeholder': 'Input expert name',
+
   'com.search.filter.searchRange': 'Range:',
   'com.search.filter.Filters': 'Filters:',
   'com.search.filter.label.h_index': 'H-Index',
@@ -50,7 +52,7 @@ export default {
   'com.bole.ExpertPhoto': 'No Avatar',
   // bole add button
   'com.bole.AddButton': 'Add',
-  'com.bole.AddedSuccessfully': 'Added Successfully',
+  'com.bole.Remove': 'remove',
   // bole remove button
   'com.bole.PersonRemoveButton': 'Remove',
 

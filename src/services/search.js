@@ -2,6 +2,7 @@ import { request, config } from '../utils';
 import { sysconfig } from '../systems';
 
 const { api } = config;
+
 /* 目前搜索的各种坑
    全局搜索：
    智库高级搜索：
@@ -77,18 +78,6 @@ function prepareParameters(query, offset, size, filters, sort, useTranslateSearc
   return { expertBase, data };
 }
 
-function addAdditionParameterToData(data, sort) {
-  // console.log('>>>>>>>>>>>>>>>>> ', data, sort);
-  const newData = data;
-  // 置顶acm fellow和高校top100
-  if (sysconfig.Search_EnablePin) {
-    if (!sort || sort === 'relevance') {
-      newData.pin = 1;
-    }
-  }
-  return newData;
-}
-
 function prepareParametersGlobal(query, offset, size, filters, sort, useTranslateSearch) {
   let data = { query, offset, size, sort };
   if (filters) {
@@ -111,6 +100,26 @@ function prepareParametersGlobal(query, offset, size, filters, sort, useTranslat
   }
   return data;
 }
+
+// Additional parameters.
+function addAdditionParameterToData(data, sort) {
+  const newData = data;
+
+  // 置顶acm fellow和高校top100
+  if (sysconfig.Search_EnablePin) {
+    if (!sort || sort === 'relevance') {
+      newData.pin = 1;
+    }
+  }
+
+  // with search in expert-base.
+  if (sysconfig.Search_CheckEB) {
+    newData.lk_roster = sysconfig.ExpertBase;
+  }
+  return newData;
+}
+
+// ---------------------------------------------------------
 
 export async function getSeminars(offset, size) {
   return request(api.getSeminars.replace(':offset', offset).replace(':size', size));

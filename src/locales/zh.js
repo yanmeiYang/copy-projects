@@ -18,6 +18,8 @@ export default {
   'com.KgSearchBox.placeholder': '请输入姓名或者搜索词',
   'com.KgSearchBox.searchBtn': '搜索',
 
+  'com.RgSearchNameBox.placeholder': '请输入姓名',
+
   'com.search.filter.searchRange': '搜索范围:',
   'com.search.filter.Filters': '过滤条件:',
   'com.search.filter.label.h_index': 'h指数',
@@ -55,9 +57,7 @@ export default {
   'com.bole.ExpertPhoto': '暂无头像',
   // bole add button
   'com.bole.AddButton': '添加',
-  'com.bole.com.bole.AddedSuccessfully': '添加成功',
-  // bole remove button
-  'com.bole.PersonRemoveButton': '移除',
+  'com.bole.Remove': '删除',
 
 
   // Recommendation

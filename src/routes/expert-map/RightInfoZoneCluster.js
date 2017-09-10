@@ -63,19 +63,15 @@ class RightInfoZoneCluster extends React.PureComponent {
     sortedInterest = sortedInterest.sort((a, b) => b.count - a.count);
     // TODO 人头按Hindex排序。
     // TODO 显示Hindex分段.
+    const avg = (hindexSum / persons.length).toFixed(0);
     return (
       <div className="rizCluster">
         <div className="name bg">
           <h2 className="section_header">Cluster of {persons.length} experts.</h2>
         </div>
 
-        <div className="info bg">
-          <div>Sum of H-index: {hindexSum}</div>
-          <div>Avg of H-index: {(hindexSum / persons.length).toFixed(0)}</div>
-        </div>
-
         <div className="info">
-          <HindexGraph persons={persons} />
+          <HindexGraph persons={persons} avg={avg} />
         </div>
 
         <div className="info images">

@@ -27,11 +27,21 @@ export default class ExpertBaseExpertsPage extends React.Component {
       type: 'expertBase/getExpertDetailList',
       payload: { id: this.TheOnlyExpertBaseID, offset: 0, size: 200 },
     });
+    this.props.dispatch({
+      type: 'app/layout',
+      payload: {
+        headerSearchBox: { query: '', onSearch: this.onSearch },
+        showFooter: false,
+      },
+    });
   }
 
-  addExpertDetailInfo = (dataId) => {
-    const id = dataId;
-    this.props.dispatch(routerRedux.push({ pathname: `/add-expert-detail/${id}` })); // TODO
+  // addExpertDetailInfo = (dataId) => {
+  //   const id = dataId;
+  //   this.props.dispatch(routerRedux.push({ pathname: `/add-expert-detail/${id}` })); // TODO
+  // };
+  onSearch = () => {
+    console.log('search:', '');
   };
 
   searchExpertByName = (value) => {

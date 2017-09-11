@@ -58,6 +58,7 @@ export default {
   // bole add button
   'com.bole.AddButton': '添加',
   'com.bole.Remove': '删除',
+  'com.bole.PersonComment': '添加评论',
 
 
   // Recommendation

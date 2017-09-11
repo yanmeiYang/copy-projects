@@ -198,6 +198,8 @@ module.exports = {
     searchExpertByName: '/search/roster/:ebid/experts/advanced',
     invokeRoster: '/roster/:id/members/u',
     removeByPidApi: '/roster/:rid/d/:pid',
+    getToBProfile: ' /api/2b/profile/:src/aid/:id ',
+    // getToBProfile: '/api/2b/profile/:src/:id',
   },
 };
 

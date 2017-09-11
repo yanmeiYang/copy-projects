@@ -4,7 +4,8 @@
 import React from 'react';
 import { Link } from 'dva/router';
 import defaults from '../utils';
-import { AddToEBButton, PersonRemoveButton } from './components';
+import { AddToEBButton, PersonRemoveButton, PersonComment } from './components';
+
 import { createRoster } from '../../hooks';
 
 module.exports = {
@@ -61,6 +62,9 @@ module.exports = {
   PersonList_TitleRightBlock:
     person => <AddToEBButton person={person} key="2" ExpertBase="59a8e5879ed5db1fc4b762ad" />,
   PersonList_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
+  PersonList_BottomZone: [
+    person => <PersonComment person={person} key="1" ExpertBase="59a8e5879ed5db1fc4b762ad" />,
+  ],
   Search_CheckEB: true, // Check ExpertBase.
 
   // 地图中心点
@@ -70,7 +74,7 @@ module.exports = {
     'Computer Assisted Surgery', 'Surgical Navigation', 'Minimally Invasive Surgery'],
 
   // research TODO ???????? Should be in add button.
-  Person_PersonPerson_PersonRemoveButtonRemoveButton: person => <PersonRemoveButton
+ Person_PersonRemoveButton: person => <PersonRemoveButton
     person={person}
     ExpertBase="59a8e5879ed5db1fc4b762ad" />,
 

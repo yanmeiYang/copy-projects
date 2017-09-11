@@ -5,6 +5,7 @@ import React from 'react';
 import { Link } from 'dva/router';
 import defaults from '../utils';
 import { AddToEBButton, PersonRemoveButton, PersonComment } from './components';
+import { createComment } from './person-comment-hooks';
 
 import { createRoster } from '../../hooks';
 
@@ -76,6 +77,8 @@ module.exports = {
         ExpertBase="59a8e5879ed5db1fc4b762ad"
       />),
   ],
+  PersonList_DidMountHooks: [
+    param => createComment(param)],
   Search_CheckEB: true, // Check ExpertBase.
 
   // 地图中心点

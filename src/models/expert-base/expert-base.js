@@ -10,6 +10,7 @@ export default {
     results: [],
     detailResults: [],
     addStatus: {},
+    deleteIsSuccess: null,
   },
 
   subscriptions: {
@@ -81,12 +82,8 @@ export default {
     * removeExpertItem({ payload }, { call, put }) {
       const { pid, rid } = payload;
       const { data } = yield call(expertBaseService.removeByPid, { pid, rid });
-      console.log('00000', data);
-      if (data.status) {
-        yield put({ type: 'removeSuccess', payload });
-      }
+      yield put({ type: 'removeSuccess', data });
     },
-
   },
   reducers: {
     getExpertSuccess(state, { payload: { data } }) {
@@ -104,20 +101,8 @@ export default {
     addExpertSuccess(state, { payload: { data } }) {
       return { ...state, };
     },
-
-    deleteExpertSuccess(state, { payload }) {
-      const data = state.results.data.filter(item => item.id !== payload.key);
-      const newState = { ...state };
-      newState.results.data = data;
-      return { ...state, newState };
-    },
-
-    removeSuccess(state, { payload }) {
-      console.log('--------------state.detailResults', state);
-      const data = state.detailResults.result.filter(item => item.id !== payload.pid);
-      const newState = { ...state };
-      newState.detailResults.result = data;
-      return newState;
+    removeSuccess(state, { data }) {
+      return { ...state, deleteIsSuccess: data.status };
     },
 
     addExpertToEBSuccess(state, { payload: { data } }) {

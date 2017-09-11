@@ -14,11 +14,14 @@ import * as profileUtils from 'utils/profile-utils';
 import { Indices } from 'components/widgets';
 import ViewExpertInfo from './view-expert-info';
 import styles from './person-list.less';
-import { PersonRemoveButton } from '../../systems/bole/components';
+import { PersonComment } from '../../systems/bole/components';
 
 const DEFAULT_RIGHT_CONTENT = <ViewExpertInfo />;
 const DefaultRightZoneFuncs = [
   person => <ViewExpertInfo person={person} key="1" />,
+];
+const DefaultBottomZoneFuncs = [
+  person => <PersonComment person={person} key="1" />,
 ];
 
 export default class PersonList extends PureComponent {
@@ -40,7 +43,7 @@ export default class PersonList extends PureComponent {
   }
 
   render() {
-    const { persons, rightZoneFuncs, personRemove, titleRightBlock } = this.props;
+    const { persons, rightZoneFuncs, titleRightBlock, bottomZoneFuncs } = this.props;
     console.log('refresh person list ');
 
     // is search in global or in eb.
@@ -48,6 +51,7 @@ export default class PersonList extends PureComponent {
 
     const showPrivacy = false;
     const RightZoneFuncs = rightZoneFuncs || DefaultRightZoneFuncs;
+    const BottomZoneFuncs = bottomZoneFuncs || DefaultBottomZoneFuncs;
     return (
       <div className={styles.personList}>
         {persons && persons.map((person) => {
@@ -69,7 +73,8 @@ export default class PersonList extends PureComponent {
           }
 
           return (
-            <div key={person.id} className={styles.person}>
+            <div key={person.id}>
+              <div className={styles.person}>
               <div className={styles.avatar_zone}>
                 <img src={profileUtils.getAvatar(person.avatar, '', 160)}
                      className={styles.avatar} alt={name} title={name} />
@@ -150,7 +155,15 @@ export default class PersonList extends PureComponent {
                     }
 
                   </div>
+                  {BottomZoneFuncs && BottomZoneFuncs.length > 0 &&
+                  <div className={styles.personComment}>
+                    {BottomZoneFuncs.map((bottomBlockFunc) => {
+                      return bottomBlockFunc ? bottomBlockFunc(person) : false;
+                    })}
+                  </div>
+                  }
                 </div>
+              </div>
               </div>
               {RightZoneFuncs && RightZoneFuncs.length > 0 &&
               <div className={styles.person_right_zone}>

@@ -162,7 +162,6 @@ export default class SearchComponent extends Component {
 
 
   render() {
-    console.log('>>-->nnmn^o^ Referesh too mach!!', this.props.showSearchBox);
     const { className } = this.props;
     const sorts = this.props.sorts || defaultSorts;
     const { sortType } = this.state;
@@ -259,6 +258,7 @@ export default class SearchComponent extends Component {
                           expertBaseId={expertBase}
                           titleRightBlock={sysconfig.PersonList_TitleRightBlock}
                           rightZoneFuncs={sysconfig.PersonList_RightZone}
+                          bottomZoneFuncs={sysconfig.PersonList_BottomZone}
               />
               <div className={styles.paginationWrap}>
                 <Pagination

@@ -91,6 +91,7 @@ const defaultSystemConfigs = {
   PersonList_PersonLink_NewTab: true,
   PersonList_TitleRightBlock: defaults.EMPTY_BLOCK_FUNC, // profile => 'jsx',
   PersonList_RightZone: defaults.IN_APP_DEFAULT, // [()=><COMP>]
+  PersonList_BottomZone: defaults.IN_APP_DEFAULT, // [()=><COMP>]
   Search_CheckEB: false,
 
   // > Search

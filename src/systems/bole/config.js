@@ -4,7 +4,8 @@
 import React from 'react';
 import { Link } from 'dva/router';
 import defaults from '../utils';
-import { AddToEBButton, PersonRemoveButton } from './components';
+import { AddToEBButton, PersonRemoveButton, PersonComment } from './components';
+
 import { createRoster } from '../../hooks';
 
 module.exports = {
@@ -68,6 +69,12 @@ module.exports = {
       />),
 
   PersonList_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
+  PersonList_BottomZone: [
+    param => (
+      <PersonComment person={param.person} key="1"
+                     ExpertBase="59a8e5879ed5db1fc4b762ad"
+      />),
+  ],
   Search_CheckEB: true, // Check ExpertBase.
 
   // 地图中心点

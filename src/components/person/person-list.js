@@ -8,6 +8,7 @@ import { Tag, Tooltip } from 'antd';
 import classnames from 'classnames';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import * as personService from 'services/person';
+import { PersonComment } from 'systems/bole/components';
 import { sysconfig } from 'systems';
 import { config } from 'utils';
 import * as profileUtils from 'utils/profile-utils';
@@ -17,6 +18,9 @@ import styles from './person-list.less';
 
 const DefaultRightZoneFuncs = [
   param => <ViewExpertInfo person={param.person} key="1" />,
+];
+const DefaultBottomZoneFuncs = [
+  param => <PersonComment person={param.person} key="1" />,
 ];
 
 export default class PersonList extends PureComponent {
@@ -38,8 +42,8 @@ export default class PersonList extends PureComponent {
   }
 
   render() {
-    const { persons, personRemove, expertBaseId } = this.props;
-    const { rightZoneFuncs, titleRightBlock } = this.props;
+    const { persons, expertBaseId } = this.props;
+    const { rightZoneFuncs, titleRightBlock, bottomZoneFuncs } = this.props;
     console.log('refresh person list ');
 
     // is search in global or in eb.
@@ -47,7 +51,7 @@ export default class PersonList extends PureComponent {
 
     const showPrivacy = false;
     const RightZoneFuncs = rightZoneFuncs || DefaultRightZoneFuncs;
-    console.log('>>>>>>>>>>>>>>>>>>>>>   +++', titleRightBlock);
+    const BottomZoneFuncs = bottomZoneFuncs || DefaultBottomZoneFuncs;
     return (
       <div className={styles.personList}>
         {persons && persons.map((person) => {
@@ -150,6 +154,16 @@ export default class PersonList extends PureComponent {
                     }
 
                   </div>
+
+                  {/* ---- Bottom Zone ---- */}
+                  {BottomZoneFuncs && BottomZoneFuncs.length > 0 &&
+                  <div className={styles.personComment}>
+                    {BottomZoneFuncs.map((bottomBlockFunc) => {
+                      return bottomBlockFunc ? bottomBlockFunc(person) : false;
+                    })}
+                  </div>
+                  }
+
                 </div>
               </div>
 

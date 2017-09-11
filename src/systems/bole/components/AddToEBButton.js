@@ -12,13 +12,15 @@ import styles from './AddToEBButton.less';
 export default class AddToEBButton extends PureComponent {
   constructor(props) {
     super(props);
+    // NOTE 使用这种方式来减小之后的代码长度。
+    const { person, ExpertBase } = props; // FIXME ExpertBase属性与model太接近了。
     this.state = {
       visible: false,
-      dataIdItem: props.ExpertBase,
+      dataIdItem: ExpertBase,
       value: 1,
       personData: '',
-      isInThisEB: props.person && props.person.locks && props.person.locks.roster,
-  };
+      isInThisEB: person && person.locks && person.locks.roster,
+    };
   }
 
   add = (id) => {
@@ -30,37 +32,39 @@ export default class AddToEBButton extends PureComponent {
       type: 'expertBase/addExpertToEB',
       payload: { ebid, aids },
     });
-    this.setState({ loading: true });
+    this.setState({ loading: true }); // FIXME 什么鬼, 不要用自己的Loading
     if (this.props.expertBase.addStatus) {
       Modal.success({
         content: '添加成功',
       });
       setTimeout(() => {
-        this.setState({ isInThisEB: true});
+        // TODO this 还是 that
+        this.setState({ isInThisEB: true });
       }, 400);
     }
     this.setState({ personData: this.props.person.id });
   };
+
   removeItem = (pid) => {
+    // TODO 看一下，这里是标准用法:
+    const { dispatch } = this.props;
     const rid = this.state.dataIdItem;
-    const props = this.props;
     const offset = 0;
     const size = 100;
     const that = this;
     Modal.confirm({
-      title: '删除',
+      title: '删除', // TODO i18n
       content: '确定删除吗？',
       onOk() {
-        props.dispatch({
+        dispatch({
           type: 'expertBase/removeExpertItem',
           payload: { pid, rid, offset, size },
         });
         that.setState({ isInThisEB: false });
-
       },
       onCancel() {
       },
-  });
+    });
   };
 
   handleOk = (id) => {

@@ -48,14 +48,13 @@ export default {
   'com.searchTypeWidget.label.ExpertTrajectory': 'Expert Trajectory',
   'com.searchTypeWidget.label.ExpertBase': 'My Experts',
 
-  // bole avart
+  // bole avatar
   'com.bole.ExpertPhoto': 'No Avatar',
   // bole add button
   'com.bole.AddButton': 'Add',
-  'com.bole.Remove': 'remove',
+  'com.bole.Remove': 'Remove',
   // bole remove button
   'com.bole.PersonRemoveButton': 'Remove',
-
 
   'com.PersonList.label.views': 'views',
   'com.PersonList.label.homepage': 'Homepage',

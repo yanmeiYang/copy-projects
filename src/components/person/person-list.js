@@ -2,7 +2,7 @@
  *  Created by BoGao on 2017-06-15;
  */
 /* eslint-disable camelcase */
-import React, { PureComponent } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import { Link } from 'dva/router';
 import { Tag, Tooltip } from 'antd';
 import classnames from 'classnames';
@@ -14,11 +14,9 @@ import * as profileUtils from 'utils/profile-utils';
 import { Indices } from 'components/widgets';
 import ViewExpertInfo from './view-expert-info';
 import styles from './person-list.less';
-import { PersonRemoveButton } from '../../systems/bole/components';
 
-const DEFAULT_RIGHT_CONTENT = <ViewExpertInfo />;
 const DefaultRightZoneFuncs = [
-  person => <ViewExpertInfo person={person} key="1" />,
+  param => <ViewExpertInfo person={param.person} key="1" />,
 ];
 
 export default class PersonList extends PureComponent {
@@ -40,7 +38,8 @@ export default class PersonList extends PureComponent {
   }
 
   render() {
-    const { persons, rightZoneFuncs, personRemove, titleRightBlock } = this.props;
+    const { persons, personRemove, expertBaseId } = this.props;
+    const { rightZoneFuncs, titleRightBlock } = this.props;
     console.log('refresh person list ');
 
     // is search in global or in eb.
@@ -48,6 +47,7 @@ export default class PersonList extends PureComponent {
 
     const showPrivacy = false;
     const RightZoneFuncs = rightZoneFuncs || DefaultRightZoneFuncs;
+    console.log('>>>>>>>>>>>>>>>>>>>>>   +++', titleRightBlock);
     return (
       <div className={styles.personList}>
         {persons && persons.map((person) => {
@@ -85,7 +85,7 @@ export default class PersonList extends PureComponent {
                     </h2>
 
                     {/* ---- TitleRightBlock ---- */}
-                    {titleRightBlock && titleRightBlock(person)}
+                    {titleRightBlock && titleRightBlock({ person, expertBaseId })}
                     {/*{this.personRightButton && this.personRightButton(person)}*/}
                   </div>}
                   <div className={classnames(styles.zone, styles.interestColumn)}>
@@ -152,21 +152,31 @@ export default class PersonList extends PureComponent {
                   </div>
                 </div>
               </div>
+
+              {/* ---- Right Zone ---- */}
               {RightZoneFuncs && RightZoneFuncs.length > 0 &&
               <div className={styles.person_right_zone}>
                 {RightZoneFuncs.map((blockFunc) => {
-                  // TODO is function
-                  return blockFunc ? blockFunc(person) : false;
+                  const param = { person, expertBaseId };
+                  return blockFunc ? blockFunc({ param }) : false;
                 })}
               </div>
               }
+
             </div>
           );
         })
         }
       </div>
     );
-
-    // console.log("persons is ", this.props.persons);
   }
 }
+
+PersonList.propTypes = {
+  // className: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  className: PropTypes.string, // NOTE: 一般来说每个稍微复杂点的Component都应该有一个className.
+  persons: PropTypes.array,
+  expertBaseId: PropTypes.string,
+  titleRightBlock: PropTypes.func, // A list of functino
+  rightZoneFuncs: PropTypes.array,
+};

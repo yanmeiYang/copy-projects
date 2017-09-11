@@ -81,11 +81,12 @@ export default {
     * removeExpertItem({ payload }, { call, put }) {
       const { pid, rid } = payload;
       const { data } = yield call(expertBaseService.removeByPid, { pid, rid });
-      console.log('00000',data);
+      console.log('00000', data);
       if (data.status) {
         yield put({ type: 'removeSuccess', payload });
       }
     },
+
   },
   reducers: {
     getExpertSuccess(state, { payload: { data } }) {
@@ -112,7 +113,7 @@ export default {
     },
 
     removeSuccess(state, { payload }) {
-      console.log('--------------state.detailResults',state);
+      console.log('--------------state.detailResults', state);
       const data = state.detailResults.result.filter(item => item.id !== payload.pid);
       const newState = { ...state };
       newState.detailResults.result = data;

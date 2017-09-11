@@ -50,11 +50,10 @@ export default {
 
   // bole avart
   'com.bole.ExpertPhoto': 'No Avatar',
-  // bole add button
   'com.bole.AddButton': 'Add',
   'com.bole.Remove': 'remove',
-  // bole remove button
   'com.bole.PersonRemoveButton': 'Remove',
+  'com.bole.PersonComment': 'Comments',
 
 
   'com.PersonList.label.views': 'views',

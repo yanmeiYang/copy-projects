@@ -3,7 +3,7 @@
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Button, Icon, Modal } from 'antd';
+import { Button, Modal } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import { routerRedux } from 'dva/router';
 import styles from './AddToEBButton.less';

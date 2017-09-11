@@ -5,12 +5,14 @@
  *
  * @param dispatch or put
  */
-function createComment(param) {
+function createComment({ param }) {
   const { dispatch, persons } = param;
-  dispatch({
-    type: 'personComments/getTobProfileList',
-    payload: { persons },
-  });
+  if (typeof dispatch === 'function') {
+    dispatch({
+      type: 'personComments/getTobProfileList',
+      payload: { persons },
+    });
+  }
 }
 
 module.exports = {

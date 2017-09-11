@@ -36,10 +36,9 @@ export default class PersonList extends PureComponent {
   state = {};
 
   componentDidMount() {
-    const personList = this.props.persons;
-    const { didMountHooks, dispatch } = this.props;
+    const { didMountHooks, dispatch, persons } = this.props;
     if (didMountHooks && didMountHooks.length > 0) {
-      didMountHooks[0]({ param: { dispatch, personList } });
+      didMountHooks[0]({ param: { dispatch, persons } });
     }
   }
 
@@ -161,13 +160,6 @@ export default class PersonList extends PureComponent {
                       }
 
                     </div>
-                    {BottomZoneFuncs && BottomZoneFuncs.length > 0 &&
-                    <div className={styles.personComment}>
-                      {BottomZoneFuncs.map((bottomBlockFunc) => {
-                        return bottomBlockFunc ? bottomBlockFunc(person) : false;
-                      })}
-                    </div>
-                    }
                   </div>
                 </div>
               </div>
@@ -179,7 +171,14 @@ export default class PersonList extends PureComponent {
                 })}
               </div>
               }
-
+              {BottomZoneFuncs && BottomZoneFuncs.length > 0 &&
+              <div className={styles.personComment}>
+                {BottomZoneFuncs.map((bottomBlockFunc) => {
+                  const param = { person, expertBaseId };
+                  return bottomBlockFunc ? bottomBlockFunc(param) : false;
+                })}
+              </div>
+              }
             </div>
           );
         })

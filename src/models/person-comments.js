@@ -7,7 +7,7 @@ export default {
   namespace: 'personComments',
 
   state: {
-    comments: {},
+    tobProfileMap: {},
   },
 
   subscriptions: {},
@@ -30,7 +30,7 @@ export default {
       for (const tobProfile of data.data) {
         tempComments.set(tobProfile.aid, tobProfile);
       }
-      return { ...state, comments: tempComments };
+      return { ...state, tobProfileMap: tempComments };
     },
   },
 

@@ -21,25 +21,33 @@ class PersonComment extends React.PureComponent {
     this.setState({ isComment: !this.state.isComment });
   };
   handleSubmit = () => {
-    const id = this.TheOnlyExpertBaseID;
-    console.log('这里=======');
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        this.props.dispatch({ type: 'expertBase/sendComments', payload: { values, id, aids } });
-      }
-    });
+    // const id = this.TheOnlyExpertBaseID;F
+    // this.props.form.validateFields((err, values) => {
+    //   if (!err) {
+    //     this.props.dispatch({
+    //       type: 'personComments/sendComments',
+    //       payload: { values, id, aids }
+    //     });
+    //   }
+    // });
   };
 
   render() {
-    const per = this.props.expertBase;
+    const { personComments, person } = this.props;
+    const comments = personComments && personComments.tobProfileMap.size !== undefined
+      && personComments.tobProfileMap.get(person.id);
+    const total = comments && comments.extra && comments.extra.comments.length;
     const FormItem = Form.Item;
     const { getFieldDecorator } = this.props.form;
     return (
       <div className={styles.commentStyles}>
-        <span onClick={this.putMessage.bind(this)}>
-         <Icon type="message" />
-        </span>
-        {this.state.isComment ?
+        <div className={styles.iconStyle} onClick={this.putMessage.bind(this)}>
+          <Icon type="message" />
+          {total ?
+            <span >共 {total} 条</span>:<span >共 0 条</span>}
+        </div>
+        <div>
+          {this.state.isComment &&
           <div className={styles.inputStyle}>
             <Form layout="inline" onSubmit={this.handleSubmit.bind()}>
               <FormItem>
@@ -53,11 +61,22 @@ class PersonComment extends React.PureComponent {
                   <FM id="com.bole.personComment" defaultMessage="Comments" /></Button>
               </FormItem>
             </Form>
-          </div> : false}
+          </div>}
+        </div>
+        {comments && comments.extra && comments.extra.comments &&
+        <div className={styles.commentArea}>
+          {comments.extra.comments.map((comment) => {
+            return (
+              <div key={comment.create_user.time}>
+                <span className={styles.name}>{comment.create_user.name}：</span>
+                <span className={styles.comments}>{comment.comment}</span>
+              </div>);
+          })}</div>
+        }
+
       </div>
     );
   }
 }
 
-export default connect(({ expertBase }) => ({ expertBase }))(Form.create()(PersonComment));
-
+export default connect(({ personComments }) => ({ personComments }))(Form.create()(PersonComment));

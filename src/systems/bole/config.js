@@ -59,11 +59,22 @@ module.exports = {
    * */
   // PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
   // PersonList_PersonLink_NewTab: true,
+  // param: [person, eb{id,name}]
   PersonList_TitleRightBlock:
-    person => <AddToEBButton person={person} key="2" ExpertBase="59a8e5879ed5db1fc4b762ad" />,
+    param => (
+      <AddToEBButton
+        person={param.person} key="2"
+        expertBaseId={param.expertBaseId}
+        targetExpertBase="59a8e5879ed5db1fc4b762ad"
+      />),
+
   PersonList_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
   PersonList_BottomZone: [
-    person => <PersonComment person={person} key="1" ExpertBase="59a8e5879ed5db1fc4b762ad" />,
+    param => (
+      <PersonComment
+        person={param.person} key="1"
+        ExpertBase="59a8e5879ed5db1fc4b762ad"
+      />),
   ],
   Search_CheckEB: true, // Check ExpertBase.
 
@@ -72,11 +83,6 @@ module.exports = {
 
   IndexPage_QuickSearchList: ['Medical Robotics', 'Surgical Robots', 'Robot Kinematics',
     'Computer Assisted Surgery', 'Surgical Navigation', 'Minimally Invasive Surgery'],
-
-  // research TODO ???????? Should be in add button.
- Person_PersonRemoveButton: person => <PersonRemoveButton
-    person={person}
-    ExpertBase="59a8e5879ed5db1fc4b762ad" />,
 
   ExpertBases: [
     {

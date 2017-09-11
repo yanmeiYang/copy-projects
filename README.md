@@ -123,6 +123,10 @@ TODO
 }
 ```
 
+##### Component 组件开发规范.(散)
++ 每个稍微复杂点的Component都应该有一个className.
+
+
 ## 挖坑
 
 ### systems/index.js

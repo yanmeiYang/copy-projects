@@ -2,26 +2,25 @@
  *  Created by BoGao on 2017-06-15;
  */
 /* eslint-disable camelcase */
-import React, { PureComponent } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import { Link } from 'dva/router';
 import { Tag, Tooltip } from 'antd';
 import classnames from 'classnames';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import * as personService from 'services/person';
+import { PersonComment } from 'systems/bole/components';
 import { sysconfig } from 'systems';
 import { config } from 'utils';
 import * as profileUtils from 'utils/profile-utils';
 import { Indices } from 'components/widgets';
 import ViewExpertInfo from './view-expert-info';
 import styles from './person-list.less';
-import { PersonComment } from '../../systems/bole/components';
 
-const DEFAULT_RIGHT_CONTENT = <ViewExpertInfo />;
 const DefaultRightZoneFuncs = [
-  person => <ViewExpertInfo person={person} key="1" />,
+  param => <ViewExpertInfo person={param.person} key="1" />,
 ];
 const DefaultBottomZoneFuncs = [
-  person => <PersonComment person={person} key="1" />,
+  param => <PersonComment person={param.person} key="1" />,
 ];
 
 export default class PersonList extends PureComponent {
@@ -43,7 +42,8 @@ export default class PersonList extends PureComponent {
   }
 
   render() {
-    const { persons, rightZoneFuncs, titleRightBlock, bottomZoneFuncs } = this.props;
+    const { persons, expertBaseId } = this.props;
+    const { rightZoneFuncs, titleRightBlock, bottomZoneFuncs } = this.props;
     console.log('refresh person list ');
 
     // is search in global or in eb.
@@ -73,8 +73,7 @@ export default class PersonList extends PureComponent {
           }
 
           return (
-            <div key={person.id}>
-              <div className={styles.person}>
+            <div key={person.id} className={styles.person}>
               <div className={styles.avatar_zone}>
                 <img src={profileUtils.getAvatar(person.avatar, '', 160)}
                      className={styles.avatar} alt={name} title={name} />
@@ -90,7 +89,7 @@ export default class PersonList extends PureComponent {
                     </h2>
 
                     {/* ---- TitleRightBlock ---- */}
-                    {titleRightBlock && titleRightBlock(person)}
+                    {titleRightBlock && titleRightBlock({ person, expertBaseId })}
                     {/*{this.personRightButton && this.personRightButton(person)}*/}
                   </div>}
                   <div className={classnames(styles.zone, styles.interestColumn)}>
@@ -155,6 +154,8 @@ export default class PersonList extends PureComponent {
                     }
 
                   </div>
+
+                  {/* ---- Bottom Zone ---- */}
                   {BottomZoneFuncs && BottomZoneFuncs.length > 0 &&
                   <div className={styles.personComment}>
                     {BottomZoneFuncs.map((bottomBlockFunc) => {
@@ -162,24 +163,34 @@ export default class PersonList extends PureComponent {
                     })}
                   </div>
                   }
+
                 </div>
               </div>
-              </div>
+
+              {/* ---- Right Zone ---- */}
               {RightZoneFuncs && RightZoneFuncs.length > 0 &&
               <div className={styles.person_right_zone}>
                 {RightZoneFuncs.map((blockFunc) => {
-                  // TODO is function
-                  return blockFunc ? blockFunc(person) : false;
+                  const param = { person, expertBaseId };
+                  return blockFunc ? blockFunc({ param }) : false;
                 })}
               </div>
               }
+
             </div>
           );
         })
         }
       </div>
     );
-
-    // console.log("persons is ", this.props.persons);
   }
 }
+
+PersonList.propTypes = {
+  // className: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  className: PropTypes.string, // NOTE: 一般来说每个稍微复杂点的Component都应该有一个className.
+  persons: PropTypes.array,
+  expertBaseId: PropTypes.string,
+  titleRightBlock: PropTypes.func, // A list of functino
+  rightZoneFuncs: PropTypes.array,
+};

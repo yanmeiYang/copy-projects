@@ -175,6 +175,8 @@ export default class SearchComponent extends Component {
         filters={filters} sort={this.state.sortType} />
     );
 
+    const expertBase = (filters && filters.eb && filters.eb.id) || 'aminer';
+
     // TODO move translate search out.
     const exportArea = sysconfig.Enable_Export ? operations : '';
 
@@ -253,6 +255,7 @@ export default class SearchComponent extends Component {
           <div className={styles.personAndKg}>
             <div>
               <PersonList persons={results}
+                          expertBaseId={expertBase}
                           titleRightBlock={sysconfig.PersonList_TitleRightBlock}
                           rightZoneFuncs={sysconfig.PersonList_RightZone}
                           bottomZoneFuncs={sysconfig.PersonList_BottomZone}

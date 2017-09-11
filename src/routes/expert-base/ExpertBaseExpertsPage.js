@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'dva';
 import { Icon, Input } from 'antd';
 import { routerRedux } from 'dva/router';
@@ -11,7 +11,7 @@ import styles from './ExpertBaseExpertsPage.less';
 const Search = Input.Search;
 @connect(({ expertBase, loading }) => ({ expertBase, loading }))
 @Auth
-export default class ExpertBaseExpertsPage extends React.Component {
+export default class ExpertBaseExpertsPage extends Component {
   constructor(props) {
     super(props);
     this.TheOnlyExpertBaseID = sysconfig.ExpertBase;

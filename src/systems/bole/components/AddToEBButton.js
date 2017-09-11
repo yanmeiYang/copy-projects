@@ -13,10 +13,10 @@ export default class AddToEBButton extends PureComponent {
   constructor(props) {
     super(props);
     // NOTE 使用这种方式来减小之后的代码长度。
-    const { person, ExpertBase } = props; // FIXME ExpertBase属性与model太接近了。
+    const { person, targetExpertBase } = props; // FIXME ExpertBase属性与model太接近了。
     this.state = {
       visible: false,
-      dataIdItem: ExpertBase,
+      dataIdItem: targetExpertBase,
       value: 1,
       personData: '',
       isInThisEB: person && person.locks && person.locks.roster,
@@ -95,8 +95,10 @@ export default class AddToEBButton extends PureComponent {
 
   render() {
     const per = this.props.person;
-    // const { results } = this.props.expertBase;
-    // const orgData = results.data;
+    if (!per) {
+      return false;
+    }
+    // TODO Loading..... of add button.
     return (
       <div className={styles.buttonArea}>
         {this.state.isInThisEB ?

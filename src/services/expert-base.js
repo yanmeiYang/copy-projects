@@ -107,7 +107,8 @@ export async function updateToBProfileExtra(aid, extra) {
   return request(api.updateToBProfileExtra
       .replace(':src', sysconfig.SOURCE)
       .replace(':id', aid),
-    { method: 'PATCH',
-      extra,
+    {
+      method: 'PATCH',
+      body: JSON.stringify({ extra }),
     });
 }

@@ -20,16 +20,17 @@ class PersonComment extends React.PureComponent {
   putMessage = () => {
     this.setState({ isComment: !this.state.isComment });
   };
-  handleSubmit = () => {
-    // const id = this.TheOnlyExpertBaseID;F
-    // this.props.form.validateFields((err, values) => {
-    //   if (!err) {
-    //     this.props.dispatch({
-    //       type: 'personComments/sendComments',
-    //       payload: { values, id, aids }
-    //     });
-    //   }
-    // });
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        this.props.dispatch({
+          type: 'personComments/createComment',
+          // TODO 需要获取用户uid，和 display_name
+          payload: { comment: values, person: this.props.person, uid: '', user_name: 'yym' },
+        });
+      }
+    });
   };
 
   render() {
@@ -49,14 +50,14 @@ class PersonComment extends React.PureComponent {
         <div>
           {this.state.isComment &&
           <div className={styles.inputStyle}>
-            <Form layout="inline" onSubmit={this.handleSubmit.bind()}>
+            <Form layout="inline" onSubmit={this.handleSubmit}>
               <FormItem>
                 {getFieldDecorator('comment')(
                   <Input type="text" placeholder="comment" />,
                 )}
               </FormItem>
               <FormItem>
-                <Button onSubmit={this.handleSubmit.bind()}
+                <Button htmlType="submit"
                         className={styles.addCommentButton}>
                   <FM id="com.bole.personComment" defaultMessage="Comments" /></Button>
               </FormItem>

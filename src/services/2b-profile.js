@@ -65,19 +65,19 @@ export async function deleteByKey(key) {
 }
 
 export async function addProfileSuccess(newData) {
-  const { name, name_zh, gender, aff, email, extra } = newData;
+  const { sid, name, name_zh, gender, aff, email, aid, type, extra } = newData;
   return request(api.addExpertInfoApi
       .replace(':src', sysconfig.SOURCE)
     , {
       method: 'POST',
       body: JSON.stringify({
-        sid: newData.sid,
-        aid: '',
+        sid: sid || '',
+        aid: aid || '',
         status: '',
-        type: '',
+        type: type || '',
         name,
         name_zh,
-        gender: parseInt(gender),
+        gender: parseInt(gender) || 0,
         title: '',
         level: '',
         aff,

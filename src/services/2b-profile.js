@@ -65,7 +65,7 @@ export async function deleteByKey(key) {
 }
 
 export async function addProfileSuccess(newData) {
-  const { name, name_zh, gender, aff, email } = newData;
+  const { name, name_zh, gender, aff, email, extra } = newData;
   return request(api.addExpertInfoApi
       .replace(':src', sysconfig.SOURCE)
     , {
@@ -85,6 +85,7 @@ export async function addProfileSuccess(newData) {
         phone: [],
         confidence: 0,
         verified: false,
+        extra: extra || {},
       }),
     });
 }

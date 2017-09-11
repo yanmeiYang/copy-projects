@@ -188,6 +188,8 @@ module.exports = {
     addExpertInfoApi: '/2b/profile/:src',
     updateItemById: '/2b/profile/:src/:id',
     searchItemByName: '/2b/profile/:src/offset/:offset/size/:size',
+    getToBProfileByAid: '/2b/profile/:src/aid/:id',
+    updateToBProfileExtra: '/2b/profile/:src/:id/extra ',
 
     getExpertBase: '/roster/list/:type/offset/:offset/size/:size',
     addExpertBaseApi: '/roster',
@@ -198,7 +200,6 @@ module.exports = {
     searchExpertByName: '/search/roster/:ebid/experts/advanced',
     invokeRoster: '/roster/:id/members/u',
     removeByPidApi: '/roster/:rid/d/:pid',
-    getToBProfile: '/2b/profile/:src/aid/:id',
     // getToBProfile: '/api/2b/profile/:src/:id',
   },
 };

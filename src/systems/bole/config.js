@@ -71,8 +71,9 @@ module.exports = {
   PersonList_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
   PersonList_BottomZone: [
     param => (
-      <PersonComment person={param.person} key="1"
-                     ExpertBase="59a8e5879ed5db1fc4b762ad"
+      <PersonComment
+        person={param.person} key="1"
+        ExpertBase="59a8e5879ed5db1fc4b762ad"
       />),
   ],
   Search_CheckEB: true, // Check ExpertBase.

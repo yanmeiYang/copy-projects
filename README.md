@@ -38,10 +38,23 @@ webpackConfig.resolve.alias = {
 ```
 
 #### New Route Configs.
+```javascript
+  UniSearch: {
+    path: '/uniSearch/:query/:offset/:size',
+    models: () => [
+      import('models/search'),
+      import('models/expert-base/expert-base'),
+    ],
+    component: () => import('routes/search/SearchPage'),
+  },
+```
 
 ### Development Guides
 
 #### Development tips:
+
+##### Common
++ Put one empty line between methods.
 
 ##### General
 + Always fork aminer-web prject，then submit a Merge Request.
@@ -109,6 +122,10 @@ TODO
 <div>blabla</div>
 }
 ```
+
+##### Component 组件开发规范.(散)
++ 每个稍微复杂点的Component都应该有一个className.
+
 
 ## 挖坑
 

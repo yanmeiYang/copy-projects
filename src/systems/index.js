@@ -86,8 +86,7 @@ const defaultSystemConfigs = {
 
   /**
    * PersonList
-   * PersonList_RightZone 右侧显示内容
-   * */
+   */
   PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
   PersonList_PersonLink_NewTab: true,
   PersonList_TitleRightBlock: defaults.EMPTY_BLOCK_FUNC, // profile => 'jsx',

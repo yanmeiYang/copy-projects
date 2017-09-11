@@ -175,6 +175,8 @@ export default class SearchComponent extends Component {
         filters={filters} sort={this.state.sortType} />
     );
 
+    const expertBase = (filters && filters.eb && filters.eb.id) || 'aminer';
+
     // TODO move translate search out.
     const exportArea = sysconfig.Enable_Export ? operations : '';
 

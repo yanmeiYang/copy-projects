@@ -2,9 +2,9 @@
  * Created by BoGao on 2017/6/20.
  */
 import React from 'react';
+import { Link } from 'dva/router';
 import defaults from '../utils';
 import { AddToEBButton, PersonRemoveButton } from './components';
-import ViewExpertInfo from '../../components/person/view-expert-info';
 import { createRoster } from '../../hooks';
 
 module.exports = {
@@ -32,6 +32,8 @@ module.exports = {
   // },
   Header_LogoWidth: 276,
   Header_UserPageURL: '/user-info',
+  Header_RightZone: [() => <Link key="0" to="/eb/59a8e5879ed5db1fc4b762ad">我的专家库</Link>], // TODO make this a Component.
+
   // Footer_Content: '',
   // ShowHelpDoc: true,
 
@@ -81,7 +83,7 @@ module.exports = {
     {
       id: '59a8e5879ed5db1fc4b762ad', // medrob eb id: 599bc0a49ed5db3ea1b61c60
       name: '我的专家库',
-      nperson: 50,
+      nperson: 100,
     },
   ],
 

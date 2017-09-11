@@ -27,11 +27,21 @@ export default class ExpertBaseExpertsPage extends React.Component {
       type: 'expertBase/getExpertDetailList',
       payload: { id: this.TheOnlyExpertBaseID, offset: 0, size: 200 },
     });
+    this.props.dispatch({
+      type: 'app/layout',
+      payload: {
+        headerSearchBox: { query: '', onSearch: this.onSearch },
+        showFooter: false,
+      },
+    });
   }
 
-  addExpertDetailInfo = (dataId) => {
-    const id = dataId;
-    this.props.dispatch(routerRedux.push({ pathname: `/add-expert-detail/${id}` })); // TODO
+  // addExpertDetailInfo = (dataId) => {
+  //   const id = dataId;
+  //   this.props.dispatch(routerRedux.push({ pathname: `/add-expert-detail/${id}` })); // TODO
+  // };
+  onSearch = () => {
+    console.log('search:', '');
   };
 
   searchExpertByName = (value) => {
@@ -51,15 +61,12 @@ export default class ExpertBaseExpertsPage extends React.Component {
   };
 
   render() {
-    // const { params } = this.props.match;
-    // console.log('>>>>>>>>>>>>>>>>>>>>>>>>>', this.props);
-    // const dataId = params.id;
     const { detailResults } = this.props.expertBase;
     const value = '';
     const { flag } = this.state;
     const load = this.props.loading.effects['expertBase/getExpertDetailList'];
     return (
-      <div>
+      <div>111
         <Search placeholder="input name" className={styles.searchArea}
                 onSearch={this.searchExpertByName.bind(value)} />
         <div className={styles.orgArea}>

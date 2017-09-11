@@ -61,7 +61,7 @@ export default {
       if (data.status) {
         yield put({ type: 'addExpertToEBSuccess', payload: { data } });
       } else {
-        throw   new Error('添加智库失败');
+        throw new Error('添加智库失败');
       }
     },
 
@@ -81,6 +81,7 @@ export default {
     * removeExpertItem({ payload }, { call, put }) {
       const { pid, rid } = payload;
       const { data } = yield call(expertBaseService.removeByPid, { pid, rid });
+      console.log('00000',data);
       if (data.status) {
         yield put({ type: 'removeSuccess', payload });
       }
@@ -100,7 +101,7 @@ export default {
     },
 
     addExpertSuccess(state, { payload: { data } }) {
-      return { ...state };
+      return { ...state, };
     },
 
     deleteExpertSuccess(state, { payload }) {
@@ -111,6 +112,7 @@ export default {
     },
 
     removeSuccess(state, { payload }) {
+      console.log('--------------state.detailResults',state);
       const data = state.detailResults.result.filter(item => item.id !== payload.pid);
       const newState = { ...state };
       newState.detailResults.result = data;
@@ -118,7 +120,7 @@ export default {
     },
 
     addExpertToEBSuccess(state, { payload: { data } }) {
-      return { ...state, addStatus: data };
+      return { ...state, addStatus: false };
     },
 
     searchExpertSuccess(state, { payload: { data } }) {

@@ -57,9 +57,7 @@ export default {
   'com.bole.ExpertPhoto': '暂无头像',
   // bole add button
   'com.bole.AddButton': '添加',
-  'com.bole.com.bole.AddedSuccessfully': '添加成功',
-  // bole remove button
-  'com.bole.PersonRemoveButton': '移除',
+  'com.bole.Remove': '删除',
 
 
   // Recommendation

@@ -4,7 +4,7 @@ import { Menu, Icon } from 'antd';
 import { Link } from 'dva/router';
 import { arrayToTree, queryArray } from '../../utils';
 import styles from './Menu.less';
-
+// TODO use <NavLink> instead; https://reacttraining.com/react-router/web/api/Link
 const Menus = ({
                  siderFold, darkTheme, location, handleClickNavMenu,
                  navOpenKeys, changeOpenKeys, menu,

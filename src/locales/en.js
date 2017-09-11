@@ -52,7 +52,7 @@ export default {
   'com.bole.ExpertPhoto': 'No Avatar',
   // bole add button
   'com.bole.AddButton': 'Add',
-  'com.bole.AddedSuccessfully': 'Added Successfully',
+  'com.bole.Remove': 'remove',
   // bole remove button
   'com.bole.PersonRemoveButton': 'Remove',
 

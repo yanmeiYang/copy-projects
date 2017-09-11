@@ -252,11 +252,13 @@ export default class SearchComponent extends Component {
           <Spinner loading={load} />
           <div className={styles.personAndKg}>
             <div>
-              <PersonList persons={results}
-                          titleRightBlock={sysconfig.PersonList_TitleRightBlock}
-                          rightZoneFuncs={sysconfig.PersonList_RightZone}
-                          bottomZoneFuncs={sysconfig.PersonList_BottomZone}
-              />
+              {(results && results.length > 0)
+              && <PersonList persons={results} dispatch={this.dispatch}
+                             titleRightBlock={sysconfig.PersonList_TitleRightBlock}
+                             rightZoneFuncs={sysconfig.PersonList_RightZone}
+                             bottomZoneFuncs={sysconfig.PersonList_BottomZone}
+                             didMountHooks={sysconfig.PersonList_DidMountHooks}
+              />}
               <div className={styles.paginationWrap}>
                 <Pagination
                   showQuickJumper

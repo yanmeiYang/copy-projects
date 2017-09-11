@@ -18,7 +18,7 @@ export default class AddToEBButton extends PureComponent {
       value: 1,
       personData: '',
       isInThisEB: props.person && props.person.locks && props.person.locks.roster,
-  };
+    };
   }
 
   add = (id) => {
@@ -36,7 +36,7 @@ export default class AddToEBButton extends PureComponent {
         content: '添加成功',
       });
       setTimeout(() => {
-        this.setState({ isInThisEB: true});
+        this.setState({ isInThisEB: true });
       }, 400);
     }
     this.setState({ personData: this.props.person.id });
@@ -60,7 +60,7 @@ export default class AddToEBButton extends PureComponent {
       },
       onCancel() {
       },
-  });
+    });
   };
 
   handleOk = (id) => {

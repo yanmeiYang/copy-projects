@@ -5,6 +5,7 @@ import React from 'react';
 import { Link } from 'dva/router';
 import defaults from '../utils';
 import { AddToEBButton, PersonRemoveButton, PersonComment } from './components';
+import { createComment } from './person-comment-hooks';
 
 import { createRoster } from '../../hooks';
 
@@ -33,7 +34,8 @@ module.exports = {
   // },
   Header_LogoWidth: 276,
   Header_UserPageURL: '/user-info',
-  Header_RightZone: [() => <Link key="0" to="/eb/59a8e5879ed5db1fc4b762ad">我的专家库</Link>], // TODO make this a Component.
+  Header_RightZone: [() => <Link key="0" to="/eb/59a8e5879ed5db1fc4b762ad">我的专家库</Link>
+  ], // TODO make this a Component.
 
   // Footer_Content: '',
   // ShowHelpDoc: true,
@@ -65,6 +67,8 @@ module.exports = {
   PersonList_BottomZone: [
     person => <PersonComment person={person} key="1" ExpertBase="59a8e5879ed5db1fc4b762ad" />,
   ],
+  PersonList_DidMountHooks: [
+    (param) => createComment(param)],
   Search_CheckEB: true, // Check ExpertBase.
 
   // 地图中心点
@@ -74,7 +78,7 @@ module.exports = {
     'Computer Assisted Surgery', 'Surgical Navigation', 'Minimally Invasive Surgery'],
 
   // research TODO ???????? Should be in add button.
- Person_PersonRemoveButton: person => <PersonRemoveButton
+  Person_PersonRemoveButton: person => <PersonRemoveButton
     person={person}
     ExpertBase="59a8e5879ed5db1fc4b762ad" />,
 

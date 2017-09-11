@@ -87,6 +87,16 @@ export default {
       }
     },
 
+    * sendComments({ payload }, { call, put }) {
+      console.log('1212121');
+
+      const { id, values,aids } = payload;
+      const { data } = yield call(expertBaseService.isHaveToBProfile, id, values,aids);
+      if (data.status) {
+        console.log('1212121', data);
+      }
+      // yield put({ type: 'isHaveToBProfile', payload: { data } });
+    },
   },
   reducers: {
     getExpertSuccess(state, { payload: { data } }) {

@@ -30,9 +30,17 @@ export default class PersonList extends PureComponent {
     personService.getInterestsI18N((result) => {
       this.interestsI18n = result;
     });
+    this.persons = this.props.persons;
   }
 
   state = {};
+
+  componentDidMount() {
+    const { didMountHooks, dispatch, persons } = this.props;
+    if (didMountHooks && didMountHooks.length > 0) {
+      didMountHooks[0]({ param: { dispatch, persons } });
+    }
+  }
 
   shouldComponentUpdate(nextProps) {
     if (nextProps.persons === this.props.persons) {
@@ -73,101 +81,88 @@ export default class PersonList extends PureComponent {
           }
 
           return (
-            <div key={person.id} className={styles.person}>
-              <div className={styles.avatar_zone}>
-                <img src={profileUtils.getAvatar(person.avatar, '', 160)}
-                     className={styles.avatar} alt={name} title={name} />
-              </div>
+            <div key={person.id}>
+              <div className={styles.person}>
+                <div className={styles.avatar_zone}>
+                  <img src={profileUtils.getAvatar(person.avatar, '', 160)}
+                       className={styles.avatar} alt={name} title={name} />
+                </div>
+                <div className={styles.info_zone}>
+                  <div className={styles.info_zone_detail}>
+                    {name &&
+                    <div className={styles.title}>
+                      <h2 className="section_header">
+                        <a {...personLinkParams}>{name}</a>
+                        {false && <span className={styles.rank}>会士</span>}
+                      </h2>
 
-              <div className={styles.info_zone}>
-                <div className={styles.info_zone_detail}>
-                  {name &&
-                  <div className={styles.title}>
-                    <h2 className="section_header">
-                      <a {...personLinkParams}>{name}</a>
-                      {false && <span className={styles.rank}>会士</span>}
-                    </h2>
+                      {/* ---- TitleRightBlock ---- */}
+                      {titleRightBlock && titleRightBlock({ person, expertBaseId })}
+                      {/*{this.personRightButton && this.personRightButton(person)}*/}
+                    </div>}
+                    <div className={classnames(styles.zone, styles.interestColumn)}>
+                      <div className={styles.contact_zone}>
+                        <Indices
+                          indices={indices}
+                          activity_indices={activity_indices}
+                          showIndices={sysconfig.PersonList_ShowIndices}
+                        />
+                        {pos && <span><i className="fa fa-briefcase fa-fw" /> {pos}</span>}
+                        {aff && <span><i className="fa fa-institution fa-fw" /> {aff}</span>}
 
-                    {/* ---- TitleRightBlock ---- */}
-                    {titleRightBlock && titleRightBlock({ person, expertBaseId })}
-                    {/*{this.personRightButton && this.personRightButton(person)}*/}
-                  </div>}
-                  <div className={classnames(styles.zone, styles.interestColumn)}>
-                    <div className={styles.contact_zone}>
-                      <Indices
-                        indices={indices}
-                        activity_indices={activity_indices}
-                        showIndices={sysconfig.PersonList_ShowIndices}
-                      />
-                      {pos && <span><i className="fa fa-briefcase fa-fw" /> {pos}</span>}
-                      {aff && <span><i className="fa fa-institution fa-fw" /> {aff}</span>}
-
-                      {phone &&
-                      <span style={{ minWidth: '158px' }}><i
-                        className="fa fa-phone fa-fw" /> {phone}</span>
-                      }
-
-                      {email &&
-                      <span style={{ backgroundImage: `url(${config.baseURL}${email})` }}
-                            className="email"><i className="fa fa-envelope fa-fw" />
+                        {phone &&
+                        <span style={{ minWidth: '158px' }}><i
+                          className="fa fa-phone fa-fw" /> {phone}</span>
+                        }
+                        {email &&
+                        <span style={{ backgroundImage: `url(${config.baseURL}${email})` }}
+                              className="email"><i className="fa fa-envelope fa-fw" />
                         </span>
-                      }
+                        }
 
-                      {false && person.num_viewed > 0 &&
-                      <span className={styles.views}><i
-                        className="fa fa-eye fa-fw" />{person.num_viewed} <FM
-                        id="com.PersonList.label.views" defaultMessage="views" /></span>}
+                        {false && person.num_viewed > 0 &&
+                        <span className={styles.views}><i
+                          className="fa fa-eye fa-fw" />{person.num_viewed} <FM
+                          id="com.PersonList.label.views" defaultMessage="views" /></span>}
 
-                    </div>
+                      </div>
 
-                    {person.tags &&
-                    <div className={styles.tag_zone}>
-                      <div>
-                        <h4><i className="fa fa-area-chart fa-fw" /> 研究兴趣:</h4>
-                        <div className={styles.tagWrap}>
-                          {person.tags.slice(0, 8).map((item, idx) => {
-                            if (item.t === null || item.t === 'Null') {
-                              return false;
-                            } else {
-                              const tag = personService.returnKeyByLanguage(this.interestsI18n, item.t);
-                              const showTag = tag.zh !== '' ? tag.zh : tag.en;
-                              const key = `${showTag}_${idx}`;
-                              const linkJSX = (
-                                <Link
-                                  to={`/${sysconfig.SearchPagePrefix}/${showTag}/0/${sysconfig.MainListSize}`}>
-                                  <Tag className={styles.tag}>{showTag}</Tag>
-                                </Link>);
-                              return (
-                                <span key={key}>
-                                  {tag.zh
-                                    ? <Tooltip placement="top" title={tag.en}>{linkJSX}</Tooltip>
-                                    : linkJSX
-                                  }
-                                </span>
-                              );
+                      {person.tags &&
+                      <div className={styles.tag_zone}>
+                        <div>
+                          <h4><i className="fa fa-area-chart fa-fw" /> 研究兴趣:</h4>
+                          <div className={styles.tagWrap}>
+                            {person.tags.slice(0, 8).map((item, idx) => {
+                              if (item.t === null || item.t === 'Null') {
+                                return false;
+                              } else {
+                                const tag = personService.returnKeyByLanguage(this.interestsI18n, item.t);
+                                const showTag = tag.zh !== '' ? tag.zh : tag.en;
+                                const key = `${showTag}_${idx}`;
+                                const linkJSX = (
+                                  <Link
+                                    to={`/${sysconfig.SearchPagePrefix}/${showTag}/0/${sysconfig.MainListSize}`}>
+                                    <Tag className={styles.tag}>{showTag}</Tag>
+                                  </Link>);
+                                return (
+                                  <span key={key}>
+                                    {tag.zh
+                                      ? <Tooltip placement="top" title={tag.en}>{linkJSX}</Tooltip>
+                                      : linkJSX}
+                                  </span>
+                                );
+                              }
+                            })
                             }
-                          })
-                          }
+                          </div>
                         </div>
                       </div>
+                      }
+
                     </div>
-                    }
-
                   </div>
-
-                  {/* ---- Bottom Zone ---- */}
-                  {BottomZoneFuncs && BottomZoneFuncs.length > 0 &&
-                  <div className={styles.personComment}>
-                    {BottomZoneFuncs.map((bottomBlockFunc) => {
-                      return bottomBlockFunc ? bottomBlockFunc(person) : false;
-                    })}
-                  </div>
-                  }
-
                 </div>
               </div>
-
-              {/* ---- Right Zone ---- */}
               {RightZoneFuncs && RightZoneFuncs.length > 0 &&
               <div className={styles.person_right_zone}>
                 {RightZoneFuncs.map((blockFunc) => {
@@ -176,7 +171,14 @@ export default class PersonList extends PureComponent {
                 })}
               </div>
               }
-
+              {BottomZoneFuncs && BottomZoneFuncs.length > 0 &&
+              <div className={styles.personComment}>
+                {BottomZoneFuncs.map((bottomBlockFunc) => {
+                  const param = { person, expertBaseId };
+                  return bottomBlockFunc ? bottomBlockFunc(param) : false;
+                })}
+              </div>
+              }
             </div>
           );
         })

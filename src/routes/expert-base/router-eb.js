@@ -10,7 +10,8 @@ export default {
 
   ExpertBaseExpertsPage: {
     path: '/eb/:id', // TODO 添加权限验证.
-    models: () => [import('models/expert-base/expert-base')],
+    models: () => [import('models/expert-base/expert-base'),
+      import('models/person-comments')],
     component: () => import('./ExpertBaseExpertsPage'),
   },
 

@@ -6,7 +6,7 @@ import { connect } from 'dva';
 import { Form, Icon, Input, Button } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import { sysconfig } from '../../../systems';
-import styles from './comment-area.less';
+import styles from './person-comment.less';
 
 class PersonComment extends React.PureComponent {
   constructor(props) {

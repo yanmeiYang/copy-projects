@@ -79,7 +79,11 @@
             margin-bottom: 6px;
           }
           :global .ant-tag { transition: none }
-          .tagWrap{max-width:558px;word-break:break-all;word-wrap:break-word;}
+          .tagWrap {
+            :global .ant-tag {
+              max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+            }
+          }
 
           //.ant-tag:hover { text-decoration: underline;}
         }
@@ -102,9 +106,6 @@
       padding: 5px 5px 5px 10px;
       //border-left: 1px solid #cccccc;
     }
-  }
-  .personComment{
-
   }
   //border: solid 1px red;
 }

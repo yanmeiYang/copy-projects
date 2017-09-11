@@ -61,15 +61,12 @@ export default class ExpertBaseExpertsPage extends React.Component {
   };
 
   render() {
-    // const { params } = this.props.match;
-    // console.log('>>>>>>>>>>>>>>>>>>>>>>>>>', this.props);
-    // const dataId = params.id;
     const { detailResults } = this.props.expertBase;
     const value = '';
     const { flag } = this.state;
     const load = this.props.loading.effects['expertBase/getExpertDetailList'];
     return (
-      <div>
+      <div>111
         <Search placeholder="input name" className={styles.searchArea}
                 onSearch={this.searchExpertByName.bind(value)} />
         <div className={styles.orgArea}>

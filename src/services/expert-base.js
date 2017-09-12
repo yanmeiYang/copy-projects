@@ -96,10 +96,19 @@ export async function searchExpert({ payload }) {
     });
 }
 
-export async function getToBProfile(id) {
-  return request(api.getToBProfile
+export async function getToBProfileByAid(id) {
+  return request(api.getToBProfileByAid
       .replace(':src', sysconfig.SOURCE)
       .replace(':id', id),
     { method: 'GET' });
 }
 
+export async function updateToBProfileExtra(aid, extra) {
+  return request(api.updateToBProfileExtra
+      .replace(':src', sysconfig.SOURCE)
+      .replace(':id', aid),
+    {
+      method: 'PATCH',
+      body: JSON.stringify({ extra }),
+    });
+}

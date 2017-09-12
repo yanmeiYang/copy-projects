@@ -64,11 +64,14 @@ export default class SearchPage extends Component {
   };
 
   render() {
+    const { filters } = this.props.search;
+    const expertBaseId = filters && filters.eb && filters.eb.id;
     return (
       <div className={classnames('content-inner', styles.page)}>
         <SearchComponent // Example: include all props.
           className={styles.SearchBorder} // additional className
           sorts={sysconfig.Search_SortOptions}
+          expertBaseId={expertBaseId}
           onSearchBarSearch={this.onSearchBarSearch}
           showSearchBox={this.props.app.headerSearchBox ? false : true}
         />

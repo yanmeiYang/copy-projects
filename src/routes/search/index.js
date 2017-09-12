@@ -123,6 +123,7 @@ const Search = ({ dispatch, search }) => {
             aggs={aggs}
             onFilterChange={onFilterChange}
             onExpertBaseChange={onExpertBaseChange}
+            disableExpertBaseFilter={!sysconfig.SHOW_ExpertBase}
           />
 
         </div>

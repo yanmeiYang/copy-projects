@@ -36,7 +36,7 @@ const defaultSystemConfigs = {
   EnableLocalLocale: false,
   // Language: 'en', // options [cn|en] // TODO change to locale.
   // PreferredLanguage: 'en', // 默认语言 // TODO delete this.
-  GLOBAL_ENABLE_HOC: false,
+  GLOBAL_ENABLE_HOC: true,
   MainListSize: 20,
 
   /**
@@ -91,7 +91,9 @@ const defaultSystemConfigs = {
   PersonList_PersonLink_NewTab: true,
   PersonList_TitleRightBlock: defaults.EMPTY_BLOCK_FUNC, // profile => 'jsx',
   PersonList_RightZone: defaults.IN_APP_DEFAULT, // [()=><COMP>]
-  PersonList_BottomZone: defaults.IN_APP_DEFAULT, // [()=><COMP>]
+  PersonList_BottomZone: defaults.IN_APP_DEFAULT,
+  PersonList_DidMountHooks: defaults.EMPTY_BLOCK_FUNC_LIST,
+  PersonList_UpdateHooks: defaults.EMPTY_BLOCK_FUNC_LIST,
   Search_CheckEB: false,
 
   // > Search

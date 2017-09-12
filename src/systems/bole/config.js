@@ -5,6 +5,7 @@ import React from 'react';
 import { Link } from 'dva/router';
 import defaults from '../utils';
 import { AddToEBButton, PersonRemoveButton, PersonComment } from './components';
+import { GetComments } from './person-comment-hooks';
 
 import { createRoster } from '../../hooks';
 
@@ -23,7 +24,7 @@ module.exports = {
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
   Header_SubTextLogo: '伯乐系统',
-  Header_SubTextStyle: { width: 168, position: 'relative', left: -72 },
+  Header_SubTextStyle: { width: 90, left: -54, marginLeft: -80 },
   // Header_LogoStyle: {
   //   top: '-10px',
   //   width: '60px',
@@ -31,7 +32,7 @@ module.exports = {
   //   backgroundSize: 'auto 56px',
   //   backgroundPosition: '0px -10px',
   // },
-  Header_LogoWidth: 276,
+  Header_LogoWidth: 118,
   Header_UserPageURL: '/user-info',
   Header_RightZone: [() => <Link key="0" to="/eb/59a8e5879ed5db1fc4b762ad">我的专家库</Link>], // TODO make this a Component.
 
@@ -55,13 +56,12 @@ module.exports = {
 
   /**
    * PersonList
-   * PersonList_RightZone 右侧显示内容
-   * */
+   */
   // PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
   // PersonList_PersonLink_NewTab: true,
   // param: [person, eb{id,name}]
   PersonList_TitleRightBlock:
-    param => (
+    ({ param }) => (
       <AddToEBButton
         person={param.person} key="2"
         expertBaseId={param.expertBaseId}
@@ -72,10 +72,16 @@ module.exports = {
   PersonList_BottomZone: [
     param => (
       <PersonComment
-        person={param.person} key="1"
+        person={param.person} user={param.user} key="1"
+        expertBaseId={param.expertBaseId}
         ExpertBase="59a8e5879ed5db1fc4b762ad"
       />),
   ],
+  // PersonList_DidMountHooks: [],
+  PersonList_UpdateHooks: [
+    param => GetComments(param),
+  ],
+
   Search_CheckEB: true, // Check ExpertBase.
 
   // 地图中心点

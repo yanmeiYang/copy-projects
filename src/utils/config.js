@@ -48,8 +48,11 @@ module.exports = {
     searchPersonAgg: '/search/person/agg',
     searchPersonInBase: '/search/roster/:ebid/experts/advanced',
     searchPersonInBaseAgg: '/search/roster/:ebid/experts/advanced/agg',
-    allPersonInBase: '/roster/:ebid/order-by/h_index/offset/:offset/size/:size',
+    allPersonInBase: '/roster/:ebid/offset/:offset/size/:size',
     allPersonInBaseAgg: '/roster/:ebid/agg?offset=&order=h_index&size=20',
+    allPersonInBaseWithSort: '/roster/:ebid/order-by/:sort/offset/:offset/size/:size',
+    // TODO agg
+
     searchMap: '/search/person/geo', // ?query=:search
     searchExpertBaseMap: '/roster/:id/geo/offset/:offset/size/:size',
     searchExpertNetWithDSL: '/search/person/ego',
@@ -188,6 +191,8 @@ module.exports = {
     addExpertInfoApi: '/2b/profile/:src',
     updateItemById: '/2b/profile/:src/:id',
     searchItemByName: '/2b/profile/:src/offset/:offset/size/:size',
+    getToBProfileByAid: '/2b/profile/:src/aid/:id',
+    updateToBProfileExtra: '/2b/profile/:src/:id/extra ',
 
     getExpertBase: '/roster/list/:type/offset/:offset/size/:size',
     addExpertBaseApi: '/roster',
@@ -198,7 +203,6 @@ module.exports = {
     searchExpertByName: '/search/roster/:ebid/experts/advanced',
     invokeRoster: '/roster/:id/members/u',
     removeByPidApi: '/roster/:rid/d/:pid',
-    getToBProfile: '/2b/profile/:src/aid/:id',
     // getToBProfile: '/api/2b/profile/:src/:id',
   },
 };

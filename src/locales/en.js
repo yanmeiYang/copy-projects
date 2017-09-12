@@ -33,12 +33,13 @@ export default {
   'com.search.filter.label2.Gender': 'Gender',
 
   'com.search.sort.label.relevance': 'Relevance',
-  'com.search.sort.label.h_index': 'h-index',
+  'com.search.sort.label.h_index': 'H-Index',
   'com.search.sort.label.activity': 'Activity',
   'com.search.sort.label.rising_star': 'Rising Star',
   'com.search.sort.label.n_citation': '#Citation',
   'com.search.sort.label.n_pubs': '#Paper',
   'com.search.sort.label.activity-ranking-contrib': 'Contrib',
+  'com.search.sort.label.time': 'Time',
 
   'com.searchTypeWidget.label.ExpertSearch': 'Experts',
   'com.searchTypeWidget.label.ExpertMap': 'Maps',

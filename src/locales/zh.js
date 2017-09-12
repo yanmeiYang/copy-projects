@@ -39,6 +39,7 @@ export default {
   'com.search.sort.label.n_citation': '引用数',
   'com.search.sort.label.n_pubs': '论文数',
   'com.search.sort.label.activity-ranking-contrib': '学会贡献', // CCF Only
+  'com.search.sort.label.time': '最新添加',
 
   'com.searchTypeWidget.label.ExpertSearch': '专家',
   'com.searchTypeWidget.label.ExpertMap': '地图',

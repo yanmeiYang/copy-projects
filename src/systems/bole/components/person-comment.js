@@ -72,7 +72,7 @@ class PersonComment extends React.PureComponent {
                 {(comment && comment.create_user) &&
                 <div>
                   <span className={styles.name}>{comment.create_user.name}：</span>
-                  <span className={styles.comments}>{comment.comment}</span>
+                  <span className={styles.comments}>{comment.comment.comment}</span>
                 </div>
                 }
               </div>

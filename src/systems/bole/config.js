@@ -73,7 +73,7 @@ module.exports = {
   PersonList_BottomZone: [
     param => (
       <PersonComment
-        person={param.person} key="1"
+        person={param.person} user={param.user} key="1"
         ExpertBase="59a8e5879ed5db1fc4b762ad"
       />),
   ],

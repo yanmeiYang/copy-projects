@@ -50,7 +50,7 @@ export default class PersonList extends PureComponent {
   }
 
   render() {
-    const { persons, expertBaseId } = this.props;
+    const { persons, expertBaseId, user } = this.props;
     const { rightZoneFuncs, titleRightBlock, bottomZoneFuncs } = this.props;
     console.log('refresh person list ');
 
@@ -174,7 +174,7 @@ export default class PersonList extends PureComponent {
               {BottomZoneFuncs && BottomZoneFuncs.length > 0 &&
               <div className={styles.personComment}>
                 {BottomZoneFuncs.map((bottomBlockFunc) => {
-                  const param = { person, expertBaseId };
+                  const param = { person, expertBaseId, user };
                   return bottomBlockFunc ? bottomBlockFunc(param) : false;
                 })}
               </div>

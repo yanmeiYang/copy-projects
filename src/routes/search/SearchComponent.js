@@ -255,7 +255,7 @@ export default class SearchComponent extends Component {
           <div className={styles.personAndKg}>
             <div>
               {(results && results.length > 0)
-              && <PersonList persons={results} dispatch={this.dispatch}
+              && <PersonList persons={results} dispatch={this.dispatch} user={this.props.app.user}
                              titleRightBlock={sysconfig.PersonList_TitleRightBlock}
                              rightZoneFuncs={sysconfig.PersonList_RightZone}
                              bottomZoneFuncs={sysconfig.PersonList_BottomZone}
@@ -272,7 +272,7 @@ export default class SearchComponent extends Component {
                 />
               </div>
             </div>
-            {topic.label && <SearchKnowledge topic={topic} />}
+            {topic.label && topic.label.toLowerCase() !== 'null' && <SearchKnowledge topic={topic} />}
           </div>
         </div>
 

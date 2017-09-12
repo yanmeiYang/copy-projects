@@ -24,12 +24,22 @@ class PersonComment extends React.PureComponent {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+        const { person, user } = this.props;
         this.props.dispatch({
           type: 'personComments/createComment',
-          // TODO 需要获取用户uid，和 display_name
-          payload: { comment: values, person: this.props.person, uid: '', user_name: 'yym' },
+          payload: {
+            comment: values.comment, person,
+            uid: user.id, user_name: user.display_name,
+          },
         });
       }
+    });
+  };
+
+  deleteTheComment = (index) => {
+    this.props.dispatch({
+      type: 'personComments/deleteTheComment',
+      payload: { aid: this.props.person.id, index },
     });
   };
 
@@ -45,7 +55,7 @@ class PersonComment extends React.PureComponent {
         <div className={styles.iconStyle} onClick={this.putMessage.bind(this)}>
           <Icon type="message" />
           {total ?
-            <span >共 {total} 条</span>:<span >共 0 条</span>}
+            <span >共 {total} 条</span> : <span >共 0 条</span>}
         </div>
         <div>
           {this.state.isComment &&

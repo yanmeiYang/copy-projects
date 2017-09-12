@@ -21,8 +21,8 @@ export default class AddToEBButton extends PureComponent {
       value: 1,
       personData: '',
       isInThisEB: expertBaseId === 'aminer'
-        ? true
-        : person && person.locks && person.locks.roster,
+        ? person && person.locks && person.locks.roster
+        : true,
     };
   }
 

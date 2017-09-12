@@ -88,10 +88,8 @@ class KnowledgeGraphTextTree extends React.PureComponent {
             onClick={e => this.onItemClick(e, node, level)}
           >
             <span className="title">
-              <Link
-                activeClassName={styles.active}
-              >{nameIcon} <span className="level"> {`L${level}`}</span> {name}
-              </Link>
+              <span>{nameIcon} <span className="level"> {`L${level}`}</span> {name}
+              </span>
               <div className="tools">
                 {node.child_nodes.length > 0 && (
                   <div className="tool">

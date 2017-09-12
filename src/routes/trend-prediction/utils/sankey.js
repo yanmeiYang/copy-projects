@@ -1,3 +1,5 @@
+import * as d3 from 'd3';
+
 function d3sankey(){
   d3.sankey = function() {
     var sankey = {},
@@ -288,7 +290,7 @@ function d3sankey(){
 /////=======end of the algo
 
 
-    sankey.area = d3.svg.area()
+    sankey.area = d3.area()
       .x(function(d){
         return d.x;
       })

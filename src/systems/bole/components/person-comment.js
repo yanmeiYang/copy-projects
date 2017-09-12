@@ -66,8 +66,7 @@ class PersonComment extends React.PureComponent {
         </div>
         {(comments && comments.extra && comments.extra.comments) &&
         <div className={styles.commentArea}>
-          {personComments.tobProfileMap && personComments.tobProfileMap.get(person.id)
-          && personComments.tobProfileMap.get(person.id).extra.comments.map((comment, index) => {
+          {comments.extra.comments.map((comment, index) => {
             return (
               <div key={index}>
                 {(comment && comment.create_user) &&

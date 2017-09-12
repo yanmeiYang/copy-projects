@@ -70,8 +70,12 @@ const defaultSystemConfigs = {
   Search_EnableCCFPin: false, // TODO bad：CCF PIN
   Search_EnableTranslateSearch: true, // 启用翻译搜索，显示提示信息;
   Search_DefaultTranslateSearch: false, // 默认使用翻译搜索;
-
   Search_EnableKnowledgeGraphHelper: true,
+
+  Search_DisableFilter: false,
+  Search_DisableExpertBaseFilter: false,
+  Search_DisableSearchKnowledge: false,
+
   Search_SortOptions: defaults.IN_APP_DEFAULT,
 
   UserAuthSystem: System, // aminer 或者是 system.config

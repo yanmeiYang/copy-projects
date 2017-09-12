@@ -34,7 +34,10 @@ module.exports = {
   // },
   Header_LogoWidth: 118,
   Header_UserPageURL: '/user-info',
-  Header_RightZone: [() => <Link key="0" to="/eb/59a8e5879ed5db1fc4b762ad">我的专家库</Link>], // TODO make this a Component.
+  Header_RightZone: [() => <Link key="0" to="/eb/59a8e5879ed5db1fc4b762ad/-/0/20">我的专家库</Link>], // TODO make this a Component.
+  // Header_RightZone: [
+  //   () => <a key="0" href="/eb/59a8e5879ed5db1fc4b762ad" target="_blank">我的专家库</a>,
+  // ],
 
   // Footer_Content: '',
   // ShowHelpDoc: true,
@@ -46,7 +49,13 @@ module.exports = {
 
   // > Search related
   SearchBarInHeader: true,
-  HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertBase'], // ExpertBase bole专有
+  // HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertBase'], // ExpertBase bole专有
+  HeaderSearch_TextNavi: [],
+
+  // Search_DisableFilter: false,
+  Search_DisableExpertBaseFilter: true,
+  // Search_DisableSearchKnowledge: false,
+
   // SearchFilterExclude: 'Gender',
   // UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // deprecated! Don't use this.
 
@@ -96,17 +105,17 @@ module.exports = {
       name: <span><i className="fa fa-globe fa-fw" />全球专家</span>,
       nperson: 2871,
     },
-    {
-      id: '59a8e5879ed5db1fc4b762ad', // medrob eb id: 599bc0a49ed5db3ea1b61c60
-      name: '我的专家库',
-      nperson: 100,
-    },
+    // {
+    //   id: '59a8e5879ed5db1fc4b762ad', // medrob eb id: 599bc0a49ed5db3ea1b61c60
+    //   name: '我的专家库',
+    //   nperson: 100,
+    // },
   ],
 
   // bole系统独有设置
   ExpertBase: '59a8e5879ed5db1fc4b762ad',
 
-  // bole 智库权限设置
+  // bole 智库权限设置 TODO param => xxx
   HOOK: [
     (dispatch, id, email, name, perm) => createRoster(dispatch, id, email, name, perm),
   ],

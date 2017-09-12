@@ -88,6 +88,10 @@ export default class PersonList extends PureComponent {
 
     return (
       <div className={styles.personList}>
+        {persons && persons.length === 0 &&
+        <div className={styles.empty}>No Results</div>
+        }
+
         {persons && persons.map((person) => {
           const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
           const pos = profileUtils.displayPosition(person.pos);

@@ -35,7 +35,6 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
 
 export async function searchListPersonInEB(payload) {
   const { sort, ebid, offset, size } = payload;
-  console.log('&&&&&&&&&&&&&&&&&&& &&&&&&&&&&&&', payload, sort, ebid);
   if (!sort || sort === 'time') {
     return request(
       api.allPersonInBase

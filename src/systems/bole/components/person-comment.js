@@ -50,16 +50,16 @@ class PersonComment extends React.PureComponent {
         <div>
           {this.state.isComment &&
           <div className={styles.inputStyle}>
-            <Form layout="inline" onSubmit={this.handleSubmit}>
+            <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
               <FormItem>
                 {getFieldDecorator('comment')(
                   <Input type="text" placeholder="comment" />,
                 )}
               </FormItem>
               <FormItem>
-                <Button htmlType="submit"
-                        className={styles.addCommentButton}>
-                  <FM id="com.bole.personComment" defaultMessage="Comments" /></Button>
+                <Button htmlType="submit" className={styles.addCommentButton}>
+                  <FM id="com.bole.personComment" defaultMessage="Comments" />
+                </Button>
               </FormItem>
             </Form>
           </div>}
@@ -72,7 +72,7 @@ class PersonComment extends React.PureComponent {
                 {(comment && comment.create_user) &&
                 <div>
                   <span className={styles.name}>{comment.create_user.name}：</span>
-                  <span className={styles.comments}>{comment.comment.comment}</span>
+                  <span className={styles.comments}>{comment.comment}</span>
                 </div>
                 }
               </div>

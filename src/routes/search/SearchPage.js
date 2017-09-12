@@ -69,6 +69,7 @@ export default class SearchPage extends Component {
         <SearchComponent // Example: include all props.
           className={styles.SearchBorder} // additional className
           sorts={sysconfig.Search_SortOptions}
+          expertBaseId="aminer"
           onSearchBarSearch={this.onSearchBarSearch}
           showSearchBox={this.props.app.headerSearchBox ? false : true}
         />

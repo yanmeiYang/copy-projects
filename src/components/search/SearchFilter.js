@@ -22,22 +22,22 @@ export default class SearchFilter extends React.PureComponent {
     this.onExpertBaseChange = this.props.onExpertBaseChange;
   }
 
-  componentWillMount() {
-  }
+  // componentWillMount() {
+  // }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return true;
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return true;
+  // }
 
   render() {
-    const { filters, aggs } = this.props;
+    const { filters, aggs, disableExpertBaseFilter } = this.props;
 
     return (
       <div className={styles.filterWrap}>
         <div className={styles.filter}>
 
           {/* ------ 搜索范围 ------ */}
-          {sysconfig.SHOW_ExpertBase && expertBases &&
+          {!disableExpertBaseFilter && expertBases &&
           <div className={classnames(styles.filterRow, styles.range)}>
             <span className={styles.filterTitle}>
               <FM id="com.search.filter.searchRange"
@@ -144,5 +144,6 @@ export default class SearchFilter extends React.PureComponent {
 
 SearchFilter.propTypes = {
   filters: PropTypes.object.isRequired,
+  disableExpertBaseFilter: PropTypes.bool,
 };
 

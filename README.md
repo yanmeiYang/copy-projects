@@ -126,6 +126,33 @@ TODO
 ##### Component 组件开发规范.(散)
 + 每个稍微复杂点的Component都应该有一个className.
 
+###### 一个标准的Component
+```javascript
+@connect(({ app, search, loading }) => ({ app, search, loading }))
+@Auth
+export default class SearchComponent extends Component {
+  static displayName = 'SearchComponent';
+
+  static contextTypes = {
+    // some context types
+  };
+
+  static propTypes = {
+    // className: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    className: PropTypes.string,
+    disableExpertBaseFilter: PropTypes.bool,
+    sorts: PropTypes.array,
+    onSearchBarSearch: PropTypes.func,
+    showSearchBox: PropTypes.bool, // has search box?
+  };
+
+  static defaultProps = {
+    disableExpertBaseFilter: false,
+  };
+
+  // ...
+}
+```
 
 ## 挖坑
 

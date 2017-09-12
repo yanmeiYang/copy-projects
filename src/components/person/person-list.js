@@ -3,6 +3,7 @@
  */
 /* eslint-disable camelcase */
 import React, { PureComponent, PropTypes } from 'react';
+import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { Tag, Tooltip } from 'antd';
 import classnames from 'classnames';
@@ -10,7 +11,7 @@ import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import * as personService from 'services/person';
 import { PersonComment } from 'systems/bole/components';
 import { sysconfig } from 'systems';
-import { config } from 'utils';
+import { config, compare } from 'utils';
 import * as profileUtils from 'utils/profile-utils';
 import { Indices } from 'components/widgets';
 import ViewExpertInfo from './view-expert-info';
@@ -19,11 +20,25 @@ import styles from './person-list.less';
 const DefaultRightZoneFuncs = [
   param => <ViewExpertInfo person={param.person} key="1" />,
 ];
-const DefaultBottomZoneFuncs = [
-  param => <PersonComment person={param.person} key="1" />,
-];
 
+// FIXME 呵呵哒，personComment并不是默认的functions.
+const DefaultBottomZoneFuncs = [];
+
+@connect()
 export default class PersonList extends PureComponent {
+
+  static propTypes = {
+    // className: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    className: PropTypes.string, // NOTE: 一般来说每个稍微复杂点的Component都应该有一个className.
+    persons: PropTypes.array,
+    expertBaseId: PropTypes.string,
+    titleRightBlock: PropTypes.func, // A list of function
+    rightZoneFuncs: PropTypes.array,
+    didMountHooks: PropTypes.array,
+    UpdateHooks: PropTypes.array,
+  };
+
+
   constructor(props) {
     super(props);
     // TODO 临时措施，国际化Interest应该从server端入手。
@@ -35,31 +50,43 @@ export default class PersonList extends PureComponent {
 
   state = {};
 
+  // 暂时没用到
   componentDidMount() {
-    const { didMountHooks, dispatch, persons } = this.props;
+    const { didMountHooks, persons } = this.props;
     if (didMountHooks && didMountHooks.length > 0) {
-      didMountHooks[0]({ param: { dispatch, persons } });
+      for (const hook of didMountHooks) {
+        if (hook) {
+          hook({ param: { dispatch: this.props.dispatch, persons } });
+        }
+      }
     }
   }
 
   shouldComponentUpdate(nextProps) {
-    if (nextProps.persons === this.props.persons) {
-      return false;
+    return compare(this.props, nextProps, 'persons');
+  }
+
+  componentWillUpdate(nextProps) {
+    const { UpdateHooks, persons, dispatch } = nextProps;
+    if (UpdateHooks && UpdateHooks.length > 0) {
+      for (const hook of UpdateHooks) {
+        console.log('sldjfalskjdf;akjdsf;', hook);
+        if (hook) {
+          hook({ param: { dispatch, persons } });
+        }
+      }
     }
-    return true;
   }
 
   render() {
     const { persons, expertBaseId, user } = this.props;
     const { rightZoneFuncs, titleRightBlock, bottomZoneFuncs } = this.props;
-    console.log('refresh person list ');
-
-    // is search in global or in eb.
-
 
     const showPrivacy = false;
     const RightZoneFuncs = rightZoneFuncs || DefaultRightZoneFuncs;
     const BottomZoneFuncs = bottomZoneFuncs || DefaultBottomZoneFuncs;
+    console.log('refresh person list ');
+
     return (
       <div className={styles.personList}>
         {persons && persons.map((person) => {
@@ -147,7 +174,8 @@ export default class PersonList extends PureComponent {
                                 return (
                                   <span key={key}>
                                     {tag.zh
-                                      ? <Tooltip placement="top" title={tag.en}>{linkJSX}</Tooltip>
+                                      ?
+                                      <Tooltip placement="top" title={tag.en}>{linkJSX}</Tooltip>
                                       : linkJSX}
                                   </span>
                                 );
@@ -163,6 +191,8 @@ export default class PersonList extends PureComponent {
                   </div>
                 </div>
               </div>
+
+              {/* ---- Right Zone ---- */}
               {RightZoneFuncs && RightZoneFuncs.length > 0 &&
               <div className={styles.person_right_zone}>
                 {RightZoneFuncs.map((blockFunc) => {
@@ -171,6 +201,8 @@ export default class PersonList extends PureComponent {
                 })}
               </div>
               }
+
+              {/* ---- Bottom Zone ---- */}
               {BottomZoneFuncs && BottomZoneFuncs.length > 0 &&
               <div className={styles.personComment}>
                 {BottomZoneFuncs.map((bottomBlockFunc) => {
@@ -187,12 +219,3 @@ export default class PersonList extends PureComponent {
     );
   }
 }
-
-PersonList.propTypes = {
-  // className: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  className: PropTypes.string, // NOTE: 一般来说每个稍微复杂点的Component都应该有一个className.
-  persons: PropTypes.array,
-  expertBaseId: PropTypes.string,
-  titleRightBlock: PropTypes.func, // A list of functino
-  rightZoneFuncs: PropTypes.array,
-};

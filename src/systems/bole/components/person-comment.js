@@ -15,7 +15,6 @@ class PersonComment extends React.PureComponent {
   }
 
   state = {
-    isComment: false,
   };
   putMessage = () => {
     this.setState({ isComment: !this.state.isComment });
@@ -43,35 +42,19 @@ class PersonComment extends React.PureComponent {
     return (
       <div className={styles.commentStyles}>
         <div className={styles.iconStyle} onClick={this.putMessage.bind(this)}>
-          <Icon type="message" />
+          <Icon type="message" className={styles.message}/>
           {total ?
             <span>共 {total} 条</span> : <span>共 0 条</span>}
         </div>
-        <div>
-          {this.state.isComment &&
-          <div className={styles.inputStyle}>
-            <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
-              <FormItem>
-                {getFieldDecorator('comment')(
-                  <Input type="text" placeholder="comment" />,
-                )}
-              </FormItem>
-              <FormItem>
-                <Button htmlType="submit" className={styles.addCommentButton}>
-                  <FM id="com.bole.personComment" defaultMessage="Comments" />
-                </Button>
-              </FormItem>
-            </Form>
-          </div>}
-        </div>
         {(comments && comments.extra && comments.extra.comments) &&
         <div className={styles.commentArea}>
+          <div className={styles.title}>View previous comments</div>
           {comments.extra.comments.map((comment, index) => {
             return (
               <div key={index}>
                 {(comment && comment.create_user) &&
-                <div>
-                  <span className={styles.name}>{comment.create_user.name}：</span>
+                <div className={styles.userInfo}>
+                  <span className={styles.name}>{comment.create_user.name}</span>
                   <span className={styles.comments}>{comment.comment}</span>
                 </div>
                 }
@@ -81,6 +64,22 @@ class PersonComment extends React.PureComponent {
           }
         </div>
         }
+        <div>
+          <div className={styles.inputStyle}>
+            <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
+              <FormItem>
+                {getFieldDecorator('comment')(
+                  <Input type="text" placeholder="Write a comment..." suffix={<i className="fa fa-send-o" />} />,
+                )}
+              </FormItem>
+              {/*<FormItem>*/}
+                {/*<Button htmlType="submit" className={styles.addCommentButton}>*/}
+                  {/*<FM id="com.bole.personComment" defaultMessage="Comment" />*/}
+                {/*</Button>*/}
+              {/*</FormItem>*/}
+            </Form>
+          </div>
+        </div>
       </div>
     );
   }

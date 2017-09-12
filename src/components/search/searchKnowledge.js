@@ -19,10 +19,28 @@ export default class SearchKnowledge extends React.PureComponent {
       },
     });
   }
-  // TODO later
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   return compare(this.props, nextProps, 'topic');
-  // }
+
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.search.query !== this.props.search.query) {
+      return true;
+    }
+    if (nextProps.search.topic !== this.props.search.topic) {
+      return true;
+    }
+    return false;
+  }
+
+  componentWillUpdate(nextProps) {
+    if (nextProps.query !== this.props.query) {
+      this.props.dispatch({
+        type: 'search/getTopicByMention',
+        payload: {
+          mention: nextProps.query,
+        },
+      });
+    }
+  }
+
 
   render() {
     const topic = this.props.search.topic;

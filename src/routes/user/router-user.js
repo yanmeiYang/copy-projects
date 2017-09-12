@@ -21,25 +21,25 @@ export default {
 
   ForgotPassword: {
     path: '/forgot-password',
-    models: () => [import('models/auth/auth')],
+    models: () => [import('models/auth')],
     component: () => import('./forgot-password/'),
   },
 
   ResetPassword: {
     path: '/reset-password',
-    models: () => [import('models/auth/auth')],
+    models: () => [import('models/auth')],
     component: () => import('./reset-password/'),
   },
 
   Retrieve: {
     path: '/retrieve',
-    models: () => [import('models/auth/auth')],
+    models: () => [import('models/auth')],
     component: () => import('./retrieve/'),
   },
 
   UserInfo: {
     path: '/user-info',
-    models: () => [import('models/auth/auth')],
+    models: () => [import('models/auth')],
     component: () => import('./user-info/'),
   },
 

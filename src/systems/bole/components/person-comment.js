@@ -14,7 +14,9 @@ class PersonComment extends React.PureComponent {
     this.TheOnlyExpertBaseID = '59a8e5879ed5db1fc4b762ad';
   }
 
-  state = {};
+  state = {
+    isComment: false,
+  };
   putMessage = () => {
     this.setState({ isComment: !this.state.isComment });
   };
@@ -50,43 +52,46 @@ class PersonComment extends React.PureComponent {
     const { getFieldDecorator } = this.props.form;
     return (
       <div className={styles.commentStyles}>
-        <div className={styles.iconStyle} onClick={this.putMessage.bind(this)}>
-          <Icon type="message" />
+        <div className={styles.iconStyle}>
+          <Icon type="message" onClick={this.putMessage.bind(this)} />
           <span><i className="fa fa-comments-o" /> {total
           && <span>{total || 0}</span>}</span>
         </div>
         {(comments && comments.extra && comments.extra.comments) &&
         <div className={styles.commentArea}>
-          <div className={styles.title}>View previous comments</div>
-          {comments.extra.comments.map((comment, index) => {
-            return (
-              <div key={index}>
-                {(comment && comment.create_user) &&
-                <div className={styles.userInfo}>
-                  <span className={styles.name}>{comment.create_user.name}</span>
-                  <span className={styles.comments}>{comment.comment}
-                    <Icon type="close-circle-o" className={styles.userInfoClose}
-                          onClick={this.deleteTheComment.bind(this, index)} /></span>
+          {this.state.isComment && <div>
+            <div className={styles.title}>View previous comments</div>
+            {comments.extra.comments.map((comment, index) => {
+              return (
+                <div key={index}>
+                  {(comment && comment.create_user) &&
+                  <div className={styles.userInfo}>
+                    <span className={styles.name}>{comment.create_user.name}</span>
+                    <span className={styles.comments}>{comment.comment}
+                      <Icon type="close-circle-o" className={styles.userInfoClose}
+                            onClick={this.deleteTheComment.bind(this, index)} /></span>
+                  </div>
+                  }
                 </div>
-                }
+              );
+            })
+            }
+            <div>
+              <div className={styles.inputStyle}>
+                <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
+                  <FormItem>
+                    {getFieldDecorator('comment')(
+                      <Input type="text" placeholder="Write a comment..."
+                             suffix={<i className="fa fa-send-o" />} />,
+                    )}
+                  </FormItem>
+                </Form>
               </div>
-            );
-          })
+            </div>
+            </div>
           }
         </div>
         }
-        <div>
-          <div className={styles.inputStyle}>
-            <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
-              <FormItem>
-                {getFieldDecorator('comment')(
-                  <Input type="text" placeholder="Write a comment..."
-                         suffix={<i className="fa fa-send-o" />} />,
-                )}
-              </FormItem>
-            </Form>
-          </div>
-        </div>
       </div>
     );
   }

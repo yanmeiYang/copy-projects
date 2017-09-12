@@ -70,7 +70,6 @@ export default class PersonList extends PureComponent {
     const { UpdateHooks, persons, dispatch } = nextProps;
     if (UpdateHooks && UpdateHooks.length > 0) {
       for (const hook of UpdateHooks) {
-        console.log('sldjfalskjdf;akjdsf;', hook);
         if (hook) {
           hook({ param: { dispatch, persons } });
         }
@@ -124,7 +123,7 @@ export default class PersonList extends PureComponent {
                       </h2>
 
                       {/* ---- TitleRightBlock ---- */}
-                      {titleRightBlock && titleRightBlock({ person, expertBaseId })}
+                      {titleRightBlock && titleRightBlock({ param: { person, expertBaseId } })}
                       {/*{this.personRightButton && this.personRightButton(person)}*/}
                     </div>}
                     <div className={classnames(styles.zone, styles.interestColumn)}>

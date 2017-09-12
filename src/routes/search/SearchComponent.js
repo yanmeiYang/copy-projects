@@ -29,7 +29,9 @@ export default class SearchComponent extends Component {
     className: PropTypes.string,
     disableFilter: PropTypes.bool,
     disableExpertBaseFilter: PropTypes.bool,
+    disableSearchKnowledge: PropTypes.bool,
     sorts: PropTypes.array, // pass through
+    defaultSortType: PropTypes.string,
     onSearchBarSearch: PropTypes.func,
     showSearchBox: PropTypes.bool, // has search box?
   };
@@ -37,6 +39,7 @@ export default class SearchComponent extends Component {
   static defaultProps = {
     disableFilter: false,
     disableExpertBaseFilter: false,
+    defaultSortType: 'relevance',
   };
 
 
@@ -51,11 +54,11 @@ export default class SearchComponent extends Component {
         name: sysconfig.DEFAULT_EXPERT_BASE_NAME,
       };
     }
-  }
 
-  state = {
-    sortType: 'relevance',
-  };
+    this.state = {
+      sortType: props.defaultSortType,
+    };
+  }
 
   componentWillMount() {
     this.doSearchUseProps(); // Init search.
@@ -178,7 +181,7 @@ export default class SearchComponent extends Component {
 
 
   render() {
-    const { disableExpertBaseFilter, disableFilter } = this.props;
+    const { disableExpertBaseFilter, disableFilter, disableSearchKnowledge } = this.props;
     const { className, sorts } = this.props;
     const { sortType } = this.state;
 
@@ -248,7 +251,8 @@ export default class SearchComponent extends Component {
             {/* ---- Filter ---- */}
             {!disableFilter &&
             <SearchFilter
-              filters={filters} aggs={aggs}
+              filters={filters}
+              aggs={aggs}
               onFilterChange={this.onFilterChange}
               onExpertBaseChange={this.onExpertBaseChange}
               disableExpertBaseFilter={disableExpertBaseFilter}
@@ -291,8 +295,12 @@ export default class SearchComponent extends Component {
                 />
               </div>
             </div>
-            {topic.label && topic.label.toLowerCase() !== 'null' &&
+
+            {/* ---- Search Knowledge ---- */}
+            {!disableSearchKnowledge &&
+            topic.label && topic.label.toLowerCase() !== 'null' &&
             <SearchKnowledge topic={topic} />}
+
           </div>
         </div>
 

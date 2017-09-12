@@ -20,17 +20,10 @@ export default class AddToEBButton extends PureComponent {
       personData: '',
       // load: false,
       isInThisEB: expertBaseId === 'aminer'
-        ? true
-        : person && person.locks && person.locks.roster,
-      perId: '',
+        ? person && person.locks && person.locks.roster
+        : true,
     };
   }
-  //
-  // componentWillReceiveProps = (nextProps) => {
-  //   if (nextProps.query !== this.state.value) {
-  //     this.setState({ value: nextProps.query || '' });
-  //   }
-  // };
   add = (id) => {
     const that = this;
     const ebid = this.state.dataIdItem;

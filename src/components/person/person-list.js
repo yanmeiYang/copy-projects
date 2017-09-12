@@ -71,7 +71,7 @@ export default class PersonList extends PureComponent {
     if (UpdateHooks && UpdateHooks.length > 0) {
       for (const hook of UpdateHooks) {
         if (hook) {
-          hook({ param: { dispatch, persons } });
+          hook({ param: { dispatch, persons, expertBaseId: this.props.expertBaseId } });
         }
       }
     }

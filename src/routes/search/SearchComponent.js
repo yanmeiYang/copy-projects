@@ -166,12 +166,6 @@ export default class SearchComponent extends Component {
       type: 'search/searchPersonAgg',
       payload: { query, offset, size, filters, sort },
     });
-    this.dispatch({
-      type: 'search/getTopicByMention',
-      payload: {
-        mention: query,
-      },
-    });
     if (!dontRefreshUrl) {
       this.dispatch(routerRedux.push({
         pathname: `/${sysconfig.SearchPagePrefix}/${query}/0/${size}`,
@@ -299,8 +293,7 @@ export default class SearchComponent extends Component {
 
             {/* ---- Search Knowledge ---- */}
             {!disableSearchKnowledge &&
-            topic.label && topic.label.toLowerCase() !== 'null' &&
-            <SearchKnowledge topic={topic} />}
+            <SearchKnowledge query={query} />}
 
           </div>
         </div>

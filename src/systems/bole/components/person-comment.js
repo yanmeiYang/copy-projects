@@ -9,19 +9,6 @@ import { sysconfig } from '../../../systems';
 import styles from './person-comment.less';
 
 class PersonComment extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    // NOTE 使用这种方式来减小之后的代码长度。
-    // FIXME ExpertBase属性与model太接近了。
-    this.TheOnlyExpertBaseID = '59a8e5879ed5db1fc4b762ad';
-    const { person, expertBaseId } = props;
-    this.state = {
-      isInThisEB: expertBaseId === 'aminer'
-        ? true
-        : person && person.locks && person.locks.roster,
-    };
-  }
-
   state = {
     isComment: false,
   };
@@ -52,7 +39,10 @@ class PersonComment extends React.PureComponent {
   };
 
   render() {
-    const { personComments, person } = this.props;
+    const { personComments, person, expertBaseId } = this.props;
+    if (expertBaseId === 'aminer' || !expertBaseId) {
+      return false;
+    }
     const comments = personComments && personComments.tobProfileMap.size !== undefined
       && personComments.tobProfileMap.get(person.id);
     const total = comments && comments.extra && comments.extra.comments.length;

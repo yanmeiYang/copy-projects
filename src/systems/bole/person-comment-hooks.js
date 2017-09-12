@@ -5,7 +5,7 @@
  *
  * @param dispatch or put
  */
-function createComment({ param }) {
+function GetComments({ param }) {
   const { dispatch, persons } = param;
   if (typeof dispatch === 'function') {
     dispatch({
@@ -16,5 +16,5 @@ function createComment({ param }) {
 }
 
 module.exports = {
-  createComment,
+  GetComments,
 };

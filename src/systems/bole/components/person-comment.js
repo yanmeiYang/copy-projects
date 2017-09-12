@@ -14,8 +14,7 @@ class PersonComment extends React.PureComponent {
     this.TheOnlyExpertBaseID = '59a8e5879ed5db1fc4b762ad';
   }
 
-  state = {
-  };
+  state = {};
   putMessage = () => {
     this.setState({ isComment: !this.state.isComment });
   };
@@ -23,12 +22,22 @@ class PersonComment extends React.PureComponent {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+        const { person, user } = this.props;
         this.props.dispatch({
           type: 'personComments/createComment',
-          // TODO 需要获取用户uid，和 display_name
-          payload: { comment: values, person: this.props.person, uid: '', user_name: 'yym' },
+          payload: {
+            comment: values.comment, person,
+            uid: user.id, user_name: user.display_name,
+          },
         });
       }
+    });
+  };
+
+  deleteTheComment = (index) => {
+    this.props.dispatch({
+      type: 'personComments/deleteTheComment',
+      payload: { aid: this.props.person.id, index },
     });
   };
 
@@ -42,9 +51,9 @@ class PersonComment extends React.PureComponent {
     return (
       <div className={styles.commentStyles}>
         <div className={styles.iconStyle} onClick={this.putMessage.bind(this)}>
-          <Icon type="message" className={styles.message}/>
-          {total ?
-            <span>共 {total} 条</span> : <span>共 0 条</span>}
+          <Icon type="message" />
+          <span><i className="fa fa-comments-o" /> {total
+          && <span>{total || 0}</span>}</span>
         </div>
         {(comments && comments.extra && comments.extra.comments) &&
         <div className={styles.commentArea}>
@@ -55,7 +64,9 @@ class PersonComment extends React.PureComponent {
                 {(comment && comment.create_user) &&
                 <div className={styles.userInfo}>
                   <span className={styles.name}>{comment.create_user.name}</span>
-                  <span className={styles.comments}>{comment.comment}</span>
+                  <span className={styles.comments}>{comment.comment}
+                    <Icon type="close-circle-o" className={styles.userInfoClose}
+                          onClick={this.deleteTheComment.bind(this, index)} /></span>
                 </div>
                 }
               </div>
@@ -69,14 +80,10 @@ class PersonComment extends React.PureComponent {
             <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
               <FormItem>
                 {getFieldDecorator('comment')(
-                  <Input type="text" placeholder="Write a comment..." suffix={<i className="fa fa-send-o" />} />,
+                  <Input type="text" placeholder="Write a comment..."
+                         suffix={<i className="fa fa-send-o" />} />,
                 )}
               </FormItem>
-              {/*<FormItem>*/}
-                {/*<Button htmlType="submit" className={styles.addCommentButton}>*/}
-                  {/*<FM id="com.bole.personComment" defaultMessage="Comment" />*/}
-                {/*</Button>*/}
-              {/*</FormItem>*/}
             </Form>
           </div>
         </div>

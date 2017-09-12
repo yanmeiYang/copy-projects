@@ -93,6 +93,7 @@ const defaultSystemConfigs = {
   PersonList_RightZone: defaults.IN_APP_DEFAULT, // [()=><COMP>]
   PersonList_BottomZone: defaults.IN_APP_DEFAULT,
   PersonList_DidMountHooks: defaults.EMPTY_BLOCK_FUNC_LIST,
+  PersonList_UpdateHooks: defaults.EMPTY_BLOCK_FUNC_LIST,
   Search_CheckEB: false,
 
   // > Search

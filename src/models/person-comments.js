@@ -23,6 +23,7 @@ export default {
       const { data } = yield call(expertBaseService.getToBProfileByAid, ids.join(JOINBYDOT));
       yield put({ type: 'commentToMap', payload: { data } });
     },
+
     * createComment({ payload }, { call, put, select }) {
       const { person, uid, user_name, comment } = payload;
       const aid = person.id;
@@ -38,8 +39,7 @@ export default {
       if (tbp && tbp.id) {
         // 获取现有的tobprofile中的comments
         const existComments = (tbp.extra && tbp.extra.comments) || [];
-        const newComments = [existComments].concat([tempComment]);
-
+        const newComments = existComments.concat([tempComment]);
         const newExtra = { ...(tbp.extra || {}), comments: newComments };
         // 更新extra中comment
         // updateToBProfileExtra 需要传的是id，而不是aid
@@ -55,7 +55,7 @@ export default {
       } else {
         const newData = {
           sid: '', name: person.name || '', name_zh: person.name_zh || '',
-          gender: 0, aff: '', email: [], aid, type: 'c', extra: { comments: tempComment },
+          gender: 0, aff: '', email: [], aid, type: 'c', extra: { comments: [tempComment] },
         };
         // 插入一条tobProfile
         const createTobProfile = yield call(tobProfileService.addProfileSuccess, newData);
@@ -73,6 +73,29 @@ export default {
       }
     },
 
+    * deleteTheComment({ payload }, { call, put, select }) {
+      const { aid, index } = payload;
+      const tobProfileMap = yield select(state => state.personComments.tobProfileMap);
+      const tbp = tobProfileMap.get(aid);
+      if (tbp && tbp.id) {
+        const existComments = (tbp.extra && tbp.extra.comments) || [];
+        const newComments = existComments.splice(index, 1);
+        const newExtra = { ...(tbp.extra || {}), comments: newComments };
+        const updateFeedBack = yield call(expertBaseService.updateToBProfileExtra, tbp.id, newExtra);
+        if (updateFeedBack.data.status) {
+          yield put({
+            type: 'updateTobProfileSuccess',
+            payload: { aid, newExtra },
+          });
+        } else {
+          console.log('update error');
+        }
+      } else {
+        console.log('error');
+      }
+
+    },
+
   },
 
 
@@ -84,13 +107,16 @@ export default {
       }
       return { ...state, tobProfileMap: tempComments };
     },
+
     updateTobProfileSuccess(state, { payload: { aid, newExtra } }) {
       state.tobProfileMap.get(aid).extra = newExtra;
       return { ...state, tobProfileMap: state.tobProfileMap };
     },
+
     insertTobProfileSuccess(state, { payload: { data } }) {
       return { ...state, tobProfileMap: data };
     },
+
   },
 
 };

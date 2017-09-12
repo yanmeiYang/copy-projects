@@ -6,24 +6,40 @@ import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import queryString from 'query-string';
 import classnames from 'classnames';
 import { Tabs, Pagination } from 'antd';
-import styles from './SearchComponent.less';
-import { PersonList } from '../../components/person';
-import { Spinner } from '../../components';
-import { sysconfig } from '../../systems';
+import { Spinner } from 'components';
+import { PersonList, ExportPersonBtn } from 'components/person';
+import { SearchFilter, SearchSorts, KgSearchBox, SearchKnowledge } from 'components/search';
+import { sysconfig } from 'systems';
+import { Auth } from 'hoc';
 import { KnowledgeGraphSearchHelper } from '../knowledge-graph';
-import { SearchFilter, KgSearchBox, SearchKnowledge } from '../../components/search';
-import ExportPersonBtn from '../../components/person/export-person';
-import { Auth } from '../../hoc';
+import styles from './SearchComponent.less';
 
 // TODO Extract Search Filter into new Component.
 // TODO Combine search and uniSearch into one.
-const TabPane = Tabs.TabPane;
-
-const defaultSorts = ['relevance', 'h_index', 'activity', 'rising_star', 'n_citation', 'n_pubs'];
 
 @connect(({ app, search, loading }) => ({ app, search, loading }))
 @Auth
 export default class SearchComponent extends Component {
+  static displayName = 'SearchComponent';
+
+  static contextTypes = {};
+
+  static propTypes = {
+    // className: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    className: PropTypes.string,
+    disableFilter: PropTypes.bool,
+    disableExpertBaseFilter: PropTypes.bool,
+    sorts: PropTypes.array, // pass through
+    onSearchBarSearch: PropTypes.func,
+    showSearchBox: PropTypes.bool, // has search box?
+  };
+
+  static defaultProps = {
+    disableFilter: false,
+    disableExpertBaseFilter: false,
+  };
+
+
   constructor(props) {
     super(props);
     this.dispatch = props.dispatch;// TODO remove
@@ -162,24 +178,26 @@ export default class SearchComponent extends Component {
 
 
   render() {
-    const { className } = this.props;
-    const sorts = this.props.sorts || defaultSorts;
+    const { disableExpertBaseFilter, disableFilter } = this.props;
+    const { className, sorts } = this.props;
     const { sortType } = this.state;
+
     // .........
     const { results, pagination, query, aggs, filters, topic } = this.props.search;
     const { pageSize, total, current } = pagination;
     const load = this.props.loading.effects['search/searchPerson'];
-    const operations = (
-      <ExportPersonBtn
-        query={query} pageSize={pageSize} current={current}
-        filters={filters} sort={this.state.sortType} />
-    );
 
     const expertBase = (filters && filters.eb && filters.eb.id) || 'aminer';
 
-    // TODO move translate search out.
-    const exportArea = sysconfig.Enable_Export ? operations : '';
+    const SearchSortsRightZone = !sysconfig.Enable_Export ? [] : [() => (
+      <ExportPersonBtn
+        query={query} pageSize={pageSize} current={current}
+        filters={filters} sort={sortType}
+      />
+    )];
+    // console.log('|||||||||||||||||||||||||||||', SearchSortsRightZone);
 
+    // TODO move translate search out.
     const { useTranslateSearch, translatedQuery } = this.props.search;
     return (
       <div className={classnames(styles.component, className)}>
@@ -227,40 +245,41 @@ export default class SearchComponent extends Component {
             </div>
             }
 
-            {/* Filter */}
+            {/* ---- Filter ---- */}
+            {!disableFilter &&
             <SearchFilter
               filters={filters} aggs={aggs}
               onFilterChange={this.onFilterChange}
               onExpertBaseChange={this.onExpertBaseChange}
-            />
+              disableExpertBaseFilter={disableExpertBaseFilter}
+            />}
+
           </div>
 
         </div>
 
-        {/* Sort */}
         <div className={styles.view}>
-          {sorts && sorts.length > 0 &&
-          <Tabs defaultActiveKey={sortType} size="small" className={styles.maxWidth}
-                onChange={this.onOrderChange} tabBarExtraContent={exportArea}>
-            {sorts && sorts.map((sortItem) => {
-              const icon = sortItem === sortType ? <i className="fa fa-sort-amount-desc" /> : '';
-              const tab = (<span><FM id={`com.search.sort.label.${sortItem}`}
-                                     defaultMessage={sortItem} /> {icon}</span>);
-              return <TabPane tab={tab} key={sortItem} />;
-            })}
-          </Tabs>
-          }
+
+          {/* Sort */}
+          <SearchSorts
+            sorts={sorts}
+            sortType={this.state.sortType}
+            rightZone={SearchSortsRightZone}
+            onOrderChange={this.onOrderChange}
+          />
 
           <Spinner loading={load} />
           <div className={styles.personAndKg}>
             <div>
-              {(results && results.length > 0)
-              && <PersonList persons={results} dispatch={this.dispatch}
-                             titleRightBlock={sysconfig.PersonList_TitleRightBlock}
-                             rightZoneFuncs={sysconfig.PersonList_RightZone}
-                             bottomZoneFuncs={sysconfig.PersonList_BottomZone}
-                             didMountHooks={sysconfig.PersonList_DidMountHooks}
-              />}
+              <PersonList
+                persons={results}
+                user={this.props.app.user}
+                titleRightBlock={sysconfig.PersonList_TitleRightBlock}
+                rightZoneFuncs={sysconfig.PersonList_RightZone}
+                bottomZoneFuncs={sysconfig.PersonList_BottomZone}
+                didMountHooks={sysconfig.PersonList_DidMountHooks}
+                UpdateHooks={sysconfig.PersonList_UpdateHooks}
+              />
               <div className={styles.paginationWrap}>
                 <Pagination
                   showQuickJumper
@@ -272,7 +291,8 @@ export default class SearchComponent extends Component {
                 />
               </div>
             </div>
-            {topic.label && <SearchKnowledge topic={topic} />}
+            {topic.label && topic.label.toLowerCase() !== 'null' &&
+            <SearchKnowledge topic={topic} />}
           </div>
         </div>
 
@@ -280,11 +300,3 @@ export default class SearchComponent extends Component {
     );
   }
 }
-
-SearchComponent.propTypes = {
-  // className: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  className: PropTypes.string,
-  sorts: PropTypes.array,
-  onSearchBarSearch: PropTypes.func,
-  showSearchBox: PropTypes.bool, // has search box?
-};

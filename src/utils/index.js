@@ -8,7 +8,7 @@ import { color } from './theme';
 import * as TopExpertBase from './expert-base';
 import * as reflect from './reflect';
 import * as system from './system';
-
+import { compare } from './compare';
 // 连字符转驼峰
 String.prototype.hyphenToHump = function () {
   return this.replace(/-(\w)/g, (...args) => {
@@ -137,5 +137,7 @@ module.exports = {
 
   // library
   reflect,
+
+  compare,
 
 };

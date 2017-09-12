@@ -6,7 +6,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { Button, Modal, InputNumber, Checkbox, Row, Col } from 'antd';
 import { sysconfig } from '../../systems';
-import styles from './expert-person.less';
+import styles from './export-person.less';
 import * as searchService from '../../services/search';
 import { getTwoDecimal } from '../../utils';
 import * as profileUtils from '../../utils/profile-utils';
@@ -34,6 +34,7 @@ const keyValue = {
 };
 
 const defaultCheckedList = ['name', 'pos', 'aff', 'h_index'];
+
 class ExportPersonBtn extends React.Component {
   state = {
     loading: false,

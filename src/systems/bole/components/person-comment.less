@@ -14,12 +14,13 @@
   background-color: #fff;
   .inputStyle{text-align: center;height: 38px;
   :global .ant-btn-lg{ border-radius: 12px;height: 28px;}
-    i{color:#aaaaaa;margin-right:5px}
+    i{color:#aaaaaa;margin-right:5px;cursor: pointer;}
   }
   :global .ant-input-lg {padding: 6px 7px;height: 28px;border-radius: 15px;}
   .iconStyle { display: flex; flex-direction: row; align-items: center;
     justify-content: space-between;border-top: 1px solid #e5e6e9;
     margin: 0 17px; padding:5px;
+    i{cursor: pointer}
   .message{font-size: 18px}
   }
   :global .ant-form-inline .ant-form-item:first-child { width: 80%; }
@@ -30,9 +31,14 @@
    }
     .userInfo{
       //border-top:1px solid #e5e6e9;
-      .name{ display: inline-block;width: 86px;text-align: right;
-        padding:5px;color:#47619e;font-weight: 600;}
-      .comments { display: inline-block; vertical-align: middle ;padding:5px; }
+      .name{ display: inline-block;vertical-align:top;min-width: 86px;text-align: right;
+        padding: 4px 5px 6px 42px;color:#47619e;font-weight: 600;}
+      .comments { display: inline-block; vertical-align: middle ;padding:5px;
+        max-width: 536px;word-wrap: break-word; }
+      .userInfoClose{font-size: 11px;float:right;margin:4px 15px 0 25px;display: none}
+      .comments:hover{
+        .userInfoClose{display: block;color:red;cursor: pointer}
+      }
     }
     }
 

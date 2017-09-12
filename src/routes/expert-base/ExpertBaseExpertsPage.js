@@ -1,10 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'dva';
+import { routerRedux } from 'dva/router';
 import { sysconfig } from 'systems';
 import { Auth } from 'hoc';
 import classnames from 'classnames';
-import { Spinner } from 'components';
-import { ExpertCard } from 'components/ExpertShow';
 import SearchComponent from 'routes/search/SearchComponent';
 import styles from './ExpertBaseExpertsPage.less';
 
@@ -46,8 +45,12 @@ export default class ExpertBaseExpertsPage extends Component {
   //   this.props.dispatch(routerRedux.push({ pathname: `/add-expert-detail/${id}` })); // TODO
   // };
 
-  onSearch = () => {
-    console.log('search:', '');
+  onSearch = (data) => {
+    const newOffset = data.offset || 0;
+    const newSize = data.size || sysconfig.MainListSize;
+    this.props.dispatch(routerRedux.push({
+      pathname: `/${sysconfig.SearchPagePrefix}/${data.query}/${newOffset}/${newSize}?`, // eb=${filters.eb}TODO
+    }));
   };
 
   searchExpertByName = (value) => {
@@ -69,13 +72,6 @@ export default class ExpertBaseExpertsPage extends Component {
   ebSorts = ['time', 'h_index', 'activity', 'rising_star', 'n_citation', 'n_pubs'];
 
   render() {
-    // const { detailResults } = this.props.expertBase;
-    // const value = '';
-    // const { flag } = this.state;
-    // const load = this.props.loading.effects['expertBase/getExpertDetailList'];
-
-    // console.log('nnmn^O^ $ ^O^nMn...... ', sysconfig.Search_SortOptions);
-
     return (
       <div className={classnames('content-inner', styles.page)}>
         <SearchComponent // Example: include all props.

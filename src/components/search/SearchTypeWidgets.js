@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
+import { compare } from 'utils/compare';
+import { sysconfig } from 'systems';
 import styles from './SearchTypeWidgets.less';
-import { sysconfig } from '../../systems';
 
 const NaviConfig = {
   ExpertSearch: {
@@ -52,7 +53,7 @@ const NaviConfig = {
     label: '我的专家库',
     url: '/eb/59a8e5879ed5db1fc4b762ad',
     // data: 'query',
-    pageSignature: '/eb/59a8e5879ed5db1fc4b762ad',
+    pageSignature: 'eb/',
   },
 };
 
@@ -64,43 +65,27 @@ if (process.env.NODE_ENV !== 'production') {
 
 const defaultQuery = 'data mining';
 
-class SearchTypeWidgets extends React.PureComponent {
-  state = {
-    current: '',
-  };
+@connect()
+export default class SearchTypeWidgets extends React.PureComponent {
 
   componentWillMount() {
     this.navis = this.props.navis || defaultNavis;
-
-    // match current label based on url.
-    const path = window.location.pathname;
-    if (NaviConfig) {
-      Object.keys(NaviConfig).forEach((key) => {
-        const config = NaviConfig[key];
-        if (path.indexOf(config.pageSignature) >= 0) {
-          this.setState({ current: config.label });
-        }
-      });
-    }
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   return true;
-  // }
+  shouldComponentUpdate(nextProps, nextState) {
+    return compare(this.props, nextProps, 'navis', 'query');
+  }
 
   onClick = conf => (e) => {
+    const { dispatch } = this.props;
     const theQuery = this.props.query || defaultQuery;
-    this.setState({ current: conf.label });
+    // this.setState({ current: conf.label });
     if (conf && conf.data) {
       const query = {};
       query[conf.data] = theQuery;
-      this.props.dispatch(routerRedux.push({
-        pathname: conf.url, query,
-      }));
+      dispatch(routerRedux.push({ pathname: conf.url, query }));
     } else {
-      this.props.dispatch(routerRedux.push({
-        pathname: conf.url.replace(':query', theQuery),
-      }));
+      dispatch(routerRedux.push({ pathname: conf.url.replace(':query', theQuery) }));
     }
   };
 
@@ -109,7 +94,8 @@ class SearchTypeWidgets extends React.PureComponent {
       <div className="naviLine" style={{ paddingLeft: sysconfig.Header_LogoWidth }}>
         {this.navis.map((naviKey) => {
           const c = NaviConfig[naviKey];
-          const currentClass = c.label === this.state.current ? 'current' : '';
+          const path = window.location.pathname;
+          const currentClass = path.indexOf(c.pageSignature) >= 0 ? 'current' : '';
           return (
             <div key={c.label} className={`navi ${currentClass}`}>
               <a onClick={this.onClick(c)}>
@@ -122,5 +108,3 @@ class SearchTypeWidgets extends React.PureComponent {
     );
   }
 }
-
-export default connect()(SearchTypeWidgets);

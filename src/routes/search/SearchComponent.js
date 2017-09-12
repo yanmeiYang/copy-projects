@@ -182,7 +182,7 @@ export default class SearchComponent extends Component {
 
   render() {
     const { disableExpertBaseFilter, disableFilter, disableSearchKnowledge } = this.props;
-    const { className, sorts } = this.props;
+    const { className, sorts, expertBaseId } = this.props;
     const { sortType } = this.state;
 
     // .........
@@ -278,6 +278,7 @@ export default class SearchComponent extends Component {
               <PersonList
                 persons={results}
                 user={this.props.app.user}
+                expertBaseId={expertBaseId}
                 titleRightBlock={sysconfig.PersonList_TitleRightBlock}
                 rightZoneFuncs={sysconfig.PersonList_RightZone}
                 bottomZoneFuncs={sysconfig.PersonList_BottomZone}

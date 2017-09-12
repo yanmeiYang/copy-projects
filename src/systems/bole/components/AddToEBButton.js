@@ -42,17 +42,6 @@ export default class AddToEBButton extends PureComponent {
       type: 'expertBase/addExpertToEB',
       payload: { ebid, id },
     });
-    // if (this.props.expertBase.addStatus) {
-    //   const type = 'success';
-    //   notification[type]({
-    //     message: '添加成功',
-    //     duration: 1,
-    //   });
-    //   setTimeout(() => {
-    //     // TODO this 还是 that
-    //     this.setState({ isInThisEB: true });
-    //   }, 400);
-    // }
     this.setState({ personData: this.props.person.id });
   };
 

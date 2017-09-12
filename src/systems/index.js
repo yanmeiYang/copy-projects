@@ -36,7 +36,7 @@ const defaultSystemConfigs = {
   EnableLocalLocale: false,
   // Language: 'en', // options [cn|en] // TODO change to locale.
   // PreferredLanguage: 'en', // 默认语言 // TODO delete this.
-  GLOBAL_ENABLE_HOC: false,
+  GLOBAL_ENABLE_HOC: true,
   MainListSize: 20,
 
   /**

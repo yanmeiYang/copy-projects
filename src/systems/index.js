@@ -71,6 +71,7 @@ const defaultSystemConfigs = {
   Search_EnableTranslateSearch: true, // 启用翻译搜索，显示提示信息;
   Search_DefaultTranslateSearch: false, // 默认使用翻译搜索;
   Search_EnableKnowledgeGraphHelper: true,
+  Search_FixedExpertBase: null,
 
   Search_DisableFilter: false,
   Search_DisableExpertBaseFilter: false,

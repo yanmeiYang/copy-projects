@@ -77,6 +77,7 @@ export default class SearchPage extends Component {
           disableFilter={sysconfig.Search_DisableFilter}
           disableExpertBaseFilter={sysconfig.Search_DisableExpertBaseFilter}
           disableSearchKnowledge={sysconfig.Search_DisableSearchKnowledge}
+          fixedExpertBase={sysconfig.Search_FixedExpertBase}
         />
       </div>
     );

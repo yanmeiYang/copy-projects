@@ -35,6 +35,7 @@ export default class SearchComponent extends Component {
     defaultSortType: PropTypes.string,
     onSearchBarSearch: PropTypes.func,
     showSearchBox: PropTypes.bool, // has search box?
+    fixedExpertBase: PropTypes.object,
   };
 
   static defaultProps = {
@@ -156,7 +157,12 @@ export default class SearchComponent extends Component {
   };
 
   doSearch = (query, offset, size, filters, sort, dontRefreshUrl) => {
-    const { dispatch } = this.props;
+    const { dispatch, fixedExpertBase } = this.props;
+
+    // 如果是fixed，那么重置所有的filters
+    if (fixedExpertBase && fixedExpertBase.id) {
+      filters.eb = fixedExpertBase; // eslint-disable-line no-param-reassign
+    }
 
     let filtersLength = 0;
     for (const item of Object.values(filters)) {

@@ -66,8 +66,8 @@ export default {
       );
       if (data.status) {
         yield put({ type: 'addExpertToEBSuccess', payload: { data } });
-
       } else {
+        yield put({ type: 'setCurrentPersonId', payload: { id: '' } });
         throw new Error('添加智库失败');
       }
     },

@@ -73,6 +73,7 @@ module.exports = {
     param => (
       <PersonComment
         person={param.person} user={param.user} key="1"
+        expertBaseId={param.expertBaseId}
         ExpertBase="59a8e5879ed5db1fc4b762ad"
       />),
   ],

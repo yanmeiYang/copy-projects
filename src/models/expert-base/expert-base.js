@@ -11,6 +11,7 @@ export default {
     detailResults: [],
     addStatus: {},
     deleteIsSuccess: null,
+    currentPersonId: '',
   },
 
   subscriptions: {
@@ -58,9 +59,14 @@ export default {
     },
 
     * addExpertToEB({ payload }, { call, put }) {
-      const { data } = yield call(expertBaseService.addExpertToEB, { payload });
+      const { id, ebid } = payload;
+      yield put({ type: 'setCurrentPersonId', payload: { id } });
+      const { data } = yield call(expertBaseService.addExpertToEB,
+        { payload: { aids: [id], ebid } },
+      );
       if (data.status) {
         yield put({ type: 'addExpertToEBSuccess', payload: { data } });
+
       } else {
         throw new Error('添加智库失败');
       }
@@ -106,11 +112,15 @@ export default {
     },
 
     addExpertToEBSuccess(state, { payload: { data } }) {
-      return { ...state, addStatus: false };
+      return { ...state, addStatus: data, currentPersonId: '' };
     },
 
     searchExpertSuccess(state, { payload: { data } }) {
       return { ...state, detailResults: data };
+    },
+
+    setCurrentPersonId(state, { payload }) {
+      return { ...state, currentPersonId: payload.id };
     },
   },
 };

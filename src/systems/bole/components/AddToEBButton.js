@@ -3,42 +3,39 @@
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Button, Modal } from 'antd';
+import { Button, Modal, notification } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import { routerRedux } from 'dva/router';
 import styles from './AddToEBButton.less';
 
-@connect(({ expertBase }) => ({ expertBase }))
+@connect(({ expertBase, loading }) => ({ expertBase, loading }))
 export default class AddToEBButton extends PureComponent {
   constructor(props) {
     super(props);
-    // NOTE 使用这种方式来减小之后的代码长度。
-    // FIXME ExpertBase属性与model太接近了。
     const { person, targetExpertBase, expertBaseId } = props;
     this.state = {
       visible: false,
       dataIdItem: targetExpertBase,
       value: 1,
       personData: '',
+      // load: false,
       isInThisEB: expertBaseId === 'aminer'
         ? person && person.locks && person.locks.roster
         : true,
     };
   }
-
   add = (id) => {
     const that = this;
     const ebid = this.state.dataIdItem;
-    const aids = id.split(';');
-
     this.props.dispatch({
       type: 'expertBase/addExpertToEB',
-      payload: { ebid, aids },
+      payload: { ebid, id },
     });
-    this.setState({ loading: true }); // FIXME 什么鬼, 不要用自己的Loading
     if (this.props.expertBase.addStatus) {
-      Modal.success({
-        content: '添加成功',
+      const type = 'success';
+      notification[type]({
+        message: '添加成功',
+        duration: 1,
       });
       setTimeout(() => {
         // TODO this 还是 that
@@ -100,8 +97,8 @@ export default class AddToEBButton extends PureComponent {
     const person = this.props.person;
     if (!person) {
       return false;
-    }
-    // TODO Loading..... of add button.
+    };
+    const load = person.id && this.props.expertBase.currentPersonId === person.id;
     return (
       <div className={styles.buttonArea}>
         {this.state.isInThisEB ? (
@@ -109,7 +106,7 @@ export default class AddToEBButton extends PureComponent {
             <FM id="com.bole.Remove" defaultMessage="Remove" />
           </Button>
         ) : (
-          <Button onClick={this.add.bind(this, person.id)}>
+          <Button onClick={this.add.bind(this, person.id)} loading={load}>
             <FM id="com.bole.AddButton" defaultMessage="Add" />
           </Button>
         )}

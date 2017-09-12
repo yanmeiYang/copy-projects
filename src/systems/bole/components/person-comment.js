@@ -49,53 +49,50 @@ class PersonComment extends React.PureComponent {
     const FormItem = Form.Item;
     const { getFieldDecorator } = this.props.form;
     return (
-      <div>
-        <div className={styles.commentStyles}>
-          <div className={styles.iconStyle} onClick={this.putMessage.bind(this)}>
-            <Icon type="message" />
-            {total ?
-              <span>共 {total} 条</span> : <span>共 0 条</span>}
-          </div>
-          <div>
-            {this.state.isComment &&
-            <div className={styles.inputStyle}>
-              <Form layout="inline" onSubmit={this.handleSubmit}>
-                <FormItem>
-                  {getFieldDecorator('comment')(
-                    <Input type="text" placeholder="comment" />,
-                  )}
-                </FormItem>
-                <FormItem>
-                  <Button htmlType="submit"
-                          className={styles.addCommentButton}>
-                    <FM id="com.bole.personComment" defaultMessage="Comments" /></Button>
-                </FormItem>
-              </Form>
-            </div>}
-          </div>
-          {(comments && comments.extra && comments.extra.comments) &&
-          <div className={styles.commentArea}>
-            {comments.extra.comments.map((comment, index) => {
-              return (
-                <div key={index}>
-                  {(comment && comment.create_user) &&
-                  <div>
-                    <span className={styles.name}>{comment.create_user.name}：</span>
-                    <span className={styles.comments}>{comment.comment}</span>
-                    <Button type="danger" size="small"
-                            onClick={this.deleteTheComment.bind(this, index)}>
-                      删除
-                    </Button>
-                  </div>
-                  }
-                </div>
-              );
-            })
-            }
-          </div>
-          }
-        </div>
-      </div>
+     <div>
+       { !this.state.isInThisEB && <div className={styles.commentStyles}>
+         <div className={styles.iconStyle}>
+           <Icon type="message" onClick={this.putMessage.bind(this)} />
+           <span><i className="fa fa-comments-o" /> {total
+           && <span>{total || 0}</span>}</span>
+         </div>
+         {(comments && comments.extra && comments.extra.comments) &&
+         <div className={styles.commentArea}>
+           {this.state.isComment && <div>
+             <div className={styles.title}>View previous comments</div>
+             {comments.extra.comments.map((comment, index) => {
+               return (
+                 <div key={index}>
+                   {(comment && comment.create_user) &&
+                   <div className={styles.userInfo}>
+                     <span className={styles.name}>{comment.create_user.name}</span>
+                     <span className={styles.comments}>{comment.comment}
+                       <Icon type="close-circle-o" className={styles.userInfoClose}
+                             onClick={this.deleteTheComment.bind(this, index)} /></span>
+                   </div>
+                   }
+                 </div>
+               );
+             })
+             }
+             <div>
+               <div className={styles.inputStyle}>
+                 <Form layout="inline" onSubmit={this.handleSubmit.bind(this)}>
+                   <FormItem>
+                     {getFieldDecorator('comment')(
+                       <Input type="text" placeholder="Write a comment..."
+                              suffix={<i className="fa fa-send-o" />} />,
+                     )}
+                   </FormItem>
+                 </Form>
+               </div>
+             </div>
+           </div>
+           }
+         </div>
+         }
+       </div>}
+     </div>
     );
   }
 }

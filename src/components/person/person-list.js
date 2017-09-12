@@ -202,14 +202,14 @@ export default class PersonList extends PureComponent {
               }
 
               {/* ---- Bottom Zone ---- */}
-              {BottomZoneFuncs && BottomZoneFuncs.length > 0 &&
-              <div className={styles.personComment}>
-                {BottomZoneFuncs.map((bottomBlockFunc) => {
-                  const param = { person, expertBaseId, user };
-                  return bottomBlockFunc ? bottomBlockFunc(param) : false;
-                })}
-              </div>
-              }
+              {/*{BottomZoneFuncs && BottomZoneFuncs.length > 0 &&*/}
+              {/*<div className={styles.personComment}>*/}
+                {/*{BottomZoneFuncs.map((bottomBlockFunc) => {*/}
+                  {/*const param = { person, expertBaseId, user };*/}
+                  {/*return bottomBlockFunc ? bottomBlockFunc(param) : false;*/}
+                {/*})}*/}
+              {/*</div>*/}
+              {/*}*/}
             </div>
           );
         })

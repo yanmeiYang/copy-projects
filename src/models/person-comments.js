@@ -28,10 +28,10 @@ export default {
       const { person, uid, user_name, comment } = payload;
       const aid = person.id;
       // 创建新增加的comment
-      const tempComment = {
+      const tempComment = [{
         create_user: { time: Date.parse(new Date()), name: user_name, uid },
         comment,
-      };
+      }];
 
       const tobProfileMap = yield select(state => state.personComments.tobProfileMap);
       const tbp = tobProfileMap.get(aid);
@@ -39,7 +39,7 @@ export default {
       if (tbp && tbp.id) {
         // 获取现有的tobprofile中的comments
         const existComments = (tbp.extra && tbp.extra.comments) || [];
-        const newComments = existComments.concat([tempComment]);
+        const newComments = existComments.concat(tempComment);
         const newExtra = { ...(tbp.extra || {}), comments: newComments };
         // 更新extra中comment
         // updateToBProfileExtra 需要传的是id，而不是aid
@@ -55,7 +55,7 @@ export default {
       } else {
         const newData = {
           sid: '', name: person.name || '', name_zh: person.name_zh || '',
-          gender: 0, aff: '', email: [], aid, type: 'c', extra: { comments: [tempComment] },
+          gender: 0, aff: '', email: [], aid, type: 'c', extra: { comments: tempComment },
         };
         // 插入一条tobProfile
         const createTobProfile = yield call(tobProfileService.addProfileSuccess, newData);

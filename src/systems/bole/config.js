@@ -61,7 +61,7 @@ module.exports = {
   // PersonList_PersonLink_NewTab: true,
   // param: [person, eb{id,name}]
   PersonList_TitleRightBlock:
-    param => (
+    ({ param }) => (
       <AddToEBButton
         person={param.person} key="2"
         expertBaseId={param.expertBaseId}

@@ -33,6 +33,12 @@ export default class ExpertBaseExpertsPage extends Component {
         showFooter: false,
       },
     });
+    // Set query to null, and set eb to the only eb.
+    this.props.dispatch({
+      type: 'search/updateFiltersAndQuery', payload: {
+        query: '', filters: { eb: { id: sysconfig.ExpertBase, name: '我的专家库' } },
+      },
+    });
   }
 
   // addExpertDetailInfo = (dataId) => {
@@ -60,6 +66,8 @@ export default class ExpertBaseExpertsPage extends Component {
     }
   };
 
+  ebSorts = ['time', 'h_index', 'activity', 'rising_star', 'n_citation', 'n_pubs'];
+
   render() {
     // const { detailResults } = this.props.expertBase;
     // const value = '';
@@ -72,25 +80,14 @@ export default class ExpertBaseExpertsPage extends Component {
       <div className={classnames('content-inner', styles.page)}>
         <SearchComponent // Example: include all props.
           className={styles.SearchBorder} // additional className
-          sorts={sysconfig.Search_SortOptions}
+          sorts={this.ebSorts}
+          defaultSortType="time"
           onSearchBarSearch={this.onSearchBarSearch}
           showSearchBox={this.props.app.headerSearchBox ? false : true}
-          disableFilter disableExpertBaseFilter
+          disableFilter disableExpertBaseFilter disableSearchKnowledge
         />
       </div>
 
-      // <div>
-      //   <Search placeholder="input name" className={styles.searchArea}
-      //           onSearch={this.searchExpertByName.bind(value)} />
-      //   <div className={styles.orgArea}>
-      //     <Spinner loading={load} nomask />
-      //     {detailResults.result && detailResults.result.length > 0 ?
-      //       <ExpertCard orgs={detailResults.result} /> :
-      //       <div>
-      //         {flag && <div className={styles.noResult}> 没有搜索到该专家 </div>}</div>
-      //     }
-      //   </div>
-      // </div>
     );
   }
 }

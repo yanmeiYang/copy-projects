@@ -148,6 +148,10 @@ export default {
       return { ...state, filters };
     },
 
+    updateFiltersAndQuery(state, { payload: { query, filters } }) {
+      return { ...state, query, filters };
+    },
+
     updateSortKey(state, { payload: { key } }) {
       // console.log('reducers, update sort key : ', key);
       return { ...state, sortKey: key || '' };

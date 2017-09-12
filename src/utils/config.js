@@ -48,8 +48,11 @@ module.exports = {
     searchPersonAgg: '/search/person/agg',
     searchPersonInBase: '/search/roster/:ebid/experts/advanced',
     searchPersonInBaseAgg: '/search/roster/:ebid/experts/advanced/agg',
-    allPersonInBase: '/roster/:ebid/order-by/h_index/offset/:offset/size/:size',
+    allPersonInBase: '/roster/:ebid/offset/:offset/size/:size',
     allPersonInBaseAgg: '/roster/:ebid/agg?offset=&order=h_index&size=20',
+    allPersonInBaseWithSort: '/roster/:ebid/order-by/:sort/offset/:offset/size/:size',
+    // TODO agg
+
     searchMap: '/search/person/geo', // ?query=:search
     searchExpertBaseMap: '/roster/:id/geo/offset/:offset/size/:size',
     searchExpertNetWithDSL: '/search/person/ego',

@@ -12,6 +12,11 @@ const { api } = config;
 
  */
 export async function searchPerson(query, offset, size, filters, sort, useTranslateSearch) {
+  // if query is null, and eb is not aminer, use expertbase list api.
+  if (!query && filters && filters.eb && filters.eb.id && filters.eb.id !== 'aminer') {
+    return searchListPersonInEB({ ebid: filters.eb.id, sort, offset, size });
+  }
+
   // if search in global experts, jump to another function;
   if (filters && filters.eb && filters.eb.id === 'aminer') {
     return searchPersonGlobal(query, offset, size, filters, sort, useTranslateSearch);
@@ -24,6 +29,39 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
   const { expertBase, data } = prepareParameters(query, offset, size, filters, sort, useTranslateSearch);
   return request(
     api.searchPersonInBase.replace(':ebid', expertBase),
+    { method: 'GET', data },
+  );
+}
+
+export async function searchListPersonInEB(payload) {
+  const { sort, ebid, offset, size } = payload;
+  console.log('&&&&&&&&&&&&&&&&&&& &&&&&&&&&&&&', payload, sort, ebid);
+  if (!sort || sort === 'time') {
+    return request(
+      api.allPersonInBase
+        .replace(':ebid', ebid)
+        .replace(':offset', offset)
+        .replace(':size', size),
+      { method: 'GET', data: { rev: 1 } },
+    );
+  } else {
+    return request(
+      api.allPersonInBaseWithSort
+        .replace(':ebid', ebid)
+        .replace(':sort', sort)
+        .replace(':offset', offset)
+        .replace(':size', size),
+      { method: 'GET' /*, data: { rev: 0 } */ },
+    );
+  }
+  const rosterAPI = sort === 'time' ? api.allPersonInBase : api.allPersonInBaseWithSort;
+
+  const data = {};
+  if (sort === 'time') {
+    data.rev = 1;
+  }
+  return request(
+    rosterAPI.replace(':ebid', ebid),
     { method: 'GET', data },
   );
 }

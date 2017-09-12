@@ -73,6 +73,29 @@ export default {
       }
     },
 
+    * deleteTheComment({ payload }, { call, put, select }) {
+      const { aid, index } = payload;
+      const tobProfileMap = yield select(state => state.personComments.tobProfileMap);
+      const tbp = tobProfileMap.get(aid);
+      if (tbp && tbp.id) {
+        const existComments = (tbp.extra && tbp.extra.comments) || [];
+        const newComments = existComments.splice(index, 1);
+        const newExtra = { ...(tbp.extra || {}), comments: newComments };
+        const updateFeedBack = yield call(expertBaseService.updateToBProfileExtra, tbp.id, newExtra);
+        if (updateFeedBack.data.status) {
+          yield put({
+            type: 'updateTobProfileSuccess',
+            payload: { aid, newExtra },
+          });
+        } else {
+          console.log('update error');
+        }
+      } else {
+        console.log('error');
+      }
+
+    },
+
   },
 
 
@@ -94,24 +117,6 @@ export default {
       return { ...state, tobProfileMap: data };
     },
 
-    // TODO aid，和需要删除comment的index
-    deleteTheComment(state, { payload }) {
-      const { aid, index } = payload;
-      console.log('model sahnchu');
-      const tbp = state.tobProfileMap.get(aid);
-      let newTbpMap = {};
-      if (tbp && tbp.id) {
-        // 获取现有的tobprofile中的comments
-        if (tbp.extra && tbp.extra.comments && tbp.extra.comments.length > 0) {
-          tbp.extra.comments.splice(index, 1);
-          newTbpMap = { ...(state.tobProfileMap || {}), aid: tbp };
-        }
-        return { ...state, tobProfileMap: newTbpMap };
-      } else {
-        return { ...state };
-      }
-
-    },
   },
 
 };

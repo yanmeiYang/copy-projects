@@ -45,7 +45,7 @@ class PersonComment extends React.PureComponent {
         <div className={styles.iconStyle} onClick={this.putMessage.bind(this)}>
           <Icon type="message" />
           {total ?
-            <span >共 {total} 条</span>:<span >共 0 条</span>}
+            <span>共 {total} 条</span> : <span>共 0 条</span>}
         </div>
         <div>
           {this.state.isComment &&
@@ -64,17 +64,24 @@ class PersonComment extends React.PureComponent {
             </Form>
           </div>}
         </div>
-        {comments && comments.extra && comments.extra.comments &&
+        {(comments && comments.extra && comments.extra.comments) &&
         <div className={styles.commentArea}>
-          {comments.extra.comments.map((comment) => {
+          {personComments.tobProfileMap && personComments.tobProfileMap.get(person.id)
+          && personComments.tobProfileMap.get(person.id).extra.comments.map((comment, index) => {
             return (
-              <div key={comment.create_user.time}>
-                <span className={styles.name}>{comment.create_user.name}：</span>
-                <span className={styles.comments}>{comment.comment}</span>
-              </div>);
-          })}</div>
+              <div key={index}>
+                {(comment && comment.create_user) &&
+                <div>
+                  <span className={styles.name}>{comment.create_user.name}：</span>
+                  <span className={styles.comments}>{comment.comment}</span>
+                </div>
+                }
+              </div>
+            );
+          })
+          }
+        </div>
         }
-
       </div>
     );
   }

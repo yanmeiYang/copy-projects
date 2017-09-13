@@ -15,6 +15,11 @@ module.exports = {
   PersonList_PersonLink: personId => `/person/${personId}`,
   PersonList_PersonLink_NewTab: false,
 
+  /**
+   * Layout related
+   */
+  Layout_HasSideBar: true, // 是否显示左侧菜单
+
   // Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
   Header_LogoWidth: 213,
   Header_LogoStyle: {
@@ -29,7 +34,6 @@ module.exports = {
   Header_SubTextStyle: { marginLeft: 12 },
   Header_UserPageURL: '', // 用户头像点击之后去的页面.
   // Footer_Content: defaults.EMPTY_BLOCK,
-  ShowSideMenu: true,
   ShowFooter: true,
 
   // > Search related

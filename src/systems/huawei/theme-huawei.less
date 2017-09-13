@@ -1,14 +1,26 @@
 /**
  * Created by BoGao on 2017/9/13.
+ * 每个Component必须有一个root class，这个root class可以和component重名，理论上应该全局唯一。
+ * 这个文件中，以每个component的root class为第一级。 不建议嵌套。
+ * 这个文件是对每个component的样式的覆盖.
  */
-Layout {
-  .title { color: red; }
-  .layout {
-    border: solid 1px green;
+@import "../../themes/vars.less";
 
-    .title { border: solid 1px red }
+.logoZones {
+  display: flex; flex-direction: row;
+}
+
+.Overrides() {
+  .layout {
+    border: solid 0px green;
+
+    .title { border: solid 2px red }
     .sider {
       border: solid 1px orange;
+      .text { color: orange }
+      .title { border: solid 1px red }
     }
   }
 }
+
+.Overrides() !important;

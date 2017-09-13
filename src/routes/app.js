@@ -96,7 +96,7 @@ const App = ({ children, location, dispatch, app, loading }) => {
 
   const { iconFontJS, iconFontCSS } = config;
 
-  const mainMarginLeft = sysconfig.ShowSideMenu ? 188 : 0;
+  const mainMarginLeft = sysconfig.Layout_HasSideBar ? 188 : 0;
 
   const { showFooter } = app;
 
@@ -142,13 +142,13 @@ const App = ({ children, location, dispatch, app, loading }) => {
 
       <div className={classnames(styles.layout)}>
         <Header {...headerProps} onSearch={onSearch} />
-        {sysconfig.ShowSideMenu && !isNavbar ?
+        {sysconfig.Layout_HasSideBar && !isNavbar ?
           <aside className={classnames(styles.sider, { [styles.light]: !darkTheme })}>
             <Sider {...siderProps} />
           </aside> : ''
         }
         <div
-          className={classnames(styles.main, sysconfig.ShowSideMenu && styles.main_margin_188)}>
+          className={classnames(styles.main, sysconfig.Layout_HasSideBar && styles.main_margin_188)}>
           <div className={styles.container}>
             <div className={styles.content}>
               {/* <Bread {...breadProps} location={location} /> */}

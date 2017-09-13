@@ -26,7 +26,6 @@ module.exports = {
   Header_SubTextStyle: { marginLeft: 12 },
   Header_UserPageURL: '', // 用户头像点击之后去的页面.
   Footer_Content: <Footer />,
-  ShowSideMenu: true,
   ShowFooter: true,
 
   // > Search related

@@ -4,9 +4,9 @@
 /* eslint-disable prefer-template,import/no-dynamic-require */
 import React from 'react';
 import { addLocaleData } from 'react-intl';
-import { loadSavedLocale } from '../utils/locale';
-
-import { System, Source } from '../utils/system';
+import classnames from 'classnames';
+import { loadSavedLocale } from 'utils/locale';
+import { System, Source } from 'utils/system';
 import Footer from '../components/Footers/default';
 import defaults from './utils';
 
@@ -24,12 +24,14 @@ const CurrentSystemConfig = {
   bole: require('./bole/config'),
 };
 
+const sysTheme = require(`systems/${System}/theme-${System}.js`);
+
 // 默认配置
 const defaultSystemConfigs = {
   SYSTEM: System,
   SOURCE: Source,
 
-  theme: require(`systems/${System}/theme-${System}.js`),
+  theme: sysTheme,
 
   //
   // Systems Preference
@@ -44,6 +46,8 @@ const defaultSystemConfigs = {
   /**
    * Layout related
    */
+  Layout_HasSideBar: false, // 是否显示左侧菜单
+
   PageTitle: 'Aminer Business',
   // header
   Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
@@ -58,7 +62,6 @@ const defaultSystemConfigs = {
   // footer and sidebar
   ShowFooter: true,
   Footer_Content: <Footer />,
-  ShowSideMenu: true,
 
   /**
    * Functionality
@@ -129,19 +132,13 @@ const defaultSystemConfigs = {
   Admin_Users_ShowAdmin: true,
   // PersonList_ShowIndices: [], // do not override in-component settings. // TODO
 
-  HOOK: [],// TODO >>>>????????
+  HOOK: [], // TODO >>>>????????
 
 };
-/** *************************************************
- * classes
- ************************************************* */
 
-const classes = () => {
-
-};
-/** *************************************************
+/***************************************************
  * Combine
- ************************************************* */
+ **************************************************/
 const sysconfig = defaultSystemConfigs;
 const currentSystem = CurrentSystemConfig[System];
 Object.keys(currentSystem).map((key) => {
@@ -149,10 +146,41 @@ Object.keys(currentSystem).map((key) => {
   return null;
 });
 
-// load & Override language from localStorage.
+/***************************************************
+ * load & Override language from localStorage.
+ **************************************************/
 if (sysconfig.EnableLocalLocale) {
   sysconfig.Locale = loadSavedLocale(sysconfig.SYSTEM, sysconfig.Locale);
 }
 addLocaleData('react-intl/locale-data/' + sysconfig.Locale);
 
-module.exports = { sysconfig, classes };
+/***************************************************
+ * classes
+ **************************************************/
+// support only styles.className, not support global css.
+const applyTheme = (styles) => {
+  const themeStyles = sysconfig.theme.styles;
+  return (classes, rawClasses) => {
+    const results = [];
+    if (classes) {
+      classes.map((className) => {
+        const c = styles[className];
+        if (c) {
+          results.push(c);
+        }
+        const c2 = themeStyles[className];
+        if (c2) {
+          results.push(c2);
+        }
+        return false;
+      });
+    }
+    if (rawClasses) {
+      results.push(...rawClasses);
+    }
+    return classnames(...results);
+  };
+};
+
+
+module.exports = { sysconfig, applyTheme };

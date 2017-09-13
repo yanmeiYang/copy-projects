@@ -112,7 +112,7 @@ const RouterRegistry2b = [
 const RouterJSXFunc = (history, app, routes, RootComponent) => {
   // return <Router history={history} routes={routes} />;
   if (process.env.NODE_ENV !== 'production') {
-    console.log('Load Routes: ', routes);
+    // console.log('Load Routes: ', routes);
   }
 
   return (

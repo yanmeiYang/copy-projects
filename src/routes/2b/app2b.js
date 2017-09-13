@@ -62,7 +62,7 @@ const App2b = ({ children, location, dispatch, app, loading }) => {
 
   const { iconFontJS, iconFontCSS } = config;
 
-  const mainMarginLeft = sysconfig.ShowSideMenu ? 188 : 0;
+  const mainMarginLeft = sysconfig.Layout_HasSideBar ? 188 : 0;
 
   // TODO Config Helmet out of app.js
   return (

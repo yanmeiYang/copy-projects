@@ -8,6 +8,9 @@
 // npm run build之后就已经将所有变量编译到css中。
 @import "../../node_modules/antd/lib/style/themes/default.less";
 
+@font-family-no-number: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+@font-family: "Microsoft Yahei", @font-family-no-number;
+
 @border-radius-base: 3px;
 @border-radius-sm: 2px;
 @shadow-color: rgba(0, 0, 0, 0.05);
@@ -17,15 +20,14 @@
 @menu-dark-bg: #3e3e3e;
 //@text-color: #666;
 @text-color: #1d2129;
-// TODO replace this.
-@font-family: "AvenirNext-Regular", "Helvetica Neue", "lucida grande", "PingFangHK-Light", "STHeiti", "Heiti SC", "Hiragino Sans GB", "Microsoft JhengHei", "Microsoft Yahei", SimHei, "WenQuanYi Micro Hei", "Droid Sans", "Roboto", Helvetica, Tahoma, Arial, "sans-serif";
+
 @icon-url: "/antd/iconfont";
 
 @animation-duration-slow: .2s; // Modal
 @animation-duration-base: .15s;
 @animation-duration-fast: .1s; // Tooltip
 
-@font-size-base: 13px;
+@font-size-base: 12px;
 @font-size-lg: @font-size-base + 2px;
 
 // 其余新加入的设置应该放vars.less里面.

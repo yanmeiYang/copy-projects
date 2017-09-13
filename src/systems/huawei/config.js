@@ -10,7 +10,6 @@ module.exports = {
   // 通用配置。所有System的配置文件必须全部包含这部分的值
   PageTitle: 'HUAWEI 知识洞察系统',
   SearchPagePrefix: 'uniSearch', // search, uniSearch
-  ShowSideMenu: false,
   ShowRegisteredRole: false,
 
   EnableLocalLocale: true,

@@ -2,14 +2,19 @@
 /**
  * Created by bogao on 2017/09/13.
  */
-import React, { PureComponent, Component } from 'react';
+import React, { PureComponent, Component, PropTypes } from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
 import { Layout as ALayout } from 'antd';
-import { sysconfig } from 'systems';
+import { sysconfig, applyTheme } from 'systems';
+import { Header } from 'components/Layout';
 import styles from './Layout.less';
 
-const { Header, Sider, Content, Footer } = ALayout;
+const { Sider, Content, Footer } = ALayout;
+
+const { theme } = sysconfig;
+const tc = applyTheme(styles);
+
 // import { Menu, Icon, Dropdown } from 'antd';
 // import { Link } from 'dva/router';
 // import { FormattedMessage as FM } from 'react-intl';
@@ -31,35 +36,50 @@ export default class Layout extends Component {
   static displayName = 'Layout';
 
   static propTypes = {
-    // sorts: PropTypes.array,
-    // sortType: PropTypes.string.isRequired,
-    // rightZone: PropTypes.array,
-    // onOrderChange: PropTypes.func,
+    // Header
+    logoZone: PropTypes.array,
+    searchZone: PropTypes.array,
+    infoZone: PropTypes.array,
+
+    footer: PropTypes.element,
   };
 
   static defaultProps = {
-    // sortType: 'relevance',
-    // rightZone: [],
+    footer: theme.footer,
   };
 
   componentWillReceiveProps = (nextProps) => {
   };
 
   render() {
-    const theme = sysconfig.theme.theme;
+    const { logoZone, searchZone, infoZone, footer } = this.props;
+    const headerOptions = { logoZone, searchZone, infoZone };
     return (
-      <ALayout className={classnames(styles.layout, theme.layout)}>
-        <Header>
-          <span className={styles.text}> header</span>
-        </Header>
+      <ALayout className={tc(['layout'])}>
+
+        <Header {...headerOptions} />
+
         <ALayout>
-          <Sider className={styles.sider}>
-            <span className={styles.text}>left sidebar</span>
+
+          {/* -------- Left Side Bar -------- */}
+          {sysconfig.Layout_HasSideBar &&
+          <Sider className={tc(['sider'])}>
+            <span className={tc(['text'])}>left sidebar</span>
           </Sider>
-          <Content>{this.props.children}</Content>
-          <Sider>right sidebar</Sider>
+          }
+
+          <Content>
+            {this.props.children}
+          </Content>
+
+          {/*<Sider>right sidebar</Sider>*/}
         </ALayout>
-        <Footer>footer</Footer>
+
+        {/* -------- Footer -------- */}
+        <Footer className={tc(['footer'])}>
+          {footer}
+        </Footer>
+
       </ALayout>
     );
   }

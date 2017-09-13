@@ -30,7 +30,6 @@ module.exports = {
   Header_SubTextStyle: {},
   Header_UserPageURL: '', // 用户头像点击之后去的页面.
   Footer_Content: defaults.EMPTY_BLOCK,
-  ShowSideMenu: false,
   ShowFooter: true,
 
   //

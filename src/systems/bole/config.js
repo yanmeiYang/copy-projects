@@ -14,7 +14,6 @@ module.exports = {
   // 通用配置。所有System的配置文件必须全部包含这部分的值
   PageTitle: '伯乐系统',
   SearchPagePrefix: 'uniSearch', // search, uniSearch
-  ShowSideMenu: false,
   ShowRegisteredRole: false,
 
   // UserAuthSystem: 'aminer', // aminer 或者是 system.config; 默认当前系统

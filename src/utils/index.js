@@ -120,6 +120,12 @@ const createURL = (path, params, newParams) => {
   return url;
 };
 
+// const applyElements = (elements) => {
+//   if (elements) {
+//   return
+//   }
+// };
+
 module.exports = {
   config,
   system,

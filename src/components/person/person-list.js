@@ -124,11 +124,11 @@ export default class PersonList extends PureComponent {
                         <a {...personLinkParams}>{name}</a>
                         {false && <span className={styles.rank}>会士</span>}
                       </h2>
-
-                      {/* ---- TitleRightBlock ---- */}
-                      {titleRightBlock && titleRightBlock({ param: { person, expertBaseId } })}
-                      {/*{this.personRightButton && this.personRightButton(person)}*/}
                     </div>}
+
+                    {/* ---- TitleRightBlock ---- */}
+                    {titleRightBlock && titleRightBlock({ param: { person, expertBaseId } })}
+                    {/*{this.personRightButton && this.personRightButton(person)}*/}
                     <div className={classnames(styles.zone, styles.interestColumn)}>
                       <div className={styles.contact_zone}>
                         <Indices
@@ -177,7 +177,7 @@ export default class PersonList extends PureComponent {
                                   <span key={key}>
                                     {tag.zh
                                       ?
-                                        <Tooltip placement="top" title={tag.en}>{linkJSX}</Tooltip>
+                                      <Tooltip placement="top" title={tag.en}>{linkJSX}</Tooltip>
                                       : linkJSX}
                                   </span>
                                 );

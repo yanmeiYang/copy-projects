@@ -89,7 +89,9 @@ export default {
       const { pid, rid } = payload;
       const { data } = yield call(expertBaseService.removeByPid, { pid, rid });
       // TODO status改成detach
-      yield put({ type: 'search/delPersonFromResultsById', pid });
+      if (data.status) {
+        yield put({ type: 'search/delPersonFromResultsById', pid });
+      }
       yield put({ type: 'removeSuccess', data });
     },
   },

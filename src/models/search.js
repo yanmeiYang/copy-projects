@@ -172,6 +172,16 @@ export default {
       return { ...state, results: [] };
     },
 
+    delPersonFromResultsById(state, { pid }) {
+      const originalResults = [];
+      for (const value of state.results) {
+        if (value.id !== pid) {
+          originalResults.push(value);
+        }
+      }
+      return { ...state, results: originalResults };
+    },
+
     searchPersonAggSuccess(state, { payload: { data } }) {
       const { aggs } = data;
       return { ...state, aggs };

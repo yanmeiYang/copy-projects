@@ -2,7 +2,7 @@
  *  Created by BoGao on 2017-06-15;
  */
 /* eslint-disable camelcase */
-import React, { PureComponent, PropTypes } from 'react';
+import React, { Component, PureComponent, PropTypes } from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { Tag, Tooltip } from 'antd';
@@ -26,7 +26,6 @@ const DefaultBottomZoneFuncs = [];
 
 @connect()
 export default class PersonList extends PureComponent {
-
   static propTypes = {
     // className: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     className: PropTypes.string, // NOTE: 一般来说每个稍微复杂点的Component都应该有一个className.
@@ -174,7 +173,7 @@ export default class PersonList extends PureComponent {
                                   <span key={key}>
                                     {tag.zh
                                       ?
-                                      <Tooltip placement="top" title={tag.en}>{linkJSX}</Tooltip>
+                                        <Tooltip placement="top" title={tag.en}>{linkJSX}</Tooltip>
                                       : linkJSX}
                                   </span>
                                 );
@@ -204,10 +203,10 @@ export default class PersonList extends PureComponent {
               {/* ---- Bottom Zone ---- */}
               {/*{BottomZoneFuncs && BottomZoneFuncs.length > 0 &&*/}
               {/*<div className={styles.personComment}>*/}
-                {/*{BottomZoneFuncs.map((bottomBlockFunc) => {*/}
-                  {/*const param = { person, expertBaseId, user };*/}
-                  {/*return bottomBlockFunc ? bottomBlockFunc(param) : false;*/}
-                {/*})}*/}
+              {/*{BottomZoneFuncs.map((bottomBlockFunc) => {*/}
+              {/*const param = { person, expertBaseId, user };*/}
+              {/*return bottomBlockFunc ? bottomBlockFunc(param) : false;*/}
+              {/*})}*/}
               {/*</div>*/}
               {/*}*/}
             </div>

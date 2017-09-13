@@ -62,7 +62,7 @@ export default class AddToEBButton extends PureComponent {
         });
         that.setState({ isInThisEB: false });
       },
-    onCancel() {
+      onCancel() {
       },
     });
   };

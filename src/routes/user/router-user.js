@@ -8,7 +8,7 @@ export default {
     path: '/registered',
     models: () => [
       import('models/common/universal-config'),
-      import('models/auth/auth'),
+      import('models/auth'),
     ],
     component: () => import('./signup'),
   },

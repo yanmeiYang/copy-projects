@@ -1,7 +1,7 @@
 /**
  * Created by yutao on 2017/5/22.
  */
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Menu, Icon, Dropdown } from 'antd';
 import { Link } from 'dva/router';
@@ -18,7 +18,7 @@ import { saveLocale } from '../../utils/locale';
 import defaults from '../../systems/utils';
 
 @connect(({ app }) => ({ app }))
-export default class Header extends React.PureComponent {
+export default class Header extends PureComponent {
   state = {
     query: '',
     logoutLoading: false,
@@ -178,7 +178,6 @@ export default class Header extends React.PureComponent {
               {/*<p className={roles.authority[0] !== undefined ? styles.isAuthority : ''}>*/}
               {/*<span>{roles.role[0]}</span>*/}
               {/*{roles.authority[0] !== undefined &&*/}
-              {/*<span>*/}
               {/*<br />*/}
               {/*<span>{seminarService.getValueByJoint(roles.authority[0])}</span>*/}
               {/*</span>}*/}

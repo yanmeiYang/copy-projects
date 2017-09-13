@@ -108,16 +108,17 @@ const arrayToTree = (array, id = 'id', pid = 'pid', children = 'children') => {
   return result;
 };
 
-// for router
-const cached = {};
-
-function registerModel(app, model) {
-  if (!cached[model.namespace]) {
-    app.model(model);
-    cached[model.namespace] = 1;
-  }
-}
-
+// Router tool
+const createURL = (path, params, newParams) => {
+  let url = path;
+  const finalParams = { ...params, ...newParams };
+  Object.keys(finalParams).map((param) => {
+    const value = finalParams[param];
+    url = url.replace(`:${param}`, value);
+    return false;
+  });
+  return url;
+};
 
 module.exports = {
   config,
@@ -132,12 +133,12 @@ module.exports = {
   arrayToTree,
   getTwoDecimal,
 
-  registerModel,
   TopExpertBase,
 
   // library
   reflect,
 
   compare,
-
-};
+  createURL,
+}
+;

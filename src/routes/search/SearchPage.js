@@ -74,6 +74,10 @@ export default class SearchPage extends Component {
           expertBaseId={expertBaseId}
           onSearchBarSearch={this.onSearchBarSearch}
           showSearchBox={this.props.app.headerSearchBox ? false : true}
+          disableFilter={sysconfig.Search_DisableFilter}
+          disableExpertBaseFilter={sysconfig.Search_DisableExpertBaseFilter}
+          disableSearchKnowledge={sysconfig.Search_DisableSearchKnowledge}
+          fixedExpertBase={sysconfig.Search_FixedExpertBase}
         />
       </div>
     );

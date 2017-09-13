@@ -4,7 +4,7 @@
 import React from 'react';
 import { Link } from 'dva/router';
 // import styles from './HeaderUserRole.less';
-import * as seminarService from '../../services/seminar';
+import * as seminarService from 'services/seminar';
 
 class IndexInfoBox extends React.PureComponent {
   render() {

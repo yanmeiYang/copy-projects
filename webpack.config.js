@@ -52,11 +52,12 @@ module.exports = (webpackConfig, env) => {
     ]);
   }
 
+  // console.log('````````````````````````````````', HtmlWebpackTemplate)
   webpackConfig.plugins = webpackConfig.plugins.concat([
     new HtmlWebpackPlugin({
       hash: true,
       mobile: true,
-      title: 'Loading...',
+      title: '',
       inject: false,
       appMountId: 'root',
       template: `!!ejs-loader!${HtmlWebpackTemplate}`,
@@ -77,7 +78,6 @@ module.exports = (webpackConfig, env) => {
     }),
   ]);
 
-
   // Alias
   webpackConfig.resolve.alias = {
     components: `${__dirname}/src/components`,
@@ -91,6 +91,7 @@ module.exports = (webpackConfig, env) => {
     systems: `${__dirname}/src/systems`,
     hoc: `${__dirname}/src/hoc`,
   };
+
   if (debug) {
     console.log('-------------------------------------------');
     console.log('>> config:\n', webpackConfig);

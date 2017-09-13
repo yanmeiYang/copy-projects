@@ -13,7 +13,7 @@ import { contactByJoint, getValueByJoint } from '../../../services/seminar';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-// const AutocompleteOption = AutoComplete.Option;
+// const AutocompleteOption = AutoComplete.Option;t
 
 class Registered extends React.Component {
   state = {
@@ -326,10 +326,6 @@ class Registered extends React.Component {
   }
 }
 
-const WrappedRegistrationForm = Form.create()(Registered);
-
-export default connect(({ auth, universalConfig, app }) => ({
-  auth,
-  universalConfig,
-  app,
-}))(WrappedRegistrationForm);
+export default connect(
+  ({ app, auth, universalConfig }) => ({ app, auth, universalConfig }),
+)(Form.create()(Registered));

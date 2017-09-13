@@ -9,6 +9,12 @@ body {
   //background-color: #f8f8f8;
 }
 
+:global {
+  #root {
+    //border: solid 1px red;
+  }
+}
+
 ::-webkit-scrollbar-thumb {
   background-color: #e6e6e6;
 }
@@ -18,23 +24,17 @@ body {
   height: 8px;
 }
 
-// Global Common Web Components. 这些东西放到哪个文件？
+/* ------------------------ Override antd ------------------------ */
+
 :global {
 
-  .section_header {
-    font-size: @font-size-lg;
-    border-bottom: solid 1px @border-color-base;
-    width: 80%;
-    margin-bottom: 6px;
-    padding-bottom: 2px;
+  // override layout
+  .ant-layout {
+    .ant-layout-header { background: white }
+    .ant-layout-sider { background: white }
   }
 
-  .debug_area { border: dashed 1px green; }
-}
-
-// Fix antd
-
-:global {
+  // override others
   .ant-breadcrumb {
     & > span {
       &:last-child {
@@ -144,6 +144,22 @@ body {
 
 }
 
+/* ------------------------ Global Components ------------------------ */
+:global {
+
+  .section_header {
+    font-size: @font-size-lg;
+    border-bottom: solid 1px @border-color-base;
+    width: 80%;
+    margin-bottom: 6px;
+    padding-bottom: 2px;
+  }
+
+  .debug_area { border: dashed 1px green; }
+}
+
+/* ------------------------ Media ------------------------ */
+
 @media (min-width: 1600px) {
   :global {
     .ant-col-xl-48 {
@@ -158,6 +174,13 @@ body {
 
 @media (max-width: 767px) {
   :global {
+    .ant-pagination-item,
+    .ant-pagination-next,
+    .ant-pagination-options,
+    .ant-pagination-prev {
+      margin-bottom: 8px;
+    }
+
     .ant-card {
       .ant-card-head {
         padding: 0 12px;

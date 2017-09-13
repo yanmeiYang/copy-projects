@@ -29,6 +29,8 @@ const defaultSystemConfigs = {
   SYSTEM: System,
   SOURCE: Source,
 
+  theme: require(`systems/${System}/theme-${System}.js`),
+
   //
   // Systems Preference
   //
@@ -36,7 +38,7 @@ const defaultSystemConfigs = {
   EnableLocalLocale: false,
   // Language: 'en', // options [cn|en] // TODO change to locale.
   // PreferredLanguage: 'en', // 默认语言 // TODO delete this.
-  GLOBAL_ENABLE_HOC: true,
+  GLOBAL_ENABLE_HOC: false,
   MainListSize: 20,
 
   /**
@@ -130,7 +132,13 @@ const defaultSystemConfigs = {
   HOOK: [],// TODO >>>>????????
 
 };
+/** *************************************************
+ * classes
+ ************************************************* */
 
+const classes = () => {
+
+};
 /** *************************************************
  * Combine
  ************************************************* */
@@ -147,4 +155,4 @@ if (sysconfig.EnableLocalLocale) {
 }
 addLocaleData('react-intl/locale-data/' + sysconfig.Locale);
 
-module.exports = { sysconfig };
+module.exports = { sysconfig, classes };

@@ -117,37 +117,38 @@ const RouterJSXFunc = (history, app, routes, RootComponent) => {
 
   return (
     <ConnectedRouter history={history}>
-      <RootComponent>
-        <Switch>
-          {/* <Route exact path="/" render={() => (<Redirect to="/dashboard" />)} /> */}
-          {routes.map(({ path, noExact, ...dynamics }, index) => {
-            const dupKey = `${index}_`;
+      {/* v2.0 不使用 RootComponent，在page中引入Root */}
+      {/*<RootComponent>*/}
+      <Switch>
+        {/* <Route exact path="/" render={() => (<Redirect to="/dashboard" />)} /> */}
+        {routes.map(({ path, noExact, ...dynamics }, index) => {
+          const dupKey = `${index}_`;
 
-            if (false && process.env.NODE_ENV !== 'production') {
-              console.log(
-                '%cRegister Routes: %s %s',
-                'color:red;background-color:rgb(255,251,130)',
-                !noExact ? '[exact]' : '', path);
-            }
+          if (false && process.env.NODE_ENV !== 'production') {
+            console.log(
+              '%cRegister Routes: %s %s',
+              'color:red;background-color:rgb(255,251,130)',
+              !noExact ? '[exact]' : '', path);
+          }
 
-            // for Error404 <Route component={error} />
-            if (!path) {
-              return <Route key={dupKey} component={dynamic({ app, ...dynamics })} />;
-              // return <Route key={dupKey} component={error} />;
-            }
+          // for Error404 <Route component={error} />
+          if (!path) {
+            return <Route key={dupKey} component={dynamic({ app, ...dynamics })} />;
+            // return <Route key={dupKey} component={error} />;
+          }
 
-            // common routes.
-            return (
-              <Route key={dupKey} exact={!noExact} path={path} component={dynamic({
-                app,
-                LoadingComponent: ({ productId }) => (<Loader spinning />), // TODO that this?
-                ...dynamics,
-              })} />
-            );
-          })}
-          {/*<Route component={error} />*/}
-        </Switch>
-      </RootComponent>
+          // common routes.
+          return (
+            <Route key={dupKey} exact={!noExact} path={path} component={dynamic({
+              app,
+              LoadingComponent: ({ productId }) => (<Loader spinning />), // TODO that this?
+              ...dynamics,
+            })} />
+          );
+        })}
+        {/*<Route component={error} />*/}
+      </Switch>
+      {/*</RootComponent>*/}
     </ConnectedRouter>
   );
 };

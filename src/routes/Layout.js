@@ -43,10 +43,12 @@ export default class Layout extends Component {
 
     contentClass: PropTypes.string,
 
+    showHeader: PropTypes.bool,
     footer: PropTypes.element,
   };
 
   static defaultProps = {
+    showHeader: true,
     footer: theme.footer,
   };
 
@@ -55,14 +57,14 @@ export default class Layout extends Component {
 
   render() {
     const { logoZone, searchZone, infoZone, footer } = this.props;
-    const { contentClass } = this.props;
+    const { contentClass, showHeader } = this.props;
 
     const headerOptions = { logoZone, searchZone, infoZone };
 
     return (
       <LayoutComponent className={tc(['layout'])}>
 
-        <Header {...headerOptions} />
+        {showHeader && <Header {...headerOptions} />}
 
         <LayoutComponent>
 

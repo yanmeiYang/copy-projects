@@ -3,12 +3,13 @@ import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { FormattedMessage as FM } from 'react-intl';
 import { Layout } from 'routes';
-import { sysconfig } from 'systems';
+import { sysconfig, applyTheme } from 'systems';
 import { KgSearchBox } from 'components/search';
 import { Auth } from 'hoc';
 import styles from './index.less';
 
 const { theme } = sysconfig;
+const tc = applyTheme(styles);
 
 @connect()
 @Auth
@@ -42,7 +43,7 @@ export default class IndexPage extends Component {
     const centerZone = theme.index_centerZone;
 
     return (
-      <Layout searchZone={[]} contentClass={styles.indexPage}>
+      <Layout searchZone={[]} contentClass={tc(['indexPage'])}>
 
         {bannerZone && bannerZone.length > 0 && bannerZone.map(elm => elm)}
 

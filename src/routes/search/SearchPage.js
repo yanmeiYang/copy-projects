@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
-import queryString from 'query-string';
+import { Layout } from 'routes';
+import { sysconfig, applyTheme } from 'systems';
 import classnames from 'classnames';
 import { Auth } from 'hoc';
 import SearchComponent from 'routes/search/SearchComponent';
 import styles from './SearchPage.less';
-import { sysconfig } from '../../systems';
 
-// TODO Extract Search Filter into new Component.
+const { theme } = sysconfig;
+const tc = applyTheme(styles);
+
 // TODO Combine search and uniSearch into one.
 
 @connect(({ app, search, loading }) => ({ app, search, loading }))
@@ -67,7 +69,7 @@ export default class SearchPage extends Component {
     const { filters } = this.props.search;
     const expertBaseId = filters && filters.eb && filters.eb.id;
     return (
-      <div className={classnames('content-inner', styles.page)}>
+      <Layout searchZone={[]} contentClass={tc(['searchPage'])}>
         <SearchComponent // Example: include all props.
           className={styles.SearchBorder} // additional className
           sorts={sysconfig.Search_SortOptions}
@@ -79,7 +81,7 @@ export default class SearchPage extends Component {
           disableSearchKnowledge={sysconfig.Search_DisableSearchKnowledge}
           fixedExpertBase={sysconfig.Search_FixedExpertBase}
         />
-      </div>
+      </Layout>
     );
   }
 }

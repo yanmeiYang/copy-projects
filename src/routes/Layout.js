@@ -4,32 +4,15 @@
  */
 import React, { PureComponent, Component, PropTypes } from 'react';
 import { connect } from 'dva';
-import classnames from 'classnames';
 import { Layout as LayoutComponent } from 'antd';
 import { sysconfig, applyTheme } from 'systems';
-import { Header } from 'components/Layout';
+import { Header, Navigator } from 'components/Layout';
 import styles from './Layout.less';
 
 const { Sider, Content, Footer } = LayoutComponent;
 
 const { theme } = sysconfig;
 const tc = applyTheme(styles);
-
-// import { Menu, Icon, Dropdown } from 'antd';
-// import { Link } from 'dva/router';
-// import { FormattedMessage as FM } from 'react-intl';
-// import { isEqual } from 'lodash';
-// import * as profileUtils from '../../utils/profile-utils';
-// import { sysconfig } from '../../systems';
-// import { KgSearchBox, SearchTypeWidgets } from '../../components/search';
-// import { isLogin, isGod, isAuthed } from '../../utils/auth';
-// import { TobButton, DevMenu } from '../../components/2b';
-// import locales from '../../locales';
-// import { saveLocale } from '../../utils/locale';
-// import defaults from '../../systems/utils';
-
-console.log('styles:::layout is ', styles);
-console.log('styles:::', sysconfig.theme);
 
 @connect(({ app }) => ({ app }))
 export default class Layout extends Component {
@@ -41,30 +24,32 @@ export default class Layout extends Component {
     searchZone: PropTypes.array,
     infoZone: PropTypes.array,
 
-    contentClass: PropTypes.string,
-
-    showHeader: PropTypes.bool,
+    navigator: PropTypes.element,
     footer: PropTypes.element,
+
+    contentClass: PropTypes.string,
+    showHeader: PropTypes.bool,
+    showNavigator: PropTypes.bool,
   };
 
   static defaultProps = {
     showHeader: true,
+    showNavigator: true,
     footer: theme.footer,
   };
 
-  componentWillReceiveProps = (nextProps) => {
-  };
-
   render() {
-    const { logoZone, searchZone, infoZone, footer } = this.props;
-    const { contentClass, showHeader } = this.props;
+    const { logoZone, searchZone, infoZone, navigator, footer } = this.props;
+    const { contentClass, showHeader, showNavigator } = this.props;
 
     const headerOptions = { logoZone, searchZone, infoZone };
+    const navigatorOptions = { navigator };
 
     return (
       <LayoutComponent className={tc(['layout'])}>
 
         {showHeader && <Header {...headerOptions} />}
+        {showNavigator && <Navigator {...navigatorOptions} />}
 
         <LayoutComponent>
 

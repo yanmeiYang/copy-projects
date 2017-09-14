@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { Link } from 'dva/router';
+import classnames from 'classnames';
 import { FormattedMessage as FM } from 'react-intl';
 import styles from './IndexCenterZone.less';
 
@@ -10,48 +11,55 @@ export default class IndexCenterZone extends React.PureComponent {
   render() {
     return (
       <div className={styles.bigNavi}>
-        <Link to="/relation-graph-page">
-          <div className={styles.blockItem}>
-            {/* <Link to="/uniSearch/Data%20Mining/0/30?view=relation-view">学者关系</Link> */}
-            <div className={styles.blockImg}>
-              <img src="/sys/huawei/relation-graph-page.png" alt="学者关系" />
+        <div className={styles.inner}>
+          <Link to="/relation-graph-page">
+            <div className={styles.blockItem}>
+              <div className={styles.outerBackground}>
+                <span alt="" className={classnames('icon', styles.relations)} />
+              </div>
+              <div className={styles.iconDesc}>
+                <FM id="com.searchTypeWidget.label.Relation" defaultMessage="Relations" />
+              </div>
             </div>
-            <span>
-              <FM id="com.searchTypeWidget.label.Relation" defaultMessage="Relations" />
-            </span>
-          </div>
-        </Link>
-        <Link to="/dispatch-expert-map">
-          <div className={styles.blockItem}>
-            <div className={styles.blockImg}>
-              <img src="/sys/huawei/expert-map.png" alt="" />
+          </Link>
+          <Link to="/dispatch-expert-map">
+            <div className={styles.blockItem}>
+              <div className={styles.outerBackground}>
+                <span alt="" className={classnames('icon', styles.maps)} />
+              </div>
+              <div className={styles.iconDesc}>
+                <FM id="com.searchTypeWidget.label.ExpertMap" defaultMessage="Maps" />
+              </div>
             </div>
-            <span>
-              <FM id="com.searchTypeWidget.label.ExpertMap" defaultMessage="Maps" />
-            </span>
-          </div>
-        </Link>
-        <Link to="/knowledge-graph">
-          <div className={styles.blockItem}>
-            <div className={styles.blockImg}>
-              <img src="/sys/huawei/knowledge-graph.png" alt="" />
+          </Link>
+          <Link to="/knowledge-graph">
+            <div className={styles.blockItem}>
+              {/*<div className={styles.blockImg}>*/}
+              {/*<img src="/sys/huawei/knowledge-graph.png" alt="" />*/}
+              {/*</div>*/}
+              <div className={styles.outerBackground}>
+                <span alt="" className={classnames('icon', styles.kgGraph)} />
+              </div>
+              <div className={styles.iconDesc}>
+                <FM id="com.searchTypeWidget.label.KnowledgeGraph"
+                    defaultMessage="Knowledge Graph" />
+              </div>
             </div>
-            <span>
-              <FM id="com.searchTypeWidget.label.KnowledgeGraph"
-                  defaultMessage="Knowledge Graph" />
-            </span>
-          </div>
-        </Link>
-        <Link to="/trend-prediction">
-          <div className={styles.blockItem}>
-            <div className={styles.blockImg}>
-              <img src="/sys/huawei/trend-prediction.png" alt="" />
+          </Link>
+          <Link to="/trend-prediction">
+            <div className={styles.blockItem}>
+              {/*<div className={styles.blockImg}>*/}
+              {/*<img src="/sys/huawei/trend-prediction.png" alt="" />*/}
+              {/*</div>*/}
+              <div className={classnames(styles.clearMarginRight, styles.outerBackground)}>
+                <span alt="" className={classnames('icon', styles.topicTrend)} />
+              </div>
+              <div className={styles.iconDesc}>
+                <FM id="com.searchTypeWidget.label.TrendPrediction" defaultMessage="Topic Trend" />
+              </div>
             </div>
-            <span>
-              <FM id="com.searchTypeWidget.label.TrendPrediction" defaultMessage="Topic Trend" />
-            </span>
-          </div>
-        </Link>
+          </Link>
+        </div>
 
         <div className="naviItem" style={{ display: 'none' }}>
           2016最具影响力

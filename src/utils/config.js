@@ -123,6 +123,10 @@ module.exports = {
     getAllOrgs: '/reviewer/orgs/get/all/:offset/:size',
     // getOrgById: '/reviewer/org/get/:id',
 
+    // cross heat
+    getDiscipline: 'http://166.111.7.105:5098/topics?area=:area&k=:k&depth=:depth',
+    delDiscipline: 'http://166.111.7.105:5098/feedback?parents=:parents&children=:children&postive=:postive',
+
     // getProjects: API_BASE+"reviewer/projects/get/:offset/:size"
     // addProject: API_BASE+"reviewer/project/add"
     // getProjectById: API_BASE+"reviewer/project/get/:id"

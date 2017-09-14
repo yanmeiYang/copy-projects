@@ -22,12 +22,12 @@ let System;
 // System = 'ccftest';
 // System = 'huawei';
 // System = 'alibaba';
-// System = 'tencent';
+System = 'tencent';
 // System = 'cie';
 // System = 'cipsc';
 // System = 'demo';
 // System = 'cietest';
-System = 'bole';
+// System = 'bole';
 
 let Source = System; // AppID, Used in UniversalConfig.
 

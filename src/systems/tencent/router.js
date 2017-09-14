@@ -14,6 +14,8 @@ import trend from 'routes/trend-prediction/router-trend';
 import seminar from 'routes/seminar/router-seminar';
 import tencent from 'routes/third-login/router';
 import router2bprofile from 'routes/2b-profile/router-2bprofile';
+import crossHeat from 'routes/cross-heat/router-ch';
+
 
 import App from 'routes/app';
 import { RouterRegistry, RouterRegistry2b, RouterJSXFunc } from '../router-registry';
@@ -89,6 +91,7 @@ const routes = [
   router2bprofile.Addition,
 
   tencent.ThirdLogin,
+  crossHeat.Cross,
 
   // System Default.
   core.Error404, // must be last one.

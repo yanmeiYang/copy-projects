@@ -10,17 +10,32 @@
   display: flex; flex-direction: row;
 }
 
+.footerText { line-height: 44px; }
+
+.index_bannerZone {
+  width: 100%; text-align: center;
+  margin-top: 65px;
+  .text {
+    font-size: 20px; font-weight: bold; color: white;
+    margin-top: 40px; margin-bottom: 30px;
+  }
+}
+
 .Overrides() {
   .layout {
     border: solid 0px green;
-
-    .title { border: solid 2px red }
     .sider {
       border: solid 1px orange;
       .text { color: orange }
-      .title { border: solid 1px red }
+    }
+
+    .content {
+      background-image: url(http://localhost:8000/sys/huawei/bg-homepage.jpg);
+      background-size: auto 100%;
+      background-origin: content-box;
     }
   }
+
 }
 
 .Overrides() !important;

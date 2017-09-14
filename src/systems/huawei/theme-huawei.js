@@ -3,18 +3,31 @@
  */
 import React from 'react';
 import classnames from 'classnames';
+import { FormattedMessage as FM } from 'react-intl';
 
 import styles from './theme-huawei.less';
 
 module.exports = {
   styles,
 
+  // Layout
+
   logoZone: [
-    <div className={classnames(styles.logoZones)}>
+    <div className={classnames(styles.logoZones)} key="0">
       <div className={classnames('header_logo')}>IMG</div>
       <div className={classnames('header_subTitle')}>知识洞察系统</div>
     </div>,
   ],
 
-  footer: <div>版权所有 &copy; 清华大学，华为技术有限公司. 保留一切权利</div>,
+  footer: <div className={styles.footerText}>版权所有 &copy; 清华大学，华为技术有限公司. </div>,
+
+  // Index page
+  index_bannerZone: [
+    <div key="0" className={styles.index_bannerZone}>
+      <div>logo</div>
+      <h1 className={styles.text}>
+        <FM id="index.title" defaultMessage="Expert Search" />
+      </h1>
+    </div>,
+  ],
 };

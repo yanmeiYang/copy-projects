@@ -5,12 +5,12 @@
 import React, { PureComponent, Component, PropTypes } from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
-import { Layout as ALayout } from 'antd';
+import { Layout as LayoutComponent } from 'antd';
 import { sysconfig, applyTheme } from 'systems';
 import { Header } from 'components/Layout';
 import styles from './Layout.less';
 
-const { Sider, Content, Footer } = ALayout;
+const { Sider, Content, Footer } = LayoutComponent;
 
 const { theme } = sysconfig;
 const tc = applyTheme(styles);
@@ -53,13 +53,15 @@ export default class Layout extends Component {
 
   render() {
     const { logoZone, searchZone, infoZone, footer } = this.props;
+
     const headerOptions = { logoZone, searchZone, infoZone };
+
     return (
-      <ALayout className={tc(['layout'])}>
+      <LayoutComponent className={tc(['layout'])}>
 
         <Header {...headerOptions} />
 
-        <ALayout>
+        <LayoutComponent>
 
           {/* -------- Left Side Bar -------- */}
           {sysconfig.Layout_HasSideBar &&
@@ -68,19 +70,19 @@ export default class Layout extends Component {
           </Sider>
           }
 
-          <Content>
+          <Content className={tc(['content'])}>
             {this.props.children}
           </Content>
 
           {/*<Sider>right sidebar</Sider>*/}
-        </ALayout>
+        </LayoutComponent>
 
         {/* -------- Footer -------- */}
         <Footer className={tc(['footer'])}>
           {footer}
         </Footer>
 
-      </ALayout>
+      </LayoutComponent>
     );
   }
 }

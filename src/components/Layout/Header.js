@@ -127,7 +127,7 @@ export default class Header extends PureComponent {
 
     return (
       <Layout.Header className={tc(['header'])}>
-        {logoZone && logoZone.map(elm => elm)}
+        {logoZone && logoZone.length > 0 && logoZone.map(elm => elm)}
       </Layout.Header>
     );
   }

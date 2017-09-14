@@ -11,7 +11,7 @@ import RegistrationForm from 'components/RegistrationForm';
 export default class EditSeminar extends PureComponent {
   render() {
     const { user } = this.props.app;
-    const id = this.props.match && this.props.match.params && this.props.match.params.id
+    const id = this.props.match && this.props.match.params && this.props.match.params.id;
     return (
       <div>
         <RegistrationForm uid={user.id} seminarId={id} />

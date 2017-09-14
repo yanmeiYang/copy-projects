@@ -95,7 +95,7 @@ export async function searchPersonAggGlobal(query, offset, size, filters, useTra
 
 function prepareParameters(query, offset, size, filters, sort, useTranslateSearch) {
   let expertBase = sysconfig.DEFAULT_EXPERT_BASE;
-  let data = { term: query, offset, size, sort };
+  let data = { [sysconfig.DEFAULT_EXPERT_SEARCH_KEY]: query, offset, size, sort };
   if (filters) {
     const newFilters = {};
     Object.keys(filters).forEach((k) => {
@@ -106,11 +106,11 @@ function prepareParameters(query, offset, size, filters, sort, useTranslateSearc
         newFilters[newKey] = filters[k];
       }
     });
-    data = { ...newFilters, term: query, offset, size, sort: sort || '' };
+    data = { ...newFilters, [sysconfig.DEFAULT_EXPERT_SEARCH_KEY]: query, offset, size, sort: sort || '' };
   }
   data = addAdditionParameterToData(data, sort, 'eb');
-  if (useTranslateSearch && data.term) {
-    data.term = `cross:${data.term}`;
+  if (useTranslateSearch && data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY]) {
+    data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY] = `cross:${data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY]}`;
   }
   return { expertBase, data };
 }

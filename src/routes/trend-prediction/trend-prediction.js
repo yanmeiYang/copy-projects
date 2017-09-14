@@ -1,11 +1,14 @@
 import React from 'react';
 import { Tabs, Icon, Slider, Button } from 'antd';
 import { connect } from 'dva';
-import d3 from 'd3';
-import { wget } from '../../utils/request';
+import * as d3 from 'd3';
 import d3sankey from './utils/sankey';
 
 // 这三个文件里面有的会导致程序build失败。无法上线。我debug了4个小时。。。
+// import nlp from '../../../external-docs/trend-prediction/Natural language processing.json';
+// import net from '../../../external-docs/trend-prediction/Networks.json';
+// import nn from '../../../external-docs/trend-prediction/neural network.json';
+//import rb from '../../../external-docs/trend-prediction/Robotics.json';
 import styles from './trend-prediction.less';
 import { Auth } from '../../hoc';
 
@@ -61,6 +64,7 @@ const marks = {
 export default class TrendPrediction extends React.PureComponent {
   componentDidMount() {
     d3sankey();
+    console.log('@@@@!!!!');
     this.showtrend();
   }
 
@@ -152,51 +156,51 @@ export default class TrendPrediction extends React.PureComponent {
     let ml;
     switch (word) {
       case 'am':
-        am = wget('../../../external-docs/trend-prediction/answer machine.json');
+        am = require('../../../external-docs/trend-prediction/answer machine.json');
         energy = am;
         break;
       case 'ai':
-        ai = wget('../../../external-docs/trend-prediction/artificial intelligence.json');
+        ai = require('../../../external-docs/trend-prediction/artificial intelligence.json');
         energy = ai;
         break;
       case 'au':
-        au = wget('../../../external-docs/trend-prediction/autopilot.json');
+        au = require('../../../external-docs/trend-prediction/autopilot.json');
         energy = au;
         break;
       case 'bc':
-        bc = wget('../../../external-docs/trend-prediction/BlockChain.json');
+        bc = require('../../../external-docs/trend-prediction/BlockChain.json');
         energy = bc;
         break;
       case 'cv':
-        cv = wget('../../../external-docs/trend-prediction/Computer vision.json');
+        cv = require('../../../external-docs/trend-prediction/Computer vision.json');
         energy = cv;
         break;
       case 'dm':
-        dm = wget('../../../external-docs/trend-prediction/Data Mining.json');
+        dm = require('../../../external-docs/trend-prediction/Data Mining.json');
         energy = dm;
         break;
       case 'dml':
-        dml = wget('../../../external-docs/trend-prediction/Data Modeling.json');
+        dml = require('../../../external-docs/trend-prediction/Data Modeling.json');
         energy = dml;
         break;
       case 'dl':
-        dl = wget('../../../external-docs/trend-prediction/deep learning.json');
+        dl = require('../../../external-docs/trend-prediction/deep learning.json');
         energy = dl;
         break;
       case 'gd':
-        gd = wget('../../../external-docs/trend-prediction/graph database.json');
+        gd = require('../../../external-docs/trend-prediction/graph database.json');
         energy = gd;
         break;
       case 'iot':
-        iot = wget('../../../external-docs/trend-prediction/Internet of Things.json');
+        iot = require('../../../external-docs/trend-prediction/Internet of Things.json');
         energy = iot;
         break;
       case 'ml':
-        ml = wget('../../../external-docs/trend-prediction/Machine Learning.json');
+        ml = require('../../../external-docs/trend-prediction/Machine Learning.json');
         energy = ml;
         break;
       default:
-        am = wget('../../../external-docs/trend-prediction/answer machine.json');
+        am = require('../../../external-docs/trend-prediction/answer machine.json');
         energy = am;
     }
     margin = {
@@ -207,12 +211,11 @@ export default class TrendPrediction extends React.PureComponent {
     };
     width = 1300; // 需调整参数，容器宽度
     height = 900 - margin.top - margin.bottom; // 需调整参数，容器高度
-    // console.log(height);
     formatNumber = d3.format(',.0f');
     format = function (d) { // 格式化为整数，点出现的次数
       return `${formatNumber(d)} Times`;
     };
-    color = d3.scale.category10();// d3图的配色样式
+    color = d3.scaleOrdinal(d3.schemeCategory10);// d3图的配色样式
     chart = d3.select('#chart').append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
     barPos = 150;// 直方图左边文字的宽度
     timelineItemOffset = 20;// 左侧直方图的间隔距离
@@ -502,7 +505,7 @@ export default class TrendPrediction extends React.PureComponent {
       return `${d.source.name} → ${d.target.name}${d.source_index}`;
     });
     // 为sankey图的结点建立力学结构模型，实现用户交互效果
-    force = d3.layout.force();
+    /*force = d3.layout.force();
     force.nodes(energy.nodes).gravity(0.1).charge((d) => {
       if (d.dy < 10) {
         return -(d.dy * 10);
@@ -510,16 +513,9 @@ export default class TrendPrediction extends React.PureComponent {
         return -(d.dy * 4);
       }
     }).size([width, 330])
-      .start();
-    node = svg.append('g').selectAll('.node').data(energy.nodes).enter()
-      .append('a')
-      .attr('href', '#')
-      .attr('class', 'popup')
-      .attr('rel', 'popuprel')
-      .append('g')
-      .attr('class', 'node')
-      .call(force.drag)
-      .on('mouseover', function (d) {
+      .start();*/
+    force = d3.forceSimulation(energy.nodes).force('charge',d3.forceCollide(6)).force("x", d3.forceX(0));//禁止重叠
+    node = node = svg.append("g").selectAll(".node").data(energy.nodes).enter().append("a").attr("href", "#").attr("class", "popup").attr("rel", "popuprel").append("g").attr("class", "node").on("mouseover", function (d, event) {
       d3.select(this).attr('opacity', 0.6);
       const xPosition = d3.event.layerX + 150;
       const yPosition = d3.event.layerY + 130;
@@ -618,7 +614,7 @@ export default class TrendPrediction extends React.PureComponent {
     })
       .style('display', 'none');
     // 技术趋势图（右下方）的两条包络线,做了减小梯度的处理
-    basis = d3.svg.area().x((d, i) => {
+    basis = d3.area().x((d, i) => {
       return x(d.y);
     }).y0((d) => {
       if (d.d < 30) {
@@ -631,7 +627,7 @@ export default class TrendPrediction extends React.PureComponent {
       }
       return 350; // 200 + 30 / 21.35 * Math.pow(d.d, 0.9) * 5
     })
-      .interpolate('basis');
+      .curve('basis');
     flow = chart.append('g').attr('transform', (d) => {
       return `translate(${[0, 350]})rotate(${0})`;
     });
@@ -657,16 +653,15 @@ export default class TrendPrediction extends React.PureComponent {
       })
         .style('fill', '#9900FF')
         .style('fill-opacity', 0.2);
-      flow.append('path').attr('d', () => {
+      flow.append('path').selectAll('d', () => {
         data.year.forEach((d) => {
           d.d = d.d;
         });
-        return basis(data.year);
+        return d3.curveBasis(data.year);
       }).style('stroke-width', 0.2).style('stroke', '#60afe9')
         .style('fill', '#60afe9');
       // 为趋势图的专家结点建立力学结构模型
-      peopleFlow = d3.layout.force().linkDistance(80).charge(-1000).gravity(0.05)
-        .size([]);
+      peopleFlow = d3.forceSimulation();//需要修改
       const channels = [];
       i = 0;
       // channel是趋势图显示结点信息的航道，由中间基线依次向两边扩展，即中间为0号航道，上方为1、3、5…号航道，下方为2、4、6…号航道

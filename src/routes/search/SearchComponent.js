@@ -1,5 +1,5 @@
 import React, { Component, PureComponent, PropTypes } from 'react';
-import { routerRedux, Link } from 'dva/router';
+import { routerRedux, Link, withRouter } from 'dva/router';
 import { connect } from 'dva';
 import { isEqual } from 'lodash';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
@@ -10,14 +10,15 @@ import { Spinner } from 'components';
 import { PersonList, ExportPersonBtn } from 'components/person';
 import { SearchFilter, SearchSorts, KgSearchBox, SearchKnowledge } from 'components/search';
 import { sysconfig } from 'systems';
+import { createURL } from 'utils';
 import { Auth } from 'hoc';
-import { KnowledgeGraphSearchHelper } from '../knowledge-graph';
 import styles from './SearchComponent.less';
 
 // TODO Extract Search Filter into new Component.
 // TODO Combine search and uniSearch into one.
 
 @connect(({ app, search, loading }) => ({ app, search, loading }))
+@withRouter
 @Auth
 export default class SearchComponent extends Component {
   static displayName = 'SearchComponent';
@@ -34,6 +35,7 @@ export default class SearchComponent extends Component {
     defaultSortType: PropTypes.string,
     onSearchBarSearch: PropTypes.func,
     showSearchBox: PropTypes.bool, // has search box?
+    fixedExpertBase: PropTypes.object,
   };
 
   static defaultProps = {
@@ -54,7 +56,7 @@ export default class SearchComponent extends Component {
         name: sysconfig.DEFAULT_EXPERT_BASE_NAME,
       };
     }
-
+    console.log('>>>>>>>>>>>>>>>>>>>>>', props);
     this.state = {
       sortType: props.defaultSortType,
     };
@@ -119,11 +121,15 @@ export default class SearchComponent extends Component {
   };
 
   onPageChange = (page) => {
-    const { query, pagination } = this.props.search;
+    const { match, dispatch, search } = this.props;
+    const { query, pagination } = search;
     const { pageSize } = pagination;
-    this.dispatch(routerRedux.push({
-      pathname: `/${sysconfig.SearchPagePrefix}/${query}/${(page - 1) * pageSize}/${pageSize}`,
-    }));
+    const pathname = createURL(match.path, match.params, {
+      query: query || '-',
+      offset: (page - 1) * pageSize,
+      size: pageSize,
+    });
+    dispatch(routerRedux.push({ pathname }));
   };
 
   // ExpertBase filter 'eb' is a special filter.
@@ -151,31 +157,39 @@ export default class SearchComponent extends Component {
   };
 
   doSearch = (query, offset, size, filters, sort, dontRefreshUrl) => {
+    const { dispatch, fixedExpertBase } = this.props;
+
+    // 如果是fixed，那么重置所有的filters
+    if (fixedExpertBase && fixedExpertBase.id) {
+      filters.eb = fixedExpertBase; // eslint-disable-line no-param-reassign
+    }
+
     let filtersLength = 0;
     for (const item of Object.values(filters)) {
       if (typeof item === 'string') {
         filtersLength = item.split('#')[1];
       }
     }
-    this.dispatch({ type: 'search/translateSearch', payload: { query } });
-    this.dispatch({
+    dispatch({ type: 'search/translateSearch', payload: { query } });
+    dispatch({
       type: 'search/searchPerson',
       payload: { query, offset, size, filters, sort, total: parseInt(filtersLength) },
     });
-    this.dispatch({
+    dispatch({
       type: 'search/searchPersonAgg',
       payload: { query, offset, size, filters, sort },
     });
-    this.dispatch({
-      type: 'search/getTopicByMention',
-      payload: {
-        mention: query,
-      },
-    });
     if (!dontRefreshUrl) {
-      this.dispatch(routerRedux.push({
-        pathname: `/${sysconfig.SearchPagePrefix}/${query}/0/${size}`,
-      }));
+      const { match } = this.props;
+      const pathname = createURL(match.path, match.params, {
+        query: query || '-',
+        offset: 0,
+        size,
+      });
+      dispatch(routerRedux.push({ pathname }));
+      // this.dispatch(routerRedux.push({
+      //   pathname: `/${sysconfig.SearchPagePrefix}/${query}/0/${size}`,
+      // }));
     }
   };
 
@@ -299,8 +313,7 @@ export default class SearchComponent extends Component {
 
             {/* ---- Search Knowledge ---- */}
             {!disableSearchKnowledge &&
-            topic.label && topic.label.toLowerCase() !== 'null' &&
-            <SearchKnowledge topic={topic} />}
+            <SearchKnowledge query={query} />}
 
           </div>
         </div>

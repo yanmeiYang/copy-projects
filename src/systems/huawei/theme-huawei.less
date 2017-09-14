@@ -6,8 +6,21 @@
  */
 @import "../../themes/vars.less";
 
+:global {
+  .icon {
+    background-image: url("/sys/huawei/icon.png");
+  }
+}
+
 .logoZones {
   display: flex; flex-direction: row;
+  .header_logo {
+    width: 62px;
+    background-position: -58px -45px;
+  }
+  .header_subTitle {
+    margin-left: 10px;
+  }
 }
 
 .footerText { line-height: 44px; }

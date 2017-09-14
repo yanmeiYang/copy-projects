@@ -20,7 +20,6 @@ const messages = defineMessages({
   },
 });
 
-
 // TODO 这个文件调用了Service，应该移动到routes里面
 
 // Teach Autosuggest how to calculate suggestions for any given input value.
@@ -320,10 +319,12 @@ export default class KgSearchBox extends React.PureComponent {
           />
 
           <Button
+            className={styles.searchBtn}
             size={size}
             type="primary"
             onClick={this.handleSubmit}
           >{btnText || intl.formatMessage(messages.searchBtn)}</Button>
+
         </Input.Group>
       </form>
     );

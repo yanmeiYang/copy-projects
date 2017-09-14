@@ -4,6 +4,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import { FormattedMessage as FM } from 'react-intl';
+import { IndexInfoBox, PersonLabel, IndexCenterZone } from './components';
 
 import styles from './theme-huawei.less';
 
@@ -14,8 +15,8 @@ module.exports = {
 
   logoZone: [
     <div className={classnames(styles.logoZones)} key="0">
-      <div className={classnames('header_logo')}>IMG</div>
-      <div className={classnames('header_subTitle')}>知识洞察系统</div>
+      <div className={classnames(styles.header_logo, 'icon')} />
+      <div className={classnames(styles.header_subTitle)}>知识洞察系统</div>
     </div>,
   ],
 
@@ -30,4 +31,6 @@ module.exports = {
       </h1>
     </div>,
   ],
+
+  index_centerZone: [<IndexCenterZone key={0} />],
 };

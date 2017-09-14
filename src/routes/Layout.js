@@ -41,6 +41,8 @@ export default class Layout extends Component {
     searchZone: PropTypes.array,
     infoZone: PropTypes.array,
 
+    contentClass: PropTypes.string,
+
     footer: PropTypes.element,
   };
 
@@ -53,6 +55,7 @@ export default class Layout extends Component {
 
   render() {
     const { logoZone, searchZone, infoZone, footer } = this.props;
+    const { contentClass } = this.props;
 
     const headerOptions = { logoZone, searchZone, infoZone };
 
@@ -70,7 +73,7 @@ export default class Layout extends Component {
           </Sider>
           }
 
-          <Content className={tc(['content'])}>
+          <Content className={tc(['content'], [contentClass])}>
             {this.props.children}
           </Content>
 

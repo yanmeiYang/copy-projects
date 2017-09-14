@@ -17,9 +17,6 @@ module.exports = {
   UserAuthSystem: 'huawei', // aminer 或者是 system.config
   UserAuthSystem_AddSysTagAuto: true, // 登录时自动添加system的标签
 
-  // IndexPage_QuickSearchList:[], // use default.
-  IndexPage_InfoBlocks: <IndexInfoBox />,
-
   Header_SubTextLogo: '知识洞察系统',
   Header_SubTextStyle: { width: 128 },
   Header_LogoStyle: {

@@ -37,13 +37,12 @@ export default class IndexPage extends Component {
   };
 
   render() {
-    // console.log('>>> ', sysconfig.ExpertBases);
-    // const { seminars } = search;
     const commonSearch = sysconfig.IndexPage_QuickSearchList;
     const bannerZone = theme.index_bannerZone;
+    const centerZone = theme.index_centerZone;
 
     return (
-      <Layout searchZone={[]}>
+      <Layout searchZone={[]} contentClass={styles.indexPage}>
 
         {bannerZone && bannerZone.length > 0 && bannerZone.map(elm => elm)}
 
@@ -53,27 +52,23 @@ export default class IndexPage extends Component {
             style={{ width: 515, boxShadow: '0 0 8px 0px rgba(99, 99, 99, 0.5)' }} />
         </div>
 
-        <div className={styles.search}>
-          {/* ---- 常用搜索 ---- */}
-          <p className={styles.commonSearch}>
-            {
-              commonSearch.map((query, index) => {
-                return (
-                  <span key={query}>
-                    <Link
-                      to={`/${sysconfig.SearchPagePrefix}/${query}/0/${sysconfig.MainListSize}`}
-                    >{query}</Link>
-                    <span>{(index === commonSearch.length - 1) ? '' : ', '}</span>
-                  </span>
-                );
-              })
-            }
-          </p>
-
-          {/* Insert Blocks in Config file. */}
-          {sysconfig.IndexPage_InfoBlocks}
+        <div className={styles.keywords}>
+          <div className={styles.inner}>
+            {commonSearch.map((query, index) => {
+              return (
+                <div key={query}>
+                  <Link
+                    to={`/${sysconfig.SearchPagePrefix}/${query}/0/${sysconfig.MainListSize}`}
+                  >{query}</Link>
+                  {/*<span>{(index === commonSearch.length - 1) ? '' : ''}</span>*/}
+                </div>
+              );
+            })}
+          </div>
 
         </div>
+
+        {centerZone && centerZone.length > 0 && centerZone.map(elm => elm)}
 
       </Layout>
     );

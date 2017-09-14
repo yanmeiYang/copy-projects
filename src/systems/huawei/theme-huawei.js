@@ -25,7 +25,9 @@ module.exports = {
   // Index page
   index_bannerZone: [
     <div key="0" className={styles.index_bannerZone}>
-      <div>logo</div>
+      <div className={classnames(styles.logo)}>
+        <span alt="" className="icon" />
+      </div>
       <h1 className={styles.text}>
         <FM id="index.title" defaultMessage="Expert Search" />
       </h1>

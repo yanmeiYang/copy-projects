@@ -15,11 +15,11 @@
 .logoZones {
   display: flex; flex-direction: row;
   .header_logo {
-    width: 62px;
-    background-position: -58px -45px;
+    width: 50px;
+    background-position: -68px -47px;
   }
   .header_subTitle {
-    margin-left: 10px;
+    margin-left: 10px; font-weight: bold; font-size: @font-size-huge;
   }
 }
 
@@ -28,6 +28,13 @@
 .index_bannerZone {
   width: 100%; text-align: center;
   margin-top: 65px;
+  .logo {
+    display: flex; flex-direction: row; justify-content: center;
+    span {
+      display: flex; background-position: -171px -10px;
+      width: 100px; height: 100px; z-index: 10000; border: none;
+    }
+  }
   .text {
     font-size: 20px; font-weight: bold; color: white;
     margin-top: 40px; margin-bottom: 30px;
@@ -43,11 +50,10 @@
     }
 
     .content {
-
     }
   }
   .indexPage {
-    background-image: url(http://localhost:8000/sys/huawei/bg-homepage.jpg);
+    background-image: url('/sys/huawei/bg-homepage.jpg');
     background-size: auto 100%;
     background-origin: content-box;
   }

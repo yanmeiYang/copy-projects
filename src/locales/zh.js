@@ -42,8 +42,8 @@ export default {
   'com.search.sort.label.time': '最新添加',
 
   'com.searchTypeWidget.label.ExpertSearch': '专家',
-  'com.searchTypeWidget.label.ExpertMap': '地图',
-  'com.searchTypeWidget.label.Relation': '关系',
+  'com.searchTypeWidget.label.ExpertMap': '人才地图',
+  'com.searchTypeWidget.label.Relation': '学者关系',
   'com.searchTypeWidget.label.KnowledgeGraph': '知识图谱',
   'com.searchTypeWidget.label.TrendPrediction': '技术趋势',
   'com.searchTypeWidget.label.ExpertTrajectory': '专家迁移',

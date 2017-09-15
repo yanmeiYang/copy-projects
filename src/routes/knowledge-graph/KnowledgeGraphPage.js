@@ -7,13 +7,19 @@ import classnames from 'classnames';
 import queryString from 'query-string';
 import { routerRedux } from 'dva/router';
 import { Radio, Tabs, message } from 'antd';
-import { Spinner } from '../../components/index';
+import { Layout } from 'routes';
+import { Spinner } from 'components';
+import { Message } from 'components/ui';
+import { PublicationList } from 'components/publication/index';
+import { PersonListTiny } from 'components/person/index';
+import { sysconfig, applyTheme } from 'systems';
+import { Auth } from 'hoc';
+
 import styles from './KnowledgeGraphPage.less';
 import { KnowledgeGraphTextTree } from './index';
-import { PublicationList } from '../../components/publication/index';
-import { PersonListTiny } from '../../components/person/index';
-import { Message } from '../../components/ui';
-import { Auth } from '../../hoc';
+
+const { theme } = sysconfig;
+const tc = applyTheme(styles);
 
 const RadioGroup = Radio.Group;
 const TabPane = Tabs.TabPane;
@@ -208,76 +214,79 @@ export default class KnowledgeGraphPage extends React.PureComponent {
 
     // const searchHeader=<div>search for: {kg.}</div>
     return (
-      <div className={classnames('content-inner', styles.page)}>
-        <Message message={popupErrorMessage} />
+      <Layout contentClass={tc(['knowledgeGraphPage'])}>
 
-        <div className={styles.title}>
-          <h1> 知识图谱 </h1>
+        <div className={classnames('content-inner', styles.page)}>
+          <Message message={popupErrorMessage} />
 
-          {process.env.NODE_ENV !== 'production' &&
-          <div className="toolbox" style={{ border: 'dashed 1px green' }}>
-            <span>DEV: Search Method:</span>
-            <RadioGroup onChange={this.onSearchMethodChange} value={this.state.searchMethod}>
-              <Radio value="direct">Direct</Radio>
-              <Radio value="and2">AND&lt;2</Radio>
-              <Radio value="or2">OR&lt;2</Radio>
-            </RadioGroup>
+          <div className={styles.title}>
+            <h1> 知识图谱 </h1>
+
+            {process.env.NODE_ENV !== 'production' &&
+            <div className="toolbox" style={{ border: 'dashed 1px green' }}>
+              <span>DEV: Search Method:</span>
+              <RadioGroup onChange={this.onSearchMethodChange} value={this.state.searchMethod}>
+                <Radio value="direct">Direct</Radio>
+                <Radio value="and2">AND&lt;2</Radio>
+                <Radio value="or2">OR&lt;2</Radio>
+              </RadioGroup>
+            </div>
+            }
+
           </div>
-          }
 
+          <div className={styles.meat}>
+            <div className={styles.left}>
+
+              <KnowledgeGraphTextTree
+                query={kg.query}
+                lang="en"
+                kgdata={kg.kgdata}
+                kgindex={kg.kgindex}
+                onItemClick={this.onItemClick}
+              />
+
+            </div>
+
+            <div className={`${styles.right} card-container`}>
+              <Tabs
+                type="card"
+                onChange={this.onInfoTabChange}
+                activeKey={this.state.infoTab}
+                tabBarExtraContent={infoExtra}
+              >
+                <TabPane tab="INFO" key="info">
+                  <div>
+                    {kg.node && kg.node.name}
+                    {kg.node && kg.node.definition}
+                    {!kg.node && this.EmptyBlock}
+                  </div>
+                </TabPane>
+                <TabPane tab="EXPERTS" key="experts">
+                  <Spinner loading={load} />
+                  {kg.experts
+                    ? <PersonListTiny persons={kg.experts} />
+                    : this.EmptyBlock
+                  }
+
+                </TabPane>
+                <TabPane tab="PUBLICATIONS" key="publications">
+                  <Spinner loading={load} />
+                  {kg.publications
+                    ? <PublicationList pubs={kg.publications} showLabels={false} />
+                    : this.EmptyBlock
+                  }
+                </TabPane>
+              </Tabs>
+
+              {/* <div className="tabContent"> */}
+              {/* {this.state.view[this.state.infoTab]} */}
+              {/* </div> */}
+            </div>
+
+          </div>
         </div>
-
-        <div className={styles.meat}>
-          <div className={styles.left}>
-
-            <KnowledgeGraphTextTree
-              query={kg.query}
-              lang="en"
-              kgdata={kg.kgdata}
-              kgindex={kg.kgindex}
-              onItemClick={this.onItemClick}
-            />
-
-          </div>
-
-          <div className={`${styles.right} card-container`}>
-            <Tabs
-              type="card"
-              onChange={this.onInfoTabChange}
-              activeKey={this.state.infoTab}
-              tabBarExtraContent={infoExtra}
-            >
-              <TabPane tab="INFO" key="info">
-                <div>
-                  {kg.node && kg.node.name}
-                  {kg.node && kg.node.definition}
-                  {!kg.node && this.EmptyBlock}
-                </div>
-              </TabPane>
-              <TabPane tab="EXPERTS" key="experts">
-                <Spinner loading={load} />
-                {kg.experts
-                  ? <PersonListTiny persons={kg.experts} />
-                  : this.EmptyBlock
-                }
-
-              </TabPane>
-              <TabPane tab="PUBLICATIONS" key="publications">
-                <Spinner loading={load} />
-                {kg.publications
-                  ? <PublicationList pubs={kg.publications} showLabels={false} />
-                  : this.EmptyBlock
-                }
-              </TabPane>
-            </Tabs>
-
-            {/* <div className="tabContent"> */}
-            {/* {this.state.view[this.state.infoTab]} */}
-            {/* </div> */}
-          </div>
-
-        </div>
-      </div>
+      </Layout>
     );
   }
 }

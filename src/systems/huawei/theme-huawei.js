@@ -4,6 +4,7 @@
 import React from 'react';
 import { Link } from 'dva/router';
 import classnames from 'classnames';
+import * as defaults from 'utils/defaults';
 import { FormattedMessage as FM } from 'react-intl';
 import { IndexInfoBox, PersonLabel, IndexCenterZone } from './components';
 
@@ -24,6 +25,9 @@ module.exports = {
       </div>
     </Link>,
   ],
+
+  searchZone: defaults.IN_COMPONENT_DEFAULT,
+  infoZone: defaults.IN_COMPONENT_DEFAULT,
 
   footer: (
     <div className={styles.footerText}>

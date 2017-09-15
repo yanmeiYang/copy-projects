@@ -41,12 +41,14 @@ export default class Layout extends Component {
   };
 
   render() {
+    console.count('>>>>>>>>>> App Render');
     const { logoZone, searchZone, infoZone, navigator, footer } = this.props;
     const { contentClass, showHeader, showNavigator } = this.props;
 
     const headerOptions = { logoZone, searchZone, infoZone };
     const navigatorOptions = { navigator };
-
+    console.log('headerOptions', headerOptions);
+    
     return (
       <LayoutComponent className={tc(['layout'])}>
 

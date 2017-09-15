@@ -2,6 +2,7 @@
  * Created by BoGao on 2017/9/13.
  */
 import React from 'react';
+import { Link } from 'dva/router';
 import classnames from 'classnames';
 import { FormattedMessage as FM } from 'react-intl';
 import { IndexInfoBox, PersonLabel, IndexCenterZone } from './components';
@@ -9,18 +10,26 @@ import { IndexInfoBox, PersonLabel, IndexCenterZone } from './components';
 import styles from './theme-huawei.less';
 
 module.exports = {
+  themeName: 'huawei-blue',
+
   styles,
 
   // Layout
 
   logoZone: [
-    <div className={classnames(styles.logoZones)} key="0">
+    <Link to={'/'} className={classnames(styles.logoZones)} key="0">
       <div className={classnames(styles.header_logo, 'icon')} />
-      <div className={classnames(styles.header_subTitle)}>知识洞察系统</div>
-    </div>,
+      <div className={classnames(styles.header_subTitle, 'font-page-title')}>
+        知识洞察系统
+      </div>
+    </Link>,
   ],
 
-  footer: <div className={styles.footerText}>版权所有 &copy; 清华大学，华为技术有限公司. </div>,
+  footer: (
+    <div className={styles.footerText}>
+      版权所有 &copy; 清华大学，华为技术有限公司.
+    </div>
+  ),
 
   // Index page
   index_bannerZone: [

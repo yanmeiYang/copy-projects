@@ -43,7 +43,7 @@ export default class IndexPage extends Component {
     const centerZone = theme.index_centerZone;
 
     return (
-      <Layout searchZone={[]} contentClass={tc(['indexPage'])}>
+      <Layout searchZone={[]} contentClass={tc(['indexPage'])} showNavigator={false}>
 
         {bannerZone && bannerZone.length > 0 && bannerZone.map(elm => elm)}
 

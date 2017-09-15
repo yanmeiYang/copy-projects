@@ -14,6 +14,8 @@ const { Sider, Content, Footer } = LayoutComponent;
 const { theme } = sysconfig;
 const tc = applyTheme(styles);
 
+require(`themes/theme-${theme.themeName}.less`); // basic themes，:global css only
+
 @connect(({ app }) => ({ app }))
 export default class Layout extends Component {
   static displayName = 'Layout';

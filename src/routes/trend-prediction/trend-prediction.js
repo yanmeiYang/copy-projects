@@ -40,6 +40,7 @@ let timeSlidesOffset;
 let timeWindow;
 let x;
 let query;
+let cperson;
 const TabPane = Tabs.TabPane;
 const marks = {
   0: '0°C',
@@ -59,6 +60,10 @@ const marks = {
 @connect(({ app }) => ({ app }))
 @Auth
 export default class TrendPrediction extends React.PureComponent {
+  state = {
+    person: cperson,
+  };
+
   componentDidMount() {
     this.postJSON();
     d3sankey();
@@ -166,96 +171,42 @@ export default class TrendPrediction extends React.PureComponent {
         word = loc[1];
       }
     }
-    let am;
-    let ai;
-    let au;
-    let bc;
-    let cv;
-    let dm;
-    let dml;
-    let dl;
-    let gd;
-    let iot;
-    let ml;
-    switch (word) {
-      case 'am':
-        am = require('../../../external-docs/trend-prediction/answer machine.json');
-        energy = am;
-        break;
-      case 'ai':
-        ai = require('../../../external-docs/trend-prediction/artificial intelligence.json');
-        energy = ai;
-        break;
-      case 'au':
-        au = require('../../../external-docs/trend-prediction/autopilot.json');
-        energy = au;
-        break;
-      case 'bc':
-        bc = require('../../../external-docs/trend-prediction/BlockChain.json');
-        energy = bc;
-        break;
-      case 'cv':
-        cv = require('../../../external-docs/trend-prediction/Computer vision.json');
-        energy = cv;
-        break;
-      case 'dm':
-        dm = require('../../../external-docs/trend-prediction/Data Mining.json');
-        energy = dm;
-        break;
-      case 'dml':
-        dml = require('../../../external-docs/trend-prediction/Data Modeling.json');
-        energy = dml;
-        break;
-      case 'dl':
-        dl = require('../../../external-docs/trend-prediction/deep learning.json');
-        energy = dl;
-        break;
-      case 'gd':
-        gd = require('../../../external-docs/trend-prediction/graph database.json');
-        energy = gd;
-        break;
-      case 'iot':
-        iot = require('../../../external-docs/trend-prediction/Internet of Things.json');
-        energy = iot;
-        break;
-      case 'ml':
-        ml = require('../../../external-docs/trend-prediction/Machine Learning.json');
-        energy = ml;
-        break;
-      default:
-        am = require('../../../external-docs/trend-prediction/answer machine.json');
-        energy = am;
-    }
-    margin = {
-      top: 1,
-      right: 1,
-      bottom: 6,
-      left: 1,
-    };
-    width = 1300; // 需调整参数，容器宽度
-    height = 900 - margin.top - margin.bottom; // 需调整参数，容器高度
-    formatNumber = d3.format(',.0f');
-    format = function (d) { // 格式化为整数，点出现的次数
-      return `${formatNumber(d)} Times`;
-    };
-    color = d3.scale.category10();// d3图的配色样式
-    chart = d3.select('#chart').append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
-    barPos = 150;// 直方图左边文字的宽度
-    timelineItemOffset = 20;// 左侧直方图的间隔距离
-    histHeight = 100;// 左侧直方图的高度
-    d3.select(window).on('resize', () => { // 窗口改变的时候重新加载
-      return renderTopic('big data', 1, 1000);
-    });
-    d3.select('#trend').on('click', () => { // trend被点击的时候重新加载
-      return renderTopic('big data', 1, 1000);
-    });
-// 显示整个界面的方法，sankey为技术发展图
-    this.renderTopic('big data', 1, 1000);
+    const url ='/lab/trend-prediction/' + word + '.json';
+    const res = wget(url);
+    res.then((data) => {
+      energy = data;
+      margin = {
+        top: 1,
+        right: 1,
+        bottom: 6,
+        left: 1,
+      };
+      width = 1300; // 需调整参数，容器宽度
+      height = 900 - margin.top - margin.bottom; // 需调整参数，容器高度
+      formatNumber = d3.format(',.0f');
+      format = function (d) { // 格式化为整数，点出现的次数
+        return `${formatNumber(d)} Times`;
+      };
+      color = d3.scale.category10();// d3图的配色样式
+      chart = d3.select('#chart').append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
+      barPos = 150;// 直方图左边文字的宽度
+      timelineItemOffset = 20;// 左侧直方图的间隔距离
+      histHeight = 100;// 左侧直方图的高度
+      d3.select(window).on('resize', () => { // 窗口改变的时候重新加载
+        return this.renderTopic('big data', 1, 1000);
+      });
+      d3.select('#trend').on('click', () => { // trend被点击的时候重新加载
+        return this.renderTopic('big data', 1, 1000);
+      });
+      // 显示整个界面的方法，sankey为技术发展图
+      this.renderTopic('big data', 1, 1000);
+    })
   }
 
   seeword = (e) => {
     const word = e.currentTarget && e.currentTarget.value && e.currentTarget.getAttribute('value');
-    const href = window.location.href.split('?query=')[0] + '?query=' + word;
+    let href = window.location.href.split('?query=')[0] + '?query=' + word;
+    href = href.replace('#', '');
     window.location.href = href;
   }
 
@@ -709,11 +660,20 @@ export default class TrendPrediction extends React.PureComponent {
         .attr('class', 'people')
         .style('cursor', 'pointer')
         .on('mouseover', (d) => {
-          console.log(people[d.p]);///添加人物显示
           d3.select(this).attr('opacity', 0.3);
           const xPosition = d3.event.layerX + 150;
           const yPosition = d3.event.layerY + 130;
-          const person = getPerson(people[d.p].id);
+          const resultPromise = getPerson(people[d.p].id);
+          resultPromise.then(
+            (data) => {
+              cperson = data;
+            },
+            () => {
+              console.log('failed');
+            },
+          ).catch((error) => {
+            console.error(error);
+          });
           d3.select('#tooltip1').style('left', `${xPosition}px`).style('top', `${yPosition}px`)
             .select('#value1').text(() => {
             return `${people[d.p].id}`;
@@ -786,6 +746,8 @@ export default class TrendPrediction extends React.PureComponent {
             <Button type="dashed" onClick={this.seeword} value="iot" className={styles.hotword}>Internet of Things</Button>
             <Button type="dashed" onClick={this.seeword} value="ml" className={styles.hotword}>Machine Learning</Button>
             <Button type="dashed" onClick={this.seeword} value="rb" className={styles.hotword}>Robotics</Button>
+            <Button type="dashed" onClick={this.seeword} value="net" className={styles.hotword}>Networks</Button>
+            <Button type="dashed" onClick={this.seeword} value="nn" className={styles.hotword}>Neural Network</Button>
           </Button.Group>
         </div>
         <div className={styles.show} id="chart">
@@ -796,9 +758,15 @@ export default class TrendPrediction extends React.PureComponent {
             </p>
           </div>
           <div id="tooltip1" className={styles.tool1}>
-            <p>
+            <div className={styles.showtool1}>
+              <div className="img"><img src='' alt="IMG" /></div>
+              <div>Name:</div>
+              <div className="info bg">
+                {1 && <span><i className="fa fa-briefcase fa-fw" />1</span>}
+                {2 && <span><i className="fa fa-institution fa-fw" />2</span>}
+              </div>
               <strong id="value1" />
-            </p>
+            </div>
           </div>
         </div>
         <div className={styles.nav} id="right-box">

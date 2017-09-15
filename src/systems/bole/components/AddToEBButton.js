@@ -3,7 +3,7 @@
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Button, Modal, notification } from 'antd';
+import { Button, Modal, message } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import { routerRedux } from 'dva/router';
 import styles from './AddToEBButton.less';
@@ -24,6 +24,17 @@ export default class AddToEBButton extends PureComponent {
         : true,
     };
   }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.expertBase.addStatus &&
+      this.props.expertBase.addStatus !== nextProps.expertBase.addStatus) {
+      if (this.props.expertBase.currentPersonId === this.props.person.id) {
+        message.success('添加成功！');
+        this.setState({ isInThisEB: true });
+      }
+    }
+  }
+
   add = (id) => {
     const that = this;
     const ebid = this.state.dataIdItem;
@@ -31,17 +42,6 @@ export default class AddToEBButton extends PureComponent {
       type: 'expertBase/addExpertToEB',
       payload: { ebid, id },
     });
-    if (this.props.expertBase.addStatus) {
-      const type = 'success';
-      notification[type]({
-        message: '添加成功',
-        duration: 1,
-      });
-      setTimeout(() => {
-        // TODO this 还是 that
-        this.setState({ isInThisEB: true });
-      }, 400);
-    }
     this.setState({ personData: this.props.person.id });
   };
 
@@ -97,7 +97,8 @@ export default class AddToEBButton extends PureComponent {
     const person = this.props.person;
     if (!person) {
       return false;
-    };
+    }
+    ;
     const load = person.id && this.props.expertBase.currentPersonId === person.id;
     return (
       <div className={styles.buttonArea}>

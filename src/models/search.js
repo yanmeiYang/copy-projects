@@ -38,25 +38,31 @@ export default {
 
   subscriptions: {
     setup({ dispatch, history }) {
-      history.listen((location, search) => {
-        const query = queryString.parse(search);
-        // console.log('----------------------------------------------------');
-        // console.log('query', query);
-        // console.log('location', location);
-        // console.log('', query);
-        // console.log('----------------------------------------------------');
+      history.listen(({ pathname, search }) => {
+        // const query = queryString.parse(search);
+        // console.log('0998', query);
 
-        const match = pathToRegexp('/(uni)?search/:query/:offset/:size').exec(location.pathname);
+        let match = pathToRegexp('/(uni)?search/:query/:offset/:size').exec(pathname);
         if (match) {
           const keyword = decodeURIComponent(match[2]);
           const offset = parseInt(match[3], 10);
           const size = parseInt(match[4], 10);
-          // update fillings.
           // dispatch({ type: 'emptyResults' });
           dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
-          // console.log('Success::::sdfsdf ', keyword);
           dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: keyword } });
         }
+
+        //
+        match = pathToRegexp('/eb/:id/:query/:offset/:size').exec(pathname);
+        if (match) {
+          const q = decodeURIComponent(match[2]);
+          const keyword = q === '-' ? '' : q;
+          const offset = parseInt(match[3], 10);
+          const size = parseInt(match[4], 10);
+          dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
+          dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: keyword } });
+        }
+
       });
     },
   },
@@ -83,7 +89,7 @@ export default {
     * translateSearch({ payload }, { call, put, select }) {
       // yield put({ type: 'clearTranslateSearch' });
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
-      console.log("==================", useTranslateSearch);
+      // console.log("==================", useTranslateSearch);
       if (useTranslateSearch) {
         const { query } = payload;
         const { data } = yield call(translateService.translateTerm, query);
@@ -170,6 +176,16 @@ export default {
 
     emptyResults(state) {
       return { ...state, results: [] };
+    },
+
+    delPersonFromResultsById(state, { pid }) {
+      const originalResults = [];
+      for (const value of state.results) {
+        if (value.id !== pid) {
+          originalResults.push(value);
+        }
+      }
+      return { ...state, results: originalResults };
     },
 
     searchPersonAggSuccess(state, { payload: { data } }) {

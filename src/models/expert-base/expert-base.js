@@ -66,8 +66,8 @@ export default {
       );
       if (data.status) {
         yield put({ type: 'addExpertToEBSuccess', payload: { data } });
-
       } else {
+        yield put({ type: 'setCurrentPersonId', payload: { id: '' } });
         throw new Error('添加智库失败');
       }
     },
@@ -88,6 +88,10 @@ export default {
     * removeExpertItem({ payload }, { call, put }) {
       const { pid, rid } = payload;
       const { data } = yield call(expertBaseService.removeByPid, { pid, rid });
+      // TODO status改成detach
+      if (data.status) {
+        yield put({ type: 'search/delPersonFromResultsById', pid });
+      }
       yield put({ type: 'removeSuccess', data });
     },
   },

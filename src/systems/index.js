@@ -70,8 +70,13 @@ const defaultSystemConfigs = {
   Search_EnableCCFPin: false, // TODO bad：CCF PIN
   Search_EnableTranslateSearch: true, // 启用翻译搜索，显示提示信息;
   Search_DefaultTranslateSearch: false, // 默认使用翻译搜索;
-
   Search_EnableKnowledgeGraphHelper: true,
+  Search_FixedExpertBase: null,
+
+  Search_DisableFilter: false,
+  Search_DisableExpertBaseFilter: false,
+  Search_DisableSearchKnowledge: false,
+
   Search_SortOptions: defaults.IN_APP_DEFAULT,
 
   UserAuthSystem: System, // aminer 或者是 system.config
@@ -102,6 +107,7 @@ const defaultSystemConfigs = {
   ExpertBases: [], // must override.
   DEFAULT_EXPERT_BASE: 'aminer', // 华为默认搜索
   DEFAULT_EXPERT_BASE_NAME: '全球专家',
+  DEFAULT_EXPERT_SEARCH_KEY: 'name',
 
   // > Search related
   SearchBarInHeader: true,

@@ -37,6 +37,7 @@ const routes = [
 
   // expertBase.ExpertBase,
   // expertBase.ExpertBaseExpertsPage,
+  // expertBase.ExpertBaseExpertsPageWithPager,
   // expertBase.AddExpertBase,
   // expertBase.AddExpertDetail,
   // expertBase.ExpertProfileInfo,

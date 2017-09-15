@@ -114,7 +114,8 @@ export default class RgSearchNameBox extends React.Component {
             size={size}
             type="primary"
             onClick={this.handleSubmit}
-          >{intl.formatMessage(messages.searchBtn)}</Button>
+            icon="search"
+          />
           }
         </Input.Group>
       </form>

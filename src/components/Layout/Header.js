@@ -5,6 +5,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'dva';
 import { sysconfig, applyTheme } from 'systems';
 import { Layout } from 'antd';
+import { KgSearchBox } from 'components/search';
 import styles from './Header.less';
 
 const { theme } = sysconfig;
@@ -23,7 +24,7 @@ const tc = applyTheme(styles);
 // import { saveLocale } from '../../utils/locale';
 // import defaults from '../../systems/utils';
 
-@connect(({ app }) => ({ app }))
+@connect()
 export default class Header extends PureComponent {
   static displayName = 'Header';
 
@@ -36,7 +37,7 @@ export default class Header extends PureComponent {
   static defaultProps = {
     logoZone: theme.logoZone,
     searchZone: theme.searchZone,
-    infoZone: theme.rightZone,
+    infoZone: theme.infoZone,
   };
 
   state = {
@@ -82,6 +83,18 @@ export default class Header extends PureComponent {
 
   render() {
     const { logoZone, searchZone, infoZone } = this.props;
+    console.log('>>>>>>>', logoZone, searchZone, infoZone);
+
+    const SearchZone = searchZone || [
+      <KgSearchBox key={0} size="large" query={this.state.query}
+                   className={styles.searchBox}
+      />,
+    ];
+
+    const InfoZone = infoZone || [
+      <div key={0}>info zone</div>,
+    ];
+
     // const { headerSearchBox, user, roles } = this.props.app;
     //
     // // Use default search if not supplied.
@@ -127,7 +140,15 @@ export default class Header extends PureComponent {
 
     return (
       <Layout.Header className={tc(['header'])}>
-        {logoZone && logoZone.length > 0 && logoZone.map(elm => elm)}
+        <div className={tc(['logoZone'])}>
+          {logoZone && logoZone.length > 0 && logoZone.map(elm => elm)}
+        </div>
+        <div className={tc(['searchZone'])}>
+          {SearchZone && SearchZone.length > 0 && SearchZone.map(elm => elm)}
+        </div>
+        <div className={tc(['infoZone'])}>
+          {InfoZone && InfoZone.length > 0 && InfoZone.map(elm => elm)}
+        </div>
       </Layout.Header>
     );
   }

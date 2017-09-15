@@ -8,6 +8,7 @@ import { color } from './theme';
 import * as TopExpertBase from './expert-base';
 import * as reflect from './reflect';
 import * as system from './system';
+import * as defaults from './defaults';
 import { compare } from './compare';
 // 连字符转驼峰
 String.prototype.hyphenToHump = function () {
@@ -129,6 +130,8 @@ const createURL = (path, params, newParams) => {
 module.exports = {
   config,
   system,
+  defaults,
+
   // menu,
   getMenusByUser,
   request,

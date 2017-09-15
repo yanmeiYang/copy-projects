@@ -34,9 +34,6 @@ export default class IndexCenterZone extends React.PureComponent {
           </Link>
           <Link to="/knowledge-graph">
             <div className={styles.blockItem}>
-              {/*<div className={styles.blockImg}>*/}
-              {/*<img src="/sys/huawei/knowledge-graph.png" alt="" />*/}
-              {/*</div>*/}
               <div className={styles.outerBackground}>
                 <span alt="" className={classnames('icon', styles.kgGraph)} />
               </div>
@@ -48,9 +45,6 @@ export default class IndexCenterZone extends React.PureComponent {
           </Link>
           <Link to="/trend-prediction">
             <div className={styles.blockItem}>
-              {/*<div className={styles.blockImg}>*/}
-              {/*<img src="/sys/huawei/trend-prediction.png" alt="" />*/}
-              {/*</div>*/}
               <div className={classnames(styles.clearMarginRight, styles.outerBackground)}>
                 <span alt="" className={classnames('icon', styles.topicTrend)} />
               </div>

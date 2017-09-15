@@ -6,11 +6,15 @@ import React from 'react';
 import { connect } from 'dva';
 import * as d3 from 'd3';
 import { Checkbox, Select, Progress, message, Button } from 'antd';
+import { Layout } from 'routes';
+import { applyTheme } from 'systems';
 import { RgSearchNameBox } from '../../components/relation-graph';
 import { getAvatar } from '../../utils/profile-utils';
 import styles from './RelationGraph.less';
 import { Auth } from '../../hoc';
 
+
+const tc = applyTheme(styles);
 
 const Option = Select.Option;
 const controlDivId = 'rgvis';
@@ -526,12 +530,12 @@ export default class RelationGraph extends React.PureComponent {
       svg.selectAll('circle').data(_nodes)
         .style('stroke', '#fff')
         .style('stroke-width', (d) => {
-        if (d.indices.hIndex > 50) {
-          return '1.5px';
-        } else {
-          return '1px';
-        }
-      }).attr('fill', (d, index) => {
+          if (d.indices.hIndex > 50) {
+            return '1.5px';
+          } else {
+            return '1px';
+          }
+        }).attr('fill', (d, index) => {
         return getClusteringColor(d);
       });
       return _onclicknodes.slice(0, _onclicknodes.length);
@@ -1440,6 +1444,7 @@ export default class RelationGraph extends React.PureComponent {
   render() {
     const { describeNodes1, describeNodes2, suspension_adjustment, two_paths, continuous_path, single_extension, currentNode } = this.state;
     return (
+      <Layout searchZone={[]} contentClass={tc(['relationGraph'])}>
       <div className={styles.vis_container}>
         {/* 搜索结果 */}
         <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -1535,6 +1540,7 @@ export default class RelationGraph extends React.PureComponent {
           marginLeft: '20%',
         }} />}
       </div>
+      </Layout>
     );
   }
 }

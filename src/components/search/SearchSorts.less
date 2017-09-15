@@ -1,0 +1,29 @@
+@import "../../themes/vars.less";
+
+.searchSorts {
+  border: solid 1px @border-color-base; // border-bottom: none;
+  margin-bottom: 5px; padding: 0 20px;
+  height: 54px;
+  box-shadow: @shadow-1-down;
+
+  .filter {
+  }
+
+  :global {
+    .ant-tabs-bar {
+      margin-bottom: 0;
+      .ant-tabs-tab {
+        height: 54px; line-height: 35px;
+        font-size: 16px; color: #333;
+      }
+      .ant-tabs-tab:hover {
+        border-bottom: solid 3px @bg-color-main;
+        color: @bg-color-main;
+      }
+      .ant-tabs-tab-active {
+        border-bottom: solid 3px @bg-color-main;
+        color: @bg-color-main;
+      }
+    }
+  }
+}

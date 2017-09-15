@@ -217,7 +217,7 @@ export default class SearchComponent extends Component {
     // TODO move translate search out.
     const { useTranslateSearch, translatedQuery } = this.props.search;
     return (
-      <div className={classnames(styles.component, className)}>
+      <div className={classnames(styles.searchComponent, className)}>
 
         <div className={styles.topZone}>
           <div className={styles.searchZone}>

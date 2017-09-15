@@ -2,7 +2,7 @@
 
 .navigator {
   display: flex; flex-direction: row;
-  height: 44px; padding: 0 20px;
+  height: 44px; padding: 0 @padding-outer-h;
   background-color: @bg-color-main;
   border-bottom: solid 1px @background-color-gray;
 
@@ -12,7 +12,6 @@
   }
   .navi:hover {
     background-color: #007aaf; border-bottom: solid 3px #3d4f56;
-
   }
   :global .current {
     background-color: #007aaf; border-bottom: solid 3px #3d4f56;

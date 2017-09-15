@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, PureComponent } from 'react';
 import { connect } from 'dva';
 import { Tag } from 'antd';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
@@ -14,7 +14,7 @@ const expertBases = sysconfig.ExpertBases;
  * SearchFilter Component
  */
 @connect()
-export default class SearchFilter extends React.PureComponent {
+export default class SearchFilter extends PureComponent {
   constructor(props) {
     super(props);
     // this.dispatch = this.props.dispatch;
@@ -22,18 +22,11 @@ export default class SearchFilter extends React.PureComponent {
     this.onExpertBaseChange = this.props.onExpertBaseChange;
   }
 
-  // componentWillMount() {
-  // }
-
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   return true;
-  // }
-
   render() {
     const { filters, aggs, disableExpertBaseFilter } = this.props;
 
     return (
-      <div className={styles.filterWrap}>
+      <div className={styles.searchFilter}>
         <div className={styles.filter}>
 
           {/* ------ 搜索范围 ------ */}

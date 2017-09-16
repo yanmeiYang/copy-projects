@@ -8,6 +8,7 @@ import { Auth } from '../../hoc';
 import { externalRequest, wget } from '../../utils/request';
 import * as profileUtils from '../../utils/profile-utils';
 import { getPerson } from '../../services/person';
+import { sysconfig } from '../../systems';
 
 let barPos;
 let chart;
@@ -60,23 +61,27 @@ const marks = {
 @connect(({ app }) => ({ app }))
 @Auth
 export default class TrendPrediction extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.dispatch = this.props.dispatch;
+  }
+
   state = {
     person: cperson,
   };
 
   componentDidMount() {
-    this.postJSON();
     d3sankey();
-    this.showtrend();
+    this.showtrend('');
   }
 
   shouldComponentUpdate(nextProps) {
     if (nextProps.query && nextProps.query !== this.props.query) {
-      console.log('Chang query', nextProps.query);
-      this.showtrend();
+      d3sankey();
+      this.showtrend(nextProps.query);
       return true;
     }
-    return false;
+    return true;
   }
 
   onChange = (key) => {
@@ -136,71 +141,84 @@ export default class TrendPrediction extends React.PureComponent {
     }
   }
 
-  postJSON = () => {
-    //const url = 'http://166.111.7.173:9997/data mining';
-    /*const req = new XMLHttpRequest()
-    req.open('POST', url)
-    req.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
-    req.setRequestHeader('authorization', localStorage.token)
-    req.send(JSON.stringify(obj));*/
-    /*const url = require('url');
-    const data = url.parse('http://166.111.7.173:9997/data mining');
-    console.log(data);*/
-    /*const http = require('http');
-    //get 请求外网
-    http.post('http://166.111.7.173:9997/data mining', (req, res) => {
-      let html = '';
-      req.on('data', (data) => {
-        html = html + data;
-      });
-      req.on('end', () => {
-        console.info(html);
-      });
-    });*/
-    const data = externalRequest('http://166.111.7.173:9997/data mining');
-    console.log(data);
-  }
-
-  showtrend = () => {
+  showtrend = (cquery) => {
     d3.select('#tooltip').classed('hidden', true).style('visibility', 'hidden');//最开始的时候都将它们设置为不可见
     d3.select('#tooltip1').classed('hidden', true).style('visibility', 'hidden');
     const loc = window.location.href.split('query=');
-    let word = 'dm';
+    let word = '';
     if (loc != null) {
       if (loc[1] != null) {
-        word = loc[1];
+        word = decodeURI(loc[1]);
       }
     }
-    const url ='/lab/trend-prediction/' + word + '.json';
-    const res = wget(url);
-    res.then((data) => {
-      energy = data;
-      margin = {
-        top: 1,
-        right: 1,
-        bottom: 6,
-        left: 1,
-      };
-      width = 1300; // 需调整参数，容器宽度
-      height = 900 - margin.top - margin.bottom; // 需调整参数，容器高度
-      formatNumber = d3.format(',.0f');
-      format = function (d) { // 格式化为整数，点出现的次数
-        return `${formatNumber(d)} Times`;
-      };
-      color = d3.scale.category10();// d3图的配色样式
-      chart = d3.select('#chart').append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
-      barPos = 150;// 直方图左边文字的宽度
-      timelineItemOffset = 20;// 左侧直方图的间隔距离
-      histHeight = 100;// 左侧直方图的高度
-      d3.select(window).on('resize', () => { // 窗口改变的时候重新加载
-        return this.renderTopic('big data', 1, 1000);
+    if (word === '' && cquery === '') {
+      word = 'Data Mining';
+    }
+    if (word === '' && cquery !== '') {
+      word = cquery;
+    }
+    if (word === 'Answer Machine' || word === 'Artificial Intelligence' || word === 'Autopilot' || word === 'BlockChain' || word === 'Computer Vision' || word === 'Data Mining' || word === 'Data Modeling' || word === 'Deep Learning' || word === 'Graph Databases' || word === 'Internet of Things' || word === 'Machine Learning' || word === 'Robotics' || word === 'Networks' || word === 'NLP' || word === 'Neural Network') {
+      const res = wget('/lab/trend-prediction/' + word + '.json');
+      res.then((data) => {
+        energy = data;
+        margin = {
+          top: 1,
+          right: 1,
+          bottom: 6,
+          left: 1,
+        };
+        width = 1300; // 需调整参数，容器宽度
+        height = 900 - margin.top - margin.bottom; // 需调整参数，容器高度
+        formatNumber = d3.format(',.0f');
+        format = function (d) { // 格式化为整数，点出现的次数
+          return `${formatNumber(d)} Times`;
+        };
+        color = d3.scale.category10();// d3图的配色样式
+        chart = d3.select('#chart').append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
+        barPos = 150;// 直方图左边文字的宽度
+        timelineItemOffset = 20;// 左侧直方图的间隔距离
+        histHeight = 100;// 左侧直方图的高度
+        /*
+        d3.select(window).on('resize', () => { // 窗口改变的时候重新加载
+          return this.showtrend(this.props.query);
+        });
+        d3.select('#trend').on('click', () => { // trend被点击的时候重新加载
+          return this.renderTopic('big data', 1, 1000);
+        });*/
+        // 显示整个界面的方法，sankey为技术发展图
+        this.renderTopic('big data', 1, 1000);
       });
-      d3.select('#trend').on('click', () => { // trend被点击的时候重新加载
-        return this.renderTopic('big data', 1, 1000);
+    } else {
+      const res = externalRequest('http://166.111.7.173:9997/' + word);
+      res.then((data) => {
+        energy = data.data;
+        margin = {
+          top: 1,
+          right: 1,
+          bottom: 6,
+          left: 1,
+        };
+        width = 1300; // 需调整参数，容器宽度
+        height = 900 - margin.top - margin.bottom; // 需调整参数，容器高度
+        formatNumber = d3.format(',.0f');
+        format = function (d) { // 格式化为整数，点出现的次数
+          return `${formatNumber(d)} Times`;
+        };
+        color = d3.scale.category10();// d3图的配色样式
+        chart = d3.select('#chart').append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
+        barPos = 150;// 直方图左边文字的宽度
+        timelineItemOffset = 20;// 左侧直方图的间隔距离
+        histHeight = 100;// 左侧直方图的高度
+        d3.select(window).on('resize', () => { // 窗口改变的时候重新加载
+          return this.renderTopic('big data', 1, 1000);
+        });
+        d3.select('#trend').on('click', () => { // trend被点击的时候重新加载
+          return this.renderTopic('big data', 1, 1000);
+        });
+        // 显示整个界面的方法，sankey为技术发展图
+        this.renderTopic('big data', 1, 1000);
       });
-      // 显示整个界面的方法，sankey为技术发展图
-      this.renderTopic('big data', 1, 1000);
-    })
+    }
   }
 
   seeword = (e) => {
@@ -211,6 +229,8 @@ export default class TrendPrediction extends React.PureComponent {
   }
 
   renderTopic = function (q, start, end) {
+    document.getElementById('chart').innerHTML = '';
+    const that = this;
     query = q;
     const sankey = d3.sankey().nodeWidth(0).nodePadding(0).size([width, 330]);// 上方趋势图的宽度
     const path = sankey.link();
@@ -222,7 +242,8 @@ export default class TrendPrediction extends React.PureComponent {
       .attr('transform', `translate(${70},${25})`)
       .attr('z-index', 1);
     chart.append('linearGradient').attr('id', 'xiangyu');
-    timeline = d3.select('#right-box').append('svg').attr('overflow', 'scroll').attr('z-index', 2);
+    d3.select('#wordid').remove();
+    timeline = d3.select('#right-box').append('svg').attr('overflow', 'scroll').attr('z-index', 2).attr('id','wordid');
     const svg = chart.append('g').attr('height', 350).attr('id', 'trend').attr('z-index', 2);
     svg.on('mousewheel', () => {
       console.log('mousewheel');
@@ -379,8 +400,6 @@ export default class TrendPrediction extends React.PureComponent {
         timeSlidesOffset[year] = j;
       });
     });
-    // console.log(timeSlidesDict);
-    // console.log(timeSlidesOffset);
     timeWindow = energy.time_slides[0].length;
     x = function (year) {
       return (timeSlidesDict[year] + ((1 / timeWindow) * timeSlidesOffset[year]))
@@ -663,20 +682,20 @@ export default class TrendPrediction extends React.PureComponent {
           d3.select(this).attr('opacity', 0.3);
           const xPosition = d3.event.layerX + 150;
           const yPosition = d3.event.layerY + 130;
-          const resultPromise = getPerson(people[d.p].id);
-          resultPromise.then(
-            (data) => {
-              cperson = data;
-            },
-            () => {
-              console.log('failed');
-            },
-          ).catch((error) => {
-            console.error(error);
-          });
           d3.select('#tooltip1').style('left', `${xPosition}px`).style('top', `${yPosition}px`)
             .select('#value1').text(() => {
-            return `${people[d.p].id}`;
+            const resultPromise = getPerson(people[d.p].id);
+            resultPromise.then((data) => {
+                cperson = data.data;
+                that.setState({ person: cperson });
+              },
+              () => {
+                console.log('failed');
+              },
+            ).catch((error) => {
+              console.error(error);
+            })
+            return ``;
           });
           d3.select('#tooltip1').classed('hidden', false).style('visibility', '');
       }).on('mouseout', function () {
@@ -684,6 +703,9 @@ export default class TrendPrediction extends React.PureComponent {
             return 1;
           });
           d3.select('#tooltip1').classed('hidden', true).style('visibility', 'hidden');
+        })
+        .on('click', function () {
+          console.log("yes!");
         })
         .attr('transform', (d, i) => {
         i = 0;
@@ -726,6 +748,22 @@ export default class TrendPrediction extends React.PureComponent {
   };
 
   render() {
+    let url = '';
+    let name = '';
+    let pos = '';
+    let aff = '';
+    let personLinkParams = '';
+    if (this.state.person != null) {
+      const person = this.state.person;
+      url = profileUtils.getAvatar(person.avatar, person.id, 80);
+      name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
+      pos = profileUtils.displayPosition(person.pos);
+      aff = profileUtils.displayAff(person);
+      personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
+      if (sysconfig.PersonList_PersonLink_NewTab) {
+        personLinkParams.target = '_blank';
+      }
+    }
     return (
       <div className={styles.trend}>
         <div className={styles.year}>
@@ -734,51 +772,54 @@ export default class TrendPrediction extends React.PureComponent {
         <div className={styles.hotwords}>
           <p>HOT WORDS</p>
           <Button.Group>
-            <Button type="dashed" onClick={this.seeword} value="am" className={styles.hotword}>Answer Machine</Button>
-            <Button type="dashed" onClick={this.seeword} value="ai" className={styles.hotword}>Artificial Intelligence</Button>
-            <Button type="dashed" onClick={this.seeword} value="au" className={styles.hotword}>Autopilot</Button>
-            <Button type="dashed" onClick={this.seeword} value="bc" className={styles.hotword}>BlockChain</Button>
-            <Button type="dashed" onClick={this.seeword} value="cv" className={styles.hotword}>Computer Vision</Button>
-            <Button type="dashed" onClick={this.seeword} value="dm" className={styles.hotword}>Data Mining</Button>
-            <Button type="dashed" onClick={this.seeword} value="dml" className={styles.hotword}>Data Modeling</Button>
-            <Button type="dashed" onClick={this.seeword} value="dl" className={styles.hotword}>Deep Learning</Button>
-            <Button type="dashed" onClick={this.seeword} value="gd" className={styles.hotword}>Graph Databases</Button>
-            <Button type="dashed" onClick={this.seeword} value="iot" className={styles.hotword}>Internet of Things</Button>
-            <Button type="dashed" onClick={this.seeword} value="ml" className={styles.hotword}>Machine Learning</Button>
-            <Button type="dashed" onClick={this.seeword} value="rb" className={styles.hotword}>Robotics</Button>
-            <Button type="dashed" onClick={this.seeword} value="net" className={styles.hotword}>Networks</Button>
-            <Button type="dashed" onClick={this.seeword} value="nn" className={styles.hotword}>Neural Network</Button>
+            <Button type="dashed" onClick={this.seeword} value="Answer Machine" className={styles.hotword}>Answer Machine</Button>
+            <Button type="dashed" onClick={this.seeword} value="Artificial Intelligence" className={styles.hotword}>Artificial Intelligence</Button>
+            <Button type="dashed" onClick={this.seeword} value="Autopilot" className={styles.hotword}>Autopilot</Button>
+            <Button type="dashed" onClick={this.seeword} value="BlockChain" className={styles.hotword}>BlockChain</Button>
+            <Button type="dashed" onClick={this.seeword} value="Computer Vision" className={styles.hotword}>Computer Vision</Button>
+            <Button type="dashed" onClick={this.seeword} value="Data Mining" className={styles.hotword}>Data Mining</Button>
+            <Button type="dashed" onClick={this.seeword} value="Data Modeling" className={styles.hotword}>Data Modeling</Button>
+            <Button type="dashed" onClick={this.seeword} value="Deep Learning" className={styles.hotword}>Deep Learning</Button>
+            <Button type="dashed" onClick={this.seeword} value="Graph Databases" className={styles.hotword}>Graph Databases</Button>
+            <Button type="dashed" onClick={this.seeword} value="Internet of Things" className={styles.hotword}>Internet of Things</Button>
+            <Button type="dashed" onClick={this.seeword} value="Machine Learning" className={styles.hotword}>Machine Learning</Button>
+            <Button type="dashed" onClick={this.seeword} value="Robotics" className={styles.hotword}>Robotics</Button>
+            <Button type="dashed" onClick={this.seeword} value="Networks" className={styles.hotword}>Networks</Button>
+            <Button type="dashed" onClick={this.seeword} value="NLP" className={styles.hotword}>NLP</Button>
+            <Button type="dashed" onClick={this.seeword} value="Neural Network" className={styles.hotword}>Neural Network</Button>
           </Button.Group>
         </div>
         <div className={styles.show} id="chart">
           <div className="modal-loading" />
-          <div id="tooltip" className={styles.tool}>
-            <p className={styles.showtool}>
-              <strong id="value" />
-            </p>
-          </div>
-          <div id="tooltip1" className={styles.tool1}>
-            <div className={styles.showtool1}>
-              <div className="img"><img src='' alt="IMG" /></div>
-              <div>Name:</div>
-              <div className="info bg">
-                {1 && <span><i className="fa fa-briefcase fa-fw" />1</span>}
-                {2 && <span><i className="fa fa-institution fa-fw" />2</span>}
-              </div>
-              <strong id="value1" />
+        </div>
+        <div id="tooltip" className={styles.tool}>
+          <p className={styles.showtool}>
+            <strong id="value" />
+          </p>
+        </div>
+        <div id="tooltip1" className={styles.tool1}>
+          <div className={styles.showtool1}>
+            <div className="img"><img src={url}/></div>
+            {name &&
+            <div className="name bg">
+              <h2 className="section_header">
+                <a {...personLinkParams}>{name} </a><br />
+              </h2>
             </div>
+            }
+            <div className="info bg">
+              {pos && <span><i className="fa fa-briefcase fa-fw" />{pos}</span>}
+              <br />
+              {aff && <span><i className="fa fa-institution fa-fw" />{aff}</span>}
+            </div>
+            <strong id="value1" />
           </div>
         </div>
         <div className={styles.nav} id="right-box">
           <Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange}>
-            <TabPane tab={<span><Icon type="calendar" />All</span>} key="1"
-                     id="first-three" />
-            <TabPane tab={<span><Icon type="global" />Recent</span>} key="2"
-                     id="revert" />
+            <TabPane tab={<span><Icon type="calendar" />All</span>} key="1" id="first-three" />
+            <TabPane tab={<span><Icon type="global" />Recent</span>} key="2" id="revert" />
           </Tabs>
-        </div>
-        <div>
-
         </div>
       </div>
     );

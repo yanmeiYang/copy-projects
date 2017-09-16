@@ -61,6 +61,12 @@ export default {
   'com.PersonList.label.sendEmail': 'Send Email',
   'com.PersonList.label.qrcode': 'QR Code',
 
+  'com.expertMap.headerLine.label.field': 'Field:',
+  'com.expertMap.headerLine.label.selectField': 'Choose the field',
+  'com.expertMap.headerLine.label.baiduMap': 'Baidu Map',
+  'com.expertMap.headerLine.label.googleMap': 'Google Map',
+  'com.expertMap.headerLine.label.level': 'Level：',
+
   // Recommendation
   'rcd.home.pageTitle': 'Organization List',
   'rcd.projectTable.header.projectName': 'Project Name',

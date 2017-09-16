@@ -5,10 +5,13 @@
 import React from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
-
+import { Layout } from 'routes';
+import { applyTheme } from 'systems';
 import { routerRedux, Link } from 'dva/router';
 import styles from './RelationGraphPage.less';
 import RelationGraph from './RelationGraph';
+
+const tc = applyTheme(styles);
 
 @connect()
 export default class RelationGraphPage extends React.Component {
@@ -72,9 +75,9 @@ export default class RelationGraphPage extends React.Component {
   render() {
     console.log('>>> |||', this.state.query);
     return (
-      <div className={classnames('content-inner', styles.page)}>
+      <Layout contentClass={tc(['relationGraph'])}>
         <RelationGraph query={this.state.query} title={this.titleBlock} />
-      </div>
+      </Layout>
     );
   }
 }

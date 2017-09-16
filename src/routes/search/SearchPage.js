@@ -69,7 +69,7 @@ export default class SearchPage extends Component {
     const { filters } = this.props.search;
     const expertBaseId = filters && filters.eb && filters.eb.id;
     return (
-      <Layout searchZone={[]} contentClass={tc(['searchPage'])}>
+      <Layout contentClass={tc(['searchPage'])}>
         <SearchComponent // Example: include all props.
           className={styles.SearchBorder} // additional className
           sorts={sysconfig.Search_SortOptions}

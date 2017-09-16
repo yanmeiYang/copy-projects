@@ -288,7 +288,7 @@ export default class SearchComponent extends Component {
 
           <Spinner loading={load} />
           <div className={styles.personAndKg}>
-            <div>
+            <div className={styles.personListWidth}>
               <PersonList
                 persons={results}
                 user={this.props.app.user}

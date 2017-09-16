@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
+import { Layout } from 'routes';
 import queryString from 'query-string';
 // import styles from './index.less';
 import TrendPrediction from './trend-prediction.js';
@@ -45,10 +46,12 @@ export default class TrendPredictionPage extends React.Component {
 
   render() {
     return (
-      <div className="content-inner">
-        <h1>技术趋势预测:</h1>
-        <TrendPrediction query={this.state.query} />
-      </div>
+      <Layout>
+        <div className="content-inner">
+          <h1>技术趋势预测:</h1>
+          <TrendPrediction query={this.state.query} />
+        </div>
+      </Layout>
     );
   }
 }

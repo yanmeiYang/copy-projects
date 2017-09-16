@@ -6,6 +6,7 @@ import { connect } from 'dva';
 import { sysconfig, applyTheme } from 'systems';
 import { Layout } from 'antd';
 import { KgSearchBox } from 'components/search';
+import HeaderInfoZone from 'components/Layout/HeaderInfoZone';
 import styles from './Header.less';
 
 const { theme } = sysconfig;
@@ -24,7 +25,7 @@ const tc = applyTheme(styles);
 // import { saveLocale } from '../../utils/locale';
 // import defaults from '../../systems/utils';
 
-@connect()
+@connect(({ app }) => ({ app }))
 export default class Header extends PureComponent {
   static displayName = 'Header';
 
@@ -32,6 +33,11 @@ export default class Header extends PureComponent {
     logoZone: PropTypes.array,
     searchZone: PropTypes.array,
     infoZone: PropTypes.array,
+
+    query: PropTypes.string,
+    onSearch: PropTypes.func,
+
+    headerSearchBox: PropTypes.object,
   };
 
   static defaultProps = {
@@ -45,28 +51,28 @@ export default class Header extends PureComponent {
     // logoutLoading: false,
   };
 
-  // componentWillReceiveProps = (nextProps) => {
-  //   // console.log('>>>>>>>>>>>>>>>>> ', nextProps.app.headerSearchBox);
-  //   if (nextProps.app.headerSearchBox) {
-  //     // console.log('>>>>>>>>>>>>>>>>> ', nextProps.app.headerSearchBox.query);
-  //     // console.log('>>>>>>>>>>>>>>>>> ', nextProps.app.headerSearchBox !== this.props.app.headerSearchBox);
-  //     if (nextProps.app.headerSearchBox !== this.props.app.headerSearchBox
-  //       || this.props.app.headerSearchBox.query !== this.state.query) {
-  //       // if (nextProps.app.headerSearchBox.query) {
-  //       this.setQuery(nextProps.app.headerSearchBox.query);
-  //       // }
-  //     }
-  //   }
-  // };
+  componentWillReceiveProps = (nextProps) => {
+    // console.log('>>>>>>>>>>>>>>>>> ', nextProps.app.headerSearchBox);
+    if (nextProps.app.headerSearchBox) {
+      // console.log('>>>>>>>>>>>>>>>>> ', nextProps.app.headerSearchBox.query);
+      // console.log('>>>>>>>>>>>>>>>>> ', nextProps.app.headerSearchBox !== this.props.app.headerSearchBox);
+      if (nextProps.app.headerSearchBox !== this.props.app.headerSearchBox
+        || this.props.app.headerSearchBox.query !== this.state.query) {
+        // if (nextProps.app.headerSearchBox.query) {
+        this.setQuery(nextProps.app.headerSearchBox.query);
+        // }
+      }
+    }
+  };
 
   // onChangeLocale = (locale) => {
   //   saveLocale(sysconfig.SYSTEM, locale);
   //   window.location.reload();
   // };
   //
-  // setQuery = (query) => {
-  //   this.setState({ query });
-  // };
+  setQuery = (query) => {
+    this.setState({ query });
+  };
   //
   // logoutAuth = () => {
   //   this.setState({ logoutLoading: true });
@@ -83,17 +89,28 @@ export default class Header extends PureComponent {
 
   render() {
     const { logoZone, searchZone, infoZone } = this.props;
+    const { headerSearchBox } = this.props.app;
     console.log('>>>>>>>', logoZone, searchZone, infoZone);
 
+    if (headerSearchBox) {
+      const oldSearchHandler = headerSearchBox.onSearch;
+      headerSearchBox.onSearch = (query) => {
+        this.setState({ query: query.query });
+        if (oldSearchHandler) {
+          oldSearchHandler(query);
+        }
+      };
+    }
+
     const SearchZone = searchZone || [
-      <KgSearchBox key={0} size="large" query={this.state.query}
-                   className={styles.searchBox}
-      />,
-    ];
+        <KgSearchBox key={0} size="large" query={this.state.query} {...headerSearchBox}
+                     className={styles.searchBox} style={{ height: 36, marginTop: 15 }}
+        />,
+      ];
 
     const InfoZone = infoZone || [
-      <div key={0}>info zone</div>,
-    ];
+        <HeaderInfoZone key={0} app={this.props.app} />,
+      ];
 
     // const { headerSearchBox, user, roles } = this.props.app;
     //

@@ -4,6 +4,7 @@
  */
 import React, { PureComponent, Component, PropTypes } from 'react';
 import { connect } from 'dva';
+import { Helmet } from 'react-helmet';
 import { Layout as LayoutComponent } from 'antd';
 import { sysconfig, applyTheme } from 'systems';
 import { Header, Navigator } from 'components/Layout';
@@ -32,6 +33,9 @@ export default class Layout extends Component {
     contentClass: PropTypes.string,
     showHeader: PropTypes.bool,
     showNavigator: PropTypes.bool,
+
+    query: PropTypes.string,
+    onSearch: PropTypes.func,
   };
 
   static defaultProps = {
@@ -42,15 +46,49 @@ export default class Layout extends Component {
 
   render() {
     console.count('>>>>>>>>>> App Render');
-    const { logoZone, searchZone, infoZone, navigator, footer } = this.props;
+    const { logoZone, searchZone, infoZone, navigator, footer, query, onSearch } = this.props;
     const { contentClass, showHeader, showNavigator } = this.props;
+    const { dispatch } = this.props;
 
-    const headerOptions = { logoZone, searchZone, infoZone };
+    const headerOptions = {
+      logoZone, searchZone, infoZone, logout() {
+        dispatch({ type: 'app/logout' });
+      }, query, onSearch,
+    };
     const navigatorOptions = { navigator };
-    console.log('headerOptions', headerOptions);
-    
+
+    const href = window.location.href;
+
     return (
       <LayoutComponent className={tc(['layout'])}>
+        <Helmet>
+          <title>{sysconfig.PageTitle}</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <link rel="icon" href={`/sys/${sysconfig.SYSTEM}/favicon.ico`} type="image/x-icon" />
+
+          {href.indexOf('/lab/knowledge-graph-widget') > 0 &&
+          <link rel="stylesheet"
+                href="https://cdn.rawgit.com/novus/nvd3/v1.8.1/build/nv.d3.css" />
+          }
+
+          {(href.indexOf('/expert-map') > 0) &&
+          <script type="text/javascript"
+                  src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />}
+
+          {(href.indexOf('/expert-map') > 0) &&
+          <script
+            src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1"
+            charSet="utf-8" async defer />}
+
+          {href.indexOf('/expert-googlemap') > 0 &&
+          <script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlzpf4YyjOBGYOhfUaNvQZENXEWBgDkS0"
+            async defer />}
+
+          {href.indexOf('/expert-heatmap') > 0 &&
+          <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/echarts/3.7.1/echarts.js" />}
+        </Helmet>
 
         {showHeader && <Header {...headerOptions} />}
         {showNavigator && <Navigator {...navigatorOptions} />}

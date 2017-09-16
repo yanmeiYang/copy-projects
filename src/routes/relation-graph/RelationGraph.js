@@ -6,16 +6,11 @@ import React from 'react';
 import { connect } from 'dva';
 import * as d3 from 'd3';
 import { Checkbox, Select, Progress, message, Button } from 'antd';
-import { Layout } from 'routes';
-import { applyTheme } from 'systems';
 import { RgSearchNameBox } from '../../components/relation-graph';
 import { getAvatar } from '../../utils/profile-utils';
 import { classnames } from '../../utils/index';
 import styles from './RelationGraph.less';
 import { Auth } from '../../hoc';
-
-
-const tc = applyTheme(styles);
 
 const Option = Select.Option;
 const controlDivId = 'rgvis';
@@ -1446,7 +1441,7 @@ export default class RelationGraph extends React.PureComponent {
   render() {
     const { describeNodes1, describeNodes2, suspension_adjustment, two_paths, continuous_path, single_extension, currentNode } = this.state;
     return (
-      <Layout searchZone={[]} contentClass={tc(['relationGraph'])}>
+      <div>
         <div style={{ width: EgoWidth }} className={styles.relationHeader}>
           <div className={styles.statAndAction}>
             {/* 搜索结果 */}
@@ -1560,7 +1555,7 @@ export default class RelationGraph extends React.PureComponent {
           top: `-${parseInt(EgoHeight) / 2}px`,
           marginLeft: '20%',
         }} />}
-      </Layout>
+      </div>
     );
   }
 }

@@ -50,7 +50,9 @@ export default class IndexPage extends Component {
         <div className={styles.search}>
           <KgSearchBox
             size="large" onSearch={this.onSearch}
-            style={{ width: 515, boxShadow: '0 0 8px 0px rgba(99, 99, 99, 0.5)' }} />
+            style={{ width: 515, boxShadow: '0 0 8px 0px rgba(99, 99, 99, 0.5)' }}
+            searchBtnStyle={{ height: 48, width: 115, fontSize: '18px', fontWeight: 'bold'}}
+          />
         </div>
 
         <div className={styles.keywords}>

@@ -4,8 +4,10 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Button, Select } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
+import classnames from 'classnames';
+import { sysconfig } from 'systems';
 import styles from './expert-map.less';
-import { sysconfig } from '../../systems';
 import { listPersonByIds } from '../../services/person';
 import * as profileUtils from '../../utils/profile-utils';
 import { findPosition, getById, waitforBMap, waitforBMapLib } from './utils/map-utils';
@@ -216,7 +218,7 @@ class ExpertMap extends React.PureComponent {
         } else {
           let tmp = personInfo.name.match(/\b(\w)/g);
           if (tmp.length > 3) {
-            tmp = tmp[0].concat(tmp[1],tmp[2]);
+            tmp = tmp[0].concat(tmp[1], tmp[2]);
             name = tmp;
           } else {
             name = tmp.join('');
@@ -288,10 +290,10 @@ class ExpertMap extends React.PureComponent {
         let maxscale = 19;
         let newtype;
         //if (localStorage.getItem("lasttype") === '0') {
-          centerx = sysconfig.CentralPosition.lng;
-          centery = sysconfig.CentralPosition.lat;
+        centerx = sysconfig.CentralPosition.lng;
+        centery = sysconfig.CentralPosition.lat;
         //}
-        console.log(localStorage.getItem("lasttype"),'||',localStorage.getItem("isClick"))
+        console.log(localStorage.getItem("lasttype"), '||', localStorage.getItem("isClick"))
         if (localStorage.getItem("lasttype") !== '0' && localStorage.getItem("isClick") === '0') {
           newtype = localStorage.getItem("lasttype");
         } else {
@@ -337,83 +339,83 @@ class ExpertMap extends React.PureComponent {
           }
           map.addOverlay(new BMap.Label("中国", opts1));
           const opts2 = {
-            position : new BMap.Point(136, 32),
+            position: new BMap.Point(136, 32),
           }
           map.addOverlay(new BMap.Label("日本", opts2));
           const opts3 = {
-            position : new BMap.Point(125, 33),
+            position: new BMap.Point(125, 33),
           }
           map.addOverlay(new BMap.Label("韩国", opts3));
           const opts4 = {
-            position : new BMap.Point(76.5, 16),
+            position: new BMap.Point(76.5, 16),
           }
           map.addOverlay(new BMap.Label("印度", opts4));
           const opts5 = {
-            position : new BMap.Point(114, 22),
+            position: new BMap.Point(114, 22),
           }
           map.addOverlay(new BMap.Label("香港", opts5));
           const opts6 = {
-            position : new BMap.Point(100, -3),
+            position: new BMap.Point(100, -3),
           }
           map.addOverlay(new BMap.Label("新加坡", opts6));
           const opts7 = {
-            position : new BMap.Point(121, 25),
+            position: new BMap.Point(121, 25),
           }
           map.addOverlay(new BMap.Label("台湾", opts7));
           const opts8 = {
-            position : new BMap.Point(64, 48),
+            position: new BMap.Point(64, 48),
           }
           map.addOverlay(new BMap.Label("中亚", opts8));
           const opts9 = {
-            position : new BMap.Point(118.5, 9),
+            position: new BMap.Point(118.5, 9),
           }
           map.addOverlay(new BMap.Label("东南亚", opts9));
           const opts10 = {
-            position : new BMap.Point(29, 45),
+            position: new BMap.Point(29, 45),
           }
           map.addOverlay(new BMap.Label("东欧", opts10));
           const opts11 = {
-            position : new BMap.Point(7, 44),
+            position: new BMap.Point(7, 44),
           }
           map.addOverlay(new BMap.Label("西欧", opts11));
           const opts12 = {
-            position : new BMap.Point(16, 58),
+            position: new BMap.Point(16, 58),
           }
           map.addOverlay(new BMap.Label("北欧", opts12));
           const opts13 = {
-            position : new BMap.Point(-6.1, 52),
+            position: new BMap.Point(-6.1, 52),
           }
           map.addOverlay(new BMap.Label("英国", opts13));
           const opts14 = {
-            position : new BMap.Point(101.5, 59.2),
+            position: new BMap.Point(101.5, 59.2),
           }
           map.addOverlay(new BMap.Label("俄罗斯", opts14));
           const opts15 = {
-            position : new BMap.Point(31, 28),
+            position: new BMap.Point(31, 28),
           }
           map.addOverlay(new BMap.Label("以色列", opts15));
           const opts16 = {
-            position : new BMap.Point(130, -31),
+            position: new BMap.Point(130, -31),
           }
           map.addOverlay(new BMap.Label("大洋洲", opts16));
           const opts17 = {
-            position : new BMap.Point(-60, -10),
+            position: new BMap.Point(-60, -10),
           }
           map.addOverlay(new BMap.Label("拉丁美洲", opts17));
           const opts18 = {
-            position : new BMap.Point(-108.5, 56.5),
+            position: new BMap.Point(-108.5, 56.5),
           }
           map.addOverlay(new BMap.Label("加拿大", opts18));
           const opts19 = {
-            position : new BMap.Point(-126, 33.5),
+            position: new BMap.Point(-126, 33.5),
           }
           map.addOverlay(new BMap.Label("美国西部", opts19));
           const opts20 = {
-            position : new BMap.Point(-79.5, 34),
+            position: new BMap.Point(-79.5, 34),
           }
           map.addOverlay(new BMap.Label("东部", opts20));
           const opts21 = {
-            position : new BMap.Point(-107.5, 34.5),
+            position: new BMap.Point(-107.5, 34.5),
           }
           map.addOverlay(new BMap.Label("中部", opts21));
         }
@@ -670,33 +672,49 @@ class ExpertMap extends React.PureComponent {
 
         <div className={styles.headerLine}>
           <div className={styles.left}>
-            {this.props.title}
-
+            {/*{this.props.title}*/}
+            <span>
+              <FM defaultMessage="Domain"
+                  id="com.expertMap.headerLine.label.field" />
+            </span>
             <Select defaultValue="" className={styles.domainSelector} style={{ width: 120 }}
                     onChange={this.domainChanged}>
-              <Select.Option key="none" value="">选择领域</Select.Option>
+              <Select.Option key="none" value="">
+                <FM defaultMessage="Domain"
+                    id="com.expertMap.headerLine.label.selectField" />
+              </Select.Option>
               {Domains.map(domain =>
                 (<Select.Option key={domain.id} value={domain.id}>{domain.name}</Select.Option>),
               )}
             </Select>
 
+            <div className={styles.level}>
+              <span>
+                <FM defaultMessage="Baidu Map"
+                    id="com.expertMap.headerLine.label.level" />
+              </span>
+              <ButtonGroup id="sType" className={styles.sType}>
+                <Button onClick={this.showType} value="0">自动</Button>
+                <Button onClick={this.showType} value="1">大区</Button>
+                <Button onClick={this.showType} value="2">国家</Button>
+                <Button onClick={this.showType} value="3" style={{ display: 'none' }}>国内区</Button>
+                <Button onClick={this.showType} value="4">城市</Button>
+                <Button onClick={this.showType} value="5">机构</Button>
+              </ButtonGroup>
+            </div>
           </div>
 
           <div className={styles.scopes}>
-            <span>按照层级显示：</span>
-            <ButtonGroup id="sType">
-              <Button onClick={this.showType} value="0">自动</Button>
-              <Button onClick={this.showType} value="1">大区</Button>
-              <Button onClick={this.showType} value="2">国家</Button>
-              <Button onClick={this.showType} value="3" style={{ display: 'none' }}>国内区</Button>
-              <Button onClick={this.showType} value="4">城市</Button>
-              <Button onClick={this.showType} value="5">机构</Button>
-            </ButtonGroup>
-
             <div className={styles.switch}>
               <ButtonGroup id="diffmaps">
-                <Button type="primary" onClick={this.onChangeBaiduMap}>Baidu Map</Button>
-                <Button onClick={this.onChangeGoogleMap}>Google Map</Button>
+                <Button type="primary" onClick={this.onChangeBaiduMap}>
+                  <FM defaultMessage="Baidu Map"
+                      id="com.expertMap.headerLine.label.baiduMap" />
+                </Button>
+                <Button onClick={this.onChangeGoogleMap}>
+                  <FM defaultMessage="Baidu Map"
+                      id="com.expertMap.headerLine.label.googleMap" />
+                </Button>
               </ButtonGroup>
             </div>
 
@@ -709,23 +727,25 @@ class ExpertMap extends React.PureComponent {
 
           <div className={styles.right}>
             <div className={styles.legend}>
-              <div className={styles.title}>Legend:</div>
+              <div className={styles.title}>
+                <span alt="" className={classnames('icon', styles.titleIcon)} />
+                图例
+              </div>
               <div className={styles.t}>
-                <img className={styles.icon} width="42" src="/images/map/marker_red_sprite.png"
-                     alt="legend" />
-                <div className={styles.t}>专家</div>
-                <img className={styles.icon2} width="32" src="/images/map/m0.png" alt="legend" />
-                <div className={styles.t}>一组专家</div>
+                <div>专家：</div>
+                <span alt="" className={classnames('icon', styles.expertIcon1)} />
+                <div className={styles.tExperts}>一组专家：</div>
+                <span alt="" className={classnames('icon', styles.expertIcon2)} />
               </div>
               <div className={styles.container}>
                 <div className={styles.label}>人数：</div>
-                <div className={styles.text}> 少</div>
-                <div className={styles.item1}> 1</div>
+                {/*<div className={styles.text}> 少</div>*/}
+                <div className={styles.item1}>少</div>
                 <div className={styles.item2}> 2</div>
                 <div className={styles.item3}> 3</div>
                 <div className={styles.item4}> 4</div>
-                <div className={styles.item5}> 5</div>
-                <div className={styles.text}> 多</div>
+                <div className={styles.item5}>多</div>
+                {/*<div className={styles.text}> 多</div>*/}
               </div>
             </div>
 

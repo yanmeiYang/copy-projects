@@ -54,6 +54,11 @@ export default {
   'com.PersonList.label.sendEmail': '发送邮件',
   'com.PersonList.label.qrcode': '二维码',
 
+  'com.expertMap.headerLine.label.field': '领域：',
+  'com.expertMap.headerLine.label.selectField': '选择领域',
+  'com.expertMap.headerLine.label.baiduMap': '百度地图',
+  'com.expertMap.headerLine.label.googleMap': '谷歌地图',
+  'com.expertMap.headerLine.label.level': '层级：',
   // bole avatar
   'com.bole.ExpertPhoto': '暂无头像',
   // bole add button

@@ -30,6 +30,12 @@ export default class HeaderInfoZone extends PureComponent {
     this.props.logout();
   };
 
+  loginPageUrl = () => {
+    return location.pathname !== sysconfig.Auth_LoginPage
+      ? `/login?from=${location.pathname}`
+      : '/login';
+  };
+  
   render() {
     const { user, roles } = this.props.app;
     const UserNameBlock = isAuthed(roles)
@@ -121,7 +127,6 @@ export default class HeaderInfoZone extends PureComponent {
           <Menu.Item key="/2bbtn">
             <Link to="/2b"><TobButton /></Link>
           </Menu.Item>}
-
 
 
           {isAuthed(roles) &&

@@ -63,10 +63,12 @@ export default class Layout extends Component {
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <link rel="icon" href={`/sys/${sysconfig.SYSTEM}/favicon.ico`} type="image/x-icon" />
 
-          {href.indexOf('/lab/knowledge-graph-widget') > 0 &&
-          <link rel="stylesheet"
-                href="https://cdn.rawgit.com/novus/nvd3/v1.8.1/build/nv.d3.css" />
-          }
+          <link rel="stylesheet" href="/fa/css/font-awesome.min.css" />
+
+          {/*{href.indexOf('/lab/knowledge-graph-widget') > 0 &&*/}
+          {/*<link rel="stylesheet"*/}
+          {/*href="https://cdn.rawgit.com/novus/nvd3/v1.8.1/build/nv.d3.css" />*/}
+          {/*}*/}
 
           {(href.indexOf('/expert-map') > 0) &&
           <script type="text/javascript"
@@ -83,8 +85,8 @@ export default class Layout extends Component {
             async defer />}
 
           {href.indexOf('/expert-heatmap') > 0 &&
-          <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/echarts/3.7.1/echarts.js" />}
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/3.7.1/echarts.js" />}
+
         </Helmet>
 
         {showHeader && <Header {...headerOptions} />}

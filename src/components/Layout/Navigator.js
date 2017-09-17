@@ -92,6 +92,8 @@ export default class Navigator extends PureComponent {
 
   componentWillMount() {
     this.navis = this.props.navis || defaultNavis;
+    console.log('this.props.navis', this.props.navis);
+    console.log('defaultNavis', defaultNavis);
   }
 
   shouldComponentUpdate(nextProps, nextState) {

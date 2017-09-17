@@ -110,11 +110,11 @@ class RightInfoZoneCluster extends React.PureComponent {
 
         <div className={styles.name}>
           <span alt="" className={classnames('icon', styles.fieldIcon)} />
-          研究领域&nbsp;
-          <span className={styles.statistics}>(&nbsp;
-            <sapn className={styles.count}>{persons.length}</sapn>
-            人 )
-          </span>
+          研究领域
+          {/*<span className={styles.statistics}>(&nbsp;*/}
+            {/*<sapn className={styles.count}>{persons.length}</sapn>*/}
+            {/*人 )*/}
+          {/*</span>*/}
         </div>
 
         <div className={styles.keywords}>

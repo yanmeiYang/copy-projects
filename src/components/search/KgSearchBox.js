@@ -288,11 +288,10 @@ export default class KgSearchBox extends React.PureComponent {
   render() {
     const { value, suggestions } = this.state;
     const { intl } = this.props;
-    const { size, className, style, btnText, searchBtnStyle } = this.props;
-
+    const { size, className, style, btnText, searchPlaceholder, searchBtnStyle } = this.props;
     // Auto suggest will pass through all these props to the input.
     const inputProps = {
-      placeholder: intl.formatMessage(messages.placeholder),
+      placeholder: searchPlaceholder || intl.formatMessage(messages.placeholder),
       value, // : query || '',
       onChange: this.onChange,
     };

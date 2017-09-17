@@ -80,6 +80,7 @@ module.exports = {
   SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
   DEFAULT_EXPERT_BASE: '5949c2f99ed5dbc2147fd854', // CCF会员
   DEFAULT_EXPERT_BASE_NAME: 'CCF会员',
+  DEFAULT_EXPERT_SEARCH_KEY: 'term',
   ExpertBases: [
     {
       id: '5949c2f99ed5dbc2147fd854',

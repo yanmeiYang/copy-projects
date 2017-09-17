@@ -32,7 +32,12 @@ export default class ExpertBaseExpertsPage extends Component {
     dispatch({
       type: 'app/layout',
       payload: {
-        headerSearchBox: { query, onSearch: this.onSearch },
+        headerSearchBox: {
+          query,
+          onSearch: this.onSearch,
+          btnText: 'Search expert base',
+          searchPlaceholder: 'Input expert name',
+        },
         // showFooter: false,
       },
     });

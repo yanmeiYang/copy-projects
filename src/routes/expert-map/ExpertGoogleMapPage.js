@@ -4,11 +4,15 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
+import { Layout } from 'routes';
+import { applyTheme } from 'systems';
+import { Auth } from 'hoc';
+import queryString from 'query-string';
 import ExpertGoogleMap from './expert-googlemap.js';
 import ExpertMap from './expert-map.js';
-import styles from './ExpertMapPage.less';
-import { Auth } from '../../hoc';
-import queryString from 'query-string';
+import styles from './ExpertGoogleMapPage.less';
+
+const tc = applyTheme(styles);
 
 @connect(({ app, expertgoogleMap }) => ({ app, expertgoogleMap }))
 @Auth
@@ -73,9 +77,9 @@ export default class ExpertGoogleMapPage extends React.Component {
       : <ExpertGoogleMap {...options} />;
 
     return (
-      <div className={styles.content}>
+      <Layout contentClass={tc(['expertGoogleMapPage'])}>
         {mainBlock}
-      </div>
+      </Layout>
     );
   }
 }

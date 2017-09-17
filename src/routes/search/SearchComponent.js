@@ -209,7 +209,7 @@ export default class SearchComponent extends Component {
     const SearchSortsRightZone = !sysconfig.Enable_Export ? [] : [() => (
       <ExportPersonBtn
         query={query} pageSize={pageSize} current={current}
-        filters={filters} sort={sortType}
+        filters={filters} sort={sortType} key="0"
       />
     )];
     // console.log('|||||||||||||||||||||||||||||', SearchSortsRightZone);
@@ -243,21 +243,21 @@ export default class SearchComponent extends Component {
                     id="search.translateSearchMessage.1"
                     values={{ enQuery: translatedQuery }}
                 />&nbsp;
-                <Link onClick={this.doTranslateSearch.bind(this, false)}>
+                <a onClick={this.doTranslateSearch.bind(this, false)}>
                   <FM defaultMessage="Search '{cnQuery}' only."
                       id="search.translateSearchMessage.2"
                       values={{ cnQuery: query }} />
-                </Link>
+                </a>
               </div>
               }
 
               {!useTranslateSearch && translatedQuery &&
-              <Link onClick={this.doTranslateSearch.bind(this, true)}>
+              <a onClick={this.doTranslateSearch.bind(this, true)}>
                 <FM defaultMessage="You can also search with both '{enQuery}' and '{cnQuery}'."
                     id="search.translateSearchMessage.reverse"
                     values={{ enQuery: translatedQuery, cnQuery: query }}
                 />
-              </Link>
+              </a>
               }
             </div>
             }

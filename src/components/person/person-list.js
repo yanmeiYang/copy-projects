@@ -2,7 +2,7 @@
  *  Created by BoGao on 2017-06-15;
  */
 /* eslint-disable camelcase */
-import React, { PureComponent, PropTypes } from 'react';
+import React, { Component, PureComponent, PropTypes } from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { Tag, Tooltip } from 'antd';
@@ -26,7 +26,6 @@ const DefaultBottomZoneFuncs = [];
 
 @connect()
 export default class PersonList extends PureComponent {
-
   static propTypes = {
     // className: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     className: PropTypes.string, // NOTE: 一般来说每个稍微复杂点的Component都应该有一个className.
@@ -125,11 +124,11 @@ export default class PersonList extends PureComponent {
                         <a {...personLinkParams}>{name}</a>
                         {false && <span className={styles.rank}>会士</span>}
                       </h2>
-
-                      {/* ---- TitleRightBlock ---- */}
-                      {titleRightBlock && titleRightBlock({ param: { person, expertBaseId } })}
-                      {/*{this.personRightButton && this.personRightButton(person)}*/}
                     </div>}
+
+                    {/* ---- TitleRightBlock ---- */}
+                    {titleRightBlock && titleRightBlock({ param: { person, expertBaseId } })}
+                    {/*{this.personRightButton && this.personRightButton(person)}*/}
                     <div className={classnames(styles.zone, styles.interestColumn)}>
                       <div className={styles.contact_zone}>
                         <Indices
@@ -208,10 +207,10 @@ export default class PersonList extends PureComponent {
               {/* ---- Bottom Zone ---- */}
               {/*{BottomZoneFuncs && BottomZoneFuncs.length > 0 &&*/}
               {/*<div className={styles.personComment}>*/}
-                {/*{BottomZoneFuncs.map((bottomBlockFunc) => {*/}
-                  {/*const param = { person, expertBaseId, user };*/}
-                  {/*return bottomBlockFunc ? bottomBlockFunc(param) : false;*/}
-                {/*})}*/}
+              {/*{BottomZoneFuncs.map((bottomBlockFunc) => {*/}
+              {/*const param = { person, expertBaseId, user };*/}
+              {/*return bottomBlockFunc ? bottomBlockFunc(param) : false;*/}
+              {/*})}*/}
               {/*</div>*/}
               {/*}*/}
             </div>

@@ -7,10 +7,10 @@ import { routerRedux } from 'dva/router';
 import { Layout } from 'routes';
 import { applyTheme } from 'systems';
 import queryString from 'query-string';
+import { Auth } from 'hoc';
 import ExpertGoogleMap from './expert-googlemap.js';
 import ExpertMap from './expert-map.js';
 import styles from './ExpertMapPage.less';
-import { Auth } from '../../hoc';
 
 const tc = applyTheme(styles);
 

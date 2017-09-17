@@ -1,16 +1,14 @@
 import React from 'react';
 import { Tabs, Icon, Slider, Button } from 'antd';
 import { connect } from 'dva';
-import * as d3 from 'd3';
+import d3 from '../../../public/lib/d3.v3';
 import d3sankey from './utils/sankey';
-
-// 这三个文件里面有的会导致程序build失败。无法上线。我debug了4个小时。。。
-// import nlp from '../../../external-docs/trend-prediction/Natural language processing.json';
-// import net from '../../../external-docs/trend-prediction/Networks.json';
-// import nn from '../../../external-docs/trend-prediction/neural network.json';
-//import rb from '../../../external-docs/trend-prediction/Robotics.json';
 import styles from './trend-prediction.less';
 import { Auth } from '../../hoc';
+import { externalRequest, wget } from '../../utils/request';
+import * as profileUtils from '../../utils/profile-utils';
+import { getPerson } from '../../services/person';
+import { sysconfig } from '../../systems';
 
 let barPos;
 let chart;
@@ -20,7 +18,7 @@ let formatNumber;
 let height;
 let histHeight;
 let margin;
-let renderTopic;
+//let renderTopic;
 let timeline;
 let timelineItemOffset;
 let width;
@@ -43,6 +41,7 @@ let timeSlidesOffset;
 let timeWindow;
 let x;
 let query;
+let cperson;
 const TabPane = Tabs.TabPane;
 const marks = {
   0: '0°C',
@@ -62,23 +61,31 @@ const marks = {
 @connect(({ app }) => ({ app }))
 @Auth
 export default class TrendPrediction extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.dispatch = this.props.dispatch;
+  }
+
+  state = {
+    person: cperson,
+  };
+
   componentDidMount() {
     d3sankey();
-    console.log('@@@@!!!!');
-    this.showtrend();
+    this.showtrend('');
   }
 
   shouldComponentUpdate(nextProps) {
     if (nextProps.query && nextProps.query !== this.props.query) {
-      console.log('Chang query', nextProps.query);
-      this.showtrend();
+      d3sankey();
+      this.showtrend(nextProps.query);
       return true;
     }
-    return false;
+    return true;
   }
 
   onChange = (key) => {
-    if (key === 1) {
+    if (key === '1') {
       d3.select('.active').classed('active', false);
       d3.select(this.parentNode).classed('active', true);
       d3.selectAll('.term').remove();
@@ -89,14 +96,13 @@ export default class TrendPrediction extends React.PureComponent {
       const q = query;
       drawFlow(terms[q]);
     } else {
-      let hist;
       d3.select('.active').classed('active', false);
       d3.select(this.parentNode).classed('active', 'true');
       d3.selectAll('.term').remove();
       energy.terms.sort((a, b) => {
         return b.freq - a.freq;
       });
-      hist = timeline.append('g').selectAll('.term').data(energy.terms).enter()
+      const hist = timeline.append('g').selectAll('.term').data(energy.terms).enter()
         .append('g')
         .attr('class', 'term')
         .attr('id', (d) => {
@@ -123,7 +129,7 @@ export default class TrendPrediction extends React.PureComponent {
         .text((d) => {
           return d.sum;
         });
-      hist.append('text').attr('text-anchor', 'end').attr('transform', (d) => {
+      hist.append('text').attr('text-anchor', 'end').attr('transform', () => {
         return `translate(${[barPos, 0]})rotate(${0})`;
       }).style('font-size', 12)
         .attr('dy', '.85em')
@@ -135,109 +141,96 @@ export default class TrendPrediction extends React.PureComponent {
     }
   }
 
-  showtrend = () => {
+  showtrend = (cquery) => {
+    d3.select('#tooltip').classed('hidden', true).style('visibility', 'hidden');//最开始的时候都将它们设置为不可见
+    d3.select('#tooltip1').classed('hidden', true).style('visibility', 'hidden');
     const loc = window.location.href.split('query=');
-    let word = 'dm';
+    let word = '';
     if (loc != null) {
       if (loc[1] != null) {
-        word = loc[1];
+        word = decodeURI(loc[1]);
       }
     }
-    let am;
-    let ai;
-    let au;
-    let bc;
-    let cv;
-    let dm;
-    let dml;
-    let dl;
-    let gd;
-    let iot;
-    let ml;
-    switch (word) {
-      case 'am':
-        am = require('../../../external-docs/trend-prediction/answer machine.json');
-        energy = am;
-        break;
-      case 'ai':
-        ai = require('../../../external-docs/trend-prediction/artificial intelligence.json');
-        energy = ai;
-        break;
-      case 'au':
-        au = require('../../../external-docs/trend-prediction/autopilot.json');
-        energy = au;
-        break;
-      case 'bc':
-        bc = require('../../../external-docs/trend-prediction/BlockChain.json');
-        energy = bc;
-        break;
-      case 'cv':
-        cv = require('../../../external-docs/trend-prediction/Computer vision.json');
-        energy = cv;
-        break;
-      case 'dm':
-        dm = require('../../../external-docs/trend-prediction/Data Mining.json');
-        energy = dm;
-        break;
-      case 'dml':
-        dml = require('../../../external-docs/trend-prediction/Data Modeling.json');
-        energy = dml;
-        break;
-      case 'dl':
-        dl = require('../../../external-docs/trend-prediction/deep learning.json');
-        energy = dl;
-        break;
-      case 'gd':
-        gd = require('../../../external-docs/trend-prediction/graph database.json');
-        energy = gd;
-        break;
-      case 'iot':
-        iot = require('../../../external-docs/trend-prediction/Internet of Things.json');
-        energy = iot;
-        break;
-      case 'ml':
-        ml = require('../../../external-docs/trend-prediction/Machine Learning.json');
-        energy = ml;
-        break;
-      default:
-        am = require('../../../external-docs/trend-prediction/answer machine.json');
-        energy = am;
+    if (word === '' && cquery === '') {
+      word = 'Data Mining';
     }
-    margin = {
-      top: 1,
-      right: 1,
-      bottom: 6,
-      left: 1,
-    };
-    width = 1300; // 需调整参数，容器宽度
-    height = 900 - margin.top - margin.bottom; // 需调整参数，容器高度
-    formatNumber = d3.format(',.0f');
-    format = function (d) { // 格式化为整数，点出现的次数
-      return `${formatNumber(d)} Times`;
-    };
-    color = d3.scaleOrdinal(d3.schemeCategory10);// d3图的配色样式
-    chart = d3.select('#chart').append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
-    barPos = 150;// 直方图左边文字的宽度
-    timelineItemOffset = 20;// 左侧直方图的间隔距离
-    histHeight = 100;// 左侧直方图的高度
-    d3.select(window).on('resize', () => { // 窗口改变的时候重新加载
-      return renderTopic('big data', 1, 1000);
-    });
-    d3.select('#trend').on('click', () => { // trend被点击的时候重新加载
-      return renderTopic('big data', 1, 1000);
-    });
-// 显示整个界面的方法，sankey为技术发展图
-    this.renderTopic('big data', 1, 1000);
+    if (word === '' && cquery !== '') {
+      word = cquery;
+    }
+    if (word === 'Answer Machine' || word === 'Artificial Intelligence' || word === 'Autopilot' || word === 'BlockChain' || word === 'Computer Vision' || word === 'Data Mining' || word === 'Data Modeling' || word === 'Deep Learning' || word === 'Graph Databases' || word === 'Internet of Things' || word === 'Machine Learning' || word === 'Robotics' || word === 'Networks' || word === 'NLP' || word === 'Neural Network') {
+      const res = wget('/lab/trend-prediction/' + word + '.json');
+      res.then((data) => {
+        energy = data;
+        margin = {
+          top: 1,
+          right: 1,
+          bottom: 6,
+          left: 1,
+        };
+        width = 1300; // 需调整参数，容器宽度
+        height = 900 - margin.top - margin.bottom; // 需调整参数，容器高度
+        formatNumber = d3.format(',.0f');
+        format = function (d) { // 格式化为整数，点出现的次数
+          return `${formatNumber(d)} Times`;
+        };
+        color = d3.scale.category10();// d3图的配色样式
+        chart = d3.select('#chart').append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
+        barPos = 150;// 直方图左边文字的宽度
+        timelineItemOffset = 20;// 左侧直方图的间隔距离
+        histHeight = 100;// 左侧直方图的高度
+        /*
+        d3.select(window).on('resize', () => { // 窗口改变的时候重新加载
+          return this.showtrend(this.props.query);
+        });
+        d3.select('#trend').on('click', () => { // trend被点击的时候重新加载
+          return this.renderTopic('big data', 1, 1000);
+        });*/
+        // 显示整个界面的方法，sankey为技术发展图
+        this.renderTopic('big data', 1, 1000);
+      });
+    } else {
+      const res = externalRequest('http://166.111.7.173:9997/' + word);
+      res.then((data) => {
+        energy = data.data;
+        margin = {
+          top: 1,
+          right: 1,
+          bottom: 6,
+          left: 1,
+        };
+        width = 1300; // 需调整参数，容器宽度
+        height = 900 - margin.top - margin.bottom; // 需调整参数，容器高度
+        formatNumber = d3.format(',.0f');
+        format = function (d) { // 格式化为整数，点出现的次数
+          return `${formatNumber(d)} Times`;
+        };
+        color = d3.scale.category10();// d3图的配色样式
+        chart = d3.select('#chart').append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
+        barPos = 150;// 直方图左边文字的宽度
+        timelineItemOffset = 20;// 左侧直方图的间隔距离
+        histHeight = 100;// 左侧直方图的高度
+        d3.select(window).on('resize', () => { // 窗口改变的时候重新加载
+          return this.renderTopic('big data', 1, 1000);
+        });
+        d3.select('#trend').on('click', () => { // trend被点击的时候重新加载
+          return this.renderTopic('big data', 1, 1000);
+        });
+        // 显示整个界面的方法，sankey为技术发展图
+        this.renderTopic('big data', 1, 1000);
+      });
+    }
   }
 
   seeword = (e) => {
     const word = e.currentTarget && e.currentTarget.value && e.currentTarget.getAttribute('value');
-    const href = window.location.href.split('?query=')[0] + '?query=' + word;
+    let href = window.location.href.split('?query=')[0] + '?query=' + word;
+    href = href.replace('#', '');
     window.location.href = href;
   }
 
   renderTopic = function (q, start, end) {
-    console.log(energy);
+    document.getElementById('chart').innerHTML = '';
+    const that = this;
     query = q;
     const sankey = d3.sankey().nodeWidth(0).nodePadding(0).size([width, 330]);// 上方趋势图的宽度
     const path = sankey.link();
@@ -246,10 +239,12 @@ export default class TrendPrediction extends React.PureComponent {
     chart = d3.select('#chart').append('svg').attr('overflow', 'scroll').attr('id', 'dark')
       .attr('width', width)
       .attr('height', height + margin.top + margin.bottom)
-      .attr('transform', `translate(${70},${25})`);
+      .attr('transform', `translate(${70},${25})`)
+      .attr('z-index', 1);
     chart.append('linearGradient').attr('id', 'xiangyu');
-    timeline = d3.select('#right-box').append('svg').attr('overflow', 'scroll');
-    const svg = chart.append('g').attr('height', 350).attr('id', 'trend');
+    d3.select('#wordid').remove();
+    timeline = d3.select('#right-box').append('svg').attr('overflow', 'scroll').attr('z-index', 2).attr('id','wordid');
+    const svg = chart.append('g').attr('height', 350).attr('id', 'trend').attr('z-index', 2);
     svg.on('mousewheel', () => {
       console.log('mousewheel');
     });
@@ -318,9 +313,9 @@ export default class TrendPrediction extends React.PureComponent {
         drawFlow(d);
       });
       // 页面左侧统计模块的直方图
-      hist.append('rect').attr('x', (d) => { // 直方图离线的距离
+      hist.append('rect').attr('x', () => { // 直方图离线的距离
         return barPos + 10;
-      }).attr('y', (d) => { // 直方图离上方的高度
+      }).attr('y', () => { // 直方图离上方的高度
         return 0;
       }).attr('height', 18)
         .attr('width', (d) => { // 直方图的宽度为18
@@ -343,8 +338,7 @@ export default class TrendPrediction extends React.PureComponent {
     drawRightBox();
     // first-three即页面中current hotspot按钮，点击后按照2010之后关于该技术的文献总数排序并显示直方图，
     // revert即页面中overall按钮，点击后按照freq对技术排序并显示直方图
-    d3.select('#first-three').on('click', function (e) {
-      console.log('@@@@###');
+    d3.select('#first-three').on('click', function () {
       d3.select('.active').classed('active', false);
       d3.select(this.parentNode).classed('active', true);
       d3.selectAll('.term').remove();
@@ -406,8 +400,6 @@ export default class TrendPrediction extends React.PureComponent {
         timeSlidesOffset[year] = j;
       });
     });
-    // console.log(timeSlidesDict);
-    // console.log(timeSlidesOffset);
     timeWindow = energy.time_slides[0].length;
     x = function (year) {
       return (timeSlidesDict[year] + ((1 / timeWindow) * timeSlidesOffset[year]))
@@ -505,32 +497,40 @@ export default class TrendPrediction extends React.PureComponent {
       return `${d.source.name} → ${d.target.name}${d.source_index}`;
     });
     // 为sankey图的结点建立力学结构模型，实现用户交互效果
-    /*force = d3.layout.force();
+    force = d3.layout.force();
     force.nodes(energy.nodes).gravity(0.1).charge((d) => {
       if (d.dy < 10) {
-        return -(d.dy * 10);
+        return -((d.dy * 10) + 10);
       } else {
-        return -(d.dy * 4);
+        return -((d.dy * 4) + 10);
       }
     }).size([width, 330])
-      .start();*/
-    force = d3.forceSimulation(energy.nodes).force('charge',d3.forceCollide(6)).force("x", d3.forceX(0));//禁止重叠
-    node = node = svg.append("g").selectAll(".node").data(energy.nodes).enter().append("a").attr("href", "#").attr("class", "popup").attr("rel", "popuprel").append("g").attr("class", "node").on("mouseover", function (d, event) {
+      .start();
+    node = svg.append('g').selectAll('.node').data(energy.nodes).enter()
+      .append('a')
+      .attr('href', '#')
+      .attr('class', 'popup')
+      .attr('rel', 'popuprel')
+      .append('g')
+      .attr('class', 'node')
+      .call(force.drag)
+      .on('mouseover', function (d) {
       d3.select(this).attr('opacity', 0.6);
       const xPosition = d3.event.layerX + 150;
       const yPosition = d3.event.layerY + 130;
       // if (xPosition > 900) {
       //     xPosition = d3.event.layerX - 200;
       // }
-      d3.select('#tooltip').style('left', `${xPosition}px`).style('top', `${yPosition}px`).style('position', 'absolute').style('border-width', '1px').style('background-color', '#0ed6ff').style('border-color','black').style('z-index','1000').style('border-radius','20px').style('height','70px').style('width','180px').style('padding','5px').select('#value').text(() => {
+      d3.select('#tooltip').style('left', `${xPosition}px`).style('top', `${yPosition}px`)
+        .select('#value').text(() => {
         return `${d.name}：  ${format(d.value)} ${d.y}`;
       });
-      d3.select('#tooltip').classed('hidden', false);
+      d3.select('#tooltip').classed('hidden', false).style('visibility', '');
     }).on('mouseout', function () {
       d3.select(this).transition().duration(400).attr('opacity', () => {
         return 1;
       });
-      d3.select('#tooltip').classed('hidden', true);
+      d3.select('#tooltip').classed('hidden', true).style('visibility', 'hidden');
     })
       .on('click', (d) => {
         console.log(d);
@@ -563,7 +563,7 @@ export default class TrendPrediction extends React.PureComponent {
       .text((d) => {
       return d.name;
     })
-      .style('fill', (d) => {
+      .style('fill', () => {
       return 'black';
     })
       .style('font-weight', 'bold')
@@ -573,9 +573,10 @@ export default class TrendPrediction extends React.PureComponent {
       w = d.w;
       if (w > 15) {
         w = 15;
-      }
-      if (w < 10 && w > 0) {
+      } else if (w < 10 && w > 0) {
         w = 10;
+      } else {
+        w = 8;
       }
       return `${w}px sans-serif`;
     });
@@ -614,7 +615,7 @@ export default class TrendPrediction extends React.PureComponent {
     })
       .style('display', 'none');
     // 技术趋势图（右下方）的两条包络线,做了减小梯度的处理
-    basis = d3.area().x((d, i) => {
+    basis = d3.svg.area().x((d, i) => {
       return x(d.y);
     }).y0((d) => {
       if (d.d < 30) {
@@ -627,7 +628,7 @@ export default class TrendPrediction extends React.PureComponent {
       }
       return 350; // 200 + 30 / 21.35 * Math.pow(d.d, 0.9) * 5
     })
-      .curve('basis');
+      .interpolate('basis');
     flow = chart.append('g').attr('transform', (d) => {
       return `translate(${[0, 350]})rotate(${0})`;
     });
@@ -640,7 +641,7 @@ export default class TrendPrediction extends React.PureComponent {
       let peopleFlow;
       flow.remove();
       flow = chart.append('g').attr('transform', (d) => {
-        return `translate(${[-300, 350]})rotate(${0})`;// 需调整参数，人图的left和top，宽度的起始和旋转
+        return `translate(${[0, 350]})rotate(${0})`;// 需调整参数，人图的left和top，宽度的起始和旋转,从-300改到了0
       });
       d3.select('.strong').remove();
       d3.select(`#term-${data.idx}`).append('rect').attr('class', 'strong').attr('x', '0px')
@@ -653,15 +654,16 @@ export default class TrendPrediction extends React.PureComponent {
       })
         .style('fill', '#9900FF')
         .style('fill-opacity', 0.2);
-      flow.append('path').selectAll('d', () => {
+      flow.append('path').attr('d', () => {
         data.year.forEach((d) => {
           d.d = d.d;
         });
-        return d3.curveBasis(data.year);
+        return basis(data.year);
       }).style('stroke-width', 0.2).style('stroke', '#60afe9')
         .style('fill', '#60afe9');
       // 为趋势图的专家结点建立力学结构模型
-      peopleFlow = d3.forceSimulation();//需要修改
+      peopleFlow = d3.layout.force().linkDistance(80).charge(-1000).gravity(0.05)
+        .size([]);
       const channels = [];
       i = 0;
       // channel是趋势图显示结点信息的航道，由中间基线依次向两边扩展，即中间为0号航道，上方为1、3、5…号航道，下方为2、4、6…号航道
@@ -675,13 +677,36 @@ export default class TrendPrediction extends React.PureComponent {
       })).enter()
         .append('g')
         .attr('class', 'people')
-        .on('click', (d) => {
-        $('#myModal').modal('show');
-        // console.log(people);
-        return d3.select('#detailInfo').text(() => {
-          `${people[d.p].name}\n`;
-        });
-      })
+        .style('cursor', 'pointer')
+        .on('mouseover', (d) => {
+          d3.select(this).attr('opacity', 0.3);
+          const xPosition = d3.event.layerX + 150;
+          const yPosition = d3.event.layerY + 130;
+          d3.select('#tooltip1').style('left', `${xPosition}px`).style('top', `${yPosition}px`)
+            .select('#value1').text(() => {
+            const resultPromise = getPerson(people[d.p].id);
+            resultPromise.then((data) => {
+                cperson = data.data;
+                that.setState({ person: cperson });
+              },
+              () => {
+                console.log('failed');
+              },
+            ).catch((error) => {
+              console.error(error);
+            })
+            return ``;
+          });
+          d3.select('#tooltip1').classed('hidden', false).style('visibility', '');
+      }).on('mouseout', function () {
+          d3.select(this).transition().duration(400).attr('opacity', () => {
+            return 1;
+          });
+          d3.select('#tooltip1').classed('hidden', true).style('visibility', 'hidden');
+        })
+        .on('click', function () {
+          console.log("yes!");
+        })
         .attr('transform', (d, i) => {
         i = 0;
         // i表示信道序号，若4年长度内信道空闲，则可用该位置显示节点，并push进channel
@@ -715,7 +740,7 @@ export default class TrendPrediction extends React.PureComponent {
         return '#eee';
       })
         .style('opacity', 0.8)
-        .style('fill', (d) => {
+        .style('fill', () => {
         return 'orangered';
       });
     };
@@ -723,6 +748,22 @@ export default class TrendPrediction extends React.PureComponent {
   };
 
   render() {
+    let url = '';
+    let name = '';
+    let pos = '';
+    let aff = '';
+    let personLinkParams = '';
+    if (this.state.person != null) {
+      const person = this.state.person;
+      url = profileUtils.getAvatar(person.avatar, person.id, 80);
+      name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
+      pos = profileUtils.displayPosition(person.pos);
+      aff = profileUtils.displayAff(person);
+      personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
+      if (sysconfig.PersonList_PersonLink_NewTab) {
+        personLinkParams.target = '_blank';
+      }
+    }
     return (
       <div className={styles.trend}>
         <div className={styles.year}>
@@ -731,35 +772,54 @@ export default class TrendPrediction extends React.PureComponent {
         <div className={styles.hotwords}>
           <p>HOT WORDS</p>
           <Button.Group>
-            <Button type="dashed" onClick={this.seeword} value="am" className={styles.hotword}>Answer Machine</Button>
-            <Button type="dashed" onClick={this.seeword} value="ai" className={styles.hotword}>Artificial Intelligence</Button>
-            <Button type="dashed" onClick={this.seeword} value="au" className={styles.hotword}>Autopilot</Button>
-            <Button type="dashed" onClick={this.seeword} value="bc" className={styles.hotword}>BlockChain</Button>
-            <Button type="dashed" onClick={this.seeword} value="cv" className={styles.hotword}>Computer Vision</Button>
-            <Button type="dashed" onClick={this.seeword} value="dm" className={styles.hotword}>Data Mining</Button>
-            <Button type="dashed" onClick={this.seeword} value="dml" className={styles.hotword}>Data Modeling</Button>
-            <Button type="dashed" onClick={this.seeword} value="dl" className={styles.hotword}>Deep Learning</Button>
-            <Button type="dashed" onClick={this.seeword} value="gd" className={styles.hotword}>Graph Databases</Button>
-            <Button type="dashed" onClick={this.seeword} value="iot" className={styles.hotword}>Internet of Things</Button>
-            <Button type="dashed" onClick={this.seeword} value="ml" className={styles.hotword}>Machine Learning</Button>
-            <Button type="dashed" onClick={this.seeword} value="rb" className={styles.hotword}>Robotics</Button>
+            <Button type="dashed" onClick={this.seeword} value="Answer Machine" className={styles.hotword}>Answer Machine</Button>
+            <Button type="dashed" onClick={this.seeword} value="Artificial Intelligence" className={styles.hotword}>Artificial Intelligence</Button>
+            <Button type="dashed" onClick={this.seeword} value="Autopilot" className={styles.hotword}>Autopilot</Button>
+            <Button type="dashed" onClick={this.seeword} value="BlockChain" className={styles.hotword}>BlockChain</Button>
+            <Button type="dashed" onClick={this.seeword} value="Computer Vision" className={styles.hotword}>Computer Vision</Button>
+            <Button type="dashed" onClick={this.seeword} value="Data Mining" className={styles.hotword}>Data Mining</Button>
+            <Button type="dashed" onClick={this.seeword} value="Data Modeling" className={styles.hotword}>Data Modeling</Button>
+            <Button type="dashed" onClick={this.seeword} value="Deep Learning" className={styles.hotword}>Deep Learning</Button>
+            <Button type="dashed" onClick={this.seeword} value="Graph Databases" className={styles.hotword}>Graph Databases</Button>
+            <Button type="dashed" onClick={this.seeword} value="Internet of Things" className={styles.hotword}>Internet of Things</Button>
+            <Button type="dashed" onClick={this.seeword} value="Machine Learning" className={styles.hotword}>Machine Learning</Button>
+            <Button type="dashed" onClick={this.seeword} value="Robotics" className={styles.hotword}>Robotics</Button>
+            <Button type="dashed" onClick={this.seeword} value="Networks" className={styles.hotword}>Networks</Button>
+            <Button type="dashed" onClick={this.seeword} value="NLP" className={styles.hotword}>NLP</Button>
+            <Button type="dashed" onClick={this.seeword} value="Neural Network" className={styles.hotword}>Neural Network</Button>
           </Button.Group>
-        </div>
-        <div className={styles.nav} id="right-box">
-          <Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange}>
-            <TabPane tab={<span><Icon type="calendar" />Current Hotspot</span>} key="1"
-                     id="first-three" />
-            <TabPane tab={<span><Icon type="global" />Overall</span>} key="2"
-                     id="revert" />
-          </Tabs>
         </div>
         <div className={styles.show} id="chart">
           <div className="modal-loading" />
-          <div id="tooltip" className="hidden">
-            <p>
-              <strong id="value" />
-            </p>
+        </div>
+        <div id="tooltip" className={styles.tool}>
+          <p className={styles.showtool}>
+            <strong id="value" />
+          </p>
+        </div>
+        <div id="tooltip1" className={styles.tool1}>
+          <div className={styles.showtool1}>
+            <div className="img"><img src={url}/></div>
+            {name &&
+            <div className="name bg">
+              <h2 className="section_header">
+                <a {...personLinkParams}>{name} </a><br />
+              </h2>
+            </div>
+            }
+            <div className="info bg">
+              {pos && <span><i className="fa fa-briefcase fa-fw" />{pos}</span>}
+              <br />
+              {aff && <span><i className="fa fa-institution fa-fw" />{aff}</span>}
+            </div>
+            <strong id="value1" />
           </div>
+        </div>
+        <div className={styles.nav} id="right-box">
+          <Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange}>
+            <TabPane tab={<span><Icon type="calendar" />All</span>} key="1" id="first-three" />
+            <TabPane tab={<span><Icon type="global" />Recent</span>} key="2" id="revert" />
+          </Tabs>
         </div>
       </div>
     );

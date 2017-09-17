@@ -127,6 +127,9 @@ export default class KnowledgeGraphPage extends React.PureComponent {
     const location = this.props.location;
     const pathname = location.pathname;
     this.props.dispatch({ type: 'knowledgeGraph/setState', payload: { query } });
+    // const href = window.location.href.split('?query=')[0] + '?query=' + query;
+    // window.location.href = href;
+
     this.props.dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query } });
     this.props.dispatch(routerRedux.push({
       pathname, query: { ...location.query, query },

@@ -54,6 +54,8 @@ export default class ExpertMapPage extends React.Component {
   onSearch = (data) => {
     if (data.query) {
       this.setState({ query: data.query });
+      // const href = window.location.href.split('?query=')[0] + '?query=' + data.query;
+      // window.location.href = href;
       this.props.dispatch(routerRedux.push({
         pathname: '/expert-map',
         query: { query: data.query },

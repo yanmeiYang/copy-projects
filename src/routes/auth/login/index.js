@@ -65,7 +65,7 @@ class Login extends React.Component {
     };
 
     return (
-      <Layout searchZone={[]} showHeader={false} contentClass={tc(['loginPage'])}>
+      <Layout searchZone={[]} showHeader={false} showNavigator={false} contentClass={tc(['loginPage'])}>
         <Form layout={'vertical'}>
           <Row className={styles.formHeader}>
             <h1>登录</h1>

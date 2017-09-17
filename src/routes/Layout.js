@@ -33,9 +33,6 @@ export default class Layout extends Component {
     contentClass: PropTypes.string,
     showHeader: PropTypes.bool,
     showNavigator: PropTypes.bool,
-
-    query: PropTypes.string,
-    onSearch: PropTypes.func,
   };
 
   static defaultProps = {
@@ -46,14 +43,14 @@ export default class Layout extends Component {
 
   render() {
     console.count('>>>>>>>>>> App Render');
-    const { logoZone, searchZone, infoZone, navigator, footer, query, onSearch } = this.props;
+    const { logoZone, searchZone, infoZone, navigator, footer } = this.props;
     const { contentClass, showHeader, showNavigator } = this.props;
     const { dispatch } = this.props;
 
     const headerOptions = {
       logoZone, searchZone, infoZone, logout() {
         dispatch({ type: 'app/logout' });
-      }, query, onSearch,
+      },
     };
     const navigatorOptions = { navigator };
 

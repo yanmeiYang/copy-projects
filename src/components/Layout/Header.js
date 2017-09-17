@@ -34,9 +34,6 @@ export default class Header extends PureComponent {
     searchZone: PropTypes.array,
     infoZone: PropTypes.array,
 
-    query: PropTypes.string,
-    onSearch: PropTypes.func,
-
     headerSearchBox: PropTypes.object,
   };
 
@@ -47,7 +44,7 @@ export default class Header extends PureComponent {
   };
 
   state = {
-    // query: '',
+    query: '',
     // logoutLoading: false,
   };
 
@@ -59,6 +56,7 @@ export default class Header extends PureComponent {
       if (nextProps.app.headerSearchBox !== this.props.app.headerSearchBox
         || this.props.app.headerSearchBox.query !== this.state.query) {
         // if (nextProps.app.headerSearchBox.query) {
+        console.log('----------------------', nextProps.app.headerSearchBox.query);
         this.setQuery(nextProps.app.headerSearchBox.query);
         // }
       }
@@ -90,7 +88,7 @@ export default class Header extends PureComponent {
   render() {
     const { logoZone, searchZone, infoZone } = this.props;
     const { headerSearchBox } = this.props.app;
-    console.log('>>>>>>>', logoZone, searchZone, infoZone);
+    // console.log('>>>>>>>', logoZone, searchZone, infoZone);
 
     if (headerSearchBox) {
       const oldSearchHandler = headerSearchBox.onSearch;
@@ -103,13 +101,13 @@ export default class Header extends PureComponent {
     }
 
     const SearchZone = searchZone || [
-        <KgSearchBox key={0} size="large" query={this.state.query} {...headerSearchBox}
-                     className={styles.searchBox} style={{ height: 36, marginTop: 15 }}
-        />,
+      <KgSearchBox key={0} size="large" query={this.state.query} {...headerSearchBox}
+                   className={styles.searchBox} style={{ height: 36, marginTop: 15 }}
+      />,
       ];
 
     const InfoZone = infoZone || [
-        <HeaderInfoZone key={0} app={this.props.app} />,
+      <HeaderInfoZone key={0} app={this.props.app} logout={this.props.logout} />,
       ];
 
     // const { headerSearchBox, user, roles } = this.props.app;

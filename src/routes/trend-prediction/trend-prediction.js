@@ -224,8 +224,8 @@ export default class TrendPrediction extends React.PureComponent {
     }
   }
 
-  seeword = (e) => {
-    const word = e.currentTarget && e.currentTarget.value && e.currentTarget.getAttribute('value');
+  seeword = (w) => {
+    const word = w;
     let href = window.location.href.split('?query=')[0] + '?query=' + word;
     href = href.replace('#', '');
     window.location.href = href;

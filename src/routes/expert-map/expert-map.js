@@ -205,24 +205,63 @@ class ExpertMap extends React.PureComponent {
         //let url = blankAvatar;
         let url;
         if (personInfo.avatar != null && personInfo.avatar !== '') {
-          url = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 50);
+          url = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 41);
         }
         //const style = url === '/images/blank_avatar.jpg' ? '' : 'margin-top:-5px;';
-        const style = 'line-height:45px;text-align:center;display: block;margin:auto;';
         let name;
         if (personInfo.name_zh) {
           const str = personInfo.name_zh.substr(1, 2);
           name = str;
         } else {
-          let tmp = personInfo.name.match(/\b(\w)/g);
-          if (tmp.length > 3) {
-            tmp = tmp[0].concat(tmp[1],tmp[2]);
-            name = tmp;
-          } else {
-            name = tmp.join('');
-          }
+          const tmp = personInfo.name.split(" ", 5);
+          name = tmp[tmp.length - 1];
+          // let tmp = personInfo.name.match(/\b(\w)/g);
+          // if (tmp.length > 3) {
+          //   tmp = tmp[0].concat(tmp[1], tmp[2]);
+          //   name = tmp;
+          // } else {
+          //   name = tmp.join('');
+          // }
         }
+        let style;
+        if (name.length <= 8) {
+          style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:45px;font-size:20%;';
+          if (name.length === 6){
+            name = ' '.concat(name);
+          }
+          if (name.length <= 5){
+            name = '&nbsp;'.concat(name);
+          }
+        } else {
+          const nameArr = name.split("",20);
+          let i = 7;
+          let arr = [];
+          nameArr.map((name1) => {
+            if (i !== 7) {
+              if (i < 13) {
+                arr[i+1] = name1;
+              } else if (i === 13) {
+                arr[i+1] = ' ';
+                arr[i+2] = name1;
+              } else {
+                arr[i+2] = name1;
+              }
+            } else {
+              arr[i] = ' ';
+              arr[i+1] = name1;
+            }
+            i = i+1;
+          })
+          console.log(arr.join(''))
+          name = arr.join('');
+          name = '&nbsp;&nbsp;'+name;
+          style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:10px;word-wrap:break-word;font-size:20%;';
+        }
+        //if (url !== undefined) {
         cimg.innerHTML = `<img style='${style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='${url}' alt='${name}'>`;
+        //} else {
+        //cimg.innerHTML = `<div style='${style}'>${name}</div>`;
+        //}
       }
 
       for (let j = 0; j < imgdivs.length; j += 1) {
@@ -629,7 +668,7 @@ class ExpertMap extends React.PureComponent {
     let personPopupJsx;
     const person = model.personInfo;
     if (person) {
-      const url = profileUtils.getAvatar(person.avatar, person.id, 90);
+      const url = profileUtils.getAvatar(person.avatar, person.id, 50);
       const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
       const pos = profileUtils.displayPosition(person.pos);
       const aff = profileUtils.displayAff(person);
@@ -680,6 +719,13 @@ class ExpertMap extends React.PureComponent {
               )}
             </Select>
 
+            <div className={styles.switchMapType}>
+              <ButtonGroup id="diffmaps">
+                <Button type="primary" onClick={this.onChangeBaiduMap}>Baidu Map</Button>
+                <Button onClick={this.onChangeGoogleMap}>Google Map</Button>
+              </ButtonGroup>
+            </div>
+
           </div>
 
           <div className={styles.scopes}>
@@ -693,12 +739,12 @@ class ExpertMap extends React.PureComponent {
               <Button onClick={this.showType} value="5">机构</Button>
             </ButtonGroup>
 
-            <div className={styles.switch}>
-              <ButtonGroup id="diffmaps">
-                <Button type="primary" onClick={this.onChangeBaiduMap}>Baidu Map</Button>
-                <Button onClick={this.onChangeGoogleMap}>Google Map</Button>
-              </ButtonGroup>
-            </div>
+            {/*<div className={styles.switch}>*/}
+              {/*<ButtonGroup id="diffmaps">*/}
+                {/*<Button type="primary" onClick={this.onChangeBaiduMap}>Baidu Map</Button>*/}
+                {/*<Button onClick={this.onChangeGoogleMap}>Google Map</Button>*/}
+              {/*</ButtonGroup>*/}
+            {/*</div>*/}
 
           </div>
         </div>

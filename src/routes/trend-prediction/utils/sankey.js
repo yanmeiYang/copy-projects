@@ -322,9 +322,9 @@ function d3sankey(){
           x4 = xj(curvature),
           x5 = xj(1 - curvature),
           m = (x0 + x1) / 2;
-        var y0_top = d.source.y + d.sy;
-        var y0_bottom = d.source.y + d.sy + d.dy1,
-          y1_top = d.target.y + d.ty;// + d.ty;
+        var y0_top = d.source.y + d.sy;//右左下
+        var y0_bottom = d.source.y + d.sy + d.dy1,//右左下
+          y1_top = d.target.y + d.ty;// + d.ty;右右下
         var y1_bottom = d.target.y + d.ty + d.dy2;
         return "M" + x0 + "," + y0_top
           + "C" + x2 + "," + y0_top

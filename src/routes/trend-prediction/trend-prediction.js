@@ -41,8 +41,10 @@ let timeSlidesDict;
 let timeSlidesOffset;
 let timeWindow;
 let x;
+let xnew;
 let query;
 let cperson;
+let carr = [];
 const TabPane = Tabs.TabPane;
 const marks = {
   0: '0°C',
@@ -409,6 +411,19 @@ export default class TrendPrediction extends React.PureComponent {
       return (timeSlidesDict[year] + ((1 / timeWindow) * timeSlidesOffset[year]))
         * (width / energy.time_slides.length);
     };
+    xnew = function (year, count) {//处理数据不平滑的问题
+      //console.log(year+"&&&&&&&&&"+timeSlidesDict[year]+"!!!!!!!!!" +timeWindow+"%%%%%%%"+timeSlidesOffset[year]+"!@######"+width +"^^^^^^^^^^^"+energy.time_slides.length+"$$$$$"+type+"~~~~~~~"+(timeSlidesDict[year] + ((1 / timeWindow) * timeSlidesOffset[year]))* (width / energy.time_slides.length));
+      let val = (timeSlidesDict[year] + ((1 / timeWindow) * timeSlidesOffset[year]))
+        * (width / energy.time_slides.length);
+      if (count > 0) {
+        const val0 = (timeSlidesDict[year - 1] + ((1 / timeWindow) * timeSlidesOffset[year - 1]))
+          * (width / energy.time_slides.length);
+        if (val < val0) {
+          val = val0;
+        }
+      }
+      return val;
+    };
     axis = svg.append('g').selectAll('.axis').data(energy.time_slides).enter()
       .append('g')
       .attr('class', 'axis')
@@ -498,7 +513,7 @@ export default class TrendPrediction extends React.PureComponent {
       .on('click', () => {
     });
     link.append('title').text((d) => {
-      return `${d.source.name} → ${d.target.name}${d.source_index}`;
+      return `${d.source.name} → ${d.target.name}`;//`${d.source.name} → ${d.target.name}${d.source_index}`箭头
     });
     // 为sankey图的结点建立力学结构模型，实现用户交互效果
     force = d3.layout.force();
@@ -620,8 +635,10 @@ export default class TrendPrediction extends React.PureComponent {
       .style('display', 'none');
     // 技术趋势图（右下方）的两条包络线,做了减小梯度的处理
     basis = d3.svg.area().x((d, i) => {
-      return x(d.y);
-    }).y0((d) => {
+      return carr[i];
+    }).x0((d, i) => {
+      return carr[i];
+    }).y0((d) => { //为了对称做出下面的处理console.log(d)
       if (d.d < 30) {
         return 200 - (d.d * 5);
       }
@@ -639,6 +656,7 @@ export default class TrendPrediction extends React.PureComponent {
     // 绘制技术趋势图，data对应1个term，趋势由data.year.d的大小反映
     drawFlow = function (data) {
       if (typeof (data) === 'undefined') {
+        console.log('undefined data!')
         return;
       }
       let i;
@@ -661,6 +679,13 @@ export default class TrendPrediction extends React.PureComponent {
       flow.append('path').attr('d', () => {
         data.year.forEach((d) => {
           d.d = d.d;
+        });
+        carr = [];
+        for (const datay in data.year) {
+          carr.push(x(data.year[datay].y));
+        }
+        carr = carr.sort((a, b) => {
+          return a - b;
         });
         return basis(data.year);
       }).style('stroke-width', 0.2).style('stroke', '#60afe9')
@@ -725,7 +750,7 @@ export default class TrendPrediction extends React.PureComponent {
           break;
           i++;
         }
-        if (i % 2 === 0) {
+        if (i % 2 === 0) {//将人错开，人的点
           return `translate(${[x(d.y), 200 - ((i / 2) * 12)]})rotate(${0})`;
         } else {
           return `translate(${[x(d.y), 200 + (((i + 1) / 2) * 12)]})rotate(${0})`;

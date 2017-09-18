@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tabs, Icon, Slider, Button } from 'antd';
 import { connect } from 'dva';
+import { routerRedux, Link } from 'dva/router';
 import d3 from '../../../public/lib/d3.v3';
 import d3sankey from './utils/sankey';
 import styles from './trend-prediction.less';
@@ -92,6 +93,7 @@ export default class TrendPrediction extends React.PureComponent {
       energy.terms.sort((a, b) => {
         return b.freq - a.freq;
       });
+      energy.terms = energy.terms.slice(1,energy.terms.length);//减去词频最高的词语
       drawRightBox();
       const q = query;
       drawFlow(terms[q]);
@@ -102,11 +104,12 @@ export default class TrendPrediction extends React.PureComponent {
       energy.terms.sort((a, b) => {
         return b.freq - a.freq;
       });
+      energy.terms = energy.terms.slice(1,energy.terms.length);//减去词频最高的词语
       const hist = timeline.append('g').selectAll('.term').data(energy.terms).enter()
         .append('g')
         .attr('class', 'term')
         .attr('id', (d) => {
-        return `term-${d.idx}`;
+        return `term-${d.idx}`;//词语
       })
         .attr('transform', (d, i) => {
         return `translate(${[0, (i * timelineItemOffset) + 20]})rotate(${0})`;
@@ -132,7 +135,7 @@ export default class TrendPrediction extends React.PureComponent {
       hist.append('text').attr('text-anchor', 'end').attr('transform', () => {
         return `translate(${[barPos, 0]})rotate(${0})`;
       }).style('font-size', 12)
-        .attr('dy', '.85em')
+        .attr('dy', '0.85em')
         .text((d) => {
           return d.t;
         });
@@ -249,9 +252,9 @@ export default class TrendPrediction extends React.PureComponent {
       console.log('mousewheel');
     });
     svg.append('line').attr('id', 'nvMouse').attr('class', 'hidden').style('stroke', 'red')
-      .style('stroke-width', 5);
-    chart.append('line').attr('x1', 0).attr('x2', width).attr('y1', 360)
-      .attr('y2', 360)
+      .style('stroke-width', 15);
+    chart.append('line').attr('x1', 0).attr('x2', width).attr('y1', 400)
+      .attr('y2', 400)
       .attr('id', 'cutline')
       .style('stroke', 'darkgray')
       .style('stroke-width', 1);// 上下图之间的线的设置
@@ -300,6 +303,7 @@ export default class TrendPrediction extends React.PureComponent {
       energy.terms.sort((a, b) => {
         return b.sum - a.sum;
       });
+      energy.terms = energy.terms.slice(1,energy.terms.length);//减去词频最高的词语
       const hist = timeline.append('g').selectAll('.term').data(energy.terms).enter()
         .append('g')
         .attr('class', 'term')
@@ -420,7 +424,7 @@ export default class TrendPrediction extends React.PureComponent {
       return 0;
     })
       .attr('y2', () => {
-      return 800;// 需调整参数，直线坐标，决定直线长短
+      return 400;// 需调整参数，直线坐标，决定树立直线长短
     })
       .style('stroke', () => {
       return 'lightgray';
@@ -525,7 +529,7 @@ export default class TrendPrediction extends React.PureComponent {
         .select('#value').text(() => {
         return `${d.name}：  ${format(d.value)} ${d.y}`;
       });
-      d3.select('#tooltip').classed('hidden', false).style('visibility', '');
+      //d3.select('#tooltip').classed('hidden', false).style('visibility', ''); 不显示次数
     }).on('mouseout', function () {
       d3.select(this).transition().duration(400).attr('opacity', () => {
         return 1;
@@ -574,9 +578,9 @@ export default class TrendPrediction extends React.PureComponent {
       if (w > 15) {
         w = 15;
       } else if (w < 10 && w > 0) {
-        w = 10;
+        w = 12;
       } else {
-        w = 8;
+        w = 10;
       }
       return `${w}px sans-serif`;
     });
@@ -586,7 +590,7 @@ export default class TrendPrediction extends React.PureComponent {
     force.on('tick', () => {
       node.attr('transform', (d) => {
         d.x = d.pos * (width / energy.time_slides.length);
-        return `translate(${d.x + 50},${d.y})`;// 需调整参数，人图离左边的距离
+        return `translate(${d.x + 50},${d.y})`;// 需调整参数，趋势图离左边、和上面的距离
       });
       sankey.relayout();
       link.attr('d', path);
@@ -641,7 +645,7 @@ export default class TrendPrediction extends React.PureComponent {
       let peopleFlow;
       flow.remove();
       flow = chart.append('g').attr('transform', (d) => {
-        return `translate(${[0, 350]})rotate(${0})`;// 需调整参数，人图的left和top，宽度的起始和旋转,从-300改到了0
+        return `translate(${[0, 450]})rotate(${0})`;// 需调整参数，人图的left和top，宽度的起始和旋转,从-300改到了0
       });
       d3.select('.strong').remove();
       d3.select(`#term-${data.idx}`).append('rect').attr('class', 'strong').attr('x', '0px')
@@ -748,6 +752,8 @@ export default class TrendPrediction extends React.PureComponent {
   };
 
   render() {
+    const hotwords = ['Answer Machine', 'Artificial Intelligence', 'Autopilot', 'BlockChain', 'Computer Vision', 'Data Mining', 'Data Modeling', 'Deep Learning', 'Graph Databases', 'Internet of Things', 'Machine Learning', 'Robotics', 'Networks', 'NLP', 'Neural Network'];
+    let i = 0;
     let url = '';
     let name = '';
     let pos = '';
@@ -764,30 +770,25 @@ export default class TrendPrediction extends React.PureComponent {
         personLinkParams.target = '_blank';
       }
     }
+    const that = this;
     return (
       <div className={styles.trend}>
         <div className={styles.year}>
           <Slider marks={marks} step={10} range defaultValue={[20, 50]} disabled={false} />
         </div>
-        <div className={styles.hotwords}>
-          <p>HOT WORDS</p>
-          <Button.Group>
-            <Button type="dashed" onClick={this.seeword} value="Answer Machine" className={styles.hotword}>Answer Machine</Button>
-            <Button type="dashed" onClick={this.seeword} value="Artificial Intelligence" className={styles.hotword}>Artificial Intelligence</Button>
-            <Button type="dashed" onClick={this.seeword} value="Autopilot" className={styles.hotword}>Autopilot</Button>
-            <Button type="dashed" onClick={this.seeword} value="BlockChain" className={styles.hotword}>BlockChain</Button>
-            <Button type="dashed" onClick={this.seeword} value="Computer Vision" className={styles.hotword}>Computer Vision</Button>
-            <Button type="dashed" onClick={this.seeword} value="Data Mining" className={styles.hotword}>Data Mining</Button>
-            <Button type="dashed" onClick={this.seeword} value="Data Modeling" className={styles.hotword}>Data Modeling</Button>
-            <Button type="dashed" onClick={this.seeword} value="Deep Learning" className={styles.hotword}>Deep Learning</Button>
-            <Button type="dashed" onClick={this.seeword} value="Graph Databases" className={styles.hotword}>Graph Databases</Button>
-            <Button type="dashed" onClick={this.seeword} value="Internet of Things" className={styles.hotword}>Internet of Things</Button>
-            <Button type="dashed" onClick={this.seeword} value="Machine Learning" className={styles.hotword}>Machine Learning</Button>
-            <Button type="dashed" onClick={this.seeword} value="Robotics" className={styles.hotword}>Robotics</Button>
-            <Button type="dashed" onClick={this.seeword} value="Networks" className={styles.hotword}>Networks</Button>
-            <Button type="dashed" onClick={this.seeword} value="NLP" className={styles.hotword}>NLP</Button>
-            <Button type="dashed" onClick={this.seeword} value="Neural Network" className={styles.hotword}>Neural Network</Button>
-          </Button.Group>
+        <div className={styles.keywords}>
+          <div className={styles.inner}>
+            {
+              hotwords.map(function (hw){
+                i++;
+                return (
+                  <div key={i}>
+                    <a key={i} onClick={that.seeword.bind(that, hw)}>{hw}</a>
+                  </div>
+                )
+              })
+            }
+          </div>
         </div>
         <div className={styles.show} id="chart">
           <div className="modal-loading" />
@@ -817,8 +818,8 @@ export default class TrendPrediction extends React.PureComponent {
         </div>
         <div className={styles.nav} id="right-box">
           <Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange}>
-            <TabPane tab={<span><Icon type="calendar" />All</span>} key="1" id="first-three" />
-            <TabPane tab={<span><Icon type="global" />Recent</span>} key="2" id="revert" />
+            <TabPane tab={<span><Icon />All</span>} key="1" id="first-three" />
+            <TabPane tab={<span><Icon />Recent</span>} key="2" id="revert" />
           </Tabs>
         </div>
       </div>

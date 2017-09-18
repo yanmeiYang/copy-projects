@@ -46,7 +46,7 @@ export default {
   'com.searchTypeWidget.label.Relation': 'Relations',
   'com.searchTypeWidget.label.KnowledgeGraph': 'Knowledge Graph',
   'com.searchTypeWidget.label.TrendPrediction': 'Topic Trend',
-  'com.searchTypeWidget.label.ExpertTrajectory': 'Expert Trajectory',
+  'com.searchTypeWidget.label.ExpertTrajectory': 'DEV:Expert Trajectory',
   'com.searchTypeWidget.label.ExpertBase': 'My Experts',
 
   // bole avatar

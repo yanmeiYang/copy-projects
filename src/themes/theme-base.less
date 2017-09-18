@@ -41,6 +41,8 @@ body {
     // .ant-layout-sider { background: white }
   }
 
+  .ant-layout-header{ line-height: normal}
+
   // override others
   .ant-breadcrumb {
     & > span {
@@ -152,18 +154,22 @@ body {
 }
 
 /* ------------------------ Global Components ------------------------ */
-:global {
+.Overrides() {
+  :global {
 
-  .section_header {
-    font-size: @font-size-lg;
-    border-bottom: solid 1px @border-color-base;
-    width: 80%;
-    margin-bottom: 6px;
-    padding-bottom: 2px;
+    .section_header {
+      font-size: @font-size-lg;
+      border-bottom: solid 1px @border-color-base;
+      width: 80%;
+      margin-bottom: 6px;
+      padding-bottom: 2px;
+    }
+
+    .debug-area { border: dashed 1px green; }
+
   }
-
-  .debug-area { border: dashed 1px green; }
 }
+.Overrides() !important;
 
 /* ------------------------ Media ------------------------ */
 

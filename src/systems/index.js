@@ -40,7 +40,7 @@ const defaultSystemConfigs = {
   EnableLocalLocale: false,
   // Language: 'en', // options [cn|en] // TODO change to locale.
   // PreferredLanguage: 'en', // 默认语言 // TODO delete this.
-  GLOBAL_ENABLE_HOC: false,
+  GLOBAL_ENABLE_HOC: true,
   MainListSize: 20,
 
   /**
@@ -112,7 +112,7 @@ const defaultSystemConfigs = {
   ExpertBases: [], // must override.
   DEFAULT_EXPERT_BASE: 'aminer', // 华为默认搜索
   DEFAULT_EXPERT_BASE_NAME: '全球专家',
-  DEFAULT_EXPERT_SEARCH_KEY: 'name',
+  DEFAULT_EXPERT_SEARCH_KEY: 'term',
 
   // > Search related
   SearchBarInHeader: true,

@@ -29,32 +29,6 @@ export default class SearchFilter extends PureComponent {
       <div className={styles.searchFilter}>
         <div className={styles.filter}>
 
-          {/* ------ 搜索范围 ------ */}
-          {!disableExpertBaseFilter && expertBases &&
-          <div className={classnames(styles.filterRow, styles.range)}>
-            <span className={styles.filterTitle}>
-              <FM id="com.search.filter.searchRange"
-                  defaultMessage="Search Range:" />
-            </span>
-            <ul className={styles.filterItems}>
-              {
-                expertBases.map((ep) => {
-                  const props = {
-                    key: ep.id,
-                    className: styles.filterItem,
-                    onChange: () => this.onExpertBaseChange(ep.id, ep.name),
-                    checked: filters.eb && (filters.eb.id === ep.id),
-                  };
-                  return (
-                    <CheckableTag {...props}>
-                      {ep.name}
-                    </CheckableTag>
-                  );
-                })
-              }
-            </ul>
-          </div>}
-
           {/* ------ 过滤条件 ------ */}
           {filters && Object.keys(filters).length > 0 &&
           <div className={styles.filterRow}>
@@ -85,6 +59,32 @@ export default class SearchFilter extends PureComponent {
             </ul>
           </div>}
 
+          {/* ------ 搜索范围 ------ */}
+          {!disableExpertBaseFilter && expertBases &&
+          <div className={classnames(styles.filterRow, styles.range)}>
+            <span className={styles.filterTitle}>
+              <FM id="com.search.filter.searchRange"
+                  defaultMessage="Search Range:" />
+            </span>
+            <ul className={styles.filterItems}>
+              {
+                expertBases.map((ep) => {
+                  const props = {
+                    key: ep.id,
+                    className: styles.filterItem,
+                    onChange: () => this.onExpertBaseChange(ep.id, ep.name),
+                    checked: filters.eb && (filters.eb.id === ep.id),
+                  };
+                  return (
+                    <CheckableTag {...props}>
+                      {ep.name}
+                    </CheckableTag>
+                  );
+                })
+              }
+            </ul>
+          </div>}
+
           {
             aggs.map((agg, index) => {
               if (agg.label === sysconfig.SearchFilterExclude) { // skip gender
@@ -100,7 +100,7 @@ export default class SearchFilter extends PureComponent {
                 // const cnLabel = showChineseLabel(agg.label);
                 return (
                   <div
-                    className={classnames(styles.filterRow, (index === aggs.length - 1) ? 'last' : '')}
+                    className={classnames(styles.filterRow, styles.range, (index === aggs.length - 1) ? 'last' : '')}
                     key={agg.type}
                   >
                     <span className={styles.filterTitle}>
@@ -115,10 +115,10 @@ export default class SearchFilter extends PureComponent {
                         return (
                           <CheckableTag
                             key={`${item.label}_${agg.label}`}
-                            className={styles.filterItem}
+                            className={classnames(styles.filterItem, 'label')}
                             checked={filters[agg.label] === item.label}
                             onChange={onChange}
-                          >{item.label} (<span className={styles.filterCount}>{item.count}</span>)
+                          >{item.label} (<span className={classnames(styles.filterCount, 'label-count')}>{item.count}</span>)
                           </CheckableTag>
                         );
                       })

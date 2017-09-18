@@ -4,6 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
+import { FormattedMessage as FM } from 'react-intl';
 import queryString from 'query-string';
 import { routerRedux } from 'dva/router';
 import { Radio, Tabs, message } from 'antd';
@@ -223,7 +224,9 @@ export default class KnowledgeGraphPage extends React.PureComponent {
           <Message message={popupErrorMessage} />
 
           <div className={styles.title}>
-            <h1> 知识图谱 </h1>
+            <h1>
+              <FM id="com.searchTypeWidget.label.KnowledgeGraph" defaultMessage="Knowledge Graph" />
+            </h1>
 
             {process.env.NODE_ENV !== 'production' &&
             <div className="toolbox" style={{ border: 'dashed 1px green' }}>

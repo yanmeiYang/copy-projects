@@ -20,7 +20,7 @@ export default {
 
   'com.RgSearchNameBox.placeholder': '请输入姓名',
 
-  'com.search.filter.searchRange': '搜索范围:',
+  'com.search.filter.searchRange': '范围:',
   'com.search.filter.Filters': '过滤条件:',
   'com.search.filter.label.h_index': 'h指数',
   'com.search.filter.label.language': '语言',

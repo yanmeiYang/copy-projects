@@ -329,6 +329,7 @@ class ExpertMap extends React.PureComponent {
         map.centerAndZoom(new BMap.Point(
           centerx, centery
         ), scale);
+
         this.initializeBaiduMap(map);
         const markers = [];
         const pId = [];
@@ -426,7 +427,9 @@ class ExpertMap extends React.PureComponent {
           if ((newplace[1] != null && newplace[1] != null) &&
             (newplace[1] !== 0 && newplace[1] !== 0)) {
             pt = new BMap.Point(newplace[1], newplace[0]);// 这里经度和纬度是反着的
-            const marker = new BMap.Marker(pt);
+            const myIcon = new BMap.Icon('/images/map/marker_blue_sprite.png', new BMap.Size(newplace[1], newplace[0]));
+            const marker = new BMap.Marker(pt, { icon: myIcon } );
+            //marker.setIcon();
             const label = new BMap.Label(`<div>${place.results[o].name}</div><div style='display: none;'>${place.results[o].id}</div>`);
             label.setStyle({
               color: 'black',

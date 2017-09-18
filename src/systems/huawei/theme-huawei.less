@@ -14,6 +14,8 @@
 
 .logoZones {
   display: flex; flex-direction: row;
+  height: 66px;
+  line-height: 66px;
   .header_logo {
     width: 50px;
     background-position: -68px -47px;
@@ -23,7 +25,11 @@
   }
 }
 
-.footerText { line-height: 44px; }
+.footerText {
+  display: flex; flex-direction: row; justify-content: flex-end;
+  line-height: 44px;
+  .aminerLogo{ height: 44px; }
+}
 
 .index_bannerZone {
   width: 100%; text-align: center;

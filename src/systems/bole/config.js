@@ -55,6 +55,7 @@ module.exports = {
   Search_DisableExpertBaseFilter: true,
   // Search_DisableSearchKnowledge: false,
   Search_FixedExpertBase: { id: 'aminer', name: '全球专家' },
+  DEFAULT_EXPERT_SEARCH_KEY: 'name',
 
   // SearchFilterExclude: 'Gender',
   // UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // deprecated! Don't use this.

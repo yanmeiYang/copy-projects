@@ -11,7 +11,7 @@ import styles from './index.less';
 const { theme } = sysconfig;
 const tc = applyTheme(styles);
 
-@connect()
+@connect(({ app }) => ({ app }))
 @Auth
 export default class IndexPage extends Component {
   static displayName = 'IndexPage';
@@ -51,7 +51,8 @@ export default class IndexPage extends Component {
           <KgSearchBox
             size="large" onSearch={this.onSearch}
             style={{ width: 515, boxShadow: '0 0 8px 0px rgba(99, 99, 99, 0.5)' }}
-            searchBtnStyle={{ height: 48, width: 115, fontSize: '18px', fontWeight: 'bold'}}
+            searchBtnStyle={{ height: 48, width: 115, fontSize: '18px', fontWeight: 'bold' }}
+            indexPageStyle="indexPageStyle"
           />
         </div>
 

@@ -288,7 +288,10 @@ export default class KgSearchBox extends React.PureComponent {
   render() {
     const { value, suggestions } = this.state;
     const { intl } = this.props;
-    const { size, className, style, btnText, searchPlaceholder, searchBtnStyle } = this.props;
+    const {
+      size, className, style, btnText, searchPlaceholder,
+      searchBtnStyle, indexPageStyle
+    } = this.props;
     // Auto suggest will pass through all these props to the input.
     const inputProps = {
       placeholder: searchPlaceholder || intl.formatMessage(messages.placeholder),
@@ -304,7 +307,7 @@ export default class KgSearchBox extends React.PureComponent {
           className={classnames(styles.search, 'kgsuggest')}
         >
           <Autosuggest
-            id="kgsuggest"
+            id={indexPageStyle || 'kgsuggest'}
             suggestions={suggestions}
             multiSection
             onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}

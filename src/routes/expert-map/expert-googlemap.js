@@ -349,7 +349,7 @@ class ExpertGoogleMap extends React.Component {
               fontStyle: 'italic',
             },
             icon: {
-              url: '/images/map/marker_red_sprite.png',
+              url: '/images/map/marker_blue_sprite.png',
               //fillColor: 'red',
               size: new google.maps.Size(20, 70),
               origin: new google.maps.Point(0, 0),

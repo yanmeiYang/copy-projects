@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { Tooltip, Tag } from 'antd';
+import { classnames } from 'utils/index';
 import styles from './indices.less';
 
 const indicesConfig = {
@@ -11,13 +12,13 @@ const indicesConfig = {
     key: 'h_index',
     letter: 'H',
     tooltip: '学术成就H-index（H）',
-    color: 'gray',
+    color: 'h_index',
   },
   activity: {
     key: 'activity',
     letter: 'A',
     tooltip: '学术活跃度（A）',
-    color: 'pink',
+    color: 'activity',
     render: (indices) => {
       return indices.activity.toFixed(2);
     },
@@ -26,7 +27,7 @@ const indicesConfig = {
     key: 'new_star',
     letter: 'S',
     tooltip: '领域新星（S）',
-    color: 'gray',
+    color: 'new_star',
     render: (indices) => {
       return indices.new_star.toFixed(2);
     },
@@ -35,13 +36,13 @@ const indicesConfig = {
     key: 'num_citation',
     letter: 'c',
     tooltip: '引用数（c）',
-    color: 'blue',
+    color: 'num_citation',
   },
   num_pubs: {
     key: 'num_pubs',
     letter: 'P',
     tooltip: '论文数（P）',
-    color: 'gray',
+    color: 'num_pubs',
   },
   activityRankingContrib: {// special for ccf.
     key: 'activity-ranking-contrib',
@@ -68,7 +69,7 @@ const Indices = ({ indices, activity_indices, showIndices }) => {
   }
 
   return (
-    <div className="score-line">
+    <div className={styles.scoreLine}>
       {indicesKeys && indicesKeys.length > 0 &&
       indicesKeys.map((key) => {
         const ic = indicesConfig[key];
@@ -77,9 +78,9 @@ const Indices = ({ indices, activity_indices, showIndices }) => {
         }
         return (
           <Tooltip key={ic.key} placement="top" title={ic.tooltip}>
-            <span className={`score ${ic.color}`}>
-              <span className="l">{ic.letter}</span>
-              <span className="r">
+            <span className={classnames(styles.score, styles[ic.color])}>
+              <span className={styles.l}>{ic.letter}</span>
+              <span className={styles.r}>
                 {ic.render ? ic.render(indices, activity_indices) : indices[ic.key]}
               </span>
             </span>

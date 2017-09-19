@@ -51,6 +51,7 @@ export default class RelationGraph extends React.PureComponent {
     this.webconnect = '';
 
     this.loadingInterval = null; // used to disable interval.
+    this.hideInfoTimeOUt = null;
   }
 
   state = {
@@ -86,6 +87,9 @@ export default class RelationGraph extends React.PureComponent {
     if (this.loadingInterval) {
       clearInterval(this.loadingInterval);
     }
+    // 清除timeout、删除用于提示专家名字的div
+    clearTimeout(this.hideInfoTimeOUt);
+    document.body.removeChild(document.getElementById('tip'));
   }
 
   showVis = (t) => {
@@ -587,7 +591,7 @@ export default class RelationGraph extends React.PureComponent {
       }
     };
     const hideInfo = (d) => {
-      setTimeout(() => {
+      this.hideInfoTimeOUt = setTimeout(() => {
         if (!mouseOnDiv) {
           document.getElementById('tip').style.display = 'none';
         }
@@ -1456,7 +1460,10 @@ export default class RelationGraph extends React.PureComponent {
             <div className={styles.action}>
               <label>相关操作：</label>
               {/* <Checkbox checked={subnet_selection} onChange={this.changeModle1}>子网选取</Checkbox> */}
-              <Button className={classnames({ active: suspension_adjustment, [styles.selected]: suspension_adjustment })}
+              <Button className={classnames({
+                active: suspension_adjustment,
+                [styles.selected]: suspension_adjustment
+              })}
                       onClick={this.changeModle2}>
                 <span className={classnames('icon', styles.stop_drag_icon)} />
                 暂停调整
@@ -1467,8 +1474,8 @@ export default class RelationGraph extends React.PureComponent {
                 两点路径
               </Button>
               {/*<Button onChange={this.changeModle4}>*/}
-                {/*<span className={classnames('icon', styles.continue_paths_icon)} />*/}
-                {/*连续路径*/}
+              {/*<span className={classnames('icon', styles.continue_paths_icon)} />*/}
+              {/*连续路径*/}
               {/*</Button>*/}
               {/*<Checkbox checked={continuous_path} onChange={this.changeModle4}>连续路径</Checkbox>*/}
               {/*<Checkbox checked={single_extension} onChange={this.changeModle5}>单点扩展</Checkbox>*/}
@@ -1491,10 +1498,12 @@ export default class RelationGraph extends React.PureComponent {
         {this.currentModle3 &&
         <div className={styles.twoExpertPathBySearch}>
           <span>
-            <RgSearchNameBox size="default" style={{ width: 230 }} onSearch={this.onSearchTwoPaths}
+            <RgSearchNameBox size="default" style={{ width: 230 }}
+                             onSearch={this.onSearchTwoPaths}
                              suggesition={this.state.allNodes} hideSearchBtn />
             &nbsp;-&nbsp;
-            <RgSearchNameBox size="default" style={{ width: 230 }} onSearch={this.onSearchTwoPaths}
+            <RgSearchNameBox size="default" style={{ width: 230 }}
+                             onSearch={this.onSearchTwoPaths}
                              suggesition={this.state.allNodes} hideSearchBtn />
             &nbsp;
             <Button type="primary" size="small" onClick={this.changeModle3}>取消选择</Button>

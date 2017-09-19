@@ -22,7 +22,7 @@ export default class TrendPredictionPage extends React.Component {
 
   componentWillMount() {
     let { query } = queryString.parse(location.search);
-    query = query || 'data mining';
+    query = query || 'Data Mining';
     if (query) {
       this.setState({ query });
     }

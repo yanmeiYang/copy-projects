@@ -4,6 +4,7 @@ import { routerRedux, Link } from 'dva/router';
 import { FormattedMessage as FM } from 'react-intl';
 import { Layout } from 'routes';
 import { sysconfig, applyTheme } from 'systems';
+import { classnames } from 'utils/index';
 import { KgSearchBox } from 'components/search';
 import { Auth } from 'hoc';
 import styles from './index.less';
@@ -57,7 +58,7 @@ export default class IndexPage extends Component {
         </div>
 
         <div className={styles.keywords}>
-          <div className={styles.inner}>
+          <div className={classnames(styles.inner, 'keywords_inner')}>
             {commonSearch.map((query, index) => {
               return (
                 <div key={query}>

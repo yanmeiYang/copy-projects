@@ -131,7 +131,7 @@ class KnowledgeGraphTextTree extends React.PureComponent {
         {/* Search for: {query} */}
 
         {!tops && <div>
-          <span className={styles.emptyBlock}>Please input a keyword above!</span>
+          <span className={styles.emptyBlock}>Please input a keyword above</span>
         </div>
         }
 

@@ -192,7 +192,7 @@ export default class KnowledgeGraphPage extends React.PureComponent {
     }
   };
 
-  EmptyBlock = <span className={styles.emptyBlock}>Please select a node!</span>;
+  EmptyBlock = <span className={styles.emptyBlock}>Please select a node</span>;
 
   render() {
     const load = this.props.loading.models.knowledgeGraph;

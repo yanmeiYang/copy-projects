@@ -1,5 +1,37 @@
 @import "./theme-base";
 
+/* ------------------------ Override antd ------------------------ */
+
+:global {
+  .ant-btn .anticon { font-weight: bold; }
+  .ant-btn {
+    padding: 0 10px; font-size: @font-size-lg; border-radius: 0px;
+    border-color: @btn-bg-color;
+  }
+  .ant-btn-primary {
+    background-color: @btn-bg-color;
+    border-color: @btn-bg-color;
+  }
+  .ant-btn:hover, .ant-btn.active {
+    background-color: @btn-bg-color;
+    border-color: @btn-bg-color;
+    color: #ffffff;
+  }
+  .ant-btn:focus { color: #1d2129 }
+  .ant-menu {
+    line-height: 64px;
+    .ant-menu-item { padding: 0 10px; }
+  }
+
+  .ant-tag-checkable:hover { background: @btn-bg-color; }
+  .ant-tag-checkable:hover, .ant-tag-checkable:active, .ant-tag-checkable-checked {
+    background: @btn-bg-color;
+    color: white; }
+
+}
+
+/* ------------------------ Global Components ------------------------ */
+
 .Overrides() {
   :global {
     #root {
@@ -36,31 +68,3 @@
 }
 
 .Overrides() !important;
-
-:global {
-  .ant-btn .anticon { font-weight: bold; }
-  .ant-btn {
-    padding: 0 10px; font-size: @font-size-lg; border-radius: 0px;
-    border-color: @btn-bg-color;
-  }
-  .ant-btn-primary {
-    background-color: @btn-bg-color;
-    border-color: @btn-bg-color;
-  }
-  .ant-btn:hover, .ant-btn.active {
-    background-color: @btn-bg-color;
-    border-color: @btn-bg-color;
-    color: #ffffff;
-  }
-  .ant-btn:focus { color: #1d2129 }
-  .ant-menu {
-    line-height: 64px;
-    .ant-menu-item { padding: 0 10px; }
-  }
-
-  .ant-tag-checkable:hover { background: @btn-bg-color; }
-  .ant-tag-checkable:hover, .ant-tag-checkable:active, .ant-tag-checkable-checked {
-    background: @btn-bg-color;
-    color: white; }
-
-}

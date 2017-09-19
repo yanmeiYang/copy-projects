@@ -2,9 +2,12 @@
  * Created by BoGao on 2017/6/20.
  */
 import React from 'react';
+import { Link } from 'dva/router';
 import defaults from '../utils';
-import { AddToEBButton } from './components';
-import ViewExpertInfo from '../../components/person/view-expert-info';
+import { AddToEBButton, PersonRemoveButton, PersonComment } from './components';
+import { GetComments } from './person-comment-hooks';
+
+import { createRoster } from '../../hooks';
 
 module.exports = {
 
@@ -21,7 +24,7 @@ module.exports = {
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
   Header_SubTextLogo: '伯乐系统',
-  Header_SubTextStyle: { width: 168, position: 'relative', left: -72 },
+  Header_SubTextStyle: { width: 90, left: -54, marginLeft: -80 },
   // Header_LogoStyle: {
   //   top: '-10px',
   //   width: '60px',
@@ -29,8 +32,13 @@ module.exports = {
   //   backgroundSize: 'auto 56px',
   //   backgroundPosition: '0px -10px',
   // },
-  Header_LogoWidth: 276,
+  Header_LogoWidth: 118,
   Header_UserPageURL: '/user-info',
+  Header_RightZone: [() => <Link key="0" to="/eb/59a8e5879ed5db1fc4b762ad/-/0/20">我的专家库</Link>], // TODO make this a Component.
+  // Header_RightZone: [
+  //   () => <a key="0" href="/eb/59a8e5879ed5db1fc4b762ad" target="_blank">我的专家库</a>,
+  // ],
+
   // Footer_Content: '',
   // ShowHelpDoc: true,
 
@@ -41,35 +49,56 @@ module.exports = {
 
   // > Search related
   SearchBarInHeader: true,
-  HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertBase'], // ExpertBase bole专有
+  // HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertBase'], // ExpertBase bole专有
+  HeaderSearch_TextNavi: [],
+
+  // Search_DisableFilter: false,
+  Search_DisableExpertBaseFilter: true,
+  // Search_DisableSearchKnowledge: false,
+  Search_FixedExpertBase: { id: 'aminer', name: '全球专家' },
+
   // SearchFilterExclude: 'Gender',
   // UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // deprecated! Don't use this.
 
   /**
    * Page specified config.
    */
-  IndexPage_QuickSearchList: ['Medical Robotics', 'Surgical Robots', 'Robot Kinematics',
-    'Computer Assisted Surgery', 'Surgical Navigation', 'Minimally Invasive Surgery'],
 
   /**
    * PersonList
-   * PersonList_RightZone 右侧显示内容
-   * */
+   */
   // PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
   // PersonList_PersonLink_NewTab: true,
-  Person_PersonLabelBlock: // profile => 'jsx',
-    person => <AddToEBButton person={person} key="2" ExpertBase="59a8e5879ed5db1fc4b762ad" />,
-  PersonList_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST, // [()=><COMP>]
-  // PersonList_RightZone: [
-  // person => <ViewExpertInfo person={person} key="1" />,
-  // ,
-  // ],
+  // param: [person, eb{id,name}]
+  PersonList_TitleRightBlock:
+    ({ param }) => (
+      <AddToEBButton
+        person={param.person} key="2"
+        expertBaseId={param.expertBaseId}
+        targetExpertBase="59a8e5879ed5db1fc4b762ad"
+      />),
 
+  PersonList_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
+  PersonList_BottomZone: [
+    param => (
+      <PersonComment
+        person={param.person} user={param.user} key="1"
+
+        ExpertBase="59a8e5879ed5db1fc4b762ad"
+      />),
+  ],
+  // PersonList_DidMountHooks: [],
+  PersonList_UpdateHooks: [
+    param => GetComments(param),
+  ],
+
+  Search_CheckEB: true, // Check ExpertBase.
 
   // 地图中心点
   // CentralPosition: { lat: 37.09024, lng: -95.712891 },
-  // Person_PersonLabelBlock: defaults.EMPTY_BLOCK,
 
+  IndexPage_QuickSearchList: ['Medical Robotics', 'Surgical Robots', 'Robot Kinematics',
+    'Computer Assisted Surgery', 'Surgical Navigation', 'Minimally Invasive Surgery'],
 
   ExpertBases: [
     {
@@ -77,13 +106,18 @@ module.exports = {
       name: <span><i className="fa fa-globe fa-fw" />全球专家</span>,
       nperson: 2871,
     },
-    {
-      id: '59a8e5879ed5db1fc4b762ad', // medrob eb id: 599bc0a49ed5db3ea1b61c60
-      name: '我的专家库',
-      nperson: 50,
-    },
+    // {
+    //   id: '59a8e5879ed5db1fc4b762ad', // medrob eb id: 599bc0a49ed5db3ea1b61c60
+    //   name: '我的专家库',
+    //   nperson: 100,
+    // },
   ],
 
   // bole系统独有设置
-  ExpertBase: '59a8e5879ed5db1fc4b762ad', // Only ExpertBase ID.
+  ExpertBase: '59a8e5879ed5db1fc4b762ad',
+
+  // bole 智库权限设置 TODO param => xxx
+  HOOK: [
+    (dispatch, id, email, name, perm) => createRoster(dispatch, id, email, name, perm),
+  ],
 };

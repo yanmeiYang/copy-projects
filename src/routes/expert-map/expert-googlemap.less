@@ -9,6 +9,10 @@
     flex: 0;
     margin: 12px 0 5px 0;
     .scopes { display: flex; align-items: baseline; align-self: center; }
+    .left {
+      display: flex;
+      .domainSelector { width: 240px; margin-left: 24px; margin-top: 6px; }
+    }
   }
 
   .map {
@@ -102,6 +106,10 @@
     overflow: scroll;
   }
 
+  .labelstyle {
+    z-index: 10002;
+    margin-top: 40px;
+  }
 }
 
 .legend {
@@ -127,6 +135,7 @@
       width: 40px; height: 15px; color: #008cff; text-align: center; border-right: white;
     }
     .text { color: #333333 }
+    .label { width: 100px; color: #333333; }
     .item1 { background-color: #008cff; color: #008cff; }
     .item2 { background-color: #ffbf00; color: #ffbf00; }
     .item3 { background-color: #ff0000; color: #ff0000; }
@@ -139,3 +148,6 @@
   margin-left: 20px;
 }
 
+.labelstyle {
+  z-index: 10002;
+}

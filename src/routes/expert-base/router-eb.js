@@ -7,9 +7,24 @@ export default {
     models: () => [import('models/expert-base/expert-base')],
     component: () => import('routes/expert-base/ExpertBaseHome'),
   },
-  ExpertBaseExpertsPage: {
+
+  ExpertBaseExpertsPage: { // deprecated and make this redirect.
     path: '/eb/:id', // TODO 添加权限验证.
-    models: () => [import('models/expert-base/expert-base')],
+    models: () => [
+      import('models/search'),
+      import('models/expert-base/expert-base'),
+      import('models/person-comments'),
+    ],
+    component: () => import('./ExpertBaseExpertsPage'),
+  },
+
+  ExpertBaseExpertsPageWithPager: {
+    path: '/eb/:id/:query/:offset/:size',
+    models: () => [
+      import('models/search'),
+      import('models/expert-base/expert-base'),
+      import('models/person-comments'),
+    ],
     component: () => import('./ExpertBaseExpertsPage'),
   },
 

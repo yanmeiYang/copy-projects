@@ -144,6 +144,7 @@ class AddExpertModal extends React.Component {
       img: defaultImg,
       phone: '',
       pos: [],
+      role: this.speakerInformation.role,
     };
     this.props.parentProps.dispatch({ type: 'seminar/cancleSuggestExpert', payload: data });
   };
@@ -190,17 +191,17 @@ class AddExpertModal extends React.Component {
     };
     talk.title = this.refs.talkTitle.refs.input.value;
     talk.speaker = state.speakerInfo;
-    if (typeof state.speakerInfo.gender === 'number') {
-      return talk.speaker.gender;
-    } else if (typeof state.speakerInfo.gender === 'object') {
-      talk.speaker.gender = parseInt(state.speakerInfo.gender.i);
-    } else {
-      talk.speaker.gender = 1;
+    if (typeof state.speakerInfo.gender !== 'number') {
+      if (typeof state.speakerInfo.gender === 'object') {
+        talk.speaker.gender = parseInt(state.speakerInfo.gender.i);
+      } else {
+        talk.speaker.gender = 1;
+      }
     }
     if (state.talkStartValue || state.talkEndValue) {
       talk.time = {};
     }
-    talk.speaker.role = state.speakerInfo.role !== undefined ? state.speakerInfo.role : [];
+    talk.speaker.role = state.speakerInfo.role || [];
     if (state.talkStartValue) {
       talk.time.from = typeof state.talkStartValue === 'string' ? state.talkStartValue : state.talkStartValue.toJSON();
     }
@@ -246,7 +247,6 @@ class AddExpertModal extends React.Component {
   };
   expertRoleChange = (value) => {
     this.speakerInformation.role = value;
-    console.log(this.speakerInformation.role);
   };
 
   jumpToStep2 = () => {
@@ -456,14 +456,13 @@ class AddExpertModal extends React.Component {
                             </span>}</p>
                           </div>
                           <div className={styles.tagWrap}>
-                            {speaker.tags && speaker.tags.slice(0, 5).map((tag) => {
+                            {speaker.tags && speaker.tags.slice(0, 5).map((tag, index) => {
                               if (tag === 'Null') {
                                 return '';
                               }
                               return (
-                                <Link key={Math.random()}>
-                                  <Tag className={styles.tag}>{tag.t}</Tag>
-                                </Link>
+                                <Tag key={`${tag.t}_${index}`}
+                                     className={styles.tag}>{tag.t}</Tag>
                               );
                             })}
                           </div>

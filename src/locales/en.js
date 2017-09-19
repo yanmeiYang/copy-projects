@@ -18,6 +18,8 @@ export default {
   'com.KgSearchBox.placeholder': 'Input expert name or query',
   'com.KgSearchBox.searchBtn': 'Search',
 
+  'com.RgSearchNameBox.placeholder': 'Input expert name',
+
   'com.search.filter.searchRange': 'Range:',
   'com.search.filter.Filters': 'Filters:',
   'com.search.filter.label.h_index': 'H-Index',
@@ -31,12 +33,13 @@ export default {
   'com.search.filter.label2.Gender': 'Gender',
 
   'com.search.sort.label.relevance': 'Relevance',
-  'com.search.sort.label.h_index': 'h-index',
+  'com.search.sort.label.h_index': 'H-Index',
   'com.search.sort.label.activity': 'Activity',
   'com.search.sort.label.rising_star': 'Rising Star',
   'com.search.sort.label.n_citation': '#Citation',
   'com.search.sort.label.n_pubs': '#Paper',
   'com.search.sort.label.activity-ranking-contrib': 'Contrib',
+  'com.search.sort.label.time': 'Time',
 
   'com.searchTypeWidget.label.ExpertSearch': 'Experts',
   'com.searchTypeWidget.label.ExpertMap': 'Maps',
@@ -46,11 +49,12 @@ export default {
   'com.searchTypeWidget.label.ExpertTrajectory': 'Expert Trajectory',
   'com.searchTypeWidget.label.ExpertBase': 'My Experts',
 
-  // bole avart
+  // bole avatar
   'com.bole.ExpertPhoto': 'No Avatar',
-  // bole add button
   'com.bole.AddButton': 'Add',
-  'com.bole.AddedSuccessfully': 'Added Successfully',
+  'com.bole.Remove': 'Remove',
+  'com.bole.PersonRemoveButton': 'Remove',
+  'com.bole.PersonComment': 'Comments',
 
   'com.PersonList.label.views': 'views',
   'com.PersonList.label.homepage': 'Homepage',

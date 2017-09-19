@@ -4,7 +4,7 @@
 export default {
   ThirdLogin: {
     path: '/auth',
-    models: () => [import('models/auth/auth')],
+    models: () => [import('models/auth')],
     component: () => import('./'),
   },
 };

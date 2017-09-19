@@ -1,3 +1,5 @@
+import d3 from '../../../../public/lib/d3.v3';
+
 function d3sankey(){
   d3.sankey = function() {
     var sankey = {},

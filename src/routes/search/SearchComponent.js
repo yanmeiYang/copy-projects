@@ -1,29 +1,50 @@
 import React, { Component, PureComponent, PropTypes } from 'react';
-import { routerRedux, Link } from 'dva/router';
+import { routerRedux, Link, withRouter } from 'dva/router';
 import { connect } from 'dva';
 import { isEqual } from 'lodash';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import queryString from 'query-string';
 import classnames from 'classnames';
 import { Tabs, Pagination } from 'antd';
+import { Spinner } from 'components';
+import { PersonList, ExportPersonBtn } from 'components/person';
+import { SearchFilter, SearchSorts, KgSearchBox, SearchKnowledge } from 'components/search';
+import { sysconfig } from 'systems';
+import { createURL } from 'utils';
+import { Auth } from 'hoc';
 import styles from './SearchComponent.less';
-import { PersonList } from '../../components/person';
-import { Spinner } from '../../components';
-import { sysconfig } from '../../systems';
-import { KnowledgeGraphSearchHelper } from '../knowledge-graph';
-import { SearchFilter, KgSearchBox, SearchKnowledge } from '../../components/search';
-import ExportPersonBtn from '../../components/person/export-person';
-import { Auth } from '../../hoc';
 
 // TODO Extract Search Filter into new Component.
 // TODO Combine search and uniSearch into one.
-const TabPane = Tabs.TabPane;
-
-const defaultSorts = ['relevance', 'h_index', 'activity', 'rising_star', 'n_citation', 'n_pubs'];
 
 @connect(({ app, search, loading }) => ({ app, search, loading }))
+@withRouter
 @Auth
 export default class SearchComponent extends Component {
+  static displayName = 'SearchComponent';
+
+  static contextTypes = {};
+
+  static propTypes = {
+    // className: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    className: PropTypes.string,
+    disableFilter: PropTypes.bool,
+    disableExpertBaseFilter: PropTypes.bool,
+    disableSearchKnowledge: PropTypes.bool,
+    sorts: PropTypes.array, // pass through
+    defaultSortType: PropTypes.string,
+    onSearchBarSearch: PropTypes.func,
+    showSearchBox: PropTypes.bool, // has search box?
+    fixedExpertBase: PropTypes.object,
+  };
+
+  static defaultProps = {
+    disableFilter: false,
+    disableExpertBaseFilter: false,
+    defaultSortType: 'relevance',
+  };
+
+
   constructor(props) {
     super(props);
     this.dispatch = props.dispatch;// TODO remove
@@ -35,11 +56,11 @@ export default class SearchComponent extends Component {
         name: sysconfig.DEFAULT_EXPERT_BASE_NAME,
       };
     }
+    console.log('>>>>>>>>>>>>>>>>>>>>>', props);
+    this.state = {
+      sortType: props.defaultSortType,
+    };
   }
-
-  state = {
-    sortType: 'relevance',
-  };
 
   componentWillMount() {
     this.doSearchUseProps(); // Init search.
@@ -100,11 +121,15 @@ export default class SearchComponent extends Component {
   };
 
   onPageChange = (page) => {
-    const { query, pagination } = this.props.search;
+    const { match, dispatch, search } = this.props;
+    const { query, pagination } = search;
     const { pageSize } = pagination;
-    this.dispatch(routerRedux.push({
-      pathname: `/${sysconfig.SearchPagePrefix}/${query}/${(page - 1) * pageSize}/${pageSize}`,
-    }));
+    const pathname = createURL(match.path, match.params, {
+      query: query || '-',
+      offset: (page - 1) * pageSize,
+      size: pageSize,
+    });
+    dispatch(routerRedux.push({ pathname }));
   };
 
   // ExpertBase filter 'eb' is a special filter.
@@ -132,53 +157,64 @@ export default class SearchComponent extends Component {
   };
 
   doSearch = (query, offset, size, filters, sort, dontRefreshUrl) => {
+    const { dispatch, fixedExpertBase } = this.props;
+
+    // 如果是fixed，那么重置所有的filters
+    if (fixedExpertBase && fixedExpertBase.id) {
+      filters.eb = fixedExpertBase; // eslint-disable-line no-param-reassign
+    }
+
     let filtersLength = 0;
     for (const item of Object.values(filters)) {
       if (typeof item === 'string') {
         filtersLength = item.split('#')[1];
       }
     }
-    this.dispatch({ type: 'search/translateSearch', payload: { query } });
-    this.dispatch({
+    dispatch({ type: 'search/translateSearch', payload: { query } });
+    dispatch({
       type: 'search/searchPerson',
       payload: { query, offset, size, filters, sort, total: parseInt(filtersLength) },
     });
-    this.dispatch({
+    dispatch({
       type: 'search/searchPersonAgg',
       payload: { query, offset, size, filters, sort },
     });
-    this.dispatch({
-      type: 'search/getTopicByMention',
-      payload: {
-        mention: query,
-      },
-    });
     if (!dontRefreshUrl) {
-      this.dispatch(routerRedux.push({
-        pathname: `/${sysconfig.SearchPagePrefix}/${query}/0/${size}`,
-      }));
+      const { match } = this.props;
+      const pathname = createURL(match.path, match.params, {
+        query: query || '-',
+        offset: 0,
+        size,
+      });
+      dispatch(routerRedux.push({ pathname }));
+      // this.dispatch(routerRedux.push({
+      //   pathname: `/${sysconfig.SearchPagePrefix}/${query}/0/${size}`,
+      // }));
     }
   };
 
 
   render() {
-    console.log('>>-->nnmn^o^ Referesh too mach!!', this.props.showSearchBox);
-    const { className } = this.props;
-    const sorts = this.props.sorts || defaultSorts;
+    const { disableExpertBaseFilter, disableFilter, disableSearchKnowledge } = this.props;
+    const { className, sorts, expertBaseId } = this.props;
     const { sortType } = this.state;
+
     // .........
     const { results, pagination, query, aggs, filters, topic } = this.props.search;
     const { pageSize, total, current } = pagination;
     const load = this.props.loading.effects['search/searchPerson'];
-    const operations = (
+
+    const expertBase = (filters && filters.eb && filters.eb.id) || 'aminer';
+
+    const SearchSortsRightZone = !sysconfig.Enable_Export ? [] : [() => (
       <ExportPersonBtn
         query={query} pageSize={pageSize} current={current}
-        filters={filters} sort={this.state.sortType} />
-    );
+        filters={filters} sort={sortType} key="0"
+      />
+    )];
+    // console.log('|||||||||||||||||||||||||||||', SearchSortsRightZone);
 
     // TODO move translate search out.
-    const exportArea = sysconfig.Enable_Export ? operations : '';
-
     const { useTranslateSearch, translatedQuery } = this.props.search;
     return (
       <div className={classnames(styles.component, className)}>
@@ -207,55 +243,61 @@ export default class SearchComponent extends Component {
                     id="search.translateSearchMessage.1"
                     values={{ enQuery: translatedQuery }}
                 />&nbsp;
-                <Link onClick={this.doTranslateSearch.bind(this, false)}>
+                <a onClick={this.doTranslateSearch.bind(this, false)}>
                   <FM defaultMessage="Search '{cnQuery}' only."
                       id="search.translateSearchMessage.2"
                       values={{ cnQuery: query }} />
-                </Link>
+                </a>
               </div>
               }
 
               {!useTranslateSearch && translatedQuery &&
-              <Link onClick={this.doTranslateSearch.bind(this, true)}>
+              <a onClick={this.doTranslateSearch.bind(this, true)}>
                 <FM defaultMessage="You can also search with both '{enQuery}' and '{cnQuery}'."
                     id="search.translateSearchMessage.reverse"
                     values={{ enQuery: translatedQuery, cnQuery: query }}
                 />
-              </Link>
+              </a>
               }
             </div>
             }
 
-            {/* Filter */}
+            {/* ---- Filter ---- */}
+            {!disableFilter &&
             <SearchFilter
-              filters={filters} aggs={aggs}
+              filters={filters}
+              aggs={aggs}
               onFilterChange={this.onFilterChange}
               onExpertBaseChange={this.onExpertBaseChange}
-            />
+              disableExpertBaseFilter={disableExpertBaseFilter}
+            />}
+
           </div>
 
         </div>
 
-        {/* Sort */}
         <div className={styles.view}>
-          {sorts && sorts.length > 0 &&
-          <Tabs defaultActiveKey={sortType} size="small" className={styles.maxWidth}
-                onChange={this.onOrderChange} tabBarExtraContent={exportArea}>
-            {sorts && sorts.map((sortItem) => {
-              const icon = sortItem === sortType ? <i className="fa fa-sort-amount-desc" /> : '';
-              const tab = (<span><FM id={`com.search.sort.label.${sortItem}`}
-                                     defaultMessage={sortItem} /> {icon}</span>);
-              return <TabPane tab={tab} key={sortItem} />;
-            })}
-          </Tabs>
-          }
+
+          {/* Sort */}
+          <SearchSorts
+            sorts={sorts}
+            sortType={this.state.sortType}
+            rightZone={SearchSortsRightZone}
+            onOrderChange={this.onOrderChange}
+          />
 
           <Spinner loading={load} />
           <div className={styles.personAndKg}>
             <div>
-              <PersonList persons={results}
-                          personLabel={sysconfig.Person_PersonLabelBlock}
-                          rightZoneFuncs={sysconfig.PersonList_RightZone}
+              <PersonList
+                persons={results}
+                user={this.props.app.user}
+                expertBaseId={expertBaseId}
+                titleRightBlock={sysconfig.PersonList_TitleRightBlock}
+                rightZoneFuncs={sysconfig.PersonList_RightZone}
+                bottomZoneFuncs={sysconfig.PersonList_BottomZone}
+                didMountHooks={sysconfig.PersonList_DidMountHooks}
+                UpdateHooks={sysconfig.PersonList_UpdateHooks}
               />
               <div className={styles.paginationWrap}>
                 <Pagination
@@ -268,7 +310,11 @@ export default class SearchComponent extends Component {
                 />
               </div>
             </div>
-            {topic.label && <SearchKnowledge topic={topic} />}
+
+            {/* ---- Search Knowledge ---- */}
+            {!disableSearchKnowledge &&
+            <SearchKnowledge query={query} />}
+
           </div>
         </div>
 
@@ -276,11 +322,3 @@ export default class SearchComponent extends Component {
     );
   }
 }
-
-SearchComponent.propTypes = {
-  // className: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  className: PropTypes.string,
-  sorts: PropTypes.array,
-  onSearchBarSearch: PropTypes.func,
-  showSearchBox: PropTypes.bool, // has search box?
-};

@@ -12,7 +12,7 @@ export default {
   ExpertMapGoogle: {
     path: '/expert-googlemap',
     models: () => [import('models/expert-map')],
-    component: () => import('./expert-googlemap'),
+    component: () => import('./ExpertGoogleMapPage'),
   },
 
   ExpertTrajectoryPage: {

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Input, Button } from 'antd';
+import { defineMessages, injectIntl } from 'react-intl';
 import Autosuggest from 'react-autosuggest';
 import styles from './RgSearchNameBox.less';
 
@@ -14,7 +15,19 @@ function renderSuggestion(suggestion) {
   );
 }
 
-class RgSearchNameBox extends React.Component {
+const messages = defineMessages({
+  placeholder: {
+    id: 'com.RgSearchNameBox.placeholder',
+    defaultMessage: 'Input expert name',
+  },
+  searchBtn: {
+    id: 'com.KgSearchBox.searchBtn',
+    defaultMessage: 'Search',
+  },
+});
+
+@injectIntl
+export default class RgSearchNameBox extends React.Component {
   constructor() {
     super();
 
@@ -67,12 +80,14 @@ class RgSearchNameBox extends React.Component {
       this.props.onSearch(this.state.finalNode);
     }
   };
+
   render() {
     const { value, suggestions } = this.state;
-    const { size, style } = this.props;
+    const { intl } = this.props;
+    const { size, style, hideSearchBtn } = this.props;
     this.props.suggesition.slice(0, 10);
     const inputProps = {
-      placeholder: "请输入姓名",
+      placeholder: intl.formatMessage(messages.placeholder),
       value,
       onChange: this.onChange,
     };
@@ -94,14 +109,15 @@ class RgSearchNameBox extends React.Component {
             inputProps={inputProps}
             size={size}
           />
+          {!hideSearchBtn &&
           <Button
             size={size}
             type="primary"
             onClick={this.handleSubmit}
-          >搜索</Button>
+          >{intl.formatMessage(messages.searchBtn)}</Button>
+          }
         </Input.Group>
       </form>
     );
   }
 }
-export default (RgSearchNameBox);

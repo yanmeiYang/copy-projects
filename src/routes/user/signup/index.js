@@ -12,6 +12,7 @@ import { contactByJoint, getValueByJoint } from '../../../services/seminar';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+
 // const AutocompleteOption = AutoComplete.Option;
 
 class Registered extends React.Component {
@@ -114,6 +115,7 @@ class Registered extends React.Component {
         data.sub = true;
         data.role = this.state.currentRoleAndOrg;
         data.password = values.password || ' ';
+        data.dispatch = this.props.dispatch;
         that.props.dispatch({ type: 'auth/createUser', payload: data });
         Modal.success({
           title: '创建用户',

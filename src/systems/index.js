@@ -36,7 +36,7 @@ const defaultSystemConfigs = {
   EnableLocalLocale: false,
   // Language: 'en', // options [cn|en] // TODO change to locale.
   // PreferredLanguage: 'en', // 默认语言 // TODO delete this.
-  GLOBAL_ENABLE_HOC: false,
+  GLOBAL_ENABLE_HOC: true,
   MainListSize: 20,
 
   /**
@@ -50,6 +50,7 @@ const defaultSystemConfigs = {
   Header_SubTextLogo: '子标题',
   Header_SubTextStyle: {},
   Header_UserPageURL: '', // 用户头像点击之后去的页面.
+  Header_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
   ShowHelpDoc: false, // 显示帮助文档
   Header_UserNameBlock: defaults.IN_APP_DEFAULT, // 显示登录用户名
   // footer and sidebar
@@ -69,8 +70,13 @@ const defaultSystemConfigs = {
   Search_EnableCCFPin: false, // TODO bad：CCF PIN
   Search_EnableTranslateSearch: true, // 启用翻译搜索，显示提示信息;
   Search_DefaultTranslateSearch: false, // 默认使用翻译搜索;
-
   Search_EnableKnowledgeGraphHelper: true,
+  Search_FixedExpertBase: null,
+
+  Search_DisableFilter: false,
+  Search_DisableExpertBaseFilter: false,
+  Search_DisableSearchKnowledge: false,
+
   Search_SortOptions: defaults.IN_APP_DEFAULT,
 
   UserAuthSystem: System, // aminer 或者是 system.config
@@ -82,15 +88,18 @@ const defaultSystemConfigs = {
   /**
    * Page specified config.
    */
+
   /**
    * PersonList
-   * PersonList_RightZone 右侧显示内容
-   * */
+   */
   PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
   PersonList_PersonLink_NewTab: true,
-  Person_PersonLabelBlock: defaults.EMPTY_BLOCK_FUNC, // profile => 'jsx',
+  PersonList_TitleRightBlock: defaults.EMPTY_BLOCK_FUNC, // profile => 'jsx',
   PersonList_RightZone: defaults.IN_APP_DEFAULT, // [()=><COMP>]
-  Search_CheckEB: true,
+  PersonList_BottomZone: defaults.IN_APP_DEFAULT,
+  PersonList_DidMountHooks: defaults.EMPTY_BLOCK_FUNC_LIST,
+  PersonList_UpdateHooks: defaults.EMPTY_BLOCK_FUNC_LIST,
+  Search_CheckEB: false,
 
   // > Search
   // expert base
@@ -98,6 +107,7 @@ const defaultSystemConfigs = {
   ExpertBases: [], // must override.
   DEFAULT_EXPERT_BASE: 'aminer', // 华为默认搜索
   DEFAULT_EXPERT_BASE_NAME: '全球专家',
+  DEFAULT_EXPERT_SEARCH_KEY: 'name',
 
   // > Search related
   SearchBarInHeader: true,
@@ -117,6 +127,8 @@ const defaultSystemConfigs = {
   // > Admin Users
   Admin_Users_ShowAdmin: true,
   // PersonList_ShowIndices: [], // do not override in-component settings. // TODO
+
+  HOOK: [],// TODO >>>>????????
 
 };
 

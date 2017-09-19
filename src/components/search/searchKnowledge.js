@@ -4,41 +4,77 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Icon } from 'antd';
-import TopicBarChart from '../../components/topicBarChart';
+// import { compare } from 'utils';
+import TopicBarChart from 'components/topicBarChart';
 import styles from './searchKnowledge.less';
 
 
-@connect()
+@connect(({ search }) => ({ search }))
 export default class SearchKnowledge extends React.PureComponent {
+  componentWillMount() {
+    this.props.dispatch({
+      type: 'search/getTopicByMention',
+      payload: {
+        mention: this.props.query,
+      },
+    });
+  }
+
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.search.query !== this.props.search.query) {
+      return true;
+    }
+    if (nextProps.search.topic !== this.props.search.topic) {
+      return true;
+    }
+    return false;
+  }
+
+  componentWillUpdate(nextProps) {
+    if (nextProps.query !== this.props.query) {
+      this.props.dispatch({
+        type: 'search/getTopicByMention',
+        payload: {
+          mention: nextProps.query,
+        },
+      });
+    }
+  }
+
+
   render() {
-    const topic = this.props.topic;
+    const topic = this.props.search.topic;
     return (
       <div className={styles.searchKgContent}>
-        <div className={styles.innerBox}>
-          <h2>
-            <strong>{topic.label}</strong>
-            {topic.label_zh && <span>&nbsp; ({topic.label_zh})</span>}
-            <hr className={styles.hrStyle} />
-          </h2>
-          <h4 className={styles.subTitleColor}>
-            <strong>
-              <Icon type="line-chart" /> &nbsp;
-              Popularity Over Time:
-            </strong>
-          </h4>
+        {
+          topic.label && topic.label.toLowerCase() !== 'null' &&
+          <div className={styles.innerBox}>
+            <h2>
+              <strong>{topic.label}</strong>
+              {topic.label_zh && <span>&nbsp; ({topic.label_zh})</span>}
+              <hr className={styles.hrStyle} />
+            </h2>
+            <h4 className={styles.subTitleColor}>
+              <strong>
+                <Icon type="line-chart" /> &nbsp;
+                Popularity Over Time:
+              </strong>
+            </h4>
 
-          <TopicBarChart topic={topic} />
+            <TopicBarChart topic={topic} />
 
-          {topic.desc &&
-          <h4 className={styles.subTitleColor}>
-            <strong>
-              <Icon type="book" />&nbsp;
-              Description:
-            </strong>
-          </h4>}
-          {topic.desc && <p>{topic.desc}</p>}
-          {topic.desc_zh && <p>{topic.desc_zh}</p>}
-        </div>
+            {topic.desc &&
+            <h4 className={styles.subTitleColor}>
+              <strong>
+                <Icon type="book" />&nbsp;
+                Description:
+              </strong>
+            </h4>}
+            {topic.desc && <p>{topic.desc}</p>}
+            {topic.desc_zh && <p>{topic.desc_zh}</p>}
+          </div>
+        }
+
       </div>
     );
   }

@@ -17,7 +17,7 @@ class PersonLabel extends React.PureComponent {
       <div className={styles.pl}>
         {p && p.pin && p.pin.l && p.pin.l.length > 0 && p.pin.l.map((ebid) => {
           let label = ACMFellowExpertBaseIndex[ebid]
-            ? <Tag color="green">ACM Fellow</Tag> : '';
+            ? <Tag className={styles.personLabel}>ACM Fellow</Tag> : '';
           if (!label || label === '') {
             const tueb = TopUnivExpertBaseIndex[ebid];
             label = tueb ? (

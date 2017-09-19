@@ -82,7 +82,7 @@ export default {
       const { data } = yield call(searchService.searchPerson,
         query, offset, size, noTotalFilters, sort, useTranslateSearch);
       yield put({ type: 'updateFilters', payload: { filters } });
-      yield put({ type: 'updateSortKey', payload: { sort } });
+      yield put({ type: 'updateSortKey', payload: { key: sort } });
       yield put({ type: 'searchPersonSuccess', payload: { data, query, total } });
     },
 

@@ -57,6 +57,7 @@ export default class SearchSorts extends React.PureComponent {
       <Tabs
         className={classnames(styles.searchSorts)}
         defaultActiveKey={sortType}
+        activeKey={sortType}
         size="small"
         onChange={this.onOrderChange}
         tabBarExtraContent={rightZoneJSX}

@@ -95,7 +95,7 @@ export default class TrendPrediction extends React.PureComponent {
       energy.terms.sort((a, b) => {
         return b.freq - a.freq;
       });
-      energy.terms = energy.terms.slice(1,energy.terms.length);//减去词频最高的词语
+      energy.terms = energy.terms.slice(1, energy.terms.length);//减去词频最高的词语
       drawRightBox();
       const q = query;
       drawFlow(terms[q]);
@@ -106,7 +106,7 @@ export default class TrendPrediction extends React.PureComponent {
       energy.terms.sort((a, b) => {
         return b.freq - a.freq;
       });
-      energy.terms = energy.terms.slice(1,energy.terms.length);//减去词频最高的词语
+      energy.terms = energy.terms.slice(1, energy.terms.length);//减去词频最高的词语
       const hist = timeline.append('g').selectAll('.term').data(energy.terms).enter()
         .append('g')
         .attr('class', 'term')
@@ -114,7 +114,7 @@ export default class TrendPrediction extends React.PureComponent {
         return `term-${d.idx}`;//词语
       })
         .attr('transform', (d, i) => {
-        return `translate(${[0, (i * timelineItemOffset) + 20]})rotate(${0})`;
+        return `translate(${[0, (i * timelineItemOffset) + 0]})rotate(${0})`;//顶到最前面，不用加20，改为0
       })
         .on('click', (d) => {
         drawFlow(d);
@@ -153,7 +153,7 @@ export default class TrendPrediction extends React.PureComponent {
     let word = '';
     if (loc != null) {
       if (loc[1] != null) {
-        word = decodeURI(loc[1]);
+        word = decodeURI(loc[1]).replace('#', '');
       }
     }
     if (word === '' && cquery === '') {
@@ -248,7 +248,7 @@ export default class TrendPrediction extends React.PureComponent {
       .attr('z-index', 1);
     chart.append('linearGradient').attr('id', 'xiangyu');
     d3.select('#wordid').remove();
-    timeline = d3.select('#right-box').append('svg').attr('overflow', 'scroll').attr('z-index', 2).attr('id','wordid');
+    timeline = d3.select('#right-box').append('svg').attr('overflow', 'scroll').attr('z-index', 2).attr('id','wordid').attr('overflow-y', 'scroll');//里面的高度
     const svg = chart.append('g').attr('height', 350).attr('id', 'trend').attr('z-index', 2);
     svg.on('mousewheel', () => {
       console.log('mousewheel');
@@ -282,11 +282,11 @@ export default class TrendPrediction extends React.PureComponent {
       people[t.id] = t;
     });
     timeline.attr('height', () => {
-      return 25 * energy.terms.length;
+      return (20 * energy.terms.length) + 20; //svg高度，每个词是20
     });
     timeline.append('line').attr('x1', barPos + 10).attr('x2', barPos + 10).attr('y1', 0)
       .attr('y2', () => {
-      return 25 * energy.terms.length;
+      return (20 * energy.terms.length) + 20; //svg高度，每个词是20
     })
       .style('stroke', 'gray')
       .style('stroke-width', 0.5);
@@ -310,7 +310,7 @@ export default class TrendPrediction extends React.PureComponent {
         .append('g')
         .attr('class', 'term')
         .attr('transform', (d, i) => {
-        return `translate(${[0, (i * timelineItemOffset) + 20]})rotate(${0})`;// 左侧图离标签页的距离，字和直方图的旋转
+        return `translate(${[0, (i * timelineItemOffset) + 0]})rotate(${0})`;// 左侧图离标签页的距离，字和直方图的旋转
       })
         .attr('id', (d) => {
         return `term-${d.idx}`;
@@ -368,7 +368,7 @@ export default class TrendPrediction extends React.PureComponent {
         return `term-${d.idx}`;
       })
         .attr('transform', (d, i) => {
-        return `translate(${[0, (i * timelineItemOffset) + 20]})rotate(${0})`;
+        return `translate(${[0, (i * timelineItemOffset) + 0]})rotate(${0})`;//顶到最前面，不用加20，改为0
       })
         .on('click', (d) => {
         drawFlow(d);
@@ -841,11 +841,12 @@ export default class TrendPrediction extends React.PureComponent {
             <strong id="value1" />
           </div>
         </div>
-        <div className={styles.nav} id="right-box">
+        <div className={styles.nav}>
           <Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange}>
-            <TabPane tab={<span><Icon />All</span>} key="1" id="first-three" />
-            <TabPane tab={<span><Icon />Recent</span>} key="2" id="revert" />
+            <TabPane tab={<span><Icon />All</span>} key="1" id="first-three"></TabPane>
+            <TabPane tab={<span><Icon />Recent</span>} key="2" id="revert"></TabPane>
           </Tabs>
+          <div  id="right-box" className={styles.rightbox}></div>
         </div>
       </div>
     );

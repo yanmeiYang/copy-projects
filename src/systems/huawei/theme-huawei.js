@@ -32,7 +32,7 @@ module.exports = {
   footer: (
     <div className={styles.footerText}>
       {/*版权所有 &copy; 清华大学，华为技术有限公司.*/}
-      <div>技术支持：</div>
+      <div>Powered by：</div>
       <a href="https://aminer.org">
         <img src="/aminer_logo.png" alt="AMiner logo" className={styles.aminerLogo} />
       </a>

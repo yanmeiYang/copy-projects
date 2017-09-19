@@ -17,11 +17,11 @@
   height: 800px;
 }
 .nav {
-  width: 320px;
+  width: 280px;
   height: 500px;
   float: left;
-  overflow-y: scroll;
-  overflow-x: auto;
+  overflow-y: hidden;
+  overflow-x: hidden;
   z-index: 200;
   position:absolute;
   margin-left:80px;
@@ -30,6 +30,13 @@
   cursor: pointer;
   border-right:solid 1px rgb(212, 212, 212);
   //display: none;
+}
+.rightbox {
+  width: 280px;
+  height: 500px;
+  float: left;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 .show {
   width:100%;
@@ -112,10 +119,10 @@
     div {
       border: none; border-radius: 32px;
       padding: 0px 10px; margin: 4px 5px;
-      background-color: rgba(52, 106, 133, 1);
+      background-color: rgba(62, 155, 201, 1);
 
-      a { color: #d4e7f0; font-size: @font-size-lg; }
+      a { color: #ffffff; font-size: @font-size-lg; }
     }
-    div:hover { background-color: rgba(34, 70, 88, 1); }
+    div:hover { background-color: rgba(0, 122, 175, 1); }
   }
 }

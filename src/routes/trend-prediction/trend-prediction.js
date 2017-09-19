@@ -41,8 +41,6 @@ let timeSlidesDict;
 let timeSlidesOffset;
 let timeWindow;
 let x;
-let xnew;
-let query;
 let cperson;
 let carr = [];
 const TabPane = Tabs.TabPane;
@@ -57,6 +55,7 @@ const marks = {
     label: <strong>100°C</strong>,
   },
 };
+const hotwords = ['Answer Machine', 'Artificial Intelligence', 'Autopilot', 'BlockChain', 'Computer Vision', 'Data Mining', 'Data Modeling', 'Deep Learning', 'Graph Databases', 'Internet of Things', 'Machine Learning', 'Robotics', 'Networks', 'NLP', 'Neural Network'];
 /**
  * Component
  * @param id
@@ -75,7 +74,7 @@ export default class TrendPrediction extends React.PureComponent {
 
   componentDidMount() {
     d3sankey();
-    this.showtrend('');
+    this.showtrend(this.props.query);
   }
 
   shouldComponentUpdate(nextProps) {
@@ -87,18 +86,21 @@ export default class TrendPrediction extends React.PureComponent {
     return true;
   }
 
+
+
   onChange = (key) => {
-    if (key === '1') {
+    if (key === '1') { //全局的时候按照词频排序
       d3.select('.active').classed('active', false);
       d3.select(this.parentNode).classed('active', true);
       d3.selectAll('.term').remove();
       energy.terms.sort((a, b) => {
-        return b.freq - a.freq;
+        return b.sum - a.sum;
       });
-      energy.terms = energy.terms.slice(1, energy.terms.length);//减去词频最高的词语
+      if (energy.terms[0].t.toLowerCase() === this.props.query) {
+        energy.terms = energy.terms.slice(1, energy.terms.length);//减去词频最高的词语
+      }
       drawRightBox();
-      const q = query;
-      drawFlow(terms[q]);
+      drawFlow(energy.terms[0]);
     } else {
       d3.select('.active').classed('active', false);
       d3.select(this.parentNode).classed('active', 'true');
@@ -106,19 +108,21 @@ export default class TrendPrediction extends React.PureComponent {
       energy.terms.sort((a, b) => {
         return b.freq - a.freq;
       });
-      energy.terms = energy.terms.slice(1, energy.terms.length);//减去词频最高的词语
+      if (energy.terms[0].t.toLowerCase() === this.props.query) {
+        energy.terms = energy.terms.slice(1, energy.terms.length);//减去词频最高的词语
+      }
       const hist = timeline.append('g').selectAll('.term').data(energy.terms).enter()
         .append('g')
         .attr('class', 'term')
         .attr('id', (d) => {
-        return `term-${d.idx}`;//词语
-      })
+          return `term-${d.idx}`;//词语
+        })
         .attr('transform', (d, i) => {
-        return `translate(${[0, (i * timelineItemOffset) + 0]})rotate(${0})`;//顶到最前面，不用加20，改为0
-      })
+          return `translate(${[0, (i * timelineItemOffset) + 10]})rotate(${0})`;//顶到最前面，不用加20，改为0
+        })
         .on('click', (d) => {
-        drawFlow(d);
-      });
+          drawFlow(d);
+        });
       // 页面左侧统计模块的直方图
       hist.append('rect').attr('x', () => {
         return barPos + 10;
@@ -126,13 +130,13 @@ export default class TrendPrediction extends React.PureComponent {
         return 0;
       }).attr('height', 18)
         .attr('width', (d) => {
-        return (histHeight * d.freq) / maxFreq;
-      })
+          return (histHeight * d.freq) / maxFreq;
+        })
         .style('fill-opacity', 0.7)
         .style('fill', '#60aFe9')
         .append('svg:title')
         .text((d) => {
-          return d.sum;
+          return d.freq;
         });
       hist.append('text').attr('text-anchor', 'end').attr('transform', () => {
         return `translate(${[barPos, 0]})rotate(${0})`;
@@ -141,28 +145,28 @@ export default class TrendPrediction extends React.PureComponent {
         .text((d) => {
           return d.t;
         });
-      const q = query;
-      drawFlow(terms[q]);
+      drawFlow(energy.terms[0]);
     }
+  }
+
+  ishot = (w) => {
+    let flag = true;
+    const w1 = w.toLowerCase().replace(/^\s+|\s+$/g,' ').trim();
+    for (const h in hotwords) {
+      const word = hotwords[h].toLowerCase().replace(/^\s+|\s+$/g,' ').trim();
+      if (w1 === word) {
+        flag = false;
+        return hotwords[h];
+      }
+    }
+    return flag;
   }
 
   showtrend = (cquery) => {
     d3.select('#tooltip').classed('hidden', true).style('visibility', 'hidden');//最开始的时候都将它们设置为不可见
     d3.select('#tooltip1').classed('hidden', true).style('visibility', 'hidden');
-    const loc = window.location.href.split('query=');
-    let word = '';
-    if (loc != null) {
-      if (loc[1] != null) {
-        word = decodeURI(loc[1]).replace('#', '');
-      }
-    }
-    if (word === '' && cquery === '') {
-      word = 'Data Mining';
-    }
-    if (word === '' && cquery !== '') {
-      word = cquery;
-    }
-    if (word === 'Answer Machine' || word === 'Artificial Intelligence' || word === 'Autopilot' || word === 'BlockChain' || word === 'Computer Vision' || word === 'Data Mining' || word === 'Data Modeling' || word === 'Deep Learning' || word === 'Graph Databases' || word === 'Internet of Things' || word === 'Machine Learning' || word === 'Robotics' || word === 'Networks' || word === 'NLP' || word === 'Neural Network') {
+    let word = (cquery === '') ? this.props.query : cquery;
+    if (this.ishot(word) !== false) {
       const res = wget('/lab/trend-prediction/' + word + '.json');
       res.then((data) => {
         energy = data;
@@ -191,7 +195,7 @@ export default class TrendPrediction extends React.PureComponent {
           return this.renderTopic('big data', 1, 1000);
         });*/
         // 显示整个界面的方法，sankey为技术发展图
-        this.renderTopic('big data', 1, 1000);
+        this.renderTopic(word, 1, 1000);
       });
     } else {
       const res = externalRequest('http://166.111.7.173:9997/' + word);
@@ -214,29 +218,21 @@ export default class TrendPrediction extends React.PureComponent {
         barPos = 150;// 直方图左边文字的宽度
         timelineItemOffset = 20;// 左侧直方图的间隔距离
         histHeight = 100;// 左侧直方图的高度
-        d3.select(window).on('resize', () => { // 窗口改变的时候重新加载
-          return this.renderTopic('big data', 1, 1000);
+        /*d3.select(window).on('resize', () => { // 窗口改变的时候重新加载
+          return this.renderTopic(this.props.query, 1, 1000);
         });
         d3.select('#trend').on('click', () => { // trend被点击的时候重新加载
-          return this.renderTopic('big data', 1, 1000);
-        });
+          return this.renderTopic(this.props.query, 1, 1000);
+        });*/
         // 显示整个界面的方法，sankey为技术发展图
-        this.renderTopic('big data', 1, 1000);
+        this.renderTopic(word, 1, 1000);
       });
     }
-  }
-
-  seeword = (w) => {
-    const word = w;
-    let href = window.location.href.split('?query=')[0] + '?query=' + word;
-    href = href.replace('#', '');
-    window.location.href = href;
   }
 
   renderTopic = function (q, start, end) {
     document.getElementById('chart').innerHTML = '';
     const that = this;
-    query = q;
     const sankey = d3.sankey().nodeWidth(0).nodePadding(0).size([width, 330]);// 上方趋势图的宽度
     const path = sankey.link();
     // 界面中的技术发展图（右上方）和趋势图（右下方）
@@ -282,11 +278,11 @@ export default class TrendPrediction extends React.PureComponent {
       people[t.id] = t;
     });
     timeline.attr('height', () => {
-      return (20 * energy.terms.length) + 20; //svg高度，每个词是20
+      return (21 * energy.terms.length); //svg高度，每个词是20
     });
     timeline.append('line').attr('x1', barPos + 10).attr('x2', barPos + 10).attr('y1', 0)
       .attr('y2', () => {
-      return (20 * energy.terms.length) + 20; //svg高度，每个词是20
+      return (21 * energy.terms.length); //svg高度，每个词是20
     })
       .style('stroke', 'gray')
       .style('stroke-width', 0.5);
@@ -301,16 +297,20 @@ export default class TrendPrediction extends React.PureComponent {
     d3.select('.active').classed('active', false);
     d3.select('#first-three').classed('active', 'true');
     // 左侧的统计框
+    let termbyfre=[];
     drawRightBox = function () { // 右侧的
       energy.terms.sort((a, b) => {
         return b.sum - a.sum;
       });
-      energy.terms = energy.terms.slice(1,energy.terms.length);//减去词频最高的词语
+      if (energy.terms[0].t.toLowerCase() === that.props.query) {
+        energy.terms = energy.terms.slice(1, energy.terms.length);//减去词频最高的词语
+      }
       const hist = timeline.append('g').selectAll('.term').data(energy.terms).enter()
         .append('g')
         .attr('class', 'term')
         .attr('transform', (d, i) => {
-        return `translate(${[0, (i * timelineItemOffset) + 0]})rotate(${0})`;// 左侧图离标签页的距离，字和直方图的旋转
+          termbyfre[i] = d;
+        return `translate(${[0, (i * timelineItemOffset) + 10]})rotate(${0})`;// 左侧图离标签页的距离，字和直方图的旋转
       })
         .attr('id', (d) => {
         return `term-${d.idx}`;
@@ -368,7 +368,7 @@ export default class TrendPrediction extends React.PureComponent {
         return `term-${d.idx}`;
       })
         .attr('transform', (d, i) => {
-        return `translate(${[0, (i * timelineItemOffset) + 0]})rotate(${0})`;//顶到最前面，不用加20，改为0
+        return `translate(${[0, (i * timelineItemOffset) + 10]})rotate(${0})`;//顶到最前面，不用加20，改为0
       })
         .on('click', (d) => {
         drawFlow(d);
@@ -410,19 +410,6 @@ export default class TrendPrediction extends React.PureComponent {
     x = function (year) {
       return (timeSlidesDict[year] + ((1 / timeWindow) * timeSlidesOffset[year]))
         * (width / energy.time_slides.length);
-    };
-    xnew = function (year, count) {//处理数据不平滑的问题
-      //console.log(year+"&&&&&&&&&"+timeSlidesDict[year]+"!!!!!!!!!" +timeWindow+"%%%%%%%"+timeSlidesOffset[year]+"!@######"+width +"^^^^^^^^^^^"+energy.time_slides.length+"$$$$$"+type+"~~~~~~~"+(timeSlidesDict[year] + ((1 / timeWindow) * timeSlidesOffset[year]))* (width / energy.time_slides.length));
-      let val = (timeSlidesDict[year] + ((1 / timeWindow) * timeSlidesOffset[year]))
-        * (width / energy.time_slides.length);
-      if (count > 0) {
-        const val0 = (timeSlidesDict[year - 1] + ((1 / timeWindow) * timeSlidesOffset[year - 1]))
-          * (width / energy.time_slides.length);
-        if (val < val0) {
-          val = val0;
-        }
-      }
-      return val;
     };
     axis = svg.append('g').selectAll('.axis').data(energy.time_slides).enter()
       .append('g')
@@ -638,7 +625,7 @@ export default class TrendPrediction extends React.PureComponent {
       return carr[i];
     }).x0((d, i) => {
       return carr[i];
-    }).y0((d) => { //为了对称做出下面的处理console.log(d)
+    }).y0((d) => { //为了对称做出下面的处理
       if (d.d < 30) {
         return 200 - (d.d * 5);
       }
@@ -773,11 +760,10 @@ export default class TrendPrediction extends React.PureComponent {
         return 'orangered';
       });
     };
-    drawFlow(terms['all pair']);
+    drawFlow(termbyfre[0]);
   };
 
   render() {
-    const hotwords = ['Answer Machine', 'Artificial Intelligence', 'Autopilot', 'BlockChain', 'Computer Vision', 'Data Mining', 'Data Modeling', 'Deep Learning', 'Graph Databases', 'Internet of Things', 'Machine Learning', 'Robotics', 'Networks', 'NLP', 'Neural Network'];
     let i = 0;
     let url = '';
     let name = '';
@@ -804,13 +790,13 @@ export default class TrendPrediction extends React.PureComponent {
         <div className={styles.keywords}>
           <div className={styles.inner}>
             {
-              hotwords.map(function (hw){
+              hotwords.map((hw) => {
                 i++;
                 return (
                   <div key={i}>
-                    <a key={i} onClick={that.seeword.bind(that, hw)}>{hw}</a>
+                    <a key={i} onClick={that.showtrend.bind(that, hw)}>{hw}</a>
                   </div>
-                )
+                );
               })
             }
           </div>
@@ -842,11 +828,11 @@ export default class TrendPrediction extends React.PureComponent {
           </div>
         </div>
         <div className={styles.nav}>
-          <Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange}>
-            <TabPane tab={<span><Icon />All</span>} key="1" id="first-three"></TabPane>
-            <TabPane tab={<span><Icon />Recent</span>} key="2" id="revert"></TabPane>
+          <Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange} className={styles.tabs}>
+            <TabPane tab={<span>Recent</span>} key="1" id="first-three" />
+            <TabPane tab={<span>All</span>} key="2" id="revert" />
           </Tabs>
-          <div  id="right-box" className={styles.rightbox}></div>
+          <div id="right-box" className={styles.rightbox} />
         </div>
       </div>
     );

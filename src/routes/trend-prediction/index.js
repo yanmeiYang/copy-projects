@@ -16,12 +16,13 @@ export default class TrendPredictionPage extends React.Component {
   }
 
   state = {
-    query: 'data mining',
+    query: '',
     mapType: 'baidu', // [baidu|google]
   };
 
   componentWillMount() {
-    const { query } = queryString.parse(location.search);
+    let { query } = queryString.parse(location.search);
+    query = query || 'data mining';
     if (query) {
       this.setState({ query });
     }

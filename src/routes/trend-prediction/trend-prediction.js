@@ -165,7 +165,7 @@ export default class TrendPrediction extends React.PureComponent {
   showtrend = (cquery) => {
     d3.select('#tooltip').classed('hidden', true).style('visibility', 'hidden');//最开始的时候都将它们设置为不可见
     d3.select('#tooltip1').classed('hidden', true).style('visibility', 'hidden');
-    let word = (cquery === '') ? this.props.query : cquery;
+    const word = (cquery === '') ? this.props.query : cquery;
     if (this.ishot(word) !== false) {
       const res = wget('/lab/trend-prediction/' + word + '.json');
       res.then((data) => {
@@ -228,6 +228,7 @@ export default class TrendPrediction extends React.PureComponent {
         this.renderTopic(word, 1, 1000);
       });
     }
+    this.props.dispatch({ type: 'app/layout', payload: { headerSearchBox: { query: word } } });
   }
 
   renderTopic = function (q, start, end) {

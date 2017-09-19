@@ -76,8 +76,17 @@ export default class RgSearchNameBox extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
+    let searchExpert = null;
     if (this.props.onSearch) {
-      this.props.onSearch(this.state.finalNode);
+      if (this.state.finalNode.name && this.state.finalNode.name.n.en === this.state.value) {
+        searchExpert = this.state.finalNode;
+      } else {
+        const value = this.state.suggestions.filter(lang =>
+          lang.name.n.en.toLowerCase().trim().includes(this.state.value.toLowerCase().trim()),
+        );
+        searchExpert = value[0];
+      }
+      this.props.onSearch(searchExpert);
     }
   };
 

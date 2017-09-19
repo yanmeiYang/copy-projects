@@ -123,8 +123,8 @@ class Registered extends React.Component {
           title: '创建用户',
           content: sysconfig.Signup_Password ?
             <div>
-              <p>创建成功, 请发邮件告知Royce.lee@argcv.com</p>
-              <p>登录密码: 123456</p>
+              <p>创建成功, 请发邮件告知{data.email}</p>
+              <p>登录密码: {data.password}</p>
             </div>
             : '创建成功',
           onOk() {

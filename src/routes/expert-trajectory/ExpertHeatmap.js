@@ -66,6 +66,7 @@ const themes = {
     lineBlendMode: '',
     line2BlendMode: '',
     symbolColor: '#f3f49f',
+    // symbolColor: '#deded7',
   },
 };
 
@@ -124,7 +125,7 @@ class ExpertHeatmap extends React.Component {
         location = heatData.locations;
         table = heatData.table;
         authors = heatData.authors;
-        // authorImage = heatData.authorImage;
+        authorImage = heatData.authorImage;
         locationName = heatData.locationName;
         this.playon = this.state.startYear;
         this.setHeatmap(); // 热力图
@@ -234,6 +235,7 @@ class ExpertHeatmap extends React.Component {
           }
         }
       }
+      // console.log("+++++++++",authorImg)
 
 
       // 第二年数据
@@ -302,6 +304,7 @@ class ExpertHeatmap extends React.Component {
     //   option2.geo.zoom = (params.originX)/352;
     //   // option2.geo.zoom = params.zoom;
     // });
+    // console.log("-------------",authorImgWest, authorImgMid, authorImgEast)
     option2.series = this.getHeatSeries(geoCoordMap, data, 0, false, index, nextYearData, data1, data2, authorImgWest, authorImgMid, authorImgEast);
     // console.log(JSON.stringify(option2, null, 4));
     this.myChart2.setOption(option2, true);
@@ -526,15 +529,16 @@ class ExpertHeatmap extends React.Component {
         trigger: 'item',
         confine: true,
       },
-      legend: {
-        orient: 'vertical',
-        y: 'bottom',
-        x: 'right',
-        data: ['location'],
-        textStyle: {
-          color: '#fff',
-        },
-      },
+      text:['200','0'],
+      // legend: {
+      //   orient: 'vertical',
+      //   y: 'bottom',
+      //   x: 'right',
+      //   data: ['location'],
+      //   textStyle: {
+      //     color: '#fff',
+      //   },
+      // },
       geo: {
         zoom: 1.2,
         map: 'world',
@@ -1042,7 +1046,7 @@ class ExpertHeatmap extends React.Component {
           east += 1;
         }
       });
-
+console.log("temp",temp)
       return temp;
     };
 
@@ -1133,6 +1137,7 @@ class ExpertHeatmap extends React.Component {
           east += 1;
         }
       });
+      console.log("temp2",temp)
         return temp;
     };
 
@@ -1441,7 +1446,7 @@ class ExpertHeatmap extends React.Component {
           trailLength: 0,
           color: themes[this.state.theme].symbolColor,
           symbol: 'arrow',
-          symbolSize: 5,
+          symbolSize: 8,
           animation: false,
           // animationThreshold:10000,
         },
@@ -1453,7 +1458,7 @@ class ExpertHeatmap extends React.Component {
           normal: {
             color: themes[this.state.theme].lineColor,
             // width: 10,
-            width: 1.0,// 1.6,
+            width: 1.6,// 1.6,
             opacity: 1,
             curveness: 0.2,
           },
@@ -1493,7 +1498,7 @@ class ExpertHeatmap extends React.Component {
           trailLength: 0,
           color: themes[this.state.theme].planColor,
           symbol: planePath,
-          symbolSize: 18,
+          symbolSize: 30,
           animation: false,
           // animationThreshold:10000,
         },
@@ -1505,7 +1510,7 @@ class ExpertHeatmap extends React.Component {
           normal: {
             color: themes[this.state.theme].lineColor,
             // width: 10,
-            width: 1.0,// 1.6,
+            width: 1.6,// 1.6,
             opacity: 1,
             curveness: 0.2,
           },
@@ -1734,31 +1739,31 @@ class ExpertHeatmap extends React.Component {
     const ifPlay = this.state.ifPlay;
     return (
       <div>
-        {/*<div className={styles.heat} id="heatmap" style={{ height: '1800px', width: '3500px' }} onClick={this.onMapClick} />*/}
-        <div className={styles.heat} id="heatmap" style={{ height: '670px', width: '1150px' }} onClick={this.onMapClick} />
-        <div>
-          <Button className={styles.plus} type="primary" ghost icon="plus" onClick={this.plusHeatZoom} />
-        </div>
-        <div>
-          <Button className={styles.minus} type="primary" ghost icon="minus" onClick={this.minusHeatZoom} />
-        </div>
-        <div>
-          <Button className={styles.light} type="primary" ghost onClick={this.onThemeChangeDark}>dark</Button>
-        </div>
-        <div>
-          <Button className={styles.dark} type="primary" ghost onClick={this.onThemeChangeLight}>light</Button>
-        </div>
+        <div className={styles.heat} id="heatmap" style={{ height: '1800px', width: '3500px' }} onClick={this.onMapClick} />
+        {/*<div className={styles.heat} id="heatmap" style={{ height: '670px', width: '1150px' }} onClick={this.onMapClick} />*/}
+        {/*<div>*/}
+          {/*<Button className={styles.plus} type="primary" ghost icon="plus" onClick={this.plusHeatZoom} />*/}
+        {/*</div>*/}
+        {/*<div>*/}
+          {/*<Button className={styles.minus} type="primary" ghost icon="minus" onClick={this.minusHeatZoom} />*/}
+        {/*</div>*/}
+        {/*<div>*/}
+          {/*<Button className={styles.light} type="primary" ghost onClick={this.onThemeChangeDark}>dark</Button>*/}
+        {/*</div>*/}
+        {/*<div>*/}
+          {/*<Button className={styles.dark} type="primary" ghost onClick={this.onThemeChangeLight}>light</Button>*/}
+        {/*</div>*/}
 
         {/*<div className={styles.two} style={{ color: '#f5f3f0', fontSize: '200px', fontWeight: '600' }} id="showYear">*/}
-        {/*<div className={styles.two} style={{ color: '#f5f3f0', fontSize: '50px', fontWeight: '600' }} id="showYear">*/}
-          {/*<h1> {yearNow}</h1>*/}
-        {/*</div>*/}
+        <div className={styles.two} style={{ color: '#f5f3f0', fontSize: '20px', fontWeight: '50' }} id="showYear">
+          <h1> {yearNow}</h1>
+        </div>
 
 
         <Row>
           <Col span={22}>
             <Slider min={this.state.startYear} max={this.state.endYear} onChange={this.onChange} onAfterChange={this.onAfterChange}value={this.state.inputValue} />
-            {/* <Slider min={startYear} max={endYear} range step={1} defaultValue={[1999, 1999]} onChange={this.onDbChange} /> */}
+             {/*<Slider min={startYear} max={endYear} range step={1} defaultValue={[1999, 1999]} onChange={this.onDbChange} />*/}
           </Col>
           <Col span={1}>
             <InputNumber

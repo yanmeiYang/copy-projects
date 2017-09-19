@@ -177,13 +177,13 @@ export default class TrendPrediction extends React.PureComponent {
           left: 1,
         };
         width = 1300; // 需调整参数，容器宽度
-        height = 900 - margin.top - margin.bottom; // 需调整参数，容器高度
+        height = 500 - margin.top - margin.bottom; // 需调整参数，容器高度，华为修改500，四个地方，另外三个为隐藏
         formatNumber = d3.format(',.0f');
         format = function (d) { // 格式化为整数，点出现的次数
           return `${formatNumber(d)} Times`;
         };
         color = d3.scale.category10();// d3图的配色样式
-        chart = d3.select('#chart').append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);
+        chart = d3.select('#chart').append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom);//隐藏
         barPos = 150;// 直方图左边文字的宽度
         timelineItemOffset = 20;// 左侧直方图的间隔距离
         histHeight = 100;// 左侧直方图的高度
@@ -208,7 +208,7 @@ export default class TrendPrediction extends React.PureComponent {
           left: 1,
         };
         width = 1300; // 需调整参数，容器宽度
-        height = 900 - margin.top - margin.bottom; // 需调整参数，容器高度
+        height = 500 - margin.top - margin.bottom; // 需调整参数，容器高度，华为修改500，四个地方，另外三个为隐藏
         formatNumber = d3.format(',.0f');
         format = function (d) { // 格式化为整数，点出现的次数
           return `${formatNumber(d)} Times`;
@@ -253,6 +253,7 @@ export default class TrendPrediction extends React.PureComponent {
       .style('stroke-width', 15);
     chart.append('line').attr('x1', 0).attr('x2', width).attr('y1', 400)
       .attr('y2', 400)
+      .attr('display', 'none')
       .attr('id', 'cutline')
       .style('stroke', 'darkgray')
       .style('stroke-width', 1);// 上下图之间的线的设置
@@ -642,7 +643,7 @@ export default class TrendPrediction extends React.PureComponent {
     });
     // 绘制技术趋势图，data对应1个term，趋势由data.year.d的大小反映
     drawFlow = function (data) {
-      if (typeof (data) === 'undefined') {
+      /*if (typeof (data) === 'undefined') {
         console.log('undefined data!')
         return;
       }
@@ -758,7 +759,7 @@ export default class TrendPrediction extends React.PureComponent {
         .style('opacity', 0.8)
         .style('fill', () => {
         return 'orangered';
-      });
+      });*/
     };
     drawFlow(termbyfre[0]);
   };

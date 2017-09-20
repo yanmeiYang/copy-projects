@@ -14,6 +14,7 @@ import RightInfoZonePerson from './RightInfoZonePerson';
 import RightInfoZoneAll from './RightInfoZoneAll';
 import GetBMapLib from './utils/BMapLibGai.js';
 import { TopExpertBase } from '../../utils/expert-base';
+import { SearchSelectBox } from '../../components/widgets';
 
 let map1;
 const ButtonGroup = Button.Group;
@@ -638,6 +639,24 @@ class ExpertMap extends React.PureComponent {
     });
   };
 
+  onExpertBaseChange = (id, name) => {
+    const { filters } = this.props.search;
+    // delete all other filters.
+    Object.keys(filters).forEach((f) => {
+      delete filters[f];
+    });
+    this.onFilterChange('eb', { id, name }, true);// Special Filter;
+  };
+
+  onExpertBaseChange = (id, name) => {
+    const { filters } = this.props.search;
+    // delete all other filters.
+    Object.keys(filters).forEach((f) => {
+      delete filters[f];
+    });
+    this.onFilterChange('eb', { id, name }, true);// Special Filter;
+  };
+
   callSearchMap = (query) => {
     this.props.dispatch({ type: 'expertMap/searchMap', payload: { query } });
   };
@@ -655,6 +674,7 @@ class ExpertMap extends React.PureComponent {
   render() {
     const model = this.props && this.props.expertMap;
     const persons = model.geoData.results;
+
     let count = 0;
     let hIndexSum = 0;
     if (persons) {
@@ -703,21 +723,20 @@ class ExpertMap extends React.PureComponent {
       cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),
     };
     const Domains = TopExpertBase.RandomTop100InDomain;
-
     return (
       <div className={styles.expertMap} id="currentMain">
-
+        <div><SearchSelectBox avg={avg}></SearchSelectBox></div>
         <div className={styles.headerLine}>
           <div className={styles.left}>
             {this.props.title}
 
-            <Select defaultValue="" className={styles.domainSelector} style={{ width: 120 }}
-                    onChange={this.domainChanged}>
-              <Select.Option key="none" value="">选择领域</Select.Option>
-              {Domains.map(domain =>
-                (<Select.Option key={domain.id} value={domain.id}>{domain.name}</Select.Option>),
-              )}
-            </Select>
+            {/*<Select defaultValue="" className={styles.domainSelector} style={{ width: 120 }}*/}
+                    {/*onChange={this.domainChanged}>*/}
+              {/*<Select.Option key="none" value="">选择领域</Select.Option>*/}
+              {/*{Domains.map(domain =>*/}
+                {/*(<Select.Option key={domain.id} value={domain.id}>{domain.name}</Select.Option>),*/}
+              {/*)}*/}
+            {/*</Select>*/}
 
             <div className={styles.switchMapType}>
               <ButtonGroup id="diffmaps">

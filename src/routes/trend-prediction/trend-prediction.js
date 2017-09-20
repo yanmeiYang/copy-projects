@@ -162,6 +162,9 @@ export default class TrendPrediction extends React.PureComponent {
     return flag;
   }
 
+  onKeywordClick = (query) => {
+    this.props.dispatch(routerRedux.push({ pathname: '/trend-prediction', search: `?query=${query}` }));
+  }
   showtrend = (cquery) => {
     d3.select('#tooltip').classed('hidden', true).style('visibility', 'hidden');//最开始的时候都将它们设置为不可见
     d3.select('#tooltip1').classed('hidden', true).style('visibility', 'hidden');
@@ -228,7 +231,7 @@ export default class TrendPrediction extends React.PureComponent {
         this.renderTopic(word, 1, 1000);
       });
     }
-    this.props.dispatch({ type: 'app/layout', payload: { headerSearchBox: { query: word } } });
+
   }
 
   renderTopic = function (q, start, end) {
@@ -796,7 +799,7 @@ export default class TrendPrediction extends React.PureComponent {
                 i++;
                 return (
                   <div key={i}>
-                    <a key={i} onClick={that.showtrend.bind(that, hw)}>{hw}</a>
+                    <a key={i} onClick={that.onKeywordClick.bind(that, hw)}>{hw}</a>
                   </div>
                 );
               })

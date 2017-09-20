@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { routerRedux } from 'dva/router';
+import { routerRedux, withRouter } from 'dva/router';
 import { connect } from 'dva';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { Layout } from 'routes';
@@ -16,6 +16,7 @@ const tc = applyTheme(styles);
 
 @connect(({ app, search, loading }) => ({ app, search, loading }))
 @Auth
+@withRouter
 export default class SearchPage extends Component {
   constructor(props) {
     super(props);
@@ -34,19 +35,19 @@ export default class SearchPage extends Component {
     sortType: 'relevance',
   };
 
-  componentWillMount() {
-    const { dispatch } = this.props;
-    const { query } = this.props.search;
-    if (sysconfig.SearchBarInHeader) {
-      dispatch({
-        type: 'app/layout',
-        payload: {
-          headerSearchBox: { query, onSearch: this.onSearchBarSearch },
-        },
-      });
-    }
-    // console.log('nnmn^O^ $ ^O^nMn...... ');
-  }
+  // componentWillMount() {
+  //   const { dispatch } = this.props;
+  //   const { query } = this.props.search;
+  //   if (sysconfig.SearchBarInHeader) {
+  //     dispatch({
+  //       type: 'app/layout',
+  //       payload: {
+  //         headerSearchBox: { query, onSearch: this.onSearchBarSearch },
+  //       },
+  //     });
+  //   }
+  //   // console.log('nnmn^O^ $ ^O^nMn...... ');
+  // }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.search.query !== this.props.search.query) {
@@ -67,15 +68,17 @@ export default class SearchPage extends Component {
 
   render() {
     const { filters } = this.props.search;
+    const { query } = this.props.match.params;
     const expertBaseId = filters && filters.eb && filters.eb.id;
     return (
-      <Layout contentClass={tc(['searchPage'])}>
+      <Layout contentClass={tc(['searchPage'])} onSearch={this.onSearchBarSearch}
+              query={query}>
         <SearchComponent // Example: include all props.
           className={styles.SearchBorder} // additional className
           sorts={sysconfig.Search_SortOptions}
           expertBaseId={expertBaseId}
           onSearchBarSearch={this.onSearchBarSearch}
-          showSearchBox={this.props.app.headerSearchBox ? false : true}
+          showSearchBox={false}
           disableFilter={sysconfig.Search_DisableFilter}
           disableExpertBaseFilter={sysconfig.Search_DisableExpertBaseFilter}
           disableSearchKnowledge={sysconfig.Search_DisableSearchKnowledge}

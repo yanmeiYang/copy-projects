@@ -638,14 +638,14 @@ export default class RelationGraph extends React.PureComponent {
         if (indexShow >= 10) {
           if (d.source.indices.hIndex > indexShow) {
             return d.name.n.en;
-          } else if (transform.k >= 2) {
+          } else if (transform.k >= 3) {
             console.log("放大到一定程度显示名字");
             console.log(transform.k);
             return d.name.n.en;
           } else {
             return '';
           }
-        } else if (transform.k >= 2) {
+        } else if (transform.k >= 3) {
           return d.name.n.en;
         } else if (d.index < snum) {
           return d.name.n.en;
@@ -664,12 +664,12 @@ export default class RelationGraph extends React.PureComponent {
         if (indexShow >= 10) {
           if (d.source.indices.hIndex > indexShow) {
             return d.name.n.en;
-          } else if (transform.k >= 2) {
+          } else if (transform.k >= 3) {
             return d.name.n.en;
           } else {
             return '';
           }
-        } else if (transform.k >= 2) {
+        } else if (transform.k >= 3) {
           return d.name.n.en;
         } else if (d.index < snum) {
           return d.name.n.en;

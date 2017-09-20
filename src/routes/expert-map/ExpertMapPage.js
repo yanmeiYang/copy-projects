@@ -38,13 +38,13 @@ export default class ExpertMapPage extends React.Component {
     if (type) {
       this.setState({ mapType: type });
     }
-    this.dispatch({
-      type: 'app/layout',
-      payload: {
-        headerSearchBox: { query, onSearch: this.onSearch },
-        showFooter: false,
-      },
-    });
+    // this.dispatch({
+    //   type: 'app/layout',
+    //   payload: {
+    //     headerSearchBox: { query, onSearch: this.onSearch },
+    //     showFooter: false,
+    //   },
+    // });
   }
 
   componentWillUnmount() {
@@ -58,7 +58,7 @@ export default class ExpertMapPage extends React.Component {
       // window.location.href = href;
       this.props.dispatch(routerRedux.push({
         pathname: '/expert-map',
-        query: { query: data.query },
+        search: `?query=${data.query}`,
       }));
       this.props.dispatch({
         type: 'app/setQueryInHeaderIfExist',
@@ -79,7 +79,7 @@ export default class ExpertMapPage extends React.Component {
       : <ExpertMap {...options} />;
 
     return (
-      <Layout contentClass={tc(['expertMapPage'])}>
+      <Layout contentClass={tc(['expertMapPage'])} query={query} onSearch={this.onSearch}>
         {mainBlock}
       </Layout>
     );

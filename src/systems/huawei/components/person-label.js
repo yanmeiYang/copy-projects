@@ -21,7 +21,7 @@ class PersonLabel extends React.PureComponent {
           if (!label || label === '') {
             const tueb = TopUnivExpertBaseIndex[ebid];
             label = tueb ? (
-              <Tag className="tu" color="green">
+              <Tag className={styles.personLabel}>
                 {(tueb.index > 0 && tueb.index <= 30) && 'Top 30 University'}
                 {(tueb.index > 30 && tueb.index <= 50) && 'Top 30-50 University'}
                 {(tueb.index > 50 && tueb.index <= 100) && 'Top 50-100 University'}

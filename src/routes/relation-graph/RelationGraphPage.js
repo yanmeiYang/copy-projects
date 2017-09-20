@@ -6,6 +6,7 @@ import React from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
 import { Layout } from 'routes';
+import queryString from 'query-string';
 import { applyTheme } from 'systems';
 import { routerRedux, Link } from 'dva/router';
 import styles from './RelationGraphPage.less';
@@ -21,18 +22,20 @@ export default class RelationGraphPage extends React.Component {
   }
 
   state = {
-    query: 'data mining',
+    query: '',
   };
 
   componentWillMount() {
-    const query = this.getQueryFromURL(this.props) || 'data mining';
-    this.dispatch({
-      type: 'app/layout',
-      payload: {
-        headerSearchBox: { query, onSearch: this.onSearch },
-        showFooter: false,
-      },
-    });
+    let { query } = queryString.parse(location.search);
+    query = query || 'data mining';
+    // const query = this.getQueryFromURL(this.props) || 'data mining';
+    // this.dispatch({
+    //   type: 'app/layout',
+    //   payload: {
+    //     headerSearchBox: { query, onSearch: this.onSearch },
+    //     showFooter: false,
+    //   },
+    // });
     this.setState({ query });
   }
 
@@ -61,7 +64,7 @@ export default class RelationGraphPage extends React.Component {
   onSearch = ({ query }) => {
     const { dispatch } = this.props;
     this.setState({ query });
-    dispatch(routerRedux.push({ pathname: '/relation-graph-page', query: { query } }));
+    dispatch(routerRedux.push({ pathname: '/relation-graph-page', search: `?query=${query}` }));
     dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query } });
   };
 
@@ -75,7 +78,7 @@ export default class RelationGraphPage extends React.Component {
   render() {
     console.log('>>> |||', this.state.query);
     return (
-      <Layout contentClass={tc(['relationGraph'])}>
+      <Layout contentClass={tc(['relationGraph'])} query={this.state.query} onSearch={this.onSearch}>
         <RelationGraph query={this.state.query} title={this.titleBlock} />
       </Layout>
     );

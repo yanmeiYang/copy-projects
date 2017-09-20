@@ -22,7 +22,7 @@ let System;
 // System = 'ccftest';
 System = 'huawei';
 // System = 'alibaba';
-//System = 'tencent';
+// System = 'tencent';
 // System = 'cie';
 // System = 'cipsc';
 // System = 'demo';

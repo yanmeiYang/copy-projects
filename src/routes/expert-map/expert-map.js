@@ -457,6 +457,8 @@ class ExpertMap extends React.PureComponent {
           map.addOverlay(new BMap.Label("中部", opts21));
         }
         for (const o in place.results) {
+          console.log(place.results[o].is_ch);
+          console.log(place.results[o].fellows);
           let pt = null;
           const newplace = findPosition(newtype, place.results[o]);
           // 只有经纬度不为空或者0的时候才显示，否则丢弃

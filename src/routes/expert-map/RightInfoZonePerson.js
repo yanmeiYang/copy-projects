@@ -35,7 +35,7 @@ class RightInfoZonePerson extends React.PureComponent {
     }
     const tags = profileUtils.findTopNTags(person, 8);
 
-    const personShowIndices = ['h_index', 'num_pubs', 'activity'];
+    const personShowIndices = ['h_index', 'citation', 'activity'];
 
     return (
       <div className="rizPersonInfo">

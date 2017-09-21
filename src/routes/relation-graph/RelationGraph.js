@@ -822,16 +822,17 @@ export default class RelationGraph extends React.PureComponent {
             } else {
               return '1px';
             }
-          });
-          svg.selectAll('line').data(_edges).style('stroke', '#999').style('opacity', 1);
+          }).style('opacity', 0.5);
+          svg.selectAll('line').data(_edges).style('stroke', '#999').style('opacity', 0.3);
           /* 清除样式结束 */
 
           svg.selectAll('circle').data(_nodes).filter((k) => {
             return d.name.n.en && k.name.n.en === d.name.n.en;
-          }).style('stroke', 'yellow').style('stroke-width', '5px');
+          }).style('stroke', 'yellow').style('stroke-width', '5px').style('opacity', 1);
+
           svg.selectAll('line').data(_edges).filter((e, i) => {
             return e.target.id === d.id || e.source.id === d.id;
-          }).style('stroke', '#a28eee').style('opacity', 1);
+          }).style('stroke', '#a28eee').style('stroke-width', '2').style('opacity', 1);
         } else {
           this.setState({ currentNode: null });
           _onclicknodes[_onclicknodes.indexOf(d.id)] = '';
@@ -1517,10 +1518,15 @@ export default class RelationGraph extends React.PureComponent {
           <div>
             {currentNode.avatar &&
             <div className={styles.avatar}>
-              <img src={getAvatar(currentNode.avatar, currentNode.id, 90)} alt="" />
+              <a href={`https://aminer.org/profile/-/${currentNode.id}`} target="_blank">
+                <img src={getAvatar(currentNode.avatar, currentNode.id, 90)}
+                     alt={currentNode.name.n.en} />
+              </a>
             </div>
             }
-            {currentNode.name && <h2>{currentNode.name.n.en}</h2>
+            {currentNode.name
+            && <a href={`https://aminer.org/profile/-/${currentNode.id}`} target="_blank">
+              <h2>{currentNode.name.n.en}</h2></a>
             }
             {currentNode.indices &&
             <div style={{ marginBottom: 8 }}>

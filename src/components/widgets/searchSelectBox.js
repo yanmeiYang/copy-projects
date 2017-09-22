@@ -54,7 +54,7 @@ class SearchSelectBox extends React.PureComponent {
               <CheckableTag className={styles.filterItem}>TOP50</CheckableTag>
               <CheckableTag className={styles.filterItem}>TOP100</CheckableTag>
               <CheckableTag className={styles.filterItem}>TOP200</CheckableTag>
-              <CheckableTag className={styles.filterItem}>TOP1000</CheckableTag>
+              <CheckableTag className={styles.filterItem}>TOP500</CheckableTag>
               <CheckableTag className={styles.filterItem}>ALL</CheckableTag>
             </ul>
           </div>

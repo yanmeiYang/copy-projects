@@ -60,6 +60,10 @@ class ExpertMap extends React.PureComponent {
     localStorage.setItem("lasttype", "0");
   }
 
+  state = {
+    typeIndex: 0,
+  }
+
   componentDidMount() {
     const { query, dispatch } = this.props;
     this.callSearchMap(query);
@@ -68,6 +72,9 @@ class ExpertMap extends React.PureComponent {
       type: 'expertMap/setRightInfo',
       payload: { idString: '', rightInfoType: 'global' },
     });
+    window.onresize = () => {
+      this.showMap(this.props.expertMap.geoData, this.state.typeIndex);
+    };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -458,8 +465,8 @@ class ExpertMap extends React.PureComponent {
           map.addOverlay(new BMap.Label("中部", opts21));
         }
         for (const o in place.results) {
-          console.log(place.results[o].is_ch);
-          console.log(place.results[o].fellows);
+          //console.log(place.results[o].is_ch);是否是华人
+          //console.log(place.results[o].fellows);是否是fellow
           let pt = null;
           const newplace = findPosition(newtype, place.results[o]);
           // 只有经纬度不为空或者0的时候才显示，否则丢弃
@@ -603,6 +610,7 @@ class ExpertMap extends React.PureComponent {
   showType = (e) => {
     localStorage.setItem("isClick", "1");
     const typeid = e.currentTarget && e.currentTarget.value && e.currentTarget.getAttribute('value');
+    this.setState({ typeIndex: typeid });
     if (typeid === '0') {
       this.showMap(this.props.expertMap.geoData, typeid);
     } else if (typeid === '1') {

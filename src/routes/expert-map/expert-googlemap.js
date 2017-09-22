@@ -580,19 +580,20 @@ class ExpertGoogleMap extends React.Component {
 
       personPopupJsx = (
         <div className="personInfo">
-          <div><img className="img" src={url} alt="IMG"/></div>
+          <div><img className="img" src={url} alt="IMG" /></div>
           <div className="info">
             <div className="nameLine">
               <div className="right">H-index:<b> {hindex}</b>
               </div>
               <div className="name">{name}</div>
             </div>
-            {pos && <span><i className="fa fa-briefcase fa-fw"/>{pos}</span>}
-            {aff && <span><i className="fa fa-institution fa-fw"/>{aff}</span>}
+            {pos && <span><i className="fa fa-briefcase fa-fw" />{pos}</span>}
+            {aff && <span><i className="fa fa-institution fa-fw" />{aff}</span>}
           </div>
         </div>
       );
     }
+
     // right info
     // const shouldRIZUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') === -1
     //   && model.infoZoneIds === person.id;
@@ -600,12 +601,13 @@ class ExpertGoogleMap extends React.Component {
 
     const rightInfos = {
       global: () => (
-        <RightInfoZoneAll count={count} hIndexSum={hIndexSum} avg={avg} persons={persons}/>
+        <RightInfoZoneAll count={count} avg={avg} persons={persons} />
       ),
-      person: () => (<RightInfoZonePerson person={model.personInfo}/>),
-      cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons}/>),
+      person: () => (<RightInfoZonePerson person={model.personInfo} />),
+      cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),
     };
     const Domains = TopExpertBase.RandomTop100InDomain;
+
     return (
       <div className={styles.expertMap} id="currentMain">
 

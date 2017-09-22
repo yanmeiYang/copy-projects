@@ -30,6 +30,7 @@ class RightInfoZonePerson extends React.PureComponent {
 
     // used in person right info zone.
     const personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
+    console.log(personLinkParams)
     if (sysconfig.PersonList_PersonLink_NewTab) {
       personLinkParams.target = '_blank';
     }
@@ -46,7 +47,7 @@ class RightInfoZonePerson extends React.PureComponent {
         </div>
         }
 
-        <div className="img"><img src={url} alt="IMG" /></div>
+        <a {...personLinkParams} className="img" ><img src={url} alt="IMG" /></a>
 
         <div className="info bg">
           {pos && <span><i className="fa fa-briefcase fa-fw" />{pos}</span>}

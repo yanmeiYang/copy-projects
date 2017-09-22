@@ -16,6 +16,7 @@ import RightInfoZonePerson from './RightInfoZonePerson';
 import RightInfoZoneAll from './RightInfoZoneAll';
 import GetBMapLib from './utils/BMapLibGai.js';
 import { TopExpertBase } from '../../utils/expert-base';
+import { SearchSelectBox } from '../../components/widgets';
 
 let map1;
 const ButtonGroup = Button.Group;
@@ -61,6 +62,10 @@ class ExpertMap extends React.PureComponent {
     localStorage.setItem("lasttype", "0");
   }
 
+  state = {
+    typeIndex: 0,
+  }
+
   componentDidMount() {
     const { query, dispatch } = this.props;
     this.callSearchMap(query);
@@ -69,6 +74,9 @@ class ExpertMap extends React.PureComponent {
       type: 'expertMap/setRightInfo',
       payload: { idString: '', rightInfoType: 'global' },
     });
+    window.onresize = () => {
+      this.showMap(this.props.expertMap.geoData, this.state.typeIndex);
+    };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -210,19 +218,54 @@ class ExpertMap extends React.PureComponent {
           url = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 50);
         }
         //const style = url === '/images/blank_avatar.jpg' ? '' : 'margin-top:-5px;';
-        const style = 'line-height:45px;text-align:center;display: block;margin:auto;';
         let name;
         if (personInfo.name_zh) {
           const str = personInfo.name_zh.substr(1, 2);
           name = str;
         } else {
-          let tmp = personInfo.name.match(/\b(\w)/g);
-          if (tmp.length > 3) {
-            tmp = tmp[0].concat(tmp[1], tmp[2]);
-            name = tmp;
-          } else {
-            name = tmp.join('');
+          const tmp = personInfo.name.split(" ", 5);
+          name = tmp[tmp.length - 1];
+          // let tmp = personInfo.name.match(/\b(\w)/g);
+          // if (tmp.length > 3) {
+          //   tmp = tmp[0].concat(tmp[1], tmp[2]);
+          //   name = tmp;
+          // } else {
+          //   name = tmp.join('');
+          // }
+        }
+        let style;
+        if (name.length <= 8) {
+          style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:45px;font-size:20%;';
+          if (name.length === 6){
+            name = ' '.concat(name);
           }
+          if (name.length <= 5){
+            name = '&nbsp;'.concat(name);
+          }
+        } else {
+          const nameArr = name.split("",20);
+          let i = 7;
+          let arr = [];
+          nameArr.map((name1) => {
+            if (i !== 7) {
+              if (i < 13) {
+                arr[i+1] = name1;
+              } else if (i === 13) {
+                arr[i+1] = ' ';
+                arr[i+2] = name1;
+              } else {
+                arr[i+2] = name1;
+              }
+            } else {
+              arr[i] = ' ';
+              arr[i+1] = name1;
+            }
+            i = i+1;
+          })
+          console.log(arr.join(''))
+          name = arr.join('');
+          name = '&nbsp;&nbsp;'+name;
+          style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:10px;word-wrap:break-word;font-size:20%;';
         }
         cimg.innerHTML = `<img style='${style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='${url}' alt='${name}'>`;
       }
@@ -421,6 +464,8 @@ class ExpertMap extends React.PureComponent {
           map.addOverlay(new BMap.Label("中部", opts21));
         }
         for (const o in place.results) {
+          //console.log(place.results[o].is_ch);是否是华人
+          //console.log(place.results[o].fellows);是否是fellow
           let pt = null;
           const newplace = findPosition(newtype, place.results[o]);
           // 只有经纬度不为空或者0的时候才显示，否则丢弃
@@ -566,6 +611,7 @@ class ExpertMap extends React.PureComponent {
   showType = (e) => {
     localStorage.setItem("isClick", "1");
     const typeid = e.currentTarget && e.currentTarget.value && e.currentTarget.getAttribute('value');
+    this.setState({ typeIndex: typeid });
     if (typeid === '0') {
       this.showMap(this.props.expertMap.geoData, typeid);
     } else if (typeid === '1') {
@@ -604,6 +650,24 @@ class ExpertMap extends React.PureComponent {
     });
   };
 
+  onExpertBaseChange = (id, name) => {
+    const { filters } = this.props.search;
+    // delete all other filters.
+    Object.keys(filters).forEach((f) => {
+      delete filters[f];
+    });
+    this.onFilterChange('eb', { id, name }, true);// Special Filter;
+  };
+
+  onExpertBaseChange = (id, name) => {
+    const { filters } = this.props.search;
+    // delete all other filters.
+    Object.keys(filters).forEach((f) => {
+      delete filters[f];
+    });
+    this.onFilterChange('eb', { id, name }, true);// Special Filter;
+  };
+
   callSearchMap = (query) => {
     this.props.dispatch({ type: 'expertMap/searchMap', payload: { query } });
   };
@@ -621,6 +685,7 @@ class ExpertMap extends React.PureComponent {
   render() {
     const model = this.props && this.props.expertMap;
     const persons = model.geoData.results;
+
     let count = 0;
     let hIndexSum = 0;
     if (persons) {
@@ -669,12 +734,27 @@ class ExpertMap extends React.PureComponent {
       cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),
     };
     const Domains = TopExpertBase.RandomTop100InDomain;
-
     return (
       <div className={styles.expertMap} id="currentMain">
-
+        <div><SearchSelectBox avg={avg}></SearchSelectBox></div>
         <div className={styles.headerLine}>
           <div className={styles.left}>
+            {this.props.title}
+
+            {/*<Select defaultValue="" className={styles.domainSelector} style={{ width: 120 }}*/}
+                    {/*onChange={this.domainChanged}>*/}
+              {/*<Select.Option key="none" value="">选择领域</Select.Option>*/}
+              {/*{Domains.map(domain =>*/}
+                {/*(<Select.Option key={domain.id} value={domain.id}>{domain.name}</Select.Option>),*/}
+              {/*)}*/}
+            {/*</Select>*/}
+
+            <div className={styles.switchMapType}>
+              <ButtonGroup id="diffmaps">
+                <Button type="primary" onClick={this.onChangeBaiduMap}>Baidu Map</Button>
+                <Button onClick={this.onChangeGoogleMap}>Google Map</Button>
+              </ButtonGroup>
+            </div>
             {/*{this.props.title}*/}
             <span>
               <FM defaultMessage="Domain"

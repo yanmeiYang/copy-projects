@@ -748,13 +748,6 @@ class ExpertMap extends React.PureComponent {
                 {/*(<Select.Option key={domain.id} value={domain.id}>{domain.name}</Select.Option>),*/}
               {/*)}*/}
             {/*</Select>*/}
-
-            <div className={styles.switchMapType}>
-              <ButtonGroup id="diffmaps">
-                <Button type="primary" onClick={this.onChangeBaiduMap}>Baidu Map</Button>
-                <Button onClick={this.onChangeGoogleMap}>Google Map</Button>
-              </ButtonGroup>
-            </div>
             {/*{this.props.title}*/}
             <span>
               <FM defaultMessage="Domain"

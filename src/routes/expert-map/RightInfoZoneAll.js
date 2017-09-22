@@ -36,6 +36,10 @@ class RightInfoZoneAll extends React.PureComponent {
           平均值：
           <span className={styles.count}>{avg}</span>
         </div>
+        <div className={styles.statistics}>
+          专家：
+          <span className={styles.count} style={{ marginRight: 0 }}>{count}</span> 人
+        </div>
         <div>
           <HindexGraph persons={persons} avg={avg} count={count} />
         </div>

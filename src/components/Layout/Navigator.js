@@ -107,7 +107,7 @@ export default class Navigator extends PureComponent {
     if (conf && conf.data) {
       const query = {};
       query[conf.data] = theQuery;
-      dispatch(routerRedux.push({ pathname: conf.url, query }));
+      dispatch(routerRedux.push({ pathname: conf.url, search: `?query=${theQuery}`}));
     } else {
       dispatch(routerRedux.push({ pathname: conf.url.replace(':query', theQuery) }));
     }

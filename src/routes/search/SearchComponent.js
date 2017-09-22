@@ -136,6 +136,7 @@ export default class SearchComponent extends Component {
   // On expert base changed, all other filters should be cleared.
   // sort method is not cleared.
   onExpertBaseChange = (id, name) => {
+    this.setState({ sortType: 'relevance' });
     const { filters } = this.props.search;
     // delete all other filters.
     Object.keys(filters).forEach((f) => {
@@ -293,6 +294,7 @@ export default class SearchComponent extends Component {
                 persons={results}
                 user={this.props.app.user}
                 expertBaseId={expertBaseId}
+                afterTitleBlock={sysconfig.PersonList_AfterTitleBlock}
                 titleRightBlock={sysconfig.PersonList_TitleRightBlock}
                 rightZoneFuncs={sysconfig.PersonList_RightZone}
                 bottomZoneFuncs={sysconfig.PersonList_BottomZone}

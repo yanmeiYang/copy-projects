@@ -37,20 +37,16 @@ export default class KnowledgeGraphPage extends React.PureComponent {
     // query: '',
     searchMethod: 'or2', // [direct, and2, or2 ]
     infoTab: 'experts',
+    query: '',
   };
 
   componentWillMount() {
-    const { query } = queryString.parse(location.search);
+    let { query } = queryString.parse(location.search);
+    query = query || 'data mining';
+    this.setState({ query });
     // if (query) {
     //   this.setState({ query });
     // }
-    this.dispatch({
-      type: 'app/layout',
-      payload: {
-        headerSearchBox: { query, onSearch: this.onSearch },
-        showFooter: false,
-      },
-    });
     this.dispatch({ type: 'knowledgeGraph/setState', payload: { query } });
   }
 
@@ -132,9 +128,12 @@ export default class KnowledgeGraphPage extends React.PureComponent {
     // window.location.href = href;
 
     this.props.dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query } });
+    // pathname, query: { ...location.query, query },
     this.props.dispatch(routerRedux.push({
-      pathname, query: { ...location.query, query },
+      pathname,
+      search: `?query=${query}`,
     }));
+    this.setState({ query });
   };
 
   onItemClick = (node, level) => {
@@ -218,14 +217,16 @@ export default class KnowledgeGraphPage extends React.PureComponent {
 
     // const searchHeader=<div>search for: {kg.}</div>
     return (
-      <Layout contentClass={tc(['knowledgeGraphPage'])}>
+      <Layout contentClass={tc(['knowledgeGraphPage'])} query={this.state.query}
+              onSearch={this.onSearch}>
 
         <div className={classnames('content-inner', styles.page)}>
           <Message message={popupErrorMessage} />
 
           <div className={styles.title}>
             <h1>
-              <FM id="com.searchTypeWidget.label.KnowledgeGraph" defaultMessage="Knowledge Graph" />
+              <FM id="com.searchTypeWidget.label.KnowledgeGraph"
+                  defaultMessage="Knowledge Graph" />
             </h1>
 
             {process.env.NODE_ENV !== 'production' &&

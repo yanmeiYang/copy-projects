@@ -150,7 +150,7 @@ class ExportPersonBtn extends React.Component {
   render() {
     const { isExport, modalVisible } = this.state;
     return (
-      <div style={{ float: 'right' }}>
+      <div style={{ float: 'right', marginTop: '11px' }}>
         {isExport && <Button type="primary" className={styles.exportPersonBtn}
                              onClick={this.exportSearchResult.bind()}>导出当前页</Button>}
         <Button className={styles.exportPersonBtn}

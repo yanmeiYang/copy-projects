@@ -252,7 +252,7 @@ function GetGoogleMapLib(showTop) {
 
         for (var i = 0, size; size = this.sizes[i]; i++) {
           this.styles_.push({
-            url: this.imagePath_ + (i + 1) + '.' + this.imageExtension_,
+            url: this.imagePath_ + i + '.' + this.imageExtension_,
             height: size,
             width: size
           });

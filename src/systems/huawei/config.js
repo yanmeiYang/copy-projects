@@ -2,8 +2,9 @@
  * Created by BoGao on 2017/6/20.
  */
 import React from 'react';
+import { toIDDotString, TopExpertBase } from 'utils/expert-base';
 import { IndexInfoBox, PersonLabel } from './components';
-import { toIDDotString, TopExpertBase } from '../../utils/expert-base';
+import defaults from '../utils';
 
 module.exports = {
 
@@ -34,12 +35,13 @@ module.exports = {
   Signup_Password: true,
 
   // Functionality
-  Enable_Export: false,
+  Enable_Export: true,
   Search_EnablePin: true,
   // 地图中心点
   CentralPosition: { lat: 37.09024, lng: -95.712891 },
 
-  PersonList_TitleRightBlock: person => <PersonLabel person={person} />,
+  PersonList_TitleRightBlock: defaults.EMPTY_BLOCK_FUNC,
+  PersonList_AfterTitleBlock: ({ param }) => <PersonLabel person={param.person} />,
 
   ExpertBases: [
     {

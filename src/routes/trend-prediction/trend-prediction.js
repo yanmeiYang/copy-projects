@@ -162,10 +162,13 @@ export default class TrendPrediction extends React.PureComponent {
     return flag;
   }
 
+  onKeywordClick = (query) => {
+    this.props.dispatch(routerRedux.push({ pathname: '/trend-prediction', search: `?query=${query}` }));
+  }
   showtrend = (cquery) => {
     d3.select('#tooltip').classed('hidden', true).style('visibility', 'hidden');//最开始的时候都将它们设置为不可见
     d3.select('#tooltip1').classed('hidden', true).style('visibility', 'hidden');
-    let word = (cquery === '') ? this.props.query : cquery;
+    const word = (cquery === '') ? this.props.query : cquery;
     if (this.ishot(word) !== false) {
       const res = wget('/lab/trend-prediction/' + word + '.json');
       res.then((data) => {
@@ -228,6 +231,7 @@ export default class TrendPrediction extends React.PureComponent {
         this.renderTopic(word, 1, 1000);
       });
     }
+
   }
 
   renderTopic = function (q, start, end) {
@@ -795,7 +799,7 @@ export default class TrendPrediction extends React.PureComponent {
                 i++;
                 return (
                   <div key={i}>
-                    <a key={i} onClick={that.showtrend.bind(that, hw)}>{hw}</a>
+                    <a key={i} onClick={that.onKeywordClick.bind(that, hw)}>{hw}</a>
                   </div>
                 );
               })

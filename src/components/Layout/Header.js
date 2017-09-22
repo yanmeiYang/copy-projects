@@ -49,17 +49,8 @@ export default class Header extends PureComponent {
   };
 
   componentWillReceiveProps = (nextProps) => {
-    // console.log('>>>>>>>>>>>>>>>>> ', nextProps.app.headerSearchBox);
-    if (nextProps.app.headerSearchBox) {
-      // console.log('>>>>>>>>>>>>>>>>> ', nextProps.app.headerSearchBox.query);
-      // console.log('>>>>>>>>>>>>>>>>> ', nextProps.app.headerSearchBox !== this.props.app.headerSearchBox);
-      if (nextProps.app.headerSearchBox !== this.props.app.headerSearchBox
-        || this.props.app.headerSearchBox.query !== this.state.query) {
-        // if (nextProps.app.headerSearchBox.query) {
-        console.log('----------------------', nextProps.app.headerSearchBox.query);
-        this.setQuery(nextProps.app.headerSearchBox.query);
-        // }
-      }
+    if (nextProps.query !== this.props.query) {
+      this.setQuery(nextProps.query);
     }
   };
 
@@ -88,20 +79,23 @@ export default class Header extends PureComponent {
   render() {
     const { logoZone, searchZone, infoZone } = this.props;
     const { headerSearchBox } = this.props.app;
+    const { onSearch } = this.props;
+    let { query } = this.props;
+    query = query || 'data mining';
     // console.log('>>>>>>>', logoZone, searchZone, infoZone);
 
-    if (headerSearchBox) {
-      const oldSearchHandler = headerSearchBox.onSearch;
-      headerSearchBox.onSearch = (query) => {
-        this.setState({ query: query.query });
-        if (oldSearchHandler) {
-          oldSearchHandler(query);
-        }
-      };
-    }
+    // if (headerSearchBox) {
+    //   const oldSearchHandler = headerSearchBox.onSearch;
+    //   headerSearchBox.onSearch = (query) => {
+    //     this.setState({ query: query.query });
+    //     if (oldSearchHandler) {
+    //       oldSearchHandler(query);
+    //     }
+    //   };
+    // }
 
     const SearchZone = searchZone || [
-      <KgSearchBox key={0} size="large" query={this.state.query} {...headerSearchBox}
+      <KgSearchBox key={0} size="large" query={query} onSearch={onSearch}
                    className={styles.searchBox} style={{ height: 36, marginTop: 15 }}
       />,
       ];

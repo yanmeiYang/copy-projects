@@ -169,13 +169,13 @@ const testNextRequest = [{
           'citation',
           'hindex',
           'labels',
-        ]
+        ],
       },
       {
         Publication: [
           'title',
           'titlezh',
-        ]
+        ],
       },
     ],
     aggregation: [
@@ -184,7 +184,7 @@ const testNextRequest = [{
         items: [
           'term',
           'count',
-        ]
+        ],
       },
     ]
   }
@@ -199,7 +199,7 @@ const testNextRequest = [{
  *  "schema":{"a":"c"}
  *  }
  */
-export default async function queryAPI(payload) {
+export async function queryAPI(payload) {
   const { method, parameters, schema, options } = payload;
 
   if (process.env.NODE_ENV !== 'production') {

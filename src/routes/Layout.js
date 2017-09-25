@@ -61,7 +61,7 @@ export default class Layout extends Component {
         dispatch({ type: 'app/logout' });
       },
     };
-    const navigatorOptions = { query };
+    const navigatorOptions = { query, navis: sysconfig.HeaderSearch_TextNavi };
 
     const href = window.location.href;
 

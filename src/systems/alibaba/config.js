@@ -2,8 +2,8 @@
  * Created by BoGao on 2017/6/20.
  */
 import React from 'react';
-import defaults from '../utils';
-import { toIDDotString, TopExpertBase as EB, TopNUniversity2015 } from '../../utils/expert-base';
+import defaults from 'utils';
+import { toIDDotString, TopExpertBase as EB, TopNUniversity2015 } from 'utils/expert-base';
 
 module.exports = {
 
@@ -28,7 +28,7 @@ module.exports = {
   },
   Header_SubTextLogo: '学术资源地图',
   Header_SubTextStyle: {},
-  Header_UserPageURL: '', // 用户头像点击之后去的页面.
+  Header_UserPageURL: '/user-info', // 用户头像点击之后去的页面.
   Footer_Content: defaults.EMPTY_BLOCK,
   ShowFooter: true,
 
@@ -36,7 +36,7 @@ module.exports = {
   // Functionality
   //
   Enable_Export: false,
-  ShowRegisteredRole: true, // 注册页面是否显示角色配置
+  ShowRegisteredRole: false, // 注册页面是否显示角色配置
 
   // SearchPagePrefix: 'uniSearch', // search - 普通搜索(deleted); uniSearch - 多合一搜索.
   Search_EnablePin: false,

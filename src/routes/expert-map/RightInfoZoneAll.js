@@ -44,11 +44,11 @@ class RightInfoZoneAll extends React.PureComponent {
           <span className={styles.count} style={{ marginRight: 0 }}>{count}</span> 人
         </div>
 
-        <div className="name">
-          <div>Acm Fellow:{isACMFellowNumber}.</div>
-          <div>Ieee Fellow:{isIeeeFellowNumber}.</div>
-          <div>华人:{isChNumber}.</div>
-        </div>
+        {/*<div className="name">*/}
+          {/*<div>Acm Fellow:{isACMFellowNumber}.</div>*/}
+          {/*<div>Ieee Fellow:{isIeeeFellowNumber}.</div>*/}
+          {/*<div>华人:{isChNumber}.</div>*/}
+        {/*</div>*/}
         <div>
           <HindexGraph persons={persons} avg={avg} count={count} />
         </div>

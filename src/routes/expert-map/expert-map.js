@@ -753,11 +753,23 @@ class ExpertMap extends React.PureComponent {
     const model = this.props && this.props.expertMap;
     const persons = model.geoData.results;
     let count = 0;
+    let isACMFellowNumber = 0;
+    let isIeeeFellowNumber = 0;
+    let isChNumber = 0;
     let hIndexSum = 0;
     if (persons) {
       persons.map((person1) => {
         hIndexSum += person1.hindex;
         count += 1;
+        if (person1.fellows[0] === 'acm') {
+          isACMFellowNumber += 1;
+        }
+        if (person1.fellows[0] === 'ieee' || person1.fellows[1] === 'ieee') {
+          isIeeeFellowNumber += 1;
+        }
+        if (person1.is_ch) {
+          isChNumber += 1;
+        }
         return hIndexSum;
       });
     }
@@ -794,7 +806,7 @@ class ExpertMap extends React.PureComponent {
 
     const rightInfos = {
       global: () => (
-        <RightInfoZoneAll count={count} avg={avg} persons={persons} />
+        <RightInfoZoneAll count={count} avg={avg} persons={persons} isACMFellowNumber={isACMFellowNumber} isIeeeFellowNumber={isIeeeFellowNumber} isChNumber={isChNumber}/>
       ),
       person: () => (<RightInfoZonePerson person={model.personInfo} />),
       cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),

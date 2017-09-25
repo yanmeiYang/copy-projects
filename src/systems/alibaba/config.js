@@ -2,8 +2,8 @@
  * Created by BoGao on 2017/6/20.
  */
 import React from 'react';
-import defaults from 'utils';
 import { toIDDotString, TopExpertBase as EB, TopNUniversity2015 } from 'utils/expert-base';
+import defaults from '../utils';
 
 module.exports = {
 

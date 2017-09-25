@@ -9,7 +9,7 @@ module.exports = {
   // URLs
   basePageURL: 'https://aminer.org',
   baseURL: 'https://api.aminer.org/api',
-  nextAPIURL: 'http://localhost:4005/api',
+  // baseURL: 'https://166.111.7.105/api',
   graphqlAPI: 'http://localhost:4005/gql',
   // graphqlAPI: 'http://localhost:4000/gql/',
 

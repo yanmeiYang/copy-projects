@@ -1,43 +1,4 @@
-@import "../../themes/vars.less";
-
-.relationHeader {
-  display: flex; justify-content: space-between;
-  .statAndAction {
-    display: flex; font-size: @font-size-lg;
-    .statistics {
-      font-size: @font-size-lg;
-      .statCount { color: #f1742f; font-size: 15px }
-    }
-    .action {
-      margin-left: 50px;
-      label { font-size: @font-size-lg }
-      .two_paths_icon, .continue_paths_icon, .stop_drag_icon {
-        width: 18px; height: 15px; z-index: 10000; float: left;
-      }
-      button {
-        .stop_drag_icon { background-position: -172px -394px; }
-        .two_paths_icon { background-position: -240px -394px; }
-        .continue_paths_icon { background-position: -307px -394px; }
-      }
-      button:hover, button.selected {
-        color: #ffffff;
-        .stop_drag_icon { background-position: -206px -394px; }
-        .two_paths_icon { background-position: -274px -394px; }
-        .continue_paths_icon { background-position: -341px -394px; }
-      }
-      .two_paths { margin-left: 10px; }
-    }
-  }
-  .filterBlock {
-    label { font-size: @font-size-lg; }
-  }
-}
-.twoExpertPathBySearch {
-  margin-top: 15px;
-  button { height: 27px; }
-}
-
-:global #rgvis { box-shadow: 0 0 14px 2px rgba(99, 99, 99, 0.2) inset; }
+:global #rgvis {box-shadow: 0 0 14px 2px rgba(99,99,99,0.2) inset;}
 
 .links line {
   stroke: #999;
@@ -48,11 +9,9 @@
   stroke: #fff;
   stroke-width: 1.5px;
 }
-
 .text-danger {
   color: red;
 }
-
 //:global {
 //  .ant-progress-bg {
 //    height: 30px !important;
@@ -75,22 +34,21 @@
 //
 //}
 
-.svgTitle {
+.svgTitle{
   display: flex;
   justify-content: space-between;
   margin-top: 0px;
 }
-
 .leftInfoZone {
   width: 200px;
   position: absolute;
   background: #ccc;
-  margin-top: 49px;
+  margin-top: 21px;
   color: #ffffff;
   padding: 10px;
   display: flex;
   justify-content: space-between;
-  .avatar {
+  .avatar{
     margin: 10px 0;
     text-align: center;
     img {
@@ -103,16 +61,15 @@
       box-shadow: 0 0 5px;
     }
   }
-  .delCurrentNode {
+  .delCurrentNode{
     color: red;
     margin-top: -5px;
     cursor: pointer;
   }
 
 }
-
-:global {
-  div.tooltip {
+:global{
+  div.tooltip{
     position: absolute;
     opacity: 0;
     padding: 0;

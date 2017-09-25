@@ -38,5 +38,52 @@ export default {
     models: () => [import('models/expert-base/expert-base')],
     component: () => import('./add-expert-detail'),
   },
+  // ExpertProfileInfo: {
+  //   path: '/profile-info/:id', //
+  //   getComponent(nextState, cb) {
+  //     require.ensure([], (require) => {
+  //       registerModel(app, require('../../models/expert-base/expert'));
+  //       cb(null, require('./profile-info'));
+  //     }, 'expertBase');
+  //   },
+  // },
+
+
+  // AddExpertBase: {
+  //   path: '/add-expert-base',
+  //   getComponent(nextState, cb) {
+  //     require.ensure([], (require) => {
+  //       registerModel(app, require('../../models/expert-base/expert'));
+  //       cb(null, require('./add-expert-base'));
+  //     }, 'expertBase');
+  //   },
+  // },
+  // ExpertDetailList: {
+  //   path: '/expert-base-list',
+  //   getComponent(nextState, cb) {
+  //     require.ensure([], (require) => {
+  //       registerModel(app, require('../../models/expert-base/expert'));
+  //       cb(null, require('./expert-base-list'));
+  //     }, 'expertBase');
+  //   },
+  // },
+  // AddExpertDetail: {
+  //   path: '/add-expert-detail/:id',
+  //   getComponent(nextState, cb) {
+  //     require.ensure([], (require) => {
+  //       registerModel(app, require('../../models/expert-base/expert'));
+  //       cb(null, require('./add-expert-detail'));
+  //     }, 'expertBase');
+  //   },
+  // },
+  // ExpertProfileInfo: {
+  //   path: '/profile-info/:id',
+  //   getComponent(nextState, cb) {
+  //     require.ensure([], (require) => {
+  //       registerModel(app, require('../../models/expert-base/expert'));
+  //       cb(null, require('./profile-info'));
+  //     }, 'expertBase');
+  //   },
+  // },
 };
 

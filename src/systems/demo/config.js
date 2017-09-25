@@ -19,11 +19,9 @@ module.exports = {
 
   PersonList_ShowIndices: ['activityRankingContrib', 'h_index', 'activity'],
 
-  /**
-   * Layout related
-   */
-  Layout_HasSideBar: true, // 是否显示左侧菜单
-
+  //
+  // Layout related
+  //
   // Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
   Header_LogoWidth: 213,
   Header_LogoStyle: {
@@ -37,6 +35,7 @@ module.exports = {
   Header_SubTextLogo: '专家库',
   Header_SubTextStyle: { marginLeft: 12 },
   Header_UserPageURL: '', // 用户头像点击之后去的页面.
+  ShowSideMenu: true,
   ShowFooter: true,
   ShowHelpDoc: false, // 显示帮助文档
 

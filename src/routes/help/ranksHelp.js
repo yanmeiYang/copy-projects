@@ -3,11 +3,8 @@
  */
 import React from 'react';
 import { Menu } from 'antd';
-import { Layout } from 'routes';
-import { applyTheme } from 'systems';
 import styles from './ranksHelp.less';
 
-const tc = applyTheme(styles);
 class RanksHelp extends React.Component {
   state = {
     current: 'citation',
@@ -21,7 +18,7 @@ class RanksHelp extends React.Component {
 
   render() {
     return (
-      <Layout searchZone={[]} contentClass={tc(['ranksHelp'])} showNavigator={false}>
+      <div>
         <Menu
           onClick={this.handleClick}
           selectedKeys={[this.state.current]}
@@ -174,7 +171,7 @@ class RanksHelp extends React.Component {
               <br />
               <br />
               <img src="/helpImg/ranks/image009.gif" alt="activity"
-                   style={{ width: '509px', height: '21px' }} />
+                   style={{ width: '509px', height: '21' }} />
             </p>
             <p>In this definition,&nbsp;
               <img src="/helpImg/ranks/image010.gif" alt=""
@@ -199,7 +196,7 @@ class RanksHelp extends React.Component {
             </p>
           </div>
         </div>
-      </Layout>
+      </div>
     );
   }
 }

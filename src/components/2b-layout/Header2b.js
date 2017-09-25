@@ -5,7 +5,7 @@ import { Link } from 'dva/router';
 import styles from './Header2b.less';
 import * as profileUtils from '../../utils/profile-utils';
 import { sysconfig } from '../../systems';
-// import { SearchTypeWidgets } from '../../components/search';
+import { SearchTypeWidgets } from '../../components/search';
 import { isLogin, isGod } from '../../utils/auth';
 
 class Header2b extends React.PureComponent {
@@ -128,6 +128,13 @@ class Header2b extends React.PureComponent {
             {/*</Menu.Item>*/}
           </Menu>
         </div>
+
+        {headerSearchBox &&
+        <SearchTypeWidgets
+          navis={sysconfig.HeaderSearch_TextNavi}
+          query={this.state.query}
+        />
+        }
 
       </div>
     );

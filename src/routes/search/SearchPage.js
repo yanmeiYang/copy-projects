@@ -1,22 +1,19 @@
 import React, { Component } from 'react';
-import { routerRedux, withRouter } from 'dva/router';
+import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
-import { Layout } from 'routes';
-import { sysconfig, applyTheme } from 'systems';
+import queryString from 'query-string';
 import classnames from 'classnames';
 import { Auth } from 'hoc';
 import SearchComponent from 'routes/search/SearchComponent';
 import styles from './SearchPage.less';
+import { sysconfig } from '../../systems';
 
-const { theme } = sysconfig;
-const tc = applyTheme(styles);
-
+// TODO Extract Search Filter into new Component.
 // TODO Combine search and uniSearch into one.
 
 @connect(({ app, search, loading }) => ({ app, search, loading }))
 @Auth
-@withRouter
 export default class SearchPage extends Component {
   constructor(props) {
     super(props);
@@ -35,19 +32,19 @@ export default class SearchPage extends Component {
     sortType: 'relevance',
   };
 
-  // componentWillMount() {
-  //   const { dispatch } = this.props;
-  //   const { query } = this.props.search;
-  //   if (sysconfig.SearchBarInHeader) {
-  //     dispatch({
-  //       type: 'app/layout',
-  //       payload: {
-  //         headerSearchBox: { query, onSearch: this.onSearchBarSearch },
-  //       },
-  //     });
-  //   }
-  //   // console.log('nnmn^O^ $ ^O^nMn...... ');
-  // }
+  componentWillMount() {
+    const { dispatch } = this.props;
+    const { query } = this.props.search;
+    if (sysconfig.SearchBarInHeader) {
+      dispatch({
+        type: 'app/layout',
+        payload: {
+          headerSearchBox: { query, onSearch: this.onSearchBarSearch },
+        },
+      });
+    }
+    // console.log('nnmn^O^ $ ^O^nMn...... ');
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.search.query !== this.props.search.query) {
@@ -68,23 +65,21 @@ export default class SearchPage extends Component {
 
   render() {
     const { filters } = this.props.search;
-    const { query } = this.props.match.params;
     const expertBaseId = filters && filters.eb && filters.eb.id;
     return (
-      <Layout contentClass={tc(['searchPage'])} onSearch={this.onSearchBarSearch}
-              query={query}>
+      <div className={classnames('content-inner', styles.page)}>
         <SearchComponent // Example: include all props.
           className={styles.SearchBorder} // additional className
           sorts={sysconfig.Search_SortOptions}
           expertBaseId={expertBaseId}
           onSearchBarSearch={this.onSearchBarSearch}
-          showSearchBox={false}
+          showSearchBox={this.props.app.headerSearchBox ? false : true}
           disableFilter={sysconfig.Search_DisableFilter}
           disableExpertBaseFilter={sysconfig.Search_DisableExpertBaseFilter}
           disableSearchKnowledge={sysconfig.Search_DisableSearchKnowledge}
           fixedExpertBase={sysconfig.Search_FixedExpertBase}
         />
-      </Layout>
+      </div>
     );
   }
 }

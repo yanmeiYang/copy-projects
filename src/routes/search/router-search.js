@@ -3,9 +3,7 @@
  *  Refactored by BoGao on 2017-09-07; dva@2.0 react-router-4
  */
 export default {
-
-  // 原来是CCF的Search，现在改成用GraphQL的CCF Search。
-  ExpertSearch: {
+  ExpertSearch: { // Not used.
     path: '/search/:query/:offset/:size',
     models: () => [
       import('models/search'),

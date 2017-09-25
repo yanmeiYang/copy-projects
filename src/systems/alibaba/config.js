@@ -30,6 +30,7 @@ module.exports = {
   Header_SubTextStyle: {},
   Header_UserPageURL: '', // 用户头像点击之后去的页面.
   Footer_Content: defaults.EMPTY_BLOCK,
+  ShowSideMenu: false,
   ShowFooter: true,
 
   //
@@ -97,7 +98,8 @@ module.exports = {
     },
     /*
     专家人才
-    活跃在科研一线，最近三年仍然在学术圈活跃（发文章）并且，H-index>40(35)；// TODO 没做
+    活跃在科研一线，最近三年仍然在学术圈活跃（发文章）// TODO 没做
+    H-index>40(35)；// TODO 没做
     全球Top 50大学的Associate Prof.；// TODO 没分出: 全球Top 50大学的Associate Prof.；
     国内千人/长江学者/杰青
     */
@@ -110,10 +112,12 @@ module.exports = {
     },
     /*
      明日之星
-     1. TR35；CCF青年科学家奖；（TODO 没有） 全球Top 50大学的Assistant Prof.；// TODO 没分出 Associate Prof.；
-        国内青年千人；优青；中 H-Index>15 <40 的人。
-
-     2. 从事科研10年之内（第一篇论文），最近三年仍然在学术圈活跃（发文章），H-index>15 ，<40
+     - TR35；
+     - CCF青年科学家奖；// TODO 没有
+     - 全球Top 50大学的Assistant Prof.；// TODO 没分出 Associate Prof.；
+     - 国内青年千人；优青；
+     - H-Index>15 // TODO 没有
+     - 从事科研10年之内（第一篇论文），最近三年仍然在学术圈活跃（发文章），H-index>10 (或者15，对于热门领域)；原则上每个领域保留前50 // TODO 没有
      */
     {
       id: toIDDotString(

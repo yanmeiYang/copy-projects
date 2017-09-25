@@ -2,21 +2,24 @@
  * Created by BoGao on 2017/6/20.
  */
 import React from 'react';
-import { toIDDotString, TopExpertBase } from 'utils/expert-base';
 import { IndexInfoBox, PersonLabel } from './components';
-import defaults from '../utils';
+import { toIDDotString, TopExpertBase } from '../../utils/expert-base';
 
 module.exports = {
 
   // 通用配置。所有System的配置文件必须全部包含这部分的值
   PageTitle: 'HUAWEI 知识洞察系统',
   SearchPagePrefix: 'uniSearch', // search, uniSearch
+  ShowSideMenu: false,
   ShowRegisteredRole: false,
 
   EnableLocalLocale: true,
 
   UserAuthSystem: 'huawei', // aminer 或者是 system.config
   UserAuthSystem_AddSysTagAuto: true, // 登录时自动添加system的标签
+
+  // IndexPage_QuickSearchList:[], // use default.
+  IndexPage_InfoBlocks: <IndexInfoBox />,
 
   Header_SubTextLogo: '知识洞察系统',
   Header_SubTextStyle: { width: 128 },
@@ -35,13 +38,12 @@ module.exports = {
   Signup_Password: true,
 
   // Functionality
-  Enable_Export: true,
+  Enable_Export: false,
   Search_EnablePin: true,
   // 地图中心点
   CentralPosition: { lat: 37.09024, lng: -95.712891 },
 
-  PersonList_TitleRightBlock: defaults.EMPTY_BLOCK_FUNC,
-  PersonList_AfterTitleBlock: ({ param }) => <PersonLabel person={param.person} />,
+  PersonList_TitleRightBlock: person => <PersonLabel person={person} />,
 
   ExpertBases: [
     {

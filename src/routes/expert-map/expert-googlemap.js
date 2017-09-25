@@ -4,8 +4,6 @@
 import React from 'react';
 import {connect} from 'dva';
 import {Button, Select} from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
-import classnames from 'classnames';
 import styles from './expert-googlemap.less';
 import {sysconfig} from '../../systems';
 import {listPersonByIds} from '../../services/person';
@@ -16,7 +14,6 @@ import RightInfoZonePerson from './RightInfoZonePerson';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
 import RightInfoZoneAll from './RightInfoZoneAll';
 import {TopExpertBase} from '../../utils/expert-base';
-
 const ButtonGroup = Button.Group;
 const blankAvatar = '/images/blank_avatar.jpg';
 let map1;
@@ -66,12 +63,12 @@ class ExpertGoogleMap extends React.Component {
         const clusterIdList = id.split(',');
         this.props.dispatch({
           type: 'expertMap/listPersonByIds',
-          payload: { ids: clusterIdList },
+          payload: {ids: clusterIdList},
         });
       }
       this.props.dispatch({
         type: 'expertMap/setRightInfo',
-        payload: { idString: id, rightInfoType: type },
+        payload: {idString: id, rightInfoType: type},
       });
     }
   };
@@ -167,7 +164,7 @@ class ExpertGoogleMap extends React.Component {
             } else {
               let tmp = personInfo.name.match(/\b(\w)/g);
               if (tmp.length > 3) {
-                tmp = tmp[0].concat(tmp[1], tmp[2]);
+                tmp = tmp[0].concat(tmp[1],tmp[2]);
                 name = tmp;
               } else {
                 name = tmp.join('');
@@ -190,7 +187,7 @@ class ExpertGoogleMap extends React.Component {
                 num = chtml.split('@@@@@@@')[1];
               }
               const personInfo = data.data.persons[num];
-              const myLatLng = new google.maps.LatLng({ lat: 47, lng: 112 });
+              const myLatLng = new google.maps.LatLng({lat: 47, lng: 112});
               const infowindow = new google.maps.InfoWindow({
                 content: "<div id='author_info' class='popup'></div>",
               });
@@ -349,7 +346,7 @@ class ExpertGoogleMap extends React.Component {
               fontStyle: 'italic',
             },
             icon: {
-              url: '/images/map/marker_blue_sprite.png',
+              url: '/images/map/marker_red_sprite.png',
               //fillColor: 'red',
               size: new google.maps.Size(20, 70),
               origin: new google.maps.Point(0, 0),
@@ -511,7 +508,7 @@ class ExpertGoogleMap extends React.Component {
   };
 
   callSearchMap(query) {
-    this.props.dispatch({ type: 'expertMap/searchMap', payload: { query } });
+    this.props.dispatch({type: 'expertMap/searchMap', payload: {query}});
   }
 
   onChangeBaiduMap = () => {
@@ -524,16 +521,16 @@ class ExpertGoogleMap extends React.Component {
   onSetPersonCard = (personInfo) => {
     this.props.dispatch({
       type: 'expertMap/getPersonInfoSuccess',
-      payload: { data: { data: personInfo } },
+      payload: {data: {data: personInfo}},
     });
   };
 
   onLoadPersonCard = (personId) => {
-    this.props.dispatch({ type: 'expertMap/getPersonInfo', payload: { personId } });
+    this.props.dispatch({type: 'expertMap/getPersonInfo', payload: {personId}});
   };
 
   onResetPersonCard = () => {
-    this.props.dispatch({ type: 'expertMap/resetPersonInfo' });
+    this.props.dispatch({type: 'expertMap/resetPersonInfo'});
   };
 
   goto = () => {
@@ -548,11 +545,11 @@ class ExpertGoogleMap extends React.Component {
 
   domainChanged = (value) => {
     if (value) {
-      const { dispatch } = this.props;
+      const {dispatch} = this.props;
       //console.log(`selected ${value}`);
       localStorage.setItem("isgoogleClick", "0");
-      dispatch({ type: 'app/clearQueryInHeaderIfExist' });
-      dispatch({ type: 'expertMap/searchExpertBaseMap', payload: { eb: value } });
+      dispatch({type: 'app/clearQueryInHeaderIfExist'});
+      dispatch({type: 'expertMap/searchExpertBaseMap', payload: {eb: value}});
     }
   };
 //page-------------------------------------------------------------------------------------------------------------------
@@ -572,7 +569,7 @@ class ExpertGoogleMap extends React.Component {
     let personPopupJsx;
     const person = model.personInfo;
     if (person) {
-      const url = profileUtils.getAvatar(person.avatar, person.id, 90);
+      const url = profileUtils.getAvatar(person.avatar, person.id, 50);
       const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
       const pos = profileUtils.displayPosition(person.pos);
       const aff = profileUtils.displayAff(person);
@@ -613,53 +610,42 @@ class ExpertGoogleMap extends React.Component {
 
         <div className={styles.headerLine}>
           <div className={styles.left}>
-            {/*{this.props.title}*/}
-            <span>
-              <FM defaultMessage="Domain"
-                  id="com.expertMap.headerLine.label.field" />
-            </span>
+            {this.props.title}
 
             <Select defaultValue="" className={styles.domainSelector} style={{ width: 120 }}
                     onChange={this.domainChanged}>
-              <Select.Option key="none" value="">
-                <FM defaultMessage="Domain"
-                    id="com.expertMap.headerLine.label.selectField" />
-              </Select.Option>
+              <Select.Option key="none" value="">选择领域</Select.Option>
               {Domains.map(domain =>
                 (<Select.Option key={domain.id} value={domain.id}>{domain.name}</Select.Option>),
               )}
             </Select>
 
-            <div className={styles.level}>
-              <span>
-                <FM defaultMessage="Baidu Map"
-                    id="com.expertMap.headerLine.label.level" />
-              </span>
-              <ButtonGroup id="sType" className={styles.sType}>
-                <Button onClick={this.showType} value="0">自动</Button>
-                <Button onClick={this.showType} value="1">大区</Button>
-                <Button onClick={this.showType} value="2">国家</Button>
-                <Button onClick={this.showType} value="3" style={{ display: 'none' }}>国内区</Button>
-                <Button onClick={this.showType} value="4">城市</Button>
-                <Button onClick={this.showType} value="5">机构</Button>
+            <div className={styles.switchMapType}>
+              <ButtonGroup id="diffmaps">
+                <Button onClick={this.onChangeBaiduMap}>Baidu Map</Button>
+                <Button type="primary" onClick={this.onChangeGoogleMap}>Google Map</Button>
               </ButtonGroup>
             </div>
 
           </div>
 
           <div className={styles.scopes}>
-            <div className={styles.switch}>
-              <ButtonGroup id="diffmaps">
-                <Button onClick={this.onChangeBaiduMap}>
-                  <FM defaultMessage="Baidu Map"
-                      id="com.expertMap.headerLine.label.baiduMap" />
-                </Button>
-                <Button type="primary" onClick={this.onChangeGoogleMap}>
-                  <FM defaultMessage="Baidu Map"
-                      id="com.expertMap.headerLine.label.googleMap" />
-                </Button>
-              </ButtonGroup>
-            </div>
+            <span>按照层级显示：</span>
+            <ButtonGroup id="sType">
+              <Button onClick={this.showType} value="0">自动</Button>
+              <Button onClick={this.showType} value="1">大区</Button>
+              <Button onClick={this.showType} value="2">国家</Button>
+              <Button onClick={this.showType} value="3" style={{ display: 'none' }}>国内区</Button>
+              <Button onClick={this.showType} value="4">城市</Button>
+              <Button onClick={this.showType} value="5">机构</Button>
+            </ButtonGroup>
+
+            {/*<div className={styles.switch}>*/}
+            {/*<ButtonGroup id="diffmaps">*/}
+            {/*<Button type="primary" onClick={this.onChangeBaiduMap}>Baidu Map</Button>*/}
+            {/*<Button onClick={this.onChangeGoogleMap}>Google Map</Button>*/}
+            {/*</ButtonGroup>*/}
+            {/*</div>*/}
 
           </div>
         </div>
@@ -670,26 +656,23 @@ class ExpertGoogleMap extends React.Component {
 
           <div className={styles.right}>
             <div className={styles.legend}>
-              <div className={styles.title}>
-                <span alt="" className={classnames('icon', styles.titleIcon)} />
-                图例
-              </div>
-
+              <div className={styles.title}>Legend:</div>
               <div className={styles.t}>
-                <div>专家：</div>
-                <span alt="" className={classnames('icon', styles.expertIcon1)} />
-                <div className={styles.tExperts}>一组专家：</div>
-                <span alt="" className={classnames('icon', styles.expertIcon2)} />
+                <img className={styles.icon} width="42" src="/images/map/marker_red_sprite.png"
+                     alt="legend" />
+                <div className={styles.t}>专家</div>
+                <img className={styles.icon2} width="32" src="/images/map/m0.png" alt="legend" />
+                <div className={styles.t}>一组专家</div>
               </div>
               <div className={styles.container}>
                 <div className={styles.label}>人数：</div>
-                {/*<div className={styles.text}> 少</div>*/}
-                <div className={styles.item1}>少</div>
+                <div className={styles.text}> 少</div>
+                <div className={styles.item1}> 1</div>
                 <div className={styles.item2}> 2</div>
                 <div className={styles.item3}> 3</div>
                 <div className={styles.item4}> 4</div>
-                <div className={styles.item5}>多</div>
-                {/*<div className={styles.text}> 多</div>*/}
+                <div className={styles.item5}> 5</div>
+                <div className={styles.text}> 多</div>
               </div>
             </div>
 
@@ -719,4 +702,4 @@ class ExpertGoogleMap extends React.Component {
   }
 }
 
-export default connect(({ expertMap, loading }) => ({ expertMap, loading }))(ExpertGoogleMap);
+export default connect(({expertMap, loading}) => ({expertMap, loading}))(ExpertGoogleMap);

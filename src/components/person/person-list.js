@@ -78,7 +78,7 @@ export default class PersonList extends PureComponent {
 
   render() {
     const { persons, expertBaseId, user } = this.props;
-    const { rightZoneFuncs, titleRightBlock, bottomZoneFuncs, afterTitleBlock } = this.props;
+    const { rightZoneFuncs, titleRightBlock, bottomZoneFuncs } = this.props;
 
     const showPrivacy = false;
     const RightZoneFuncs = rightZoneFuncs || DefaultRightZoneFuncs;
@@ -124,7 +124,6 @@ export default class PersonList extends PureComponent {
                         <a {...personLinkParams}>{name}</a>
                         {false && <span className={styles.rank}>会士</span>}
                       </h2>
-                      {afterTitleBlock && afterTitleBlock({ param: { person, expertBaseId } })}
                     </div>}
 
                     {/* ---- TitleRightBlock ---- */}

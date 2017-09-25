@@ -86,7 +86,7 @@ export default class SearchFilter extends PureComponent {
           </div>}
 
           {
-            aggs.map((agg, index) => {
+            aggs && aggs.map((agg, index) => {
               if (agg.label === sysconfig.SearchFilterExclude) { // skip gender
                 return '';
               }
@@ -118,7 +118,8 @@ export default class SearchFilter extends PureComponent {
                             className={classnames(styles.filterItem, 'label')}
                             checked={filters[agg.label] === item.label}
                             onChange={onChange}
-                          >{item.label} (<span className={classnames(styles.filterCount, 'label-count')}>{item.count}</span>)
+                          >{item.label} (<span
+                            className={classnames(styles.filterCount, 'label-count')}>{item.count}</span>)
                           </CheckableTag>
                         );
                       })

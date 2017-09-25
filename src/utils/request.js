@@ -169,13 +169,13 @@ const testNextRequest = [{
           'citation',
           'hindex',
           'labels',
-        ]
+        ],
       },
       {
         Publication: [
           'title',
           'titlezh',
-        ]
+        ],
       },
     ],
     aggregation: [
@@ -184,7 +184,7 @@ const testNextRequest = [{
         items: [
           'term',
           'count',
-        ]
+        ],
       },
     ]
   }

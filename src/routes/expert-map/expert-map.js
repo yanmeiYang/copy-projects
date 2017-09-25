@@ -913,7 +913,7 @@ class ExpertMap extends React.PureComponent {
                 图例
               </div>
               <div className={styles.t}>
-                <div>专家：</div>
+                <div className={styles.div}>专家：</div>
                 <span alt="" className={classnames('icon', styles.expertIcon1)} />
                 <div className={styles.tExperts}>一组专家：</div>
                 <span alt="" className={classnames('icon', styles.expertIcon2)} />

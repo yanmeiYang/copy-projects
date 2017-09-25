@@ -19,6 +19,9 @@ class RightInfoZoneAll extends React.PureComponent {
     const count = this.props.count;
     const avg = this.props.avg;
     const persons = this.props.persons;
+    const isChNumber = this.props.isChNumber;
+    const isIeeeFellowNumber = this.props.isIeeeFellowNumber;
+    const isACMFellowNumber = this.props.isACMFellowNumber;
     if (!persons) {
       return <div />;
     }
@@ -26,6 +29,12 @@ class RightInfoZoneAll extends React.PureComponent {
       <div className="rizAll">
         <div className="name bg">
           <h2 className="section_header">Show {count} experts in map.</h2>
+        </div>
+
+        <div className="name">
+          <div>Acm Fellow:{isACMFellowNumber}.</div>
+          <div>Ieee Fellow:{isIeeeFellowNumber}.</div>
+          <div>华人:{isChNumber}.</div>
         </div>
         <div>
           <HindexGraph persons={persons} avg={avg} />

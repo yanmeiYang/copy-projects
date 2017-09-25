@@ -14,9 +14,12 @@ import RightInfoZonePerson from './RightInfoZonePerson';
 import RightInfoZoneAll from './RightInfoZoneAll';
 import GetBMapLib from './utils/BMapLibGai.js';
 import { TopExpertBase } from '../../utils/expert-base';
-import { SearchSelectBox } from '../../components/widgets';
+import { Tag } from 'antd';
+const { CheckableTag } = Tag;
 
 let map1;
+let number;
+let range;
 const ButtonGroup = Button.Group;
 const blankAvatar = '/images/blank_avatar.jpg';
 
@@ -62,19 +65,25 @@ class ExpertMap extends React.PureComponent {
 
   state = {
     typeIndex: 0,
+
   }
 
   componentDidMount() {
     const { query, dispatch } = this.props;
     this.callSearchMap(query);
     localStorage.setItem("lasttype", "0");
+    localStorage.setItem("domain","0");
     dispatch({
       type: 'expertMap/setRightInfo',
       payload: { idString: '', rightInfoType: 'global' },
     });
     window.onresize = () => {
-      this.showMap(this.props.expertMap.geoData, this.state.typeIndex);
+      //this.showMap(this.props.expertMap.geoData, this.state.typeIndex);
     };
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return true;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -84,7 +93,7 @@ class ExpertMap extends React.PureComponent {
     }
     if (nextProps.expertMap.geoData !== this.props.expertMap.geoData) {
       const typeId = '0';
-      this.showMap(nextProps.expertMap.geoData, typeId);
+      this.showMap(nextProps.expertMap.geoData, typeId, '0', '0');
     }
   }
 
@@ -187,7 +196,7 @@ class ExpertMap extends React.PureComponent {
           console.log('failed');
         },
       ).catch((error) => {
-        console.error(error);
+        //console.error(error);
       });
     }
   };
@@ -260,7 +269,6 @@ class ExpertMap extends React.PureComponent {
             }
             i = i+1;
           })
-          console.log(arr.join(''))
           name = arr.join('');
           name = '&nbsp;&nbsp;'+name;
           style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:10px;word-wrap:break-word;font-size:20%;';
@@ -324,7 +332,11 @@ class ExpertMap extends React.PureComponent {
     window.location.href = href.replace('expert-map', 'expert-googlemap');
   };
 
-  showMap = (place, type) => {
+  // onSearch = (lb) => {
+  //   console.log(lb)
+  // };
+
+  showMap = (place, type, range, number) => {
     waitforBMap(200, 100,
       (BMap) => {
         this.showOverLay();
@@ -375,7 +387,7 @@ class ExpertMap extends React.PureComponent {
           centerx, centery
         ), scale);
         this.initializeBaiduMap(map);
-        const markers = [];
+        let markers = [];
         const pId = [];
         let counts = 0;
         if (newtype === '1') {
@@ -464,41 +476,82 @@ class ExpertMap extends React.PureComponent {
           }
           map.addOverlay(new BMap.Label("中部", opts21));
         }
+        //const domain = localStorage.getItem("domain");
+        place.results.sort((a, b) => b.hindex - a.hindex);
         for (const o in place.results) {
-          //console.log(place.results[o].is_ch);是否是华人
-          //console.log(place.results[o].fellows);是否是fellow
+          //console.log(place.results[o].is_ch)
+          //console.log(place.results[o].fellows)
           let pt = null;
           const newplace = findPosition(newtype, place.results[o]);
+          const label = new BMap.Label(`<div>${place.results[o].name}</div><div style='display: none;'>${place.results[o].id}</div>`);
+          label.setStyle({
+            color: 'black',
+            fontSize: '12px',
+            border: 'none',
+            backgroundColor: 'transparent',
+            // opacity:0.4,
+            fontWeight: 'bold',
+            textAlign: 'center',
+            width: '130px',
+            textShadow: '1px 1px 2px white, -1px -1px 2px white',
+            fontStyle: 'italic',
+          });
+          label.setOffset(new BMap.Size(-55.5, 25));
+
           // 只有经纬度不为空或者0的时候才显示，否则丢弃
-          if ((newplace[1] != null && newplace[1] != null) &&
-            (newplace[1] !== 0 && newplace[1] !== 0)) {
-            pt = new BMap.Point(newplace[1], newplace[0]);// 这里经度和纬度是反着的
-            const marker = new BMap.Marker(pt);
-            const label = new BMap.Label(`<div>${place.results[o].name}</div><div style='display: none;'>${place.results[o].id}</div>`);
-            label.setStyle({
-              color: 'black',
-              fontSize: '12px',
-              border: 'none',
-              backgroundColor: 'transparent',
-              // opacity:0.4,
-              fontWeight: 'bold',
-              textAlign: 'center',
-              width: '130px',
-              textShadow: '1px 1px 2px white, -1px -1px 2px white',
-              fontStyle: 'italic',
-            });
-            label.setOffset(new BMap.Size(-55.5, 25));
-            marker.setLabel(label);
-            const personId = place.results[o].id;
-            pId[counts] = personId;
-            markers.push(marker);
-            counts += 1;
-          }
+              if ((newplace[1] != null && newplace[1] != null) &&
+                (newplace[1] !== 0 && newplace[1] !== 0)) {
+                pt = new BMap.Point(newplace[1], newplace[0]);// 这里经度和纬度是反着的
+                if (range === '0') {
+                  const marker = new BMap.Marker(pt);
+                  marker.setLabel(label);
+                  const personId = place.results[o].id;
+                  pId[counts] = personId;
+                  markers.push(marker);
+                  counts += 1;
+                } else if (range === '1') {
+                  if (place.results[o].fellows[0] === 'acm') {
+                    const marker = new BMap.Marker(pt);
+                    marker.setLabel(label);
+                    const personId = place.results[o].id;
+                    pId[counts] = personId;
+                    markers.push(marker);
+                    counts += 1;
+                  }
+                } else if (range === '2') {
+                   if (place.results[o].fellows[0] === 'ieee' || place.results[o].fellows[1] === 'ieee') {
+                     const marker = new BMap.Marker(pt);
+                     marker.setLabel(label);
+                     const personId = place.results[o].id;
+                     pId[counts] = personId;
+                     markers.push(marker);
+                     counts += 1;
+                   }
+                } else if (range === '3') {
+                  if (place.results[o].is_ch) {
+                    const marker = new BMap.Marker(pt);
+                    marker.setLabel(label);
+                    const personId = place.results[o].id;
+                    pId[counts] = personId;
+                    markers.push(marker);
+                    counts += 1;
+                  }
+                }
+              }
+        }
+        if (number === '0') {
+          markers = markers.slice(0, 200);
+        } else if (number === '1') {
+          markers = markers.slice(0, 50);
+        } else if (number === '2') {
+          markers = markers.slice(0, 100);
+        } else if (number === '3') {
+          markers = markers.slice(0, 500);
         }
         waitforBMapLib(200, 100,
           (BMapLib) => {
             const _ = new BMapLib.MarkerClusterer(map, { markers });
-            for (let m = 0; m < pId.length; m += 1) {
+            for (let m = 0; m < markers.length; m += 1) {
               this.addMouseoverHandler(markers[m], pId[m]);
             }
           }, showLoadErrorMessage,
@@ -612,21 +665,36 @@ class ExpertMap extends React.PureComponent {
     const typeid = e.currentTarget && e.currentTarget.value && e.currentTarget.getAttribute('value');
     this.setState({ typeIndex: typeid });
     if (typeid === '0') {
-      this.showMap(this.props.expertMap.geoData, typeid);
+      this.showMap(this.props.expertMap.geoData, typeid, '0', '0');
     } else if (typeid === '1') {
       // 简单地读取其城市大区等信息，然后归一到一个地址，然后在地图上显示
-      this.showMap(this.props.expertMap.geoData, typeid);
+      this.showMap(this.props.expertMap.geoData, typeid, '0', '0');
     } else if (typeid === '2') {
-      this.showMap(this.props.expertMap.geoData, typeid);
+      this.showMap(this.props.expertMap.geoData, typeid, '0', '0');
     } else if (typeid === '3') {
-      this.showMap(this.props.expertMap.geoData, typeid);
+      this.showMap(this.props.expertMap.geoData, typeid, '0', '0');
     } else if (typeid === '4') {
-      this.showMap(this.props.expertMap.geoData, typeid);
+      this.showMap(this.props.expertMap.geoData, typeid, '0', '0');
     } else if (typeid === '5') {
-      this.showMap(this.props.expertMap.geoData, typeid);
+      this.showMap(this.props.expertMap.geoData, typeid, '0', '0');
     }
   };
 
+  showRange = (rangeTmp) => {
+    const lastType = localStorage.getItem("lasttype");
+    if (rangeTmp) {
+      range = rangeTmp;
+      this.showMap(this.props.expertMap.geoData, lastType, range, number);
+    }
+  };
+
+  showNumber = (numberTmp) => {
+    const lastType = localStorage.getItem("lasttype");
+    if (numberTmp) {
+      number = numberTmp;
+      this.showMap(this.props.expertMap.geoData, lastType, range, number);
+    }
+  };
 
   onChangeBaiduMap = () => {
     // TODO don't change page, use dispatch.
@@ -684,13 +752,24 @@ class ExpertMap extends React.PureComponent {
   render() {
     const model = this.props && this.props.expertMap;
     const persons = model.geoData.results;
-
     let count = 0;
+    let isACMFellowNumber = 0;
+    let isIeeeFellowNumber = 0;
+    let isChNumber = 0;
     let hIndexSum = 0;
     if (persons) {
       persons.map((person1) => {
         hIndexSum += person1.hindex;
         count += 1;
+        if (person1.fellows[0] === 'acm') {
+          isACMFellowNumber += 1;
+        }
+        if (person1.fellows[0] === 'ieee' || person1.fellows[1] === 'ieee') {
+          isIeeeFellowNumber += 1;
+        }
+        if (person1.is_ch) {
+          isChNumber += 1;
+        }
         return hIndexSum;
       });
     }
@@ -727,26 +806,51 @@ class ExpertMap extends React.PureComponent {
 
     const rightInfos = {
       global: () => (
-        <RightInfoZoneAll count={count} avg={avg} persons={persons} />
+        <RightInfoZoneAll count={count} avg={avg} persons={persons} isACMFellowNumber={isACMFellowNumber} isIeeeFellowNumber={isIeeeFellowNumber} isChNumber={isChNumber}/>
       ),
       person: () => (<RightInfoZonePerson person={model.personInfo} />),
       cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),
     };
     const Domains = TopExpertBase.RandomTop100InDomain;
+    const that = this;
     return (
       <div className={styles.expertMap} id="currentMain">
-        <div><SearchSelectBox avg={avg}></SearchSelectBox></div>
+        <div className={styles.filterWrap}>
+          <div className={styles.filter}>
+            <div className={styles.filterRow}>
+              <span className={styles.filterTitle}><span>Range:</span></span>
+              <ul>
+                <CheckableTag className={styles.filterItem}>
+                  <span onClick={this.showRange.bind(that, '0')} value="0" ><i className="fa fa-globe fa-fw"></i>全球专家</span>
+                </CheckableTag>
+                <CheckableTag className={styles.filterItem}><span onClick={this.showRange.bind(that, '1')}>ACM Fellow</span></CheckableTag>
+                <CheckableTag className={styles.filterItem}><span onClick={this.showRange.bind(that, '2')}>IEEE Fellow</span></CheckableTag>
+                <CheckableTag className={styles.filterItem}><span onClick={this.showRange.bind(that, '3')}>华人</span></CheckableTag>
+              </ul>
+            </div>
+            <div className={styles.filterRow}>
+              <span className={styles.filterTitle}><span>H-index:</span></span>
+              <ul>
+                <CheckableTag className={styles.filterItem}><span onClick={this.showNumber.bind(that, '1')}>TOP50</span></CheckableTag>
+                <CheckableTag className={styles.filterItem}><span onClick={this.showNumber.bind(that, '2')}>TOP100</span></CheckableTag>
+                <CheckableTag className={styles.filterItem}><span onClick={this.showNumber.bind(that, '0')}>TOP200</span></CheckableTag>
+                <CheckableTag className={styles.filterItem}><span onClick={this.showNumber.bind(that, '3')}>TOP500</span></CheckableTag>
+                <CheckableTag className={styles.filterItem}><span onClick={this.showNumber.bind(that, '4')}>ALL</span></CheckableTag>
+              </ul>
+            </div>
+          </div>
+        </div>
         <div className={styles.headerLine}>
           <div className={styles.left}>
             {this.props.title}
 
-            {/*<Select defaultValue="" className={styles.domainSelector} style={{ width: 120 }}*/}
-                    {/*onChange={this.domainChanged}>*/}
-              {/*<Select.Option key="none" value="">选择领域</Select.Option>*/}
-              {/*{Domains.map(domain =>*/}
-                {/*(<Select.Option key={domain.id} value={domain.id}>{domain.name}</Select.Option>),*/}
-              {/*)}*/}
-            {/*</Select>*/}
+            <Select defaultValue="" className={styles.domainSelector} style={{ width: 120 }}
+                    onChange={this.domainChanged}>
+              <Select.Option key="none" value="">选择领域</Select.Option>
+              {Domains.map(domain =>
+                (<Select.Option key={domain.id} value={domain.id}>{domain.name}</Select.Option>),
+              )}
+            </Select>
 
             <div className={styles.switchMapType}>
               <ButtonGroup id="diffmaps">

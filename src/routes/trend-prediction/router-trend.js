@@ -5,7 +5,7 @@
 export default {
   TrendPredictionPage: {
     path: '/trend-prediction',
-    models: () => [import('models/expert-map')],
+    models: () => [import('models/topic-trend')],
     component: () => import('./'),
   },
 };

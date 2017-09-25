@@ -5,7 +5,8 @@ import { Layout } from 'routes';
 import queryString from 'query-string';
 import { compare } from 'utils';
 // import styles from './index.less';
-import TrendPrediction from './trend-prediction.js';
+//import TrendPrediction from './trend-prediction.js';
+import TopicTrend from './topic-trend';
 import { Auth } from '../../hoc';
 
 @connect(({ app }) => ({ app }))
@@ -51,8 +52,8 @@ export default class TrendPredictionPage extends React.Component {
     return (
       <Layout query={this.state.query} onSearch={this.onSearch}>
         <div className="content-inner">
-          <h1>技术趋势预测:</h1>
-          <TrendPrediction query={this.state.query} />
+          <h1>技术趋势分析:</h1>
+          <TopicTrend query={this.state.query} />
         </div>
       </Layout>
     );

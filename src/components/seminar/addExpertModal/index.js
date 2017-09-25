@@ -257,12 +257,12 @@ class AddExpertModal extends React.Component {
   };
 
   jumpToStep2 = () => {
-    this.setStep('step2', true);
-    // this.props.parentProps.form.validateFieldsAndScroll((err, values) => {
-    //   if (!err) {
-    //     this.setStep('step2', true);
-    //   }
-    // });
+    // this.setStep('step2', true);
+    this.props.parentProps.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        this.setStep('step2', true);
+      }
+    });
   };
 
   cancelCurrentPerson = () => {

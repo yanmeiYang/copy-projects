@@ -249,6 +249,7 @@ class RegistrationForm extends React.Component {
         address: currentSeminar.location.address || '',
         abstract: currentSeminar.abstract,
       };
+      this.expertExtendAddress = currentSeminar.location.address || '';
       this.props.form.setFieldsValue(data);
     }
   };
@@ -379,7 +380,7 @@ class RegistrationForm extends React.Component {
                   required: true, message: '请输入活动名称',
                 }],
               })(
-                <Input placeholder="请输入活动名称" />,
+                <Input placeholder="请输入活动名称" autoComplete="off" />,
               )}
             </FormItem>
 

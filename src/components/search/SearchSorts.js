@@ -1,10 +1,9 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'dva';
 import { Tag, Tabs } from 'antd';
-import classnames from 'classnames';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { compare } from 'utils/compare';
-import styles from './SearchSorts.less';
+import styles from './SearchFilter.less';
 
 const TabPane = Tabs.TabPane;
 
@@ -53,11 +52,11 @@ export default class SearchSorts extends React.PureComponent {
         })}
       </div>;
 
+
     return (
       <Tabs
-        className={classnames(styles.searchSorts)}
+        className={styles.maxWidth}
         defaultActiveKey={sortType}
-        activeKey={sortType}
         size="small"
         onChange={this.onOrderChange}
         tabBarExtraContent={rightZoneJSX}

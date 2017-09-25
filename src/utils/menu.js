@@ -1,4 +1,4 @@
-import { System } from './system';
+import { sysconfig } from 'systems';
 
 const allMenus = [{ id: 1, icon: 'laptop', name: '首页', router: '/' },
   { id: 2, bpid: 1, name: '学会活动', icon: 'api', router: '/seminar' },
@@ -33,8 +33,7 @@ const allMenus = [{ id: 1, icon: 'laptop', name: '首页', router: '/' },
   {
     id: 49, bpid: 4, mpid: 4, name: '机构列表', icon: 'compass',
     router: '/admin/category-list',
-  },
-];
+  },];
 
 const getMenusByUser = (user, role) => {
   const menus = [];
@@ -47,7 +46,7 @@ const getMenusByUser = (user, role) => {
     menus.push(all.slice(0, 1));
   }
   // todo 通过配置文件完成
-  if (System !== 'ccf') {
+  if (sysconfig.SOURCE !== 'ccf') {
     menus[0].splice(2, 1);
   }
   return menus;

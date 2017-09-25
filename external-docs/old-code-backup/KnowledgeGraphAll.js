@@ -167,7 +167,6 @@ class KnowledgeGraphSearchHelper extends React.Component {
       // Add Circle for the nodes
       nodeEnter.append('circle')
         .attr('class', 'node')
-        .attr('class', 'kgGraphAll')
         .attr('r', 1e-6)
         .style('fill', (d) => {
           return d._children ? 'lightsteelblue' : '#fff';

@@ -4,15 +4,11 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Layout } from 'routes';
-import { applyTheme } from 'systems';
 import queryString from 'query-string';
-import { Auth } from 'hoc';
 import ExpertGoogleMap from './expert-googlemap.js';
 import ExpertMap from './expert-map.js';
 import styles from './ExpertMapPage.less';
-
-const tc = applyTheme(styles);
+import { Auth } from '../../hoc';
 
 @connect(({ app, expertMap }) => ({ app, expertMap }))
 @Auth
@@ -38,13 +34,13 @@ export default class ExpertMapPage extends React.Component {
     if (type) {
       this.setState({ mapType: type });
     }
-    // this.dispatch({
-    //   type: 'app/layout',
-    //   payload: {
-    //     headerSearchBox: { query, onSearch: this.onSearch },
-    //     showFooter: false,
-    //   },
-    // });
+    this.dispatch({
+      type: 'app/layout',
+      payload: {
+        headerSearchBox: { query, onSearch: this.onSearch },
+        showFooter: false,
+      },
+    });
   }
 
   componentWillUnmount() {
@@ -54,11 +50,9 @@ export default class ExpertMapPage extends React.Component {
   onSearch = (data) => {
     if (data.query) {
       this.setState({ query: data.query });
-      // const href = window.location.href.split('?query=')[0] + '?query=' + data.query;
-      // window.location.href = href;
       this.props.dispatch(routerRedux.push({
         pathname: '/expert-map',
-        search: `?query=${data.query}`,
+        query: { query: data.query },
       }));
       this.props.dispatch({
         type: 'app/setQueryInHeaderIfExist',
@@ -68,7 +62,7 @@ export default class ExpertMapPage extends React.Component {
   };
 
   // Tips: 不会根据state变化的jsx block放到外面。这样多次渲染的时候不会多次初始化;
-  // titleBlock = <h1>专家地图:</h1>;
+  titleBlock = <h1>专家地图:</h1>;
 
   render() {
     // 这代码写的太漂亮了。 -- someone 2017-8-16
@@ -79,9 +73,9 @@ export default class ExpertMapPage extends React.Component {
       : <ExpertMap {...options} />;
 
     return (
-      <Layout contentClass={tc(['expertMapPage'])} query={query} onSearch={this.onSearch}>
+      <div className={styles.content}>
         {mainBlock}
-      </Layout>
+      </div>
     );
   }
 }

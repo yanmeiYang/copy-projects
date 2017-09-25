@@ -94,24 +94,6 @@ const TopExpertBase = {
     { id: '59a7eb3d9ed5db1ed2034305', name: '物联网' },
     { id: '59a77a809ed5db1ed202dbd6', name: '信息检索' },
   ],
-  RandomTop100InDomainAminer: [
-    { id: '57a57c640a3ac5e5b97e6f9b', name: 'Data Mining' },
-    { id: '57a57c640a3ac5e5b97e6f9c', name: 'Database' },
-    { id: '57a57c5f0a3ac5e5b97e6f90', name: 'Theory' },
-    { id: '57a57c620a3ac5e5b97e6f96', name: 'Multimedia' },
-    { id: '57a57c650a3ac5e5b97e6f9e', name: 'Security' },
-    { id: '57a57c610a3ac5e5b97e6f93', name: 'System' },
-    { id: '57a57c640a3ac5e5b97e6f9a', name: 'Machine Learning' },
-    { id: '57a57c630a3ac5e5b97e6f99', name: 'Artificial Intelligence' },
-    { id: '580460fa41928c416c374145', name: 'Software Engineering' },
-    { id: '57a57c600a3ac5e5b97e6f92', name: 'Computer Networking' },
-    { id: '57a57c620a3ac5e5b97e6f95', name: 'Natural Language Processing' },
-    { id: '57a57c620a3ac5e5b97e6f97', name: 'Human-Computer Interaction' },
-    { id: '57a57c630a3ac5e5b97e6f98', name: 'Computer Graphics' },
-    { id: '57a57c660a3ac5e5b97e6f9f', name: 'Computer Vision' },
-    { id: '587834730a3ac5b5de65f60d', name: 'Web and Information Retrieval' },
-
-  ],
 
 };
 

@@ -5,13 +5,12 @@ import React from 'react';
 import { routerRedux } from 'dva/router';
 import { Table, Tabs, Spin, Modal, Input, Radio, Button } from 'antd';
 import { connect } from 'dva';
-import { Layout } from 'routes';
-import { RequireAdmin } from 'hoc';
-import { sysconfig, applyTheme } from 'systems';
-import { contactByJoint, getValueByJoint } from 'services/seminar';
 import styles from './Users.less';
+import { config } from '../../../utils';
+import { sysconfig } from '../../../systems';
+import { RequireAdmin } from '../../../hoc';
+import { contactByJoint, getValueByJoint } from '../../../services/seminar';
 
-const tc = applyTheme(styles);
 const TabPane = Tabs.TabPane;
 const { Column } = Table;
 const RadioGroup = Radio.Group;
@@ -265,79 +264,77 @@ export default class Users extends React.Component {
     const { universalConfig } = this.props;
     const { committee, selectedAuthority, selectedRole } = this.state;
     return (
-      <Layout searchZone={[]} contentClass={tc(['userList'])} showNavigator={false}>
-        <div className="content-inner" style={{ maxWidth: '1228px' }}>
-          <div className="toolsArea">
-            <Button type="primary" size="large" style={{}} onClick={this.goCreateUser}>创建用户</Button>
-          </div>
-          <h2 className={styles.pageTitle}>用户管理</h2>
-          {sysconfig.UserAuthSystem === 'aminer' &&
-          <div>也可以使用AMiner账号登录</div>
-          }
-          <Tabs defaultActiveKey={this.state.defaultTabKey} type="card" onChange={this.onTabChange}>
-            <TabPane tab="活动用户" key="active" />
-            <TabPane tab="禁用用户" key="forbid" />
-          </Tabs>
+      <div className="content-inner" style={{ maxWidth: '1228px' }}>
+        <div className="toolsArea">
+          <Button type="primary" size="large" style={{}} onClick={this.goCreateUser}>创建用户</Button>
+        </div>
+        <h2 className={styles.pageTitle}>用户管理</h2>
+        {sysconfig.UserAuthSystem === 'aminer' &&
+        <div>也可以使用AMiner账号登录</div>
+        }
+        <Tabs defaultActiveKey={this.state.defaultTabKey} type="card" onChange={this.onTabChange}>
+          <TabPane tab="活动用户" key="active" />
+          <TabPane tab="禁用用户" key="forbid" />
+        </Tabs>
 
-          <Spin spinning={loading}>
-            <Table
-              className={styles.userListTable}
-              dataSource={listUsers}
-              bordered
-              size="small"
-              pagination={false}
-            >
-              <Column title="姓名" dataIndex="" key="display_name"
-                      render={this.showUpdateName} />
-              <Column title="邮箱" dataIndex="email" key="email" />
-              {/* <Column title="职称" dataIndex="position" key="position"/> */}
-              {/* <Column title="性别" dataIndex="gender" key="gender" render={this.i18nGender} /> */}
-              <Column title="角色" dataIndex="new_role" key="role" />
-              {sysconfig.ShowRegisteredRole &&
-              <Column title="所属部门" dataIndex="authority" key="committee"
-                      render={key => getValueByJoint(key)} />}
-              <Column title="操作" dataIndex="" key="action" render={this.operatorRender} />
-            </Table>
-          </Spin>
-          <Modal
-            title="修改角色"
-            visible={this.state.visible}
-            confirmLoading={this.state.confirmLoading}
-            onOk={this.handleOk}
-            onCancel={this.handleCancel}
+        <Spin spinning={loading}>
+          <Table
+            className={styles.userListTable}
+            dataSource={listUsers}
+            bordered
+            size="small"
+            pagination={false}
           >
-            {userRoles &&
-            <div style={{ width: '100%' }}>
-              <h5>角色：</h5>
-              <RadioGroup onChange={this.selectedRole.bind()} value={selectedRole}>
+            <Column title="姓名" dataIndex="" key="display_name"
+                    render={this.showUpdateName} />
+            <Column title="邮箱" dataIndex="email" key="email" />
+            {/* <Column title="职称" dataIndex="position" key="position"/> */}
+            {/* <Column title="性别" dataIndex="gender" key="gender" render={this.i18nGender} /> */}
+            <Column title="角色" dataIndex="new_role" key="role" />
+            {sysconfig.ShowRegisteredRole &&
+            <Column title="所属部门" dataIndex="authority" key="committee"
+                    render={key => getValueByJoint(key)} />}
+            <Column title="操作" dataIndex="" key="action" render={this.operatorRender} />
+          </Table>
+        </Spin>
+        <Modal
+          title="修改角色"
+          visible={this.state.visible}
+          confirmLoading={this.state.confirmLoading}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
+          {userRoles &&
+          <div style={{ width: '100%' }}>
+            <h5>角色：</h5>
+            <RadioGroup onChange={this.selectedRole.bind()} value={selectedRole}>
+              {
+                userRoles.map((item) => {
+                  return (<Radio key={Math.random()}
+                                 value={`${item.value.key}`}
+                                 data={item.value}>{item.value.key}</Radio>);
+                })
+              }
+            </RadioGroup>
+            {committee &&
+            <div><h5>所属部门：</h5>
+              <RadioGroup size="large" onChange={this.selectedAuthorityRegion.bind()}
+                          value={selectedAuthority}>
                 {
-                  userRoles.map((item) => {
-                    return (<Radio key={Math.random()}
-                                   value={`${item.value.key}`}
-                                   data={item.value}>{item.value.key}</Radio>);
+                  universalConfig.data.map((item) => {
+                    const val = `authority_${contactByJoint(this.state.parentOrg, item.value.key)}`;
+                    return (
+                      <Radio key={Math.random()} className={styles.twoColumnsShowRadio}
+                             value={val}>{item.value.key}</Radio>
+                    );
                   })
                 }
               </RadioGroup>
-              {committee &&
-              <div><h5>所属部门：</h5>
-                <RadioGroup size="large" onChange={this.selectedAuthorityRegion.bind()}
-                            value={selectedAuthority}>
-                  {
-                    universalConfig.data.map((item) => {
-                      const val = `authority_${contactByJoint(this.state.parentOrg, item.value.key)}`;
-                      return (
-                        <Radio key={Math.random()} className={styles.twoColumnsShowRadio}
-                               value={val}>{item.value.key}</Radio>
-                      );
-                    })
-                  }
-                </RadioGroup>
-              </div>}
-            </div>
-            }
-          </Modal>
-        </div>
-      </Layout>
+            </div>}
+          </div>
+          }
+        </Modal>
+      </div>
     );
   }
 }

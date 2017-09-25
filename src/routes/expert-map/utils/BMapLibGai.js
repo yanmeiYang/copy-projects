@@ -1377,7 +1377,7 @@ function GetBMapLib(showTop) {
        * @type {String}
 
        */
-      const _IMAGE_PATH = '/images/map/m';
+      const _IMAGE_PATH = 'http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m';
 
       /**
 
@@ -1560,8 +1560,8 @@ function GetBMapLib(showTop) {
         const size = style.size;
         const anchor = style.anchor;
         const offset = style.offset;
-        const textColor = style.textColor || 'white';
-        const textSize = style.textSize || 16;
+        const textColor = style.textColor || 'black';
+        const textSize = style.textSize || 10;
 
         const csstext = [];
         if (T.browser.ie < 7) {

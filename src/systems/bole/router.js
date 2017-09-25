@@ -15,6 +15,7 @@ import admin from 'routes/admin/router-admin';
 // import tencent from 'routes/third-login/router';
 import router2bprofile from 'routes/2b-profile/router-2bprofile';
 
+import App from 'routes/app';
 import { RouterRegistry, RouterRegistry2b, RouterJSXFunc } from '../router-registry';
 
 const routes = [
@@ -96,7 +97,7 @@ const routes = [
 ];
 
 const Routers = ({ history, app }) => {
-  return RouterJSXFunc(history, app, routes);
+  return RouterJSXFunc(history, app, routes, App);
 };
 
 // Routers.propTypes = {

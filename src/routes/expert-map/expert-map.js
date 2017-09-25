@@ -4,10 +4,8 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Button, Select } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
-import classnames from 'classnames';
-import { sysconfig } from 'systems';
 import styles from './expert-map.less';
+import { sysconfig } from '../../systems';
 import { listPersonByIds } from '../../services/person';
 import * as profileUtils from '../../utils/profile-utils';
 import { findPosition, getById, waitforBMap, waitforBMapLib } from './utils/map-utils';
@@ -20,8 +18,8 @@ import { Tag } from 'antd';
 const { CheckableTag } = Tag;
 
 let map1;
-let number = '0';
-let range = '0';
+let number;
+let range;
 const ButtonGroup = Button.Group;
 const blankAvatar = '/images/blank_avatar.jpg';
 
@@ -67,6 +65,7 @@ class ExpertMap extends React.PureComponent {
 
   state = {
     typeIndex: 0,
+
   }
 
   componentDidMount() {
@@ -223,7 +222,7 @@ class ExpertMap extends React.PureComponent {
         //let url = blankAvatar;
         let url;
         if (personInfo.avatar != null && personInfo.avatar !== '') {
-          url = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 50);
+          url = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 41);
         }
         //const style = url === '/images/blank_avatar.jpg' ? '' : 'margin-top:-5px;';
         let name;
@@ -274,7 +273,11 @@ class ExpertMap extends React.PureComponent {
           name = '&nbsp;&nbsp;'+name;
           style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:10px;word-wrap:break-word;font-size:20%;';
         }
+        //if (url !== undefined) {
         cimg.innerHTML = `<img style='${style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='${url}' alt='${name}'>`;
+        //} else {
+        //cimg.innerHTML = `<div style='${style}'>${name}</div>`;
+        //}
       }
 
       for (let j = 0; j < imgdivs.length; j += 1) {
@@ -329,7 +332,11 @@ class ExpertMap extends React.PureComponent {
     window.location.href = href.replace('expert-map', 'expert-googlemap');
   };
 
-  showMap = (place, type) => {
+  // onSearch = (lb) => {
+  //   console.log(lb)
+  // };
+
+  showMap = (place, type, range, number) => {
     waitforBMap(200, 100,
       (BMap) => {
         this.showOverLay();
@@ -340,10 +347,10 @@ class ExpertMap extends React.PureComponent {
         let maxscale = 19;
         let newtype;
         //if (localStorage.getItem("lasttype") === '0') {
-        centerx = sysconfig.CentralPosition.lng;
-        centery = sysconfig.CentralPosition.lat;
+          centerx = sysconfig.CentralPosition.lng;
+          centery = sysconfig.CentralPosition.lat;
         //}
-        console.log(localStorage.getItem("lasttype"), '||', localStorage.getItem("isClick"))
+        console.log(localStorage.getItem("lasttype"),'||',localStorage.getItem("isClick"))
         if (localStorage.getItem("lasttype") !== '0' && localStorage.getItem("isClick") === '0') {
           newtype = localStorage.getItem("lasttype");
         } else {
@@ -379,7 +386,6 @@ class ExpertMap extends React.PureComponent {
         map.centerAndZoom(new BMap.Point(
           centerx, centery
         ), scale);
-
         this.initializeBaiduMap(map);
         let markers = [];
         const pId = [];
@@ -390,7 +396,7 @@ class ExpertMap extends React.PureComponent {
           }
           map.addOverlay(new BMap.Label("中国", opts1));
           const opts2 = {
-            position: new BMap.Point(136, 32),
+            position : new BMap.Point(136, 32),
           }
           map.addOverlay(new BMap.Label("日本", opts2));
           const opts3 = {
@@ -771,7 +777,7 @@ class ExpertMap extends React.PureComponent {
     let personPopupJsx;
     const person = model.personInfo;
     if (person) {
-      const url = profileUtils.getAvatar(person.avatar, person.id, 90);
+      const url = profileUtils.getAvatar(person.avatar, person.id, 50);
       const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
       const pos = profileUtils.displayPosition(person.pos);
       const aff = profileUtils.displayAff(person);
@@ -806,27 +812,10 @@ class ExpertMap extends React.PureComponent {
       cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),
     };
     const Domains = TopExpertBase.RandomTop100InDomain;
-    const Domains_Aminer = TopExpertBase.RandomTop100InDomainAminer;
-    console.log(Domains)
     const that = this;
     return (
       <div className={styles.expertMap} id="currentMain">
         <div className={styles.filterWrap}>
-          <div className={styles.filter}>
-            <div className={styles.filterRow}>
-              <span className={styles.filterTitle}><span>Hot words:</span></span>
-              <ul>
-                {Domains.map(domain =>
-                  (<CheckableTag className={styles.filterItem} key={domain.id} value={domain.id}><span onClick={this.domainChanged.bind(that, domain.id)}>{domain.name}</span></CheckableTag>),
-                )}
-              </ul>
-              {/*<ul>*/}
-                {/*{Domains_Aminer.map(domain =>*/}
-                  {/*(<CheckableTag className={styles.filterItem} key={domain.id} value={domain.id}><span onClick={this.domainChanged.bind(that, domain.id)}>{domain.name}</span></CheckableTag>),*/}
-                {/*)}*/}
-              {/*</ul>*/}
-            </div>
-          </div>
           <div className={styles.filter}>
             <div className={styles.filterRow}>
               <span className={styles.filterTitle}><span>Range:</span></span>
@@ -853,51 +842,42 @@ class ExpertMap extends React.PureComponent {
         </div>
         <div className={styles.headerLine}>
           <div className={styles.left}>
-            {/*{this.props.title}*/}
-            {/*<span>*/}
-              {/*<FM defaultMessage="Domain"*/}
-                  {/*id="com.expertMap.headerLine.label.field" />*/}
-            {/*</span>*/}
-            {/*<Select defaultValue="" className={styles.domainSelector} style={{ width: 120 }}*/}
-                    {/*onChange={this.domainChanged}>*/}
-              {/*<Select.Option key="none" value="">*/}
-                {/*<FM defaultMessage="Domain"*/}
-                    {/*id="com.expertMap.headerLine.label.selectField" />*/}
-              {/*</Select.Option>*/}
-              {/*{Domains.map(domain =>*/}
-                {/*(<Select.Option key={domain.id} value={domain.id}>{domain.name}</Select.Option>),*/}
-              {/*)}*/}
-            {/*</Select>*/}
+            {this.props.title}
 
-            <div className={styles.level}>
-              <span>
-                <FM defaultMessage="Baidu Map"
-                    id="com.expertMap.headerLine.label.level" />
-              </span>
-              <ButtonGroup id="sType" className={styles.sType}>
-                <Button onClick={this.showType} value="0">自动</Button>
-                <Button onClick={this.showType} value="1">大区</Button>
-                <Button onClick={this.showType} value="2">国家</Button>
-                <Button onClick={this.showType} value="3" style={{ display: 'none' }}>国内区</Button>
-                <Button onClick={this.showType} value="4">城市</Button>
-                <Button onClick={this.showType} value="5">机构</Button>
+            <Select defaultValue="" className={styles.domainSelector} style={{ width: 120 }}
+                    onChange={this.domainChanged}>
+              <Select.Option key="none" value="">选择领域</Select.Option>
+              {Domains.map(domain =>
+                (<Select.Option key={domain.id} value={domain.id}>{domain.name}</Select.Option>),
+              )}
+            </Select>
+
+            <div className={styles.switchMapType}>
+              <ButtonGroup id="diffmaps">
+                <Button type="primary" onClick={this.onChangeBaiduMap}>Baidu Map</Button>
+                <Button onClick={this.onChangeGoogleMap}>Google Map</Button>
               </ButtonGroup>
             </div>
+
           </div>
 
           <div className={styles.scopes}>
-            <div className={styles.switch}>
-              <ButtonGroup id="diffmaps">
-                <Button type="primary" onClick={this.onChangeBaiduMap}>
-                  <FM defaultMessage="Baidu Map"
-                      id="com.expertMap.headerLine.label.baiduMap" />
-                </Button>
-                <Button onClick={this.onChangeGoogleMap}>
-                  <FM defaultMessage="Baidu Map"
-                      id="com.expertMap.headerLine.label.googleMap" />
-                </Button>
-              </ButtonGroup>
-            </div>
+            <span>按照层级显示：</span>
+            <ButtonGroup id="sType">
+              <Button onClick={this.showType} value="0">自动</Button>
+              <Button onClick={this.showType} value="1">大区</Button>
+              <Button onClick={this.showType} value="2">国家</Button>
+              <Button onClick={this.showType} value="3" style={{ display: 'none' }}>国内区</Button>
+              <Button onClick={this.showType} value="4">城市</Button>
+              <Button onClick={this.showType} value="5">机构</Button>
+            </ButtonGroup>
+
+            {/*<div className={styles.switch}>*/}
+              {/*<ButtonGroup id="diffmaps">*/}
+                {/*<Button type="primary" onClick={this.onChangeBaiduMap}>Baidu Map</Button>*/}
+                {/*<Button onClick={this.onChangeGoogleMap}>Google Map</Button>*/}
+              {/*</ButtonGroup>*/}
+            {/*</div>*/}
 
           </div>
         </div>
@@ -908,25 +888,23 @@ class ExpertMap extends React.PureComponent {
 
           <div className={styles.right}>
             <div className={styles.legend}>
-              <div className={styles.title}>
-                <span alt="" className={classnames('icon', styles.titleIcon)} />
-                图例
-              </div>
+              <div className={styles.title}>Legend:</div>
               <div className={styles.t}>
-                <div>专家：</div>
-                <span alt="" className={classnames('icon', styles.expertIcon1)} />
-                <div className={styles.tExperts}>一组专家：</div>
-                <span alt="" className={classnames('icon', styles.expertIcon2)} />
+                <img className={styles.icon} width="42" src="/images/map/marker_red_sprite.png"
+                     alt="legend" />
+                <div className={styles.t}>专家</div>
+                <img className={styles.icon2} width="32" src="/images/map/m0.png" alt="legend" />
+                <div className={styles.t}>一组专家</div>
               </div>
               <div className={styles.container}>
                 <div className={styles.label}>人数：</div>
-                {/*<div className={styles.text}> 少</div>*/}
-                <div className={styles.item1}>少</div>
+                <div className={styles.text}> 少</div>
+                <div className={styles.item1}> 1</div>
                 <div className={styles.item2}> 2</div>
                 <div className={styles.item3}> 3</div>
                 <div className={styles.item4}> 4</div>
-                <div className={styles.item5}>多</div>
-                {/*<div className={styles.text}> 多</div>*/}
+                <div className={styles.item5}> 5</div>
+                <div className={styles.text}> 多</div>
               </div>
             </div>
 

@@ -46,7 +46,7 @@ export default {
   'com.searchTypeWidget.label.Relation': 'Relations',
   'com.searchTypeWidget.label.KnowledgeGraph': 'Knowledge Graph',
   'com.searchTypeWidget.label.TrendPrediction': 'Topic Trend',
-  'com.searchTypeWidget.label.ExpertTrajectory': 'DEV:Expert Trajectory',
+  'com.searchTypeWidget.label.ExpertTrajectory': 'Expert Trajectory',
   'com.searchTypeWidget.label.ExpertBase': 'My Experts',
 
   // bole avatar
@@ -60,12 +60,6 @@ export default {
   'com.PersonList.label.homepage': 'Homepage',
   'com.PersonList.label.sendEmail': 'Send Email',
   'com.PersonList.label.qrcode': 'QR Code',
-
-  'com.expertMap.headerLine.label.field': 'Field:',
-  'com.expertMap.headerLine.label.selectField': 'Choose the field',
-  'com.expertMap.headerLine.label.baiduMap': 'Baidu Map',
-  'com.expertMap.headerLine.label.googleMap': 'Google Map',
-  'com.expertMap.headerLine.label.level': 'Level：',
 
   // Recommendation
   'rcd.home.pageTitle': 'Organization List',

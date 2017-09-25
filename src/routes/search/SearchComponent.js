@@ -136,7 +136,6 @@ export default class SearchComponent extends Component {
   // On expert base changed, all other filters should be cleared.
   // sort method is not cleared.
   onExpertBaseChange = (id, name) => {
-    this.setState({ sortType: 'relevance' });
     const { filters } = this.props.search;
     // delete all other filters.
     Object.keys(filters).forEach((f) => {
@@ -218,7 +217,7 @@ export default class SearchComponent extends Component {
     // TODO move translate search out.
     const { useTranslateSearch, translatedQuery } = this.props.search;
     return (
-      <div className={classnames(styles.searchComponent, className)}>
+      <div className={classnames(styles.component, className)}>
 
         <div className={styles.topZone}>
           <div className={styles.searchZone}>
@@ -289,12 +288,11 @@ export default class SearchComponent extends Component {
 
           <Spinner loading={load} />
           <div className={styles.personAndKg}>
-            <div className={styles.personListWidth}>
+            <div>
               <PersonList
                 persons={results}
                 user={this.props.app.user}
                 expertBaseId={expertBaseId}
-                afterTitleBlock={sysconfig.PersonList_AfterTitleBlock}
                 titleRightBlock={sysconfig.PersonList_TitleRightBlock}
                 rightZoneFuncs={sysconfig.PersonList_RightZone}
                 bottomZoneFuncs={sysconfig.PersonList_BottomZone}

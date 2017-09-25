@@ -2,14 +2,17 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
-import { Layout } from 'routes';
-import { Button, Modal, Row, Form, Input, Icon } from 'antd';
-import { sysconfig, applyTheme } from 'systems';
+import { Button, Modal, Row, Form, Input } from 'antd';
+import { Helmet } from 'react-helmet';
+import { Layout } from 'components';
+import { sysconfig } from 'systems';
 import { classnames, config } from 'utils';
 import styles from './index.less';
+import PageBg from './pageBackground';
 
-const tc = applyTheme(styles);
+const { Header, Footer } = Layout;
 const FormItem = Form.Item;
+const { iconFontJS, iconFontCSS } = config;
 
 class Login extends React.Component {
   componentWillMount() {
@@ -56,6 +59,56 @@ class Login extends React.Component {
     const { dispatch, auth, form } = this.props;
     const { errorMessage, loading } = auth;
     const { getFieldDecorator, validateFieldsAndScroll } = form;
+    const children = (
+      <div className={styles.loginPage}>
+        <div className={styles.form}>
+          <Form layout={'vertical'}>
+            <Row className={styles.formHeader}>
+              <div>
+                <h1>登录</h1>
+                <p>使用您的 {sysconfig.PageTitle} 账号</p>
+              </div>
+            </Row>
+            <FormItem label="电子邮件地址" hasFeedback>
+              {getFieldDecorator('email',
+                { rules: [{ required: true, message: '邮箱不能为空' }] },
+              )(
+                <Input onPressEnter={this.handleOk}
+                       placeholder="用户名" size="large"
+                       onChange={() => this.setErrorMessage('')}
+                />)}
+            </FormItem>
+            <FormItem label="密码" hasFeedback>
+              {getFieldDecorator('password',
+                { rules: [{ required: true, message: '密码不能为空' }] },
+              )(
+                <Input type="password" placeholder="密码不能为空"
+                       size="large" onPressEnter={this.handleOk}
+                       onChange={() => this.setErrorMessage('')}
+                />)}
+            </FormItem>
+            <Row>
+              {errorMessage && errorMessage.status === false &&
+              <div className={styles.errors}>
+                {errorMessage.status}用户名或密码错误
+              </div>}
+
+              <div>
+                {/*<Link onClick={this.jumpToForgot} className={styles.forgotpwbtn}>忘记密码?</Link>*/}
+                <a href="/forgot-password" className={styles.forgotpwbtn}>忘记密码?</a>
+                {sysconfig.ApplyUserBtn &&
+                <span className={styles.applyUserbtn} onClick={this.applyUser}>新用户申请</span>
+                }
+              </div>
+              <Button type="primary" size="large" onClick={this.handleOk}
+                      loading={loading} className={styles.loginBtn}> 登录
+              </Button>
+            </Row>
+          </Form>
+        </div>
+        <PageBg />
+      </div>
+    );
 
     const headerProps = {
       location,
@@ -65,52 +118,26 @@ class Login extends React.Component {
     };
 
     return (
-      <Layout searchZone={[]} showHeader={false} showNavigator={false} contentClass={tc(['loginPage'])}>
-        <Form layout={'vertical'}>
-          <Row className={styles.formHeader}>
-            <h1>登录</h1>
-          </Row>
-          <Row className={styles.formContent}>
-            <FormItem hasFeedback>
-              {getFieldDecorator('email',
-                { rules: [{ required: true, message: '邮箱不能为空' }] },
-              )(
-                <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />}
-                       onPressEnter={this.handleOk}
-                       placeholder="用户名" size="large"
-                       onChange={() => this.setErrorMessage('')}
-                />)}
-            </FormItem>
-            <FormItem hasFeedback>
-              {getFieldDecorator('password',
-                { rules: [{ required: true, message: '密码不能为空' }] },
-              )(
-                <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />}
-                       type="password" placeholder="密码不能为空"
-                       size="large" onPressEnter={this.handleOk}
-                       onChange={() => this.setErrorMessage('')}
-                />)}
-            </FormItem>
-            <FormItem>
-              {errorMessage && errorMessage.status === false &&
-              <div className={styles.errors}>
-                {errorMessage.status}用户名或密码错误
-              </div>}
-              <Button type="primary" size="large" onClick={this.handleOk}
-                      loading={loading} className={styles.loginBtn}> 登录
-              </Button>
-            </FormItem>
-            <FormItem>
-              <div className={styles.forgetpw}>
-                <a href="/forgot-password" className={styles.forgotpwbtn}>忘记密码?</a>
-                {sysconfig.ApplyUserBtn &&
-                <span className={styles.applyUserbtn} onClick={this.applyUser}>新用户申请</span>
-                }
+      <div style={{ height: '100vh' }}>
+        <Helmet>
+          <title>{sysconfig.PageTitle}</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <link rel="icon" href={`/sys/${sysconfig.SYSTEM}/favicon.ico`} type="image/x-icon" />
+          {iconFontJS && <script src={iconFontJS} />}
+          {iconFontCSS && <link rel="stylesheet" href={iconFontCSS} />}
+        </Helmet>
+        <div className={classnames(styles.layout)}>
+          <Header {...headerProps} />
+          <div className={styles.main}>
+            <div className={styles.container}>
+              <div className={styles.content}>
+                {children}
               </div>
-            </FormItem>
-          </Row>
-        </Form>
-      </Layout>
+            </div>
+          </div>
+          {/*<Footer />*/}
+        </div>
+      </div>
     );
   }
 }

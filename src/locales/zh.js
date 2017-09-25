@@ -20,7 +20,7 @@ export default {
 
   'com.RgSearchNameBox.placeholder': '请输入姓名',
 
-  'com.search.filter.searchRange': '范围:',
+  'com.search.filter.searchRange': '搜索范围:',
   'com.search.filter.Filters': '过滤条件:',
   'com.search.filter.label.h_index': 'h指数',
   'com.search.filter.label.language': '语言',
@@ -42,11 +42,11 @@ export default {
   'com.search.sort.label.time': '最新添加',
 
   'com.searchTypeWidget.label.ExpertSearch': '专家',
-  'com.searchTypeWidget.label.ExpertMap': '人才地图',
-  'com.searchTypeWidget.label.Relation': '学者关系',
+  'com.searchTypeWidget.label.ExpertMap': '地图',
+  'com.searchTypeWidget.label.Relation': '关系',
   'com.searchTypeWidget.label.KnowledgeGraph': '知识图谱',
   'com.searchTypeWidget.label.TrendPrediction': '技术趋势',
-  'com.searchTypeWidget.label.ExpertTrajectory': 'DEV:专家迁移',
+  'com.searchTypeWidget.label.ExpertTrajectory': '专家迁移',
   'com.searchTypeWidget.label.ExpertBase': '我的专家库',
 
   'com.PersonList.label.views': '次查看',
@@ -54,11 +54,6 @@ export default {
   'com.PersonList.label.sendEmail': '发送邮件',
   'com.PersonList.label.qrcode': '二维码',
 
-  'com.expertMap.headerLine.label.field': '领域：',
-  'com.expertMap.headerLine.label.selectField': '选择领域',
-  'com.expertMap.headerLine.label.baiduMap': '百度地图',
-  'com.expertMap.headerLine.label.googleMap': '谷歌地图',
-  'com.expertMap.headerLine.label.level': '层级：',
   // bole avatar
   'com.bole.ExpertPhoto': '暂无头像',
   // bole add button

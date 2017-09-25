@@ -1,26 +1,13 @@
-@import "~themes/vars";
+@import "./vars.less";
 
 /*
- * 基础的 Theme 文件。提供基础的CSS样式（注意不是LESS，因为需要在线切换）。
- * 由 theme-<theme name>.less 来替换。
+ * Things in this file can't be changed online.
  */
 body {
-  //height: 100%;
+  height: 100%;
   //overflow-y: hidden;
   //background-color: #f8f8f8;
 }
-
-:global {
-  #root {
-    //height: 100%;
-    //border-left: solid 1px red;
-  }
-
-  .font-page-title { font-weight: bold; font-size: @font-size-huge; }
-
-}
-
-/* ------------------------ Theme ------------------------ */
 
 ::-webkit-scrollbar-thumb {
   background-color: #e6e6e6;
@@ -31,19 +18,23 @@ body {
   height: 8px;
 }
 
-/* ------------------------ Override antd ------------------------ */
-
+// Global Common Web Components. 这些东西放到哪个文件？
 :global {
 
-  // override layout
-  .ant-layout {
-    // .ant-layout-header { background: white }
-    // .ant-layout-sider { background: white }
+  .section_header {
+    font-size: @font-size-lg;
+    border-bottom: solid 1px @border-color-base;
+    width: 80%;
+    margin-bottom: 6px;
+    padding-bottom: 2px;
   }
 
-  .ant-layout-header { line-height: normal }
+  .debug_area { border: dashed 1px green; }
+}
 
-  // override others
+// Fix antd
+
+:global {
   .ant-breadcrumb {
     & > span {
       &:last-child {
@@ -153,68 +144,28 @@ body {
 
 }
 
-/* ------------------------ Global Components ------------------------ */
-.Overrides() {
+@media (min-width: 1600px) {
   :global {
-
-    .label-title { }
-    .label { }
-    .label-count { }
-    .label:hover {
-      .label-count { }
+    .ant-col-xl-48 {
+      width: 20%;
     }
 
-    .section_header {
-      font-size: @font-size-lg;
-      border-bottom: solid 1px @border-color-base;
-      margin-bottom: 6px;
-      padding-bottom: 2px;
+    .ant-col-xl-96 {
+      width: 40%;
     }
-
-    .keywords_inner {
-      div {
-        a { color: white; }
-      }
-    }
-
-    .debug-area { border: dashed 1px green; }
-
   }
 }
 
-.Overrides() !important;
+@media (max-width: 767px) {
+  :global {
+    .ant-card {
+      .ant-card-head {
+        padding: 0 12px;
+      }
 
-/* ------------------------ Media ------------------------ */
-
-//@media (min-width: 1600px) {
-//  :global {
-//    .ant-col-xl-48 {
-//      width: 20%;
-//    }
-//
-//    .ant-col-xl-96 {
-//      width: 40%;
-//    }
-//  }
-//}
-//
-//@media (max-width: 767px) {
-//  :global {
-//    .ant-pagination-item,
-//    .ant-pagination-next,
-//    .ant-pagination-options,
-//    .ant-pagination-prev {
-//      margin-bottom: 8px;
-//    }
-//
-//    .ant-card {
-//      .ant-card-head {
-//        padding: 0 12px;
-//      }
-//
-//      .ant-card-body {
-//        padding: 12px;
-//      }
-//    }
-//  }
-//}
+      .ant-card-body {
+        padding: 12px;
+      }
+    }
+  }
+}

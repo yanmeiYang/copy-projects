@@ -196,7 +196,7 @@ function GetGoogleMapLib(showTop) {
        * @type {string}
        * @private
        */
-      MarkerClusterer.prototype.MARKER_CLUSTER_IMAGE_PATH_ = '/images/map/m';
+      MarkerClusterer.prototype.MARKER_CLUSTER_IMAGE_PATH_ = 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m';
 
 
       /**
@@ -252,7 +252,7 @@ function GetGoogleMapLib(showTop) {
 
         for (var i = 0, size; size = this.sizes[i]; i++) {
           this.styles_.push({
-            url: this.imagePath_ + i + '.' + this.imageExtension_,
+            url: this.imagePath_ + (i + 1) + '.' + this.imageExtension_,
             height: size,
             width: size
           });
@@ -1246,9 +1246,9 @@ function GetGoogleMapLib(showTop) {
         this.url_ = style['url'];
         this.height_ = style['height'];
         this.width_ = style['width'];
-        this.textColor_ = style['textColor'] || 'white';
+        this.textColor_ = style['textColor'];
         this.anchor_ = style['anchor'];
-        this.textSize_ = style['textSize'] || 16;
+        this.textSize_ = style['textSize'];
         this.backgroundPosition_ = style['backgroundPosition'];
         this.iconAnchor_ = style['iconAnchor'];
       };

@@ -153,7 +153,11 @@ class AddExpertModal extends React.Component {
   // 选择一位推荐专家
   selectedExpert = (speaker) => {
     this.notFoundSuggestExpert();
-    speaker.role = this.speakerInformation.role;
+    if (typeof this.speakerInformation.role === 'string') {
+      speaker.role = this.speakerInformation.role;
+    } else {
+      speaker.role = this.speakerInformation.role[0];
+    }
     this.props.parentProps.dispatch({ type: 'seminar/saveSuggestExpert', payload: { speaker } });
     this.setState({
       step3: true,

@@ -5,15 +5,17 @@ import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Form, Input, Button, Select, Modal, Tag } from 'antd';
-import { config } from '../../../utils';
-import { sysconfig } from '../../../systems';
-import { contactByJoint, getValueByJoint } from '../../../services/seminar';
+import { Layout } from 'routes';
+import { sysconfig, applyTheme } from 'systems';
+import { contactByJoint, getValueByJoint } from 'services/seminar';
+import styles from './index.less';
 // import AddRoleModal from '../add-user-role-modal';
 
+const tc = applyTheme(styles);
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-// const AutocompleteOption = AutoComplete.Option;
+// const AutocompleteOption = AutoComplete.Option;t
 
 class Registered extends React.Component {
   state = {
@@ -121,8 +123,8 @@ class Registered extends React.Component {
           title: '创建用户',
           content: sysconfig.Signup_Password ?
             <div>
-              <p>创建成功, 请发邮件告知Royce.lee@argcv.com</p>
-              <p>登录密码: 123456</p>
+              <p>创建成功, 请发邮件告知{data.email}</p>
+              <p>登录密码: {data.password}</p>
             </div>
             : '创建成功',
           onOk() {
@@ -163,9 +165,9 @@ class Registered extends React.Component {
     const { getFieldDecorator } = this.props.form;
     const { universalConfig, auth } = this.props;
     return (
-      <div style={{ maxWidth: '1228px' }}>
-        <h2 style={{ paddingLeft: 24 }}>创建用户</h2>
-        <Form onSubmit={this.registered} style={{ marginTop: 30 }}>
+      <Layout searchZone={[]} contentClass={tc(['signup'])} showNavigator={false}>
+        <h2 className={styles.title}>创建用户</h2>
+        <Form onSubmit={this.registered}>
           <FormItem
             {...formItemLayout}
             label="邮箱"
@@ -315,21 +317,17 @@ class Registered extends React.Component {
           {/*</FormItem>*/}
           {/*<AddRoleModal visible={this.state.addRoleModalVisible} handleOk={this.setCurrentRoleAndOrg} />*/}
 
-          <FormItem {...tailFormItemLayout} style={{ textAlign: 'center' }}>
-            <Button type="primary" onClick={this.registered} style={{ width: '50%' }}>
+          <FormItem {...tailFormItemLayout} className={styles.footerBtn}>
+            <Button type="primary" onClick={this.registered}>
               创建用户
             </Button>
           </FormItem>
         </Form>
-      </div>
+      </Layout>
     );
   }
 }
 
-const WrappedRegistrationForm = Form.create()(Registered);
-
-export default connect(({ auth, universalConfig, app }) => ({
-  auth,
-  universalConfig,
-  app,
-}))(WrappedRegistrationForm);
+export default connect(
+  ({ app, auth, universalConfig }) => ({ app, auth, universalConfig }),
+)(Form.create()(Registered));

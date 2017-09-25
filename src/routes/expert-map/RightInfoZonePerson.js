@@ -5,10 +5,10 @@ import React from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { Tag } from 'antd';
+import { sysconfig } from 'systems';
+import { Indices } from 'components/widgets';
+import * as profileUtils from 'utils/profile-utils';
 import styles from './RightInfoZonePerson.less';
-import { sysconfig } from '../../systems';
-import { Indices } from '../../components/widgets';
-import * as profileUtils from '../../utils/profile-utils';
 
 
 class RightInfoZonePerson extends React.PureComponent {
@@ -36,6 +36,8 @@ class RightInfoZonePerson extends React.PureComponent {
     }
     const tags = profileUtils.findTopNTags(person, 8);
 
+    const personShowIndices = ['h_index', 'citation', 'activity'];
+
     return (
       <div className="rizPersonInfo">
         {name &&
@@ -58,7 +60,7 @@ class RightInfoZonePerson extends React.PureComponent {
           <Indices
             indices={person.indices}
             activity_indices={person.activity_indices}
-            showIndices={sysconfig.PersonList_ShowIndices}
+            showIndices={personShowIndices}
           />
         </div>
 

@@ -1,43 +1,62 @@
-:global {
-  .score-line {
-    margin-bottom: 8px;
+.scoreLine {
+  margin-bottom: 10px;
+  display: flex;
+  span.score {
     display: flex;
-    span.score {
-      display: flex;
-      flex-direction: row;
+    flex-direction: row;
 
-      span {
-        display: flex; justify-content: center;
-        color: white; font-weight: normal; font-size: 12px;
-        height: 20px; text-shadow: 1px 1px 1px black; padding: 0 4px 0 4px;
-      }
-      .l {
-        width: 20px; font-weight: bold;
-        border: solid 1px rgb(85, 85, 85);
-        border-radius: 2px 0 0 2px;
-        background-color: rgb(85, 85, 85);
-      }
-      .r {
-        min-width: 40px;
-        border: solid 1px rgb(85, 85, 85);
-        border-radius: 0 2px 2px 0;
-        //background-color: black;
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.25);
-        margin-right: 8px;
-        color: rgb(30, 30, 30);
-      }
+    span {
+      display: flex; justify-content: center;
+      color: white; font-weight: normal; font-size: 12px;
+      height: 20px; text-shadow: 1px 1px 1px black; padding: 0 4px 0 4px;
     }
-    span.pink {
-      .l { background-color: #fcdbd9; border-color: #fcdbd9; }
-      .r { border-color: #fcdbd9; }
+    .l {
+      width: 20px; font-weight: bold;
+      border: solid 1px rgb(85, 85, 85);
+      border-radius: 2px 0 0 2px;
+      background-color: rgb(85, 85, 85);
     }
-    span.blue {
-      .l { background-color: #d2eafb; border-color: #d2eafb; }
-      .r { border-color: #d2eafb; }
+    .r {
+      min-width: 40px;
+      border: solid 1px rgb(85, 85, 85);
+      border-radius: 0 2px 2px 0;
+      //background-color: black;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.25);
+      margin-right: 8px;
+      color: rgb(30, 30, 30);
     }
-    span.gray {
-      .l { background-color: #ddd; border-color: #ddd; }
-      .r { border-color: #ddd; }
-    }
+  }
+  span.h_index{
+    .l { background-color: #bcc8ae; border-color: #bcc8ae; }
+    .r { border-color: #bcc8ae; }
+  }
+  span.activity{
+    .l { background-color: #c7bda1; border-color: #c7bda1; }
+    .r { border-color: #c7bda1; }
+  }
+  span.new_star{
+    .l { background-color: #98bec7; border-color: #98bec7; }
+    .r { border-color: #98bec7; }
+  }
+  span.num_citation{
+    .l { background-color: #adbbdc; border-color: #adbbdc; }
+    .r { border-color: #adbbdc; }
+  }
+  span.num_pubs{
+    .l { background-color: #a7c1bf; border-color: #a7c1bf; }
+    .r { border-color: #a7c1bf; }
+  }
+
+  span.pink {
+    .l { background-color: #fcdbd9; border-color: #fcdbd9; }
+    .r { border-color: #fcdbd9; }
+  }
+  span.blue {
+    .l { background-color: #d2eafb; border-color: #d2eafb; }
+    .r { border-color: #d2eafb; }
+  }
+  span.gray {
+    .l { background-color: #ddd; border-color: #ddd; }
+    .r { border-color: #ddd; }
   }
 }

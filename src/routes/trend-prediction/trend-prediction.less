@@ -10,28 +10,42 @@
 }
 .trend {
   width:100%;
-  height: 1000px;
+  height: 400px;
 }
 .frame {
   width:100%;
   height: 800px;
 }
 .nav {
-  width: 200px;
+  width: 280px;
   height: 500px;
   float: left;
-  overflow-y: scroll;
-  overflow-x: auto;
+  overflow-y: hidden;
+  overflow-x: hidden;
   z-index: 200;
   position:absolute;
   margin-left:80px;
-  margin-top:385px;
+  margin-top:450px;
   background-color: #FFFFFF;
   cursor: pointer;
+  display: none; //隐藏
+}
+.rightbox {
+  width: 280px;
+  height: 500px;
+  float: left;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  border-right:solid 1px rgb(212, 212, 212);
+}
+.tabs {
+  div{
+    margin-bottom: 0px;
+  }
 }
 .show {
   width:100%;
-  height: 800px;
+  height: 400px;//原来800
   float: right;
   z-index: 1;
 }
@@ -56,6 +70,7 @@
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
   pointer-events: none;
   z-index:10000;
+  display:block;
 }
 .tool {
   position: absolute;
@@ -100,4 +115,19 @@
 .info {
   display: flex; flex-direction: column;
   margin: 8px 0 4px 0;
+}
+.keywords {
+  display: flex; flex-direction: row; justify-content: center;
+  .inner {
+    display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center;
+    width: 1300px;
+    div {
+      border: none; border-radius: 32px;
+      padding: 0px 10px; margin: 4px 5px;
+      background-color: rgba(62, 155, 201, 1);
+
+      a { color: #ffffff; font-size: @font-size-lg; }
+    }
+    div:hover { background-color: rgba(0, 122, 175, 1); }
+  }
 }

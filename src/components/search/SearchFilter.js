@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, PureComponent } from 'react';
 import { connect } from 'dva';
 import { Tag } from 'antd';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
@@ -14,7 +14,7 @@ const expertBases = sysconfig.ExpertBases;
  * SearchFilter Component
  */
 @connect()
-export default class SearchFilter extends React.PureComponent {
+export default class SearchFilter extends PureComponent {
   constructor(props) {
     super(props);
     // this.dispatch = this.props.dispatch;
@@ -22,45 +22,12 @@ export default class SearchFilter extends React.PureComponent {
     this.onExpertBaseChange = this.props.onExpertBaseChange;
   }
 
-  // componentWillMount() {
-  // }
-
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   return true;
-  // }
-
   render() {
     const { filters, aggs, disableExpertBaseFilter } = this.props;
 
     return (
-      <div className={styles.filterWrap}>
+      <div className={styles.searchFilter}>
         <div className={styles.filter}>
-
-          {/* ------ 搜索范围 ------ */}
-          {!disableExpertBaseFilter && expertBases &&
-          <div className={classnames(styles.filterRow, styles.range)}>
-            <span className={styles.filterTitle}>
-              <FM id="com.search.filter.searchRange"
-                  defaultMessage="Search Range:" />
-            </span>
-            <ul className={styles.filterItems}>
-              {
-                expertBases.map((ep) => {
-                  const props = {
-                    key: ep.id,
-                    className: styles.filterItem,
-                    onChange: () => this.onExpertBaseChange(ep.id, ep.name),
-                    checked: filters.eb && (filters.eb.id === ep.id),
-                  };
-                  return (
-                    <CheckableTag {...props}>
-                      {ep.name}
-                    </CheckableTag>
-                  );
-                })
-              }
-            </ul>
-          </div>}
 
           {/* ------ 过滤条件 ------ */}
           {filters && Object.keys(filters).length > 0 &&
@@ -92,8 +59,34 @@ export default class SearchFilter extends React.PureComponent {
             </ul>
           </div>}
 
+          {/* ------ 搜索范围 ------ */}
+          {!disableExpertBaseFilter && expertBases &&
+          <div className={classnames(styles.filterRow, styles.range)}>
+            <span className={styles.filterTitle}>
+              <FM id="com.search.filter.searchRange"
+                  defaultMessage="Search Range:" />
+            </span>
+            <ul className={styles.filterItems}>
+              {
+                expertBases.map((ep) => {
+                  const props = {
+                    key: ep.id,
+                    className: styles.filterItem,
+                    onChange: () => this.onExpertBaseChange(ep.id, ep.name),
+                    checked: filters.eb && (filters.eb.id === ep.id),
+                  };
+                  return (
+                    <CheckableTag {...props}>
+                      {ep.name}
+                    </CheckableTag>
+                  );
+                })
+              }
+            </ul>
+          </div>}
+
           {
-            aggs.map((agg, index) => {
+            aggs && aggs.map((agg, index) => {
               if (agg.label === sysconfig.SearchFilterExclude) { // skip gender
                 return '';
               }
@@ -107,7 +100,7 @@ export default class SearchFilter extends React.PureComponent {
                 // const cnLabel = showChineseLabel(agg.label);
                 return (
                   <div
-                    className={classnames(styles.filterRow, (index === aggs.length - 1) ? 'last' : '')}
+                    className={classnames(styles.filterRow, styles.range, (index === aggs.length - 1) ? 'last' : '')}
                     key={agg.type}
                   >
                     <span className={styles.filterTitle}>
@@ -122,10 +115,11 @@ export default class SearchFilter extends React.PureComponent {
                         return (
                           <CheckableTag
                             key={`${item.label}_${agg.label}`}
-                            className={styles.filterItem}
+                            className={classnames(styles.filterItem, 'label')}
                             checked={filters[agg.label] === item.label}
                             onChange={onChange}
-                          >{item.label} (<span className={styles.filterCount}>{item.count}</span>)
+                          >{item.label} (<span
+                            className={classnames(styles.filterCount, 'label-count')}>{item.count}</span>)
                           </CheckableTag>
                         );
                       })

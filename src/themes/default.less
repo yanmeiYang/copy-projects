@@ -3,11 +3,13 @@
 // 相应变量值的覆盖
 // 注意：只需写出要覆盖的变量即可（不需要覆盖的变量不要写）
 // http://www.iconfont.cn/collections/detail?cid=790
+//
+// 注意：本文件只提供不可变的基础配置，无法进行热替换，因此无法在此文件之后覆盖。
+// npm run build之后就已经将所有变量编译到css中。
 @import "../../node_modules/antd/lib/style/themes/default.less";
 
-@font-size-base: 13px;
-@font-size-lg: @font-size-base + 2px;
-@font-size-sm: @font-size-base - 1px; // New ~
+@font-family-no-number: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+@font-family: "Microsoft Yahei", @font-family-no-number;
 
 @border-radius-base: 3px;
 @border-radius-sm: 2px;
@@ -16,23 +18,32 @@
 @border-color-split: #f4f4f4;
 @border-color-base: #e5e5e5;
 @menu-dark-bg: #3e3e3e;
-
+//@text-color: #666;
 @text-color: #1d2129;
-@font-family: "AvenirNext-Regular", "Helvetica Neue", "lucida grande", "PingFangHK-Light", "STHeiti", "Heiti SC", "Hiragino Sans GB", "Microsoft JhengHei", "Microsoft Yahei", SimHei, "WenQuanYi Micro Hei", "Droid Sans", "Roboto", Helvetica, Tahoma, Arial, "sans-serif";
-@font-family-2: "STHeitiSC-Medium", "STHeiti", "Heiti SC", "Hiragino Sans GB", "Microsoft JhengHei", "Microsoft Yahei", SimHei, "AvenirNext-Regular", "Helvetica Neue", "lucida grande", "PingFangHK-Light", "WenQuanYi Micro Hei", "Droid Sans", "Roboto", Helvetica, Tahoma, Arial, "sans-serif";
+
 @icon-url: "/antd/iconfont";
 
 @animation-duration-slow: .2s; // Modal
 @animation-duration-base: .15s;
 @animation-duration-fast: .1s; // Tooltip
 
+@font-size-base: 12px;
+@font-size-lg: @font-size-base + 2px;
+
+// 其余新加入的设置应该放vars.less里面.
 // 扯淡，
+@font-family-2: "STHeitiSC-Medium", "STHeiti", "Heiti SC", "Hiragino Sans GB", "Microsoft JhengHei", "Microsoft Yahei", SimHei, "AvenirNext-Regular", "Helvetica Neue", "lucida grande", "PingFangHK-Light", "WenQuanYi Micro Hei", "Droid Sans", "Roboto", Helvetica, Tahoma, Arial, "sans-serif";
 @text-color-gray: #90949c;
+
+@input-placeholder-color: #ddd;
+
 @default-border-color: #e5e6e9; // #dfe0e4 #d0d1d5
 @background-color-gray: #f6f7f9;
 
-// colors:
+@font-size-sm: @font-size-base - 1px; // New ~
+
 @orange: #ff7f0e;
 @dark-gray: #4b4f56;
 @max-width-page: 1128px;
 @min-width-page: 375px; // iphone6 width;
+@menu-dark-bg: #3e3e3e;

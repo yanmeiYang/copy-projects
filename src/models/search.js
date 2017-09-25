@@ -79,11 +79,19 @@ export default {
         }
       }
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
-      const { data } = yield call(searchService.searchPerson,
-        query, offset, size, noTotalFilters, sort, useTranslateSearch);
+      yield put({ type: 'updateSortKey', payload: { key: sort } });
       yield put({ type: 'updateFilters', payload: { filters } });
-      yield put({ type: 'updateSortKey', payload: { sort } });
-      yield put({ type: 'searchPersonSuccess', payload: { data, query, total } });
+      const sr = yield call(searchService.searchPerson,
+        query, offset, size, noTotalFilters, sort, useTranslateSearch);
+      const data = (sr && sr.data) || {};
+      console.log('--------------', data);
+      // 分界线
+      if (data.search) {
+        // NEW
+        yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.search } });
+      } else if (data.result) {
+        yield put({ type: 'searchPersonSuccess', payload: { data, query, total } });
+      }
     },
 
     * translateSearch({ payload }, { call, put, select }) {
@@ -116,8 +124,11 @@ export default {
         }
       }
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
-      const { data } = yield call(searchService.searchPersonAgg, query, offset, size, noTotalFilters, useTranslateSearch);
-      yield put({ type: 'searchPersonAggSuccess', payload: { data } });
+      const sr = yield call(searchService.searchPersonAgg, query, offset, size, noTotalFilters, useTranslateSearch);
+      if (sr) {
+        const { data } = sr;
+        yield put({ type: 'searchPersonAggSuccess', payload: { data } });
+      }
     },
 
     * getSeminars({ payload }, { call, put }) {
@@ -163,7 +174,10 @@ export default {
       return { ...state, sortKey: key || '' };
     },
 
-    searchPersonSuccess(state, { payload: { data, query, total } }) {
+    searchPersonSuccess(state, { payload: { data, total } }) {
+      if (!data) {
+        return state;
+      }
       const { result } = data;
       const currentTotal = total || data.total;
       const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
@@ -171,6 +185,22 @@ export default {
         ...state,
         results: result,
         pagination: { pageSize: state.pagination.pageSize, total: currentTotal, current },
+      };
+    },
+
+    nextSearchPersonSuccess(state, { payload: { data } }) {
+      if (!data) {
+        return state;
+      }
+      const { succeed, message, total, result, aggregation } = data;
+      if (!succeed) {
+        throw new Error(message);
+      }
+      const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
+      return {
+        ...state,
+        results: result,
+        pagination: { pageSize: state.pagination.pageSize, total, current },
       };
     },
 
@@ -189,6 +219,9 @@ export default {
     },
 
     searchPersonAggSuccess(state, { payload: { data } }) {
+      if (!data) {
+        return state;
+      }
       const { aggs } = data;
       return { ...state, aggs };
     },

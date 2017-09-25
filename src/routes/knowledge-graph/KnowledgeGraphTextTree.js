@@ -4,6 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
+import { classnames } from 'utils/index';
 import styles from './KnowledgeGraphTextTree.less';
 import { sysconfig } from '../../systems';
 import * as kgService from '../../services/knoledge-graph-service';
@@ -48,9 +49,9 @@ class KnowledgeGraphTextTree extends React.PureComponent {
   onItemClick = (e, node, level) => {
     // add class to element;
     if (this.selected) {
-      this.selected.className = this.selected.className.replace(' select', '');
+      this.selected.className = this.selected.className.replace(` ${styles.select}`, '');
     }
-    e.currentTarget.className += ' select';
+    e.currentTarget.className += ` ${styles.select}`;
     this.selected = e.currentTarget;
 
     if (this.onItemClickCallback) {
@@ -76,33 +77,34 @@ class KnowledgeGraphTextTree extends React.PureComponent {
     const name = node.name === '_root' ? 'Computer Science' : `${node.name} ${nameZH}`;
     const childs = this.kgFetcher.getChildNode(node);
     const nameIcon = node.hit ?
-      <i className="fa fa-circle orange" aria-hidden /> :
-      <i className="fa fa-circle-thin orange" aria-hidden />;
+      <i className={classnames('fa', 'fa-circle', styles.orange)} aria-hidden /> :
+      <i className={classnames('fa', 'fa-circle-thin', styles.orange)} aria-hidden />;
 
     return (
-      <div className="node" key={node.id}>
-        <div className={`level_${level}`}>
+      <div className={styles.node} key={node.id}>
+        <div className={styles[`level_${level}`]}>
 
+          {/*`item ${node.hit ? 'current' : ''}`*/}
           <div
-            className={`item ${node.hit ? 'current' : ''}`}
+            className={classnames(styles.item, node.hit ? styles.current : '')}
             onClick={e => this.onItemClick(e, node, level)}
           >
-            <span className="title">
-              <span>{nameIcon} <span className="level"> {`L${level}`}</span> {name}
+            <span className={styles.title}>
+              <span>{nameIcon} <span className={styles.level}> {`L${level}`}</span> {name}
               </span>
-              <div className="tools">
+              <div className={styles.tools}>
                 {node.child_nodes.length > 0 && (
-                  <div className="tool">
+                  <div className={styles.tool}>
                     <i className="fa fa-plus-square-o" aria-hidden="true" />
                     {node.child_nodes.length}
                   </div>
                 )}
               </div>
             </span>
-            <div className="tools">
+            <div className={styles.tools}>
               {node.alias && node.alias.length > 0 &&
-              <div className="tool">
-                <span className="label">ALIAS: </span>
+              <div className={styles.tool}>
+                <span className={styles.label}>ALIAS: </span>
                 {node.alias.map(a => <span key={a}>{a}, </span>)}
               </div>
               }
@@ -127,6 +129,11 @@ class KnowledgeGraphTextTree extends React.PureComponent {
     return (
       <div className={styles.kgContainer}>
         {/* Search for: {query} */}
+
+        {!tops && <div>
+          <span className={styles.emptyBlock}>Please input a keyword above</span>
+        </div>
+        }
 
         {tops && tops.map((node) => {
           return <div key={node.id}> {this.showNode(node, 0)} </div>;

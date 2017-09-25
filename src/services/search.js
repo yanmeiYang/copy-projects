@@ -25,12 +25,21 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
   if ((!filters || !filters.eb) && sysconfig.DEFAULT_EXPERT_BASE === 'aminer') {
     return searchPersonGlobal(query, offset, size, filters, sort, useTranslateSearch);
   }
-  // Search ExpertBase.
-  const { expertBase, data } = prepareParameters(query, offset, size, filters, sort, useTranslateSearch);
-  return request(
-    api.searchPersonInBase.replace(':ebid', expertBase),
-    { method: 'GET', data },
-  );
+
+  // Search in ExpertBase.
+  if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH) {
+    // TODO 我需要替换成新的API
+    console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^ 注意注意，我这里变成了取新的API。');
+    const data = require('../../external-docs/next-api/test-search-result.json');
+    console.log('data is >>> ', data);
+    return data;
+  } else {
+    const { expertBase, data } = prepareParameters(query, offset, size, filters, sort, useTranslateSearch);
+    return request(
+      api.searchPersonInBase.replace(':ebid', expertBase),
+      { method: 'GET', data },
+    );
+  }
 }
 
 export async function searchListPersonInEB(payload) {
@@ -81,11 +90,17 @@ export async function searchPersonAgg(query, offset, size, filters, useTranslate
   if ((!filters || !filters.eb) && sysconfig.DEFAULT_EXPERT_BASE === 'aminer') {
     return searchPersonAggGlobal(query, offset, size, filters, useTranslateSearch);
   }
-  const { expertBase, data } = prepareParameters(query, offset, size, filters, '', useTranslateSearch);
-  return request(
-    api.searchPersonInBaseAgg.replace(':ebid', expertBase),
-    { method: 'GET', data },
-  );
+
+  if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH) {
+    // TODO 我需要替换成新的API
+    console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^ 注意注意，我这里变成了取新的API。');
+  } else {
+    const { expertBase, data } = prepareParameters(query, offset, size, filters, '', useTranslateSearch);
+    return request(
+      api.searchPersonInBaseAgg.replace(':ebid', expertBase),
+      { method: 'GET', data },
+    );
+  }
 }
 
 export async function searchPersonAggGlobal(query, offset, size, filters, useTranslateSearch) {
@@ -106,7 +121,13 @@ function prepareParameters(query, offset, size, filters, sort, useTranslateSearc
         newFilters[newKey] = filters[k];
       }
     });
-    data = { ...newFilters, [sysconfig.DEFAULT_EXPERT_SEARCH_KEY]: query, offset, size, sort: sort || '' };
+    data = {
+      ...newFilters,
+      [sysconfig.DEFAULT_EXPERT_SEARCH_KEY]: query,
+      offset,
+      size,
+      sort: sort || ''
+    };
   }
   data = addAdditionParameterToData(data, sort, 'eb');
   if (useTranslateSearch && data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY]) {

@@ -8,7 +8,7 @@
   border: solid 0px @default-border-color; padding: 0px;
   min-height: 40px;
   min-width: 70%;
-  width: 100%;
+  //width: 100%;
 
   //max-width: @max-width-page;
   .empty {
@@ -22,7 +22,7 @@
     margin-bottom: 16px;
 
     .avatar_zone {
-      padding: 6px; text-align: center;
+      padding: 15px; text-align: center;
       .avatar {
         width: 90px;
         //-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, .2);
@@ -37,10 +37,8 @@
       font-size: 13px; color: #333;
       flex: 2;
       .title {
-        //display: flex;
-        display: inline-block;vertical-align: middle;
-        flex-direction: row; align-items: baseline; justify-content: space-between;
-        margin: 8px 0 4px 0;
+        display: flex; flex-direction: row; align-items: baseline; justify-content: flex-start;
+        margin: 20px 0 4px 0;
 
         h2, h2 a {
           font-size: @font-size-lg; font-family: @font-family-2;
@@ -68,6 +66,7 @@
         .contact_zone {
           display: flex; flex-direction: column;
           flex: 2 0px;
+          span { margin-bottom: 5px; }
 
           .views { color: #3e3e3e }
         }

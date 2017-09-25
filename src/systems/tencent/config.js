@@ -9,7 +9,6 @@ module.exports = {
   // 通用配置。所有System的配置文件必须全部包含这部分的值。
   PageTitle: '腾讯人才智库',
   SearchPagePrefix: 'uniSearch',
-  ShowSideMenu: false,
 
   EnableLocalLocale: true,
 

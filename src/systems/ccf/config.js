@@ -16,6 +16,8 @@ module.exports = {
   /**
    * Layout related
    */
+  Layout_HasSideBar: true, // 是否显示左侧菜单
+
   PageTitle: 'CCF 专家库',
   // Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
   Header_LogoWidth: 213,
@@ -31,7 +33,6 @@ module.exports = {
   Header_SubTextStyle: { marginLeft: 12 },
   Header_UserPageURL: '', // 用户头像点击之后去的页面.
   Footer_Content: <Footer />,
-  ShowSideMenu: true,
   ShowFooter: true,
 
   /**
@@ -157,5 +158,7 @@ module.exports = {
     },
   ],
 
+  // 临时属性，需要删除
+  USE_NEXT_EXPERT_BASE_SEARCH: true,
 
 };

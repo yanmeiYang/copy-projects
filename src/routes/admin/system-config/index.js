@@ -92,7 +92,3 @@ export default class SystemConfig extends React.Component {
     );
   }
 }
-
-// export default hoc(connect(
-//   ({ adminSystemConfig, loading }) => ({ adminSystemConfig, loading }),
-// )(SystemConfig));

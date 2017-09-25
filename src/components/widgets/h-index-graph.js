@@ -59,8 +59,6 @@ class HindexGraph extends React.PureComponent {
 
     return (
       <div className={styles.container}>
-        <div className={styles.lab}>H-index分布图</div>
-        <div className={styles.lab1}>Avg. of H-index: {avg}</div>
         <div className={styles.container1}>
           <div className={styles.itema}>&lt;10</div>
           <div className={styles.item1} style={{ width: groupHeight[0] }}>{groupNumTemp[0]}</div>

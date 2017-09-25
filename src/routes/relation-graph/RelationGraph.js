@@ -8,9 +8,9 @@ import * as d3 from 'd3';
 import { Checkbox, Select, Progress, message, Button } from 'antd';
 import { RgSearchNameBox } from '../../components/relation-graph';
 import { getAvatar } from '../../utils/profile-utils';
+import { classnames } from '../../utils/index';
 import styles from './RelationGraph.less';
 import { Auth } from '../../hoc';
-
 
 const Option = Select.Option;
 const controlDivId = 'rgvis';
@@ -51,6 +51,7 @@ export default class RelationGraph extends React.PureComponent {
     this.webconnect = '';
 
     this.loadingInterval = null; // used to disable interval.
+    this.hideInfoTimeOUt = null;
   }
 
   state = {
@@ -86,6 +87,9 @@ export default class RelationGraph extends React.PureComponent {
     if (this.loadingInterval) {
       clearInterval(this.loadingInterval);
     }
+    // 清除timeout、删除用于提示专家名字的div
+    clearTimeout(this.hideInfoTimeOUt);
+    document.body.removeChild(document.getElementById('tip'));
   }
 
   showVis = (t) => {
@@ -526,12 +530,12 @@ export default class RelationGraph extends React.PureComponent {
       svg.selectAll('circle').data(_nodes)
         .style('stroke', '#fff')
         .style('stroke-width', (d) => {
-        if (d.indices.hIndex > 50) {
-          return '1.5px';
-        } else {
-          return '1px';
-        }
-      }).attr('fill', (d, index) => {
+          if (d.indices.hIndex > 50) {
+            return '1.5px';
+          } else {
+            return '1px';
+          }
+        }).attr('fill', (d, index) => {
         return getClusteringColor(d);
       });
       return _onclicknodes.slice(0, _onclicknodes.length);
@@ -587,7 +591,7 @@ export default class RelationGraph extends React.PureComponent {
       }
     };
     const hideInfo = (d) => {
-      setTimeout(() => {
+      this.hideInfoTimeOUt = setTimeout(() => {
         if (!mouseOnDiv) {
           document.getElementById('tip').style.display = 'none';
         }
@@ -634,14 +638,14 @@ export default class RelationGraph extends React.PureComponent {
         if (indexShow >= 10) {
           if (d.source.indices.hIndex > indexShow) {
             return d.name.n.en;
-          } else if (transform.k >= 2) {
+          } else if (transform.k >= 3) {
             console.log("放大到一定程度显示名字");
             console.log(transform.k);
             return d.name.n.en;
           } else {
             return '';
           }
-        } else if (transform.k >= 2) {
+        } else if (transform.k >= 3) {
           return d.name.n.en;
         } else if (d.index < snum) {
           return d.name.n.en;
@@ -660,12 +664,12 @@ export default class RelationGraph extends React.PureComponent {
         if (indexShow >= 10) {
           if (d.source.indices.hIndex > indexShow) {
             return d.name.n.en;
-          } else if (transform.k >= 2) {
+          } else if (transform.k >= 3) {
             return d.name.n.en;
           } else {
             return '';
           }
-        } else if (transform.k >= 2) {
+        } else if (transform.k >= 3) {
           return d.name.n.en;
         } else if (d.index < snum) {
           return d.name.n.en;
@@ -818,16 +822,17 @@ export default class RelationGraph extends React.PureComponent {
             } else {
               return '1px';
             }
-          });
-          svg.selectAll('line').data(_edges).style('stroke', '#999').style('opacity', 1);
+          }).style('opacity', 0.5);
+          svg.selectAll('line').data(_edges).style('stroke', '#999').style('opacity', 0.3);
           /* 清除样式结束 */
 
           svg.selectAll('circle').data(_nodes).filter((k) => {
             return d.name.n.en && k.name.n.en === d.name.n.en;
-          }).style('stroke', 'yellow').style('stroke-width', '5px');
+          }).style('stroke', 'yellow').style('stroke-width', '5px').style('opacity', 1);
+
           svg.selectAll('line').data(_edges).filter((e, i) => {
             return e.target.id === d.id || e.source.id === d.id;
-          }).style('stroke', '#a28eee').style('opacity', 1);
+          }).style('stroke', '#a28eee').style('stroke-width', '2').style('opacity', 1);
         } else {
           this.setState({ currentNode: null });
           _onclicknodes[_onclicknodes.indexOf(d.id)] = '';
@@ -942,7 +947,7 @@ export default class RelationGraph extends React.PureComponent {
         } else {
           return getRadious(16);
         }
-      }).style('stroke', '#fff').style('stroke-width', (d) => {
+      }).style('stroke', 'rgba(255,255,255,0.6)').style('stroke-width', (d) => {
         if (d.indices.hIndex > 50) {
           return '1.5px';
         } else {
@@ -1355,11 +1360,11 @@ export default class RelationGraph extends React.PureComponent {
       // $('#cb4').attr('checked', false);
       return this.currentModle4 = false;
     };
-    this.changeModle2 = (e) => {
-      this.currentModle2 = e.target.checked;
+    this.changeModle2 = () => {
+      this.currentModle2 = !currentThis.state.suspension_adjustment;
       // this.currentModle2 = !this.currentModle2;
       currentThis.setState({
-        suspension_adjustment: e.target.checked,
+        suspension_adjustment: !currentThis.state.suspension_adjustment,
       });
       if (typeof simulation !== 'undefined') {
         if (this.currentModle2 === true) {
@@ -1370,6 +1375,7 @@ export default class RelationGraph extends React.PureComponent {
       }
     };
     this.changeModle3 = (e) => {
+      console.log('两点路径', currentThis.state.two_paths);
       clearAllChoosed(5);
       _totalLine = [];
       _lastNode = null;
@@ -1378,7 +1384,7 @@ export default class RelationGraph extends React.PureComponent {
       svg.selectAll('circle').data(_nodes).style('opacity', 0.8);
       currentThis.setState({
         subnet_selection: false,
-        two_paths: e.target.checked,
+        two_paths: !currentThis.state.two_paths,
         continuous_path: false,
         single_extension: false,
       });
@@ -1440,34 +1446,44 @@ export default class RelationGraph extends React.PureComponent {
   render() {
     const { describeNodes1, describeNodes2, suspension_adjustment, two_paths, continuous_path, single_extension, currentNode } = this.state;
     return (
-      <div className={styles.vis_container}>
-        {/* 搜索结果 */}
-        <div style={{ display: 'flex', flexDirection: 'row' }}>
-          {/* <h3>{this.props.query}</h3> */}
-          There are
-          <div style={{ marginLeft: 10 }}>{describeNodes1} people</div>
-          <div style={{ marginLeft: 10 }}>{describeNodes2} relations</div>
-        </div>
-        <div className={styles.svgTitle} style={{ width: EgoWidth }}>
-          <div>
-            <label>相关操作：</label>
-            {/* <Checkbox checked={subnet_selection} onChange={this.changeModle1}>子网选取</Checkbox> */}
-            <Checkbox checked={suspension_adjustment} onChange={this.changeModle2}>暂停调整</Checkbox>
-            <Checkbox checked={two_paths} onChange={this.changeModle3}>两点路径</Checkbox>
-            {this.currentModle3 &&
-            <span>
-              <RgSearchNameBox size="default" style={{ width: 260 }} onSearch={this.onSearchTwoPaths}
-                                  suggesition={this.state.allNodes} hideSearchBtn={true} />
-              &nbsp;-&nbsp;
-              <RgSearchNameBox size="default" style={{ width: 260 }} onSearch={this.onSearchTwoPaths}
-                               suggesition={this.state.allNodes} hideSearchBtn={true} />
-              &nbsp;
-              <Button type="primary" size="small" onClick={this.changeModle3}>取消选择</Button>
-            </span>}
-
-            {/*<Checkbox checked={continuous_path} onChange={this.changeModle4}>连续路径</Checkbox>*/}
-            {/*<Checkbox checked={single_extension} onChange={this.changeModle5}>单点扩展</Checkbox>*/}
-            <label>过滤器：</label>
+      <div>
+        <div style={{ width: EgoWidth }} className={styles.relationHeader}>
+          <div className={styles.statAndAction}>
+            {/* 搜索结果 */}
+            <div className={styles.statistics}>
+              共
+              <span className={styles.statCount}>{describeNodes1}</span>
+              位专家，
+              <span className={styles.statCount}>{describeNodes2}</span>
+              个关系
+            </div>
+            {/*style={{ width: EgoWidth }}*/}
+            <div className={styles.action}>
+              <label>相关操作：</label>
+              {/* <Checkbox checked={subnet_selection} onChange={this.changeModle1}>子网选取</Checkbox> */}
+              <Button className={classnames({
+                active: suspension_adjustment,
+                [styles.selected]: suspension_adjustment
+              })}
+                      onClick={this.changeModle2}>
+                <span className={classnames('icon', styles.stop_drag_icon)} />
+                暂停调整
+              </Button>
+              <Button className={classnames(styles.two_paths, { active: two_paths })}
+                      onClick={this.changeModle3}>
+                <span className={classnames('icon', styles.two_paths_icon)} />
+                两点路径
+              </Button>
+              {/*<Button onChange={this.changeModle4}>*/}
+              {/*<span className={classnames('icon', styles.continue_paths_icon)} />*/}
+              {/*连续路径*/}
+              {/*</Button>*/}
+              {/*<Checkbox checked={continuous_path} onChange={this.changeModle4}>连续路径</Checkbox>*/}
+              {/*<Checkbox checked={single_extension} onChange={this.changeModle5}>单点扩展</Checkbox>*/}
+            </div>
+          </div>
+          <div className={styles.filterBlock}>
+            <label>H-指数：</label>
             <Select defaultValue="h-Index>0" style={{ width: 120, marginRight: 10 }}
                     onChange={this.IndexChange}>
               {this.activities.map((act) => {
@@ -1476,10 +1492,25 @@ export default class RelationGraph extends React.PureComponent {
                 );
               })}
             </Select>
+            <RgSearchNameBox size="default" style={{ width: 230 }} onSearch={this.onSearch}
+                             suggesition={this.state.allNodes} />
           </div>
-          <RgSearchNameBox size="default" style={{ width: 320 }} onSearch={this.onSearch}
-                           suggesition={this.state.allNodes} />
         </div>
+        {this.currentModle3 &&
+        <div className={styles.twoExpertPathBySearch}>
+          <span>
+            <RgSearchNameBox size="default" style={{ width: 230 }}
+                             onSearch={this.onSearchTwoPaths}
+                             suggesition={this.state.allNodes} hideSearchBtn />
+            &nbsp;-&nbsp;
+            <RgSearchNameBox size="default" style={{ width: 230 }}
+                             onSearch={this.onSearchTwoPaths}
+                             suggesition={this.state.allNodes} hideSearchBtn />
+            &nbsp;
+            <Button type="primary" size="small" onClick={this.changeModle3}>取消选择</Button>
+          </span>
+        </div>
+        }
 
         {/* 左侧显示的专家信息 */}
         {currentNode !== null && currentNode &&
@@ -1487,10 +1518,15 @@ export default class RelationGraph extends React.PureComponent {
           <div>
             {currentNode.avatar &&
             <div className={styles.avatar}>
-              <img src={getAvatar(currentNode.avatar, currentNode.id, 90)} alt="" />
+              <a href={`https://aminer.org/profile/-/${currentNode.id}`} target="_blank">
+                <img src={getAvatar(currentNode.avatar, currentNode.id, 90)}
+                     alt={currentNode.name.n.en} />
+              </a>
             </div>
             }
-            {currentNode.name && <h2>{currentNode.name.n.en}</h2>
+            {currentNode.name
+            && <a href={`https://aminer.org/profile/-/${currentNode.id}`} target="_blank">
+              <h2>{currentNode.name.n.en}</h2></a>
             }
             {currentNode.indices &&
             <div style={{ marginBottom: 8 }}>

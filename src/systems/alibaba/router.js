@@ -10,7 +10,6 @@ import map from 'routes/expert-map/router-map';
 import trend from 'routes/trend-prediction/router-trend';
 import seminar from 'routes/seminar/router-seminar';
 
-import App from 'routes/app';
 import { RouterRegistry, RouterRegistry2b, RouterJSXFunc } from '../router-registry';
 
 const routes = [
@@ -89,7 +88,7 @@ const routes = [
 ];
 
 const Routers = ({ history, app }) => {
-  return RouterJSXFunc(history, app, routes, App);
+  return RouterJSXFunc(history, app, routes);
 };
 
 export default Routers;

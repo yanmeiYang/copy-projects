@@ -3,10 +3,10 @@ import { connect } from 'dva';
 import { Input, Button } from 'antd';
 import Autosuggest from 'react-autosuggest';
 import { defineMessages, injectIntl } from 'react-intl';
+import classnames from 'classnames';
 import styles from './KgSearchBox.less';
 import * as kgService from '../../services/knoledge-graph-service';
 import * as suggestService from '../../services/search-suggest';
-import { classnames } from '../../utils';
 import { sysconfig } from '../../systems';
 
 const messages = defineMessages({
@@ -19,7 +19,6 @@ const messages = defineMessages({
     defaultMessage: 'Search',
   },
 });
-
 
 // TODO 这个文件调用了Service，应该移动到routes里面
 
@@ -289,7 +288,10 @@ export default class KgSearchBox extends React.PureComponent {
   render() {
     const { value, suggestions } = this.state;
     const { intl } = this.props;
-    const { size, className, style, btnText, searchPlaceholder } = this.props;
+    const {
+      size, className, style, btnText, searchPlaceholder,
+      searchBtnStyle, indexPageStyle
+    } = this.props;
     // Auto suggest will pass through all these props to the input.
     const inputProps = {
       placeholder: searchPlaceholder || intl.formatMessage(messages.placeholder),
@@ -299,13 +301,13 @@ export default class KgSearchBox extends React.PureComponent {
 
     // Finally, render it!
     return (
-      <form className={className} onSubmit={this.handleSubmit}>
+      <form className={classnames(styles.kgSearchBox, className)} onSubmit={this.handleSubmit}>
         <Input.Group
           compact size={size} style={style}
           className={classnames(styles.search, 'kgsuggest')}
         >
           <Autosuggest
-            id="kgsuggest"
+            id={indexPageStyle || 'kgsuggest'}
             suggestions={suggestions}
             multiSection
             onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
@@ -319,10 +321,13 @@ export default class KgSearchBox extends React.PureComponent {
           />
 
           <Button
+            className={styles.searchBtn}
+            style={searchBtnStyle}
             size={size}
             type="primary"
             onClick={this.handleSubmit}
           >{btnText || intl.formatMessage(messages.searchBtn)}</Button>
+
         </Input.Group>
       </form>
     );

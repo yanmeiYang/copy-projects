@@ -20,8 +20,8 @@ import { Tag } from 'antd';
 const { CheckableTag } = Tag;
 
 let map1;
-let number;
-let range;
+let number = '0';
+let range = '0';
 const ButtonGroup = Button.Group;
 const blankAvatar = '/images/blank_avatar.jpg';
 
@@ -806,10 +806,27 @@ class ExpertMap extends React.PureComponent {
       cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),
     };
     const Domains = TopExpertBase.RandomTop100InDomain;
+    const Domains_Aminer = TopExpertBase.RandomTop100InDomainAminer;
+    console.log(Domains)
     const that = this;
     return (
       <div className={styles.expertMap} id="currentMain">
         <div className={styles.filterWrap}>
+          <div className={styles.filter}>
+            <div className={styles.filterRow}>
+              <span className={styles.filterTitle}><span>Hot words:</span></span>
+              <ul>
+                {Domains.map(domain =>
+                  (<CheckableTag className={styles.filterItem} key={domain.id} value={domain.id}><span onClick={this.domainChanged.bind(that, domain.id)}>{domain.name}</span></CheckableTag>),
+                )}
+              </ul>
+              {/*<ul>*/}
+                {/*{Domains_Aminer.map(domain =>*/}
+                  {/*(<CheckableTag className={styles.filterItem} key={domain.id} value={domain.id}><span onClick={this.domainChanged.bind(that, domain.id)}>{domain.name}</span></CheckableTag>),*/}
+                {/*)}*/}
+              {/*</ul>*/}
+            </div>
+          </div>
           <div className={styles.filter}>
             <div className={styles.filterRow}>
               <span className={styles.filterTitle}><span>Range:</span></span>
@@ -836,21 +853,21 @@ class ExpertMap extends React.PureComponent {
         </div>
         <div className={styles.headerLine}>
           <div className={styles.left}>
-            {this.props.title}
-            <span>
-              <FM defaultMessage="Domain"
-                  id="com.expertMap.headerLine.label.field" />
-            </span>
-            <Select defaultValue="" className={styles.domainSelector} style={{ width: 120 }}
-                    onChange={this.domainChanged}>
-              <Select.Option key="none" value="">
-                <FM defaultMessage="Domain"
-                    id="com.expertMap.headerLine.label.selectField" />
-              </Select.Option>
-              {Domains.map(domain =>
-                (<Select.Option key={domain.id} value={domain.id}>{domain.name}</Select.Option>),
-              )}
-            </Select>
+            {/*{this.props.title}*/}
+            {/*<span>*/}
+              {/*<FM defaultMessage="Domain"*/}
+                  {/*id="com.expertMap.headerLine.label.field" />*/}
+            {/*</span>*/}
+            {/*<Select defaultValue="" className={styles.domainSelector} style={{ width: 120 }}*/}
+                    {/*onChange={this.domainChanged}>*/}
+              {/*<Select.Option key="none" value="">*/}
+                {/*<FM defaultMessage="Domain"*/}
+                    {/*id="com.expertMap.headerLine.label.selectField" />*/}
+              {/*</Select.Option>*/}
+              {/*{Domains.map(domain =>*/}
+                {/*(<Select.Option key={domain.id} value={domain.id}>{domain.name}</Select.Option>),*/}
+              {/*)}*/}
+            {/*</Select>*/}
 
             <div className={styles.level}>
               <span>

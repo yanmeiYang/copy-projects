@@ -12,7 +12,7 @@ import 'echarts/lib/component/title';
 import styles from './topic-trend.less';
 import { Auth } from '../../hoc';
 
-@connect(({ app }) => ({ app }))
+@connect(({ app, topicTrend }) => ({ app, topicTrend }))
 @Auth
 export default class TopicTrend extends React.PureComponent {
   constructor(props) {
@@ -27,47 +27,59 @@ export default class TopicTrend extends React.PureComponent {
   componentDidMount() {
     const { query, dispatch } = this.props;
     this.callSearchTrendByMention(query);
-    this.myChart = echarts.init(document.getElementById('trendchart'));
-    this.showChart();
+    this.myChart = echarts.init(document.getElementById('trendchart'));//初始化
   }
 
   shouldComponentUpdate(nextProps) {
     if (nextProps.query && nextProps.query !== this.props.query) {
       this.showtrend(nextProps.query);
+      //this.showChart();
+      return true;
+    }
+    if (nextProps.topicTrend.trendInfo &&
+      this.props.topicTrend.trendInfo !== nextProps.topicTrend.trendInfo) {
+      this.showChart(nextProps.topicTrend.trendInfo, this.props.query);
       return true;
     }
     return true;
   }
 
   callSearchTrendByMention = (query) => {
-    console.log('@@@@@@@@@@@@@@@@@@@');
     this.props.dispatch({ type: 'topicTrend/searchTrendByMention', payload: { query } });
   };
 
-  showChart = () => {
-    var axisData = ['周一','周二','周三','很长很长的周四','周五','周六','周日'];
-    var data = axisData.map(function (item, i) {
-      return Math.round(Math.random() * 1000 * (i + 1));
+  showChart = (info, q) => {
+    const title = q + '领域趋势图';
+    const axisData = [];
+    const freq = [];
+    const weight = [];
+    for (const f in info.freq) {
+      axisData.push(info.freq[f].y);
+      freq.push(info.freq[f].f);
+      weight.push(info.freq[f].w);
+    }
+    const data = axisData.map((item, i) => {
+      return freq[i];
     });
-    var links = data.map(function (item, i) {
+    const links = data.map((item, i) => {
       return {
         source: i,
-        target: i + 1
+        target: i + 1,
       };
     });
     links.pop();
     const option = {
       title: {
-        text: '笛卡尔坐标系上的 Graph'
+        text: title
       },
       tooltip: {},
       xAxis: {
-        type : 'category',
-        boundaryGap : false,
-        data : axisData
+        type: 'category',
+        boundaryGap: false,
+        data: axisData,
       },
       yAxis: {
-        type : 'value'
+        type: 'value',
       },
       series: [
         {
@@ -86,11 +98,11 @@ export default class TopicTrend extends React.PureComponent {
           links: links,
           lineStyle: {
             normal: {
-              color: '#2f4554'
-            }
-          }
-        }
-      ]
+              color: '#2f4554',
+            },
+          },
+        },
+      ],
     };
     this.myChart.setOption(option);
   }

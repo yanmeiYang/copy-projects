@@ -271,8 +271,15 @@ class RegistrationForm extends React.Component {
     this.expertExtendAddress = e.target.value;
   };
 
+  // 活动简介字数提示
+  countChar = (maxLength, textareaName, spanName) => {
+    document.getElementById(spanName).innerHTML =
+      `${maxLength - document.getElementById(textareaName).value.length} / ${maxLength}`;
+  };
+
   render() {
     const { getFieldDecorator } = this.props.form;
+    const load = this.props.loading.effects['seminar/postSeminarActivity'];
     const {
       activity_organizer_options, postSeminarOrganizer, activity_type, summaryById
     } = this.props.seminar;
@@ -439,12 +446,15 @@ class RegistrationForm extends React.Component {
                 rules: [{
                   required: true,
                   message: '请输入活动简介',
-                }, { type: 'string', max: 150, message: '最多150个字符' }],
+                }, { type: 'string', max: 1500, message: '最多1500个字符' }],
               })(
                 <Input type="textarea" rows={4} placeholder="请输入活动简介"
-                       onBlur={this.getKeywords} />,
+                       onBlur={this.getKeywords}
+                       onKeyDown={this.countChar.bind(this, 1500, 'abstract', 'counter')}
+                       onKeyUp={this.countChar.bind(this, 1500, 'abstract', 'counter')} />,
               )}
             </FormItem>
+            <div className={styles.countChar}>可以输入<span id="counter">1500</span>字</div>
             <FormItem
               {...formItemLayout}
               label="活动海报"
@@ -540,6 +550,7 @@ class RegistrationForm extends React.Component {
             <FormItem
               wrapperCol={{ span: 12, offset: 6 }} style={{ marginBottom: 6 }}>
               <Button type="primary" onClick={this.handleSubmit}
+                      loading={load}
                       style={{ width: '50%', height: 40 }}>确定</Button>
             </FormItem>
           </Col>
@@ -551,4 +562,4 @@ class RegistrationForm extends React.Component {
 
 const WrappedRegistrationForm = Form.create()(RegistrationForm);
 
-export default connect(({ seminar, person }) => ({ seminar, person }))(WrappedRegistrationForm);
+export default connect(({ seminar, person, loading }) => ({ seminar, person, loading }))(WrappedRegistrationForm);

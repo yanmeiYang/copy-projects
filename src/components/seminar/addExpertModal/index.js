@@ -111,6 +111,7 @@ class AddExpertModal extends React.Component {
   setModalVisible() {
     this.setState({ modalVisible: false });
     this.props.callbackParentSetAddNewTalk();
+    this.props.parentProps.dispatch({ type: 'seminar/emptySpeakerSuggests' });
   }
 
   setStep(step, visible) {
@@ -212,6 +213,8 @@ class AddExpertModal extends React.Component {
     talk.abstract = ReactDOM.findDOMNode(this.refs.talkAbstract).value;
     this.props.callbackParent(talk, state.isEdit);
     this.setState({ modalVisible: false });
+    // 保存以后把suggest expert清空
+    this.props.parentProps.dispatch({ type: 'seminar/emptySpeakerSuggests' });
   };
 
   suggestExpert(type) {
@@ -259,7 +262,8 @@ class AddExpertModal extends React.Component {
   };
 
   cancelCurrentPerson = () => {
-    this.props.parentProps.seminar.speakerSuggests = [];
+    // this.props.parentProps.seminar.speakerSuggests = [];
+    this.props.parentProps.dispatch({ type: 'seminar/emptySpeakerSuggests' });
     this.setState({ step2: true, step3: false, isSearched: false });
     // this.refs.speakerName.refs.input.value = '';
     // this.refs.speakerAff.refs.input.value = '';
@@ -536,7 +540,7 @@ class AddExpertModal extends React.Component {
               <label className="ant-col-3">姓名: </label>
               <div className="ant-col-21">
                 <Input size="large" placeholder="专家姓名" ref="speakerName"
-                       onBlur={this.saveExpertInfo.bind(this, 'name')} />
+                       onChange={this.saveExpertInfo.bind(this, 'name')} />
               </div>
             </div>
 
@@ -553,28 +557,28 @@ class AddExpertModal extends React.Component {
               <label className="ant-col-3">职称: </label>
               <div className="ant-col-21">
                 <Input size="large" placeholder="专家职称" ref="speakerPos"
-                       onBlur={this.saveExpertInfo.bind(this, 'position')} />
+                       onChange={this.saveExpertInfo.bind(this, 'position')} />
               </div>
             </div>
             <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
               <label className="ant-col-3">单位: </label>
               <div className="ant-col-21">
                 <Input size="large" placeholder="专家单位" ref="speakerAff"
-                       onBlur={this.saveExpertInfo.bind(this, 'affiliation')} />
+                       onChange={this.saveExpertInfo.bind(this, 'affiliation')} />
               </div>
             </div>
             <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
               <label className="ant-col-3">电话: </label>
               <div className="ant-col-21">
                 <Input size="large" placeholder="电话" ref="speakerIphone"
-                       onBlur={this.saveExpertInfo.bind(this, 'phone')} />
+                       onChange={this.saveExpertInfo.bind(this, 'phone')} />
               </div>
             </div>
             <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
               <label className="ant-col-3">邮箱: </label>
               <div className="ant-col-21">
                 <Input size="large" placeholder="邮箱" ref="speakerEmail"
-                       onBlur={this.saveExpertInfo.bind(this, 'email')} />
+                       onChange={this.saveExpertInfo.bind(this, 'email')} />
               </div>
             </div>
           </Col>
@@ -582,7 +586,7 @@ class AddExpertModal extends React.Component {
             <label className="ant-col-3">专家简介: </label>
             <div className="ant-col-21">
               <Input type="textarea" rows={4} size="large" placeholder="专家简介" ref="speakerBio"
-                     onBlur={this.saveExpertInfo.bind(this, 'bio')} />
+                     onChange={this.saveExpertInfo.bind(this, 'bio')} />
             </div>
           </Col>
 

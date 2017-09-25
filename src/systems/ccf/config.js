@@ -2,7 +2,8 @@
  * Created by BoGao on 2017/6/20.
  */
 import React from 'react';
-import Footer from '../../components/Footers/ccf';
+import Footer from 'components/Footers/ccf';
+import ViewExpertInfo from 'components/person/view-expert-info';
 
 module.exports = {
   /**
@@ -39,6 +40,7 @@ module.exports = {
   Enable_Export: true,
   ShowRegisteredRole: true, // 注册页面是否显示角色配置
   // Signup_Password: false, // 注册页面password
+  PersonList_RightZone: [({ param }) => (<ViewExpertInfo key="1" person={param.person} />)],
 
   // SearchPagePrefix: 'uniSearch', // search - 普通搜索(deleted); uniSearch - 多合一搜索.
   // Search_EnablePin: false, // TODO bad：Huawei PIN

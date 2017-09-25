@@ -250,6 +250,11 @@ export default {
     getSpeakerSuggestSuccess(state, { payload: { data } }) {
       return { ...state, speakerSuggests: data, loading: false };
     },
+
+    emptySpeakerSuggests(state) {
+      return { ...state, speakerSuggests: [] };
+    },
+
     searchActivitySuccess(state, { payload: { data, query, offset } }) {
       let results = [];
       if (offset === 0) {

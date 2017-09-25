@@ -5,10 +5,11 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Icon, InputNumber, Rate, Tabs, Spin } from 'antd';
-import { getTwoDecimal } from '../../utils';
-import { ProfileInfo } from '../../components/person';
-import { Indices } from '../../components/widgets';
-import * as personService from '../../services/person';
+import { getTwoDecimal } from 'utils';
+import { ProfileInfo } from 'components/person';
+import { Indices } from 'components/widgets';
+import * as personService from 'services/person';
+import classnames from 'classnames';
 import styles from './index.less';
 import PersonFeaturedPapers from './person-featured-papers';
 // import ActivityList from '../../components/seminar/activityList';
@@ -35,7 +36,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
       {false && profile && profile.indices &&
       <Indices indices={profile.indices} />
       }
-      <table style={{ marginBottom: 10 }} className="scoreTable">
+      <table style={{ marginBottom: 10 }} className={styles.scoreTable}>
         {contrib &&
         <tr>
           <td>贡献度:</td>
@@ -53,7 +54,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
               <td>演讲内容:</td>
               <td>
                 <Rate disabled defaultValue={score.score} />
-                <input type="text" className="score" value={getTwoDecimal(score.score, 2)}
+                <input type="text" className={styles.score} value={getTwoDecimal(score.score, 2)}
                        disabled />
               </td>
             </tr>
@@ -63,7 +64,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
               <td>演讲水平:</td>
               <td>
                 <Rate disabled defaultValue={score.score} />
-                <input type="text" className="score" value={getTwoDecimal(score.score, 2)}
+                <input type="text" className={styles.score} value={getTwoDecimal(score.score, 2)}
                        disabled />
               </td>
             </tr>
@@ -76,7 +77,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
           <td>综合评价:</td>
           <td>
             <Rate disabled defaultValue={integrated.score} />
-            <input type="text" className="score" value={getTwoDecimal(integrated.score, 2)}
+            <input type="text" className={styles.score} value={getTwoDecimal(integrated.score, 2)}
                    disabled />
           </td>
         </tr>
@@ -164,7 +165,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
 
   // console.log('|||||||||||| PersonIndex:', person);
   return (
-    <div className="content-inner">
+    <div className={classnames('content-inner', styles.maxWidth)}>
 
       <ProfileInfo profile={profile} activity_indices={activity_indices}
                    rightZoneFuncs={sysconfig.PersonList_RightZone} />

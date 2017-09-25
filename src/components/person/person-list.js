@@ -192,17 +192,16 @@ export default class PersonList extends PureComponent {
                     </div>
                   </div>
                 </div>
+                {/* ---- Right Zone ---- */}
+                {RightZoneFuncs && RightZoneFuncs.length > 0 &&
+                <div className={styles.person_right_zone}>
+                  {RightZoneFuncs.map((blockFunc) => {
+                    const param = { person, expertBaseId };
+                    return blockFunc ? blockFunc({ param }) : false;
+                  })}
+                </div>
+                }
               </div>
-
-              {/* ---- Right Zone ---- */}
-              {RightZoneFuncs && RightZoneFuncs.length > 0 &&
-              <div className={styles.person_right_zone}>
-                {RightZoneFuncs.map((blockFunc) => {
-                  const param = { person, expertBaseId };
-                  return blockFunc ? blockFunc({ param }) : false;
-                })}
-              </div>
-              }
 
               {/* ---- Bottom Zone ---- */}
               {/*{BottomZoneFuncs && BottomZoneFuncs.length > 0 &&*/}

@@ -6,7 +6,7 @@ import * as authService from '../services/auth';
 import { sysconfig } from '../systems';
 
 const { prefix } = config;
-
+// TODO remove unnecessary.
 export default {
   namespace: 'app',
   state: {

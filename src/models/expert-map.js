@@ -88,8 +88,13 @@ export default {
         })
         data.data.data.map((item) => {
           const add = [];
+          let fellow;
+          if (typeof (item.fellows) !== 'undefined') {
+            fellow = item.fellows;
+          } else {
+            fellow = [];
+          }
           let c = item.city;
-          // console.log(geomap[c]);
           while (true) {
             add.push(geomap[c].name);
             if (geomap[c].parent_id === 0 || typeof (geomap[c].parent_id) === 'undefined') {
@@ -106,6 +111,8 @@ export default {
             name_zh: item.n_zh,
             longaddress: add,
             hindex: item.h,
+            is_ch: item.is_ch,
+            fellows: fellow,
             location: {
               lat: item.lat,
               lng: item.lng,

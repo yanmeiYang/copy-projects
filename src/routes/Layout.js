@@ -28,6 +28,7 @@ export default class Layout extends Component {
     infoZone: PropTypes.array,
 
     navigator: PropTypes.element,
+    sidebar: PropTypes.array,
     footer: PropTypes.element,
 
     contentClass: PropTypes.string,
@@ -42,15 +43,17 @@ export default class Layout extends Component {
   static defaultProps = {
     showHeader: true,
     showNavigator: true,
+    sidebar: theme.sidebar,
     footer: theme.footer,
   };
 
   render() {
     console.count('>>>>>>>>>> App Render');
-    const { logoZone, searchZone, infoZone, footer } = this.props;
+    const { logoZone, searchZone, infoZone, sidebar, footer } = this.props;
     const { contentClass, showHeader, showNavigator } = this.props;
     const { query, onSearch } = this.props;
-    const { dispatch } = this.props;
+    const { dispatch, app } = this.props;
+    const { user, roles } = app;
 
     const headerOptions = {
       logoZone, searchZone, infoZone, query, onSearch,
@@ -64,6 +67,7 @@ export default class Layout extends Component {
 
     return (
       <LayoutComponent className={tc(['layout'])}>
+
         <Helmet>
           <title>{sysconfig.PageTitle}</title>
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -77,8 +81,9 @@ export default class Layout extends Component {
           {/*}*/}
 
           {(href.indexOf('/expert-map') > 0) &&
-          <script type="text/javascript"
-                  src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />}
+          <script
+            type="text/javascript"
+            src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />}
 
           {(href.indexOf('/expert-map') > 0) &&
           <script
@@ -102,11 +107,13 @@ export default class Layout extends Component {
         <LayoutComponent>
 
           {/* -------- Left Side Bar -------- */}
+
           {sysconfig.Layout_HasSideBar &&
           <Sider className={tc(['sider'])}>
-            <span className={tc(['text'])}>left sidebar</span>
-          </Sider>
-          }
+            {sidebar && sidebar.length > 0 && sidebar.map(elm => elm)}
+          </Sider>}
+
+          {/* -------- Main Content -------- */}
 
           <Content className={tc(['content'], [contentClass])}>
             {this.props.children}
@@ -116,6 +123,7 @@ export default class Layout extends Component {
         </LayoutComponent>
 
         {/* -------- Footer -------- */}
+
         <Footer className={tc(['footer'])}>
           {footer}
         </Footer>

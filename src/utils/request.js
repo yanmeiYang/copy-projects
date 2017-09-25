@@ -2,7 +2,7 @@
  * Created by yutao on 2017/5/25.
  */
 import fetch from 'dva/fetch';
-import { baseURL } from './config';
+import { baseURL, nextAPIURL } from './config';
 import * as auth from './auth';
 import * as debug from './debug';
 
@@ -125,6 +125,7 @@ export async function externalRequest(url, options) {
   return ret;
 }
 
+
 export async function wget(url) {
   const token = localStorage.getItem('token');
   const headers = new Headers();
@@ -140,4 +141,98 @@ export async function wget(url) {
 
   const data = await response.json();
   return data;
+}
+
+// -----------------------------------------------
+const testNextRequest = [{
+  method: 'search',
+  parameters: {
+    query: 'data mining',
+    searchType: 'person',
+    sorts: ['h_index', '~time'], // old version: [{\"field\":\"h_index\",\"order\":\"desc\"}, \"_score\"]
+    filters: { terms: { labels: ['CCF_MEMBER_高级会员'] } }, // filters按原计划没变; 暂时没变
+    offset: 0, // 分页选项，起始偏移量.
+    size: 20, // 分页选项，返回数据条数.
+    aggregation: ['gender', 'h_index', 'location', 'language'], // search 独有的aggregation.
+  },
+  options: {
+    token: '09876677....LKSDJF', // 对调用者可选，默认值为localStorage中的值。
+  },
+  schema: {
+    result: [
+      'score',
+      'id',
+      {
+        Person: [
+          'name',
+          'namezh',
+          'citation',
+          'hindex',
+          'labels',
+        ],
+      },
+      {
+        Publication: [
+          'title',
+          'titlezh',
+        ],
+      },
+    ],
+    aggregation: [
+      'name',
+      {
+        items: [
+          'term',
+          'count',
+        ],
+      },
+    ]
+  }
+}];
+
+/**
+ * Requests a URL, returning a promise.
+ * Request Format：
+ * {
+ *  "method" :"search",
+ *  "parameters":{"a":"c"},
+ *  "schema":{"a":"c"}
+ *  }
+ */
+export async function queryAPI(payload) {
+  const { method, parameters, schema, options } = payload;
+
+  if (process.env.NODE_ENV !== 'production') {
+    debug.logRequest('@@next-request ', options.method, options);
+  }
+
+  const headers = new Headers();
+  headers.append('Accept', 'application/json');
+  headers.append('Content-Type', 'application/json');
+
+  const token = (options && options.token) || localStorage.getItem('token');
+  if (token) {
+    headers.append('Authorization', token);
+  }
+
+  const requestBody = {
+    method,
+    parameters,
+    schema,
+  };
+
+  // next api process is always POST.
+  options.method = 'POST';
+  const newOption = { ...options, headers };
+  const response = await fetch(nextAPIURL, newOption);
+
+  checkStatus(response);
+
+  const data = await response.json();
+
+  const ret = { data, headers: {} };
+  // if (response.headers.get('x-total-count')) {
+  //   ret.headers['x-total-count'] = response.headers.get('x-total-count');
+  // }
+  return ret;
 }

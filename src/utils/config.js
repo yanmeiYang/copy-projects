@@ -9,7 +9,7 @@ module.exports = {
   // URLs
   basePageURL: 'https://aminer.org',
   baseURL: 'https://api.aminer.org/api',
-  // baseURL: 'https://166.111.7.105/api',
+  nextAPIURL: 'http://localhost:4005/api',
   graphqlAPI: 'http://localhost:4005/gql',
   // graphqlAPI: 'http://localhost:4000/gql/',
 
@@ -122,6 +122,10 @@ module.exports = {
     // Recommendation APIs
     getAllOrgs: '/reviewer/orgs/get/all/:offset/:size',
     // getOrgById: '/reviewer/org/get/:id',
+
+    // cross heat
+    getDiscipline: 'http://166.111.7.105:5098/topics?area=:area&k=:k&depth=:depth',
+    delDiscipline: 'http://166.111.7.105:5098/feedback?parents=:parents&children=:children&postive=:postive',
 
     // getProjects: API_BASE+"reviewer/projects/get/:offset/:size"
     // addProject: API_BASE+"reviewer/project/add"

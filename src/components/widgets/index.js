@@ -3,6 +3,7 @@
  */
 import Indices from './indices';
 import HindexGraph from './h-index-graph';
+import SearchSelectBox from './searchSelectBox';
 
-module.exports = { Indices, HindexGraph };
+module.exports = { Indices, HindexGraph, SearchSelectBox };
 

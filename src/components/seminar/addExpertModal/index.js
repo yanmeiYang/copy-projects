@@ -98,7 +98,11 @@ class AddExpertModal extends React.Component {
     this.speakerInformation.bio = selectedExpert.bio;
     this.speakerInformation.phone = selectedExpert.phone;
     this.speakerInformation.email = selectedExpert.email;
-    this.speakerInformation.role = [selectedExpert.role];
+    if (typeof selectedExpert.role === 'string') {
+      this.speakerInformation.role = [selectedExpert.role];
+    } else if (selectedExpert.role && selectedExpert.role.length > 0 ) {
+      this.speakerInformation.role = selectedExpert.role;
+    }
     ReactDOM.findDOMNode(this.refs.speakerBio).value = selectedExpert.bio;
     ReactDOM.findDOMNode(this.refs.speakerIphone).value = selectedExpert.phone;
     ReactDOM.findDOMNode(this.refs.speakerEmail).value = selectedExpert.email;
@@ -164,7 +168,9 @@ class AddExpertModal extends React.Component {
       step2: false,
       step1: false,
     });
-    this.props.parentProps.seminar.speakerSuggests = [];
+    // 保存以后把suggest expert清空
+    this.props.parentProps.dispatch({ type: 'seminar/emptySpeakerSuggests' });
+    // this.props.parentProps.seminar.speakerSuggests = [];
   };
 
   // 修改当前专家信息
@@ -491,6 +497,7 @@ class AddExpertModal extends React.Component {
             </Spin>
             {/* 活动页面点编辑展示的内容 */}
             {isEdit && editTheTalk.speaker !== undefined && editTheTalk.speaker.name !== undefined &&
+            speakerSuggests.length === 0 &&
             <ExpertBasicInfo currentExpert={editTheTalk.speaker} />
             }
             {/* 非活动详情页面编辑 */}

@@ -16,3 +16,7 @@ export async function dataFind(id) {
     baseURL: 'https://trajectory.aminer.org',
   });
 }
+
+export async function eventFind(year) {
+  return require('../../external-docs/expert-trajectory/eventData.json');
+}

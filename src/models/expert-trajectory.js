@@ -4,6 +4,7 @@ import * as pubsService from '../services/publication';
 import * as personService from '../services/person';
 import * as searchService from '../services/search';
 import * as traDataFindService from '../services/expert-trajectory-service';
+
 const cache = {};
 
 export default {
@@ -18,13 +19,14 @@ export default {
     // for rightInfoZone,
     infoZoneIds: '', // ids as string slitted by ',';
     clusterPersons: [],
-    loading: false, // TODO remove loading, use global loading compoennt.
+    loading: false, // TODO remove loading, use global loading compoennt.\
+    yearMessage: [],
+    year: '',
   },
 
   subscriptions: {},
 
   effects: {
-    // 直接抄expert-map的，所有剩下的东西都要改。
     * searchPerson({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
       const { query } = payload;
@@ -35,16 +37,22 @@ export default {
     * dataFind({ payload }, { call, put }) {
       console.log('enter kfFind, with query:', payload);
       const { personId } = payload;
-         try {
-           const data = yield call(traDataFindService.dataFind, personId);
-           yield put({ type: 'dataFindSuccess', payload: { data } });
-         } catch (e) {
-           console.error('---- Catch Error: ---- ', e);
-           yield put({
-             type: 'dataNotFound',
-             payload: { message: `'${personId}' Not Found ${e || ''}` },
-           });
-         }
+      try {
+        const data = yield call(traDataFindService.dataFind, personId);
+        yield put({ type: 'dataFindSuccess', payload: { data } });
+      } catch (e) {
+        console.error('---- Catch Error: ---- ', e);
+        yield put({
+          type: 'dataNotFound',
+          payload: { message: `'${personId}' Not Found ${e || ''}` },
+        });
+      }
+    },
+
+    * eventFind({ payload }, { call, put }) {
+      const { yearNow } = payload;
+      const data = yield call(traDataFindService.eventFind, yearNow);
+      yield put({ type: 'eventFindSuccess', payload: { data, yearNow } });
     },
 
     * listPersonByIds({ payload }, { call, put }) {  // eslint-disable-line
@@ -84,8 +92,17 @@ export default {
       return { ...state, kgdata: data, kgindex, kgFetcher }; */
     },
 
+    eventFindSuccess(state, { payload: { data, yearNow } }) {
+      const newMassage = state.yearMessage;
+      newMassage.push({
+        year: yearNow,
+        events: data,
+      });
+      return { ...state, yearMessage: newMassage };
+    },
+
     listPersonByIdsSuccess(state, { payload: { data } }) {
-      return { ...state, clusterPersons: data.data.persons, loading: false, };
+      return { ...state, clusterPersons: data.data.persons, loading: false };
     },
 
     showLoading(state) {

@@ -10,10 +10,15 @@ import styles from './ExpertHeatmapPage.less';
 import LeftInfoZoneCluster from './LeftInfoZoneCluster';
 import LeftLineInfoCluster from './LeftLineInfoCluster';
 import ExpertHeatmap from './ExpertHeatmap';
-import { Layout } from 'antd';
+import EventsForYears from './EventForYears';
+import { Layout, Tabs } from 'antd';
 import { Spinner } from '../../components';
+import { sysconfig, applyTheme } from 'systems';
 
 const { Content, Sider } = Layout;
+const TabPane = Tabs.TabPane;
+const tc = applyTheme(styles);
+
 class ExpertHeatmapPage extends React.Component {
   constructor(props) {
     super(props);
@@ -22,9 +27,12 @@ class ExpertHeatmapPage extends React.Component {
 
   state = {
     query: 'data mining',
-    mapType: 'google', // [baidu|google]
+    mapType: 'google',
     from: '',
     to: '',
+    rightType: '',
+    infoTab: 'selection',
+    year: '',
   };
 
   componentWillMount() {
@@ -66,13 +74,6 @@ class ExpertHeatmapPage extends React.Component {
     }
   };
 
-  toggleRightInfo = (type) => {
-      this.props.dispatch({
-        type: 'expertTrajectory/setRightInfo',
-        payload: { rightInfoType: type },
-      });
-  };
-
   callSearchMap = (query) => {
     this.props.dispatch({ type: 'expertTrajectory/searchPerson', payload: { query } });
   }
@@ -81,41 +82,84 @@ class ExpertHeatmapPage extends React.Component {
     console.log('id', clusterIdList);
     this.props.dispatch({ type: 'expertTrajectory/listPersonByIds', payload: { ids: clusterIdList } });
     this.props.dispatch({ type: 'expertTrajectory/setRightInfo', payload: { rightInfoType: type } });
-    if(from1 && to1){
-      this.setState({ from: from1, to: to1});
+    if (from1 && to1) {
+      this.setState({ from: from1, to: to1 });
     }
   }
 
+  onSearchBarSearch = (data) => {
+    console.log('Enter query is ', data);
+    const newOffset = data.offset || 0;
+    const newSize = data.size || sysconfig.MainListSize;
+    this.dispatch(routerRedux.push({
+      pathname: `/${sysconfig.SearchPagePrefix}/${data.query}/${newOffset}/${newSize}?`, // eb=${filters.eb}TODO
+    }));
+    // this.doSearchUseProps(); // another approach;
+  };
+
+  onYearChange = (year1) => {
+    this.setState({ year: year1 },()=>{console.log("hahahahha",this.state.year);});
+    this.setState({ infoTab: 'event'});
+    const e = document.getElementsByClassName("ant-tabs-content") // 滑动条
+    // e[0].scrollTop = e[0].scrollHeight;
+    e[0].scrollTo(0, e[0].scrollHeight)
+    console.log("scrollTop",e[0].scrollTop)
+  }
+
+  onInfoTabChange = (e) => { // 改变tab的取值
+    this.setState({ infoTab: e });
+  };
+
   render() {
     const load = this.props.loading.models.expertTrajectory;
-    const rightType = this.props.expertTrajectory.infoZoneIds;
+    this.state.rightType = this.props.expertTrajectory.infoZoneIds;
+    console.log('rightType', this.state.rightType);
     const ifPlay = this.state.ifPlay;
     const from = this.state.from;
     const to = this.state.to;
     const clusterPersons = this.props.expertTrajectory.clusterPersons;
+    const { query } = this.props.match.params;
     const rightInfos = {
-       scatter: () => (<LeftInfoZoneCluster persons={clusterPersons} />),
-       // lines: () => (<LeftLineInfoCluster persons={clusterPersons} />),
-       lines: () => (<LeftLineInfoCluster persons={clusterPersons} from={from} to={to}/>),
+      scatter: () => (<LeftInfoZoneCluster persons={clusterPersons} />),
+      // lines: () => (<LeftLineInfoCluster persons={clusterPersons} />),
+      lines: () => (<LeftLineInfoCluster persons={clusterPersons} from={from} to={to} />),
     };
     return (
+      <Layout contentClass={tc(['ExpertHeatmapPage'])} onSearch={this.onSearchBarSearch}
+              query={query}>
       <div className={classnames('content-inner', styles.page)}>
-
         <Layout >
-          <Sider className={styles.left} width={250} style={{ backgroundColor: '#fff' }}>
-            <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
-            {rightInfos[rightType] && rightInfos[rightType]()}
+          <Sider className={classnames(styles.left, 'card-container')} width={260} style={{ backgroundColor: '#fff' }}>
+            <Tabs
+              className={styles.card}
+              type="card"
+              onChange={this.onInfoTabChange}
+              activeKey={this.state.infoTab}
+              tabBarExtraContent={''}
+            >
+              <TabPane tab="SELECTION" key="selection">
+                <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
+                {rightInfos[this.state.rightType] && rightInfos[this.state.rightType]()}
+              </TabPane>
+
+              <TabPane tab="EVENTS" key="event" >
+                <h1> EVENTS: </h1>
+                <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
+                <EventsForYears year={this.state.year} />
+              </TabPane>
+            </Tabs>
           </Sider>
 
           <Layout className={styles.right} >
             <Content className={styles.content}>
-              <ExpertHeatmap onPageClick={this.callClusterPerson} />
+              <ExpertHeatmap onPageClick={this.callClusterPerson} yearChange={this.onYearChange} />
             </Content>
           </Layout>
         </Layout>
 
 
       </div>
+      </Layout>
     );
   }
 }

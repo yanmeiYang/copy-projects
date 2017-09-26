@@ -34,24 +34,27 @@ class RightInfoZoneAll extends React.PureComponent {
           H-index分布
         </div>
         <div className={styles.statistics}>
-          总值：
-          <span className={styles.count}>{count * avg}</span>
+          {/*总值：*/}
+          {/*<span className={styles.count}>{count * avg}</span>*/}
           平均值：
           <span className={styles.count}>{avg}</span>
         </div>
-        <div className={styles.statistics}>
-          专家：
-          <span className={styles.count} style={{ marginRight: 0 }}>{count}</span> 人
-        </div>
 
-        <div className="name">
-          <div>Acm Fellow:{isACMFellowNumber}.</div>
-          <div>Ieee Fellow:{isIeeeFellowNumber}.</div>
-          <div>华人:{isChNumber}.</div>
-        </div>
         <div>
           <HindexGraph persons={persons} avg={avg} count={count} />
         </div>
+
+        <div className={styles.statistics}>
+          专家：
+          <span className={styles.count}>{count}</span>
+          ACM Fellow:<span className={styles.count}>{isACMFellowNumber}</span>
+        </div>
+
+          <div className={styles.statistics}>
+            华人:<span className={styles.count}>{isChNumber}</span>
+            IEEE Fellow:<span className={styles.count}>{isIeeeFellowNumber}</span></div>
+          {/*style={{ marginRight: 0 }}*/}
+
       </div>
     );
   }

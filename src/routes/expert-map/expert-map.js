@@ -2,26 +2,28 @@
  *  Created by BoGao on 2017-06-07;
  */
 import React from 'react';
-import { connect } from 'dva';
-import { Button, Select } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
+import {connect} from 'dva';
+import {Button, Tag} from 'antd';
+import {FormattedMessage as FM} from 'react-intl';
 import classnames from 'classnames';
-import { sysconfig } from 'systems';
+import {sysconfig} from 'systems';
 import styles from './expert-map.less';
-import { listPersonByIds } from '../../services/person';
+import {listPersonByIds} from '../../services/person';
 import * as profileUtils from '../../utils/profile-utils';
-import { findPosition, getById, waitforBMap, waitforBMapLib } from './utils/map-utils';
+import {findPosition, getById, waitforBMap, waitforBMapLib} from './utils/map-utils';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
 import RightInfoZonePerson from './RightInfoZonePerson';
 import RightInfoZoneAll from './RightInfoZoneAll';
 import GetBMapLib from './utils/BMapLibGai.js';
-import { TopExpertBase } from '../../utils/expert-base';
-import { Tag } from 'antd';
+import { routerRedux } from 'dva/router';
+import {TopExpertBase} from '../../utils/expert-base';
+
 const { CheckableTag } = Tag;
 
 let map1;
 let number = '0';
 let range = '0';
+let domainIds = [];
 const ButtonGroup = Button.Group;
 const blankAvatar = '/images/blank_avatar.jpg';
 
@@ -67,6 +69,9 @@ class ExpertMap extends React.PureComponent {
 
   state = {
     typeIndex: 0,
+    domainChecks: [],
+    rangeChecks: [],
+    numberChecks: [],
   }
 
   componentDidMount() {
@@ -91,6 +96,10 @@ class ExpertMap extends React.PureComponent {
     // console.log('compare: ', nextProps.query, ' == ', this.props.query)
     if (nextProps.query && nextProps.query !== this.props.query) {
       this.callSearchMap(nextProps.query);
+      const that = this;
+      const arr = [];
+      domainIds = [];
+      that.setState({domainChecks:arr});
     }
     if (nextProps.expertMap.geoData !== this.props.expertMap.geoData) {
       const typeId = '0';
@@ -337,7 +346,7 @@ class ExpertMap extends React.PureComponent {
         let centery;
         let scale = 4;
         let minscale = 3;
-        let maxscale = 19;
+        let maxscale = 18;
         let newtype;
         //if (localStorage.getItem("lasttype") === '0') {
         centerx = sysconfig.CentralPosition.lng;
@@ -676,6 +685,10 @@ class ExpertMap extends React.PureComponent {
 
   showRange = (rangeTmp) => {
     const lastType = localStorage.getItem("lasttype");
+    const that = this;
+    let arr = [false, false, false, false];
+    arr[rangeTmp] = true;
+    that.setState({rangeChecks:arr})
     if (rangeTmp) {
       range = rangeTmp;
       this.showMap(this.props.expertMap.geoData, lastType, range, number);
@@ -683,6 +696,10 @@ class ExpertMap extends React.PureComponent {
   };
 
   showNumber = (numberTmp) => {
+    const that = this;
+    let arr = [false, false, false, false, false];
+    arr[numberTmp] = true;
+    that.setState({numberChecks:arr})
     const lastType = localStorage.getItem("lasttype");
     if (numberTmp) {
       number = numberTmp;
@@ -734,18 +751,33 @@ class ExpertMap extends React.PureComponent {
   };
 
   domainChanged = (value) => {
-    if (value) {
+    const that = this;
+    let i = 0;
+    let arr = [];
+    domainIds.map((domain1) => {
+      if (value.id === domain1) {
+        arr[i] = true;
+      } else {
+        arr[i] = false;
+      }
+      i += 1;
+    });
+    that.setState({domainChecks:arr})
+    this.props.dispatch(routerRedux.push({ pathname: '/expert-map', search: `?query=${value.name}` }));
+    if (value.id) {
       const { dispatch } = this.props;
       //console.log(`selected ${value}`);
       localStorage.setItem("isClick", "0");
       dispatch({ type: 'app/clearQueryInHeaderIfExist' });
-      dispatch({ type: 'expertMap/searchExpertBaseMap', payload: { eb: value } });
+      dispatch({ type: 'expertMap/searchExpertBaseMap', payload: { eb: value.id } });
     }
   };
 
   render() {
     const model = this.props && this.props.expertMap;
     const persons = model.geoData.results;
+    const tr = true;
+    let checkState = 0;
     let count = 0;
     let isACMFellowNumber = 0;
     let isIeeeFellowNumber = 0;
@@ -805,10 +837,17 @@ class ExpertMap extends React.PureComponent {
       person: () => (<RightInfoZonePerson person={model.personInfo} />),
       cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),
     };
-    const Domains = TopExpertBase.RandomTop100InDomain;
-    const Domains_Aminer = TopExpertBase.RandomTop100InDomainAminer;
-    console.log(Domains)
     const that = this;
+    const Domains = sysconfig.Map_HotDomains;
+    let i = 0;
+    let arr = [];
+    Domains.map((domain1) => {
+      domainIds[i] = domain1.id;
+      if (domainIds.length === 0) {
+        arr[i] = false;
+      }
+      i += 1;
+    });
     return (
       <div className={styles.expertMap} id="currentMain">
         <div className={styles.filterWrap}>
@@ -816,37 +855,36 @@ class ExpertMap extends React.PureComponent {
             <div className={styles.filterRow}>
               <span className={styles.filterTitle}><span>Hot words:</span></span>
               <ul>
-                {Domains.map(domain =>
-                  (<CheckableTag className={styles.filterItem} key={domain.id} value={domain.id}><span onClick={this.domainChanged.bind(that, domain.id)}>{domain.name}</span></CheckableTag>),
-                )}
+                {Domains.map((domain) =>{
+                  checkState += 1;
+                  return (<CheckableTag className={styles.filterItem} key={domain.id} checked={that.state.domainChecks[checkState - 1]} value={domain.id}><span onClick={this.domainChanged.bind(that, domain)} >{domain.name}</span></CheckableTag>)
+                })
+
+
+                }
               </ul>
-              {/*<ul>*/}
-                {/*{Domains_Aminer.map(domain =>*/}
-                  {/*(<CheckableTag className={styles.filterItem} key={domain.id} value={domain.id}><span onClick={this.domainChanged.bind(that, domain.id)}>{domain.name}</span></CheckableTag>),*/}
-                {/*)}*/}
-              {/*</ul>*/}
             </div>
           </div>
           <div className={styles.filter}>
             <div className={styles.filterRow}>
               <span className={styles.filterTitle}><span>Range:</span></span>
               <ul>
-                <CheckableTag className={styles.filterItem}>
-                  <span onClick={this.showRange.bind(that, '0')} value="0" ><i className="fa fa-globe fa-fw"></i>全球专家</span>
+                <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[0]}>
+                  <span onClick={this.showRange.bind(that, '0')} value="0" >ALL</span>
                 </CheckableTag>
-                <CheckableTag className={styles.filterItem}><span onClick={this.showRange.bind(that, '1')}>ACM Fellow</span></CheckableTag>
-                <CheckableTag className={styles.filterItem}><span onClick={this.showRange.bind(that, '2')}>IEEE Fellow</span></CheckableTag>
-                <CheckableTag className={styles.filterItem}><span onClick={this.showRange.bind(that, '3')}>华人</span></CheckableTag>
+                <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[1]}><span onClick={this.showRange.bind(that, '1')}>ACM Fellow</span></CheckableTag>
+                <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[2]}><span onClick={this.showRange.bind(that, '2')}>IEEE Fellow</span></CheckableTag>
+                <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[3]}><span onClick={this.showRange.bind(that, '3')}>华人</span></CheckableTag>
               </ul>
             </div>
             <div className={styles.filterRow}>
               <span className={styles.filterTitle}><span>H-index:</span></span>
               <ul>
-                <CheckableTag className={styles.filterItem}><span onClick={this.showNumber.bind(that, '1')}>TOP50</span></CheckableTag>
-                <CheckableTag className={styles.filterItem}><span onClick={this.showNumber.bind(that, '2')}>TOP100</span></CheckableTag>
-                <CheckableTag className={styles.filterItem}><span onClick={this.showNumber.bind(that, '0')}>TOP200</span></CheckableTag>
-                <CheckableTag className={styles.filterItem}><span onClick={this.showNumber.bind(that, '3')}>TOP500</span></CheckableTag>
-                <CheckableTag className={styles.filterItem}><span onClick={this.showNumber.bind(that, '4')}>ALL</span></CheckableTag>
+                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[1]}><span onClick={this.showNumber.bind(that, '1')}>TOP50</span></CheckableTag>
+                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[2]}><span onClick={this.showNumber.bind(that, '2')}>TOP100</span></CheckableTag>
+                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[0]}><span onClick={this.showNumber.bind(that, '0')}>TOP200</span></CheckableTag>
+                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[3]}><span onClick={this.showNumber.bind(that, '3')}>TOP500</span></CheckableTag>
+                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[4]}><span onClick={this.showNumber.bind(that, '4')}>ALL</span></CheckableTag>
               </ul>
             </div>
           </div>
@@ -913,7 +951,7 @@ class ExpertMap extends React.PureComponent {
                 图例
               </div>
               <div className={styles.t}>
-                <div>专家：</div>
+                <div className={styles.div}>专家：</div>
                 <span alt="" className={classnames('icon', styles.expertIcon1)} />
                 <div className={styles.tExperts}>一组专家：</div>
                 <span alt="" className={classnames('icon', styles.expertIcon2)} />

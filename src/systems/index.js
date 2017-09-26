@@ -9,6 +9,7 @@ import { loadSavedLocale } from 'utils/locale';
 import { System, Source } from 'utils/system';
 import Footer from '../components/Footers/default';
 import defaults from './utils';
+import { TopExpertBase } from 'utils/expert-base';
 
 // All available systems.
 const CurrentSystemConfig = {
@@ -143,6 +144,7 @@ const defaultSystemConfigs = {
   // 临时属性，过度属性
   USE_NEXT_EXPERT_BASE_SEARCH: false, // 是否使用新的后端来搜索新的结果。
 
+  Map_HotDomains: TopExpertBase.RandomTop100InDomainAminer, //地图领域
 };
 
 /***************************************************
@@ -190,6 +192,5 @@ const applyTheme = (styles) => {
     return classnames(...results);
   };
 };
-
 
 module.exports = { sysconfig, applyTheme };

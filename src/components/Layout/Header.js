@@ -160,7 +160,7 @@ export default class Header extends PureComponent {
               <Menu.Item key="/ccfHelp">
                 <a href="/Instructions/index.html" title="help" target="_blank"
                       className="headerAvatar">
-                  <FM id="header.label.help" defaultMessage="Help" />
+                  帮助
                 </a>
               </Menu.Item>}
 

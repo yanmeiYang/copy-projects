@@ -58,6 +58,9 @@ class RanksHelp extends React.Component {
           <Menu.Item key="new-star">
             <a href="#new-star">New star</a>
           </Menu.Item>
+          <Menu.Item key="search-rank">
+            <a href="#search-rank">专家搜索排序</a>
+          </Menu.Item>
         </Menu>
         <div style={{ marginTop: '30px', maxWidth: '1128px' }} className="content-inner">
           <h2 className={styles.ranksTitle}><a name="citation">#citation</a></h2>
@@ -196,6 +199,17 @@ class RanksHelp extends React.Component {
             <p>New star has a short academic longevity (&lt;=5 years). The score is based on
               <a href="#b309">activity</a>
               .
+            </p>
+          </div>
+          <h2 className={styles.ranksTitle}><a name="search-rank">专家搜索排序</a></h2>
+          <div className={styles.ranksContent}>
+            <p>目前排序基于作者在该领域相关论文citation的加权和
+              <br /><br />
+              例如data mining,<br />
+              先搜索data mining相关论文，将论文按照重要度（citation）分级，如0~10, 10~100, 100~300, ...
+              为每类分级赋予权重W，如citation为0~10的论文权重为1，10~100权重为2，100~300权重为4
+              将作者在data mining领域相关论文按照相似度(tfidf)和重要度权重进行加权
+              Score(person) = \sum_&#x7b;pub of person&#x7d; TFIDF(pub) * W(pub)
             </p>
           </div>
         </div>

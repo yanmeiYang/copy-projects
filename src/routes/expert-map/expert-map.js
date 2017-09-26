@@ -337,7 +337,7 @@ class ExpertMap extends React.PureComponent {
         let centery;
         let scale = 4;
         let minscale = 3;
-        let maxscale = 19;
+        let maxscale = 18;
         let newtype;
         //if (localStorage.getItem("lasttype") === '0') {
         centerx = sysconfig.CentralPosition.lng;

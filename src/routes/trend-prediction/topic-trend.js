@@ -115,11 +115,11 @@ export default class TopicTrend extends React.PureComponent {
         top: '60%'
       }],
       series: [{
-        type: 'line',
+        type:'bar',
         showSymbol: false,
         data: valueList
       }, {
-        type: 'line',
+        type:'bar',
         showSymbol: false,
         data: valueList,
         xAxisIndex: 1,

@@ -805,9 +805,9 @@ class ExpertMap extends React.PureComponent {
       person: () => (<RightInfoZonePerson person={model.personInfo} />),
       cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),
     };
-    const Domains = TopExpertBase.RandomTop100InDomain;
+    const Domains = sysconfig.Map_HotDomains;
+    //console.log(sysconfig.Map_HotDomains)
     const Domains_Aminer = TopExpertBase.RandomTop100InDomainAminer;
-    console.log(Domains)
     const that = this;
     return (
       <div className={styles.expertMap} id="currentMain">

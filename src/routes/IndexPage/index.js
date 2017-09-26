@@ -59,7 +59,13 @@ export default class IndexPage extends Component {
 
         <div className={styles.keywords}>
           <div className={classnames(styles.inner, 'keywords_inner')}>
-            {commonSearch.map((query, index) => {
+            {commonSearch.map((item, index) => {
+              let query = '';
+              if (sysconfig.Locale === 'zh') {
+                query = item.name_zh || item.name;
+              } else {
+                query = item.name || item.name_zh;
+              }
               return (
                 <div key={query}>
                   <Link

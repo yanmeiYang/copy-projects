@@ -10,7 +10,7 @@ import { FormattedMessage as FM } from 'react-intl';
 import styles from './theme-alibaba.less';
 
 module.exports = {
-  themeName: 'alibaba',
+  themeName: 'huawei-blue',
 
   styles,
 

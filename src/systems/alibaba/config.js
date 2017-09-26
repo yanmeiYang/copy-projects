@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { toIDDotString, TopExpertBase as EB, TopNUniversity2015 } from 'utils/expert-base';
+import { TopExpertBase } from '../../utils/expert-base';
 import defaults from '../utils';
 
 module.exports = {
@@ -70,7 +71,7 @@ module.exports = {
   //   'Data Mining', 'Machine Learning', 'Data Modeling', 'Computer vision',
   //   'Networks', 'Natural language processing'],
   // IndexPage_InfoBlocks: EMPTY_BLOCK,
-
+  Map_HotDomains: TopExpertBase.RandomTop100InDomain, //地图领域
 
   // PersonList_ShowIndices: [], // do not override in-component settings. // TODO
 

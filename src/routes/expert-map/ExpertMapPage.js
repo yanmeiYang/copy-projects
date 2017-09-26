@@ -52,6 +52,7 @@ export default class ExpertMapPage extends React.Component {
   }
 
   onSearch = (data) => {
+    console.log(data)
     if (data.query) {
       this.setState({ query: data.query });
       // const href = window.location.href.split('?query=')[0] + '?query=' + data.query;
@@ -77,7 +78,7 @@ export default class ExpertMapPage extends React.Component {
     const mainBlock = mapType === 'google'
       ? <ExpertGoogleMap {...options} />
       : <ExpertMap {...options} />;
-
+    console.log(query)
     return (
       <Layout contentClass={tc(['expertMapPage'])} query={query} onSearch={this.onSearch}>
         {mainBlock}

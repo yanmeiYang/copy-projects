@@ -8,13 +8,7 @@ export default {
   namespace: 'topicTrend',
 
   state: {
-    personId: '',
-    personInfo: {},
-    geoData: {},
-    // for rightInfoZone,
-    rightInfoType: 'global', // global, person, cluster
-    infoZoneIds: '', // ids as string splitted by ',' or one id.;
-    clusterPersons: [],
+    trendInfo: {},
   },
 
 
@@ -22,7 +16,6 @@ export default {
 
   effects: {
     * searchTrendByMention({ payload }, { call, put }) {
-      console.log('&&&&&&&&&&&&&&&&&&&&&');
       const { query } = payload;
       const data = yield call(trendService.searchTrendByMention, query);
       yield put({ type: 'trendSuccess', payload: { data } });
@@ -31,8 +24,9 @@ export default {
   },
 
   reducers: {
-    getPersonInfoSuccess(state, { payload: { data } }) {
-      return { ...state, personInfo: data.data };
+    trendSuccess(state, { payload: { data } }) {
+      console.log(data);
+      return { ...state, trendInfo: data.data.data };
     },
 
   },

@@ -44,6 +44,10 @@ export default class Seminar extends React.Component {
     };
     this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
   };
+  componentWillUnmount = () => {
+    this.props.dispatch({ type: 'seminar/clearState' });
+    this.props.dispatch({ type: 'app/handleNavbar', payload: false });
+  };
   addBao = () => {
     this.props.dispatch(routerRedux.push({
       pathname: '/seminar-post',

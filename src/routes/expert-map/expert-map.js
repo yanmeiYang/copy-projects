@@ -2,21 +2,21 @@
  *  Created by BoGao on 2017-06-07;
  */
 import React from 'react';
-import { connect } from 'dva';
-import { Button, Select } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
+import {connect} from 'dva';
+import {Button, Tag} from 'antd';
+import {FormattedMessage as FM} from 'react-intl';
 import classnames from 'classnames';
-import { sysconfig } from 'systems';
+import {sysconfig} from 'systems';
 import styles from './expert-map.less';
-import { listPersonByIds } from '../../services/person';
+import {listPersonByIds} from '../../services/person';
 import * as profileUtils from '../../utils/profile-utils';
-import { findPosition, getById, waitforBMap, waitforBMapLib } from './utils/map-utils';
+import {findPosition, getById, waitforBMap, waitforBMapLib} from './utils/map-utils';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
 import RightInfoZonePerson from './RightInfoZonePerson';
 import RightInfoZoneAll from './RightInfoZoneAll';
 import GetBMapLib from './utils/BMapLibGai.js';
-import { TopExpertBase } from '../../utils/expert-base';
-import { Tag } from 'antd';
+import {TopExpertBase} from '../../utils/expert-base';
+
 const { CheckableTag } = Tag;
 
 let map1;
@@ -815,16 +815,16 @@ class ExpertMap extends React.PureComponent {
           <div className={styles.filter}>
             <div className={styles.filterRow}>
               <span className={styles.filterTitle}><span>Hot words:</span></span>
-              <ul>
+              {/*<ul>
                 {Domains.map(domain =>
                   (<CheckableTag className={styles.filterItem} key={domain.id} value={domain.id}><span onClick={this.domainChanged.bind(that, domain.id)}>{domain.name}</span></CheckableTag>),
                 )}
+              </ul>*/}
+              <ul>
+                {Domains_Aminer.map(domain =>
+                  (<CheckableTag className={styles.filterItem} key={domain.id} value={domain.id}><span onClick={this.domainChanged.bind(that, domain.id)}>{domain.name}</span></CheckableTag>),
+                )}
               </ul>
-              {/*<ul>*/}
-                {/*{Domains_Aminer.map(domain =>*/}
-                  {/*(<CheckableTag className={styles.filterItem} key={domain.id} value={domain.id}><span onClick={this.domainChanged.bind(that, domain.id)}>{domain.name}</span></CheckableTag>),*/}
-                {/*)}*/}
-              {/*</ul>*/}
             </div>
           </div>
           <div className={styles.filter}>

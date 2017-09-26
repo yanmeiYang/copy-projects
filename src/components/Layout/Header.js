@@ -155,6 +155,15 @@ export default class Header extends PureComponent {
               {/* <Link to="/"><Icon type="bars" />语言切换</Link> */}
               {/* </Menu.Item> */}
 
+
+              {sysconfig.SOURCE === 'ccf' &&
+              <Menu.Item key="/ccfHelp">
+                <a href="/Instructions/index.html" title="help" target="_blank"
+                      className="headerAvatar">
+                  Help
+                </a>
+              </Menu.Item>}
+
               {isAuthed(roles) &&
               <Menu.Item key="/account">
                 <Link to={sysconfig.Header_UserPageURL} title={user.display_name}

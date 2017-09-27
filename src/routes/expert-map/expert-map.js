@@ -24,6 +24,7 @@ let map1;
 let number = '0';
 let range = '0';
 let domainIds = [];
+let domainChecks = [];
 const ButtonGroup = Button.Group;
 const blankAvatar = '/images/blank_avatar.jpg';
 
@@ -69,13 +70,13 @@ class ExpertMap extends React.PureComponent {
 
   state = {
     typeIndex: 0,
-    domainChecks: [],
     rangeChecks: [],
     numberChecks: [],
   }
 
   componentDidMount() {
     const { query, dispatch } = this.props;
+    console.log(this.props)
     this.callSearchMap(query);
     localStorage.setItem("lasttype", "0");
     localStorage.setItem("domain","0");
@@ -97,9 +98,8 @@ class ExpertMap extends React.PureComponent {
     if (nextProps.query && nextProps.query !== this.props.query) {
       this.callSearchMap(nextProps.query);
       const that = this;
-      const arr = [];
+      domainChecks = [];
       domainIds = [];
-      that.setState({domainChecks:arr});
     }
     if (nextProps.expertMap.geoData !== this.props.expertMap.geoData) {
       const typeId = '0';
@@ -534,6 +534,8 @@ class ExpertMap extends React.PureComponent {
                if (place.results[o].fellows[0] === 'ieee' || place.results[o].fellows[1] === 'ieee') {
                  const marker = new BMap.Marker(pt);
                  marker.setLabel(label);
+                 marker.setTop();
+                 marker.setIcon(myIcon);
                  const personId = place.results[o].id;
                  pId[counts] = personId;
                  markers.push(marker);
@@ -543,6 +545,8 @@ class ExpertMap extends React.PureComponent {
               if (place.results[o].is_ch) {
                 const marker = new BMap.Marker(pt);
                 marker.setLabel(label);
+                marker.setTop();
+                marker.setIcon(myIcon);
                 const personId = place.results[o].id;
                 pId[counts] = personId;
                 markers.push(marker);
@@ -760,19 +764,17 @@ class ExpertMap extends React.PureComponent {
   };
 
   domainChanged = (value) => {
+    this.props.dispatch(routerRedux.push({ pathname: '/expert-map', search:  `?query=${value.name}` }));
     const that = this;
     let i = 0;
-    let arr = [];
     domainIds.map((domain1) => {
       if (value.id === domain1) {
-        arr[i] = true;
+        domainChecks[i] = true;
       } else {
-        arr[i] = false;
+        domainChecks[i] = false;
       }
       i += 1;
     });
-    that.setState({ domainChecks: arr })
-    this.props.dispatch(routerRedux.push({ pathname: '/expert-map', search: `?query=${value.name}` }));
     if (value.id) {
       const { dispatch } = this.props;
       //console.log(`selected ${value}`);
@@ -785,7 +787,6 @@ class ExpertMap extends React.PureComponent {
   render() {
     const model = this.props && this.props.expertMap;
     const persons = model.geoData.results;
-    const tr = true;
     let checkState = 0;
     let count = 0;
     let isACMFellowNumber = 0;
@@ -857,6 +858,18 @@ class ExpertMap extends React.PureComponent {
       }
       i += 1;
     });
+    let m = 0;
+    if (domainChecks) {
+      Domains.map((domain1) => {
+        if (domain1.name === this.props.query) {
+          domainChecks[m] = true;
+        } else {
+          domainChecks[m] = false;
+        }
+        m += 1;
+      });
+    }
+    console.log(domainChecks)
     return (
       <div className={styles.expertMap} id="currentMain">
         <div className={styles.filterWrap}>
@@ -866,7 +879,7 @@ class ExpertMap extends React.PureComponent {
               <ul>
                 {Domains.map((domain) =>{
                   checkState += 1;
-                  return (<CheckableTag className={styles.filterItem} key={domain.id} checked={that.state.domainChecks[checkState - 1]} value={domain.id}><span onClick={this.domainChanged.bind(that, domain)} >{domain.name}</span></CheckableTag>)
+                  return (<CheckableTag className={styles.filterItem} key={domain.id} checked={domainChecks[checkState - 1]} value={domain.id}><span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span></CheckableTag>)
                 })
 
 

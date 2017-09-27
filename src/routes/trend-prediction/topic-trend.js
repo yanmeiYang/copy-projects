@@ -56,6 +56,50 @@ export default class TopicTrend extends React.PureComponent {
     this.props.dispatch({ type: 'topicTrend/searchTrendByMention', payload: { query } });
   };
 
+  findkeyword = (info, f, totalf) => {
+    let words = [];
+    let formernum = 0;//它之前的词频
+    for (let u = 0; u < f; u += 1) {
+      formernum += info.freq[u].f;
+    }
+    if (info.sub_topics.length !== 0) { //存在子话题数据的时候
+      let start = (formernum / totalf) * info.sub_topics.length;
+      let end = ((formernum + info.freq[f].f) / totalf) * info.sub_topics.length;
+      start = parseInt(start, 10);
+      end = parseInt(end, 10);
+      if ((end - start) < 4) { //关键词不足两个的时候
+        let count = 0;
+        while (count < 4) {
+          if ((start === 0) && ((end + 1) === info.sub_topics.length)) {
+            break;
+          } else {
+            if (start !== 0) {
+              start -= 1; //向前移动一个
+              count += 1;
+            }
+            if ((end + 1) !== info.sub_topics.length) {
+              end += 1;
+              count += 1;
+            }
+          }
+        }
+      }
+      const wd = info.sub_topics.slice(start, end);
+      const kws = [];
+      for (let w = 0; w < wd.length; w += 1) {
+        kws.push(wd[w].label);
+      }
+      words = kws;
+    } else {
+      console.log(1);
+    }
+    return words;
+  }
+
+  showExpert = (word) => {
+    console.log(word);
+  }
+
   findhot = (info, q) => {
     const title = `${q} 领域趋势图`; //注意这里不是单引号，是键盘1旁边的·
     const label = `${q} 论文热度值`;
@@ -63,19 +107,26 @@ export default class TopicTrend extends React.PureComponent {
     const axisData = [];
     const freq = [];
     const weight = [];
-    let hw = [];
+    const hw = [];
+    let totalf = 0;
+    for (let f = 0; f < info.freq.length; f += 1) {
+      totalf += info.freq[f].f;
+    }
     for (let f = 0; f < info.freq.length; f += 1) {
       axisData.push(info.freq[f].y);
-      for (let s = 0; s < info.sub_topics.length; s += 1) {
-        console.log(info.sub_topics[s].label);
-        hw[s] = info.sub_topics[s].label;
+      //生成技术热点的词
+      const keys = this.findkeyword(info, f, totalf);
+      let ck = '';
+      const that = this;
+      for (let k = 0; k < keys.length; k += 1) {
+        //console.log(keys[k]);
+        ck += `<a href="#" onclick="that.showExpert(1)">${keys[k]}</a><br />`;
       }
+      hw[f] = ck;
       freq.push({ value: info.freq[f].f, name: [`${info.freq[f].y}年该领域热点技术`,
-        `<a href='#'>${hw[f]}</a>`] });
-      weight.push(info.freq[f].w * 100000);
+        hw[f]] });
+      weight.push(info.freq[f].w * 150000);
     }
-    console.log(info.sub_topics);
-    console.log(info.sub_topics.length);
     const result = { title, label, label2, axisData, freq, weight };
     //该句等于{ title: title, label: label, axisData: axisData, freq: freq, weight: weight };
     return result;
@@ -112,15 +163,15 @@ export default class TopicTrend extends React.PureComponent {
           //console.log(params);
           const colorset = ['#ff3d3d', '#00a0e9', '#f603ff', '#00b419', '#5f52a0'];
           const color = colorset[parseInt(params.dataIndex, 10) % colorset.length]; //parseInt，10进制
-          let a = `<div style='background-color:${color};padding: 6px 6px;text-align:center;color:white;font-size: 20px;'>${params.data.name[0]}</div>`;
-          a += "<div style='padding:5px;width:230px;height:100px;word-wrap:break-word;word-break:break-all;white-space: pre-wrap;overflow:hidden;'>";
+          let a = `<div style='background-color:${color};padding: 6px 6px;text-align:center;color:white;font-size: 18px;'>${params.data.name[0]}</div>`;
+          a += "<div style='padding:5px;width:214px;padding:13px;min-height:100px;word-wrap:break-word;word-break:break-all;white-space: pre-wrap;font-size:13px;'>";
           a += `${params.data.name[1]}<br>`;
           a += '</div>';
           return a;
         },
       },
       legend: {//旁边的标签说明
-        right: 180, //右边的距离
+        right: 100, //右边的距离
         orient: 'vertical',
         data: [label, label2],
       },

@@ -24,6 +24,7 @@
     "react-addons-perf": "^15.4.2",
     "react-apollo": "^1.4.15",
     "react-autosuggest": "^9.3.2",
+    "react-ckeditor-component": "^1.0.4",
     "react-countup": "^2.2.0",
     "react-dom": "^15.6.1",
     "react-helmet": "^5.2.0",

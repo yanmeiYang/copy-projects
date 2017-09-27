@@ -24,7 +24,7 @@ const DefaultRightZoneFuncs = [
 // FIXME 呵呵哒，personComment并不是默认的functions.
 const DefaultBottomZoneFuncs = [];
 
-@connect()
+@connect(({ personComments }) => ({ personComments }))
 export default class PersonList extends PureComponent {
   static propTypes = {
     // className: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
@@ -62,6 +62,9 @@ export default class PersonList extends PureComponent {
   }
 
   shouldComponentUpdate(nextProps) {
+    if (nextProps.personComments.createComment !== this.props.personComments.createComment){
+      return true;
+    }
     return compare(this.props, nextProps, 'persons');
   }
 
@@ -77,7 +80,7 @@ export default class PersonList extends PureComponent {
   }
 
   render() {
-    const { persons, expertBaseId, user } = this.props;
+    const { persons, expertBaseId, user, expertBase } = this.props;
     const { rightZoneFuncs, titleRightBlock, bottomZoneFuncs } = this.props;
 
     const showPrivacy = false;
@@ -204,14 +207,14 @@ export default class PersonList extends PureComponent {
               </div>
 
               {/* ---- Bottom Zone ---- */}
-              {/*{BottomZoneFuncs && BottomZoneFuncs.length > 0 &&*/}
-              {/*<div className={styles.personComment}>*/}
-              {/*{BottomZoneFuncs.map((bottomBlockFunc) => {*/}
-              {/*const param = { person, expertBaseId, user };*/}
-              {/*return bottomBlockFunc ? bottomBlockFunc(param) : false;*/}
-              {/*})}*/}
-              {/*</div>*/}
-              {/*}*/}
+              {BottomZoneFuncs && BottomZoneFuncs.length > 0 &&
+              <div className={styles.personComment}>
+              {BottomZoneFuncs.map((bottomBlockFunc) => {
+                const param = { person, expertBaseId, user };
+                return bottomBlockFunc ? bottomBlockFunc(param) : false;
+              })}
+              </div>
+              }
             </div>
           );
         })

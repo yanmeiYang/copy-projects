@@ -293,6 +293,7 @@ export default class SearchComponent extends Component {
                 persons={results}
                 user={this.props.app.user}
                 expertBaseId={expertBaseId}
+                expertBase={expertBase}
                 titleRightBlock={sysconfig.PersonList_TitleRightBlock}
                 rightZoneFuncs={sysconfig.PersonList_RightZone}
                 bottomZoneFuncs={sysconfig.PersonList_BottomZone}

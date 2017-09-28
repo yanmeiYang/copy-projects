@@ -7,8 +7,11 @@ import { toIDDotString, TopExpertBase as EB, TopNUniversity2015 } from '../../ut
 module.exports = {
 
   // 通用配置。所有System的配置文件必须全部包含这部分的值。
-  PageTitle: '腾讯人才智库',
+  PageTitle: '腾讯高校合作',
   SearchPagePrefix: 'uniSearch',
+
+  // google analysis
+  googleAnalytics: 'UA-107003102-1',
 
   EnableLocalLocale: true,
 
@@ -27,7 +30,7 @@ module.exports = {
 
   // > Search related
   SearchBarInHeader: true,
-  HeaderSearch_TextNavi: [],
+  HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertMap'],
 
   ExpertBases: [
     {
@@ -74,6 +77,17 @@ module.exports = {
      青年人才 TODO
      计算机科学领域的博士毕业生，在读博士，博士后
      */
+
+    {
+      id: '59bf38e09ed5dbb384f6fa3f',
+      name: '犀牛鸟海外专家',
+      nperson: 4,
+    },
+    {
+      id: '59bf38ce9ed5dbb384f6fa1e',
+      name: '犀牛鸟基金专家',
+      nperson: 31,
+    },
   ],
 
   SearchFilterExclude: '',

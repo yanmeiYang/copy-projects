@@ -112,6 +112,7 @@ export default class ExpertBaseExpertsPage extends Component {
           disableFilter={!query}
           disableExpertBaseFilter
           disableSearchKnowledge
+          showPersonComment
         />
       </div>
 

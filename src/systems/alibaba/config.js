@@ -70,6 +70,24 @@ module.exports = {
   // IndexPage_QuickSearchList: ['Artificial intelligence', 'Robotics',
   //   'Data Mining', 'Machine Learning', 'Data Modeling', 'Computer vision',
   //   'Networks', 'Natural language processing'],
+  IndexPage_QuickSearchList: [
+    { id: '57a57c640a3ac5e5b97e6f9b', name: 'Data Mining', name_zh: '数据挖掘' },
+    { id: '57a57c640a3ac5e5b97e6f9c', name: 'Database', name_zh: '数据库' },
+    { id: '57a57c5f0a3ac5e5b97e6f90', name: 'Theory', name_zh: '原理' },
+    { id: '57a57c620a3ac5e5b97e6f96', name: 'Multimedia', name_zh: '多媒体' },
+    { id: '57a57c650a3ac5e5b97e6f9e', name: 'Security', name_zh: '安全' },
+    { id: '57a57c610a3ac5e5b97e6f93', name: 'System', name_zh: '系统' },
+    { id: '57a57c640a3ac5e5b97e6f9a', name: 'Machine Learning', name_zh: '机器学习' },
+    { id: '57a57c630a3ac5e5b97e6f99', name: 'Artificial Intelligence', name_zh: '人工智能' },
+    { id: '580460fa41928c416c374145', name: 'Software Engineering', name_zh: '软件工程' },
+    { id: '57a57c600a3ac5e5b97e6f92', name: 'Computer Networking', name_zh: '计算机网络' },
+    { id: '57a57c620a3ac5e5b97e6f95', name: 'Natural Language Processing', name_zh: '自然语言处理' },
+    { id: '57a57c620a3ac5e5b97e6f97', name: 'Human-Computer Interaction', name_zh: '人机交互' },
+    { id: '57a57c630a3ac5e5b97e6f98', name: 'Computer Graphics', name_zh: '计算机图形学' },
+    { id: '57a57c660a3ac5e5b97e6f9f', name: 'Computer Vision', name_zh: '计算机视觉' },
+    { id: '587834730a3ac5b5de65f60d', name: 'Web and Information Retrieval', name_zh: '网络和信息检索' },
+
+  ],
   // IndexPage_InfoBlocks: EMPTY_BLOCK,
   Map_HotDomains: TopExpertBase.RandomTop100InDomain, //地图领域
 
@@ -82,11 +100,11 @@ module.exports = {
       nperson: 2871,
     },
     /*
-    高端科学家
-    图灵奖；美国、中国科学院/工程院院士；
-    计算机学科全球Top 20大学Full Prof.；TODO 没分出 Full Prof.
-    IEEE Fellow, ACM Fellow
-    */
+     高端科学家
+     图灵奖；美国、中国科学院/工程院院士；
+     计算机学科全球Top 20大学Full Prof.；TODO 没分出 Full Prof.
+     IEEE Fellow, ACM Fellow
+     */
     {
       name: '高端科学家',
       id: toIDDotString(
@@ -97,11 +115,11 @@ module.exports = {
       ),
     },
     /*
-    专家人才
-    活跃在科研一线，最近三年仍然在学术圈活跃（发文章）并且，H-index>40(35)；// TODO 没做
-    全球Top 50大学的Associate Prof.；// TODO 没分出: 全球Top 50大学的Associate Prof.；
-    国内千人/长江学者/杰青
-    */
+     专家人才
+     活跃在科研一线，最近三年仍然在学术圈活跃（发文章）并且，H-index>40(35)；// TODO 没做
+     全球Top 50大学的Associate Prof.；// TODO 没分出: 全球Top 50大学的Associate Prof.；
+     国内千人/长江学者/杰青
+     */
     {
       id: toIDDotString(
         EB.JieQing, EB.YouQing,
@@ -112,7 +130,7 @@ module.exports = {
     /*
      明日之星
      1. TR35；CCF青年科学家奖；（TODO 没有） 全球Top 50大学的Assistant Prof.；// TODO 没分出 Associate Prof.；
-        国内青年千人；优青；中 H-Index>15 <40 的人。
+     国内青年千人；优青；中 H-Index>15 <40 的人。
 
      2. 从事科研10年之内（第一篇论文），最近三年仍然在学术圈活跃（发文章），H-index>15 ，<40
      */

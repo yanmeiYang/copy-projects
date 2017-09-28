@@ -122,9 +122,16 @@ const defaultSystemConfigs = {
   UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // deprecated! Don't use this.
 
   // > IndexPage
-  IndexPage_QuickSearchList: ['Artificial intelligence', 'Robotics',
-    'Data Mining', 'Machine Learning', 'Data Modeling', 'Computer vision',
-    'Networks', 'Natural language processing'],
+  IndexPage_QuickSearchList: [
+    { name: 'Artificial intelligence', name_zh: '人工智能' },
+    { name: 'Robotics', name_zh: '机器人' },
+    { name: 'Data Mining', name_zh: '数据挖掘' },
+    { name: 'Machine Learning', name_zh: '机器学习' },
+    { name: 'Data Modeling', name_zh: 'Data Modeling' },
+    { name: 'Computer vision', name_zh: '计算机视觉' },
+    { name: 'Networks', name_zh: '网络' },
+    { name: 'Natural language processing', name_zh: '自然语言处理' },
+  ],
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
   // 地图中心点

@@ -4,7 +4,7 @@ const { api } = config;
 
 const BASE_SPLITER = 1000000; // 1000000 Hits的节点是 一百万+index.
 
-export async function dataFind(id) {
+export async function dataFind2(id) {
   return request('/go2/', {
     method: 'POST',
     data: {
@@ -19,4 +19,25 @@ export async function dataFind(id) {
 
 export async function eventFind(year) {
   return require('../../external-docs/expert-trajectory/eventData.json');
+}
+
+export async function findTrajPerson(id) {
+  return request(api.getTrajectoryInfo
+      .replace(':id', id)
+      .replace(':lo', 1988)
+      .replace(':hi', 2012)
+    , { method: 'GET' });
+}
+
+export async function findHeatMap(rid) {
+  return request(api.getHeatInfo
+      .replace(':rid', rid)
+      .replace(':lo', 1988)
+      .replace(':hi', 2012)
+      .replace(':size', 344)
+    , { method: 'GET' });
+}
+
+export async function findTop10000() {
+  return require('../../public/lab/heatData.json');
 }

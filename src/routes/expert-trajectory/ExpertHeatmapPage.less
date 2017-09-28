@@ -2,7 +2,7 @@
   .left{
     display: flex;
     flex: 3;
-    // overflow: scroll;
+     overflow: hidden;
     border-top: solid 1px #ddd;
     border-bottom: solid 1px #ddd;
     box-shadow: 0 0 18px rgba(2, 2, 2, 0.1) inset;
@@ -20,6 +20,10 @@
       }
       .text {
         padding: 8px; overflow: scroll; height: 100%
+      }
+
+      .scrolling{
+        overflow: auto;
       }
     }
 
@@ -57,11 +61,11 @@
         //height: 120px;
         margin-top: -16px;
         height: 100%;
-        overflow: scroll;
+        overflow: auto;
 
         .ant-tabs-tabpane {
           background: #fff;
-          padding: 16px;
+          padding: 0px;
         }
       }
 

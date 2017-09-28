@@ -98,7 +98,7 @@ class LeftInfoZoneCluster extends React.PureComponent {
           })}
         </div>
 
-        <div className="info bg" style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
+        <div className="info bg" style={{display: 'flex', flexDirection: 'column', flexWrap: 'wrap'}}>
           <h4 className="section_header"> Research Interests: </h4>
           {sortedInterest && sortedInterest.slice(0, 20).map((interest) => {
             return (

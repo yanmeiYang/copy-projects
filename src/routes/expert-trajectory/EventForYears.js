@@ -25,10 +25,13 @@ export default class EventForYears extends React.PureComponent {
   componentDidMount() {
   }
 
+
   shouldComponentUpdate(nextProps, nextState) {
-    console.log('aiyowei', this.props.year, nextProps.year);
+    if (nextProps.qquery !== this.props.qquery){
+      document.getElementById('eve').innerHTML = ''
+      return true;
+    }
     if (nextProps.year !== this.props.year) {
-      console.log('nextYear', nextProps.year);
       this.findYearEvent(nextProps.year);
       return true;
     }
@@ -38,6 +41,12 @@ export default class EventForYears extends React.PureComponent {
     return false;
   }
 
+  componentDidUpdate() {
+    if (this.props.onDone) {
+      this.props.onDone();
+    }
+  }
+
   findYearEvent = (year) => {
     this.setState({ year });
     this.props.dispatch({ type: 'expertTrajectory/eventFind', payload: { yearNow: year } });
@@ -45,13 +54,10 @@ export default class EventForYears extends React.PureComponent {
 
   render() {
     const year = this.props.year;
-    console.log('------------------------------year', year);
     const message = this.props.expertTrajectory.yearMessage;
-    console.log('message', message);
-    console.log('yearMessage', message.length);
 
     return (
-      <div className={styles.first} >
+      <div className={styles.first} id="eve" >
         {message && message.map((mes, index) => {
           const key = `${mes.year}_${index}`;
           return (
@@ -77,7 +83,7 @@ export default class EventForYears extends React.PureComponent {
                           <div className={styles.info_zone_detail}>
                             {oneEvent.name &&
                             <div className={styles.title}>
-                              <h2 className="section_header">
+                              <h2>
                                 {oneEvent.name}
                                 {false && <span className={styles.rank}>会士</span>}
                               </h2>
@@ -85,7 +91,7 @@ export default class EventForYears extends React.PureComponent {
                             {/*{this.personRightButton && this.personRightButton(person)}*/}
                             <div className={classnames(styles.zone, styles.interestColumn)}>
                               <div className={styles.contact_zone}>
-                                H_index: {oneEvent.h_index} <br/>
+                                H_index: {oneEvent.h_index} <br />
                                 {oneEvent.position && <span><i className="fa fa-briefcase fa-fw" /> {oneEvent.position}</span>}
                                 {oneEvent.affiliation && <span><i className="fa fa-institution fa-fw" /> {oneEvent.affiliation}</span>}
                               </div>

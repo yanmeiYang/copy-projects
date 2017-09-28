@@ -6,14 +6,17 @@ import { connect } from 'dva';
 import classnames from 'classnames';
 import queryString from 'query-string';
 import { routerRedux } from 'dva/router';
+import SearchComponent from 'routes/search/SearchComponent';
 import styles from './ExpertHeatmapPage.less';
 import LeftInfoZoneCluster from './LeftInfoZoneCluster';
 import LeftLineInfoCluster from './LeftLineInfoCluster';
 import ExpertHeatmap from './ExpertHeatmap';
 import EventsForYears from './EventForYears';
+import LeftInfoAll from './LeftInfoAll';
 import { Layout, Tabs } from 'antd';
 import { Spinner } from '../../components';
 import { sysconfig, applyTheme } from 'systems';
+import { Layout as Layout1 } from 'routes';
 
 const { Content, Sider } = Layout;
 const TabPane = Tabs.TabPane;
@@ -26,12 +29,12 @@ class ExpertHeatmapPage extends React.Component {
   }
 
   state = {
-    query: 'data mining',
+    query: '',
     mapType: 'google',
     from: '',
     to: '',
     rightType: '',
-    infoTab: 'selection',
+    infoTab: 'overview',
     year: '',
   };
 
@@ -50,6 +53,8 @@ class ExpertHeatmapPage extends React.Component {
         showFooter: false,
       },
     });
+    this.props.dispatch({ type: 'expertTrajectory/setRightInfo', payload: { rightInfoType: 'allYear' } });
+    this.findIfQuery(this.state.query);
   }
 
   componentDidMount() {
@@ -58,17 +63,25 @@ class ExpertHeatmapPage extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) { // 状态改变时判断要不要刷新
     if (nextState.query && nextState.query !== this.state.query) {
-      this.callSearchMap(nextState.query);
+      console.log("nextProps.query", nextState.query)
+      this.setState({ query: nextState.query });
+      this.findIfQuery(nextState.query);
+      // this.callSearchMap(nextState.query);
     }
     return true;
   }
 
+  findIfQuery = (query) => {
+    this.props.dispatch({ type: 'expertTrajectory/heatFind', payload: { query } });
+  }
+
   onSearch = (data) => {
+    console.log("data-------------====================ddd",data)
     if (data.query) {
       this.setState({ query: data.query });
       // TODO change this, 不能用
       this.props.dispatch(routerRedux.push({
-        pathname: '/expert-trajectory',
+        pathname: '/expert-heatmap',
         query: { query: data.query },
       }));
     }
@@ -79,41 +92,31 @@ class ExpertHeatmapPage extends React.Component {
   }
 
   callClusterPerson =(clusterIdList, from1, to1, type) => {
-    console.log('id', clusterIdList);
     this.props.dispatch({ type: 'expertTrajectory/listPersonByIds', payload: { ids: clusterIdList } });
     this.props.dispatch({ type: 'expertTrajectory/setRightInfo', payload: { rightInfoType: type } });
     if (from1 && to1) {
       this.setState({ from: from1, to: to1 });
     }
+    this.setState({ infoTab: 'selection' });
   }
 
-  onSearchBarSearch = (data) => {
-    console.log('Enter query is ', data);
-    const newOffset = data.offset || 0;
-    const newSize = data.size || sysconfig.MainListSize;
-    this.dispatch(routerRedux.push({
-      pathname: `/${sysconfig.SearchPagePrefix}/${data.query}/${newOffset}/${newSize}?`, // eb=${filters.eb}TODO
-    }));
-    // this.doSearchUseProps(); // another approach;
-  };
-
   onYearChange = (year1) => {
-    this.setState({ year: year1 },()=>{console.log("hahahahha",this.state.year);});
-    this.setState({ infoTab: 'event'});
-    const e = document.getElementsByClassName("ant-tabs-content") // 滑动条
-    // e[0].scrollTop = e[0].scrollHeight;
-    e[0].scrollTo(0, e[0].scrollHeight)
-    console.log("scrollTop",e[0].scrollTop)
+    this.setState({ year: year1 });
+    this.setState({ infoTab: 'event' });
   }
 
   onInfoTabChange = (e) => { // 改变tab的取值
     this.setState({ infoTab: e });
   };
 
+  callScroll= () => { // 滑动条滑到最底端
+    const e = document.getElementsByClassName('ant-tabs-content ant-tabs-content-no-animated'); // 滑动条cfco
+    e[0].scrollTop = e[0].scrollHeight;
+  }
+
   render() {
     const load = this.props.loading.models.expertTrajectory;
     this.state.rightType = this.props.expertTrajectory.infoZoneIds;
-    console.log('rightType', this.state.rightType);
     const ifPlay = this.state.ifPlay;
     const from = this.state.from;
     const to = this.state.to;
@@ -124,42 +127,49 @@ class ExpertHeatmapPage extends React.Component {
       // lines: () => (<LeftLineInfoCluster persons={clusterPersons} />),
       lines: () => (<LeftLineInfoCluster persons={clusterPersons} from={from} to={to} />),
     };
+    console.log("righttype----====",this.state.rightType)
     return (
-      <Layout contentClass={tc(['ExpertHeatmapPage'])} onSearch={this.onSearchBarSearch}
+      <Layout1 contentClass={tc(['ExpertHeatmapPage'])} onSearch={this.onSearch}
               query={query}>
-      <div className={classnames('content-inner', styles.page)}>
-        <Layout >
-          <Sider className={classnames(styles.left, 'card-container')} width={260} style={{ backgroundColor: '#fff' }}>
-            <Tabs
+        <div className={classnames('content-inner', styles.page)}>
+          <Layout >
+            <Sider className={classnames(styles.left, 'card-container')} width={260} style={{ backgroundColor: '#fff' }}>
+              <Tabs
               className={styles.card}
               type="card"
               onChange={this.onInfoTabChange}
               activeKey={this.state.infoTab}
               tabBarExtraContent={''}
             >
-              <TabPane tab="SELECTION" key="selection">
-                <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
-                {rightInfos[this.state.rightType] && rightInfos[this.state.rightType]()}
-              </TabPane>
+                <TabPane tab="OVERVIEW" key="overview">
+                  <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
+                  <LeftInfoAll />
+                </TabPane>
 
-              <TabPane tab="EVENTS" key="event" >
-                <h1> EVENTS: </h1>
-                <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
-                <EventsForYears year={this.state.year} />
-              </TabPane>
-            </Tabs>
-          </Sider>
+                <TabPane tab="SELECTION" key="selection">
+                  <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
+                  {rightInfos[this.state.rightType] && rightInfos[this.state.rightType]()}
+                </TabPane>
 
-          <Layout className={styles.right} >
-            <Content className={styles.content}>
-              <ExpertHeatmap onPageClick={this.callClusterPerson} yearChange={this.onYearChange} />
-            </Content>
+                <TabPane tab="EVENTS" key="event" >
+                  <div id="scroll" >
+                    <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
+                    <EventsForYears qquery={this.state.query} onDone={this.callScroll} year={this.state.year} />
+                  </div>
+                </TabPane>
+              </Tabs>
+            </Sider>
+
+            <Layout className={styles.right} >
+              <Content className={styles.content}>
+                <ExpertHeatmap qquery={this.state.query} onPageClick={this.callClusterPerson} yearChange={this.onYearChange} />
+              </Content>
+            </Layout>
           </Layout>
-        </Layout>
 
 
-      </div>
-      </Layout>
+        </div>
+      </Layout1>
     );
   }
 }

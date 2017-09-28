@@ -33,6 +33,7 @@ let mapinterval;
 let location = [];
 let table = [];
 let authors;
+let hindex;
 const imageData = {};
 const themes = {
   dark: {
@@ -75,8 +76,7 @@ const jietang = 'am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.j
 let play = false;
 let yearNow;
 
-@connect()
-class ExpertHeatmap extends React.Component {
+class ExpertHeatmap extends React.Component { ///
   constructor(props) {
     super(props);
     this.dispatch = this.props.dispatch;
@@ -91,7 +91,6 @@ class ExpertHeatmap extends React.Component {
   };
 
   componentWillMount() {
-    // console.log('---------');
     const theme = (queryURL('theme'));
     if (theme) {
       this.setState({ theme });
@@ -99,7 +98,6 @@ class ExpertHeatmap extends React.Component {
   }
 
   componentDidMount() {
-    // console.log('iamge', authorImg);
     this.seriesNo = false;
     this.type = '';
     this.personList = '';
@@ -108,7 +106,37 @@ class ExpertHeatmap extends React.Component {
     this.ifLarge = false;
     this.ifButton = false;
     this.myChart2 = echarts.init(document.getElementById('heatmap'));
-    this.getHeatmapData(); // 热力图
+    // this.getHeatmapData(); // 热力图
+  }
+
+  shouldComponentUpdate(nextProps, nextState){
+    if (nextProps.qquery !== this.props.qquery){
+      this.myChart2.clear();
+      return true;
+    }
+    if (nextState.inputValue !== this.state.inputValue) {
+      return true;
+    }
+    if (nextProps.expertTrajectory.heatData !== this.props.expertTrajectory.heatData) {
+      const heatData = nextProps.expertTrajectory.heatData;
+      this.setState({ startYear: heatData.startYear, endYear: heatData.endYear });
+      location = heatData.locations;
+      table = heatData.table;
+      authors = heatData.authors;
+      // authorImage = heatData.authorImage;
+      locationName = heatData.locationName;
+      hindex = heatData.h_index;
+      console.log("yoyoyoyoyo0-----------",hindex)
+      this.props.dispatch({ type: 'expertTrajectory/storeHindex', payload: { hindex }  })
+      this.playon = this.state.startYear;
+      this.setHeatmap(); // 热力图
+      this.getMouseEvent();
+      return true;
+    }
+    if (nextState.ifPlay !== this.state.ifPlay) {
+      return true;
+    }
+    return false;
   }
 
   getHeatmapData = () => { // 获取json数据
@@ -182,8 +210,8 @@ class ExpertHeatmap extends React.Component {
     this.seriesNo = false;
     this.playon = value;
     yearNow = this.playon;
+    // this.props.dispatch({ type: 'expertTrajectory/getYearData', payload: { year: yearNow} });
     const yearIndex = value - this.state.startYear;
-    // console.log('index', index);
     const data = [];
     const nextYearData = [];
     const geoCoordMap = this.doHeatGeoMap();
@@ -196,8 +224,6 @@ class ExpertHeatmap extends React.Component {
     const authorImgWest = {};
     const authorImgEast = {};
     const authorImgMid = {};
-    const starttime = new Date().getTime();
-    // console.log('onChange start time', starttime);
     for (let aid = 0; aid < table.length; aid += 1) { // 当年的数据
       const addressID = table[aid][yearIndex];
       if (addressID) {
@@ -645,7 +671,6 @@ class ExpertHeatmap extends React.Component {
     }
 
     Object.keys(dup).map((key) => {
-      console.log('key------------------------', key);
       tempLineArray.push(dup[key]);
     });
     tempLineArray.sort(sortCount);
@@ -991,7 +1016,6 @@ class ExpertHeatmap extends React.Component {
       if (this.from !== '') {
         this.props.onPageClick(this.personList, locationName[this.from - 1].toLowerCase(), locationName[this.to - 1].toLowerCase(), this.type);
       } else {
-        console.log();
         this.props.onPageClick(this.personList, '', '', this.type);
       }
     }
@@ -1002,48 +1026,40 @@ class ExpertHeatmap extends React.Component {
     return (
       <div>
         {/*<div className={styles.heat} id="heatmap" style={{ height: '1800px', width: '3500px' }} onClick={this.onMapClick} />*/}
-        <div className={styles.heat} id="heatmap" style={{ height: '670px', width: '1150px' }} onClick={this.onMapClick} />
-        <div>
+        <div className={styles.button}>
+          <Button className={styles.dark} type="primary" ghost onClick={this.onThemeChangeDark}>dark</Button>
+          <Button className={styles.light} type="primary" ghost onClick={this.onThemeChangeLight}>light</Button>
           <Button className={styles.plus} type="primary" ghost icon="plus" onClick={this.plusHeatZoom} />
-        </div>
-        <div>
           <Button className={styles.minus} type="primary" ghost icon="minus" onClick={this.minusHeatZoom} />
         </div>
-        <div>
-          <Button className={styles.light} type="primary" ghost onClick={this.onThemeChangeDark}>dark</Button>
-        </div>
-        <div>
-          <Button className={styles.dark} type="primary" ghost onClick={this.onThemeChangeLight}>light</Button>
-        </div>
+        <div className={styles.heat} id="heatmap" style={{ height: '670px', width: '1150px' }} onClick={this.onMapClick} />
 
         {/*<div className={styles.two} style={{ color: '#f5f3f0', fontSize: '200px', fontWeight: '600' }} id="showYear">*/}
         <div className={styles.two} style={{ color: '#f5f3f0', fontSize: '20px', fontWeight: '50' }} id="showYear">
           <h1> {yearNow}</h1>
         </div>
 
-
-        <Row>
-          <Col span={22}>
-            <Slider min={this.state.startYear} max={this.state.endYear} onChange={this.onChange} onAfterChange={this.onAfterChange}value={this.state.inputValue} />
-          </Col>
-          <Col span={1}>
-            <InputNumber
-              min={this.state.startYear}
-              max={this.state.endYear}
-              style={{ marginLeft: 0 }}
-              value={this.state.inputValue}
-              onChange={this.onInputNum}
-            />
-          </Col>
-        </Row>
-
-        <div>
+        <div className={styles.dinner}>
           <Button className={styles.play} icon={ifPlay} onClick={this.onClick} />
+          <Row className={styles.slide}>
+            <Col span={22}>
+              <Slider min={this.state.startYear} max={this.state.endYear} onChange={this.onChange} onAfterChange={this.onAfterChange}value={this.state.inputValue} />
+            </Col>
+            <Col span={1}>
+              <InputNumber
+                min={this.state.startYear}
+                max={this.state.endYear}
+                style={{ marginLeft: 0 }}
+                value={this.state.inputValue}
+                onChange={this.onInputNum}
+              />
+            </Col>
+          </Row>
         </div>
       </div>
     );
   }
 }
 
-export default ExpertHeatmap;
+export default connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))(ExpertHeatmap);
 

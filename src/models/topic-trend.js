@@ -1,7 +1,5 @@
-/** Created by Bo Gao on 2017-06-07 */
+import * as searchService from 'services/search';
 import * as trendService from '../services/trend-prediction-service';
-
-const cache = {};
 
 export default {
 
@@ -9,6 +7,8 @@ export default {
 
   state: {
     trendInfo: {},
+    relatedPapers: {},
+    relatedExperts: {},
   },
 
 
@@ -21,6 +21,17 @@ export default {
       yield put({ type: 'trendSuccess', payload: { data } });
     },
 
+    * searchExpert({ payload }, { call, put }) {
+      const { query, offset, size, sort } = payload;
+      const data = yield call(trendService.searchPersons, { query, offset, size, sort });
+      yield put({ type: 'expertsSuccess', payload: { data } });
+    },
+
+    * searchPapers({ payload }, { call, put }) {
+      const { query, offset, size, sort } = payload;
+      const { data } = yield call(searchService.searchPublications, { query, offset, size, sort });
+      yield put({ type: 'papersSuccess', payload: { data } });
+    },
   },
 
   reducers: {
@@ -28,5 +39,12 @@ export default {
       return { ...state, trendInfo: data.data.data };
     },
 
+    expertsSuccess(state, { payload: { data } }) {
+      return { ...state, relatedExperts: data.data };
+    },
+
+    papersSuccess(state, { payload: { data } }) {
+      return { ...state, relatedPapers: data };
+    },
   },
 };

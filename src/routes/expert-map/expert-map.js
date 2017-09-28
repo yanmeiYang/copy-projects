@@ -2,21 +2,20 @@
  *  Created by BoGao on 2017-06-07;
  */
 import React from 'react';
-import {connect} from 'dva';
-import {Button, Tag} from 'antd';
-import {FormattedMessage as FM} from 'react-intl';
+import { connect } from 'dva';
+import { routerRedux } from 'dva/router';
+import { Button, Tag } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import classnames from 'classnames';
-import {sysconfig} from 'systems';
+import { sysconfig } from 'systems';
 import styles from './expert-map.less';
-import {listPersonByIds} from '../../services/person';
+import { listPersonByIds } from '../../services/person';
 import * as profileUtils from '../../utils/profile-utils';
-import {findPosition, getById, waitforBMap, waitforBMapLib} from './utils/map-utils';
+import { findPosition, getById, waitforBMap, waitforBMapLib } from './utils/map-utils';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
 import RightInfoZonePerson from './RightInfoZonePerson';
 import RightInfoZoneAll from './RightInfoZoneAll';
 import GetBMapLib from './utils/BMapLibGai.js';
-import { routerRedux } from 'dva/router';
-import {TopExpertBase} from '../../utils/expert-base';
 
 const { CheckableTag } = Tag;
 
@@ -65,7 +64,7 @@ class ExpertMap extends React.PureComponent {
     this.cache = {};
     this.showOverLay = GetBMapLib(this.showTop);
     this.currentPersonId = 0;
-    localStorage.setItem("lasttype", "0");
+    localStorage.setItem('lasttype', '0');
   }
 
   state = {
@@ -76,10 +75,9 @@ class ExpertMap extends React.PureComponent {
 
   componentDidMount() {
     const { query, dispatch } = this.props;
-    console.log(this.props)
     this.callSearchMap(query);
-    localStorage.setItem("lasttype", "0");
-    localStorage.setItem("domain","0");
+    localStorage.setItem('lasttype', '0');
+    localStorage.setItem('domain', '0');
     dispatch({
       type: 'expertMap/setRightInfo',
       payload: { idString: '', rightInfoType: 'global' },
@@ -97,7 +95,6 @@ class ExpertMap extends React.PureComponent {
     // console.log('compare: ', nextProps.query, ' == ', this.props.query)
     if (nextProps.query && nextProps.query !== this.props.query) {
       this.callSearchMap(nextProps.query);
-      const that = this;
       domainChecks = [];
       domainIds = [];
     }
@@ -280,7 +277,7 @@ class ExpertMap extends React.PureComponent {
             i = i + 1;
           })
           name = arr.join('');
-          name = '&nbsp;&nbsp;'+name;
+          name = `&nbsp;&nbsp;${name}`;
           style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:10px;word-wrap:break-word;font-size:20%;';
         }
         cimg.innerHTML = `<img style='${style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='${url}' alt='${name}'>`;

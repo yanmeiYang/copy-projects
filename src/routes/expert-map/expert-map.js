@@ -70,8 +70,8 @@ class ExpertMap extends React.PureComponent {
 
   state = {
     typeIndex: 0,
-    rangeChecks: [],
-    numberChecks: [],
+    rangeChecks: [true, false, false, false],
+    numberChecks: [true, false, false, false, false],
   }
 
   componentDidMount() {
@@ -781,6 +781,10 @@ class ExpertMap extends React.PureComponent {
       localStorage.setItem('isClick', '0');
       dispatch({ type: 'app/clearQueryInHeaderIfExist' });
       dispatch({ type: 'expertMap/searchExpertBaseMap', payload: { eb: value.id } });
+      dispatch({
+        type: 'expertMap/setRightInfo',
+        payload: { idString: '', rightInfoType: 'global' },
+      });
     }
   };
 

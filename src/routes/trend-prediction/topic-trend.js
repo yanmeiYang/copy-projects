@@ -117,10 +117,8 @@ export default class TopicTrend extends React.PureComponent {
       //生成技术热点的词
       const keys = this.findkeyword(info, f, totalf);
       let ck = '';
-      const that = this;
       for (let k = 0; k < keys.length; k += 1) {
-        //console.log(keys[k]);
-        ck += `<a href="#" onclick="that.showExpert(1)">${keys[k]}</a><br />`;
+        ck += `<a href="#" onclick="showExpert(1)">${keys[k]}</a><br />`;
       }
       hw[f] = ck;
       freq.push({ value: info.freq[f].f, name: [`${info.freq[f].y}年该领域热点技术`,
@@ -167,7 +165,7 @@ export default class TopicTrend extends React.PureComponent {
           a += "<div style='padding:5px;width:214px;padding:13px;min-height:100px;word-wrap:break-word;word-break:break-all;white-space: pre-wrap;font-size:13px;'>";
           a += `${params.data.name[1]}<br>`;
           a += '</div>';
-          return a;
+          return <Link site={this.props.query} />;
         },
       },
       legend: {//旁边的标签说明
@@ -316,8 +314,24 @@ export default class TopicTrend extends React.PureComponent {
         <div id="trendchart" style={{ height: '800px', width: '80%', float: 'left' }} />
         <div id="statistic" style={{ height: '800px', width: '20%', float: 'right' }} >
           <div>统计：</div>
+          <div>
+            &nbsp;<Link site={this.props.query} />
+          </div>
+        </div>
+        <div>
+          &nbsp;
         </div>
       </div>
     );
   }
 }
+
+const Link = React.createClass({
+  render() {
+    return (
+      <a href={this.props.query}>
+        {this.props.query}sssss
+      </a>
+    );
+  },
+});

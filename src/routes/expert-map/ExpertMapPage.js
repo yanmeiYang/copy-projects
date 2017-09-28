@@ -46,13 +46,18 @@ export default class ExpertMapPage extends React.Component {
     //   },
     // });
   }
+  componentWillReceiveProps(nextProps) {
+    const { query } = queryString.parse(location.search);
+    if (this.state.orgs !== query) {
+      this.setState({ query });
+    }
+  }
 
   componentWillUnmount() {
     this.dispatch({ type: 'app/layout', payload: { showFooter: true } });
   }
 
   onSearch = (data) => {
-    console.log(data)
     if (data.query) {
       this.setState({ query: data.query });
       // const href = window.location.href.split('?query=')[0] + '?query=' + data.query;

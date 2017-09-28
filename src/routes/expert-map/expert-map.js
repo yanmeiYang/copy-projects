@@ -24,6 +24,7 @@ let map1;
 let number = '0';
 let range = '0';
 let domainIds = [];
+let domainChecks = [];
 const ButtonGroup = Button.Group;
 const blankAvatar = '/images/blank_avatar.jpg';
 
@@ -69,13 +70,13 @@ class ExpertMap extends React.PureComponent {
 
   state = {
     typeIndex: 0,
-    domainChecks: [],
     rangeChecks: [],
     numberChecks: [],
   }
 
   componentDidMount() {
     const { query, dispatch } = this.props;
+    console.log(this.props)
     this.callSearchMap(query);
     localStorage.setItem("lasttype", "0");
     localStorage.setItem("domain","0");
@@ -97,9 +98,8 @@ class ExpertMap extends React.PureComponent {
     if (nextProps.query && nextProps.query !== this.props.query) {
       this.callSearchMap(nextProps.query);
       const that = this;
-      const arr = [];
+      domainChecks = [];
       domainIds = [];
-      that.setState({domainChecks:arr});
     }
     if (nextProps.expertMap.geoData !== this.props.expertMap.geoData) {
       const typeId = '0';
@@ -183,7 +183,7 @@ class ExpertMap extends React.PureComponent {
 
     if (thisNode != null) { // 准备绑定事件
       const pthisNode = thisNode.parentNode;
-      pthisNode.addEventListener('mouseleave', (event) => {
+      pthisNode.addEventListener('mouseleave', () => {
         if (onLeave) {
           onLeave();
         }
@@ -206,7 +206,7 @@ class ExpertMap extends React.PureComponent {
           console.log('failed');
         },
       ).catch((error) => {
-        //console.error(error);
+        console.error(error);
       });
     }
   };
@@ -240,7 +240,7 @@ class ExpertMap extends React.PureComponent {
           const str = personInfo.name_zh.substr(1, 2);
           name = str;
         } else {
-          const tmp = personInfo.name.split(" ", 5);
+          const tmp = personInfo.name.split(' ', 5);
           name = tmp[tmp.length - 1];
           // let tmp = personInfo.name.match(/\b(\w)/g);
           // if (tmp.length > 3) {
@@ -260,24 +260,24 @@ class ExpertMap extends React.PureComponent {
             name = '&nbsp;'.concat(name);
           }
         } else {
-          const nameArr = name.split("",20);
+          const nameArr = name.split('', 20);
           let i = 7;
-          let arr = [];
+          const arr = [];
           nameArr.map((name1) => {
             if (i !== 7) {
               if (i < 13) {
-                arr[i+1] = name1;
+                arr[i + 1] = name1;
               } else if (i === 13) {
-                arr[i+1] = ' ';
-                arr[i+2] = name1;
+                arr[i + 1] = ' ';
+                arr[i + 2] = name1;
               } else {
-                arr[i+2] = name1;
+                arr[i + 2] = name1;
               }
             } else {
               arr[i] = ' ';
-              arr[i+1] = name1;
+              arr[i + 1] = name1;
             }
-            i = i+1;
+            i = i + 1;
           })
           name = arr.join('');
           name = '&nbsp;&nbsp;'+name;
@@ -308,7 +308,7 @@ class ExpertMap extends React.PureComponent {
           this.syncInfoWindow();
           this.currentPersonId = personInfo.id;
         });
-        cimg.addEventListener('mouseleave', (event) => {
+        cimg.addEventListener('mouseleave', () => {
           map.closeInfoWindow();
         });
       }
@@ -333,7 +333,7 @@ class ExpertMap extends React.PureComponent {
     //   pathname: '/expert-map',
     //   data: { type: 'google' },
     // }));
-    localStorage.setItem("maptype", "google");
+    localStorage.setItem('maptype', 'google');
     const href = window.location.href;
     window.location.href = href.replace('expert-map', 'expert-googlemap');
   };
@@ -352,9 +352,9 @@ class ExpertMap extends React.PureComponent {
         centerx = sysconfig.CentralPosition.lng;
         centery = sysconfig.CentralPosition.lat;
         //}
-        console.log(localStorage.getItem("lasttype"), '||', localStorage.getItem("isClick"))
-        if (localStorage.getItem("lasttype") !== '0' && localStorage.getItem("isClick") === '0') {
-          newtype = localStorage.getItem("lasttype");
+        console.log(localStorage.getItem('lasttype'), '||', localStorage.getItem('isClick'))
+        if (localStorage.getItem('lasttype') !== '0' && localStorage.getItem('isClick') === '0') {
+          newtype = localStorage.getItem('lasttype');
         } else {
           newtype = type;
         }
@@ -377,7 +377,7 @@ class ExpertMap extends React.PureComponent {
           centerx = sysconfig.CentralPosition.lng;
           centery = sysconfig.CentralPosition.lat;
         }
-        localStorage.setItem("lasttype", newtype);
+        localStorage.setItem('lasttype', newtype);
         const map = new BMap.Map('allmap', { minZoom: minscale, maxZoom: maxscale });
         this.map = map; // set to global;
         map1 = this.map;
@@ -395,89 +395,89 @@ class ExpertMap extends React.PureComponent {
         let counts = 0;
         if (newtype === '1') {
           const opts1 = {
-            position: new BMap.Point(102, 38)
+            position: new BMap.Point(102, 38),
           }
-          map.addOverlay(new BMap.Label("中国", opts1));
+          map.addOverlay(new BMap.Label('中国', opts1));
           const opts2 = {
             position: new BMap.Point(136, 32),
           }
-          map.addOverlay(new BMap.Label("日本", opts2));
+          map.addOverlay(new BMap.Label('日本', opts2));
           const opts3 = {
-            position : new BMap.Point(125, 33),
+            position: new BMap.Point(125, 33),
           }
-          map.addOverlay(new BMap.Label("韩国", opts3));
+          map.addOverlay(new BMap.Label('韩国', opts3));
           const opts4 = {
-            position : new BMap.Point(76.5, 16),
+            position: new BMap.Point(76.5, 16),
           }
-          map.addOverlay(new BMap.Label("印度", opts4));
+          map.addOverlay(new BMap.Label('印度', opts4));
           const opts5 = {
-            position : new BMap.Point(114, 22),
+            position: new BMap.Point(114, 22),
           }
-          map.addOverlay(new BMap.Label("香港", opts5));
+          map.addOverlay(new BMap.Label('香港', opts5));
           const opts6 = {
-            position : new BMap.Point(100, -3),
+            position: new BMap.Point(100, -3),
           }
-          map.addOverlay(new BMap.Label("新加坡", opts6));
+          map.addOverlay(new BMap.Label('新加坡', opts6));
           const opts7 = {
-            position : new BMap.Point(121, 25),
+            position: new BMap.Point(121, 25),
           }
-          map.addOverlay(new BMap.Label("台湾", opts7));
+          map.addOverlay(new BMap.Label('台湾', opts7));
           const opts8 = {
-            position : new BMap.Point(64, 48),
+            position: new BMap.Point(64, 48),
           }
-          map.addOverlay(new BMap.Label("中亚", opts8));
+          map.addOverlay(new BMap.Label('中亚', opts8));
           const opts9 = {
-            position : new BMap.Point(118.5, 9),
+            position: new BMap.Point(118.5, 9),
           }
-          map.addOverlay(new BMap.Label("东南亚", opts9));
+          map.addOverlay(new BMap.Label('东南亚', opts9));
           const opts10 = {
-            position : new BMap.Point(29, 45),
+            position: new BMap.Point(29, 45),
           }
-          map.addOverlay(new BMap.Label("东欧", opts10));
+          map.addOverlay(new BMap.Label('东欧', opts10));
           const opts11 = {
-            position : new BMap.Point(7, 44),
+            position: new BMap.Point(7, 44),
           }
-          map.addOverlay(new BMap.Label("西欧", opts11));
+          map.addOverlay(new BMap.Label('西欧', opts11));
           const opts12 = {
-            position : new BMap.Point(16, 58),
+            position: new BMap.Point(16, 58),
           }
-          map.addOverlay(new BMap.Label("北欧", opts12));
+          map.addOverlay(new BMap.Label('北欧', opts12));
           const opts13 = {
-            position : new BMap.Point(-6.1, 52),
+            position: new BMap.Point(-6.1, 52),
           }
-          map.addOverlay(new BMap.Label("英国", opts13));
+          map.addOverlay(new BMap.Label('英国', opts13));
           const opts14 = {
-            position : new BMap.Point(101.5, 59.2),
+            position: new BMap.Point(101.5, 59.2),
           }
-          map.addOverlay(new BMap.Label("俄罗斯", opts14));
+          map.addOverlay(new BMap.Label('俄罗斯', opts14));
           const opts15 = {
-            position : new BMap.Point(31, 28),
+            position: new BMap.Point(31, 28),
           }
-          map.addOverlay(new BMap.Label("以色列", opts15));
+          map.addOverlay(new BMap.Label('以色列', opts15));
           const opts16 = {
-            position : new BMap.Point(130, -31),
+            position: new BMap.Point(130, -31),
           }
-          map.addOverlay(new BMap.Label("大洋洲", opts16));
+          map.addOverlay(new BMap.Label('大洋洲', opts16));
           const opts17 = {
-            position : new BMap.Point(-60, -10),
+            position: new BMap.Point(-60, -10),
           }
-          map.addOverlay(new BMap.Label("拉丁美洲", opts17));
+          map.addOverlay(new BMap.Label('拉丁美洲', opts17));
           const opts18 = {
-            position : new BMap.Point(-108.5, 56.5),
+            position: new BMap.Point(-108.5, 56.5),
           }
-          map.addOverlay(new BMap.Label("加拿大", opts18));
+          map.addOverlay(new BMap.Label('加拿大', opts18));
           const opts19 = {
-            position : new BMap.Point(-126, 33.5),
+            position: new BMap.Point(-126, 33.5),
           }
-          map.addOverlay(new BMap.Label("美国西部", opts19));
+          map.addOverlay(new BMap.Label('美国西部', opts19));
           const opts20 = {
-            position : new BMap.Point(-79.5, 34),
+            position: new BMap.Point(-79.5, 34),
           }
-          map.addOverlay(new BMap.Label("东部", opts20));
+          map.addOverlay(new BMap.Label('东部', opts20));
           const opts21 = {
-            position : new BMap.Point(-107.5, 34.5),
+            position: new BMap.Point(-107.5, 34.5),
           }
-          map.addOverlay(new BMap.Label("中部", opts21));
+          map.addOverlay(new BMap.Label('中部', opts21));
         }
         //const domain = localStorage.getItem("domain");
         place.results.sort((a, b) => b.hindex - a.hindex);
@@ -502,45 +502,58 @@ class ExpertMap extends React.PureComponent {
           label.setOffset(new BMap.Size(-55.5, 25));
 
           // 只有经纬度不为空或者0的时候才显示，否则丢弃
-              if ((newplace[1] != null && newplace[1] != null) &&
-                (newplace[1] !== 0 && newplace[1] !== 0)) {
-                pt = new BMap.Point(newplace[1], newplace[0]);// 这里经度和纬度是反着的
-                if (range === '0') {
-                  const marker = new BMap.Marker(pt);
-                  marker.setLabel(label);
-                  const personId = place.results[o].id;
-                  pId[counts] = personId;
-                  markers.push(marker);
-                  counts += 1;
-                } else if (range === '1') {
-                  if (place.results[o].fellows[0] === 'acm') {
-                    const marker = new BMap.Marker(pt);
-                    marker.setLabel(label);
-                    const personId = place.results[o].id;
-                    pId[counts] = personId;
-                    markers.push(marker);
-                    counts += 1;
-                  }
-                } else if (range === '2') {
-                   if (place.results[o].fellows[0] === 'ieee' || place.results[o].fellows[1] === 'ieee') {
-                     const marker = new BMap.Marker(pt);
-                     marker.setLabel(label);
-                     const personId = place.results[o].id;
-                     pId[counts] = personId;
-                     markers.push(marker);
-                     counts += 1;
-                   }
-                } else if (range === '3') {
-                  if (place.results[o].is_ch) {
-                    const marker = new BMap.Marker(pt);
-                    marker.setLabel(label);
-                    const personId = place.results[o].id;
-                    pId[counts] = personId;
-                    markers.push(marker);
-                    counts += 1;
-                  }
-                }
+          if ((newplace[1] != null && newplace[1] != null) &&
+            (newplace[1] !== 0 && newplace[1] !== 0)) {
+            pt = new BMap.Point(newplace[1], newplace[0]);// 这里经度和纬度是反着的
+            const myIcon = new BMap.Icon('/images/map/marker_blue_sprite1.png', new BMap.Size(19, 50), {
+              offset: new BMap.Size(0, 0), // 指定定位位置
+              imageOffset: new BMap.Size(0, 0), // 设置图片偏移
+            });
+            //const marker = new BMap.Marker(pt, { icon: myIcon } );
+            if (range === '0') {
+              const marker = new BMap.Marker(pt);
+              marker.setLabel(label);
+              marker.setTop();
+              marker.setIcon(myIcon);
+              const personId = place.results[o].id;
+              pId[counts] = personId;
+              markers.push(marker);
+              counts += 1;
+            } else if (range === '1') {
+              if (place.results[o].fellows[0] === 'acm') {
+                const marker = new BMap.Marker(pt);
+                marker.setLabel(label);
+                marker.setTop();
+                marker.setIcon(myIcon);
+                const personId = place.results[o].id;
+                pId[counts] = personId;
+                markers.push(marker);
+                counts += 1;
               }
+            } else if (range === '2') {
+               if (place.results[o].fellows[0] === 'ieee' || place.results[o].fellows[1] === 'ieee') {
+                 const marker = new BMap.Marker(pt);
+                 marker.setLabel(label);
+                 marker.setTop();
+                 marker.setIcon(myIcon);
+                 const personId = place.results[o].id;
+                 pId[counts] = personId;
+                 markers.push(marker);
+                 counts += 1;
+               }
+            } else if (range === '3') {
+              if (place.results[o].is_ch) {
+                const marker = new BMap.Marker(pt);
+                marker.setLabel(label);
+                marker.setTop();
+                marker.setIcon(myIcon);
+                const personId = place.results[o].id;
+                pId[counts] = personId;
+                markers.push(marker);
+                counts += 1;
+              }
+            }
+          }
         }
         if (number === '0') {
           markers = markers.slice(0, 200);
@@ -581,7 +594,7 @@ class ExpertMap extends React.PureComponent {
     marker.addEventListener('mouseout', (e) => {
       e.target.closeInfoWindow(infoWindow);
     });
-    marker.addEventListener('click', (e) => {
+    marker.addEventListener('click', () => {
       this.toggleRightInfo('person', personId);
       // this.toggleRightInfoBox(personId);
     });
@@ -664,7 +677,7 @@ class ExpertMap extends React.PureComponent {
   // };
 
   showType = (e) => {
-    localStorage.setItem("isClick", "1");
+    localStorage.setItem('isClick', '1');
     const typeid = e.currentTarget && e.currentTarget.value && e.currentTarget.getAttribute('value');
     this.setState({ typeIndex: typeid });
     if (typeid === '0') {
@@ -684,11 +697,11 @@ class ExpertMap extends React.PureComponent {
   };
 
   showRange = (rangeTmp) => {
-    const lastType = localStorage.getItem("lasttype");
+    const lastType = localStorage.getItem('lasttype');
     const that = this;
-    let arr = [false, false, false, false];
+    const arr = [false, false, false, false];
     arr[rangeTmp] = true;
-    that.setState({rangeChecks:arr})
+    that.setState({ rangeChecks: arr })
     if (rangeTmp) {
       range = rangeTmp;
       this.showMap(this.props.expertMap.geoData, lastType, range, number);
@@ -699,8 +712,8 @@ class ExpertMap extends React.PureComponent {
     const that = this;
     let arr = [false, false, false, false, false];
     arr[numberTmp] = true;
-    that.setState({numberChecks:arr})
-    const lastType = localStorage.getItem("lasttype");
+    that.setState({ numberChecks: arr })
+    const lastType = localStorage.getItem('lasttype');
     if (numberTmp) {
       number = numberTmp;
       this.showMap(this.props.expertMap.geoData, lastType, range, number);
@@ -751,23 +764,21 @@ class ExpertMap extends React.PureComponent {
   };
 
   domainChanged = (value) => {
+    this.props.dispatch(routerRedux.push({ pathname: '/expert-map', search:  `?query=${value.name}` }));
     const that = this;
     let i = 0;
-    let arr = [];
     domainIds.map((domain1) => {
       if (value.id === domain1) {
-        arr[i] = true;
+        domainChecks[i] = true;
       } else {
-        arr[i] = false;
+        domainChecks[i] = false;
       }
       i += 1;
     });
-    that.setState({domainChecks:arr})
-    this.props.dispatch(routerRedux.push({ pathname: '/expert-map', search: `?query=${value.name}` }));
     if (value.id) {
       const { dispatch } = this.props;
       //console.log(`selected ${value}`);
-      localStorage.setItem("isClick", "0");
+      localStorage.setItem('isClick', '0');
       dispatch({ type: 'app/clearQueryInHeaderIfExist' });
       dispatch({ type: 'expertMap/searchExpertBaseMap', payload: { eb: value.id } });
     }
@@ -776,7 +787,6 @@ class ExpertMap extends React.PureComponent {
   render() {
     const model = this.props && this.props.expertMap;
     const persons = model.geoData.results;
-    const tr = true;
     let checkState = 0;
     let count = 0;
     let isACMFellowNumber = 0;
@@ -840,7 +850,7 @@ class ExpertMap extends React.PureComponent {
     const that = this;
     const Domains = sysconfig.Map_HotDomains;
     let i = 0;
-    let arr = [];
+    const arr = [];
     Domains.map((domain1) => {
       domainIds[i] = domain1.id;
       if (domainIds.length === 0) {
@@ -848,6 +858,18 @@ class ExpertMap extends React.PureComponent {
       }
       i += 1;
     });
+    let m = 0;
+    if (domainChecks) {
+      Domains.map((domain1) => {
+        if (domain1.name === this.props.query) {
+          domainChecks[m] = true;
+        } else {
+          domainChecks[m] = false;
+        }
+        m += 1;
+      });
+    }
+    console.log(domainChecks)
     return (
       <div className={styles.expertMap} id="currentMain">
         <div className={styles.filterWrap}>
@@ -857,7 +879,7 @@ class ExpertMap extends React.PureComponent {
               <ul>
                 {Domains.map((domain) =>{
                   checkState += 1;
-                  return (<CheckableTag className={styles.filterItem} key={domain.id} checked={that.state.domainChecks[checkState - 1]} value={domain.id}><span onClick={this.domainChanged.bind(that, domain)} >{domain.name}</span></CheckableTag>)
+                  return (<CheckableTag className={styles.filterItem} key={domain.id} checked={domainChecks[checkState - 1]} value={domain.id}><span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span></CheckableTag>)
                 })
 
 
@@ -880,11 +902,11 @@ class ExpertMap extends React.PureComponent {
             <div className={styles.filterRow}>
               <span className={styles.filterTitle}><span>H-index:</span></span>
               <ul>
-                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[1]}><span onClick={this.showNumber.bind(that, '1')}>TOP50</span></CheckableTag>
-                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[2]}><span onClick={this.showNumber.bind(that, '2')}>TOP100</span></CheckableTag>
-                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[0]}><span onClick={this.showNumber.bind(that, '0')}>TOP200</span></CheckableTag>
-                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[3]}><span onClick={this.showNumber.bind(that, '3')}>TOP500</span></CheckableTag>
                 <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[4]}><span onClick={this.showNumber.bind(that, '4')}>ALL</span></CheckableTag>
+                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[3]}><span onClick={this.showNumber.bind(that, '3')}>TOP500</span></CheckableTag>
+                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[0]}><span onClick={this.showNumber.bind(that, '0')}>TOP200</span></CheckableTag>
+                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[2]}><span onClick={this.showNumber.bind(that, '2')}>TOP100</span></CheckableTag>
+                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[1]}><span onClick={this.showNumber.bind(that, '1')}>TOP50</span></CheckableTag>
               </ul>
             </div>
           </div>

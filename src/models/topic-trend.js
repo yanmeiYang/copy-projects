@@ -25,7 +25,6 @@ export default {
 
   reducers: {
     trendSuccess(state, { payload: { data } }) {
-      console.log(data);
       return { ...state, trendInfo: data.data.data };
     },
 

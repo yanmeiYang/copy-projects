@@ -50,7 +50,6 @@
   :global .ant-form-inline .ant-form-item:first-child { width: 97%; }
   //:global .ant-form-inline .ant-form-item:first-child { width: 80%; }
   :global .ant-form-inline .ant-form-item > div { width: 100%; }
-  .addCommentButton { margin-left: 5px }
 
   .commentArea {
     .title {
@@ -62,7 +61,7 @@
     }
     .commentList {
       border-top: 1px solid #d9d9d9;
-      margin-left:15px;
+      margin-left: 15px;
       margin-right: 15px;
       .userInfo {
         margin-bottom: 7px;
@@ -81,6 +80,10 @@
           margin: 4px 15px 0 25px;
           cursor: pointer;
         }
+        .commentBlock {
+          .commentsChildren { color: #333333; }
+          div { color: #808080; }
+        }
       }
       .cardMore {
         padding-left: 15px;
@@ -92,4 +95,8 @@
       }
     }
   }
+}
+
+:global {
+  .cke_toolbar_last { display: none }
 }

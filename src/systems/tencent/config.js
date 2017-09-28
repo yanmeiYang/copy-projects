@@ -7,7 +7,7 @@ import { toIDDotString, TopExpertBase as EB, TopNUniversity2015 } from '../../ut
 module.exports = {
 
   // 通用配置。所有System的配置文件必须全部包含这部分的值。
-  PageTitle: '腾讯人才智库',
+  PageTitle: '腾讯高校合作',
   SearchPagePrefix: 'uniSearch',
   ShowSideMenu: false,
 
@@ -21,7 +21,7 @@ module.exports = {
     backgroundRepeat: 'no-repeat',
     backgroundColor: 'white',
   },
-  Header_SubTextLogo: '人才智库',
+  Header_SubTextLogo: '',
   Header_SubTextStyle: { paddingLeft: 12 },
   Header_UserPageURL: '',
   Footer_Content: '',

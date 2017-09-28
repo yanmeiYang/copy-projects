@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
+import styles from './TopicRightInfo.less';
 
 class TopicRightInfo extends React.PureComponent {
   componentDidMount() {
@@ -12,7 +13,7 @@ class TopicRightInfo extends React.PureComponent {
 
   render() {
     return (
-      <div onClick={this.showExpert.bind(this, this.props.query)}>{this.props.query}#####</div>
+      <span className={styles.keyword} role="presentation" onClick={this.showExpert.bind(this, this.props.query)}>{this.props.query}#####</span>
     );
   }
 }

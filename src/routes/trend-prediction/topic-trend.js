@@ -137,7 +137,6 @@ export default class TopicTrend extends React.PureComponent {
     if (x < 0) {
       x = 50;
     }
-    console.log(cId);
     for (let i = 1; i < len + 1; i += 1) {
       if (i === cId) {
         document.getElementById(`tip${cId}`).style = `position: absolute;left: ${x}px;top: ${y}px;display:block`;
@@ -154,7 +153,7 @@ export default class TopicTrend extends React.PureComponent {
     if (trend.trendInfo && trend.relatedPapers && trend.relatedExperts) {
       const year = trend.trendInfo.freq[count - 1].y;
       let body = [];
-      body = [1*count,2,3,4,5,6,7,8,9]
+      body = [1*count,2,3,4,5,6,7,8,9,10,11,1,4,23,2,1,0,1,11,1,3]
       data = { head: `${year}年该领域热点技术`, body };//Key和Value一致的时候可以简写
     } else {
       data = { head: '2018年该领域热点技术', body: '正在研究中' };
@@ -368,10 +367,6 @@ export default class TopicTrend extends React.PureComponent {
           </div>
         </div>
         <div className={styles.keyinfo}>
-          <div id="cyear" >
-            <div name="keyhead" className={styles.keyhead} />
-            <div name="keybody" className={styles.keybody}>##################<TopicRightInfo query={this.props.query} /></div>
-          </div>
           <div>
             {
               this.props.topicTrend.trendInfo && this.props.topicTrend.trendInfo.freq
@@ -397,8 +392,7 @@ export default class TopicTrend extends React.PureComponent {
                         const key4 = `typethree${j}in${k}`;
                         return (
                           <div role="presentation" key={key4} onClick={this.showExpert.bind(that, d)}>
-                            {/*<a href="#" onClick={this.showExpert.bind(that, d)}>{d}</a><br />*/}
-                            <TopicRightInfo query={that.props.query} />
+                            <span href="#" role="presentation" className={styles.hotword} onClick={this.showExpert.bind(that, d)}>{d}</span><br />
                           </div>
                         );
                       })

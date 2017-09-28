@@ -24,13 +24,18 @@ export default {
   'com.search.filter.Filters': '过滤条件:',
   'com.search.filter.label.h_index': 'h指数',
   'com.search.filter.label.language': '语言',
-  'com.search.filter.label.nationality': '国家',
+  'com.search.filter.label.nationality': '地区',
+  'com.search.filter.label.location': '地区',
   'com.search.filter.label.gender': '性别',
 
-  'com.search.filter.label2.H-Index': 'H指数',
-  'com.search.filter.label2.Language': '语言',
-  'com.search.filter.label2.Location': '国家',
-  'com.search.filter.label2.Gender': '性别',
+  'com.search.filter.label2.h_index': 'H指数',
+  'com.search.filter.label2.language': '语言',
+  'com.search.filter.label2.location': '地区',
+  'com.search.filter.label2.gender': '性别',
+  'com.search.filter.label2.nationality': '地区',
+
+  'com.search.filter.value.gender.male': '男',
+  'com.search.filter.value.gender.female': '女',
 
   'com.search.sort.label.relevance': '综合',
   'com.search.sort.label.h_index': 'h指数',

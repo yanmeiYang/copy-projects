@@ -14,7 +14,7 @@ export default class Menus extends Component {
   //   navOpenKeys, changeOpenKeys,
 
   render() {
-    console.log('>>>MENU:::: app is ', this.props.app);
+    // console.log('>>>MENU:::: app is ', this.props.app);
     const { navOpenKeys } = this.props.app;
     const { siderFold, handleClickNavMenu, dispatch } = this.props;
     const { user, roles } = this.props.app;

@@ -12,12 +12,14 @@ import styles from './searchKnowledge.less';
 @connect(({ search }) => ({ search }))
 export default class SearchKnowledge extends React.PureComponent {
   componentWillMount() {
-    this.props.dispatch({
-      type: 'search/getTopicByMention',
-      payload: {
-        mention: this.props.query,
-      },
-    });
+    console.log('=======0098',);
+    // this.props.dispatch({
+    //   type: 'search/getTopicByMention',
+    //   payload: {
+    //     mention: this.props.query,
+    //   },
+    // });
+    // console.log('=======00981',);
   }
 
   shouldComponentUpdate(nextProps) {
@@ -31,14 +33,16 @@ export default class SearchKnowledge extends React.PureComponent {
   }
 
   componentWillUpdate(nextProps) {
-    if (nextProps.query !== this.props.query) {
-      this.props.dispatch({
-        type: 'search/getTopicByMention',
-        payload: {
-          mention: nextProps.query,
-        },
-      });
-    }
+    // if (nextProps.query !== this.props.query) {
+    //   console.log('=======00983', );
+    //   this.props.dispatch({
+    //     type: 'search/getTopicByMention',
+    //     payload: {
+    //       mention: nextProps.query,
+    //     },
+    //   });
+    //   console.log('=======00984', );
+    // }
   }
 
 

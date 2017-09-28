@@ -6,7 +6,7 @@
 const ReduxLoggerEnabled = false;
 const DebugLogEnabled = true;
 const LogRequest = true;
-const LogHOC = true;
+const LogHOC = false;
 
 // Log common message.
 function log(...data) {

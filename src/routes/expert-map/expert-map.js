@@ -866,7 +866,15 @@ class ExpertMap extends React.PureComponent {
               <ul>
                 {Domains.map((domain) =>{
                   checkState += 1;
-                  return (<CheckableTag className={styles.filterItem} key={domain.id} checked={that.state.domainChecks[checkState - 1]} value={domain.id}><span onClick={this.domainChanged.bind(that, domain)} >{domain.name}</span></CheckableTag>)
+                  return (
+                    <CheckableTag
+                      className={styles.filterItem}
+                      key={domain.id}
+                      checked={that.state.domainChecks[checkState - 1]}
+                      value={domain.id}>
+                      <span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>
+                    </CheckableTag>
+                  )
                 })
 
 

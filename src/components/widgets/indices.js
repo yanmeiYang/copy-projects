@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /**
  *  Created by BoGao on 2017-07-4;
  */
@@ -9,7 +10,7 @@ import styles from './indices.less';
 const indicesConfig = {
   // relevance: { key: 'relevance', letter: 'R', tooltip: '搜索相关度（R）', color: 'blue' },
   h_index: {
-    key: 'h_index',
+    key: 'hindex',
     letter: 'H',
     tooltip: '学术成就H-index（H）',
     color: 'h_index',
@@ -20,26 +21,26 @@ const indicesConfig = {
     tooltip: '学术活跃度（A）',
     color: 'activity',
     render: (indices) => {
-      return indices.activity.toFixed(2);
+      return indices.activity && indices.activity.toFixed(2);
     },
   },
   rising_star: {
-    key: 'new_star',
+    key: 'risingStar', // 'newstar',
     letter: 'S',
     tooltip: '领域新星（S）',
     color: 'new_star',
     render: (indices) => {
-      return indices.new_star.toFixed(2);
+      return indices.risingStar && indices.risingStar.toFixed(2);
     },
   },
   citation: {
-    key: 'num_citation',
+    key: 'citation',
     letter: 'c',
     tooltip: '引用数（c）',
     color: 'num_citation',
   },
   num_pubs: {
-    key: 'num_pubs',
+    key: 'numpubs',
     letter: 'P',
     tooltip: '论文数（P）',
     color: 'num_pubs',
@@ -50,7 +51,7 @@ const indicesConfig = {
     color: 'blue',
     tooltip: 'CCF活动贡献（C）',
     render: (activity, activity_indices) => {
-      return activity_indices && activity_indices.contrib.toFixed(2);
+      return activity_indices && activity_indices.contrib && activity_indices.contrib.toFixed(2);
     },
   },
 };
@@ -62,7 +63,7 @@ const defaultIndices = ['activity-ranking-contrib', 'h_index', 'activity', 'risi
  * showItems - TODO use this to config which indices to show.
  */
 const Indices = ({ indices, activity_indices, showIndices }) => {
-  if (!indices) return <span></span>;
+  if (!indices) return false;
   let indicesKeys = defaultIndices;
   if (showIndices && showIndices.length > 0) {
     indicesKeys = showIndices;
@@ -89,6 +90,6 @@ const Indices = ({ indices, activity_indices, showIndices }) => {
       })}
     </div>
   );
-}
+};
 
 export default Indices;

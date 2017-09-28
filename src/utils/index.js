@@ -2,7 +2,7 @@
 import classnames from 'classnames';
 import config from './config';
 import { getMenusByUser } from './menu';
-import request from './request';
+import request, { queryAPI } from './request';
 import { color } from './theme';
 import * as TopExpertBase from './expert-base';
 import * as reflect from './reflect';
@@ -87,7 +87,7 @@ module.exports = {
 
   // menu,
   getMenusByUser,
-  request,
+  request, queryAPI,
   color,
   classnames,
   queryURL,

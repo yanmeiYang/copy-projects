@@ -1,0 +1,67 @@
+[
+  {
+    "method": "search",
+    "parameters": {
+      "query": "data ",
+      "offset": 0,
+      "size": 20,
+      "searchType": "person",
+      "filters": {
+        "terms": {
+          "labels": [
+            "CCF_MEMBER_杰出会员"
+          ]
+        },
+        "ranges": {
+          "h_index": [
+            "2",
+            "3"
+          ]
+        }
+      },
+      "aggregation": [
+        "gender",
+        "h_index",
+        "location",
+        "language"
+      ],
+      "haves": {
+        "labels": [
+          "CCF_MEMBER_高级会员",
+          "CCF_MEMBER_会士",
+          "CCF_MEMBER_杰出会员"
+        ]
+      },
+      "switches": [
+        "translate"
+      ]
+    },
+    "schema": {
+      "person": [
+        "id",
+        "name",
+        "name_zh",
+        "tags",
+        {
+          "profile": [
+            "position",
+            "affiliation"
+          ]
+        },
+        {
+          "indices": [
+            "hindex",
+            "gindex",
+            "numpubs",
+            "citation",
+            "newStar",
+            "risingStar",
+            "activity",
+            "diversity",
+            "sociability"
+          ]
+        }
+      ]
+    }
+  }
+]

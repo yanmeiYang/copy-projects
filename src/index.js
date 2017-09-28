@@ -8,7 +8,7 @@ import { IntlProvider, addLocaleData } from 'react-intl';
 import { createLogger } from 'redux-logger';
 import { message } from 'antd';
 import createLoading from 'dva-loading';
-import { ApolloClient, createNetworkInterface, ApolloProvider } from 'react-apollo';
+// import { ApolloClient, createNetworkInterface, ApolloProvider } from 'react-apollo';
 import { sysconfig } from './systems';
 import { config } from './utils';
 import { ReduxLoggerEnabled } from './utils/debug';
@@ -32,8 +32,17 @@ if (ENABLE_PERF) { // eslint-disable-line no-undef
 const app = dva({
   history: createHistory(),
   onError(error) {
-    logErr('Global Error:', error);
-    message.error(error.message, ERROR_MSG_DURATION);
+    if (process.env.NODE_ENV !== 'production') {
+      logErr(
+        '===============================================\n这回真的错的不行了！！！\n',
+        error,
+        '===============================================',
+      );
+      message.error(error.message, ERROR_MSG_DURATION);
+    } else {
+      logErr('= Global Error:', error);
+      message.error(error.message, ERROR_MSG_DURATION);
+    }
   },
 });
 
@@ -57,19 +66,19 @@ const messages = require('./locales/' + sysconfig.Locale);
 addLocaleData(require('react-intl/locale-data/' + sysconfig.Locale));
 
 // Graphql
-const client = new ApolloClient({
-  networkInterface: createNetworkInterface({
-    uri: config.graphqlAPI,
-  }),
-});
+// const client = new ApolloClient({
+//   networkInterface: createNetworkInterface({
+//     uri: config.graphqlAPI,
+//   }),
+// });
 
 const App = app.start();
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <IntlProvider locale={sysconfig.Locale} messages={messages}>
-      <App />
-    </IntlProvider>
-  </ApolloProvider>,
+  // <ApolloProvider client={client}>
+  <IntlProvider locale={sysconfig.Locale} messages={messages}>
+    <App />
+  </IntlProvider>,
+  // </ApolloProvider>,
   document.getElementById('root'),
 );
 

@@ -143,53 +143,6 @@ export async function wget(url) {
   return data;
 }
 
-// -----------------------------------------------
-const testNextRequest = [{
-  method: 'search',
-  parameters: {
-    query: 'data mining',
-    searchType: 'person',
-    sorts: ['h_index', '~time'], // old version: [{\"field\":\"h_index\",\"order\":\"desc\"}, \"_score\"]
-    filters: { terms: { labels: ['CCF_MEMBER_高级会员'] } }, // filters按原计划没变; 暂时没变
-    offset: 0, // 分页选项，起始偏移量.
-    size: 20, // 分页选项，返回数据条数.
-    aggregation: ['gender', 'h_index', 'location', 'language'], // search 独有的aggregation.
-  },
-  options: {
-    token: '09876677....LKSDJF', // 对调用者可选，默认值为localStorage中的值。
-  },
-  schema: {
-    result: [
-      'score',
-      'id',
-      {
-        Person: [
-          'name',
-          'namezh',
-          'citation',
-          'hindex',
-          'labels',
-        ],
-      },
-      {
-        Publication: [
-          'title',
-          'titlezh',
-        ],
-      },
-    ],
-    aggregation: [
-      'name',
-      {
-        items: [
-          'term',
-          'count',
-        ],
-      },
-    ]
-  }
-}];
-
 /**
  * Requests a URL, returning a promise.
  * Request Format：
@@ -200,39 +153,84 @@ const testNextRequest = [{
  *  }
  */
 export async function queryAPI(payload) {
-  const { method, parameters, schema, options } = payload;
+  // method is nextAPI's method.
+  const { method, parameters, schema, RequestMethod, ...options } = payload;
 
   if (process.env.NODE_ENV !== 'production') {
-    debug.logRequest('@@next-request ', options.method, options);
+    debug.logRequest('@@next-request ', method, parameters, schema, options);
   }
 
   const headers = new Headers();
   headers.append('Accept', 'application/json');
   headers.append('Content-Type', 'application/json');
+  if (process.env.NODE_ENV !== 'production') {
+    // headers.append('Debug', 1);
+  }
 
   const token = (options && options.token) || localStorage.getItem('token');
   if (token) {
     headers.append('Authorization', token);
   }
 
-  const requestBody = {
+  options.method = RequestMethod || 'POST'; // next api process is always POST.
+  options.body = JSON.stringify([{
     method,
     parameters,
     schema,
-  };
+  }]);
 
-  // next api process is always POST.
-  options.method = 'POST';
   const newOption = { ...options, headers };
   const response = await fetch(nextAPIURL, newOption);
-
-  checkStatus(response);
+  // checkQueryStatus(response);
 
   const data = await response.json();
 
-  const ret = { data, headers: {} };
+  // error handling
+  if (data && data.errs) {
+    data.errs.map((err) => {
+      if (process.env.NODE_ENV !== 'production') {
+        console.error('NEXT-API-ERROR:', err);
+      }
+      return false;
+    });
+  }
+
+  console.log('))))))))***', data);
+  const ret = (data && data.data && data.data && data.data.length > 0 && data.data[0]) || {};
+  console.log('))))))))***', ret);
+
+  // const ret = { data, headers: {} };
   // if (response.headers.get('x-total-count')) {
   //   ret.headers['x-total-count'] = response.headers.get('x-total-count');
   // }
   return ret;
+}
+
+function checkQueryStatus(response) {
+  if (response.status >= 200 && response.status < 300) {
+    return response;
+  }
+
+  // TODO move out, don't process auth here.
+  if (response.status === 401) {
+    // console.log('xxxxxxxxxx', response);
+    // throw error;
+    // auth.removeLocalAuth();
+    // location.href = '/';
+  }
+
+  if (response.status >= 404 && response.statusText === 'Not Found') {
+    throw error;
+  }
+
+  // Special case: for knowledge graph, query not found will return
+  // {"status":false,"message":"data.not_found"} // code 404
+
+  const error = new Error(response.statusText);
+  error.response = response;
+  // try {
+  //   throw error;
+  // } catch (e) {
+  //   console.error('---- Catch Error: ---- ', e);
+  // }
 }

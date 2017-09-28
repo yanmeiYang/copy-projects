@@ -25,12 +25,17 @@ export default {
   'com.search.filter.label.h_index': 'H-Index',
   'com.search.filter.label.language': 'Language',
   'com.search.filter.label.nationality': 'Location',
+  'com.search.filter.label.location': 'Location',
   'com.search.filter.label.gender': 'Gender',
 
-  'com.search.filter.label2.H-Index': 'H-Index',
-  'com.search.filter.label2.Language': 'Language',
-  'com.search.filter.label2.Location': 'Location',
-  'com.search.filter.label2.Gender': 'Gender',
+  'com.search.filter.label2.h_index': 'H-Index',
+  'com.search.filter.label2.language': 'Language',
+  'com.search.filter.label2.location': 'Location',
+  'com.search.filter.label2.gender': 'Gender',
+  'com.search.filter.label2.nationality': 'Location',
+
+  'com.search.filter.value.gender.male': 'Male',
+  'com.search.filter.value.gender.female': 'Female',
 
   'com.search.sort.label.relevance': 'Relevance',
   'com.search.sort.label.h_index': 'H-Index',

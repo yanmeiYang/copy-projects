@@ -7,7 +7,7 @@ import { routerRedux } from 'dva/router';
 import queryString from 'query-string';
 import { Icon } from 'antd';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
-import { gql, graphql } from 'react-apollo';
+// import { gql, graphql } from 'react-apollo';
 import { sysconfig } from '../../../systems';
 import { Spinner } from '../../../components';
 import { classnames } from '../../../utils';
@@ -15,48 +15,48 @@ import styles from './ProjectPage.less';
 import { Auth } from '../../../hoc';
 import { ProjectTable } from '../../../components/recommendation';
 
-const gqlGetOrgByID = gql`
-  query gqlGetOrgByID ($id:ID!) {
-    rcdorg (id: $id){
-      id
-      name
-      desc
-      creatorID
-      creatorName
-      createTime
-      updateTime
-      projects {
-        ... projectFields
-        taskCount
-      }
-    }
-  }
-  
-  fragment projectFields on RcdProject {
-    id
-    desc
-    title
-    progress
-    status
-    creatorID
-    creatorName
-    createTime
-    updateTime
-  }
-`;
+// const gqlGetOrgByID = gql`
+//   query gqlGetOrgByID ($id:ID!) {
+//     rcdorg (id: $id){
+//       id
+//       name
+//       desc
+//       creatorID
+//       creatorName
+//       createTime
+//       updateTime
+//       projects {
+//         ... projectFields
+//         taskCount
+//       }
+//     }
+//   }
+//
+//   fragment projectFields on RcdProject {
+//     id
+//     desc
+//     title
+//     progress
+//     status
+//     creatorID
+//     creatorName
+//     createTime
+//     updateTime
+//   }
+// `;
 
 @connect(({ app, recommendation }) => ({ app, recommendation }))
-@graphql(gqlGetOrgByID, {
-  options({ params }) {
-    // console.log('--------------', params);
-    return {
-      variables: { id: `${params.id}` },
-    };
-  },
-  // props({ data: { loading, currentUser, entry } }) {
-  //   return { loading, currentUser, entry };
-  // },
-})
+// @graphql(gqlGetOrgByID, {
+//   options({ params }) {
+//     // console.log('--------------', params);
+//     return {
+//       variables: { id: `${params.id}` },
+//     };
+//   },
+//   // props({ data: { loading, currentUser, entry } }) {
+//   //   return { loading, currentUser, entry };
+//   // },
+// })
 @Auth
 export default class ProjectPage extends React.Component {
   constructor(props) {

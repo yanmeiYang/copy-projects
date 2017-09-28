@@ -48,6 +48,7 @@ const defaultSystemConfigs = {
    * Layout related
    */
   Layout_HasSideBar: false, // 是否显示左侧菜单
+  Layout_HasNavigator: true,
 
   PageTitle: 'Aminer Business',
   // header

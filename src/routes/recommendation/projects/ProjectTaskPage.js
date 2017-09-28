@@ -7,7 +7,7 @@ import { routerRedux } from 'dva/router';
 import queryString from 'query-string';
 import { Icon } from 'antd';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
-import { gql, graphql } from 'react-apollo';
+// import { gql, graphql } from 'react-apollo';
 import { sysconfig } from '../../../systems';
 import { Spinner } from '../../../components';
 import { classnames } from '../../../utils';
@@ -15,52 +15,52 @@ import styles from './ProjectTaskPage.less';
 import { Auth } from '../../../hoc';
 import { ProjectTaskTable } from '../../../components/recommendation';
 
-const gqlGetProjectByID = gql`
-  query gqlGetProjectByID ($id:ID!) {
-    rcdproject(id: $id) {
-      ... projectFields
-      taskCount
-      tasks{
-        ... taskFields
-      }
-    }
-  }
-  
-  fragment projectFields on RcdProject {
-    id
-    desc
-    title
-    progress
-    status
-    creatorID
-    creatorName
-    createTime
-    updateTime
-  }
-  
-  fragment taskFields on RcdTask {
-    id
-    title
-    url
-    progress
-    status
-    createTime
-    updateTime
-  }
-`;
+// const gqlGetProjectByID = gql`
+//   query gqlGetProjectByID ($id:ID!) {
+//     rcdproject(id: $id) {
+//       ... projectFields
+//       taskCount
+//       tasks{
+//         ... taskFields
+//       }
+//     }
+//   }
+//
+//   fragment projectFields on RcdProject {
+//     id
+//     desc
+//     title
+//     progress
+//     status
+//     creatorID
+//     creatorName
+//     createTime
+//     updateTime
+//   }
+//
+//   fragment taskFields on RcdTask {
+//     id
+//     title
+//     url
+//     progress
+//     status
+//     createTime
+//     updateTime
+//   }
+// `;
 
 @connect(({ app, recommendation }) => ({ app, recommendation }))
-@graphql(gqlGetProjectByID, {
-  options({ params }) {
-    console.log('params:::', params);
-    return {
-      variables: { id: `${params.id}` },
-    };
-  },
-  // props({ data: { loading, currentUser, entry } }) {
-  //   return { loading, currentUser, entry };
-  // },
-})
+// @graphql(gqlGetProjectByID, {
+//   options({ params }) {
+//     console.log('params:::', params);
+//     return {
+//       variables: { id: `${params.id}` },
+//     };
+//   },
+//   // props({ data: { loading, currentUser, entry } }) {
+//   //   return { loading, currentUser, entry };
+//   // },
+// })
 @Auth
 export default class ProjectTaskPage extends React.Component {
   constructor(props) {

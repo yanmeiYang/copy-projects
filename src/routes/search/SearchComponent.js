@@ -3,9 +3,8 @@ import { routerRedux, Link, withRouter } from 'dva/router';
 import { connect } from 'dva';
 import { isEqual } from 'lodash';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
-import queryString from 'query-string';
 import classnames from 'classnames';
-import { Tabs, Pagination } from 'antd';
+import { Pagination } from 'antd';
 import { Spinner } from 'components';
 import { PersonList, ExportPersonBtn } from 'components/person';
 import { SearchFilter, SearchSorts, KgSearchBox, SearchKnowledge } from 'components/search';
@@ -56,7 +55,7 @@ export default class SearchComponent extends Component {
         name: sysconfig.DEFAULT_EXPERT_BASE_NAME,
       };
     }
-    console.log('>>>>>>>>>>>>>>>>>>>>>', props);
+    // console.log('>>>>>>>>>>>>>>>>>>>>>', props);
     this.state = {
       sortType: props.defaultSortType,
     };
@@ -101,25 +100,18 @@ export default class SearchComponent extends Component {
     this.doSearch(query, 0, sysconfig.MainListSize, filters, '');
   };
 
-  // onViewTabChange = (key) => {
-  //   const { query } = this.props.search;
-  //   this.setState({ currentTab: key });
-  //   const pageSize = sysconfig.MainListSize;
-  //   this.props.dispatch(routerRedux.push({
-  //     pathname: `/${sysconfig.SearchPagePrefix}/${query}/0/${pageSize}?view=${key}`,
-  //   }));
-  // };
-
   onOrderChange = (e) => {
     const { filters, query } = this.props.search;
     this.setState({ sortType: e });
-    this.dispatch({ type: 'search/updateSortKey', payload: { key: e } });
-    this.dispatch({
-      type: 'search/searchPerson',
-      payload: { query, offset: 0, size: sysconfig.MainListSize, filters, sort: e },
-    });
+    this.doSearch(query, 0, sysconfig.MainListSize, filters, e, false);
+    // this.dispatch({ type: 'search/updateSortKey', payload: { key: e } });
+    // this.dispatch({
+    //   type: 'search/searchPerson',
+    //   payload: { query, offset: 0, size: sysconfig.MainListSize, filters, sort: e },
+    // });
   };
 
+  // 保留一些，只换URL和页码。
   onPageChange = (page) => {
     const { match, dispatch, search } = this.props;
     const { query, pagination } = search;
@@ -148,7 +140,7 @@ export default class SearchComponent extends Component {
   // keep every thing, just call search;
   doSearchUseProps = () => {
     const { query, offset, pagination, filters, sortKey } = this.props.search;
-    const { pageSize, total, current } = pagination;
+    const { pageSize } = pagination;
     this.doSearch(query, offset, pageSize, filters, sortKey, true);
   };
 
@@ -160,26 +152,31 @@ export default class SearchComponent extends Component {
   doSearch = (query, offset, size, filters, sort, dontRefreshUrl) => {
     const { dispatch, fixedExpertBase } = this.props;
 
-    // 如果是fixed，那么重置所有的filters
+    // 如果是fixed，那么限制EB为指定值。
     if (fixedExpertBase && fixedExpertBase.id) {
       filters.eb = fixedExpertBase; // eslint-disable-line no-param-reassign
     }
 
+    // TODO 老旧方式获取total, 当换成新的api的时候删除.
     let filtersLength = 0;
     for (const item of Object.values(filters)) {
       if (typeof item === 'string') {
         filtersLength = item.split('#')[1];
       }
     }
+
     dispatch({ type: 'search/translateSearch', payload: { query } });
     dispatch({
       type: 'search/searchPerson',
-      payload: { query, offset, size, filters, sort, total: parseInt(filtersLength) },
+      payload: { query, offset, size, filters, sort, total: parseInt(filtersLength) }, // TODO remove total;
     });
+    // TODO remove later. 新的方式获取api的时候，这个方法啥也不干。
     dispatch({
       type: 'search/searchPersonAgg',
       payload: { query, offset, size, filters, sort },
     });
+
+    // Change URL
     if (!dontRefreshUrl) {
       const { match } = this.props;
       const pathname = createURL(match.path, match.params, {
@@ -188,9 +185,6 @@ export default class SearchComponent extends Component {
         size,
       });
       dispatch(routerRedux.push({ pathname }));
-      // this.dispatch(routerRedux.push({
-      //   pathname: `/${sysconfig.SearchPagePrefix}/${query}/0/${size}`,
-      // }));
     }
   };
 
@@ -213,7 +207,7 @@ export default class SearchComponent extends Component {
         filters={filters} sort={sortType} key="0"
       />
     )];
-    // console.log('|||||||||||||||||||||||||||||', SearchSortsRightZone);
+    // console.log('||||||||||||||||||', filters, aggs);
 
     // TODO move translate search out.
     const { useTranslateSearch, translatedQuery } = this.props.search;
@@ -266,6 +260,7 @@ export default class SearchComponent extends Component {
             {/* ---- Filter ---- */}
             {!disableFilter &&
             <SearchFilter
+              title={Math.random()}
               filters={filters}
               aggs={aggs}
               onFilterChange={this.onFilterChange}

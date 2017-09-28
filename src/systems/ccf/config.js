@@ -16,6 +16,7 @@ module.exports = {
    * Layout related
    */
   Layout_HasSideBar: true, // 是否显示左侧菜单
+  Layout_HasNavigator: false,
 
   PageTitle: 'CCF 专家库',
   // Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
@@ -68,7 +69,7 @@ module.exports = {
   IndexPage_QuickSearchList: ['人工智能', '机器人', '数据挖掘', '机器学习', '数据建模', '计算机视觉',
     '计算机网络', '网络', '自然语言处理'],
 
-  PersonList_ShowIndices: ['activityRankingContrib', 'h_index', 'activity'],
+  PersonList_ShowIndices: ['activityRankingContrib', 'h_index', 'activity', 'rising_star'],
 
 
   // > Search related

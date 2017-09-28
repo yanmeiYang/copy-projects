@@ -6,7 +6,7 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import queryString from 'query-string';
 import { FormattedMessage as FM } from 'react-intl';
-import { gql, graphql } from 'react-apollo';
+// import { gql, graphql } from 'react-apollo';
 import { sysconfig } from '../../systems';
 import { Spinner } from '../../components';
 import { classnames } from '../../utils';
@@ -14,22 +14,22 @@ import styles from './RecommendationPage.less';
 import { Auth } from '../../hoc';
 import { RCDOrgList } from '../../components/recommendation';
 
-const gqlAllOrgs = gql`
-  query gqlAllOrgs {
-    rcdorgs {
-      id
-      name
-      desc
-      creatorID
-      creatorName
-      createTime
-      updateTime
-    }
-  }
-`;
+// const gqlAllOrgs = gql`
+//   query gqlAllOrgs {
+//     rcdorgs {
+//       id
+//       name
+//       desc
+//       creatorID
+//       creatorName
+//       createTime
+//       updateTime
+//     }
+//   }
+// `;
 
 @connect(({ app, recommendation }) => ({ app, recommendation }))
-@graphql(gqlAllOrgs)
+// @graphql(gqlAllOrgs)
 @Auth
 export default class RecommendationPage extends React.Component {
   constructor(props) {

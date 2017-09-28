@@ -12,7 +12,6 @@ import * as personService from 'services/person';
 import { PersonComment } from 'systems/bole/components';
 import { sysconfig } from 'systems';
 import { config, compare } from 'utils';
-import * as display from 'utils/display';
 import * as profileUtils from 'utils/profile-utils';
 import { Indices } from 'components/widgets';
 import ViewExpertInfo from './view-expert-info';
@@ -93,17 +92,16 @@ export default class PersonList extends PureComponent {
         }
 
         {persons && persons.map((person) => {
-          const profile = person.profile || {};
-          const name = display.personName(person.name, person.name_zh, sysconfig.Locale);
-          const pos = profile.position;
-          const aff = display.localValue(sysconfig.Locale, profile.affiliation, profile.affiliation_zh);
+          const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
+          const pos = profileUtils.displayPosition(person.pos);
+          const aff = profileUtils.displayAff(person);
 
-          const phone = showPrivacy && profile.phone;
-          const email = showPrivacy && profile.email;
+          const phone = showPrivacy && person.contact && person.contact.phone;
+          const email = showPrivacy && profileUtils.displayEmailSrc(person);
 
-          // go into
+          // const homepage = person.contact && person.contact.homepage;
           const indices = person.indices;
-          const activity_indices = {}; // TODO use
+          const activity_indices = person.activity_indices;
           // const tags = profileUtils.findTopNTags(person, 8);
 
           const personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
@@ -115,7 +113,7 @@ export default class PersonList extends PureComponent {
             <div key={person.id}>
               <div className={styles.person}>
                 <div className={styles.avatar_zone}>
-                  <img src={display.personAvatar(person.avatar, '', 160)}
+                  <img src={profileUtils.getAvatar(person.avatar, '', 160)}
                        className={styles.avatar} alt={name} title={name} />
                 </div>
                 <div className={styles.info_zone}>
@@ -146,7 +144,6 @@ export default class PersonList extends PureComponent {
                         <span style={{ minWidth: '158px' }}><i
                           className="fa fa-phone fa-fw" /> {phone}</span>
                         }
-
                         {email &&
                         <span style={{ backgroundImage: `url(${config.baseURL}${email})` }}
                               className="email"><i className="fa fa-envelope fa-fw" />
@@ -169,19 +166,18 @@ export default class PersonList extends PureComponent {
                               if (item.t === null || item.t === 'Null') {
                                 return false;
                               } else {
-                                // const tag = personService.returnKeyByLanguage(this.interestsI18n, item.t);
-                                const tag = { en: item };
-                                const showTag = tag.zh ? tag.zh : tag.en;
+                                const tag = personService.returnKeyByLanguage(this.interestsI18n, item.t);
+                                const showTag = tag.zh !== '' ? tag.zh : tag.en;
                                 const key = `${showTag}_${idx}`;
                                 const linkJSX = (
                                   <Link
                                     to={`/${sysconfig.SearchPagePrefix}/${showTag}/0/${sysconfig.MainListSize}`}>
                                     <Tag className={styles.tag}>{showTag}</Tag>
-                                  </Link>
-                                );
+                                  </Link>);
                                 return (
                                   <span key={key}>
-                                    {tag.zh ?
+                                    {tag.zh
+                                      ?
                                       <Tooltip placement="top" title={tag.en}>{linkJSX}</Tooltip>
                                       : linkJSX}
                                   </span>

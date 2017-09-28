@@ -1,5 +1,6 @@
-import { request, config } from '../utils';
+import { request, queryAPI, config } from '../utils';
 import { sysconfig } from '../systems';
+import * as bridge from 'utils/next-bridge';
 
 const { api } = config;
 
@@ -9,7 +10,6 @@ const { api } = config;
      /api/search/roster/59..08/experts/advanced?name=&offset=0&org=&size=20&sort=n_citation&term=jie
      sort = relevance, h_index, a_index, activity, diversity, rising_star, n_citation, n_pubs,
    智库无缓存查询：
-
  */
 export async function searchPerson(query, offset, size, filters, sort, useTranslateSearch) {
   // if query is null, and eb is not aminer, use expertbase list api.
@@ -27,14 +27,72 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
   }
 
   // Search in ExpertBase.
-  if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH) {
+
+  // 1. prepare parameters.
+  const Sort = sort || 'relevance'; // TODO or '_sort';
+
+  // 2. query
+  if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH && Sort !== 'activity-ranking-contrib') {
+
+    const nextapi = {
+      RequestMethod: 'POST',
+      method: 'search',
+      parameters: {
+        query, offset, size,
+        searchType: 'allb', // all
+        // sorts: [Sort],
+        filters: { terms: {} },
+        aggregation: ['gender', 'h_index', 'location', 'language'],
+        haves: { labels: ['CCF_MEMBER_高级会员', 'CCF_MEMBER_会士', 'CCF_MEMBER_杰出会员', /*'CCF_DEPT_*'*/] },
+        switches: ['translate'],
+      },
+      schema: {
+        person: [
+          'id', 'name', 'name_zh', 'tags', // 'tags_zh', 'tags_trans_zh'
+          {
+            profile: [
+              'position', 'affiliation',
+              // 'org', 'org_zh', 'bio', 'email', 'edu' ', phone'
+            ],
+          },
+          { indices: ['hindex', 'gindex', 'numpubs', 'citation', 'newStar', 'risingStar', 'activity', 'diversity', 'sociability'] },
+        ],
+      },
+    };
+
+    // filters
+    Object.keys(filters).map((key) => {
+      const filter = filters[key];
+      if (key === 'eb') {
+        const ebLabel = bridge.toNextCCFLabelFromEBID(filters.eb.id);
+        nextapi.parameters.filters.terms.labels = [ebLabel]; // TODO transfer EB.
+      } else if (key === 'h_index') {
+        console.log('TODO filter by h_index 这里暂时是用解析的方式获取数据的。');
+        const splits = filter.split('-');
+        if (splits && splits.length === 2) {
+          const from = parseInt(splits[0]);
+          const to = parseInt(splits[1]);
+          nextapi.parameters.filters.ranges = {
+            h_index: [isNaN(from) ? '' : from.toString(), isNaN(to) ? '' : to.toString()],
+          };
+        }
+      } else {
+        nextapi.parameters.filters.terms[key] = [filters[key]];
+      }
+      return false;
+    });
+
+    // sort
+    if (Sort && Sort !== 'relevance') {
+      nextapi.parameters.sorts = [Sort];
+    }
+
+    return queryAPI(nextapi);
+
     // TODO 我需要替换成新的API
-    console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^ 注意注意，我这里变成了取新的API。');
-    const data = require('../../external-docs/next-api/test-search-result.json');
-    console.log('data is >>> ', data);
-    return data;
   } else {
-    const { expertBase, data } = prepareParameters(query, offset, size, filters, sort, useTranslateSearch);
+    const { expertBase, data } = prepareParameters(query, offset, size, filters,
+      sort, useTranslateSearch);
     return request(
       api.searchPersonInBase.replace(':ebid', expertBase),
       { method: 'GET', data },
@@ -81,7 +139,10 @@ export async function searchPersonGlobal(query, offset, size, filters, sort, use
   return request(api.searchPerson, { method: 'GET', data });
 }
 
-export async function searchPersonAgg(query, offset, size, filters, useTranslateSearch) {
+//
+// Search Aggregation!
+//
+export async function searchPersonAgg(query, offset, size, filters, useTranslateSearch, sort) {
   // if search in global experts, jump to another function;
   if (filters && filters.eb && filters.eb.id === 'aminer') {
     return searchPersonAggGlobal(query, offset, size, filters, useTranslateSearch);
@@ -91,9 +152,9 @@ export async function searchPersonAgg(query, offset, size, filters, useTranslate
     return searchPersonAggGlobal(query, offset, size, filters, useTranslateSearch);
   }
 
-  if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH) {
+  if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH && sort !== 'activity-ranking-contrib') {
     // TODO 我需要替换成新的API
-    console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^ 注意注意，我这里变成了取新的API。');
+    console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^ 注意注意，我这里变成了取新的API。所以agg什么都不做了!!');
   } else {
     const { expertBase, data } = prepareParameters(query, offset, size, filters, '', useTranslateSearch);
     return request(
@@ -126,7 +187,7 @@ function prepareParameters(query, offset, size, filters, sort, useTranslateSearc
       [sysconfig.DEFAULT_EXPERT_SEARCH_KEY]: query,
       offset,
       size,
-      sort: sort || ''
+      sort: sort || '',
     };
   }
   data = addAdditionParameterToData(data, sort, 'eb');

@@ -4,6 +4,7 @@ import queryString from 'query-string';
 import * as searchService from 'services/search';
 import * as translateService from 'services/translate';
 import * as topicService from 'services/topic';
+import bridge from 'utils/next-bridge';
 
 export default {
 
@@ -68,6 +69,8 @@ export default {
   },
 
   effects: {
+    // 搜索全球专家时，使用old service。
+    // 使用智库搜索，并且排序算法不是contribute的时候，使用新的搜索API。
     * searchPerson({ payload }, { call, put, select }) {
       const { query, offset, size, filters, sort, total } = payload;
       const noTotalFilters = {};
@@ -79,18 +82,23 @@ export default {
         }
       }
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
+
+      const data = yield call(searchService.searchPerson,
+        query, offset, size, noTotalFilters, sort, useTranslateSearch);
+      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>', data);
+
+      // 分界线
       yield put({ type: 'updateSortKey', payload: { key: sort } });
       yield put({ type: 'updateFilters', payload: { filters } });
-      const sr = yield call(searchService.searchPerson,
-        query, offset, size, noTotalFilters, sort, useTranslateSearch);
-      const data = (sr && sr.data) || {};
-      console.log('--------------', data);
-      // 分界线
-      if (data.search) {
-        // NEW
-        yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.search } });
-      } else if (data.result) {
-        yield put({ type: 'searchPersonSuccess', payload: { data, query, total } });
+
+      if (data.succeed) {
+        console.log('>>>>------ to next API');
+        yield put({ type: 'nextSearchPersonSuccess', payload: { data } });
+      } else if (data.data && data.data.result) {
+        console.log('>>>>------ to old API');
+        yield put({ type: 'searchPersonSuccess', payload: { data: data.data, query, total } });
+      } else {
+        throw new Error('Result Not Available');
       }
     },
 
@@ -114,7 +122,7 @@ export default {
     },
 
     * searchPersonAgg({ payload }, { call, put, select }) {
-      const { query, offset, size, filters } = payload;
+      const { query, offset, size, filters, sort } = payload;
       const noTotalFilters = {};
       for (const [key, item] of Object.entries(filters)) {
         if (typeof item === 'string') {
@@ -124,7 +132,7 @@ export default {
         }
       }
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
-      const sr = yield call(searchService.searchPersonAgg, query, offset, size, noTotalFilters, useTranslateSearch);
+      const sr = yield call(searchService.searchPersonAgg, query, offset, size, noTotalFilters, useTranslateSearch, sort);
       if (sr) {
         const { data } = sr;
         yield put({ type: 'searchPersonAggSuccess', payload: { data } });
@@ -137,11 +145,14 @@ export default {
       yield put({ type: 'getSeminarsSuccess', payload: { data } });
     },
 
-    * getTopicByMention({ payload }, { call, put }) {
-      const { mention } = payload;
-      const { data } = yield call(topicService.getTopicByMention, mention);
-      yield put({ type: 'getTopicByMentionSuccess', payload: { data } });
-    },
+    // * getTopicByMention({ payload }, { call, put }) {
+    //   const { mention } = payload;
+    //   console.log('--------------------||||',);
+    //   const { data } = yield call(topicService.getTopicByMention, mention);
+    //   console.log('--------------------||||',);
+    //   yield put({ type: 'getTopicByMentionSuccess', payload: { data } });
+    //   console.log('--------------------||||',);
+    // },
 
   },
 
@@ -170,7 +181,6 @@ export default {
     },
 
     updateSortKey(state, { payload: { key } }) {
-      // console.log('reducers, update sort key : ', key);
       return { ...state, sortKey: key || '' };
     },
 
@@ -181,9 +191,10 @@ export default {
       const { result } = data;
       const currentTotal = total || data.total;
       const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
+      // console.log('::', toNextPersons(result));
       return {
         ...state,
-        results: result,
+        results: bridge.toNextPersons(result),
         pagination: { pageSize: state.pagination.pageSize, total: currentTotal, current },
       };
     },
@@ -192,15 +203,18 @@ export default {
       if (!data) {
         return state;
       }
-      const { succeed, message, total, result, aggregation } = data;
+      const { succeed, message, total, offset, size, items, aggregation } = data;
       if (!succeed) {
         throw new Error(message);
       }
       const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
+      console.log('++++++++++++++++(aggregation)', aggregation);
+      console.log('----------------(items)', items);
       return {
         ...state,
-        results: result,
+        results: items,
         pagination: { pageSize: state.pagination.pageSize, total, current },
+        aggs: aggregation,
       };
     },
 
@@ -222,7 +236,8 @@ export default {
       if (!data) {
         return state;
       }
-      const { aggs } = data;
+      console.log('**************', data);
+      const aggs = bridge.toNextAggregation(data.aggs);
       return { ...state, aggs };
     },
 

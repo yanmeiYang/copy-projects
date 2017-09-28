@@ -42,13 +42,13 @@ export default class Layout extends Component {
 
   static defaultProps = {
     showHeader: true,
-    showNavigator: true,
+    showNavigator: sysconfig.Layout_HasNavigator,
     sidebar: theme.sidebar,
     footer: theme.footer,
   };
 
   render() {
-    console.count('>>>>>>>>>> App Render');
+    // console.count('>>>>>>>>>> App Render'); // TODO performance
     const { logoZone, searchZone, infoZone, sidebar, footer } = this.props;
     const { contentClass, showHeader, showNavigator } = this.props;
     const { query, onSearch } = this.props;
@@ -101,8 +101,7 @@ export default class Layout extends Component {
         </Helmet>
 
         {showHeader && <Header {...headerOptions} />}
-        {showNavigator &&
-        <Navigator {...navigatorOptions} />}
+        {showNavigator && <Navigator {...navigatorOptions} />}
 
         <LayoutComponent>
 

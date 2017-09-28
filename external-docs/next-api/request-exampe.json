@@ -1,0 +1,66 @@
+[
+  {
+    "method": "search",
+    "parameters": {
+      "query": "data mining",
+      "searchType": "person",
+      "sorts": [
+        "h_index"
+      ],
+      "filters": {
+        "terms": {
+          "labels": [
+            "CCF_MEMBER_高级会员"
+          ]
+        }
+      },
+      "offset": 0,
+      "size": 20,
+      "aggregation": [
+        "gender",
+        "h_index",
+        "location",
+        "language"
+      ],
+      "haves": {
+        "labels": [
+          "CCF_MEMBER_高级会员",
+          "CCF_MEMBER_会员"
+        ]
+      }
+    },
+    "schema": {
+      "person": [
+        "id",
+        "name",
+        "name_zh",
+        "org",
+        "org_zh",
+        {
+          "test": [
+            "test0",
+            "test1",
+            "test2"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "method": "persons",
+    "parameters": {
+      "a": "c"
+    },
+    "schema": {
+      "person": [
+        "id",
+        "name",
+        {
+          "keyname": [
+            "test"
+          ]
+        }
+      ]
+    }
+  }
+];

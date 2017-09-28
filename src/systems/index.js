@@ -42,6 +42,10 @@ const defaultSystemConfigs = {
   // Language: 'en', // options [cn|en] // TODO change to locale.
   // PreferredLanguage: 'en', // 默认语言 // TODO delete this.
   GLOBAL_ENABLE_HOC: true,
+
+  // google analysis
+  googleAnalytics: defaults.IN_APP_DEFAULT,
+
   MainListSize: 20,
 
   /**

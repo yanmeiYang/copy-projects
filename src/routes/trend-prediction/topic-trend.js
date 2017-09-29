@@ -9,10 +9,8 @@ import 'echarts/lib/chart/graph';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/chart/line';
-import classnames from 'classnames';
 import styles from './topic-trend.less';
 import { Auth } from '../../hoc';
-import * as profileUtils from '../../utils/profile-utils';
 import TopicRightInfo from './TopicRightInfo';
 
 const hotwords = ['Answer Machine', 'Artificial Intelligence', 'Autopilot', 'BlockChain', 'Computer Vision', 'Data Mining', 'Data Modeling', 'Deep Learning', 'Graph Databases', 'Internet of Things', 'Machine Learning', 'Robotics', 'Networks', 'NLP', 'Neural Network'];
@@ -26,7 +24,8 @@ export default class TopicTrend extends React.PureComponent {
   }
 
   state = {
-
+    currTch: {},
+    expers: {},
   };
 
   componentDidMount() {
@@ -52,7 +51,6 @@ export default class TopicTrend extends React.PureComponent {
   }
 
   componentDidUpdate() { //当props或state更新之后，使用它更新DOM节点componentDidUpdate(prevProps, prevState)
-    console.log(this.props);
     return true;
   }
 
@@ -62,12 +60,12 @@ export default class TopicTrend extends React.PureComponent {
 
   prepareData = (query) => {
     const offset = 0;
-    const size = 20;
+    const size = 100;
     const sort = 'relevance';
     this.callSearchTrendByMention(query);
-    this.callSearchRelatedPapers(query, offset, 100, sort);//参数需要进行调整
+    this.callSearchRelatedPapers(query, offset, size, sort);//参数需要进行调整
     this.callSearchRelatedExperts(query, offset, size, sort);
-    this.callMostCitedPapers(query, offset, size, 'n_citation');
+    this.callMostCitedPapers(query, offset, 20, 'n_citation');
   }
 
   callSearchTrendByMention = (query) => {
@@ -90,9 +88,56 @@ export default class TopicTrend extends React.PureComponent {
     document.getElementById(id).style = 'position: absolute;left: 0px;top: 500px;display:none';
   };
 
-  showExpert = (word) => {
-    console.log(word.paper);
-    console.log('#################');
+  showExpert = (word, count) => { //计算其相关的作者和论文，模糊匹配
+    const trend = this.props.topicTrend;
+    const pp = trend.relatedPapers.result;
+    const ep = trend.relatedExperts.result;
+    const year = trend.trendInfo.freq[count - 1].y;
+    const paper = [];
+    const person = [];
+    for (let i = 0; i < pp.length; i += 1) { //keys或者什么有的时候加进去
+        if (word.paper === pp[i].id) {
+          paper.push(pp[i]);
+        } else if (pp[i].year === year || pp[i].year === '') {
+          if (pp[i].title.toLowerCase().trim().indexOf(word.name.toLowerCase().trim())
+            || paper.indexOf(pp[i].id) < 0) {
+            paper.push(pp[i]);
+          } else if (typeof (pp[i].keywords) !== 'undefined') {
+            for (let j = 0; j < pp[i].keywords.length; j += 1) {
+              if (pp[i].keywords[j].toLowerCase().trim() === word.name.toLowerCase().trim() &&
+                paper.indexOf(pp[i].id) < 0) {
+                paper.push(pp[i]);
+              }
+            }
+          }
+        }
+    }
+    if (paper.length === 0) { //加入一篇当年的或者没有年份的论文
+      for (let i = 0; i < pp.length; i += 1) {
+        if (pp[i].year === year || pp[i].year === '') {
+          paper.push(pp[i]);
+        }
+      }
+    }
+    for (let i = 0; i < ep.length; i += 1) {
+      if (typeof (ep[i].tags) !== 'undefined') {
+        for (let j = 0; j < ep[i].tags.length; j += 1) {
+          if (ep[i].tags[j].t.toLowerCase().trim() === word.name.toLowerCase().trim()) {
+            person.push(ep[i]);
+          }
+        }
+      }
+    }
+    if (person.length === 0) {
+      for (let i = 0; i < ep.length; i += 1) {
+        if (i % word.name.length === 0) {
+          person.push(ep[i]);
+        }
+      }
+    }
+    const expers = { person, paper };
+    this.setState({ currTch: word });
+    this.setState({ expers });
   }
 
   showCYear = (yearId, len) => { //将外部的显示信息拷贝进去，进行提示
@@ -179,18 +224,22 @@ export default class TopicTrend extends React.PureComponent {
 
   findKeywordYearly = (trend, count) => {
     let data = [];
+    const year = trend.trendInfo.freq[count - 1].y;
     if (trend.trendInfo !== null && typeof (trend.relatedPapers.result) !== 'undefined' && typeof (trend.relatedExperts.result) !== 'undefined') {
-      const year = trend.trendInfo.freq[count - 1].y;
       const body = [];
       const yearkw = [];
       const corpaper = [];
+      const yearkw1 = [];
       const p = trend.relatedPapers.result;
       for (let i = 0; i < p.length; i += 1) {
         if (p[i].year === year) {
           if (typeof (p[i].keywords) !== 'undefined') {
             for (let j = 0; j < p[i].keywords.length; j += 1) {
-              yearkw.push(p[i].keywords[j]);
-              corpaper.push(p[i].id);
+              if (yearkw1.indexOf(p[i].keywords[j].toLowerCase().trim()) < 0) {
+                yearkw.push(p[i].keywords[j]);
+                yearkw1.push(p[i].keywords[j].toLowerCase().trim());
+                corpaper.push(p[i].id);
+              }
             }
           }
         }
@@ -202,8 +251,11 @@ export default class TopicTrend extends React.PureComponent {
       if (yearkw.length < 15) { //词太少的时候从summary里面找
         const subkey = this.findsubkeyword(trend.trendInfo, count - 1, totalf);
         for (let j = 0; j < subkey.length; j += 1) {
-          yearkw.push(subkey[j]);
-          corpaper.push('');
+          if (yearkw1.indexOf(subkey[j].toLowerCase().trim()) < 0) {
+            yearkw.push(subkey[j]);
+            yearkw1.push(subkey[j].toLowerCase().trim());
+            corpaper.push('');
+          }
         }
       }
       if (yearkw.length < 15) { //词还是太少的时候从expert里面找
@@ -211,8 +263,11 @@ export default class TopicTrend extends React.PureComponent {
         const exptag = this.findexperttag(trend.relatedExperts.result, count - 1, all);
         if (exptag !== []) {
           for (let j = 0; j < exptag.length; j += 1) {
-            yearkw.push(exptag[j]);
-            corpaper.push('');
+            if (yearkw1.indexOf(exptag[j].toLowerCase().trim()) < 0) {
+              yearkw.push(exptag[j]);
+              yearkw1.push(exptag[j].toLowerCase().trim());
+              corpaper.push('');
+            }
           }
         }
       }
@@ -221,7 +276,7 @@ export default class TopicTrend extends React.PureComponent {
       }
       data = { head: `${year}年该领域热点技术`, body };//Key和Value一致的时候可以简写
     } else {
-      data = { head: '2018年该领域热点技术', body: ['正在研究中'] };
+      data = { head: `${year}年该领域热点技术`, body: [{ name: '正在努力加载中...', paper: [] }] };
     }
     return data;
   }
@@ -405,6 +460,19 @@ export default class TopicTrend extends React.PureComponent {
     const colorset = ['#ff3d3d', '#00a0e9', '#f603ff', '#00b419', '#5f52a0'];
     const trend = this.props.topicTrend;
     const that = this;
+    let type;
+    let exper = {};
+    if (typeof (this.state.currTch.name) === 'undefined') {
+      type = 'all';
+      exper = { person: trend.relatedExperts.result, paper: trend.mostCitedPapers.result };
+    } else {
+      type = 'one';
+      exper = this.state.expers;
+    }
+    const rightInfos = {
+      all: () => (<TopicRightInfo trend={exper} />),
+      one: () => (<TopicRightInfo trend={exper} />), //TopicRightInfoOne暂时不用
+    };
     return (
       <div className={styles.trendmap}>
         <div className={styles.keywords}>
@@ -425,46 +493,9 @@ export default class TopicTrend extends React.PureComponent {
         </div>
         <div id="trendchart" style={{ height: '800px', width: '80%', float: 'left' }} />
         <div id="statistic" style={{ height: '800px', width: '20%', float: 'right' }} >
-          <div className={styles.scrollable}>
-            <div className={styles.border}>
-              <div className={styles.name}>
-                <span alt="" className={classnames('icon', styles.expertIcon)} />
-                重要专家
-              </div>
-              <div className={styles.images}>
-                {trend.relatedExperts.result &&
-                trend.relatedExperts.result.slice(0, 20).map((person) => {
-                  const avatarUrl = profileUtils.getAvatar(person.avatar, person.id, 50);
-                  const url = `https://aminer.org/profile/${person.id}`;
-                  return (
-                    <div key={person.id} className={styles.imgOuter}>
-                      <div className={styles.imgBox}>
-                        <a href={url} target="_blank"><img src={avatarUrl} alt="" /></a>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className={styles.name}>
-                <br />
-                <span alt="" className={classnames('icon', styles.fieldIcon)} />
-                重要论文
-              </div>
-              <div>
-                {trend.mostCitedPapers.result &&
-                trend.mostCitedPapers.result.slice(0, 20).map((paper) => {
-                  const url = '';
-                  return (
-                    <div key={paper.id}>
-                      <div>
-                        <a href={url} target="_blank">{paper.title}</a>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
+          {
+            rightInfos[type]()
+          }
         </div>
         <div className={styles.keyinfo}>
           <div>
@@ -492,7 +523,7 @@ export default class TopicTrend extends React.PureComponent {
                         const key4 = `typethree${j}in${k}`;
                         return (
                           <div role="presentation" key={key4}>
-                            <span href="#" role="presentation" className={styles.hotword} onClick={this.showExpert.bind(that, d)}>{d.name}</span><br />
+                            <span href="#" role="presentation" className={styles.hotword} onClick={this.showExpert.bind(that, d, j)}>{d.name}</span><br />
                           </div>
                         );
                       })

@@ -16,14 +16,14 @@ module.exports = {
 
   Header_LogoWidth: 212,
   Header_LogoStyle: {
-    width: 185,
+    width: 135,
     backgroundPosition: '8px 2px',
     backgroundSize: 'auto 34px',
     backgroundRepeat: 'no-repeat',
     backgroundColor: 'white',
   },
-  Header_SubTextLogo: '',
-  Header_SubTextStyle: { paddingLeft: 12 },
+  Header_SubTextLogo: 'UCircle',
+  Header_SubTextStyle: { },
   Header_UserPageURL: '',
   Footer_Content: '',
 

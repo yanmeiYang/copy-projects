@@ -4,7 +4,7 @@ import { Icon, Input, Modal } from 'antd';
 import ReactDOM from 'react-dom';
 import * as d3 from 'd3';
 import styles from './index.less';
-
+const { TextArea } = Input;
 class DisciplineTree extends React.Component {
   state = {
     left: 0,
@@ -14,9 +14,11 @@ class DisciplineTree extends React.Component {
   };
 
   componentWillMount() {
+    // 判断树的值是不是为空， 如果为空,则重新请求
+    const id = this.props.id;
     const query = this.props.query;
     const params = {
-      id: this.props.id,
+      id,
       area: query.replace(/ /g, '_'),
       k: 4,
       depth: 2,
@@ -47,7 +49,6 @@ class DisciplineTree extends React.Component {
       .attr('transform', 'translate(120,0)');
 
     const treemap = d3.tree().size([height, width]);
-
     const root = d3.hierarchy(iData, (d) => {
       return d.children;
     });
@@ -134,8 +135,12 @@ class DisciplineTree extends React.Component {
               }
               return txt;
             });
+          // 判断是不是说子节点
           const top = d.x + 60;
-          const left = event.pageX - 5;
+          let left = event.pageX - 5;
+          if (d.children && d.children.length > 0) {
+            left = event.pageX - 80;
+          }
           this.setState({
             showTooltip: true,
             top,
@@ -216,8 +221,6 @@ class DisciplineTree extends React.Component {
     }
     return dt;
   }
-
-
   // 编辑节点
   editNode = () => {
     const name = ReactDOM.findDOMNode(this.refs.edit).value;
@@ -236,7 +239,6 @@ class DisciplineTree extends React.Component {
     }
     return dt;
   }
-
   render() {
     return (
       <div>
@@ -244,14 +246,21 @@ class DisciplineTree extends React.Component {
         <div className={styles.tooltipDis}
              style={{ top: this.state.top, left: this.state.left }}>
           {this.state.node.depth > 0 &&
-          <Icon type="close-circle-o" onClick={this.delNode}
-                className={styles.close} />
-          }
-          <Input size="small" placeholder=""
+          <Input addonBefore={<Icon type="close-circle-o" onClick={this.delNode}
+                                    className={styles.close} />}
+                 addonAfter={<Icon type="plus-circle-o" onClick={this.addNode}
+                                   className={styles.plus} />}
+                 value={this.state.node.data.name}
                  onChange={this.editNode}
-                 className={styles.input} ref="edit" />
-          <Icon type="plus-circle-o" onClick={this.addNode}
-                className={styles.plus} />
+                 ref="edit" />
+          }
+          {this.state.node.depth === 0 &&
+          <Input addonAfter={<Icon type="plus-circle-o" onClick={this.addNode}
+                                   className={styles.plus} />}
+                 defaultValue={this.state.node.data.name}
+                 onChange={this.editNode}
+                 ref="edit" />
+          }
         </div>
         }
         <div id={this.props.id} />

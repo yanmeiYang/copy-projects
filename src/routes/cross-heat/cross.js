@@ -3,9 +3,9 @@
  */
 
 import React from 'react';
-import { routerRedux, withRouter } from 'dva/router';
+import { routerRedux, } from 'dva/router';
 import { connect } from 'dva';
-import { Button, Steps, message } from 'antd';
+import { Button, Steps } from 'antd';
 import DisciplineTree from './discipline-tree/index';
 import SearchTree from './search-discipline/index';
 import styles from './cross.less';
@@ -19,14 +19,14 @@ const steps = [
   { title: 'last', description: '笛卡尔智能分析' },
 
 ];
-
 class Cross extends React.Component {
   state = {
     current: 1,
-    query: '',
+    queryTree1: null,
+    queryTree2: null,
   }
-
   componentWillMount() {
+    this.props.dispatch({ type: 'app/handleNavbar', payload: true });
     const hash = this.props.location.hash;
     if (hash !== '' && Number(hash.substring(1, 2)) > 1 && Number(hash.substring(1, 2)) < 6) {
       this.changeCurrent(Number(hash.substring(1, 2)));
@@ -35,17 +35,31 @@ class Cross extends React.Component {
 
   onSearch = (query) => {
     const current = this.state.current + 1;
-    this.setState({ query });
+    if (current === 2) {
+      this.setState({ queryTree1: query });
+    } else {
+      this.setState({ queryTree2: query });
+    }
     this.changeCurrent(current);
   }
-
   save = () => {
     const current = this.state.current + 1;
     this.changeCurrent(current);
   }
 
   analysis = () => {
-    window.location.href = '/analysisCross';
+    const params = {
+      queryTree1: this.props.crossHeat.queryTree1,
+      queryTree2: this.props.crossHeat.queryTree2,
+    }
+    const that = this;
+    this.props.dispatch({ type: 'crossHeat/createDiscipline', payload: params })
+      .then(() => {
+        const decareID = this.props.crossHeat.decareID;
+        that.props.dispatch(routerRedux.push({
+          pathname: '/heat/' + decareID,
+        }));
+      });
   }
   changeCurrent = (current) => {
     this.setState({ current });
@@ -63,7 +77,6 @@ class Cross extends React.Component {
     }
   }
 
-
   render() {
     const { current } = this.state;
     return (
@@ -72,7 +85,8 @@ class Cross extends React.Component {
           <Steps current={current - 1}>
             {steps.map((item, num) => (
               <Step key={item.title} title={item.title} description={item.description}
-                    onClick={this.backStep.bind(this, num + 1)} />))}
+                    onClick={this.backStep.bind(this, num + 1)}
+              />))}
           </Steps>
         </div>
         <div className={styles.stepsContent}>
@@ -81,16 +95,21 @@ class Cross extends React.Component {
             <SearchTree onSearch={this.onSearch} />
           </div>
           }
-
-          { (this.state.current === 2 || this.state.current === 4) &&
+          { (this.state.current === 2) &&
           <div className={styles.contentCenter}>
-            <DisciplineTree id="tree1" query={this.state.query} isEdit />
+            <DisciplineTree id="queryTree1" query={this.state.queryTree1} isEdit />
+          </div>
+          }
+
+          { (this.state.current === 4) &&
+          <div className={styles.contentCenter}>
+            <DisciplineTree id="queryTree2" query={this.state.queryTree2} isEdit />
           </div>
           }
           { this.state.current === 5 &&
           <div className={styles.contentLeft}>
-            <DisciplineTree id="tree1" query="data mining" isEdit={false} />
-            <DisciplineTree id="tree2" query="machine learning" isEdit={false} />
+            <DisciplineTree id="queryTree1" query={this.state.queryTree1} isEdit={false} />
+            <DisciplineTree id="queryTree2" query={this.state.queryTree2} isEdit={false} />
           </div>
           }
         </div>
@@ -111,5 +130,5 @@ class Cross extends React.Component {
     );
   }
 }
-export default connect(({ app, loading }) => ({ app, loading }))(Cross);
+export default connect(({ app, loading, crossHeat }) => ({ app, loading, crossHeat }))(Cross);
 

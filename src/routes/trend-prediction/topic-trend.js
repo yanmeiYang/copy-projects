@@ -9,8 +9,10 @@ import 'echarts/lib/chart/graph';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/chart/line';
+import classnames from 'classnames';
 import styles from './topic-trend.less';
 import { Auth } from '../../hoc';
+import * as profileUtils from '../../utils/profile-utils';
 import TopicRightInfo from './TopicRightInfo';
 
 const hotwords = ['Answer Machine', 'Artificial Intelligence', 'Autopilot', 'BlockChain', 'Computer Vision', 'Data Mining', 'Data Modeling', 'Deep Learning', 'Graph Databases', 'Internet of Things', 'Machine Learning', 'Robotics', 'Networks', 'NLP', 'Neural Network'];
@@ -65,6 +67,7 @@ export default class TopicTrend extends React.PureComponent {
     this.callSearchTrendByMention(query);
     this.callSearchRelatedPapers(query, offset, 100, sort);//参数需要进行调整
     this.callSearchRelatedExperts(query, offset, size, sort);
+    this.callMostCitedPapers(query, offset, size, 'n_citation');
   }
 
   callSearchTrendByMention = (query) => {
@@ -77,6 +80,10 @@ export default class TopicTrend extends React.PureComponent {
 
   callSearchRelatedExperts = (query, offset, size, sort) => {
     this.props.dispatch({ type: 'topicTrend/searchExpert', payload: { query, offset, size, sort } });
+  };
+
+  callMostCitedPapers = (query, offset, size, sort) => {
+    this.props.dispatch({ type: 'topicTrend/mostcitedpapers', payload: { query, offset, size, sort } });
   };
 
   cancelSelected = (id) => {
@@ -200,7 +207,8 @@ export default class TopicTrend extends React.PureComponent {
         }
       }
       if (yearkw.length < 15) { //词还是太少的时候从expert里面找
-        const exptag = this.findexperttag(trend.relatedExperts.result, count - 1, trend.trendInfo.freq.length);
+        const all = trend.trendInfo.freq.length;
+        const exptag = this.findexperttag(trend.relatedExperts.result, count - 1, all);
         if (exptag !== []) {
           for (let j = 0; j < exptag.length; j += 1) {
             yearkw.push(exptag[j]);
@@ -417,10 +425,45 @@ export default class TopicTrend extends React.PureComponent {
         </div>
         <div id="trendchart" style={{ height: '800px', width: '80%', float: 'left' }} />
         <div id="statistic" style={{ height: '800px', width: '20%', float: 'right' }} >
-          <div>统计：</div>
-          <div>
-            <TopicRightInfo query={this.props.query} />
-            <TopicRightInfo query={this.props.query} />
+          <div className={styles.scrollable}>
+            <div className={styles.border}>
+              <div className={styles.name}>
+                <span alt="" className={classnames('icon', styles.expertIcon)} />
+                重要专家
+              </div>
+              <div className={styles.images}>
+                {trend.relatedExperts.result &&
+                trend.relatedExperts.result.slice(0, 20).map((person) => {
+                  const avatarUrl = profileUtils.getAvatar(person.avatar, person.id, 50);
+                  const url = `https://aminer.org/profile/${person.id}`;
+                  return (
+                    <div key={person.id} className={styles.imgOuter}>
+                      <div className={styles.imgBox}>
+                        <a href={url} target="_blank"><img src={avatarUrl} alt="" /></a>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className={styles.name}>
+                <br />
+                <span alt="" className={classnames('icon', styles.fieldIcon)} />
+                重要论文
+              </div>
+              <div>
+                {trend.mostCitedPapers.result &&
+                trend.mostCitedPapers.result.slice(0, 20).map((paper) => {
+                  const url = '';
+                  return (
+                    <div key={paper.id}>
+                      <div>
+                        <a href={url} target="_blank">{paper.title}</a>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
         <div className={styles.keyinfo}>

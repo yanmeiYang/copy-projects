@@ -9,6 +9,7 @@ export default {
     trendInfo: {},
     relatedPapers: {},
     relatedExperts: {},
+    mostCitedPapers:{},
   },
 
 
@@ -32,6 +33,12 @@ export default {
       const { data } = yield call(searchService.searchPublications, { query, offset, size, sort });
       yield put({ type: 'papersSuccess', payload: { data } });
     },
+
+    * mostcitedpapers({ payload }, { call, put }) {
+      const { query, offset, size, sort } = payload;
+      const { data } = yield call(searchService.searchPublications, { query, offset, size, sort });
+      yield put({ type: 'mostcitedpapersSuccess', payload: { data } });
+    },
   },
 
   reducers: {
@@ -45,6 +52,10 @@ export default {
 
     papersSuccess(state, { payload: { data } }) {
       return { ...state, relatedPapers: data };
+    },
+
+    mostcitedpapersSuccess(state, { payload: { data } }) {
+      return { ...state, mostCitedPapers: data };
     },
   },
 };

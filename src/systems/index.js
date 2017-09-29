@@ -39,6 +39,9 @@ const defaultSystemConfigs = {
   GLOBAL_ENABLE_HOC: true,
   MainListSize: 20,
 
+  // google analytics
+  googleAnalytics: defaults.IN_APP_DEFAULT,
+
   /**
    * Layout related
    */
@@ -108,7 +111,7 @@ const defaultSystemConfigs = {
   ExpertBases: [], // must override.
   DEFAULT_EXPERT_BASE: 'aminer', // 华为默认搜索
   DEFAULT_EXPERT_BASE_NAME: '全球专家',
-  DEFAULT_EXPERT_SEARCH_KEY: 'name',
+  DEFAULT_EXPERT_SEARCH_KEY: 'term',
 
   // > Search related
   SearchBarInHeader: true,

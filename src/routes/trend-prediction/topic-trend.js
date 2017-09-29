@@ -49,9 +49,9 @@ export default class TopicTrend extends React.PureComponent {
     return true;
   }
 
-  componentDidUpdate(prevProps, prevState) { //当props或state更新之后，使用它更新DOM节点
-    console.log(prevProps);
-    console.log(prevState);
+  componentDidUpdate() { //当props或state更新之后，使用它更新DOM节点componentDidUpdate(prevProps, prevState)
+    console.log(this.props);
+    return true;
   }
 
   onKeywordClick = (query) => {
@@ -63,7 +63,7 @@ export default class TopicTrend extends React.PureComponent {
     const size = 20;
     const sort = 'relevance';
     this.callSearchTrendByMention(query);
-    this.callSearchRelatedPapers(query, offset, size, sort);
+    this.callSearchRelatedPapers(query, offset, 100, sort);//参数需要进行调整
     this.callSearchRelatedExperts(query, offset, size, sort);
   }
 
@@ -83,7 +83,56 @@ export default class TopicTrend extends React.PureComponent {
     document.getElementById(id).style = 'position: absolute;left: 0px;top: 500px;display:none';
   };
 
-  findkeyword = (info, f, totalf) => {
+  showExpert = (word) => {
+    console.log(word.paper);
+    console.log('#################');
+  }
+
+  showCYear = (yearId, len) => { //将外部的显示信息拷贝进去，进行提示
+    const cId = yearId + 1;//下面的显示是从1开始的
+    const e = event || window.event;
+    let x = e.offsetX;
+    let y = e.offsetY;
+    x -= 100;
+    y -= 50;
+    if (x < 0) {
+      x = 50;
+    }
+    for (let i = 1; i < len + 1; i += 1) {
+      if (i === cId) {
+        document.getElementById(`tip${cId}`).style = `position: absolute;left: ${x}px;top: ${y}px;display:block`;
+      } else {
+        document.getElementById(`tip${i}`).style = 'position: absolute;left: 0px;top: 500px;display:none';
+      }
+    }
+    return null; //document.getElementById(`tip${cId}`).innerHTML;
+  }
+
+  findexperttag = (info, index, all) => {
+    const words = [];
+    const w = [];
+    for (let u = 0; u < info.length; u += 1) {
+      if (typeof (info[u].tags) !== 'undefined') {
+        for (let i = 0; i < info[u].tags.length; i += 1) {
+          words.push(info[u].tags[i].t);
+        }
+      }
+    }
+    let start = parseInt(index / all, 10) * words.length;
+    let end = (parseInt(index / all, 10) + 1) * words.length;
+    if (start < 0) {
+      start = 0;
+    }
+    if (end > words.length) {
+      end = words.length;
+    }
+    for (let i = start; i < end; i += 1) {
+      w.push(words[i]);
+    }
+    return w;
+  }
+
+  findsubkeyword = (info, f, totalf) => {
     let words = [];
     let formernum = 0;//它之前的词频
     for (let u = 0; u < f; u += 1) {
@@ -117,46 +166,54 @@ export default class TopicTrend extends React.PureComponent {
         kws.push(wd[w].label);
       }
       words = kws;
-    } else {
-      console.log(1);
     }
     return words;
   }
 
-  showExpert = (word) => {
-    console.log(word);
-    console.log('#################');
-  }
-
-  showCYear = (yearId, len) => { //将外部的显示信息拷贝进去，进行提示
-    const cId = yearId + 1;//下面的显示是从1开始的
-    const e = event || window.event;
-    let x = e.clientX;
-    const y = e.clientY;
-    x -= 200;
-    if (x < 0) {
-      x = 50;
-    }
-    for (let i = 1; i < len + 1; i += 1) {
-      if (i === cId) {
-        document.getElementById(`tip${cId}`).style = `position: absolute;left: ${x}px;top: ${y}px;display:block`;
-      } else {
-        document.getElementById(`tip${i}`).style = 'position: absolute;left: 0px;top: 500px;display:none';
-      }
-    }
-
-    return null; //document.getElementById(`tip${cId}`).innerHTML;
-  }
-
   findKeywordYearly = (trend, count) => {
     let data = [];
-    if (trend.trendInfo && trend.relatedPapers && trend.relatedExperts) {
+    if (trend.trendInfo !== null && typeof (trend.relatedPapers.result) !== 'undefined' && typeof (trend.relatedExperts.result) !== 'undefined') {
       const year = trend.trendInfo.freq[count - 1].y;
-      let body = [];
-      body = [1*count,2,3,4,5,6,7,8,9,10,11,1,4,23,2,1,0,1,11,1,3]
+      const body = [];
+      const yearkw = [];
+      const corpaper = [];
+      const p = trend.relatedPapers.result;
+      for (let i = 0; i < p.length; i += 1) {
+        if (p[i].year === year) {
+          if (typeof (p[i].keywords) !== 'undefined') {
+            for (let j = 0; j < p[i].keywords.length; j += 1) {
+              yearkw.push(p[i].keywords[j]);
+              corpaper.push(p[i].id);
+            }
+          }
+        }
+      }
+      let totalf = 0;
+      for (let f = 0; f < trend.trendInfo.freq.length; f += 1) {
+        totalf += trend.trendInfo.freq[f].f;
+      }
+      if (yearkw.length < 15) { //词太少的时候从summary里面找
+        const subkey = this.findsubkeyword(trend.trendInfo, count - 1, totalf);
+        for (let j = 0; j < subkey.length; j += 1) {
+          yearkw.push(subkey[j]);
+          corpaper.push('');
+        }
+      }
+      if (yearkw.length < 15) { //词还是太少的时候从expert里面找
+        const exptag = this.findexperttag(trend.relatedExperts.result, count - 1, trend.trendInfo.freq.length);
+        if (exptag !== []) {
+          for (let j = 0; j < exptag.length; j += 1) {
+            yearkw.push(exptag[j]);
+            corpaper.push('');
+          }
+        }
+      }
+      for (let i = 0; i < yearkw.length; i += 1) { //组装
+        body[i] = { name: yearkw[i], paper: corpaper[i] };
+      }
       data = { head: `${year}年该领域热点技术`, body };//Key和Value一致的时候可以简写
     } else {
-      data = { head: '2018年该领域热点技术', body: '正在研究中' };
+      data = { head: '2018年该领域热点技术', body: ['正在研究中'] };
     }
     return data;
   }
@@ -391,8 +448,8 @@ export default class TopicTrend extends React.PureComponent {
                       data.body && data.body.map((d, k) => {
                         const key4 = `typethree${j}in${k}`;
                         return (
-                          <div role="presentation" key={key4} onClick={this.showExpert.bind(that, d)}>
-                            <span href="#" role="presentation" className={styles.hotword} onClick={this.showExpert.bind(that, d)}>{d}</span><br />
+                          <div role="presentation" key={key4}>
+                            <span href="#" role="presentation" className={styles.hotword} onClick={this.showExpert.bind(that, d)}>{d.name}</span><br />
                           </div>
                         );
                       })

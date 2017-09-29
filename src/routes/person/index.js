@@ -49,7 +49,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
         {avgScores.map((score) => {
           return (
             <tbody key={score.key}>
-            {score.key === 'level' &&
+            {score.key === 'content' &&
             <tr>
               <td>演讲内容:</td>
               <td>
@@ -59,7 +59,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
               </td>
             </tr>
             }
-            {score.key === 'content' &&
+            {score.key === 'level' &&
             <tr>
               <td>演讲水平:</td>
               <td>

@@ -61,6 +61,9 @@ const defaultSystemConfigs = {
   Footer_Content: <Footer />,
   ShowSideMenu: true,
 
+  // ccf activity 专家评分是否显示
+  ShowRating: false,
+
   /**
    * Functionality
    */

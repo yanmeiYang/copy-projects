@@ -238,7 +238,7 @@ export default {
       if (state.results.length >= size) {
         newData = state.results.concat(data);
       } else {
-        newData = data;
+        newData = data.length > 0 ? data : state.results;
       }
       return { ...state, results: newData, loading: false, offset: offset + state.sizePerPage };
     },

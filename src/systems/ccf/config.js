@@ -34,6 +34,9 @@ module.exports = {
   ShowSideMenu: true,
   ShowFooter: true,
 
+  // ccf activity 专家评分是否显示
+  ShowRating: true,
+
   /**
    * Functionality
    */

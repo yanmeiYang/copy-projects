@@ -44,7 +44,7 @@ export default class ActivityList extends React.Component {
               {result.title}
             </Link>
           </h3>
-          {auth.isAuthed(app.roles) && !this.props.hidetExpertRating && sysconfig.ShowRating &&
+          {auth.isAuthed(app.roles) || !this.props.hidetExpertRating &&
           <Button type="" className={styles.viewTheActivityBtn} size="small"
                   onClick={this.goToRating.bind(this, result.id)}>专家评分</Button>}
           <div className={styles.info}>

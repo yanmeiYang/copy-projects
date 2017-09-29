@@ -4,7 +4,7 @@
 import React from 'react';
 import { Link } from 'dva/router';
 import defaults from '../utils';
-import { AddToEBButton, PersonRemoveButton, PersonComment } from './components';
+import { AddToEBButton, SearchExpertBase, PersonComment } from './components';
 import { GetComments } from './person-comment-hooks';
 
 import { createRoster } from '../../hooks';
@@ -35,6 +35,10 @@ module.exports = {
   Header_LogoWidth: 118,
   Header_UserPageURL: '/user-info',
   Header_RightZone: [() => <Link key="0" to="/eb/59a8e5879ed5db1fc4b762ad/-/0/20">我的专家库</Link>], // TODO make this a Component.
+  SearchBox_RightZone: [
+    ({ param }) => (
+      <SearchExpertBase query={param.inputProps.value} sysconfig={param.sysconfig} key="1" />),
+  ],
   // Header_RightZone: [
   //   () => <a key="0" href="/eb/59a8e5879ed5db1fc4b762ad" target="_blank">我的专家库</a>,
   // ],
@@ -57,6 +61,7 @@ module.exports = {
   // Search_DisableSearchKnowledge: false,
   Search_FixedExpertBase: { id: 'aminer', name: '全球专家' },
 
+  DEFAULT_EXPERT_SEARCH_KEY: 'name',
   // SearchFilterExclude: 'Gender',
   // UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // deprecated! Don't use this.
 
@@ -70,20 +75,18 @@ module.exports = {
   // PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
   // PersonList_PersonLink_NewTab: true,
   // param: [person, eb{id,name}]
-  PersonList_TitleRightBlock:
-    ({ param }) => (
-      <AddToEBButton
-        person={param.person} key="2"
-        expertBaseId={param.expertBaseId}
-        targetExpertBase="59a8e5879ed5db1fc4b762ad"
-      />),
+  PersonList_TitleRightBlock: ({ param }) => (
+    <AddToEBButton
+      person={param.person} key="2"
+      expertBaseId={param.expertBaseId}
+      targetExpertBase="59a8e5879ed5db1fc4b762ad"
+    />),
 
   PersonList_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
   PersonList_BottomZone: [
     param => (
       <PersonComment
         person={param.person} user={param.user} key="1"
-
         ExpertBase="59a8e5879ed5db1fc4b762ad"
       />),
   ],

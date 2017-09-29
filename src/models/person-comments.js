@@ -9,6 +9,8 @@ export default {
 
   state: {
     tobProfileMap: {},
+    createComment: '',
+    createFlag: false,
   },
 
   subscriptions: {},
@@ -39,15 +41,17 @@ export default {
       if (tbp && tbp.id) {
         // 获取现有的tobprofile中的comments
         const existComments = (tbp.extra && tbp.extra.comments) || [];
-        const newComments = existComments.concat(tempComment);
+        const newComments = tempComment.concat(existComments);
         const newExtra = { ...(tbp.extra || {}), comments: newComments };
         // 更新extra中comment
         // updateToBProfileExtra 需要传的是id，而不是aid
         const updateFeedBack = yield call(expertBaseService.updateToBProfileExtra, tbp.id, newExtra);
+        const updateFlag = updateFeedBack.data.status;
         if (updateFeedBack.data.status) {
           yield put({
             type: 'updateTobProfileSuccess',
-            payload: { aid, newExtra },
+            // payload: { aid, newExtra },
+            payload: { aid, newExtra, updateFlag },
           });
         } else {
           console.log('error');
@@ -59,12 +63,14 @@ export default {
         };
         // 插入一条tobProfile
         const createTobProfile = yield call(tobProfileService.addProfileSuccess, newData);
+        const createStatus = createTobProfile.data.status;
         if (createTobProfile.data.status) {
           const { data } = yield call(expertBaseService.getToBProfileByAid, aid);
           if (data.status) {
             yield put({
               type: 'insertTobProfileSuccess',
-              payload: { data: tobProfileMap.set(aid, data.data[0]) },
+              // payload: { data: tobProfileMap.set(aid, data.data[0]) },
+              payload: { data: tobProfileMap.set(aid, data), createStatus },
             });
           }
         } else {
@@ -80,7 +86,8 @@ export default {
       if (tbp && tbp.id) {
         const existComments = (tbp.extra && tbp.extra.comments) || [];
         const newComments = existComments.splice(index, 1);
-        const newExtra = { ...(tbp.extra || {}), comments: newComments };
+        // const newExtra = { ...(tbp.extra || {}), comments: newComments };
+        const newExtra = { ...(tbp.extra || {}), comments: existComments };
         const updateFeedBack = yield call(expertBaseService.updateToBProfileExtra, tbp.id, newExtra);
         if (updateFeedBack.data.status) {
           yield put({
@@ -100,6 +107,9 @@ export default {
 
 
   reducers: {
+    createFlagFun(state) {
+      return { ...state, createComment: false };
+    },
     commentToMap(state, { payload: { data } }) {
       const tempComments = new Map();
       for (const tobProfile of data.data) {
@@ -108,14 +118,23 @@ export default {
       return { ...state, tobProfileMap: tempComments };
     },
 
-    updateTobProfileSuccess(state, { payload: { aid, newExtra } }) {
+    // updateTobProfileSuccess(state, { payload: { aid, newExtra } }) {
+    //   state.tobProfileMap.get(aid).extra = newExtra;
+    //   return { ...state, tobProfileMap: state.tobProfileMap };
+    // },
+    updateTobProfileSuccess(state, { payload: { aid, newExtra, updateFlag } }) {
       state.tobProfileMap.get(aid).extra = newExtra;
-      return { ...state, tobProfileMap: state.tobProfileMap };
+      return { ...state, tobProfileMap: state.tobProfileMap, createComment: updateFlag };
     },
 
-    insertTobProfileSuccess(state, { payload: { data } }) {
-      return { ...state, tobProfileMap: data };
+    // insertTobProfileSuccess(state, { payload: { data } }) {
+    //   return { ...state, tobProfileMap: data };
+    // },
+
+    insertTobProfileSuccess(state, { payload: { data, createStatus } }) {
+      return { ...state, tobProfileMap: data, createComment: createStatus };
     },
+
 
   },
 

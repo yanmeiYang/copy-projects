@@ -1,29 +1,29 @@
 /*
  * created by Xinyi Xu on 2017-8-16.
  */
-// import React from 'react';
-// import { connect } from 'dva';
-// import classnames from 'classnames';
-// import { routerRedux } from 'dva/router';
-// // import { Slider, Switch, InputNumber, Row, Col, Icon, Button } from 'antd';
-// import echarts from 'echarts/lib/echarts'; // 必须
-// import 'echarts/lib/component/tooltip';
-// import 'echarts/lib/component/legend';
-// import 'echarts/lib/component/geo';
-// import 'echarts/lib/chart/map'; // 引入地图
-// import 'echarts/lib/chart/lines';
-// import 'echarts/lib/chart/effectScatter';
-// import 'echarts/map/js/china'; // 引入中国地图//
-// import 'echarts/map/js/world';
-// import styles from './ExpertTrajectory.less';
-// import { Button, Layout } from 'antd';
-// import { PersonListLittle } from '../../components/person/index';
-// import mapData from '../../../external-docs/expert-trajectory/testData.json';
-// // import world from 'echarts/map/js/world';
-const { Content, Sider } = Layout;
-let option = {};
+import React from 'react';
+import { connect } from 'dva';
+// import { Slider, Switch, InputNumber, Row, Col, Icon, Button } from 'antd';
+import echarts from 'echarts/lib/echarts'; // 必须
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/legend';
+import 'echarts/lib/component/geo';
+import 'echarts/lib/chart/map'; // 引入地图
+import 'echarts/lib/chart/lines';
+import 'echarts/lib/chart/effectScatter';
+import 'echarts/map/js/china'; // 引入中国地图//
+import 'echarts/map/js/world';
+import styles from './ExpertTrajectory.less';
+import { Button, Layout } from 'antd';
+import { wget } from '../../utils/request';
+import mapData from '../../../external-docs/expert-trajectory/testData.json';
+// import world from 'echarts/map/js/world';
 const address2 = mapData.addresses;
 const trajectory = mapData.trajectory;
+const { Content, Sider } = Layout;
+let option = {};
+// let address2;
+// let trajectory;
 let ifDraw = 0;
 
 class ExpertTrajectory extends React.Component {
@@ -61,7 +61,9 @@ class ExpertTrajectory extends React.Component {
   componentDidMount() {
     // this.callSearchMap(this.state.query);
     this.myChart = echarts.init(document.getElementById('world'));
-    this.showTrajectory(); // 画图
+    this.showTrajectory();
+    // this.getTrajectoryData(); // 获取数据
+
   }
 
   // componentWillReceiveProps(nextProps) { //用于当传进来一个1，让name = 1，在update前执行
@@ -81,6 +83,23 @@ class ExpertTrajectory extends React.Component {
     }
     return true;
   }
+
+  // getTrajectoryData = () => {
+  //   // let startYear;
+  //   let mapData;
+  //   if (!mapData) {
+  //     const pms = wget('/lab/mapData.json');
+  //     pms.then((data) => {
+  //       mapData = data;
+  //       address2 = mapData.addresses;
+  //       trajectory = mapData.trajectory;
+  //       this.showTrajectory(); // 画图
+  //     }).catch((error) => {
+  //       localStorage.removeItem(LSKEY_INTERESTS);
+  //       return undefined;
+  //     });
+  //   }
+  // }
 
   getTrajSeries = (geoCoordMap, data, record, i) => { // 设置点和线的参数
     function formtGCData(geoData, data, count) { // 画线
@@ -115,7 +134,7 @@ class ExpertTrajectory extends React.Component {
         const tNam = data[j].name;
         if (srcNam !== tNam) {
           tGeoDt.push({
-            name: `${tNam}`,
+            name: tNam.concat(` ${record[j][1][0].toString()}`),
             value: geoData[tNam].concat(`${record[j][1][0].toString()} - ${record[j][1][1].toString()}`),
             symbolSize: data[j].value,
             itemStyle: {

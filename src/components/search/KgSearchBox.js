@@ -323,6 +323,15 @@ export default class KgSearchBox extends React.PureComponent {
             type="primary"
             onClick={this.handleSubmit}
           >{btnText || intl.formatMessage(messages.searchBtn)}</Button>
+          {/* --------------- Search Expert Base -------------- */}
+
+          {btnText && sysconfig.SearchBox_RightZone && sysconfig.SearchBox_RightZone.length > 0 &&
+          <div className={styles.xxx}>
+            {sysconfig.SearchBox_RightZone.map(zoneFunc =>
+              (zoneFunc ? zoneFunc({ param: { inputProps, sysconfig } }) : false))}
+          </div>
+          }
+
         </Input.Group>
       </form>
     );

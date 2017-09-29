@@ -2,7 +2,8 @@
  * Created by BoGao on 2017/6/20.
  */
 import React from 'react';
-import Footer from '../../components/Footers/ccf';
+import Footer from 'components/Footers/ccf';
+import ViewExpertInfo from 'components/person/view-expert-info';
 
 module.exports = {
   /**
@@ -33,12 +34,16 @@ module.exports = {
   ShowSideMenu: true,
   ShowFooter: true,
 
+  // ccf activity 专家评分是否显示
+  ShowRating: true,
+
   /**
    * Functionality
    */
   Enable_Export: true,
   ShowRegisteredRole: true, // 注册页面是否显示角色配置
   // Signup_Password: false, // 注册页面password
+  PersonList_RightZone: [({ param }) => (<ViewExpertInfo key="1" person={param.person} />)],
 
   // SearchPagePrefix: 'uniSearch', // search - 普通搜索(deleted); uniSearch - 多合一搜索.
   // Search_EnablePin: false, // TODO bad：Huawei PIN
@@ -79,6 +84,7 @@ module.exports = {
   SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
   DEFAULT_EXPERT_BASE: '5949c2f99ed5dbc2147fd854', // CCF会员
   DEFAULT_EXPERT_BASE_NAME: 'CCF会员',
+  DEFAULT_EXPERT_SEARCH_KEY: 'term',
   ExpertBases: [
     {
       id: '5949c2f99ed5dbc2147fd854',

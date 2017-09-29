@@ -66,7 +66,8 @@ class NewActivityList extends React.Component {
             <p>活动地点：{result.location.city} {result.location.address}</p>
             {result.talk.filter(item => item.speaker.role && item.speaker.role.includes('president'))
               .map((talk) => {
-                return <div key={talk.speaker.aid} className={styles.seminar_expert_president}>
+                return <div key={talk.speaker.name + talk.speaker.aid}
+                            className={styles.seminar_expert_president}>
                   <Tooltip title={talk.speaker.name}>
                     <img src={profileUtils.getAvatar(talk.speaker.img, talk.speaker.aid, 80)}
                          alt={talk.speaker.name} />
@@ -75,7 +76,8 @@ class NewActivityList extends React.Component {
               })}
             {result.talk.filter(item => item.speaker.role && !item.speaker.role.includes('president'))
               .map((talk) => {
-                return <div key={talk.speaker.aid} className={styles.seminar_expert_common}>
+                return <div key={talk.speaker.name + talk.speaker.aid}
+                            className={styles.seminar_expert_common}>
                   <Tooltip title={talk.speaker.name}>
                     <img src={profileUtils.getAvatar(talk.speaker.img, talk.speaker.aid, 80)}
                          alt={talk.speaker.name} />

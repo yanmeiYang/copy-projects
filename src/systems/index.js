@@ -39,6 +39,9 @@ const defaultSystemConfigs = {
   GLOBAL_ENABLE_HOC: true,
   MainListSize: 20,
 
+  // google analytics
+  googleAnalytics: defaults.IN_APP_DEFAULT,
+
   /**
    * Layout related
    */
@@ -57,6 +60,9 @@ const defaultSystemConfigs = {
   ShowFooter: true,
   Footer_Content: <Footer />,
   ShowSideMenu: true,
+
+  // ccf activity 专家评分是否显示
+  ShowRating: false,
 
   /**
    * Functionality
@@ -96,9 +102,10 @@ const defaultSystemConfigs = {
   PersonList_PersonLink_NewTab: true,
   PersonList_TitleRightBlock: defaults.EMPTY_BLOCK_FUNC, // profile => 'jsx',
   PersonList_RightZone: defaults.IN_APP_DEFAULT, // [()=><COMP>]
-  PersonList_BottomZone: defaults.IN_APP_DEFAULT,
+  PersonList_BottomZone: defaults.EMPTY_BLOCK_FUNC_LIST,
   PersonList_DidMountHooks: defaults.EMPTY_BLOCK_FUNC_LIST,
   PersonList_UpdateHooks: defaults.EMPTY_BLOCK_FUNC_LIST,
+  SearchBox_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
   Search_CheckEB: false,
 
   // > Search
@@ -107,7 +114,7 @@ const defaultSystemConfigs = {
   ExpertBases: [], // must override.
   DEFAULT_EXPERT_BASE: 'aminer', // 华为默认搜索
   DEFAULT_EXPERT_BASE_NAME: '全球专家',
-  DEFAULT_EXPERT_SEARCH_KEY: 'name',
+  DEFAULT_EXPERT_SEARCH_KEY: 'term',
 
   // > Search related
   SearchBarInHeader: true,

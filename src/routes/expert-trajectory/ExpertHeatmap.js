@@ -3,24 +3,12 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import classnames from 'classnames';
-import { routerRedux } from 'dva/router';
 import styles from './ExpertHeatmap.less';
 import { wget } from '../../utils/request';
-// import '../../../external-docs/echarts/map/js/world';
-// import echarts from '../../../external-docs/echarts';
-// import echarts from '../../../external-docs/echarts/lib/echarts';
-// import heatmap from '../../../external-docs/echarts/lib/chart/heatmap';
-// import '../../../external-docs/echarts/lib/chart/lines';
-// // import '../../../external-docs/echarts/lib/coord/geo/Geo';
-// import '../../../external-docs/echarts/lib/coord/geo/GeoModel';
-// import scatter from '../../../external-docs/echarts/lib/chart/scatter';
-// import VisualMap from '../../../external-docs/echarts/lib/component/visualMap';
 import { queryURL } from '../../utils';
 import world from 'echarts/map/js/world';
 import echarts from 'echarts/lib/echarts';
-import { Slider, Layout, InputNumber, Row, Col, Icon, Button, message } from 'antd';
-// import expert
+import { Slider, Layout, InputNumber, Row, Col, Icon, Button } from 'antd';
 
 const dims = {
   time: 0,
@@ -56,8 +44,10 @@ const themes = {
     lineColor: '#5c95f7',
     visualColor: ['#d2eafb', '#7ec2f3', '#49a9ee', '#108ee9', '#0c60aa', '#0c60aa'].reverse(),
     labelColor: '#fff',
+    line2Color: '#eeeeee',
     pointBlendMode: 'lighter',
     lineBlendMode: 'screen',
+    lin2BlendMode: 'lighter',
     symbolColor: '#5c95f7',
   },
   light: {
@@ -67,12 +57,16 @@ const themes = {
     areaColor: '#f5f3f0',
     borderColor: '#91a0ae',
     lineColor: '#f78e3d',
+    line2Color: '#5081d7',
     // visualColor: ['#fff','#FDFFB5','#fff72f','#ffce3d','#F19436','#EC5428'].reverse(),
     visualColor: ['#eb3323', '#F19436', '#F8D247', '#eeee4f', '#cbfa50', '#00a854'].reverse(),
     labelColor: '#111',
+    planColor: '#2469fb',
     pointBlendMode: '',
     lineBlendMode: '',
+    line2BlendMode: '',
     symbolColor: '#f3f49f',
+    // symbolColor: '#deded7',
   },
 };
 
@@ -98,7 +92,7 @@ class ExpertHeatmap extends React.Component {
   };
 
   componentWillMount() {
-    console.log("---------")
+    // console.log('---------');
     const theme = (queryURL('theme'));
     if (theme) {
       this.setState({ theme });
@@ -133,12 +127,10 @@ class ExpertHeatmap extends React.Component {
         authors = heatData.authors;
         authorImage = heatData.authorImage;
         locationName = heatData.locationName;
-
         this.playon = this.state.startYear;
         this.setHeatmap(); // 热力图
         this.getMouseEvent();
         // this.authorImage = heatData.authorImage;
-
         // return interestsData;
       }).catch((error) => {
         localStorage.removeItem(LSKEY_INTERESTS);
@@ -214,9 +206,12 @@ class ExpertHeatmap extends React.Component {
     author = {};
     author2 = {};
     authorImg = {};
+    const authorImgWest = {};
+    const authorImgEast = {};
+    const authorImgMid = {};
     // console.log("authorImage",authorImage)
     const starttime = new Date().getTime();
-    console.log("onChange start time", starttime)
+    // console.log('onChange start time', starttime);
     for (let aid = 0; aid < table.length; aid += 1) {
       const addressID = table[aid][index];
       if (addressID) {
@@ -240,6 +235,7 @@ class ExpertHeatmap extends React.Component {
           }
         }
       }
+      // console.log("+++++++++",authorImg)
 
 
       // 第二年数据
@@ -276,12 +272,12 @@ class ExpertHeatmap extends React.Component {
 
     // console.log("data",data)
     data.sort(this.sortValue);
-    nextYearData.sort(this.sortValue)
+    nextYearData.sort(this.sortValue);
     let data1 = [];
     let p;
     // console.log('datasp', datas[0]);
     // console.log(datas[0].value);
-    if(data.length > 10){
+    if (data.length > 10) {
       for (p = 0; data[p].value > 1 && p < 100; p += 1) {
         data1.push(data[p]);
       }
@@ -289,16 +285,30 @@ class ExpertHeatmap extends React.Component {
       data1 = data;
     }
     const data2 = data.slice(p);
+
+    // console.log('authorImg', authorImg);
+    Object.keys(authorImg).map((key) => {
+      // console.log('geoCOooiejijf', geoCoordMap[key]);
+      if (geoCoordMap[key][0] < (-30)) {
+        // console.log('come to west');
+        authorImgWest[key] = authorImg[key];
+      } else if (geoCoordMap[key][0] >= -30 && geoCoordMap[key][0] <= 70) {
+        authorImgMid[key] = authorImg[key];
+      } else if (geoCoordMap[key][0] > 70) {
+        authorImgEast[key] = authorImg[key];
+      }
+    });
     // console.log('nextYear Data', nextYearData);
     // this.myChart2.on('georoam', function (params) {
     //   console.log("jijijdf",params);
     //   option2.geo.zoom = (params.originX)/352;
     //   // option2.geo.zoom = params.zoom;
     // });
-    option2.series = this.getHeatSeries(geoCoordMap, data, 0, false, index, nextYearData,data1,data2);
+    // console.log("-------------",authorImgWest, authorImgMid, authorImgEast)
+    option2.series = this.getHeatSeries(geoCoordMap, data, 0, false, index, nextYearData, data1, data2, authorImgWest, authorImgMid, authorImgEast);
     // console.log(JSON.stringify(option2, null, 4));
     this.myChart2.setOption(option2, true);
-    console.log("end time", (new Date().getTime() - starttime)+"ms");
+    // console.log('end time', `${new Date().getTime() - starttime}ms`);
   }
 
 
@@ -342,7 +352,7 @@ class ExpertHeatmap extends React.Component {
           }
           clearInterval(mapinterval);
         }
-      }, 6600);
+      }, 6800);
     } else {
       clearInterval(mapinterval);
     }
@@ -485,14 +495,16 @@ class ExpertHeatmap extends React.Component {
       // backgroundColor: '#abc1db',
       backgroundColor: themes[this.state.theme].backgroundColor,
       title: {
-        text: '历年学者热力图',
-        subtext: 'Data From Aminer',
+        // text: '全球顶尖10000学者迁徙图',
+        // subtext: 'Global Top 10000 experts career trajecory',
         left: 'center',
         textStyle: {
           color: themes[this.state.theme].textColor,
+          // fontSize:40,
         },
         subtextStyle: {
           color: themes[this.state.theme].subtextColor,
+          // fontSize:20,
         },
       },
       visualMap: {
@@ -517,21 +529,22 @@ class ExpertHeatmap extends React.Component {
         trigger: 'item',
         confine: true,
       },
-      legend: {
-        orient: 'vertical',
-        y: 'bottom',
-        x: 'right',
-        data: ['location'],
-        textStyle: {
-          color: '#fff',
-        },
-      },
+      text:['200','0'],
+      // legend: {
+      //   orient: 'vertical',
+      //   y: 'bottom',
+      //   x: 'right',
+      //   data: ['location'],
+      //   textStyle: {
+      //     color: '#fff',
+      //   },
+      // },
       geo: {
         zoom: 1.2,
         map: 'world',
         label: {
           emphasis: {
-            show: true,
+            opacity: 0,
           },
         },
         roam: true,
@@ -787,33 +800,6 @@ class ExpertHeatmap extends React.Component {
               },
               data: [{ coords: [params.data.coords[0], params.data.coords[1]] }],
             });
-            // const a = {
-            //   type: 'lines',
-            //   // zlevel: 2,
-            //   // effect: {
-            //   //   show: true,
-            //   //   period: 6,
-            //   //   trailLength: 0,
-            //   //   color: '#ff2f31',
-            //   //   symbol: planePath,
-            //   //   symbolSize: 4,
-            //   //   animation: true,
-            //   // },
-            //   animation: false,
-            //   symbol: planePath,
-            //   symbolSize: 4,
-            //   lineStyle: {
-            //     normal: {
-            //       color: '#ff2f31',
-            //       width: 2,
-            //       opacity: 1,
-            //       curveness: 0.2,
-            //       shadowColor: 'rgba(0, 0, 0, 0.5)',
-            //       shadowBlur: 10,
-            //     },
-            //   },
-            //   data: [{ coords: [params.data.coords[0], params.data.coords[1]] }],
-            // };
             this.type = 'lines';
             this.myChart2.setOption(option2, true);
             // this.myChart2.setOption({series: a});
@@ -861,25 +847,49 @@ class ExpertHeatmap extends React.Component {
     return b.value - a.value;
   };
 
-  getHeatSeries = (geoCoordMap, data, j, choose, year, nextYearData, data1, data2) => { // j是一年中第几个插值 ifButton是否为播放模式
-    console.log('nextYearData', nextYearData);
-    // console.log('data', data);
-    // console.log('image2', authorImg);
-    // console.log('jjjjj', j);
-    const arrowSize = 18;
-
-    const convertData2 = function (datas) {
-      const res = [];
-      for (let i = 0; i < datas.length; i += 1) {
-        const geoCoord = geoCoordMap[datas[i].name];
-        if (geoCoord) {
-          res.push({
-            value: geoCoord.concat(datas[i].value)
-          });
+  getHeatSeries = (geoCoordMap, data, j, choose, year, nextYearData, data1, data2, authorImgWest, authorImgMid, authorImgEast) => { // j是一年中第几个插值 ifButton是否为播放模式
+    // console.log('nextYearData', nextYearData);
+    const imagePosWest = [[-180, 50], [-180, 35], [-180, 20], [-180, 5], [-180, -10]];
+    const imagePosMid = [[-30, -67], [-10, -67], [10, -67], [30, -67]];
+    const imagePosEast = [[175, 30], [175, 15], [175, 0], [175, -15]];
+    const dup = {};
+    const tempLineArray = [];
+    const lineIndex = table.length;
+    for (let j = 0; j < lineIndex; j += 1) {
+      const addLine = table[j][year];
+      const addLine2 = table[j][year + 1];
+      const startLine = geoCoordMap[addLine];
+      const endLine = geoCoordMap[addLine2];
+      if (addLine && addLine2 && (addLine !== addLine2)) {
+        if ((Math.abs(startLine[0] - endLine[0]) + Math.abs(startLine[1] - endLine[1])) > 50) {
+          const key = [addLine, addLine2].join('_');
+          const v = dup[key];
+          if (!v) {
+            dup[key] = {};
+            dup[key].name = [addLine, addLine2];
+            dup[key].coords = [startLine, endLine];
+            dup[key].count = 0;
+          }
         }
       }
-      return res;
-    };
+    }
+
+    Object.keys(dup).map((key) => {
+      tempLineArray.push(dup[key]);
+    });
+    tempLineArray.sort(sortCount);
+    // const convertData2 = function (datas) {
+    //   const res = [];
+    //   for (let i = 0; i < datas.length; i += 1) {
+    //     const geoCoord = geoCoordMap[datas[i].name];
+    //     if (geoCoord) {
+    //       res.push({
+    //         value: geoCoord.concat(datas[i].value)
+    //       });
+    //     }
+    //   }
+    //   return res;
+    // };
 
     const convertData = function (datas) { // 画出热力图上的圈并标出地名
       const res = [];
@@ -895,110 +905,190 @@ class ExpertHeatmap extends React.Component {
       return res;
     };
 
-    function formtGCData() { // 画线
-      const dup = {};
-      let tGeoDt = [];
-      const tempArray = [];
-      const index = table.length;
-      // for (let j = 0; j < index; j += 1) {
-      //   const add = table[j][year];
-      //   const add2 = table[j][year + 1];
-      //   if (add && add2 && (add !== add2)) {
-      //     const key = [add, add2].join('_');
-      //     const v = dup[key];
-      //     if (!v) {
-      //       tGeoDt.push({
-      //         name: [add, add2],
-      //         coords: [geoCoordMap[add], geoCoordMap[add2]],
-      //         // coords:[[123,41],[123,41]],
-      //       });
-      //       dup[key] = true;
-      //     }
-      //   }
-      // }
-      for (let j = 0; j < index; j += 1) {
-        const add = table[j][year];
-        const add2 = table[j][year + 1];
-        const start = geoCoordMap[add];
-        const end = geoCoordMap[add2];
-        if (add && add2 && (add !== add2)) {
-          if ((Math.abs(start[0] - end[0]) + Math.abs(start[1] - end[1])) > 50) {
-            const key = [add, add2].join('_');
-            const v = dup[key];
-            if (!v) {
-              dup[key] = {};
-              dup[key].name = [add, add2];
-              dup[key].coords = [start, end];
-              dup[key].count = 0;
-            }
-          }
-        }
+    function formtGCData(ifTop10) { // 画线
+      const tGeoDt = tempLineArray.slice(10, 100);
+      const tGeoDt2 = tempLineArray.slice(0,10);
+      if (ifTop10){
+        return tGeoDt2;
+      } else {
+        return tGeoDt;
       }
-
-      Object.keys(dup).map((key) => {
-        tempArray.push(dup[key]);
-      });
-      tempArray.sort(sortCount);
-      tGeoDt = tempArray.slice(0, 100);
-      return tGeoDt;
     }
 
     const sortCount = (a, b) => {
       return b.count - a.count;
     };
 
-    const getImage = () => {
-      console.log('==============================');
-      const temp = [];
-      if (this.ifButton) {
-        const timeNow = new Date().getTime();
-        // const index = authorImg.length;
-        Object.keys(authorImg).map((key) => { // key是地名
-          // console.log("key1111",key)
-          imageData[key] = [];
-          imageData[key][0] = authorImg[key];
-          imageData[key][1] = timeNow;
-          // console.log("imageData1 ",imageData);
-          // console.log("timeNow",timeNow)
-          // console.log("---------",timeNow - imageData[key][1]);
-        });
+    // const getImage = () => {
+    //   console.log('==============================');
+    //   const temp = [];
+    //   if (this.ifButton) {
+    //     const timeNow = new Date().getTime();
+    //     // const index = authorImg.length;
+    //     Object.keys(authorImg).map((key) => { // key是地名
+    //       // console.log("key1111",key)
+    //       imageData[key] = [];
+    //       imageData[key][0] = authorImg[key];
+    //       imageData[key][1] = timeNow;
+    //       // console.log("imageData1 ",imageData);
+    //       // console.log("timeNow",timeNow)
+    //       // console.log("---------",timeNow - imageData[key][1]);
+    //     });
+    //
+    //     Object.keys(imageData).map((key) => { // Object.keys(authorImg)是key 用authorImage.key取值
+    //       if (timeNow - imageData[key][1] >= 5000) {
+    //         // console.log("delete", key)
+    //         delete imageData[key];
+    //         // console.log("imageData2 ",imageData);
+    //       } else {
+    //         temp.push({
+    //           name: 'Author',
+    //           coord: geoCoordMap[key],
+    //           symbol: `image://https://${imageData[key][0]}`,
+    //           // symbol: 'image://https://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
+    //           symbolSize: [32, 40],
+    //           symbolOffset: [0, '-70%'],
+    //           label: {
+    //             normal: {
+    //               show: false,
+    //             },
+    //             emphasis: {
+    //               show: false,
+    //             },
+    //           },
+    //           itemStyle: {
+    //             normal: {
+    //               borderColor: '#fff',
+    //               borderWidth: 5,
+    //             },
+    //           },
+    //         });
+    //       }
+    //     });
+    //   } else {
+    //     Object.keys(authorImg).map((key) => { // Object.keys(authorImg)是key 用authorImage.key取值
+    //       temp.push({
+    //         name: 'Author',
+    //         coord: [-180,40],
+    //         // coord: [-180,50],
+    //         // coord: geoCoordMap[key],
+    //         symbol: `image://https://${authorImg[key]}`,
+    //         // symbol: 'image://https://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
+    //         symbolSize: [32, 40],
+    //         symbolOffset: [0, '-70%'],
+    //         label: {
+    //           normal: {
+    //             show: false,
+    //           },
+    //           emphasis: {
+    //             show: false,
+    //           },
+    //         },
+    //         itemStyle: {
+    //           normal: {
+    //             borderColor: '#fff',
+    //             borderWidth: 5,
+    //           },
+    //         },
+    //       });
+    //     });
+    //   }
+    //
+    //
+    //   return temp;
+    // };
 
-        Object.keys(imageData).map((key) => { // Object.keys(authorImg)是key 用authorImage.key取值
-          if (timeNow - imageData[key][1] >= 5000) {
-            // console.log("delete", key)
-            delete imageData[key];
-            // console.log("imageData2 ",imageData);
-          } else {
+    const lineToImage = () => {
+      const temp = [];
+      let west = 0;
+      let middle = 0;
+      let east = 0;
+      // console.log('--------', authorImgWest);
+      Object.keys(authorImgWest).map((key) => {
+        if (west < 5) {
+          const middleLat = ((parseFloat(geoCoordMap[key][0]) - parseFloat(imagePosWest[west][0])) * 0.764) + parseFloat(imagePosWest[west][0]);
+          // const middleLng = ((parseFloat(geoCoordMap[key][1]) - parseFloat(imagePosWest[west][1])) * 0.764) + parseFloat(imagePosWest[west][1]);
+          // console.log("======================",middleLat,middleLng,imagePosWest[west],geoCoordMap[key])
+          temp.push({
+            coords: [imagePosWest[west], [middleLat, imagePosWest[west][1]]],
+          });
+          temp.push({
+            coords: [[middleLat, imagePosWest[west][1]], geoCoordMap[key]],
+          });
+          west += 1;
+        }
+      });
+      Object.keys(authorImgMid).map((key) => {
+          if (middle < 4) {
+            const middleLat = ((parseFloat(geoCoordMap[key][0]) - parseFloat(imagePosMid[middle][0])) * 0.764) + parseFloat(imagePosMid[middle][0]);
+            const middleLng = ((parseFloat(geoCoordMap[key][1]) - parseFloat(imagePosWest[middle][1])) * 0.764) + parseFloat(imagePosWest[middle][1]);
+            // console.log("======================",middleLat,middleLng,imagePosWest[west],geoCoordMap[key])
             temp.push({
-              name: 'Author',
-              coord: geoCoordMap[key],
-              symbol: `image://https://${imageData[key][0]}`,
-              // symbol: 'image://https://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
-              symbolSize: [32, 40],
-              symbolOffset: [0, '-70%'],
-              label: {
-                normal: {
-                  show: false,
-                },
-                emphasis: {
-                  show: false,
-                },
-              },
-              itemStyle: {
-                normal: {
-                  borderColor: '#fff',
-                  borderWidth: 5,
-                },
-              },
+              coords: [[imagePosMid[middle][0],(imagePosMid[middle][1]+12)], [middleLat, middleLng]]
             });
+            temp.push({
+              coords: [[middleLat, middleLng], geoCoordMap[key]],
+            });
+            middle += 1;
           }
-        });
-      } else {
-        Object.keys(authorImg).map((key) => { // Object.keys(authorImg)是key 用authorImage.key取值
+      });
+      Object.keys(authorImgEast).map((key) => {
+        if (east < 4) {
+          const middleLat = parseFloat(imagePosEast[east][0]) - ((parseFloat(imagePosEast[east][0]) - parseFloat(geoCoordMap[key][0])) * 0.764);
+          const middleLng = parseFloat(imagePosEast[east][1]) - ((parseFloat(imagePosEast[east][1]) - parseFloat(geoCoordMap[key][1])) * 0.764);
+          // console.log("======================",middleLat,middleLng,imagePosWest[west],geoCoordMap[key])
+          temp.push({
+            coords: [[imagePosEast[east][0],(imagePosEast[east][1]+2)], [middleLat, imagePosEast[east][1]]]
+          });
+          temp.push({
+            coords: [[middleLat, imagePosEast[east][1]], geoCoordMap[key]],
+          });
+          east += 1;
+        }
+      });
+console.log("temp",temp)
+      return temp;
+    };
+
+    const getImage = () => {
+      const temp = [];
+      let west = 0;
+      let middle = 0;
+      let east = 0;
+      // console.log('authorImgwest', authorImgEast);
+      Object.keys(authorImgWest).map((key) => { // Object.keys(authorImg)是key 用authorImage.key取值
+        if (west < 5) {
           temp.push({
             name: 'Author',
-            coord: geoCoordMap[key],
-            symbol: `image://https://${authorImg[key]}`,
+            coord: imagePosWest[west],
+            symbol: `image://https://${authorImgWest[key][0]}`,
+            // symbol: 'image://https://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
+            symbolSize: [32, 40],
+            symbolOffset: [0, '-50%'],
+            label: {
+              normal: {
+                show: false,
+              },
+              emphasis: {
+                show: false,
+              },
+            },
+            itemStyle: {
+              normal: {
+                borderColor: '#fff',
+                borderWidth: 5,
+              },
+            },
+          });
+          west += 1;
+        }
+      });
+      Object.keys(authorImgMid).map((key) => { // Object.keys(authorImg)是key 用authorImage.key取值
+        if (middle < 4) {
+          temp.push({
+            name: 'Author',
+            coord: imagePosMid[middle],
+            symbol: `image://https://${authorImgMid[key][0]}`,
             // symbol: 'image://https://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
             symbolSize: [32, 40],
             symbolOffset: [0, '-70%'],
@@ -1017,40 +1107,67 @@ class ExpertHeatmap extends React.Component {
               },
             },
           });
-        });
-      }
-
-
-      return temp;
+          middle += 1;
+        }
+      });
+      Object.keys(authorImgEast).map((key) => { // Object.keys(authorImg)是key 用authorImage.key取值
+        if (east < 4) {
+          temp.push({
+            name: 'Author',
+            coord: imagePosEast[east],
+            symbol: `image://https://${authorImgEast[key][0]}`,
+            // symbol: 'image://https://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
+            symbolSize: [32, 40],
+            symbolOffset: [0, '-70%'],
+            label: {
+              normal: {
+                show: false,
+              },
+              emphasis: {
+                show: false,
+              },
+            },
+            itemStyle: {
+              normal: {
+                borderColor: '#fff',
+                borderWidth: 5,
+              },
+            },
+          });
+          east += 1;
+        }
+      });
+      console.log("temp2",temp)
+        return temp;
     };
 
-    function haveTry() {
-      console.log("============----------------")
-      const temp = [];
-      temp.push({
-        name: 'Author',
-        value: geoCoordMap[key],
-        // symbol: `image://https://${imageData[key][0]}`,
-        symbol: 'image://https://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
-        symbolSize: [32, 40],
-        symbolOffset: [0, '-70%'],
-        label: {
-          normal: {
-            show: false,
-          },
-          emphasis: {
-            show: false,
-          },
-        },
-        itemStyle: {
-          normal: {
-            borderColor: '#fff',
-            borderWidth: 5,
-          },
-        },
-      });
-      return temp
-    }
+    // function haveTry() {
+    //   console.log("============----------------")
+    //   const temp = [];
+    //   temp.push({
+    //     name: 'Author',
+    //     value: geoCoordMap[key],
+    //     // symbol: `image://https://${imageData[key][0]}`,
+    //     symbol: 'image://https://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
+    //     symbolSize: [32, 40],
+    //     symbolOffset: [0, '-70%'],
+    //     label: {
+    //       normal: {
+    //         show: false,
+    //       },
+    //       emphasis: {
+    //         show: false,
+    //       },
+    //     },
+    //     itemStyle: {
+    //       normal: {
+    //         borderColor: '#fff',
+    //         borderWidth: 5,
+    //       },
+    //     },
+    //   });
+    //   return temp
+    // }
 
 
     function getArrow() {
@@ -1107,283 +1224,328 @@ class ExpertHeatmap extends React.Component {
 
 
     const series = [
-      // {
-      //   name: 'TOP 6',
-      //   // type: 'effectScatter',
-      //   type: 'scatter',
-      //   coordinateSystem: 'geo',
-      //   zlevel: 3,
-      //   rippleEffect: {
-      //     period: 4,
-      //     scale: 2,
-      //     brushType: 'stroke',
-      //   },
-      //   label: {
-      //     normal: {
-      //       show: true,
-      //       formatter: params => this.getNum(params.value[2]),
-      //       position: 'inside',
-      //       color: themes[this.state.theme].labelColor,
-      //       textStyle: {
-      //         fontSize: 10,
-      //       },
-      //     },
-      //     emphasis: {
-      //       show: false,
-      //     },
-      //   },
-      //   itemStyle: {
-      //     normal: {
-      //       color: '#f78e3d',
-      //       // borderColor: '#f78e3d',
-      //       opacity: 0.8,
-      //       shadowColor: 'rgba(198, 198, 198, 0.3)',
-      //       shadowBlur: 10,
-      //     },
-      //     emphasis: {
-      //       color: '#ff2f31',
-      //       shadowBlur: 10,
-      //       shadowOffsetX: 0,
-      //       shadowColor: 'rgba(0, 0, 0, 0.5)',
-      //     },
-      //   },
-      //   tooltip: {
-      //     confine: true,
-      //     formatter: (params) => {
-      //       return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
-      //         locationName[parseInt(params.name)-1].toLowerCase()}<br>`;
-      //     },
-      //   },
-      //   data: convertData(data1.sort((a, b) => {
-      //     return b.value - a.value;
-      //   }).slice(0, 6)),
-      //   symbolSize(val) {
-      //     const size = 10 + val[2] / 4;
-      //     if (size > 25) {
-      //       return (26);
-      //     } else {
-      //       return (size);
-      //     }
-      //   },
-      //   // blendMode: 'screen',
-      // },
-      // { // 当年所有地点
-      //   name: 'location',
-      //   type: 'scatter',
-      //   zlevel: 2,
-      //   coordinateSystem: 'geo',
-      //   data: convertData(data1),
-      //   symbolSize(val) {
-      //     const size = 10 + val[2] / 4;
-      //     if (size > 25) {
-      //       return (26);
-      //     } else {
-      //       return (size);
-      //     }
-      //     // return ((10 + val[2] / 4));
-      //   },
-      //   label: {
-      //     normal: {
-      //       show: true,
-      //       formatter: params => this.getNum(params.value[2]),
-      //       position: 'inside',
-      //       color: themes[this.state.theme].labelColor,
-      //       textStyle: {
-      //         fontSize: 10,
-      //       },
-      //     },
-      //     emphasis: {
-      //       show: true,
-      //     },
-      //   },
-      //   itemStyle: {
-      //     normal: {
-      //       color: '#FFBA00',
-      //       opacity: 1,
-      //       shadowColor: 'rgba(198, 198, 198, 0.3)',
-      //       shadowBlur: 10,
-      //     },
-      //     emphasis: {
-      //       color: '#ff2f31',
-      //       shadowBlur: 10,
-      //       shadowOffsetX: 0,
-      //       shadowColor: 'rgba(0, 0, 0, 0.5)',
-      //     },
-      //   },
-      //   // markPoint: {
-      //   //   z:5,
-      //   //   symbol: 'rect',
-      //   //   symbolSize: [40,60],
-      //   //   color: '#fff',
-      //   //   // symbolOffset:[0,'-70%'],
-      //   //   label: {
-      //   //     normal: {
-      //   //       show: false,
-      //   //     },
-      //   //     emphasis: {
-      //   //       show: false,
-      //   //     },
-      //   //   },
-      //   //   itemStyle: {
-      //   //     normal: {
-      //   //       borderColor: '#fff',
-      //   //       borderWidth: 10,
-      //   //     },
-      //   //   },
-      //   //   data:getImage(),
-      //   // },
-      //   tooltip: {
-      //     confine: true,
-      //     formatter: (params) => {
-      //       return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
-      //         locationName[parseInt(params.name)-1].toLowerCase()}<br>`;
-      //     },
-      //   },
-      //   blendMode: themes[this.state.theme].pointBlendMode,
-      // },
-      //
-      // { // 当年所有单点
-      //   name: 'single location',
-      //   type: 'scatter',
-      //   large: true,
-      //   largeThreshold: 1000,
-      //   zlevel: 1,
-      //   z: 6,
-      //   coordinateSystem: 'geo',
-      //   data: convertData(data2),
-      //   // symbolSize: 4,
-      //   symbolSize(val) {
-      //     const size = 3 + val[2];
-      //     return size;
-      //   },
-      //   label: {
-      //     normal: {
-      //       show: false,
-      //     },
-      //   },
-      //   itemStyle: {
-      //     normal: {
-      //       color: '#00A854',
-      //       opacity: 1,
-      //       shadowColor: 'rgba(198, 198, 198, 0.3)',
-      //       shadowBlur: 10,
-      //     },
-      //     emphasis: {
-      //       color: '#ff2f31',
-      //       shadowBlur: 10,
-      //       shadowOffsetX: 0,
-      //       shadowColor: 'rgba(0, 0, 0, 0.5)',
-      //     },
-      //   },
-      //   tooltip: {
-      //     confine: true,
-      //     formatter: (params) => {
-      //       return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
-      //         locationName[parseInt(params.name)-1].toLowerCase()}<br>`;
-      //     },
-      //   },
-      //   blendMode: themes[this.state.theme].pointBlendMode,
-      // },
-      //
-      // { // 下一年所有地点
-      //   name: 'nextYear',
-      //   type: 'scatter',
-      //   large: true,
-      //   largeThreshold: 1000,
-      //   coordinateSystem: 'geo',
-      //   data: convertData(nextYearData),
-      //   // data: convertData2(nextYearData),
-      //   symbolSize: 3,
-      //   label: {
-      //     normal: {
-      //       // formatter: '{b}',
-      //       // position: 'right',
-      //       // show: true,
-      //       show: false,
-      //     },
-      //   },
-      //   itemStyle: {
-      //     normal: {
-      //       opacity: 1,
-      //       color: '#ffee66',
-      //       // borderColor:'#fe9b46',
-      //     },
-      //     emphasis: {
-      //       color: '#ff2f31',
-      //       shadowBlur: 10,
-      //       shadowOffsetX: 0,
-      //       shadowColor: 'rgba(0, 0, 0, 0.5)',
-      //     },
-      //   },
-      // },
-      // {
-      //   type: 'lines',
-      //   large: this.ifLarge,
-      //   largeThreshold: 400,
-      //   // animation: true,
-      //   // animationDuration: 0,
-      //   // zlevel: 1,
-      //   effect: {
-      //     show: true,
-      //     period: 3,
-      //     trailLength: 0,
-      //     color: themes[this.state.theme].symbolColor,
-      //     symbol: 'arrow',
-      //     symbolSize: 5,
-      //     animation: false,
-      //     // animationThreshold:10000,
-      //   },
-      //   symbol: ['', planePath],
-      //   // symbol: 'arrow',
-      //   // symbol: 'image://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
-      //   symbolSize: 3,
-      //   lineStyle: {
-      //     normal: {
-      //       color: themes[this.state.theme].lineColor,
-      //       // width: 10,
-      //       width: 1.6,
-      //       opacity: 0.7,
-      //       curveness: 0.2,
-      //     },
-      //     emphasis: {
-      //       color: '#ff2f31',
-      //       shadowColor: 'rgba(0, 0, 0, 0.5)',
-      //       shadowBlur: 10,
-      //     },
-      //   },
-      //   tooltip: {
-      //     confine: true,
-      //
-      //     formatter: (params) => {
-      //       return `<div style="font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">Number of People: ${
-      //         (_.intersection(author[params.name[0]], author2[params.name[1]])).length}<br/>From: ${
-      //         locationName[params.name[0]-1].toLowerCase()}<br/>To: ${locationName[params.name[1]-1].toLowerCase()}<br>`;
-      //     },
-      //     // formatter: (params) => {
-      //     //   return `Number of people: ${(_.intersection(author[params.name[0]], author2[params.name[1]])).length}`;
-      //     // },
-      //   },
-      //   data: formtGCData(),
-      //   // data: [
-      //   //   {
-      //   //     name: [1234, 41710],
-      //   //     coords: [ geoCoordMap[14],geoCoordMap[30000]],
-      //   //     // coords:[[123,41],[123,41]],
-      //   //     value:10,
-      //   //   },
-      //   // ],
-      //   animationThreshold: 1000000,
-      //   blendMode: themes[this.state.theme].lineBlendMode, // screen
-      // },
+      {
+        name: 'TOP 6',
+        // type: 'effectScatter',
+        type: 'scatter',
+        coordinateSystem: 'geo',
+        zlevel: 3,
+        rippleEffect: {
+          period: 4,
+          scale: 2,
+          brushType: 'stroke',
+        },
+        label: {
+          normal: {
+            show: true,
+            formatter: params => this.getNum(params.value[2]),
+            position: 'inside',
+            color: themes[this.state.theme].labelColor,
+            textStyle: {
+              fontSize: 10,
+            },
+          },
+          emphasis: {
+            show: false,
+          },
+        },
+        itemStyle: {
+          normal: {
+            color: '#f78e3d',
+            // borderColor: '#f78e3d',
+            opacity: 0.8,
+            shadowColor: 'rgba(198, 198, 198, 0.3)',
+            shadowBlur: 10,
+          },
+          emphasis: {
+            color: '#ff2f31',
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+          },
+        },
+        tooltip: {
+          confine: true,
+          formatter: (params) => {
+            return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
+              locationName[parseInt(params.name)-1].toLowerCase()}<br>`;
+          },
+        },
+        data: convertData(data1.sort((a, b) => {
+          return b.value - a.value;
+        }).slice(0, 6)),
+        symbolSize(val) {
+          const size = 10 + val[2] / 4;
+          if (size > 25) {
+            return (26);
+          } else {
+            return (size);
+          }
+        },
+        // blendMode: 'screen',
+      },
+      { // 当年所有地点
+        name: 'location',
+        type: 'scatter',
+        zlevel: 2,
+        coordinateSystem: 'geo',
+        data: convertData(data1),
+        symbolSize(val) {
+          const size = 10 + val[2] / 4;
+          if (size > 25) {
+            return (26);
+          } else {
+            return (size);
+          }
+          // return ((10 + val[2] / 4));
+        },
+        label: {
+          normal: {
+            show: true,
+            formatter: params => this.getNum(params.value[2]),
+            position: 'inside',
+            color: themes[this.state.theme].labelColor,
+            textStyle: {
+              fontSize: 10,
+            },
+          },
+          emphasis: {
+            show: true,
+          },
+        },
+        itemStyle: {
+          normal: {
+            color: '#FFBA00',
+            opacity: 1,
+            shadowColor: 'rgba(198, 198, 198, 0.3)',
+            shadowBlur: 10,
+          },
+          emphasis: {
+            color: '#ff2f31',
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+          },
+        },
+        // markPoint: {
+        //   z:5,
+        //   symbol: 'rect',
+        //   symbolSize: [40,60],
+        //   color: '#fff',
+        //   // symbolOffset:[0,'-70%'],
+        //   label: {
+        //     normal: {
+        //       show: false,
+        //     },
+        //     emphasis: {
+        //       show: false,
+        //     },
+        //   },
+        //   itemStyle: {
+        //     normal: {
+        //       borderColor: '#fff',
+        //       borderWidth: 10,
+        //     },
+        //   },
+        //   data:getImage(),
+        // },
+        tooltip: {
+          confine: true,
+          formatter: (params) => {
+            return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
+              locationName[parseInt(params.name)-1].toLowerCase()}<br>`;
+          },
+        },
+        blendMode: themes[this.state.theme].pointBlendMode,
+      },
+
+      { // 当年所有单点
+        name: 'single location',
+        type: 'scatter',
+        // large: true,
+        // largeThreshold: 1000,
+        zlevel: 1,
+        z: 6,
+        coordinateSystem: 'geo',
+        data: convertData(data2),
+        // symbolSize: 4,
+        symbolSize(val) {
+          const size = 3 + val[2];
+          return size;
+        },
+        label: {
+          normal: {
+            show: false,
+          },
+        },
+        itemStyle: {
+          normal: {
+            color: '#00A854',
+            opacity: 1,
+            shadowColor: 'rgba(198, 198, 198, 0.3)',
+            shadowBlur: 10,
+          },
+          emphasis: {
+            color: '#ff2f31',
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+          },
+        },
+        tooltip: {
+          confine: true,
+          formatter: (params) => {
+            return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
+              locationName[parseInt(params.name)-1].toLowerCase()}<br>`;
+          },
+        },
+        blendMode: themes[this.state.theme].pointBlendMode,
+      },
+
+      { // 下一年所有地点
+        name: 'nextYear',
+        type: 'scatter',
+        large: true,
+        largeThreshold: 1000,
+        coordinateSystem: 'geo',
+        data: convertData(nextYearData),
+        // data: convertData2(nextYearData),
+        symbolSize: 3,
+        label: {
+          normal: {
+            // formatter: '{b}',
+            // position: 'right',
+            // show: true,
+            show: false,
+          },
+        },
+        itemStyle: {
+          normal: {
+            opacity: 1,
+            color: '#ffee66',
+            // borderColor:'#fe9b46',
+          },
+          emphasis: {
+            color: '#ff2f31',
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+          },
+        },
+      },
+      {
+        type: 'lines',
+        large: this.ifLarge,
+        largeThreshold: 400,
+        // animation: true,
+        // animationDuration: 0,
+        // zlevel: 1,
+        effect: {
+          show: true,
+          period: 3,
+          trailLength: 0,
+          color: themes[this.state.theme].symbolColor,
+          symbol: 'arrow',
+          symbolSize: 8,
+          animation: false,
+          // animationThreshold:10000,
+        },
+        symbol: ['', planePath],
+        // symbol: 'arrow',
+        // symbol: 'image://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
+        symbolSize: 3,
+        lineStyle: {
+          normal: {
+            color: themes[this.state.theme].lineColor,
+            // width: 10,
+            width: 1.6,// 1.6,
+            opacity: 1,
+            curveness: 0.2,
+          },
+          emphasis: {
+            color: '#ff2f31',
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+            shadowBlur: 10,
+          },
+        },
+        tooltip: {
+          confine: true,
+
+          formatter: (params) => {
+            return `<div style="font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">Number of People: ${
+              (_.intersection(author[params.name[0]], author2[params.name[1]])).length}<br/>From: ${
+              locationName[params.name[0]-1].toLowerCase()}<br/>To: ${locationName[params.name[1]-1].toLowerCase()}<br>`;
+          },
+          // formatter: (params) => {
+          //   return `Number of people: ${(_.intersection(author[params.name[0]], author2[params.name[1]])).length}`;
+          // },
+        },
+        data: formtGCData(false),
+        animation: false,
+        blendMode: themes[this.state.theme].lineBlendMode, // screen
+      },
+
+      {
+        type: 'lines',
+        large: this.ifLarge,
+        largeThreshold: 400,
+        // animation: true,
+        // animationDuration: 0,
+        // zlevel: 1,
+        effect: {
+          show: true,
+          period: 3,
+          trailLength: 0,
+          color: themes[this.state.theme].planColor,
+          symbol: planePath,
+          symbolSize: 30,
+          animation: false,
+          // animationThreshold:10000,
+        },
+        symbol: ['', planePath],
+        // symbol: 'arrow',
+        // symbol: 'image://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
+        symbolSize: 3,
+        lineStyle: {
+          normal: {
+            color: themes[this.state.theme].lineColor,
+            // width: 10,
+            width: 1.6,// 1.6,
+            opacity: 1,
+            curveness: 0.2,
+          },
+          emphasis: {
+            color: '#ff2f31',
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+            shadowBlur: 10,
+          },
+        },
+        tooltip: {
+          confine: true,
+
+          formatter: (params) => {
+            return `<div style="font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">Number of People: ${
+              (_.intersection(author[params.name[0]], author2[params.name[1]])).length}<br/>From: ${
+              locationName[params.name[0]-1].toLowerCase()}<br/>To: ${locationName[params.name[1]-1].toLowerCase()}<br>`;
+          },
+          // formatter: (params) => {
+          //   return `Number of people: ${(_.intersection(author[params.name[0]], author2[params.name[1]])).length}`;
+          // },
+        },
+        data: formtGCData(true),
+        animation: false,
+        blendMode: themes[this.state.theme].lineBlendMode, // screen
+      },
 
       // {
       //   name: 'image',
       //   type: 'scatter',
       //   zlevel: 4,
-      //   z: 6,
+      //   z: 1,
       //   coordinateSystem: 'geo',
       //   markPoint: {
-      //     z: 5,
+      //     // zlevel:6,
+      //     // z: 7,
       //     symbol: 'rect',
       //     symbolSize: [40, 60],
       //     color: '#fff',
@@ -1403,54 +1565,39 @@ class ExpertHeatmap extends React.Component {
       //       },
       //     },
       //     data: getImage(),
+      //     animation: true,
       //   },
+      //   // data: [{value: [123,40,100]}],
+      //   // symbolSize(val){
+      //   //   return val[2];
+      //   // }
       // },
-
-      {
-        type: 'custom',
-        zlevel: 6,
-        // data:[123,41],
-        coordinateSystem: 'geo',
-        renderItem(params, api) {
-          const point = api.coord([api.value(0), api.value(1)]);
-          // const point = [api.value(0), api.value(1)];
-          // console.log('point', point);
-          const arrowSize = 18;
-          return {
-            type: 'image',
-            shape: {
-              image: jietang,
-              x: -arrowSize / 2,
-              y: -arrowSize / 2,
-              width: arrowSize,
-              height: arrowSize,
-            },
-            rotation: 0.2,
-             position: point,
-            style: api.style({
-              // stroke: '#555',
-              // lineWidth: 1
-            }),
-          };
-        },
-        itemStyle: {
-          normal: {
-            color: '#ff2c37',
-          },
-        },
-        // encode: {
-        //   x: dims.time,
-        //   y: dims.windSpeed
-        // },
-        // data: data,
-        data: [{
-          value: [120,30,200],
-        },{
-          value: [100,30,200],
-        }],
-        // data: getArrow(),
-        z: 10,
-      },
+      //
+      // {
+      //   type: 'lines',
+      //   large: this.ifLarge,
+      //   largeThreshold: 400,
+      //   // animation: true,
+      //   // animationDuration: 0,
+      //   zlevel: 3,
+      //   symbol: ['', ''],
+      //   symbolSize: 3,
+      //   lineStyle: {
+      //     normal: {
+      //       color: themes[this.state.theme].line2Color,
+      //       // width: 10,
+      //       width: 1.6,
+      //       opacity: 0.7,
+      //       curveness: 0,
+      //       shadowColor: 'rgba(198, 198, 198, 0.3)',
+      //       shadowBlur: 10,
+      //     },
+      //   },
+      //   data: lineToImage(),
+      //   animation: false,
+      //   // animationThreshold: 1000000,
+      //   blendMode: themes[this.state.theme].line2BlendMode, // lighter
+      // },
 
       {
         name: 'AQI',
@@ -1580,8 +1727,8 @@ class ExpertHeatmap extends React.Component {
   onMapClick = () => {
     if (this.props.onPageClick) {
       // this.props.onPageClick(this.personList, this.type);
-      if(this.from){
-        this.props.onPageClick(this.personList, locationName[this.from-1].toLowerCase(), locationName[this.to-1].toLowerCase(), this.type);
+      if (this.from) {
+        this.props.onPageClick(this.personList, locationName[this.from - 1].toLowerCase(), locationName[this.to - 1].toLowerCase(), this.type);
       } else {
         this.props.onPageClick(this.personList, this.type);
       }
@@ -1592,22 +1739,23 @@ class ExpertHeatmap extends React.Component {
     const ifPlay = this.state.ifPlay;
     return (
       <div>
-        {/*<div className={styles.heat} id="heatmap" style={{ height: '1630px', width: '3500px' }} onClick={this.onMapClick} />*/}
-        <div className={styles.heat} id="heatmap" style={{ height: '670px', width: '1150px' }} onClick={this.onMapClick} />
-        <div>
-          <Button className={styles.plus} type="primary" ghost icon="plus" onClick={this.plusHeatZoom} />
-        </div>
-        <div>
-          <Button className={styles.minus} type="primary" ghost icon="minus" onClick={this.minusHeatZoom} />
-        </div>
-        <div>
-          <Button className={styles.light} type="primary" ghost onClick={this.onThemeChangeDark}>dark</Button>
-        </div>
-        <div>
-          <Button className={styles.dark} type="primary" ghost onClick={this.onThemeChangeLight}>light</Button>
-        </div>
+        <div className={styles.heat} id="heatmap" style={{ height: '1800px', width: '3500px' }} onClick={this.onMapClick} />
+        {/*<div className={styles.heat} id="heatmap" style={{ height: '670px', width: '1150px' }} onClick={this.onMapClick} />*/}
+        {/*<div>*/}
+          {/*<Button className={styles.plus} type="primary" ghost icon="plus" onClick={this.plusHeatZoom} />*/}
+        {/*</div>*/}
+        {/*<div>*/}
+          {/*<Button className={styles.minus} type="primary" ghost icon="minus" onClick={this.minusHeatZoom} />*/}
+        {/*</div>*/}
+        {/*<div>*/}
+          {/*<Button className={styles.light} type="primary" ghost onClick={this.onThemeChangeDark}>dark</Button>*/}
+        {/*</div>*/}
+        {/*<div>*/}
+          {/*<Button className={styles.dark} type="primary" ghost onClick={this.onThemeChangeLight}>light</Button>*/}
+        {/*</div>*/}
 
-        <div className={styles.two} style={{ color: '#f5f3f0', fontSize: '200px', fontWeight: '600' }} id="showYear">
+        {/*<div className={styles.two} style={{ color: '#f5f3f0', fontSize: '200px', fontWeight: '600' }} id="showYear">*/}
+        <div className={styles.two} style={{ color: '#f5f3f0', fontSize: '20px', fontWeight: '50' }} id="showYear">
           <h1> {yearNow}</h1>
         </div>
 
@@ -1615,7 +1763,7 @@ class ExpertHeatmap extends React.Component {
         <Row>
           <Col span={22}>
             <Slider min={this.state.startYear} max={this.state.endYear} onChange={this.onChange} onAfterChange={this.onAfterChange}value={this.state.inputValue} />
-            {/* <Slider min={startYear} max={endYear} range step={1} defaultValue={[1999, 1999]} onChange={this.onDbChange} /> */}
+             {/*<Slider min={startYear} max={endYear} range step={1} defaultValue={[1999, 1999]} onChange={this.onDbChange} />*/}
           </Col>
           <Col span={1}>
             <InputNumber
@@ -1637,6 +1785,4 @@ class ExpertHeatmap extends React.Component {
 }
 
 export default ExpertHeatmap;
-
-
 

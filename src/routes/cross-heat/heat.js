@@ -447,6 +447,8 @@ class Heat extends React.Component {
     // TODO 传入数组没有成功
     const loadPub = this.props.loading.effects['crossHeat/getDomainPub'];
     const loadExpert = this.props.loading.effects['crossHeat/getDomainExpert'];
+    const expertBase = 'aminer';
+    const expertBaseId = 'aminer';
 
     return (
       <div className={styles.heat}>
@@ -480,12 +482,13 @@ class Heat extends React.Component {
             <PersonList
               persons={this.props.crossHeat.experts}
               user={this.props.app.user}
-              expertBaseId='aminer'
               titleRightBlock={sysconfig.PersonList_TitleRightBlock}
               rightZoneFuncs={sysconfig.PersonList_RightZone}
               bottomZoneFuncs={sysconfig.PersonList_BottomZone}
               didMountHooks={sysconfig.PersonList_DidMountHooks}
               UpdateHooks={sysconfig.PersonList_UpdateHooks}
+              expertBaseId={expertBaseId}
+              expertBase={expertBase}
             />
             }
             {this.state.modalType === 'heat' &&

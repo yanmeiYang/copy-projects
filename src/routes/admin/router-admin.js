@@ -8,7 +8,7 @@ export default {
     path: '/admin/users',
     models: () => [
       import('models/common/universal-config'),
-      import('models/auth/auth'),
+      import('models/auth'),
     ],
     component: () => import('./user/Users'),
   },
@@ -17,7 +17,7 @@ export default {
     path: '/admin/system-config/user_roles',
     models: () => [
       import('models/common/universal-config'),
-      import('models/auth/auth'),
+      import('models/auth'),
     ],
     component: () => import('./add-user-roles'),
   },

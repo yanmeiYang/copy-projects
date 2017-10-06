@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { FormattedMessage } from 'react-intl';
+import { sysconfig } from 'systems';
+import { KgSearchBox } from 'components/search';
+import { Auth } from 'hoc';
 import styles from './index.less';
-import { sysconfig } from '../../systems';
-import { KgSearchBox } from '../../components/search';
-import { Auth } from '../../hoc';
 
 @connect(({ app }) => ({ app }))
 @Auth

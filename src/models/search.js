@@ -1,8 +1,9 @@
+import { sysconfig } from 'systems';
 import pathToRegexp from 'path-to-regexp';
-import * as searchService from '../services/search';
-import * as translateService from '../services/translate';
-import * as topicService from '../services/topic';
-import { sysconfig } from '../systems';
+import queryString from 'query-string';
+import * as searchService from 'services/search';
+import * as translateService from 'services/translate';
+import * as topicService from 'services/topic';
 
 export default {
 
@@ -37,43 +38,31 @@ export default {
 
   subscriptions: {
     setup({ dispatch, history }) {
-      history.listen((location, query) => {
-        // if (location.pathname === '/') {
-        //   dispatch({ type: 'getSeminars', payload: { offset: 0, size: 5 } });
-        // }
-        const match = pathToRegexp('/(uni)?search/:query/:offset/:size').exec(location.pathname);
+      history.listen(({ pathname, search }) => {
+        // const query = queryString.parse(search);
+        // console.log('0998', query);
+
+        let match = pathToRegexp('/(uni)?search/:query/:offset/:size').exec(pathname);
         if (match) {
           const keyword = decodeURIComponent(match[2]);
           const offset = parseInt(match[3], 10);
           const size = parseInt(match[4], 10);
-          // update fillings.
           // dispatch({ type: 'emptyResults' });
           dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
-          // console.log('Success::::sdfsdf ', keyword);
           dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: keyword } });
-
-          // Accept query: eb = expertBaseID.
-          // const filters = {};
-          // if (location.query) {
-          //   if (location.query.eb) {
-          //     sysconfig.ExpertBases.map((expertBase) => {
-          //       if (expertBase.id === location.query.eb) {
-          //         filters.eb = expertBase;
-          //         return false;
-          //       }
-          //       return true;
-          //     });
-          //   }
-          // }
-
-          // dispatch({ type: 'app/setQuery', query: keyword });
-          // dispatch({ type: 'searchPerson', payload: { query: keyword, offset, size, filters } });
-          // dispatch({
-          //   type: 'searchPersonAgg',
-          //   payload: { query: keyword, offset, size, filters },
-          // });
-          // return;
         }
+
+        //
+        match = pathToRegexp('/eb/:id/:query/:offset/:size').exec(pathname);
+        if (match) {
+          const q = decodeURIComponent(match[2]);
+          const keyword = q === '-' ? '' : q;
+          const offset = parseInt(match[3], 10);
+          const size = parseInt(match[4], 10);
+          dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
+          dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: keyword } });
+        }
+
       });
     },
   },
@@ -100,7 +89,7 @@ export default {
     * translateSearch({ payload }, { call, put, select }) {
       // yield put({ type: 'clearTranslateSearch' });
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
-      console.log("==================", useTranslateSearch);
+      // console.log("==================", useTranslateSearch);
       if (useTranslateSearch) {
         const { query } = payload;
         const { data } = yield call(translateService.translateTerm, query);
@@ -137,7 +126,7 @@ export default {
       yield put({ type: 'getSeminarsSuccess', payload: { data } });
     },
 
-    * getTopicByMention({ payload }, { call, put }){
+    * getTopicByMention({ payload }, { call, put }) {
       const { mention } = payload;
       const { data } = yield call(topicService.getTopicByMention, mention);
       yield put({ type: 'getTopicByMentionSuccess', payload: { data } });
@@ -165,6 +154,10 @@ export default {
       return { ...state, filters };
     },
 
+    updateFiltersAndQuery(state, { payload: { query, filters } }) {
+      return { ...state, query, filters };
+    },
+
     updateSortKey(state, { payload: { key } }) {
       // console.log('reducers, update sort key : ', key);
       return { ...state, sortKey: key || '' };
@@ -183,6 +176,16 @@ export default {
 
     emptyResults(state) {
       return { ...state, results: [] };
+    },
+
+    delPersonFromResultsById(state, { pid }) {
+      const originalResults = [];
+      for (const value of state.results) {
+        if (value.id !== pid) {
+          originalResults.push(value);
+        }
+      }
+      return { ...state, results: originalResults };
     },
 
     searchPersonAggSuccess(state, { payload: { data } }) {

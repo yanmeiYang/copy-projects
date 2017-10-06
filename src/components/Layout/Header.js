@@ -1,7 +1,7 @@
 /**
  * Created by yutao on 2017/5/22.
  */
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Menu, Icon, Dropdown } from 'antd';
 import { Link } from 'dva/router';
@@ -18,7 +18,7 @@ import { saveLocale } from '../../utils/locale';
 import defaults from '../../systems/utils';
 
 @connect(({ app }) => ({ app }))
-export default class Header extends React.PureComponent {
+export default class Header extends PureComponent {
   state = {
     query: '',
     logoutLoading: false,
@@ -123,6 +123,7 @@ export default class Header extends React.PureComponent {
             </div>
           </Link>
 
+          {/* --------------- Search Box -------------- */}
           <div className={styles.searchWrapper}>
             {headerSearchBox &&
             <KgSearchBox
@@ -131,6 +132,13 @@ export default class Header extends React.PureComponent {
               {...headerSearchBox}
             />}
           </div>
+
+          {/* --------------- Search Box -------------- */}
+          {sysconfig.Header_RightZone && sysconfig.Header_RightZone.length > 0 &&
+          <div className={styles.xxx}>
+            {sysconfig.Header_RightZone.map(zoneFunc => (zoneFunc ? zoneFunc() : false))}
+          </div>
+          }
 
           {process.env.NODE_ENV !== 'production' && false &&
           <span className="debug_area" style={{ marginRight: 20 }}>
@@ -146,6 +154,15 @@ export default class Header extends React.PureComponent {
               {/* <Menu.Item key="/users"> */}
               {/* <Link to="/"><Icon type="bars" />语言切换</Link> */}
               {/* </Menu.Item> */}
+
+
+              {sysconfig.SOURCE === 'ccf' &&
+              <Menu.Item key="/ccfHelp">
+                <a href="/Instructions/index.html" title="help" target="_blank"
+                      className="headerAvatar">
+                  帮助
+                </a>
+              </Menu.Item>}
 
               {isAuthed(roles) &&
               <Menu.Item key="/account">
@@ -170,7 +187,6 @@ export default class Header extends React.PureComponent {
               {/*<p className={roles.authority[0] !== undefined ? styles.isAuthority : ''}>*/}
               {/*<span>{roles.role[0]}</span>*/}
               {/*{roles.authority[0] !== undefined &&*/}
-              {/*<span>*/}
               {/*<br />*/}
               {/*<span>{seminarService.getValueByJoint(roles.authority[0])}</span>*/}
               {/*</span>}*/}

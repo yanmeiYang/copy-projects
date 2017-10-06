@@ -12,6 +12,7 @@
     .left {
       display: flex;
       .domainSelector { width: 240px; margin-left: 24px; margin-top: 6px; }
+      .switchMapType { margin-left: 20px; margin-top: 6px; }
     }
   }
 
@@ -82,6 +83,7 @@
 
     .imgWrapper {
       z-index: 10001; border: 1px solid white; position: absolute;
+      background-color:white;
       border-radius: 50%; overflow: hidden;
       box-shadow: 0px 0px 5px #333, 0 0 5px #333 inset;
 
@@ -139,6 +141,43 @@
   }
 }
 
-.switch {
-  margin-left: 20px;
+.filterWrap {
+  .filter {
+    display: flex; flex-direction: column;
+    border: 1px solid @default-border-color; border-radius: @border-radius-base;
+    //box-shadow: 1px 1px 1px @shadow-color;
+    box-shadow: 0 2px 6px rgba(200, 200, 200, 0.4);
+    margin-top: 10px;
+    .filterRow {
+      display: flex; flex-direction: row; flex: 1; align-items: center;
+      border-bottom: 1px solid @default-border-color;
+      padding: 8px;
+      .filterTitle {
+        display: flex; flex: 0 72px;
+        color: @text-color; font-weight: bold;
+      }
+      .filterItem { margin: 0 5px; }
+      .filterItem:hover {
+        background: #49a9ee;
+        color: white;
+        .filterCount { color: white; }
+      }
+      .filterCount { font-weight: 600; color: darkgreen; }
+      > ul { display: flex; flex-direction: row; flex: 2; flex-flow: row wrap; }
+    }
+    .filterRow.last { border-bottom: none; }
+    .filterRow.range {
+      background-color: @background-color-gray;
+      //.filterItem { color: #555; font-weight: bold; }
+      //.filterTitle { color: #555; width: 110px; }
+      :global {
+        .ant-tag-checkable:hover { background: #49a9ee; }
+        .ant-tag-checkable:hover, .ant-tag-checkable:active, .ant-tag-checkable-checked { color: white; }
+      }
+    }
+
+    :global .ant-tag { transition: none }
+  }
 }
+
+

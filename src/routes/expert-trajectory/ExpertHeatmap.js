@@ -3,34 +3,80 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import classnames from 'classnames';
-import { routerRedux } from 'dva/router';
 import styles from './ExpertHeatmap.less';
 import { wget } from '../../utils/request';
-// import echarts from 'echarts';
-// import world from 'echarts/map/js/world';
-import mapData from '../../../external-docs/expert-trajectory/testData.json';
-import heatData from '../../../external-docs/expert-trajectory/heatData.json';
-import { Slider, Layout, InputNumber, Row, Col, Icon, Button, message } from 'antd';
-// import expert
+import { queryURL } from '../../utils';
+import world from 'echarts/map/js/world';
+import echarts from 'echarts/lib/echarts';
+import { Slider, Layout, InputNumber, Row, Col, Icon, Button } from 'antd';
+
+const dims = {
+  time: 0,
+  windSpeed: 1,
+  R: 2,
+  waveHeight: 3,
+  weatherIcon: 2,
+  minTemp: 3,
+  maxTemp: 4,
+};
 
 const { Content, Sider } = Layout;
 let startYear;
+let locationName;
 let endYear;
 let option2 = {};
 let author = {};
 let author2 = {};
 let authorImg = {};
+let authorImage = [];
 let mapinterval;
 let location = [];
 let table = [];
 let authors;
-// const authorImage = heatData.authorImage;
+const imageData = {};
+const themes = {
+  dark: {
+    textColor: '#deded7',
+    subtextColor: '#eeeeee',
+    backgroundColor: '#404a59',
+    areaColor: '#323c48',
+    borderColor: '#565656',
+    lineColor: '#5c95f7',
+    visualColor: ['#d2eafb', '#7ec2f3', '#49a9ee', '#108ee9', '#0c60aa', '#0c60aa'].reverse(),
+    labelColor: '#fff',
+    line2Color: '#eeeeee',
+    pointBlendMode: 'lighter',
+    lineBlendMode: 'screen',
+    lin2BlendMode: 'lighter',
+    symbolColor: '#5c95f7',
+  },
+  light: {
+    textColor: '#404040',
+    subtextColor: '#5a5a5a',
+    backgroundColor: '#abc1db',
+    areaColor: '#f5f3f0',
+    borderColor: '#91a0ae',
+    lineColor: '#f78e3d',
+    line2Color: '#5081d7',
+    // visualColor: ['#fff','#FDFFB5','#fff72f','#ffce3d','#F19436','#EC5428'].reverse(),
+    visualColor: ['#eb3323', '#F19436', '#F8D247', '#eeee4f', '#cbfa50', '#00a854'].reverse(),
+    labelColor: '#111',
+    planColor: '#2469fb',
+    pointBlendMode: '',
+    lineBlendMode: '',
+    line2BlendMode: '',
+    symbolColor: '#f3f49f',
+    // symbolColor: '#deded7',
+  },
+};
+
 const planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
 const jietang = 'am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90';
 // const myChart2 = echarts.init(document.getElementById('world'));
 let play = false;
 let yearNow;
+
+@connect()
 class ExpertHeatmap extends React.Component {
   constructor(props) {
     super(props);
@@ -40,15 +86,28 @@ class ExpertHeatmap extends React.Component {
   state = {
     inputValue: startYear,
     ifPlay: 'play-circle',
-    startYear: 1979,
-    endYear:2016,
+    startYear: 1978,
+    endYear: 2016,
+    theme: 'light',
   };
 
+  componentWillMount() {
+    // console.log('---------');
+    const theme = (queryURL('theme'));
+    if (theme) {
+      this.setState({ theme });
+    }
+  }
 
   componentDidMount() {
+    // console.log('iamge', authorImg);
     this.seriesNo = false;
     this.type = '';
     this.personList = '';
+    this.from = '';
+    this.to = '';
+    this.ifLarge = false;
+    this.ifButton = false;
     this.myChart2 = echarts.init(document.getElementById('heatmap'));
     this.getHeatmapData(); // 热力图
   }
@@ -60,21 +119,57 @@ class ExpertHeatmap extends React.Component {
       const pms = wget('/lab/heatData.json');
       pms.then((data) => {
         heatData = data;
-        this.setState({startYear: heatData.startYear, endYear: heatData.endYear});
+        this.setState({ startYear: heatData.startYear, endYear: heatData.endYear });
         // startYear = heatData.startYear;
         // endYear = heatData.endYear;
         location = heatData.locations;
         table = heatData.table;
         authors = heatData.authors;
+        authorImage = heatData.authorImage;
+        locationName = heatData.locationName;
         this.playon = this.state.startYear;
         this.setHeatmap(); // 热力图
+        this.getMouseEvent();
         // this.authorImage = heatData.authorImage;
-
         // return interestsData;
       }).catch((error) => {
         localStorage.removeItem(LSKEY_INTERESTS);
         return undefined;
       });
+    }
+  }
+
+  onThemeChangeDark = () => {
+    this.setState({ theme: 'dark' }, () => {
+      window.location.href = 'expert-heatmap?theme=dark';
+    });
+  }
+
+  onThemeChangeLight = () => {
+    this.setState({ theme: 'light' }, () => {
+      window.location.href = 'expert-heatmap?theme=light';
+    });
+  }
+
+  getMouseEvent = () => { // 高亮和取消高亮
+    if (!this.ifLarge) {
+      this.myChart2.on('mouseover', (params) => {
+        if (params.componentType === 'series') {
+          if (params.componentSubType === 'lines') {
+            this.getHighLight(params);
+          }
+        }
+      });
+      this.myChart2.on('mouseout', (params) => {
+        if (params.componentType === 'series') {
+          if (params.componentSubType === 'lines') {
+            this.getDownPlay(params);
+          }
+        }
+      });
+    } else {
+      this.myChart2.off('mouseover');
+      this.myChart2.off('mouseout');
     }
   }
 
@@ -91,6 +186,7 @@ class ExpertHeatmap extends React.Component {
     this.setState({
       inputValue: value,
     });
+    this.seriesNo = false;
     // if (this.seriesNo === true) {
     //   option2.series.pop();
     //   this.seriesNo = false;
@@ -110,6 +206,12 @@ class ExpertHeatmap extends React.Component {
     author = {};
     author2 = {};
     authorImg = {};
+    const authorImgWest = {};
+    const authorImgEast = {};
+    const authorImgMid = {};
+    // console.log("authorImage",authorImage)
+    const starttime = new Date().getTime();
+    // console.log('onChange start time', starttime);
     for (let aid = 0; aid < table.length; aid += 1) {
       const addressID = table[aid][index];
       if (addressID) {
@@ -123,22 +225,23 @@ class ExpertHeatmap extends React.Component {
         }
         author[addressID].push(authors[aid]);
 
-        // if (authorImage[aid] !== 0) {
-        //   if (table[aid][index] in authorImg) { // 取今年各地点的作者id
-        //     authorImg[table[aid][index]].push(authorImage[aid]);
-        //   } else {
-        //     authorImg[table[aid][index]] = [];
-        //     authorImg[table[aid][index]].push(authorImage[aid]);
-        //   }
-        // }
-
-        // console.log('image', authorImg);
+        if (authorImage[aid]) {
+          // console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+          if (table[aid][index] in authorImg) { // 取今年各地点的作者id
+            authorImg[table[aid][index]].push(authorImage[aid]);
+          } else {
+            authorImg[table[aid][index]] = [];
+            authorImg[table[aid][index]].push(authorImage[aid]);
+          }
+        }
       }
+      // console.log("+++++++++",authorImg)
+
 
       // 第二年数据
       if (index < (this.state.endYear - this.state.startYear)) {
         const addressID2 = table[aid][index + 1];
-        if (addressID2) {
+        if (addressID2 && !merge[addressID2]) {
           if (!nextYear[addressID2]) {
             nextYear[addressID2] = 0;
           }
@@ -151,6 +254,7 @@ class ExpertHeatmap extends React.Component {
         author2[addressID2].push(authors[aid]);
       }
     }
+    // console.log('image2234343', authorImg);
 
     for (const key in merge) {
       // console.log('key', key);
@@ -165,18 +269,61 @@ class ExpertHeatmap extends React.Component {
         nextYearData.push(onenode);
       }
     }
+
+    // console.log("data",data)
+    data.sort(this.sortValue);
+    nextYearData.sort(this.sortValue);
+    let data1 = [];
+    let p;
+    // console.log('datasp', datas[0]);
+    // console.log(datas[0].value);
+    if (data.length > 10) {
+      for (p = 0; data[p].value > 1 && p < 100; p += 1) {
+        data1.push(data[p]);
+      }
+    } else {
+      data1 = data;
+    }
+    const data2 = data.slice(p);
+
+    // console.log('authorImg', authorImg);
+    Object.keys(authorImg).map((key) => {
+      // console.log('geoCOooiejijf', geoCoordMap[key]);
+      if (geoCoordMap[key][0] < (-30)) {
+        // console.log('come to west');
+        authorImgWest[key] = authorImg[key];
+      } else if (geoCoordMap[key][0] >= -30 && geoCoordMap[key][0] <= 70) {
+        authorImgMid[key] = authorImg[key];
+      } else if (geoCoordMap[key][0] > 70) {
+        authorImgEast[key] = authorImg[key];
+      }
+    });
     // console.log('nextYear Data', nextYearData);
-    option2.series = this.getHeatSeries(geoCoordMap, data, 0, false, index, nextYearData);
+    // this.myChart2.on('georoam', function (params) {
+    //   console.log("jijijdf",params);
+    //   option2.geo.zoom = (params.originX)/352;
+    //   // option2.geo.zoom = params.zoom;
+    // });
+    // console.log("-------------",authorImgWest, authorImgMid, authorImgEast)
+    option2.series = this.getHeatSeries(geoCoordMap, data, 0, false, index, nextYearData, data1, data2, authorImgWest, authorImgMid, authorImgEast);
+    // console.log(JSON.stringify(option2, null, 4));
     this.myChart2.setOption(option2, true);
+    // console.log('end time', `${new Date().getTime() - starttime}ms`);
   }
 
 
   onClick=() => { // 点击热力图按钮
     if (!play) {
       play = true;
+      this.ifLarge = true;
+      this.ifButton = true;
+      this.getMouseEvent();
       this.setState({ ifPlay: 'pause' });
     } else {
       play = false;
+      this.ifLarge = false;
+      this.ifButton = false;
+      this.getMouseEvent();
       this.setState({ ifPlay: 'play-circle' });
     }
     yearNow = this.playon;
@@ -205,7 +352,7 @@ class ExpertHeatmap extends React.Component {
           }
           clearInterval(mapinterval);
         }
-      }, 11000);
+      }, 6800);
     } else {
       clearInterval(mapinterval);
     }
@@ -343,78 +490,76 @@ class ExpertHeatmap extends React.Component {
 
 
   setHeatmap = () => { // 设置热力图参数
+    // console.log('hh-------------------------');
     option2 = {
-      backgroundColor: '#abc1db',
+      // backgroundColor: '#abc1db',
+      backgroundColor: themes[this.state.theme].backgroundColor,
       title: {
-        text: '历年学者热力图',
-        subtext: 'data from aminer',
+        // text: '全球顶尖10000学者迁徙图',
+        // subtext: 'Global Top 10000 experts career trajecory',
         left: 'center',
         textStyle: {
-          color: '#404040',
+          color: themes[this.state.theme].textColor,
+          // fontSize:40,
         },
         subtextStyle: {
-          color: '#5a5a5a',
+          color: themes[this.state.theme].subtextColor,
+          // fontSize:20,
         },
       },
       visualMap: {
         min: 0,
-        max: 120,
+        max: 200,
         // splitNumber: 5,
         type: 'continuous',
         // seriesIndex: 0,
         inRange: {
-          color: ['#eb3323', '#EC5428', '#F19436', '#F8D247', '#eeee4f', '#cbfa50', '#00a854'].reverse(),
-          // color: ['#eb3323','#EC5428','#F19436','#F8D247','#eeee4f','#108ee9','#0c60aa'].reverse(),
+          // color: ['#eb3323', '#EC5428', '#F19436', '#F8D247', '#eeee4f', '#cbfa50', '#00a854'].reverse(),
+          color: themes[this.state.theme].visualColor,
         },
         textStyle: {
           color: '#fff',
         },
       },
+      // animation: true,
+      // animationThreshold:1000000,
+      progressive: 1000,
+      // hoverLayerThreshold: 2000,
       tooltip: {
         trigger: 'item',
         confine: true,
       },
-      legend: {
-        orient: 'vertical',
-        y: 'bottom',
-        x: 'right',
-        data: ['location'],
-        textStyle: {
-          color: '#fff',
-        },
-      },
+      text:['200','0'],
+      // legend: {
+      //   orient: 'vertical',
+      //   y: 'bottom',
+      //   x: 'right',
+      //   data: ['location'],
+      //   textStyle: {
+      //     color: '#fff',
+      //   },
+      // },
       geo: {
         zoom: 1.2,
         map: 'world',
         label: {
           emphasis: {
-            show: true,
+            opacity: 0,
           },
         },
         roam: true,
         itemStyle: {
           normal: {
-            areaColor: '#f5f3f0',
-            borderColor: '#91a0ae',
+            // areaColor: '#f5f3f0',
+            borderColor: themes[this.state.theme].borderColor,
+            areaColor: themes[this.state.theme].areaColor,
           },
         },
       },
     };
+
     this.myChart2.setOption(option2);
-    this.myChart2.on('mouseover', (params) => {
-      if (params.componentType === 'series') {
-        if (params.componentSubType === 'lines') {
-          this.getHighLight(params);
-        }
-      }
-    });
-    this.myChart2.on('mouseout', (params) => {
-      if (params.componentType === 'series') {
-        if (params.componentSubType === 'lines') {
-          this.getDownPlay(params);
-        }
-      }
-    });
+
     this.myChart2.on('click', (params) => {
       // console.log('parames', params);
       if (params.componentType === 'series') {
@@ -427,6 +572,11 @@ class ExpertHeatmap extends React.Component {
             // console.log('ddqerqrq2', option2.series);
             this.seriesNo = true;
             if (params.componentSubType === 'scatter') {
+              if (params.seriesName === 'nextYear') {
+                this.personList = author2[params.name];
+              } else {
+                this.personList = author[params.name];
+              }
               // console.log('yiyiyiyiyiyiyiyiyi', option2.series);
               // option2.series.pop();
               // console.log('yoyoyoyoyo', option2.series);
@@ -435,7 +585,8 @@ class ExpertHeatmap extends React.Component {
                 {
                   type: 'scatter',
                   coordinateSystem: 'geo',
-                  zlevel: 2,
+                  zlevel: 3,
+                  z: 6,
                   // rippleEffect: {
                   //   period: 4,
                   //   scale: 2,
@@ -447,7 +598,7 @@ class ExpertHeatmap extends React.Component {
                       show: true,
                       formatter: this.getNum(params.value[2]),
                       position: 'inside',
-                      color: '#fff',
+                      color: themes[this.state.theme].labelColor,
                       textStyle: {
                         fontSize: 10,
                       },
@@ -469,8 +620,13 @@ class ExpertHeatmap extends React.Component {
                     value: params.value,
                   }],
                   symbolSize(val) {
+                    const size = 10 + val[2] / 4;
                     if (val[2] !== 1) {
-                      return (10 + val[2] / 4);
+                      if (size > 25) {
+                        return (26);
+                      } else {
+                        return (size);
+                      }
                     } else {
                       return ((10 + val[2] / 4) / 2);
                     }
@@ -478,13 +634,11 @@ class ExpertHeatmap extends React.Component {
                 },
               );
               this.type = 'scatter';
-              if (params.seriesName === 'nextYear') {
-                this.personList = author2[params.name];
-              } else {
-                this.personList = author[params.name];
-              }
-              this.myChart2.setOption(option2);
+              this.myChart2.setOption(option2, true);
             } else if (params.componentSubType === 'lines') {
+              this.personList = _.intersection(author[params.name[0]], author2[params.name[1]]);
+              this.from = params.name[0];
+              this.to = params.name[1];
               // console.log('yoyoyoyoyo');
               option2.series.push({
                 type: 'lines',
@@ -512,8 +666,37 @@ class ExpertHeatmap extends React.Component {
                 data: [{ coords: [params.data.coords[0], params.data.coords[1]] }],
               });
               this.type = 'lines';
-              this.personList = _.intersection(author[params.name[0]], author2[params.name[1]]);
               this.myChart2.setOption(option2, true);
+              // const a = {
+              //   type: 'lines',
+              //   // zlevel: 2,
+              //   // effect: {
+              //   //   show: true,
+              //   //   period: 6,
+              //   //   trailLength: 0,
+              //   //   color: '#ff2f31',
+              //   //   symbol: planePath,
+              //   //   symbolSize: 4,
+              //   //   animation: true,
+              //   // },
+              //   animation: false,
+              //   symbol: planePath,
+              //   symbolSize: 4,
+              //   lineStyle: {
+              //     normal: {
+              //       color: '#ff2f31',
+              //       width: 2,
+              //       opacity: 1,
+              //       curveness: 0.2,
+              //       shadowColor: 'rgba(0, 0, 0, 0.5)',
+              //       shadowBlur: 10,
+              //     },
+              //   },
+              //   data: [{ coords: [params.data.coords[0], params.data.coords[1]] }],
+              // };
+              // this.type = 'lines';
+              // // this.myChart2.setOption(option2, true);
+              // this.myChart2.setOption({series: a});
               // this.getHighLight(params);
             }
           } else {
@@ -524,11 +707,17 @@ class ExpertHeatmap extends React.Component {
         } else {
           this.seriesNo = true;
           if (params.componentSubType === 'scatter') {
+            if (params.seriesName === 'nextYear') {
+              this.personList = author2[params.name];
+            } else {
+              this.personList = author[params.name];
+            }
             option2.series.push(
               {
                 type: 'scatter',
                 coordinateSystem: 'geo',
-                zlevel: 2,
+                zlevel: 3,
+                z: 6,
                 animation: false,
                 // rippleEffect: {
                 //   period: 4,
@@ -540,7 +729,7 @@ class ExpertHeatmap extends React.Component {
                     show: true,
                     formatter: this.getNum(params.value[2]),
                     position: 'inside',
-                    color: '#fff',
+                    color: themes[this.state.theme].labelColor,
                     textStyle: {
                       fontSize: 10,
                     },
@@ -564,8 +753,13 @@ class ExpertHeatmap extends React.Component {
                   value: params.value,
                 }],
                 symbolSize(val) {
+                  const size = 10 + val[2] / 4;
                   if (val[2] !== 1) {
-                    return (10 + val[2] / 4);
+                    if (size > 25) {
+                      return (26);
+                    } else {
+                      return (size);
+                    }
                   } else {
                     return ((10 + val[2] / 4) / 2);
                   }
@@ -573,14 +767,12 @@ class ExpertHeatmap extends React.Component {
               },
             );
             this.type = 'scatter';
-            if (params.seriesName === 'nextYear') {
-              this.personList = author2[params.name];
-            } else {
-              this.personList = author[params.name];
-            }
-            this.myChart2.setOption(option2);
+            this.myChart2.setOption(option2, true);
             // console.log('begin', option2.series);
           } else if (params.componentSubType === 'lines') {
+            this.personList = _.intersection(author[params.name[0]], author2[params.name[1]]);
+            this.from = params.name[0];
+            this.to = params.name[1];
             option2.series.push({
               type: 'lines',
               // zlevel: 2,
@@ -609,8 +801,8 @@ class ExpertHeatmap extends React.Component {
               data: [{ coords: [params.data.coords[0], params.data.coords[1]] }],
             });
             this.type = 'lines';
-            this.personList = _.intersection(author[params.name[0]], author2[params.name[1]]);
-            this.myChart2.setOption(option2);
+            this.myChart2.setOption(option2, true);
+            // this.myChart2.setOption({series: a});
             // this.getHighLight(params);
             // console.log('seriesNo', this.seriesNo);
           }
@@ -651,87 +843,253 @@ class ExpertHeatmap extends React.Component {
     return temp;
   }
 
-  getHeatSeries = (geoCoordMap, data, j, choose, year, nextYearData) => { // j是一年中第几个插值
-    // console.log('nextYearData', nextYearData);
-    // console.log('data', data);
-    // console.log('image2', authorImg);
-    // console.log('jjjjj', j);
+  sortValue = (a, b) => {
+    return b.value - a.value;
+  };
 
-    const convertData2 = function (data) {
-      const res = [];
-      for (let i = 0; i < data.length; i += 1) {
-        const geoCoord = geoCoordMap[data[i].name];
-        if (geoCoord) {
-          res.push(geoCoord.concat(data[i].value));
+  getHeatSeries = (geoCoordMap, data, j, choose, year, nextYearData, data1, data2, authorImgWest, authorImgMid, authorImgEast) => { // j是一年中第几个插值 ifButton是否为播放模式
+    // console.log('nextYearData', nextYearData);
+    const imagePosWest = [[-180, 50], [-180, 35], [-180, 20], [-180, 5], [-180, -10]];
+    const imagePosMid = [[-30, -67], [-10, -67], [10, -67], [30, -67]];
+    const imagePosEast = [[175, 30], [175, 15], [175, 0], [175, -15]];
+    const dup = {};
+    const tempLineArray = [];
+    const lineIndex = table.length;
+    for (let j = 0; j < lineIndex; j += 1) {
+      const addLine = table[j][year];
+      const addLine2 = table[j][year + 1];
+      const startLine = geoCoordMap[addLine];
+      const endLine = geoCoordMap[addLine2];
+      if (addLine && addLine2 && (addLine !== addLine2)) {
+        if ((Math.abs(startLine[0] - endLine[0]) + Math.abs(startLine[1] - endLine[1])) > 50) {
+          const key = [addLine, addLine2].join('_');
+          const v = dup[key];
+          if (!v) {
+            dup[key] = {};
+            dup[key].name = [addLine, addLine2];
+            dup[key].coords = [startLine, endLine];
+            dup[key].count = 0;
+          }
         }
       }
-      return res;
-    };
+    }
 
-    const convertData = function (datas, counter, ifSingle) { // 画出热力图上的圈并标出地名
+    Object.keys(dup).map((key) => {
+      tempLineArray.push(dup[key]);
+    });
+    tempLineArray.sort(sortCount);
+    // const convertData2 = function (datas) {
+    //   const res = [];
+    //   for (let i = 0; i < datas.length; i += 1) {
+    //     const geoCoord = geoCoordMap[datas[i].name];
+    //     if (geoCoord) {
+    //       res.push({
+    //         value: geoCoord.concat(datas[i].value)
+    //       });
+    //     }
+    //   }
+    //   return res;
+    // };
+
+    const convertData = function (datas) { // 画出热力图上的圈并标出地名
       const res = [];
       for (let i = 0; i < datas.length; i += 1) {
         const geoCoord = geoCoordMap[datas[i].name];
         if (geoCoord) {
-          if (choose !== false) {
-            res.push({
-              name: datas[i].name,
-              value: geoCoord.concat(datas[i].value[0] - (datas[i].value[1] * counter)),
-            });
-          } else {
-            if (ifSingle === true) {
-              if (datas[i].value === 1) {
-                res.push({
-                  name: datas[i].name,
-                  value: geoCoord.concat(datas[i].value),
-                });
-              }
-            } else if (datas[i].value !== 1) {
-              res.push({
-                name: datas[i].name,
-                value: geoCoord.concat(datas[i].value),
-              });
-            }
-
-            // res.push(geoCoord.concat(data[i].value));
-          }
+          res.push({
+            name: datas[i].name,
+            value: geoCoord.concat(datas[i].value),
+          });
         }
       }
-      // console.log('res', res);
       return res;
     };
 
-    function formtGCData() { // 画线
-      const dup = {};
-      const tGeoDt = [];
-      const index = table.length;
-      for (let j = 0; j < index; j += 1) {
-        const add = table[j][year];
-        const add2 = table[j][year + 1];
-        if (add && add2) {
-          const key = [add, add2].join('_');
-          const v = dup[key];
-          if (!v) {
-            tGeoDt.push({
-              name: [add, add2],
-              coords: [geoCoordMap[add], geoCoordMap[add2]],
-            });
-            dup[key] = true;
-          }
-        }
+    function formtGCData(ifTop10) { // 画线
+      const tGeoDt = tempLineArray.slice(10, 100);
+      const tGeoDt2 = tempLineArray.slice(0,10);
+      if (ifTop10){
+        return tGeoDt2;
+      } else {
+        return tGeoDt;
       }
-      return tGeoDt;
     }
 
-    function getImage() {
+    const sortCount = (a, b) => {
+      return b.count - a.count;
+    };
+
+    // const getImage = () => {
+    //   console.log('==============================');
+    //   const temp = [];
+    //   if (this.ifButton) {
+    //     const timeNow = new Date().getTime();
+    //     // const index = authorImg.length;
+    //     Object.keys(authorImg).map((key) => { // key是地名
+    //       // console.log("key1111",key)
+    //       imageData[key] = [];
+    //       imageData[key][0] = authorImg[key];
+    //       imageData[key][1] = timeNow;
+    //       // console.log("imageData1 ",imageData);
+    //       // console.log("timeNow",timeNow)
+    //       // console.log("---------",timeNow - imageData[key][1]);
+    //     });
+    //
+    //     Object.keys(imageData).map((key) => { // Object.keys(authorImg)是key 用authorImage.key取值
+    //       if (timeNow - imageData[key][1] >= 5000) {
+    //         // console.log("delete", key)
+    //         delete imageData[key];
+    //         // console.log("imageData2 ",imageData);
+    //       } else {
+    //         temp.push({
+    //           name: 'Author',
+    //           coord: geoCoordMap[key],
+    //           symbol: `image://https://${imageData[key][0]}`,
+    //           // symbol: 'image://https://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
+    //           symbolSize: [32, 40],
+    //           symbolOffset: [0, '-70%'],
+    //           label: {
+    //             normal: {
+    //               show: false,
+    //             },
+    //             emphasis: {
+    //               show: false,
+    //             },
+    //           },
+    //           itemStyle: {
+    //             normal: {
+    //               borderColor: '#fff',
+    //               borderWidth: 5,
+    //             },
+    //           },
+    //         });
+    //       }
+    //     });
+    //   } else {
+    //     Object.keys(authorImg).map((key) => { // Object.keys(authorImg)是key 用authorImage.key取值
+    //       temp.push({
+    //         name: 'Author',
+    //         coord: [-180,40],
+    //         // coord: [-180,50],
+    //         // coord: geoCoordMap[key],
+    //         symbol: `image://https://${authorImg[key]}`,
+    //         // symbol: 'image://https://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
+    //         symbolSize: [32, 40],
+    //         symbolOffset: [0, '-70%'],
+    //         label: {
+    //           normal: {
+    //             show: false,
+    //           },
+    //           emphasis: {
+    //             show: false,
+    //           },
+    //         },
+    //         itemStyle: {
+    //           normal: {
+    //             borderColor: '#fff',
+    //             borderWidth: 5,
+    //           },
+    //         },
+    //       });
+    //     });
+    //   }
+    //
+    //
+    //   return temp;
+    // };
+
+    const lineToImage = () => {
       const temp = [];
-      const index = authorImg.length;
-      Object.keys(authorImg).map((key) => {
-        for (let j = 0; j < key.length; j += 1) {
+      let west = 0;
+      let middle = 0;
+      let east = 0;
+      // console.log('--------', authorImgWest);
+      Object.keys(authorImgWest).map((key) => {
+        if (west < 5) {
+          const middleLat = ((parseFloat(geoCoordMap[key][0]) - parseFloat(imagePosWest[west][0])) * 0.764) + parseFloat(imagePosWest[west][0]);
+          // const middleLng = ((parseFloat(geoCoordMap[key][1]) - parseFloat(imagePosWest[west][1])) * 0.764) + parseFloat(imagePosWest[west][1]);
+          // console.log("======================",middleLat,middleLng,imagePosWest[west],geoCoordMap[key])
+          temp.push({
+            coords: [imagePosWest[west], [middleLat, imagePosWest[west][1]]],
+          });
+          temp.push({
+            coords: [[middleLat, imagePosWest[west][1]], geoCoordMap[key]],
+          });
+          west += 1;
+        }
+      });
+      Object.keys(authorImgMid).map((key) => {
+          if (middle < 4) {
+            const middleLat = ((parseFloat(geoCoordMap[key][0]) - parseFloat(imagePosMid[middle][0])) * 0.764) + parseFloat(imagePosMid[middle][0]);
+            const middleLng = ((parseFloat(geoCoordMap[key][1]) - parseFloat(imagePosWest[middle][1])) * 0.764) + parseFloat(imagePosWest[middle][1]);
+            // console.log("======================",middleLat,middleLng,imagePosWest[west],geoCoordMap[key])
+            temp.push({
+              coords: [[imagePosMid[middle][0],(imagePosMid[middle][1]+12)], [middleLat, middleLng]]
+            });
+            temp.push({
+              coords: [[middleLat, middleLng], geoCoordMap[key]],
+            });
+            middle += 1;
+          }
+      });
+      Object.keys(authorImgEast).map((key) => {
+        if (east < 4) {
+          const middleLat = parseFloat(imagePosEast[east][0]) - ((parseFloat(imagePosEast[east][0]) - parseFloat(geoCoordMap[key][0])) * 0.764);
+          const middleLng = parseFloat(imagePosEast[east][1]) - ((parseFloat(imagePosEast[east][1]) - parseFloat(geoCoordMap[key][1])) * 0.764);
+          // console.log("======================",middleLat,middleLng,imagePosWest[west],geoCoordMap[key])
+          temp.push({
+            coords: [[imagePosEast[east][0],(imagePosEast[east][1]+2)], [middleLat, imagePosEast[east][1]]]
+          });
+          temp.push({
+            coords: [[middleLat, imagePosEast[east][1]], geoCoordMap[key]],
+          });
+          east += 1;
+        }
+      });
+console.log("temp",temp)
+      return temp;
+    };
+
+    const getImage = () => {
+      const temp = [];
+      let west = 0;
+      let middle = 0;
+      let east = 0;
+      // console.log('authorImgwest', authorImgEast);
+      Object.keys(authorImgWest).map((key) => { // Object.keys(authorImg)是key 用authorImage.key取值
+        if (west < 5) {
           temp.push({
             name: 'Author',
-            coord: geoCoordMap[key[j]],
-            symbol: `image://https://${authorImg[(key[0])]}`,
+            coord: imagePosWest[west],
+            symbol: `image://https://${authorImgWest[key][0]}`,
+            // symbol: 'image://https://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
+            symbolSize: [32, 40],
+            symbolOffset: [0, '-50%'],
+            label: {
+              normal: {
+                show: false,
+              },
+              emphasis: {
+                show: false,
+              },
+            },
+            itemStyle: {
+              normal: {
+                borderColor: '#fff',
+                borderWidth: 5,
+              },
+            },
+          });
+          west += 1;
+        }
+      });
+      Object.keys(authorImgMid).map((key) => { // Object.keys(authorImg)是key 用authorImage.key取值
+        if (middle < 4) {
+          temp.push({
+            name: 'Author',
+            coord: imagePosMid[middle],
+            symbol: `image://https://${authorImgMid[key][0]}`,
+            // symbol: 'image://https://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
             symbolSize: [32, 40],
             symbolOffset: [0, '-70%'],
             label: {
@@ -749,19 +1107,129 @@ class ExpertHeatmap extends React.Component {
               },
             },
           });
+          middle += 1;
         }
       });
+      Object.keys(authorImgEast).map((key) => { // Object.keys(authorImg)是key 用authorImage.key取值
+        if (east < 4) {
+          temp.push({
+            name: 'Author',
+            coord: imagePosEast[east],
+            symbol: `image://https://${authorImgEast[key][0]}`,
+            // symbol: 'image://https://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
+            symbolSize: [32, 40],
+            symbolOffset: [0, '-70%'],
+            label: {
+              normal: {
+                show: false,
+              },
+              emphasis: {
+                show: false,
+              },
+            },
+            itemStyle: {
+              normal: {
+                borderColor: '#fff',
+                borderWidth: 5,
+              },
+            },
+          });
+          east += 1;
+        }
+      });
+      console.log("temp2",temp)
+        return temp;
+    };
 
-      return temp;
+    // function haveTry() {
+    //   console.log("============----------------")
+    //   const temp = [];
+    //   temp.push({
+    //     name: 'Author',
+    //     value: geoCoordMap[key],
+    //     // symbol: `image://https://${imageData[key][0]}`,
+    //     symbol: 'image://https://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
+    //     symbolSize: [32, 40],
+    //     symbolOffset: [0, '-70%'],
+    //     label: {
+    //       normal: {
+    //         show: false,
+    //       },
+    //       emphasis: {
+    //         show: false,
+    //       },
+    //     },
+    //     itemStyle: {
+    //       normal: {
+    //         borderColor: '#fff',
+    //         borderWidth: 5,
+    //       },
+    //     },
+    //   });
+    //   return temp
+    // }
+
+
+    function getArrow() {
+      const curveness = 1;
+      const res = [];
+      const firstYearX = parseFloat(geoCoordMap[14][0]);
+      const firstYearY = parseFloat(geoCoordMap[14][1]);
+      const secondYearX = parseFloat(geoCoordMap[30000][0]);
+      const secondYearY = parseFloat(geoCoordMap[30000][1]);
+      // console.log("h-------------------================",geoCoordMap[14][0]);
+      // console.log(geoCoordMap[41710][0]);
+      // console.log()
+      res.push(
+        {
+          // value: [ (firstYearX+secondYearX)/2 - (firstYearY - secondYearY)* curveness,
+          //   (firstYearY + secondYearY)/2 - (firstYearX - secondYearX)* curveness,
+          // ],
+          value: [(firstYearX + secondYearX) / 2 + (firstYearY - secondYearY) * curveness,
+            (firstYearY + secondYearY) / 2 - (secondYearY - firstYearY) * curveness,
+          ],
+          // value:[280.837, 179.626],
+        },
+      );
+      // console.log("res",res)
+      return res;
+
+      // const dup = {};
+      // const tGeoDt = [];
+      // const index = table.length;
+      // for (let j = 0; j < index; j += 1) {
+      //   const add = table[j][year];
+      //   // console.log("add",add,add2)
+      //   const add2 = table[j][year + 1];
+      //   // console.log("---------------------------",geoCoordMap[add])
+      //   if (add && add2 && (add !== add2)) {
+      //     const firstYearX = parseFloat(geoCoordMap[add][0]);
+      //     const firstYearY = parseFloat(geoCoordMap[add][1]);
+      //     const secondYearX = parseFloat(geoCoordMap[add2][0]);
+      //     const secondYearY = parseFloat(geoCoordMap[add2][1])
+      //     const key = [add, add2].join('_');
+      //     const v = dup[key];
+      //     if (!v) {
+      //       tGeoDt.push({
+      //         value: [ (firstYearX+secondYearX)/2- (firstYearY - secondYearY)* curveness,
+      //           (firstYearY + secondYearY)/2 - (secondYearX - firstYearX)* curveness,
+      //         ],
+      //       });
+      //       dup[key] = true;
+      //     }
+      //   }
+      // }
+      // return tGeoDt;
     }
+
 
     const series = [
       {
-        name: 'TOP 5',
+        name: 'TOP 6',
         // type: 'effectScatter',
         type: 'scatter',
         coordinateSystem: 'geo',
-        zlevel: 2,
+        zlevel: 3,
         rippleEffect: {
           period: 4,
           scale: 2,
@@ -772,7 +1240,7 @@ class ExpertHeatmap extends React.Component {
             show: true,
             formatter: params => this.getNum(params.value[2]),
             position: 'inside',
-            color: '#111',
+            color: themes[this.state.theme].labelColor,
             textStyle: {
               fontSize: 10,
             },
@@ -785,7 +1253,9 @@ class ExpertHeatmap extends React.Component {
           normal: {
             color: '#f78e3d',
             // borderColor: '#f78e3d',
-            opacity: 0.7,
+            opacity: 0.8,
+            shadowColor: 'rgba(198, 198, 198, 0.3)',
+            shadowBlur: 10,
           },
           emphasis: {
             color: '#ff2f31',
@@ -797,39 +1267,44 @@ class ExpertHeatmap extends React.Component {
         tooltip: {
           confine: true,
           formatter: (params) => {
-            return `<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">${
-              params.seriesName
-              }</div>${
-              params.name}：${params.value[2]}<br>`;
+            return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
+              locationName[parseInt(params.name)-1].toLowerCase()}<br>`;
           },
         },
-        data: convertData(data.sort((a, b) => {
+        data: convertData(data1.sort((a, b) => {
           return b.value - a.value;
-        }).slice(0, 6), j, false),
+        }).slice(0, 6)),
         symbolSize(val) {
-          return ((10 + val[2] / 4));
+          const size = 10 + val[2] / 4;
+          if (size > 25) {
+            return (26);
+          } else {
+            return (size);
+          }
         },
+        // blendMode: 'screen',
       },
       { // 当年所有地点
         name: 'location',
         type: 'scatter',
-        zlevel: 1,
+        zlevel: 2,
         coordinateSystem: 'geo',
-        data: convertData(data, j, false),
+        data: convertData(data1),
         symbolSize(val) {
-          // if (val[2] !== 1) {
-          //   return (10 + val[2] / 8);
-          // } else {
-          //   return ((10 + val[2] / 4) / 2);
-          // }
-          return ((10 + val[2] / 4));
+          const size = 10 + val[2] / 4;
+          if (size > 25) {
+            return (26);
+          } else {
+            return (size);
+          }
+          // return ((10 + val[2] / 4));
         },
         label: {
           normal: {
             show: true,
             formatter: params => this.getNum(params.value[2]),
             position: 'inside',
-            color: '#111',
+            color: themes[this.state.theme].labelColor,
             textStyle: {
               fontSize: 10,
             },
@@ -842,6 +1317,8 @@ class ExpertHeatmap extends React.Component {
           normal: {
             color: '#FFBA00',
             opacity: 1,
+            shadowColor: 'rgba(198, 198, 198, 0.3)',
+            shadowBlur: 10,
           },
           emphasis: {
             color: '#ff2f31',
@@ -875,38 +1352,38 @@ class ExpertHeatmap extends React.Component {
         tooltip: {
           confine: true,
           formatter: (params) => {
-            return `<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">${
-              params.seriesName
-              }</div>${
-              params.name}：${params.value[2]}<br>`;
+            return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
+              locationName[parseInt(params.name)-1].toLowerCase()}<br>`;
           },
         },
+        blendMode: themes[this.state.theme].pointBlendMode,
       },
 
       { // 当年所有单点
-        name: 'location',
+        name: 'single location',
         type: 'scatter',
+        // large: true,
+        // largeThreshold: 1000,
+        zlevel: 1,
+        z: 6,
         coordinateSystem: 'geo',
-        data: convertData(data, j, true),
-        symbolSize: 4,
+        data: convertData(data2),
+        // symbolSize: 4,
+        symbolSize(val) {
+          const size = 3 + val[2];
+          return size;
+        },
         label: {
           normal: {
-            show: true,
-            formatter: params => this.getNum(params.value[2]),
-            position: 'inside',
-            color: '#111',
-            textStyle: {
-              fontSize: 10,
-            },
-          },
-          emphasis: {
-            show: true,
+            show: false,
           },
         },
         itemStyle: {
           normal: {
-            color: '#FFBA00',
+            color: '#00A854',
             opacity: 1,
+            shadowColor: 'rgba(198, 198, 198, 0.3)',
+            shadowBlur: 10,
           },
           emphasis: {
             color: '#ff2f31',
@@ -918,64 +1395,71 @@ class ExpertHeatmap extends React.Component {
         tooltip: {
           confine: true,
           formatter: (params) => {
-            return `<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">${
-              params.seriesName
-              }</div>${
-              params.name}：${params.value[2]}<br>`;
+            return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
+              locationName[parseInt(params.name)-1].toLowerCase()}<br>`;
+          },
+        },
+        blendMode: themes[this.state.theme].pointBlendMode,
+      },
+
+      { // 下一年所有地点
+        name: 'nextYear',
+        type: 'scatter',
+        large: true,
+        largeThreshold: 1000,
+        coordinateSystem: 'geo',
+        data: convertData(nextYearData),
+        // data: convertData2(nextYearData),
+        symbolSize: 3,
+        label: {
+          normal: {
+            // formatter: '{b}',
+            // position: 'right',
+            // show: true,
+            show: false,
+          },
+        },
+        itemStyle: {
+          normal: {
+            opacity: 1,
+            color: '#ffee66',
+            // borderColor:'#fe9b46',
+          },
+          emphasis: {
+            color: '#ff2f31',
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
           },
         },
       },
-
-      // { // 下一年所有地点
-      //   name: 'nextYear',
-      //   type: 'scatter',
-      //   coordinateSystem: 'geo',
-      //   data: convertData(nextYearData, j),
-      //   symbolSize: 6.5,
-      //   label: {
-      //     normal: {
-      //       // formatter: '{b}',
-      //       // position: 'right',
-      //       // show: true,
-      //       show: false,
-      //     },
-      //   },
-      //   itemStyle: {
-      //     normal: {
-      //       opacity: 1,
-      //       color: '#ffee66',
-      //       // borderColor:'#fe9b46',
-      //     },
-      //     emphasis: {
-      //       color: '#ff2f31',
-      //       shadowBlur: 10,
-      //       shadowOffsetX: 0,
-      //       shadowColor: 'rgba(0, 0, 0, 0.5)',
-      //     },
-      //   },
-      // },
       {
         type: 'lines',
-        animationDuration: 10,
+        large: this.ifLarge,
+        largeThreshold: 400,
+        // animation: true,
+        // animationDuration: 0,
         // zlevel: 1,
         effect: {
           show: true,
-          period: 6,
+          period: 3,
           trailLength: 0,
-          // color: '#f78e3d',
+          color: themes[this.state.theme].symbolColor,
           symbol: 'arrow',
-          symbolSize: 3,
+          symbolSize: 8,
           animation: false,
+          // animationThreshold:10000,
         },
-        // symbol: planePath,
+        symbol: ['', planePath],
         // symbol: 'arrow',
         // symbol: 'image://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
         symbolSize: 3,
         lineStyle: {
           normal: {
-            color: '#f78e3d',
-            width: 0.4,
-            opacity: 0.7,
+            color: themes[this.state.theme].lineColor,
+            // width: 10,
+            width: 1.6,// 1.6,
+            opacity: 1,
             curveness: 0.2,
           },
           emphasis: {
@@ -986,20 +1470,82 @@ class ExpertHeatmap extends React.Component {
         },
         tooltip: {
           confine: true,
+
           formatter: (params) => {
-            return `Number of people: ${(_.intersection(author[params.name[0]], author2[params.name[1]])).length}`;
+            return `<div style="font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">Number of People: ${
+              (_.intersection(author[params.name[0]], author2[params.name[1]])).length}<br/>From: ${
+              locationName[params.name[0]-1].toLowerCase()}<br/>To: ${locationName[params.name[1]-1].toLowerCase()}<br>`;
+          },
+          // formatter: (params) => {
+          //   return `Number of people: ${(_.intersection(author[params.name[0]], author2[params.name[1]])).length}`;
+          // },
+        },
+        data: formtGCData(false),
+        animation: false,
+        blendMode: themes[this.state.theme].lineBlendMode, // screen
+      },
+
+      {
+        type: 'lines',
+        large: this.ifLarge,
+        largeThreshold: 400,
+        // animation: true,
+        // animationDuration: 0,
+        // zlevel: 1,
+        effect: {
+          show: true,
+          period: 3,
+          trailLength: 0,
+          color: themes[this.state.theme].planColor,
+          symbol: planePath,
+          symbolSize: 30,
+          animation: false,
+          // animationThreshold:10000,
+        },
+        symbol: ['', planePath],
+        // symbol: 'arrow',
+        // symbol: 'image://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
+        symbolSize: 3,
+        lineStyle: {
+          normal: {
+            color: themes[this.state.theme].lineColor,
+            // width: 10,
+            width: 1.6,// 1.6,
+            opacity: 1,
+            curveness: 0.2,
+          },
+          emphasis: {
+            color: '#ff2f31',
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+            shadowBlur: 10,
           },
         },
-        data: formtGCData(),
+        tooltip: {
+          confine: true,
+
+          formatter: (params) => {
+            return `<div style="font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">Number of People: ${
+              (_.intersection(author[params.name[0]], author2[params.name[1]])).length}<br/>From: ${
+              locationName[params.name[0]-1].toLowerCase()}<br/>To: ${locationName[params.name[1]-1].toLowerCase()}<br>`;
+          },
+          // formatter: (params) => {
+          //   return `Number of people: ${(_.intersection(author[params.name[0]], author2[params.name[1]])).length}`;
+          // },
+        },
+        data: formtGCData(true),
+        animation: false,
+        blendMode: themes[this.state.theme].lineBlendMode, // screen
       },
 
       // {
       //   name: 'image',
       //   type: 'scatter',
-      //   zlevel: 2,
+      //   zlevel: 4,
+      //   z: 1,
       //   coordinateSystem: 'geo',
       //   markPoint: {
-      //     z: 5,
+      //     // zlevel:6,
+      //     // z: 7,
       //     symbol: 'rect',
       //     symbolSize: [40, 60],
       //     color: '#fff',
@@ -1019,7 +1565,38 @@ class ExpertHeatmap extends React.Component {
       //       },
       //     },
       //     data: getImage(),
+      //     animation: true,
       //   },
+      //   // data: [{value: [123,40,100]}],
+      //   // symbolSize(val){
+      //   //   return val[2];
+      //   // }
+      // },
+      //
+      // {
+      //   type: 'lines',
+      //   large: this.ifLarge,
+      //   largeThreshold: 400,
+      //   // animation: true,
+      //   // animationDuration: 0,
+      //   zlevel: 3,
+      //   symbol: ['', ''],
+      //   symbolSize: 3,
+      //   lineStyle: {
+      //     normal: {
+      //       color: themes[this.state.theme].line2Color,
+      //       // width: 10,
+      //       width: 1.6,
+      //       opacity: 0.7,
+      //       curveness: 0,
+      //       shadowColor: 'rgba(198, 198, 198, 0.3)',
+      //       shadowBlur: 10,
+      //     },
+      //   },
+      //   data: lineToImage(),
+      //   animation: false,
+      //   // animationThreshold: 1000000,
+      //   blendMode: themes[this.state.theme].line2BlendMode, // lighter
       // },
 
       {
@@ -1028,8 +1605,63 @@ class ExpertHeatmap extends React.Component {
         coordinateSystem: 'geo',
         blurSize: 20,
         zlevel: 2,
-        data: convertData(data, j),
+        z: 7,
+        data: convertData(data),
+        blendMode: 'hard-light', // multiple, color-dodge
       },
+
+      // {
+      //   type: 'custom',
+      //   zlevel: 6,
+      //   // data:[123,41],
+      //   coordinateSystem: 'geo',
+      //   renderItem(params, api) {
+      //     // console.log('jajaja', api.value(), api.value(), api.value(0), api.value(1));
+      //     // console.log('eeeeeee', params, api);
+      //     const point = api.coord([api.value(0), api.value(1)]);
+      //     // const point = [api.value(0), api.value(1)];
+      //     // console.log('point', point);
+      //
+      //     const categoryIndex = api.value(0);
+      //     const start = api.coord([api.value(1), categoryIndex]);
+      //     const end = api.coord([api.value(2), categoryIndex]);
+      //     const height = api.size([0, 1])[1] * 0.6;
+      //
+      //     return {
+      //       type: 'path',
+      //       shape: {
+      //         pathData: planePath,
+      //         x: -arrowSize / 2,
+      //         y: -arrowSize / 2,
+      //         width: arrowSize,
+      //         height: arrowSize,
+      //       },
+      //       rotation: 0.2,
+      //        position: point,
+      //       style: api.style({
+      //         // stroke: '#555',
+      //         // lineWidth: 1
+      //       }),
+      //     };
+      //   },
+      //   itemStyle: {
+      //     normal: {
+      //       color: '#ff2c37',
+      //     },
+      //   },
+      //   // encode: {
+      //   //   x: dims.time,
+      //   //   y: dims.windSpeed
+      //   // },
+      //   // data: data,
+      //   // data: [{
+      //   //   value: [120,30,200],
+      //   // },{
+      //   //   value: [100,30,200],
+      //   // }],
+      //   data: getArrow(),
+      //   z: 10,
+      // },
 
       // {
       //   name: 'image',
@@ -1094,7 +1726,12 @@ class ExpertHeatmap extends React.Component {
 
   onMapClick = () => {
     if (this.props.onPageClick) {
-      this.props.onPageClick(this.personList, this.type);
+      // this.props.onPageClick(this.personList, this.type);
+      if (this.from) {
+        this.props.onPageClick(this.personList, locationName[this.from - 1].toLowerCase(), locationName[this.to - 1].toLowerCase(), this.type);
+      } else {
+        this.props.onPageClick(this.personList, this.type);
+      }
     }
   }
 
@@ -1102,16 +1739,23 @@ class ExpertHeatmap extends React.Component {
     const ifPlay = this.state.ifPlay;
     return (
       <div>
-        {/*<div className={styles.heat} id="heatmap" style={{ height: '1630px', width: '3500px' }} onClick={this.onMapClick} />*/}
-        <div className={styles.heat} id="heatmap" style={{ height: '670px', width: '1200px' }} onClick={this.onMapClick} />
-        <div>
-          <Button className={styles.plus} type="primary" ghost icon="plus" onClick={this.plusHeatZoom} />
-        </div>
-        <div>
-          <Button className={styles.minus} type="primary" ghost icon="minus" onClick={this.minusHeatZoom} />
-        </div>
+        <div className={styles.heat} id="heatmap" style={{ height: '1800px', width: '3500px' }} onClick={this.onMapClick} />
+        {/*<div className={styles.heat} id="heatmap" style={{ height: '670px', width: '1150px' }} onClick={this.onMapClick} />*/}
+        {/*<div>*/}
+          {/*<Button className={styles.plus} type="primary" ghost icon="plus" onClick={this.plusHeatZoom} />*/}
+        {/*</div>*/}
+        {/*<div>*/}
+          {/*<Button className={styles.minus} type="primary" ghost icon="minus" onClick={this.minusHeatZoom} />*/}
+        {/*</div>*/}
+        {/*<div>*/}
+          {/*<Button className={styles.light} type="primary" ghost onClick={this.onThemeChangeDark}>dark</Button>*/}
+        {/*</div>*/}
+        {/*<div>*/}
+          {/*<Button className={styles.dark} type="primary" ghost onClick={this.onThemeChangeLight}>light</Button>*/}
+        {/*</div>*/}
 
-        <div className={styles.two} id="showYear">
+        {/*<div className={styles.two} style={{ color: '#f5f3f0', fontSize: '200px', fontWeight: '600' }} id="showYear">*/}
+        <div className={styles.two} style={{ color: '#f5f3f0', fontSize: '20px', fontWeight: '50' }} id="showYear">
           <h1> {yearNow}</h1>
         </div>
 
@@ -1119,7 +1763,7 @@ class ExpertHeatmap extends React.Component {
         <Row>
           <Col span={22}>
             <Slider min={this.state.startYear} max={this.state.endYear} onChange={this.onChange} onAfterChange={this.onAfterChange}value={this.state.inputValue} />
-            {/* <Slider min={startYear} max={endYear} range step={1} defaultValue={[1999, 1999]} onChange={this.onDbChange} /> */}
+             {/*<Slider min={startYear} max={endYear} range step={1} defaultValue={[1999, 1999]} onChange={this.onDbChange} />*/}
           </Col>
           <Col span={1}>
             <InputNumber
@@ -1141,5 +1785,4 @@ class ExpertHeatmap extends React.Component {
 }
 
 export default ExpertHeatmap;
-
 

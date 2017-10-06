@@ -18,6 +18,8 @@ export default {
   'com.KgSearchBox.placeholder': '请输入姓名或者搜索词',
   'com.KgSearchBox.searchBtn': '搜索',
 
+  'com.RgSearchNameBox.placeholder': '请输入姓名',
+
   'com.search.filter.searchRange': '搜索范围:',
   'com.search.filter.Filters': '过滤条件:',
   'com.search.filter.label.h_index': 'h指数',
@@ -34,9 +36,10 @@ export default {
   'com.search.sort.label.h_index': 'h指数',
   'com.search.sort.label.activity': '学术活跃度',
   'com.search.sort.label.rising_star': '领域新星',
-  'com.search.sort.label.citation': '引用数',
-  'com.search.sort.label.num_pubs': '论文数',
+  'com.search.sort.label.n_citation': '引用数',
+  'com.search.sort.label.n_pubs': '论文数',
   'com.search.sort.label.activity-ranking-contrib': '学会贡献', // CCF Only
+  'com.search.sort.label.time': '最新添加',
 
   'com.searchTypeWidget.label.ExpertSearch': '专家',
   'com.searchTypeWidget.label.ExpertMap': '地图',
@@ -55,7 +58,8 @@ export default {
   'com.bole.ExpertPhoto': '暂无头像',
   // bole add button
   'com.bole.AddButton': '添加',
-  'com.bole.com.bole.AddedSuccessfully': '添加成功',
+  'com.bole.Remove': '删除',
+  'com.bole.PersonComment': '添加评论',
 
 
   // Recommendation

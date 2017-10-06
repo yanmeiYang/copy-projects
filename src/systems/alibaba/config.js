@@ -53,7 +53,6 @@ module.exports = {
   // > PersonList
   // PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
   // PersonList_PersonLink_NewTab: true,
-  // Person_PersonLabelBlock: EMPTY_BLOCK_FUNC, // profile => 'jsx',
 
   // > Search
   // expert base

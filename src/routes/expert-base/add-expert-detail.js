@@ -14,7 +14,7 @@ class AddExpertDetail extends React.Component {
       if (!err) {
         console.log('555%%%%',id);
         that.props.dispatch({
-          type: 'expertBase/addExpertDetail',
+          type: 'expertBase/addExpertDetail', // TODO ????????????????????
           payload: { id, name, name_zh },
         });
         Modal.success({

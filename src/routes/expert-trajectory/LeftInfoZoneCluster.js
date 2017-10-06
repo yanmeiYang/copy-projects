@@ -63,7 +63,7 @@ class LeftInfoZoneCluster extends React.PureComponent {
     // TODO 人头按Hindex排序。
     // TODO 显示Hindex分段.
     return (
-      <div className={styles.rizCluste} >
+      <div className={styles.rizCluster} >
         <div className={styles.name_bg}>
           <h2 className={styles.section_header}>Cluster of {persons.length} experts.</h2>
         </div>

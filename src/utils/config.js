@@ -48,8 +48,11 @@ module.exports = {
     searchPersonAgg: '/search/person/agg',
     searchPersonInBase: '/search/roster/:ebid/experts/advanced',
     searchPersonInBaseAgg: '/search/roster/:ebid/experts/advanced/agg',
-    allPersonInBase: '/roster/:ebid/order-by/h_index/offset/:offset/size/:size',
+    allPersonInBase: '/roster/:ebid/offset/:offset/size/:size',
     allPersonInBaseAgg: '/roster/:ebid/agg?offset=&order=h_index&size=20',
+    allPersonInBaseWithSort: '/roster/:ebid/order-by/:sort/offset/:offset/size/:size',
+    // TODO agg
+
     searchMap: '/search/person/geo', // ?query=:search
     searchExpertBaseMap: '/roster/:id/geo/offset/:offset/size/:size',
     searchExpertNetWithDSL: '/search/person/ego',
@@ -120,6 +123,15 @@ module.exports = {
     getAllOrgs: '/reviewer/orgs/get/all/:offset/:size',
     // getOrgById: '/reviewer/org/get/:id',
 
+    // cross heat
+    getDiscipline: 'http://166.111.7.105:5098/topics?area=:area&k=:k&depth=:depth&context=',
+    delDiscipline: 'http://166.111.7.105:5098/feedback?parents=:parents&children=:children&postive=:postive',
+    createDiscipline: 'http://166.111.7.173:15000/query',
+    getCrossTree: 'http://166.111.7.173:15000/query/:id',
+    getDomainInfo: 'http://166.111.7.173:15000/records/:begin/:end',
+    getDomainAllInfo: 'http://166.111.7.173:15000/record/:domain1/:domain2/:begin/:end',
+    getExpertByIds: '/person/batch-list',
+    getPubById: '/pub/:id',
     // getProjects: API_BASE+"reviewer/projects/get/:offset/:size"
     // addProject: API_BASE+"reviewer/project/add"
     // getProjectById: API_BASE+"reviewer/project/get/:id"
@@ -188,14 +200,19 @@ module.exports = {
     addExpertInfoApi: '/2b/profile/:src',
     updateItemById: '/2b/profile/:src/:id',
     searchItemByName: '/2b/profile/:src/offset/:offset/size/:size',
+    getToBProfileByAid: '/2b/profile/:src/aid/:id',
+    updateToBProfileExtra: '/2b/profile/:src/:id/extra ',
 
     getExpertBase: '/roster/list/:type/offset/:offset/size/:size',
     addExpertBaseApi: '/roster',
-    addExpertDetailApi: '/roster/:ebid/a',
+    addExpertToEB: '/roster/:ebid/a',
     deleteExpertBaseApi: '/roster/:rid',
     getExpertDetailList: '/roster/:ebid/order-by/h_index/offset/:offset/size/:size',
     // searchExpertByName: '/2b/profile/:src/offset/:offset/size/:size',
     searchExpertByName: '/search/roster/:ebid/experts/advanced',
+    invokeRoster: '/roster/:id/members/u',
+    removeByPidApi: '/roster/:rid/d/:pid',
+    // getToBProfile: '/api/2b/profile/:src/:id',
   },
 };
 

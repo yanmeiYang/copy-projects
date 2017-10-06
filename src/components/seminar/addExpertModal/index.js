@@ -98,7 +98,11 @@ class AddExpertModal extends React.Component {
     this.speakerInformation.bio = selectedExpert.bio;
     this.speakerInformation.phone = selectedExpert.phone;
     this.speakerInformation.email = selectedExpert.email;
-    this.speakerInformation.role = [selectedExpert.role];
+    if (typeof selectedExpert.role === 'string') {
+      this.speakerInformation.role = [selectedExpert.role];
+    } else if (selectedExpert.role && selectedExpert.role.length > 0 ) {
+      this.speakerInformation.role = selectedExpert.role;
+    }
     ReactDOM.findDOMNode(this.refs.speakerBio).value = selectedExpert.bio;
     ReactDOM.findDOMNode(this.refs.speakerIphone).value = selectedExpert.phone;
     ReactDOM.findDOMNode(this.refs.speakerEmail).value = selectedExpert.email;
@@ -111,6 +115,7 @@ class AddExpertModal extends React.Component {
   setModalVisible() {
     this.setState({ modalVisible: false });
     this.props.callbackParentSetAddNewTalk();
+    this.props.parentProps.dispatch({ type: 'seminar/emptySpeakerSuggests' });
   }
 
   setStep(step, visible) {
@@ -144,6 +149,7 @@ class AddExpertModal extends React.Component {
       img: defaultImg,
       phone: '',
       pos: [],
+      role: this.speakerInformation.role,
     };
     this.props.parentProps.dispatch({ type: 'seminar/cancleSuggestExpert', payload: data });
   };
@@ -151,14 +157,20 @@ class AddExpertModal extends React.Component {
   // 选择一位推荐专家
   selectedExpert = (speaker) => {
     this.notFoundSuggestExpert();
-    speaker.role = this.speakerInformation.role;
+    if (typeof this.speakerInformation.role === 'string') {
+      speaker.role = this.speakerInformation.role;
+    } else {
+      speaker.role = this.speakerInformation.role[0];
+    }
     this.props.parentProps.dispatch({ type: 'seminar/saveSuggestExpert', payload: { speaker } });
     this.setState({
       step3: true,
       step2: false,
       step1: false,
     });
-    this.props.parentProps.seminar.speakerSuggests = [];
+    // 保存以后把suggest expert清空
+    this.props.parentProps.dispatch({ type: 'seminar/emptySpeakerSuggests' });
+    // this.props.parentProps.seminar.speakerSuggests = [];
   };
 
   // 修改当前专家信息
@@ -190,17 +202,17 @@ class AddExpertModal extends React.Component {
     };
     talk.title = this.refs.talkTitle.refs.input.value;
     talk.speaker = state.speakerInfo;
-    if (typeof state.speakerInfo.gender === 'number') {
-      return talk.speaker.gender;
-    } else if (typeof state.speakerInfo.gender === 'object') {
-      talk.speaker.gender = parseInt(state.speakerInfo.gender.i);
-    } else {
-      talk.speaker.gender = 1;
+    if (typeof state.speakerInfo.gender !== 'number') {
+      if (typeof state.speakerInfo.gender === 'object') {
+        talk.speaker.gender = parseInt(state.speakerInfo.gender.i);
+      } else {
+        talk.speaker.gender = 1;
+      }
     }
     if (state.talkStartValue || state.talkEndValue) {
       talk.time = {};
     }
-    talk.speaker.role = state.speakerInfo.role !== undefined ? state.speakerInfo.role : [];
+    talk.speaker.role = state.speakerInfo.role || [];
     if (state.talkStartValue) {
       talk.time.from = typeof state.talkStartValue === 'string' ? state.talkStartValue : state.talkStartValue.toJSON();
     }
@@ -211,6 +223,8 @@ class AddExpertModal extends React.Component {
     talk.abstract = ReactDOM.findDOMNode(this.refs.talkAbstract).value;
     this.props.callbackParent(talk, state.isEdit);
     this.setState({ modalVisible: false });
+    // 保存以后把suggest expert清空
+    this.props.parentProps.dispatch({ type: 'seminar/emptySpeakerSuggests' });
   };
 
   suggestExpert(type) {
@@ -246,20 +260,20 @@ class AddExpertModal extends React.Component {
   };
   expertRoleChange = (value) => {
     this.speakerInformation.role = value;
-    console.log(this.speakerInformation.role);
   };
 
   jumpToStep2 = () => {
-    this.setStep('step2', true);
-    // this.props.parentProps.form.validateFieldsAndScroll((err, values) => {
-    //   if (!err) {
-    //     this.setStep('step2', true);
-    //   }
-    // });
+    // this.setStep('step2', true);
+    this.props.parentProps.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        this.setStep('step2', true);
+      }
+    });
   };
 
   cancelCurrentPerson = () => {
-    this.props.parentProps.seminar.speakerSuggests = [];
+    // this.props.parentProps.seminar.speakerSuggests = [];
+    this.props.parentProps.dispatch({ type: 'seminar/emptySpeakerSuggests' });
     this.setState({ step2: true, step3: false, isSearched: false });
     // this.refs.speakerName.refs.input.value = '';
     // this.refs.speakerAff.refs.input.value = '';
@@ -456,14 +470,13 @@ class AddExpertModal extends React.Component {
                             </span>}</p>
                           </div>
                           <div className={styles.tagWrap}>
-                            {speaker.tags && speaker.tags.slice(0, 5).map((tag) => {
+                            {speaker.tags && speaker.tags.slice(0, 5).map((tag, index) => {
                               if (tag === 'Null') {
                                 return '';
                               }
                               return (
-                                <Link key={Math.random()}>
-                                  <Tag className={styles.tag}>{tag.t}</Tag>
-                                </Link>
+                                <Tag key={`${tag.t}_${index}`}
+                                     className={styles.tag}>{tag.t}</Tag>
                               );
                             })}
                           </div>
@@ -484,6 +497,7 @@ class AddExpertModal extends React.Component {
             </Spin>
             {/* 活动页面点编辑展示的内容 */}
             {isEdit && editTheTalk.speaker !== undefined && editTheTalk.speaker.name !== undefined &&
+            speakerSuggests.length === 0 &&
             <ExpertBasicInfo currentExpert={editTheTalk.speaker} />
             }
             {/* 非活动详情页面编辑 */}
@@ -537,7 +551,7 @@ class AddExpertModal extends React.Component {
               <label className="ant-col-3">姓名: </label>
               <div className="ant-col-21">
                 <Input size="large" placeholder="专家姓名" ref="speakerName"
-                       onBlur={this.saveExpertInfo.bind(this, 'name')} />
+                       onChange={this.saveExpertInfo.bind(this, 'name')} />
               </div>
             </div>
 
@@ -554,28 +568,28 @@ class AddExpertModal extends React.Component {
               <label className="ant-col-3">职称: </label>
               <div className="ant-col-21">
                 <Input size="large" placeholder="专家职称" ref="speakerPos"
-                       onBlur={this.saveExpertInfo.bind(this, 'position')} />
+                       onChange={this.saveExpertInfo.bind(this, 'position')} />
               </div>
             </div>
             <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
               <label className="ant-col-3">单位: </label>
               <div className="ant-col-21">
                 <Input size="large" placeholder="专家单位" ref="speakerAff"
-                       onBlur={this.saveExpertInfo.bind(this, 'affiliation')} />
+                       onChange={this.saveExpertInfo.bind(this, 'affiliation')} />
               </div>
             </div>
             <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
               <label className="ant-col-3">电话: </label>
               <div className="ant-col-21">
                 <Input size="large" placeholder="电话" ref="speakerIphone"
-                       onBlur={this.saveExpertInfo.bind(this, 'phone')} />
+                       onChange={this.saveExpertInfo.bind(this, 'phone')} />
               </div>
             </div>
             <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
               <label className="ant-col-3">邮箱: </label>
               <div className="ant-col-21">
                 <Input size="large" placeholder="邮箱" ref="speakerEmail"
-                       onBlur={this.saveExpertInfo.bind(this, 'email')} />
+                       onChange={this.saveExpertInfo.bind(this, 'email')} />
               </div>
             </div>
           </Col>
@@ -583,7 +597,7 @@ class AddExpertModal extends React.Component {
             <label className="ant-col-3">专家简介: </label>
             <div className="ant-col-21">
               <Input type="textarea" rows={4} size="large" placeholder="专家简介" ref="speakerBio"
-                     onBlur={this.saveExpertInfo.bind(this, 'bio')} />
+                     onChange={this.saveExpertInfo.bind(this, 'bio')} />
             </div>
           </Col>
 

@@ -34,6 +34,7 @@ export default class Header extends PureComponent {
     logoZone: PropTypes.array,
     searchZone: PropTypes.array,
     infoZone: PropTypes.array,
+    rightZone: PropTypes.array,
 
     headerSearchBox: PropTypes.object,
   };
@@ -55,7 +56,8 @@ export default class Header extends PureComponent {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (compare(this.props, nextProps, 'logoZone', 'searchZone', 'infoZone', 'headerSearchBox')) {
+    if (compare(this.props, nextProps,
+        'logoZone', 'searchZone', 'infoZone', 'rightZone', 'headerSearchBox')) {
       return true;
     }
     if (compare(this.state, nextState, 'query')) {
@@ -90,7 +92,7 @@ export default class Header extends PureComponent {
 
   render() {
     console.count('>>>>>>>HEADER');
-    const { logoZone, searchZone, infoZone } = this.props;
+    const { logoZone, searchZone, infoZone, rightZone } = this.props;
     const { headerSearchBox } = this.props.app;
     const { onSearch } = this.props;
     let { query } = this.props;
@@ -114,6 +116,9 @@ export default class Header extends PureComponent {
     ];
 
     const InfoZone = infoZone || [
+      { /*<HeaderInfoZone key={0} app={this.props.app} logout={this.props.logout} />,*/ }
+    ];
+    const RightZone = rightZone || [
       <HeaderInfoZone key={0} app={this.props.app} logout={this.props.logout} />,
     ];
 
@@ -170,6 +175,9 @@ export default class Header extends PureComponent {
         </div>
         <div className={tc(['infoZone'])}>
           {InfoZone && InfoZone.length > 0 && InfoZone.map(elm => elm)}
+        </div>
+        <div className={tc(['rightZone'])}>
+          {RightZone && RightZone.length > 0 && RightZone.map(elm => elm)}
         </div>
       </Layout.Header>
     );

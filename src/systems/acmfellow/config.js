@@ -6,6 +6,7 @@ import { Link } from 'dva/router';
 import defaults from '../utils';
 import { AddToEBButton, PersonRemoveButton, PersonComment } from './components';
 import { GetComments } from './person-comment-hooks';
+import * as Const from './const-acmfellow';
 
 import { createRoster } from '../../hooks';
 
@@ -33,10 +34,7 @@ module.exports = {
   // },
   Header_LogoWidth: 118,
   Header_UserPageURL: '/user-info',
-  Header_RightZone: [() => <Link key="0" to="/eb/59a8e5879ed5db1fc4b762ad/-/0/20">我的专家库</Link>], // TODO make this a Component.
-  // Header_RightZone: [
-  //   () => <a key="0" href="/eb/59a8e5879ed5db1fc4b762ad" target="_blank">我的专家库</a>,
-  // ],
+  Header_RightZone: [() => <Link key="0" to={`/eb/${Const.ExpertBase}/-/0/20`}>我的专家库</Link>], // TODO make this a Component.
 
   // Footer_Content: '',
   // ShowHelpDoc: true,
@@ -44,12 +42,12 @@ module.exports = {
   // Functionality
   Enable_Export: false,
   // Enable_Export: true,
-  // Search_EnablePin: true,
+  Search_EnablePin: true,
 
   // > Search related
   SearchBarInHeader: true,
-  // HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertBase'], // ExpertBase bole专有
-  HeaderSearch_TextNavi: [],
+  HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertBase'],
+  // HeaderSearch_TextNavi: [],
 
   // Search_DisableFilter: false,
   Search_DisableExpertBaseFilter: true,
@@ -75,7 +73,7 @@ module.exports = {
       <AddToEBButton
         person={param.person} key="2"
         expertBaseId={param.expertBaseId}
-        targetExpertBase="59a8e5879ed5db1fc4b762ad"
+        targetExpertBase={Const.ExpertBase}
       />),
 
   PersonList_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
@@ -83,8 +81,7 @@ module.exports = {
     param => (
       <PersonComment
         person={param.person} user={param.user} key="1"
-
-        ExpertBase="59a8e5879ed5db1fc4b762ad"
+        ExpertBase={Const.ExpertBase}
       />),
   ],
   // PersonList_DidMountHooks: [],
@@ -97,14 +94,15 @@ module.exports = {
   // 地图中心点
   // CentralPosition: { lat: 37.09024, lng: -95.712891 },
 
-  IndexPage_QuickSearchList: [
-    { name: 'Medical Robotics', name_zh: '' },
-    { name: 'Surgical Robots', name_zh: '' },
-    { name: 'Robot Kinematics', name_zh: '' },
-    { name: 'Computer Assisted Surgery', name_zh: '' },
-    { name: 'Surgical Navigation', name_zh: '' },
-    { name: 'Minimally Invasive Surgery', name_zh: '' },
-  ],
+  // TODO: use default.
+  // IndexPage_QuickSearchList: [
+  //   { name: 'Medical Robotics', name_zh: '' },
+  //   { name: 'Surgical Robots', name_zh: '' },
+  //   { name: 'Robot Kinematics', name_zh: '' },
+  //   { name: 'Computer Assisted Surgery', name_zh: '' },
+  //   { name: 'Surgical Navigation', name_zh: '' },
+  //   { name: 'Minimally Invasive Surgery', name_zh: '' },
+  // ],
 
   ExpertBases: [
     {
@@ -112,18 +110,13 @@ module.exports = {
       name: <span><i className="fa fa-globe fa-fw" />全球专家</span>,
       nperson: 2871,
     },
-    // {
-    //   id: '59a8e5879ed5db1fc4b762ad', // medrob eb id: 599bc0a49ed5db3ea1b61c60
-    //   name: '我的专家库',
-    //   nperson: 100,
-    // },
   ],
 
-  // bole系统独有设置
-  ExpertBase: '59a8e5879ed5db1fc4b762ad',
+  // acmfellow 系统
+  ExpertBase: Const.ExpertBase,
 
   // bole 智库权限设置 TODO param => xxx
-  HOOK: [
-    (dispatch, id, email, name, perm) => createRoster(dispatch, id, email, name, perm),
-  ],
+  // HOOK: [
+  //   (dispatch, id, email, name, perm) => createRoster(dispatch, id, email, name, perm),
+  // ],
 };

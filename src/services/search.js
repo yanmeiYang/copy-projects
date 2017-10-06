@@ -1,6 +1,6 @@
-import { request, queryAPI, config } from '../utils';
-import { sysconfig } from '../systems';
+import { request, queryAPI, config } from 'utils';
 import * as bridge from 'utils/next-bridge';
+import { sysconfig } from 'systems';
 
 const { api } = config;
 
@@ -21,6 +21,7 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
   if (filters && filters.eb && filters.eb.id === 'aminer') {
     return searchPersonGlobal(query, offset, size, filters, sort, useTranslateSearch);
   }
+
   // Fix bugs when default search area is 'aminer'
   if ((!filters || !filters.eb) && sysconfig.DEFAULT_EXPERT_BASE === 'aminer') {
     return searchPersonGlobal(query, offset, size, filters, sort, useTranslateSearch);
@@ -91,6 +92,7 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
 
     // TODO 我需要替换成新的API
   } else {
+    // old method.
     const { expertBase, data } = prepareParameters(query, offset, size, filters,
       sort, useTranslateSearch);
     return request(
@@ -120,16 +122,16 @@ export async function searchListPersonInEB(payload) {
       { method: 'GET' /*, data: { rev: 0 } */ },
     );
   }
-  const rosterAPI = sort === 'time' ? api.allPersonInBase : api.allPersonInBaseWithSort;
-
-  const data = {};
-  if (sort === 'time') {
-    data.rev = 1;
-  }
-  return request(
-    rosterAPI.replace(':ebid', ebid),
-    { method: 'GET', data },
-  );
+  // const rosterAPI = sort === 'time' ? api.allPersonInBase : api.allPersonInBaseWithSort;
+  //
+  // const data = {};
+  // if (sort === 'time') {
+  //   data.rev = 1;
+  // }
+  // return request(
+  //   rosterAPI.replace(':ebid', ebid),
+  //   { method: 'GET', data },
+  // );
 }
 
 // Search Global.

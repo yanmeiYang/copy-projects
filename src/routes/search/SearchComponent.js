@@ -122,6 +122,7 @@ export default class SearchComponent extends Component {
       size: pageSize,
     });
     dispatch(routerRedux.push({ pathname }));
+    console.log('>>>> >>>> page changed::::', page, pathname);
   };
 
   // ExpertBase filter 'eb' is a special filter.

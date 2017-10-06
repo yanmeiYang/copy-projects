@@ -15,7 +15,7 @@ const toNextPersons = (persons) => {
 };
 
 const toNextPerson = (person) => {
-  console.log('person is >>>>>>>>>>', person);
+  // console.log('person is >>>>>>>>>>', person);
   if (person) {
     return {
       id: person.id,
@@ -61,19 +61,13 @@ const toNextPerson = (person) => {
       email: profileUtils.displayEmailSrc(person),
       activity_indices: person.activity_indices, // TODO ccf 的麻烦
 
-      // indices
-      // numpubs: person.indices.num_pubs,
-      // citation: person.indices.num_citation,
-      // hindex: person.indices.h_index,
-      // gindex: person.indices.g_index,
-      // sociability: person.indices.sociability,
-      // risingStar: person.indices.risingStar, // TODO 旧的没有
-      // activity: person.indices.activity,
-      // diversity: person.indices.diversity, // TODO 你没有
-      // newstar: person.indices.new_star, // TODO ???
-      // >> what's num_patents, as, num_ret_pubs
-
       labels: '', // TODO 旧数据没有。
+
+      // additional old data.
+      pin: person.pin,
+      locks: person.locks,
+      attr: person.attr,
+
     };
   }
   return null;
@@ -84,7 +78,7 @@ const toNextAggregation = (aggs) => {
   if (aggs && aggs.length > 0) {
     aggs.map((agg) => {
       agg.name = agg.type;
-      agg.items = agg.item.map((i) => {
+      agg.items = agg.item && agg.item.map((i) => {
         return {
           term: i.value,
           count: i.count,

@@ -6,12 +6,12 @@ import { connect } from 'dva';
 import { Button, Modal } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import styles from './AddToEBButton.less';
-
+import * as Const from '../const-acmfellow';
 
 class PersonRemoveButton extends React.PureComponent {
   state = {};
   removeItem = (pid) => {
-    const rid = '59a8e5879ed5db1fc4b762ad';
+    const rid = Const.ExpertBase;
     const props = this.props;
     const offset = 0;
     const size = 100;

@@ -14,7 +14,6 @@ import styles from './Navigator.less';
 const { theme } = sysconfig;
 const tc = applyTheme(styles);
 
-
 const NaviConfig = {
   ExpertSearch: {
     key: 'ExpertSearch',
@@ -60,7 +59,7 @@ const NaviConfig = {
   ExpertBase: { // bole 专有
     key: 'ExpertBase',
     label: '我的专家库',
-    url: '/eb/59a8e5879ed5db1fc4b762ad',
+    url: `/eb/${sysconfig.ExpertBase}/-/0/20`,
     // data: 'query',
     pageSignature: 'eb/',
   },
@@ -107,7 +106,7 @@ export default class Navigator extends PureComponent {
     if (conf && conf.data) {
       const query = {};
       query[conf.data] = theQuery;
-      dispatch(routerRedux.push({ pathname: conf.url, search: `?query=${theQuery}`}));
+      dispatch(routerRedux.push({ pathname: conf.url, search: `?query=${theQuery}` }));
     } else {
       dispatch(routerRedux.push({ pathname: conf.url.replace(':query', theQuery) }));
     }

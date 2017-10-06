@@ -1,12 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link, withRouter } from 'dva/router';
-import { sysconfig } from 'systems';
+import { sysconfig, applyTheme } from 'systems';
 import { Auth } from 'hoc';
+import { Layout } from 'routes';
 import classnames from 'classnames';
 import { createURL } from 'utils';
 import SearchComponent from 'routes/search/SearchComponent';
 import styles from './ExpertBaseExpertsPage.less';
+
+const { theme } = sysconfig;
+const tc = applyTheme(styles);
 
 @connect(({ app, search, expertBase, loading }) => ({ app, search, expertBase, loading }))
 @withRouter
@@ -94,7 +98,8 @@ export default class ExpertBaseExpertsPage extends Component {
     }
 
     return (
-      <div className={classnames('content-inner', styles.page)}>
+      <Layout contentClass={tc(['searchPage'])} onSearch={this.onSearchBarSearch}
+              query={query}>
         <h1 className={styles.pageTitle}>
           我的专家库
           {seeAllURL &&
@@ -113,8 +118,7 @@ export default class ExpertBaseExpertsPage extends Component {
           disableExpertBaseFilter
           disableSearchKnowledge
         />
-      </div>
-
+      </Layout>
     );
   }
 }

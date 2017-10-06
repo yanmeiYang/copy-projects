@@ -5,6 +5,7 @@
 import React, { PureComponent, Component, PropTypes } from 'react';
 import { connect } from 'dva';
 import { Helmet } from 'react-helmet';
+import ReactGA from 'react-ga';
 import { Layout as LayoutComponent } from 'antd';
 import { sysconfig, applyTheme } from 'systems';
 import { Header, Navigator } from 'components/Layout';
@@ -45,6 +46,11 @@ export default class Layout extends Component {
     showNavigator: sysconfig.Layout_HasNavigator,
     sidebar: theme.sidebar,
     footer: theme.footer,
+  };
+
+  componentWillMount() {
+    console.log('********* 统计 *********');
+    ReactGA.pageview(window.location.hash);
   };
 
   render() {

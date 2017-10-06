@@ -1,9 +1,85 @@
 .trendmap{
   height: 100%;
-  width: 200%;
+  width: 100%;
 }
 .trendchart {
   height: 800px;
-  width: 800px;
   display:block;
+}
+.keyinfo{
+  //display:none;
+}
+.tooltip{
+  position: absolute;
+  display: none;
+  border-style: solid;
+  white-space: nowrap;
+  z-index: 9999999;
+  transition: left 0.4s cubic-bezier(0.23, 1, 0.32, 1), top 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  background-color: rgba(255, 255, 255, 0.9);
+  border-width: 1px;
+  border-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px; color: rgb(51, 51, 51);
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  font-stretch: normal;
+  font-size: 12px;
+  font-family: "Microsoft YaHei";
+  line-height: 18px;
+  padding: 0px;
+}
+.keyhead{
+  padding: 0px 6px 0px 6px;
+  text-align:center;
+  color:white;
+  font-size: 18px;
+  width:240px;
+  height:30px;
+  line-height:30px;
+}
+.hotword{
+  color:rgba(0, 122, 175, 1);
+  cursor:pointer;
+}
+.keybody{
+  padding:5px;
+  width:240px;
+  min-height:100px;
+  max-height:260px;
+  overflow-y:auto;
+  word-wrap:break-word;
+  word-break:break-all;
+  white-space: pre-wrap;
+  font-size:13px;
+}
+.delCurrentNode {
+  color: #ffffff;
+  margin-top: -5px;
+  cursor: pointer;
+  float:right;
+  padding:2px;
+}
+.keywords {
+  display: flex; flex-direction: row; justify-content: center;
+  padding: 0px 180px 40px 180px;
+  .inner {
+    display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center;
+    width: 100%;
+    div {
+      border: none; border-radius: 32px;
+      padding: 0px 10px; margin: 4px 5px;
+      background-color: rgba(62, 155, 201, 1);
+
+      a { color: #ffffff; font-size: @font-size-lg; }
+    }
+    div:hover { background-color: rgba(0, 122, 175, 1); }
+  }
+}
+.paper{
+  font-size:13px;
+  .title{
+    color: rgba(0, 122, 175, 1);
+    font-weight: normal;
+  }
 }

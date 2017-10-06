@@ -40,6 +40,10 @@
   .text {
     font-size: 20px; font-weight: bold; color: #333333;
     margin-top: 40px; margin-bottom: 30px;
+    span{
+      font-size: 40px;
+      text-shadow: 5px 5px 5px #ddd;
+    }
   }
 }
 
@@ -64,6 +68,18 @@
     background-size: auto 100%;
     background-origin: content-box;
   }
+
+  :global {
+     .keywords_inner {
+       div {
+         border: none; border-radius: 32px;
+         padding: 0px 10px; margin: 4px 5px;
+         background-color:  rgba(62, 155, 201, 1);
+         a { color: #ffffff; font-size: @font-size-lg; }
+       }
+       div:hover { background-color: rgba(0, 122, 175, 1); }
+     }
+   }
 
 }
 

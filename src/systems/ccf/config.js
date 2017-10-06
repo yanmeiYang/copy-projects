@@ -66,8 +66,17 @@ module.exports = {
   PersonList_PersonLink: personId => `/person/${personId}`,
   PersonList_PersonLink_NewTab: false,
 
-  IndexPage_QuickSearchList: ['人工智能', '机器人', '数据挖掘', '机器学习', '数据建模', '计算机视觉',
-    '计算机网络', '网络', '自然语言处理'],
+  IndexPage_QuickSearchList: [
+    { name: '', name_zh: '人工智能' },
+    { name: '', name_zh: '机器人' },
+    { name: '', name_zh: '数据挖掘' },
+    { name: '', name_zh: '机器学习' },
+    { name: '', name_zh: '数据建模' },
+    { name: '', name_zh: '计算机视觉' },
+    { name: '', name_zh: '计算机网络' },
+    { name: '', name_zh: '网络' },
+    { name: '', name_zh: '自然语言处理' },
+  ],
 
   PersonList_ShowIndices: ['activityRankingContrib', 'h_index', 'activity', 'rising_star'],
 

@@ -7,6 +7,7 @@ import { sysconfig, applyTheme } from 'systems';
 import { Layout } from 'antd';
 import { KgSearchBox } from 'components/search';
 import HeaderInfoZone from 'components/Layout/HeaderInfoZone';
+import { compare } from 'utils/compare';
 import styles from './Header.less';
 
 const { theme } = sysconfig;
@@ -45,7 +46,6 @@ export default class Header extends PureComponent {
 
   state = {
     query: '',
-    // logoutLoading: false,
   };
 
   componentWillReceiveProps = (nextProps) => {
@@ -54,14 +54,26 @@ export default class Header extends PureComponent {
     }
   };
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (compare(this.props, nextProps, 'logoZone', 'searchZone', 'infoZone', 'headerSearchBox')) {
+      return true;
+    }
+    if (compare(this.state, nextState, 'query')) {
+      return true;
+    }
+    return false;
+  }
+
   // onChangeLocale = (locale) => {
   //   saveLocale(sysconfig.SYSTEM, locale);
   //   window.location.reload();
   // };
   //
+
   setQuery = (query) => {
     this.setState({ query });
   };
+
   //
   // logoutAuth = () => {
   //   this.setState({ logoutLoading: true });
@@ -77,12 +89,13 @@ export default class Header extends PureComponent {
   // };
 
   render() {
+    console.count('>>>>>>>HEADER');
     const { logoZone, searchZone, infoZone } = this.props;
     const { headerSearchBox } = this.props.app;
     const { onSearch } = this.props;
     let { query } = this.props;
     query = query || 'data mining';
-    // console.log('>>>>>>>', logoZone, searchZone, infoZone);
+    // console.log('>>>>>>>HEADER', logoZone, searchZone, infoZone);
 
     // if (headerSearchBox) {
     //   const oldSearchHandler = headerSearchBox.onSearch;
@@ -98,11 +111,11 @@ export default class Header extends PureComponent {
       <KgSearchBox key={0} size="large" query={query} onSearch={onSearch}
                    className={styles.searchBox} style={{ height: 36, marginTop: 15 }}
       />,
-      ];
+    ];
 
     const InfoZone = infoZone || [
       <HeaderInfoZone key={0} app={this.props.app} logout={this.props.logout} />,
-      ];
+    ];
 
     // const { headerSearchBox, user, roles } = this.props.app;
     //

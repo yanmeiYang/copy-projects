@@ -7,9 +7,9 @@ import { addLocaleData } from 'react-intl';
 import classnames from 'classnames';
 import { loadSavedLocale } from 'utils/locale';
 import { System, Source } from 'utils/system';
-import Footer from '../components/Footers/default';
-import defaults from './utils';
 import { TopExpertBase } from 'utils/expert-base';
+import Footer from 'components/Footers/default';
+import defaults from './utils'; // Warning: no zhuo no die.
 
 // All available systems.
 const CurrentSystemConfig = {
@@ -23,6 +23,7 @@ const CurrentSystemConfig = {
   demo: require('./demo/config'),
   cietest: require('./cietest/config'),
   bole: require('./bole/config'),
+  acmfellow: require('./acmfellow/config'),
 };
 
 const sysTheme = require(`systems/${System}/theme-${System}.js`);

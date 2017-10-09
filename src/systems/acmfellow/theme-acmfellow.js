@@ -31,4 +31,6 @@ module.exports = {
     </Link>,
   ],
 
+  ExpertBaseExpertsPage_Title: <span>ACM Fellow</span>,
+
 };

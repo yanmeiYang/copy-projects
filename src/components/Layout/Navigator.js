@@ -63,6 +63,19 @@ const NaviConfig = {
     // data: 'query',
     pageSignature: 'eb/',
   },
+
+  ACMFellowExpertBase: { // acmfellow 专有
+    key: 'ACMFellowExpertBase',
+    label: 'ACM Fellow',
+    url: `/eb/${sysconfig.ExpertBase}/:query/0/20`,
+    pageSignature: 'eb/',
+  },
+  ACM_ExpertSearch: {
+    key: 'ACM_ExpertSearch',
+    label: '全部专家',
+    url: `/uniSearch/:query/0/${sysconfig.MainListSize}`,
+    pageSignature: 'uniSearch',
+  },
 };
 
 const defaultNavis = ['ExpertSearch', 'ExpertMap', 'Relation', 'KnowledgeGraph', 'TrendPrediction'];

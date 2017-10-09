@@ -3,6 +3,7 @@ export default {
 
   // Layout::Header
   'header.label.help': 'HELP',
+  'header.login': 'Login',
   'header.exit_login': 'Exit Login',
   'system.lang.show': 'Language',
   'system.lang.option_en': 'English',
@@ -10,9 +11,9 @@ export default {
 
   // Index
   'index.title': 'Expert Search',
-  'search.translateSearchMessage.1': '同时搜索了 "{enQuery}".',
-  'search.translateSearchMessage.2': '您也可以只搜索 "{cnQuery}".',
-  'search.translateSearchMessage.reverse': '您可以同时搜索 "{enQuery}" 和 "{cnQuery}".',
+  'search.translateSearchMessage.1': 'We also search "{enQuery}" for you.',
+  'search.translateSearchMessage.2': 'Search "{cnQuery}" only.',
+  'search.translateSearchMessage.reverse': 'You can also search with both "{enQuery}" and "{cnQuery}".',
 
   // Components
   'com.KgSearchBox.placeholder': 'Input expert name or query',
@@ -54,6 +55,8 @@ export default {
   'com.searchTypeWidget.label.ExpertTrajectory': 'DEV:Expert Trajectory',
   'com.searchTypeWidget.label.ExpertBase': 'My Experts',
 
+  'com.searchTypeWidget.label.ACM_ExpertSearch': 'All Experts',
+
   // bole avatar
   'com.bole.ExpertPhoto': 'No Avatar',
   'com.bole.AddButton': 'Add',
@@ -71,6 +74,10 @@ export default {
   'com.expertMap.headerLine.label.baiduMap': 'Baidu Map',
   'com.expertMap.headerLine.label.googleMap': 'Google Map',
   'com.expertMap.headerLine.label.level': 'Level：',
+
+  // Expert Base
+  'page.ExpertBaseExpertsPage.MyExperts': 'My Experts',
+  'page.ExpertBaseExpertsPage.SeeAllExperts': 'See All',
 
   // Recommendation
   'rcd.home.pageTitle': 'Organization List',

@@ -12,6 +12,8 @@ import { createRoster } from '../../hooks';
 
 module.exports = {
 
+  Use_CDN: false,
+
   // 通用配置。所有System的配置文件必须全部包含这部分的值
   PageTitle: 'ACM Fellow',
   SearchPagePrefix: 'uniSearch', // search, uniSearch
@@ -46,7 +48,7 @@ module.exports = {
 
   // > Search related
   SearchBarInHeader: true,
-  HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertBase'],
+  HeaderSearch_TextNavi: ['ACMFellowExpertBase', 'ACM_ExpertSearch'],
   // HeaderSearch_TextNavi: [],
 
   // Search_DisableFilter: false,

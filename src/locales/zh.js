@@ -3,6 +3,7 @@ export default {
 
   // Layout::Header
   'header.label.help': '帮助文档',
+  'header.login': '登录',
   'header.exit_login': '退出登录',
   'system.lang.show': '语言',
   'system.lang.option_en': 'English',
@@ -10,9 +11,9 @@ export default {
 
   // Index
   'index.title': '专家搜索',
-  'search.translateSearchMessage.1': 'We also search "{enQuery}" for you.',
-  'search.translateSearchMessage.2': 'Search "{cnQuery}" only.',
-  'search.translateSearchMessage.reverse': 'You can also search with both "{enQuery}" and "{cnQuery}".',
+  'search.translateSearchMessage.1': '同时搜索了 "{enQuery}".',
+  'search.translateSearchMessage.2': '您也可以只搜索 "{cnQuery}".',
+  'search.translateSearchMessage.reverse': '您可以同时搜索 "{enQuery}" 和 "{cnQuery}".',
 
   // Components
   'com.KgSearchBox.placeholder': '请输入姓名或者搜索词',
@@ -54,6 +55,8 @@ export default {
   'com.searchTypeWidget.label.ExpertTrajectory': 'DEV:专家迁移',
   'com.searchTypeWidget.label.ExpertBase': '我的专家库',
 
+  'com.searchTypeWidget.label.ACM_ExpertSearch': '全部专家',
+
   'com.PersonList.label.views': '次查看',
   'com.PersonList.label.homepage': '个人主页',
   'com.PersonList.label.sendEmail': '发送邮件',
@@ -71,6 +74,9 @@ export default {
   'com.bole.Remove': '删除',
   'com.bole.PersonComment': '添加评论',
 
+  // Expert Base
+  'page.ExpertBaseExpertsPage.MyExperts': '我的专家库',
+  'page.ExpertBaseExpertsPage.SeeAllExperts': '查看全部专家',
 
   // Recommendation
   'rcd.home.pageTitle': '机构列表',

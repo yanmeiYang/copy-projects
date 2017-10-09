@@ -7,7 +7,7 @@
   .headerAvatar:hover img { box-shadow: 0 0 1px 1px orange; }
 }
 
-.headerInfoZone{
+.headerInfoZone {
   .emptyMenuStyle {
     border: 0px !important;
     padding-left: 0px !important;
@@ -20,7 +20,19 @@
     }
     //display: block; // disabled
   }
+
+  :global {
+    .ant-menu .ant-menu-item { padding: 0 8px; }
+    .ant-menu .ant-menu-item span { padding: 0 8px; }
+
+    .ant-menu-item .anticon,
+    .ant-menu-submenu-title .anticon {
+      margin-right: 0px;
+    }
+
+  }
 }
+
 //
 //.header {
 //  height: 70px; padding: 0;
@@ -94,19 +106,7 @@
 //        .hideCreateUser {
 //          display: none;
 //        }
-//
-//        .emptyMenuStyle {
-//          border: 0px !important;
-//          padding-left: 0px !important;
-//          color: #1d2129 !important;
-//          cursor: default;
-//          .isAuthority {
-//            float: left;
-//            line-height: 18px;
-//            margin-top: 7px;
-//          }
-//          display: none; // disabled
-//        }
+
 //        .logoutText {
 //          span { display: none }
 //        }

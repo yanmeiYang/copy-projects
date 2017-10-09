@@ -1,4 +1,5 @@
 import { api } from 'utils/config';
+import { sysconfig } from '../systems';
 
 const cdnDomain = 'am-cdn-s0.b0.upaiyun.com';
 
@@ -35,14 +36,18 @@ const personAvatar = (src, profileId, size) => {
   const imgSize = size || 160;
   const imgSrc = src || '//static.aminer.org/default/default.jpg';
 
-  // const scopeSessionId = Math.random(); // 'todo-replace-scope-session-id';
-  if (imgSrc.indexOf('static.aminer.org') >= 0) {
-    // 其他域名下CDN图片读取不出来。
-    return `${imgSrc.replace('static.aminer.org', cdnDomain)}!${imgSize}`;
-    // ?ran=${scopeSessionId}`;
-    // return `${imgSrc}?ran=${scopeSessionId}`;
+  if (sysconfig.Use_CDN) {
+    // const scopeSessionId = Math.random(); // 'todo-replace-scope-session-id';
+    if (imgSrc.indexOf('static.aminer.org') >= 0) {
+      // 其他域名下CDN图片读取不出来。
+      return `${imgSrc.replace('static.aminer.org', cdnDomain)}!${imgSize}`;
+      // ?ran=${scopeSessionId}`;
+      // return `${imgSrc}?ran=${scopeSessionId}`;
+    } else {
+      // return `${imgSrc}?ran=${scopeSessionId}`;
+      return imgSrc;
+    }
   } else {
-    // return `${imgSrc}?ran=${scopeSessionId}`;
     return imgSrc;
   }
 };

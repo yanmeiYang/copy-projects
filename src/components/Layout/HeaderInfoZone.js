@@ -35,7 +35,7 @@ export default class HeaderInfoZone extends PureComponent {
       ? `/login?from=${location.pathname}`
       : '/login';
   };
-  
+
   render() {
     const { user, roles } = this.props.app;
     const UserNameBlock = isAuthed(roles)
@@ -60,15 +60,9 @@ export default class HeaderInfoZone extends PureComponent {
     );
     return (
       <div className={styles.headerInfoZone}>
-        {/*className={styles.menu}*/}
-        <Menu selectedKeys={[location.pathname]}
-              mode="horizontal" theme="light">
-          {/*className={styles.menu}*/}
+        <Menu selectedKeys={[location.pathname]} mode="horizontal" theme="light">
 
-          {/* <Menu.Item key="/users"> */}
-          {/* <Link to="/"><Icon type="bars" />语言切换</Link> */}
-          {/* </Menu.Item> */}
-
+          {/* 帮助 */}
           {isLogin(user) && sysconfig.ShowHelpDoc &&
           <Menu.Item key="/help">
             <Link to="/help">
@@ -76,6 +70,7 @@ export default class HeaderInfoZone extends PureComponent {
             </Link>
           </Menu.Item>}
 
+          {/* 语言 */}
           {sysconfig.EnableLocalLocale &&
           <Menu.Item>
             <Dropdown overlay={menu} placement="bottomLeft">
@@ -87,22 +82,22 @@ export default class HeaderInfoZone extends PureComponent {
           </Menu.Item>
           }
 
+          {/* 头像&用户名 */}
           {isAuthed(roles) &&
           <Menu.Item key="/account">
             <Link to={sysconfig.Header_UserPageURL} title={user.display_name}
                   className="headerAvatar">
               <img src={profileUtils.getAvatar(user.avatar, user.id, 30)}
                    alt={user.display_name} />
+
+              {/* 用户名 */}
+              {UserNameBlock && <span>{UserNameBlock}</span>}
+
               {/* <Icon type="frown-circle"/>个人账号 */}
             </Link>
           </Menu.Item>
           }
 
-          {UserNameBlock &&
-          <Menu.Item key="/name" className={styles.emptyMenuStyle}>
-            {UserNameBlock}
-          </Menu.Item>
-          }
 
           {/*/!* TODO 不确定是否其他系统也需要显示角色 TODO ccf specified. *!/*/}
           {/*{sysconfig.SYSTEM === 'ccf' && roles && isAuthed(roles) &&*/}
@@ -118,7 +113,7 @@ export default class HeaderInfoZone extends PureComponent {
           {/*}*/}
 
 
-          {isGod(roles) &&
+          {isGod(roles) && false && // ----------------------- TODO
           <Menu.Item key="/devMenu">
             <DevMenu />
           </Menu.Item>}
@@ -145,7 +140,8 @@ export default class HeaderInfoZone extends PureComponent {
           {(!isLogin(user) || !isAuthed(roles)) &&
           <Menu.Item key="/login">
             <Link to={this.loginPageUrl()}>
-              <Icon type="user" /> 登录
+              <Icon type="user" />
+              <FM id="header.login" defaultMessage="登录" />
             </Link>
           </Menu.Item>
           }

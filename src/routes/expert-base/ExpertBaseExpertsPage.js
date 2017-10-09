@@ -5,6 +5,7 @@ import { sysconfig, applyTheme } from 'systems';
 import { Auth } from 'hoc';
 import { Layout } from 'routes';
 import classnames from 'classnames';
+import { FormattedMessage as FM } from 'react-intl';
 import { createURL } from 'utils';
 import SearchComponent from 'routes/search/SearchComponent';
 import styles from './ExpertBaseExpertsPage.less';
@@ -29,22 +30,6 @@ export default class ExpertBaseExpertsPage extends Component {
 
     console.log('000', { query, offset, size, id });
 
-    // this.props.dispatch({
-    //   type: 'expertBase/getExpertDetailList',
-    //   payload: { id: this.TheOnlyExpertBaseID, offset: 0, size: 200 },
-    // });
-    dispatch({
-      type: 'app/layout',
-      payload: {
-        headerSearchBox: {
-          query,
-          onSearch: this.onSearch,
-          btnText: 'Search expert base',
-          searchPlaceholder: 'Input expert name',
-        },
-        // showFooter: false,
-      },
-    });
     // Set query to null, and set eb to the only eb. TODO bugs
     dispatch({
       type: 'search/updateFiltersAndQuery', payload: {
@@ -58,7 +43,7 @@ export default class ExpertBaseExpertsPage extends Component {
   //   this.props.dispatch(routerRedux.push({ pathname: `/add-expert-detail/${id}` })); // TODO
   // };
 
-  onSearch = (data) => {
+  onSearchBarSearch = (data) => {
     const { match, dispatch } = this.props;
     const pathname = createURL(match.path, match.params, {
       query: data.query || '-',
@@ -69,21 +54,21 @@ export default class ExpertBaseExpertsPage extends Component {
   };
 
   // Not used
-  searchExpertByName = (value) => {
-    this.setState({ flag: true });
-    const id = this.TheOnlyExpertBaseID;
-    if (value) {
-      this.props.dispatch({
-        type: 'expertBase/searchExpertItem',
-        payload: { id, name: value },
-      });
-    } else {
-      this.props.dispatch({
-        type: 'expertBase/getExpertDetailList',
-        payload: { id, offset: 0, size: 100 },
-      });
-    }
-  };
+  // searchExpertByName = (value) => {
+  //   this.setState({ flag: true });
+  //   const id = this.TheOnlyExpertBaseID;
+  //   if (value) {
+  //     this.props.dispatch({
+  //       type: 'expertBase/searchExpertItem',
+  //       payload: { id, name: value },
+  //     });
+  //   } else {
+  //     this.props.dispatch({
+  //       type: 'expertBase/getExpertDetailList',
+  //       payload: { id, offset: 0, size: 100 },
+  //     });
+  //   }
+  // };
 
   ebSorts = ['time', 'h_index', 'activity', 'rising_star', 'n_citation', 'n_pubs'];
 
@@ -97,17 +82,24 @@ export default class ExpertBaseExpertsPage extends Component {
       });
     }
 
+    const PageTitle = theme.ExpertBaseExpertsPage_Title
+      || <FM defaultMessage="我的专家库" id="page.ExpertBaseExpertsPage.MyExperts" />;
+
     return (
-      <Layout contentClass={tc(['searchPage'])} onSearch={this.onSearchBarSearch}
+      <Layout contentClass={tc(['expertBase'])} onSearch={this.onSearchBarSearch}
               query={query}>
         <h1 className={styles.pageTitle}>
-          我的专家库
+
+          {PageTitle}
+
           {seeAllURL &&
           <div className={styles.seeAll}>
-            <Link to={seeAllURL}>查看全部专家</Link>
+            <Link to={seeAllURL}>
+              <FM defaultMessage="查看全部专家" id="page.ExpertBaseExpertsPage.SeeAllExperts" /></Link>
           </div>
           }
         </h1>
+
         <SearchComponent // Example: include all props.
           className={styles.SearchBorder} // additional className
           sorts={query ? null : this.ebSorts}

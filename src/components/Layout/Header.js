@@ -96,7 +96,8 @@ export default class Header extends PureComponent {
     const { headerSearchBox } = this.props.app;
     const { onSearch } = this.props;
     let { query } = this.props;
-    query = query || 'data mining';
+
+    // query = query || 'data mining';
     // console.log('>>>>>>>HEADER', logoZone, searchZone, infoZone);
 
     // if (headerSearchBox) {
@@ -116,8 +117,9 @@ export default class Header extends PureComponent {
     ];
 
     const InfoZone = infoZone || [
-      { /*<HeaderInfoZone key={0} app={this.props.app} logout={this.props.logout} />,*/ }
+      // <HeaderInfoZone key={0} app={this.props.app} logout={this.props.logout} />,
     ];
+
     const RightZone = rightZone || [
       <HeaderInfoZone key={0} app={this.props.app} logout={this.props.logout} />,
     ];

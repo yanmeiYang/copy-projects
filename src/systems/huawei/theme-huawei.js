@@ -28,6 +28,7 @@ module.exports = {
 
   searchZone: defaults.IN_COMPONENT_DEFAULT,
   infoZone: defaults.IN_COMPONENT_DEFAULT,
+  rightZone: defaults.IN_COMPONENT_DEFAULT,
 
   footer: (
     <div className={styles.footerText}>
@@ -40,6 +41,7 @@ module.exports = {
   ),
 
   // Index page
+
   index_bannerZone: [
     <div key="0" className={styles.index_bannerZone}>
       <div className={classnames(styles.logo)}>
@@ -52,4 +54,8 @@ module.exports = {
   ],
 
   index_centerZone: [<IndexCenterZone key={0} />],
+
+  // Expert Page
+
+  ExpertBaseExpertsPage_Title: defaults.IN_COMPONENT_DEFAULT,
 };

@@ -202,7 +202,7 @@ export default class TrendPrediction extends React.PureComponent {
       .style('stroke', 'darkgray')
       .style('stroke-width', 1);// 上下图之间的线的设置
 
-    barPos = 150;// 直方图左边文字的宽度
+    barPos = 100;// 直方图左边文字的宽度
     timelineItemOffset = 20;// 左侧直方图的间隔距离
     histHeight = 100;// 左侧直方图的高度
     /*
@@ -324,7 +324,7 @@ export default class TrendPrediction extends React.PureComponent {
     }).style('font-size', 12)
       .attr('dy', '.85em')
       .text((d) => { // 左侧图字体大小
-        return d.t;
+        return trendDataNew.term_to_label[d.t];
       });
     // first-three即页面中current hotspot按钮，点击后按照2010之后关于该技术的文献总数排序并显示直方图，
     // revert即页面中overall按钮，点击后按照freq对技术排序并显示直方图
@@ -578,7 +578,7 @@ export default class TrendPrediction extends React.PureComponent {
     for (const key of topTerms) {
       termToIndex[key] = cnt;
       cnt += 1;
-      if (cnt > 10) {
+      if (cnt > 12) {
         break;
       }
     }
@@ -589,7 +589,7 @@ export default class TrendPrediction extends React.PureComponent {
           const n = {
             name: trendDataNew.term_to_label[key],
             term: key,
-            w: Math.sqrt(freq),
+            w: freq ** (2 / 3), //Math.sqrt(freq),
             pos: idx,
           };
           if (!terms[key]) {
@@ -598,7 +598,7 @@ export default class TrendPrediction extends React.PureComponent {
           }
           nodeToIndex[`${key}-${idx}`] = nodes.length;
           nodes.push(n);
-          if (idx > 0 && nodeToIndex[`${key}-${idx - 1}`]) {
+          if (idx > 0 && nodeToIndex[`${key}-${idx - 1}`] !== undefined) {
             links.push({
               source: nodeToIndex[`${key}-${idx - 1}`],
               target: nodeToIndex[`${key}-${idx}`],
@@ -910,10 +910,10 @@ export default class TrendPrediction extends React.PureComponent {
           </div>
         </div>
         <div className={styles.nav}>
-          <Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange} className={styles.tabs}>
-            <TabPane tab={<span>Recent</span>} key="1" id="first-three"/>
-            <TabPane tab={<span>All</span>} key="2" id="revert"/>
-          </Tabs>
+          {/*<Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange} className={styles.tabs}>*/}
+            {/*<TabPane tab={<span>Recent</span>} key="1" id="first-three"/>*/}
+            {/*<TabPane tab={<span>All</span>} key="2" id="revert"/>*/}
+          {/*</Tabs>*/}
           <div id="hist-chart" className={styles.rightbox}/>
         </div>
       </div>

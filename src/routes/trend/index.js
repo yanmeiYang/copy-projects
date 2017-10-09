@@ -5,8 +5,7 @@ import { Layout } from 'routes';
 import queryString from 'query-string';
 import { compare } from 'utils';
 // import styles from './index.less';
-//import TrendPrediction from './trend-prediction.js';
-import TopicTrend from './topic-trend';
+import TrendPrediction from './trend-prediction.js';
 import { Auth } from '../../hoc';
 
 @connect(({ app }) => ({ app }))
@@ -43,7 +42,7 @@ export default class TrendPredictionPage extends React.Component {
     const { query } = data;
     if (query) {
       this.setState({ query });
-      dispatch(routerRedux.push({ pathname: '/trend', search: `?query=${query}` }));
+      dispatch(routerRedux.push({ pathname: '/trend-prediction', search: `?query=${query}` }));
       dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query } });
     }
   };
@@ -52,8 +51,8 @@ export default class TrendPredictionPage extends React.Component {
     return (
       <Layout query={this.state.query} onSearch={this.onSearch}>
         <div className="content-inner">
-          <h1>技术趋势分析:</h1>
-          <TopicTrend query={this.state.query} />
+          <h1>技术趋势预测:</h1>
+          <TrendPrediction query={this.state.query} />
         </div>
       </Layout>
     );

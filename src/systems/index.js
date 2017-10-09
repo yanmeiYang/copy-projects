@@ -9,7 +9,7 @@ import { loadSavedLocale } from 'utils/locale';
 import { System, Source } from 'utils/system';
 import { TopExpertBase } from 'utils/expert-base';
 import Footer from 'components/Footers/default';
-import defaults from './utils'; // Warning: no zhuo no die.
+import defaults from './utils'; // Warrning: no zhuo no die.
 
 // All available systems.
 const CurrentSystemConfig = {

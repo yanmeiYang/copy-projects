@@ -25,12 +25,12 @@ const indicesConfig = {
     },
   },
   rising_star: {
-    key: 'risingStar', // 'newstar',
+    key: 'newStar', // 'newstar',
     letter: 'S',
     tooltip: '领域新星（S）',
     color: 'new_star',
     render: (indices) => {
-      return indices.risingStar && indices.risingStar.toFixed(2);
+      return indices.newStar && indices.newStar.toFixed(2);
     },
   },
   citation: {

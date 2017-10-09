@@ -15,7 +15,7 @@ const toNextPersons = (persons) => {
 };
 
 const toNextPerson = (person) => {
-  // console.log('person is >>>>>>>>>>', person);
+  console.log('person is >>>>>>>>>>', person);
   if (person) {
     return {
       id: person.id,

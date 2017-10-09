@@ -406,7 +406,7 @@ function d3sankey() {
 
       // var test=1;
       nodes.forEach(function (node) {
-        node.x = node.pos * nodeOffset + 50;////pos is in the Json data  jixiangyu
+        node.x = node.pos * nodeOffset;////pos is in the Json data  jixiangyu
 
         //console.log(node.cluster);
         //test++;

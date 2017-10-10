@@ -1,6 +1,4 @@
 /** Created by Bo Gao on 2017-06-07 */
-import pathToRegexp from 'path-to-regexp';
-import * as pubsService from '../services/publication';
 import * as personService from '../services/person';
 import * as searchService from '../services/search';
 import * as traDataFindService from '../services/expert-trajectory-service';
@@ -32,7 +30,7 @@ export default {
     authors: [],
     hindex: [],
     locationName: [],
-    geoCoordMap:{},
+    geoCoordMap: {},
     // yearHeat: {},
   },
 
@@ -62,7 +60,6 @@ export default {
       } else {
         data = yield call(traDataFindService.findTop10000);
       }
-      console.log("dataà1",data)
       const location = data.locations;
       const startYear = data.startYear;
       const endYear = data.endYear;
@@ -71,7 +68,6 @@ export default {
       const authorImage = data.authorImage;
       const locationName = data.locationName;
       const hindex = data.h_index;
-      console.log()
       yield put({ type: 'heatFindSuccess',
         payload: {
           location,
@@ -91,21 +87,6 @@ export default {
       yield put({ type: 'eventFindSuccess', payload: { data, yearNow } });
     },
 
-    // * storeHindex({ payload }, { call, put }) {
-    //   const { hindex } = payload;
-    //   yield put({ type: 'hindexSuccess', payload: { hindex } });
-    // },
-    //
-    // * storeAid({ payload }, { call, put }) {
-    //   const { authors, startYear, locationName } = payload;
-    //   yield put({ type: 'aidSuccess', payload: { authors, startYear, locationName } });
-    // },
-    //
-    // * storeTable({ payload }, { call, put }) {
-    //   const { table } = payload;
-    //   yield put({ type: 'tableSuccess', payload: { table } });
-    // },
-
     * listPersonByIds({ payload }, { call, put }) {  // eslint-disable-line
       yield put({ type: 'showLoading' });
       const { ids } = payload;
@@ -117,7 +98,7 @@ export default {
       yield put({ type: 'listPersonByIdsSuccess', payload: { data } });
     },
 
-    * getYearData({ payload }, { call, put, select }) {
+    * getYearData({ payload }, { put, select }) {
       const { year } = payload;
       const yearStart = yield select(state => state.expertTrajectory.startYear);
       const yearEnd = yield select(state => state.expertTrajectory.endYear);

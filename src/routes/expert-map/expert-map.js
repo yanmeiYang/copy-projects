@@ -878,18 +878,6 @@ class ExpertMap extends React.PureComponent {
         <div className={styles.filterWrap}>
           <div className={styles.filter}>
             <div className={styles.filterRow}>
-              <span className={styles.filterTitle}><span>Hot words:</span></span>
-              <ul>
-                {Domains.map((domain) =>{
-                  checkState += 1;
-                  return (<CheckableTag className={styles.filterItem} key={domain.id} checked={domainChecks[checkState - 1]} value={domain.id}><span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span></CheckableTag>)
-                })
-                }
-              </ul>
-            </div>
-          </div>
-          <div className={styles.filter}>
-            <div className={styles.filterRow}>
               <span className={styles.filterTitle}><span>Range:</span></span>
               <ul>
                 <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[0]}>
@@ -934,40 +922,44 @@ class ExpertMap extends React.PureComponent {
               <Dropdown placement="bottomLeft" overlay={
                 <div>
                   <Menu style={{ width: 240 }} mode="inline">
-                  <SubMenu title={<span>Theory</span>}>
-                    {Domains.map((domain) =>{
-                      if (domain.name === 'Theory' || domain.name === 'Multimedia' || domain.name === 'Security'
-                        || domain.name === 'Software Engineering' || domain.name === 'Computer Graphics') {
-                        return (
-                          <Menu.Item><span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span></Menu.Item>
-                        )
+                    <SubMenu title={<span>Theory</span>}>
+                      {Domains.map((domain) => {
+                        if (domain.name === 'Theory' || domain.name === 'Multimedia' || domain.name === 'Security'
+                          || domain.name === 'Software Engineering' || domain.name === 'Computer Graphics') {
+                          return (
+                            <Menu.Item key={domain.id}><span role="presentation" onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span></Menu.Item>
+                          );
+                        }
+                      })
                       }
-                    })
-                    }
-                  </SubMenu>
-                  <SubMenu title={<span>System</span>}>
-                    {Domains.map((domain) =>{
-                      if (domain.name === 'Database' || domain.name === 'System' || domain.name === 'Computer Networking') {
-                        return (
-                          <Menu.Item><span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span></Menu.Item>
-                        )
+                    </SubMenu>
+                    <SubMenu title={<span>System</span>}>
+                      {Domains.map((domain) => {
+                        if (domain.name === 'Database' || domain.name === 'System' || domain.name === 'Computer Networking') {
+                          return (
+                            <Menu.Item key={domain.id}><span role="presentation"
+                                             onClick={this.domainChanged.bind(that, domain)}>
+                              {domain.name}</span></Menu.Item>
+                          );
+                        }
+                      })
                       }
-                    })
-                    }
-                  </SubMenu>
-                  <SubMenu title={<span>Artificial Intelligence</span>}>
-                    {Domains.map((domain) =>{
-                      if (domain.name === 'Data Mining' || domain.name === 'Machine Learning' || domain.name === 'Artificial Intelligence'
-                        || domain.name === 'Web and Information Retrieval' || domain.name === 'Computer Vision'
-                        || domain.name === 'Human-Computer Interaction' || domain.name === 'Natural Language Processing') {
-                        return (
-                          <Menu.Item><span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span></Menu.Item>
-                        )
+                    </SubMenu>
+                    <SubMenu title={<span>Artificial Intelligence</span>}>
+                      {Domains.map((domain) => {
+                        if (domain.name === 'Data Mining' || domain.name === 'Machine Learning' || domain.name === 'Artificial Intelligence'
+                          || domain.name === 'Web and Information Retrieval' || domain.name === 'Computer Vision'
+                          || domain.name === 'Human-Computer Interaction' || domain.name === 'Natural Language Processing') {
+                          return (
+                            <Menu.Item key={domain.id}><span role="presentation"
+                                             onClick={this.domainChanged.bind(that, domain)}>
+                              {domain.name}</span></Menu.Item>
+                          );
+                        }
+                      })
                       }
-                    })
-                    }
-                  </SubMenu>
-              </Menu></div>}>
+                    </SubMenu>
+                  </Menu></div>}>
                 <a className="ant-dropdown-link" >
                   <span>Domains</span>
                   <Icon type="down" />

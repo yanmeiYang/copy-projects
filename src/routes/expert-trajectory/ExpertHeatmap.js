@@ -4,6 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import echarts from 'echarts/lib/echarts';
+import world from 'echarts/map/js/world';
 import { Slider, InputNumber, Row, Col, Button } from 'antd';
 import styles from './ExpertHeatmap.less';
 import { wget } from '../../utils/request';
@@ -86,6 +87,7 @@ class ExpertHeatmap extends React.PureComponent { ///
     this.ifLarge = false;
     this.ifButton = false;
     this.myChart2 = echarts.init(document.getElementById('heatmap'));
+    this.world = world;
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -484,7 +486,7 @@ class ExpertHeatmap extends React.PureComponent { ///
           confine: true,
           formatter: (params) => {
             return `<div style="font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">Number of People: ${
-              new Set([...author[params.name[0]]].filter(x => author2[params.name[1]].has(x))).length}<br/>From: ${
+              new Set([...author[params.name[0]]].filter(x => new Set(author2[params.name[1]]).has(x))).length}<br/>From: ${
               locationName[params.name[0] - 1].toLowerCase()}<br/>To: ${locationName[params.name[1] - 1].toLowerCase()}<br>`;
           },
         },
@@ -532,7 +534,7 @@ class ExpertHeatmap extends React.PureComponent { ///
 
           formatter: (params) => {
             return `<div style="font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">Number of People: ${
-              new Set([...author[params.name[0]]].filter(x => author2[params.name[1]].has(x))).length}<br/>From: ${
+              new Set([...author[params.name[0]]].filter(x => new Set(author2[params.name[1]]).has(x))).length}<br/>From: ${
               locationName[params.name[0] - 1].toLowerCase()}<br/>To: ${locationName[params.name[1] - 1].toLowerCase()}<br>`;
           },
         },
@@ -680,8 +682,8 @@ class ExpertHeatmap extends React.PureComponent { ///
               this.type = 'scatter';
               this.myChart2.setOption(mapOption, true);
             } else if (params.componentSubType === 'lines') {
-              const a = author[params.name[0]];
-              const b = author2[params.name[1]];
+              const a = new Set(author[params.name[0]]);
+              const b = new Set(author2[params.name[1]]);
               this.personList = new Set([...a].filter(x => b.has(x)));
               this.from = params.name[0];
               this.to = params.name[1];
@@ -768,8 +770,8 @@ class ExpertHeatmap extends React.PureComponent { ///
             this.type = 'scatter';
             this.myChart2.setOption(mapOption, true);
           } else if (params.componentSubType === 'lines') {
-            const a = author[params.name[0]];
-            const b = author2[params.name[1]];
+            const a = new Set(author[params.name[0]]);
+            const b = new Set(author2[params.name[1]]);
             this.personList = new Set([...a].filter(x => b.has(x)));
             this.from = params.name[0];
             this.to = params.name[1];

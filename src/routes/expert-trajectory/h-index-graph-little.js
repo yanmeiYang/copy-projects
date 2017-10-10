@@ -33,7 +33,7 @@ class HindexGraph extends React.PureComponent {
   render() {
     const hindex = this.props.hindex;
     const groupNumTemp = [0, 0, 0, 0, 0];
-    if (hindex !== '') {
+    if (typeof (hindex) !== 'undefined') {
       hindex.forEach((hindex1) => {
         const g = group(hindex1);
         groupNumTemp[g] += 1;

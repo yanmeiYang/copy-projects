@@ -6,7 +6,6 @@ import { connect } from 'dva';
 import classnames from 'classnames';
 import queryString from 'query-string';
 import { routerRedux } from 'dva/router';
-import SearchComponent from 'routes/search/SearchComponent';
 import styles from './ExpertHeatmapPage.less';
 import LeftInfoZoneCluster from './LeftInfoZoneCluster';
 import LeftLineInfoCluster from './LeftLineInfoCluster';
@@ -65,13 +64,8 @@ class ExpertHeatmapPage extends React.PureComponent {
     if (nextState.query && nextState.query !== this.state.query) {
       this.setState({ query: nextState.query });
       this.findIfQuery(nextState.query);
-      // this.callSearchMap(nextState.query);
     }
     return true;
-  }
-
-  findIfQuery = (query) => {
-    this.props.dispatch({ type: 'expertTrajectory/heatFind', payload: { query } });
   }
 
   onSearch = (data) => {
@@ -85,22 +79,6 @@ class ExpertHeatmapPage extends React.PureComponent {
     }
   };
 
-  callSearchMap = (query) => {
-    this.props.dispatch({ type: 'expertTrajectory/searchPerson', payload: { query } });
-  }
-
-  callClusterPerson =(clusterIdList, from1, to1, type) => {
-    this.props.dispatch({ type: 'expertTrajectory/listPersonByIds', payload: { ids: clusterIdList } });
-    this.props.dispatch({ type: 'expertTrajectory/setRightInfo', payload: { rightInfoType: type } });
-    if (from1 && to1) {
-      this.setState({ from: from1, to: to1 });
-    }
-    if(type === 'scatter' || type === 'lines'){
-      this.setState({ infoTab: 'selection' });
-    }
-
-  }
-
   onYearChange = (year1) => {
     this.setState({ year: year1 });
     this.setState({ infoTab: 'event' });
@@ -110,6 +88,25 @@ class ExpertHeatmapPage extends React.PureComponent {
     this.setState({ infoTab: e });
   };
 
+  callClusterPerson =(clusterIdList, from1, to1, type) => {
+    this.props.dispatch({ type: 'expertTrajectory/listPersonByIds', payload: { ids: clusterIdList } });
+    this.props.dispatch({ type: 'expertTrajectory/setRightInfo', payload: { rightInfoType: type } });
+    if (from1 && to1) {
+      this.setState({ from: from1, to: to1 });
+    }
+    if (type === 'scatter' || type === 'lines') {
+      this.setState({ infoTab: 'selection' });
+    }
+  }
+
+  callSearchMap = (query) => {
+    this.props.dispatch({ type: 'expertTrajectory/searchPerson', payload: { query } });
+  }
+
+  findIfQuery = (query) => {
+    this.props.dispatch({ type: 'expertTrajectory/heatFind', payload: { query } });
+  }
+
   callScroll= () => { // 滑动条滑到最底端
     const e = document.getElementsByClassName('ant-tabs-content ant-tabs-content-no-animated'); // 滑动条cfco
     e[0].scrollTop = e[0].scrollHeight;
@@ -118,7 +115,6 @@ class ExpertHeatmapPage extends React.PureComponent {
   render() {
     const load = this.props.loading.models.expertTrajectory;
     this.state.rightType = this.props.expertTrajectory.infoZoneIds;
-    const ifPlay = this.state.ifPlay;
     const from = this.state.from;
     const to = this.state.to;
     const clusterPersons = this.props.expertTrajectory.clusterPersons;
@@ -154,7 +150,8 @@ class ExpertHeatmapPage extends React.PureComponent {
                 <TabPane tab="EVENTS" key="event" >
                   <div id="scroll" >
                     <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
-                    <EventsForYears qquery={this.state.query} onDone={this.callScroll} year={this.state.year} />
+                    <EventsForYears qquery={this.state.query}
+                                    onDone={this.callScroll} year={this.state.year} />
                   </div>
                 </TabPane>
               </Tabs>
@@ -162,7 +159,8 @@ class ExpertHeatmapPage extends React.PureComponent {
 
             <Layout className={styles.right} >
               <Content className={styles.content}>
-                <ExpertHeatmap qquery={this.state.query} onPageClick={this.callClusterPerson} yearChange={this.onYearChange} />
+                <ExpertHeatmap qquery={this.state.query} onPageClick={this.callClusterPerson}
+                               yearChange={this.onYearChange} />
               </Content>
             </Layout>
           </Layout>
@@ -174,4 +172,5 @@ class ExpertHeatmapPage extends React.PureComponent {
   }
 }
 
-export default connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))(ExpertHeatmapPage);
+export default connect(({ expertTrajectory, loading }) =>
+  ({ expertTrajectory, loading }))(ExpertHeatmapPage);

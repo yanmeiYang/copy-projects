@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
-import styles from './LeftInfoAll.less';
 import classnames from 'classnames';
-import * as profileUtils from '../../utils/profile-utils';
+import styles from './LeftInfoAll.less';
 import HindexGraph from './h-index-graph-little';
 
 class LeftInfoAll extends React.PureComponent {
@@ -41,12 +40,12 @@ class LeftInfoAll extends React.PureComponent {
     let count;
     let hindexSum = 0;
     let avg;
-    if (this.hindex){
+    if (this.hindex) {
       count = this.hindex.length;
-      for ( let i = 0 ; i < count; i += 1) {
-        hindexSum += parseInt(this.hindex[i]);
+      for (let i = 0; i < count; i += 1) {
+        hindexSum += parseInt(this.hindex[i], 10);
       }
-      avg = hindexSum/ count;
+      avg = hindexSum / count;
     }
     return (
       <div className={styles.rizAll}>
@@ -74,4 +73,5 @@ class LeftInfoAll extends React.PureComponent {
   }
 }
 
-export default connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))(LeftInfoAll);
+export default connect(({ expertTrajectory, loading }) =>
+  ({ expertTrajectory, loading }))(LeftInfoAll);

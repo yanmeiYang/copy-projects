@@ -3,10 +3,7 @@
  */
 
 import React from 'react';
-import { connect } from 'dva';
 import styles from './h-index-grapg-little.less';
-import classnames from 'classnames';
-import * as profileUtils from '../../utils/profile-utils';
 
 function group(hindex) {
   let g = 0;
@@ -35,13 +32,14 @@ function group(hindex) {
 class HindexGraph extends React.PureComponent {
   render() {
     const hindex = this.props.hindex;
-    const avg = this.props.avg;
     const groupNumTemp = [0, 0, 0, 0, 0];
-    hindex && hindex.map((hindex1) => {
-      const g = group(hindex1);
-      groupNumTemp[g] += 1;
-      return groupNumTemp;
-    });
+    if (typeof (hindex) !== 'undefined') {
+      hindex.forEach((hindex1) => {
+        const g = group(hindex1);
+        groupNumTemp[g] += 1;
+        return groupNumTemp;
+      });
+    }
     const groupNum = JSON.parse(JSON.stringify(groupNumTemp));
     groupNum.sort((a, b) => b - a);
     const number = groupNum[0];

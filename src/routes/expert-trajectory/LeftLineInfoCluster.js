@@ -6,7 +6,6 @@ import * as profileUtils from '../../utils/profile-utils';
 import { HindexGraph } from '../../components/widgets';
 
 class LeftLineInfoCluster extends React.PureComponent {
-
   componentDidMount() {
   }
 
@@ -17,12 +16,10 @@ class LeftLineInfoCluster extends React.PureComponent {
     const persons = this.props.persons;
     const from = this.props.from;
     const to = this.props.to;
-    console.log("--------------=============",from,to)
     if (!persons || persons.length <= 0) {
       return <div />;
     }
 
-    let hindexSum = 0;
     const interests = {};
     persons.map((person) => {
       persons.sort((a, b) => b.indices.h_index - a.indices.h_index);
@@ -74,7 +71,7 @@ class LeftLineInfoCluster extends React.PureComponent {
           <HindexGraph persons={persons} />
         </div>
 
-        <div className={styles.info_images} style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}} >
+        <div className={styles.info_images} style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }} >
           {persons && persons.slice(0, 20).map((person) => {
             const avatarUrl = profileUtils.getAvatar(person.avatar, person.id, 50);
 
@@ -87,7 +84,7 @@ class LeftLineInfoCluster extends React.PureComponent {
               <div key={person.id} className="imgOuter">
                 <div className="imgBox">
                   <Tooltip title={tooltip}>
-                    <img src={avatarUrl} />
+                    <img src={avatarUrl} alt="" />
                   </Tooltip>
                 </div>
               </div>
@@ -95,7 +92,7 @@ class LeftLineInfoCluster extends React.PureComponent {
           })}
         </div>
 
-        <div className="info bg" style={{display: 'flex', flexDirection: 'column', flexWrap: 'wrap'}}>
+        <div className="info bg" style={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap' }}>
           <h4 className="section_header"> Research Interests: </h4> <br />
           {sortedInterest && sortedInterest.slice(0, 20).map((interest) => {
             return (

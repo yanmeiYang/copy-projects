@@ -7,7 +7,6 @@ import classnames from 'classnames';
 import { routerRedux } from 'dva/router';
 import queryString from 'query-string';
 // import { Slider, Switch, InputNumber, Row, Col, Icon, Button } from 'antd';
-import echarts from 'echarts/lib/echarts'; // 必须
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/geo';
@@ -16,17 +15,11 @@ import 'echarts/lib/chart/lines';
 import 'echarts/lib/chart/effectScatter';
 import 'echarts/map/js/china'; // 引入中国地图//
 import 'echarts/map/js/world';
+import { Layout } from 'antd';
 import styles from './ExpertTrajectoryPage.less';
-import { Button, Layout } from 'antd';
 import { PersonListLittle } from '../../components/person';
 import ExpertTrajectory from './ExpertTrajectory';
-import mapData from '../../../external-docs/expert-trajectory/testData.json';
-// import world from 'echarts/map/js/world';
 const { Content, Sider } = Layout;
-const option = {};
-const address2 = mapData.addresses;
-const trajectory = mapData.trajectory;
-const ifDraw = 0;
 
 class ExpertTrajectoryPage extends React.Component {
   constructor(props) {
@@ -38,10 +31,9 @@ class ExpertTrajectoryPage extends React.Component {
     query: '',
     mapType: 'google', // [baidu|google]
     view: {},
-    // results: [],
   };
 
-  componentWillMount(nextProps) {
+  componentWillMount() {
     const { query, type } = queryString.parse(location.search);
     if (query) {
       this.setState({ query });
@@ -62,17 +54,6 @@ class ExpertTrajectoryPage extends React.Component {
     this.callSearchMap(this.state.query);
   }
 
-  // componentWillReceiveProps(nextProps) { //用于当传进来一个1，让name = 1，在update前执行
-  //   console.log('compare: ', nextProps.location.query, ' == ', this.props.location.query)
-  //   if (nextProps.location.query && nextProps.location.query !== this.props.location.query) {
-  //     this.callSearchMap(nextProps.location.query);
-  //   }
-  //   this.state.results = this.props.expertTrajectory.results;
-  //   console.log("11111",this.state.results)
-  //   console.log("yiyiyi",this.props.expertTrajectory.results)
-  //   return true;
-  // }
-
   shouldComponentUpdate(nextProps, nextState) { // 状态改变时判断要不要刷新
     if (nextState.query && nextState.query !== this.state.query) {
       this.callSearchMap(nextState.query);
@@ -80,17 +61,12 @@ class ExpertTrajectoryPage extends React.Component {
     return true;
   }
 
-  callSearchMap = (query) => {
-    this.props.dispatch({ type: 'expertTrajectory/searchPerson', payload: { query } });
-  }
-
   onSearch = (data) => {
     if (data.query) {
       this.setState({ query: data.query });
-      // TODO change this, 涓嶈兘鐢?
       this.props.dispatch({
         type: 'app/setQueryInHeaderIfExist',
-        payload: { query: data.query }
+        payload: { query: data.query },
       });
       this.props.dispatch(routerRedux.push({
         pathname: '/expert-trajectory',
@@ -99,10 +75,12 @@ class ExpertTrajectoryPage extends React.Component {
     }
   };
 
-
   onPersonClick = (personId) => {
-    alert(personId);
     this.props.dispatch({ type: 'expertTrajectory/dataFind', payload: { personId } });
+  }
+
+  callSearchMap = (query) => {
+    this.props.dispatch({ type: 'expertTrajectory/searchPerson', payload: { query } });
   }
 
   render() {

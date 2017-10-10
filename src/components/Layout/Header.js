@@ -3,14 +3,14 @@
  */
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'dva';
-import { sysconfig, applyTheme } from 'systems';
+// import { sysconfig } from 'systems';
+import { theme, applyTheme } from 'themes';
 import { Layout } from 'antd';
 import { KgSearchBox } from 'components/search';
 import HeaderInfoZone from 'components/Layout/HeaderInfoZone';
 import { compare } from 'utils/compare';
 import styles from './Header.less';
 
-const { theme } = sysconfig;
 const tc = applyTheme(styles);
 
 // import { Menu, Icon, Dropdown } from 'antd';

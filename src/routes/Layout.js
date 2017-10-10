@@ -7,13 +7,13 @@ import { connect } from 'dva';
 import { Helmet } from 'react-helmet';
 import ReactGA from 'react-ga';
 import { Layout as LayoutComponent } from 'antd';
-import { sysconfig, applyTheme } from 'systems';
+import { sysconfig } from 'systems';
+import { theme, applyTheme } from 'themes';
 import { Header, Navigator } from 'components/Layout';
 import styles from './Layout.less';
 
 const { Sider, Content, Footer } = LayoutComponent;
 
-const { theme } = sysconfig;
 const tc = applyTheme(styles);
 
 require(`themes/theme-${theme.themeName}.less`); // basic themes，:global css only

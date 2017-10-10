@@ -4,14 +4,15 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { sysconfig, applyTheme } from 'systems';
+import { sysconfig } from 'systems';
+import { theme, applyTheme } from 'themes';
+
 import { Layout } from 'antd';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { compare } from 'utils/compare';
 
 import styles from './Navigator.less';
 
-const { theme } = sysconfig;
 const tc = applyTheme(styles);
 
 const NaviConfig = {

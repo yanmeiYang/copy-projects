@@ -4,10 +4,12 @@
 import React from 'react';
 import { Link } from 'dva/router';
 import classnames from 'classnames';
-import * as defaults from 'utils/defaults';
+import { sysconfig } from 'systems';
+import * as hole from 'utils/hole';
 import { FormattedMessage as FM } from 'react-intl';
+import { IndexHotLinks } from 'components/widgets';
 import styles from './theme-acmfellow.less';
-import * as Const from './const-acmfellow';
+// import * as Const from './const-acmfellow';
 
 module.exports = {
   themeName: 'common-white',
@@ -25,15 +27,22 @@ module.exports = {
   ],
 
   infoZone: [
-    <Link to={`/eb/${Const.ExpertBase}/-/0/20`}
+    <Link to={`/eb/${sysconfig.ExpertBase}/-/0/20`}
           className={classnames(styles.header_info)} key="0">
       My Experts
     </Link>,
   ],
 
   // Index page
-  ExpertBaseExpertsPage_Title: defaults.IN_COMPONENT_DEFAULT,
 
+  index_centerZone: [
+    <IndexHotLinks
+      key={0}
+      links={sysconfig.IndexPage_QuickSearchList}
+      lang={sysconfig.Locale}
+      urlFunc={query => `/${sysconfig.SearchPagePrefix}/${query}/0/${sysconfig.MainListSize}`}
+    />,
+  ],
 
   // Expert Page
 

@@ -26,14 +26,14 @@ const CurrentSystemConfig = {
   acmfellow: require('./acmfellow/config'),
 };
 
-const sysTheme = require(`systems/${System}/theme-${System}.js`);
+// const sysTheme = require(`systems/${System}/theme-${System}.js`);
 
 // 默认配置
 const defaultSystemConfigs = {
   SYSTEM: System,
   SOURCE: Source,
 
-  theme: sysTheme,
+  // theme: sysTheme,
 
   //
   // Systems Preference
@@ -120,7 +120,7 @@ const defaultSystemConfigs = {
   ExpertBases: [], // must override.
   DEFAULT_EXPERT_BASE: 'aminer', // 华为默认搜索
   DEFAULT_EXPERT_BASE_NAME: '全球专家',
-  DEFAULT_EXPERT_SEARCH_KEY: 'term', // 旧API智库搜索三选一
+  DEFAULT_EXPERT_SEARCH_KEY: 'term', // 旧API智库搜索中三选一
 
   // > Search related
   SearchBarInHeader: true,
@@ -139,6 +139,7 @@ const defaultSystemConfigs = {
     { name: 'Networks', name_zh: '网络' },
     { name: 'Natural language processing', name_zh: '自然语言处理' },
   ],
+
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
   // 地图中心点
@@ -172,32 +173,4 @@ if (sysconfig.EnableLocalLocale) {
 }
 addLocaleData('react-intl/locale-data/' + sysconfig.Locale);
 
-/***************************************************
- * classes
- **************************************************/
-// support only styles.className, not support global css.
-const applyTheme = (styles) => {
-  const themeStyles = sysconfig.theme.styles;
-  return (classes, rawClasses) => {
-    const results = [];
-    if (classes) {
-      classes.map((className) => {
-        const c = styles[className];
-        if (c) {
-          results.push(c);
-        }
-        const c2 = themeStyles[className];
-        if (c2) {
-          results.push(c2);
-        }
-        return false;
-      });
-    }
-    if (rawClasses) {
-      results.push(...rawClasses);
-    }
-    return classnames(...results);
-  };
-};
-
-module.exports = { sysconfig, applyTheme };
+module.exports = { sysconfig };

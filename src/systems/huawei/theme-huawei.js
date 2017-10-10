@@ -4,7 +4,7 @@
 import React from 'react';
 import { Link } from 'dva/router';
 import classnames from 'classnames';
-import * as defaults from 'utils/defaults';
+import * as hole from 'utils/hole';
 import { FormattedMessage as FM } from 'react-intl';
 import { IndexInfoBox, PersonLabel, IndexCenterZone } from './components';
 
@@ -26,9 +26,9 @@ module.exports = {
     </Link>,
   ],
 
-  searchZone: defaults.IN_COMPONENT_DEFAULT,
-  infoZone: defaults.IN_COMPONENT_DEFAULT,
-  rightZone: defaults.IN_COMPONENT_DEFAULT,
+  searchZone: hole.IN_COMPONENT_DEFAULT,
+  infoZone: hole.IN_COMPONENT_DEFAULT,
+  rightZone: hole.IN_COMPONENT_DEFAULT,
 
   footer: (
     <div className={styles.footerText}>
@@ -53,9 +53,9 @@ module.exports = {
     </div>,
   ],
 
-  index_centerZone: [<IndexCenterZone key={0} />],
+  index_centerZone: [hole.DEFAULT_PLACEHOLDER, <IndexCenterZone key={0} />],
 
   // Expert Page
 
-  ExpertBaseExpertsPage_Title: defaults.IN_COMPONENT_DEFAULT,
+  ExpertBaseExpertsPage_Title: hole.IN_COMPONENT_DEFAULT,
 };

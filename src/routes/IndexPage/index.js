@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { FormattedMessage as FM } from 'react-intl';
+import { hole } from 'utils';
 import { Layout } from 'routes';
-import { sysconfig, applyTheme } from 'systems';
+import { sysconfig } from 'systems';
+import { theme, applyTheme } from 'themes';
 import { classnames } from 'utils/index';
 import { KgSearchBox } from 'components/search';
+import { IndexHotLinks } from 'components/widgets';
 import { Auth } from 'hoc';
 import styles from './index.less';
 
-const { theme } = sysconfig;
 const tc = applyTheme(styles);
 
 @connect(({ app }) => ({ app }))
@@ -39,9 +41,7 @@ export default class IndexPage extends Component {
   };
 
   render() {
-    const commonSearch = sysconfig.IndexPage_QuickSearchList;
     const bannerZone = theme.index_bannerZone;
-    const centerZone = theme.index_centerZone;
 
     return (
       <Layout searchZone={[]} contentClass={tc(['indexPage'])} showNavigator={false}>
@@ -57,29 +57,15 @@ export default class IndexPage extends Component {
           />
         </div>
 
-        <div className={styles.keywords}>
-          <div className={classnames(styles.inner, 'keywords_inner')}>
-            {commonSearch.map((item, index) => {
-              let query = '';
-              if (sysconfig.Locale === 'zh') {
-                query = item.name_zh || item.name;
-              } else {
-                query = item.name || item.name_zh;
-              }
-              return (
-                <div key={query}>
-                  <Link
-                    to={`/${sysconfig.SearchPagePrefix}/${query}/0/${sysconfig.MainListSize}`}
-                  >{query}</Link>
-                  {/*<span>{(index === commonSearch.length - 1) ? '' : ''}</span>*/}
-                </div>
-              );
-            })}
-          </div>
+        {hole.fill(theme.index_centerZone, [
+          <IndexHotLinks
+            key={100}
+            links={sysconfig.IndexPage_QuickSearchList}
+            urlFunc={query => `/${sysconfig.SearchPagePrefix}/${query}/0/${sysconfig.MainListSize}`}
+          />,
+        ])}
 
-        </div>
-
-        {centerZone && centerZone.length > 0 && centerZone.map(elm => elm)}
+        {/*{centerZone && centerZone.length > 0 && centerZone.map(elm => elm)}*/}
 
       </Layout>
     );

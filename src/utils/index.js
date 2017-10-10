@@ -7,8 +7,9 @@ import { color } from './theme';
 import * as TopExpertBase from './expert-base';
 import * as reflect from './reflect';
 import * as system from './system';
-import * as defaults from './defaults';
+import * as hole from './hole';
 import { compare } from './compare';
+
 // 连字符转驼峰
 String.prototype.hyphenToHump = function () {
   return this.replace(/-(\w)/g, (...args) => {
@@ -50,11 +51,6 @@ const getTwoDecimal = (text, num) => {
   return Math.floor(text * decimal) / decimal;
 };
 
-/**
- * @param   {String}
- * @return  {String}
- */
-
 const queryURL = (name) => {
   const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`, 'i');
   const r = window.location.search.substr(1).match(reg);
@@ -74,16 +70,10 @@ const createURL = (path, params, newParams) => {
   return url;
 };
 
-// const applyElements = (elements) => {
-//   if (elements) {
-//   return
-//   }
-// };
-
 module.exports = {
   config,
   system,
-  defaults,
+  hole,
 
   // menu,
   getMenusByUser,

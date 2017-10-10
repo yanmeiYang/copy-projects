@@ -6,9 +6,10 @@ import { Link } from 'dva/router';
 import defaults from '../utils';
 import { AddToEBButton, PersonRemoveButton, PersonComment } from './components';
 import { GetComments } from './person-comment-hooks';
-import * as Const from './const-acmfellow';
 
 import { createRoster } from '../../hooks';
+
+const ExpertBase = '59d7bb7e9ed5dbe450e6b275';
 
 module.exports = {
 
@@ -36,7 +37,7 @@ module.exports = {
   // },
   Header_LogoWidth: 118,
   Header_UserPageURL: '/user-info',
-  Header_RightZone: [() => <Link key="0" to={`/eb/${Const.ExpertBase}/-/0/20`}>我的专家库</Link>], // TODO make this a Component.
+  Header_RightZone: [() => <Link key="0" to={`/eb/${ExpertBase}/-/0/20`}>我的专家库</Link>], // TODO make this a Component.
 
   // Footer_Content: '',
   // ShowHelpDoc: true,
@@ -75,7 +76,7 @@ module.exports = {
       <AddToEBButton
         person={param.person} key="2"
         expertBaseId={param.expertBaseId}
-        targetExpertBase={Const.ExpertBase}
+        targetExpertBase={ExpertBase}
       />),
 
   PersonList_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
@@ -83,7 +84,7 @@ module.exports = {
     param => (
       <PersonComment
         person={param.person} user={param.user} key="1"
-        ExpertBase={Const.ExpertBase}
+        ExpertBase={ExpertBase}
       />),
   ],
   // PersonList_DidMountHooks: [],
@@ -115,7 +116,7 @@ module.exports = {
   ],
 
   // acmfellow 系统
-  ExpertBase: Const.ExpertBase,
+  ExpertBase,
 
   // bole 智库权限设置 TODO param => xxx
   // HOOK: [

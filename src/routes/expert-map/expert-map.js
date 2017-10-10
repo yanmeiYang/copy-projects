@@ -4,7 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Button, Tag } from 'antd';
+import { Button, Tag, Menu, Dropdown, Icon } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
@@ -870,6 +870,8 @@ class ExpertMap extends React.PureComponent {
         m += 1;
       });
     }
+    const SubMenu = Menu.SubMenu;
+    const MenuItemGroup = Menu.ItemGroup;
     console.log(domainChecks)
     return (
       <div className={styles.expertMap} id="currentMain">
@@ -882,8 +884,6 @@ class ExpertMap extends React.PureComponent {
                   checkState += 1;
                   return (<CheckableTag className={styles.filterItem} key={domain.id} checked={domainChecks[checkState - 1]} value={domain.id}><span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span></CheckableTag>)
                 })
-
-
                 }
               </ul>
             </div>
@@ -931,6 +931,48 @@ class ExpertMap extends React.PureComponent {
             {/*</Select>*/}
 
             <div className={styles.level}>
+              <Dropdown placement="bottomLeft" overlay={
+                <div>
+                  <Menu style={{ width: 240 }} mode="inline">
+                  <SubMenu title={<span>Theory</span>}>
+                    {Domains.map((domain) =>{
+                      if (domain.name === 'Theory' || domain.name === 'Multimedia' || domain.name === 'Security'
+                        || domain.name === 'Software Engineering' || domain.name === 'Computer Graphics') {
+                        return (
+                          <Menu.Item><span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span></Menu.Item>
+                        )
+                      }
+                    })
+                    }
+                  </SubMenu>
+                  <SubMenu title={<span>System</span>}>
+                    {Domains.map((domain) =>{
+                      if (domain.name === 'Database' || domain.name === 'System' || domain.name === 'Computer Networking') {
+                        return (
+                          <Menu.Item><span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span></Menu.Item>
+                        )
+                      }
+                    })
+                    }
+                  </SubMenu>
+                  <SubMenu title={<span>Artificial Intelligence</span>}>
+                    {Domains.map((domain) =>{
+                      if (domain.name === 'Data Mining' || domain.name === 'Machine Learning' || domain.name === 'Artificial Intelligence'
+                        || domain.name === 'Web and Information Retrieval' || domain.name === 'Computer Vision'
+                        || domain.name === 'Human-Computer Interaction' || domain.name === 'Natural Language Processing') {
+                        return (
+                          <Menu.Item><span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span></Menu.Item>
+                        )
+                      }
+                    })
+                    }
+                  </SubMenu>
+              </Menu></div>}>
+                <a className="ant-dropdown-link" >
+                  <span>Domains</span>
+                  <Icon type="down" />
+                </a>
+              </Dropdown>
               <span>
                 <FM defaultMessage="Baidu Map"
                     id="com.expertMap.headerLine.label.level" />

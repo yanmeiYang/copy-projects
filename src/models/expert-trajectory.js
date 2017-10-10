@@ -15,7 +15,7 @@ export default {
     results: [],
     personId: '',
     personInfo: {},
-    geoData: {},
+    // geoData: {},
     // for rightInfoZone,
     infoZoneIds: '', // ids as string slitted by ',';
     clusterPersons: [],
@@ -23,7 +23,7 @@ export default {
     yearMessage: [],
     eachYearHeat: {}, // each year's infomation
     year: '', // current year
-    heatData: '',
+    // heatData: '',
     startYear: '',
     endYear: '',
     location: [],
@@ -32,6 +32,8 @@ export default {
     authors: [],
     hindex: [],
     locationName: [],
+    geoCoordMap:{},
+    // yearHeat: {},
   },
 
   subscriptions: {},
@@ -55,18 +57,31 @@ export default {
       let data;
       const { query } = payload;
       if (query !== '') {
+        console.log("query !== '");
         data = yield call(traDataFindService.findHeatMap, query);
       } else {
         data = yield call(traDataFindService.findTop10000);
       }
+      console.log("dataà1",data)
+      const location = data.locations;
+      const startYear = data.startYear;
+      const endYear = data.endYear;
+      const table = data.table;
+      const authors = data.authors;
+      const authorImage = data.authorImage;
+      const locationName = data.locationName;
+      const hindex = data.h_index;
+      console.log()
       yield put({ type: 'heatFindSuccess',
         payload: {
-          heatData: data,
-          // location: data.locations,
-          // table: data.table,
-          // authors: data.authors,
-          // locationName: data.locationName,
-          // hindex: data.h_index,
+          location,
+          startYear,
+          endYear,
+          table,
+          authors,
+          authorImage,
+          locationName,
+          hindex,
       } });
     },
 
@@ -76,10 +91,20 @@ export default {
       yield put({ type: 'eventFindSuccess', payload: { data, yearNow } });
     },
 
-    * storeHindex({ payload }, { call, put }) {
-      const { hindex } = payload;
-      yield put({ type: 'hindexSuccess', payload: { hindex } });
-    },
+    // * storeHindex({ payload }, { call, put }) {
+    //   const { hindex } = payload;
+    //   yield put({ type: 'hindexSuccess', payload: { hindex } });
+    // },
+    //
+    // * storeAid({ payload }, { call, put }) {
+    //   const { authors, startYear, locationName } = payload;
+    //   yield put({ type: 'aidSuccess', payload: { authors, startYear, locationName } });
+    // },
+    //
+    // * storeTable({ payload }, { call, put }) {
+    //   const { table } = payload;
+    //   yield put({ type: 'tableSuccess', payload: { table } });
+    // },
 
     * listPersonByIds({ payload }, { call, put }) {  // eslint-disable-line
       yield put({ type: 'showLoading' });
@@ -94,15 +119,16 @@ export default {
 
     * getYearData({ payload }, { call, put, select }) {
       const { year } = payload;
-      const yearN = yield select(state => state.expertTrajectory.startYear);
+      const yearStart = yield select(state => state.expertTrajectory.startYear);
+      const yearEnd = yield select(state => state.expertTrajectory.endYear);
       const table = yield select(state => state.expertTrajectory.table);
       const authors = yield select(state => state.expertTrajectory.authors);
       const authorImage = yield select(state => state.expertTrajectory.authorImage);
-      const yearIndex = year - yearN;
+      const location = yield select(state => state.expertTrajectory.location);
+      const yearIndex = year - yearStart;
       const data = [];
       const nextYearData = [];
-      const geoCoordMap = this.doHeatGeoMap();
-
+      const geoCoordMap = doHeatGeoMap(location);
       const merge = {};
       const nextYear = {};
       const author = {};
@@ -134,7 +160,7 @@ export default {
           }
         }
         // 第二年数据
-        if (yearIndex < (this.state.endYear - this.state.startYear)) {
+        if (yearIndex < (yearEnd - yearStart)) {
           const addressID2 = table[aid][yearIndex + 1];
           if (addressID2 && !merge[addressID2]) {
             if (!nextYear[addressID2]) {
@@ -155,15 +181,15 @@ export default {
         data.push(onenode);
       }
 
-      if (yearIndex < (this.state.endYear - this.state.startYear)) {
+      if (yearIndex < (yearEnd - yearStart)) {
         for (const key in nextYear) {
           const onenode = { name: key, value: nextYear[key] }; // 实际数据中乘20应删去！
           nextYearData.push(onenode);
         }
       }
 
-      data.sort(this.sortValue);
-      nextYearData.sort(this.sortValue);
+      data.sort(sortValue);
+      nextYearData.sort(sortValue);
       let data1 = []; // data1为人数前100地点数据， data2为100以后
       let p;
       // console.log('datasp', datas[0]);
@@ -189,9 +215,10 @@ export default {
           authorImgEast[key] = authorImg[key];
         }
       });
+      console.log("89089089-----------============")
 
       yield put({ type: 'getPerYearHeatDataSuccess',
-        payload: { year, geoCoordMap, data, yearIndex, nextYearData, data1, data2, authorImgWest, authorImgMid, authorImgEast },
+        payload: { year, geoCoordMap, data, yearIndex, nextYearData, data1, data2, authorImgWest, authorImgMid, authorImgEast, author, author2 },
       });
     },
 
@@ -199,10 +226,11 @@ export default {
   },
 
   reducers: {
-    getPerYearHeatDataSuccess(state, { payload: { year, geoCoordMap, data, yearIndex, nextYearData, data1, data2, authorImgWest, authorImgMid, authorImgEast } }) {
+    getPerYearHeatDataSuccess(state, { payload: { year, geoCoordMap, data, yearIndex, nextYearData, data1, data2, authorImgWest, authorImgMid, authorImgEast, author, author2 } }) {
       const yearHeat = state.eachYearHeat;
+      yearHeat[year] = {};
+      yearHeat[year]['data'] = data;
       yearHeat[year].geoCoordMap = geoCoordMap;
-      yearHeat[year].data = data;
       yearHeat[year].yearIndex = yearIndex;
       yearHeat[year].nextYearData = nextYearData;
       yearHeat[year].data1 = data1;
@@ -210,7 +238,8 @@ export default {
       yearHeat[year].authorImgWest = authorImgWest;
       yearHeat[year].authorImgMid = authorImgMid;
       yearHeat[year].authorImgEast = authorImgEast;
-
+      yearHeat[year].author = author;
+      yearHeat[year].author2 = author2;
       return { ...state, eachYearHeat: yearHeat };
     },
 
@@ -228,16 +257,17 @@ export default {
       };
     },
 
-    heatFindSuccess(state, { payload: { heatData } }) {
-      const location = heatData.locations;
-      const startYear = heatData.startYear;
-      const endYear = heatData.endYear;
-      const table = heatData.table;
-      const authors = heatData.authors;
-      const authorImage = heatData.authorImage;
-      const locationName = heatData.locationName;
-      const hindex = heatData.h_index;
-      console.log('authors', authors);
+    heatFindSuccess(state, { payload: { heatData,location, startYear, authorImage, endYear, table, authors, locationName, hindex } }) {
+      console.log("startYear",startYear)
+      // const location = heatData.locations;
+      // const startYear = heatData.startYear;
+      // const endYear = heatData.endYear;
+      // const table = heatData.table;
+      // const authors = heatData.authors;
+      // const authorImage = heatData.authorImage;
+      // const locationName = heatData.locationName;
+      // const hindex = heatData.h_index;
+      // console.log('authors', authors);
       return {
         ...state,
         heatData,
@@ -270,12 +300,28 @@ export default {
       return { ...state, yearMessage: newMassage };
     },
 
-    hindexSuccess(state, { payload: { hindex } }) {
-      return {
-        ...state,
-        hindex,
-      };
-    },
+    // hindexSuccess(state, { payload: { hindex } }) {
+    //   return {
+    //     ...state,
+    //     hindex,
+    //   };
+    // },
+    //
+    // aidSuccess(state, { payload: { authors, startYear, locationName } }) {
+    //   return {
+    //     ...state,
+    //     authors,
+    //     startYear,
+    //     locationName,
+    //   };
+    // },
+    //
+    // tableSuccess(state, { payload: { table } }) {
+    //   return {
+    //     ...state,
+    //     table,
+    //   };
+    // },
 
     listPersonByIdsSuccess(state, { payload: { data } }) {
       return { ...state, clusterPersons: data.data.persons, loading: false };
@@ -295,4 +341,19 @@ export default {
     },
 
   },
+
+
+};
+
+function doHeatGeoMap(location) { // 存储经纬度 geoCoordMap = {123:[116,40]}
+  const geoCoordMap = {};
+  for (let i = 1; i < location.length; i += 1) {
+    geoCoordMap[i] = location[i];
+  }
+  console.log('geo', geoCoordMap);
+  return geoCoordMap;
+}
+
+function sortValue(a, b) {
+  return b.value - a.value;
 };

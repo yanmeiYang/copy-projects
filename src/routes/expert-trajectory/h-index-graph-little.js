@@ -11,19 +11,19 @@ import * as profileUtils from '../../utils/profile-utils';
 function group(hindex) {
   let g = 0;
   switch (true) {
-    case hindex >= 0 && hindex < 10:
+    case hindex >= 0 && hindex < 45:
       g = 0;
       break;
-    case hindex >= 10 && hindex < 20:
+    case hindex >= 45 && hindex < 55:
       g = 1;
       break;
-    case hindex >= 20 && hindex < 40:
+    case hindex >= 55 && hindex < 70:
       g = 2;
       break;
-    case hindex >= 40 && hindex < 60:
+    case hindex >= 70 && hindex < 90:
       g = 3;
       break;
-    case hindex >= 60 :
+    case hindex >= 90 :
       g = 4;
       break;
     default:
@@ -58,23 +58,23 @@ class HindexGraph extends React.PureComponent {
     return (
       <div className={styles.container}>
         <div className={styles.container1}>
-          <div className={styles.itema}>&lt;10</div>
+          <div className={styles.itema}>&lt;45</div>
           <div className={styles.item1} style={{ width: groupHeight[0] }}>{groupNumTemp[0]}</div>
         </div>
         <div className={styles.container1}>
-          <div className={styles.itema}>10~20</div>
+          <div className={styles.itema}>45~55</div>
           <div className={styles.item2} style={{ width: groupHeight[1] }}>{groupNumTemp[1]}</div>
         </div>
         <div className={styles.container1}>
-          <div className={styles.itema}>20~40</div>
+          <div className={styles.itema}>55~70</div>
           <div className={styles.item3} style={{ width: groupHeight[2] }}>{groupNumTemp[2]}</div>
         </div>
         <div className={styles.container1}>
-          <div className={styles.itema}>40~60</div>
+          <div className={styles.itema}>70~90</div>
           <div className={styles.item4} style={{ width: groupHeight[3] }}>{groupNumTemp[3]}</div>
         </div>
         <div className={styles.container1}>
-          <div className={styles.itema}>&gt;60</div>
+          <div className={styles.itema}>&gt;90</div>
           <div className={styles.item5} style={{ width: groupHeight[4] }}>{groupNumTemp[4]}</div>
         </div>
       </div>

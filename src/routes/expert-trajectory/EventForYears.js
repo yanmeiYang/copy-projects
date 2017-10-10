@@ -5,6 +5,9 @@ import classnames from 'classnames';
 import { Indices } from 'components/widgets';
 import styles from './EventForYears.less';
 
+let authors;
+let table;
+let locationName;
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
 export default class EventForYears extends React.PureComponent {
   constructor(props) {
@@ -18,6 +21,10 @@ export default class EventForYears extends React.PureComponent {
 
   componentWillMount() {
     if (this.props.year !== '') {
+      authors = this.props.expertTrajectory.authors;
+      console.log("should author",authors)
+      table = this.props.expertTrajectory.table;
+      locationName = this.props.expertTrajectory.locationName;
       this.findYearEvent(this.props.year);
     }
   }
@@ -27,7 +34,7 @@ export default class EventForYears extends React.PureComponent {
 
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps.qquery !== this.props.qquery){
+    if (nextProps.qquery !== this.props.qquery) {
       document.getElementById('eve').innerHTML = ''
       return true;
     }
@@ -54,7 +61,7 @@ export default class EventForYears extends React.PureComponent {
 
   render() {
     const year = this.props.year;
-    const message = this.props.expertTrajectory.yearMessage;
+    const message = this.props.expertTrajectory.yearMessage; // 每年数据
 
     return (
       <div className={styles.first} id="eve" >
@@ -72,6 +79,15 @@ export default class EventForYears extends React.PureComponent {
                     </div>
                   );
                 } else if (oneEvent.type === 'professor') {
+                  const authorIndex = authors.indexOf(oneEvent.authorID);
+                  const yearIndex = this.state.year - this.props.expertTrajectory.startYear;
+                  console.log("yearIndex",yearIndex);
+                  const thisYearID = table[authorIndex][yearIndex];
+                  const nextYearID = table[authorIndex][yearIndex + 1];
+                  console.log("yearId", thisYearID, nextYearID)
+                  const thisYear = locationName[thisYearID].toLowerCase();
+                  const nextYear = locationName[nextYearID].toLowerCase();
+                  console.log("year",thisYear, nextYear)
                   return (
                     <div key={idx} className={styles.event}>
                       <div className={styles.person}>
@@ -88,6 +104,7 @@ export default class EventForYears extends React.PureComponent {
                                 {false && <span className={styles.rank}>会士</span>}
                               </h2>
                             </div>}
+                            <div className={styles.yearToGo}> <h4> This Year: </h4> <span> {thisYear} </span> <br /> <h4> Next Year:</h4> <span> {nextYear} </span> </div>
                             {/*{this.personRightButton && this.personRightButton(person)}*/}
                             <div className={classnames(styles.zone, styles.interestColumn)}>
                               <div className={styles.contact_zone}>

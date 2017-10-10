@@ -39,5 +39,5 @@ export async function findHeatMap(rid) {
 }
 
 export async function findTop10000() {
-  return require('../../public/lab/heatData.json');
+  return require('../../public/lab/heatData40.json');
 }

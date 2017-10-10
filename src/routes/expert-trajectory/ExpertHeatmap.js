@@ -29,7 +29,7 @@ let author = {};
 let author2 = {};
 let authorImg = {};
 const authorImage = [];
-let mapinterval;
+let mapinterval; // 播放的interval
 let location = [];
 let table = [];
 let authors;
@@ -76,7 +76,7 @@ const jietang = 'am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.j
 let play = false;
 let yearNow;
 
-class ExpertHeatmap extends React.Component { ///
+class ExpertHeatmap extends React.PureComponent { ///
   constructor(props) {
     super(props);
     this.dispatch = this.props.dispatch;
@@ -109,7 +109,15 @@ class ExpertHeatmap extends React.Component { ///
     // this.getHeatmapData(); // 热力图
   }
 
+  // componentDidUpdate(nextProps){
+  //   if (nextProps.qquery !== this.props.qquery){
+  //     this.myChart2.clear();
+  //     return true;
+  //   }
+  // }
+
   shouldComponentUpdate(nextProps, nextState){
+    console.log("---------------====================")
     if (nextProps.qquery !== this.props.qquery){
       this.myChart2.clear();
       return true;
@@ -117,17 +125,19 @@ class ExpertHeatmap extends React.Component { ///
     if (nextState.inputValue !== this.state.inputValue) {
       return true;
     }
-    if (nextProps.expertTrajectory.heatData !== this.props.expertTrajectory.heatData) {
-      const heatData = nextProps.expertTrajectory.heatData;
-      this.setState({ startYear: heatData.startYear, endYear: heatData.endYear });
-      location = heatData.locations;
-      table = heatData.table;
-      authors = heatData.authors;
-      // authorImage = heatData.authorImage;
-      locationName = heatData.locationName;
-      hindex = heatData.h_index;
-      console.log("yoyoyoyoyo0-----------",hindex)
-      this.props.dispatch({ type: 'expertTrajectory/storeHindex', payload: { hindex }  })
+    if (nextProps.expertTrajectory.location !== this.props.expertTrajectory.location) {
+      // const heatData = nextProps.expertTrajectory.heatData;
+      this.setState({ startYear: nextProps.expertTrajectory.startYear, endYear: nextProps.expertTrajectory.endYear });
+      location = nextProps.expertTrajectory.locations;
+      table = nextProps.expertTrajectory.table;
+      authors = nextProps.expertTrajectory.authors;
+      // authorImage = nextProps.expertTrajectory.authorImage;
+      locationName = nextProps.expertTrajectory.locationName;
+      hindex = nextProps.expertTrajectory.h_index;
+      // console.log("yoyoyoyoyo0-----------",hindex)
+      // this.props.dispatch({ type: 'expertTrajectory/storeAid', payload: { authors, startYear: heatData.startYear, locationName } });
+      // this.props.dispatch({ type: 'expertTrajectory/storeTable', payload: { table } });
+      // this.props.dispatch({ type: 'expertTrajectory/storeHindex', payload: { hindex }  });
       this.playon = this.state.startYear;
       this.setHeatmap(); // 热力图
       this.getMouseEvent();
@@ -210,103 +220,108 @@ class ExpertHeatmap extends React.Component { ///
     this.seriesNo = false;
     this.playon = value;
     yearNow = this.playon;
-    // this.props.dispatch({ type: 'expertTrajectory/getYearData', payload: { year: yearNow} });
-    const yearIndex = value - this.state.startYear;
-    const data = [];
-    const nextYearData = [];
-    const geoCoordMap = this.doHeatGeoMap();
-
-    const merge = {};
-    const nextYear = {};
-    author = {};
-    author2 = {};
-    authorImg = {};
-    const authorImgWest = {};
-    const authorImgEast = {};
-    const authorImgMid = {};
-    for (let aid = 0; aid < table.length; aid += 1) { // 当年的数据
-      const addressID = table[aid][yearIndex];
-      if (addressID) {
-        if (!merge[addressID]) { // 统计该地人数
-          merge[addressID] = 0;
-        }
-        merge[addressID] += 1;
-
-        if (!author[addressID]) {
-          author[addressID] = [];
-        }
-        author[addressID].push(authors[aid]);
-
-        if (authorImage[aid]) {
-          if (table[aid][yearIndex] in authorImg) { // 取今年各地点的作者id
-            authorImg[table[aid][yearIndex]].push(authorImage[aid]);
-          } else {
-            authorImg[table[aid][yearIndex]] = [];
-            authorImg[table[aid][yearIndex]].push(authorImage[aid]);
-          }
-        }
-      }
-      // console.log("+++++++++",authorImg)
-
-
-      // 第二年数据
-      if (yearIndex < (this.state.endYear - this.state.startYear)) {
-        const addressID2 = table[aid][yearIndex + 1];
-        if (addressID2 && !merge[addressID2]) {
-          if (!nextYear[addressID2]) {
-            nextYear[addressID2] = 0;
-          }
-          nextYear[addressID2] += 1;
-        }
-
-        if (!author2[addressID2]) {
-          author2[addressID2] = [];
-        }
-        author2[addressID2].push(authors[aid]);
-      }
-    }
-
-    for (const key in merge) { // 当年的地点、人数数据
-      const onenode = { name: key, value: merge[key] };
-      data.push(onenode);
-    }
-
-    if (yearIndex < (this.state.endYear - this.state.startYear)) {
-      for (const key in nextYear) {
-        const onenode = { name: key, value: nextYear[key] }; // 实际数据中乘20应删去！
-        nextYearData.push(onenode);
-      }
-    }
-
-    data.sort(this.sortValue);
-    nextYearData.sort(this.sortValue);
-    let data1 = []; // data1为人数前100地点数据， data2为100以后
-    let p;
-    // console.log('datasp', datas[0]);
-    // console.log(datas[0].value);
-    if (data.length > 10) {
-      for (p = 0; data[p].value > 1 && p < 100; p += 1) {
-        data1.push(data[p]);
-      }
-    } else {
-      data1 = data;
-    }
-    const data2 = data.slice(p);
-
-    // console.log('authorImg', authorImg);
-    Object.keys(authorImg).map((key) => {
-      // console.log('geoCOooiejijf', geoCoordMap[key]);
-      if (geoCoordMap[key][0] < (-30)) {
-        // console.log('come to west');
-        authorImgWest[key] = authorImg[key];
-      } else if (geoCoordMap[key][0] >= -30 && geoCoordMap[key][0] <= 70) {
-        authorImgMid[key] = authorImg[key];
-      } else if (geoCoordMap[key][0] > 70) {
-        authorImgEast[key] = authorImg[key];
-      }
+    this.props.dispatch({ type: 'expertTrajectory/getYearData', payload: { year: yearNow} }).then(() => {
+      const thisYearData = this.props.expertTrajectory.eachYearHeat[yearNow]
+      author = thisYearData.author;
+      author2 = thisYearData.author2;
+      mapOption.series = this.getHeatSeries(thisYearData.geoCoordMap, thisYearData.data, 0, false, thisYearData.yearIndex, thisYearData.nextYearData, thisYearData.data1, thisYearData.data2, thisYearData.authorImgWest, thisYearData.authorImgMid, thisYearData.authorImgEast);
+      this.myChart2.setOption(mapOption, true);
     });
-    mapOption.series = this.getHeatSeries(geoCoordMap, data, 0, false, yearIndex, nextYearData, data1, data2, authorImgWest, authorImgMid, authorImgEast);
-    this.myChart2.setOption(mapOption, true);
+    // const yearIndex = value - this.state.startYear;
+    // const data = [];
+    // const nextYearData = [];
+    // const geoCoordMap = this.doHeatGeoMap();
+    //
+    // const merge = {};
+    // const nextYear = {};
+    // author = {};
+    // author2 = {};
+    // authorImg = {};
+    // const authorImgWest = {};
+    // const authorImgEast = {};
+    // const authorImgMid = {};
+    // for (let aid = 0; aid < table.length; aid += 1) { // 当年的数据
+    //   const addressID = table[aid][yearIndex];
+    //   if (addressID) {
+    //     if (!merge[addressID]) { // 统计该地人数
+    //       merge[addressID] = 0;
+    //     }
+    //     merge[addressID] += 1;
+    //
+    //     if (!author[addressID]) {
+    //       author[addressID] = [];
+    //     }
+    //     author[addressID].push(authors[aid]);
+    //
+    //     if (authorImage[aid]) {
+    //       if (table[aid][yearIndex] in authorImg) { // 取今年各地点的作者id
+    //         authorImg[table[aid][yearIndex]].push(authorImage[aid]);
+    //       } else {
+    //         authorImg[table[aid][yearIndex]] = [];
+    //         authorImg[table[aid][yearIndex]].push(authorImage[aid]);
+    //       }
+    //     }
+    //   }
+    //   // console.log("+++++++++",authorImg)
+    //
+    //
+    //   // 第二年数据
+    //   if (yearIndex < (this.state.endYear - this.state.startYear)) {
+    //     const addressID2 = table[aid][yearIndex + 1];
+    //     if (addressID2 && !merge[addressID2]) {
+    //       if (!nextYear[addressID2]) {
+    //         nextYear[addressID2] = 0;
+    //       }
+    //       nextYear[addressID2] += 1;
+    //     }
+    //
+    //     if (!author2[addressID2]) {
+    //       author2[addressID2] = [];
+    //     }
+    //     author2[addressID2].push(authors[aid]);
+    //   }
+    // }
+    //
+    // for (const key in merge) { // 当年的地点、人数数据
+    //   const onenode = { name: key, value: merge[key] };
+    //   data.push(onenode);
+    // }
+    //
+    // if (yearIndex < (this.state.endYear - this.state.startYear)) {
+    //   for (const key in nextYear) {
+    //     const onenode = { name: key, value: nextYear[key] }; // 实际数据中乘20应删去！
+    //     nextYearData.push(onenode);
+    //   }
+    // }
+    //
+    // data.sort(this.sortValue);
+    // nextYearData.sort(this.sortValue);
+    // let data1 = []; // data1为人数前100地点数据， data2为100以后
+    // let p;
+    // // console.log('datasp', datas[0]);
+    // // console.log(datas[0].value);
+    // if (data.length > 10) {
+    //   for (p = 0; data[p].value > 1 && p < 100; p += 1) {
+    //     data1.push(data[p]);
+    //   }
+    // } else {
+    //   data1 = data;
+    // }
+    // const data2 = data.slice(p);
+    //
+    // // console.log('authorImg', authorImg);
+    // Object.keys(authorImg).map((key) => {
+    //   // console.log('geoCOooiejijf', geoCoordMap[key]);
+    //   if (geoCoordMap[key][0] < (-30)) {
+    //     // console.log('come to west');
+    //     authorImgWest[key] = authorImg[key];
+    //   } else if (geoCoordMap[key][0] >= -30 && geoCoordMap[key][0] <= 70) {
+    //     authorImgMid[key] = authorImg[key];
+    //   } else if (geoCoordMap[key][0] > 70) {
+    //     authorImgEast[key] = authorImg[key];
+    //   }
+    // });
+
   }
 
 
@@ -498,6 +513,7 @@ class ExpertHeatmap extends React.Component { ///
               this.myChart2.setOption(mapOption, true);
             } else if (params.componentSubType === 'lines') {
               this.personList = _.intersection(author[params.name[0]], author2[params.name[1]]);
+              console.log("the personlist", this.personList)
               this.from = params.name[0];
               this.to = params.name[1];
               mapOption.series.push({

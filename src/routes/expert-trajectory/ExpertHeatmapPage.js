@@ -22,7 +22,7 @@ const { Content, Sider } = Layout;
 const TabPane = Tabs.TabPane;
 const tc = applyTheme(styles);
 
-class ExpertHeatmapPage extends React.Component {
+class ExpertHeatmapPage extends React.PureComponent {
   constructor(props) {
     super(props);
     this.dispatch = this.props.dispatch;
@@ -63,7 +63,6 @@ class ExpertHeatmapPage extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) { // 状态改变时判断要不要刷新
     if (nextState.query && nextState.query !== this.state.query) {
-      console.log("nextProps.query", nextState.query)
       this.setState({ query: nextState.query });
       this.findIfQuery(nextState.query);
       // this.callSearchMap(nextState.query);
@@ -76,7 +75,6 @@ class ExpertHeatmapPage extends React.Component {
   }
 
   onSearch = (data) => {
-    console.log("data-------------====================ddd",data)
     if (data.query) {
       this.setState({ query: data.query });
       // TODO change this, 不能用
@@ -97,7 +95,10 @@ class ExpertHeatmapPage extends React.Component {
     if (from1 && to1) {
       this.setState({ from: from1, to: to1 });
     }
-    this.setState({ infoTab: 'selection' });
+    if(type === 'scatter' || type === 'lines'){
+      this.setState({ infoTab: 'selection' });
+    }
+
   }
 
   onYearChange = (year1) => {
@@ -127,7 +128,6 @@ class ExpertHeatmapPage extends React.Component {
       // lines: () => (<LeftLineInfoCluster persons={clusterPersons} />),
       lines: () => (<LeftLineInfoCluster persons={clusterPersons} from={from} to={to} />),
     };
-    console.log("righttype----====",this.state.rightType)
     return (
       <Layout1 contentClass={tc(['ExpertHeatmapPage'])} onSearch={this.onSearch}
               query={query}>

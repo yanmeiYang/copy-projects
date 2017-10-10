@@ -57,7 +57,7 @@ class LeftInfoAll extends React.PureComponent {
         </div>
         <div className={styles.statistics}>
           总值：
-          <span className={styles.count}>{hindexSum}</span>
+          <span className={styles.count}>{hindexSum}</span> <br />
           平均值：
           <span className={styles.count}>{avg}</span>
         </div>

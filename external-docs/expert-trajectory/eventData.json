@@ -7,8 +7,9 @@
     },
     {
         "type": "professor",
-        "name": "BurgerKingdddddddddddddddddfg",
+        "name": "BurgerKing",
         "h_index": 180,
+        "authorID": "53f42f36dabfaedce54dcd0c",
         "position": "joy city",
         "affiliation": "Xi Dan",
         "url": "https://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!160?ran=0.5590563738547021"
@@ -23,6 +24,7 @@
         "type": "professor",
         "name": "jerry",
         "h_index": 150,
+        "authorID": "53f47977dabfae8a6845b643",
         "position": "apm",
         "affiliation": "Wang Fu Jin",
         "url": "https://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!160?ran=0.5590563738547021"

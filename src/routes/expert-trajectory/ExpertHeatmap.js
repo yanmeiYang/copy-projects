@@ -35,6 +35,7 @@ let table = [];
 let authors;
 let hindex;
 const imageData = {};
+let yearMessage;
 const themes = {
   dark: {
     textColor: '#deded7',
@@ -117,7 +118,6 @@ class ExpertHeatmap extends React.PureComponent { ///
   // }
 
   shouldComponentUpdate(nextProps, nextState){
-    console.log("---------------====================")
     if (nextProps.qquery !== this.props.qquery){
       this.myChart2.clear();
       return true;
@@ -221,7 +221,9 @@ class ExpertHeatmap extends React.PureComponent { ///
     this.playon = value;
     yearNow = this.playon;
     this.props.dispatch({ type: 'expertTrajectory/getYearData', payload: { year: yearNow} }).then(() => {
-      const thisYearData = this.props.expertTrajectory.eachYearHeat[yearNow]
+      // const thisYearEvent = this.props.yearMessage[yearNow];
+      console.log("thisYearEvent", this.props.expertTrajectory.yearMessage)
+      const thisYearData = this.props.expertTrajectory.eachYearHeat[yearNow];
       author = thisYearData.author;
       author2 = thisYearData.author2;
       mapOption.series = this.getHeatSeries(thisYearData.geoCoordMap, thisYearData.data, 0, false, thisYearData.yearIndex, thisYearData.nextYearData, thisYearData.data1, thisYearData.data2, thisYearData.authorImgWest, thisYearData.authorImgMid, thisYearData.authorImgEast);
@@ -631,6 +633,9 @@ class ExpertHeatmap extends React.PureComponent { ///
       mapOption.geo.zoom += 0.1;
       this.myChart2.setOption(mapOption);
     });
+
+    console.log("hahahha-----------=================-------------=====",this.myChart2.convertToPixel('geo', [128.3324, 89.5344]));
+
   }
 
 

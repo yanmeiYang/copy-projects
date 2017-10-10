@@ -108,7 +108,7 @@ export default class EventForYears extends React.PureComponent {
                             {/*{this.personRightButton && this.personRightButton(person)}*/}
                             <div className={classnames(styles.zone, styles.interestColumn)}>
                               <div className={styles.contact_zone}>
-                                H_index: {oneEvent.h_index} <br />
+                                 H_index: {oneEvent.h_index} <br />
                                 {oneEvent.position && <span><i className="fa fa-briefcase fa-fw" /> {oneEvent.position}</span>}
                                 {oneEvent.affiliation && <span><i className="fa fa-institution fa-fw" /> {oneEvent.affiliation}</span>}
                               </div>

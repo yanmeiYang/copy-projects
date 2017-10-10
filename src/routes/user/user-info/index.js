@@ -6,10 +6,9 @@ import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { Button } from 'antd';
 import { Layout } from 'routes';
-import { applyTheme } from 'systems';
+import { theme, applyTheme } from 'themes';
 import * as auth from 'utils/auth';
 import styles from './index.less';
-import * as profileUtils from '../../../utils/profile-utils';
 
 const tc = applyTheme(styles);
 

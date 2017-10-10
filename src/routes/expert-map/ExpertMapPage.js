@@ -5,7 +5,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Layout } from 'routes';
-import { applyTheme } from 'systems';
+import { theme, applyTheme } from 'themes';
 import queryString from 'query-string';
 import { Auth } from 'hoc';
 import ExpertGoogleMap from './expert-googlemap.js';

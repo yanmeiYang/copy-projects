@@ -4,7 +4,7 @@
 import React from 'react';
 import { Menu } from 'antd';
 import { Layout } from 'routes';
-import { applyTheme } from 'systems';
+import { theme, applyTheme } from 'themes';
 import styles from './ranksHelp.less';
 
 const tc = applyTheme(styles);

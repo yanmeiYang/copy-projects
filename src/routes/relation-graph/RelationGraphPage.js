@@ -7,7 +7,7 @@ import { connect } from 'dva';
 import classnames from 'classnames';
 import { Layout } from 'routes';
 import queryString from 'query-string';
-import { applyTheme } from 'systems';
+import { theme, applyTheme } from 'themes';
 import { routerRedux, Link } from 'dva/router';
 import styles from './RelationGraphPage.less';
 import RelationGraph from './RelationGraph';

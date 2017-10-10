@@ -4,7 +4,8 @@ import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import { Layout } from 'routes';
 import { Button, Modal, Row, Form, Input, Icon } from 'antd';
-import { sysconfig, applyTheme } from 'systems';
+import { sysconfig } from 'systems';
+import { theme, applyTheme } from 'themes';
 import { classnames, config } from 'utils';
 import styles from './index.less';
 
@@ -65,7 +66,8 @@ class Login extends React.Component {
     };
 
     return (
-      <Layout searchZone={[]} showHeader={false} showNavigator={false} contentClass={tc(['loginPage'])}>
+      <Layout searchZone={[]} showHeader={false} showNavigator={false}
+              contentClass={tc(['loginPage'])}>
         <Form layout={'vertical'}>
           <Row className={styles.formHeader}>
             <h1>登录</h1>

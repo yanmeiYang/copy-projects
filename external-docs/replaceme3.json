@@ -1,67 +1,19 @@
+// api-parameters: query, year, n_experts, n_paper,
 [
   {
-    "method": "search",
-    "parameters": {
-      "query": "data ",
-      "offset": 0,
-      "size": 20,
-      "searchType": "person",
-      "filters": {
-        "terms": {
-          "labels": [
-            "CCF_MEMBER_杰出会员"
-          ]
-        },
-        "ranges": {
-          "h_index": [
-            "2",
-            "3"
-          ]
-        }
-      },
-      "aggregation": [
-        "gender",
-        "h_index",
-        "location",
-        "language"
-      ],
-      "haves": {
-        "labels": [
-          "CCF_MEMBER_高级会员",
-          "CCF_MEMBER_会士",
-          "CCF_MEMBER_杰出会员"
-        ]
-      },
-      "switches": [
-        "translate"
-      ]
-    },
-    "schema": {
-      "person": [
-        "id",
-        "name",
-        "name_zh",
-        "tags",
-        {
-          "profile": [
-            "position",
-            "affiliation"
-          ]
-        },
-        {
-          "indices": [
-            "hindex",
-            "gindex",
-            "numpubs",
-            "citation",
-            "newStar",
-            "risingStar",
-            "activity",
-            "diversity",
-            "sociability"
-          ]
-        }
-      ]
-    }
-  }
+    "type": "paper", // 类型 论文／professor
+    "title": "xxx", // 论文题目
+    "author": "xxxx", // 论文作者
+    "cited": 120, // 引用数
+  },
+  {
+    "type": "expert",
+    "name": "xxx", // 姓名
+    "h_index": 180,
+    "authorID": "53f42f36dabfaedce54dcd0c",
+    "position": "joy city", // 地址
+    "affiliation": "Xi Dan", // 联盟
+    "url": "xxx"// 头像url
+  },
+  // ...
 ]

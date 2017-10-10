@@ -120,7 +120,7 @@ const defaultSystemConfigs = {
   ExpertBases: [], // must override.
   DEFAULT_EXPERT_BASE: 'aminer', // 华为默认搜索
   DEFAULT_EXPERT_BASE_NAME: '全球专家',
-  DEFAULT_EXPERT_SEARCH_KEY: 'term',
+  DEFAULT_EXPERT_SEARCH_KEY: 'term', // 旧API智库搜索三选一
 
   // > Search related
   SearchBarInHeader: true,

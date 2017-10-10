@@ -105,7 +105,8 @@ export default class ExpertBaseExpertsPage extends Component {
           sorts={query ? null : this.ebSorts}
           defaultSortType="time"
           onSearchBarSearch={this.onSearchBarSearch}
-          showSearchBox={this.props.app.headerSearchBox ? false : true}
+          // showSearchBox={this.props.app.headerSearchBox ? false : true}
+          showSearchBox={false}
           disableFilter={!query}
           disableExpertBaseFilter
           disableSearchKnowledge

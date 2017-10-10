@@ -31,6 +31,12 @@ module.exports = {
     </Link>,
   ],
 
+  // Index page
+  ExpertBaseExpertsPage_Title: defaults.IN_COMPONENT_DEFAULT,
+
+
+  // Expert Page
+
   ExpertBaseExpertsPage_Title: <span>ACM Fellow</span>,
 
 };

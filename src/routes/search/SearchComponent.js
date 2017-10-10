@@ -200,7 +200,7 @@ export default class SearchComponent extends Component {
     const { pageSize, total, current } = pagination;
     const load = this.props.loading.effects['search/searchPerson'];
 
-    const expertBase = (filters && filters.eb && filters.eb.id) || 'aminer';
+    // const expertBase = (filters && filters.eb && filters.eb.id) || 'aminer';
 
     const SearchSortsRightZone = !sysconfig.Enable_Export ? [] : [() => (
       <ExportPersonBtn

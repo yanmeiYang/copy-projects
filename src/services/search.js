@@ -14,7 +14,7 @@ const { api } = config;
 export async function searchPerson(query, offset, size, filters, sort, useTranslateSearch) {
   // if query is null, and eb is not aminer, use expertbase list api.
   if (!query && filters && filters.eb && filters.eb.id && filters.eb.id !== 'aminer') {
-    return searchListPersonInEB({ ebid: filters.eb.id, sort, offset, size });
+    return listPersonInEB({ ebid: filters.eb.id, sort, offset, size });
   }
 
   // if search in global experts, jump to another function;
@@ -27,7 +27,9 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
     return searchPersonGlobal(query, offset, size, filters, sort, useTranslateSearch);
   }
 
+  //
   // Search in ExpertBase.
+  //
 
   // 1. prepare parameters.
   const Sort = sort || 'relevance'; // TODO or '_sort';
@@ -102,7 +104,7 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
   }
 }
 
-export async function searchListPersonInEB(payload) {
+export async function listPersonInEB(payload) {
   const { sort, ebid, offset, size } = payload;
   if (!sort || sort === 'time') {
     return request(

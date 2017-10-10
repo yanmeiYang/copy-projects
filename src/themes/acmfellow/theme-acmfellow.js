@@ -40,7 +40,8 @@ module.exports = {
       key={0}
       links={sysconfig.IndexPage_QuickSearchList}
       lang={sysconfig.Locale}
-      urlFunc={query => `/${sysconfig.SearchPagePrefix}/${query}/0/${sysconfig.MainListSize}`}
+      // urlFunc={query => `/${sysconfig.SearchPagePrefix}/${query}/0/${sysconfig.MainListSize}`}
+      urlFunc={query => `/eb/${sysconfig.ExpertBase}/${query}/0/${sysconfig.MainListSize}`}
     />,
   ],
 

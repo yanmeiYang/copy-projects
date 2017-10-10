@@ -13,13 +13,13 @@ import { Spinner } from 'components';
 import { Message } from 'components/ui';
 import { PublicationList } from 'components/publication/index';
 import { PersonListTiny } from 'components/person/index';
-import { sysconfig, applyTheme } from 'systems';
+import { sysconfig } from 'systems';
+import { theme, applyTheme } from 'themes';
 import { Auth } from 'hoc';
 
 import styles from './KnowledgeGraphPage.less';
 import { KnowledgeGraphTextTree } from './index';
 
-const { theme } = sysconfig;
 const tc = applyTheme(styles);
 
 const RadioGroup = Radio.Group;

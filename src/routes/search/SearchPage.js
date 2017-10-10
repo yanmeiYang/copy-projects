@@ -3,13 +3,13 @@ import { routerRedux, withRouter } from 'dva/router';
 import { connect } from 'dva';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { Layout } from 'routes';
-import { sysconfig, applyTheme } from 'systems';
+import { sysconfig } from 'systems';
+import { theme, applyTheme } from 'themes';
 import classnames from 'classnames';
 import { Auth } from 'hoc';
 import SearchComponent from 'routes/search/SearchComponent';
 import styles from './SearchPage.less';
 
-const { theme } = sysconfig;
 const tc = applyTheme(styles);
 
 // TODO Combine search and uniSearch into one.

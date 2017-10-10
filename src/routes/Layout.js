@@ -5,6 +5,7 @@
 import React, { PureComponent, Component, PropTypes } from 'react';
 import { connect } from 'dva';
 import { Helmet } from 'react-helmet';
+import ReactGA from 'react-ga';
 import { Layout as LayoutComponent } from 'antd';
 import { sysconfig, applyTheme } from 'systems';
 import { Header, Navigator } from 'components/Layout';
@@ -47,6 +48,11 @@ export default class Layout extends Component {
     footer: theme.footer,
   };
 
+  componentWillMount() {
+    console.log('********* 统计 *********');
+    ReactGA.pageview(window.location.hash);
+  };
+
   render() {
     console.count('>>>>>>>>>> App Render');
     const { logoZone, searchZone, infoZone, sidebar, footer } = this.props;
@@ -61,7 +67,7 @@ export default class Layout extends Component {
         dispatch({ type: 'app/logout' });
       },
     };
-    const navigatorOptions = { query };
+    const navigatorOptions = { query, navis: sysconfig.HeaderSearch_TextNavi };
 
     const href = window.location.href;
 

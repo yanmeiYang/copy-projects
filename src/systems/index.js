@@ -9,6 +9,7 @@ import { loadSavedLocale } from 'utils/locale';
 import { System, Source } from 'utils/system';
 import Footer from '../components/Footers/default';
 import defaults from './utils';
+import { TopExpertBase } from 'utils/expert-base';
 
 // All available systems.
 const CurrentSystemConfig = {
@@ -40,7 +41,11 @@ const defaultSystemConfigs = {
   EnableLocalLocale: false,
   // Language: 'en', // options [cn|en] // TODO change to locale.
   // PreferredLanguage: 'en', // 默认语言 // TODO delete this.
-  GLOBAL_ENABLE_HOC: true,
+  GLOBAL_ENABLE_HOC: false,
+
+  // google analysis
+  googleAnalytics: defaults.IN_APP_DEFAULT,
+
   MainListSize: 20,
 
   /**
@@ -121,9 +126,16 @@ const defaultSystemConfigs = {
   UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // deprecated! Don't use this.
 
   // > IndexPage
-  IndexPage_QuickSearchList: ['Artificial intelligence', 'Robotics',
-    'Data Mining', 'Machine Learning', 'Data Modeling', 'Computer vision',
-    'Networks', 'Natural language processing'],
+  IndexPage_QuickSearchList: [
+    { name: 'Artificial intelligence', name_zh: '人工智能' },
+    { name: 'Robotics', name_zh: '机器人' },
+    { name: 'Data Mining', name_zh: '数据挖掘' },
+    { name: 'Machine Learning', name_zh: '机器学习' },
+    { name: 'Data Modeling', name_zh: 'Data Modeling' },
+    { name: 'Computer vision', name_zh: '计算机视觉' },
+    { name: 'Networks', name_zh: '网络' },
+    { name: 'Natural language processing', name_zh: '自然语言处理' },
+  ],
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
   // 地图中心点
@@ -136,6 +148,7 @@ const defaultSystemConfigs = {
   // 临时属性，过度属性
   USE_NEXT_EXPERT_BASE_SEARCH: false, // 是否使用新的后端来搜索新的结果。
 
+  Map_HotDomains: TopExpertBase.RandomTop100InDomainAminer, //地图领域
 };
 
 /***************************************************
@@ -183,6 +196,5 @@ const applyTheme = (styles) => {
     return classnames(...results);
   };
 };
-
 
 module.exports = { sysconfig, applyTheme };

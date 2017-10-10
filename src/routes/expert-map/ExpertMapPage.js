@@ -46,6 +46,12 @@ export default class ExpertMapPage extends React.Component {
     //   },
     // });
   }
+  componentWillReceiveProps(nextProps) {
+    const { query } = queryString.parse(location.search);
+    if (this.state.orgs !== query) {
+      this.setState({ query });
+    }
+  }
 
   componentWillUnmount() {
     this.dispatch({ type: 'app/layout', payload: { showFooter: true } });
@@ -77,7 +83,7 @@ export default class ExpertMapPage extends React.Component {
     const mainBlock = mapType === 'google'
       ? <ExpertGoogleMap {...options} />
       : <ExpertMap {...options} />;
-
+    console.log(query)
     return (
       <Layout contentClass={tc(['expertMapPage'])} query={query} onSearch={this.onSearch}>
         {mainBlock}

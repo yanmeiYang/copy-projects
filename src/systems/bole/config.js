@@ -97,8 +97,14 @@ module.exports = {
   // 地图中心点
   // CentralPosition: { lat: 37.09024, lng: -95.712891 },
 
-  IndexPage_QuickSearchList: ['Medical Robotics', 'Surgical Robots', 'Robot Kinematics',
-    'Computer Assisted Surgery', 'Surgical Navigation', 'Minimally Invasive Surgery'],
+  IndexPage_QuickSearchList: [
+    { name: 'Medical Robotics', name_zh: '' },
+    { name: 'Surgical Robots', name_zh: '' },
+    { name: 'Robot Kinematics', name_zh: '' },
+    { name: 'Computer Assisted Surgery', name_zh: '' },
+    { name: 'Surgical Navigation', name_zh: '' },
+    { name: 'Minimally Invasive Surgery', name_zh: '' },
+  ],
 
   ExpertBases: [
     {

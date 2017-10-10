@@ -208,6 +208,8 @@ module.exports = {
     invokeRoster: '/roster/:id/members/u',
     removeByPidApi: '/roster/:rid/d/:pid',
     // getToBProfile: '/api/2b/profile/:src/:id',
+    getTrajectoryInfo: '/person/geo/trajectory/:id/year/:lo/:hi',
+    getHeatInfo: '/person/geo/trajectory/roster/:rid/year/:lo/:hi/size/:size',
   },
 };
 

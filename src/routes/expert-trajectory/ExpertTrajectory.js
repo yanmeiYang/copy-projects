@@ -381,7 +381,7 @@ class ExpertTrajectory extends React.Component {
   }
 
   render() {
-    // // const model = this.props && this.props.expertTrajectory;
+    // const model = this.props && this.props.expertTrajectory;
 
     return (
       <div>

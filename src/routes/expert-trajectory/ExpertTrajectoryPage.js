@@ -108,7 +108,6 @@ class ExpertTrajectoryPage extends React.Component {
   render() {
     // // const model = this.props && this.props.expertTrajectory;
     const persons = this.props.expertTrajectory.results;
-    console.log('person', persons);
 
     return (
       <div className={classnames('content-inner', styles.page)}>

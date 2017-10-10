@@ -1,6 +1,3 @@
-/**
- *  Created by BoGao on 2017-07-16;
- */
 import React from 'react';
 import { connect } from 'dva';
 import { Tooltip } from 'antd';
@@ -73,6 +70,7 @@ class LeftLineInfoCluster extends React.PureComponent {
         </div>
 
         <div className={styles.info}>
+          <h3>H_index: </h3><br />
           <HindexGraph persons={persons} />
         </div>
 
@@ -97,8 +95,8 @@ class LeftLineInfoCluster extends React.PureComponent {
           })}
         </div>
 
-        <div className="info bg" style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
-          <h4 className="section_header"> Research Interests: </h4>
+        <div className="info bg" style={{display: 'flex', flexDirection: 'column', flexWrap: 'wrap'}}>
+          <h4 className="section_header"> Research Interests: </h4> <br />
           {sortedInterest && sortedInterest.slice(0, 20).map((interest) => {
             return (
               <span key={interest.key}>{interest.key} ({interest.count})</span>

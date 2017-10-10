@@ -7,8 +7,8 @@ import { Tooltip } from 'antd';
 import styles from './LeftInfoZoneCluster.less';
 import * as profileUtils from '../../utils/profile-utils';
 import { HindexGraph } from '../../components/widgets';
-class LeftInfoZoneCluster extends React.PureComponent {
 
+class LeftInfoZoneCluster extends React.PureComponent {
   componentDidMount() {
   }
 
@@ -77,7 +77,7 @@ class LeftInfoZoneCluster extends React.PureComponent {
           <HindexGraph persons={persons} />
         </div>
 
-        <div className={styles.info_images} style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}} >
+        <div className={styles.info_images} style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }} >
           {persons && persons.slice(0, 20).map((person) => {
             const avatarUrl = profileUtils.getAvatar(person.avatar, person.id, 50);
 
@@ -90,7 +90,7 @@ class LeftInfoZoneCluster extends React.PureComponent {
               <div key={person.id} className="imgOuter">
                 <div className="imgBox">
                   <Tooltip title={tooltip}>
-                    <img src={avatarUrl} />
+                    <img src={avatarUrl} alt="" />
                   </Tooltip>
                 </div>
               </div>
@@ -98,7 +98,7 @@ class LeftInfoZoneCluster extends React.PureComponent {
           })}
         </div>
 
-        <div className="info bg" style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
+        <div className="info bg" style={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap' }}>
           <h4 className="section_header"> Research Interests: </h4>
           {sortedInterest && sortedInterest.slice(0, 20).map((interest) => {
             return (

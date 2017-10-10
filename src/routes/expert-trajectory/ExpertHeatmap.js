@@ -3,38 +3,20 @@
  */
 import React from 'react';
 import { connect } from 'dva';
+import echarts from 'echarts/lib/echarts';
+import { Slider, InputNumber, Row, Col, Button } from 'antd';
 import styles from './ExpertHeatmap.less';
 import { wget } from '../../utils/request';
 import { queryURL } from '../../utils';
-import world from 'echarts/map/js/world';
-import echarts from 'echarts/lib/echarts';
-import { Slider, Layout, InputNumber, Row, Col, Icon, Button } from 'antd';
 
-const dims = {
-  time: 0,
-  windSpeed: 1,
-  R: 2,
-  waveHeight: 3,
-  weatherIcon: 2,
-  minTemp: 3,
-  maxTemp: 4,
-};
-
-const { Content, Sider } = Layout;
 let startYear;
 let locationName;
-let endYear;
 let mapOption = {};
 let author = {};
 let author2 = {};
-let authorImg = {};
-const authorImage = [];
 let mapinterval; // 播放的interval
 let location = [];
 let table = [];
-let authors;
-let hindex;
-const imageData = {};
 const themes = {
   dark: {
     textColor: '#deded7',
@@ -67,12 +49,10 @@ const themes = {
     lineBlendMode: '',
     line2BlendMode: '',
     symbolColor: '#f3f49f',
-    // symbolColor: '#deded7',
   },
 };
 
 const planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
-const jietang = 'am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90';
 let play = false;
 let yearNow;
 
@@ -106,19 +86,10 @@ class ExpertHeatmap extends React.PureComponent { ///
     this.ifLarge = false;
     this.ifButton = false;
     this.myChart2 = echarts.init(document.getElementById('heatmap'));
-    // this.getHeatmapData(); // 热力图
   }
 
-  // componentDidUpdate(nextProps){
-  //   if (nextProps.qquery !== this.props.qquery){
-  //     this.myChart2.clear();
-  //     return true;
-  //   }
-  // }
-
-  shouldComponentUpdate(nextProps, nextState){
-    console.log("---------------====================")
-    if (nextProps.qquery !== this.props.qquery){
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.qquery !== this.props.qquery) {
       this.myChart2.clear();
       return true;
     }
@@ -126,18 +97,11 @@ class ExpertHeatmap extends React.PureComponent { ///
       return true;
     }
     if (nextProps.expertTrajectory.location !== this.props.expertTrajectory.location) {
-      // const heatData = nextProps.expertTrajectory.heatData;
-      this.setState({ startYear: nextProps.expertTrajectory.startYear, endYear: nextProps.expertTrajectory.endYear });
+      this.setState({ startYear: nextProps.expertTrajectory.startYear,
+        endYear: nextProps.expertTrajectory.endYear });
       location = nextProps.expertTrajectory.locations;
       table = nextProps.expertTrajectory.table;
-      authors = nextProps.expertTrajectory.authors;
-      // authorImage = nextProps.expertTrajectory.authorImage;
       locationName = nextProps.expertTrajectory.locationName;
-      hindex = nextProps.expertTrajectory.h_index;
-      // console.log("yoyoyoyoyo0-----------",hindex)
-      // this.props.dispatch({ type: 'expertTrajectory/storeAid', payload: { authors, startYear: heatData.startYear, locationName } });
-      // this.props.dispatch({ type: 'expertTrajectory/storeTable', payload: { table } });
-      // this.props.dispatch({ type: 'expertTrajectory/storeHindex', payload: { hindex }  });
       this.playon = this.state.startYear;
       this.setHeatmap(); // 热力图
       this.getMouseEvent();
@@ -147,33 +111,6 @@ class ExpertHeatmap extends React.PureComponent { ///
       return true;
     }
     return false;
-  }
-
-  getHeatmapData = () => { // 获取json数据
-    // let startYear;
-    let heatData;
-    if (!heatData) {
-      const pms = wget('/lab/heatData.json');
-      pms.then((data) => {
-        heatData = data;
-        this.setState({ startYear: heatData.startYear, endYear: heatData.endYear });
-        // startYear = heatData.startYear;
-        // endYear = heatData.endYear;
-        location = heatData.locations;
-        table = heatData.table;
-        authors = heatData.authors;
-        // authorImage = heatData.authorImage;
-        locationName = heatData.locationName;
-        this.playon = this.state.startYear;
-        this.setHeatmap(); // 热力图
-        this.getMouseEvent();
-        // this.authorImage = heatData.authorImage;
-        // return interestsData;
-      }).catch((error) => {
-        localStorage.removeItem(LSKEY_INTERESTS);
-        return undefined;
-      });
-    }
   }
 
   onThemeChangeDark = () => { // 切换成dark模式
@@ -188,28 +125,6 @@ class ExpertHeatmap extends React.PureComponent { ///
     });
   }
 
-  getMouseEvent = () => { // 高亮和取消高亮
-    if (!this.ifLarge) {
-      this.myChart2.on('mouseover', (params) => {
-        if (params.componentType === 'series') {
-          if (params.componentSubType === 'lines') {
-            this.getHighLight(params);
-          }
-        }
-      });
-      this.myChart2.on('mouseout', (params) => {
-        if (params.componentType === 'series') {
-          if (params.componentSubType === 'lines') {
-            this.getDownPlay(params);
-          }
-        }
-      });
-    } else {
-      this.myChart2.off('mouseover');
-      this.myChart2.off('mouseout');
-    }
-  }
-
   onChange = (value) => { // 点击滑动条或数字框，处理当年数据
     if (this.props.yearChange) {
       this.props.yearChange(value);
@@ -220,110 +135,17 @@ class ExpertHeatmap extends React.PureComponent { ///
     this.seriesNo = false;
     this.playon = value;
     yearNow = this.playon;
-    this.props.dispatch({ type: 'expertTrajectory/getYearData', payload: { year: yearNow} }).then(() => {
-      const thisYearData = this.props.expertTrajectory.eachYearHeat[yearNow]
+    this.props.dispatch({ type: 'expertTrajectory/getYearData', payload: { year: yearNow } }).then(() => {
+      const thisYearData = this.props.expertTrajectory.eachYearHeat[yearNow];
       author = thisYearData.author;
       author2 = thisYearData.author2;
-      mapOption.series = this.getHeatSeries(thisYearData.geoCoordMap, thisYearData.data, 0, false, thisYearData.yearIndex, thisYearData.nextYearData, thisYearData.data1, thisYearData.data2, thisYearData.authorImgWest, thisYearData.authorImgMid, thisYearData.authorImgEast);
+      mapOption.series = this.getHeatSeries(thisYearData.geoCoordMap, thisYearData.data,
+        0, false, thisYearData.yearIndex, thisYearData.nextYearData, thisYearData.data1,
+        thisYearData.data2, thisYearData.authorImgWest,
+        thisYearData.authorImgMid, thisYearData.authorImgEast);
       this.myChart2.setOption(mapOption, true);
     });
-    // const yearIndex = value - this.state.startYear;
-    // const data = [];
-    // const nextYearData = [];
-    // const geoCoordMap = this.doHeatGeoMap();
-    //
-    // const merge = {};
-    // const nextYear = {};
-    // author = {};
-    // author2 = {};
-    // authorImg = {};
-    // const authorImgWest = {};
-    // const authorImgEast = {};
-    // const authorImgMid = {};
-    // for (let aid = 0; aid < table.length; aid += 1) { // 当年的数据
-    //   const addressID = table[aid][yearIndex];
-    //   if (addressID) {
-    //     if (!merge[addressID]) { // 统计该地人数
-    //       merge[addressID] = 0;
-    //     }
-    //     merge[addressID] += 1;
-    //
-    //     if (!author[addressID]) {
-    //       author[addressID] = [];
-    //     }
-    //     author[addressID].push(authors[aid]);
-    //
-    //     if (authorImage[aid]) {
-    //       if (table[aid][yearIndex] in authorImg) { // 取今年各地点的作者id
-    //         authorImg[table[aid][yearIndex]].push(authorImage[aid]);
-    //       } else {
-    //         authorImg[table[aid][yearIndex]] = [];
-    //         authorImg[table[aid][yearIndex]].push(authorImage[aid]);
-    //       }
-    //     }
-    //   }
-    //   // console.log("+++++++++",authorImg)
-    //
-    //
-    //   // 第二年数据
-    //   if (yearIndex < (this.state.endYear - this.state.startYear)) {
-    //     const addressID2 = table[aid][yearIndex + 1];
-    //     if (addressID2 && !merge[addressID2]) {
-    //       if (!nextYear[addressID2]) {
-    //         nextYear[addressID2] = 0;
-    //       }
-    //       nextYear[addressID2] += 1;
-    //     }
-    //
-    //     if (!author2[addressID2]) {
-    //       author2[addressID2] = [];
-    //     }
-    //     author2[addressID2].push(authors[aid]);
-    //   }
-    // }
-    //
-    // for (const key in merge) { // 当年的地点、人数数据
-    //   const onenode = { name: key, value: merge[key] };
-    //   data.push(onenode);
-    // }
-    //
-    // if (yearIndex < (this.state.endYear - this.state.startYear)) {
-    //   for (const key in nextYear) {
-    //     const onenode = { name: key, value: nextYear[key] }; // 实际数据中乘20应删去！
-    //     nextYearData.push(onenode);
-    //   }
-    // }
-    //
-    // data.sort(this.sortValue);
-    // nextYearData.sort(this.sortValue);
-    // let data1 = []; // data1为人数前100地点数据， data2为100以后
-    // let p;
-    // // console.log('datasp', datas[0]);
-    // // console.log(datas[0].value);
-    // if (data.length > 10) {
-    //   for (p = 0; data[p].value > 1 && p < 100; p += 1) {
-    //     data1.push(data[p]);
-    //   }
-    // } else {
-    //   data1 = data;
-    // }
-    // const data2 = data.slice(p);
-    //
-    // // console.log('authorImg', authorImg);
-    // Object.keys(authorImg).map((key) => {
-    //   // console.log('geoCOooiejijf', geoCoordMap[key]);
-    //   if (geoCoordMap[key][0] < (-30)) {
-    //     // console.log('come to west');
-    //     authorImgWest[key] = authorImg[key];
-    //   } else if (geoCoordMap[key][0] >= -30 && geoCoordMap[key][0] <= 70) {
-    //     authorImgMid[key] = authorImg[key];
-    //   } else if (geoCoordMap[key][0] > 70) {
-    //     authorImgEast[key] = authorImg[key];
-    //   }
-    // });
-
   }
-
 
   onClick=() => { // 点击热力图按钮
     if (!play) {
@@ -370,32 +192,378 @@ class ExpertHeatmap extends React.PureComponent { ///
     this.onChange(value);
   }
 
-  getDownPlay = (params) => { // 鼠标移开取消高亮
-    this.myChart2.dispatchAction({
-      type: 'downplay',
-      seriesIndex: [0, 1, 2],
-      name: (`${params.name[0]}`),
-    });
-    this.myChart2.dispatchAction({
-      type: 'downplay',
-      seriesIndex: [0, 1, 2],
-      name: (`${params.name[1]}`),
-    });
+  onMapClick = () => { // 地图点击事件 将信息传给Page
+    if (this.props.onPageClick) {
+      if (this.from !== '') {
+        this.props.onPageClick(this.personList, locationName[this.from - 1].toLowerCase(),
+          locationName[this.to - 1].toLowerCase(), this.type);
+      } else {
+        this.props.onPageClick(this.personList, '', '', this.type);
+      }
+    }
   }
 
-  getHighLight = (params) => { // 鼠标移上高亮
-    this.myChart2.dispatchAction({
-      type: 'highlight',
-      seriesIndex: [0, 1, 2],
-      name: (`${params.name[0]}`),
+  getHeatSeries = (geoCoordMap, data, j, choose, year,
+                   nextYearData, data1, data2) => {
+    // j是一年中第几个插值 ifButton是否为播放模式 choose是否插值 year当前年份 data1前100数据 西部 中部 东部头像数据
+    const dup = {};
+    const tempLineArray = [];
+    const lineIndex = table.length;
+    for (let k = 0; k < lineIndex; k += 1) {
+      const addLine = table[k][year];
+      const addLine2 = table[k][year + 1];
+      const startLine = geoCoordMap[addLine];
+      const endLine = geoCoordMap[addLine2];
+      if (addLine && addLine2 && (addLine !== addLine2)) {
+        if ((Math.abs(startLine[0] - endLine[0]) + Math.abs(startLine[1] - endLine[1])) > 50) {
+          const key = [addLine, addLine2].join('_');
+          const v = dup[key];
+          if (!v) {
+            dup[key] = {};
+            dup[key].name = [addLine, addLine2];
+            dup[key].coords = [startLine, endLine];
+            dup[key].count = 0;
+          }
+        }
+      }
+    }
+
+    Object.keys(dup).forEach((key) => {
+      tempLineArray.push(dup[key]);
     });
-    this.myChart2.dispatchAction({
-      type: 'highlight',
-      seriesIndex: [0, 1, 2],
-      name: (`${params.name[1]}`),
-    });
+    tempLineArray.sort(sortCount);
+
+    const convertData = function (datas) { // 画出热力图上的圈并标出地名
+      const res = [];
+      for (let i = 0; i < datas.length; i += 1) {
+        const geoCoord = geoCoordMap[datas[i].name];
+        if (geoCoord) {
+          res.push({
+            name: datas[i].name,
+            value: geoCoord.concat(datas[i].value),
+          });
+        }
+      }
+      return res;
+    };
+
+    function formtGCData(ifTop10) { // 画线
+      const tGeoDt = tempLineArray.slice(10, 100);
+      const tGeoDt2 = tempLineArray.slice(0, 10);
+      if (ifTop10) {
+        return tGeoDt2;
+      } else {
+        return tGeoDt;
+      }
+    }
+
+    const sortCount = (a, b) => {
+      return b.count - a.count;
+    };
+
+    const series = [
+      {
+        name: 'TOP 6', // 今年人数最多的前6个地方
+        type: 'scatter',
+        coordinateSystem: 'geo',
+        zlevel: 3,
+        rippleEffect: {
+          period: 4,
+          scale: 2,
+          brushType: 'stroke',
+        },
+        label: {
+          normal: {
+            show: true,
+            formatter: params => this.getNum(params.value[2]),
+            position: 'inside',
+            color: themes[this.state.theme].labelColor,
+            textStyle: {
+              fontSize: 10,
+            },
+          },
+          emphasis: {
+            show: false,
+          },
+        },
+        itemStyle: {
+          normal: {
+            color: '#f78e3d',
+            // borderColor: '#f78e3d',
+            opacity: 0.8,
+            shadowColor: 'rgba(198, 198, 198, 0.3)',
+            shadowBlur: 10,
+          },
+          emphasis: {
+            color: '#ff2f31',
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+          },
+        },
+        tooltip: {
+          confine: true,
+          formatter: (params) => {
+            return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
+              locationName[parseInt(params.name, 10) - 1].toLowerCase()}<br>`;
+          },
+        },
+        data: convertData(data1.sort((a, b) => {
+          return b.value - a.value;
+        }).slice(0, 6)),
+        symbolSize(val) {
+          const size = 10 + (val[2] / 4);
+          if (size > 25) {
+            return (26);
+          } else {
+            return (size);
+          }
+        },
+        // blendMode: 'screen',
+      },
+      { // 当年所有地点
+        name: 'location',
+        type: 'scatter',
+        zlevel: 2,
+        coordinateSystem: 'geo',
+        data: convertData(data1),
+        symbolSize(val) {
+          const size = 10 + (val[2] / 4);
+          if (size > 25) {
+            return (26);
+          } else {
+            return (size);
+          }
+          // return ((10 + val[2] / 4));
+        },
+        label: {
+          normal: {
+            show: true,
+            formatter: params => this.getNum(params.value[2]),
+            position: 'inside',
+            color: themes[this.state.theme].labelColor,
+            textStyle: {
+              fontSize: 10,
+            },
+          },
+          emphasis: {
+            show: true,
+          },
+        },
+        itemStyle: {
+          normal: {
+            color: '#FFBA00',
+            opacity: 1,
+            shadowColor: 'rgba(198, 198, 198, 0.3)',
+            shadowBlur: 10,
+          },
+          emphasis: {
+            color: '#ff2f31',
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+          },
+        },
+        tooltip: {
+          confine: true,
+          formatter: (params) => {
+            return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
+              locationName[parseInt(params.name, 10) - 1].toLowerCase()}<br>`;
+          },
+        },
+        blendMode: themes[this.state.theme].pointBlendMode,
+      },
+
+      { // 当年所有单点
+        name: 'single location',
+        type: 'scatter',
+        // large: true,
+        // largeThreshold: 1000,
+        zlevel: 1,
+        z: 6,
+        coordinateSystem: 'geo',
+        data: convertData(data2),
+        // symbolSize: 4,
+        symbolSize(val) {
+          const size = 3 + val[2];
+          return size;
+        },
+        label: {
+          normal: {
+            show: false,
+          },
+        },
+        itemStyle: {
+          normal: {
+            color: '#00A854',
+            opacity: 1,
+            shadowColor: 'rgba(198, 198, 198, 0.3)',
+            shadowBlur: 10,
+          },
+          emphasis: {
+            color: '#ff2f31',
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+          },
+        },
+        tooltip: {
+          confine: true,
+          formatter: (params) => {
+            return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
+              locationName[parseInt(params.name, 10) - 1].toLowerCase()}<br>`;
+          },
+        },
+        blendMode: themes[this.state.theme].pointBlendMode,
+      },
+
+      { // 下一年所有地点
+        name: 'nextYear',
+        type: 'scatter',
+        large: true,
+        largeThreshold: 1000,
+        coordinateSystem: 'geo',
+        data: convertData(nextYearData),
+        // data: convertData2(nextYearData),
+        symbolSize: 3,
+        label: {
+          normal: {
+            // formatter: '{b}',
+            // position: 'right',
+            // show: true,
+            show: false,
+          },
+        },
+        itemStyle: {
+          normal: {
+            opacity: 1,
+            color: '#ffee66',
+            // borderColor:'#fe9b46',
+          },
+          emphasis: {
+            color: '#ff2f31',
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+          },
+        },
+      },
+      { // 所有迁移线
+        type: 'lines',
+        large: this.ifLarge,
+        largeThreshold: 400,
+        // animation: true,
+        // animationDuration: 0,
+        // zlevel: 1,
+        effect: {
+          show: true,
+          period: 3,
+          trailLength: 0,
+          color: themes[this.state.theme].symbolColor,
+          symbol: 'arrow',
+          symbolSize: 8,
+          animation: false,
+          // animationThreshold:10000,
+        },
+        symbol: ['', planePath],
+        symbolSize: 3,
+        lineStyle: {
+          normal: {
+            color: themes[this.state.theme].lineColor,
+            width: 1.6, // 1.6,
+            opacity: 1,
+            curveness: 0.2,
+          },
+          emphasis: {
+            color: '#ff2f31',
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+            shadowBlur: 10,
+          },
+        },
+        tooltip: {
+          confine: true,
+          formatter: (params) => {
+            return `<div style="font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">Number of People: ${
+              new Set([...author[params.name[0]]].filter(x => author2[params.name[1]].has(x))).length}<br/>From: ${
+              locationName[params.name[0] - 1].toLowerCase()}<br/>To: ${locationName[params.name[1] - 1].toLowerCase()}<br>`;
+          },
+        },
+        data: formtGCData(false),
+        animation: false,
+        blendMode: themes[this.state.theme].lineBlendMode, // screen
+      },
+
+      { // 人数最多的10条线
+        type: 'lines',
+        large: this.ifLarge,
+        largeThreshold: 400,
+        // animation: true,
+        // animationDuration: 0,
+        // zlevel: 1,
+        effect: {
+          show: true,
+          period: 3,
+          trailLength: 0,
+          color: themes[this.state.theme].planColor,
+          symbol: planePath,
+          symbolSize: 30,
+          animation: false,
+          // animationThreshold:10000,
+        },
+        symbol: ['', planePath],
+        // symbol: 'arrow',
+        // symbol: 'image://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
+        symbolSize: 3,
+        lineStyle: {
+          normal: {
+            color: themes[this.state.theme].lineColor,
+            width: 1.6, // 1.6,
+            opacity: 1,
+            curveness: 0.2,
+          },
+          emphasis: {
+            color: '#ff2f31',
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+            shadowBlur: 10,
+          },
+        },
+        tooltip: {
+          confine: true,
+
+          formatter: (params) => {
+            return `<div style="font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">Number of People: ${
+              new Set([...author[params.name[0]]].filter(x => author2[params.name[1]].has(x))).length}<br/>From: ${
+              locationName[params.name[0] - 1].toLowerCase()}<br/>To: ${locationName[params.name[1] - 1].toLowerCase()}<br>`;
+          },
+        },
+        data: formtGCData(true),
+        animation: false,
+        blendMode: themes[this.state.theme].lineBlendMode, // screen
+      },
+
+      {
+        name: 'AQI',
+        type: 'heatmap',
+        coordinateSystem: 'geo',
+        blurSize: 20,
+        zlevel: 2,
+        z: 7,
+        data: convertData(data),
+        blendMode: 'hard-light', // multiple, color-dodge
+      },
+    ];
+    return series;
   }
 
+  getNum = (value) => { // 得到圈上的数字
+    let temp;
+    if (value > 1) {
+      temp = Math.round(value);
+    } else {
+      temp = '';
+    }
+    return temp;
+  }
 
   setHeatmap = () => { // 设置热力图参数
     mapOption = { // 地图基本参数
@@ -496,7 +664,7 @@ class ExpertHeatmap extends React.PureComponent { ///
                     value: params.value,
                   }],
                   symbolSize(val) {
-                    const size = 10 + val[2] / 4;
+                    const size = 10 + (val[2] / 4);
                     if (val[2] !== 1) {
                       if (size > 25) {
                         return (26);
@@ -504,7 +672,7 @@ class ExpertHeatmap extends React.PureComponent { ///
                         return (size);
                       }
                     } else {
-                      return ((10 + val[2] / 4) / 2);
+                      return ((10 + (val[2] / 4)) / 2);
                     }
                   },
                 },
@@ -512,8 +680,9 @@ class ExpertHeatmap extends React.PureComponent { ///
               this.type = 'scatter';
               this.myChart2.setOption(mapOption, true);
             } else if (params.componentSubType === 'lines') {
-              this.personList = _.intersection(author[params.name[0]], author2[params.name[1]]);
-              console.log("the personlist", this.personList)
+              const a = author[params.name[0]];
+              const b = author2[params.name[1]];
+              this.personList = new Set([...a].filter(x => b.has(x)));
               this.from = params.name[0];
               this.to = params.name[1];
               mapOption.series.push({
@@ -583,7 +752,7 @@ class ExpertHeatmap extends React.PureComponent { ///
                   value: params.value,
                 }],
                 symbolSize(val) {
-                  const size = 10 + val[2] / 4;
+                  const size = 10 + (val[2] / 4);
                   if (val[2] !== 1) {
                     if (size > 25) {
                       return (26);
@@ -591,16 +760,17 @@ class ExpertHeatmap extends React.PureComponent { ///
                       return (size);
                     }
                   } else {
-                    return ((10 + val[2] / 4) / 2);
+                    return ((10 + (val[2] / 4)) / 2);
                   }
                 },
               },
             );
             this.type = 'scatter';
             this.myChart2.setOption(mapOption, true);
-            // console.log('begin', mapOption.series);
           } else if (params.componentSubType === 'lines') {
-            this.personList = _.intersection(author[params.name[0]], author2[params.name[1]]);
+            const a = author[params.name[0]];
+            const b = author2[params.name[1]];
+            this.personList = new Set([...a].filter(x => b.has(x)));
             this.from = params.name[0];
             this.to = params.name[1];
             mapOption.series.push({
@@ -627,394 +797,90 @@ class ExpertHeatmap extends React.PureComponent { ///
       }
     });
 
-    this.myChart2.on('dblclick', (params) => { // 双击放大
+    this.myChart2.on('dblclick', () => { // 双击放大
       mapOption.geo.zoom += 0.1;
       this.myChart2.setOption(mapOption);
     });
   }
 
-
-  doHeatGeoMap=() => { // 存储经纬度 geoCoordMap = {123:[116,40]}
-    const geoCoordMap = {};
-
-    for (let i = 1; i < location.length; i += 1) {
-      geoCoordMap[i] = location[i];
-    }
-    // console.log('geo', geoCoordMap);
-    return geoCoordMap;
+  getDownPlay = (params) => { // 鼠标移开取消高亮
+    this.myChart2.dispatchAction({
+      type: 'downplay',
+      seriesIndex: [0, 1, 2],
+      name: (`${params.name[0]}`),
+    });
+    this.myChart2.dispatchAction({
+      type: 'downplay',
+      seriesIndex: [0, 1, 2],
+      name: (`${params.name[1]}`),
+    });
   }
 
+  getHighLight = (params) => { // 鼠标移上高亮
+    this.myChart2.dispatchAction({
+      type: 'highlight',
+      seriesIndex: [0, 1, 2],
+      name: (`${params.name[0]}`),
+    });
+    this.myChart2.dispatchAction({
+      type: 'highlight',
+      seriesIndex: [0, 1, 2],
+      name: (`${params.name[1]}`),
+    });
+  }
 
-  getNum = (value) => { // 得到圈上的数字
-    let temp;
-    if (value > 1) {
-      temp = Math.round(value);
+  getMouseEvent = () => { // 高亮和取消高亮
+    if (!this.ifLarge) {
+      this.myChart2.on('mouseover', (params) => {
+        if (params.componentType === 'series') {
+          if (params.componentSubType === 'lines') {
+            this.getHighLight(params);
+          }
+        }
+      });
+      this.myChart2.on('mouseout', (params) => {
+        if (params.componentType === 'series') {
+          if (params.componentSubType === 'lines') {
+            this.getDownPlay(params);
+          }
+        }
+      });
     } else {
-      temp = '';
+      this.myChart2.off('mouseover');
+      this.myChart2.off('mouseout');
     }
-    return temp;
+  }
+
+  getHeatmapData = () => { // 获取json数据
+    let heatData;
+    if (!heatData) {
+      const pms = wget('/lab/heatData.json');
+      pms.then((data) => {
+        heatData = data;
+        this.setState({ startYear: heatData.startYear, endYear: heatData.endYear });
+        location = heatData.locations;
+        table = heatData.table;
+        locationName = heatData.locationName;
+        this.playon = this.state.startYear;
+        this.setHeatmap(); // 热力图
+        this.getMouseEvent();
+      }).catch((error) => {
+        console.log(error);
+        return undefined;
+      });
+    }
   }
 
   sortValue = (a, b) => {
     return b.value - a.value;
   };
 
-  getHeatSeries = (geoCoordMap, data, j, choose, year, nextYearData, data1, data2, authorImgWest, authorImgMid, authorImgEast) => {
-    // j是一年中第几个插值 ifButton是否为播放模式 choose是否插值 year当前年份 data1前100数据 西部 中部 东部头像数据
-    const imagePosWest = [[-180, 50], [-180, 35], [-180, 20], [-180, 5], [-180, -10]];
-    const imagePosMid = [[-30, -67], [-10, -67], [10, -67], [30, -67]];
-    const imagePosEast = [[175, 30], [175, 15], [175, 0], [175, -15]];
-    const dup = {};
-    const tempLineArray = [];
-    const lineIndex = table.length;
-    for (let j = 0; j < lineIndex; j += 1) {
-      const addLine = table[j][year];
-      const addLine2 = table[j][year + 1];
-      const startLine = geoCoordMap[addLine];
-      const endLine = geoCoordMap[addLine2];
-      if (addLine && addLine2 && (addLine !== addLine2)) {
-        if ((Math.abs(startLine[0] - endLine[0]) + Math.abs(startLine[1] - endLine[1])) > 50) {
-          const key = [addLine, addLine2].join('_');
-          const v = dup[key];
-          if (!v) {
-            dup[key] = {};
-            dup[key].name = [addLine, addLine2];
-            dup[key].coords = [startLine, endLine];
-            dup[key].count = 0;
-          }
-        }
-      }
+  doHeatGeoMap=() => { // 存储经纬度 geoCoordMap = {123:[116,40]}
+    const geoCoordMap = {};
+    for (let i = 1; i < location.length; i += 1) {
+      geoCoordMap[i] = location[i];
     }
-
-    Object.keys(dup).map((key) => {
-      tempLineArray.push(dup[key]);
-    });
-    tempLineArray.sort(sortCount);
-
-    const convertData = function (datas) { // 画出热力图上的圈并标出地名
-      const res = [];
-      for (let i = 0; i < datas.length; i += 1) {
-        const geoCoord = geoCoordMap[datas[i].name];
-        if (geoCoord) {
-          res.push({
-            name: datas[i].name,
-            value: geoCoord.concat(datas[i].value),
-          });
-        }
-      }
-      return res;
-    };
-
-    function formtGCData(ifTop10) { // 画线
-      const tGeoDt = tempLineArray.slice(10, 100);
-      const tGeoDt2 = tempLineArray.slice(0, 10);
-      if (ifTop10) {
-        return tGeoDt2;
-      } else {
-        return tGeoDt;
-      }
-    }
-
-    const sortCount = (a, b) => {
-      return b.count - a.count;
-    };
-
-    const series = [
-      {
-        name: 'TOP 6', // 今年人数最多的前6个地方
-        type: 'scatter',
-        coordinateSystem: 'geo',
-        zlevel: 3,
-        rippleEffect: {
-          period: 4,
-          scale: 2,
-          brushType: 'stroke',
-        },
-        label: {
-          normal: {
-            show: true,
-            formatter: params => this.getNum(params.value[2]),
-            position: 'inside',
-            color: themes[this.state.theme].labelColor,
-            textStyle: {
-              fontSize: 10,
-            },
-          },
-          emphasis: {
-            show: false,
-          },
-        },
-        itemStyle: {
-          normal: {
-            color: '#f78e3d',
-            // borderColor: '#f78e3d',
-            opacity: 0.8,
-            shadowColor: 'rgba(198, 198, 198, 0.3)',
-            shadowBlur: 10,
-          },
-          emphasis: {
-            color: '#ff2f31',
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-          },
-        },
-        tooltip: {
-          confine: true,
-          formatter: (params) => {
-            return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
-              locationName[parseInt(params.name) - 1].toLowerCase()}<br>`;
-          },
-        },
-        data: convertData(data1.sort((a, b) => {
-          return b.value - a.value;
-        }).slice(0, 6)),
-        symbolSize(val) {
-          const size = 10 + val[2] / 4;
-          if (size > 25) {
-            return (26);
-          } else {
-            return (size);
-          }
-        },
-        // blendMode: 'screen',
-      },
-      { // 当年所有地点
-        name: 'location',
-        type: 'scatter',
-        zlevel: 2,
-        coordinateSystem: 'geo',
-        data: convertData(data1),
-        symbolSize(val) {
-          const size = 10 + val[2] / 4;
-          if (size > 25) {
-            return (26);
-          } else {
-            return (size);
-          }
-          // return ((10 + val[2] / 4));
-        },
-        label: {
-          normal: {
-            show: true,
-            formatter: params => this.getNum(params.value[2]),
-            position: 'inside',
-            color: themes[this.state.theme].labelColor,
-            textStyle: {
-              fontSize: 10,
-            },
-          },
-          emphasis: {
-            show: true,
-          },
-        },
-        itemStyle: {
-          normal: {
-            color: '#FFBA00',
-            opacity: 1,
-            shadowColor: 'rgba(198, 198, 198, 0.3)',
-            shadowBlur: 10,
-          },
-          emphasis: {
-            color: '#ff2f31',
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-          },
-        },
-        tooltip: {
-          confine: true,
-          formatter: (params) => {
-            return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
-              locationName[parseInt(params.name) - 1].toLowerCase()}<br>`;
-          },
-        },
-        blendMode: themes[this.state.theme].pointBlendMode,
-      },
-
-      { // 当年所有单点
-        name: 'single location',
-        type: 'scatter',
-        // large: true,
-        // largeThreshold: 1000,
-        zlevel: 1,
-        z: 6,
-        coordinateSystem: 'geo',
-        data: convertData(data2),
-        // symbolSize: 4,
-        symbolSize(val) {
-          const size = 3 + val[2];
-          return size;
-        },
-        label: {
-          normal: {
-            show: false,
-          },
-        },
-        itemStyle: {
-          normal: {
-            color: '#00A854',
-            opacity: 1,
-            shadowColor: 'rgba(198, 198, 198, 0.3)',
-            shadowBlur: 10,
-          },
-          emphasis: {
-            color: '#ff2f31',
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-          },
-        },
-        tooltip: {
-          confine: true,
-          formatter: (params) => {
-            return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">${
-              locationName[parseInt(params.name) - 1].toLowerCase()}<br>`;
-          },
-        },
-        blendMode: themes[this.state.theme].pointBlendMode,
-      },
-
-      { // 下一年所有地点
-        name: 'nextYear',
-        type: 'scatter',
-        large: true,
-        largeThreshold: 1000,
-        coordinateSystem: 'geo',
-        data: convertData(nextYearData),
-        // data: convertData2(nextYearData),
-        symbolSize: 3,
-        label: {
-          normal: {
-            // formatter: '{b}',
-            // position: 'right',
-            // show: true,
-            show: false,
-          },
-        },
-        itemStyle: {
-          normal: {
-            opacity: 1,
-            color: '#ffee66',
-            // borderColor:'#fe9b46',
-          },
-          emphasis: {
-            color: '#ff2f31',
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-          },
-        },
-      },
-      { // 所有迁移线
-        type: 'lines',
-        large: this.ifLarge,
-        largeThreshold: 400,
-        // animation: true,
-        // animationDuration: 0,
-        // zlevel: 1,
-        effect: {
-          show: true,
-          period: 3,
-          trailLength: 0,
-          color: themes[this.state.theme].symbolColor,
-          symbol: 'arrow',
-          symbolSize: 8,
-          animation: false,
-          // animationThreshold:10000,
-        },
-        symbol: ['', planePath],
-        // symbol: 'arrow',
-        // symbol: 'image://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
-        symbolSize: 3,
-        lineStyle: {
-          normal: {
-            color: themes[this.state.theme].lineColor,
-            // width: 10,
-            width: 1.6, // 1.6,
-            opacity: 1,
-            curveness: 0.2,
-          },
-          emphasis: {
-            color: '#ff2f31',
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-            shadowBlur: 10,
-          },
-        },
-        tooltip: {
-          confine: true,
-          formatter: (params) => {
-            return `<div style="font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">Number of People: ${
-              (_.intersection(author[params.name[0]], author2[params.name[1]])).length}<br/>From: ${
-              locationName[params.name[0] - 1].toLowerCase()}<br/>To: ${locationName[params.name[1] - 1].toLowerCase()}<br>`;
-          },
-        },
-        data: formtGCData(false),
-        animation: false,
-        blendMode: themes[this.state.theme].lineBlendMode, // screen
-      },
-
-      { // 人数最多的10条线
-        type: 'lines',
-        large: this.ifLarge,
-        largeThreshold: 400,
-        // animation: true,
-        // animationDuration: 0,
-        // zlevel: 1,
-        effect: {
-          show: true,
-          period: 3,
-          trailLength: 0,
-          color: themes[this.state.theme].planColor,
-          symbol: planePath,
-          symbolSize: 30,
-          animation: false,
-          // animationThreshold:10000,
-        },
-        symbol: ['', planePath],
-        // symbol: 'arrow',
-        // symbol: 'image://am-cdn-s0.b0.upaiyun.com/picture/01823/Jie_Tang_1348889820664.jpg!90',
-        symbolSize: 3,
-        lineStyle: {
-          normal: {
-            color: themes[this.state.theme].lineColor,
-            // width: 10,
-            width: 1.6, // 1.6,
-            opacity: 1,
-            curveness: 0.2,
-          },
-          emphasis: {
-            color: '#ff2f31',
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-            shadowBlur: 10,
-          },
-        },
-        tooltip: {
-          confine: true,
-
-          formatter: (params) => {
-            return `<div style="font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">Number of People: ${
-              (_.intersection(author[params.name[0]], author2[params.name[1]])).length}<br/>From: ${
-              locationName[params.name[0] - 1].toLowerCase()}<br/>To: ${locationName[params.name[1] - 1].toLowerCase()}<br>`;
-          },
-        },
-        data: formtGCData(true),
-        animation: false,
-        blendMode: themes[this.state.theme].lineBlendMode, // screen
-      },
-
-      {
-        name: 'AQI',
-        type: 'heatmap',
-        coordinateSystem: 'geo',
-        blurSize: 20,
-        zlevel: 2,
-        z: 7,
-        data: convertData(data),
-        blendMode: 'hard-light', // multiple, color-dodge
-      },
-    ];
-    return series;
+    return geoCoordMap;
   }
 
   plusHeatZoom = () => { // 放大地图
@@ -1027,30 +893,17 @@ class ExpertHeatmap extends React.PureComponent { ///
     this.myChart2.setOption(mapOption);
   }
 
-  onMapClick = () => { // 地图点击事件 将信息传给Page
-    if (this.props.onPageClick) {
-      if (this.from !== '') {
-        this.props.onPageClick(this.personList, locationName[this.from - 1].toLowerCase(), locationName[this.to - 1].toLowerCase(), this.type);
-      } else {
-        this.props.onPageClick(this.personList, '', '', this.type);
-      }
-    }
-  }
-
   render() {
     const ifPlay = this.state.ifPlay;
     return (
       <div>
-        {/*<div className={styles.heat} id="heatmap" style={{ height: '1800px', width: '3500px' }} onClick={this.onMapClick} />*/}
         <div className={styles.button}>
           <Button className={styles.dark} type="primary" ghost onClick={this.onThemeChangeDark}>dark</Button>
           <Button className={styles.light} type="primary" ghost onClick={this.onThemeChangeLight}>light</Button>
           <Button className={styles.plus} type="primary" ghost icon="plus" onClick={this.plusHeatZoom} />
           <Button className={styles.minus} type="primary" ghost icon="minus" onClick={this.minusHeatZoom} />
         </div>
-        <div className={styles.heat} id="heatmap" style={{ height: '670px', width: '1150px' }} onClick={this.onMapClick} />
-
-        {/*<div className={styles.two} style={{ color: '#f5f3f0', fontSize: '200px', fontWeight: '600' }} id="showYear">*/}
+        <div role="presentation" className={styles.heat} id="heatmap" style={{ height: '670px', width: '1150px' }} onClick={this.onMapClick} />
         <div className={styles.two} style={{ color: '#f5f3f0', fontSize: '20px', fontWeight: '50' }} id="showYear">
           <h1> {yearNow}</h1>
         </div>
@@ -1059,7 +912,8 @@ class ExpertHeatmap extends React.PureComponent { ///
           <Button className={styles.play} icon={ifPlay} onClick={this.onClick} />
           <Row className={styles.slide}>
             <Col span={22}>
-              <Slider min={this.state.startYear} max={this.state.endYear} onChange={this.onChange} onAfterChange={this.onAfterChange}value={this.state.inputValue} />
+              <Slider min={this.state.startYear} max={this.state.endYear} onChange={this.onChange}
+                      onAfterChange={this.onAfterChange}value={this.state.inputValue} />
             </Col>
             <Col span={1}>
               <InputNumber
@@ -1077,5 +931,5 @@ class ExpertHeatmap extends React.PureComponent { ///
   }
 }
 
-export default connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))(ExpertHeatmap);
-
+export default connect(({ expertTrajectory, loading }) =>
+  ({ expertTrajectory, loading }))(ExpertHeatmap);

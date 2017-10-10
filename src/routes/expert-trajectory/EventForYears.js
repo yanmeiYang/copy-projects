@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'dva';
 import { isEqual } from 'lodash';
 import classnames from 'classnames';
-import { Indices } from 'components/widgets';
 import styles from './EventForYears.less';
 
 let authors;
@@ -22,7 +21,6 @@ export default class EventForYears extends React.PureComponent {
   componentWillMount() {
     if (this.props.year !== '') {
       authors = this.props.expertTrajectory.authors;
-      console.log("should author",authors)
       table = this.props.expertTrajectory.table;
       locationName = this.props.expertTrajectory.locationName;
       this.findYearEvent(this.props.year);
@@ -33,9 +31,9 @@ export default class EventForYears extends React.PureComponent {
   }
 
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     if (nextProps.qquery !== this.props.qquery) {
-      document.getElementById('eve').innerHTML = ''
+      document.getElementById('eve').innerHTML = '';
       return true;
     }
     if (nextProps.year !== this.props.year) {
@@ -60,7 +58,6 @@ export default class EventForYears extends React.PureComponent {
   }
 
   render() {
-    const year = this.props.year;
     const message = this.props.expertTrajectory.yearMessage; // 每年数据
 
     return (
@@ -70,10 +67,10 @@ export default class EventForYears extends React.PureComponent {
           return (
             <div key={key} className={styles.year}>
               <h1>{mes.year}</h1>
-              {mes.events.map((oneEvent, idx) => {
+              {mes.events.forEach((oneEvent) => {
                 if (oneEvent.type === 'paper') {
                   return (
-                    <div key={idx} className={styles.event}>
+                    <div key={oneEvent} className={styles.event}>
                       {oneEvent.title}<br />Author: {oneEvent.author} <br />
                       Cited by {oneEvent.cited}
                     </div>
@@ -81,19 +78,15 @@ export default class EventForYears extends React.PureComponent {
                 } else if (oneEvent.type === 'professor') {
                   const authorIndex = authors.indexOf(oneEvent.authorID);
                   const yearIndex = this.state.year - this.props.expertTrajectory.startYear;
-                  console.log("yearIndex",yearIndex);
                   const thisYearID = table[authorIndex][yearIndex];
                   const nextYearID = table[authorIndex][yearIndex + 1];
-                  console.log("yearId", thisYearID, nextYearID)
                   const thisYear = locationName[thisYearID].toLowerCase();
                   const nextYear = locationName[nextYearID].toLowerCase();
-                  console.log("year",thisYear, nextYear)
                   return (
-                    <div key={idx} className={styles.event}>
+                    <div key={oneEvent} className={styles.event}>
                       <div className={styles.person}>
                         <div className={styles.avatar_zone}>
-                          <img src={oneEvent.url}
-                               className={styles.avatar} />
+                          <img src={oneEvent.url} className={styles.avatar} alt="" />
                         </div>
                         <div className={styles.info_zone}>
                           <div className={styles.info_zone_detail}>
@@ -104,8 +97,11 @@ export default class EventForYears extends React.PureComponent {
                                 {false && <span className={styles.rank}>会士</span>}
                               </h2>
                             </div>}
-                            <div className={styles.yearToGo}> <h4> This Year: </h4> <span> {thisYear} </span> <br /> <h4> Next Year:</h4> <span> {nextYear} </span> </div>
-                            {/*{this.personRightButton && this.personRightButton(person)}*/}
+                            <div className={styles.yearToGo}>
+                              <h4> This Year: </h4>
+                              <span> {thisYear} </span>
+                              <br /> <h4> Next Year:</h4> <span> {nextYear} </span>
+                            </div>
                             <div className={classnames(styles.zone, styles.interestColumn)}>
                               <div className={styles.contact_zone}>
                                 H_index: {oneEvent.h_index} <br />

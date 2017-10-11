@@ -10,6 +10,7 @@ import { externalRequest, wget } from '../../utils/request';
 import * as profileUtils from '../../utils/profile-utils';
 import { getPerson } from '../../services/person';
 import { sysconfig } from '../../systems';
+import { Spinner } from '../../components';
 
 const humps = require('humps');
 
@@ -65,6 +66,7 @@ export default class TrendPrediction extends React.PureComponent {
 
   state = {
     person: cperson,
+    loadingFlag: true,
   };
 
   componentDidMount() {
@@ -150,6 +152,7 @@ export default class TrendPrediction extends React.PureComponent {
   };
 
   onKeywordClick = (query) => {
+    this.setState({ loadingFlag: true });
     this.props.dispatch(routerRedux.push({ pathname: '/trend', search: `?query=${query}` }));
   };
 
@@ -231,11 +234,12 @@ export default class TrendPrediction extends React.PureComponent {
     const term = (query === '') ? this.props.query : query;
 
     const dd = wget(`http://166.111.7.173:5012/trend/${term}`);
+    const that = this;
     dd.then((data) => {
       trendData = humps.camelizeKeys(data, (key, convert) => {
         return key.includes(' ') && !key.includes('_') ? key : convert(key);
       });
-      console.log(trendData);
+      that.setState({ loadingFlag: false });
       this.initChart(term);
     });
   };
@@ -421,6 +425,7 @@ export default class TrendPrediction extends React.PureComponent {
     }
 
     const onMouseOverEventNode = (d) => {
+      console.log(d);
       // d3.select(this).attr('opacity', 0.3);
       // const xPosition = d3.event.layerX + 150;
       // const yPosition = d3.event.layerY + 130;
@@ -877,6 +882,7 @@ export default class TrendPrediction extends React.PureComponent {
     const that = this;
     return (
       <div className={styles.trend}>
+        <Spinner loading={this.state.loadingFlag} />
         {/*<div className={styles.year}>*/}
           {/*<Slider marks={marks} step={10} range defaultValue={[20, 50]} disabled={false}/>*/}
         {/*</div>*/}

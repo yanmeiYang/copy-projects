@@ -444,10 +444,10 @@ export default class TrendPrediction extends React.PureComponent {
     };
 
     const onMouseOutEventNode = () => {
-      d3.select(this).transition().duration(400).attr('opacity', () => {
-        return 1;
-      });
-      d3.select('#tooltip1').classed('hidden', true).style('visibility', 'hidden');
+      // d3.select(this).transition().duration(400).attr('opacity', () => {
+      //   return 1;
+      // });
+      // d3.select('#tooltip1').classed('hidden', true).style('visibility', 'hidden');
     };
 
     const onClickEventNode = () => {
@@ -869,7 +869,7 @@ export default class TrendPrediction extends React.PureComponent {
       name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
       pos = profileUtils.displayPosition(person.pos);
       aff = profileUtils.displayAff(person);
-      personLinkParams = {href: sysconfig.PersonList_PersonLink(person.id)};
+      personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
       if (sysconfig.PersonList_PersonLink_NewTab) {
         personLinkParams.target = '_blank';
       }
@@ -884,7 +884,7 @@ export default class TrendPrediction extends React.PureComponent {
           <div className={styles.inner}>
             {
               HOT_TERMS.map((hw) => {
-                i++;
+                i += 1;
                 return (
                   <div key={i}>
                     <a key={i} onClick={that.onKeywordClick.bind(that, hw)}>{hw}</a>
@@ -895,16 +895,16 @@ export default class TrendPrediction extends React.PureComponent {
           </div>
         </div>
         <div className={styles.show} id="chart">
-          <div className="modal-loading"/>
+          <div className="modal-loading" />
         </div>
         <div id="tooltip" className={styles.tool}>
           <p className={styles.showtool}>
-            <strong id="value"/>
+            <strong id="value" />
           </p>
         </div>
         <div id="tooltip1" className={styles.tool1}>
           <div className={styles.showtool1}>
-            <div className="img"><img src={url} alt={url}/></div>
+            <div className="img"><img src={url} alt={url} /></div>
             {name &&
             <div className="name bg">
               <h2 className="section_header">
@@ -913,11 +913,11 @@ export default class TrendPrediction extends React.PureComponent {
             </div>
             }
             <div className="info bg">
-              {pos && <span><i className="fa fa-briefcase fa-fw"/>{pos}</span>}
+              {pos && <span><i className="fa fa-briefcase fa-fw" />{pos}</span>}
               <br />
-              {aff && <span><i className="fa fa-institution fa-fw"/>{aff}</span>}
+              {aff && <span><i className="fa fa-institution fa-fw" />{aff}</span>}
             </div>
-            <strong id="value1"/>
+            <strong id="value1" />
           </div>
         </div>
         <div className={styles.nav}>

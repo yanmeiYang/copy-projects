@@ -20,7 +20,7 @@ class IndexInfoBox extends React.PureComponent {
           <Link to="/knowledge-graph">知识图谱</Link>
         </div>
         <div className="naviItem">
-          <Link to="/trend-prediction">技术趋势</Link>
+          <Link to="/trend">技术趋势</Link>
         </div>
 
         <div className="naviItem" style={{ display: 'none' }}>

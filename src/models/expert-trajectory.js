@@ -158,14 +158,18 @@ export default {
       }
 
       for (const key in merge) { // 当年的地点、人数数据
-        const onenode = { name: key, value: merge[key] };
-        data.push(onenode);
+        if (true) {
+          const onenode = { name: key, value: merge[key] };
+          data.push(onenode);
+        }
       }
 
       if (yearIndex < (yearEnd - yearStart)) {
         for (const key in nextYear) {
-          const onenode = { name: key, value: nextYear[key] }; // 实际数据中乘20应删去！
-          nextYearData.push(onenode);
+          if (true) {
+            const onenode = { name: key, value: nextYear[key] }; // 实际数据中乘20应删去！
+            nextYearData.push(onenode);
+          }
         }
       }
 
@@ -173,8 +177,6 @@ export default {
       nextYearData.sort(sortValue);
       let data1 = []; // data1为人数前100地点数据， data2为100以后
       let p;
-      // console.log('datasp', datas[0]);
-      // console.log(datas[0].value);
       if (data.length > 10) {
         for (p = 0; data[p].value > 1 && p < 100; p += 1) {
           data1.push(data[p]);
@@ -184,22 +186,20 @@ export default {
       }
       const data2 = data.slice(p);
 
-      // console.log('authorImg', authorImg);
       Object.keys(authorImg).map((key) => {
-        // console.log('geoCOooiejijf', geoCoordMap[key]);
         if (geoCoordMap[key][0] < (-30)) {
-          // console.log('come to west');
           authorImgWest[key] = authorImg[key];
         } else if (geoCoordMap[key][0] >= -30 && geoCoordMap[key][0] <= 70) {
           authorImgMid[key] = authorImg[key];
         } else if (geoCoordMap[key][0] > 70) {
           authorImgEast[key] = authorImg[key];
         }
+        return true;
       });
-      console.log("89089089-----------============")
 
       yield put({ type: 'getPerYearHeatDataSuccess',
-        payload: { year, geoCoordMap, data, yearIndex, nextYearData, data1, data2, authorImgWest, authorImgMid, authorImgEast, author, author2 },
+        payload: { year, geoCoordMap, data, yearIndex, nextYearData, data1, data2,
+          authorImgWest, authorImgMid, authorImgEast, author, author2 },
       });
     },
 
@@ -207,10 +207,11 @@ export default {
   },
 
   reducers: {
-    getPerYearHeatDataSuccess(state, { payload: { year, geoCoordMap, data, yearIndex, nextYearData, data1, data2, authorImgWest, authorImgMid, authorImgEast, author, author2 } }) {
+    getPerYearHeatDataSuccess(state, { payload: { year, geoCoordMap, data, yearIndex, nextYearData,
+      data1, data2, authorImgWest, authorImgMid, authorImgEast, author, author2 } }) {
       const yearHeat = state.eachYearHeat;
       yearHeat[year] = {};
-      yearHeat[year]['data'] = data;
+      yearHeat[year].data = data;
       yearHeat[year].geoCoordMap = geoCoordMap;
       yearHeat[year].yearIndex = yearIndex;
       yearHeat[year].nextYearData = nextYearData;
@@ -228,8 +229,8 @@ export default {
       return { ...state, infoZoneIds: rightInfoType };
     },
 
-    searchPersonSuccess(state, { payload: { data, query } }) { // state?
-      const { result, total } = data;
+    searchPersonSuccess(state, { payload: { data } }) { // state?
+      const { result } = data;
       return {
         ...state,
         results: result,
@@ -238,17 +239,8 @@ export default {
       };
     },
 
-    heatFindSuccess(state, { payload: { heatData,location, startYear, authorImage, endYear, table, authors, locationName, hindex } }) {
-      console.log("startYear",startYear)
-      // const location = heatData.locations;
-      // const startYear = heatData.startYear;
-      // const endYear = heatData.endYear;
-      // const table = heatData.table;
-      // const authors = heatData.authors;
-      // const authorImage = heatData.authorImage;
-      // const locationName = heatData.locationName;
-      // const hindex = heatData.h_index;
-      // console.log('authors', authors);
+    heatFindSuccess(state, { payload: { heatData, location, startYear, authorImage,
+      endYear, table, authors, locationName, hindex } }) {
       return {
         ...state,
         heatData,
@@ -263,15 +255,6 @@ export default {
       };
     },
 
-    dataFindSuccess(state, { payload: { data } }) {
-      /*      const data = payload.data && payload.data.data;
-      const kgindex = kgService.indexingKGData(data);
-      const kgFetcher = kgService.kgFetcher(data, kgindex);
-      // console.log('success findKG, return date is ', data);
-      // console.log('indexing it: ', kgindex);
-      return { ...state, kgdata: data, kgindex, kgFetcher }; */
-    },
-
     eventFindSuccess(state, { payload: { data, yearNow } }) {
       const newMassage = state.yearMessage;
       newMassage.push({
@@ -280,29 +263,6 @@ export default {
       });
       return { ...state, yearMessage: newMassage };
     },
-
-    // hindexSuccess(state, { payload: { hindex } }) {
-    //   return {
-    //     ...state,
-    //     hindex,
-    //   };
-    // },
-    //
-    // aidSuccess(state, { payload: { authors, startYear, locationName } }) {
-    //   return {
-    //     ...state,
-    //     authors,
-    //     startYear,
-    //     locationName,
-    //   };
-    // },
-    //
-    // tableSuccess(state, { payload: { table } }) {
-    //   return {
-    //     ...state,
-    //     table,
-    //   };
-    // },
 
     listPersonByIdsSuccess(state, { payload: { data } }) {
       return { ...state, clusterPersons: data.data.persons, loading: false };
@@ -331,10 +291,9 @@ function doHeatGeoMap(location) { // 存储经纬度 geoCoordMap = {123:[116,40]
   for (let i = 1; i < location.length; i += 1) {
     geoCoordMap[i] = location[i];
   }
-  console.log('geo', geoCoordMap);
   return geoCoordMap;
 }
 
 function sortValue(a, b) {
   return b.value - a.value;
-};
+}

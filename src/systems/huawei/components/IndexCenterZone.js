@@ -43,7 +43,7 @@ export default class IndexCenterZone extends React.PureComponent {
               </div>
             </div>
           </Link>
-          <Link to="/trend-prediction">
+          <Link to="/trend">
             <div className={styles.blockItem}>
               <div className={classnames(styles.clearMarginRight, styles.outerBackground)}>
                 <span alt="" className={classnames('icon', styles.topicTrend)} />

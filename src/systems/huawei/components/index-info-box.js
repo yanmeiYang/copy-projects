@@ -41,7 +41,7 @@ class IndexInfoBox extends React.PureComponent {
             </span>
           </div>
         </Link>
-        <Link to="/trend-prediction">
+        <Link to="/trend">
           <div className={styles.blockItem}>
             <div className={styles.blockImg}>
               <img src="/sys/huawei/trend-prediction.png" alt="" />

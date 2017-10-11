@@ -10,7 +10,7 @@ import auth from 'routes/auth/router-auth';
 import admin from 'routes/admin/router-admin';
 import rcd from 'routes/recommendation/router-rcd';
 import map from 'routes/expert-map/router-map';
-import trend from 'routes/trend-prediction/router-trend';
+import trend_new from 'routes/trend/router-trend';
 import seminar from 'routes/seminar/router-seminar';
 import tencent from 'routes/third-login/router';
 import router2bprofile from 'routes/2b-profile/router-2bprofile';

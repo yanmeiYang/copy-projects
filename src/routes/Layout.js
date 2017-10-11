@@ -2,7 +2,8 @@
 /**
  * Created by bogao on 2017/09/13.
  */
-import React, { PureComponent, Component, PropTypes } from 'react';
+import React, { PureComponent, Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Helmet } from 'react-helmet';
 import ReactGA from 'react-ga';

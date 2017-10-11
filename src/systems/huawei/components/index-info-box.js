@@ -1,12 +1,12 @@
 /**
  * Created by BoGao on 2017/7/15.
  */
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { Link } from 'dva/router';
 import { FormattedMessage as FM } from 'react-intl';
 import styles from './index-info-box.less';
 
-class IndexInfoBox extends React.PureComponent {
+class IndexInfoBox extends PureComponent {
   render() {
     return (
       <div className={styles.bigNavi}>
@@ -37,7 +37,8 @@ class IndexInfoBox extends React.PureComponent {
               <img src="/sys/huawei/knowledge-graph.png" alt="" />
             </div>
             <span>
-              <FM id="com.searchTypeWidget.label.KnowledgeGraph" defaultMessage="Knowledge Graph" />
+              <FM id="com.searchTypeWidget.label.KnowledgeGraph"
+                  defaultMessage="Knowledge Graph" />
             </span>
           </div>
         </Link>

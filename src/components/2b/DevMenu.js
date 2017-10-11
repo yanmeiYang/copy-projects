@@ -2,7 +2,8 @@
 /**
  *  Created by BoGao on 2017-08-14;
  */
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { Icon } from 'antd';
 
 export default class DevMenu extends PureComponent {

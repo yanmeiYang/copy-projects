@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Tag, Tabs } from 'antd';
 import classnames from 'classnames';
@@ -11,7 +12,7 @@ const TabPane = Tabs.TabPane;
 const defaultSorts = ['relevance', 'h_index', 'activity', 'rising_star', 'n_citation', 'n_pubs'];
 
 @connect()
-export default class SearchSorts extends React.PureComponent {
+export default class SearchSorts extends PureComponent {
   static displayName = 'SearchSorts';
 
   static propTypes = {

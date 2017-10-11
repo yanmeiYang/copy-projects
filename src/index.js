@@ -27,7 +27,7 @@ if (sysconfig.googleAnalytics) {
 }
 
 if (ENABLE_PERF) { // eslint-disable-line no-undef
-  window.Perf = require('react-addons-perf');
+                   // window.Perf = require('react-addons-perf');
 }
 
 /** ----------------------------------------------------------------------------

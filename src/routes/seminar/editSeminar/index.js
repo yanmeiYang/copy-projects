@@ -1,7 +1,8 @@
 /**
  * Created by yangyanmei on 17/8/1.
  */
-import React, { Component, PureComponent, PropTypes } from 'react';
+import React, { Component, PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { routerRedux, Link, withRouter } from 'dva/router';
 import RegistrationForm from 'components/RegistrationForm';

@@ -2,7 +2,8 @@
  *  Created by BoGao on 2017-06-15;
  */
 /* eslint-disable camelcase */
-import React, { Component, PureComponent, PropTypes } from 'react';
+import React, { Component, PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { Tag, Tooltip } from 'antd';

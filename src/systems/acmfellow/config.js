@@ -28,13 +28,6 @@ module.exports = {
 
   Header_SubTextLogo: '伯乐系统',
   Header_SubTextStyle: { width: 90, left: -54, marginLeft: -80 },
-  // Header_LogoStyle: {
-  //   top: '-10px',
-  //   width: '60px',
-  //   height: '36px',
-  //   backgroundSize: 'auto 56px',
-  //   backgroundPosition: '0px -10px',
-  // },
   Header_LogoWidth: 118,
   Header_UserPageURL: '/user-info',
   Header_RightZone: [() => <Link key="0" to={`/eb/${ExpertBase}/-/0/20`}>我的专家库</Link>], // TODO make this a Component.

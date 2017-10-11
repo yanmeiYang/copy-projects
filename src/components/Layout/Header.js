@@ -1,7 +1,8 @@
 /**
  * Created by BoGao on 2017/9/14.
  */
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'dva';
 // import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';

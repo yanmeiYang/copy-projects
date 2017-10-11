@@ -1,5 +1,6 @@
 /* eslint-disable react/no-find-dom-node */
-import React, { PropTypes } from 'react';
+import React, {  } from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 import styles from './Spinner.less';

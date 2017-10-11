@@ -1,9 +1,10 @@
 /* eslint-disable react/no-multi-comp */
-import React, { Component, PureComponent, PropTypes } from 'react';
-import { sysconfig } from '../systems';
-import * as authUtil from '../utils/auth';
-import { reflect } from '../utils';
-import debug from '../utils/debug';
+import React, { Component, PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import { sysconfig } from 'systems';
+import * as authUtil from 'utils/auth';
+import { reflect } from 'utils';
+import debug from 'utils/debug';
 
 const ENABLED = sysconfig.GLOBAL_ENABLE_HOC;
 

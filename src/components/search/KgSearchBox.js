@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Input, Button } from 'antd';
+import { Input, Button, message } from 'antd';
 import Autosuggest from 'react-autosuggest';
 import { defineMessages, injectIntl } from 'react-intl';
 import classnames from 'classnames';
@@ -77,7 +77,6 @@ export default class KgSearchBox extends React.PureComponent {
     this.state = {
       value: '', // current query
       suggestions: [],
-      isLoading: false,
     };
 
     this.lastRequestId = null;
@@ -182,10 +181,7 @@ export default class KgSearchBox extends React.PureComponent {
           suggestions: suggestion,
         },
       ];
-      this.setState({
-        isLoading: false,
-        suggestions,
-      });
+      this.setState({ suggestions });
     }
   };
 
@@ -282,6 +278,10 @@ export default class KgSearchBox extends React.PureComponent {
     event.preventDefault();
     if (this.props.onSearch) {
       this.props.onSearch({ query: this.state.value });
+    }
+    // 阻止搜索后再弹出窗口。
+    if (this.lastRequestId !== null) {
+      clearTimeout(this.lastRequestId);
     }
   };
 

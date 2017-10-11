@@ -1,4 +1,5 @@
-import React, { Component, PureComponent, PropTypes } from 'react';
+import React, { Component, PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { routerRedux, Link, withRouter } from 'dva/router';
 import { connect } from 'dva';
 import { isEqual } from 'lodash';

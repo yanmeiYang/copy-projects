@@ -81,7 +81,7 @@ export default class Header extends PureComponent {
     const { headerSearchBox } = this.props.app;
     const { onSearch } = this.props;
     let { query } = this.props;
-    query = query || 'data mining';
+    query = query;
     // console.log('>>>>>>>', logoZone, searchZone, infoZone);
 
     // if (headerSearchBox) {

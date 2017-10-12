@@ -140,7 +140,7 @@ export default class TrendPrediction extends React.PureComponent {
         .attr('transform', () => {
           return `translate(${[histPosition, 0]})rotate(${0})`;
         })
-        .style('font-size', 18)
+        .style('font-size', 12)
         .attr('dy', '0.85em')
         .text((d) => {
           return trendData.termToLabel[d.t];
@@ -293,7 +293,7 @@ export default class TrendPrediction extends React.PureComponent {
         return `translate(${[0, (i * histItemHeight) + 10]})rotate(${0})`;// 左侧图离标签页的距离，字和直方图的旋转
       })
       .attr('id', (d) => {
-        return `term-${d.idx}`;
+        return `term-${d.t.replace(' ', '')}`;
       })
       .on('click', (d) => {
         this.renderTermTrend(d);
@@ -317,7 +317,7 @@ export default class TrendPrediction extends React.PureComponent {
 
     histGraph.append('text').attr('text-anchor', 'end').attr('transform', (d) => {
       return `translate(${[histPosition, 0]})rotate(${0})`;
-    }).style('font-size', 18)
+    }).style('font-size', 12)
       .attr('dy', '.85em')
       .text((d) => { // 左侧图字体大小
         return trendData.termToLabel[d.t];
@@ -367,6 +367,18 @@ export default class TrendPrediction extends React.PureComponent {
       });
     // d3.select('.strong').remove();
     // 技术趋势图（右下方）的两条包络线,做了减小梯度的处理
+    console.log(data);
+    d3.select('.strong').remove();
+    d3.select(`#term-${data.t.replace(' ', '')}`).append('rect').attr('class', 'strong').attr('x', '0px')
+      .attr('y', () => {
+        return -1.8125;
+      })
+      .attr('width', '300px')
+      .attr('height', () => {
+        return 19.8125;
+      })
+      .style('fill', '#9900FF')
+      .style('fill-opacity', 0.2);
     basis = d3.svg.area()
       .x((d, i) => {
         return carr[i];

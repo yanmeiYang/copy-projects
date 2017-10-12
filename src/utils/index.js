@@ -90,5 +90,6 @@ module.exports = {
 
   compare,
   createURL,
+
 }
 ;

@@ -92,11 +92,12 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
 
     return queryAPI(nextapi);
 
-    // TODO 我需要替换成新的API
   } else {
     // old method.
-    const { expertBase, data } = prepareParameters(query, offset, size, filters,
-      sort, useTranslateSearch);
+    const { expertBase, data } = prepareParameters(
+      query, offset, size, filters,
+      sort, useTranslateSearch,
+    );
     return request(
       api.searchPersonInBase.replace(':ebid', expertBase),
       { method: 'GET', data },

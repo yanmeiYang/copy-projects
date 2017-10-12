@@ -29,7 +29,7 @@ export default class ExpertBaseExpertsPage extends Component {
     let query = match.params.query;
     query = query === '-' ? '' : query;
 
-    console.log('000', { query, offset, size, id });
+    console.log('000000--', { query, offset, size, id });
 
     // Set query to null, and set eb to the only eb. TODO bugs
     dispatch({
@@ -88,7 +88,7 @@ export default class ExpertBaseExpertsPage extends Component {
 
     return (
       <Layout contentClass={tc(['expertBase'])} onSearch={this.onSearchBarSearch}
-              query={query}>
+              query={query} advancedSearch>
         <h1 className={styles.pageTitle}>
 
           {PageTitle}

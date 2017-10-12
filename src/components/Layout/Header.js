@@ -1,7 +1,7 @@
 /**
  * Created by BoGao on 2017/9/14.
  */
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 // import { sysconfig } from 'systems';
@@ -28,7 +28,7 @@ const tc = applyTheme(styles);
 // import defaults from '../../systems/utils';
 
 @connect(({ app }) => ({ app }))
-export default class Header extends PureComponent {
+export default class Header extends Component {
   static displayName = 'Header';
 
   static propTypes = {
@@ -37,13 +37,16 @@ export default class Header extends PureComponent {
     infoZone: PropTypes.array,
     rightZone: PropTypes.array,
 
-    headerSearchBox: PropTypes.object,
+    advancedSearch: PropTypes.bool,
+
+    // headerSearchBox: PropTypes.object,
   };
 
   static defaultProps = {
     logoZone: theme.logoZone,
     searchZone: theme.searchZone,
     infoZone: theme.infoZone,
+    advancedSearch: false,
   };
 
   state = {
@@ -58,7 +61,9 @@ export default class Header extends PureComponent {
 
   shouldComponentUpdate(nextProps, nextState) {
     if (compare(this.props, nextProps,
-        'logoZone', 'searchZone', 'infoZone', 'rightZone', 'headerSearchBox')) {
+        'logoZone', 'searchZone', 'infoZone', 'rightZone', 'headerSearchBox',
+        'advancedSearch',
+      )) {
       return true;
     }
     if (compare(this.state, nextState, 'query')) {
@@ -94,9 +99,9 @@ export default class Header extends PureComponent {
   render() {
     console.count('>>>>>>>HEADER');
     const { logoZone, searchZone, infoZone, rightZone } = this.props;
-    const { headerSearchBox } = this.props.app;
-    const { onSearch } = this.props;
-    let { query } = this.props;
+    // const { headerSearchBox } = this.props.app;
+    const { onSearch, advancedSearch } = this.props;
+    const { query } = this.props;
 
     // query = query || 'data mining';
     // console.log('>>>>>>>HEADER', logoZone, searchZone, infoZone);
@@ -112,8 +117,11 @@ export default class Header extends PureComponent {
     // }
 
     const SearchZone = searchZone || [
-      <KgSearchBox key={0} size="large" query={query} onSearch={onSearch}
-                   className={styles.searchBox} style={{ height: 36, marginTop: 15 }}
+      <KgSearchBox key={100} size="large" query={query}
+                   onSearch={onSearch}
+                   className={styles.searchBox}
+                   style={{ height: 36, marginTop: 15 }}
+                   advanced={advancedSearch}
       />,
     ];
 
@@ -122,7 +130,7 @@ export default class Header extends PureComponent {
     ];
 
     const RightZone = rightZone || [
-      <HeaderInfoZone key={0} app={this.props.app} logout={this.props.logout} />,
+      <HeaderInfoZone key={100} app={this.props.app} logout={this.props.logout} />,
     ];
 
     // const { headerSearchBox, user, roles } = this.props.app;

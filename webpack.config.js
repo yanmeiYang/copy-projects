@@ -25,7 +25,7 @@ module.exports = (webpackConfig, env) => {
 
   if (production) {
     if (webpackConfig.module) {
-      // Classname Hash
+      // Class name Hash
       webpackConfig.module.rules.map((item) => {
         if (String(item.test) === '/\\.less$/' || item.test === '/\\.css/') {
           item.use.filter(iitem => iitem.loader === 'css')[0].options.localIdentName = '[hash:base64:5]';

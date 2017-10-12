@@ -28,9 +28,9 @@ export default class SearchSorts extends PureComponent {
     rightZone: [],
   };
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return compare(this.props, nextProps, 'sortType', 'sorts');// TODO sorts not work.
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return compare(this.props, nextProps, 'sortType', 'sorts');// TODO sorts not work.
+  // }
 
   onOrderChange = (e) => {
     if (this.props.onOrderChange) {

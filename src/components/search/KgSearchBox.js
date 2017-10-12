@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Input, Button, message } from 'antd';
+import { Input, Button, message, Form } from 'antd';
+import * as strings from 'utils/strings';
 import Autosuggest from 'react-autosuggest';
 import { defineMessages, injectIntl } from 'react-intl';
 import classnames from 'classnames';
+import { sysconfig } from 'systems';
+import * as kgService from 'services/knoledge-graph-service';
+import * as suggestService from 'services/search-suggest';
 import styles from './KgSearchBox.less';
-import * as kgService from '../../services/knoledge-graph-service';
-import * as suggestService from '../../services/search-suggest';
-import { sysconfig } from '../../systems';
+
+const FormItem = Form.Item;
 
 const messages = defineMessages({
   placeholder: {
@@ -28,8 +32,7 @@ const getSuggestions = (value) => {
   const inputLength = inputValue.length;
 
   return inputLength === 0 ? [] : languages.filter(lang =>
-    lang.name.toLowerCase().slice(0, inputLength) === inputValue,
-  );
+    lang.name.toLowerCase().slice(0, inputLength) === inputValue);
 };
 
 // When suggestion is clicked, Autosuggest needs to populate the input
@@ -63,9 +66,13 @@ const getSectionSuggestions = (section) => {
   return section.suggestions;
 };
 
-@connect()
-@injectIntl
-export default class KgSearchBox extends React.PureComponent {
+// ==================================================================================
+
+class KgSearchBox extends PureComponent {
+  static propTypes = {
+    // logoZone: PropTypes.array,
+  };
+
   constructor() {
     super();
 
@@ -75,7 +82,7 @@ export default class KgSearchBox extends React.PureComponent {
     // Suggestions also need to be provided to the Autosuggest,
     // and they are initially empty because the Autosuggest is closed.
     this.state = {
-      value: '', // current query
+      value: '', // current query, term in advanced.
       suggestions: [],
     };
 
@@ -83,15 +90,24 @@ export default class KgSearchBox extends React.PureComponent {
   }
 
   componentWillMount = () => {
-    this.setState({ value: this.props.query || '' });
+    const { term } = strings.destructQueryString(this.props.query);
+    this.setState({ value: term || '' });
   };
+
+  componentDidMount() {
+    const { form, query } = this.props;
+    const { _, name, org } = strings.destructQueryString(query);
+    form.setFieldsValue({ name, org });
+  }
 
   componentWillReceiveProps = (nextProps) => {
-    if (nextProps.query !== this.state.value) {
-      this.setState({ value: nextProps.query || '' });
+    const { form, query } = this.props;
+    if (nextProps.query !== query) {
+      const { term, name, org } = strings.destructQueryString(nextProps.query);
+      this.setState({ value: term || '' });
+      form.setFieldsValue({ name, org });
     }
   };
-
 
   onChange = (event, { newValue, method }) => {
     this.setState({ value: newValue });
@@ -252,32 +268,21 @@ export default class KgSearchBox extends React.PureComponent {
     });
   };
 
-  // handleSearch = () => {
-  //   // 这个不好
-  //   const kgs = document.getElementsByClassName('kgsuggest');
-  //   const data = {};
-  //   if (kgs && kgs.length > 0) {
-  //     data.query = kgs[0].firstChild.firstChild.value;
-  //   }
-  //   // const data = {
-  //   //   query: ReactDOM.findDOMNode('.findDOMNode').value,
-  //   // };
-  //   if (this.props.select) {
-  //     data.field = this.state.selectValue;
-  //   }
-  //   if (this.props.onSearch) this.props.onSearch(data);
-  // };
-  // onSuggestionSelected=(event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method })=>{
-  //   console.log(method);
-  //   if (method==='enter'){
-  //     this.props.onSearch({query:suggestionValue});
-  //   }
-  // };
-
+  /**
+   * Handle Submit
+   * @param event
+   */
   handleSubmit = (event) => {
     event.preventDefault();
+
+    // pin query
+    const { form } = this.props;
+    const name = form.getFieldValue('name');
+    const org = form.getFieldValue('org');
+    const query = strings.constructQueryString(this.state.value, name, org);
+
     if (this.props.onSearch) {
-      this.props.onSearch({ query: this.state.value });
+      this.props.onSearch({ query });
     }
     // 阻止搜索后再弹出窗口。
     if (this.lastRequestId !== null) {
@@ -288,10 +293,10 @@ export default class KgSearchBox extends React.PureComponent {
   render() {
     const { value, suggestions } = this.state;
     const { intl } = this.props;
-    const {
-      size, className, style, btnText, searchPlaceholder,
-      searchBtnStyle, indexPageStyle
-    } = this.props;
+    const { size, className, style, btnText, searchPlaceholder, searchBtnStyle } = this.props;
+    const { indexPageStyle /* TODO 什么鬼 */, advanced } = this.props;
+    const { getFieldDecorator } = this.props.form;
+
     // Auto suggest will pass through all these props to the input.
     const inputProps = {
       placeholder: searchPlaceholder || intl.formatMessage(messages.placeholder),
@@ -301,11 +306,13 @@ export default class KgSearchBox extends React.PureComponent {
 
     // Finally, render it!
     return (
-      <form className={classnames(styles.kgSearchBox, className)} onSubmit={this.handleSubmit}>
+      <form className={classnames(styles.kgSearchBox, className, advanced ? styles.adv : '')}
+            onSubmit={this.handleSubmit}>
         <Input.Group
           compact size={size} style={style}
           className={classnames(styles.search, 'kgsuggest')}
         >
+
           <Autosuggest
             id={indexPageStyle || 'kgsuggest'}
             suggestions={suggestions}
@@ -320,13 +327,30 @@ export default class KgSearchBox extends React.PureComponent {
             size={size}
           />
 
+          {advanced &&
+          <FormItem>
+            {getFieldDecorator('name', {
+              // rules: [{ required: true, message: 'Please input your username!' }],
+            })(<Input className={styles.inputBox} placeholder="Name" />)}
+          </FormItem>
+          }
+
+          {advanced &&
+          <FormItem>
+            {getFieldDecorator('org', {
+              // rules: [{ required: true, message: 'Please input your username!' }],
+            })(<Input className={styles.inputBox} placeholder="Organization" />)}
+          </FormItem>
+          }
+
           <Button
             className={styles.searchBtn}
             style={searchBtnStyle}
             size={size}
             type="primary"
             onClick={this.handleSubmit}
-          >{btnText || intl.formatMessage(messages.searchBtn)}</Button>
+          >{btnText || intl.formatMessage(messages.searchBtn)}
+          </Button>
 
         </Input.Group>
       </form>
@@ -334,3 +358,4 @@ export default class KgSearchBox extends React.PureComponent {
   }
 }
 
+export default injectIntl(connect()(Form.create()(KgSearchBox)));

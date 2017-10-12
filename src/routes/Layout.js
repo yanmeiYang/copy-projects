@@ -37,6 +37,8 @@ export default class Layout extends Component {
     showHeader: PropTypes.bool,
     showNavigator: PropTypes.bool,
 
+    advancedSearch: PropTypes.bool, // 是否是三个框的高级搜索
+
     // props
     query: PropTypes.string,
     onSearch: PropTypes.func,
@@ -56,14 +58,16 @@ export default class Layout extends Component {
 
   render() {
     // console.count('>>>>>>>>>> App Render'); // TODO performance
-    const { logoZone, searchZone, infoZone, sidebar, footer } = this.props;
+    const { sidebar, footer } = this.props;
     const { contentClass, showHeader, showNavigator } = this.props;
-    const { query, onSearch } = this.props;
     const { dispatch, app } = this.props;
     const { user, roles } = app;
 
+    const { logoZone, searchZone, infoZone, advancedSearch } = this.props;
+    const { query, onSearch } = this.props;
+
     const headerOptions = {
-      logoZone, searchZone, infoZone, query, onSearch,
+      logoZone, searchZone, infoZone, query, onSearch, advancedSearch,
       logout() {
         dispatch({ type: 'app/logout' });
       },

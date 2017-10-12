@@ -58,7 +58,7 @@ export default {
   'com.searchTypeWidget.label.ExpertTrajectory': 'DEV:专家迁移',
   'com.searchTypeWidget.label.ExpertBase': '我的专家库',
 
-  'com.searchTypeWidget.label.ACM_ExpertSearch': '全部专家',
+  'com.searchTypeWidget.label.ACM_ExpertSearch': '全球专家',
 
   'com.PersonList.label.views': '次查看',
   'com.PersonList.label.homepage': '个人主页',
@@ -70,11 +70,12 @@ export default {
   'com.expertMap.headerLine.label.baiduMap': '百度地图',
   'com.expertMap.headerLine.label.googleMap': '谷歌地图',
   'com.expertMap.headerLine.label.level': '层级：',
+
+  'com.ExpertBase.Button.Add': '添加',
+  'com.ExpertBase.Button.Remove': '删除',
+
   // bole avatar
   'com.bole.ExpertPhoto': '暂无头像',
-  // bole add button
-  'com.bole.AddButton': '添加',
-  'com.bole.Remove': '删除',
   'com.bole.PersonComment': '添加评论',
 
   // Expert Base

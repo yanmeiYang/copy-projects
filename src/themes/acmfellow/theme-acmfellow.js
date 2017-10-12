@@ -47,6 +47,13 @@ module.exports = {
 
   // Expert Page
 
-  ExpertBaseExpertsPage_Title: <span>ACM Fellow</span>,
+  ExpertBaseExpertsPage_TitleZone: [
+    // <span>ACM Fellows</span>,
+  ],
 
+  ExpertBaseExpertsPage_Title_SHOW_SeeAll_Link: false,
+
+  ExpertBaseExpertsPage_MessageZone: [
+    hole.DEFAULT_PLACEHOLDER,
+  ],
 };

@@ -1,6 +1,3 @@
-/**
- * Created by zlm on 2017/8/31.
- */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Button, Modal, message } from 'antd';
@@ -14,10 +11,10 @@ export default class AddToEBButton extends PureComponent {
     super(props);
     const { person, targetExpertBase, expertBaseId } = props;
     this.state = {
-      visible: false,
+      // visible: false,
       dataIdItem: targetExpertBase,
-      value: 1,
-      personData: '',
+      // value: 1,
+      // personData: '',
       // load: false,
       isInThisEB: expertBaseId === 'aminer'
         ? person && person.locks && person.locks.roster
@@ -36,13 +33,12 @@ export default class AddToEBButton extends PureComponent {
   }
 
   add = (id) => {
-    const that = this;
     const ebid = this.state.dataIdItem;
     this.props.dispatch({
       type: 'expertBase/addExpertToEB',
       payload: { ebid, id },
     });
-    this.setState({ personData: this.props.person.id });
+    // this.setState({ personData: this.props.person.id });
   };
 
   removeItem = (pid) => {
@@ -74,31 +70,13 @@ export default class AddToEBButton extends PureComponent {
       type: 'expertBase/addExpertToEB',
       payload: { ebid, aids },
     });
-
-    this.setState({
-      visible: false,
-    });
-  };
-
-  handleCancel = () => {
-    this.setState({
-      visible: false,
-    });
-  };
-
-  selectTitleArea = (id, e) => {
-    this.setState({
-      value: e.target.value,
-    });
-    this.setState({ dataIdItem: id });
   };
 
   render() {
-    const person = this.props.person;
+    const { person } = this.props;
     if (!person) {
-      return false;
+      return null;
     }
-    ;
     const load = person.id && this.props.expertBase.currentPersonId === person.id;
     return (
       <div className={styles.buttonArea}>

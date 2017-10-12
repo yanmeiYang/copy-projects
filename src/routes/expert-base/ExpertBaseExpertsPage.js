@@ -4,13 +4,14 @@ import { connect } from 'dva';
 import { routerRedux, Link, withRouter } from 'dva/router';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
+import { hole, createURL } from 'utils';
+import * as strings from 'utils/strings';
 import { Auth } from 'hoc';
 import { Layout } from 'routes';
-import classnames from 'classnames';
 import { FormattedMessage as FM } from 'react-intl';
-import { createURL } from 'utils';
 import SearchComponent from 'routes/search/SearchComponent';
 import styles from './ExpertBaseExpertsPage.less';
+import { query } from 'services/user';
 
 const tc = applyTheme(styles);
 
@@ -57,7 +58,7 @@ export default class ExpertBaseExpertsPage extends Component {
   ebSorts = ['time', 'h_index', 'activity', 'rising_star', 'n_citation', 'n_pubs'];
 
   render() {
-    const { query } = this.props.search;
+    const { query, pagination } = this.props.search;
     let seeAllURL = '';
     if (query) {
       const { match } = this.props;
@@ -66,23 +67,54 @@ export default class ExpertBaseExpertsPage extends Component {
       });
     }
 
-    const PageTitle = theme.ExpertBaseExpertsPage_Title
-      || <FM defaultMessage="我的专家库" id="page.ExpertBaseExpertsPage.MyExperts" />;
+    const total = pagination && (pagination.total || 0);
+    const { term, name, org } = strings.destructQueryString(query);
+    const zoneData = { total, term, name, org };
+
     return (
       <Layout contentClass={tc(['expertBase'])} onSearch={this.onSearchBarSearch}
               query={query} advancedSearch>
+
+        {theme.ExpertBaseExpertsPage_TitleZone && theme.ExpertBaseExpertsPage_TitleZone.length > 0 &&
         <h1 className={styles.pageTitle}>
 
-          {PageTitle}
+          {hole.fill(theme.ExpertBaseExpertsPage_TitleZone, [
+            <FM defaultMessage="我的专家库" id="page.ExpertBaseExpertsPage.MyExperts" />,
+          ])}
 
-          {seeAllURL &&
+          {theme.ExpertBaseExpertsPage_Title_SHOW_SeeAll_Link && seeAllURL &&
           <div className={styles.seeAll}>
             <Link to={seeAllURL}>
               <FM defaultMessage="查看全部专家" id="page.ExpertBaseExpertsPage.SeeAllExperts" />
             </Link>
           </div>
           }
-        </h1>
+        </h1>}
+
+        <div className={styles.message}>
+          {hole.fillFuncs(theme.ExpertBaseExpertsPage_MessageZone, [
+            (payload) => {
+              const querySegments = [];
+              if (payload.term) {
+                querySegments.push(payload.term);
+              }
+              if (payload.name) {
+                querySegments.push(payload.name);
+              }
+              if (payload.org) {
+                querySegments.push(payload.org);
+              }
+              const queryString = querySegments.join(', ');
+
+              return (
+                <div>
+                  {payload.total} Experts in ACM Fellow.
+                  {queryString && <span> related to "{queryString}".</span>}
+                </div>
+              );
+            },
+          ], zoneData)}
+        </div>
 
         <SearchComponent // Example: include all props.
           className={styles.SearchBorder} // additional className

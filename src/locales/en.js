@@ -58,14 +58,7 @@ export default {
   'com.searchTypeWidget.label.ExpertTrajectory': 'DEV:Expert Trajectory',
   'com.searchTypeWidget.label.ExpertBase': 'My Experts',
 
-  'com.searchTypeWidget.label.ACM_ExpertSearch': 'All Experts',
-
-  // bole avatar
-  'com.bole.ExpertPhoto': 'No Avatar',
-  'com.bole.AddButton': 'Add',
-  'com.bole.Remove': 'Remove',
-  'com.bole.PersonRemoveButton': 'Remove',
-  'com.bole.PersonComment': 'Comments',
+  'com.searchTypeWidget.label.ACM_ExpertSearch': 'Global Experts',
 
   'com.PersonList.label.views': 'views',
   'com.PersonList.label.homepage': 'Homepage',
@@ -77,6 +70,13 @@ export default {
   'com.expertMap.headerLine.label.baiduMap': 'Baidu Map',
   'com.expertMap.headerLine.label.googleMap': 'Google Map',
   'com.expertMap.headerLine.label.level': 'Level：',
+
+  'com.ExpertBase.Button.Add': '添加',
+  'com.ExpertBase.Button.Remove': '删除',
+
+  // bole avatar
+  'com.bole.ExpertPhoto': 'No Avatar',
+  'com.bole.PersonComment': 'Comments',
 
   // Expert Base
   'page.ExpertBaseExpertsPage.MyExperts': 'My Experts',
@@ -98,5 +98,4 @@ export default {
   'rcd.taskTable.header.progress': 'Progress',
   'rcd.taskTable.header.status': 'Status',
   'rcd.taskTable.header.actions': 'Actions',
-
 };

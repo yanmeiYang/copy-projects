@@ -3,8 +3,9 @@
  */
 import React from 'react';
 import { Link } from 'dva/router';
+import AddToEBButton from 'routes/expert-base/AddToEBButton';
 import defaults from '../utils';
-import { AddToEBButton, PersonRemoveButton, PersonComment } from './components';
+import { PersonComment } from './components';
 import { GetComments } from './person-comment-hooks';
 
 import { createRoster } from '../../hooks';
@@ -30,9 +31,7 @@ module.exports = {
   Header_SubTextStyle: { width: 90, left: -54, marginLeft: -80 },
   Header_LogoWidth: 118,
   Header_UserPageURL: '/user-info',
-  // Header_RightZone: [() => <Link key="0" to={`/eb/${ExpertBase}/-/0/20`}>我的专家库</Link>], // TODO make this a Component.
 
-  // Footer_Content: '',
   // ShowHelpDoc: true,
 
   // Functionality
@@ -64,7 +63,7 @@ module.exports = {
   // PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
   // PersonList_PersonLink_NewTab: true,
   // param: [person, eb{id,name}]
-  PersonList_TitleRightBlock:
+  PersonList_AfterTitleBlock:
     ({ param }) => (
       <AddToEBButton
         person={param.person} key="2"

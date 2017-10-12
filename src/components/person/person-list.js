@@ -27,7 +27,7 @@ const DefaultRightZoneFuncs = [
 const DefaultBottomZoneFuncs = [];
 
 @connect()
-export default class PersonList extends PureComponent {
+export default class PersonList extends Component {
   static propTypes = {
     // className: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     className: PropTypes.string, // NOTE: 一般来说每个稍微复杂点的Component都应该有一个className.

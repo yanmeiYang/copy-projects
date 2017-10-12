@@ -107,17 +107,21 @@ class KgSearchBox extends PureComponent {
   };
 
   componentDidMount() {
-    const { form, query } = this.props;
-    const { _, name, org } = strings.destructQueryString(query);
-    form.setFieldsValue({ name, org });
+    const { form, query, advanced } = this.props;
+    if (advanced) {
+      const { _, name, org } = strings.destructQueryString(query);
+      form.setFieldsValue({ name, org });
+    }
   }
 
   componentWillReceiveProps = (nextProps) => {
-    const { form, query } = this.props;
+    const { form, query, advanced } = this.props;
     if (nextProps.query !== query) {
       const { term, name, org } = strings.destructQueryString(nextProps.query);
       this.setState({ value: term || '' });
-      form.setFieldsValue({ name, org });
+      if (advanced) {
+        form.setFieldsValue({ name, org });
+      }
     }
   };
 
@@ -288,10 +292,13 @@ class KgSearchBox extends PureComponent {
     event.preventDefault();
 
     // pin query
-    const { form } = this.props;
-    const name = form.getFieldValue('name');
-    const org = form.getFieldValue('org');
-    const query = strings.constructQueryString(this.state.value, name, org);
+    const { form, advanced } = this.props;
+    let query = this.state.value;
+    if (advanced) {
+      const name = form.getFieldValue('name');
+      const org = form.getFieldValue('org');
+      query = strings.constructQueryString(this.state.value, name, org);
+    }
 
     if (this.props.onSearch) {
       this.props.onSearch({ query });

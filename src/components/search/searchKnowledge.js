@@ -1,7 +1,7 @@
 /**
  * Created by yangyanmei on 17/8/31.
  */
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Icon } from 'antd';
 // import { compare } from 'utils';
@@ -10,9 +10,8 @@ import styles from './searchKnowledge.less';
 
 
 @connect(({ search }) => ({ search }))
-export default class SearchKnowledge extends React.PureComponent {
+export default class SearchKnowledge extends Component {
   componentWillMount() {
-    console.log('=======0098',);
     // this.props.dispatch({
     //   type: 'search/getTopicByMention',
     //   payload: {

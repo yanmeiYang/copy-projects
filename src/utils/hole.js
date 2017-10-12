@@ -25,6 +25,29 @@ function fill(holeList, defaultHoleList) {
   return false;
 }
 
+function fillFuncs(holeList, defaultHoleList, payload) {
+  let holes = holeList;
+  if (!holes) {
+    holes = defaultHoleList;
+  }
+  if (holes && holes && holes.length > 0) {
+    const newHoles = [];
+    holes.map((elm) => {
+      if (elm === default_placeholder && defaultHoleList && defaultHoleList.length > 0) {
+        defaultHoleList.map((hole) => {
+          newHoles.push(hole(payload));
+          return false;
+        });
+      } else {
+        newHoles.push(elm(payload));
+      }
+      return false;
+    });
+    return newHoles;
+  }
+  return false;
+}
+
 module.exports = {
 
   // placeholders
@@ -35,5 +58,5 @@ module.exports = {
   DEFAULT_PLACEHOLDER: default_placeholder,
 
   // methods
-  fill,
+  fill, fillFuncs,
 };

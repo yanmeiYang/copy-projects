@@ -195,13 +195,14 @@ function prepareParameters(query, offset, size, filters, sort, useTranslateSearc
   }
   const { term, name, org } = strings.destructQueryString(query);
   if (term) {
-    data.term = useTranslateSearch ? `cross:${term}` : term;
+    const cleanedTerm = strings.cleanQuery(term);
+    data.term = useTranslateSearch ? `cross:${cleanedTerm}` : cleanedTerm;
   }
   if (name) {
     data.name = name;
   }
   if (org) {
-    data.org = org;
+    data.org = strings.cleanQuery(org);
   }
   // data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY]= query,
 

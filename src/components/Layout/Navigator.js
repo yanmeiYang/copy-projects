@@ -1,7 +1,7 @@
 /**
  * Created by BoGao on 2017/9/14.
  */
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
@@ -74,7 +74,7 @@ const NaviConfig = {
   },
   ACM_ExpertSearch: {
     key: 'ACM_ExpertSearch',
-    label: '全部专家',
+    label: '全球专家',
     url: `/uniSearch/:query/0/${sysconfig.MainListSize}`,
     pageSignature: 'uniSearch',
   },
@@ -89,7 +89,7 @@ if (process.env.NODE_ENV !== 'production') {
 const defaultQuery = 'data mining';
 
 @connect()
-export default class Navigator extends PureComponent {
+export default class Navigator extends Component {
   static displayName = 'Navigator';
 
   static propTypes = {

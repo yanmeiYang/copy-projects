@@ -21,4 +21,8 @@ const destructQueryString = (query) => {
   return { term, name, org };
 };
 
-module.exports = { constructQueryString, destructQueryString };
+const cleanQuery = (query) => {
+  return query.replace(/-/g, ' ').trim();
+};
+
+module.exports = { constructQueryString, destructQueryString, cleanQuery };

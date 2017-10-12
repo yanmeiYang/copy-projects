@@ -98,6 +98,8 @@ export default class Header extends Component {
 
   render() {
     console.count('>>>>>>>HEADER');
+    console.log('|||||||||||||||||||', query);
+
     const { logoZone, searchZone, infoZone, rightZone } = this.props;
     // const { headerSearchBox } = this.props.app;
     const { onSearch, advancedSearch } = this.props;

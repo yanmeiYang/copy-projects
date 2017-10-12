@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 import { sysconfig } from 'systems';
 import pathToRegexp from 'path-to-regexp';
 import queryString from 'query-string';
@@ -81,13 +82,16 @@ export default {
           noTotalFilters[key] = item;
         }
       }
+      // fix sort key
+      const Sort = fixSortKey(sort, query);
+
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
 
       const data = yield call(searchService.searchPerson,
-        query, offset, size, noTotalFilters, sort, useTranslateSearch);
+        query, offset, size, noTotalFilters, Sort, useTranslateSearch);
 
       // 分界线
-      yield put({ type: 'updateSortKey', payload: { key: sort } });
+      yield put({ type: 'updateSortKey', payload: { key: Sort } });
       yield put({ type: 'updateFilters', payload: { filters } });
 
       if (data.succeed) {
@@ -269,3 +273,10 @@ export default {
   },
 
 };
+
+function fixSortKey(sort, query) {
+  if (!query && (!sort || sort === 'relevance')) {
+    return 'time';
+  }
+  return sort;
+}

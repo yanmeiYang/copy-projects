@@ -68,7 +68,6 @@ export default class ExpertBaseExpertsPage extends Component {
 
     const PageTitle = theme.ExpertBaseExpertsPage_Title
       || <FM defaultMessage="我的专家库" id="page.ExpertBaseExpertsPage.MyExperts" />;
-
     return (
       <Layout contentClass={tc(['expertBase'])} onSearch={this.onSearchBarSearch}
               query={query} advancedSearch>
@@ -79,7 +78,8 @@ export default class ExpertBaseExpertsPage extends Component {
           {seeAllURL &&
           <div className={styles.seeAll}>
             <Link to={seeAllURL}>
-              <FM defaultMessage="查看全部专家" id="page.ExpertBaseExpertsPage.SeeAllExperts" /></Link>
+              <FM defaultMessage="查看全部专家" id="page.ExpertBaseExpertsPage.SeeAllExperts" />
+            </Link>
           </div>
           }
         </h1>

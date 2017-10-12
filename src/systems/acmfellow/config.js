@@ -30,7 +30,7 @@ module.exports = {
   Header_SubTextStyle: { width: 90, left: -54, marginLeft: -80 },
   Header_LogoWidth: 118,
   Header_UserPageURL: '/user-info',
-  Header_RightZone: [() => <Link key="0" to={`/eb/${ExpertBase}/-/0/20`}>我的专家库</Link>], // TODO make this a Component.
+  // Header_RightZone: [() => <Link key="0" to={`/eb/${ExpertBase}/-/0/20`}>我的专家库</Link>], // TODO make this a Component.
 
   // Footer_Content: '',
   // ShowHelpDoc: true,
@@ -73,17 +73,20 @@ module.exports = {
       />),
 
   PersonList_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
-  PersonList_BottomZone: [
-    param => (
-      <PersonComment
-        person={param.person} user={param.user} key="1"
-        ExpertBase={ExpertBase}
-      />),
-  ],
+
+  // PersonList_BottomZone: [
+  //   param => (
+  //     <PersonComment
+  //       person={param.person} user={param.user} key="1"
+  //       ExpertBase={ExpertBase}
+  //     />),
+  // ],
+
   // PersonList_DidMountHooks: [],
-  PersonList_UpdateHooks: [
-    param => GetComments(param),
-  ],
+
+  // PersonList_UpdateHooks: [
+  //   param => GetComments(param),
+  // ],
 
   Search_CheckEB: true, // Check ExpertBase.
 

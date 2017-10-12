@@ -74,13 +74,11 @@ export default class TrendPrediction extends React.PureComponent {
     this.updateTrend(this.props.query);
   }
 
-  shouldComponentUpdate(nextProps) {
-    if (nextProps.query && nextProps.query !== this.props.query) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.query && prevProps.query !== this.props.query) {
       d3sankey();
-      this.updateTrend(nextProps.query);
-      return true;
+      this.updateTrend(this.props.query);
     }
-    return true;
   }
 
   onChange = (key) => {
@@ -233,6 +231,7 @@ export default class TrendPrediction extends React.PureComponent {
     d3.select('#tooltip1').classed('hidden', true).style('visibility', 'hidden');
     const term = (query === '') ? this.props.query : query;
 
+    this.setState({ loadingFlag: true });
     const dd = wget(`http://166.111.7.173:5012/trend/${term}`);
     const that = this;
     dd.then((data) => {
@@ -425,7 +424,8 @@ export default class TrendPrediction extends React.PureComponent {
     }
 
     const onMouseOverEventNode = (d) => {
-      console.log(d);
+      console.log(d.p);
+      console.log('made!');
       // d3.select(this).attr('opacity', 0.3);
       // const xPosition = d3.event.layerX + 150;
       // const yPosition = d3.event.layerY + 130;

@@ -205,9 +205,9 @@ export default class TrendPrediction extends React.PureComponent {
       terms[t.t] = t;
     });
     people = {};
-    trendData.authors.forEach((t) => {
-      people[t.id] = t;
-    });
+    // trendData.authors.forEach((t) => {
+    //   people[t.id] = t;
+    // });
 
     chart = d3.select('#chart')
       .append('svg')
@@ -317,7 +317,7 @@ export default class TrendPrediction extends React.PureComponent {
 
     histGraph.append('text').attr('text-anchor', 'end').attr('transform', (d) => {
       return `translate(${[histPosition, 0]})rotate(${0})`;
-    }).style('font-size', 18)
+    }).style('font-size', 12)
       .attr('dy', '.85em')
       .text((d) => { // 左侧图字体大小
         return trendData.termToLabel[d.t];
@@ -572,57 +572,64 @@ export default class TrendPrediction extends React.PureComponent {
       .attr('id', 'cutline')
       .style('stroke', 'darkgray')
       .style('stroke-width', 1);// 上下图之间的线的设置
-    const svg = chart.append('g').attr('height', 650).attr('id', 'trend').attr('z-index', 2);
+    const svg = chart.append('g').attr('height', 700).attr('id', 'trend').attr('z-index', 2);
     svg.append('line').attr('id', 'nvMouse').attr('class', 'hidden').style('stroke', 'red')
       .style('stroke-width', 15);
     const sankey = d3.sankey()
       .nodeWidth(0)
       .nodePadding(8)
-      .size([width, 430]);// 上方趋势图的宽度
+      .size([width, 450]);// 上方趋势图的宽度
     const path = sankey.link();
     // 界面中的技术发展图（右上方）和趋势图（右下方）
     const nodes = [];
     const links = [];
     const nodeToIndex = {};
     const termToIndex = {};
-    const terms = {};
+    const selectedTerms = {};
+    const addedTerms = {};
     let cnt = 0;
     const topTerms = Object.keys(trendData.termFreq)
       .sort((a, b) => trendData.termFreq[b] - trendData.termFreq[a]);
     for (const key of topTerms) {
       termToIndex[key] = cnt;
+      selectedTerms[key] = true;
       cnt += 1;
       if (cnt > 12) {
         break;
       }
     }
-    trendData.termFreqBySlide.forEach((termFreq, idx) => {
-      for (const key of Object.keys(termToIndex)) {
-        if (termFreq[key] || terms[key]) {
-          const freq = termFreq[key] || 0.1;
+    for (let i = 0; i < trendData.termFreqBySlide.length; i += 1) {
+      // for (const year of Object.keys(trendData.termFreqBySlides[i])) {
+      for (const key of Object.keys(trendData.termFreqBySlide[i])) {
+        const termFreq = trendData.termFreqBySlide[i][key];
+        if (addedTerms[key] || selectedTerms[key]) {
+          const freq = termFreq || 0.1;
           const n = {
             name: trendData.termToLabel[key],
             term: key,
             w: freq ** (2 / 3), //Math.sqrt(freq),
-            pos: idx,
+            pos: i, //yearToXOffset(year),
           };
-          if (!terms[key]) {
+          if (!addedTerms[key]) {
             n.first = true;
-            terms[key] = true;
+            addedTerms[key] = true;
           }
-          nodeToIndex[`${key}-${idx}`] = nodes.length;
+          nodeToIndex[`${key}-${i}`] = nodes.length;
           nodes.push(n);
-          if (idx > 0 && nodeToIndex[`${key}-${idx - 1}`] !== undefined) {
+          if (i > 0 && nodeToIndex[`${key}-${i - 1}`] !== undefined) {
             links.push({
-              source: nodeToIndex[`${key}-${idx - 1}`],
-              target: nodeToIndex[`${key}-${idx}`],
-              w1: nodes[nodeToIndex[`${key}-${idx}`]].w,
+              source: nodeToIndex[`${key}-${i - 1}`],
+              target: nodeToIndex[`${key}-${i}`],
+              w1: nodes[nodeToIndex[`${key}-${i}`]].w,
               w2: n.w,
             });
           }
         }
       }
-    });
+    }
+    for (const key of Object.keys(trendData.termFreqByYear)) {
+
+    }
     console.log(nodes);
     console.log(links);
     // console.log(trendData);

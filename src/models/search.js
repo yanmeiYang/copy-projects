@@ -28,7 +28,7 @@ export default {
       showQuickJumper: true,
       showTotal: total => `共 ${total} 条`,
       current: 1,
-      pageSize: 20,
+      pageSize: sysconfig.MainListSize,
       total: null,
     },
 
@@ -85,17 +85,16 @@ export default {
 
       const data = yield call(searchService.searchPerson,
         query, offset, size, noTotalFilters, sort, useTranslateSearch);
-      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>', data);
 
       // 分界线
       yield put({ type: 'updateSortKey', payload: { key: sort } });
       yield put({ type: 'updateFilters', payload: { filters } });
 
       if (data.succeed) {
-        console.log('>>>>------ to next API');
+        // console.log('>>>>------ to next API');
         yield put({ type: 'nextSearchPersonSuccess', payload: { data } });
       } else if (data.data && data.data.result) {
-        console.log('>>>>------ to old API');
+        // console.log('>>>>------ to old API');
         yield put({ type: 'searchPersonSuccess', payload: { data: data.data, query, total } });
       } else {
         throw new Error('Result Not Available');
@@ -158,18 +157,24 @@ export default {
 
   reducers: {
     updateUrlParams(state, { payload: { query, offset, size } }) {
+      const newState = { ...state, query, offset };
       if (state.query !== query) {
-        const filters = state.filters.eb
-          ? { eb: state.filters.eb }
-          : {
-            eb: {
-              id: sysconfig.DEFAULT_EXPERT_BASE,
-              name: sysconfig.DEFAULT_EXPERT_BASE_NAME,
-            },
+        newState.filters = newState.filters || {};
+        if (!newState.filters.eb) {
+          newState.filters.eb = {
+            id: sysconfig.DEFAULT_EXPERT_BASE,
+            name: sysconfig.DEFAULT_EXPERT_BASE_NAME,
           };
-        return { ...state, query, offset, filters, pagination: { pageSize: size } };
+        }
+
+        newState.pagination = newState.pagination || {
+          current: 1,
+          pageSize: sysconfig.MainListSize,
+          total: null,
+        };
+        newState.pagination.pageSize = size;
       }
-      return { ...state, query, offset, pagination: { pageSize: size } };
+      return newState;
     },
 
     updateFilters(state, { payload: { filters } }) {

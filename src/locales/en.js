@@ -17,6 +17,9 @@ export default {
 
   // Components
   'com.KgSearchBox.placeholder': 'Input expert name or query',
+  'com.KgSearchBox.placeholderTerm': 'Term',
+  'com.KgSearchBox.placeholderName': 'Name',
+  'com.KgSearchBox.placeholderOrg': 'Organization',
   'com.KgSearchBox.searchBtn': 'Search',
 
   'com.RgSearchNameBox.placeholder': 'Input expert name',

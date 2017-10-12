@@ -203,6 +203,7 @@ export default class SearchComponent extends Component {
 
     // const expertBase = (filters && filters.eb && filters.eb.id) || 'aminer';
 
+    console.log('----------------------------------------', pagination);
     const SearchSortsRightZone = !sysconfig.Enable_Export ? [] : [() => (
       <ExportPersonBtn
         query={query} pageSize={pageSize} current={current}

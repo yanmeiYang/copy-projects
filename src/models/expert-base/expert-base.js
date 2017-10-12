@@ -72,13 +72,13 @@ export default {
       }
     },
 
-    * searchExpertItem({ payload }, { call, put }) {
-      const { data } = yield call(expertBaseService.searchExpert, { payload });
-      yield put({
-        type: 'searchExpertSuccess', payload: { data },
-      })
-      ;
-    },
+    // * searchExpertItem({ payload }, { call, put }) {
+    //   const { data } = yield call(expertBaseService.searchExpert, { payload });
+    //   yield put({
+    //     type: 'searchExpertSuccess', payload: { data },
+    //   })
+    //   ;
+    // },
 
     * invokeRoster({ payload }, { call, put }) {
       const { data } = yield call(expertBaseService.rosterManage, { payload });
@@ -119,9 +119,9 @@ export default {
       return { ...state, addStatus: data, currentPersonId: '' };
     },
 
-    searchExpertSuccess(state, { payload: { data } }) {
-      return { ...state, detailResults: data };
-    },
+    // searchExpertSuccess(state, { payload: { data } }) {
+    //   return { ...state, detailResults: data };
+    // },
 
     setCurrentPersonId(state, { payload }) {
       return { ...state, currentPersonId: payload.id };

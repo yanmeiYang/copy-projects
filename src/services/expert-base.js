@@ -84,17 +84,17 @@ export async function removeByPid({ pid, rid }) {
     });
 }
 
-export async function searchExpert({ payload }) {
-  const { id, name } = payload;
-  return request(api.searchExpertByName
-      .replace(':ebid', id),
-    {
-      method: 'GET',
-      data: {
-        name,
-      },
-    });
-}
+// export async function searchExpert({ payload }) {
+//   const { id, name } = payload;
+//   return request(api.searchExpertByName
+//       .replace(':ebid', id),
+//     {
+//       method: 'GET',
+//       data: {
+//         name,
+//       },
+//     });
+// }
 
 export async function getToBProfileByAid(id) {
   return request(api.getToBProfileByAid

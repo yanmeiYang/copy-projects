@@ -74,7 +74,7 @@ const toNextPerson = (person) => {
 };
 
 const toNextAggregation = (aggs) => {
-  console.log('bridge before >>>>>>>>>>', aggs);
+  // console.log('bridge before >>>>>>>>>>', aggs);
   if (aggs && aggs.length > 0) {
     aggs.map((agg) => {
       agg.name = agg.type;
@@ -91,7 +91,7 @@ const toNextAggregation = (aggs) => {
       return false;
     });
   }
-  console.log('bridge after >>>>>>>>>>', aggs);
+  // console.log('bridge after >>>>>>>>>>', aggs);
   return aggs;
 };
 

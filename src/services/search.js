@@ -1,6 +1,7 @@
 import { request, queryAPI, config } from 'utils';
 import * as bridge from 'utils/next-bridge';
 import { sysconfig } from 'systems';
+import * as strings from 'utils/strings';
 
 const { api } = config;
 
@@ -35,6 +36,7 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
   const Sort = sort || 'relevance'; // TODO or '_sort';
 
   // 2. query
+  // ------------------------------------------------------------------------------------------
   if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH && Sort !== 'activity-ranking-contrib') {
 
     const nextapi = {
@@ -92,12 +94,11 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
 
     return queryAPI(nextapi);
 
+    // ------------------------------------------------------------------------------------------
   } else {
     // old method.
-    const { expertBase, data } = prepareParameters(
-      query, offset, size, filters,
-      sort, useTranslateSearch,
-    );
+    const { expertBase, data } =
+      prepareParameters(query, offset, size, filters, sort, useTranslateSearch);
     return request(
       api.searchPersonInBase.replace(':ebid', expertBase),
       { method: 'GET', data },
@@ -162,6 +163,8 @@ export async function searchPersonAgg(query, offset, size, filters, useTranslate
     console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^ 注意注意，我这里变成了取新的API。所以agg什么都不做了!!');
   } else {
     const { expertBase, data } = prepareParameters(query, offset, size, filters, '', useTranslateSearch);
+    console.log('------------', data);
+
     return request(
       api.searchPersonInBaseAgg.replace(':ebid', expertBase),
       { method: 'GET', data },
@@ -176,29 +179,36 @@ export async function searchPersonAggGlobal(query, offset, size, filters, useTra
 
 function prepareParameters(query, offset, size, filters, sort, useTranslateSearch) {
   let expertBase = sysconfig.DEFAULT_EXPERT_BASE;
-  let data = { [sysconfig.DEFAULT_EXPERT_SEARCH_KEY]: query, offset, size, sort };
+  let data = { offset, size, sort: sort || '', };
+
   if (filters) {
-    const newFilters = {};
+    // const newFilters = {};
     Object.keys(filters).forEach((k) => {
       if (k === 'eb') {
         expertBase = filters[k].id;
       } else {
         const newKey = `as_${k.toLowerCase().replace(' ', '_').replace('-', '_')}`;
-        newFilters[newKey] = filters[k];
+        data[newKey] = filters[k];
       }
     });
-    data = {
-      ...newFilters,
-      [sysconfig.DEFAULT_EXPERT_SEARCH_KEY]: query,
-      offset,
-      size,
-      sort: sort || '',
-    };
+    // data = { ...data, ...newFilters };
   }
+  const { term, name, org } = strings.destructQueryString(query);
+  if (term) {
+    data.term = useTranslateSearch ? `cross:${term}` : term;
+  }
+  if (name) {
+    data.name = name;
+  }
+  if (org) {
+    data.org = org;
+  }
+  // data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY]= query,
+
   data = addAdditionParameterToData(data, sort, 'eb');
-  if (useTranslateSearch && data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY]) {
-    data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY] = `cross:${data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY]}`;
-  }
+  // if (useTranslateSearch && data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY]) {
+  //   data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY] = `cross:${data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY]}`;
+  // }
   return { expertBase, data };
 }
 

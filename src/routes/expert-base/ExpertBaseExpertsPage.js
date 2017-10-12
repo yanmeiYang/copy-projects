@@ -26,7 +26,7 @@ export default class ExpertBaseExpertsPage extends Component {
   componentWillMount() {
     const { dispatch, match } = this.props;
     const { offset, size, id } = match.params;
-    let query = match.params.query;
+    let { query } = match.params;
     query = query === '-' ? '' : query;
 
     console.log('000000--', { query, offset, size, id });
@@ -53,23 +53,6 @@ export default class ExpertBaseExpertsPage extends Component {
     });
     dispatch(routerRedux.push({ pathname }));
   };
-
-  // Not used
-  // searchExpertByName = (value) => {
-  //   this.setState({ flag: true });
-  //   const id = this.TheOnlyExpertBaseID;
-  //   if (value) {
-  //     this.props.dispatch({
-  //       type: 'expertBase/searchExpertItem',
-  //       payload: { id, name: value },
-  //     });
-  //   } else {
-  //     this.props.dispatch({
-  //       type: 'expertBase/getExpertDetailList',
-  //       payload: { id, offset: 0, size: 100 },
-  //     });
-  //   }
-  // };
 
   ebSorts = ['time', 'h_index', 'activity', 'rising_star', 'n_citation', 'n_pubs'];
 

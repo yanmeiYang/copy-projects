@@ -3,7 +3,7 @@
  *
  *  Note: This util is disabled in production mode.
  */
-const ReduxLoggerEnabled = false;
+const ReduxLoggerEnabled = true;
 const DebugLogEnabled = true;
 const LogRequest = true;
 const LogHOC = false;

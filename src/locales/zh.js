@@ -17,6 +17,9 @@ export default {
 
   // Components
   'com.KgSearchBox.placeholder': '请输入姓名或者搜索词',
+  'com.KgSearchBox.placeholderTerm': '关键词',
+  'com.KgSearchBox.placeholderName': '姓名',
+  'com.KgSearchBox.placeholderOrg': '机构',
   'com.KgSearchBox.searchBtn': '搜索',
 
   'com.RgSearchNameBox.placeholder': '请输入姓名',

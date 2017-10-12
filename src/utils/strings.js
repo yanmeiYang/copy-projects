@@ -2,19 +2,16 @@
 const QuerySpliter = '||';
 
 const constructQueryString = (term, name, org) => {
-  const segments = [];
-  if (term) {
-    segments.push(term);
-  }
-  if (name) {
-    segments.push(QuerySpliter);
-    segments.push(term);
+  if (!term && !name && !org) {
+    return '';
   }
   if (org) {
-    segments.push(QuerySpliter);
-    segments.push(org);
+    return `${term || ''}||${name || ''}||${org || ''}`;
+  } else if (name) {
+    return `${term || ''}||${name || ''}`;
+  } else {
+    return term;
   }
-  return segments.join(QuerySpliter);
 };
 
 const destructQueryString = (query) => {

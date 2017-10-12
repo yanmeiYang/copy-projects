@@ -18,6 +18,18 @@ const messages = defineMessages({
     id: 'com.KgSearchBox.placeholder',
     defaultMessage: 'Input expert name or query',
   },
+  placeholderTerm: {
+    id: 'com.KgSearchBox.placeholderTerm',
+    defaultMessage: 'Term',
+  },
+  placeholderName: {
+    id: 'com.KgSearchBox.placeholderName',
+    defaultMessage: 'Name',
+  },
+  placeholderOrg: {
+    id: 'com.KgSearchBox.placeholderOrg',
+    defaultMessage: 'Org',
+  },
   searchBtn: {
     id: 'com.KgSearchBox.searchBtn',
     defaultMessage: 'Search',
@@ -299,15 +311,23 @@ class KgSearchBox extends PureComponent {
 
     // Auto suggest will pass through all these props to the input.
     const inputProps = {
-      placeholder: searchPlaceholder || intl.formatMessage(messages.placeholder),
+      placeholder: advanced
+        ? intl.formatMessage(messages.placeholderTerm)
+        : searchPlaceholder || intl.formatMessage(messages.placeholder),
       value, // : query || '',
       onChange: this.onChange,
     };
 
     // Finally, render it!
     return (
-      <form className={classnames(styles.kgSearchBox, className, advanced ? styles.adv : '')}
-            onSubmit={this.handleSubmit}>
+      <Form
+        className={classnames(
+          styles.kgSearchBox,
+          className,
+          advanced ? styles.adv : '',
+        )}
+        onSubmit={this.handleSubmit}>
+
         <Input.Group
           compact size={size} style={style}
           className={classnames(styles.search, 'kgsuggest')}
@@ -331,7 +351,8 @@ class KgSearchBox extends PureComponent {
           <FormItem>
             {getFieldDecorator('name', {
               // rules: [{ required: true, message: 'Please input your username!' }],
-            })(<Input className={styles.inputBox} placeholder="Name" />)}
+            })(<Input className={styles.inputBox}
+                      placeholder={intl.formatMessage(messages.placeholderName)} />)}
           </FormItem>
           }
 
@@ -339,12 +360,14 @@ class KgSearchBox extends PureComponent {
           <FormItem>
             {getFieldDecorator('org', {
               // rules: [{ required: true, message: 'Please input your username!' }],
-            })(<Input className={styles.inputBox} placeholder="Organization" />)}
+            })(<Input className={styles.inputBox}
+                      placeholder={intl.formatMessage(messages.placeholderOrg)} />)}
           </FormItem>
           }
 
           <Button
             className={styles.searchBtn}
+            htmlType="submit"
             style={searchBtnStyle}
             size={size}
             type="primary"
@@ -353,7 +376,7 @@ class KgSearchBox extends PureComponent {
           </Button>
 
         </Input.Group>
-      </form>
+      </Form>
     );
   }
 }

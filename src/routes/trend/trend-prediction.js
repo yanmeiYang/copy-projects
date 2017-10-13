@@ -1,4 +1,5 @@
 import React from 'react';
+import { Tabs } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import d3 from '../../../public/lib/d3.v3';
@@ -54,6 +55,8 @@ const yearToXOffset = (year) => {
   const binOffset = slide + ((offset + 1) / years.length);
   return binWidth * binOffset;
 };
+
+const TabPane = Tabs.TabPane;
 
 const HOT_TERMS = ['Answer Machine', 'Artificial Intelligence', 'Autopilot', 'BlockChain', 'Computer Vision', 'Data Mining', 'Data Modeling', 'Deep Learning', 'Graph Databases', 'Internet of Things', 'Machine Learning', 'Robotics', 'Networks', 'Natural Language Processing', 'Neural Network'];
 /**
@@ -166,9 +169,9 @@ export default class TrendPrediction extends React.PureComponent {
       bottom: 6,
       left: 100,
     };
-    width = 1300; // 需调整参数，容器宽度
+    width = 1500; // 需调整参数，容器宽度
     height = 1000 - margin.top - margin.bottom; // 需调整参数，容器高度，华为修改500，四个地方，另外三个为隐藏
-    histWidth = 400;
+    histWidth = 380;
     histHeight = 100;// 左侧直方图的高度
     histPosition = histWidth / 2;// 直方图左边文字的宽度
     histItemHeight = 20;// 左侧直方图的间隔距离
@@ -222,7 +225,7 @@ export default class TrendPrediction extends React.PureComponent {
     const term = (query === '') ? this.props.query : query;
 
     this.setState({ loadingFlag: true });
-    const dd = wget(`http://166.111.7.173:5012/trend/${term}`);
+    const dd = wget(`http://dc.api.aminer.org/trend/${term}`);
     const that = this;
     dd.then((data) => {
       trendData = humps.camelizeKeys(data, (key, convert) => {
@@ -826,7 +829,12 @@ export default class TrendPrediction extends React.PureComponent {
             </div>
           </div>
           <div className={styles.nav}>
-            <div id="hist-chart" className={styles.rightbox} />
+            <Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange} className={styles.tabs}>
+              <TabPane tab={<span>近期热度</span>} key="1" id="recent-trend" />
+              <TabPane tab={<span>全局热度</span>} key="2" id="overall-trend" />
+              <TabPane tab={<span>技术源头</span>} key="3" id="origin-trend" />
+            </Tabs>
+            <div id="hist-chart" className={styles.rightbox}/>
           </div>
         </div>
       </div>

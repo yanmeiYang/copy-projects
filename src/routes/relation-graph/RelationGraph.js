@@ -52,6 +52,8 @@ export default class RelationGraph extends React.PureComponent {
 
     this.loadingInterval = null; // used to disable interval.
     this.hideInfoTimeOUt = null;
+
+    this.lineColor = '#9ecae1';
   }
 
   state = {
@@ -168,7 +170,14 @@ export default class RelationGraph extends React.PureComponent {
 
     // 设置圆的半径
     const getRadious = (d) => {
-      return Math.sqrt(d);
+      if (d < 15) {
+        return 5;
+      } else if (d < 60) {
+        return 8;
+      } else if (d > 60) {
+        return 12;
+      }
+      // return Math.sqrt(d);
     };
 
     // 随机颜色 目前
@@ -180,14 +189,16 @@ export default class RelationGraph extends React.PureComponent {
     };
     // 聚类颜色
     const getClusteringColor = (d) => {
-      const s = _edges.filter(item => item.source.name.n.en === d.name.n.en);
-      const t = _edges.filter(item => item.target.name.n.en === d.name.n.en);
+      const s = _edges.filter(item => item.source.id === d.id);
+      const t = _edges.filter(item => item.target.id === d.id);
       if (s.length > 0) {
-        return color(s[0].source.index + 1);
+        return this.lineColor;
+        // return color(s[0].source.index + 1);
       } else if (t.length > 0) {
-        return color(t[0].source.index + 1);
+        return 'rgb(253, 141, 60)';
+        // return color(t[0].source.index + 1);
       } else {
-        return color(0);
+        return 'rgb(253, 141, 60)';
       }
     };
 
@@ -299,206 +310,265 @@ export default class RelationGraph extends React.PureComponent {
       let edgeIndex,
         goalsId,
         tempEdges;
-      goalsId = [];
-      goals.forEach((f) => {
-        return goalsId.push(f.id);
-      });
-      if (goals.length > 6) {
-        tempEdges = [];
-        edgeIndex = _edges.length;
-        return d3.json(`https://api.aminer.org/api/person/ego/${goalsId[0]}`, (error, data) => {
+      goalsId = goals[0];
+      tempEdges = [];
+      edgeIndex = _edges.length;
+      if (goals.length > 0) {
+        return d3.json(`https://api.aminer.org/api/person/ego/${goals[0]}`, (error, data) => {
           if (error) {
             throw error;
           }
           if (data.count > 3) {
-            data.nodes.forEach((f) => {
-              let a,
-                k;
-              a = goalsId.indexOf(f.id);
-              if (a !== -1) {
-                k = {
-                  index: edgeIndex += 1,
-                  target: goals[a],
-                  source: goals[0],
-                  count: f.w,
-                };
-                return tempEdges.push(k);
+            data.nodes.forEach((f, i) => {
+              const step = i % 2 === 0 ? 0.1 : -0.1;
+              const n = {
+                name: { n: { en: f.name, zh: f.name_zh } },
+                desc: { n: { en: '' } },
+                avatar: '',
+                num_viewed: '',
+                indices: { hIndex: f.h_index || 10 },
+                pos: [],
+                id: f.id,
+                index: 10,
+                x: d.x + step,
+                y: d.y,
+                vx: d.vx + step,
+                vy: d.vy,
+              };
+              const k = {
+                index: edgeIndex += 1,
+                target: n,
+                source: d,
+                count: f.w,
+              };
+              if (_nodes.find(item => item.id === f.id) === undefined) {
+                _nodes.push(n);
+                tempEdges.push(k);
               }
             });
-            return d3.json(`https://api.aminer.org/api/person/ego/${goalsId[1]}`, (error, data2) => {
-              if (error) {
-                throw error;
-              }
-              if (data2.count > 3) {
-                data2.nodes.forEach((f) => {
-                  let a,
-                    k;
-                  a = goalsId.indexOf(f.id);
-                  if (a !== -1) {
-                    k = {
-                      index: edgeIndex += 1,
-                      target: goals[a],
-                      source: goals[1],
-                      count: f.w,
-                    };
-                    return tempEdges.push(k);
-                  }
-                });
-                return d3.json(`https://api.aminer.org/api/person/ego/${goalsId[2]}`, (error, data3) => {
-                  if (error) {
-                    throw error;
-                  }
-                  if (data3.count > 3) {
-                    data3.nodes.forEach((f) => {
-                      let a,
-                        k;
-                      a = goalsId.indexOf(f.id);
-                      if (a !== -1) {
-                        k = {
-                          index: edgeIndex += 1,
-                          target: goals[a],
-                          source: goals[2],
-                          count: f.w,
-                        };
-                        return tempEdges.push(k);
-                      }
-                    });
-                    return d3.json(`https://api.aminer.org/api/person/ego/${goalsId[3]}`, (error, data4) => {
-                      if (error) {
-                        throw error;
-                      }
-                      if (data4.count > 3) {
-                        data4.nodes.forEach((f) => {
-                          let a,
-                            k;
-                          a = goalsId.indexOf(f.id);
-                          if (a !== -1) {
-                            k = {
-                              index: edgeIndex += 1,
-                              target: goals[a],
-                              source: goals[3],
-                              count: f.w,
-                            };
-                            return tempEdges.push(k);
-                          }
-                        });
-                        return d3.json(`https://api.aminer.org/api/person/ego/${goalsId[4]}`, (error, data5) => {
-                          if (error) {
-                            throw error;
-                          }
-                          if (data5.count > 3) {
-                            data5.nodes.forEach((f) => {
-                              let a,
-                                k;
-                              a = goalsId.indexOf(f.id);
-                              if (a !== -1) {
-                                k = {
-                                  index: edgeIndex += 1,
-                                  target: goals[a],
-                                  source: goals[4],
-                                  count: f.w,
-                                };
-                                return tempEdges.push(k);
-                              }
-                            });
-                            return d3.json(`https://api.aminer.org/api/person/ego/${goalsId[5]}`, (error, data6) => {
-                              let i,
-                                k,
-                                t;
-                              if (error) {
-                                throw error;
-                              }
-                              if (data6.count > 3) {
-                                data6.nodes.forEach((f) => {
-                                  let a,
-                                    k;
-                                  a = goalsId.indexOf(f.id);
-                                  if (a !== -1) {
-                                    k = {
-                                      index: edgeIndex += 1,
-                                      target: goals[a],
-                                      source: goals[5],
-                                      count: f.w,
-                                    };
-                                    return tempEdges.push(k);
-                                  }
-                                });
-                                i = 0;
-                                while (i < 10) {
-                                  t = Math.floor(Math.random() * 10);
-                                  k = {
-                                    index: edgeIndex += 1,
-                                    target: goals[t],
-                                    source: goals[t + 10],
-                                    count: 2 + Math.floor(Math.random() * 10),
-                                  };
-                                  tempEdges.push(k);
-                                  i++;
-                                }
-                                i = 0;
-                                while (i < 10) {
-                                  t = 10 + Math.floor(Math.random() * 10);
-                                  k = {
-                                    index: edgeIndex += 1,
-                                    target: goals[t],
-                                    source: goals[t + 10],
-                                    count: 2 + Math.floor(Math.random() * 10),
-                                  };
-                                  tempEdges.push(k);
-                                  i++;
-                                }
-                                while (i < 10) {
-                                  t = 20 + Math.floor(Math.random() * 10);
-                                  k = {
-                                    index: edgeIndex += 1,
-                                    target: goals[t],
-                                    source: goals[t + 10],
-                                    count: 2 + Math.floor(Math.random() * 10),
-                                  };
-                                  tempEdges.push(k);
-                                  i++;
-                                }
-                                if (tempEdges.length > 2) {
-                                  // $('[data-toggle=\'popover\']').popover('hide');
-                                  console.log('popoverHide()!!!!');
-
-                                  svg.selectAll('circle').remove();
-                                  svg.selectAll('line').remove();
-                                  svg.selectAll('text').remove();
-                                  tempEdges.forEach((k) => {
-                                    return _edges.push(k);
-                                  });
-                                  _drawNetOnly(snum);
-                                  svg.attr('transform', `translate(${width * d.vx},${height * d.vy}) scale(1)`);
-                                  console.log(d);
-                                  svg.selectAll('line').data(_edges).filter((k) => {
-                                    return goalsId.indexOf(k.target.id) === -1 || goalsId.indexOf(k.source.id) === -1;
-                                  }).style('opacity', 0);
-                                  svg.selectAll('text').data(_nodes).filter((k) => {
-                                    return goalsId.indexOf(k.id) === -1;
-                                  }).style('opacity', 0);
-                                  svg.selectAll('circle').data(_nodes).filter((k) => {
-                                    return goalsId.indexOf(k.id) === -1;
-                                  }).style('opacity', 0);
-                                  simulation.restart();
-                                  // return $('[data-toggle=\'popover\']').popover();
-                                  console.log('popover again()!!!!');
-                                  return null;
-                                }
-                              }
-                            });
-                          }
-                        });
-                      }
-                    });
-                  }
-                });
-              }
-            });
+            if (tempEdges.length > 2) {
+              svg.selectAll('*').remove();
+              tempEdges.forEach((k) => {
+                return _edges.push(k);
+              });
+              _drawNetOnly(snum);
+              simulation.alphaTarget(0.05).restart();
+              setTimeout((d) => {
+                simulation.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
+              }, 2000, d);
+              console.log('popover again()!!!!');
+              return null;
+            }
           }
         });
       }
     };
+    // const expandNet = (goals, d) => {
+    //   let edgeIndex,
+    //     goalsId,
+    //     tempEdges;
+    //   goalsId = [];
+    //   goals.forEach((f) => {
+    //     return goalsId.push(f.id);
+    //   });
+    //   if (goals.length > 6) {
+    //     tempEdges = [];
+    //     edgeIndex = _edges.length;
+    //     return d3.json(`https://api.aminer.org/api/person/ego/${goalsId[0]}`, (error, data) => {
+    //       if (error) {
+    //         throw error;
+    //       }
+    //       if (data.count > 3) {
+    //         data.nodes.forEach((f) => {
+    //           let a,
+    //             k;
+    //           a = goalsId.indexOf(f.id);
+    //           if (a !== -1) {
+    //             k = {
+    //               index: edgeIndex += 1,
+    //               target: goals[a],
+    //               source: goals[0],
+    //               count: f.w,
+    //             };
+    //             return tempEdges.push(k);
+    //           }
+    //         });
+    //         return d3.json(`https://api.aminer.org/api/person/ego/${goalsId[1]}`, (error, data2) => {
+    //           if (error) {
+    //             throw error;
+    //           }
+    //           if (data2.count > 3) {
+    //             data2.nodes.forEach((f) => {
+    //               let a,
+    //                 k;
+    //               a = goalsId.indexOf(f.id);
+    //               if (a !== -1) {
+    //                 k = {
+    //                   index: edgeIndex += 1,
+    //                   target: goals[a],
+    //                   source: goals[1],
+    //                   count: f.w,
+    //                 };
+    //                 return tempEdges.push(k);
+    //               }
+    //             });
+    //             return d3.json(`https://api.aminer.org/api/person/ego/${goalsId[2]}`, (error, data3) => {
+    //               if (error) {
+    //                 throw error;
+    //               }
+    //               if (data3.count > 3) {
+    //                 data3.nodes.forEach((f) => {
+    //                   let a,
+    //                     k;
+    //                   a = goalsId.indexOf(f.id);
+    //                   if (a !== -1) {
+    //                     k = {
+    //                       index: edgeIndex += 1,
+    //                       target: goals[a],
+    //                       source: goals[2],
+    //                       count: f.w,
+    //                     };
+    //                     return tempEdges.push(k);
+    //                   }
+    //                 });
+    //                 return d3.json(`https://api.aminer.org/api/person/ego/${goalsId[3]}`, (error, data4) => {
+    //                   if (error) {
+    //                     throw error;
+    //                   }
+    //                   if (data4.count > 3) {
+    //                     data4.nodes.forEach((f) => {
+    //                       let a,
+    //                         k;
+    //                       a = goalsId.indexOf(f.id);
+    //                       if (a !== -1) {
+    //                         k = {
+    //                           index: edgeIndex += 1,
+    //                           target: goals[a],
+    //                           source: goals[3],
+    //                           count: f.w,
+    //                         };
+    //                         return tempEdges.push(k);
+    //                       }
+    //                     });
+    //                     return d3.json(`https://api.aminer.org/api/person/ego/${goalsId[4]}`, (error, data5) => {
+    //                       if (error) {
+    //                         throw error;
+    //                       }
+    //                       if (data5.count > 3) {
+    //                         data5.nodes.forEach((f) => {
+    //                           let a,
+    //                             k;
+    //                           a = goalsId.indexOf(f.id);
+    //                           if (a !== -1) {
+    //                             k = {
+    //                               index: edgeIndex += 1,
+    //                               target: goals[a],
+    //                               source: goals[4],
+    //                               count: f.w,
+    //                             };
+    //                             return tempEdges.push(k);
+    //                           }
+    //                         });
+    //                         return d3.json(`https://api.aminer.org/api/person/ego/${goalsId[5]}`, (error, data6) => {
+    //                           let i,
+    //                             k,
+    //                             t;
+    //                           if (error) {
+    //                             throw error;
+    //                           }
+    //                           if (data6.count > 3) {
+    //                             data6.nodes.forEach((f) => {
+    //                               let a,
+    //                                 k;
+    //                               a = goalsId.indexOf(f.id);
+    //                               if (a !== -1) {
+    //                                 k = {
+    //                                   index: edgeIndex += 1,
+    //                                   target: goals[a],
+    //                                   source: goals[5],
+    //                                   count: f.w,
+    //                                 };
+    //                                 return tempEdges.push(k);
+    //                               }
+    //                             });
+    //                             i = 0;
+    //                             while (i < 10) {
+    //                               t = Math.floor(Math.random() * 10);
+    //                               k = {
+    //                                 index: edgeIndex += 1,
+    //                                 target: goals[t],
+    //                                 source: goals[t + 10],
+    //                                 count: 2 + Math.floor(Math.random() * 10),
+    //                               };
+    //                               tempEdges.push(k);
+    //                               i++;
+    //                             }
+    //                             i = 0;
+    //                             while (i < 10) {
+    //                               t = 10 + Math.floor(Math.random() * 10);
+    //                               k = {
+    //                                 index: edgeIndex += 1,
+    //                                 target: goals[t],
+    //                                 source: goals[t + 10],
+    //                                 count: 2 + Math.floor(Math.random() * 10),
+    //                               };
+    //                               tempEdges.push(k);
+    //                               i++;
+    //                             }
+    //                             while (i < 10) {
+    //                               t = 20 + Math.floor(Math.random() * 10);
+    //                               k = {
+    //                                 index: edgeIndex += 1,
+    //                                 target: goals[t],
+    //                                 source: goals[t + 10],
+    //                                 count: 2 + Math.floor(Math.random() * 10),
+    //                               };
+    //                               tempEdges.push(k);
+    //                               i++;
+    //                             }
+    //                             if (tempEdges.length > 2) {
+    //                               // $('[data-toggle=\'popover\']').popover('hide');
+    //                               console.log('popoverHide()!!!!');
+    //
+    //                               svg.selectAll('circle').remove();
+    //                               svg.selectAll('line').remove();
+    //                               svg.selectAll('text').remove();
+    //                               tempEdges.forEach((k) => {
+    //                                 return _edges.push(k);
+    //                               });
+    //                               _drawNetOnly(snum);
+    //                               svg.attr('transform', `translate(${width * d.vx},${height * d.vy}) scale(1)`);
+    //                               console.log(d);
+    //                               // svg.selectAll('line').data(_edges).filter((k) => {
+    //                               //   return goalsId.indexOf(k.target.id) === -1 || goalsId.indexOf(k.source.id) === -1;
+    //                               // }).style('opacity', 0);
+    //                               // svg.selectAll('text').data(_nodes).filter((k) => {
+    //                               //   return goalsId.indexOf(k.id) === -1;
+    //                               // }).style('opacity', 0);
+    //                               // svg.selectAll('circle').data(_nodes).filter((k) => {
+    //                               //   return goalsId.indexOf(k.id) === -1;
+    //                               // }).style('opacity', 0);
+    //                               simulation.restart();
+    //                               // return $('[data-toggle=\'popover\']').popover();
+    //                               console.log('popover again()!!!!');
+    //                               return null;
+    //                             }
+    //                           }
+    //                         });
+    //                       }
+    //                     });
+    //                   }
+    //                 });
+    //               }
+    //             });
+    //           }
+    //         });
+    //       }
+    //     });
+    //   }
+    // };
 
     const removeDuplicatedItem = (ar) => {
       let i,
@@ -517,9 +587,10 @@ export default class RelationGraph extends React.PureComponent {
     };
 
     const clearAllChoosed = (k) => {
-      svg.selectAll('line').data(_edges).style('stroke', (d) => {
-        return '#999';
-      }).style('opacity', 1);
+      svg.selectAll('line').data(_edges).style('stroke', this.lineColor)
+        .style('stroke-width', (d) => {
+          return d;
+        }).style('opacity', 0.3);
       svg.selectAll('text').data(_nodes).text((d) => {
         if (d.index < snum) {
           return d.name.n.en;
@@ -537,14 +608,14 @@ export default class RelationGraph extends React.PureComponent {
           }
         }).attr('fill', (d, index) => {
         return getClusteringColor(d);
-      });
+      }).style('opacity', 1);
       return _onclicknodes.slice(0, _onclicknodes.length);
     };
 
     const dragstarted = (d) => {
       this.drag = true;
       if (!d3.event.active && this.currentModle2 === false) {
-        simulation.alphaTarget(0.2).restart();
+        simulation.alphaTarget(0.05).restart();
       }
       d.fx = d.x;
       d.fy = d.y;
@@ -606,7 +677,7 @@ export default class RelationGraph extends React.PureComponent {
       svg.attr('transform', `translate(${transform.x},${transform.y}) scale(${transform.k})`);
       svg.selectAll('line').data(_edges).style('stroke-width', (d) => {
         if (indexShow >= 10) {
-          if (d.source.indices.hIndex > indexShow) {
+          if (d.source.indices.hIndex > indexShow && d.target.indices.hIndex > indexShow) {
             return 1 / transform.k;
           } else {
             return 0;
@@ -616,17 +687,18 @@ export default class RelationGraph extends React.PureComponent {
         }
       });
       svg.selectAll('circle').data(_nodes).attr('r', (d) => {
-        if (indexShow >= 10) {
-          if (d.indices.hIndex > indexShow) {
-            return getRadious(d.indices.hIndex + 32);
-          } else {
-            return 0;
-          }
-        } else if (d.indices.hIndex < 400) {
-          return getRadious(d.indices.hIndex + 32);
-        } else {
-          return getRadious(16);
-        }
+        return getRadious(d.indices.hIndex);
+        // if (indexShow >= 10) {
+        //   if (d.indices.hIndex > indexShow) {
+        //     return getRadious(d.indices.hIndex + 32);
+        //   } else {
+        //     return 0;
+        //   }
+        // } else if (d.indices.hIndex < 400) {
+        //   return getRadious(d.indices.hIndex + 32);
+        // } else {
+        //   return getRadious(16);
+        // }
       }).style('stroke-width', (d) => {
         if (d.indices.hIndex > 50) {
           return '1px';
@@ -635,8 +707,8 @@ export default class RelationGraph extends React.PureComponent {
         }
       });
       svg.selectAll('.initialText').data(_nodes).text((d) => {
-        if (indexShow >= 10) {
-          if (d.source.indices.hIndex > indexShow) {
+        if (indexShow >= 60) {
+          if (d.indices.hIndex > indexShow) {
             return d.name.n.en;
           } else if (transform.k >= 3) {
             console.log("放大到一定程度显示名字");
@@ -661,8 +733,8 @@ export default class RelationGraph extends React.PureComponent {
         }
       }).style('font-size', `${15 / transform.k}px`).attr('stroke-width', 3 / transform.k);
       svg.selectAll('.finalText').data(_nodes).text((d) => {
-        if (indexShow >= 10) {
-          if (d.source.indices.hIndex > indexShow) {
+        if (indexShow >= 60) {
+          if (d.indices.hIndex > indexShow) {
             return d.name.n.en;
           } else if (transform.k >= 3) {
             return d.name.n.en;
@@ -687,7 +759,7 @@ export default class RelationGraph extends React.PureComponent {
       return svg.selectAll('text').data(_nodes).style('font-size', `${15 / transform.k}px`);
     };
 
-    const tempzoom = d3.zoom().scaleExtent([1, 10]).on('zoom', this.zoomed);
+    const tempzoom = d3.zoom().scaleExtent([0, 10]).on('zoom', this.zoomed);
 
     svg = d3.select(`#${controlDivId}`).append('svg')
       .style('width', width)
@@ -701,13 +773,16 @@ export default class RelationGraph extends React.PureComponent {
     console.log('svg: is ', svg);
 
     const returndraw = (k) => {
-      svg.selectAll('line').data(_edges).style('stroke-width', '1px').style('stroke', '#999999').style('opacity', 0.8);
+      svg.selectAll('line').data(_edges).style('stroke', this.lineColor).style('stroke-width', (d) => {
+        return d;
+      });
       return svg.selectAll('circle').data(_nodes).attr('r', (d) => {
-        if (d.indices.hIndex < 400) {
-          return getRadious(d.indices.hIndex + 32);
-        } else {
-          return getRadious(16);
-        }
+        return getRadious(d.indices.hIndex);
+        // if (d.indices.hIndex < 400) {
+        //   return getRadious(d.indices.hIndex + 32);
+        // } else {
+        //   return getRadious(16);
+        // }
       }).style('stroke-width', '0px').style('opacity', 0.8).attr('fill', (d) => {
         return getClusteringColor(d);
       });
@@ -715,7 +790,7 @@ export default class RelationGraph extends React.PureComponent {
 
     const orderdraw = (ds) => {
       ds = removeDuplicatedItem(ds);
-      svg.selectAll('line').data(_edges).style('opacity', 0.3).style('stroke', '#999999');
+      svg.selectAll('line').data(_edges).style('opacity', 0.3).style('stroke', this.lineColor);
       svg.selectAll('circle').data(_nodes).style('opacity', 0.3).style('stroke', '#fff');
       svg.selectAll('line').data(_edges).filter((e, i) => {
         let a,
@@ -738,7 +813,13 @@ export default class RelationGraph extends React.PureComponent {
         } else {
           return false;
         }
-      }).transition().duration(1000).style('stroke', 'yellow').style('stroke-width', '5px').style('opacity', 0.8);
+      }).transition().duration(1000).style('stroke', (d) => {
+        if (d.index === ds[ds.length - 1] || d.index === ds[0]) {
+          return 'red';
+        } else {
+          return 'yellow';
+        }
+      }).style('stroke-width', '5px').style('opacity', 0.8);
       return svg.selectAll('text').data(_nodes).filter((j) => {
         if (ds.indexOf(j.index) !== -1) {
           return true;
@@ -800,6 +881,7 @@ export default class RelationGraph extends React.PureComponent {
     };
     this.cancelSelected = () => {
       this.currentModle1 = false;
+      this.currentModle2 = false;
       clearAllChoosed(5);
       this.setState({ currentNode: null });
     };
@@ -811,7 +893,24 @@ export default class RelationGraph extends React.PureComponent {
         res,
         w;
       if (this.currentModle1 === true) {
-        this.setState({ currentNode: d });
+        if (d.indices.numPubs) {
+          this.setState({ currentNode: d });
+        } else {
+          d3.json(`https://api.aminer.org/api/person/summary/${d.id}`, (error, summary) => {
+            if (summary) {
+              d.avatar = summary.avatar;
+              d.indices.numPubs = summary.indices.num_pubs;
+              if (summary.aff) {
+                d.desc.n.en = summary.aff.desc || summary.aff.desc_zh;
+              }
+              d.num_viewd = summary.num_viewd;
+              if (summary.pos.length > 0) {
+                d.pos[0] = { name: { n: { en: summary.pos[0].n || summary.pos[0].n_zh } } };
+              }
+            }
+            this.setState({ currentNode: d });
+          });
+        }
         if (_onclicknodes.indexOf(d.id) === -1) {
           _onclicknodes.push(d.id);
           // svg.selectAll('line').data(_edges).style('opacity', 0.3);
@@ -823,17 +922,18 @@ export default class RelationGraph extends React.PureComponent {
               return '1px';
             }
           }).style('opacity', 0.5);
-          svg.selectAll('line').data(_edges).style('stroke', '#999').style('opacity', 0.3);
+          svg.selectAll('line').data(_edges).style('stroke', this.lineColor).style('opacity', 0.3);
           /* 清除样式结束 */
 
           svg.selectAll('circle').data(_nodes).filter((k) => {
-            return d.name.n.en && k.name.n.en === d.name.n.en;
+            return d.name.n.en && k.id === d.id;
           }).style('stroke', 'yellow').style('stroke-width', '5px').style('opacity', 1);
 
           svg.selectAll('line').data(_edges).filter((e, i) => {
             return e.target.id === d.id || e.source.id === d.id;
           }).style('stroke', '#a28eee').style('stroke-width', '2').style('opacity', 1);
         } else {
+          this.currentModle2 = false;
           this.setState({ currentNode: null });
           _onclicknodes[_onclicknodes.indexOf(d.id)] = '';
           svg.selectAll('circle').data(_nodes).style('stroke', '#fff')
@@ -843,9 +943,10 @@ export default class RelationGraph extends React.PureComponent {
               } else {
                 return '1px';
               }
-            });
-          return svg.selectAll('line').data(_edges).style('stroke', '#999')
-            .style('opacity', 1);
+            }).style('opacity', 1);
+          svg.selectAll('line').data(_edges).style('stroke', this.lineColor).style('stroke-width', (d) => {
+            return d;
+          }).style('opacity', 0.3);
         }
       } else if (this.currentModle5 === true) {
         goalNodes = [];
@@ -856,7 +957,13 @@ export default class RelationGraph extends React.PureComponent {
             return goalNodes;
           }
         });
-        return expandNet(goalNodes, d);
+        if (goalNodes.length < 6) {
+          expandNet([d.id], d);
+        } else {
+          expandNet([], d);
+        }
+        // goalNodes.push(d.id)
+        // return expandNet(goalNodes, d);
       } else if (this.currentModle3 === true) {
         if (_lastNode === null) {
           _lastNode = d.index;
@@ -938,53 +1045,52 @@ export default class RelationGraph extends React.PureComponent {
       // this.describeNodes1 = _nodes.length;
       // this.describeNodes2 = _edges.length; .style('stroke-opacity', '0.6')
       this.setState({ describeNodes1: _nodes.length, describeNodes2: _edges.length });
-      link = svg.append('g').attr('class', 'links').selectAll('line').data(_edges).enter().append('line').style('stroke', '#999').style('stroke-width', (d) => {
+      link = svg.append('g').attr('class', 'links').selectAll('line').data(_edges).enter().append('line').style('stroke', this.lineColor).style('stroke-width', (d) => {
         return d;
       });
-      node = svg.append('g').attr('class', 'nodes').selectAll('circle').data(_nodes).enter().append('circle').attr('r', (d) => {
-        if (d.indices.hIndex < 400) {
-          return getRadious(d.indices.hIndex + 32);
-        } else {
-          return getRadious(16);
-        }
-      }).style('stroke', 'rgba(255,255,255,0.6)').style('stroke-width', (d) => {
-        if (d.indices.hIndex > 50) {
-          return '1.5px';
-        } else {
-          return '1px';
-        }
-      }).attr('fill', (d, index) => {
-        return getClusteringColor(d);
-      }).call(_drag).on('mouseover', (d) => {
-        showInfo(d);
-        svg.selectAll('circle').data(_nodes).filter((k) => {
-          return k.id === d.id && _onclicknodes.indexOf(d.id) === -1;
-        }).attr('fill', 'yellow');
-      }).on('mouseout', (d) => {
-        hideInfo(d);
-        svg.selectAll('circle').data(_nodes).filter((k) => {
-          return k.id === d.id;
-        }).attr('fill', (d) => {
+      node = svg.append('g').attr('class', 'nodes').selectAll('circle').data(_nodes).enter().append('circle')
+        .attr('r', (d) => {
+          return getRadious(d.indices.hIndex);
+          // if (d.indices.hIndex < 400) {
+          //   return getRadious(d.indices.hIndex + 32);
+          // } else {
+          //   return getRadious(16);
+          // }
+        }).style('stroke', '#000').style('stroke-width', (d) => {
+          return '.5px';
+        }).attr('fill', (d, index) => {
           return getClusteringColor(d);
+        }).call(_drag).on('mouseover', (d) => {
+          showInfo(d);
+          svg.selectAll('circle').data(_nodes).filter((k) => {
+            return k.id === d.id && _onclicknodes.indexOf(d.id) === -1;
+          }).attr('fill', 'yellow');
+        }).on('mouseout', (d) => {
+          hideInfo(d);
+          svg.selectAll('circle').data(_nodes).filter((k) => {
+            return k.id === d.id;
+          }).attr('fill', (d) => {
+            return getClusteringColor(d);
+          });
+        }).attr('data-toggle', 'popover').attr('data-container', 'body').attr('data-placement', 'right').attr('data-html', true).attr('title', (d) => {
+          return `<a href='https://cn.aminer.org/profile/${d.id}'>${d.name.n.en}</a>`;
+        }).attr('data-trigger', 'hover').attr('delay', 500).attr('data-content', (d) => {
+          let posObj,
+            tempStr,
+            temppos;
+          tempStr = d.desc.n.en;
+          posObj = d.pos[0];
+          if (posObj) {
+            temppos = posObj.name.n.en;
+          }
+          return `<strong class="text-danger">h-Index:</strong>${d.indices.hIndex}|<strong class="text-danger">#Papers:</strong>${d.indices.numPubs}<br><i  class="fa fa-briefcase">&nbsp;</i>${temppos}<br><i class="fa fa-map-marker" style="word-break:break-all;text-overflow:ellipsis">&nbsp;${tempStr}</i>`;
+        }).on('click', (d) => {
+          if (!this.currentModle3 && !this.currentModle4) {
+            this.currentModle1 = !this.currentModle5;
+          }
+          this.currentModle2 = true;
+          return nodeclick(d);
         });
-      }).attr('data-toggle', 'popover').attr('data-container', 'body').attr('data-placement', 'right').attr('data-html', true).attr('title', (d) => {
-        return `<a href='https://cn.aminer.org/profile/${d.id}'>${d.name.n.en}</a>`;
-      }).attr('data-trigger', 'hover').attr('delay', 500).attr('data-content', (d) => {
-        let posObj,
-          tempStr,
-          temppos;
-        tempStr = d.desc.n.en;
-        posObj = d.pos[0];
-        if (posObj) {
-          temppos = posObj.name.n.en;
-        }
-        return `<strong class="text-danger">h-Index:</strong>${d.indices.hIndex}|<strong class="text-danger">#Papers:</strong>${d.indices.numPubs}<br><i  class="fa fa-briefcase">&nbsp;</i>${temppos}<br><i class="fa fa-map-marker" style="word-break:break-all;text-overflow:ellipsis">&nbsp;${tempStr}</i>`;
-      }).on('click', (d) => {
-        if (!this.currentModle3 && !this.currentModle4) {
-          this.currentModle1 = !this.currentModle5;
-        }
-        return nodeclick(d);
-      });
       nodes_text = svg.selectAll('.nodetext').data(_nodes).enter().append('text').attr('class', 'initialText').style('cursor', ' pointer').style('font-size', '15px')
         .attr('dy', (d) => {
           const top = getRadious(d.indices.hIndex + 32) * 2;
@@ -1018,6 +1124,7 @@ export default class RelationGraph extends React.PureComponent {
           if (!this.currentModle3 && !this.currentModle4) {
             this.currentModle1 = !this.currentModle5;
           }
+          this.currentModle2 = true;
           return nodeclick(d);
         });
 
@@ -1060,6 +1167,7 @@ export default class RelationGraph extends React.PureComponent {
           if (!this.currentModle3 && !this.currentModle4) {
             this.currentModle1 = !this.currentModle5;
           }
+          this.currentModle2 = true;
           return nodeclick(d);
         });
 
@@ -1092,7 +1200,7 @@ export default class RelationGraph extends React.PureComponent {
           return d.y;
         });
       };
-      return simulation.nodes(_nodes).on('tick', ticked);
+      simulation.nodes(_nodes).on('tick', ticked);
     };
 
 
@@ -1150,11 +1258,15 @@ export default class RelationGraph extends React.PureComponent {
         this.setState({ allNodes: _nodes });
         _edges = graph.edges;
         setlink = d3.forceLink(_edges).distance((d) => {
-          return (-d.count * 2.5) + 30;
+          return (-d.count * 2.5) + 15;
         });
-        simulation = d3.forceSimulation(_nodes).velocityDecay(0.3).force('charge', d3.forceManyBody().strength((d) => {
-          return d.count;
-        })).force('link', setlink).force('gravity', d3.forceCollide(height / 100 + 10).strength(0.6)).alpha(0.2).force('center', d3.forceCenter(width / 2, height / 2));
+        simulation = d3.forceSimulation(_nodes).velocityDecay(0.3)
+          .force('charge', d3.forceManyBody().strength((d) => {
+            return d.count;
+          }))
+          .force('link', setlink)
+          .force('gravity', d3.forceCollide(height / 100 + 10).strength(0.6)).alpha(0.2)
+          .force('center', d3.forceCenter(width / 2, height / 2));
         _saveRootAdges = [];
         _edges.forEach((f) => {
           if (f.target.index < snum) {
@@ -1256,11 +1368,12 @@ export default class RelationGraph extends React.PureComponent {
           }
         });
         svg.selectAll('circle').data(_nodes).attr('r', (d) => {
-          if (_showNodes.indexOf(d.index) !== -1 && d.indices.hIndex > indexShow) {
-            return getRadious(d.indices.hIndex + 32);
-          } else {
-            return 0;
-          }
+          return getRadious(d.indices.hIndex);
+          // if (_showNodes.indexOf(d.index) !== -1 && d.indices.hIndex > indexShow) {
+          //   return getRadious(d.indices.hIndex + 32);
+          // } else {
+          //   return 0;
+          // }
         });
         return svg.selectAll('.nodetext').data(_nodes).text((d) => {
           if (_showNodes.indexOf(d.index) !== -1 && d.indices.hIndex > indexShow || d.index > snum) {
@@ -1278,11 +1391,12 @@ export default class RelationGraph extends React.PureComponent {
           }
         });
         svg.selectAll('circle').data(_nodes).attr('r', (d) => {
-          if (_showNodes.indexOf(d.index) !== -1 && d.indices.hIndex > indexShow) {
-            return getRadious(d.indices.hIndex + 32);
-          } else {
-            return 0;
-          }
+          return getRadious(d.indices.hIndex);
+          // if (_showNodes.indexOf(d.index) !== -1 && d.indices.hIndex > indexShow) {
+          //   return getRadious(d.indices.hIndex + 32);
+          // } else {
+          //   return 0;
+          // }
         });
         return svg.selectAll('.nodetext').data(_nodes).text((d) => {
           if (_showNodes.indexOf(d.index) !== -1 || d.index > snum) {
@@ -1305,11 +1419,12 @@ export default class RelationGraph extends React.PureComponent {
         }
       });
       svg.selectAll('circle').data(_nodes).attr('r', (d) => {
-        if (d.indices.hIndex > indexShow) {
-          return getRadious(d.indices.hIndex + 32);
-        } else {
-          return 0;
-        }
+        return getRadious(d.indices.hIndex);
+        // if (d.indices.hIndex > indexShow) {
+        //   return getRadious(d.indices.hIndex + 32);
+        // } else {
+        //   return 0;
+        // }
       });
       // return svg.selectAll('.nodetext').data(_nodes).text((d) => {
       //   if (d.indices.hIndex > showName && d.indices.hIndex > indexShow) {
@@ -1428,10 +1543,11 @@ export default class RelationGraph extends React.PureComponent {
         subnet_selection: false,
         two_paths: false,
         continuous_path: false,
-        single_extension: e.target.checked,
+        single_extension: !currentThis.state.single_extension,
       });
       // $('#cb1').attr('checked', false);
       this.currentModle1 = false;
+      this.currentModle2 = false;
       // $('#cb3').attr('checked', false);
       this.currentModle3 = false;
       // $('#cb4').attr('checked', false);
@@ -1469,7 +1585,10 @@ export default class RelationGraph extends React.PureComponent {
                 <span className={classnames('icon', styles.stop_drag_icon)} />
                 暂停调整
               </Button>
-              <Button className={classnames(styles.two_paths, { active: two_paths })}
+              <Button className={classnames(styles.two_paths, {
+                active: two_paths,
+                [styles.selected]: two_paths,
+              })}
                       onClick={this.changeModle3}>
                 <span className={classnames('icon', styles.two_paths_icon)} />
                 两点路径
@@ -1480,6 +1599,14 @@ export default class RelationGraph extends React.PureComponent {
               {/*</Button>*/}
               {/*<Checkbox checked={continuous_path} onChange={this.changeModle4}>连续路径</Checkbox>*/}
               {/*<Checkbox checked={single_extension} onChange={this.changeModle5}>单点扩展</Checkbox>*/}
+              <Button className={classnames(styles.two_paths, {
+                active: single_extension,
+                [styles.selected]: single_extension,
+              })}
+                      onClick={this.changeModle5}>
+                <span className={classnames('icon', styles.single_extension_icon)} />
+                单点扩展
+              </Button>
             </div>
           </div>
           <div className={styles.filterBlock}>
@@ -1537,7 +1664,7 @@ export default class RelationGraph extends React.PureComponent {
               <span style={{ color: 'orange' }}> &nbsp;{currentNode.indices.numPubs}</span>
             </div>
             }
-            {currentNode.pos &&
+            {currentNode.pos.length > 0 &&
             <p>
               <i className="fa fa-briefcase fa-fw" />
               {currentNode.pos.length > 0 ? currentNode.pos[0].name.n.en : ''}

@@ -8,7 +8,6 @@ import styles from './RightInfoZoneAll.less';
 import { HindexGraph } from '../../components/widgets';
 
 class RightInfoZoneAll extends React.PureComponent {
-
   componentDidMount() {
   }
 
@@ -50,11 +49,9 @@ class RightInfoZoneAll extends React.PureComponent {
           ACM Fellow:<span className={styles.count}>{isACMFellowNumber}</span>
         </div>
 
-          <div className={styles.statistics}>
-            华人:<span className={styles.count}>{isChNumber}</span>
-            IEEE Fellow:<span className={styles.count}>{isIeeeFellowNumber}</span></div>
-          {/*style={{ marginRight: 0 }}*/}
-
+        <div className={styles.statistics}>
+          华人:<span className={styles.count}>{isChNumber}</span>
+          IEEE Fellow:<span className={styles.count}>{isIeeeFellowNumber}</span></div>
       </div>
     );
   }

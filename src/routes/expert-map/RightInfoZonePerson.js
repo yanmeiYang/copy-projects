@@ -12,7 +12,6 @@ import styles from './RightInfoZonePerson.less';
 
 
 class RightInfoZonePerson extends React.PureComponent {
-
   componentDidMount() {
   }
 
@@ -30,7 +29,6 @@ class RightInfoZonePerson extends React.PureComponent {
 
     // used in person right info zone.
     const personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
-    console.log(personLinkParams)
     if (sysconfig.PersonList_PersonLink_NewTab) {
       personLinkParams.target = '_blank';
     }

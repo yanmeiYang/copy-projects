@@ -10,7 +10,6 @@ import * as profileUtils from '../../utils/profile-utils';
 import { HindexGraph } from '../../components/widgets';
 
 class RightInfoZoneCluster extends React.PureComponent {
-
   componentDidMount() {
   }
 
@@ -100,7 +99,7 @@ class RightInfoZoneCluster extends React.PureComponent {
               <div key={person.id} className={styles.imgOuter}>
                 <div className={styles.imgBox}>
                   <Tooltip title={tooltip}>
-                    <img src={avatarUrl} />
+                    <img src={avatarUrl} alt="" />
                   </Tooltip>
                 </div>
               </div>
@@ -111,14 +110,9 @@ class RightInfoZoneCluster extends React.PureComponent {
         <div className={styles.name}>
           <span alt="" className={classnames('icon', styles.fieldIcon)} />
           研究领域
-          {/*<span className={styles.statistics}>(&nbsp;*/}
-            {/*<sapn className={styles.count}>{persons.length}</sapn>*/}
-            {/*人 )*/}
-          {/*</span>*/}
         </div>
 
         <div className={styles.keywords}>
-          {/*<h4 className="section_header"> Research Interests: </h4>*/}
           {sortedInterest && sortedInterest.slice(0, 20).map((interest) => {
             return (
               <div key={interest.key}>{interest.key} ({interest.count})</div>

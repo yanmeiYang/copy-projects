@@ -10,6 +10,7 @@ import { externalRequest, wget } from '../../utils/request';
 import * as profileUtils from '../../utils/profile-utils';
 import { getPerson } from '../../services/person';
 import { sysconfig } from '../../systems';
+import { Spinner } from '../../components';
 
 const humps = require('humps');
 
@@ -65,6 +66,7 @@ export default class TrendPrediction extends React.PureComponent {
 
   state = {
     person: cperson,
+    loadingFlag: true,
   };
 
   componentDidMount() {
@@ -72,13 +74,11 @@ export default class TrendPrediction extends React.PureComponent {
     this.updateTrend(this.props.query);
   }
 
-  shouldComponentUpdate(nextProps) {
-    if (nextProps.query && nextProps.query !== this.props.query) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.query && prevProps.query !== this.props.query) {
       d3sankey();
-      this.updateTrend(nextProps.query);
-      return true;
+      this.updateTrend(this.props.query);
     }
-    return true;
   }
 
   onChange = (key) => {
@@ -150,6 +150,7 @@ export default class TrendPrediction extends React.PureComponent {
   };
 
   onKeywordClick = (query) => {
+    this.setState({ loadingFlag: true });
     this.props.dispatch(routerRedux.push({ pathname: '/trend', search: `?query=${query}` }));
   };
 
@@ -230,12 +231,14 @@ export default class TrendPrediction extends React.PureComponent {
     d3.select('#tooltip1').classed('hidden', true).style('visibility', 'hidden');
     const term = (query === '') ? this.props.query : query;
 
+    this.setState({ loadingFlag: true });
     const dd = wget(`http://166.111.7.173:5012/trend/${term}`);
+    const that = this;
     dd.then((data) => {
       trendData = humps.camelizeKeys(data, (key, convert) => {
         return key.includes(' ') && !key.includes('_') ? key : convert(key);
       });
-      console.log(trendData);
+      that.setState({ loadingFlag: false });
       this.initChart(term);
     });
   };
@@ -290,7 +293,7 @@ export default class TrendPrediction extends React.PureComponent {
         return `translate(${[0, (i * histItemHeight) + 10]})rotate(${0})`;// 左侧图离标签页的距离，字和直方图的旋转
       })
       .attr('id', (d) => {
-        return `term-${d.idx}`;
+        return `term-${d.t.replace(' ', '')}`;
       })
       .on('click', (d) => {
         this.renderTermTrend(d);
@@ -364,6 +367,18 @@ export default class TrendPrediction extends React.PureComponent {
       });
     // d3.select('.strong').remove();
     // 技术趋势图（右下方）的两条包络线,做了减小梯度的处理
+    console.log(data);
+    d3.select('.strong').remove();
+    d3.select(`#term-${data.t.replace(' ', '')}`).append('rect').attr('class', 'strong').attr('x', '0px')
+      .attr('y', () => {
+        return -1.8125;
+      })
+      .attr('width', '300px')
+      .attr('height', () => {
+        return 19.8125;
+      })
+      .style('fill', '#9900FF')
+      .style('fill-opacity', 0.2);
     basis = d3.svg.area()
       .x((d, i) => {
         return carr[i];
@@ -421,33 +436,34 @@ export default class TrendPrediction extends React.PureComponent {
     }
 
     const onMouseOverEventNode = (d) => {
-      // d3.select(this).attr('opacity', 0.3);
-      // const xPosition = d3.event.layerX + 150;
-      // const yPosition = d3.event.layerY + 130;
-      // d3.select('#tooltip1').style('left', `${xPosition}px`).style('top', `${yPosition}px`)
-      //   .select('#value1')
-      //   .text(() => {
-      //     const resultPromise = getPerson(people[d.p].id);
-      //     resultPromise.then((data) => {
-      //         cperson = data.data;
-      //         that.setState({ person: cperson });
-      //       },
-      //       () => {
-      //         console.log('failed');
-      //       },
-      //     ).catch((error) => {
-      //       console.error(error);
-      //     });
-      //     return '';
-      //   });
-      // d3.select('#tooltip1').classed('hidden', false).style('visibility', '');
+      //d3.select(this).attr('opacity', 0.3);
+      document.getElementById('tooltip1').style = 'display:block';
+      const xPosition = d3.event.layerX + 220;
+      const yPosition = d3.event.layerY - 50;
+      d3.select('#tooltip1').style('left', `${xPosition}px`).style('top', `${yPosition}px`)
+        .select('#value1')
+        .text(() => {
+          const resultPromise = getPerson(people[d.p].id);
+          resultPromise.then((data1) => {
+              cperson = data1.data;
+              that.setState({ person: cperson });
+            },
+            () => {
+              console.log('failed');
+            },
+          ).catch((error) => {
+            console.error(error);
+          });
+          return '';
+        });
+      d3.select('#tooltip1').classed('hidden', false).style('visibility', '');
     };
 
     const onMouseOutEventNode = () => {
-      d3.select(this).transition().duration(400).attr('opacity', () => {
+      /*d3.select(this).transition().duration(400).attr('opacity', () => {
         return 1;
       });
-      d3.select('#tooltip1').classed('hidden', true).style('visibility', 'hidden');
+      d3.select('#tooltip1').classed('hidden', true).style('visibility', 'hidden');*/
     };
 
     const onClickEventNode = () => {
@@ -463,7 +479,7 @@ export default class TrendPrediction extends React.PureComponent {
       .append('g')
       .attr('class', 'people')
       .style('cursor', 'pointer')
-      .on('mouseover', onMouseOverEventNode)
+      .on('mouseenter', onMouseOverEventNode)
       .on('mouseout', onMouseOutEventNode)
       .on('click', onClickEventNode)
       .attr('transform', (d) => {
@@ -856,6 +872,10 @@ export default class TrendPrediction extends React.PureComponent {
     //   .style('display', 'none');
   };
 
+  cancelSelected = (id) => {
+    document.getElementById(id).style = 'display:none';
+  };
+
   render() {
     let i = 0;
     let url = '';
@@ -869,7 +889,7 @@ export default class TrendPrediction extends React.PureComponent {
       name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
       pos = profileUtils.displayPosition(person.pos);
       aff = profileUtils.displayAff(person);
-      personLinkParams = {href: sysconfig.PersonList_PersonLink(person.id)};
+      personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
       if (sysconfig.PersonList_PersonLink_NewTab) {
         personLinkParams.target = '_blank';
       }
@@ -877,6 +897,7 @@ export default class TrendPrediction extends React.PureComponent {
     const that = this;
     return (
       <div className={styles.trend}>
+        <Spinner loading={this.state.loadingFlag} />
         {/*<div className={styles.year}>*/}
           {/*<Slider marks={marks} step={10} range defaultValue={[20, 50]} disabled={false}/>*/}
         {/*</div>*/}
@@ -903,19 +924,23 @@ export default class TrendPrediction extends React.PureComponent {
           </p>
         </div>
         <div id="tooltip1" className={styles.tool1}>
+          <div role="presentation" className={styles.delCurrentNode}
+               onClick={this.cancelSelected.bind(that, 'tooltip1')}>
+            <i className="fa fa-ban" aria-hidden="true" />
+          </div>
           <div className={styles.showtool1}>
             <div className="img"><img src={url} alt={url}/></div>
             {name &&
             <div className="name bg">
               <h2 className="section_header">
-                <a {...personLinkParams}>{name} </a><br />
+                <span className={styles.detail}><a {...personLinkParams}>{name} </a></span><br />
               </h2>
             </div>
             }
-            <div className="info bg">
-              {pos && <span><i className="fa fa-briefcase fa-fw"/>{pos}</span>}
+            <div className="info">
+              {pos && <span className={styles.detail}><i className="fa fa-briefcase fa-fw"/>{pos}</span>}
               <br />
-              {aff && <span><i className="fa fa-institution fa-fw"/>{aff}</span>}
+              {aff && <span className={styles.detail}><i className="fa fa-institution fa-fw"/>{aff}</span>}
             </div>
             <strong id="value1"/>
           </div>

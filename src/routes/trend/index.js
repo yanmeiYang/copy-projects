@@ -42,7 +42,7 @@ export default class TrendPredictionPage extends React.Component {
     const { query } = data;
     if (query) {
       this.setState({ query });
-      dispatch(routerRedux.push({ pathname: '/trend-prediction', search: `?query=${query}` }));
+      dispatch(routerRedux.push({ pathname: '/trend', search: `?query=${query}` }));
       dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query } });
     }
   };

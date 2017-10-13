@@ -48,7 +48,7 @@ const NaviConfig = {
     label: '技术趋势',
     url: '/trend',
     data: 'query',
-    pageSignature: 'trend-prediction',
+    pageSignature: 'trend',
   },
   ExpertTrajectory: {
     key: 'ExpertTrajectory',

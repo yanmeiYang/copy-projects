@@ -4,7 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Button, Tag, Menu, Dropdown, Icon } from 'antd';
+import { Button, Tag, Menu } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
@@ -47,7 +47,7 @@ let globalInfoWindow;
 const getInfoWindow = () => {
   if (!globalInfoWindow) {
     const sContent = "<div id='author_info' class='popup'></div>";
-    globalInfoWindow = new BMap.InfoWindow(sContent);
+    globalInfoWindow = new window.BMap.InfoWindow(sContent);
     globalInfoWindow.disableAutoPan();
   }
   return globalInfoWindow;
@@ -250,10 +250,10 @@ class ExpertMap extends React.PureComponent {
         let style;
         if (name.length <= 8) {
           style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:45px;font-size:20%;';
-          if (name.length === 6){
+          if (name.length === 6) {
             name = ' '.concat(name);
           }
-          if (name.length <= 5){
+          if (name.length <= 5) {
             name = '&nbsp;'.concat(name);
           }
         } else {
@@ -274,8 +274,8 @@ class ExpertMap extends React.PureComponent {
               arr[i] = ' ';
               arr[i + 1] = name1;
             }
-            i = i + 1;
-          })
+            i += 1;
+          });
           name = arr.join('');
           name = `&nbsp;&nbsp;${name}`;
           style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:10px;word-wrap:break-word;font-size:20%;';
@@ -289,7 +289,7 @@ class ExpertMap extends React.PureComponent {
           // get current point.
           const apos = getById('allmap').getBoundingClientRect();
           const cpos = event.target.getBoundingClientRect();
-          const newPixel = new BMap.Pixel(cpos.left - apos.left + imgwidth, cpos.top - apos.top); // eslint-disable-line
+          const newPixel = new window.BMap.Pixel(cpos.left - apos.left + imgwidth, cpos.top - apos.top); // eslint-disable-line
           const currentPoint = map.pixelToPoint(newPixel);
           // get personInfo data.
           const chtml = event.target.innerHTML;
@@ -314,15 +314,15 @@ class ExpertMap extends React.PureComponent {
 
   initializeBaiduMap = (map) => {
     map.enableScrollWheelZoom();
-    const cr = new BMap.CopyrightControl({ anchor: BMAP_ANCHOR_BOTTOM_RIGHT });
+    const cr = new window.BMap.CopyrightControl({ anchor: BMAP_ANCHOR_BOTTOM_RIGHT });
     map.addControl(cr);
-    map.addControl(new BMap.NavigationControl());
-    map.addControl(new BMap.ScaleControl());
-    map.addControl(new BMap.OverviewMapControl());
+    map.addControl(new window.BMap.NavigationControl());
+    map.addControl(new window.BMap.ScaleControl());
+    map.addControl(new window.BMap.OverviewMapControl());
     // map.disableScrollWheelZoom();
     // map.setDefaultCursor();
     // map.disableDoubleClickZoom();// 静止双击
-    // map.addControl(new BMap.MapTypeControl());
+    // map.addControl(new window.BMap.MapTypeControl());
   };
 
   onChangeGoogleMap = () => {
@@ -338,6 +338,7 @@ class ExpertMap extends React.PureComponent {
   showMap = (place, type) => {
     waitforBMap(200, 100,
       (BMap) => {
+        console.log(window.BMap);
         this.showOverLay();
         let centerx;
         let centery;
@@ -349,7 +350,7 @@ class ExpertMap extends React.PureComponent {
         centerx = sysconfig.CentralPosition.lng;
         centery = sysconfig.CentralPosition.lat;
         //}
-        console.log(localStorage.getItem('lasttype'), '||', localStorage.getItem('isClick'))
+        console.log(localStorage.getItem('lasttype'), '||', localStorage.getItem('isClick'));
         if (localStorage.getItem('lasttype') !== '0' && localStorage.getItem('isClick') === '0') {
           newtype = localStorage.getItem('lasttype');
         } else {
@@ -375,15 +376,15 @@ class ExpertMap extends React.PureComponent {
           centery = sysconfig.CentralPosition.lat;
         }
         localStorage.setItem('lasttype', newtype);
-        const map = new BMap.Map('allmap', { minZoom: minscale, maxZoom: maxscale });
+        const map = new window.BMap.Map('allmap', { minZoom: minscale, maxZoom: maxscale });
         this.map = map; // set to global;
         map1 = this.map;
-        // map.centerAndZoom(new BMap.Point(45, 45), scale);
-        // map.centerAndZoom(new BMap.Point(
+        // map.centerAndZoom(new window.BMap.Point(45, 45), scale);
+        // map.centerAndZoom(new window.BMap.Point(
         //   sysconfig.CentralPosition.lng, sysconfig.CentralPosition.lat
         // ), scale);
-        map.centerAndZoom(new BMap.Point(
-          centerx, centery
+        map.centerAndZoom(new window.BMap.Point(
+          centerx, centery,
         ), scale);
 
         this.initializeBaiduMap(map);
@@ -392,89 +393,89 @@ class ExpertMap extends React.PureComponent {
         let counts = 0;
         if (newtype === '1') {
           const opts1 = {
-            position: new BMap.Point(102, 38),
-          }
-          map.addOverlay(new BMap.Label('中国', opts1));
+            position: new window.BMap.Point(102, 38),
+          };
+          map.addOverlay(new window.BMap.Label('中国', opts1));
           const opts2 = {
-            position: new BMap.Point(136, 32),
-          }
-          map.addOverlay(new BMap.Label('日本', opts2));
+            position: new window.BMap.Point(136, 32),
+          };
+          map.addOverlay(new window.BMap.Label('日本', opts2));
           const opts3 = {
-            position: new BMap.Point(125, 33),
-          }
-          map.addOverlay(new BMap.Label('韩国', opts3));
+            position: new window.BMap.Point(125, 33),
+          };
+          map.addOverlay(new window.BMap.Label('韩国', opts3));
           const opts4 = {
-            position: new BMap.Point(76.5, 16),
-          }
-          map.addOverlay(new BMap.Label('印度', opts4));
+            position: new window.BMap.Point(76.5, 16),
+          };
+          map.addOverlay(new window.BMap.Label('印度', opts4));
           const opts5 = {
-            position: new BMap.Point(114, 22),
-          }
-          map.addOverlay(new BMap.Label('香港', opts5));
+            position: new window.BMap.Point(114, 22),
+          };
+          map.addOverlay(new window.BMap.Label('香港', opts5));
           const opts6 = {
-            position: new BMap.Point(100, -3),
-          }
-          map.addOverlay(new BMap.Label('新加坡', opts6));
+            position: new window.BMap.Point(100, -3),
+          };
+          map.addOverlay(new window.BMap.Label('新加坡', opts6));
           const opts7 = {
-            position: new BMap.Point(121, 25),
-          }
-          map.addOverlay(new BMap.Label('台湾', opts7));
+            position: new window.BMap.Point(121, 25),
+          };
+          map.addOverlay(new window.BMap.Label('台湾', opts7));
           const opts8 = {
-            position: new BMap.Point(64, 48),
-          }
-          map.addOverlay(new BMap.Label('中亚', opts8));
+            position: new window.BMap.Point(64, 48),
+          };
+          map.addOverlay(new window.BMap.Label('中亚', opts8));
           const opts9 = {
-            position: new BMap.Point(118.5, 9),
-          }
-          map.addOverlay(new BMap.Label('东南亚', opts9));
+            position: new window.BMap.Point(118.5, 9),
+          };
+          map.addOverlay(new window.BMap.Label('东南亚', opts9));
           const opts10 = {
-            position: new BMap.Point(29, 45),
-          }
-          map.addOverlay(new BMap.Label('东欧', opts10));
+            position: new window.BMap.Point(29, 45),
+          };
+          map.addOverlay(new window.BMap.Label('东欧', opts10));
           const opts11 = {
-            position: new BMap.Point(7, 44),
-          }
-          map.addOverlay(new BMap.Label('西欧', opts11));
+            position: new window.BMap.Point(7, 44),
+          };
+          map.addOverlay(new window.BMap.Label('西欧', opts11));
           const opts12 = {
-            position: new BMap.Point(16, 58),
-          }
-          map.addOverlay(new BMap.Label('北欧', opts12));
+            position: new window.BMap.Point(16, 58),
+          };
+          map.addOverlay(new window.BMap.Label('北欧', opts12));
           const opts13 = {
-            position: new BMap.Point(-6.1, 52),
-          }
-          map.addOverlay(new BMap.Label('英国', opts13));
+            position: new window.BMap.Point(-6.1, 52),
+          };
+          map.addOverlay(new window.BMap.Label('英国', opts13));
           const opts14 = {
-            position: new BMap.Point(101.5, 59.2),
-          }
-          map.addOverlay(new BMap.Label('俄罗斯', opts14));
+            position: new window.BMap.Point(101.5, 59.2),
+          };
+          map.addOverlay(new window.BMap.Label('俄罗斯', opts14));
           const opts15 = {
-            position: new BMap.Point(31, 28),
-          }
-          map.addOverlay(new BMap.Label('以色列', opts15));
+            position: new window.BMap.Point(31, 28),
+          };
+          map.addOverlay(new window.BMap.Label('以色列', opts15));
           const opts16 = {
-            position: new BMap.Point(130, -31),
-          }
-          map.addOverlay(new BMap.Label('大洋洲', opts16));
+            position: new window.BMap.Point(130, -31),
+          };
+          map.addOverlay(new window.BMap.Label('大洋洲', opts16));
           const opts17 = {
-            position: new BMap.Point(-60, -10),
-          }
-          map.addOverlay(new BMap.Label('拉丁美洲', opts17));
+            position: new window.BMap.Point(-60, -10),
+          };
+          map.addOverlay(new window.BMap.Label('拉丁美洲', opts17));
           const opts18 = {
-            position: new BMap.Point(-108.5, 56.5),
-          }
-          map.addOverlay(new BMap.Label('加拿大', opts18));
+            position: new window.BMap.Point(-108.5, 56.5),
+          };
+          map.addOverlay(new window.BMap.Label('加拿大', opts18));
           const opts19 = {
-            position: new BMap.Point(-126, 33.5),
-          }
-          map.addOverlay(new BMap.Label('美国西部', opts19));
+            position: new window.BMap.Point(-126, 33.5),
+          };
+          map.addOverlay(new window.BMap.Label('美国西部', opts19));
           const opts20 = {
-            position: new BMap.Point(-79.5, 34),
-          }
-          map.addOverlay(new BMap.Label('东部', opts20));
+            position: new window.BMap.Point(-79.5, 34),
+          };
+          map.addOverlay(new window.BMap.Label('东部', opts20));
           const opts21 = {
-            position: new BMap.Point(-107.5, 34.5),
-          }
-          map.addOverlay(new BMap.Label('中部', opts21));
+            position: new window.BMap.Point(-107.5, 34.5),
+          };
+          map.addOverlay(new window.BMap.Label('中部', opts21));
         }
         //const domain = localStorage.getItem("domain");
         place.results.sort((a, b) => b.hindex - a.hindex);
@@ -483,7 +484,7 @@ class ExpertMap extends React.PureComponent {
           //console.log(place.results[o].fellows)
           let pt = null;
           const newplace = findPosition(newtype, place.results[o]);
-          const label = new BMap.Label(`<div>${place.results[o].name}</div><div style='display: none;'>${place.results[o].id}</div>`);
+          const label = new window.BMap.Label(`<div>${place.results[o].name}</div><div style='display: none;'>${place.results[o].id}</div>`);
           label.setStyle({
             color: 'black',
             fontSize: '12px',
@@ -496,19 +497,19 @@ class ExpertMap extends React.PureComponent {
             textShadow: '1px 1px 2px white, -1px -1px 2px white',
             fontStyle: 'italic',
           });
-          label.setOffset(new BMap.Size(-55.5, 25));
+          label.setOffset(new window.BMap.Size(-55.5, 25));
 
           // 只有经纬度不为空或者0的时候才显示，否则丢弃
           if ((newplace[1] != null && newplace[1] != null) &&
             (newplace[1] !== 0 && newplace[1] !== 0)) {
-            pt = new BMap.Point(newplace[1], newplace[0]);// 这里经度和纬度是反着的
-            const myIcon = new BMap.Icon('/images/map/marker_blue_sprite1.png', new BMap.Size(19, 50), {
-              offset: new BMap.Size(0, 0), // 指定定位位置
-              imageOffset: new BMap.Size(0, 0), // 设置图片偏移
+            pt = new window.BMap.Point(newplace[1], newplace[0]);// 这里经度和纬度是反着的
+            const myIcon = new window.BMap.Icon('/images/map/marker_blue_sprite1.png', new window.BMap.Size(19, 50), {
+              offset: new window.BMap.Size(0, 0), // 指定定位位置
+              imageOffset: new window.BMap.Size(0, 0), // 设置图片偏移
             });
-            //const marker = new BMap.Marker(pt, { icon: myIcon } );
+            //const marker = new window.BMap.Marker(pt, { icon: myIcon } );
             if (range === '0') {
-              const marker = new BMap.Marker(pt);
+              const marker = new window.BMap.Marker(pt);
               marker.setLabel(label);
               marker.setTop();
               marker.setIcon(myIcon);
@@ -518,7 +519,7 @@ class ExpertMap extends React.PureComponent {
               counts += 1;
             } else if (range === '1') {
               if (place.results[o].fellows[0] === 'acm') {
-                const marker = new BMap.Marker(pt);
+                const marker = new window.BMap.Marker(pt);
                 marker.setLabel(label);
                 marker.setTop();
                 marker.setIcon(myIcon);
@@ -529,7 +530,7 @@ class ExpertMap extends React.PureComponent {
               }
             } else if (range === '2') {
                if (place.results[o].fellows[0] === 'ieee' || place.results[o].fellows[1] === 'ieee') {
-                 const marker = new BMap.Marker(pt);
+                 const marker = new window.BMap.Marker(pt);
                  marker.setLabel(label);
                  marker.setTop();
                  marker.setIcon(myIcon);
@@ -540,7 +541,7 @@ class ExpertMap extends React.PureComponent {
                }
             } else if (range === '3') {
               if (place.results[o].is_ch) {
-                const marker = new BMap.Marker(pt);
+                const marker = new window.BMap.Marker(pt);
                 marker.setLabel(label);
                 marker.setTop();
                 marker.setIcon(myIcon);
@@ -563,7 +564,7 @@ class ExpertMap extends React.PureComponent {
         }
         waitforBMapLib(200, 100,
           (BMapLib) => {
-            const _ = new BMapLib.MarkerClusterer(map, { markers });
+            const _ = new window.BMapLib.MarkerClusterer(map, { markers });
             for (let m = 0; m < markers.length; m += 1) {
               this.addMouseoverHandler(markers[m], pId[m]);
             }
@@ -698,7 +699,7 @@ class ExpertMap extends React.PureComponent {
     const that = this;
     const arr = [false, false, false, false];
     arr[rangeTmp] = true;
-    that.setState({ rangeChecks: arr })
+    that.setState({ rangeChecks: arr });
     if (rangeTmp) {
       range = rangeTmp;
       this.showMap(this.props.expertMap.geoData, lastType, range, number);
@@ -707,9 +708,9 @@ class ExpertMap extends React.PureComponent {
 
   showNumber = (numberTmp) => {
     const that = this;
-    let arr = [false, false, false, false, false];
+    const arr = [false, false, false, false, false];
     arr[numberTmp] = true;
-    that.setState({ numberChecks: arr })
+    that.setState({ numberChecks: arr });
     const lastType = localStorage.getItem('lasttype');
     if (numberTmp) {
       number = numberTmp;
@@ -761,7 +762,7 @@ class ExpertMap extends React.PureComponent {
   };
 
   domainChanged = (value) => {
-    this.props.dispatch(routerRedux.push({ pathname: '/expert-map', search:  `?query=${value.name}` }));
+    this.props.dispatch(routerRedux.push({ pathname: '/expert-map', search: `?query=${value.name}` }));
     const that = this;
     let i = 0;
     domainIds.map((domain1) => {
@@ -843,7 +844,7 @@ class ExpertMap extends React.PureComponent {
 
     const rightInfos = {
       global: () => (
-        <RightInfoZoneAll count={count} avg={avg} persons={persons} isACMFellowNumber={isACMFellowNumber} isIeeeFellowNumber={isIeeeFellowNumber} isChNumber={isChNumber}/>
+        <RightInfoZoneAll count={count} avg={avg} persons={persons} isACMFellowNumber={isACMFellowNumber} isIeeeFellowNumber={isIeeeFellowNumber} isChNumber={isChNumber} />
       ),
       person: () => (<RightInfoZonePerson person={model.personInfo} />),
       cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),
@@ -872,7 +873,7 @@ class ExpertMap extends React.PureComponent {
     }
     const SubMenu = Menu.SubMenu;
     const MenuItemGroup = Menu.ItemGroup;
-    console.log(domainChecks)
+    console.log(domainChecks);
     return (
       <div className={styles.expertMap} id="currentMain">
         <div className={styles.filterWrap}>
@@ -880,9 +881,9 @@ class ExpertMap extends React.PureComponent {
             <div className={styles.filterRow}>
               <span className={styles.filterTitle}><span>Hot words:</span></span>
               <ul>
-                {Domains.map((domain) =>{
+                {Domains.map((domain) => {
                   checkState += 1;
-                  return (<CheckableTag className={styles.filterItem} key={domain.id} checked={domainChecks[checkState - 1]} value={domain.id}><span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span></CheckableTag>)
+                  return (<CheckableTag className={styles.filterItem} key={domain.id} checked={domainChecks[checkState - 1]} value={domain.id}><span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span></CheckableTag>);
                 })
                 }
               </ul>
@@ -916,62 +917,62 @@ class ExpertMap extends React.PureComponent {
           <div className={styles.left}>
             {/*{this.props.title}*/}
             {/*<span>*/}
-              {/*<FM defaultMessage="Domain"*/}
-                  {/*id="com.expertMap.headerLine.label.field" />*/}
+            {/*<FM defaultMessage="Domain"*/}
+            {/*id="com.expertMap.headerLine.label.field" />*/}
             {/*</span>*/}
             {/*<Select defaultValue="" className={styles.domainSelector} style={{ width: 120 }}*/}
-                    {/*onChange={this.domainChanged}>*/}
-              {/*<Select.Option key="none" value="">*/}
-                {/*<FM defaultMessage="Domain"*/}
-                    {/*id="com.expertMap.headerLine.label.selectField" />*/}
-              {/*</Select.Option>*/}
-              {/*{Domains.map(domain =>*/}
-                {/*(<Select.Option key={domain.id} value={domain.id}>{domain.name}</Select.Option>),*/}
-              {/*)}*/}
+            {/*onChange={this.domainChanged}>*/}
+            {/*<Select.Option key="none" value="">*/}
+            {/*<FM defaultMessage="Domain"*/}
+            {/*id="com.expertMap.headerLine.label.selectField" />*/}
+            {/*</Select.Option>*/}
+            {/*{Domains.map(domain =>*/}
+            {/*(<Select.Option key={domain.id} value={domain.id}>{domain.name}</Select.Option>),*/}
+            {/*)}*/}
             {/*</Select>*/}
 
             <div className={styles.level}>
               {/*<Dropdown placement="bottomLeft" overlay={*/}
-                {/*<div>*/}
-                  {/*<Menu style={{ width: 240 }} mode="inline">*/}
-                  {/*<SubMenu title={<span>Theory</span>}>*/}
-                    {/*{Domains.map((domain) =>{*/}
-                      {/*if (domain.name === 'Theory' || domain.name === 'Multimedia' || domain.name === 'Security'*/}
-                        {/*|| domain.name === 'Software Engineering' || domain.name === 'Computer Graphics') {*/}
-                        {/*return (*/}
-                          {/*<Menu.Item><span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span></Menu.Item>*/}
-                        {/*)*/}
-                      {/*}*/}
-                    {/*})*/}
-                    {/*}*/}
-                  {/*</SubMenu>*/}
-                  {/*<SubMenu title={<span>System</span>}>*/}
-                    {/*{Domains.map((domain) =>{*/}
-                      {/*if (domain.name === 'Database' || domain.name === 'System' || domain.name === 'Computer Networking') {*/}
-                        {/*return (*/}
-                          {/*<Menu.Item><span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span></Menu.Item>*/}
-                        {/*)*/}
-                      {/*}*/}
-                    {/*})*/}
-                    {/*}*/}
-                  {/*</SubMenu>*/}
-                  {/*<SubMenu title={<span>Artificial Intelligence</span>}>*/}
-                    {/*{Domains.map((domain) =>{*/}
-                      {/*if (domain.name === 'Data Mining' || domain.name === 'Machine Learning' || domain.name === 'Artificial Intelligence'*/}
-                        {/*|| domain.name === 'Web and Information Retrieval' || domain.name === 'Computer Vision'*/}
-                        {/*|| domain.name === 'Human-Computer Interaction' || domain.name === 'Natural Language Processing') {*/}
-                        {/*return (*/}
-                          {/*<Menu.Item><span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span></Menu.Item>*/}
-                        {/*)*/}
-                      {/*}*/}
-                    {/*})*/}
-                    {/*}*/}
-                  {/*</SubMenu>*/}
+              {/*<div>*/}
+              {/*<Menu style={{ width: 240 }} mode="inline">*/}
+              {/*<SubMenu title={<span>Theory</span>}>*/}
+              {/*{Domains.map((domain) =>{*/}
+              {/*if (domain.name === 'Theory' || domain.name === 'Multimedia' || domain.name === 'Security'*/}
+              {/*|| domain.name === 'Software Engineering' || domain.name === 'Computer Graphics') {*/}
+              {/*return (*/}
+              {/*<Menu.Item><span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span></Menu.Item>*/}
+              {/*)*/}
+              {/*}*/}
+              {/*})*/}
+              {/*}*/}
+              {/*</SubMenu>*/}
+              {/*<SubMenu title={<span>System</span>}>*/}
+              {/*{Domains.map((domain) =>{*/}
+              {/*if (domain.name === 'Database' || domain.name === 'System' || domain.name === 'Computer Networking') {*/}
+              {/*return (*/}
+              {/*<Menu.Item><span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span></Menu.Item>*/}
+              {/*)*/}
+              {/*}*/}
+              {/*})*/}
+              {/*}*/}
+              {/*</SubMenu>*/}
+              {/*<SubMenu title={<span>Artificial Intelligence</span>}>*/}
+              {/*{Domains.map((domain) =>{*/}
+              {/*if (domain.name === 'Data Mining' || domain.name === 'Machine Learning' || domain.name === 'Artificial Intelligence'*/}
+              {/*|| domain.name === 'Web and Information Retrieval' || domain.name === 'Computer Vision'*/}
+              {/*|| domain.name === 'Human-Computer Interaction' || domain.name === 'Natural Language Processing') {*/}
+              {/*return (*/}
+              {/*<Menu.Item><span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span></Menu.Item>*/}
+              {/*)*/}
+              {/*}*/}
+              {/*})*/}
+              {/*}*/}
+              {/*</SubMenu>*/}
               {/*</Menu></div>}>*/}
-                {/*<a className="ant-dropdown-link" >*/}
-                  {/*<span>Domains</span>*/}
-                  {/*<Icon type="down" />*/}
-                {/*</a>*/}
+              {/*<a className="ant-dropdown-link" >*/}
+              {/*<span>Domains</span>*/}
+              {/*<Icon type="down" />*/}
+              {/*</a>*/}
               {/*</Dropdown>*/}
               <span>
                 <FM defaultMessage="Baidu Map"

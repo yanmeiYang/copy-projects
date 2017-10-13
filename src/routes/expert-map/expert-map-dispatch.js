@@ -29,7 +29,7 @@ class ExpertMapDispatch extends React.Component {
       }
     }
     if (target === 'baidu') {
-      window.location.href = '/expert-map?type=baidu';
+      window.location.href = '/expert-map';
     } else {
       window.location.href = '/expert-googlemap';
     }

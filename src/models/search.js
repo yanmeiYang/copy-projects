@@ -62,6 +62,7 @@ export default {
           const offset = parseInt(match[3], 10);
           const size = parseInt(match[4], 10);
           dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
+          dispatch({ type: 'updateSortKey', payload: { key: '' } });
           dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: keyword } });
         }
 

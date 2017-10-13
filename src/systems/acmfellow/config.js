@@ -4,11 +4,11 @@
 import React from 'react';
 import { Link } from 'dva/router';
 import AddToEBButton from 'routes/expert-base/AddToEBButton';
+import { authenticateExpertBase } from 'hooks';
 import defaults from '../utils';
 import { PersonComment } from './components';
 import { GetComments } from './person-comment-hooks';
 
-import { createRoster } from '../../hooks';
 
 const ExpertBase = '59d7bb7e9ed5dbe450e6b275';
 
@@ -19,7 +19,12 @@ module.exports = {
   // 通用配置。所有System的配置文件必须全部包含这部分的值
   PageTitle: 'ACM Fellow',
   SearchPagePrefix: 'uniSearch', // search, uniSearch
+
+  /**
+   * Replace Hooks.
+   */
   ShowRegisteredRole: false,
+  Register_AddPrivilegesToExpertBaseIDs: [ExpertBase],
 
   // UserAuthSystem: 'aminer', // aminer 或者是 system.config; 默认当前系统
   // UserAuthSystem_AddSysTagAuto: true, // 登录时自动添加system的标签
@@ -87,6 +92,11 @@ module.exports = {
   //   param => GetComments(param),
   // ],
 
+  // 智库权限设置 TODO param => xxx
+  // RegisterUserHooks: [
+  //   (dispatch, id, email, name, perm) => authenticateExpertBase(dispatch, id, email, name, perm),
+  // ],
+
   Search_CheckEB: true, // Check ExpertBase.
 
   // 地图中心点
@@ -113,8 +123,5 @@ module.exports = {
   // acmfellow 系统
   ExpertBase,
 
-  // bole 智库权限设置 TODO param => xxx
-  // HOOK: [
-  //   (dispatch, id, email, name, perm) => createRoster(dispatch, id, email, name, perm),
-  // ],
+
 };

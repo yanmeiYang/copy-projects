@@ -90,6 +90,7 @@ module.exports = (webpackConfig, env) => {
     themes: `${__dirname}/src/themes`,
     systems: `${__dirname}/src/systems`,
     hoc: `${__dirname}/src/hoc`,
+    hooks: `${__dirname}/src/hooks`,
   };
 
   if (debug) {

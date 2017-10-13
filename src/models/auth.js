@@ -1,11 +1,12 @@
+/* eslint-disable camelcase */
 /**
  * Created by BoGao on 2018-08-13.
  */
 import { routerRedux } from 'dva/router';
-import { config } from '../utils';
-import { sysconfig } from '../systems';
-import * as authService from '../services/auth';
-import * as uconfigService from '../services/universal-config';
+import { sysconfig } from 'systems';
+import * as authService from 'services/auth';
+import * as uconfigService from 'services/universal-config';
+import * as expertBaseService from 'services/expert-base';
 
 export default {
   namespace: 'auth',
@@ -19,7 +20,9 @@ export default {
     userRoles: [],
     errorMessage: '',
   },
+
   subscriptions: {},
+
   effects: {
     * createUser({ payload }, { call, put }) {
       const { email, first_name, gender, last_name, position, sub, password, role } = payload;
@@ -36,6 +39,24 @@ export default {
             yield call(authService.invoke, uid, `authority_${arr[1]}`);
           } else if (arr.length === 1) {
             yield call(authService.invoke, uid, `${arr[0]}`);
+          }
+        }
+
+        // Add Hooks.
+        // const hooks = sysconfig.RegisterUserHooks || [];
+        // for (const hook of hooks) {
+        //   if (hook) {
+        //     hook();
+        //   }
+        // }
+        const ids = sysconfig.Register_AddPrivilegesToExpertBaseIDs;
+        if (ids && ids.length > 0) {
+          for (const id of ids) {
+            console.log('================================ dAdd privileges to eb: ', id, first_name);
+            const { data } = yield call(
+              expertBaseService.rosterManage,
+              { payload: { id, name: `${first_name} ${last_name}`, email, perm: 3 } },
+            );
           }
         }
       }

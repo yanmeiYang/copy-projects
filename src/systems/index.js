@@ -145,6 +145,12 @@ const defaultSystemConfigs = {
   // 地图中心点
   CentralPosition: { lat: 37.09024, lng: -95.712891 },
 
+  /**
+   * Replace Hooks.
+   */
+  Register_AddPrivilegesToExpertBaseIDs: [],
+
+
   // > Admin Users
   Admin_Users_ShowAdmin: true,
   // PersonList_ShowIndices: [], // do not override in-component settings. // TODO

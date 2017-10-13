@@ -1,11 +1,8 @@
 /**
- * Created by zhanglimin on 17/09/07.
+ * 残的.
  */
-/**
- *
- * @param dispatch or put
- */
-function createRoster(dispatch, id, name, email, perm) {
+function authenticateExpertBase(dispatch, id, name, email, perm) {
+  console.log('\\\\\\\\\\\\\\\\\\\\\\===============', "HOOKS;;;;;;;;;;;;;");
   dispatch({
     type: 'expertBase/invokeRoster',
     payload: { id, name, email, perm },
@@ -13,5 +10,5 @@ function createRoster(dispatch, id, name, email, perm) {
 }
 
 module.exports = {
-  createRoster,
+  authenticateExpertBase,
 };

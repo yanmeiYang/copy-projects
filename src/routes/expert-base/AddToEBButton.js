@@ -57,6 +57,7 @@ export default class AddToEBButton extends PureComponent {
             if (!expertBaseId || expertBaseId !== 'aminer') { // 全球人才删除时不从列表移除.
               dispatch({ type: 'search/removePersonFromSearchResultsById', payload: { pid } });
             }
+            message.success('Experts Removed!');
           });
         that.setState({ isInThisEB: false });
       },

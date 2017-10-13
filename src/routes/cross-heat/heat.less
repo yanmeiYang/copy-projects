@@ -1,0 +1,67 @@
+.heat {
+  margin-left: -188px;
+  .handleCircle {
+    fill: #03A9F4;
+    fill-opacity: 0.8;
+    stroke: #03A9F4;
+    cursor: ew-resize;
+  }
+
+  .nodeCircle {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 2px;
+  }
+
+  .node text {
+    font: 13px sans-serif;
+  }
+
+  .link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 2px;
+  }
+
+  .grid .tick line {
+    stroke: grey;
+    stroke-dasharray: 5, 10;
+    opacity: 0.7;
+  }
+
+  .grid path {
+    stroke-width: 0;
+  }
+
+  .node circle {
+    fill: #999;
+  }
+
+  .node--internal circle {
+    fill: #555;
+  }
+
+  .node--internal text {
+    font-size: 16px;
+    text-shadow: 0 2px 0 #fff, 0 -2px 0 #fff, 2px 0 0 #fff, -2px 0 0 #fff;
+  }
+}
+
+.heatModal {
+  .modalContent {
+    min-height: 450px;
+    max-height: 700px;
+    overflow: scroll;
+  }
+  .antTag {
+    margin-top: 5px;
+  }
+  :global {
+    .spinnerMask {
+      text-align: center;
+      padding-top: 30%;
+      width: 95%;
+      height: 85%
+    }
+  }
+}

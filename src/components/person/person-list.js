@@ -62,7 +62,7 @@ export default class PersonList extends PureComponent {
   }
 
   shouldComponentUpdate(nextProps) {
-    if (nextProps.personComments.createComment !== this.props.personComments.createComment){
+    if (nextProps.personComments && nextProps.personComments.createComment !== this.props.personComments.createComment) {
       return true;
     }
     return compare(this.props, nextProps, 'persons');
@@ -209,10 +209,10 @@ export default class PersonList extends PureComponent {
               {/* ---- Bottom Zone ---- */}
               {BottomZoneFuncs && BottomZoneFuncs.length > 0 &&
               <div className={styles.personComment}>
-              {BottomZoneFuncs.map((bottomBlockFunc) => {
-                const param = { person, expertBaseId, user };
-                return bottomBlockFunc ? bottomBlockFunc(param) : false;
-              })}
+                {BottomZoneFuncs.map((bottomBlockFunc) => {
+                  const param = { person, expertBaseId, user };
+                  return bottomBlockFunc ? bottomBlockFunc(param) : false;
+                })}
               </div>
               }
             </div>

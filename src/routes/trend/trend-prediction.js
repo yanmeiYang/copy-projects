@@ -180,9 +180,9 @@ export default class TrendPrediction extends React.PureComponent {
       bottom: 6,
       left: 100,
     };
-    width = 1300; // 需调整参数，容器宽度
+    width = 1200; // 需调整参数，容器宽度
     height = 1000 - margin.top - margin.bottom; // 需调整参数，容器高度，华为修改500，四个地方，另外三个为隐藏
-    histWidth = 400;
+    histWidth = 380;
     histHeight = 100;// 左侧直方图的高度
     histPosition = histWidth / 2;// 直方图左边文字的宽度
     histItemHeight = 20;// 左侧直方图的间隔距离

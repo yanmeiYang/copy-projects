@@ -4,7 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Button, Tag, Menu } from 'antd';
+import { Button, Tag } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
@@ -88,7 +88,6 @@ class ExpertMap extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    // console.log('compare: ', nextProps.query, ' == ', this.props.query)
     if (nextProps.query && nextProps.query !== this.props.query) {
       this.callSearchMap(nextProps.query);
       domainChecks = [];
@@ -231,11 +230,8 @@ class ExpertMap extends React.PureComponent {
         let minscale = 3;
         let maxscale = 18;
         let newtype;
-        //if (localStorage.getItem("lasttype") === '0') {
         centerx = sysconfig.CentralPosition.lng;
         centery = sysconfig.CentralPosition.lat;
-        //}
-        console.log(localStorage.getItem('lasttype'), '||', localStorage.getItem('isClick'));
         if (localStorage.getItem('lasttype') !== '0' && localStorage.getItem('isClick') === '0') {
           newtype = localStorage.getItem('lasttype');
         } else {
@@ -264,10 +260,6 @@ class ExpertMap extends React.PureComponent {
         const map = new window.BMap.Map('allmap', { minZoom: minscale, maxZoom: maxscale });
         this.map = map; // set to global;
         map1 = this.map;
-        // map.centerAndZoom(new window.BMap.Point(45, 45), scale);
-        // map.centerAndZoom(new window.BMap.Point(
-        //   sysconfig.CentralPosition.lng, sysconfig.CentralPosition.lat
-        // ), scale);
         map.centerAndZoom(new window.BMap.Point(
           centerx, centery,
         ), scale);
@@ -364,16 +356,15 @@ class ExpertMap extends React.PureComponent {
         }
         //const domain = localStorage.getItem("domain");
         place.results.sort((a, b) => b.hindex - a.hindex);
-        for (const o of place.results) {
+        for (const pr of place.results) {
           let pt = null;
-          const newplace = findPosition(newtype, place.results[o]);
-          const label = new window.BMap.Label(`<div>${place.results[o].name}</div><div style='display: none;'>${place.results[o].id}</div>`);
+          const newplace = findPosition(newtype, pr);
+          const label = new window.BMap.Label(`<div>${pr.name}</div><div style='display: none;'>${pr.id}</div>`);
           label.setStyle({
             color: 'black',
             fontSize: '12px',
             border: 'none',
             backgroundColor: 'transparent',
-            // opacity:0.4,
             fontWeight: 'bold',
             textAlign: 'center',
             width: '130px',
@@ -396,39 +387,39 @@ class ExpertMap extends React.PureComponent {
               marker.setLabel(label);
               marker.setTop();
               marker.setIcon(myIcon);
-              const personId = place.results[o].id;
+              const personId = pr.id;
               pId[counts] = personId;
               markers.push(marker);
               counts += 1;
             } else if (range === '1') {
-              if (place.results[o].fellows[0] === 'acm') {
+              if (pr.fellows[0] === 'acm') {
                 const marker = new window.BMap.Marker(pt);
                 marker.setLabel(label);
                 marker.setTop();
                 marker.setIcon(myIcon);
-                const personId = place.results[o].id;
+                const personId = pr.id;
                 pId[counts] = personId;
                 markers.push(marker);
                 counts += 1;
               }
             } else if (range === '2') {
-              if (place.results[o].fellows[0] === 'ieee' || place.results[o].fellows[1] === 'ieee') {
+              if (pr.fellows[0] === 'ieee' || pr.fellows[1] === 'ieee') {
                 const marker = new window.BMap.Marker(pt);
                 marker.setLabel(label);
                 marker.setTop();
                 marker.setIcon(myIcon);
-                const personId = place.results[o].id;
+                const personId = pr.id;
                 pId[counts] = personId;
                 markers.push(marker);
                 counts += 1;
               }
             } else if (range === '3') {
-              if (place.results[o].is_ch) {
+              if (pr.is_ch) {
                 const marker = new window.BMap.Marker(pt);
                 marker.setLabel(label);
                 marker.setTop();
                 marker.setIcon(myIcon);
-                const personId = place.results[o].id;
+                const personId = pr.id;
                 pId[counts] = personId;
                 markers.push(marker);
                 counts += 1;
@@ -459,15 +450,9 @@ class ExpertMap extends React.PureComponent {
 
   initializeBaiduMap = (map) => {
     map.enableScrollWheelZoom();
-    const cr = new window.BMap.CopyrightControl({ anchor: BMAP_ANCHOR_BOTTOM_RIGHT });
-    map.addControl(cr);
     map.addControl(new window.BMap.NavigationControl());
     map.addControl(new window.BMap.ScaleControl());
     map.addControl(new window.BMap.OverviewMapControl());
-    // map.disableScrollWheelZoom();
-    // map.setDefaultCursor();
-    // map.disableDoubleClickZoom();// 静止双击
-    // map.addControl(new window.BMap.MapTypeControl());
   };
 
   listPersonDone = (map, ids, data) => {
@@ -491,13 +476,6 @@ class ExpertMap extends React.PureComponent {
         } else {
           const tmp = personInfo.name.split(' ', 5);
           name = tmp[tmp.length - 1];
-          // let tmp = personInfo.name.match(/\b(\w)/g);
-          // if (tmp.length > 3) {
-          //   tmp = tmp[0].concat(tmp[1], tmp[2]);
-          //   name = tmp;
-          // } else {
-          //   name = tmp.join('');
-          // }
         }
         let style;
         if (name.length <= 8) {
@@ -510,23 +488,24 @@ class ExpertMap extends React.PureComponent {
           }
         } else {
           const nameArr = name.split('', 20);
-          let i = 7;
+          let u = 7;
           const arr = [];
           nameArr.map((name1) => {
-            if (i !== 7) {
-              if (i < 13) {
-                arr[i + 1] = name1;
-              } else if (i === 13) {
-                arr[i + 1] = ' ';
-                arr[i + 2] = name1;
+            if (u !== 7) {
+              if (u < 13) {
+                arr[u + 1] = name1;
+              } else if (u === 13) {
+                arr[u + 1] = ' ';
+                arr[u + 2] = name1;
               } else {
-                arr[i + 2] = name1;
+                arr[u + 2] = name1;
               }
             } else {
-              arr[i] = ' ';
-              arr[i + 1] = name1;
+              arr[u] = ' ';
+              arr[u + 1] = name1;
             }
-            i += 1;
+            u += 1;
+            return true;
           });
           name = arr.join('');
           name = `&nbsp;&nbsp;${name}`;
@@ -543,7 +522,6 @@ class ExpertMap extends React.PureComponent {
           const cpos = event.target.getBoundingClientRect();
           const newPixel = new window.BMap.Pixel(cpos.left - apos.left + imgwidth, cpos.top - apos.top); // eslint-disable-line
           const currentPoint = map.pixelToPoint(newPixel);
-          // get personInfo data.
           const chtml = event.target.innerHTML;
           let num = 0;
           if (chtml.split('@@@@@@@').length > 1) {
@@ -567,8 +545,6 @@ class ExpertMap extends React.PureComponent {
   showTop = (usersIds, e, map, maindom, inputids, onLeave) => {
     const ishere = getById('panel');
     if (ishere != null) {
-      // return;
-      // changed to close panel;
       this.detachCluster(ishere);
     }
 
@@ -589,8 +565,8 @@ class ExpertMap extends React.PureComponent {
 
     const fenshu = (2 * Math.PI) / ids.length;// 共有多少份，每份的夹角
     for (let i = 0; i < ids.length; i += 1) {
-      const centerX = Math.cos(fenshu * i) * (width / 2 - imgwidth / 2) + width / 2;
-      const centerY = Math.sin(fenshu * i) * (width / 2 - imgwidth / 2) + width / 2;
+      const centerX = (Math.cos(fenshu * i) * ((width / 2) - (imgwidth / 2))) + (width / 2);
+      const centerY = (Math.sin(fenshu * i) * ((width / 2) - (imgwidth / 2))) + (width / 2);
       const imgdiv = document.createElement('div');
       const cstyle = `height:${imgwidth}px;width:${imgwidth}px;left:${centerX - (imgwidth / 2)}px;top:${centerY - (imgwidth / 2)}px;`;
       imgdiv.setAttribute('name', 'scholarimg');
@@ -697,10 +673,10 @@ class ExpertMap extends React.PureComponent {
         domainChecks[i] = false;
       }
       i += 1;
+      return true;
     });
     if (value.id) {
       const { dispatch } = this.props;
-      //console.log(`selected ${value}`);
       localStorage.setItem('isClick', '0');
       dispatch({ type: 'app/clearQueryInHeaderIfExist' });
       dispatch({ type: 'expertMap/searchExpertBaseMap', payload: { eb: value.id } });
@@ -762,11 +738,6 @@ class ExpertMap extends React.PureComponent {
       );
     }
 
-    // right info
-    // const shouldRIZUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') === -1
-    //   && model.infoZoneIds === person.id;
-    // const shouldRIZClusterUpdate = model.infoZoneIds && model.infoZoneIds.indexOf(',') > 0;
-
     const rightInfos = {
       global: () => (
         <RightInfoZoneAll count={count} avg={avg} persons={persons}
@@ -786,6 +757,7 @@ class ExpertMap extends React.PureComponent {
         arr[i] = false;
       }
       i += 1;
+      return true;
     });
     let m = 0;
     if (domainChecks) {
@@ -796,11 +768,9 @@ class ExpertMap extends React.PureComponent {
           domainChecks[m] = false;
         }
         m += 1;
+        return true;
       });
     }
-    const SubMenu = Menu.SubMenu;
-    const MenuItemGroup = Menu.ItemGroup;
-    console.log(domainChecks);
     return (
       <div className={styles.expertMap} id="currentMain">
         <div className={styles.filterWrap}>
@@ -810,7 +780,11 @@ class ExpertMap extends React.PureComponent {
               <ul>
                 {Domains.map((domain) => {
                   checkState += 1;
-                  return (<CheckableTag className={styles.filterItem} key={domain.id} checked={domainChecks[checkState - 1]} value={domain.id}><span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span></CheckableTag>);
+                  return (
+                    <CheckableTag className={styles.filterItem} key={domain.id}
+                                  checked={domainChecks[checkState - 1]} value={domain.id}>
+                      <span role="presentation" onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>
+                    </CheckableTag>);
                 })
                 }
               </ul>
@@ -821,7 +795,7 @@ class ExpertMap extends React.PureComponent {
               <span className={styles.filterTitle}><span>Range:</span></span>
               <ul>
                 <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[0]}>
-                  <span onClick={this.showRange.bind(that, '0')} value="0" >ALL</span>
+                  <span role="presentation" onClick={this.showRange.bind(that, '0')} value="0" >ALL</span>
                 </CheckableTag>
                 <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[1]}><span role="presentation" onClick={this.showRange.bind(that, '1')}>ACM Fellow</span></CheckableTag>
                 <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[2]}><span role="presentation" onClick={this.showRange.bind(that, '2')}>IEEE Fellow</span></CheckableTag>

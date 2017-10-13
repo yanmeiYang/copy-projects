@@ -12,7 +12,7 @@ class ExpertMapDispatch extends React.Component {
 
   render() {
     let target;
-    const type = localStorage.getItem("maptype");
+    const type = localStorage.getItem('maptype');
     if (type) {
       if (type === 'google') {
         target = 'google';
@@ -29,13 +29,13 @@ class ExpertMapDispatch extends React.Component {
       }
     }
     if (target === 'baidu') {
-      window.location.href = '/expert-map?type=baidu';
+      window.location.href = '/expert-map';
     } else {
       window.location.href = '/expert-googlemap';
     }
 
     return (
-      <div></div>
+      <div />
     );
   }
 }

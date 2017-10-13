@@ -26,7 +26,7 @@ export default class AddToEBButton extends PureComponent {
     if (this.props.expertBase.addStatus &&
       this.props.expertBase.addStatus !== nextProps.expertBase.addStatus) {
       if (this.props.expertBase.currentPersonId === this.props.person.id) {
-        message.success('添加成功！');
+        // message.success('添加成功！');
         this.setState({ isInThisEB: true });
       }
     }
@@ -41,9 +41,9 @@ export default class AddToEBButton extends PureComponent {
     // this.setState({ personData: this.props.person.id });
   };
 
-  removeItem = (pid) => {
+  removeExpert = (pid) => {
     // TODO 看一下，这里是标准用法:
-    const { dispatch } = this.props;
+    const { dispatch, expertBaseId } = this.props;
     const rid = this.state.dataIdItem;
     const offset = 0;
     const size = 100;
@@ -52,13 +52,16 @@ export default class AddToEBButton extends PureComponent {
       title: '删除', // TODO i18n
       content: '确定删除吗？',
       onOk() {
-        dispatch({
-          type: 'expertBase/removeExpertItem',
-          payload: { pid, rid, offset, size },
-        });
+        dispatch({ type: 'expertBase/removeExpertFromEB', payload: { pid, rid, offset, size } })
+          .then(() => {
+            if (!expertBaseId || expertBaseId !== 'aminer') { // 全球人才删除时不从列表移除.
+              dispatch({ type: 'search/removePersonFromSearchResultsById', payload: { pid } });
+            }
+          });
         that.setState({ isInThisEB: false });
       },
       onCancel() {
+        // nothing
       },
     });
   };
@@ -81,7 +84,7 @@ export default class AddToEBButton extends PureComponent {
     return (
       <div className={styles.buttonArea}>
         {this.state.isInThisEB ? (
-          <Button onClick={this.removeItem.bind(this, person.id)}>
+          <Button onClick={this.removeExpert.bind(this, person.id)}>
             <FM id="com.bole.Remove" defaultMessage="Remove" />
           </Button>
         ) : (

@@ -231,7 +231,7 @@ export default {
       return { ...state, results: [] };
     },
 
-    delPersonFromResultsById(state, { pid }) {
+    removePersonFromSearchResultsById(state, { payload: { pid } }) {
       const originalResults = [];
       for (const value of state.results) {
         if (value.id !== pid) {

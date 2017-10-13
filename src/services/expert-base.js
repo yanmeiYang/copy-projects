@@ -67,21 +67,17 @@ export async function addExpertToEB({ payload }) {
 }
 
 export async function deleteByKey(key) {
-  return request(api.deleteExpertBaseApi
-      .replace(':rid', key)
-    , {
-      method: 'DELETE',
-    });
+  return request(
+    api.deleteExpertBaseApi.replace(':rid', key),
+    { method: 'DELETE' },
+  );
 }
 
-export async function removeByPid({ pid, rid }) {
-
-  return request(api.removeByPidApi
-      .replace(':rid', rid)
-      .replace(':pid', pid)
-    , {
-      method: 'DELETE',
-    });
+export async function removeExpertsFromEBByPid({ pid, rid }) {
+  return request(
+    api.removeExpertsFromEBByPid.replace(':rid', rid).replace(':pid', pid),
+    { method: 'DELETE' },
+  );
 }
 
 // export async function searchExpert({ payload }) {

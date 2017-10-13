@@ -203,7 +203,7 @@ module.exports = {
     deleteExpertBaseApi: '/roster/:rid',
     getExpertDetailList: '/roster/:ebid/order-by/h_index/offset/:offset/size/:size',
     invokeRoster: '/roster/:id/members/u',
-    removeByPidApi: '/roster/:rid/d/:pid',
+    removeExpertsFromEBByPid: '/roster/:rid/d/:pid',
     // getToBProfile: '/api/2b/profile/:src/:id',
   },
 };

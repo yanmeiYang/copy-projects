@@ -110,6 +110,7 @@ const defaultSystemConfigs = {
   PersonList_DidMountHooks: defaults.EMPTY_BLOCK_FUNC_LIST,
   PersonList_UpdateHooks: defaults.EMPTY_BLOCK_FUNC_LIST,
   Search_CheckEB: false,
+  PaperLink: paperId => `https://aminer.org/archive/${paperId}`,
 
   // > Search
   // expert base

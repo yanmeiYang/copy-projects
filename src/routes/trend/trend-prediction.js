@@ -1,14 +1,14 @@
 import React from 'react';
-import { Tabs, Slider } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import d3 from '../../../public/lib/d3.v3';
 import d3sankey from './utils/sankey';
 import styles from './trend-prediction.less';
 import { Auth } from '../../hoc';
-import { externalRequest, wget } from '../../utils/request';
+import { wget } from '../../utils/request';
 import * as profileUtils from '../../utils/profile-utils';
 import { getPerson } from '../../services/person';
+import { searchPubById } from '../../services/trend-prediction-service';
 import { sysconfig } from '../../systems';
 import { Spinner } from '../../components';
 
@@ -41,12 +41,12 @@ let timeSlidesDict;
 let timeSlidesOffset;
 let timeWindow;
 let axisWidth;
-let cperson;
+let cperson = null;
+let cpaper = null;
 let carr = [];
 let idToAuthor;
 
 const yearToXOffset = (year) => {
-  console.log(year);
   const slide = trendData.yearToSlide[year];
   const years = trendData.timeSlides[slide];
   const offset = years.indexOf(year);
@@ -55,14 +55,12 @@ const yearToXOffset = (year) => {
   return binWidth * binOffset;
 };
 
-const TabPane = Tabs.TabPane;
-
 const HOT_TERMS = ['Answer Machine', 'Artificial Intelligence', 'Autopilot', 'BlockChain', 'Computer Vision', 'Data Mining', 'Data Modeling', 'Deep Learning', 'Graph Databases', 'Internet of Things', 'Machine Learning', 'Robotics', 'Networks', 'Natural Language Processing', 'Neural Network'];
 /**
  * Component
  * @param id
  */
-@connect(({ app }) => ({ app }))
+@connect(({ app, topicTrend }) => ({ app, topicTrend }))
 @Auth
 export default class TrendPrediction extends React.PureComponent {
   constructor(props) {
@@ -72,6 +70,7 @@ export default class TrendPrediction extends React.PureComponent {
 
   state = {
     person: cperson,
+    paper: cpaper,
     loadingFlag: true,
   };
 
@@ -160,23 +159,10 @@ export default class TrendPrediction extends React.PureComponent {
     this.props.dispatch(routerRedux.push({ pathname: '/trend', search: `?query=${query}` }));
   };
 
-  // isHotTerm = (w) => {
-  //   let flag = true;
-  //   const w1 = w.toLowerCase().replace(/^\s+|\s+$/g, ' ').trim();
-  //   for (const h in HOT_TERMS) {
-  //     const word = HOT_TERMS[h].toLowerCase().replace(/^\s+|\s+$/g, ' ').trim();
-  //     if (w1 === word) {
-  //       flag = false;
-  //       return HOT_TERMS[h];
-  //     }
-  //   }
-  //   return flag;
-  // };
-
   initChart = (term) => {
     margin = {
       top: 1,
-      right: 100,
+      right: 0,
       bottom: 6,
       left: 100,
     };
@@ -201,9 +187,7 @@ export default class TrendPrediction extends React.PureComponent {
     trendData.terms.forEach((t) => {
       t.sum = 0;
       t.year.forEach((tt) => {
-        // if ((tt.y > 2010) && (tt.d > 0)) {
         t.sum += tt.d;
-        // }
       });
       if (t.sum > maxSum) {
         maxSum = t.sum;
@@ -270,14 +254,6 @@ export default class TrendPrediction extends React.PureComponent {
       })
       .style('stroke', 'gray')
       .style('stroke-width', 0.5);
-
-    // maxFreq = 0;
-    // trendData.terms.forEach((d) => {
-    //   if (d.freq > maxFreq) {
-    //     maxFreq = d.freq;
-    //   }
-    // });
-
     // 左侧的统计框
     termByFreq = [];
     trendData.terms.sort((a, b) => {
@@ -299,7 +275,7 @@ export default class TrendPrediction extends React.PureComponent {
         return `translate(${[0, (i * histItemHeight) + 10]})rotate(${0})`;// 左侧图离标签页的距离，字和直方图的旋转
       })
       .attr('id', (d) => {
-        return `term-${d.t.replace(' ', '')}`;
+        return `term-${d.t.replace(/\s+/g, '')}`;
       })
       .on('click', (d) => {
         this.renderTermTrend(d);
@@ -321,7 +297,7 @@ export default class TrendPrediction extends React.PureComponent {
         return d.sum;
       });
 
-    histGraph.append('text').attr('text-anchor', 'end').attr('transform', (d) => {
+    histGraph.append('text').attr('text-anchor', 'end').attr('transform', () => {
       return `translate(${[histPosition, 0]})rotate(${0})`;
     }).style('font-size', 12)
       .attr('dy', '.85em')
@@ -371,11 +347,9 @@ export default class TrendPrediction extends React.PureComponent {
       .attr('transform', () => {
         return `translate(${[0, 500]})rotate(${0})`; // 需调整参数，人图的left和top，宽度的起始和旋转,从-300改到了0
       });
-    // d3.select('.strong').remove();
     // 技术趋势图（右下方）的两条包络线,做了减小梯度的处理
-    console.log(data);
     d3.select('.strong').remove();
-    d3.select(`#term-${data.t.replace(' ', '')}`).append('rect').attr('class', 'strong').attr('x', '0px')
+    d3.select(`#term-${data.t.replace(/\s+/g, '')}`).append('rect').attr('class', 'strong').attr('x', '0px')
       .attr('y', () => {
         return -1.8125;
       })
@@ -399,16 +373,6 @@ export default class TrendPrediction extends React.PureComponent {
         return 200 + (200 * d.normFreq);
       })
       .interpolate('basis');
-    // d3.select(`#term-${data.idx}`).append('rect').attr('class', 'strong').attr('x', '0px')
-    //   .attr('y', () => {
-    //     return -1.8125;
-    //   })
-    //   .attr('width', '300px')
-    //   .attr('height', () => {
-    //     return 19.8125;
-    //   })
-    //   .style('fill', '#9900FF')
-    //   .style('fill-opacity', 0.2);
     termTrendStreamGraph.append('path').attr('d', () => {
       carr = [];
       let termMaxFreq = 0;
@@ -419,9 +383,6 @@ export default class TrendPrediction extends React.PureComponent {
           termMaxFreq = d.d;
         }
       });
-      // for (const dataY in data.year) {
-      //   carr.push(x(data.year[dataY].y));
-      // }
       carr = carr.sort((a, b) => {
         return a - b;
       });
@@ -431,9 +392,6 @@ export default class TrendPrediction extends React.PureComponent {
       return basis(data.year);
     }).style('stroke-width', 0.2).style('stroke', '#60afe9')
       .style('fill', '#60afe9');
-    // 为趋势图的专家结点建立力学结构模型
-    // termTrendEventNodes = d3.layout.force().linkDistance(80).charge(-1000).gravity(0.05)
-    //   .size([]);
     const channels = [];
     // channel是趋势图显示结点信息的航道，由中间基线依次向两边扩展，即中间为0号航道，上方为1、3、5…号航道，下方为2、4、6…号航道
     // 若当前航道在坐标轴上四年内未被使用，则该航道空闲，将结点信息在此处显示
@@ -442,14 +400,15 @@ export default class TrendPrediction extends React.PureComponent {
     }
 
     const onMouseOverEventNode = (d) => {
-      //d3.select(this).attr('opacity', 0.3);
+      this.setState({ person: null, paper: null });
       document.getElementById('tooltip1').style = 'display:block';
       const xPosition = d3.event.layerX + 220;
-      const yPosition = d3.event.layerY - 50;
+      const yPosition = d3.event.layerY - 70;
       d3.select('#tooltip1').style('left', `${xPosition}px`).style('top', `${yPosition}px`)
         .select('#value1')
         .text(() => {
           const resultPromise = getPerson(idToAuthor[d.a].id);
+          const rp = searchPubById(d.p);
           resultPromise.then((data1) => {
               cperson = data1.data;
               that.setState({ person: cperson });
@@ -460,20 +419,20 @@ export default class TrendPrediction extends React.PureComponent {
           ).catch((error) => {
             console.error(error);
           });
+          rp.then((data2) => {
+            cpaper = data2.data;
+            that.setState({ paper: cpaper });
+          });
           return '';
         });
       d3.select('#tooltip1').classed('hidden', false).style('visibility', '');
     };
 
     const onMouseOutEventNode = () => {
-      /*d3.select(this).transition().duration(400).attr('opacity', () => {
-        return 1;
-      });
-      d3.select('#tooltip1').classed('hidden', true).style('visibility', 'hidden');*/
     };
 
     const onClickEventNode = () => {
-      console.log("event clicked!");
+      console.log('event clicked!');
     };
 
     const termTrendEventNodes = termTrendStreamGraph.append('g')
@@ -630,7 +589,6 @@ export default class TrendPrediction extends React.PureComponent {
       for (const y of slideToYear[i]) {
         pubCount += trendData.pubCount[y];
       }
-      // for (const year of Object.keys(trendData.termFreqBySlides[i])) {
       for (const key of Object.keys(selectedTerms)) {
         const termFreq = trendData.termFreqBySlide[i][key];
         if (addedTerms[key] || termFreq) {
@@ -662,27 +620,6 @@ export default class TrendPrediction extends React.PureComponent {
         }
       }
     }
-    console.log(nodes);
-    console.log(links);
-    // console.log(trendData);
-    // trendData.terms.forEach((term) => {
-    //   let prevNode = null;
-    //   term.year.forEach((node) => {
-    //     if (node.d > 0) {
-    //       node.t = term.t;
-    //       nodes.push(node);
-    //       if (prevNode !== null) {
-    //         links.push({
-    //           source: prevNode,
-    //           target: node,
-    //         });
-    //       }
-    //       prevNode = node;
-    //     }
-    //   });
-    // });
-    // console.log(nodes);
-    // console.log(links);
 
     console.log(trendData);
     // 技术发展图（右上方），用的sankey画图框架
@@ -739,89 +676,16 @@ export default class TrendPrediction extends React.PureComponent {
           return 1;
         });
       });
-    // .on('click', () => {
-    // });
     link.append('title').text((d) => {
       return `${d.source.name} → ${d.target.name}`;//`${d.source.name} → ${d.target.name}${d.source_index}`箭头
     });
-    // 为sankey图的结点建立力学结构模型，实现用户交互效果
-    // force = d3.layout.force();
-    // force.nodes(trendData.nodes).gravity(0.1).charge((d) => {
-    //   if (d.dy < 10) {
-    //     return -((d.dy * 10) + 10);
-    //   } else {
-    //     return -((d.dy * 4) + 10);
-    //   }
-    // }).size([width, 330])
-    //   .start();
-
-    // const layout = (nds) => {
-    //   const nodesByYear = {};
-    //   nds.forEach((n) => {
-    //     if (nodesByYear[n.year]) {
-    //
-    //     }
-    //   })
-    // }
 
     node = svg.append('g')
       .selectAll('.node')
       .data(nodes)
       .enter()
-      // .append('a')
-      // .attr('href', '#')
-      // .attr('class', 'popup')
-      // .attr('rel', 'popuprel')
       .append('g')
       .attr('class', 'node');
-
-    //   .call(force.drag)
-    //   .on('mouseover', function (d) {
-    //     d3.select(this).attr('opacity', 0.6);
-    //     const xPosition = d3.event.layerX + 150;
-    //     const yPosition = d3.event.layerY + 130;
-    //     // if (xPosition > 900) {
-    //     //     xPosition = d3.event.layerX - 200;
-    //     // }
-    //     d3.select('#tooltip').style('left', `${xPosition}px`).style('top', `${yPosition}px`)
-    //       .select('#value')
-    //       .text(() => {
-    //         return `${d.name}：  ${format(d.value)} ${d.y}`;
-    //       });
-    //     //d3.select('#tooltip').classed('hidden', false).style('visibility', ''); 不显示次数
-    //   })
-    //   .on('mouseout', function () {
-    //     d3.select(this).transition().duration(400).attr('opacity', () => {
-    //       return 1;
-    //     });
-    //     d3.select('#tooltip').classed('hidden', true).style('visibility', 'hidden');
-    //   })
-    //   .on('click', (d) => {
-    //     console.log(d);
-    //   });
-
-    // node.append('a').attr('class', 'border-fade').append('rect').attr('height', (d) => {
-    //   return d.dy;
-    // })
-    //   .attr('width', sankey.nodeWidth())
-    //   .style('fill', (d) => {
-    //     d.color = color(d.cluster);
-    //     return d.color;
-    //   })
-    //   .style('stroke', (d) => {
-    //     return d.color;
-    //   })
-    //   .style('stroke-width', () => {
-    //     return 0;
-    //   })
-    //   .style('opacity', () => {
-    //     return 0.6;
-    //   });
-    // node.append('circle').attr('cy', (d) => {
-    //   return (d.dy / 2) + 5;
-    // }).attr('r', 5).attr('stroke', 'black')
-    //   .attr('stroke-width', 1)
-    //   .attr('fill', 'red');
     node.append('rect')
       .attr('x', d => d.x)
       .attr('y', d => d.y)
@@ -829,12 +693,7 @@ export default class TrendPrediction extends React.PureComponent {
       .attr('width', d => d.dx)
       .attr('fill', d => color(d.term))
       .attr('stroke', '#000');
-
     node.append('text')
-    // .attr('x', -20)
-    // .attr('y', (d) => {
-    //   return d.dy / 2;
-    // })
       .attr('x', d => d.x + 125)
       .attr('y', d => d.y + (d.dy / 2))
       .attr('text-anchor', 'end')
@@ -862,41 +721,6 @@ export default class TrendPrediction extends React.PureComponent {
         }
         return `${w}px sans-serif`;
       });
-
-    // trendData.terms.sort((a, b) => {
-    //   return b.start.year - a.start.year;
-    // });
-    // force.on('tick', () => {
-    //   node.attr('transform', (d) => {
-    //     d.x = d.pos * (width / trendData.timeSlides.length);
-    //     return `translate(${d.x + 50},${d.y})`;// 需调整参数，趋势图离左边、和上面的距离
-    //   });
-    //   // sankey.relayout();
-    //   link.attr('d', path);
-    // });
-    // item对应每条技术，根据start数据确定位置偏移
-    // item = svg.append('g').selectAll('.item').data(trendData.terms).enter()
-    //   .append('g')
-    //   .attr('class', 'item')
-    //   .attr('transform', (d) => {
-    //     return `translate(${x(d.start.year)},${d.start.node.y + (d.start.node.dy / 2)})`;
-    //   });
-    // item.append('circle').attr('cx', () => {
-    //   return 0;
-    // }).attr('cy', () => {
-    //   return 0;
-    // }).attr('r', (d) => {
-    //   return d.freq / 10;
-    // })
-    //   .style('stroke-width', 1)
-    //   .style('stroke', (d) => {
-    //     return color(d.start.cluster);
-    //   })
-    //   .style('stroke-opacity', 0.5)
-    //   .style('fill', (d) => {
-    //     return color(d.start.cluster);
-    //   })
-    //   .style('display', 'none');
   };
 
   cancelSelected = (id) => {
@@ -910,9 +734,24 @@ export default class TrendPrediction extends React.PureComponent {
     let pos = '';
     let aff = '';
     let personLinkParams = '';
+    let paperLinkParams = '';
+    const thepaper = this.state.paper;
+    let quote = '';
+    if (typeof (thepaper) !== 'undefined' && thepaper !== null) {
+      paperLinkParams = { href: sysconfig.PaperLink(thepaper.id) };
+      if (sysconfig.PersonList_PersonLink_NewTab) {
+        paperLinkParams.target = '_blank';
+      }
+      let authors = '';
+      for (const a of thepaper.authors) {
+        authors += `${a.name},`;
+      }
+      authors = `${authors.substring(0, authors.length - 1)}.`
+      quote = `   ${authors}${thepaper.title}(${thepaper.year})`;
+    }
     if (this.state.person != null) {
       const person = this.state.person;
-      url = profileUtils.getAvatar(person.avatar, person.id, 80);
+      url = profileUtils.getAvatar(person.avatar, person.id, 50);
       name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
       pos = profileUtils.displayPosition(person.pos);
       aff = profileUtils.displayAff(person);
@@ -922,62 +761,73 @@ export default class TrendPrediction extends React.PureComponent {
       }
     }
     const that = this;
+    const query = this.props.query;
+    let showFlag = 'none';
+    let showFlag1 = 'none';
+    if (this.state.loadingFlag) {
+      showFlag = 'inline';
+      showFlag1 = 'none';
+    } else {
+      showFlag = 'none';
+      showFlag1 = 'inline';
+    }
     return (
       <div className={styles.trend}>
         <Spinner loading={this.state.loadingFlag} />
-        {/*<div className={styles.year}>*/}
-          {/*<Slider marks={marks} step={10} range defaultValue={[20, 50]} disabled={false}/>*/}
-        {/*</div>*/}
         <div className={styles.keywords}>
           <div className={styles.inner}>
             {
               HOT_TERMS.map((hw) => {
-                i++;
+                i += 1;
                 return (
                   <div key={i}>
-                    <a key={i} onClick={that.onKeywordClick.bind(that, hw)}>{hw}</a>
+                    <a role="presentation" key={i} onClick={that.onKeywordClick.bind(that, hw)}>{hw}</a>
                   </div>
                 );
               })
             }
           </div>
         </div>
-        <div className={styles.show} id="chart">
-          <div className="modal-loading"/>
-        </div>
-        <div id="tooltip" className={styles.tool}>
-          <p className={styles.showtool}>
-            <strong id="value"/>
-          </p>
-        </div>
-        <div id="tooltip1" className={styles.tool1}>
-          <div role="presentation" className={styles.delCurrentNode}
-               onClick={this.cancelSelected.bind(that, 'tooltip1')}>
-            <i className="fa fa-ban" aria-hidden="true" />
-          </div>
-          <div className={styles.showtool1}>
-            <div className="img"><img src={url} alt={url}/></div>
-            {name &&
-            <div className="name bg">
-              <h2 className="section_header">
-                <span className={styles.detail}><a {...personLinkParams}>{name} </a></span><br />
-              </h2>
-            </div>
-            }
-            <div className="info">
-              {pos && <span className={styles.detail}><i className="fa fa-briefcase fa-fw"/>{pos}</span>}
-              <br />
-              {aff && <span className={styles.detail}><i className="fa fa-institution fa-fw"/>{aff}</span>}
-            </div>
-            <strong id="value1"/>
+        <div className={styles.loading1}>
+          <div className={styles.loading} id="loading" style={{ display: showFlag, textAlign: 'center' }}>
+            {query}趋势正在生成中！
           </div>
         </div>
-        <div className={styles.nav}>
-          {/*<Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange} className={styles.tabs}>*/}
-          {/*<TabPane tab={<span>Recent</span>} key="1" id="first-three"/>*/}
-          {/*<TabPane tab={<span>All</span>} key="2" id="revert"/>*/}
-          {/*</Tabs>*/}
-          <div id="hist-chart" className={styles.rightbox}/>
+        <div id="showchart" style={{ display: showFlag1 }}>
+          <div className={styles.show} id="chart">
+            <div className="modal-loading" />
+          </div>
+          <div id="tooltip" className={styles.tool}>
+            <p className={styles.showtool}>
+              <strong id="value" />
+            </p>
+          </div>
+          <div id="tooltip1" className={styles.tool1}>
+            <div role="presentation" className={styles.delCurrentNode}
+                 onClick={this.cancelSelected.bind(that, 'tooltip1')}>
+              <i className="fa fa-ban" aria-hidden="true" />
+            </div>
+            <div className={styles.showtool1}>
+              {name &&
+              <div className="name bg">
+                <h2 className="section_header">
+                  <span className={styles.detail}><a {...personLinkParams}>{name} </a></span><br />
+                </h2>
+              </div>
+              }
+              <div className="img"><img src={url} alt={url} /></div>
+              <div className="info">
+                {pos && <span className={styles.detail}><i className="fa fa-briefcase fa-fw" />{pos}</span>}
+                <br />
+                {aff && <span className={styles.detail}><i className="fa fa-institution fa-fw" />{aff}</span>}
+              </div>
+              <strong id="value1" />
+              <div>{thepaper && <span className={styles.detail}><i className="fa fa-file-pdf-o" /><a {...paperLinkParams}>{quote}</a></span>}</div>
+            </div>
+          </div>
+          <div className={styles.nav}>
+            <div id="hist-chart" className={styles.rightbox} />
+          </div>
         </div>
       </div>
     );

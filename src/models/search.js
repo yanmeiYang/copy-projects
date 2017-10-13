@@ -62,7 +62,6 @@ export default {
           const offset = parseInt(match[3], 10);
           const size = parseInt(match[4], 10);
           dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
-          dispatch({ type: 'updateSortKey', payload: { key: '' } });
           dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: keyword } });
         }
 
@@ -88,12 +87,12 @@ export default {
 
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
 
-      const data = yield call(searchService.searchPerson,
-        query, offset, size, noTotalFilters, Sort, useTranslateSearch);
-
       // 分界线
       yield put({ type: 'updateSortKey', payload: { key: Sort } });
       yield put({ type: 'updateFilters', payload: { filters } });
+
+      const data = yield call(searchService.searchPerson,
+        query, offset, size, noTotalFilters, Sort, useTranslateSearch);
 
       if (data.succeed) {
         // console.log('>>>>------ to next API');
@@ -191,7 +190,7 @@ export default {
     },
 
     updateSortKey(state, { payload: { key } }) {
-      return { ...state, sortKey: key || '' };
+      return { ...state, sortKey: key };
     },
 
     searchPersonSuccess(state, { payload: { data, total } }) {
@@ -272,12 +271,19 @@ export default {
     },
 
   },
-
 };
 
 function fixSortKey(sort, query) {
-  if (!query && (!sort || sort === 'relevance')) {
-    return 'time';
+  if (query) {
+    // search, default is relevance;
+    if (!sort || sort === 'time') {
+      return 'relevance';
+    }
+  } else {
+    // List all experts in query. use time as default sort.
+    if (!sort || sort === 'relevance') {
+      return 'time';
+    }
   }
   return sort;
 }

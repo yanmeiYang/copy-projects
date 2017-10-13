@@ -58,7 +58,7 @@ export default class ExpertBaseExpertsPage extends Component {
   ebSorts = ['time', 'h_index', 'activity', 'rising_star', 'n_citation', 'n_pubs'];
 
   render() {
-    const { query, pagination } = this.props.search;
+    const { query, pagination, sortKey } = this.props.search;
     let seeAllURL = '';
     if (query) {
       const { match } = this.props;
@@ -79,13 +79,14 @@ export default class ExpertBaseExpertsPage extends Component {
         <h1 className={styles.pageTitle}>
 
           {hole.fill(theme.ExpertBaseExpertsPage_TitleZone, [
-            <FM defaultMessage="我的专家库" id="page.ExpertBaseExpertsPage.MyExperts" />,
+            <FM key={10} defaultMessage="我的专家库" id="page.ExpertBaseExpertsPage.MyExperts" />,
           ])}
 
           {theme.ExpertBaseExpertsPage_Title_SHOW_SeeAll_Link && seeAllURL &&
           <div className={styles.seeAll}>
             <Link to={seeAllURL}>
-              <FM defaultMessage="查看全部专家" id="page.ExpertBaseExpertsPage.SeeAllExperts" />
+              <FM key={10} defaultMessage="查看全部专家"
+                  id="page.ExpertBaseExpertsPage.SeeAllExperts" />
             </Link>
           </div>
           }
@@ -107,7 +108,7 @@ export default class ExpertBaseExpertsPage extends Component {
               const queryString = querySegments.join(', ');
 
               return (
-                <div>
+                <div key={100}>
                   {payload.total} Experts in ACM Fellow.
                   {queryString && <span> related to "{queryString}".</span>}
                 </div>
@@ -119,7 +120,7 @@ export default class ExpertBaseExpertsPage extends Component {
         <SearchComponent // Example: include all props.
           className={styles.SearchBorder} // additional className
           sorts={query ? null : this.ebSorts}
-          defaultSortType="time"
+          defaultSortType={sortKey}
           onSearchBarSearch={this.onSearchBarSearch}
           // showSearchBox={this.props.app.headerSearchBox ? false : true}
           showSearchBox={false}

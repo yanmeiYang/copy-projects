@@ -85,7 +85,7 @@ export default class PersonList extends Component {
     const showPrivacy = false;
     const RightZoneFuncs = rightZoneFuncs || DefaultRightZoneFuncs;
     const BottomZoneFuncs = bottomZoneFuncs || DefaultBottomZoneFuncs;
-    console.log('refresh person list ,', persons);
+    // console.log('refresh person list ,', persons);
 
     return (
       <div className={styles.personList}>

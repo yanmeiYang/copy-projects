@@ -24,7 +24,7 @@ export default class SearchSorts extends PureComponent {
 
   static defaultProps = {
     // Note: default value只在使用component时不传参数时生效。传空进来并不能生效。
-    sortType: 'relevance',
+    sortType: '',
     rightZone: [],
   };
 
@@ -39,8 +39,7 @@ export default class SearchSorts extends PureComponent {
   };
 
   render() {
-    const { rightZone } = this.props;
-    const sortType = this.props.sortType || 'relevance';
+    const { rightZone, sortType } = this.props;
     const sorts = this.props.sorts || defaultSorts;
     if (!sorts || sorts.length <= 0) {
       return false;

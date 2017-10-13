@@ -56,10 +56,6 @@ export default class SearchComponent extends Component {
         name: sysconfig.DEFAULT_EXPERT_BASE_NAME,
       };
     }
-    // console.log('>>>>>>>>>>>>>>>>>>>>>', props);
-    this.state = {
-      sortType: props.defaultSortType,
-    };
   }
 
   componentWillMount() {
@@ -77,7 +73,7 @@ export default class SearchComponent extends Component {
 
   // URL改变引起的props变化，在这里刷新搜索。其余的action导致的数据更新都在action后面调用了search方法。
   componentDidUpdate(prevProps, prevState) {
-    const search = this.props.search;
+    const { search } = this.props;
     const prevSearch = prevProps.search;
     if (search.query !== prevSearch.query
       || search.offset !== prevSearch.offset
@@ -103,7 +99,6 @@ export default class SearchComponent extends Component {
 
   onOrderChange = (e) => {
     const { filters, query } = this.props.search;
-    this.setState({ sortType: e });
     this.doSearch(query, 0, sysconfig.MainListSize, filters, e, false);
     // this.dispatch({ type: 'search/updateSortKey', payload: { key: e } });
     // this.dispatch({
@@ -123,14 +118,12 @@ export default class SearchComponent extends Component {
       size: pageSize,
     });
     dispatch(routerRedux.push({ pathname }));
-    console.log('>>>> >>>> page changed::::', page, pathname);
   };
 
   // ExpertBase filter 'eb' is a special filter.
   // On expert base changed, all other filters should be cleared.
   // sort method is not cleared.
   onExpertBaseChange = (id, name) => {
-    this.setState({ sortType: 'relevance' });
     const { filters } = this.props.search;
     // delete all other filters.
     Object.keys(filters).forEach((f) => {
@@ -194,7 +187,8 @@ export default class SearchComponent extends Component {
   render() {
     const { disableExpertBaseFilter, disableFilter, disableSearchKnowledge } = this.props;
     const { className, sorts, expertBaseId } = this.props;
-    const { sortType } = this.state;
+    const { sortKey } = this.props.search;
+    const sortType = sortKey;
 
     // .........
     const { results, pagination, query, aggs, filters, topic } = this.props.search;
@@ -279,7 +273,7 @@ export default class SearchComponent extends Component {
           {/* Sort */}
           <SearchSorts
             sorts={sorts}
-            sortType={this.state.sortType}
+            sortType={sortType}
             rightZone={SearchSortsRightZone}
             onOrderChange={this.onOrderChange}
           />

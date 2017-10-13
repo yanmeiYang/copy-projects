@@ -9,6 +9,8 @@ module.exports = {
   // 通用配置。所有System的配置文件必须全部包含这部分的值
   PageTitle: 'CIE 专家库',
 
+  Locale: 'zh',
+
   Search_SortOptions: [
     { label: '相关度', key: 'relevance' },
     { label: '学术成就', key: 'h_index' },
@@ -54,6 +56,11 @@ module.exports = {
     {
       id: '598bf2a19ed5db236b1062ea',
       name: '中国电子学会专家',
+      nperson: 77,
+    },
+    {
+      id: '59e07c7d9ed5dbf89c4d404e',
+      name: '中国电子学会院士库',
       nperson: 77,
     },
 

@@ -12,7 +12,7 @@ class ExpertMapDispatch extends React.Component {
 
   render() {
     let target;
-    const type = localStorage.getItem("maptype");
+    const type = localStorage.getItem('maptype');
     if (type) {
       if (type === 'google') {
         target = 'google';
@@ -35,7 +35,7 @@ class ExpertMapDispatch extends React.Component {
     }
 
     return (
-      <div></div>
+      <div />
     );
   }
 }

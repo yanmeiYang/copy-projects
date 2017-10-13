@@ -102,8 +102,10 @@ class KgSearchBox extends PureComponent {
   }
 
   componentWillMount = () => {
-    const { term } = strings.destructQueryString(this.props.query);
-    this.setState({ value: term || '' });
+    const { query, advanced } = this.props;
+    const { term, name, org } = strings.destructQueryString(query);
+    const newQuery = advanced ? term : strings.firstNonEmpty(term, name, org);
+    this.setState({ value: newQuery || '' });
   };
 
   componentDidMount() {
@@ -118,7 +120,8 @@ class KgSearchBox extends PureComponent {
     const { form, query, advanced } = this.props;
     if (nextProps.query !== query) {
       const { term, name, org } = strings.destructQueryString(nextProps.query);
-      this.setState({ value: term || '' });
+      const newQuery = advanced ? term : strings.firstNonEmpty(term, name, org);
+      this.setState({ value: newQuery || '' });
       if (advanced) {
         form.setFieldsValue({ name, org });
       }
@@ -339,7 +342,6 @@ class KgSearchBox extends PureComponent {
           compact size={size} style={style}
           className={classnames(styles.search, 'kgsuggest')}
         >
-
           <Autosuggest
             id={indexPageStyle || 'kgsuggest'}
             suggestions={suggestions}

@@ -2,7 +2,7 @@
  * Created by ranyanchuan on 2017/8/11.
  */
 import React from 'react';
-import { toIDDotString, TopExpertBase } from '../../utils/expert-base';
+import { toIDDotString, TopExpertBase } from 'utils/expert-base';
 
 module.exports = {
 

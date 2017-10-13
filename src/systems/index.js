@@ -26,14 +26,10 @@ const CurrentSystemConfig = {
   acmfellow: require('./acmfellow/config'),
 };
 
-// const sysTheme = require(`systems/${System}/theme-${System}.js`);
-
 // 默认配置
 const defaultSystemConfigs = {
   SYSTEM: System,
   SOURCE: Source,
-
-  // theme: sysTheme,
 
   //
   // Systems Preference
@@ -42,7 +38,7 @@ const defaultSystemConfigs = {
   EnableLocalLocale: false,
   // Language: 'en', // options [cn|en] // TODO change to locale.
   // PreferredLanguage: 'en', // 默认语言 // TODO delete this.
-  GLOBAL_ENABLE_HOC: false,
+  GLOBAL_ENABLE_HOC: true,
   Use_CDN: true,
 
   // google analysis

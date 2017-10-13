@@ -21,8 +21,23 @@ const destructQueryString = (query) => {
   return { term, name, org };
 };
 
+const firstNonEmpty = (...terms) => {
+  if (terms && terms.length > 0) {
+    for (const term of terms) {
+      if (term) {
+        return term;
+      }
+    }
+  }
+  return '';
+};
+
 const cleanQuery = (query) => {
   return query.replace(/-/g, ' ').trim();
 };
 
-module.exports = { constructQueryString, destructQueryString, cleanQuery };
+module.exports = {
+  constructQueryString, destructQueryString, cleanQuery,
+  firstNonEmpty,
+}
+;

@@ -179,7 +179,7 @@ export async function searchPersonAggGlobal(query, offset, size, filters, useTra
 
 function prepareParameters(query, offset, size, filters, sort, useTranslateSearch) {
   let expertBase = sysconfig.DEFAULT_EXPERT_BASE;
-  let data = { offset, size, sort: sort || '', };
+  let data = { offset, size, sort: sort || '' };
 
   if (filters) {
     // const newFilters = {};
@@ -215,21 +215,24 @@ function prepareParameters(query, offset, size, filters, sort, useTranslateSearc
 
 function prepareParametersGlobal(query, offset, size, filters, sort, useTranslateSearch) {
   let data = { query, offset, size, sort };
+  data = { offset, size, sort: sort || '' };
+
+  // add filters
   if (filters) {
-    const newFilters = {};
     Object.keys(filters).forEach((k) => {
-      if (k === 'eb') {
-        // ignore;
-      } else {
+      if (k !== 'eb') { // ignore eb;
         const newKey = `as_${k.toLowerCase().replace(' ', '_').replace('-', '_')}`;
-        // newFilters[newKey] = filters[k].toLowerCase().replace(' ', '_');
-        newFilters[newKey] = filters[k];
+        data[newKey] = filters[k];
       }
     });
-    // console.log('=====================',newFilters );
-    data = { ...newFilters, query, offset, size, sort: sort || '' };
   }
+
+  // add query
+  const { term, name, org } = strings.destructQueryString(query);
+  const newQuery = strings.firstNonEmpty(term, name, org);
+  data.query = newQuery;
   data = addAdditionParameterToData(data, sort, 'global');
+
   if (useTranslateSearch && data.query) {
     data.query = `cross:${data.query}`;
   }

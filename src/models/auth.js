@@ -55,8 +55,17 @@ export default {
             console.log('================================ dAdd privileges to eb: ', id, first_name);
             const { data } = yield call(
               expertBaseService.rosterManage,
-              { payload: { id, name: `${first_name} ${last_name}`, email, perm: 3 } },
-            );
+              {
+                payload:
+                  {
+                    id,
+                    name: `${first_name} ${last_name}`,
+                    email: `${email}@${sysconfig.SOURCE}`,
+                    perm: 3,
+                  },
+              },
+              )
+            ;
           }
         }
       }

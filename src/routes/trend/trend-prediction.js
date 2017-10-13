@@ -180,7 +180,7 @@ export default class TrendPrediction extends React.PureComponent {
       bottom: 6,
       left: 100,
     };
-    width = 1200; // 需调整参数，容器宽度
+    width = 1500; // 需调整参数，容器宽度
     height = 1000 - margin.top - margin.bottom; // 需调整参数，容器高度，华为修改500，四个地方，另外三个为隐藏
     histWidth = 380;
     histHeight = 100;// 左侧直方图的高度
@@ -965,18 +965,19 @@ export default class TrendPrediction extends React.PureComponent {
             </div>
             }
             <div className="info">
-              {pos && <span className={styles.detail}><i className="fa fa-briefcase fa-fw"/>{pos}</span>}
+              {pos && <span className={styles.detail}><i className="fa fa-briefcase fa-fw" />{pos}</span>}
               <br />
-              {aff && <span className={styles.detail}><i className="fa fa-institution fa-fw"/>{aff}</span>}
+              {aff && <span className={styles.detail}><i className="fa fa-institution fa-fw" />{aff}</span>}
             </div>
-            <strong id="value1"/>
+            <strong id="value1" />
           </div>
         </div>
         <div className={styles.nav}>
-          {/*<Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange} className={styles.tabs}>*/}
-          {/*<TabPane tab={<span>Recent</span>} key="1" id="first-three"/>*/}
-          {/*<TabPane tab={<span>All</span>} key="2" id="revert"/>*/}
-          {/*</Tabs>*/}
+          <Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange} className={styles.tabs}>
+            <TabPane tab={<span>近期热度</span>} key="1" id="recent-trend" />
+            <TabPane tab={<span>全局热度</span>} key="2" id="overall-trend" />
+            <TabPane tab={<span>技术源头</span>} key="3" id="origin-trend" />
+          </Tabs>
           <div id="hist-chart" className={styles.rightbox}/>
         </div>
       </div>

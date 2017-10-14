@@ -35,9 +35,7 @@ const defaultSystemConfigs = {
   // Systems Preference
   //
   Locale: 'en', // en, zh
-  EnableLocalLocale: false,
-  // Language: 'en', // options [cn|en] // TODO change to locale.
-  // PreferredLanguage: 'en', // 默认语言 // TODO delete this.
+  EnableLocalLocale: false, // 将Locale存储到localStorage
   GLOBAL_ENABLE_HOC: true,
   Use_CDN: true,
 
@@ -49,23 +47,15 @@ const defaultSystemConfigs = {
   /**
    * Layout related
    */
+  PageTitle: 'Aminer Business',
   Layout_HasSideBar: false, // 是否显示左侧菜单
   Layout_HasNavigator: true,
 
-  PageTitle: 'Aminer Business',
   // header
-  Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
-  Header_LogoWidth: 212,
-  Header_LogoStyle: {},
-  Header_SubTextLogo: '子标题',
-  Header_SubTextStyle: {},
   Header_UserPageURL: '', // 用户头像点击之后去的页面.
   Header_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
   ShowHelpDoc: false, // 显示帮助文档
   Header_UserNameBlock: defaults.IN_APP_DEFAULT, // 显示登录用户名
-  // footer and sidebar
-  ShowFooter: true,
-  Footer_Content: <Footer />,
 
   /**
    * Functionality

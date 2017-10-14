@@ -11,38 +11,48 @@ import { IndexHotLinks } from 'components/widgets';
 import styles from './theme-demo.less';
 // import * as Const from './const-acmfellow';
 
+const infoZone = (
+  <Link to={`/eb/${sysconfig.ExpertBase}/-/0/20`}
+        className={classnames(styles.header_info)} key="0">
+    My Experts
+  </Link>);
+
 module.exports = {
   themeName: 'common-white',
   styles,
 
   // Layout
-
   logoZone: [
     <Link to="/" href="/" className={classnames(styles.logoZones)} key="0">
       <div className={classnames(styles.header_logo, 'icon')} />
       <div className={classnames(styles.header_subTitle, 'font-page-title')}>
-        ACM Fellow
+        AMiner Demo
       </div>
     </Link>,
   ],
 
-  infoZone: [
-    <Link to={`/eb/${sysconfig.ExpertBase}/-/0/20`}
-          className={classnames(styles.header_info)} key="0">
-      My Experts
-    </Link>,
-  ],
+  infoZone: [],
+
+  footer: (
+    <div className={styles.footerText}>
+      <div>Powered by：</div>
+      <a href="https://aminer.org">
+        <img src="/aminer_logo.png" alt="AMiner logo" className={styles.aminerLogo} />
+      </a>
+    </div>
+  ),
 
   // Index page
 
-  index_centerZone: [
-    <IndexHotLinks
-      key={0}
-      links={sysconfig.IndexPage_QuickSearchList}
-      lang={sysconfig.Locale}
-      // urlFunc={query => `/${sysconfig.SearchPagePrefix}/${query}/0/${sysconfig.MainListSize}`}
-      urlFunc={query => `/eb/${sysconfig.ExpertBase}/${query}/0/${sysconfig.MainListSize}`}
-    />,
+  index_bannerZone: [
+    <div key="0" className={styles.index_bannerZone}>
+      {/*<div className={classnames(styles.logo)}>*/}
+      {/*<span alt="" className="icon" />*/}
+      {/*</div>*/}
+      <h1 className={styles.text}>
+        <FM id="index.title" defaultMessage="Expert Search" />
+      </h1>
+    </div>,
   ],
 
   // Expert Page

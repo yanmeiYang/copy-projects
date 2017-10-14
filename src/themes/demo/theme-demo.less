@@ -1,4 +1,4 @@
-@import "../../themes/vars.less";
+@import "~themes/vars";
 
 .logoZones {
   display: flex; flex-direction: row;
@@ -6,8 +6,7 @@
 
   .header_logo {
     width: 66px;
-    //background-position: -68px -47px;
-    background-image: url('/sys/acmfellow/header_logo.png');
+    background-image: url('/sys/demo/header_logo.png');
     background-size: cover;
   }
 
@@ -15,6 +14,35 @@
 
 }
 
+.footerText {
+  display: flex; flex-direction: row; justify-content: flex-end;
+  line-height: 25px; margin-top: 10px; margin-right: 10px;
+  .aminerLogo { height: 25px; }
+}
+
+.index_bannerZone {
+  width: 100%; text-align: center; margin-top: 0px;
+  //.logo {
+  //  display: flex; flex-direction: row; justify-content: center;
+  //  span {
+  //    display: flex; background-position: -171px -10px;
+  //    width: 100px; height: 100px; z-index: 10000; border: none;
+  //  }
+  //}
+  .text {
+    font-size: 28px; font-weight: bold;
+    margin-top: 40px; margin-bottom: 30px;
+  }
+}
+
 .header_info {
   margin: 0 12px 0 20px; height: 66px; line-height: 66px;
 }
+
+.Overrides() {
+  .header {
+    //background-color: rgb(51, 51, 51);
+  }
+}
+
+.Overrides() !important;

@@ -6,38 +6,16 @@ import { toIDDotString, TopExpertBase } from 'utils/expert-base';
 
 module.exports = {
 
-  PageTitle: '专家库',
-
-  //
-  // Systems Preference
-  //
   Locale: 'en', // en, zh
   EnableLocalLocale: false,
 
-  IndexPage_QuickSearchList: ['人工智能', '机器人', '数据挖掘', '机器学习', '数据建模', '计算机视觉',
-    '计算机网络', '网络', '自然语言处理'],
-
-  PersonList_ShowIndices: ['activityRankingContrib', 'h_index', 'activity'],
+  // PersonList_ShowIndices: ['activityRankingContrib', 'h_index', 'activity'],
 
   /**
    * Layout related
    */
-  Layout_HasSideBar: true, // 是否显示左侧菜单
-
-  // Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
-  Header_LogoWidth: 213,
-  Header_LogoStyle: {
-    width: '60px',
-    height: '38px',
-    backgroundPosition: '8px 2px',
-    backgroundSize: ' auto 32px',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor: 'white',
-  },
-  Header_SubTextLogo: '专家库',
-  Header_SubTextStyle: { marginLeft: 12 },
+  Layout_HasSideBar: false, // 是否显示左侧菜单
   Header_UserPageURL: '', // 用户头像点击之后去的页面.
-  ShowFooter: true,
   ShowHelpDoc: false, // 显示帮助文档
 
   //

@@ -13,7 +13,7 @@ export default {
 
   state: {
     results: [],
-    topic: {},
+    topic: {}, // search 右边的 topic
     aggs: [],
     filters: {},
     query: null,

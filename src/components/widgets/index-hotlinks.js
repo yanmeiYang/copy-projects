@@ -14,15 +14,16 @@ const IndexHotLinks = ({ links, urlFunc }) => {
   return (
     <div className={styles.keywords}>
       <div className={classnames(styles.inner, 'keywords_inner')}>
-        {Links.map((item) => {
+        {Links.map((item, index) => {
           let query = '';
           if (sysconfig.Locale === 'zh') {
             query = item.name_zh || item.name;
           } else {
             query = item.name || item.name_zh;
           }
+          const key = `${query}_${index}`;
           return (
-            <div key={query}>
+            <div key={key}>
               <Link to={urlFunc && urlFunc(query)}>{query}</Link>
               {/*<span>{(index === commonSearch.length - 1) ? '' : ''}</span>*/}
             </div>

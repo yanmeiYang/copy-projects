@@ -46,7 +46,11 @@ export default class SearchKnowledge extends Component {
 
 
   render() {
-    const topic = this.props.search.topic;
+    const { topic } = this.props.search;
+    if (!topic || topic.length <= 0) {
+      return null;
+    }
+    console.log('============================= SearchKnowledge propchanged', topic);
     return (
       <div className={styles.searchKgContent}>
         {

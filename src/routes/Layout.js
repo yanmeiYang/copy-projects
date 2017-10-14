@@ -52,8 +52,9 @@ export default class Layout extends Component {
   };
 
   componentWillMount() {
-    console.log('********* 统计 *********');
-    ReactGA.pageview(window.location.hash);
+    console.log('********* google analytics *********');
+    ReactGA.initialize(sysconfig.googleAnalytics);
+    ReactGA.pageview(window.location.href);
   };
 
   render() {

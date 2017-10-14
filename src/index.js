@@ -2,7 +2,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import dva from 'dva';
-import ReactGA from 'react-ga';
 import 'babel-polyfill';
 import createHistory from 'history/createBrowserHistory';
 import { IntlProvider, addLocaleData } from 'react-intl';
@@ -20,11 +19,6 @@ const logErr = ::console.error;
 const ERROR_MSG_DURATION = 3; // 3 秒
 
 configAntd();
-
-// initialize google analytics
-if (sysconfig.googleAnalytics) {
-  ReactGA.initialize(sysconfig.googleAnalytics);
-}
 
 if (ENABLE_PERF) { // eslint-disable-line no-undef
                    // window.Perf = require('react-addons-perf');

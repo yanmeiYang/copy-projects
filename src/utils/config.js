@@ -107,6 +107,7 @@ module.exports = {
     pubListInfo: '/person/pubs/:id/stats',
     pubListByYear: '/person/pubs/:id/range/year/:year/:offset/:size',
     pubListLimited: '/person/pubs/:id/range/citation/:nc_lo/:nc_hi/:offset/:size',
+    pubById: '/pub/summary/:id',
 
     // System config
     ucListByCategory: '/2b/config/:source/list?category=:category',

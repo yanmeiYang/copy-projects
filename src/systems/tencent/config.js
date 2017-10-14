@@ -30,7 +30,7 @@ module.exports = {
 
   // > Search related
   SearchBarInHeader: true,
-  HeaderSearch_TextNavi: [],
+  HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertMap'],
 
   ExpertBases: [
     {

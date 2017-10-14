@@ -27,6 +27,7 @@ let histWidth;
 //let renderTrend;
 let termByFreq;
 let histChart;
+let sortedStreamChart;
 let histItemHeight;
 let width;
 let trendData;
@@ -46,6 +47,8 @@ let cperson = null;
 let cpaper = null;
 let carr = [];
 let idToAuthor;
+let selectedTerm;
+let sortMethod = 'recent';
 
 const yearToXOffset = (year) => {
   const slide = trendData.yearToSlide[year];
@@ -90,76 +93,69 @@ export default class TrendPrediction extends React.PureComponent {
   }
 
   onChange = (key) => {
-    if (key === '1') { //全局的时候按照词频排序
-      d3.select('.active').classed('active', false);
-      d3.select(this.parentNode).classed('active', true);
-      d3.selectAll('.term').remove();
-      trendData.terms.sort((a, b) => {
-        return b.sum - a.sum;
-      });
-      if (trendData.terms[0].t.toLowerCase() === this.props.query) {
-        trendData.terms = trendData.terms.slice(1, trendData.terms.length);//减去词频最高的词语
-      }
-      this.renderHist();
-      this.renderTermTrend(trendData.terms[0]);
-    } else {
-      d3.select('.active').classed('active', false);
-      d3.select(this.parentNode).classed('active', 'true');
-      d3.selectAll('.term').remove();
-      trendData.terms.sort((a, b) => {
-        return b.freq - a.freq;
-      });
-      if (trendData.terms[0].t.toLowerCase() === this.props.query) {
-        trendData.terms = trendData.terms.slice(1, trendData.terms.length);//减去词频最高的词语
-      }
-      const hist = histChart.append('g').selectAll('.term').data(trendData.terms).enter()
-        .append('g')
-        .attr('class', 'term')
-        .attr('id', (d) => {
-          return `term-${d.idx}`;//词语
-        })
-        .attr('transform', (d, i) => {
-          return `translate(${[0, (i * histItemHeight) + 10]})rotate(${0})`;//顶到最前面，不用加20，改为0
-        })
-        .on('click', (d) => {
-          this.renderTermTrend(d);
-        });
-      // 页面左侧统计模块的直方图
-      hist.append('rect')
-        .attr('x', () => {
-          return histPosition + 10;
-        })
-        .attr('y', () => {
-          return 0;
-        })
-        .attr('height', 18)
-        .attr('width', (d) => {
-          return (histHeight * d.freq) / maxFreq;
-        })
-        .style('fill-opacity', 0.7)
-        .style('fill', '#60aFe9')
-        .append('svg:title')
-        .text((d) => {
-          return d.freq;
-        });
-
-      hist.append('text')
-        .attr('text-anchor', 'end')
-        .attr('transform', () => {
-          return `translate(${[histPosition, 0]})rotate(${0})`;
-        })
-        .style('font-size', 12)
-        .attr('dy', '0.85em')
-        .text((d) => {
-          return trendData.termToLabel[d.t];
-        });
-      this.renderTermTrend(trendData.terms[0]);
+    d3.select('.active').classed('active', false);
+    d3.select(this.parentNode).classed('active', true);
+    d3.selectAll('.term').remove();
+    switch (key) { //全局的时候按照词频排
+      case '1':
+        sortMethod = 'recent';
+        break;
+      case '2':
+        sortMethod = 'overall';
+        break;
+      case '3':
+        sortMethod = 'origin';
+        break;
+      default:
+        break;
     }
+    // if (trendData.terms[0].t.toLowerCase() === this.props.query) {
+    //   trendData.terms = trendData.terms.slice(1, trendData.terms.length);//减去词频最高的词语
+    // }
+    this.sortTerms(sortMethod);
+
+    this.renderHist();
+    this.renderTermTrend(trendData.terms[0]);
+    this.renderTrend();
   };
 
   onKeywordClick = (query) => {
     this.setState({ loadingFlag: true });
     this.props.dispatch(routerRedux.push({ pathname: '/trend', search: `?query=${query}` }));
+  };
+
+  sortTerms = (method) => {
+    terms = {};
+    maxSum = 0;
+    let func = _ => true;
+    switch (method) {
+      case 'recent':
+        func = term => ((term.y > 2012) && (term.d > 0));
+        break;
+      case 'origin':
+        func = term => (trendData.yearToSlide[term.y] <= 3);
+        break;
+      default:
+        break;
+    }
+    // current hotsopt中按各技术2010年之后的文献总数排序
+    trendData.terms.forEach((t) => {
+      t.sum = 0;
+      t.year.forEach((tt) => {
+        if (func(tt)) {
+          t.sum += tt.d;
+        }
+      });
+      if (t.sum > maxSum) {
+        maxSum = t.sum;
+      }
+      terms[t.t] = t;
+    });
+
+    trendData.terms.sort((a, b) => {
+      return b.sum - a.sum;
+    });
+    selectedTerm = trendData.terms[0];
   };
 
   initChart = (term) => {
@@ -169,7 +165,7 @@ export default class TrendPrediction extends React.PureComponent {
       bottom: 6,
       left: 100,
     };
-    width = 1500; // 需调整参数，容器宽度
+    width = 1300; // 需调整参数，容器宽度
     height = 1000 - margin.top - margin.bottom; // 需调整参数，容器高度，华为修改500，四个地方，另外三个为隐藏
     histWidth = 380;
     histHeight = 100;// 左侧直方图的高度
@@ -180,28 +176,16 @@ export default class TrendPrediction extends React.PureComponent {
       return `${formatNumber(d)} Times`;
     };
     color = d3.scale.category10();// d3图的配色样式
+
+    idToAuthor = {};
+    trendData.authors.forEach((a) => {
+      idToAuthor[a.id] = a;
+    });
+    this.sortTerms(sortMethod);
+
     if (chart) {
       chart.remove();
     }
-
-    terms = {};
-    maxSum = 0;
-    // current hotsopt中按各技术2010年之后的文献总数排序
-    trendData.terms.forEach((t) => {
-      t.sum = 0;
-      t.year.forEach((tt) => {
-        t.sum += tt.d;
-      });
-      if (t.sum > maxSum) {
-        maxSum = t.sum;
-      }
-      terms[t.t] = t;
-    });
-    idToAuthor = {};
-    trendData.authors.forEach((t) => {
-      idToAuthor[t.id] = t;
-    });
-
     chart = d3.select('#chart')
       .append('svg')
       .attr('overflow', 'scroll')
@@ -216,7 +200,7 @@ export default class TrendPrediction extends React.PureComponent {
     this.renderAxis();
     this.renderHist();
     this.renderTrend(term, 1, 1000);
-    this.renderTermTrend(termByFreq[0]);
+    this.renderTermTrend(selectedTerm);
   };
 
   updateTrend = (query) => {
@@ -257,14 +241,15 @@ export default class TrendPrediction extends React.PureComponent {
       })
       .style('stroke', 'gray')
       .style('stroke-width', 0.5);
+
     // 左侧的统计框
-    termByFreq = [];
-    trendData.terms.sort((a, b) => {
-      return b.sum - a.sum;
-    });
-    if (trendData.terms[0].t.toLowerCase() === this.props.query) {
-      trendData.terms = trendData.terms.slice(1, trendData.terms.length);//减去词频最高的词语
-    }
+    // termByFreq = [];
+    // trendData.terms.sort((a, b) => {
+    //   return b.sum - a.sum;
+    // });
+    // if (trendData.terms[0].t.toLowerCase() === this.props.query) {
+    //   trendData.terms = trendData.terms.slice(1, trendData.terms.length);//减去词频最高的词语
+    // }
 
     const histGraph = histChart
       .append('g')
@@ -274,7 +259,7 @@ export default class TrendPrediction extends React.PureComponent {
       .append('g')
       .attr('class', 'term')
       .attr('transform', (d, i) => {
-        termByFreq[i] = d;
+        // termByFreq[i] = d;
         return `translate(${[0, (i * histItemHeight) + 10]})rotate(${0})`;// 左侧图离标签页的距离，字和直方图的旋转
       })
       .attr('id', (d) => {
@@ -307,33 +292,6 @@ export default class TrendPrediction extends React.PureComponent {
       .text((d) => { // 左侧图字体大小
         return trendData.termToLabel[d.t];
       });
-    // first-three即页面中current hotspot按钮，点击后按照2010之后关于该技术的文献总数排序并显示直方图，
-    // revert即页面中overall按钮，点击后按照freq对技术排序并显示直方图
-    // 导航布局，first-three即页面中current hotspot按钮
-    d3.select('#nav').style('display', '');
-    d3.select('.active').classed('active', false);
-    d3.select('#first-three').classed('active', 'true');
-
-    d3.select('#first-three').on('click', function () {
-      d3.select('.active').classed('active', false);
-      d3.select(this.parentNode).classed('active', true);
-      d3.selectAll('.term').remove();
-      trendData.terms.sort((a, b) => {
-        return b.freq - a.freq;
-      });
-      this.renderHist();
-      this.renderTermTrend(terms[q]);
-    });
-    d3.select('#revert').on('click', () => {
-      d3.select('.active').classed('active', false);
-      d3.select(this.parentNode).classed('active', 'true');
-      d3.selectAll('.term').remove();
-      trendData.terms.sort((a, b) => {
-        return b.freq - a.freq;
-      });
-      this.renderHist();
-      this.renderTermTrend(terms[q]);
-    });
   };
 
   // 绘制技术趋势图，data对应1个term，趋势由data.year.d的大小反映
@@ -405,8 +363,8 @@ export default class TrendPrediction extends React.PureComponent {
     const onMouseOverEventNode = (d) => {
       this.setState({ person: null, paper: null });
       document.getElementById('tooltip1').style = 'display:block';
-      const xPosition = d3.event.layerX + 220;
-      const yPosition = d3.event.layerY - 70;
+      const xPosition = d3.event.layerX + 30;
+      const yPosition = d3.event.layerY + 20;
       d3.select('#tooltip1').style('left', `${xPosition}px`).style('top', `${yPosition}px`)
         .select('#value1')
         .text(() => {
@@ -552,8 +510,11 @@ export default class TrendPrediction extends React.PureComponent {
       .attr('id', 'cutline')
       .style('stroke', 'darkgray')
       .style('stroke-width', 1);// 上下图之间的线的设置
-    const svg = chart.append('g').attr('height', 700).attr('id', 'trend').attr('z-index', 2);
-    svg.append('line').attr('id', 'nvMouse').attr('class', 'hidden').style('stroke', 'red')
+    if (sortedStreamChart) {
+      sortedStreamChart.remove();
+    }
+    sortedStreamChart = chart.append('g').attr('height', 700).attr('id', 'trend').attr('z-index', 2);
+    sortedStreamChart.append('line').attr('id', 'nvMouse').attr('class', 'hidden').style('stroke', 'red')
       .style('stroke-width', 15);
     const sankey = d3.sankey()
       .nodeWidth(0)
@@ -568,11 +529,11 @@ export default class TrendPrediction extends React.PureComponent {
     const selectedTerms = {};
     const addedTerms = {};
     let cnt = 0;
-    const topTerms = Object.keys(trendData.termFreq)
-      .sort((a, b) => trendData.termFreq[b] - trendData.termFreq[a]);
-    for (const key of topTerms) {
-      termToIndex[key] = cnt;
-      selectedTerms[key] = true;
+    // const topTerms = Object.keys(trendData.termFreq)
+    //   .sort((a, b) => trendData.termFreq[b] - trendData.termFreq[a]);
+    for (const term of trendData.terms) {
+      termToIndex[term.t] = cnt;
+      selectedTerms[term.t] = true;
       cnt += 1;
       if (cnt > 12) {
         break;
@@ -629,7 +590,7 @@ export default class TrendPrediction extends React.PureComponent {
     sankey.nodes(nodes).links(links)
       .nodeOffset(width / trendData.timeSlides.length)
       .layout(100);
-    link = svg.append('g')
+    link = sortedStreamChart.append('g')
       .selectAll('.link')
       .data(links).enter()
       .append('path')
@@ -645,7 +606,7 @@ export default class TrendPrediction extends React.PureComponent {
       .style('fill', (d) => {
         const key = `gradient-${d.source_index}-${d.target_index}`;
         // offset表示link中颜色渐变，0%为起始结点颜色，100%为终止节点颜色，cluster类别为0-4，每个类别对应不同颜色
-        svg.append('linearGradient').attr('id', key).attr('gradientUnits', 'userSpaceOnUse')
+        sortedStreamChart.append('linearGradient').attr('id', key).attr('gradientUnits', 'userSpaceOnUse')
           .attr('x1', d.source.x + 50)
           .attr('y1', 0)
           .attr('x2', d.target.x)
@@ -683,7 +644,7 @@ export default class TrendPrediction extends React.PureComponent {
       return `${d.source.name} → ${d.target.name}`;//`${d.source.name} → ${d.target.name}${d.source_index}`箭头
     });
 
-    node = svg.append('g')
+    node = sortedStreamChart.append('g')
       .selectAll('.node')
       .data(nodes)
       .enter()
@@ -749,8 +710,8 @@ export default class TrendPrediction extends React.PureComponent {
       for (const a of thepaper.authors) {
         authors += `${a.name},`;
       }
-      authors = `${authors.substring(0, authors.length - 1)}.`
-      quote = `   ${authors}${thepaper.title}(${thepaper.year})`;
+      authors = `${authors.substring(0, authors.length - 1)}.`;
+      quote = `${thepaper.title} (${thepaper.year})`;
     }
     if (this.state.person != null) {
       const person = this.state.person;
@@ -793,7 +754,7 @@ export default class TrendPrediction extends React.PureComponent {
         </div>
         <div className={styles.loading1}>
           <div className={styles.loading} id="loading" style={{ display: showFlag, textAlign: 'center' }}>
-            {query}趋势正在生成中！
+            {query}技术趋势正在分析中，请稍后...
           </div>
         </div>
         <div id="showchart" style={{ display: showFlag1 }}>
@@ -820,12 +781,16 @@ export default class TrendPrediction extends React.PureComponent {
               }
               <div className="img"><img src={url} alt={url} /></div>
               <div className="info">
-                {pos && <span className={styles.detail}><i className="fa fa-briefcase fa-fw" />{pos}</span>}
-                <br />
-                {aff && <span className={styles.detail}><i className="fa fa-institution fa-fw" />{aff}</span>}
+                {pos && <span className={styles.detail}>{pos}</span>}<br />
+                {aff && <span className={styles.detail}>{aff}</span>}
               </div>
               <strong id="value1" />
-              <div>{thepaper && <span className={styles.detail}><i className="fa fa-file-pdf-o" /><a {...paperLinkParams}>{quote}</a></span>}</div>
+              <div>
+                {
+                  thepaper &&
+                  <span className={styles.detail}><a {...paperLinkParams}>{quote}</a></span>
+                }
+              </div>
             </div>
           </div>
           <div className={styles.nav}>

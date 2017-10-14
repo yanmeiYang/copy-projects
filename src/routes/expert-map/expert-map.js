@@ -24,6 +24,7 @@ let number = '0';
 let range = '0';
 let domainIds = [];
 let domainChecks = [];
+const dataMap = {};
 const ButtonGroup = Button.Group;
 const blankAvatar = '/images/blank_avatar.jpg';
 
@@ -71,7 +72,7 @@ class ExpertMap extends React.PureComponent {
     typeIndex: 0,
     rangeChecks: [true, false, false, false],
     numberChecks: [true, false, false, false, false],
-  }
+  };
 
   componentDidMount() {
     const { query, dispatch } = this.props;
@@ -114,7 +115,6 @@ class ExpertMap extends React.PureComponent {
   };
 
   onChangeBaiduMap = () => {
-    // TODO don't change page, use dispatch.
     const href = window.location.href;
     window.location.href = href;
   };
@@ -134,58 +134,6 @@ class ExpertMap extends React.PureComponent {
     });
   };
 
-  onExpertBaseChange = (id, name) => {
-    const { filters } = this.props.search;
-    Object.keys(filters).forEach((f) => {
-      delete filters[f];
-    });
-    this.onFilterChange('eb', { id, name }, true);// Special Filter;
-  };
-
-  showRange = (rangeTmp) => {
-    const lastType = localStorage.getItem('lasttype');
-    const that = this;
-    const arr = [false, false, false, false];
-    arr[rangeTmp] = true;
-    that.setState({ rangeChecks: arr });
-    if (rangeTmp) {
-      range = rangeTmp;
-      this.showMap(this.props.expertMap.geoData, lastType, range, number);
-    }
-  };
-
-  showNumber = (numberTmp) => {
-    const that = this;
-    const arr = [false, false, false, false, false];
-    arr[numberTmp] = true;
-    that.setState({ numberChecks: arr });
-    const lastType = localStorage.getItem('lasttype');
-    if (numberTmp) {
-      number = numberTmp;
-      this.showMap(this.props.expertMap.geoData, lastType, range, number);
-    }
-  };
-
-  showType = (e) => {
-    localStorage.setItem('isClick', '1');
-    const typeid = e.currentTarget && e.currentTarget.value && e.currentTarget.getAttribute('value');
-    this.setState({ typeIndex: typeid });
-    if (typeid === '0') {
-      this.showMap(this.props.expertMap.geoData, typeid, '0', '0');
-    } else if (typeid === '1') {
-      // 简单地读取其城市大区等信息，然后归一到一个地址，然后在地图上显示
-      this.showMap(this.props.expertMap.geoData, typeid, '0', '0');
-    } else if (typeid === '2') {
-      this.showMap(this.props.expertMap.geoData, typeid, '0', '0');
-    } else if (typeid === '3') {
-      this.showMap(this.props.expertMap.geoData, typeid, '0', '0');
-    } else if (typeid === '4') {
-      this.showMap(this.props.expertMap.geoData, typeid, '0', '0');
-    } else if (typeid === '5') {
-      this.showMap(this.props.expertMap.geoData, typeid, '0', '0');
-    }
-  };
-
   // 将内容同步到地图中的控件上。
   syncInfoWindow = () => {
     // sync personInfo popup
@@ -193,6 +141,24 @@ class ExpertMap extends React.PureComponent {
     const pi = getById('personInfo');
     if (ai && pi) {
       ai.innerHTML = pi.innerHTML;
+    }
+  };
+
+  // update one person's info.
+  toggleRightInfo = (type, id) => {
+    // TODO cache it.
+    if (this.props.expertMap.infoZoneIds !== id) { // don't change
+      if (id.indexOf(',') >= 0) { // is cluster
+        const clusterIdList = id.split(',');
+        this.props.dispatch({
+          type: 'expertMap/listPersonByIds',
+          payload: { ids: clusterIdList },
+        });
+      }
+      this.props.dispatch({
+        type: 'expertMap/setRightInfo',
+        payload: { idString: id, rightInfoType: type },
+      });
     }
   };
 
@@ -218,6 +184,25 @@ class ExpertMap extends React.PureComponent {
       this.toggleRightInfo('person', personId);
       // this.toggleRightInfoBox(personId);
     });
+  };
+
+  showRange = (rangeTmp) => {
+    const lastType = localStorage.getItem('lasttype');
+    const that = this;
+    const arr = [false, false, false, false];
+    arr[rangeTmp] = true;
+    that.setState({ rangeChecks: arr });
+    if (rangeTmp) {
+      range = rangeTmp;
+      this.showMap(this.props.expertMap.geoData, lastType, range, number);
+    }
+  };
+
+  initializeBaiduMap = (map) => {
+    map.enableScrollWheelZoom();
+    map.addControl(new window.BMap.NavigationControl());
+    map.addControl(new window.BMap.ScaleControl());
+    map.addControl(new window.BMap.OverviewMapControl());
   };
 
   showMap = (place, type) => {
@@ -357,6 +342,7 @@ class ExpertMap extends React.PureComponent {
         //const domain = localStorage.getItem("domain");
         place.results.sort((a, b) => b.hindex - a.hindex);
         for (const pr of place.results) {
+          dataMap[pr.id] = pr;
           let pt = null;
           const newplace = findPosition(newtype, pr);
           const label = new window.BMap.Label(`<div>${pr.name}</div><div style='display: none;'>${pr.id}</div>`);
@@ -438,7 +424,7 @@ class ExpertMap extends React.PureComponent {
         }
         waitforBMapLib(200, 100,
           () => {
-            const _ = new window.BMapLib.MarkerClusterer(map, { markers });
+            const markerClusterer = new window.BMapLib.MarkerClusterer(map, { markers });
             for (let m = 0; m < markers.length; m += 1) {
               this.addMouseoverHandler(markers[m], pId[m]);
             }
@@ -448,24 +434,49 @@ class ExpertMap extends React.PureComponent {
     );
   };
 
-  initializeBaiduMap = (map) => {
-    map.enableScrollWheelZoom();
-    map.addControl(new window.BMap.NavigationControl());
-    map.addControl(new window.BMap.ScaleControl());
-    map.addControl(new window.BMap.OverviewMapControl());
+  showType = (e) => {
+    localStorage.setItem('isClick', '1');
+    const typeid = e.currentTarget && e.currentTarget.value && e.currentTarget.getAttribute('value');
+    this.setState({ typeIndex: typeid });
+    if (typeid === '0') {
+      this.showMap(this.props.expertMap.geoData, typeid, '0', '0');
+    } else if (typeid === '1') {
+      // 简单地读取其城市大区等信息，然后归一到一个地址，然后在地图上显示
+      this.showMap(this.props.expertMap.geoData, typeid, '0', '0');
+    } else if (typeid === '2') {
+      this.showMap(this.props.expertMap.geoData, typeid, '0', '0');
+    } else if (typeid === '3') {
+      this.showMap(this.props.expertMap.geoData, typeid, '0', '0');
+    } else if (typeid === '4') {
+      this.showMap(this.props.expertMap.geoData, typeid, '0', '0');
+    } else if (typeid === '5') {
+      this.showMap(this.props.expertMap.geoData, typeid, '0', '0');
+    }
+  };
+
+  showNumber = (numberTmp) => {
+    const that = this;
+    const arr = [false, false, false, false, false];
+    arr[numberTmp] = true;
+    that.setState({ numberChecks: arr });
+    const lastType = localStorage.getItem('lasttype');
+    if (numberTmp) {
+      number = numberTmp;
+      this.showMap(this.props.expertMap.geoData, lastType, range, number);
+    }
   };
 
   listPersonDone = (map, ids, data) => {
     const imgwidth = 45;
 
     const imgdivs = document.getElementsByName('scholarimg');
-    if (imgdivs != null && imgdivs.length !== 0) {
+    if (imgdivs !== null && imgdivs.length !== 0) {
       for (let i = 0; i < ids.length; i += 1) {
         const cimg = imgdivs[i];
         const personInfo = data.data.persons[i];
         //let url = blankAvatar;
         let url;
-        if (personInfo.avatar != null && personInfo.avatar !== '') {
+        if (personInfo.avatar !== null && personInfo.avatar !== '') {
           url = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 50);
         }
         //const style = url === '/images/blank_avatar.jpg' ? '' : 'margin-top:-5px;';
@@ -542,6 +553,16 @@ class ExpertMap extends React.PureComponent {
     }
   };
 
+  detachCluster = (clusterPanel) => {
+    if (clusterPanel != null && clusterPanel.parentNode != null) {
+      const imgdivs = document.getElementsByName('scholarimg');
+      for (let i = 0; i < imgdivs.length;) {
+        imgdivs[i].parentNode.removeChild(imgdivs[i]);
+      }
+      clusterPanel.parentNode.removeChild(clusterPanel);
+    }
+  };
+
   showTop = (usersIds, e, map, maindom, inputids, onLeave) => {
     const ishere = getById('panel');
     if (ishere != null) {
@@ -561,12 +582,22 @@ class ExpertMap extends React.PureComponent {
     insertAfter(oDiv, maindom);
     const thisNode = getById('panel');
     // 开始显示图片
-    const ids = usersIds.slice(0, 8);
+    const usersInfo = [];
+    for (const u of usersIds) {
+      usersInfo.push(dataMap[u]);
+    }
+    usersInfo.sort((a, b) => b.hindex - a.hindex);
+    const ids = [];
+    for (const u of usersInfo.slice(0, 8)) {
+      ids.push(u.id);
+    }
 
     const fenshu = (2 * Math.PI) / ids.length;// 共有多少份，每份的夹角
-    for (let i = 0; i < ids.length; i += 1) {
-      const centerX = (Math.cos(fenshu * i) * ((width / 2) - (imgwidth / 2))) + (width / 2);
-      const centerY = (Math.sin(fenshu * i) * ((width / 2) - (imgwidth / 2))) + (width / 2);
+    for (let i = 0; i < ids.length; i += 1) { //从12点方向开始
+      const centerX = (Math.cos((fenshu * i) - (Math.PI / 2)) * ((width / 2) - (imgwidth / 2)))
+        + (width / 2);
+      const centerY = (Math.sin((fenshu * i) - (Math.PI / 2)) * ((width / 2) - (imgwidth / 2)))
+        + (width / 2);
       const imgdiv = document.createElement('div');
       const cstyle = `height:${imgwidth}px;width:${imgwidth}px;left:${centerX - (imgwidth / 2)}px;top:${centerY - (imgwidth / 2)}px;`;
       imgdiv.setAttribute('name', 'scholarimg');
@@ -622,34 +653,6 @@ class ExpertMap extends React.PureComponent {
     }
   };
 
-  detachCluster = (clusterPanel) => {
-    if (clusterPanel != null && clusterPanel.parentNode != null) {
-      const imgdivs = document.getElementsByName('scholarimg');
-      for (let i = 0; i < imgdivs.length;) {
-        imgdivs[i].parentNode.removeChild(imgdivs[i]);
-      }
-      clusterPanel.parentNode.removeChild(clusterPanel);
-    }
-  }
-
-  // update one person's info.
-  toggleRightInfo = (type, id) => {
-    // TODO cache it.
-    if (this.props.expertMap.infoZoneIds !== id) { // don't change
-      if (id.indexOf(',') >= 0) { // is cluster
-        const clusterIdList = id.split(',');
-        this.props.dispatch({
-          type: 'expertMap/listPersonByIds',
-          payload: { ids: clusterIdList },
-        });
-      }
-      this.props.dispatch({
-        type: 'expertMap/setRightInfo',
-        payload: { idString: id, rightInfoType: type },
-      });
-    }
-  };
-
   onExpertBaseChange = (id, name) => {
     const { filters } = this.props.search;
     // delete all other filters.
@@ -667,11 +670,7 @@ class ExpertMap extends React.PureComponent {
     this.props.dispatch(routerRedux.push({ pathname: '/expert-map', search: `?query=${value.name}` }));
     let i = 0;
     domainIds.map((domain1) => {
-      if (value.id === domain1) {
-        domainChecks[i] = true;
-      } else {
-        domainChecks[i] = false;
-      }
+      domainChecks[i] = value.id === domain1; //简化写法
       i += 1;
       return true;
     });
@@ -762,11 +761,7 @@ class ExpertMap extends React.PureComponent {
     let m = 0;
     if (domainChecks) {
       Domains.map((domain1) => {
-        if (domain1.name === this.props.query) {
-          domainChecks[m] = true;
-        } else {
-          domainChecks[m] = false;
-        }
+        domainChecks[m] = domain1.name === this.props.query; //简化写法返回true，false
         m += 1;
         return true;
       });

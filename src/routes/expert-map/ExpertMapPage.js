@@ -38,6 +38,7 @@ export default class ExpertMapPage extends React.Component {
       this.setState({ mapType: type });
     }
   }
+
   componentWillReceiveProps() {
     const { query } = queryString.parse(location.search);
     if (this.state.orgs !== query) {

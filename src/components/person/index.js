@@ -10,7 +10,7 @@ import ExportPersonBtn from './export-person';
 module.exports = {
   ProfileInfo,
 
-  PersonList, PersonListTiny, PersonListLittle,
+  PersonList, PersonListLittle,
 
   ExportPersonBtn,
 };

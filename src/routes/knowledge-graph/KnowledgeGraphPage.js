@@ -7,12 +7,13 @@ import classnames from 'classnames';
 import { FormattedMessage as FM } from 'react-intl';
 import queryString from 'query-string';
 import { routerRedux } from 'dva/router';
+import * as bridge from 'utils/next-bridge';
 import { Radio, Tabs, message } from 'antd';
 import { Layout } from 'routes';
 import { Spinner } from 'components';
 import { Message } from 'components/ui';
 import { PublicationList } from 'components/publication/index';
-import { PersonListTiny } from 'components/person/index';
+import { PersonList } from 'components/person';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 import { Auth } from 'hoc';
@@ -272,7 +273,10 @@ export default class KnowledgeGraphPage extends React.PureComponent {
                 <TabPane tab="EXPERTS" key="experts">
                   <Spinner loading={load} />
                   {kg.experts
-                    ? <PersonListTiny persons={kg.experts} />
+                    ? <PersonList
+                      persons={bridge.toNextPersons(kg.experts)}
+                      type="tiny"
+                    />
                     : this.EmptyBlock
                   }
 

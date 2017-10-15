@@ -31,6 +31,7 @@ export default class PersonList extends Component {
   static propTypes = {
     // className: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     className: PropTypes.string, // NOTE: 一般来说每个稍微复杂点的Component都应该有一个className.
+    type: PropTypes.string,
     persons: PropTypes.array,
     expertBaseId: PropTypes.string,
     titleRightBlock: PropTypes.func, // A list of function
@@ -79,16 +80,15 @@ export default class PersonList extends Component {
   }
 
   render() {
-    const { persons, expertBaseId, className } = this.props;
+    const { persons, expertBaseId, className, type } = this.props;
     const { rightZoneFuncs, titleRightBlock, bottomZoneFuncs, afterTitleBlock } = this.props;
 
     const showPrivacy = false;
     const RightZoneFuncs = rightZoneFuncs || DefaultRightZoneFuncs;
     const BottomZoneFuncs = bottomZoneFuncs || DefaultBottomZoneFuncs;
-    // console.log('refresh person list ,', persons);
 
     return (
-      <div className={classnames(styles.personList, className)}>
+      <div className={classnames(styles.personList, className, styles[type])}>
         {persons && persons.length === 0 && <div className={styles.empty}>No Results</div>}
 
         {persons && persons.map((person) => {
@@ -167,27 +167,22 @@ export default class PersonList extends Component {
                             {person.tags.slice(0, 8).map((item, idx) => {
                               if (item.t === null || item.t === 'Null') {
                                 return false;
-                              } else {
-                                // const tag = personService.returnKeyByLanguage(this.interestsI18n, item.t);
-                                const tag = { en: item };
-                                const showTag = tag.zh ? tag.zh : tag.en;
-                                const key = `${showTag}_${idx}`;
-                                const linkJSX = (
-                                  <Link
-                                    to={`/${sysconfig.SearchPagePrefix}/${showTag}/0/${sysconfig.MainListSize}`}>
-                                    <Tag className={styles.tag}>{showTag}</Tag>
-                                  </Link>
-                                );
-                                return (
-                                  <span key={key}>
-                                    {tag.zh ?
-                                      <Tooltip placement="top" title={tag.en}>{linkJSX}</Tooltip>
-                                      : linkJSX}
-                                  </span>
-                                );
                               }
-                            })
-                            }
+                              // const tag = personService.returnKeyByLanguage(this.interestsI18n, item.t);
+                              const tag = { en: item };
+                              const showTag = tag.zh ? tag.zh : tag.en;
+                              const key = `${showTag}_${idx}`;
+                              return (
+                                <Tooltip key={key} placement="top" title={tag.en}>
+                                  <Tag className={styles.tag}>
+                                    <Link
+                                      to={`/${sysconfig.SearchPagePrefix}/${showTag}/0/${sysconfig.MainListSize}`}>
+                                      {showTag}
+                                    </Link>
+                                  </Tag>
+                                </Tooltip>
+                              );
+                            })}
                           </div>
                         </div>
                       </div>

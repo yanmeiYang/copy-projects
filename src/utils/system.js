@@ -26,10 +26,10 @@ let System;
 // System = 'tencent';
 // System = 'cie';
 // System = 'cipsc';
-// System = 'demo';
+System = 'demo';
 // System = 'cietest';
 // System = 'bole';
-System = 'acmfellow';
+// System = 'acmfellow';
 
 let Source = System; // AppID, Used in UniversalConfig.
 

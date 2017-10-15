@@ -1,6 +1,6 @@
 import KgSearchBox from './KgSearchBox';
 import SearchFilter from './SearchFilter';
-import SearchKnowledge from './searchKnowledge';
+import SearchKnowledge from './SearchKnowledge';
 import SearchSorts from './SearchSorts';
 
 module.exports = {

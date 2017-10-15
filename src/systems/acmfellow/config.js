@@ -70,11 +70,13 @@ module.exports = {
   // param: [person, eb{id,name}]
   PersonList_AfterTitleBlock:
     ({ param }) => (
-      <AddToEBButton
-        person={param.person} key="2"
-        expertBaseId={param.expertBaseId}
-        targetExpertBase={ExpertBase}
-      />),
+      <div key="2">
+        <AddToEBButton
+          person={param.person}
+          expertBaseId={param.expertBaseId}
+          targetExpertBase={ExpertBase}
+        />
+      </div>),
 
   PersonList_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
 

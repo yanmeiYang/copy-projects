@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'dva';
 import { Tag } from 'antd';
 import { classnames } from 'utils';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';

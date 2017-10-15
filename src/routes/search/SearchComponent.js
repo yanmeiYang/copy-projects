@@ -279,9 +279,10 @@ export default class SearchComponent extends Component {
           />
 
           <Spinner loading={load} />
-          <div className={styles.personAndKg}>
-            <div className={styles.personListWidth}>
+          <div className={styles.searchContent}>
+            <div className={styles.leftRight}>
               <PersonList
+                className={styles.personList}
                 persons={results}
                 user={this.props.app.user}
                 expertBaseId={expertBaseId}
@@ -292,21 +293,23 @@ export default class SearchComponent extends Component {
                 didMountHooks={sysconfig.PersonList_DidMountHooks}
                 UpdateHooks={sysconfig.PersonList_UpdateHooks}
               />
-              <div className={styles.paginationWrap}>
-                <Pagination
-                  showQuickJumper
-                  current={current}
-                  defaultCurrent={1}
-                  defaultPageSize={pageSize}
-                  total={total}
-                  onChange={this.onPageChange}
-                />
-              </div>
+
+              {/* ---- Search Knowledge ---- */}
+              {!disableSearchKnowledge &&
+              <SearchKnowledge className={styles.searchKgContent} query={query} />}
             </div>
 
-            {/* ---- Search Knowledge ---- */}
-            {!disableSearchKnowledge &&
-            <SearchKnowledge query={query} />}
+            <div className={styles.paginationWrap}>
+              <Pagination
+                showQuickJumper
+                current={current}
+                defaultCurrent={1}
+                defaultPageSize={pageSize}
+                total={total}
+                onChange={this.onPageChange}
+              />
+            </div>
+
 
           </div>
         </div>

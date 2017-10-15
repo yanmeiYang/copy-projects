@@ -13,7 +13,31 @@ import styles from './Header.less';
 
 const tc = applyTheme(styles);
 
-@connect(({ app }) => ({ app }))
+function mapStateToPropsFactory(initialState, ownProps) {
+  // a closure for ownProps is created
+  console.log('****** mapStateToPropsFactory',);
+  return function mapStateToProps(state) {
+    console.log('****** mapStateToProps',);
+    return ({
+      app: {
+        user: state.app.user,
+        roles: state.app.roles,
+      },
+    });
+  };
+}
+
+const mapStateToProps = (state) => {
+  console.log('****** mapStateToProps',);
+  return ({
+    app: {
+      user: state.app.user,
+      roles: state.app.roles,
+    },
+  });
+};
+
+@connect(mapStateToPropsFactory)
 export default class Header extends Component {
   static displayName = 'Header';
 
@@ -58,12 +82,6 @@ export default class Header extends Component {
     return false;
   }
 
-  // onChangeLocale = (locale) => {
-  //   saveLocale(sysconfig.SYSTEM, locale);
-  //   window.location.reload();
-  // };
-  //
-
   setQuery = (query) => {
     this.setState({ query });
   };
@@ -83,24 +101,11 @@ export default class Header extends Component {
   // };
 
   render() {
-    console.count('>>>>>>>HEADER');
+    console.log('>>>>>>>HEADER');
 
     const { logoZone, searchZone, infoZone, rightZone } = this.props;
     const { onSearch, advancedSearch } = this.props;
     const { query } = this.props;
-
-    // query = query || 'data mining';
-    // console.log('>>>>>>>HEADER', logoZone, searchZone, infoZone);
-
-    // if (headerSearchBox) {
-    //   const oldSearchHandler = headerSearchBox.onSearch;
-    //   headerSearchBox.onSearch = (query) => {
-    //     this.setState({ query: query.query });
-    //     if (oldSearchHandler) {
-    //       oldSearchHandler(query);
-    //     }
-    //   };
-    // }
 
     const SearchZone = searchZone || [
       <KgSearchBox key={100} size="large" query={query}

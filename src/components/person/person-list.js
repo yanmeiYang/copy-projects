@@ -79,7 +79,7 @@ export default class PersonList extends Component {
   }
 
   render() {
-    const { persons, expertBaseId, user } = this.props;
+    const { persons, expertBaseId, className } = this.props;
     const { rightZoneFuncs, titleRightBlock, bottomZoneFuncs, afterTitleBlock } = this.props;
 
     const showPrivacy = false;
@@ -88,10 +88,8 @@ export default class PersonList extends Component {
     // console.log('refresh person list ,', persons);
 
     return (
-      <div className={styles.personList}>
-        {persons && persons.length === 0 &&
-        <div className={styles.empty}>No Results</div>
-        }
+      <div className={classnames(styles.personList, className)}>
+        {persons && persons.length === 0 && <div className={styles.empty}>No Results</div>}
 
         {persons && persons.map((person) => {
           const profile = person.profile || {};
@@ -123,7 +121,7 @@ export default class PersonList extends Component {
                   <div className={styles.info_zone_detail}>
                     {name &&
                     <div className={styles.title}>
-                      <h2 className="section_header">
+                      <h2 className="section_headerxxx">
                         <a {...personLinkParams}>{name}</a>
                         {false && <span className={styles.rank}>会士</span>}
                       </h2>

@@ -13,7 +13,7 @@ export default {
 
   state: {
     results: [],
-    topic: {}, // search 右边的 topic
+    topic: null, // search 右边的 topic
     aggs: [],
     filters: {},
     query: null,
@@ -135,7 +135,8 @@ export default {
         }
       }
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
-      const sr = yield call(searchService.searchPersonAgg, query, offset, size, noTotalFilters, useTranslateSearch, sort);
+      const sr = yield call(searchService.searchPersonAgg,
+        query, offset, size, noTotalFilters, useTranslateSearch, sort);
       if (sr) {
         const { data } = sr;
         yield put({ type: 'searchPersonAggSuccess', payload: { data } });
@@ -148,14 +149,15 @@ export default {
       yield put({ type: 'getSeminarsSuccess', payload: { data } });
     },
 
-    // * getTopicByMention({ payload }, { call, put }) {
-    //   const { mention } = payload;
-    //   console.log('--------------------||||',);
-    //   const { data } = yield call(topicService.getTopicByMention, mention);
-    //   console.log('--------------------||||',);
-    //   yield put({ type: 'getTopicByMentionSuccess', payload: { data } });
-    //   console.log('--------------------||||',);
-    // },
+    * getTopicByMention({ payload }, { call, put }) {
+      try {
+        const { mention } = payload;
+        const { data } = yield call(topicService.getTopicByMention, mention);
+        yield put({ type: 'getTopicByMentionSuccess', payload: { data } });
+      } catch (err) {
+        console.error(err);
+      }
+    },
 
   },
 

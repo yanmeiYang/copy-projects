@@ -165,7 +165,9 @@ export default class TrendPrediction extends React.PureComponent {
       bottom: 6,
       left: 100,
     };
-    width = 1300; // 需调整参数，容器宽度
+    let svgWidth = document.body.clientWidth - 500;
+    svgWidth = svgWidth > 1400 ? svgWidth : 1400;//取其大者
+    width = svgWidth; // 需调整参数，容器宽度
     height = 1000 - margin.top - margin.bottom; // 需调整参数，容器高度，华为修改500，四个地方，另外三个为隐藏
     histWidth = 380;
     histHeight = 100;// 左侧直方图的高度
@@ -193,7 +195,7 @@ export default class TrendPrediction extends React.PureComponent {
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
       .attr('transform', `translate(${0},${25})`)
-      .style('margin-left', `${histWidth}px`)
+      .style('margin-left', `0px`)
       .attr('z-index', 1);
 
     // 显示整个界面的方法，sankey为技术发展图
@@ -685,6 +687,7 @@ export default class TrendPrediction extends React.PureComponent {
         }
         return `${w}px sans-serif`;
       });
+    document.getElementById('chartdiv').scrollLeft = document.getElementById('chartdiv').scrollHeight - 100;
   };
 
   cancelSelected = (id) => {
@@ -735,6 +738,8 @@ export default class TrendPrediction extends React.PureComponent {
       showFlag = 'none';
       showFlag1 = 'inline';
     }
+    let showDivWidth = document.body.clientWidth - 400;
+    showDivWidth = showDivWidth > 1024 ? showDivWidth : 1024;//取其大者
     return (
       <div className={styles.trend}>
         <Spinner loading={this.state.loadingFlag} />
@@ -758,8 +763,16 @@ export default class TrendPrediction extends React.PureComponent {
           </div>
         </div>
         <div id="showchart" style={{ display: showFlag1 }}>
-          <div className={styles.show} id="chart">
-            <div className="modal-loading" />
+          <div className={styles.nav}>
+            <Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange} className={styles.tabs}>
+              <TabPane tab={<span>近期热度</span>} key="1" id="recent-trend" />
+              <TabPane tab={<span>全局热度</span>} key="2" id="overall-trend" />
+              <TabPane tab={<span>技术源头</span>} key="3" id="origin-trend" />
+            </Tabs>
+            <div id="hist-chart" className={styles.rightbox} />
+          </div>
+          <div id="chartdiv" className={styles.show} style={{ width: showDivWidth }}>
+            <div id="chart" />
           </div>
           <div id="tooltip" className={styles.tool}>
             <p className={styles.showtool}>
@@ -792,14 +805,6 @@ export default class TrendPrediction extends React.PureComponent {
                 }
               </div>
             </div>
-          </div>
-          <div className={styles.nav}>
-            <Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange} className={styles.tabs}>
-              <TabPane tab={<span>近期热度</span>} key="1" id="recent-trend" />
-              <TabPane tab={<span>全局热度</span>} key="2" id="overall-trend" />
-              <TabPane tab={<span>技术源头</span>} key="3" id="origin-trend" />
-            </Tabs>
-            <div id="hist-chart" className={styles.rightbox}/>
           </div>
         </div>
       </div>

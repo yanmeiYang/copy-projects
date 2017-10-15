@@ -63,6 +63,8 @@ class ExpertMap extends React.PureComponent {
   constructor(props) {
     super(props);
     this.cache = {};
+    this.cacheData = {};//缓存作者数据
+    this.cacheImg = {};//缓存作者图像
     this.showOverLay = GetBMapLib(this.showTop);
     this.currentPersonId = 0;
     localStorage.setItem('lasttype', '0');
@@ -206,6 +208,7 @@ class ExpertMap extends React.PureComponent {
   };
 
   showMap = (place, type) => {
+    const that = this;
     waitforBMap(200, 100,
       () => {
         this.showOverLay();
@@ -339,9 +342,10 @@ class ExpertMap extends React.PureComponent {
           };
           map.addOverlay(new window.BMap.Label('中部', opts21));
         }
-        //const domain = localStorage.getItem("domain");
         place.results.sort((a, b) => b.hindex - a.hindex);
+        const ids = [];
         for (const pr of place.results) {
+          ids.push(pr.id);
           dataMap[pr.id] = pr;
           let pt = null;
           const newplace = findPosition(newtype, pr);
@@ -430,6 +434,32 @@ class ExpertMap extends React.PureComponent {
             }
           }, showLoadErrorMessage,
         );
+        //cache imges
+        const resultPromise = listPersonByIds(ids);
+        let count = 0;
+        resultPromise.then(
+          (data) => {
+            for (const p of data.data.persons) {
+              that.cacheData[p.id] = p;
+              const url = profileUtils.getAvatar(p.avatar, p.id, 50);
+              const img = new Image();
+              img.src = url;
+              img.onerror = () => {
+                img.src = '//static.aminer.org/upload/avatar/525/1059/167/53f48d04dabfaea7cd1d0ef9.jpeg';
+              };
+              img.width = 45;
+              //console.log(img);
+              //console.log(count);
+              count += 1;
+              that.cacheImg[p.id] = img;
+            }
+          },
+          () => {
+            console.log('failed');
+          },
+        ).catch((error) => {
+          console.error(error);
+        });
       }, showLoadErrorMessage,
     );
   };
@@ -603,10 +633,12 @@ class ExpertMap extends React.PureComponent {
       imgdiv.setAttribute('name', 'scholarimg');
       imgdiv.setAttribute('style', cstyle);
       imgdiv.setAttribute('class', 'imgWrapper');
-      imgdiv.innerHTML = `<img width='${imgwidth}' src='${blankAvatar}' alt='0'>`;
+      //imgdiv.innerHTML = `<img width='${imgwidth}' src='${blankAvatar}' alt='0'>`;//缓存了，此代码不用了
+      const img = this.cacheImg[ids[i]]; //创建一个Image对象，实现图片的预下载
+      imgdiv.append(img);
+      console.log(img);
       insertAfter(imgdiv, thisNode);
       thisNode.appendChild(imgdiv);
-      // imgdiv.addEventListener('click', () => this.toggleRightInfoBox(ids[i]), false);
       imgdiv.addEventListener('click', () => this.toggleRightInfo('person', ids[i]), false);
     }
     // 再在其中间添加一个图像
@@ -638,9 +670,11 @@ class ExpertMap extends React.PureComponent {
     if (cached) {
       this.listPersonDone(map, ids, cached);
     } else {
+      console.log(ids);
       const resultPromise = listPersonByIds(ids);
       resultPromise.then(
         (data) => {
+          console.log(data);
           this.cache[ids] = data;
           this.listPersonDone(map, ids, data);
         },
@@ -650,6 +684,7 @@ class ExpertMap extends React.PureComponent {
       ).catch((error) => {
         console.error(error);
       });
+      console.log('second!');
     }
   };
 

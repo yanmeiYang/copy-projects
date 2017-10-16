@@ -821,11 +821,11 @@ class ExpertGoogleMap extends React.Component {
           <div className={styles.scopes}>
             <div className={styles.switch}>
               <ButtonGroup id="diffmaps">
-                <Button type="primary" onClick={this.onChangeBaiduMap}>
+                <Button onClick={this.onChangeBaiduMap}>
                   <FM defaultMessage="Baidu Map"
                       id="com.expertMap.headerLine.label.baiduMap" />
                 </Button>
-                <Button onClick={this.onChangeGoogleMap}>
+                <Button type="primary" onClick={this.onChangeGoogleMap}>
                   <FM defaultMessage="Baidu Map"
                       id="com.expertMap.headerLine.label.googleMap" />
                 </Button>

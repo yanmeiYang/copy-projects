@@ -32,7 +32,8 @@ export default {
     authors: [],
     hindex: [],
     locationName: [],
-    geoCoordMap:{},
+    geoCoordMap: {},
+    allMessage: [],
     // yearHeat: {},
   },
 
@@ -60,9 +61,9 @@ export default {
         console.log("query !== '");
         data = yield call(traDataFindService.findHeatMap, query);
       } else {
-        data = yield call(traDataFindService.findTop10000);
+        data = yield call(traDataFindService.findTop10000Data);
       }
-      console.log("dataà1",data)
+      console.log('dataà1', data);
       const location = data.locations;
       const startYear = data.startYear;
       const endYear = data.endYear;
@@ -71,7 +72,7 @@ export default {
       const authorImage = data.authorImage;
       const locationName = data.locationName;
       const hindex = data.h_index;
-      console.log()
+      console.log();
       yield put({ type: 'heatFindSuccess',
         payload: {
           location,
@@ -86,9 +87,16 @@ export default {
     },
 
     * eventFind({ payload }, { call, put }) {
-      const { yearNow } = payload;
-      const data = yield call(traDataFindService.eventFind, yearNow);
-      yield put({ type: 'eventFindSuccess', payload: { data, yearNow } });
+      let data;
+      const { query } = payload;
+      if (query !== '') {
+        data = yield call(traDataFindService.eventTop10000Find);
+      } else {
+        console.log('hahah');
+        data = yield call(traDataFindService.eventTop10000Find);
+      }
+      console.log('event', data);
+      yield put({ type: 'eventFindSuccess', payload: { data } });
     },
 
     // * storeHindex({ payload }, { call, put }) {
@@ -119,6 +127,7 @@ export default {
 
     * getYearData({ payload }, { call, put, select }) {
       const { year } = payload;
+      yield put({ type: 'oneEventFindSuccess', payload: { year } });
       const yearStart = yield select(state => state.expertTrajectory.startYear);
       const yearEnd = yield select(state => state.expertTrajectory.endYear);
       const table = yield select(state => state.expertTrajectory.table);
@@ -215,10 +224,8 @@ export default {
           authorImgEast[key] = authorImg[key];
         }
       });
-      console.log("89089089-----------============")
 
-      yield put({ type: 'getPerYearHeatDataSuccess',
-        payload: { year, geoCoordMap, data, yearIndex, nextYearData, data1, data2, authorImgWest, authorImgMid, authorImgEast, author, author2 },
+      yield put({ type: 'getPerYearHeatDataSuccess', payload: { year, geoCoordMap, data, yearIndex, nextYearData, data1, data2, authorImgWest, authorImgMid, authorImgEast, author, author2 },
       });
     },
 
@@ -229,7 +236,7 @@ export default {
     getPerYearHeatDataSuccess(state, { payload: { year, geoCoordMap, data, yearIndex, nextYearData, data1, data2, authorImgWest, authorImgMid, authorImgEast, author, author2 } }) {
       const yearHeat = state.eachYearHeat;
       yearHeat[year] = {};
-      yearHeat[year]['data'] = data;
+      yearHeat[year].data = data;
       yearHeat[year].geoCoordMap = geoCoordMap;
       yearHeat[year].yearIndex = yearIndex;
       yearHeat[year].nextYearData = nextYearData;
@@ -257,8 +264,8 @@ export default {
       };
     },
 
-    heatFindSuccess(state, { payload: { heatData,location, startYear, authorImage, endYear, table, authors, locationName, hindex } }) {
-      console.log("startYear",startYear)
+    heatFindSuccess(state, { payload: { heatData, location, startYear, authorImage, endYear, table, authors, locationName, hindex } }) {
+      // console.log('startYear', startYear);
       // const location = heatData.locations;
       // const startYear = heatData.startYear;
       // const endYear = heatData.endYear;
@@ -291,13 +298,31 @@ export default {
       return { ...state, kgdata: data, kgindex, kgFetcher }; */
     },
 
-    eventFindSuccess(state, { payload: { data, yearNow } }) {
-      const newMassage = state.yearMessage;
-      newMassage.push({
-        year: yearNow,
-        events: data,
+    eventFindSuccess(state, { payload: { data } }) {
+      const allData = [];
+      for (let i = 0; i < data.length; i += 1) {
+        const tempData = {};
+        const year = parseInt(Object.keys(data[i])[0]);
+        tempData.year = year;
+        tempData.events = data[i][year];
+        allData.push(tempData);
+      }
+      return { ...state, allMessage: allData };
+      // return { ...state, allMessage: data };
+    },
+
+    oneEventFindSuccess(state, { payload: { year } }) {
+      const allYearMesRaw = state.allMessage;
+      const allYearMes = {};
+      for (let i = 0; i < allYearMesRaw.length; i += 1) {
+        allYearMes[allYearMesRaw[i].year] = allYearMesRaw[i].events;
+      }
+      const newMessage = state.yearMessage;
+      newMessage.push({
+        year,
+        events: allYearMes[year],
       });
-      return { ...state, yearMessage: newMassage };
+      return { ...state, yearMessage: newMessage };
     },
 
     // hindexSuccess(state, { payload: { hindex } }) {
@@ -356,4 +381,4 @@ function doHeatGeoMap(location) { // 存储经纬度 geoCoordMap = {123:[116,40]
 
 function sortValue(a, b) {
   return b.value - a.value;
-};
+}

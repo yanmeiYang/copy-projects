@@ -33,5 +33,4 @@ const IndexHotLinks = ({ links, urlFunc, withComma}) => {
     </div>
   );
 };
-//adding commas to keywords on frontPage
 export default IndexHotLinks;

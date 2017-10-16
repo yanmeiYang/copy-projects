@@ -19,14 +19,18 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
   }
 
   // if search in global experts, jump to another function;
-  if (filters && filters.eb && filters.eb.id === 'aminer') {
+  // Fix bugs when default search area is 'aminer'
+  if (
+    (filters && filters.eb && filters.eb.id === 'aminer') ||
+    ((!filters || !filters.eb) && sysconfig.DEFAULT_EXPERT_BASE === 'aminer')
+  ) {
     return searchPersonGlobal(query, offset, size, filters, sort, useTranslateSearch);
   }
 
-  // Fix bugs when default search area is 'aminer'
-  if ((!filters || !filters.eb) && sysconfig.DEFAULT_EXPERT_BASE === 'aminer') {
-    return searchPersonGlobal(query, offset, size, filters, sort, useTranslateSearch);
-  }
+  //
+  // if ((!filters || !filters.eb) && sysconfig.DEFAULT_EXPERT_BASE === 'aminer') {
+  //   return searchPersonGlobal(query, offset, size, filters, sort, useTranslateSearch);
+  // }
 
   //
   // Search in ExpertBase.
@@ -195,7 +199,7 @@ function prepareParameters(query, offset, size, filters, sort, useTranslateSearc
   }
   const { term, name, org } = strings.destructQueryString(query);
   if (term) {
-    const cleanedTerm = strings.cleanQuery(term);
+    const cleanedTerm = encodeURIComponent(strings.cleanQuery(term));
     data.term = useTranslateSearch ? `cross:${cleanedTerm}` : cleanedTerm;
   }
   if (name) {
@@ -230,7 +234,7 @@ function prepareParametersGlobal(query, offset, size, filters, sort, useTranslat
   // add query
   const { term, name, org } = strings.destructQueryString(query);
   const newQuery = strings.firstNonEmpty(term, name, org);
-  data.query = newQuery;
+  data.query = encodeURIComponent(newQuery);
   data = addAdditionParameterToData(data, sort, 'global');
 
   if (useTranslateSearch && data.query) {

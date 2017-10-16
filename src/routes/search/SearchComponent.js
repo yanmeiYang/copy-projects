@@ -163,7 +163,8 @@ export default class SearchComponent extends Component {
     dispatch({ type: 'search/translateSearch', payload: { query } });
     dispatch({
       type: 'search/searchPerson',
-      payload: { query, offset, size, filters, sort, total: parseInt(filtersLength) }, // TODO remove total;
+      payload: { query, offset, size, filters, sort, total: parseInt(filtersLength) },
+      // TODO remove total;
     });
     // TODO remove later. 新的方式获取api的时候，这个方法啥也不干。
     dispatch({
@@ -182,7 +183,6 @@ export default class SearchComponent extends Component {
       dispatch(routerRedux.push({ pathname }));
     }
   };
-
 
   render() {
     const { disableExpertBaseFilter, disableFilter, disableSearchKnowledge } = this.props;

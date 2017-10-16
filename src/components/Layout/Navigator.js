@@ -80,7 +80,7 @@ const NaviConfig = {
   },
 };
 
-const defaultNavis = ['ExpertSearch', 'ExpertMap', 'Relation', 'TrendPrediction'];
+const defaultNavis = ['ExpertSearch', 'ExpertMap', 'Relation', 'KnowledgeGraph', 'TrendPrediction'];
 // Function in development.
 if (process.env.NODE_ENV !== 'production') {
   defaultNavis.push('KnowledgeGraph');

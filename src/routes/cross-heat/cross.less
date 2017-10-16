@@ -1,3 +1,4 @@
+@import "../../themes/vars.less";
 
 .searchCross {
   padding: 10px 30px;
@@ -23,11 +24,25 @@
   .contentCenter {
     display: flex;
     justify-content: center;
+    .crossTooltip {
+      margin-top: 15px;
+    }
   }
   .contentLeft {
     display: flex;
     justify-content: flex-start;
   }
+  .descript {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 16px;
+  }
+  .step {
+    span:hover {
+      cursor: pointer;
+    }
+  }
+
 }
 
 

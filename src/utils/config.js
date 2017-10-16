@@ -124,8 +124,14 @@ module.exports = {
     // getOrgById: '/reviewer/org/get/:id',
 
     // cross heat
-    getDiscipline: 'http://166.111.7.105:5098/topics?area=:area&k=:k&depth=:depth',
+    getDiscipline: 'http://166.111.7.105:5098/topics?area=:area&k=:k&depth=:depth&context=',
     delDiscipline: 'http://166.111.7.105:5098/feedback?parents=:parents&children=:children&postive=:postive',
+    createDiscipline: 'http://166.111.7.173:15000/query',
+    getCrossTree: 'http://166.111.7.173:15000/query/:id',
+    getDomainInfo: 'http://166.111.7.173:15000/records/:begin/:end',
+    getDomainAllInfo: 'http://166.111.7.173:15000/record/:domain1/:domain2/:begin/:end',
+    getExpertByIds: '/person/batch-list',
+    getPubById: '/pub/:id',
 
     // getProjects: API_BASE+"reviewer/projects/get/:offset/:size"
     // addProject: API_BASE+"reviewer/project/add"
@@ -140,7 +146,7 @@ module.exports = {
     // addOrg: API_BASE+"reviewer/org/add"
     // getAllOrgs: API_BASE+"reviewer/orgs/get/all/:offset/:size"
     // removeOrgById: API_BASE+"reviewer/org/remove/:id"
-    // addUserToOrg: API_BASE+"reviewer/user/add"
+    // addUserToOrg: API_BASE+"reviewer/user/add"npmn
     // SearchUserByEmail:API_BASE+"reviewer/user/get/:email"
     //
     // onlineSearch:API_BASE+"search/person"

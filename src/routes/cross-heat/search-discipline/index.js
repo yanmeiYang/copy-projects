@@ -8,7 +8,7 @@ import styles from './index.less';
 
 class SearchDiscipline extends React.Component {
   search = () => {
-    const query = ReactDOM.findDOMNode(this.refs.query).value ? ReactDOM.findDOMNode(this.refs.query).value : '';
+    const query = ReactDOM.findDOMNode(this.refs.query).value ? ReactDOM.findDOMNode(this.refs.query).value : null;
     this.props.onSearch(query);
   };
 

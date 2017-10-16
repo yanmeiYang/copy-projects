@@ -19,7 +19,6 @@ function log(...data) {
 // Log every network request.
 function logRequest(pattern, ...data) {
   if (LogRequest) {
-    console.log(`%c${pattern}`, 'color:green', ...data);
   }
 }
 

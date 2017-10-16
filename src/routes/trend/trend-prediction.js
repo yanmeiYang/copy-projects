@@ -301,6 +301,7 @@ export default class TrendPrediction extends React.PureComponent {
 
   // 绘制技术趋势图，data对应1个term，趋势由data.year.d的大小反映
   renderTermTrend = (data) => {
+    document.getElementById('tooltip1').style = 'display:none';
     const that = this;
     if (typeof (data) === 'undefined') {
       return;
@@ -807,14 +808,14 @@ export default class TrendPrediction extends React.PureComponent {
               }
               <div className="img"><img src={url} alt={url} /></div>
               <div className="info">
-                {pos && <span className={styles.detail}>{pos}</span>}<br />
-                {aff && <span className={styles.detail}>{aff}</span>}
+                {pos && <span className={styles.detail}><i className="fa fa-briefcase fa-fw" />{pos}</span>}<br />
+                {aff && <span className={styles.detail}><i className="fa fa-institution fa-fw" />{aff}</span>}
               </div>
               <strong id="value1" />
               <div>
                 {
                   thepaper &&
-                  <span className={styles.detail}><a {...paperLinkParams}>{quote}</a></span>
+                  <span className={styles.detail}><i className="fa fa-file-pdf-o" /><a {...paperLinkParams}>{quote}</a></span>
                 }
               </div>
             </div>

@@ -93,8 +93,6 @@ export default class Navigator extends PureComponent {
 
   componentWillMount() {
     this.navis = this.props.navis || defaultNavis;
-    console.log('this.props.navis', this.props.navis);
-    console.log('defaultNavis', defaultNavis);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -122,7 +120,10 @@ export default class Navigator extends PureComponent {
         {this.navis.map((naviKey) => {
           const c = NaviConfig[naviKey];
           const path = window.location.pathname;
-          const currentClass = path.indexOf(c.pageSignature) >= 0 ? 'current' : '';
+          let currentClass = path.indexOf(c.pageSignature) >= 0 ? 'current' : '';
+          if (path.indexOf('expert-googlemap') >= 0 && naviKey === 'ExpertMap') {
+            currentClass = 'current';
+          }
           return (
             <div key={c.label} className={tc(['navi'], [currentClass])}>
               <a onClick={this.onClick(c)}>

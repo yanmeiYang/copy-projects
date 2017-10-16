@@ -313,8 +313,31 @@ class ExpertGoogleMap extends React.Component {
         let locations = [];
         const typeid = String(type);
         const newTypeString = String(newtype);
-        for (const i in place.results) {
-          const newplace = findPosition(newTypeString, place.results[i]);
+        let newPlaceResults = [];
+        if (range === '0') {
+          newPlaceResults = place.results;
+        } else if (range === '1') {
+          place.results.map((placeResult) => {
+            if (placeResult.fellows[0] && placeResult.fellows[0] === 'acm') {
+              newPlaceResults.push(placeResult);
+            }
+          });
+        } else if (range === '2') {
+          place.results.map((placeResult) => {
+            if (placeResult.fellows[0] === 'ieee' || placeResult.fellows[1] === 'ieee') {
+              newPlaceResults.push(placeResult);
+            }
+          });
+        } else if (range === '3') {
+          place.results.map((placeResult) => {
+            if (placeResult.is_ch) {
+              newPlaceResults.push(placeResult);
+            }
+          });
+        }
+        newPlaceResults.sort((a, b) => b.hindex - a.hindex);
+        for (const i in newPlaceResults) {
+          const newplace = findPosition(newTypeString, newPlaceResults[i]);
           //if ((newplace[1] != null && newplace[1] != null) &&
           //(newplace[1] !== 0 && newplace[1] !== 0)) {
           //const onepoint = { lat: place.results[i].location.lat, lng: place.results[i].location.lng }
@@ -322,77 +345,35 @@ class ExpertGoogleMap extends React.Component {
           locations[i] = onepoint;
           //}
         }
-        // const markers = [];
-        // const pId = [];
-        // let counts = 0;
-        // for (const o in place.results) {
-        //   const marker = new google.maps.Marker({
-        //     position:{ lat: place.results[o].location.lat, lng: place.results[o].location.lng },
-        //     map: map,
-        //     label: {
-        //       text: place.results[o].name,
-        //       color: 'black',
-        //       fontSize: '12px',
-        //       border: 'none',
-        //       backgroundColor: 'transparent',
-        //       // opacity:0.4,
-        //       fontWeight: 'bold',
-        //       textAlign: 'center',
-        //       width: '130px',
-        //       textShadow: '1px 1px 2px white, -1px -1px 2px white',
-        //       fontStyle: 'italic',
-        //     },
-        //     title: place.results[o].id,
-        //   });
-        //   const personId = place.results[o].id;
-        //   pId[counts] = personId;
-        //   markers.push(marker);
-        //   counts += 1;
-        // }
         let markers = locations.map(function (location, i) {
-          //if (range === '0') {
-            return new google.maps.Marker({
-              position: location,
-              label: {
-                text: place.results[i].name,
-                color: '#000000',
-                fontSize: '12px',
-                backgroundColor: 'transparent',
-                fontWeight: 'bold',
-                fontStyle: 'italic',
-              },
-              icon: {
-                url: '/images/map/marker_blue_sprite.png',
-                size: new google.maps.Size(20, 70),
-                origin: new google.maps.Point(0, 0),
-                anchor: new google.maps.Point(0, 25),
-              },
-              title: place.results[i].id,
-            });
-          // } else if (range === '1') {
-          //   console.log(location)
-          //   if (place.results[i].fellows[0] === 'acm') {
-          //     return new google.maps.Marker({
-          //       position: location,
-          //       label: {
-          //         text: place.results[i].name,
-          //         color: '#000000',
-          //         fontSize: '12px',
-          //         backgroundColor: 'transparent',
-          //         fontWeight: 'bold',
-          //         fontStyle: 'italic',
-          //       },
-          //       icon: {
-          //         url: '/images/map/marker_blue_sprite.png',
-          //         size: new google.maps.Size(20, 70),
-          //         origin: new google.maps.Point(0, 0),
-          //         anchor: new google.maps.Point(0, 25),
-          //       },
-          //       title: place.results[i].id,
-          //     });
-          //   }
-          // }
+          return new google.maps.Marker({
+            position: location,
+            label: {
+              text: newPlaceResults[i].name,
+              color: '#000000',
+              fontSize: '12px',
+              backgroundColor: 'transparent',
+              fontWeight: 'bold',
+              fontStyle: 'italic',
+            },
+            icon: {
+              url: '/images/map/marker_blue_sprite.png',
+              size: new google.maps.Size(20, 70),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(0, 25),
+            },
+            title: newPlaceResults[i].id,
+          });
         });
+        if (number === '0') {
+          markers = markers.slice(0, 200);
+        } else if (number === '1') {
+          markers = markers.slice(0, 50);
+        } else if (number === '2') {
+          markers = markers.slice(0, 100);
+        } else if (number === '3') {
+          markers = markers.slice(0, 500);
+        }
         const beaches = [
           ['东部', 38.9071923, -77.0368707],
           ['美国中部', 39.8027644, -105.0874842],
@@ -725,7 +706,7 @@ class ExpertGoogleMap extends React.Component {
     const TreeNode = TreeSelect.TreeNode;
     return (
       <div className={styles.expertMap} id="currentMain">
-        <div style={{display:'none' }} className={styles.filterWrap}>
+        <div className={styles.filterWrap}>
           <div className={styles.filter}>
             <div className={styles.filterRow}>
               <span className={styles.filterTitle}><span>Hot words:</span></span>
@@ -780,46 +761,46 @@ class ExpertGoogleMap extends React.Component {
             {/*)}*/}
             {/*</Select>*/}
             {/*<TreeSelect*/}
-              {/*className={styles.treeSelect}*/}
-              {/*style={{ width: 280, display: 'none' }}*/}
-              {/*value={this.state.value}*/}
-              {/*dropdownStyle={{ maxHeight: 425, overflow: 'auto' }}*/}
-              {/*placeholder={<b style={{ color: '#08c' }}>Domains</b>}*/}
-              {/*treeDefaultExpandAll*/}
+            {/*className={styles.treeSelect}*/}
+            {/*style={{ width: 280, display: 'none' }}*/}
+            {/*value={this.state.value}*/}
+            {/*dropdownStyle={{ maxHeight: 425, overflow: 'auto' }}*/}
+            {/*placeholder={<b style={{ color: '#08c' }}>Domains</b>}*/}
+            {/*treeDefaultExpandAll*/}
             {/*>*/}
-              {/*<TreeNode value="parent 1-0" title="Theory" key="1-0">*/}
-                {/*{Domains.map((domain) => {*/}
-                  {/*if (domain.name === 'Theory' || domain.name === 'Multimedia' || domain.name === 'Security'*/}
-                    {/*|| domain.name === 'Software Engineering' || domain.name === 'Computer Graphics') {*/}
-                    {/*return (*/}
-                      {/*<TreeNode value={domain.id} title={<span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>} key={domain.id}></TreeNode>*/}
-                    {/*)*/}
-                  {/*}*/}
-                {/*})*/}
-                {/*}*/}
-              {/*</TreeNode>*/}
-              {/*<TreeNode value="parent 1-1" title="System" key="1-1">*/}
-                {/*{Domains.map((domain) => {*/}
-                  {/*if (domain.name === 'Database' || domain.name === 'System' || domain.name === 'Computer Networking') {*/}
-                    {/*return (*/}
-                      {/*<TreeNode value={domain.id} title={<span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>} key={domain.id}></TreeNode>*/}
-                    {/*)*/}
-                  {/*}*/}
-                {/*})*/}
-                {/*}*/}
-              {/*</TreeNode>*/}
-              {/*<TreeNode value="parent 1-2" title="Artificial Intelligence" key="1-2">*/}
-                {/*{Domains.map((domain) => {*/}
-                  {/*if (domain.name === 'Data Mining' || domain.name === 'Machine Learning' || domain.name === 'Artificial Intelligence'*/}
-                    {/*|| domain.name === 'Web and Information Retrieval' || domain.name === 'Computer Vision'*/}
-                    {/*|| domain.name === 'Human-Computer Interaction' || domain.name === 'Natural Language Processing') {*/}
-                    {/*return (*/}
-                      {/*<TreeNode value={domain.id} title={<span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>} key={domain.id}></TreeNode>*/}
-                    {/*)*/}
-                  {/*}*/}
-                {/*})*/}
-                {/*}*/}
-              {/*</TreeNode>*/}
+            {/*<TreeNode value="parent 1-0" title="Theory" key="1-0">*/}
+            {/*{Domains.map((domain) => {*/}
+            {/*if (domain.name === 'Theory' || domain.name === 'Multimedia' || domain.name === 'Security'*/}
+            {/*|| domain.name === 'Software Engineering' || domain.name === 'Computer Graphics') {*/}
+            {/*return (*/}
+            {/*<TreeNode value={domain.id} title={<span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>} key={domain.id}></TreeNode>*/}
+            {/*)*/}
+            {/*}*/}
+            {/*})*/}
+            {/*}*/}
+            {/*</TreeNode>*/}
+            {/*<TreeNode value="parent 1-1" title="System" key="1-1">*/}
+            {/*{Domains.map((domain) => {*/}
+            {/*if (domain.name === 'Database' || domain.name === 'System' || domain.name === 'Computer Networking') {*/}
+            {/*return (*/}
+            {/*<TreeNode value={domain.id} title={<span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>} key={domain.id}></TreeNode>*/}
+            {/*)*/}
+            {/*}*/}
+            {/*})*/}
+            {/*}*/}
+            {/*</TreeNode>*/}
+            {/*<TreeNode value="parent 1-2" title="Artificial Intelligence" key="1-2">*/}
+            {/*{Domains.map((domain) => {*/}
+            {/*if (domain.name === 'Data Mining' || domain.name === 'Machine Learning' || domain.name === 'Artificial Intelligence'*/}
+            {/*|| domain.name === 'Web and Information Retrieval' || domain.name === 'Computer Vision'*/}
+            {/*|| domain.name === 'Human-Computer Interaction' || domain.name === 'Natural Language Processing') {*/}
+            {/*return (*/}
+            {/*<TreeNode value={domain.id} title={<span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>} key={domain.id}></TreeNode>*/}
+            {/*)*/}
+            {/*}*/}
+            {/*})*/}
+            {/*}*/}
+            {/*</TreeNode>*/}
             {/*</TreeSelect>*/}
             <div className={styles.level}>
               <span>

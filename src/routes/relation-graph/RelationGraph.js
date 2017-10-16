@@ -54,6 +54,7 @@ export default class RelationGraph extends React.PureComponent {
     this.hideInfoTimeOUt = null;
 
     this.lineColor = '#9ecae1';
+    this.two_paths_endNode = '';
   }
 
   state = {
@@ -68,6 +69,8 @@ export default class RelationGraph extends React.PureComponent {
     single_extension: false,
     allNodes: [],
     currentNode: null,
+    start_two_paths: null,
+    end_two_paths: null,
     // activities: ['h-Index>0', 'h-Index>10', 'h-Index>30', 'h-Index>60']
   };
 
@@ -819,15 +822,15 @@ export default class RelationGraph extends React.PureComponent {
           return 'yellow';
         }
       }).style('stroke-width', '5px').style('opacity', 0.8);
-      return svg.selectAll('text').data(_nodes).filter((j) => {
-        if (ds.indexOf(j.index) !== -1) {
-          return true;
-        } else {
-          return false;
-        }
-      }).text((d) => {
-        return d.name.n.en;
-      }).transition().duration(1000).style('fill', 'black').style('opacity', 0.8);
+      // return svg.selectAll('text').data(_nodes).filter((j) => {
+      //   if (ds.indexOf(j.index) !== -1) {
+      //     return true;
+      //   } else {
+      //     return false;
+      //   }
+      // }).text((d) => {
+      //   return d.name.n.en;
+      // }).transition().duration(1000).style('fill', 'black').style('opacity', 0.8);
     };
 
     const orderdraw2 = (ds) => {
@@ -883,6 +886,13 @@ export default class RelationGraph extends React.PureComponent {
       this.currentModle2 = false;
       clearAllChoosed(5);
       this.setState({ currentNode: null });
+    };
+    this.onSearchTwoPathsStart = (d) => {
+      _lastNode = null;
+      nodeclick(d);
+    };
+    this.submitTwoPaths = () => {
+      nodeclick(this.two_paths_endNode);
     };
     this.onSearchTwoPaths = (d) => {
       nodeclick(d);
@@ -966,6 +976,7 @@ export default class RelationGraph extends React.PureComponent {
       } else if (this.currentModle3 === true) {
         if (_lastNode === null) {
           _lastNode = d.index;
+          this.setState({ start_two_paths: d.name.n.en || d.name.n.zh });
           clearAllChoosed(5);
           returndraw(5);
           svg.selectAll('circle').data(_nodes).filter((k) => {
@@ -975,6 +986,8 @@ export default class RelationGraph extends React.PureComponent {
           if (_lastNode !== null) {
             _endOfSortAdges = [];
             stack = [];
+            this.two_paths_endNode = d;
+            this.setState({ end_two_paths: d.name.n.en || d.name.n.zh });
             if (!isstraight(d.index, _lastNode)) {
               res = [];
               res = sortNode(d.index, null, null, _lastNode);
@@ -996,6 +1009,7 @@ export default class RelationGraph extends React.PureComponent {
               }
             }
           }
+          // this.setState({ end_two_paths: '', start_two_paths: '' });
           // return _lastNode = null;
         }
       } else if (this.currentModle4 === true) {
@@ -1625,14 +1639,16 @@ export default class RelationGraph extends React.PureComponent {
         <div className={styles.twoExpertPathBySearch}>
           <span>
             <RgSearchNameBox size="default" style={{ width: 230 }}
-                             onSearch={this.onSearchTwoPaths}
+                             onSearch={this.onSearchTwoPathsStart}
+                             value={this.state.start_two_paths}
                              suggesition={this.state.allNodes} hideSearchBtn />
             &nbsp;-&nbsp;
             <RgSearchNameBox size="default" style={{ width: 230 }}
+                             value={this.state.end_two_paths}
                              onSearch={this.onSearchTwoPaths}
                              suggesition={this.state.allNodes} hideSearchBtn />
             &nbsp;
-            <Button type="primary" size="small" onClick={this.changeModle3}>取消选择</Button>
+            <Button type="primary" size="small" onClick={this.submitTwoPaths}>确定选择</Button>
           </span>
         </div>
         }

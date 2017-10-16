@@ -4,7 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Button, Tag } from 'antd';
+import { Button, Tag, Menu, Dropdown, Icon, TreeSelect } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
@@ -903,6 +903,8 @@ class ExpertMap extends React.PureComponent {
         return true;
       });
     }
+    const TreeNode = TreeSelect.TreeNode;
+
     return (
       <div className={styles.expertMap} id="currentMain">
         <div className={styles.filterWrap}>
@@ -948,6 +950,63 @@ class ExpertMap extends React.PureComponent {
         </div>
         <div className={styles.headerLine}>
           <div className={styles.left}>
+            {/*{this.props.title}*/}
+            {/*<span>*/}
+            {/*<FM defaultMessage="Domain"*/}
+            {/*id="com.expertMap.headerLine.label.field" />*/}
+            {/*</span>*/}
+            {/*<Select defaultValue="" className={styles.domainSelector} style={{ width: 120 }}*/}
+            {/*onChange={this.domainChanged}>*/}
+            {/*<Select.Option key="none" value="">*/}
+            {/*<FM defaultMessage="Domain"*/}
+            {/*id="com.expertMap.headerLine.label.selectField" />*/}
+            {/*</Select.Option>*/}
+            {/*{Domains.map(domain =>*/}
+            {/*(<Select.Option key={domain.id} value={domain.id}>{domain.name}</Select.Option>),*/}
+            {/*)}*/}
+            {/*</Select>*/}
+            <TreeSelect
+              className={styles.treeSelect}
+              style={{ width: 280, display: 'none' }}
+              value={this.state.value}
+              dropdownStyle={{ maxHeight: 425, overflow: 'auto' }}
+              placeholder={<b style={{ color: '#08c' }}>Domains</b>}
+              treeDefaultExpandAll
+            >
+              <TreeNode value="parent 1-0" title="Theory" key="1-0">
+                {Domains.map((domain) =>{
+                  if (domain.name === 'Theory' || domain.name === 'Multimedia' || domain.name === 'Security'
+                    || domain.name === 'Software Engineering' || domain.name === 'Computer Graphics') {
+                    return (
+                      <TreeNode value={domain.id} title={<span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>} key={domain.id}></TreeNode>
+                    )
+                  }
+                })
+                }
+              </TreeNode>
+              <TreeNode value="parent 1-1" title="System" key="1-1">
+                {Domains.map((domain) =>{
+                  if (domain.name === 'Database' || domain.name === 'System' || domain.name === 'Computer Networking') {
+                    return (
+                      <TreeNode value={domain.id} title={<span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>} key={domain.id}></TreeNode>
+                    )
+                  }
+                })
+                }
+              </TreeNode>
+              <TreeNode value="parent 1-2" title="Artificial Intelligence" key="1-2">
+                {Domains.map((domain) =>{
+                  if (domain.name === 'Data Mining' || domain.name === 'Machine Learning' || domain.name === 'Artificial Intelligence'
+                    || domain.name === 'Web and Information Retrieval' || domain.name === 'Computer Vision'
+                    || domain.name === 'Human-Computer Interaction' || domain.name === 'Natural Language Processing') {
+                    return (
+                      <TreeNode value={domain.id} title={<span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>} key={domain.id}></TreeNode>
+                    )
+                  }
+                })
+                }
+              </TreeNode>
+            </TreeSelect>
             <div className={styles.level}>
               <span>
                 <FM defaultMessage="Baidu Map"

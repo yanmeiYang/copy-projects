@@ -166,7 +166,7 @@ export default class KnowledgeGraphPage extends React.PureComponent {
       }
     }
     // console.log('Search : >>> ', query, 'escaped:', encodeURI(query));
-    query = encodeURIComponent(query);
+    // query = encodeURIComponent(query);
     return query;
   };
 

@@ -46,9 +46,9 @@ const NaviConfig = {
   TrendPrediction: {
     key: 'TrendPrediction',
     label: '技术趋势',
-    url: '/trend-prediction',
+    url: '/trend',
     data: 'query',
-    pageSignature: 'trend-prediction',
+    pageSignature: 'trend',
   },
   ExpertTrajectory: {
     key: 'ExpertTrajectory',
@@ -66,9 +66,10 @@ const NaviConfig = {
   },
 };
 
-const defaultNavis = ['ExpertSearch', 'ExpertMap', 'Relation', 'KnowledgeGraph', 'TrendPrediction'];
+const defaultNavis = ['ExpertSearch', 'ExpertMap', 'Relation', 'TrendPrediction'];
 // Function in development.
 if (process.env.NODE_ENV !== 'production') {
+  defaultNavis.push('KnowledgeGraph');
   defaultNavis.push('ExpertTrajectory');
 }
 

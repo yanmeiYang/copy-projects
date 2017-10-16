@@ -32,18 +32,18 @@ export default class IndexCenterZone extends React.PureComponent {
               </div>
             </div>
           </Link>
-          <Link to="/knowledge-graph">
-            <div className={styles.blockItem}>
-              <div className={styles.outerBackground}>
-                <span alt="" className={classnames('icon', styles.kgGraph)} />
-              </div>
-              <div className={styles.iconDesc}>
-                <FM id="com.searchTypeWidget.label.KnowledgeGraph"
-                    defaultMessage="Knowledge Graph" />
-              </div>
-            </div>
-          </Link>
-          <Link to="/trend-prediction">
+          {/*<Link to="/knowledge-graph">*/}
+            {/*<div className={styles.blockItem}>*/}
+              {/*<div className={styles.outerBackground}>*/}
+                {/*<span alt="" className={classnames('icon', styles.kgGraph)} />*/}
+              {/*</div>*/}
+              {/*<div className={styles.iconDesc}>*/}
+                {/*<FM id="com.searchTypeWidget.label.KnowledgeGraph"*/}
+                    {/*defaultMessage="Knowledge Graph" />*/}
+              {/*</div>*/}
+            {/*</div>*/}
+          {/*</Link>*/}
+          <Link to="/trend">
             <div className={styles.blockItem}>
               <div className={classnames(styles.clearMarginRight, styles.outerBackground)}>
                 <span alt="" className={classnames('icon', styles.topicTrend)} />

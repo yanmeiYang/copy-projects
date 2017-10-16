@@ -607,7 +607,7 @@ class ExpertMap extends React.PureComponent {
         if (img.src.includes('default.jpg') || img.src.includes('blank_avatar.jpg')) {
           cimg.innerHTML = `<img id='${personInfo.id}' style='${style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='${personInfo.avatar}' alt='${name}'>`;
         } else {
-          cimg.append(image);
+          cimg.appendChild(image);
         }
       }
 
@@ -645,7 +645,7 @@ class ExpertMap extends React.PureComponent {
           image.src = img.src;
           image.name = img.name;
           image.width = img.width;
-          document.getElementById(divId).append(image);
+          document.getElementById(divId).appendChild(image);
           this.currentPersonId = personInfo.id;
         });
         cimg.addEventListener('mouseleave', () => {

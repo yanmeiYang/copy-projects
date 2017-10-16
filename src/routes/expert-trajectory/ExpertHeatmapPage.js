@@ -105,6 +105,7 @@ class ExpertHeatmapPage extends React.PureComponent {
 
   findIfQuery = (query) => {
     this.props.dispatch({ type: 'expertTrajectory/heatFind', payload: { query } });
+    this.props.dispatch({ type: 'expertTrajectory/eventFind', payload: { query } });
   }
 
   callScroll= () => { // 滑动条滑到最底端
@@ -137,7 +138,7 @@ class ExpertHeatmapPage extends React.PureComponent {
               activeKey={this.state.infoTab}
               tabBarExtraContent={''}
             >
-                <TabPane tab="OVERVIEW" key="overview">
+                <TabPane tab="VIEW" key="overview">
                   <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
                   <LeftInfoAll />
                 </TabPane>

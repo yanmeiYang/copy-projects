@@ -4,7 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Button, Tag } from 'antd';
+import { Button, Tag, Menu, Dropdown, Icon, TreeSelect } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
@@ -16,6 +16,7 @@ import RightInfoZoneCluster from './RightInfoZoneCluster';
 import RightInfoZonePerson from './RightInfoZonePerson';
 import RightInfoZoneAll from './RightInfoZoneAll';
 import GetBMapLib from './utils/BMapLibGai.js';
+import { Spinner } from '../../components';
 
 const { CheckableTag } = Tag;
 
@@ -63,6 +64,8 @@ class ExpertMap extends React.PureComponent {
   constructor(props) {
     super(props);
     this.cache = {};
+    this.cacheData = {};//缓存作者数据
+    this.cacheImg = {};//缓存作者图像
     this.showOverLay = GetBMapLib(this.showTop);
     this.currentPersonId = 0;
     localStorage.setItem('lasttype', '0');
@@ -72,6 +75,8 @@ class ExpertMap extends React.PureComponent {
     typeIndex: 0,
     rangeChecks: [true, false, false, false],
     numberChecks: [true, false, false, false, false],
+    loadingFlag: true,
+    cperson: '', //当前显示的作者的id
   };
 
   componentDidMount() {
@@ -205,7 +210,77 @@ class ExpertMap extends React.PureComponent {
     map.addControl(new window.BMap.OverviewMapControl());
   };
 
+  cacheBiGImage = (ids, width) => {
+    let head = ''; //图片名称
+    if (width === 90) { //中等大小的图片
+      head = 'M';
+    } else if (width === 160) { //特别大的图片
+      head = 'L';
+    }
+    for (let i = 0; i < ids.length; i += 100) { //可控制cache的数目
+      const cids = ids.slice(i, i + 100);
+      const resultPromise = listPersonByIds(cids);
+      resultPromise.then(
+        (data) => {
+          for (const p of data.data.persons) {
+            let name = head;
+            const url = profileUtils.getAvatar(p.avatar, p.id, width);
+            const img = new Image();
+            img.src = url;
+            img.name = p.id;//不能使用id,否则重复
+            name += p.id;
+            this.cacheImg[name] = img;
+          }
+        },
+        () => {
+          console.log('failed');
+        },
+      ).catch((error) => {
+        console.error(error);
+      });
+    }
+  };
+
+  cacheInfo = (ids) => {
+    const resultPromise = [];
+    let count = 0;
+    let count1 = 0;
+    for (let i = 0; i < ids.length; i += 100) { //可控制cache的数目
+      const cids = ids.slice(i, i + 100);
+      resultPromise[count] = listPersonByIds(cids);
+      count += 1;
+    }
+    for (let i = 0; i < count; i += 1) { //先将信息数据缓存
+      resultPromise[i].then(
+        (data) => {
+          for (const p of data.data.persons) {
+            this.cacheData[p.id] = p;
+            const url = profileUtils.getAvatar(p.avatar, p.id, 50);
+            const img = new Image();
+            img.src = url;
+            img.name = p.id;//不能使用id,否则重复
+            img.onerror = () => {
+              img.src = blankAvatar;
+            };
+            this.cacheImg[p.id] = img;
+          }
+          count1 += 1;
+          if (count === count1) {
+            this.setState({ loadingFlag: false });
+          }
+        },
+        () => {
+          console.log('failed');
+        },
+      ).catch((error) => {
+        console.error(error);
+      });
+    }
+  };
+
   showMap = (place, type) => {
+    const that = this;
+    this.setState({ loadingFlag: true });
     waitforBMap(200, 100,
       () => {
         this.showOverLay();
@@ -339,9 +414,10 @@ class ExpertMap extends React.PureComponent {
           };
           map.addOverlay(new window.BMap.Label('中部', opts21));
         }
-        //const domain = localStorage.getItem("domain");
         place.results.sort((a, b) => b.hindex - a.hindex);
+        const ids = [];
         for (const pr of place.results) {
+          ids.push(pr.id);
           dataMap[pr.id] = pr;
           let pt = null;
           const newplace = findPosition(newtype, pr);
@@ -430,6 +506,11 @@ class ExpertMap extends React.PureComponent {
             }
           }, showLoadErrorMessage,
         );
+        //cache imges
+        that.cacheInfo(ids);
+        that.cacheBiGImage(ids, 90);
+        that.cacheBiGImage(ids, 160);
+        console.log('cached in!!!yes!');
       }, showLoadErrorMessage,
     );
   };
@@ -473,13 +554,7 @@ class ExpertMap extends React.PureComponent {
     if (imgdivs !== null && imgdivs.length !== 0) {
       for (let i = 0; i < ids.length; i += 1) {
         const cimg = imgdivs[i];
-        const personInfo = data.data.persons[i];
-        //let url = blankAvatar;
-        let url;
-        if (personInfo.avatar !== null && personInfo.avatar !== '') {
-          url = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 50);
-        }
-        //const style = url === '/images/blank_avatar.jpg' ? '' : 'margin-top:-5px;';
+        const personInfo = data[ids[i]];
         let name;
         if (personInfo.name_zh) {
           const str = personInfo.name_zh.substr(1, 2);
@@ -522,7 +597,24 @@ class ExpertMap extends React.PureComponent {
           name = `&nbsp;&nbsp;${name}`;
           style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:10px;word-wrap:break-word;font-size:20%;';
         }
-        cimg.innerHTML = `<img style='${style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='${url}' alt='${name}'>`;
+        const img = this.cacheImg[ids[i]];//浅拷贝和深拷贝
+        const image = new Image(); //进行深拷贝
+        if (typeof (img) === 'undefined') {
+          image.src = blankAvatar;
+          image.alt = name;
+          image.width = imgwidth;
+        } else {
+          image.src = img.src;
+          image.name = img.name;
+          image.alt = name;
+          image.width = imgwidth;
+          image.style = style;
+        }
+        if (img.src.includes('default.jpg') || img.src.includes('blank_avatar.jpg')) {
+          cimg.innerHTML = `<img id='${personInfo.id}' style='${style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='${personInfo.avatar}' alt='${name}'>`;
+        } else {
+          cimg.appendChild(image);
+        }
       }
 
       for (let j = 0; j < imgdivs.length; j += 1) {
@@ -535,15 +627,36 @@ class ExpertMap extends React.PureComponent {
           const currentPoint = map.pixelToPoint(newPixel);
           const chtml = event.target.innerHTML;
           let num = 0;
-          if (chtml.split('@@@@@@@').length > 1) {
+          let personInfo;
+          if (chtml.split('@@@@@@@').length > 1) { //当时想到这种办法也挺不容易的，保留着吧，注意一个是id一个是序号
             num = chtml.split('@@@@@@@')[1];
+            personInfo = data[ids[num]];
+          } else {
+            if (event.target.tagName.toUpperCase() === 'DIV') {
+              num = event.target.firstChild.name;
+            } else if (event.target.tagName.toUpperCase() === 'IMG') {
+              num = event.target.name;
+            }
+            personInfo = data[num];
           }
-          const personInfo = data.data.persons[num];
-
-          const infoWindow = getInfoWindow();
-          this.onSetPersonCard(personInfo);
-          map.openInfoWindow(infoWindow, currentPoint);
-          this.syncInfoWindow();
+          const infoWindow = getInfoWindow(); //信息窗口
+          //this.onSetPersonCard(personInfo); //查询数据，不需要了
+          map.openInfoWindow(infoWindow, currentPoint); //打开窗口
+          this.setState({ cperson: personInfo.id }, this.syncInfoWindow());
+          //使用中等大小的图标
+          const id = `M${personInfo.id}`;
+          const divId = `Mid${personInfo.id}`;
+          const img = this.cacheImg[id];
+          console.log(img);
+          const image = new Image(); //进行深拷贝
+          if (typeof (img) === 'undefined') {
+            image.src = blankAvatar;
+          } else {
+            image.src = img.src;
+            image.name = img.name;
+            image.width = img.width;
+          }
+          document.getElementById(divId).appendChild(image);
           this.currentPersonId = personInfo.id;
         });
         cimg.addEventListener('mouseleave', () => {
@@ -603,10 +716,10 @@ class ExpertMap extends React.PureComponent {
       imgdiv.setAttribute('name', 'scholarimg');
       imgdiv.setAttribute('style', cstyle);
       imgdiv.setAttribute('class', 'imgWrapper');
-      imgdiv.innerHTML = `<img width='${imgwidth}' src='${blankAvatar}' alt='0'>`;
+      imgdiv.innerHTML = '';
+        //imgdiv.innerHTML = `<img width='${imgwidth}' src='${blankAvatar}' alt='0'>`;
       insertAfter(imgdiv, thisNode);
       thisNode.appendChild(imgdiv);
-      // imgdiv.addEventListener('click', () => this.toggleRightInfoBox(ids[i]), false);
       imgdiv.addEventListener('click', () => this.toggleRightInfo('person', ids[i]), false);
     }
     // 再在其中间添加一个图像
@@ -633,14 +746,17 @@ class ExpertMap extends React.PureComponent {
       });
     }
 
-    // cached.
+    this.listPersonDone(map, ids, this.cacheData);
+    /*// cached.
     const cached = this.cache[ids];
     if (cached) {
       this.listPersonDone(map, ids, cached);
     } else {
+      console.log(ids);
       const resultPromise = listPersonByIds(ids);
       resultPromise.then(
         (data) => {
+          console.log(data);
           this.cache[ids] = data;
           this.listPersonDone(map, ids, data);
         },
@@ -650,7 +766,8 @@ class ExpertMap extends React.PureComponent {
       ).catch((error) => {
         console.error(error);
       });
-    }
+      console.log('second!');
+    }*/
   };
 
   onExpertBaseChange = (id, name) => {
@@ -713,6 +830,33 @@ class ExpertMap extends React.PureComponent {
     }
     const avg = (hIndexSum / count).toFixed(0);
     let personPopupJsx;
+    const person = this.cacheData[this.state.cperson];
+    if (person) {
+      //console.log(person);
+      //const url = person.avatar;
+      const divId = `Mid${person.id}`;
+      const name = person.name;
+      const pos = person && person.pos && person.pos[0] && person.pos[0].n;
+      const aff = person && person.aff && person.aff.desc;
+      const hindex = person && person.indices && person.indices.h_index;
+
+      personPopupJsx = (
+        <div className="personInfo">
+          <div id={divId} />
+          <div className="info">
+            <div className="nameLine">
+              <div className="right">H-index:<b> {hindex}</b>
+              </div>
+              <div className="name">{name}</div>
+            </div>
+            {pos && <span><i className="fa fa-briefcase fa-fw" />{pos}</span>}
+            {aff && <span><i className="fa fa-institution fa-fw" />{aff}</span>}
+          </div>
+        </div>
+      );
+    }
+    /*console.log(personPopupJsx);
+    console.log(typeof (personPopupJsx));
     const person = model.personInfo;
     if (person) {
       const url = profileUtils.getAvatar(person.avatar, person.id, 90);
@@ -720,6 +864,8 @@ class ExpertMap extends React.PureComponent {
       const pos = profileUtils.displayPosition(person.pos);
       const aff = profileUtils.displayAff(person);
       const hindex = person && person.indices && person.indices.h_index;
+      const img = this.cacheImg[person.id];
+      console.log('GGGGG');
 
       personPopupJsx = (
         <div className="personInfo">
@@ -736,6 +882,8 @@ class ExpertMap extends React.PureComponent {
         </div>
       );
     }
+    console.log(personPopupJsx);
+    console.log(typeof (personPopupJsx));*/
 
     const rightInfos = {
       global: () => (
@@ -743,7 +891,7 @@ class ExpertMap extends React.PureComponent {
                           isACMFellowNumber={isACMFellowNumber}
                           isIeeeFellowNumber={isIeeeFellowNumber} isChNumber={isChNumber} />
       ),
-      person: () => (<RightInfoZonePerson person={model.personInfo} />),
+      person: () => (<RightInfoZonePerson person={person} />),
       cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),
     };
     const that = this;
@@ -766,6 +914,8 @@ class ExpertMap extends React.PureComponent {
         return true;
       });
     }
+    const TreeNode = TreeSelect.TreeNode;
+
     return (
       <div className={styles.expertMap} id="currentMain">
         <div className={styles.filterWrap}>
@@ -811,6 +961,63 @@ class ExpertMap extends React.PureComponent {
         </div>
         <div className={styles.headerLine}>
           <div className={styles.left}>
+            {/*{this.props.title}*/}
+            {/*<span>*/}
+            {/*<FM defaultMessage="Domain"*/}
+            {/*id="com.expertMap.headerLine.label.field" />*/}
+            {/*</span>*/}
+            {/*<Select defaultValue="" className={styles.domainSelector} style={{ width: 120 }}*/}
+            {/*onChange={this.domainChanged}>*/}
+            {/*<Select.Option key="none" value="">*/}
+            {/*<FM defaultMessage="Domain"*/}
+            {/*id="com.expertMap.headerLine.label.selectField" />*/}
+            {/*</Select.Option>*/}
+            {/*{Domains.map(domain =>*/}
+            {/*(<Select.Option key={domain.id} value={domain.id}>{domain.name}</Select.Option>),*/}
+            {/*)}*/}
+            {/*</Select>*/}
+            <TreeSelect
+              className={styles.treeSelect}
+              style={{ width: 280, display: 'none' }}
+              value={this.state.value}
+              dropdownStyle={{ maxHeight: 425, overflow: 'auto' }}
+              placeholder={<b style={{ color: '#08c' }}>Domains</b>}
+              treeDefaultExpandAll
+            >
+              <TreeNode value="parent 1-0" title="Theory" key="1-0">
+                {Domains.map((domain) =>{
+                  if (domain.name === 'Theory' || domain.name === 'Multimedia' || domain.name === 'Security'
+                    || domain.name === 'Software Engineering' || domain.name === 'Computer Graphics') {
+                    return (
+                      <TreeNode value={domain.id} title={<span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>} key={domain.id}></TreeNode>
+                    )
+                  }
+                })
+                }
+              </TreeNode>
+              <TreeNode value="parent 1-1" title="System" key="1-1">
+                {Domains.map((domain) =>{
+                  if (domain.name === 'Database' || domain.name === 'System' || domain.name === 'Computer Networking') {
+                    return (
+                      <TreeNode value={domain.id} title={<span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>} key={domain.id}></TreeNode>
+                    )
+                  }
+                })
+                }
+              </TreeNode>
+              <TreeNode value="parent 1-2" title="Artificial Intelligence" key="1-2">
+                {Domains.map((domain) =>{
+                  if (domain.name === 'Data Mining' || domain.name === 'Machine Learning' || domain.name === 'Artificial Intelligence'
+                    || domain.name === 'Web and Information Retrieval' || domain.name === 'Computer Vision'
+                    || domain.name === 'Human-Computer Interaction' || domain.name === 'Natural Language Processing') {
+                    return (
+                      <TreeNode value={domain.id} title={<span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>} key={domain.id}></TreeNode>
+                    )
+                  }
+                })
+                }
+              </TreeNode>
+            </TreeSelect>
             <div className={styles.level}>
               <span>
                 <FM defaultMessage="Baidu Map"
@@ -845,7 +1052,7 @@ class ExpertMap extends React.PureComponent {
         </div>
 
         <div className={styles.map}>
-
+          <Spinner loading={this.state.loadingFlag} />
           <div id="allmap" />
 
           <div className={styles.right}>

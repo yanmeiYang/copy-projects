@@ -46,7 +46,12 @@ export default class ExpertGoogleMapPage extends React.Component {
       },
     });
   }
-
+  componentWillReceiveProps(nextProps) {
+    const { query } = queryString.parse(location.search);
+    if (this.state.orgs !== query) {
+      this.setState({ query });
+    }
+  }
   componentWillUnmount() {
     this.dispatch({ type: 'app/layout', payload: { showFooter: true } });
   }

@@ -38,10 +38,16 @@ export default class RgSearchNameBox extends React.Component {
     };
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.value !== this.props.value) {
+      this.setState({ value: nextProps.value });
+    }
+  };
+
   getSuggestionValue = (suggestion) => {
     this.setState({ finalNode: suggestion });
     return suggestion.name.n.en;
-  }
+  };
 
   getSuggestions = (value) => {
     const suggestions = [];
@@ -54,7 +60,7 @@ export default class RgSearchNameBox extends React.Component {
     return inputLength === 0 ? [] : suggestions.filter(lang =>
       lang.name.n.en.toLowerCase().trim().includes(inputValue),
     );
-  }
+  };
 
   onChange = (event, { newValue, method }) => {
     this.setState({

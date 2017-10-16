@@ -54,6 +54,7 @@ export default class RelationGraph extends React.PureComponent {
     this.hideInfoTimeOUt = null;
 
     this.lineColor = '#9ecae1';
+    this.two_paths_endNode = '';
   }
 
   state = {
@@ -68,6 +69,8 @@ export default class RelationGraph extends React.PureComponent {
     single_extension: false,
     allNodes: [],
     currentNode: null,
+    start_two_paths: null,
+    end_two_paths: null,
     // activities: ['h-Index>0', 'h-Index>10', 'h-Index>30', 'h-Index>60']
   };
 
@@ -170,11 +173,11 @@ export default class RelationGraph extends React.PureComponent {
 
     // 设置圆的半径
     const getRadious = (d) => {
-      if (d < 15) {
+      if (d <= 15) {
         return 5;
       } else if (d < 60) {
         return 8;
-      } else if (d > 60) {
+      } else if (d >= 60) {
         return 12;
       }
       // return Math.sqrt(d);
@@ -687,18 +690,17 @@ export default class RelationGraph extends React.PureComponent {
         }
       });
       svg.selectAll('circle').data(_nodes).attr('r', (d) => {
-        return getRadious(d.indices.hIndex);
-        // if (indexShow >= 10) {
-        //   if (d.indices.hIndex > indexShow) {
-        //     return getRadious(d.indices.hIndex + 32);
-        //   } else {
-        //     return 0;
-        //   }
-        // } else if (d.indices.hIndex < 400) {
-        //   return getRadious(d.indices.hIndex + 32);
-        // } else {
-        //   return getRadious(16);
-        // }
+        if (indexShow >= 10) {
+          if (d.indices.hIndex > indexShow) {
+            return getRadious(d.indices.hIndex);
+          } else {
+            return 0;
+          }
+        } else if (d.indices.hIndex < 400) {
+          return getRadious(d.indices.hIndex);
+        } else {
+          return getRadious(15);
+        }
       }).style('stroke-width', (d) => {
         if (d.indices.hIndex > 50) {
           return '1px';
@@ -726,7 +728,7 @@ export default class RelationGraph extends React.PureComponent {
         }
       }).attr('dy', (d) => {
         if (d.indices.hIndex > indexShow || d.indices.hIndex < 400) {
-          const top = getRadious(d.indices.hIndex + 32) * 2;
+          const top = getRadious(d.indices.hIndex) * 2;
           return top + 1.5;
         } else {
           return transform.k + 16;
@@ -750,7 +752,7 @@ export default class RelationGraph extends React.PureComponent {
         }
       }).attr('dy', (d) => {
         if (d.indices.hIndex > indexShow || d.indices.hIndex < 400) {
-          const top = getRadious(d.indices.hIndex + 32) * 2;
+          const top = getRadious(d.indices.hIndex) * 2;
           return top + 1.5;
         } else {
           return transform.k + 16;
@@ -820,15 +822,15 @@ export default class RelationGraph extends React.PureComponent {
           return 'yellow';
         }
       }).style('stroke-width', '5px').style('opacity', 0.8);
-      return svg.selectAll('text').data(_nodes).filter((j) => {
-        if (ds.indexOf(j.index) !== -1) {
-          return true;
-        } else {
-          return false;
-        }
-      }).text((d) => {
-        return d.name.n.en;
-      }).transition().duration(1000).style('fill', 'black').style('opacity', 0.8);
+      // return svg.selectAll('text').data(_nodes).filter((j) => {
+      //   if (ds.indexOf(j.index) !== -1) {
+      //     return true;
+      //   } else {
+      //     return false;
+      //   }
+      // }).text((d) => {
+      //   return d.name.n.en;
+      // }).transition().duration(1000).style('fill', 'black').style('opacity', 0.8);
     };
 
     const orderdraw2 = (ds) => {
@@ -884,6 +886,13 @@ export default class RelationGraph extends React.PureComponent {
       this.currentModle2 = false;
       clearAllChoosed(5);
       this.setState({ currentNode: null });
+    };
+    this.onSearchTwoPathsStart = (d) => {
+      _lastNode = null;
+      nodeclick(d);
+    };
+    this.submitTwoPaths = () => {
+      nodeclick(this.two_paths_endNode);
     };
     this.onSearchTwoPaths = (d) => {
       nodeclick(d);
@@ -967,6 +976,7 @@ export default class RelationGraph extends React.PureComponent {
       } else if (this.currentModle3 === true) {
         if (_lastNode === null) {
           _lastNode = d.index;
+          this.setState({ start_two_paths: d.name.n.en || d.name.n.zh });
           clearAllChoosed(5);
           returndraw(5);
           svg.selectAll('circle').data(_nodes).filter((k) => {
@@ -976,6 +986,8 @@ export default class RelationGraph extends React.PureComponent {
           if (_lastNode !== null) {
             _endOfSortAdges = [];
             stack = [];
+            this.two_paths_endNode = d;
+            this.setState({ end_two_paths: d.name.n.en || d.name.n.zh });
             if (!isstraight(d.index, _lastNode)) {
               res = [];
               res = sortNode(d.index, null, null, _lastNode);
@@ -997,6 +1009,7 @@ export default class RelationGraph extends React.PureComponent {
               }
             }
           }
+          // this.setState({ end_two_paths: '', start_two_paths: '' });
           // return _lastNode = null;
         }
       } else if (this.currentModle4 === true) {
@@ -1093,7 +1106,7 @@ export default class RelationGraph extends React.PureComponent {
         });
       nodes_text = svg.selectAll('.nodetext').data(_nodes).enter().append('text').attr('class', 'initialText').style('cursor', ' pointer').style('font-size', '15px')
         .attr('dy', (d) => {
-          const top = getRadious(d.indices.hIndex + 32) * 2;
+          const top = getRadious(d.indices.hIndex) * 2;
           return top + 10;
         })
         .text((d) => {
@@ -1130,7 +1143,7 @@ export default class RelationGraph extends React.PureComponent {
 
       final_text = svg.selectAll('.nodetextstyle').data(_nodes).enter().append('text').attr('class', 'finalText').style('cursor', ' pointer').style('font-size', '15px')
         .attr('dy', (d) => {
-          const top = getRadious(d.indices.hIndex + 32) * 2;
+          const top = getRadious(d.indices.hIndex) * 2;
           return top + 10;
         })
         .text((d) => {
@@ -1419,12 +1432,11 @@ export default class RelationGraph extends React.PureComponent {
         }
       });
       svg.selectAll('circle').data(_nodes).attr('r', (d) => {
-        return getRadious(d.indices.hIndex);
-        // if (d.indices.hIndex > indexShow) {
-        //   return getRadious(d.indices.hIndex + 32);
-        // } else {
-        //   return 0;
-        // }
+        if (d.indices.hIndex > indexShow) {
+          return getRadious(d.indices.hIndex);
+        } else {
+          return 0;
+        }
       });
       // return svg.selectAll('.nodetext').data(_nodes).text((d) => {
       //   if (d.indices.hIndex > showName && d.indices.hIndex > indexShow) {
@@ -1563,7 +1575,7 @@ export default class RelationGraph extends React.PureComponent {
     const { describeNodes1, describeNodes2, suspension_adjustment, two_paths, continuous_path, single_extension, currentNode } = this.state;
     return (
       <div>
-        <div style={{ width: EgoWidth }} className={styles.relationHeader}>
+        <div className={styles.relationHeader}>
           <div className={styles.statAndAction}>
             {/* 搜索结果 */}
             <div className={styles.statistics}>
@@ -1579,7 +1591,7 @@ export default class RelationGraph extends React.PureComponent {
               {/* <Checkbox checked={subnet_selection} onChange={this.changeModle1}>子网选取</Checkbox> */}
               <Button className={classnames({
                 active: suspension_adjustment,
-                [styles.selected]: suspension_adjustment
+                [styles.selected]: suspension_adjustment,
               })}
                       onClick={this.changeModle2}>
                 <span className={classnames('icon', styles.stop_drag_icon)} />
@@ -1627,14 +1639,16 @@ export default class RelationGraph extends React.PureComponent {
         <div className={styles.twoExpertPathBySearch}>
           <span>
             <RgSearchNameBox size="default" style={{ width: 230 }}
-                             onSearch={this.onSearchTwoPaths}
+                             onSearch={this.onSearchTwoPathsStart}
+                             value={this.state.start_two_paths}
                              suggesition={this.state.allNodes} hideSearchBtn />
             &nbsp;-&nbsp;
             <RgSearchNameBox size="default" style={{ width: 230 }}
+                             value={this.state.end_two_paths}
                              onSearch={this.onSearchTwoPaths}
                              suggesition={this.state.allNodes} hideSearchBtn />
             &nbsp;
-            <Button type="primary" size="small" onClick={this.changeModle3}>取消选择</Button>
+            <Button type="primary" size="small" onClick={this.submitTwoPaths}>确定选择</Button>
           </span>
         </div>
         }
@@ -1688,7 +1702,7 @@ export default class RelationGraph extends React.PureComponent {
           width: EgoWidth,
           height: EgoHeight,
           border: '1px solid #eee',
-          marginTop: 20,
+          marginTop: 10,
         }} />
         {/* 进度条 */}
         {this.pgshow && <Progress percent={this.state.pgLength} style={{

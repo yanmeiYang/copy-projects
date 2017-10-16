@@ -7,7 +7,7 @@ import { sysconfig } from 'systems';
 import { classnames } from 'utils/index';
 import styles from './index-hotlinks.less';
 
-const IndexHotLinks = ({ links, urlFunc }) => {
+const IndexHotLinks = ({ links, urlFunc, withComma}) => {
 
   const Links = links || [];
 
@@ -25,7 +25,7 @@ const IndexHotLinks = ({ links, urlFunc }) => {
           return (
             <div key={key}>
               <Link to={urlFunc && urlFunc(query)}>{query}</Link>
-              {/*<span>{(index === commonSearch.length - 1) ? '' : ''}</span>*/}
+              {withComma && index !== Links.length-1 && ','}
             </div>
           );
         })}

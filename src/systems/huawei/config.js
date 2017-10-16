@@ -19,20 +19,26 @@ module.exports = {
   UserAuthSystem_AddSysTagAuto: true, // 登录时自动添加system的标签
 
   Header_SubTextLogo: '知识洞察系统',
-  Header_SubTextStyle: { width: 128 },
-  Header_LogoStyle: {
-    top: '-10px',
-    width: '60px',
-    height: '36px',
-    backgroundSize: 'auto 56px',
-    backgroundPosition: '0px -10px',
-  },
-  Header_LogoWidth: 199,
+  // Header_SubTextStyle: { width: 128 },
+  // Header_LogoStyle: {
+  //   top: '-10px',
+  //   width: '60px',
+  //   height: '36px',
+  //   backgroundSize: 'auto 56px',
+  //   backgroundPosition: '0px -10px',
+  // },
+  // Header_LogoWidth: 199,
   Header_UserPageURL: '/user-info',
   // Footer_Content: '',
   ShowHelpDoc: true,
 
   Signup_Password: true,
+
+  // > Search related
+  // SearchBarInHeader: true,
+  HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertMap', 'Relation', 'TrendPrediction'],
+  // SearchFilterExclude: '', // 'Gender',
+  // UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // deprecated! Don't use this.
 
   // Functionality
   Enable_Export: true,

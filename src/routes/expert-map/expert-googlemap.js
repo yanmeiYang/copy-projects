@@ -2,24 +2,30 @@
  *  Created by BoGao on 2017-06-07;
  */
 import React from 'react';
-import {connect} from 'dva';
-import {Button, Select} from 'antd';
+import { connect } from 'dva';
+import { Button, TreeSelect, Tag } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import classnames from 'classnames';
 import styles from './expert-googlemap.less';
-import {sysconfig} from '../../systems';
-import {listPersonByIds} from '../../services/person';
+import { sysconfig } from '../../systems';
+import { listPersonByIds } from '../../services/person';
 import * as profileUtils from '../../utils/profile-utils';
-import {findPosition, getById} from './utils/map-utils';
+import { findPosition, getById } from './utils/map-utils';
 import GetGoogleMapLib from './utils/googleMapGai.js';
 import RightInfoZonePerson from './RightInfoZonePerson';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
 import RightInfoZoneAll from './RightInfoZoneAll';
+import { routerRedux } from 'dva/router';
 import {TopExpertBase} from '../../utils/expert-base';
 
 const ButtonGroup = Button.Group;
+const { CheckableTag } = Tag;
 const blankAvatar = '/images/blank_avatar.jpg';
 let map1;
+let number = '0';
+let range = '0';
+let domainIds = [];
+let domainChecks = [];
 function insertAfter(newElement, targetElement) {
   const parent = targetElement.parentNode;
   if (parent.lastChild === targetElement) {
@@ -35,6 +41,12 @@ class ExpertGoogleMap extends React.Component {
     this.showOverLay = GetGoogleMapLib(this.showTop);
     localStorage.setItem("lastgoogletype", "0");
     localStorage.setItem("googletype", "0");
+  }
+
+  state = {
+    typeIndex: 0,
+    rangeChecks: [true, false, false, false],
+    numberChecks: [true, false, false, false, false],
   }
 
   componentDidMount() {
@@ -337,28 +349,49 @@ class ExpertGoogleMap extends React.Component {
         //   markers.push(marker);
         //   counts += 1;
         // }
-        const markers = locations.map(function (location, i) {
-          return new google.maps.Marker({
-            position: location,
-            label: {
-              text: place.results[i].name,
-              color: '#000000',
-              fontSize: '12px',
-              backgroundColor: 'transparent',
-              fontWeight: 'bold',
-              fontStyle: 'italic',
-            },
-            icon: {
-              url: '/images/map/marker_blue_sprite.png',
-              //fillColor: 'red',
-              size: new google.maps.Size(20, 70),
-              origin: new google.maps.Point(0, 0),
-              anchor: new google.maps.Point(0, 25),
-            },
-            //labelText: place.results[i].name,
-            //labelClass: 'labels',
-            title: place.results[i].id,
-          });
+        let markers = locations.map(function (location, i) {
+          //if (range === '0') {
+            return new google.maps.Marker({
+              position: location,
+              label: {
+                text: place.results[i].name,
+                color: '#000000',
+                fontSize: '12px',
+                backgroundColor: 'transparent',
+                fontWeight: 'bold',
+                fontStyle: 'italic',
+              },
+              icon: {
+                url: '/images/map/marker_blue_sprite.png',
+                size: new google.maps.Size(20, 70),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(0, 25),
+              },
+              title: place.results[i].id,
+            });
+          // } else if (range === '1') {
+          //   console.log(location)
+          //   if (place.results[i].fellows[0] === 'acm') {
+          //     return new google.maps.Marker({
+          //       position: location,
+          //       label: {
+          //         text: place.results[i].name,
+          //         color: '#000000',
+          //         fontSize: '12px',
+          //         backgroundColor: 'transparent',
+          //         fontWeight: 'bold',
+          //         fontStyle: 'italic',
+          //       },
+          //       icon: {
+          //         url: '/images/map/marker_blue_sprite.png',
+          //         size: new google.maps.Size(20, 70),
+          //         origin: new google.maps.Point(0, 0),
+          //         anchor: new google.maps.Point(0, 25),
+          //       },
+          //       title: place.results[i].id,
+          //     });
+          //   }
+          // }
         });
         const beaches = [
           ['东部', 38.9071923, -77.0368707],
@@ -393,9 +426,18 @@ class ExpertGoogleMap extends React.Component {
             });
           });
         }
+        // if (number === '0') {
+        //   markers = markers.slice(0, 200);
+        // } else if (number === '1') {
+        //   markers = markers.slice(0, 50);
+        // } else if (number === '2') {
+        //   markers = markers.slice(0, 100);
+        // } else if (number === '3') {
+        //   markers = markers.slice(0, 500);
+        // }
         // Add a marker clusterer to manage the markers.
         const _ = new googleMap.MarkerClusterer(map, {markers});
-        for (let m = 0; m < place.results.length; m += 1) {
+        for (let m = 0; m < markers.length; m += 1) {
           that.addMouseoverHandler(map, markers[m], place.results[m].id);
         }
         // if (typeid === '1') {
@@ -546,25 +588,77 @@ class ExpertGoogleMap extends React.Component {
     window.location.href = href;
   }
 
+  showNumber = (numberTmp) => {
+    const that = this;
+    let arr = [false, false, false, false, false];
+    arr[numberTmp] = true;
+    that.setState({ numberChecks: arr })
+    const lastType = localStorage.getItem('lasttype');
+    if (numberTmp) {
+      number = numberTmp;
+      that.showgooglemap(this.props.expertMap.geoData, lastType, range, number);
+    }
+  };
+
+  showRange = (rangeTmp) => {
+    const lastType = localStorage.getItem('lasttype');
+    const that = this;
+    const arr = [false, false, false, false];
+    arr[rangeTmp] = true;
+    that.setState({ rangeChecks: arr })
+    if (rangeTmp) {
+      range = rangeTmp;
+      this.showgooglemap(this.props.expertMap.geoData, lastType, range, number);
+    }
+  };
+
   domainChanged = (value) => {
-    if (value) {
+    this.props.dispatch(routerRedux.push({ pathname: '/expert-googlemap', search:  `?query=${value.name}` }));
+    const that = this;
+    let i = 0;
+    domainIds.map((domain1) => {
+      if (value.id === domain1) {
+        domainChecks[i] = true;
+      } else {
+        domainChecks[i] = false;
+      }
+      i += 1;
+    });
+    if (value.id) {
       const { dispatch } = this.props;
       //console.log(`selected ${value}`);
-      localStorage.setItem("isgoogleClick", "0");
+      localStorage.setItem('isClick', '0');
       dispatch({ type: 'app/clearQueryInHeaderIfExist' });
-      dispatch({ type: 'expertMap/searchExpertBaseMap', payload: { eb: value } });
+      dispatch({ type: 'expertMap/searchExpertBaseMap', payload: { eb: value.id } });
+      dispatch({
+        type: 'expertMap/setRightInfo',
+        payload: { idString: '', rightInfoType: 'global' },
+      });
     }
   };
 //page-------------------------------------------------------------------------------------------------------------------
   render() {
     const model = this.props && this.props.expertMap;
     const persons = model.geoData.results;
+    let checkState = 0;
     let count = 0;
+    let isACMFellowNumber = 0;
+    let isIeeeFellowNumber = 0;
+    let isChNumber = 0;
     let hIndexSum = 0;
     if (persons) {
       persons.map((person1) => {
         hIndexSum += person1.hindex;
         count += 1;
+        if (person1.fellows[0] === 'acm') {
+          isACMFellowNumber += 1;
+        }
+        if (person1.fellows[0] === 'ieee' || person1.fellows[1] === 'ieee') {
+          isIeeeFellowNumber += 1;
+        }
+        if (person1.is_ch) {
+          isChNumber += 1;
+        }
         return hIndexSum;
       });
     }
@@ -601,35 +695,132 @@ class ExpertGoogleMap extends React.Component {
 
     const rightInfos = {
       global: () => (
-        <RightInfoZoneAll count={count} avg={avg} persons={persons} />
+        <RightInfoZoneAll count={count} avg={avg} persons={persons} isACMFellowNumber={isACMFellowNumber} isIeeeFellowNumber={isIeeeFellowNumber} isChNumber={isChNumber}/>
       ),
       person: () => (<RightInfoZonePerson person={model.personInfo} />),
       cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),
     };
-    const Domains = TopExpertBase.RandomTop100InDomain;
-
+    const that = this;
+    const Domains = sysconfig.Map_HotDomains;
+    let i = 0;
+    const arr = [];
+    Domains.map((domain1) => {
+      domainIds[i] = domain1.id;
+      if (domainIds.length === 0) {
+        arr[i] = false;
+      }
+      i += 1;
+    });
+    let m = 0;
+    if (domainChecks) {
+      Domains.map((domain1) => {
+        if (domain1.name === this.props.query) {
+          domainChecks[m] = true;
+        } else {
+          domainChecks[m] = false;
+        }
+        m += 1;
+      });
+    }
+    const TreeNode = TreeSelect.TreeNode;
     return (
       <div className={styles.expertMap} id="currentMain">
-
+        <div style={{display:'none' }} className={styles.filterWrap}>
+          <div className={styles.filter}>
+            <div className={styles.filterRow}>
+              <span className={styles.filterTitle}><span>Hot words:</span></span>
+              <ul>
+                {Domains.map((domain) =>{
+                  checkState += 1;
+                  return (<CheckableTag className={styles.filterItem} key={domain.id} checked={domainChecks[checkState - 1]} value={domain.id}><span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span></CheckableTag>)
+                })
+                }
+              </ul>
+            </div>
+          </div>
+          <div className={styles.filter}>
+            <div className={styles.filterRow}>
+              <span className={styles.filterTitle}><span>Range:</span></span>
+              <ul>
+                <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[0]}>
+                  <span onClick={this.showRange.bind(that, '0')} value="0" >ALL</span>
+                </CheckableTag>
+                <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[1]}><span onClick={this.showRange.bind(that, '1')}>ACM Fellow</span></CheckableTag>
+                <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[2]}><span onClick={this.showRange.bind(that, '2')}>IEEE Fellow</span></CheckableTag>
+                <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[3]}><span onClick={this.showRange.bind(that, '3')}>华人</span></CheckableTag>
+              </ul>
+            </div>
+            <div className={styles.filterRow}>
+              <span className={styles.filterTitle}><span>H-index:</span></span>
+              <ul>
+                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[4]}><span onClick={this.showNumber.bind(that, '4')}>ALL</span></CheckableTag>
+                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[3]}><span onClick={this.showNumber.bind(that, '3')}>TOP500</span></CheckableTag>
+                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[0]}><span onClick={this.showNumber.bind(that, '0')}>TOP200</span></CheckableTag>
+                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[2]}><span onClick={this.showNumber.bind(that, '2')}>TOP100</span></CheckableTag>
+                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[1]}><span onClick={this.showNumber.bind(that, '1')}>TOP50</span></CheckableTag>
+              </ul>
+            </div>
+          </div>
+        </div>
         <div className={styles.headerLine}>
           <div className={styles.left}>
             {/*{this.props.title}*/}
-            <span>
-              <FM defaultMessage="Domain"
-                  id="com.expertMap.headerLine.label.field" />
-            </span>
-
-            <Select defaultValue="" className={styles.domainSelector} style={{ width: 120 }}
-                    onChange={this.domainChanged}>
-              <Select.Option key="none" value="">
-                <FM defaultMessage="Domain"
-                    id="com.expertMap.headerLine.label.selectField" />
-              </Select.Option>
-              {Domains.map(domain =>
-                (<Select.Option key={domain.id} value={domain.id}>{domain.name}</Select.Option>),
-              )}
-            </Select>
-
+            {/*<span>*/}
+            {/*<FM defaultMessage="Domain"*/}
+            {/*id="com.expertMap.headerLine.label.field" />*/}
+            {/*</span>*/}
+            {/*<Select defaultValue="" className={styles.domainSelector} style={{ width: 120 }}*/}
+            {/*onChange={this.domainChanged}>*/}
+            {/*<Select.Option key="none" value="">*/}
+            {/*<FM defaultMessage="Domain"*/}
+            {/*id="com.expertMap.headerLine.label.selectField" />*/}
+            {/*</Select.Option>*/}
+            {/*{Domains.map(domain =>*/}
+            {/*(<Select.Option key={domain.id} value={domain.id}>{domain.name}</Select.Option>),*/}
+            {/*)}*/}
+            {/*</Select>*/}
+            {/*<TreeSelect*/}
+              {/*className={styles.treeSelect}*/}
+              {/*style={{ width: 280, display: 'none' }}*/}
+              {/*value={this.state.value}*/}
+              {/*dropdownStyle={{ maxHeight: 425, overflow: 'auto' }}*/}
+              {/*placeholder={<b style={{ color: '#08c' }}>Domains</b>}*/}
+              {/*treeDefaultExpandAll*/}
+            {/*>*/}
+              {/*<TreeNode value="parent 1-0" title="Theory" key="1-0">*/}
+                {/*{Domains.map((domain) => {*/}
+                  {/*if (domain.name === 'Theory' || domain.name === 'Multimedia' || domain.name === 'Security'*/}
+                    {/*|| domain.name === 'Software Engineering' || domain.name === 'Computer Graphics') {*/}
+                    {/*return (*/}
+                      {/*<TreeNode value={domain.id} title={<span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>} key={domain.id}></TreeNode>*/}
+                    {/*)*/}
+                  {/*}*/}
+                {/*})*/}
+                {/*}*/}
+              {/*</TreeNode>*/}
+              {/*<TreeNode value="parent 1-1" title="System" key="1-1">*/}
+                {/*{Domains.map((domain) => {*/}
+                  {/*if (domain.name === 'Database' || domain.name === 'System' || domain.name === 'Computer Networking') {*/}
+                    {/*return (*/}
+                      {/*<TreeNode value={domain.id} title={<span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>} key={domain.id}></TreeNode>*/}
+                    {/*)*/}
+                  {/*}*/}
+                {/*})*/}
+                {/*}*/}
+              {/*</TreeNode>*/}
+              {/*<TreeNode value="parent 1-2" title="Artificial Intelligence" key="1-2">*/}
+                {/*{Domains.map((domain) => {*/}
+                  {/*if (domain.name === 'Data Mining' || domain.name === 'Machine Learning' || domain.name === 'Artificial Intelligence'*/}
+                    {/*|| domain.name === 'Web and Information Retrieval' || domain.name === 'Computer Vision'*/}
+                    {/*|| domain.name === 'Human-Computer Interaction' || domain.name === 'Natural Language Processing') {*/}
+                    {/*return (*/}
+                      {/*<TreeNode value={domain.id} title={<span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>} key={domain.id}></TreeNode>*/}
+                    {/*)*/}
+                  {/*}*/}
+                {/*})*/}
+                {/*}*/}
+              {/*</TreeNode>*/}
+            {/*</TreeSelect>*/}
             <div className={styles.level}>
               <span>
                 <FM defaultMessage="Baidu Map"
@@ -644,17 +835,16 @@ class ExpertGoogleMap extends React.Component {
                 <Button onClick={this.showType} value="5">机构</Button>
               </ButtonGroup>
             </div>
-
           </div>
 
           <div className={styles.scopes}>
             <div className={styles.switch}>
               <ButtonGroup id="diffmaps">
-                <Button onClick={this.onChangeBaiduMap}>
+                <Button type="primary" onClick={this.onChangeBaiduMap}>
                   <FM defaultMessage="Baidu Map"
                       id="com.expertMap.headerLine.label.baiduMap" />
                 </Button>
-                <Button type="primary" onClick={this.onChangeGoogleMap}>
+                <Button onClick={this.onChangeGoogleMap}>
                   <FM defaultMessage="Baidu Map"
                       id="com.expertMap.headerLine.label.googleMap" />
                 </Button>
@@ -674,9 +864,8 @@ class ExpertGoogleMap extends React.Component {
                 <span alt="" className={classnames('icon', styles.titleIcon)} />
                 图例
               </div>
-
               <div className={styles.t}>
-                <div>专家：</div>
+                <div className={styles.div}>专家：</div>
                 <span alt="" className={classnames('icon', styles.expertIcon1)} />
                 <div className={styles.tExperts}>一组专家：</div>
                 <span alt="" className={classnames('icon', styles.expertIcon2)} />

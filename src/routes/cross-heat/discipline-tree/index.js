@@ -1,43 +1,68 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Icon, Input, Modal } from 'antd';
-import ReactDOM from 'react-dom';
+import { Icon, Button, Input, Modal } from 'antd';
 import * as d3 from 'd3';
+import { Spinner } from 'components';
 import styles from './index.less';
 
 class DisciplineTree extends React.Component {
   state = {
-    left: 0,
-    top: 0,
-    node: null,
     showTooltip: false,
+    node: null,
+    name: '',
   };
+  initData = null;
+  timeoutId = 0;
+  mouseOut = false;
+  tooltipLeft = 0;
+  tooltipTop = 0;
 
-  componentWillMount() {
+  componentDidMount() {
+    this.getDiscipline();
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    const data = nextProps.crossHeat[this.props.id];
+    if (data && this.props.crossHeat[this.props.id] !== data) {
+      this.initData = this.addId(data);
+      this.createD3(this.initData);
+    }
+  }
+
+  // 获取领域树
+  getDiscipline = () => {
+    const id = this.props.id;
+    const data = this.props.crossHeat[id];
     const query = this.props.query;
-    const params = {
-      id: this.props.id,
-      area: query.replace(/ /g, '_'),
-      k: 4,
-      depth: 2,
-    };
-    this.props.dispatch({ type: 'crossHeat/getDiscipline', payload: params });
-  }
-
-  componentWillReceiveProps() {
-    const data = this.props.crossHeat[this.props.id];
-    if (data) {
-      this.createD3(data, false);
+    const isSearch = this.props.isSearch;
+    if (!isSearch && data) {
+      this.initData = this.addId(data);
+      this.createD3(this.initData);
+    } else {
+      const area = query.replace(/ /g, '_');
+      const params = { id, area, k: 4, depth: 2 };
+      this.props.dispatch({ type: 'crossHeat/getDiscipline', payload: params });
     }
   }
 
-  createD3 = (iData, editContent) => {
+  addId = (iData) => {
+    iData.id = this.guid();
+    if (iData.children) {
+      iData.children.map(item => this.addId(item));
+    }
+    return iData;
+  }
+  // todo 唯一id
+  guid = () => {
+    function S4() {
+      return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    }
+
+    return (S4() + S4() + S4());
+  }
+  createD3 = (iData) => {
     const height = 500;
-    let width = 600;
-    if (this.props.isEdit) {
-      width = 800;
-    }
-
+    const width = this.props.isEdit ? 800 : 600;
     // 创建画板
     d3.select(`#${this.props.id}`).selectAll('svg').remove();
     const svg = d3.select(`#${this.props.id}`).append('svg')
@@ -47,10 +72,7 @@ class DisciplineTree extends React.Component {
       .attr('transform', 'translate(120,0)');
 
     const treemap = d3.tree().size([height, width]);
-
-    const root = d3.hierarchy(iData, (d) => {
-      return d.children;
-    });
+    const root = d3.hierarchy(iData, d => d.children);
     root.x0 = height / 2;
     root.y0 = 0;
 
@@ -68,9 +90,7 @@ class DisciplineTree extends React.Component {
       .enter()
       .append('path')
       .attr('class', styles.link)
-      .attr('d', (d) => {
-        return diagonal(d, d.parent);
-      });
+      .attr('d', d => diagonal(d, d.parent));
 
     // 创建节点
     const node = svg.selectAll('.node')
@@ -78,73 +98,18 @@ class DisciplineTree extends React.Component {
       .enter()
       .append('g')
       .attr('class', styles.node)
-      .attr('transform', (d) => {
-        return `translate(${d.y},${d.x})`;
-      });
+      .attr('transform', d => `translate(${d.y},${d.x})`);
 
     // 给节点添加圆
     node.append('circle')
       .attr('r', 4.5)
-      .style('stroke', (d) => {
-        let stroke = 'steelblue';
-        if (editContent) {
-          if (d.data.name === this.state.node.data.name) {
-            stroke = '#fff';
-          }
-        }
-        return stroke;
-      });
+      .style('stroke', 'steelblue');
     // 给节点添加文本
     node.append('text')
-      .attr('dx', (d) => {
-        return d.children ? -8 : 8;
-      })
+      .attr('dx', 8)
       .attr('dy', 3)
-      .style('text-anchor', (d) => {
-        return d.children ? 'end' : 'start';
-      })
-      .text((d) => {
-        // 去掉 text
-        let txt = d.data.name;
-        if (editContent) {
-          if (d.data.name === this.state.node.data.name) {
-            txt = '';
-          }
-        }
-        return txt;
-      });
-    // 添加鼠标事件
-    svg.selectAll('circle')
-      .on('mouseover', (d) => {
-        if (this.props.isEdit) {
-          this.setState({ name: d.data.name });
-          svg.selectAll('circle').data(nodes)
-            .style('stroke', (item) => {
-              let fill = 'steelblue';
-              if (item.x === d.x && item.y === d.y) {
-                fill = '#fff';
-              }
-              return fill;
-            });
-          svg.selectAll('text').data(nodes)
-            .text((item) => {
-              let txt = item.data.name;
-              if (item.x === d.x && item.y === d.y) {
-                txt = '';
-              }
-              return txt;
-            });
-          const top = d.x + 60;
-          const left = event.pageX - 5;
-          this.setState({
-            showTooltip: true,
-            top,
-            left,
-            node: d,
-          });
-          ReactDOM.findDOMNode(this.refs.edit).value = d.data.name;
-        }
-      });
+      .style('text-anchor', 'start')
+      .text(d => d.data.name);
     // 对角线函数
     function diagonal(s, d) {
       const path =
@@ -154,18 +119,31 @@ class DisciplineTree extends React.Component {
              ${d.y} ${d.x}`;
       return path;
     }
-  }
 
+    // 添加鼠标事件
+    svg.selectAll('circle')
+      .on('mouseover', (node) => {
+        if (this.props.isEdit) {
+          // 圈变成背景色
+          svg.selectAll('circle').data(nodes)
+            .style('stroke', item => (node.data.id === item.data.id ? '#fff' : 'steelblue'));
+          // 字体变成背景色
+          svg.selectAll('text').data(nodes)
+            .style('fill', item => (node.data.id === item.data.id ? '#fff' : '#000'))
+            .attr('opacity', item => (node.data.id === item.data.id ? 0 : 1))
+          // 判断是不是说子节点
+          this.tooltipTop = node.x + 155;
+          this.tooltipLeft = event.pageX - 10;
+          const name = node.data.name;
+          this.setState({ showTooltip: true, node, name });
+        }
+      });
+  }
   // 递归删除 节点
   delData = (dt, node) => {
-    // todo 节点不唯一
     if (dt.children) {
       dt.children.map((item, i) => {
-        if (item.name === node.data.name) {
-          dt.children.splice(i, 1);
-        } else {
-          this.delData(item, node);
-        }
+        item.id === node.data.id ? dt.children.splice(i, 1) : this.delData(item, node);
         return true;
       });
     }
@@ -181,80 +159,98 @@ class DisciplineTree extends React.Component {
       onOk() {
         const data = that.props.crossHeat[that.props.id];
         const dData = that.delData(data, that.state.node);
-        that.createD3(dData, false);
-        that.setState({ showTooltip: false });
-        const params = {
-          parents: that.state.node.parent.data.name,
-          children: that.state.node.data.name,
-          postive: 1,
-        }
-        that.props.dispatch({ type: 'crossHeat/delDiscipline', payload: params });
+        that.createD3(dData);
       },
       onCancel() {
+        that.setState({ showTooltip: false });
       },
     });
-  }
+  };
 
   addNode = () => {
     this.setState({ showTooltip: false });
     const data = this.props.crossHeat[this.props.id];
     const aData = this.addData(data, this.state.node);
-    this.createD3(aData, false);
+    this.createD3(aData);
   }
-  addData = (dt, node) => {
-    // todo 节点不唯一
-    if (dt.name === node.data.name) {
-      if (dt.children === undefined) {
-        dt.children = [];
-      }
-      dt.children.push({ name: '新节点' });
+  addData = (data, node) => {
+    const dt = data;
+    if (dt.id === node.data.id) {
+      dt.children = dt.children || [];
+      dt.children.push({ name: '新节点', id: this.guid() });
     } else if (dt.children) {
-      dt.children.map((item) => {
-        this.addData(item, node);
-        return true;
-      });
+      dt.children.map(item => this.addData(item, node));
     }
     return dt;
   }
-
-
-  // 编辑节点
-  editNode = () => {
-    const name = ReactDOM.findDOMNode(this.refs.edit).value;
-    const data = this.props.crossHeat[this.props.id];
-    const eData = this.editData(data, name);
-    this.createD3(eData, true);
-  };
-  editData = (dt, name) => {
-    if (dt.name === this.state.node.data.name) {
+  editData = (data, name) => {
+    const dt = data;
+    if (dt.id === this.state.node.data.id) {
       dt.name = name;
     } else if (dt.children) {
-      dt.children.map((item) => {
-        this.editData(item, name);
-        return true;
-      });
+      dt.children.map(item => this.editData(item, name));
     }
     return dt;
+  };
+
+  onChangeName = () => {
+    const name = this.refs.edit.refs.input.value;
+    this.setState({ name });
+    this.editData(this.initData, name);
+  }
+
+  // 展示可以编辑页面
+  onMouseOut = () => {
+    this.timeoutId = setTimeout(() => {
+      if (!this.mouseOut) {
+        this.createD3(this.initData);
+        this.setState({ showTooltip: this.mouseOut });
+      }
+    }, 100);
+  }
+  onMouseOver = () => {
+    this.mouseOut = false;
+    clearTimeout(this.timeoutId);
   }
 
   render() {
+    const loadTree = this.props.loading.effects['crossHeat/getDiscipline'];
+    const inputVal = this.state.node ? this.state.name : '';
+    const addonBefore = (
+      <Icon type="close-circle-o"
+            onClick={this.delNode}
+            onMouseOver={this.onMouseOver}
+            onMouseOut={this.onMouseOut}
+            className={styles.close} />
+    );
+    const addonAfter = (
+      <Icon type="plus-circle-o"
+            onClick={this.addNode}
+            onMouseOver={this.onMouseOver}
+            onMouseOut={this.onMouseOut}
+            className={styles.plus} />
+    );
     return (
-      <div>
+      <div className={styles.disciplineTree}>
+        <div id="edit"></div>
         {this.state.showTooltip &&
         <div className={styles.tooltipDis}
-             style={{ top: this.state.top, left: this.state.left }}>
-          {this.state.node.depth > 0 &&
-          <Icon type="close-circle-o" onClick={this.delNode}
-                className={styles.close} />
-          }
-          <Input size="small" placeholder=""
-                 onChange={this.editNode}
-                 className={styles.input} ref="edit" />
-          <Icon type="plus-circle-o" onClick={this.addNode}
-                className={styles.plus} />
+             style={{
+               top: this.tooltipTop,
+               left: this.tooltipLeft,
+             }}>
+          <Input
+            onMouseOver={this.onMouseOver}
+            onMouseOut={this.onMouseOut}
+            addonBefore={this.state.node.depth > 0 && addonBefore}
+            addonAfter={addonAfter}
+            value={inputVal}
+            onChange={this.onChangeName}
+            ref="edit" />
         </div>
         }
-        <div id={this.props.id} />
+        <Spinner className={styles.heatSpinner} loading={loadTree} size="large" />
+        <div id={this.props.id} onClick={this.onCancel} />
       </div>);
   }
 }

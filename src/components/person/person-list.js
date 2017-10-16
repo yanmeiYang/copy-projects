@@ -203,15 +203,15 @@ export default class PersonList extends Component {
               </div>
               }
 
-              {/* ---- Bottom Zone ---- */}
-              {/*{BottomZoneFuncs && BottomZoneFuncs.length > 0 &&*/}
-              {/*<div className={styles.personComment}>*/}
-              {/*{BottomZoneFuncs.map((bottomBlockFunc) => {*/}
-              {/*const param = { person, expertBaseId, user };*/}
-              {/*return bottomBlockFunc ? bottomBlockFunc(param) : false;*/}
-              {/*})}*/}
-              {/*</div>*/}
-              {/*}*/}
+              {/*---- Bottom Zone ---- */}
+              {BottomZoneFuncs && BottomZoneFuncs.length > 0 &&
+              <div className={styles.personComment}>
+                {BottomZoneFuncs.map((bottomBlockFunc) => {
+                  const param = { person, expertBaseId, user: this.props.user };
+                  return bottomBlockFunc ? bottomBlockFunc(param) : false;
+                })}
+              </div>
+              }
             </div>
           );
         })

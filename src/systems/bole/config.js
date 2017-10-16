@@ -5,7 +5,7 @@ import React from 'react';
 import { Link } from 'dva/router';
 import defaults from '../utils';
 import { AddToEBButton, PersonRemoveButton, PersonComment } from './components';
-import { GetComments } from './person-comment-hooks';
+import { GetComments } from './hooks/person-comment-hooks';
 
 import { createRoster } from '../../hooks';
 
@@ -15,6 +15,8 @@ module.exports = {
   PageTitle: '伯乐系统',
   SearchPagePrefix: 'uniSearch', // search, uniSearch
   ShowRegisteredRole: false,
+
+  Locale: 'zh',
 
   // UserAuthSystem: 'aminer', // aminer 或者是 system.config; 默认当前系统
   // UserAuthSystem_AddSysTagAuto: true, // 登录时自动添加system的标签
@@ -40,7 +42,7 @@ module.exports = {
   // > Search related
   SearchBarInHeader: true,
   // HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertBase'], // ExpertBase bole专有
-  HeaderSearch_TextNavi: [],
+  HeaderSearch_TextNavi: ['ExpertBase', 'ACM_ExpertSearch'],
 
   // Search_DisableFilter: false,
   Search_DisableExpertBaseFilter: true,
@@ -74,8 +76,7 @@ module.exports = {
     param => (
       <PersonComment
         person={param.person} user={param.user} key="1"
-
-        ExpertBase="59a8e5879ed5db1fc4b762ad"
+        expertBaseId={param.expertBaseId}
       />),
   ],
   // PersonList_DidMountHooks: [],

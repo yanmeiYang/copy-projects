@@ -16,8 +16,13 @@ let mapOption = {};
 let author = {};
 let author2 = {};
 let mapinterval; // 播放的interval
-let location = [];
+let location;
 let table = [];
+let authors;
+const centerBegin = [0,12];
+let centerPixeBegin;
+let roamNow;
+let centerNow;
 const themes = {
   dark: {
     textColor: '#deded7',
@@ -66,9 +71,10 @@ class ExpertHeatmap extends React.PureComponent { ///
   state = {
     inputValue: startYear,
     ifPlay: 'play-circle',
-    startYear: 1999, // 1978,
-    endYear: 2013, // 2016,
+    startYear: 1978, // 1978,
+    endYear: 2016, // 2016,
     theme: 'light',
+    displayURL: [],
   };
 
   componentWillMount() {
@@ -98,10 +104,14 @@ class ExpertHeatmap extends React.PureComponent { ///
     if (nextState.inputValue !== this.state.inputValue) {
       return true;
     }
+    if (nextState.displayURL !== this.state.displayURL) {
+      return true;
+    }
     if (nextProps.expertTrajectory.location !== this.props.expertTrajectory.location) {
       this.setState({ startYear: nextProps.expertTrajectory.startYear,
         endYear: nextProps.expertTrajectory.endYear });
-      location = nextProps.expertTrajectory.locations;
+      authors = nextProps.expertTrajectory.authors;
+      location = nextProps.expertTrajectory.location;
       table = nextProps.expertTrajectory.table;
       locationName = nextProps.expertTrajectory.locationName;
       this.playon = this.state.startYear;
@@ -128,16 +138,40 @@ class ExpertHeatmap extends React.PureComponent { ///
   }
 
   onChange = (value) => { // 点击滑动条或数字框，处理当年数据
+    // const e = document.getElementById("pic");
+    // e.innerHTML = '';
     if (this.props.yearChange) {
       this.props.yearChange(value);
     }
     this.setState({
       inputValue: value,
     });
+    const geoBegin = this.myChart2.getOption();
+    /////centerBegin = geoBegin[0].center;
+    console.log('centerBegin22222', geoBegin);
     this.seriesNo = false;
     this.playon = value;
     yearNow = this.playon;
     this.props.dispatch({ type: 'expertTrajectory/getYearData', payload: { year: yearNow } }).then(() => {
+      const thisYearEvent = this.props.expertTrajectory.yearMessage[this.props.expertTrajectory.yearMessage.length - 1];
+      const display = [];
+      thisYearEvent.events.map((oneEvent) => {
+        if (oneEvent.type === 'expert') {
+          // const authorIndex = authors.indexOf(oneEvent.authorID); // 正确
+          const authorIndex = authors.indexOf(oneEvent.author); // 暂时
+          const yearIndex = yearNow - this.state.startYear;
+          const thisYearID = table[authorIndex][yearIndex];
+          const latLng = location[thisYearID];
+          const pixel = this.myChart2.convertToPixel('geo', latLng);
+          const oneExpert = {};
+          oneExpert.authorIndex = authorIndex;
+          oneExpert.url = oneEvent.url;
+          oneExpert.geo = latLng;
+          oneExpert.pixel = pixel;
+          display.push(oneExpert);
+        }
+      });
+      this.setState({ displayURL: display });
       const thisYearData = this.props.expertTrajectory.eachYearHeat[yearNow];
       author = thisYearData.author;
       author2 = thisYearData.author2;
@@ -145,6 +179,8 @@ class ExpertHeatmap extends React.PureComponent { ///
         0, false, thisYearData.yearIndex, thisYearData.nextYearData, thisYearData.data1,
         thisYearData.data2, thisYearData.authorImgWest,
         thisYearData.authorImgMid, thisYearData.authorImgEast);
+      this.calculateLocation();
+      console.log("this.geo.center", this.myChart2.getModel().option.geo[0].center);
       this.myChart2.setOption(mapOption, true);
     });
   }
@@ -174,7 +210,6 @@ class ExpertHeatmap extends React.PureComponent { ///
           this.onChange(this.playon);
         } else {
           if (this.playon >= this.state.endYear) {
-            // console.log('daole');
             this.playon = this.state.startYear;
             play = false;
             this.setState({ ifPlay: 'play-circle' });
@@ -463,7 +498,7 @@ class ExpertHeatmap extends React.PureComponent { ///
           trailLength: 0,
           color: themes[this.state.theme].symbolColor,
           symbol: 'arrow',
-          symbolSize: 8,
+          symbolSize: 5, // 8,
           animation: false,
           // animationThreshold:10000,
         },
@@ -486,7 +521,7 @@ class ExpertHeatmap extends React.PureComponent { ///
           confine: true,
           formatter: (params) => {
             return `<div style="font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">Number of People: ${
-              new Set([...author[params.name[0]]].filter(x => new Set(author2[params.name[1]]).has(x))).length}<br/>From: ${
+              (_.intersection(author[params.name[0]], author2[params.name[1]])).length}<br/>From: ${
               locationName[params.name[0] - 1].toLowerCase()}<br/>To: ${locationName[params.name[1] - 1].toLowerCase()}<br>`;
           },
         },
@@ -508,7 +543,7 @@ class ExpertHeatmap extends React.PureComponent { ///
           trailLength: 0,
           color: themes[this.state.theme].planColor,
           symbol: planePath,
-          symbolSize: 30,
+          symbolSize: 20, // 30,
           animation: false,
           // animationThreshold:10000,
         },
@@ -531,10 +566,9 @@ class ExpertHeatmap extends React.PureComponent { ///
         },
         tooltip: {
           confine: true,
-
           formatter: (params) => {
             return `<div style="font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">Number of People: ${
-              new Set([...author[params.name[0]]].filter(x => new Set(author2[params.name[1]]).has(x))).length}<br/>From: ${
+              (_.intersection(author[params.name[0]], author2[params.name[1]])).length}<br/>From: ${
               locationName[params.name[0] - 1].toLowerCase()}<br/>To: ${locationName[params.name[1] - 1].toLowerCase()}<br>`;
           },
         },
@@ -601,6 +635,7 @@ class ExpertHeatmap extends React.PureComponent { ///
       },
       text: ['200', '0'],
       geo: {
+        center: centerBegin,
         zoom: 1.2,
         map: 'world',
         label: {
@@ -617,11 +652,21 @@ class ExpertHeatmap extends React.PureComponent { ///
         },
       },
     };
-
     this.myChart2.setOption(mapOption);
+    // console.log("centerBegin1", centerBegin)
+    centerPixeBegin = this.myChart2.convertToPixel('geo', centerBegin);
+
+    this.myChart2.on('georoam', (params) => {
+      this.calculateLocation();
+    });
 
     this.myChart2.on('click', (params) => { // 点击点或线出现红色高亮
+      roamNow = this.myChart2.getOption().geo[0].zoom;
+      centerNow = this.myChart2.getOption().geo[0].center;
+      console.log("roamNOw",roamNow)
       if (params.componentType === 'series') {
+        mapOption.geo.zoom = roamNow;
+        mapOption.geo.center = centerNow;
         if (this.seriesNo === true) { // 原本已有高亮
           if (mapOption.series.length - 1 !== params.seriesIndex) { // 点击的不是原来高亮的
             mapOption.series.pop();
@@ -798,7 +843,6 @@ class ExpertHeatmap extends React.PureComponent { ///
         }
       }
     });
-
     this.myChart2.on('dblclick', () => { // 双击放大
       mapOption.geo.zoom += 0.1;
       this.myChart2.setOption(mapOption);
@@ -867,7 +911,6 @@ class ExpertHeatmap extends React.PureComponent { ///
         this.setHeatmap(); // 热力图
         this.getMouseEvent();
       }).catch((error) => {
-        console.log(error);
         return undefined;
       });
     }
@@ -887,18 +930,47 @@ class ExpertHeatmap extends React.PureComponent { ///
 
   plusHeatZoom = () => { // 放大地图
     mapOption.geo.zoom += 0.1;
+    this.calculateLocation();
     this.myChart2.setOption(mapOption);
   }
 
   minusHeatZoom = () => { // 缩小地图
     mapOption.geo.zoom -= 0.1;
+    this.calculateLocation();
     this.myChart2.setOption(mapOption);
+  }
+
+  calculateLocation = () => {
+    const display = this.state.displayURL;
+    display.map((oneGeo) => {
+      oneGeo.pixel = this.myChart2.convertToPixel('geo', oneGeo.geo);
+      const centerAfter = this.myChart2.getModel().option.geo[0].center;
+      const centerPixelAfrer = this.myChart2.convertToPixel('geo', centerAfter);
+      const top = ((centerPixelAfrer[1] - centerPixeBegin[1]) + oneGeo.pixel[1]) - 46;
+      const left = ((centerPixelAfrer[0] - centerPixeBegin[0]) + oneGeo.pixel[0]) - 20;
+      const e = document.getElementById(oneGeo.authorIndex);
+      e.style.top = `${top}px`;
+      e.style.left = `${left}px`;
+    });
   }
 
   render() {
     const ifPlay = this.state.ifPlay;
+    const display = this.state.displayURL;
+    console.log('display', this.state.displayURL);
     return (
       <div>
+        <div className={styles.picture} id="pic">
+          {display && display.map((oneExpert, index) => {
+            const key = index;
+            return (
+              <div className={styles.onePic} key={key} id={oneExpert.authorIndex} style={{ left: oneExpert.pixel[0] - 20, top: oneExpert.pixel[1] - 46 }}>
+                <img src={oneExpert.url} className={styles.url} alt="" />
+              </div>
+            );
+          })
+          }
+        </div>
         <div className={styles.button}>
           <Button className={styles.dark} type="primary" ghost onClick={this.onThemeChangeDark}>dark</Button>
           <Button className={styles.light} type="primary" ghost onClick={this.onThemeChangeLight}>light</Button>
@@ -928,6 +1000,8 @@ class ExpertHeatmap extends React.PureComponent { ///
             </Col>
           </Row>
         </div>
+
+
       </div>
     );
   }

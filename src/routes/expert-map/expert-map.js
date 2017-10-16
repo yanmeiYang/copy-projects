@@ -4,7 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Button, Tag, Menu, Dropdown, Icon, TreeSelect } from 'antd';
+import { Button, Tag, TreeSelect } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
@@ -72,7 +72,7 @@ class ExpertMap extends React.PureComponent {
   }
 
   state = {
-    typeIndex: 0,
+    typeIndex: '0',
     rangeChecks: [true, false, false, false],
     numberChecks: [true, false, false, false, false],
     loadingFlag: true,
@@ -89,7 +89,7 @@ class ExpertMap extends React.PureComponent {
       payload: { idString: '', rightInfoType: 'global' },
     });
     window.onresize = () => {
-      //this.showMap(this.props.expertMap.geoData, this.state.typeIndex);
+      this.showMap(this.props.expertMap.geoData, this.state.typeIndex);
     };
   }
 
@@ -172,14 +172,29 @@ class ExpertMap extends React.PureComponent {
     const infoWindow = getInfoWindow();
     marker.addEventListener('mouseover', (e) => {
       if (this.currentPersonId !== personId) {
-        this.onResetPersonCard(); // TODO Load default name
-        this.onLoadPersonCard(personId);
+        this.onResetPersonCard(); // TODO Load default name,重置其信息
+        //this.onLoadPersonCard(personId); //请求数据，现在不需要了
         e.target.openInfoWindow(infoWindow);
-        this.syncInfoWindow();
+        //this.syncInfoWindow();
+        this.setState({ cperson: personId }, this.syncInfoWindow());//回调函数里面改写
       } else {
         e.target.openInfoWindow(infoWindow);
         this.syncInfoWindow();
       }
+      //使用中等大小的图标，将图片拷贝过去，和cluster中的一样,一定注意其逻辑顺序啊！
+      const id = `M${personId}`;
+      const divId = `Mid${personId}`;
+      let img = this.cacheImg[id];
+      const image = new Image(); //进行深拷贝
+      if (typeof (img) === 'undefined') {
+        img = this.cacheImg[personId];
+        img.width = 90;
+      }
+      image.src = img.src;
+      image.name = img.name;
+      image.width = img.width;
+
+      document.getElementById(divId).appendChild(image);
       this.currentPersonId = personId;
     });
     marker.addEventListener('mouseout', (e) => {
@@ -241,7 +256,7 @@ class ExpertMap extends React.PureComponent {
     }
   };
 
-  cacheInfo = (ids) => {
+  cacheInfo = (ids) => { //缓存基本信息
     const resultPromise = [];
     let count = 0;
     let count1 = 0;
@@ -556,13 +571,25 @@ class ExpertMap extends React.PureComponent {
         const cimg = imgdivs[i];
         const personInfo = data[ids[i]];
         let name;
-        if (personInfo.name_zh) {
-          const str = personInfo.name_zh.substr(1, 2);
-          name = str;
+        if (typeof (personInfo.name_zh) !== 'undefined') {
+          if (personInfo.name_zh) {
+            const str = personInfo.name_zh.substr(1, 2);
+            name = str;
+          } else {
+            const tmp = personInfo.name.split(' ', 5);
+            name = tmp[tmp.length - 1];
+            if (name === '') {
+              name = personInfo.name;
+            }
+          }
         } else {
           const tmp = personInfo.name.split(' ', 5);
           name = tmp[tmp.length - 1];
+          if (name === '') {
+            name = personInfo.name;
+          }
         }
+
         let style;
         if (name.length <= 8) {
           style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:45px;font-size:20%;';
@@ -599,13 +626,19 @@ class ExpertMap extends React.PureComponent {
         }
         const img = this.cacheImg[ids[i]];//浅拷贝和深拷贝
         const image = new Image(); //进行深拷贝
-        image.src = img.src;
-        image.name = img.name;
-        image.alt = name;
-        image.width = imgwidth;
-        image.style = style;
+        if (typeof (img) === 'undefined') {
+          image.src = blankAvatar;
+          image.alt = name;
+          image.width = imgwidth;
+        } else {
+          image.src = img.src;
+          image.name = img.name;
+          image.alt = name;
+          image.width = imgwidth;
+          image.style = style;
+        }
         if (img.src.includes('default.jpg') || img.src.includes('blank_avatar.jpg')) {
-          cimg.innerHTML = `<img id='${personInfo.id}' style='${style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='${personInfo.avatar}' alt='${name}'>`;
+          cimg.innerHTML = `<img id='${personInfo.id}' style='${style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='' alt='${name}'>`;
         } else {
           cimg.appendChild(image);
         }
@@ -640,11 +673,16 @@ class ExpertMap extends React.PureComponent {
           //使用中等大小的图标
           const id = `M${personInfo.id}`;
           const divId = `Mid${personInfo.id}`;
-          const img = this.cacheImg[id];
+          let img = this.cacheImg[id];
           const image = new Image(); //进行深拷贝
+          if (typeof (img) === 'undefined') {
+            img = this.cacheImg[personInfo.id];
+            img.width = 90;
+          }
           image.src = img.src;
           image.name = img.name;
           image.width = img.width;
+
           document.getElementById(divId).appendChild(image);
           this.currentPersonId = personInfo.id;
         });
@@ -825,7 +863,7 @@ class ExpertMap extends React.PureComponent {
       //const url = person.avatar;
       const divId = `Mid${person.id}`;
       const name = person.name;
-      const pos = person && person.pos && person.pos[0].n;
+      const pos = person && person.pos && person.pos[0] && person.pos[0].n;
       const aff = person && person.aff && person.aff.desc;
       const hindex = person && person.indices && person.indices.h_index;
 
@@ -974,35 +1012,44 @@ class ExpertMap extends React.PureComponent {
               treeDefaultExpandAll
             >
               <TreeNode value="parent 1-0" title="Theory" key="1-0">
-                {Domains.map((domain) =>{
+                {Domains.map((domain) => {
                   if (domain.name === 'Theory' || domain.name === 'Multimedia' || domain.name === 'Security'
                     || domain.name === 'Software Engineering' || domain.name === 'Computer Graphics') {
                     return (
-                      <TreeNode value={domain.id} title={<span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>} key={domain.id}></TreeNode>
-                    )
+                      <TreeNode value={domain.id}
+                                title={<span role="presentation" onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>}
+                                key={domain.id} />
+                    );
                   }
+                  return true;
                 })
                 }
               </TreeNode>
               <TreeNode value="parent 1-1" title="System" key="1-1">
-                {Domains.map((domain) =>{
+                {Domains.map((domain) => {
                   if (domain.name === 'Database' || domain.name === 'System' || domain.name === 'Computer Networking') {
                     return (
-                      <TreeNode value={domain.id} title={<span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>} key={domain.id}></TreeNode>
-                    )
+                      <TreeNode value={domain.id}
+                                title={<span role="presentation" onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>}
+                                key={domain.id} />
+                    );
                   }
+                  return true;
                 })
                 }
               </TreeNode>
               <TreeNode value="parent 1-2" title="Artificial Intelligence" key="1-2">
-                {Domains.map((domain) =>{
+                {Domains.map((domain) => {
                   if (domain.name === 'Data Mining' || domain.name === 'Machine Learning' || domain.name === 'Artificial Intelligence'
                     || domain.name === 'Web and Information Retrieval' || domain.name === 'Computer Vision'
                     || domain.name === 'Human-Computer Interaction' || domain.name === 'Natural Language Processing') {
                     return (
-                      <TreeNode value={domain.id} title={<span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>} key={domain.id}></TreeNode>
-                    )
+                      <TreeNode value={domain.id}
+                                title={<span role="presentation" onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>}
+                                key={domain.id} />
+                    );
                   }
+                  return true;
                 })
                 }
               </TreeNode>

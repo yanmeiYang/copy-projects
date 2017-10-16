@@ -17,8 +17,8 @@ export async function dataFind2(id) {
   });
 }
 
-export async function eventFind(year) {
-  return require('../../external-docs/expert-trajectory/eventData.json');
+export async function eventFind(year) { // 有query
+  return require('../../external-docs/expert-trajectory/eventTop10000.json');
 }
 
 export async function findTrajPerson(id) {
@@ -38,6 +38,10 @@ export async function findHeatMap(rid) {
     , { method: 'GET' });
 }
 
-export async function findTop10000() {
+export async function findTop10000Data() {
   return require('../../public/lab/heatData40.json');
+}
+
+export async function eventTop10000Find() {
+  return require('../../external-docs/expert-trajectory/eventTop10000.json');
 }

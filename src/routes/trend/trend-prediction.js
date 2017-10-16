@@ -83,6 +83,9 @@ export default class TrendPrediction extends React.PureComponent {
   componentDidMount() {
     d3sankey();
     this.updateTrend(this.props.query);
+    window.onresize = () => {
+      this.updateTrend(this.props.query);
+    };
   }
 
   componentDidUpdate(prevProps) {
@@ -365,9 +368,19 @@ export default class TrendPrediction extends React.PureComponent {
     const onMouseOverEventNode = (d) => {
       this.setState({ person: null, paper: null });
       document.getElementById('tooltip1').style = 'display:block';
-      const xPosition = d3.event.layerX + 30;
-      const yPosition = d3.event.layerY + 20;
-      d3.select('#tooltip1').style('left', `${xPosition}px`).style('top', `${yPosition}px`)
+      /*const xPosition = d3.event.layerX + 30;
+      const yPosition = d3.event.layerY + 20;*/
+      const e = event || window.event;
+      const scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+      const scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+      const x = e.pageX || e.clientX + scrollX;
+      const y = e.pageY || e.clientY + scrollY;
+      let xPosition = x - 130;
+      const yPosition = y - 230;
+      if (xPosition > (document.body.clientWidth - 350)) {
+        xPosition = document.body.clientWidth - 350;
+      }
+      d3.select('#tooltip1').style('position', 'absolute').style('left', `${xPosition}px`).style('top', `${yPosition}px`)
         .select('#value1')
         .text(() => {
           const resultPromise = getPerson(idToAuthor[d.a].id);

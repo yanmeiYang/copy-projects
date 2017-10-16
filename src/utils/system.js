@@ -5,6 +5,7 @@
 
 // 所有可选系统
 const AvailableSystems = [
+  'aminer',
   'ccf',
   'ccftest',
   'huawei',
@@ -19,7 +20,7 @@ const AvailableSystems = [
 ];
 
 let System;
-System = 'aminer';
+// System = 'aminer';
 // System = 'ccf';
 // System = 'ccftest';
 // System = 'huawei';
@@ -27,7 +28,7 @@ System = 'aminer';
 // System = 'tencent';
 // System = 'cie';
 // System = 'cipsc';
-// System = 'demo';
+System = 'demo';
 // System = 'cietest';
 // System = 'bole';
 // System = 'acmfellow';

@@ -82,16 +82,16 @@ export default class HeaderInfoZone extends PureComponent {
           </Menu.Item>
           }
 
-          {/* 头像&用户名 */}
+          {/* ---- 头像 & 用户名 ---- */}
           {isAuthed(roles) &&
           <Menu.Item key="/account">
             <Link to={sysconfig.Header_UserPageURL} title={user.display_name}
-                  className="headerAvatar">
+                  className={styles.headerAvatar}>
               <img src={profileUtils.getAvatar(user.avatar, user.id, 30)}
                    alt={user.display_name} />
 
               {/* 用户名 */}
-              {UserNameBlock && <span>{UserNameBlock}</span>}
+              {UserNameBlock && <span className={styles.userName}>{UserNameBlock}</span>}
 
               {/* <Icon type="frown-circle"/>个人账号 */}
             </Link>
@@ -127,7 +127,7 @@ export default class HeaderInfoZone extends PureComponent {
           {isAuthed(roles) &&
           <Menu.Item key="/logout">
             {/*className={styles.logoutText}*/}
-            <div onClick={this.logoutAuth}>
+            <div className={styles.logoutBtn} onClick={this.logoutAuth}>
               {this.state.logoutLoading ?
                 <Icon type="loading" /> :
                 <Icon type="logout" />

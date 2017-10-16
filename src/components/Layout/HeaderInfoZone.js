@@ -98,7 +98,6 @@ export default class HeaderInfoZone extends PureComponent {
           </Menu.Item>
           }
 
-
           {/*/!* TODO 不确定是否其他系统也需要显示角色 TODO ccf specified. *!/*/}
           {/*{sysconfig.SYSTEM === 'ccf' && roles && isAuthed(roles) &&*/}
           {/*<Menu.Item key="role" className={styles.emptyMenuStyle}>*/}

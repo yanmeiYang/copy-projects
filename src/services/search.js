@@ -48,11 +48,13 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
       method: 'search',
       parameters: {
         query, offset, size,
-        searchType: 'allb', // all
+        searchType: 'allb', // [all | allb]
         // sorts: [Sort],
         filters: { terms: {} },
         aggregation: ['gender', 'h_index', 'location', 'language'],
-        haves: { labels: ['CCF_MEMBER_高级会员', 'CCF_MEMBER_会士', 'CCF_MEMBER_杰出会员', /*'CCF_DEPT_*'*/] },
+        haves: {
+          //labels: ['CCF_MEMBER_高级会员', 'CCF_MEMBER_会士', 'CCF_MEMBER_杰出会员', /*'CCF_DEPT_*'*/]
+        },
         switches: ['translate'],
       },
       schema: {

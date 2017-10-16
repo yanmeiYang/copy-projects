@@ -24,7 +24,7 @@ import { KnowledgeGraphTextTree } from './index';
 const tc = applyTheme(styles);
 
 const RadioGroup = Radio.Group;
-const TabPane = Tabs.TabPane;
+const { TabPane } = Tabs;
 
 @connect(({ app, knowledgeGraph, loading }) => ({ app, knowledgeGraph, loading }))
 @Auth

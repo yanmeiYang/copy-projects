@@ -121,7 +121,7 @@ const defaultSystemConfigs = {
     { name: 'Robotics', name_zh: '机器人' },
     { name: 'Data Mining', name_zh: '数据挖掘' },
     { name: 'Machine Learning', name_zh: '机器学习' },
-    { name: 'Data Modeling', name_zh: 'Data Modeling' },
+    { name: 'Data Modeling', name_zh: '数据建模' },
     { name: 'Computer vision', name_zh: '计算机视觉' },
     { name: 'Networks', name_zh: '网络' },
     { name: 'Natural language processing', name_zh: '自然语言处理' },

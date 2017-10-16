@@ -70,6 +70,7 @@ module.exports = {
   // IndexPage_QuickSearchList: ['Artificial intelligence', 'Robotics',
   //   'Data Mining', 'Machine Learning', 'Data Modeling', 'Computer vision',
   //   'Networks', 'Natural language processing'],
+
   IndexPage_QuickSearchList: [
     { id: '57a57c640a3ac5e5b97e6f9b', name: 'Data Mining', name_zh: '数据挖掘' },
     { id: '57a57c640a3ac5e5b97e6f9c', name: 'Database', name_zh: '数据库' },

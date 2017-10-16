@@ -67,14 +67,14 @@ module.exports = {
 
 
 
-  PersonList_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
-  // PersonList_BottomZone: [
-  //   param => (
-  //     <PersonComment
-  //       person={param.person} user={param.user} key="1"
-  //       ExpertBase={ExpertBase}
-  //     />),
-  // ],
+  //PersonList_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
+  //PersonList_BottomZone: [
+  //  param => (
+  //    <PersonComment
+  //      person={param.person} user={param.user} key="1"
+  //      ExpertBase={ExpertBase}
+  //    />),
+  //],
   // PersonList_DidMountHooks: [],
 
 

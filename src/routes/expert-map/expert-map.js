@@ -599,11 +599,17 @@ class ExpertMap extends React.PureComponent {
         }
         const img = this.cacheImg[ids[i]];//浅拷贝和深拷贝
         const image = new Image(); //进行深拷贝
-        image.src = img.src;
-        image.name = img.name;
-        image.alt = name;
-        image.width = imgwidth;
-        image.style = style;
+        if (typeof (img) === 'undefined') {
+          image.src = blankAvatar;
+          image.alt = name;
+          image.width = imgwidth;
+        } else {
+          image.src = img.src;
+          image.name = img.name;
+          image.alt = name;
+          image.width = imgwidth;
+          image.style = style;
+        }
         if (img.src.includes('default.jpg') || img.src.includes('blank_avatar.jpg')) {
           cimg.innerHTML = `<img id='${personInfo.id}' style='${style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='${personInfo.avatar}' alt='${name}'>`;
         } else {
@@ -641,10 +647,15 @@ class ExpertMap extends React.PureComponent {
           const id = `M${personInfo.id}`;
           const divId = `Mid${personInfo.id}`;
           const img = this.cacheImg[id];
+          console.log(img);
           const image = new Image(); //进行深拷贝
-          image.src = img.src;
-          image.name = img.name;
-          image.width = img.width;
+          if (typeof (img) === 'undefined') {
+            image.src = blankAvatar;
+          } else {
+            image.src = img.src;
+            image.name = img.name;
+            image.width = img.width;
+          }
           document.getElementById(divId).appendChild(image);
           this.currentPersonId = personInfo.id;
         });
@@ -825,7 +836,7 @@ class ExpertMap extends React.PureComponent {
       //const url = person.avatar;
       const divId = `Mid${person.id}`;
       const name = person.name;
-      const pos = person && person.pos && person.pos[0].n;
+      const pos = person && person.pos && person.pos[0] && person.pos[0].n;
       const aff = person && person.aff && person.aff.desc;
       const hindex = person && person.indices && person.indices.h_index;
 

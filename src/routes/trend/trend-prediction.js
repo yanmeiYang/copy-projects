@@ -211,7 +211,7 @@ export default class TrendPrediction extends React.PureComponent {
     const term = (query === '') ? this.props.query : query;
 
     this.setState({ loadingFlag: true });
-    const dd = wget(`http://dc.api.aminer.org/trend/${term}`);
+    const dd = wget(`https://dc_api.aminer.org/trend/${term}`);
     const that = this;
     dd.then((data) => {
       trendData = humps.camelizeKeys(data, (key, convert) => {

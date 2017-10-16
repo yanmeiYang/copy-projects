@@ -308,6 +308,49 @@ export default class RelationGraph extends React.PureComponent {
       return res;
     };
 
+    const saveSortAdges = (sum) => {
+      _edges.forEach((f) => {
+        if (f.target.index < sum) {
+          const a = {
+            start: f.source.index,
+            end: f.target.index,
+          };
+          return _saveRootAdges.push(a);
+        }
+      });
+      let a,
+        i,
+        k,
+        setlink,
+        temp;
+      i = 0;
+      while (i < sum) {
+        a = [];
+        _saveRootAdges.forEach((f) => {
+          if (f.start === i && a.indexOf(f.end) === -1) {
+            a.push(f.end);
+          }
+          if (f.end === i && a.indexOf(f.start) === -1) {
+            return a.push(f.start);
+          }
+        });
+        if (a.length === 0) {
+          k = 0;
+          a.push(k);
+          _saveSortAdges.push([i]);
+          temp = {
+            target: _nodes[k],
+            source: _nodes[i],
+            count: 20,
+          };
+          _edges.push(temp);
+        } else {
+          _saveSortAdges.push(a);
+        }
+        i++;
+      }
+    }
+
     // 单点扩展
     const expandNet = (goals, d) => {
       let edgeIndex,
@@ -332,7 +375,7 @@ export default class RelationGraph extends React.PureComponent {
                 indices: { hIndex: f.h_index || 10 },
                 pos: [],
                 id: f.id,
-                index: 10,
+                index: _nodes.length + 1,
                 x: d.x + step,
                 y: d.y,
                 vx: d.vx + step,
@@ -354,6 +397,7 @@ export default class RelationGraph extends React.PureComponent {
               tempEdges.forEach((k) => {
                 return _edges.push(k);
               });
+              saveSortAdges(50);
               _drawNetOnly(snum);
               simulation.alphaTarget(0.05).restart();
               setTimeout((d) => {
@@ -1281,41 +1325,42 @@ export default class RelationGraph extends React.PureComponent {
           .force('gravity', d3.forceCollide(height / 100 + 10).strength(0.6)).alpha(0.2)
           .force('center', d3.forceCenter(width / 2, height / 2));
         _saveRootAdges = [];
-        _edges.forEach((f) => {
-          if (f.target.index < snum) {
-            const a = {
-              start: f.source.index,
-              end: f.target.index,
-            };
-            return _saveRootAdges.push(a);
-          }
-        });
-        i = 0;
-        while (i < snum) {
-          a = [];
-          _saveRootAdges.forEach((f) => {
-            if (f.start === i && a.indexOf(f.end) === -1) {
-              a.push(f.end);
-            }
-            if (f.end === i && a.indexOf(f.start) === -1) {
-              return a.push(f.start);
-            }
-          });
-          if (a.length === 0) {
-            k = 0;
-            a.push(k);
-            _saveSortAdges.push([i]);
-            temp = {
-              target: _nodes[k],
-              source: _nodes[i],
-              count: 20,
-            };
-            _edges.push(temp);
-          } else {
-            _saveSortAdges.push(a);
-          }
-          i++;
-        }
+        saveSortAdges(snum);
+        // _edges.forEach((f) => {
+        //   if (f.target.index < snum) {
+        //     const a = {
+        //       start: f.source.index,
+        //       end: f.target.index,
+        //     };
+        //     return _saveRootAdges.push(a);
+        //   }
+        // });
+        // i = 0;
+        // while (i < snum) {
+        //   a = [];
+        //   _saveRootAdges.forEach((f) => {
+        //     if (f.start === i && a.indexOf(f.end) === -1) {
+        //       a.push(f.end);
+        //     }
+        //     if (f.end === i && a.indexOf(f.start) === -1) {
+        //       return a.push(f.start);
+        //     }
+        //   });
+        //   if (a.length === 0) {
+        //     k = 0;
+        //     a.push(k);
+        //     _saveSortAdges.push([i]);
+        //     temp = {
+        //       target: _nodes[k],
+        //       source: _nodes[i],
+        //       count: 20,
+        //     };
+        //     _edges.push(temp);
+        //   } else {
+        //     _saveSortAdges.push(a);
+        //   }
+        //   i++;
+        // }
         _drawNetOnly(snum);
         // $('[data-toggle=\'popover\']').popover();
         if (process.env.NODE_ENV !== 'production') {

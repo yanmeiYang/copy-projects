@@ -39,6 +39,7 @@ const RouterRegistry = [
 
   // person
   person.Person,
+  person.PersonPage,
 
   // user & auth.
   auth.Login,

@@ -13,6 +13,7 @@ import defaults from './utils'; // Warrning: no zhuo no die.
 
 // All available systems.
 const CurrentSystemConfig = {
+  aminer: require('./aminer/config'),
   ccf: require('./ccf/config'),
   ccftest: require('./ccftest/config'),
   huawei: require('./huawei/config'),

@@ -4,7 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Button, Tag, Menu, Dropdown, Icon, TreeSelect } from 'antd';
+import { Button, Tag, TreeSelect } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
@@ -639,7 +639,6 @@ class ExpertMap extends React.PureComponent {
         }
         if (img.src.includes('default.jpg') || img.src.includes('blank_avatar.jpg')) {
           cimg.innerHTML = `<img id='${personInfo.id}' style='${style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='' alt='${name}'>`;
-          console.log(cimg.innerHTML);
         } else {
           cimg.appendChild(image);
         }
@@ -1013,35 +1012,44 @@ class ExpertMap extends React.PureComponent {
               treeDefaultExpandAll
             >
               <TreeNode value="parent 1-0" title="Theory" key="1-0">
-                {Domains.map((domain) =>{
+                {Domains.map((domain) => {
                   if (domain.name === 'Theory' || domain.name === 'Multimedia' || domain.name === 'Security'
                     || domain.name === 'Software Engineering' || domain.name === 'Computer Graphics') {
                     return (
-                      <TreeNode value={domain.id} title={<span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>} key={domain.id}></TreeNode>
-                    )
+                      <TreeNode value={domain.id}
+                                title={<span role="presentation" onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>}
+                                key={domain.id} />
+                    );
                   }
+                  return true;
                 })
                 }
               </TreeNode>
               <TreeNode value="parent 1-1" title="System" key="1-1">
-                {Domains.map((domain) =>{
+                {Domains.map((domain) => {
                   if (domain.name === 'Database' || domain.name === 'System' || domain.name === 'Computer Networking') {
                     return (
-                      <TreeNode value={domain.id} title={<span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>} key={domain.id}></TreeNode>
-                    )
+                      <TreeNode value={domain.id}
+                                title={<span role="presentation" onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>}
+                                key={domain.id} />
+                    );
                   }
+                  return true;
                 })
                 }
               </TreeNode>
               <TreeNode value="parent 1-2" title="Artificial Intelligence" key="1-2">
-                {Domains.map((domain) =>{
+                {Domains.map((domain) => {
                   if (domain.name === 'Data Mining' || domain.name === 'Machine Learning' || domain.name === 'Artificial Intelligence'
                     || domain.name === 'Web and Information Retrieval' || domain.name === 'Computer Vision'
                     || domain.name === 'Human-Computer Interaction' || domain.name === 'Natural Language Processing') {
                     return (
-                      <TreeNode value={domain.id} title={<span onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>} key={domain.id}></TreeNode>
-                    )
+                      <TreeNode value={domain.id}
+                                title={<span role="presentation" onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>}
+                                key={domain.id} />
+                    );
                   }
+                  return true;
                 })
                 }
               </TreeNode>

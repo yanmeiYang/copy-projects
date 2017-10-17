@@ -153,14 +153,14 @@ CKEditor.defaultProps = {
   flag: false,
 };
 
-CKEditor.propTypes = {
-  content: _react2.default.PropTypes.any,
-  config: _react2.default.PropTypes.object,
-  onChange: _react2.default.PropTypes.func,
-  isScriptLoaded: _react2.default.PropTypes.bool,
-  scriptUrl: _react2.default.PropTypes.string,
-  activeClass: _react2.default.PropTypes.string,
-  flag: _react2.default.PropTypes.bool,
-};
+// CKEditor.propTypes = {
+//   content: _react2.default.PropTypes.any,
+//   config: _react2.default.PropTypes.object,
+//   onChange: _react2.default.PropTypes.func,
+//   isScriptLoaded: _react2.default.PropTypes.bool,
+//   scriptUrl: _react2.default.PropTypes.string,
+//   activeClass: _react2.default.PropTypes.string,
+//   flag: _react2.default.PropTypes.bool,
+// };
 
 exports.default = CKEditor;

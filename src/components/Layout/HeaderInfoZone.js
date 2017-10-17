@@ -3,6 +3,7 @@
  */
 import React, { PureComponent } from 'react';
 import { sysconfig } from 'systems';
+import { theme } from 'themes';
 import { Menu, Icon, Dropdown } from 'antd';
 import { Link } from 'dva/router';
 import { FormattedMessage as FM } from 'react-intl';
@@ -58,6 +59,10 @@ export default class HeaderInfoZone extends PureComponent {
         })}
       </Menu>
     );
+
+    const additionFunc = theme.Header_UserAdditionalInfoBlock;
+    const AdditionalJSX = additionFunc && additionFunc({ user, roles });
+
     return (
       <div className={styles.headerInfoZone}>
         <Menu selectedKeys={[location.pathname]} mode="horizontal" theme="light">
@@ -98,19 +103,7 @@ export default class HeaderInfoZone extends PureComponent {
           </Menu.Item>
           }
 
-          {/*/!* TODO 不确定是否其他系统也需要显示角色 TODO ccf specified. *!/*/}
-          {/*{sysconfig.SYSTEM === 'ccf' && roles && isAuthed(roles) &&*/}
-          {/*<Menu.Item key="role" className={styles.emptyMenuStyle}>*/}
-          {/*<p className={roles.authority[0] !== undefined ? styles.isAuthority : ''}>*/}
-          {/*<span>{roles.role[0]}</span>*/}
-          {/*{roles.authority[0] !== undefined &&*/}
-          {/*<br />*/}
-          {/*<span>{seminarService.getValueByJoint(roles.authority[0])}</span>*/}
-          {/*</span>}*/}
-          {/*</p>*/}
-          {/*</Menu.Item>*/}
-          {/*}*/}
-
+          {AdditionalJSX && <Menu.Item key="/additional">{AdditionalJSX}</Menu.Item>}
 
           {isGod(roles) && false && // ----------------------- TODO
           <Menu.Item key="/devMenu">

@@ -6,6 +6,8 @@ import { Link } from 'dva/router';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
 import * as hole from 'utils/hole';
+import { isLogin, isGod, isAuthed } from 'utils/auth';
+import * as seminarService from 'services/seminar';
 import Menu from './components/Menu';
 import styles from './theme-ccf.less';
 
@@ -34,4 +36,17 @@ module.exports = {
     // <div key={1}>sadfasdfa</div>,
   ],
 
+  // Layout:Header:HeaderInfoZone
+  Header_UserAdditionalInfoBlock: param => {
+    const { roles } = param;
+    console.log('+++++++++++++++++++++ Header_UserAdditionalInfoBlock', param);
+    const authed = isAuthed(param && param.roles);
+    return authed && (
+      <p className={roles.authority[0] !== undefined ? styles.isAuthority : ''}>
+        <span>{roles.role[0]}</span>
+        {roles.authority[0] !== undefined &&
+        <span> {seminarService.getValueByJoint(roles.authority[0])}</span>}
+      </p>
+    );
+  },
 };

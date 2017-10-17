@@ -53,7 +53,7 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
         filters: { terms: {} },
         aggregation: ['gender', 'h_index', 'location', 'language'],
         haves: {
-          //labels: ['CCF_MEMBER_高级会员', 'CCF_MEMBER_会士', 'CCF_MEMBER_杰出会员', /*'CCF_DEPT_*'*/]
+          title: ['CCF_MEMBER_高级会员', 'CCF_MEMBER_会士', 'CCF_MEMBER_杰出会员' /*, 'CCF_DEPT_*'*/],
         },
         switches: ['translate'],
       },
@@ -76,7 +76,7 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
       const filter = filters[key];
       if (key === 'eb') {
         const ebLabel = bridge.toNextCCFLabelFromEBID(filters.eb.id);
-        nextapi.parameters.filters.terms.labels = [ebLabel]; // TODO transfer EB.
+        // nextapi.parameters.filters.terms.title = [ebLabel]; // TODO transfer EB.// TODOOOOOO
       } else if (key === 'h_index') {
         console.log('TODO filter by h_index 这里暂时是用解析的方式获取数据的。');
         const splits = filter.split('-');

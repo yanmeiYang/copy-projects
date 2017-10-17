@@ -15,15 +15,17 @@ module.exports = {
 
   styles,
 
+  //
   // Layout
+  //
 
   logoZone: [
-    <Link to={'/'} className={classnames(styles.logoZones)} key="0">
+    <a key="0" href="/" className={classnames(styles.logoZones)}>
       <div className={classnames(styles.header_logo, 'icon')} />
       <div className={classnames(styles.header_subTitle, 'font-page-title')}>
         知识洞察系统
       </div>
-    </Link>,
+    </a>,
   ],
 
   searchZone: hole.IN_COMPONENT_DEFAULT,
@@ -40,7 +42,11 @@ module.exports = {
     </div>
   ),
 
+  Header_UserAdditionalInfoBlock: hole.EMPTY_BLOCK_FUNC,
+
+  //
   // Index page
+  //
 
   index_bannerZone: [
     <div key="0" className={styles.index_bannerZone}>
@@ -53,9 +59,12 @@ module.exports = {
     </div>,
   ],
 
+
   index_centerZone: [hole.DEFAULT_PLACEHOLDER, <IndexCenterZone key={0} />],
 
   // Expert Page
 
-  ExpertBaseExpertsPage_Title: hole.IN_COMPONENT_DEFAULT,
-};
+  ExpertBaseExpertsPage_Title:
+  hole.IN_COMPONENT_DEFAULT,
+}
+;

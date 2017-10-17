@@ -9,7 +9,6 @@ import defaults from '../utils';
 import { PersonComment } from './components';
 import { GetComments } from './person-comment-hooks';
 
-
 const ExpertBase = '59d7bb7e9ed5dbe450e6b275';
 
 module.exports = {

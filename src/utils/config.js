@@ -9,8 +9,8 @@ module.exports = {
   // URLs
   basePageURL: 'https://aminer.org',
   baseURL: 'https://api.aminer.org/api',
-  // nextAPIURL: 'http://localhost:4005/query',
-  nextAPIURL: 'http://e30c17034d854ef4b1dac3d7b5874d3b-cn-beijing.alicloudapi.com/query',
+  nextAPIURL: 'http://localhost:4005/query',
+  // nextAPIURL: 'http://e30c17034d854ef4b1dac3d7b5874d3b-cn-beijing.alicloudapi.com/query',
 
   openPages: ['/login'],
 

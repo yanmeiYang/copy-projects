@@ -52,8 +52,8 @@ module.exports = {
 
   // placeholders
   IN_COMPONENT_DEFAULT: undefined,
+  EMPTY_BLOCK_FUNC: () => null,
   // EMPTY_BLOCK: '',
-  // EMPTY_BLOCK_FUNC: () => false,
   // EMPTY_BLOCK_FUNC_LIST: [],
   DEFAULT_PLACEHOLDER: default_placeholder,
 

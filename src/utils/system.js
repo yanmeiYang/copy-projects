@@ -18,12 +18,12 @@ const AvailableSystems = [
 ];
 
 let System;
-// System = 'ccf';
+System = 'ccf';
 // System = 'ccftest';
 // System = 'huawei';
 // System = 'alibaba';
 // System = 'tencent';
-System = 'cie';
+// System = 'cie';
 // System = 'cipsc';
 // System = 'demo';
 // System = 'cietest';

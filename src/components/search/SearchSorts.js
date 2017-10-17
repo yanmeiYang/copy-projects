@@ -64,8 +64,8 @@ export default class SearchSorts extends React.PureComponent {
         {sorts.map((sortItem) => {
           const icon = sortItem === sortType ? <i className="fa fa-sort-amount-desc" /> : '';
           const label =
-            <FM id={`com.search.sort.label.${sortItem.key}`} defaultMessage={sortItem.key} />;
-          return <TabPane tab={<span>{label} {icon}</span>} key={sortItem.key} />;
+            <FM id={`com.search.sort.label.${sortItem}`} defaultMessage={sortItem} />;
+          return <TabPane tab={<span>{label} {icon}</span>} key={sortItem} />;
         })}
       </Tabs>
     );

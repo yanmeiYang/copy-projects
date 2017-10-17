@@ -57,8 +57,9 @@ export default class SearchPage extends Component {
     console.log('Enter query is ', data);
     const newOffset = data.offset || 0;
     const newSize = data.size || sysconfig.MainListSize;
+    const query = data.query || this.props.search.query;
     this.dispatch(routerRedux.push({
-      pathname: `/${sysconfig.SearchPagePrefix}/${data.query}/${newOffset}/${newSize}?`, // eb=${filters.eb}TODO
+      pathname: `/${sysconfig.SearchPagePrefix}/${query}/${newOffset}/${newSize}?`, // eb=${filters.eb}TODO
     }));
     // this.doSearchUseProps(); // another approach;
   };

@@ -77,6 +77,8 @@ export default {
   // bole avatar
   'com.bole.ExpertPhoto': '暂无头像',
   'com.bole.PersonComment': '添加评论',
+  'com.bole.Remove': '删除',
+  'com.bole.AddButton': '添加',
 
   // Expert Base
   'page.ExpertBaseExpertsPage.MyExperts': '我的专家库',

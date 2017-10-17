@@ -77,6 +77,8 @@ export default {
   // bole avatar
   'com.bole.ExpertPhoto': 'No Avatar',
   'com.bole.PersonComment': 'Comments',
+  'com.bole.Remove': 'Remove',
+  'com.bole.AddButton': 'Add',
 
   // Expert Base
   'page.ExpertBaseExpertsPage.MyExperts': 'My Experts',

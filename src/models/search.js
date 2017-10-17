@@ -127,9 +127,13 @@ export default {
     },
 
     * getTopicByMention({ payload }, { call, put }) {
-      const { mention } = payload;
-      const { data } = yield call(topicService.getTopicByMention, mention);
-      yield put({ type: 'getTopicByMentionSuccess', payload: { data } });
+      try {
+        const { mention } = payload;
+        const { data } = yield call(topicService.getTopicByMention, mention);
+        yield put({ type: 'getTopicByMentionSuccess', payload: { data } });
+      } catch (err) {
+        console.error(err);
+      }
     },
 
   },

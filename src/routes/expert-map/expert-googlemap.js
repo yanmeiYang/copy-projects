@@ -76,6 +76,7 @@ class ExpertGoogleMap extends React.Component {
     if (this.props.expertMap.infoZoneIds !== id) { // don't change
       if (id.indexOf(',') >= 0) { // is cluster
         const clusterIdList = id.split(',');
+        console.log(clusterIdList.length);
         this.props.dispatch({
           type: 'expertMap/listPersonByIds',
           payload: { ids: clusterIdList },

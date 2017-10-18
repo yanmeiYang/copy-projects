@@ -156,13 +156,13 @@ export default class RelationGraph extends React.PureComponent {
     let stack = [];
     const snum = 10;
     const _showNodes = [];
-    const _saveSortAdges = [];
+    let _saveSortAdges = {};
     let _totalLine = [];
     let _lastNode = null;
     let showName = 100;
     let dispalyAll = true;
     let indexShow = 0;
-
+    const allRootNodeIndex = [];
     const color = d3.scaleOrdinal(d3.schemeCategory20);
     // const color = d3.interpolateRgb(d3.rgb('blue'), d3.rgb(230, 0, 18));
     // const rawSvg = d3.select(`#${controlDivId}`).append('svg')
@@ -308,47 +308,37 @@ export default class RelationGraph extends React.PureComponent {
       return res;
     };
 
-    const saveSortAdges = (sum) => {
-      _edges.forEach((f) => {
-        if (f.target.index < sum) {
-          const a = {
-            start: f.source.index,
-            end: f.target.index,
-          };
-          return _saveRootAdges.push(a);
-        }
-      });
+    const saveSortAdges = () => {
       let a,
         i,
         k,
         setlink,
         temp;
-      i = 0;
-      while (i < sum) {
+      _saveSortAdges = {};
+      allRootNodeIndex.forEach((n) => {
         a = [];
         _saveRootAdges.forEach((f) => {
-          if (f.start === i && a.indexOf(f.end) === -1) {
+          if (f.start === n && a.indexOf(f.end) === -1) {
             a.push(f.end);
           }
-          if (f.end === i && a.indexOf(f.start) === -1) {
+          if (f.end === n && a.indexOf(f.start) === -1) {
             return a.push(f.start);
           }
         });
         if (a.length === 0) {
           k = 0;
           a.push(k);
-          _saveSortAdges.push([i]);
+          _saveSortAdges[n] = a;
           temp = {
             target: _nodes[k],
-            source: _nodes[i],
+            source: _nodes[n],
             count: 20,
           };
           _edges.push(temp);
         } else {
-          _saveSortAdges.push(a);
+          _saveSortAdges[n] = a;
         }
-        i++;
-      }
+      });
     }
 
     // 单点扩展
@@ -363,6 +353,9 @@ export default class RelationGraph extends React.PureComponent {
         return d3.json(`https://api.aminer.org/api/person/ego/${goals[0]}`, (error, data) => {
           if (error) {
             throw error;
+          }
+          if (!allRootNodeIndex.includes(d.index)) {
+            allRootNodeIndex.push(d.index);
           }
           if (data.count > 3) {
             data.nodes.forEach((f, i) => {
@@ -397,7 +390,49 @@ export default class RelationGraph extends React.PureComponent {
               tempEdges.forEach((k) => {
                 return _edges.push(k);
               });
-              saveSortAdges(50);
+
+              _edges.forEach((f) => {
+                if (f.target.index === d.index) {
+                  const a = {
+                    start: f.source.index,
+                    end: f.target.index,
+                  };
+                  const b = {
+                    start: f.target.index,
+                    end: f.source.index,
+                  };
+                  _saveRootAdges.push(a);
+                  _saveRootAdges.push(b);
+                }
+              });
+              saveSortAdges()
+              // i = 0;
+              // while (i < snum) {
+              //   a = [];
+              //   _saveRootAdges.forEach((f) => {
+              //     if (f.start === i && a.indexOf(f.end) === -1) {
+              //       a.push(f.end);
+              //     }
+              //     if (f.end === i && a.indexOf(f.start) === -1) {
+              //       return a.push(f.start);
+              //     }
+              //   });
+              //   if (a.length === 0) {
+              //     k = 0;
+              //     a.push(k);
+              //     _saveSortAdges.push([i]);
+              //     temp = {
+              //       target: _nodes[k],
+              //       source: _nodes[i],
+              //       count: 20,
+              //     };
+              //     _edges.push(temp);
+              //   } else {
+              //     _saveSortAdges.push(a);
+              //   }
+              //   i++;
+              // }
+
               _drawNetOnly(snum);
               simulation.alphaTarget(0.05).restart();
               setTimeout((d) => {
@@ -1324,8 +1359,22 @@ export default class RelationGraph extends React.PureComponent {
           .force('link', setlink)
           .force('gravity', d3.forceCollide(height / 100 + 10).strength(0.6)).alpha(0.2)
           .force('center', d3.forceCenter(width / 2, height / 2));
+        i = 0;
+        while (i < snum) {
+          allRootNodeIndex.push(i);
+          i++;
+        }
         _saveRootAdges = [];
-        saveSortAdges(snum);
+        _edges.forEach((f) => {
+          if (f.target.index < snum) {
+            const a = {
+              start: f.source.index,
+              end: f.target.index,
+            };
+            return _saveRootAdges.push(a);
+          }
+        });
+        saveSortAdges();
         // _edges.forEach((f) => {
         //   if (f.target.index < snum) {
         //     const a = {

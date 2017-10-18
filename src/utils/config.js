@@ -126,9 +126,9 @@ module.exports = {
     // cross heat
     getDiscipline: '//cross1.aminer.org/topics?area=:area&k=:k&depth=:depth&context=',
     delDiscipline: '//cross1.aminer.org/feedback?parents=:parents&children=:children&postive=:postive',
-    createDiscipline: '/cross-domain/query',
-    getUserQuerys: '/cross-domain/query/offset/:offset/size/:size',
-    getCrossTree: '/cross-domain/query/:id',
+    createDiscipline: '//cross2.aminer.org/query',
+    getUserQuerys: '//cross2.aminer.org/cross-domain/query/offset/:offset/size/:size',
+    getCrossTree: '//cross2.aminer.org/query/:id',
     delUserQuery: '/cross-domain/query/:id',
     getDomainInfo: '//cross2.aminer.org/records/:begin/:end',
     getDomainAllInfo: '//cross2.aminer.org/record/:domain1/:domain2/:begin/:end',

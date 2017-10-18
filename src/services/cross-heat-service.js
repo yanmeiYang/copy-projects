@@ -19,14 +19,14 @@ export async function delDiscipline(parents, children, postive) {
 }
 
 export async function createDiscipline(params) {
-  return request(api.createDiscipline, {
+  return externalRequest(api.createDiscipline, {
     method: 'PUT',
     body: JSON.stringify(params),
   });
 }
 
 export async function getCrossTree(id) {
-  return request(api.getCrossTree
+  return externalRequest(api.getCrossTree
       .replace(':id', id),
     {
       method: 'GET',

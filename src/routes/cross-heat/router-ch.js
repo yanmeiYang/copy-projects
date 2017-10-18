@@ -8,7 +8,7 @@ export default {
     component: () => import('routes/cross-heat/cross'),
   },
   Heat: {
-    path: '/heat/query/:id',
+    path: '/heat/:id',
     models: () => [import('models/cross-heat')],
     component: () => import('routes/cross-heat/heat'),
   },
@@ -16,5 +16,10 @@ export default {
     path: '/heat/querys',
     models: () => [import('models/cross-heat')],
     component: () => import('routes/cross-heat/crossHeatList'),
+  },
+  crossIndex: {
+    path: '/cross/index',
+    models: () => [import('models/cross-heat')],
+    component: () => import('routes/cross-heat/index'),
   },
 };

@@ -74,7 +74,7 @@ class Cross extends React.Component {
       .then(() => { //页面跳转到 热力图页面
         const decareID = this.props.crossHeat.decareID;
         that.props.dispatch(routerRedux.push({
-          pathname: `/heat/${decareID}`,
+          pathname: `/heat/query/${decareID}`,
         }));
       });
   }

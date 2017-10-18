@@ -19,7 +19,8 @@ class SearchDiscipline extends React.Component {
   render() {
     return (
       <div className={styles.searchWrap}>
-        <Input placeholder="请输入领域, 例如：AI" ref="query" onPressEnter={this.handlesearch} />
+        <Input placeholder="请输入领域, 例如：artificial intelligence" ref="query"
+               onPressEnter={this.handlesearch} />
         <Button type="primary" onClick={this.search}>智能生成</Button>
       </div>
     );

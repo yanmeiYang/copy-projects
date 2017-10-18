@@ -85,9 +85,9 @@ class KgSearchBox extends PureComponent {
     // logoZone: PropTypes.array,
   };
 
-  constructor() {
-    super();
-
+  constructor(props) {
+    super(props);
+    this.advanced = this.getRealAdvancedSearchStatus(props);
     // Auto suggest is a controlled component.
     // This means that you need to provide an input value
     // and an onChange handler that updates this value (see below).
@@ -102,27 +102,28 @@ class KgSearchBox extends PureComponent {
   }
 
   componentWillMount = () => {
-    const { query, advanced } = this.props;
+    const { query } = this.props;
     const { term, name, org } = strings.destructQueryString(query);
-    const newQuery = advanced ? term : strings.firstNonEmpty(term, name, org);
+    const newQuery = this.advanced ? term : strings.firstNonEmpty(term, name, org);
     this.setState({ value: newQuery || '' });
   };
 
   componentDidMount() {
-    const { form, query, advanced } = this.props;
-    if (advanced) {
+    const { form, query } = this.props;
+    if (this.advanced) {
       const { _, name, org } = strings.destructQueryString(query);
       form.setFieldsValue({ name, org });
     }
   }
 
   componentWillReceiveProps = (nextProps) => {
-    const { form, query, advanced } = this.props;
+    const { form, query } = this.props;
+    this.advanced = this.getRealAdvancedSearchStatus(nextProps);
     if (nextProps.query !== query) {
       const { term, name, org } = strings.destructQueryString(nextProps.query);
-      const newQuery = advanced ? term : strings.firstNonEmpty(term, name, org);
+      const newQuery = this.advanced ? term : strings.firstNonEmpty(term, name, org);
       this.setState({ value: newQuery || '' });
-      if (advanced) {
+      if (this.advanced) {
         form.setFieldsValue({ name, org });
       }
     }
@@ -287,24 +288,30 @@ class KgSearchBox extends PureComponent {
     });
   };
 
+  getRealAdvancedSearchStatus = (props) => {
+    const { fixAdvancedSearch, isAdvancedSearch } = props;
+    return fixAdvancedSearch ? true : isAdvancedSearch;
+  };
+
   /**
    * Handle Submit
    * @param event
    */
-  handleSubmit = (event) => {
+  handleSubmit = (advanced, event) => {
     event.preventDefault();
 
     // pin query
-    const { form, advanced } = this.props;
-    let query = this.state.value;
+    const { form } = this.props;
+    let query = this.state.value; // term
     if (advanced) {
       const name = form.getFieldValue('name');
       const org = form.getFieldValue('org');
       query = strings.constructQueryString(this.state.value, name, org);
     }
+    query = query || '-';
 
     if (this.props.onSearch) {
-      this.props.onSearch({ query });
+      this.props.onSearch({ advanced, query });
     }
     // 阻止搜索后再弹出窗口。
     if (this.lastRequestId !== null) {
@@ -312,38 +319,45 @@ class KgSearchBox extends PureComponent {
     }
   };
 
+  switchAdvanced = () => {
+    this.props.dispatch({ type: 'app/toggleAdvancedSearch' });
+  };
+
   render() {
     const { value, suggestions } = this.state;
     const { intl } = this.props;
     const { size, className, style, btnText, searchPlaceholder, searchBtnStyle } = this.props;
-    const { indexPageStyle /* TODO 什么鬼 */, advanced } = this.props;
     const { getFieldDecorator } = this.props.form;
+    const { fixAdvancedSearch } = this.props;
+    // const { isAdvancedSearch } = this.props; // from app model.
+    // fixAdvancedSearch ? true : isAdvancedSearch;
 
     // Auto suggest will pass through all these props to the input.
     const inputProps = {
-      placeholder: advanced
+      placeholder: this.advanced
         ? intl.formatMessage(messages.placeholderTerm)
         : searchPlaceholder || intl.formatMessage(messages.placeholder),
       value, // : query || '',
       onChange: this.onChange,
     };
-
+    const btnSize = size === 'huge' ? 'large' : size;
     // Finally, render it!
     return (
       <Form
         className={classnames(
           styles.kgSearchBox,
           className,
-          advanced ? styles.adv : '',
+          styles[size],
+          this.advanced ? styles.adv : '',
         )}
-        onSubmit={this.handleSubmit}>
+        onSubmit={this.handleSubmit.bind(this, this.advanced)}>
 
         <Input.Group
-          compact size={size} style={style}
+          compact size={btnSize} style={style}
           className={classnames(styles.search, 'kgsuggest')}
         >
           <Autosuggest
-            id={indexPageStyle || 'kgsuggest'}
+            id="kgsuggest"
             suggestions={suggestions}
             multiSection
             onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
@@ -353,41 +367,45 @@ class KgSearchBox extends PureComponent {
             renderSectionTitle={renderSectionTitle}
             getSectionSuggestions={getSectionSuggestions}
             inputProps={inputProps}
-            size={size}
+            size={btnSize}
           />
 
-          {advanced &&
+          {this.advanced &&
           <FormItem>
             {getFieldDecorator('name', {
               // rules: [{ required: true, message: 'Please input your username!' }],
-            })(<Input className={styles.inputBox}
+            })(<Input className={classnames(styles.inputBox, styles.name)}
                       placeholder={intl.formatMessage(messages.placeholderName)} />)}
           </FormItem>
           }
 
-          {advanced &&
-          <FormItem>
+          {this.advanced &&
+          <FormItem className={styles.orgFormItem}>
             {getFieldDecorator('org', {
               // rules: [{ required: true, message: 'Please input your username!' }],
-            })(<Input className={styles.inputBox}
+            })(<Input className={classnames(styles.inputBox, styles.org)}
                       placeholder={intl.formatMessage(messages.placeholderOrg)} />)}
           </FormItem>
           }
 
           <Button
-            className={styles.searchBtn}
-            htmlType="submit"
-            style={searchBtnStyle}
-            size={size}
-            type="primary"
-            onClick={this.handleSubmit}
+            className={styles.searchBtn} style={searchBtnStyle} htmlType="submit"
+            type="primary" size={btnSize} onClick={this.handleSubmit.bind(this, this.advanced)}
           >{btnText || intl.formatMessage(messages.searchBtn)}
           </Button>
 
+          {!fixAdvancedSearch &&
+          <Button
+            className={styles.switchBtn} style={searchBtnStyle}
+            type="primary" size={btnSize} onClick={this.switchAdvanced.bind(this, this.advanced)}
+          ><i className="fa fa-fw fa-retweet fa-md" />
+          </Button>
+          }
         </Input.Group>
       </Form>
     );
   }
 }
 
-export default injectIntl(connect()(Form.create()(KgSearchBox)));
+const mapStateToProps = state => ({ isAdvancedSearch: state.app.isAdvancedSearch });
+export default injectIntl(connect(mapStateToProps)(Form.create()(KgSearchBox)));

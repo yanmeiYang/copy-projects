@@ -40,8 +40,7 @@ module.exports = {
   // ShowHelpDoc: true,
 
   // Functionality
-  Enable_Export: false,
-  // Enable_Export: true,
+  Enable_Export: true,
   Search_EnablePin: true,
 
   // > Search related

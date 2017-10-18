@@ -4,7 +4,6 @@
 /* eslint-disable prefer-template,import/no-dynamic-require */
 import React from 'react';
 import { addLocaleData } from 'react-intl';
-import classnames from 'classnames';
 import { loadSavedLocale } from 'utils/locale';
 import { System, Source } from 'utils/system';
 import { TopExpertBase } from 'utils/expert-base';
@@ -41,7 +40,7 @@ const defaultSystemConfigs = {
   Use_CDN: true,
 
   // google analysis
-  googleAnalytics: defaults.IN_APP_DEFAULT,
+  googleAnalytics: '',
 
   MainListSize: 20,
 

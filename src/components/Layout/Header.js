@@ -8,7 +8,7 @@ import { theme, applyTheme } from 'themes';
 import { Layout } from 'antd';
 import { KgSearchBox } from 'components/search';
 import HeaderInfoZone from 'components/Layout/HeaderInfoZone';
-import { compare } from 'utils/compare';
+import { hole, compare } from 'utils';
 import styles from './Header.less';
 
 const tc = applyTheme(styles);
@@ -22,6 +22,7 @@ function mapStateToPropsFactory(initialState, ownProps) {
       app: {
         user: state.app.user,
         roles: state.app.roles,
+        // isAdvancedSearch: state.app.isAdvancedSearch,
       },
     });
   };
@@ -47,32 +48,29 @@ export default class Header extends Component {
     infoZone: PropTypes.array,
     rightZone: PropTypes.array,
 
-    advancedSearch: PropTypes.bool,
-
-    // headerSearchBox: PropTypes.object,
+    fixAdvancedSearch: PropTypes.bool,
   };
 
   static defaultProps = {
     logoZone: theme.logoZone,
     searchZone: theme.searchZone,
     infoZone: theme.infoZone,
-    advancedSearch: false,
+    fixAdvancedSearch: false,
   };
 
-  state = {
-    query: '',
-  };
+  // state = {
+  //   query: '',
+  // };
 
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.query !== this.props.query) {
-      this.setQuery(nextProps.query);
-    }
-  };
+  // componentWillReceiveProps = (nextProps) => {
+  //   if (nextProps.query !== this.props.query) {
+  //     this.setQuery(nextProps.query);
+  //   }
+  // };
 
   shouldComponentUpdate(nextProps, nextState) {
     if (compare(this.props, nextProps,
-        'logoZone', 'searchZone', 'infoZone', 'rightZone', 'headerSearchBox',
-        'advancedSearch',
+        'app', 'logoZone', 'searchZone', 'infoZone', 'rightZone', 'fixAdvancedSearch',
       )) {
       return true;
     }
@@ -82,11 +80,6 @@ export default class Header extends Component {
     return false;
   }
 
-  setQuery = (query) => {
-    this.setState({ query });
-  };
-
-  //
   // logoutAuth = () => {
   //   this.setState({ logoutLoading: true });
   //   // this.forceUpdate(() => console.log('forceUpdate Done!'));
@@ -104,83 +97,35 @@ export default class Header extends Component {
     console.log('>>>>>>>HEADER');
 
     const { logoZone, searchZone, infoZone, rightZone } = this.props;
-    const { onSearch, advancedSearch } = this.props;
-    const { query } = this.props;
-
-    const SearchZone = searchZone || [
-      <KgSearchBox key={100} size="large" query={query}
-                   onSearch={onSearch}
-                   className={styles.searchBox}
-                   style={{ height: 36, marginTop: 15 }}
-                   advanced={advancedSearch}
-      />,
-    ];
-
-    const InfoZone = infoZone || [
-      // <HeaderInfoZone key={0} app={this.props.app} logout={this.props.logout} />,
-    ];
-
-    const RightZone = rightZone || [
-      <HeaderInfoZone key={100} app={this.props.app} logout={this.props.logout} />,
-    ];
-
-    // const { headerSearchBox, user, roles } = this.props.app;
-    //
-    // // Use default search if not supplied.
-    // if (headerSearchBox) {
-    //   const oldSearchHandler = headerSearchBox.onSearch;
-    //   headerSearchBox.onSearch = (query) => {
-    //     this.setState({ query: query.query });
-    //     if (oldSearchHandler) {
-    //       oldSearchHandler(query);
-    //     }
-    //   };
-    // }
-    //
-    // if (process.env.NODE_ENV !== 'production' && false) {
-    //   const { app } = this.props;
-    //   console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-    //   console.log('app.user:', app.user);
-    //   // console.log('app.token:', app.token ? app.token.slice(0, 10) : app.token);
-    //   console.log('app.roles:', app.roles);
-    //   console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-    // }
-    //
-    // const menu = (
-    //   <Menu style={{ boxShadow: '0 0 1px' }} selectedKeys={[sysconfig.Locale]}>
-    //     {locales && locales.map((local) => {
-    //       return (
-    //         <Menu.Item key={local}>
-    //           <span onClick={this.onChangeLocale.bind(this, local)}>
-    //             <FM id={`system.lang.option_${local}`}
-    //                 defaultMessage={`system.lang.option_${local}`} />
-    //           </span>
-    //         </Menu.Item>
-    //       );
-    //     })}
-    //   </Menu>
-    // );
-    //
-    // const UserNameBlock = isAuthed(roles)
-    //   ? sysconfig.Header_UserNameBlock === defaults.IN_APP_DEFAULT
-    //     ? <span>{user.display_name}</span>
-    //     : sysconfig.Header_UserNameBlock
-    //   : defaults.EMPTY_BLOCK;
+    const { onSearch, fixAdvancedSearch, query, app } = this.props;
 
     return (
       <Layout.Header className={tc(['header'])}>
+
         <div className={tc(['logoZone'])}>
-          {logoZone && logoZone.length > 0 && logoZone.map(elm => elm)}
+          {hole.fill(logoZone)}
         </div>
+
         <div className={tc(['searchZone'])}>
-          {SearchZone && SearchZone.length > 0 && SearchZone.map(elm => elm)}
+          {hole.fill(searchZone, [
+            <KgSearchBox
+              key={100} size="large" query={query} className={styles.searchBox}
+              style={{ height: 36, marginTop: 15 }}
+              onSearch={onSearch} fixAdvancedSearch={fixAdvancedSearch}
+            />,
+          ])}
         </div>
+
         <div className={tc(['infoZone'])}>
-          {InfoZone && InfoZone.length > 0 && InfoZone.map(elm => elm)}
+          {hole.fill(infoZone)}
         </div>
+
         <div className={tc(['rightZone'])}>
-          {RightZone && RightZone.length > 0 && RightZone.map(elm => elm)}
+          {hole.fill(rightZone, [
+            <HeaderInfoZone key={100} app={this.props.app} logout={this.props.logout} />,
+          ])}
         </div>
+
       </Layout.Header>
     );
   }

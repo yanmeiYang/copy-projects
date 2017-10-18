@@ -1,24 +1,21 @@
 import { parse } from 'qs';
 import { routerRedux } from 'dva/router';
-import { config, queryURL } from '../utils';
-import * as auth from '../utils/auth';
-import * as authService from '../services/auth';
-import { sysconfig } from '../systems';
+import { config, queryURL } from 'utils';
+import * as auth from 'utils/auth';
+import * as authService from 'services/auth';
+import { sysconfig } from 'systems';
 
 const { prefix } = config;
-// TODO remove unnecessary.
+
 export default {
   namespace: 'app',
   state: {
-    // User/auth token related. TODO move to auth module.
     user: {},
     token: auth.getLocalToken(),
     roles: auth.createEmptyRoles(), // { admin: false, ccf_user: false, role: [], authority: [] },
-    loading: false,
+    loading: false, // TODO what's this?
 
-    // layout switches.
-    headerSearchBox: null, // Header search box parameters.
-    showFooter: true,
+    isAdvancedSearch: false,
 
     // Layout related, not used. TODO remove them.
     menuPopoverVisible: false,
@@ -26,6 +23,7 @@ export default {
     darkTheme: localStorage.getItem(`${prefix}darkTheme`) === 'true',
     isNavbar: false, // document.body.clientWidth < 769,
     navOpenKeys: JSON.parse(localStorage.getItem(`${prefix}navOpenKeys`)) || [],
+
   },
 
   subscriptions: {
@@ -124,6 +122,18 @@ export default {
       return { ...state, user, roles };
     },
 
+    toggleAdvancedSearch(state) {
+      return { ...state, isAdvancedSearch: !state.isAdvancedSearch };
+    },
+
+    changeToAdvancedSearch(state) {
+      return { ...state, isAdvancedSearch: true };
+    },
+
+    changeToSimpleSearch(state) {
+      return { ...state, isAdvancedSearch: false };
+    },
+
     switchSider(state) {
       localStorage.setItem(`${prefix}siderFold`, !state.siderFold);
       return {
@@ -166,10 +176,13 @@ export default {
     },
 
     hideHeaderSearch(state) {
+      console.warn('WARRNING: Deprecated!');
       return { ...state, headerSearchBox: undefined };
     },
 
     setQueryInHeaderIfExist(state, { payload }) {
+      console.warn('WARRNING: Deprecated!');
+
       const { query } = payload;
       if (state.headerSearchBox) {
         const newState = state;
@@ -181,6 +194,8 @@ export default {
     },
 
     clearQueryInHeaderIfExist(state) {
+      console.warn('WARRNING: Deprecated!');
+
       if (state.headerSearchBox) {
         const newState = state;
         newState.headerSearchBox.query = ' ';

@@ -73,7 +73,7 @@ export default class ExpertBaseExpertsPage extends Component {
 
     return (
       <Layout contentClass={tc(['expertBase'])} onSearch={this.onSearchBarSearch}
-              query={query} advancedSearch>
+              query={query} fixAdvancedSearch>
 
         {theme.ExpertBaseExpertsPage_TitleZone && theme.ExpertBaseExpertsPage_TitleZone.length > 0 &&
         <h1 className={styles.pageTitle}>

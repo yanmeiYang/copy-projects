@@ -45,6 +45,8 @@ module.exports = {
     // search
     searchPerson: '/search/person', // pin=1 huawei mode.
     searchPersonAgg: '/search/person/agg',
+    searchPersonAdvanced: '/search/person/advanced',
+    searchPersonAdvancedAgg: '/search/person/advanced/agg',
     searchPersonInBase: '/search/roster/:ebid/experts/advanced',
     searchPersonInBaseAgg: '/search/roster/:ebid/experts/advanced/agg',
     allPersonInBase: '/roster/:ebid/offset/:offset/size/:size',

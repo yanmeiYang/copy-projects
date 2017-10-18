@@ -50,7 +50,7 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
         query, offset, size,
         searchType: 'allb', // [all | allb]
         // sorts: [Sort],
-        filters: { terms: {} },
+        filters: { dims: {}, terms: {} },
         aggregation: ['gender', 'h_index', 'location', 'language'],
         haves: {
           title: ['CCF_MEMBER_高级会员', 'CCF_MEMBER_会士', 'CCF_MEMBER_杰出会员' /*, 'CCF_DEPT_*'*/],
@@ -76,7 +76,7 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
       const filter = filters[key];
       if (key === 'eb') {
         const ebLabel = bridge.toNextCCFLabelFromEBID(filters.eb.id);
-        // nextapi.parameters.filters.terms.title = [ebLabel]; // TODO transfer EB.// TODOOOOOO
+        nextapi.parameters.filters.dims.title = [ebLabel]; // TODO transfer EB.// TODOOOOOO
       } else if (key === 'h_index') {
         console.log('TODO filter by h_index 这里暂时是用解析的方式获取数据的。');
         const splits = filter.split('-');
@@ -147,8 +147,9 @@ export async function listPersonInEB(payload) {
 // Search Global.
 export async function searchPersonGlobal(query, offset, size, filters, sort, useTranslateSearch) {
   const data = prepareParametersGlobal(query, offset, size, filters, sort, useTranslateSearch);
-  // console.log('data', data);
-  return request(api.searchPerson, { method: 'GET', data });
+  const { term, name, org, isAdvancedSearch } = strings.destructQueryString(query);
+  const apiURL = isAdvancedSearch ? api.searchPersonAdvanced : api.searchPerson;
+  return request(apiURL, { method: 'GET', data });
 }
 
 //
@@ -180,7 +181,9 @@ export async function searchPersonAgg(query, offset, size, filters, useTranslate
 
 export async function searchPersonAggGlobal(query, offset, size, filters, useTranslateSearch) {
   const data = prepareParametersGlobal(query, offset, size, filters, '', useTranslateSearch);
-  return request(api.searchPersonAgg, { method: 'GET', data });
+  const { term, name, org, isAdvancedSearch } = strings.destructQueryString(query);
+  const apiURL = isAdvancedSearch ? api.searchPersonAdvancedAgg : api.searchPersonAgg;
+  return request(apiURL, { method: 'GET', data });
 }
 
 function prepareParameters(query, offset, size, filters, sort, useTranslateSearch) {
@@ -233,15 +236,30 @@ function prepareParametersGlobal(query, offset, size, filters, sort, useTranslat
     });
   }
 
-  // add query
-  const { term, name, org } = strings.destructQueryString(query);
-  const newQuery = strings.firstNonEmpty(term, name, org);
-  data.query = encodeURIComponent(newQuery);
+  // add query // TODO Use Advanced Search?????
+  const { term, name, org, isAdvancedSearch } = strings.destructQueryString(query);
+  if (isAdvancedSearch) {
+    if (term) {
+      const cleanedTerm = encodeURIComponent(strings.cleanQuery(term));
+      data.term = useTranslateSearch ? `cross:${cleanedTerm}` : cleanedTerm;
+    }
+    if (name) {
+      data.name = name;
+    }
+    if (org) {
+      data.org = strings.cleanQuery(org);
+    }
+  } else {
+    const newQuery = strings.firstNonEmpty(term, name, org); // use new query?
+    data.query = useTranslateSearch ? `cross:${newQuery}` : newQuery;
+  }
+
+  // data.query = encodeURIComponent(newQuery);
   data = addAdditionParameterToData(data, sort, 'global');
 
-  if (useTranslateSearch && data.query) {
-    data.query = `cross:${data.query}`;
-  }
+  // if (useTranslateSearch && data.query) {
+  //   data.query = `cross:${data.query}`;
+  // }
   return data;
 }
 

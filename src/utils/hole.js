@@ -6,10 +6,13 @@ const default_placeholder = '__DEFAULT_PLACEHOLDER__';
 
 // TODO with parameters.
 function fill(holeList, defaultHoleList) {
-  let holes = holeList;
-  if (!holes) {
-    holes = defaultHoleList;
+  if (!holeList) {
+    return defaultHoleList;
   }
+  if (!defaultHoleList) {
+    return holeList;
+  }
+  const holes = holeList;
   if (holes && holes && holes.length > 0) {
     const newHoles = [];
     holes.map((elm) => {
@@ -22,7 +25,7 @@ function fill(holeList, defaultHoleList) {
     });
     return newHoles;
   }
-  return false;
+  return null;
 }
 
 function fillFuncs(holeList, defaultHoleList, payload) {

@@ -41,6 +41,7 @@ module.exports = {
 
   // Functionality
   Enable_Export: true,
+  Enable_Export_EB_IF_EXIST: true,
   Search_EnablePin: true,
 
   // > Search related

@@ -1,14 +1,13 @@
 import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
+import { sysconfig } from 'systems';
 import { Tabs, Tag, Pagination, Spin } from 'antd';
+import { PersonList, ExportExperts } from 'components/person';
+import { KgSearchBox, SearchFilter } from 'components/search';
 import styles from './SearchComponent.less';
-import { PersonList } from '../../components/person';
-import { sysconfig } from '../../systems';
-import ExportPersonBtn from '../../components/person/export-person';
-import { KgSearchBox, SearchFilter } from '../../components/search';
 
-const TabPane = Tabs.TabPane;
+const { TabPane } = Tabs;
 
 const searchSorts = [
   { label: '相关度', key: 'relevance' },
@@ -131,7 +130,7 @@ const Search = ({ dispatch, search }) => {
         <div className="rightZone">
           {/* <KnowledgeGraphSearchHelper query={query} lang="cn" /> */}
           {sysconfig.Enable_Export &&
-          <ExportPersonBtn {...filters} results={results} />
+          <ExportExperts {...filters} results={results} />
           }
         </div>
       </div>

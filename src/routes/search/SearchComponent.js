@@ -7,7 +7,7 @@ import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import classnames from 'classnames';
 import { Pagination } from 'antd';
 import { Spinner } from 'components';
-import { PersonList, ExportPersonBtn } from 'components/person';
+import { PersonList, ExportExperts } from 'components/person';
 import { SearchFilter, SearchSorts, KgSearchBox, SearchKnowledge } from 'components/search';
 import { sysconfig } from 'systems';
 import { createURL } from 'utils';
@@ -198,12 +198,11 @@ export default class SearchComponent extends Component {
     // const expertBase = (filters && filters.eb && filters.eb.id) || 'aminer';
 
     const SearchSortsRightZone = !sysconfig.Enable_Export ? [] : [() => (
-      <ExportPersonBtn
-        query={query} pageSize={pageSize} current={current}
-        filters={filters} sort={sortType} key="0"
+      <ExportExperts
+        key="0" expertBaseId={expertBaseId}
+        query={query} pageSize={pageSize} current={current} filters={filters} sort={sortType}
       />
     )];
-    // console.log('||||||||||||||||||', filters, aggs);
 
     // TODO move translate search out.
     const { useTranslateSearch, translatedQuery } = this.props.search;

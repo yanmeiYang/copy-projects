@@ -61,6 +61,7 @@ const defaultSystemConfigs = {
    * Functionality
    */
   Enable_Export: false,
+  Enable_Export_EB_IF_EXIST: false,
   ShowRegisteredRole: true, // 注册页面是否显示角色配置
   Signup_Password: false, // 注册页面password
 

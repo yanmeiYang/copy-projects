@@ -1,4 +1,4 @@
-@import "../../themes/vars.less";
+@import "~themes/vars";
 
 .searchSorts {
   border: solid 1px @border-color-base; // border-bottom: none;
@@ -9,8 +9,11 @@
   .filter {
   }
 
+  .exportButtonZone {
+  }
+
   :global {
-    .ant-tabs-ink-bar{ background-color: initial; }
+    .ant-tabs-ink-bar { background-color: initial; }
     .ant-tabs-bar {
       margin-bottom: 0;
       .ant-tabs-tab {
@@ -26,5 +29,6 @@
         color: @bg-color-main;
       }
     }
+    .ant-tabs-extra-content { }
   }
 }

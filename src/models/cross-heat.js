@@ -89,7 +89,7 @@ export default {
       }
     },
     createDisciplineSuccess(state, { payload: { data } }) {
-      return { ...state, decareID: data.data._id };
+      return { ...state, decareID: data.data.id };
     },
     getCrossTreeSuccess(state, { payload: { data } }) {
       return { ...state, crossTree: data.data };

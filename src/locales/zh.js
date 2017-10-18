@@ -77,10 +77,36 @@ export default {
   // bole avatar
   'com.bole.ExpertPhoto': '暂无头像',
   'com.bole.PersonComment': '添加评论',
+  'com.bole.Remove': '删除',
+  'com.bole.AddButton': '添加',
 
   // Expert Base
   'page.ExpertBaseExpertsPage.MyExperts': '我的专家库',
   'page.ExpertBaseExpertsPage.SeeAllExperts': '查看全部专家',
+
+  // ExportExperts
+  'com.exportExpert.label.export': '导出',
+  'com.exportExpert.label.exportCurrentPage': '导出当前结果',
+  'com.exportExpert.label.exportEB': '导出专家库',
+  'com.exportExpert.modal.exportExperts': '导出专家列表',
+  'com.exportExpert.modal.exportNumber': '导出条数:',
+  'com.exportExpert.modal.exportFields': '导出字段:',
+  'com.exportExpert.modal.export': '导出',
+
+  // ExportExperts::Fields
+  'com.exportExpert.fields.name': '姓名',
+  'com.exportExpert.fields.gender': '性别',
+  'com.exportExpert.fields.pos': '职称',
+  'com.exportExpert.fields.aff': '单位',
+  'com.exportExpert.fields.h_index': 'h指数',
+  'com.exportExpert.fields.activity': '学术活跃度',
+  'com.exportExpert.fields.new_star': '领域新星',
+  'com.exportExpert.fields.num_citation': '引用数',
+  'com.exportExpert.fields.num_pubs': '论文数',
+  'com.exportExpert.fields.male': '男',
+  'com.exportExpert.fields.female': '女',
+  'com.exportExpert.fields.translate': '翻译',
+  'com.exportExpert.fields.interest': '研究兴趣',
 
   // Recommendation
   'rcd.home.pageTitle': '机构列表',

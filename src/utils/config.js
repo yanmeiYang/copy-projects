@@ -9,8 +9,8 @@ module.exports = {
   // URLs
   basePageURL: 'https://aminer.org',
   baseURL: 'https://api.aminer.org/api',
-  // nextAPIURL: 'http://localhost:4005/query',
-  nextAPIURL: 'http://e30c17034d854ef4b1dac3d7b5874d3b-cn-beijing.alicloudapi.com/query',
+  nextAPIURL: 'http://localhost:4005/query',
+  // nextAPIURL: 'http://e30c17034d854ef4b1dac3d7b5874d3b-cn-beijing.alicloudapi.com/query',
 
   openPages: ['/login'],
 
@@ -45,6 +45,8 @@ module.exports = {
     // search
     searchPerson: '/search/person', // pin=1 huawei mode.
     searchPersonAgg: '/search/person/agg',
+    searchPersonAdvanced: '/search/person/advanced',
+    searchPersonAdvancedAgg: '/search/person/advanced/agg',
     searchPersonInBase: '/search/roster/:ebid/experts/advanced',
     searchPersonInBaseAgg: '/search/roster/:ebid/experts/advanced/agg',
     allPersonInBase: '/roster/:ebid/offset/:offset/size/:size',

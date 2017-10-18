@@ -180,7 +180,7 @@ export async function queryAPI(payload) {
   }]);
 
   const newOption = { ...options, headers };
-  const response = await fetch(nextAPIURL, newOption);
+  const response = await fetch(`${nextAPIURL}?m=${method}`, newOption);
   // checkQueryStatus(response);
 
   const data = await response.json();

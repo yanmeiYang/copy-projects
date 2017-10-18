@@ -9,7 +9,6 @@ import defaults from '../utils';
 import { PersonComment } from './components';
 import { GetComments } from './person-comment-hooks';
 
-
 const ExpertBase = '59d7bb7e9ed5dbe450e6b275';
 
 module.exports = {
@@ -41,8 +40,8 @@ module.exports = {
   // ShowHelpDoc: true,
 
   // Functionality
-  Enable_Export: false,
-  // Enable_Export: true,
+  Enable_Export: true,
+  Enable_Export_EB_IF_EXIST: true,
   Search_EnablePin: true,
 
   // > Search related

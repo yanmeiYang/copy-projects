@@ -217,3 +217,6 @@ const A = hasValue ? 'has value' : 'no';
   )}
 </Bundle>
 ···
+
+#### TODO remove the occurence.
+  showFooter

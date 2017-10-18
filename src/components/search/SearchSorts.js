@@ -47,7 +47,7 @@ export default class SearchSorts extends PureComponent {
 
     // render rightZone
     const rightZoneJSX = rightZone && rightZone.length > 0 &&
-      <div>
+      <div className={styles.exportButtonZone}>
         {rightZone && rightZone.length > 0 && rightZone.map((block) => {
           return block && block({ sortType });
         })}

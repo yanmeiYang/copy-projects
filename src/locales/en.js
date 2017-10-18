@@ -77,10 +77,36 @@ export default {
   // bole avatar
   'com.bole.ExpertPhoto': 'No Avatar',
   'com.bole.PersonComment': 'Comments',
+  'com.bole.Remove': 'Remove',
+  'com.bole.AddButton': 'Add',
 
   // Expert Base
   'page.ExpertBaseExpertsPage.MyExperts': 'My Experts',
   'page.ExpertBaseExpertsPage.SeeAllExperts': 'See All',
+
+  // ExportExperts
+  'com.exportExpert.label.export': 'Export',
+  'com.exportExpert.label.exportCurrentPage': 'Export Current Page',
+  'com.exportExpert.label.exportEB': 'Export All Experts',
+  'com.exportExpert.modal.exportExperts': 'Export Experts',
+  'com.exportExpert.modal.exportNumber': 'Export Number:',
+  'com.exportExpert.modal.exportFields': 'Fields:',
+  'com.exportExpert.modal.export': 'Export',
+
+  // ExportExperts::Fields
+  'com.exportExpert.fields.name': 'Name',
+  'com.exportExpert.fields.gender': 'Gender',
+  'com.exportExpert.fields.pos': 'Position',
+  'com.exportExpert.fields.aff': 'Affiliation',
+  'com.exportExpert.fields.h_index': 'h-index',
+  'com.exportExpert.fields.activity': 'Activity',
+  'com.exportExpert.fields.new_star': 'New Star',
+  'com.exportExpert.fields.num_citation': 'Citation',
+  'com.exportExpert.fields.num_pubs': 'Publications',
+  'com.exportExpert.fields.male': 'Male',
+  'com.exportExpert.fields.female': 'Female',
+  'com.exportExpert.fields.translate': 'Translate',
+  'com.exportExpert.fields.interest': 'Research Interest',
 
   // Recommendation
   'rcd.home.pageTitle': 'Organization List',

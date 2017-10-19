@@ -99,9 +99,6 @@ module.exports = {
     listPersonByIds: '/person/batch-list',
     getActivityAvgScoresByPersonId: '/person/activity/:id/indices',
 
-    // merge
-    tryToDoMerge: '/bifrost/person/merge/:mid',
-
     // interests vis data
     interests: '/person/interests/:id', // 这个是vis图中单独调用的。和人下面的可能不一样.
 
@@ -131,12 +128,12 @@ module.exports = {
     // cross heat
     getDiscipline: '//cross1.aminer.org/topics?area=:area&k=:k&depth=:depth&context=',
     delDiscipline: '//cross1.aminer.org/feedback?parents=:parents&children=:children&postive=:postive',
-    createDiscipline: '//cross1.aminer.org/query',
-    getUserQuerys: '//cross1.aminer.org/cross-domain/query/offset/:offset/size/:size',
-    getCrossTree: '//cross1.aminer.org/query/:id',
+    createDiscipline: '//cross2.aminer.org/query',
+    getUserQuerys: '//cross2.aminer.org/cross-domain/query/offset/:offset/size/:size',
+    getCrossTree: '//cross2.aminer.org/query/:id',
     delUserQuery: '/cross-domain/query/:id',
-    getDomainInfo: '//cross1.aminer.org/records/:begin/:end',
-    getDomainAllInfo: '//cross1.aminer.org/record/:domain1/:domain2/:begin/:end',
+    getDomainInfo: '//cross2.aminer.org/records/:begin/:end',
+    getDomainAllInfo: '//cross2.aminer.org/record/:domain1/:domain2/:begin/:end',
     getExpertByIds: '/person/batch-list',
     getPubById: '/pub/:id',
 

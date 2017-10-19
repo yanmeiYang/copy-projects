@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { Link } from 'dva/router';
+import { Checkbox } from 'antd';
 import defaults from '../utils';
 import { AddToEBButton, PersonRemoveButton, PersonComment } from './components';
 import { GetComments } from './hooks/person-comment-hooks';

@@ -23,6 +23,7 @@ import trend_new from 'routes/trend/router-trend';
 import seminar from 'routes/seminar/router-seminar';
 import tencent from 'routes/third-login/router';
 import router2bprofile from 'routes/2b-profile/router-2bprofile';
+import profile from 'routes/profile/router-profile';
 import crossHeat from 'routes/cross-heat/router-ch';
 
 
@@ -98,6 +99,9 @@ const RouterRegistry = [
   // 2b profile
   router2bprofile.TobProfile,
   router2bprofile.Addition,
+
+  // profile
+  profile.ProfileMerge,
 
   tencent.ThirdLogin,
   crossHeat.Cross,

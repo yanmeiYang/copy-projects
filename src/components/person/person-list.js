@@ -6,7 +6,7 @@ import React, { Component, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
-import { Tag, Tooltip } from 'antd';
+import { Tag, Tooltip, Checkbox } from 'antd';
 import classnames from 'classnames';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import * as personService from 'services/person';
@@ -79,6 +79,12 @@ export default class PersonList extends Component {
     }
   }
 
+  selectedThePerson = (person, e) => {
+    console.log('111111111', person);
+    console.log(`checked = ${e.target.checked}`);
+  };
+
+
   render() {
     const { persons, expertBaseId, className, type } = this.props;
     const { rightZoneFuncs, titleRightBlock, bottomZoneFuncs, afterTitleBlock } = this.props;
@@ -149,7 +155,7 @@ export default class PersonList extends Component {
                         {email &&
                         <span style={{ backgroundImage: `url(${config.baseURL}${email})` }}
                               className="email"><i className="fa fa-envelope fa-fw" />
-                        </span>
+                          </span>
                         }
 
                         {false && person.num_viewed > 0 &&
@@ -191,17 +197,16 @@ export default class PersonList extends Component {
                     </div>
                   </div>
                 </div>
+                {/* ---- Right Zone ---- */}
+                {RightZoneFuncs && RightZoneFuncs.length > 0 &&
+                <div className={styles.person_right_zone}>
+                  {RightZoneFuncs.map((blockFunc) => {
+                    const param = { person, expertBaseId };
+                    return blockFunc ? blockFunc(param) : false;
+                  })}
+                </div>
+                }
               </div>
-
-              {/* ---- Right Zone ---- */}
-              {RightZoneFuncs && RightZoneFuncs.length > 0 &&
-              <div className={styles.person_right_zone}>
-                {RightZoneFuncs.map((blockFunc) => {
-                  const param = { person, expertBaseId };
-                  return blockFunc ? blockFunc({ param }) : false;
-                })}
-              </div>
-              }
 
               {/*---- Bottom Zone ---- */}
               {BottomZoneFuncs && BottomZoneFuncs.length > 0 &&

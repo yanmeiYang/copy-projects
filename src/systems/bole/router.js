@@ -14,6 +14,7 @@ import admin from 'routes/admin/router-admin';
 // import seminar from 'routes/seminar/router-seminar';
 // import tencent from 'routes/third-login/router';
 import router2bprofile from 'routes/2b-profile/router-2bprofile';
+import profile from 'routes/profile/router-profile';
 
 import { RouterRegistry, RouterRegistry2b, RouterJSXFunc } from '../router-registry';
 
@@ -88,6 +89,9 @@ const routes = [
   // 2b profile
   router2bprofile.TobProfile,
   router2bprofile.Addition,
+
+  // profile
+  profile.ProfileMerge,
 
   // tencent.ThirdLogin,
 

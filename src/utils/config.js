@@ -99,6 +99,9 @@ module.exports = {
     listPersonByIds: '/person/batch-list',
     getActivityAvgScoresByPersonId: '/person/activity/:id/indices',
 
+    // merge
+    tryToDoMerge: '/bifrost/person/merge/:mid',
+
     // interests vis data
     interests: '/person/interests/:id', // 这个是vis图中单独调用的。和人下面的可能不一样.
 

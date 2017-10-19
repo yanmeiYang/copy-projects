@@ -3,6 +3,48 @@
 .crossIndex {
   display: flex; justify-content: center;
 
+  .introduce {
+    height: 490px;
+    background-image: linear-gradient(to top, #03163a 0%, #000000 100%);
+    .group {
+      background-position: 50% 20px !important;
+      height: 490px;
+      background: url(/funcs/cross-heat/bg_index.png) right 0 no-repeat;
+      .title {
+        text-align: center;
+        color: #fff;
+        padding-top: 160px;
+        font-size: 58px;
+      }
+      .descript {
+        text-align: center;
+        color: #fff;
+        padding-top: 10px;
+        font-size: 20px;
+      }
+      .create {
+        text-align: center;
+        color: #fff;
+        padding-top: 60px;
+        span {
+          border: 2px solid #fff;
+          padding: 8px 20px;
+          cursor: pointer;
+          border-radius: 5px;
+        }
+        span:hover {
+          background-color: #fff;
+          color: #000000;
+        }
+      }
+    }
+
+  }
+  .hCenter {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+  }
   .example {
     display: flex;
     justify-content: center;
@@ -12,6 +54,34 @@
       border-radius: 2px;
       width: 315px;
       margin-left: 60px;
+      margin-top: 20px;
+      box-shadow: 2px 5px 5px rgba(200, 200, 200, 0.4);
+      -moz-box-shadow: 2px 5px 5px rgba(200, 200, 200, 0.4);
+      -webkit-box-shadow: 2px 5px 5px rgba(200, 200, 200, 0.4);
+      overflow: hidden;
+      h2 {
+        text-align: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        z-index: 20;
+        color: #999;
+      }
+      .img {
+        height: 200px;
+        overflow: hidden;
+        text-align: center;
+      }
+      img {
+        width: 100%;
+        height: 200px;
+      }
+      img:hover {
+        transform: scale(1.2);
+        -moz-transform: scale(1.2);
+        -webkit-transform: scale(1.2);
+        -o-transform: scale(1.2);
+        -ms-transform: scale(1.2)
+      }
     }
     .item:hover {
       box-shadow: 2px 5px 5px rgba(200, 200, 200, 0.4);

@@ -12,21 +12,27 @@ import styles from './index.less';
 const tc = applyTheme(styles);
 const data = [
   {
-    title: 'Artificial Intelligence & Health Care',
-    id: '59e5bf489ed5db1d9cf76056',
-    src: 'https://zos.alipayobjects.com/rmsportal/kYIPuuwXooUZUMjHZCMV.png'
+    title: 'Machine Learning & Energy',
+    id: '59e8558ce1cd8e91db7e4c5e',
+    src: '/funcs/cross-heat/energy.png',
   },
   {
-    title: 'Data mining & Physics',
-    id: '59e569e79ed5db1d9cf6c149',
-    src: 'https://zos.alipayobjects.com/rmsportal/PPTJClMTYOrsfJefqnZC.png'
+    title: 'Data mining & Health Care',
+    id: '59e85014e1cd8e91db7e4c59',
+    src: '/funcs/cross-heat/heath.png',
   },
   {
-    title: 'Machine Learning & Health Care',
-    id: '59e5c0a69ed5db1d9cf76199',
-    src: 'https://zos.alipayobjects.com/rmsportal/hKqMgRnvbPbUqjLLOXts.png'
+    title: 'Artificial intelligence & Physical Security',
+    id: '59e85940e1cd8e91db7e4c61',
+    src: '/funcs/cross-heat/security.png',
   },
 ]
+
+const dataList = {
+  title: '科技情报深度洞察',
+  describe: '任意两个科研领域，系统自动计算领域知识图谱，并进行笛卡尔交叉热点深度挖掘，捕捉趋势，预见未来',
+
+}
 
 
 class CrossIndex extends React.Component {
@@ -40,6 +46,11 @@ class CrossIndex extends React.Component {
     this.props.dispatch(routerRedux.push({
       pathname: '/heat/' + value,
     }));
+  };
+  goCreate = () => {
+    this.props.dispatch(routerRedux.push({
+      pathname: '/cross',
+    }));
   }
 
   render() {
@@ -47,24 +58,28 @@ class CrossIndex extends React.Component {
       <Layout searchZone={[]} contentClass={tc(['crossIndex'])} showNavigator={false}>
         <div>
 
-          {/*<div>*/}
-          {/*<img src="http://news.k618.cn/tech/201704/W020170425388475031941.jpg" alt=""*/}
-          {/*style={{ height: 770 }} />*/}
-          {/*</div>*/}
+          <div className={styles.introduce}>
+            <div className={styles.group}>
 
-          <h1 style={{ textAlign: 'center', marginBottom: 40 }}>----优秀案例----</h1>
+              <div className={styles.title}>{dataList.title}</div>
+              <div className={styles.descript}>{dataList.describe}</div>
+              <h1 className={styles.create}>
+                <span onClick={this.goCreate}>挖掘交叉热点</span>
+              </h1>
+            </div>
+          </div>
+          <h1 className={styles.hCenter}>----经典案例----</h1>
           <div className={styles.example}>
             {
-              data.map((item) => {
+              data.map((item, index) => {
                 return (
-                  <div className={styles.item} onClick={this.goReport.bind(this, item.id)}>
-                    <img src={item.src}
-                         alt="" style={{ width: 313, height: 280 }} />
-                    <h3 style={{
-                      textAlign: 'center',
-                      marginTop: 10,
-                      marginBottom: 10,
-                    }}>{item.title}</h3>
+                  <div className={styles.item} key={index}
+                       onClick={this.goReport.bind(this, item.id)}>
+                    <div className={styles.img}>
+                      <img src={item.src}
+                           alt={item.title} />
+                    </div>
+                    <h2>{item.title}</h2>
                   </div>)
               })
             }

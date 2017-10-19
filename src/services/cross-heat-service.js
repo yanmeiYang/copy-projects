@@ -76,3 +76,19 @@ export async function getDomainPub(id) {
     method: 'GET',
   });
 }
+
+export async function getUserQuerys(offset, size) {
+  return request(api.getUserQuerys
+    .replace(':offset', offset)
+    .replace(':size', size), {
+    method: 'GET',
+  });
+}
+
+export async function delUserQuery(id) {
+  return request(api.delUserQuery
+      .replace(':id', id),
+    {
+      method: 'GET',
+    });
+}

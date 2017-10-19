@@ -49,12 +49,8 @@ export default class IndexPage extends Component {
         {bannerZone && bannerZone.length > 0 && bannerZone.map(elm => elm)}
 
         <div className={styles.search}>
-          <KgSearchBox
-            size="large" onSearch={this.onSearch}
-            style={{ width: 515, boxShadow: '0 0 8px 0px rgba(99, 99, 99, 0.5)' }}
-            searchBtnStyle={{ height: 48, width: 115, fontSize: '18px', fontWeight: 'bold' }}
-            indexPageStyle="indexPageStyle"
-          />
+          {/*// TODO use localStorage to search.*/}
+          <KgSearchBox size="huge" className={styles.searchBox} onSearch={this.onSearch} />
         </div>
 
         {hole.fill(theme.index_centerZone, [

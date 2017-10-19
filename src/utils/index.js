@@ -74,22 +74,19 @@ module.exports = {
   config,
   system,
   hole,
+  classnames,
+
+  // library
+  reflect,
+  compare,
+  createURL,
 
   // menu,
   getMenusByUser,
   request, queryAPI,
   color,
-  classnames,
   queryURL,
   getTwoDecimal,
 
   TopExpertBase,
-
-  // library
-  reflect,
-
-  compare,
-  createURL,
-
-}
-;
+};

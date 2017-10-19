@@ -17,8 +17,12 @@ const constructQueryString = (term, name, org) => {
 const destructQueryString = (query) => {
   const Q = query || '';
   const frags = Q.split('||');
-  const [term, name, org] = frags;
-  return { term, name, org };
+  const isAdvancedSearch = frags.length > 1;
+  let [term, name, org] = frags;
+  term = term === '-' ? '' : term;
+  name = name === '-' ? '' : name;
+  org = org === '-' ? '' : org;
+  return { term, name, org, isAdvancedSearch };
 };
 
 const firstNonEmpty = (...terms) => {

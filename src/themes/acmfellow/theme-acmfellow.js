@@ -29,7 +29,7 @@ module.exports = {
   infoZone: [
     <Link to={`/eb/${sysconfig.ExpertBase}/-/0/20`}
           className={classnames(styles.header_info)} key="0">
-      My Experts
+      All ACM Fellows
     </Link>,
   ],
 

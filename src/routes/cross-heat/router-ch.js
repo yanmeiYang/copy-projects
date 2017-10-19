@@ -9,7 +9,17 @@ export default {
   },
   Heat: {
     path: '/heat/:id',
-    models: () => [import('models/cross-heat'), import('models/knowledge-graph')],
+    models: () => [import('models/cross-heat')],
     component: () => import('routes/cross-heat/heat'),
+  },
+  crossHeatList: {
+    path: '/heat/querys',
+    models: () => [import('models/cross-heat')],
+    component: () => import('routes/cross-heat/crossHeatList'),
+  },
+  crossIndex: {
+    path: '/cross/index',
+    models: () => [import('models/cross-heat')],
+    component: () => import('routes/cross-heat/index'),
   },
 };

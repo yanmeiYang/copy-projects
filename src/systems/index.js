@@ -4,7 +4,6 @@
 /* eslint-disable prefer-template,import/no-dynamic-require */
 import React from 'react';
 import { addLocaleData } from 'react-intl';
-import classnames from 'classnames';
 import { loadSavedLocale } from 'utils/locale';
 import { System, Source } from 'utils/system';
 import { TopExpertBase } from 'utils/expert-base';
@@ -41,7 +40,7 @@ const defaultSystemConfigs = {
   Use_CDN: true,
 
   // google analysis
-  googleAnalytics: defaults.IN_APP_DEFAULT,
+  googleAnalytics: '',
 
   MainListSize: 20,
 
@@ -62,6 +61,7 @@ const defaultSystemConfigs = {
    * Functionality
    */
   Enable_Export: false,
+  Enable_Export_EB_IF_EXIST: false,
   ShowRegisteredRole: true, // 注册页面是否显示角色配置
   Signup_Password: false, // 注册页面password
 

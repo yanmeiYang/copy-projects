@@ -17,6 +17,8 @@ export default {
     domainAllInfo: null,
     experts: [],
     pubs: [],
+    userQuerys: [],
+
   },
 
   effects: {
@@ -36,10 +38,6 @@ export default {
     *createDiscipline({ payload }, { call, put }) {
       const data = yield call(crossHeatService.createDiscipline, payload);
       yield put({ type: 'createDisciplineSuccess', payload: { data } });
-    },
-    *updateDiscipline({ payload }, { call, put }){
-      const { data, id } = payload;
-      yield put({ type: 'updateDisciplineSuccess', payload: { data, id } });
     },
     *getCrossTree({ payload }, { call, put }) {
       const { id } = payload;
@@ -67,10 +65,19 @@ export default {
     },
     *getDomainExpert({ payload }, { call, put }) {
       const data = yield call(crossHeatService.getDomainExpert, payload);
-      console.log("modal get====");
-      console.log(data);
       yield put({ type: 'getDomainExpertSuccess', payload: { data } });
     },
+    *getUserQuerys({ payload }, { call, put }) {
+      const { offset, size } = payload;
+      const data = yield call(crossHeatService.getUserQuerys, offset, size);
+      yield put({ type: 'getUserQuerysSuccess', payload: { data } });
+    },
+    *delUserQuery({ payload }, { call, put }) {
+      const { id } = payload;
+      const data = yield call(crossHeatService.delUserQuery, id);
+      yield put({ type: 'delUserQuerySuccess', payload: { data } });
+    },
+
   },
 
   reducers: {
@@ -79,13 +86,6 @@ export default {
         return { ...state, queryTree1: data.data };
       } else {
         return { ...state, queryTree2: data.data };
-      }
-    },
-    updateDisciplineSuccess(state, { payload: { data, id } }) {
-      if (id === 'queryTree1') {
-        return { ...state, queryTree1: data };
-      } else {
-        return { ...state, queryTree2: data };
       }
     },
     createDisciplineSuccess(state, { payload: { data } }) {
@@ -105,6 +105,14 @@ export default {
     },
     getDomainPubSuccess(state, { payload: { data } }) {
       return { ...state, pubs: data };
+    },
+    getUserQuerysSuccess(state, { payload: { data } }) {
+      console.log(data);
+      return { ...state, userQuerys: data.data };
+    },
+    delUserQuerySuccess(state, { payload: { data } }) {
+      console.log(data);
+      return { ...state };
     },
   },
 };

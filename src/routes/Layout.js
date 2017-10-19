@@ -10,6 +10,7 @@ import ReactGA from 'react-ga';
 import { Layout as LayoutComponent } from 'antd';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
+import { hole } from 'utils';
 import { Header, Navigator } from 'components/Layout';
 import styles from './Layout.less';
 
@@ -37,7 +38,7 @@ export default class Layout extends Component {
     showHeader: PropTypes.bool,
     showNavigator: PropTypes.bool,
 
-    advancedSearch: PropTypes.bool, // 是否是三个框的高级搜索
+    fixAdvancedSearch: PropTypes.bool, // 是否固定是三个框的高级搜索
 
     // props
     query: PropTypes.string,
@@ -49,13 +50,17 @@ export default class Layout extends Component {
     showNavigator: sysconfig.Layout_HasNavigator,
     sidebar: theme.sidebar,
     footer: theme.footer,
+    fixAdvancedSearch: false, // TODO use localStorage to cache user habits.
   };
 
-  componentWillMount() {
-    console.log('********* google analytics *********');
-    ReactGA.initialize(sysconfig.googleAnalytics);
-    ReactGA.pageview(window.location.href);
-  };
+  componentDidMount() {
+    // TODO 这个统计有问题呀 ????
+    if (sysconfig.googleAnalytics) {
+      console.log('********* google analytics *********');
+      ReactGA.initialize(sysconfig.googleAnalytics);
+      ReactGA.pageview(window.location.href);
+    }
+  }
 
   render() {
     // console.count('>>>>>>>>>> App Render'); // TODO performance
@@ -64,11 +69,11 @@ export default class Layout extends Component {
     const { dispatch, app } = this.props;
     const { user, roles } = app;
 
-    const { logoZone, searchZone, infoZone, advancedSearch } = this.props;
+    const { logoZone, searchZone, infoZone, fixAdvancedSearch } = this.props;
     const { query, onSearch } = this.props;
 
     const headerOptions = {
-      logoZone, searchZone, infoZone, query, onSearch, advancedSearch,
+      logoZone, searchZone, infoZone, query, onSearch, fixAdvancedSearch,
       logout() {
         dispatch({ type: 'app/logout' });
       },
@@ -121,7 +126,7 @@ export default class Layout extends Component {
 
           {sysconfig.Layout_HasSideBar &&
           <Sider className={tc(['sider'])}>
-            {sidebar && sidebar.length > 0 && sidebar.map(elm => elm)}
+            {hole.fill(sidebar)}
           </Sider>}
 
           {/* -------- Main Content -------- */}

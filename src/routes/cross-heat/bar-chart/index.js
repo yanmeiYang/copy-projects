@@ -55,7 +55,8 @@ class BarChart extends React.Component {
     g.selectAll('.bar')
       .data(barData)
       .enter().append('rect')
-      .attr('class', styles.bar)
+    // .attr('class', styles.bar)
+      .attr('fill', d => d.title === '中国' ? '#4472C4' : (d.title === '美国' ? '#ED7D31' : '#A5A5A5'))
       .attr('x', d => x(d.title))
       .attr('y', d => y(d.num))
       .attr('width', x.bandwidth())
@@ -68,8 +69,7 @@ class BarChart extends React.Component {
       .attr('y', d => y(d.num) - 5)
       .style('text-anchor', 'middle')
       .text(d => d.num)
-      .attr('fill', 'none')
-      .attr('stroke', '#ff1591');
+      .attr('fill', '#000');
   }
 
   render() {

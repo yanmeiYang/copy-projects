@@ -9,8 +9,8 @@ module.exports = {
   // URLs
   basePageURL: 'https://aminer.org',
   baseURL: 'https://api.aminer.org/api',
-  // nextAPIURL: 'http://localhost:4005/query',
-  nextAPIURL: 'http://e30c17034d854ef4b1dac3d7b5874d3b-cn-beijing.alicloudapi.com/query',
+  nextAPIURL: 'http://localhost:4005/query',
+  // nextAPIURL: 'http://e30c17034d854ef4b1dac3d7b5874d3b-cn-beijing.alicloudapi.com/query',
 
   openPages: ['/login'],
 
@@ -45,6 +45,8 @@ module.exports = {
     // search
     searchPerson: '/search/person', // pin=1 huawei mode.
     searchPersonAgg: '/search/person/agg',
+    searchPersonAdvanced: '/search/person/advanced',
+    searchPersonAdvancedAgg: '/search/person/advanced/agg',
     searchPersonInBase: '/search/roster/:ebid/experts/advanced',
     searchPersonInBaseAgg: '/search/roster/:ebid/experts/advanced/agg',
     allPersonInBase: '/roster/:ebid/offset/:offset/size/:size',
@@ -127,12 +129,14 @@ module.exports = {
     // getOrgById: '/reviewer/org/get/:id',
 
     // cross heat
-    getDiscipline: 'http://166.111.7.105:5098/topics?area=:area&k=:k&depth=:depth&context=',
-    delDiscipline: 'http://166.111.7.105:5098/feedback?parents=:parents&children=:children&postive=:postive',
-    createDiscipline: 'http://166.111.7.173:15000/query',
-    getCrossTree: 'http://166.111.7.173:15000/query/:id',
-    getDomainInfo: 'http://166.111.7.173:15000/records/:begin/:end',
-    getDomainAllInfo: 'http://166.111.7.173:15000/record/:domain1/:domain2/:begin/:end',
+    getDiscipline: '//cross1.aminer.org/topics?area=:area&k=:k&depth=:depth&context=',
+    delDiscipline: '//cross1.aminer.org/feedback?parents=:parents&children=:children&postive=:postive',
+    createDiscipline: '//cross2.aminer.org/query',
+    getUserQuerys: '//cross2.aminer.org/cross-domain/query/offset/:offset/size/:size',
+    getCrossTree: '//cross2.aminer.org/query/:id',
+    delUserQuery: '/cross-domain/query/:id',
+    getDomainInfo: '//cross2.aminer.org/records/:begin/:end',
+    getDomainAllInfo: '//cross2.aminer.org/record/:domain1/:domain2/:begin/:end',
     getExpertByIds: '/person/batch-list',
     getPubById: '/pub/:id',
 

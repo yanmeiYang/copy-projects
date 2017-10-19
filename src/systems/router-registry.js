@@ -106,6 +106,8 @@ const RouterRegistry = [
   tencent.ThirdLogin,
   crossHeat.Cross,
   crossHeat.Heat,
+  crossHeat.crossHeatList,
+  crossHeat.crossIndex,
 
   // System Default.
   core.Error404, // must be last one.

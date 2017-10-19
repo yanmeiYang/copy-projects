@@ -28,7 +28,7 @@ module.exports = {
   Search_EnablePin: false,
   Search_EnableKnowledgeGraphHelper: true,
 
-  UserAuthSystem: 'aminer', // aminer 或者是 system.config
+  // UserAuthSystem: System, // aminer 或者是 system.config
   UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签, 目前没用到
 
   Auth_AllowAnonymousAccess: false,

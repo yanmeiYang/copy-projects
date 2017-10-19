@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Modal, Button, Pagination, Tag, Tooltip } from 'antd';
+import { Modal, Button, Switch, Pagination, Tag, Tooltip } from 'antd';
 import { routerRedux, withRouter } from 'dva/router';
 import * as d3 from 'd3';
 import { sysconfig } from 'systems';
@@ -56,6 +56,9 @@ class Heat extends React.Component {
   orgList = [];
   personList = [];
   pubList = [];
+
+  heatInfo = [];
+  barInfo = [];
 
 
   /** 在Component被加载的时候调用的。 */
@@ -126,8 +129,8 @@ class Heat extends React.Component {
 // 绘制rect 图
   createRect = (domainList) => {
     if (domainList) {
-      const heatInfo = [];
-      const barInfo = [];
+      this.heatInfo = [];
+      this.barInfo = [];
       domainList.map((domain, num) => { // 将json 转换成d3格式
         num += 1;
         const yLength = this.yNode.length;
@@ -142,15 +145,15 @@ class Heat extends React.Component {
         this.barNum.push(temPersonCount, temPubCount);
         const first = domain.first;
         const second = domain.second;
-        heatInfo.push({ x, y, key: 'heat', power: temPower, first, second }); // 格式heat json 数据
+        this.heatInfo.push({ x, y, key: 'heat', power: temPower, first, second }); // 格式heat json 数据
         const startY = (y - 1) * 2;
-        barInfo.push( // 格式bar json 数据
+        this.barInfo.push( // 格式bar json 数据
           { x, y: startY + 1, h: temPersonCount, key: 'expert', first, second },
           { x, y: startY + 2, h: temPubCount, key: 'pub', first, second },
         );
         return true;
       });
-      this.createAxis(heatInfo, barInfo);
+      this.createAxis(this.heatInfo, this.barInfo);
     }
   };
 // 获取 DomainInfo
@@ -208,12 +211,16 @@ class Heat extends React.Component {
       .attr('x', d => d.x * cellSize)
       .attr('y', d => d.y * cellSize)
       .attr('fill', (d) => {
-        if (d.power >= 0) { // 大于-1 表示计划完成
+        if (d.power > 0) { // 大于-1 表示计划完成
           const formatPower = d.power / maxHeatNum;
           let hv = formatPower.toFixed(1);
-          hv = (formatPower > 0 && formatPower < 0.1) ? 0.1 : hv;
+          hv = formatPower < 0.1 ? 0.1 : hv;
           return compute(hv);
-        } else {
+        }
+        if (d.power === 0) {
+          return '#fff';
+        }
+        if (d.power === -1) {
           return '#ccc';
         }
       })
@@ -304,7 +311,7 @@ class Heat extends React.Component {
     const modalType = d.key;// modal 展示类容类型
     const show = !(modalType === 'heat' && d.power < 1); // modal是否展示
     if (show) {
-      this.modalTitle = domain1 + ' + ' + domain2;
+      this.modalTitle = domain1 + ' & ' + domain2;
       this.modalType = modalType;
       this.setState({ visibleModal: true });
       this.props.dispatch({
@@ -475,6 +482,16 @@ class Heat extends React.Component {
     }
   }
 
+  clearHeatZero = (value) => {
+    // console.log(value);
+    // console.log(this.heatInfo);
+    // console.log('ynode', this.yNode);
+    // console.log('xnode', this.xNode);
+
+    //获取x轴所有为0
+    //获取y轴所有为0
+  };
+
 
   render() {
     const loadPub = this.props.loading.effects['crossHeat/getDomainPub'];
@@ -487,13 +504,16 @@ class Heat extends React.Component {
       <Layout searchZone={[]} contentClass={tc(['heat'])} showNavigator={false}>
         <div >
           <Spinner loading={loadTree || loadDomainInfo} size="large" />
+          <div>
+            {/*<Switch checkedChildren="开" onChange={this.clearHeatZero} unCheckedChildren="关" />*/}
+            {/*<Button type="primary" onClick={this.toggle}>未来三年</Button>*/}
+          </div>
           <div id="tooltip"></div>
           {this.xWidth > 0 &&
           <div>
             <Brush getLocalYear={this.getLocalYear} xWidth={this.xWidth} />
           </div>
           }
-
           <div style={{ margin: 0 }}>
             <svg id="heat" width={this.xWidth + 345} height={this.yHeight}
                  style={{ marginRight: 200 }} />
@@ -502,6 +522,7 @@ class Heat extends React.Component {
             <svg id="xTree" width={this.xWidth + 340} height="500"></svg>
           </div>
           <Modal
+            title={this.modalTitle}
             className={styles.heatModal}
             width={this.modalWidth}
             visible={this.state.visibleModal}

@@ -156,13 +156,13 @@ export default class RelationGraph extends React.PureComponent {
     let stack = [];
     const snum = 10;
     const _showNodes = [];
-    let _saveSortAdges = {};
+    const _saveSortAdges = [];
     let _totalLine = [];
     let _lastNode = null;
     let showName = 100;
     let dispalyAll = true;
     let indexShow = 0;
-    const allRootNodeIndex = [];
+
     const color = d3.scaleOrdinal(d3.schemeCategory20);
     // const color = d3.interpolateRgb(d3.rgb('blue'), d3.rgb(230, 0, 18));
     // const rawSvg = d3.select(`#${controlDivId}`).append('svg')
@@ -206,53 +206,144 @@ export default class RelationGraph extends React.PureComponent {
     };
 
     // 根据操作获取点与点之间的路径
-    const getPaths = (cNode, pNode, sNode, eNode) => {
-      let a,
-        i,
-        nNode;
-      nNode = null;
-      if (cNode !== null && pNode !== null && cNode === pNode) {
-        return false;
-      }
-      if (cNode !== null) {
-        i = 0;
-        stack.push(cNode);
-        if (cNode === eNode) {
-          a = [];
-          stack.forEach((f) => {
-            return a.push(f);
-          });
-          _endOfSortAdges.push(a);
-          return false;
-        } else {
-          nNode = _saveSortAdges[cNode][i];
-          while (nNode !== null) {
-            if (pNode !== null &&
-              (nNode === sNode || nNode === pNode || stack.indexOf(nNode) !== -1)) {
-              if (i >= _saveSortAdges[cNode].length) {
-                nNode = null;
-              } else {
-                nNode = _saveSortAdges[cNode][i];
-              }
-              i += 1;
-              continue;
-            }
-            if (getPaths(nNode, cNode, sNode, eNode)) {
-              stack.pop();
-            }
-            if (i >= _saveSortAdges[cNode].length) {
-              nNode = null;
-            } else {
-              nNode = _saveSortAdges[cNode][i];
-            }
-            i += 1;
-          }
-          stack.pop();
-          return false;
+    const getPaths = (sNode, eNode) => {
+      // console.log('[debug] start -- end');
+      // console.log(sNode, eNode);
+      // console.log('[debug] all nodes');
+      // console.log(_nodes);
+      // console.log('[debug] all edges');
+      // for (let i = 0; i < _edges.length; i++) {
+      //   console.log('initial edges---', _edges[i].source.index, _edges[i].target.index);
+      // }
+
+      const Dijkstra_Set = [];
+      const Dijkstra_Left_Set = []; //即剩余的未访问结点最短距离的集合
+      //计算距离时使用
+      let dx2 = 0;
+      let dy2 = 0;
+
+      //初始化
+      Dijkstra_Set.push(sNode);
+      for (let i = 0; i < _nodes.length; i++) {
+        if (Dijkstra_Set.indexOf(i) === -1) {
+          Dijkstra_Left_Set.push(i);
         }
-      } else {
-        return false;
       }
+
+      const Dijkstra_ShortDist = [];
+      let Neighbor_Sign = 0; //用于判断当前结点是否是起始点的邻结点
+      let Neighbor_Dist = 10000000000000;
+      for (let i = 0; i < _nodes.length; i++) {
+        Neighbor_Sign = 0;
+        Neighbor_Dist = 10000000000000;
+        //判断sNode是否与相邻
+        for (let j = 0; j < _edges.length; j++) {
+          if ((_edges[j].source.index === sNode && _edges[j].target.index === i)
+            || (_edges[j].source.index === i && _edges[j].target.index === sNode)) {
+            Neighbor_Sign = 1;
+            Neighbor_Dist = _edges[j].count;
+            break;
+          }
+        }
+        //依据Neighbor_Sign来设置初始距离
+        //如果sNode与i相邻，则设置初始距离为正常距离
+        if (Neighbor_Sign === 1) {
+          dx2 = Math.pow((_nodes[sNode].x - _nodes[i].x), 2);
+          dy2 = Math.pow((_nodes[sNode].y - _nodes[i].y), 2);
+          //Dijkstra_ShortDist.push(Math.sqrt(dx2 + dy2));
+          Dijkstra_ShortDist.push(Neighbor_Dist);
+          Neighbor_Dist = 1/Neighbor_Dist;
+          console.log('edge_count');
+          console.log(Neighbor_Dist);
+        } else if (sNode === i) {   //自己到自己的距离为0
+          Dijkstra_ShortDist.push(0);
+        } else {   //否则设置初始距离为无穷大
+          Dijkstra_ShortDist.push(10000000000000);
+        }
+      }
+      // console.log('[debug] --- initial dist');
+      // console.log(Dijkstra_ShortDist);
+
+      //用于保存到每个点的最短路径所经过的点,初始化为各终点
+      const Dijkstra_ShortDist_Route = new Array();
+      for (let i = 0; i < _nodes.length; i++) {
+        if (i !== sNode) {
+          Dijkstra_ShortDist_Route[i] = [sNode, i];
+        } else {
+          Dijkstra_ShortDist_Route[i] = [sNode];
+        }
+      }
+
+      for (let i = 0; i < _nodes.length; i++) {
+        if (Dijkstra_ShortDist_Route[i].length > 2) {
+          Dijkstra_ShortDist_Route[i] = Dijkstra_ShortDist_Route[i].slice(0, 2);
+        }
+      }
+
+      let Current_Spot,  //新加入的结点
+        Current_Spot_Edge,  //目前访问的边
+        Current_Spot_Edge_Dist, //目前访问边的距离
+        Finding_Spot; //新加入的结点目前的访问结点
+      while (Dijkstra_Set.length < _nodes.length) {
+        //选择新的节点
+        let temp_min_dist = 100000000000000;
+        let temp_left_location = 0;
+        for (let k = 0; k < Dijkstra_Left_Set.length; k++) {
+          if (temp_min_dist > Dijkstra_ShortDist[Dijkstra_Left_Set[k]]) {
+            temp_min_dist = Dijkstra_ShortDist[Dijkstra_Left_Set[k]];
+            temp_left_location = k;
+          }
+        }
+
+        let Next_Dist = temp_min_dist;
+        Current_Spot = Dijkstra_ShortDist.indexOf(Next_Dist);
+        Dijkstra_Set.push(Current_Spot);
+        Dijkstra_Left_Set.splice(temp_left_location, 1);
+
+        for (let k = 0; k < _edges.length; k++) {
+          if (_edges[k].source.index === Current_Spot) {
+            Current_Spot_Edge = _edges[k];
+            Finding_Spot = Current_Spot_Edge.target.index;
+            dx2 = Math.pow((_nodes[Current_Spot_Edge.source.index].x - _nodes[Current_Spot_Edge.target.index].x), 2);
+            dy2 = Math.pow((_nodes[Current_Spot_Edge.source.index].y - _nodes[Current_Spot_Edge.target.index].y), 2);
+            // Current_Spot_Edge_Dist = Math.sqrt(dx2 + dy2);
+            Current_Spot_Edge_Dist = 1/Current_Spot_Edge.count;
+            // console.log('Current ---- 1/edge count:', Current_Spot_Edge.source.index, Current_Spot_Edge.target.index);
+            // console.log(Current_Spot_Edge_Dist);
+            if (Dijkstra_ShortDist[Finding_Spot] > Dijkstra_ShortDist[Current_Spot] + Current_Spot_Edge_Dist) {
+              Dijkstra_ShortDist[Finding_Spot] = Dijkstra_ShortDist[Current_Spot] + Current_Spot_Edge_Dist;
+              //这里要保存到结点Finding_Spot的新最短路径
+              Dijkstra_ShortDist_Route[Finding_Spot] = [];
+              for (let i = 0; i < Dijkstra_ShortDist_Route[Current_Spot].length; i++) {
+                Dijkstra_ShortDist_Route[Finding_Spot].push(Dijkstra_ShortDist_Route[Current_Spot][i]);
+              }
+              Dijkstra_ShortDist_Route[Finding_Spot].push(Finding_Spot);
+            }
+          }
+          else if (_edges[k].target.index === Current_Spot) {
+            Current_Spot_Edge = _edges[k];
+            Finding_Spot = Current_Spot_Edge.source.index;
+            dx2 = Math.pow((_nodes[Current_Spot_Edge.source.index].x - _nodes[Current_Spot_Edge.target.index].x), 2);
+            dy2 = Math.pow((_nodes[Current_Spot_Edge.source.index].y - _nodes[Current_Spot_Edge.target.index].y), 2);
+            // Current_Spot_Edge_Dist = Math.sqrt(dx2 + dy2);
+            Current_Spot_Edge_Dist = 1/Current_Spot_Edge.count;
+            // console.log('Current ---- 1/edge count:', Current_Spot_Edge.source.index, Current_Spot_Edge.target.index);
+            // console.log(Current_Spot_Edge_Dist);
+            if (Dijkstra_ShortDist[Finding_Spot] > Dijkstra_ShortDist[Current_Spot] + Current_Spot_Edge_Dist) {
+              Dijkstra_ShortDist[Finding_Spot] = Dijkstra_ShortDist[Current_Spot] + Current_Spot_Edge_Dist;
+              //这里要保存到结点Finding_Spot的新最短路径
+              Dijkstra_ShortDist_Route[Finding_Spot] = [];
+              for (var i = 0; i < Dijkstra_ShortDist_Route[Current_Spot].length; i++) {
+                Dijkstra_ShortDist_Route[Finding_Spot].push(Dijkstra_ShortDist_Route[Current_Spot][i]);
+              }
+              Dijkstra_ShortDist_Route[Finding_Spot].push(Finding_Spot);
+            }
+          }
+        }
+      }
+      console.log(Dijkstra_ShortDist);
+      console.log(Dijkstra_ShortDist_Route);
+      return Dijkstra_ShortDist_Route[eNode];
     };
     // 两点之间的直线距离
     const isstraight = (a, b) => {
@@ -308,39 +399,6 @@ export default class RelationGraph extends React.PureComponent {
       return res;
     };
 
-    const saveSortAdges = () => {
-      let a,
-        i,
-        k,
-        setlink,
-        temp;
-      _saveSortAdges = {};
-      allRootNodeIndex.forEach((n) => {
-        a = [];
-        _saveRootAdges.forEach((f) => {
-          if (f.start === n && a.indexOf(f.end) === -1) {
-            a.push(f.end);
-          }
-          if (f.end === n && a.indexOf(f.start) === -1) {
-            return a.push(f.start);
-          }
-        });
-        if (a.length === 0) {
-          k = 0;
-          a.push(k);
-          _saveSortAdges[n] = a;
-          temp = {
-            target: _nodes[k],
-            source: _nodes[n],
-            count: 20,
-          };
-          _edges.push(temp);
-        } else {
-          _saveSortAdges[n] = a;
-        }
-      });
-    }
-
     // 单点扩展
     const expandNet = (goals, d) => {
       let edgeIndex,
@@ -354,9 +412,6 @@ export default class RelationGraph extends React.PureComponent {
           if (error) {
             throw error;
           }
-          if (!allRootNodeIndex.includes(d.index)) {
-            allRootNodeIndex.push(d.index);
-          }
           if (data.count > 3) {
             data.nodes.forEach((f, i) => {
               const step = i % 2 === 0 ? 0.1 : -0.1;
@@ -368,7 +423,7 @@ export default class RelationGraph extends React.PureComponent {
                 indices: { hIndex: f.h_index || 10 },
                 pos: [],
                 id: f.id,
-                index: _nodes.length + 1,
+                index: 10,
                 x: d.x + step,
                 y: d.y,
                 vx: d.vx + step,
@@ -390,49 +445,6 @@ export default class RelationGraph extends React.PureComponent {
               tempEdges.forEach((k) => {
                 return _edges.push(k);
               });
-
-              _edges.forEach((f) => {
-                if (f.target.index === d.index) {
-                  const a = {
-                    start: f.source.index,
-                    end: f.target.index,
-                  };
-                  const b = {
-                    start: f.target.index,
-                    end: f.source.index,
-                  };
-                  _saveRootAdges.push(a);
-                  _saveRootAdges.push(b);
-                }
-              });
-              saveSortAdges()
-              // i = 0;
-              // while (i < snum) {
-              //   a = [];
-              //   _saveRootAdges.forEach((f) => {
-              //     if (f.start === i && a.indexOf(f.end) === -1) {
-              //       a.push(f.end);
-              //     }
-              //     if (f.end === i && a.indexOf(f.start) === -1) {
-              //       return a.push(f.start);
-              //     }
-              //   });
-              //   if (a.length === 0) {
-              //     k = 0;
-              //     a.push(k);
-              //     _saveSortAdges.push([i]);
-              //     temp = {
-              //       target: _nodes[k],
-              //       source: _nodes[i],
-              //       count: 20,
-              //     };
-              //     _edges.push(temp);
-              //   } else {
-              //     _saveSortAdges.push(a);
-              //   }
-              //   i++;
-              // }
-
               _drawNetOnly(snum);
               simulation.alphaTarget(0.05).restart();
               setTimeout((d) => {
@@ -1073,14 +1085,27 @@ export default class RelationGraph extends React.PureComponent {
               if (res !== null && res[1] === res[2]) {
                 orderdraw(res);
               } else {
-                getPaths(res[1], null, res[1], res[2]);
+                let compare1 = getPaths(d.index, _lastNode);
+                let compare2 = getPaths(_lastNode, d.index);
+                if (compare1.length > compare2.length){
+                  _endOfSortAdges.push(compare1);
+                } else{
+                  _endOfSortAdges.push(compare2);
+                }
                 console.log(`${res[1]},${res[2]}`);
                 console.log(_endOfSortAdges);
                 if (typeof _endOfSortAdges[0] !== 'undefined') {
                   w = [];
-                  w.push(res[0]);
+                  // w.push(res[0]);
                   w = w.concat(_endOfSortAdges[0]);
-                  w.push(res[3]);
+                  // w.push(res[3]);
+                  //console.log('This is shortest path');
+                  console.log(d.index);
+                  console.log(_lastNode);
+                  //console.log(res[0]);
+                  console.log(_endOfSortAdges[0])
+                  //console.log(res[3])
+                  console.log(w);
                   orderdraw(w);
                 } else {
                   alert('未找到路径');
@@ -1107,12 +1132,18 @@ export default class RelationGraph extends React.PureComponent {
             if (res !== null && res[1] === res[2]) {
               orderdraw2(res);
             } else {
-              getPaths(res[1], null, res[1], res[2]);
+              let compare1 = getPaths(d.index, _lastNode);
+              let compare2 = getPaths(_lastNode, d.index);
+              if (compare1.length > compare2.length){
+                _endOfSortAdges.push(compare1);
+              } else{
+                _endOfSortAdges.push(compare2);
+              }
               if (_endOfSortAdges !== []) {
                 w = [];
-                w.push(res[0]);
+                // w.push(res[0]);
                 w = w.concat(_endOfSortAdges[0]);
-                w.push(res[3]);
+                // w.push(res[3]);
                 _totalLine = _totalLine.concat(w);
                 orderdraw2(_totalLine);
               } else {
@@ -1347,8 +1378,12 @@ export default class RelationGraph extends React.PureComponent {
         }
 
         _nodes = graph.nodes;
+        console.log('[debug] this is all nodes');
+        console.log(_nodes);
         this.setState({ allNodes: _nodes });
         _edges = graph.edges;
+        console.log('[debug] this is all edges');
+        console.log(_edges);
         setlink = d3.forceLink(_edges).distance((d) => {
           return (-d.count * 2.5) + 15;
         });
@@ -1359,11 +1394,6 @@ export default class RelationGraph extends React.PureComponent {
           .force('link', setlink)
           .force('gravity', d3.forceCollide(height / 100 + 10).strength(0.6)).alpha(0.2)
           .force('center', d3.forceCenter(width / 2, height / 2));
-        i = 0;
-        while (i < snum) {
-          allRootNodeIndex.push(i);
-          i++;
-        }
         _saveRootAdges = [];
         _edges.forEach((f) => {
           if (f.target.index < snum) {
@@ -1374,42 +1404,32 @@ export default class RelationGraph extends React.PureComponent {
             return _saveRootAdges.push(a);
           }
         });
-        saveSortAdges();
-        // _edges.forEach((f) => {
-        //   if (f.target.index < snum) {
-        //     const a = {
-        //       start: f.source.index,
-        //       end: f.target.index,
-        //     };
-        //     return _saveRootAdges.push(a);
-        //   }
-        // });
-        // i = 0;
-        // while (i < snum) {
-        //   a = [];
-        //   _saveRootAdges.forEach((f) => {
-        //     if (f.start === i && a.indexOf(f.end) === -1) {
-        //       a.push(f.end);
-        //     }
-        //     if (f.end === i && a.indexOf(f.start) === -1) {
-        //       return a.push(f.start);
-        //     }
-        //   });
-        //   if (a.length === 0) {
-        //     k = 0;
-        //     a.push(k);
-        //     _saveSortAdges.push([i]);
-        //     temp = {
-        //       target: _nodes[k],
-        //       source: _nodes[i],
-        //       count: 20,
-        //     };
-        //     _edges.push(temp);
-        //   } else {
-        //     _saveSortAdges.push(a);
-        //   }
-        //   i++;
-        // }
+        i = 0;
+        while (i < snum) {
+          a = [];
+          _saveRootAdges.forEach((f) => {
+            if (f.start === i && a.indexOf(f.end) === -1) {
+              a.push(f.end);
+            }
+            if (f.end === i && a.indexOf(f.start) === -1) {
+              return a.push(f.start);
+            }
+          });
+          if (a.length === 0) {
+            k = 0;
+            a.push(k);
+            _saveSortAdges.push([i]);
+            temp = {
+              target: _nodes[k],
+              source: _nodes[i],
+              count: 20,
+            };
+            _edges.push(temp);
+          } else {
+            _saveSortAdges.push(a);
+          }
+          i++;
+        }
         _drawNetOnly(snum);
         // $('[data-toggle=\'popover\']').popover();
         if (process.env.NODE_ENV !== 'production') {
@@ -1601,6 +1621,9 @@ export default class RelationGraph extends React.PureComponent {
       _totalLine = [];
       _lastNode = null;
       this.currentModle3 = !this.currentModle3;
+      if (!this.currentModle3) {
+        this.currentModle2 = false;
+      }
       svg.selectAll('line').data(_edges).style('opacity', 0.8);
       svg.selectAll('circle').data(_nodes).style('opacity', 0.8);
       currentThis.setState({

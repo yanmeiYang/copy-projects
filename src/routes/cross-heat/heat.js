@@ -44,6 +44,7 @@ class Heat extends React.Component {
   xWidth = 0; // 图的宽
   heatNum = []; // 热力值数组
   barNum = []; //bar值数组
+  title = '';
   yNode = [];
   xNode = [];
   modalWidth = 800; // modal 默认宽
@@ -86,6 +87,7 @@ class Heat extends React.Component {
         this.xNode = this.getNodeChildren(crossTree.queryTree2, []);
         this.yHeight = this.yNode.length * 62;
         this.xWidth = this.xNode.length * 62;
+        this.title = crossTree.queryTree1.name + ' & ' + crossTree.queryTree2.name;
         this.createYTree(crossTree.queryTree1, this.yHeight);
         this.createXTree(crossTree.queryTree2, this.yHeight, this.xWidth);
       }
@@ -221,7 +223,7 @@ class Heat extends React.Component {
           return '#fff';
         }
         if (d.power === -1) {
-          return '#ccc';
+          return '#f8f8f8';
         }
       })
       .attr('transform', `translate(${260},${-62})`);
@@ -491,6 +493,11 @@ class Heat extends React.Component {
     //获取x轴所有为0
     //获取y轴所有为0
   };
+  goBack = () => {
+    this.props.dispatch(routerRedux.push({
+      pathname: '/cross/index',
+    }));
+  }
 
 
   render() {
@@ -504,6 +511,10 @@ class Heat extends React.Component {
       <Layout searchZone={[]} contentClass={tc(['heat'])} showNavigator={false}>
         <div >
           <Spinner loading={loadTree || loadDomainInfo} size="large" />
+          <div className={styles.actionBar}>
+            <span className={styles.title}>{this.title}</span>
+            <span className={styles.back} onClick={this.goBack}>返回</span>
+          </div>
           <div>
             {/*<Switch checkedChildren="开" onChange={this.clearHeatZero} unCheckedChildren="关" />*/}
             {/*<Button type="primary" onClick={this.toggle}>未来三年</Button>*/}

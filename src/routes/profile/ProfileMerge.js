@@ -66,7 +66,7 @@ export default class ProfileMerge extends Component {
                 <FM id="com.profileMerge.label.pending" defaultMessage="In pending" />
               </span> :
               <Checkbox
-                key="100" defaultChecked={checkedPersonIds.includes(param.person)}
+                key="100" defaultChecked={checkedPersonIds.includes(param.person.id)}
                 onChange={this.changePerson.bind(this, param.person)}>
                 <FM id="com.profileMerge.button.merge" defaultMessage="Merge" />
               </Checkbox>

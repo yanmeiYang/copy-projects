@@ -54,6 +54,25 @@ module.exports = {
   ExpertBaseExpertsPage_Title_SHOW_SeeAll_Link: false,
 
   ExpertBaseExpertsPage_MessageZone: [
-    hole.DEFAULT_PLACEHOLDER,
+    (payload) => {
+      const querySegments = [];
+      if (payload.term) {
+        querySegments.push(payload.term);
+      }
+      if (payload.name) {
+        querySegments.push(payload.name);
+      }
+      if (payload.org) {
+        querySegments.push(payload.org);
+      }
+      const queryString = querySegments.join(', ');
+
+      return (
+        <div key={100}>
+          {payload.total} Experts.
+          {queryString && <span> related to "{queryString}".</span>}
+        </div>
+      );
+    },
   ],
 };

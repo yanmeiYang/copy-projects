@@ -91,6 +91,9 @@ export default class TrendPrediction extends React.PureComponent {
         console.log('===============================-=-=-=-=',);
       });
     });
+    window.onresize = () => {
+      this.updateTrend(this.props.query);
+    };
   }
 
   componentDidUpdate(prevProps) {
@@ -317,6 +320,7 @@ export default class TrendPrediction extends React.PureComponent {
 
   // 绘制技术趋势图，data对应1个term，趋势由data.year.d的大小反映
   renderTermTrend = (data) => {
+    document.getElementById('tooltip1').style = 'display:none';
     const that = this;
     if (typeof (data) === 'undefined') {
       return;
@@ -384,9 +388,19 @@ export default class TrendPrediction extends React.PureComponent {
     const onMouseOverEventNode = (d) => {
       this.setState({ person: null, paper: null });
       document.getElementById('tooltip1').style = 'display:block';
-      const xPosition = d3.event.layerX + 30;
-      const yPosition = d3.event.layerY + 20;
-      d3.select('#tooltip1').style('left', `${xPosition}px`).style('top', `${yPosition}px`)
+      /*const xPosition = d3.event.layerX + 30;
+      const yPosition = d3.event.layerY + 20;*/
+      const e = event || window.event;
+      const scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+      const scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+      const x = e.pageX || e.clientX + scrollX;
+      const y = e.pageY || e.clientY + scrollY;
+      let xPosition = x - 130;
+      const yPosition = y - 230;
+      if (xPosition > (document.body.clientWidth - 350)) {
+        xPosition = document.body.clientWidth - 350;
+      }
+      d3.select('#tooltip1').style('position', 'absolute').style('left', `${xPosition}px`).style('top', `${yPosition}px`)
         .select('#value1')
         .text(() => {
           const resultPromise = getPerson(idToAuthor[d.a].id);
@@ -817,14 +831,14 @@ export default class TrendPrediction extends React.PureComponent {
               }
               <div className="img"><img src={url} alt={url} /></div>
               <div className="info">
-                {pos && <span className={styles.detail}>{pos}</span>}<br />
-                {aff && <span className={styles.detail}>{aff}</span>}
+                {pos && <span className={styles.detail}><i className="fa fa-briefcase fa-fw" />{pos}</span>}<br />
+                {aff && <span className={styles.detail}><i className="fa fa-institution fa-fw" />{aff}</span>}
               </div>
               <strong id="value1" />
               <div>
                 {
                   thepaper &&
-                  <span className={styles.detail}><a {...paperLinkParams}>{quote}</a></span>
+                  <span className={styles.detail}><i className="fa fa-file-pdf-o" /><a {...paperLinkParams}>{quote}</a></span>
                 }
               </div>
             </div>

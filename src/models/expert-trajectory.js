@@ -1,4 +1,6 @@
 /** Created by Bo Gao on 2017-06-07 */
+import pathToRegexp from 'path-to-regexp';
+import * as pubsService from 'services/publication';
 import * as personService from 'services/person';
 import * as searchService from 'services/search';
 import * as traDataFindService from 'services/expert-trajectory-service';
@@ -31,6 +33,7 @@ export default {
     hindex: [],
     locationName: [],
     geoCoordMap: {},
+    allMessage: [],
     // yearHeat: {},
   },
 
@@ -58,8 +61,9 @@ export default {
         console.log("query !== '");
         data = yield call(traDataFindService.findHeatMap, query);
       } else {
-        data = yield call(traDataFindService.findTop10000);
+        data = yield call(traDataFindService.findTop10000Data);
       }
+      console.log('dataà1', data);
       const location = data.locations;
       const startYear = data.startYear;
       const endYear = data.endYear;
@@ -68,8 +72,8 @@ export default {
       const authorImage = data.authorImage;
       const locationName = data.locationName;
       const hindex = data.h_index;
-      yield put({
-        type: 'heatFindSuccess',
+      console.log();
+      yield put({ type: 'heatFindSuccess',
         payload: {
           location,
           startYear,
@@ -84,10 +88,32 @@ export default {
     },
 
     * eventFind({ payload }, { call, put }) {
-      const { yearNow } = payload;
-      const data = yield call(traDataFindService.eventFind, yearNow);
-      yield put({ type: 'eventFindSuccess', payload: { data, yearNow } });
+      let data;
+      const { query } = payload;
+      if (query !== '') {
+        data = yield call(traDataFindService.eventTop10000Find);
+      } else {
+        console.log('hahah');
+        data = yield call(traDataFindService.eventTop10000Find);
+      }
+      console.log('event', data);
+      yield put({ type: 'eventFindSuccess', payload: { data } });
     },
+
+    // * storeHindex({ payload }, { call, put }) {
+    //   const { hindex } = payload;
+    //   yield put({ type: 'hindexSuccess', payload: { hindex } });
+    // },
+    //
+    // * storeAid({ payload }, { call, put }) {
+    //   const { authors, startYear, locationName } = payload;
+    //   yield put({ type: 'aidSuccess', payload: { authors, startYear, locationName } });
+    // },
+    //
+    // * storeTable({ payload }, { call, put }) {
+    //   const { table } = payload;
+    //   yield put({ type: 'tableSuccess', payload: { table } });
+    // },
 
     * listPersonByIds({ payload }, { call, put }) {  // eslint-disable-line
       yield put({ type: 'showLoading' });
@@ -100,8 +126,9 @@ export default {
       yield put({ type: 'listPersonByIdsSuccess', payload: { data } });
     },
 
-    * getYearData({ payload }, { put, select }) {
+    * getYearData({ payload }, { call, put, select }) {
       const { year } = payload;
+      yield put({ type: 'oneEventFindSuccess', payload: { year } });
       const yearStart = yield select(state => state.expertTrajectory.startYear);
       const yearEnd = yield select(state => state.expertTrajectory.endYear);
       const table = yield select(state => state.expertTrajectory.table);
@@ -160,18 +187,14 @@ export default {
       }
 
       for (const key in merge) { // 当年的地点、人数数据
-        if (true) {
-          const onenode = { name: key, value: merge[key] };
-          data.push(onenode);
-        }
+        const onenode = { name: key, value: merge[key] };
+        data.push(onenode);
       }
 
       if (yearIndex < (yearEnd - yearStart)) {
         for (const key in nextYear) {
-          if (true) {
-            const onenode = { name: key, value: nextYear[key] }; // 实际数据中乘20应删去！
-            nextYearData.push(onenode);
-          }
+          const onenode = { name: key, value: nextYear[key] }; // 实际数据中乘20应删去！
+          nextYearData.push(onenode);
         }
       }
 
@@ -179,6 +202,8 @@ export default {
       nextYearData.sort(sortValue);
       let data1 = []; // data1为人数前100地点数据， data2为100以后
       let p;
+      // console.log('datasp', datas[0]);
+      // console.log(datas[0].value);
       if (data.length > 10) {
         for (p = 0; data[p].value > 1 && p < 100; p += 1) {
           data1.push(data[p]);
@@ -188,23 +213,20 @@ export default {
       }
       const data2 = data.slice(p);
 
+      // console.log('authorImg', authorImg);
       Object.keys(authorImg).map((key) => {
+        // console.log('geoCOooiejijf', geoCoordMap[key]);
         if (geoCoordMap[key][0] < (-30)) {
+          // console.log('come to west');
           authorImgWest[key] = authorImg[key];
         } else if (geoCoordMap[key][0] >= -30 && geoCoordMap[key][0] <= 70) {
           authorImgMid[key] = authorImg[key];
         } else if (geoCoordMap[key][0] > 70) {
           authorImgEast[key] = authorImg[key];
         }
-        return true;
       });
 
-      yield put({
-        type: 'getPerYearHeatDataSuccess',
-        payload: {
-          year, geoCoordMap, data, yearIndex, nextYearData, data1, data2,
-          authorImgWest, authorImgMid, authorImgEast, author, author2
-        },
+      yield put({ type: 'getPerYearHeatDataSuccess', payload: { year, geoCoordMap, data, yearIndex, nextYearData, data1, data2, authorImgWest, authorImgMid, authorImgEast, author, author2 },
       });
     },
 
@@ -212,12 +234,7 @@ export default {
   },
 
   reducers: {
-    getPerYearHeatDataSuccess(state, {
-      payload: {
-        year, geoCoordMap, data, yearIndex, nextYearData,
-        data1, data2, authorImgWest, authorImgMid, authorImgEast, author, author2
-      }
-    }) {
+    getPerYearHeatDataSuccess(state, { payload: { year, geoCoordMap, data, yearIndex, nextYearData, data1, data2, authorImgWest, authorImgMid, authorImgEast, author, author2 } }) {
       const yearHeat = state.eachYearHeat;
       yearHeat[year] = {};
       yearHeat[year].data = data;
@@ -238,8 +255,8 @@ export default {
       return { ...state, infoZoneIds: rightInfoType };
     },
 
-    searchPersonSuccess(state, { payload: { data } }) { // state?
-      const { result } = data;
+    searchPersonSuccess(state, { payload: { data, query } }) { // state?
+      const { result, total } = data;
       return {
         ...state,
         results: result,
@@ -248,12 +265,17 @@ export default {
       };
     },
 
-    heatFindSuccess(state, {
-      payload: {
-        heatData, location, startYear, authorImage,
-        endYear, table, authors, locationName, hindex
-      }
-    }) {
+    heatFindSuccess(state, { payload: { heatData, location, startYear, authorImage, endYear, table, authors, locationName, hindex } }) {
+      // console.log('startYear', startYear);
+      // const location = heatData.locations;
+      // const startYear = heatData.startYear;
+      // const endYear = heatData.endYear;
+      // const table = heatData.table;
+      // const authors = heatData.authors;
+      // const authorImage = heatData.authorImage;
+      // const locationName = heatData.locationName;
+      // const hindex = heatData.h_index;
+      // console.log('authors', authors);
       return {
         ...state,
         heatData,
@@ -268,14 +290,64 @@ export default {
       };
     },
 
-    eventFindSuccess(state, { payload: { data, yearNow } }) {
-      const newMassage = state.yearMessage;
-      newMassage.push({
-        year: yearNow,
-        events: data,
-      });
-      return { ...state, yearMessage: newMassage };
+    dataFindSuccess(state, { payload: { data } }) {
+      /*      const data = payload.data && payload.data.data;
+      const kgindex = kgService.indexingKGData(data);
+      const kgFetcher = kgService.kgFetcher(data, kgindex);
+      // console.log('success findKG, return date is ', data);
+      // console.log('indexing it: ', kgindex);
+      return { ...state, kgdata: data, kgindex, kgFetcher }; */
     },
+
+    eventFindSuccess(state, { payload: { data } }) {
+      const allData = [];
+      for (let i = 0; i < data.length; i += 1) {
+        const tempData = {};
+        const year = parseInt(Object.keys(data[i])[0]);
+        tempData.year = year;
+        tempData.events = data[i][year];
+        allData.push(tempData);
+      }
+      return { ...state, allMessage: allData };
+      // return { ...state, allMessage: data };
+    },
+
+    oneEventFindSuccess(state, { payload: { year } }) {
+      const allYearMesRaw = state.allMessage;
+      const allYearMes = {};
+      for (let i = 0; i < allYearMesRaw.length; i += 1) {
+        allYearMes[allYearMesRaw[i].year] = allYearMesRaw[i].events;
+      }
+      const newMessage = state.yearMessage;
+      newMessage.push({
+        year,
+        events: allYearMes[year],
+      });
+      return { ...state, yearMessage: newMessage };
+    },
+
+    // hindexSuccess(state, { payload: { hindex } }) {
+    //   return {
+    //     ...state,
+    //     hindex,
+    //   };
+    // },
+    //
+    // aidSuccess(state, { payload: { authors, startYear, locationName } }) {
+    //   return {
+    //     ...state,
+    //     authors,
+    //     startYear,
+    //     locationName,
+    //   };
+    // },
+    //
+    // tableSuccess(state, { payload: { table } }) {
+    //   return {
+    //     ...state,
+    //     table,
+    //   };
+    // },
 
     listPersonByIdsSuccess(state, { payload: { data } }) {
       return { ...state, clusterPersons: data.data.persons, loading: false };
@@ -304,6 +376,7 @@ function doHeatGeoMap(location) { // 存储经纬度 geoCoordMap = {123:[116,40]
   for (let i = 1; i < location.length; i += 1) {
     geoCoordMap[i] = location[i];
   }
+  console.log('geo', geoCoordMap);
   return geoCoordMap;
 }
 

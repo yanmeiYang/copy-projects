@@ -3,10 +3,11 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import echarts from 'echarts/lib/echarts';
-import world from 'echarts/map/js/world';
+// import echarts from 'echarts/lib/echarts';
+// import world from 'echarts/map/js/world';
 import { Slider, InputNumber, Row, Col, Button } from 'antd';
 import { request, queryURL } from 'utils';
+import loadScript from 'load-script';
 import styles from './ExpertHeatmap.less';
 
 let startYear;
@@ -18,7 +19,7 @@ let mapinterval; // 播放的interval
 let location;
 let table = [];
 let authors;
-const centerBegin = [0,12];
+const centerBegin = [0, 12];
 let centerPixeBegin;
 let roamNow;
 let centerNow;
@@ -60,6 +61,7 @@ const themes = {
 const planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
 let play = false;
 let yearNow;
+let echarts; // used for loadScript
 
 class ExpertHeatmap extends React.PureComponent { ///
   constructor(props) {
@@ -84,15 +86,21 @@ class ExpertHeatmap extends React.PureComponent { ///
   }
 
   componentDidMount() {
-    this.seriesNo = false;
-    this.type = '';
-    this.personList = '';
-    this.from = '';
-    this.to = '';
-    this.ifLarge = false;
-    this.ifButton = false;
-    this.myChart2 = echarts.init(document.getElementById('heatmap'));
-    this.world = world;
+    loadScript('/lib/echarts.js', () => {
+      echarts = window.echarts; // eslint-disable-line prefer-destructuring
+      loadScript('/lib/echarts-map/world.js', () => {
+        this.seriesNo = false;
+        this.type = '';
+        this.personList = '';
+        this.from = '';
+        this.to = '';
+        this.ifLarge = false;
+        this.ifButton = false;
+        this.myChart2 = echarts.init(document.getElementById('heatmap'));
+        // this.world = world;
+      });
+    });
+
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -107,8 +115,10 @@ class ExpertHeatmap extends React.PureComponent { ///
       return true;
     }
     if (nextProps.expertTrajectory.location !== this.props.expertTrajectory.location) {
-      this.setState({ startYear: nextProps.expertTrajectory.startYear,
-        endYear: nextProps.expertTrajectory.endYear });
+      this.setState({
+        startYear: nextProps.expertTrajectory.startYear,
+        endYear: nextProps.expertTrajectory.endYear
+      });
       authors = nextProps.expertTrajectory.authors;
       location = nextProps.expertTrajectory.location;
       table = nextProps.expertTrajectory.table;
@@ -151,7 +161,10 @@ class ExpertHeatmap extends React.PureComponent { ///
     this.seriesNo = false;
     this.playon = value;
     yearNow = this.playon;
-    this.props.dispatch({ type: 'expertTrajectory/getYearData', payload: { year: yearNow } }).then(() => {
+    this.props.dispatch({
+      type: 'expertTrajectory/getYearData',
+      payload: { year: yearNow }
+    }).then(() => {
       const thisYearEvent = this.props.expertTrajectory.yearMessage[this.props.expertTrajectory.yearMessage.length - 1];
       const display = [];
       thisYearEvent.events.map((oneEvent) => {
@@ -662,7 +675,7 @@ class ExpertHeatmap extends React.PureComponent { ///
     this.myChart2.on('click', (params) => { // 点击点或线出现红色高亮
       roamNow = this.myChart2.getOption().geo[0].zoom;
       centerNow = this.myChart2.getOption().geo[0].center;
-      console.log("roamNOw",roamNow)
+      console.log("roamNOw", roamNow)
       if (params.componentType === 'series') {
         mapOption.geo.zoom = roamNow;
         mapOption.geo.center = centerNow;
@@ -919,7 +932,7 @@ class ExpertHeatmap extends React.PureComponent { ///
     return b.value - a.value;
   };
 
-  doHeatGeoMap=() => { // 存储经纬度 geoCoordMap = {123:[116,40]}
+  doHeatGeoMap = () => { // 存储经纬度 geoCoordMap = {123:[116,40]}
     const geoCoordMap = {};
     for (let i = 1; i < location.length; i += 1) {
       geoCoordMap[i] = location[i];
@@ -963,7 +976,8 @@ class ExpertHeatmap extends React.PureComponent { ///
           {display && display.map((oneExpert, index) => {
             const key = index;
             return (
-              <div className={styles.onePic} key={key} id={oneExpert.authorIndex} style={{ left: oneExpert.pixel[0] - 20, top: oneExpert.pixel[1] - 46 }}>
+              <div className={styles.onePic} key={key} id={oneExpert.authorIndex}
+                   style={{ left: oneExpert.pixel[0] - 20, top: oneExpert.pixel[1] - 46 }}>
                 <img src={oneExpert.url} className={styles.url} alt="" />
               </div>
             );
@@ -973,11 +987,15 @@ class ExpertHeatmap extends React.PureComponent { ///
         <div className={styles.button}>
           <Button className={styles.dark} type="primary" ghost onClick={this.onThemeChangeDark}>dark</Button>
           <Button className={styles.light} type="primary" ghost onClick={this.onThemeChangeLight}>light</Button>
-          <Button className={styles.plus} type="primary" ghost icon="plus" onClick={this.plusHeatZoom} />
-          <Button className={styles.minus} type="primary" ghost icon="minus" onClick={this.minusHeatZoom} />
+          <Button className={styles.plus} type="primary" ghost icon="plus"
+                  onClick={this.plusHeatZoom} />
+          <Button className={styles.minus} type="primary" ghost icon="minus"
+                  onClick={this.minusHeatZoom} />
         </div>
-        <div role="presentation" className={styles.heat} id="heatmap" style={{ height: '670px', width: '1150px' }} onClick={this.onMapClick} />
-        <div className={styles.two} style={{ color: '#f5f3f0', fontSize: '20px', fontWeight: '50' }} id="showYear">
+        <div role="presentation" className={styles.heat} id="heatmap"
+             style={{ height: '670px', width: '1150px' }} onClick={this.onMapClick} />
+        <div className={styles.two}
+             style={{ color: '#f5f3f0', fontSize: '20px', fontWeight: '50' }} id="showYear">
           <h1> {yearNow}</h1>
         </div>
 
@@ -986,7 +1004,7 @@ class ExpertHeatmap extends React.PureComponent { ///
           <Row className={styles.slide}>
             <Col span={22}>
               <Slider min={this.state.startYear} max={this.state.endYear} onChange={this.onChange}
-                      onAfterChange={this.onAfterChange}value={this.state.inputValue} />
+                      onAfterChange={this.onAfterChange} value={this.state.inputValue} />
             </Col>
             <Col span={1}>
               <InputNumber

@@ -3,19 +3,26 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import echarts from 'echarts/lib/echarts'; // 必须
-import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/legend';
-import 'echarts/lib/component/geo';
-import 'echarts/lib/chart/bar';
+import loadScript from 'load-script';
+
+// import echarts from 'echarts/lib/echarts'; // 必须
+// import 'echarts/lib/component/tooltip';
+// import 'echarts/lib/component/legend';
+// import 'echarts/lib/component/geo';
+// import 'echarts/lib/chart/bar';
+
+let echarts; // used for loadScript
 
 @connect()
 export default class TopicBarChart extends React.Component {
 
   componentDidMount() {
-    this.myChart = echarts.init(document.getElementById('topic'));
-    const topic = this.props.topic;
-    this.initBarChar(topic);
+    loadScript('/lib/echarts.js', () => {
+      echarts = window.echarts; // eslint-disable-line prefer-destructuring
+      console.log('......................', echarts, window.echarts);
+      this.myChart = echarts.init(document.getElementById('topic'));
+      this.initBarChar(this.props.topic);
+    });
   }
 
   componentWillReceiveProps(nextProps) {

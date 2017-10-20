@@ -1,4 +1,5 @@
-import { request, config } from '../utils';
+import { request, config } from 'utils';
+
 const { api } = config;
 
 
@@ -18,7 +19,7 @@ export async function dataFind2(id) {
 }
 
 export async function eventFind(year) { // 有query
-  return require('../../external-docs/expert-trajectory/eventTop10000.json');
+  return request('/lab/trajectory/eventTop10000.json');
 }
 
 export async function findTrajPerson(id) {
@@ -39,9 +40,9 @@ export async function findHeatMap(rid) {
 }
 
 export async function findTop10000Data() {
-  return require('../../public/lab/heatData40.json');
+  return request('/lab/heatData40.json');
 }
 
 export async function eventTop10000Find() {
-  return require('../../external-docs/expert-trajectory/eventTop10000.json');
+  return request('/lab/eventTop10000.json');
 }

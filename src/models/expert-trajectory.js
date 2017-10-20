@@ -73,7 +73,8 @@ export default {
       const locationName = data.locationName;
       const hindex = data.h_index;
       console.log();
-      yield put({ type: 'heatFindSuccess',
+      yield put({
+        type: 'heatFindSuccess',
         payload: {
           location,
           startYear,
@@ -226,7 +227,22 @@ export default {
         }
       });
 
-      yield put({ type: 'getPerYearHeatDataSuccess', payload: { year, geoCoordMap, data, yearIndex, nextYearData, data1, data2, authorImgWest, authorImgMid, authorImgEast, author, author2 },
+      yield put({
+        type: 'getPerYearHeatDataSuccess',
+        payload: {
+          year,
+          geoCoordMap,
+          data,
+          yearIndex,
+          nextYearData,
+          data1,
+          data2,
+          authorImgWest,
+          authorImgMid,
+          authorImgEast,
+          author,
+          author2
+        },
       });
     },
 

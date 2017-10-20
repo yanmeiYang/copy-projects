@@ -1,6 +1,8 @@
-/**
- * Created by yutao on 2017/5/22.
- */
+const baseURL = 'https://api.aminer.org/api';
+const apiDomain = 'https://api.aminer.org';
+const nextAPIURL = 'http://localhost:4005/query';
+// const nextAPIURL = 'http://e30c17034d854ef4b1dac3d7b5874d3b-cn-beijing.alicloudapi.com/query';
+
 const param = (key, type, description) => {
   return { key, type, description };
 };
@@ -8,11 +10,14 @@ const param = (key, type, description) => {
 module.exports = {
   // URLs
   basePageURL: 'https://aminer.org',
-  baseURL: 'https://api.aminer.org/api',
-  nextAPIURL: 'http://localhost:4005/query',
-  // nextAPIURL: 'http://e30c17034d854ef4b1dac3d7b5874d3b-cn-beijing.alicloudapi.com/query',
+  baseURL,
+  nextAPIURL,
+  apiDomain,
+  strict: false, // 如果是strict模式，所有向下兼容的东西都会报错。
 
   openPages: ['/login'],
+  CORS: ['https://dc_api.aminer.org'],
+  YQL: [],
 
   name: '专家搜索', // TODO Don't use this.
   prefix: 'aminer', // ???
@@ -24,121 +29,118 @@ module.exports = {
   // AMiner restful API.
   api: {
     // user system
-    currentUser: '/user/me',
-    userLogin: '/auth/signin',
-    userLogout: '/auth/signout',
-    signup: '/auth/signup',
-    checkEmail: '/user/check/src/:src/email/:email',
-    updateProfile: '/user/:id',
-    forgot: '/auth/update/forgot',
+    currentUser: `${baseURL}/user/me`,
+    userLogin: `${baseURL}/auth/signin`,
+    userLogout: `${baseURL}/auth/signout`,
+    signup: `${baseURL}/auth/signup`,
+    checkEmail: `${baseURL}/user/check/src/:src/email/:email`,
+    updateProfile: `${baseURL}/user/:id`,
+    forgot: `${baseURL}/auth/update/forgot`,
     // 重置密码
-    retrieve: '/auth/update/token',
-    // 给user添加label {uid:'',label:''}
-    invoke: '/user/role/invoke',
+    retrieve: `${baseURL}/auth/update/token`,
+    // 给user添加label {uid:'`,label:''}
+    invoke: `${baseURL}/user/role/invoke`,
     // 删除user的label
-    revoke: '/user/role/revoke',
-    listUsersByRole: '/user/role/list/:role/offset/:offset/size/:size',
+    revoke: `${baseURL}/user/role/revoke`,
+    listUsersByRole: `${baseURL}/user/role/list/:role/offset/:offset/size/:size`,
     // 创建邮件模板
-    emailTemplate: '/user/mail/template/:src/:type',
-    getTemplate: '/user/mail/template/:src/:type ',
+    emailTemplate: `${baseURL}/user/mail/template/:src/:type`,
+    getTemplate: `${baseURL}/user/mail/template/:src/:type`,
 
     // search
-    searchPerson: '/search/person', // pin=1 huawei mode.
-    searchPersonAgg: '/search/person/agg',
-    searchPersonAdvanced: '/search/person/advanced',
-    searchPersonAdvancedAgg: '/search/person/advanced/agg',
-    searchPersonInBase: '/search/roster/:ebid/experts/advanced',
-    searchPersonInBaseAgg: '/search/roster/:ebid/experts/advanced/agg',
-    allPersonInBase: '/roster/:ebid/offset/:offset/size/:size',
-    allPersonInBaseWithSort: '/roster/:ebid/order-by/:sort/offset/:offset/size/:size',
-    allPersonInBaseAgg: '/roster/:ebid/agg?offset=&order=h_index&size=20',
+    searchPerson: `${baseURL}/search/person`, // pin=1 huawei mode.
+    searchPersonAgg: `${baseURL}/search/person/agg`,
+    searchPersonAdvanced: `${baseURL}/search/person/advanced`,
+    searchPersonAdvancedAgg: `${baseURL}/search/person/advanced/agg`,
+    searchPersonInBase: `${baseURL}/search/roster/:ebid/experts/advanced`,
+    searchPersonInBaseAgg: `${baseURL}/search/roster/:ebid/experts/advanced/agg`,
+    allPersonInBase: `${baseURL}/roster/:ebid/offset/:offset/size/:size`,
+    allPersonInBaseWithSort: `${baseURL}/roster/:ebid/order-by/:sort/offset/:offset/size/:size`,
+    allPersonInBaseAgg: `${baseURL}/roster/:ebid/agg?offset=&order=h_index&size=20`,
     // TODO agg
 
-    searchMap: '/search/person/geo', // ?query=:search
-    searchExpertBaseMap: '/roster/:id/geo/offset/:offset/size/:size',
-    searchExpertNetWithDSL: '/search/person/ego',
+    searchMap: `${baseURL}/search/person/geo`, // ?query=:search
+    searchExpertBaseMap: `${baseURL}/roster/:id/geo/offset/:offset/size/:size`,
+    searchExpertNetWithDSL: `${baseURL}/search/person/ego`,
 
-    searchPubs: '/search/pub', // ?query=xxx&size=20&sort=relevance',
+    searchPubs: `${baseURL}/search/pub`, // ?query=xxx&size=20&sort=relevance`,
 
     // search suggest
-    searchSuggest: '/search/suggest/gen/:query',
+    searchSuggest: `${baseURL}/search/suggest/gen/:query`,
 
     // misc services
-    translateTerm: '/abbreviation/mapping/:term',
+    translateTerm: `${baseURL}/abbreviation/mapping/:term`,
 
     // export roster
-    rosterExportSimple: '/roster/:id/export/s/offset/:offset/size/:size/:name',
+    rosterExportSimple: `${baseURL}/roster/:id/export/s/offset/:offset/size/:size/:name`,
 
     // seminar
-    getSeminars: '/activity/list/offset/:offset/size/:size', // src aid uid organizer type category stype
-    getActivityById: '/activity/:id',
-    postActivity: '/activity/post_activity',
-    updateActivity: '/activity/update',
-    speakerSuggest: '/activity/speaker/suggest',
-    uploadActivityPosterImgFile: '/activity/img',
-    searchActivity: '/search/activity',
-    deleteActivity: '/activity/delete/:id',
-    getCommentFromActivity: '/comment/activity/:id/offset/:offset/size/:size',
-    addCommentToActivity: '/comment/activity/:id',
-    deleteCommentFromActivity: '/comment/activity/cmid/:id',
+    getSeminars: `${baseURL}/activity/list/offset/:offset/size/:size`, // src aid uid organizer type category stype
+    getActivityById: `${baseURL}/activity/:id`,
+    postActivity: `${baseURL}/activity/post_activity`,
+    updateActivity: `${baseURL}/activity/update`,
+    speakerSuggest: `${baseURL}/activity/speaker/suggest`,
+    uploadActivityPosterImgFile: `${baseURL}/activity/img`,
+    searchActivity: `${baseURL}/search/activity`,
+    deleteActivity: `${baseURL}/activity/delete/:id`,
+    getCommentFromActivity: `${baseURL}/comment/activity/:id/offset/:offset/size/:size`,
+    addCommentToActivity: `${baseURL}/comment/activity/:id`,
+    deleteCommentFromActivity: `${baseURL}/comment/activity/cmid/:id`,
     // score
-    updateOrSaveActivityScore: '/activity/score/me/:src/:actid/:aid/:key/:score/:lvtime',
+    updateOrSaveActivityScore: `${baseURL}/activity/score/me/:src/:actid/:aid/:key/:score/:lvtime`,
     // 不知 key, 列出相关的 key 和 scores.
-    listActivityScores: '/activity/score-list/:uid/:src/:actid',
+    listActivityScores: `${baseURL}/activity/score-list/:uid/:src/:actid`,
     // 已知 key 获取 一个 score
-    getActivityScore: '/activity/score/:uid/:src/:actid/:aid/:key',
-    getStatsOfCcfActivities: '/activity/admin/stats',
-    keywordExtraction: 'http://nlp.newsminer.net/rest/nlp/keywords',
-    getTopMentionedTags: '/activity/tags/:src/:num',
+    getActivityScore: `${baseURL}/activity/score/:uid/:src/:actid/:aid/:key`,
+    getStatsOfCcfActivities: `${baseURL}/activity/admin/stats`,
+    keywordExtraction: `${baseURL}http://nlp.newsminer.net/rest/nlp/keywords`,
+    getTopMentionedTags: `${baseURL}/activity/tags/:src/:num`,
 
     /* person */
-    personProfile: '/person/summary/:id',
-    personEmailImg: '/person/email/i/',
-    personEmailStr: '/person/email/s/:id',
-    getEmailCrImage: '/person/email-cr/i/',
-    listPersonByIds: '/person/batch-list',
-    getActivityAvgScoresByPersonId: '/person/activity/:id/indices',
-
-    // merge
-    tryToDoMerge: '/bifrost/person/merge/:mid',
+    personProfile: `${baseURL}/person/summary/:id`,
+    personEmailImg: `${baseURL}/person/email/i/`,
+    personEmailStr: `${baseURL}/person/email/s/:id`,
+    getEmailCrImage: `${baseURL}/person/email-cr/i/`,
+    listPersonByIds: `${baseURL}/person/batch-list`,
+    getActivityAvgScoresByPersonId: `${baseURL}/person/activity/:id/indices`,
 
     // interests vis data
-    interests: '/person/interests/:id', // 这个是vis图中单独调用的。和人下面的可能不一样.
+    interests: `${baseURL}/person/interests/:id`, // 这个是vis图中单独调用的。和人下面的可能不一样.
 
     /* publications */
-    pubList: '/person/pubs/:id/all/year/:offset/:size',
-    pubListByCitation: '/person/pubs/:id/all/citation/:offset/:size',
-    pubListInfo: '/person/pubs/:id/stats',
-    pubListByYear: '/person/pubs/:id/range/year/:year/:offset/:size',
-    pubListLimited: '/person/pubs/:id/range/citation/:nc_lo/:nc_hi/:offset/:size',
-    pubById: '/pub/summary/:id',
+    pubList: `${baseURL}/person/pubs/:id/all/year/:offset/:size`,
+    pubListByCitation: `${baseURL}/person/pubs/:id/all/citation/:offset/:size`,
+    pubListInfo: `${baseURL}/person/pubs/:id/stats`,
+    pubListByYear: `${baseURL}/person/pubs/:id/range/year/:year/:offset/:size`,
+    pubListLimited: `${baseURL}/person/pubs/:id/range/citation/:nc_lo/:nc_hi/:offset/:size`,
+    pubById: `${baseURL}/pub/summary/:id`,
 
     // System config
-    ucListByCategory: '/2b/config/:source/list?category=:category',
-    ucSetByKey: '/2b/config/:source/:category/:key',
-    ucDeleteByKey: '/2b/config/:source/:category/:key',
-    ucUpdateByKey: '/2b/config/:source/:category/rename/:key/:newKey',
-    getCategoriesHint: '/2b/config/:source/category/suggest/:category',
-    listConfigsByCategoryList: '/2b/config/:source/by-category',
+    ucListByCategory: `${baseURL}/2b/config/:source/list?category=:category`,
+    ucSetByKey: `${baseURL}/2b/config/:source/:category/:key`,
+    ucDeleteByKey: `${baseURL}/2b/config/:source/:category/:key`,
+    ucUpdateByKey: `${baseURL}/2b/config/:source/:category/rename/:key/:newKey`,
+    getCategoriesHint: `${baseURL}/2b/config/:source/category/suggest/:category`,
+    listConfigsByCategoryList: `${baseURL}/2b/config/:source/by-category`,
 
     // topic
-    getTopicByMention: '/topic/summary/m/:mention',
+    getTopicByMention: `${baseURL}/topic/summary/m/:mention`,
 
     // Recommendation APIs
-    getAllOrgs: '/reviewer/orgs/get/all/:offset/:size',
-    // getOrgById: '/reviewer/org/get/:id',
+    getAllOrgs: `${baseURL}/reviewer/orgs/get/all/:offset/:size`,
+    // getOrgById: `${baseURL}/reviewer/org/get/:id`,
 
     // cross heat
-    getDiscipline: '//cross1.aminer.org/topics?area=:area&k=:k&depth=:depth&context=',
-    delDiscipline: '//cross1.aminer.org/feedback?parents=:parents&children=:children&postive=:postive',
-    createDiscipline: '//cross2.aminer.org/query',
-    getUserQuerys: '//cross2.aminer.org/cross-domain/query/offset/:offset/size/:size',
-    getCrossTree: '//cross2.aminer.org/query/:id',
-    delUserQuery: '/cross-domain/query/:id',
-    getDomainInfo: '//cross2.aminer.org/records/:begin/:end',
-    getDomainAllInfo: '//cross2.aminer.org/record/:domain1/:domain2/:begin/:end',
-    getExpertByIds: '/person/batch-list',
-    getPubById: '/pub/:id',
+    getDiscipline: `${baseURL}//cross1.aminer.org/topics?area=:area&k=:k&depth=:depth&context=`,
+    delDiscipline: `${baseURL}//cross1.aminer.org/feedback?parents=:parents&children=:children&postive=:postive`,
+    createDiscipline: `${baseURL}//cross2.aminer.org/query`,
+    getUserQuerys: `${baseURL}//cross2.aminer.org/cross-domain/query/offset/:offset/size/:size`,
+    getCrossTree: `${baseURL}//cross2.aminer.org/query/:id`,
+    delUserQuery: `${baseURL}/cross-domain/query/:id`,
+    getDomainInfo: `${baseURL}//cross2.aminer.org/records/:begin/:end`,
+    getDomainAllInfo: `${baseURL}//cross2.aminer.org/record/:domain1/:domain2/:begin/:end`,
+    getExpertByIds: `${baseURL}/person/batch-list`,
+    getPubById: `${baseURL}/pub/:id`,
 
     // getProjects: API_BASE+"reviewer/projects/get/:offset/:size"
     // addProject: API_BASE+"reviewer/project/add"
@@ -170,9 +172,33 @@ module.exports = {
     // addInstAsProtectedByIid: API_BASE + "aff/person/protected/:iid"
 
 
+    // userInfo: `${baseURL}/userInfo`,
+    // users: `${baseURL}/users`,
+    // dashboard: `${baseURL}/dashboard`,
+    // expert info
+    getExpertInfo: `${baseURL}/2b/profile/:src/offset/:offset/size/:size`,
+    deleteItemByKey: `${baseURL}/2b/profile/:src/:id`,
+    editItemByKey: `${baseURL}/2b/profile/:src/:id`,
+    addExpertInfoApi: `${baseURL}/2b/profile/:src`,
+    updateItemById: `${baseURL}/2b/profile/:src/:id`,
+    searchItemByName: `${baseURL}/2b/profile/:src/offset/:offset/size/:size`,
+    getToBProfileByAid: `${baseURL}/2b/profile/:src/aid/:id`,
+    updateToBProfileExtra: `${baseURL}/2b/profile/:src/:id/extra`,
+
+    getExpertBase: `${baseURL}/roster/list/:type/offset/:offset/size/:size`,
+    addExpertBaseApi: `${baseURL}/roster`,
+    addExpertToEB: `${baseURL}/roster/:ebid/a`,
+    deleteExpertBaseApi: `${baseURL}/roster/:rid`,
+    getExpertDetailList: `${baseURL}/roster/:ebid/order-by/h_index/offset/:offset/size/:size`,
+    invokeRoster: `${baseURL}/roster/:id/members/u`,
+    removeExpertsFromEBByPid: `${baseURL}/roster/:rid/d/:pid`,
+    // getToBProfile: `${baseURL}/api/2b/profile/:src/:id`,
+    getTrajectoryInfo: `${baseURL}/person/geo/trajectory/:id/year/:lo/:hi`,
+    getHeatInfo: `${baseURL}/person/geo/trajectory/roster/:rid/year/:lo/:hi/size/:size`,
+
     // Knowledge Graph
     kgFind: {
-      api: '/knowledge-graph/:entry',
+      api: `${baseURL}/knowledge-graph/:entry`,
       param: [ // means param in path.
         param('entry', 'string', 'query that matches name, name_zh, alias, in kgNode.'),
       ],
@@ -185,7 +211,7 @@ module.exports = {
       },
     },
     kgGetByIds: {
-      api: '/knowledge-graph/:id_chain',
+      api: `${baseURL}/knowledge-graph/:id_chain`,
       param: [
         param('id_chain', 'string', 'e.g.: id1.id2.id3'),
       ],
@@ -198,28 +224,5 @@ module.exports = {
       },
     },
 
-    // userInfo: '/userInfo',
-    // users: '/users',
-    // dashboard: '/dashboard',
-    // expert info
-    getExpertInfo: '/2b/profile/:src/offset/:offset/size/:size',
-    deleteItemByKey: '/2b/profile/:src/:id',
-    editItemByKey: '/2b/profile/:src/:id',
-    addExpertInfoApi: '/2b/profile/:src',
-    updateItemById: '/2b/profile/:src/:id',
-    searchItemByName: '/2b/profile/:src/offset/:offset/size/:size',
-    getToBProfileByAid: '/2b/profile/:src/aid/:id',
-    updateToBProfileExtra: '/2b/profile/:src/:id/extra ',
-
-    getExpertBase: '/roster/list/:type/offset/:offset/size/:size',
-    addExpertBaseApi: '/roster',
-    addExpertToEB: '/roster/:ebid/a',
-    deleteExpertBaseApi: '/roster/:rid',
-    getExpertDetailList: '/roster/:ebid/order-by/h_index/offset/:offset/size/:size',
-    invokeRoster: '/roster/:id/members/u',
-    removeExpertsFromEBByPid: '/roster/:rid/d/:pid',
-    // getToBProfile: '/api/2b/profile/:src/:id',
-    getTrajectoryInfo: '/person/geo/trajectory/:id/year/:lo/:hi',
-    getHeatInfo: '/person/geo/trajectory/roster/:rid/year/:lo/:hi/size/:size',
   },
 };

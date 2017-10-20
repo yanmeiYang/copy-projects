@@ -1,6 +1,15 @@
 # Aminer2b
 
-## Development Environment
+
+## Documentation Draft
+
+Build内存溢出可以用下面方式build.
+```javascript
+node --max_old_space_size=4096 node_modules/roadhog/lib/build.js --analyze  
+```
+
+
+## Development Environment / IDE Setup
 
 IDE：WebStorm Latest version.
 
@@ -65,6 +74,9 @@ webpackConfig.resolve.alias = {
 ##### JSX
 + Never use Math.random() as key in JXS loop.
 + Don't use <span></span> to include multiline jsx, indentation not work in webstorm with multiline span.
+
+
+
 
 
 #### Coding Conventions / 编码规范
@@ -197,13 +209,21 @@ PersonList_RightZone: defaults.IN_APP_DEFAULT, // [()=><COMP>]
     const RightZoneFuncs = rightZoneFuncs || DefaultRightZoneFuncs;
     ```
 
-### component不引入systems配置文件，一律从最外层通过参数形式传入component中
+### Component原则上不引入sysconfig配置文件，需要从上层通过参数(props)的形式传入Component中
 ```javascript
 <PersonList persons={orgs} titleRightBlock={sysconfig.PersonList_TitleRightBlock}
 personRemove={sysconfig.Person_PersonRemoveButton} />
 ```
 
-##### Formater of ternary expression (? expression)
+
+
+
+#### 编发风格规范（Code Style）
+
+
+
+
+##### Code Style of ternary expression (? expression)
 
 ```javascript
 // If the expression can in one line.
@@ -216,7 +236,11 @@ const A = hasValue ? 'has value' : 'no';
     : <Loading/>
   )}
 </Bundle>
-···
+```
 
-#### TODO remove the occurence.
+
+## Refactoring TODO
+#### Remove the occurence.
   showFooter
+  let { query } = queryString.parse(location.search);
+

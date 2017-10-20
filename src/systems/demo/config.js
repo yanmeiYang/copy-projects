@@ -15,7 +15,7 @@ module.exports = {
    * Layout related
    */
   Layout_HasSideBar: false, // 是否显示左侧菜单
-  Header_UserPageURL: '', // 用户头像点击之后去的页面.
+  Header_UserPageURL: '/user-info',
   ShowHelpDoc: false, // 显示帮助文档
 
   //

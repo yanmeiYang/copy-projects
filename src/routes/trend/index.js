@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
+import { Auth } from 'hoc';
 import { Layout } from 'routes';
 import queryString from 'query-string';
 import { compare } from 'utils';
 // import styles from './index.less';
 import TrendPrediction from './trend-prediction.js';
-import { Auth } from '../../hoc';
 
 @connect(({ app }) => ({ app }))
 @Auth

@@ -1,7 +1,7 @@
 /** Created by Bo Gao on 2017-06-07 */
-import * as personService from '../services/person';
-import * as searchService from '../services/search';
-import * as traDataFindService from '../services/expert-trajectory-service';
+import * as personService from 'services/person';
+import * as searchService from 'services/search';
+import * as traDataFindService from 'services/expert-trajectory-service';
 
 const cache = {};
 
@@ -68,7 +68,8 @@ export default {
       const authorImage = data.authorImage;
       const locationName = data.locationName;
       const hindex = data.h_index;
-      yield put({ type: 'heatFindSuccess',
+      yield put({
+        type: 'heatFindSuccess',
         payload: {
           location,
           startYear,
@@ -78,7 +79,8 @@ export default {
           authorImage,
           locationName,
           hindex,
-      } });
+        }
+      });
     },
 
     * eventFind({ payload }, { call, put }) {
@@ -197,9 +199,12 @@ export default {
         return true;
       });
 
-      yield put({ type: 'getPerYearHeatDataSuccess',
-        payload: { year, geoCoordMap, data, yearIndex, nextYearData, data1, data2,
-          authorImgWest, authorImgMid, authorImgEast, author, author2 },
+      yield put({
+        type: 'getPerYearHeatDataSuccess',
+        payload: {
+          year, geoCoordMap, data, yearIndex, nextYearData, data1, data2,
+          authorImgWest, authorImgMid, authorImgEast, author, author2
+        },
       });
     },
 
@@ -207,8 +212,12 @@ export default {
   },
 
   reducers: {
-    getPerYearHeatDataSuccess(state, { payload: { year, geoCoordMap, data, yearIndex, nextYearData,
-      data1, data2, authorImgWest, authorImgMid, authorImgEast, author, author2 } }) {
+    getPerYearHeatDataSuccess(state, {
+      payload: {
+        year, geoCoordMap, data, yearIndex, nextYearData,
+        data1, data2, authorImgWest, authorImgMid, authorImgEast, author, author2
+      }
+    }) {
       const yearHeat = state.eachYearHeat;
       yearHeat[year] = {};
       yearHeat[year].data = data;
@@ -239,8 +248,12 @@ export default {
       };
     },
 
-    heatFindSuccess(state, { payload: { heatData, location, startYear, authorImage,
-      endYear, table, authors, locationName, hindex } }) {
+    heatFindSuccess(state, {
+      payload: {
+        heatData, location, startYear, authorImage,
+        endYear, table, authors, locationName, hindex
+      }
+    }) {
       return {
         ...state,
         heatData,

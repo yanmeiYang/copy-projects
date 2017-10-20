@@ -132,7 +132,7 @@ class DisciplineTree extends React.Component {
             .style('fill', item => (node.data.id === item.data.id ? '#fff' : '#000'))
             .attr('opacity', item => (node.data.id === item.data.id ? 0 : 1))
           // 判断是不是说子节点
-          this.tooltipTop = node.x + 155;
+          this.tooltipTop = node.x + 110;
           this.tooltipLeft = event.pageX - 10;
           const name = node.data.name;
           this.setState({ showTooltip: true, node, name });
@@ -177,7 +177,7 @@ class DisciplineTree extends React.Component {
     const dt = data;
     if (dt.id === node.data.id) {
       dt.children = dt.children || [];
-      dt.children.push({ name: '新节点', id: this.guid() });
+      dt.children.push({ name: '新节点', id: this.guid(), children: [] });
     } else if (dt.children) {
       dt.children.map(item => this.addData(item, node));
     }

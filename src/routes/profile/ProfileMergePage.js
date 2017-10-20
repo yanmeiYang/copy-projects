@@ -3,62 +3,85 @@
  */
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { routerRedux, Link, withRouter } from 'dva/router';
-import { sysconfig } from 'systems';
+import { withRouter } from 'dva/router';
 import { theme, applyTheme } from 'themes';
-import * as strings from 'utils/strings';
 import { hole, createURL } from 'utils';
 import { Auth } from 'hoc';
 import { Layout } from 'routes';
-import { FormattedMessage as FM } from 'react-intl';
-import SearchComponent from 'routes/search/SearchComponent';
 import ProfileMerge from 'routes/profile/ProfileMerge';
-import { query } from 'services/user';
 import styles from './ProfileMergePage.less';
 
 const tc = applyTheme(styles);
-@connect(({ app, search }) => ({ app, search }))
+@connect(({ app, merge, loading, search }) => ({ app, merge, loading, search }))
 @withRouter
 @Auth
 export default class ProfileMergePage extends Component {
   state = {
     name: '',
+    id: '',
+    current: 1,
+    query: '',
   };
 
   componentWillMount() {
     const { match } = this.props;
-    const { name } = match.params;
-    this.setState({ name });
-    this.props.dispatch({
-      type: 'search/searchPerson',
-      payload: {
-        query: name,
-        offset: 0,
-        size: 10,
-        filters: { id: 'aminer', name: '全球专家' },
-        sort: [],
-      },
-    });
+    const { name, id } = match.params;
+    this.setState({ name, id });
+    this.props.dispatch({ type: 'merge/emptyCheckedPersons' });
+    this.doSearchUseProps(); // Init search.
   }
 
-  onSearchBarSearch = (data) => {
-    const { match, dispatch } = this.props;
-    const pathname = createURL(match.path, match.params, {
-      query: data.query || '-',
-      offset: data.offset || 0,
-      size: data.size || sysconfig.MainListSize,
+  // // keep every thing, just call search;
+  doSearchUseProps = () => {
+    const { offset, pagination } = this.props.merge;
+    const query = `||${this.props.match.params.name}`;
+    const { pageSize } = pagination;
+    this.setState({ query });
+    this.doSearch(query, offset, pageSize);
+  };
+  //
+  doSearch = (query, offset, size) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'merge/searchPerson',
+      payload: {
+        query,
+        offset,
+        size,
+        personId: this.props.match.params.id,
+      },
     });
-    dispatch(routerRedux.push({ pathname }));
+  };
+
+  onSearchBarSearch = (data) => {
+    this.setState({ query: data.query });
+    const { pageSize } = this.props.merge.pagination;
+    const offset = (this.state.current - 1) * pageSize;
+    this.doSearch(data.query, offset, pageSize);
+  };
+
+  onPageChange = (page) => {
+    const { pageSize } = this.props.merge.pagination;
+    this.setState({ current: page });
+    const offset = (page - 1) * pageSize;
+    const query = this.state.query;
+    this.doSearch(query, offset, pageSize);
   };
 
   render() {
-    const { name } = this.state;
-    const { results } = this.props.search;
+    const { name, id, current } = this.state;
+    const { results, pagination } = this.props.merge;
+    const { pageSize, total } = pagination;
     const expertBaseId = 'aminer';
+    const load = this.props.loading.effects['merge/searchPerson'];
     return (
-      <Layout contentClass={tc(['profileMerge'])} onSearch={this.onSearchBarSearch}
-              query={name} showNavigator={false}>
-        <ProfileMerge results={results} expertBaseId={expertBaseId} user={this.props.app.user} />
+      <Layout contentClass={tc(['profileMergePage'])} onSearch={this.onSearchBarSearch}
+              query={name} showNavigator={false} fixAdvancedSearch>
+        <ProfileMerge load={load} results={results}
+                      expertBaseId={expertBaseId} user={this.props.app.user}
+                      currentPersonId={id}
+                      onPageChange={this.onPageChange}
+                      current={current} pageSize={pageSize} total={total} />
       </Layout>
     );
   }

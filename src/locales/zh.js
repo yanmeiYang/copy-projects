@@ -124,4 +124,8 @@ export default {
   'rcd.taskTable.header.progress': '完成进度',
   'rcd.taskTable.header.status': '状态',
   'rcd.taskTable.header.actions': '操作',
+
+  // Merge
+  'com.profileMerge.button.merge': '合并',
+  'com.profileMerge.label.pending': '正在等待',
 };

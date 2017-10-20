@@ -125,17 +125,19 @@ export default class PersonList extends Component {
                 </div>
                 <div className={styles.info_zone}>
                   <div className={styles.info_zone_detail}>
-                    {name &&
-                    <div className={styles.title}>
-                      <h2 className="section_headerxxx">
-                        <a {...personLinkParams}>{name}</a>
-                        {false && <span className={styles.rank}>会士</span>}
-                      </h2>
-                      {afterTitleBlock && afterTitleBlock({ param: { person, expertBaseId } })}
-                    </div>}
+                    <div className={styles.title_zone}>
+                      {name &&
+                      <div className={styles.title}>
+                        <h2 className="section_headerxxx">
+                          <a {...personLinkParams}>{name}</a>
+                          {false && <span className={styles.rank}>会士</span>}
+                        </h2>
+                        {afterTitleBlock && afterTitleBlock({ param: { person, expertBaseId } })}
+                      </div>}
 
-                    {/* ---- TitleRightBlock ---- */}
-                    {titleRightBlock && titleRightBlock({ param: { person, expertBaseId } })}
+                      {/* ---- TitleRightBlock ---- */}
+                      {titleRightBlock && titleRightBlock({ param: { person, expertBaseId } })}
+                    </div>
                     {/*{this.personRightButton && this.personRightButton(person)}*/}
                     <div className={classnames(styles.zone, styles.interestColumn)}>
                       <div className={styles.contact_zone}>

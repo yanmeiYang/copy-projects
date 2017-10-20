@@ -3,7 +3,8 @@
  */
 import React from 'react';
 import { Link } from 'dva/router';
-import { Checkbox } from 'antd';
+import { Button } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import defaults from '../utils';
 import { AddToEBButton, PersonRemoveButton, PersonComment } from './components';
 import { GetComments } from './hooks/person-comment-hooks';
@@ -66,13 +67,28 @@ module.exports = {
   // param: [person, eb{id,name}]
   PersonList_TitleRightBlock:
     ({ param }) => (
-      <AddToEBButton
-        person={param.person} key="2"
-        expertBaseId={param.expertBaseId}
-        targetExpertBase="59a8e5879ed5db1fc4b762ad"
-      />),
+      <div>
+        <AddToEBButton
+          person={param.person} key="2"
+          expertBaseId={param.expertBaseId}
+          targetExpertBase="59a8e5879ed5db1fc4b762ad"
+        />
+      </div>),
 
-  PersonList_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
+  PersonList_RightZone: [
+    param => {
+      return (
+        <div key="0">
+          {param.person && param.expertBaseId !== 'aminer' &&
+          <Button>
+            <Link to={`/profile/merge/${param.person.id}/${param.person.name}`}>
+              <FM id="com.profileMerge.button.merge" defaultMessage="Merge" />
+            </Link>
+          </Button>}
+        </div>
+      );
+    },
+  ],
   PersonList_BottomZone: [
     param => (
       <PersonComment

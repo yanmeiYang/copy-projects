@@ -45,8 +45,8 @@ export default {
   effects: {
     // make sure app.user is filled.
     * getMe({ payload }, { call, put }) {
-      const { data } = yield call(authService.getCurrentUserInfo, parse(payload));
-      if (data) {
+      const { success, data } = yield call(authService.getCurrentUserInfo, parse(payload));
+      if (success && data) {
         yield put({ type: 'getMeSuccess', payload: data });
       }
     },

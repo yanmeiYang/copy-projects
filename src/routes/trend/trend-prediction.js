@@ -1,13 +1,13 @@
+/* eslint-disable prefer-destructuring */
 import React from 'react';
-import { Tabs } from 'antd';
+import { Tabs, message } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import d3 from '../../../public/lib/d3.v3';
-import d3sankey from './utils/sankey';
+import loadScript from 'load-script';
+import { Auth } from 'hoc';
+import { request } from 'utils';
+import * as profileUtils from 'utils/profile-utils';
 import styles from './trend-prediction.less';
-import { Auth } from '../../hoc';
-import { wget } from '../../utils/request';
-import * as profileUtils from '../../utils/profile-utils';
 import { getPerson } from '../../services/person';
 import { searchPubById } from '../../services/trend-prediction-service';
 import { sysconfig } from '../../systems';
@@ -59,9 +59,12 @@ const yearToXOffset = (year) => {
   return binWidth * binOffset;
 };
 
-const TabPane = Tabs.TabPane;
+const { TabPane } = Tabs;
 
 const HOT_TERMS = ['Answer Machine', 'Artificial Intelligence', 'Autopilot', 'BlockChain', 'Computer Vision', 'Data Mining', 'Data Modeling', 'Deep Learning', 'Graph Databases', 'Internet of Things', 'Machine Learning', 'Robotics', 'Networks', 'Natural Language Processing', 'Neural Network'];
+
+let d3;
+
 /**
  * Component
  * @param id
@@ -81,13 +84,18 @@ export default class TrendPrediction extends React.PureComponent {
   };
 
   componentDidMount() {
-    d3sankey();
-    this.updateTrend(this.props.query);
+    loadScript('/lib/d3.v3.js', () => {
+      d3 = window.d3;
+      loadScript('/lib/sankey-modified.js', () => {
+        this.updateTrend(this.props.query);
+        console.log('===============================-=-=-=-=',);
+      });
+    });
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.query && prevProps.query !== this.props.query) {
-      d3sankey();
+      // d3sankey();
       this.updateTrend(this.props.query);
     }
   }
@@ -211,15 +219,26 @@ export default class TrendPrediction extends React.PureComponent {
     const term = (query === '') ? this.props.query : query;
 
     this.setState({ loadingFlag: true });
-    const dd = wget(`https://dc_api.aminer.org/trend/${term}`);
-    const that = this;
-    dd.then((data) => {
-      trendData = humps.camelizeKeys(data, (key, convert) => {
-        return key.includes(' ') && !key.includes('_') ? key : convert(key);
-      });
-      that.setState({ loadingFlag: false });
-      this.initChart(term);
-    });
+    const url = `https://dc_api.aminer.org/trend/${term}`;
+    console.log('=-=-=-=-=--=-=URL:', url);
+    if (url) {
+      const that = this;
+      request(url).then(({ success, data }) => {
+        if (success && data) {
+          console.log('=-=-=-=-=--=-=Data:', data);
+          trendData = humps.camelizeKeys(data, (key, convert) => {
+            return key.includes(' ') && !key.includes('_') ? key : convert(key);
+          });
+          that.setState({ loadingFlag: false });
+          this.initChart(term);
+        } else {
+          console.error("Error get :", url);
+        }
+      }).catch((err) => {
+        throw err;
+      })
+      ;
+    }
   };
 
   renderHist = () => {
@@ -473,8 +492,8 @@ export default class TrendPrediction extends React.PureComponent {
     axisWidth = width / trendData.timeSlides.length;
     // 年代坐标轴，x1、y1为起点坐标，x2、y2为终点坐标
     axis.append('line').attr('x1', () => {
-        return axisWidth;
-      })
+      return axisWidth;
+    })
       .attr('x2', () => {
         return axisWidth;
       })
@@ -750,7 +769,8 @@ export default class TrendPrediction extends React.PureComponent {
                 i += 1;
                 return (
                   <div key={i}>
-                    <a role="presentation" key={i} onClick={that.onKeywordClick.bind(that, hw)}>{hw}</a>
+                    <a role="presentation" key={i}
+                       onClick={that.onKeywordClick.bind(that, hw)}>{hw}</a>
                   </div>
                 );
               })
@@ -758,13 +778,15 @@ export default class TrendPrediction extends React.PureComponent {
           </div>
         </div>
         <div className={styles.loading1}>
-          <div className={styles.loading} id="loading" style={{ display: showFlag, textAlign: 'center' }}>
+          <div className={styles.loading} id="loading"
+               style={{ display: showFlag, textAlign: 'center' }}>
             {query}技术趋势正在分析中，请稍后...
           </div>
         </div>
         <div id="showchart" style={{ display: showFlag1 }}>
           <div className={styles.nav}>
-            <Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange} className={styles.tabs}>
+            <Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange}
+                  className={styles.tabs}>
               <TabPane tab={<span>近期热度</span>} key="1" id="recent-trend" />
               <TabPane tab={<span>全局热度</span>} key="2" id="overall-trend" />
               <TabPane tab={<span>技术源头</span>} key="3" id="origin-trend" />
@@ -788,7 +810,8 @@ export default class TrendPrediction extends React.PureComponent {
               {name &&
               <div className="name bg">
                 <h2 className="section_header">
-                  <span className={styles.detail}><a {...personLinkParams}>{name} </a></span><br />
+                  <span
+                    className={styles.detail}><a {...personLinkParams}>{name} </a></span><br />
                 </h2>
               </div>
               }

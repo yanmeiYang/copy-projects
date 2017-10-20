@@ -1,6 +1,5 @@
-import { request, config } from '../utils';
-import { wget } from '../utils/request';
-import { sysconfig } from '../systems';
+import { request, config } from 'utils';
+import { sysconfig } from 'systems';
 
 const { api } = config;
 
@@ -63,8 +62,7 @@ export function getInterestsI18N(callback) {
     }
   }
   if (!interestsData) {
-    const pms = wget('/lab/interest_i18n.json');
-    pms.then((data) => {
+    request('/lab/interest_i18n.json').then((data) => {
       interestsData = keyToLowerCase(data);
       localStorage.setItem(LSKEY_INTERESTS, JSON.stringify(interestsData));
       if (callback) {
@@ -72,6 +70,7 @@ export function getInterestsI18N(callback) {
       }
       return interestsData;
     }).catch((error) => {
+      console.log('ERROR Reading interest_i18n.json:', error);
       localStorage.removeItem(LSKEY_INTERESTS);
       return undefined;
     });

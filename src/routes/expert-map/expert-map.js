@@ -8,15 +8,15 @@ import { Button, Tag, Menu, Dropdown, Icon, TreeSelect } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
-import styles from './expert-map.less';
-import { listPersonByIds } from '../../services/person';
-import * as profileUtils from '../../utils/profile-utils';
+import { Spinner } from 'components';
+import { listPersonByIds } from 'services/person';
+import * as profileUtils from 'utils/profile-utils';
 import { findPosition, getById, waitforBMap, waitforBMapLib } from './utils/map-utils';
+import GetBMapLib from './utils/BMapLibGai.js';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
 import RightInfoZonePerson from './RightInfoZonePerson';
 import RightInfoZoneAll from './RightInfoZoneAll';
-import GetBMapLib from './utils/BMapLibGai.js';
-import { Spinner } from '../../components';
+import styles from './expert-map.less';
 
 const { CheckableTag } = Tag;
 

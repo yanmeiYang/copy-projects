@@ -1,6 +1,6 @@
 const path = require('path');
 const { defines } = require('./src/define.js');
-// const { version } = require('./package.json')
+const { version } = require('./package.json')
 
 const svgSpriteDirs = [
   path.resolve(__dirname, 'src/svg/'),
@@ -8,11 +8,12 @@ const svgSpriteDirs = [
 ];
 
 export default {
-  "define": defines,
-
+  define: defines,
   entry: 'src/index.js',
   svgSpriteLoaderDirs: svgSpriteDirs,
   theme: "./theme.config.js",
+  publicPath: `/${version}/`,
+  outputPath: `./dist/${version}`,
 
   // "proxy": {
   //   "/api/v1/weather": {
@@ -33,7 +34,7 @@ export default {
   // "outputPath": "./dist",
   // "extraPostCSSPlugins": [],
   // "sass": false,
-  "hash": true,
+  // "hash": true,
   // "autoprefixer": null,
   // "library": null,
   // "libraryTarget": "var",

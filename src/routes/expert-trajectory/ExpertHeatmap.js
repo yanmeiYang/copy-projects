@@ -6,9 +6,8 @@ import { connect } from 'dva';
 import echarts from 'echarts/lib/echarts';
 import world from 'echarts/map/js/world';
 import { Slider, InputNumber, Row, Col, Button } from 'antd';
+import { request, queryURL } from 'utils';
 import styles from './ExpertHeatmap.less';
-import { wget } from '../../utils/request';
-import { queryURL } from '../../utils';
 
 let startYear;
 let locationName;
@@ -99,8 +98,10 @@ class ExpertHeatmap extends React.PureComponent { ///
       return true;
     }
     if (nextProps.expertTrajectory.location !== this.props.expertTrajectory.location) {
-      this.setState({ startYear: nextProps.expertTrajectory.startYear,
-        endYear: nextProps.expertTrajectory.endYear });
+      this.setState({
+        startYear: nextProps.expertTrajectory.startYear,
+        endYear: nextProps.expertTrajectory.endYear
+      });
       location = nextProps.expertTrajectory.locations;
       table = nextProps.expertTrajectory.table;
       locationName = nextProps.expertTrajectory.locationName;
@@ -137,7 +138,10 @@ class ExpertHeatmap extends React.PureComponent { ///
     this.seriesNo = false;
     this.playon = value;
     yearNow = this.playon;
-    this.props.dispatch({ type: 'expertTrajectory/getYearData', payload: { year: yearNow } }).then(() => {
+    this.props.dispatch({
+      type: 'expertTrajectory/getYearData',
+      payload: { year: yearNow }
+    }).then(() => {
       const thisYearData = this.props.expertTrajectory.eachYearHeat[yearNow];
       author = thisYearData.author;
       author2 = thisYearData.author2;
@@ -149,7 +153,7 @@ class ExpertHeatmap extends React.PureComponent { ///
     });
   }
 
-  onClick=() => { // 点击热力图按钮
+  onClick = () => { // 点击热力图按钮
     if (!play) {
       play = true;
       this.ifLarge = true; // 开启大规模优化
@@ -856,8 +860,7 @@ class ExpertHeatmap extends React.PureComponent { ///
   getHeatmapData = () => { // 获取json数据
     let heatData;
     if (!heatData) {
-      const pms = wget('/lab/heatData.json');
-      pms.then((data) => {
+      request('/lab/heatData.json').then((data) => {
         heatData = data;
         this.setState({ startYear: heatData.startYear, endYear: heatData.endYear });
         location = heatData.locations;
@@ -877,7 +880,7 @@ class ExpertHeatmap extends React.PureComponent { ///
     return b.value - a.value;
   };
 
-  doHeatGeoMap=() => { // 存储经纬度 geoCoordMap = {123:[116,40]}
+  doHeatGeoMap = () => { // 存储经纬度 geoCoordMap = {123:[116,40]}
     const geoCoordMap = {};
     for (let i = 1; i < location.length; i += 1) {
       geoCoordMap[i] = location[i];
@@ -902,11 +905,15 @@ class ExpertHeatmap extends React.PureComponent { ///
         <div className={styles.button}>
           <Button className={styles.dark} type="primary" ghost onClick={this.onThemeChangeDark}>dark</Button>
           <Button className={styles.light} type="primary" ghost onClick={this.onThemeChangeLight}>light</Button>
-          <Button className={styles.plus} type="primary" ghost icon="plus" onClick={this.plusHeatZoom} />
-          <Button className={styles.minus} type="primary" ghost icon="minus" onClick={this.minusHeatZoom} />
+          <Button className={styles.plus} type="primary" ghost icon="plus"
+                  onClick={this.plusHeatZoom} />
+          <Button className={styles.minus} type="primary" ghost icon="minus"
+                  onClick={this.minusHeatZoom} />
         </div>
-        <div role="presentation" className={styles.heat} id="heatmap" style={{ height: '670px', width: '1150px' }} onClick={this.onMapClick} />
-        <div className={styles.two} style={{ color: '#f5f3f0', fontSize: '20px', fontWeight: '50' }} id="showYear">
+        <div role="presentation" className={styles.heat} id="heatmap"
+             style={{ height: '670px', width: '1150px' }} onClick={this.onMapClick} />
+        <div className={styles.two}
+             style={{ color: '#f5f3f0', fontSize: '20px', fontWeight: '50' }} id="showYear">
           <h1> {yearNow}</h1>
         </div>
 
@@ -915,7 +922,7 @@ class ExpertHeatmap extends React.PureComponent { ///
           <Row className={styles.slide}>
             <Col span={22}>
               <Slider min={this.state.startYear} max={this.state.endYear} onChange={this.onChange}
-                      onAfterChange={this.onAfterChange}value={this.state.inputValue} />
+                      onAfterChange={this.onAfterChange} value={this.state.inputValue} />
             </Col>
             <Col span={1}>
               <InputNumber

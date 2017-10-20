@@ -7,20 +7,22 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Helmet } from 'react-helmet';
 import ReactGA from 'react-ga';
+import NProgress from 'nprogress'
 import { Layout as LayoutComponent } from 'antd';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
-import { hole } from 'utils';
+import { hole, classnames, config } from 'utils';
 import { Header, Navigator } from 'components/Layout';
 import styles from './Layout.less';
 
+const { iconFontJS, iconFontCSS, logo } = config;
 const { Sider, Content, Footer } = LayoutComponent;
 
 const tc = applyTheme(styles);
 
 require(`themes/theme-${theme.themeName}.less`); // basic themes，:global css only
 
-@connect(({ app }) => ({ app }))
+@connect(({ app, loading }) => ({ app, loading }))
 export default class Layout extends Component {
   static displayName = 'Layout';
 
@@ -66,9 +68,19 @@ export default class Layout extends Component {
     // console.count('>>>>>>>>>> App Render'); // TODO performance
     const { sidebar, footer } = this.props;
     const { contentClass, showHeader, showNavigator } = this.props;
-    const { dispatch, app } = this.props;
+    const { dispatch, app, loading } = this.props;
     const { user, roles } = app;
 
+    const href = window.location.href;
+
+    let lastHref;
+    if (lastHref !== href) {
+      NProgress.start();
+      if (!loading.global) {
+        NProgress.done();
+        lastHref = href;
+      }
+    }
     const { logoZone, searchZone, infoZone, fixAdvancedSearch } = this.props;
     const { query, onSearch } = this.props;
 
@@ -80,8 +92,6 @@ export default class Layout extends Component {
     };
     const navigatorOptions = { query, navis: sysconfig.HeaderSearch_TextNavi };
 
-    const href = window.location.href;
-
     return (
       <LayoutComponent className={tc(['layout'])}>
 
@@ -89,6 +99,9 @@ export default class Layout extends Component {
           <title>{sysconfig.PageTitle}</title>
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <link rel="icon" href={`/sys/${sysconfig.SYSTEM}/favicon.ico`} type="image/x-icon" />
+
+          {iconFontJS && <script src={iconFontJS} />}
+          {iconFontCSS && <link rel="stylesheet" href={iconFontCSS} />}
 
           <link rel="stylesheet" href="/fa/css/font-awesome.min.css" />
 

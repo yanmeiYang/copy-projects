@@ -92,8 +92,7 @@ export default class HeaderInfoZone extends PureComponent {
           <Menu.Item key="/account">
             <Link to={sysconfig.Header_UserPageURL} title={user.display_name}
                   className={styles.headerAvatar}>
-              <img src={profileUtils.getAvatar(user.avatar, user.id, 30)}
-                   alt={user.display_name} />
+              <img src={profileUtils.getAvatar(user.avatar, user.id, 30)} />
 
               {/* 用户名 */}
               {UserNameBlock && <span className={styles.userName}>{UserNameBlock}</span>}

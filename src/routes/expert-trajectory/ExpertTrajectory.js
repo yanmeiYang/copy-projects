@@ -2,15 +2,17 @@
  * created by Xinyi Xu on 2017-8-16.
  */
 import React from 'react';
-import echarts from 'echarts/lib/echarts'; // 必须
-import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/legend';
-import 'echarts/lib/component/geo';
-import 'echarts/lib/chart/map'; // 引入地图
-import 'echarts/lib/chart/lines';
-import 'echarts/lib/chart/effectScatter';
-import 'echarts/map/js/china'; // 引入中国地图//
-import 'echarts/map/js/world';
+import loadScript from 'load-script';
+
+// import echarts from 'echarts/lib/echarts'; // 必须
+// import 'echarts/lib/component/tooltip';
+// import 'echarts/lib/component/legend';
+// import 'echarts/lib/component/geo';
+// import 'echarts/lib/chart/map'; // 引入地图
+// import 'echarts/lib/chart/lines';
+// import 'echarts/lib/chart/effectScatter';
+// import 'echarts/map/js/china'; // 引入中国地图//
+// import 'echarts/map/js/world';
 import { Button } from 'antd';
 import styles from './ExpertTrajectory.less';
 import mapData from '../../../external-docs/expert-trajectory/testData.json';
@@ -19,6 +21,8 @@ const address2 = mapData.addresses;
 const trajectory = mapData.trajectory;
 let option = {};
 let ifDraw = 0;
+
+let echarts; // used for loadScript
 
 class ExpertTrajectory extends React.Component {
   constructor(props) {
@@ -33,8 +37,13 @@ class ExpertTrajectory extends React.Component {
   };
 
   componentDidMount() {
-    this.myChart = echarts.init(document.getElementById('world'));
-    this.showTrajectory();
+    loadScript('/lib/echarts.js', () => {
+      echarts = window.echarts; // eslint-disable-line prefer-destructuring
+      loadScript('/lib/echarts-map/world.js', () => {
+        this.myChart = echarts.init(document.getElementById('world'));
+        this.showTrajectory();
+      });
+    });
   }
 
   shouldComponentUpdate(nextProps, nextState) { // 状态改变时判断要不要刷新
@@ -48,7 +57,7 @@ class ExpertTrajectory extends React.Component {
     alert(personId);
   }
 
-  getTrajRecord =() => { // 整理接口给的数据
+  getTrajRecord = () => { // 整理接口给的数据
     const record = [];
     let lastYear;
     let lastArea;
@@ -146,6 +155,7 @@ class ExpertTrajectory extends React.Component {
       }
       return tGeoDt;
     }
+
     const planePath = 'arrow';
     const series = [ // 设置地图参数
       {
@@ -202,7 +212,7 @@ class ExpertTrajectory extends React.Component {
     return series;
   }
 
-  getTrajData =(record) => { // 在各个地点的时间，存于data
+  getTrajData = (record) => { // 在各个地点的时间，存于data
     const data = []; // data = [{name: tsinghua university, value : 6(years)}]
     for (const onerecord of record) {
       const years = (onerecord[1][1] - onerecord[1][0]) + 1;
@@ -212,7 +222,7 @@ class ExpertTrajectory extends React.Component {
     return data;
   }
 
-  doTrajGeoMap =(record) => { // 得到经纬度数据
+  doTrajGeoMap = (record) => { // 得到经纬度数据
     const geoCoordMap = {}; // geoCoordMap = {tsinghua unversity : [120,40] }
     for (const onerecord of record) {
       const onenode = [address2[onerecord[0]].lat, address2[onerecord[0]].lng];
@@ -221,7 +231,7 @@ class ExpertTrajectory extends React.Component {
     return geoCoordMap;
   }
 
-  quickLine =() => { // 停止动画立刻画出路线
+  quickLine = () => { // 停止动画立刻画出路线
     // const temp = option.geo.zoom;
     ifDraw = 1;
     // console.log("temp1",temp);
@@ -235,7 +245,7 @@ class ExpertTrajectory extends React.Component {
     this.myChart.setOption(option);
   }
 
-  drawTrajMap =() => { // 画地图
+  drawTrajMap = () => { // 画地图
     option = { // 设置地图参数
       backgroundColor: '#abc1db',
       title: {
@@ -319,15 +329,19 @@ class ExpertTrajectory extends React.Component {
   render() {
     return (
       <div>
-        <div className={styles.wor} id="world" style={{ height: '600px', width: '1200px', padding: '0px' }} />
+        <div className={styles.wor} id="world"
+             style={{ height: '600px', width: '1200px', padding: '0px' }} />
         <div>
-          <Button className={styles.path} type="primary" ghost onClick={this.quickLine} >Show Path</Button>
+          <Button className={styles.path} type="primary" ghost onClick={this.quickLine}>Show
+            Path</Button>
         </div>
         <div>
-          <Button className={styles.plus} type="primary" ghost icon="plus" onClick={this.plusTrajZoom} />
+          <Button className={styles.plus} type="primary" ghost icon="plus"
+                  onClick={this.plusTrajZoom} />
         </div>
         <div>
-          <Button className={styles.minus} type="primary" ghost icon="minus" onClick={this.minusTrajZoom} />
+          <Button className={styles.minus} type="primary" ghost icon="minus"
+                  onClick={this.minusTrajZoom} />
         </div>
       </div>
     );

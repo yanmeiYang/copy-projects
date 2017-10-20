@@ -3,23 +3,23 @@ import { request, config } from 'utils';
 const { api } = config;
 
 
-// const BASE_SPLITER = 1000000; // 1000000 Hits的节点是 一百万+index.
-//
-// export async function dataFind2(id) {
-//   return request('/go2/', {
-//     method: 'POST',
-//     data: {
-//       aid: id, // from form
-//       csrfmiddlewaretoken: 'JgGMxQfCjamNupEdUYhqlRXqU5ewK6Yj',
-//       isapi: true,
-//     },
-//     dataType: 'jsonp',
-//     baseURL: 'https://trajectory.aminer.org',
-//   });
-// }
+const BASE_SPLITER = 1000000; // 1000000 Hits的节点是 一百万+index.
 
-export async function eventFind(year) {
-  return request('public/lab/eventData.json');
+export async function dataFind2(id) {
+  return request('/go2/', {
+    method: 'POST',
+    data: {
+      aid: id, // from form
+      csrfmiddlewaretoken: 'JgGMxQfCjamNupEdUYhqlRXqU5ewK6Yj',
+      isapi: true,
+    },
+    dataType: 'jsonp',
+    baseURL: 'https://trajectory.aminer.org',
+  });
+}
+
+export async function eventFind(year) { // 有query
+  return request('/lab/trajectory/eventTop10000.json');
 }
 
 export async function findTrajPerson(id) {
@@ -39,6 +39,10 @@ export async function findHeatMap(rid) {
     , { method: 'GET' });
 }
 
-export async function findTop10000() {
-  return request('public/lab/heatData40.json');
+export async function findTop10000Data() {
+  return request('/lab/heatData40.json');
+}
+
+export async function eventTop10000Find() {
+  return request('/lab/eventTop10000.json');
 }

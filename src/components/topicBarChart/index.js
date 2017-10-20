@@ -3,19 +3,26 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import echarts from 'echarts/lib/echarts'; // 必须
-import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/legend';
-import 'echarts/lib/component/geo';
-import 'echarts/lib/chart/bar';
+import loadScript from 'load-script';
+
+// import echarts from 'echarts/lib/echarts'; // 必须
+// import 'echarts/lib/component/tooltip';
+// import 'echarts/lib/component/legend';
+// import 'echarts/lib/component/geo';
+// import 'echarts/lib/chart/bar';
+
+let echarts; // used for loadScript
 
 @connect()
 export default class TopicBarChart extends React.Component {
 
   componentDidMount() {
-    this.myChart = echarts.init(document.getElementById('topic'));
-    const topic = this.props.topic;
-    this.initBarChar(topic);
+    loadScript('/lib/echarts.js', () => {
+      echarts = window.echarts; // eslint-disable-line prefer-destructuring
+      console.log('......................', echarts, window.echarts);
+      this.myChart = echarts.init(document.getElementById('topic'));
+      this.initBarChar(this.props.topic);
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -26,10 +33,21 @@ export default class TopicBarChart extends React.Component {
     if (topic.label) {
       const xAxis = [];
       const yAxis = [];
-      for (const f of topic.freq) {
-        xAxis.push(f.y);
-        yAxis.push(f.w);
+      if (topic.freq) {
+        for (let i = 0; i < topic.freq.length; i++) {
+          xAxis.push(topic.freq[i].y);
+          if (i === topic.freq.length - 1 && topic.freq.length > 3) {
+            const newW = (topic.freq[i].w + topic.freq[i - 1].w + topic.freq[i - 2].w) / 3
+            yAxis.push(newW);
+          } else {
+            yAxis.push(topic.freq[i].w);
+          }
+        }
       }
+      // for (const f of topic.freq) {
+      //   xAxis.push(f.y);
+      //   yAxis.push(f.w);
+      // }
       const option = {
         color: ['#3398DB'],
         tooltip: { axisPointer: { type: 'shadow' } },

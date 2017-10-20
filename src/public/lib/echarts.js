@@ -92,21 +92,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	__webpack_require__(238);
 	__webpack_require__(294);
 	__webpack_require__(354);
-	__webpack_require__(365);
-
-	__webpack_require__(369);
+	__webpack_require__(366);
 
 	__webpack_require__(370);
-	__webpack_require__(383);
 
-	__webpack_require__(398);
-	__webpack_require__(404);
-	__webpack_require__(407);
+	__webpack_require__(371);
+	__webpack_require__(384);
 
-	__webpack_require__(410);
-	__webpack_require__(419);
+	__webpack_require__(399);
+	__webpack_require__(405);
+	__webpack_require__(408);
 
-	__webpack_require__(431);
+	__webpack_require__(411);
+	__webpack_require__(420);
+
+	__webpack_require__(432);
 
 
 /***/ }),
@@ -161,9 +161,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var zrender = __webpack_require__(87);
 	    var zrUtil = __webpack_require__(4);
-	    var colorTool = __webpack_require__(35);
-	    var Eventful = __webpack_require__(29);
+	    var colorTool = __webpack_require__(33);
+	    var Eventful = __webpack_require__(27);
 	    var timsort = __webpack_require__(91);
+
 
 	    var each = zrUtil.each;
 	    var parseClassType = ComponentModel.parseClassType;
@@ -189,6 +190,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var HAS_GRADIENT_OR_PATTERN_BG = '__hasGradientOrPatternBg';
 	    var OPTION_UPDATED = '__optionUpdated';
 	    var ACTION_REG = /^[a-zA-Z0-9_]+$/;
+
 
 	    function createRegisterEventWithLowercaseName(method) {
 	        return function (eventName, handler, context) {
@@ -1639,9 +1641,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        /**
 	         * @type {number}
 	         */
-	        version: '3.7.1',
+	        version: '3.7.2',
 	        dependencies: {
-	            zrender: '3.6.1'
+	            zrender: '3.6.2'
 	        }
 	    };
 
@@ -2073,7 +2075,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        update: 'downplay'
 	    }, zrUtil.noop);
 
-
 	    // --------
 	    // Exports
 	    // --------
@@ -2090,7 +2091,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    echarts.throttle = throttle.throttle;
 	    echarts.matrix = __webpack_require__(11);
 	    echarts.vector = __webpack_require__(10);
-	    echarts.color = __webpack_require__(35);
+	    echarts.color = __webpack_require__(33);
 
 	    echarts.util = {};
 	    each([
@@ -4786,11 +4787,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var TIME_REG = /^(?:(\d{4})(?:[-\/](\d{1,2})(?:[-\/](\d{1,2})(?:[T ](\d{1,2})(?::(\d\d)(?::(\d\d)(?:[.,](\d+))?)?)?(Z|[\+\-]\d\d:?\d\d)?)?)?)?)?$/; // jshint ignore:line
 
 	    /**
+	     * Consider DST, it is incorrect to provide a method `getTimezoneOffset`
+	     * without time specified. So this method is removed.
+	     *
 	     * @return {number} in minutes
 	     */
-	    number.getTimezoneOffset = function () {
-	        return (new Date()).getTimezoneOffset();
-	    };
+	    // number.getTimezoneOffset = function () {
+	    //     return (new Date()).getTimezoneOffset();
+	    // };
 
 	    /**
 	     * @param {string|Date|number} value These values can be accepted:
@@ -4824,24 +4828,42 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return new Date(NaN);
 	            }
 
-	            var timezoneOffset = number.getTimezoneOffset();
-	            var timeOffset = !match[8]
-	                ? 0
-	                : match[8].toUpperCase() === 'Z'
-	                ? timezoneOffset
-	                : +match[8].slice(0, 3) * 60 + timezoneOffset;
-
-	            // match[n] can only be string or undefined.
-	            // But take care of '12' + 1 => '121'.
-	            return new Date(
-	                +match[1],
-	                +(match[2] || 1) - 1,
-	                +match[3] || 1,
-	                +match[4] || 0,
-	                +(match[5] || 0) - timeOffset,
-	                +match[6] || 0,
-	                +match[7] || 0
-	            );
+	            // Use local time when no timezone offset specifed.
+	            if (!match[8]) {
+	                // match[n] can only be string or undefined.
+	                // But take care of '12' + 1 => '121'.
+	                return new Date(
+	                    +match[1],
+	                    +(match[2] || 1) - 1,
+	                    +match[3] || 1,
+	                    +match[4] || 0,
+	                    +(match[5] || 0),
+	                    +match[6] || 0,
+	                    +match[7] || 0
+	                );
+	            }
+	            // Timezoneoffset of Javascript Date has considered DST (Daylight Saving Time,
+	            // https://tc39.github.io/ecma262/#sec-daylight-saving-time-adjustment).
+	            // For example, system timezone is set as "Time Zone: America/Toronto",
+	            // then these code will get different result:
+	            // `new Date(1478411999999).getTimezoneOffset();  // get 240`
+	            // `new Date(1478412000000).getTimezoneOffset();  // get 300`
+	            // So we should not use `new Date`, but use `Date.UTC`.
+	            else {
+	                var hour = +match[4] || 0;
+	                if (match[8].toUpperCase() !== 'Z') {
+	                    hour -= match[8].slice(0, 3);
+	                }
+	                return new Date(Date.UTC(
+	                    +match[1],
+	                    +(match[2] || 1) - 1,
+	                    +match[3] || 1,
+	                    hour,
+	                    +(match[5] || 0),
+	                    +match[6] || 0,
+	                    +match[7] || 0
+	                ));
+	            }
 	        }
 	        else if (value == null) {
 	            return new Date(NaN);
@@ -7269,10 +7291,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var pathTool = __webpack_require__(21);
 	    var Path = __webpack_require__(22);
-	    var colorTool = __webpack_require__(35);
+	    var colorTool = __webpack_require__(33);
 	    var matrix = __webpack_require__(11);
 	    var vector = __webpack_require__(10);
-	    var Transformable = __webpack_require__(30);
+	    var Transformable = __webpack_require__(28);
 	    var BoundingRect = __webpack_require__(9);
 
 	    var round = Math.round;
@@ -7814,7 +7836,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *              for textFill, textStroke, textBackgroundColor, and textBorderColor.
 	     *              If autoColor specified, it is used as default textFill.
 	     *      useInsideStyle:
-	     *              `true`: Use inside style (textFill, textStroke, textLineWidth)
+	     *              `true`: Use inside style (textFill, textStroke, textStrokeWidth)
 	     *                  if `textFill` is not specified.
 	     *              `false`: Do not use inside style.
 	     *              `null/undefined`: use inside style if `isRectText` is true and
@@ -7927,7 +7949,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            || globalTextStyle.color;
 	        textStyle.textStroke = getAutoColor(textStyleModel.getShallow('textBorderColor'), opt)
 	            || globalTextStyle.textBorderColor;
-	        textStyle.textLineWidth = zrUtil.retrieve2(
+	        textStyle.textStrokeWidth = zrUtil.retrieve2(
 	            textStyleModel.getShallow('textBorderWidth'),
 	            globalTextStyle.textBorderWidth
 	        );
@@ -8011,13 +8033,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            insideRollback = {
 	                textFill: null,
 	                textStroke: textStyle.textStroke,
-	                textLineWidth: textStyle.textLineWidth
+	                textStrokeWidth: textStyle.textStrokeWidth
 	            };
 	            textStyle.textFill = '#fff';
 	            // Consider text with #fff overflow its container.
 	            if (textStyle.textStroke == null) {
 	                textStyle.textStroke = opt.autoColor;
-	                textStyle.textLineWidth == null && (textStyle.textLineWidth = 2);
+	                textStyle.textStrokeWidth == null && (textStyle.textStrokeWidth = 2);
 	            }
 	        }
 
@@ -8029,7 +8051,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (insideRollback) {
 	            style.textFill = insideRollback.textFill;
 	            style.textStroke = insideRollback.textStroke;
-	            style.textLineWidth = insideRollback.textLineWidth;
+	            style.textStrokeWidth = insideRollback.textStrokeWidth;
 	        }
 	    }
 
@@ -9104,8 +9126,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var Style = __webpack_require__(24);
 
-	    var Element = __webpack_require__(27);
-	    var RectText = __webpack_require__(38);
+	    var Element = __webpack_require__(25);
+	    var RectText = __webpack_require__(36);
 	    // var Stateful = require('./mixin/Stateful');
 
 	    /**
@@ -9364,14 +9386,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 24 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
 	/**
 	 * @module zrender/graphic/Style
 	 */
 
-
-	    var textHelper = __webpack_require__(25);
 
 	    var STYLE_COMMON_PROPS = [
 	        ['shadowBlur', 0], ['shadowOffsetX', 0], ['shadowOffsetY', 0], ['shadowColor', '#000'],
@@ -9562,11 +9582,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        /**
 	         * textStroke may be set as some color as a default
 	         * value in upper applicaion, where the default value
-	         * of textLineWidth should be 0 to make sure that
+	         * of textStrokeWidth should be 0 to make sure that
 	         * user can choose to do not use text stroke.
 	         * @type {number}
 	         */
-	        textLineWidth: 0,
+	        textStrokeWidth: 0,
 
 	        /**
 	         * @type {number}
@@ -9846,597 +9866,16 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	
-
-	    var textContain = __webpack_require__(8);
-	    var util = __webpack_require__(4);
-	    var roundRectHelper = __webpack_require__(26);
-	    var imageHelper = __webpack_require__(12);
-
-	    var retrieve3 = util.retrieve3;
-	    var retrieve2 = util.retrieve2;
-
-	    // TODO: Have not support 'start', 'end' yet.
-	    var VALID_TEXT_ALIGN = {left: 1, right: 1, center: 1};
-	    var VALID_TEXT_VERTICAL_ALIGN = {top: 1, bottom: 1, middle: 1};
-
-	    var helper = {};
-
-	    /**
-	     * @param {module:zrender/graphic/Style} style
-	     * @return {module:zrender/graphic/Style} The input style.
-	     */
-	    helper.normalizeTextStyle = function (style) {
-	        normalizeStyle(style);
-	        util.each(style.rich, normalizeStyle);
-	        return style;
-	    };
-
-	    function normalizeStyle(style) {
-	        if (style) {
-
-	            style.font = textContain.makeFont(style);
-
-	            var textAlign = style.textAlign;
-	            textAlign === 'middle' && (textAlign = 'center');
-	            style.textAlign = (
-	                textAlign == null || VALID_TEXT_ALIGN[textAlign]
-	            ) ? textAlign : 'left';
-
-	            // Compatible with textBaseline.
-	            var textVerticalAlign = style.textVerticalAlign || style.textBaseline;
-	            textVerticalAlign === 'center' && (textVerticalAlign = 'middle');
-	            style.textVerticalAlign = (
-	                textVerticalAlign == null || VALID_TEXT_VERTICAL_ALIGN[textVerticalAlign]
-	            ) ? textVerticalAlign : 'top';
-
-	            var textPadding = style.textPadding;
-	            if (textPadding) {
-	                style.textPadding = util.normalizeCssArray(style.textPadding);
-	            }
-	        }
-	    }
-
-	    /**
-	     * @param {CanvasRenderingContext2D} ctx
-	     * @param {string} text
-	     * @param {module:zrender/graphic/Style} style
-	     * @param {Object|boolean} [rect] {x, y, width, height}
-	     *                  If set false, rect text is not used.
-	     */
-	    helper.renderText = function (hostEl, ctx, text, style, rect) {
-	        style.rich
-	            ? renderRichText(hostEl, ctx, text, style, rect)
-	            : renderPlainText(hostEl, ctx, text, style, rect);
-	    };
-
-	    function renderPlainText(hostEl, ctx, text, style, rect) {
-	        var font = setCtx(ctx, 'font', style.font || textContain.DEFAULT_FONT);
-
-	        var textPadding = style.textPadding;
-
-	        var contentBlock = hostEl.__textCotentBlock;
-	        if (!contentBlock || hostEl.__dirty) {
-	            contentBlock = hostEl.__textCotentBlock = textContain.parsePlainText(
-	                text, font, textPadding, style.truncate
-	            );
-	        }
-
-	        var outerHeight = contentBlock.outerHeight;
-
-	        var textLines = contentBlock.lines;
-	        var lineHeight = contentBlock.lineHeight;
-
-	        var boxPos = getBoxPosition(outerHeight, style, rect);
-	        var baseX = boxPos.baseX;
-	        var baseY = boxPos.baseY;
-	        var textAlign = boxPos.textAlign;
-	        var textVerticalAlign = boxPos.textVerticalAlign;
-
-	        // Origin of textRotation should be the base point of text drawing.
-	        applyTextRotation(ctx, style, rect, baseX, baseY);
-
-	        var boxY = textContain.adjustTextY(baseY, outerHeight, textVerticalAlign);
-	        var textX = baseX;
-	        var textY = boxY;
-
-	        var needDrawBg = needDrawBackground(style);
-	        if (needDrawBg || textPadding) {
-	            // Consider performance, do not call getTextWidth util necessary.
-	            var textWidth = textContain.getWidth(text, font);
-	            var outerWidth = textWidth;
-	            textPadding && (outerWidth += textPadding[1] + textPadding[3]);
-	            var boxX = textContain.adjustTextX(baseX, outerWidth, textAlign);
-
-	            needDrawBg && drawBackground(hostEl, ctx, style, boxX, boxY, outerWidth, outerHeight);
-
-	            if (textPadding) {
-	                textX = getTextXForPadding(baseX, textAlign, textPadding);
-	                textY += textPadding[0];
-	            }
-	        }
-
-	        setCtx(ctx, 'textAlign', textAlign || 'left');
-	        // Force baseline to be "middle". Otherwise, if using "top", the
-	        // text will offset downward a little bit in font "Microsoft YaHei".
-	        setCtx(ctx, 'textBaseline', 'middle');
-
-	        // Always set shadowBlur and shadowOffset to avoid leak from displayable.
-	        setCtx(ctx, 'shadowBlur', style.textShadowBlur || 0);
-	        setCtx(ctx, 'shadowColor', style.textShadowColor || 'transparent');
-	        setCtx(ctx, 'shadowOffsetX', style.textShadowOffsetX || 0);
-	        setCtx(ctx, 'shadowOffsetY', style.textShadowOffsetY || 0);
-
-	        // `textBaseline` is set as 'middle'.
-	        textY += lineHeight / 2;
-
-	        var textLineWidth = style.textLineWidth;
-	        var textStroke = getStroke(style.textStroke, textLineWidth);
-	        var textFill = getFill(style.textFill);
-
-	        if (textStroke) {
-	            setCtx(ctx, 'lineWidth', textLineWidth);
-	            setCtx(ctx, 'strokeStyle', textStroke);
-	        }
-	        if (textFill) {
-	            setCtx(ctx, 'fillStyle', textFill);
-	        }
-
-	        for (var i = 0; i < textLines.length; i++) {
-	            // Fill after stroke so the outline will not cover the main part.
-	            textStroke && ctx.strokeText(textLines[i], textX, textY);
-	            textFill && ctx.fillText(textLines[i], textX, textY);
-	            textY += lineHeight;
-	        }
-	    }
-
-	    function renderRichText(hostEl, ctx, text, style, rect) {
-	        var contentBlock = hostEl.__textCotentBlock;
-
-	        if (!contentBlock || hostEl.__dirty) {
-	            contentBlock = hostEl.__textCotentBlock = textContain.parseRichText(text, style);
-	        }
-
-	        drawRichText(hostEl, ctx, contentBlock, style, rect);
-	    }
-
-	    function drawRichText(hostEl, ctx, contentBlock, style, rect) {
-	        var contentWidth = contentBlock.width;
-	        var outerWidth = contentBlock.outerWidth;
-	        var outerHeight = contentBlock.outerHeight;
-	        var textPadding = style.textPadding;
-
-	        var boxPos = getBoxPosition(outerHeight, style, rect);
-	        var baseX = boxPos.baseX;
-	        var baseY = boxPos.baseY;
-	        var textAlign = boxPos.textAlign;
-	        var textVerticalAlign = boxPos.textVerticalAlign;
-
-	        // Origin of textRotation should be the base point of text drawing.
-	        applyTextRotation(ctx, style, rect, baseX, baseY);
-
-	        var boxX = textContain.adjustTextX(baseX, outerWidth, textAlign);
-	        var boxY = textContain.adjustTextY(baseY, outerHeight, textVerticalAlign);
-	        var xLeft = boxX;
-	        var lineTop = boxY;
-	        if (textPadding) {
-	            xLeft += textPadding[3];
-	            lineTop += textPadding[0];
-	        }
-	        var xRight = xLeft + contentWidth;
-
-	        needDrawBackground(style) && drawBackground(
-	            hostEl, ctx, style, boxX, boxY, outerWidth, outerHeight
-	        );
-
-	        for (var i = 0; i < contentBlock.lines.length; i++) {
-	            var line = contentBlock.lines[i];
-	            var tokens = line.tokens;
-	            var tokenCount = tokens.length;
-	            var lineHeight = line.lineHeight;
-	            var usedWidth = line.width;
-
-	            var leftIndex = 0;
-	            var lineXLeft = xLeft;
-	            var lineXRight = xRight;
-	            var rightIndex = tokenCount - 1;
-	            var token;
-
-	            while (
-	                leftIndex < tokenCount
-	                && (token = tokens[leftIndex], !token.textAlign || token.textAlign === 'left')
-	            ) {
-	                placeToken(hostEl, ctx, token, style, lineHeight, lineTop, lineXLeft, 'left');
-	                usedWidth -= token.width;
-	                lineXLeft += token.width;
-	                leftIndex++;
-	            }
-
-	            while (
-	                rightIndex >= 0
-	                && (token = tokens[rightIndex], token.textAlign === 'right')
-	            ) {
-	                placeToken(hostEl, ctx, token, style, lineHeight, lineTop, lineXRight, 'right');
-	                usedWidth -= token.width;
-	                lineXRight -= token.width;
-	                rightIndex--;
-	            }
-
-	            // The other tokens are placed as textAlign 'center' if there is enough space.
-	            lineXLeft += (contentWidth - (lineXLeft - xLeft) - (xRight - lineXRight) - usedWidth) / 2;
-	            while (leftIndex <= rightIndex) {
-	                token = tokens[leftIndex];
-	                // Consider width specified by user, use 'center' rather than 'left'.
-	                placeToken(hostEl, ctx, token, style, lineHeight, lineTop, lineXLeft + token.width / 2, 'center');
-	                lineXLeft += token.width;
-	                leftIndex++;
-	            }
-
-	            lineTop += lineHeight;
-	        }
-	    }
-
-	    function applyTextRotation(ctx, style, rect, x, y) {
-	        // textRotation only apply in RectText.
-	        if (rect && style.textRotation) {
-	            var origin = style.textOrigin;
-	            if (origin === 'center') {
-	                x = rect.width / 2 + rect.x;
-	                y = rect.height / 2 + rect.y;
-	            }
-	            else if (origin) {
-	                x = origin[0] + rect.x;
-	                y = origin[1] + rect.y;
-	            }
-
-	            ctx.translate(x, y);
-	            // Positive: anticlockwise
-	            ctx.rotate(-style.textRotation);
-	            ctx.translate(-x, -y);
-	        }
-	    }
-
-	    function placeToken(hostEl, ctx, token, style, lineHeight, lineTop, x, textAlign) {
-	        var tokenStyle = style.rich[token.styleName] || {};
-
-	        // 'ctx.textBaseline' is always set as 'middle', for sake of
-	        // the bias of "Microsoft YaHei".
-	        var textVerticalAlign = token.textVerticalAlign;
-	        var y = lineTop + lineHeight / 2;
-	        if (textVerticalAlign === 'top') {
-	            y = lineTop + token.height / 2;
-	        }
-	        else if (textVerticalAlign === 'bottom') {
-	            y = lineTop + lineHeight - token.height / 2;
-	        }
-
-	        !token.isLineHolder && needDrawBackground(tokenStyle) && drawBackground(
-	            hostEl,
-	            ctx,
-	            tokenStyle,
-	            textAlign === 'right'
-	                ? x - token.width
-	                : textAlign === 'center'
-	                ? x - token.width / 2
-	                : x,
-	            y - token.height / 2,
-	            token.width,
-	            token.height
-	        );
-
-	        var textPadding = token.textPadding;
-	        if (textPadding) {
-	            x = getTextXForPadding(x, textAlign, textPadding);
-	            y -= token.height / 2 - textPadding[2] - token.textHeight / 2;
-	        }
-
-	        setCtx(ctx, 'shadowBlur', retrieve3(tokenStyle.textShadowBlur, style.textShadowBlur, 0));
-	        setCtx(ctx, 'shadowColor', tokenStyle.textShadowColor || style.textShadowColor || 'transparent');
-	        setCtx(ctx, 'shadowOffsetX', retrieve3(tokenStyle.textShadowOffsetX, style.textShadowOffsetX, 0));
-	        setCtx(ctx, 'shadowOffsetY', retrieve3(tokenStyle.textShadowOffsetY, style.textShadowOffsetY, 0));
-
-	        setCtx(ctx, 'textAlign', textAlign);
-	        // Force baseline to be "middle". Otherwise, if using "top", the
-	        // text will offset downward a little bit in font "Microsoft YaHei".
-	        setCtx(ctx, 'textBaseline', 'middle');
-
-	        setCtx(ctx, 'font', token.font || textContain.DEFAULT_FONT);
-
-	        var textStroke = getStroke(tokenStyle.textStroke || style.textStroke, textLineWidth);
-	        var textFill = getFill(tokenStyle.textFill || style.textFill);
-	        var textLineWidth = retrieve2(tokenStyle.textLineWidth, style.textLineWidth);
-
-	        // Fill after stroke so the outline will not cover the main part.
-	        if (textStroke) {
-	            setCtx(ctx, 'lineWidth', textLineWidth);
-	            setCtx(ctx, 'strokeStyle', textStroke);
-	            ctx.strokeText(token.text, x, y);
-	        }
-	        if (textFill) {
-	            setCtx(ctx, 'fillStyle', textFill);
-	            ctx.fillText(token.text, x, y);
-	        }
-	    }
-
-	    function needDrawBackground(style) {
-	        return style.textBackgroundColor
-	            || (style.textBorderWidth && style.textBorderColor);
-	    }
-
-	    // style: {textBackgroundColor, textBorderWidth, textBorderColor, textBorderRadius}
-	    // shape: {x, y, width, height}
-	    function drawBackground(hostEl, ctx, style, x, y, width, height) {
-	        var textBackgroundColor = style.textBackgroundColor;
-	        var textBorderWidth = style.textBorderWidth;
-	        var textBorderColor = style.textBorderColor;
-	        var isPlainBg = util.isString(textBackgroundColor);
-
-	        setCtx(ctx, 'shadowBlur', style.textBoxShadowBlur || 0);
-	        setCtx(ctx, 'shadowColor', style.textBoxShadowColor || 'transparent');
-	        setCtx(ctx, 'shadowOffsetX', style.textBoxShadowOffsetX || 0);
-	        setCtx(ctx, 'shadowOffsetY', style.textBoxShadowOffsetY || 0);
-
-	        if (isPlainBg || (textBorderWidth && textBorderColor)) {
-	            ctx.beginPath();
-	            var textBorderRadius = style.textBorderRadius;
-	            if (!textBorderRadius) {
-	                ctx.rect(x, y, width, height);
-	            }
-	            else {
-	                roundRectHelper.buildPath(ctx, {
-	                    x: x, y: y, width: width, height: height, r: textBorderRadius
-	                });
-	            }
-	            ctx.closePath();
-	        }
-
-	        if (isPlainBg) {
-	            setCtx(ctx, 'fillStyle', textBackgroundColor);
-	            ctx.fill();
-	        }
-	        else if (util.isObject(textBackgroundColor)) {
-	            var image = textBackgroundColor.image;
-
-	            image = imageHelper.createOrUpdateImage(
-	                image, null, hostEl, onBgImageLoaded, textBackgroundColor
-	            );
-	            if (image && imageHelper.isImageReady(image)) {
-	                ctx.drawImage(image, x, y, width, height);
-	            }
-	        }
-
-	        if (textBorderWidth && textBorderColor) {
-	            setCtx(ctx, 'lineWidth', textBorderWidth);
-	            setCtx(ctx, 'strokeStyle', textBorderColor);
-	            ctx.stroke();
-	        }
-	    }
-
-	    function onBgImageLoaded(image, textBackgroundColor) {
-	        // Replace image, so that `contain/text.js#parseRichText`
-	        // will get correct result in next tick.
-	        textBackgroundColor.image = image;
-	    }
-
-	    function getBoxPosition(blockHeiht, style, rect) {
-	        var baseX = style.x || 0;
-	        var baseY = style.y || 0;
-	        var textAlign = style.textAlign;
-	        var textVerticalAlign = style.textVerticalAlign;
-
-	        // Text position represented by coord
-	        if (rect) {
-	            var textPosition = style.textPosition;
-	            if (textPosition instanceof Array) {
-	                // Percent
-	                baseX = rect.x + parsePercent(textPosition[0], rect.width);
-	                baseY = rect.y + parsePercent(textPosition[1], rect.height);
-	            }
-	            else {
-	                var res = textContain.adjustTextPositionOnRect(
-	                    textPosition, rect, style.textDistance
-	                );
-	                baseX = res.x;
-	                baseY = res.y;
-	                // Default align and baseline when has textPosition
-	                textAlign = textAlign || res.textAlign;
-	                textVerticalAlign = textVerticalAlign || res.textVerticalAlign;
-	            }
-
-	            // textOffset is only support in RectText, otherwise
-	            // we have to adjust boundingRect for textOffset.
-	            var textOffset = style.textOffset;
-	            if (textOffset) {
-	                baseX += textOffset[0];
-	                baseY += textOffset[1];
-	            }
-	        }
-
-	        return {
-	            baseX: baseX,
-	            baseY: baseY,
-	            textAlign: textAlign,
-	            textVerticalAlign: textVerticalAlign
-	        };
-	    }
-
-	    function setCtx(ctx, prop, value) {
-	        // FIXME ??? performance try
-	        // if (ctx.__currentValues[prop] !== value) {
-	            ctx[prop] = ctx.__currentValues[prop] = value;
-	        // }
-	        return ctx[prop];
-	    }
-
-	    /**
-	     * @param {string} [stroke] If specified, do not check style.textStroke.
-	     * @param {string} [lineWidth] If specified, do not check style.textStroke.
-	     * @param {number} style
-	     */
-	    var getStroke = helper.getStroke = function (stroke, lineWidth) {
-	        return (stroke == null || lineWidth <= 0 || stroke === 'transparent' || stroke === 'none')
-	            ? null
-	            // TODO pattern and gradient?
-	            : (stroke.image || stroke.colorStops)
-	            ? '#000'
-	            : stroke;
-	    };
-
-	    var getFill = helper.getFill = function (fill) {
-	        return (fill == null || fill === 'none')
-	            ? null
-	            // TODO pattern and gradient?
-	            : (fill.image || fill.colorStops)
-	            ? '#000'
-	            : fill;
-	    };
-
-	    function parsePercent(value, maxValue) {
-	        if (typeof value === 'string') {
-	            if (value.lastIndexOf('%') >= 0) {
-	                return parseFloat(value) / 100 * maxValue;
-	            }
-	            return parseFloat(value);
-	        }
-	        return value;
-	    }
-
-	    function getTextXForPadding(x, textAlign, textPadding) {
-	        return textAlign === 'right'
-	            ? (x - textPadding[1])
-	            : textAlign === 'center'
-	            ? (x + textPadding[3] / 2 - textPadding[1] / 2)
-	            : (x + textPadding[3]);
-	    }
-
-	    /**
-	     * @param {string} text
-	     * @param {module:zrender/Style} style
-	     * @return {boolean}
-	     */
-	    helper.needDrawText = function (text, style) {
-	        return text != null
-	            && (text
-	                || style.textBackgroundColor
-	                || (style.textBorderWidth && style.textBorderColor)
-	                || style.textPadding
-	            );
-	    };
-
-	    module.exports = helper;
-
-
-
-
-/***/ }),
-/* 26 */
-/***/ (function(module, exports) {
-
-	
-
-	    module.exports = {
-	        buildPath: function (ctx, shape) {
-	            var x = shape.x;
-	            var y = shape.y;
-	            var width = shape.width;
-	            var height = shape.height;
-	            var r = shape.r;
-	            var r1;
-	            var r2;
-	            var r3;
-	            var r4;
-
-	            // Convert width and height to positive for better borderRadius
-	            if (width < 0) {
-	                x = x + width;
-	                width = -width;
-	            }
-	            if (height < 0) {
-	                y = y + height;
-	                height = -height;
-	            }
-
-	            if (typeof r === 'number') {
-	                r1 = r2 = r3 = r4 = r;
-	            }
-	            else if (r instanceof Array) {
-	                if (r.length === 1) {
-	                    r1 = r2 = r3 = r4 = r[0];
-	                }
-	                else if (r.length === 2) {
-	                    r1 = r3 = r[0];
-	                    r2 = r4 = r[1];
-	                }
-	                else if (r.length === 3) {
-	                    r1 = r[0];
-	                    r2 = r4 = r[1];
-	                    r3 = r[2];
-	                }
-	                else {
-	                    r1 = r[0];
-	                    r2 = r[1];
-	                    r3 = r[2];
-	                    r4 = r[3];
-	                }
-	            }
-	            else {
-	                r1 = r2 = r3 = r4 = 0;
-	            }
-
-	            var total;
-	            if (r1 + r2 > width) {
-	                total = r1 + r2;
-	                r1 *= width / total;
-	                r2 *= width / total;
-	            }
-	            if (r3 + r4 > width) {
-	                total = r3 + r4;
-	                r3 *= width / total;
-	                r4 *= width / total;
-	            }
-	            if (r2 + r3 > height) {
-	                total = r2 + r3;
-	                r2 *= height / total;
-	                r3 *= height / total;
-	            }
-	            if (r1 + r4 > height) {
-	                total = r1 + r4;
-	                r1 *= height / total;
-	                r4 *= height / total;
-	            }
-	            ctx.moveTo(x + r1, y);
-	            ctx.lineTo(x + width - r2, y);
-	            r2 !== 0 && ctx.quadraticCurveTo(
-	                x + width, y, x + width, y + r2
-	            );
-	            ctx.lineTo(x + width, y + height - r3);
-	            r3 !== 0 && ctx.quadraticCurveTo(
-	                x + width, y + height, x + width - r3, y + height
-	            );
-	            ctx.lineTo(x + r4, y + height);
-	            r4 !== 0 && ctx.quadraticCurveTo(
-	                x, y + height, x, y + height - r4
-	            );
-	            ctx.lineTo(x, y + r1);
-	            r1 !== 0 && ctx.quadraticCurveTo(x, y, x + r1, y);
-	        }
-	    };
-
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports, __webpack_require__) {
-
 	'use strict';
 	/**
 	 * @module zrender/Element
 	 */
 
 
-	    var guid = __webpack_require__(28);
-	    var Eventful = __webpack_require__(29);
-	    var Transformable = __webpack_require__(30);
-	    var Animatable = __webpack_require__(31);
+	    var guid = __webpack_require__(26);
+	    var Eventful = __webpack_require__(27);
+	    var Transformable = __webpack_require__(28);
+	    var Animatable = __webpack_require__(29);
 	    var zrUtil = __webpack_require__(4);
 
 	    /**
@@ -10692,7 +10131,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 28 */
+/* 26 */
 /***/ (function(module, exports) {
 
 	/**
@@ -10711,7 +10150,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 29 */
+/* 27 */
 /***/ (function(module, exports) {
 
 	/**
@@ -11019,7 +10458,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 30 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11287,7 +10726,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 31 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11296,12 +10735,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 
-	    var Animator = __webpack_require__(32);
+	    var Animator = __webpack_require__(30);
 	    var util = __webpack_require__(4);
 	    var isString = util.isString;
 	    var isFunction = util.isFunction;
 	    var isObject = util.isObject;
-	    var log = __webpack_require__(36);
+	    var log = __webpack_require__(34);
 
 	    /**
 	     * @alias modue:zrender/mixin/Animatable
@@ -11566,7 +11005,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 32 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -11574,8 +11013,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 
-	    var Clip = __webpack_require__(33);
-	    var color = __webpack_require__(35);
+	    var Clip = __webpack_require__(31);
+	    var color = __webpack_require__(33);
 	    var util = __webpack_require__(4);
 	    var isArrayLike = util.isArrayLike;
 
@@ -12226,7 +11665,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 33 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -12245,7 +11684,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 
-	    var easingFuncs = __webpack_require__(34);
+	    var easingFuncs = __webpack_require__(32);
 
 	    function Clip(options) {
 
@@ -12355,7 +11794,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 34 */
+/* 32 */
 /***/ (function(module, exports) {
 
 	/**
@@ -12706,7 +12145,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 35 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -12841,7 +12280,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return m1;
 	    }
 
-	    function lerp(a, b, p) {
+	    function lerpNumber(a, b, p) {
 	        return a + (b - a) * p;
 	    }
 
@@ -13107,13 +12546,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    /**
-	     * Map value to color. Faster than mapToColor methods because color is represented by rgba array.
+	     * Map value to color. Faster than lerp methods because color is represented by rgba array.
 	     * @param {number} normalizedValue A float between 0 and 1.
 	     * @param {Array.<Array.<number>>} colors List of rgba color array
 	     * @param {Array.<number>} [out] Mapped gba color array
 	     * @return {Array.<number>} will be null/undefined if input illegal.
 	     */
-	    function fastMapToColor(normalizedValue, colors, out) {
+	    function fastLerp(normalizedValue, colors, out) {
 	        if (!(colors && colors.length)
 	            || !(normalizedValue >= 0 && normalizedValue <= 1)
 	        ) {
@@ -13128,13 +12567,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var leftColor = colors[leftIndex];
 	        var rightColor = colors[rightIndex];
 	        var dv = value - leftIndex;
-	        out[0] = clampCssByte(lerp(leftColor[0], rightColor[0], dv));
-	        out[1] = clampCssByte(lerp(leftColor[1], rightColor[1], dv));
-	        out[2] = clampCssByte(lerp(leftColor[2], rightColor[2], dv));
-	        out[3] = clampCssFloat(lerp(leftColor[3], rightColor[3], dv));
+	        out[0] = clampCssByte(lerpNumber(leftColor[0], rightColor[0], dv));
+	        out[1] = clampCssByte(lerpNumber(leftColor[1], rightColor[1], dv));
+	        out[2] = clampCssByte(lerpNumber(leftColor[2], rightColor[2], dv));
+	        out[3] = clampCssFloat(lerpNumber(leftColor[3], rightColor[3], dv));
 
 	        return out;
 	    }
+
 	    /**
 	     * @param {number} normalizedValue A float between 0 and 1.
 	     * @param {Array.<string>} colors Color list.
@@ -13143,7 +12583,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *                           return {color: ..., leftIndex: ..., rightIndex: ..., value: ...},
 	     * @memberOf module:zrender/util/color
 	     */
-	    function mapToColor(normalizedValue, colors, fullOutput) {
+	    function lerp(normalizedValue, colors, fullOutput) {
 	        if (!(colors && colors.length)
 	            || !(normalizedValue >= 0 && normalizedValue <= 1)
 	        ) {
@@ -13159,10 +12599,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var color = stringify(
 	            [
-	                clampCssByte(lerp(leftColor[0], rightColor[0], dv)),
-	                clampCssByte(lerp(leftColor[1], rightColor[1], dv)),
-	                clampCssByte(lerp(leftColor[2], rightColor[2], dv)),
-	                clampCssFloat(lerp(leftColor[3], rightColor[3], dv))
+	                clampCssByte(lerpNumber(leftColor[0], rightColor[0], dv)),
+	                clampCssByte(lerpNumber(leftColor[1], rightColor[1], dv)),
+	                clampCssByte(lerpNumber(leftColor[2], rightColor[2], dv)),
+	                clampCssFloat(lerpNumber(leftColor[3], rightColor[3], dv))
 	            ],
 	            'rgba'
 	        );
@@ -13233,8 +12673,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        parse: parse,
 	        lift: lift,
 	        toHex: toHex,
-	        fastMapToColor: fastMapToColor,
-	        mapToColor: mapToColor,
+	        fastLerp: fastLerp,
+	        fastMapToColor: fastLerp, // Deprecated
+	        lerp: lerp,
+	        mapToColor: lerp, // Deprecated
 	        modifyHSL: modifyHSL,
 	        modifyAlpha: modifyAlpha,
 	        stringify: stringify
@@ -13244,11 +12686,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 36 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
-	        var config = __webpack_require__(37);
+	        var config = __webpack_require__(35);
 
 	        /**
 	         * @exports zrender/tool/log
@@ -13282,7 +12724,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 37 */
+/* 35 */
 /***/ (function(module, exports) {
 
 	
@@ -13314,7 +12756,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 38 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -13324,7 +12766,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 
-	    var textHelper = __webpack_require__(25);
+	    var textHelper = __webpack_require__(37);
 	    var BoundingRect = __webpack_require__(9);
 
 	    var tmpRect = new BoundingRect();
@@ -13384,6 +12826,588 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	
+
+	    var textContain = __webpack_require__(8);
+	    var util = __webpack_require__(4);
+	    var roundRectHelper = __webpack_require__(38);
+	    var imageHelper = __webpack_require__(12);
+
+	    var retrieve3 = util.retrieve3;
+	    var retrieve2 = util.retrieve2;
+
+	    // TODO: Have not support 'start', 'end' yet.
+	    var VALID_TEXT_ALIGN = {left: 1, right: 1, center: 1};
+	    var VALID_TEXT_VERTICAL_ALIGN = {top: 1, bottom: 1, middle: 1};
+
+	    var helper = {};
+
+	    /**
+	     * @param {module:zrender/graphic/Style} style
+	     * @return {module:zrender/graphic/Style} The input style.
+	     */
+	    helper.normalizeTextStyle = function (style) {
+	        normalizeStyle(style);
+	        util.each(style.rich, normalizeStyle);
+	        return style;
+	    };
+
+	    function normalizeStyle(style) {
+	        if (style) {
+
+	            style.font = textContain.makeFont(style);
+
+	            var textAlign = style.textAlign;
+	            textAlign === 'middle' && (textAlign = 'center');
+	            style.textAlign = (
+	                textAlign == null || VALID_TEXT_ALIGN[textAlign]
+	            ) ? textAlign : 'left';
+
+	            // Compatible with textBaseline.
+	            var textVerticalAlign = style.textVerticalAlign || style.textBaseline;
+	            textVerticalAlign === 'center' && (textVerticalAlign = 'middle');
+	            style.textVerticalAlign = (
+	                textVerticalAlign == null || VALID_TEXT_VERTICAL_ALIGN[textVerticalAlign]
+	            ) ? textVerticalAlign : 'top';
+
+	            var textPadding = style.textPadding;
+	            if (textPadding) {
+	                style.textPadding = util.normalizeCssArray(style.textPadding);
+	            }
+	        }
+	    }
+
+	    /**
+	     * @param {CanvasRenderingContext2D} ctx
+	     * @param {string} text
+	     * @param {module:zrender/graphic/Style} style
+	     * @param {Object|boolean} [rect] {x, y, width, height}
+	     *                  If set false, rect text is not used.
+	     */
+	    helper.renderText = function (hostEl, ctx, text, style, rect) {
+	        style.rich
+	            ? renderRichText(hostEl, ctx, text, style, rect)
+	            : renderPlainText(hostEl, ctx, text, style, rect);
+	    };
+
+	    function renderPlainText(hostEl, ctx, text, style, rect) {
+	        var font = setCtx(ctx, 'font', style.font || textContain.DEFAULT_FONT);
+
+	        var textPadding = style.textPadding;
+
+	        var contentBlock = hostEl.__textCotentBlock;
+	        if (!contentBlock || hostEl.__dirty) {
+	            contentBlock = hostEl.__textCotentBlock = textContain.parsePlainText(
+	                text, font, textPadding, style.truncate
+	            );
+	        }
+
+	        var outerHeight = contentBlock.outerHeight;
+
+	        var textLines = contentBlock.lines;
+	        var lineHeight = contentBlock.lineHeight;
+
+	        var boxPos = getBoxPosition(outerHeight, style, rect);
+	        var baseX = boxPos.baseX;
+	        var baseY = boxPos.baseY;
+	        var textAlign = boxPos.textAlign;
+	        var textVerticalAlign = boxPos.textVerticalAlign;
+
+	        // Origin of textRotation should be the base point of text drawing.
+	        applyTextRotation(ctx, style, rect, baseX, baseY);
+
+	        var boxY = textContain.adjustTextY(baseY, outerHeight, textVerticalAlign);
+	        var textX = baseX;
+	        var textY = boxY;
+
+	        var needDrawBg = needDrawBackground(style);
+	        if (needDrawBg || textPadding) {
+	            // Consider performance, do not call getTextWidth util necessary.
+	            var textWidth = textContain.getWidth(text, font);
+	            var outerWidth = textWidth;
+	            textPadding && (outerWidth += textPadding[1] + textPadding[3]);
+	            var boxX = textContain.adjustTextX(baseX, outerWidth, textAlign);
+
+	            needDrawBg && drawBackground(hostEl, ctx, style, boxX, boxY, outerWidth, outerHeight);
+
+	            if (textPadding) {
+	                textX = getTextXForPadding(baseX, textAlign, textPadding);
+	                textY += textPadding[0];
+	            }
+	        }
+
+	        setCtx(ctx, 'textAlign', textAlign || 'left');
+	        // Force baseline to be "middle". Otherwise, if using "top", the
+	        // text will offset downward a little bit in font "Microsoft YaHei".
+	        setCtx(ctx, 'textBaseline', 'middle');
+
+	        // Always set shadowBlur and shadowOffset to avoid leak from displayable.
+	        setCtx(ctx, 'shadowBlur', style.textShadowBlur || 0);
+	        setCtx(ctx, 'shadowColor', style.textShadowColor || 'transparent');
+	        setCtx(ctx, 'shadowOffsetX', style.textShadowOffsetX || 0);
+	        setCtx(ctx, 'shadowOffsetY', style.textShadowOffsetY || 0);
+
+	        // `textBaseline` is set as 'middle'.
+	        textY += lineHeight / 2;
+
+	        var textStrokeWidth = style.textStrokeWidth;
+	        var textStroke = getStroke(style.textStroke, textStrokeWidth);
+	        var textFill = getFill(style.textFill);
+
+	        if (textStroke) {
+	            setCtx(ctx, 'lineWidth', textStrokeWidth);
+	            setCtx(ctx, 'strokeStyle', textStroke);
+	        }
+	        if (textFill) {
+	            setCtx(ctx, 'fillStyle', textFill);
+	        }
+
+	        for (var i = 0; i < textLines.length; i++) {
+	            // Fill after stroke so the outline will not cover the main part.
+	            textStroke && ctx.strokeText(textLines[i], textX, textY);
+	            textFill && ctx.fillText(textLines[i], textX, textY);
+	            textY += lineHeight;
+	        }
+	    }
+
+	    function renderRichText(hostEl, ctx, text, style, rect) {
+	        var contentBlock = hostEl.__textCotentBlock;
+
+	        if (!contentBlock || hostEl.__dirty) {
+	            contentBlock = hostEl.__textCotentBlock = textContain.parseRichText(text, style);
+	        }
+
+	        drawRichText(hostEl, ctx, contentBlock, style, rect);
+	    }
+
+	    function drawRichText(hostEl, ctx, contentBlock, style, rect) {
+	        var contentWidth = contentBlock.width;
+	        var outerWidth = contentBlock.outerWidth;
+	        var outerHeight = contentBlock.outerHeight;
+	        var textPadding = style.textPadding;
+
+	        var boxPos = getBoxPosition(outerHeight, style, rect);
+	        var baseX = boxPos.baseX;
+	        var baseY = boxPos.baseY;
+	        var textAlign = boxPos.textAlign;
+	        var textVerticalAlign = boxPos.textVerticalAlign;
+
+	        // Origin of textRotation should be the base point of text drawing.
+	        applyTextRotation(ctx, style, rect, baseX, baseY);
+
+	        var boxX = textContain.adjustTextX(baseX, outerWidth, textAlign);
+	        var boxY = textContain.adjustTextY(baseY, outerHeight, textVerticalAlign);
+	        var xLeft = boxX;
+	        var lineTop = boxY;
+	        if (textPadding) {
+	            xLeft += textPadding[3];
+	            lineTop += textPadding[0];
+	        }
+	        var xRight = xLeft + contentWidth;
+
+	        needDrawBackground(style) && drawBackground(
+	            hostEl, ctx, style, boxX, boxY, outerWidth, outerHeight
+	        );
+
+	        for (var i = 0; i < contentBlock.lines.length; i++) {
+	            var line = contentBlock.lines[i];
+	            var tokens = line.tokens;
+	            var tokenCount = tokens.length;
+	            var lineHeight = line.lineHeight;
+	            var usedWidth = line.width;
+
+	            var leftIndex = 0;
+	            var lineXLeft = xLeft;
+	            var lineXRight = xRight;
+	            var rightIndex = tokenCount - 1;
+	            var token;
+
+	            while (
+	                leftIndex < tokenCount
+	                && (token = tokens[leftIndex], !token.textAlign || token.textAlign === 'left')
+	            ) {
+	                placeToken(hostEl, ctx, token, style, lineHeight, lineTop, lineXLeft, 'left');
+	                usedWidth -= token.width;
+	                lineXLeft += token.width;
+	                leftIndex++;
+	            }
+
+	            while (
+	                rightIndex >= 0
+	                && (token = tokens[rightIndex], token.textAlign === 'right')
+	            ) {
+	                placeToken(hostEl, ctx, token, style, lineHeight, lineTop, lineXRight, 'right');
+	                usedWidth -= token.width;
+	                lineXRight -= token.width;
+	                rightIndex--;
+	            }
+
+	            // The other tokens are placed as textAlign 'center' if there is enough space.
+	            lineXLeft += (contentWidth - (lineXLeft - xLeft) - (xRight - lineXRight) - usedWidth) / 2;
+	            while (leftIndex <= rightIndex) {
+	                token = tokens[leftIndex];
+	                // Consider width specified by user, use 'center' rather than 'left'.
+	                placeToken(hostEl, ctx, token, style, lineHeight, lineTop, lineXLeft + token.width / 2, 'center');
+	                lineXLeft += token.width;
+	                leftIndex++;
+	            }
+
+	            lineTop += lineHeight;
+	        }
+	    }
+
+	    function applyTextRotation(ctx, style, rect, x, y) {
+	        // textRotation only apply in RectText.
+	        if (rect && style.textRotation) {
+	            var origin = style.textOrigin;
+	            if (origin === 'center') {
+	                x = rect.width / 2 + rect.x;
+	                y = rect.height / 2 + rect.y;
+	            }
+	            else if (origin) {
+	                x = origin[0] + rect.x;
+	                y = origin[1] + rect.y;
+	            }
+
+	            ctx.translate(x, y);
+	            // Positive: anticlockwise
+	            ctx.rotate(-style.textRotation);
+	            ctx.translate(-x, -y);
+	        }
+	    }
+
+	    function placeToken(hostEl, ctx, token, style, lineHeight, lineTop, x, textAlign) {
+	        var tokenStyle = style.rich[token.styleName] || {};
+
+	        // 'ctx.textBaseline' is always set as 'middle', for sake of
+	        // the bias of "Microsoft YaHei".
+	        var textVerticalAlign = token.textVerticalAlign;
+	        var y = lineTop + lineHeight / 2;
+	        if (textVerticalAlign === 'top') {
+	            y = lineTop + token.height / 2;
+	        }
+	        else if (textVerticalAlign === 'bottom') {
+	            y = lineTop + lineHeight - token.height / 2;
+	        }
+
+	        !token.isLineHolder && needDrawBackground(tokenStyle) && drawBackground(
+	            hostEl,
+	            ctx,
+	            tokenStyle,
+	            textAlign === 'right'
+	                ? x - token.width
+	                : textAlign === 'center'
+	                ? x - token.width / 2
+	                : x,
+	            y - token.height / 2,
+	            token.width,
+	            token.height
+	        );
+
+	        var textPadding = token.textPadding;
+	        if (textPadding) {
+	            x = getTextXForPadding(x, textAlign, textPadding);
+	            y -= token.height / 2 - textPadding[2] - token.textHeight / 2;
+	        }
+
+	        setCtx(ctx, 'shadowBlur', retrieve3(tokenStyle.textShadowBlur, style.textShadowBlur, 0));
+	        setCtx(ctx, 'shadowColor', tokenStyle.textShadowColor || style.textShadowColor || 'transparent');
+	        setCtx(ctx, 'shadowOffsetX', retrieve3(tokenStyle.textShadowOffsetX, style.textShadowOffsetX, 0));
+	        setCtx(ctx, 'shadowOffsetY', retrieve3(tokenStyle.textShadowOffsetY, style.textShadowOffsetY, 0));
+
+	        setCtx(ctx, 'textAlign', textAlign);
+	        // Force baseline to be "middle". Otherwise, if using "top", the
+	        // text will offset downward a little bit in font "Microsoft YaHei".
+	        setCtx(ctx, 'textBaseline', 'middle');
+
+	        setCtx(ctx, 'font', token.font || textContain.DEFAULT_FONT);
+
+	        var textStroke = getStroke(tokenStyle.textStroke || style.textStroke, textStrokeWidth);
+	        var textFill = getFill(tokenStyle.textFill || style.textFill);
+	        var textStrokeWidth = retrieve2(tokenStyle.textStrokeWidth, style.textStrokeWidth);
+
+	        // Fill after stroke so the outline will not cover the main part.
+	        if (textStroke) {
+	            setCtx(ctx, 'lineWidth', textStrokeWidth);
+	            setCtx(ctx, 'strokeStyle', textStroke);
+	            ctx.strokeText(token.text, x, y);
+	        }
+	        if (textFill) {
+	            setCtx(ctx, 'fillStyle', textFill);
+	            ctx.fillText(token.text, x, y);
+	        }
+	    }
+
+	    function needDrawBackground(style) {
+	        return style.textBackgroundColor
+	            || (style.textBorderWidth && style.textBorderColor);
+	    }
+
+	    // style: {textBackgroundColor, textBorderWidth, textBorderColor, textBorderRadius}
+	    // shape: {x, y, width, height}
+	    function drawBackground(hostEl, ctx, style, x, y, width, height) {
+	        var textBackgroundColor = style.textBackgroundColor;
+	        var textBorderWidth = style.textBorderWidth;
+	        var textBorderColor = style.textBorderColor;
+	        var isPlainBg = util.isString(textBackgroundColor);
+
+	        setCtx(ctx, 'shadowBlur', style.textBoxShadowBlur || 0);
+	        setCtx(ctx, 'shadowColor', style.textBoxShadowColor || 'transparent');
+	        setCtx(ctx, 'shadowOffsetX', style.textBoxShadowOffsetX || 0);
+	        setCtx(ctx, 'shadowOffsetY', style.textBoxShadowOffsetY || 0);
+
+	        if (isPlainBg || (textBorderWidth && textBorderColor)) {
+	            ctx.beginPath();
+	            var textBorderRadius = style.textBorderRadius;
+	            if (!textBorderRadius) {
+	                ctx.rect(x, y, width, height);
+	            }
+	            else {
+	                roundRectHelper.buildPath(ctx, {
+	                    x: x, y: y, width: width, height: height, r: textBorderRadius
+	                });
+	            }
+	            ctx.closePath();
+	        }
+
+	        if (isPlainBg) {
+	            setCtx(ctx, 'fillStyle', textBackgroundColor);
+	            ctx.fill();
+	        }
+	        else if (util.isObject(textBackgroundColor)) {
+	            var image = textBackgroundColor.image;
+
+	            image = imageHelper.createOrUpdateImage(
+	                image, null, hostEl, onBgImageLoaded, textBackgroundColor
+	            );
+	            if (image && imageHelper.isImageReady(image)) {
+	                ctx.drawImage(image, x, y, width, height);
+	            }
+	        }
+
+	        if (textBorderWidth && textBorderColor) {
+	            setCtx(ctx, 'lineWidth', textBorderWidth);
+	            setCtx(ctx, 'strokeStyle', textBorderColor);
+	            ctx.stroke();
+	        }
+	    }
+
+	    function onBgImageLoaded(image, textBackgroundColor) {
+	        // Replace image, so that `contain/text.js#parseRichText`
+	        // will get correct result in next tick.
+	        textBackgroundColor.image = image;
+	    }
+
+	    function getBoxPosition(blockHeiht, style, rect) {
+	        var baseX = style.x || 0;
+	        var baseY = style.y || 0;
+	        var textAlign = style.textAlign;
+	        var textVerticalAlign = style.textVerticalAlign;
+
+	        // Text position represented by coord
+	        if (rect) {
+	            var textPosition = style.textPosition;
+	            if (textPosition instanceof Array) {
+	                // Percent
+	                baseX = rect.x + parsePercent(textPosition[0], rect.width);
+	                baseY = rect.y + parsePercent(textPosition[1], rect.height);
+	            }
+	            else {
+	                var res = textContain.adjustTextPositionOnRect(
+	                    textPosition, rect, style.textDistance
+	                );
+	                baseX = res.x;
+	                baseY = res.y;
+	                // Default align and baseline when has textPosition
+	                textAlign = textAlign || res.textAlign;
+	                textVerticalAlign = textVerticalAlign || res.textVerticalAlign;
+	            }
+
+	            // textOffset is only support in RectText, otherwise
+	            // we have to adjust boundingRect for textOffset.
+	            var textOffset = style.textOffset;
+	            if (textOffset) {
+	                baseX += textOffset[0];
+	                baseY += textOffset[1];
+	            }
+	        }
+
+	        return {
+	            baseX: baseX,
+	            baseY: baseY,
+	            textAlign: textAlign,
+	            textVerticalAlign: textVerticalAlign
+	        };
+	    }
+
+	    function setCtx(ctx, prop, value) {
+	        // FIXME ??? performance try
+	        // if (ctx.__currentValues[prop] !== value) {
+	            // ctx[prop] = ctx.__currentValues[prop] = value;
+	        ctx[prop] = value;
+	        // }
+	        return ctx[prop];
+	    }
+
+	    /**
+	     * @param {string} [stroke] If specified, do not check style.textStroke.
+	     * @param {string} [lineWidth] If specified, do not check style.textStroke.
+	     * @param {number} style
+	     */
+	    var getStroke = helper.getStroke = function (stroke, lineWidth) {
+	        return (stroke == null || lineWidth <= 0 || stroke === 'transparent' || stroke === 'none')
+	            ? null
+	            // TODO pattern and gradient?
+	            : (stroke.image || stroke.colorStops)
+	            ? '#000'
+	            : stroke;
+	    };
+
+	    var getFill = helper.getFill = function (fill) {
+	        return (fill == null || fill === 'none')
+	            ? null
+	            // TODO pattern and gradient?
+	            : (fill.image || fill.colorStops)
+	            ? '#000'
+	            : fill;
+	    };
+
+	    function parsePercent(value, maxValue) {
+	        if (typeof value === 'string') {
+	            if (value.lastIndexOf('%') >= 0) {
+	                return parseFloat(value) / 100 * maxValue;
+	            }
+	            return parseFloat(value);
+	        }
+	        return value;
+	    }
+
+	    function getTextXForPadding(x, textAlign, textPadding) {
+	        return textAlign === 'right'
+	            ? (x - textPadding[1])
+	            : textAlign === 'center'
+	            ? (x + textPadding[3] / 2 - textPadding[1] / 2)
+	            : (x + textPadding[3]);
+	    }
+
+	    /**
+	     * @param {string} text
+	     * @param {module:zrender/Style} style
+	     * @return {boolean}
+	     */
+	    helper.needDrawText = function (text, style) {
+	        return text != null
+	            && (text
+	                || style.textBackgroundColor
+	                || (style.textBorderWidth && style.textBorderColor)
+	                || style.textPadding
+	            );
+	    };
+
+	    module.exports = helper;
+
+
+
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports) {
+
+	
+
+	    module.exports = {
+	        buildPath: function (ctx, shape) {
+	            var x = shape.x;
+	            var y = shape.y;
+	            var width = shape.width;
+	            var height = shape.height;
+	            var r = shape.r;
+	            var r1;
+	            var r2;
+	            var r3;
+	            var r4;
+
+	            // Convert width and height to positive for better borderRadius
+	            if (width < 0) {
+	                x = x + width;
+	                width = -width;
+	            }
+	            if (height < 0) {
+	                y = y + height;
+	                height = -height;
+	            }
+
+	            if (typeof r === 'number') {
+	                r1 = r2 = r3 = r4 = r;
+	            }
+	            else if (r instanceof Array) {
+	                if (r.length === 1) {
+	                    r1 = r2 = r3 = r4 = r[0];
+	                }
+	                else if (r.length === 2) {
+	                    r1 = r3 = r[0];
+	                    r2 = r4 = r[1];
+	                }
+	                else if (r.length === 3) {
+	                    r1 = r[0];
+	                    r2 = r4 = r[1];
+	                    r3 = r[2];
+	                }
+	                else {
+	                    r1 = r[0];
+	                    r2 = r[1];
+	                    r3 = r[2];
+	                    r4 = r[3];
+	                }
+	            }
+	            else {
+	                r1 = r2 = r3 = r4 = 0;
+	            }
+
+	            var total;
+	            if (r1 + r2 > width) {
+	                total = r1 + r2;
+	                r1 *= width / total;
+	                r2 *= width / total;
+	            }
+	            if (r3 + r4 > width) {
+	                total = r3 + r4;
+	                r3 *= width / total;
+	                r4 *= width / total;
+	            }
+	            if (r2 + r3 > height) {
+	                total = r2 + r3;
+	                r2 *= height / total;
+	                r3 *= height / total;
+	            }
+	            if (r1 + r4 > height) {
+	                total = r1 + r4;
+	                r1 *= height / total;
+	                r4 *= height / total;
+	            }
+	            ctx.moveTo(x + r1, y);
+	            ctx.lineTo(x + width - r2, y);
+	            r2 !== 0 && ctx.quadraticCurveTo(
+	                x + width, y, x + width, y + r2
+	            );
+	            ctx.lineTo(x + width, y + height - r3);
+	            r3 !== 0 && ctx.quadraticCurveTo(
+	                x + width, y + height, x + width - r3, y + height
+	            );
+	            ctx.lineTo(x + r4, y + height);
+	            r4 !== 0 && ctx.quadraticCurveTo(
+	                x, y + height, x, y + height - r4
+	            );
+	            ctx.lineTo(x, y + r1);
+	            r1 !== 0 && ctx.quadraticCurveTo(x, y, x + r1, y);
+	        }
+	    };
+
+
+/***/ }),
 /* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13403,7 +13427,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var vec2 = __webpack_require__(10);
 	    var bbox = __webpack_require__(41);
 	    var BoundingRect = __webpack_require__(9);
-	    var dpr = __webpack_require__(37).devicePixelRatio;
+	    var dpr = __webpack_require__(35).devicePixelRatio;
 
 	    var CMD = {
 	        M: 1,
@@ -15768,7 +15792,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    var zrUtil = __webpack_require__(4);
-	    var Element = __webpack_require__(27);
+	    var Element = __webpack_require__(25);
 	    var BoundingRect = __webpack_require__(9);
 
 	    /**
@@ -16204,7 +16228,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var Displayable = __webpack_require__(23);
 	    var zrUtil = __webpack_require__(4);
 	    var textContain = __webpack_require__(8);
-	    var textHelper = __webpack_require__(25);
+	    var textHelper = __webpack_require__(37);
 
 	    /**
 	     * @alias zrender/graphic/Text
@@ -16272,8 +16296,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                rect.x += style.x || 0;
 	                rect.y += style.y || 0;
 
-	                if (textHelper.getStroke(style.textStroke, style.textLineWidth)) {
-	                    var w = style.textLineWidth;
+	                if (textHelper.getStroke(style.textStroke, style.textStrokeWidth)) {
+	                    var w = style.textStrokeWidth;
 	                    rect.x -= w / 2;
 	                    rect.y -= w / 2;
 	                    rect.width += w;
@@ -16820,7 +16844,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 
-	    var roundRectHelper = __webpack_require__(26);
+	    var roundRectHelper = __webpack_require__(38);
 
 	    module.exports = __webpack_require__(22).extend({
 
@@ -19085,30 +19109,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	                compatItemStyle(data[i]);
 	                compatLabelTextStyle(data[i] && data[i].label);
 	            }
-	            // mark point data
-	            var markPoint = seriesOpt.markPoint;
-	            if (markPoint && markPoint.data) {
-	                var mpData = markPoint.data;
-	                for (var i = 0; i < mpData.length; i++) {
-	                    compatItemStyle(mpData[i]);
-	                    compatLabelTextStyle(mpData[i] && mpData[i].label);
-	                }
+	        }
+
+	        // mark point data
+	        var markPoint = seriesOpt.markPoint;
+	        if (markPoint && markPoint.data) {
+	            var mpData = markPoint.data;
+	            for (var i = 0; i < mpData.length; i++) {
+	                compatItemStyle(mpData[i]);
+	                compatLabelTextStyle(mpData[i] && mpData[i].label);
 	            }
-	            // mark line data
-	            var markLine = seriesOpt.markLine;
-	            if (markLine && markLine.data) {
-	                var mlData = markLine.data;
-	                for (var i = 0; i < mlData.length; i++) {
-	                    if (zrUtil.isArray(mlData[i])) {
-	                        compatItemStyle(mlData[i][0]);
-	                        compatLabelTextStyle(mlData[i][0] && mlData[i][0].label);
-	                        compatItemStyle(mlData[i][1]);
-	                        compatLabelTextStyle(mlData[i][1] && mlData[i][1].label);
-	                    }
-	                    else {
-	                        compatItemStyle(mlData[i]);
-	                        compatLabelTextStyle(mlData[i] && mlData[i].label);
-	                    }
+	        }
+	        // mark line data
+	        var markLine = seriesOpt.markLine;
+	        if (markLine && markLine.data) {
+	            var mlData = markLine.data;
+	            for (var i = 0; i < mlData.length; i++) {
+	                if (zrUtil.isArray(mlData[i])) {
+	                    compatItemStyle(mlData[i][0]);
+	                    compatLabelTextStyle(mlData[i][0] && mlData[i][0].label);
+	                    compatItemStyle(mlData[i][1]);
+	                    compatLabelTextStyle(mlData[i][1] && mlData[i][1].label);
+	                }
+	                else {
+	                    compatItemStyle(mlData[i]);
+	                    compatLabelTextStyle(mlData[i] && mlData[i].label);
 	                }
 	            }
 	        }
@@ -19901,7 +19926,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	// Global defines
 
-	    var guid = __webpack_require__(28);
+	    var guid = __webpack_require__(26);
 	    var env = __webpack_require__(2);
 	    var zrUtil = __webpack_require__(4);
 
@@ -19923,7 +19948,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * @type {string}
 	     */
-	    zrender.version = '3.6.1';
+	    zrender.version = '3.6.2';
 
 	    /**
 	     * Initializing a zrender instance
@@ -20346,9 +20371,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    var util = __webpack_require__(4);
+	    var vec2 = __webpack_require__(10);
 	    var Draggable = __webpack_require__(89);
 
-	    var Eventful = __webpack_require__(29);
+	    var Eventful = __webpack_require__(27);
 
 	    var SILENT = 'silent';
 
@@ -20368,7 +20394,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            pinchY: event.pinchY,
 	            pinchScale: event.pinchScale,
 	            wheelDelta: event.zrDelta,
-	            zrByTouch: event.zrByTouch
+	            zrByTouch: event.zrByTouch,
+	            which: event.which
 	        };
 	    }
 
@@ -20623,17 +20650,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var hoveredTarget = hovered.target;
 
 	            if (name === 'mousedown') {
-	                this._downel = hoveredTarget;
+	                this._downEl = hoveredTarget;
+	                this._downPoint = [event.zrX, event.zrY];
 	                // In case click triggered before mouseup
-	                this._upel = hoveredTarget;
+	                this._upEl = hoveredTarget;
 	            }
 	            else if (name === 'mosueup') {
-	                this._upel = hoveredTarget;
+	                this._upEl = hoveredTarget;
 	            }
 	            else if (name === 'click') {
-	                if (this._downel !== this._upel) {
+	                if (this._downEl !== this._upEl
+	                    // Original click event is triggered on the whole canvas element,
+	                    // including the case that `mousedown` - `mousemove` - `mouseup`,
+	                    // which should be filtered, otherwise it will bring trouble to
+	                    // pan and zoom.
+	                    || !this._downPoint
+	                    // Arbitrary value
+	                    || vec2.dist(this._downPoint, [event.zrX, event.zrY]) > 4
+	                ) {
 	                    return;
 	                }
+	                this._downPoint = null;
 	            }
 
 	            this.dispatchToElement(hovered, name, event);
@@ -21721,7 +21758,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var requestAnimationFrame = __webpack_require__(94);
 
-	    var Animator = __webpack_require__(32);
+	    var Animator = __webpack_require__(30);
 	    /**
 	     * @typedef {Object} IZRenderStage
 	     * @property {Function} update
@@ -21972,10 +22009,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 
-	    var Eventful = __webpack_require__(29);
+	    var Eventful = __webpack_require__(27);
 	    var env = __webpack_require__(2);
 
 	    var isDomLevel2 = (typeof window !== 'undefined') && !!window.addEventListener;
+
+	    var MOUSE_EVENT_REG = /^(?:mouse|pointer|contextmenu|drag|drop)|click/;
 
 	    function getBoundingClientRect(el) {
 	        // BlackBerry 5, iOS 3 (original iPhone) don't have getBoundingRect
@@ -22057,6 +22096,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            touch && clientToLocal(el, touch, e, calculate);
 	        }
 
+	        // Add which for click: 1 === left; 2 === middle; 3 === right; otherwise: 0;
+	        // See jQuery: https://github.com/jquery/jquery/blob/master/src/event.js
+	        // If e.which has been defined, if may be readonly,
+	        // see: https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/which
+	        var button = e.button;
+	        if (e.which == null && button !== undefined && MOUSE_EVENT_REG.test(e.type)) {
+	            e.which = (button & 1 ? 1 : (button & 2 ? 3 : (button & 4 ? 2 : 0)));
+	        }
+
 	        return e;
 	    }
 
@@ -22098,11 +22146,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            e.cancelBubble = true;
 	        };
 
+	    function notLeftMouse(e) {
+	        // If e.which is undefined, considered as left mouse event.
+	        return e.which > 1;
+	    }
+
 	    module.exports = {
 	        clientToLocal: clientToLocal,
 	        normalizeEvent: normalizeEvent,
 	        addEventListener: addEventListener,
 	        removeEventListener: removeEventListener,
+	        notLeftMouse: notLeftMouse,
 
 	        stop: stop,
 	        // 做向上兼容
@@ -22138,7 +22192,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var eventTool = __webpack_require__(93);
 	    var zrUtil = __webpack_require__(4);
-	    var Eventful = __webpack_require__(29);
+	    var Eventful = __webpack_require__(27);
 	    var env = __webpack_require__(2);
 	    var GestureMgr = __webpack_require__(96);
 
@@ -22654,9 +22708,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	 
 
-	    var config = __webpack_require__(37);
+	    var config = __webpack_require__(35);
 	    var util = __webpack_require__(4);
-	    var log = __webpack_require__(36);
+	    var log = __webpack_require__(34);
 	    var BoundingRect = __webpack_require__(9);
 	    var timsort = __webpack_require__(91);
 
@@ -22767,6 +22821,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {Object} opts
 	     */
 	    var Painter = function (root, storage, opts) {
+
+	        this.type = 'canvas';
+
 	        // In node environment using node-canvas
 	        var singleCanvas = !root.nodeName // In node ?
 	            || root.nodeName.toUpperCase() === 'CANVAS';
@@ -22871,6 +22928,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Painter.prototype = {
 
 	        constructor: Painter,
+
+	        getType: function () {
+	            return 'canvas';
+	        },
 
 	        /**
 	         * If painter use a single canvas
@@ -23779,7 +23840,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    var util = __webpack_require__(4);
-	    var config = __webpack_require__(37);
+	    var config = __webpack_require__(35);
 	    var Style = __webpack_require__(24);
 	    var Pattern = __webpack_require__(49);
 
@@ -26700,7 +26761,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // If there are no data and extent are [Infinity, -Infinity]
 	            if (extent[1] === -Infinity && extent[0] === Infinity) {
 	                var d = new Date();
-	                extent[1] = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+	                extent[1] = +new Date(d.getFullYear(), d.getMonth(), d.getDate());
 	                extent[0] = extent[1] - ONE_DAY;
 	            }
 
@@ -26721,8 +26782,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @override
 	         */
 	        niceTicks: function (approxTickNum, minInterval, maxInterval) {
-	            var timezoneOffset = this.getSetting('useUTC')
-	                ? 0 : numberUtil.getTimezoneOffset() * 60 * 1000;
 	            approxTickNum = approxTickNum || 10;
 
 	            var extent = this._extent;
@@ -26752,9 +26811,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                interval *= yearStep;
 	            }
 
+	            var timezoneOffset = this.getSetting('useUTC')
+	                ? 0 : (new Date(+extent[0] || +extent[1])).getTimezoneOffset() * 60 * 1000;
 	            var niceExtent = [
 	                Math.round(mathCeil((extent[0] - timezoneOffset) / interval) * interval + timezoneOffset),
-	                Math.round(mathFloor((extent[1] - timezoneOffset)/ interval) * interval + timezoneOffset)
+	                Math.round(mathFloor((extent[1] - timezoneOffset) / interval) * interval + timezoneOffset)
 	            ];
 
 	            scaleHelper.fixExtent(niceExtent, extent);
@@ -28302,8 +28363,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function getStackedOnPoints(coordSys, data) {
 	        var baseAxis = coordSys.getBaseAxis();
 	        var valueAxis = coordSys.getOtherAxis(baseAxis);
-	        var valueStart = baseAxis.onZero
-	            ? 0 : valueAxis.scale.getExtent()[0];
+
+	        var valueStart = 0;
+	        if (!baseAxis.onZero) {
+	            var extent = valueAxis.scale.getExtent();
+	            if (extent[0] > 0) {
+	                // Both positive
+	                valueStart = extent[0];
+	            }
+	            else if (extent[1] < 0) {
+	                // Both negative
+	                valueStart = extent[1];
+	            }
+	            // If is one positive, and one negative, onZero shall be true
+	        }
 
 	        var valueDim = valueAxis.dim;
 
@@ -31470,7 +31543,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var getInterval = AxisBuilder.getInterval;
 
 	    var axisBuilderAttrs = [
-	        'axisLine', 'axisLabel', 'axisTick', 'axisName'
+	        'axisLine', 'axisTickLabel', 'axisName'
 	    ];
 	    var selfBuilderAttrs = [
 	        'splitArea', 'splitLine'
@@ -31558,13 +31631,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	            );
 	            var ticks = axis.scale.getTicks();
 
+	            var showMinLabel = axisModel.get('axisLabel.showMinLabel');
+	            var showMaxLabel = axisModel.get('axisLabel.showMaxLabel');
+
 	            var p1 = [];
 	            var p2 = [];
 	            // Simple optimization
 	            // Batching the lines if color are the same
 	            var lineStyle = lineStyleModel.getLineStyle();
 	            for (var i = 0; i < ticksCoords.length; i++) {
-	                if (ifIgnoreOnTick(axis, i, lineInterval)) {
+	                if (ifIgnoreOnTick(
+	                    axis, i, lineInterval, ticksCoords.length,
+	                    showMinLabel, showMaxLabel
+	                )) {
 	                    continue;
 	                }
 
@@ -31635,8 +31714,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var areaStyle = areaStyleModel.getAreaStyle();
 	            areaColors = zrUtil.isArray(areaColors) ? areaColors : [areaColors];
 
+	            var showMinLabel = axisModel.get('axisLabel.showMinLabel');
+	            var showMaxLabel = axisModel.get('axisLabel.showMaxLabel');
+
 	            for (var i = 1; i < ticksCoords.length; i++) {
-	                if (ifIgnoreOnTick(axis, i, areaInterval)) {
+	                if (ifIgnoreOnTick(
+	                    axis, i, areaInterval, ticksCoords.length,
+	                    showMinLabel, showMaxLabel
+	                )) {
 	                    continue;
 	                }
 
@@ -31745,7 +31830,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {Object} opt Standard axis parameters.
 	     * @param {Array.<number>} opt.position [x, y]
 	     * @param {number} opt.rotation by radian
-	     * @param {number} [opt.nameDirection=1] 1 or -1 Used when nameLocation is 'middle'.
+	     * @param {number} [opt.nameDirection=1] 1 or -1 Used when nameLocation is 'middle' or 'center'.
 	     * @param {number} [opt.tickDirection=1] 1 or -1
 	     * @param {number} [opt.labelDirection=1] 1 or -1
 	     * @param {number} [opt.labelOffset=0] Usefull when onZero.
@@ -31867,173 +31952,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        /**
 	         * @private
 	         */
-	        axisTick: function () {
+	        axisTickLabel: function () {
 	            var axisModel = this.axisModel;
-	            var axis = axisModel.axis;
-
-	            if (!axisModel.get('axisTick.show') || axis.scale.isBlank()) {
-	                return;
-	            }
-
-	            var tickModel = axisModel.getModel('axisTick');
 	            var opt = this.opt;
 
-	            var lineStyleModel = tickModel.getModel('lineStyle');
-	            var tickLen = tickModel.get('length');
+	            var tickEls = buildAxisTick(this, axisModel, opt);
+	            var labelEls = buildAxisLabel(this, axisModel, opt);
 
-	            var tickInterval = getInterval(tickModel, opt.labelInterval);
-	            var ticksCoords = axis.getTicksCoords(tickModel.get('alignWithLabel'));
-	            var ticks = axis.scale.getTicks();
-
-	            var pt1 = [];
-	            var pt2 = [];
-	            var matrix = this._transform;
-
-	            for (var i = 0; i < ticksCoords.length; i++) {
-	                // Only ordinal scale support tick interval
-	                if (ifIgnoreOnTick(axis, i, tickInterval)) {
-	                     continue;
-	                }
-
-	                var tickCoord = ticksCoords[i];
-
-	                pt1[0] = tickCoord;
-	                pt1[1] = 0;
-	                pt2[0] = tickCoord;
-	                pt2[1] = opt.tickDirection * tickLen;
-
-	                if (matrix) {
-	                    v2ApplyTransform(pt1, pt1, matrix);
-	                    v2ApplyTransform(pt2, pt2, matrix);
-	                }
-	                // Tick line, Not use group transform to have better line draw
-	                this.group.add(new graphic.Line(graphic.subPixelOptimizeLine({
-
-	                    // Id for animation
-	                    anid: 'tick_' + ticks[i],
-
-	                    shape: {
-	                        x1: pt1[0],
-	                        y1: pt1[1],
-	                        x2: pt2[0],
-	                        y2: pt2[1]
-	                    },
-	                    style: zrUtil.defaults(
-	                        lineStyleModel.getLineStyle(),
-	                        {
-	                            stroke: axisModel.get('axisLine.lineStyle.color')
-	                        }
-	                    ),
-	                    z2: 2,
-	                    silent: true
-	                })));
-	            }
-	        },
-
-	        /**
-	         * @param {module:echarts/coord/cartesian/AxisModel} axisModel
-	         * @param {module:echarts/coord/cartesian/GridModel} gridModel
-	         * @private
-	         */
-	        axisLabel: function () {
-	            var opt = this.opt;
-	            var axisModel = this.axisModel;
-	            var axis = axisModel.axis;
-	            var show = retrieve(opt.axisLabelShow, axisModel.get('axisLabel.show'));
-
-	            if (!show || axis.scale.isBlank()) {
-	                return;
-	            }
-
-	            var labelModel = axisModel.getModel('axisLabel');
-	            var labelMargin = labelModel.get('margin');
-	            var ticks = axis.scale.getTicks();
-	            var labels = axisModel.getFormattedLabels();
-
-	            // Special label rotate.
-	            var labelRotation = (
-	                retrieve(opt.labelRotate, labelModel.get('rotate')) || 0
-	            ) * PI / 180;
-
-	            var labelLayout = innerTextLayout(opt.rotation, labelRotation, opt.labelDirection);
-	            var categoryData = axisModel.get('data');
-
-	            var textEls = [];
-	            var silent = isSilent(axisModel);
-	            var triggerEvent = axisModel.get('triggerEvent');
-
-	            zrUtil.each(ticks, function (tickVal, index) {
-	                if (ifIgnoreOnTick(axis, index, opt.labelInterval)) {
-	                     return;
-	                }
-
-	                var itemLabelModel = labelModel;
-	                if (categoryData && categoryData[tickVal] && categoryData[tickVal].textStyle) {
-	                    itemLabelModel = new Model(
-	                        categoryData[tickVal].textStyle, labelModel, axisModel.ecModel
-	                    );
-	                }
-
-	                var textColor = itemLabelModel.getTextColor()
-	                    || axisModel.get('axisLine.lineStyle.color');
-
-	                var tickCoord = axis.dataToCoord(tickVal);
-	                var pos = [
-	                    tickCoord,
-	                    opt.labelOffset + opt.labelDirection * labelMargin
-	                ];
-	                var labelStr = axis.scale.getLabel(tickVal);
-
-	                var textEl = new graphic.Text({
-	                    // Id for animation
-	                    anid: 'label_' + tickVal,
-	                    position: pos,
-	                    rotation: labelLayout.rotation,
-	                    silent: silent,
-	                    z2: 10
-	                });
-
-	                graphic.setTextStyle(textEl.style, itemLabelModel, {
-	                    text: labels[index],
-	                    textAlign: itemLabelModel.getShallow('align', true)
-	                        || labelLayout.textAlign,
-	                    textVerticalAlign: itemLabelModel.getShallow('verticalAlign', true)
-	                        || itemLabelModel.getShallow('baseline', true)
-	                        || labelLayout.textVerticalAlign,
-	                    textFill: typeof textColor === 'function'
-	                        ? textColor(
-	                            // (1) In category axis with data zoom, tick is not the original
-	                            // index of axis.data. So tick should not be exposed to user
-	                            // in category axis.
-	                            // (2) Compatible with previous version, which always returns labelStr.
-	                            // But in interval scale labelStr is like '223,445', which maked
-	                            // user repalce ','. So we modify it to return original val but remain
-	                            // it as 'string' to avoid error in replacing.
-	                            axis.type === 'category' ? labelStr : axis.type === 'value' ? tickVal + '' : tickVal,
-	                            index
-	                        )
-	                        : textColor
-	                });
-
-	                // Pack data for mouse event
-	                if (triggerEvent) {
-	                    textEl.eventData = makeAxisEventDataBase(axisModel);
-	                    textEl.eventData.targetType = 'axisLabel';
-	                    textEl.eventData.value = labelStr;
-	                }
-
-	                // FIXME
-	                this._dumbGroup.add(textEl);
-	                textEl.updateTransform();
-
-	                textEls.push(textEl);
-	                this.group.add(textEl);
-
-	                textEl.decomposeTransform();
-
-	            }, this);
-
-	            fixMinMaxLabelShow(axisModel, textEls);
+	            fixMinMaxLabelShow(axisModel, labelEls, tickEls);
 	        },
 
 	        /**
@@ -32062,7 +31988,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    ? extent[1] + gapSignal * gap
 	                    : (extent[0] + extent[1]) / 2, // 'middle'
 	                // Reuse labelOffset.
-	                nameLocation === 'middle' ? opt.labelOffset + nameDirection * gap : 0
+	                isNameLocationCenter(nameLocation) ? opt.labelOffset + nameDirection * gap : 0
 	            ];
 
 	            var labelLayout;
@@ -32074,7 +32000,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            var axisNameAvailableWidth;
 
-	            if (nameLocation === 'middle') {
+	            if (isNameLocationCenter(nameLocation)) {
 	                labelLayout = innerTextLayout(
 	                    opt.rotation,
 	                    nameRotation != null ? nameRotation : opt.rotation, // Adapt to axis.
@@ -32255,30 +32181,62 @@ return /******/ (function(modules) { // webpackBootstrap
 	            );
 	    }
 
-	    function fixMinMaxLabelShow(axisModel, textEls) {
+	    function fixMinMaxLabelShow(axisModel, labelEls, tickEls) {
 	        // If min or max are user set, we need to check
 	        // If the tick on min(max) are overlap on their neighbour tick
 	        // If they are overlapped, we need to hide the min(max) tick label
 	        var showMinLabel = axisModel.get('axisLabel.showMinLabel');
 	        var showMaxLabel = axisModel.get('axisLabel.showMaxLabel');
-	        var firstLabel = textEls[0];
-	        var nextLabel = textEls[1];
-	        var lastLabel = textEls[textEls.length - 1];
-	        var prevLabel = textEls[textEls.length - 2];
+
+	        // FIXME
+	        // Have not consider onBand yet, where tick els is more than label els.
+
+	        labelEls = labelEls || [];
+	        tickEls = tickEls || [];
+
+	        var firstLabel = labelEls[0];
+	        var nextLabel = labelEls[1];
+	        var lastLabel = labelEls[labelEls.length - 1];
+	        var prevLabel = labelEls[labelEls.length - 2];
+
+	        var firstTick = tickEls[0];
+	        var nextTick = tickEls[1];
+	        var lastTick = tickEls[tickEls.length - 1];
+	        var prevTick = tickEls[tickEls.length - 2];
 
 	        if (showMinLabel === false) {
-	            firstLabel.ignore = true;
+	            ignoreEl(firstLabel);
+	            ignoreEl(firstTick);
 	        }
-	        else if (axisModel.getMin() != null && isTwoLabelOverlapped(firstLabel, nextLabel)) {
-	            showMinLabel ? (nextLabel.ignore = true) : (firstLabel.ignore = true);
+	        else if (isTwoLabelOverlapped(firstLabel, nextLabel)) {
+	            if (showMinLabel) {
+	                ignoreEl(nextLabel);
+	                ignoreEl(nextTick);
+	            }
+	            else {
+	                ignoreEl(firstLabel);
+	                ignoreEl(firstTick);
+	            }
 	        }
 
 	        if (showMaxLabel === false) {
-	            lastLabel.ignore = true;
+	            ignoreEl(lastLabel);
+	            ignoreEl(lastTick);
 	        }
-	        else if (axisModel.getMax() != null && isTwoLabelOverlapped(prevLabel, lastLabel)) {
-	            showMaxLabel ? (prevLabel.ignore = true) : (lastLabel.ignore = true);
+	        else if (isTwoLabelOverlapped(prevLabel, lastLabel)) {
+	            if (showMaxLabel) {
+	                ignoreEl(prevLabel);
+	                ignoreEl(prevTick);
+	            }
+	            else {
+	                ignoreEl(lastLabel);
+	                ignoreEl(lastTick);
+	            }
 	        }
+	    }
+
+	    function ignoreEl(el) {
+	        el && (el.ignore = true);
 	    }
 
 	    function isTwoLabelOverlapped(current, next, labelLayout) {
@@ -32301,11 +32259,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return firstRect.intersect(nextRect);
 	    }
 
+	    function isNameLocationCenter(nameLocation) {
+	        return nameLocation === 'middle' || nameLocation === 'center';
+	    }
 
 	    /**
 	     * @static
 	     */
-	    var ifIgnoreOnTick = AxisBuilder.ifIgnoreOnTick = function (axis, i, interval) {
+	    var ifIgnoreOnTick = AxisBuilder.ifIgnoreOnTick = function (
+	        axis,
+	        i,
+	        interval,
+	        ticksCnt,
+	        showMinLabel,
+	        showMaxLabel
+	    ) {
+	        if (i === 0 && showMinLabel || i === ticksCnt - 1 && showMaxLabel) {
+	            return false;
+	        }
+
+	        // FIXME
+	        // Have not consider label overlap (if label is too long) yet.
+
 	        var rawTick;
 	        var scale = axis.scale;
 	        return scale.type === 'ordinal'
@@ -32329,6 +32304,187 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return interval;
 	    };
+
+	    function buildAxisTick(axisBuilder, axisModel, opt) {
+	        var axis = axisModel.axis;
+
+	        if (!axisModel.get('axisTick.show') || axis.scale.isBlank()) {
+	            return;
+	        }
+
+	        var tickModel = axisModel.getModel('axisTick');
+
+	        var lineStyleModel = tickModel.getModel('lineStyle');
+	        var tickLen = tickModel.get('length');
+
+	        var tickInterval = getInterval(tickModel, opt.labelInterval);
+	        var ticksCoords = axis.getTicksCoords(tickModel.get('alignWithLabel'));
+	        // FIXME
+	        // Corresponds to ticksCoords ?
+	        var ticks = axis.scale.getTicks();
+
+	        var showMinLabel = axisModel.get('axisLabel.showMinLabel');
+	        var showMaxLabel = axisModel.get('axisLabel.showMaxLabel');
+
+	        var pt1 = [];
+	        var pt2 = [];
+	        var matrix = axisBuilder._transform;
+
+	        var tickEls = [];
+
+	        var ticksCnt = ticksCoords.length;
+	        for (var i = 0; i < ticksCnt; i++) {
+	            // Only ordinal scale support tick interval
+	            if (ifIgnoreOnTick(
+	                axis, i, tickInterval, ticksCnt,
+	                showMinLabel, showMaxLabel
+	            )) {
+	                continue;
+	            }
+
+	            var tickCoord = ticksCoords[i];
+
+	            pt1[0] = tickCoord;
+	            pt1[1] = 0;
+	            pt2[0] = tickCoord;
+	            pt2[1] = opt.tickDirection * tickLen;
+
+	            if (matrix) {
+	                v2ApplyTransform(pt1, pt1, matrix);
+	                v2ApplyTransform(pt2, pt2, matrix);
+	            }
+	            // Tick line, Not use group transform to have better line draw
+	            var tickEl = new graphic.Line(graphic.subPixelOptimizeLine({
+	                // Id for animation
+	                anid: 'tick_' + ticks[i],
+
+	                shape: {
+	                    x1: pt1[0],
+	                    y1: pt1[1],
+	                    x2: pt2[0],
+	                    y2: pt2[1]
+	                },
+	                style: zrUtil.defaults(
+	                    lineStyleModel.getLineStyle(),
+	                    {
+	                        stroke: axisModel.get('axisLine.lineStyle.color')
+	                    }
+	                ),
+	                z2: 2,
+	                silent: true
+	            }));
+	            axisBuilder.group.add(tickEl);
+	            tickEls.push(tickEl);
+	        }
+
+	        return tickEls;
+	    }
+
+	    function buildAxisLabel(axisBuilder, axisModel, opt) {
+	        var axis = axisModel.axis;
+	        var show = retrieve(opt.axisLabelShow, axisModel.get('axisLabel.show'));
+
+	        if (!show || axis.scale.isBlank()) {
+	            return;
+	        }
+
+	        var labelModel = axisModel.getModel('axisLabel');
+	        var labelMargin = labelModel.get('margin');
+	        var ticks = axis.scale.getTicks();
+	        var labels = axisModel.getFormattedLabels();
+
+	        // Special label rotate.
+	        var labelRotation = (
+	            retrieve(opt.labelRotate, labelModel.get('rotate')) || 0
+	        ) * PI / 180;
+
+	        var labelLayout = innerTextLayout(opt.rotation, labelRotation, opt.labelDirection);
+	        var categoryData = axisModel.get('data');
+
+	        var labelEls = [];
+	        var silent = isSilent(axisModel);
+	        var triggerEvent = axisModel.get('triggerEvent');
+
+	        var showMinLabel = axisModel.get('axisLabel.showMinLabel');
+	        var showMaxLabel = axisModel.get('axisLabel.showMaxLabel');
+
+	        zrUtil.each(ticks, function (tickVal, index) {
+	            if (ifIgnoreOnTick(
+	                axis, index, opt.labelInterval, ticks.length,
+	                showMinLabel, showMaxLabel
+	            )) {
+	                    return;
+	            }
+
+	            var itemLabelModel = labelModel;
+	            if (categoryData && categoryData[tickVal] && categoryData[tickVal].textStyle) {
+	                itemLabelModel = new Model(
+	                    categoryData[tickVal].textStyle, labelModel, axisModel.ecModel
+	                );
+	            }
+
+	            var textColor = itemLabelModel.getTextColor()
+	                || axisModel.get('axisLine.lineStyle.color');
+
+	            var tickCoord = axis.dataToCoord(tickVal);
+	            var pos = [
+	                tickCoord,
+	                opt.labelOffset + opt.labelDirection * labelMargin
+	            ];
+	            var labelStr = axis.scale.getLabel(tickVal);
+
+	            var textEl = new graphic.Text({
+	                // Id for animation
+	                anid: 'label_' + tickVal,
+	                position: pos,
+	                rotation: labelLayout.rotation,
+	                silent: silent,
+	                z2: 10
+	            });
+
+	            graphic.setTextStyle(textEl.style, itemLabelModel, {
+	                text: labels[index],
+	                textAlign: itemLabelModel.getShallow('align', true)
+	                    || labelLayout.textAlign,
+	                textVerticalAlign: itemLabelModel.getShallow('verticalAlign', true)
+	                    || itemLabelModel.getShallow('baseline', true)
+	                    || labelLayout.textVerticalAlign,
+	                textFill: typeof textColor === 'function'
+	                    ? textColor(
+	                        // (1) In category axis with data zoom, tick is not the original
+	                        // index of axis.data. So tick should not be exposed to user
+	                        // in category axis.
+	                        // (2) Compatible with previous version, which always returns labelStr.
+	                        // But in interval scale labelStr is like '223,445', which maked
+	                        // user repalce ','. So we modify it to return original val but remain
+	                        // it as 'string' to avoid error in replacing.
+	                        axis.type === 'category' ? labelStr : axis.type === 'value' ? tickVal + '' : tickVal,
+	                        index
+	                    )
+	                    : textColor
+	            });
+
+	            // Pack data for mouse event
+	            if (triggerEvent) {
+	                textEl.eventData = makeAxisEventDataBase(axisModel);
+	                textEl.eventData.targetType = 'axisLabel';
+	                textEl.eventData.value = labelStr;
+	            }
+
+	            // FIXME
+	            axisBuilder._dumbGroup.add(textEl);
+	            textEl.updateTransform();
+
+	            labelEls.push(textEl);
+	            axisBuilder.group.add(textEl);
+
+	            textEl.decomposeTransform();
+
+	        });
+
+	        return labelEls;
+	    }
+
 
 	    module.exports = AxisBuilder;
 
@@ -32968,10 +33124,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            //     }
 	            // },
 	            itemStyle: {
-	                normal: {
+	                // normal: {
 	                    // color: '各异'
-	                },
-	                emphasis: {}
+	                // },
+	                // emphasis: {}
 	            }
 	        }
 	    });
@@ -33796,8 +33952,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            startAngle: 90,
 	            // 最小角度改为0
 	            minAngle: 0,
-	            // 选中是扇区偏移量
+	            // 选中时扇区偏移量
 	            selectedOffset: 10,
+	            // 高亮扇区偏移量
+	            hoverOffset: 10,
 
 	            // If use strategy to avoid label overlapping
 	            avoidLabelOverlap: true,
@@ -34132,7 +34290,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            sector.stopAnimation(true);
 	            sector.animateTo({
 	                shape: {
-	                    r: layout.r + 10
+	                    r: layout.r + seriesModel.get('hoverOffset')
 	                }
 	            }, 300, 'elasticOut');
 	        }
@@ -35640,7 +35798,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var graphic = __webpack_require__(20);
 
 	    var axisBuilderAttrs = [
-	        'axisLine', 'axisLabel', 'axisTick', 'axisName'
+	        'axisLine', 'axisTickLabel', 'axisName'
 	    ];
 
 	    module.exports = __webpack_require__(1).extendComponentView({
@@ -37386,7 +37544,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var vector = __webpack_require__(10);
 	    var matrix = __webpack_require__(11);
 
-	    var Transformable = __webpack_require__(30);
+	    var Transformable = __webpack_require__(28);
 	    var zrUtil = __webpack_require__(4);
 
 	    var BoundingRect = __webpack_require__(9);
@@ -38372,7 +38530,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 
-	    var Eventful = __webpack_require__(29);
+	    var Eventful = __webpack_require__(27);
 	    var zrUtil = __webpack_require__(4);
 	    var eventTool = __webpack_require__(93);
 	    var interactionMutex = __webpack_require__(187);
@@ -38482,7 +38640,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    function mousedown(e) {
-	        if (e.target && e.target.draggable) {
+	        if (eventTool.notLeftMouse(e)
+	            || (e.target && e.target.draggable)
+	        ) {
 	            return;
 	        }
 
@@ -38499,15 +38659,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    function mousemove(e) {
-	        if (!checkKeyBinding(this, 'moveOnMouseMove', e) || !this._dragging) {
-	            return;
-	        }
-
-	        if (e.gestureEvent === 'pinch') {
-	            return;
-	        }
-
-	        if (interactionMutex.isTaken(this._zr, 'globalPan')) {
+	        if (eventTool.notLeftMouse(e)
+	            || !checkKeyBinding(this, 'moveOnMouseMove', e)
+	            || !this._dragging
+	            || e.gestureEvent === 'pinch'
+	            || interactionMutex.isTaken(this._zr, 'globalPan')
+	        ) {
 	            return;
 	        }
 
@@ -38529,7 +38686,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    function mouseup(e) {
-	        this._dragging = false;
+	        if (!eventTool.notLeftMouse(e)) {
+	            this._dragging = false;
+	        }
 	    }
 
 	    function mousewheel(e) {
@@ -40178,12 +40337,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	             * @private
 	             */
 	            this._state = 'ready';
-
-	            /**
-	             * @private
-	             * @type {boolean}
-	             */
-	            this._mayClick;
 	        },
 
 	        /**
@@ -40508,8 +40661,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @private
 	         */
 	        _onPan: function (dx, dy) {
-	            this._mayClick = false;
-
 	            if (this._state !== 'animating'
 	                && (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD)
 	            ) {
@@ -40542,8 +40693,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @private
 	         */
 	        _onZoom: function (scale, mouseX, mouseY) {
-	            this._mayClick = false;
-
 	            if (this._state !== 'animating') {
 	                // These param must not be cached.
 	                var root = this.seriesModel.getData().tree.root;
@@ -40591,25 +40740,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @private
 	         */
 	        _initEvents: function (containerGroup) {
-	            // FIXME
-	            // 不用click以及silent的原因是，animate时视图设置silent true来避免click生效，
-	            // 但是animate中，按下鼠标，animate结束后（silent设回为false）松开鼠标，
-	            // 还是会触发click，期望是不触发。
-
-	            // Mousedown occurs when drag start, and mouseup occurs when drag end,
-	            // click event should not be triggered in that case.
-
-	            containerGroup.on('mousedown', function (e) {
-	                this._state === 'ready' && (this._mayClick = true);
-	            }, this);
-	            containerGroup.on('mouseup', function (e) {
-	                if (this._mayClick) {
-	                    this._mayClick = false;
-	                    this._state === 'ready' && onClick.call(this, e);
+	            containerGroup.on('click', function (e) {
+	                if (this._state !== 'ready') {
+	                    return;
 	                }
-	            }, this);
 
-	            function onClick(e) {
 	                var nodeClick = this.seriesModel.get('nodeClick', true);
 
 	                if (!nodeClick) {
@@ -40637,7 +40772,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        link && window.open(link, linkTarget);
 	                    }
 	                }
-	            }
+
+	            }, this);
 	        },
 
 	        /**
@@ -41362,7 +41498,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 
 	    var VisualMapping = __webpack_require__(206);
-	    var zrColor = __webpack_require__(35);
+	    var zrColor = __webpack_require__(33);
 	    var zrUtil = __webpack_require__(4);
 	    var isArray = zrUtil.isArray;
 
@@ -41597,7 +41733,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    var zrUtil = __webpack_require__(4);
-	    var zrColor = __webpack_require__(35);
+	    var zrColor = __webpack_require__(33);
 	    var linearMap = __webpack_require__(7).linearMap;
 	    var each = zrUtil.each;
 	    var isObject = zrUtil.isObject;
@@ -41735,7 +41871,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            // which will be much faster and useful in pixel manipulation
 	                            var returnRGBArray = !!out;
 	                            !isNormalized && (value = this._normalizeData(value));
-	                            out = zrColor.fastMapToColor(value, thisOption.parsedVisual, out);
+	                            out = zrColor.fastLerp(value, thisOption.parsedVisual, out);
 	                            return returnRGBArray ? out : zrColor.stringify(out, 'rgba');
 	                        },
 	                    this
@@ -41745,7 +41881,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _doMap: {
 	                linear: function (normalized) {
 	                    return zrColor.stringify(
-	                        zrColor.fastMapToColor(normalized, this.option.parsedVisual),
+	                        zrColor.fastLerp(normalized, this.option.parsedVisual),
 	                        'rgba'
 	                    );
 	                },
@@ -41754,7 +41890,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    var result = getSpecifiedVisual.call(this, value);
 	                    if (result == null) {
 	                        result = zrColor.stringify(
-	                            zrColor.fastMapToColor(normalized, this.option.parsedVisual),
+	                            zrColor.fastLerp(normalized, this.option.parsedVisual),
 	                            'rgba'
 	                        );
 	                    }
@@ -47808,7 +47944,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var brushHelper = __webpack_require__(249);
 	    var graphic = __webpack_require__(20);
 
-	    var elementList = ['axisLine', 'axisLabel', 'axisTick', 'axisName'];
+	    var elementList = ['axisLine', 'axisTickLabel', 'axisName'];
 
 	    var AxisView = __webpack_require__(1).extendComponentView({
 
@@ -47997,7 +48133,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 
-	    var Eventful = __webpack_require__(29);
+	    var Eventful = __webpack_require__(27);
 	    var zrUtil = __webpack_require__(4);
 	    var graphic = __webpack_require__(20);
 	    var interactionMutex = __webpack_require__(187);
@@ -50572,7 +50708,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var data = option.data;
 
 	            addOrdinal && zrUtil.each(data, function (item, index) {
-	                zrUtil.isArray(item) && item.unshift(index);
+	                if (item.value && zrUtil.isArray(item.value)) {
+	                    item.value.unshift(index);
+	                } else {
+	                    zrUtil.isArray(item) && item.unshift(index);
+	                }
 	            });
 
 	            var defaultValueDimensions = this.defaultValueDimensions;
@@ -50638,6 +50778,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        seriesModelMixin: seriesModelMixin,
 	        viewMixin: viewMixin
 	    };
+
 
 
 /***/ }),
@@ -51432,6 +51573,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return;
 	            }
 
+	            var dataIndex = 0;
+
 	            data.each([cDim].concat(vDims), function () {
 	                var args = arguments;
 	                var axisDimVal = args[0];
@@ -51465,15 +51608,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	                addBodyEnd(ocHighPoint, 0);
 	                addBodyEnd(ocLowPoint, 1);
 
+	                var sign;
+	                if (openVal > closeVal) {
+	                    sign = -1;
+	                }
+	                else if (openVal < closeVal) {
+	                    sign = 1;
+	                }
+	                else {
+	                    // If close === open, compare with close of last record
+	                    if (dataIndex > 0) {
+	                        sign = data.getItemModel(dataIndex - 1).get()[2]
+	                            <= closeVal
+	                                ? 1
+	                                : -1;
+	                    }
+	                    else {
+	                        // No record of previous, set to be positive
+	                        sign = 1;
+	                    }
+	                }
+
 	                data.setItemLayout(idx, {
 	                    chartLayout: chartLayout,
-	                    sign: openVal > closeVal ? -1 : openVal < closeVal ? 1 : 0,
+	                    sign: sign,
 	                    initBaseline: openVal > closeVal
 	                        ? ocHighPoint[constDim] : ocLowPoint[constDim], // open point.
 	                    bodyEnds: bodyEnds,
 	                    whiskerEnds: whiskerEnds,
 	                    brushRect: makeBrushRect()
 	                });
+
+	                ++dataIndex;
 
 	                function getPoint(val) {
 	                    var p = [];
@@ -52150,9 +52316,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var zr = api.getZr();
 	            // Avoid the drag cause ghost shadow
 	            // FIXME Better way ?
-	            zr.painter.getLayer(zlevel).clear(true);
+	            // SVG doesn't support
+	            var isSvg = zr.painter.getType() === 'svg';
+	            if (!isSvg) {
+	                zr.painter.getLayer(zlevel).clear(true);
+	            }
 	            // Config layer with motion blur
-	            if (this._lastZlevel != null) {
+	            if (this._lastZlevel != null && !isSvg) {
 	                zr.configLayer(this._lastZlevel, {
 	                    motionBlur: false
 	                });
@@ -52168,10 +52338,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    notInIndividual && console.warn('Lines with trail effect should have an individual zlevel');
 	                }
 
-	                zr.configLayer(zlevel, {
-	                    motionBlur: true,
-	                    lastFrameAlpha: Math.max(Math.min(trailLength / 10 + 0.9, 1), 0)
-	                });
+	                if (!isSvg) {
+	                    zr.configLayer(zlevel, {
+	                        motionBlur: true,
+	                        lastFrameAlpha: Math.max(Math.min(trailLength / 10 + 0.9, 1), 0)
+	                    });
+	                }
 	            }
 
 	            this.group.add(lineDraw.group);
@@ -52185,11 +52357,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this._lineDraw.updateLayout(seriesModel);
 	            // Not use motion when dragging or zooming
 	            var zr = api.getZr();
-	            zr.painter.getLayer(this._lastZlevel).clear(true);
+	            var isSvg = zr.painter.getType() === 'svg';
+	            if (!isSvg) {
+	                zr.painter.getLayer(this._lastZlevel).clear(true);
+	            }
 	        },
 
 	        remove: function (ecModel, api) {
 	            this._lineDraw && this._lineDraw.remove(api, true);
+	            // Clear motion when lineDraw is removed
+	            var zr = api.getZr();
+	            var isSvg = zr.painter.getType() === 'svg';
+	            if (!isSvg) {
+	                zr.painter.getLayer(this._lastZlevel).clear(true);
+	            }
 	        },
 
 	        dispose: function () {}
@@ -54682,7 +54863,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var ifIgnoreOnTick = AxisBuilder.ifIgnoreOnTick;
 
 	    var axisBuilderAttrs = [
-	        'axisLine', 'axisLabel', 'axisTick', 'axisName'
+	        'axisLine', 'axisTickLabel', 'axisName'
 	    ];
 
 	    var selfBuilderAttr = 'splitLine';
@@ -54740,8 +54921,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var p1 = [];
 	            var p2 = [];
 
+	            var showMinLabel = axisModel.get('axisLabel.showMinLabel');
+	            var showMaxLabel = axisModel.get('axisLabel.showMaxLabel');
+
 	            for (var i = 0; i < ticksCoords.length; ++i) {
-	                if (ifIgnoreOnTick(axis, i, lineInterval)) {
+	                if (ifIgnoreOnTick(
+	                    axis, i, lineInterval, ticksCoords.length,
+	                    showMinLabel, showMaxLabel
+	                )) {
 	                    continue;
 	                }
 	                var tickCoord = axis.toGlobalCoord(ticksCoords[i]);
@@ -61190,7 +61377,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    var zrUtil = __webpack_require__(4);
-	    var zrColor = __webpack_require__(35);
+	    var zrColor = __webpack_require__(33);
 	    var eventUtil = __webpack_require__(93);
 	    var formatUtil = __webpack_require__(6);
 	    var each = zrUtil.each;
@@ -62350,7 +62537,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var AxisBuilder = __webpack_require__(138);
 
 	    var axisBuilderAttrs = [
-	        'axisLine', 'axisLabel', 'axisTick', 'axisName'
+	        'axisLine', 'axisTickLabel', 'axisName'
 	    ];
 	    var selfBuilderAttrs = [
 	        'splitLine', 'splitArea'
@@ -64680,6 +64867,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var featureManager = __webpack_require__(364);
 	    var zrUtil = __webpack_require__(4);
+	    var lang = __webpack_require__(365).toolbox.brush;
 
 	    function Brush(model, ecModel, api) {
 	        this.model = model;
@@ -64710,14 +64898,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            keep: 'M4,10.5V1h10.3 M20.7,1h6.1 M33,1h6.1 M55.4,10.5V1H45.2 M4,17.3v6.6 M55.6,17.3v6.6 M4,30.5V40h10.3 M20.7,40 h6.1 M33,40h6.1 M55.4,30.5V40H45.2 M21,18.9h62.9v48.6H21V18.9z', // jshint ignore:line
 	            clear: 'M22,14.7l30.9,31 M52.9,14.7L22,45.7 M4.7,16.8V4.2h13.1 M26,4.2h7.8 M41.6,4.2h7.8 M70.3,16.8V4.2H57.2 M4.7,25.9v8.6 M70.3,25.9v8.6 M4.7,43.2v12.6h13.1 M26,55.8h7.8 M41.6,55.8h7.8 M70.3,43.2v12.6H57.2' // jshint ignore:line
 	        },
-	        title: {
-	            rect: '矩形选择',
-	            polygon: '圈选',
-	            lineX: '横向选择',
-	            lineY: '纵向选择',
-	            keep: '保持选择',
-	            clear: '清除选择'
-	        }
+	        // `rect`, `polygon`, `lineX`, `lineY`, `keep`, `clear`
+	        title: zrUtil.clone(lang.title)
 	    };
 
 	    var proto = Brush.prototype;
@@ -64825,6 +65007,54 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 365 */
+/***/ (function(module, exports) {
+
+	
+
+	    module.exports = {
+	        toolbox: {
+	            brush: {
+	                title: {
+	                    rect: '矩形选择',
+	                    polygon: '圈选',
+	                    lineX: '横向选择',
+	                    lineY: '纵向选择',
+	                    keep: '保持选择',
+	                    clear: '清除选择'
+	                }
+	            },
+	            dataView: {
+	                title: '数据视图',
+	                lang: ['数据视图', '关闭', '刷新']
+	            },
+	            dataZoom: {
+	                title: {
+	                    zoom: '区域缩放',
+	                    back: '区域缩放还原'
+	                }
+	            },
+	            magicType: {
+	                title: {
+	                    line: '切换为折线图',
+	                    bar: '切换为柱状图',
+	                    stack: '切换为堆叠',
+	                    tiled: '切换为平铺'
+	                }
+	            },
+	            restore: {
+	                title: '还原'
+	            },
+	            saveAsImage: {
+	                title: '保存为图片',
+	                lang: ['右键另存为图片']
+	            }
+	        }
+	    };
+
+
+
+/***/ }),
+/* 366 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -64835,15 +65065,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 
-	    __webpack_require__(366);
 	    __webpack_require__(367);
 	    __webpack_require__(368);
+	    __webpack_require__(369);
 
 
 
 
 /***/ }),
-/* 366 */
+/* 367 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -64854,7 +65084,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var zrUtil = __webpack_require__(4);
 
 	    // (24*60*60*1000)
-	    var ONE_DAY = 86400000;
+	    var PROXIMATE_ONE_DAY = 86400000;
 
 	    /**
 	     * Calendar
@@ -64923,7 +65153,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * get date info
 	         *
 	         * @param  {string|number} date date
-	         * @return {Object}      info
+	         * @return {Object}
+	         * {
+	         *      y: string, local full year, eg., '1940',
+	         *      m: string, local month, from '01' ot '12',
+	         *      d: string, local date, from '01' to '31' (if exists),
+	         *      day: It is not date.getDay(). It is the location of the cell in a week, from 0 to 6,
+	         *      time: timestamp,
+	         *      formatedDate: string, yyyy-MM-dd,
+	         *      date: original date object.
+	         * }
 	         */
 	        getDateInfo: function (date) {
 
@@ -64958,9 +65197,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return this.getDateInfo(date);
 	            }
 
-	            var time = this.getDateInfo(date).time;
+	            date = new Date(this.getDateInfo(date).time);
+	            date.setDate(date.getDate() + n);
 
-	            return this.getDateInfo(time + ONE_DAY * n);
+	            return this.getDateInfo(date);
 	        },
 
 	        update: function (ecModel, api) {
@@ -65026,18 +65266,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 
 	            var week = dayInfo.day;
-	            var nthWeek = this._getRangeInfo([range.start.time, date]).weeks;
+	            var nthWeek = this._getRangeInfo([range.start.time, date]).nthWeek;
 
 	            if (this._orient === 'vertical') {
 	                return [
 	                    this._rect.x + week * this._sw + this._sw / 2,
-	                    this._rect.y + (nthWeek - 1) * this._sh + this._sh / 2
+	                    this._rect.y + nthWeek * this._sh + this._sh / 2
 	                ];
 
 	            }
 
 	            return [
-	                this._rect.x + (nthWeek - 1) * this._sw + this._sw / 2,
+	                this._rect.x + nthWeek * this._sw + this._sw / 2,
 	                this._rect.y + week * this._sh + this._sh / 2
 	            ];
 
@@ -65175,25 +65415,60 @@ return /******/ (function(modules) { // webpackBootstrap
 	         *
 	         * @private
 	         * @param  {Array} range range ['2017-01-01', '2017-07-08']
+	         *  If range[0] > range[1], they will not be reversed.
 	         * @return {Object}       obj
 	         */
 	        _getRangeInfo: function (range) {
+	            range = [
+	                this.getDateInfo(range[0]),
+	                this.getDateInfo(range[1])
+	            ];
 
-	            var start = this.getDateInfo(range[0]);
-	            var end = this.getDateInfo(range[1]);
+	            var reversed;
+	            if (range[0].time > range[1].time) {
+	                reversed = true;
+	                range.reverse();
+	            }
 
-	            var allDay = Math.floor(end.time / ONE_DAY) - Math.floor(start.time / ONE_DAY) + 1;
+	            var allDay = Math.floor(range[1].time / PROXIMATE_ONE_DAY)
+	                - Math.floor(range[0].time / PROXIMATE_ONE_DAY) + 1;
 
-	            var weeks = Math.floor((allDay + start.day + 6) / 7);
+	            // Consider case:
+	            // Firstly set system timezone as "Time Zone: America/Toronto",
+	            // ```
+	            // var first = new Date(1478412000000 - 3600 * 1000 * 2.5);
+	            // var second = new Date(1478412000000);
+	            // var allDays = Math.floor(second / ONE_DAY) - Math.floor(first / ONE_DAY) + 1;
+	            // ```
+	            // will get wrong result because of DST. So we should fix it.
+	            var date = new Date(range[0].time);
+	            var startDateNum = date.getDate();
+	            var endDateNum = range[1].date.getDate();
+	            date.setDate(startDateNum + allDay - 1);
+	            // The bias can not over a month, so just compare date.
+	            if (date.getDate() !== endDateNum) {
+	                var sign = date.getTime() - range[1].time > 0 ? 1 : -1;
+	                while (date.getDate() !== endDateNum && (date.getTime() - range[1].time) * sign > 0) {
+	                    allDay -= sign;
+	                    date.setDate(startDateNum + allDay - 1);
+	                }
+	            }
+
+	            var weeks = Math.floor((allDay + range[0].day + 6) / 7);
+	            var nthWeek = reversed ? -weeks + 1: weeks - 1;
+
+	            reversed && range.reverse();
 
 	            return {
-	                range: [start.formatedDate, end.formatedDate],
-	                start: start,
-	                end: end,
+	                range: [range[0].formatedDate, range[1].formatedDate],
+	                start: range[0],
+	                end: range[1],
 	                allDay: allDay,
 	                weeks: weeks,
-	                fweek: start.day,
-	                lweek: end.day
+	                // From 0.
+	                nthWeek: nthWeek,
+	                fweek: range[0].day,
+	                lweek: range[1].day
 	            };
 	        },
 
@@ -65217,11 +65492,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 
 	            var nthDay = (nthWeek - 1) * 7 - rangeInfo.fweek + day;
+	            var date = new Date(rangeInfo.start.time);
+	            date.setDate(rangeInfo.start.d + nthDay);
 
-	            var time = rangeInfo.start.time + nthDay * ONE_DAY;
-
-	            return this.getDateInfo(time);
-
+	            return this.getDateInfo(date);
 	        }
 	    };
 
@@ -65267,7 +65541,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 367 */
+/* 368 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -65415,7 +65689,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 368 */
+/* 369 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -65901,7 +66175,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 369 */
+/* 370 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -66114,7 +66388,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 370 */
+/* 371 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -66122,24 +66396,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 
-	    __webpack_require__(371);
-
 	    __webpack_require__(372);
-	    __webpack_require__(375);
 
+	    __webpack_require__(373);
 	    __webpack_require__(376);
+
 	    __webpack_require__(377);
-
 	    __webpack_require__(378);
-	    __webpack_require__(379);
 
-	    __webpack_require__(381);
+	    __webpack_require__(379);
+	    __webpack_require__(380);
+
 	    __webpack_require__(382);
+	    __webpack_require__(383);
 
 
 
 /***/ }),
-/* 371 */
+/* 372 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
@@ -66152,7 +66426,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 372 */
+/* 373 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -66164,8 +66438,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var env = __webpack_require__(2);
 	    var echarts = __webpack_require__(1);
 	    var modelUtil = __webpack_require__(5);
-	    var helper = __webpack_require__(373);
-	    var AxisProxy = __webpack_require__(374);
+	    var helper = __webpack_require__(374);
+	    var AxisProxy = __webpack_require__(375);
 	    var each = zrUtil.each;
 	    var eachAxisDim = helper.eachAxisDim;
 
@@ -66714,7 +66988,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 373 */
+/* 374 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
@@ -66852,7 +67126,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 374 */
+/* 375 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -66862,7 +67136,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var zrUtil = __webpack_require__(4);
 	    var numberUtil = __webpack_require__(7);
-	    var helper = __webpack_require__(373);
+	    var helper = __webpack_require__(374);
 	    var each = zrUtil.each;
 	    var asc = numberUtil.asc;
 
@@ -67326,7 +67600,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 375 */
+/* 376 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
@@ -67403,7 +67677,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 376 */
+/* 377 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -67411,7 +67685,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 
-	    var DataZoomModel = __webpack_require__(372);
+	    var DataZoomModel = __webpack_require__(373);
 
 	    var SliderZoomModel = DataZoomModel.extend({
 
@@ -67482,7 +67756,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 377 */
+/* 378 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
@@ -67490,7 +67764,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var zrUtil = __webpack_require__(4);
 	    var graphic = __webpack_require__(20);
 	    var throttle = __webpack_require__(86);
-	    var DataZoomView = __webpack_require__(375);
+	    var DataZoomView = __webpack_require__(376);
 	    var Rect = graphic.Rect;
 	    var numberUtil = __webpack_require__(7);
 	    var linearMap = numberUtil.linearMap;
@@ -68278,7 +68552,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 378 */
+/* 379 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -68286,7 +68560,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 
-	    module.exports = __webpack_require__(372).extend({
+	    module.exports = __webpack_require__(373).extend({
 
 	        type: 'dataZoom.inside',
 
@@ -68304,15 +68578,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 379 */
+/* 380 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
 
-	    var DataZoomView = __webpack_require__(375);
+	    var DataZoomView = __webpack_require__(376);
 	    var zrUtil = __webpack_require__(4);
 	    var sliderMove = __webpack_require__(242);
-	    var roams = __webpack_require__(380);
+	    var roams = __webpack_require__(381);
 	    var bind = zrUtil.bind;
 
 	    var InsideZoomView = DataZoomView.extend({
@@ -68532,7 +68806,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 380 */
+/* 381 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -68756,7 +69030,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 381 */
+/* 382 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -68819,7 +69093,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 382 */
+/* 383 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -68828,7 +69102,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    var zrUtil = __webpack_require__(4);
-	    var helper = __webpack_require__(373);
+	    var helper = __webpack_require__(374);
 	    var echarts = __webpack_require__(1);
 
 
@@ -68867,7 +69141,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 383 */
+/* 384 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -68875,13 +69149,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 
-	    __webpack_require__(384);
-	    __webpack_require__(395);
+	    __webpack_require__(385);
+	    __webpack_require__(396);
 
 
 
 /***/ }),
-/* 384 */
+/* 385 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -68890,19 +69164,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    __webpack_require__(1).registerPreprocessor(
-	        __webpack_require__(385)
+	        __webpack_require__(386)
 	    );
 
-	    __webpack_require__(386);
 	    __webpack_require__(387);
 	    __webpack_require__(388);
-	    __webpack_require__(391);
-	    __webpack_require__(394);
+	    __webpack_require__(389);
+	    __webpack_require__(392);
+	    __webpack_require__(395);
 
 
 
 /***/ }),
-/* 385 */
+/* 386 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -68954,7 +69228,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 386 */
+/* 387 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
@@ -68978,7 +69252,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 387 */
+/* 388 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -69068,7 +69342,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 388 */
+/* 389 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -69076,7 +69350,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 
-	    var VisualMapModel = __webpack_require__(389);
+	    var VisualMapModel = __webpack_require__(390);
 	    var zrUtil = __webpack_require__(4);
 	    var numberUtil = __webpack_require__(7);
 
@@ -69102,7 +69376,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            itemWidth: null,        // The length of the other side.
 	            hoverLink: true,        // Enable hover highlight.
 	            hoverLinkDataSize: null,// The size of hovered data.
-	            hoverLinkOnHandle: true // Whether trigger hoverLink when hover handle.
+	            hoverLinkOnHandle: null // Whether trigger hoverLink when hover handle.
+	                                    // If not specified, follow the value of `realtime`.
 	        },
 
 	        /**
@@ -69111,7 +69386,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        optionUpdated: function (newOption, isInit) {
 	            ContinuousModel.superApply(this, 'optionUpdated', arguments);
 
-	            this.resetTargetSeries();
 	            this.resetExtent();
 
 	            this.resetVisual(function (mappingOption) {
@@ -69322,7 +69596,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 389 */
+/* 390 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -69333,7 +69607,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var echarts = __webpack_require__(1);
 	    var zrUtil = __webpack_require__(4);
 	    var env = __webpack_require__(2);
-	    var visualDefault = __webpack_require__(390);
+	    var visualDefault = __webpack_require__(391);
 	    var VisualMapping = __webpack_require__(206);
 	    var visualSolution = __webpack_require__(357);
 	    var mapVisual = VisualMapping.mapVisual;
@@ -69391,7 +69665,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            zlevel: 0,
 	            z: 4,
 
-	            seriesIndex: null,       // 所控制的series indices，默认所有有value的series.
+	            seriesIndex: 'all',     // 'all' or null/undefined: all series.
+	                                    // A number or an array of number: the specified series.
 
 	                                    // set min: 0, max: 200, only for campatible with ec2.
 	                                    // In fact min max should not have default value.
@@ -69508,26 +69783,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	            );
 	        },
 
-
 	        /**
 	         * @protected
+	         * @return {Array.<number>} An array of series indices.
 	         */
-	        resetTargetSeries: function () {
-	            var thisOption = this.option;
-	            var allSeriesIndex = thisOption.seriesIndex == null;
-	            thisOption.seriesIndex = allSeriesIndex
-	                ? [] : modelUtil.normalizeToArray(thisOption.seriesIndex);
+	        getTargetSeriesIndices: function () {
+	            var optionSeriesIndex = this.option.seriesIndex;
+	            var seriesIndices = [];
 
-	            allSeriesIndex && this.ecModel.eachSeries(function (seriesModel, index) {
-	                thisOption.seriesIndex.push(index);
-	            });
+	            if (optionSeriesIndex == null || optionSeriesIndex === 'all') {
+	                this.ecModel.eachSeries(function (seriesModel, index) {
+	                    seriesIndices.push(index);
+	                });
+	            }
+	            else {
+	                seriesIndices = modelUtil.normalizeToArray(optionSeriesIndex);
+	            }
+
+	            return seriesIndices;
 	        },
 
 	        /**
 	         * @public
 	         */
 	        eachTargetSeries: function (callback, context) {
-	            zrUtil.each(this.option.seriesIndex, function (seriesIndex) {
+	            zrUtil.each(this.getTargetSeriesIndices(), function (seriesIndex) {
 	                callback.call(context, this.ecModel.getSeriesByIndex(seriesIndex));
 	            }, this);
 	        },
@@ -69849,7 +70129,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 390 */
+/* 391 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -69925,18 +70205,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 391 */
+/* 392 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
 
-	    var VisualMapView = __webpack_require__(392);
+	    var VisualMapView = __webpack_require__(393);
 	    var graphic = __webpack_require__(20);
 	    var zrUtil = __webpack_require__(4);
 	    var numberUtil = __webpack_require__(7);
 	    var sliderMove = __webpack_require__(242);
 	    var LinearGradient = __webpack_require__(68);
-	    var helper = __webpack_require__(393);
+	    var helper = __webpack_require__(394);
 	    var modelUtil = __webpack_require__(5);
 	    var eventTool = __webpack_require__(93);
 
@@ -70536,7 +70816,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        // For hover link show when hover handle, which might be
 	                        // below or upper than sizeExtent.
 	                        pos[1] = mathMin(mathMax(0, pos[1]), itemSize[1]);
-
 	                        self._doHoverLinkToSeries(
 	                            pos[1],
 	                            0 <= pos[0] && pos[0] <= itemSize[0]
@@ -70623,6 +70902,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 
 	            var resultBatches = modelUtil.compressBatches(oldBatch, newBatch);
+
 	            this._dispatchHighDown('downplay', helper.convertDataIndex(resultBatches[0]));
 	            this._dispatchHighDown('highlight', helper.convertDataIndex(resultBatches[1]));
 	        },
@@ -70669,7 +70949,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this._hideIndicator();
 
 	            var indices = this._hoverLinkDataIndices;
-
 	            this._dispatchHighDown('downplay', helper.convertDataIndex(indices));
 
 	            indices.length = 0;
@@ -70767,7 +71046,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    function useHoverLinkOnHandle(visualMapModel) {
-	        return !visualMapModel.get('realtime') && visualMapModel.get('hoverLinkOnHandle');
+	        var hoverLinkOnHandle = visualMapModel.get('hoverLinkOnHandle');
+	        return !!(hoverLinkOnHandle == null ? visualMapModel.get('realtime') : hoverLinkOnHandle);
 	    }
 
 	    function getCursor(orient) {
@@ -70779,7 +71059,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 392 */
+/* 393 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
@@ -70939,7 +71219,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 393 */
+/* 394 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
@@ -71011,7 +71291,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 394 */
+/* 395 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -71039,7 +71319,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 395 */
+/* 396 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -71048,27 +71328,27 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	    __webpack_require__(1).registerPreprocessor(
-	        __webpack_require__(385)
+	        __webpack_require__(386)
 	    );
 
-	    __webpack_require__(386);
 	    __webpack_require__(387);
-	    __webpack_require__(396);
+	    __webpack_require__(388);
 	    __webpack_require__(397);
-	    __webpack_require__(394);
+	    __webpack_require__(398);
+	    __webpack_require__(395);
 
 
 
 /***/ }),
-/* 396 */
+/* 397 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
 
-	    var VisualMapModel = __webpack_require__(389);
+	    var VisualMapModel = __webpack_require__(390);
 	    var zrUtil = __webpack_require__(4);
 	    var VisualMapping = __webpack_require__(206);
-	    var visualDefault = __webpack_require__(390);
+	    var visualDefault = __webpack_require__(391);
 	    var reformIntervals = __webpack_require__(7).reformIntervals;
 
 	    var PiecewiseModel = VisualMapModel.extend({
@@ -71146,7 +71426,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	             */
 	            this._pieceList = [];
 
-	            this.resetTargetSeries();
 	            this.resetExtent();
 
 	            /**
@@ -71593,17 +71872,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 397 */
+/* 398 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
 
-	    var VisualMapView = __webpack_require__(392);
+	    var VisualMapView = __webpack_require__(393);
 	    var zrUtil = __webpack_require__(4);
 	    var graphic = __webpack_require__(20);
 	    var symbolCreators = __webpack_require__(114);
 	    var layout = __webpack_require__(74);
-	    var helper = __webpack_require__(393);
+	    var helper = __webpack_require__(394);
 
 	    var PiecewiseVisualMapView = VisualMapView.extend({
 
@@ -71821,14 +72100,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 398 */
+/* 399 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// HINT Markpoint can't be used too much
 
 
-	    __webpack_require__(399);
-	    __webpack_require__(401);
+	    __webpack_require__(400);
+	    __webpack_require__(402);
 
 	    __webpack_require__(1).registerPreprocessor(function (opt) {
 	        // Make sure markPoint component is enabled
@@ -71837,12 +72116,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 399 */
+/* 400 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
 
-	    module.exports = __webpack_require__(400).extend({
+	    module.exports = __webpack_require__(401).extend({
 
 	        type: 'markPoint',
 
@@ -71875,7 +72154,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 400 */
+/* 401 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
@@ -72010,7 +72289,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 401 */
+/* 402 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
@@ -72021,7 +72300,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var List = __webpack_require__(101);
 
-	    var markerHelper = __webpack_require__(402);
+	    var markerHelper = __webpack_require__(403);
 
 	    function updateMarkerLayout(mpData, seriesModel, api) {
 	        var coordSys = seriesModel.coordinateSystem;
@@ -72059,7 +72338,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    }
 
-	    __webpack_require__(403).extend({
+	    __webpack_require__(404).extend({
 
 	        type: 'markPoint',
 
@@ -72169,7 +72448,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 402 */
+/* 403 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
@@ -72374,7 +72653,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 403 */
+/* 404 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
@@ -72416,13 +72695,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 404 */
+/* 405 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
 
-	    __webpack_require__(405);
 	    __webpack_require__(406);
+	    __webpack_require__(407);
 
 	    __webpack_require__(1).registerPreprocessor(function (opt) {
 	        // Make sure markLine component is enabled
@@ -72431,12 +72710,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 405 */
+/* 406 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
 
-	    module.exports = __webpack_require__(400).extend({
+	    module.exports = __webpack_require__(401).extend({
 
 	        type: 'markLine',
 
@@ -72476,7 +72755,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 406 */
+/* 407 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
@@ -72485,7 +72764,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var List = __webpack_require__(101);
 	    var numberUtil = __webpack_require__(7);
 
-	    var markerHelper = __webpack_require__(402);
+	    var markerHelper = __webpack_require__(403);
 
 	    var LineDraw = __webpack_require__(213);
 
@@ -72657,7 +72936,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        data.setItemLayout(idx, point);
 	    }
 
-	    __webpack_require__(403).extend({
+	    __webpack_require__(404).extend({
 
 	        type: 'markLine',
 
@@ -72834,13 +73113,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 407 */
+/* 408 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
 
-	    __webpack_require__(408);
 	    __webpack_require__(409);
+	    __webpack_require__(410);
 
 	    __webpack_require__(1).registerPreprocessor(function (opt) {
 	        // Make sure markArea component is enabled
@@ -72849,12 +73128,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 408 */
+/* 409 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
 
-	    module.exports = __webpack_require__(400).extend({
+	    module.exports = __webpack_require__(401).extend({
 
 	        type: 'markArea',
 
@@ -72890,7 +73169,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 409 */
+/* 410 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// TODO Better on polar
@@ -72900,9 +73179,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var List = __webpack_require__(101);
 	    var numberUtil = __webpack_require__(7);
 	    var graphic = __webpack_require__(20);
-	    var colorUtil = __webpack_require__(35);
+	    var colorUtil = __webpack_require__(33);
 
-	    var markerHelper = __webpack_require__(402);
+	    var markerHelper = __webpack_require__(403);
 
 	    var markAreaTransform = function (seriesModel, coordSys, maModel, item) {
 	        var lt = markerHelper.dataTransform(seriesModel, item[0]);
@@ -73022,7 +73301,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var dimPermutations = [['x0', 'y0'], ['x1', 'y0'], ['x1', 'y1'], ['x0', 'y1']];
 
-	    __webpack_require__(403).extend({
+	    __webpack_require__(404).extend({
 
 	        type: 'markArea',
 
@@ -73116,7 +73395,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    )
 	                );
 
-	                polygon.hoverStyle = itemModel.getModel('itemStyle.normal').getItemStyle();
+	                polygon.hoverStyle = itemModel.getModel('itemStyle.emphasis').getItemStyle();
 
 	                graphic.setLabelStyle(
 	                    polygon.style, polygon.hoverStyle, labelModel, labelHoverModel,
@@ -73195,7 +73474,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 410 */
+/* 411 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -73205,17 +73484,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var echarts = __webpack_require__(1);
 
-	    echarts.registerPreprocessor(__webpack_require__(411));
+	    echarts.registerPreprocessor(__webpack_require__(412));
 
-	    __webpack_require__(412);
 	    __webpack_require__(413);
 	    __webpack_require__(414);
-	    __webpack_require__(416);
+	    __webpack_require__(415);
+	    __webpack_require__(417);
 
 
 
 /***/ }),
-/* 411 */
+/* 412 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -73306,7 +73585,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 412 */
+/* 413 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
@@ -73319,7 +73598,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 413 */
+/* 414 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -73369,7 +73648,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 414 */
+/* 415 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -73377,7 +73656,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 
-	    var TimelineModel = __webpack_require__(415);
+	    var TimelineModel = __webpack_require__(416);
 	    var zrUtil = __webpack_require__(4);
 	    var modelUtil = __webpack_require__(5);
 
@@ -73483,7 +73762,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 415 */
+/* 416 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -73683,7 +73962,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 416 */
+/* 417 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -73694,8 +73973,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var zrUtil = __webpack_require__(4);
 	    var graphic = __webpack_require__(20);
 	    var layout = __webpack_require__(74);
-	    var TimelineView = __webpack_require__(417);
-	    var TimelineAxis = __webpack_require__(418);
+	    var TimelineView = __webpack_require__(418);
+	    var TimelineAxis = __webpack_require__(419);
 	    var symbolUtil = __webpack_require__(114);
 	    var axisHelper = __webpack_require__(104);
 	    var BoundingRect = __webpack_require__(9);
@@ -74399,7 +74678,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 417 */
+/* 418 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -74419,7 +74698,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 418 */
+/* 419 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
@@ -74520,23 +74799,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 419 */
+/* 420 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
 
-	    __webpack_require__(420);
 	    __webpack_require__(421);
-
 	    __webpack_require__(422);
+
 	    __webpack_require__(423);
 	    __webpack_require__(424);
 	    __webpack_require__(425);
-	    __webpack_require__(430);
+	    __webpack_require__(426);
+	    __webpack_require__(431);
 
 
 /***/ }),
-/* 420 */
+/* 421 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
@@ -74614,7 +74893,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 421 */
+/* 422 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {
@@ -74857,12 +75136,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(313)))
 
 /***/ }),
-/* 422 */
+/* 423 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
 
 	    var env = __webpack_require__(2);
+	    var lang = __webpack_require__(365).toolbox.saveAsImage;
 
 	    function SaveAsImage (model) {
 	        this.model = model;
@@ -74871,14 +75151,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    SaveAsImage.defaultOption = {
 	        show: true,
 	        icon: 'M4.7,22.9L29.3,45.5L54.7,23.4M4.6,43.6L4.6,58L53.8,58L53.8,43.6M29.2,45.1L29.2,0',
-	        title: '保存为图片',
+	        title: lang.title,
 	        type: 'png',
 	        // Default use option.backgroundColor
 	        // backgroundColor: '#fff',
 	        name: '',
 	        excludeComponents: ['toolbox'],
 	        pixelRatio: 1,
-	        lang: ['右键另存为图片']
+	        lang: lang.lang.slice()
 	    };
 
 	    SaveAsImage.prototype.unusable = !env.canvasSupported;
@@ -74911,13 +75191,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        // IE
 	        else {
-	            var lang = model.get('lang');
-	            var html = ''
-	                + '<body style="margin:0;">'
-	                + '<img src="' + url + '" style="max-width:100%;" title="' + ((lang && lang[0]) || '') + '" />'
-	                + '</body>';
-	            var tab = window.open();
-	            tab.document.write(html);
+	            if (window.navigator.msSaveOrOpenBlob) {
+	                var bstr = atob(url.split(',')[1]);
+	                var n = bstr.length;
+	                var u8arr = new Uint8Array(n);
+	                while(n--) {
+	                    u8arr[n] = bstr.charCodeAt(n);
+	                }
+	                var blob = new Blob([u8arr]);
+	                window.navigator.msSaveOrOpenBlob(blob, title + '.' + type);
+	            }
+	            else {
+	                var lang = model.get('lang');
+	                var html = '' +
+	                    '<body style="margin:0;">' +
+	                    '<img src="' + url + '" style="max-width:100%;" title="' + ((lang && lang[0]) || '') + '" />' +
+	                    '</body>';
+	                var tab = window.open();
+	                tab.document.write(html);
+	            }
 	        }
 	    };
 
@@ -74928,14 +75220,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    module.exports = SaveAsImage;
 
 
+
 /***/ }),
-/* 423 */
+/* 424 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 
 	    var zrUtil = __webpack_require__(4);
+	    var lang = __webpack_require__(365).toolbox.magicType;
 
 	    function MagicType(model) {
 	        this.model = model;
@@ -74951,12 +75245,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            stack: 'M8.2,38.4l-8.4,4.1l30.6,15.3L60,42.5l-8.1-4.1l-21.5,11L8.2,38.4z M51.9,30l-8.1,4.2l-13.4,6.9l-13.9-6.9L8.2,30l-8.4,4.2l8.4,4.2l22.2,11l21.5-11l8.1-4.2L51.9,30z M51.9,21.7l-8.1,4.2L35.7,30l-5.3,2.8L24.9,30l-8.4-4.1l-8.3-4.2l-8.4,4.2L8.2,30l8.3,4.2l13.9,6.9l13.4-6.9l8.1-4.2l8.1-4.1L51.9,21.7zM30.4,2.2L-0.2,17.5l8.4,4.1l8.3,4.2l8.4,4.2l5.5,2.7l5.3-2.7l8.1-4.2l8.1-4.2l8.1-4.1L30.4,2.2z', // jshint ignore:line
 	            tiled: 'M2.3,2.2h22.8V25H2.3V2.2z M35,2.2h22.8V25H35V2.2zM2.3,35h22.8v22.8H2.3V35z M35,35h22.8v22.8H35V35z'
 	        },
-	        title: {
-	            line: '切换为折线图',
-	            bar: '切换为柱状图',
-	            stack: '切换为堆叠',
-	            tiled: '切换为平铺'
-	        },
+	        // `line`, `bar`, `stack`, `tiled`
+	        title: zrUtil.clone(lang.title),
 	        option: {},
 	        seriesIndex: {}
 	    };
@@ -75109,7 +75399,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 424 */
+/* 425 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -75120,7 +75410,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var zrUtil = __webpack_require__(4);
 	    var eventTool = __webpack_require__(93);
-
+	    var lang = __webpack_require__(365).toolbox.dataView;
 
 	    var BLOCK_SPLITER = new Array(60).join('-');
 	    var ITEM_SPLITER = '\t';
@@ -75391,8 +75681,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        contentToOption: null,
 
 	        icon: 'M17.5,17.3H33 M17.5,17.3H33 M45.4,29.5h-28 M11.5,2v56H51V14.8L38.4,2H11.5z M38.4,2.2v12.7H51 M45.4,41.7h-28',
-	        title: '数据视图',
-	        lang: ['数据视图', '关闭', '刷新'],
+	        title: zrUtil.clone(lang.title),
+	        lang: zrUtil.clone(lang.lang),
 	        backgroundColor: '#fff',
 	        textColor: '#000',
 	        textareaColor: '#fff',
@@ -75592,7 +75882,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 425 */
+/* 426 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -75601,13 +75891,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var zrUtil = __webpack_require__(4);
 	    var BrushController = __webpack_require__(248);
 	    var BrushTargetManager = __webpack_require__(359);
-	    var history = __webpack_require__(426);
+	    var history = __webpack_require__(427);
 	    var sliderMove = __webpack_require__(242);
+	    var lang = __webpack_require__(365).toolbox.dataZoom;
 
 	    var each = zrUtil.each;
 
 	    // Use dataZoomSelect
-	    __webpack_require__(427);
+	    __webpack_require__(428);
 
 	    // Spectial component id start with \0ec\0, see echarts/model/Global.js~hasInnerId
 	    var DATA_ZOOM_ID_BASE = '\0_ec_\0toolbox-dataZoom_';
@@ -75636,10 +75927,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            zoom: 'M0,13.5h26.9 M13.5,26.9V0 M32.1,13.5H58V58H13.5 V32.1',
 	            back: 'M22,1.4L9.9,13.5l12.3,12.3 M10.3,13.5H54.9v44.6 H10.3v-26'
 	        },
-	        title: {
-	            zoom: '区域缩放',
-	            back: '区域缩放还原'
-	        }
+	        // `zoom`, `back`
+	        title: zrUtil.clone(lang.title)
 	    };
 
 	    var proto = DataZoom.prototype;
@@ -75901,7 +76190,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 426 */
+/* 427 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -76015,7 +76304,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 427 */
+/* 428 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -76023,35 +76312,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 
-	    __webpack_require__(371);
-
 	    __webpack_require__(372);
-	    __webpack_require__(375);
 
-	    __webpack_require__(428);
+	    __webpack_require__(373);
+	    __webpack_require__(376);
+
 	    __webpack_require__(429);
+	    __webpack_require__(430);
 
-	    __webpack_require__(381);
 	    __webpack_require__(382);
-
-
-
-/***/ }),
-/* 428 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	/**
-	 * @file Data zoom model
-	 */
-
-
-	    var DataZoomModel = __webpack_require__(372);
-
-	    module.exports = DataZoomModel.extend({
-
-	        type: 'dataZoom.select'
-
-	    });
+	    __webpack_require__(383);
 
 
 
@@ -76059,9 +76329,14 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 429 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	
+	/**
+	 * @file Data zoom model
+	 */
 
-	    module.exports = __webpack_require__(375).extend({
+
+	    var DataZoomModel = __webpack_require__(373);
+
+	    module.exports = DataZoomModel.extend({
 
 	        type: 'dataZoom.select'
 
@@ -76073,10 +76348,25 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 430 */
 /***/ (function(module, exports, __webpack_require__) {
 
+	
+
+	    module.exports = __webpack_require__(376).extend({
+
+	        type: 'dataZoom.select'
+
+	    });
+
+
+
+/***/ }),
+/* 431 */
+/***/ (function(module, exports, __webpack_require__) {
+
 	'use strict';
 
 
-	    var history = __webpack_require__(426);
+	    var history = __webpack_require__(427);
+	    var lang = __webpack_require__(365).toolbox.restore;
 
 	    function Restore(model) {
 	        this.model = model;
@@ -76085,7 +76375,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Restore.defaultOption = {
 	        show: true,
 	        icon: 'M3.8,33.4 M47,18.9h9.8V8.7 M56.3,20.1 C52.1,9,40.5,0.6,26.8,2.1C12.6,3.7,1.6,16.2,2.1,30.6 M13,41.1H3.1v10.2 M3.7,39.9c4.2,11.1,15.8,19.5,29.5,18 c14.2-1.6,25.2-14.1,24.7-28.5',
-	        title: '还原'
+	        title: lang.title
 	    };
 
 	    var proto = Restore.prototype;
@@ -76114,16 +76404,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 431 */
+/* 432 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
-	    __webpack_require__(432);
-	    __webpack_require__(87).registerPainter('vml', __webpack_require__(434));
+	    __webpack_require__(433);
+	    __webpack_require__(87).registerPainter('vml', __webpack_require__(435));
 
 
 /***/ }),
-/* 432 */
+/* 433 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// http://www.w3.org/TR/NOTE-VML
@@ -76134,10 +76424,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var vec2 = __webpack_require__(10);
 	    var BoundingRect = __webpack_require__(9);
 	    var CMD = __webpack_require__(39).CMD;
-	    var colorTool = __webpack_require__(35);
+	    var colorTool = __webpack_require__(33);
 	    var textContain = __webpack_require__(8);
-	    var textHelper = __webpack_require__(25);
-	    var RectText = __webpack_require__(38);
+	    var textHelper = __webpack_require__(37);
+	    var RectText = __webpack_require__(36);
 	    var Displayable = __webpack_require__(23);
 	    var ZImage = __webpack_require__(52);
 	    var Text = __webpack_require__(53);
@@ -76146,7 +76436,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var Gradient = __webpack_require__(69);
 
-	    var vmlCore = __webpack_require__(433);
+	    var vmlCore = __webpack_require__(434);
 
 	    var round = Math.round;
 	    var sqrt = Math.sqrt;
@@ -77197,7 +77487,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 433 */
+/* 434 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	
@@ -77250,7 +77540,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 434 */
+/* 435 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -77261,8 +77551,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 
-	    var zrLog = __webpack_require__(36);
-	    var vmlCore = __webpack_require__(433);
+	    var zrLog = __webpack_require__(34);
+	    var vmlCore = __webpack_require__(434);
 
 	    function parseInt10(val) {
 	        return parseInt(val, 10);
@@ -77318,6 +77608,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    VMLPainter.prototype = {
 
 	        constructor: VMLPainter,
+
+	        getType: function () {
+	            return 'vml';
+	        },
 
 	        /**
 	         * @return {HTMLDivElement}

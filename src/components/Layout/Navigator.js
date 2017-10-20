@@ -135,7 +135,10 @@ export default class Navigator extends Component {
         {this.navis.map((naviKey) => {
           const c = NaviConfig[naviKey];
           const path = window.location.pathname;
-          const currentClass = path.indexOf(c.pageSignature) >= 0 ? 'current' : '';
+          let currentClass = path.indexOf(c.pageSignature) >= 0 ? 'current' : '';
+          if (path.indexOf('expert-googlemap') >= 0 && naviKey === 'ExpertMap') {
+            currentClass = 'current';
+          }
           return (
             <div key={c.label} className={tc(['navi'], [currentClass])}>
               <a onClick={this.onClick(c)}>

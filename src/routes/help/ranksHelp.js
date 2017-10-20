@@ -61,6 +61,9 @@ class RanksHelp extends React.Component {
           <Menu.Item key="search-rank">
             <a href="#search-rank">专家搜索排序</a>
           </Menu.Item>
+          <Menu.Item key="topic-trend">
+            <a href="#topic-trend">技术趋势预测</a>
+          </Menu.Item>
         </Menu>
         <div style={{ marginTop: '30px', maxWidth: '1128px' }} className="content-inner">
           <h2 className={styles.ranksTitle}><a name="citation">#citation</a></h2>
@@ -196,7 +199,7 @@ class RanksHelp extends React.Component {
           <h2 className={styles.ranksTitle}>
             <a name="new-star">New star</a></h2>
           <div className={styles.ranksContent}>
-            <p>New star has a short academic longevity (&lt;=5 years). The score is based on
+            <p>New star has a short academic longevity (&lt;=5 years). The score is based on&nbsp;
               <a href="#b309">activity</a>
               .
             </p>
@@ -210,6 +213,14 @@ class RanksHelp extends React.Component {
               为每类分级赋予权重W，如citation为0~10的论文权重为1，10~100权重为2，100~300权重为4
               将作者在data mining领域相关论文按照相似度(tfidf)和重要度权重进行加权
               Score(person) = \sum_&#x7b;pub of person&#x7d; TFIDF(pub) * W(pub)
+            </p>
+          </div>
+          <h2 className={styles.ranksTitle}><a name="topic-trend">技术趋势预测</a></h2>
+          <div className={styles.ranksContent}>
+            <p>近期热度，全局热度和技术源头分别是按近五年，全部，和前一半年份的热度对相关领域排序；选出前12个换成sorted stream graph
+              <br /><br />
+              例如machine learning里近期热度是neural network最高，全局热度里svm还算比较高，而技术源头可以看出machine
+              learning主要由ai，pattern recognition, inductive inference等技术发展而来
             </p>
           </div>
         </div>

@@ -339,7 +339,7 @@ class ExpertGoogleMap extends React.Component {
     }
   };
 
-  showTop = (usersIds, e, map, maindom, inputids, onLeave) => {
+  showTop = (usersIds, e, map, maindom, inputids, onLeave, projection) => {
     const that = this;
     const ishere = getById('panel');
     if (ishere != null) {
@@ -398,6 +398,9 @@ class ExpertGoogleMap extends React.Component {
       });
     }
 
+    const infowindow = new window.google.maps.InfoWindow({
+      content: "<div id='author_info' class='popup'></div>",
+    });
     const resultPromise = listPersonByIds(ids);
 
     resultPromise.then(
@@ -433,24 +436,23 @@ class ExpertGoogleMap extends React.Component {
               console.log("####################");
               const apos = getById('allmap').getBoundingClientRect();
               const cpos = event.target.getBoundingClientRect();
-              const newPixel = new window.google.maps.Point(cpos.left - apos.left + imgwidth, cpos.top - apos.top); // eslint-disable-line
+              const newPixel = new window.google.maps.Point((cpos.left - apos.left) + imgwidth,
+                cpos.top - apos.top); // 这里是地图里面的相对位置
+              const currentLatLng = projection.fromDivPixelToLatLng(newPixel);
+
               const chtml = event.target.innerHTML;
               let num = 0;
               if (chtml.split('@@@@@@@').length > 1) {
                 num = chtml.split('@@@@@@@')[1];
               }
               const personInfo = data.data.persons[num];
-              const myLatLng = new window.google.maps.LatLng({ lat: 47, lng: 112 });
-              const infowindow = new window.google.maps.InfoWindow({
-                content: "<div id='author_info' class='popup'></div>",
-              });
-              infowindow.setPosition(myLatLng);
+              infowindow.setPosition(currentLatLng);
               that.onSetPersonCard(personInfo);
               infowindow.open(map);
               that.syncInfoWindow();
             });
             cimg.addEventListener('mouseleave', () => {
-              map.closeInfoWindow();
+              infowindow.close();
             });
           }
         }

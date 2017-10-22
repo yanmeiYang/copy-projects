@@ -1096,7 +1096,6 @@ function GetGoogleMapLib(showTop) {
           const projection = that.getProjection();
           const newPixel = new google.maps.Point(25,25);
           const as =projection.fromDivPixelToLatLng(newPixel);
-          console.log(as)
           if (me.target === event.target) {
             // console.log('match, pass', me.target._text);
             return;
@@ -1106,7 +1105,6 @@ function GetGoogleMapLib(showTop) {
           let ids = '';
           const userids = [];
           const map = that.map_;
-          console.log('@#################');
 
           const markers = that.cluster_.getMarkers();
           for (var i = 0; i < that.cluster_.getSize(); i++) {

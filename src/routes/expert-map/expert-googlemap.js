@@ -16,6 +16,7 @@ import GetGoogleMapLib from './utils/googleMapGai.js';
 import RightInfoZonePerson from './RightInfoZonePerson';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
 import RightInfoZoneAll from './RightInfoZoneAll';
+import { Spinner } from '../../components';
 
 const ButtonGroup = Button.Group;
 const { CheckableTag } = Tag;
@@ -23,6 +24,7 @@ const blankAvatar = '/images/blank_avatar.jpg';
 let map1;
 let number = '0';
 let range = '0';
+const dataMap = {};
 const domainIds = [];
 const domainChecks = [];
 function insertAfter(newElement, targetElement) {
@@ -37,6 +39,9 @@ function insertAfter(newElement, targetElement) {
 class ExpertGoogleMap extends React.Component {
   constructor(props) {
     super(props);
+    this.cache = {};
+    this.cacheData = {};//缓存作者数据
+    this.cacheImg = {};//缓存作者图像
     this.showOverLay = GetGoogleMapLib(this.showTop);
     localStorage.setItem('lastgoogletype', '0');
     localStorage.setItem('googletype', '0');
@@ -46,6 +51,8 @@ class ExpertGoogleMap extends React.Component {
     typeIndex: 0,
     rangeChecks: [true, false, false, false],
     numberChecks: [true, false, false, false, false],
+    loadingFlag: true,
+    cperson: '', //当前显示的作者的id
   };
 
   componentDidMount() {
@@ -125,13 +132,28 @@ class ExpertGoogleMap extends React.Component {
     window.google.maps.event.addListener(marker, 'mouseover', () => {
       if (that.currentPersonId !== personId) {
         that.onResetPersonCard();
-        that.onLoadPersonCard(personId);
+        //that.onLoadPersonCard(personId);
         infoWindow.open(map, marker);
-        that.syncInfoWindow();
+        //that.syncInfoWindow();
+        this.setState({ cperson: personId }, this.syncInfoWindow());//回调函数里面改写
       } else {
         infoWindow.open(map, marker);
         that.syncInfoWindow();
       }
+      //使用中等大小的图标，将图片拷贝过去，和cluster中的一样,一定注意其逻辑顺序啊！
+      const id = `M${personId}`;
+      const divId = `Mid${personId}`;
+      let img = this.cacheImg[id];
+      const image = new Image(); //进行深拷贝
+      if (typeof (img) === 'undefined') {
+        img = this.cacheImg[personId];
+        img.width = 90;
+      }
+      image.src = img.src;
+      image.name = img.name;
+      image.width = img.width;
+
+      document.getElementById(divId).appendChild(image);
       that.currentPersonId = personId;
     });
 
@@ -153,6 +175,7 @@ class ExpertGoogleMap extends React.Component {
   };
 
   showgooglemap = (place, type) => {
+    this.setState({ loadingFlag: true });
     let counter = 0;
     const that = this;
     that.showOverLay();
@@ -231,7 +254,10 @@ class ExpertGoogleMap extends React.Component {
         }
         newPlaceResults.sort((a, b) => b.hindex - a.hindex);
         let j = 0;
+        const ids = [];
         for (const n of newPlaceResults) {
+          ids.push(n.id);
+          dataMap[n.id] = n;
           const newplace = findPosition(newTypeString, n);
           const onepoint = { lat: newplace[0], lng: newplace[1] };
           locations[j] = onepoint;
@@ -304,8 +330,75 @@ class ExpertGoogleMap extends React.Component {
         for (let m = 0; m < markers.length; m += 1) {
           that.addMouseoverHandler(map, markers[m], place.results[m].id);
         }
+        //cache imges
+        that.cacheInfo(ids);
+        that.cacheBiGImage(ids, 90);
+        that.cacheBiGImage(ids, 160);
+        console.log('cached in!!!yes!');
       }
     }, 100);
+  };
+
+  cacheInfo = (ids) => { //缓存基本信息
+    const resultPromise = [];
+    let count = 0;
+    let count1 = 0;
+    for (let i = 0; i < ids.length; i += 100) { //可控制cache的数目
+      const cids = ids.slice(i, i + 100);
+      resultPromise[count] = listPersonByIds(cids);
+      count += 1;
+    }
+    resultPromise.map((r) => {
+      r.then((data) => {
+        for (const p of data.data.persons) {
+          this.cacheData[p.id] = p;
+          const url = profileUtils.getAvatar(p.avatar, p.id, 50);
+          const img = new Image();
+          img.src = url;
+          img.name = p.id;//不能使用id,否则重复
+          img.onerror = () => {
+            img.src = blankAvatar;
+          };
+          this.cacheImg[p.id] = img;
+        }
+        count1 += 1;
+        if (count === count1) {
+          this.setState({ loadingFlag: false });
+        }
+      });
+      return true;
+    });
+  };
+
+  cacheBiGImage = (ids, width) => {
+    let head = ''; //图片名称
+    if (width === 90) { //中等大小的图片
+      head = 'M';
+    } else if (width === 160) { //特别大的图片
+      head = 'L';
+    }
+    for (let i = 0; i < ids.length; i += 100) { //可控制cache的数目
+      const cids = ids.slice(i, i + 100);
+      const resultPromise = listPersonByIds(cids);
+      resultPromise.then(
+        (data) => {
+          for (const p of data.data.persons) {
+            let name = head;
+            const url = profileUtils.getAvatar(p.avatar, p.id, width);
+            const img = new Image();
+            img.src = url;
+            img.name = p.id;//不能使用id,否则重复
+            name += p.id;
+            this.cacheImg[name] = img;
+          }
+        },
+        () => {
+          console.log('failed');
+        },
+      ).catch((error) => {
+        console.error(error);
+      });
+    }
   };
 
   showType = (e) => {
@@ -357,19 +450,30 @@ class ExpertGoogleMap extends React.Component {
 
     insertAfter(oDiv, maindom);
     const thisNode = getById('panel');
-    // 开始显示图片
-    const ids = usersIds.slice(0, 8);
+    // 开始显示图片,按照hindex排序
+    const usersInfo = [];
+    for (const u of usersIds) {
+      usersInfo.push(dataMap[u]);
+    }
+    usersInfo.sort((a, b) => b.hindex - a.hindex);
+    const ids = [];
+    for (const u of usersInfo.slice(0, 8)) {
+      ids.push(u.id);
+    }
 
     const fenshu = (2 * Math.PI) / ids.length;// 共有多少份，每份的夹角
     for (let i = 0; i < ids.length; i += 1) {
-      const centerX = (Math.cos(fenshu * i) * ((width / 2) - (imgwidth / 2))) + (width / 2);
-      const centerY = (Math.sin(fenshu * i) * ((width / 2) - (imgwidth / 2))) + (width / 2);
+      const centerX = (Math.cos((fenshu * i) - (Math.PI / 2)) * ((width / 2) - (imgwidth / 2)))
+        + (width / 2);
+      const centerY = (Math.sin((fenshu * i) - (Math.PI / 2)) * ((width / 2) - (imgwidth / 2)))
+        + (width / 2);
       const imgdiv = document.createElement('div');
       const cstyle = `height:${imgwidth}px;width:${imgwidth}px;left:${centerX - (imgwidth / 2)}px;top:${centerY - (imgwidth / 2)}px;`;
       imgdiv.setAttribute('name', 'scholarimg');
       imgdiv.setAttribute('style', cstyle);
       imgdiv.setAttribute('class', 'imgWrapper');
-      imgdiv.innerHTML = `<img width='${imgwidth}' src='${blankAvatar}' alt='0'>`;
+      //imgdiv.innerHTML = `<img width='${imgwidth}' src='${blankAvatar}' alt='0'>`;
+      imgdiv.innerHTML = '';
       insertAfter(imgdiv, thisNode);
       thisNode.appendChild(imgdiv);
       imgdiv.addEventListener('click', () => that.toggleRightInfo('person', ids[i]), false);
@@ -401,7 +505,8 @@ class ExpertGoogleMap extends React.Component {
     const infowindow = new window.google.maps.InfoWindow({
       content: "<div id='author_info' class='popup'></div>",
     });
-    const resultPromise = listPersonByIds(ids);
+    this.listPersonDone(map, ids, this.cacheData, infowindow, projection);
+    /*const resultPromise = listPersonByIds(ids);
 
     resultPromise.then(
       (data) => {
@@ -433,11 +538,10 @@ class ExpertGoogleMap extends React.Component {
           for (let j = 0; j < imgdivs.length; j += 1) {
             const cimg = imgdivs[j];
             window.google.maps.event.addDomListener(cimg, 'mouseenter', (event) => {
-              console.log("####################");
               const apos = getById('allmap').getBoundingClientRect();
               const cpos = event.target.getBoundingClientRect();
               const newPixel = new window.google.maps.Point((cpos.left - apos.left) + imgwidth,
-                cpos.top - apos.top); // 这里是地图里面的相对位置
+                (cpos.top - apos.top - imgwidth)); // 这里是地图里面的相对位置
               const currentLatLng = projection.fromDivPixelToLatLng(newPixel);
 
               const chtml = event.target.innerHTML;
@@ -462,7 +566,7 @@ class ExpertGoogleMap extends React.Component {
       },
     ).catch((error) => {
       console.error(error);
-    });
+    });*/
   };
 
   handleScriptLoad() {
@@ -471,10 +575,11 @@ class ExpertGoogleMap extends React.Component {
 
   toggleRightInfo = (type, id) => {
     // TODO cache it.
+    console.log(id);
+    console.log(type);
     if (this.props.expertMap.infoZoneIds !== id) { // don't change
       if (id.indexOf(',') >= 0) { // is cluster
         const clusterIdList = id.split(',');
-        console.log(clusterIdList.length);
         this.props.dispatch({
           type: 'expertMap/listPersonByIds',
           payload: { ids: clusterIdList },
@@ -499,6 +604,140 @@ class ExpertGoogleMap extends React.Component {
   reload = () => {
     const href = window.location.href;
     window.location.href = href;
+  };
+
+  listPersonDone = (map, ids, data, infowindow, projection) => {
+    const imgwidth = 45;
+
+    const imgdivs = document.getElementsByName('scholarimg');
+    if (imgdivs !== null && imgdivs.length !== 0) {
+      for (let i = 0; i < ids.length; i += 1) {
+        const cimg = imgdivs[i];
+        const personInfo = data[ids[i]];
+        let name;
+        if (typeof (personInfo.name_zh) !== 'undefined') {
+          if (personInfo.name_zh) {
+            const str = personInfo.name_zh.substr(1, 2);
+            name = str;
+          } else {
+            const tmp = personInfo.name.split(' ', 5);
+            name = tmp[tmp.length - 1];
+            if (name === '') {
+              name = personInfo.name;
+            }
+          }
+        } else {
+          const tmp = personInfo.name.split(' ', 5);
+          name = tmp[tmp.length - 1];
+          if (name === '') {
+            name = personInfo.name;
+          }
+        }
+
+        let style;
+        if (name.length <= 8) {
+          style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:45px;font-size:20%;';
+          if (name.length === 6) {
+            name = ' '.concat(name);
+          }
+          if (name.length <= 5) {
+            name = '&nbsp;'.concat(name);
+          }
+        } else {
+          const nameArr = name.split('', 20);
+          let u = 7;
+          const arr = [];
+          nameArr.map((name1) => {
+            if (u !== 7) {
+              if (u < 13) {
+                arr[u + 1] = name1;
+              } else if (u === 13) {
+                arr[u + 1] = ' ';
+                arr[u + 2] = name1;
+              } else {
+                arr[u + 2] = name1;
+              }
+            } else {
+              arr[u] = ' ';
+              arr[u + 1] = name1;
+            }
+            u += 1;
+            return true;
+          });
+          name = arr.join('');
+          name = `&nbsp;&nbsp;${name}`;
+          style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:10px;word-wrap:break-word;font-size:20%;';
+        }
+        const img = this.cacheImg[ids[i]];//浅拷贝和深拷贝
+        const image = new Image(); //进行深拷贝
+        if (typeof (img) === 'undefined') {
+          image.src = blankAvatar;
+          image.alt = name;
+          image.width = imgwidth;
+        } else {
+          image.src = img.src;
+          image.name = img.name;
+          image.alt = name;
+          image.width = imgwidth;
+          image.style = style;
+        }
+        if (img.src.includes('default.jpg') || img.src.includes('blank_avatar.jpg')) {
+          cimg.innerHTML = `<img id='${personInfo.id}' style='${style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='' alt='${name}'>`;
+        } else {
+          cimg.appendChild(image);
+        }
+      }
+
+      for (let j = 0; j < imgdivs.length; j += 1) {
+        const cimg = imgdivs[j];
+        //cimg.addEventListener('mouseenter', (event) => {
+        window.google.maps.event.addDomListener(cimg, 'mouseenter', (event) => {
+          // get current point.
+          const apos = getById('allmap').getBoundingClientRect();
+          const cpos = event.target.getBoundingClientRect();
+          const newPixel = new window.google.maps.Point((cpos.left - apos.left) + imgwidth,
+            (cpos.top - apos.top)); // 这里是地图里面的相对位置
+          const currentLatLng = projection.fromContainerPixelToLatLng(newPixel);
+          const chtml = event.target.innerHTML;
+          let num = 0;
+          let personInfo;
+          if (chtml.split('@@@@@@@').length > 1) { //当时想到这种办法也挺不容易的，保留着吧，注意一个是id一个是序号
+            num = chtml.split('@@@@@@@')[1];
+            personInfo = data[ids[num]];
+          } else {
+            if (event.target.tagName.toUpperCase() === 'DIV') {
+              num = event.target.firstChild.name;
+            } else if (event.target.tagName.toUpperCase() === 'IMG') {
+              num = event.target.name;
+            }
+            personInfo = data[num];
+          }
+          //const infoWindow = getInfoWindow(); //信息窗口
+          infowindow.setPosition(currentLatLng);
+          //map.openInfoWindow(infoWindow, currentPoint); //打开窗口
+          infowindow.open(map);
+          this.setState({ cperson: personInfo.id }, this.syncInfoWindow());
+          //使用中等大小的图标
+          const id = `M${personInfo.id}`;
+          const divId = `Mid${personInfo.id}`;
+          let img = this.cacheImg[id];
+          const image = new Image(); //进行深拷贝
+          if (typeof (img) === 'undefined') {
+            img = this.cacheImg[personInfo.id];
+            img.width = 90;
+          }
+          image.src = img.src;
+          image.name = img.name;
+          image.width = img.width;
+
+          document.getElementById(divId).appendChild(image);
+          this.currentPersonId = personInfo.id;
+        });
+        cimg.addEventListener('mouseleave', () => {
+          infowindow.close();
+        });
+      }
+    }
   };
 
   showNumber = (numberTmp) => {
@@ -572,17 +811,24 @@ class ExpertGoogleMap extends React.Component {
     }
     const avg = (hIndexSum / count).toFixed(0);
     let personPopupJsx;
-    const person = model.personInfo;
+    //const person = model.personInfo;
+    const person = this.cacheData[this.state.cperson];
     if (person) {
-      const url = profileUtils.getAvatar(person.avatar, person.id, 90);
-      const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
-      const pos = profileUtils.displayPosition(person.pos);
-      const aff = profileUtils.displayAff(person);
+      // const url = profileUtils.getAvatar(person.avatar, person.id, 90);
+      // const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
+      // const pos = profileUtils.displayPosition(person.pos);
+      // const aff = profileUtils.displayAff(person);
+      // const hindex = person && person.indices && person.indices.h_index;
+      const divId = `Mid${person.id}`;
+      const name = person.name;
+      const pos = person && person.pos && person.pos[0] && person.pos[0].n;
+      const aff = person && person.aff && person.aff.desc;
       const hindex = person && person.indices && person.indices.h_index;
 
       personPopupJsx = (
         <div className="personInfo">
-          <div><img className="img" src={url} alt="IMG" /></div>
+          <div id={divId} />
+          {/*<div><img className="img" src={url} alt="IMG" /></div>*/}
           <div className="info">
             <div className="nameLine">
               <div className="right">H-index:<b> {hindex}</b>
@@ -602,7 +848,7 @@ class ExpertGoogleMap extends React.Component {
                           isACMFellowNumber={isACMFellowNumber}
                           isIeeeFellowNumber={isIeeeFellowNumber} isChNumber={isChNumber} />
       ),
-      person: () => (<RightInfoZonePerson person={model.personInfo} />),
+      person: () => (<RightInfoZonePerson person={person} />),
       cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),
     };
 
@@ -719,6 +965,7 @@ class ExpertGoogleMap extends React.Component {
         </div>
 
         <div className={styles.map}>
+          <Spinner loading={this.state.loadingFlag} />
           <div id="allmap" />
           <div className={styles.right}>
             <div className={styles.legend}>

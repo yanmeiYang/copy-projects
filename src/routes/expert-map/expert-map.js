@@ -166,7 +166,7 @@ class ExpertMap extends React.PureComponent {
     oDiv.setAttribute('class', 'roundImgContainer');
     insertAfter(oDiv, maindom);
     const thisNode = getById('panel');
-    // 开始显示图片
+    // 开始显示图片,按照hindex排序
     const usersInfo = [];
     for (const u of usersIds) {
       usersInfo.push(dataMap[u]);

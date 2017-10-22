@@ -708,6 +708,30 @@ export default class TrendPrediction extends React.PureComponent {
     document.getElementById(id).style = 'display:none';
   };
 
+  showTip = (id) => {
+    const e = event || window.event;
+    const scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+    const scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+    const x = e.pageX || e.clientX + scrollX;
+    const y = e.pageY || e.clientY + scrollY;
+    const xPosition = x;
+    const yPosition = y;
+    document.getElementById('tip').setAttribute('style', `position:absolute;left:${xPosition}px;top:${yPosition}px;display:block;`);
+    let info = '';
+    if (id === 0) {
+      info = '按照关键词在该领域最近5年中所发表论文中出现的频率进行排序';
+    } else if (id === 1) {
+      info = '按照关键词在该领域所有发表论文中出现的频率排序';
+    } else if (id === 2) {
+      info = '按照关键词在该领域整个时间轴上前一半年份发表文章中出现的频率进行排序';
+    }
+    document.getElementById('tip').innerHTML = info;
+  };
+
+  hideTip = () => {
+    document.getElementById('tip').setAttribute('style', 'display:none;');
+  };
+
   render() {
     let i = 0;
     let url = '';
@@ -756,6 +780,7 @@ export default class TrendPrediction extends React.PureComponent {
     showDivWidth = showDivWidth > 1024 ? showDivWidth : 1024;//取其大者
     return (
       <div className={styles.trend}>
+        <div id="tip" className={styles.tip} />
         <Spinner loading={this.state.loadingFlag} />
         <div className={styles.keywords}>
           <div className={styles.inner}>
@@ -779,9 +804,9 @@ export default class TrendPrediction extends React.PureComponent {
         <div id="showchart" style={{ display: showFlag1 }}>
           <div className={styles.nav}>
             <Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange} className={styles.tabs}>
-              <TabPane tab={<span>近期热度</span>} key="1" id="recent-trend" />
-              <TabPane tab={<span>全局热度</span>} key="2" id="overall-trend" />
-              <TabPane tab={<span>技术源头</span>} key="3" id="origin-trend" />
+              <TabPane tab={<span onMouseEnter={this.showTip.bind(that, 0)} onMouseLeave={this.hideTip}>近期热度</span>} key="1" id="recent-trend" />
+              <TabPane tab={<span onMouseEnter={this.showTip.bind(that, 1)} onMouseLeave={this.hideTip}>全局热度</span>} key="2" id="overall-trend" />
+              <TabPane tab={<span onMouseEnter={this.showTip.bind(that, 2)} onMouseLeave={this.hideTip}>技术源头</span>} key="3" id="origin-trend" />
             </Tabs>
             <div id="hist-chart" className={styles.rightbox} />
           </div>

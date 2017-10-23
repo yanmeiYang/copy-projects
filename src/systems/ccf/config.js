@@ -37,6 +37,9 @@ module.exports = {
   // ccf activity 专家评分是否显示
   ShowRating: true,
 
+  // google analytics
+  googleAnalytics: 'UA-107003102-2',
+
   /**
    * Functionality
    */

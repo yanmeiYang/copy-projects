@@ -1,4 +1,5 @@
 // import fetch from 'dva/fetch';
+import { getLocalToken, saveLocalToken } from 'utils/auth';
 
 import axios from 'axios'
 import qs from 'qs'
@@ -80,7 +81,7 @@ export default async function request(url, options) {
     }
   }
 
-  const token = (options && options.token) || localStorage.getItem('token');
+  const token = (options && options.token) || getLocalToken();
   if (token) {
     headers.append('Authorization', token);
   }
@@ -132,7 +133,7 @@ export async function externalRequest(url, options) {
 
 
 export async function wget(url) {
-  const token = localStorage.getItem('token');
+  const token = getLocalToken();
   const headers = new Headers();
   headers.append('Accept', 'application/json');
   headers.append('Content-Type', 'application/json');
@@ -172,7 +173,7 @@ export async function queryAPI(payload) {
     // headers.append('Debug', 1);
   }
 
-  const token = (options && options.token) || localStorage.getItem('token');
+  const token = (options && options.token) || getLocalToken();
   if (token) {
     headers.append('Authorization', token);
   }

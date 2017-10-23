@@ -4,6 +4,7 @@ import qs from 'qs';
 import jsonp from 'jsonp';
 import { cloneDeep } from 'lodash';
 import pathToRegexp from 'path-to-regexp';
+import { getLocalToken } from 'utils/auth';
 
 import { apiDomain, nextAPIURL, YQL, CORS, strict } from './config';
 import * as debug from './debug';
@@ -141,7 +142,7 @@ const fetch = (options) => {
     }
   }
 
-  const token = (options && options.token) || localStorage.getItem('token');
+  const token = (options && options.token) || getLocalToken();
   if (token) {
     headers.Authorization = token;
   }
@@ -213,7 +214,7 @@ export async function queryAPI(payload) {
     // headers.append('Debug', 1);
   }
 
-  const token = (options && options.token) || localStorage.getItem('token');
+  const token = (options && options.token) || getLocalToken();
   if (token) {
     headers.append('Authorization', token);
   }

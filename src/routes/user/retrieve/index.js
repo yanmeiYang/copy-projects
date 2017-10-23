@@ -5,6 +5,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { Form, Button, Input, Modal } from 'antd';
 import { routerRedux } from 'dva/router';
+import { getLocalToken, saveLocalToken } from 'utils/auth';
 import { queryURL } from '../../../utils';
 import styles from './index.less';
 
@@ -24,10 +25,8 @@ class Retrieve extends React.Component {
         title: '成功',
         content: '初始化密码成功',
         onOk() {
-          localStorage.setItem('token', outerThis.props.auth.retrieve.token);
-          outerThis.props.dispatch(routerRedux.push({
-            pathname: '/',
-          }));
+          saveLocalToken(outerThis.props.auth.retrieve.token);
+          outerThis.props.dispatch(routerRedux.push({ pathname: '/' }));
         },
       });
     }

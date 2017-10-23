@@ -72,7 +72,7 @@ class PersonComment extends React.PureComponent {
     const props = this.props;
     Modal.confirm({
       title: '删除',
-      content: '确定删除该条评论？',
+      content: '确定删除该条备注？',
       onOk() {
         props.dispatch({
           type: 'personComments/deleteTheComment',
@@ -126,7 +126,7 @@ class PersonComment extends React.PureComponent {
       <div className={styles.commentStyles}>
         <div className={styles.iconStyle} onClick={this.putMessage.bind(this)}>
           <Icon type="message" />
-          <span className={styles.total}>评论</span>
+          <span className={styles.total}>备注</span>
           {total && <span>{total || 0}</span>}
         </div>
 
@@ -147,7 +147,7 @@ class PersonComment extends React.PureComponent {
                         <div className={styles.ckEditorSubmitBtn}>
                           <Button type="primary"
                                   onClick={this.updateContent.bind(this, this.state.content)}>
-                            评论
+                            备注
                           </Button>
                         </div>
 

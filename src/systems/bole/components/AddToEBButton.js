@@ -57,7 +57,7 @@ export default class AddToEBButton extends PureComponent {
       content: '确定删除吗？',
       onOk() {
         dispatch({
-          type: 'expertBase/removeExpertItem',
+          type: 'expertBase/removeExpertFromEB',
           payload: { pid, rid, offset, size },
         });
         that.setState({ isInThisEB: false });

@@ -3,9 +3,8 @@
  */
 export default {
   ProfileMerge: {
-    path: '/profile/merge/:name',
+    path: '/profile/merge/:id/:name',
     models: () => [
-      import('models/search'),
       import('models/merge'),
     ],
     component: () => import('./ProfileMergePage'),

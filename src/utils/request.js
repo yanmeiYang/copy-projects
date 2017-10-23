@@ -175,18 +175,17 @@ const fetch = (options) => {
       result = axios.delete(url, { data: cloneData, headers });
       break;
     case 'post': // ??? is this work?
-      result = axios.post(url, cloneData);
+      result = axios.post(url, cloneData, { headers });
       break;
     case 'put':
-      result = axios.put(url, cloneData);
+      result = axios.put(url, cloneData, { headers });
       break;
     case 'patch':
-      result = axios.patch(url, cloneData);
+      result = axios.patch(url, cloneData, { headers });
       break;
     default:
       result = axios(options);
   }
-  console.log('@@result:', result);
   return result;
 };
 

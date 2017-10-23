@@ -23,7 +23,7 @@ IDE：WebStorm Latest version.
 ### DVA2.0 Updates
 
 ###### Use Absolute Path to `import` packages. (Webpack alias)
-```javascript 1.8
+```javascript
 // old
 import { PersonList } from '../../component/person';
 

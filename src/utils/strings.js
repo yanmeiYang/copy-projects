@@ -19,11 +19,21 @@ const destructQueryString = (query) => {
   const frags = Q.split('||');
   const isAdvancedSearch = frags.length > 1;
   let [term, name, org] = frags;
-  term = term === '-' ? '' : term;
-  name = name === '-' ? '' : name;
-  org = org === '-' ? '' : org;
+  term = (!term || term === '-') ? '' : term;
+  name = (!name || name === '-') ? '' : name;
+  org = (!org || org === '-') ? '' : org;
   return { term, name, org, isAdvancedSearch };
 };
+
+const destructDecodedQueryString = (query) => {
+  // eslint-disable-next-line prefer-const
+  let { term, name, org, isAdvancedSearch } = destructQueryString(query);
+  term = decodeURIComponent(term) || '';
+  name = decodeURIComponent(name) || '';
+  org = decodeURIComponent(org) || '';
+  return { term, name, org, isAdvancedSearch };
+};
+
 
 const firstNonEmpty = (...terms) => {
   if (terms && terms.length > 0) {
@@ -36,12 +46,32 @@ const firstNonEmpty = (...terms) => {
   return '';
 };
 
+const encodeQuery = (query) => {
+  if (!query) {
+    return '';
+  }
+  let newQuery = query.replace(/%/g, ' ').replace(/ +/g, ' ');
+  newQuery = newQuery.trim();
+  newQuery = encodeURIComponent(newQuery);
+  return newQuery;
+};
+
+// preserve ||
+const encodeAdvancedQuery = (query) => {
+  let { term, name, org } = destructQueryString(query);
+  term = encodeQuery(term);
+  name = encodeQuery(name);
+  org = encodeQuery(org);
+  return constructQueryString(term, name, org);
+};
+
 const cleanQuery = (query) => {
   return query.replace(/-/g, ' ').trim();
 };
 
 module.exports = {
-  constructQueryString, destructQueryString, cleanQuery,
+  constructQueryString, destructQueryString, destructDecodedQueryString,
+  cleanQuery, encodeQuery, encodeAdvancedQuery,
   firstNonEmpty,
 }
 ;

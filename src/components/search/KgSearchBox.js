@@ -103,15 +103,16 @@ class KgSearchBox extends PureComponent {
 
   componentWillMount = () => {
     const { query } = this.props;
-    const { term, name, org } = strings.destructQueryString(query);
+    const { term, name, org } = strings.destructDecodedQueryString(query);
     const newQuery = this.advanced ? term : strings.firstNonEmpty(term, name, org);
+    console.log('|||||||||||||||||||||||||||', term, name, org, newQuery, { value: decodeURIComponent(newQuery) });
     this.setState({ value: newQuery || '' });
   };
 
   componentDidMount() {
     const { form, query } = this.props;
     if (this.advanced) {
-      const { _, name, org } = strings.destructQueryString(query);
+      const { _, name, org } = strings.destructDecodedQueryString(query);
       form.setFieldsValue({ name, org });
     }
   }
@@ -120,7 +121,7 @@ class KgSearchBox extends PureComponent {
     const { form, query } = this.props;
     this.advanced = this.getRealAdvancedSearchStatus(nextProps);
     if (nextProps.query !== query) {
-      const { term, name, org } = strings.destructQueryString(nextProps.query);
+      const { term, name, org } = strings.destructDecodedQueryString(nextProps.query);
       const newQuery = this.advanced ? term : strings.firstNonEmpty(term, name, org);
       this.setState({ value: newQuery || '' });
       if (this.advanced) {

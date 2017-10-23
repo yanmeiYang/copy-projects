@@ -38,7 +38,7 @@ function prepareParametersGlobal(query, offset, size, personId) {
   const { term, name, org, isAdvancedSearch } = strings.destructQueryString(query);
   if (isAdvancedSearch) {
     if (term) {
-      const cleanedTerm = encodeURIComponent(strings.cleanQuery(term));
+      const cleanedTerm = strings.cleanQuery(term);//encodeURIComponent(strings.cleanQuery(term));
       data.term = cleanedTerm;
     }
     if (name) {

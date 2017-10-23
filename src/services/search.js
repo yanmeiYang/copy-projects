@@ -203,8 +203,11 @@ function prepareParameters(query, offset, size, filters, sort, useTranslateSearc
     // data = { ...data, ...newFilters };
   }
   const { term, name, org } = strings.destructQueryString(query);
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>', term, name, org);
   if (term) {
-    const cleanedTerm = encodeURIComponent(strings.cleanQuery(term));
+    // const cleanedTerm = encodeURIComponent(strings.cleanQuery(term));
+    const cleanedTerm = strings.cleanQuery(term);
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>', cleanedTerm);
     data.term = useTranslateSearch ? `cross:${cleanedTerm}` : cleanedTerm;
   }
   if (name) {
@@ -240,7 +243,7 @@ function prepareParametersGlobal(query, offset, size, filters, sort, useTranslat
   const { term, name, org, isAdvancedSearch } = strings.destructQueryString(query);
   if (isAdvancedSearch) {
     if (term) {
-      const cleanedTerm = encodeURIComponent(strings.cleanQuery(term));
+      const cleanedTerm = strings.cleanQuery(term);//encodeURIComponent(strings.cleanQuery(term));
       data.term = useTranslateSearch ? `cross:${cleanedTerm}` : cleanedTerm;
     }
     if (name) {

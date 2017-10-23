@@ -22,7 +22,7 @@ export default class ProfileMerge extends Component {
   componentWillReceiveProps = (nextProps) => {
     if (nextProps.merge.mergeStatus !== this.props.merge.mergeStatus) {
       if (nextProps.merge.mergeStatus) {
-        message.success('合并成功');
+        // message.success('合并成功');
         window.location.reload();
       }
     }

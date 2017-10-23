@@ -80,11 +80,11 @@ module.exports = {
       return (
         <div key="0">
           {param.person && param.expertBaseId !== 'aminer' &&
-          <Button>
-            <Link to={`/profile/merge/${param.person.id}/${param.person.name}`}>
+          <Link to={`/profile/merge/${param.person.id}/${param.person.name}`}>
+            <Button>
               <FM id="com.profileMerge.button.merge" defaultMessage="Merge" />
-            </Link>
-          </Button>}
+            </Button>
+          </Link>}
         </div>
       );
     },

@@ -3,7 +3,7 @@
  */
 // Note: can't import any utils. Make sure this file load first.
 
-// 所有可选系统
+// 所有可选系统，保留关键字：global.
 const AvailableSystems = [
   'aminer',
   'ccf',

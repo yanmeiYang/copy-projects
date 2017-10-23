@@ -1,11 +1,20 @@
 import { parse } from 'qs';
+import { message as antdMessage } from 'antd';
 import { routerRedux } from 'dva/router';
 import { config, queryURL } from 'utils';
 import * as auth from 'utils/auth';
 import * as authService from 'services/auth';
 import { sysconfig } from 'systems';
+import { defineMessages, injectIntl } from 'react-intl';
 
 const { prefix } = config;
+
+const messages = defineMessages({
+  errorMessage401: {
+    id: 'message.error.login.401',
+    defaultMessage: 'User name or password not match!',
+  },
+});
 
 export default {
   namespace: 'app',
@@ -52,27 +61,40 @@ export default {
     },
 
     * login({ payload }, { put, call }) {
-      const { data } = yield call(authService.login, payload);
-      if (data.status) {
-        auth.saveLocalToken(data.token);
-        // update me info.
-        const getMeData = yield call(authService.getCurrentUserInfo);
-        if (getMeData && getMeData.data) {
-          yield put({ type: 'getMeSuccess', payload: getMeData.data });
-          yield put({ type: 'auth/hideLoading' });
-          // yield auth.dispatchAfterLogin(put);
-          const from = queryURL('from') || '/';
-          if (process.env.NODE_ENV !== 'production') {
-            console.log('Login Success, Dispatch to ', decodeURIComponent(from));
-          }
-          yield put(routerRedux.push({ pathname: decodeURIComponent(from) }));
+      try {
+        const { data } = yield call(authService.login, payload);
+        console.log('|||||||||||||||||||||||||||||', data);
+        if (data.status) {
+          auth.saveLocalToken(data.token);
+          // update me info.
+          const getMeData = yield call(authService.getCurrentUserInfo);
+          if (getMeData && getMeData.data) {
+            yield put({ type: 'getMeSuccess', payload: getMeData.data });
+            yield put({ type: 'auth/hideLoading' });
+            // yield auth.dispatchAfterLogin(put);
+            const from = queryURL('from') || '/';
+            if (process.env.NODE_ENV !== 'production') {
+              console.log('Login Success, Dispatch to ', decodeURIComponent(from));
+            }
+            yield put(routerRedux.push({ pathname: decodeURIComponent(from) }));
 
-          console.log('--------------------------------------- done');
-          // yield put(routerRedux.push({ pathname: '/' }));// temp
+            console.log('--------------------------------------- done');
+            // yield put(routerRedux.push({ pathname: '/' }));// temp
+          }
+        } else {
+          console.error('Login error:', data);
+          yield put({ type: 'auth/loginError', data });
         }
-      } else {
-        console.error('Login error:', data);
-        yield put({ type: 'auth/loginError', data });
+      } catch (err) {
+        const { success, statusCode, message } = err;
+        if (!success && statusCode > 400 && statusCode < 500) {
+          // console.error('Error: ', statusCode, message);
+          // antdMessage.error(intl.formatMessage(messages.errorMessage401));
+          antdMessage.error('用户名和密码错误'); // TODO
+          yield put({ type: 'auth/loginError', data: message });
+        } else {
+          throw err;
+        }
       }
     },
 

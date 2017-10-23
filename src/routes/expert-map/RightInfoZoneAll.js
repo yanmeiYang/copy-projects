@@ -44,14 +44,11 @@ class RightInfoZoneAll extends React.PureComponent {
         </div>
 
         <div className={styles.statistics}>
-          专家：
-          <span className={styles.count}>{count}</span>
-          ACM Fellow:<span className={styles.count}>{isACMFellowNumber}</span>
+          专家：<span className={styles.count}>{count}</span>
+          <br />ACM Fellow:<span className={styles.count}>{isACMFellowNumber}</span>
+          <br />IEEE Fellow:<span className={styles.count}>{isIeeeFellowNumber}</span>
+          <br />华人:<span className={styles.count}>{isChNumber}</span>
         </div>
-
-        <div className={styles.statistics}>
-          华人:<span className={styles.count}>{isChNumber}</span>
-          IEEE Fellow:<span className={styles.count}>{isIeeeFellowNumber}</span></div>
       </div>
     );
   }

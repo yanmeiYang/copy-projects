@@ -78,6 +78,7 @@ export default class TrendPrediction extends React.PureComponent {
     person: cperson,
     paper: cpaper,
     loadingFlag: true,
+    errorFlag: false,
   };
 
   componentDidMount() {
@@ -213,15 +214,20 @@ export default class TrendPrediction extends React.PureComponent {
     d3.select('#tooltip1').classed('hidden', true).style('visibility', 'hidden');
     const term = (query === '') ? this.props.query : query;
 
-    this.setState({ loadingFlag: true });
+    this.setState({ errorFlag: false, loadingFlag: true });
     const dd = wget(`https://dc_api.aminer.org/trend/${term}`);
     const that = this;
     dd.then((data) => {
-      trendData = humps.camelizeKeys(data, (key, convert) => {
-        return key.includes(' ') && !key.includes('_') ? key : convert(key);
-      });
-      that.setState({ loadingFlag: false });
-      this.initChart(term);
+      console.log(data);
+      if (data.terms.length === 0 || data.time_slides.length === 0) {
+        that.setState({ errorFlag: true, loadingFlag: false });
+      } else {
+        trendData = humps.camelizeKeys(data, (key, convert) => {
+          return key.includes(' ') && !key.includes('_') ? key : convert(key);
+        });
+        that.setState({ loadingFlag: false });
+        this.initChart(term);
+      }
     });
   };
 
@@ -769,12 +775,20 @@ export default class TrendPrediction extends React.PureComponent {
     const query = this.props.query;
     let showFlag = 'none';
     let showFlag1 = 'none';
-    if (this.state.loadingFlag) {
+    let tipinfo = '';
+    if (this.state.errorFlag) {
       showFlag = 'inline';
       showFlag1 = 'none';
+      tipinfo = `${query}技术领域不存在或者您的输入错误，请检查重试`;
     } else {
-      showFlag = 'none';
-      showFlag1 = 'inline';
+      if (this.state.loadingFlag) {
+        showFlag = 'inline';
+        showFlag1 = 'none';
+      } else {
+        showFlag = 'none';
+        showFlag1 = 'inline';
+      }
+      tipinfo = `${query}技术趋势正在分析中，请稍后...`;
     }
     let showDivWidth = document.body.clientWidth - 400;
     showDivWidth = showDivWidth > 1024 ? showDivWidth : 1024;//取其大者
@@ -798,7 +812,7 @@ export default class TrendPrediction extends React.PureComponent {
         </div>
         <div className={styles.loading1}>
           <div className={styles.loading} id="loading" style={{ display: showFlag, textAlign: 'center' }}>
-            {query}技术趋势正在分析中，请稍后...
+            {tipinfo}
           </div>
         </div>
         <div id="showchart" style={{ display: showFlag1 }}>

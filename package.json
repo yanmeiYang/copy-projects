@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "dependencies": {
     "antd": "^2.13.3",
-    "axios": "^0.16.2",
+    "axios": "^0.17.0",
     "babel-polyfill": "^6.26.0",
     "camelcase-object": "^1.0.0",
     "classnames": "^2.2.5",
@@ -42,7 +42,6 @@
   "devDependencies": {
     "amdefine": "^1.0.1",
     "atool-l10n": "^0.2.2",
-    "axios": "^0.16.2",
     "babel-eslint": "^8.0.0",
     "babel-plugin-dev-expression": "^0.2.1",
     "babel-plugin-dva-hmr": "^0.3.2",
@@ -85,6 +84,7 @@
     "lint": "eslint --fix --ext .js src",
     "build": "roadhog build",
     "build:a": "roadhog build --analyze",
+    "build:ab": "node --max_old_space_size=4096 node_modules/roadhog/lib/build.js --analyze",
     "build:dll": "roadhog buildDll",
     "build:new": "node version && roadhog build"
   }

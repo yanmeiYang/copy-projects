@@ -3,7 +3,7 @@
  */
 // Note: can't import any utils. Make sure this file load first.
 
-// 所有可选系统
+// 所有可选系统，保留关键字：global.
 const AvailableSystems = [
   'aminer',
   'ccf',
@@ -28,9 +28,9 @@ let System;
 // System = 'tencent';
 // System = 'cie';
 // System = 'cipsc';
-System = 'demo';
+// System = 'demo';
 // System = 'cietest';
-// System = 'bole';
+System = 'bole';
 // System = 'acmfellow';
 
 let Source = System; // AppID, Used in UniversalConfig.

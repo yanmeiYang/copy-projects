@@ -61,7 +61,7 @@ const NaviConfig = {
   ExpertBase: { // bole 专有
     key: 'ExpertBase',
     label: '我的专家库',
-    url: `/eb/${sysconfig.ExpertBase}/-/0/20`,
+    url: `/eb/${sysconfig.ExpertBase}/:query/0/20`,
     // data: 'query',
     pageSignature: 'eb/',
   },

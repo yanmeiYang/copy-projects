@@ -38,6 +38,7 @@ export default class PersonList extends Component {
     rightZoneFuncs: PropTypes.array,
     didMountHooks: PropTypes.array,
     UpdateHooks: PropTypes.array,
+    tagsLinkFuncs: PropTypes.func,
   };
 
 
@@ -87,7 +88,7 @@ export default class PersonList extends Component {
 
   render() {
     const { persons, expertBaseId, className, type } = this.props;
-    const { rightZoneFuncs, titleRightBlock, bottomZoneFuncs, afterTitleBlock } = this.props;
+    const { rightZoneFuncs, titleRightBlock, bottomZoneFuncs, afterTitleBlock, tagsLinkFuncs } = this.props;
 
     const showPrivacy = false;
     const RightZoneFuncs = rightZoneFuncs || DefaultRightZoneFuncs;
@@ -183,10 +184,16 @@ export default class PersonList extends Component {
                               return (
                                 <Tooltip key={key} placement="top" title={tag.en}>
                                   <Tag className={styles.tag}>
-                                    <Link
-                                      to={`/${sysconfig.SearchPagePrefix}/${showTag}/0/${sysconfig.MainListSize}`}>
-                                      {showTag}
-                                    </Link>
+                                    {tagsLinkFuncs ?
+                                      <a href="" onClick={tagsLinkFuncs.bind(this,{query:showTag})}>
+                                        {showTag}
+                                      </a>
+                                      : <Link
+                                        to={`/${sysconfig.SearchPagePrefix}/${showTag}/0/${sysconfig.MainListSize}`}>
+                                        {showTag}
+                                      </Link>
+                                    }
+
                                   </Tag>
                                 </Tooltip>
                               );

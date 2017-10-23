@@ -291,6 +291,7 @@ export default class SearchComponent extends Component {
                 bottomZoneFuncs={sysconfig.PersonList_BottomZone}
                 didMountHooks={sysconfig.PersonList_DidMountHooks}
                 UpdateHooks={sysconfig.PersonList_UpdateHooks}
+                tagsLinkFuncs={this.props.onSearchBarSearch}
               />
 
               {/* ---- Search Knowledge ---- */}

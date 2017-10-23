@@ -10,7 +10,7 @@ import CKEditor from './ckeditor-config';
 import { sysconfig } from '../../../systems';
 import styles from './person-comment.less';
 
-class PersonComment extends React.PureComponent {
+class PersonComment extends React.Component {
   state = {
     isComment: false,
     content: '',

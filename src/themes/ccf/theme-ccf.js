@@ -24,6 +24,15 @@ module.exports = {
   themeName: 'common-white',
   styles,
 
+  logoZone: [
+    <Link to="/" href="/" className={classnames(styles.logoZones)} key="0">
+      <div className={classnames(styles.header_logo, 'icon')} />
+      <div className={classnames(styles.header_subTitle, 'font-page-title')}>
+        CCF 专家库
+      </div>
+    </Link>,
+  ],
+
   infoZone: [
     <a key="0" href="/sys/ccf/Instructions/index.html"
        className={classnames(styles.header_info)}>

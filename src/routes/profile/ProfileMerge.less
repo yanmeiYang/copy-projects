@@ -1,9 +1,25 @@
 @import "../../themes/vars.less";
 
-.mergeBtn {
-  display: flex; justify-content: flex-end;
-  margin-bottom: 10px;
-}
-.mergeStatus {
-  color: @btn-bg-color;
+.profileMerge {
+  .mergeBtnAndNote {
+    display: flex; justify-content: space-between;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    .note{
+      font-size: @font-size-lg;
+    }
+  }
+
+  .mergeStatus {
+    color: @btn-bg-color;
+  }
+
+  .majorExpert > div > div:first-child {
+    border: 1px solid @btn-bg-color;;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+  }
 }

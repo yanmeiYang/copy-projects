@@ -8,10 +8,12 @@ import * as strings from 'utils/strings';
 
 const { api } = config;
 
+const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyLUdPTU5tbWwwU3psQUpDT2IxblZUaWh5SXN0WWNQeWc4RjY3ejRjRWQreHhGZ3pSNEJwWVV4bEdpaVwvcytHNm1janlzMDFyNTFnYk1SbHU5VWQ4UEJcL2s3K28yQmhncjRQVkhZR0M1clhoQT09IiwidWlkIjoiNTRmNTExMmU0NWNlMWJjNmQ1NjNiOGQ5Iiwic3JjIjoiYW1pbmVyIiwiaXNzIjoiYXBpLmFtaW5lci5vcmciLCJleHAiOjE1MTE0MDk5ODgsImlhdCI6MTUwODgxNzk4OCwianRpIjoiMzk1ZjM2YTIyMGJhMTBhMDAyOWU2ODcyOTA4MmFlMmFkOTRlZmUzMDIyMGM0OWYxZDExZDczNTMyMDE5M2QwM2U4MDYzOTRjOGYyNGE4ZGI2ZGUwYjljYTdkZGIyMTBlNGFhMjIyZWFlZmM2Nzc0ZjhmZmZhMTBlYTM2ZWQyMzU5MDMwYjgxOTMwNzE5ZmRmOGZjMjI3ZDQzMDIwNTBlYjQ2YWViMmJmYWM3NzI3ZGYyYWFlMTJiNGVjOTdkZDYxNzA5NmMxMjM3MWEyODIyZjBhOTE1N2IwNjljOTY0NmQ4MWRiNjdiZWQ1ZjYzN2E1NDRiOTBiMDZkZGQ1N2M1MiIsImVtYWlsIjoiaGRfeWFuZ3ltQHNpbmEuY29tIn0.snLla12tGEAC63xNTTQndCJVT82otrvNbZ0x_gTysck';
 export async function tryToDoMerge(id, mergeIds) {
   return request(api.tryToDoMerge.replace(':mid', id), {
     method: 'POST',
     body: JSON.stringify(mergeIds),
+    token,
   });
 }
 

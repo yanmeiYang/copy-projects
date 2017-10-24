@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Checkbox, Button, Pagination, Modal, message } from 'antd';
+import { Checkbox, Button, Pagination, Modal, message, Alert } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import { PersonList } from 'components/person';
 import { Spinner } from 'components';
@@ -77,19 +77,21 @@ export default class ProfileMerge extends Component {
     ];
 
     return (
-      <div>
-        <div className={styles.mergeBtn}>
-          <Button type="primary" onClick={this.merge}>
-            <FM id="com.profileMerge.button.merge" defaultMessage="Merge" />
-          </Button>
-        </div>
+      <div className={styles.profileMerge}>
         <PersonList
-          className={styles.personList}
+          className={styles.majorExpert}
           persons={currentPerson}
           user={user}
           expertBaseId={expertBaseId}
           rightZoneFuncs={[]}
         />
+        <div className={styles.mergeBtnAndNote}>
+          <Alert className={styles.note} message="请从以下专家中选择合并对象，合并操作需要后台管理员人员审核，请耐心等待。"
+                 type="info" showIcon />
+          <Button type="primary" onClick={this.merge} size="large">
+            <FM id="com.profileMerge.button.merge" defaultMessage="Merge" />
+          </Button>
+        </div>
         <Spinner loading={load} />
         <PersonList
           className={styles.personList}
@@ -99,6 +101,7 @@ export default class ProfileMerge extends Component {
           rightZoneFuncs={mergeCheckbox}
         />
         <Pagination
+          className={styles.pagination}
           showQuickJumper
           current={current}
           defaultCurrent={1}

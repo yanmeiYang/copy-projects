@@ -5,6 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Modal, Button, Input, Form, Col, Tag, Icon, Radio, Spin, Select, Upload } from 'antd';
 import { Link } from 'dva/router';
+import { getLocalToken, saveLocalToken } from 'utils/auth';
 import CanlendarInForm from '../calendar';
 import defaultImg from '../../../assets/people/default.jpg';
 import ExpertBasicInfo from './expertBasicInfo';
@@ -285,7 +286,7 @@ class AddExpertModal extends React.Component {
       name: 'file',
       action: config.baseURL + config.api.uploadActivityPosterImgFile,
       headers: {
-        Authorization: localStorage.getItem('token'),
+        Authorization: getLocalToken(),
       },
       onChange(info) {
         info.file.status = 'done';

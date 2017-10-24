@@ -36,6 +36,7 @@ System = 'bole';
 let Source = System; // AppID, Used in UniversalConfig.
 
 const SavedSystemKey = 'IJFEOVSLKDFJ';
+const LS_USER_KEY = `user_${System}`;
 
 function loadSavedSystem() {
   const savedSystem = localStorage.getItem(SavedSystemKey);
@@ -44,8 +45,7 @@ function loadSavedSystem() {
     return;
   }
   // validate auth
-  const USER_LOCAL_KEY = 'user';
-  const data = localStorage.getItem(USER_LOCAL_KEY);
+  const data = localStorage.getItem(LS_USER_KEY);
   if (data) {
     const dataObj = JSON.parse(data);
     // console.log('userInSession', dataObj);

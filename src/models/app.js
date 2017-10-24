@@ -63,7 +63,6 @@ export default {
     * login({ payload }, { put, call }) {
       try {
         const { data } = yield call(authService.login, payload);
-        console.log('|||||||||||||||||||||||||||||', data);
         if (data.status) {
           auth.saveLocalToken(data.token);
           // update me info.

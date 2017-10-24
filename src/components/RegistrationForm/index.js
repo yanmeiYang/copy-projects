@@ -15,6 +15,7 @@ import {
   Icon,
 } from 'antd';
 import { connect } from 'dva';
+import { getLocalToken, saveLocalToken } from 'utils/auth';
 import { config } from '../../utils';
 import { sysconfig } from '../../systems';
 import styles from './index.less';
@@ -300,7 +301,7 @@ class RegistrationForm extends React.Component {
       // listType: 'text',
       headers: {
         // 获得登录用户的token
-        Authorization: localStorage.getItem('token'),
+        Authorization: getLocalToken(),
       },
       onChange(info) {
         const status = info.file.status;

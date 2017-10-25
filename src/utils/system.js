@@ -21,9 +21,9 @@ const AvailableSystems = [
 
 let System;
 // System = 'aminer';
-// System = 'ccf';
+System = 'ccf';
 // System = 'ccftest';
-System = 'huawei';
+// System = 'huawei';
 // System = 'alibaba';
 // System = 'tencent';
 // System = 'cie';
@@ -67,8 +67,10 @@ function loadSavedSystem() {
 loadSavedSystem();
 
 function saveSystem(system, user) {
-  localStorage.setItem(SavedSystemKey,
-    JSON.stringify({ user: user.email, system }));
+  localStorage.setItem(
+    SavedSystemKey,
+    JSON.stringify({ user: user.email, system }),
+  );
 }
 
 module.exports = {

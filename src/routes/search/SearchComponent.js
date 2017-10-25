@@ -10,7 +10,8 @@ import { Spinner } from 'components';
 import { PersonList, ExportExperts } from 'components/person';
 import { SearchFilter, SearchSorts, KgSearchBox, SearchKnowledge } from 'components/search';
 import { sysconfig } from 'systems';
-import { createURL } from 'utils';
+import { theme, applyTheme } from 'themes';
+import { createURL, hole } from 'utils';
 import { Auth } from 'hoc';
 import styles from './SearchComponent.less';
 
@@ -197,12 +198,16 @@ export default class SearchComponent extends Component {
 
     // const expertBase = (filters && filters.eb && filters.eb.id) || 'aminer';
 
-    const SearchSortsRightZone = !sysconfig.Enable_Export ? [] : [() => (
-      <ExportExperts
-        key="0" expertBaseId={expertBaseId}
-        query={query} pageSize={pageSize} current={current} filters={filters} sort={sortType}
-      />
-    )];
+    const zoneData = { expertBaseId, query, pageSize, current, filters, sortType };
+    const SearchSortsRightZone = hole.fillFuncs(theme.SearchSorts_RightZone, [
+      () => () => (
+        <ExportExperts
+          key="0" expertBaseId={expertBaseId}
+          query={query} pageSize={pageSize} current={current} filters={filters} sort={sortType}
+        />
+      ),
+    ], zoneData);
+    // const SearchSortsRightZone = !sysconfig.Enable_Export ? [] : [];
 
     // TODO move translate search out.
     const { useTranslateSearch, translatedQuery } = this.props.search;

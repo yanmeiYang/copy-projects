@@ -16,7 +16,7 @@ module.exports = {
   strict: false, // 如果是strict模式，所有向下兼容的东西都会报错。
 
   openPages: ['/login'],
-  CORS: ['https://dc_api.aminer.org'],
+  CORS: ['https://dc_api.aminer.org', 'http://localhost:4005'],
   YQL: [],
 
   name: '专家搜索', // TODO Don't use this.

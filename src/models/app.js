@@ -60,40 +60,64 @@ export default {
       }
     },
 
+    // params: src, restrictRoot, backdoor.
     * login({ payload }, { put, call }) {
+      // first call login.
+      const { restrictRoot, backdoor, ...params } = payload;
+      const { src } = params;
+      let authData;
       try {
-        const { data } = yield call(authService.login, payload);
-        if (data.status) {
-          auth.saveLocalToken(data.token);
-          // update me info.
-          const getMeData = yield call(authService.getCurrentUserInfo);
-          if (getMeData && getMeData.data) {
-            yield put({ type: 'getMeSuccess', payload: getMeData.data });
-            yield put({ type: 'auth/hideLoading' });
-            // yield auth.dispatchAfterLogin(put);
-            const from = queryURL('from') || '/';
-            if (process.env.NODE_ENV !== 'production') {
-              console.log('Login Success, Dispatch to ', decodeURIComponent(from));
-            }
-            yield put(routerRedux.push({ pathname: decodeURIComponent(from) }));
-
-            console.log('--------------------------------------- done');
-            // yield put(routerRedux.push({ pathname: '/' }));// temp
-          }
-        } else {
-          console.error('Login error:', data);
-          yield put({ type: 'auth/loginError', data });
-        }
+        const { success, data } = yield call(authService.login, params);
+        authData = data;
       } catch (err) {
         const { success, statusCode, message } = err;
         if (!success && statusCode > 400 && statusCode < 500) {
-          // console.error('Error: ', statusCode, message);
-          // antdMessage.error(intl.formatMessage(messages.errorMessage401));
           antdMessage.error('用户名和密码错误'); // TODO
           yield put({ type: 'auth/loginError', data: message });
         } else {
           throw err;
         }
+      }
+
+      // then get me.
+      if (authData && authData.status) {
+        if (src) {
+          auth.saveLocalTokenSystem(src, authData.token);
+        }
+        auth.saveLocalToken(authData.token);
+
+        const getMeParam = {};
+        if (backdoor) {
+          getMeParam.token = authData.token;
+        }
+
+        // TODO if(restrictRoot){ ... }
+        // update me info.
+        let getMeData;
+        try {
+          getMeData = yield call(authService.getCurrentUserInfo, getMeParam);
+        } catch (err) {
+          const { success, statusCode, message } = err;
+          if (!success && statusCode > 400 && statusCode < 500) {
+            antdMessage.error('认证失败!'); // TODO
+            yield put({ type: 'auth/loginError', data: message });
+          } else {
+            throw err;
+          }
+        }
+        if (getMeData && getMeData.data) {
+          yield put({ type: 'getMeSuccess', payload: getMeData.data });
+          yield put({ type: 'auth/hideLoading' });
+          // yield auth.dispatchAfterLogin(put);
+          const from = queryURL('from') || '/';
+          if (process.env.NODE_ENV !== 'production') {
+            console.log('Login Success, Dispatch to ', decodeURIComponent(from));
+          }
+          yield put(routerRedux.push({ pathname: decodeURIComponent(from) }));
+        }
+      } else {
+        console.error('Login error:', authData);
+        yield put({ type: 'auth/loginError', authData });
       }
     },
 
@@ -201,30 +225,30 @@ export default {
       return { ...state, headerSearchBox: undefined };
     },
 
-    setQueryInHeaderIfExist(state, { payload }) {
-      console.warn('WARRNING: Deprecated!');
+    // setQueryInHeaderIfExist(state, { payload }) {
+    //   console.warn('WARRNING: Deprecated!');
+    //
+    //   const { query } = payload;
+    //   if (state.headerSearchBox) {
+    //     const newState = state;
+    //     newState.headerSearchBox.query = query;
+    //     return newState;
+    //   } else {
+    //     return state;
+    //   }
+    // },
 
-      const { query } = payload;
-      if (state.headerSearchBox) {
-        const newState = state;
-        newState.headerSearchBox.query = query;
-        return newState;
-      } else {
-        return state;
-      }
-    },
-
-    clearQueryInHeaderIfExist(state) {
-      console.warn('WARRNING: Deprecated!');
-
-      if (state.headerSearchBox) {
-        const newState = state;
-        newState.headerSearchBox.query = ' ';
-        return newState;
-      } else {
-        return state;
-      }
-    },
+    // clearQueryInHeaderIfExist(state) {
+    //   console.warn('WARRNING: Deprecated!');
+    //
+    //   if (state.headerSearchBox) {
+    //     const newState = state;
+    //     newState.headerSearchBox.query = ' ';
+    //     return newState;
+    //   } else {
+    //     return state;
+    //   }
+    // },
 
     logoutSuccess(state) {
       auth.removeLocalAuth();

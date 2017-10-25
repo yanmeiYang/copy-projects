@@ -30,7 +30,7 @@ const indicesConfig = {
     tooltip: '领域新星（S）',
     color: 'new_star',
     render: (indices) => {
-      return indices.newStar && indices.newStar.toFixed(2);
+      return (indices.newStar && indices.newStar.toFixed(2)) || 0;
     },
   },
   citation: {

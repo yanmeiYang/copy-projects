@@ -8,6 +8,7 @@ import { sysconfig } from 'systems';
 import * as hole from 'utils/hole';
 import { FormattedMessage as FM } from 'react-intl';
 import { IndexHotLinks } from 'components/widgets';
+import { ExportExperts } from 'components/person';
 import styles from './theme-acmfellow.less';
 // import * as Const from './const-acmfellow';
 
@@ -45,8 +46,9 @@ module.exports = {
     />,
   ],
 
+  //
   // Expert Page
-
+  //
   ExpertBaseExpertsPage_TitleZone: [
     // <span>ACM Fellows</span>,
   ],
@@ -56,4 +58,21 @@ module.exports = {
   ExpertBaseExpertsPage_MessageZone: [
     hole.DEFAULT_PLACEHOLDER,
   ],
+
+
+  //
+  // Search Page
+  //
+  SearchSorts_RightZone: [
+    (params) => {
+      const { expertBaseId, query, pageSize, current, filters, sortType } = params;
+      return () => // 这里是一个二级Function调用.
+        (<ExportExperts
+            key="0" expertBaseId={expertBaseId}
+            query={query} pageSize={pageSize} current={current} filters={filters} sort={sortType}
+          />
+        );
+    },
+  ],
+
 };

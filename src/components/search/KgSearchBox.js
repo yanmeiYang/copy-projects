@@ -98,7 +98,8 @@ class KgSearchBox extends PureComponent {
       suggestions: [],
     };
 
-    this.lastRequestId = null;
+    this.lastRequestId = null; // 记录最后一次请求的ID，其余的都清除掉。
+    this.latestT = 1;
   }
 
   componentWillMount = () => {
@@ -141,27 +142,24 @@ class KgSearchBox extends PureComponent {
       clearTimeout(this.lastRequestId);
     }
 
-    this.setState({ isLoading: true });
-
     // 延时200毫秒再去请求服务器。
     this.lastRequestId = setTimeout(() => {
       const t = new Date().getTime();
       this.latestT = t;
 
+      // TODO How to abort a promise outside? Or use saga to do this.
       // TODO first call suggest search function.
       const suggestPromise = suggestService.suggest(value);
       suggestPromise.then(
         (data) => {
-          if (t < this.latestT) {
-            return false; // out of date, canceled;
-          }
-          // console.log('suggest find data: ', data);
-          if (data.data && data.data.topic && data.data.topic.length > 0) {
-            this.makeSuggestion(data.data.topic);
+          if (this.latestT && t >= this.latestT) {
+            if (data.data && data.data.topic && data.data.topic.length > 0) {
+              this.makeSuggestion(data.data.topic);
+            }
           }
         },
         (err) => {
-          console.log('failed', err);
+          console.log('Request failed:', err);
         },
       ).catch((error) => {
         console.error(error);
@@ -314,10 +312,12 @@ class KgSearchBox extends PureComponent {
     if (this.props.onSearch) {
       this.props.onSearch({ advanced, query });
     }
+
     // 阻止搜索后再弹出窗口。
     if (this.lastRequestId !== null) {
       clearTimeout(this.lastRequestId);
     }
+    this.latestT = 0;
   };
 
   switchAdvanced = () => {
@@ -342,6 +342,7 @@ class KgSearchBox extends PureComponent {
       onChange: this.onChange,
     };
     const btnSize = size === 'huge' ? 'large' : size;
+
     // Finally, render it!
     return (
       <Form

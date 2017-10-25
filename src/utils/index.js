@@ -2,7 +2,8 @@
 import classnames from 'classnames';
 import config from './config';
 import { getMenusByUser } from './menu';
-import request, { queryAPI } from './request';
+import request, { nextQuery } from './request';
+import apiBuilder from './next-api-builder';
 import { color } from './theme';
 import * as TopExpertBase from './expert-base';
 import * as reflect from './reflect';
@@ -81,9 +82,10 @@ module.exports = {
   compare,
   createURL,
 
-  // menu,
   getMenusByUser,
-  request, queryAPI,
+  request, nextQuery,
+  apiBuilder,
+
   color,
   queryURL,
   getTwoDecimal,

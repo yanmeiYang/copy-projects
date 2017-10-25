@@ -48,7 +48,6 @@ module.exports = {
   // Layout:Header:HeaderInfoZone
   Header_UserAdditionalInfoBlock: param => {
     const { roles } = param;
-    console.log('+++++++++++++++++++++ Header_UserAdditionalInfoBlock', param);
     const authed = isAuthed(param && param.roles);
     return authed && (
       <p className={roles.authority[0] !== undefined ? styles.isAuthority : ''}>

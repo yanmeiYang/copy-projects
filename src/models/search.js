@@ -51,7 +51,7 @@ export default {
           const size = parseInt(match[4], 10);
           // dispatch({ type: 'emptyResults' });
           dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
-          dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: keyword } });
+          // dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: keyword } });
         }
 
         //
@@ -62,7 +62,7 @@ export default {
           const offset = parseInt(match[3], 10);
           const size = parseInt(match[4], 10);
           dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
-          dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: keyword } });
+          // dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: keyword } });
         }
 
       });
@@ -82,6 +82,7 @@ export default {
           noTotalFilters[key] = item;
         }
       }
+
       // fix sort key
       const Sort = fixSortKey(sort, query);
 
@@ -91,14 +92,16 @@ export default {
       yield put({ type: 'updateSortKey', payload: { key: Sort } });
       yield put({ type: 'updateFilters', payload: { filters } });
 
-      const data = yield call(searchService.searchPerson,
-        query, offset, size, noTotalFilters, Sort, useTranslateSearch);
+      const data = yield call(
+        searchService.searchPerson,
+        query, offset, size, noTotalFilters, Sort, useTranslateSearch,
+      );
 
-      if (data.succeed) {
-        // console.log('>>>>------ to next API');
-        yield put({ type: 'nextSearchPersonSuccess', payload: { data } });
+      if (data.data && data.data.succeed) {
+        // console.log('>>>>>> ---==== to next API');
+        yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data } });
       } else if (data.data && data.data.result) {
-        // console.log('>>>>------ to old API');
+        // console.log('>>>>>> ---==== to old API');
         yield put({ type: 'searchPersonSuccess', payload: { data: data.data, query, total } });
       } else {
         throw new Error('Result Not Available');

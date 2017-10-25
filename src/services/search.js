@@ -1,5 +1,6 @@
-import { request, queryAPI, config } from 'utils';
+import { request, nextQuery, config, queryBuilder } from 'utils';
 import * as bridge from 'utils/next-bridge';
+import { apiBuilder, F } from 'utils/next-api-builder';
 import { sysconfig } from 'systems';
 import * as strings from 'utils/strings';
 
@@ -28,11 +29,6 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
   }
 
   //
-  // if ((!filters || !filters.eb) && sysconfig.DEFAULT_EXPERT_BASE === 'aminer') {
-  //   return searchPersonGlobal(query, offset, size, filters, sort, useTranslateSearch);
-  // }
-
-  //
   // Search in ExpertBase.
   //
 
@@ -43,13 +39,13 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
   // ------------------------------------------------------------------------------------------
   if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH && Sort !== 'activity-ranking-contrib') {
 
-    const nextapi = {
-      RequestMethod: 'POST',
-      method: 'search',
+    const nextapixxxx = {
+      action: 'search',
       parameters: {
-        query, offset, size,
+        query,
+        offset,
+        size,
         searchType: 'allb', // [all | allb]
-        // sorts: [Sort],
         filters: { dims: {}, terms: {} },
         aggregation: ['gender', 'h_index', 'location', 'language'],
         haves: {
@@ -71,34 +67,63 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
       },
     };
 
+    const nextapi = apiBuilder.query(F.action.search)
+      .param({ query, offset, size })
+      .param({
+        searchType: F.searchType.allb,
+        aggregation: ['gender', 'h_index', 'location', 'language'],
+        switches: ['translate'],
+        haves: {
+          title: ['CCF_MEMBER_高级会员', 'CCF_MEMBER_会士', 'CCF_MEMBER_杰出会员' /*, 'CCF_DEPT_*'*/],
+        },
+      })
+      .schema({
+        person: [
+          'id', 'name', 'name_zh', 'tags', // 'tags_zh', 'tags_trans_zh'
+          {
+            profile: [
+              'position', 'affiliation',
+              // 'org', 'org_zh', 'bio', 'email', 'edu' ', phone'
+            ],
+          },
+          { indices: F.fields.person.indices_all },
+        ],
+      });
+
     // filters
     Object.keys(filters).map((key) => {
       const filter = filters[key];
       if (key === 'eb') {
         const ebLabel = bridge.toNextCCFLabelFromEBID(filters.eb.id);
-        nextapi.parameters.filters.dims.title = [ebLabel]; // TODO transfer EB.// TODOOOOOO
+        nextapi.mergeParam({ filters: { dims: { title: [ebLabel] } } });
       } else if (key === 'h_index') {
-        console.log('TODO filter by h_index 这里暂时是用解析的方式获取数据的。');
+        // console.log('TODO filter by h_index 这里暂时是用解析的方式获取数据的。');
         const splits = filter.split('-');
         if (splits && splits.length === 2) {
           const from = parseInt(splits[0]);
           const to = parseInt(splits[1]);
-          nextapi.parameters.filters.ranges = {
-            h_index: [isNaN(from) ? '' : from.toString(), isNaN(to) ? '' : to.toString()],
-          };
+          nextapi.mergeParam({
+            filters: {
+              ranges: {
+                h_index: [isNaN(from) ? '' : from.toString(), isNaN(to) ? '' : to.toString()],
+              },
+            },
+          });
         }
       } else {
-        nextapi.parameters.filters.terms[key] = [filters[key]];
+        nextapi.mergeParam({ filters: { terms: { key: filters[key] } } });
       }
       return false;
     });
 
     // sort
     if (Sort && Sort !== 'relevance') {
-      nextapi.parameters.sorts = [Sort];
+      nextapi.param({ sorts: [Sort] });
     }
+    console.log('DEBUG---------------------\n', nextapi.api);
+    console.log('DEBUG---------------------\n', JSON.stringify(nextapi.api));
 
-    return queryAPI(nextapi);
+    return nextQuery({ data: [nextapi.api] });
 
     // ------------------------------------------------------------------------------------------
   } else {

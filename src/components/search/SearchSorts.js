@@ -5,9 +5,10 @@ import { Tag, Tabs } from 'antd';
 import classnames from 'classnames';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { compare } from 'utils/compare';
+import { hole } from 'utils';
 import styles from './SearchSorts.less';
 
-const TabPane = Tabs.TabPane;
+const { TabPane } = Tabs;
 
 const defaultSorts = ['relevance', 'h_index', 'activity', 'rising_star', 'n_citation', 'n_pubs'];
 
@@ -37,6 +38,7 @@ export default class SearchSorts extends PureComponent {
       this.props.onOrderChange(e);
     }
   };
+
 
   render() {
     const { rightZone, sortType } = this.props;

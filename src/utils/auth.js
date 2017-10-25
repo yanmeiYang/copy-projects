@@ -29,6 +29,10 @@ function saveLocalToken(token) {
   localStorage.setItem(LS_TOKEN_KEY, token);
 }
 
+function saveLocalTokenSystem(system, token) {
+  localStorage.setItem(`token_${system}`, token);
+}
+
 /**
  *
  * @param dispatch or put
@@ -254,6 +258,7 @@ module.exports = {
   getLocalUser,
   saveLocalAuth,
   saveLocalToken,
+  saveLocalTokenSystem,
   removeLocalAuth,
   parseRoles,
 

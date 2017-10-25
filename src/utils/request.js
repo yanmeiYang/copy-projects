@@ -55,10 +55,20 @@ export default function request(url, options) {
       debug.logRequestResult(
         '❯❯ Response:',
         options.method,
-        options.url && options.url.replace(apiDomain, ''),
+        options.url && options.url.replace(apiDomain, ''), '\n>',
         result,
       );
     }
+
+    // this is a fix; if only one query, return result. if many TODO;
+    if (data && data.data && data.data) {
+      if (data.data.length === 1) {
+        result.data = data.data[0];
+      } else if (data.data.length > 1) {
+        // return as result.
+      }
+    }
+
     return Promise.resolve(result);
   }).catch((error) => {
     const { response } = error;
@@ -121,10 +131,9 @@ const fetch = (options) => {
       newUrl = `${newUrl}?${queryString}`;
     }
     console.log('> TODO 没用的newUrl', newUrl);
-
   } catch (e) {
-    console.log('======================新的错误=======================');
-    throw(e.message);
+    console.error('======================新的错误=======================');
+    throw (e.message);
     // message.error(e.message);
   }
 
@@ -199,10 +208,21 @@ const fetch = (options) => {
  *  "schema":{"a":"c"}
  *  }
  */
-export async function queryAPI(payload) {
-  // method is nextAPI's method.
-  const { method, parameters, schema, RequestMethod, ...options } = payload;
+// TODO Support Multiple queries.
+export async function nextQuery(payload) {
+  if (!payload) {
+    console.error('Error! parameters can\'t be null when call nextQuery');
+  }
+  const { method, ...options } = payload;
+  options.method = method || 'post';
+  const actions = options.data && options.data.map((query) => query.action);
+  const action = actions && actions.join(',');
+  const result = request(`${nextAPIURL}?action=${action}`, options);
+  return result;
 
+  // method is nextAPI's method.
+
+  const { parameters, schema, RequestMethod } = payload;
   if (process.env.NODE_ENV !== 'production') {
     debug.logRequest('@@next-request ', method, parameters, schema, options);
   }
@@ -227,6 +247,7 @@ export async function queryAPI(payload) {
   }]);
 
   const newOption = { ...options, headers };
+  console.log('============================', newOption);
   const response = await fetch(`${nextAPIURL}?m=${method}`, newOption);
   // checkQueryStatus(response);
 

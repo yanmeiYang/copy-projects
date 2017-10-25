@@ -34,9 +34,10 @@ const app = dva({
   onError(error) {
     if (process.env.NODE_ENV !== 'production') {
       logErr(
-        '===============================================\n这回真的错的不行了！！！\n',
-        error,
         '===============================================',
+        '\n这回真的错的不行了！！！\n',
+        error,
+        '\n===============================================',
       );
       message.error(error.message, ERROR_MSG_DURATION);
     } else {

@@ -62,9 +62,17 @@ module.exports = {
 
   index_centerZone: [hole.DEFAULT_PLACEHOLDER, <IndexCenterZone key={0} />],
 
+  //
   // Expert Page
+  //
 
-  ExpertBaseExpertsPage_Title:
-  hole.IN_COMPONENT_DEFAULT,
+  ExpertBaseExpertsPage_TitleZone: hole.IN_COMPONENT_DEFAULT,
+  ExpertBaseExpertsPage_Title_SHOW_SeeAll_Link: false,
+  ExpertBaseExpertsPage_MessageZone: hole.IN_COMPONENT_DEFAULT,
+
+  //
+  // Search Page
+  //
+  SearchSorts_RightZone: hole.IN_COMPONENT_DEFAULT,
 }
 ;

@@ -14,13 +14,17 @@ const { api } = config;
 // }
 
 export async function login(data) {
+  const { src, ...newData } = data;
+  newData.src = src || sysconfig.UserAuthSystem;
+  newData.persist = true;
   return request(api.userLogin, {
     method: 'post',
-    body: JSON.stringify({
-      ...data,
-      persist: true,
-      src: data.src || sysconfig.UserAuthSystem,
-    }),
+    data: newData,
+    // body: JSON.stringify({
+    //   ...data,
+    //   persist: true,
+    //   src: data.src || sysconfig.UserAuthSystem,
+    // }),
   });
 }
 
@@ -34,10 +38,12 @@ export async function logout(optionalToken) {
 }
 
 export async function getCurrentUserInfo(params) {
-  return request(api.currentUser, {
-    method: 'get',
-    data: params,
-  });
+  const { token, ...data } = params;
+  const options = { method: 'get', data };
+  if (token) {
+    options.token = token;
+  }
+  return request(api.currentUser, options);
 }
 
 // TODO should in use service.

@@ -85,7 +85,7 @@ export default {
         data.data.cities.map((item) => {
           geomap[item.id] = item;
           return null;
-        })
+        });
         data.data.data.map((item) => {
           const add = [];
           let fellow;

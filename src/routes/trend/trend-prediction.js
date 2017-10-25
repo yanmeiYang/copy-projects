@@ -81,6 +81,7 @@ export default class TrendPrediction extends React.PureComponent {
     person: cperson,
     paper: cpaper,
     loadingFlag: true,
+    errorFlag: false,
   };
 
   componentDidMount() {
@@ -98,7 +99,6 @@ export default class TrendPrediction extends React.PureComponent {
 
   componentDidUpdate(prevProps) {
     if (prevProps.query && prevProps.query !== this.props.query) {
-      // d3sankey();
       this.updateTrend(this.props.query);
     }
   }
@@ -221,27 +221,24 @@ export default class TrendPrediction extends React.PureComponent {
     d3.select('#tooltip1').classed('hidden', true).style('visibility', 'hidden');
     const term = (query === '') ? this.props.query : query;
 
-    this.setState({ loadingFlag: true });
+    this.setState({ errorFlag: false, loadingFlag: true });
     const url = `https://dc_api.aminer.org/trend/${term}`;
-    console.log('=-=-=-=-=--=-=URL:', url);
-    if (url) {
-      const that = this;
-      request(url).then(({ success, data }) => {
-        if (success && data) {
-          console.log('=-=-=-=-=--=-=Data:', data);
-          trendData = humps.camelizeKeys(data, (key, convert) => {
-            return key.includes(' ') && !key.includes('_') ? key : convert(key);
-          });
-          that.setState({ loadingFlag: false });
-          this.initChart(term);
-        } else {
-          console.error("Error get :", url);
-        }
-      }).catch((err) => {
-        throw err;
-      })
-      ;
-    }
+    // const dd = wget(`https://dc_api.aminer.org/trend/${term}`);
+    const that = this;
+    request(url).then(({ success, data }) => {
+      if (success && data &&
+        (data.terms.length === 0 || data.time_slides.length === 0)) {
+        that.setState({ errorFlag: true, loadingFlag: false });
+      } else {
+        trendData = humps.camelizeKeys(data, (key, convert) => {
+          return key.includes(' ') && !key.includes('_') ? key : convert(key);
+        });
+        that.setState({ loadingFlag: false });
+        this.initChart(term);
+      }
+    }).catch((err) => {
+      throw err;
+    });
   };
 
   renderHist = () => {
@@ -506,8 +503,8 @@ export default class TrendPrediction extends React.PureComponent {
     axisWidth = width / trendData.timeSlides.length;
     // 年代坐标轴，x1、y1为起点坐标，x2、y2为终点坐标
     axis.append('line').attr('x1', () => {
-      return axisWidth;
-    })
+        return axisWidth;
+      })
       .attr('x2', () => {
         return axisWidth;
       })
@@ -727,6 +724,30 @@ export default class TrendPrediction extends React.PureComponent {
     document.getElementById(id).style = 'display:none';
   };
 
+  showTip = (id) => {
+    const e = event || window.event;
+    const scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+    const scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+    const x = e.pageX || e.clientX + scrollX;
+    const y = e.pageY || e.clientY + scrollY;
+    const xPosition = x;
+    const yPosition = y;
+    document.getElementById('tip').setAttribute('style', `position:absolute;left:${xPosition}px;top:${yPosition}px;display:block;`);
+    let info = '';
+    if (id === 0) {
+      info = '按照关键词在该领域最近5年中所发表论文中出现的频率进行排序';
+    } else if (id === 1) {
+      info = '按照关键词在该领域所有发表论文中出现的频率排序';
+    } else if (id === 2) {
+      info = '按照关键词在该领域整个时间轴上前一半年份发表文章中出现的频率进行排序';
+    }
+    document.getElementById('tip').innerHTML = info;
+  };
+
+  hideTip = () => {
+    document.getElementById('tip').setAttribute('style', 'display:none;');
+  };
+
   render() {
     let i = 0;
     let url = '';
@@ -764,17 +785,26 @@ export default class TrendPrediction extends React.PureComponent {
     const query = this.props.query;
     let showFlag = 'none';
     let showFlag1 = 'none';
-    if (this.state.loadingFlag) {
+    let tipinfo = '';
+    if (this.state.errorFlag) {
       showFlag = 'inline';
       showFlag1 = 'none';
+      tipinfo = `${query}技术领域不存在或者您的输入错误，请检查重试`;
     } else {
-      showFlag = 'none';
-      showFlag1 = 'inline';
+      if (this.state.loadingFlag) {
+        showFlag = 'inline';
+        showFlag1 = 'none';
+      } else {
+        showFlag = 'none';
+        showFlag1 = 'inline';
+      }
+      tipinfo = `${query}技术趋势正在分析中，请稍后...`;
     }
     let showDivWidth = document.body.clientWidth - 400;
     showDivWidth = showDivWidth > 1024 ? showDivWidth : 1024;//取其大者
     return (
       <div className={styles.trend}>
+        <div id="tip" className={styles.tip} />
         <Spinner loading={this.state.loadingFlag} />
         <div className={styles.keywords}>
           <div className={styles.inner}>
@@ -783,8 +813,7 @@ export default class TrendPrediction extends React.PureComponent {
                 i += 1;
                 return (
                   <div key={i}>
-                    <a role="presentation" key={i}
-                       onClick={that.onKeywordClick.bind(that, hw)}>{hw}</a>
+                    <a role="presentation" key={i} onClick={that.onKeywordClick.bind(that, hw)}>{hw}</a>
                   </div>
                 );
               })
@@ -792,18 +821,16 @@ export default class TrendPrediction extends React.PureComponent {
           </div>
         </div>
         <div className={styles.loading1}>
-          <div className={styles.loading} id="loading"
-               style={{ display: showFlag, textAlign: 'center' }}>
-            {query}技术趋势正在分析中，请稍后...
+          <div className={styles.loading} id="loading" style={{ display: showFlag, textAlign: 'center' }}>
+            {tipinfo}
           </div>
         </div>
         <div id="showchart" style={{ display: showFlag1 }}>
           <div className={styles.nav}>
-            <Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange}
-                  className={styles.tabs}>
-              <TabPane tab={<span>近期热度</span>} key="1" id="recent-trend" />
-              <TabPane tab={<span>全局热度</span>} key="2" id="overall-trend" />
-              <TabPane tab={<span>技术源头</span>} key="3" id="origin-trend" />
+            <Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange} className={styles.tabs}>
+              <TabPane tab={<span onMouseEnter={this.showTip.bind(that, 0)} onMouseLeave={this.hideTip}>近期热度</span>} key="1" id="recent-trend" />
+              <TabPane tab={<span onMouseEnter={this.showTip.bind(that, 1)} onMouseLeave={this.hideTip}>全局热度</span>} key="2" id="overall-trend" />
+              <TabPane tab={<span onMouseEnter={this.showTip.bind(that, 2)} onMouseLeave={this.hideTip}>技术源头</span>} key="3" id="origin-trend" />
             </Tabs>
             <div id="hist-chart" className={styles.rightbox} />
           </div>
@@ -824,8 +851,7 @@ export default class TrendPrediction extends React.PureComponent {
               {name &&
               <div className="name bg">
                 <h2 className="section_header">
-                  <span
-                    className={styles.detail}><a {...personLinkParams}>{name} </a></span><br />
+                  <span className={styles.detail}><a {...personLinkParams}>{name} </a></span><br />
                 </h2>
               </div>
               }

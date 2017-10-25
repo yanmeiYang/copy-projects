@@ -1093,10 +1093,9 @@ function GetGoogleMapLib(showTop) {
         });
         var that = this;
         google.maps.event.addDomListener(this.div_, 'mouseover', function(event) {
-          // const projection = that.getProjection();
-          // const newPixel = new google.maps.Point(25,25);
-          // //projection.fromLatLngToDivPixel(newPixel);
-          // console.log(projection)
+          const projection = that.getProjection();
+          const newPixel = new google.maps.Point(25,25);
+          const as =projection.fromDivPixelToLatLng(newPixel);
           if (me.target === event.target) {
             // console.log('match, pass', me.target._text);
             return;
@@ -1105,8 +1104,8 @@ function GetGoogleMapLib(showTop) {
           // console.log('over new: ', me.target && me.target._text);
           let ids = '';
           const userids = [];
-          //const map = that.map_;
-          const map = that._map;
+          const map = that.map_;
+
           const markers = that.cluster_.getMarkers();
           for (var i = 0; i < that.cluster_.getSize(); i++) {
             const userinfo = markers[i].getTitle();
@@ -1127,7 +1126,7 @@ function GetGoogleMapLib(showTop) {
             me.target = null;
           };
           // call function in component.
-          showTop(userids, pos, map, maindom, ids, onLeave);
+          showTop(userids, pos, map, maindom, ids, onLeave, projection);
         });
 
         google.maps.event.addDomListener(this.div_, 'mousedown', function() {

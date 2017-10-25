@@ -40,7 +40,7 @@ const defaultSystemConfigs = {
   Use_CDN: true,
 
   // google analysis
-  googleAnalytics: '',
+  googleAnalytics: defaults.IN_APP_DEFAULT,
 
   MainListSize: 20,
 

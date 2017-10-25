@@ -77,7 +77,7 @@ const routes = [
   // core.KnowledgeGraph, // TODO BUG
   // core.RanksHelp,
 
-  trend.TrendPredictionPage,
+  // trend.TrendPredictionPage,
 
   // 2b profile
   // core.TobProfile(app),

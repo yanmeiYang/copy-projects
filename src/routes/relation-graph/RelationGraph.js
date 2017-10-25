@@ -163,6 +163,8 @@ export default class RelationGraph extends React.PureComponent {
     let dispalyAll = true;
     let indexShow = 0;
 
+    const destroyNodesIndex = [];
+
     const color = d3.scaleOrdinal(d3.schemeCategory20);
     // const color = d3.interpolateRgb(d3.rgb('blue'), d3.rgb(230, 0, 18));
     // const rawSvg = d3.select(`#${controlDivId}`).append('svg')
@@ -252,7 +254,7 @@ export default class RelationGraph extends React.PureComponent {
           dy2 = Math.pow((_nodes[sNode].y - _nodes[i].y), 2);
           //Dijkstra_ShortDist.push(Math.sqrt(dx2 + dy2));
           Dijkstra_ShortDist.push(Neighbor_Dist);
-          Neighbor_Dist = 1/Neighbor_Dist;
+          Neighbor_Dist = 1 / Neighbor_Dist;
           console.log('edge_count');
           console.log(Neighbor_Dist);
         } else if (sNode === i) {   //自己到自己的距离为0
@@ -307,7 +309,7 @@ export default class RelationGraph extends React.PureComponent {
             dx2 = Math.pow((_nodes[Current_Spot_Edge.source.index].x - _nodes[Current_Spot_Edge.target.index].x), 2);
             dy2 = Math.pow((_nodes[Current_Spot_Edge.source.index].y - _nodes[Current_Spot_Edge.target.index].y), 2);
             // Current_Spot_Edge_Dist = Math.sqrt(dx2 + dy2);
-            Current_Spot_Edge_Dist = 1/Current_Spot_Edge.count;
+            Current_Spot_Edge_Dist = 1 / Current_Spot_Edge.count;
             // console.log('Current ---- 1/edge count:', Current_Spot_Edge.source.index, Current_Spot_Edge.target.index);
             // console.log(Current_Spot_Edge_Dist);
             if (Dijkstra_ShortDist[Finding_Spot] > Dijkstra_ShortDist[Current_Spot] + Current_Spot_Edge_Dist) {
@@ -326,7 +328,7 @@ export default class RelationGraph extends React.PureComponent {
             dx2 = Math.pow((_nodes[Current_Spot_Edge.source.index].x - _nodes[Current_Spot_Edge.target.index].x), 2);
             dy2 = Math.pow((_nodes[Current_Spot_Edge.source.index].y - _nodes[Current_Spot_Edge.target.index].y), 2);
             // Current_Spot_Edge_Dist = Math.sqrt(dx2 + dy2);
-            Current_Spot_Edge_Dist = 1/Current_Spot_Edge.count;
+            Current_Spot_Edge_Dist = 1 / Current_Spot_Edge.count;
             // console.log('Current ---- 1/edge count:', Current_Spot_Edge.source.index, Current_Spot_Edge.target.index);
             // console.log(Current_Spot_Edge_Dist);
             if (Dijkstra_ShortDist[Finding_Spot] > Dijkstra_ShortDist[Current_Spot] + Current_Spot_Edge_Dist) {
@@ -767,6 +769,7 @@ export default class RelationGraph extends React.PureComponent {
 
     // $scope.zommed.
     this.zoomed = function () {
+      console.log('>>>>>>>>>>>> zoom >>>>>>>>>>',);
       const transform = d3.zoomTransform(this);
       svg.attr('transform', `translate(${transform.x},${transform.y}) scale(${transform.k})`);
       svg.selectAll('line').data(_edges).style('stroke-width', (d) => {
@@ -781,16 +784,20 @@ export default class RelationGraph extends React.PureComponent {
         }
       });
       svg.selectAll('circle').data(_nodes).attr('r', (d) => {
-        if (indexShow >= 10) {
-          if (d.indices.hIndex > indexShow) {
+        if (!destroyNodesIndex.includes(d.index)) {
+          if (indexShow >= 10) {
+            if (d.indices.hIndex > indexShow) {
+              return getRadious(d.indices.hIndex);
+            } else {
+              return 0;
+            }
+          } else if (d.indices.hIndex < 400) {
             return getRadious(d.indices.hIndex);
           } else {
-            return 0;
+            return getRadious(15);
           }
-        } else if (d.indices.hIndex < 400) {
-          return getRadious(d.indices.hIndex);
         } else {
-          return getRadious(15);
+          return 0;
         }
       }).style('stroke-width', (d) => {
         if (d.indices.hIndex > 50) {
@@ -800,20 +807,24 @@ export default class RelationGraph extends React.PureComponent {
         }
       });
       svg.selectAll('.initialText').data(_nodes).text((d) => {
-        if (indexShow >= 60) {
-          if (d.indices.hIndex > indexShow) {
-            return d.name.n.en;
+        if (!destroyNodesIndex.includes(d.index)) {
+          if (indexShow >= 60) {
+            if (d.indices.hIndex > indexShow) {
+              return d.name.n.en;
+            } else if (transform.k >= 3) {
+              console.log("放大到一定程度显示名字");
+              console.log(transform.k);
+              return d.name.n.en;
+            } else {
+              return '';
+            }
           } else if (transform.k >= 3) {
-            console.log("放大到一定程度显示名字");
-            console.log(transform.k);
+            return d.name.n.en;
+          } else if (d.index < snum) {
             return d.name.n.en;
           } else {
             return '';
           }
-        } else if (transform.k >= 3) {
-          return d.name.n.en;
-        } else if (d.index < snum) {
-          return d.name.n.en;
         } else {
           return '';
         }
@@ -826,18 +837,22 @@ export default class RelationGraph extends React.PureComponent {
         }
       }).style('font-size', `${15 / transform.k}px`).attr('stroke-width', 3 / transform.k);
       svg.selectAll('.finalText').data(_nodes).text((d) => {
-        if (indexShow >= 60) {
-          if (d.indices.hIndex > indexShow) {
-            return d.name.n.en;
+        if (!destroyNodesIndex.includes(d.index)){
+          if (indexShow >= 60) {
+            if (d.indices.hIndex > indexShow) {
+              return d.name.n.en;
+            } else if (transform.k >= 3) {
+              return d.name.n.en;
+            } else {
+              return '';
+            }
           } else if (transform.k >= 3) {
+            return d.name.n.en;
+          } else if (d.index < snum) {
             return d.name.n.en;
           } else {
             return '';
           }
-        } else if (transform.k >= 3) {
-          return d.name.n.en;
-        } else if (d.index < snum) {
-          return d.name.n.en;
         } else {
           return '';
         }
@@ -1087,9 +1102,9 @@ export default class RelationGraph extends React.PureComponent {
               } else {
                 let compare1 = getPaths(d.index, _lastNode);
                 let compare2 = getPaths(_lastNode, d.index);
-                if (compare1.length > compare2.length){
+                if (compare1.length > compare2.length) {
                   _endOfSortAdges.push(compare1);
-                } else{
+                } else {
                   _endOfSortAdges.push(compare2);
                 }
                 console.log(`${res[1]},${res[2]}`);
@@ -1134,9 +1149,9 @@ export default class RelationGraph extends React.PureComponent {
             } else {
               let compare1 = getPaths(d.index, _lastNode);
               let compare2 = getPaths(_lastNode, d.index);
-              if (compare1.length > compare2.length){
+              if (compare1.length > compare2.length) {
                 _endOfSortAdges.push(compare1);
-              } else{
+              } else {
                 _endOfSortAdges.push(compare2);
               }
               if (_endOfSortAdges !== []) {
@@ -1173,7 +1188,11 @@ export default class RelationGraph extends React.PureComponent {
       });
       node = svg.append('g').attr('class', 'nodes').selectAll('circle').data(_nodes).enter().append('circle')
         .attr('r', (d) => {
-          return getRadious(d.indices.hIndex);
+          if (destroyNodesIndex.includes(d.index)) {
+            return 0;
+          } else {
+            return getRadious(d.indices.hIndex);
+          }
           // if (d.indices.hIndex < 400) {
           //   return getRadious(d.indices.hIndex + 32);
           // } else {
@@ -1220,7 +1239,7 @@ export default class RelationGraph extends React.PureComponent {
           return top + 10;
         })
         .text((d) => {
-          if (d.index < snum) {
+          if (d.index < snum && !destroyNodesIndex.includes(d.index)) {
             return d.name.n.en;
           } else {
             return '';
@@ -1257,7 +1276,7 @@ export default class RelationGraph extends React.PureComponent {
           return top + 10;
         })
         .text((d) => {
-          if (d.index < snum) {
+          if (d.index < snum && !destroyNodesIndex.includes(d.index)) {
             return d.name.n.en;
           } else {
             return '';
@@ -1358,6 +1377,7 @@ export default class RelationGraph extends React.PureComponent {
           i,
           k,
           setlink,
+          tempSource,
           temp;
         if (error) {
           throw error;
@@ -1377,11 +1397,20 @@ export default class RelationGraph extends React.PureComponent {
           return;
         }
 
-        _nodes = graph.nodes;
+        _nodes = graph.nodes.filter(item => {
+          if (item.name.n.en === 'null null') {
+            destroyNodesIndex.push(item.index);
+            tempSource = item.index;
+          }
+          return true; });
         console.log('[debug] this is all nodes');
         console.log(_nodes);
         this.setState({ allNodes: _nodes });
-        _edges = graph.edges;
+        _edges = graph.edges.filter(item => {
+          if (item.source === tempSource) {
+            destroyNodesIndex.push(item.target);
+          }
+          return item.source !== tempSource;});
         console.log('[debug] this is all edges');
         console.log(_edges);
         setlink = d3.forceLink(_edges).distance((d) => {
@@ -1424,7 +1453,10 @@ export default class RelationGraph extends React.PureComponent {
               source: _nodes[i],
               count: 20,
             };
-            _edges.push(temp);
+            // _edges.push(temp);
+            if (_nodes[k].name.n.en !== 'null null' && _nodes[i].name.n.en !== 'null null'){
+              _edges.push(temp);
+            }
           } else {
             _saveSortAdges.push(a);
           }

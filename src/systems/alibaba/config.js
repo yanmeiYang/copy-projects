@@ -33,6 +33,9 @@ module.exports = {
   Footer_Content: defaults.EMPTY_BLOCK,
   ShowFooter: true,
 
+  // google analytics
+  googleAnalytics: 'UA-107003102-3',
+
   //
   // Functionality
   //

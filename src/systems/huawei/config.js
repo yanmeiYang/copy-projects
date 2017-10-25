@@ -34,6 +34,9 @@ module.exports = {
 
   Signup_Password: true,
 
+  // google analytics
+  googleAnalytics: 'UA-107003102-4',
+
   // > Search related
   // SearchBarInHeader: true,
   HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertMap', 'Relation', 'TrendPrediction'],

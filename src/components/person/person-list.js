@@ -167,24 +167,22 @@ export default class PersonList extends Component {
                           <h4><i className="fa fa-area-chart fa-fw" /> 研究兴趣:</h4>
                           <div className={styles.tagWrap}>
                             {person.tags.slice(0, 8).map((item, idx) => {
-                              if (item.t === null || item.t === 'Null') {
+                              if (item === null || item === 'Null') {
                                 return false;
                               }
-                              // const tag = personService.returnKeyByLanguage(this.interestsI18n, item.t);
-                              const tag = { en: item };
-                              const showTag = tag.zh ? tag.zh : tag.en;
-                              const key = `${showTag}_${idx}`;
+                              const tag = personService.returnKeyByLanguage(this.interestsI18n, item);
+                              const tooltipTag = tag.zh ? tag.zh : '';
+                              const key = `${tag.en}_${idx}`;
                               return (
-                                <Tooltip key={key} placement="top" title={tag.en}>
+                                <Tooltip key={key} placement="top" title={tooltipTag}>
                                   <Tag className={styles.tag}>
                                     {tagsLinkFuncs ?
-                                      <a href=""
-                                         onClick={tagsLinkFuncs.bind(this, { query: showTag })}>
-                                        {showTag}
+                                      <a href="" onClick={tagsLinkFuncs.bind(this, { query: tag.en })}>
+                                        {tag.en}
                                       </a>
                                       : <Link
-                                        to={`/${sysconfig.SearchPagePrefix}/${showTag}/0/${sysconfig.MainListSize}`}>
-                                        {showTag}
+                                        to={`/${sysconfig.SearchPagePrefix}/${tag.en}/0/${sysconfig.MainListSize}`}>
+                                        {tag.en}
                                       </Link>
                                     }
 

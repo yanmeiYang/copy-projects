@@ -6,10 +6,11 @@ import ReactDOM from 'react-dom';
 import { Tabs, Input, Modal, Icon } from 'antd';
 import { connect } from 'dva';
 import { isEqual } from 'lodash';
+import { Layout } from 'routes';
+import { classnames } from 'utils';
+import { RequireAdmin } from 'hoc';
 import UniversalConfig from '../../common/universal-config/index';
 import styles from './index.less';
-import { classnames } from '../../../utils';
-import { RequireAdmin } from '../../../hoc';
 
 const TabPane = Tabs.TabPane;
 const OrgListGroupCategoryKey = 'orgcategory';
@@ -181,55 +182,57 @@ export default class OrgCategory extends React.Component {
   render() {
     const { categories } = this.props.universalConfig;
     return (
-      <div className={classnames('', styles.page)}>
-        <h2>机构列表</h2>
+      <Layout searchZone={[]} showNavigator={false}>
+        <div className={classnames('', styles.page)}>
+          <h2>机构列表</h2>
 
-        <div className={styles.main}>
-          <div className={styles.left}>
+          <div className={styles.main}>
+            <div className={styles.left}>
 
-            <div className={styles.toolbox} style={{ display: 'flex', marginRight: '5px' }}>
-              <a onClick={this.onSetOrgModalVisible}>添加</a>
-              <Modal
-                title="添加机构列表："
-                visible={this.state.addOrgModalVisible}
-                onOk={this.onAddOrgList.bind(this)}
-                onCancel={this.cancelHandle}
-              >
-                <Input className="orgNameInput" placeholder="请输入新机构的名字" ref="addOrgInput"
-                       onBlur={this.onModalInputBlur}
-                       onPressEnter={e => this.onAddOrgList(e.target.value)}
-                />
-              </Modal>
+              <div className={styles.toolbox} style={{ display: 'flex', marginRight: '5px' }}>
+                <a onClick={this.onSetOrgModalVisible}>添加</a>
+                <Modal
+                  title="添加机构列表："
+                  visible={this.state.addOrgModalVisible}
+                  onOk={this.onAddOrgList.bind(this)}
+                  onCancel={this.cancelHandle}
+                >
+                  <Input className="orgNameInput" placeholder="请输入新机构的名字" ref="addOrgInput"
+                         onBlur={this.onModalInputBlur}
+                         onPressEnter={e => this.onAddOrgList(e.target.value)}
+                  />
+                </Modal>
+              </div>
+
+              <Tabs type="line" size="small" tabPosition="left"
+                    activeKey={`${OrgListPrefix}${this.state.currentGroupId}`}
+                    onChange={this.onTabChange}>
+                {categories && categories.map((item) => {
+                  // TODO how to match ya.
+                  return <TabPane key={item.category} tab={
+                    <div className={styles.leftTab}>
+                      <span className={styles.wrapOverWidth}>{item.name}</span>
+                      <div className={styles.toolbox}
+                           style={this.state.currentGroupId === item.id ? { display: 'inline-block' } : { display: 'none' }}>
+                        <a onClick={this.onEditOrgList}>
+                          <Icon type="edit" />
+                        </a>
+                        <span className="spliter">|</span>
+                        <a className={styles.actionByDel} onClick={this.onDeleteOrgList}>
+                          <Icon type="delete" />
+                        </a></div>
+                    </div>} />;
+                })}
+              </Tabs>
             </div>
 
-            <Tabs type="line" size="small" tabPosition="left"
-                  activeKey={`${OrgListPrefix}${this.state.currentGroupId}`}
-                  onChange={this.onTabChange}>
-              {categories && categories.map((item) => {
-                // TODO how to match ya.
-                return <TabPane key={item.category} tab={
-                  <div className={styles.leftTab}>
-                    <span className={styles.wrapOverWidth}>{item.name}</span>
-                    <div className={styles.toolbox}
-                         style={this.state.currentGroupId === item.id ? { display: 'inline-block' } : { display: 'none' }}>
-                      <a onClick={this.onEditOrgList}>
-                        <Icon type="edit" />
-                      </a>
-                      <span className="spliter">|</span>
-                      <a className={styles.actionByDel} onClick={this.onDeleteOrgList}>
-                        <Icon type="delete" />
-                      </a></div>
-                  </div>} />;
-              })}
-            </Tabs>
-          </div>
+            <div className={styles.right}>
+              <UniversalConfig hideValue />
+            </div>
 
-          <div className={styles.right}>
-            <UniversalConfig hideValue />
           </div>
-
         </div>
-      </div>
+      </Layout>
     );
   }
 }

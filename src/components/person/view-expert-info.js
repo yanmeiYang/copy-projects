@@ -59,7 +59,7 @@ export default class ViewExpertInfo extends React.PureComponent {
         {/*</p>}*/}
 
         {person.id &&
-        <Tooltip placement="left" title={
+        <Tooltip placement="left" overlayClassName="QRTooltip" title={
           <QRCode value={`https://aminer.org/profile_mobile/${person.id}`} size={90} />
         }>
           <p className={styles.container_qrCode}>

@@ -92,8 +92,8 @@ function keyToLowerCase(data) {
 
 export function returnKeyByLanguage(interestsData, key) {
   const tag = { en: key, zh: '' };
-  if (interestsData && sysconfig.Locale === 'zh') {
-    tag.zh = interestsData[key.toLowerCase()] ? interestsData[key.toLowerCase()] : '';
+  if (interestsData && interestsData.data && sysconfig.Locale === 'zh') {
+    tag.zh = interestsData.data[key.toLowerCase()] ? interestsData.data[key.toLowerCase()] : '';
     return tag;
   } else {
     return tag;

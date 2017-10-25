@@ -3,8 +3,8 @@
  */
 import React from 'react';
 import { connect } from 'dva';
+import { Layout } from 'routes';
 import AddUserRolesByOrg from '../../common/add-role';
-
 
 class AddUserRoles extends React.Component {
   componentDidMount() {
@@ -20,9 +20,11 @@ class AddUserRoles extends React.Component {
 
   render() {
     return (
-      <div className="content-inner">
-        <AddUserRolesByOrg />
-      </div>
+      <Layout searchZone={[]} showNavigator={false}>
+        <div className="content-inner">
+          <AddUserRolesByOrg />
+        </div>
+      </Layout>
     );
   }
 }

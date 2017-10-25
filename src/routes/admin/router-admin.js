@@ -55,7 +55,7 @@ export default {
       import('models/common/universal-config'),
       import('models/admin/system-config'),
     ],
-    component: () => import('./system-config'),
+    component: () => import('./system-config-category'),
   },
 
   // TODO yanmei:

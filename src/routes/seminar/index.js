@@ -5,18 +5,19 @@ import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import { Button, Tabs, Icon, Spin, Tag, Modal } from 'antd';
-import { config } from '../../utils';
-import { sysconfig } from '../../systems';
+import { sysconfig } from 'systems';
+import { Layout } from 'routes';
+import { applyTheme } from 'themes';
+import NewActivityList from 'components/seminar/newActivityList';
+import { Auth } from 'hoc';
+import * as auth from 'utils/auth';
 import styles from './index.less';
 import SearchSeminar from './search-seminar';
-import NewActivityList from '../../components/seminar/newActivityList';
-// import ActivityList from '../../components/seminar/activityList';
-import * as auth from '../../utils/auth';
-import { Auth } from '../../hoc';
 import { contactByJoint, getValueByJoint } from '../../services/seminar';
 
 const { CheckableTag } = Tag;
 const TabPane = Tabs.TabPane;
+const tc = applyTheme(styles);
 
 @connect(({ app, seminar, loading }) => ({ app, seminar, loading }))
 @Auth
@@ -200,183 +201,189 @@ export default class Seminar extends React.Component {
         return new Date(val2) - new Date(val1);
       };
     };
-    results.sort(compare(sortType));
-
+    if (results && results.list && results.list.length > 0) {
+      results.list.sort(compare(sortType));
+    }
     return (
-      <div className="content-inner">
-        <div className={styles.top}>
-          <SearchSeminar onSearch={this.onSearch.bind()} />
-          {auth.isAuthed(app.roles) &&
-          <Button type="primary" onClick={this.addBao.bind()}>
-            <Icon type="plus" />&nbsp;创建新活动
-          </Button>}
-        </div>
-        {/* filter */}
-        <div className={styles.filterWrap}>
-          <div className={styles.filter}>
-            {/*<div className={styles.filterRow}>*/}
-            {/*<span className={styles.filterTitle}>过滤条件:</span>*/}
-            {/*<ul className={styles.filterItems}>*/}
-            {/*{Object.entries(this.state).map((item) => {*/}
-            {/*console.log(item);*/}
-            {/*if (item[1] === '') {*/}
-            {/*return '';*/}
-            {/*}*/}
-            {/*return (*/}
-            {/*<Tag*/}
-            {/*className={styles.filterItem}*/}
-            {/*key={item[1]}*/}
-            {/*closable*/}
-            {/*afterClose={() => this.onFilterChange(item[1], item[0], false)}*/}
-            {/*color="blue"*/}
-            {/*style={{ width: 'auto' }}*/}
-            {/*>{item[1]}</Tag>*/}
-            {/*);*/}
-            {/*})}*/}
-            {/*</ul>*/}
-            {/*</div>*/}
-            {topMentionedTags.data && topMentionedTags.data.tags.length > 0 &&
-            <div className={styles.filterRow}>
-              <span className={styles.filterTitle}>标签:</span>
-              <ul className={styles.filterItems}>
-                {
-                  topMentionedTags.data.tags.slice(0, 5).map((item) => {
-                    return (
-                      <CheckableTag
-                        key={item.l}
-                        className={styles.filterItem}
-                        checked={tag === item.l}
-                        onChange={checked => this.onFilterChange(item.l, item, 'tag', checked)}
-                      >
-                        {item.l}
-                        (<span className={styles.filterCount}>{item.f + 1}</span>)
-                      </CheckableTag>
-                    );
-                  })
-                }
-              </ul>
-            </div>
-            }
-            <div className={styles.filterRow}>
-              <span className={styles.filterTitle}>活动类型:</span>
-              {activity_type.data &&
-              <ul className={styles.filterItems}>
-                <CheckableTag
-                  className={styles.filterItem}
-                  checked={category === ''}
-                  onChange={checked => this.getSeminar(sizePerPage, { src: sysconfig.SOURCE }, checked)}
-                >All
-                </CheckableTag>
-                {
-                  Object.values(activity_type.data).map((item) => {
-                    return (
-                      <CheckableTag
-                        key={item.id}
-                        className={styles.filterItem}
-                        checked={category === item.key}
-                        onChange={checked => this.onFilterChange(item.key, item, 'category', checked)}
-                      >
-                        {item.key}
-                      </CheckableTag>
-                    );
-                  })
-                }
-              </ul>
-              }
-            </div>
-            <div className={styles.filterRow}>
-              <span className={styles.filterTitle}>机构类型:</span>
-              {orgcategory.data &&
-              <ul className={styles.filterItems}>
-                <CheckableTag
-                  className={styles.filterItem}
-                  checked={orgType === ''}
-                  onChange={checked => this.getSeminar(sizePerPage, { src: sysconfig.SOURCE }, checked)}
-                >All
-                </CheckableTag>
-                {
-                  Object.values(orgcategory.data).map((item) => {
-                    return (
-                      <CheckableTag
-                        key={item.id}
-                        className={styles.filterItem}
-                        checked={orgType === item.key}
-                        onChange={checked => this.onFilterChange(item.key, item, 'orgType', checked)}
-                      >
-                        {item.key}
-                      </CheckableTag>
-                    );
-                  })
-                }
-              </ul>
-              }
-            </div>
-            {orgByActivity.data && <div className={styles.filterRow}>
-              <span className={styles.filterTitle}>承办单位:</span>
-              <ul className={styles.filterItems}>
-                {
-                  Object.values(orgByActivity.data).map((item) => {
-                    return (
-                      <CheckableTag
-                        key={`${item.id}_${Math.random()}`}
-                        className={styles.filterItem}
-                        checked={getValueByJoint(organizer) === item.key}
-                        onChange={checked => this.onFilterChange(item.key, item, 'organizer', checked)}
-                      >
-                        {item.key}
-                      </CheckableTag>
-                    );
-                  })
-                }
-              </ul>
-            </div>}
+      <Layout contentClass={tc(['seminar'])} searchZone={[]}>
+        <div className="content-inner">
+          <div className={styles.top}>
+            <SearchSeminar onSearch={this.onSearch.bind()} />
+            {auth.isAuthed(app.roles) &&
+            <Button type="primary" onClick={this.addBao.bind()}>
+              <Icon type="plus" />&nbsp;创建新活动
+            </Button>}
           </div>
-        </div>
-
-        <div>
-          <Tabs defaultActiveKey={this.state.sortType} onChange={this.onTabsChange}
-                className={styles.maxWidth}>
-
-            <TabPane tab={<span>开始时间<i className="fa fa-sort-amount-desc" /></span>}
-                     key="time" />
-            <TabPane tab={<span>创建时间<i className="fa fa-sort-amount-desc" /></span>}
-                     key="createtime" />
-            <TabPane tab={<span>修改时间<i className="fa fa-sort-amount-desc" /></span>}
-                     key="updatetime" />
-          </Tabs>
-        </div>
-
-        <Spin spinning={loading}>
-          <div className="seminar">
-            {results.length > 0 ?
-              <div className="seminar_outbox">
-                {
-                  results.map((result, index) => {
-                    return (
-                      <div key={result.id + Math.random()}>
-                        {(app.roles.authority.indexOf(result.organizer[0]) >= 0
-                        || auth.isSuperAdmin(app.roles))
-                        && <Button type="danger" icon="delete" size="small"
-                                   className={styles.delSeminarBtn}
-                                   onClick={this.delTheSeminar.bind(this, result, index)}>
-                          删除
-                        </Button>}
-                        <NewActivityList result={result} hidetExpertRating="false"
-                                         style={{ marginTop: '20px' }} />
-                      </div>
-                    );
-                  })
-                }
-                {!loading &&
-                <Button type="primary" className="getMoreActivities"
-                        onClick={this.getMoreSeminar.bind()}>More</Button>}
+          {/* filter */}
+          <div className={styles.filterWrap}>
+            <div className={styles.filter}>
+              {/*<div className={styles.filterRow}>*/}
+              {/*<span className={styles.filterTitle}>过滤条件:</span>*/}
+              {/*<ul className={styles.filterItems}>*/}
+              {/*{Object.entries(this.state).map((item) => {*/}
+              {/*console.log(item);*/}
+              {/*if (item[1] === '') {*/}
+              {/*return '';*/}
+              {/*}*/}
+              {/*return (*/}
+              {/*<Tag*/}
+              {/*className={styles.filterItem}*/}
+              {/*key={item[1]}*/}
+              {/*closable*/}
+              {/*afterClose={() => this.onFilterChange(item[1], item[0], false)}*/}
+              {/*color="blue"*/}
+              {/*style={{ width: 'auto' }}*/}
+              {/*>{item[1]}</Tag>*/}
+              {/*);*/}
+              {/*})}*/}
+              {/*</ul>*/}
+              {/*</div>*/}
+              {topMentionedTags.data && topMentionedTags.data.tags.length > 0 &&
+              <div className={styles.filterRow}>
+                <span className={styles.filterTitle}>标签:</span>
+                <ul className={styles.filterItems}>
+                  {
+                    topMentionedTags.data.tags.slice(0, 5).map((item) => {
+                      return (
+                        <CheckableTag
+                          key={item.l}
+                          className={styles.filterItem}
+                          checked={tag === item.l}
+                          onChange={checked => this.onFilterChange(item.l, item, 'tag', checked)}
+                        >
+                          {item.l}
+                          (<span className={styles.filterCount}>{item.f + 1}</span>)
+                        </CheckableTag>
+                      );
+                    })
+                  }
+                </ul>
               </div>
-              : <div className={styles.noDataMessage}>
-                <span>暂无数据</span>
+              }
+              <div className={styles.filterRow}>
+                <span className={styles.filterTitle}>活动类型:</span>
+                {activity_type.data &&
+                <ul className={styles.filterItems}>
+                  <CheckableTag
+                    className={styles.filterItem}
+                    checked={category === ''}
+                    onChange={checked => this.getSeminar(sizePerPage, { src: sysconfig.SOURCE }, checked)}
+                  >All
+                  </CheckableTag>
+                  {
+                    Object.values(activity_type.data).map((item) => {
+                      return (
+                        <CheckableTag
+                          key={item.id}
+                          className={styles.filterItem}
+                          checked={category === item.key}
+                          onChange={checked => this.onFilterChange(item.key, item, 'category', checked)}
+                        >
+                          {item.key}
+                        </CheckableTag>
+                      );
+                    })
+                  }
+                </ul>
+                }
+              </div>
+              <div className={styles.filterRow}>
+                <span className={styles.filterTitle}>机构类型:</span>
+                {orgcategory.data &&
+                <ul className={styles.filterItems}>
+                  <CheckableTag
+                    className={styles.filterItem}
+                    checked={orgType === ''}
+                    onChange={checked => this.getSeminar(sizePerPage, { src: sysconfig.SOURCE }, checked)}
+                  >All
+                  </CheckableTag>
+                  {
+                    Object.values(orgcategory.data).map((item) => {
+                      return (
+                        <CheckableTag
+                          key={item.id}
+                          className={styles.filterItem}
+                          checked={orgType === item.key}
+                          onChange={checked => this.onFilterChange(item.key, item, 'orgType', checked)}
+                        >
+                          {item.key}
+                        </CheckableTag>
+                      );
+                    })
+                  }
+                </ul>
+                }
+              </div>
+              {orgByActivity.data && <div className={styles.filterRow}>
+                <span className={styles.filterTitle}>承办单位:</span>
+                <ul className={styles.filterItems}>
+                  {
+                    Object.values(orgByActivity.data).map((item) => {
+                      return (
+                        <CheckableTag
+                          key={`${item.id}_${Math.random()}`}
+                          className={styles.filterItem}
+                          checked={getValueByJoint(organizer) === item.key}
+                          onChange={checked => this.onFilterChange(item.key, item, 'organizer', checked)}
+                        >
+                          {item.key}
+                        </CheckableTag>
+                      );
+                    })
+                  }
+                </ul>
               </div>}
+            </div>
           </div>
-        </Spin>
-      </div>
+
+            <div>
+              <Tabs defaultActiveKey={this.state.sortType} onChange={this.onTabsChange}
+                    className={styles.maxWidth}>
+
+                <TabPane tab={<span>开始时间<i className="fa fa-sort-amount-desc" /></span>}
+                         key="time" />
+                <TabPane tab={<span>创建时间<i className="fa fa-sort-amount-desc" /></span>}
+                         key="createtime" />
+                <TabPane tab={<span>修改时间<i className="fa fa-sort-amount-desc" /></span>}
+                         key="updatetime" />
+              </Tabs>
+            </div>
+
+            <Spin spinning={loading}>
+              <div className="seminar">
+                {results.list && results.list.length > 0 ?
+                  <div className="seminar_outbox">
+                    {
+                      results.list.map((result, index) => {
+                        return (
+                          <div key={result.id + Math.random()}>
+                            {(app.roles.authority.indexOf(result.organizer[0]) >= 0
+                            || auth.isSuperAdmin(app.roles))
+                            && <Button type="danger" icon="delete" size="small"
+                                       className={styles.delSeminarBtn}
+                                       onClick={this.delTheSeminar.bind(this, result, index)}>
+                              删除
+                            </Button>}
+                            <NewActivityList result={result} hidetExpertRating="false"
+                                             style={{ marginTop: '20px' }} />
+                          </div>
+                        );
+                      })
+                    }
+                    {!loading &&
+                    <Button type="primary" className="getMoreActivities"
+                            onClick={this.getMoreSeminar.bind()}>
+                      More
+                    </Button>}
+                  </div>
+                  :
+                  <div className={styles.noDataMessage}>
+                    <span>暂无数据</span>
+                  </div>}
+              </div>
+            </Spin>
+        </div>
+      </Layout>
     );
   }
 }

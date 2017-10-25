@@ -65,19 +65,6 @@ module.exports = {
   // PersonList_PersonLink_NewTab: true,
   // param: [person, eb{id,name}]
 
-
-
-  //PersonList_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
-  //PersonList_BottomZone: [
-  //  param => (
-  //    <PersonComment
-  //      person={param.person} user={param.user} key="1"
-  //      ExpertBase={ExpertBase}
-  //    />),
-  //],
-  // PersonList_DidMountHooks: [],
-
-
   Search_CheckEB: true, // Check ExpertBase.
 
   // 地图中心点

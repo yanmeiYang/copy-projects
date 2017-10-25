@@ -45,6 +45,11 @@ module.exports = {
     // <div key={1}>sadfasdfa</div>,
   ],
 
+  //
+  // Person List Component
+  //
+  PersonList_AfterTitleBlock: ({ param }) => <div></div>,
+
   // Layout:Header:HeaderInfoZone
   Header_UserAdditionalInfoBlock: param => {
     const { roles } = param;

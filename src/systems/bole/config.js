@@ -3,10 +3,8 @@
  */
 import React from 'react';
 import { Link } from 'dva/router';
-import { Button } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import defaults from '../utils';
-import { AddToEBButton, PersonRemoveButton, PersonComment } from './components';
 import { GetComments } from './hooks/person-comment-hooks';
 
 import { createRoster } from '../../hooks';
@@ -62,40 +60,6 @@ module.exports = {
   /**
    * PersonList
    */
-  // PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
-  // PersonList_PersonLink_NewTab: true,
-  // param: [person, eb{id,name}]
-  PersonList_TitleRightBlock:
-    ({ param }) => (
-      <div>
-        <AddToEBButton
-          person={param.person} key="2"
-          expertBaseId={param.expertBaseId}
-          targetExpertBase="59a8e5879ed5db1fc4b762ad"
-        />
-      </div>),
-
-  PersonList_RightZone: [
-    param => {
-      return (
-        <div key="0">
-          {param.person && param.expertBaseId !== 'aminer' &&
-          <Link to={`/profile/merge/${param.person.id}/${param.person.name}`}>
-            <Button>
-              <FM id="com.profileMerge.button.merge" defaultMessage="Merge" />
-            </Button>
-          </Link>}
-        </div>
-      );
-    },
-  ],
-  PersonList_BottomZone: [
-    param => (
-      <PersonComment
-        person={param.person} user={param.user} key="1"
-        expertBaseId={param.expertBaseId}
-      />),
-  ],
   // PersonList_DidMountHooks: [],
   PersonList_UpdateHooks: [
     param => GetComments(param),

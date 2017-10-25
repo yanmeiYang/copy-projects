@@ -240,9 +240,10 @@ const A = hasValue ? 'has value' : 'no';
 
 
 ## Refactoring TODO
-#### Remove the occurence.
+#### Remove the Occurrence.
   showFooter
   let { query } = queryString.parse(location.search);
   INTERESTS_I18N
+  import * as hole from 'utils/hole';
   
 

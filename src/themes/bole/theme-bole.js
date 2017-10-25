@@ -5,7 +5,10 @@ import React from 'react';
 import { Link } from 'dva/router';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
+import { Button } from 'antd';
 import * as hole from 'utils/hole';
+import AddToEBButton from 'routes/expert-base/AddToEBButton';
+import { PersonComment } from 'systems/bole/components';
 import { FormattedMessage as FM } from 'react-intl';
 import { IndexHotLinks } from 'components/widgets';
 import styles from './theme-bole.less';
@@ -33,7 +36,9 @@ module.exports = {
     </Link>,
   ],
 
+  //
   // Index page
+  //
 
   index_centerZone: [
     <IndexHotLinks
@@ -45,8 +50,44 @@ module.exports = {
     />,
   ],
 
-  // Expert Page
+  //
+  // Person List Component
+  //
+  PersonList_TitleRightBlock: ({ param }) => (
+    <div key="1">
+      <AddToEBButton
+        person={param.person}
+        expertBaseId={param.expertBaseId}
+        targetExpertBase={sysconfig.ExpertBase}
+      />
+    </div>),
 
+  PersonList_RightZone: [
+    param => {
+      return (
+        <div key="0">
+          {param.person && param.expertBaseId !== 'aminer' &&
+          <Link to={`/profile/merge/${param.person.id}/${param.person.name}`}>
+            <Button>
+              <FM id="com.profileMerge.button.merge" defaultMessage="Merge" />
+            </Button>
+          </Link>}
+        </div>
+      );
+    },
+  ],
+
+  PersonList_BottomZone: [
+    param => (
+      <PersonComment
+        person={param.person} user={param.user} key="1"
+        expertBaseId={param.expertBaseId}
+      />),
+  ],
+
+  //
+  // Expert Page
+  //
   ExpertBaseExpertsPage_TitleZone: [
     // <span>ACM Fellows</span>,
   ],

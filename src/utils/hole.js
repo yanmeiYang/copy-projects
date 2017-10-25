@@ -1,11 +1,13 @@
 /* eslint-disable camelcase */
+import React from 'react';
+
 /**
  * Created by BoGao on 2017/8/3.
  */
 const default_placeholder = '__DEFAULT_PLACEHOLDER__';
 
 // TODO with parameters.
-function fill(holeList, defaultHoleList) {
+function fill(holeList, defaultHoleList, config) {
   if (!holeList) {
     return defaultHoleList;
   }
@@ -23,12 +25,20 @@ function fill(holeList, defaultHoleList) {
       }
       return false;
     });
-    return newHoles;
+    if (config && (config.withContainer || config.containerClass)) {
+      return (
+        <div className={config.containerClass}>
+          {newHoles}
+        </div>
+      );
+    } else {
+      return newHoles;
+    }
   }
   return null;
 }
 
-function fillFuncs(holeList, defaultHoleList, payload) {
+function fillFuncs(holeList, defaultHoleList, payload, config) {
   let holes = holeList;
   if (!holes) {
     holes = defaultHoleList;
@@ -46,7 +56,15 @@ function fillFuncs(holeList, defaultHoleList, payload) {
       }
       return false;
     });
-    return newHoles;
+    if (config && (config.withContainer || config.containerClass)) {
+      return (
+        <div className={config.containerClass}>
+          {newHoles}
+        </div>
+      );
+    } else {
+      return newHoles;
+    }
   }
   return false;
 }
@@ -57,7 +75,7 @@ module.exports = {
   IN_COMPONENT_DEFAULT: undefined,
   EMPTY_BLOCK_FUNC: () => null,
   // EMPTY_BLOCK: '',
-  // EMPTY_BLOCK_FUNC_LIST: [],
+  EMPTY_ZONE_FUNC: [],
   DEFAULT_PLACEHOLDER: default_placeholder,
 
   // methods

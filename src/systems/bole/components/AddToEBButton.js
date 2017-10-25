@@ -7,7 +7,7 @@ import { Button, Modal, message } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import { routerRedux } from 'dva/router';
 import styles from './AddToEBButton.less';
-
+// TODO Remove this. dup with others.
 @connect(({ expertBase, loading }) => ({ expertBase, loading }))
 export default class AddToEBButton extends PureComponent {
   constructor(props) {

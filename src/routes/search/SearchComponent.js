@@ -290,10 +290,10 @@ export default class SearchComponent extends Component {
                 persons={results}
                 user={this.props.app.user}
                 expertBaseId={expertBaseId}
-                afterTitleBlock={sysconfig.PersonList_AfterTitleBlock}
-                titleRightBlock={sysconfig.PersonList_TitleRightBlock}
-                rightZoneFuncs={sysconfig.PersonList_RightZone}
-                bottomZoneFuncs={sysconfig.PersonList_BottomZone}
+                afterTitleBlock={theme.PersonList_AfterTitleBlock}
+                titleRightBlock={theme.PersonList_TitleRightBlock}
+                rightZoneFuncs={theme.PersonList_RightZone}
+                bottomZoneFuncs={theme.PersonList_BottomZone}
                 didMountHooks={sysconfig.PersonList_DidMountHooks}
                 UpdateHooks={sysconfig.PersonList_UpdateHooks}
                 tagsLinkFuncs={this.props.onSearchBarSearch}

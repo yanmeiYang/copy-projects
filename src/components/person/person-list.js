@@ -2,19 +2,17 @@
  *  Created by BoGao on 2017-06-15;
  */
 /* eslint-disable camelcase */
-import React, { Component, PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
-import { Tag, Tooltip, Checkbox } from 'antd';
+import { Tag, Tooltip } from 'antd';
 import classnames from 'classnames';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import * as personService from 'services/person';
-import { PersonComment } from 'systems/bole/components';
 import { sysconfig } from 'systems';
-import { config, compare } from 'utils';
+import { config, compare, hole } from 'utils';
 import * as display from 'utils/display';
-import * as profileUtils from 'utils/profile-utils';
 import { Indices } from 'components/widgets';
 import ViewExpertInfo from './view-expert-info';
 import styles from './person-list.less';
@@ -22,9 +20,6 @@ import styles from './person-list.less';
 const DefaultRightZoneFuncs = [
   param => <ViewExpertInfo person={param.person} key="1" />,
 ];
-
-// FIXME 呵呵哒，personComment并不是默认的functions.
-const DefaultBottomZoneFuncs = [];
 
 @connect()
 export default class PersonList extends Component {
@@ -91,8 +86,6 @@ export default class PersonList extends Component {
     const { rightZoneFuncs, titleRightBlock, bottomZoneFuncs, afterTitleBlock, tagsLinkFuncs } = this.props;
 
     const showPrivacy = false;
-    const RightZoneFuncs = rightZoneFuncs || DefaultRightZoneFuncs;
-    const BottomZoneFuncs = bottomZoneFuncs || DefaultBottomZoneFuncs;
 
     return (
       <div className={classnames(styles.personList, className, styles[type])}>
@@ -185,7 +178,8 @@ export default class PersonList extends Component {
                                 <Tooltip key={key} placement="top" title={tag.en}>
                                   <Tag className={styles.tag}>
                                     {tagsLinkFuncs ?
-                                      <a href="" onClick={tagsLinkFuncs.bind(this,{query:showTag})}>
+                                      <a href=""
+                                         onClick={tagsLinkFuncs.bind(this, { query: showTag })}>
                                         {showTag}
                                       </a>
                                       : <Link
@@ -206,26 +200,22 @@ export default class PersonList extends Component {
                     </div>
                   </div>
                 </div>
+
                 {/* ---- Right Zone ---- */}
-                {RightZoneFuncs && RightZoneFuncs.length > 0 &&
-                <div className={styles.person_right_zone}>
-                  {RightZoneFuncs.map((blockFunc) => {
-                    const param = { person, expertBaseId };
-                    return blockFunc ? blockFunc(param) : false;
-                  })}
-                </div>
-                }
+                {hole.fillFuncs(
+                  rightZoneFuncs, // theme from config.
+                  DefaultRightZoneFuncs, // default block.
+                  { person, expertBaseId }, // parameters passed to block.
+                  { containerClass: styles.person_right_zone }, // configs.
+                )}
               </div>
 
               {/*---- Bottom Zone ---- */}
-              {BottomZoneFuncs && BottomZoneFuncs.length > 0 &&
-              <div className={styles.personComment}>
-                {BottomZoneFuncs.map((bottomBlockFunc) => {
-                  const param = { person, expertBaseId, user: this.props.user };
-                  return bottomBlockFunc ? bottomBlockFunc(param) : false;
-                })}
-              </div>
-              }
+              {hole.fillFuncs(
+                bottomZoneFuncs, [],
+                { person, expertBaseId, user: this.props.user },
+                { containerClass: styles.personComment }, // TODO change name.
+              )}
             </div>
           );
         })

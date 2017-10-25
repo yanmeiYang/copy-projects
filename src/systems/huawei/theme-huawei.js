@@ -59,8 +59,15 @@ module.exports = {
     </div>,
   ],
 
-
   index_centerZone: [hole.DEFAULT_PLACEHOLDER, <IndexCenterZone key={0} />],
+
+  //
+  // Person List Component
+  //
+  PersonList_AfterTitleBlock: ({ param }) => <PersonLabel person={param.person} />,
+  PersonList_TitleRightBlock: hole.EMPTY_BLOCK_FUNC,
+  PersonList_RightZone: hole.IN_COMPONENT_DEFAULT,
+  PersonList_BottomZone: hole.IN_COMPONENT_DEFAULT,
 
   //
   // Expert Page

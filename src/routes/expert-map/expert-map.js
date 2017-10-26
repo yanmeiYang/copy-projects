@@ -644,11 +644,14 @@ class ExpertMap extends React.PureComponent {
             }
           }, showLoadErrorMessage,
         );
-        //cache imges
-        that.cacheInfo(ids);
-        that.cacheBiGImage(ids, 90);
-        that.cacheBiGImage(ids, 160);
-        console.log('cached in!!!yes!');
+
+        // cache images
+        if (sysconfig.Map_Preload) {
+          that.cacheInfo(ids);
+          that.cacheBiGImage(ids, 90);
+          that.cacheBiGImage(ids, 160);
+          console.log('cached in!!!yes!');
+        }
       }, showLoadErrorMessage,
     );
   };
@@ -830,7 +833,10 @@ class ExpertMap extends React.PureComponent {
   };
 
   domainChanged = (value) => {
-    this.props.dispatch(routerRedux.push({ pathname: '/expert-map', search: `?query=${value.name}` }));
+    this.props.dispatch(routerRedux.push({
+      pathname: '/expert-map',
+      search: `?query=${value.name}`
+    }));
     let i = 0;
     domainIds.map((domain1) => {
       domainChecks[i] = value.id === domain1; //简化写法
@@ -974,7 +980,8 @@ class ExpertMap extends React.PureComponent {
                   return (
                     <CheckableTag className={styles.filterItem} key={domain.id}
                                   checked={domainChecks[checkState - 1]} value={domain.id}>
-                      <span role="presentation" onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>
+                      <span role="presentation"
+                            onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>
                     </CheckableTag>);
                 })
                 }
@@ -986,21 +993,38 @@ class ExpertMap extends React.PureComponent {
               <span className={styles.filterTitle}><span>Range:</span></span>
               <ul>
                 <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[0]}>
-                  <span role="presentation" onClick={this.showRange.bind(that, '0')} value="0" >ALL</span>
+                  <span role="presentation" onClick={this.showRange.bind(that, '0')}
+                        value="0">ALL</span>
                 </CheckableTag>
-                <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[1]}><span role="presentation" onClick={this.showRange.bind(that, '1')}>ACM Fellow</span></CheckableTag>
-                <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[2]}><span role="presentation" onClick={this.showRange.bind(that, '2')}>IEEE Fellow</span></CheckableTag>
-                <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[3]}><span role="presentation" onClick={this.showRange.bind(that, '3')}>华人</span></CheckableTag>
+                <CheckableTag className={styles.filterItem}
+                              checked={that.state.rangeChecks[1]}><span role="presentation"
+                                                                        onClick={this.showRange.bind(that, '1')}>ACM Fellow</span></CheckableTag>
+                <CheckableTag className={styles.filterItem}
+                              checked={that.state.rangeChecks[2]}><span role="presentation"
+                                                                        onClick={this.showRange.bind(that, '2')}>IEEE Fellow</span></CheckableTag>
+                <CheckableTag className={styles.filterItem}
+                              checked={that.state.rangeChecks[3]}><span role="presentation"
+                                                                        onClick={this.showRange.bind(that, '3')}>华人</span></CheckableTag>
               </ul>
             </div>
             <div className={styles.filterRow}>
               <span className={styles.filterTitle}><span>H-index:</span></span>
               <ul>
-                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[4]}><span role="presentation" onClick={this.showNumber.bind(that, '4')}>ALL</span></CheckableTag>
-                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[3]}><span role="presentation" onClick={this.showNumber.bind(that, '3')}>TOP500</span></CheckableTag>
-                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[0]}><span role="presentation" onClick={this.showNumber.bind(that, '0')}>TOP200</span></CheckableTag>
-                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[2]}><span role="presentation" onClick={this.showNumber.bind(that, '2')}>TOP100</span></CheckableTag>
-                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[1]}><span role="presentation" onClick={this.showNumber.bind(that, '1')}>TOP50</span></CheckableTag>
+                <CheckableTag className={styles.filterItem}
+                              checked={that.state.numberChecks[4]}><span role="presentation"
+                                                                         onClick={this.showNumber.bind(that, '4')}>ALL</span></CheckableTag>
+                <CheckableTag className={styles.filterItem}
+                              checked={that.state.numberChecks[3]}><span role="presentation"
+                                                                         onClick={this.showNumber.bind(that, '3')}>TOP500</span></CheckableTag>
+                <CheckableTag className={styles.filterItem}
+                              checked={that.state.numberChecks[0]}><span role="presentation"
+                                                                         onClick={this.showNumber.bind(that, '0')}>TOP200</span></CheckableTag>
+                <CheckableTag className={styles.filterItem}
+                              checked={that.state.numberChecks[2]}><span role="presentation"
+                                                                         onClick={this.showNumber.bind(that, '2')}>TOP100</span></CheckableTag>
+                <CheckableTag className={styles.filterItem}
+                              checked={that.state.numberChecks[1]}><span role="presentation"
+                                                                         onClick={this.showNumber.bind(that, '1')}>TOP50</span></CheckableTag>
               </ul>
             </div>
           </div>
@@ -1036,7 +1060,8 @@ class ExpertMap extends React.PureComponent {
                     || domain.name === 'Software Engineering' || domain.name === 'Computer Graphics') {
                     return (
                       <TreeNode value={domain.id}
-                                title={<span role="presentation" onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>}
+                                title={<span role="presentation"
+                                             onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>}
                                 key={domain.id} />
                     );
                   }
@@ -1049,7 +1074,8 @@ class ExpertMap extends React.PureComponent {
                   if (domain.name === 'Database' || domain.name === 'System' || domain.name === 'Computer Networking') {
                     return (
                       <TreeNode value={domain.id}
-                                title={<span role="presentation" onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>}
+                                title={<span role="presentation"
+                                             onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>}
                                 key={domain.id} />
                     );
                   }
@@ -1064,7 +1090,8 @@ class ExpertMap extends React.PureComponent {
                     || domain.name === 'Human-Computer Interaction' || domain.name === 'Natural Language Processing') {
                     return (
                       <TreeNode value={domain.id}
-                                title={<span role="presentation" onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>}
+                                title={<span role="presentation"
+                                             onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>}
                                 key={domain.id} />
                     );
                   }

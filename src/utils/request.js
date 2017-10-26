@@ -61,7 +61,7 @@ export default function request(url, options) {
     }
 
     // this is a fix; if only one query, return result. if many TODO;
-    if (data && data.data && data.data) {
+    if (options.nextapi && data && data.data && data.data) {
       if (data.data.length === 1) {
         result.data = data.data[0];
       } else if (data.data.length > 1) {
@@ -215,6 +215,7 @@ export async function nextQuery(payload) {
   }
   const { method, ...options } = payload;
   options.method = method || 'post';
+  options.nextapi = true;
   const actions = options.data && options.data.map((query) => query.action);
   const action = actions && actions.join(',');
   const result = request(`${nextAPIURL}?action=${action}`, options);

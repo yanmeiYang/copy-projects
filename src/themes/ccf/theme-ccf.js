@@ -4,6 +4,7 @@
 import React from 'react';
 import { Link } from 'dva/router';
 import classnames from 'classnames';
+import { PersonLabels } from 'components/widgets';
 import { sysconfig } from 'systems';
 import * as hole from 'utils/hole';
 import { isLogin, isGod, isAuthed } from 'utils/auth';
@@ -48,7 +49,8 @@ module.exports = {
   //
   // Person List Component
   //
-  PersonList_AfterTitleBlock: ({ param }) => <div></div>,
+  PersonList_AfterTitleBlock: ({ param }) =>
+    <PersonLabels person={param.person} haves={[]} />,
 
   // Layout:Header:HeaderInfoZone
   Header_UserAdditionalInfoBlock: param => {

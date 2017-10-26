@@ -36,12 +36,16 @@ const query = (action) => {
       }
       return chains;
     },
-    mergeParam: (params) => {
+    addParam: (params) => {
       api.parameters = merge(api.parameters, params);
       return chains;
     },
-    schema: (data) => {
-      api.schema = data;
+    schema: (schema) => {
+      api.schema = schema;
+      return chains;
+    },
+    addSchema: (schema) => {
+      api.schema = merge(api.schema, schema);
       return chains;
     },
   };

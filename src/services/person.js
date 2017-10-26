@@ -52,33 +52,37 @@ export async function personEmailStr(id) {
 const LSKEY_INTERESTS = 'INTERESTS_I18N';
 
 export function getInterestsI18N(callback) {
-  let interestsData;
+  // If cached.
+  if (window.interestsData) {
+    if (callback) {
+      callback(window.interestsData);
+    }
+    return;
+  }
+
   const obj = localStorage.getItem(LSKEY_INTERESTS);
   if (obj) {
     try {
-      interestsData = JSON.parse(obj);
+      window.interestsData = JSON.parse(obj);
+      if (callback) {
+        callback(window.interestsData);
+      }
     } catch (err) {
       console.error(err);
     }
   }
-  if (!interestsData) {
+  if (!window.interestsData) {
     request('/lab/interest_i18n.json').then((data) => {
-      interestsData = keyToLowerCase(data);
-      localStorage.setItem(LSKEY_INTERESTS, JSON.stringify(interestsData));
+      window.interestsData = keyToLowerCase(data);
+      localStorage.setItem(LSKEY_INTERESTS, JSON.stringify(window.interestsData));
       if (callback) {
-        callback(interestsData);
+        callback(window.interestsData);
       }
-      return interestsData;
     }).catch((error) => {
       console.log('ERROR Reading interest_i18n.json:', error);
       localStorage.removeItem(LSKEY_INTERESTS);
-      return undefined;
     });
   }
-  if (callback) {
-    callback(interestsData);
-  }
-  return interestsData;
 }
 
 function keyToLowerCase(data) {

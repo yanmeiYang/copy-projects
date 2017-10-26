@@ -52,7 +52,7 @@ module.exports = {
   //
   // Person List Component
   //
-  PersonList_AfterTitleBlock: ({ param }) => (
+  PersonList_TitleRightBlock: ({ param }) => (
     <div key="1">
       <AddToEBButton
         person={param.person}
@@ -60,7 +60,6 @@ module.exports = {
         targetExpertBase={sysconfig.ExpertBase}
       />
     </div>),
-  PersonList_TitleRightBlock: hole.IN_COMPONENT_DEFAULT,
   PersonList_RightZone: hole.EMPTY_ZONE_FUNC,
   PersonList_BottomZone: hole.IN_COMPONENT_DEFAULT,
 

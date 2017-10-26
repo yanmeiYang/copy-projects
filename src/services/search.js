@@ -72,14 +72,14 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
       .param({
         searchType: F.searchType.allb,
         aggregation: ['gender', 'h_index', 'location', 'language'],
-        switches: ['translate'],
+        switches: ['translate_all'], // translate_all | translate_zh | translate_en
         haves: {
-          title: ['CCF_MEMBER_高级会员', 'CCF_MEMBER_会士', 'CCF_MEMBER_杰出会员' /*, 'CCF_DEPT_*'*/],
+          title: ['CCF_MEMBER_高级会员', 'CCF_MEMBER_会士', 'CCF_MEMBER_杰出会员', /*, 'CCF_DEPT_*'*/],
         },
       })
       .schema({
         person: [
-          'id', 'name', 'name_zh', 'tags', // 'tags_zh', 'tags_trans_zh'
+          'id', 'name', 'name_zh', 'tags', // 'tags_zh', 'tags_translated'
           {
             profile: [
               'position', 'affiliation',
@@ -95,14 +95,14 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
       const filter = filters[key];
       if (key === 'eb') {
         const ebLabel = bridge.toNextCCFLabelFromEBID(filters.eb.id);
-        nextapi.mergeParam({ filters: { dims: { title: [ebLabel] } } });
+        nextapi.addParam({ filters: { dims: { title: [ebLabel] } } });
       } else if (key === 'h_index') {
         // console.log('TODO filter by h_index 这里暂时是用解析的方式获取数据的。');
         const splits = filter.split('-');
         if (splits && splits.length === 2) {
           const from = parseInt(splits[0]);
           const to = parseInt(splits[1]);
-          nextapi.mergeParam({
+          nextapi.addParam({
             filters: {
               ranges: {
                 h_index: [isNaN(from) ? '' : from.toString(), isNaN(to) ? '' : to.toString()],
@@ -111,11 +111,15 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
           });
         }
       } else {
-        nextapi.mergeParam({ filters: { terms: { key: filters[key] } } });
+        nextapi.addParam({ filters: { terms: { key: filters[key] } } });
       }
       return false;
     });
 
+    // translate?
+    if (true) { // translate
+      // nextapi.addSchema({ person: ['tags_translated'] });
+    }
     // sort
     if (Sort && Sort !== 'relevance') {
       nextapi.param({ sorts: [Sort] });
@@ -228,11 +232,9 @@ function prepareParameters(query, offset, size, filters, sort, useTranslateSearc
     // data = { ...data, ...newFilters };
   }
   const { term, name, org } = strings.destructQueryString(query);
-  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>', term, name, org);
   if (term) {
     // const cleanedTerm = encodeURIComponent(strings.cleanQuery(term));
     const cleanedTerm = strings.cleanQuery(term);
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>', cleanedTerm);
     data.term = useTranslateSearch ? `cross:${cleanedTerm}` : cleanedTerm;
   }
   if (name) {

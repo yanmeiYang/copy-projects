@@ -5,6 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'dva';
 import { Form, Icon, Modal, Button } from 'antd';
+import AddTags from 'components/seminar/addTags';
 import CKEditor from './ckeditor-config';
 // import CKEditor from 'react-ckeditor-component';
 import { sysconfig } from '../../../systems';
@@ -15,6 +16,7 @@ class PersonComment extends React.Component {
     isComment: false,
     content: '',
     flag: false,
+    tags: ['pink', 'orange', 'red'], // 临时定义的
   };
 
   componentWillReceiveProps(nextProps) {
@@ -40,6 +42,11 @@ class PersonComment extends React.Component {
     }
     return false;
   }
+
+  // 存储活动标签
+  onTagsChanged = (value) => {
+    this.setState({ tags: value });
+  };
 
 
   getContent(newContent) {
@@ -124,10 +131,16 @@ class PersonComment extends React.Component {
     const { getFieldDecorator } = this.props.form;
     return (
       <div className={styles.commentStyles}>
-        <div className={styles.iconStyle} onClick={this.putMessage.bind(this)}>
-          <Icon type="message" />
-          <span className={styles.total}>备注</span>
-          {total && <span>{total || 0}</span>}
+        <div className={styles.commentAndTags}>
+          <div className={styles.iconStyle} onClick={this.putMessage.bind(this)}>
+            <Icon type="message" />
+            <span className={styles.total}>备注</span>
+            {total && <span>{total || 0}</span>}
+          </div>
+          <div className={styles.tags}>
+            <AddTags callbackParent={this.onTagsChanged}
+                     tags={this.state.tags} />
+          </div>
         </div>
 
         <div className={styles.commentArea}>

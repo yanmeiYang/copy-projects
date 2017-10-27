@@ -16,15 +16,15 @@ import {
 } from 'antd';
 import { connect } from 'dva';
 import { getLocalToken, saveLocalToken } from 'utils/auth';
-import { config } from '../../utils';
-import { sysconfig } from '../../systems';
-import styles from './index.less';
+import { config } from 'utils';
+import { sysconfig } from 'systems';
+import CanlendarInForm from 'components/seminar/calendar';
+import AddTags from 'components/seminar/addTags';
+import AddCoOrgModal from 'components/seminar/addCoOrgModal';
+import AddExpertModal from 'components/seminar/addExpertModal';
+import ShowExpertList from 'routes/seminar/addSeminar/workshop/showExpertList';
 import defaultImg from '../../assets/people/default.jpg';
-import CanlendarInForm from '../../components/seminar/calendar';
-import AddTags from '../../components/seminar/addTags';
-import AddCoOrgModal from '../../components/seminar/addCoOrgModal';
-import AddExpertModal from '../../components/seminar/addExpertModal';
-import ShowExpertList from '../../routes/seminar/addSeminar/workshop/showExpertList';
+import styles from './index.less';
 
 const Dragger = Upload.Dragger;
 const FormItem = Form.Item;

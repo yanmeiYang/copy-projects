@@ -10,11 +10,15 @@ class AddTags extends React.Component {
     inputVisible: false,
     inputValue: '',
   };
+  componentWillMount = () => {
+    this.setState({ tags: this.props.tags });
+  };
+
   componentWillReceiveProps = (nextProps) => {
     if (nextProps.tags.length > 0 && this.props.tags.length !== nextProps.tags.length) {
       this.setState({ tags: nextProps.tags });
     }
-  }
+  };
   handleClose = (removedTag) => {
     const tags = this.state.tags.filter(tag => tag !== removedTag);
     this.setState({ tags });

@@ -9,7 +9,8 @@
   margin-top: -22px;
   margin-bottom: 10px;
   background-color: #fff;
-  .inputStyle { text-align: center; height: auto; margin-bottom: 12px;
+  .inputStyle {
+    text-align: center; height: auto; margin-bottom: 12px;
     :global {
       .CKeidtorStyle {
         .cke_contents { height: 100px !important; min-height: 60px !important; }
@@ -17,26 +18,38 @@
     }
     .ckeditorConfirm { position: absolute; bottom: 1px; right: 2px; }
     //.inputStyle{text-align: center;height: 38px;
-    :global .ant-btn-lg { border-radius: 12px; height: 28px; }
-    i { color: #aaaaaa; cursor: pointer; margin: -10px 5px 0 0; }
+    //:global .ant-btn-lg { border-radius: 12px; height: 28px; }
+    //i { color: #aaaaaa; cursor: pointer; margin: -10px 5px 0 0; }
 
     .ckEditorSubmitBtn {
       display: flex; justify-content: flex-end;
       margin-top: 5px;
     }
   }
-  :global .ant-input-lg { padding: 6px 7px; height: 28px; border-radius: 15px; }
-  .iconStyle {
+  //:global .ant-input-lg { padding: 6px 7px; height: 28px; border-radius: 15px; }
+
+  .commentAndTags{
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    //justify-content: flex-start;
     border-top: 1px solid #e5e6e9;
     padding: 15px 15px 15px 15px;
-    cursor: pointer;
-    .total { margin: 0 5px }
-    i { cursor: pointer }
-    .message { font-size: 18px }
+
+    .iconStyle {
+      cursor: pointer;
+      .total { margin: 0 5px }
+      i { cursor: pointer }
+      .message { font-size: 18px }
+    }
+
+    .tags{
+      border-left: 1px solid #e5e6e9;
+      margin-left: 10px;
+      padding-left: 5px;
+    }
   }
+
+
   :global .ant-input-affix-wrapper .ant-input:not(:last-child) {
     width: 100%;
     float: right;
@@ -49,13 +62,13 @@
   :global .ant-form-inline .ant-form-item > div { width: 100%; }
 
   .commentArea {
-    .title {
-      padding: 2px 6px;
-      margin: 0 21px;
-      color: #47619e;
-      font-size: 11px;
-      border-top: 1px solid #e5e6e9;
-    }
+    //.title {
+    //  padding: 2px 6px;
+    //  margin: 0 21px;
+    //  color: #47619e;
+    //  font-size: 11px;
+    //  border-top: 1px solid #e5e6e9;
+    //}
     .commentList {
       border-top: 1px solid #d9d9d9;
       margin-left: 15px;

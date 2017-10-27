@@ -127,9 +127,10 @@ const defaultSystemConfigs = {
 
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
-  // 地图中心点
-  Map_Preload: true,
+  // Map Related
+  Map_Preload: false,
   CentralPosition: { lat: 37.09024, lng: -95.712891 },
+  Map_HotDomains: TopExpertBase.RandomTop100InDomainAminer, //地图领域
 
   /**
    * Replace Hooks.
@@ -144,7 +145,6 @@ const defaultSystemConfigs = {
   // 临时属性，过度属性
   USE_NEXT_EXPERT_BASE_SEARCH: false, // 是否使用新的后端来搜索新的结果。
 
-  Map_HotDomains: TopExpertBase.RandomTop100InDomainAminer, //地图领域
 };
 
 /***************************************************

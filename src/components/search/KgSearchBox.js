@@ -106,7 +106,7 @@ class KgSearchBox extends PureComponent {
     const { query } = this.props;
     const { term, name, org } = strings.destructDecodedQueryString(query);
     const newQuery = this.advanced ? term : strings.firstNonEmpty(term, name, org);
-    console.log('|||||||||||||||||||||||||||', term, name, org, newQuery, { value: decodeURIComponent(newQuery) });
+    // console.log('|||||||||||||||||||||||||||', term, name, org, newQuery, { value: decodeURIComponent(newQuery) });
     this.setState({ value: newQuery || '' });
   };
 

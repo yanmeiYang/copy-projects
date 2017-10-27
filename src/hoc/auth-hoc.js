@@ -8,6 +8,8 @@ import debug from 'utils/debug';
 
 const ENABLED = sysconfig.GLOBAL_ENABLE_HOC;
 
+const hasAuthInfo = props => props && props.app && props.app.user && props.app.roles;
+
 /**
  * 会根据 sysconfig.Auth_AllowAnonymousAccess 的值来判断是否进行登录权限判断。
  * @param ComponentClass
@@ -23,13 +25,15 @@ function Auth(ComponentClass) {
 
       if (process.env.NODE_ENV !== 'production') {
         if (debug.LogHOC) {
-          console.log('%c@@HOC: @Auth on %s', 'color:orange',
-            reflect.GetComponentName(ComponentClass));
+          console.log(
+            '%c@@HOC: @Auth on %s', 'color:orange',
+            reflect.GetComponentName(ComponentClass),
+          );
         }
       }
 
       if (!sysconfig.Auth_AllowAnonymousAccess) { // 当不允许匿名登录时
-        if (!this.props.app) {
+        if (!hasAuthInfo(this.props)) {
           console.warn('Must connect `app` models when use @Auth! in component: ',
             reflect.GetComponentName(ComponentClass));
           console.error(ComponentClass);

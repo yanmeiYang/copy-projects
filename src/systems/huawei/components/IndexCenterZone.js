@@ -22,7 +22,7 @@ export default class IndexCenterZone extends React.PureComponent {
               </div>
             </div>
           </Link>
-          <Link to="/dispatch-expert-map">
+          <Link to="/expert-map">
             <div className={styles.blockItem}>
               <div className={styles.outerBackground}>
                 <span alt="" className={classnames('icon', styles.maps)} />

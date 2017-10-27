@@ -235,10 +235,12 @@ export default {
 
     getSeminarsSuccess(state, { payload: { data, offset, size } }) {
       let newData = [];
-      if (state.results.length >= size) {
+      if (state.results.length >= size && offset !== 0) {
         newData = state.results.concat(data);
-      } else {
+      } else if (offset === 0) {
         newData = data;
+      } else {
+        newData = state.results;
       }
       return { ...state, results: newData, loading: false, offset: offset + state.sizePerPage };
     },

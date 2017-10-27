@@ -39,12 +39,12 @@ export default function request(url, options) {
 
   return fetch(options).then((response) => {
     const { statusText, status } = response;
-    let data = options.fetchType === 'YQL' ? response.data.query.results.json : response.data;
-    if (data instanceof Array) {
-      data = {
-        list: data,
-      };
-    }
+    const data = options.fetchType === 'YQL' ? response.data.query.results.json : response.data;
+    // if (data instanceof Array) {
+    //   data = {
+    //     list: data,
+    //   };
+    // }
     const result = {
       success: true,
       message: statusText,

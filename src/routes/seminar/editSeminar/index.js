@@ -1,10 +1,10 @@
 /**
  * Created by yangyanmei on 17/8/1.
  */
-import React, { Component, PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { routerRedux, Link, withRouter } from 'dva/router';
+import { Layout } from 'routes';
+import { withRouter } from 'dva/router';
 import RegistrationForm from 'components/RegistrationForm';
 
 @connect(({ app }) => ({ app }))
@@ -14,9 +14,9 @@ export default class EditSeminar extends PureComponent {
     const { user } = this.props.app;
     const id = this.props.match && this.props.match.params && this.props.match.params.id;
     return (
-      <div>
+      <Layout searchZone={[]}>
         <RegistrationForm uid={user.id} seminarId={id} />
-      </div>
+      </Layout>
     );
   }
 }

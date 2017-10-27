@@ -45,6 +45,24 @@ export default class Seminar extends React.Component {
     };
     this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
   };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.seminar.orgByActivity !== this.props.seminar.orgByActivity) {
+      const tempOrg = nextProps.seminar.orgByActivity;
+      if (!tempOrg.data || tempOrg.data.length === 0) {
+        const params = {
+          query: this.state.query,
+          organizer: this.state.orgType,
+          category: this.state.category,
+          tag: this.state.tag,
+          offset: 0,
+          size: this.props.seminar.sizePerPage,
+          src: sysconfig.SOURCE,
+        };
+        this.props.dispatch({ type: 'seminar/searchActivity', payload: params });
+      }
+    }
+  }
   addBao = () => {
     this.props.dispatch(routerRedux.push({
       pathname: '/seminar-post',
@@ -68,7 +86,7 @@ export default class Seminar extends React.Component {
   getMoreSeminar = () => {
     const { offset, query, sizePerPage } = this.props.seminar;
     const { organizer, category } = this.state;
-    if (query) {
+    if (query || organizer || category) {
       const params = {
         query,
         offset,
@@ -156,26 +174,29 @@ export default class Seminar extends React.Component {
         // 活动类型取消后 承办单位置为空
         this.props.seminar.orgByActivity = {};
       }
+      this.getSeminar(sizePerPage, { src: sysconfig.SOURCE });
     }
-    this.props.seminar.results = [];
-    if (stype.organizer === '' && stype.category === '' && stype.tag === '' && this.state.query === '') {
-      const params = {
-        offset: 0,
-        size: sizePerPage,
-        filter: { src: sysconfig.SOURCE },
-      };
-      this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
-    } else {
-      const params = {
-        query: this.state.query,
-        organizer: stype.organizer,
-        category: stype.category,
-        tag: stype.tag,
-        offset: 0,
-        size: sizePerPage,
-        src: sysconfig.SOURCE,
-      };
-      this.props.dispatch({ type: 'seminar/searchActivity', payload: params });
+    if (type !== 'orgType') {
+      this.props.seminar.results = [];
+      if (stype.organizer === '' && stype.category === '' && stype.tag === '' && this.state.query === '') {
+        const params = {
+          offset: 0,
+          size: sizePerPage,
+          filter: { src: sysconfig.SOURCE },
+        };
+        this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
+      } else {
+        const params = {
+          query: this.state.query,
+          organizer: stype.organizer,
+          category: stype.category,
+          tag: stype.tag,
+          offset: 0,
+          size: sizePerPage,
+          src: sysconfig.SOURCE,
+        };
+        this.props.dispatch({ type: 'seminar/searchActivity', payload: params });
+      }
     }
   };
 
@@ -187,7 +208,7 @@ export default class Seminar extends React.Component {
     const { app } = this.props;
     const {
       results, loading, sizePerPage, orgcategory, activity_type,
-      topMentionedTags, orgByActivity,
+      topMentionedTags, orgByActivity, offset,
     } = this.props.seminar;
     const { organizer, category, tag, orgType, sortType } = this.state;
     const compare = (property) => {
@@ -201,8 +222,8 @@ export default class Seminar extends React.Component {
         return new Date(val2) - new Date(val1);
       };
     };
-    if (results && results.list && results.list.length > 0) {
-      results.list.sort(compare(sortType));
+    if (results && results.length > 0) {
+      results.sort(compare(sortType));
     }
     return (
       <Layout contentClass={tc(['seminar'])} searchZone={[]}>
@@ -351,10 +372,10 @@ export default class Seminar extends React.Component {
 
             <Spin spinning={loading}>
               <div className="seminar">
-                {results.list && results.list.length > 0 ?
+                {results && results.length > 0 ?
                   <div className="seminar_outbox">
                     {
-                      results.list.map((result, index) => {
+                      results.map((result, index) => {
                         return (
                           <div key={result.id + Math.random()}>
                             {(app.roles.authority.indexOf(result.organizer[0]) >= 0
@@ -370,7 +391,7 @@ export default class Seminar extends React.Component {
                         );
                       })
                     }
-                    {!loading &&
+                    {!loading && results.length >= (offset - 2) &&
                     <Button type="primary" className="getMoreActivities"
                             onClick={this.getMoreSeminar.bind()}>
                       More

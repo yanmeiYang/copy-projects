@@ -1,11 +1,14 @@
 import React from 'react';
 import { connect } from 'dva';
-import RegistrationForm from '../../../components/RegistrationForm';
+import { Layout } from 'routes';
+import RegistrationForm from 'components/RegistrationForm';
 
 const AddSeminar = ({ app }) => {
   const { user } = app;
   return (
-    <RegistrationForm uid={user.id} />
+    <Layout searchZone={[]}>
+      <RegistrationForm uid={user.id} />
+    </Layout>
   );
 };
 export default connect(({ app }) => ({ app }))(AddSeminar);

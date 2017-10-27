@@ -1,0 +1,270 @@
+@import "../../themes/vars.less";
+
+.heat {
+  width: auto;
+  overflow: scroll;
+  .actionBar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 14px;
+    margin-left: 20px;
+
+    .num {
+      color: #f1742f;
+      font-size: 15px;
+    }
+    .title {
+      font-size: 18px;
+      font-family: "Microsoft Sans Serif";
+      margin-right: 40px;
+    }
+    button {
+      margin-left: 15px;
+    }
+    .back {
+      border-radius: 2px;
+      border: 1px solid #ccc;
+      margin-right: 10px;
+      padding: 3px 15px;
+    }
+    .back:hover {
+      color: #03A9F4;
+      border: 1px solid #03A9F4;
+      cursor: pointer;
+    }
+  }
+
+  .statistics {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+    font-size: 14px;
+    border: 1px solid #e5e6e9;
+    border-radius: 3px;
+    -webkit-box-shadow: 0 2px 6px rgba(200, 200, 200, 0.4);
+    box-shadow: 0 2px 6px rgba(200, 200, 200, 0.4);
+    padding: 8px;
+    min-width: 1200px;
+    .title {
+      display: flex;
+      font-weight: bold;
+      font-size: @font-size-lg;
+      color: #999999;
+      margin-left: 10px;
+      i {
+        margin-top: 4px;
+        margin-right: 5px;
+      }
+      .titleIcon {
+        width: 22px; height: 22px;
+        background-position: -70px -511px;
+      }
+    }
+    .content {
+      margin-left: 10px;
+      .basic {
+        margin-top: 3px;
+        .num {
+          color: #f1742f;
+          font-size: 15px;
+        }
+      }
+      .hTitle {
+        font-size: 12px;
+      }
+      .hBar {
+        display: flex;
+        color: #333333;
+        font-size: 12px;
+        justify-content: flex-start;
+        margin-top: 1px;
+        .itemAxias {
+          width: 40px;
+          height: 21px;
+          line-height: 21px;
+          text-align: right;
+          margin-right: 10px;
+        }
+        .item1 {
+          background-color: #D7EEF4;
+          text-align: center;
+          margin-top: 2px;
+          padding-top: 1px;
+        }
+        .item2 {
+          background-color: #AEDCEB;
+          text-align: center;
+          margin-top: 2px;
+          padding-top: 1px;
+        }
+        .item3 {
+          background-color: #8ACDEA;
+          text-align: center;
+          margin-top: 2px;
+          padding-top: 1px;
+        }
+        .item4 {
+          background-color: #56BED9;
+          text-align: center;
+          margin-top: 2px;
+          padding-top: 1px;
+        }
+        .item5 {
+          background-color: #3E9BC9;
+          text-align: center;
+          margin-top: 2px;
+          padding-top: 1px;
+        }
+      }
+
+      .legend {
+        display: flex;
+        justify-content: flex-start;
+        line-height: 18px;
+        height: 18px;
+        margin-top: 6px;
+        .label {
+          color: #333333;
+        }
+        // rgb(255, 204, 185) rgb(255, 191, 168) rgb(255, 178, 150) rgb(255, 165, 133) rgb(255, 153, 115) rgb(255, 140, 98) rgb(255, 127, 80)
+
+        .hColor1 {
+          background-image: -webkit-linear-gradient(to right, #ffffff, rgb(255, 127, 80));
+          background-image: linear-gradient(to right, #ffffff, rgb(255, 127, 80));
+          width: 180px;
+          display: flex;
+          justify-content: space-between;
+          font-size: 12px;
+          padding: 0px 5px;
+        }
+        .eColor {
+          background-color: #8EC267;
+          width: 50px;
+        }
+        .pColor {
+          background-color: #92D1FF;
+          width: 50px;
+        }
+      }
+
+    }
+    .item {
+      margin-left: 40px;
+    }
+
+  }
+
+  .antTag {
+    margin-top: 3px;
+    line-height: 18px;
+    height: 18px;
+    //border: 1px solid #999;
+  }
+
+  .handleCircle {
+    fill: #03A9F4;
+    fill-opacity: 0.8;
+    stroke: #03A9F4;
+    cursor: ew-resize;
+  }
+
+  .nodeCircle {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 2px;
+  }
+
+  .node text {
+    font: 13px sans-serif;
+  }
+
+  .link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 2px;
+  }
+
+  .grid .tick line {
+    stroke: grey;
+    stroke-dasharray: 5, 10;
+    opacity: 0.7;
+  }
+
+  .grid path {
+    stroke-width: 0;
+  }
+
+  .node circle {
+    fill: #999;
+  }
+
+  .node--internal circle {
+    fill: #555;
+  }
+
+  .node--internal text {
+    font-size: 16px;
+    text-shadow: 0 2px 0 #fff, 0 -2px 0 #fff, 2px 0 0 #fff, -2px 0 0 #fff;
+  }
+
+  .tooltipDis {
+    float: left;
+    position: absolute;
+    text-align: left;
+    border-radius: 4px;
+    padding: 3px 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    pointer-events: none;
+  }
+
+  .d3Content {
+    overflow: inherit;
+    border: 1px solid rgb(238, 238, 238);
+    -webkit-box-shadow: 0 0 14px 2px rgba(99, 99, 99, 0.2) inset;
+    box-shadow: 0 0 14px 2px rgba(99, 99, 99, 0.2) inset;
+    min-width: 1200px;
+    .title {
+      font-size: 18px;
+      font-family: "Microsoft Sans Serif";
+      margin-top: 40px;
+      margin-left: 20px;
+      width: 325px;
+      overflow: auto;
+    }
+  }
+
+}
+
+.heatModal {
+  .modalContent {
+    height: 580px;
+    width: 100%;
+    overflow: scroll;
+  }
+  .pagination {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .antTag {
+    margin-top: 5px;
+  }
+  :global {
+    .spinnerMask {
+      width: 770px;
+      height: 95%;
+    }
+    .ant-tabs-nav-wrap {
+      float: right;
+      margin-right: 25px;
+    }
+    .ant-tabs-extra-content {
+      float: left !important;
+    }
+    .ant-modal-close {
+      top: 12px;
+    }
+  }
+}

@@ -104,10 +104,11 @@ const RouterRegistry = [
   profile.ProfileMerge,
 
   tencent.ThirdLogin,
-  crossHeat.Cross,
-  crossHeat.Heat,
-  crossHeat.crossHeatList,
-  crossHeat.crossIndex,
+  crossHeat.CrossReport,
+  crossHeat.CrossTaskList,
+  crossHeat.CrossIndex,
+  crossHeat.CrossStartTask,
+
 
   // System Default.
   core.Error404, // must be last one.

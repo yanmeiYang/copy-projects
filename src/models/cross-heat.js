@@ -7,17 +7,19 @@ export default {
 
   namespace: 'crossHeat',
   state: {
-    queryTree1: null,
-    queryTree2: null,
+    queryOne: null,
+    queryTwo: null,
     mostScholars: null,
     decareID: null,
     crossTree: null,
     domainList: null,
     modalInfo: null,
     domainAllInfo: null,
+    domainMinInfo: null,
     experts: [],
     pubs: [],
-    userQuerys: [],
+    taskList: [],
+    suggest: [],
 
   },
 
@@ -25,6 +27,8 @@ export default {
     *getDiscipline({ payload }, { call, put }) {
       const { id, area, k, depth } = payload;
       const data = yield call(crossHeatService.getDiscipline, area, k, depth);
+
+      console.log('data=============',data);
       yield put({ type: 'getDisciplineSuccess', payload: { data, id } });
     },
 
@@ -50,9 +54,13 @@ export default {
       yield put({ type: 'getDomainInfoSuccess', payload: { data } });
     },
     *getDomainAllInfo({ payload }, { call, put }) {
-      const { domain1, domain2, begin, end } = payload;
-      const data = yield call(crossHeatService.getDomainAllInfo, domain1, domain2, begin, end);
+      const data = yield call(crossHeatService.getDomainAllInfo, payload);
       yield put({ type: 'getDomainAllInfoSuccess', payload: { data } });
+    },
+    *getDomainMinInfo({ payload }, { call, put }) {
+      yield put({ type: 'delExpPubSuccess', payload: { data } });
+      const data = yield call(crossHeatService.getDomainAllInfo, payload);
+      yield put({ type: 'getDomainMinInfoSuccess', payload: { data } });
     },
     *getDomainPub({ payload }, { call, put }) {
       const { ids } = payload;
@@ -67,29 +75,34 @@ export default {
       const data = yield call(crossHeatService.getDomainExpert, payload);
       yield put({ type: 'getDomainExpertSuccess', payload: { data } });
     },
-    *getUserQuerys({ payload }, { call, put }) {
+    *getTaskList({ payload }, { call, put }) {
       const { offset, size } = payload;
-      const data = yield call(crossHeatService.getUserQuerys, offset, size);
-      yield put({ type: 'getUserQuerysSuccess', payload: { data } });
+      const data = yield call(crossHeatService.getTaskList, offset, size);
+      yield put({ type: 'getTaskListSuccess', payload: { data } });
     },
     *delUserQuery({ payload }, { call, put }) {
       const { id } = payload;
       const data = yield call(crossHeatService.delUserQuery, id);
       yield put({ type: 'delUserQuerySuccess', payload: { data } });
     },
+    *getSuggest({ payload }, { call, put }) {
+      const { query } = payload;
+      const data = yield call(crossHeatService.getSuggest, query);
+      yield put({ type: 'getSuggestSuccess', payload: { data } });
+    },
 
   },
 
   reducers: {
     getDisciplineSuccess(state, { payload: { data, id } }) {
-      if (id === 'queryTree1') {
-        return { ...state, queryTree1: data.data };
+      if (id === 'queryOne') {
+        return { ...state, queryOne: data.data };
       } else {
-        return { ...state, queryTree2: data.data };
+        return { ...state, queryTwo: data.data };
       }
     },
     createDisciplineSuccess(state, { payload: { data } }) {
-      return { ...state, decareID: data.data.id };
+      return { ...state, decareID: data.data._id };
     },
     getCrossTreeSuccess(state, { payload: { data } }) {
       return { ...state, crossTree: data.data };
@@ -103,16 +116,23 @@ export default {
     getDomainAllInfoSuccess(state, { payload: { data } }) {
       return { ...state, domainAllInfo: data.data };
     },
+    getDomainMinInfoSuccess(state, { payload: { data } }) {
+      return { ...state, domainMinInfo: data.data };
+    },
     getDomainPubSuccess(state, { payload: { data } }) {
       return { ...state, pubs: data };
     },
-    getUserQuerysSuccess(state, { payload: { data } }) {
-      console.log(data);
-      return { ...state, userQuerys: data.data };
+    getTaskListSuccess(state, { payload: { data } }) {
+      return { ...state, taskList: data.data };
     },
     delUserQuerySuccess(state, { payload: { data } }) {
-      console.log(data);
       return { ...state };
+    },
+    getSuggestSuccess(state, { payload: { data } }){
+      return { ...state, suggest: data.data.phrase };
+    },
+    delExpPubSuccess(state, { payload: { data } }){
+      return { ...state, experts: [], pubs: [] };
     },
   },
 };

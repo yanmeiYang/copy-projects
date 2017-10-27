@@ -13,6 +13,7 @@ import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 import { hole, classnames, config } from 'utils';
 import { Header, Navigator } from 'components/Layout';
+import { ErrorBoundary } from 'components';
 import styles from './Layout.less';
 
 const { iconFontJS, iconFontCSS, logo } = config;
@@ -125,7 +126,8 @@ export default class Layout extends Component {
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlzpf4YyjOBGYOhfUaNvQZENXEWBgDkS0"
             async defer />}
 
-          {false && href.indexOf('/expert-heatmap') > 0 &&          <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/3.7.1/echarts.js" />}
+          {false && href.indexOf('/expert-heatmap') > 0 &&
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/3.7.1/echarts.js" />}
 
         </Helmet>
 
@@ -144,7 +146,9 @@ export default class Layout extends Component {
           {/* -------- Main Content -------- */}
 
           <Content className={tc(['content'], [contentClass])}>
-            {this.props.children}
+            <ErrorBoundary>
+              {this.props.children}
+            </ErrorBoundary>
           </Content>
 
           {/*<Sider>right sidebar</Sider>*/}

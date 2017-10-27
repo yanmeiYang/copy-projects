@@ -1,11 +1,11 @@
 /* eslint-disable react/no-find-dom-node */
-import React, {  } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 import styles from './Spinner.less';
 
-class Spinner extends React.PureComponent {
+class Spinner extends PureComponent {
   constructor(props) {
     super(props);
     this.nomask = props.nomask;

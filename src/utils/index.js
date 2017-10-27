@@ -46,6 +46,21 @@ Date.prototype.format = function (format) {
   return format;
 };
 
+const detectSavedMapType = (key) => {
+  key = 'map-dispatch';
+  let type = localStorage.getItem(key);
+  if (type) {
+    if (type === 'google') {
+      return 'google';
+    } else {
+      return 'baidu';
+    }
+  } else {
+    type = navigator.language === 'zh-CN' ? 'baidu' : 'google';
+  }
+  return type;
+};
+
 // 保留小数位
 const getTwoDecimal = (text, num) => {
   const decimal = Math.pow(10, num);
@@ -81,6 +96,7 @@ module.exports = {
   reflect,
   compare,
   createURL,
+  detectSavedMapType,
 
   getMenusByUser,
   request, nextQuery,

@@ -3,11 +3,13 @@
  *
  *  Note: This util is disabled in production mode.
  */
-const ReduxLoggerEnabled = false;
+let ReduxLoggerEnabled = false;
 const DebugLogEnabled = true;
 const LogRequest = true;
 const LogRequestResult = true;
 const LogHOC = false;
+
+// ReduxLoggerEnabled = true;
 
 // Log common message.
 function log(...data) {

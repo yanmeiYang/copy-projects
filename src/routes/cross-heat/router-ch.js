@@ -2,24 +2,25 @@
  * Created by ranyanchuan on 2017/8/18.
  */
 export default {
-  Cross: {
-    path: '/cross',
+  CrossReport: {
+    path: '/cross/report/:id',
     models: () => [import('models/cross-heat')],
-    component: () => import('routes/cross-heat/cross'),
+    component: () => import('routes/cross-heat/report'),
   },
-  Heat: {
-    path: '/heat/:id',
+  CrossTaskList: {
+    path: '/cross/taskList',
     models: () => [import('models/cross-heat')],
-    component: () => import('routes/cross-heat/heat'),
+    component: () => import('routes/cross-heat/taskList'),
   },
-  crossHeatList: {
-    path: '/heat/querys',
-    models: () => [import('models/cross-heat')],
-    component: () => import('routes/cross-heat/crossHeatList'),
-  },
-  crossIndex: {
+  CrossIndex: {
     path: '/cross/index',
     models: () => [import('models/cross-heat')],
     component: () => import('routes/cross-heat/index'),
+  },
+
+  CrossStartTask: {
+    path: '/cross/startTask',
+    models: () => [import('models/cross-heat')],
+    component: () => import('routes/cross-heat/startTask'),
   },
 };

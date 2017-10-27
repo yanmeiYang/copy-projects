@@ -1,10 +1,11 @@
 /**
- * Created by zenensen on 2017/10/18.
+ * Created by ranyanchuan on 2017/10/18.
  */
 import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import { Button, Steps } from 'antd';
+import { Auth } from 'hoc';
 import { Layout } from 'routes';
 import { applyTheme } from 'themes';
 import styles from './index.less';
@@ -13,17 +14,17 @@ const tc = applyTheme(styles);
 const data = [
   {
     title: 'Machine Learning & Energy',
-    id: '59e8558ce1cd8e91db7e4c5e',
+    id: '59f28cbe9ed5db27414df00f',
     src: '/funcs/cross-heat/energy.png',
   },
   {
-    title: 'Data mining & Health Care',
-    id: '59e85014e1cd8e91db7e4c59',
+    title: 'Data Mining & Health Care',
+    id: '59f28d179ed5db27414df078',
     src: '/funcs/cross-heat/heath.png',
   },
   {
-    title: 'Artificial intelligence & Physical Security',
-    id: '59e85940e1cd8e91db7e4c61',
+    title: 'Artificial Intelligence & Physical Security',
+    id: '59f28dd29ed5db27414df1d8',
     src: '/funcs/cross-heat/security.png',
   },
 ]
@@ -34,22 +35,21 @@ const dataList = {
 
 }
 
-
+@Auth
 class CrossIndex extends React.Component {
-  state = {}
-
-  componentWillMount() {
-
-  }
-
   goReport = (value) => {
     this.props.dispatch(routerRedux.push({
-      pathname: '/heat/' + value,
+      pathname: '/cross/report/' + value,
     }));
   };
   goCreate = () => {
     this.props.dispatch(routerRedux.push({
-      pathname: '/cross',
+      pathname: '/cross/startTask',
+    }));
+  }
+  goProject = () => {
+    this.props.dispatch(routerRedux.push({
+      pathname: '/cross/taskList',
     }));
   }
 
@@ -64,7 +64,8 @@ class CrossIndex extends React.Component {
               <div className={styles.title}>{dataList.title}</div>
               <div className={styles.descript}>{dataList.describe}</div>
               <h1 className={styles.create}>
-                <span onClick={this.goCreate}>挖掘交叉热点</span>
+                <span onClick={this.goCreate}>挖掘热点</span>
+                <span onClick={this.goProject}>我的项目</span>
               </h1>
             </div>
           </div>

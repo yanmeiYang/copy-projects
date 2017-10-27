@@ -5,14 +5,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Link } from 'dva/router';
-import { Tag, Tooltip } from 'antd';
 import classnames from 'classnames';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import * as personService from 'services/person';
 import { sysconfig } from 'systems';
 import { config, compare, hole } from 'utils';
 import * as display from 'utils/display';
+import PersonTags from 'components/person/PersonTags';
+// import { PersonTags } from 'components/person'; // this is bad.
 import { Indices } from 'components/widgets';
 import ViewExpertInfo from './view-expert-info';
 import styles from './person-list.less';
@@ -36,17 +36,10 @@ export default class PersonList extends Component {
     tagsLinkFuncs: PropTypes.func,
   };
 
-
   constructor(props) {
     super(props);
-    // TODO 临时措施，国际化Interest应该从server端入手。
-    personService.getInterestsI18N((result) => {
-      this.interestsI18n = result;
-    });
     this.persons = this.props.persons;
   }
-
-  state = {};
 
   // 暂时没用到
   componentDidMount() {
@@ -79,7 +72,6 @@ export default class PersonList extends Component {
     console.log('111111111', person);
     console.log(`checked = ${e.target.checked}`);
   };
-
 
   render() {
     const { persons, expertBaseId, className, type } = this.props;
@@ -151,7 +143,7 @@ export default class PersonList extends Component {
                         {email &&
                         <span style={{ backgroundImage: `url(${config.baseURL}${email})` }}
                               className="email"><i className="fa fa-envelope fa-fw" />
-                          </span>
+                        </span>
                         }
 
                         {false && person.num_viewed > 0 &&
@@ -161,39 +153,14 @@ export default class PersonList extends Component {
 
                       </div>
 
-                      {person.tags &&
-                      <div className={styles.tag_zone}>
-                        <div>
-                          <h4><i className="fa fa-area-chart fa-fw" /> 研究兴趣:</h4>
-                          <div className={styles.tagWrap}>
-                            {person.tags.slice(0, 8).map((item, idx) => {
-                              if (item === null || item === 'Null') {
-                                return false;
-                              }
-                              const tag = personService.returnKeyByLanguage(this.interestsI18n, item);
-                              const tooltipTag = tag.zh ? tag.zh : '';
-                              const key = `${tag.en}_${idx}`;
-                              return (
-                                <Tooltip key={key} placement="top" title={tooltipTag}>
-                                  <Tag className={styles.tag}>
-                                    {tagsLinkFuncs ?
-                                      <a href="" onClick={tagsLinkFuncs.bind(this, { query: tag.en })}>
-                                        {tag.en}
-                                      </a>
-                                      : <Link
-                                        to={`/${sysconfig.SearchPagePrefix}/${tag.en}/0/${sysconfig.MainListSize}`}>
-                                        {tag.en}
-                                      </Link>
-                                    }
-
-                                  </Tag>
-                                </Tooltip>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      </div>
-                      }
+                      {/* ---- Tags ---- */}
+                      <PersonTags
+                        className={styles.tagZone}
+                        tags={person.tags}
+                        tagsTranslated={person.tags_translated}
+                        tagsLinkFuncs={tagsLinkFuncs}
+                        hideBorder
+                      />
 
                     </div>
                   </div>

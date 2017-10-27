@@ -222,8 +222,6 @@ export default {
         throw new Error(message);
       }
       const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
-      console.log('++++++++++++++++(aggregation)', aggregation);
-      console.log('----------------(items)', items);
       return {
         ...state,
         results: items,

@@ -128,6 +128,7 @@ const defaultSystemConfigs = {
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
   // 地图中心点
+  Map_Preload: true,
   CentralPosition: { lat: 37.09024, lng: -95.712891 },
 
   /**

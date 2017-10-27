@@ -11,7 +11,7 @@
   height: 66px;
   line-height: 66px;
   .header_logo {
-    width: 150px;
+    width: 150px; min-width: 150px;
     margin-top: 4px;
     background: url("/sys/alibaba/header_logo.png") 0px -23px / auto 100px no-repeat white;
     //background-position: -68px -47px;
@@ -24,7 +24,7 @@
 .footerText {
   display: flex; flex-direction: row; justify-content: flex-end;
   line-height: 25px; margin-top: 10px; margin-right: 10px;
-  .aminerLogo{ height: 25px; }
+  .aminerLogo { height: 25px; }
 }
 
 .index_bannerZone {
@@ -40,7 +40,7 @@
   .text {
     font-size: 20px; font-weight: bold; color: #333333;
     margin-top: 40px; margin-bottom: 30px;
-    span{
+    span {
       font-size: 40px;
       text-shadow: 5px 5px 5px #ddd;
     }
@@ -70,16 +70,16 @@
   }
 
   :global {
-     .keywords_inner {
-       div {
-         border: none; border-radius: 32px;
-         padding: 0px 10px; margin: 4px 5px;
-         background-color:  rgba(62, 155, 201, 1);
-         a { color: #ffffff; font-size: @font-size-lg; }
-       }
-       div:hover { background-color: rgba(0, 122, 175, 1); }
-     }
-   }
+    .keywords_inner {
+      div {
+        border: none; border-radius: 32px;
+        padding: 0px 10px; margin: 4px 5px;
+        background-color: rgba(62, 155, 201, 1);
+        a { color: #ffffff; font-size: @font-size-lg; }
+      }
+      div:hover { background-color: rgba(0, 122, 175, 1); }
+    }
+  }
 
 }
 

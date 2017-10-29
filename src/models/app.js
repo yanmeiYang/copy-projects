@@ -220,36 +220,6 @@ export default {
       return { ...state, ...payload };
     },
 
-    hideHeaderSearch(state) {
-      console.warn('WARRNING: Deprecated!');
-      return { ...state, headerSearchBox: undefined };
-    },
-
-    // setQueryInHeaderIfExist(state, { payload }) {
-    //   console.warn('WARRNING: Deprecated!');
-    //
-    //   const { query } = payload;
-    //   if (state.headerSearchBox) {
-    //     const newState = state;
-    //     newState.headerSearchBox.query = query;
-    //     return newState;
-    //   } else {
-    //     return state;
-    //   }
-    // },
-
-    // clearQueryInHeaderIfExist(state) {
-    //   console.warn('WARRNING: Deprecated!');
-    //
-    //   if (state.headerSearchBox) {
-    //     const newState = state;
-    //     newState.headerSearchBox.query = ' ';
-    //     return newState;
-    //   } else {
-    //     return state;
-    //   }
-    // },
-
     logoutSuccess(state) {
       auth.removeLocalAuth();
       return { ...state, user: {}, token: null, roles: auth.createEmptyRoles() };

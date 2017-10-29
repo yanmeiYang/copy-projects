@@ -19,7 +19,7 @@ import { getLocalToken, saveLocalToken } from 'utils/auth';
 import { config } from 'utils';
 import { sysconfig } from 'systems';
 import CanlendarInForm from 'components/seminar/calendar';
-import AddTags from 'components/seminar/addTags';
+import { Labels } from 'routes/common';
 import AddCoOrgModal from 'components/seminar/addCoOrgModal';
 import AddExpertModal from 'components/seminar/addExpertModal';
 import ShowExpertList from 'routes/seminar/addSeminar/workshop/showExpertList';
@@ -473,7 +473,7 @@ class RegistrationForm extends React.Component {
               {...formItemLayout}
               label="活动标签"
             >
-              {getFieldDecorator('activityTags', {})(<AddTags callbackParent={this.onTagsChanged}
+              {getFieldDecorator('activityTags', {})(<Labels callbackParent={this.onTagsChanged}
                                                               tags={tags} />)}
 
             </FormItem>

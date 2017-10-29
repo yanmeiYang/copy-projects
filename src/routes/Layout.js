@@ -42,6 +42,7 @@ export default class Layout extends Component {
     showNavigator: PropTypes.bool,
 
     fixAdvancedSearch: PropTypes.bool, // 是否固定是三个框的高级搜索
+    disableAdvancedSearch: PropTypes.bool, // 禁止高级搜索
 
     // props
     query: PropTypes.string,
@@ -82,11 +83,11 @@ export default class Layout extends Component {
         lastHref = href;
       }
     }
-    const { logoZone, searchZone, infoZone, fixAdvancedSearch } = this.props;
+    const { logoZone, searchZone, infoZone, fixAdvancedSearch, disableAdvancedSearch } = this.props;
     const { query, onSearch } = this.props;
 
     const headerOptions = {
-      logoZone, searchZone, infoZone, query, onSearch, fixAdvancedSearch,
+      logoZone, searchZone, infoZone, query, onSearch, fixAdvancedSearch, disableAdvancedSearch,
       logout() {
         dispatch({ type: 'app/logout' });
       },

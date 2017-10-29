@@ -16,15 +16,34 @@ class RightInfoZoneAll extends React.PureComponent {
   }
 
   render() {
-    const count = this.props.count;
-    const avg = this.props.avg;
-    const persons = this.props.persons;
-    const isChNumber = this.props.isChNumber;
-    const isIeeeFellowNumber = this.props.isIeeeFellowNumber;
-    const isACMFellowNumber = this.props.isACMFellowNumber;
+    const { persons } = this.props;
+    console.log('persons:', persons);
     if (!persons) {
-      return <div />;
+      return null;
     }
+    let count = 0;
+    let isACMFellowNumber = 0;
+    let isIeeeFellowNumber = 0;
+    let isChNumber = 0;
+    let hIndexSum = 0;
+    if (persons) {
+      persons.map((person1) => {
+        hIndexSum += person1.hindex;
+        count += 1;
+        if (person1.fellows[0] === 'acm') {
+          isACMFellowNumber += 1;
+        }
+        if (person1.fellows[0] === 'ieee' || person1.fellows[1] === 'ieee') {
+          isIeeeFellowNumber += 1;
+        }
+        if (person1.is_ch) {
+          isChNumber += 1;
+        }
+        return hIndexSum;
+      });
+    }
+    const avg = (hIndexSum / count).toFixed(0);
+
     return (
       <div className={styles.rizAll}>
         <div className={styles.name}>

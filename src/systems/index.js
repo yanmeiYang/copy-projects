@@ -128,7 +128,7 @@ const defaultSystemConfigs = {
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
   // Map Related
-  Map_Preload: false,
+  Map_Preload: true,
   CentralPosition: { lat: 37.09024, lng: -95.712891 },
   Map_HotDomains: TopExpertBase.RandomTop100InDomainAminer, //地图领域
 

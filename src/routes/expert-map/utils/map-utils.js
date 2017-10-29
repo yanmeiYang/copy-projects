@@ -1,4 +1,4 @@
-import continentscountries from '../../../../external-docs/expert-map/continentscountries.json';
+import continentscountries from 'public/lab/expert-map/continentscountries.json';
 
 const findPosition = (type, results) => {
   let place = [null, null];
@@ -37,47 +37,125 @@ const findPosition = (type, results) => {
 const findarea = (results, place) => {
   let place1 = place;
   const country = results.country.name;
+  const area = results.location.area;
   if (country === 'China') {
-    if (results.location.area === 'Beijing' || results.location.area === 'Tianjin' || results.location.area === 'Hebei' || results.location.area === 'Shanxi' || results.location.area === 'Mongolia') {
-      place1 = [39.90419989999999, 116.4073963];// 以北京返回
+    switch (area) {
+      case 'Beijing':
+      case 'Tianjin':
+      case 'Hebei':
+      case 'Shanxi':
+      case 'Mongolia':
+        place1 = [39.90419989999999, 116.4073963];// 以北京返回
+        break;
+      case 'Liaoning':
+      case 'Jilin':
+      case 'Heilongjiang':
+        place1 = [41.672126, 123.333494];// 以沈阳返回
+        break;
+      case 'Shanghai':
+      case 'Jiangsu':
+      case 'Zhejiang':
+      case 'Anhui':
+      case 'Fujian':
+      case 'Jiangxi':
+      case 'Shandong':
+        place1 = [31.2303904, 121.4737021];// 以上海返回
+        break;
+      case 'Guangdong':
+      case 'Guangxi':
+      case 'Hainan':
+        place1 = [23.12911, 113.264385];// 以广州返回
+        break;
+      case 'Henan':
+      case 'Hubei':
+      case 'Hunan':
+        place1 = [30.592849, 114.305539];// 以武汉返回
+        break;
+      case 'Chongqing':
+      case 'Sichuan':
+      case 'Guizhou':
+      case 'Yunan':
+      case 'Tibet':
+        place1 = [30.572815, 104.066801];// 以成都返回
+        break;
+      case 'Shaanxi':
+      case 'Qinghai':
+      case 'Ningxia':
+      case 'Xinjiang':
+      case '':
+        place1 = [36.061089, 103.834303];// 以兰州返回
+        break;
+      case 'Hong Kong':
+      case 'Macao':
+      case 'Taiwan':
+        place1 = [25.0329694, 121.5654177];// 以台北
+        break;// 返回
+      default:
     }
-    if (results.location.area === 'Liaoning' || results.location.area === 'Jilin' || results.location.area === 'Heilongjiang') {
-      place1 = [41.672126, 123.333494];// 以沈阳返回
-    }
-    if (results.location.area === 'Shanghai' || results.location.area === 'Jiangsu' || results.location.area === 'Zhejiang' || results.location.area === 'Anhui' || results.location.area === 'Fujian' || results.location.area === 'Jiangxi' || results.location.area === 'Shandong') {
-      place1 = [31.2303904, 121.4737021];// 以上海返回
-    }
-    if (results.location.area === 'Guangdong' || results.location.area === 'Guangxi' || results.location.area === 'Hainan') {
-      place1 = [23.12911, 113.264385];// 以广州返回
-    }
-    if (results.location.area === 'Henan' || results.location.area === 'Hubei' || results.location.area === 'Hunan') {
-      place1 = [30.592849, 114.305539];// 以武汉返回
-    }
-    if (results.location.area === 'Chongqing' || results.location.area === 'Sichuan' || results.location.area === 'Guizhou' || results.location.area === 'Yunan' || results.location.area === 'Tibet') {
-      place1 = [30.572815, 104.066801];// 以成都返回
-    }
-    if (results.location.area === 'Shaanxi' || results.location.area === 'Qinghai' || results.location.area === 'Ningxia' || results.location.area === 'Xinjiang' || results.location.area === '') {
-      place1 = [36.061089, 103.834303];// 以兰州返回
-    }
-    if (results.location.area === 'Hong Kong' || results.location.area === 'Macao' || results.location.area === 'Taiwan') {
-      place1 = [25.0329694, 121.5654177];// 以台北返回
-    }
-  }
-  if (country === 'United States') {
-    if (results.location.area === 'Michigan' || results.location.area === 'Indiana' || results.location.area === 'Ohio' || results.location.area === 'Kentucky' || results.location.area === 'Georgia' || results.location.area === 'New York' || results.location.area === 'Pennsylvania' || results.location.area === 'West Virginia' || results.location.area === 'Virginia' || results.location.area === 'North Carolina' || results.location.area === 'South Carolina' || results.location.area === 'Florida' || results.location.area === 'Washington' || results.location.area === 'New Jersey' || results.location.area === 'Connecticut' || results.location.area === 'Rhode island' || results.location.area === 'Massachusetts' || results.location.area === 'New Hampshire' || results.location.area === 'Vermont' || results.location.area === 'Maine' || results.location.area === 'Maryland' || results.location.area === 'Delaware') {
-      place1 = [38.9071923, -77.0368707];// 以华盛顿特区返回
-    }
-    if (results.location.area === 'North Dakota' || results.location.area === 'South Dakota' || results.location.area === 'Nebraska' || results.location.area === 'Kansas' || results.location.area === 'Oklahoma' || results.location.area === 'Texas' || results.location.area === 'Minnesota' || results.location.area === 'Iowa' || results.location.area === 'Missouri' || results.location.area === 'Arkansas' || results.location.area === 'Louisiana' || results.location.area === 'Wisconsin' || results.location.area === 'Illinois' || results.location.area === 'Tennessee' || results.location.area === 'Mississippi' || results.location.area === 'Alabama') {
-      place1 = [39.8027644, -105.0874842];// 以Jefferson返回
-    }
-    if (results.location.area === 'Montana' || results.location.area === 'Wyoming' || results.location.area === 'Idaho' || results.location.area === 'Utah' || results.location.area === 'Colorado' || results.location.area === 'Arizona' || results.location.area === 'New Mexico' || results.location.area === 'Washington' || results.location.area === 'Oregon' || results.location.area === 'Nevada' || results.location.area === 'California') {
-      place1 = [38.4087993, -121.3716178];// 以Sacramento返回
-    }
-    if (results.location.area === 'Hawaii') {
-      place1 = [21.2910781, -157.8200175];// 以Honolulu返回
-    }
-    if (results.location.area === 'Alaska') {
-      place1 = [61.2180556, -149.9002778];// 以Anchorage返回
+  } else if (country === 'United States') {
+    switch (area) {
+      case 'Michigan':
+      case 'Indiana':
+      case 'Ohio':
+      case 'Kentucky':
+      case 'Georgia':
+      case 'New York':
+      case 'Pennsylvania':
+      case 'West Virginia':
+      case 'Virginia':
+      case 'North Carolina':
+      case 'South Carolina':
+      case 'Florida':
+      case 'Washington':
+      case 'New Jersey':
+      case 'Connecticut':
+      case 'Rhode island':
+      case 'Massachusetts':
+      case 'New Hampshire':
+      case 'Vermont':
+      case 'Maine':
+      case 'Maryland':
+      case 'Delaware':
+        place1 = [38.9071923, -77.0368707];// 以华盛顿特区返回
+        break;
+      case 'North Dakota':
+      case 'South Dakota':
+      case 'Nebraska':
+      case 'Kansas':
+      case 'Oklahoma':
+      case 'Texas':
+      case 'Minnesota':
+      case 'Iowa':
+      case 'Missouri':
+      case 'Arkansas':
+      case 'Louisiana':
+      case 'Wisconsin':
+      case 'Illinois':
+      case 'Tennessee':
+      case 'Mississippi':
+      case 'Alabama':
+        place1 = [39.8027644, -105.0874842];// 以Jefferson返回
+        break;
+      case 'Montana':
+      case 'Wyoming':
+      case 'Idaho':
+      case 'Utah':
+      case 'Colorado':
+      case 'Arizona':
+      case 'New Mexico':
+      // case 'Washington':
+      case 'Oregon':
+      case 'Nevada':
+      case 'California':
+        place1 = [38.4087993, -121.3716178];// 以Sacramento返回
+        break;
+      case 'Hawaii':
+        place1 = [21.2910781, -157.8200175];// 以Honolulu返回
+        break;
+      case 'Alaska':
+        place1 = [61.2180556, -149.9002778];// 以Anchorage返回
+        break;
+      default:
     }
   }
   return place1;
@@ -101,8 +179,9 @@ const finduspart = (add) => {
     place1 = [61.2180556, -149.9002778];// 以Anchorage返回
   }
   return place1;
-}
+};
 
+// TODO change to use switch.
 const findhuaweidistrict = (results, place) => {
   let place1 = place;
   if (results.country.name === 'Kazakhstan' || results.country.name === 'Kyrgyzstan' || results.country.name === 'Uzbekistan' || results.country.name === 'Tajikistan' || results.country.name === 'Turkmenistan') { // 中亚
@@ -234,7 +313,69 @@ function waitforBMapLib(tryTimes, interval, success, failed) {
   }, interval);
 }
 
+// -----------------------------------
+
+
+const MapFilterRanges = [
+  { key: 'all', label: 'ALL' },
+  { key: 'acm', label: 'ACM Fellow' },
+  { key: 'ieee', label: 'IEEE Fellow' },
+  { key: 'chinese', label: 'Chinese' },
+];
+
+const MapFilterHindexRange = [
+  { key: 'all', label: 'ALL', boundary: 200 },
+  { key: 'top500', label: 'TOP500', boundary: 500 },
+  { key: 'top200', label: 'TOP200', boundary: 200 },
+  { key: 'top100', label: 'TOP100', boundary: 100 },
+  { key: 'top50', label: 'TOP50', boundary: 50 },
+];
+
+const findMapFilterRangesByKey = (key) => {
+  for (const config of MapFilterRanges) {
+    if (config && config.key === key) {
+      return config;
+    }
+  }
+};
+
+const findMapFilterHindexRangesByKey = (key) => {
+  for (const config of MapFilterHindexRange) {
+    if (config && config.key === key) {
+      return config;
+    }
+  }
+};
+
+const bigAreaConfig = [
+  { label: '中国', x: 102, y: 38 },
+  { label: '日本', x: 136, y: 32 },
+  { label: '韩国', x: 125, y: 33 },
+  { label: '印度', x: 76.5, y: 16 },
+  { label: '香港', x: 114, y: 22 },
+  { label: '新加坡', x: 100, y: -3 },
+  { label: '台湾', x: 121, y: 25 },
+  { label: '中亚', x: 64, y: 48 },
+  { label: '东南亚', x: 118.5, y: 9 },
+  { label: '东欧', x: 29, y: 45 },
+  { label: '西欧', x: 7, y: 44 },
+  { label: '北欧', x: 16, y: 58 },
+  { label: '英国', x: -6.1, y: 52 },
+  { label: '俄罗斯', x: 101.5, y: 59.2 },
+  { label: '以色列', x: 31, y: 28 },
+  { label: '大洋洲', x: 130, y: -31 },
+  { label: '拉丁美洲', x: -60, y: -10 },
+  { label: '加拿大', x: -108.5, y: 56.5 },
+  { label: '美国西部', x: -126, y: 33.5 },
+  { label: '东部', x: -79.5, y: 34 },
+  { label: '中部', x: -107.5, y: 34.5 },
+];
+
 module.exports = {
   findPosition, getById, waitforBMap, waitforBMapLib,
+
+  bigAreaConfig,
+  MapFilterRanges, MapFilterHindexRange,
+  findMapFilterRangesByKey, findMapFilterHindexRangesByKey,
 };
 

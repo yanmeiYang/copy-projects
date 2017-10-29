@@ -14,12 +14,14 @@ export default {
     component: () => import('routes/search'),
   },
 
+  // TODO dynamic load models using sysconfig.
   UniSearch: {
     path: '/uniSearch/:query/:offset/:size',
     models: () => [
       import('models/search'),
       import('models/expert-base/expert-base'),
       import('models/person-comments'),
+      import('models/common/common-labels'),
     ],
     component: () => import('routes/search/SearchPage'),
   },

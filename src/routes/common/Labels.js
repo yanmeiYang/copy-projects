@@ -4,7 +4,7 @@
 import React from 'react';
 import { Tag, Input, Tooltip, Button } from 'antd';
 
-class AddTags extends React.Component {
+export default class Labels extends React.Component {
   state = {
     tags: [],
     inputVisible: false,
@@ -57,7 +57,8 @@ class AddTags extends React.Component {
         {tags.map((tag, index) => {
           const isLongTag = tag.length > 20;
           const tagElem = (
-            <Tag key={tag} color="#2db7f5" closable={index !== -1} afterClose={() => this.handleClose(tag)}>
+            <Tag key={tag} color="#2db7f5" closable={index !== -1}
+                 afterClose={() => this.handleClose(tag)}>
               {isLongTag ? `${tag.slice(0, 20)}...` : tag}
             </Tag>
           );
@@ -75,10 +76,9 @@ class AddTags extends React.Component {
             onPressEnter={this.handleInputConfirm}
           />
         )}
-        {!inputVisible && <Button size="small" type="dashed" onClick={this.showInput}>+ 新标签</Button>}
+        {!inputVisible &&
+        <Button size="small" type="dashed" onClick={this.showInput}>+ 新标签</Button>}
       </div>
     );
   }
 }
-
-export default AddTags;

@@ -11,7 +11,6 @@ import { Tag, Tooltip } from 'antd';
 import * as personService from '../../services/person';
 import styles from './vis-research-interest.less';
 // import './nv.d3.css';
-import AddTags from '../../components/seminar/addTags';
 
 /**
  * @param disable_vis_chart - default:false

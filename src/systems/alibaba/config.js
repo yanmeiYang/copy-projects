@@ -39,7 +39,7 @@ module.exports = {
   //
   // Functionality
   //
-  Enable_Export: false,
+  Enable_Export: true,
   ShowRegisteredRole: false, // 注册页面是否显示角色配置
 
   // SearchPagePrefix: 'uniSearch', // search - 普通搜索(deleted); uniSearch - 多合一搜索.

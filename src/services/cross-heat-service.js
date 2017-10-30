@@ -7,60 +7,62 @@ import { externalRequest } from '../utils/request';
 
 const { api } = config;
 export async function getDiscipline(area, k, depth) {
-  return externalRequest(api.getDiscipline.replace(':area', area).replace(':k', k).replace(':depth', depth), {
+  return request(api.getDiscipline.replace(':area', area).replace(':k', k).replace(':depth', depth), {
     method: 'GET',
   });
 }
 
 export async function delDiscipline(parents, children, postive) {
-  return externalRequest(api.delDiscipline.replace(':parents', parents).replace(':children', children).replace(':postive', postive), {
+  return request(api.delDiscipline.replace(':parents', parents).replace(':children', children).replace(':postive', postive), {
     method: 'GET',
   });
 }
 
 export async function createDiscipline(params) {
-  return externalRequest(api.createDiscipline, {
+  return request(api.createDiscipline, {
     method: 'PUT',
     body: JSON.stringify(params),
   });
 }
 
 export async function getCrossTree(id) {
-  return externalRequest(api.getCrossTree
-      .replace(':id', id),
-    {
-      method: 'GET',
-    });
+  return request(api.getCrossTree
+    .replace(':id', id), {
+    method: 'GET',
+  });
 }
 
 export async function getDomainiInfo(begin, end, dt) {
-  return externalRequest(api.getDomainInfo
-      .replace(':begin', begin)
-      .replace(':end', end),
-    {
-      method: 'POST',
-      body: JSON.stringify(dt),
-    });
+  return request(api.getDomainInfo
+    .replace(':begin', begin)
+    .replace(':end', end), {
+    method: 'POST',
+    body: JSON.stringify(dt),
+  });
 }
 
-export async function getDomainAllInfo(domain1, domain2, begin, end) {
-  return externalRequest(api.getDomainAllInfo
-      .replace(':domain1', domain1)
-      .replace(':domain2', domain2)
-      .replace(':begin', begin)
-      .replace(':end', end),
-    {
-      method: 'GET',
-    });
+export async function getDomainAllInfo(params) {
+  const { domain1, domain2, beginYear, endYear, summary, pubSkip, pubLimit, authorSkip, authorLimit } = params;
+  return request(api.getDomainAllInfo
+    .replace(':domain1', domain1)
+    .replace(':domain2', domain2)
+    .replace(':beginYear', beginYear)
+    .replace(':endYear', endYear)
+    .replace(':summary', summary)
+    .replace(':pubSkip', pubSkip)
+    .replace(':pubLimit', pubLimit)
+    .replace(':authorSkip', authorSkip)
+    .replace(':authorLimit', authorLimit), {
+    method: 'GET',
+  });
 }
 
 export async function getDomainExpertPub(complete, id,) {
-  return externalRequest(api.getDomainInfo
-      .replace(':complete', complete)
-      .replace(':id', id),
-    {
-      method: 'GET',
-    });
+  return request(api.getDomainInfo
+    .replace(':complete', complete)
+    .replace(':id', id), {
+    method: 'GET',
+  });
 }
 
 export async function getDomainExpert(ids) {
@@ -77,8 +79,8 @@ export async function getDomainPub(id) {
   });
 }
 
-export async function getUserQuerys(offset, size) {
-  return request(api.getUserQuerys
+export async function getTaskList(offset, size) {
+  return request(api.getTaskList
     .replace(':offset', offset)
     .replace(':size', size), {
     method: 'GET',
@@ -87,8 +89,14 @@ export async function getUserQuerys(offset, size) {
 
 export async function delUserQuery(id) {
   return request(api.delUserQuery
-      .replace(':id', id),
-    {
-      method: 'GET',
-    });
+    .replace(':id', id), {
+    method: 'GET',
+  });
+}
+
+export async function getSuggest(query) {
+  return request(api.getSuggest
+    .replace(':query', query), {
+    method: 'GET',
+  });
 }

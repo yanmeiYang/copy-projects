@@ -18,6 +18,7 @@ module.exports = {
   openPages: ['/login'],
   CORS: [
     'https://dc_api.aminer.org', 'http://localhost:4005',
+    'https://cross1.aminer.org',
     'http://e30c17034d854ef4b1dac3d7b5874d3b-cn-beijing.alicloudapi.com/',
   ],
   YQL: [],
@@ -137,16 +138,29 @@ module.exports = {
     // getOrgById: `${baseURL}/reviewer/org/get/:id`,
 
     // cross heat
-    getDiscipline: `${baseURL}//cross1.aminer.org/topics?area=:area&k=:k&depth=:depth&context=`,
-    delDiscipline: `${baseURL}//cross1.aminer.org/feedback?parents=:parents&children=:children&postive=:postive`,
-    createDiscipline: `${baseURL}//cross2.aminer.org/query`,
-    getUserQuerys: `${baseURL}//cross2.aminer.org/cross-domain/query/offset/:offset/size/:size`,
-    getCrossTree: `${baseURL}//cross2.aminer.org/query/:id`,
+    // getDiscipline: `${baseURL}//cross1.aminer.org/topics?area=:area&k=:k&depth=:depth&context=`,
+    // delDiscipline: `${baseURL}//cross1.aminer.org/feedback?parents=:parents&children=:children&postive=:postive`,
+    // createDiscipline: `${baseURL}//cross2.aminer.org/query`,
+    // getUserQuerys: `${baseURL}//cross2.aminer.org/cross-domain/query/offset/:offset/size/:size`,
+    // getCrossTree: `${baseURL}//cross2.aminer.org/query/:id`,
+    // delUserQuery: `${baseURL}/cross-domain/query/:id`,
+    // getDomainInfo: `${baseURL}//cross2.aminer.org/records/:begin/:end`,
+    // getDomainAllInfo: `${baseURL}//cross2.aminer.org/record/:domain1/:domain2/:begin/:end`,
+    // getExpertByIds: `${baseURL}/person/batch-list`,
+    // getPubById: `${baseURL}/pub/:id`,
+
+    getDiscipline: 'https://cross1.aminer.org/topics?area=:area&k=:k&depth=:depth&context=',
+    delDiscipline: 'https://cross1.aminer.org/feedback?parents=:parents&children=:children&postive=:postive',
+    createDiscipline: `${baseURL}/cross-domain/query`,
+    getTaskList: `${baseURL}/cross-domain/query/offset/:offset/size/:size`,
+    getCrossTree: `${baseURL}/cross-domain/query/:id`,
     delUserQuery: `${baseURL}/cross-domain/query/:id`,
-    getDomainInfo: `${baseURL}//cross2.aminer.org/records/:begin/:end`,
-    getDomainAllInfo: `${baseURL}//cross2.aminer.org/record/:domain1/:domain2/:begin/:end`,
+    getDomainInfo: `${baseURL}/cross-domain/records/:begin/:end`,
+    // getDomainAllInfo: 'http://166.111.7.173:15000/record/:domain1/:domain2/:begin/:end',
+    getDomainAllInfo: `${baseURL}/cross-domain/record/:domain1/:domain2/:beginYear/:endYear/:summary/:pubSkip/:pubLimit/:authorSkip/:authorLimit`,
     getExpertByIds: `${baseURL}/person/batch-list`,
     getPubById: `${baseURL}/pub/:id`,
+    getSuggest: `${baseURL}/search/suggest/gen/:query`,
 
     // getProjects: API_BASE+"reviewer/projects/get/:offset/:size"
     // addProject: API_BASE+"reviewer/project/add"

@@ -40,9 +40,9 @@ export async function findHeatMap(rid) {
 }
 
 export async function findTop10000Data() {
-  return request('/lab/heatData40.json');
+  return request('/lab/trajectory/heatData40.json');
 }
 
 export async function eventTop10000Find() {
-  return request('/lab/eventTop10000.json');
+  return request('/lab/trajectory/eventTop10000.json');
 }

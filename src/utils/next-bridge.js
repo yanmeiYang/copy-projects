@@ -48,7 +48,7 @@ const toNextPerson = (person) => {
         activity: person.indices.activity,
         diversity: person.indices.diversity,
         sociability: person.indices.sociability,
-        activityRankingContrib: person.activity_indices.contrib,
+        activityRankingContrib: person.activity_indices ? person.activity_indices.contrib : '',
       },
 
       tags: person.tags && person.tags.map(tag => tag.t),
@@ -80,11 +80,11 @@ const toNextAggregation = (aggs) => {
     aggs.map((agg) => {
       agg.name = agg.type;
       agg.items = agg.item && agg.item.map((i) => {
-        return {
-          term: i.value,
-          count: i.count,
-        };
-      });
+          return {
+            term: i.value,
+            count: i.count,
+          };
+        });
       // value,count,label, item, count
       delete agg.item;
       delete agg.type;

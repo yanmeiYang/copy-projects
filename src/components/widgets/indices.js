@@ -14,6 +14,9 @@ const indicesConfig = {
     letter: 'H',
     tooltip: '学术成就H-index（H）',
     color: 'h_index',
+    render: (indices) => {
+      return indices.hindex || indices.h_index;
+    },
   },
   activity: {
     key: 'activity',
@@ -50,9 +53,13 @@ const indicesConfig = {
     letter: 'C',
     color: 'blue',
     tooltip: 'CCF活动贡献（C）',
-    // render: (activity, activity_indices) => {
-    //   return activity_indices && activity_indices.contrib && activity_indices.contrib.toFixed(2);
-    // },
+    render: (activity, activity_indices) => {
+      if (activity.activityRankingContrib || activity.activityRankingContrib === 0) {
+        return activity.activityRankingContrib;
+      } else {
+        return activity_indices && activity_indices.contrib && activity_indices.contrib.toFixed(2);
+      }
+    },
   },
 };
 

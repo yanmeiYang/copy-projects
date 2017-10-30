@@ -5,15 +5,16 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Icon, InputNumber, Rate, Tabs, Spin } from 'antd';
-import { getTwoDecimal } from '../../utils';
-import { ProfileInfo } from '../../components/person';
-import { Indices } from '../../components/widgets';
-import * as personService from '../../services/person';
+import { Layout } from 'routes';
+import { getTwoDecimal } from 'utils';
+import { ProfileInfo } from 'components/person';
+import { Indices } from 'components/widgets';
+import NewActivityList from 'components/seminar/newActivityList';
+import * as personService from 'services/person';
+import { sysconfig } from 'systems';
 import styles from './index.less';
 import PersonFeaturedPapers from './person-featured-papers';
 // import ActivityList from '../../components/seminar/activityList';
-import NewActivityList from '../../components/seminar/newActivityList';
-import { sysconfig } from '../../systems';
 
 
 const TabPane = Tabs.TabPane;
@@ -164,32 +165,33 @@ const Person = ({ dispatch, person, seminar, publications }) => {
 
   // console.log('|||||||||||| PersonIndex:', person);
   return (
-    <div className="content-inner">
+    <Layout searchZone={[]}>
+      <div className="content-inner">
+        <ProfileInfo profile={profile} activity_indices={activity_indices}
+                     rightZoneFuncs={sysconfig.PersonList_RightZone} />
+        <div style={{ marginTop: 30 }} />
 
-      <ProfileInfo profile={profile} activity_indices={activity_indices}
-                   rightZoneFuncs={sysconfig.PersonList_RightZone} />
-      <div style={{ marginTop: 30 }} />
+        <div>
+          <Tabs defaultActiveKey="0" onTabClick={callback}>
+            {profileTabs.filter(item => (item.isShow !== false)).map((item) => {
+              return (
+                <TabPane key={item.desc} tab={item.title}>
+                  {item.content}
+                </TabPane>
+              );
+            })}
+          </Tabs>
+        </div>
 
-      <div>
-        <Tabs defaultActiveKey="0" onTabClick={callback}>
-          {profileTabs.filter(item => (item.isShow !== false)).map((item) => {
-            return (
-              <TabPane key={item.desc} tab={item.title}>
-                {item.content}
-              </TabPane>
-            );
-          })}
-        </Tabs>
+        {/* 先不要这个了。需要一个 top 的论文.
+         <h1>论文:
+         <small>({totalPubs})</small>
+         </h1>
+         <PersonPublications personId={profile.id} totalPubs={totalPubs} />
+         */}
+        {/* <PersonFeaturedPapers personId={profile.id} totalPubs={totalPubs}/> */}
       </div>
-
-      {/* 先不要这个了。需要一个 top 的论文.
-       <h1>论文:
-       <small>({totalPubs})</small>
-       </h1>
-       <PersonPublications personId={profile.id} totalPubs={totalPubs} />
-       */}
-      {/* <PersonFeaturedPapers personId={profile.id} totalPubs={totalPubs}/> */}
-    </div>
+    </Layout>
   );
 };
 

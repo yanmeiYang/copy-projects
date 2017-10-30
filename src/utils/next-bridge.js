@@ -48,7 +48,7 @@ const toNextPerson = (person) => {
         activity: person.indices.activity,
         diversity: person.indices.diversity,
         sociability: person.indices.sociability,
-        'activity-ranking-contrib': person.activity_indices.contrib,
+        activityRankingContrib: person.activity_indices.contrib,
       },
 
       tags: person.tags && person.tags.map(tag => tag.t),

@@ -6,19 +6,20 @@ import { connect } from 'dva';
 import classnames from 'classnames';
 import queryString from 'query-string';
 import { routerRedux } from 'dva/router';
+import { Spinner } from 'components';
+import { sysconfig } from 'systems';
+import { applyTheme, theme } from 'themes';
+import { Layout as Page } from 'routes';
+import { Layout, Tabs } from 'antd';
 import styles from './ExpertHeatmapPage.less';
 import LeftInfoZoneCluster from './LeftInfoZoneCluster';
 import LeftLineInfoCluster from './LeftLineInfoCluster';
 import ExpertHeatmap from './ExpertHeatmap';
 import EventsForYears from './EventForYears';
 import LeftInfoAll from './LeftInfoAll';
-import { Layout, Tabs } from 'antd';
-import { Spinner } from '../../components';
-import { sysconfig, applyTheme } from 'systems';
-import { Layout as Layout1 } from 'routes';
 
 const { Content, Sider } = Layout;
-const TabPane = Tabs.TabPane;
+const { TabPane } = Tabs;
 const tc = applyTheme(styles);
 
 class ExpertHeatmapPage extends React.PureComponent {
@@ -52,7 +53,10 @@ class ExpertHeatmapPage extends React.PureComponent {
         showFooter: false,
       },
     });
-    this.props.dispatch({ type: 'expertTrajectory/setRightInfo', payload: { rightInfoType: 'allYear' } });
+    this.props.dispatch({
+      type: 'expertTrajectory/setRightInfo',
+      payload: { rightInfoType: 'allYear' }
+    });
     this.findIfQuery(this.state.query);
   }
 
@@ -88,9 +92,15 @@ class ExpertHeatmapPage extends React.PureComponent {
     this.setState({ infoTab: e });
   };
 
-  callClusterPerson =(clusterIdList, from1, to1, type) => {
-    this.props.dispatch({ type: 'expertTrajectory/listPersonByIds', payload: { ids: clusterIdList } });
-    this.props.dispatch({ type: 'expertTrajectory/setRightInfo', payload: { rightInfoType: type } });
+  callClusterPerson = (clusterIdList, from1, to1, type) => {
+    this.props.dispatch({
+      type: 'expertTrajectory/listPersonByIds',
+      payload: { ids: clusterIdList }
+    });
+    this.props.dispatch({
+      type: 'expertTrajectory/setRightInfo',
+      payload: { rightInfoType: type }
+    });
     if (from1 && to1) {
       this.setState({ from: from1, to: to1 });
     }
@@ -108,7 +118,7 @@ class ExpertHeatmapPage extends React.PureComponent {
     this.props.dispatch({ type: 'expertTrajectory/eventFind', payload: { query } });
   }
 
-  callScroll= () => { // 滑动条滑到最底端
+  callScroll = () => { // 滑动条滑到最底端
     const e = document.getElementsByClassName('ant-tabs-content ant-tabs-content-no-animated'); // 滑动条cfco
     e[0].scrollTop = e[0].scrollHeight;
   }
@@ -126,18 +136,19 @@ class ExpertHeatmapPage extends React.PureComponent {
       lines: () => (<LeftLineInfoCluster persons={clusterPersons} from={from} to={to} />),
     };
     return (
-      <Layout1 contentClass={tc(['ExpertHeatmapPage'])} onSearch={this.onSearch}
-              query={query}>
+      <Page contentClass={tc(['ExpertHeatmapPage'])} onSearch={this.onSearch}
+            query={query}>
         <div className={classnames('content-inner', styles.page)}>
-          <Layout >
-            <Sider className={classnames(styles.left, 'card-container')} width={260} style={{ backgroundColor: '#fff' }}>
+          <Layout>
+            <Sider className={classnames(styles.left, 'card-container')} width={260}
+                   style={{ backgroundColor: '#fff' }}>
               <Tabs
-              className={styles.card}
-              type="card"
-              onChange={this.onInfoTabChange}
-              activeKey={this.state.infoTab}
-              tabBarExtraContent={''}
-            >
+                className={styles.card}
+                type="card"
+                onChange={this.onInfoTabChange}
+                activeKey={this.state.infoTab}
+                tabBarExtraContent={''}
+              >
                 <TabPane tab="VIEW" key="overview">
                   <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
                   <LeftInfoAll />
@@ -148,8 +159,8 @@ class ExpertHeatmapPage extends React.PureComponent {
                   {rightInfos[this.state.rightType] && rightInfos[this.state.rightType]()}
                 </TabPane>
 
-                <TabPane tab="EVENTS" key="event" >
-                  <div id="scroll" >
+                <TabPane tab="EVENTS" key="event">
+                  <div id="scroll">
                     <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
                     <EventsForYears qquery={this.state.query}
                                     onDone={this.callScroll} year={this.state.year} />
@@ -158,7 +169,7 @@ class ExpertHeatmapPage extends React.PureComponent {
               </Tabs>
             </Sider>
 
-            <Layout className={styles.right} >
+            <Layout className={styles.right}>
               <Content className={styles.content}>
                 <ExpertHeatmap qquery={this.state.query} onPageClick={this.callClusterPerson}
                                yearChange={this.onYearChange} />
@@ -168,7 +179,7 @@ class ExpertHeatmapPage extends React.PureComponent {
 
 
         </div>
-      </Layout1>
+      </Page>
     );
   }
 }

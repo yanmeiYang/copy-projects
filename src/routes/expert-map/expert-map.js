@@ -60,7 +60,6 @@ const getInfoWindow = () => {
  */
 @connect(({ expertMap, loading }) => ({ expertMap, loading }))
 export default class ExpertMap extends PureComponent {
-  /** 构造函数： 这里执行初始化 */
   constructor(props) {
     super(props);
     this.cache = {};
@@ -72,8 +71,6 @@ export default class ExpertMap extends PureComponent {
 
   state = {
     typeIndex: '0',
-    // rangeChecks: [true, false, false, false],
-    // numberChecks: [true, false, false, false, false],
     loadingFlag: false,
     cperson: '', //当前显示的作者的id
   };

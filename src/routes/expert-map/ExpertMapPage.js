@@ -7,7 +7,9 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Layout } from 'routes';
 import { sysconfig } from 'systems';
+import { Button } from 'antd';
 import { theme, applyTheme } from 'themes';
+import { FormattedMessage as FM } from 'react-intl';
 import queryString from 'query-string';
 import { Auth } from 'hoc';
 import { detectSavedMapType, compare } from 'utils';
@@ -18,6 +20,7 @@ import ExpertMap from './expert-map.js';
 import styles from './ExpertMapPage.less';
 
 const tc = applyTheme(styles);
+const ButtonGroup = Button.Group;
 
 const MAP_DISPATCH_KEY = 'map-dispatch';
 
@@ -30,11 +33,12 @@ export default class ExpertMapPage extends React.Component {
   }
 
   state = {
-    query: '',
     mapType: '', // [baidu|google]
+    query: '',
     domainId: '',
-    range: '',
-    hindexRange: '',
+    range: '', // Filter by acm, ieee
+    hindexRange: '', // Filter by hindex
+    type: '', // 自动那一行.
   };
 
   componentWillMount() {
@@ -79,7 +83,7 @@ export default class ExpertMapPage extends React.Component {
       this.searchMapByQuery(ns.query);
       return true;
     }
-    if (compare(ns, this.state, 'range', 'hindexRange')) {
+    if (compare(ns, this.state, 'mapType', 'range', 'hindexRange', 'type')) {
       return true;
     }
     return false;
@@ -134,8 +138,27 @@ export default class ExpertMapPage extends React.Component {
   // Tips: 不会根据state变化的jsx block放到外面。这样多次渲染的时候不会多次初始化;
   // titleBlock = <h1>专家地图:</h1>;
 
+  onTypeChange = (type) => {
+    this.setState({ type });
+  };
+
+  onMapTypeChange = (mapType) => {
+    localStorage.setItem(MAP_DISPATCH_KEY, mapType);
+    this.setState({ mapType });
+  };
+
+  typeConfig = [
+    { key: '0', label: '自动' },
+    { key: '1', label: '大区' },
+    { key: '2', label: '国家' },
+    { key: '3', label: '国内区', disabled: true },
+    { key: '4', label: '城市' },
+    { key: '5', label: '机构' },
+  ];
+
+
   render() {
-    const { query, mapType, domainId, range, hindexRange } = this.state;
+    const { mapType, query, domainId, range, hindexRange, type } = this.state;
     const options = { ...this.state, title: this.titleBlock };
     console.log('>>>>>> options:', options);
     return (
@@ -156,6 +179,52 @@ export default class ExpertMapPage extends React.Component {
           onRangeChange={this.onRangeChange}
           onHindexRangeChange={this.onHindexRangeChange}
         />
+
+        <div className={styles.headerLine}>
+          <div className={styles.left}>
+            <div className={styles.level}>
+              <span>
+                <FM defaultMessage="Baidu Map"
+                    id="com.expertMap.headerLine.label.level" />
+              </span>
+              <ButtonGroup id="sType" className={styles.sType}>
+                {this.typeConfig.map((conf) => {
+                  return !conf.disabled && (
+                    <Button
+                      key={conf.key}
+                      onClick={this.onTypeChange.bind(this, conf.key)}
+                      type={this.state.type === conf.key ? 'primary' : ''}
+                    >
+                      {conf.label}
+                    </Button>
+                  );
+                })}
+              </ButtonGroup>
+            </div>
+          </div>
+
+          <div className={styles.scopes}>
+            <div className={styles.switch}>
+              <ButtonGroup id="diffmaps">
+                <Button
+                  type={this.state.mapType === 'baidu' ? 'primary' : ''}
+                  onClick={this.onMapTypeChange.bind(this, 'baidu')}
+                >
+                  <FM defaultMessage="Baidu Map"
+                      id="com.expertMap.headerLine.label.baiduMap" />
+                </Button>
+                <Button
+                  type={this.state.mapType === 'google' ? 'primary' : ''}
+                  onClick={this.onMapTypeChange.bind(this, 'google')}
+                >
+                  <FM defaultMessage="Baidu Map"
+                      id="com.expertMap.headerLine.label.googleMap" />
+                </Button>
+              </ButtonGroup>
+            </div>
+
+          </div>
+        </div>
 
         {mapType === 'google'
           ? <ExpertGoogleMap {...options} />

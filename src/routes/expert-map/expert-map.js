@@ -3,13 +3,12 @@
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Button } from 'antd';
 import loadScript from 'load-script';
-import { FormattedMessage as FM } from 'react-intl';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
 import { Spinner } from 'components';
 import { listPersonByIds } from 'services/person';
+import { compare } from 'utils';
 import * as profileUtils from 'utils/profile-utils';
 import GetBMapLib from './utils/BMapLibGai.js';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
@@ -28,7 +27,6 @@ import {
 
 let map1; // what?
 const dataMap = {}; // 数据的索引，建议可以放到reducers.
-const ButtonGroup = Button.Group;
 const blankAvatar = '/images/blank_avatar.jpg';
 
 function insertAfter(newElement, targetElement) {
@@ -78,7 +76,6 @@ export default class ExpertMap extends PureComponent {
     // numberChecks: [true, false, false, false, false],
     loadingFlag: false,
     cperson: '', //当前显示的作者的id
-    lastType: '',
   };
 
   componentDidMount() {
@@ -99,14 +96,8 @@ export default class ExpertMap extends PureComponent {
     if (np.expertMap.geoData !== this.props.expertMap.geoData) {
       this.showMap(np.expertMap.geoData, '0', np.range, np.hindexRange);
     }
-    const { lastType } = this.state;
-    if (np.range !== this.props.range) {
-      console.log('>>>>> change map to :', np.range, np.hindexRange);
-      this.showMap(this.props.expertMap.geoData, lastType, np.range, np.hindexRange);
-    }
-    if (np.hindexRange !== this.props.hindexRange) {
-      console.log('>>>>> change map to :', np.range, np.hindexRange);
-      this.showMap(this.props.expertMap.geoData, lastType, np.range, np.hindexRange);
+    if (compare(np, this.props, 'range', 'hindexRange', 'type')) {
+      this.showMap(this.props.expertMap.geoData, np.type, np.range, np.hindexRange);
     }
   }
 
@@ -115,18 +106,6 @@ export default class ExpertMap extends PureComponent {
   }
 
   // EVENTS ---------------------------------------------------------------
-
-  // TODO Change this. to main block.
-  onChangeGoogleMap = () => {
-    localStorage.setItem('maptype', 'google');
-    const href = window.location.href;
-    window.location.href = href.replace('expert-map', 'expert-googlemap');
-  };
-
-  onChangeBaiduMap = () => {
-    const href = window.location.href;
-    window.location.href = href;
-  };
 
   onLoadPersonCard = (personId) => {
     this.props.dispatch({ type: 'expertMap/getPersonInfo', payload: { personId } });
@@ -167,7 +146,7 @@ export default class ExpertMap extends PureComponent {
       this.detachCluster(ishere);
     }
 
-    const pixel = map.pointToOverlayPixel(e.currentTarget.getPosition());// 中心点的位置
+    const pixel = map.pointToOverlayPixel(e.currentTarget.getPosition()); // 中心点的位置
     const width = 180;
     // 可得中心点到图像中心点的半径为：width/2-imgwidth/2,圆形的方程为(X-pixel.x)^2+(Y-pixel.y)^2=width/2
     const imgwidth = 45;
@@ -231,7 +210,6 @@ export default class ExpertMap extends PureComponent {
       });
     }
 
-    console.log('======================++++++++++++++++++++++++++++', this.cacheData);
     this.listPersonDone(map, ids, this.cacheData);
     /*// cached.
     const cached = this.cache[ids];
@@ -296,7 +274,7 @@ export default class ExpertMap extends PureComponent {
 
         let style;
         if (name.length <= 8) {
-          style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:45px;font-size:20%;';
+          style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:45px;font-size:10px;';
           if (name.length === 6) {
             name = ' '.concat(name);
           }
@@ -326,7 +304,7 @@ export default class ExpertMap extends PureComponent {
           });
           name = arr.join('');
           name = `&nbsp;&nbsp;${name}`;
-          style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:10px;word-wrap:break-word;font-size:20%;';
+          style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:10px;word-wrap:break-word;font-size:10px;';
         }
         const img = this.cacheImg[ids[i]];//浅拷贝和深拷贝
         const image = new Image(); //进行深拷贝
@@ -395,14 +373,6 @@ export default class ExpertMap extends PureComponent {
         });
       }
     }
-  };
-
-  showType = (e) => {
-    const { range, hindexRange } = this.props;
-    const typeid = e.currentTarget && e.currentTarget.value && e.currentTarget.getAttribute('value');
-    this.setState({ typeIndex: typeid });
-    // refactor:: to this line.
-    this.showMap(this.props.expertMap.geoData, typeid, range, hindexRange, true);
   };
 
   showLoading = () => {
@@ -777,42 +747,6 @@ export default class ExpertMap extends PureComponent {
 
     return (
       <div className={styles.expertMap} id="currentMain">
-
-        <div className={styles.headerLine}>
-          <div className={styles.left}>
-
-            <div className={styles.level}>
-              <span>
-                <FM defaultMessage="Baidu Map"
-                    id="com.expertMap.headerLine.label.level" />
-              </span>
-              <ButtonGroup id="sType" className={styles.sType}>
-                <Button onClick={this.showType} value="0">自动</Button>
-                <Button onClick={this.showType} value="1">大区</Button>
-                <Button onClick={this.showType} value="2">国家</Button>
-                <Button onClick={this.showType} value="3" style={{ display: 'none' }}>国内区</Button>
-                <Button onClick={this.showType} value="4">城市</Button>
-                <Button onClick={this.showType} value="5">机构</Button>
-              </ButtonGroup>
-            </div>
-          </div>
-
-          <div className={styles.scopes}>
-            <div className={styles.switch}>
-              <ButtonGroup id="diffmaps">
-                <Button type="primary" onClick={this.onChangeBaiduMap}>
-                  <FM defaultMessage="Baidu Map"
-                      id="com.expertMap.headerLine.label.baiduMap" />
-                </Button>
-                <Button onClick={this.onChangeGoogleMap}>
-                  <FM defaultMessage="Baidu Map"
-                      id="com.expertMap.headerLine.label.googleMap" />
-                </Button>
-              </ButtonGroup>
-            </div>
-
-          </div>
-        </div>
 
         <div className={styles.map}>
           <Spinner loading={this.state.loadingFlag} />

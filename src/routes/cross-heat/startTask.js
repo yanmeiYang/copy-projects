@@ -27,7 +27,7 @@ const descripts = [
   '请输入领域一生成知识图谱，例如：artificial intelligence',
   '请输入领域一生成知识图谱，例如：health care',
 ];
-const errorInfo = '学科数量必须在3～20之间，请您添加学科或者删除学科';
+const errorInfo = ['学科数量必须在3～20之间，请您手动添加学科', '学科数量必须在3～20之间，请您手动删除学科'];
 const crossTooltip = '请注意笛卡尔智能分析是对两个领域的各个子领域进行交叉分析，耗时根据领域知识图谱的大小而定，时长可能达到几到几十小时，请耐心等待。';
 const getSuggestionValue = suggestion => suggestion.phrase;
 const renderSuggestion = suggestion => suggestion.phrase;
@@ -108,8 +108,12 @@ class StartTask extends React.Component {
     if (current === 3 || current === 5) {
       const id = current === 3 ? 'queryOne' : 'queryTwo';
       const children = this.getNodeChildren(this.props.crossHeat[id], []);
-      if (children.length < 5 || children.length > 20) {
-        message.error(errorInfo);
+      if (children.length < 3) {
+        message.error(errorInfo[0]);
+        isChange = false;
+      }
+      if (children.length > 20) {
+        message.error(errorInfo[1]);
         isChange = false;
       }
     }

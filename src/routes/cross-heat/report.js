@@ -77,6 +77,7 @@ class CrossReport extends React.Component {
   expertList = [];
   pubList = [];
 
+
   /** 在Component被加载的时候调用的。 */
   componentDidMount() {
     const { id } = this.props.match.params;
@@ -110,9 +111,9 @@ class CrossReport extends React.Component {
         this.getDomainInfo(crossTree.queryTree1, crossTree.queryTree2, nextState.dateDuring);
       }
     }
-    const domainList = this.props.crossHeat.domainList; // 热力值改变
-    if (domainList !== nextProps.crossHeat.domainList) {
-      this.createRect(nextProps.crossHeat.domainList);
+    const crossInfo = this.props.crossHeat.crossInfo; // 热力值改变
+    if (crossInfo !== nextProps.crossHeat.crossInfo) {
+      this.createRect(nextProps.crossHeat.crossInfo.dataList);
     }
     if (this.props.crossHeat.experts !== nextProps.crossHeat.experts) {
       this.expertList = nextProps.crossHeat.experts;
@@ -240,7 +241,7 @@ class CrossReport extends React.Component {
         .append('rect')
         .attr('width', (d) => { // bar的宽
           if (d.h && d.h > 0) {
-            const fWidth = Math.log(d.h) * wMin;
+            const fWidth = Math.log(d.h + 1) * wMin;
             return fWidth > 58 ? 58 : fWidth;// 设置bar 默认宽度
           }
         })
@@ -266,10 +267,11 @@ class CrossReport extends React.Component {
         .append('text')
         .attr('x', (d) => {
           if (d.h && d.h > 0) {
-            let xStart = Math.log(d.h) * wMin;
+            // let xStart = Math.log(d.h) * wMin;
             // 开始 最小6 最大 20
-            xStart = (xStart > 0 && xStart <= 6) ? 6 : (xStart > 25 ? 20 : xStart);
-            return (d.x * cellSize) + xStart;
+            // xStart = xStart < 6 ? xStart : ((xStart / 2) - 3);
+            // xStart = 4;
+            return (d.x * cellSize) + 4;
           }
         })
         .attr('y', (d) => {
@@ -328,7 +330,7 @@ class CrossReport extends React.Component {
     const show = !(modalType === 'heat' && d.power < 1); // modal是否展示
     if (show) {
       this.modalType = modalType;
-      this.setState({ visibleModal: true });
+      this.setState({ visibleModal: true, defaultTab: modalType });
       this.expertList = [];
       this.pubList = [];
       const params = {
@@ -350,7 +352,6 @@ class CrossReport extends React.Component {
         //查看tab 默认是那个
         this.first10Authors = info.first10Authors;
         this.first10Pubs = info.first10Pubs;
-        this.modalType = 'expert'; // todo 根据点击
         const title = ['中国', '美国', '其他'];
         this.comPer = { title, num: [info.ChinaAuthorSize, info.USAAuthorSize, 0] };
         this.comPub = { title, num: [info.ChinaPubSize, info.USAPubSize, 0] };
@@ -566,13 +567,33 @@ class CrossReport extends React.Component {
 
   };
 
+
+  hIndexBarWidth = (hindexData) => {
+    const indexList = [hindexData['1'], hindexData['2'], hindexData['3'], hindexData['4'], hindexData['5']];
+    const maxIndex = Math.max.apply(null, indexList);
+    const tmp = 180 / maxIndex;
+    const widthList = [tmp * hindexData['1'], tmp * hindexData['2'], tmp * hindexData['3'], tmp * hindexData['4'], tmp * hindexData['5']];
+    return widthList;
+  }
+
+  onTagChange = (item) => {
+    const title = item.split(',');
+    const param = { first: title[0], second: title[1], key: 'expert', power: 1 };
+    this.showModal(param);
+  }
+
   render() {
     const loadPub = this.props.loading.effects['crossHeat/getDomainPub'];
     const loadExpert = this.props.loading.effects['crossHeat/getDomainExpert'];
     const loadDomain = this.props.loading.effects['crossHeat/getDomainAllInfo'];
     const loadTree = this.props.loading.effects['crossHeat/getCrossTree'];
     const loadDomainInfo = this.props.loading.effects['crossHeat/getDomainInfo'];
-    const modalInfo = this.props.crossHeat.domainAllInfo;
+    const { domainAllInfo, crossInfo } = this.props.crossHeat;
+    const modalInfo = domainAllInfo;
+    let hIndexBarWidth = [];
+    if (crossInfo) {
+      hIndexBarWidth = this.hIndexBarWidth(crossInfo.hIndexDistribution);
+    }
     const operations = <span>{`${this.domain2} & ${this.domain1}`}</span>;
     const heatInfo = this.heatBtn ? '历史热点' : '未来趋势';
     const nullInfo = this.nullBtn ? '隐藏空白' : '展示空白';
@@ -582,112 +603,131 @@ class CrossReport extends React.Component {
           <Spinner loading={loadTree || loadDomainInfo} size="large" />
           <div className={styles.actionBar}>
             <div>
-              <span className={styles.title}>{this.title}</span>
-              {/*<Button type="default" onClick={this.heatChange}>{heatInfo}</Button>*/}
-              {/*<Button type="default" onClick={this.nullChange}>{nullInfo}</Button>*/}
-              {/*<Button type="default" onClick={this.autoChange}>自动演示</Button>*/}
+            <span className={styles.title}>{this.title}</span>
+            <Button type="default" onClick={this.heatChange}>{heatInfo}</Button>
+            <Button type="default" onClick={this.nullChange}>{nullInfo}</Button>
+            <Button type="default" onClick={this.autoChange}>自动演示</Button>
             </div>
             <div>
               <Button type="default" onClick={this.goBack}>返回首页</Button>
             </div>
           </div>
-          {/*<div className={styles.statistics}>*/}
-            {/*<div>*/}
-              {/*<div className={styles.title}>*/}
-                {/*<i className="fa fa-bar-chart" aria-hidden="true" />*/}
-                {/*<span>统计</span>*/}
-              {/*</div>*/}
-              {/*<div className={styles.content}>*/}
-                {/*<div className={styles.basic}>*/}
-                  {/*<span>专家：</span>*/}
-                  {/*<span className={styles.num}>999</span>*/}
-                  {/*<span>人</span>*/}
-                {/*</div>*/}
-                {/*<div className={styles.basic}>*/}
-                  {/*<span>论文：</span>*/}
-                  {/*<span className={styles.num}>1024</span>*/}
-                  {/*<span>篇</span>*/}
-                {/*</div>*/}
-                {/*<div className={styles.basic}>*/}
-                  {/*<span>华人：</span>*/}
-                  {/*<span className={styles.num}>987</span>*/}
-                  {/*<span>人</span>*/}
-                {/*</div>*/}
-                {/*<div className={styles.basic}>*/}
-                  {/*<span>H-index均值：</span>*/}
-                  {/*<span className={styles.num}>60</span>*/}
-                {/*</div>*/}
-              {/*</div>*/}
-            {/*</div>*/}
-            {/*<div className={styles.item}>*/}
-              {/*<div className={styles.title}>*/}
-                {/*<i className="fa fa-area-chart" aria-hidden="true" />*/}
-                {/*<span>H-index分布</span>*/}
-              {/*</div>*/}
-              {/*<div className={styles.content}>*/}
-                {/*<div className={styles.hBar}>*/}
-                  {/*<div className={styles.itemAxias}>&lt;10</div>*/}
-                  {/*<div className={styles.item1} style={{ width: 18 }}>38</div>*/}
-                {/*</div>*/}
-                {/*<div className={styles.hBar}>*/}
-                  {/*<div className={styles.itemAxias}>10~20</div>*/}
-                  {/*<div className={styles.item2} style={{ width: 180 }}>180</div>*/}
-                {/*</div>*/}
-                {/*<div className={styles.hBar}>*/}
-                  {/*<div className={styles.itemAxias}>20~40</div>*/}
-                  {/*<div className={styles.item3} style={{ width: 70 }}>38</div>*/}
-                {/*</div>*/}
-                {/*<div className={styles.hBar}>*/}
-                  {/*<div className={styles.itemAxias}>40~60</div>*/}
-                  {/*<div className={styles.item4} style={{ width: 18 }}>38</div>*/}
-                {/*</div>*/}
-                {/*<div className={styles.hBar}>*/}
-                  {/*<div className={styles.itemAxias}>&gt;60</div>*/}
-                  {/*<div className={styles.item5} style={{ width: 30 }}>38</div>*/}
-                {/*</div>*/}
-              {/*</div>*/}
-            {/*</div>*/}
-            {/*<div className={styles.item}>*/}
-              {/*<div className={styles.title}>*/}
-                {/*<i className="fa fa-sort-amount-desc" aria-hidden="true" />*/}
-                {/*<span>最热交叉</span>*/}
-              {/*</div>*/}
-              {/*<div className={styles.content}>*/}
-                {/*{top5.map((item, index) => {*/}
-                  {/*return (*/}
-                    {/*<Tooltip key={index} placement="top" title={item}>*/}
-                      {/*<div href="#" className={styles.hTitle}>*/}
-                        {/*<Tag className={styles.antTag}>{index + 1}. {item}</Tag>*/}
-                      {/*</div>*/}
-                    {/*</Tooltip>*/}
-                  {/*);*/}
-                {/*})}*/}
-              {/*</div>*/}
-            {/*</div>*/}
-            {/*<div className={styles.item}>*/}
-              {/*<div className={styles.title}>*/}
-                {/*<span alt="" className={classnames('icon', styles.titleIcon)} />*/}
-                {/*<span>图例</span>*/}
-              {/*</div>*/}
-              {/*<div className={styles.content}>*/}
-                {/*<div className={styles.legend}>*/}
-                  {/*<div className={styles.label}>交叉学科热度：</div>*/}
-                  {/*<div className={styles.hColor1}>*/}
-                    {/*<div>低</div>*/}
-                    {/*<div>高</div>*/}
-                  {/*</div>*/}
-                {/*</div>*/}
-                {/*<div className={styles.legend}>*/}
-                  {/*<div className={styles.label}>交叉学科专家：</div>*/}
-                  {/*<div className={styles.eColor}></div>*/}
-                {/*</div>*/}
-                {/*<div className={styles.legend}>*/}
-                  {/*<div className={styles.label}>交叉学科论文：</div>*/}
-                  {/*<div className={styles.pColor}></div>*/}
-                {/*</div>*/}
-              {/*</div>*/}
-            {/*</div>*/}
-          {/*</div>*/}
+          {crossInfo &&
+          <div className={styles.statistics}>
+            <div>
+              <div className={styles.title}>
+                <i className="fa fa-bar-chart" aria-hidden="true" />
+                <span>统计</span>
+              </div>
+              <div className={styles.content}>
+                <div className={styles.basic}>
+                  <span>专家：</span>
+                  <span className={styles.num}>{crossInfo.authorSize}</span>
+                  <span>人</span>
+                </div>
+                <div className={styles.basic}>
+                  <span>论文：</span>
+                  <span className={styles.num}>{crossInfo.pubSize}</span>
+                  <span>篇</span>
+                </div>
+                <div className={styles.basic}>
+                  <span>华人：</span>
+                  <span className={styles.num}>{crossInfo.ChinaAuthorSize}</span>
+                  <span>人</span>
+                </div>
+                <div className={styles.basic}>
+                  <span>H-index均值：</span>
+                  <span className={styles.num}>{crossInfo.averageHIndex.toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
+            <div className={styles.item}>
+              <div className={styles.title}>
+                <i className="fa fa-area-chart" aria-hidden="true" />
+                <span>H-index分布</span>
+              </div>
+              <div className={styles.content}>
+                <div className={styles.hBar}>
+                  <div className={styles.itemAxias}>&lt;10</div>
+                  <div className={styles.item1}
+                       style={{ width: hIndexBarWidth[0] }}
+                  >{crossInfo.hIndexDistribution['1']}</div>
+                </div>
+                <div className={styles.hBar}>
+                  <div className={styles.itemAxias}>10~20</div>
+                  <div className={styles.item2}
+                       style={{ width: hIndexBarWidth[1] }}>{crossInfo.hIndexDistribution['2']}
+                  </div>
+                </div>
+                <div className={styles.hBar}>
+                  <div className={styles.itemAxias}>20~40</div>
+                  <div className={styles.item3} style={{ width: hIndexBarWidth[2] }}>
+                    { crossInfo.hIndexDistribution['3']}
+                  </div>
+                </div>
+                <div className={styles.hBar}>
+                  <div className={styles.itemAxias}>40~60</div>
+                  <div className={styles.item4} style={{ width: hIndexBarWidth[3] }}>
+                    {crossInfo.hIndexDistribution['4']}
+                  </div>
+                </div>
+                <div className={styles.hBar}>
+                  <div className={styles.itemAxias}>&gt;60</div>
+                  <div className={styles.item5} style={{ width: hIndexBarWidth[4] }}>
+                    {crossInfo.hIndexDistribution['5']}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={styles.item}>
+              <div className={styles.title}>
+                <i className="fa fa-sort-amount-desc" aria-hidden="true" />
+                <span>最热交叉</span>
+              </div>
+              <div className={styles.content}>
+                {crossInfo.hottestFive.map((item, index) => {
+                  return (
+                    <Tooltip key={index} placement="top" title={item}
+                             onClick={this.onTagChange.bind(this, item)}>
+                      <div href="#" className={styles.hTitle}>
+                        <Tag
+                          className={styles.antTag}>{index + 1}. {item.replace(',', ' & ')}</Tag>
+                      </div>
+                    </Tooltip>
+                  );
+                })}
+              </div>
+            </div>
+            <div className={styles.item}>
+              <div className={styles.title}>
+                <span alt="" className={classnames('icon', styles.titleIcon)} />
+                <span>图例</span>
+              </div>
+              <div className={styles.content}>
+                <div className={styles.legend}>
+                  <div className={styles.label}>交叉学科热度：</div>
+                  <div className={styles.hColor1}>
+                    <div>低</div>
+                    <div>高</div>
+                  </div>
+                </div>
+                <div className={styles.legend}>
+                  <div className={styles.label}>交叉学科专家：</div>
+                  <div className={styles.eColor}></div>
+                </div>
+                <div className={styles.legend}>
+                  <div className={styles.label}>交叉学科论文：</div>
+                  <div className={styles.pColor}></div>
+                </div>
+                <div className={styles.legend}>
+                  <div className={styles.label}>正在计算交叉：</div>
+                  <div className={styles.lColor}></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          }
+
           <div id="tooltip" />
           <div id="d3Content" className={styles.d3Content}>
             {this.xWidth > 0 &&

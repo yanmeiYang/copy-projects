@@ -15,34 +15,15 @@ import styles from './taskList.less';
 const tc = applyTheme(styles);
 const Search = Input.Search;
 
-
-const data = [{
-  id: '59e569e79ed5db1d9cf6c149',
-  name: 'Data mining & Physics',
-  status: '计算中',
-  beginTime: '2017-10-12 10:00',
-  endTime: '2017-10-12 10:30',
-}, {
-  id: '59e5bf489ed5db1d9cf76056',
-  name: 'Artificial Intelligence & Health Care',
-  status: '已完成',
-  beginTime: '2017-10-13 10:00',
-  endTime: '2017-10-13 10:30',
-}, {
-  id: '59e5c0a69ed5db1d9cf76199',
-  name: 'Machine Learning & Health Care',
-  status: '计算中',
-  beginTime: '2017-10-10 10:00',
-  endTime: '2017-10-10 10:30',
-}];
-
-
 @Auth
 class CrossTaskList extends React.Component {
 
+  state = {
+    sortedInfo: {},
+  };
   tabData = [];
   componentDidMount = () => {
-    const params = { offset: 0, size: 10 };
+    const params = { offset: 0, size: 50 };
     this.props.dispatch({ type: 'crossHeat/getTaskList', payload: params });
   };
 
@@ -61,10 +42,10 @@ class CrossTaskList extends React.Component {
       const isOk = item.total === item.calculated ? 1 : 0;
       const status = statusVal[isOk];
       const id = item._id;
-      const date = new Date(item.timestamp * 1000);
-      this.tabData.push({ title, status, date: date.toLocaleString(), id });
+      this.tabData.push({ title, status, date: item.timestamp, id });
       return true;
     });
+    this.tabData.reverse();
   }
 
   createCross = () => {
@@ -73,11 +54,12 @@ class CrossTaskList extends React.Component {
     }));
   };
   onDelete = (id, record) => {
+    const that = this;
     Modal.confirm({
       title: record.name,
       content: '您确定删除吗？',
       onOk() {
-        console.log('delete', id);
+        that.props.dispatch({ type: 'crossHeat/delTaskList', payload: { id } });
       },
     });
   };
@@ -87,7 +69,20 @@ class CrossTaskList extends React.Component {
     }));
   };
 
+  handleChange = (pagination, filters, sorter) => {
+    this.setState({
+      sortedInfo: sorter,
+    });
+  }
+
+  formatRelative = (text, record) => {
+    const date = new Date(text * 1000);
+    const formatDate = date.format('yyyy-MM-dd hh:mm:ss');
+    return formatDate;
+  }
+
   render() {
+    const { sortedInfo } = this.state;
     const loading = this.props.loading.effects['crossHeat/getTaskList'];
     const columns = [{
       title: '名称',
@@ -96,11 +91,13 @@ class CrossTaskList extends React.Component {
     }, {
       title: '状态',
       dataIndex: 'status',
-      render: text => <span >{text}</span>,
     }, {
-      title: '开始时间',
+      title: '日期',
       dataIndex: 'date',
-      render: text => <span >{text}</span>,
+      key: 'date',
+      sorter: (a, b) => a.date - b.date,
+      sortOrder: sortedInfo.columnKey === 'date' && sortedInfo.order,
+      render: (text, record) => (this.formatRelative(text, record)),
     }, {
       title: '操作',
       dataIndex: 'id',
@@ -112,16 +109,18 @@ class CrossTaskList extends React.Component {
         </span>
       ),
     }];
+
     return (
       <Layout searchZone={[]} contentClass={tc(['queryList'])} showNavigator={false}>
         <div className={ styles.bar}>
-          <Button type="primary" icon="plus" size="large" onClick={this.createCross}>创建</Button>
+          <Button type="primary" icon="plus" size="large" onClick={this.createCross}>挖掘热点</Button>
         </div>
         <Spinner loading={loading} size="large" />
         {this.tabData.length > 0 &&
-        <Table columns={columns} key={Math.random()} dataSource={this.tabData}
-               rowKey={record => record.id} />
+        <Table columns={columns} dataSource={this.tabData} onChange={this.handleChange} />
+
         }
+
       </Layout>
     );
   }

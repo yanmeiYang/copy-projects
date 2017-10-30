@@ -5,12 +5,13 @@
 import React from 'react';
 import { connect } from 'dva';
 import * as d3 from 'd3';
+import { sysconfig } from 'systems';
+import { Auth } from 'hoc';
 import { Checkbox, Select, Progress, message, Button } from 'antd';
-import { RgSearchNameBox } from '../../components/relation-graph';
+import { RgSearchNameBox } from 'components/relation-graph';
 import { getAvatar } from '../../utils/profile-utils';
 import { classnames } from '../../utils/index';
 import styles from './RelationGraph.less';
-import { Auth } from '../../hoc';
 
 const Option = Select.Option;
 const controlDivId = 'rgvis';
@@ -1170,7 +1171,7 @@ export default class RelationGraph extends React.PureComponent {
         _lastNode = d.index;
         return _lastNode;
       } else {
-        return window.open(`https://cn.aminer.org/profile/${d.id}`);
+        return window.open(`${sysconfig.PersonList_PersonLink(d.id)}`);
       }
     };
 
@@ -1215,7 +1216,7 @@ export default class RelationGraph extends React.PureComponent {
             return getClusteringColor(d);
           });
         }).attr('data-toggle', 'popover').attr('data-container', 'body').attr('data-placement', 'right').attr('data-html', true).attr('title', (d) => {
-          return `<a href='https://cn.aminer.org/profile/${d.id}'>${d.name.n.en}</a>`;
+          return `<a href=${sysconfig.PersonList_PersonLink(d.id)}>${d.name.n.en}</a>`;
         }).attr('data-trigger', 'hover').attr('delay', 500).attr('data-content', (d) => {
           let posObj,
             tempStr,
@@ -1808,14 +1809,14 @@ export default class RelationGraph extends React.PureComponent {
           <div>
             {currentNode.avatar &&
             <div className={styles.avatar}>
-              <a href={`https://aminer.org/profile/-/${currentNode.id}`} target="_blank">
+              <a href={sysconfig.PersonList_PersonLink(currentNode.id)} target="_blank">
                 <img src={getAvatar(currentNode.avatar, currentNode.id, 90)}
                      alt={currentNode.name.n.en} />
               </a>
             </div>
             }
             {currentNode.name
-            && <a href={`https://aminer.org/profile/-/${currentNode.id}`} target="_blank">
+            && <a href={sysconfig.PersonList_PersonLink(currentNode.id)} target="_blank">
               <h2>{currentNode.name.n.en}</h2></a>
             }
             {currentNode.indices &&

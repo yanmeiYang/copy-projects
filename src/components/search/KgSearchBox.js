@@ -288,8 +288,8 @@ class KgSearchBox extends PureComponent {
   };
 
   getRealAdvancedSearchStatus = (props) => {
-    const { fixAdvancedSearch, isAdvancedSearch } = props;
-    return fixAdvancedSearch ? true : isAdvancedSearch;
+    const { fixAdvancedSearch, isAdvancedSearch, disableAdvancedSearch } = props;
+    return disableAdvancedSearch ? false : fixAdvancedSearch ? true : isAdvancedSearch;
   };
 
   /**
@@ -329,7 +329,8 @@ class KgSearchBox extends PureComponent {
     const { intl } = this.props;
     const { size, className, style, btnText, searchPlaceholder, searchBtnStyle } = this.props;
     const { getFieldDecorator } = this.props.form;
-    const { fixAdvancedSearch } = this.props;
+    const { fixAdvancedSearch, disableAdvancedSearch } = this.props;
+    const shouldShowSiwtchBtn = !fixAdvancedSearch && !disableAdvancedSearch;
     // const { isAdvancedSearch } = this.props; // from app model.
     // fixAdvancedSearch ? true : isAdvancedSearch;
 
@@ -396,7 +397,7 @@ class KgSearchBox extends PureComponent {
           >{btnText || intl.formatMessage(messages.searchBtn)}
           </Button>
 
-          {!fixAdvancedSearch &&
+          {shouldShowSiwtchBtn &&
           <Button
             className={styles.switchBtn} style={searchBtnStyle}
             type="primary" size={btnSize} onClick={this.switchAdvanced.bind(this, this.advanced)}

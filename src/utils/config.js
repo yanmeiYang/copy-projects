@@ -1,7 +1,7 @@
 const baseURL = 'https://api.aminer.org/api';
 const apiDomain = 'https://api.aminer.org';
-const nextAPIURL = 'http://localhost:4005/query';
-// const nextAPIURL = 'http://e30c17034d854ef4b1dac3d7b5874d3b-cn-beijing.alicloudapi.com/query';
+// const nextAPIURL = 'http://localhost:4005/query';
+const nextAPIURL = 'http://e30c17034d854ef4b1dac3d7b5874d3b-cn-beijing.alicloudapi.com/query';
 
 const param = (key, type, description) => {
   return { key, type, description };
@@ -19,6 +19,7 @@ module.exports = {
   CORS: [
     'https://dc_api.aminer.org', 'http://localhost:4005',
     'https://cross1.aminer.org',
+    'http://e30c17034d854ef4b1dac3d7b5874d3b-cn-beijing.alicloudapi.com/',
   ],
   YQL: [],
 

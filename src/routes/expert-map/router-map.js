@@ -27,9 +27,9 @@ export default {
     component: () => import('routes/expert-trajectory/ExpertHeatmapPage'),
   },
 
-  ExpertMapDispatch: {
-    path: '/dispatch-expert-map',
-    models: () => [import('models/expert-map')],
-    component: () => import('./expert-map-dispatch'),
-  },
+  // ExpertMapDispatch: {
+  //   path: '/dispatch-expert-map',
+  //   models: () => [import('models/expert-map')],
+  //   component: () => import('./expert-map-dispatch'),
+  // },
 };

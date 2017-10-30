@@ -2,13 +2,10 @@
  * Created by yangyanmei on 17/9/5.
  */
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { connect } from 'dva';
 import { Form, Icon, Modal, Button } from 'antd';
-import AddTags from 'components/seminar/addTags';
+import { Labels } from 'routes/common';
 import CKEditor from './ckeditor-config';
-// import CKEditor from 'react-ckeditor-component';
-import { sysconfig } from '../../../systems';
 import styles from './person-comment.less';
 
 class PersonComment extends React.Component {
@@ -138,8 +135,8 @@ class PersonComment extends React.Component {
             {total && <span>{total || 0}</span>}
           </div>
           <div className={styles.tags}>
-            <AddTags callbackParent={this.onTagsChanged}
-                     tags={this.state.tags} />
+            <Labels callbackParent={this.onTagsChanged}
+                    tags={this.state.tags} />
           </div>
         </div>
 
@@ -210,7 +207,6 @@ class PersonComment extends React.Component {
   }
 }
 
-export default connect(({ personComments, app }) => ({
-  personComments,
-  app,
-}))(Form.create()(PersonComment));
+const mapStateToProps = ({ personComments, app }) => ({ personComments, app });
+
+export default connect(mapStateToProps)(Form.create()(PersonComment));

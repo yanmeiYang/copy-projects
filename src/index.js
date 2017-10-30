@@ -73,19 +73,16 @@ addLocaleData(require('react-intl/locale-data/' + sysconfig.Locale));
 //   }),
 // });
 
-var areIntlLocalesSupported = require('intl-locales-supported');
-
-var localesMyAppSupports = [
-  /* list locales here */
-];
+const areIntlLocalesSupported = require('intl-locales-supported');
+const localesMyAppSupports = ['en', 'zh'];
 
 if (global.Intl) {
   // Determine if the built-in `Intl` has the locale data we need.
   if (!areIntlLocalesSupported(localesMyAppSupports)) {
     // `Intl` exists, but it doesn't have the data we need, so load the
     // polyfill and replace the constructors with need with the polyfill's.
-    var IntlPolyfill = require('intl');
-    Intl.NumberFormat   = IntlPolyfill.NumberFormat;
+    const IntlPolyfill = require('intl');
+    Intl.NumberFormat = IntlPolyfill.NumberFormat;
     Intl.DateTimeFormat = IntlPolyfill.DateTimeFormat;
   }
 } else {

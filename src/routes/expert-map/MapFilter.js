@@ -7,6 +7,7 @@ import { connect } from 'dva';
 import { Button, Tag, TreeSelect } from 'antd';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
+import { MapFilterRanges, MapFilterHindexRange } from './utils/map-utils';
 import styles from './DomainSelector.less';
 
 const { CheckableTag } = Tag;
@@ -41,20 +42,6 @@ export default class MapFilter extends PureComponent {
     }
   };
 
-  ranges = [
-    { key: 'all', label: 'ALL' },
-    { key: 'acm', label: 'ACM Fellow' },
-    { key: 'ieee', label: 'IEEE Fellow' },
-    { key: 'chinese', label: 'Chinese' },
-  ];
-
-  hindexRange = [
-    { key: 'all', label: 'ALL' },
-    { key: 'top500', label: 'TOP500' },
-    { key: 'top200', label: 'TOP200' },
-    { key: 'top100', label: 'TOP100' },
-    { key: 'top50', label: 'TOP50' },
-  ];
 
   render() {
     const { current, currentHindex } = this.state;
@@ -67,7 +54,7 @@ export default class MapFilter extends PureComponent {
               <span>Range:</span>
             </span>
             <ul>
-              {this.ranges.map(range => (
+              {MapFilterRanges.map(range => (
                 <CheckableTag
                   key={range.key}
                   className={styles.filterItem}
@@ -84,7 +71,7 @@ export default class MapFilter extends PureComponent {
               <span>H-index:</span>
             </span>
             <ul>
-              {this.hindexRange.map(range => (
+              {MapFilterHindexRange.map(range => (
                 <CheckableTag
                   key={range.key}
                   className={styles.filterItem}

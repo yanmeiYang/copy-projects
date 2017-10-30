@@ -7,8 +7,8 @@ import { Button, Tag } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import classnames from 'classnames';
 import { routerRedux } from 'dva/router';
+import { sysconfig } from 'systems';
 import styles from './expert-googlemap.less';
-import { sysconfig } from '../../systems';
 import { listPersonByIds } from '../../services/person';
 import * as profileUtils from '../../utils/profile-utils';
 import { findPosition, getById } from './utils/map-utils';
@@ -18,6 +18,8 @@ import RightInfoZoneCluster from './RightInfoZoneCluster';
 import RightInfoZoneAll from './RightInfoZoneAll';
 import { Spinner } from '../../components';
 
+const domainIds = [];
+const domainChecks = [];
 const ButtonGroup = Button.Group;
 const { CheckableTag } = Tag;
 const blankAvatar = '/images/blank_avatar.jpg';
@@ -25,8 +27,7 @@ let map1;
 let number = '0';
 let range = '0';
 const dataMap = {};
-const domainIds = [];
-const domainChecks = [];
+
 function insertAfter(newElement, targetElement) {
   const parent = targetElement.parentNode;
   if (parent.lastChild === targetElement) {
@@ -506,6 +507,7 @@ class ExpertGoogleMap extends React.Component {
       content: "<div id='author_info' class='popup'></div>",
     });
     this.listPersonDone(map, ids, this.cacheData, infowindow, projection);
+
     /*const resultPromise = listPersonByIds(ids);
 
     resultPromise.then(

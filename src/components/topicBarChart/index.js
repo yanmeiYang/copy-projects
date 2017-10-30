@@ -19,7 +19,6 @@ export default class TopicBarChart extends React.Component {
   componentDidMount() {
     loadScript('/lib/echarts.js', () => {
       echarts = window.echarts; // eslint-disable-line prefer-destructuring
-      console.log('......................', echarts, window.echarts);
       this.myChart = echarts.init(document.getElementById('topic'));
       this.initBarChar(this.props.topic);
     });

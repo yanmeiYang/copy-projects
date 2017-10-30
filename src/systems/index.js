@@ -92,7 +92,7 @@ const defaultSystemConfigs = {
   /**
    * PersonList
    */
-  PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
+  PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}?token=bianyigetoken`,
   PersonList_PersonLink_NewTab: true,
   PersonList_DidMountHooks: defaults.EMPTY_BLOCK_FUNC_LIST,
   PersonList_UpdateHooks: defaults.EMPTY_BLOCK_FUNC_LIST,
@@ -128,7 +128,7 @@ const defaultSystemConfigs = {
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
   // Map Related
-  Map_Preload: false,
+  Map_Preload: true,
   CentralPosition: { lat: 37.09024, lng: -95.712891 },
   Map_HotDomains: TopExpertBase.RandomTop100InDomainAminer, //地图领域
 

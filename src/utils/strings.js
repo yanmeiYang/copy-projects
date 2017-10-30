@@ -46,6 +46,11 @@ const firstNonEmpty = (...terms) => {
   return '';
 };
 
+const firstNonEmptyQuery = (query) => {
+  const { term, name, org } = destructQueryString(query);
+  return firstNonEmpty(cleanQuery(term), cleanQuery(name), cleanQuery(org));
+};
+
 const encodeQuery = (query) => {
   if (!query) {
     return '';
@@ -72,6 +77,6 @@ const cleanQuery = (query) => {
 module.exports = {
   constructQueryString, destructQueryString, destructDecodedQueryString,
   cleanQuery, encodeQuery, encodeAdvancedQuery,
-  firstNonEmpty,
+  firstNonEmpty, firstNonEmptyQuery,
 }
 ;

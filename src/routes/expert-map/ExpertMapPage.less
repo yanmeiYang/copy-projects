@@ -6,4 +6,26 @@
   width: 100%;
   align-self: center;
   padding-top: 0px !important;
+
+  .headerLine {
+    display: flex; flex-direction: row; justify-content: space-between;
+    flex: 0;
+    margin: 10px 0 10px 0;
+    .scopes {
+      display: flex; align-items: baseline; align-self: center;
+      .switch button { width: 96px; }
+    }
+    .left {
+      display: flex; align-items: baseline;
+      font-size: @font-size-lg;
+      .domainSelector { width: 240px; margin-left: 10px; }
+      .level {
+        .sType button { width: 64px; }
+      }
+    }
+  }
+  .tempGoogleStyle{
+    background-color: #ddd;
+    color: #aaa;
+  }
 }

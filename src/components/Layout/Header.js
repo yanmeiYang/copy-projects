@@ -49,6 +49,7 @@ export default class Header extends Component {
     rightZone: PropTypes.array,
 
     fixAdvancedSearch: PropTypes.bool,
+    disableAdvancedSearch: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -97,7 +98,7 @@ export default class Header extends Component {
     console.log('>>>>>>>HEADER');
 
     const { logoZone, searchZone, infoZone, rightZone } = this.props;
-    const { onSearch, fixAdvancedSearch, query, app } = this.props;
+    const { onSearch, fixAdvancedSearch, disableAdvancedSearch, query, app } = this.props;
 
     return (
       <Layout.Header className={tc(['header'])}>
@@ -109,9 +110,11 @@ export default class Header extends Component {
         <div className={tc(['searchZone'])}>
           {hole.fill(searchZone, [
             <KgSearchBox
-              key={100} size="large" query={query} className={styles.searchBox}
-              style={{ height: 36, marginTop: 15 }}
-              onSearch={onSearch} fixAdvancedSearch={fixAdvancedSearch}
+              key={100} size="large"
+              className={styles.searchBox} style={{ height: 36, marginTop: 15 }}
+              query={query} onSearch={onSearch}
+              fixAdvancedSearch={fixAdvancedSearch}
+              disableAdvancedSearch={disableAdvancedSearch}
             />,
           ])}
         </div>

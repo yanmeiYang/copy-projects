@@ -167,6 +167,6 @@ module.exports = {
   ],
 
   // 临时属性，需要删除
-  USE_NEXT_EXPERT_BASE_SEARCH: true,
+  USE_NEXT_EXPERT_BASE_SEARCH: false,
 
 };

@@ -1,6 +1,7 @@
 /** Created by Bo Gao on 2017-06-07 */
-import * as personService from '../services/person';
-import * as mapService from '../services/expert-map-service';
+import * as strings from 'utils/strings';
+import * as personService from 'services/person';
+import * as mapService from 'services/expert-map-service';
 
 const cache = {};
 
@@ -18,14 +19,18 @@ export default {
     clusterPersons: [],
   },
 
-
   subscriptions: {},
 
   effects: {
     * searchMap({ payload }, { call, put }) {
-      const { query } = payload;
-      const data = yield call(mapService.searchMap, query);
-      yield put({ type: 'searchMapSuccess', payload: { data } });
+      let { query } = payload;
+      query = strings.cleanQuery(query);
+      if (query) {
+        const data = yield call(mapService.searchMap, query);
+        yield put({ type: 'searchMapSuccess', payload: { data } });
+      } else {
+
+      }
     },
 
     * searchExpertBaseMap({ payload }, { call, put }) {
@@ -121,7 +126,6 @@ export default {
           return null;
         });
       }
-      // console.log('-----------------------------------', geoSearchData);
       return { ...state, geoData: { results: geoSearchData } };
     },
 

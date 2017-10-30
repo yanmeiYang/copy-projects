@@ -215,7 +215,8 @@ export default class ExpertMapPage extends React.Component {
                 </Button>
                 <Button
                   type={this.state.mapType === 'google' ? 'primary' : ''}
-                  onClick={this.onMapTypeChange.bind(this, 'google')}
+                  className={styles.tempGoogleStyle}
+                  // onClick={this.onMapTypeChange.bind(this, 'google')}
                 >
                   <FM defaultMessage="Baidu Map"
                       id="com.expertMap.headerLine.label.googleMap" />

@@ -63,6 +63,7 @@ export default class Seminar extends React.Component {
       }
     }
   }
+
   addBao = () => {
     this.props.dispatch(routerRedux.push({
       pathname: '/seminar-post',
@@ -210,6 +211,13 @@ export default class Seminar extends React.Component {
       results, loading, sizePerPage, orgcategory, activity_type,
       topMentionedTags, orgByActivity, offset,
     } = this.props.seminar;
+
+    let showTip = '';
+    if (loading && results.length <= 0) {
+      showTip = '读取中...';
+    } else {
+      showTip = '暂无数据';
+    }
     const { organizer, category, tag, orgType, sortType } = this.state;
     const compare = (property) => {
       return (a, b) => {
@@ -357,52 +365,52 @@ export default class Seminar extends React.Component {
             </div>
           </div>
 
-            <div>
-              <Tabs defaultActiveKey={this.state.sortType} onChange={this.onTabsChange}
-                    className={styles.maxWidth}>
+          <div>
+            <Tabs defaultActiveKey={this.state.sortType} onChange={this.onTabsChange}
+                  className={styles.maxWidth}>
 
-                <TabPane tab={<span>开始时间<i className="fa fa-sort-amount-desc" /></span>}
-                         key="time" />
-                <TabPane tab={<span>创建时间<i className="fa fa-sort-amount-desc" /></span>}
-                         key="createtime" />
-                <TabPane tab={<span>修改时间<i className="fa fa-sort-amount-desc" /></span>}
-                         key="updatetime" />
-              </Tabs>
+              <TabPane tab={<span>开始时间<i className="fa fa-sort-amount-desc" /></span>}
+                       key="time" />
+              <TabPane tab={<span>创建时间<i className="fa fa-sort-amount-desc" /></span>}
+                       key="createtime" />
+              <TabPane tab={<span>修改时间<i className="fa fa-sort-amount-desc" /></span>}
+                       key="updatetime" />
+            </Tabs>
+          </div>
+
+          <Spin spinning={loading}>
+            <div className="seminar">
+              {results && results.length > 0 ?
+                <div className="seminar_outbox">
+                  {
+                    results.map((result, index) => {
+                      return (
+                        <div key={result.id + Math.random()}>
+                          {(app.roles.authority.indexOf(result.organizer[0]) >= 0
+                          || auth.isSuperAdmin(app.roles))
+                          && <Button type="danger" icon="delete" size="small"
+                                     className={styles.delSeminarBtn}
+                                     onClick={this.delTheSeminar.bind(this, result, index)}>
+                            删除
+                          </Button>}
+                          <NewActivityList result={result} hidetExpertRating="false"
+                                           style={{ marginTop: '20px' }} />
+                        </div>
+                      );
+                    })
+                  }
+                  {!loading && results.length >= (offset - 2) &&
+                  <Button type="primary" className="getMoreActivities"
+                          onClick={this.getMoreSeminar.bind()}>
+                    More
+                  </Button>}
+                </div>
+                :
+                <div className={styles.noDataMessage}>
+                  <span>{showTip}</span>
+                </div>}
             </div>
-
-            <Spin spinning={loading}>
-              <div className="seminar">
-                {results && results.length > 0 ?
-                  <div className="seminar_outbox">
-                    {
-                      results.map((result, index) => {
-                        return (
-                          <div key={result.id + Math.random()}>
-                            {(app.roles.authority.indexOf(result.organizer[0]) >= 0
-                            || auth.isSuperAdmin(app.roles))
-                            && <Button type="danger" icon="delete" size="small"
-                                       className={styles.delSeminarBtn}
-                                       onClick={this.delTheSeminar.bind(this, result, index)}>
-                              删除
-                            </Button>}
-                            <NewActivityList result={result} hidetExpertRating="false"
-                                             style={{ marginTop: '20px' }} />
-                          </div>
-                        );
-                      })
-                    }
-                    {!loading && results.length >= (offset - 2) &&
-                    <Button type="primary" className="getMoreActivities"
-                            onClick={this.getMoreSeminar.bind()}>
-                      More
-                    </Button>}
-                  </div>
-                  :
-                  <div className={styles.noDataMessage}>
-                    <span>暂无数据</span>
-                  </div>}
-              </div>
-            </Spin>
+          </Spin>
         </div>
       </Layout>
     );

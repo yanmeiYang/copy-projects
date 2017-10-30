@@ -50,9 +50,9 @@ const indicesConfig = {
     letter: 'C',
     color: 'blue',
     tooltip: 'CCF活动贡献（C）',
-    render: (activity, activity_indices) => {
-      return activity_indices && activity_indices.contrib && activity_indices.contrib.toFixed(2);
-    },
+    // render: (activity, activity_indices) => {
+    //   return activity_indices && activity_indices.contrib && activity_indices.contrib.toFixed(2);
+    // },
   },
 };
 

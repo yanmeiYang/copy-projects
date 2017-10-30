@@ -123,22 +123,34 @@ class DisciplineTree extends React.Component {
     // 添加鼠标事件
     svg.selectAll('circle')
       .on('mouseover', (node) => {
-        if (this.props.isEdit) {
-          // 圈变成背景色
-          svg.selectAll('circle').data(nodes)
-            .style('stroke', item => (node.data.id === item.data.id ? '#fff' : 'steelblue'));
-          // 字体变成背景色
-          svg.selectAll('text').data(nodes)
-            .style('fill', item => (node.data.id === item.data.id ? '#fff' : '#000'))
-            .attr('opacity', item => (node.data.id === item.data.id ? 0 : 1))
-          // 判断是不是说子节点
-          this.tooltipTop = node.x + 110;
-          this.tooltipLeft = event.pageX - 10;
-          const name = node.data.name;
-          this.setState({ showTooltip: true, node, name });
-        }
+        mouserOver(this, node);
       });
+
+    // 添加鼠标事件
+    svg.selectAll('text')
+      .on('mouseover', (node) => {
+        mouserOver(this, node);
+      });
+    function mouserOver(that, node) {
+
+      if (that.props.isEdit) {
+        // 圈变成背景色
+        svg.selectAll('circle').data(nodes)
+          .style('stroke', item => (node.data.id === item.data.id ? '#fff' : 'steelblue'));
+        // 字体变成背景色
+        svg.selectAll('text').data(nodes)
+          .style('fill', item => (node.data.id === item.data.id ? '#fff' : '#000'))
+          .attr('opacity', item => (node.data.id === item.data.id ? 0 : 1))
+        // 判断是不是说子节点
+        const sWidth = (document.body.offsetWidth - width - 40) / 2;
+        that.tooltipTop = node.x + 110;
+        that.tooltipLeft = sWidth + node.y + 120;
+        const name = node.data.name;
+        that.setState({ showTooltip: true, node, name });
+      }
+    }
   }
+
   // 递归删除 节点
   delData = (dt, node) => {
     if (dt.children) {

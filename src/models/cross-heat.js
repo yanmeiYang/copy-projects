@@ -12,7 +12,7 @@ export default {
     mostScholars: null,
     decareID: null,
     crossTree: null,
-    domainList: null,
+    crossInfo: null,
     modalInfo: null,
     domainAllInfo: null,
     domainMinInfo: null,
@@ -27,8 +27,6 @@ export default {
     *getDiscipline({ payload }, { call, put }) {
       const { id, area, k, depth } = payload;
       const data = yield call(crossHeatService.getDiscipline, area, k, depth);
-
-      console.log('data=============',data);
       yield put({ type: 'getDisciplineSuccess', payload: { data, id } });
     },
 
@@ -80,10 +78,10 @@ export default {
       const data = yield call(crossHeatService.getTaskList, offset, size);
       yield put({ type: 'getTaskListSuccess', payload: { data } });
     },
-    *delUserQuery({ payload }, { call, put }) {
+    *delTaskList({ payload }, { call, put }) {
       const { id } = payload;
-      const data = yield call(crossHeatService.delUserQuery, id);
-      yield put({ type: 'delUserQuerySuccess', payload: { data } });
+      const data = yield call(crossHeatService.delTaskList, id);
+      yield put({ type: 'delTaskListSuccess', payload: { data, id } });
     },
     *getSuggest({ payload }, { call, put }) {
       const { query } = payload;
@@ -108,7 +106,7 @@ export default {
       return { ...state, crossTree: data.data };
     },
     getDomainInfoSuccess(state, { payload: { data } }) {
-      return { ...state, domainList: data.data, experts: null, pubs: [] };
+      return { ...state, crossInfo: data.data, experts: null, pubs: [] };
     },
     getDomainExpertSuccess(state, { payload: { data } }) {
       return { ...state, experts: data.data.persons };
@@ -125,8 +123,15 @@ export default {
     getTaskListSuccess(state, { payload: { data } }) {
       return { ...state, taskList: data.data };
     },
-    delUserQuerySuccess(state, { payload: { data } }) {
-      return { ...state };
+    delTaskListSuccess(state, { payload: { data, id } }) {
+      if (data.success) {
+        const taskList = state.taskList.filter((item) => {
+          return item._id !== id;
+        });
+        return { ...state, taskList };
+      } else {
+        return { ...state };
+      }
     },
     getSuggestSuccess(state, { payload: { data } }){
       return { ...state, suggest: data.data.phrase };

@@ -87,10 +87,10 @@ export async function getTaskList(offset, size) {
   });
 }
 
-export async function delUserQuery(id) {
-  return request(api.delUserQuery
+export async function delTaskList(id) {
+  return request(api.delTaskList
     .replace(':id', id), {
-    method: 'GET',
+    method: 'DELETE',
   });
 }
 

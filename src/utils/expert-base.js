@@ -291,7 +291,10 @@ TopExpertBase.TopUniversity2015.map((eb) => {
   return null;
 });
 
+//
 // tools.
+//
+
 function toIDDotString(...ebs) {
   const ids = [];
   if (ebs && ebs.length > 0) {
@@ -306,7 +309,23 @@ function toIDDotString(...ebs) {
 
 function TopNUniversity2015(n) {
   return TopExpertBase.TopUniversity2015.filter(u => u.index <= n);
-};
+}
+
+function ExpertBaseID2NameMap(ExpertBases) {
+  const map = {};
+  for (const item of ExpertBases) {
+    map[item.id] = item.name;
+  }
+  return map;
+}
+
+function ExpertBaseID2NameMapCCF(ExpertBases) {
+  const map = {};
+  for (const item of ExpertBases) {
+    map[item.id] = item.name;
+  }
+  return map;
+}
 
 module.exports = {
   TopExpertBase,
@@ -314,4 +333,6 @@ module.exports = {
   TopUnivExpertBaseIndex,
   toIDDotString,
   TopNUniversity2015,
+  ExpertBaseID2NameMap,
+  ExpertBaseID2NameMapCCF,
 };

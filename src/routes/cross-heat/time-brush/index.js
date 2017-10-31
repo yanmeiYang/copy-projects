@@ -93,8 +93,7 @@ class TimeBrush extends React.Component {
           eYear += 1;
         }
       }
-
-      d3.selectAll('.overlay').attr('fill', '#ccc');
+      d3.selectAll('.overlay').attr('fill', '#ccc').attr('cursor', 'pointer');
       d3.selectAll('.selection').attr('fill', '#00FF23');
       const yDate = [sYear, eYear];
       that.setState({ date: yDate });

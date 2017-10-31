@@ -15,12 +15,13 @@ export default {
     crossInfo: null,
     modalInfo: null,
     domainAllInfo: null,
+    staticInfo: null,
     domainMinInfo: null,
     experts: [],
     pubs: [],
     taskList: [],
     suggest: [],
-
+    predict: null,
   },
 
   effects: {
@@ -47,9 +48,12 @@ export default {
       yield put({ type: 'getCrossTreeSuccess', payload: { data } });
     },
     *getDomainInfo({ payload }, { call, put }) {
-      const { begin, end, dt } = payload;
-      const data = yield call(crossHeatService.getDomainiInfo, begin, end, dt);
+      const data = yield call(crossHeatService.getDomainiInfo, payload);
       yield put({ type: 'getDomainInfoSuccess', payload: { data } });
+    },
+    *getCrossPredict({ payload }, { call, put }) {
+      const data = yield call(crossHeatService.getCrossPredict, payload);
+      yield put({ type: 'getCrossPredictSuccess', payload: { data } });
     },
     *getDomainAllInfo({ payload }, { call, put }) {
       const data = yield call(crossHeatService.getDomainAllInfo, payload);
@@ -89,6 +93,10 @@ export default {
       yield put({ type: 'getSuggestSuccess', payload: { data } });
     },
 
+    *getTreeModalInfo({ payload }, { call, put }) {
+      const data = yield call(crossHeatService.getDomainiInfo, payload);
+      yield put({ type: 'getTreeModalInfoSuccess', payload: { data } });
+    },
   },
 
   reducers: {
@@ -138,6 +146,13 @@ export default {
     },
     delExpPubSuccess(state, { payload: { data } }){
       return { ...state, experts: [], pubs: [] };
+    },
+
+    getCrossPredictSuccess(state, { payload: { data } }){
+      return { ...state, predict: data.data };
+    },
+    getTreeModalInfoSuccess(state, { payload: { data } }){
+      return { ...state, modalInfo: data.data };
     },
   },
 };

@@ -80,11 +80,11 @@ const toNextAggregation = (aggs) => {
     aggs.map((agg) => {
       agg.name = agg.type;
       agg.items = agg.item && agg.item.map((i) => {
-          return {
-            term: i.value,
-            count: i.count,
-          };
-        });
+        return {
+          term: i.value,
+          count: i.count,
+        };
+      });
       // value,count,label, item, count
       delete agg.item;
       delete agg.type;

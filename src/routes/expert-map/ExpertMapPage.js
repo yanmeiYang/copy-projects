@@ -227,10 +227,13 @@ export default class ExpertMapPage extends React.Component {
           </div>
         </div>
 
-        {mapType === 'google'
-          ? <ExpertGoogleMap {...options} />
-          : <ExpertMap {...options} />
-        }
+        {/*{mapType === 'google'*/}
+          {/*? <ExpertGoogleMap {...options} />*/}
+          {/*: <ExpertMap {...options} />*/}
+        {/*}*/}
+
+        <ExpertMap {...options} />
+
       </Layout>
     );
   }

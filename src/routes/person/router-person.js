@@ -13,6 +13,7 @@ export default {
     ],
     component: () => import('./'),
   },
+
   PersonPage: {
     path: '/p/:id',
     models: () => [

@@ -4,12 +4,14 @@
 export default {
   namespace: 'commonLabels',
 
-  state: {},
+  state: {
+    tags: null,
+  },
 
   subscriptions: {},
 
   effects: {
-    * getCategoryGroup({ payload }, { call, put }) {
+    * loadTagsBatch({ payload }, { call, put }) {
       // const { groupCategory, categoryTemplate } = payload;
       // callback data.
       // const data = yield call(uconfigService.listByCategory, groupCategory);

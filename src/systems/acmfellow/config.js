@@ -2,11 +2,11 @@
  * Created by BoGao on 2017/10/6.
  */
 import React from 'react';
-import { Link } from 'dva/router';
+// import { Link } from 'dva/router';
 import { authenticateExpertBase } from 'hooks';
 import defaults from '../utils';
-import { PersonComment } from './components';
-import { GetComments } from './person-comment-hooks';
+// import { PersonComment } from './components';
+// import { GetComments } from './person-comment-hooks';
 
 const ExpertBase = '59d7bb7e9ed5dbe450e6b275';
 

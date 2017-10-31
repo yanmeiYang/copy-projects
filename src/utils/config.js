@@ -144,12 +144,13 @@ module.exports = {
     getTaskList: `${baseURL}/cross-domain/query/offset/:offset/size/:size`,
     getCrossTree: `${baseURL}/cross-domain/query/:id`,
     delTaskList: `${baseURL}/cross-domain/query/:id`,
-    getDomainInfo: `${baseURL}/cross-domain/records/:begin/:end`,
+    getDomainInfo: `${baseURL}/cross-domain/records/:beginYear/:endYear/:pubSkip/:pubLimit/:authorSkip/:authorLimit`,
     // getDomainAllInfo: 'http://166.111.7.173:15000/record/:domain1/:domain2/:begin/:end',
     getDomainAllInfo: `${baseURL}/cross-domain/record/:domain1/:domain2/:beginYear/:endYear/:summary/:pubSkip/:pubLimit/:authorSkip/:authorLimit`,
     getExpertByIds: `${baseURL}/person/batch-list`,
     getPubById: `${baseURL}/pub/:id`,
     getSuggest: `${baseURL}/search/suggest/gen/:query`,
+    getCrossPredict: `${baseURL}/cross-domain/predict`,
 
     // getProjects: API_BASE+"reviewer/projects/get/:offset/:size"
     // addProject: API_BASE+"reviewer/project/add"

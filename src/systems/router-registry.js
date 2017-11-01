@@ -25,7 +25,7 @@ import tencent from 'routes/third-login/router';
 import router2bprofile from 'routes/2b-profile/router-2bprofile';
 import profile from 'routes/profile/router-profile';
 import crossHeat from 'routes/cross-heat/router-ch';
-
+import dataAnnotation from 'routes/data-annotation/router-da';
 
 const { ConnectedRouter } = routerRedux;
 
@@ -108,6 +108,8 @@ const RouterRegistry = [
   crossHeat.CrossIndex,
   crossHeat.CrossStartTask,
 
+  // Data Annotation
+  dataAnnotation.AnnotatePersonProfile,
 
   // System Default.
   core.Error404, // must be last one.
@@ -132,7 +134,12 @@ const RouterJSXFunc = (history, app, routes, RootComponent) => {
       {/*<RootComponent>*/}
       <Switch>
         {/* <Route exact path="/" render={() => (<Redirect to="/dashboard" />)} /> */}
-        {routes.map(({ path, noExact, ...dynamics }, index) => {
+        {routes.map((route, index) => {
+          if (!route) {
+            console.log('Error: route #%d is null!', index);
+            return false;
+          }
+          const { path, noExact, ...dynamics } = route;
           const dupKey = `${index}_`;
 
           if (false && process.env.NODE_ENV !== 'production') {

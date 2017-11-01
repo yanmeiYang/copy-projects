@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import Footer from '../../components/Footers/ccf';
+import { ExpertBaseID2NameMap } from 'utils/expert-base';
 
 module.exports = {
   /**
@@ -129,8 +130,12 @@ module.exports = {
     //   nperson: 610,
     // },
   ],
-
-
+  ExpertBases_ID2NameMap: {
+    // '5949c2f99ed5dbc2147fd854':'CCF会员'
+    '592f8af69ed5db8bb68d713b': '会士',
+    '58ddbc229ed5db001ceac2a4': '杰出会员',
+    '592f6d219ed5dbf59c1b76d4': '高级会员',
+  },
   // 特殊配置，这里是System的自己的配置
 
   CCF_activityTypes: ['专委活动', 'CNCC', 'ADL78', 'CCF@U100(走进高校)', 'YOCSEF', '论坛', '报告会', 'NOI讲座', '分部活动', '精英大会', '女性大会', 'TF',],
@@ -167,6 +172,6 @@ module.exports = {
   ],
 
   // 临时属性，需要删除
-  USE_NEXT_EXPERT_BASE_SEARCH: false,
+  USE_NEXT_EXPERT_BASE_SEARCH: true,
 
 };

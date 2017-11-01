@@ -2,11 +2,7 @@
  * Created by BoGao on 2017/10/6.
  */
 import React from 'react';
-// import { Link } from 'dva/router';
-import { authenticateExpertBase } from 'hooks';
 import defaults from '../utils';
-// import { PersonComment } from './components';
-// import { GetComments } from './person-comment-hooks';
 
 const ExpertBase = '59d7bb7e9ed5dbe450e6b275';
 
@@ -16,7 +12,7 @@ module.exports = {
   EnableLocalLocale: true,
 
   // 通用配置。所有System的配置文件必须全部包含这部分的值
-  PageTitle: 'ACM Fellow',
+  PageTitle: 'AMiner Data Annotation',
   SearchPagePrefix: 'uniSearch', // search, uniSearch
 
   /**

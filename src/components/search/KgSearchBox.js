@@ -8,7 +8,6 @@ import { defineMessages, injectIntl } from 'react-intl';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
 import * as kgService from 'services/knoledge-graph-service';
-import * as suggestService from 'services/search-suggest';
 import styles from './KgSearchBox.less';
 
 const FormItem = Form.Item;
@@ -137,6 +136,7 @@ class KgSearchBox extends PureComponent {
 
   // Autosuggest will call this function every time you need to update suggestions.
   onSuggestionsFetchRequested = ({ value, reason }) => {
+    const { dispatch } = this.props;
     // Cancel the previous request
     if (this.lastRequestId !== null) {
       clearTimeout(this.lastRequestId);
@@ -149,21 +149,24 @@ class KgSearchBox extends PureComponent {
 
       // TODO How to abort a promise outside? Or use saga to do this.
       // TODO first call suggest search function.
-      const suggestPromise = suggestService.suggest(value);
-      suggestPromise.then(
-        (data) => {
-          if (this.latestT && t >= this.latestT) {
-            if (data.data && data.data.topic && data.data.topic.length > 0) {
-              this.makeSuggestion(data.data.topic);
-            }
-          }
-        },
-        (err) => {
-          console.log('Request failed:', err);
-        },
-      ).catch((error) => {
-        console.error(error);
-      });
+      // const suggestPromise = suggestService.suggest(value);
+      // suggestPromise.then(
+      //   (data) => {
+      //     if (this.latestT && t >= this.latestT) {
+      //       if (data.data && data.data.topic && data.data.topic.length > 0) {
+      //         this.makeSuggestion(data.data.topic);
+      //       }
+      //     }
+      //   },
+      //   (err) => {
+      //     console.log('Request failed:', err);
+      //   },
+      // ).catch((error) => {
+      //   console.error(error);
+      // });
+      console.log('--- call effect',);
+      dispatch({ type: 'searchSuggest/suggest', payload: { query: value } });
+
     }, 200);
   };
 

@@ -1,68 +1,62 @@
-{
-  "data": [
-    {
-      "aggregation": [
-        {
-          "name": "language"
-        },
-        {
-          "items": [
-            {
-              "count": 0,
-              "term": "*-10.0",
-              "to": 10
-            },
-            {
-              "count": 0,
-              "from": 10,
-              "term": "10.0-20.0",
-              "to": 20
-            },
-            {
-              "count": 0,
-              "from": 20,
-              "term": "20.0-30.0",
-              "to": 30
-            },
-            {
-              "count": 0,
-              "from": 30,
-              "term": "30.0-40.0",
-              "to": 40
-            },
-            {
-              "count": 0,
-              "from": 40,
-              "term": "40.0-50.0",
-              "to": 50
-            },
-            {
-              "count": 0,
-              "from": 50,
-              "term": "50.0-60.0",
-              "to": 60
-            },
-            {
-              "count": 0,
-              "from": 60,
-              "term": "60.0-*"
-            }
-          ],
-          "name": "h_index"
-        },
-        {
-          "name": "gender"
-        },
-        {
-          "name": "location"
-        }
-      ],
-      "message": "",
+[
+  {
+    "action": "search",
+    "parameters": {
+      "query": "Medical Robotics",
       "offset": 0,
-      "size": 0,
-      "succeed": true,
-      "tookms": 3,
-      "total": 0
+      "size": 20,
+      "searchType": "allb",
+      "aggregation": [
+        "gender",
+        "h_index",
+        "location",
+        "language"
+      ],
+      "switches": [
+        "translate_all"
+      ],
+      "haves": {
+        "eb": [
+          "5949c2f99ed5dbc2147fd854",
+          "592f8af69ed5db8bb68d713b",
+          "58ddbc229ed5db001ceac2a4",
+          "592f6d219ed5dbf59c1b76d4",
+          "aminer"
+        ]
+      },
+      "filters": {
+        "dims": {
+          "eb": [
+            null
+          ]
+        }
+      }
+    },
+    "schema": {
+      "person": [
+        "id",
+        "name",
+        "name_zh",
+        {
+          "profile": [
+            "position",
+            "affiliation"
+          ]
+        },
+        {
+          "indices": [
+            "hindex",
+            "gindex",
+            "numpubs",
+            "citation",
+            "newStar",
+            "risingStar",
+            "activity",
+            "diversity",
+            "sociability"
+          ]
+        }
+      ]
     }
-  ]
-}
+  }
+]

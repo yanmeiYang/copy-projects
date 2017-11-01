@@ -32,15 +32,26 @@ export async function getCrossTree(id) {
   });
 }
 
-export async function getDomainiInfo(begin, end, dt) {
+export async function getDomainiInfo(params) {
+  const { beginYear, endYear, pubSkip, pubLimit, authorSkip, authorLimit, dt } = params;
   return request(api.getDomainInfo
-    .replace(':begin', begin)
-    .replace(':end', end), {
+    .replace(':beginYear', beginYear)
+    .replace(':endYear', endYear)
+    .replace(':pubSkip', pubSkip)
+    .replace(':pubLimit', pubLimit)
+    .replace(':authorSkip', authorSkip)
+    .replace(':authorLimit', authorLimit), {
     method: 'POST',
     body: JSON.stringify(dt),
   });
 }
-
+export async function getCrossPredict(params) {
+  const { dt } = params;
+  return request(api.getCrossPredict, {
+    method: 'POST',
+    body: JSON.stringify(dt),
+  });
+}
 export async function getDomainAllInfo(params) {
   const { domain1, domain2, beginYear, endYear, summary, pubSkip, pubLimit, authorSkip, authorLimit } = params;
   return request(api.getDomainAllInfo
@@ -87,10 +98,10 @@ export async function getTaskList(offset, size) {
   });
 }
 
-export async function delUserQuery(id) {
-  return request(api.delUserQuery
+export async function delTaskList(id) {
+  return request(api.delTaskList
     .replace(':id', id), {
-    method: 'GET',
+    method: 'DELETE',
   });
 }
 

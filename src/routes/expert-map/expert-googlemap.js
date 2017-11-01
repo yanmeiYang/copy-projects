@@ -9,24 +9,27 @@ import classnames from 'classnames';
 import { routerRedux } from 'dva/router';
 import { sysconfig } from 'systems';
 import styles from './expert-googlemap.less';
+
+import { Spinner } from 'components';
 import { listPersonByIds } from '../../services/person';
 import * as profileUtils from '../../utils/profile-utils';
-import { findPosition, getById } from './utils/map-utils';
 import GetGoogleMapLib from './utils/googleMapGai.js';
 import RightInfoZonePerson from './RightInfoZonePerson';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
 import RightInfoZoneAll from './RightInfoZoneAll';
-import { Spinner } from '../../components';
+import {
+  findPosition,
+  getById,
+  waitforBMap,
+  waitforBMapLib,
+  findMapFilterRangesByKey,
+  findMapFilterHindexRangesByKey,
+  bigAreaConfig,
+} from './utils/map-utils';
 
-const domainIds = [];
-const domainChecks = [];
-const ButtonGroup = Button.Group;
-const { CheckableTag } = Tag;
-const blankAvatar = '/images/blank_avatar.jpg';
 let map1;
-let number = '0';
-let range = '0';
 const dataMap = {};
+const blankAvatar = '/images/blank_avatar.jpg';
 
 function insertAfter(newElement, targetElement) {
   const parent = targetElement.parentNode;
@@ -37,28 +40,27 @@ function insertAfter(newElement, targetElement) {
   }
 }
 
-class ExpertGoogleMap extends React.Component {
+/**
+ * -------------------------------------------------------------------
+ */
+@connect(({ expertMap, loading }) => ({ expertMap, loading }))
+export default class ExpertGoogleMap extends React.Component {
   constructor(props) {
     super(props);
     this.cache = {};
     this.cacheData = {};//缓存作者数据
     this.cacheImg = {};//缓存作者图像
     this.showOverLay = GetGoogleMapLib(this.showTop);
-    localStorage.setItem('lastgoogletype', '0');
-    localStorage.setItem('googletype', '0');
   }
 
   state = {
-    typeIndex: 0,
-    rangeChecks: [true, false, false, false],
-    numberChecks: [true, false, false, false, false],
-    loadingFlag: true,
+    typeIndex: '0',
+    loadingFlag: false,
     cperson: '', //当前显示的作者的id
   };
 
   componentDidMount() {
-    this.callSearchMap(this.props.query);
-    localStorage.setItem('lastgoogletype', '0');
+    // this.callSearchMap(this.props.query);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -190,7 +192,10 @@ class ExpertGoogleMap extends React.Component {
         }
       } else {
         clearInterval(mapinterval);
-        let mapCenter = { lat: sysconfig.CentralPosition.lat, lng: sysconfig.CentralPosition.lng };
+        let mapCenter = {
+          lat: sysconfig.CentralPosition.lat,
+          lng: sysconfig.CentralPosition.lng
+        };
         let scale = 3;
         let minscale = 1;
         let maxscale = 19;
@@ -320,7 +325,12 @@ class ExpertGoogleMap extends React.Component {
           beaches.map((beach) => {
             return new window.google.maps.Marker({
               position: { lat: beach[1] - 6, lng: beach[2] },
-              label: { text: beach[0], fontSize: '12px', fontStyle: 'italic', fontWeight: 'bold' },
+              label: {
+                text: beach[0],
+                fontSize: '12px',
+                fontStyle: 'italic',
+                fontWeight: 'bold'
+              },
               icon: { url: '/images/map/blank.png' },
               map,
             });
@@ -767,7 +777,10 @@ class ExpertGoogleMap extends React.Component {
   };
 
   domainChanged = (value) => {
-    this.props.dispatch(routerRedux.push({ pathname: '/expert-googlemap', search: `?query=${value.name}` }));
+    this.props.dispatch(routerRedux.push({
+      pathname: '/expert-googlemap',
+      search: `?query=${value.name}`
+    }));
     let i = 0;
     domainIds.map((domain1) => {
       domainChecks[i] = value.id === domain1;
@@ -885,7 +898,8 @@ class ExpertGoogleMap extends React.Component {
                   checkState += 1;
                   return (<CheckableTag className={styles.filterItem} key={domain.id}
                                         checked={domainChecks[checkState - 1]} value={domain.id}>
-                    <span role="presentation" onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>
+                    <span role="presentation"
+                          onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>
                   </CheckableTag>);
                 })
                 }
@@ -897,13 +911,16 @@ class ExpertGoogleMap extends React.Component {
               <span className={styles.filterTitle}><span>Range:</span></span>
               <ul>
                 <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[0]}>
-                  <span role="presentation" onClick={this.showRange.bind(that, '0')} value="0" >ALL</span>
+                  <span role="presentation" onClick={this.showRange.bind(that, '0')}
+                        value="0">ALL</span>
                 </CheckableTag>
                 <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[1]}>
-                  <span role="presentation" onClick={this.showRange.bind(that, '1')}>ACM Fellow</span>
+                  <span role="presentation"
+                        onClick={this.showRange.bind(that, '1')}>ACM Fellow</span>
                 </CheckableTag>
                 <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[2]}>
-                  <span role="presentation" onClick={this.showRange.bind(that, '2')}>IEEE Fellow</span>
+                  <span role="presentation"
+                        onClick={this.showRange.bind(that, '2')}>IEEE Fellow</span>
                 </CheckableTag>
                 <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[3]}>
                   <span role="presentation" onClick={this.showRange.bind(that, '3')}>华人</span>
@@ -917,13 +934,16 @@ class ExpertGoogleMap extends React.Component {
                   <span role="presentation" onClick={this.showNumber.bind(that, '4')}>ALL</span>
                 </CheckableTag>
                 <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[3]}>
-                  <span role="presentation" onClick={this.showNumber.bind(that, '3')}>TOP500</span>
+                  <span role="presentation"
+                        onClick={this.showNumber.bind(that, '3')}>TOP500</span>
                 </CheckableTag>
                 <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[0]}>
-                  <span role="presentation" onClick={this.showNumber.bind(that, '0')}>TOP200</span>
+                  <span role="presentation"
+                        onClick={this.showNumber.bind(that, '0')}>TOP200</span>
                 </CheckableTag>
                 <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[2]}>
-                  <span role="presentation" onClick={this.showNumber.bind(that, '2')}>TOP100</span>
+                  <span role="presentation"
+                        onClick={this.showNumber.bind(that, '2')}>TOP100</span>
                 </CheckableTag>
                 <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[1]}>
                   <span role="presentation" onClick={this.showNumber.bind(that, '1')}>TOP50</span>
@@ -1013,4 +1033,3 @@ class ExpertGoogleMap extends React.Component {
   }
 }
 
-export default connect(({ expertMap, loading }) => ({ expertMap, loading }))(ExpertGoogleMap);

@@ -7,6 +7,8 @@ import * as translateService from 'services/translate';
 import * as topicService from 'services/topic';
 import bridge from 'utils/next-bridge';
 
+const takeLatest = { type: 'takeLatest' };
+
 export default {
 
   namespace: 'search',
@@ -72,7 +74,7 @@ export default {
   effects: {
     // 搜索全球专家时，使用old service。
     // 使用智库搜索，并且排序算法不是contribute的时候，使用新的搜索API。
-    * searchPerson({ payload }, { call, put, select }) {
+    searchPerson: [function* ({ payload }, { call, put, select }) {
       const { query, offset, size, filters, sort, total } = payload;
       const noTotalFilters = {};
       for (const [key, item] of Object.entries(filters)) {
@@ -106,7 +108,7 @@ export default {
       } else {
         throw new Error('Result Not Available');
       }
-    },
+    }, takeLatest],
 
     * translateSearch({ payload }, { call, put, select }) {
       // yield put({ type: 'clearTranslateSearch' });

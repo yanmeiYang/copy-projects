@@ -10,7 +10,7 @@ import { message } from 'antd';
 import createLoading from 'dva-loading';
 // import { ApolloClient, createNetworkInterface, ApolloProvider } from 'react-apollo';
 import { sysconfig } from './systems';
-import { config } from './utils';
+//import { config } from './utils';
 import { ReduxLoggerEnabled } from './utils/debug';
 
 // const log = ::console.log;
@@ -74,6 +74,7 @@ addLocaleData(require('react-intl/locale-data/' + sysconfig.Locale));
 // });
 
 const areIntlLocalesSupported = require('intl-locales-supported');
+
 const localesMyAppSupports = ['en', 'zh'];
 
 if (global.Intl) {

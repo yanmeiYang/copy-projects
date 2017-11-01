@@ -122,7 +122,7 @@ export default class Layout extends Component {
             src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1"
             charSet="utf-8" async defer />}
 
-          {href.indexOf('/expert-googlemap') > 0 &&
+          {href.indexOf('/expert-map') > 0 &&
           <script
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlzpf4YyjOBGYOhfUaNvQZENXEWBgDkS0"
             async defer />}

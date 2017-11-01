@@ -286,7 +286,7 @@ function waitforBMap(tryTimes, interval, success, failed) {
     } else {
       clearInterval(mapInterval);
       if (success) {
-        success(BMap);
+        success(window.BMap);
       }
     }
   }, interval);
@@ -296,7 +296,6 @@ function waitforBMapLib(tryTimes, interval, success, failed) {
   let n = 0;
   const mapLibInterval = setInterval(() => {
     if (typeof (BMapLib) === 'undefined') {
-      // console.log('wait for BMapLib');
       n += 1;
       if (n >= tryTimes) {
         clearInterval(mapLibInterval);
@@ -307,7 +306,7 @@ function waitforBMapLib(tryTimes, interval, success, failed) {
     } else {
       clearInterval(mapLibInterval);
       if (success) {
-        success(BMapLib);
+        success(window.BMapLib);
       }
     }
   }, interval);

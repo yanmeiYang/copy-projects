@@ -46,7 +46,7 @@ Date.prototype.format = function (format) {
   return format;
 };
 
-const detectSavedMapType = (key) => {
+const detectSavedMapType = (key) => { //判断该使用什么类型的地图
   key = 'map-dispatch';
   let type = localStorage.getItem(key);
   if (type) {

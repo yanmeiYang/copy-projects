@@ -24,6 +24,7 @@ const CurrentSystemConfig = {
   cietest: require('./cietest/config'),
   bole: require('./bole/config'),
   acmfellow: require('./acmfellow/config'),
+  DataAnnotation: require('./DataAnnotation/config'),
 };
 
 // 默认配置

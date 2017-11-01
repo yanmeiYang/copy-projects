@@ -166,6 +166,15 @@ export default class SearchComponent extends Component {
 }
 ```
 
+##### Effects takeLatest
+```javascript
+const takeLatest = { type: 'takeLatest' };
+searchPerson: [function* ({ payload }, { call, put, select }) {
+  yield put({ type: 'updateFilters', payload: { filters } });
+  // ....
+}, takeLatest],
+```
+
 ## 挖坑
 
 ### systems/index.js
@@ -210,7 +219,7 @@ PersonList_RightZone: defaults.IN_APP_DEFAULT, // [()=><COMP>]
     ```
 
 ### Component原则上不引入sysconfig配置文件，需要从上层通过参数(props)的形式传入Component中
-```javascript
+```html
 <PersonList persons={orgs} titleRightBlock={sysconfig.PersonList_TitleRightBlock}
 personRemove={sysconfig.Person_PersonRemoveButton} />
 ```

@@ -113,6 +113,11 @@ const fetch = (options) => {
       url = url.slice(domain.length);
     }
     const match = pathToRegexp.parse(url);
+
+    // console.log('09090909090909090909090', url, data, );
+    // window.a = pathToRegexp.compile(url);
+    // console.log( a.toString());
+
     url = pathToRegexp.compile(url)(data);
     for (const item of match) {
       if (item instanceof Object && item.name in cloneData) {

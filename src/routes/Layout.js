@@ -28,6 +28,10 @@ export default class Layout extends Component {
   static displayName = 'Layout';
 
   static propTypes = {
+    // Page Title
+    pageTitle: PropTypes.string,
+    pageSubTitle: PropTypes.string,
+
     // Header
     logoZone: PropTypes.array,
     searchZone: PropTypes.array,
@@ -84,6 +88,7 @@ export default class Layout extends Component {
       }
     }
     const { logoZone, searchZone, infoZone, fixAdvancedSearch, disableAdvancedSearch } = this.props;
+    const { pageTitle, pageSubTitle } = this.props;
     const { query, onSearch } = this.props;
 
     const headerOptions = {
@@ -94,11 +99,13 @@ export default class Layout extends Component {
     };
     const navigatorOptions = { query, navis: sysconfig.HeaderSearch_TextNavi };
 
+    const title = pageTitle || (pageSubTitle ? `${sysconfig.PageTitle} | ${pageSubTitle}` : sysconfig.PageTitle);
+
     return (
       <LayoutComponent className={tc(['layout'])}>
 
         <Helmet>
-          <title>{sysconfig.PageTitle}</title>
+          <title>{title}</title>
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <link rel="icon" href={`/sys/${sysconfig.SYSTEM}/favicon.ico`} type="image/x-icon" />
 

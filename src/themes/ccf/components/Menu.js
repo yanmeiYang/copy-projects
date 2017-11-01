@@ -121,6 +121,7 @@ export default class Menus extends Component {
 
     return (
       <Menu
+        className={styles.menu}
         {...menuProps}
         mode={siderFold ? 'vertical' : 'inline'}
         theme={darkTheme ? 'dark' : 'light'}

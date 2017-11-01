@@ -17,7 +17,7 @@ function mapStateToPropsFactory(initialState, ownProps) {
   // a closure for ownProps is created
   console.log('****** mapStateToPropsFactory',);
   return function mapStateToProps(state) {
-    console.log('****** mapStateToProps',);
+    // console.log('****** mapStateToProps',); // TODO Performance
     return ({
       app: {
         user: state.app.user,
@@ -29,7 +29,7 @@ function mapStateToPropsFactory(initialState, ownProps) {
 }
 
 const mapStateToProps = (state) => {
-  console.log('****** mapStateToProps',);
+  // console.log('****** mapStateToProps',); // TODO Performance
   return ({
     app: {
       user: state.app.user,

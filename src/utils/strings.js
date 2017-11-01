@@ -74,9 +74,19 @@ const cleanQuery = (query) => {
   return query.replace(/-/g, ' ').trim();
 };
 
+const escapeURLBracket = (url) => {
+  return url.replace(/\(/g, '%28').replace(/\)/g, '%29').trim();
+};
+
+const unescapeURLBracket = (url) => {
+  return url.replace(/%28/g, '(').replace(/%29/g, ')').trim();
+};
+
 module.exports = {
   constructQueryString, destructQueryString, destructDecodedQueryString,
   cleanQuery, encodeQuery, encodeAdvancedQuery,
   firstNonEmpty, firstNonEmptyQuery,
+
+  escapeURLBracket, unescapeURLBracket,
 }
 ;

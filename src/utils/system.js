@@ -17,6 +17,7 @@ const AvailableSystems = [
   'cietest',
   'bole',
   'acmfellow',
+  'DataAnnotation',
 ];
 
 let System;
@@ -32,6 +33,7 @@ System = 'demo';
 // System = 'cietest';
 // System = 'bole';
 // System = 'acmfellow';
+System = 'DataAnnotation';
 
 let Source = System; // AppID, Used in UniversalConfig.
 

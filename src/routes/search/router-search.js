@@ -22,6 +22,7 @@ export default {
       import('models/expert-base/expert-base'),
       import('models/person-comments'),
       import('models/common/common-labels'),
+      import('models/search-suggest'),
     ],
     component: () => import('routes/search/SearchPage'),
   },

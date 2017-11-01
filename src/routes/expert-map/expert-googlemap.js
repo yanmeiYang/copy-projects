@@ -299,8 +299,27 @@ export default class ExpertGoogleMap extends React.Component {
           dataMap[pr.id] = pr;
           const newplace = findPosition(mapType, pr);
           const onepoint = { lat: newplace[0], lng: newplace[1] };
-          locations[j] = onepoint;
-          j += 1;
+
+          if (newplace && newplace[1] && (newplace[1] !== 0 && newplace[1] !== 0)) {
+            let include = false;
+            switch (filterRange) {
+              case 'all':
+                include = true;
+                break;
+              case 'acm':
+              case 'ieee':
+                include = pr.fellows.indexOf(range) >= 0;
+                break;
+              case 'chinese':
+                include = pr.is_ch;
+                break;
+              default:
+            }
+            if (include) { //只有是选定的时候才加入
+              locations[j] = onepoint;
+              j += 1;
+            }
+          }
         }
         let markers = locations.map((location, i) => {
           return new window.google.maps.Marker({
@@ -323,14 +342,14 @@ export default class ExpertGoogleMap extends React.Component {
           });
         });
 
-        const number=0
-        if (number === '0') {
+        const number = hindexRange;
+        if (number === 'top200') {
           markers = markers.slice(0, 200);
-        } else if (number === '1') {
+        } else if (number === 'top50') {
           markers = markers.slice(0, 50);
-        } else if (number === '2') {
+        } else if (number === 'top100') {
           markers = markers.slice(0, 100);
-        } else if (number === '3') {
+        } else if (number === 'top500') {
           markers = markers.slice(0, 500);
         }
         // const beaches = [
@@ -846,7 +865,6 @@ export default class ExpertGoogleMap extends React.Component {
       personPopupJsx = (
         <div className="personInfo">
           <div id={divId} />
-          {/*<div><img className="img" src={url} alt="IMG" /></div>*/}
           <div className="info">
             <div className="nameLine">
               <div className="right">H-index:<b> {hindex}</b>

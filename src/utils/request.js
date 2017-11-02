@@ -219,16 +219,16 @@ const fetch = (options) => {
  *  }
  */
 // TODO Support Multiple queries.
-export async function nextQuery(payload) {
+export async function nextAPI(payload) {
   if (!payload) {
-    console.error('Error! parameters can\'t be null when call nextQuery');
+    console.error('Error! parameters can\'t be null when call nextApi');
   }
-  const { method, ...options } = payload;
+  const { method, type, ...options } = payload;
   options.method = method || 'post';
   options.nextapi = true;
   const actions = options.data && options.data.map((query) => query.action);
   const action = actions && actions.join(',');
-  const result = request(`${nextAPIURL}?action=${action}`, options);
+  const result = request(`${nextAPIURL}/${type || 'query'}?action=${action}`, options);
   return result;
 
   // method is nextAPI's method.

@@ -7,6 +7,7 @@ import { Form, Icon, Modal, Button } from 'antd';
 import { Labels } from 'routes/common';
 import CKEditor from './ckeditor-config';
 import styles from './person-comment.less';
+import { F } from 'utils/next-api-builder';
 
 class PersonComment extends React.Component {
   state = {
@@ -24,6 +25,7 @@ class PersonComment extends React.Component {
     }
   }
 
+  // TODO chnage to compare utils.
   shouldComponentUpdate(nextProps, nextStates) {
     if (nextProps.personComments !== this.props.personComments) {
       return true;
@@ -56,6 +58,7 @@ class PersonComment extends React.Component {
     this.setState({ isComment: !this.state.isComment });
     this.setState({});
   };
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -135,8 +138,11 @@ class PersonComment extends React.Component {
             {total && <span>{total || 0}</span>}
           </div>
           <div className={styles.tags}>
-            <Labels callbackParent={this.onTagsChanged}
-                    tags={this.state.tags} />
+            <Labels
+              tags={this.state.tags}
+              targetId={person.id}
+              targetEntity={F.Entities.Person}
+            />
           </div>
         </div>
 
@@ -149,15 +155,18 @@ class PersonComment extends React.Component {
                   <div>
                     {getFieldDecorator('comment')(
                       <div>
-                        <CKEditor ref="editor" flag={this.state.flag}
-                                  activeClass="CKeidtorStyle"
-                                  content={this.state.content}
-                                  onChange={this.getContent.bind(this)}
-                                  scriptUrl="https://cdn.ckeditor.com/4.6.2/basic/ckeditor.js" />
+                        <CKEditor
+                          ref="editor" flag={this.state.flag}
+                          activeClass="CKeidtorStyle"
+                          content={this.state.content}
+                          onChange={this.getContent.bind(this)}
+                          scriptUrl="https://cdn.ckeditor.com/4.6.2/basic/ckeditor.js"
+                        />
                         <div className={styles.ckEditorSubmitBtn}>
-                          <Button type="primary"
-                                  onClick={this.updateContent.bind(this, this.state.content)}>
-                            备注
+                          <Button
+                            type="primary"
+                            onClick={this.updateContent.bind(this, this.state.content)}
+                          > 备注
                           </Button>
                         </div>
 

@@ -1,4 +1,4 @@
-import { request, nextQuery, config, queryBuilder } from 'utils';
+import { request, nextAPI, config } from 'utils';
 import * as bridge from 'utils/next-bridge';
 import { apiBuilder, F } from 'utils/next-api-builder';
 import { sysconfig } from 'systems';
@@ -70,7 +70,7 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
     const ebs = sysconfig.ExpertBases;
     const defaultHaves = ebs && ebs.length > 0 && ebs.map(eb => eb.id);
 
-    const nextapi = apiBuilder.query(F.action.search)
+    const nextapi = apiBuilder.query(F.queries.search)
       .param({ query, offset, size })
       .param({
         searchType: F.searchType.allb,
@@ -131,7 +131,7 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
     console.log('DEBUG---------------------\n', nextapi.api);
     console.log('DEBUG---------------------\n', JSON.stringify(nextapi.api));
 
-    return nextQuery({ data: [nextapi.api] });
+    return nextAPI({ data: [nextapi.api] });
 
     // ------------------------------------------------------------------------------------------
   } else {

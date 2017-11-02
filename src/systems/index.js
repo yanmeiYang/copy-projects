@@ -4,6 +4,7 @@
 /* eslint-disable prefer-template,import/no-dynamic-require */
 import React from 'react';
 import { addLocaleData } from 'react-intl';
+import { cloneDeep } from 'lodash';
 import { loadSavedLocale } from 'utils/locale';
 import { System, Source } from 'utils/system';
 import { TopExpertBase } from 'utils/expert-base';
@@ -151,7 +152,7 @@ const defaultSystemConfigs = {
 /***************************************************
  * Combine
  **************************************************/
-const sysconfig = defaultSystemConfigs;
+const sysconfig = cloneDeep(defaultSystemConfigs);
 const currentSystem = CurrentSystemConfig[System];
 Object.keys(currentSystem).map((key) => {
   sysconfig[key] = currentSystem[key];
@@ -166,4 +167,4 @@ if (sysconfig.EnableLocalLocale) {
 }
 addLocaleData('react-intl/locale-data/' + sysconfig.Locale);
 
-module.exports = { sysconfig };
+module.exports = { sysconfig, defaultSystemConfigs, CurrentSystemConfig };

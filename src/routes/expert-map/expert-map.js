@@ -3,7 +3,6 @@
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import loadScript from 'load-script';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
 import { Spinner } from 'components';
@@ -20,28 +19,17 @@ import {
   getById,
   waitforBMap,
   waitforBMapLib,
-  findMapFilterRangesByKey,
+  insertAfter,
+  //findMapFilterRangesByKey,
   findMapFilterHindexRangesByKey,
   bigAreaConfig,
 } from './utils/map-utils';
 
-let map1; // what?
+let map1; // 地图刷新前，用于存储上次浏览的地点
 const dataMap = {}; // 数据的索引，建议可以放到reducers.
 const blankAvatar = '/images/blank_avatar.jpg';
 
-function insertAfter(newElement, targetElement) {
-  const parent = targetElement.parentNode;
-  if (parent.lastChild === targetElement) {
-    parent.appendChild(newElement);
-  } else {
-    parent.insertBefore(newElement, targetElement.nextSibling);
-  }
-}
-
-/*
- * Popup window.
- */
-const showLoadErrorMessage = () => {
+const showLoadErrorMessage = () => { //Popup window.
   getById('allmap').innerHTML = 'Cannot connect to Baidu Map! Please check the network state!';
 };
 
@@ -70,7 +58,6 @@ export default class ExpertMap extends PureComponent {
   }
 
   state = {
-    typeIndex: '0',
     loadingFlag: false,
     cperson: '', //当前显示的作者的id
   };
@@ -78,20 +65,16 @@ export default class ExpertMap extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     this.resetRightInfoToGlobal(dispatch);
-    this.showMap(this.props.expertMap.geoData, this.state.typeIndex);// Show an empty map.
-    // TODO what this for?
-    // window.onresize = () => {
-    //   this.showMap(this.props.expertMap.geoData, this.state.typeIndex);
-    // };
+    const pro = this.props;
+    this.showMap(pro.expertMap.geoData, pro.type, pro.range, pro.hindexRange);
+    window.onresize = () => { //改变窗口大小的时候重新加载地图，防止出现错位问题
+      this.showMap(pro.expertMap.geoData, pro.type, pro.range, pro.hindexRange);
+    };
   }
 
   componentWillReceiveProps(np) {
-    // if (np.query && np.query !== this.props.query) {
-    // this.callSearchMap(nextProps.query);
-    // }
-    // monitor data.
     if (np.expertMap.geoData !== this.props.expertMap.geoData) {
-      this.showMap(np.expertMap.geoData, '0', np.range, np.hindexRange);
+      this.showMap(np.expertMap.geoData, np.type, np.range, np.hindexRange);
     }
     if (compare(np, this.props, 'range', 'hindexRange', 'type')) {
       this.showMap(this.props.expertMap.geoData, np.type, np.range, np.hindexRange);
@@ -121,7 +104,6 @@ export default class ExpertMap extends PureComponent {
 
   onExpertBaseChange = (id, name) => {
     const { filters } = this.props.search;
-    // delete all other filters.
     Object.keys(filters).forEach((f) => {
       delete filters[f];
     });
@@ -381,42 +363,28 @@ export default class ExpertMap extends PureComponent {
   };
 
   mapConfig = {
-    '0': { scale: 5, minscale: 1, maxscale: 16 },
-    '1': { scale: 4, minscale: 4, maxscale: 5 },
-    '2': { scale: 4, minscale: 4, maxscale: 5 },
-    '3': { scale: 4, minscale: 4, maxscale: 5 },
-    '4': { scale: 7, minscale: 5, maxscale: 7 },
-    '5': { scale: 7, minscale: 5, maxscale: 7 },
+    0: { scale: 5, minscale: 1, maxscale: 16 },
+    1: { scale: 4, minscale: 4, maxscale: 5 },
+    2: { scale: 4, minscale: 4, maxscale: 5 },
+    3: { scale: 4, minscale: 4, maxscale: 5 },
+    4: { scale: 7, minscale: 5, maxscale: 7 },
+    5: { scale: 7, minscale: 5, maxscale: 7 },
   };
 
-  showMap = (place, type, range, hindexRange, noLoading) => {
-    // loadScript('/lib/echarts.js', () => {
-    //   echarts = window.echarts; // eslint-disable-line prefer-destructuring
-    //   loadScript('/lib/echarts-map/world.js', () => {
-    //     this.myChart = echarts.init(document.getElementById('world'));
-    //     this.showTrajectory();
-    //   });
-    // });
-    // return false; // -------------------------------------------
-
-    if (!noLoading) { // Loading mask.
-      this.showLoading();
-    }
-
-    const that = this; // TODO This is not used.
+  showMap = (place, type, range, hindexRange) => {
+    this.showLoading();
+    const that = this;
     const mapType = type || '0';
     const filterRange = range || 'all';
 
     waitforBMap(200, 100, () => {
         if (!place || !place.results) {
-          this.hideLoading();
+          that.hideLoading();
           return;
         }
-
         this.showOverLay();
 
-        // init map instance.
-        const conf = this.mapConfig[mapType] || this.mapConfig['0'];
+        const conf = this.mapConfig[mapType] || this.mapConfig[0];// init map instance.
         const map = new window.BMap.Map('allmap', {
           minZoom: conf.minscale,
           maxZoom: conf.maxscale,
@@ -428,9 +396,7 @@ export default class ExpertMap extends PureComponent {
         ), conf.scale);
 
         this.configBaiduMap(map);
-        map1 = this.map; // TODO What's map1 这个鬼
-
-        // create markers;
+        map1 = this.map; // 地图刷新前，用于存储上次浏览的地点
 
         if (mapType === '1') {
           bigAreaConfig.map((ac) => {
@@ -441,11 +407,9 @@ export default class ExpertMap extends PureComponent {
           });
         }
 
-        // Loop results.
-
         // 确定 hindex Ranges 的Filter.
         const hindexRangeConfig = findMapFilterHindexRangesByKey(hindexRange);
-        const maxHindex = hindexRangeConfig ? hindexRangeConfig.boundary : 200;
+        const maxHindex = hindexRangeConfig ? hindexRangeConfig.boundary : 20000;
 
         const markers = [];
         const pId = [];
@@ -460,7 +424,6 @@ export default class ExpertMap extends PureComponent {
           if (counts > maxHindex) {
             break;
           }
-
           ids.push(pr.id);
           dataMap[pr.id] = pr;
           const newplace = findPosition(mapType, pr);
@@ -479,8 +442,7 @@ export default class ExpertMap extends PureComponent {
           label.setOffset(new window.BMap.Size(-55.5, 25));
 
           // 只有经纬度不为空或者0的时候才显示，否则丢弃
-          // if ((newplace[1] != null && newplace[1] != null) && (newplace[1] !== 0 && newplace[1] !== 0)) {
-          if (newplace && newplace[1]) {
+          if (newplace && newplace[1] && (newplace[1] !== 0 && newplace[1] !== 0)) {
             let include = false;
             switch (filterRange) {
               case 'all':
@@ -502,15 +464,13 @@ export default class ExpertMap extends PureComponent {
               );
               marker.setLabel(label);
               marker.setTop();
-              marker.setIcon(
-                new window.BMap.Icon(
+              marker.setIcon(new window.BMap.Icon(
                   '/images/map/marker_blue_sprite1.png',
                   new window.BMap.Size(19, 50), {
                     offset: new window.BMap.Size(0, 0), // 指定定位位置
                     imageOffset: new window.BMap.Size(0, 0), // 设置图片偏移
-                  }
-                ),
-              );
+                  },
+                ));
               pId[counts] = pr.id;
               markers.push(marker);
               counts += 1;
@@ -521,7 +481,8 @@ export default class ExpertMap extends PureComponent {
         // this.hideLoading();
 
         // Add Markers
-        waitforBMapLib(200, 100,
+        waitforBMapLib(
+          200, 100,
           () => {
             const markerClusterer = new window.BMapLib.MarkerClusterer(map, {});
             markerClusterer.addMarkers(markers);
@@ -538,8 +499,7 @@ export default class ExpertMap extends PureComponent {
           that.cacheBiGImage(ids, 160);
           console.log('cached in!!!yes!');
         }
-      }, showLoadErrorMessage,
-    );
+      }, showLoadErrorMessage);
   };
 
   cacheInfo = (ids) => { // 缓存基本信息
@@ -763,13 +723,11 @@ export default class ExpertMap extends PureComponent {
               </div>
               <div className={styles.container}>
                 <div className={styles.label}>人数：</div>
-                {/*<div className={styles.text}> 少</div>*/}
                 <div className={styles.item1}>少</div>
                 <div className={styles.item2}> 2</div>
                 <div className={styles.item3}> 3</div>
                 <div className={styles.item4}> 4</div>
                 <div className={styles.item5}>多</div>
-                {/*<div className={styles.text}> 多</div>*/}
               </div>
             </div>
 
@@ -796,5 +754,4 @@ export default class ExpertMap extends PureComponent {
     );
   }
 }
-
 

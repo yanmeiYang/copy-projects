@@ -36,8 +36,7 @@ const findPosition = (type, results) => {
 
 const findarea = (results, place) => {
   let place1 = place;
-  const country = results.country.name;
-  const area = results.location.area;
+  const [country, area] = [results.country.name, results.location.area];
   if (country === 'China') {
     switch (area) {
       case 'Beijing':
@@ -225,12 +224,10 @@ const findcontinent = (country) => {
   let continent = 'North American';
   for (const o in continentscountries.results) {
     if (continentscountries.results[o].country.indexOf(country) === 0) {
-      flag = false;
-      continent = continentscountries.results[o].continent;
+      [flag, continent] = [false, continentscountries.results[o].continent];
       break;
     } else if (continentscountries.results[o].country.indexOf(country) > 0) {
-      flag = false;
-      continent = continentscountries.results[o].continent;
+      [flag, continent] = [false, continentscountries.results[o].continent];
       break;
     }
   }
@@ -286,17 +283,25 @@ function waitforBMap(tryTimes, interval, success, failed) {
     } else {
       clearInterval(mapInterval);
       if (success) {
-        success(BMap);
+        success(window.BMap);
       }
     }
   }, interval);
+}
+
+function insertAfter(newElement, targetElement) {
+  const parent = targetElement.parentNode;
+  if (parent.lastChild === targetElement) {
+    parent.appendChild(newElement);
+  } else {
+    parent.insertBefore(newElement, targetElement.nextSibling);
+  }
 }
 
 function waitforBMapLib(tryTimes, interval, success, failed) {
   let n = 0;
   const mapLibInterval = setInterval(() => {
     if (typeof (BMapLib) === 'undefined') {
-      // console.log('wait for BMapLib');
       n += 1;
       if (n >= tryTimes) {
         clearInterval(mapLibInterval);
@@ -307,7 +312,7 @@ function waitforBMapLib(tryTimes, interval, success, failed) {
     } else {
       clearInterval(mapLibInterval);
       if (success) {
-        success(BMapLib);
+        success(window.BMapLib);
       }
     }
   }, interval);
@@ -373,7 +378,7 @@ const bigAreaConfig = [
 
 module.exports = {
   findPosition, getById, waitforBMap, waitforBMapLib,
-
+  insertAfter,
   bigAreaConfig,
   MapFilterRanges, MapFilterHindexRange,
   findMapFilterRangesByKey, findMapFilterHindexRangesByKey,

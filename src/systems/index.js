@@ -133,6 +133,7 @@ const defaultSystemConfigs = {
   Map_Preload: true,
   CentralPosition: { lat: 37.09024, lng: -95.712891 },
   Map_HotDomains: TopExpertBase.RandomTop100InDomainAminer, //地图领域
+  HotDomains_Type: 'filter', //filter or selector
 
   /**
    * Replace Hooks.

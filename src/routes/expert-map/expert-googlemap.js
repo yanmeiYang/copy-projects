@@ -11,6 +11,7 @@ import { sysconfig } from 'systems';
 import styles from './expert-googlemap.less';
 
 import { Spinner } from 'components';
+import { compare } from 'utils';
 import { listPersonByIds } from '../../services/person';
 import * as profileUtils from '../../utils/profile-utils';
 import GetGoogleMapLib from './utils/googleMapGai.js';
@@ -20,6 +21,7 @@ import RightInfoZoneAll from './RightInfoZoneAll';
 import {
   findPosition,
   getById,
+  insertAfter,
   waitforBMap,
   waitforBMapLib,
   findMapFilterRangesByKey,
@@ -30,15 +32,6 @@ import {
 let map1;
 const dataMap = {};
 const blankAvatar = '/images/blank_avatar.jpg';
-
-function insertAfter(newElement, targetElement) {
-  const parent = targetElement.parentNode;
-  if (parent.lastChild === targetElement) {
-    parent.appendChild(newElement);
-  } else {
-    parent.insertBefore(newElement, targetElement.nextSibling);
-  }
-}
 
 /**
  * -------------------------------------------------------------------
@@ -54,22 +47,21 @@ export default class ExpertGoogleMap extends React.Component {
   }
 
   state = {
-    typeIndex: '0',
     loadingFlag: false,
     cperson: '', //当前显示的作者的id
   };
 
   componentDidMount() {
-    // this.callSearchMap(this.props.query);
+    const pro = this.props;
+    this.showgooglemap(pro.expertMap.geoData, pro.type, pro.range, pro.hindexRange);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.query && nextProps.query !== this.props.query) {
-      this.callSearchMap(nextProps.query);
+  componentWillReceiveProps(np) {
+    if (np.expertMap.geoData !== this.props.expertMap.geoData) {
+      this.showgooglemap(np.expertMap.geoData, np.type, np.range, np.hindexRange);
     }
-    if (nextProps.expertMap.geoData !== this.props.expertMap.geoData) {
-      const typeid = 0;
-      this.showgooglemap(nextProps.expertMap.geoData, typeid);
+    if (compare(np, this.props, 'range', 'hindexRange', 'type')) {
+      this.showgooglemap(np.expertMap.geoData, np.type, np.range, np.hindexRange);
     }
     return true;
   }
@@ -77,12 +69,6 @@ export default class ExpertGoogleMap extends React.Component {
   componentDidUpdate() {
     this.syncInfoWindow();
   }
-
-  onChangeBaiduMap = () => {
-    localStorage.setItem('maptype', 'baidu');
-    const href = window.location.href;
-    window.location.href = href.replace('expert-googlemap', 'expert-map');
-  };
 
   onSetPersonCard = (personInfo) => {
     this.props.dispatch({
@@ -121,10 +107,6 @@ export default class ExpertGoogleMap extends React.Component {
       riz1.setAttribute('class', 'imgWrapper1');
       return riz1;
     }
-  };
-
-  handleScriptError = () => {
-    console.log('error');
   };
 
   addMouseoverHandler = (map, marker, personId) => {
@@ -177,103 +159,162 @@ export default class ExpertGoogleMap extends React.Component {
     }
   };
 
-  showgooglemap = (place, type) => {
-    this.setState({ loadingFlag: true });
+  mapConfig = {
+    0: { scale: 5, minscale: 1, maxscale: 16 },
+    1: { scale: 4, minscale: 4, maxscale: 5 },
+    2: { scale: 4, minscale: 4, maxscale: 5 },
+    3: { scale: 4, minscale: 4, maxscale: 5 },
+    4: { scale: 7, minscale: 5, maxscale: 7 },
+    5: { scale: 7, minscale: 5, maxscale: 7 },
+  };
+
+  showgooglemap = (place, type, range, hindexRange) => {
+    this.showLoading();
     let counter = 0;
     const that = this;
+    const filterRange = range || 'all';
+    const mapType = type || '0';
+
     that.showOverLay();
-    const mapinterval = setInterval(function () {
+    const mapinterval = setInterval(() => {
       if (typeof (window.google) === 'undefined') {
         console.log('wait for Google');
         counter += 1;
         if (counter > 200) {
           clearInterval(mapinterval);
+          that.hideLoading();
           document.getElementById('allmap').innerHTML = 'Cannot connect to Google Map! Please check the network state!';
         }
       } else {
         clearInterval(mapinterval);
-        let mapCenter = {
-          lat: sysconfig.CentralPosition.lat,
-          lng: sysconfig.CentralPosition.lng
+
+
+
+        // let mapCenter = {
+        //   lat: sysconfig.CentralPosition.lat,
+        //   lng: sysconfig.CentralPosition.lng,
+        // };
+        // let scale = 3;
+        // let minscale = 1;
+        // let maxscale = 19;
+        // let newtype;
+        // if (localStorage.getItem('lastgoogletype') !== '0' && localStorage.getItem('isgoogleClick') === '0') {
+        //   newtype = localStorage.getItem('lastgoogletype');
+        // } else {
+        //   newtype = type;
+        // }
+        // if (newtype === '0') {
+        //   scale = 3;
+        //   minscale = 3;
+        // } else if (newtype === '1' || newtype === '2' || newtype === '3') {
+        //   scale = 3;
+        //   minscale = 3;
+        //   maxscale = 4;
+        // } else if (newtype === '4' || newtype === '5') {
+        //   scale = 6;
+        //   minscale = 6;
+        //   maxscale = 7;
+        // }
+        // if (map1) {
+        //   mapCenter = map1.getCenter();
+        // }
+        // localStorage.setItem('lastgoogletype', newtype);
+        // const map = new window.google.maps.Map(document.getElementById('allmap'), {
+        //   center: mapCenter,
+        //   zoom: scale,
+        //   gestureHandling: 'greedy',
+        //   minZoom: minscale,
+        //   maxZoom: maxscale,
+        // });
+        //
+        // this.map = map; // set to global;
+        // map1 = this.map;
+        // const locations = [];
+        // const newTypeString = String(newtype);
+        // let newPlaceResults = [];
+        // const range = '0';
+        // console.log(place);
+        // if (range === '0') {
+        //   newPlaceResults = place.results;
+        // } else if (range === '1') {
+        //   place.results.map((placeResult) => {
+        //     if (placeResult.fellows[0] && placeResult.fellows[0] === 'acm') {
+        //       newPlaceResults.push(placeResult);
+        //     }
+        //     return true;
+        //   });
+        // } else if (range === '2') {
+        //   place.results.map((placeResult) => {
+        //     if (placeResult.fellows[0] === 'ieee' || placeResult.fellows[1] === 'ieee') {
+        //       newPlaceResults.push(placeResult);
+        //     }
+        //     return true;
+        //   });
+        // } else if (range === '3') {
+        //   place.results.map((placeResult) => {
+        //     if (placeResult.is_ch) {
+        //       newPlaceResults.push(placeResult);
+        //     }
+        //     return true;
+        //   });
+        // }
+
+        if (!map1) {
+          map1 = new window.google.maps.Map(document.getElementById('allmap'), {
+            center: { lat: sysconfig.CentralPosition.lat, lng: sysconfig.CentralPosition.lng },
+          });
+        }
+        const mapCenter = {
+          lat: map1 ? map1.getCenter().lat() : sysconfig.CentralPosition.lat,
+          lng: map1 ? map1.getCenter().lng() : sysconfig.CentralPosition.lng,
         };
-        let scale = 3;
-        let minscale = 1;
-        let maxscale = 19;
-        let newtype;
-        if (localStorage.getItem('lastgoogletype') !== '0' && localStorage.getItem('isgoogleClick') === '0') {
-          newtype = localStorage.getItem('lastgoogletype');
-        } else {
-          newtype = type;
-        }
-        if (newtype === '0') {
-          scale = 3;
-          minscale = 3;
-        } else if (newtype === '1' || newtype === '2' || newtype === '3') {
-          scale = 3;
-          minscale = 3;
-          maxscale = 4;
-        } else if (newtype === '4' || newtype === '5') {
-          scale = 6;
-          minscale = 6;
-          maxscale = 7;
-        }
-        if (map1) {
-          mapCenter = map1.getCenter();
-        }
-        localStorage.setItem('lastgoogletype', newtype);
+        const conf = this.mapConfig[mapType] || this.mapConfig[0]; //根据地图的类型选择地图的尺寸
         const map = new window.google.maps.Map(document.getElementById('allmap'), {
           center: mapCenter,
-          zoom: scale,
+          zoom: conf.scale,
           gestureHandling: 'greedy',
-          minZoom: minscale,
-          maxZoom: maxscale,
+          minZoom: conf.minscale,
+          maxZoom: conf.maxscale,
         });
-
-        this.map = map; // set to global;
-        map1 = this.map;
+        this.map = map; // set to global,以便全局取用
+        map1 = this.map; // 地图刷新前，用于存储上次浏览的地点
+        place.results.sort((a, b) => b.hindex - a.hindex);
         const locations = [];
-        const newTypeString = String(newtype);
-        let newPlaceResults = [];
-        if (range === '0') {
-          newPlaceResults = place.results;
-        } else if (range === '1') {
-          place.results.map((placeResult) => {
-            if (placeResult.fellows[0] && placeResult.fellows[0] === 'acm') {
-              newPlaceResults.push(placeResult);
-            }
-            return true;
-          });
-        } else if (range === '2') {
-          place.results.map((placeResult) => {
-            if (placeResult.fellows[0] === 'ieee' || placeResult.fellows[1] === 'ieee') {
-              newPlaceResults.push(placeResult);
-            }
-            return true;
-          });
-        } else if (range === '3') {
-          place.results.map((placeResult) => {
-            if (placeResult.is_ch) {
-              newPlaceResults.push(placeResult);
-            }
-            return true;
-          });
-        }
-        newPlaceResults.sort((a, b) => b.hindex - a.hindex);
+
         let j = 0;
         const ids = [];
-        for (const n of newPlaceResults) {
-          ids.push(n.id);
-          dataMap[n.id] = n;
-          const newplace = findPosition(newTypeString, n);
+        for (const pr of place.results) {
+          ids.push(pr.id);
+          dataMap[pr.id] = pr;
+          const newplace = findPosition(mapType, pr);
           const onepoint = { lat: newplace[0], lng: newplace[1] };
-          locations[j] = onepoint;
-          j += 1;
+
+          if (newplace && newplace[1] && (newplace[1] !== 0 && newplace[1] !== 0)) {
+            let include = false;
+            switch (filterRange) {
+              case 'all':
+                include = true;
+                break;
+              case 'acm':
+              case 'ieee':
+                include = pr.fellows.indexOf(range) >= 0;
+                break;
+              case 'chinese':
+                include = pr.is_ch;
+                break;
+              default:
+            }
+            if (include) { //只有是选定的时候才加入
+              locations[j] = onepoint;
+              j += 1;
+            }
+          }
         }
         let markers = locations.map((location, i) => {
           return new window.google.maps.Marker({
             position: location,
             label: {
-              text: newPlaceResults[i].name,
+              text: place.results[i].name,
               color: '#000000',
               fontSize: '12px',
               backgroundColor: 'transparent',
@@ -286,47 +327,65 @@ export default class ExpertGoogleMap extends React.Component {
               origin: new window.google.maps.Point(0, 0),
               anchor: new window.google.maps.Point(0, 25),
             },
-            title: newPlaceResults[i].id,
+            title: place.results[i].id,
           });
         });
-        if (number === '0') {
+
+        const number = hindexRange;
+        if (number === 'top200') {
           markers = markers.slice(0, 200);
-        } else if (number === '1') {
+        } else if (number === 'top50') {
           markers = markers.slice(0, 50);
-        } else if (number === '2') {
+        } else if (number === 'top100') {
           markers = markers.slice(0, 100);
-        } else if (number === '3') {
+        } else if (number === 'top500') {
           markers = markers.slice(0, 500);
         }
-        const beaches = [
-          ['东部', 38.9071923, -77.0368707],
-          ['美国中部', 39.8027644, -105.0874842],
-          ['西部', 38.4087993, -121.3716178],
-          ['加拿大', 62, -105.712891],
-          ['拉丁美洲', 4.570868, -74.297333],
-          ['大洋洲', -25.274398, 133.775136],
-          ['以色列', 31.046051, 34.851612],
-          ['俄罗斯', 63, 105.318756],
-          ['英国', 57.378051, -3.435973],
-          ['北欧', 62, 18.643501],
-          ['中国', 39.90419989999999, 116.4073963],
-          ['台湾', 25.0329694, 121.5654177],
-          ['韩国', 35.907757, 127.766922],
-          ['日本', 36.204824, 138.252924],
-          ['香港', 22.396428, 114.109497],
-          ['新加坡', 1.352083, 103.819836],
-          ['东南亚', 12.879721, 121.774017],
-          ['中亚', 48.019573, 66.923684],
-          ['印度', 20.593684, 78.96288],
-          ['东欧', 48.379433, 31.16558],
-          ['西欧', 48.7468939, 9.0805141],
-        ];
-        if (localStorage.getItem('googletype') === '1') {
-          beaches.map((beach) => {
+        // const beaches = [
+        //   ['东部', 38.9071923, -77.0368707],
+        //   ['美国中部', 39.8027644, -105.0874842],
+        //   ['西部', 38.4087993, -121.3716178],
+        //   ['加拿大', 62, -105.712891],
+        //   ['拉丁美洲', 4.570868, -74.297333],
+        //   ['大洋洲', -25.274398, 133.775136],
+        //   ['以色列', 31.046051, 34.851612],
+        //   ['俄罗斯', 63, 105.318756],
+        //   ['英国', 57.378051, -3.435973],
+        //   ['北欧', 62, 18.643501],
+        //   ['中国', 39.90419989999999, 116.4073963],
+        //   ['台湾', 25.0329694, 121.5654177],
+        //   ['韩国', 35.907757, 127.766922],
+        //   ['日本', 36.204824, 138.252924],
+        //   ['香港', 22.396428, 114.109497],
+        //   ['新加坡', 1.352083, 103.819836],
+        //   ['东南亚', 12.879721, 121.774017],
+        //   ['中亚', 48.019573, 66.923684],
+        //   ['印度', 20.593684, 78.96288],
+        //   ['东欧', 48.379433, 31.16558],
+        //   ['西欧', 48.7468939, 9.0805141],
+        // ];
+        // if (localStorage.getItem('googletype') === '1') {
+        //   beaches.map((beach) => {
+        //     return new window.google.maps.Marker({
+        //       position: { lat: beach[1] - 6, lng: beach[2] },
+        //       label: {
+        //         text: beach[0],
+        //         fontSize: '12px',
+        //         fontStyle: 'italic',
+        //         fontWeight: 'bold'
+        //       },
+        //       icon: { url: '/images/map/blank.png' },
+        //       map,
+        //     });
+        //   });
+        // }
+
+        if (mapType === '1') {
+          bigAreaConfig.map((ac) => {
             return new window.google.maps.Marker({
-              position: { lat: beach[1] - 6, lng: beach[2] },
+              position: { lat: ac[1] - 6, lng: ac[2] },
               label: {
-                text: beach[0],
+                text: ac[0],
                 fontSize: '12px',
                 fontStyle: 'italic',
                 fontWeight: 'bold'
@@ -336,8 +395,11 @@ export default class ExpertGoogleMap extends React.Component {
             });
           });
         }
+
+
         const markerClusterer = new window.googleMap.MarkerClusterer(map, {});
         markerClusterer.addMarkers(markers);
+        console.log(markers);
         for (let m = 0; m < markers.length; m += 1) {
           that.addMouseoverHandler(map, markers[m], place.results[m].id);
         }
@@ -412,25 +474,19 @@ export default class ExpertGoogleMap extends React.Component {
     }
   };
 
-  showType = (e) => {
-    localStorage.setItem('isgoogleClick', '1');
-    localStorage.setItem('googletype', '0');
-    const typeid = e.currentTarget && e.currentTarget.value && e.currentTarget.getAttribute('value');
-    if (typeid === '0') {
-      this.showgooglemap(this.props.expertMap.geoData, typeid);
-    } else if (typeid === '1') {
-      localStorage.setItem('googletype', '1');
-      //简单地读取其城市大区等信息，然后归一到一个地址，然后在地图上显示
-      this.showgooglemap(this.props.expertMap.geoData, typeid);
-    } else if (typeid === '2') {
-      this.showgooglemap(this.props.expertMap.geoData, typeid);
-    } else if (typeid === '3') {
-      this.showgooglemap(this.props.expertMap.geoData, typeid);
-    } else if (typeid === '4') {
-      this.showgooglemap(this.props.expertMap.geoData, typeid);
-    } else if (typeid === '5') {
-      this.showgooglemap(this.props.expertMap.geoData, typeid);
-    }
+  showLoading = () => {
+    this.setState({ loadingFlag: true });
+  };
+
+  hideLoading = () => {
+    this.setState({ loadingFlag: false });
+  };
+
+  configGoogleMap = (map) => {
+    map.enableScrollWheelZoom();
+    map.addControl(new window.BMap.NavigationControl());
+    map.addControl(new window.BMap.ScaleControl());
+    map.addControl(new window.BMap.OverviewMapControl());
   };
 
   detachCluster = (clusterPanel) => {
@@ -752,54 +808,9 @@ export default class ExpertGoogleMap extends React.Component {
     }
   };
 
-  showNumber = (numberTmp) => {
-    const that = this;
-    const arr = [false, false, false, false, false];
-    arr[numberTmp] = true;
-    that.setState({ numberChecks: arr });
-    const lastType = localStorage.getItem('lasttype');
-    if (numberTmp) {
-      number = numberTmp;
-      that.showgooglemap(this.props.expertMap.geoData, lastType, range, number);
-    }
-  };
-
-  showRange = (rangeTmp) => {
-    const lastType = localStorage.getItem('lasttype');
-    const that = this;
-    const arr = [false, false, false, false];
-    arr[rangeTmp] = true;
-    that.setState({ rangeChecks: arr });
-    if (rangeTmp) {
-      range = rangeTmp;
-      this.showgooglemap(this.props.expertMap.geoData, lastType, range, number);
-    }
-  };
-
-  domainChanged = (value) => {
-    this.props.dispatch(routerRedux.push({
-      pathname: '/expert-googlemap',
-      search: `?query=${value.name}`
-    }));
-    let i = 0;
-    domainIds.map((domain1) => {
-      domainChecks[i] = value.id === domain1;
-      i += 1;
-      return true;
-    });
-    if (value.id) {
-      const { dispatch } = this.props;
-      localStorage.setItem('isClick', '0');
-      dispatch({ type: 'app/clearQueryInHeaderIfExist' });
-      dispatch({ type: 'expertMap/searchExpertBaseMap', payload: { eb: value.id } });
-      dispatch({
-        type: 'expertMap/setRightInfo',
-        payload: { idString: '', rightInfoType: 'global' },
-      });
-    }
-  };
 
   render() {
+    console.log("@@@@@@@@@@@@@@@@@@");
     const model = this.props && this.props.expertMap;
     const persons = model.geoData.results;
     let checkState = 0;
@@ -843,7 +854,6 @@ export default class ExpertGoogleMap extends React.Component {
       personPopupJsx = (
         <div className="personInfo">
           <div id={divId} />
-          {/*<div><img className="img" src={url} alt="IMG" /></div>*/}
           <div className="info">
             <div className="nameLine">
               <div className="right">H-index:<b> {hindex}</b>
@@ -867,127 +877,10 @@ export default class ExpertGoogleMap extends React.Component {
       cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),
     };
 
-    const that = this;
-    const Domains = sysconfig.Map_HotDomains;
-    let i = 0;
-    const arr = [];
-    Domains.map((domain1) => {
-      domainIds[i] = domain1.id;
-      if (domainIds.length === 0) {
-        arr[i] = false;
-      }
-      i += 1;
-      return true;
-    });
-    let m = 0;
-    if (domainChecks) {
-      Domains.map((domain1) => {
-        domainChecks[m] = domain1.name === this.props.query;
-        m += 1;
-        return true;
-      });
-    }
     return (
       <div className={styles.expertMap} id="currentMain">
-        <div className={styles.filterWrap}>
-          <div className={styles.filter}>
-            <div className={styles.filterRow}>
-              <span className={styles.filterTitle}><span>Hot words:</span></span>
-              <ul>
-                {Domains.map((domain) => {
-                  checkState += 1;
-                  return (<CheckableTag className={styles.filterItem} key={domain.id}
-                                        checked={domainChecks[checkState - 1]} value={domain.id}>
-                    <span role="presentation"
-                          onClick={this.domainChanged.bind(that, domain)}>{domain.name}</span>
-                  </CheckableTag>);
-                })
-                }
-              </ul>
-            </div>
-          </div>
-          <div className={styles.filter}>
-            <div className={styles.filterRow}>
-              <span className={styles.filterTitle}><span>Range:</span></span>
-              <ul>
-                <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[0]}>
-                  <span role="presentation" onClick={this.showRange.bind(that, '0')}
-                        value="0">ALL</span>
-                </CheckableTag>
-                <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[1]}>
-                  <span role="presentation"
-                        onClick={this.showRange.bind(that, '1')}>ACM Fellow</span>
-                </CheckableTag>
-                <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[2]}>
-                  <span role="presentation"
-                        onClick={this.showRange.bind(that, '2')}>IEEE Fellow</span>
-                </CheckableTag>
-                <CheckableTag className={styles.filterItem} checked={that.state.rangeChecks[3]}>
-                  <span role="presentation" onClick={this.showRange.bind(that, '3')}>华人</span>
-                </CheckableTag>
-              </ul>
-            </div>
-            <div className={styles.filterRow}>
-              <span className={styles.filterTitle}><span>H-index:</span></span>
-              <ul>
-                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[4]}>
-                  <span role="presentation" onClick={this.showNumber.bind(that, '4')}>ALL</span>
-                </CheckableTag>
-                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[3]}>
-                  <span role="presentation"
-                        onClick={this.showNumber.bind(that, '3')}>TOP500</span>
-                </CheckableTag>
-                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[0]}>
-                  <span role="presentation"
-                        onClick={this.showNumber.bind(that, '0')}>TOP200</span>
-                </CheckableTag>
-                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[2]}>
-                  <span role="presentation"
-                        onClick={this.showNumber.bind(that, '2')}>TOP100</span>
-                </CheckableTag>
-                <CheckableTag className={styles.filterItem} checked={that.state.numberChecks[1]}>
-                  <span role="presentation" onClick={this.showNumber.bind(that, '1')}>TOP50</span>
-                </CheckableTag>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className={styles.headerLine}>
-          <div className={styles.left}>
-            <div className={styles.level}>
-              <span>
-                <FM defaultMessage="Baidu Map"
-                    id="com.expertMap.headerLine.label.level" />
-              </span>
-              <ButtonGroup id="sType" className={styles.sType}>
-                <Button onClick={this.showType} value="0">自动</Button>
-                <Button onClick={this.showType} value="1">大区</Button>
-                <Button onClick={this.showType} value="2">国家</Button>
-                <Button onClick={this.showType} value="3" style={{ display: 'none' }}>国内区</Button>
-                <Button onClick={this.showType} value="4">城市</Button>
-                <Button onClick={this.showType} value="5">机构</Button>
-              </ButtonGroup>
-            </div>
-          </div>
-
-          <div className={styles.scopes}>
-            <div className={styles.switch}>
-              <ButtonGroup id="diffmaps">
-                <Button onClick={this.onChangeBaiduMap}>
-                  <FM defaultMessage="Baidu Map"
-                      id="com.expertMap.headerLine.label.baiduMap" />
-                </Button>
-                <Button type="primary" onClick={this.onChangeGoogleMap}>
-                  <FM defaultMessage="Baidu Map"
-                      id="com.expertMap.headerLine.label.googleMap" />
-                </Button>
-              </ButtonGroup>
-            </div>
-          </div>
-        </div>
-
         <div className={styles.map}>
-          <Spinner loading={this.state.loadingFlag} />
+          {/*<Spinner loading={this.state.loadingFlag} />*/}
           <div id="allmap" />
           <div className={styles.right}>
             <div className={styles.legend}>

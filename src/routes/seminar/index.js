@@ -4,6 +4,7 @@
 import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
+import { isEqual } from 'lodash';
 import { Button, Tabs, Icon, Spin, Tag, Modal } from 'antd';
 import { sysconfig } from 'systems';
 import { Layout } from 'routes';
@@ -46,13 +47,15 @@ export default class Seminar extends React.Component {
     this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.seminar.orgByActivity !== this.props.seminar.orgByActivity) {
-      const tempOrg = nextProps.seminar.orgByActivity;
-      if (!tempOrg.data || tempOrg.data.length === 0) {
+  componentDidUpdate(nextProps) {
+    if (!isEqual(nextProps.seminar.orgByActivity, this.props.seminar.orgByActivity)) {
+      const orgData = this.props.seminar.orgByActivity.data;
+      const organizer = (orgData && orgData.length > 0) ?
+        contactByJoint(this.state.parentOrg, orgData[0].key) : this.state.orgType;
+      if (orgData) {
         const params = {
           query: this.state.query,
-          organizer: this.state.orgType,
+          organizer,
           category: this.state.category,
           tag: this.state.tag,
           offset: 0,
@@ -159,7 +162,7 @@ export default class Seminar extends React.Component {
           type: 'seminar/getCategory',
           payload: { category: `orglist_${item.id}` },
         });
-        this.setState({ [type]: key, parentOrg: item.key });
+        this.setState({ [type]: key, parentOrg: item.key, organizer: '' });
         stype[type] = key;
       } else if (type === 'organizer' && this.state.parentOrg) {
         this.setState({ [type]: contactByJoint(this.state.parentOrg, key) });
@@ -169,13 +172,13 @@ export default class Seminar extends React.Component {
         stype[type] = key;
       }
     } else {
-      this.setState({ [type]: '' });
-      stype[type] = '';
-      if (type === 'orgType') {
-        // 活动类型取消后 承办单位置为空
-        this.props.seminar.orgByActivity = {};
-      }
-      this.getSeminar(sizePerPage, { src: sysconfig.SOURCE });
+      // this.setState({ [type]: '' });
+      // stype[type] = '';
+      // if (type === 'orgType') {
+      // 活动类型取消后 承办单位置为空
+      // this.props.seminar.orgByActivity = {};
+      // }
+      // this.getSeminar(sizePerPage, { src: sysconfig.SOURCE });
     }
     if (type !== 'orgType') {
       this.props.seminar.results = [];
@@ -219,6 +222,7 @@ export default class Seminar extends React.Component {
       showTip = '暂无数据';
     }
     const { organizer, category, tag, orgType, sortType } = this.state;
+    console.log('=============== organizer ==========', organizer);
     const compare = (property) => {
       return (a, b) => {
         let val1 = a[property];
@@ -246,27 +250,6 @@ export default class Seminar extends React.Component {
           {/* filter */}
           <div className={styles.filterWrap}>
             <div className={styles.filter}>
-              {/*<div className={styles.filterRow}>*/}
-              {/*<span className={styles.filterTitle}>过滤条件:</span>*/}
-              {/*<ul className={styles.filterItems}>*/}
-              {/*{Object.entries(this.state).map((item) => {*/}
-              {/*console.log(item);*/}
-              {/*if (item[1] === '') {*/}
-              {/*return '';*/}
-              {/*}*/}
-              {/*return (*/}
-              {/*<Tag*/}
-              {/*className={styles.filterItem}*/}
-              {/*key={item[1]}*/}
-              {/*closable*/}
-              {/*afterClose={() => this.onFilterChange(item[1], item[0], false)}*/}
-              {/*color="blue"*/}
-              {/*style={{ width: 'auto' }}*/}
-              {/*>{item[1]}</Tag>*/}
-              {/*);*/}
-              {/*})}*/}
-              {/*</ul>*/}
-              {/*</div>*/}
               {topMentionedTags.data && topMentionedTags.data.tags.length > 0 &&
               <div className={styles.filterRow}>
                 <span className={styles.filterTitle}>标签:</span>
@@ -347,12 +330,12 @@ export default class Seminar extends React.Component {
                 <span className={styles.filterTitle}>承办单位:</span>
                 <ul className={styles.filterItems}>
                   {
-                    Object.values(orgByActivity.data).map((item) => {
+                    Object.values(orgByActivity.data).map((item, index) => {
                       return (
                         <CheckableTag
                           key={`${item.id}_${Math.random()}`}
                           className={styles.filterItem}
-                          checked={getValueByJoint(organizer) === item.key}
+                          checked={organizer ? getValueByJoint(organizer) === item.key : index === 0}
                           onChange={checked => this.onFilterChange(item.key, item, 'organizer', checked)}
                         >
                           {item.key}

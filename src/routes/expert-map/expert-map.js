@@ -3,7 +3,6 @@
  */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-//import loadScript from 'load-script';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
 import { Spinner } from 'components';
@@ -20,6 +19,7 @@ import {
   getById,
   waitforBMap,
   waitforBMapLib,
+  insertAfter,
   //findMapFilterRangesByKey,
   findMapFilterHindexRangesByKey,
   bigAreaConfig,
@@ -29,19 +29,7 @@ let map1; // 地图刷新前，用于存储上次浏览的地点
 const dataMap = {}; // 数据的索引，建议可以放到reducers.
 const blankAvatar = '/images/blank_avatar.jpg';
 
-function insertAfter(newElement, targetElement) {
-  const parent = targetElement.parentNode;
-  if (parent.lastChild === targetElement) {
-    parent.appendChild(newElement);
-  } else {
-    parent.insertBefore(newElement, targetElement.nextSibling);
-  }
-}
-
-/*
- * Popup window.
- */
-const showLoadErrorMessage = () => {
+const showLoadErrorMessage = () => { //Popup window.
   getById('allmap').innerHTML = 'Cannot connect to Baidu Map! Please check the network state!';
 };
 
@@ -79,17 +67,12 @@ export default class ExpertMap extends PureComponent {
     this.resetRightInfoToGlobal(dispatch);
     const pro = this.props;
     this.showMap(pro.expertMap.geoData, pro.type, pro.range, pro.hindexRange);
-    // TODO what this for?
-    // window.onresize = () => {
-    //   this.showMap(this.props.expertMap.geoData, this.state.typeIndex);
-    // };
+    window.onresize = () => { //改变窗口大小的时候重新加载地图，防止出现错位问题
+      this.showMap(pro.expertMap.geoData, pro.type, pro.range, pro.hindexRange);
+    };
   }
 
   componentWillReceiveProps(np) {
-    // if (np.query && np.query !== this.props.query) {
-    // this.callSearchMap(nextProps.query);
-    // }
-    // monitor data.
     if (np.expertMap.geoData !== this.props.expertMap.geoData) {
       this.showMap(np.expertMap.geoData, np.type, np.range, np.hindexRange);
     }
@@ -121,7 +104,6 @@ export default class ExpertMap extends PureComponent {
 
   onExpertBaseChange = (id, name) => {
     const { filters } = this.props.search;
-    // delete all other filters.
     Object.keys(filters).forEach((f) => {
       delete filters[f];
     });
@@ -381,23 +363,15 @@ export default class ExpertMap extends PureComponent {
   };
 
   mapConfig = {
-    '0': { scale: 5, minscale: 1, maxscale: 16 },
-    '1': { scale: 4, minscale: 4, maxscale: 5 },
-    '2': { scale: 4, minscale: 4, maxscale: 5 },
-    '3': { scale: 4, minscale: 4, maxscale: 5 },
-    '4': { scale: 7, minscale: 5, maxscale: 7 },
-    '5': { scale: 7, minscale: 5, maxscale: 7 },
+    0: { scale: 5, minscale: 1, maxscale: 16 },
+    1: { scale: 4, minscale: 4, maxscale: 5 },
+    2: { scale: 4, minscale: 4, maxscale: 5 },
+    3: { scale: 4, minscale: 4, maxscale: 5 },
+    4: { scale: 7, minscale: 5, maxscale: 7 },
+    5: { scale: 7, minscale: 5, maxscale: 7 },
   };
 
   showMap = (place, type, range, hindexRange) => {
-    // loadScript('/lib/echarts.js', () => {
-    //   echarts = window.echarts; // eslint-disable-line prefer-destructuring
-    //   loadScript('/lib/echarts-map/world.js', () => {
-    //     this.myChart = echarts.init(document.getElementById('world'));
-    //     this.showTrajectory();
-    //   });
-    // });
-    // return false; // -------------------------------------------
     this.showLoading();
     const that = this;
     const mapType = type || '0';
@@ -410,8 +384,7 @@ export default class ExpertMap extends PureComponent {
         }
         this.showOverLay();
 
-        // init map instance.
-        const conf = this.mapConfig[mapType] || this.mapConfig['0'];
+        const conf = this.mapConfig[mapType] || this.mapConfig[0];// init map instance.
         const map = new window.BMap.Map('allmap', {
           minZoom: conf.minscale,
           maxZoom: conf.maxscale,
@@ -425,8 +398,6 @@ export default class ExpertMap extends PureComponent {
         this.configBaiduMap(map);
         map1 = this.map; // 地图刷新前，用于存储上次浏览的地点
 
-        // create markers;
-
         if (mapType === '1') {
           bigAreaConfig.map((ac) => {
             map.addOverlay(new window.BMap.Label(ac.label, {
@@ -435,8 +406,6 @@ export default class ExpertMap extends PureComponent {
             return false;
           });
         }
-
-        // Loop results.
 
         // 确定 hindex Ranges 的Filter.
         const hindexRangeConfig = findMapFilterHindexRangesByKey(hindexRange);
@@ -455,7 +424,6 @@ export default class ExpertMap extends PureComponent {
           if (counts > maxHindex) {
             break;
           }
-
           ids.push(pr.id);
           dataMap[pr.id] = pr;
           const newplace = findPosition(mapType, pr);
@@ -496,15 +464,13 @@ export default class ExpertMap extends PureComponent {
               );
               marker.setLabel(label);
               marker.setTop();
-              marker.setIcon(
-                new window.BMap.Icon(
+              marker.setIcon(new window.BMap.Icon(
                   '/images/map/marker_blue_sprite1.png',
                   new window.BMap.Size(19, 50), {
                     offset: new window.BMap.Size(0, 0), // 指定定位位置
                     imageOffset: new window.BMap.Size(0, 0), // 设置图片偏移
                   },
-                ),
-              );
+                ));
               pId[counts] = pr.id;
               markers.push(marker);
               counts += 1;
@@ -515,11 +481,11 @@ export default class ExpertMap extends PureComponent {
         // this.hideLoading();
 
         // Add Markers
-        waitforBMapLib(200, 100,
+        waitforBMapLib(
+          200, 100,
           () => {
             const markerClusterer = new window.BMapLib.MarkerClusterer(map, {});
             markerClusterer.addMarkers(markers);
-            console.log(markers.length);
             for (let m = 0; m < markers.length; m += 1) {
               this.addMouseoverHandler(markers[m], pId[m]);
             }
@@ -533,8 +499,7 @@ export default class ExpertMap extends PureComponent {
           that.cacheBiGImage(ids, 160);
           console.log('cached in!!!yes!');
         }
-      }, showLoadErrorMessage,
-    );
+      }, showLoadErrorMessage);
   };
 
   cacheInfo = (ids) => { // 缓存基本信息

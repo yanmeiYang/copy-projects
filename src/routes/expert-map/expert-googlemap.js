@@ -21,6 +21,7 @@ import RightInfoZoneAll from './RightInfoZoneAll';
 import {
   findPosition,
   getById,
+  insertAfter,
   waitforBMap,
   waitforBMapLib,
   findMapFilterRangesByKey,
@@ -31,15 +32,6 @@ import {
 let map1;
 const dataMap = {};
 const blankAvatar = '/images/blank_avatar.jpg';
-
-function insertAfter(newElement, targetElement) {
-  const parent = targetElement.parentNode;
-  if (parent.lastChild === targetElement) {
-    parent.appendChild(newElement);
-  } else {
-    parent.insertBefore(newElement, targetElement.nextSibling);
-  }
-}
 
 /**
  * -------------------------------------------------------------------
@@ -65,9 +57,6 @@ export default class ExpertGoogleMap extends React.Component {
   }
 
   componentWillReceiveProps(np) {
-    // if (nextProps.query && nextProps.query !== this.props.query) {
-    //   this.callSearchMap(nextProps.query);
-    // }
     if (np.expertMap.geoData !== this.props.expertMap.geoData) {
       this.showgooglemap(np.expertMap.geoData, np.type, np.range, np.hindexRange);
     }
@@ -171,12 +160,12 @@ export default class ExpertGoogleMap extends React.Component {
   };
 
   mapConfig = {
-    '0': { scale: 5, minscale: 1, maxscale: 16 },
-    '1': { scale: 4, minscale: 4, maxscale: 5 },
-    '2': { scale: 4, minscale: 4, maxscale: 5 },
-    '3': { scale: 4, minscale: 4, maxscale: 5 },
-    '4': { scale: 7, minscale: 5, maxscale: 7 },
-    '5': { scale: 7, minscale: 5, maxscale: 7 },
+    0: { scale: 5, minscale: 1, maxscale: 16 },
+    1: { scale: 4, minscale: 4, maxscale: 5 },
+    2: { scale: 4, minscale: 4, maxscale: 5 },
+    3: { scale: 4, minscale: 4, maxscale: 5 },
+    4: { scale: 7, minscale: 5, maxscale: 7 },
+    5: { scale: 7, minscale: 5, maxscale: 7 },
   };
 
   showgooglemap = (place, type, range, hindexRange) => {
@@ -279,7 +268,7 @@ export default class ExpertGoogleMap extends React.Component {
           lat: map1 ? map1.getCenter().lat() : sysconfig.CentralPosition.lat,
           lng: map1 ? map1.getCenter().lng() : sysconfig.CentralPosition.lng,
         };
-        const conf = this.mapConfig[mapType] || this.mapConfig['0']; //根据地图的类型选择地图的尺寸
+        const conf = this.mapConfig[mapType] || this.mapConfig[0]; //根据地图的类型选择地图的尺寸
         const map = new window.google.maps.Map(document.getElementById('allmap'), {
           center: mapCenter,
           zoom: conf.scale,

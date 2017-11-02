@@ -33,7 +33,7 @@ System = 'huawei';
 // System = 'cietest';
 // System = 'bole';
 // System = 'acmfellow';
-System = 'DataAnnotation';
+// System = 'DataAnnotation';
 
 let Source = System; // AppID, Used in UniversalConfig.
 

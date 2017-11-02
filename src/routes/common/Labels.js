@@ -14,7 +14,9 @@ export default class Labels extends Component {
     targetEntity: PropTypes.string,
   };
 
-  // state = {};
+  state = {
+    tags: [],
+  };
 
   componentWillMount = () => {
     this.setState({ tags: this.props.tags });
@@ -36,10 +38,17 @@ export default class Labels extends Component {
     }
     const payload = { targetEntity, targetId, tag };
     const type = `commonLabels/${op}`;
-    console.log('---------------', type);
-    dispatch({ type, payload }, (data) => {
-      console.log('Retuen data is ', data);
-    });
+    dispatch({ type, payload })
+      .then((success) => {
+        if (success) {
+          this.setState({
+            tags: this.state.tags.indexOf(tag) === -1
+              ? [...this.state.tags, tag]
+              : this.state.tags,
+          });
+          console.log('===========', this.state);
+        }
+      });
   };
 
   // handleClose = (removedTag) => {
@@ -74,9 +83,9 @@ export default class Labels extends Component {
 
   render() {
     const { tags } = this.state;
-    const { commonLabels } = this.props;
+    // const { commonLabels } = this.props;
     return (
-      <LabelLine tags={commonLabels.tags} onTagChange={this.onTagChange} canRemove canAdd />
+      <LabelLine tags={tags} onTagChange={this.onTagChange} canRemove canAdd />
     );
   }
 }

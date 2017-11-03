@@ -390,8 +390,8 @@ function showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch
 
 function showTopImages(ids, i, imgwidth, blankAvatar, imgdivs) {
   const cimg = imgdivs[i];
-  let personInfo = dataCache[ids[i]];
-  personInfo = personInfo && model.personInfo;// 没有缓存的时候
+  let personInfo = dataCache[ids[i]];  //需要缓存的地方
+  //personInfo = personInfo && model.personInfo;// 没有缓存的时候
   let name;
   console.log(personInfo);
   if (personInfo) {
@@ -441,6 +441,7 @@ function showTopImages(ids, i, imgwidth, blankAvatar, imgdivs) {
     name = `&nbsp;&nbsp;${name}`;
     style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:10px;word-wrap:break-word;font-size:10px;';
   }
+  //需要缓存的地方,判断是否存在
   const img = imageCache[ids[i]];//浅拷贝和深拷贝
   const image = new Image(); //进行深拷贝
   if (typeof (img) === 'undefined') {
@@ -484,14 +485,14 @@ function addImageListener(map, ids, getInfoWindow, event, imgwidth, type, projec
   let num = 0;
   let personInfo;
   if (chtml.split('@@@@@@@').length > 1) { //当时想到这种办法也挺不容易的，保留着吧，注意一个是id一个是序号
-    personInfo = dataCache[ids[chtml.split('@@@@@@@')[1]]];
+    personInfo = dataCache[ids[chtml.split('@@@@@@@')[1]]];  //需要缓存的地方
   } else {
     if (event.target.tagName.toUpperCase() === 'DIV') {
       num = event.target.firstChild.name;
     } else if (event.target.tagName.toUpperCase() === 'IMG') {
       num = event.target.name;
     }
-    personInfo = dataCache[num];
+    personInfo = dataCache[num];  //需要缓存的地方
   }
   return personInfo.id;
 }

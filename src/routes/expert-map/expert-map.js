@@ -281,7 +281,7 @@ export default class ExpertMap extends PureComponent {
       that.hideLoading();
       // cache images
       if (sysconfig.Map_Preload) {
-        cacheInfo(ids, listPersonByIds, profileUtils);
+        cacheInfo(ids);
         console.log('cached in!!!yes!');
       }
     }, showLoadErrorMessage);

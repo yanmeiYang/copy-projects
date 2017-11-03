@@ -1,3 +1,5 @@
+import { listPersonByIds } from 'services/person';
+import * as profileUtils from 'utils/profile-utils';
 
 const copyImage = (imageId, divId, size) => { //图像深度拷贝
   let img = imageCache[imageId];
@@ -29,7 +31,29 @@ const ifAllInCache = (ids) => { //判断一串作者ids是否全部缓存了的
   return info;
 };
 
-const cacheInfo = (ids, listPersonByIds, profileUtils) => { // 缓存基本信息
+const cacheImage = () => {
+  console.log('CCCCCCCCCCCCCCCCCAAAAAAAAAAAA');
+  for (const ic of indexCache) {
+    const p = dataCache[ic];
+    const url = profileUtils.getAvatar(p.avatar, p.id, 50);
+    console.log(url);
+    const img = new Image();
+    img.src = url;
+    img.name = p.id;//不能使用id,否则重复
+    img.width = 50;
+    img.onerror = () => {
+      img.src = blankAvatar;
+    };
+    imageCache[p.id] = img;
+  }
+  console.log(imageCache);
+}
+
+const cacheInfo = (ids) => { // 缓存基本信息
+  /*
+  如果有的时候不缓存
+   */
+
   const resultPromise = [];
   let count = 0;
   let count1 = 0;
@@ -43,6 +67,7 @@ const cacheInfo = (ids, listPersonByIds, profileUtils) => { // 缓存基本信�
       for (const p of data.data.persons) {
         dataCache[p.id] = p;
         indexCache.push(p.id); //将id存到里面
+        //缓存图片
         const url = profileUtils.getAvatar(p.avatar, p.id, 50);
         const img = new Image();
         img.src = url;
@@ -55,6 +80,7 @@ const cacheInfo = (ids, listPersonByIds, profileUtils) => { // 缓存基本信�
       }
       count1 += 1;
       if (count === count1) {
+        //cacheImage();
         console.log('cached in!');
       }
     });
@@ -76,4 +102,5 @@ module.exports = {
   ifAllInCache,
   copyImage,
   cacheInfo,
+  cacheImage,
 };

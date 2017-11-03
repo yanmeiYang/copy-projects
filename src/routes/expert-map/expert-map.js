@@ -19,11 +19,22 @@ import {
   getById,
   waitforBMap,
   waitforBMapLib,
-  insertAfter,
+  toggleRightInfo,
+  onResetPersonCard,
+  resetRightInfoToGlobal,
+  showTopImageDiv,
+  showTopImages,
+  addImageListener,
   //findMapFilterRangesByKey,
   findMapFilterHindexRangesByKey,
   bigAreaConfig,
 } from './utils/map-utils';
+import {
+  dataCache,
+  imageCache,
+  copyImage,
+  cacheInfo,
+} from './utils/cache-utils';
 
 let map1; // 地图刷新前，用于存储上次浏览的地点
 const dataMap = {}; // 数据的索引，建议可以放到reducers.
@@ -50,9 +61,6 @@ const getInfoWindow = () => {
 export default class ExpertMap extends PureComponent {
   constructor(props) {
     super(props);
-    this.cache = {};
-    this.cacheData = {}; // 缓存作者数据
-    this.cacheImg = {}; // 缓存作者图像
     this.showOverLay = GetBMapLib(this.showTop);
     this.currentPersonId = 0;
   }
@@ -64,7 +72,7 @@ export default class ExpertMap extends PureComponent {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    this.resetRightInfoToGlobal(dispatch);
+    resetRightInfoToGlobal(dispatch);
     const pro = this.props;
     this.showMap(pro.expertMap.geoData, pro.type, pro.range, pro.hindexRange);
     window.onresize = () => { //改变窗口大小的时候重新加载地图，防止出现错位问题
@@ -87,38 +95,11 @@ export default class ExpertMap extends PureComponent {
 
   // EVENTS ---------------------------------------------------------------
 
-  onResetPersonCard = () => {
-    this.props.dispatch({ type: 'expertMap/resetPersonInfo' });
-  };
-
   // TOOLS ---------------------------------------------------------------
 
-  resetRightInfoToGlobal = (dispatch) => {
-    dispatch({
-      type: 'expertMap/setRightInfo',
-      payload: { idString: '', rightInfoType: 'global' },
-    });
-  };
-
   showTop = (usersIds, e, map, maindom, inputids, onLeave) => {
-    const ishere = getById('panel');
-    if (ishere != null) {
-      this.detachCluster(ishere);
-    }
-
-    const pixel = map.pointToOverlayPixel(e.currentTarget.getPosition()); // 中心点的位置
-    const width = 180;
-    // 可得中心点到图像中心点的半径为：width/2-imgwidth/2,圆形的方程为(X-pixel.x)^2+(Y-pixel.y)^2=width/2
-    const imgwidth = 45;
-
-    const oDiv = document.createElement('div');
-    const ostyle = `height:${width}px;width:${width}px;left: ${pixel.x - (width / 2)}px;top: ${pixel.y - (width / 2)}px;`;
-    oDiv.setAttribute('id', 'panel');
-    oDiv.setAttribute('style', ostyle);
-    oDiv.setAttribute('class', 'roundImgContainer');
-    insertAfter(oDiv, maindom);
-    const thisNode = getById('panel');
-    // 开始显示图片,按照hindex排序
+    const { dispatch } = this.props;
+    const type = 'baidu';
     const usersInfo = [];
     for (const u of usersIds) {
       usersInfo.push(dataMap[u]);
@@ -128,210 +109,33 @@ export default class ExpertMap extends PureComponent {
     for (const u of usersInfo.slice(0, 8)) {
       ids.push(u.id);
     }
-
-    const fenshu = (2 * Math.PI) / ids.length;// 共有多少份，每份的夹角
-    for (let i = 0; i < ids.length; i += 1) { //从12点方向开始
-      const centerX = (Math.cos((fenshu * i) - (Math.PI / 2)) * ((width / 2) - (imgwidth / 2)))
-        + (width / 2);
-      const centerY = (Math.sin((fenshu * i) - (Math.PI / 2)) * ((width / 2) - (imgwidth / 2)))
-        + (width / 2);
-      const imgdiv = document.createElement('div');
-      const cstyle = `height:${imgwidth}px;width:${imgwidth}px;left:${centerX - (imgwidth / 2)}px;top:${centerY - (imgwidth / 2)}px;`;
-      imgdiv.setAttribute('name', 'scholarimg');
-      imgdiv.setAttribute('style', cstyle);
-      imgdiv.setAttribute('class', 'imgWrapper');
-      imgdiv.innerHTML = '';
-      //imgdiv.innerHTML = `<img width='${imgwidth}' src='${blankAvatar}' alt='0'>`;
-      insertAfter(imgdiv, thisNode);
-      thisNode.appendChild(imgdiv);
-      imgdiv.addEventListener('click', () => this.toggleRightInfo('person', ids[i]), false);
-    }
-    // 再在其中间添加一个图像
-    const wh = imgwidth + 40;
-    const left = (width / 2) - (wh / 2);
-    const imgdiv = document.createElement('div');
-    const cstyle = `opacity:0;height:${wh}px;width:${wh}px;left:${left}px;top:${left}px;`;
-    imgdiv.setAttribute('name', 'center');// 中心的一个图片
-    imgdiv.setAttribute('style', cstyle);
-    imgdiv.setAttribute('class', 'imgWrapper');
-    thisNode.appendChild(imgdiv);
-    imgdiv.addEventListener('click', (event) => { // 集体的一个显示
-      this.toggleRightInfo('cluster', inputids);
-      event.stopPropagation();
-    });
-
-    if (thisNode != null) { // 准备绑定事件
-      const pthisNode = thisNode.parentNode;
-      pthisNode.addEventListener('mouseleave', () => {
-        if (onLeave) {
-          onLeave();
-        }
-        this.detachCluster(thisNode);
-      });
-    }
-
-    this.listPersonDone(map, ids, this.cacheData);
-    /*// cached.
-    const cached = this.cache[ids];
-    if (cached) {
-      this.listPersonDone(map, ids, cached);
-    } else {
-      console.log(ids);
-      const resultPromise = listPersonByIds(ids);
-      resultPromise.then(
-        (data) => {
-          console.log(data);
-          this.cache[ids] = data;
-          this.listPersonDone(map, ids, data);
-        },
-        () => {
-          console.log('failed');
-        },
-      ).catch((error) => {
-        console.error(error);
-      });
-      console.log('second!');
-    }*/
+    showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch, this.props.expertMap.infoZoneIds);
+    this.listPersonDone(map, ids);
   };
 
-  detachCluster = (clusterPanel) => {
-    if (clusterPanel != null && clusterPanel.parentNode != null) {
-      const imgdivs = document.getElementsByName('scholarimg');
-      for (let i = 0; i < imgdivs.length;) {
-        imgdivs[i].parentNode.removeChild(imgdivs[i]);
-      }
-      clusterPanel.parentNode.removeChild(clusterPanel);
-    }
-  };
-
-  listPersonDone = (map, ids, data) => {
+  listPersonDone = (map, ids) => {
     const imgwidth = 45;
+    const type = 'baidu';
 
     const imgdivs = document.getElementsByName('scholarimg');
     if (imgdivs !== null && imgdivs.length !== 0) {
       for (let i = 0; i < ids.length; i += 1) {
-        const cimg = imgdivs[i];
-        const personInfo = data[ids[i]];
-        let name;
-        if (typeof (personInfo.name_zh) !== 'undefined') {
-          if (personInfo.name_zh) {
-            const str = personInfo.name_zh.substr(1, 2);
-            name = str;
-          } else {
-            const tmp = personInfo.name.split(' ', 5);
-            name = tmp[tmp.length - 1];
-            if (name === '') {
-              name = personInfo.name;
-            }
-          }
-        } else {
-          const tmp = personInfo.name.split(' ', 5);
-          name = tmp[tmp.length - 1];
-          if (name === '') {
-            name = personInfo.name;
-          }
-        }
-
-        let style;
-        if (name.length <= 8) {
-          style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:45px;font-size:10px;';
-          if (name.length === 6) {
-            name = ' '.concat(name);
-          }
-          if (name.length <= 5) {
-            name = '&nbsp;'.concat(name);
-          }
-        } else {
-          const nameArr = name.split('', 20);
-          let u = 7;
-          const arr = [];
-          nameArr.map((name1) => {
-            if (u !== 7) {
-              if (u < 13) {
-                arr[u + 1] = name1;
-              } else if (u === 13) {
-                arr[u + 1] = ' ';
-                arr[u + 2] = name1;
-              } else {
-                arr[u + 2] = name1;
-              }
-            } else {
-              arr[u] = ' ';
-              arr[u + 1] = name1;
-            }
-            u += 1;
-            return true;
-          });
-          name = arr.join('');
-          name = `&nbsp;&nbsp;${name}`;
-          style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:10px;word-wrap:break-word;font-size:10px;';
-        }
-        const img = this.cacheImg[ids[i]];//浅拷贝和深拷贝
-        const image = new Image(); //进行深拷贝
-        if (typeof (img) === 'undefined') {
-          image.src = blankAvatar;
-          image.alt = name;
-          image.width = imgwidth;
-        } else {
-          image.src = img.src;
-          image.name = img.name;
-          image.alt = name;
-          image.width = imgwidth;
-          image.style = style;
-        }
-        if (img.src.includes('default.jpg') || img.src.includes('blank_avatar.jpg')) {
-          cimg.innerHTML = `<img id='${personInfo.id}' style='${style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='' alt='${name}'>`;
-        } else {
-          cimg.appendChild(image);
-        }
+        showTopImages(ids, dataCache, imageCache, i, imgwidth, blankAvatar, imgdivs);
       }
-
-      for (let j = 0; j < imgdivs.length; j += 1) {
-        const cimg = imgdivs[j];
-        cimg.addEventListener('mouseenter', (event) => {
-          // get current point.
-          const apos = getById('allmap').getBoundingClientRect();
-          const cpos = event.target.getBoundingClientRect();
-          const newPixel = new window.BMap.Pixel(cpos.left - apos.left + imgwidth, cpos.top - apos.top); // eslint-disable-line
-          const currentPoint = map.pixelToPoint(newPixel);
-          const chtml = event.target.innerHTML;
-          let num = 0;
-          let personInfo;
-          if (chtml.split('@@@@@@@').length > 1) { //当时想到这种办法也挺不容易的，保留着吧，注意一个是id一个是序号
-            num = chtml.split('@@@@@@@')[1];
-            personInfo = data[ids[num]];
-          } else {
-            if (event.target.tagName.toUpperCase() === 'DIV') {
-              num = event.target.firstChild.name;
-            } else if (event.target.tagName.toUpperCase() === 'IMG') {
-              num = event.target.name;
-            }
-            personInfo = data[num];
-          }
-          const infoWindow = getInfoWindow(); //信息窗口
-          //this.onSetPersonCard(personInfo); //查询数据，不需要了
-          map.openInfoWindow(infoWindow, currentPoint); //打开窗口
-          this.setState({ cperson: personInfo.id }, this.syncInfoWindow());
-          //使用中等大小的图标
-          const id = `M${personInfo.id}`;
-          const divId = `Mid${personInfo.id}`;
-          let img = this.cacheImg[id];
-          const image = new Image(); //进行深拷贝
-          if (typeof (img) === 'undefined') {
-            img = this.cacheImg[personInfo.id];
-            img.width = 90;
-          }
-          image.src = img.src;
-          image.name = img.name;
-          image.width = img.width;
-
-          document.getElementById(divId).appendChild(image);
-          this.currentPersonId = personInfo.id;
-        });
-        cimg.addEventListener('mouseleave', () => {
-          map.closeInfoWindow();
-        });
-      }
+    }
+    for (let j = 0; j < imgdivs.length; j += 1) {
+      const cimg = imgdivs[j];
+      cimg.addEventListener('mouseenter', (event) => {
+        const pId = addImageListener(map, ids, dataCache, getInfoWindow, event, imgwidth, type);
+        this.setState({ cperson: pId }, this.syncInfoWindow());
+        const id = `${pId}`;
+        const divId = `Mid${pId}`;
+        copyImage(id, divId, 90);
+        this.currentPersonId = pId;
+      });
+      cimg.addEventListener('mouseleave', () => {
+        map.closeInfoWindow();
+      });
     }
   };
 
@@ -473,76 +277,13 @@ export default class ExpertMap extends PureComponent {
         }, showLoadErrorMessage,
       );
 
+      that.hideLoading();
       // cache images
       if (sysconfig.Map_Preload) {
-        that.cacheInfo(ids);
-        that.cacheBiGImage(ids, 90);
-        that.cacheBiGImage(ids, 160);
+        cacheInfo(ids, listPersonByIds, profileUtils);
         console.log('cached in!!!yes!');
       }
     }, showLoadErrorMessage);
-  };
-
-  cacheInfo = (ids) => { // 缓存基本信息
-    const resultPromise = [];
-    let count = 0;
-    let count1 = 0;
-    for (let i = 0; i < ids.length; i += 100) { // 可控制cache的数目
-      const cids = ids.slice(i, i + 100);
-      resultPromise[count] = listPersonByIds(cids);
-      count += 1;
-    }
-    resultPromise.map((r) => {
-      r.then((data) => {
-        for (const p of data.data.persons) {
-          this.cacheData[p.id] = p;
-          const url = profileUtils.getAvatar(p.avatar, p.id, 50);
-          const img = new Image();
-          img.src = url;
-          img.name = p.id;//不能使用id,否则重复
-          img.onerror = () => {
-            img.src = blankAvatar;
-          };
-          this.cacheImg[p.id] = img;
-        }
-        count1 += 1;
-        if (count === count1) {
-          this.hideLoading();
-        }
-      });
-      return true;
-    });
-  };
-
-  cacheBiGImage = (ids, width) => {
-    let head = ''; //图片名称
-    if (width === 90) { //中等大小的图片
-      head = 'M';
-    } else if (width === 160) { //特别大的图片
-      head = 'L';
-    }
-    for (let i = 0; i < ids.length; i += 100) { //可控制cache的数目
-      const cids = ids.slice(i, i + 100);
-      const resultPromise = listPersonByIds(cids);
-      resultPromise.then(
-        (data) => {
-          for (const p of data.data.persons) {
-            let name = head;
-            const url = profileUtils.getAvatar(p.avatar, p.id, width);
-            const img = new Image();
-            img.src = url;
-            img.name = p.id;//不能使用id,否则重复
-            name += p.id;
-            this.cacheImg[name] = img;
-          }
-        },
-        () => {
-          console.log('failed');
-        },
-      ).catch((error) => {
-        console.error(error);
-      });
-    }
   };
 
   configBaiduMap = (map) => {
@@ -554,10 +295,11 @@ export default class ExpertMap extends PureComponent {
 
   // 单点鼠标移上效果
   addMouseoverHandler = (marker, personId) => {
+    const { dispatch } = this.props;
     const infoWindow = getInfoWindow();
     marker.addEventListener('mouseover', (e) => {
       if (this.currentPersonId !== personId) {
-        this.onResetPersonCard(); // TODO Load default name,重置其信息
+        onResetPersonCard(dispatch); // TODO Load default name,重置其信息
         //this.onLoadPersonCard(personId); //请求数据，现在不需要了
         e.target.openInfoWindow(infoWindow);
         //this.syncInfoWindow();
@@ -567,46 +309,20 @@ export default class ExpertMap extends PureComponent {
         this.syncInfoWindow();
       }
       //使用中等大小的图标，将图片拷贝过去，和cluster中的一样,一定注意其逻辑顺序啊！
-      const id = `M${personId}`;
+      const id = `${personId}`;
       const divId = `Mid${personId}`;
-      let img = this.cacheImg[id];
-      const image = new Image(); //进行深拷贝
-      if (typeof (img) === 'undefined') {
-        img = this.cacheImg[personId];
-        img.width = 90;
-      }
-      image.src = img.src;
-      image.name = img.name;
-      image.width = img.width;
-
-      document.getElementById(divId).appendChild(image);
+      copyImage(id, divId, 90);
       this.currentPersonId = personId;
     });
     marker.addEventListener('mouseout', (e) => {
       e.target.closeInfoWindow(infoWindow);
     });
     marker.addEventListener('click', () => {
-      this.toggleRightInfo('person', personId);
+      toggleRightInfo('person', personId, dispatch, this.props.expertMap.infoZoneIds);
     });
   };
 
-  // update one person's info.
-  toggleRightInfo = (type, id) => {
-    // TODO cache it.
-    if (this.props.expertMap.infoZoneIds !== id) { // don't change
-      if (id.indexOf(',') >= 0) { // is cluster
-        const clusterIdList = id.split(',');
-        this.props.dispatch({
-          type: 'expertMap/listPersonByIds',
-          payload: { ids: clusterIdList },
-        });
-      }
-      this.props.dispatch({
-        type: 'expertMap/setRightInfo',
-        payload: { idString: id, rightInfoType: type },
-      });
-    }
-  };
+
 
   // 将内容同步到地图中的控件上。
   syncInfoWindow = () => {
@@ -621,7 +337,7 @@ export default class ExpertMap extends PureComponent {
     const model = this.props && this.props.expertMap;
     const { results } = model.geoData;
     let personPopupJsx;
-    const person = this.cacheData[this.state.cperson];
+    const person = dataCache[this.state.cperson];
     if (person) {
       //console.log(person);
       //const url = person.avatar;
@@ -646,36 +362,6 @@ export default class ExpertMap extends PureComponent {
         </div>
       );
     }
-
-    /*console.log(personPopupJsx);
-    console.log(typeof (personPopupJsx));
-    const person = model.personInfo;
-    if (person) {
-      const url = profileUtils.getAvatar(person.avatar, person.id, 90);
-      const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
-      const pos = profileUtils.displayPosition(person.pos);
-      const aff = profileUtils.displayAff(person);
-      const hindex = person && person.indices && person.indices.h_index;
-      const img = this.cacheImg[person.id];
-      console.log('GGGGG');
-
-      personPopupJsx = (
-        <div className="personInfo">
-          <div><img className="img" src={url} alt="IMG" /></div>
-          <div className="info">
-            <div className="nameLine">
-              <div className="right">H-index:<b> {hindex}</b>
-              </div>
-              <div className="name">{name}</div>
-            </div>
-            {pos && <span><i className="fa fa-briefcase fa-fw" />{pos}</span>}
-            {aff && <span><i className="fa fa-institution fa-fw" />{aff}</span>}
-          </div>
-        </div>
-      );
-    }
-    console.log(personPopupJsx);
-    console.log(typeof (personPopupJsx));*/
 
     const rightInfos = {
       global: () => (<RightInfoZoneAll persons={results} />),

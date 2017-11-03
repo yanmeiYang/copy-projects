@@ -7,7 +7,7 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Layout } from 'routes';
 import { sysconfig } from 'systems';
-import { Button } from 'antd';
+import { Button, Modal, Icon, Tabs } from 'antd';
 import { applyTheme } from 'themes';
 import { FormattedMessage as FM } from 'react-intl';
 import queryString from 'query-string';
@@ -20,7 +20,7 @@ import ExpertMap from './expert-map.js';
 import styles from './ExpertMapPage.less';
 
 const tc = applyTheme(styles);
-const ButtonGroup = Button.Group;
+const [ButtonGroup, TabPane] = [Button.Group, Tabs.TabPane];
 
 const MAP_DISPATCH_KEY = 'map-dispatch';
 
@@ -39,6 +39,7 @@ export default class ExpertMapPage extends React.Component {
     range: '', // Filter by acm, ieee
     hindexRange: '', // Filter by hindex
     type: '0', // 根据地图显示类型，默认为0
+    visible: false, //模态框是否可见
   };
 
   componentWillMount() {
@@ -85,6 +86,9 @@ export default class ExpertMapPage extends React.Component {
       return true;
     }
     if (compare(ns, this.state, 'mapType', 'range', 'hindexRange', 'type')) {
+      return true;
+    }
+    if (ns.visible !== this.state.visible) {
       return true;
     }
     return false;
@@ -157,6 +161,32 @@ export default class ExpertMapPage extends React.Component {
     { key: '5', label: '机构' },
   ];
 
+  showModal = () => {
+    console.log('妈的!!!!');
+    this.setState({
+      visible: true,
+    });
+    console.log(this.state.visible);
+  }
+
+  handleOk = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  }
+
+  handleCancel = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  }
+
+  changeStatistic = (key) => {
+    console.log(key);
+  }
+
 
   render() {
     const { mapType, query, domainId } = this.state;
@@ -203,6 +233,32 @@ export default class ExpertMapPage extends React.Component {
           </div>
 
           <div className={styles.scopes}>
+            <div className={styles.analysis}>
+              <Button onClick={this.showModal}>
+                <Icon type="line-chart" />
+                <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.statistic" />
+              </Button>
+              <Modal
+                title="Results"
+                visible={this.state.visible}
+                onOk={this.handleOk}
+                onCancel={this.handleCancel}
+                footer={[
+                  <Button key="back" size="large" onClick={this.handleCancel}>
+                    <Icon type="download" />
+                    <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.download" />
+                  </Button>,
+                  <Button key="submit" type="primary" size="large" onClick={this.handleOk}>
+                    <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.ok" />
+                  </Button>,
+                ]}
+              >
+                <Tabs defaultActiveKey="1" onChange={this.changeStatistic}>
+                  <TabPane tab="地区" key="1">Content of Tab Pane 1</TabPane>
+                  <TabPane tab="华人" key="2">Content of Tab Pane 2</TabPane>
+                </Tabs>
+              </Modal>
+            </div>
             <div className={styles.switch}>
               <ButtonGroup id="diffmaps">
                 <Button

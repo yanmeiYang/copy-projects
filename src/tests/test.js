@@ -1,20 +1,59 @@
-const pathToRegexp = require('path-to-regexp');
+const {
+  Map,
+} = require('immutable');
 
-// const url = '/api/topic/summary/m/王飞跃 (Feiyue Wang)';
-// console.log('==========', escape(url));
-// console.log('==========', encodeURI(url));
-// console.log('==========', encodeURIComponent(url));
+let time1 = new Date();
 
-// const a = pathToRegexp.compile(escape(url));
-// console.log('>>> ', a());
+const ldata = {};
+for (let i = 0; i <= 1000000; i += 1) {
+  ldata[i] = i;
+}
 
-const escapeURLBracket = (url) => {
-  return url.replace(/\(/g, '%28').replace(/\)/g, '%29').trim();
-};
+console.log('>>> TIME: calclate:', new Date() - time1);
+time1 = new Date();
 
-const unescapeURLBracket = (url) => {
-  return url.replace(/%28/g, '(').replace(/%29/g, ')').trim();
-};
+// change to immutable js
 
-console.log(escapeURLBracket('slkdjf (ksdfj) '));
-console.log(unescapeURLBracket(escapeURLBracket('slkdjf (ksdfj) ')));
+// method 1
+const im = Map(ldata); // 2448
+console.log('>>> TIME: translate1 ', new Date() - time1);
+time1 = new Date();
+
+// method 2
+let im2 = Map();
+for (let i = 0; i <= 1000000; i += 1) {
+  im2 = im2.set(i, i);
+}
+console.log('>>> TIME: translate2 ', new Date() - time1);
+time1 = new Date();
+
+// test merge
+const im3 = im.merge(im2);
+console.log('>>> TIME: merge ', new Date() - time1);
+time1 = new Date();
+
+// test batch modify.
+let im4 = Map();
+im4 = im4.withMutations((map) => {
+  for (let i = 0; i <= 1000000; i += 1) {
+    map.set(i, i);
+  }
+});
+
+console.log('>>> TIME: translate2 ', new Date() - time1);
+time1 = new Date();
+
+// print
+// console.log(im);
+// console.log(im2);
+// console.log(im3);
+console.log(im4);
+// const map1 = Map({
+//   a: 1,
+//   b: 2,
+//   c: 3,
+// });
+// const map2 = map1.set('b', 2);
+// const map3 = map1.set('b', 50);
+
+console.log('>>> TIME: ALL ', new Date() - time1);

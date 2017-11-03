@@ -147,7 +147,7 @@ const getDefaultSystemConfigs = (system, source) => {
     // 临时属性，过度属性
     USE_NEXT_EXPERT_BASE_SEARCH: false, // 是否使用新的后端来搜索新的结果。
 
-  },
+  };
 };
 
 /***************************************************
@@ -168,4 +168,4 @@ if (sysconfig.EnableLocalLocale) {
 }
 addLocaleData('react-intl/locale-data/' + sysconfig.Locale);
 
-module.exports = { sysconfig, defaultSystemConfigs, CurrentSystemConfig };
+module.exports = { sysconfig, getDefaultSystemConfigs, CurrentSystemConfig };

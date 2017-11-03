@@ -95,7 +95,7 @@ export default class Header extends Component {
   // };
 
   render() {
-    console.log('>>>>>>>HEADER');
+    // console.log('>>>>>>>HEADER');
 
     const { logoZone, searchZone, infoZone, rightZone } = this.props;
     const { onSearch, fixAdvancedSearch, disableAdvancedSearch, query, app } = this.props;

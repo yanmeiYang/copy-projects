@@ -90,7 +90,7 @@ export default class ExpertMapPage extends React.Component {
     return false;
   }
 
-  onDomainChange = (domain) => {
+  onDomainChange = (domain) => { //修改url,shouldComponentUpdate更新
     const { dispatch } = this.props;
     dispatch(routerRedux.push({ pathname: '/expert-map', search: `?domain=${domain.id}` }));
   };
@@ -103,7 +103,7 @@ export default class ExpertMapPage extends React.Component {
     this.setState({ hindexRange: key });
   };
 
-  onSearch = (data) => {
+  onSearch = (data) => { //修改url,shouldComponentUpdate更新
     const { dispatch } = this.props;
     if (data.query) {
       this.setState({ query: data.query });
@@ -126,18 +126,18 @@ export default class ExpertMapPage extends React.Component {
     this.setState({ mapType });
   };
 
-  searchMapByDomain = (domainEBID) => {
+  searchMapByDomain = (domainEBID) => { //models里面重新查询数据
     const { dispatch } = this.props;
     dispatch({ type: 'expertMap/searchExpertBaseMap', payload: { eb: domainEBID } });
     this.resetRightInfo();
   };
 
-  searchMapByQuery = (query) => {
+  searchMapByQuery = (query) => { //models里面重新查询数据
     this.props.dispatch({
       type: 'expertMap/searchMap',
       payload: { query: strings.firstNonEmptyQuery(query) },
     });
-    this.resetRightInfo();
+    this.resetRightInfo(); //右边的置为全局的
   };
 
   resetRightInfo = () => {
@@ -161,9 +161,6 @@ export default class ExpertMapPage extends React.Component {
   render() {
     const { mapType, query, domainId } = this.state;
     const options = { ...this.state, title: this.titleBlock };//以便传入到组件里面
-    console.log(this.state);
-    console.log(this.props);
-    console.log(sysconfig.HotDomains_Type + '###################');
     return (
       <Layout
         contentClass={tc(['expertMapPage'])}

@@ -664,15 +664,6 @@ export default class ExpertGoogleMap extends React.Component {
     this.props.dispatch({ type: 'expertMap/searchMap', payload: { query } });
   }
 
-  goto = () => {
-    const href = window.location.href;
-    window.location.href = href.replace('expert-googlemap', 'expert-map');
-  };
-
-  reload = () => {
-    const href = window.location.href;
-    window.location.href = href;
-  };
 
   listPersonDone = (map, ids, data, infowindow, projection) => {
     const imgwidth = 45;

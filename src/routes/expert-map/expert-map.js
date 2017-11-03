@@ -87,27 +87,8 @@ export default class ExpertMap extends PureComponent {
 
   // EVENTS ---------------------------------------------------------------
 
-  onLoadPersonCard = (personId) => {
-    this.props.dispatch({ type: 'expertMap/getPersonInfo', payload: { personId } });
-  };
-
   onResetPersonCard = () => {
     this.props.dispatch({ type: 'expertMap/resetPersonInfo' });
-  };
-
-  onSetPersonCard = (personInfo) => {
-    this.props.dispatch({
-      type: 'expertMap/getPersonInfoSuccess',
-      payload: { data: { data: personInfo } },
-    });
-  };
-
-  onExpertBaseChange = (id, name) => {
-    const { filters } = this.props.search;
-    Object.keys(filters).forEach((f) => {
-      delete filters[f];
-    });
-    this.onFilterChange('eb', { id, name }, true);// Special Filter;
   };
 
   // TOOLS ---------------------------------------------------------------
@@ -378,128 +359,128 @@ export default class ExpertMap extends PureComponent {
     const filterRange = range || 'all';
 
     waitforBMap(200, 100, () => {
-        if (!place || !place.results) {
-          that.hideLoading();
-          return;
-        }
-        this.showOverLay();
+      if (!place || !place.results) {
+        that.hideLoading();
+        return;
+      }
+      this.showOverLay();
 
-        const conf = this.mapConfig[mapType] || this.mapConfig[0];// init map instance.
-        const map = new window.BMap.Map('allmap', {
-          minZoom: conf.minscale,
-          maxZoom: conf.maxscale,
+      const conf = this.mapConfig[mapType] || this.mapConfig[0];// init map instance.
+      const map = new window.BMap.Map('allmap', {
+        minZoom: conf.minscale,
+        maxZoom: conf.maxscale,
+      });
+      this.map = map; // set to global;
+      map.centerAndZoom(new window.BMap.Point(
+        map1 ? map1.getCenter().lng : sysconfig.CentralPosition.lng,
+        map1 ? map1.getCenter().lat : sysconfig.CentralPosition.lat,
+      ), conf.scale);
+
+      this.configBaiduMap(map);
+      map1 = this.map; // 地图刷新前，用于存储上次浏览的地点
+
+      if (mapType === '1') {
+        bigAreaConfig.map((ac) => {
+          map.addOverlay(new window.BMap.Label(ac.label, {
+            position: new window.BMap.Point(ac.x, ac.y),
+          }));
+          return false;
         });
-        this.map = map; // set to global;
-        map.centerAndZoom(new window.BMap.Point(
-          map1 ? map1.getCenter().lng : sysconfig.CentralPosition.lng,
-          map1 ? map1.getCenter().lat : sysconfig.CentralPosition.lat,
-        ), conf.scale);
+      }
 
-        this.configBaiduMap(map);
-        map1 = this.map; // 地图刷新前，用于存储上次浏览的地点
+      // 确定 hindex Ranges 的Filter.
+      const hindexRangeConfig = findMapFilterHindexRangesByKey(hindexRange);
+      const maxHindex = hindexRangeConfig ? hindexRangeConfig.boundary : 20000;
 
-        if (mapType === '1') {
-          bigAreaConfig.map((ac) => {
-            map.addOverlay(new window.BMap.Label(ac.label, {
-              position: new window.BMap.Point(ac.x, ac.y),
-            }));
-            return false;
-          });
+      const markers = [];
+      const pId = [];
+      let counts = 0;
+
+      // better sort when first get results, in reducers.
+      place.results.sort((a, b) => b.hindex - a.hindex);
+
+      const ids = [];
+      // Loop all results.
+      for (const pr of place.results) {
+        if (counts > maxHindex) {
+          break;
         }
+        ids.push(pr.id);
+        dataMap[pr.id] = pr;
+        const newplace = findPosition(mapType, pr);
+        const label = new window.BMap.Label(`<div>${pr.name}</div><div style='display: none;'>${pr.id}</div>`);
+        label.setStyle({
+          color: 'black',
+          fontSize: '12px',
+          border: 'none',
+          backgroundColor: 'transparent',
+          fontWeight: 'bold',
+          textAlign: 'center',
+          width: '130px',
+          textShadow: '1px 1px 2px white, -1px -1px 2px white',
+          fontStyle: 'italic',
+        });
+        label.setOffset(new window.BMap.Size(-55.5, 25));
 
-        // 确定 hindex Ranges 的Filter.
-        const hindexRangeConfig = findMapFilterHindexRangesByKey(hindexRange);
-        const maxHindex = hindexRangeConfig ? hindexRangeConfig.boundary : 20000;
-
-        const markers = [];
-        const pId = [];
-        let counts = 0;
-
-        // better sort when first get results, in reducers.
-        place.results.sort((a, b) => b.hindex - a.hindex);
-
-        const ids = [];
-        // Loop all results.
-        for (const pr of place.results) {
-          if (counts > maxHindex) {
-            break;
+        // 只有经纬度不为空或者0的时候才显示，否则丢弃
+        if (newplace && newplace[1] && (newplace[1] !== 0 && newplace[1] !== 0)) {
+          let include = false;
+          switch (filterRange) {
+            case 'all':
+              include = true;
+              break;
+            case 'acm':
+            case 'ieee':
+              include = pr.fellows.indexOf(range) >= 0;
+              break;
+            case 'chinese':
+              include = pr.is_ch;
+              break;
+            default:
           }
-          ids.push(pr.id);
-          dataMap[pr.id] = pr;
-          const newplace = findPosition(mapType, pr);
-          const label = new window.BMap.Label(`<div>${pr.name}</div><div style='display: none;'>${pr.id}</div>`);
-          label.setStyle({
-            color: 'black',
-            fontSize: '12px',
-            border: 'none',
-            backgroundColor: 'transparent',
-            fontWeight: 'bold',
-            textAlign: 'center',
-            width: '130px',
-            textShadow: '1px 1px 2px white, -1px -1px 2px white',
-            fontStyle: 'italic',
-          });
-          label.setOffset(new window.BMap.Size(-55.5, 25));
 
-          // 只有经纬度不为空或者0的时候才显示，否则丢弃
-          if (newplace && newplace[1] && (newplace[1] !== 0 && newplace[1] !== 0)) {
-            let include = false;
-            switch (filterRange) {
-              case 'all':
-                include = true;
-                break;
-              case 'acm':
-              case 'ieee':
-                include = pr.fellows.indexOf(range) >= 0;
-                break;
-              case 'chinese':
-                include = pr.is_ch;
-                break;
-              default:
-            }
-
-            if (include) {
-              const marker = new window.BMap.Marker(
-                new window.BMap.Point(newplace[1], newplace[0]), // 这里经度和纬度是反着的
-              );
-              marker.setLabel(label);
-              marker.setTop();
-              marker.setIcon(new window.BMap.Icon(
-                  '/images/map/marker_blue_sprite1.png',
-                  new window.BMap.Size(19, 50), {
-                    offset: new window.BMap.Size(0, 0), // 指定定位位置
-                    imageOffset: new window.BMap.Size(0, 0), // 设置图片偏移
-                  },
-                ));
-              pId[counts] = pr.id;
-              markers.push(marker);
-              counts += 1;
-            }
+          if (include) {
+            const marker = new window.BMap.Marker(
+              new window.BMap.Point(newplace[1], newplace[0]), // 这里经度和纬度是反着的
+            );
+            marker.setLabel(label);
+            marker.setTop();
+            marker.setIcon(new window.BMap.Icon(
+              '/images/map/marker_blue_sprite1.png',
+              new window.BMap.Size(19, 50), {
+                offset: new window.BMap.Size(0, 0), // 指定定位位置
+                imageOffset: new window.BMap.Size(0, 0), // 设置图片偏移
+              },
+            ));
+            pId[counts] = pr.id;
+            markers.push(marker);
+            counts += 1;
           }
         }
+      }
 
-        // this.hideLoading();
+      // this.hideLoading();
 
-        // Add Markers
-        waitforBMapLib(
-          200, 100,
-          () => {
-            const markerClusterer = new window.BMapLib.MarkerClusterer(map, {});
-            markerClusterer.addMarkers(markers);
-            for (let m = 0; m < markers.length; m += 1) {
-              this.addMouseoverHandler(markers[m], pId[m]);
-            }
-          }, showLoadErrorMessage,
-        );
+      // Add Markers
+      waitforBMapLib(
+        200, 100,
+        () => {
+          const markerClusterer = new window.BMapLib.MarkerClusterer(map, {});
+          markerClusterer.addMarkers(markers);
+          for (let m = 0; m < markers.length; m += 1) {
+            this.addMouseoverHandler(markers[m], pId[m]);
+          }
+        }, showLoadErrorMessage,
+      );
 
-        // cache images
-        if (sysconfig.Map_Preload) {
-          that.cacheInfo(ids);
-          that.cacheBiGImage(ids, 90);
-          that.cacheBiGImage(ids, 160);
-          console.log('cached in!!!yes!');
-        }
-      }, showLoadErrorMessage);
+      // cache images
+      if (sysconfig.Map_Preload) {
+        that.cacheInfo(ids);
+        that.cacheBiGImage(ids, 90);
+        that.cacheBiGImage(ids, 160);
+        console.log('cached in!!!yes!');
+      }
+    }, showLoadErrorMessage);
   };
 
   cacheInfo = (ids) => { // 缓存基本信息

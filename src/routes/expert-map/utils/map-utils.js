@@ -142,7 +142,6 @@ const findarea = (results, place) => {
       case 'Colorado':
       case 'Arizona':
       case 'New Mexico':
-      // case 'Washington':
       case 'Oregon':
       case 'Nevada':
       case 'California':
@@ -318,8 +317,31 @@ function waitforBMapLib(tryTimes, interval, success, failed) {
   }, interval);
 }
 
-// -----------------------------------
+function addMouseoverHandler(marker, personId) {
 
+}
+
+function detachCluster(clusterPanel) {
+  if (clusterPanel != null && clusterPanel.parentNode != null) {
+    const imgdivs = document.getElementsByName('scholarimg');
+    for (let i = 0; i < imgdivs.length;) {
+      imgdivs[i].parentNode.removeChild(imgdivs[i]);
+    }
+    clusterPanel.parentNode.removeChild(clusterPanel);
+  }
+}
+
+// -----------------------------------
+const resetRightInfoToGlobal = (dispatch) => {
+  dispatch({
+    type: 'expertMap/setRightInfo',
+    payload: { idString: '', rightInfoType: 'global' },
+  });
+};
+
+const onResetPersonCard = (dispatch) => {
+  dispatch({ type: 'expertMap/resetPersonInfo' });
+};
 
 const MapFilterRanges = [
   { key: 'all', label: 'ALL' },
@@ -376,9 +398,11 @@ const bigAreaConfig = [
   { label: '中部', x: -107.5, y: 34.5 },
 ];
 
+
 module.exports = {
   findPosition, getById, waitforBMap, waitforBMapLib,
-  insertAfter,
+  insertAfter, resetRightInfoToGlobal,
+  onResetPersonCard, addMouseoverHandler, detachCluster,
   bigAreaConfig,
   MapFilterRanges, MapFilterHindexRange,
   findMapFilterRangesByKey, findMapFilterHindexRangesByKey,

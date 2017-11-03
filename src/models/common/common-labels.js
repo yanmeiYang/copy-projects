@@ -1,37 +1,41 @@
 /**
  * Bo Gao on 2017-10-27
  */
+import { config } from 'utils';
+import * as bridge from 'utils/next-bridge';
+import * as labelService from 'services/label-service';
+
 export default {
   namespace: 'commonLabels',
 
   state: {
-    tags: null,
+    tagMap: {},
   },
 
   subscriptions: {},
 
   effects: {
-    * loadTagsBatch({ payload }, { call, put }) {
-      // const { groupCategory, categoryTemplate } = payload;
-      // callback data.
-      // const data = yield call(uconfigService.listByCategory, groupCategory);
-      // if (data && data.data && data.data.data) {
-      //   const categories = [];
-      //   data.data.data.map((item) => {
-      //     const newCategory = categoryTemplate
-      //       .replace('{id}', item.id)
-      //       .replace('{key}', item.key)
-      //       .replace('{value}', item.value);
-      //     categories.push({ id: item.id, name: item.key, category: newCategory });
-      //     console.log('data is: ', item, 'key is : ', newCategory);
-      // return true;
-      // });
-      // yield put({ type: 'setCategories', payload: { categories } });
-      // }
+    // In Component Effects. Hahahaha
+    * add({ payload }, { call, put }) {
+      console.log(payload);
+      const { targetId, tag } = payload;
+      if (!targetId || !tag) {
+        return false;
+      }
+      const data = yield call(labelService.addLabelToEntity, payload);
+      if (data.success && data.data && data.data.succeed) {
+        return true;
+        // yield put({ type: 'addSuccess', payload: { tag } });
+      }
+      return false;
     },
-
   },
 
-  reducers: {},
+  reducers: {
+    addSuccess(state, { payload: { tag } }) {
+      const newTags = [...(state.tags || []), tag];
+      return { ...state, tags: newTags };
+    },
+  },
 
 };

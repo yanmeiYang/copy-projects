@@ -1,62 +1,16 @@
 [
   {
-    "action": "search",
+    "action": "alter",
     "parameters": {
-      "query": "Medical Robotics",
-      "offset": 0,
-      "size": 20,
-      "searchType": "allb",
-      "aggregation": [
-        "gender",
-        "h_index",
-        "location",
-        "language"
+      "ids": [
+        "54410a12dabfae7d84bd76c2"
       ],
-      "switches": [
-        "translate_all"
-      ],
-      "haves": {
-        "eb": [
-          "5949c2f99ed5dbc2147fd854",
-          "592f8af69ed5db8bb68d713b",
-          "58ddbc229ed5db001ceac2a4",
-          "592f6d219ed5dbf59c1b76d4",
-          "aminer"
-        ]
-      },
-      "filters": {
-        "dims": {
-          "eb": [
-            null
-          ]
+      "dims": {
+        "systag": {
+          "op": "upsert",
+          "value": "sdfsdf"
         }
       }
-    },
-    "schema": {
-      "person": [
-        "id",
-        "name",
-        "name_zh",
-        {
-          "profile": [
-            "position",
-            "affiliation"
-          ]
-        },
-        {
-          "indices": [
-            "hindex",
-            "gindex",
-            "numpubs",
-            "citation",
-            "newStar",
-            "risingStar",
-            "activity",
-            "diversity",
-            "sociability"
-          ]
-        }
-      ]
     }
   }
 ]

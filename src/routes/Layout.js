@@ -44,6 +44,7 @@ export default class Layout extends Component {
     contentClass: PropTypes.string,
     showHeader: PropTypes.bool,
     showNavigator: PropTypes.bool,
+    showSidebar: PropTypes.bool,
 
     fixAdvancedSearch: PropTypes.bool, // 是否固定是三个框的高级搜索
     disableAdvancedSearch: PropTypes.bool, // 禁止高级搜索
@@ -56,6 +57,7 @@ export default class Layout extends Component {
   static defaultProps = {
     showHeader: true,
     showNavigator: sysconfig.Layout_HasNavigator,
+    showSidebar: sysconfig.Layout_HasSideBar,
     sidebar: theme.sidebar,
     footer: theme.footer,
     fixAdvancedSearch: false, // TODO use localStorage to cache user habits.
@@ -73,7 +75,7 @@ export default class Layout extends Component {
   render() {
     // console.count('>>>>>>>>>> App Render'); // TODO performance
     const { sidebar, footer } = this.props;
-    const { contentClass, showHeader, showNavigator } = this.props;
+    const { contentClass, showHeader, showNavigator, showSidebar } = this.props;
     const { dispatch, app, loading } = this.props;
     const { user, roles } = app;
 
@@ -146,7 +148,7 @@ export default class Layout extends Component {
 
           {/* -------- Left Side Bar -------- */}
 
-          {sysconfig.Layout_HasSideBar &&
+          {showSidebar &&
           <Sider className={tc(['sider'])}>
             {hole.fill(sidebar)}
           </Sider>}

@@ -37,9 +37,6 @@ class RanksHelp extends React.Component {
           <Menu.Item key="h-index">
             <a href="#h-index">h-index</a>
           </Menu.Item>
-          <Menu.Item key="longevity">
-            <a href="#longevity">Longevity</a>
-          </Menu.Item>
           <Menu.Item key="impact-factor">
             <a href="#impact-factor">Impact Factor</a>
           </Menu.Item>
@@ -48,9 +45,6 @@ class RanksHelp extends React.Component {
           </Menu.Item>
           <Menu.Item key="diversity">
             <a href="#diversity">Diversity</a>
-          </Menu.Item>
-          <Menu.Item key="sociability">
-            <a href="#sociability">Sociability</a>
           </Menu.Item>
           <Menu.Item key="uptrend">
             <a href="#uptrend">Uptrend</a>
@@ -68,113 +62,67 @@ class RanksHelp extends React.Component {
         <div style={{ marginTop: '30px', maxWidth: '1128px' }} className="content-inner">
           <h2 className={styles.ranksTitle}><a name="citation">#citation</a></h2>
           <div className={styles.ranksContent}>
-            <p>The number of citations of all publications by an expert.</p>
+            <p>专家对所有出版物的引用次数。</p>
           </div>
           <h2 className={styles.ranksTitle}><a href="publication">#publication</a></h2>
           <div className={styles.ranksContent}>
-            <p>The number of all publications by an expert.</p>
+            <p>专家的所有出版物的数量。</p>
           </div>
           <h2 className={styles.ranksTitle}><a name="h-index">h-index</a></h2>
           <div className={styles.ranksContent}>
-            <p>An expert has index h if h of his or her N papers have at least h citations
-              each, and the other (N − h) papers have at most h citations each.</p>
-          </div>
-          <h2 className={styles.ranksTitle}><a name="longevity">Longevity</a></h2>
-          <div className={styles.ranksContent}>
-            <p>Longevity reflects the length of one author’s academic life. We consider the
-              year when one author published his/her first paper as the beginning year of his/her
-              academic life and the last paper as the end year. Then longevity can be defined
-              as:</p>
-            <p className={styles.ranksContentImg}>
-              <img src="/helpImg/ranks/image001.gif" alt="longevity" style={{ height: '21px' }} />
-            </p>
+            <p>一名科学家的h指数是指其发表的所有论文中有h篇每篇至少被引h次、其余论文每篇被引均小于或等于h次。</p>
           </div>
           <h2 className={styles.ranksTitle}><a name="impact-factor">Impact Factor</a></h2>
           <div className={styles.ranksContent}>
-            <p> Basically, the score reflects the importance of a publication venue and is
-              calculated by http://en.wikipedia.org/wiki/Impact_factor. In Arnetminer, for
-              evaluating a paper published at a venue, we further consider the paper length.
-              Specifically, if the paper length &lt; 3 pages, then we take 1/5 of impact factor of
-              the publication venue; if the 3&lt;= length &lt;5 pages, we take 1/3 of the factor
-              of
-              the publication venue. Formally, the new score can be defined as follow:</p>
+            <p> Impact Factor反映了论文在期刊中的重要性（参照http://en.wikipedia.org/wiki/Impact_factor）。
+              为了更好的评估一篇论文，在AMiner中我们进一步考虑了论文的长度。具体来说，如果论文的篇幅 &lt; 3，那么
+              我们认为这篇论文在期刊中的impact factor为1/5；如果 3 &lt;=论文的篇幅 &lt; 5，那么我们认为这篇论文
+              在期刊中的impact factor为1/3。定义公式如下：</p>
             <p className={styles.ranksContentImg}>
               <img src="/helpImg/ranks/image002.gif" alt="impact factor"
                    style={{ height: '62px' }} />
             </p>
-            <p> In the definition, G is a group of papers. IC (P) means the impact of conference
-              in
-              which the paper published. Weight(P) equals to 1/5 if the paper length&lt;3, while
-              weight(P) equals to 1/3 if the 3&lt;= length &lt;5.
+            <p> G是一组论文。IC（P）是指论文发表会议的影响。如果篇幅长度&lt; 3，权重（P）等于1/5，如果3&lt;=篇幅长度&lt;5，权重（P）等于1/3。
             </p>
           </div>
           <h2 className={styles.ranksTitle}><a name="activity">Activity</a></h2>
           <div className={styles.ranksContent}>
             <p>
-              People's activityis simply defined based on one's papers published in the last
-              years.
-              We consider the importance of each paper and thus define the activity score as:
+              学者的activity是根据过去几年发表的论文定义的。我们考虑了每篇论文的重要性，从而将活动定义为：
             </p>
             <p className={styles.ranksContentImg}>
               <img src="/helpImg/ranks/image003.gif" alt="activity" style={{ height: '62px' }} />
             </p>
             <p>
-              In the definition, in the year n (n belong to recent N years), G is a group of
-              papers
-              published by author A in the year n. Weight(n) = α this year – n. We tentatively set
-              the values for N and α. Specifically, we set N = 4 and α = 0.75, if the
-              current month is in the first half year (month &lt; July); and set N = 3 and α =
-              0.85
-              if the current month is in the second half year.
+              在公式中，n代表最近n年，G是作者A在第n年发表的一组论文。Weight(n)=a-n。N和a的定义如下：如果当前月份是上半年（1-6月），
+              我们设N=4，a=0.75。如果当前月份是下半年（7-12月），则设N=3，a=0.85。
             </p>
           </div>
           <h2 className={styles.ranksTitle}><a name="diversity">Diversity</a></h2>
           <div className={styles.ranksContent}>
             <p>
-              Generally, an expert's research may include several different research fields.
-              Diversity is defined to quantitatively reflect the degree. In particular, we first
-              use
-              the author-conference-topic model author-conference-topic model (Tang, et al.
-              2008) to obtain the research fields for each expert. Then we automatically assign
-              his
-              papers to each topic. We calculate the topic distribution based on the assignment
-              results. Given expert A, the research topic distribution&nbsp;
+              G一般来说，专家的研究可以包括几个不同的领域。我们将Diversity定义为定量反应程度。我们通过作者参加会议主题为模型来获取每位
+              专家的研究领域。然后我们将他的论文分配给每个主题。我们根据分配结果计算主题分布。给予专家A研究主题分布&nbsp;
               <img style={{ height: '21px', width: '35px', verticalAlign: 'middle' }} alt=""
                    src="/helpImg/ranks/image004.gif" />
-              &nbsp;is defined as
+              &nbsp;定义为：
             </p>
             <p className={styles.ranksContentImg}>
               <img src="/helpImg/ranks/image005.gif" alt="diversity"
                    style={{ width: '257px', height: '42px' }} />
             </p>
             <p>
-              The author diversity is then defined as the entropy of this distribution:
+              作者diversity被定义为这种分布的熵：
             </p>
             <p className={styles.ranksContentImg}>
               <img src="/helpImg/ranks/image006.gif" alt=""
                    style={{ height: '62px', width: '314px' }} />
             </p>
           </div>
-          <h2 className={styles.ranksTitle}><a name="sociability">Sociability</a></h2>
-          <div className={styles.ranksContent}>
-            <p>The score of sociability is basically defined based on how many coauthors an expert
-              has. We define the score as :</p>
-            <p className={styles.ranksContentImg}>
-              <img src="/helpImg/ranks/image007.gif" alt="activity" style={{ height: '62px' }} />
-            </p>
-            <p>where #copapercdenotes the number of papers coauthored between the expert and the
-              coauthor c.In the next step, we will further consider the location, organization,
-              nationality information, and research fields.</p>
-          </div>
           <h2 className={styles.ranksTitle}><a name="uptrend">Uptrend</a></h2>
           <div className={styles.ranksContent}>
-            <p>Nothing can catch people's eyes more than a rising star. We useuptrend to define
-              therising degreeof a researcher. The information of each author’s paper including
-              the
-              published date and conference's impact factor. We use Least Squares Method to fit a
-              curve from published papers in recent N years. Then we use the curve to predict
-              one's
-              score in the next year, which is defined as the score of Uptrend, formally</p>
+            <p>没有什么比rising star更吸引人了。我们用uptrend来定义研究者的理论程度。作者每篇论文的信息，包括公布的日期和会议的影响因子。
+              我们使用最小二乘法来拟合最近N年发表论文的曲线。然后我们用曲线来预测下一年的得分，这个比例被定义为uptrend的得分公式：</p>
             <p className={styles.ranksContentImg}>
               <img src="/helpImg/ranks/image008.gif" alt="activity" />
               <br />
@@ -182,26 +130,20 @@ class RanksHelp extends React.Component {
               <img src="/helpImg/ranks/image009.gif" alt="activity"
                    style={{ width: '509px', height: '21px' }} />
             </p>
-            <p>In this definition,&nbsp;
+            <p>在定义中，&nbsp;
               <img src="/helpImg/ranks/image010.gif" alt=""
                    style={{ width: '153px', height: '21px' }} />
-              &nbsp;. N = 3. This year is not included if we calculate the value in the first half
-              year, while this year is included and&nbsp;
+              &nbsp;. N = 3. 计算上半年分值时包含今年&nbsp;
               <img src="/helpImg/ranks/image011.gif" alt=""
                    style={{ width: '172px', height: '42px' }} />
-              &nbsp;if we calculate the value in the second half year.
-            </p>
-            <p>For&nbsp;
-              <a href="http://arnetminer.org/topicBrowser.do">all the 200 topics</a>
-              , we will calculate an author’s uptrend in each topic.
+              &nbsp;，而下半年时不包括今年。
             </p>
           </div>
           <h2 className={styles.ranksTitle}>
             <a name="new-star">New star</a></h2>
           <div className={styles.ranksContent}>
-            <p>New star has a short academic longevity (&lt;=5 years). The score is based on&nbsp;
-              <a href="#b309">activity</a>
-              .
+            <p>第一篇论文发表年份之今年 &lt;=5的，我们称之为New star，得分基于&nbsp;
+              <a href="#activity">activity</a>。
             </p>
           </div>
           <h2 className={styles.ranksTitle}><a name="search-rank">专家搜索排序</a></h2>
@@ -221,6 +163,15 @@ class RanksHelp extends React.Component {
               <br /><br />
               例如machine learning里近期热度是neural network最高，全局热度里svm还算比较高，而技术源头可以看出machine
               learning主要由ai，pattern recognition, inductive inference等技术发展而来
+              <br /><br />
+              趋势图中节点按每年的热度（支流宽度）排序，热度越高顺序越靠上。
+              <br /><br />
+              关键人物根据以下条件选出：
+              <br />
+              1、该领域的第一篇炉温；
+              <br />
+              2、该领域按照时间正规化后citation排序的前K篇论文，Citation按时间normalize的方法是 normalized_citation =
+              citation - 100 * log_2(current_year - pub_year + 1)
             </p>
           </div>
         </div>

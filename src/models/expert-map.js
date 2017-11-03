@@ -82,6 +82,10 @@ export default {
       return { ...state, infoZoneIds: idString, rightInfoType };
     },
 
+    setClusterInfo(state, { payload: { data } }) {
+      return { ...state, clusterPersons: data };
+    },
+
     searchMapSuccess(state, { payload: { data } }) {
       // TODO translate data into target format.
       const geoSearchData = [];

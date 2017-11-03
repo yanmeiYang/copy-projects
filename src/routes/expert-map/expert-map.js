@@ -116,17 +116,18 @@ export default class ExpertMap extends PureComponent {
   listPersonDone = (map, ids) => {
     const imgwidth = 45;
     const type = 'baidu';
+    const model = this.props && this.props.expertMap;
 
     const imgdivs = document.getElementsByName('scholarimg');
     if (imgdivs !== null && imgdivs.length !== 0) {
       for (let i = 0; i < ids.length; i += 1) {
-        showTopImages(ids, dataCache, imageCache, i, imgwidth, blankAvatar, imgdivs);
+        showTopImages(ids, i, imgwidth, blankAvatar, imgdivs);
       }
     }
     for (let j = 0; j < imgdivs.length; j += 1) {
       const cimg = imgdivs[j];
       cimg.addEventListener('mouseenter', (event) => {
-        const pId = addImageListener(map, ids, dataCache, getInfoWindow, event, imgwidth, type);
+        const pId = addImageListener(map, ids, getInfoWindow, event, imgwidth, type);
         this.setState({ cperson: pId }, this.syncInfoWindow());
         const id = `${pId}`;
         const divId = `Mid${pId}`;
@@ -337,12 +338,9 @@ export default class ExpertMap extends PureComponent {
     const model = this.props && this.props.expertMap;
     const { results } = model.geoData;
     let personPopupJsx;
-    const person = dataCache[this.state.cperson];
+    let person = dataCache[this.state.cperson];
     if (person) {
-      //console.log(person);
-      //const url = person.avatar;
-      const divId = `Mid${person.id}`;
-      const name = person.name;
+      const [divId, name] = [`Mid${person.id}`, person.name];
       const pos = person && person.pos && person.pos[0] && person.pos[0].n;
       const aff = person && person.aff && person.aff.desc;
       const hindex = person && person.indices && person.indices.h_index;
@@ -350,6 +348,28 @@ export default class ExpertMap extends PureComponent {
       personPopupJsx = (
         <div className="personInfo">
           <div id={divId} />
+          <div className="info">
+            <div className="nameLine">
+              <div className="right">H-index:<b> {hindex}</b>
+              </div>
+              <div className="name">{name}</div>
+            </div>
+            {pos && <span><i className="fa fa-briefcase fa-fw" />{pos}</span>}
+            {aff && <span><i className="fa fa-institution fa-fw" />{aff}</span>}
+          </div>
+        </div>
+      );
+    } else { //数据没有缓存的时候自己加载
+      person = model.personInfo;
+      const url = profileUtils.getAvatar(person.avatar, person.id, 90);
+      const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
+      const pos = profileUtils.displayPosition(person.pos);
+      const aff = profileUtils.displayAff(person);
+      const hindex = person && person.indices && person.indices.h_index;
+
+      personPopupJsx = (
+        <div className="personInfo">
+          <div><img className="img" src={url} alt="IMG" /></div>
           <div className="info">
             <div className="nameLine">
               <div className="right">H-index:<b> {hindex}</b>

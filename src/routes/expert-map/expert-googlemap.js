@@ -286,6 +286,8 @@ export default class ExpertGoogleMap extends React.Component {
   listPersonDone = (map, ids, projection) => {
     const imgwidth = 45;
     const type = 'google';
+    const model = this.props && this.props.expertMap;
+
     const infowindow = new window.google.maps.InfoWindow({
       content: "<div id='author_info' class='popup'></div>",
     });
@@ -293,13 +295,13 @@ export default class ExpertGoogleMap extends React.Component {
     const imgdivs = document.getElementsByName('scholarimg');
     if (imgdivs !== null && imgdivs.length !== 0) {
       for (let i = 0; i < ids.length; i += 1) {
-        showTopImages(ids, dataCache, imageCache, i, imgwidth, blankAvatar, imgdivs);
+        showTopImages(ids, i, imgwidth, blankAvatar, imgdivs);
       }
     }
     for (let j = 0; j < imgdivs.length; j += 1) {
       const cimg = imgdivs[j];
       cimg.addEventListener('mouseenter', (event) => {
-        const pId = addImageListener(map, ids, dataCache, '', event, imgwidth, type, projection, infowindow);
+        const pId = addImageListener(map, ids, '', event, imgwidth, type, projection, infowindow);
         this.setState({ cperson: pId }, this.syncInfoWindow());
         const id = `${pId}`;
         const divId = `Mid${pId}`;

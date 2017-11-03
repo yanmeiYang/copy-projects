@@ -1,4 +1,9 @@
 import continentscountries from 'public/lab/expert-map/continentscountries.json';
+import {
+  ifAllInCache,
+  dataCache,
+  imageCache
+} from './cache-utils.js';
 
 const findPosition = (type, results) => {
   let place = [null, null];
@@ -383,9 +388,10 @@ function showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch
   }
 }
 
-function showTopImages(ids, data, imageCache, i, imgwidth, blankAvatar, imgdivs) {
+function showTopImages(ids, i, imgwidth, blankAvatar, imgdivs) {
   const cimg = imgdivs[i];
-  const personInfo = data[ids[i]];
+  let personInfo = dataCache[ids[i]];
+  personInfo = personInfo && model.personInfo;// 没有缓存的时候
   let name;
   console.log(personInfo);
   if (personInfo) {
@@ -455,7 +461,7 @@ function showTopImages(ids, data, imageCache, i, imgwidth, blankAvatar, imgdivs)
   }
 }
 
-function addImageListener(map, ids, data, getInfoWindow, event, imgwidth, type, projection, infowindow) {
+function addImageListener(map, ids, getInfoWindow, event, imgwidth, type, projection, infowindow) {
   // get current point.
   const apos = getById('allmap').getBoundingClientRect();
   const cpos = event.target.getBoundingClientRect();
@@ -478,42 +484,36 @@ function addImageListener(map, ids, data, getInfoWindow, event, imgwidth, type, 
   let num = 0;
   let personInfo;
   if (chtml.split('@@@@@@@').length > 1) { //当时想到这种办法也挺不容易的，保留着吧，注意一个是id一个是序号
-    personInfo = data[ids[chtml.split('@@@@@@@')[1]]];
+    personInfo = dataCache[ids[chtml.split('@@@@@@@')[1]]];
   } else {
     if (event.target.tagName.toUpperCase() === 'DIV') {
       num = event.target.firstChild.name;
     } else if (event.target.tagName.toUpperCase() === 'IMG') {
       num = event.target.name;
     }
-    personInfo = data[num];
+    personInfo = dataCache[num];
   }
-  console.log(personInfo);
-  // //使用中等大小的图标
-  // const id = `${personInfo.id}`;
-  // const divId = `Mid${personInfo.id}`;
-  // let img = imageCache[id];
-  // const image = new Image(); //进行深拷贝
-  // if (typeof (img) === 'undefined') {
-  //   img = imageCache[personInfo.id];
-  //   img.width = 90;
-  // }
-  // image.src = img.src;
-  // image.name = img.name;
-  // image.width = img.width;
-  //
-  // document.getElementById(divId).appendChild(image);
   return personInfo.id;
 }
 
 function toggleRightInfo(type, id, dispatch, infoIds) { // update one person's info.
-  // TODO cache it.
   if (infoIds !== id) { // don't change
     if (id.indexOf(',') >= 0) { // is cluster
       const clusterIdList = id.split(',');
-      dispatch({
-        type: 'expertMap/listPersonByIds',
-        payload: { ids: clusterIdList },
-      });
+      const clusterInfo = ifAllInCache(clusterIdList);
+      console.log(clusterInfo);
+      if (clusterInfo.length !== 0) { //如果全部缓存了的话就从缓存里面取数据，然后存到model里面
+        console.log(clusterIdList);
+        dispatch({
+          type: 'expertMap/setClusterInfo',
+          payload: { data: clusterInfo },
+        });
+      } else {
+        dispatch({
+          type: 'expertMap/listPersonByIds',
+          payload: { ids: clusterIdList },
+        });
+      }
     }
     dispatch({
       type: 'expertMap/setRightInfo',

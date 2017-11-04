@@ -1,8 +1,11 @@
 import continentscountries from 'public/lab/expert-map/continentscountries.json';
+import { listPersonByIds } from 'services/person';
+import * as profileUtils from 'utils/profile-utils';
 import {
   ifAllInCache,
   dataCache,
-  imageCache
+  imageCache,
+  indexCache,
 } from './cache-utils.js';
 
 const findPosition = (type, results) => {
@@ -343,9 +346,8 @@ function showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch
   oDiv.setAttribute('class', 'roundImgContainer');
   insertAfter(oDiv, maindom);
   const thisNode = getById('panel');
+
   // 开始显示图片,按照hindex排序
-
-
   const fenshu = (2 * Math.PI) / ids.length;// 共有多少份，每份的夹角
   for (let i = 0; i < ids.length; i += 1) { //从12点方向开始
     const centerX = (Math.cos((fenshu * i) - (Math.PI / 2)) * ((width / 2) - (imgwidth / 2)))
@@ -358,7 +360,6 @@ function showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch
     imgdiv.setAttribute('style', cstyle);
     imgdiv.setAttribute('class', 'imgWrapper');
     imgdiv.innerHTML = '';
-    //imgdiv.innerHTML = `<img width='${imgwidth}' src='${blankAvatar}' alt='0'>`;
     insertAfter(imgdiv, thisNode);
     thisNode.appendChild(imgdiv);
     imgdiv.addEventListener('click', () => toggleRightInfo('person', ids[i], dispatch, infoIds), false);
@@ -388,12 +389,8 @@ function showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch
   }
 }
 
-function showTopImages(ids, i, imgwidth, blankAvatar, imgdivs) {
-  const cimg = imgdivs[i];
-  let personInfo = dataCache[ids[i]];  //需要缓存的地方
-  //personInfo = personInfo && model.personInfo;// 没有缓存的时候
+const ifNotImgShowName = (personInfo) => { //当作者的头像是空的时候，显示名字
   let name;
-  //console.log(personInfo);
   if (personInfo) {
     if (personInfo.name_zh) {
       const str = personInfo.name_zh.substr(1, 2);
@@ -441,24 +438,65 @@ function showTopImages(ids, i, imgwidth, blankAvatar, imgdivs) {
     name = `&nbsp;&nbsp;${name}`;
     style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:10px;word-wrap:break-word;font-size:10px;';
   }
-  //需要缓存的地方,判断是否存在
-  const img = imageCache[ids[i]];//浅拷贝和深拷贝
-  const image = new Image(); //进行深拷贝
-  if (typeof (img) === 'undefined') {
-    image.src = blankAvatar;
-    image.alt = name;
-    image.width = imgwidth;
-  } else {
+  return { name, style };
+};
+
+const showImagesInDiv = (ids, imgwidth, blankAvatar, imgdivs) => {
+  for (let i = 0; i < ids.length; i += 1) {
+    const cimg = imgdivs[i];
+    const personInfo = dataCache[ids[i]];
+    const showinfo = ifNotImgShowName(personInfo);
+    //需要缓存的地方,判断是否存在
+    const image = new Image(); //进行深拷贝
+    if (typeof (imageCache[ids[i]]) === 'undefined') { //如果没有就先写入缓存
+      const url = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 90);
+      const image2 = new Image();
+      image2.src = url;
+      image2.name = personInfo.id;//不能使用id,否则重复
+      image2.width = 90;
+      image2.onerror = () => {
+        image2.src = blankAvatar;
+      };
+      imageCache[personInfo.id] = image2;
+    }
+    const img = imageCache[ids[i]];//浅拷贝和深拷贝
     image.src = img.src;
     image.name = img.name;
-    image.alt = name;
+    image.alt = showinfo.name;
     image.width = imgwidth;
-    image.style = style;
+    image.style = showinfo.style;
+
+    if (img.src.includes('default.jpg') || img.src.includes('blank_avatar.jpg')) {
+      cimg.innerHTML = `<img id='${personInfo.id}' style='${showinfo.style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='' alt='${showinfo.name}'>`;
+    } else {
+      cimg.appendChild(image);
+    }
   }
-  if (img.src.includes('default.jpg') || img.src.includes('blank_avatar.jpg')) {
-    cimg.innerHTML = `<img id='${personInfo.id}' style='${style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='' alt='${name}'>`;
-  } else {
-    cimg.appendChild(image);
+};
+
+function showTopImages(ids, imgwidth, blankAvatar, imgdivs) {
+  const topEight = ifAllInCache(ids);
+  if (topEight.length === 0) { //有没有缓存的
+    const resultPromise = listPersonByIds(ids);
+    resultPromise.then(
+      (data) => {
+        //加入到缓存中
+        for (let i = 0; i < ids.length; i += 1) {
+          indexCache.push(ids[i]);
+        }
+        for (const p of data.data.persons) {
+          dataCache[p.id] = p;
+        }
+        showImagesInDiv(ids, imgwidth, blankAvatar, imgdivs);
+      },
+      () => {
+        console.log('failed');
+      },
+    ).catch((error) => {
+      console.error(error);
+    });
+  } else { //全部都缓存了
+    showImagesInDiv(ids, imgwidth, blankAvatar, imgdivs);
   }
 }
 
@@ -467,50 +505,77 @@ function addImageListener(map, ids, getInfoWindow, event, imgwidth, type, projec
   const apos = getById('allmap').getBoundingClientRect();
   const cpos = event.target.getBoundingClientRect();
   if (type === 'baidu') {
-    const newPixel = new window.BMap.Pixel(cpos.left - apos.left + imgwidth, cpos.top - apos.top);
+    const newPixel = new window.BMap.Pixel(
+      ((cpos.left - apos.left) + imgwidth),
+      (cpos.top - apos.top),
+    );
     const currentPoint = map.pixelToPoint(newPixel);
     const infoWindow = getInfoWindow(); //信息窗口
-    //this.onSetPersonCard(personInfo); //查询数据，不需要了
     map.openInfoWindow(infoWindow, currentPoint); //打开窗口
   } else {
-    const newPixel = new window.google.maps.Point((cpos.left - apos.left) + imgwidth,
+    const newPixel = new window.google.maps.Point(
+      ((cpos.left - apos.left) + imgwidth),
       (cpos.top - apos.top),
     ); // 这里是地图里面的相对位置
     const currentLatLng = projection.fromContainerPixelToLatLng(newPixel);
     infowindow.setPosition(currentLatLng);
-    //map.openInfoWindow(infoWindow, currentPoint); //打开窗口
     infowindow.open(map);
   }
   const chtml = event.target.innerHTML;
   let num = 0;
   let personInfo;
   if (chtml.split('@@@@@@@').length > 1) { //当时想到这种办法也挺不容易的，保留着吧，注意一个是id一个是序号
-    personInfo = dataCache[ids[chtml.split('@@@@@@@')[1]]];  //需要缓存的地方
+    personInfo = dataCache[ids[chtml.split('@@@@@@@')[1]]];
   } else {
+    console.log(event.target);
+    console.log(event.target.firstChild);
     if (event.target.tagName.toUpperCase() === 'DIV') {
       num = event.target.firstChild.name;
     } else if (event.target.tagName.toUpperCase() === 'IMG') {
       num = event.target.name;
     }
-    personInfo = dataCache[num];  //需要缓存的地方
+    personInfo = dataCache[num];
   }
-  return personInfo.id;
+  if (typeof (personInfo) === 'undefined') {
+    console.log('@@@@@@@@@@@@@@@@@@@@@@@@@2');
+    const resultPromise = listPersonByIds(ids);
+    resultPromise.then(
+      (data) => { //加入到缓存中
+        for (let i = 0; i < ids.length; i += 1) {
+          indexCache.push(ids[i]);
+        }
+        for (const p of data.data.persons) {
+          dataCache[p.id] = p;
+        }
+        personInfo = dataCache[num];
+        return personInfo;
+      },
+      () => {
+        console.log('failed');
+      },
+    ).catch((error) => {
+      console.error(error);
+    });
+  } else {
+    return personInfo;
+  }
 }
+
+const onLoadPersonCard = (dispatch, personId) => { //请求单个人的数据
+  dispatch({ type: 'expertMap/getPersonInfo', payload: { personId } });
+};
 
 function toggleRightInfo(type, id, dispatch, infoIds) { // update one person's info.
   if (infoIds !== id) { // don't change
     if (id.indexOf(',') >= 0) { // is cluster
       const clusterIdList = id.split(',');
       const clusterInfo = ifAllInCache(clusterIdList);
-      console.log(clusterInfo);
       if (clusterInfo.length !== 0) { //如果全部缓存了的话就从缓存里面取数据，然后存到model里面
-        console.log(clusterIdList);
         dispatch({
           type: 'expertMap/setClusterInfo',
           payload: { data: clusterInfo },
         });
       } else {
-        console.log('@@@@@@!!!!!!!!!!');
         dispatch({
           type: 'expertMap/listPersonByIds',
           payload: { ids: clusterIdList },
@@ -539,6 +604,8 @@ const syncInfoWindow = () => {
   const ai = getById('author_info');
   const pi = getById('personInfo');
   if (ai && pi) {
+    //console.log(ai.innerHTML);
+    //console.log(pi.innerHTML);
     ai.innerHTML = pi.innerHTML;
   }
 };

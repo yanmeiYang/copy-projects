@@ -93,9 +93,7 @@ export default class ExpertGoogleMap extends React.Component {
         syncInfoWindow();
       }
       //使用中等大小的图标，将图片拷贝过去，和cluster中的一样,一定注意其逻辑顺序啊！
-      const id = `${personId}`;
-      const divId = `Mid${personId}`;
-      copyImage(id, divId, 90);
+      copyImage(`${personId}`, `Mid${personId}`, 90);
       that.currentPersonId = personId;
     });
 
@@ -281,18 +279,15 @@ export default class ExpertGoogleMap extends React.Component {
 
     const imgdivs = document.getElementsByName('scholarimg');
     if (imgdivs !== null && imgdivs.length !== 0) {
-      for (let i = 0; i < ids.length; i += 1) {
-        showTopImages(ids, i, imgwidth, blankAvatar, imgdivs);
-      }
+      showTopImages(ids, imgwidth, blankAvatar, imgdivs);
     }
     for (let j = 0; j < imgdivs.length; j += 1) {
       const cimg = imgdivs[j];
       cimg.addEventListener('mouseenter', (event) => {
-        const pId = addImageListener(map, ids, '', event, imgwidth, type, projection, infowindow);
+        const p = addImageListener(map, ids, '', event, imgwidth, type, projection, infowindow);
+        const pId = p.id;
         this.setState({ cperson: pId }, syncInfoWindow());
-        const id = `${pId}`;
-        const divId = `Mid${pId}`;
-        copyImage(id, divId, 90);
+        copyImage(`${pId}`, `Mid${pId}`, 90);
         this.currentPersonId = pId;
       });
       cimg.addEventListener('mouseleave', () => {
@@ -423,11 +418,6 @@ export default class ExpertGoogleMap extends React.Component {
         <div id="personInfo" style={{ display: 'none' }}>
           {personPopupJsx && personPopupJsx}
         </div>
-
-        <input id="currentId" type="hidden" />
-        <input id="currentIds" type="hidden" />
-        <input id="statistic" type="hidden" value="0" />
-        <input id="flowstate" type="hidden" value="0" />
       </div>
     );
   }

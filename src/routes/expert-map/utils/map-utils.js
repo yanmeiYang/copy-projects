@@ -510,6 +510,7 @@ function toggleRightInfo(type, id, dispatch, infoIds) { // update one person's i
           payload: { data: clusterInfo },
         });
       } else {
+        console.log('@@@@@@!!!!!!!!!!');
         dispatch({
           type: 'expertMap/listPersonByIds',
           payload: { ids: clusterIdList },

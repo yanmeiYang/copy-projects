@@ -53,12 +53,20 @@ const cacheInfo = (ids) => { // 缓存基本信息
   /*
   如果有的时候不缓存
    */
-
+  const idsneeded = [];
+  for (const id of ids) {
+    if (!indexCache.includes(id)) { //现在的id还没有被缓存
+      idsneeded.push(id);
+    }
+  }
+  if (idsneeded.length === 0) { //没有数据的时候不去缓存
+    return true;
+  }
   const resultPromise = [];
   let count = 0;
   let count1 = 0;
-  for (let i = 0; i < ids.length; i += 100) { // 可控制cache的数目
-    const cids = ids.slice(i, i + 100);
+  for (let i = 0; i < idsneeded.length; i += 100) { // 可控制cache的数目
+    const cids = idsneeded.slice(i, i + 100);
     resultPromise[count] = listPersonByIds(cids);
     count += 1;
   }
@@ -68,11 +76,11 @@ const cacheInfo = (ids) => { // 缓存基本信息
         dataCache[p.id] = p;
         indexCache.push(p.id); //将id存到里面
         //缓存图片
-        const url = profileUtils.getAvatar(p.avatar, p.id, 50);
+        const url = profileUtils.getAvatar(p.avatar, p.id, 90);
         const img = new Image();
         img.src = url;
         img.name = p.id;//不能使用id,否则重复
-        img.width = 50;
+        img.width = 90;
         img.onerror = () => {
           img.src = blankAvatar;
         };

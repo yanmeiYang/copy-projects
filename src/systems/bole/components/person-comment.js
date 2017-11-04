@@ -4,17 +4,17 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Form, Icon, Modal, Button } from 'antd';
+import { F } from 'utils/next-api-builder';
+import { compare } from 'utils/compare';
 import { Labels } from 'routes/common';
 import CKEditor from './ckeditor-config';
 import styles from './person-comment.less';
-import { F } from 'utils/next-api-builder';
 
 class PersonComment extends React.Component {
   state = {
     isComment: false,
     content: '',
     flag: false,
-    tags: ['pink', 'orange', 'red'], // 临时定义的
   };
 
   componentWillReceiveProps(nextProps) {
@@ -27,6 +27,12 @@ class PersonComment extends React.Component {
 
   // TODO chnage to compare utils.
   shouldComponentUpdate(nextProps, nextStates) {
+    if (compare(
+        nextProps, this.props,
+        'personComments', 'isComment', 'content', 'flag',
+      )) {
+      return true;
+    }
     if (nextProps.personComments !== this.props.personComments) {
       return true;
     }
@@ -43,9 +49,9 @@ class PersonComment extends React.Component {
   }
 
   // 存储活动标签
-  onTagsChanged = (value) => {
-    this.setState({ tags: value });
-  };
+  // onTagsChanged = (value) => {
+  //   this.setState({ tags: value });
+  // };
 
 
   getContent(newContent) {
@@ -89,7 +95,6 @@ class PersonComment extends React.Component {
       onCancel() {
       },
     });
-
   };
 
   updateContent(newContent) {
@@ -110,7 +115,7 @@ class PersonComment extends React.Component {
   }
 
   render() {
-    const { personComments, person, expertBaseId, app } = this.props;
+    const { personComments, person, expertBaseId, app, tags } = this.props;
     const { user } = app;
     if (expertBaseId === 'aminer' || !expertBaseId) {
       return false;
@@ -139,7 +144,7 @@ class PersonComment extends React.Component {
           </div>
           <div className={styles.tags}>
             <Labels
-              tags={this.state.tags}
+              tags={tags}
               targetId={person.id}
               targetEntity={F.Entities.Person}
             />
@@ -216,6 +221,13 @@ class PersonComment extends React.Component {
   }
 }
 
-const mapStateToProps = ({ personComments, app }) => ({ personComments, app });
+const mapStateToProps = ({ app, personComments, commonLabels }, { person }) => ({
+  personComments,
+  app: {
+    user: app.user,
+    roles: app.roles,
+  },
+  tags: commonLabels.tagsMap && person && commonLabels.tagsMap.get(person.id),
+});
 
 export default connect(mapStateToProps)(Form.create()(PersonComment));

@@ -226,61 +226,9 @@ export async function nextAPI(payload) {
   const { method, type, ...options } = payload;
   options.method = method || 'post';
   options.nextapi = true;
-  const actions = options.data && options.data.map((query) => query.action);
+  const actions = options.data && options.data.map(query => `${query.action}+${query.eventName}`);
   const action = actions && actions.join(',');
-  const result = request(`${nextAPIURL}/${type || 'query'}?action=${action}`, options);
+  const url = `${nextAPIURL}/${type || 'query'}?action=${action}`;
+  const result = request(url, options);
   return result;
-
-  // method is nextAPI's method.
-
-  const { parameters, schema, RequestMethod } = payload;
-  if (process.env.NODE_ENV !== 'production') {
-    debug.logRequest('@@next-request ', method, parameters, schema, options);
-  }
-
-  const headers = new Headers();
-  headers.append('Accept', 'application/json');
-  headers.append('Content-Type', 'application/json');
-  if (process.env.NODE_ENV !== 'production') {
-    // headers.append('Debug', 1);
-  }
-
-  const token = (options && options.token) || getLocalToken();
-  if (token) {
-    headers.append('Authorization', token);
-  }
-
-  options.method = RequestMethod || 'POST'; // next api process is always POST.
-  options.body = JSON.stringify([{
-    method,
-    parameters,
-    schema,
-  }]);
-
-  const newOption = { ...options, headers };
-  console.log('============================', newOption);
-  const response = await fetch(`${nextAPIURL}?m=${method}`, newOption);
-  // checkQueryStatus(response);
-
-  const data = await response.json();
-
-  // error handling
-  if (data && data.errs) {
-    data.errs.map((err) => {
-      if (process.env.NODE_ENV !== 'production') {
-        console.error('NEXT-API-ERROR:', err);
-      }
-      return false;
-    });
-  }
-
-  console.log('))))))))***', data);
-  const ret = (data && data.data && data.data && data.data.length > 0 && data.data[0]) || {};
-  console.log('))))))))***', ret);
-
-  // const ret = { data, headers: {} };
-  // if (response.headers.get('x-total-count')) {
-  //   ret.headers['x-total-count'] = response.headers.get('x-total-count');
-  // }
-  return ret;
 }

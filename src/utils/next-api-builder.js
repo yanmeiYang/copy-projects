@@ -13,26 +13,29 @@ class ParamError extends Error {
 }
 
 // Query api-builder.
-const query = (action) => {
+const query = (action, eventName) => {
   if (!action) {
     throw new ParamError('Parameter action can\'t be empty.');
   }
 
   const api = {
     action,
+    eventName,
   };
 
   const chains = {
     api,
-    param: (params) => {
-      if (params) {
-        if (!api.parameters) {
-          api.parameters = {};
+    param: (params, config) => {
+      if (!config || config.when) {
+        if (params) {
+          if (!api.parameters) {
+            api.parameters = {};
+          }
+          Object.keys(params).map((key) => {
+            api.parameters[key] = params[key];
+            return false;
+          });
         }
-        Object.keys(params).map((key) => {
-          api.parameters[key] = params[key];
-          return false;
-        });
       }
       return chains;
     },
@@ -43,11 +46,13 @@ const query = (action) => {
       api.parameters = merge(api.parameters, params);
       return chains;
     },
-    schema: (schema) => {
-      if (!api.schema) {
-        api.schema = {};
+    schema: (schema, config) => {
+      if (!config || config.when) {
+        if (!api.schema) {
+          api.schema = {};
+        }
+        api.schema = schema;
       }
-      api.schema = schema;
       return chains;
     },
     addSchema: (schema) => {
@@ -73,15 +78,17 @@ const alter = (action) => {
 
   const chains = {
     api,
-    param: (params) => {
-      if (params) {
-        if (!api.parameters) {
-          api.parameters = {};
+    param: (params, config) => {
+      if (!config || config.when) {
+        if (params) {
+          if (!api.parameters) {
+            api.parameters = {};
+          }
+          Object.keys(params).map((key) => {
+            api.parameters[key] = params[key];
+            return false;
+          });
         }
-        Object.keys(params).map((key) => {
-          api.parameters[key] = params[key];
-          return false;
-        });
       }
       return chains;
     },
@@ -92,11 +99,13 @@ const alter = (action) => {
       api.parameters = merge(api.parameters, params);
       return chains;
     },
-    schema: (schema) => {
-      if (!api.schema) {
-        api.schema = {};
+    schema: (schema, config) => {
+      if (!config || config.when) {
+        if (!api.schema) {
+          api.schema = {};
+        }
+        api.schema = schema;
       }
-      api.schema = schema;
       return chains;
     },
     addSchema: (schema) => {
@@ -140,7 +149,7 @@ const F = {
 
   // alter related
   alters: { alter: 'alter' }, // alter actions.
-  alterop: { upsert: 'upsert', update: 'update' }, // alter operations
+  alterop: { upsert: 'upsert', update: 'update', delete: 'delete' }, // alter operations
 
   Entities: { Person: 'person', Publication: 'pub', Venue: 'venue' },
 };

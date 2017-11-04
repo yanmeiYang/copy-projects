@@ -1,14 +1,15 @@
 [
   {
-    "action": "alter",
+    "action": "search",
     "parameters": {
-      "ids": [
-        "54410a12dabfae7d84bd76c2"
+      "switches": [
+        "translate_all"
       ],
-      "dims": {
-        "systag": {
-          "op": "upsert",
-          "value": "sdfsdf"
+      "filters": {
+        "dims": {
+          "eb": [
+            "5949c2f99ed5dbc2147fd854"
+          ]
         }
       }
     }

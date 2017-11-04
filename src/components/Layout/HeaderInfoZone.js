@@ -102,7 +102,8 @@ export default class HeaderInfoZone extends PureComponent {
           </Menu.Item>
           }
 
-          {AdditionalJSX && <Menu.Item key="/additional">{AdditionalJSX}</Menu.Item>}
+          {AdditionalJSX &&
+          <Menu.Item key="/additional" className={styles.additional}>{AdditionalJSX}</Menu.Item>}
 
           {isGod(roles) && false && // ----------------------- TODO
           <Menu.Item key="/devMenu">

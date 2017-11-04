@@ -27,6 +27,8 @@
   }
   .headerAvatar:hover img { box-shadow: 0 0 1px 1px orange; }
 
+  .additional { .hide() }
+
   .emptyMenuStyle {
     border: 0px !important;
     padding-left: 0px !important;
@@ -49,6 +51,9 @@
 // Responsive
 
 @media (min-width: 568px) {
+}
+
+@media (min-width: 767px) {
   .headerInfoZone {
     .headerAvatar {
       .userName { display: inline }
@@ -56,7 +61,13 @@
   }
 }
 
-@media (min-width: 767px) {
+@media (min-width: 860px) {
+  .headerInfoZone {
+    .additional { display: inline }
+  }
+}
+
+@media (min-width: 980px) {
   .headerInfoZone {
     .logoutBtn {
       span { display: inline }

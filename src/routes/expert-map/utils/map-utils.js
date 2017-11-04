@@ -393,7 +393,7 @@ function showTopImages(ids, i, imgwidth, blankAvatar, imgdivs) {
   let personInfo = dataCache[ids[i]];  //需要缓存的地方
   //personInfo = personInfo && model.personInfo;// 没有缓存的时候
   let name;
-  console.log(personInfo);
+  //console.log(personInfo);
   if (personInfo) {
     if (personInfo.name_zh) {
       const str = personInfo.name_zh.substr(1, 2);
@@ -534,6 +534,15 @@ function detachCluster(clusterPanel) {
   }
 }
 
+// 将内容同步到地图中的控件上。
+const syncInfoWindow = () => {
+  const ai = getById('author_info');
+  const pi = getById('personInfo');
+  if (ai && pi) {
+    ai.innerHTML = pi.innerHTML;
+  }
+};
+
 // -----------------------------------
 const resetRightInfoToGlobal = (dispatch) => {
   dispatch({
@@ -607,7 +616,7 @@ module.exports = {
   insertAfter, resetRightInfoToGlobal,
   onResetPersonCard, detachCluster,
   showTopImageDiv, toggleRightInfo, showTopImages,
-  addImageListener,
+  addImageListener, syncInfoWindow,
   bigAreaConfig,
   MapFilterRanges, MapFilterHindexRange,
   findMapFilterRangesByKey, findMapFilterHindexRangesByKey,

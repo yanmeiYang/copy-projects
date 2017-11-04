@@ -25,15 +25,15 @@ import {
   showTopImageDiv,
   showTopImages,
   addImageListener,
+  syncInfoWindow,
   //findMapFilterRangesByKey,
   findMapFilterHindexRangesByKey,
   bigAreaConfig,
 } from './utils/map-utils';
 import {
   dataCache,
-  imageCache,
   copyImage,
-  cacheInfo,
+  checkCacheLevel,
 } from './utils/cache-utils';
 
 let map1; // 地图刷新前，用于存储上次浏览的地点
@@ -90,7 +90,7 @@ export default class ExpertMap extends PureComponent {
   }
 
   componentDidUpdate() {
-    this.syncInfoWindow();
+    syncInfoWindow();
   }
 
   // EVENTS ---------------------------------------------------------------
@@ -128,7 +128,7 @@ export default class ExpertMap extends PureComponent {
       const cimg = imgdivs[j];
       cimg.addEventListener('mouseenter', (event) => {
         const pId = addImageListener(map, ids, getInfoWindow, event, imgwidth, type);
-        this.setState({ cperson: pId }, this.syncInfoWindow());
+        this.setState({ cperson: pId }, syncInfoWindow());
         const id = `${pId}`;
         const divId = `Mid${pId}`;
         copyImage(id, divId, 90);
@@ -279,11 +279,8 @@ export default class ExpertMap extends PureComponent {
       );
 
       that.hideLoading();
-      // cache images
-      if (sysconfig.Map_Preload) {
-        cacheInfo(ids);
-        console.log('cached in!!!yes!');
-      }
+      //cache image
+      checkCacheLevel(sysconfig.Map_Preload, ids);
     }, showLoadErrorMessage);
   };
 
@@ -301,13 +298,11 @@ export default class ExpertMap extends PureComponent {
     marker.addEventListener('mouseover', (e) => {
       if (this.currentPersonId !== personId) {
         onResetPersonCard(dispatch); // TODO Load default name,重置其信息
-        //this.onLoadPersonCard(personId); //请求数据，现在不需要了
         e.target.openInfoWindow(infoWindow);
-        //this.syncInfoWindow();
-        this.setState({ cperson: personId }, this.syncInfoWindow());//回调函数里面改写
+        this.setState({ cperson: personId }, syncInfoWindow());//回调函数里面改写
       } else {
         e.target.openInfoWindow(infoWindow);
-        this.syncInfoWindow();
+        syncInfoWindow();
       }
       //使用中等大小的图标，将图片拷贝过去，和cluster中的一样,一定注意其逻辑顺序啊！
       const id = `${personId}`;
@@ -324,16 +319,6 @@ export default class ExpertMap extends PureComponent {
   };
 
 
-
-  // 将内容同步到地图中的控件上。
-  syncInfoWindow = () => {
-    const ai = getById('author_info');
-    const pi = getById('personInfo');
-    if (ai && pi) {
-      ai.innerHTML = pi.innerHTML;
-    }
-  };
-
   render() {
     const model = this.props && this.props.expertMap;
     const { results } = model.geoData;
@@ -347,7 +332,7 @@ export default class ExpertMap extends PureComponent {
 
       personPopupJsx = (
         <div className="personInfo">
-          <div id={divId} />
+          <div name={divId} />
           <div className="info">
             <div className="nameLine">
               <div className="right">H-index:<b> {hindex}</b>

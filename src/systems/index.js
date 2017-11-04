@@ -128,8 +128,8 @@ const getDefaultSystemConfigs = (system, source) => {
 
     IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
-    // Map Related
-    Map_Preload: true,
+    // Map Related,2 is recommended!
+    Map_Preload: 3, //0的时候不缓存，1的时候缓存信息，2的时候缓存信息和90头像，3的时候缓存信息和90、160头像
     CentralPosition: { lat: 37.09024, lng: -95.712891 },
     Map_HotDomains: TopExpertBase.RandomTop100InDomainAminer, //地图领域
     HotDomains_Type: 'filter', //filter or selector

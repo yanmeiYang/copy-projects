@@ -27,15 +27,15 @@ import {
   showTopImageDiv,
   showTopImages,
   addImageListener,
+  syncInfoWindow,
   //findMapFilterRangesByKey,
   findMapFilterHindexRangesByKey,
   bigAreaConfig,
 } from './utils/map-utils';
 import {
   dataCache,
-  imageCache,
   copyImage,
-  cacheInfo,
+  checkCacheLevel,
 } from './utils/cache-utils';
 
 let map1;
@@ -74,7 +74,7 @@ export default class ExpertGoogleMap extends React.Component {
   }
 
   componentDidUpdate() {
-    this.syncInfoWindow();
+    syncInfoWindow();
   }
 
   addMouseoverHandler = (map, marker, personId) => {
@@ -86,16 +86,14 @@ export default class ExpertGoogleMap extends React.Component {
     window.google.maps.event.addListener(marker, 'mouseover', () => {
       if (that.currentPersonId !== personId) {
         onResetPersonCard(dispatch);
-        //that.onLoadPersonCard(personId);
         infoWindow.open(map, marker);
-        //that.syncInfoWindow();
-        this.setState({ cperson: personId }, this.syncInfoWindow());//回调函数里面改写
+        this.setState({ cperson: personId }, syncInfoWindow());//回调函数里面改写
       } else {
         infoWindow.open(map, marker);
-        that.syncInfoWindow();
+        syncInfoWindow();
       }
       //使用中等大小的图标，将图片拷贝过去，和cluster中的一样,一定注意其逻辑顺序啊！
-      const id = `M${personId}`;
+      const id = `${personId}`;
       const divId = `Mid${personId}`;
       copyImage(id, divId, 90);
       that.currentPersonId = personId;
@@ -108,14 +106,6 @@ export default class ExpertGoogleMap extends React.Component {
     window.google.maps.event.addListener(marker, 'click', () => {
       toggleRightInfo('person', personId, dispatch, this.props.expertMap.infoZoneIds);
     });
-  };
-
-  syncInfoWindow = () => {
-    const ai = getById('author_info');
-    const pi = getById('personInfo');
-    if (ai && pi) {
-      ai.innerHTML = pi.innerHTML;
-    }
   };
 
   mapConfig = {
@@ -250,11 +240,8 @@ export default class ExpertGoogleMap extends React.Component {
           that.addMouseoverHandler(map, markers[m], place.results[m].id);
         }
         that.hideLoading();
-        // cache images
-        if (sysconfig.Map_Preload) {
-          cacheInfo(ids);
-          console.log('cached in!!!yes!');
-        }
+        //cache image
+        checkCacheLevel(sysconfig.Map_Preload, ids);
       }
     }, 100);
   };
@@ -302,7 +289,7 @@ export default class ExpertGoogleMap extends React.Component {
       const cimg = imgdivs[j];
       cimg.addEventListener('mouseenter', (event) => {
         const pId = addImageListener(map, ids, '', event, imgwidth, type, projection, infowindow);
-        this.setState({ cperson: pId }, this.syncInfoWindow());
+        this.setState({ cperson: pId }, syncInfoWindow());
         const id = `${pId}`;
         const divId = `Mid${pId}`;
         copyImage(id, divId, 90);
@@ -342,18 +329,38 @@ export default class ExpertGoogleMap extends React.Component {
     }
     const avg = (hIndexSum / count).toFixed(0);
     let personPopupJsx;
-    //const person = model.personInfo;
-    const person = dataCache[this.state.cperson];
+    let person = dataCache[this.state.cperson];
     if (person) {
-      const divId = `Mid${person.id}`;
-      const name = person.name;
+      const [divId, name] = [`Mid${person.id}`, person.name];
       const pos = person && person.pos && person.pos[0] && person.pos[0].n;
       const aff = person && person.aff && person.aff.desc;
       const hindex = person && person.indices && person.indices.h_index;
 
       personPopupJsx = (
         <div className="personInfo">
-          <div id={divId} />
+          <div name={divId} />
+          <div className="info">
+            <div className="nameLine">
+              <div className="right">H-index:<b> {hindex}</b>
+              </div>
+              <div className="name">{name}</div>
+            </div>
+            {pos && <span><i className="fa fa-briefcase fa-fw" />{pos}</span>}
+            {aff && <span><i className="fa fa-institution fa-fw" />{aff}</span>}
+          </div>
+        </div>
+      );
+    } else { //数据没有缓存的时候自己加载
+      person = model.personInfo;
+      const url = profileUtils.getAvatar(person.avatar, person.id, 90);
+      const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
+      const pos = profileUtils.displayPosition(person.pos);
+      const aff = profileUtils.displayAff(person);
+      const hindex = person && person.indices && person.indices.h_index;
+
+      personPopupJsx = (
+        <div className="personInfo">
+          <div><img className="img" src={url} alt="IMG" /></div>
           <div className="info">
             <div className="nameLine">
               <div className="right">H-index:<b> {hindex}</b>

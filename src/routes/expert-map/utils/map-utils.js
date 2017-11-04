@@ -1,4 +1,9 @@
 import continentscountries from 'public/lab/expert-map/continentscountries.json';
+import {
+  ifAllInCache,
+  dataCache,
+  imageCache
+} from './cache-utils.js';
 
 const findPosition = (type, results) => {
   let place = [null, null];
@@ -142,7 +147,6 @@ const findarea = (results, place) => {
       case 'Colorado':
       case 'Arizona':
       case 'New Mexico':
-      // case 'Washington':
       case 'Oregon':
       case 'Nevada':
       case 'California':
@@ -318,8 +322,228 @@ function waitforBMapLib(tryTimes, interval, success, failed) {
   }, interval);
 }
 
-// -----------------------------------
+function showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch, infoIds) {
+  const ishere = getById('panel');
+  if (ishere != null) {
+    detachCluster(ishere);
+  }
+  const width = 180;
+  let ostyle = '';
+  if (type === 'baidu') { //baidu map
+    const pixel = map.pointToOverlayPixel(e.currentTarget.getPosition()); // 中心点的位置
+    ostyle = `height:${width}px;width:${width}px;left: ${pixel.x - (width / 2)}px;top: ${pixel.y - (width / 2)}px;`;
+  } else { //google map
+    ostyle = `height:${width}px;width:${width}px;left: ${(e.x + 27) - (width / 2)}px;top: ${(e.y + 27) - (width / 2)}px;`;
+  }
+  // 可得中心点到图像中心点的半径为：width/2-imgwidth/2,圆形的方程为(X-pixel.x)^2+(Y-pixel.y)^2=width/2
+  const imgwidth = 45;
+  const oDiv = document.createElement('div');
+  oDiv.setAttribute('id', 'panel');
+  oDiv.setAttribute('style', ostyle);
+  oDiv.setAttribute('class', 'roundImgContainer');
+  insertAfter(oDiv, maindom);
+  const thisNode = getById('panel');
+  // 开始显示图片,按照hindex排序
 
+
+  const fenshu = (2 * Math.PI) / ids.length;// 共有多少份，每份的夹角
+  for (let i = 0; i < ids.length; i += 1) { //从12点方向开始
+    const centerX = (Math.cos((fenshu * i) - (Math.PI / 2)) * ((width / 2) - (imgwidth / 2)))
+      + (width / 2);
+    const centerY = (Math.sin((fenshu * i) - (Math.PI / 2)) * ((width / 2) - (imgwidth / 2)))
+      + (width / 2);
+    const imgdiv = document.createElement('div');
+    const cstyle = `height:${imgwidth}px;width:${imgwidth}px;left:${centerX - (imgwidth / 2)}px;top:${centerY - (imgwidth / 2)}px;`;
+    imgdiv.setAttribute('name', 'scholarimg');
+    imgdiv.setAttribute('style', cstyle);
+    imgdiv.setAttribute('class', 'imgWrapper');
+    imgdiv.innerHTML = '';
+    //imgdiv.innerHTML = `<img width='${imgwidth}' src='${blankAvatar}' alt='0'>`;
+    insertAfter(imgdiv, thisNode);
+    thisNode.appendChild(imgdiv);
+    imgdiv.addEventListener('click', () => toggleRightInfo('person', ids[i], dispatch, infoIds), false);
+  }
+  // 再在其中间添加一个图像
+  const wh = imgwidth + 40;
+  const left = (width / 2) - (wh / 2);
+  const imgdiv = document.createElement('div');
+  const cstyle = `opacity:0;height:${wh}px;width:${wh}px;left:${left}px;top:${left}px;`;
+  imgdiv.setAttribute('name', 'center');// 中心的一个图片
+  imgdiv.setAttribute('style', cstyle);
+  imgdiv.setAttribute('class', 'imgWrapper');
+  thisNode.appendChild(imgdiv);
+  imgdiv.addEventListener('click', (event) => { // 集体的一个显示
+    toggleRightInfo('cluster', inputids, dispatch, infoIds);
+    event.stopPropagation();
+  });
+
+  if (thisNode != null) { // 准备绑定事件
+    const pthisNode = thisNode.parentNode;
+    pthisNode.addEventListener('mouseleave', () => {
+      if (onLeave) {
+        onLeave();
+      }
+      detachCluster(thisNode);
+    });
+  }
+}
+
+function showTopImages(ids, i, imgwidth, blankAvatar, imgdivs) {
+  const cimg = imgdivs[i];
+  let personInfo = dataCache[ids[i]];  //需要缓存的地方
+  //personInfo = personInfo && model.personInfo;// 没有缓存的时候
+  let name;
+  console.log(personInfo);
+  if (personInfo) {
+    if (personInfo.name_zh) {
+      const str = personInfo.name_zh.substr(1, 2);
+      name = str;
+    } else {
+      const tmp = personInfo.name.split(' ', 5);
+      name = (tmp[tmp.length - 1] === '') ? personInfo.name : tmp[tmp.length - 1];
+    }
+  } else {
+    const tmp = personInfo.name.split(' ', 5);
+    name = (tmp[tmp.length - 1] === '') ? personInfo.name : tmp[tmp.length - 1];
+  }
+
+  let style;
+  if (name.length <= 8) {
+    style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:45px;font-size:10px;';
+    if (name.length === 6) {
+      name = ' '.concat(name);
+    }
+    if (name.length <= 5) {
+      name = '&nbsp;'.concat(name);
+    }
+  } else {
+    const nameArr = name.split('', 20);
+    let u = 7;
+    const arr = [];
+    nameArr.map((name1) => {
+      if (u !== 7) {
+        if (u < 13) {
+          arr[u + 1] = name1;
+        } else if (u === 13) {
+          arr[u + 1] = ' ';
+          arr[u + 2] = name1;
+        } else {
+          arr[u + 2] = name1;
+        }
+      } else {
+        arr[u] = ' ';
+        arr[u + 1] = name1;
+      }
+      u += 1;
+      return true;
+    });
+    name = arr.join('');
+    name = `&nbsp;&nbsp;${name}`;
+    style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:10px;word-wrap:break-word;font-size:10px;';
+  }
+  //需要缓存的地方,判断是否存在
+  const img = imageCache[ids[i]];//浅拷贝和深拷贝
+  const image = new Image(); //进行深拷贝
+  if (typeof (img) === 'undefined') {
+    image.src = blankAvatar;
+    image.alt = name;
+    image.width = imgwidth;
+  } else {
+    image.src = img.src;
+    image.name = img.name;
+    image.alt = name;
+    image.width = imgwidth;
+    image.style = style;
+  }
+  if (img.src.includes('default.jpg') || img.src.includes('blank_avatar.jpg')) {
+    cimg.innerHTML = `<img id='${personInfo.id}' style='${style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='' alt='${name}'>`;
+  } else {
+    cimg.appendChild(image);
+  }
+}
+
+function addImageListener(map, ids, getInfoWindow, event, imgwidth, type, projection, infowindow) {
+  // get current point.
+  const apos = getById('allmap').getBoundingClientRect();
+  const cpos = event.target.getBoundingClientRect();
+  if (type === 'baidu') {
+    const newPixel = new window.BMap.Pixel(cpos.left - apos.left + imgwidth, cpos.top - apos.top);
+    const currentPoint = map.pixelToPoint(newPixel);
+    const infoWindow = getInfoWindow(); //信息窗口
+    //this.onSetPersonCard(personInfo); //查询数据，不需要了
+    map.openInfoWindow(infoWindow, currentPoint); //打开窗口
+  } else {
+    const newPixel = new window.google.maps.Point((cpos.left - apos.left) + imgwidth,
+      (cpos.top - apos.top),
+    ); // 这里是地图里面的相对位置
+    const currentLatLng = projection.fromContainerPixelToLatLng(newPixel);
+    infowindow.setPosition(currentLatLng);
+    //map.openInfoWindow(infoWindow, currentPoint); //打开窗口
+    infowindow.open(map);
+  }
+  const chtml = event.target.innerHTML;
+  let num = 0;
+  let personInfo;
+  if (chtml.split('@@@@@@@').length > 1) { //当时想到这种办法也挺不容易的，保留着吧，注意一个是id一个是序号
+    personInfo = dataCache[ids[chtml.split('@@@@@@@')[1]]];  //需要缓存的地方
+  } else {
+    if (event.target.tagName.toUpperCase() === 'DIV') {
+      num = event.target.firstChild.name;
+    } else if (event.target.tagName.toUpperCase() === 'IMG') {
+      num = event.target.name;
+    }
+    personInfo = dataCache[num];  //需要缓存的地方
+  }
+  return personInfo.id;
+}
+
+function toggleRightInfo(type, id, dispatch, infoIds) { // update one person's info.
+  if (infoIds !== id) { // don't change
+    if (id.indexOf(',') >= 0) { // is cluster
+      const clusterIdList = id.split(',');
+      const clusterInfo = ifAllInCache(clusterIdList);
+      console.log(clusterInfo);
+      if (clusterInfo.length !== 0) { //如果全部缓存了的话就从缓存里面取数据，然后存到model里面
+        console.log(clusterIdList);
+        dispatch({
+          type: 'expertMap/setClusterInfo',
+          payload: { data: clusterInfo },
+        });
+      } else {
+        dispatch({
+          type: 'expertMap/listPersonByIds',
+          payload: { ids: clusterIdList },
+        });
+      }
+    }
+    dispatch({
+      type: 'expertMap/setRightInfo',
+      payload: { idString: id, rightInfoType: type },
+    });
+  }
+}
+
+function detachCluster(clusterPanel) {
+  if (clusterPanel != null && clusterPanel.parentNode != null) {
+    const imgdivs = document.getElementsByName('scholarimg');
+    for (let i = 0; i < imgdivs.length;) {
+      imgdivs[i].parentNode.removeChild(imgdivs[i]);
+    }
+    clusterPanel.parentNode.removeChild(clusterPanel);
+  }
+}
+
+// -----------------------------------
+const resetRightInfoToGlobal = (dispatch) => {
+  dispatch({
+    type: 'expertMap/setRightInfo',
+    payload: { idString: '', rightInfoType: 'global' },
+  });
+};
+
+const onResetPersonCard = (dispatch) => {
+  dispatch({ type: 'expertMap/resetPersonInfo' });
+};
 
 const MapFilterRanges = [
   { key: 'all', label: 'ALL' },
@@ -376,9 +600,13 @@ const bigAreaConfig = [
   { label: '中部', x: -107.5, y: 34.5 },
 ];
 
+
 module.exports = {
   findPosition, getById, waitforBMap, waitforBMapLib,
-  insertAfter,
+  insertAfter, resetRightInfoToGlobal,
+  onResetPersonCard, detachCluster,
+  showTopImageDiv, toggleRightInfo, showTopImages,
+  addImageListener,
   bigAreaConfig,
   MapFilterRanges, MapFilterHindexRange,
   findMapFilterRangesByKey, findMapFilterHindexRangesByKey,

@@ -226,8 +226,9 @@ export async function nextAPI(payload) {
   const { method, type, ...options } = payload;
   options.method = method || 'post';
   options.nextapi = true;
-  const actions = options.data && options.data.map((query) => query.action);
+  const actions = options.data && options.data.map(query => `${query.action}+${query.eventName}`);
   const action = actions && actions.join(',');
-  const result = request(`${nextAPIURL}/${type || 'query'}?action=${action}`, options);
+  const url = `${nextAPIURL}/${type || 'query'}?action=${action}`;
+  const result = request(url, options);
   return result;
 }

@@ -39,34 +39,6 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
   // ------------------------------------------------------------------------------------------
   if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH && Sort !== 'activity-ranking-contrib') {
 
-    // const nextapixxxx = {
-    //   action: 'search',
-    //   parameters: {
-    //     query,
-    //     offset,
-    //     size,
-    //     searchType: 'allb', // [all | allb]
-    //     filters: { dims: {}, terms: {} },
-    //     aggregation: ['gender', 'h_index', 'location', 'language'],
-    //     haves: {
-    //       title: ['CCF_MEMBER_高级会员', 'CCF_MEMBER_会士', 'CCF_MEMBER_杰出会员' /*, 'CCF_DEPT_*'*/],
-    //     },
-    //     switches: ['translate'],
-    //   },
-    //   schema: {
-    //     person: [
-    //       'id', 'name', 'name_zh', 'tags', // 'tags_zh', 'tags_trans_zh'
-    //       {
-    //         profile: [
-    //           'position', 'affiliation',
-    //           // 'org', 'org_zh', 'bio', 'email', 'edu' ', phone'
-    //         ],
-    //       },
-    //       { indices: ['hindex', 'gindex', 'numpubs', 'citation', 'newStar', 'risingStar', 'activity', 'diversity', 'sociability'] },
-    //     ],
-    //   },
-    // };
-
     const ebs = sysconfig.ExpertBases;
     const defaultHaves = ebs && ebs.length > 0 && ebs.map(eb => eb.id);
 
@@ -75,11 +47,9 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
       .param({
         searchType: F.searchType.allb,
         aggregation: ['gender', 'h_index', 'location', 'language'],
-        switches: ['translate_all'], // translate_all | translate_zh | translate_en
-        haves: {
-          eb: defaultHaves,
-        },
+        haves: { eb: defaultHaves },
       })
+      .param({ switches: ['translate_all'] }, { when: useTranslateSearch })
       .schema({
         person: [
           'id', 'name', 'name_zh', // 'tags', // 'tags_zh', 'tags_translated'

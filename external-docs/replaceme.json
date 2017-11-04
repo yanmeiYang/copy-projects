@@ -1,152 +1,17 @@
-{
-  "aff": {
-    "desc": "Tsinghua University",
-    "id": ""
-  },
-  "name": "Hsinchun Chen",
-  "num_viewed": 3225,
-  "avatar": "//static.aminer.org/upload/avatar/1452/106/107/53f48be3dabfaea7cd1cd4e8.jpeg",
-  "indices": {
-    "num_activities": 0,
-    "num_patents": 0,
-    "sociability": 9.1698,
-    "h_index": 77,
-    "num_citation": 29789,
-    "as": 0.0,
-    "diversity": 4.1397,
-    "new_star": 47.3102,
-    "num_ret_pubs": 0,
-    "num_pubs": 880,
-    "activity": 82.5954,
-    "num_tobe_confirm_pubs": 0,
-    "g_index": 158
-  },
-  "is_following": false,
-  "revised": {
-    "cname": "",
-    "mid": "5770b49976d91118547e80d1",
-    "mtime": "2017-07-25 05:34:50",
-    "cid": "",
-    "mname": "cheng wang",
-    "ctime": "1970-01-01 00:00:00"
-  },
-  "locks": {
-    "edit": {
-      "status": false
-    }
-  },
-  "tags": [
-    {
-      "t": "Internet",
-      "w": 77
-    },
-    {
-      "t": "Information Retrieval",
-      "w": 71
-    },
-    {
-      "t": "Artificial Intelligence",
-      "w": 62
-    },
-    {
-      "t": "Data Mining",
-      "w": 61
-    },
-    {
-      "t": "Knowledge Management",
-      "w": 43
-    },
-    {
-      "t": "Digital Library",
-      "w": 41
-    },
-    {
-      "t": "Digital Libraries",
-      "w": 38
-    },
-    {
-      "t": "Terrorism",
-      "w": 37
-    },
-    {
-      "t": "World Wide Web",
-      "w": 34
-    },
-    {
-      "t": "Information Extraction",
-      "w": 33
-    }
-  ],
-  "acm_citations": [
-    {
-      "id": "59ef09640a3ac5c15bbd9210",
-      "country": "USA",
-      "year": 2015,
-      "citation": "For contributions to the research and development of security informatics and health informatics systems. Press Release"
-    }
-  ],
-  "pos": [
-    {
-      "i": "",
-      "n": "Professor"
-    }
-  ],
-  "hidden": false,
-  "award": [],
-  "bind": false,
-  "contact": {
-    "affiliation": "Tsinghua University",
-    "has_email_cr": true,
-    "work": "Hsinchun Chen, Ph.D.\nRegents' Professor and Thomas R. Brown Chair of Management and Technology and \nDirector, Artificial Intelligence Lab",
-    "bio": "Dr. Hsinchun Chen is McClelland Professor of Management Information Systems at the University of Arizona. He received the B.S. degree from the National Chiao-Tung University in Taiwan, the MBA degree from SUNY Buffalo, and the Ph.D. degree in Information Systems from the New York University. Dr. Chen had served as a Scientific Counselor/Advisor of the National Library of Medicine (USA), Academia Sinica (Taiwan), and National Library of China (China). \n\n",
-    "edu": "Ph.D. Information Systems New York University 1989\nM.S. Information Systems New York University 1987\nMBA Management Information Systems\nManagement Science\nFinance\nState University of New York at\nBuffalo\n1985\nB.S. Management Science National Chiao-Tung University,\nTaiwan\n1981",
-    "fax": "(520) 621-2433 ",
-    "homepage": "https://mis.eller.arizona.edu/people/hsinchun-chen",
-    "address": "Management Information Systems Department\nEller College of Management\nThe University of Arizona\nMcClelland Hall 430Z\nTucson, Arizona 85721",
-    "has_email": true,
-    "phone": "(520) 621-2748"
-  },
-  "work": [
-    {
-      "aff": {
-        "dept": {
-          "i": "552e52cbdabfae7de9fd14cc",
-          "n_zh": "信息科学与技术学院",
-          "n": "School of Information Science and Technology"
-        },
-        "id": "",
-        "inst": {
-          "i": "552e0adfdabfae7de9e566a0",
-          "n_zh": "清华大学",
-          "n": "Tsinghua University"
+[
+  {
+    "action": "search",
+    "parameters": {
+      "switches": [
+        "translate_all"
+      ],
+      "filters": {
+        "dims": {
+          "eb": [
+            "5949c2f99ed5dbc2147fd854"
+          ]
         }
-      },
-      "pos": {
-        "i": ""
-      },
-      "id": "5884771c9ed5db856ff538d3"
+      }
     }
-  ],
-  "links": [
-    {
-      "type": "oid",
-      "url": "",
-      "id": "872473"
-    }
-  ],
-  "edu": [],
-  "id": "53f48be3dabfaea7cd1cd4e8",
-  "is_holding": false,
-  "name_zh": "",
-  "src": [],
-  "attr": {
-    "gender": "male",
-    "nation": "USA",
-    "ethnic": "Chinese",
-    "lang": "Chinese"
-  },
-  "tags_zh": [],
-  "intr": [],
-  "num_followed": 10,
-  "honor": []
-}
+  }
+]

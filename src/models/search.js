@@ -22,6 +22,8 @@ export default {
     // use translate search?
     useTranslateSearch: sysconfig.Search_DefaultTranslateSearch,
     translatedQuery: '',
+    translatedLanguage: 0, // 1 en to zh; 2 zh to en;
+    translatedText: '',
 
     offset: 0,
     sortKey: '',
@@ -99,10 +101,8 @@ export default {
       );
 
       if (data.data && data.data.succeed) {
-        // console.log('>>>>>> ---==== to next API');
         yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data } });
       } else if (data.data && data.data.result) {
-        // console.log('>>>>>> ---==== to old API');
         yield put({ type: 'searchPersonSuccess', payload: { data: data.data, query, total } });
       } else {
         throw new Error('Result Not Available');
@@ -223,12 +223,16 @@ export default {
         throw new Error(message);
       }
       const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
-      return {
+      const { translatedLanguage, translatedtext } = data;
+      const newState = {
         ...state,
         results: items,
         pagination: { pageSize: state.pagination.pageSize, total, current },
         aggs: aggregation,
+        translatedLanguage,
+        translatedText: translatedtext,
       };
+      return newState;
     },
 
     emptyResults(state) {

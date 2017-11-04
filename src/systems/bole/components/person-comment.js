@@ -95,7 +95,6 @@ class PersonComment extends React.Component {
       onCancel() {
       },
     });
-
   };
 
   updateContent(newContent) {

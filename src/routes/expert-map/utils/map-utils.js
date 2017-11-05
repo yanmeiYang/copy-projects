@@ -27,7 +27,8 @@ const findPosition = (type, results) => {
     } else if (continent === 'Oceania') { // 以澳大利亚返回
       place = [-25.274398, 133.775136];
     }
-    place = findhuaweidistrict(results, place); // 按照华为的进行分区，此处的代码若非华为产品则可以删掉，其他的均可保持不变
+    const res = findhuaweidistrict(results, place); // 按照华为的进行分区，此处的代码若非华为产品则可以删掉，其他的均可保持不变
+    place = res.place1;
   } else if (type === '2') {
     place = findcountries(results.country.name);
   } else if (type === '3') {
@@ -169,61 +170,84 @@ const findarea = (results, place) => {
 
 const finduspart = (add) => {
   let place1 = [38.9071923, -77.0368707];
+  let name;
   if (add.indexOf('Michigan') > -1 || add.indexOf('Indiana') > -1 || add.indexOf('Ohio') > -1 || add.indexOf('Kentucky') > -1 || add.indexOf('Georgia') > -1 || add.indexOf('New York') > -1 || add.indexOf('Pennsylvania') > -1 || add.indexOf('West Virginia') > -1 || add.indexOf('Virginia') > -1 || add.indexOf('North Carolina') > -1 || add.indexOf('South Carolina') > -1 || add.indexOf('Florida') > -1 || add.indexOf('Washington') > -1 || add.indexOf('New Jersey') > -1 || add.indexOf('Connecticut') > -1 || add.indexOf('Rhode island') > -1 || add.indexOf('Massachusetts') > -1 || add.indexOf('New Hampshire') > -1 || add.indexOf('Vermont') > -1 || add.indexOf('Maine') > -1 || add.indexOf('Maryland') > -1 || add.indexOf('Delaware') > -1) {
     place1 = [38.9071923, -77.0368707];// 以华盛顿特区返回
+    name = 'Eastern United States';
   }
   if (add.indexOf('North Dakota') > -1 || add.indexOf('South Dakota') > -1 || add.indexOf('Nebraska') > -1 || add.indexOf('Kansas') > -1 || add.indexOf('Oklahoma') > -1 || add.indexOf('Texas') > -1 || add.indexOf('Minnesota') > -1 || add.indexOf('Iowa') > -1 || add.indexOf('Missouri') > -1 || add.indexOf('Arkansas') > -1 || add.indexOf('Louisiana') > -1 || add.indexOf('Wisconsin') > -1 || add.indexOf('Illinois') > -1 || add.indexOf('Tennessee') > -1 || add.indexOf('Mississippi') > -1 || add.indexOf('Alabama') > -1) {
     place1 = [39.8027644, -105.0874842];// 以Jefferson返回
+    name = 'Central United States';
   }
   if (add.indexOf('Montana') > -1 || add.indexOf('Wyoming') > -1 || add.indexOf('Idaho') > -1 || add.indexOf('Utah') > -1 || add.indexOf('Colorado') > -1 || add.indexOf('Arizona') > -1 || add.indexOf('New Mexico') > -1 || add.indexOf('Washington') > -1 || add.indexOf('Oregon') > -1 || add.indexOf('Nevada') > -1 || add.indexOf('California') > -1) {
     place1 = [38.4087993, -121.3716178];// 以Sacramento返回
+    name = 'Western United States';
   }
   if (add.indexOf('Hawaii') > -1) {
     place1 = [21.2910781, -157.8200175];// 以Honolulu返回
+    name = 'Central United States';
   }
   if (add.indexOf('Alaska') > -1) {
     place1 = [61.2180556, -149.9002778];// 以Anchorage返回
+    name = 'Central United States';
   }
-  return place1;
+  return { place1, name };
 };
 
 // TODO change to use switch.
 const findhuaweidistrict = (results, place) => {
   let place1 = place;
+  let name;
   if (results.country.name === 'Kazakhstan' || results.country.name === 'Kyrgyzstan' || results.country.name === 'Uzbekistan' || results.country.name === 'Tajikistan' || results.country.name === 'Turkmenistan') { // 中亚
     place1 = [48.019573, 66.923684];// 以哈萨克斯坦返回
+    name = 'Central Asia';
   } else if (results.country.name === 'Vietnam' || results.country.name === 'Laos' || results.country.name === 'Cambodia' || results.country.name === 'Thailand' || results.country.name === 'Malaysia' || results.country.name === 'Myanmar' || results.country.name === 'Indonesia' || results.country.name === 'Brunei' || results.country.name === 'Philippines' || results.country.name === 'Timor-Leste') { // 东南亚
     place1 = [12.879721, 121.774017];// 以印度尼西亚返回
+    name = 'Southeast Asia';
   } else if (results.country.name === 'India') { // 印度
     place1 = [20.593684, 78.96288];// 以印度返回
+    name = 'India';
   } else if (results.country.name === 'Singapore') { // 新加坡
     place1 = [1.352083, 103.819836];// 以新加坡返回
+    name = 'Singapore';
   } else if (results.country.name === 'Japan') { // 日本
     place1 = [36.204824, 138.252924];// 以日本返回
+    name = 'Japan';
   } else if (results.country.name === 'South Korea') { // 韩国
     place1 = [35.907757, 127.766922];// 以韩国返回
+    name = 'The Republic of Korea';
   } else if (results.country.name === 'China' && results.location.area === 'Hong Kong') { // 香港
     place1 = [22.396428, 114.109497];// 以香港返回
+    name = 'Hong Kong';
   } else if (results.country.name === 'China' && results.location.area === 'Taiwan') { // 台湾
     place1 = [25.0329694, 121.5654177];// 以台北返回
+    name = 'Taiwan';
   } else if (results.country.name === 'China' && results.location.area !== 'Taiwan' && results.location.area !== 'Hong Kong') { // 中国
     place1 = [39.90419989999999, 116.4073963];// 以北京返回
+    name = 'Chinese Mainland';
   } else if (results.country.name === 'Estonia' || results.country.name === 'Latvia' || results.country.name === 'Lithuania' || results.country.name === 'Belarus' || results.country.name === 'Ukraine' || results.country.name === 'Moldova' || results.country.name === 'Serbia' || results.country.name === 'Croatia' || results.country.name === 'Slovenia' || results.country.name === 'Bosnia and Herzegovina' || results.country.name === 'Montenegro' || results.country.name === 'Macedonia' || results.country.name === 'Albania') { // 东欧
     place1 = [48.379433, 31.16558];// 以乌克兰返回
-  } else if (results.country.name === '') { // 西欧
-    // 西欧部分按照原来的德国去分
+    name = 'Eastern Europe';
+  } else if (results.country.name === 'Andorra' || results.country.name === 'Armenia' || results.country.name === 'Austria' || results.country.name === 'Azerbaijan' || results.country.name === 'Belgium' || results.country.name === 'Bosnia and Herzegovina' || results.country.name === 'Bulgaria' || results.country.name === 'Cyprus' || results.country.name === 'Czechia' || results.country.name === 'Czech Republic' || results.country.name === 'France' || results.country.name === 'Germany' || results.country.name === 'Greece' || results.country.name === 'Hungary' || results.country.name === 'Ireland' || results.country.name === 'Italy' || results.country.name === 'Liechtenstein' || results.country.name === 'Luxembourg' || results.country.name === 'Macedonia (FYROM)' || results.country.name === 'Malta' || results.country.name === 'Monaco' || results.country.name === 'Netherlands' || results.country.name === 'Poland' || results.country.name === 'Portugal' || results.country.name === 'Romania' || results.country.name === 'San Marino' || results.country.name === 'Slovakia' || results.country.name === 'Spain' || results.country.name === 'Switzerland' || results.country.name === 'Turkey' || results.country.name === 'Vatican City (Holy See)') { // 西欧
+    place1 = [51.165691, 10.451526];// 以德国返回
+    name = 'Western Europe';
   } else if (results.country.name === 'Iceland' || results.country.name === 'Denmark' || results.country.name === 'Finland' || results.country.name === 'Norway' || results.country.name === 'Sweden') { // 北欧
     place1 = [60.12816100000001, 18.643501];// 以瑞典返回
+    name = 'Northern Europe';
   } else if (results.country.name === 'United Kingdom') { // 英国
     place1 = [55.378051, -3.435973];// 以英国返回
+    name = 'United Kingdom';
   } else if (results.country.name === 'Russia') { // 俄国
     place1 = [61.52401, 105.318756];// 以俄罗斯返回
+    name = 'Russia';
   } else if (results.country.name === 'Israel') { // 以色列
-    place1 = [31.046051, 34.851612];// 以以色列返回
+    place1 = [31.046051, 34.851612];// 以色列返回
+    name = 'Israel';
   } else if (results.country.name === 'United States') { // 美国
-    place1 = finduspart(results.longaddress);
+    const res = finduspart(results.longaddress);
+    [place1, name] = res;
   }
-  return place1;
+  return { place1, name };
 };
 
 const findcontinent = (country) => {
@@ -689,7 +713,7 @@ module.exports = {
   insertAfter, resetRightInfoToGlobal,
   onResetPersonCard, detachCluster,
   showTopImageDiv, toggleRightInfo, showTopImages,
-  addImageListener, syncInfoWindow,
+  addImageListener, syncInfoWindow, findhuaweidistrict,
   bigAreaConfig,
   MapFilterRanges, MapFilterHindexRange,
   findMapFilterRangesByKey, findMapFilterHindexRangesByKey,

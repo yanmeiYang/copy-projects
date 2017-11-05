@@ -1,25 +1,39 @@
+import {
+  findhuaweidistrict,
+} from './map-utils.js';
 
-const showSta = (echarts, divId, data) => {
-  const result = sortByCountries(data);
-  const countries = [];
-  const value = [];
-  for (const key in result.countries) {
-    countries.push(key);
-    value.push(result.countries[key]);
+
+const showSta = (echarts, divId, data, type) => {
+  let title = '';
+  let result = [];
+  if (type === 'country') {
+    title = '按国家进行统计';
+    result = sortByCountries(data);
+  } else if (type === 'bigArea') {
+    title = '按大区进行统计';
+    result = sortByBigArea(data);
   }
-  console.log(result);
-  console.log(countries);
-  console.log(value);
+  const names = [];
+  const values = [];
+  for (const key in result.countries) {
+    if (true) {
+      names.push(key);
+      values.push(result.countries[key]);
+    }
+  }
   const myChart = echarts.init(divId);
 
   // 绘制图表
   const option = {
     title: {
-      text: '按国家进行统计',
+      text: title,
       subtext: '主要学者情况',
     },
     tooltip: {
       trigger: 'axis',
+    },
+    grid: {
+      x: '150px',
     },
     legend: {
       data: ['总人数'],
@@ -39,23 +53,43 @@ const showSta = (echarts, divId, data) => {
       {
         type: 'value',
         boundaryGap: [0, 0.01],
-        width: '20px',
       },
     ],
     yAxis: [
       {
         type: 'category',
-        data: countries,
+        data: names,
       },
     ],
     series: [{
         name: '总人数',
         type: 'bar',
-        data: value,
+        data: values,
       },
     ],
   };
   myChart.setOption(option);
+};
+
+const sortByBigArea = (data) => {
+  const areas = [];
+  let place;
+  for (const p of data.results) {
+    place = findhuaweidistrict(p, [0, 0]);
+    //console.log(place);
+    if (place === [39.90419989999999, 116.4073963]) {
+      console.log('#########################################^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+    }
+  }
+
+  for (const p of data.results) {
+    if (typeof (areas[p.country.name]) !== 'undefined') {
+      areas[p.country.name] += 1;
+    } else {
+      areas[p.country.name] = 1;
+    }
+  }
+  return { areas };
 };
 
 const sortByCountries = (data) => {

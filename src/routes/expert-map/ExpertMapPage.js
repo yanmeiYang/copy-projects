@@ -177,10 +177,10 @@ export default class ExpertMapPage extends React.Component {
       visible: true,
     }, () => {
       const chartsinterval = setInterval(() => {
-        const divId = document.getElementById('bycountries')
+        const divId = document.getElementById('bycountries');
         if (typeof (divId) !== 'undefined' && divId !== 'undefined') {
           clearInterval(chartsinterval);
-          showSta(echarts, divId, this.props.expertMap.geoData);
+          showSta(echarts, divId, this.props.expertMap.geoData, 'country');
         }
       }, 100);
     });
@@ -201,7 +201,21 @@ export default class ExpertMapPage extends React.Component {
   };
 
   changeStatistic = (key) => {
-    console.log(key);
+    const chartsinterval = setInterval(() => {
+      let divId;
+      let type;
+      if (key === 1) {
+        divId = document.getElementById('bycountries');
+        type = 'country';
+      } else {
+        divId = document.getElementById('bigArea');
+        type = 'bigArea';
+      }
+      if (typeof (divId) !== 'undefined' && divId !== 'undefined') {
+        clearInterval(chartsinterval);
+        showSta(echarts, divId, this.props.expertMap.geoData, type);
+      }
+    }, 100);
   };
 
 
@@ -209,11 +223,15 @@ export default class ExpertMapPage extends React.Component {
     const { mapType, query, domainId } = this.state;
     const options = { ...this.state, title: this.titleBlock };//以便传入到组件里面
 
-    let staJsx;
-    staJsx = (
-      <div className={styles.chart1} >
-        <div id="bycountries">
-        </div>
+    const staJsx = (
+      <div className={styles.charts} >
+        <div id="bycountries" className={styles.chart1} />
+      </div>
+    );
+
+    const staJsx1 = (
+      <div className={styles.charts} >
+        <div id="bigArea" className={styles.chart1} />
       </div>
     );
 
@@ -281,8 +299,8 @@ export default class ExpertMapPage extends React.Component {
                 width="700px"
               >
                 <Tabs defaultActiveKey="1" onChange={this.changeStatistic}>
-                  <TabPane tab="地区" key="1">{staJsx && staJsx}</TabPane>
-                  <TabPane tab="华人" key="2">Content of Tab Pane 2</TabPane>
+                  <TabPane tab="国家" key="1">{staJsx && staJsx}</TabPane>
+                  <TabPane tab="大区" key="2">{staJsx1 && staJsx1}</TabPane>
                 </Tabs>
               </Modal>
             </div>

@@ -19,12 +19,15 @@ import loadScript from 'load-script';
 import ExpertGoogleMap from './expert-googlemap.js';
 import ExpertMap from './expert-map.js';
 import styles from './ExpertMapPage.less';
+import {
+  showSta,
+} from './utils/sta-utils';
 
 const tc = applyTheme(styles);
 const [ButtonGroup, TabPane] = [Button.Group, Tabs.TabPane];
+let echarts;
 
 const MAP_DISPATCH_KEY = 'map-dispatch';
-let echarts;
 
 @connect(({ app, expertMap }) => ({ app: { user: app.user, roles: app.roles }, expertMap }))
 @Auth
@@ -172,6 +175,14 @@ export default class ExpertMapPage extends React.Component {
   showModal = () => {
     this.setState({
       visible: true,
+    }, () => {
+      const chartsinterval = setInterval(() => {
+        const divId = document.getElementById('bycountries')
+        if (typeof (divId) !== 'undefined' && divId !== 'undefined') {
+          clearInterval(chartsinterval);
+          showSta(echarts, divId, this.props.expertMap.geoData);
+        }
+      }, 100);
     });
   };
 
@@ -200,8 +211,9 @@ export default class ExpertMapPage extends React.Component {
 
     let staJsx;
     staJsx = (
-      <div id="bycountries">
-
+      <div className={styles.chart1} >
+        <div id="bycountries">
+        </div>
       </div>
     );
 
@@ -266,6 +278,7 @@ export default class ExpertMapPage extends React.Component {
                     <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.ok" />
                   </Button>,
                 ]}
+                width="700px"
               >
                 <Tabs defaultActiveKey="1" onChange={this.changeStatistic}>
                   <TabPane tab="地区" key="1">{staJsx && staJsx}</TabPane>
@@ -297,7 +310,6 @@ export default class ExpertMapPage extends React.Component {
           ? <ExpertGoogleMap {...options} />
           : <ExpertMap {...options} />
         }
-        <div id="test"></div>
       </Layout>
     );
   }

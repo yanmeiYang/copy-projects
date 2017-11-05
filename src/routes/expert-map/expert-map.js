@@ -125,12 +125,15 @@ export default class ExpertMap extends PureComponent {
     for (let j = 0; j < imgdivs.length; j += 1) {
       const cimg = imgdivs[j];
       cimg.addEventListener('mouseenter', (event) => {
-        const pId = addImageListener(map, ids, getInfoWindow, event, imgwidth, type);
-        this.setState({ cperson: pId }, syncInfoWindow());
-        const id = `${pId}`;
-        const divId = `Mid${pId}`;
-        copyImage(id, divId, 90);
-        this.currentPersonId = pId;
+        const p = addImageListener(map, ids, getInfoWindow, event, imgwidth, type);
+        const pId = p.id;
+        const idx = [];
+        idx.push(pId);
+        requestDataNow(idx, () => {
+          this.setState({ cperson: pId }, syncInfoWindow());
+          copyImage(`${pId}`, `Mid${pId}`, 90);
+          this.currentPersonId = pId;
+        });
       });
       cimg.addEventListener('mouseleave', () => {
         map.closeInfoWindow();
@@ -296,7 +299,9 @@ export default class ExpertMap extends PureComponent {
     marker.addEventListener('mouseover', (e) => {
       onResetPersonCard(dispatch); // TODO Load default name,重置其信息
       e.target.openInfoWindow(infoWindow);
-      requestDataNow(`${personId}`, `Mid${personId}`, 90, () => { //获取完信息之后再回调
+      const ids = [];
+      ids.push(personId);
+      requestDataNow(ids, () => { //获取完信息之后再回调
         if (this.currentPersonId !== personId) {
           this.setState({ cperson: personId }, syncInfoWindow());//回调函数里面改写
         } else {

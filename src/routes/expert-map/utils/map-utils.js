@@ -537,7 +537,6 @@ function addImageListener(map, ids, getInfoWindow, event, imgwidth, type, projec
     personInfo = dataCache[num];
   }
   if (typeof (personInfo) === 'undefined') {
-    console.log('@@@@@@@@@@@@@@@@@@@@@@@@@2');
     const resultPromise = listPersonByIds(ids);
     resultPromise.then(
       (data) => { //加入到缓存中

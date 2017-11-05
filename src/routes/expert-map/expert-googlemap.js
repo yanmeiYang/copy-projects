@@ -87,7 +87,9 @@ export default class ExpertGoogleMap extends React.Component {
     window.google.maps.event.addListener(marker, 'mouseover', () => {
       onResetPersonCard(dispatch);
       infoWindow.open(map, marker);
-      requestDataNow(`${personId}`, `Mid${personId}`, 90, () => { //获取完信息之后再回调
+      const ids = [];
+      ids.push(personId);
+      requestDataNow(ids, () => { //获取完信息之后再回调
         if (that.currentPersonId !== personId) {
           this.setState({ cperson: personId }, syncInfoWindow());//回调函数里面改写
         } else {
@@ -289,9 +291,13 @@ export default class ExpertGoogleMap extends React.Component {
       cimg.addEventListener('mouseenter', (event) => {
         const p = addImageListener(map, ids, '', event, imgwidth, type, projection, infowindow);
         const pId = p.id;
-        this.setState({ cperson: pId }, syncInfoWindow());
-        copyImage(`${pId}`, `Mid${pId}`, 90);
-        this.currentPersonId = pId;
+        const idx = [];
+        idx.push(pId);
+        requestDataNow(idx, () => {
+          this.setState({ cperson: pId }, syncInfoWindow());
+          copyImage(`${pId}`, `Mid${pId}`, 90);
+          this.currentPersonId = pId;
+        });
       });
       cimg.addEventListener('mouseleave', () => {
         infowindow.close();

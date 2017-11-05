@@ -14,30 +14,29 @@ const deepCopyImage = (imageId, size) => { //图像深度拷贝
   return image;
 };
 
-const requestDataNow = (imageId, divId, size, callback) => {
-  if (typeof (dataCache[imageId]) === 'undefined') { //人的信息都没有缓存的情况
-    const ids = [];
-    ids.push(imageId);
+const requestDataNow = (ids, callback) => {
+  const info = ifAllInCache(ids);
+  if (info.length === 0) { //有没有缓存的
     const resultPromise = listPersonByIds(ids);
     resultPromise.then(
       (data) => {
         //加入到缓存中
-        for (let i = 0; i < ids.length; i += 1) {
-          indexCache.push(ids[i]);
-        }
         for (const p of data.data.persons) {
           dataCache[p.id] = p;
         }
-        const personInfo = dataCache[imageId];
-        const url = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 90);
-        const image2 = new Image();
-        image2.src = url;
-        image2.name = personInfo.id;//不能使用id,否则重复
-        image2.width = 90;
-        image2.onerror = () => {
-          image2.src = blankAvatar;
-        };
-        imageCache[personInfo.id] = image2;
+        for (let i = 0; i < ids.length; i += 1) {
+          indexCache.push(ids[i]);
+          const personInfo = dataCache[ids[i]];
+          const url = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 90);
+          const image2 = new Image();
+          image2.src = url;
+          image2.name = personInfo.id;//不能使用id,否则重复
+          image2.width = 90;
+          image2.onerror = () => {
+            image2.src = blankAvatar;
+          };
+          imageCache[personInfo.id] = image2;
+        }
         if (typeof (callback) === 'function') {
           callback();
         }
@@ -49,24 +48,23 @@ const requestDataNow = (imageId, divId, size, callback) => {
       console.error(error);
     });
   } else {
-    const personInfo = dataCache[imageId];
-    if (typeof (imageCache[imageId]) !== 'undefined') {
-      const url = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 90);
-      const image2 = new Image();
-      image2.src = url;
-      image2.name = personInfo.id;//不能使用id,否则重复
-      image2.width = 90;
-      image2.onerror = () => {
-        image2.src = blankAvatar;
-      };
-      imageCache[personInfo.id] = image2;
-      if (typeof (callback) === 'function') {
-        callback();
+    const imgInfo = UnCachedImg(ids);
+    if (imgInfo !== 0) {
+      for (let i = 0; i < imgInfo.length; i += 1) {
+        const personInfo = dataCache[imgInfo[i]];
+        const url = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 90);
+        const image2 = new Image();
+        image2.src = url;
+        image2.name = personInfo.id;//不能使用id,否则重复
+        image2.width = 90;
+        image2.onerror = () => {
+          image2.src = blankAvatar;
+        };
+        imageCache[personInfo.id] = image2;
       }
-    } else {
-      if (typeof (callback) === 'function') {
-        callback();
-      }
+    }
+    if (typeof (callback) === 'function') {
+      callback();
     }
   }
 };
@@ -78,6 +76,18 @@ const copyImage = (imageId, divId, size) => {
     d.innerHTML = '';
     d.appendChild(image);
   }
+};
+
+const UnCachedImg = (ids) => { //判断一串作者ids是否全部缓存了的
+  const info = [];
+  for (const id of ids) {
+    if (id !== '') { //非空
+      if (typeof (imageCache[id]) === 'undefined') { //不包含的记录下来
+        info.push(id);
+      }
+    }
+  }
+  return info;
 };
 
 const ifAllInCache = (ids) => { //判断一串作者ids是否全部缓存了的

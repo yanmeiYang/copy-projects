@@ -332,3 +332,10 @@ export async function relationGraph(data) {
 export async function searchPublications(params) {
   return request(api.searchPubs, { method: 'GET', data: params });
 }
+
+export async function getActivityScoresByPersonIds(ids) {
+  return request(api.batchGetActivityCompareScoresByPersonId.replace(':ids', ids), {
+    method: 'GET',
+  });
+}
+

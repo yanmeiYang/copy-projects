@@ -19,12 +19,12 @@ module.exports = {
   //
 
   logoZone: [
-    <a key="0" href="/" className={classnames(styles.logoZones)}>
+    <Link key="0" to="/" className={classnames(styles.logoZones)}>
       <div className={classnames(styles.header_logo, 'icon')} />
       <div className={classnames(styles.header_subTitle, 'font-page-title')}>
         知识洞察系统
       </div>
-    </a>,
+    </Link>,
   ],
 
   searchZone: hole.IN_COMPONENT_DEFAULT,

@@ -77,11 +77,11 @@ class ExpertTrajectoryPage extends React.Component {
 
   onPersonClick = (personId) => {
     this.props.dispatch({ type: 'expertTrajectory/dataFind', payload: { personId } });
-  }
+  };
 
   callSearchMap = (query) => {
     this.props.dispatch({ type: 'expertTrajectory/searchPerson', payload: { query } });
-  }
+  };
 
   render() {
     // // const model = this.props && this.props.expertTrajectory;

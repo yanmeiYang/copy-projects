@@ -15,6 +15,7 @@ import { Auth } from 'hoc';
 import { detectSavedMapType, compare } from 'utils';
 import { DomainSelector, MapFilter } from 'routes/expert-map';
 import * as strings from 'utils/strings';
+import loadScript from 'load-script';
 import ExpertGoogleMap from './expert-googlemap.js';
 import ExpertMap from './expert-map.js';
 import styles from './ExpertMapPage.less';
@@ -23,6 +24,7 @@ const tc = applyTheme(styles);
 const [ButtonGroup, TabPane] = [Button.Group, Tabs.TabPane];
 
 const MAP_DISPATCH_KEY = 'map-dispatch';
+let echarts;
 
 @connect(({ app, expertMap }) => ({ app: { user: app.user, roles: app.roles }, expertMap }))
 @Auth
@@ -58,6 +60,12 @@ export default class ExpertMapPage extends React.Component {
     } else if (q) {
       this.searchMapByQuery(q);
     }
+  }
+
+  componentDidMount() {
+    loadScript('/lib/echarts.js', () => {
+      echarts = window.echarts; // eslint-disable-line prefer-destructuring
+    });
   }
 
   componentWillReceiveProps(np) {
@@ -162,35 +170,41 @@ export default class ExpertMapPage extends React.Component {
   ];
 
   showModal = () => {
-    console.log('妈的!!!!');
     this.setState({
       visible: true,
     });
-    console.log(this.state.visible);
-  }
+  };
 
   handleOk = (e) => {
     console.log(e);
     this.setState({
       visible: false,
     });
-  }
+  };
 
   handleCancel = (e) => {
     console.log(e);
     this.setState({
       visible: false,
     });
-  }
+  };
 
   changeStatistic = (key) => {
     console.log(key);
-  }
+  };
 
 
   render() {
     const { mapType, query, domainId } = this.state;
     const options = { ...this.state, title: this.titleBlock };//以便传入到组件里面
+
+    let staJsx;
+    staJsx = (
+      <div id="bycountries">
+
+      </div>
+    );
+
     return (
       <Layout
         contentClass={tc(['expertMapPage'])}
@@ -254,7 +268,7 @@ export default class ExpertMapPage extends React.Component {
                 ]}
               >
                 <Tabs defaultActiveKey="1" onChange={this.changeStatistic}>
-                  <TabPane tab="地区" key="1">Content of Tab Pane 1</TabPane>
+                  <TabPane tab="地区" key="1">{staJsx && staJsx}</TabPane>
                   <TabPane tab="华人" key="2">Content of Tab Pane 2</TabPane>
                 </Tabs>
               </Modal>
@@ -277,14 +291,13 @@ export default class ExpertMapPage extends React.Component {
                 </Button>
               </ButtonGroup>
             </div>
-
           </div>
         </div>
-
         {mapType === 'google'
           ? <ExpertGoogleMap {...options} />
           : <ExpertMap {...options} />
         }
+        <div id="test"></div>
       </Layout>
     );
   }

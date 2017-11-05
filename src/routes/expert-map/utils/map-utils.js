@@ -33,7 +33,7 @@ const findPosition = (type, results) => {
     place = findcountries(results.country.name);
   } else if (type === '3') {
     place = findcountries(results.country.name);
-    place = findarea(results, place);// 按照国内的省份，或者美国的按照州
+    place = findarea(results, place);// 按照国hua内的省份，或者美国的按照州
   } else if (type === '4') {
     place = findCities(results.city);
   } else if (type === '5') {
@@ -197,7 +197,7 @@ const finduspart = (add) => {
 // TODO change to use switch.
 const findhuaweidistrict = (results, place) => {
   let place1 = place;
-  let name;
+  let name = 'Others';
   if (results.country.name === 'Kazakhstan' || results.country.name === 'Kyrgyzstan' || results.country.name === 'Uzbekistan' || results.country.name === 'Tajikistan' || results.country.name === 'Turkmenistan') { // 中亚
     place1 = [48.019573, 66.923684];// 以哈萨克斯坦返回
     name = 'Central Asia';
@@ -245,7 +245,9 @@ const findhuaweidistrict = (results, place) => {
     name = 'Israel';
   } else if (results.country.name === 'United States') { // 美国
     const res = finduspart(results.longaddress);
-    [place1, name] = res;
+    [place1, name] = [res.place1, res.name];
+  } else {
+    name = 'Others';
   }
   return { place1, name };
 };

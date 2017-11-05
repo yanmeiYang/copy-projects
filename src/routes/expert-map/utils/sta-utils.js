@@ -73,23 +73,24 @@ const showSta = (echarts, divId, data, type) => {
 
 const sortByBigArea = (data) => {
   const areas = [];
-  let place;
+  const place = [];
   for (const p of data.results) {
-    place = findhuaweidistrict(p, [0, 0]);
-    //console.log(place);
-    if (place === [39.90419989999999, 116.4073963]) {
-      console.log('#########################################^^^^^^^^^^^^^^^^^^^^^^^^^^^^^');
+    const res = findhuaweidistrict(p, [p.location.lat, p.location.lng]);
+    if (res.name === 'undefined' || typeof (res.name) === 'undefined') {
+      place.push('Others');
+    } else {
+      place.push(res.name);
     }
   }
 
-  for (const p of data.results) {
-    if (typeof (areas[p.country.name]) !== 'undefined') {
-      areas[p.country.name] += 1;
+  for (const p of place) {
+    if (typeof (areas[p]) !== 'undefined') {
+      areas[p] += 1;
     } else {
-      areas[p.country.name] = 1;
+      areas[p] = 1;
     }
   }
-  return { areas };
+  return { countries: areas };
 };
 
 const sortByCountries = (data) => {

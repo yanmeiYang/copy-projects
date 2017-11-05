@@ -445,7 +445,7 @@ const ifNotImgShowName = (personInfo) => { //当作者的头像是空的时候�
 const showImagesInDiv = (ids, imgwidth, blankAvatar, imgdivs) => {
   for (let i = 0; i < ids.length; i += 1) {
     const cimg = imgdivs[i];
-    const personInfo = dataCache[ids[i]];
+    const personInfo = dataCache[ids[i]]; //确保数据都是缓存了的
     const showinfo = ifNotImgShowName(personInfo);
     //需要缓存的地方,判断是否存在
     const image = new Image(); //进行深拷贝
@@ -502,7 +502,7 @@ function showTopImages(ids, imgwidth, blankAvatar, imgdivs) {
   }
 }
 
-function addImageListener(map, ids, getInfoWindow, event, imgwidth, type, projection, infowindow) {
+function addImageListener(map, ids, getInfoWindow, event, imgwidth, type, projection, infowindow, callback) {
   // get current point.
   const apos = getById('allmap').getBoundingClientRect();
   const cpos = event.target.getBoundingClientRect();
@@ -530,23 +530,17 @@ function addImageListener(map, ids, getInfoWindow, event, imgwidth, type, projec
     personInfo = dataCache[ids[chtml.split('@@@@@@@')[1]]];
   } else {
     if (event.target.tagName.toUpperCase() === 'DIV') {
-      console.log(event.target.firstChild);
-      console.log("@@@@@@@@@@@@@@@@@@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11");
       if (event.target.firstChild) { //图片还没有加载出来的时候
         num = event.target.firstChild.name;
       } else {
         num = event.target.title;
       }
-      console.log(event.target.tip);
-      console.log(event.target);
-      console.log(num);
     } else if (event.target.tagName.toUpperCase() === 'IMG') {
       num = event.target.name;
     }
     personInfo = dataCache[num];
   }
-  console.log(personInfo);
-  if (typeof (personInfo) === 'undefined') {
+  if (typeof (personInfo) === 'undefined' || personInfo === 'undefined') {
     const resultPromise = listPersonByIds(ids);
     resultPromise.then(
       (data) => { //加入到缓存中
@@ -557,7 +551,9 @@ function addImageListener(map, ids, getInfoWindow, event, imgwidth, type, projec
           dataCache[p.id] = p;
         }
         personInfo = dataCache[num];
-        return personInfo;
+        if (typeof (callback) === 'function') {
+          callback(personInfo);
+        }
       },
       () => {
         console.log('failed');
@@ -566,7 +562,9 @@ function addImageListener(map, ids, getInfoWindow, event, imgwidth, type, projec
       console.error(error);
     });
   } else {
-    return personInfo;
+    if (typeof (callback) === 'function') {
+      callback(personInfo);
+    }
   }
 }
 

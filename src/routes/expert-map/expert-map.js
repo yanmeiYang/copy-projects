@@ -124,14 +124,15 @@ export default class ExpertMap extends PureComponent {
     for (let j = 0; j < imgdivs.length; j += 1) {
       const cimg = imgdivs[j];
       cimg.addEventListener('mouseenter', (event) => {
-        const p = addImageListener(map, ids, getInfoWindow, event, imgwidth, type);
-        const pId = p.id;
-        const idx = [];
-        idx.push(pId);
-        requestDataNow(idx, () => {
-          this.setState({ cperson: pId }, syncInfoWindow());
-          copyImage(`${pId}`, `Mid${pId}`, 90);
-          this.currentPersonId = pId;
+        addImageListener(map, ids, getInfoWindow, event, imgwidth, type, '', '', (data) => {
+          const pId = data.id;
+          const idx = [];
+          idx.push(pId);
+          requestDataNow(idx, () => {
+            this.setState({ cperson: pId }, syncInfoWindow());
+            copyImage(`${pId}`, `Mid${pId}`, 90);
+            this.currentPersonId = pId;
+          });
         });
       });
       cimg.addEventListener('mouseleave', () => {

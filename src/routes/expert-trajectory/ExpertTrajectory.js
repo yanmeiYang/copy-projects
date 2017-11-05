@@ -3,16 +3,6 @@
  */
 import React from 'react';
 import loadScript from 'load-script';
-
-// import echarts from 'echarts/lib/echarts'; // 必须
-// import 'echarts/lib/component/tooltip';
-// import 'echarts/lib/component/legend';
-// import 'echarts/lib/component/geo';
-// import 'echarts/lib/chart/map'; // 引入地图
-// import 'echarts/lib/chart/lines';
-// import 'echarts/lib/chart/effectScatter';
-// import 'echarts/map/js/china'; // 引入中国地图//
-// import 'echarts/map/js/world';
 import { Button } from 'antd';
 import styles from './ExpertTrajectory.less';
 import mapData from '../../../external-docs/expert-trajectory/testData.json';

@@ -6,15 +6,6 @@ import { connect } from 'dva';
 import classnames from 'classnames';
 import { routerRedux } from 'dva/router';
 import queryString from 'query-string';
-// import { Slider, Switch, InputNumber, Row, Col, Icon, Button } from 'antd';
-// import 'echarts/lib/component/tooltip';
-// import 'echarts/lib/component/legend';
-// import 'echarts/lib/component/geo';
-// import 'echarts/lib/chart/map'; // 引入地图
-// import 'echarts/lib/chart/lines';
-// import 'echarts/lib/chart/effectScatter';
-// import 'echarts/map/js/china'; // 引入中国地图//
-// import 'echarts/map/js/world';
 import { Layout } from 'antd';
 import styles from './ExpertTrajectoryPage.less';
 import { PersonListLittle } from '../../components/person';
@@ -75,8 +66,8 @@ class ExpertTrajectoryPage extends React.Component {
     }
   };
 
-  onPersonClick = (personId) => {
-    this.props.dispatch({ type: 'expertTrajectory/dataFind', payload: { personId } });
+  onPersonClick = (personId, start, end) => {
+    this.props.dispatch({ type: 'expertTrajectory/dataFind', payload: { personId, start, end } });
   };
 
   callSearchMap = (query) => {
@@ -84,7 +75,6 @@ class ExpertTrajectoryPage extends React.Component {
   };
 
   render() {
-    // // const model = this.props && this.props.expertTrajectory;
     const persons = this.props.expertTrajectory.results;
 
     return (

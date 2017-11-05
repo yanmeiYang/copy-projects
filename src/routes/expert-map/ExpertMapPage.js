@@ -7,7 +7,7 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Layout } from 'routes';
 import { sysconfig } from 'systems';
-import { Button } from 'antd';
+import { Button, Modal, Icon, Tabs } from 'antd';
 import { applyTheme } from 'themes';
 import { FormattedMessage as FM } from 'react-intl';
 import queryString from 'query-string';
@@ -15,12 +15,17 @@ import { Auth } from 'hoc';
 import { detectSavedMapType, compare } from 'utils';
 import { DomainSelector, MapFilter } from 'routes/expert-map';
 import * as strings from 'utils/strings';
+import loadScript from 'load-script';
 import ExpertGoogleMap from './expert-googlemap.js';
 import ExpertMap from './expert-map.js';
 import styles from './ExpertMapPage.less';
+import {
+  showSta,
+} from './utils/sta-utils';
 
 const tc = applyTheme(styles);
-const ButtonGroup = Button.Group;
+const [ButtonGroup, TabPane] = [Button.Group, Tabs.TabPane];
+let echarts;
 
 const MAP_DISPATCH_KEY = 'map-dispatch';
 
@@ -39,6 +44,7 @@ export default class ExpertMapPage extends React.Component {
     range: '', // Filter by acm, ieee
     hindexRange: '', // Filter by hindex
     type: '0', // 根据地图显示类型，默认为0
+    visible: false, //模态框是否可见
   };
 
   componentWillMount() {
@@ -57,6 +63,12 @@ export default class ExpertMapPage extends React.Component {
     } else if (q) {
       this.searchMapByQuery(q);
     }
+  }
+
+  componentDidMount() {
+    loadScript('/lib/echarts.js', () => {
+      echarts = window.echarts; // eslint-disable-line prefer-destructuring
+    });
   }
 
   componentWillReceiveProps(np) {
@@ -87,10 +99,13 @@ export default class ExpertMapPage extends React.Component {
     if (compare(ns, this.state, 'mapType', 'range', 'hindexRange', 'type')) {
       return true;
     }
+    if (ns.visible !== this.state.visible) {
+      return true;
+    }
     return false;
   }
 
-  onDomainChange = (domain) => {
+  onDomainChange = (domain) => { //修改url,shouldComponentUpdate更新
     const { dispatch } = this.props;
     dispatch(routerRedux.push({ pathname: '/expert-map', search: `?domain=${domain.id}` }));
   };
@@ -103,7 +118,7 @@ export default class ExpertMapPage extends React.Component {
     this.setState({ hindexRange: key });
   };
 
-  onSearch = (data) => {
+  onSearch = (data) => { //修改url,shouldComponentUpdate更新
     const { dispatch } = this.props;
     if (data.query) {
       this.setState({ query: data.query });
@@ -126,18 +141,18 @@ export default class ExpertMapPage extends React.Component {
     this.setState({ mapType });
   };
 
-  searchMapByDomain = (domainEBID) => {
+  searchMapByDomain = (domainEBID) => { //models里面重新查询数据
     const { dispatch } = this.props;
     dispatch({ type: 'expertMap/searchExpertBaseMap', payload: { eb: domainEBID } });
     this.resetRightInfo();
   };
 
-  searchMapByQuery = (query) => {
+  searchMapByQuery = (query) => { //models里面重新查询数据
     this.props.dispatch({
       type: 'expertMap/searchMap',
       payload: { query: strings.firstNonEmptyQuery(query) },
     });
-    this.resetRightInfo();
+    this.resetRightInfo(); //右边的置为全局的
   };
 
   resetRightInfo = () => {
@@ -157,13 +172,69 @@ export default class ExpertMapPage extends React.Component {
     { key: '5', label: '机构' },
   ];
 
+  showModal = () => {
+    this.setState({
+      visible: true,
+    }, () => {
+      const chartsinterval = setInterval(() => {
+        const divId = document.getElementById('bycountries');
+        if (typeof (divId) !== 'undefined' && divId !== 'undefined') {
+          clearInterval(chartsinterval);
+          showSta(echarts, divId, this.props.expertMap.geoData, 'country');
+        }
+      }, 100);
+    });
+  };
+
+  handleOk = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleCancel = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+
+  changeStatistic = (key) => {
+    const chartsinterval = setInterval(() => {
+      let divId;
+      let type;
+      if (key === 1) {
+        divId = document.getElementById('bycountries');
+        type = 'country';
+      } else {
+        divId = document.getElementById('bigArea');
+        type = 'bigArea';
+      }
+      if (typeof (divId) !== 'undefined' && divId !== 'undefined') {
+        clearInterval(chartsinterval);
+        showSta(echarts, divId, this.props.expertMap.geoData, type);
+      }
+    }, 100);
+  };
+
 
   render() {
     const { mapType, query, domainId } = this.state;
     const options = { ...this.state, title: this.titleBlock };//以便传入到组件里面
-    console.log(this.state);
-    console.log(this.props);
-    console.log(sysconfig.HotDomains_Type + '###################');
+
+    const staJsx = (
+      <div className={styles.charts} >
+        <div id="bycountries" className={styles.chart1} />
+      </div>
+    );
+
+    const staJsx1 = (
+      <div className={styles.charts} >
+        <div id="bigArea" className={styles.chart1} />
+      </div>
+    );
+
     return (
       <Layout
         contentClass={tc(['expertMapPage'])}
@@ -206,6 +277,33 @@ export default class ExpertMapPage extends React.Component {
           </div>
 
           <div className={styles.scopes}>
+            <div className={styles.analysis}>
+              <Button onClick={this.showModal}>
+                <Icon type="line-chart" />
+                <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.statistic" />
+              </Button>
+              <Modal
+                title="Results"
+                visible={this.state.visible}
+                onOk={this.handleOk}
+                onCancel={this.handleCancel}
+                footer={[
+                  <Button key="back" size="large" onClick={this.handleCancel}>
+                    <Icon type="download" />
+                    <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.download" />
+                  </Button>,
+                  <Button key="submit" type="primary" size="large" onClick={this.handleOk}>
+                    <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.ok" />
+                  </Button>,
+                ]}
+                width="700px"
+              >
+                <Tabs defaultActiveKey="1" onChange={this.changeStatistic}>
+                  <TabPane tab="国家" key="1">{staJsx && staJsx}</TabPane>
+                  <TabPane tab="大区" key="2">{staJsx1 && staJsx1}</TabPane>
+                </Tabs>
+              </Modal>
+            </div>
             <div className={styles.switch}>
               <ButtonGroup id="diffmaps">
                 <Button
@@ -224,10 +322,8 @@ export default class ExpertMapPage extends React.Component {
                 </Button>
               </ButtonGroup>
             </div>
-
           </div>
         </div>
-
         {mapType === 'google'
           ? <ExpertGoogleMap {...options} />
           : <ExpertMap {...options} />

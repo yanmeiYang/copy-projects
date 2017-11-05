@@ -14,17 +14,29 @@ export default class Labels extends Component {
     targetEntity: PropTypes.string,
   };
 
-  // state = {};
+  state = {
+    tags: [],
+  };
 
   componentWillMount = () => {
     this.setState({ tags: this.props.tags });
   };
 
   componentWillReceiveProps = (nextProps) => {
+    // tags from outside.
     if (compare(nextProps, this.props, 'tags')) {
       this.setState({ tags: nextProps.tags });
     }
   };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    // if (compare(
+    //     this.props, nextProps,
+    //   )) {
+    //   return true;
+    // }
+    return true;
+  }
 
   onTagChange = (op, tag, finalTag) => {
     const { dispatch, targetId, targetEntity } = this.props;
@@ -36,47 +48,28 @@ export default class Labels extends Component {
     }
     const payload = { targetEntity, targetId, tag };
     const type = `commonLabels/${op}`;
-    console.log('---------------', type);
-    dispatch({ type, payload }, (data) => {
-      console.log('Retuen data is ', data);
-    });
+    const { tags } = this.state;
+    dispatch({ type, payload })
+      .then((success) => {
+        if (success) {
+          if (op === 'add') {
+            const newTags = tags || [];
+            if (newTags.indexOf(tag) === -1) {
+              this.setState({ tags: [...newTags, tag] });
+            }
+          } else if (op === 'remove') {
+            console.log('remove this tags',);
+            // TODO /......
+          }
+        }
+      });
   };
-
-  // handleClose = (removedTag) => {
-  //   const tags = this.state.tags.filter(tag => tag !== removedTag);
-  //   this.setState({ tags });
-  //   this.props.callbackParent(tags);
-  // };
-  //
-  // showInput = () => {
-  //   this.setState({ inputVisible: true }, () => this.input.focus());
-  // };
-  //
-  // handleInputChange = (e) => {
-  //   this.setState({ inputValue: e.target.value });
-  // };
-  //
-  // handleInputConfirm = () => {
-  //   const { inputValue } = this.state;
-  //   let tags = this.state.tags;
-  //   if (inputValue && tags.indexOf(inputValue) === -1) {
-  //     tags = [...tags, inputValue];
-  //   }
-  //   this.setState({
-  //     tags,
-  //     inputVisible: false,
-  //     inputValue: '',
-  //   });
-  //   this.props.callbackParent(tags);
-  // };
-  //
-  // saveInputRef = input => this.input = input;
 
   render() {
     const { tags } = this.state;
-    const { commonLabels } = this.props;
+    // const { commonLabels } = this.props;
     return (
-      <LabelLine tags={commonLabels.tags} onTagChange={this.onTagChange} canRemove canAdd />
+      <LabelLine tags={tags} onTagChange={this.onTagChange} canRemove canAdd />
     );
   }
 }

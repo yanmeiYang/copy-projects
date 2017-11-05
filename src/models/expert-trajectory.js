@@ -49,8 +49,8 @@ export default {
 
     * dataFind({ payload }, { call, put }) {
       console.log('enter kfFind, with query:', payload);
-      const { personId } = payload;
-      const data = yield call(traDataFindService.findTrajPerson, personId);
+      const { personId, start, end } = payload;
+      const data = yield call(traDataFindService.findTrajPerson, personId, start, end);
       yield put({ type: 'dataFindSuccess', payload: { data } });
     },
 

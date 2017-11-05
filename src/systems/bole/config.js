@@ -5,7 +5,7 @@ import React from 'react';
 import { Link } from 'dva/router';
 import { FormattedMessage as FM } from 'react-intl';
 import defaults from '../utils';
-import { GetComments } from './hooks/person-comment-hooks';
+import { GetComments, FetchPersonLabels } from './hooks';
 
 import { createRoster } from '../../hooks';
 
@@ -63,6 +63,7 @@ module.exports = {
   // PersonList_DidMountHooks: [],
   PersonList_UpdateHooks: [
     param => GetComments(param),
+    param => FetchPersonLabels(param),
   ],
 
   Search_CheckEB: true, // Check ExpertBase.

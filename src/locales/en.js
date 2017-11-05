@@ -76,6 +76,9 @@ export default {
   'com.expertMap.headerLine.label.baiduMap': 'Baidu Map',
   'com.expertMap.headerLine.label.googleMap': 'Google Map',
   'com.expertMap.headerLine.label.level': 'Level：',
+  'com.expertMap.headerLine.label.statistic': 'Statistic & Analysis',
+  'com.expertMap.headerLine.label.download': 'Download Report',
+  'com.expertMap.headerLine.label.ok': 'OK',
 
   'com.ExpertBase.Button.Add': '添加',
   'com.ExpertBase.Button.Remove': '删除',

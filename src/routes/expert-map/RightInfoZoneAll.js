@@ -17,7 +17,6 @@ class RightInfoZoneAll extends React.PureComponent {
 
   render() {
     const { persons } = this.props;
-    console.log('persons:', persons);
     if (!persons) {
       return null;
     }

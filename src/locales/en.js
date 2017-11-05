@@ -9,6 +9,12 @@ export default {
   'system.lang.option_en': 'English',
   'system.lang.option_zh': '简体中文',
 
+  // login
+  'login.header': 'Login',
+  'login.loginBtn': 'Login',
+  'login.forgetPw': 'Forget Password?',
+  'login.newUserApplication': 'New User Application',
+
   // Index
   'index.title': 'Expert Search',
   'search.translateSearchMessage.1': 'We also search "{enQuery}" for you.',

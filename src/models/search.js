@@ -101,6 +101,24 @@ export default {
       );
 
       if (data.data && data.data.succeed) {
+        // console.log('>>>>>> ---==== to next API');
+        const personIds = data.data.items && data.data.items.map(item => item && item.id);
+        if (personIds) {
+          const activityScores = yield call(
+            searchService.getActivityScoresByPersonIds,
+            personIds.join('.'),
+          );
+          if (activityScores.success && activityScores.data && activityScores.data.indices &&
+            activityScores.data.indices.length > 0) {
+            data.data.items && data.data.items.map((item, index) => {
+              const activityRankingContrib =
+                activityScores.data.indices[index].filter(scores => scores.key === 'contrib');
+              data.data.items[index].indices.activityRankingContrib =
+                activityRankingContrib.length > 0 ? activityRankingContrib[0].score : 0;
+              return '';
+            });
+          }
+        }
         yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data } });
       } else if (data.data && data.data.result) {
         yield put({ type: 'searchPersonSuccess', payload: { data: data.data, query, total } });

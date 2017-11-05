@@ -48,18 +48,15 @@ export default class Seminar extends React.Component {
   };
 
   componentDidUpdate(nextProps) {
-    if (!isEqual(nextProps.seminar.orgByActivity, this.props.seminar.orgByActivity)) {
-      const orgData = this.props.seminar.orgByActivity.data;
-      const organizer = (orgData && orgData.length > 0) ?
-        contactByJoint(this.state.parentOrg, orgData[0].key) : this.state.orgType;
-      if (orgData) {
+    const { parentOrg, orgType, category, query, tag } = this.state;
+    const { orgByActivity } = this.props.seminar;
+    if (!isEqual(nextProps.seminar.orgByActivity, orgByActivity)) {
+      const organizer = (orgByActivity.data && orgByActivity.data.length > 0) ?
+        contactByJoint(parentOrg, orgByActivity.data[0].key) : orgType;
+      if (orgByActivity.data) {
         const params = {
-          query: this.state.query,
-          organizer,
-          category: this.state.category,
-          tag: this.state.tag,
-          offset: 0,
-          size: this.props.seminar.sizePerPage,
+          query, organizer, category, tag,
+          offset: 0, size: this.props.seminar.sizePerPage,
           src: sysconfig.SOURCE,
         };
         this.props.dispatch({ type: 'seminar/searchActivity', payload: params });
@@ -159,7 +156,7 @@ export default class Seminar extends React.Component {
     if (checked) {
       if (type === 'orgType') {
         this.props.dispatch({
-          type: 'seminar/getCategory',
+          type: 'seminar/getOrgList',
           payload: { category: `orglist_${item.id}` },
         });
         this.setState({ [type]: key, parentOrg: item.key, organizer: '' });

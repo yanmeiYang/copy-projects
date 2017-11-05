@@ -83,7 +83,7 @@ const routes = [
   core.KnowledgeGraph, // TODO BUG
   core.RanksHelp,
 
-  trend.TrendPredictionPage,
+  // trend.TrendPredictionPage,
 
   // 2b profile
   router2bprofile.TobProfile,

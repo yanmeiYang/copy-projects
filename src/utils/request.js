@@ -163,7 +163,7 @@ const fetch = (options) => {
 
   // enable debug in next api.
   if (process.env.NODE_ENV !== 'production') {
-    headers.debug = 1;
+    // headers.debug = 1;
   }
 
   // real call

@@ -9,6 +9,12 @@ export default {
   'system.lang.option_en': 'English',
   'system.lang.option_zh': '简体中文',
 
+  // login
+  'login.header': '登录',
+  'login.loginBtn': '登录',
+  'login.forgetPw': '忘记密码?',
+  'login.newUserApplication': '新用户申请',
+
   // Index
   'index.title': '专家搜索',
   'search.translateSearchMessage.1': '同时搜索了 "{enQuery}".',

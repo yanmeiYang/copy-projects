@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import { Layout } from 'routes';
+import { FormattedMessage as FM } from 'react-intl';
 import { Button, Modal, Row, Form, Input, Icon } from 'antd';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
@@ -72,7 +73,15 @@ class Login extends React.Component {
       >
         <Form layout={'vertical'}>
           <Row className={styles.formHeader}>
-            <h1>登录</h1>
+            <h1>
+              <FM id="login.header" defaultMessage="Login" />
+              {process.env.NODE_ENV !== 'production' &&
+              <span className={styles.loginSource}>
+                {sysconfig.PageTitle}
+              </span>
+              }
+            </h1>
+
           </Row>
           <Row className={styles.formContent}>
             <FormItem hasFeedback>
@@ -101,14 +110,19 @@ class Login extends React.Component {
                 {errorMessage.status}用户名或密码错误
               </div>}
               <Button type="primary" size="large" onClick={this.handleOk}
-                      loading={loading} className={styles.loginBtn}> 登录
+                      loading={loading} className={styles.loginBtn}>
+                <FM id="login.loginBtn" defaultMessage="Login" />
               </Button>
             </FormItem>
             <FormItem>
               <div className={styles.forgetpw}>
-                <a href="/forgot-password" className={styles.forgotpwbtn}>忘记密码?</a>
+                <a href="/forgot-password" className={styles.forgotpwbtn}>
+                  <FM id="login.forgetPw" defaultMessage="Forget Password?" />
+                </a>
                 {sysconfig.ApplyUserBtn &&
-                <span className={styles.applyUserbtn} onClick={this.applyUser}>新用户申请</span>
+                <span className={styles.applyUserbtn} onClick={this.applyUser}>
+                  <FM id="login.newUserApplication" defaultMessage="New user application" />
+                </span>
                 }
               </div>
             </FormItem>

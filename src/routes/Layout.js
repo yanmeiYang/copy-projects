@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Helmet } from 'react-helmet';
 import ReactGA from 'react-ga';
-import NProgress from 'nprogress'
+import NProgress from 'nprogress';
 import { Layout as LayoutComponent } from 'antd';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
@@ -66,8 +66,10 @@ export default class Layout extends Component {
   componentDidMount() {
     // TODO 这个统计有问题呀 ????
     if (sysconfig.googleAnalytics) {
-      console.log('********* google analytics *********');
-      ReactGA.initialize(sysconfig.googleAnalytics);
+      const { user } = this.props.app;
+      ReactGA.initialize(sysconfig.googleAnalytics, {
+        gaOptions: { userId: (user && user.id) || '' },
+      });
       ReactGA.pageview(window.location.href);
     }
   }

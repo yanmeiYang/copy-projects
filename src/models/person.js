@@ -35,7 +35,7 @@ export default {
           const personId = decodeURIComponent(match[1]);
           // console.log('personId is :', personId);
           dispatch({ type: 'getPerson', payload: { personId } });
-          dispatch({ type: 'getActivityAvgScoresByPersonId', payload: { id: personId } })
+          dispatch({ type: 'getActivityAvgScoresByPersonId', payload: { id: personId } });
           // dispatch({ type: 'setParams', payload: { personId } });
         }
       });

@@ -107,6 +107,7 @@ module.exports = {
     getEmailCrImage: `${baseURL}/person/email-cr/i/`,
     listPersonByIds: `${baseURL}/person/batch-list`,
     getActivityAvgScoresByPersonId: `${baseURL}/person/activity/:id/indices`,
+    batchGetActivityCompareScoresByPersonId: `${baseURL}/person/activity/:ids/batch/indices`,
 
     // merge
     tryToDoMerge: `${baseURL}/bifrost/person/merge/:mid`,

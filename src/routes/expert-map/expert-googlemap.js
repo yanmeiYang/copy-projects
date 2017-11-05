@@ -36,6 +36,7 @@ import {
   dataCache,
   copyImage,
   checkCacheLevel,
+  requestDataNow,
 } from './utils/cache-utils';
 
 let map1;
@@ -84,17 +85,19 @@ export default class ExpertGoogleMap extends React.Component {
       content: "<div id='author_info' class='popup'></div>",
     });
     window.google.maps.event.addListener(marker, 'mouseover', () => {
-      if (that.currentPersonId !== personId) {
-        onResetPersonCard(dispatch);
-        infoWindow.open(map, marker);
-        this.setState({ cperson: personId }, syncInfoWindow());//回调函数里面改写
-      } else {
-        infoWindow.open(map, marker);
-        syncInfoWindow();
-      }
-      //使用中等大小的图标，将图片拷贝过去，和cluster中的一样,一定注意其逻辑顺序啊！
-      copyImage(`${personId}`, `Mid${personId}`, 90);
-      that.currentPersonId = personId;
+      onResetPersonCard(dispatch);
+      infoWindow.open(map, marker);
+      requestDataNow(`${personId}`, `Mid${personId}`, 90, () => { //获取完信息之后再回调
+        if (that.currentPersonId !== personId) {
+          this.setState({ cperson: personId }, syncInfoWindow());//回调函数里面改写
+        } else {
+          infoWindow.open(map, marker);
+          syncInfoWindow();
+        }
+        //使用中等大小的图标，将图片拷贝过去，和cluster中的一样,一定注意其逻辑顺序啊！
+        copyImage(`${personId}`, `Mid${personId}`, 90);
+        that.currentPersonId = personId;
+      });
     });
 
     window.google.maps.event.addListener(marker, 'mouseout', () => {
@@ -324,7 +327,7 @@ export default class ExpertGoogleMap extends React.Component {
     }
     const avg = (hIndexSum / count).toFixed(0);
     let personPopupJsx;
-    let person = dataCache[this.state.cperson];
+    const person = dataCache[this.state.cperson];
     if (person) {
       const [divId, name] = [`Mid${person.id}`, person.name];
       const pos = person && person.pos && person.pos[0] && person.pos[0].n;
@@ -334,28 +337,6 @@ export default class ExpertGoogleMap extends React.Component {
       personPopupJsx = (
         <div className="personInfo">
           <div name={divId} />
-          <div className="info">
-            <div className="nameLine">
-              <div className="right">H-index:<b> {hindex}</b>
-              </div>
-              <div className="name">{name}</div>
-            </div>
-            {pos && <span><i className="fa fa-briefcase fa-fw" />{pos}</span>}
-            {aff && <span><i className="fa fa-institution fa-fw" />{aff}</span>}
-          </div>
-        </div>
-      );
-    } else { //数据没有缓存的时候自己加载
-      person = model.personInfo;
-      const url = profileUtils.getAvatar(person.avatar, person.id, 90);
-      const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
-      const pos = profileUtils.displayPosition(person.pos);
-      const aff = profileUtils.displayAff(person);
-      const hindex = person && person.indices && person.indices.h_index;
-
-      personPopupJsx = (
-        <div className="personInfo">
-          <div><img className="img" src={url} alt="IMG" /></div>
           <div className="info">
             <div className="nameLine">
               <div className="right">H-index:<b> {hindex}</b>

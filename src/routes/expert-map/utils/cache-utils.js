@@ -14,18 +14,69 @@ const deepCopyImage = (imageId, size) => { //图像深度拷贝
   return image;
 };
 
+const requestDataNow = (imageId, divId, size, callback) => {
+  if (typeof (dataCache[imageId]) === 'undefined') { //人的信息都没有缓存的情况
+    const ids = [];
+    ids.push(imageId);
+    const resultPromise = listPersonByIds(ids);
+    resultPromise.then(
+      (data) => {
+        //加入到缓存中
+        for (let i = 0; i < ids.length; i += 1) {
+          indexCache.push(ids[i]);
+        }
+        for (const p of data.data.persons) {
+          dataCache[p.id] = p;
+        }
+        const personInfo = dataCache[imageId];
+        const url = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 90);
+        const image2 = new Image();
+        image2.src = url;
+        image2.name = personInfo.id;//不能使用id,否则重复
+        image2.width = 90;
+        image2.onerror = () => {
+          image2.src = blankAvatar;
+        };
+        imageCache[personInfo.id] = image2;
+        if (typeof (callback) === 'function') {
+          callback();
+        }
+      },
+      () => {
+        console.log('failed');
+      },
+    ).catch((error) => {
+      console.error(error);
+    });
+  } else {
+    const personInfo = dataCache[imageId];
+    if (typeof (imageCache[imageId]) !== 'undefined') {
+      const url = profileUtils.getAvatar(personInfo.avatar, personInfo.id, 90);
+      const image2 = new Image();
+      image2.src = url;
+      image2.name = personInfo.id;//不能使用id,否则重复
+      image2.width = 90;
+      image2.onerror = () => {
+        image2.src = blankAvatar;
+      };
+      imageCache[personInfo.id] = image2;
+      if (typeof (callback) === 'function') {
+        callback();
+      }
+    } else {
+      if (typeof (callback) === 'function') {
+        callback();
+      }
+    }
+  }
+};
 
 const copyImage = (imageId, divId, size) => {
-  const img = imageCache[imageId];
-  if (typeof (img) !== 'undefined') { //图像信息做了缓存的时候
-    const doc = document.getElementsByName(divId); //必定会有两个
-    for (const d of doc) { //插入图像
-      const image = deepCopyImage(imageId, size);
-      d.innerHTML = '';
-      d.appendChild(image);
-    }
-  } else {
-    console.log('@@@QQQQ!');
+  const doc = document.getElementsByName(divId); //必定会有两个
+  for (const d of doc) { //插入图像
+    const image = deepCopyImage(imageId, size); //注意，copyImage在使用的时候必定是缓存了的
+    d.innerHTML = '';
+    d.appendChild(image);
   }
 };
 
@@ -177,4 +228,5 @@ module.exports = {
   cacheImage,
   onlyCacheInfo,
   checkCacheLevel,
+  requestDataNow,
 };

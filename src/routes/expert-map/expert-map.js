@@ -1,6 +1,3 @@
-/**
- *  Created by ???? on 2017-06-07;
- */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
@@ -34,6 +31,7 @@ import {
   dataCache,
   copyImage,
   checkCacheLevel,
+  requestDataNow,
 } from './utils/cache-utils';
 
 let map1; // 地图刷新前，用于存储上次浏览的地点
@@ -296,19 +294,19 @@ export default class ExpertMap extends PureComponent {
     const { dispatch } = this.props;
     const infoWindow = getInfoWindow();
     marker.addEventListener('mouseover', (e) => {
-      if (this.currentPersonId !== personId) {
-        onResetPersonCard(dispatch); // TODO Load default name,重置其信息
-        e.target.openInfoWindow(infoWindow);
-        this.setState({ cperson: personId }, syncInfoWindow());//回调函数里面改写
-      } else {
-        e.target.openInfoWindow(infoWindow);
-        syncInfoWindow();
-      }
-      //使用中等大小的图标，将图片拷贝过去，和cluster中的一样,一定注意其逻辑顺序啊！
-      const id = `${personId}`;
-      const divId = `Mid${personId}`;
-      copyImage(id, divId, 90);
-      this.currentPersonId = personId;
+      onResetPersonCard(dispatch); // TODO Load default name,重置其信息
+      e.target.openInfoWindow(infoWindow);
+      requestDataNow(`${personId}`, `Mid${personId}`, 90, () => { //获取完信息之后再回调
+        if (this.currentPersonId !== personId) {
+          this.setState({ cperson: personId }, syncInfoWindow());//回调函数里面改写
+        } else {
+          e.target.openInfoWindow(infoWindow);
+          syncInfoWindow();
+        }
+        //使用中等大小的图标，将图片拷贝过去，和cluster中的一样,一定注意其逻辑顺序啊！
+        copyImage(`${personId}`, `Mid${personId}`, 90);
+        this.currentPersonId = personId;
+      });
     });
     marker.addEventListener('mouseout', (e) => {
       e.target.closeInfoWindow(infoWindow);
@@ -323,7 +321,7 @@ export default class ExpertMap extends PureComponent {
     const model = this.props && this.props.expertMap;
     const { results } = model.geoData;
     let personPopupJsx;
-    let person = dataCache[this.state.cperson];
+    const person = dataCache[this.state.cperson];
     if (person) {
       const [divId, name] = [`Mid${person.id}`, person.name];
       const pos = person && person.pos && person.pos[0] && person.pos[0].n;
@@ -333,28 +331,6 @@ export default class ExpertMap extends PureComponent {
       personPopupJsx = (
         <div className="personInfo">
           <div name={divId} />
-          <div className="info">
-            <div className="nameLine">
-              <div className="right">H-index:<b> {hindex}</b>
-              </div>
-              <div className="name">{name}</div>
-            </div>
-            {pos && <span><i className="fa fa-briefcase fa-fw" />{pos}</span>}
-            {aff && <span><i className="fa fa-institution fa-fw" />{aff}</span>}
-          </div>
-        </div>
-      );
-    } else { //数据没有缓存的时候自己加载
-      person = model.personInfo;
-      const url = profileUtils.getAvatar(person.avatar, person.id, 90);
-      const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
-      const pos = profileUtils.displayPosition(person.pos);
-      const aff = profileUtils.displayAff(person);
-      const hindex = person && person.indices && person.indices.h_index;
-
-      personPopupJsx = (
-        <div className="personInfo">
-          <div><img className="img" src={url} alt="IMG" /></div>
           <div className="info">
             <div className="nameLine">
               <div className="right">H-index:<b> {hindex}</b>

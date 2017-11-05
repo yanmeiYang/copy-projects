@@ -107,8 +107,9 @@ export default class ExpertMap extends PureComponent {
     for (const u of usersInfo.slice(0, 8)) {
       ids.push(u.id);
     }
-    showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch, this.props.expertMap.infoZoneIds);
-    this.listPersonDone(map, ids);
+    showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch, this.props.expertMap.infoZoneIds, () => {
+      this.listPersonDone(map, ids);
+    });
   };
 
   listPersonDone = (map, ids) => {
@@ -118,9 +119,7 @@ export default class ExpertMap extends PureComponent {
 
     const imgdivs = document.getElementsByName('scholarimg');
     if (imgdivs !== null && imgdivs.length !== 0) {
-      for (let i = 0; i < ids.length; i += 1) {
-        showTopImages(ids, i, imgwidth, blankAvatar, imgdivs);
-      }
+      showTopImages(ids, imgwidth, blankAvatar, imgdivs);
     }
     for (let j = 0; j < imgdivs.length; j += 1) {
       const cimg = imgdivs[j];

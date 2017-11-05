@@ -269,8 +269,9 @@ export default class ExpertGoogleMap extends React.Component {
     for (const u of usersInfo.slice(0, 8)) {
       ids.push(u.id);
     }
-    showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch, this.props.expertMap.infoZoneIds);
-    this.listPersonDone(map, ids, projection);
+    showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch, this.props.expertMap.infoZoneIds, () => {
+      this.listPersonDone(map, ids);
+    });
   };
 
   listPersonDone = (map, ids, projection) => {

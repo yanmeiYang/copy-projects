@@ -238,9 +238,6 @@ const findcontinent = (country) => {
       break;
     }
   }
-  if (flag) {
-    // console.log(country+"**********");
-  }
   return continent;
 };
 
@@ -325,7 +322,7 @@ function waitforBMapLib(tryTimes, interval, success, failed) {
   }, interval);
 }
 
-function showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch, infoIds) {
+function showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch, infoIds, callback) {
   const ishere = getById('panel');
   if (ishere != null) {
     detachCluster(ishere);
@@ -359,6 +356,7 @@ function showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch
     imgdiv.setAttribute('name', 'scholarimg');
     imgdiv.setAttribute('style', cstyle);
     imgdiv.setAttribute('class', 'imgWrapper');
+    imgdiv.setAttribute('title', ids[i]);
     imgdiv.innerHTML = '';
     insertAfter(imgdiv, thisNode);
     thisNode.appendChild(imgdiv);
@@ -386,6 +384,9 @@ function showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch
       }
       detachCluster(thisNode);
     });
+  }
+  if (typeof (callback) === 'function') {
+    callback();
   }
 }
 
@@ -466,6 +467,7 @@ const showImagesInDiv = (ids, imgwidth, blankAvatar, imgdivs) => {
     image.width = imgwidth;
     image.style = showinfo.style;
 
+    console.log(cimg);
     if (img.src.includes('default.jpg') || img.src.includes('blank_avatar.jpg')) {
       cimg.innerHTML = `<img id='${personInfo.id}' style='${showinfo.style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='' alt='${showinfo.name}'>`;
     } else {
@@ -527,15 +529,23 @@ function addImageListener(map, ids, getInfoWindow, event, imgwidth, type, projec
   if (chtml.split('@@@@@@@').length > 1) { //当时想到这种办法也挺不容易的，保留着吧，注意一个是id一个是序号
     personInfo = dataCache[ids[chtml.split('@@@@@@@')[1]]];
   } else {
-    console.log(event.target);
-    console.log(event.target.firstChild);
     if (event.target.tagName.toUpperCase() === 'DIV') {
-      num = event.target.firstChild.name;
+      console.log(event.target.firstChild);
+      console.log("@@@@@@@@@@@@@@@@@@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11");
+      if (event.target.firstChild) { //图片还没有加载出来的时候
+        num = event.target.firstChild.name;
+      } else {
+        num = event.target.title;
+      }
+      console.log(event.target.tip);
+      console.log(event.target);
+      console.log(num);
     } else if (event.target.tagName.toUpperCase() === 'IMG') {
       num = event.target.name;
     }
     personInfo = dataCache[num];
   }
+  console.log(personInfo);
   if (typeof (personInfo) === 'undefined') {
     const resultPromise = listPersonByIds(ids);
     resultPromise.then(
@@ -603,8 +613,6 @@ const syncInfoWindow = () => {
   const ai = getById('author_info');
   const pi = getById('personInfo');
   if (ai && pi) {
-    //console.log(ai.innerHTML);
-    //console.log(pi.innerHTML);
     ai.innerHTML = pi.innerHTML;
   }
 };

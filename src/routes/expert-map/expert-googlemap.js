@@ -158,9 +158,13 @@ export default class ExpertGoogleMap extends React.Component {
         });
         this.map = map; // set to global,以便全局取用
         map1 = this.map; // 地图刷新前，用于存储上次浏览的地点
-        place.results.sort((a, b) => b.hindex - a.hindex);
-        const locations = [];
+        if (place.results !== 'undefined' && typeof (place.results) !== 'undefined') {
+          place.results.sort((a, b) => b.hindex - a.hindex);
+        } else {
+          return true; //往下执行没有必要了
+        }
 
+        const locations = [];
         let j = 0;
         const ids = [];
         for (const pr of place.results) {
@@ -270,7 +274,7 @@ export default class ExpertGoogleMap extends React.Component {
       ids.push(u.id);
     }
     showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch, this.props.expertMap.infoZoneIds, () => {
-      this.listPersonDone(map, ids);
+      this.listPersonDone(map, ids, projection);
     });
   };
 

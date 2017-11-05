@@ -467,11 +467,12 @@ const showImagesInDiv = (ids, imgwidth, blankAvatar, imgdivs) => {
     image.width = imgwidth;
     image.style = showinfo.style;
 
-    console.log(cimg);
-    if (img.src.includes('default.jpg') || img.src.includes('blank_avatar.jpg')) {
-      cimg.innerHTML = `<img id='${personInfo.id}' style='${showinfo.style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='' alt='${showinfo.name}'>`;
-    } else {
-      cimg.appendChild(image);
+    if (cimg !== 'undefined' && typeof (cimg) !== 'undefined') {
+      if (img.src.includes('default.jpg') || img.src.includes('blank_avatar.jpg')) {
+        cimg.innerHTML = `<img id='${personInfo.id}' style='${showinfo.style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='' alt='${showinfo.name}'>`;
+      } else {
+        cimg.appendChild(image);
+      }
     }
   }
 };

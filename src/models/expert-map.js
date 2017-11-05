@@ -53,8 +53,15 @@ export default {
       const { ids } = payload;
       let data = cache[ids];
       if (!data) {
-        data = yield call(personService.listPersonByIds, ids);
-        cache[ids] = data;
+        data = [];
+        for (let i = 0; i < ids.length; i += 100) {
+          const cids = ids.slice(i, i + 100);
+          const data1 = yield call(personService.listPersonByIds, cids);
+          cache[ids] = data1;
+          for (const d of data1.data.persons) {
+            data.push(d);
+          }
+        }
       }
       yield put({ type: 'listPersonByIdsSuccess', payload: { data } });
     },
@@ -71,7 +78,7 @@ export default {
     },
 
     listPersonByIdsSuccess(state, { payload: { data } }) {
-      return { ...state, clusterPersons: data.data.persons };
+      return { ...state, clusterPersons: data };
     },
 
     setRightInfoZoneIds(state, { payload: { idString } }) {

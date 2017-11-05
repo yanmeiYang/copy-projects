@@ -6,11 +6,15 @@ import { connect } from 'dva';
 import classnames from 'classnames';
 import { routerRedux } from 'dva/router';
 import queryString from 'query-string';
+import { applyTheme, theme } from 'themes';
 import { Layout } from 'antd';
+import { Layout as Page } from 'routes';
 import styles from './ExpertTrajectoryPage.less';
 import { PersonListLittle } from '../../components/person';
 import ExpertTrajectory from './ExpertTrajectory';
+
 const { Content, Sider } = Layout;
+const tc = applyTheme(styles);
 
 class ExpertTrajectoryPage extends React.Component {
   constructor(props) {
@@ -76,24 +80,23 @@ class ExpertTrajectoryPage extends React.Component {
 
   render() {
     const persons = this.props.expertTrajectory.results;
-
+    const { query } = this.state;
     return (
-      <div className={classnames('content-inner', styles.page)}>
-
-        <Layout>
-          <Sider className={styles.left} width={250}>
-            <PersonListLittle persons={persons} onClick={this.onPersonClick} />
-          </Sider>
-
-          <Layout className={styles.right}>
-            <Content className={styles.content}>
-              <ExpertTrajectory />
-            </Content>
+      <Page contentClass={tc(['ExpertTrajectoryPage'])} onSearch={this.onSearch}
+            query={query}>
+        <div className={classnames('content-inner', styles.page)}>
+          <Layout>
+            <Sider className={styles.left} width={250}>
+              <PersonListLittle persons={persons} onClick={this.onPersonClick} />
+            </Sider>
+            <Layout className={styles.right}>
+              <Content className={styles.content}>
+                <ExpertTrajectory />
+              </Content>
+            </Layout>
           </Layout>
-        </Layout>
-
-      </div>
-
+        </div>
+      </Page>
     );
   }
 }

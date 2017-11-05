@@ -82,7 +82,7 @@ const checkCacheLevel = (level, ids) => {
     default:
       console.log('Wait for configuring!');
   }
-}
+};
 
 const onlyCacheInfo = (ids) => { // 缓存基本信息
   const idsneeded = [];

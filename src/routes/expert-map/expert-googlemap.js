@@ -412,9 +412,7 @@ export default class ExpertGoogleMap extends React.Component {
               </div>
             </div>
           </div>
-
         </div>
-
         <div id="personInfo" style={{ display: 'none' }}>
           {personPopupJsx && personPopupJsx}
         </div>

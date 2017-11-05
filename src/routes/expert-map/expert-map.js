@@ -409,19 +409,10 @@ export default class ExpertMap extends PureComponent {
               </div>
             </div>
           </div>
-
         </div>
-
         <div id="personInfo" style={{ display: 'none' }}>
           {personPopupJsx && personPopupJsx}
         </div>
-
-        {/* TODO what's this for? */}
-        <input id="currentId" type="hidden" />
-        <input id="currentIds" type="hidden" />
-        <input id="statistic" type="hidden" value="0" />
-        <input id="flowstate" type="hidden" value="0" />
-
       </div>
     );
   }

@@ -6,20 +6,15 @@ import { connect } from 'dva';
 import classnames from 'classnames';
 import { routerRedux } from 'dva/router';
 import queryString from 'query-string';
-// import { Slider, Switch, InputNumber, Row, Col, Icon, Button } from 'antd';
-// import 'echarts/lib/component/tooltip';
-// import 'echarts/lib/component/legend';
-// import 'echarts/lib/component/geo';
-// import 'echarts/lib/chart/map'; // 引入地图
-// import 'echarts/lib/chart/lines';
-// import 'echarts/lib/chart/effectScatter';
-// import 'echarts/map/js/china'; // 引入中国地图//
-// import 'echarts/map/js/world';
+import { applyTheme, theme } from 'themes';
 import { Layout } from 'antd';
+import { Layout as Page } from 'routes';
 import styles from './ExpertTrajectoryPage.less';
 import { PersonListLittle } from '../../components/person';
 import ExpertTrajectory from './ExpertTrajectory';
+
 const { Content, Sider } = Layout;
+const tc = applyTheme(styles);
 
 class ExpertTrajectoryPage extends React.Component {
   constructor(props) {
@@ -29,18 +24,10 @@ class ExpertTrajectoryPage extends React.Component {
 
   state = {
     query: '',
-    mapType: 'google', // [baidu|google]
-    view: {},
   };
 
   componentWillMount() {
-    const { query, type } = queryString.parse(location.search);
-    if (query) {
-      this.setState({ query });
-    }
-    if (type) {
-      this.setState({ mapType: type || 'google' });
-    }
+    const { query } = '';
     this.dispatch({
       type: 'app/layout',
       payload: {
@@ -75,35 +62,35 @@ class ExpertTrajectoryPage extends React.Component {
     }
   };
 
-  onPersonClick = (personId) => {
-    this.props.dispatch({ type: 'expertTrajectory/dataFind', payload: { personId } });
-  }
+  onPersonClick = (personId, start, end) => {
+    console.log(personId);
+
+    this.props.dispatch({ type: 'expertTrajectory/dataFind', payload: { personId, start, end } });
+  };
 
   callSearchMap = (query) => {
     this.props.dispatch({ type: 'expertTrajectory/searchPerson', payload: { query } });
-  }
+  };
 
   render() {
-    // // const model = this.props && this.props.expertTrajectory;
     const persons = this.props.expertTrajectory.results;
-
+    const { query } = this.state;
     return (
-      <div className={classnames('content-inner', styles.page)}>
-
-        <Layout>
-          <Sider className={styles.left} width={250}>
-            <PersonListLittle persons={persons} onClick={this.onPersonClick} />
-          </Sider>
-
-          <Layout className={styles.right}>
-            <Content className={styles.content}>
-              <ExpertTrajectory />
-            </Content>
+      <Page contentClass={tc(['ExpertTrajectoryPage'])} onSearch={this.onSearch}
+            query={query}>
+        <div className={classnames('content-inner', styles.page)}>
+          <Layout>
+            <Sider className={styles.left} width={250}>
+              <PersonListLittle persons={persons} onClick={this.onPersonClick.bind(this, 1900, 2017)} />
+            </Sider>
+            <Layout className={styles.right}>
+              <Content className={styles.content}>
+                <ExpertTrajectory />
+              </Content>
+            </Layout>
           </Layout>
-        </Layout>
-
-      </div>
-
+        </div>
+      </Page>
     );
   }
 }

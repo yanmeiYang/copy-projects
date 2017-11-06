@@ -22,12 +22,14 @@ export async function eventFind(year) { // 有query
   return request('/lab/trajectory/eventTop10000.json');
 }
 
-export async function findTrajPerson(id) {
-  return request(api.getTrajectoryInfo
+export async function findTrajPerson(id, start, end) {
+  return request(
+    api.getTrajectoryInfo
       .replace(':id', id)
-      .replace(':lo', 1988)
-      .replace(':hi', 2012)
-    , { method: 'GET' });
+      .replace(':lo', start)
+      .replace(':hi', end)
+    , { method: 'GET' },
+    );
 }
 
 export async function findHeatMap(rid) {

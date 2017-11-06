@@ -22,7 +22,8 @@ class RightInfoZonePerson extends React.PureComponent {
     }
 
     // used in person popup info
-    const url = profileUtils.getAvatar(person.avatar, person.id, 160);
+    let url = '/images/blank_avatar.jpg';
+    url = profileUtils.getAvatar(person.avatar, person.id, 160);
     const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
     const pos = profileUtils.displayPosition(person.pos);
     const aff = profileUtils.displayAff(person);

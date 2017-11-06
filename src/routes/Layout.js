@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Helmet } from 'react-helmet';
 import ReactGA from 'react-ga';
-import NProgress from 'nprogress'
+import NProgress from 'nprogress';
 import { Layout as LayoutComponent } from 'antd';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
@@ -28,6 +28,10 @@ export default class Layout extends Component {
   static displayName = 'Layout';
 
   static propTypes = {
+    // Page Title
+    pageTitle: PropTypes.string,
+    pageSubTitle: PropTypes.string,
+
     // Header
     logoZone: PropTypes.array,
     searchZone: PropTypes.array,
@@ -40,6 +44,7 @@ export default class Layout extends Component {
     contentClass: PropTypes.string,
     showHeader: PropTypes.bool,
     showNavigator: PropTypes.bool,
+    showSidebar: PropTypes.bool,
 
     fixAdvancedSearch: PropTypes.bool, // 是否固定是三个框的高级搜索
     disableAdvancedSearch: PropTypes.bool, // 禁止高级搜索
@@ -52,6 +57,7 @@ export default class Layout extends Component {
   static defaultProps = {
     showHeader: true,
     showNavigator: sysconfig.Layout_HasNavigator,
+    showSidebar: sysconfig.Layout_HasSideBar,
     sidebar: theme.sidebar,
     footer: theme.footer,
     fixAdvancedSearch: false, // TODO use localStorage to cache user habits.
@@ -60,8 +66,10 @@ export default class Layout extends Component {
   componentDidMount() {
     // TODO 这个统计有问题呀 ????
     if (sysconfig.googleAnalytics) {
-      console.log('********* google analytics *********');
-      ReactGA.initialize(sysconfig.googleAnalytics);
+      const { user } = this.props.app;
+      ReactGA.initialize(sysconfig.googleAnalytics, {
+        gaOptions: { userId: (user && user.id) || '' },
+      });
       ReactGA.pageview(window.location.href);
     }
   }
@@ -69,7 +77,7 @@ export default class Layout extends Component {
   render() {
     // console.count('>>>>>>>>>> App Render'); // TODO performance
     const { sidebar, footer } = this.props;
-    const { contentClass, showHeader, showNavigator } = this.props;
+    const { contentClass, showHeader, showNavigator, showSidebar } = this.props;
     const { dispatch, app, loading } = this.props;
     const { user, roles } = app;
 
@@ -84,6 +92,7 @@ export default class Layout extends Component {
       }
     }
     const { logoZone, searchZone, infoZone, fixAdvancedSearch, disableAdvancedSearch } = this.props;
+    const { pageTitle, pageSubTitle } = this.props;
     const { query, onSearch } = this.props;
 
     const headerOptions = {
@@ -94,11 +103,13 @@ export default class Layout extends Component {
     };
     const navigatorOptions = { query, navis: sysconfig.HeaderSearch_TextNavi };
 
+    const title = pageTitle || (pageSubTitle ? `${sysconfig.PageTitle} | ${pageSubTitle}` : sysconfig.PageTitle);
+
     return (
       <LayoutComponent className={tc(['layout'])}>
 
         <Helmet>
-          <title>{sysconfig.PageTitle}</title>
+          <title>{title}</title>
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <link rel="icon" href={`/sys/${sysconfig.SYSTEM}/favicon.ico`} type="image/x-icon" />
 
@@ -122,7 +133,7 @@ export default class Layout extends Component {
             src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1"
             charSet="utf-8" async defer />}
 
-          {href.indexOf('/expert-googlemap') > 0 &&
+          {href.indexOf('/expert-map') > 0 &&
           <script
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlzpf4YyjOBGYOhfUaNvQZENXEWBgDkS0"
             async defer />}
@@ -139,7 +150,7 @@ export default class Layout extends Component {
 
           {/* -------- Left Side Bar -------- */}
 
-          {sysconfig.Layout_HasSideBar &&
+          {showSidebar &&
           <Sider className={tc(['sider'])}>
             {hole.fill(sidebar)}
           </Sider>}

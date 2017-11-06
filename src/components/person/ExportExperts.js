@@ -21,7 +21,8 @@ const plainOptions = ['name', 'gender', 'pos', 'aff', 'h_index', 'activity', 'ne
 
 const defaultCheckedList = plainOptions; // ['name', 'pos', 'aff', 'h_index'];
 
-const mapStateToProps = ({ app, search, loading }) => ({ app, search, loading });
+const mapStateToProps = ({ app, search, loading, exportExperts }) =>
+  ({ app, search, loading, exportExperts });
 
 @connect(mapStateToProps)
 @Auth
@@ -33,8 +34,8 @@ export default class ExportExperts extends Component {
     checkedList: defaultCheckedList,
     indeterminate: true,
     checkAll: false,
-    exportSize: 100,
-    maxExportSize: 100,
+    exportSize: 500,
+    maxExportSize: 500,
     interestsI18n: {},
   };
 
@@ -86,11 +87,14 @@ export default class ExportExperts extends Component {
     // }
 
     // TODO Change to multi download, change to use effects takeAll.
-    searchService.searchPerson(query, offset, size, filters, sort).then((res) => {
+    this.props.dispatch({
+      type: 'exportExperts/searchPerson',
+      payload: { query, filters, sort, exportSize: this.state.exportSize },
+    }).then((res) => {
       const selectedItem = selected;
       let expertPersonInfo = '';
-      if (res.data.result.length > 0) {
-        const results = res.data.result.slice(0, this.state.exportSize);
+      if (res.length > 0) {
+        const results = res.slice(0, this.state.exportSize);
         results.map((person) => {
           const personInfo = [];
           const basic = {

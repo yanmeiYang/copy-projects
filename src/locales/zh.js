@@ -9,6 +9,12 @@ export default {
   'system.lang.option_en': 'English',
   'system.lang.option_zh': '简体中文',
 
+  // login
+  'login.header': '登录',
+  'login.loginBtn': '登录',
+  'login.forgetPw': '忘记密码?',
+  'login.newUserApplication': '新用户申请',
+
   // Index
   'index.title': '专家搜索',
   'search.translateSearchMessage.1': '同时搜索了 "{enQuery}".',
@@ -70,6 +76,9 @@ export default {
   'com.expertMap.headerLine.label.baiduMap': '百度地图',
   'com.expertMap.headerLine.label.googleMap': '谷歌地图',
   'com.expertMap.headerLine.label.level': '层级：',
+  'com.expertMap.headerLine.label.statistic': '统计分析报告',
+  'com.expertMap.headerLine.label.download': '导出Excel表',
+  'com.expertMap.headerLine.label.ok': '确定',
 
   'com.ExpertBase.Button.Add': '添加',
   'com.ExpertBase.Button.Remove': '删除',

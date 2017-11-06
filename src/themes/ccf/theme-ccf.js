@@ -50,7 +50,7 @@ module.exports = {
   // Person List Component
   //
   PersonList_AfterTitleBlock: ({ param }) =>
-    <PersonLabels person={param.person} haves={[]} />,
+    <PersonLabels person={param.person} labelMap={sysconfig.ExpertBases_ID2NameMap} />,
 
   // Layout:Header:HeaderInfoZone
   Header_UserAdditionalInfoBlock: param => {

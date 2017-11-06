@@ -6,6 +6,7 @@ import * as searchService from 'services/search';
 import * as translateService from 'services/translate';
 import * as topicService from 'services/topic';
 import bridge from 'utils/next-bridge';
+import { takeLatest } from './helper';
 
 export default {
 
@@ -21,6 +22,8 @@ export default {
     // use translate search?
     useTranslateSearch: sysconfig.Search_DefaultTranslateSearch,
     translatedQuery: '',
+    translatedLanguage: 0, // 1 en to zh; 2 zh to en;
+    translatedText: '',
 
     offset: 0,
     sortKey: '',
@@ -72,7 +75,7 @@ export default {
   effects: {
     // 搜索全球专家时，使用old service。
     // 使用智库搜索，并且排序算法不是contribute的时候，使用新的搜索API。
-    * searchPerson({ payload }, { call, put, select }) {
+    searchPerson: [function* ({ payload }, { call, put, select }) {
       const { query, offset, size, filters, sort, total } = payload;
       const noTotalFilters = {};
       for (const [key, item] of Object.entries(filters)) {
@@ -99,14 +102,30 @@ export default {
 
       if (data.data && data.data.succeed) {
         // console.log('>>>>>> ---==== to next API');
+        const personIds = data.data.items && data.data.items.map(item => item && item.id);
+        if (personIds) {
+          const activityScores = yield call(
+            searchService.getActivityScoresByPersonIds,
+            personIds.join('.'),
+          );
+          if (activityScores.success && activityScores.data && activityScores.data.indices &&
+            activityScores.data.indices.length > 0) {
+            data.data.items && data.data.items.map((item, index) => {
+              const activityRankingContrib =
+                activityScores.data.indices[index].filter(scores => scores.key === 'contrib');
+              data.data.items[index].indices.activityRankingContrib =
+                activityRankingContrib.length > 0 ? activityRankingContrib[0].score : 0;
+              return '';
+            });
+          }
+        }
         yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data } });
       } else if (data.data && data.data.result) {
-        // console.log('>>>>>> ---==== to old API');
         yield put({ type: 'searchPersonSuccess', payload: { data: data.data, query, total } });
       } else {
         throw new Error('Result Not Available');
       }
-    },
+    }, takeLatest],
 
     * translateSearch({ payload }, { call, put, select }) {
       // yield put({ type: 'clearTranslateSearch' });
@@ -222,12 +241,16 @@ export default {
         throw new Error(message);
       }
       const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
-      return {
+      const { translatedLanguage, translatedtext } = data;
+      const newState = {
         ...state,
         results: items,
         pagination: { pageSize: state.pagination.pageSize, total, current },
         aggs: aggregation,
+        translatedLanguage,
+        translatedText: translatedtext,
       };
+      return newState;
     },
 
     emptyResults(state) {

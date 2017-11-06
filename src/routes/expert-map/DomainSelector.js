@@ -49,7 +49,7 @@ export default class DomainSelector extends PureComponent {
       <div className={styles.filterWrap}>
         <div className={styles.filter}>
           <div className={styles.filterRow}>
-            <span className={styles.filterTitle}><span>Hot words:</span></span>
+            <span className={styles.filterTitle}><span>Most Influential Scholars:</span></span>
             <ul>
               {domains.map((domain) => {
                 return (

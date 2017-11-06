@@ -1,4 +1,4 @@
-import { request, nextQuery, config, queryBuilder } from 'utils';
+import { request, nextAPI, config } from 'utils';
 import * as bridge from 'utils/next-bridge';
 import { apiBuilder, F } from 'utils/next-api-builder';
 import { sysconfig } from 'systems';
@@ -39,53 +39,22 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
   // ------------------------------------------------------------------------------------------
   if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH && Sort !== 'activity-ranking-contrib') {
 
-    const nextapixxxx = {
-      action: 'search',
-      parameters: {
-        query,
-        offset,
-        size,
-        searchType: 'allb', // [all | allb]
-        filters: { dims: {}, terms: {} },
-        aggregation: ['gender', 'h_index', 'location', 'language'],
-        haves: {
-          title: ['CCF_MEMBER_高级会员', 'CCF_MEMBER_会士', 'CCF_MEMBER_杰出会员' /*, 'CCF_DEPT_*'*/],
-        },
-        switches: ['translate'],
-      },
-      schema: {
-        person: [
-          'id', 'name', 'name_zh', 'tags', // 'tags_zh', 'tags_trans_zh'
-          {
-            profile: [
-              'position', 'affiliation',
-              // 'org', 'org_zh', 'bio', 'email', 'edu' ', phone'
-            ],
-          },
-          { indices: ['hindex', 'gindex', 'numpubs', 'citation', 'newStar', 'risingStar', 'activity', 'diversity', 'sociability'] },
-        ],
-      },
-    };
+    const ebs = sysconfig.ExpertBases;
+    const defaultHaves = ebs && ebs.length > 0 && ebs.map(eb => eb.id);
 
-    const nextapi = apiBuilder.query(F.action.search)
+    const nextapi = apiBuilder.query(F.queries.search)
       .param({ query, offset, size })
       .param({
         searchType: F.searchType.allb,
         aggregation: ['gender', 'h_index', 'location', 'language'],
-        switches: ['translate_all'], // translate_all | translate_zh | translate_en
-        haves: {
-          title: ['CCF_MEMBER_高级会员', 'CCF_MEMBER_会士', 'CCF_MEMBER_杰出会员', /*, 'CCF_DEPT_*'*/],
-        },
+        haves: { eb: defaultHaves },
       })
+      .param({ switches: ['translate_all'] }, { when: useTranslateSearch })
       .schema({
         person: [
-          'id', 'name', 'name_zh', 'tags', // 'tags_zh', 'tags_translated'
-          {
-            profile: [
-              'position', 'affiliation',
-              // 'org', 'org_zh', 'bio', 'email', 'edu' ', phone'
-            ],
-          },
+          'id', 'name', 'name_zh', // 'tags', // 'tags_zh', 'tags_translated'
+          { profile: ['position', 'affiliation'] },
+          // 'org', 'org_zh', 'bio', 'email', 'edu' ', phone'
           { indices: F.fields.person.indices_all },
         ],
       });
@@ -94,8 +63,10 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
     Object.keys(filters).map((key) => {
       const filter = filters[key];
       if (key === 'eb') {
-        const ebLabel = bridge.toNextCCFLabelFromEBID(filters.eb.id);
-        nextapi.addParam({ filters: { dims: { title: [ebLabel] } } });
+        if (filter && filter.id) {
+          // const ebLabel = bridge.toNextCCFLabelFromEBID(filters.eb.id);
+          nextapi.addParam({ filters: { dims: { eb: [filter.id] } } });
+        }
       } else if (key === 'h_index') {
         // console.log('TODO filter by h_index 这里暂时是用解析的方式获取数据的。');
         const splits = filter.split('-');
@@ -105,7 +76,10 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
           nextapi.addParam({
             filters: {
               ranges: {
-                h_index: [isNaN(from) ? '' : from.toString(), isNaN(to) ? '' : to.toString()],
+                h_index: [
+                  isNaN(from) ? '' : from.toString(),
+                  isNaN(to) ? '' : to.toString(),
+                ],
               },
             },
           });
@@ -127,7 +101,7 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
     console.log('DEBUG---------------------\n', nextapi.api);
     console.log('DEBUG---------------------\n', JSON.stringify(nextapi.api));
 
-    return nextQuery({ data: [nextapi.api] });
+    return nextAPI({ data: [nextapi.api] });
 
     // ------------------------------------------------------------------------------------------
   } else {
@@ -328,3 +302,10 @@ export async function relationGraph(data) {
 export async function searchPublications(params) {
   return request(api.searchPubs, { method: 'GET', data: params });
 }
+
+export async function getActivityScoresByPersonIds(ids) {
+  return request(api.batchGetActivityCompareScoresByPersonId.replace(':ids', ids), {
+    method: 'GET',
+  });
+}
+

@@ -2,15 +2,27 @@
  * Created by yangyanmei on 17/6/3.
  */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Tag, Input, Tooltip, Button } from 'antd';
-import { compare } from 'utils/compare';
+import { compareDeep } from 'utils/compare';
+
+const op = { REMOVE: 'remove', ADD: 'add', UPDATE: 'update' };
 
 export default class LabelLine extends Component {
+  static propTypes = {
+    onTagChange: PropTypes.func,
+    canRemove: PropTypes.bool,
+    canAdd: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    canRemove: false,
+    canAdd: false,
+  };
 
   state = {
     tags: [],
     inputVisible: false,
-    inputValue: '',
   };
 
   componentWillMount = () => {
@@ -18,7 +30,7 @@ export default class LabelLine extends Component {
   };
 
   componentWillReceiveProps = (nextProps) => {
-    if (compare(nextProps, this.props, 'tags')) {
+    if (compareDeep(nextProps, this.props, 'tags')) {
       this.setState({ tags: nextProps.tags });
     }
   };
@@ -26,60 +38,63 @@ export default class LabelLine extends Component {
   handleClose = (removedTag) => {
     const tags = this.state.tags.filter(tag => tag !== removedTag);
     this.setState({ tags });
-    this.props.callbackParent(tags);
+    if (this.props.onTagChange) {
+      this.props.onTagChange(op.REMOVE, removedTag, tags);
+    }
   };
 
   showInput = () => {
     this.setState({ inputVisible: true }, () => this.input.focus());
   };
 
-  handleInputChange = (e) => {
-    this.setState({ inputValue: e.target.value });
-  };
-
-  handleInputConfirm = () => {
-    const { inputValue } = this.state;
-    let tags = this.state.tags;
-    if (inputValue && tags.indexOf(inputValue) === -1) {
-      tags = [...tags, inputValue];
+  handleInputConfirm = (e) => {
+    const newTag = e.target.value;
+    const { tags } = this.state;
+    let newTags = tags || [];
+    if (newTag && newTags.indexOf(newTag) === -1) {
+      newTags = [...newTags, newTag];
     }
     this.setState({
-      tags,
+      tags: newTags,
       inputVisible: false,
-      inputValue: '',
     });
-    this.props.callbackParent(tags);
+    if (this.props.onTagChange) {
+      this.props.onTagChange(op.ADD, newTag, newTags);
+    }
   };
 
-  saveInputRef = input => this.input = input;
+  saveInputRef = (input) => {
+    this.input = input;
+  };
 
   render() {
-    const { tags, inputVisible, inputValue } = this.state;
+    const { tags, inputVisible } = this.state;
+    const { canRemove, canAdd } = this.props;
     return (
       <div>
-        {tags.map((tag, index) => {
+        {tags && tags.map((tag, index) => {
           const isLongTag = tag.length > 20;
+          const closable = canRemove && index !== -1;
+          // TODO 使用 css 来显示...
           const tagElem = (
-            <Tag key={tag} color="#2db7f5" closable={index !== -1}
-                 afterClose={() => this.handleClose(tag)}>
+            <Tag key={tag} color="#2db7f5" closable={closable}
+                 afterClose={this.handleClose.bind(this, tag)}>
               {isLongTag ? `${tag.slice(0, 20)}...` : tag}
             </Tag>
           );
-          return isLongTag ? <Tooltip title={tag}>{tagElem}</Tooltip> : tagElem;
+          return isLongTag ? <Tooltip key={tag} title={tag}>{tagElem}</Tooltip> : tagElem;
         })}
-        {inputVisible && (
+        {canAdd && inputVisible && (
           <Input
             ref={this.saveInputRef}
             type="text"
             size="small"
             style={{ width: 78 }}
-            value={inputValue}
-            onChange={this.handleInputChange}
             onBlur={this.handleInputConfirm}
             onPressEnter={this.handleInputConfirm}
           />
         )}
-        {!inputVisible &&
+        {canAdd && !inputVisible &&
         <Button size="small" type="dashed" onClick={this.showInput}>+ 新标签</Button>}
       </div>
     );

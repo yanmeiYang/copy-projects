@@ -61,7 +61,7 @@ class NewActivityList extends React.Component {
             <p>活动类型：{result.category}</p>
             <p>活动时间：{timeFrom.format('yyyy年MM月dd日')}
               {timeFrom.getDate() < timeTo.getDate() &&
-              <span>~ {timeTo.getDate()}日</span>}
+              <span> ~ {timeTo.getDate()}日</span>}
             </p>
             <p>活动地点：{result.location.city} {result.location.address}</p>
             <div className={styles.expert_avatar}>

@@ -14,6 +14,7 @@ export default {
       import('models/search'),
       import('models/expert-base/expert-base'),
       import('models/person-comments'),
+      import('models/common/common-labels'),
     ],
     component: () => import('./ExpertBaseExpertsPage'),
   },
@@ -24,6 +25,7 @@ export default {
       import('models/search'),
       import('models/expert-base/expert-base'),
       import('models/person-comments'),
+      import('models/common/common-labels'),
     ],
     component: () => import('./ExpertBaseExpertsPage'),
   },
@@ -33,6 +35,7 @@ export default {
     models: () => [import('models/expert-base/expert-base')],
     component: () => import('routes/expert-base/add-expert-base'),
   },
+
   AddExpertDetail: {
     path: '/add-expert-detail/:id', // TODO /eb/add-detail/:id
     models: () => [import('models/expert-base/expert-base')],

@@ -2,21 +2,21 @@
  *  Created by BoGao on 2017-10-25;
  */
 import React, { PureComponent } from 'react';
-import { Tooltip, Tag } from 'antd';
-import { classnames } from 'utils/index';
+import { Tag } from 'antd';
 import styles from './PersonLabels.less';
 
 export default class PersonLabels extends PureComponent {
 
   render() {
-    const { person } = this.props;
+    const { person, labelMap } = this.props;
+    const map = labelMap || {};
     return (
       <div className={styles.personLabels}>
-        {person && person.dims && person.dims.title &&
-        person.dims.title.map((t) => {
-          const label = t.replace(/CCF_MEMBER_/g, '');
-          return (
-            <Tag key={label} className={styles.label}>{label}</Tag>
+        {person && person.dims && person.dims.eb &&
+        person.dims.eb.map((t) => {
+          const label = map[t];
+          return label && (
+            <Tag key={t} className={styles.label}>{label}</Tag>
           );
         })}
       </div>

@@ -3,16 +3,6 @@
  */
 import React from 'react';
 import loadScript from 'load-script';
-
-// import echarts from 'echarts/lib/echarts'; // 必须
-// import 'echarts/lib/component/tooltip';
-// import 'echarts/lib/component/legend';
-// import 'echarts/lib/component/geo';
-// import 'echarts/lib/chart/map'; // 引入地图
-// import 'echarts/lib/chart/lines';
-// import 'echarts/lib/chart/effectScatter';
-// import 'echarts/map/js/china'; // 引入中国地图//
-// import 'echarts/map/js/world';
 import { Button } from 'antd';
 import styles from './ExpertTrajectory.less';
 import mapData from '../../../external-docs/expert-trajectory/testData.json';
@@ -55,7 +45,7 @@ class ExpertTrajectory extends React.Component {
 
   onPersonClick = (personId) => {
     alert(personId);
-  }
+  };
 
   getTrajRecord = () => { // 整理接口给的数据
     const record = [];
@@ -110,7 +100,7 @@ class ExpertTrajectory extends React.Component {
       counter1 += 1;
     }
     return record;
-  }
+  };
 
   getTrajSeries = (geoCoordMap, data, record, i) => { // 设置点和线的参数
     function formtGCData(geoData, data1, count) { // 画线
@@ -210,7 +200,7 @@ class ExpertTrajectory extends React.Component {
         data: formtGCData(geoCoordMap, data, i),
       }];
     return series;
-  }
+  };
 
   getTrajData = (record) => { // 在各个地点的时间，存于data
     const data = []; // data = [{name: tsinghua university, value : 6(years)}]
@@ -220,7 +210,7 @@ class ExpertTrajectory extends React.Component {
       data.push(onewhere);
     }
     return data;
-  }
+  };
 
   doTrajGeoMap = (record) => { // 得到经纬度数据
     const geoCoordMap = {}; // geoCoordMap = {tsinghua unversity : [120,40] }
@@ -229,21 +219,17 @@ class ExpertTrajectory extends React.Component {
       geoCoordMap[address2[onerecord[0]].addr] = onenode;
     }
     return geoCoordMap;
-  }
+  };
 
   quickLine = () => { // 停止动画立刻画出路线
-    // const temp = option.geo.zoom;
     ifDraw = 1;
-    // console.log("temp1",temp);
     const record = this.getTrajRecord();
     const geoCoordMap = this.doTrajGeoMap(record); // geoCoordMap = {tsinghua unversity : [120,40] }
     const data = this.getTrajData(record); // data = [{name: tsinghua university, value : 6(years)}]
     option = this.drawTrajMap();
     option.series = this.getTrajSeries(geoCoordMap, data, record, (data.length - 2));
-    // console.log("temp2",temp);
-    // option.geo.zoom = temp;
     this.myChart.setOption(option);
-  }
+  };
 
   drawTrajMap = () => { // 画地图
     option = { // 设置地图参数
@@ -294,7 +280,7 @@ class ExpertTrajectory extends React.Component {
       },
     };
     return option;
-  }
+  };
 
   showTrajectory = () => { // 功能起始函数
     const record = this.getTrajRecord();
@@ -312,36 +298,32 @@ class ExpertTrajectory extends React.Component {
         }
       }, i * 200);
     }
-  }
+  };
 
   plusTrajZoom = () => {
     option.geo.zoom += 0.1;
     this.myChart.setOption(option);
-  }
+  };
 
   minusTrajZoom = () => {
     if (option.geo.zoom > 0.8) {
       option.geo.zoom -= 0.1;
       this.myChart.setOption(option);
     }
-  }
+  };
 
   render() {
     return (
       <div>
-        <div className={styles.wor} id="world"
-             style={{ height: '600px', width: '1200px', padding: '0px' }} />
+        <div className={styles.wor} id="world" />
         <div>
-          <Button className={styles.path} type="primary" ghost onClick={this.quickLine}>Show
-            Path</Button>
+          <Button className={styles.path} type="primary" ghost onClick={this.quickLine}>Show Path</Button>
         </div>
         <div>
-          <Button className={styles.plus} type="primary" ghost icon="plus"
-                  onClick={this.plusTrajZoom} />
+          <Button className={styles.plus} type="primary" ghost icon="plus" onClick={this.plusTrajZoom} />
         </div>
         <div>
-          <Button className={styles.minus} type="primary" ghost icon="minus"
-                  onClick={this.minusTrajZoom} />
+          <Button className={styles.minus} type="primary" ghost icon="minus" onClick={this.minusTrajZoom} />
         </div>
       </div>
     );

@@ -72,7 +72,7 @@ export default {
       } catch (err) {
         const { success, statusCode, message } = err;
         if (!success && statusCode > 400 && statusCode < 500) {
-          antdMessage.error('用户名和密码错误'); // TODO
+          antdMessage.error('用户名或密码错误'); // TODO
           yield put({ type: 'auth/loginError', data: message });
         } else {
           throw err;

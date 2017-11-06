@@ -1,68 +1,17 @@
-{
-  "data": [
-    {
-      "aggregation": [
-        {
-          "name": "language"
-        },
-        {
-          "items": [
-            {
-              "count": 0,
-              "term": "*-10.0",
-              "to": 10
-            },
-            {
-              "count": 0,
-              "from": 10,
-              "term": "10.0-20.0",
-              "to": 20
-            },
-            {
-              "count": 0,
-              "from": 20,
-              "term": "20.0-30.0",
-              "to": 30
-            },
-            {
-              "count": 0,
-              "from": 30,
-              "term": "30.0-40.0",
-              "to": 40
-            },
-            {
-              "count": 0,
-              "from": 40,
-              "term": "40.0-50.0",
-              "to": 50
-            },
-            {
-              "count": 0,
-              "from": 50,
-              "term": "50.0-60.0",
-              "to": 60
-            },
-            {
-              "count": 0,
-              "from": 60,
-              "term": "60.0-*"
-            }
-          ],
-          "name": "h_index"
-        },
-        {
-          "name": "gender"
-        },
-        {
-          "name": "location"
-        }
+[
+  {
+    "action": "search",
+    "parameters": {
+      "switches": [
+        "translate_all"
       ],
-      "message": "",
-      "offset": 0,
-      "size": 0,
-      "succeed": true,
-      "tookms": 3,
-      "total": 0
+      "filters": {
+        "dims": {
+          "eb": [
+            "5949c2f99ed5dbc2147fd854"
+          ]
+        }
+      }
     }
-  ]
-}
+  }
+]

@@ -1,61 +1,75 @@
 /**
- * Created by yangyanmei on 17/6/3.
+ * Created by bogao on 17/11/2.
  */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Tag, Input, Tooltip, Button } from 'antd';
 import { LabelLine } from 'components/common';
 import { compare } from 'utils/compare';
 
 @connect(({ commonLabels }) => ({ commonLabels }))
 export default class Labels extends Component {
+  static propTypes = {
+    targetId: PropTypes.string,
+    targetEntity: PropTypes.string,
+  };
 
-  // state = {};
+  state = {
+    tags: [],
+  };
 
   componentWillMount = () => {
     this.setState({ tags: this.props.tags });
   };
 
   componentWillReceiveProps = (nextProps) => {
+    // tags from outside.
     if (compare(nextProps, this.props, 'tags')) {
       this.setState({ tags: nextProps.tags });
     }
   };
 
-  // handleClose = (removedTag) => {
-  //   const tags = this.state.tags.filter(tag => tag !== removedTag);
-  //   this.setState({ tags });
-  //   this.props.callbackParent(tags);
-  // };
-  //
-  // showInput = () => {
-  //   this.setState({ inputVisible: true }, () => this.input.focus());
-  // };
-  //
-  // handleInputChange = (e) => {
-  //   this.setState({ inputValue: e.target.value });
-  // };
-  //
-  // handleInputConfirm = () => {
-  //   const { inputValue } = this.state;
-  //   let tags = this.state.tags;
-  //   if (inputValue && tags.indexOf(inputValue) === -1) {
-  //     tags = [...tags, inputValue];
-  //   }
-  //   this.setState({
-  //     tags,
-  //     inputVisible: false,
-  //     inputValue: '',
-  //   });
-  //   this.props.callbackParent(tags);
-  // };
-  //
-  // saveInputRef = input => this.input = input;
+  shouldComponentUpdate(nextProps, nextState) {
+    // if (compare(
+    //     this.props, nextProps,
+    //   )) {
+    //   return true;
+    // }
+    return true;
+  }
+
+  onTagChange = (op, tag, finalTag) => {
+    const { dispatch, targetId, targetEntity } = this.props;
+    if (!targetId || !targetEntity) {
+      console.error('Must provide property `targetId` and `targetEntity` in component Labels');
+    }
+    if (op !== 'remove' && op !== 'add') {
+      console.error('Invalid op %s', op);
+    }
+    const payload = { targetEntity, targetId, tag };
+    const type = `commonLabels/${op}`;
+    const { tags } = this.state;
+    dispatch({ type, payload })
+      .then((success) => {
+        if (success) {
+          if (op === 'add') {
+            const newTags = tags || [];
+            if (newTags.indexOf(tag) === -1) {
+              this.setState({ tags: [...newTags, tag] });
+            }
+          } else if (op === 'remove') {
+            console.log('remove this tags',);
+            // TODO /......
+          }
+        }
+      });
+  };
 
   render() {
-    const { tags, inputVisible, inputValue } = this.state;
+    const { tags } = this.state;
+    // const { commonLabels } = this.props;
     return (
-      <LabelLine tags={tags} callbackParent={this.onTagsChanged} />
+      <LabelLine tags={tags} onTagChange={this.onTagChange} canRemove canAdd />
     );
   }
 }

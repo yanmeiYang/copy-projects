@@ -14,6 +14,7 @@ export default {
   subscriptions: {},
 
   effects: {
+
     * getTobProfileList({ payload }, { call, put }) {
       const { persons } = payload;
       const ids = [];

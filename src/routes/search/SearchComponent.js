@@ -161,17 +161,19 @@ export default class SearchComponent extends Component {
       }
     }
 
-    dispatch({ type: 'search/translateSearch', payload: { query } });
     dispatch({
       type: 'search/searchPerson',
       payload: { query, offset, size, filters, sort, total: parseInt(filtersLength) },
-      // TODO remove total;
     });
+
     // TODO remove later. 新的方式获取api的时候，这个方法啥也不干。
-    dispatch({
-      type: 'search/searchPersonAgg',
-      payload: { query, offset, size, filters, sort },
-    });
+    if (!sysconfig.USE_NEXT_EXPERT_BASE_SEARCH || sort === 'activity-ranking-contrib') {
+      dispatch({ type: 'search/translateSearch', payload: { query } });
+      dispatch({
+        type: 'search/searchPersonAgg',
+        payload: { query, offset, size, filters, sort },
+      });
+    }
 
     // Change URL
     if (!dontRefreshUrl) {
@@ -210,7 +212,7 @@ export default class SearchComponent extends Component {
     // const SearchSortsRightZone = !sysconfig.Enable_Export ? [] : [];
 
     // TODO move translate search out.
-    const { useTranslateSearch, translatedQuery } = this.props.search;
+    const { useTranslateSearch, translatedQuery, translatedLanguage, translatedText } = this.props.search;
     return (
       <div className={classnames(styles.searchComponent, className)}>
 
@@ -231,12 +233,20 @@ export default class SearchComponent extends Component {
 
             {sysconfig.Search_EnableTranslateSearch &&
             <div className="message">
+              <div className={styles.debug} style={{ display: 'none' }}>
+                [useTranslateSearch : {useTranslateSearch ? 'true' : 'false'},
+                translatedQuery : {translatedQuery},
+                translatedLanguage : {translatedLanguage},
+                translatedText : {translatedText},]
+              </div>
+
               {/* Translate Search */}
-              {useTranslateSearch && translatedQuery &&
+
+              {useTranslateSearch && translatedText &&
               <div>
                 <FM defaultMessage="We also search '{enQuery}' for you."
                     id="search.translateSearchMessage.1"
-                    values={{ enQuery: translatedQuery }}
+                    values={{ enQuery: translatedText }}
                 />&nbsp;
                 <a onClick={this.doTranslateSearch.bind(this, false)}>
                   <FM defaultMessage="Search '{cnQuery}' only."
@@ -246,11 +256,11 @@ export default class SearchComponent extends Component {
               </div>
               }
 
-              {!useTranslateSearch && translatedQuery &&
+              {!useTranslateSearch && translatedText &&
               <a onClick={this.doTranslateSearch.bind(this, true)}>
                 <FM defaultMessage="You can also search with both '{enQuery}' and '{cnQuery}'."
                     id="search.translateSearchMessage.reverse"
-                    values={{ enQuery: translatedQuery, cnQuery: query }}
+                    values={{ enQuery: translatedText, cnQuery: query }}
                 />
               </a>
               }

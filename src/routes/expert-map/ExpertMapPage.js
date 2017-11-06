@@ -7,20 +7,25 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Layout } from 'routes';
 import { sysconfig } from 'systems';
-import { Button } from 'antd';
-import { theme, applyTheme } from 'themes';
+import { Button, Modal, Icon, Tabs } from 'antd';
+import { applyTheme } from 'themes';
 import { FormattedMessage as FM } from 'react-intl';
 import queryString from 'query-string';
 import { Auth } from 'hoc';
 import { detectSavedMapType, compare } from 'utils';
 import { DomainSelector, MapFilter } from 'routes/expert-map';
 import * as strings from 'utils/strings';
+import loadScript from 'load-script';
 import ExpertGoogleMap from './expert-googlemap.js';
 import ExpertMap from './expert-map.js';
 import styles from './ExpertMapPage.less';
+import {
+  showSta,
+} from './utils/sta-utils';
 
 const tc = applyTheme(styles);
-const ButtonGroup = Button.Group;
+const [ButtonGroup, TabPane] = [Button.Group, Tabs.TabPane];
+let echarts;
 
 const MAP_DISPATCH_KEY = 'map-dispatch';
 
@@ -35,27 +40,35 @@ export default class ExpertMapPage extends React.Component {
   state = {
     mapType: '', // [baidu|google]
     query: '',
-    domainId: '',
+    domainId: '', //领域id
     range: '', // Filter by acm, ieee
     hindexRange: '', // Filter by hindex
-    type: '', // 自动那一行.
+    type: '0', // 根据地图显示类型，默认为0
+    visible: false, //模态框是否可见
   };
 
   componentWillMount() {
     const { location } = this.props;
     const { query, type, domain } = queryString.parse(location.search);
-    const mapType = type || detectSavedMapType(MAP_DISPATCH_KEY);
+    const mapType = type || detectSavedMapType(MAP_DISPATCH_KEY); //判断该使用什么样的地图
+    const q = query || 'Data Mining';
     this.setState({
-      query: domain ? '' : query,
+      query: domain ? '' : q,
       domainId: domain,
       mapType,
     });
     // first laod.
     if (domain) {
       this.searchMapByDomain(domain);
-    } else if (query) {
-      this.searchMapByQuery(query);
+    } else if (q) {
+      this.searchMapByQuery(q);
     }
+  }
+
+  componentDidMount() {
+    loadScript('/lib/echarts.js', () => {
+      echarts = window.echarts; // eslint-disable-line prefer-destructuring
+    });
   }
 
   componentWillReceiveProps(np) {
@@ -86,10 +99,13 @@ export default class ExpertMapPage extends React.Component {
     if (compare(ns, this.state, 'mapType', 'range', 'hindexRange', 'type')) {
       return true;
     }
+    if (ns.visible !== this.state.visible) {
+      return true;
+    }
     return false;
   }
 
-  onDomainChange = (domain) => {
+  onDomainChange = (domain) => { //修改url,shouldComponentUpdate更新
     const { dispatch } = this.props;
     dispatch(routerRedux.push({ pathname: '/expert-map', search: `?domain=${domain.id}` }));
   };
@@ -102,7 +118,7 @@ export default class ExpertMapPage extends React.Component {
     this.setState({ hindexRange: key });
   };
 
-  onSearch = (data) => {
+  onSearch = (data) => { //修改url,shouldComponentUpdate更新
     const { dispatch } = this.props;
     if (data.query) {
       this.setState({ query: data.query });
@@ -111,28 +127,6 @@ export default class ExpertMapPage extends React.Component {
         search: `?query=${data.query}`,
       }));
     }
-  };
-
-  searchMapByDomain = (domainEBID) => {
-    const { dispatch } = this.props;
-    dispatch({ type: 'expertMap/searchExpertBaseMap', payload: { eb: domainEBID } });
-    this.resetRightInfo();
-  };
-
-  searchMapByQuery = (query) => {
-    this.props.dispatch({
-      type: 'expertMap/searchMap',
-      payload: { query: strings.firstNonEmptyQuery(query) },
-    });
-    this.resetRightInfo();
-  };
-
-  resetRightInfo = () => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'expertMap/setRightInfo',
-      payload: { idString: '', rightInfoType: 'global' },
-    });
   };
 
   // Tips: 不会根据state变化的jsx block放到外面。这样多次渲染的时候不会多次初始化;
@@ -147,6 +141,28 @@ export default class ExpertMapPage extends React.Component {
     this.setState({ mapType });
   };
 
+  searchMapByDomain = (domainEBID) => { //models里面重新查询数据
+    const { dispatch } = this.props;
+    dispatch({ type: 'expertMap/searchExpertBaseMap', payload: { eb: domainEBID } });
+    this.resetRightInfo();
+  };
+
+  searchMapByQuery = (query) => { //models里面重新查询数据
+    this.props.dispatch({
+      type: 'expertMap/searchMap',
+      payload: { query: strings.firstNonEmptyQuery(query) },
+    });
+    this.resetRightInfo(); //右边的置为全局的
+  };
+
+  resetRightInfo = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'expertMap/setRightInfo',
+      payload: { idString: '', rightInfoType: 'global' },
+    });
+  };
+
   typeConfig = [
     { key: '0', label: '自动' },
     { key: '1', label: '大区' },
@@ -156,11 +172,69 @@ export default class ExpertMapPage extends React.Component {
     { key: '5', label: '机构' },
   ];
 
+  showModal = () => {
+    this.setState({
+      visible: true,
+    }, () => {
+      const chartsinterval = setInterval(() => {
+        const divId = document.getElementById('bycountries');
+        if (typeof (divId) !== 'undefined' && divId !== 'undefined') {
+          clearInterval(chartsinterval);
+          showSta(echarts, divId, this.props.expertMap.geoData, 'country');
+        }
+      }, 100);
+    });
+  };
+
+  handleOk = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleCancel = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+
+  changeStatistic = (key) => {
+    const chartsinterval = setInterval(() => {
+      let divId;
+      let type;
+      if (key === 1) {
+        divId = document.getElementById('bycountries');
+        type = 'country';
+      } else {
+        divId = document.getElementById('bigArea');
+        type = 'bigArea';
+      }
+      if (typeof (divId) !== 'undefined' && divId !== 'undefined') {
+        clearInterval(chartsinterval);
+        showSta(echarts, divId, this.props.expertMap.geoData, type);
+      }
+    }, 100);
+  };
+
 
   render() {
-    const { mapType, query, domainId, range, hindexRange, type } = this.state;
-    const options = { ...this.state, title: this.titleBlock };
-    console.log('>>>>>> options:', options);
+    const { mapType, query, domainId } = this.state;
+    const options = { ...this.state, title: this.titleBlock };//以便传入到组件里面
+
+    const staJsx = (
+      <div className={styles.charts} >
+        <div id="bycountries" className={styles.chart1} />
+      </div>
+    );
+
+    const staJsx1 = (
+      <div className={styles.charts} >
+        <div id="bigArea" className={styles.chart1} />
+      </div>
+    );
+
     return (
       <Layout
         contentClass={tc(['expertMapPage'])}
@@ -174,7 +248,6 @@ export default class ExpertMapPage extends React.Component {
           onChange={this.onDomainChange}
           time={Math.random()}
         />
-
         <MapFilter
           onRangeChange={this.onRangeChange}
           onHindexRangeChange={this.onHindexRangeChange}
@@ -204,6 +277,33 @@ export default class ExpertMapPage extends React.Component {
           </div>
 
           <div className={styles.scopes}>
+            <div className={styles.analysis} style={{ display: 'none' }}>
+              <Button onClick={this.showModal}>
+                <Icon type="line-chart" />
+                <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.statistic" />
+              </Button>
+              <Modal
+                title="Statistics & Analyses"
+                visible={this.state.visible}
+                onOk={this.handleOk}
+                onCancel={this.handleCancel}
+                footer={[
+                  <Button key="back" size="large" onClick={this.handleCancel}>
+                    <Icon type="download" />
+                    <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.download" />
+                  </Button>,
+                  <Button key="submit" type="primary" size="large" onClick={this.handleOk}>
+                    <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.ok" />
+                  </Button>,
+                ]}
+                width="700px"
+                >
+                <Tabs defaultActiveKey="1" onChange={this.changeStatistic}>
+                  <TabPane tab="国家" key="1">{staJsx && staJsx}</TabPane>
+                  <TabPane tab="大区" key="2">{staJsx1 && staJsx1}</TabPane>
+                </Tabs>
+              </Modal>
+            </div>
             <div className={styles.switch}>
               <ButtonGroup id="diffmaps">
                 <Button
@@ -215,25 +315,19 @@ export default class ExpertMapPage extends React.Component {
                 </Button>
                 <Button
                   type={this.state.mapType === 'google' ? 'primary' : ''}
-                  className={styles.tempGoogleStyle}
-                  // onClick={this.onMapTypeChange.bind(this, 'google')}
+                  onClick={this.onMapTypeChange.bind(this, 'google')}
                 >
                   <FM defaultMessage="Baidu Map"
                       id="com.expertMap.headerLine.label.googleMap" />
                 </Button>
               </ButtonGroup>
             </div>
-
           </div>
         </div>
-
-        {/*{mapType === 'google'*/}
-          {/*? <ExpertGoogleMap {...options} />*/}
-          {/*: <ExpertMap {...options} />*/}
-        {/*}*/}
-
-        <ExpertMap {...options} />
-
+        {mapType === 'google'
+          ? <ExpertGoogleMap {...options} />
+          : <ExpertMap {...options} />
+        }
       </Layout>
     );
   }

@@ -4,6 +4,8 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Form, Icon, Modal, Button } from 'antd';
+import { F } from 'utils/next-api-builder';
+import { compare } from 'utils/compare';
 import { Labels } from 'routes/common';
 import CKEditor from './ckeditor-config';
 import styles from './person-comment.less';
@@ -13,7 +15,6 @@ class PersonComment extends React.Component {
     isComment: false,
     content: '',
     flag: false,
-    tags: ['pink', 'orange', 'red'], // 临时定义的
   };
 
   componentWillReceiveProps(nextProps) {
@@ -24,7 +25,14 @@ class PersonComment extends React.Component {
     }
   }
 
+  // TODO chnage to compare utils.
   shouldComponentUpdate(nextProps, nextStates) {
+    if (compare(
+        nextProps, this.props,
+        'personComments', 'isComment', 'content', 'flag',
+      )) {
+      return true;
+    }
     if (nextProps.personComments !== this.props.personComments) {
       return true;
     }
@@ -41,9 +49,9 @@ class PersonComment extends React.Component {
   }
 
   // 存储活动标签
-  onTagsChanged = (value) => {
-    this.setState({ tags: value });
-  };
+  // onTagsChanged = (value) => {
+  //   this.setState({ tags: value });
+  // };
 
 
   getContent(newContent) {
@@ -56,6 +64,7 @@ class PersonComment extends React.Component {
     this.setState({ isComment: !this.state.isComment });
     this.setState({});
   };
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -86,7 +95,6 @@ class PersonComment extends React.Component {
       onCancel() {
       },
     });
-
   };
 
   updateContent(newContent) {
@@ -107,7 +115,7 @@ class PersonComment extends React.Component {
   }
 
   render() {
-    const { personComments, person, expertBaseId, app } = this.props;
+    const { personComments, person, expertBaseId, app, tags } = this.props;
     const { user } = app;
     if (expertBaseId === 'aminer' || !expertBaseId) {
       return false;
@@ -135,8 +143,11 @@ class PersonComment extends React.Component {
             {total && <span>{total || 0}</span>}
           </div>
           <div className={styles.tags}>
-            <Labels callbackParent={this.onTagsChanged}
-                    tags={this.state.tags} />
+            <Labels
+              tags={tags}
+              targetId={person.id}
+              targetEntity={F.Entities.Person}
+            />
           </div>
         </div>
 
@@ -149,15 +160,18 @@ class PersonComment extends React.Component {
                   <div>
                     {getFieldDecorator('comment')(
                       <div>
-                        <CKEditor ref="editor" flag={this.state.flag}
-                                  activeClass="CKeidtorStyle"
-                                  content={this.state.content}
-                                  onChange={this.getContent.bind(this)}
-                                  scriptUrl="https://cdn.ckeditor.com/4.6.2/basic/ckeditor.js" />
+                        <CKEditor
+                          ref="editor" flag={this.state.flag}
+                          activeClass="CKeidtorStyle"
+                          content={this.state.content}
+                          onChange={this.getContent.bind(this)}
+                          scriptUrl="https://cdn.ckeditor.com/4.6.2/basic/ckeditor.js"
+                        />
                         <div className={styles.ckEditorSubmitBtn}>
-                          <Button type="primary"
-                                  onClick={this.updateContent.bind(this, this.state.content)}>
-                            备注
+                          <Button
+                            type="primary"
+                            onClick={this.updateContent.bind(this, this.state.content)}
+                          > 备注
                           </Button>
                         </div>
 
@@ -207,6 +221,13 @@ class PersonComment extends React.Component {
   }
 }
 
-const mapStateToProps = ({ personComments, app }) => ({ personComments, app });
+const mapStateToProps = ({ app, personComments, commonLabels }, { person }) => ({
+  personComments,
+  app: {
+    user: app.user,
+    roles: app.roles,
+  },
+  tags: commonLabels.tagsMap && person && commonLabels.tagsMap.get(person.id),
+});
 
 export default connect(mapStateToProps)(Form.create()(PersonComment));

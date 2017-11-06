@@ -10,7 +10,7 @@ import { message } from 'antd';
 import createLoading from 'dva-loading';
 // import { ApolloClient, createNetworkInterface, ApolloProvider } from 'react-apollo';
 import { sysconfig } from './systems';
-import { config } from './utils';
+//import { config } from './utils';
 import { ReduxLoggerEnabled } from './utils/debug';
 
 // const log = ::console.log;
@@ -21,7 +21,7 @@ const ERROR_MSG_DURATION = 3; // 3 秒
 configAntd();
 
 if (ENABLE_PERF) { // eslint-disable-line no-undef
-  // window.Perf = require('react-addons-perf');
+                   // window.Perf = require('react-addons-perf');
 }
 
 /** ----------------------------------------------------------------------------
@@ -57,6 +57,8 @@ if (process.env.NODE_ENV !== 'production') {
 
 // 2. Model
 app.model(require('./models/app'));
+// app.use(require('./ssrMiddleware'));
+// app.disable('x-powered-by');
 
 // 3. Router
 app.router(require('./systems/' + sysconfig.SYSTEM + '/router'));
@@ -74,6 +76,7 @@ addLocaleData(require('react-intl/locale-data/' + sysconfig.Locale));
 // });
 
 const areIntlLocalesSupported = require('intl-locales-supported');
+
 const localesMyAppSupports = ['en', 'zh'];
 
 if (global.Intl) {

@@ -5,6 +5,7 @@ import jsonp from 'jsonp';
 import { cloneDeep } from 'lodash';
 import pathToRegexp from 'path-to-regexp';
 import { getLocalToken } from 'utils/auth';
+import { escapeURLBracket, unescapeURLBracket } from 'utils/strings';
 
 import { apiDomain, nextAPIURL, YQL, CORS, strict } from './config';
 import * as debug from './debug';
@@ -16,6 +17,8 @@ export default function request(url, options) {
   if (url) {
     options.url = url;
   }
+  // options.url = encodeURI(options.url);
+
   if (process.env.NODE_ENV !== 'production') {
     debug.logRequest(
       '❯ Request',
@@ -89,7 +92,7 @@ export default function request(url, options) {
 const fetch = (options) => {
   let {
     method = 'get',
-    data,
+    data = {},
     fetchType,
     url,
     body, // This is a fix.
@@ -108,29 +111,31 @@ const fetch = (options) => {
 
   try {
     let domain = '';
-    if (url.match(/[a-zA-z]+:\/\/[^/]*/)) {
-      domain = url.match(/[a-zA-z]+:\/\/[^/]*/)[0];
-      url = url.slice(domain.length);
+    let escapedUrl = escapeURLBracket(url);
+    if (escapedUrl.match(/[a-zA-z]+:\/\/[^/]*/)) {
+      domain = escapedUrl.match(/[a-zA-z]+:\/\/[^/]*/)[0];
+      escapedUrl = escapedUrl.slice(domain.length);
     }
-    const match = pathToRegexp.parse(url);
-    url = pathToRegexp.compile(url)(data);
+    const match = pathToRegexp.parse(escapedUrl);
+    escapedUrl = pathToRegexp.compile(escapedUrl)(data);
+
     for (const item of match) {
       if (item instanceof Object && item.name in cloneData) {
         delete cloneData[item.name];
       }
     }
-    url = domain + url;
+    url = domain + unescapeURLBracket(escapedUrl);
 
     // process !post mode data.
-    let newUrl = '';
-    if (options &&
-      !(options.method && options.method.toUpperCase() === 'POST')
-      && options.data) {
-      const queryList = Object.keys(options.data).map(k => `${k}=${options.data[k]}`);
-      const queryString = queryList.join('&');
-      newUrl = `${newUrl}?${queryString}`;
-    }
-    console.log('> TODO 没用的newUrl', newUrl);
+    // let newUrl = '';
+    // if (options &&
+    //   !(options.method && options.method.toUpperCase() === 'POST')
+    //   && options.data) {
+    //   const queryList = Object.keys(options.data).map(k => `${k}=${options.data[k]}`);
+    //   const queryString = queryList.join('&');
+    //   newUrl = `${newUrl}?${queryString}`;
+    // }
+    // console.log('> TODO 没用的newUrl', newUrl);
   } catch (e) {
     console.error('======================新的错误=======================');
     throw (e.message);
@@ -156,6 +161,11 @@ const fetch = (options) => {
     headers.Authorization = token;
   }
 
+  // enable debug in next api.
+  if (process.env.NODE_ENV !== 'production') {
+    // headers.debug = 1;
+  }
+
   // real call
 
   if (fetchType === 'JSONP') {
@@ -179,7 +189,7 @@ const fetch = (options) => {
   let result;
   switch (method.toLowerCase()) {
     case 'get':
-      result = axios.get(url, { params: cloneData, headers });
+      result = axios.get(encodeURI(url), { params: cloneData, headers });
       break;
     case 'delete':
       result = axios.delete(url, { data: cloneData, headers });
@@ -209,68 +219,16 @@ const fetch = (options) => {
  *  }
  */
 // TODO Support Multiple queries.
-export async function nextQuery(payload) {
+export async function nextAPI(payload) {
   if (!payload) {
-    console.error('Error! parameters can\'t be null when call nextQuery');
+    console.error('Error! parameters can\'t be null when call nextApi');
   }
-  const { method, ...options } = payload;
+  const { method, type, ...options } = payload;
   options.method = method || 'post';
   options.nextapi = true;
-  const actions = options.data && options.data.map((query) => query.action);
+  const actions = options.data && options.data.map(query => `${query.action}+${query.eventName}`);
   const action = actions && actions.join(',');
-  const result = request(`${nextAPIURL}?action=${action}`, options);
+  const url = `${nextAPIURL}/${type || 'query'}?action=${action}`;
+  const result = request(url, options);
   return result;
-
-  // method is nextAPI's method.
-
-  const { parameters, schema, RequestMethod } = payload;
-  if (process.env.NODE_ENV !== 'production') {
-    debug.logRequest('@@next-request ', method, parameters, schema, options);
-  }
-
-  const headers = new Headers();
-  headers.append('Accept', 'application/json');
-  headers.append('Content-Type', 'application/json');
-  if (process.env.NODE_ENV !== 'production') {
-    // headers.append('Debug', 1);
-  }
-
-  const token = (options && options.token) || getLocalToken();
-  if (token) {
-    headers.append('Authorization', token);
-  }
-
-  options.method = RequestMethod || 'POST'; // next api process is always POST.
-  options.body = JSON.stringify([{
-    method,
-    parameters,
-    schema,
-  }]);
-
-  const newOption = { ...options, headers };
-  console.log('============================', newOption);
-  const response = await fetch(`${nextAPIURL}?m=${method}`, newOption);
-  // checkQueryStatus(response);
-
-  const data = await response.json();
-
-  // error handling
-  if (data && data.errs) {
-    data.errs.map((err) => {
-      if (process.env.NODE_ENV !== 'production') {
-        console.error('NEXT-API-ERROR:', err);
-      }
-      return false;
-    });
-  }
-
-  console.log('))))))))***', data);
-  const ret = (data && data.data && data.data && data.data.length > 0 && data.data[0]) || {};
-  console.log('))))))))***', ret);
-
-  // const ret = { data, headers: {} };
-  // if (response.headers.get('x-total-count')) {
-  //   ret.headers['x-total-count'] = response.headers.get('x-total-count');
-  // }
-  return ret;
 }

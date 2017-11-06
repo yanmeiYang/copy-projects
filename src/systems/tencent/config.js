@@ -14,6 +14,7 @@ module.exports = {
   googleAnalytics: 'UA-107003102-1',
 
   EnableLocalLocale: true,
+  Layout_HasNavigator: false,
 
   Header_LogoWidth: 212,
   Header_LogoStyle: {
@@ -23,7 +24,7 @@ module.exports = {
     backgroundRepeat: 'no-repeat',
     backgroundColor: 'white',
   },
-  Header_SubTextLogo: '人才智库',
+  Header_SubTextLogo: 'UCircle',
   Header_SubTextStyle: { paddingLeft: 12 },
   Header_UserPageURL: '',
   Footer_Content: '',

@@ -9,6 +9,12 @@ export default {
   'system.lang.option_en': 'English',
   'system.lang.option_zh': '简体中文',
 
+  // login
+  'login.header': 'Login',
+  'login.loginBtn': 'Login',
+  'login.forgetPw': 'Forget Password?',
+  'login.newUserApplication': 'New User Application',
+
   // Index
   'index.title': 'Expert Search',
   'search.translateSearchMessage.1': 'We also search "{enQuery}" for you.',
@@ -70,6 +76,9 @@ export default {
   'com.expertMap.headerLine.label.baiduMap': 'Baidu Map',
   'com.expertMap.headerLine.label.googleMap': 'Google Map',
   'com.expertMap.headerLine.label.level': 'Level：',
+  'com.expertMap.headerLine.label.statistic': 'Statistic & Analysis',
+  'com.expertMap.headerLine.label.download': 'Export Excel',
+  'com.expertMap.headerLine.label.ok': 'OK',
 
   'com.ExpertBase.Button.Add': '添加',
   'com.ExpertBase.Button.Remove': '删除',

@@ -7,44 +7,111 @@ import { merge } from 'lodash';
  */
 class ParamError extends Error {
   constructor(message) {
-    super(message);
-    this.name = "ParamError";
+    super();
+    this.name = 'ParamError';
   }
 }
 
-
 // Query api-builder.
-const query = (action) => {
+const query = (action, eventName) => {
   if (!action) {
     throw new ParamError('Parameter action can\'t be empty.');
   }
 
   const api = {
     action,
-    parameters: {},
-    schema: {},
+    eventName,
   };
 
   const chains = {
     api,
-    param: (params) => {
-      if (params) {
-        Object.keys(params).map((key) => {
-          api.parameters[key] = params[key];
-          return false;
-        });
+    param: (params, config) => {
+      if (!config || config.when) {
+        if (params) {
+          if (!api.parameters) {
+            api.parameters = {};
+          }
+          Object.keys(params).map((key) => {
+            api.parameters[key] = params[key];
+            return false;
+          });
+        }
       }
       return chains;
     },
     addParam: (params) => {
+      if (!api.parameters) {
+        api.parameters = {};
+      }
       api.parameters = merge(api.parameters, params);
       return chains;
     },
-    schema: (schema) => {
-      api.schema = schema;
+    schema: (schema, config) => {
+      if (!config || config.when) {
+        if (!api.schema) {
+          api.schema = {};
+        }
+        api.schema = schema;
+      }
       return chains;
     },
     addSchema: (schema) => {
+      if (!api.schema) {
+        api.schema = {};
+      }
+      api.schema = merge(api.schema, schema);
+      return chains;
+    },
+  };
+  return chains;
+};
+
+// Alter api-builder.
+const alter = (action) => {
+  if (!action) {
+    throw new ParamError('Parameter action can\'t be empty.');
+  }
+
+  const api = {
+    action,
+  };
+
+  const chains = {
+    api,
+    param: (params, config) => {
+      if (!config || config.when) {
+        if (params) {
+          if (!api.parameters) {
+            api.parameters = {};
+          }
+          Object.keys(params).map((key) => {
+            api.parameters[key] = params[key];
+            return false;
+          });
+        }
+      }
+      return chains;
+    },
+    addParam: (params) => {
+      if (!api.parameters) {
+        api.parameters = {};
+      }
+      api.parameters = merge(api.parameters, params);
+      return chains;
+    },
+    schema: (schema, config) => {
+      if (!config || config.when) {
+        if (!api.schema) {
+          api.schema = {};
+        }
+        api.schema = schema;
+      }
+      return chains;
+    },
+    addSchema: (schema) => {
+      if (!api.schema) {
+        api.schema = {};
+      }
       api.schema = merge(api.schema, schema);
       return chains;
     },
@@ -60,13 +127,18 @@ const apiBuilder = {
   //
   query,
 
+  alter,
+
   // alter: () => {},
   // run: () => {},
 };
 
 // Builtin Fields.
 const F = {
-  action: { search: 'search' }, // available actions.
+  Type: { Query: 'query', Alter: 'alter' },
+
+  // query related
+  queries: { search: 'search' }, // query actions.
   searchType: { all: 'all', allb: 'allb' },
   fields: {
     person: {
@@ -74,6 +146,12 @@ const F = {
         'citation', 'newStar', 'risingStar', 'activity', 'diversity', 'sociability'],
     },
   },
+
+  // alter related
+  alters: { alter: 'alter' }, // alter actions.
+  alterop: { upsert: 'upsert', update: 'update', delete: 'delete' }, // alter operations
+
+  Entities: { Person: 'person', Publication: 'pub', Venue: 'venue' },
 };
 
 module.exports = {

@@ -222,16 +222,12 @@ class ExpertTrajectory extends React.Component {
   };
 
   quickLine = () => { // 停止动画立刻画出路线
-    // const temp = option.geo.zoom;
     ifDraw = 1;
-    // console.log("temp1",temp);
     const record = this.getTrajRecord();
     const geoCoordMap = this.doTrajGeoMap(record); // geoCoordMap = {tsinghua unversity : [120,40] }
     const data = this.getTrajData(record); // data = [{name: tsinghua university, value : 6(years)}]
     option = this.drawTrajMap();
     option.series = this.getTrajSeries(geoCoordMap, data, record, (data.length - 2));
-    // console.log("temp2",temp);
-    // option.geo.zoom = temp;
     this.myChart.setOption(option);
   };
 

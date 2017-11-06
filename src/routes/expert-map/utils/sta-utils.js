@@ -13,14 +13,15 @@ const showSta = (echarts, divId, data, type) => {
     title = '按大区进行统计';
     result = sortByBigArea(data);
   }
-  const names = [];
-  const values = [];
-  for (const key in result.countries) {
-    if (true) {
-      names.push(key);
-      values.push(result.countries[key]);
-    }
-  }
+  const [names, values] = [result.names, result.values];
+  //const  = ;
+  // const a
+  // for (const key in result.countries) {
+  //   if (true) {
+  //     names.push(key);
+  //     const v = { name: key, value: result.countries[key] };
+  //   }
+  // }
   const myChart = echarts.init(divId);
 
   // 绘制图表
@@ -90,7 +91,8 @@ const sortByBigArea = (data) => {
       areas[p] = 1;
     }
   }
-  return { countries: areas };
+  const result = sortByValue(areas);
+  return result;
 };
 
 const sortByCountries = (data) => {
@@ -102,7 +104,26 @@ const sortByCountries = (data) => {
       countries[p.country.name] = 1;
     }
   }
-  return { countries };
+  const result = sortByValue(countries);
+  return result;
+};
+
+const sortByValue = (result) => {
+  const vs = [];
+  for (const key in result) {
+    if (true) {
+      const v = { name: key, value: result[key] };
+      vs.push(v);
+    }
+  }
+  vs.sort((a, b) => a.value - b.value);
+  const names = [];
+  const values = [];
+  for (const v of vs) {
+    names.push(v.name);
+    values.push(v.value);
+  }
+  return { names, values, result: vs };
 };
 
 module.exports = {

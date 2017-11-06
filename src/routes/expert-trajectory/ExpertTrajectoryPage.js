@@ -24,18 +24,10 @@ class ExpertTrajectoryPage extends React.Component {
 
   state = {
     query: '',
-    mapType: 'google', // [baidu|google]
-    view: {},
   };
 
   componentWillMount() {
-    const { query, type } = queryString.parse(location.search);
-    if (query) {
-      this.setState({ query });
-    }
-    if (type) {
-      this.setState({ mapType: type || 'google' });
-    }
+    const { query } = '';
     this.dispatch({
       type: 'app/layout',
       payload: {
@@ -71,6 +63,8 @@ class ExpertTrajectoryPage extends React.Component {
   };
 
   onPersonClick = (personId, start, end) => {
+    console.log(personId);
+
     this.props.dispatch({ type: 'expertTrajectory/dataFind', payload: { personId, start, end } });
   };
 
@@ -87,7 +81,7 @@ class ExpertTrajectoryPage extends React.Component {
         <div className={classnames('content-inner', styles.page)}>
           <Layout>
             <Sider className={styles.left} width={250}>
-              <PersonListLittle persons={persons} onClick={this.onPersonClick} />
+              <PersonListLittle persons={persons} onClick={this.onPersonClick.bind(this, 1900, 2017)} />
             </Sider>
             <Layout className={styles.right}>
               <Content className={styles.content}>

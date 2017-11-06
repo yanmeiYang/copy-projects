@@ -277,13 +277,13 @@ export default class ExpertMapPage extends React.Component {
           </div>
 
           <div className={styles.scopes}>
-            <div className={styles.analysis}>
+            <div className={styles.analysis} style={{ display: 'none' }}>
               <Button onClick={this.showModal}>
                 <Icon type="line-chart" />
                 <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.statistic" />
               </Button>
               <Modal
-                title="Results"
+                title="Statistics & Analyses"
                 visible={this.state.visible}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
@@ -297,7 +297,7 @@ export default class ExpertMapPage extends React.Component {
                   </Button>,
                 ]}
                 width="700px"
-              >
+                >
                 <Tabs defaultActiveKey="1" onChange={this.changeStatistic}>
                   <TabPane tab="国家" key="1">{staJsx && staJsx}</TabPane>
                   <TabPane tab="大区" key="2">{staJsx1 && staJsx1}</TabPane>

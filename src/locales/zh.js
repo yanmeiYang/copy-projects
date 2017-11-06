@@ -77,7 +77,7 @@ export default {
   'com.expertMap.headerLine.label.googleMap': '谷歌地图',
   'com.expertMap.headerLine.label.level': '层级：',
   'com.expertMap.headerLine.label.statistic': '统计分析报告',
-  'com.expertMap.headerLine.label.download': '下载分析报告',
+  'com.expertMap.headerLine.label.download': '导出Excel表',
   'com.expertMap.headerLine.label.ok': '确定',
 
   'com.ExpertBase.Button.Add': '添加',

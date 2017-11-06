@@ -315,19 +315,15 @@ class ExpertTrajectory extends React.Component {
   render() {
     return (
       <div>
-        <div className={styles.wor} id="world"
-             style={{ height: '600px', width: '1200px', padding: '0px' }} />
+        <div className={styles.wor} id="world" />
         <div>
-          <Button className={styles.path} type="primary" ghost onClick={this.quickLine}>Show
-            Path</Button>
+          <Button className={styles.path} type="primary" ghost onClick={this.quickLine}>Show Path</Button>
         </div>
         <div>
-          <Button className={styles.plus} type="primary" ghost icon="plus"
-                  onClick={this.plusTrajZoom} />
+          <Button className={styles.plus} type="primary" ghost icon="plus" onClick={this.plusTrajZoom} />
         </div>
         <div>
-          <Button className={styles.minus} type="primary" ghost icon="minus"
-                  onClick={this.minusTrajZoom} />
+          <Button className={styles.minus} type="primary" ghost icon="minus" onClick={this.minusTrajZoom} />
         </div>
       </div>
     );

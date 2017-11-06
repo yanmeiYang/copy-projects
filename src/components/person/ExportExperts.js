@@ -35,7 +35,7 @@ export default class ExportExperts extends Component {
     indeterminate: true,
     checkAll: false,
     exportSize: 500,
-    maxExportSize: 100,
+    maxExportSize: 500,
     interestsI18n: {},
   };
 
@@ -89,7 +89,7 @@ export default class ExportExperts extends Component {
     // TODO Change to multi download, change to use effects takeAll.
     this.props.dispatch({
       type: 'exportExperts/searchPerson',
-      payload: { query, filters, sort },
+      payload: { query, filters, sort, exportSize: this.state.exportSize },
     }).then((res) => {
       const selectedItem = selected;
       let expertPersonInfo = '';

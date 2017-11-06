@@ -16,22 +16,19 @@ export default {
   },
 
   effects: {
-    * searchPerson({ payload }, { call, put, all }) {
-      const { query, filters, sort } = payload;
-      // const data = yield call(searchService.searchPerson, query, filters, sort);
-
-      const { top100, top200, top300, top400, top500 } = yield all({
-        top100: call(searchService.searchPerson, query, 0, 100, filters, sort),
-        top200: call(searchService.searchPerson, query, 100, 100, filters, sort),
-        top300: call(searchService.searchPerson, query, 200, 100, filters, sort),
-        top400: call(searchService.searchPerson, query, 300, 100, filters, sort),
-        top500: call(searchService.searchPerson, query, 400, 100, filters, sort),
-      });
-
-      if (top100.data && top100.data.result && top200.data && top200.data.result
-        && top300.data && top300.data.result && top400.data && top400.data.result
-        && top500.data && top500.data.result) {
-        return top100.data.result.concat(top200.data.result).concat(top300.data.result).concat(top400.data.result).concat(top500.data.result);
+    * searchPerson({ payload }, { call, all }) {
+      const { query, filters, sort, exportSize } = payload;
+      let searchResults = [];
+      for (let i = 0; i < exportSize; i += 100) {
+        const [top] = yield all([
+          call(searchService.searchPerson, query, i, 100, filters, sort),
+        ]);
+        if (top.data && top.data.result) {
+          searchResults = searchResults.concat(top.data.result);
+        }
+      }
+      if (searchResults.length > 0) {
+        return searchResults;
       } else {
         throw new Error('Result Not Available');
       }

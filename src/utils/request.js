@@ -17,7 +17,7 @@ export default function request(url, options) {
   if (url) {
     options.url = url;
   }
-  options.url = encodeURI(options.url);
+  // options.url = encodeURI(options.url);
 
   if (process.env.NODE_ENV !== 'production') {
     debug.logRequest(

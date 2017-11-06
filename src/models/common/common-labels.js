@@ -45,33 +45,26 @@ export default {
     },
 
     * fetchPersonLabels({ payload }, { call, put }) {
-      const { ids } = payload;
-      console.log('****', ids);
-      const newPayload = payload;//{ ids: [...ids, '53f46a3edabfaee43ed05f08'] };
-      const data = yield call(labelService.fetchLabelsByIds, newPayload);
-      console.log('****>>>>', data);
-
-      // TODO map tags into immutable js.
-      let tagsMap = Map();
-      tagsMap = tagsMap.withMutations((map) => {
-        for (const id of ids) {
-          map.set(id, [id]);
+      const newPayload = payload;
+      const { success, data } = yield call(labelService.fetchLabelsByIds, newPayload);
+      if (success && data) {
+        console.log('****>>>>', data);
+        let tagsMap = Map();
+        if (data && data.items && data.items.length > 0) {
+          tagsMap = tagsMap.withMutations((map) => {
+            for (const item of data.items) {
+              const tags = item && item.dims && item.dims.systag;
+              if (tags && tags.length > 0) {
+                map.set(item.id, tags);
+              }
+            }
+          });
         }
-        // map.set('53f46a3edabfaee43ed05f08', ['AMINER TEST LABEL']);
-      });
-      console.log('****', tagsMap);
-      yield put({ type: 'fetchPersonLabelsSuccess', payload: { tagsMap } });
-
-      // const { targetId, tag } = payload;
-      // if (!targetId || !tag) {
-      //   return false;
-      // }
-      // const data = yield call(labelService.addLabelToEntity, payload);
-      // if (data.success && data.data && data.data.succeed) {
-      //   return true;
-      //   yield put({ type: 'addSuccess', payload: { tag } });
-      // }
-      // return false;
+        console.log('****', tagsMap);
+        yield put({ type: 'fetchPersonLabelsSuccess', payload: { tagsMap } });
+      } else {
+        console.error('Error when calling things....');
+      }
     },
   },
 

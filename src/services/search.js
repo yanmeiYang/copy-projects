@@ -52,7 +52,7 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
       .param({ switches: ['translate_all'] }, { when: useTranslateSearch })
       .schema({
         person: [
-          'id', 'name', 'name_zh', // 'tags', // 'tags_zh', 'tags_translated'
+          'id', 'name', 'name_zh', //'tags', // 'tags_zh', 'tags_translated'
           { profile: ['position', 'affiliation'] },
           // 'org', 'org_zh', 'bio', 'email', 'edu' ', phone'
           { indices: F.fields.person.indices_all },

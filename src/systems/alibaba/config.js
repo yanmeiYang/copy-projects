@@ -98,6 +98,14 @@ module.exports = {
   // PersonList_ShowIndices: [], // do not override in-component settings. // TODO
 
   ExpertBases: [
+    { id: 'aminer', name: <span><i className="fa fa-globe fa-fw" />ALL</span> },
+    { name: '高端科学家', id: '59ffe21c9ed5db93537362f3' },
+    { name: '一线中青年科学家', id: '59ffb7d69ed5db9353731eaa' },
+    { name: '明日之星', id: '59ffb9339ed5db93537320c9' },
+  ],
+
+
+  ExpertBasesxxxx: [
     {
       id: 'aminer',
       name: <span><i className="fa fa-globe fa-fw" />ALL</span>,

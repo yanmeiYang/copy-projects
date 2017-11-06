@@ -20,10 +20,6 @@ const ERROR_MSG_DURATION = 3; // 3 秒
 
 configAntd();
 
-if (ENABLE_PERF) { // eslint-disable-line no-undef
-                   // window.Perf = require('react-addons-perf');
-}
-
 /** ----------------------------------------------------------------------------
  *
  * ----------------------------------------------------------------------------*/

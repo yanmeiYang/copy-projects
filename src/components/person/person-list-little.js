@@ -45,6 +45,8 @@ class PersonListLittle extends React.PureComponent {
           persons && persons.map((person) => {
             const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
             const indices = person.indices.h_index;
+            const pos = profileUtils.displayPosition(person.pos);
+            const aff = profileUtils.displayAff(person);
 
             return (
               <div key={person.id} role="presentation" className="item" onClick={this.onClick.bind(this, person.id)}>
@@ -56,21 +58,22 @@ class PersonListLittle extends React.PureComponent {
                     title={name}
                   />
                 </div>
-                <div className="info_zone">
-                {name &&
-                <div className="title">
-                  <Icon type="user" />
-                  <h2 className="section_header">
-                    {name}
-                    {false && <span className="rank">会士</span>}
-                  </h2>
-                  {this.personLabel && this.personLabel(person)}
-                </div>}
+                <div>{name &&
+                  <div>
+                    <h2 className="section_header">
+                      <Icon type="user" />
+                      {name}
+                      {false && <span className="rank">会士</span>}
+                    </h2>
+                    {this.personLabel && this.personLabel(person)}
+                  </div>}
                   <div className="zone">
                     <div className="contact_zone">
-                      <h3>h_index: {indices}</h3>
+                      <h3><Icon type="solution" /> h_index: {indices}</h3>
                     </div>
                   </div>
+                  {pos && <span><i className="fa fa-briefcase fa-fw" /> {pos}</span>}<br />
+                  {aff && <span><i className="fa fa-institution fa-fw" /> {aff}</span>}
                 </div>
               </div>
             );

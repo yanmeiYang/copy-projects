@@ -3,6 +3,7 @@
  */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { message } from 'antd';
 import { connect } from 'dva';
 import { LabelLine } from 'components/common';
 import { compare } from 'utils/compare';
@@ -51,16 +52,25 @@ export default class Labels extends Component {
     const { tags } = this.state;
     dispatch({ type, payload })
       .then((success) => {
-        if (success) {
-          if (op === 'add') {
-            const newTags = tags || [];
-            if (newTags.indexOf(tag) === -1) {
-              this.setState({ tags: [...newTags, tag] });
+        switch (op) {
+          case 'add':
+            if (success) {
+              const newTags = tags || [];
+              if (newTags.indexOf(tag) === -1) {
+                this.setState({ tags: [...newTags, tag] });
+              }
+            } else {
+              message.error('添加标签错误');
             }
-          } else if (op === 'remove') {
-            console.log('remove this tags',);
-            // TODO /......
-          }
+            break;
+          case 'remove':
+            if (success) {
+              console.log('Remove this tags',);
+            } else {
+              message.error('删除标签错误');
+            }
+            break;
+          default:
         }
       });
   };

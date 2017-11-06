@@ -14,14 +14,6 @@ const showSta = (echarts, divId, data, type) => {
     result = sortByBigArea(data);
   }
   const [names, values] = [result.names, result.values];
-  //const  = ;
-  // const a
-  // for (const key in result.countries) {
-  //   if (true) {
-  //     names.push(key);
-  //     const v = { name: key, value: result.countries[key] };
-  //   }
-  // }
   const myChart = echarts.init(divId);
 
   // 绘制图表

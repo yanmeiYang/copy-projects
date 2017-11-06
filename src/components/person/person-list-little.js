@@ -1,6 +1,15 @@
 import React from 'react';
+import { Icon } from 'antd';
+import classnames from 'classnames';
+import { config, compare, hole } from 'utils';
+import { sysconfig } from 'systems';
+import * as display from 'utils/display';
+import { Indices } from 'components/widgets';
+import PersonTags from 'components/person/PersonTags';
+import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import styles from './person-list-little.less';
 import * as profileUtils from '../../utils/profile-utils';
+
 
 /**
  * @param param
@@ -20,14 +29,16 @@ class PersonListLittle extends React.PureComponent {
   }
 
   onClick = (id) => {
-    // alert(id);
-    if( this.props.onClick){
-      this.props.onClick(id);
+    if (this.props.onClick) { // onClick是个参数，判断组件里面是否有这个对象
+      this.props.onClick(id); //有的话将参数传递进去
     }
-  }
+  };
+
 
   render() {
     const { persons } = this.props;
+    console.log(persons);
+    console.log(this.props);
     return (
       <div className={styles.personList}>
         {
@@ -36,7 +47,7 @@ class PersonListLittle extends React.PureComponent {
             const indices = person.indices.h_index;
 
             return (
-              <div key={person.id} className="item" onClick={this.onClick.bind(this, person.id)}>
+              <div key={person.id} role="presentation" className="item" onClick={this.onClick.bind(this, person.id)}>
                 <div className="avatar_zone">
                   <img
                     src={profileUtils.getAvatar(person.avatar, '', 90)}
@@ -45,31 +56,28 @@ class PersonListLittle extends React.PureComponent {
                     title={name}
                   />
                 </div>
-
                 <div className="info_zone">
-                  {name &&
-                  <div className="title">
-                    <h2 className="section_header">
-                      {name}
-                      {false && <span className="rank">会士</span>}
-                    </h2>
-                    {this.personLabel && this.personLabel(person)}
-                  </div>}
+                {name &&
+                <div className="title">
+                  <Icon type="user" />
+                  <h2 className="section_header">
+                    {name}
+                    {false && <span className="rank">会士</span>}
+                  </h2>
+                  {this.personLabel && this.personLabel(person)}
+                </div>}
                   <div className="zone">
                     <div className="contact_zone">
                       <h3>h_index: {indices}</h3>
                     </div>
                   </div>
                 </div>
-
               </div>
             );
           })
         }
       </div>
     );
-
-    // console.log("persons is ", this.props.persons);
   }
 }
 

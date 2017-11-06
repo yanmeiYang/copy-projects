@@ -178,9 +178,11 @@ export default class ExpertMapPage extends React.Component {
     }, () => {
       const chartsinterval = setInterval(() => {
         const divId = document.getElementById('bycountries');
-        if (typeof (divId) !== 'undefined' && divId !== 'undefined') {
+        const data = this.props.expertMap.geoData;
+        if (typeof (divId) !== 'undefined' && divId !== 'undefined'
+        && typeof (data.results) !== 'undefined' && data.results !== 'undefined') {
           clearInterval(chartsinterval);
-          showSta(echarts, divId, this.props.expertMap.geoData, 'country');
+          showSta(echarts, divId, data, 'country');
         }
       }, 100);
     });
@@ -211,9 +213,11 @@ export default class ExpertMapPage extends React.Component {
         divId = document.getElementById('bigArea');
         type = 'bigArea';
       }
-      if (typeof (divId) !== 'undefined' && divId !== 'undefined') {
+      const data = this.props.expertMap.geoData;
+      if (typeof (divId) !== 'undefined' && divId !== 'undefined'
+      && typeof (data.results) !== 'undefined' && data.results !== 'undefined') {
         clearInterval(chartsinterval);
-        showSta(echarts, divId, this.props.expertMap.geoData, type);
+        showSta(echarts, divId, data, type);
       }
     }, 100);
   };
@@ -277,7 +281,7 @@ export default class ExpertMapPage extends React.Component {
           </div>
 
           <div className={styles.scopes}>
-            <div className={styles.analysis} style={{ display: 'none' }}>
+            <div className={styles.analysis}>
               <Button onClick={this.showModal}>
                 <Icon type="line-chart" />
                 <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.statistic" />

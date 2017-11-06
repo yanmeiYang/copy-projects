@@ -42,14 +42,14 @@ export default {
   effects: {
     * searchPerson({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
-      const { query } = payload;
-      const { data } = yield call(searchService.searchPerson, query);
+      const { query, offset, size } = payload;
+      const { data } = yield call(searchService.searchPerson, query, offset, size);
       yield put({ type: 'searchPersonSuccess', payload: { data, query } });
     },
 
     * dataFind({ payload }, { call, put }) {
       console.log('enter kfFind, with query:', payload);
-      const { personId, start, end } = payload;
+      const { personId, start, end } = payload; //注意是两边的名字要一致，否则错误
       const data = yield call(traDataFindService.findTrajPerson, personId, start, end);
       yield put({ type: 'dataFindSuccess', payload: { data } });
     },
@@ -214,11 +214,8 @@ export default {
       }
       const data2 = data.slice(p);
 
-      // console.log('authorImg', authorImg);
       Object.keys(authorImg).map((key) => {
-        // console.log('geoCOooiejijf', geoCoordMap[key]);
         if (geoCoordMap[key][0] < (-30)) {
-          // console.log('come to west');
           authorImgWest[key] = authorImg[key];
         } else if (geoCoordMap[key][0] >= -30 && geoCoordMap[key][0] <= 70) {
           authorImgMid[key] = authorImg[key];
@@ -307,12 +304,7 @@ export default {
     },
 
     dataFindSuccess(state, { payload: { data } }) {
-      /*      const data = payload.data && payload.data.data;
-      const kgindex = kgService.indexingKGData(data);
-      const kgFetcher = kgService.kgFetcher(data, kgindex);
-      // console.log('success findKG, return date is ', data);
-      // console.log('indexing it: ', kgindex);
-      return { ...state, kgdata: data, kgindex, kgFetcher }; */
+      return { ...state, kgdata: data };
     },
 
     eventFindSuccess(state, { payload: { data } }) {

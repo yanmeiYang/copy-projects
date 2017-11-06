@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "aminer2b",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "dependencies": {
     "antd": "^2.13.8",
     "axios": "^0.17.0",
@@ -11,7 +11,7 @@
     "cross-env": "^5.1.1",
     "crypto-js": "^3.1.9-1",
     "d3": "^4.10.2",
-    "dva": "^2.0.4",
+    "dva": "^2.1.0-beta.3",
     "dva-loading": "^1.0.3",
     "ejs-loader": "^0.3.0",
     "history": "^4.7.2",
@@ -32,7 +32,7 @@
     "rc-tween-one": "^1.5.5",
     "react": "^16.0.0",
     "react-autosuggest": "^9.3.2",
-    "react-countup": "^2.4.0",
+    "react-countup": "^3.0.0",
     "react-dom": "^16.0.0",
     "react-ga": "^2.3.4",
     "react-helmet": "^5.2.0",
@@ -43,7 +43,6 @@
   },
   "devDependencies": {
     "amdefine": "^1.0.1",
-    "atool-l10n": "^0.3.0",
     "babel-eslint": "^8.0.0",
     "babel-plugin-dev-expression": "^0.2.1",
     "babel-plugin-dva-hmr": "^0.3.2",
@@ -75,9 +74,7 @@
   "optionalDependencies": {
     "fsevents": "^1.1.2"
   },
-  "pre-commit": [
-    "lint"
-  ],
+  "pre-commit": ["lint"],
   "scripts": {
     "dev": "cross-env BROWSER=none HOST=0.0.0.0 roadhog server",
     "lint": "eslint --fix --ext .js src",

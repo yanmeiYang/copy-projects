@@ -5,11 +5,11 @@ const {
 let time1 = new Date();
 
 const ldata = {};
-for (let i = 0; i <= 1000000; i += 1) {
+for (let i = 0; i <= 100000; i += 1) {
   ldata[i] = i;
 }
 
-console.log('>>> TIME: calclate:', new Date() - time1);
+onsole.log('>>> TIME: calclate:', new Date() - time1);
 time1 = new Date();
 
 // change to immutable js
@@ -21,7 +21,7 @@ time1 = new Date();
 
 // method 2
 let im2 = Map();
-for (let i = 0; i <= 1000000; i += 1) {
+for (let i = 0; i <= 100000; i += 1) {
   im2 = im2.set(i, i);
 }
 console.log('>>> TIME: translate2 ', new Date() - time1);
@@ -35,7 +35,7 @@ time1 = new Date();
 // test batch modify.
 let im4 = Map();
 im4 = im4.withMutations((map) => {
-  for (let i = 0; i <= 1000000; i += 1) {
+  for (let i = 0; i <= 100000; i += 1) {
     map.set(i, i);
   }
 });
@@ -57,3 +57,9 @@ console.log(im4);
 // const map3 = map1.set('b', 50);
 
 console.log('>>> TIME: ALL ', new Date() - time1);
+
+export default class className {
+  constructor() {
+    this.super();
+  }
+};

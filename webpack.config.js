@@ -28,28 +28,26 @@ module.exports = (webpackConfig, env) => {
     if (webpackConfig.module) {
       // Class name Hash
       webpackConfig.module.rules.map((item) => {
-        if (String(item.test) === '/\\.less$/' || String(item.test) === '/\\.css/') {
-          item.use.filter(iitem => iitem.loader === 'css')[0].options.localIdentName = '[hash:base64:5]'
+        if (String(item.test) === '/\\.less$/' ||
+          String(item.test) === '/\\.css/') {
+          item.use.filter(iitem => iitem.loader === 'css')[0]
+            .options.localIdentName = '[hash:base64:5]';
         }
         return item;
       });
     }
-    webpackConfig.plugins.push(
-      new webpack.LoaderOptionsPlugin({
-        minimize: true,
-        debug: false,
-      }),
-    );
+    webpackConfig.plugins.push(new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      debug: false,
+    }));
   }
 
   if (!buildDllMode) {
     webpackConfig.plugins = webpackConfig.plugins.concat([
-      new CopyWebpackPlugin([
-        {
-          from: 'src/public',
-          to: production ? '../' : webpackConfig.output.outputPath,
-        },
-      ]),
+      new CopyWebpackPlugin([{
+        from: 'src/public',
+        to: production ? '../' : webpackConfig.output.outputPath,
+      }]),
     ]);
   }
 

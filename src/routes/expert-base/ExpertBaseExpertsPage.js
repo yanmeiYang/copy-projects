@@ -5,13 +5,13 @@ import { routerRedux, Link, withRouter } from 'dva/router';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 import { hole, createURL } from 'utils';
+import { query } from 'services/user';
 import * as strings from 'utils/strings';
 import { Auth } from 'hoc';
 import { Layout } from 'routes';
 import { FormattedMessage as FM } from 'react-intl';
 import SearchComponent from 'routes/search/SearchComponent';
 import styles from './ExpertBaseExpertsPage.less';
-import { query } from 'services/user';
 
 const tc = applyTheme(styles);
 

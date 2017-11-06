@@ -20,9 +20,7 @@ export default {
       const { query, filters, sort, exportSize } = payload;
       let searchResults = [];
       for (let i = 0; i < exportSize; i += 100) {
-        const [top] = yield all([
-          call(searchService.searchPerson, query, i, 100, filters, sort),
-        ]);
+        const top = yield call(searchService.searchPerson, query, i, 100, filters, sort);
         if (top.data && top.data.result) {
           searchResults = searchResults.concat(top.data.result);
         }

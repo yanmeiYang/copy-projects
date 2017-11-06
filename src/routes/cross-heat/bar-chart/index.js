@@ -8,6 +8,7 @@ import styles from './index.less';
 
 
 class BarChart extends React.Component {
+
   componentDidMount() {
     if (this.props.compareVal.title) {
       this.createBar(this.props.compareVal);

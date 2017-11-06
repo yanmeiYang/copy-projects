@@ -52,9 +52,9 @@ export async function getCrossPredict(params) {
     body: JSON.stringify(dt),
   });
 }
-export async function getDomainAllInfo(params) {
+export async function getCrossModalInfo(params) {
   const { domain1, domain2, beginYear, endYear, summary, pubSkip, pubLimit, authorSkip, authorLimit } = params;
-  return request(api.getDomainAllInfo
+  return request(api.getCrossModalInfo
     .replace(':domain1', domain1)
     .replace(':domain2', domain2)
     .replace(':beginYear', beginYear)

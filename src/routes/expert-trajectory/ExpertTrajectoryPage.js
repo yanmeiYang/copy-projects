@@ -5,8 +5,7 @@ import React from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
 import { routerRedux } from 'dva/router';
-import queryString from 'query-string';
-import { applyTheme, theme } from 'themes';
+import { applyTheme } from 'themes';
 import { Layout } from 'antd';
 import { Layout as Page } from 'routes';
 import styles from './ExpertTrajectoryPage.less';
@@ -23,11 +22,15 @@ class ExpertTrajectoryPage extends React.Component {
   }
 
   state = {
-    query: '',
+    query: '', //查询窗口中的默认值
   };
 
   componentWillMount() {
-    const { query } = '';
+    const { query } = this.state;
+    const q = query || '唐杰'; //设置一个默认值
+    this.setState({
+      query: q,
+    });
     this.dispatch({
       type: 'app/layout',
       payload: {
@@ -62,14 +65,15 @@ class ExpertTrajectoryPage extends React.Component {
     }
   };
 
-  onPersonClick = (personId, start, end) => {
-    console.log(personId);
-
+  onPersonClick = (start, end, personId) => {
+    //这里的参数的名字要和model里面的一致
     this.props.dispatch({ type: 'expertTrajectory/dataFind', payload: { personId, start, end } });
   };
 
   callSearchMap = (query) => {
-    this.props.dispatch({ type: 'expertTrajectory/searchPerson', payload: { query } });
+    const offset = 0;
+    const size = 20;
+    this.props.dispatch({ type: 'expertTrajectory/searchPerson', payload: { query, offset, size } });
   };
 
   render() {
@@ -79,9 +83,10 @@ class ExpertTrajectoryPage extends React.Component {
       <Page contentClass={tc(['ExpertTrajectoryPage'])} onSearch={this.onSearch}
             query={query}>
         <div className={classnames('content-inner', styles.page)}>
-          <Layout>
-            <Sider className={styles.left} width={250}>
-              <PersonListLittle persons={persons} onClick={this.onPersonClick.bind(this, 1900, 2017)} />
+          <Layout className={styles.experts}>
+            <Sider className={styles.left}>
+              <PersonListLittle persons={persons}
+                                onClick={this.onPersonClick.bind(this, 1900, 2017)} />
             </Sider>
             <Layout className={styles.right}>
               <Content className={styles.content}>

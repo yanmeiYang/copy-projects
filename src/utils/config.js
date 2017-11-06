@@ -147,7 +147,7 @@ module.exports = {
     delTaskList: `${baseURL}/cross-domain/query/:id`,
     getDomainInfo: `${baseURL}/cross-domain/records/:beginYear/:endYear/:pubSkip/:pubLimit/:authorSkip/:authorLimit`,
     // getDomainAllInfo: 'http://166.111.7.173:15000/record/:domain1/:domain2/:begin/:end',
-    getDomainAllInfo: `${baseURL}/cross-domain/record/:domain1/:domain2/:beginYear/:endYear/:summary/:pubSkip/:pubLimit/:authorSkip/:authorLimit`,
+    getCrossModalInfo: `${baseURL}/cross-domain/record/:domain1/:domain2/:beginYear/:endYear/:summary/:pubSkip/:pubLimit/:authorSkip/:authorLimit`,
     getExpertByIds: `${baseURL}/person/batch-list`,
     getPubById: `${baseURL}/pub/:id`,
     getSuggest: `${baseURL}/search/suggest/gen/:query`,

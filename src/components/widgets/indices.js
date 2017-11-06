@@ -27,8 +27,8 @@ const indicesConfig = {
       return indices.activity && indices.activity.toFixed(2);
     },
   },
-  rising_star: {
-    key: 'newStar', // 'newstar',
+  rising_star: { // Actually this is newStar.
+    key: 'newStar',
     letter: 'S',
     tooltip: '领域新星（S）',
     color: 'new_star',

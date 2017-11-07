@@ -12,6 +12,7 @@ export default {
   namespace: 'expertTrajectory',
 
   state: {
+    trajData: {},
     results: [],
     personId: '',
     personInfo: {},
@@ -47,13 +48,20 @@ export default {
       yield put({ type: 'searchPersonSuccess', payload: { data, query } });
     },
 
-    * dataFind({ payload }, { call, put }) {
+    * findTrajById({ payload }, { call, put }) {
       console.log('enter kfFind, with query:', payload);
       const { personId, start, end } = payload; //注意是两边的名字要一致，否则错误
       const data = yield call(traDataFindService.findTrajPerson, personId, start, end);
-      yield put({ type: 'dataFindSuccess', payload: { data } });
+      yield put({ type: 'findTrajByIdSuccess', payload: { data } });
     },
 
+
+    /*********************************
+     *
+     * 上面的是验证过的函数
+     *
+     * *********************************
+     */
     * heatFind({ payload }, { call, put }) {
       let data;
       const { query } = payload;
@@ -247,6 +255,17 @@ export default {
   },
 
   reducers: {
+    findTrajByIdSuccess(state, { payload: { data } }) {
+      return { ...state, trajData: data };
+    },
+
+    /***********************************************************************
+     *
+     * 上面是验证过的函数
+     *
+     * **********************************************************************
+     */
+
     getPerYearHeatDataSuccess(state, { payload: { year, geoCoordMap, data, yearIndex, nextYearData, data1, data2, authorImgWest, authorImgMid, authorImgEast, author, author2 } }) {
       const yearHeat = state.eachYearHeat;
       yearHeat[year] = {};
@@ -301,10 +320,6 @@ export default {
         locationName,
         hindex,
       };
-    },
-
-    dataFindSuccess(state, { payload: { data } }) {
-      return { ...state, kgdata: data };
     },
 
     eventFindSuccess(state, { payload: { data } }) {

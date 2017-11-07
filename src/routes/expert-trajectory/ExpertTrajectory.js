@@ -292,6 +292,7 @@ class ExpertTrajectory extends React.Component {
       setTimeout(() => {
         if (ifDraw === 0) {
           option.series = this.getTrajSeries(geoCoordMap, data, record, i);
+          console.log(JSON.stringify(option));
           this.myChart.setOption(option);
         } else {
           clearTimeout();

@@ -15,6 +15,7 @@ import ExpertTrajectory from './ExpertTrajectory';
 const { Content, Sider } = Layout;
 const tc = applyTheme(styles);
 
+@connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
 class ExpertTrajectoryPage extends React.Component {
   constructor(props) {
     super(props);
@@ -67,7 +68,7 @@ class ExpertTrajectoryPage extends React.Component {
 
   onPersonClick = (start, end, personId) => {
     //这里的参数的名字要和model里面的一致
-    this.props.dispatch({ type: 'expertTrajectory/dataFind', payload: { personId, start, end } });
+    this.props.dispatch({ type: 'expertTrajectory/findTrajById', payload: { personId, start, end } });
   };
 
   callSearchMap = (query) => {

@@ -53,6 +53,7 @@ const toNextPerson = (person) => {
 
       tags: person.tags && person.tags.map(tag => tag.t),
       tags_zh: person.tags_zh && person.tags_zh.map(tag => tag.t),
+      num_viewed: person.num_viewed,
 
       // -
 

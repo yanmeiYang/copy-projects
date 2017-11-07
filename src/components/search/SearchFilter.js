@@ -58,7 +58,7 @@ export default class SearchFilter extends Component {
 
   render() {
     // console.log('====================================');
-    const { filters, aggs, disableExpertBaseFilter } = this.props;
+    const { filters, aggs, disableExpertBaseFilter, roles } = this.props;
     const keys = this.keys;
 
     return (
@@ -103,11 +103,16 @@ export default class SearchFilter extends Component {
             </span>
             <ul className={styles.filterItems}>
               {expertBases.map((eb) => {
+                let isShowEb = false;
+                if (eb.show) {
+                  isShowEb = !eb.show(roles);
+                }
                 const props = {
                   key: eb.id,
                   className: styles.filterItem,
                   onChange: () => this.onExpertBaseChange(eb.id, eb.name),
                   checked: filters.eb && (filters.eb.id === eb.id),
+                  style: { display: isShowEb ? 'none' : 'block' },
                 };
                 return (
                   <CheckableTag {...props}>

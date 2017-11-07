@@ -1,7 +1,7 @@
 const baseURL = 'https://api.aminer.org/api';
 const apiDomain = 'https://api.aminer.org';
-const nextAPIURL = 'http://localhost:4005';
-// const nextAPIURL = 'http://e30c17034d854ef4b1dac3d7b5874d3b-cn-beijing.alicloudapi.com';
+// const nextAPIURL = 'http://localhost:4005';
+const nextAPIURL = 'http://e30c17034d854ef4b1dac3d7b5874d3b-cn-beijing.alicloudapi.com';
 
 const param = (key, type, description) => {
   return { key, type, description };

@@ -53,7 +53,7 @@ const getDefaultSystemConfigs = (system, source) => {
     Layout_HasNavigator: true,
 
     // header
-    Header_UserPageURL: '', // 用户头像点击之后去的页面.
+    Header_UserPageURL: defaults.IN_APP_DEFAULT, // 用户头像点击之后去的页面.
     Header_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
     ShowHelpDoc: false, // 显示帮助文档
     Header_UserNameBlock: defaults.IN_APP_DEFAULT, // 显示登录用户名
@@ -84,6 +84,7 @@ const getDefaultSystemConfigs = (system, source) => {
     UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签, 目前没用到
 
     Auth_AllowAnonymousAccess: false,
+    AuthLoginUsingThird: false, // 使用第三方登录界面，目前只有tencent在用
     Auth_LoginPage: '/login',
 
     /**

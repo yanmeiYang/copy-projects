@@ -92,7 +92,7 @@ export default {
           authorImage,
           locationName,
           hindex,
-        }
+        },
       });
     },
 
@@ -144,6 +144,7 @@ export default {
       const authors = yield select(state => state.expertTrajectory.authors);
       const authorImage = yield select(state => state.expertTrajectory.authorImage);
       const location = yield select(state => state.expertTrajectory.location);
+      console.log('location', location);
       const yearIndex = year - yearStart;
       const data = [];
       const nextYearData = [];
@@ -246,7 +247,7 @@ export default {
           authorImgMid,
           authorImgEast,
           author,
-          author2
+          author2,
         },
       });
     },

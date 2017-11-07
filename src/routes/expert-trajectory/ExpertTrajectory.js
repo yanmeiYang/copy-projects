@@ -5,6 +5,8 @@ import React from 'react';
 import loadScript from 'load-script';
 import { Button } from 'antd';
 import styles from './ExpertTrajectory.less';
+// import '../../public/lib/echarts';
+import '../../public/lib/bmap.js';
 import mapData from '../../../external-docs/expert-trajectory/testData.json';
 
 const address2 = mapData.addresses;
@@ -151,7 +153,7 @@ class ExpertTrajectory extends React.Component {
       {
         // type: 'effectScatter',
         type: 'scatter',
-        coordinateSystem: 'geo',
+        coordinateSystem: 'bmap',
         zlevel: 5,
         rippleEffect: {
           period: 4,
@@ -179,6 +181,7 @@ class ExpertTrajectory extends React.Component {
       },
       {
         type: 'lines',
+        coordinateSystem: 'bmap',
         zlevel: 2,
         effect: {
           show: true,
@@ -257,27 +260,166 @@ class ExpertTrajectory extends React.Component {
           color: '#fff',
         },
       },
-      geo: {
-        zoom: 1,
-        name: 'trajectory',
-        type: 'map',
-        map: 'world',
+
+      // geo: {
+      //   zoom: 1,
+      //   name: 'trajectory',
+      //   type: 'map',
+      //   map: 'world',
+      //   roam: true,
+      //   label: {
+      //     emphasis: {
+      //       show: false,
+      //     },
+      //   },
+      //   itemStyle: {
+      //     normal: {
+      //       areaColor: '#f5f3f0',
+      //       borderColor: '#91a0ae',
+      //     },
+      //     emphasis: {
+      //       areaColor: '#bcbab8',
+      //     },
+      //   },
+      // },
+      bmap: {
+        center: [104.114129, 37.550339],
+        zoom: 5,
         roam: true,
-        label: {
-          emphasis: {
-            show: false,
-          },
-        },
-        itemStyle: {
-          normal: {
-            areaColor: '#f5f3f0',
-            borderColor: '#91a0ae',
-          },
-          emphasis: {
-            areaColor: '#bcbab8',
-          },
+        mapStyle: {
+          styleJson: [
+            {
+              featureType: 'water',
+              elementType: 'all',
+              stylers: {
+                color: '#044161',
+              },
+            },
+            {
+              featureType: 'land',
+              elementType: 'all',
+              stylers: {
+                color: '#004981',
+              },
+            },
+            {
+              featureType: 'boundary',
+              elementType: 'geometry',
+              stylers: {
+                color: '#064f85',
+              },
+            },
+            {
+              featureType: 'railway',
+              elementType: 'all',
+              stylers: {
+                visibility: 'off',
+              },
+            },
+            {
+              featureType: 'highway',
+              elementType: 'geometry',
+              stylers: {
+                color: '#004981',
+              },
+            },
+            {
+              featureType: 'highway',
+              elementType: 'geometry.fill',
+              stylers: {
+                color: '#005b96',
+                lightness: 1,
+              },
+            },
+            {
+              featureType: 'highway',
+              elementType: 'labels',
+              stylers: {
+                visibility: 'off',
+              },
+            },
+            {
+              featureType: 'arterial',
+              elementType: 'geometry',
+              stylers: {
+                color: '#004981',
+              },
+            },
+            {
+              featureType: 'arterial',
+              elementType: 'geometry.fill',
+              stylers: {
+                color: '#00508b',
+              },
+            },
+            {
+              featureType: 'poi',
+              elementType: 'all',
+              stylers: {
+                visibility: 'off',
+              },
+            },
+            {
+              featureType: 'green',
+              elementType: 'all',
+              stylers: {
+                color: '#056197',
+                visibility: 'off',
+              },
+            },
+            {
+              featureType: 'subway',
+              elementType: 'all',
+              stylers: {
+                visibility: 'off',
+              },
+            },
+            {
+              featureType: 'manmade',
+              elementType: 'all',
+              stylers: {
+                visibility: 'off',
+              },
+            },
+            {
+              featureType: 'local',
+              elementType: 'all',
+              stylers: {
+                visibility: 'off',
+              },
+            },
+            {
+              featureType: 'arterial',
+              elementType: 'labels',
+              stylers: {
+                visibility: 'off',
+              },
+            },
+            {
+              featureType: 'boundary',
+              elementType: 'geometry.fill',
+              stylers: {
+                color: '#029fd4',
+              },
+            },
+            {
+              featureType: 'building',
+              elementType: 'all',
+              stylers: {
+                color: '#1a5787',
+              },
+            },
+            {
+              featureType: 'label',
+              elementType: 'all',
+              stylers: {
+                visibility: 'off',
+              },
+            },
+          ],
         },
       },
+      series: [],
     };
     return option;
   };
@@ -287,12 +429,15 @@ class ExpertTrajectory extends React.Component {
     const geoCoordMap = this.doTrajGeoMap(record); // geoCoordMap = {tsinghua unversity : [120,40] }
     const data = this.getTrajData(record); // data = [{name: tsinghua university, value : 6(years)}]
     option = this.drawTrajMap();
+    console.log("hahahah")
     this.myChart.setOption(option);
+    option.series.pop();
+    console.log("yoyoyo")
     for (const i of _.range(data.length)) { // 每隔0.2秒画一条线
       setTimeout(() => {
         if (ifDraw === 0) {
           option.series = this.getTrajSeries(geoCoordMap, data, record, i);
-          console.log(JSON.stringify(option));
+          console.log("series",option.series)
           this.myChart.setOption(option);
         } else {
           clearTimeout();

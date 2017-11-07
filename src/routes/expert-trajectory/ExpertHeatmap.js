@@ -100,7 +100,6 @@ class ExpertHeatmap extends React.PureComponent { ///
         // this.world = world;
       });
     });
-
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -117,7 +116,7 @@ class ExpertHeatmap extends React.PureComponent { ///
     if (nextProps.expertTrajectory.location !== this.props.expertTrajectory.location) {
       this.setState({
         startYear: nextProps.expertTrajectory.startYear,
-        endYear: nextProps.expertTrajectory.endYear
+        endYear: nextProps.expertTrajectory.endYear,
       });
       authors = nextProps.expertTrajectory.authors;
       location = nextProps.expertTrajectory.location;
@@ -163,7 +162,7 @@ class ExpertHeatmap extends React.PureComponent { ///
     yearNow = this.playon;
     this.props.dispatch({
       type: 'expertTrajectory/getYearData',
-      payload: { year: yearNow }
+      payload: { year: yearNow },
     }).then(() => {
       const thisYearEvent = this.props.expertTrajectory.yearMessage[this.props.expertTrajectory.yearMessage.length - 1];
       const display = [];
@@ -187,12 +186,14 @@ class ExpertHeatmap extends React.PureComponent { ///
       const thisYearData = this.props.expertTrajectory.eachYearHeat[yearNow];
       author = thisYearData.author;
       author2 = thisYearData.author2;
-      mapOption.series = this.getHeatSeries(thisYearData.geoCoordMap, thisYearData.data,
+      mapOption.series = this.getHeatSeries(
+thisYearData.geoCoordMap, thisYearData.data,
         0, false, thisYearData.yearIndex, thisYearData.nextYearData, thisYearData.data1,
         thisYearData.data2, thisYearData.authorImgWest,
-        thisYearData.authorImgMid, thisYearData.authorImgEast);
+        thisYearData.authorImgMid, thisYearData.authorImgEast,
+);
       this.calculateLocation();
-      console.log("this.geo.center", this.myChart2.getModel().option.geo[0].center);
+      console.log('this.geo.center', this.myChart2.getModel().option.geo[0].center);
       this.myChart2.setOption(mapOption, true);
     });
   }
@@ -244,16 +245,20 @@ class ExpertHeatmap extends React.PureComponent { ///
   onMapClick = () => { // 地图点击事件 将信息传给Page
     if (this.props.onPageClick) {
       if (this.from !== '') {
-        this.props.onPageClick(this.personList, locationName[this.from - 1].toLowerCase(),
-          locationName[this.to - 1].toLowerCase(), this.type);
+        this.props.onPageClick(
+this.personList, locationName[this.from - 1].toLowerCase(),
+          locationName[this.to - 1].toLowerCase(), this.type,
+);
       } else {
         this.props.onPageClick(this.personList, '', '', this.type);
       }
     }
   }
 
-  getHeatSeries = (geoCoordMap, data, j, choose, year,
-                   nextYearData, data1, data2) => {
+  getHeatSeries = (
+geoCoordMap, data, j, choose, year,
+                   nextYearData, data1, data2,
+) => {
     // j是一年中第几个插值 ifButton是否为播放模式 choose是否插值 year当前年份 data1前100数据 西部 中部 东部头像数据
     const dup = {};
     const tempLineArray = [];
@@ -314,7 +319,7 @@ class ExpertHeatmap extends React.PureComponent { ///
       {
         name: 'TOP 6', // 今年人数最多的前6个地方
         type: 'scatter',
-        coordinateSystem: 'geo',
+        coordinateSystem: 'bmap',
         zlevel: 3,
         rippleEffect: {
           period: 4,
@@ -374,7 +379,7 @@ class ExpertHeatmap extends React.PureComponent { ///
         name: 'location',
         type: 'scatter',
         zlevel: 2,
-        coordinateSystem: 'geo',
+        coordinateSystem: 'bmap',
         data: convertData(data1),
         symbolSize(val) {
           const size = 10 + (val[2] / 4);
@@ -430,7 +435,7 @@ class ExpertHeatmap extends React.PureComponent { ///
         // largeThreshold: 1000,
         zlevel: 1,
         z: 6,
-        coordinateSystem: 'geo',
+        coordinateSystem: 'bmap',
         data: convertData(data2),
         // symbolSize: 4,
         symbolSize(val) {
@@ -471,7 +476,7 @@ class ExpertHeatmap extends React.PureComponent { ///
         type: 'scatter',
         large: true,
         largeThreshold: 1000,
-        coordinateSystem: 'geo',
+        coordinateSystem: 'bmap',
         data: convertData(nextYearData),
         // data: convertData2(nextYearData),
         symbolSize: 3,
@@ -592,7 +597,7 @@ class ExpertHeatmap extends React.PureComponent { ///
       {
         name: 'AQI',
         type: 'heatmap',
-        coordinateSystem: 'geo',
+        coordinateSystem: 'bmap',
         blurSize: 20,
         zlevel: 2,
         z: 7,
@@ -646,23 +651,160 @@ class ExpertHeatmap extends React.PureComponent { ///
         confine: true,
       },
       text: ['200', '0'],
-      geo: {
-        center: centerBegin,
-        zoom: 1.2,
-        map: 'world',
-        label: {
-          emphasis: {
-            opacity: 0,
-          },
-        },
+      bmap: {
+        center: [104.114129, 37.550339],
+        zoom: 5,
         roam: true,
-        itemStyle: {
-          normal: {
-            borderColor: themes[this.state.theme].borderColor,
-            areaColor: themes[this.state.theme].areaColor,
-          },
+        mapStyle: {
+          styleJson: [
+            {
+              featureType: 'water',
+              elementType: 'all',
+              stylers: {
+                color: '#044161',
+              },
+            },
+            {
+              featureType: 'land',
+              elementType: 'all',
+              stylers: {
+                color: '#004981',
+              },
+            },
+            {
+              featureType: 'boundary',
+              elementType: 'geometry',
+              stylers: {
+                color: '#064f85',
+              },
+            },
+            {
+              featureType: 'railway',
+              elementType: 'all',
+              stylers: {
+                visibility: 'off',
+              },
+            },
+            {
+              featureType: 'highway',
+              elementType: 'geometry',
+              stylers: {
+                color: '#004981',
+              },
+            },
+            {
+              featureType: 'highway',
+              elementType: 'geometry.fill',
+              stylers: {
+                color: '#005b96',
+                lightness: 1,
+              },
+            },
+            {
+              featureType: 'highway',
+              elementType: 'labels',
+              stylers: {
+                visibility: 'off',
+              },
+            },
+            {
+              featureType: 'arterial',
+              elementType: 'geometry',
+              stylers: {
+                color: '#004981',
+              },
+            },
+            {
+              featureType: 'arterial',
+              elementType: 'geometry.fill',
+              stylers: {
+                color: '#00508b',
+              },
+            },
+            {
+              featureType: 'poi',
+              elementType: 'all',
+              stylers: {
+                visibility: 'off',
+              },
+            },
+            {
+              featureType: 'green',
+              elementType: 'all',
+              stylers: {
+                color: '#056197',
+                visibility: 'off',
+              },
+            },
+            {
+              featureType: 'subway',
+              elementType: 'all',
+              stylers: {
+                visibility: 'off',
+              },
+            },
+            {
+              featureType: 'manmade',
+              elementType: 'all',
+              stylers: {
+                visibility: 'off',
+              },
+            },
+            {
+              featureType: 'local',
+              elementType: 'all',
+              stylers: {
+                visibility: 'off',
+              },
+            },
+            {
+              featureType: 'arterial',
+              elementType: 'labels',
+              stylers: {
+                visibility: 'off',
+              },
+            },
+            {
+              featureType: 'boundary',
+              elementType: 'geometry.fill',
+              stylers: {
+                color: '#029fd4',
+              },
+            },
+            {
+              featureType: 'building',
+              elementType: 'all',
+              stylers: {
+                color: '#1a5787',
+              },
+            },
+            {
+              featureType: 'label',
+              elementType: 'all',
+              stylers: {
+                visibility: 'off',
+              },
+            },
+          ],
         },
       },
+      // geo: {
+      //   center: centerBegin,
+      //   zoom: 1.2,
+      //   map: 'world',
+      //   label: {
+      //     emphasis: {
+      //       opacity: 0,
+      //     },
+      //   },
+      //   roam: true,
+      //   itemStyle: {
+      //     normal: {
+      //       borderColor: themes[this.state.theme].borderColor,
+      //       areaColor: themes[this.state.theme].areaColor,
+      //     },
+      //   },
+      // },
     };
     this.myChart2.setOption(mapOption);
     // console.log("centerBegin1", centerBegin)
@@ -675,7 +817,7 @@ class ExpertHeatmap extends React.PureComponent { ///
     this.myChart2.on('click', (params) => { // 点击点或线出现红色高亮
       roamNow = this.myChart2.getOption().geo[0].zoom;
       centerNow = this.myChart2.getOption().geo[0].center;
-      console.log("roamNOw", roamNow)
+      console.log('roamNOw', roamNow);
       if (params.componentType === 'series') {
         mapOption.geo.zoom = roamNow;
         mapOption.geo.center = centerNow;
@@ -689,8 +831,7 @@ class ExpertHeatmap extends React.PureComponent { ///
               } else {
                 this.personList = author[params.name];
               }
-              mapOption.series.push(
-                {
+              mapOption.series.push({
                   type: 'scatter',
                   coordinateSystem: 'geo',
                   zlevel: 3,
@@ -734,8 +875,7 @@ class ExpertHeatmap extends React.PureComponent { ///
                       return ((10 + (val[2] / 4)) / 2);
                     }
                   },
-                },
-              );
+                });
               this.type = 'scatter';
               this.myChart2.setOption(mapOption, true);
             } else if (params.componentSubType === 'lines') {
@@ -775,8 +915,7 @@ class ExpertHeatmap extends React.PureComponent { ///
             } else {
               this.personList = author[params.name];
             }
-            mapOption.series.push(
-              {
+            mapOption.series.push({
                 type: 'scatter',
                 coordinateSystem: 'geo',
                 zlevel: 3,
@@ -822,8 +961,7 @@ class ExpertHeatmap extends React.PureComponent { ///
                     return ((10 + (val[2] / 4)) / 2);
                   }
                 },
-              },
-            );
+              });
             this.type = 'scatter';
             this.myChart2.setOption(mapOption, true);
           } else if (params.componentSubType === 'lines') {

@@ -128,6 +128,11 @@ export default class Layout extends Component {
             type="text/javascript"
             src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />}
 
+          {(href.indexOf('/expert-trajectory') > 0) &&
+          <script
+            type="text/javascript"
+            src="http://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo" />}
+
           {(href.indexOf('/expert-map') > 0) &&
           <script
             src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1"

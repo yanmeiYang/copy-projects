@@ -1,6 +1,6 @@
 import { request, nextAPI, config } from 'utils';
 import * as bridge from 'utils/next-bridge';
-import { apiBuilder, F } from 'utils/next-api-builder';
+import { apiBuilder, F, applyPlugin } from 'utils/next-api-builder';
 import { sysconfig } from 'systems';
 import * as strings from 'utils/strings';
 
@@ -38,15 +38,14 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
   // 2. query
   // ------------------------------------------------------------------------------------------
   if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH && Sort !== 'activity-ranking-contrib') {
-
     const ebs = sysconfig.ExpertBases;
     const defaultHaves = ebs && ebs.length > 0 && ebs.map(eb => eb.id);
 
-    const nextapi = apiBuilder.query(F.queries.search)
+    const nextapi = apiBuilder.query(F.queries.search, 'search')
       .param({ query, offset, size })
       .param({
         searchType: F.searchType.allb,
-        aggregation: ['gender', 'h_index', 'location', 'language', /*'dims:systag'*/],
+        aggregation: ['gender', 'h_index', 'location', 'language'],
         haves: { eb: defaultHaves },
       })
       .param({ switches: ['translate_all'] }, { when: useTranslateSearch })
@@ -94,12 +93,17 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
     if (true) { // translate
       // nextapi.addSchema({ person: ['tags_translated'] });
     }
+
     // sort
     if (Sort && Sort !== 'relevance') {
       nextapi.param({ sorts: [Sort] });
     }
-    console.log('DEBUG---------------------\n', nextapi.api);
-    console.log('DEBUG---------------------\n', JSON.stringify(nextapi.api));
+
+    // Apply Plugins.
+    applyPlugin(nextapi, sysconfig.APIPlugin_ExpertSearch);
+
+    // console.log('DEBUG---------------------\n', nextapi.api);
+    // console.log('DEBUG---------------------\n', JSON.stringify(nextapi.api));
 
     return nextAPI({ data: [nextapi.api] });
 
@@ -217,7 +221,6 @@ function prepareParameters(query, offset, size, filters, sort, useTranslateSearc
   if (org) {
     data.org = strings.cleanQuery(org);
   }
-  // data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY]= query,
 
   data = addAdditionParameterToData(data, sort, 'eb');
   // if (useTranslateSearch && data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY]) {

@@ -66,8 +66,6 @@ module.exports = {
   // > Search related
   // SearchBarInHeader: true,
   HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertMap'], // use default settings in component.
-  // SearchFilterExclude: 'Gender',
-  // UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // deprecated! Don't use this.
 
   // > IndexPage
   // IndexPage_QuickSearchList: ['Artificial intelligence', 'Robotics',

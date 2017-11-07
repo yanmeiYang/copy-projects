@@ -90,15 +90,22 @@ export default class HeaderInfoZone extends PureComponent {
           {/* ---- 头像 & 用户名 ---- */}
           {isAuthed(roles) &&
           <Menu.Item key="/account">
-            <Link to={sysconfig.Header_UserPageURL} title={user.display_name}
-                  className={styles.headerAvatar}>
-              <img src={profileUtils.getAvatar(user.avatar, user.id, 30)} />
+            {sysconfig.Header_UserPageURL ?
+              <Link to={sysconfig.Header_UserPageURL} title={user.display_name}
+                    className={styles.headerAvatar}>
+                <img src={profileUtils.getAvatar(user.avatar, user.id, 30)} />
 
-              {/* 用户名 */}
-              {UserNameBlock && <span className={styles.userName}>{UserNameBlock}</span>}
+                {/* 用户名 */}
+                {UserNameBlock && <span className={styles.userName}>{UserNameBlock}</span>}
 
-              {/* <Icon type="frown-circle"/>个人账号 */}
-            </Link>
+                {/* <Icon type="frown-circle"/>个人账号 */}
+              </Link>
+              :
+              <div className={styles.headerAvatar}>
+                <img src={profileUtils.getAvatar(user.avatar, user.id, 30)} />
+                {UserNameBlock && <span className={styles.userName}>{UserNameBlock}</span>}
+              </div>
+            }
           </Menu.Item>
           }
 

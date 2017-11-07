@@ -69,10 +69,12 @@ function loadSavedSystem() {
 loadSavedSystem();
 
 function saveSystem(system, user) {
-  localStorage.setItem(
-    SavedSystemKey,
-    JSON.stringify({ user: user.email, system }),
-  );
+  if (user) {
+    localStorage.setItem(
+      SavedSystemKey,
+      JSON.stringify({ user: user.email, system }),
+    );
+  }
 }
 
 module.exports = {

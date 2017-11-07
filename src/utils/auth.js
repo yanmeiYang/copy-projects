@@ -42,10 +42,14 @@ function dispatchToLogin(dispatch) {
   if (process.env.NODE_ENV !== 'production') {
     console.log('Dispatch to Login Page from ', from);
   }
-  dispatch(routerRedux.push({
-    pathname: sysconfig.Auth_LoginPage,
-    query: { from },
-  }));
+  if (sysconfig.AuthLoginUsingThird) {
+    window.location.href = sysconfig.AuthLoginUsingThirdPage;
+  } else {
+    dispatch(routerRedux.push({
+      pathname: sysconfig.Auth_LoginPage,
+      query: { from },
+    }));
+  }
 }
 
 function dispatchAfterLogin(put) {

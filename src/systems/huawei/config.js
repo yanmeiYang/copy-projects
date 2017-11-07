@@ -40,8 +40,6 @@ module.exports = {
   // > Search related
   // SearchBarInHeader: true,
   HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertMap', 'Relation', 'TrendPrediction'],
-  // SearchFilterExclude: '', // 'Gender',
-  // UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // deprecated! Don't use this.
 
   // Functionality
   Enable_Export: true,

@@ -99,7 +99,7 @@ export default class ExportExperts extends Component {
           const personInfo = [];
           const basic = {
             name: profileUtils.displayNameCNFirst(person.name, person.name_zh),
-            gender: person.attr.gender ? personService.returnGender(person.attr.gender) : ' ',
+            gender: (person.attr && person.attr.gender) ? personService.returnGender(person.attr.gender) : ' ',
             pos: profileUtils.displayPosition(person.pos),
             aff: profileUtils.displayAff(person),
             h_index: person.indices.h_index ? person.indices.h_index : ' ',
@@ -107,8 +107,9 @@ export default class ExportExperts extends Component {
             new_star: person.indices.new_star ? getTwoDecimal(parseFloat(person.indices.new_star), 2) : ' ',
             num_citation: person.indices.num_citation ? getTwoDecimal(parseFloat(person.indices.num_citation), 2) : ' ',
             num_pubs: person.indices.num_pubs ? getTwoDecimal(parseFloat(person.indices.num_pubs), 2) : ' ',
-            interest: person.tags.length > 0 ? person.tags.slice(0, 8).map(item => item.t).join(';') : ' ',
-            translate: person.tags.length > 0 ? person.tags.slice(0, 8).map((item) => {
+            interest: (person.tags && person.tags.length > 0) ? person.tags.slice(0, 8).map(item => item.t).join(';') : ' ',
+            translate: (person.tags && person.tags.length > 0) ?
+              person.tags.slice(0, 8).map((item) => {
               const tag = personService.returnKeyByLanguage(this.state.interestsI18n, item.t);
               const showTag = tag.zh !== '' ? tag.zh : tag.en;
               return showTag;

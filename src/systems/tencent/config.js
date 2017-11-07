@@ -33,6 +33,9 @@ module.exports = {
   SearchBarInHeader: true,
   HeaderSearch_TextNavi: [], // 'ExpertSearch', 'ExpertMap'
 
+  AuthLoginUsingThird: true,
+  AuthLoginUsingThirdPage: 'http://ucircle.oa.com/auth/aminer',
+
   ExpertBases: [
     {
       id: 'aminer',
@@ -43,6 +46,7 @@ module.exports = {
       id: '595efbda9ed5db252c2b9349',
       name: '腾讯合作者',
       nperson: 0,
+      show: roles => roles.indexOf('管理员') >= 0 || roles.indexOf('超级管理员') >= 0,
     },
     /*
     高级专家人才
@@ -91,7 +95,6 @@ module.exports = {
     },
   ],
 
-  SearchFilterExclude: '',
   UniSearch_Tabs: ['list', 'map'],
 
 };

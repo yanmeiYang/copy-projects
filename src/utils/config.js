@@ -1,6 +1,3 @@
-/*
-
- */
 const baseURL = 'https://api.aminer.org/api';
 const apiDomain = 'https://api.aminer.org';
 const nextAPIURLLocalhost = 'http://localhost:4005';

@@ -6,10 +6,13 @@
     "node": true
   },
   "rules": {
+    "no-console": [0],
     "generator-star-spacing": [0],
     "consistent-return": [0],
     "react/forbid-prop-types": [0],
-    "react/jsx-filename-extension": [1, { "extensions": [".js"] }],
+    "react/jsx-filename-extension": [1, {
+      "extensions": [".js"]
+    }],
     "global-require": [1],
     "import/prefer-default-export": [0],
     "react/jsx-no-bind": [0],
@@ -27,13 +30,13 @@
     "import/no-unresolved": [0],
     "require-yield": [1],
     "react/jsx-max-props-per-line": [0],
-    "react/jsx-closing-bracket-location":[0],
-    "react/jsx-indent-props":[0],
-    "react/jsx-first-prop-new-line":[0],
-    "react/require-default-props":[0],
-    "jsx-a11y/href-no-hash":[0],
-    "spaced-comment":[0],
-    "object-property-newline":[0],
+    "react/jsx-closing-bracket-location": [0],
+    "react/jsx-indent-props": [0],
+    "react/jsx-first-prop-new-line": [0],
+    "react/require-default-props": [0],
+    "jsx-a11y/href-no-hash": [0],
+    "spaced-comment": [0],
+    "object-property-newline": [0],
     "object-curly-newline": [0],
     "indent": [0]
   },

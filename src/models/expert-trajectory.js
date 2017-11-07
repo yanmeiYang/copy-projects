@@ -12,6 +12,7 @@ export default {
   namespace: 'expertTrajectory',
 
   state: {
+    trajData: {},
     results: [],
     personId: '',
     personInfo: {},
@@ -42,18 +43,25 @@ export default {
   effects: {
     * searchPerson({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
-      const { query } = payload;
-      const { data } = yield call(searchService.searchPerson, query);
+      const { query, offset, size } = payload;
+      const { data } = yield call(searchService.searchPerson, query, offset, size);
       yield put({ type: 'searchPersonSuccess', payload: { data, query } });
     },
 
-    * dataFind({ payload }, { call, put }) {
+    * findTrajById({ payload }, { call, put }) {
       console.log('enter kfFind, with query:', payload);
-      const { personId, start, end } = payload;
+      const { personId, start, end } = payload; //注意是两边的名字要一致，否则错误
       const data = yield call(traDataFindService.findTrajPerson, personId, start, end);
-      yield put({ type: 'dataFindSuccess', payload: { data } });
+      yield put({ type: 'findTrajByIdSuccess', payload: { data } });
     },
 
+
+    /*********************************
+     *
+     * 上面的是验证过的函数
+     *
+     * *********************************
+     */
     * heatFind({ payload }, { call, put }) {
       let data;
       const { query } = payload;
@@ -214,11 +222,8 @@ export default {
       }
       const data2 = data.slice(p);
 
-      // console.log('authorImg', authorImg);
       Object.keys(authorImg).map((key) => {
-        // console.log('geoCOooiejijf', geoCoordMap[key]);
         if (geoCoordMap[key][0] < (-30)) {
-          // console.log('come to west');
           authorImgWest[key] = authorImg[key];
         } else if (geoCoordMap[key][0] >= -30 && geoCoordMap[key][0] <= 70) {
           authorImgMid[key] = authorImg[key];
@@ -250,6 +255,17 @@ export default {
   },
 
   reducers: {
+    findTrajByIdSuccess(state, { payload: { data } }) {
+      return { ...state, trajData: data };
+    },
+
+    /***********************************************************************
+     *
+     * 上面是验证过的函数
+     *
+     * **********************************************************************
+     */
+
     getPerYearHeatDataSuccess(state, { payload: { year, geoCoordMap, data, yearIndex, nextYearData, data1, data2, authorImgWest, authorImgMid, authorImgEast, author, author2 } }) {
       const yearHeat = state.eachYearHeat;
       yearHeat[year] = {};
@@ -304,15 +320,6 @@ export default {
         locationName,
         hindex,
       };
-    },
-
-    dataFindSuccess(state, { payload: { data } }) {
-      /*      const data = payload.data && payload.data.data;
-      const kgindex = kgService.indexingKGData(data);
-      const kgFetcher = kgService.kgFetcher(data, kgindex);
-      // console.log('success findKG, return date is ', data);
-      // console.log('indexing it: ', kgindex);
-      return { ...state, kgdata: data, kgindex, kgFetcher }; */
     },
 
     eventFindSuccess(state, { payload: { data } }) {

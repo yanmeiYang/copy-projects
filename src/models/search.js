@@ -241,14 +241,14 @@ export default {
         throw new Error(message);
       }
       const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
-      const { translatedLanguage, translatedtext } = data;
+      const { translatedLanguage, translatedText } = data;
       const newState = {
         ...state,
         results: items,
         pagination: { pageSize: state.pagination.pageSize, total, current },
         aggs: aggregation,
         translatedLanguage,
-        translatedText: translatedtext,
+        translatedText,
       };
       return newState;
     },

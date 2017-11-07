@@ -30,14 +30,6 @@ export default {
       const data = yield call(crossHeatService.getDiscipline, area, k, depth);
       yield put({ type: 'getDisciplineSuccess', payload: { data, id } });
     },
-
-    *delDiscipline({ payload }, { call, put }) {
-      const { parents, children, postive } = payload;
-      // 不管用户是否删除成功，前端都要删除
-      // yield put({ type: 'delDisciplineSuccess', payload: { data } });
-      const data = yield call(crossHeatService.delDiscipline, parents, children, postive);
-    },
-
     *createDiscipline({ payload }, { call, put }) {
       const data = yield call(crossHeatService.createDiscipline, payload);
       yield put({ type: 'createDisciplineSuccess', payload: { data } });
@@ -55,9 +47,13 @@ export default {
       const data = yield call(crossHeatService.getCrossPredict, payload);
       yield put({ type: 'getCrossPredictSuccess', payload: { data } });
     },
-    *getDomainAllInfo({ payload }, { call, put }) {
-      const data = yield call(crossHeatService.getDomainAllInfo, payload);
-      yield put({ type: 'getDomainAllInfoSuccess', payload: { data } });
+    *getTreeModalInfo({ payload }, { call, put }) { // heat 点击树的叶子节点
+      const data = yield call(crossHeatService.getDomainiInfo, payload);
+      yield put({ type: 'getTreeModalInfoSuccess', payload: { data } });
+    },
+    *getModalInfo({ payload }, { call, put }) { // heat 点击bar
+      const data = yield call(crossHeatService.getCrossModalInfo, payload);
+      yield put({ type: 'getModalInfoSuccess', payload: { data } });
     },
     *getDomainMinInfo({ payload }, { call, put }) {
       yield put({ type: 'delExpPubSuccess', payload: { data } });
@@ -92,11 +88,6 @@ export default {
       const data = yield call(crossHeatService.getSuggest, query);
       yield put({ type: 'getSuggestSuccess', payload: { data } });
     },
-
-    *getTreeModalInfo({ payload }, { call, put }) {
-      const data = yield call(crossHeatService.getDomainiInfo, payload);
-      yield put({ type: 'getTreeModalInfoSuccess', payload: { data } });
-    },
   },
 
   reducers: {
@@ -119,8 +110,8 @@ export default {
     getDomainExpertSuccess(state, { payload: { data } }) {
       return { ...state, experts: data.data.persons };
     },
-    getDomainAllInfoSuccess(state, { payload: { data } }) {
-      return { ...state, domainAllInfo: data.data };
+    getModalInfoSuccess(state, { payload: { data } }) {
+      return { ...state, modalInfo: data.data };
     },
     getDomainMinInfoSuccess(state, { payload: { data } }) {
       return { ...state, domainMinInfo: data.data };

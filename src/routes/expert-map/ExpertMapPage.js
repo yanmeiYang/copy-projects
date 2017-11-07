@@ -178,9 +178,11 @@ export default class ExpertMapPage extends React.Component {
     }, () => {
       const chartsinterval = setInterval(() => {
         const divId = document.getElementById('bycountries');
-        if (typeof (divId) !== 'undefined' && divId !== 'undefined') {
+        const data = this.props.expertMap.geoData;
+        if (typeof (divId) !== 'undefined' && divId !== 'undefined'
+        && typeof (data.results) !== 'undefined' && data.results !== 'undefined') {
           clearInterval(chartsinterval);
-          showSta(echarts, divId, this.props.expertMap.geoData, 'country');
+          showSta(echarts, divId, data, 'country');
         }
       }, 100);
     });
@@ -211,9 +213,11 @@ export default class ExpertMapPage extends React.Component {
         divId = document.getElementById('bigArea');
         type = 'bigArea';
       }
-      if (typeof (divId) !== 'undefined' && divId !== 'undefined') {
+      const data = this.props.expertMap.geoData;
+      if (typeof (divId) !== 'undefined' && divId !== 'undefined'
+      && typeof (data.results) !== 'undefined' && data.results !== 'undefined') {
         clearInterval(chartsinterval);
-        showSta(echarts, divId, this.props.expertMap.geoData, type);
+        showSta(echarts, divId, data, type);
       }
     }, 100);
   };
@@ -283,7 +287,7 @@ export default class ExpertMapPage extends React.Component {
                 <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.statistic" />
               </Button>
               <Modal
-                title="Results"
+                title="Statistics & Analyses"
                 visible={this.state.visible}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
@@ -297,7 +301,7 @@ export default class ExpertMapPage extends React.Component {
                   </Button>,
                 ]}
                 width="700px"
-              >
+                >
                 <Tabs defaultActiveKey="1" onChange={this.changeStatistic}>
                   <TabPane tab="国家" key="1">{staJsx && staJsx}</TabPane>
                   <TabPane tab="大区" key="2">{staJsx1 && staJsx1}</TabPane>

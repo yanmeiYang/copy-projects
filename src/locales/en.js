@@ -78,7 +78,7 @@ export default {
   'com.expertMap.headerLine.label.googleMap': 'Google Map',
   'com.expertMap.headerLine.label.level': 'Level：',
   'com.expertMap.headerLine.label.statistic': 'Statistic & Analysis',
-  'com.expertMap.headerLine.label.download': 'Download Report',
+  'com.expertMap.headerLine.label.download': 'Export Excel',
   'com.expertMap.headerLine.label.ok': 'OK',
 
   'com.ExpertBase.Button.Add': '添加',

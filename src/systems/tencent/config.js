@@ -95,7 +95,6 @@ module.exports = {
     },
   ],
 
-  SearchFilterExclude: '',
   UniSearch_Tabs: ['list', 'map'],
 
 };

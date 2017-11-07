@@ -38,6 +38,7 @@ const AggConfig = {
   },
   location: {},
   language: {},
+  'dims.systag': {}, // first used in bole's tag system.
 };
 
 /**
@@ -49,7 +50,8 @@ export default class SearchFilter extends Component {
     // this.dispatch = this.props.dispatch;
     this.onFilterChange = this.props.onFilterChange;
     this.onExpertBaseChange = this.props.onExpertBaseChange;
-    this.keys = ['h_index', 'gender', 'location', 'language'];
+    // 这里先写全所有的filters，靠返回值中有无相应结果来控制是否显示。
+    this.keys = ['h_index', 'gender', 'location', 'language', 'dims.systag'];
   }
 
   // shouldComponentUpdate(nextProps) {
@@ -124,6 +126,8 @@ export default class SearchFilter extends Component {
           </div>
           }
 
+          {/* ------ 其他 Filter ------ */}
+
           {keys && keys.length > 0 && aggs && keys.map((key, index) => {
             const aggss = aggs.filter(a => (a.name === key));
             const agg = aggss && aggss.length > 0 && aggss[0];
@@ -139,9 +143,11 @@ export default class SearchFilter extends Component {
             }
 
             return (
-              <div className={classnames(
-                styles.filterRow, styles.range, (index === aggs.length - 1) ? 'last' : '')
-              } key={agg.name}>
+              <div
+                className={classnames(
+                  styles.filterRow, styles.range,
+                  (index === aggs.length - 1) ? 'last' : '',
+                )} key={agg.name}>
                 <span className={styles.filterTitle}>
                   <FM id={`com.search.filter.label2.${agg.name}`}
                       defaultMessage={agg.name} />:

@@ -37,12 +37,14 @@ export default {
   'com.search.filter.label.nationality': 'Location',
   'com.search.filter.label.location': 'Location',
   'com.search.filter.label.gender': 'Gender',
+  'com.search.filter.label.dims.systag': 'Tags',
 
   'com.search.filter.label2.h_index': 'H-Index',
   'com.search.filter.label2.language': 'Language',
   'com.search.filter.label2.location': 'Location',
   'com.search.filter.label2.gender': 'Gender',
   'com.search.filter.label2.nationality': 'Location',
+  'com.search.filter.label2.dims.systag': 'Tags',
 
   'com.search.filter.value.gender.male': 'Male',
   'com.search.filter.value.gender.female': 'Female',

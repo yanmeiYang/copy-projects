@@ -76,6 +76,7 @@ class ExpertHeatmap extends React.PureComponent { ///
     endYear: 2016, // 2016,
     theme: 'light',
     displayURL: [],
+    loadin: 'false',
   };
 
   componentWillMount() {
@@ -86,20 +87,28 @@ class ExpertHeatmap extends React.PureComponent { ///
   }
 
   componentDidMount() {
-    loadScript('/lib/echarts.js', () => {
-      echarts = window.echarts; // eslint-disable-line prefer-destructuring
-      loadScript('/lib/echarts-map/world.js', () => {
-        this.seriesNo = false;
-        this.type = '';
-        this.personList = '';
-        this.from = '';
-        this.to = '';
-        this.ifLarge = false;
-        this.ifButton = false;
-        this.myChart2 = echarts.init(document.getElementById('heatmap'));
-        // this.world = world;
-      });
-    });
+    const echartsInterval = setInterval(() => {
+      console.log(window.BMap);
+      if (typeof (window.BMap) === 'undefined') {
+        console.log('wait!!@@@@@@@@@@@@@@@@@@@@@@@@@@');
+      } else {
+        loadScript('/lib/echarts-trajectory/echarts.min.js', () => {
+          loadScript('/lib/echarts-trajectory/bmap.min.js', () => {
+            echarts = window.echarts; // eslint-disable-line prefer-destructuring
+            clearInterval(echartsInterval);
+            this.seriesNo = false;
+            this.type = '';
+            this.personList = '';
+            this.from = '';
+            this.to = '';
+            this.ifLarge = false;
+            this.ifButton = false;
+            this.setState({ loadin: true });
+            this.myChart2 = window.echarts.init(document.getElementById('chart'));
+          });
+        });
+      }
+    }, 100);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -113,10 +122,10 @@ class ExpertHeatmap extends React.PureComponent { ///
     if (nextState.displayURL !== this.state.displayURL) {
       return true;
     }
-    if (nextProps.expertTrajectory.location !== this.props.expertTrajectory.location) {
+    if (nextProps.expertTrajectory.location !== this.props.expertTrajectory.location && this.state.loadin !== nextState.loadin) {
       this.setState({
         startYear: nextProps.expertTrajectory.startYear,
-        endYear: nextProps.expertTrajectory.endYear,
+        endYear: nextProps.expertTrajectory.endYear
       });
       authors = nextProps.expertTrajectory.authors;
       location = nextProps.expertTrajectory.location;
@@ -162,7 +171,7 @@ class ExpertHeatmap extends React.PureComponent { ///
     yearNow = this.playon;
     this.props.dispatch({
       type: 'expertTrajectory/getYearData',
-      payload: { year: yearNow },
+      payload: { year: yearNow }
     }).then(() => {
       const thisYearEvent = this.props.expertTrajectory.yearMessage[this.props.expertTrajectory.yearMessage.length - 1];
       const display = [];
@@ -186,14 +195,12 @@ class ExpertHeatmap extends React.PureComponent { ///
       const thisYearData = this.props.expertTrajectory.eachYearHeat[yearNow];
       author = thisYearData.author;
       author2 = thisYearData.author2;
-      mapOption.series = this.getHeatSeries(
-thisYearData.geoCoordMap, thisYearData.data,
+      mapOption.series = this.getHeatSeries(thisYearData.geoCoordMap, thisYearData.data,
         0, false, thisYearData.yearIndex, thisYearData.nextYearData, thisYearData.data1,
         thisYearData.data2, thisYearData.authorImgWest,
-        thisYearData.authorImgMid, thisYearData.authorImgEast,
-);
+        thisYearData.authorImgMid, thisYearData.authorImgEast);
       this.calculateLocation();
-      console.log('this.geo.center', this.myChart2.getModel().option.geo[0].center);
+      console.log("this.geo.center", this.myChart2.getModel().option.geo[0].center);
       this.myChart2.setOption(mapOption, true);
     });
   }
@@ -245,20 +252,16 @@ thisYearData.geoCoordMap, thisYearData.data,
   onMapClick = () => { // 地图点击事件 将信息传给Page
     if (this.props.onPageClick) {
       if (this.from !== '') {
-        this.props.onPageClick(
-this.personList, locationName[this.from - 1].toLowerCase(),
-          locationName[this.to - 1].toLowerCase(), this.type,
-);
+        this.props.onPageClick(this.personList, locationName[this.from - 1].toLowerCase(),
+          locationName[this.to - 1].toLowerCase(), this.type);
       } else {
         this.props.onPageClick(this.personList, '', '', this.type);
       }
     }
   }
 
-  getHeatSeries = (
-geoCoordMap, data, j, choose, year,
-                   nextYearData, data1, data2,
-) => {
+  getHeatSeries = (geoCoordMap, data, j, choose, year,
+                   nextYearData, data1, data2) => {
     // j是一年中第几个插值 ifButton是否为播放模式 choose是否插值 year当前年份 data1前100数据 西部 中部 东部头像数据
     const dup = {};
     const tempLineArray = [];
@@ -505,6 +508,7 @@ geoCoordMap, data, j, choose, year,
       { // 所有迁移线
         type: 'lines',
         large: this.ifLarge,
+        coordinateSystem: 'bmap',
         largeThreshold: 400,
         // animation: true,
         // animationDuration: 0,
@@ -551,6 +555,7 @@ geoCoordMap, data, j, choose, year,
         type: 'lines',
         large: this.ifLarge,
         largeThreshold: 400,
+        coordinateSystem: 'bmap',
         // animation: true,
         // animationDuration: 0,
         // zlevel: 1,
@@ -619,38 +624,37 @@ geoCoordMap, data, j, choose, year,
   }
 
   setHeatmap = () => { // 设置热力图参数
-    mapOption = { // 地图基本参数
-      backgroundColor: themes[this.state.theme].backgroundColor,
+    mapOption = {
+      backgroundColor: '#404a59',
       title: {
-        // text: '全球顶尖10000学者迁徙图',
-        // subtext: 'Global Top 10000 experts career trajecory',
+        text: '全国主要城市空气质量',
+        subtext: 'data from PM25.in',
+        sublink: 'http://www.pm25.in',
         left: 'center',
-        textStyle: {
-          color: themes[this.state.theme].textColor,
-          // fontSize:40,
-        },
-        subtextStyle: {
-          color: themes[this.state.theme].subtextColor,
-          // fontSize:20,
-        },
-      },
-      visualMap: {
-        min: 0,
-        max: 200,
-        type: 'continuous',
-        inRange: {
-          color: themes[this.state.theme].visualColor,
-        },
         textStyle: {
           color: '#fff',
         },
       },
-      progressive: 1000,
       tooltip: {
         trigger: 'item',
-        confine: true,
       },
-      text: ['200', '0'],
+      // geo: {
+      //   center: centerBegin,
+      //   zoom: 1.2,
+      //   map: 'world',
+      //   label: {
+      //     emphasis: {
+      //       opacity: 0,
+      //     },
+      //   },
+      //   roam: true,
+      //   itemStyle: {
+      //     normal: {
+      //       borderColor: themes[this.state.theme].borderColor,
+      //       areaColor: themes[this.state.theme].areaColor,
+      //     },
+      //   },
+      // },
       bmap: {
         center: [104.114129, 37.550339],
         zoom: 5,
@@ -788,23 +792,173 @@ geoCoordMap, data, j, choose, year,
           ],
         },
       },
-      // geo: {
-      //   center: centerBegin,
-      //   zoom: 1.2,
-      //   map: 'world',
-      //   label: {
-      //     emphasis: {
-      //       opacity: 0,
-      //     },
-      //   },
-      //   roam: true,
-      //   itemStyle: {
-      //     normal: {
-      //       borderColor: themes[this.state.theme].borderColor,
-      //       areaColor: themes[this.state.theme].areaColor,
-      //     },
-      //   },
-      // },
+      series: [
+        {
+          name: 'Top 5',
+          type: 'effectScatter',
+          coordinateSystem: 'bmap',
+          data: [{
+            name: 'tsinghua university 1999',
+            value: [116.33,
+              40,
+              '1999 - 2000'],
+            symbolSize: 6,
+            itemStyle: {
+              normal: {
+                color: '#f56a00',
+                borderColor: '#d75000',
+              },
+            },
+          },
+            {
+              name: 'fudan university 2001',
+              value: [121.3,
+                31.17,
+                '2001 - 2003'],
+              symbolSize: 9,
+              itemStyle: {
+                normal: {
+                  color: '#f56a00',
+                  borderColor: '#d75000',
+                },
+              },
+            },
+            {
+              name: 'the University of Hong Kong 2004',
+              value: [114.137,
+                22.28,
+                '2004 - 2004'],
+              symbolSize: 3,
+              itemStyle: {
+                normal: {
+                  color: '#f56a00',
+                  borderColor: '#d75000',
+                },
+              },
+            },
+            {
+              name: 'Carnegie Mellon University 2005',
+              value: [-79.94,
+                40.44,
+                '2005 - 2007'],
+              symbolSize: 9,
+              itemStyle: {
+                normal: {
+                  color: '#f56a00',
+                  borderColor: '#d75000',
+                },
+              },
+            },
+            {
+              name: 'University of Toronto 2008',
+              value: [-79.4,
+                43.66,
+                '2008 - 2010'],
+              symbolSize: 9,
+              itemStyle: {
+                normal: {
+                  color: '#f56a00',
+                  borderColor: '#d75000',
+                },
+              },
+            },
+            {
+              name: 'University of Oxford 2011',
+              value: [-1.25,
+                51.75,
+                '2011 - 2012'],
+              symbolSize: 6,
+              itemStyle: {
+                normal: {
+                  color: '#f56a00',
+                  borderColor: '#d75000',
+                },
+              },
+            },
+            {
+              name: 'Московский государственный университет 2013',
+              value: [37.53,
+                55.7,
+                '2013 - 2014'],
+              symbolSize: 6,
+              itemStyle: {
+                normal: {
+                  color: '#f56a00',
+                  borderColor: '#d75000',
+                },
+              },
+            }],
+          showEffectOn: 'emphasis',
+          rippleEffect: {
+            brushType: 'stroke',
+          },
+          hoverAnimation: true,
+          label: {
+            normal: {
+              formatter: '{b}',
+              position: 'right',
+              show: true,
+            },
+          },
+          itemStyle: {
+            normal: {
+              color: '#f4e925',
+              shadowBlur: 10,
+              shadowColor: '#333',
+            },
+          },
+          zlevel: 1,
+        },
+        {
+          type: 'lines',
+          coordinateSystem: 'bmap',
+          zlevel: 2,
+          lineStyle: {
+            normal: {
+              color: '#f78e3d',
+              width: 1.5,
+              opacity: 0.4,
+              curveness: 0.2,
+            },
+          },
+          data: [{
+            coords: [[116.33,
+              40],
+              [121.3,
+                31.17]],
+          },
+            {
+              coords: [[121.3,
+                31.17],
+                [114.137,
+                  22.28]],
+            },
+            {
+              coords: [[114.137,
+                22.28],
+                [-79.94,
+                  40.44]],
+            },
+            {
+              coords: [[-79.94,
+                40.44],
+                [-79.4,
+                  43.66]],
+            },
+            {
+              coords: [[-79.4,
+                43.66],
+                [-1.25,
+                  51.75]],
+            },
+            {
+              coords: [[-1.25,
+                51.75],
+                [37.53,
+                  55.7]],
+            }],
+        },
+      ],
     };
     this.myChart2.setOption(mapOption);
     // console.log("centerBegin1", centerBegin)
@@ -817,7 +971,7 @@ geoCoordMap, data, j, choose, year,
     this.myChart2.on('click', (params) => { // 点击点或线出现红色高亮
       roamNow = this.myChart2.getOption().geo[0].zoom;
       centerNow = this.myChart2.getOption().geo[0].center;
-      console.log('roamNOw', roamNow);
+      console.log("roamNOw", roamNow)
       if (params.componentType === 'series') {
         mapOption.geo.zoom = roamNow;
         mapOption.geo.center = centerNow;
@@ -831,9 +985,10 @@ geoCoordMap, data, j, choose, year,
               } else {
                 this.personList = author[params.name];
               }
-              mapOption.series.push({
+              mapOption.series.push(
+                {
                   type: 'scatter',
-                  coordinateSystem: 'geo',
+                  coordinateSystem: 'bmap',
                   zlevel: 3,
                   z: 6,
                   animation: false,
@@ -875,7 +1030,8 @@ geoCoordMap, data, j, choose, year,
                       return ((10 + (val[2] / 4)) / 2);
                     }
                   },
-                });
+                },
+              );
               this.type = 'scatter';
               this.myChart2.setOption(mapOption, true);
             } else if (params.componentSubType === 'lines') {
@@ -915,9 +1071,10 @@ geoCoordMap, data, j, choose, year,
             } else {
               this.personList = author[params.name];
             }
-            mapOption.series.push({
+            mapOption.series.push(
+              {
                 type: 'scatter',
-                coordinateSystem: 'geo',
+                coordinateSystem: 'bmap',
                 zlevel: 3,
                 z: 6,
                 animation: false,
@@ -961,7 +1118,8 @@ geoCoordMap, data, j, choose, year,
                     return ((10 + (val[2] / 4)) / 2);
                   }
                 },
-              });
+              },
+            );
             this.type = 'scatter';
             this.myChart2.setOption(mapOption, true);
           } else if (params.componentSubType === 'lines') {

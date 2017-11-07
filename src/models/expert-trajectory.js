@@ -72,6 +72,7 @@ export default {
         data = yield call(traDataFindService.findTop10000Data);
       }
       console.log('dataà1', data);
+      data = data.data;
       const location = data.locations;
       const startYear = data.startYear;
       const endYear = data.endYear;
@@ -80,7 +81,6 @@ export default {
       const authorImage = data.authorImage;
       const locationName = data.locationName;
       const hindex = data.h_index;
-      console.log();
       yield put({
         type: 'heatFindSuccess',
         payload: {
@@ -299,7 +299,6 @@ export default {
     },
 
     heatFindSuccess(state, { payload: { heatData, location, startYear, authorImage, endYear, table, authors, locationName, hindex } }) {
-      // console.log('startYear', startYear);
       // const location = heatData.locations;
       // const startYear = heatData.startYear;
       // const endYear = heatData.endYear;
@@ -324,6 +323,7 @@ export default {
     },
 
     eventFindSuccess(state, { payload: { data } }) {
+      data = data.data;
       const allData = [];
       for (let i = 0; i < data.length; i += 1) {
         const tempData = {};
@@ -343,6 +343,7 @@ export default {
         allYearMes[allYearMesRaw[i].year] = allYearMesRaw[i].events;
       }
       const newMessage = state.yearMessage;
+      console.log("mewMessage",newMessage)
       newMessage.push({
         year,
         events: allYearMes[year],

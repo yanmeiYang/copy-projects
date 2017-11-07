@@ -66,6 +66,10 @@ export default class Labels extends Component {
           case 'remove':
             if (success) {
               console.log('Remove this tags',);
+              const newTags = tags || [];
+              if (newTags.indexOf(tag) !== -1) {
+                this.setState({ tags: tags.filter(t => t !== tag) });
+              }
             } else {
               message.error('删除标签错误');
             }

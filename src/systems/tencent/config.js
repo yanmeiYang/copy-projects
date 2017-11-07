@@ -30,7 +30,6 @@ module.exports = {
   Footer_Content: '',
 
   // > Search related
-  SearchBarInHeader: true,
   HeaderSearch_TextNavi: [], // 'ExpertSearch', 'ExpertMap'
 
   AuthLoginUsingThird: true,

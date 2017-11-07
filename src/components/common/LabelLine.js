@@ -13,11 +13,13 @@ export default class LabelLine extends Component {
     onTagChange: PropTypes.func,
     canRemove: PropTypes.bool,
     canAdd: PropTypes.bool,
+    confirmOnClose: PropTypes.bool,
   };
 
   static defaultProps = {
     canRemove: false,
     canAdd: false,
+    confirmOnClose: false,
   };
 
   state = {

@@ -16,21 +16,6 @@ import locales from '../../locales';
 @connect(({ app }) => ({ app }))
 @RequireGod
 export default class SystemConfig extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  // }
-  componentWillMount() {
-    this.props.dispatch({ type: 'app/hideHeaderSearch' });
-  }
-
-  // componentDidMount() {
-  // }
-  //
-  // shouldComponentUpdate(nextProps) {
-  // }
-  //
-  // componentDidUpdate() {
-  // }
 
   onChangeSystem = (sys) => {
     const { user } = this.props.app;

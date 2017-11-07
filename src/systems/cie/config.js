@@ -42,7 +42,6 @@ module.exports = {
   ShowFooter: true,
 
   // > Search related
-  SearchBarInHeader: false,
   ApplyUserBtn: false, // 是否显示创建新用户btn
   ShowRating: false, // 显示评分
   showMenustatistics: false, // 显示活动统计

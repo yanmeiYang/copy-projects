@@ -127,6 +127,10 @@ export default class ExpertGoogleMap extends React.Component {
     const filterRange = range || 'all';
     const mapType = type || '0';
 
+    if (!place || !place.results) {
+      that.hideLoading();
+      return;
+    }
     that.showOverLay();
     const mapinterval = setInterval(() => {
       if (typeof (window.google) === 'undefined') {

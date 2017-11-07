@@ -64,7 +64,6 @@ module.exports = {
   DEFAULT_EXPERT_BASE_NAME: 'ALL',
 
   // > Search related
-  // SearchBarInHeader: true,
   HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertMap'], // use default settings in component.
 
   // > IndexPage

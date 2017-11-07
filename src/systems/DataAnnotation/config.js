@@ -40,7 +40,6 @@ module.exports = {
   Search_EnablePin: true,
 
   // > Search related
-  SearchBarInHeader: true,
   HeaderSearch_TextNavi: ['ACMFellowExpertBase', 'ACM_ExpertSearch'],
   // HeaderSearch_TextNavi: [],
 

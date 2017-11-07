@@ -65,6 +65,16 @@ const getDefaultSystemConfigs = (system, source) => {
     ShowRegisteredRole: true, // 注册页面是否显示角色配置
     Signup_Password: false, // 注册页面password
 
+    /**
+     * > Search
+     */
+    // expert base
+    SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
+    ExpertBases: [], // must override.
+    DEFAULT_EXPERT_BASE: 'aminer', // 华为默认搜索
+    DEFAULT_EXPERT_BASE_NAME: '全球专家',
+
+    // Search Page
     SearchPagePrefix: 'uniSearch', // search - 普通搜索(deleted); uniSearch - 多合一搜索.
     Search_EnablePin: false, // TODO bad：Huawei PIN
     Search_EnableCCFPin: false, // TODO bad：CCF PIN
@@ -78,6 +88,14 @@ const getDefaultSystemConfigs = (system, source) => {
     Search_DisableSearchKnowledge: false,
 
     Search_SortOptions: defaults.IN_APP_DEFAULT,
+
+    // > Search related
+    HeaderSearch_TextNavi: defaults.IN_APP_DEFAULT, // use default settings in component.
+    SearchFilterExclude: '', // 'Gender',
+    UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // deprecated! Don't use this.
+
+    // NextAPI-QueryHooks:
+    APIPlugin_ExpertSearch: null,
 
     UserAuthSystem: system, // aminer 或者是 system.config
     UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签, 目前没用到
@@ -100,23 +118,6 @@ const getDefaultSystemConfigs = (system, source) => {
     Search_CheckEB: false,
     PaperLink: paperId => `https://aminer.org/archive/${paperId}`,
 
-    /**
-     * > Search
-     */
-    // expert base
-    SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
-    ExpertBases: [], // must override.
-    DEFAULT_EXPERT_BASE: 'aminer', // 华为默认搜索
-    DEFAULT_EXPERT_BASE_NAME: '全球专家',
-
-    // > Search related
-    SearchBarInHeader: true,
-    HeaderSearch_TextNavi: defaults.IN_APP_DEFAULT, // use default settings in component.
-    SearchFilterExclude: '', // 'Gender',
-    UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // deprecated! Don't use this.
-
-    // NextAPI-QueryHooks:
-    APIPlugin_ExpertSearch: { parameters: { aggregation: ['dims.systag'] } },
 
     /**
      * IndexPage

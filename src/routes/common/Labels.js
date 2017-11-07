@@ -79,7 +79,7 @@ export default class Labels extends Component {
     const { tags } = this.state;
     // const { commonLabels } = this.props;
     return (
-      <LabelLine tags={tags} onTagChange={this.onTagChange} canRemove canAdd />
+      <LabelLine tags={tags} onTagChange={this.onTagChange} canRemove canAdd confirmOnClose />
     );
   }
 }

@@ -141,6 +141,16 @@ export default class Layout extends Component {
           {false && href.indexOf('/expert-heatmap') > 0 &&
           <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/3.7.1/echarts.js" />}
 
+          {(href.indexOf('/expert-trajectory') > 0) &&
+          <script
+            type="text/javascript"
+            src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />}
+
+          {(href.indexOf('/expert-trajectory') > 0) &&
+          <script
+            src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1"
+            charSet="utf-8" async defer />}
+
         </Helmet>
 
         {showHeader && <Header {...headerOptions} />}

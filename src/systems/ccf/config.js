@@ -58,6 +58,11 @@ module.exports = {
   // Auth_AllowAnonymousAccess: false,
   // Auth_LoginPage: '/login',
 
+  // NextAPI-QueryHooks:
+  APIPlugin_ExpertSearch: {
+    // parameters: { aggregation: ['dims.systag'] },
+    // haves: { systag: [] },
+  },
 
   // /////////////////////////////////
 
@@ -80,10 +85,6 @@ module.exports = {
   ],
 
   PersonList_ShowIndices: ['activityRankingContrib', 'h_index', 'activity', 'rising_star'],
-
-
-  // > Search related
-  SearchBarInHeader: false,
 
   // > Admin Users
   Admin_Users_ShowAdmin: false,

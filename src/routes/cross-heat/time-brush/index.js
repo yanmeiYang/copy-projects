@@ -15,24 +15,37 @@ class TimeBrush extends React.Component {
   };
 
   componentDidMount() {
-    this.createBrush();
+    const { xWidth } = this.props;
+    this.createBrush(xWidth);
   }
 
   componentWillUpdate(nextProps, nextState) {
     if (this.state.date !== nextState.date) {
       this.props.getLocalYear(nextState.date);
     }
+    if (this.props.xWidth !== nextProps.xWidth) {
+      this.createBrush(nextProps.xWidth,);
+    }
   }
 
-  createBrush = () => {
-    let timeAxis = [0, 0];
-    const margin = { top: 9, right: 50, bottom: 214, left: 50 };
-    const width = this.props.xWidth > 806 ? this.props.xWidth : 806;
-    const height = 20;
-    const svg = d3.selectAll('#brush').append('g')
-      .attr('transform', `translate(340,${margin.top})`);
+
+  createBrush = (xWidth) => {
+
     const localDate = new Date();
     const dateYear = localDate.getFullYear();
+    let sY = dateYear - 10;
+    let eY = dateYear;
+    if (this.state.date.length > 0) {
+      sY = this.state.date[0];
+      eY = this.state.date[1];
+    }
+    let timeAxis = [0, 0];
+    const margin = { top: 9, right: 50, bottom: 214, left: 50 };
+    const width = xWidth > 806 ? xWidth : 806;
+    const height = 20;
+    d3.select('#brush').selectAll('g').remove();
+    const svg = d3.selectAll('#brush').append('g')
+      .attr('transform', `translate(340,${margin.top})`);
     const beginYear = new Date(dateYear - 10, 0, 1);
     const endYear = new Date(dateYear, 0, 1)
     const x = d3.scaleTime().domain([beginYear, endYear]).range([0, width]);
@@ -56,7 +69,7 @@ class TimeBrush extends React.Component {
       .attr('fill', '#000')
       .call(d3.axisBottom(xScale2));
 
-    const circle = svg.append('g')
+    svg.append('g')
       .attr('class', 'circle');
 
     const gBrush = svg.append('g')
@@ -78,7 +91,7 @@ class TimeBrush extends React.Component {
         }));
 
     // todo 初始化默认区间
-    gBrush.call(brush.move, [new Date(2007, 0, 1), new Date(2017, 0, 1)].map(x));
+    gBrush.call(brush.move, [new Date(sY, 0, 1), new Date(eY, 0, 1)].map(x));
 
     function brushEnd() {
       const s = timeAxis;

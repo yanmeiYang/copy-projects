@@ -42,6 +42,7 @@ export async function fetchLabelsByIds(payload) {
     .param({
       ids,
       haves: { [LabelDimension]: [] },
+      switches: ['master'],
     })
     .schema({ person: ['id'] });
   return nextAPI({ data: [nextapi.api] });

@@ -1,6 +1,6 @@
 import { request, nextAPI, config } from 'utils';
 import * as bridge from 'utils/next-bridge';
-import { apiBuilder, F, applyPlugin } from 'utils/next-api-builder';
+import { apiBuilder, F, applyPlugin, filtersToQuery } from 'utils/next-api-builder';
 import { sysconfig } from 'systems';
 import * as strings from 'utils/strings';
 
@@ -59,39 +59,10 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
       });
 
     // filters
-    Object.keys(filters).map((key) => {
-      const filter = filters[key];
-      if (key === 'eb') {
-        if (filter && filter.id) {
-          // const ebLabel = bridge.toNextCCFLabelFromEBID(filters.eb.id);
-          nextapi.addParam({ filters: { dims: { eb: [filter.id] } } });
-        }
-      } else if (key === 'h_index') {
-        // console.log('TODO filter by h_index 这里暂时是用解析的方式获取数据的。');
-        const splits = filter.split('-');
-        if (splits && splits.length === 2) {
-          const from = parseInt(splits[0]);
-          const to = parseInt(splits[1]);
-          nextapi.addParam({
-            filters: {
-              ranges: {
-                h_index: [
-                  isNaN(from) ? '' : from.toString(),
-                  isNaN(to) ? '' : to.toString(),
-                ],
-              },
-            },
-          });
-        }
-      } else {
-        nextapi.addParam({ filters: { terms: { [key]: [filters[key]] } } });
-      }
-      return false;
-    });
+    filtersToQuery(nextapi, filters);
 
-    // translate?
-    if (true) { // translate
-      // nextapi.addSchema({ person: ['tags_translated'] });
+    if (false) { // translate chinese tags.
+      nextapi.addSchema({ person: ['tags_translated'] });
     }
 
     // sort

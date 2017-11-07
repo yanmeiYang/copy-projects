@@ -35,20 +35,6 @@ export default class SearchPage extends Component {
     sortType: 'relevance',
   };
 
-  // componentWillMount() {
-  //   const { dispatch } = this.props;
-  //   const { query } = this.props.search;
-  //   if (sysconfig.SearchBarInHeader) {
-  //     dispatch({
-  //       type: 'app/layout',
-  //       payload: {
-  //         headerSearchBox: { query, onSearch: this.onSearchBarSearch },
-  //       },
-  //     });
-  //   }
-  //   // console.log('nnmn^O^ $ ^O^nMn...... ');
-  // }
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.search.query !== this.props.search.query) {
       console.log('COMPARE:', nextProps.search.query, this.props.search.query);

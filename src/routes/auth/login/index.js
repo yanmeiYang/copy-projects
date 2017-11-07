@@ -14,12 +14,6 @@ const tc = applyTheme(styles);
 const FormItem = Form.Item;
 
 class Login extends React.Component {
-  componentWillMount() {
-    // hide search bar in header.
-    if (sysconfig.SearchBarInHeader) {
-      this.props.dispatch({ type: 'app/hideHeaderSearch' });
-    }
-  }
 
   setErrorMessage(message) {
     this.props.dispatch({ type: 'auth/setMessage', payload: { message } });

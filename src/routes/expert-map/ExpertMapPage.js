@@ -51,7 +51,7 @@ export default class ExpertMapPage extends React.Component {
     const { location } = this.props;
     const { query, type, domain } = queryString.parse(location.search);
     const mapType = type || detectSavedMapType(MAP_DISPATCH_KEY); //判断该使用什么样的地图
-    const q = query || 'Data Mining';
+    const q = query || ' ';
     this.setState({
       query: domain ? '' : q,
       domainId: domain,

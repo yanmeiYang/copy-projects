@@ -66,6 +66,10 @@ export default class Labels extends Component {
           case 'remove':
             if (success) {
               console.log('Remove this tags',);
+              const newTags = tags || [];
+              if (newTags.indexOf(tag) !== -1) {
+                this.setState({ tags: tags.filter(t => t !== tag) });
+              }
             } else {
               message.error('删除标签错误');
             }
@@ -79,7 +83,7 @@ export default class Labels extends Component {
     const { tags } = this.state;
     // const { commonLabels } = this.props;
     return (
-      <LabelLine tags={tags} onTagChange={this.onTagChange} canRemove canAdd />
+      <LabelLine tags={tags} onTagChange={this.onTagChange} canRemove canAdd confirmOnClose />
     );
   }
 }

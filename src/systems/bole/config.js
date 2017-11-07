@@ -39,15 +39,24 @@ module.exports = {
   // Enable_Export: true,
   // Search_EnablePin: true,
 
+  /**
+   * > Search
+   */
+  // expert base
+
   // > Search related
-  SearchBarInHeader: true,
-  // HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertBase'], // ExpertBase bole专有
   HeaderSearch_TextNavi: ['ExpertBase', 'ACM_ExpertSearch'],
 
   // Search_DisableFilter: false,
   Search_DisableExpertBaseFilter: true,
   // Search_DisableSearchKnowledge: false,
   Search_FixedExpertBase: { id: 'aminer', name: '全球专家' },
+
+  // NextAPI-QueryHooks:
+  APIPlugin_ExpertSearch: {
+    parameters: { aggregation: ['dims.systag'] },
+    haves: { systag: [] },
+  },
 
   /**
    * Page specified config.

@@ -38,7 +38,6 @@ module.exports = {
   SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
 
   // > Search related
-  SearchBarInHeader: true,
   // 是否显示创建新用户btn
   ApplyUserBtn: false,
 

@@ -127,10 +127,14 @@ export default {
       yield put({ type: 'logoutSuccess' });
       // yield auth.dispatchToLogin(put); // don't work
 
-      yield put(routerRedux.push({
-        pathname: sysconfig.Auth_LoginPage,
-        query: { from: auth.getLoginFromURL() },
-      }));
+      if (sysconfig.AuthLoginUsingThird) {
+        window.location.href = sysconfig.AuthLoginUsingThirdPage;
+      } else {
+        yield put(routerRedux.push({
+          pathname: sysconfig.Auth_LoginPage,
+          query: { from: auth.getLoginFromURL() },
+        }));
+      }
 
       // last call api.
       const data = yield call(authService.logout, token);

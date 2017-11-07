@@ -2,7 +2,6 @@
  * Created by BoGao on 2017/6/20.
  */
 /* eslint-disable prefer-template,import/no-dynamic-require */
-import React from 'react';
 import { addLocaleData } from 'react-intl';
 import { loadSavedLocale } from 'utils/locale';
 import { System, Source } from 'utils/system';
@@ -53,7 +52,7 @@ const getDefaultSystemConfigs = (system, source) => {
     Layout_HasNavigator: true,
 
     // header
-    Header_UserPageURL: '', // 用户头像点击之后去的页面.
+    Header_UserPageURL: defaults.IN_APP_DEFAULT, // 用户头像点击之后去的页面.
     Header_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
     ShowHelpDoc: false, // 显示帮助文档
     Header_UserNameBlock: defaults.IN_APP_DEFAULT, // 显示登录用户名
@@ -84,6 +83,7 @@ const getDefaultSystemConfigs = (system, source) => {
     UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签, 目前没用到
 
     Auth_AllowAnonymousAccess: false,
+    AuthLoginUsingThird: false, // 使用第三方登录界面，目前只有tencent在用
     Auth_LoginPage: '/login',
 
     /**
@@ -100,13 +100,14 @@ const getDefaultSystemConfigs = (system, source) => {
     Search_CheckEB: false,
     PaperLink: paperId => `https://aminer.org/archive/${paperId}`,
 
-    // > Search
+    /**
+     * > Search
+     */
     // expert base
     SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
     ExpertBases: [], // must override.
     DEFAULT_EXPERT_BASE: 'aminer', // 华为默认搜索
     DEFAULT_EXPERT_BASE_NAME: '全球专家',
-    DEFAULT_EXPERT_SEARCH_KEY: 'term', // 旧API智库搜索中三选一
 
     // > Search related
     SearchBarInHeader: true,
@@ -114,7 +115,12 @@ const getDefaultSystemConfigs = (system, source) => {
     SearchFilterExclude: '', // 'Gender',
     UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // deprecated! Don't use this.
 
-    // > IndexPage
+    // NextAPI-QueryHooks:
+    APIPlugin_ExpertSearch: { parameters: { aggregation: ['dims.systag'] } },
+
+    /**
+     * IndexPage
+     */
     IndexPage_QuickSearchList: [
       { name: 'Artificial intelligence', name_zh: '人工智能' },
       { name: 'Robotics', name_zh: '机器人' },
@@ -129,16 +135,15 @@ const getDefaultSystemConfigs = (system, source) => {
     IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
     // Map Related,2 is recommended!
-    Map_Preload: 2, //0的时候不缓存，1的时候缓存信息，2的时候缓存信息和90头像，3的时候缓存信息和90、160头像
+    Map_Preload: 2, // 0的时候不缓存，1的时候缓存信息，2的时候缓存信息和90头像，3的时候缓存信息和90、160头像
     CentralPosition: { lat: 37.09024, lng: -95.712891 },
-    Map_HotDomains: TopExpertBase.RandomTop100InDomainAminer, //地图领域
-    HotDomains_Type: 'filter', //filter or selector
+    Map_HotDomains: TopExpertBase.RandomTop100InDomainAminer, // 地图领域
+    HotDomains_Type: 'filter', // filter or selector
 
     /**
      * Replace Hooks.
      */
     Register_AddPrivilegesToExpertBaseIDs: [],
-
 
     // > Admin Users
     Admin_Users_ShowAdmin: true,

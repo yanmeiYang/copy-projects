@@ -1,4 +1,4 @@
-import { merge } from 'lodash';
+import { mergeWith, isArray } from 'lodash';
 
 /**
  *  Created by BoGao on 2017-10-25;
@@ -10,6 +10,14 @@ class ParamError extends Error {
     super();
     this.name = 'ParamError';
   }
+}
+
+function apiMerge(obj, source) {
+  mergeWith(obj, source, (objValue, srcValue) => {
+    if (isArray(objValue)) {
+      return objValue.concat(srcValue);
+    }
+  });
 }
 
 // Query api-builder.
@@ -43,7 +51,7 @@ const query = (action, eventName) => {
       if (!api.parameters) {
         api.parameters = {};
       }
-      api.parameters = merge(api.parameters, params);
+      apiMerge(api.parameters, params);
       return chains;
     },
     schema: (schema, config) => {
@@ -59,7 +67,7 @@ const query = (action, eventName) => {
       if (!api.schema) {
         api.schema = {};
       }
-      api.schema = merge(api.schema, schema);
+      apiMerge(api.schema, schema);
       return chains;
     },
   };
@@ -96,7 +104,7 @@ const alter = (action) => {
       if (!api.parameters) {
         api.parameters = {};
       }
-      api.parameters = merge(api.parameters, params);
+      apiMerge(api.parameters, params);
       return chains;
     },
     schema: (schema, config) => {
@@ -112,7 +120,7 @@ const alter = (action) => {
       if (!api.schema) {
         api.schema = {};
       }
-      api.schema = merge(api.schema, schema);
+      apiMerge(api.schema, schema);
       return chains;
     },
   };
@@ -154,8 +162,19 @@ const F = {
   Entities: { Person: 'person', Publication: 'pub', Venue: 'venue' },
 };
 
+// functions
+const applyPlugin = (nextapi, pluginConfig) => {
+  if (!nextapi || !pluginConfig) {
+    return false;
+  }
+  nextapi.addParam(pluginConfig.parameters);
+  nextapi.addSchema(pluginConfig.schema);
+  // TODO ... merge filters, sorts, havings, etc...
+  return nextapi;
+};
+
 module.exports = {
-  apiBuilder, F,
+  apiBuilder, F, applyPlugin,
 };
 
 //

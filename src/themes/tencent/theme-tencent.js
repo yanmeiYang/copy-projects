@@ -37,7 +37,19 @@ module.exports = {
   //     </a>
   //   </div>
   // ),
-
+  PersonList_RightZone: [
+    hole.DEFAULT_PLACEHOLDER,
+    () => {
+      return (
+        <div className={styles.feedback} key="0">
+          <a href="http://ucircle.oa.com/aminer/requirement/create" target="_blank" rel="feedback">
+            <i className="fa fa-exclamation-circle" />&nbsp;
+            <FM id="com.PersonList.label.feedback" defaultMessage="反馈需求" />
+          </a>
+        </div>
+      );
+    },
+  ],
   // Index page
   index_bannerZone: [
     <div key="0" className={styles.index_bannerZone}>

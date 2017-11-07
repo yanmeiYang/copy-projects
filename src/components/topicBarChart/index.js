@@ -71,7 +71,7 @@ export default class TopicBarChart extends React.Component {
       };
       this.myChart.setOption(option);
     }
-  }
+  };
 
   render() {
     return (

@@ -221,6 +221,10 @@ export default class TrendPrediction extends React.PureComponent {
     d3.select('#tooltip1').classed('hidden', true).style('visibility', 'hidden');
     const term = (query === '') ? this.props.query : query;
 
+    if (term === ' ' || !term) {
+      this.setState({ loadingFlag: false, errorFlag: true });
+      return;
+    }
     this.setState({ errorFlag: false, loadingFlag: true });
     const url = `https://dc_api.aminer.org/trend/${term}`;
     // const dd = wget(`https://dc_api.aminer.org/trend/${term}`);

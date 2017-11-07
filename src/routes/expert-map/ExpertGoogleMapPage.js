@@ -29,7 +29,7 @@ export default class ExpertGoogleMapPage extends React.Component {
 
   componentWillMount() {
     let { query, type } = queryString.parse(location.search);
-    query = query || 'data mining';
+    query = query || ' ';
     type = type || 'google';
     if (query) {
       // this.props.dispatch({ type: 'app/setQuery', query });

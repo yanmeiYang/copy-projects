@@ -43,7 +43,7 @@ export default class KnowledgeGraphPage extends React.PureComponent {
 
   componentWillMount() {
     let { query } = queryString.parse(location.search);
-    query = query || 'data mining';
+    query = query || ' ';
     this.setState({ query });
     // if (query) {
     //   this.setState({ query });

@@ -24,7 +24,7 @@ let System;
 // System = 'aminer';
 // System = 'ccf';
 // System = 'ccftest';
-// System = 'huawei';
+System = 'huawei';
 // System = 'alibaba';
 // System = 'tencent';
 // System = 'cie';

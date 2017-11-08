@@ -1,19 +1,125 @@
 
+// const showEchart = (myChart) => {
+//   const option = {
+//     backgroundColor: '#abc1db',
+//     title: {
+//       text: '学者迁移图',
+//       subtext: 'data from aminer',
+//       left: 'center',
+//       textStyle: {
+//         color: '#404040',
+//       },
+//       subtextStyle: {
+//         color: '#5a5a5a',
+//       },
+//     },
+//     tooltip: {
+//       trigger: 'item',
+//     },
+//     legend: {
+//       orient: 'vertical',
+//       y: 'bottom',
+//       x: 'right',
+//       data: ['location'],
+//       textStyle: {
+//         color: '#fff',
+//       },
+//     },
+//     geo: {
+//       zoom: 1,
+//       name: 'trajectory',
+//       type: 'map',
+//       map: 'world',
+//       roam: true,
+//       label: {
+//         emphasis: {
+//           show: false,
+//         },
+//       },
+//       itemStyle: {
+//         normal: {
+//           areaColor: '#f5f3f0',
+//           borderColor: '#91a0ae',
+//         },
+//         emphasis: {
+//           areaColor: '#bcbab8',
+//         },
+//       },
+//     },
+//     series: [{
+//       type: 'scatter',
+//       coordinateSystem: 'geo',
+//       zlevel: 5,
+//       rippleEffect: {
+//         period: 4,
+//         scale: 2,
+//         brushType: 'stroke',
+//       },
+//       label: {
+//         normal: {
+//           show: true,
+//           position: 'right',
+//           formatter: '{b}',
+//         },
+//         emphasis: {
+//           show: true,
+//         },
+//       },
+//       symbolSize: 5,
+//       itemStyle: {
+//         normal: {
+//           color: '#fff',
+//           borderColor: 'gold',
+//         },
+//       },
+//       data: [],
+//     }, {
+//       type: 'lines',
+//       zlevel: 2,
+//       coordinateSystem: 'geo',
+//       effect: {
+//         show: true,
+//         period: 6,
+//         trailLength: 0.1,
+//         color: '#f78e3d',
+//         symbol: 'arrow',
+//         symbolSize: 5,
+//         animation: true,
+//       },
+//       lineStyle: {
+//         normal: {
+//           color: '#f78e3d',
+//           width: 1.5,
+//           opacity: 0.4,
+//           curveness: 0.2,
+//         },
+//       },
+//       data: [],
+//     }],
+//   };
+//   myChart.setOption(option);
+// };
+
 const setBMap = (myChart) => {
   console.log(myChart);
   const map = myChart.getModel().getComponent('bmap').getBMap();
   const navigationControl = new window.BMap.NavigationControl({ // 添加带有定位的导航控件
-    anchor: 'BMAP_ANCHOR_TOP_LEFT',// 靠左上角位置
-    type: 'BMAP_NAVIGATION_CONTROL_LARGE',// LARGE类型
-    enableGeolocation: true,// 启用显示定位
+    anchor: 'BMAP_ANCHOR_TOP_LEFT', // 靠左上角位置
+    type: 'BMAP_NAVIGATION_CONTROL_LARGE', // LARGE类型
+    enableGeolocation: true, // 启用显示定位
   });
   map.addControl(navigationControl);
 };
 
-
-const showChart = (myChart) => { // 功能起始函数
+const showChart = (myChart, type) => { // 功能起始函数
+  let color = '';
+  if (type === 'geo') {
+    color = '#abc1db';
+  } else {
+    color = '#404a59';
+  }
   const option = {
-    backgroundColor: '#404a59',
+    backgroundColor: color,
     title: {
       text: '学者迁移图',
       subtext: 'data from aminer',
@@ -25,6 +131,27 @@ const showChart = (myChart) => { // 功能起始函数
     },
     tooltip: {
       trigger: 'item',
+    },
+    geo: {
+      zoom: 1,
+      name: 'trajectory',
+      type: 'map',
+      map: 'world',
+      roam: true,
+      label: {
+        emphasis: {
+          show: false,
+        },
+      },
+      itemStyle: {
+        normal: {
+          areaColor: '#f5f3f0',
+          borderColor: '#91a0ae',
+        },
+        emphasis: {
+          areaColor: '#bcbab8',
+        },
+      },
     },
     bmap: {
       center: [34.45, 31.3],
@@ -164,7 +291,7 @@ const showChart = (myChart) => { // 功能起始函数
     },
     series: [{
       type: 'scatter',
-      coordinateSystem: 'bmap',
+      coordinateSystem: type,
       zlevel: 5,
       rippleEffect: {
         period: 4,
@@ -192,7 +319,7 @@ const showChart = (myChart) => { // 功能起始函数
     }, {
       type: 'lines',
       zlevel: 2,
-      coordinateSystem: 'bmap',
+      coordinateSystem: type,
       effect: {
         show: true,
         period: 6,
@@ -214,7 +341,9 @@ const showChart = (myChart) => { // 功能起始函数
     }],
   };
   myChart.setOption(option);
-  setBMap(myChart);
+  if (type === 'bmap') {
+    setBMap(myChart);
+  }
 };
 
 module.exports = {

@@ -53,6 +53,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 // 2. Model
 app.model(require('./models/app'));
+// app.model(require('./models/auth')); // TODO use this model in hoc. or auto hoc.
 // app.use(require('./ssrMiddleware'));
 // app.disable('x-powered-by');
 

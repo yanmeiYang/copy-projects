@@ -44,7 +44,6 @@ export default {
       //     dispatch({ type: 'emptyResults' });
       //     dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
       //     // console.log('Success::::sdfsdf ', keyword);
-      //     dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: keyword } });
       //   }
       // });
     },

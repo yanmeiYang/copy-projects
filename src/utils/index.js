@@ -1,6 +1,5 @@
 /* eslint-disable no-extend-native */
 import classnames from 'classnames';
-import loadScriptJs from 'load-script';
 import config from './config';
 import { getMenusByUser } from './menu';
 import request, { nextAPI } from './request';
@@ -11,6 +10,7 @@ import * as reflect from './reflect';
 import * as system from './system';
 import * as hole from './hole';
 import { compare } from './compare';
+import { loadD3, loadD3v3, loadECharts, loadScript } from './requirejs';
 
 // 连字符转驼峰
 String.prototype.hyphenToHump = function () {
@@ -87,57 +87,6 @@ const createURL = (path, params, newParams) => {
   return url;
 };
 
-// Load script
-const scripts = {
-  BMap: 'https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20171031174121',
-  BMapLib: 'https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1',
-  // BMap: 'https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1',
-  GoogleMap: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBlzpf4YyjOBGYOhfUaNvQZENXEWBgDkS0',
-};
-
-const loadScript = (url, opts, cb) => {
-  const { check, ...restOpts } = opts;
-  const value = hasValue(check);
-  if (value) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('[RequireJs] Cached ', url);
-    }
-    if (cb) {
-      cb(value);
-    }
-    return;
-  }
-
-  const script = scripts[url] || url;
-
-  if (process.env.NODE_ENV !== 'production') {
-    console.log('[RequireJs] load ', url);
-  }
-
-  loadScriptJs(script, restOpts, () => {
-    const ret = hasValue(check);
-    if (ret) {
-      if (cb) {
-        cb(check ? ret : null);
-      }
-    } else {
-      console.error('Error loading script: ', script);
-    }
-  });
-};
-
-const hasValue = (check) => {
-  if (typeof check === 'string') {
-    return window[check];
-  } else {
-    if (check.length === 1) {
-      return window[check[0]];
-    } else if (check.length === 2) {
-      return window[check[0]] && window[check[0]][check[1]];
-    }
-  }
-};
-
 module.exports = {
   config,
   system,
@@ -149,11 +98,11 @@ module.exports = {
   compare,
   createURL,
   detectSavedMapType,
-  loadScript,
 
   getMenusByUser,
   request, nextAPI,
   apiBuilder,
+  loadD3, loadD3v3, loadScript, loadECharts,
 
   color,
   queryURL,

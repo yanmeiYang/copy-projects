@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Auth } from 'hoc';
@@ -8,26 +8,28 @@ import { compare } from 'utils';
 // import styles from './index.less';
 import TrendPrediction from './trend-prediction.js';
 
-@connect(({ app }) => ({ app }))
+@connect(({ app }) => ({ app: { user: app.user, roles: app.roles } }))
 @Auth
-export default class TrendPredictionPage extends React.Component {
+export default class TrendPredictionPage extends Component {
   constructor(props) {
     super(props);
     this.dispatch = this.props.dispatch;
   }
 
-  state = { query: '' };
+  state = {
+    query: '',
+  };
 
   componentWillMount() {
-    let { query } = queryString.parse(location.search);
-    query = query || '-';
+    let { query } = queryString.parse(this.props.location.search);
+    query = query || 'artificial intelligence';
     if (query) {
       this.setState({ query });
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const { query } = queryString.parse(location.search);
+    const { query } = queryString.parse(nextProps.location.search);
     if (this.state.orgs !== query) {
       this.setState({ query });
     }
@@ -43,7 +45,6 @@ export default class TrendPredictionPage extends React.Component {
     if (query) {
       this.setState({ query });
       dispatch(routerRedux.push({ pathname: '/trend', search: `?query=${query}` }));
-      dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query } });
     }
   };
 

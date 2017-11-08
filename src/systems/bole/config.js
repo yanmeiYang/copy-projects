@@ -45,7 +45,7 @@ module.exports = {
   // expert base
 
   // > Search related
-  HeaderSearch_TextNavi: ['ExpertBase', 'ACM_ExpertSearch', /*'ExpertMap'*/],
+  HeaderSearch_TextNavi: ['ExpertBase', 'ACM_ExpertSearch', 'ExpertMap'],
 
   // Search_DisableFilter: false,
   Search_DisableExpertBaseFilter: true,

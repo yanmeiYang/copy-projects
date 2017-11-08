@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
-import loadScript from 'load-script';
 import styles from './ExpertTrajectory.less';
-import {
-  showChart,
-} from './utils/echarts-utils';
+import { loadD3 } from 'utils/requirejs';
+import { showChart } from './utils/echarts-utils';
+
 let address = [];
 let addValue = {};
 let myChart; // used for loadScript
@@ -53,7 +52,10 @@ class ExpertTrajectory extends React.Component {
                 const personId = this.props.person.id;
                 const start = 0;
                 const end = 2017;
-                this.props.dispatch({ type: 'expertTrajectory/findTrajById', payload: { personId, start, end } });
+                this.props.dispatch({
+                  type: 'expertTrajectory/findTrajById',
+                  payload: { personId, start, end }
+                });
               }
             });
           });
@@ -70,7 +72,10 @@ class ExpertTrajectory extends React.Component {
               const personId = this.props.person.id;
               const start = 0;
               const end = 2017;
-              this.props.dispatch({ type: 'expertTrajectory/findTrajById', payload: { personId, start, end } });
+              this.props.dispatch({
+                type: 'expertTrajectory/findTrajById',
+                payload: { personId, start, end }
+              });
             }
           });
         });
@@ -79,11 +84,11 @@ class ExpertTrajectory extends React.Component {
   };
 
   showTrajectory = (data) => {
-    console.log("999",addValue,address)
+    console.log("999", addValue, address)
     const points = [];
     const trajData = [];
     for (const key in data.data.trajectories) {
-      console.log("data",data)
+      console.log("data", data)
       if (data.data.trajectories) {
         let previous = '';
         for (const d of data.data.trajectories[key]) {
@@ -103,7 +108,7 @@ class ExpertTrajectory extends React.Component {
         points.push({
           name: address[key].name + addValue[key][0], //可加入城市信息
           value: [address[key].geo.lng, address[key].geo.lat],
-          symbolSize: addValue[key][1]/2 + 3,
+          symbolSize: addValue[key][1] / 2 + 3,
           itemStyle: {
             normal: {
               color: '#f56a00',
@@ -159,7 +164,7 @@ class ExpertTrajectory extends React.Component {
         addValue[previous][1] = addValue[previous][1] + 2017 - startYear + 1;
       }
     }
-    console.log("00000",addValue,address)
+    console.log("00000", addValue, address)
     this.showTrajectory(data);
   }
 

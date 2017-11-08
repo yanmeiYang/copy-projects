@@ -54,7 +54,6 @@ export default {
           const size = parseInt(match[4], 10);
           // dispatch({ type: 'emptyResults' });
           dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
-          // dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: keyword } });
         }
 
         //
@@ -65,7 +64,6 @@ export default {
           const offset = parseInt(match[3], 10);
           const size = parseInt(match[4], 10);
           dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
-          // dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: keyword } });
         }
 
       });

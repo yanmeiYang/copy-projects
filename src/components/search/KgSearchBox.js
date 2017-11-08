@@ -8,6 +8,7 @@ import { defineMessages, injectIntl } from 'react-intl';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
 import * as kgService from 'services/knoledge-graph-service';
+import * as suggestService from 'services/search-suggest';
 import styles from './KgSearchBox.less';
 
 const FormItem = Form.Item;
@@ -144,30 +145,38 @@ class KgSearchBox extends PureComponent {
 
     // 延时200毫秒再去请求服务器。
     this.lastRequestId = setTimeout(() => {
-      const t = new Date().getTime();
-      this.latestT = t;
-
-      // TODO How to abort a promise outside? Or use saga to do this.
-      // TODO first call suggest search function.
-      // const suggestPromise = suggestService.suggest(value);
-      // suggestPromise.then(
-      //   (data) => {
-      //     if (this.latestT && t >= this.latestT) {
-      //       if (data.data && data.data.topic && data.data.topic.length > 0) {
-      //         this.makeSuggestion(data.data.topic);
-      //       }
-      //     }
-      //   },
-      //   (err) => {
-      //     console.log('Request failed:', err);
-      //   },
-      // ).catch((error) => {
-      //   console.error(error);
-      // });
-      console.log('--- call effect',);
-      dispatch({ type: 'searchSuggest/suggest', payload: { query: value } });
-
-    }, 200);
+      const newMethod = false;
+      if (newMethod) {
+        // TODO How to abort a promise outside? Or use saga to do this.
+        // TODO first call suggest search function.
+        const t = new Date().getTime();
+        this.latestT = t;
+        const suggestPromise = suggestService.suggest(value);
+        suggestPromise.then(
+          (data) => {
+            if (this.latestT && t >= this.latestT) {
+              if (data.data && data.data.topic && data.data.topic.length > 0) {
+                this.makeSuggestion(data.data.topic);
+              }
+            }
+          },
+          (err) => {
+            console.log('Request failed:', err);
+          },
+        ).catch((error) => {
+          console.error(error);
+        });
+      } else {
+        // replace with takeLatest effect.
+        dispatch({ type: 'searchSuggest/suggest', payload: { query: value } })
+          .then((data) => { //页面跳转到 热力图页面
+            console.log('0==================slkdjf', data);
+            if (data.data && data.data.topic && data.data.topic.length > 0) {
+              this.makeSuggestion(data.data.topic);
+            }
+          });
+      }
+    }, 120);
   };
 
 
@@ -175,52 +184,6 @@ class KgSearchBox extends PureComponent {
   onSuggestionsClearRequested = () => {
     // console.log('onSuggestionsClearRequested');
     this.setState({ suggestions: [] });
-  };
-
-  // deprecated
-  makeSuggestion = (topics, selectedTopic) => {
-    // console.log('suggest find data: ', topics);
-    if (!topics && topics.length <= 0) {
-      return false;
-    }
-
-    const querySuggests = [];
-    topics.map((topic) => {
-      return querySuggests.push({
-        name: topic.text,
-        zh: topic.text,
-        type: 'suggest',
-      });
-    });
-
-    const topicGraph = topics[0];
-    if (topicGraph && topicGraph.graph && topicGraph.graph.hits) {
-      //   const parents = [];
-      //   topicGraph.graph.hits.map((hit) => {
-      //     parents.push(hit.parent);
-      //     if (hit.child_nodes && hit.child_nodes) {
-      //       childs.push(...hit.child_nodes);
-      //     }
-      //     return false;
-      //   });
-      //
-      //   console.log(parents, childs);
-      // TODO generate kg suggestions json.
-      const suggestion = this.kgDataTransferToSuggest(topicGraph.graph);
-
-      // Finally generate suggest json.
-      const suggestions = [
-        {
-          title: 'Related Topics:',
-          suggestions: querySuggests,
-        },
-        {
-          title: 'Knowledge Graph Suggestions:',
-          suggestions: suggestion,
-        },
-      ];
-      this.setState({ suggestions });
-    }
   };
 
   // TODO sort parents and childs.
@@ -293,6 +256,51 @@ class KgSearchBox extends PureComponent {
   getRealAdvancedSearchStatus = (props) => {
     const { fixAdvancedSearch, isAdvancedSearch, disableAdvancedSearch } = props;
     return disableAdvancedSearch ? false : fixAdvancedSearch ? true : isAdvancedSearch;
+  };
+
+  makeSuggestion = (topics, selectedTopic) => {
+    // console.log('suggest find data: ', topics);
+    if (!topics && topics.length <= 0) {
+      return false;
+    }
+
+    const querySuggests = [];
+    topics.map((topic) => {
+      return querySuggests.push({
+        name: topic.text,
+        zh: topic.text,
+        type: 'suggest',
+      });
+    });
+
+    const topicGraph = topics[0];
+    if (topicGraph && topicGraph.graph && topicGraph.graph.hits) {
+      //   const parents = [];
+      //   topicGraph.graph.hits.map((hit) => {
+      //     parents.push(hit.parent);
+      //     if (hit.child_nodes && hit.child_nodes) {
+      //       childs.push(...hit.child_nodes);
+      //     }
+      //     return false;
+      //   });
+      //
+      //   console.log(parents, childs);
+      // TODO generate kg suggestions json.
+      const suggestion = this.kgDataTransferToSuggest(topicGraph.graph);
+
+      // Finally generate suggest json.
+      const suggestions = [
+        {
+          title: 'Related Topics:',
+          suggestions: querySuggests,
+        },
+        {
+          title: 'Knowledge Graph Suggestions:',
+          suggestions: suggestion,
+        },
+      ];
+      this.setState({ suggestions });
+    }
   };
 
   /**

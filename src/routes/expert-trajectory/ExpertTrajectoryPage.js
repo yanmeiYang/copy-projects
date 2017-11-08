@@ -56,10 +56,6 @@ class ExpertTrajectoryPage extends React.Component {
   onSearch = (data) => {
     if (data.query) {
       this.setState({ query: data.query });
-      this.props.dispatch({
-        type: 'app/setQueryInHeaderIfExist',
-        payload: { query: data.query },
-      });
       this.props.dispatch(routerRedux.push({
         pathname: '/expert-trajectory',
         query: { query: data.query },

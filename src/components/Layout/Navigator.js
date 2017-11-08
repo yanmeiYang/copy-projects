@@ -86,7 +86,7 @@ if (process.env.NODE_ENV !== 'production') {
   defaultNavis.push('ExpertTrajectory');
 }
 
-const defaultQuery = ' ';
+const defaultQuery = '-';
 
 @connect()
 export default class Navigator extends Component {

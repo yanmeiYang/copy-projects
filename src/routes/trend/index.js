@@ -20,7 +20,7 @@ export default class TrendPredictionPage extends React.Component {
 
   componentWillMount() {
     let { query } = queryString.parse(location.search);
-    query = query || ' ';
+    query = query || '-';
     if (query) {
       this.setState({ query });
     }

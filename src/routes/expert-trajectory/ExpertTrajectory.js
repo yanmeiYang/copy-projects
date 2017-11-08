@@ -105,8 +105,8 @@ class ExpertTrajectory extends React.Component {
         trigger: 'item',
       },
       bmap: {
-        center: [104.114129, 37.550339],
-        zoom: 5,
+        center: [-169,37],
+        zoom: 1,
         roam: true,
         mapStyle: {
           styleJson: [{

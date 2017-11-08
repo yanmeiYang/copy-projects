@@ -7,7 +7,7 @@ import pathToRegexp from 'path-to-regexp';
 import { getLocalToken } from 'utils/auth';
 import { escapeURLBracket, unescapeURLBracket } from 'utils/strings';
 
-import { apiDomain, nextAPIURL, YQL, CORS, strict } from './config';
+import { apiDomain, nextAPIURL, YQL, CORS, JSONP, strict } from './config';
 import * as debug from './debug';
 
 export default function request(url, options) {
@@ -29,13 +29,13 @@ export default function request(url, options) {
   }
   if (options.url && options.url.indexOf('//') > -1) {
     const origin = `${options.url.split('//')[0]}//${options.url.split('//')[1].split('/')[0]}`;
-    if (window.location.origin !== origin && apiDomain !== origin) {
-      if (CORS && CORS.indexOf(origin) > -1) {
-        options.fetchType = 'CORS';
+    if (window.location.origin !== origin) {
+      if (JSONP && JSONP.indexOf(origin) > -1) {
+        options.fetchType = 'JSONP';
       } else if (YQL && YQL.indexOf(origin) > -1) {
         options.fetchType = 'YQL';
       } else {
-        options.fetchType = 'JSONP';
+        options.fetchType = 'CORS';
       }
     }
   }

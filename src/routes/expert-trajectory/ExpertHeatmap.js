@@ -125,7 +125,7 @@ class ExpertHeatmap extends React.PureComponent { ///
     if (nextProps.expertTrajectory.location !== this.props.expertTrajectory.location && this.state.loadin !== nextState.loadin) {
       this.setState({
         startYear: nextProps.expertTrajectory.startYear,
-        endYear: nextProps.expertTrajectory.endYear
+        endYear: nextProps.expertTrajectory.endYear,
       });
       authors = nextProps.expertTrajectory.authors;
       location = nextProps.expertTrajectory.location;
@@ -171,7 +171,7 @@ class ExpertHeatmap extends React.PureComponent { ///
     yearNow = this.playon;
     this.props.dispatch({
       type: 'expertTrajectory/getYearData',
-      payload: { year: yearNow }
+      payload: { year: yearNow },
     }).then(() => {
       const thisYearEvent = this.props.expertTrajectory.yearMessage[this.props.expertTrajectory.yearMessage.length - 1];
       const display = [];
@@ -195,12 +195,14 @@ class ExpertHeatmap extends React.PureComponent { ///
       const thisYearData = this.props.expertTrajectory.eachYearHeat[yearNow];
       author = thisYearData.author;
       author2 = thisYearData.author2;
-      mapOption.series = this.getHeatSeries(thisYearData.geoCoordMap, thisYearData.data,
+      mapOption.series = this.getHeatSeries(
+thisYearData.geoCoordMap, thisYearData.data,
         0, false, thisYearData.yearIndex, thisYearData.nextYearData, thisYearData.data1,
         thisYearData.data2, thisYearData.authorImgWest,
-        thisYearData.authorImgMid, thisYearData.authorImgEast);
+        thisYearData.authorImgMid, thisYearData.authorImgEast,
+);
       this.calculateLocation();
-      console.log("this.geo.center", this.myChart2.getModel().option.geo[0].center);
+      console.log('this.geo.center', this.myChart2.getModel().option.geo[0].center);
       this.myChart2.setOption(mapOption, true);
     });
   }
@@ -252,16 +254,20 @@ class ExpertHeatmap extends React.PureComponent { ///
   onMapClick = () => { // 地图点击事件 将信息传给Page
     if (this.props.onPageClick) {
       if (this.from !== '') {
-        this.props.onPageClick(this.personList, locationName[this.from - 1].toLowerCase(),
-          locationName[this.to - 1].toLowerCase(), this.type);
+        this.props.onPageClick(
+this.personList, locationName[this.from - 1].toLowerCase(),
+          locationName[this.to - 1].toLowerCase(), this.type,
+);
       } else {
         this.props.onPageClick(this.personList, '', '', this.type);
       }
     }
   }
 
-  getHeatSeries = (geoCoordMap, data, j, choose, year,
-                   nextYearData, data1, data2) => {
+  getHeatSeries = (
+geoCoordMap, data, j, choose, year,
+                   nextYearData, data1, data2,
+) => {
     // j是一年中第几个插值 ifButton是否为播放模式 choose是否插值 year当前年份 data1前100数据 西部 中部 东部头像数据
     const dup = {};
     const tempLineArray = [];
@@ -289,6 +295,34 @@ class ExpertHeatmap extends React.PureComponent { ///
       tempLineArray.push(dup[key]);
     });
     tempLineArray.sort(sortCount);
+
+    let heatChange = {};
+    const heatData = {};
+    const Data = [];
+    heatChange = xxx.trajectories;
+    const address = xxx.address;
+    Object.keys(heatChange).forEach((key) => {
+      const heatYearData = heatChange[key];
+      for (let i = 0; i < heatYearData.length; i += 1) {
+        if (heatYearData[i][0] === year) {
+          const thisYearData = heatYearData[i];
+          if (!heatData[thisYearData[1]]) {
+            heatData[thisYearData[1]] = 0;
+          }
+          heatData[thisYearData[1]] += 1;
+        }
+      }
+    });
+
+    Object.keys(heatData).forEach((key) => {
+      const temp = address[key];
+      const tempHeatData = {};
+      tempHeatData.name = temp.name;
+      tempHeatData.value = [];
+      tempHeatData.value.push(temp.lng);
+      tempHeatData.value.push(temp.lat);
+      tempHeatData.value.push(heatData[key]);
+    });
 
     const convertData = function (datas) { // 画出热力图上的圈并标出地名
       const res = [];
@@ -971,7 +1005,7 @@ class ExpertHeatmap extends React.PureComponent { ///
     this.myChart2.on('click', (params) => { // 点击点或线出现红色高亮
       roamNow = this.myChart2.getOption().geo[0].zoom;
       centerNow = this.myChart2.getOption().geo[0].center;
-      console.log("roamNOw", roamNow)
+      console.log('roamNOw', roamNow);
       if (params.componentType === 'series') {
         mapOption.geo.zoom = roamNow;
         mapOption.geo.center = centerNow;
@@ -985,8 +1019,7 @@ class ExpertHeatmap extends React.PureComponent { ///
               } else {
                 this.personList = author[params.name];
               }
-              mapOption.series.push(
-                {
+              mapOption.series.push({
                   type: 'scatter',
                   coordinateSystem: 'bmap',
                   zlevel: 3,
@@ -1030,8 +1063,7 @@ class ExpertHeatmap extends React.PureComponent { ///
                       return ((10 + (val[2] / 4)) / 2);
                     }
                   },
-                },
-              );
+                });
               this.type = 'scatter';
               this.myChart2.setOption(mapOption, true);
             } else if (params.componentSubType === 'lines') {
@@ -1071,8 +1103,7 @@ class ExpertHeatmap extends React.PureComponent { ///
             } else {
               this.personList = author[params.name];
             }
-            mapOption.series.push(
-              {
+            mapOption.series.push({
                 type: 'scatter',
                 coordinateSystem: 'bmap',
                 zlevel: 3,
@@ -1118,8 +1149,7 @@ class ExpertHeatmap extends React.PureComponent { ///
                     return ((10 + (val[2] / 4)) / 2);
                   }
                 },
-              },
-            );
+              });
             this.type = 'scatter';
             this.myChart2.setOption(mapOption, true);
           } else if (params.componentSubType === 'lines') {

@@ -105,7 +105,7 @@ class ExpertTrajectory extends React.Component {
         trigger: 'item',
       },
       bmap: {
-        center: [-169,37],
+        center: [-169,30],
         zoom: 1,
         roam: true,
         mapStyle: {
@@ -113,21 +113,21 @@ class ExpertTrajectory extends React.Component {
             featureType: 'water',
             elementType: 'all',
             stylers: {
-              color: '#044161',
+              color: '#404a59',
             },
           },
             {
               featureType: 'land',
               elementType: 'all',
               stylers: {
-                color: '#004981',
+                color: '#323c48',
               },
             },
             {
               featureType: 'boundary',
               elementType: 'geometry',
               stylers: {
-                color: '#064f85',
+                color: '#565656',
               },
             },
             {
@@ -148,7 +148,7 @@ class ExpertTrajectory extends React.Component {
               featureType: 'highway',
               elementType: 'geometry.fill',
               stylers: {
-                color: '#005b96',
+                color: '#565656',
                 lightness: 1,
               },
             },
@@ -184,7 +184,7 @@ class ExpertTrajectory extends React.Component {
               featureType: 'green',
               elementType: 'all',
               stylers: {
-                color: '#056197',
+                color: '#8a8060',
                 visibility: 'off',
               },
             },
@@ -220,7 +220,7 @@ class ExpertTrajectory extends React.Component {
               featureType: 'boundary',
               elementType: 'geometry.fill',
               stylers: {
-                color: '#029fd4',
+                color: '#fff',
               },
             },
             {

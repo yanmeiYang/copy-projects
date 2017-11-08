@@ -52,6 +52,7 @@ export default {
     },
 
     * findTrajById({ payload }, { call, put }) {
+      console.log('enter kfFind, with query:', payload);
       const { personId, start, end } = payload; //注意是两边的名字要一致，否则错误
       const data = yield call(traDataFindService.findTrajPerson, personId, start, end);
       yield put({ type: 'findTrajByIdSuccess', payload: { data } });
@@ -70,7 +71,39 @@ export default {
      *
      * *********************************
      */
-
+    * heatFind({ payload }, { call, put }) {
+      let data;
+      const { query } = payload;
+      if (query !== '') {
+        console.log("query !== '");
+        data = yield call(traDataFindService.findHeatMap, query);
+      } else {
+        data = yield call(traDataFindService.findTop10000Data);
+      }
+      console.log('dataà1', data);
+      const location = data.locations;
+      const startYear = data.startYear;
+      const endYear = data.endYear;
+      const table = data.table;
+      const authors = data.authors;
+      const authorImage = data.authorImage;
+      const locationName = data.locationName;
+      const hindex = data.h_index;
+      console.log();
+      yield put({
+        type: 'heatFindSuccess',
+        payload: {
+          location,
+          startYear,
+          endYear,
+          table,
+          authors,
+          authorImage,
+          locationName,
+          hindex,
+        }
+      });
+    },
 
     * eventFind({ payload }, { call, put }) {
       let data;
@@ -306,6 +339,7 @@ export default {
     },
 
     eventFindSuccess(state, { payload: { data } }) {
+      data = data.data;
       const allData = [];
       for (let i = 0; i < data.length; i += 1) {
         const tempData = {};

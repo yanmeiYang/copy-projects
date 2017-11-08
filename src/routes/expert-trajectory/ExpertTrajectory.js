@@ -10,7 +10,6 @@ let address = [];
 let addValue = {};
 let myChart; // used for loadScript
 
-
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
 class ExpertTrajectory extends React.Component {
   constructor(props) {

@@ -9,6 +9,7 @@ const scripts = {
   d3v3: '/lib/d3.v3.js',
   d3: '/lib/d3.v4.js',
   echarts: '/lib/echarts.js',
+  BMapForECharts: '/lib/echarts-trajectory/bmap.min.js',
 };
 
 const createLoader = (check) => {
@@ -81,7 +82,7 @@ const loadScript = (url, opts, cb) => {
 
   loadScriptJs(script, restOpts, () => {
     const ret = hasValue(check);
-    if (ret) {
+    if (ret || !check) {
       window.requireJsRegistry[url] = ret;
       if (cb) {
         cb(ret);
@@ -97,9 +98,23 @@ const hasValue = (check) => {
     return window[check];
   } else if (check && check.length === 1) {
     return window[check[0]];
-  } else if (check.length === 2) {
+  } else if (check && check.length === 2) {
     return window[check[0]] && window[check[0]][check[1]];
+  } else {
+    return false;
   }
+};
+
+const loadBMap = (cb) => {
+  loadScript('BMap', { check: 'BMap' }, cb);
+};
+
+const loadBMapForECharts = (cb) => {
+  loadScript('BMapForECharts', { check: 'BMap' }, cb);
+};
+
+const loadGoogleMap = (cb) => {
+  loadScript('GoogleMap', { check: ['google', 'maps'] }, cb);
 };
 
 const loadD3v3 = (cb) => {
@@ -119,4 +134,7 @@ module.exports = {
   loadD3v3,
   loadD3,
   loadECharts,
+  loadBMap,
+  loadGoogleMap,
+  loadBMapForECharts,
 };

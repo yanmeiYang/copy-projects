@@ -1,13 +1,14 @@
 import React from 'react';
 import { connect } from 'dva';
+import loadScript from 'load-script';
 import styles from './ExpertTrajectory.less';
-import { loadD3 } from 'utils/requirejs';
-import { showChart } from './utils/echarts-utils';
+import {
+  showChart,
+} from './utils/echarts-utils';
 
 let address = [];
 let addValue = {};
 let myChart; // used for loadScript
-
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
 class ExpertTrajectory extends React.Component {
@@ -52,10 +53,7 @@ class ExpertTrajectory extends React.Component {
                 const personId = this.props.person.id;
                 const start = 0;
                 const end = 2017;
-                this.props.dispatch({
-                  type: 'expertTrajectory/findTrajById',
-                  payload: { personId, start, end }
-                });
+                this.props.dispatch({ type: 'expertTrajectory/findTrajById', payload: { personId, start, end } });
               }
             });
           });
@@ -72,10 +70,7 @@ class ExpertTrajectory extends React.Component {
               const personId = this.props.person.id;
               const start = 0;
               const end = 2017;
-              this.props.dispatch({
-                type: 'expertTrajectory/findTrajById',
-                payload: { personId, start, end }
-              });
+              this.props.dispatch({ type: 'expertTrajectory/findTrajById', payload: { personId, start, end } });
             }
           });
         });
@@ -84,11 +79,9 @@ class ExpertTrajectory extends React.Component {
   };
 
   showTrajectory = (data) => {
-    console.log("999", addValue, address)
     const points = [];
     const trajData = [];
     for (const key in data.data.trajectories) {
-      console.log("data", data)
       if (data.data.trajectories) {
         let previous = '';
         for (const d of data.data.trajectories[key]) {
@@ -98,7 +91,7 @@ class ExpertTrajectory extends React.Component {
                 [address[d[1]].geo.lng, address[d[1]].geo.lat]],
             });
           }
-          previous = d[1];
+          [, previous] = d;
         }
       }
     }
@@ -108,7 +101,7 @@ class ExpertTrajectory extends React.Component {
         points.push({
           name: address[key].name + addValue[key][0], //可加入城市信息
           value: [address[key].geo.lng, address[key].geo.lat],
-          symbolSize: addValue[key][1] / 2 + 3,
+          symbolSize: (addValue[key][1] / 2) + 3,
           itemStyle: {
             normal: {
               color: '#f56a00',
@@ -134,15 +127,17 @@ class ExpertTrajectory extends React.Component {
     }
     for (const key in data.data.trajectories) {
       if (data.data.trajectories) {
-        let startYear, endYear, start;
+        let startYear;
+        let endYear;
+        let start;
         let previous = '';
         for (const d of data.data.trajectories[key]) {
           if (previous !== d[1] && previous !== '') {
             endYear = parseInt(d[0], 10);
-            addValue[previous][0] = addValue[previous][0] + start + "-" + d[0] + ",";
-            addValue[previous][1] = addValue[previous][1] + endYear - startYear + 1;
+            addValue[previous][0] = `${addValue[previous][0]}${start}-${d[0]},`;
+            addValue[previous][1] = ((addValue[previous][1] + endYear) - startYear) + 1;
             startYear = parseInt(d[0], 10);
-            start = d[0];
+            [start] = d;
             if (!addValue[d[1]]) {
               addValue[d[1]] = [];
               addValue[d[1]][0] = '';
@@ -155,18 +150,17 @@ class ExpertTrajectory extends React.Component {
             addValue[d[1]] = [];
             addValue[d[1]][0] = '';
             addValue[d[1]][1] = 0;
-            start = d[0];
+            [start] = d;
             startYear = parseInt(d[0], 10);
           }
-          previous = d[1];
+          [, previous] = d;
         }
-        addValue[previous][0] = addValue[previous][0] + start + "-" + "now" + ",";
-        addValue[previous][1] = addValue[previous][1] + 2017 - startYear + 1;
+        addValue[previous][0] = `${addValue[previous][0]}${start}-now,`;
+        addValue[previous][1] = ((addValue[previous][1] + 2017) - startYear) + 1;
       }
     }
-    console.log("00000", addValue, address)
     this.showTrajectory(data);
-  }
+  };
 
   render() {
     return (

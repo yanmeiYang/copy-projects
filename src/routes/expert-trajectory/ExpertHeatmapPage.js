@@ -22,38 +22,24 @@ const { Content, Sider } = Layout;
 const { TabPane } = Tabs;
 const tc = applyTheme(styles);
 
-class ExpertHeatmapPage extends React.PureComponent {
+
+@connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
+class ExpertHeatmapPage extends React.Component {
   constructor(props) {
     super(props);
     this.dispatch = this.props.dispatch;
   }
 
   state = {
-    query: '',
-    from: '',
-    to: '',
-    rightType: '',
-    infoTab: 'overview',
-    year: '',
+    query: '', //查询窗口中的默认值
   };
 
   componentWillMount() {
-    const { query, type } = queryString.parse(location.search);
-    if (query) {
-      this.setState({ query });
-    }
-    this.dispatch({
-      type: 'app/layout',
-      payload: {
-        headerSearchBox: { query, onSearch: this.onSearch },
-        showFooter: false,
-      },
+    const { query } = this.state;
+    const q = query || '59a772779ed5db1ed202d190'; //设置一个默认值
+    this.setState({
+      query: q,
     });
-    this.props.dispatch({
-      type: 'expertTrajectory/setRightInfo',
-      payload: { rightInfoType: 'allYear' }
-    });
-    this.findIfQuery(this.state.query);
   }
 
   componentDidMount() {
@@ -62,8 +48,7 @@ class ExpertHeatmapPage extends React.PureComponent {
 
   shouldComponentUpdate(nextProps, nextState) { // 状态改变时判断要不要刷新
     if (nextState.query && nextState.query !== this.state.query) {
-      this.setState({ query: nextState.query });
-      this.findIfQuery(nextState.query);
+      this.callSearchMap(nextState.query);
     }
     return true;
   }
@@ -71,66 +56,25 @@ class ExpertHeatmapPage extends React.PureComponent {
   onSearch = (data) => {
     if (data.query) {
       this.setState({ query: data.query });
-      // TODO change this, 不能用
-      this.props.dispatch(routerRedux.push({
-        pathname: '/expert-heatmap',
-        query: { query: data.query },
-      }));
+      alert('啊！我还不能变啊!等荆榆', data.query);
     }
   };
-
-  onYearChange = (year1) => {
-    this.setState({ year: year1 });
-    this.setState({ infoTab: 'event' });
-  }
-
-  onInfoTabChange = (e) => { // 改变tab的取值
-    this.setState({ infoTab: e });
-  };
-
-  callClusterPerson = (clusterIdList, from1, to1, type) => {
-    this.props.dispatch({
-      type: 'expertTrajectory/listPersonByIds',
-      payload: { ids: clusterIdList }
-    });
-    this.props.dispatch({
-      type: 'expertTrajectory/setRightInfo',
-      payload: { rightInfoType: type }
-    });
-    if (from1 && to1) {
-      this.setState({ from: from1, to: to1 });
-    }
-    if (type === 'scatter' || type === 'lines') {
-      this.setState({ infoTab: 'selection' });
-    }
-  }
 
   callSearchMap = (query) => {
-    this.props.dispatch({ type: 'expertTrajectory/searchPerson', payload: { query } });
-  }
-
-  findIfQuery = (query) => {
-    this.props.dispatch({ type: 'expertTrajectory/heatFind', payload: { query } });
-    this.props.dispatch({ type: 'expertTrajectory/eventFind', payload: { query } });
-  }
-
-  callScroll = () => { // 滑动条滑到最底端
-    const e = document.getElementsByClassName('ant-tabs-content ant-tabs-content-no-animated'); // 滑动条cfco
-    e[0].scrollTop = e[0].scrollHeight;
-  }
+    const rosterId = query;
+    const start = 1900;
+    const end = 2017;
+    const size = 20;
+    this.props.dispatch({ type: 'expertTrajectory/findTrajsByRosterId', payload: { rosterId, start, end, size } });
+  };
 
   render() {
+    const data = this.props.expertTrajectory.heatData;
+    const { query } = this.state;
+
+
     const load = this.props.loading.models.expertTrajectory;
     this.state.rightType = this.props.expertTrajectory.infoZoneIds;
-    const from = this.state.from;
-    const to = this.state.to;
-    const clusterPersons = this.props.expertTrajectory.clusterPersons;
-    const { query } = this.props.match.params;
-    const rightInfos = {
-      scatter: () => (<LeftInfoZoneCluster persons={clusterPersons} />),
-      // lines: () => (<LeftLineInfoCluster persons={clusterPersons} />),
-      lines: () => (<LeftLineInfoCluster persons={clusterPersons} from={from} to={to} />),
-    };
     return (
       <Page contentClass={tc(['ExpertHeatmapPage'])} onSearch={this.onSearch}
             query={query}>
@@ -151,21 +95,18 @@ class ExpertHeatmapPage extends React.PureComponent {
                 </TabPane>
                 <TabPane tab="SELECTION" key="selection">
                   <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
-                  {rightInfos[this.state.rightType] && rightInfos[this.state.rightType]()}
                 </TabPane>
                 <TabPane tab="EVENTS" key="event">
                   <div id="scroll">
                     <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
-                    <EventsForYears qquery={this.state.query}
-                                    onDone={this.callScroll} year={this.state.year} />
+                    <EventsForYears data={data} />
                   </div>
                 </TabPane>
               </Tabs>
             </Sider>
             <Layout className={styles.right}>
               <Content className={styles.content}>
-                {/*<ExpertHeatmap qquery={this.state.query} onPageClick={this.callClusterPerson}*/}
-                               {/*yearChange={this.onYearChange} />*/}
+                <ExpertHeatmap data={data} />
               </Content>
             </Layout>
           </Layout>

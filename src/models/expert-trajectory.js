@@ -14,6 +14,9 @@ export default {
   state: {
     trajData: {},
     results: [],
+    heatData: [],
+
+    /**************************上面的有主啦！*************************************/
     personId: '',
     personInfo: {},
     // geoData: {},
@@ -55,6 +58,12 @@ export default {
       yield put({ type: 'findTrajByIdSuccess', payload: { data } });
     },
 
+    * findTrajsByRosterId({ payload }, { call, put }) {
+      const { rosterId, start, end, size } = payload;
+      const data = yield call(traDataFindService.findTrajsHeat, rosterId, start, end, size);
+      yield put({ type: 'findTrajsByRosterIdSuccess', payload: { data } });
+    },
+
 
     /*********************************
      *
@@ -72,7 +81,6 @@ export default {
         data = yield call(traDataFindService.findTop10000Data);
       }
       console.log('dataà1', data);
-      data = data.data;
       const location = data.locations;
       const startYear = data.startYear;
       const endYear = data.endYear;
@@ -81,6 +89,7 @@ export default {
       const authorImage = data.authorImage;
       const locationName = data.locationName;
       const hindex = data.h_index;
+      console.log();
       yield put({
         type: 'heatFindSuccess',
         payload: {
@@ -92,7 +101,7 @@ export default {
           authorImage,
           locationName,
           hindex,
-        },
+        }
       });
     },
 
@@ -144,7 +153,6 @@ export default {
       const authors = yield select(state => state.expertTrajectory.authors);
       const authorImage = yield select(state => state.expertTrajectory.authorImage);
       const location = yield select(state => state.expertTrajectory.location);
-      console.log('location', location);
       const yearIndex = year - yearStart;
       const data = [];
       const nextYearData = [];
@@ -247,7 +255,7 @@ export default {
           authorImgMid,
           authorImgEast,
           author,
-          author2,
+          author2
         },
       });
     },
@@ -258,6 +266,13 @@ export default {
   reducers: {
     findTrajByIdSuccess(state, { payload: { data } }) {
       return { ...state, trajData: data };
+    },
+
+
+    findTrajsByRosterIdSuccess(state, { payload: { data } }) {
+      console.log(data);
+      console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+      return { ...state, heatData: data };
     },
 
     /***********************************************************************
@@ -299,6 +314,7 @@ export default {
     },
 
     heatFindSuccess(state, { payload: { heatData, location, startYear, authorImage, endYear, table, authors, locationName, hindex } }) {
+      // console.log('startYear', startYear);
       // const location = heatData.locations;
       // const startYear = heatData.startYear;
       // const endYear = heatData.endYear;
@@ -343,7 +359,6 @@ export default {
         allYearMes[allYearMesRaw[i].year] = allYearMesRaw[i].events;
       }
       const newMessage = state.yearMessage;
-      console.log("mewMessage",newMessage)
       newMessage.push({
         year,
         events: allYearMes[year],

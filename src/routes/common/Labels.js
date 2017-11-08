@@ -3,12 +3,12 @@
  */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { message } from 'antd';
+import { message, Modal } from 'antd';
 import { connect } from 'dva';
 import { LabelLine } from 'components/common';
 import { compare } from 'utils/compare';
 
-@connect(({ commonLabels }) => ({ commonLabels }))
+@connect(({ commonLabels, loading }) => ({ commonLabels, loading }))
 export default class Labels extends Component {
   static propTypes = {
     targetId: PropTypes.string,
@@ -39,7 +39,7 @@ export default class Labels extends Component {
     return true;
   }
 
-  onTagChange = (op, tag, finalTag) => {
+  onTagChange = (op, tag) => {
     const { dispatch, targetId, targetEntity } = this.props;
     if (!targetId || !targetEntity) {
       console.error('Must provide property `targetId` and `targetEntity` in component Labels');
@@ -47,43 +47,54 @@ export default class Labels extends Component {
     if (op !== 'remove' && op !== 'add') {
       console.error('Invalid op %s', op);
     }
+
     const payload = { targetEntity, targetId, tag };
     const type = `commonLabels/${op}`;
     const { tags } = this.state;
-    dispatch({ type, payload })
-      .then((success) => {
-        switch (op) {
-          case 'add':
-            if (success) {
-              const newTags = tags || [];
-              if (newTags.indexOf(tag) === -1) {
-                this.setState({ tags: [...newTags, tag] });
+
+    if (op === 'remove') {
+      const that = this;
+      Modal.confirm({
+        title: '删除',
+        content: '确定删除吗？',
+        onOk() {
+          dispatch({ type, payload })
+            .then((success) => {
+              if (success) {
+                const newTags = tags || [];
+                if (newTags.indexOf(tag) !== -1) {
+                  that.setState({ tags: tags.filter(t => t !== tag) });
+                }
+              } else {
+                message.error('删除标签错误');
               }
-            } else {
-              message.error('添加标签错误');
-            }
-            break;
-          case 'remove':
-            if (success) {
-              console.log('Remove this tags',);
-              const newTags = tags || [];
-              if (newTags.indexOf(tag) !== -1) {
-                this.setState({ tags: tags.filter(t => t !== tag) });
-              }
-            } else {
-              message.error('删除标签错误');
-            }
-            break;
-          default:
-        }
+            });
+        },
+        onCancel() {
+        },
       });
+    } else {
+      dispatch({ type, payload })
+        .then((success) => {
+          if (success) {
+            const newTags = tags || [];
+            if (newTags.indexOf(tag) === -1) {
+              this.setState({ tags: [...newTags, tag] });
+            }
+          } else {
+            message.error('添加标签错误');
+          }
+        });
+    }
   };
 
   render() {
     const { tags } = this.state;
+    const load = this.props.loading.effects['commonLabels/add'];
     // const { commonLabels } = this.props;
     return (
-      <LabelLine tags={tags} onTagChange={this.onTagChange} canRemove canAdd confirmOnClose />
+      <LabelLine tags={tags} loading={load} onTagChange={this.onTagChange} canRemove canAdd
+                 confirmOnClose />
     );
   }
 }

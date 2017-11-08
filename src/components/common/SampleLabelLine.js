@@ -6,9 +6,7 @@ import PropTypes from 'prop-types';
 import { Tag, Input, Tooltip, Button } from 'antd';
 import { compareDeep, compare } from 'utils/compare';
 
-const op = { REMOVE: 'remove', ADD: 'add', UPDATE: 'update' };
-
-export default class LabelLine extends Component {
+export default class SampleLabelLine extends Component {
   static propTypes = {
     onTagChange: PropTypes.func,
     canRemove: PropTypes.bool,
@@ -23,10 +21,10 @@ export default class LabelLine extends Component {
   state = {
     tags: [],
     inputVisible: false,
-    inputDisabled: false,
   };
 
   componentWillMount = () => {
+    console.log('componentWillMount=========', this.props.tags);
     this.setState({ tags: this.props.tags });
   };
 
@@ -34,30 +32,34 @@ export default class LabelLine extends Component {
     if (compareDeep(nextProps, this.props, 'tags')) {
       this.setState({ tags: nextProps.tags });
     }
-    if (compare(nextProps, this.props, 'loading')) {
-      this.setState({ inputVisible: nextProps.loading });
-    }
   };
 
   handleClose = (removedTag, e) => {
     e.preventDefault();
-    // const tags = this.state.tags.filter(tag => tag !== removedTag);
+    const tags = this.state.tags.filter(tag => tag !== removedTag);
+    this.setState({ tags });
     if (this.props.onTagChange) {
-      this.props.onTagChange(op.REMOVE, removedTag);
+      this.props.onTagChange(tags);
     }
   };
 
   showInput = () => {
-    this.setState({ inputVisible: true, inputDisabled: false }, () => this.input.focus());
+    this.setState({ inputVisible: true }, () => this.input.focus());
   };
 
   handleInputConfirm = (e) => {
     const newTag = e.target.value;
+    const { tags } = this.state;
+    let newTags = tags || [];
+    if (newTag && newTags.indexOf(newTag) === -1) {
+      newTags = [...newTags, newTag];
+    }
     this.setState({
-      inputDisabled: true,
+      tags: newTags,
+      inputVisible: false,
     });
     if (this.props.onTagChange) {
-      this.props.onTagChange(op.ADD, newTag);
+      this.props.onTagChange(newTags);
     }
   };
 
@@ -66,8 +68,9 @@ export default class LabelLine extends Component {
   };
 
   render() {
-    const { tags, inputVisible, inputDisabled } = this.state;
+    const { tags, inputVisible } = this.state;
     const { canRemove, canAdd } = this.props;
+    console.log(' -- sample label render ------', tags);
     return (
       <div>
         {tags && tags.map((tag, index) => {
@@ -87,7 +90,6 @@ export default class LabelLine extends Component {
             ref={this.saveInputRef}
             type="text"
             size="small"
-            disabled={inputDisabled}
             style={{ width: 78 }}
             onBlur={this.handleInputConfirm}
             onPressEnter={this.handleInputConfirm}

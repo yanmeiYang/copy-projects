@@ -99,7 +99,7 @@ export async function getStatsOfCcfActivities() {
 }
 
 export async function keywordExtraction(payload) {
-  return externalRequest(api.keywordExtraction, {
+  return request(api.keywordExtraction, {
     method: 'POST',
     body: JSON.stringify(payload),
   });

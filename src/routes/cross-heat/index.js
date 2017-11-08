@@ -11,37 +11,27 @@ import { applyTheme } from 'themes';
 import styles from './index.less';
 
 const tc = applyTheme(styles);
-const data = [
-  {
-    title: 'Machine Learning & Energy',
-    id: '59f28cbe9ed5db27414df00f',
-    src: '/funcs/cross-heat/energy.png',
-  },
-  {
-    title: 'Data Mining & Health Care',
-    id: '59f28d179ed5db27414df078',
-    src: '/funcs/cross-heat/heath.png',
-  },
-  {
-    title: 'Artificial Intelligence & Physical Security',
-    id: '59f28dd29ed5db27414df1d8',
-    src: '/funcs/cross-heat/security.png',
-  },
-]
+
+
+const dataTitle = ['科研趋势分析', '交叉热点挖掘', '学者关系探测', '专家地图分布']
+const dataSrc = ['/funcs/cross-heat/trend.png', '/funcs/cross-heat/cross.jpeg', '/funcs/cross-heat/xuezhe.jpeg', '/funcs/cross-heat/map.jpeg']
+const dataEn = ['Trend', 'Cross', 'Relations', 'Maps']
 
 const dataList = {
   title: '科技情报深度洞察',
-  describe: '任意两个科研领域，系统自动计算领域知识图谱，并进行笛卡尔交叉热点深度挖掘，捕捉趋势，预见未来',
+  describe1: '最新科研趋势，潜在交叉热点，深度学者关系，领域专家分布',
+  describe2: '科技情报一网打尽，助您站在巨人肩膀上看未来',
+
 
 }
 
+@connect(({ app, loading, crossHeat }) => ({
+  app,
+  loading,
+  crossHeat,
+}))
 @Auth
-class CrossIndex extends React.Component {
-  goReport = (value) => {
-    this.props.dispatch(routerRedux.push({
-      pathname: '/cross/report/' + value,
-    }));
-  };
+export default class CrossIndex extends React.Component {
   goCreate = () => {
     this.props.dispatch(routerRedux.push({
       pathname: '/cross/startTask',
@@ -62,38 +52,71 @@ class CrossIndex extends React.Component {
             <div className={styles.group}>
 
               <div className={styles.title}>{dataList.title}</div>
-              <div className={styles.descript}>{dataList.describe}</div>
+              <div className={styles.descript}>{dataList.describe1}</div>
+              <div className={styles.descript}>{dataList.describe2}</div>
               <h1 className={styles.create}>
                 <span onClick={this.goCreate}>挖掘热点</span>
                 <span onClick={this.goProject}>我的项目</span>
               </h1>
             </div>
           </div>
-          <h1 className={styles.hCenter}>----经典案例----</h1>
+          <h1 className={styles.hCenter}>----核心服务----</h1>
           <div className={styles.example}>
-            {
-              data.map((item, index) => {
-                return (
-                  <div className={styles.item} key={index}
-                       onClick={this.goReport.bind(this, item.id)}>
-                    <div className={styles.img}>
-                      <img src={item.src}
-                           alt={item.title} />
-                    </div>
-                    <h2>{item.title}</h2>
-                  </div>)
-              })
-            }
+            <a href="/trend?query=communication network" target="_blank">
+              <div className={styles.item}>
+                <div className={styles.img}>
+                  <img src={dataSrc[0]}
+                       alt={dataTitle[0]} />
+                </div>
+                <h2>{dataTitle[0]}</h2>
+                <h2>{dataEn[0]}</h2>
+              </div>
+            </a>
+
+            <a href="/cross/report/5a0155a89ed5db9353752534" target="_blank">
+              <div className={styles.item}
+              >
+                <div className={styles.img}>
+                  <img src={dataSrc[1]}
+                       alt={dataTitle[1]} />
+                </div>
+                <h2>{dataTitle[1]}</h2>
+                <h2>{dataEn[1]}</h2>
+              </div>
+            </a>
+
+            <a href="/relation-graph-page?query=communication network" target="_blank">
+              <div className={styles.item}
+              >
+                <div className={styles.img}>
+                  <img src={dataSrc[2]}
+                       alt={dataTitle[2]} />
+                </div>
+                <h2>{dataTitle[2]}</h2>
+                <h2>{dataEn[2]}</h2>
+              </div>
+            </a>
+
+            <a href="/expert-map?query=communication network" target="_blank">
+              <div className={styles.item}
+              >
+                <div className={styles.img}>
+                  <img src={dataSrc[3]}
+                       alt={dataTitle[3]} />
+                </div>
+                <h2>{dataTitle[3]}</h2>
+                <h2>{dataEn[3]}</h2>
+              </div>
+            </a>
+
+
           </div>
 
         </div>
       </Layout>
-    );
+    )
+      ;
   }
 }
-export default connect(({ app, loading, crossHeat }) => ({
-  app,
-  loading,
-  crossHeat,
-}))(CrossIndex);
+
 

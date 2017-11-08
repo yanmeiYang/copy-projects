@@ -73,6 +73,7 @@ export default {
   'com.PersonList.label.sendEmail': '发送邮件',
   'com.PersonList.label.qrcode': '二维码',
   'com.PersonList.label.feedback': '反馈需求',
+  'com.PersonList.message.noResults': '没有结果',
 
   'com.expertMap.headerLine.label.field': '领域：',
   'com.expertMap.headerLine.label.selectField': '选择领域',

@@ -81,7 +81,15 @@ export default class PersonList extends Component {
 
     return (
       <div className={classnames(styles.personList, className, styles[type])}>
-        {persons && persons.length === 0 && <div className={styles.empty}>No Results</div>}
+        {!persons &&
+        <div className={styles.empty}>
+          <FM id="com.KgSearchBox.placeholder" defaultMessage="请输入姓名或者搜索词" />
+        </div>}
+        {persons && persons.length === 0 &&
+        <div className={styles.empty}>
+          No Results
+          <FM id="com.PersonList.message.noResults" defaultMessage="No Results" />
+        </div>}
 
         {persons && persons.map((person) => {
           const profile = person.profile || {};
@@ -148,8 +156,9 @@ export default class PersonList extends Component {
 
                         {false && person.num_viewed > 0 &&
                         <span className={styles.views}><i
-                          className="fa fa-eye fa-fw" />{person.num_viewed} <FM
-                          id="com.PersonList.label.views" defaultMessage="views" /></span>}
+                          className="fa fa-eye fa-fw" />{person.num_viewed}
+                          <FM id="com.PersonList.label.views" defaultMessage="views" />
+                        </span>}
 
                       </div>
 

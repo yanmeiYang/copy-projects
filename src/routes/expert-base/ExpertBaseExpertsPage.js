@@ -123,6 +123,7 @@ export default class ExpertBaseExpertsPage extends Component {
           defaultSortType={sortKey}
           onSearchBarSearch={this.onSearchBarSearch}
           expertBaseId={sysconfig.ExpertBase}
+          PersonList_BottomZone={theme.PersonList_BottomZone}
           // showSearchBox={this.props.app.headerSearchBox ? false : true}
           showSearchBox={false}
           disableFilter={!query}

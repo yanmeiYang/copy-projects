@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { sysconfig } from 'systems';
 import { Spinner } from 'components';
 import { listPersonByIds } from 'services/person';
-import { compare } from 'utils';
+import { compare, loadScript } from 'utils';
 import * as profileUtils from 'utils/profile-utils';
 import GetBMapLib from './utils/BMapLibGai.js';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
@@ -14,8 +14,6 @@ import styles from './expert-map.less';
 import {
   findPosition,
   getById,
-  waitforBMap,
-  waitforBMapLib,
   toggleRightInfo,
   onResetPersonCard,
   resetRightInfoToGlobal,
@@ -73,7 +71,7 @@ export default class ExpertMap extends PureComponent {
     resetRightInfoToGlobal(dispatch);
     const pro = this.props;
     this.showMap(pro.expertMap.geoData, pro.type, pro.range, pro.hindexRange);
-    window.onresize = () => { //改变窗口大小的时候重新加载地图，防止出现错位问题
+    window.onresize = () => { // 改变窗口大小的时候重新加载地图，防止出现错位问题
       this.showMap(pro.expertMap.geoData, pro.type, pro.range, pro.hindexRange);
     };
   }
@@ -164,7 +162,12 @@ export default class ExpertMap extends PureComponent {
     const mapType = type || '0';
     const filterRange = range || 'all';
 
-    waitforBMap(200, 100, () => {
+    // TODO load script for baidumap.
+
+
+    loadScript('BMap', { check: 'BMap' }, (BMap) => {
+      // });
+      // waitforBMap(200, 100, () => {
       if (!place || !place.results) {
         that.hideLoading();
         return;
@@ -172,12 +175,12 @@ export default class ExpertMap extends PureComponent {
       this.showOverLay();
 
       const conf = this.mapConfig[mapType] || this.mapConfig[0];// init map instance.
-      const map = new window.BMap.Map('allmap', {
+      const map = new BMap.Map('allmap', {
         minZoom: conf.minscale,
         maxZoom: conf.maxscale,
       });
       this.map = map; // set to global;
-      map.centerAndZoom(new window.BMap.Point(
+      map.centerAndZoom(new BMap.Point(
         map1 ? map1.getCenter().lng : sysconfig.CentralPosition.lng,
         map1 ? map1.getCenter().lat : sysconfig.CentralPosition.lat,
       ), conf.scale);
@@ -187,8 +190,8 @@ export default class ExpertMap extends PureComponent {
 
       if (mapType === '1') {
         bigAreaConfig.map((ac) => {
-          map.addOverlay(new window.BMap.Label(ac.label, {
-            position: new window.BMap.Point(ac.x, ac.y),
+          map.addOverlay(new BMap.Label(ac.label, {
+            position: new BMap.Point(ac.x, ac.y),
           }));
           return false;
         });
@@ -214,7 +217,7 @@ export default class ExpertMap extends PureComponent {
         ids.push(pr.id);
         dataMap[pr.id] = pr;
         const newplace = findPosition(mapType, pr);
-        const label = new window.BMap.Label(`<div>${pr.name}</div><div style='display: none;'>${pr.id}</div>`);
+        const label = new BMap.Label(`<div>${pr.name}</div><div style='display: none;'>${pr.id}</div>`);
         label.setStyle({
           color: 'black',
           fontSize: '12px',
@@ -226,7 +229,7 @@ export default class ExpertMap extends PureComponent {
           textShadow: '1px 1px 2px white, -1px -1px 2px white',
           fontStyle: 'italic',
         });
-        label.setOffset(new window.BMap.Size(-55.5, 25));
+        label.setOffset(new BMap.Size(-55.5, 25));
 
         // 只有经纬度不为空或者0的时候才显示，否则丢弃
         if (newplace && newplace[1] && (newplace[1] !== 0 && newplace[1] !== 0)) {
@@ -246,16 +249,16 @@ export default class ExpertMap extends PureComponent {
           }
 
           if (include) {
-            const marker = new window.BMap.Marker(
-              new window.BMap.Point(newplace[1], newplace[0]), // 这里经度和纬度是反着的
+            const marker = new BMap.Marker(
+              new BMap.Point(newplace[1], newplace[0]), // 这里经度和纬度是反着的
             );
             marker.setLabel(label);
             marker.setTop();
-            marker.setIcon(new window.BMap.Icon(
+            marker.setIcon(new BMap.Icon(
               '/images/map/marker_blue_sprite1.png',
-              new window.BMap.Size(19, 50), {
-                offset: new window.BMap.Size(0, 0), // 指定定位位置
-                imageOffset: new window.BMap.Size(0, 0), // 设置图片偏移
+              new BMap.Size(19, 50), {
+                offset: new BMap.Size(0, 0), // 指定定位位置
+                imageOffset: new BMap.Size(0, 0), // 设置图片偏移
               },
             ));
             pId[counts] = pr.id;
@@ -268,16 +271,17 @@ export default class ExpertMap extends PureComponent {
       // this.hideLoading();
 
       // Add Markers
-      waitforBMapLib(
-        200, 100,
-        () => {
-          const markerClusterer = new window.BMapLib.MarkerClusterer(map, {});
-          markerClusterer.addMarkers(markers);
-          for (let m = 0; m < markers.length; m += 1) {
-            this.addMouseoverHandler(markers[m], pId[m]);
-          }
-        }, showLoadErrorMessage,
-      );
+      // loadScript('BMapLib', { check: 'BMapLib' }, (BMapLib) => {
+      // waitforBMapLib(
+      // 200, 100,
+      // () => {
+      const markerClusterer = new window.BMapLib.MarkerClusterer(map, {});
+      markerClusterer.addMarkers(markers);
+      for (let m = 0; m < markers.length; m += 1) {
+        this.addMouseoverHandler(markers[m], pId[m]);
+      }
+      // }, showLoadErrorMessage,
+      // );
 
       that.hideLoading();
       //cache image

@@ -17,6 +17,7 @@ export default class Labels extends Component {
 
   state = {
     tags: [],
+    addStatus: null,
   };
 
   componentWillMount = () => {
@@ -31,11 +32,9 @@ export default class Labels extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    // if (compare(
-    //     this.props, nextProps,
-    //   )) {
-    //   return true;
-    // }
+    if (compare(this.props, nextProps, 'loading')) {
+      return false;
+    }
     return true;
   }
 
@@ -81,17 +80,20 @@ export default class Labels extends Component {
             if (newTags.indexOf(tag) === -1) {
               this.setState({ tags: [...newTags, tag] });
             }
+            this.setState({ addStatus: true });
           } else {
             message.error('添加标签错误');
+            this.setState({ addStatus: false });
           }
         });
     }
   };
 
   render() {
-    const { tags } = this.state;
+    const { tags, addStatus } = this.state;
     const load = this.props.loading.effects['commonLabels/add'];
     // const { commonLabels } = this.props;
+    console.log('add tag ', addStatus);
     return (
       <LabelLine tags={tags} loading={load} onTagChange={this.onTagChange} canRemove canAdd
                  confirmOnClose />

@@ -9,12 +9,6 @@ export default {
     component: () => import('./ExpertMapPage'),
   },
 
-  ExpertMapGoogle: {
-    path: '/expert-googlemap',
-    models: () => [import('models/expert-map')],
-    component: () => import('./ExpertGoogleMapPage'),
-  },
-
   ExpertTrajectoryPage: {
     path: '/expert-trajectory',
     models: () => [import('models/expert-trajectory')],
@@ -27,9 +21,4 @@ export default {
     component: () => import('routes/expert-trajectory/ExpertHeatmapPage'),
   },
 
-  // ExpertMapDispatch: {
-  //   path: '/dispatch-expert-map',
-  //   models: () => [import('models/expert-map')],
-  //   component: () => import('./expert-map-dispatch'),
-  // },
 };

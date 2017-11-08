@@ -84,7 +84,6 @@ const RouterRegistry = [
 
   // expert map
   map.ExpertMap,
-  map.ExpertMapGoogle,
   map.ExpertTrajectoryPage,
   map.ExpertHeatmapPage,
 
@@ -120,6 +119,7 @@ const RouterRegistry2b = [
   route2b.IndexPage2b,
   route2b.Login2b,
   route2b.EmailTemplate,
+  route2b.UserCreate,
 ];
 
 const RouterJSXFunc = (history, app, routes, RootComponent) => {

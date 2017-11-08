@@ -46,7 +46,7 @@ export default class SearchPage extends Component {
     console.log('Enter query is ', data);
     const newOffset = data.offset || 0;
     const newSize = data.size || sysconfig.MainListSize;
-    const encodedQuery = strings.encodeAdvancedQuery(data.query);
+    const encodedQuery = strings.encodeAdvancedQuery(data.query) || '-';
     const pathname = `/${sysconfig.SearchPagePrefix}/${encodedQuery}/${newOffset}/${newSize}`;
     console.log('=========== encode query is: ', pathname);
     this.dispatch(routerRedux.push({ pathname }));

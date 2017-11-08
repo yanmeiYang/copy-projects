@@ -12,6 +12,8 @@ import { config, system } from 'utils';
 import { saveLocale } from 'utils/locale';
 import styles from './2bIndex.less';
 import locales from '../../locales';
+import SystemInfo from './SystemInfo/SystemInfo';
+import UserLists from './user/UserList';
 
 @connect(({ app }) => ({ app }))
 @RequireGod
@@ -84,7 +86,8 @@ export default class SystemConfig extends React.Component {
               <Link to="/rcd">Recommendation</Link>
             </li>
           </ul>
-
+          <SystemInfo />
+          <UserLists />
           TODO quick choose system.<br />
           TODO on error redirect.<br />
         </div>

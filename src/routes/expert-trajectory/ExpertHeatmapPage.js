@@ -75,7 +75,6 @@ class ExpertHeatmapPage extends React.Component {
 
     const load = this.props.loading.models.expertTrajectory;
     this.state.rightType = this.props.expertTrajectory.infoZoneIds;
-    console.log(query);
     return (
       <Page contentClass={tc(['ExpertHeatmapPage'])} onSearch={this.onSearch}
             query={query}>

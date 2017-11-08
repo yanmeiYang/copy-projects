@@ -56,7 +56,6 @@ class PersonComment extends React.Component {
 
   putMessage = () => {
     this.setState({ isComment: !this.state.isComment });
-    this.setState({});
   };
 
   handleSubmit = (e) => {
@@ -159,7 +158,7 @@ class PersonComment extends React.Component {
                           activeClass="CKeidtorStyle"
                           content={this.state.content}
                           onChange={this.getContent.bind(this)}
-                          scriptUrl="https://cdn.ckeditor.com/4.6.2/basic/ckeditor.js"
+                          scriptUrl="/lib/ckeditor/ckeditor.js"
                         />
                         <div className={styles.ckEditorSubmitBtn}>
                           <Button

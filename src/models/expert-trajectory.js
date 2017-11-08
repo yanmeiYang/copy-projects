@@ -14,6 +14,9 @@ export default {
   state: {
     trajData: {},
     results: [],
+    heatData: [],
+
+    /**************************上面的有主啦！*************************************/
     personId: '',
     personInfo: {},
     // geoData: {},
@@ -49,10 +52,15 @@ export default {
     },
 
     * findTrajById({ payload }, { call, put }) {
-      console.log('enter kfFind, with query:', payload);
       const { personId, start, end } = payload; //注意是两边的名字要一致，否则错误
       const data = yield call(traDataFindService.findTrajPerson, personId, start, end);
       yield put({ type: 'findTrajByIdSuccess', payload: { data } });
+    },
+
+    * findTrajsByRosterId({ payload }, { call, put }) {
+      const { rosterId, start, end, size } = payload;
+      const data = yield call(traDataFindService.findTrajsHeat, rosterId, start, end, size);
+      yield put({ type: 'findTrajsByRosterIdSuccess', payload: { data } });
     },
 
 
@@ -62,39 +70,7 @@ export default {
      *
      * *********************************
      */
-    * heatFind({ payload }, { call, put }) {
-      let data;
-      const { query } = payload;
-      if (query !== '') {
-        console.log("query !== '");
-        data = yield call(traDataFindService.findHeatMap, query);
-      } else {
-        data = yield call(traDataFindService.findTop10000Data);
-      }
-      console.log('dataà1', data);
-      const location = data.locations;
-      const startYear = data.startYear;
-      const endYear = data.endYear;
-      const table = data.table;
-      const authors = data.authors;
-      const authorImage = data.authorImage;
-      const locationName = data.locationName;
-      const hindex = data.h_index;
-      console.log();
-      yield put({
-        type: 'heatFindSuccess',
-        payload: {
-          location,
-          startYear,
-          endYear,
-          table,
-          authors,
-          authorImage,
-          locationName,
-          hindex,
-        }
-      });
-    },
+
 
     * eventFind({ payload }, { call, put }) {
       let data;
@@ -257,6 +233,13 @@ export default {
   reducers: {
     findTrajByIdSuccess(state, { payload: { data } }) {
       return { ...state, trajData: data };
+    },
+
+
+    findTrajsByRosterIdSuccess(state, { payload: { data } }) {
+      console.log(data);
+      console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+      return { ...state, heatData: data };
     },
 
     /***********************************************************************

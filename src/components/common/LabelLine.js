@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Tag, Input, Tooltip, Button } from 'antd';
-import { compareDeep } from 'utils/compare';
+import { compareDeep, compare } from 'utils/compare';
 
 const op = { REMOVE: 'remove', ADD: 'add', UPDATE: 'update' };
 
@@ -13,18 +13,17 @@ export default class LabelLine extends Component {
     onTagChange: PropTypes.func,
     canRemove: PropTypes.bool,
     canAdd: PropTypes.bool,
-    confirmOnClose: PropTypes.bool,
   };
 
   static defaultProps = {
     canRemove: false,
     canAdd: false,
-    confirmOnClose: false,
   };
 
   state = {
     tags: [],
     inputVisible: false,
+    inputDisabled: false,
   };
 
   componentWillMount = () => {
@@ -35,33 +34,35 @@ export default class LabelLine extends Component {
     if (compareDeep(nextProps, this.props, 'tags')) {
       this.setState({ tags: nextProps.tags });
     }
+    console.log('-----------',nextProps.loading, this.props.loading );
+    if (compare(nextProps, this.props, 'loading')) {
+      this.setState({ inputVisible: nextProps.loading });
+    } else if (nextProps.loading === this.props.loading && this.props.loading === false) {
+      this.setState({ inputVisible: nextProps.loading });
+    }
   };
 
-  handleClose = (removedTag) => {
-    const tags = this.state.tags.filter(tag => tag !== removedTag);
-    this.setState({ tags });
+  handleClose = (removedTag, e) => {
+    e.preventDefault();
+    // const tags = this.state.tags.filter(tag => tag !== removedTag);
     if (this.props.onTagChange) {
-      this.props.onTagChange(op.REMOVE, removedTag, tags);
+      this.props.onTagChange(op.REMOVE, removedTag);
     }
   };
 
   showInput = () => {
-    this.setState({ inputVisible: true }, () => this.input.focus());
+    this.setState({ inputVisible: true, inputDisabled: false }, () => this.input.focus());
   };
 
   handleInputConfirm = (e) => {
     const newTag = e.target.value;
-    const { tags } = this.state;
-    let newTags = tags || [];
-    if (newTag && newTags.indexOf(newTag) === -1) {
-      newTags = [...newTags, newTag];
-    }
-    this.setState({
-      tags: newTags,
-      inputVisible: false,
-    });
-    if (this.props.onTagChange) {
-      this.props.onTagChange(op.ADD, newTag, newTags);
+    if (newTag !== '' && newTag) {
+      this.setState({
+        inputDisabled: true,
+      });
+      if (this.props.onTagChange) {
+        this.props.onTagChange(op.ADD, newTag);
+      }
     }
   };
 
@@ -70,7 +71,7 @@ export default class LabelLine extends Component {
   };
 
   render() {
-    const { tags, inputVisible } = this.state;
+    const { tags, inputVisible, inputDisabled } = this.state;
     const { canRemove, canAdd } = this.props;
     return (
       <div>
@@ -80,7 +81,7 @@ export default class LabelLine extends Component {
           // TODO 使用 css 来显示...
           const tagElem = (
             <Tag key={tag} color="#2db7f5" closable={closable}
-                 afterClose={this.handleClose.bind(this, tag)}>
+                 onClose={this.handleClose.bind(this, tag)}>
               {isLongTag ? `${tag.slice(0, 20)}...` : tag}
             </Tag>
           );
@@ -91,6 +92,7 @@ export default class LabelLine extends Component {
             ref={this.saveInputRef}
             type="text"
             size="small"
+            disabled={inputDisabled}
             style={{ width: 78 }}
             onBlur={this.handleInputConfirm}
             onPressEnter={this.handleInputConfirm}

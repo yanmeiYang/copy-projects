@@ -30,7 +30,6 @@ class ExpertHeatmapPage extends React.PureComponent {
 
   state = {
     query: '',
-    mapType: 'google',
     from: '',
     to: '',
     rightType: '',
@@ -42,9 +41,6 @@ class ExpertHeatmapPage extends React.PureComponent {
     const { query, type } = queryString.parse(location.search);
     if (query) {
       this.setState({ query });
-    }
-    if (type) {
-      this.setState({ mapType: type || 'google' });
     }
     this.dispatch({
       type: 'app/layout',
@@ -153,12 +149,10 @@ class ExpertHeatmapPage extends React.PureComponent {
                   <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
                   <LeftInfoAll />
                 </TabPane>
-
                 <TabPane tab="SELECTION" key="selection">
                   <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
                   {rightInfos[this.state.rightType] && rightInfos[this.state.rightType]()}
                 </TabPane>
-
                 <TabPane tab="EVENTS" key="event">
                   <div id="scroll">
                     <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
@@ -168,16 +162,13 @@ class ExpertHeatmapPage extends React.PureComponent {
                 </TabPane>
               </Tabs>
             </Sider>
-
             <Layout className={styles.right}>
               <Content className={styles.content}>
-                <ExpertHeatmap qquery={this.state.query} onPageClick={this.callClusterPerson}
-                               yearChange={this.onYearChange} />
+                {/*<ExpertHeatmap qquery={this.state.query} onPageClick={this.callClusterPerson}*/}
+                               {/*yearChange={this.onYearChange} />*/}
               </Content>
             </Layout>
           </Layout>
-
-
         </div>
       </Page>
     );

@@ -72,7 +72,8 @@ export default {
   'com.PersonList.label.homepage': 'Homepage',
   'com.PersonList.label.sendEmail': 'Send Email',
   'com.PersonList.label.qrcode': 'QR Code',
-  'com.PersonList.label.feedback': 'Feedback required',
+  'com.PersonList.label.feedback': 'Feedback',
+  'com.PersonList.message.noResults': 'No Results',
 
   'com.expertMap.headerLine.label.field': 'Field:',
   'com.expertMap.headerLine.label.selectField': 'Choose the field',

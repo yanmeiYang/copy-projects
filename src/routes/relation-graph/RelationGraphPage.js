@@ -27,7 +27,7 @@ export default class RelationGraphPage extends React.Component {
 
   componentWillMount() {
     let { query } = queryString.parse(location.search);
-    query = query || ' ';
+    query = query || '-';
     // const query = this.getQueryFromURL(this.props) || 'data mining';
     // this.dispatch({
     //   type: 'app/layout',

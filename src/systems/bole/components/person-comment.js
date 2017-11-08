@@ -29,20 +29,14 @@ class PersonComment extends React.Component {
   shouldComponentUpdate(nextProps, nextStates) {
     if (compare(
         nextProps, this.props,
-        'personComments', 'isComment', 'content', 'flag',
+        'personComments', 'tags',
       )) {
       return true;
     }
-    if (nextProps.personComments !== this.props.personComments) {
-      return true;
-    }
-    if (nextStates.isComment !== this.state.isComment) {
-      return true;
-    }
-    if (nextStates.content !== this.state.content) {
-      return true;
-    }
-    if (nextStates.flag !== this.state.flag) {
+    if (compare(
+        nextStates, this.state,
+        'isComment', 'content', 'flag',
+      )) {
       return true;
     }
     return false;
@@ -62,7 +56,6 @@ class PersonComment extends React.Component {
 
   putMessage = () => {
     this.setState({ isComment: !this.state.isComment });
-    this.setState({});
   };
 
   handleSubmit = (e) => {
@@ -165,7 +158,7 @@ class PersonComment extends React.Component {
                           activeClass="CKeidtorStyle"
                           content={this.state.content}
                           onChange={this.getContent.bind(this)}
-                          scriptUrl="https://cdn.ckeditor.com/4.6.2/basic/ckeditor.js"
+                          scriptUrl="/lib/ckeditor/ckeditor.js"
                         />
                         <div className={styles.ckEditorSubmitBtn}>
                           <Button

@@ -13,7 +13,7 @@ export default {
   namespace: 'search',
 
   state: {
-    results: [],
+    results: null,
     topic: null, // search 右边的 topic
     aggs: [],
     filters: {},
@@ -75,7 +75,7 @@ export default {
   effects: {
     // 搜索全球专家时，使用old service。
     // 使用智库搜索，并且排序算法不是contribute的时候，使用新的搜索API。
-    searchPerson: [function* ({ payload }, { call, put, select }) {
+    searchPerson: [function*({ payload }, { call, put, select }) {
       const { query, offset, size, filters, sort, total } = payload;
       const noTotalFilters = {};
       for (const [key, item] of Object.entries(filters)) {
@@ -119,7 +119,7 @@ export default {
             });
           }
         }
-        yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data } });
+        yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data, query } });
       } else if (data.data && data.data.result) {
         yield put({ type: 'searchPersonSuccess', payload: { data: data.data, query, total } });
       } else {
@@ -217,7 +217,7 @@ export default {
       return { ...state, sortKey: key };
     },
 
-    searchPersonSuccess(state, { payload: { data, total } }) {
+    searchPersonSuccess(state, { payload: { data, query, total } }) {
       if (!data) {
         return state;
       }
@@ -227,12 +227,12 @@ export default {
       // console.log('::', toNextPersons(result));
       return {
         ...state,
-        results: bridge.toNextPersons(result),
+        results: query === '-' ? null : bridge.toNextPersons(result),
         pagination: { pageSize: state.pagination.pageSize, total: currentTotal, current },
       };
     },
 
-    nextSearchPersonSuccess(state, { payload: { data } }) {
+    nextSearchPersonSuccess(state, { payload: { data, query } }) {
       if (!data) {
         return state;
       }
@@ -244,7 +244,7 @@ export default {
       const { translatedLanguage, translatedText } = data;
       const newState = {
         ...state,
-        results: items,
+        results: query === '-' ? null : items,
         pagination: { pageSize: state.pagination.pageSize, total, current },
         aggs: aggregation,
         translatedLanguage,

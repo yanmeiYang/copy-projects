@@ -3,7 +3,10 @@ const apiDomain = 'https://api.aminer.org';
 const nextAPIURLLocalhost = 'http://localhost:4005';
 const nextAPIURLOnlineBeta = 'http://e30c17034d854ef4b1dac3d7b5874d3b-cn-beijing.alicloudapi.com';
 const nextAPIURLOnlineProduction = 'https://apiv2.aminer.org';
-const nextAPIURL = process.env.NODE_ENV !== 'production' ? nextAPIURLLocalhost :
+const nextAPIURL = process.env.NODE_ENV !== 'production' ?
+  nextAPIURLOnlineProduction
+  // nextAPIURLLocalhost
+  :
   // nextAPIURLOnlineBeta;
   nextAPIURLOnlineProduction;
 
@@ -20,10 +23,11 @@ module.exports = {
   strict: false, // 如果是strict模式，所有向下兼容的东西都会报错。
 
   openPages: ['/login'],
+  JSONP: [],
   CORS: [
-    nextAPIURL,
-    'https://dc_api.aminer.org',
-    'https://cross1.aminer.org',
+    // nextAPIURL,
+    // 'https://dc_api.aminer.org',
+    // 'https://cross1.aminer.org',
   ],
   YQL: [],
 
@@ -101,7 +105,7 @@ module.exports = {
     // 已知 key 获取 一个 score
     getActivityScore: `${baseURL}/activity/score/:uid/:src/:actid/:aid/:key`,
     getStatsOfCcfActivities: `${baseURL}/activity/admin/stats`,
-    keywordExtraction: `${baseURL}http://nlp.newsminer.net/rest/nlp/keywords`,
+    keywordExtraction: 'http://nlp.newsminer.net/rest/nlp/keywords',
     getTopMentionedTags: `${baseURL}/activity/tags/:src/:num`,
 
     /* person */

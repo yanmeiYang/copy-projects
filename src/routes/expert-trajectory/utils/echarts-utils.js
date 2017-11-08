@@ -1,4 +1,15 @@
 
+const setBMap = (myChart) => {
+  console.log(myChart);
+  const map = myChart.getModel().getComponent('bmap').getBMap();
+  const navigationControl = new window.BMap.NavigationControl({ // 添加带有定位的导航控件
+    anchor: 'BMAP_ANCHOR_TOP_LEFT',// 靠左上角位置
+    type: 'BMAP_NAVIGATION_CONTROL_LARGE',// LARGE类型
+    enableGeolocation: true,// 启用显示定位
+  });
+  map.addControl(navigationControl);
+};
+
 
 const showChart = (myChart) => { // 功能起始函数
   const option = {
@@ -16,7 +27,7 @@ const showChart = (myChart) => { // 功能起始函数
       trigger: 'item',
     },
     bmap: {
-      center: [104.114129, 37.550339],
+      center: [34.45, 31.3],
       zoom: 1,
       roam: true,
       mapStyle: {
@@ -203,8 +214,10 @@ const showChart = (myChart) => { // 功能起始函数
     }],
   };
   myChart.setOption(option);
+  setBMap(myChart);
 };
 
 module.exports = {
   showChart,
+  setBMap,
 };

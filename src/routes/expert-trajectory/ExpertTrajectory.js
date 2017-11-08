@@ -50,6 +50,14 @@ class ExpertTrajectory extends React.Component {
             clearInterval(echartsInterval);
             myChart = window.echarts.init(document.getElementById(divId));
             showChart(myChart);
+            if (this.props.person === '') {
+              console.log('Try to clcik one person!');
+            } else { //为以后将ExpertTrajectory做组件使用
+              const personId = this.props.person.id;
+              const start = 0;
+              const end = 2017;
+              this.props.dispatch({ type: 'expertTrajectory/findTrajById', payload: { personId, start, end } });
+            }
           });
         });
       }

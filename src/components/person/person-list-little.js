@@ -21,16 +21,9 @@ class PersonListLittle extends React.PureComponent {
     this.personLabel = props.personLabel;
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps.persons === this.props.persons) {
-      return false;
-    }
-    return true;
-  }
-
-  onClick = (id) => {
+  onClick = (person) => {
     if (this.props.onClick) { // onClick是个参数，判断组件里面是否有这个对象
-      this.props.onClick(id); //有的话将参数传递进去
+      this.props.onClick(person); //有的话将参数传递进去
     }
   };
 
@@ -49,7 +42,7 @@ class PersonListLittle extends React.PureComponent {
             const aff = profileUtils.displayAff(person);
 
             return (
-              <div key={person.id} role="presentation" className="item" onClick={this.onClick.bind(this, person.id)}>
+              <div key={person.id} role="presentation" className="item" onClick={this.onClick.bind(this, person)}>
                 <div className="avatar_zone">
                   <img
                     src={profileUtils.getAvatar(person.avatar, '', 90)}

@@ -24,6 +24,7 @@ class ExpertTrajectoryPage extends React.Component {
 
   state = {
     query: '', //查询窗口中的默认值
+    cperson: '', //当前选择的人
   };
 
   componentWillMount() {
@@ -32,7 +33,7 @@ class ExpertTrajectoryPage extends React.Component {
     this.setState({
       query: q,
     });
-    this.dispatch({
+    this.dispatch({ //设置搜索框的内容
       type: 'app/layout',
       payload: {
         headerSearchBox: { query, onSearch: this.onSearch },
@@ -66,9 +67,11 @@ class ExpertTrajectoryPage extends React.Component {
     }
   };
 
-  onPersonClick = (start, end, personId) => {
+  onPersonClick = (start, end, person) => {
     //这里的参数的名字要和model里面的一致
+    const personId = person.id;
     this.props.dispatch({ type: 'expertTrajectory/findTrajById', payload: { personId, start, end } });
+    this.setState({ cperson: person });
   };
 
   callSearchMap = (query) => {
@@ -91,7 +94,7 @@ class ExpertTrajectoryPage extends React.Component {
             </Sider>
             <Layout className={styles.right}>
               <Content className={styles.content}>
-                <ExpertTrajectory />
+                <ExpertTrajectory person={this.state.cperson} />
               </Content>
             </Layout>
           </Layout>

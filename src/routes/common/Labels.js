@@ -30,15 +30,6 @@ export default class Labels extends Component {
     }
   };
 
-  shouldComponentUpdate(nextProps, nextState) {
-    // if (compare(
-    //     this.props, nextProps,
-    //   )) {
-    //   return true;
-    // }
-    return true;
-  }
-
   onTagChange = (op, tag, finalTag) => {
     const { dispatch, targetId, targetEntity } = this.props;
     if (!targetId || !targetEntity) {

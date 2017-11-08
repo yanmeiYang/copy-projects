@@ -9,7 +9,7 @@ import user from 'routes/user/router-user';
 import auth from 'routes/auth/router-auth';
 import admin from 'routes/admin/router-admin';
 // import rcd from 'routes/recommendation/router-rcd';
-// import map from 'routes/expert-map/router-map';
+import map from 'routes/expert-map/router-map';
 // import trend_new from 'routes/trend/router-trend';
 // import seminar from 'routes/seminar/router-seminar';
 // import tencent from 'routes/third-login/router';
@@ -73,11 +73,9 @@ const routes = [
   // seminar.SeminarByEdit,
 
   // expert map
-  // map.ExpertMap,
-  // map.ExpertMapGoogle,
+  map.ExpertMap,
   // map.ExpertTrajectoryPage,
   // map.ExpertHeatmapPage,
-  // map.ExpertMapDispatch,
 
   // Relation-Graph, KnowledgeGraph, TrendPrediction, etc...
   // core.RelationGraphPage, // TODO BUG

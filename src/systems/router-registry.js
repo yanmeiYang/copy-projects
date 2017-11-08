@@ -84,7 +84,6 @@ const RouterRegistry = [
 
   // expert map
   map.ExpertMap,
-  map.ExpertMapGoogle,
   map.ExpertTrajectoryPage,
   map.ExpertHeatmapPage,
 

@@ -298,26 +298,26 @@ function getById(id) {
   return document.getElementById(id);
 }
 
-function waitforBMap(tryTimes, interval, success, failed) {
-  let n = 0;
-  const mapInterval = setInterval(() => {
-    if (typeof (BMap) === 'undefined') {
-      // console.log('wait for BMap');
-      n += 1;
-      if (n >= tryTimes) {
-        clearInterval(mapInterval);
-        if (failed) {
-          failed();
-        }
-      }
-    } else {
-      clearInterval(mapInterval);
-      if (success) {
-        success(window.BMap);
-      }
-    }
-  }, interval);
-}
+// function waitforBMap(tryTimes, interval, success, failed) {
+//   let n = 0;
+//   const mapInterval = setInterval(() => {
+//     if (typeof (BMap) === 'undefined') {
+//       // console.log('wait for BMap');
+//       n += 1;
+//       if (n >= tryTimes) {
+//         clearInterval(mapInterval);
+//         if (failed) {
+//           failed();
+//         }
+//       }
+//     } else {
+//       clearInterval(mapInterval);
+//       if (success) {
+//         success(window.BMap);
+//       }
+//     }
+//   }, interval);
+// }
 
 function insertAfter(newElement, targetElement) {
   const parent = targetElement.parentNode;
@@ -328,25 +328,25 @@ function insertAfter(newElement, targetElement) {
   }
 }
 
-function waitforBMapLib(tryTimes, interval, success, failed) {
-  let n = 0;
-  const mapLibInterval = setInterval(() => {
-    if (typeof (BMapLib) === 'undefined') {
-      n += 1;
-      if (n >= tryTimes) {
-        clearInterval(mapLibInterval);
-        if (failed) {
-          failed();
-        }
-      }
-    } else {
-      clearInterval(mapLibInterval);
-      if (success) {
-        success(window.BMapLib);
-      }
-    }
-  }, interval);
-}
+// function waitforBMapLib(tryTimes, interval, success, failed) {
+//   let n = 0;
+//   const mapLibInterval = setInterval(() => {
+//     if (typeof (BMapLib) === 'undefined') {
+//       n += 1;
+//       if (n >= tryTimes) {
+//         clearInterval(mapLibInterval);
+//         if (failed) {
+//           failed();
+//         }
+//       }
+//     } else {
+//       clearInterval(mapLibInterval);
+//       if (success) {
+//         success(window.BMapLib);
+//       }
+//     }
+//   }, interval);
+// }
 
 function showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch, infoIds, callback) {
   const ishere = getById('panel');
@@ -711,7 +711,7 @@ const bigAreaConfig = [
 
 
 module.exports = {
-  findPosition, getById, waitforBMap, waitforBMapLib,
+  findPosition, getById,
   insertAfter, resetRightInfoToGlobal,
   onResetPersonCard, detachCluster,
   showTopImageDiv, toggleRightInfo, showTopImages,

@@ -2,6 +2,7 @@
 import { sysconfig } from 'systems';
 import * as authService from 'services/auth';
 import * as expertBaseService from 'services/expert-base';
+import { takeLatest } from '../helper';
 
 export default {
   namespace: 'user',
@@ -19,12 +20,15 @@ export default {
   subscriptions: {},
   effects: {
     * createUser({ payload }, { call, put }) {
-      const { email, first_name, gender, last_name, position, sub, password, role, source } = payload;
-      const { data } = yield call(authService.createUser, email, first_name, gender,
-        last_name, position, sub, password, source);
+      const { email, first_name, gender,
+        last_name, position, sub, password, role, source } = payload;
+      const { data } = yield call(
+        authService.createUser,
+        email, first_name, gender, last_name, position, sub, password, source,
+        );
       yield put({ type: 'createUserSuccess', payload: data });
       if (data.status) {
-        const uid = data.uid;
+        const { uid } = data;
         yield call(authService.invoke, uid, sysconfig.SOURCE);
         if (sysconfig.ShowRegisteredRole) {
           const arr = role.split('_');
@@ -38,7 +42,6 @@ export default {
         const ids = sysconfig.Register_AddPrivilegesToExpertBaseIDs;
         if (ids && ids.length > 0) {
           for (const id of ids) {
-            console.log('================================ dAdd privileges to eb: ', id, first_name);
             const { data } = yield call(
               expertBaseService.rosterManage,
               {
@@ -55,11 +58,11 @@ export default {
         }
       }
     },
-    * listUsersByRole({ payload }, { call, put }) {
+    listUsersByRole: [function* ({ payload }, { call, put }) {
       const { offset, size, source } = payload;
       const { data } = yield call(authService.listUsersByRole, offset, size, source);
       yield put({ type: 'getListUserByRoleSuccess', payload: data });
-    },
+    }, takeLatest],
   },
   reducers: {
     createUserSuccess(state) {

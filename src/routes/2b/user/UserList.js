@@ -46,7 +46,6 @@ export default class UserList extends Component {
   };
 
   render() {
-    console.log('3345667');
     const { listUsers } = this.props.user;
     return (
       <div className={styles.userList}>
@@ -72,7 +71,8 @@ export default class UserList extends Component {
               bordered
               size="small"
               pagination={false}
-              rowKey="email"
+              rowKey={(record) => record.id}
+
             >
               <Column title="姓名" dataIndex="display_name" key="name" />
               <Column title="邮箱" dataIndex="email" key="email" />

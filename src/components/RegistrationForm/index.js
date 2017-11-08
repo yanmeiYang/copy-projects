@@ -19,10 +19,11 @@ import { getLocalToken, saveLocalToken } from 'utils/auth';
 import { config } from 'utils';
 import { sysconfig } from 'systems';
 import CanlendarInForm from 'components/seminar/calendar';
-import { LabelLine } from 'components/common';
+import { SampleLabelLine } from 'components/common';
 import AddCoOrgModal from 'components/seminar/addCoOrgModal';
 import AddExpertModal from 'components/seminar/addExpertModal';
 import ShowExpertList from 'routes/seminar/addSeminar/workshop/showExpertList';
+import { compare } from 'utils/compare';
 import defaultImg from '../../assets/people/default.jpg';
 import styles from './index.less';
 
@@ -88,6 +89,9 @@ class RegistrationForm extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.seminar.tags !== this.props.seminar.tags) {
+      this.setState({ tags: nextProps.seminar.tags });
+    }
     if (nextProps.seminar.summaryById === this.props.seminar.summaryById) {
       return false;
     }
@@ -275,7 +279,7 @@ class RegistrationForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const {
-      activity_organizer_options, postSeminarOrganizer, activity_type, summaryById
+      activity_organizer_options, postSeminarOrganizer, activity_type, summaryById,
     } = this.props.seminar;
     const {
       addNewTalk, talks, startValue, endValue, editTheTalk, image, currentOrg,
@@ -474,7 +478,7 @@ class RegistrationForm extends React.Component {
               label="活动标签"
             >
               {getFieldDecorator('activityTags', {})(
-                <LabelLine callbackParent={this.onTagsChanged} tags={tags} />
+                <SampleLabelLine onTagChange={this.onTagsChanged} tags={tags} canAdd canRemove />
               )}
 
             </FormItem>

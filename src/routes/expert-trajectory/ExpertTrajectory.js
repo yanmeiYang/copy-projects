@@ -3,9 +3,11 @@ import { connect } from 'dva';
 import loadScript from 'load-script';
 import { Button } from 'antd';
 import styles from './ExpertTrajectory.less';
+import {
+  showChart,
+} from './utils/echarts-utils';
 
-let option = {};
-let echarts; // used for loadScript
+let myChart; // used for loadScript
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
 class ExpertTrajectory extends React.Component {
@@ -19,21 +21,7 @@ class ExpertTrajectory extends React.Component {
   };
 
   componentDidMount() {
-    const echartsInterval = setInterval(() => {
-      console.log(window.BMap);
-      if (typeof (window.BMap) === 'undefined') {
-        console.log('wait!!@@@@@@@@@@@@@@@@@@@@@@@@@@');
-      } else {
-        loadScript('/lib/echarts-trajectory/echarts.min.js', () => {
-          loadScript('/lib/echarts-trajectory/bmap.min.js', () => {
-            echarts = window.echarts; // eslint-disable-line prefer-destructuring
-            clearInterval(echartsInterval);
-            this.myChart = window.echarts.init(document.getElementById('chart'));
-            this.showChart();
-          });
-        });
-      }
-    }, 100);
+    this.initChart();
   }
 
   shouldComponentUpdate(nextProps, nextState) { // 状态改变时判断要不要刷新
@@ -46,9 +34,30 @@ class ExpertTrajectory extends React.Component {
     return true;
   }
 
+  initChart = () => {
+    let counter = 0;
+    const divId = 'chart';
+    const echartsInterval = setInterval(() => {
+      if (typeof (window.BMap) === 'undefined') {
+        counter += 1;
+        if (counter > 200) {
+          clearInterval(echartsInterval);
+          document.getElementById(divId).innerHTML = 'Cannot connect to Baidu Map! Please check the network state!';
+        }
+      } else {
+        loadScript('/lib/echarts-trajectory/echarts.min.js', () => {
+          loadScript('/lib/echarts-trajectory/bmap.min.js', () => {
+            clearInterval(echartsInterval);
+            myChart = window.echarts.init(document.getElementById(divId));
+            showChart(myChart);
+          });
+        });
+      }
+    }, 100);
+  };
+
   showTrajectory = (data) => {
     const points = [];
-    const lines = [];
     const address = [];
     for (const key in data.data.addresses) {
       if (data.data.addresses) {
@@ -84,216 +93,11 @@ class ExpertTrajectory extends React.Component {
         }
       }
     }
+    const option = myChart.getOption();
     option.series[0].data = points;
     option.series[1].data = trajData;
-    this.myChart.setOption(option);
+    myChart.setOption(option);
   };
-
-  showChart = () => { // 功能起始函数
-    option = {
-      backgroundColor: '#404a59',
-      title: {
-        text: '学者迁移图',
-        subtext: 'data from aminer',
-        sublink: 'http://aminer.org/',
-        left: 'center',
-        textStyle: {
-          color: '#fff',
-        },
-      },
-      tooltip: {
-        trigger: 'item',
-      },
-      bmap: {
-        center: [104.114129, 37.550339],
-        zoom: 2,
-        roam: true,
-        mapStyle: {
-          styleJson: [{
-            featureType: 'water',
-            elementType: 'all',
-            stylers: {
-              color: '#044161',
-            },
-          },
-            {
-              featureType: 'land',
-              elementType: 'all',
-              stylers: {
-                color: '#004981',
-              },
-            },
-            {
-              featureType: 'boundary',
-              elementType: 'geometry',
-              stylers: {
-                color: '#064f85',
-              },
-            },
-            {
-              featureType: 'railway',
-              elementType: 'all',
-              stylers: {
-                visibility: 'off',
-              },
-            },
-            {
-              featureType: 'highway',
-              elementType: 'geometry',
-              stylers: {
-                color: '#004981',
-              },
-            },
-            {
-              featureType: 'highway',
-              elementType: 'geometry.fill',
-              stylers: {
-                color: '#005b96',
-                lightness: 1,
-              },
-            },
-            {
-              featureType: 'highway',
-              elementType: 'labels',
-              stylers: {
-                visibility: 'off',
-              },
-            },
-            {
-              featureType: 'arterial',
-              elementType: 'geometry',
-              stylers: {
-                color: '#004981',
-              },
-            },
-            {
-              featureType: 'arterial',
-              elementType: 'geometry.fill',
-              stylers: {
-                color: '#00508b',
-              },
-            },
-            {
-              featureType: 'poi',
-              elementType: 'all',
-              stylers: {
-                visibility: 'off',
-              },
-            },
-            {
-              featureType: 'green',
-              elementType: 'all',
-              stylers: {
-                color: '#056197',
-                visibility: 'off',
-              },
-            },
-            {
-              featureType: 'subway',
-              elementType: 'all',
-              stylers: {
-                visibility: 'off',
-              },
-            },
-            {
-              featureType: 'manmade',
-              elementType: 'all',
-              stylers: {
-                visibility: 'off',
-              },
-            },
-            {
-              featureType: 'local',
-              elementType: 'all',
-              stylers: {
-                visibility: 'off',
-              },
-            },
-            {
-              featureType: 'arterial',
-              elementType: 'labels',
-              stylers: {
-                visibility: 'off',
-              },
-            },
-            {
-              featureType: 'boundary',
-              elementType: 'geometry.fill',
-              stylers: {
-                color: '#029fd4',
-              },
-            },
-            {
-              featureType: 'building',
-              elementType: 'all',
-              stylers: {
-                color: '#1a5787',
-              },
-            },
-            {
-              featureType: 'label',
-              elementType: 'all',
-              stylers: {
-                visibility: 'off',
-              },
-            },
-          ],
-        },
-      },
-      series: [{
-        type: 'scatter',
-        coordinateSystem: 'bmap',
-        zlevel: 5,
-        rippleEffect: {
-          period: 4,
-          scale: 2,
-          brushType: 'stroke',
-        },
-        label: {
-          normal: {
-            show: true,
-            position: 'right',
-            formatter: '{b}',
-          },
-          emphasis: {
-            show: true,
-          },
-        },
-        symbolSize: 5,
-        itemStyle: {
-          normal: {
-            color: '#fff',
-            borderColor: 'gold',
-          },
-        },
-        data: [],
-      }, {
-          type: 'lines',
-          zlevel: 2,
-          coordinateSystem: 'bmap',
-          effect: {
-            show: true,
-            period: 6,
-            trailLength: 0.1,
-            color: '#f78e3d',
-            symbol: 'arrow',
-            symbolSize: 5,
-            animation: true,
-          },
-          lineStyle: {
-            normal: {
-              color: '#f78e3d',
-              width: 1.5,
-              opacity: 0.4,
-              curveness: 0.2,
-            },
-          },
-          data: [],
-        }],
-    };
-    this.myChart.setOption(option);
-  };
-
 
   render() {
     return (

@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
 import loadScript from 'load-script';
-import { Button } from 'antd';
 import styles from './ExpertTrajectory.less';
 import {
   showChart,
@@ -40,16 +39,29 @@ class ExpertTrajectory extends React.Component {
     const echartsInterval = setInterval(() => {
       if (typeof (window.BMap) === 'undefined') {
         counter += 1;
-        if (counter > 200) {
+        if (counter > 20) {
           clearInterval(echartsInterval);
-          document.getElementById(divId).innerHTML = 'Cannot connect to Baidu Map! Please check the network state!';
+          loadScript('/lib/echarts-trajectory/echarts.min.js', () => {
+            loadScript('/lib/echarts-map/world.js', () => {
+              myChart = window.echarts.init(document.getElementById(divId));
+              showChart(myChart, 'geo');
+              if (this.props.person === '') {
+                console.log('Try to clcik one person!');
+              } else { //为以后将ExpertTrajectory做组件使用
+                const personId = this.props.person.id;
+                const start = 0;
+                const end = 2017;
+                this.props.dispatch({ type: 'expertTrajectory/findTrajById', payload: { personId, start, end } });
+              }
+            });
+          });
         }
       } else {
         loadScript('/lib/echarts-trajectory/echarts.min.js', () => {
           loadScript('/lib/echarts-trajectory/bmap.min.js', () => {
             clearInterval(echartsInterval);
             myChart = window.echarts.init(document.getElementById(divId));
-            showChart(myChart);
+            showChart(myChart, 'bmap');
             if (this.props.person === '') {
               console.log('Try to clcik one person!');
             } else { //为以后将ExpertTrajectory做组件使用
@@ -96,8 +108,10 @@ class ExpertTrajectory extends React.Component {
             });
           }
           if (previous === '') {
-            [previous, startYear] = [d[1], parseInt(d[0], 10)];
+            startYear = parseInt(d[0], 10);
           }
+          previous = d[1];
+          console.log(d);
         }
       }
     }

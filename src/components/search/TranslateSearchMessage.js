@@ -35,7 +35,6 @@ export default class TranslateSearchMessage extends PureComponent {
   render() {
     const { query, useTranslateSearch, translatedLanguage, translatedText } = this.props;
 
-
     return (
       <div className={styles.translateSearchMessage}>
         <div className={styles.debug} style={{ display: 'none' }}>

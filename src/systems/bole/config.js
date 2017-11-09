@@ -54,8 +54,10 @@ module.exports = {
 
   // NextAPI-QueryHooks:
   APIPlugin_ExpertSearch: {
-    parameters: { aggregation: ['dims.systag'] },
-    haves: { systag: [] },
+    parameters: {
+      aggregation: ['dims.systag'],
+      haves: { systag: [] },
+    },
   },
 
   /**
@@ -100,12 +102,7 @@ module.exports = {
 
   Map_Preload: 0, // 0的时候不缓存，1的时候缓存信息，2的时候缓存信息和90头像，3的时候缓存信息和90、160头像
 
-
   // bole系统独有设置
   ExpertBase: '59a8e5879ed5db1fc4b762ad',
 
-  // bole 智库权限设置 TODO param => xxx
-  HOOK: [
-    (dispatch, id, email, name, perm) => createRoster(dispatch, id, email, name, perm),
-  ],
 };

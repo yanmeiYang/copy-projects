@@ -73,8 +73,8 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
     // Apply Plugins.
     applyPlugin(nextapi, sysconfig.APIPlugin_ExpertSearch);
 
-    // console.log('DEBUG---------------------\n', nextapi.api);
-    // console.log('DEBUG---------------------\n', JSON.stringify(nextapi.api));
+    console.log('DEBUG---------------------\n', nextapi.api);
+    console.log('DEBUG---------------------\n', JSON.stringify(nextapi.api));
 
     return nextAPI({ data: [nextapi.api] });
 

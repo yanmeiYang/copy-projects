@@ -79,7 +79,7 @@ const getDefaultSystemConfigs = (system, source) => {
     Search_EnablePin: false, // TODO bad：Huawei PIN
     Search_EnableCCFPin: false, // TODO bad：CCF PIN
     Search_EnableTranslateSearch: true, // 启用翻译搜索，显示提示信息;
-    Search_DefaultTranslateSearch: false, // 默认使用翻译搜索;
+    Search_DefaultTranslateSearch: true, // 默认使用翻译搜索;
     Search_EnableKnowledgeGraphHelper: true,
     Search_FixedExpertBase: null,
 

@@ -3,7 +3,6 @@
  */
 import React from 'react';
 import { toIDDotString, TopExpertBase as EB, TopNUniversity2015 } from 'utils/expert-base';
-import { TopExpertBase } from '../../utils/expert-base';
 import defaults from '../utils';
 
 module.exports = {
@@ -45,7 +44,8 @@ module.exports = {
   // SearchPagePrefix: 'uniSearch', // search - 普通搜索(deleted); uniSearch - 多合一搜索.
   Search_EnablePin: false,
   Search_EnableKnowledgeGraphHelper: false,
-  // Search_SortOptions: defaults.IN_APP_DEFAULT,
+  Search_EnableTranslateSearch: true, // 启用翻译搜索，显示提示信息;
+  Search_DefaultTranslateSearch: true, // 默认使用翻译搜索;
 
   // UserAuthSystem: config.system, // aminer 或者是 system.config
   // UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签
@@ -90,7 +90,7 @@ module.exports = {
 
   ],
   // IndexPage_InfoBlocks: EMPTY_BLOCK,
-  Map_HotDomains: TopExpertBase.RandomTop100InDomain, //地图领域
+  Map_HotDomains: EB.RandomTop100InDomain, //地图领域
 
   // PersonList_ShowIndices: [], // do not override in-component settings. // TODO
 

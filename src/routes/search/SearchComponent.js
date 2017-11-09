@@ -8,7 +8,10 @@ import classnames from 'classnames';
 import { Pagination } from 'antd';
 import { Spinner } from 'components';
 import { PersonList, ExportExperts } from 'components/person';
-import { SearchFilter, SearchSorts, KgSearchBox, SearchKnowledge } from 'components/search';
+import {
+  SearchFilter, SearchSorts, KgSearchBox,
+  SearchKnowledge, TranslateSearchMessage,
+} from 'components/search';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 import { createURL, hole } from 'utils';
@@ -157,6 +160,7 @@ export default class SearchComponent extends Component {
     let filtersLength = 0;
     for (const item of Object.values(filters)) {
       if (typeof item === 'string') {
+        // eslint-disable-next-line prefer-destructuring
         filtersLength = item.split('#')[1];
       }
     }
@@ -212,7 +216,8 @@ export default class SearchComponent extends Component {
     // const SearchSortsRightZone = !sysconfig.Enable_Export ? [] : [];
 
     // TODO move translate search out.
-    const { useTranslateSearch, translatedQuery, translatedLanguage, translatedText } = this.props.search;
+    const { useTranslateSearch, translatedLanguage, translatedText } = this.props.search;
+    const transMsgProps = { query, useTranslateSearch, translatedLanguage, translatedText };
     return (
       <div className={classnames(styles.searchComponent, className)}>
 
@@ -231,41 +236,13 @@ export default class SearchComponent extends Component {
             </div>
             }
 
+            {/* Translate Search */}
+
             {sysconfig.Search_EnableTranslateSearch &&
-            <div className="message">
-              <div className={styles.debug} style={{ display: 'none' }}>
-                [useTranslateSearch : {useTranslateSearch ? 'true' : 'false'},
-                translatedQuery : {translatedQuery},
-                translatedLanguage : {translatedLanguage},
-                translatedText : {translatedText},]
-              </div>
-
-              {/* Translate Search */}
-
-              {useTranslateSearch && translatedText &&
-              <div>
-                <FM defaultMessage="We also search '{enQuery}' for you."
-                    id="search.translateSearchMessage.1"
-                    values={{ enQuery: translatedText }}
-                />&nbsp;
-                <a onClick={this.doTranslateSearch.bind(this, false)}>
-                  <FM defaultMessage="Search '{cnQuery}' only."
-                      id="search.translateSearchMessage.2"
-                      values={{ cnQuery: query }} />
-                </a>
-              </div>
-              }
-
-              {!useTranslateSearch && translatedText &&
-              <a onClick={this.doTranslateSearch.bind(this, true)}>
-                <FM defaultMessage="You can also search with both '{enQuery}' and '{cnQuery}'."
-                    id="search.translateSearchMessage.reverse"
-                    values={{ enQuery: translatedText, cnQuery: query }}
-                />
-              </a>
-              }
-            </div>
-            }
+            <TranslateSearchMessage
+              {...transMsgProps}
+              doTranslateSearch={this.doTranslateSearch}
+            />}
 
             {/* ---- Filter ---- */}
             {!disableFilter &&

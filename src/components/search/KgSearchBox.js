@@ -145,7 +145,7 @@ class KgSearchBox extends PureComponent {
 
     // 延时200毫秒再去请求服务器。
     this.lastRequestId = setTimeout(() => {
-      const newMethod = false;
+      const newMethod = true; // use new method to do suggest.
       if (newMethod) {
         // TODO How to abort a promise outside? Or use saga to do this.
         // TODO first call suggest search function.
@@ -176,7 +176,7 @@ class KgSearchBox extends PureComponent {
             }
           });
       }
-    }, 120);
+    }, 200);
   };
 
 

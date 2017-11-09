@@ -21,7 +21,6 @@ export default {
 
     // use translate search?
     useTranslateSearch: sysconfig.Search_DefaultTranslateSearch,
-    translatedQuery: '',
     translatedLanguage: 0, // 1 en to zh; 2 zh to en;
     translatedText: '',
 
@@ -128,7 +127,6 @@ export default {
     * translateSearch({ payload }, { call, put, select }) {
       // yield put({ type: 'clearTranslateSearch' });
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
-      // console.log("==================", useTranslateSearch);
       if (useTranslateSearch) {
         const { query } = payload;
         const { data } = yield call(translateService.translateTerm, query);
@@ -136,7 +134,6 @@ export default {
         if (data && data.status) {
           const q = query.trim().toLowerCase();
           const en = data.en && data.en.trim().toLowerCase();
-          // console.log('>>>> query', q, ' == ', en);
           if (q !== en) {
             yield put({ type: 'translateSearchSuccess', payload: { data } });
           }
@@ -279,7 +276,7 @@ export default {
     },
 
     translateSearchSuccess(state, { payload: { data } }) {
-      return { ...state, translatedQuery: data.en };
+      return { ...state, translatedText: data.en };
     },
 
     setTranslateSearch(state, { payload: { useTranslate } }) {
@@ -287,7 +284,7 @@ export default {
     },
 
     clearTranslateSearch(state) {
-      return { ...state, useTranslateSearch: true, translatedQuery: '' };
+      return { ...state, useTranslateSearch: true, translatedText: '' };
     },
 
     getTopicByMentionSuccess(state, { payload: { data } }) {

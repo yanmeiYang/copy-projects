@@ -58,10 +58,12 @@ module.exports = {
   // Auth_AllowAnonymousAccess: false,
   // Auth_LoginPage: '/login',
 
-  // NextAPI-QueryHooks:
+  // NextAPI-QueryHooks: // TODO should not enabled.
   APIPlugin_ExpertSearch: {
-    // parameters: { aggregation: ['dims.systag'] },
-    // haves: { systag: [] },
+    parameters: {
+      aggregation: ['dims.systag'],
+      // haves: { systag: [] },
+    },
   },
 
   // /////////////////////////////////

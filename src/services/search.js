@@ -48,8 +48,8 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
         aggregation: ['gender', 'h_index', 'location', 'language'],
         haves: { eb: defaultHaves },
       })
-      .param({ switches: ['loc_translate_all'] }, { when: useTranslateSearch })
-      .param({ switches: ['loc_search_all'] }, { when: !useTranslateSearch })
+      .param({ switches: ['loc_search_all'] }, { when: useTranslateSearch })
+      .param({ switches: ['loc_translate_all'] }, { when: !useTranslateSearch })
       .schema({
         person: [
           'id', 'name', 'name_zh', 'avatar', 'tags', 'tags_translated_zh',

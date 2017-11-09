@@ -39,6 +39,9 @@ module.exports = {
   // Enable_Export: true,
   // Search_EnablePin: true,
 
+  // google analytics
+  googleAnalytics: 'UA-107003102-5',
+
   /**
    * > Search
    */

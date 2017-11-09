@@ -20,6 +20,9 @@ module.exports = {
   PersonList_PersonLink: personId => `/person/${personId}`,
   PersonList_PersonLink_NewTab: false,
 
+  // google analytics
+  googleAnalytics: 'UA-107003102-7',
+
   /**
    * Layout related
    */

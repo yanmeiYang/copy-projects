@@ -1152,16 +1152,21 @@ export default class RelationGraph extends React.PureComponent {
         })).force('link', setlink).force('gravity', d3.forceCollide(height / 100 + 10).strength(0.6)).alpha(0.2).force('center', d3.forceCenter(width / 2, height / 2));
         _saveRootAdges = [];
         _edges.forEach((f) => {
-          if (f.target.index < snum) {
-            const a = {
-              start: f.source.index,
-              end: f.target.index,
-            };
-            return _saveRootAdges.push(a);
-          }
+          const a = {
+            start: f.source.index,
+            end: f.target.index,
+          };
+          return _saveRootAdges.push(a);
+          // if (f.target.index < snum) {
+          //   const a = {
+          //     start: f.source.index,
+          //     end: f.target.index,
+          //   };
+          //   return _saveRootAdges.push(a);
+          // }
         });
         i = 0;
-        while (i < snum) {
+        while (i < _nodes.length) {
           a = [];
           _saveRootAdges.forEach((f) => {
             if (f.start === i && a.indexOf(f.end) === -1) {
@@ -1171,19 +1176,20 @@ export default class RelationGraph extends React.PureComponent {
               return a.push(f.start);
             }
           });
-          if (a.length === 0) {
-            k = 0;
-            a.push(k);
-            _saveSortAdges.push([i]);
-            temp = {
-              target: _nodes[k],
-              source: _nodes[i],
-              count: 20,
-            };
-            _edges.push(temp);
-          } else {
-            _saveSortAdges.push(a);
-          }
+          // if (a.length === 0) {
+          //   k = 0;
+          //   a.push(k);
+          //   _saveSortAdges.push([i]);
+          //   temp = {
+          //     target: _nodes[k],
+          //     source: _nodes[i],
+          //     count: 20,
+          //   };
+          //   _edges.push(temp);
+          // } else {
+          //   _saveSortAdges.push(a);
+          // }
+          _saveSortAdges.push(a);
           i++;
         }
         _drawNetOnly(snum);

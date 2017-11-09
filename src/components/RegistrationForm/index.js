@@ -87,6 +87,9 @@ class RegistrationForm extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.seminar.tags !== this.props.seminar.tags) {
+      this.setState({ tags: nextProps.seminar.tags });
+    }
     if (nextProps.seminar.summaryById === this.props.seminar.summaryById) {
       return false;
     }

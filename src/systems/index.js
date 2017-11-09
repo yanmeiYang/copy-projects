@@ -141,6 +141,8 @@ const getDefaultSystemConfigs = (system, source) => {
     Map_HotDomains: TopExpertBase.RandomTop100InDomainAminer, // 地图领域
     HotDomains_Type: 'filter', // filter or selector
 
+    Charts_Type: 'bmap', //bmap or geo
+
     /**
      * Replace Hooks.
      */

@@ -33,13 +33,6 @@ class ExpertTrajectoryPage extends React.Component {
     this.setState({
       query: q,
     });
-    this.dispatch({ //设置搜索框的内容
-      type: 'app/layout',
-      payload: {
-        headerSearchBox: { query, onSearch: this.onSearch },
-        showFooter: false,
-      },
-    });
   }
 
   componentDidMount() {

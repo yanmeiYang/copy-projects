@@ -17,9 +17,9 @@ export default {
 
   // Index
   'index.title': '专家搜索',
-  'search.translateSearchMessage.1': '同时搜索了 "{enQuery}".',
-  'search.translateSearchMessage.2': '您也可以只搜索 "{cnQuery}".',
-  'search.translateSearchMessage.reverse': '您可以同时搜索 "{enQuery}" 和 "{cnQuery}".',
+  'search.translateSearchMessage.1': '同时搜索了 "{enQuery}"。',
+  'search.translateSearchMessage.2': '您也可以只搜索 "{cnQuery}"。',
+  'search.translateSearchMessage.reverse': '您可以同时搜索 "{enQuery}" 和 "{cnQuery}"。',
 
   // Components
   'com.KgSearchBox.placeholder': '请输入姓名或者搜索词',

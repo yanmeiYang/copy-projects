@@ -60,10 +60,10 @@ module.exports = {
 
   // NextAPI-QueryHooks: // TODO should not enabled.
   APIPlugin_ExpertSearch: {
-    parameters: {
-      aggregation: ['dims.systag'],
-      // haves: { systag: [] },
-    },
+    // parameters: {
+    //   aggregation: ['dims.systag'],
+    //   haves: { systag: [] },
+    // },
   },
 
   // /////////////////////////////////

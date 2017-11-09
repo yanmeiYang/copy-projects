@@ -152,6 +152,9 @@ const F = {
     person: {
       indices_all: ['hindex', 'gindex', 'pubs',
         'citation', 'newStar', 'risingStar', 'activity', 'diversity', 'sociability'],
+      // 'id', 'name', 'name_zh', 'avatar', 'tags', 'tags_translated_zh',
+      // 'tags_zh',
+      // 'org', 'org_zh', 'bio', 'email', 'edu' ', phone'
     },
   },
 

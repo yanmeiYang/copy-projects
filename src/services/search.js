@@ -52,19 +52,15 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
       .param({ switches: ['loc_search_all'] }, { when: !useTranslateSearch })
       .schema({
         person: [
-          'id', 'name', 'name_zh', 'avatar', //'tags', // 'tags_zh', 'tags_translated'
+          'id', 'name', 'name_zh', 'avatar', 'tags', 'tags_translated_zh',
           { profile: ['position', 'affiliation'] },
-          // 'org', 'org_zh', 'bio', 'email', 'edu' ', phone'
           { indices: F.fields.person.indices_all },
         ],
-      });
+      })
+      .addSchema({ person: ['tags_translated_zh'] }, { when: sysconfig.Locale === 'zh' });
 
     // filters
     filtersToQuery(nextapi, filters);
-
-    if (false) { // translate chinese tags.
-      nextapi.addSchema({ person: ['tags_translated'] });
-    }
 
     // sort
     if (Sort && Sort !== 'relevance') {

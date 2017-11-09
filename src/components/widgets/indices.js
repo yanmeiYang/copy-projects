@@ -43,7 +43,7 @@ const indicesConfig = {
     color: 'num_citation',
   },
   num_pubs: {
-    key: 'numpubs',
+    key: 'pubs',
     letter: 'P',
     tooltip: '论文数（P）',
     color: 'num_pubs',

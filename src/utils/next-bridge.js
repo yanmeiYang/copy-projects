@@ -40,8 +40,8 @@ const toNextPerson = (person) => {
       indices: {
         hindex: person.indices.h_index,
         gindex: person.indices.g_index,
-        numpubs: person.indices.num_pubs,
-        citation: person.indices.num_citation,
+        pubs: person.indices.num_pubs, // pubs, old numpubs
+        citations: person.indices.num_citation, // citations, old citation
         newStar: person.indices.new_star,
         risingStar: person.indices.risingStar,
         activity: person.indices.activity,

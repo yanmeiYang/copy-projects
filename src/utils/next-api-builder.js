@@ -150,7 +150,7 @@ const F = {
   searchType: { all: 'all', allb: 'allb' },
   fields: {
     person: {
-      indices_all: ['hindex', 'gindex', 'numpubs',
+      indices_all: ['hindex', 'gindex', 'pubs',
         'citation', 'newStar', 'risingStar', 'activity', 'diversity', 'sociability'],
     },
   },

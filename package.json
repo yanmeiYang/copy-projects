@@ -38,7 +38,7 @@
     "react-intl": "^2.4.0",
     "react-load-script": "0.0.6",
     "redux-logger": "^3.0.6",
-    "zrender": "^3.6.1"
+    "zrender": "^3.7.0"
   },
   "devDependencies": {
     "amdefine": "^1.0.1",

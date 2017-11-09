@@ -4,13 +4,13 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import * as d3 from 'd3';
 import { sysconfig } from 'systems';
 import { Auth } from 'hoc';
 import { Checkbox, Select, Progress, message, Button } from 'antd';
 import { RgSearchNameBox } from 'components/relation-graph';
-import { getAvatar } from '../../utils/profile-utils';
-import { classnames } from '../../utils/index';
+import { loadD3 } from 'utils/requirejs';
+import { getAvatar } from 'utils/profile-utils';
+import { classnames } from 'utils/index';
 import styles from './RelationGraph.less';
 
 const Option = Select.Option;
@@ -18,10 +18,12 @@ const controlDivId = 'rgvis';
 const EgoHeight = document.body.scrollHeight - 180;
 const EgoWidth = document.body.scrollWidth - (24 * 2);
 
+let d3;
+
 /*
  * @params: lang: [en|cn]
  */
-@connect(({ app }) => ({ app }))
+@connect(({ app }) => ({ app: { user: app.user, roles: app.roles } }))
 @Auth
 export default class RelationGraph extends React.PureComponent {
   constructor(props) {
@@ -76,14 +78,17 @@ export default class RelationGraph extends React.PureComponent {
   };
 
   componentDidMount() {
-    this.showVis(this);
-    const query = this.props.query;
-    this.redraw(query);
+    const { query } = this.props;
+    loadD3((ret) => {
+      d3 = ret;
+
+      this.showVis(this);
+      this.redraw(query);
+    });
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.query !== nextProps.query) {
-      // console.log('query changed to :', nextProps.query);
       // this.showVis(this);
       this.redraw(nextProps.query);
     }
@@ -103,23 +108,27 @@ export default class RelationGraph extends React.PureComponent {
   };
 
   redraw = (type) => {
-    this.count = 0;
-    this.pgshow = true;
-    this.pglength = 0;
-    this.pgshow = true;
+    loadD3((ret) => {
+      d3 = ret;
 
-    let max = 100;
-    const interval = 200;
-    this.loadingInterval = setInterval(() => {
-      if (max <= 0) { // call then
-        this.pgshow = false;
-      } else { // call interval function
-        this.pro();
-      }
-      max -= 1;
-    }, interval);
+      this.count = 0;
+      this.pgshow = true;
+      this.pglength = 0;
+      this.pgshow = true;
 
-    return this.drawNet(type);
+      let max = 100;
+      const interval = 200;
+      this.loadingInterval = setInterval(() => {
+        if (max <= 0) { // call then
+          this.pgshow = false;
+        } else { // call interval function
+          this.pro();
+        }
+        max -= 1;
+      }, interval);
+
+      this.drawNet(type);
+    });
   };
 
 
@@ -838,7 +847,7 @@ export default class RelationGraph extends React.PureComponent {
         }
       }).style('font-size', `${15 / transform.k}px`).attr('stroke-width', 3 / transform.k);
       svg.selectAll('.finalText').data(_nodes).text((d) => {
-        if (!destroyNodesIndex.includes(d.index)){
+        if (!destroyNodesIndex.includes(d.index)) {
           if (indexShow >= 60) {
             if (d.indices.hIndex > indexShow) {
               return d.name.n.en;
@@ -1403,7 +1412,8 @@ export default class RelationGraph extends React.PureComponent {
             destroyNodesIndex.push(item.index);
             tempSource = item.index;
           }
-          return true; });
+          return true;
+        });
         console.log('[debug] this is all nodes');
         console.log(_nodes);
         this.setState({ allNodes: _nodes });
@@ -1411,7 +1421,8 @@ export default class RelationGraph extends React.PureComponent {
           if (item.source === tempSource) {
             destroyNodesIndex.push(item.target);
           }
-          return item.source !== tempSource;});
+          return item.source !== tempSource;
+        });
         console.log('[debug] this is all edges');
         console.log(_edges);
         setlink = d3.forceLink(_edges).distance((d) => {
@@ -1455,7 +1466,7 @@ export default class RelationGraph extends React.PureComponent {
               count: 20,
             };
             // _edges.push(temp);
-            if (_nodes[k].name.n.en !== 'null null' && _nodes[i].name.n.en !== 'null null'){
+            if (_nodes[k].name.n.en !== 'null null' && _nodes[i].name.n.en !== 'null null') {
               _edges.push(temp);
             }
           } else {

@@ -15,13 +15,11 @@ import { Auth } from 'hoc';
 import { detectSavedMapType, compare } from 'utils';
 import { DomainSelector, MapFilter } from 'routes/expert-map';
 import * as strings from 'utils/strings';
-import loadScript from 'load-script';
+import { loadECharts } from 'utils/requirejs';
 import ExpertGoogleMap from './expert-googlemap.js';
 import ExpertMap from './expert-map.js';
 import styles from './ExpertMapPage.less';
-import {
-  showSta,
-} from './utils/sta-utils';
+import { showSta } from './utils/sta-utils';
 
 const tc = applyTheme(styles);
 const [ButtonGroup, TabPane] = [Button.Group, Tabs.TabPane];
@@ -57,7 +55,7 @@ export default class ExpertMapPage extends React.Component {
       domainId: domain,
       mapType,
     });
-    // first laod.
+    // first load.
     if (domain) {
       this.searchMapByDomain(domain);
     } else if (q) {
@@ -66,8 +64,8 @@ export default class ExpertMapPage extends React.Component {
   }
 
   componentDidMount() {
-    loadScript('/lib/echarts.js', () => {
-      echarts = window.echarts; // eslint-disable-line prefer-destructuring
+    loadECharts((ret) => {
+      echarts = ret;
     });
   }
 
@@ -180,7 +178,7 @@ export default class ExpertMapPage extends React.Component {
         const divId = document.getElementById('bycountries');
         const data = this.props.expertMap.geoData;
         if (typeof (divId) !== 'undefined' && divId !== 'undefined'
-        && typeof (data.results) !== 'undefined' && data.results !== 'undefined') {
+          && typeof (data.results) !== 'undefined' && data.results !== 'undefined') {
           clearInterval(chartsinterval);
           showSta(echarts, divId, data, 'country');
         }
@@ -215,7 +213,7 @@ export default class ExpertMapPage extends React.Component {
       }
       const data = this.props.expertMap.geoData;
       if (typeof (divId) !== 'undefined' && divId !== 'undefined'
-      && typeof (data.results) !== 'undefined' && data.results !== 'undefined') {
+        && typeof (data.results) !== 'undefined' && data.results !== 'undefined') {
         clearInterval(chartsinterval);
         showSta(echarts, divId, data, type);
       }
@@ -228,13 +226,13 @@ export default class ExpertMapPage extends React.Component {
     const options = { ...this.state, title: this.titleBlock };//以便传入到组件里面
 
     const staJsx = (
-      <div className={styles.charts} >
+      <div className={styles.charts}>
         <div id="bycountries" className={styles.chart1} />
       </div>
     );
 
     const staJsx1 = (
-      <div className={styles.charts} >
+      <div className={styles.charts}>
         <div id="bigArea" className={styles.chart1} />
       </div>
     );
@@ -301,7 +299,7 @@ export default class ExpertMapPage extends React.Component {
                   </Button>,
                 ]}
                 width="700px"
-                >
+              >
                 <Tabs defaultActiveKey="1" onChange={this.changeStatistic}>
                   <TabPane tab="国家" key="1">{staJsx && staJsx}</TabPane>
                   <TabPane tab="大区" key="2">{staJsx1 && staJsx1}</TabPane>

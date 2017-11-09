@@ -70,7 +70,6 @@ export default class RecommendationPage extends React.Component {
     const { dispatch } = this.props;
     this.setState({ query: data.query });
     dispatch(routerRedux.push({ pathname: '/rcd', query: { query: data.query } }));
-    dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: data.query } });
   };
 
   loadOrgs = () => {

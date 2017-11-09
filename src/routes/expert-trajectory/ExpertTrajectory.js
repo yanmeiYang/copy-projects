@@ -1,10 +1,8 @@
 import React from 'react';
 import { connect } from 'dva';
-import loadScript from 'load-script';
+import { loadScript, loadECharts, loadBMap, loadBMapForECharts } from 'utils/requirejs';
 import styles from './ExpertTrajectory.less';
-import {
-  showChart,
-} from './utils/echarts-utils';
+import { showChart } from './utils/echarts-utils';
 
 let address = [];
 let addValue = {};
@@ -30,12 +28,44 @@ class ExpertTrajectory extends React.Component {
       this.callSearchMap(nextState.query);
     }
     if (nextProps.expertTrajectory.trajData !== this.props.expertTrajectory.trajData) {
-      this.calculateData(nextProps.expertTrajectory.trajData);//用新的来代替
+      this.load((echarts) => {
+        this.calculateData(nextProps.expertTrajectory.trajData); // 用新的来代替
+      });
     }
     return true;
   }
 
+  load = (cb) => {
+    loadECharts((echarts) => {
+      loadBMapForECharts(() => {
+        if (cb) {
+          cb(echarts);
+        }
+      });
+    });
+  };
+
   initChart = () => {
+    const divId = 'chart';
+    this.load((echarts) => {
+      myChart = echarts.init(document.getElementById(divId));
+      showChart(myChart, 'geo');
+      if (this.props.person === '') {
+        console.log('Try to click one person!');
+      } else { //为以后将ExpertTrajectory做组件使用
+        const personId = this.props.person.id;
+        const start = 0;
+        const end = 2017;
+        this.props.dispatch({
+          type: 'expertTrajectory/findTrajById',
+          payload: { personId, start, end }
+        });
+      }
+
+    });
+  };
+
+  initChartBackupxxxxxxxxxxxxxx = () => {
     let counter = 0;
     const divId = 'chart';
     const echartsInterval = setInterval(() => {
@@ -53,7 +83,10 @@ class ExpertTrajectory extends React.Component {
                 const personId = this.props.person.id;
                 const start = 0;
                 const end = 2017;
-                this.props.dispatch({ type: 'expertTrajectory/findTrajById', payload: { personId, start, end } });
+                this.props.dispatch({
+                  type: 'expertTrajectory/findTrajById',
+                  payload: { personId, start, end }
+                });
               }
             });
           });
@@ -70,7 +103,10 @@ class ExpertTrajectory extends React.Component {
               const personId = this.props.person.id;
               const start = 0;
               const end = 2017;
-              this.props.dispatch({ type: 'expertTrajectory/findTrajById', payload: { personId, start, end } });
+              this.props.dispatch({
+                type: 'expertTrajectory/findTrajById',
+                payload: { personId, start, end }
+              });
             }
           });
         });

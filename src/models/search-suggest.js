@@ -20,8 +20,8 @@ export default {
     suggest: [function* ({ payload }, { call, put }) {
       const { query } = payload;
       const data = yield call(suggestService.suggest, query);
-      console.log('0==================slkdjf', data);
       // yield put({ type: 'searchPersonSuccess', payload: { data } });
+      return data;
     }, takeLatest],
   },
 

@@ -1,4 +1,4 @@
-
+import { loadECharts, loadBMap, loadBMapForECharts } from 'utils/requirejs';
 
 const setBMap = (myChart) => {
   console.log(myChart);
@@ -246,7 +246,20 @@ const showChart = (myChart, type) => { // 功能起始函数
   }
 };
 
+const load = (cb) => {
+  loadBMap(() => {
+    loadECharts((echarts) => {
+      loadBMapForECharts(() => {
+        if (cb) {
+          cb(echarts);
+        }
+      });
+    });
+  });
+};
+
 module.exports = {
   showChart,
   setBMap,
+  load,
 };

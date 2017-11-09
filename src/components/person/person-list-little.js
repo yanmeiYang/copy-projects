@@ -65,7 +65,8 @@ class PersonListLittle extends React.PureComponent {
                       <h3><Icon type="solution" /> h_index: {indices}</h3>
                     </div>
                   </div>
-                  {pos && <span><i className="fa fa-briefcase fa-fw" /> {pos}</span>}<br />
+                  {pos && <span><i className="fa fa-briefcase fa-fw" /> {pos}</span>}
+                  {pos && <br />}
                   {aff && <span><i className="fa fa-institution fa-fw" /> {aff}</span>}
                 </div>
               </div>

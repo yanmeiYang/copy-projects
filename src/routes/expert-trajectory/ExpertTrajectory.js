@@ -137,8 +137,9 @@ class ExpertTrajectory extends React.Component {
       }
     }
     const option = myChart.getOption();
-    option.series[0].data = points;
-    option.series[1].data = trajData;
+    option.series[1].data = points;
+    option.series[2].data = trajData;
+    console.log(trajData);
     myChart.setOption(option);
   };
 

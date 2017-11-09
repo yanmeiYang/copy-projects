@@ -14,7 +14,7 @@ export default {
   state: {
     trajData: {},
     results: [],
-    heatData: [],
+    heatData: {},
 
     /**************************上面的有主啦！*************************************/
     personId: '',
@@ -270,8 +270,6 @@ export default {
 
 
     findTrajsByRosterIdSuccess(state, { payload: { data } }) {
-      console.log(data);
-      console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
       return { ...state, heatData: data };
     },
 

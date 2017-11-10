@@ -36,8 +36,8 @@ const indicesConfig = {
       return (indices.newStar && indices.newStar.toFixed(2)) || 0;
     },
   },
-  citation: {
-    key: 'citation',
+  citations: {
+    key: 'citations',
     letter: 'c',
     tooltip: '引用数（c）',
     color: 'num_citation',

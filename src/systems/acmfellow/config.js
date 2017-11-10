@@ -34,9 +34,6 @@ module.exports = {
   // IndexPage_QuickSearchList:[], // use default.
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
-  Header_SubTextLogo: '伯乐系统',
-  Header_SubTextStyle: { width: 90, left: -54, marginLeft: -80 },
-  Header_LogoWidth: 118,
   Header_UserPageURL: '/user-info',
 
   // ShowHelpDoc: true,
@@ -98,6 +95,6 @@ module.exports = {
   ExpertBase,
 
   // 临时属性，需要删除
-  USE_NEXT_EXPERT_BASE_SEARCH: false,
+  USE_NEXT_EXPERT_BASE_SEARCH: true,
 
 };

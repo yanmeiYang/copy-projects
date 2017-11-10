@@ -24,7 +24,6 @@ module.exports = {
   // IndexPage_QuickSearchList:[], // use default.
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
-  Header_LogoWidth: 118,
   Header_UserPageURL: '/user-info',
   Header_RightZone: [() => <Link key="0" to="/eb/59a8e5879ed5db1fc4b762ad/-/0/20">我的专家库</Link>], // TODO make this a Component.
   // Header_RightZone: [

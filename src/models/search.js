@@ -83,7 +83,7 @@ export default {
       }
 
       // fix sort key
-      const Sort = fixSortKey(sort, query);
+      const Sort = fixSortKey(sort, query); // Fix default sort key.
 
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
 

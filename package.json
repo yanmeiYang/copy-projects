@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "aminer2b",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "dependencies": {
     "antd": "^2.13.9",
     "axios": "^0.17.0",
@@ -30,10 +30,10 @@
     "qs": "^6.5.1",
     "query-string": "^5.0.0",
     "rc-tween-one": "^1.5.5",
-    "react": "^16.0.0",
+    "react": "^16.1.0",
     "react-autosuggest": "^9.3.2",
     "react-countup": "^3.0.2",
-    "react-dom": "^16.0.0",
+    "react-dom": "^16.1.0",
     "react-ga": "^2.3.4",
     "react-helmet": "^5.2.0",
     "react-intl": "^2.4.0",

@@ -148,10 +148,13 @@ const F = {
   // query related
   queries: { search: 'search' }, // query actions.
   searchType: { all: 'all', allb: 'allb' },
+  params: {
+    default_aggregation: ['gender', 'h_index', 'location', 'language'],
+  },
   fields: {
     person: {
       indices_all: ['hindex', 'gindex', 'pubs',
-        'citation', 'newStar', 'risingStar', 'activity', 'diversity', 'sociability'],
+        'citations', 'newStar', 'risingStar', 'activity', 'diversity', 'sociability'],
       // 'id', 'name', 'name_zh', 'avatar', 'tags', 'tags_translated_zh',
       // 'tags_zh',
       // 'org', 'org_zh', 'bio', 'email', 'edu' ', phone'

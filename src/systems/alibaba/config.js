@@ -17,20 +17,8 @@ module.exports = {
   // Layout related
   //
   PageTitle: '阿里学术资源地图',
-  Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
-  Header_LogoWidth: 280,
-  Header_LogoStyle: {
-    width: 150,
-    backgroundPosition: '0px -23px',
-    backgroundSize: 'auto 100px',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor: 'white',
-  },
-  Header_SubTextLogo: '学术资源地图',
-  Header_SubTextStyle: {},
   Header_UserPageURL: '/user-info', // 用户头像点击之后去的页面.
   Footer_Content: defaults.EMPTY_BLOCK,
-  ShowFooter: true,
 
   // google analytics
   googleAnalytics: 'UA-107003102-3',

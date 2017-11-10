@@ -57,12 +57,6 @@ export default class RecommendationPage extends React.Component {
     this.loadOrgs();
   }
 
-
-  // componentWillUnmount() {
-  //   this.dispatch({ type: 'app/layout', payload: { showFooter: true } });
-  // }
-  //
-
   onSearch = (data) => {
     if (data.query) {
       return;

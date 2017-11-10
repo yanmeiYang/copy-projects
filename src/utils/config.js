@@ -4,8 +4,8 @@ const nextAPIURLLocalhost = 'http://localhost:4005';
 const nextAPIURLOnlineBeta = 'http://e30c17034d854ef4b1dac3d7b5874d3b-cn-beijing.alicloudapi.com';
 const nextAPIURLOnlineProduction = 'https://apiv2.aminer.org';
 const nextAPIURL = process.env.NODE_ENV !== 'production' ?
-  // nextAPIURLOnlineProduction
-  nextAPIURLLocalhost
+  nextAPIURLOnlineProduction
+  // nextAPIURLLocalhost
   :
   // nextAPIURLOnlineBeta;
   nextAPIURLOnlineProduction;

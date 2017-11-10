@@ -63,7 +63,7 @@ const indicesConfig = {
   },
 };
 
-const defaultIndices = ['activity-ranking-contrib', 'h_index', 'activity', 'rising_star', 'citation', 'num_pubs'];
+const defaultIndices = ['activity-ranking-contrib', 'h_index', 'activity', 'rising_star', 'citations', 'num_pubs'];
 
 /**
  * @param indices - indices node from person.

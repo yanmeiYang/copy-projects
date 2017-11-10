@@ -11,7 +11,7 @@ import {
 let myChart;
 const heatData = []; //热力信息[[lng,lat,num],..,]
 let years; //年份
-const trajData = []; //{coords:[[lng,lat],[lng,lat]],...,coords:[[lng,lat],[lng,lat]]}
+const trajData = []; //{coords:[[lng,lat],[lng,lat]],...,coords:[[lng,lat],[lng,lat]]}每年的迁徙
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
 class ExpertHeatmap extends React.Component {
@@ -56,22 +56,24 @@ class ExpertHeatmap extends React.Component {
   };
 
   processData = (data) => {
-    const address = [];
-    const statis = [];
-    const pTrj = []; //每个人的迁徙过程
+    const address = []; //地理信息字典
+    const yearTrj = []; //每年的迁徙
+    const personPlace = []; //每人，每年的地理位置二维数组
+    const peopleTrj = []; //每个人的迁徙
+    const yearPlace = []; //每年，各个位置出现次数二维数组
     const trj = data.data.trajectories;
     const add = data.data.addresses;
-    for (const key in add) {
+    for (const key in add) { //遍历出所有的地址，并生成字典
       if (key) {
         address[key] = add[key];
       }
     }
     let start = 10000;
     let end = 0;
-    for (const key in trj) {
+    for (const key in trj) { //找到开始的年份和结束的年份
       if (key) {
+        personPlace[key] = []; //初始化每人，每年的地理位置二维数组
         for (const t of trj[key]) {
-          statis[parseInt(t[0], 10)] = [];
           if (parseInt(t[0], 10) < start) {
             start = parseInt(t[0], 10);
           }
@@ -82,28 +84,72 @@ class ExpertHeatmap extends React.Component {
       }
     }
     years = [start, end];
-    for (let i = start; i <= end; i += 1) {
-      for (const key in trj) {
-        if (key) {
-          pTrj[key] = [];
-          for (const t of trj[key]) {
-            if (parseInt(t[0], 10) === i) {
-              if (typeof (statis[i][t[1]]) === 'undefined') {
-                statis[i][t[1]] = 1;
+    for (let i = start; i <= end; i += 1) { //每年每个人所在地点信息
+      heatData[i] = []; //按年份初始化热力图数据
+      yearTrj[i] = []; //按年份初始化迁徙地址
+      trajData[i] = []; //按年份初始化迁徙经纬度
+      yearPlace[i] = []; //每年，各个位置出现次数二维数组初始化
+    }
+    for (const key in trj) { //生成迁徙图和作者当年所在位置信息
+      if (key) {
+        peopleTrj[key] = [];
+        let startPlace = ''; //一次迁徙中开始的位置
+        let currentPlace = ''; //当前位置
+        let currentYear; //当前年份
+        for (const t of trj[key]) {
+          //第一部分，生成作者当年所在位置信息
+          if (currentPlace !== '') { //第一年
+            for (let y = currentYear + 1; y < parseInt(t[0], 10); y += 1) {
+              personPlace[key][y] = currentPlace;
+            }
+          }
+          [, currentPlace] = t;
+          currentYear = parseInt(t[0], 10);
+          personPlace[key][currentYear] = currentPlace;
+          //第二部分，生成迁徙图
+          for (let i = start; i <= end; i += 1) {
+            if (i === parseInt(t[0], 10) && startPlace !== t[1]) {
+              if (startPlace === '') {
+                [, startPlace] = t;
               } else {
-                statis[i][t[1]] += 1;
+                const p = [startPlace, t[1]]; //一次迁徙
+                yearTrj[i].push(p);
+                peopleTrj[key].push([startPlace, t[1], i]);
+                trajData[i].push([[address[startPlace].geo.lng, address[startPlace].geo.lat],
+                  [address[t[1]].geo.lng, address[t[1]].geo.lat]]); //迁徙的经纬度
+                [, startPlace] = t; //重新赋值
               }
+            }
+          }
+        }
+        //属于第一部分
+        for (let y = currentYear + 1; y < end; y += 1) { //补足到最后一个年份的数据
+          personPlace[key][y] = currentPlace;
+        }
+      }
+    }
+    //通过每人，每年的地理位置二维数组，得到每年，各个位置出现次数二维数组
+    for (const key in personPlace) {
+      if (key) {
+        for (const y in personPlace[key]) {
+          if (y) {
+            const currentPlace = personPlace[key][y];
+            if (typeof (yearPlace[y][currentPlace]) === 'undefined') { //还没有出现过
+              yearPlace[y][currentPlace] = 1; //初始化为出现一次
+            } else {
+              yearPlace[y][currentPlace] += 1; //次数增加
             }
           }
         }
       }
     }
-    for (let i = start; i <= end; i += 1) {
-      heatData[i] = [];
-      for (const s in statis[i]) {
-        if (s) {
-          console.log(add[s]);
-          heatData[i].push([add[s].geo.lng, add[s].geo.lat, statis[i][s] * 10000]);
+    for (const year in yearPlace) { //遍历得到热力图数据
+      if (year) {
+        for (const place in yearPlace[year]) {
+          if (place) {
+            const num = yearPlace[year][place];
+            heatData[year].push([address[place].geo.lng, address[place].geo.lat, num]);
+          }
         }
       }
     }
@@ -112,6 +158,7 @@ class ExpertHeatmap extends React.Component {
   loadHeat = (year) => {
     const option = myChart.getOption();
     option.series[0].data = heatData[year];
+    option.series[2].data = trajData[year];
     myChart.setOption(option);
   };
 

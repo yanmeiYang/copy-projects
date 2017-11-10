@@ -62,9 +62,9 @@ class ExpertHeatmapPage extends React.Component {
 
   callSearchMap = (query) => {
     const rosterId = query;
-    const start = 1900;
+    const start = 1960;
     const end = 2017;
-    const size = 20;
+    const size = 100;
     this.props.dispatch({ type: 'expertTrajectory/findTrajsByRosterId', payload: { rosterId, start, end, size } });
   };
 

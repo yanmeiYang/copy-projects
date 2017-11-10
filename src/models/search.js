@@ -286,7 +286,7 @@ export default {
     },
 
     translateSearchSuccess(state, { payload: { data } }) {
-      return { ...state, translatedText: data.en };
+      return { ...state, translatedText: data.en || data.zh };
     },
 
     setTranslateSearch(state, { payload: { useTranslate } }) {

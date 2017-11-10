@@ -10,7 +10,7 @@ import {
 
 let myChart;
 const heatData = []; //热力信息[[lng,lat,num],..,]
-let years; //年份
+let years = []; //年份
 const trajData = []; //{coords:[[lng,lat],[lng,lat]],...,coords:[[lng,lat],[lng,lat]]}每年的迁徙
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
@@ -163,9 +163,33 @@ class ExpertHeatmap extends React.Component {
   };
 
   render() {
+    const ifPlay = 'play-circle';
+    let startYear = 0;
+    let endYear = 2017;
+    if (years.length > 0) {
+      [startYear, endYear] = years;
+    }
     return (
       <div>
         <div className={styles.heatmap} id="chart" />
+        <div className={styles.dinner}>
+          <Button className={styles.play} icon={ifPlay} onClick={this.onClick} />
+          <Row className={styles.slide}>
+            <Col span={22}>
+              <Slider min={startYear} max={endYear} onChange={this.onChange}
+                      onAfterChange={this.onAfterChange} value={this.state.inputValue} />
+            </Col>
+            <Col span={1}>
+              <InputNumber
+                min={startYear}
+                max={endYear}
+                style={{ marginLeft: 0 }}
+                value="2017"
+                onChange={this.onInputNum}
+              />
+            </Col>
+          </Row>
+        </div>
       </div>
     );
   }

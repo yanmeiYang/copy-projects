@@ -72,6 +72,7 @@ class ExpertTrajectoryPage extends React.Component {
   render() {
     const persons = this.props.expertTrajectory.results;
     const { query } = this.state;
+    console.log(persons);
     return (
       <Page contentClass={tc(['ExpertTrajectoryPage'])} onSearch={this.onSearch}
             query={query}>

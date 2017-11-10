@@ -12,11 +12,8 @@ import { applyTheme, theme } from 'themes';
 import { Layout as Page } from 'routes';
 import { Layout, Tabs } from 'antd';
 import styles from './ExpertHeatmapPage.less';
-import LeftInfoZoneCluster from './LeftInfoZoneCluster';
-import LeftLineInfoCluster from './LeftLineInfoCluster';
 import ExpertHeatmap from './ExpertHeatmap';
-import EventsForYears from './EventForYears';
-import LeftInfoAll from './LeftInfoAll';
+
 
 const { Content, Sider } = Layout;
 const { TabPane } = Tabs;
@@ -91,7 +88,6 @@ class ExpertHeatmapPage extends React.Component {
               >
                 <TabPane tab="VIEW" key="overview">
                   <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
-                  <LeftInfoAll />
                 </TabPane>
                 <TabPane tab="SELECTION" key="selection">
                   <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
@@ -99,7 +95,6 @@ class ExpertHeatmapPage extends React.Component {
                 <TabPane tab="EVENTS" key="event">
                   <div id="scroll">
                     <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
-                    <EventsForYears data={data} />
                   </div>
                 </TabPane>
               </Tabs>

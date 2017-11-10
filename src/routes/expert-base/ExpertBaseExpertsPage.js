@@ -125,6 +125,7 @@ export default class ExpertBaseExpertsPage extends Component {
           expertBaseId={sysconfig.ExpertBase}
           PersonList_BottomZone={theme.PersonList_BottomZone}
           // showSearchBox={this.props.app.headerSearchBox ? false : true}
+          PersonList_UpdateHooks={sysconfig.PersonList_UpdateHooks}
           showSearchBox={false}
           disableFilter={!query}
           disableExpertBaseFilter

@@ -25,13 +25,13 @@ let System;
 // System = 'ccf';
 // System = 'ccftest';
 // System = 'huawei';
-System = 'alibaba';
+// System = 'alibaba';
 // System = 'tencent';
 // System = 'cie';
 // System = 'cipsc';
 // System = 'demo';
 // System = 'cietest';
-// System = 'bole';
+System = 'bole';
 // System = 'acmfellow';
 // System = 'DataAnnotation';
 

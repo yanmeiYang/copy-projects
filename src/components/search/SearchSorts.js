@@ -19,7 +19,7 @@ export default class SearchSorts extends PureComponent {
   static propTypes = {
     sorts: PropTypes.array,
     sortType: PropTypes.string.isRequired,
-    rightZone: PropTypes.array,
+    rightZone: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
     onOrderChange: PropTypes.func,
   };
 

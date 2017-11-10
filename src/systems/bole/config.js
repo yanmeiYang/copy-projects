@@ -103,6 +103,12 @@ module.exports = {
   ],
 
   Map_Preload: 0, // 0的时候不缓存，1的时候缓存信息，2的时候缓存信息和90头像，3的时候缓存信息和90、160头像
+  Map_HotDomains: [
+    { id: '59a8e5879ed5db1fc4b762ad', name: '我的专家库' },
+    { id: 'aminer', name: '全球专家' },
+  ], // 地图领域
+  Map_HotDomainsLabel: '',
+  Map_FilterRange: false,
 
   // bole系统独有设置
   ExpertBase: '59a8e5879ed5db1fc4b762ad',

@@ -139,13 +139,15 @@ export default {
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
       if (useTranslateSearch) {
         const { query } = payload;
-        const { data } = yield call(translateService.translateTerm, query);
-        console.log('||translateSearch', payload, '>>', data);
-        if (data && data.status) {
-          const q = query.trim().toLowerCase();
-          const en = data.en && data.en.trim().toLowerCase();
-          if (q !== en) {
-            yield put({ type: 'translateSearchSuccess', payload: { data } });
+        if (query) {
+          const { data } = yield call(translateService.translateTerm, query);
+          console.log('||translateSearch', payload, '>>', data);
+          if (data && data.status) {
+            const q = query.trim().toLowerCase();
+            const en = data.en && data.en.trim().toLowerCase();
+            if (q !== en) {
+              yield put({ type: 'translateSearchSuccess', payload: { data } });
+            }
           }
         }
       }

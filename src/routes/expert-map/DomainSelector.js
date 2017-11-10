@@ -28,7 +28,7 @@ export default class DomainSelector extends PureComponent {
   };
 
   render() {
-    const { domains, currentDomain } = this.props;
+    const { domainsLabel, domains, currentDomain } = this.props;
     if (!domains) {
       return null;
     }
@@ -49,7 +49,8 @@ export default class DomainSelector extends PureComponent {
       <div className={styles.filterWrap}>
         <div className={styles.filter}>
           <div className={styles.filterRow}>
-            <span className={styles.filterTitle}><span>Most Influential Scholars:</span></span>
+            {domainsLabel &&
+            <span className={styles.filterTitle}><span>{domainsLabel}</span></span>}
             <ul>
               {domains.map((domain) => {
                 return (

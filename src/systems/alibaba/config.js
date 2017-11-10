@@ -85,8 +85,8 @@ module.exports = {
   ExpertBases: [
     { id: 'aminer', name: <span><i className="fa fa-globe fa-fw" />ALL</span> },
     { name: '高端科学家', id: '59ffe21c9ed5db93537362f3' },
-    { name: '一线中青年科学家', id: '59ffb7d69ed5db9353731eaa' },
-    { name: '明日之星', id: '59ffb9339ed5db93537320c9' },
+    { name: '一线中青年科学家', id: '5a0539af9ed5db5b4c4ed2a1' },
+    { name: '明日之星', id: '5a05413d9ed5db5b4c4f14a1' },
   ],
 
 

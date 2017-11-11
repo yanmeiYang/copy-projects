@@ -3,7 +3,6 @@
  */
 import React from 'react';
 import { toIDDotString, TopExpertBase as EB, TopNUniversity2015 } from 'utils/expert-base';
-import { TopExpertBase } from '../../utils/expert-base';
 import defaults from '../utils';
 
 module.exports = {
@@ -18,20 +17,8 @@ module.exports = {
   // Layout related
   //
   PageTitle: '阿里学术资源地图',
-  Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
-  Header_LogoWidth: 280,
-  Header_LogoStyle: {
-    width: 150,
-    backgroundPosition: '0px -23px',
-    backgroundSize: 'auto 100px',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor: 'white',
-  },
-  Header_SubTextLogo: '学术资源地图',
-  Header_SubTextStyle: {},
   Header_UserPageURL: '/user-info', // 用户头像点击之后去的页面.
   Footer_Content: defaults.EMPTY_BLOCK,
-  ShowFooter: true,
 
   // google analytics
   googleAnalytics: 'UA-107003102-3',
@@ -45,7 +32,8 @@ module.exports = {
   // SearchPagePrefix: 'uniSearch', // search - 普通搜索(deleted); uniSearch - 多合一搜索.
   Search_EnablePin: false,
   Search_EnableKnowledgeGraphHelper: false,
-  // Search_SortOptions: defaults.IN_APP_DEFAULT,
+  Search_EnableTranslateSearch: true, // 启用翻译搜索，显示提示信息;
+  Search_DefaultTranslateSearch: true, // 默认使用翻译搜索;
 
   // UserAuthSystem: config.system, // aminer 或者是 system.config
   // UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签
@@ -90,15 +78,15 @@ module.exports = {
 
   ],
   // IndexPage_InfoBlocks: EMPTY_BLOCK,
-  Map_HotDomains: TopExpertBase.RandomTop100InDomain, //地图领域
+  Map_HotDomains: EB.RandomTop100InDomain, //地图领域
 
   // PersonList_ShowIndices: [], // do not override in-component settings. // TODO
 
   ExpertBases: [
     { id: 'aminer', name: <span><i className="fa fa-globe fa-fw" />ALL</span> },
     { name: '高端科学家', id: '59ffe21c9ed5db93537362f3' },
-    { name: '一线中青年科学家', id: '59ffb7d69ed5db9353731eaa' },
-    { name: '明日之星', id: '59ffb9339ed5db93537320c9' },
+    { name: '一线中青年科学家', id: '5a0539af9ed5db5b4c4ed2a1' },
+    { name: '明日之星', id: '5a05413d9ed5db5b4c4f14a1' },
   ],
 
 

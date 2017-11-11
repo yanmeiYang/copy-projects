@@ -16,7 +16,11 @@ const { api } = config;
 export async function searchPerson(query, offset, size, filters, sort, useTranslateSearch) {
   // if query is null, and eb is not aminer, use expertbase list api.
   if (!query && filters && filters.eb && filters.eb.id && filters.eb.id !== 'aminer') {
-    return listPersonInEB({ ebid: filters.eb.id, sort, offset, size });
+    if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH) {
+      return listPersonInEBNextAPI({ ebid: filters.eb.id, sort, offset, size });
+    } else {
+      return listPersonInEB({ ebid: filters.eb.id, sort, offset, size });
+    }
   }
 
   // if search in global experts, jump to another function;
@@ -48,22 +52,19 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
         aggregation: ['gender', 'h_index', 'location', 'language'],
         haves: { eb: defaultHaves },
       })
-      .param({ switches: ['translate_all'] }, { when: useTranslateSearch })
+      .param({ switches: ['loc_search_all'] }, { when: useTranslateSearch })
+      .param({ switches: ['loc_translate_all'] }, { when: !useTranslateSearch })
       .schema({
         person: [
-          'id', 'name', 'name_zh', 'avatar', //'tags', // 'tags_zh', 'tags_translated'
+          'id', 'name', 'name_zh', 'avatar', 'tags', 'tags_translated_zh',
           { profile: ['position', 'affiliation'] },
-          // 'org', 'org_zh', 'bio', 'email', 'edu' ', phone'
           { indices: F.fields.person.indices_all },
         ],
-      });
+      })
+      .addSchema({ person: ['tags_translated_zh'] }, { when: sysconfig.Locale === 'zh' });
 
     // filters
     filtersToQuery(nextapi, filters);
-
-    if (false) { // translate chinese tags.
-      nextapi.addSchema({ person: ['tags_translated'] });
-    }
 
     // sort
     if (Sort && Sort !== 'relevance') {
@@ -73,8 +74,8 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
     // Apply Plugins.
     applyPlugin(nextapi, sysconfig.APIPlugin_ExpertSearch);
 
-    // console.log('DEBUG---------------------\n', nextapi.api);
-    // console.log('DEBUG---------------------\n', JSON.stringify(nextapi.api));
+    console.log('DEBUG---------------------\n', nextapi.api);
+    console.log('DEBUG---------------------\n', JSON.stringify(nextapi.api));
 
     return nextAPI({ data: [nextapi.api] });
 
@@ -120,6 +121,46 @@ export async function listPersonInEB(payload) {
   //   rosterAPI.replace(':ebid', ebid),
   //   { method: 'GET', data },
   // );
+}
+
+export async function listPersonInEBNextAPI(payload) {
+  const { sort, ebid, offset, size } = payload;
+  //
+  // // const ebs = sysconfig.ExpertBases;
+  // // const defaultHaves = ebs && ebs.length > 0 && ebs.map(eb => eb.id);
+  // const nextapi = apiBuilder.query(F.queries.search, 'list-in-EB')
+  //   .param({
+  //     offset, size,
+  //     searchType: F.searchType.allb,
+  //     aggregation: F.params.default_aggregation,
+  //     // haves: { eb: defaultHaves },
+  //   })
+  //   .param({ switches: ['loc_search_all'] }, { when: useTranslateSearch })
+  //   .param({ switches: ['loc_translate_all'] }, { when: !useTranslateSearch })
+  //   .schema({
+  //     person: [
+  //       'id', 'name', 'name_zh', 'avatar', 'tags', 'tags_translated_zh',
+  //       { profile: ['position', 'affiliation'] },
+  //       { indices: F.fields.person.indices_all },
+  //     ],
+  //   })
+  //   .addSchema({ person: ['tags_translated_zh'] }, { when: sysconfig.Locale === 'zh' });
+  //
+  // // filters
+  // filtersToQuery(nextapi, filters);
+  //
+  // // sort
+  // if (Sort && Sort !== 'relevance') {
+  //   nextapi.param({ sorts: [Sort] });
+  // }
+  //
+  // // Apply Plugins.
+  // applyPlugin(nextapi, sysconfig.APIPlugin_ExpertSearch);
+  //
+  // console.log('DEBUG---------------------\n', nextapi.api);
+  // console.log('DEBUG---------------------\n', JSON.stringify(nextapi.api));
+  //
+  // return nextAPI({ data: [nextapi.api] });
 }
 
 // Search Global.

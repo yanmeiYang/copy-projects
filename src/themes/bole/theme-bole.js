@@ -85,6 +85,7 @@ module.exports = {
       />),
   ],
 
+  SearchSorts_RightZone: hole.EMPTY_ZONE_FUNC,
   //
   // Expert Page
   //

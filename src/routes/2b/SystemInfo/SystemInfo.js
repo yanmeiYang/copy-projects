@@ -82,7 +82,7 @@ export default class SystemInfo extends PureComponent {
 
     return (
       <div className={styles.SystemInfo}>
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={data} size="small" pagination={false} />
       </div>
     );
   }

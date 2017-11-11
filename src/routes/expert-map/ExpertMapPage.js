@@ -60,6 +60,7 @@ export default class ExpertMapPage extends React.Component {
       this.searchMapByDomain(domain);
     } else if (q) {
       this.searchMapByQuery(q);
+      this.setState({ domainId: 'aminer' });
     }
   }
 
@@ -86,7 +87,7 @@ export default class ExpertMapPage extends React.Component {
 
   // TODO use did update ?
   shouldComponentUpdate(np, ns) { // nextProps, nextState
-    if (ns.domainId && ns.domainId !== this.state.domainId) {
+    if (ns.domainId && ns.domainId !== this.state.domainId && ns.domainId !== 'aminer') {
       this.searchMapByDomain(ns.domainId);
       return true;
     }
@@ -105,7 +106,13 @@ export default class ExpertMapPage extends React.Component {
 
   onDomainChange = (domain) => { //修改url,shouldComponentUpdate更新
     const { dispatch } = this.props;
-    dispatch(routerRedux.push({ pathname: '/expert-map', search: `?domain=${domain.id}` }));
+    if (domain.id !== 'aminer') {
+      this.setState({ query: '' });
+      dispatch(routerRedux.push({ pathname: '/expert-map', search: `?domain=${domain.id}` }));
+    } else {
+      const data = { query: this.state.query || '-' };
+      this.onSearch(data);
+    }
   };
 
   onRangeChange = (key) => {
@@ -119,7 +126,7 @@ export default class ExpertMapPage extends React.Component {
   onSearch = (data) => { //修改url,shouldComponentUpdate更新
     const { dispatch } = this.props;
     if (data.query) {
-      this.setState({ query: data.query });
+      this.setState({ query: data.query, domainId: 'aminer' });
       dispatch(routerRedux.push({
         pathname: '/expert-map',
         search: `?query=${data.query}`,
@@ -246,6 +253,7 @@ export default class ExpertMapPage extends React.Component {
       >
         <DomainSelector
           domains={sysconfig.Map_HotDomains}
+          domainsLabel={sysconfig.Map_HotDomainsLabel}
           currentDomain={domainId}
           onChange={this.onDomainChange}
           time={Math.random()}
@@ -253,6 +261,7 @@ export default class ExpertMapPage extends React.Component {
         <MapFilter
           onRangeChange={this.onRangeChange}
           onHindexRangeChange={this.onHindexRangeChange}
+          MapFilterRange={sysconfig.Map_FilterRange}
         />
 
         <div className={styles.headerLine}>
@@ -265,14 +274,14 @@ export default class ExpertMapPage extends React.Component {
               <ButtonGroup id="sType" className={styles.sType}>
                 {this.typeConfig.map((conf) => {
                   return !conf.disabled && (
-                    <Button
-                      key={conf.key}
-                      onClick={this.onTypeChange.bind(this, conf.key)}
-                      type={this.state.type === conf.key ? 'primary' : ''}
-                    >
-                      {conf.label}
-                    </Button>
-                  );
+                      <Button
+                        key={conf.key}
+                        onClick={this.onTypeChange.bind(this, conf.key)}
+                        type={this.state.type === conf.key ? 'primary' : ''}
+                      >
+                        {conf.label}
+                      </Button>
+                    );
                 })}
               </ButtonGroup>
             </div>
@@ -280,10 +289,11 @@ export default class ExpertMapPage extends React.Component {
 
           <div className={styles.scopes}>
             <div className={styles.analysis}>
+              {process.env.NODE_ENV !== 'production' &&
               <Button onClick={this.showModal}>
                 <Icon type="line-chart" />
                 <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.statistic" />
-              </Button>
+              </Button>}
               <Modal
                 title="Statistics & Analyses"
                 visible={this.state.visible}

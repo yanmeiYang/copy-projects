@@ -5,7 +5,7 @@ import { routerRedux, Link, withRouter } from 'dva/router';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 import { hole, createURL } from 'utils';
-import { query } from 'services/user';
+// import { query } from 'services/user';
 import * as strings from 'utils/strings';
 import { Auth } from 'hoc';
 import { Layout } from 'routes';
@@ -125,6 +125,7 @@ export default class ExpertBaseExpertsPage extends Component {
           expertBaseId={sysconfig.ExpertBase}
           PersonList_BottomZone={theme.PersonList_BottomZone}
           // showSearchBox={this.props.app.headerSearchBox ? false : true}
+          PersonList_UpdateHooks={sysconfig.PersonList_UpdateHooks}
           showSearchBox={false}
           disableFilter={!query}
           disableExpertBaseFilter

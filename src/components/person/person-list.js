@@ -166,7 +166,7 @@ export default class PersonList extends Component {
                       <PersonTags
                         className={styles.tagZone}
                         tags={person.tags}
-                        tagsTranslated={person.tags_translated}
+                        tagsTranslated={person.tags_translated_zh}
                         tagsLinkFuncs={tagsLinkFuncs}
                         hideBorder
                       />

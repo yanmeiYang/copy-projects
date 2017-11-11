@@ -82,12 +82,6 @@ export default class ProjectPage extends React.Component {
     });
   }
 
-
-  // componentWillUnmount() {
-  //   this.dispatch({ type: 'app/layout', payload: { showFooter: true } });
-  // }
-  //
-
   onSearch = (data) => {
     if (data.query) {
       return;

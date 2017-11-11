@@ -16,18 +16,7 @@ module.exports = {
   EnableLocalLocale: true,
   Layout_HasNavigator: false,
 
-  Header_LogoWidth: 212,
-  Header_LogoStyle: {
-    width: 185,
-    backgroundPosition: '8px 2px',
-    backgroundSize: 'auto 40px',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor: 'white',
-  },
-  Header_SubTextLogo: 'UCircle',
-  Header_SubTextStyle: { paddingLeft: 12 },
   Header_UserPageURL: '',
-  Footer_Content: '',
 
   // > Search related
   HeaderSearch_TextNavi: [], // 'ExpertSearch', 'ExpertMap'

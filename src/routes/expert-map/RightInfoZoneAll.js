@@ -54,7 +54,7 @@ class RightInfoZoneAll extends React.PureComponent {
           {/*总值：*/}
           {/*<span className={styles.count}>{count * avg}</span>*/}
           平均值：
-          <span className={styles.count}>{avg}</span>
+          {avg && avg !== 'NaN' && <span className={styles.count}>{avg}</span>}
         </div>
 
         <div>

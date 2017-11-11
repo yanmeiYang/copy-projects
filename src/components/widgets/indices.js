@@ -36,14 +36,14 @@ const indicesConfig = {
       return (indices.newStar && indices.newStar.toFixed(2)) || 0;
     },
   },
-  citation: {
-    key: 'citation',
+  citations: {
+    key: 'citations',
     letter: 'c',
     tooltip: '引用数（c）',
     color: 'num_citation',
   },
   num_pubs: {
-    key: 'numpubs',
+    key: 'pubs',
     letter: 'P',
     tooltip: '论文数（P）',
     color: 'num_pubs',
@@ -63,7 +63,7 @@ const indicesConfig = {
   },
 };
 
-const defaultIndices = ['activity-ranking-contrib', 'h_index', 'activity', 'rising_star', 'citation', 'num_pubs'];
+const defaultIndices = ['activity-ranking-contrib', 'h_index', 'activity', 'rising_star', 'citations', 'num_pubs'];
 
 /**
  * @param indices - indices node from person.

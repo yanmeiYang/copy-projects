@@ -20,6 +20,7 @@ class UserCreate extends Component {
     selectedOrgName: '',
     currentConfig: '',
     src: '',
+    sigupPassword: '',
   };
 
   componentWillMount() {
@@ -27,12 +28,13 @@ class UserCreate extends Component {
     this.setState({ src: source });
     const currentSystem = CurrentSystemConfig[source];
     this.setState({ currentConfig: currentSystem.ShowRegisteredRole });
+    this.setState({ sigupPassword: currentSystem.Signup_Password || sysconfig.Signup_Password });
   }
 
   componentDidMount() {
     this.props.dispatch({
       type: 'auth/getCategoryByUserRoles',
-      payload: { category: 'user_roles' },
+      payload: { category: 'user_roles', source: this.state.src },
     });
   }
 
@@ -44,7 +46,7 @@ class UserCreate extends Component {
   checkEmail = (e) => {
     this.setState({ errorMessageByEmail: '' });
     if (e.target.value !== '') {
-      this.props.dispatch({ type: 'auth/checkEmail', payload: { email: e.target.value } });
+      this.props.dispatch({ type: 'auth/checkEmail', payload: { email: e.target.value, source: this.state.src } });
     }
   };
   selectedRole = (e) => {
@@ -138,7 +140,7 @@ class UserCreate extends Component {
         },
       },
     };
-    const { errorMessageByEmail, currentConfig } = this.state;
+    const { errorMessageByEmail, currentConfig, sigupPassword } = this.state;
     const { getFieldDecorator } = this.props.form;
     const { universalConfig, auth } = this.props;
     return (
@@ -190,7 +192,7 @@ class UserCreate extends Component {
               })(<Input />)
             }
           </FormItem>
-          {sysconfig.Signup_Password &&
+          {sigupPassword &&
           <FormItem
             {...formItemLayout}
             label="登录密码"

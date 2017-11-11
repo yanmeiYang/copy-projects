@@ -35,13 +35,11 @@ const toNextPerson = (person) => {
         phone: '', // TODO phone
       },
 
-      // h_index, g_index, num_pubs, citation, activity, diversity, new_star, rising_star, sociability,
-      // 'hindex', 'gindex', 'numpubs', 'citation', 'newStar', 'risingStar', 'activity', 'diversity', 'sociability'
       indices: {
         hindex: person.indices.h_index,
         gindex: person.indices.g_index,
-        numpubs: person.indices.num_pubs,
-        citation: person.indices.num_citation,
+        pubs: person.indices.num_pubs, // pubs, old numpubs
+        citations: person.indices.num_citation, // citations, old citation
         newStar: person.indices.new_star,
         risingStar: person.indices.risingStar,
         activity: person.indices.activity,

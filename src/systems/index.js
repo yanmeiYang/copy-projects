@@ -79,7 +79,7 @@ const getDefaultSystemConfigs = (system, source) => {
     Search_EnablePin: false, // TODO bad：Huawei PIN
     Search_EnableCCFPin: false, // TODO bad：CCF PIN
     Search_EnableTranslateSearch: true, // 启用翻译搜索，显示提示信息;
-    Search_DefaultTranslateSearch: false, // 默认使用翻译搜索;
+    Search_DefaultTranslateSearch: true, // 默认使用翻译搜索;
     Search_EnableKnowledgeGraphHelper: true,
     Search_FixedExpertBase: null,
 
@@ -139,7 +139,9 @@ const getDefaultSystemConfigs = (system, source) => {
     Map_Preload: 2, // 0的时候不缓存，1的时候缓存信息，2的时候缓存信息和90头像，3的时候缓存信息和90、160头像
     CentralPosition: { lat: 37.09024, lng: -95.712891 },
     Map_HotDomains: TopExpertBase.RandomTop100InDomainAminer, // 地图领域
+    Map_HotDomainsLabel: 'Most Influential Scholars:', // 地图领域的描述
     HotDomains_Type: 'filter', // filter or selector
+    Map_FilterRange: true, // 地图range默认显示
 
     Charts_Type: 'bmap', //bmap or geo
 

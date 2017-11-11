@@ -1,5 +1,6 @@
-/* eslint-disable prefer-destructuring */
+/* eslint-disable prefer-destructuring,no-unused-expressions */
 import { sysconfig } from 'systems';
+import { notification } from 'antd';
 import pathToRegexp from 'path-to-regexp';
 import queryString from 'query-string';
 import * as searchService from 'services/search';
@@ -21,7 +22,6 @@ export default {
 
     // use translate search?
     useTranslateSearch: sysconfig.Search_DefaultTranslateSearch,
-    translatedQuery: '',
     translatedLanguage: 0, // 1 en to zh; 2 zh to en;
     translatedText: '',
 
@@ -44,9 +44,7 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen(({ pathname, search }) => {
-        // const query = queryString.parse(search);
-        // console.log('0998', query);
-
+        // TODO dont't use this method to get query, use in component method.
         let match = pathToRegexp('/(uni)?search/:query/:offset/:size').exec(pathname);
         if (match) {
           const keyword = decodeURIComponent(match[2]);
@@ -73,7 +71,7 @@ export default {
   effects: {
     // 搜索全球专家时，使用old service。
     // 使用智库搜索，并且排序算法不是contribute的时候，使用新的搜索API。
-    searchPerson: [function*({ payload }, { call, put, select }) {
+    searchPerson: [function* ({ payload }, { call, put, select }) {
       const { query, offset, size, filters, sort, total } = payload;
       const noTotalFilters = {};
       for (const [key, item] of Object.entries(filters)) {
@@ -85,7 +83,7 @@ export default {
       }
 
       // fix sort key
-      const Sort = fixSortKey(sort, query);
+      const Sort = fixSortKey(sort, query); // Fix default sort key.
 
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
 
@@ -97,6 +95,17 @@ export default {
         searchService.searchPerson,
         query, offset, size, noTotalFilters, Sort, useTranslateSearch,
       );
+
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('data:::', data);
+        if (data && data.data && data.data.queryEscaped) {
+          console.warn('DEVELOPMENT ONLY MESSAGE: Query中有非法字符，已经过滤。详情：宋驰没告诉我!',);
+          notification.open({
+            message: 'DEVELOPMENT ONLY MESSAGE',
+            description: 'Query中有非法字符，已经过滤。详情：宋驰没告诉我!',
+          });
+        }
+      }
 
       if (data.data && data.data.succeed) {
         // console.log('>>>>>> ---==== to next API');
@@ -128,17 +137,17 @@ export default {
     * translateSearch({ payload }, { call, put, select }) {
       // yield put({ type: 'clearTranslateSearch' });
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
-      // console.log("==================", useTranslateSearch);
       if (useTranslateSearch) {
         const { query } = payload;
-        const { data } = yield call(translateService.translateTerm, query);
-        console.log('||translateSearch', payload, '>>', data);
-        if (data && data.status) {
-          const q = query.trim().toLowerCase();
-          const en = data.en && data.en.trim().toLowerCase();
-          // console.log('>>>> query', q, ' == ', en);
-          if (q !== en) {
-            yield put({ type: 'translateSearchSuccess', payload: { data } });
+        if (query) {
+          const { data } = yield call(translateService.translateTerm, query);
+          console.log('||translateSearch', payload, '>>', data);
+          if (data && data.status) {
+            const q = query.trim().toLowerCase();
+            const en = data.en && data.en.trim().toLowerCase();
+            if (q !== en) {
+              yield put({ type: 'translateSearchSuccess', payload: { data } });
+            }
           }
         }
       }
@@ -279,7 +288,7 @@ export default {
     },
 
     translateSearchSuccess(state, { payload: { data } }) {
-      return { ...state, translatedQuery: data.en };
+      return { ...state, translatedText: data.en || data.zh };
     },
 
     setTranslateSearch(state, { payload: { useTranslate } }) {
@@ -287,7 +296,7 @@ export default {
     },
 
     clearTranslateSearch(state) {
-      return { ...state, useTranslateSearch: true, translatedQuery: '' };
+      return { ...state, useTranslateSearch: true, translatedText: '' };
     },
 
     getTopicByMentionSuccess(state, { payload: { data } }) {

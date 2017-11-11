@@ -19,22 +19,7 @@ module.exports = {
    * Layout related
    */
   Layout_HasSideBar: true, // 是否显示左侧菜单
-
-  // Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
-  Header_LogoWidth: 213,
-  Header_LogoStyle: {
-    width: '60px',
-    height: '38px',
-    backgroundPosition: '8px 2px',
-    backgroundSize: ' auto 32px',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor: 'white',
-  },
-  Header_SubTextLogo: 'CIPSC 专家库',
-  Header_SubTextStyle: { marginLeft: 12 },
   Header_UserPageURL: '', // 用户头像点击之后去的页面.
-  // Footer_Content: defaults.EMPTY_BLOCK,
-  ShowFooter: true,
 
   // > Search related
   ApplyUserBtn: false, // 是否显示创建新用户btn

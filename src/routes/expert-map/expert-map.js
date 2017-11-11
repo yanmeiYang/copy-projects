@@ -166,12 +166,6 @@ export default class ExpertMap extends PureComponent {
 
 
     loadScript('BMap', { check: 'BMap' }, (BMap) => {
-      // });
-      // waitforBMap(200, 100, () => {
-      if (!place || !place.results) {
-        that.hideLoading();
-        return;
-      }
       this.showOverLay();
 
       const conf = this.mapConfig[mapType] || this.mapConfig[0];// init map instance.
@@ -187,6 +181,11 @@ export default class ExpertMap extends PureComponent {
 
       this.configBaiduMap(map);
       map1 = this.map; // 地图刷新前，用于存储上次浏览的地点
+
+      if (!place || !place.results) { //为空的时候不显示地图
+        that.hideLoading();
+        return;
+      }
 
       if (mapType === '1') {
         bigAreaConfig.map((ac) => {
@@ -205,8 +204,9 @@ export default class ExpertMap extends PureComponent {
       const pId = [];
       let counts = 0;
 
-      // better sort when first get results, in reducers.
-      place.results.sort((a, b) => b.hindex - a.hindex);
+      if (place.results) {
+        place.results.sort((a, b) => b.hindex - a.hindex);
+      }
 
       const ids = [];
       // Loop all results.
@@ -268,20 +268,11 @@ export default class ExpertMap extends PureComponent {
         }
       }
 
-      // this.hideLoading();
-
-      // Add Markers
-      // loadScript('BMapLib', { check: 'BMapLib' }, (BMapLib) => {
-      // waitforBMapLib(
-      // 200, 100,
-      // () => {
       const markerClusterer = new window.BMapLib.MarkerClusterer(map, {});
       markerClusterer.addMarkers(markers);
       for (let m = 0; m < markers.length; m += 1) {
         this.addMouseoverHandler(markers[m], pId[m]);
       }
-      // }, showLoadErrorMessage,
-      // );
 
       that.hideLoading();
       //cache image

@@ -189,9 +189,10 @@ class ExpertTrajectory extends React.Component {
   };
 
   render() {
+    const wid = document.body.clientHeight - 190;
     return (
       <div>
-        <div className={styles.wor} id="chart" />
+        <div className={styles.wor} id="chart" style={{ height: wid }} />
       </div>
     );
   }

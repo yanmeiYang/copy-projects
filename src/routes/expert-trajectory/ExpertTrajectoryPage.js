@@ -72,13 +72,13 @@ class ExpertTrajectoryPage extends React.Component {
   render() {
     const persons = this.props.expertTrajectory.results;
     const { query } = this.state;
-    console.log(persons);
+    const wid = document.body.clientHeight - 190;
     return (
       <Page contentClass={tc(['ExpertTrajectoryPage'])} onSearch={this.onSearch}
             query={query}>
         <div className={classnames('content-inner', styles.page)}>
           <Layout className={styles.experts}>
-            <Sider className={styles.left}>
+            <Sider className={styles.left} style={{ height: wid }}>
               <PersonListLittle persons={persons}
                                 onClick={this.onPersonClick.bind(this, 1900, 2017)} />
             </Sider>

@@ -1,7 +1,6 @@
 import { loadECharts, loadBMap, loadBMapForECharts } from 'utils/requirejs';
 
 const setBMap = (myChart) => {
-  console.log(myChart);
   const map = myChart.getModel().getComponent('bmap').getBMap();
   const navigationControl = new window.BMap.NavigationControl({ // 添加带有定位的导航控件
     anchor: 'BMAP_ANCHOR_TOP_LEFT', // 靠左上角位置

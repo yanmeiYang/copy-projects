@@ -3,23 +3,44 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Tooltip, Icon } from 'antd';
+import { Button, Tooltip, Icon, Modal, Tabs } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import classnames from 'classnames';
 import styles from './RightInfoZoneCluster.less';
+import ExpertTrajectory from '../expert-trajectory/ExpertTrajectory';
 import * as profileUtils from '../../utils/profile-utils';
 import { HindexGraph } from '../../components/widgets';
 
 let flag = false;
+const { TabPane } = Tabs;
 
-class RightInfoZoneCluster extends React.PureComponent {
+class RightInfoZoneCluster extends React.Component {
+  state = {
+    visible: false,
+    cperson: '',
+  };
+
   componentDidMount() {
   }
+
 
   componentWillReceiveProps() {
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextState.cperson && nextState.cperson !== this.state.cperson) {
+      return true;
+    }
+    return true;
+  }
+
   showPersonelInfo = (person) => {
-    console.log(person);
+    this.setState({
+      visible: true,
+      cperson: person,
+    }, () => {
+      console.log('++++++++++++++++++++++++++++++++++++++++++++++++++');
+    });
   };
 
   showMore = () => {
@@ -32,6 +53,20 @@ class RightInfoZoneCluster extends React.PureComponent {
       document.getElementById('showNum').innerHTML = 'less...';
       flag = true;
     }
+  };
+
+  handleOk = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleCancel = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
   };
 
   render() {
@@ -82,6 +117,13 @@ class RightInfoZoneCluster extends React.PureComponent {
     // TODO 人头按Hindex排序。
     // TODO 显示Hindex分段.
     const avg = (hindexSum / persons.length).toFixed(0);
+
+    const infoJsx = (
+      <div className={styles.charts}>
+        <div id="bycountries" className={styles.chart1} />
+      </div>
+    );
+    console.log(this.state.cperson.id);
     return (
       <div className={styles.rizCluster}>
         <div className={styles.name}>
@@ -93,7 +135,6 @@ class RightInfoZoneCluster extends React.PureComponent {
           <HindexGraph persons={persons} avg={avg} />
         </div>
 
-        {/* images*/}
         <div className={styles.name}>
           <span alt="" className={classnames('icon', styles.expertIcon)} />
           专家&nbsp;
@@ -157,6 +198,29 @@ class RightInfoZoneCluster extends React.PureComponent {
               <div key={interest.key}>{interest.key} ({interest.count})</div>
             );
           })}
+        </div>
+        <div className={styles.showInfo}>
+          <Modal
+            title="Information & Trajectory"
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+            footer={[
+              <Button key="submit" type="primary" size="large" onClick={this.handleOk}>
+                <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.ok" />
+              </Button>,
+            ]}
+            width="700px"
+          >
+            <Tabs defaultActiveKey="1" onChange={this.changeStatistic}>
+              <TabPane tab="Detailed Information" key="1">{infoJsx && infoJsx}</TabPane>
+              <TabPane tab="Trajectory" key="2">
+                <div className={styles.traj}>
+                  <ExpertTrajectory person={this.state.cperson} />
+                </div>
+              </TabPane>
+            </Tabs>
+          </Modal>
         </div>
       </div>
     );

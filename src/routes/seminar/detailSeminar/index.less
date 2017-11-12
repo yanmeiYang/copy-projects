@@ -153,3 +153,54 @@
   .detailSeminar .seminar_action { display: block; }
 
 }
+
+.action_buttons{
+  display: flex;
+  justify-content: flex-end;
+}
+.share_buttons{
+  display: flex;
+  justify-content: flex-end;
+}
+.join_button{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+:global{
+  .social-share .social-share-icon{
+    //border: 0px!important;
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+  }
+  .icon-qq:before{
+    content: "\f1d6" !important;
+  }
+  .icon-facebook{
+    content: "\f09a" !important;
+  }
+  .social-share .icon-facebook:before{
+    content: "\f09a" !important;
+  }
+  .icon-weibo:before{
+    content: '\f18a' !important;
+  }
+  .icon-linkedin:before{
+    content: '\f0e1' !important;
+  }
+  .icon-twitter:before{
+    content: '\f099' !important;
+  }
+  .icon-wechat:before{
+    content: '\f1d7' !important;
+  }
+  .icon-google:before{
+    content: '\f1a0' !important;
+  }
+  .icon-tencent:before{
+    content: '\f1d5' !important;
+  }
+}

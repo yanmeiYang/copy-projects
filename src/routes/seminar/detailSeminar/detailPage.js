@@ -4,6 +4,7 @@
 import React from 'react';
 import QRCode from 'qrcode.react';
 import { connect } from 'dva';
+import ShareButtons from 'react-share-buttons';
 import { routerRedux, Link } from 'dva/router';
 import { Tabs, Button, Icon, Row, Col, Rate, Modal, Spin } from 'antd';
 import ActivityInfo from './activityInfo';
@@ -80,8 +81,9 @@ const DetailPage = ({ dispatch, seminar, app, pad }) => {
       <Spin spinning={loading}>
         {summaryById.title ? <Row>
           <Col className={styles.seminar_action}>
-            <div>
-              {(app.roles.authority.includes(summaryById.organizer[0]) || app.roles.admin)
+            <div className={styles.action_buttons}>
+              {(app.roles &&
+              (app.roles.authority.includes(summaryById.organizer[0]) || app.roles.admin))
               && <span>
                 <a type="danger"
                    style={{
@@ -98,6 +100,14 @@ const DetailPage = ({ dispatch, seminar, app, pad }) => {
                   <Icon type="edit" />
                 </a>
               </span>}
+            </div>
+            <div className={styles.share_buttons}>
+              <ShareButtons
+                sites={['qq', 'weibo', 'tencent', 'linkedin', 'twitter', 'facebook', 'google']}
+                url={window.location.href}
+                title={summaryById.title}
+                description={summaryById.abstract}
+              />
             </div>
           </Col>
           <Col className={styles.thumbnail}>
@@ -125,6 +135,9 @@ const DetailPage = ({ dispatch, seminar, app, pad }) => {
                 </div>}
               </div>
             </div>
+          </Col>
+          <Col className={styles.join_button}>
+            <Button type="primary" size="large">我要报名</Button>
           </Col>
           <CommentsByActivity activityId={summaryById.id} currentUser={currentUser} />
         </Row> : <div style={{ minHeight: 300 }} />}

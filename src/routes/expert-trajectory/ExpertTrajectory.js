@@ -95,12 +95,12 @@ class ExpertTrajectory extends React.Component {
           name: address[key].name + addValue[key][0], //可加入城市信息
           value: [address[key].geo.lng, address[key].geo.lat],
           symbolSize: (addValue[key][1] / 2) + 3,
-          itemStyle: {
-            normal: {
-              color: '#f56a00',
-              borderColor: '#d75000',
-            },
-          },
+          // itemStyle: {
+          //   normal: {
+          //     color: '#f56a00',
+          //     borderColor: '#d75000',
+          //   },
+          // },
         });
       }
     }

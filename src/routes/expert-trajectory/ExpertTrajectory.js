@@ -106,11 +106,10 @@ class ExpertTrajectory extends React.Component {
       }
     }
     const option = myChart.getOption();
-    option.bmap.center = points[0].value; //设置其起始点为中心点
-    console.log(points[0].value);
     option.series[1].data = points;
     option.series[2].data = trajData;
     myChart.setOption(option);
+    myChart.setOption({ bmap: { center: points[0].value } });
     console.log(option);
   };
 

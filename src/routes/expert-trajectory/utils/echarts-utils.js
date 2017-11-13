@@ -7,6 +7,8 @@ const setBMap = (myChart) => {
     type: 'BMAP_NAVIGATION_CONTROL_LARGE', // LARGE类型
     enableGeolocation: true, // 启用显示定位
   });
+  console.log(map.getCenter());
+  console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
   map.addControl(navigationControl);
 };
 

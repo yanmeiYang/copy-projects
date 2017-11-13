@@ -216,6 +216,7 @@ module.exports = {
     // getToBProfile: `${baseURL}/api/2b/profile/:src/:id`,
     getTrajectoryInfo: `${baseURL}/person/geo/trajectory/:id/year/:lo/:hi`,
     getHeatInfo: `${baseURL}/person/geo/trajectory/roster/:rid/year/:lo/:hi/size/:size`,
+    getHeatByQuery: `${baseURL}/search/person/advanced/trajectory`,
 
     // Knowledge Graph
     kgFind: {

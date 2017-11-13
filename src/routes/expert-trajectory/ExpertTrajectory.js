@@ -22,7 +22,6 @@ class ExpertTrajectory extends React.Component {
   componentDidMount() {
     this.initChart(this.props.person);
     window.onresize = () => {
-      console.log('{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{');
       this.initChart(this.props.person);
     };
   }

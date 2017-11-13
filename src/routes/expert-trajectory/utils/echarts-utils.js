@@ -10,7 +10,7 @@ const setBMap = (myChart) => {
   map.addControl(navigationControl);
 };
 
-const showChart = (myChart, type) => { // 功能起始函数
+const showChart = (myChart, type, skinType) => { // 功能起始函数
   let color = '';
   if (type === 'geo') {
     color = '#abc1db';
@@ -56,7 +56,7 @@ const showChart = (myChart, type) => { // 功能起始函数
       center: [34.45, 31.3],
       zoom: 1,
       roam: true,
-      mapStyle: mapStyle[0],
+      mapStyle: mapStyle[skinType],
     },
     visualMap: {
       show: false,
@@ -262,202 +262,6 @@ const mapStyle = [{}, {
       },
     },
   ],
-}, {
-    styleJson: [{
-      featureType: 'water',
-      elementType: 'all',
-      stylers: {
-        color: '#d1d1d1',
-      },
-    }, {
-      featureType: 'land',
-      elementType: 'all',
-      stylers: {
-        color: '#f3f3f3',
-      },
-    }, {
-      featureType: 'railway',
-      elementType: 'all',
-      stylers: {
-        visibility: 'off',
-      },
-    }, {
-      featureType: 'highway',
-      elementType: 'all',
-      stylers: {
-        color: '#fdfdfd',
-      },
-    }, {
-      featureType: 'highway',
-      elementType: 'labels',
-      stylers: {
-        visibility: 'off',
-      },
-    }, {
-      featureType: 'arterial',
-      elementType: 'geometry',
-      stylers: {
-        color: '#fefefe',
-      },
-    }, {
-      featureType: 'arterial',
-      elementType: 'geometry.fill',
-      stylers: {
-        color: '#fefefe',
-      },
-    }, {
-      featureType: 'poi',
-      elementType: 'all',
-      stylers: {
-        visibility: 'off',
-      },
-    }, {
-      featureType: 'green',
-      elementType: 'all',
-      stylers: {
-        visibility: 'off',
-      },
-    }, {
-      featureType: 'subway',
-      elementType: 'all',
-      stylers: {
-        visibility: 'off',
-      },
-    }, {
-      featureType: 'manmade',
-      elementType: 'all',
-      stylers: {
-        color: '#d1d1d1',
-      },
-    }, {
-      featureType: 'local',
-      elementType: 'all',
-      stylers: {
-        color: '#d1d1d1',
-      },
-    }, {
-      featureType: 'arterial',
-      elementType: 'labels',
-      stylers: {
-        visibility: 'off',
-      },
-    }, {
-      featureType: 'boundary',
-      elementType: 'all',
-      stylers: {
-        color: '#fefefe',
-      },
-    }, {
-      featureType: 'building',
-      elementType: 'all',
-      stylers: {
-        color: '#d1d1d1',
-      },
-    }, {
-      featureType: 'label',
-      elementType: 'labels.text.fill',
-      stylers: {
-        color: '#999999',
-      },
-    }],
-}, {
-    styleJson: [{
-      featureType: 'water',
-      elementType: 'all',
-      stylers: {
-        color: '#d1d1d1',
-      },
-    }, {
-      featureType: 'land',
-      elementType: 'all',
-      stylers: {
-        color: '#f3f3f3',
-      },
-    }, {
-      featureType: 'railway',
-      elementType: 'all',
-      stylers: {
-        visibility: 'off',
-      },
-    }, {
-      featureType: 'highway',
-      elementType: 'all',
-      stylers: {
-        color: '#fdfdfd',
-      },
-    }, {
-      featureType: 'highway',
-      elementType: 'labels',
-      stylers: {
-        visibility: 'off',
-      },
-    }, {
-      featureType: 'arterial',
-      elementType: 'geometry',
-      stylers: {
-        color: '#fefefe',
-      },
-    }, {
-      featureType: 'arterial',
-      elementType: 'geometry.fill',
-      stylers: {
-        color: '#fefefe',
-      },
-    }, {
-      featureType: 'poi',
-      elementType: 'all',
-      stylers: {
-        visibility: 'off',
-      },
-    }, {
-      featureType: 'green',
-      elementType: 'all',
-      stylers: {
-        visibility: 'off',
-      },
-    }, {
-      featureType: 'subway',
-      elementType: 'all',
-      stylers: {
-        visibility: 'off',
-      },
-    }, {
-      featureType: 'manmade',
-      elementType: 'all',
-      stylers: {
-        color: '#d1d1d1',
-      },
-    }, {
-      featureType: 'local',
-      elementType: 'all',
-      stylers: {
-        color: '#d1d1d1',
-      },
-    }, {
-      featureType: 'arterial',
-      elementType: 'labels',
-      stylers: {
-        visibility: 'off',
-      },
-    }, {
-      featureType: 'boundary',
-      elementType: 'all',
-      stylers: {
-        color: '#fefefe',
-      },
-    }, {
-      featureType: 'building',
-      elementType: 'all',
-      stylers: {
-        color: '#d1d1d1',
-      },
-    }, {
-      featureType: 'label',
-      elementType: 'labels.text.fill',
-      stylers: {
-        color: '#999999',
-      },
-    }],
 }];
 
 const load = (cb) => {

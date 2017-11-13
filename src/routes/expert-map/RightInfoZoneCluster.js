@@ -6,6 +6,7 @@ import { connect } from 'dva';
 import { Button, Tooltip, Icon, Modal, Tabs, Tag } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import classnames from 'classnames';
+import { sysconfig } from 'systems';
 import styles from './RightInfoZoneCluster.less';
 import RightInfoZonePerson from './RightInfoZonePerson';
 import ExpertTrajectory from '../expert-trajectory/ExpertTrajectory';
@@ -37,15 +38,6 @@ class RightInfoZoneCluster extends React.Component {
     }
     return true;
   }
-
-  showPersonelInfo = (person) => {
-    this.setState({
-      visible: true,
-      cperson: person,
-    }, () => {
-
-    });
-  };
 
   showMore = () => {
     if (flag) {
@@ -84,21 +76,46 @@ class RightInfoZoneCluster extends React.Component {
   };
 
   showTagPersons = (tag) => {
+    const cp = new Set();
     const cpersons = [];
     for (const p of this.props.persons) {
       if (p.tags_zh && p.tags_zh.length > 0) {
+        p.tags_zh.map((t) => {
+          if (t.t === tag) {
+            cp.add(p);
+          }
+          return true;
+        });
+      }
+      if (p.tags && p.tags.length > 0) {
         p.tags.map((t) => {
           if (t.t === tag) {
-            cpersons.push(p);
+            cp.add(p);
           }
           return true;
         });
       }
     }
-    console.log(cpersons);
+    cp.forEach((item) => {
+      cpersons.push(item);
+    });
     this.setState({
       visible1: true,
       cpersons,
+    });
+  };
+
+  onPersonClick = (person) => {
+    const personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
+    window.open(personLinkParams.href, '_blank');
+  };
+
+  showPersonelInfo = (person) => {
+    this.setState({
+      visible: true,
+      cperson: person,
+    }, () => {
+
     });
   };
 
@@ -158,7 +175,7 @@ class RightInfoZoneCluster extends React.Component {
     );
     const tagJsx = (
       <div className={styles.charts}>
-        <PersonListLittle persons={this.state.cpersons} />
+        <PersonListLittle persons={this.state.cpersons} onClick={this.onPersonClick} />
       </div>
     );
     return (
@@ -249,7 +266,7 @@ class RightInfoZoneCluster extends React.Component {
                 <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.ok" />
               </Button>,
             ]}
-            width="700px"
+            width="600px"
           >
             <Tabs defaultActiveKey="1" onChange={this.changeStatistic}>
               <TabPane tab="Detailed Information" key="1">{infoJsx && infoJsx}</TabPane>
@@ -272,7 +289,7 @@ class RightInfoZoneCluster extends React.Component {
                 <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.ok" />
               </Button>,
             ]}
-            width="700px"
+            width="600px"
           >
             <div className={styles.tagsInfo}>{tagJsx && tagJsx}</div>
           </Modal>

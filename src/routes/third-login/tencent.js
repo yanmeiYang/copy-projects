@@ -86,7 +86,11 @@ class Tencent3rd extends React.Component {
       if (authUtil.getLocalToken() !== true && authUtil.getLocalUser().email !== this.state.email) {
         this.props.dispatch({
           type: 'app/login',
-          payload: { email: this.state.email, password: this.state.password },
+          payload: {
+            email: this.state.email,
+            password: this.state.password,
+            role: this.state.role,
+          },
         });
       }
     }

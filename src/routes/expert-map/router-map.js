@@ -5,7 +5,8 @@
 export default {
   ExpertMap: {
     path: '/expert-map',
-    models: () => [import('models/expert-map')],
+    models: () => [import('models/expert-map'),
+      import('models/expert-trajectory')],
     component: () => import('./ExpertMapPage'),
   },
 

@@ -20,7 +20,11 @@ class ExpertTrajectory extends React.Component {
   };
 
   componentDidMount() {
-    this.initChart();
+    this.initChart(this.props.person);
+    window.onresize = () => {
+      console.log('{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{');
+      this.initChart(this.props.person);
+    };
   }
 
   shouldComponentUpdate(nextProps, nextState) { // 状态改变时判断要不要刷新
@@ -28,47 +32,44 @@ class ExpertTrajectory extends React.Component {
       this.callSearchMap(nextState.query);
       return true;
     }
-    if (nextProps.expertTrajectory && nextProps.expertTrajectory.trajData) {
-      if (nextProps.expertTrajectory.trajData !== this.props.expertTrajectory.trajData) {
-        load((echarts) => {
-          this.calculateData(nextProps.expertTrajectory.trajData); // 用新的来代替
-        });
-      }
+    if (nextProps.expertTrajectory.trajData !== this.props.expertTrajectory.trajData) {
+      this.calculateData(nextProps.expertTrajectory.trajData); // 用新的来代替
     }
-    console.log(this.props.person.name);
-    console.log(nextProps.person.name);
-    console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+    if (nextProps.person !== this.props.person) {
+      this.initChart(nextProps.person);
+      return true;
+    }
     return false;
   }
 
   componentWillUpdate() {
-
   }
 
   componentDidUpdate() {
-    console.log('###########################################');
-    console.log(this.props.person);
-    this.initChart();
   }
 
-  initChart = () => {
+  initChart = (person) => {
     const divId = 'chart';
     load((echarts) => {
       myChart = echarts.init(document.getElementById(divId));
-      showChart(myChart, 'bmap');
-      if (this.props.person === '') {
-        console.log('Try to click one person!');
-      } else { //为以后将ExpertTrajectory做组件使用
-        const personId = this.props.person.id;
-        const start = 0;
-        const end = 2017;
-        console.log(this.props.person.name);
-        this.props.dispatch({
-          type: 'expertTrajectory/findTrajById',
-          payload: { personId, start, end },
-        });
-      }
+      const skinType = 0;
+      showChart(myChart, 'bmap', skinType);
+      this.findPersonTraj(person);
     });
+  };
+
+  findPersonTraj = (person) => {
+    if (person === '') {
+      console.log('Try to click one person!');
+    } else { //为以后将ExpertTrajectory做组件使用
+      const personId = person.id;
+      const start = 0;
+      const end = 2017;
+      this.props.dispatch({
+        type: 'expertTrajectory/findTrajById',
+        payload: { personId, start, end },
+      });
+    }
   };
 
   showTrajectory = (data) => {
@@ -105,10 +106,12 @@ class ExpertTrajectory extends React.Component {
       }
     }
     const option = myChart.getOption();
+    option.bmap.center = points[0].value; //设置其起始点为中心点
+    console.log(points[0].value);
     option.series[1].data = points;
     option.series[2].data = trajData;
-    console.log(trajData);
     myChart.setOption(option);
+    console.log(option);
   };
 
   calculateData = (data) => {

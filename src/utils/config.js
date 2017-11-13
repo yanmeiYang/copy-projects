@@ -71,6 +71,8 @@ module.exports = {
     allPersonInBaseAgg: `${baseURL}/roster/:ebid/agg?offset=&order=h_index&size=20`,
     // TODO agg
 
+    searchVenue: `${baseURL}/search/venue`,
+
     searchMap: `${baseURL}/search/person/geo`, // ?query=:search
     searchExpertBaseMap: `${baseURL}/roster/:id/geo/offset/:offset/size/:size`,
     searchExpertNetWithDSL: `${baseURL}/search/person/ego`,

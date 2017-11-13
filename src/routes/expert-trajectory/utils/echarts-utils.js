@@ -126,16 +126,6 @@ const showChart = (myChart, type) => { // 功能起始函数
       data: [],
     }],
   };
-  // option = {
-  //   //animation: false,
-  //   bmap: {
-  //     center: [120.13066322374, 30.240018034923],
-  //     zoom: 14,
-  //     roam: true
-  //   },
-  //
-  //   series: []
-  // }
   myChart.setOption(option);
   if (type === 'bmap') {
     setBMap(myChart);

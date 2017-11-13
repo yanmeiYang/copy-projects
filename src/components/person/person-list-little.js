@@ -30,8 +30,6 @@ class PersonListLittle extends React.PureComponent {
 
   render() {
     const { persons } = this.props;
-    console.log(persons);
-    console.log(this.props);
     return (
       <div className={styles.personList}>
         {

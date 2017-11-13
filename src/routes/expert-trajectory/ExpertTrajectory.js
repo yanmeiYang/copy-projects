@@ -26,13 +26,29 @@ class ExpertTrajectory extends React.Component {
   shouldComponentUpdate(nextProps, nextState) { // 状态改变时判断要不要刷新
     if (nextState.query && nextState.query !== this.state.query) {
       this.callSearchMap(nextState.query);
+      return true;
     }
-    if (nextProps.expertTrajectory.trajData !== this.props.expertTrajectory.trajData) {
-      load((echarts) => {
-        this.calculateData(nextProps.expertTrajectory.trajData); // 用新的来代替
-      });
+    if (nextProps.expertTrajectory && nextProps.expertTrajectory.trajData) {
+      if (nextProps.expertTrajectory.trajData !== this.props.expertTrajectory.trajData) {
+        load((echarts) => {
+          this.calculateData(nextProps.expertTrajectory.trajData); // 用新的来代替
+        });
+      }
     }
-    return true;
+    console.log(this.props.person.name);
+    console.log(nextProps.person.name);
+    console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+    return false;
+  }
+
+  componentWillUpdate() {
+
+  }
+
+  componentDidUpdate() {
+    console.log('###########################################');
+    console.log(this.props.person);
+    this.initChart();
   }
 
   initChart = () => {
@@ -46,61 +62,13 @@ class ExpertTrajectory extends React.Component {
         const personId = this.props.person.id;
         const start = 0;
         const end = 2017;
+        console.log(this.props.person.name);
         this.props.dispatch({
           type: 'expertTrajectory/findTrajById',
           payload: { personId, start, end },
         });
       }
     });
-  };
-
-  initChartBackupxxxxxxxxxxxxxx = () => {
-    let counter = 0;
-    const divId = 'chart';
-    const echartsInterval = setInterval(() => {
-      if (typeof (window.BMap) === 'undefined') {
-        counter += 1;
-        if (counter > 20) {
-          clearInterval(echartsInterval);
-          loadScript('/lib/echarts-trajectory/echarts.min.js', () => {
-            loadScript('/lib/echarts-map/world.js', () => {
-              myChart = window.echarts.init(document.getElementById(divId));
-              showChart(myChart, 'geo');
-              if (this.props.person === '') {
-                console.log('Try to clcik one person!');
-              } else { //为以后将ExpertTrajectory做组件使用
-                const personId = this.props.person.id;
-                const start = 0;
-                const end = 2017;
-                this.props.dispatch({
-                  type: 'expertTrajectory/findTrajById',
-                  payload: { personId, start, end },
-                });
-              }
-            });
-          });
-        }
-      } else {
-        loadScript('/lib/echarts-trajectory/echarts.min.js', () => {
-          loadScript('/lib/echarts-trajectory/bmap.min.js', () => {
-            clearInterval(echartsInterval);
-            myChart = window.echarts.init(document.getElementById(divId));
-            showChart(myChart, 'bmap');
-            if (this.props.person === '') {
-              console.log('Try to clcik one person!');
-            } else { //为以后将ExpertTrajectory做组件使用
-              const personId = this.props.person.id;
-              const start = 0;
-              const end = 2017;
-              this.props.dispatch({
-                type: 'expertTrajectory/findTrajById',
-                payload: { personId, start, end },
-              });
-            }
-          });
-        });
-      }
-    }, 100);
   };
 
   showTrajectory = (data) => {

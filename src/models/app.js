@@ -64,7 +64,7 @@ export default {
     * login({ payload }, { put, call }) {
       // first call login.
       const { restrictRoot, backdoor, ...params } = payload;
-      const { src } = params;
+      const { src, role } = params;
       let authData;
       try {
         const { success, data } = yield call(authService.login, params);
@@ -106,7 +106,7 @@ export default {
           }
         }
         if (getMeData && getMeData.data) {
-          yield put({ type: 'getMeSuccess', payload: getMeData.data });
+          yield put({ type: 'getMeSuccess', payload: getMeData.data, role });
           yield put({ type: 'auth/hideLoading' });
           // yield auth.dispatchAfterLogin(put);
           const from = queryURL('from') || '/';
@@ -157,8 +157,13 @@ export default {
   },
 
   reducers: {
-    getMeSuccess(state, { payload: user }) {
+    getMeSuccess(state, { payload: user, role }) {
       const roles = auth.parseRoles(user);
+      if (role) { // tencent在用
+        if (roles.role.length > 0 && !roles.role.includes(role)) {
+          roles.role[0] = role;
+        }
+      }
       auth.saveLocalAuth(user, roles);
       return { ...state, user, roles };
     },

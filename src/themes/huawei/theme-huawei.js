@@ -19,12 +19,12 @@ module.exports = {
   //
 
   logoZone: [
-    <Link key="0" to="/" className={classnames(styles.logoZones)}>
+    <a key="0" href="/" className={classnames(styles.logoZones)}>
       <div className={classnames(styles.header_logo, 'icon')} />
       <div className={classnames(styles.header_subTitle, 'font-page-title')}>
         知识洞察系统
       </div>
-    </Link>,
+    </a>,
   ],
 
   searchZone: hole.IN_COMPONENT_DEFAULT,
@@ -58,11 +58,26 @@ module.exports = {
     </div>,
   ],
 
-
   index_centerZone: [hole.DEFAULT_PLACEHOLDER, <IndexCenterZone key={0} />],
 
-  // Expert Page
+  //
+  // Person List Component
+  //
+  PersonList_AfterTitleBlock: ({ param }) => <PersonLabel person={param.person} />,
+  PersonList_TitleRightBlock: hole.EMPTY_BLOCK_FUNC,
+  PersonList_RightZone: hole.IN_COMPONENT_DEFAULT,
+  PersonList_BottomZone: hole.IN_COMPONENT_DEFAULT,
 
-  ExpertBaseExpertsPage_Title:
-  hole.IN_COMPONENT_DEFAULT,
+  //
+  // Expert Page
+  //
+
+  ExpertBaseExpertsPage_TitleZone: hole.IN_COMPONENT_DEFAULT,
+  ExpertBaseExpertsPage_Title_SHOW_SeeAll_Link: false,
+  ExpertBaseExpertsPage_MessageZone: hole.IN_COMPONENT_DEFAULT,
+
+  //
+  // Search Page
+  //
+  SearchSorts_RightZone: hole.IN_COMPONENT_DEFAULT,
 };

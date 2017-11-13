@@ -570,6 +570,8 @@ export default class TrendPrediction extends React.PureComponent {
         slideToYear[slide] = [y];
       }
     }
+    const groups = [];
+    let groupNum = 0;
     for (let i = 0; i < trendData.termFreqBySlide.length; i += 1) {
       let pubCount = 5;
       for (const y of slideToYear[i]) {
@@ -595,18 +597,27 @@ export default class TrendPrediction extends React.PureComponent {
           }
           nodeToIndex[`${key}-${i}`] = nodes.length;
           nodes.push(n);
+          let group = -1;
+          const preIndex = nodeToIndex[`${key}-${i - 1}`];
+          if (preIndex !== undefined) {
+            group = groups[preIndex];
+          } else {
+            groupNum += 1;
+            group = groupNum;
+          }
+          groups.push(group);
           if (i > 0 && preNode !== undefined) {
             links.push({
               source: nodeToIndex[`${key}-${i - 1}`],
               target: nodeToIndex[`${key}-${i}`],
               w1: preNode.w,
               w2: n.w,
+              groupID: group,
             });
           }
         }
       }
     }
-
     console.log(trendData);
     // 技术发展图（右上方），用的sankey画图框架
     sankey.nodes(nodes).links(links)
@@ -621,6 +632,9 @@ export default class TrendPrediction extends React.PureComponent {
       })
       .attr('transform', `translate(${axisWidth},${0})`)
       .attr('d', path)
+      .attr('groupID', (d) => {
+        return d.groupID;
+      })
       .style('stroke-width', () => {
         return 20;
       })
@@ -656,11 +670,16 @@ export default class TrendPrediction extends React.PureComponent {
       })
       .on('mouseover', function () {
         d3.select(this).attr('opacity', 0.6);
+        const tar = d3.select(this);
+        d3.selectAll('.link')
+          .filter((d) => {
+            return d.groupID === parseInt(tar.attr('groupID'), 10);
+          })
+          .attr('opacity', 0.6);
+        tar.attr('opacity', 0.4);
       })
       .on('mouseout', function () {
-        d3.select(this).transition().duration(250).attr('opacity', () => {
-          return 1;
-        });
+        d3.selectAll('.link').attr('opacity', 1);
       });
     link.append('title').text((d) => {
       return `${d.source.name} → ${d.target.name}`;//`${d.source.name} → ${d.target.name}${d.source_index}`箭头

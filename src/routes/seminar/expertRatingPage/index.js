@@ -68,7 +68,7 @@ class ExpertRatingPage extends React.Component {
 
   render() {
     const { summaryById, expertRating } = this.props.seminar;
-    const { roles } = this.props.app;
+    const { roles, user } = this.props.app;
     // 评分数据处理
     const expertData = [];
 
@@ -207,7 +207,8 @@ class ExpertRatingPage extends React.Component {
                   render={(text, record) => {
                     return (
                       <div>
-                        {(roles.admin || roles.authority.includes(summaryById.organizer[0])) &&
+                        {(roles.admin || roles.authority.includes(summaryById.organizer[0]) ||
+                        user.id === summaryById.uid) &&
                         <Button type="primary" onClick={this.showModal(text)}
                                 data={JSON.stringify(text)}>评分</Button>}
                         <Modal

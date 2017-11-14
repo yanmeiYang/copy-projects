@@ -19,7 +19,7 @@ import { loadECharts } from 'utils/requirejs';
 import ExpertGoogleMap from './expert-googlemap.js';
 import ExpertMap from './expert-map.js';
 import styles from './ExpertMapPage.less';
-import { showSta } from './utils/sta-utils';
+import { showSta, sortByBigArea, sortByCountries } from './utils/sta-utils';
 
 const tc = applyTheme(styles);
 const [ButtonGroup, TabPane] = [Button.Group, Tabs.TabPane];
@@ -227,6 +227,19 @@ export default class ExpertMapPage extends React.Component {
     }, 100);
   };
 
+  handleDownload = () => {
+    const downloadinterval = setInterval(() => {
+      const data = this.props.expertMap.geoData;
+      if (typeof (data.results) !== 'undefined' && data.results !== 'undefined') {
+        clearInterval(downloadinterval);
+        const d1 = sortByBigArea(data);
+        const d2 = sortByCountries(data);
+        console.log(d1);
+        console.log(d2);
+      }
+    }, 100);
+  };
+
 
   render() {
     const { mapType, query, domainId } = this.state;
@@ -243,7 +256,10 @@ export default class ExpertMapPage extends React.Component {
         <div id="bigArea" className={styles.chart1} />
       </div>
     );
-
+    //const hdType = 'selector';
+    const hdType = sysconfig.HotDomains_Type;
+    const hdFlag = (hdType === 'filter');
+    const dp = hdFlag ? 'none' : '';
     return (
       <Layout
         contentClass={tc(['expertMapPage'])}
@@ -251,13 +267,16 @@ export default class ExpertMapPage extends React.Component {
         onSearch={this.onSearch}
         disableAdvancedSearch
       >
-        <DomainSelector
-          domains={sysconfig.Map_HotDomains}
-          domainsLabel={sysconfig.Map_HotDomainsLabel}
-          currentDomain={domainId}
-          onChange={this.onDomainChange}
-          time={Math.random()}
-        />
+        {
+          hdFlag && <DomainSelector
+            domains={sysconfig.Map_HotDomains}
+            domainsLabel={sysconfig.Map_HotDomainsLabel}
+            currentDomain={domainId}
+            onChange={this.onDomainChange}
+            time={Math.random()}
+            type={hdType}
+          />
+        }
         <MapFilter
           onRangeChange={this.onRangeChange}
           onHindexRangeChange={this.onHindexRangeChange}
@@ -265,6 +284,18 @@ export default class ExpertMapPage extends React.Component {
         />
 
         <div className={styles.headerLine}>
+          <div style={{ display: dp }}>
+            {
+              !hdFlag && <DomainSelector
+                domains={sysconfig.Map_HotDomains}
+                domainsLabel={sysconfig.Map_HotDomainsLabel}
+                currentDomain={domainId}
+                onChange={this.onDomainChange}
+                time={Math.random()}
+                type={hdType}
+              />
+            }
+          </div>
           <div className={styles.left}>
             <div className={styles.level}>
               <span>
@@ -274,13 +305,9 @@ export default class ExpertMapPage extends React.Component {
               <ButtonGroup id="sType" className={styles.sType}>
                 {this.typeConfig.map((conf) => {
                   return !conf.disabled && (
-                      <Button
-                        key={conf.key}
-                        onClick={this.onTypeChange.bind(this, conf.key)}
-                        type={this.state.type === conf.key ? 'primary' : ''}
-                      >
-                        {conf.label}
-                      </Button>
+                    <Button key={conf.key} onClick={this.onTypeChange.bind(this, conf.key)} onKeyDown={() => {}} type={this.state.type === conf.key ? 'primary' : ''}>
+                      {conf.label}
+                    </Button>
                     );
                 })}
               </ButtonGroup>
@@ -300,7 +327,7 @@ export default class ExpertMapPage extends React.Component {
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
                 footer={[
-                  <Button key="back" size="large" onClick={this.handleCancel}>
+                  <Button key="back" size="large" onClick={this.handleDownload}>
                     <Icon type="download" />
                     <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.download" />
                   </Button>,

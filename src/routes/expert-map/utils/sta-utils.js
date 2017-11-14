@@ -119,5 +119,5 @@ const sortByValue = (result) => {
 };
 
 module.exports = {
-  showSta,
+  showSta, sortByCountries, sortByBigArea,
 };

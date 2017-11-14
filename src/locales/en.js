@@ -83,6 +83,7 @@ export default {
   'com.expertMap.headerLine.label.statistic': 'Statistic & Analysis',
   'com.expertMap.headerLine.label.download': 'Export Excel',
   'com.expertMap.headerLine.label.ok': 'OK',
+  'com.expertHeatMap.headerLine.setting.yourSkin': ' Choose Your Skin',
 
   'com.ExpertBase.Button.Add': '添加',
   'com.ExpertBase.Button.Remove': '删除',

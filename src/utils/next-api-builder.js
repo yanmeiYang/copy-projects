@@ -142,6 +142,13 @@ const apiBuilder = {
 };
 
 // Builtin Fields.
+const fseg = {
+  indices_all: ['hindex', 'gindex', 'pubs',
+    'citations', 'newStar', 'risingStar', 'activity', 'diversity', 'sociability'],
+  // 'id', 'name', 'name_zh', 'avatar', 'tags', 'tags_translated_zh',
+  // 'tags_zh', 'org', 'org_zh', 'bio', 'email', 'edu' ', phone'
+};
+
 const F = {
   Type: { Query: 'query', Alter: 'alter' },
 
@@ -153,12 +160,13 @@ const F = {
   },
   fields: {
     person: {
-      indices_all: ['hindex', 'gindex', 'pubs',
-        'citations', 'newStar', 'risingStar', 'activity', 'diversity', 'sociability'],
-      // 'id', 'name', 'name_zh', 'avatar', 'tags', 'tags_translated_zh',
-      // 'tags_zh',
-      // 'org', 'org_zh', 'bio', 'email', 'edu' ', phone'
+      indices_all: fseg.indices_all,
     },
+    person_in_PersonList: [
+      'id', 'name', 'name_zh', 'avatar', 'tags',
+      { profile: ['position', 'affiliation'] },
+      { indices: fseg.indices_all },
+    ],
   },
 
   // alter related
@@ -179,6 +187,10 @@ const applyPlugin = (nextapi, pluginConfig) => {
   return nextapi;
 };
 
+
+const filterByEBs = (nextapi, ebs) => {
+  nextapi.addParam({ filters: { dims: { eb: ebs } } });
+};
 
 const filtersToQuery = (nextapi, searchFiltersFromAggregation) => {
   const filters = searchFiltersFromAggregation;
@@ -217,7 +229,8 @@ const filtersToQuery = (nextapi, searchFiltersFromAggregation) => {
 };
 
 module.exports = {
-  apiBuilder, F, applyPlugin, filtersToQuery,
+  apiBuilder, F,
+  H: { applyPlugin, filtersToQuery, filterByEBs },
 };
 
 //

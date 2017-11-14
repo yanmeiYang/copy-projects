@@ -9,6 +9,15 @@ import {
 } from './utils/echarts-utils';
 
 let myChart;
+
+function getMyChart(echarts) {
+  const divId = 'chart';
+  if (!myChart) {
+    myChart = echarts.init(document.getElementById(divId));
+  }
+  return myChart;
+}
+
 const heatData = []; //热力信息[[lng,lat,num],..,]
 let years = []; //年份
 const trajData = []; //{coords:[[lng,lat],[lng,lat]],...,coords:[[lng,lat],[lng,lat]]}每年的迁徙
@@ -20,9 +29,7 @@ class ExpertHeatmap extends React.Component {
     this.dispatch = this.props.dispatch;
   }
 
-  state = {
-
-  };
+  state = {};
 
   componentWillMount() {
     this.initChart();
@@ -33,18 +40,26 @@ class ExpertHeatmap extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    console.log("dddd",this.props.themeKey, nextProps.themeKey)
     if (nextProps.expertTrajectory.heatData &&
       nextProps.expertTrajectory.heatData !== this.props.expertTrajectory.heatData) {
       this.processData(nextProps.expertTrajectory.heatData);
+      load((echarts) => {
+        getMyChart(echarts);
+        this.loadHeat(2000);
+      });
+    }
+    if (this.props.themeKey !== nextProps.themeKey) {
+      console.log("3333")
+      showChart(myChart, 'bmap', nextProps.themeKey);
       this.loadHeat(2000);
     }
     return true;
   }
 
   initChart = () => {
-    const divId = 'chart';
     load((echarts) => {
-      myChart = echarts.init(document.getElementById(divId));
+      const myChart = getMyChart(echarts);
       const skinType = 0;
       showChart(myChart, 'bmap', skinType);
       if (typeof (this.props.data.data) === 'undefined') {
@@ -172,7 +187,12 @@ class ExpertHeatmap extends React.Component {
     }
     return (
       <div>
-        <div className={styles.heatmap} id="chart" />
+        <div className={styles.whole}>
+          <div className={styles.heatmap} id="chart" />
+          <div className={styles.info}>
+            ddd
+          </div>
+        </div>
         <div className={styles.dinner}>
           <Button className={styles.play} icon={ifPlay} onClick={this.onClick} />
           <Row className={styles.slide}>

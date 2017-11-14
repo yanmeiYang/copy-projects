@@ -7,12 +7,11 @@ const setBMap = (myChart) => {
     type: 'BMAP_NAVIGATION_CONTROL_LARGE', // LARGE类型
     enableGeolocation: true, // 启用显示定位
   });
-  console.log(map.getCenter());
-  console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
   map.addControl(navigationControl);
 };
 
 const showChart = (myChart, type, skinType) => { // 功能起始函数
+  const skin = parseInt(skinType);
   let color = '';
   if (type === 'geo') {
     color = '#abc1db';
@@ -58,17 +57,24 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       center: [34.45, 31.3],
       zoom: 1,
       roam: true,
-      mapStyle: mapStyle[skinType],
+      mapStyle: mapStyle[skin], // mapStyle[skinType]
     },
     visualMap: {
-      show: false,
-      top: 'top',
+      show: true,
+      // top: 'top',
       min: 0,
-      max: 5,
+      max: 10,
+      orient: 'horizontal',
+      right: 'right',
+      bottom: 'bottom',
       seriesIndex: 0,
       calculable: true,
       inRange: {
-        color: ['blue', 'blue', 'green', 'yellow', 'red'],
+        color: ['#d2eafb', '#7ec2f3', '#49a9ee', '#108ee9', '#0c60aa', '#0c60aa'].reverse(),
+        // color: ['green','red','yellow'],
+      },
+      textStyle: {
+        color: '#fff',
       },
     },
     series: [{
@@ -77,6 +83,7 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       data: [],
       pointSize: 5,
       blurSize: 6,
+      blendMode: 'hard-light',
     }, {
       type: 'scatter',
       coordinateSystem: type,
@@ -99,11 +106,14 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       symbolSize: 5,
       itemStyle: {
         normal: {
-          color: '#fff',
+          // color: '#5c95f7',
+          // borderColor: '3d7ef7',
+          color: '#f77a2b',
           borderColor: 'gold',
         },
       },
       data: [],
+      // blendMode: 'lighter',
     }, {
       type: 'lines',
       zlevel: 2,
@@ -112,6 +122,7 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
         show: true,
         period: 6,
         trailLength: 0.1,
+        // color: '#3d7ef7',
         color: '#f78e3d',
         symbol: 'arrow',
         symbolSize: 5,
@@ -119,13 +130,15 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       },
       lineStyle: {
         normal: {
+          // color: '#3d7ef7',
           color: '#f78e3d',
-          width: 1.5,
-          opacity: 0.4,
+          width: 0.8,
+          opacity: 1,
           curveness: 0.2,
         },
       },
       data: [],
+      // blendMode: 'screen',
     }],
   };
   myChart.setOption(option);
@@ -261,6 +274,118 @@ const mapStyle = [{}, {
       elementType: 'all',
       stylers: {
         visibility: 'off',
+      },
+    },
+  ],
+}, {
+  styleJson: [{
+    featureType: 'land',
+    elementType: 'geometry',
+    stylers: {
+      color: '#323c48',
+    },
+  },
+    {
+      featureType: 'building',
+      elementType: 'geometry',
+      stylers: {
+        color: '#2b2b2b',
+      },
+    },
+    {
+      featureType: 'highway',
+      elementType: 'all',
+      stylers: {
+        lightness: -42,
+        saturation: -91,
+      },
+    },
+    {
+      featureType: 'arterial',
+      elementType: 'geometry',
+      stylers: {
+        lightness: -77,
+        saturation: -94,
+      },
+    },
+    {
+      featureType: 'green',
+      elementType: 'geometry',
+      stylers: {
+        color: '#1b1b1b',
+      },
+    },
+    {
+      featureType: 'water',
+      elementType: 'geometry',
+      stylers: {
+        color: '#404a59',
+      },
+    },
+    {
+      featureType: 'subway',
+      elementType: 'geometry.stroke',
+      stylers: {
+        color: '#181818',
+      },
+    },
+    {
+      featureType: 'railway',
+      elementType: 'geometry',
+      stylers: {
+        lightness: -52,
+      },
+    },
+    {
+      featureType: 'all',
+      elementType: 'labels.text.stroke',
+      stylers: {
+        color: '#313131',
+      },
+    },
+    {
+      featureType: 'all',
+      elementType: 'labels.text.fill',
+      stylers: {
+        color: '#8b8787',
+      },
+    },
+    {
+      featureType: 'manmade',
+      elementType: 'geometry',
+      stylers: {
+        color: '#1b1b1b',
+      },
+    },
+    {
+      featureType: 'local',
+      elementType: 'geometry',
+      stylers: {
+        lightness: -75,
+        saturation: -91,
+      },
+    },
+    {
+      featureType: 'subway',
+      elementType: 'geometry',
+      stylers: {
+        lightness: -65,
+      },
+    },
+    {
+      featureType: 'railway',
+      elementType: 'all',
+      stylers: {
+        lightness: -40,
+      },
+    },
+    {
+      featureType: 'boundary',
+      elementType: 'geometry',
+      stylers: {
+        color: '#8b8787',
+        weight: '1',
+        lightness: -29,
       },
     },
   ],

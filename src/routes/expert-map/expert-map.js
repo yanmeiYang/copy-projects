@@ -118,7 +118,6 @@ export default class ExpertMap extends PureComponent {
   listPersonDone = (map, ids) => {
     const imgwidth = 45;
     const type = 'baidu';
-    const model = this.props && this.props.expertMap;
 
     const imgdivs = document.getElementsByName('scholarimg');
     if (imgdivs !== null && imgdivs.length !== 0) {
@@ -188,7 +187,8 @@ export default class ExpertMap extends PureComponent {
       map1 = this.map; // 地图刷新前，用于存储上次浏览的地点
 
       if (!place || !place.results) { //为空的时候不显示地图
-        if (this.props.query === '' || this.props.query === '-') {
+        if (this.props.query === '' || this.props.query === '-' || this.props.query === 'undefined'
+          || typeof (this.props.query) === 'undefined') {
           that.hideLoading();
         }
         return;
@@ -256,9 +256,7 @@ export default class ExpertMap extends PureComponent {
           }
 
           if (include) {
-            const marker = new BMap.Marker(
-              new BMap.Point(newplace[1], newplace[0]), // 这里经度和纬度是反着的
-            );
+            const marker = new BMap.Marker(new BMap.Point(newplace[1], newplace[0])); // 这里经度和纬度是反着的
             marker.setLabel(label);
             marker.setTop();
             marker.setIcon(new BMap.Icon(

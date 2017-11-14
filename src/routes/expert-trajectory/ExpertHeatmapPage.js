@@ -4,13 +4,15 @@
 import React from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
+import { sysconfig } from 'systems';
 import queryString from 'query-string';
 import { routerRedux } from 'dva/router';
 import { Spinner } from 'components';
-import { sysconfig } from 'systems';
+import { DomainSelector } from 'routes/expert-map';
+import { FormattedMessage as FM } from 'react-intl';
 import { applyTheme, theme } from 'themes';
 import { Layout as Page } from 'routes';
-import { Layout, Tabs } from 'antd';
+import { Layout, Tabs, Button, Icon, TreeSelect, Menu, Dropdown, message  } from 'antd';
 import styles from './ExpertHeatmapPage.less';
 import ExpertHeatmap from './ExpertHeatmap';
 
@@ -18,7 +20,6 @@ import ExpertHeatmap from './ExpertHeatmap';
 const { Content, Sider } = Layout;
 const { TabPane } = Tabs;
 const tc = applyTheme(styles);
-
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
 class ExpertHeatmapPage extends React.Component {
@@ -29,6 +30,8 @@ class ExpertHeatmapPage extends React.Component {
 
   state = {
     query: '', //查询窗口中的默认值
+    domainId: '', //领域id
+    themeKey: '1',
   };
 
   componentWillMount() {
@@ -66,46 +69,86 @@ class ExpertHeatmapPage extends React.Component {
     this.props.dispatch({ type: 'expertTrajectory/findTrajsByRosterId', payload: { rosterId, start, end, size } });
   };
 
+  onSkinClick = (value) => {
+    console.log("ddd",value.key)
+    this.setState({ themeKey: value.key });
+  }
+
   render() {
     const data = this.props.expertTrajectory.heatData;
-    const { query } = this.state;
-
+    const { query, themeKey } = this.state;
+    const menu = (
+      <Menu onClick={this.onSkinClick}>
+        <Menu.Item key="1">{themeKey === '1' && <Icon type="check" />} 佩琦风</Menu.Item>
+        <Menu.Item key="2">{themeKey === '2' && <Icon type="check" />} 抹茶风</Menu.Item>
+        <Menu.Item key="3">{themeKey === '3' && <Icon type="check" />} 五花肉风</Menu.Item>
+      </Menu>
+    );
 
     const load = this.props.loading.models.expertTrajectory;
     this.state.rightType = this.props.expertTrajectory.infoZoneIds;
     return (
       <Page contentClass={tc(['ExpertHeatmapPage'])} onSearch={this.onSearch}
             query={query}>
+        <div className={styles.filter}>
+          <DomainSelector
+            domains={sysconfig.Map_HotDomains}
+            domainsLabel={sysconfig.Map_HotDomainsLabel}
+            currentDomain={this.state.domainId}
+            onChange={this.onDomainChange}
+            time={Math.random()}
+          />
+        </div>
+        <div className={styles.header}>
+          <div className={styles.domain}> ddd </div>
+          <div className={styles.setting}>
+            <div className={styles.statics}>
+              <Button onClick={this.showModal}>
+                <Icon type="line-chart" />
+                <FM defaultMessage="Statistic & Analysis" id="com.expertMap.headerLine.label.statistic" />
+              </Button>
+            </div>
+            <div className={styles.yourSkin}>
+              <Dropdown overlay={menu} className={styles.skin}>
+                <a className="ant-dropdown-link" href="#">
+                  <Icon type="setting" />
+                  <FM defaultMessage=" Choose Your Skin" id="com.expertHeatMap.headerLine.setting.yourSkin" />
+                </a>
+              </Dropdown>
+            </div>
+          </div>
+        </div>
         <div className={classnames('content-inner', styles.page)}>
-          <Layout>
-            <Sider className={classnames(styles.left, 'card-container')} width={260}
-                   style={{ backgroundColor: '#fff' }}>
-              <Tabs
-                className={styles.card}
-                type="card"
-                onChange={this.onInfoTabChange}
-                activeKey={this.state.infoTab}
-                tabBarExtraContent={''}
-              >
-                <TabPane tab="VIEW" key="overview">
-                  <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
-                </TabPane>
-                <TabPane tab="SELECTION" key="selection">
-                  <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
-                </TabPane>
-                <TabPane tab="EVENTS" key="event">
-                  <div id="scroll">
-                    <Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />
-                  </div>
-                </TabPane>
-              </Tabs>
-            </Sider>
-            <Layout className={styles.right}>
-              <Content className={styles.content}>
-                <ExpertHeatmap data={data} />
-              </Content>
-            </Layout>
-          </Layout>
+          <ExpertHeatmap data={data} />
+          {/*<Layout>*/}
+            {/*<Sider className={classnames(styles.left, 'card-container')} width={260}*/}
+                   {/*style={{ backgroundColor: '#fff' }}>*/}
+              {/*<Tabs*/}
+                {/*className={styles.card}*/}
+                {/*type="card"*/}
+                {/*onChange={this.onInfoTabChange}*/}
+                {/*activeKey={this.state.infoTab}*/}
+                {/*tabBarExtraContent={''}*/}
+              {/*>*/}
+                {/*<TabPane tab="VIEW" key="overview">*/}
+                  {/*<Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />*/}
+                {/*</TabPane>*/}
+                {/*<TabPane tab="SELECTION" key="selection">*/}
+                  {/*<Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />*/}
+                {/*</TabPane>*/}
+                {/*<TabPane tab="EVENTS" key="event">*/}
+                  {/*<div id="scroll">*/}
+                    {/*<Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />*/}
+                  {/*</div>*/}
+                {/*</TabPane>*/}
+              {/*</Tabs>*/}
+            {/*</Sider>*/}
+            {/*<Layout className={styles.right}>*/}
+              {/*<Content className={styles.content}>*/}
+                {/*<ExpertHeatmap data={data} />*/}
+              {/*</Content>*/}
+            {/*</Layout>*/}
+          {/*</Layout>*/}
         </div>
       </Page>
     );

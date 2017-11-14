@@ -18,13 +18,14 @@ const AvailableSystems = [
   'bole',
   'acmfellow',
   'DataAnnotation',
+  'thrcb',
 ];
 
 let System;
 // System = 'aminer';
 // System = 'ccf';
 // System = 'ccftest';
-System = 'huawei';
+// System = 'huawei';
 // System = 'alibaba';
 // System = 'tencent';
 // System = 'cie';
@@ -34,6 +35,7 @@ System = 'huawei';
 // System = 'bole';
 // System = 'acmfellow';
 // System = 'DataAnnotation';
+System = 'thrcb';
 
 let Source = System; // AppID, Used in UniversalConfig.
 

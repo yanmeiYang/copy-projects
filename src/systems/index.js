@@ -6,7 +6,7 @@ import { addLocaleData } from 'react-intl';
 import { loadSavedLocale } from 'utils/locale';
 import { System, Source } from 'utils/system';
 import { TopExpertBase } from 'utils/expert-base';
-import defaults from './utils'; // Warrning: no zhuo no die.
+import defaults from './utils'; // Warning: no zhuo no die.
 
 // All available systems.
 const CurrentSystemConfig = {
@@ -23,6 +23,7 @@ const CurrentSystemConfig = {
   bole: require('./bole/config'),
   acmfellow: require('./acmfellow/config'),
   DataAnnotation: require('./DataAnnotation/config'),
+  thrcb: require('./thrcb/config'),
 };
 
 // 默认配置

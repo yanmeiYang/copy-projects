@@ -4,8 +4,10 @@
 import React from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
+import { sysconfig } from 'systems';
 import { routerRedux } from 'dva/router';
 import { applyTheme } from 'themes';
+import { DomainSelector } from 'routes/expert-map';
 import { Layout } from 'antd';
 import { Layout as Page } from 'routes';
 import styles from './ExpertTrajectoryPage.less';
@@ -25,6 +27,7 @@ class ExpertTrajectoryPage extends React.Component {
   state = {
     query: '', //查询窗口中的默认值
     cperson: '', //当前选择的人
+    domainId: '', //领域id
   };
 
   componentWillMount() {
@@ -76,6 +79,13 @@ class ExpertTrajectoryPage extends React.Component {
     return (
       <Page contentClass={tc(['ExpertTrajectoryPage'])} onSearch={this.onSearch}
             query={query}>
+        <DomainSelector
+          domains={sysconfig.Map_HotDomains}
+          domainsLabel={sysconfig.Map_HotDomainsLabel}
+          currentDomain={domainId}
+          onChange={this.onDomainChange}
+          time={Math.random()}
+        />
         <div className={classnames('content-inner', styles.page)}>
           <Layout className={styles.experts}>
             <Sider className={styles.left} style={{ height: wid }}>

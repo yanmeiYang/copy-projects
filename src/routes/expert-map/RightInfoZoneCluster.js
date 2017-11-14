@@ -39,7 +39,7 @@ class RightInfoZoneCluster extends React.Component {
       visible: true,
       cperson: person,
     }, () => {
-      console.log('++++++++++++++++++++++++++++++++++++++++++++++++++');
+
     });
   };
 
@@ -55,15 +55,13 @@ class RightInfoZoneCluster extends React.Component {
     }
   };
 
-  handleOk = (e) => {
-    console.log(e);
+  handleOk = () => {
     this.setState({
       visible: false,
     });
   };
 
-  handleCancel = (e) => {
-    console.log(e);
+  handleCancel = () => {
     this.setState({
       visible: false,
     });
@@ -123,7 +121,6 @@ class RightInfoZoneCluster extends React.Component {
         <div id="bycountries" className={styles.chart1} />
       </div>
     );
-    console.log(this.state.cperson.id);
     return (
       <div className={styles.rizCluster}>
         <div className={styles.name}>

@@ -85,7 +85,6 @@ export default class ExpertMapPage extends React.Component {
     }
   }
 
-  // TODO use did update ?
   shouldComponentUpdate(np, ns) { // nextProps, nextState
     if (ns.domainId && ns.domainId !== this.state.domainId && ns.domainId !== 'aminer') {
       this.searchMapByDomain(ns.domainId);
@@ -99,6 +98,9 @@ export default class ExpertMapPage extends React.Component {
       return true;
     }
     if (ns.visible !== this.state.visible) {
+      return true;
+    }
+    if (np.expertMap.geoData !== this.props.expertMap.geoData) {
       return true;
     }
     return false;
@@ -193,15 +195,13 @@ export default class ExpertMapPage extends React.Component {
     });
   };
 
-  handleOk = (e) => {
-    console.log(e);
+  handleOk = () => {
     this.setState({
       visible: false,
     });
   };
 
-  handleCancel = (e) => {
-    console.log(e);
+  handleCancel = () => {
     this.setState({
       visible: false,
     });

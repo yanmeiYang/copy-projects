@@ -26,7 +26,6 @@ export default {
     },
 
     * findTrajById({ payload }, { call, put }) {
-      console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^');
       const { personId, start, end } = payload; //注意是两边的名字要一致，否则错误
       const data = yield call(traDataFindService.findTrajPerson, personId, start, end);
       yield put({ type: 'findTrajByIdSuccess', payload: { data } });
@@ -41,7 +40,6 @@ export default {
 
   reducers: {
     findTrajByIdSuccess(state, { payload: { data } }) {
-      console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
       return { ...state, trajData: data };
     },
 

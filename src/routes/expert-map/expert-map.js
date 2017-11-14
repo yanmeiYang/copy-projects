@@ -67,12 +67,17 @@ export default class ExpertMap extends PureComponent {
   };
 
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch, expertMap } = this.props;
     resetRightInfoToGlobal(dispatch);
     const pro = this.props;
-    this.showMap(pro.expertMap.geoData, pro.type, pro.range, pro.hindexRange);
+    this.showMap(expertMap.geoData, pro.type, pro.range, pro.hindexRange);
     window.onresize = () => { // 改变窗口大小的时候重新加载地图，防止出现错位问题
-      this.showMap(pro.expertMap.geoData, pro.type, pro.range, pro.hindexRange);
+      this.showMap(
+        this.props.expertMap.geoData,
+        this.props.type,
+        this.props.range,
+        this.props.hindexRange,
+      );
     };
   }
 
@@ -183,7 +188,6 @@ export default class ExpertMap extends PureComponent {
       map1 = this.map; // 地图刷新前，用于存储上次浏览的地点
 
       if (!place || !place.results) { //为空的时候不显示地图
-        that.hideLoading();
         return;
       }
 

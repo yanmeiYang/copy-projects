@@ -6,6 +6,7 @@ import { showChart, load } from './utils/echarts-utils';
 
 let address = [];
 let addValue = {};
+let addInfo = [];
 let myChart; // used for loadScript
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
@@ -89,32 +90,42 @@ class ExpertTrajectory extends React.Component {
       }
     }
 
-    for (const key in address) {
+    for ( let i = 0; i < addInfo.length; i += 1) {
       if (address) {
+        const key = addInfo[i];
         points.push({
           name: address[key].name + addValue[key][0], //可加入城市信息
           value: [address[key].geo.lng, address[key].geo.lat],
           symbolSize: (addValue[key][1] / 2) + 3,
-          itemStyle: {
-            normal: {
-              color: '#f56a00',
-              borderColor: '#d75000',
-            },
-          },
+          // itemStyle: {
+          //   normal: {
+          //     color: '#f56a00',
+          //     borderColor: '#d75000',
+          //   },
+          // },
         });
       }
     }
     const option = myChart.getOption();
-    option.series[1].data = points;
-    option.series[2].data = trajData;
-    myChart.setOption(option);
-    myChart.setOption({ bmap: { center: points[0].value } });
+    let lineData;
+    let pointData;
+    myChart.setOption({ title: { text: '学者' + this.props.person.name_zh + '迁徙图' } });
+    // myChart.setOption({ bmap: { center: points[0].value } });
+
+    for (const i of _.range(trajData.length + 1)) { // 每隔0.2秒画一条线
+      setTimeout(() => {
+        lineData = trajData.slice(0, i);
+        pointData = points.slice(0, i);
+        myChart.setOption({ series: [{}, { data: pointData }, { data: lineData }] });
+      }, i * 1000);
+    }
     console.log(option);
   };
 
   calculateData = (data) => {
     address = [];
     addValue = {};
+    addInfo = [];
     for (const key in data.data.addresses) {
       if (data.data.addresses) {
         address[key] = data.data.addresses[key];
@@ -128,6 +139,7 @@ class ExpertTrajectory extends React.Component {
         let previous = '';
         for (const d of data.data.trajectories[key]) {
           if (previous !== d[1] && previous !== '') {
+            addInfo.push(d[1]);
             endYear = parseInt(d[0], 10);
             addValue[previous][0] = `${addValue[previous][0]}${start}-${d[0]},`;
             addValue[previous][1] = ((addValue[previous][1] + endYear) - startYear) + 1;
@@ -147,11 +159,15 @@ class ExpertTrajectory extends React.Component {
             addValue[d[1]][1] = 0;
             [start] = d;
             startYear = parseInt(d[0], 10);
+            addInfo.push(d[1]);
           }
           [, previous] = d;
         }
-        addValue[previous][0] = `${addValue[previous][0]}${start}-now,`;
-        addValue[previous][1] = ((addValue[previous][1] + 2017) - startYear) + 1;
+        if (addValue[previous] !== undefined) {
+          addInfo.push(previous);
+          addValue[previous][0] = `${addValue[previous][0]}${start}-now,`;
+          addValue[previous][1] = ((addValue[previous][1] + 2017) - startYear) + 1;
+        }
       }
     }
     this.showTrajectory(data);

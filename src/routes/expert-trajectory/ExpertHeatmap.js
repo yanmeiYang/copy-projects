@@ -40,6 +40,7 @@ class ExpertHeatmap extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    console.log("dddd",this.props.themeKey, nextProps.themeKey)
     if (nextProps.expertTrajectory.heatData &&
       nextProps.expertTrajectory.heatData !== this.props.expertTrajectory.heatData) {
       this.processData(nextProps.expertTrajectory.heatData);
@@ -47,6 +48,11 @@ class ExpertHeatmap extends React.Component {
         getMyChart(echarts);
         this.loadHeat(2000);
       });
+    }
+    if (this.props.themeKey !== nextProps.themeKey) {
+      console.log("3333")
+      showChart(myChart, 'bmap', nextProps.themeKey);
+      this.loadHeat(2000);
     }
     return true;
   }
@@ -181,7 +187,12 @@ class ExpertHeatmap extends React.Component {
     }
     return (
       <div>
-        <div className={styles.heatmap} id="chart" />
+        <div className={styles.whole}>
+          <div className={styles.heatmap} id="chart" />
+          <div className={styles.info}>
+            ddd
+          </div>
+        </div>
         <div className={styles.dinner}>
           <Button className={styles.play} icon={ifPlay} onClick={this.onClick} />
           <Row className={styles.slide}>

@@ -31,7 +31,7 @@ class ExpertHeatmapPage extends React.Component {
   state = {
     query: '', //查询窗口中的默认值
     domainId: '', //领域id
-    themeKey: '1',
+    themeKey: '0',
   };
 
   componentWillMount() {
@@ -76,12 +76,15 @@ class ExpertHeatmapPage extends React.Component {
 
   render() {
     const data = this.props.expertTrajectory.heatData;
-    const { query, themeKey } = this.state;
+    const { query, themeKey, domainId } = this.state;
     const menu = (
       <Menu onClick={this.onSkinClick}>
-        <Menu.Item key="1">{themeKey === '1' && <Icon type="check" />} 佩琦风</Menu.Item>
-        <Menu.Item key="2">{themeKey === '2' && <Icon type="check" />} 抹茶风</Menu.Item>
-        <Menu.Item key="3">{themeKey === '3' && <Icon type="check" />} 五花肉风</Menu.Item>
+        <Menu.Item key="0">{themeKey === '0' && <Icon type="check" />} 原始风</Menu.Item>
+        <Menu.Item key="1">{themeKey === '1' && <Icon type="check" />} 商务风</Menu.Item>
+        <Menu.Item key="2">{themeKey === '2' && <Icon type="check" />} 暗黑风</Menu.Item>
+        <Menu.Item key="3">{themeKey === '3' && <Icon type="check" />} 佩琦风</Menu.Item>
+        <Menu.Item key="4">{themeKey === '4' && <Icon type="check" />} 抹茶风</Menu.Item>
+        <Menu.Item key="5">{themeKey === '5' && <Icon type="check" />} 五花肉风</Menu.Item>
       </Menu>
     );
 
@@ -90,17 +93,17 @@ class ExpertHeatmapPage extends React.Component {
     return (
       <Page contentClass={tc(['ExpertHeatmapPage'])} onSearch={this.onSearch}
             query={query}>
-        <div className={styles.filter}>
-          <DomainSelector
-            domains={sysconfig.Map_HotDomains}
-            domainsLabel={sysconfig.Map_HotDomainsLabel}
-            currentDomain={this.state.domainId}
-            onChange={this.onDomainChange}
-            time={Math.random()}
-          />
-        </div>
         <div className={styles.header}>
-          <div className={styles.domain}> ddd </div>
+          <div className={styles.domain}>
+            <DomainSelector
+              domains={sysconfig.Map_HotDomains}
+              domainsLabel={sysconfig.Map_HotDomainsLabel}
+              currentDomain={domainId}
+              onChange={this.onDomainChange}
+              time={Math.random()}
+              type="selector"
+            />
+          </div>
           <div className={styles.setting}>
             <div className={styles.statics}>
               <Button onClick={this.showModal}>
@@ -119,7 +122,7 @@ class ExpertHeatmapPage extends React.Component {
           </div>
         </div>
         <div className={classnames('content-inner', styles.page)}>
-          <ExpertHeatmap data={data} />
+          <ExpertHeatmap data={data} themeKey={themeKey} />
           {/*<Layout>*/}
             {/*<Sider className={classnames(styles.left, 'card-container')} width={260}*/}
                    {/*style={{ backgroundColor: '#fff' }}>*/}

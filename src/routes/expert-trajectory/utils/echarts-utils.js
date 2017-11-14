@@ -11,6 +11,7 @@ const setBMap = (myChart) => {
 };
 
 const showChart = (myChart, type, skinType) => { // 功能起始函数
+  const skin = parseInt(skinType);
   let color = '';
   if (type === 'geo') {
     color = '#abc1db';
@@ -56,7 +57,7 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       center: [34.45, 31.3],
       zoom: 1,
       roam: true,
-      mapStyle: mapStyle[2], // mapStyle[skinType]
+      mapStyle: mapStyle[skin], // mapStyle[skinType]
     },
     visualMap: {
       show: true,

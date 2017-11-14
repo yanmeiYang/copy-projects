@@ -10,6 +10,7 @@ import { Tabs, Button, Icon, Row, Col, Rate, Modal, Spin } from 'antd';
 import ActivityInfo from './activityInfo';
 import ExpertAllInfo from './expertAllInfo';
 import CommentsByActivity from './comments';
+import * as auth from '../../../utils/auth';
 import * as profileUtils from '../../../utils/profile-utils';
 import styles from './index.less';
 
@@ -83,7 +84,8 @@ const DetailPage = ({ dispatch, seminar, app, pad }) => {
           <Col className={styles.seminar_action}>
             <div className={styles.action_buttons}>
               {(app.roles &&
-              (app.roles.authority.includes(summaryById.organizer[0]) || app.roles.admin))
+              (app.roles.authority.includes(summaryById.organizer[0]) || auth.isSuperAdmin(app.roles) ||
+              summaryById.uid === app.user.id))
               && <span>
                 <a type="danger"
                    style={{

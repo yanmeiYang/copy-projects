@@ -365,7 +365,7 @@ export default class Seminar extends React.Component {
                     return (
                       <div key={result.id + Math.random()}>
                         {(app.roles.authority.indexOf(result.organizer[0]) >= 0
-                        || auth.isSuperAdmin(app.roles))
+                        || auth.isSuperAdmin(app.roles) || result.uid === app.user.id)
                         && <Button type="danger" icon="delete" size="small"
                                    className={styles.delSeminarBtn}
                                    onClick={this.delTheSeminar.bind(this, result, index)}>

@@ -35,7 +35,7 @@ class NewActivityList extends React.Component {
       style.borderLeft = result.organizer[0].includes('专业委员会') ? CommitteeColor : DivisionColor;
     }
     let expertRating;
-    if (app.roles.admin) {
+    if (app.roles.admin || app.user.id === result.uid) {
       expertRating = true;
     } else if (app.roles.role[0] && app.roles.role[0].includes('专员') && app.roles.role[0].includes(result.category)) {
       expertRating = true;

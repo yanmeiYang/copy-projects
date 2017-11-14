@@ -127,24 +127,15 @@ export default class ExpertGoogleMap extends React.Component {
     const filterRange = range || 'all';
     const mapType = type || '0';
     if (!place || !place.results) {
-      that.hideLoading();
+      if (this.props.query === '' || this.props.query === '-') {
+        that.hideLoading();
+      }
       return;
     }
 
     loadScript('GoogleMap', { check: ['google', 'maps'] }, (gmaps) => {
 
       that.showOverLay();
-      // const mapinterval = setInterval(() => {
-      // if (typeof (window.google) === 'undefined') {
-      //   console.log('wait for Google');
-      //   counter += 1;
-      //   if (counter > 200) {
-      //     clearInterval(mapinterval);
-      //     that.hideLoading();
-      //     document.getElementById('allmap').innerHTML = 'Cannot connect to Google Map! Please check the network state!';
-      //   }
-      // } else {
-      //   clearInterval(mapinterval);
       if (!map1) {
         map1 = new gmaps.Map(document.getElementById('allmap'), {
           center: { lat: sysconfig.CentralPosition.lat, lng: sysconfig.CentralPosition.lng },
@@ -240,7 +231,7 @@ export default class ExpertGoogleMap extends React.Component {
               text: ac[0],
               fontSize: '12px',
               fontStyle: 'italic',
-              fontWeight: 'bold'
+              fontWeight: 'bold',
             },
             icon: { url: '/images/map/blank.png' },
             map,
@@ -253,10 +244,7 @@ export default class ExpertGoogleMap extends React.Component {
         that.addMouseoverHandler(gmaps, map, markers[m], place.results[m].id);
       }
       that.hideLoading();
-      //cache image
       checkCacheLevel(sysconfig.Map_Preload, ids);
-      // }
-      // }, 100);
     });
   };
 

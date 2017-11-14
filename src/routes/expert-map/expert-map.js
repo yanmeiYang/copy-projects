@@ -188,6 +188,9 @@ export default class ExpertMap extends PureComponent {
       map1 = this.map; // 地图刷新前，用于存储上次浏览的地点
 
       if (!place || !place.results) { //为空的时候不显示地图
+        if (this.props.query === '' || this.props.query === '-') {
+          that.hideLoading();
+        }
         return;
       }
 

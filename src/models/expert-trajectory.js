@@ -13,6 +13,7 @@ export default {
     trajData: {},
     results: [],
     heatData: {},
+    loading: false,
   },
 
   subscriptions: {},
@@ -26,19 +27,39 @@ export default {
     },
 
     * findTrajById({ payload }, { call, put }) {
+      yield put({ type: 'showLoading' });
       const { personId, start, end } = payload; //注意是两边的名字要一致，否则错误
       const data = yield call(traDataFindService.findTrajPerson, personId, start, end);
       yield put({ type: 'findTrajByIdSuccess', payload: { data } });
     },
 
     * findTrajsByRosterId({ payload }, { call, put }) {
+      yield put({ type: 'showLoading' });
       const { rosterId, start, end, size } = payload;
       const data = yield call(traDataFindService.findTrajsHeat, rosterId, start, end, size);
       yield put({ type: 'findTrajsByRosterIdSuccess', payload: { data } });
     },
+
+    * findTrajsHeatAdvance({ payload }, { call, put }) {
+      yield put({ type: 'showLoading' });
+      const { name, offset, org, term, size } = payload;
+      const data = yield call(
+        traDataFindService.findTrajsHeatAdvance,
+        name, offset, org, term, size,
+      );
+      yield put({ type: 'findTrajsHeatAdvanceSuccess', payload: { data } });
+    },
+
   },
 
   reducers: {
+    showLoading(state) {
+      return {
+        ...state,
+        loading: true,
+      };
+    },
+
     findTrajByIdSuccess(state, { payload: { data } }) {
       return { ...state, trajData: data };
     },
@@ -56,5 +77,15 @@ export default {
         loading: false,
       };
     },
+
+    findTrajsHeatAdvanceSuccess(state, { payload: { data } }) { // state?
+      const { result } = data;
+      return {
+        ...state,
+        results: result,
+        loading: false,
+      };
+    },
+
   },
 };

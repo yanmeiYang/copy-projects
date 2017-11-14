@@ -43,6 +43,19 @@ export async function findTrajsHeat(rosterId, start, end, size) {
     );
 }
 
+export async function findTrajsHeatAdvance(name, offset, org, term, size) {
+  return request(
+    api.getHeatByQuery
+      .replace(':name', name)
+      .replace(':offset', offset)
+      .replace(':org', org)
+      .replace(':term', term)
+      .replace(':size', size)
+    , { method: 'GET' },
+  );
+}
+
+
 export async function findTop10000Data() {
   return request('/lab/trajectory/heatData40.json');
 }

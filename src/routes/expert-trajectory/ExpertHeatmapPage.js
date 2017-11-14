@@ -53,7 +53,8 @@ class ExpertHeatmapPage extends React.Component {
   onSearch = (data) => {
     if (data.query) {
       this.setState({ query: data.query });
-      alert('啊！我还不能变啊!等荆榆', data.query);
+      const [name, offset, org, term, size] = ['', 0, '', data.query, 1000];
+      this.props.dispatch({ type: 'expertTrajectory/findTrajsHeatAdvance', payload: { name, offset, org, term, size } });
     }
   };
 

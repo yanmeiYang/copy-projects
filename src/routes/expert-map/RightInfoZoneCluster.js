@@ -3,13 +3,16 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Button, Tooltip, Icon, Modal, Tabs } from 'antd';
+import { Button, Tooltip, Icon, Modal, Tabs, Tag } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import classnames from 'classnames';
+import { sysconfig } from 'systems';
 import styles from './RightInfoZoneCluster.less';
+import RightInfoZonePerson from './RightInfoZonePerson';
 import ExpertTrajectory from '../expert-trajectory/ExpertTrajectory';
 import * as profileUtils from '../../utils/profile-utils';
 import { HindexGraph } from '../../components/widgets';
+import { PersonListLittle } from '../../components/person';
 
 let flag = false;
 const { TabPane } = Tabs;
@@ -17,7 +20,9 @@ const { TabPane } = Tabs;
 class RightInfoZoneCluster extends React.Component {
   state = {
     visible: false,
+    visible1: false,
     cperson: '',
+    cpersons: '',
   };
 
   componentDidMount() {
@@ -33,15 +38,6 @@ class RightInfoZoneCluster extends React.Component {
     }
     return true;
   }
-
-  showPersonelInfo = (person) => {
-    this.setState({
-      visible: true,
-      cperson: person,
-    }, () => {
-
-    });
-  };
 
   showMore = () => {
     if (flag) {
@@ -64,6 +60,62 @@ class RightInfoZoneCluster extends React.Component {
   handleCancel = () => {
     this.setState({
       visible: false,
+    });
+  };
+
+  handleOk1 = () => {
+    this.setState({
+      visible1: false,
+    });
+  };
+
+  handleCancel1 = () => {
+    this.setState({
+      visible1: false,
+    });
+  };
+
+  showTagPersons = (tag) => {
+    const cp = new Set();
+    const cpersons = [];
+    for (const p of this.props.persons) {
+      if (p.tags_zh && p.tags_zh.length > 0) {
+        p.tags_zh.map((t) => {
+          if (t.t === tag) {
+            cp.add(p);
+          }
+          return true;
+        });
+      }
+      if (p.tags && p.tags.length > 0) {
+        p.tags.map((t) => {
+          if (t.t === tag) {
+            cp.add(p);
+          }
+          return true;
+        });
+      }
+    }
+    cp.forEach((item) => {
+      cpersons.push(item);
+    });
+    this.setState({
+      visible1: true,
+      cpersons,
+    });
+  };
+
+  onPersonClick = (person) => {
+    const personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
+    window.open(personLinkParams.href, '_blank');
+  };
+
+  showPersonelInfo = (person) => {
+    this.setState({
+      visible: true,
+      cperson: person,
+    }, () => {
+
     });
   };
 
@@ -118,7 +170,12 @@ class RightInfoZoneCluster extends React.Component {
 
     const infoJsx = (
       <div className={styles.charts}>
-        <div id="bycountries" className={styles.chart1} />
+        <RightInfoZonePerson person={this.state.cperson} />
+      </div>
+    );
+    const tagJsx = (
+      <div className={styles.charts}>
+        <PersonListLittle persons={this.state.cpersons} onClick={this.onPersonClick} />
       </div>
     );
     return (
@@ -179,11 +236,10 @@ class RightInfoZoneCluster extends React.Component {
             );
           })}
         </div>
-        <div style={styles.showMore}>
+        <div className={styles.showMoreInfo}>
           <a className="ant-dropdown-link" href="#" onClick={this.showMore} >
             <span id="showNum">more...</span>
           </a>
-          <br />
         </div>
         <div className={styles.name}>
           <span alt="" className={classnames('icon', styles.fieldIcon)} />
@@ -192,7 +248,10 @@ class RightInfoZoneCluster extends React.Component {
         <div className={styles.keywords}>
           {sortedInterest && sortedInterest.slice(0, 20).map((interest) => {
             return (
-              <div key={interest.key}>{interest.key} ({interest.count})</div>
+              <div key={interest.key} role="presentation"
+                   onClick={this.showTagPersons.bind(this, interest.key)} className={styles.tag}>
+                <Tag className="tag">{interest.key} ({interest.count})</Tag>
+              </div>
             );
           })}
         </div>
@@ -207,7 +266,7 @@ class RightInfoZoneCluster extends React.Component {
                 <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.ok" />
               </Button>,
             ]}
-            width="700px"
+            width="600px"
           >
             <Tabs defaultActiveKey="1" onChange={this.changeStatistic}>
               <TabPane tab="Detailed Information" key="1">{infoJsx && infoJsx}</TabPane>
@@ -217,6 +276,22 @@ class RightInfoZoneCluster extends React.Component {
                 </div>
               </TabPane>
             </Tabs>
+          </Modal>
+        </div>
+        <div className={styles.showResearch}>
+          <Modal
+            title="Same Research Area Scholars"
+            visible={this.state.visible1}
+            onOk={this.handleOk1}
+            onCancel={this.handleCancel1}
+            footer={[
+              <Button key="submit" type="primary" size="large" onClick={this.handleOk1}>
+                <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.ok" />
+              </Button>,
+            ]}
+            width="600px"
+          >
+            <div className={styles.tagsInfo}>{tagJsx && tagJsx}</div>
           </Modal>
         </div>
       </div>

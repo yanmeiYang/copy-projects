@@ -1,6 +1,6 @@
 import { request, nextAPI, config } from 'utils';
 import * as bridge from 'utils/next-bridge';
-import { apiBuilder, F, applyPlugin, filtersToQuery } from 'utils/next-api-builder';
+import { apiBuilder, F, H } from 'utils/next-api-builder';
 import { sysconfig } from 'systems';
 import * as strings from 'utils/strings';
 
@@ -54,17 +54,11 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
       })
       .param({ switches: ['loc_search_all'] }, { when: useTranslateSearch })
       .param({ switches: ['loc_translate_all'] }, { when: !useTranslateSearch })
-      .schema({
-        person: [
-          'id', 'name', 'name_zh', 'avatar', 'tags', 'tags_translated_zh',
-          { profile: ['position', 'affiliation'] },
-          { indices: F.fields.person.indices_all },
-        ],
-      })
+      .schema({ person: F.fields.person_in_PersonList })
       .addSchema({ person: ['tags_translated_zh'] }, { when: sysconfig.Locale === 'zh' });
 
     // filters
-    filtersToQuery(nextapi, filters);
+    H.filtersToQuery(nextapi, filters);
 
     // sort
     if (Sort && Sort !== 'relevance') {
@@ -72,10 +66,10 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
     }
 
     // Apply Plugins.
-    applyPlugin(nextapi, sysconfig.APIPlugin_ExpertSearch);
+    H.applyPlugin(nextapi, sysconfig.APIPlugin_ExpertSearch);
 
-    console.log('DEBUG---------------------\n', nextapi.api);
-    console.log('DEBUG---------------------\n', JSON.stringify(nextapi.api));
+    // console.log('DEBUG---------------------\n', nextapi.api);
+    // console.log('DEBUG---------------------\n', JSON.stringify(nextapi.api));
 
     return nextAPI({ data: [nextapi.api] });
 
@@ -125,42 +119,30 @@ export async function listPersonInEB(payload) {
 
 export async function listPersonInEBNextAPI(payload) {
   const { sort, ebid, offset, size } = payload;
-  //
-  // // const ebs = sysconfig.ExpertBases;
-  // // const defaultHaves = ebs && ebs.length > 0 && ebs.map(eb => eb.id);
-  // const nextapi = apiBuilder.query(F.queries.search, 'list-in-EB')
-  //   .param({
-  //     offset, size,
-  //     searchType: F.searchType.allb,
-  //     aggregation: F.params.default_aggregation,
-  //     // haves: { eb: defaultHaves },
-  //   })
-  //   .param({ switches: ['loc_search_all'] }, { when: useTranslateSearch })
-  //   .param({ switches: ['loc_translate_all'] }, { when: !useTranslateSearch })
-  //   .schema({
-  //     person: [
-  //       'id', 'name', 'name_zh', 'avatar', 'tags', 'tags_translated_zh',
-  //       { profile: ['position', 'affiliation'] },
-  //       { indices: F.fields.person.indices_all },
-  //     ],
-  //   })
-  //   .addSchema({ person: ['tags_translated_zh'] }, { when: sysconfig.Locale === 'zh' });
-  //
-  // // filters
-  // filtersToQuery(nextapi, filters);
-  //
-  // // sort
-  // if (Sort && Sort !== 'relevance') {
-  //   nextapi.param({ sorts: [Sort] });
-  // }
-  //
-  // // Apply Plugins.
-  // applyPlugin(nextapi, sysconfig.APIPlugin_ExpertSearch);
-  //
+
+  // const ebs = sysconfig.ExpertBases;
+  // const defaultHaves = ebs && ebs.length > 0 && ebs.map(eb => eb.id);
+  const nextapi = apiBuilder.query(F.queries.search, 'list-in-EB')
+    .param({
+      offset, size,
+      searchType: F.searchType.allb,
+      aggregation: F.params.default_aggregation,
+      // haves: { eb: defaultHaves },
+    })
+    .schema({ person: F.fields.person_in_PersonList })
+    .addSchema({ person: ['tags_translated_zh'] }, { when: sysconfig.Locale === 'zh' });
+
+  H.filterByEBs(nextapi, [ebid]);
+  if (sort && sort !== 'relevance' && sort !== 'time') {
+    nextapi.param({ sorts: [sort] });
+  }
+
+  H.applyPlugin(nextapi, sysconfig.APIPlugin_ExpertSearch);
+
   // console.log('DEBUG---------------------\n', nextapi.api);
   // console.log('DEBUG---------------------\n', JSON.stringify(nextapi.api));
-  //
-  // return nextAPI({ data: [nextapi.api] });
+
+  return nextAPI({ data: [nextapi.api] });
 }
 
 // Search Global.

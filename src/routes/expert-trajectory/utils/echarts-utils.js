@@ -11,7 +11,6 @@ const setBMap = (myChart) => {
 };
 
 const showChart = (myChart, type, skinType) => { // 功能起始函数
-  const skin = parseInt(skinType);
   let color = '';
   if (type === 'geo') {
     color = '#abc1db';
@@ -57,11 +56,10 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       center: [34.45, 31.3],
       zoom: 1,
       roam: true,
-      mapStyle: mapStyle[skin], // mapStyle[skinType]
+      mapStyle: mapStyle[skinType], // mapStyle[skinType]
     },
     visualMap: {
       show: true,
-      // top: 'top',
       min: 0,
       max: 10,
       orient: 'horizontal',
@@ -71,7 +69,6 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       calculable: true,
       inRange: {
         color: ['#d2eafb', '#7ec2f3', '#49a9ee', '#108ee9', '#0c60aa', '#0c60aa'].reverse(),
-        // color: ['green','red','yellow'],
       },
       textStyle: {
         color: '#fff',
@@ -106,14 +103,11 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       symbolSize: 5,
       itemStyle: {
         normal: {
-          // color: '#5c95f7',
-          // borderColor: '3d7ef7',
           color: '#f77a2b',
           borderColor: 'gold',
         },
       },
       data: [],
-      // blendMode: 'lighter',
     }, {
       type: 'lines',
       zlevel: 2,
@@ -130,7 +124,6 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       },
       lineStyle: {
         normal: {
-          // color: '#3d7ef7',
           color: '#f78e3d',
           width: 0.8,
           opacity: 1,
@@ -138,7 +131,6 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
         },
       },
       data: [],
-      // blendMode: 'screen',
     }],
   };
   myChart.setOption(option);

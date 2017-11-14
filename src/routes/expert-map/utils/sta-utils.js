@@ -58,6 +58,11 @@ const showSta = (echarts, divId, data, type) => {
         name: '总人数',
         type: 'bar',
         data: values,
+        itemStyle: {
+          normal: {
+            color: '#3e9bc9',
+          },
+        },
       },
     ],
   };

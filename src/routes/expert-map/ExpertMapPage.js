@@ -232,14 +232,37 @@ export default class ExpertMapPage extends React.Component {
       const data = this.props.expertMap.geoData;
       if (typeof (data.results) !== 'undefined' && data.results !== 'undefined') {
         clearInterval(downloadinterval);
-        const d1 = sortByBigArea(data);
-        const d2 = sortByCountries(data);
-        console.log(d1);
-        console.log(d2);
+        this.downloadSta(data);
       }
     }, 100);
   };
 
+  downloadSta = (data) => {
+    let str = '';
+    const d1 = sortByCountries(data);
+    console.log(d1);
+    const d2 = sortByBigArea(data);
+    str = '1.Statistics according to the state are as follows:\n\n';
+    str += 'names,values\n';
+    for (const dd of d1.result) {
+      str += `${dd.name},${dd.value}\n`;
+    }
+    str += '\n\n\n\n2.Statistics by region are as follows:\n\n';
+    str += 'names,values\n';
+    for (const ddd of d2.result) {
+      str += `${ddd.name},${ddd.value}\n`;
+    }
+
+    const bom = '\uFEFF';
+    str = encodeURI(str);
+    console.log(str);
+
+    const link = window.document.createElement('a');
+    link.setAttribute('href', `data:text/csv;charset=utf-8,${bom}${str}`);
+    link.setAttribute('download', 'statistics.csv');
+    link.click();
+
+  };
 
   render() {
     const { mapType, query, domainId } = this.state;
@@ -327,7 +350,7 @@ export default class ExpertMapPage extends React.Component {
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
                 footer={[
-                  <Button key="back" size="large" onClick={this.handleDownload}>
+                  <Button key="back" size="large" onClick={this.handleDownload.bind(this)}>
                     <Icon type="download" />
                     <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.download" />
                   </Button>,

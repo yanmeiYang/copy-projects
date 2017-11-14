@@ -9,6 +9,15 @@ import {
 } from './utils/echarts-utils';
 
 let myChart;
+
+function getMyChart(echarts) {
+  const divId = 'chart';
+  if (!myChart) {
+    myChart = echarts.init(document.getElementById(divId));
+  }
+  return myChart;
+}
+
 const heatData = []; //热力信息[[lng,lat,num],..,]
 let years = []; //年份
 const trajData = []; //{coords:[[lng,lat],[lng,lat]],...,coords:[[lng,lat],[lng,lat]]}每年的迁徙
@@ -20,9 +29,7 @@ class ExpertHeatmap extends React.Component {
     this.dispatch = this.props.dispatch;
   }
 
-  state = {
-
-  };
+  state = {};
 
   componentWillMount() {
     this.initChart();
@@ -36,15 +43,17 @@ class ExpertHeatmap extends React.Component {
     if (nextProps.expertTrajectory.heatData &&
       nextProps.expertTrajectory.heatData !== this.props.expertTrajectory.heatData) {
       this.processData(nextProps.expertTrajectory.heatData);
-      this.loadHeat(2000);
+      load((echarts) => {
+        getMyChart(echarts);
+        this.loadHeat(2000);
+      });
     }
     return true;
   }
 
   initChart = () => {
-    const divId = 'chart';
     load((echarts) => {
-      myChart = echarts.init(document.getElementById(divId));
+      const myChart = getMyChart(echarts);
       const skinType = 0;
       showChart(myChart, 'bmap', skinType);
       if (typeof (this.props.data.data) === 'undefined') {

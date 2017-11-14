@@ -38,7 +38,7 @@ const TopExpertBase = {
       index: 1,
       name: 'Massachusetts Institute of Technology',
       id: '58f4b0ab9ed5dbe8d7c85803',
-      abbr: 'MIT'
+      abbr: 'MIT',
     },
     {
       index: 2,

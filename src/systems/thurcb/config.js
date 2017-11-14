@@ -15,7 +15,7 @@ module.exports = {
 
   EnableLocalLocale: true,
 
-  UserAuthSystem: 'thrcb', // aminer 或者是 system.config
+  UserAuthSystem: 'thurcb', // aminer 或者是 system.config
   UserAuthSystem_AddSysTagAuto: true, // 登录时自动添加system的标签
 
   Header_UserPageURL: '/user-info',

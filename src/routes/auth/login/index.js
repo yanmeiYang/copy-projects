@@ -20,6 +20,7 @@ class Login extends React.Component {
   }
 
   handleOk = () => {
+    console.log("deng lu ap --------");
     this.props.dispatch({ type: 'auth/showLoading' });
     this.props.form.validateFieldsAndScroll((errors, values) => {
       if (!errors) {

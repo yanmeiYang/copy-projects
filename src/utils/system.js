@@ -18,6 +18,7 @@ const AvailableSystems = [
   'bole',
   'acmfellow',
   'DataAnnotation',
+  'thurcb',
 ];
 
 let System;
@@ -34,6 +35,7 @@ System = 'huawei';
 // System = 'bole';
 // System = 'acmfellow';
 // System = 'DataAnnotation';
+// System = 'thurcb';
 
 let Source = System; // AppID, Used in UniversalConfig.
 

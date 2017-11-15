@@ -39,6 +39,11 @@ class RightInfoZoneCluster extends React.Component {
     return true;
   }
 
+  onPersonClick = (person) => {
+    const personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
+    window.open(personLinkParams.href, '_blank');
+  };
+
   handleOk = () => {
     this.setState({
       visible: false,
@@ -91,11 +96,6 @@ class RightInfoZoneCluster extends React.Component {
       visible1: true,
       cpersons,
     });
-  };
-
-  onPersonClick = (person) => {
-    const personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
-    window.open(personLinkParams.href, '_blank');
   };
 
   showMore = () => {
@@ -195,7 +195,8 @@ class RightInfoZoneCluster extends React.Component {
           专家&nbsp;
           <span className={styles.statistics}>(&nbsp;
             <span className={styles.count}>{persons.length}</span>
-            人 )</span>
+            人 )
+          </span>
         </div>
         <div className={styles.images}>
           {persons && persons.slice(0, 20).map((person) => {
@@ -230,7 +231,7 @@ class RightInfoZoneCluster extends React.Component {
               <div key={person.id} className={styles.imgOuter}>
                 <div className={styles.imgBox}>
                   <Tooltip title={tooltip}>
-                    <img src={avatarUrl} alt="" onClick={this.showPersonelInfo.bind(this, person)} />
+                    <img src={avatarUrl} alt="" onKeyDown={() => {}} onClick={this.showPersonelInfo.bind(this, person)} />
                   </Tooltip>
                 </div>
               </div>
@@ -249,7 +250,7 @@ class RightInfoZoneCluster extends React.Component {
         <div className={styles.keywords}>
           {sortedInterest && sortedInterest.slice(0, 20).map((interest) => {
             return (
-              <div key={interest.key} role="presentation"
+              <div key={interest.key} role="presentation" onKeyDown={() => {}}
                    onClick={this.showTagPersons.bind(this, interest.key)} className={styles.tag}>
                 <Tag className="tag">{interest.key} ({interest.count})</Tag>
               </div>

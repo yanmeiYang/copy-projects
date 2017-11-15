@@ -70,9 +70,8 @@ class ExpertHeatmapPage extends React.Component {
   };
 
   onSkinClick = (value) => {
-    console.log("ddd",value.key)
     this.setState({ themeKey: value.key });
-  }
+  };
 
   render() {
     const data = this.props.expertTrajectory.heatData;
@@ -124,35 +123,6 @@ class ExpertHeatmapPage extends React.Component {
         </div>
         <div className={classnames('content-inner', styles.page)}>
           <ExpertHeatmap data={data} themeKey={themeKey} />
-          {/*<Layout>*/}
-            {/*<Sider className={classnames(styles.left, 'card-container')} width={260}*/}
-                   {/*style={{ backgroundColor: '#fff' }}>*/}
-              {/*<Tabs*/}
-                {/*className={styles.card}*/}
-                {/*type="card"*/}
-                {/*onChange={this.onInfoTabChange}*/}
-                {/*activeKey={this.state.infoTab}*/}
-                {/*tabBarExtraContent={''}*/}
-              {/*>*/}
-                {/*<TabPane tab="VIEW" key="overview">*/}
-                  {/*<Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />*/}
-                {/*</TabPane>*/}
-                {/*<TabPane tab="SELECTION" key="selection">*/}
-                  {/*<Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />*/}
-                {/*</TabPane>*/}
-                {/*<TabPane tab="EVENTS" key="event">*/}
-                  {/*<div id="scroll">*/}
-                    {/*<Spinner className={styles.load} loading={load} style={{ padding: '20px' }} />*/}
-                  {/*</div>*/}
-                {/*</TabPane>*/}
-              {/*</Tabs>*/}
-            {/*</Sider>*/}
-            {/*<Layout className={styles.right}>*/}
-              {/*<Content className={styles.content}>*/}
-                {/*<ExpertHeatmap data={data} />*/}
-              {/*</Content>*/}
-            {/*</Layout>*/}
-          {/*</Layout>*/}
         </div>
       </Page>
     );

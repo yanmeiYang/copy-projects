@@ -20,6 +20,7 @@ function getMyChart(echarts) {
 
 const heatData = []; //热力信息[[lng,lat,num],..,]
 let years = []; //年份
+let pointsData = [];
 const trajData = []; //{coords:[[lng,lat],[lng,lat]],...,coords:[[lng,lat],[lng,lat]]}每年的迁徙
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
@@ -105,6 +106,7 @@ class ExpertHeatmap extends React.Component {
       yearTrj[i] = []; //按年份初始化迁徙地址
       trajData[i] = []; //按年份初始化迁徙经纬度
       yearPlace[i] = []; //每年，各个位置出现次数二维数组初始化
+      pointsData[i] = []; //每年，各个地址信息
     }
     for (const key in trj) { //生成迁徙图和作者当年所在位置信息
       if (key) {
@@ -165,6 +167,11 @@ class ExpertHeatmap extends React.Component {
           if (place) {
             const num = yearPlace[year][place];
             heatData[year].push([address[place].geo.lng, address[place].geo.lat, num]);
+            pointsData[year].push({
+              //name: address[key].name + addValue[key][0], //可加入城市信息
+              value: [address[place].geo.lng, address[place].geo.lat],
+              symbolSize: (num / 2) + 3,
+            });
           }
         }
       }
@@ -174,6 +181,8 @@ class ExpertHeatmap extends React.Component {
   loadHeat = (year) => {
     const option = myChart.getOption();
     option.series[0].data = heatData[year];
+    console.log(heatData[year]);
+    option.series[1].data = pointsData[year];
     option.series[2].data = trajData[year];
     myChart.setOption(option);
   };

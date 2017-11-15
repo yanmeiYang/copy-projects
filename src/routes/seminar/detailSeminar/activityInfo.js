@@ -40,7 +40,7 @@ class ActivityInfo extends React.PureComponent {
           {summaryById.location &&
           <span>&nbsp;{summaryById.location.address}</span>}
         </p>
-        <p>{summaryById.abstract}</p>
+        <p dangerouslySetInnerHTML={{ __html: summaryById.abstract.replace(/\n/g, '<br />') }} />
         <hr />
       </div>
     );

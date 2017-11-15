@@ -9,6 +9,10 @@ import * as profileUtils from '../../../utils/profile-utils';
 import styles from './index.less';
 
 class ExpertAllInfo extends React.PureComponent {
+  createMarkup = (data) => {
+    return { __html: data.replace(/\n/g, '<br />') };
+  };
+
   render() {
     const speakers = this.props.speakers;
     const pad = this.props.pad;
@@ -40,7 +44,7 @@ class ExpertAllInfo extends React.PureComponent {
                     </span>}
                   </span>}
                 </p>}
-                <div className={styles.expert_content} >
+                <div className={styles.expert_content}>
                   <div className={styles.speakerAvatar}>
                     {aTalk.speaker.aid ?
                       <Link to={`/person/${aTalk.speaker.aid}`}>
@@ -107,7 +111,8 @@ class ExpertAllInfo extends React.PureComponent {
                       {aTalk.speaker.bio ? <div>
                         <h5>个人简介:</h5>
                         <div className={styles.center}>
-                          <p className="rdw-justify-aligned-block">{ aTalk.speaker.bio }</p>
+                          <p className="rdw-justify-aligned-block"
+                             dangerouslySetInnerHTML={this.createMarkup(aTalk.speaker.bio)} />
                         </div>
                       </div> : ''}
                     </div>
@@ -117,7 +122,8 @@ class ExpertAllInfo extends React.PureComponent {
                       {aTalk.abstract ? <div>
                         <h5>主题简介:</h5>
                         <div className={styles.center}>
-                          <p className="rdw-justify-aligned-block">{aTalk.abstract}</p>
+                          <p className="rdw-justify-aligned-block"
+                             dangerouslySetInnerHTML={this.createMarkup(aTalk.abstract)} />
                         </div>
                       </div> : ''}
                     </div>}

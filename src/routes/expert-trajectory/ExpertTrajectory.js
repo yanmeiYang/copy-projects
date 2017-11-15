@@ -171,7 +171,11 @@ class ExpertTrajectory extends React.Component {
   };
 
   render() {
-    const wid = document.body.clientHeight - 210;
+    let wid = document.body.clientHeight - 210;
+    const { centerZoom } = this.props;
+    if (centerZoom) {
+      wid = 500;
+    }
     return (
       <div>
         <div className={styles.map} id="chart" style={{ height: wid }} />

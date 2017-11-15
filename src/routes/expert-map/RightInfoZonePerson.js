@@ -4,23 +4,56 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
-import { Tag } from 'antd';
+import { Button, Modal, Tag } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import { sysconfig } from 'systems';
 import bridge from 'utils/next-bridge';
 import { Indices } from 'components/widgets';
 import * as profileUtils from 'utils/profile-utils';
 import styles from './RightInfoZonePerson.less';
+import ExpertTrajectory from '../expert-trajectory/ExpertTrajectory';
 
 class RightInfoZonePerson extends React.PureComponent {
+  state = {
+    visible: false,
+    cperson: '',
+  };
+
   componentDidMount() {
   }
 
+  handleOk = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleCancel = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+
+  showTraj = (person) => {
+    this.setState({
+      visible: true,
+      cperson: person,
+    }, () => {
+
+    });
+  };
+
   render() {
-    const person = this.props.person;
+    const { person } = this.props;
+    let showBut = false;
+    if (this.props.showBut) {
+      showBut = true;
+    }
     if (!person) {
       return <div />;
     }
 
+    const centerZoom = true;
     // used in person popup info
     let url = '/images/blank_avatar.jpg';
     url = profileUtils.getAvatar(person.avatar, person.id, 160);
@@ -51,6 +84,10 @@ class RightInfoZonePerson extends React.PureComponent {
         <a {...personLinkParams} className="img"><img src={url} alt="IMG" /></a>
 
         <div className="info bg">
+          {showBut &&
+          <span>
+            <Button onClick={this.showTraj.bind(this, person)}>Show Trajectory</Button>
+          </span>}
           {pos && <span><i className="fa fa-briefcase fa-fw" />{pos}</span>}
           {aff && <span><i className="fa fa-institution fa-fw" />{aff}</span>}
         </div>
@@ -78,7 +115,24 @@ class RightInfoZonePerson extends React.PureComponent {
             }
           </div>
         </div>
-
+        <div className={styles.showTraj}>
+          <Modal
+            title="Trajectory"
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+            footer={[
+              <Button key="submit" type="primary" size="large" onClick={this.handleOk}>
+                <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.ok" />
+              </Button>,
+            ]}
+            width="600px"
+          >
+            <div className={styles.traj}>
+              <ExpertTrajectory person={this.state.cperson} centerZoom={centerZoom} />
+            </div>
+          </Modal>
+        </div>
       </div>
     );
   }

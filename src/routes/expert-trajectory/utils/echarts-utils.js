@@ -123,7 +123,15 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
         normal: {
           color: detailedStyle.itemNormalStyle[skin],
           borderColor: detailedStyle.itemEmphasisStyle[skin],
+          opacity: 0.8,
+          shadowColor: 'rgba(198, 198, 198, 0.3)',
+          shadowBlur: 10,
         },
+        emphasis: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)',
+        }
       },
       data: [],
       blendMode: detailedStyle.blendItemStlye[skin],
@@ -151,6 +159,8 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
         },
         emphasis: {
           color: detailedStyle.lineEmphasisStyle[skin],
+          shadowColor: 'rgba(0, 0, 0, 0.5)',
+          shadowBlur: 7,
         },
       },
       data: [],

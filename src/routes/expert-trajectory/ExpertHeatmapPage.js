@@ -31,50 +31,95 @@ class ExpertHeatmapPage extends React.Component {
   state = {
     query: '', //查询窗口中的默认值
     domainId: '', //领域id
-    themeKey: '0',
+    themeKey: '0', //皮肤的I
   };
 
   componentWillMount() {
-    const { query } = this.state;
-    const q = query || '59a772779ed5db1ed202d190'; //设置一个默认值
+    const { location } = this.props;
+    const { query, domain } = queryString.parse(location.search);
+    const q = query || ''; //设置一个默认值
     this.setState({
       query: q,
     });
+    if (domain) {
+      this.searchTrajByDomain(domain);
+    } else if (q) {
+      this.searchTrajByQuery(q);
+      this.setState({ domainId: 'aminer' });
+    }
   }
 
   componentDidMount() {
-    this.callSearchMap(this.state.query);
+    //this.searchTrajByQuery(this.state.query);
+  }
+
+  componentWillReceiveProps(np) {
+    const { location } = np;
+    const { query, domain } = queryString.parse(location.search);
+    if (this.state.query !== query) {
+      this.setState({ query });
+    }
+    if (this.state.domain !== domain) {
+      this.setState({ domainId: domain });
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) { // 状态改变时判断要不要刷新
     if (nextState.query && nextState.query !== this.state.query) {
-      this.callSearchMap(nextState.query);
+      console.log(nextState.query);
+      this.searchTrajByQuery(nextState.query);
+    }
+    if (nextState.domainId && nextState.domainId !== this.state.domainId) {
+      console.log(nextState.domainId);
+      this.searchTrajByDomain(nextState.domainId);
     }
     return true;
   }
 
   onSearch = (data) => {
+    const { dispatch } = this.props;
     if (data.query) {
       this.setState({ query: data.query });
-      const [name, offset, org, term, size] = ['', 0, '', data.query, 1000];
-      this.props.dispatch({ type: 'expertTrajectory/findTrajsHeatAdvance', payload: { name, offset, org, term, size } });
+      dispatch(routerRedux.push({
+        pathname: '/expert-heatmap',
+        search: `?query=${data.query}`,
+      }));
     }
   };
 
-  callSearchMap = (query) => {
-    const rosterId = query;
-    const start = 1960;
-    const end = 2017;
-    const size = 100;
-    this.props.dispatch({ type: 'expertTrajectory/findTrajsByRosterId', payload: { rosterId, start, end, size } });
+  onDomainChange = (domain) => { //修改url,shouldComponentUpdate更新
+    const { dispatch } = this.props;
+    if (domain.id !== 'aminer') {
+      this.setState({ query: '' });
+      dispatch(routerRedux.push({ pathname: '/expert-heatmap', search: `?domain=${domain.id}` }));
+    } else {
+      const data = { query: this.state.query || '-' };
+      this.onSearch(data);
+    }
   };
 
   onSkinClick = (value) => {
     this.setState({ themeKey: value.key });
   };
 
+  searchTrajByDomain = (domainEBID) => { //models里面重新查询数据
+    const { dispatch } = this.props;
+    const rosterId = domainEBID;
+    const start = 1960;
+    const end = 2017;
+    const size = 100;
+    dispatch({ type: 'expertTrajectory/findTrajsByRosterId', payload: { rosterId, start, end, size } });
+  };
+
+  searchTrajByQuery = (query) => { //models里面重新查询数据
+    const { dispatch } = this.props;
+    const [name, offset, org, term, size] = ['', 0, '', query, 1000];
+    dispatch({ type: 'expertTrajectory/findTrajsHeatAdvance', payload: { name, offset, org, term, size } });
+  };
+
   render() {
     const data = this.props.expertTrajectory.heatData;
+    console.log(data);
     const { query, themeKey, domainId } = this.state;
     const menu = (
       <Menu onClick={this.onSkinClick}>

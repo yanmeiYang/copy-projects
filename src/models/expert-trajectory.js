@@ -79,10 +79,9 @@ export default {
     },
 
     findTrajsHeatAdvanceSuccess(state, { payload: { data } }) { // state?
-      const { result } = data;
       return {
         ...state,
-        results: result,
+        heatData: data,
         loading: false,
       };
     },

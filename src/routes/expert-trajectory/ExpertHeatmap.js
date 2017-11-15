@@ -50,7 +50,6 @@ class ExpertHeatmap extends React.Component {
       });
     }
     if (this.props.themeKey !== nextProps.themeKey) {
-      console.log("3333")
       showChart(myChart, 'bmap', nextProps.themeKey);
       this.loadHeat(2000);
     }
@@ -179,8 +178,10 @@ class ExpertHeatmap extends React.Component {
 
   loadHeat = (year) => {
     const option = myChart.getOption();
+    if (heatData.length === 0 || pointsData.length === 0 || trajData.length === 0) {
+      return;
+    }
     option.series[0].data = heatData[year];
-    console.log(heatData[year]);
     option.series[1].data = pointsData[year];
     option.series[2].data = trajData[year];
     myChart.setOption(option);

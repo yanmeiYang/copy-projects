@@ -27,6 +27,9 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       textStyle: {
         color: '#fff',
       },
+      subtextStyle: {
+        color: 'black',
+      },
     },
     tooltip: {
       trigger: 'item',
@@ -116,7 +119,6 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
         show: true,
         period: 6,
         trailLength: 0.1,
-        // color: '#3d7ef7',
         color: '#f78e3d',
         symbol: 'arrow',
         symbolSize: 5,

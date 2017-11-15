@@ -58,7 +58,6 @@ class RightInfoZonePerson extends React.PureComponent {
         <div className="info indicesInfo bg">
           <Indices
             indices={person.indices}
-            activity_indices={person.activity_indices}
             showIndices={personShowIndices}
           />
         </div>

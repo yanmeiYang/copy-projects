@@ -30,17 +30,10 @@ class PersonListLittle extends React.PureComponent {
 
   render() {
     const { persons } = this.props;
-    console.log("person",persons)
-    // let man = '';
-    // if (typeof (persons.person.name_zh) !== undefined) {
-    //   man = this.props.person.name_zh;
-    // } else {
-    //   man = 'Experts';
-    // }
     return (
       <div className={styles.page}>
         <div className={styles.aaa}>
-          <div calssName={styles.headline}>
+          <div className={styles.headline}>
             <h2 className={styles.h2}>
               <i className="fa fa-user" />
               <span className={styles.word}> Experts  </span>

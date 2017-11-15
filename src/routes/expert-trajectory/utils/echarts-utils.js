@@ -137,6 +137,7 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       blendMode: detailedStyle.blendItemStlye[skin],
     }, {
       type: 'lines',
+      animation: false,
       zlevel: 2,
       coordinateSystem: type,
       effect: {

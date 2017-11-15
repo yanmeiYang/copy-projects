@@ -8,7 +8,9 @@ let address = [];
 let addValue = {};
 let addInfo = [];
 let myChart; // used for loadScript
-let trajDataNow;
+let trainterval;
+let aaa = 0;
+let play = false;
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
 class ExpertTrajectory extends React.Component {
@@ -34,7 +36,7 @@ class ExpertTrajectory extends React.Component {
       return true;
     }
     if (nextProps.expertTrajectory.trajData !== this.props.expertTrajectory.trajData) {
-      trajDataNow = nextProps.expertTrajectory.trajData
+      console.log("bianle",this.props.expertTrajectory.trajData, nextProps.expertTrajectory.trajData)
       this.calculateData(nextProps.expertTrajectory.trajData); // 用新的来代替
     }
     if (nextProps.person !== this.props.person) {
@@ -42,8 +44,9 @@ class ExpertTrajectory extends React.Component {
       return true;
     }
     if (this.props.themeKey !== nextProps.themeKey) {
+      console.log("themKey",this.props.themeKey, nextProps.themeKey)
       showChart(myChart, 'bmap', nextProps.themeKey);
-      this.showTrajectory(trajDataNow);
+      this.showTrajectory(this.props.expertTrajectory.trajData);
     }
     return false;
   }
@@ -58,7 +61,7 @@ class ExpertTrajectory extends React.Component {
     const divId = 'chart';
     load((echarts) => {
       myChart = echarts.init(document.getElementById(divId));
-      const skinType = 0;
+      const skinType = this.props.themeKey
       showChart(myChart, 'bmap', skinType);
       this.findPersonTraj(person);
     });
@@ -79,6 +82,11 @@ class ExpertTrajectory extends React.Component {
   };
 
   showTrajectory = (data) => {
+    aaa += 1;
+    console.log("aaa",aaa)
+    if(!data || !data.data){
+      return false;
+    }
     console.log("data", data)
     const points = [];
     const trajData = [];
@@ -123,13 +131,24 @@ class ExpertTrajectory extends React.Component {
       myChart.setOption({ bmap: { center: points[0].value } });
     }
 
-    for (const i of _.range(trajData.length + 1)) { // 每隔0.2秒画一条线
-      setTimeout(() => {
-        lineData = trajData.slice(0, i);
-        pointData = points.slice(0, i);
-        myChart.setOption({ series: [{}, { data: pointData }, { data: lineData }] });
-      }, i * 500);
+    let length = 0;
+    if (trainterval) {
+      clearInterval(trainterval);
+      console.log("------------==========",trainterval)
     }
+    trainterval = setInterval(() => {
+      if (length < (trajData.length + 1)) {
+        console.log("huaxianle", length)
+        length += 1;
+        lineData = trajData.slice(0, length);
+        pointData = points.slice(0, length);
+        myChart.setOption({ series: [{}, { data: pointData }, { data: lineData }] });
+      } else {
+        console.log("huawanle")
+        clearInterval(trainterval);
+      }
+    }, 500);
+
   };
 
   calculateData = (data) => {

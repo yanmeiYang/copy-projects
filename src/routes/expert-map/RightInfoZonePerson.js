@@ -6,10 +6,10 @@ import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { Tag } from 'antd';
 import { sysconfig } from 'systems';
+import bridge from 'utils/next-bridge';
 import { Indices } from 'components/widgets';
 import * as profileUtils from 'utils/profile-utils';
 import styles from './RightInfoZonePerson.less';
-
 
 class RightInfoZonePerson extends React.PureComponent {
   componentDidMount() {
@@ -48,7 +48,7 @@ class RightInfoZonePerson extends React.PureComponent {
         </div>
         }
 
-        <a {...personLinkParams} className="img" ><img src={url} alt="IMG" /></a>
+        <a {...personLinkParams} className="img"><img src={url} alt="IMG" /></a>
 
         <div className="info bg">
           {pos && <span><i className="fa fa-briefcase fa-fw" />{pos}</span>}
@@ -57,7 +57,8 @@ class RightInfoZonePerson extends React.PureComponent {
 
         <div className="info indicesInfo bg">
           <Indices
-            indices={person.indices}
+            indices={bridge.toNextIndices(person.indices)}
+            activity_indices={person.activity_indices}
             showIndices={personShowIndices}
           />
         </div>

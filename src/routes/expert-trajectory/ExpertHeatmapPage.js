@@ -85,6 +85,7 @@ class ExpertHeatmapPage extends React.Component {
         <Menu.Item key="3">{themeKey === '3' && <Icon type="check" />} 佩琦风</Menu.Item>
         <Menu.Item key="4">{themeKey === '4' && <Icon type="check" />} 抹茶风</Menu.Item>
         <Menu.Item key="5">{themeKey === '5' && <Icon type="check" />} 五花肉风</Menu.Item>
+        <Menu.Item key="6">{themeKey === '6' && <Icon type="check" />} 哈哈哈风</Menu.Item>
       </Menu>
     );
 

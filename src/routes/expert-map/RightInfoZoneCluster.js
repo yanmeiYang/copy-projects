@@ -39,18 +39,6 @@ class RightInfoZoneCluster extends React.Component {
     return true;
   }
 
-  showMore = () => {
-    if (flag) {
-      document.getElementById('images').style.display = 'none';
-      document.getElementById('showNum').innerHTML = 'more...';
-      flag = false;
-    } else {
-      document.getElementById('images').style.display = '';
-      document.getElementById('showNum').innerHTML = 'less...';
-      flag = true;
-    }
-  };
-
   handleOk = () => {
     this.setState({
       visible: false,
@@ -110,6 +98,18 @@ class RightInfoZoneCluster extends React.Component {
     window.open(personLinkParams.href, '_blank');
   };
 
+  showMore = () => {
+    if (flag) {
+      document.getElementById('images').style.display = 'none';
+      document.getElementById('showNum').innerHTML = 'more...';
+      flag = false;
+    } else {
+      document.getElementById('images').style.display = '';
+      document.getElementById('showNum').innerHTML = 'less...';
+      flag = true;
+    }
+  };
+
   showPersonelInfo = (person) => {
     this.setState({
       visible: true,
@@ -120,15 +120,16 @@ class RightInfoZoneCluster extends React.Component {
   };
 
   render() {
-    const persons = this.props.persons;
+    const { persons } = this.props;
     if (!persons || persons.length <= 0) {
       return <div />;
     }
 
+    const centerZoom = true; //个性化设置Trajectory地图聚焦到第一个位置
     let hindexSum = 0;
     const interests = {};
     persons.map((person) => {
-      const indices = person.indices;
+      const { indices } = person;
       // sum hindex
       if (indices) {
         hindexSum += indices.h_index;
@@ -272,7 +273,7 @@ class RightInfoZoneCluster extends React.Component {
               <TabPane tab="Detailed Information" key="1">{infoJsx && infoJsx}</TabPane>
               <TabPane tab="Trajectory" key="2">
                 <div className={styles.traj}>
-                  <ExpertTrajectory person={this.state.cperson} />
+                  <ExpertTrajectory person={this.state.cperson} centerZoom={centerZoom} />
                 </div>
               </TabPane>
             </Tabs>

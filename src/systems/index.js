@@ -85,7 +85,7 @@ const getDefaultSystemConfigs = (system, source) => {
 
     Search_DisableFilter: false,
     Search_DisableExpertBaseFilter: false,
-    Search_DisableSearchKnowledge: false,
+    // Search_DisableSearchKnowledge: false,
 
     Search_SortOptions: defaults.IN_APP_DEFAULT,
 

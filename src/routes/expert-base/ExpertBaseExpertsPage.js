@@ -126,6 +126,7 @@ export default class ExpertBaseExpertsPage extends Component {
           PersonList_BottomZone={theme.PersonList_BottomZone}
           // showSearchBox={this.props.app.headerSearchBox ? false : true}
           PersonList_UpdateHooks={sysconfig.PersonList_UpdateHooks}
+          rightZoneFuncs={[]}
           showSearchBox={false}
           disableFilter={!query}
           disableExpertBaseFilter

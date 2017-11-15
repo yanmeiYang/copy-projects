@@ -97,20 +97,17 @@ class ExpertTrajectory extends React.Component {
           name: address[key].name + addValue[key][0], //可加入城市信息
           value: [address[key].geo.lng, address[key].geo.lat],
           symbolSize: (addValue[key][1] / 2) + 3,
-          // itemStyle: {
-          //   normal: {
-          //     color: '#f56a00',
-          //     borderColor: '#d75000',
-          //   },
-          // },
         });
       }
     }
     const option = myChart.getOption();
     let lineData;
     let pointData;
-    myChart.setOption({ title: { text: '学者' + this.props.person.name_zh + '迁徙图' } });
-    // myChart.setOption({ bmap: { center: points[0].value } });
+    myChart.setOption({ title: { text: `学者${this.props.person.name_zh}迁徙图` } });
+    const { centerZoom } = this.props;
+    if (centerZoom) {
+      myChart.setOption({ bmap: { center: points[0].value } });
+    }
 
     for (const i of _.range(trajData.length + 1)) { // 每隔0.2秒画一条线
       setTimeout(() => {
@@ -174,10 +171,10 @@ class ExpertTrajectory extends React.Component {
   };
 
   render() {
-    const wid = document.body.clientHeight - 190;
+    const wid = document.body.clientHeight - 210;
     return (
       <div>
-        <div className={styles.wor} id="chart" style={{ height: wid }} />
+        <div className={styles.map} id="chart" style={{ height: wid }} />
       </div>
     );
   }

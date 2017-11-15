@@ -12,13 +12,24 @@ const setBMap = (myChart) => {
 
 const showChart = (myChart, type, skinType) => { // 功能起始函数
   const skin = parseInt(skinType, 10);
-  console.log("skin",skin,typeof(skin))
   let color = '';
   if (type === 'geo') {
     color = '#abc1db';
   } else {
     color = '#404a59';
   }
+  mapStyle.styleJson[0].stylers.color = detailedStyle.waterStyle[skin];
+  mapStyle.styleJson[1].stylers.color = detailedStyle.landStyle[skin];
+  mapStyle.styleJson[2].stylers.color = detailedStyle.boundaryStyle[skin];
+  mapStyle.styleJson[3].stylers.color = detailedStyle.waterStyle[skin];
+  mapStyle.styleJson[5].stylers.color = detailedStyle.highwayStyle[skin];
+  mapStyle.styleJson[6].stylers.color = detailedStyle.highwayStyle2[skin];
+  mapStyle.styleJson[6].stylers.lightness = detailedStyle.highwaylightness[skin];
+  mapStyle.styleJson[7].stylers.color = detailedStyle.arterialStyle[skin];
+  mapStyle.styleJson[8].stylers.color = detailedStyle.arterialStyle2[skin];
+  mapStyle.styleJson[10].stylers.color = detailedStyle.greenStyle[skin];
+  mapStyle.styleJson[15].stylers.color = detailedStyle.boundaryStyle2[skin];
+  mapStyle.styleJson[16].stylers.color = detailedStyle.buildingStyle[skin];
   const option = {
     backgroundColor: color,
     title: {
@@ -27,8 +38,11 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       sublink: 'http://aminer.org/',
       left: 'center',
       textStyle: {
-        color: '#fff',
+        color: detailedStyle.textColor[skin],
       },
+      subTextColor: {
+        color: detailedStyle.subTextColor[skin],
+      }
     },
     tooltip: {
       trigger: 'item',
@@ -58,7 +72,7 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       center: [34.45, 31.3],
       zoom: 1,
       roam: true,
-      mapStyle: mapStyle[skin], // mapStyle[skinType]
+      mapStyle: mapStyle, // mapStyle[skinType]
     },
     visualMap: {
       show: true,
@@ -71,7 +85,7 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       seriesIndex: 0,
       calculable: true,
       inRange: {
-        color: ['#d2eafb', '#7ec2f3', '#49a9ee', '#108ee9', '#0c60aa', '#0c60aa'].reverse(),
+        color: detailedStyle.visualStyle[skin],
         // color: ['green','red','yellow'],
       },
       textStyle: {
@@ -84,7 +98,7 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       data: [],
       pointSize: 5,
       blurSize: 6,
-      blendMode: 'hard-light',
+      blendMode: detailedStyle.blendHeatStlye[skin],
     }, {
       type: 'scatter',
       coordinateSystem: type,
@@ -107,14 +121,12 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       symbolSize: 5,
       itemStyle: {
         normal: {
-          // color: '#5c95f7',
-          // borderColor: '3d7ef7',
-          color: '#f77a2b',
-          borderColor: 'gold',
+          color: detailedStyle.itemNormalStyle[skin],
+          borderColor: detailedStyle.itemEmphasisStyle[skin],
         },
       },
       data: [],
-      // blendMode: 'lighter',
+      blendMode: detailedStyle.blendItemStlye[skin],
     }, {
       type: 'lines',
       zlevel: 2,
@@ -123,51 +135,82 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
         show: true,
         period: 6,
         trailLength: 0.1,
-        // color: '#3d7ef7',
-        color: '#f78e3d',
+        color: detailedStyle.lineNormalStyle[skin],
+        // color: '#f78e3d',
         symbol: 'arrow',
         symbolSize: 5,
         animation: true,
       },
       lineStyle: {
         normal: {
-          // color: '#3d7ef7',
-          color: '#f78e3d',
+          color: detailedStyle.lineNormalStyle[skin],
+          // color: '#f78e3d',
           width: 0.8,
           opacity: 1,
           curveness: 0.2,
         },
+        emphasis: {
+          color: detailedStyle.lineEmphasisStyle[skin],
+        },
       },
       data: [],
-      // blendMode: 'screen',
+      blendMode: detailedStyle.blendLineStlye[skin],
     }],
   };
+  console.log("iii", skin, option.bmap.mapStyle)
   myChart.setOption(option);
   if (type === 'bmap') {
     setBMap(myChart);
   }
 };
+const visual = ['green', 'yellow', 'yellow', 'red'];
+const detailedStyle = {
+  textColor: ['#fff', '#fff', '#fff', '#fff', '#fff', '#fff'],
+  textShadowColor: ['', '', '', '', '#ffab40', ''],
+  subTextShadowColor: ['', '', '', '', 'white', ''],
+  subTextColor: ['', '', '', 'black', '#ff5f00', '#fff'],
+  waterStyle: ['', '#044161', '#404a59', '#80cbc4', '#e3f2fd', '#4e6c8d', '#d1d1d1'],
+  landStyle: ['', '#004981', '#323c48', '#009688', '#ffab40', '#aedaf5', '#f3f3f3'],
+  boundaryStyle: ['', '#064f85', '#8b8787', '#004d40', '#fb8c00', '#ab485c', '#fefefe'],
+  highwayStyle: ['', '#004981', '', '#004d40', '#fb8c00', '#ab485c', '#fdfdfd' ],
+  highwaylightness: ['', '1', '-42', '', '', '', ''],
+  highwayStyle2: ['', '#005b96', '', '#004d40', '#fb8c00', '#ab485c', '#fdfdfd'],
+  arterialStyle: ['', '#004981', '', '#004d40', '#fb8c00', '#ab485c', '#fefefe' ],
+  arterialStyle2: ['', '#00508b', '', '#004d40', '#fb8c00', '#ab485c', '#fefefe'],
+  greenStyle: ['', '#056197', '#1b1b1b', '#004d40', '#fb8c00', '#ab485c', '#fefefe'],
+  boundaryStyle2: ['', '#029fd4', '#8b8787', '#004d40', '#fb8c00', '#ab485c', '#fefefe'],
+  buildingStyle: ['', '#1a5787', '#2b2b2b', '#004d40', '#fb8c00', '#ab485c', '#d1d1d1'],
+  lineNormalStyle: ['#f78e3d', '#3d7ef7', '#f78e3d', '#00846d', '#346bff', '#aedaf5', '#aedaf5'],
+  lineEmphasisStyle: ['#f77325', '3d7ef7', '#f77325', '#00846d', '#346bff', '#aedaf5', '#aedaf5'],
+  itemNormalStyle: ['#f77a2b', '#5c95f7', '#f77a2b', '#fff', '#fff', '#fff', '#fff'],
+  itemNormalBorderStyle: ['gold', '#3d7ef7', 'gold', 'gold', 'gold', 'gold', 'gold'],
+  itemEmphasisStyle: ['#f77325', '#3d7ef7', '#f77325', 'blue', 'blue', 'blue', 'blue'],
+  blendLineStlye: ['', 'screen', '', 'screen', 'screen', 'screen', 'screen'],
+  blendItemStlye: ['', 'lighter', '', '', '', '', '' ],
+  blendHeatStlye: ['', 'hard-light', '', '', '', '', '' ],
+  visualStyle: [['green', 'yellow', 'yellow', 'red'], ['#d2eafb', '#7ec2f3', '#49a9ee', '#108ee9', '#0c60aa', '#0c60aa'].reverse(), visual, visual, visual, visual, visual],
+}
 
-const mapStyle = [{}, {
+const mapStyle = {
   styleJson: [{
     featureType: 'water',
     elementType: 'all',
     stylers: {
-      color: '#044161',
+      color: '',
     },
   },
     {
       featureType: 'land',
       elementType: 'all',
       stylers: {
-        color: '#004981',
+        color: '',
       },
     },
     {
       featureType: 'boundary',
       elementType: 'geometry',
       stylers: {
-        color: '#064f85',
+        color: '',
       },
     },
     {
@@ -181,15 +224,15 @@ const mapStyle = [{}, {
       featureType: 'highway',
       elementType: 'geometry',
       stylers: {
-        color: '#004981',
+        color: '',
       },
     },
     {
       featureType: 'highway',
       elementType: 'geometry.fill',
       stylers: {
-        color: '#005b96',
-        lightness: 1,
+        color: '',
+        lightness: '',
       },
     },
     {
@@ -203,14 +246,14 @@ const mapStyle = [{}, {
       featureType: 'arterial',
       elementType: 'geometry',
       stylers: {
-        color: '#004981',
+        color: '',
       },
     },
     {
       featureType: 'arterial',
       elementType: 'geometry.fill',
       stylers: {
-        color: '#00508b',
+        color: '',
       },
     },
     {
@@ -224,7 +267,7 @@ const mapStyle = [{}, {
       featureType: 'green',
       elementType: 'all',
       stylers: {
-        color: '#056197',
+        color: '',
         visibility: 'off',
       },
     },
@@ -260,14 +303,14 @@ const mapStyle = [{}, {
       featureType: 'boundary',
       elementType: 'geometry.fill',
       stylers: {
-        color: '#029fd4',
+        color: '',
       },
     },
     {
       featureType: 'building',
       elementType: 'all',
       stylers: {
-        color: '#1a5787',
+        color: '',
       },
     },
     {
@@ -278,119 +321,7 @@ const mapStyle = [{}, {
       },
     },
   ],
-}, {
-  styleJson: [{
-    featureType: 'land',
-    elementType: 'geometry',
-    stylers: {
-      color: '#323c48',
-    },
-  },
-    {
-      featureType: 'building',
-      elementType: 'geometry',
-      stylers: {
-        color: '#2b2b2b',
-      },
-    },
-    {
-      featureType: 'highway',
-      elementType: 'all',
-      stylers: {
-        lightness: -42,
-        saturation: -91,
-      },
-    },
-    {
-      featureType: 'arterial',
-      elementType: 'geometry',
-      stylers: {
-        lightness: -77,
-        saturation: -94,
-      },
-    },
-    {
-      featureType: 'green',
-      elementType: 'geometry',
-      stylers: {
-        color: '#1b1b1b',
-      },
-    },
-    {
-      featureType: 'water',
-      elementType: 'geometry',
-      stylers: {
-        color: '#404a59',
-      },
-    },
-    {
-      featureType: 'subway',
-      elementType: 'geometry.stroke',
-      stylers: {
-        color: '#181818',
-      },
-    },
-    {
-      featureType: 'railway',
-      elementType: 'geometry',
-      stylers: {
-        lightness: -52,
-      },
-    },
-    {
-      featureType: 'all',
-      elementType: 'labels.text.stroke',
-      stylers: {
-        color: '#313131',
-      },
-    },
-    {
-      featureType: 'all',
-      elementType: 'labels.text.fill',
-      stylers: {
-        color: '#8b8787',
-      },
-    },
-    {
-      featureType: 'manmade',
-      elementType: 'geometry',
-      stylers: {
-        color: '#1b1b1b',
-      },
-    },
-    {
-      featureType: 'local',
-      elementType: 'geometry',
-      stylers: {
-        lightness: -75,
-        saturation: -91,
-      },
-    },
-    {
-      featureType: 'subway',
-      elementType: 'geometry',
-      stylers: {
-        lightness: -65,
-      },
-    },
-    {
-      featureType: 'railway',
-      elementType: 'all',
-      stylers: {
-        lightness: -40,
-      },
-    },
-    {
-      featureType: 'boundary',
-      elementType: 'geometry',
-      stylers: {
-        color: '#8b8787',
-        weight: '1',
-        lightness: -29,
-      },
-    },
-  ],
-}];
+};
 
 const load = (cb) => {
   loadBMap(() => {

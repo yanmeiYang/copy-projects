@@ -93,6 +93,9 @@ export default {
   'com.bole.Remove': '删除',
   'com.bole.AddButton': '添加',
 
+  // search venue
+  'com.SearchVenue.title': '期刊(会议)排名',
+
   // Expert Base
   'page.ExpertBaseExpertsPage.MyExperts': '我的专家库',
   'page.ExpertBaseExpertsPage.SeeAllExperts': '查看全部专家',

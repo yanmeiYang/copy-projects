@@ -72,7 +72,7 @@ class ExpertTrajectoryPage extends React.Component {
   render() {
     const persons = this.props.expertTrajectory.results;
     const { query } = this.state;
-    const wid = document.body.clientHeight - 190;
+    const wid = document.body.clientHeight - 210;
     return (
       <Page contentClass={tc(['ExpertTrajectoryPage'])} onSearch={this.onSearch}
             query={query}>

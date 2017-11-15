@@ -8,6 +8,7 @@ import { sysconfig } from 'systems';
 import * as hole from 'utils/hole';
 import { FormattedMessage as FM } from 'react-intl';
 import { IndexHotLinks } from 'components/widgets';
+import { SearchVenue } from 'components/search';
 import { IndexCenterZone } from '../../systems/alibaba/components';
 import centerZoneLinks from '../../systems/alibaba/components/center-zone-links';
 import styles from './theme-alibaba.less';
@@ -38,6 +39,17 @@ module.exports = {
         <FM id="index.title" defaultMessage="Expert Search" />
       </h1>
     </div>,
+  ],
+
+  SearchComponent_RightZone: [
+    hole.DEFAULT_PLACEHOLDER,
+    param => {
+      return (
+        <div key="0">
+          <SearchVenue query={param.query} />
+        </div>
+      );
+    },
   ],
 
   // Expert Page

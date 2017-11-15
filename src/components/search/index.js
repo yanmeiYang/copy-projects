@@ -3,7 +3,7 @@ import SearchFilter from './SearchFilter';
 import SearchKnowledge from './SearchKnowledge';
 import SearchSorts from './SearchSorts';
 import TranslateSearchMessage from './TranslateSearchMessage';
-import SearchVenue from './searchVenue';
+import SearchVenue from './SearchVenue';
 
 module.exports = {
   KgSearchBox,

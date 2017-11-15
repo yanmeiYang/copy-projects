@@ -100,7 +100,6 @@ class ExpertTrajectory extends React.Component {
         });
       }
     }
-    const option = myChart.getOption();
     let lineData;
     let pointData;
     myChart.setOption({ title: { text: `学者${this.props.person.name_zh}迁徙图` } });
@@ -116,7 +115,6 @@ class ExpertTrajectory extends React.Component {
         myChart.setOption({ series: [{}, { data: pointData }, { data: lineData }] });
       }, i * 1000);
     }
-    console.log(option);
   };
 
   calculateData = (data) => {

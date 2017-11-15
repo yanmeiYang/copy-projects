@@ -20,6 +20,15 @@ import ExpertHeatmap from './ExpertHeatmap';
 const { Content, Sider } = Layout;
 const { TabPane } = Tabs;
 const tc = applyTheme(styles);
+const themes = [
+  { label: '常规', key: '0' },
+  { label: '商务', key: '1' },
+  { label: '黑暗', key: '2' },
+  { label: '抹茶绿', key: '3' },
+  { label: '牛皮纸', key: '4' },
+  { label: '航海家', key: '5' },
+  { label: '简约风', key: '6' },
+];
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
 class ExpertHeatmapPage extends React.Component {
@@ -31,7 +40,7 @@ class ExpertHeatmapPage extends React.Component {
   state = {
     query: '', //查询窗口中的默认值
     domainId: '', //领域id
-    themeKey: '0', //皮肤的I
+    themeKey: '1', //皮肤的I
   };
 
   componentWillMount() {
@@ -121,15 +130,17 @@ class ExpertHeatmapPage extends React.Component {
     const data = this.props.expertTrajectory.heatData;
     console.log(data);
     const { query, themeKey, domainId } = this.state;
+    const currentTheme = themes.filter(theme => theme.key === themeKey);
+
     const menu = (
       <Menu onClick={this.onSkinClick}>
-        <Menu.Item key="0">{themeKey === '0' && <Icon type="check" />} 原始风</Menu.Item>
-        <Menu.Item key="1">{themeKey === '1' && <Icon type="check" />} 商务风</Menu.Item>
-        <Menu.Item key="2">{themeKey === '2' && <Icon type="check" />} 暗黑风</Menu.Item>
-        <Menu.Item key="3">{themeKey === '3' && <Icon type="check" />} 佩琦风</Menu.Item>
-        <Menu.Item key="4">{themeKey === '4' && <Icon type="check" />} 抹茶风</Menu.Item>
-        <Menu.Item key="5">{themeKey === '5' && <Icon type="check" />} 五花肉风</Menu.Item>
-        <Menu.Item key="6">{themeKey === '6' && <Icon type="check" />} 哈哈哈风</Menu.Item>
+        {themes && themes.map((theme)=>{
+          return (
+            <Menu.Item key={theme.key}>{themeKey === theme.key && <Icon type="check" />}
+              <FM defaultMessage={theme.label} id={`com.expertTrajectory.theme.label.${theme.key}`} />
+            </Menu.Item>
+          );
+        })}
       </Menu>
     );
 
@@ -159,8 +170,10 @@ class ExpertHeatmapPage extends React.Component {
             <div className={styles.yourSkin}>
               <Dropdown overlay={menu} className={styles.skin}>
                 <a className="ant-dropdown-link" href="#">
-                  <Icon type="setting" />
-                  <FM defaultMessage=" Choose Your Skin" id="com.expertHeatMap.headerLine.setting.yourSkin" />
+                  <Icon type="skin" />
+                  {currentTheme && currentTheme.length > 0 &&
+                  <FM defaultMessage={currentTheme[0].label} id={`com.expertTrajectory.theme.label.${currentTheme[0].key}`} />
+                  }
                 </a>
               </Dropdown>
             </div>

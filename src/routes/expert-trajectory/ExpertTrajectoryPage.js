@@ -4,16 +4,29 @@
 import React from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
+import { sysconfig } from 'systems';
 import { routerRedux } from 'dva/router';
 import { applyTheme } from 'themes';
-import { Layout } from 'antd';
+import { Layout, Button, Icon, Menu, Dropdown, } from 'antd';
 import { Layout as Page } from 'routes';
+import { FormattedMessage as FM } from 'react-intl';
+import { DomainSelector } from 'routes/expert-map';
 import styles from './ExpertTrajectoryPage.less';
 import { PersonListLittle } from '../../components/person';
 import ExpertTrajectory from './ExpertTrajectory';
 
 const { Content, Sider } = Layout;
 const tc = applyTheme(styles);
+const themes = [
+  { label: '常规', key: '0' },
+  { label: '商务', key: '1' },
+  { label: '黑暗', key: '2' },
+  { label: '抹茶绿', key: '3' },
+  { label: '牛皮纸', key: '4' },
+  { label: '航海家', key: '5' },
+  { label: '简约风', key: '6' },
+];
+
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
 class ExpertTrajectoryPage extends React.Component {
@@ -25,6 +38,7 @@ class ExpertTrajectoryPage extends React.Component {
   state = {
     query: '', //查询窗口中的默认值
     cperson: '', //当前选择的人
+    themeKey: '0',
   };
 
   componentWillMount() {
@@ -69,13 +83,50 @@ class ExpertTrajectoryPage extends React.Component {
     this.props.dispatch({ type: 'expertTrajectory/searchPerson', payload: { query, offset, size } });
   };
 
+  onSkinClick = (value) => {
+    this.setState({ themeKey: value.key });
+  };
+
   render() {
     const persons = this.props.expertTrajectory.results;
-    const { query } = this.state;
+    const { query, themeKey } = this.state;
+    const currentTheme = themes.filter(theme => theme.key === themeKey);
+
     const wid = document.body.clientHeight - 210;
+    const menu = (
+      <Menu onClick={this.onSkinClick}>
+        {themes && themes.map((theme)=>{
+        return (
+          <Menu.Item key={theme.key}>{themeKey === theme.key && <Icon type="check" />}
+            <FM defaultMessage={theme.label} id={`com.expertTrajectory.theme.label.${theme.key}`} />
+          </Menu.Item>
+        );
+        })}
+      </Menu>
+    );
     return (
       <Page contentClass={tc(['ExpertTrajectoryPage'])} onSearch={this.onSearch}
             query={query}>
+        <div className={styles.header}>
+          <div className={styles.setting}>
+            <div className={styles.statics}>
+              <Button onClick={this.showModal}>
+                <Icon type="line-chart" />
+                <FM defaultMessage="Statistic & Analysis" id="com.expertMap.headerLine.label.statistic" />
+              </Button>
+            </div>
+            <div className={styles.yourSkin}>
+              <Dropdown overlay={menu} className={styles.skin}>
+                <a className="ant-dropdown-link" href="#">
+                  <Icon type="skin" />
+                  {currentTheme && currentTheme.length > 0 &&
+                  <FM defaultMessage={currentTheme[0].label} id={`com.expertTrajectory.theme.label.${currentTheme[0].key}`} />
+                  }
+                </a>
+              </Dropdown>
+            </div>
+          </div>
+        </div>
         <div className={classnames('content-inner', styles.page)}>
           <Layout className={styles.experts}>
             <Sider className={styles.left} style={{ height: wid }}>
@@ -84,7 +135,7 @@ class ExpertTrajectoryPage extends React.Component {
             </Sider>
             <Layout className={styles.right}>
               <Content className={styles.content}>
-                <ExpertTrajectory person={this.state.cperson} />
+                <ExpertTrajectory person={this.state.cperson} themeKey={themeKey} />
               </Content>
             </Layout>
           </Layout>

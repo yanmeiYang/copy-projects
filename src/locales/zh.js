@@ -83,6 +83,13 @@ export default {
   'com.expertMap.headerLine.label.statistic': '统计分析报告',
   'com.expertMap.headerLine.label.download': '导出Excel表',
   'com.expertMap.headerLine.label.ok': '确定',
+  'com.expertTrajectory.theme.label.0': '常规',
+  'com.expertTrajectory.theme.label.1': '商务',
+  'com.expertTrajectory.theme.label.2': '黑暗',
+  'com.expertTrajectory.theme.label.3': '抹茶绿',
+  'com.expertTrajectory.theme.label.4': '牛皮纸',
+  'com.expertTrajectory.theme.label.5': '航海家',
+  'com.expertTrajectory.theme.label.6': '简约风',
 
   'com.ExpertBase.Button.Add': '添加',
   'com.ExpertBase.Button.Remove': '删除',

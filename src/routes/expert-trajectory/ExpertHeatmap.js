@@ -41,7 +41,6 @@ class ExpertHeatmap extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log("dddd",this.props.themeKey, nextProps.themeKey)
     if (nextProps.expertTrajectory.heatData &&
       nextProps.expertTrajectory.heatData !== this.props.expertTrajectory.heatData) {
       this.processData(nextProps.expertTrajectory.heatData);

@@ -8,6 +8,7 @@ let address = [];
 let addValue = {};
 let addInfo = [];
 let myChart; // used for loadScript
+let trajDataNow;
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
 class ExpertTrajectory extends React.Component {
@@ -33,11 +34,16 @@ class ExpertTrajectory extends React.Component {
       return true;
     }
     if (nextProps.expertTrajectory.trajData !== this.props.expertTrajectory.trajData) {
+      trajDataNow = nextProps.expertTrajectory.trajData
       this.calculateData(nextProps.expertTrajectory.trajData); // 用新的来代替
     }
     if (nextProps.person !== this.props.person) {
       this.initChart(nextProps.person);
       return true;
+    }
+    if (this.props.themeKey !== nextProps.themeKey) {
+      showChart(myChart, 'bmap', nextProps.themeKey);
+      this.showTrajectory(trajDataNow);
     }
     return false;
   }
@@ -73,6 +79,7 @@ class ExpertTrajectory extends React.Component {
   };
 
   showTrajectory = (data) => {
+    console.log("data", data)
     const points = [];
     const trajData = [];
     for (const key in data.data.trajectories) {
@@ -89,15 +96,23 @@ class ExpertTrajectory extends React.Component {
         }
       }
     }
-
-    for ( let i = 0; i < addInfo.length; i += 1) {
+    let dup = '';
+    for (let i = 0; i < addInfo.length; i += 1) {
       if (address) {
         const key = addInfo[i];
-        points.push({
-          name: address[key].name + addValue[key][0], //可加入城市信息
-          value: [address[key].geo.lng, address[key].geo.lat],
-          symbolSize: (addValue[key][1] / 2) + 3,
-        });
+        const latlng = [address[key].geo.lng, address[key].geo.lat].join(',');
+        if (dup.indexOf(latlng) === -1) {
+          dup = [dup, latlng].join('+');
+          points.push({
+            name: address[key].name + addValue[key][0], //可加入城市信息
+            value: [address[key].geo.lng, address[key].geo.lat],
+            symbolSize: (addValue[key][1] / 2) + 3,
+          });
+        } else {
+          points.push({
+            name: address[key].name + addValue[key][0], //可加入城市信息
+          });
+        }
       }
     }
     let lineData;
@@ -113,11 +128,12 @@ class ExpertTrajectory extends React.Component {
         lineData = trajData.slice(0, i);
         pointData = points.slice(0, i);
         myChart.setOption({ series: [{}, { data: pointData }, { data: lineData }] });
-      }, i * 1000);
+      }, i * 500);
     }
   };
 
   calculateData = (data) => {
+    console.log("data1",data)
     address = [];
     addValue = {};
     addInfo = [];

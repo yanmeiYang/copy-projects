@@ -11,7 +11,8 @@ const setBMap = (myChart) => {
 };
 
 const showChart = (myChart, type, skinType) => { // 功能起始函数
-  const skin = parseInt(skinType);
+  const skin = parseInt(skinType, 10);
+  console.log("skin",skin,typeof(skin))
   let color = '';
   if (type === 'geo') {
     color = '#abc1db';

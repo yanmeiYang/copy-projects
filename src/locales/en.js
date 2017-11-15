@@ -94,6 +94,9 @@ export default {
   'com.bole.Remove': 'Remove',
   'com.bole.AddButton': 'Add',
 
+  // search venue
+  'com.SearchVenue.title': 'Conference Rank',
+
   // Expert Base
   'page.ExpertBaseExpertsPage.MyExperts': 'My Experts',
   'page.ExpertBaseExpertsPage.SeeAllExperts': 'See All',

@@ -23,7 +23,7 @@ const CurrentSystemConfig = {
   bole: require('./bole/config'),
   acmfellow: require('./acmfellow/config'),
   DataAnnotation: require('./DataAnnotation/config'),
-  thrcb: require('./thrcb/config'),
+  thurcb: require('./thurcb/config'),
 };
 
 // 默认配置

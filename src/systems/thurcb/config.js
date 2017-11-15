@@ -2,9 +2,6 @@
  * Created by BoGao on 2017/6/20.
  */
 import React from 'react';
-import { toIDDotString, TopExpertBase } from 'utils/expert-base';
-
-import defaults from '../utils';
 
 module.exports = {
 
@@ -20,11 +17,6 @@ module.exports = {
 
   Header_UserPageURL: '/user-info',
   ShowHelpDoc: true,
-
-  Signup_Password: true,
-
-  // google analytics
-  googleAnalytics: 'UA-107003102-4',
 
   // > Search related
   HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertMap'],

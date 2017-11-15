@@ -82,10 +82,10 @@ class ExpertHeatmapPage extends React.Component {
         <Menu.Item key="0">{themeKey === '0' && <Icon type="check" />} 原始风</Menu.Item>
         <Menu.Item key="1">{themeKey === '1' && <Icon type="check" />} 商务风</Menu.Item>
         <Menu.Item key="2">{themeKey === '2' && <Icon type="check" />} 暗黑风</Menu.Item>
-        <Menu.Item key="3">{themeKey === '3' && <Icon type="check" />} 佩琦风</Menu.Item>
-        <Menu.Item key="4">{themeKey === '4' && <Icon type="check" />} 抹茶风</Menu.Item>
-        <Menu.Item key="5">{themeKey === '5' && <Icon type="check" />} 五花肉风</Menu.Item>
-        <Menu.Item key="6">{themeKey === '6' && <Icon type="check" />} 哈哈哈风</Menu.Item>
+        <Menu.Item key="3">{themeKey === '3' && <Icon type="check" />} 抹茶绿</Menu.Item>
+        <Menu.Item key="4">{themeKey === '4' && <Icon type="check" />} 牛皮纸</Menu.Item>
+        <Menu.Item key="5">{themeKey === '5' && <Icon type="check" />} 航海家</Menu.Item>
+        <Menu.Item key="6">{themeKey === '6' && <Icon type="check" />} 简约风</Menu.Item>
       </Menu>
     );
 

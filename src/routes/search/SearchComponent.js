@@ -17,6 +17,8 @@ import { theme, applyTheme } from 'themes';
 import { createURL, hole } from 'utils';
 import { Auth } from 'hoc';
 import styles from './SearchComponent.less';
+import SearchHelp from '../SearchHelp/SearchHelp';
+
 
 // TODO Extract Search Filter into new Component.
 // TODO Combine search and uniSearch into one.
@@ -244,7 +246,11 @@ export default class SearchComponent extends Component {
               doTranslateSearch={this.doTranslateSearch}
             />}
 
+            {/*/!*/!* Search Help *!/*!/*/}
+            {/*<SearchHelp />*/}
+
             {/* ---- Filter ---- */}
+
             {!disableFilter &&
             <SearchFilter
               title={Math.random()}

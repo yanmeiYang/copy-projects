@@ -16,7 +16,6 @@ module.exports = {
   UserAuthSystem_AddSysTagAuto: true, // 登录时自动添加system的标签
 
   Header_UserPageURL: '/user-info',
-  ShowHelpDoc: true,
 
   // > Search related
   HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertMap'],
@@ -26,6 +25,7 @@ module.exports = {
   Search_EnablePin: true,
   // 地图中心点
   CentralPosition: { lat: 37.09024, lng: -95.712891 },
+  Map_FilterRange: false,
 
   ExpertBases: [
     {

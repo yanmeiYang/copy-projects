@@ -10,7 +10,7 @@ import { IndexInfoBox, PersonLabel, IndexCenterZone } from '../../systems/huawei
 import styles from './theme-thurcb.less';
 
 module.exports = {
-  themeName: 'huawei-blue',
+  themeName: 'common-white',
 
   styles,
 

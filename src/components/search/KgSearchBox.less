@@ -149,12 +149,15 @@
 
   :global {
     .ant-form-item {
-      margin-right: 2px; margin-bottom: 0;
-
+      flex: 1; margin-right: 2px; margin-bottom: 0; min-width: 40px;
       input { border-radius: 1px; /* border-color: #b9b7b9;*/ }
     }
     .react-autosuggest__container {
+      display: flex; flex: 1; min-width: 40px;
       border-right-width: 1px; margin-right: 4px;
+      .react-autosuggest__input {
+        flex: 1; width: 100%;
+      }
     }
   }
 }

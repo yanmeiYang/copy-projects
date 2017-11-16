@@ -120,7 +120,7 @@ export default class TrendPrediction extends React.PureComponent {
 
     this.renderHist();
     this.renderTermTrend(trendData.terms[0]);
-    this.renderTrend();
+    this.renderTrend(true);
   };
 
   onKeywordClick = (query) => {
@@ -205,7 +205,7 @@ export default class TrendPrediction extends React.PureComponent {
     // 显示整个界面的方法，sankey为技术发展图
     this.renderAxis();
     this.renderHist();
-    this.renderTrend(term, 1, 1000);
+    this.renderTrend(true);
     this.renderTermTrend(selectedTerm);
   };
 
@@ -278,6 +278,12 @@ export default class TrendPrediction extends React.PureComponent {
       })
       .on('click', (d) => {
         this.renderTermTrend(d);
+      })
+      .on('mouseover', (d, i) => {
+        d3.select(`#select-${i}`).style('opacity', 1);
+      })
+      .on('mouseout', (d, i) => {
+        d3.select(`#select-${i}`).style('opacity', 0);
       });
 
     // 页面左侧统计模块的直方图
@@ -303,6 +309,43 @@ export default class TrendPrediction extends React.PureComponent {
       .text((d) => { // 左侧图字体大小
         return trendData.termToLabel[d.t];
       });
+
+    // 选中后呈现的圆
+    histGraph.append('circle').attr('id', (d, i) => {
+      return `circle-${i}`;
+    })
+      .attr('cx', histItemHeight / 2 - 1)
+      .attr('cy', histItemHeight / 2 - 1)
+      .attr('r', (histItemHeight - 12) / 2) // 位于多选按钮的中心
+      .style('fill', '#CC0000')
+      .style('opacity', (d, i) => { // 默认选中前12个
+        if (i < 12) return 1;
+        else return 0;
+      });
+
+    // 多选按钮，选择技术发展图绘制的关键词
+    histGraph.append('rect').attr('x', 0).attr('y', 0) // 多选按钮位于直方图的左侧
+      .attr('id', (d, i) => {
+        return `select-${i}`;
+      })
+      .attr('rx', 3)
+      .attr('ry', 3)
+      .attr('height', histItemHeight - 2)
+      .attr('width', histItemHeight - 2)
+      .attr('stroke', '#505050')
+      .attr('stroke-opacity', 0.3) // 按钮只有边框有颜色
+      .attr('stroke-width', 1)
+      .style('fill', '#FFFFFF')
+      .style('fill-opacity', 0)
+      .style('opacity', 0)
+      .on('click', (d, i) => {
+        const cir = d3.select(`#circle-${i}`);
+        const v = 1 - cir.style('opacity');
+        trendData.terms[i].selected = (v !== 0);
+        cir.style('opacity', v);
+        this.renderTrend(false);
+        event.stopPropagation();
+      });
   };
 
   // 绘制技术趋势图，data对应1个term，趋势由data.year.d的大小反映
@@ -322,7 +365,8 @@ export default class TrendPrediction extends React.PureComponent {
       });
     // 技术趋势图（右下方）的两条包络线,做了减小梯度的处理
     d3.select('.strong').remove();
-    d3.select(`#term-${data.t.replace(/\s+/g, '')}`).append('rect').attr('class', 'strong').attr('x', '0px')
+    d3.select(`#term-${data.t.replace(/\s+/g, '')}`).append('rect').attr('class', 'strong')
+      .attr('x', histItemHeight)
       .attr('y', () => {
         return -1.8125;
       })
@@ -521,7 +565,7 @@ export default class TrendPrediction extends React.PureComponent {
       .style('font-weight', 'bold');
   };
 
-  renderTrend = (q, start, end) => {
+  renderTrend = (isInit) => {
     chart.append('linearGradient').attr('id');
     chart.append('line')
       .attr('x1', 0)
@@ -550,16 +594,23 @@ export default class TrendPrediction extends React.PureComponent {
     const termToIndex = {};
     const selectedTerms = {};
     const addedTerms = {};
-    let cnt = 0;
     // const topTerms = Object.keys(trendData.termFreq)
     //   .sort((a, b) => trendData.termFreq[b] - trendData.termFreq[a]);
-    for (const term of trendData.terms) {
-      termToIndex[term.t] = cnt;
-      selectedTerms[term.t] = true;
-      cnt += 1;
-      if (cnt > 12) {
-        break;
+    let cnt = 0;
+    if (isInit) {
+      for (const term of trendData.terms) {
+        if (cnt < 12) term.selected = true;
+        else term.selected = false;
+        cnt += 1;
       }
+    }
+    cnt = 0;
+    for (const term of trendData.terms) {
+      if (term.selected) {
+        termToIndex[term.t] = cnt;
+        selectedTerms[term.t] = true;
+      }
+      cnt += 1;
     }
     const slideToYear = {};
     for (const y in trendData.yearToSlide) {

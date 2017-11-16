@@ -3,8 +3,9 @@
  */
 import React, { PureComponent } from 'react';
 import { sysconfig } from 'systems';
+import classnames from 'classnames';
 import { theme } from 'themes';
-import { Menu, Icon, Dropdown } from 'antd';
+import { Menu, Icon, Dropdown, Button } from 'antd';
 import { Link } from 'dva/router';
 import { FormattedMessage as FM } from 'react-intl';
 import { TobButton, DevMenu } from 'components/2b';
@@ -19,6 +20,7 @@ import styles from './HeaderInfoZone.less';
 export default class HeaderInfoZone extends PureComponent {
   state = {
     logoutLoading: false,
+    language: 'EN',
   };
 
   onChangeLocale = (locale) => {
@@ -75,12 +77,23 @@ export default class HeaderInfoZone extends PureComponent {
             </Link>
           </Menu.Item>}
 
-          {/* 语言 */}
+          {/*语言 */}
           {sysconfig.EnableLocalLocale &&
-          <Menu.Item>
+          <Menu.Item key="/language">
             <Dropdown overlay={menu} placement="bottomLeft">
-              <a className="ant-dropdown-link">
+              <a className={classnames('ant-dropdown-link', styles.longLanguage)}>
                 <FM id="system.lang.show" defaultMessage="system.lang.show" />&nbsp;
+                <Icon type="down" />
+              </a>
+            </Dropdown>
+          </Menu.Item>
+          }
+
+          {sysconfig.EnableLocalLocale &&
+          <Menu.Item key="/languageNew">
+            <Dropdown overlay={menu} placement="bottomLeft">
+              <a className={classnames('ant-dropdown-link', styles.simpleLanguage)}>
+                <FM id="system.lang.simple" defaultMessage="system.lang.simple" />&nbsp;
                 <Icon type="down" />
               </a>
             </Dropdown>

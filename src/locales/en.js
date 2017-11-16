@@ -5,6 +5,7 @@ export default {
   'header.label.help': 'HELP',
   'header.login': 'Login',
   'header.exit_login': 'Exit Login',
+  'system.lang.simple': 'EN',
   'system.lang.show': 'Language',
   'system.lang.option_en': 'English',
   'system.lang.option_zh': '简体中文',

@@ -383,7 +383,6 @@ class KgSearchBox extends PureComponent {
             inputProps={inputProps}
             size={btnSize}
           />
-
           {this.advanced &&
           <FormItem>
             {getFieldDecorator('name', {
@@ -406,6 +405,12 @@ class KgSearchBox extends PureComponent {
             className={styles.searchBtn} style={searchBtnStyle} htmlType="submit"
             type="primary" size={btnSize} onClick={this.handleSubmit.bind(this, this.advanced)}
           >{btnText || intl.formatMessage(messages.searchBtn)}
+          </Button>
+          {/* button变成放大镜*/}
+          <Button
+            className={styles.searchIcon} style={searchBtnStyle} htmlType="submit" icon="search"
+            type="primary" size={btnSize} onClick={this.handleSubmit.bind(this, this.advanced)}
+          >
           </Button>
 
           {shouldShowSiwtchBtn &&

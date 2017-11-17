@@ -1,15 +1,15 @@
 /**
  * Created by ranyanchuan on 2017/8/18.
  */
-import React from 'react';
+import React, { Component } from 'react';
 // import browserHistory from 'react-router/lib/browserHistory';
 import { connect } from 'dva';
 import CryptoJS from 'crypto-js';
-import * as authUtil from '../../utils/auth';
+import * as authUtil from 'utils/auth';
 
 const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyLUZLaE1WZjR5YjR0SmFTMVNXRzlRd0dOQnhRMlZmZnI3SWNBU2g1ajRIWWN1RXZtenFvbHQ4T05ZRUdSUzlIbnhBWVJMczhUT0VXK1dGQ3pueURcL0lJamVobzNLTkZHZHBET3B5OXpEamQyeStzZE9EaHdBMiIsImlzcyI6InBsYXktYW5ndWxhci1zaWxob3VldHRlIiwiZXhwIjoxNTA2MTQ5MjE1LCJpYXQiOjE1MDM1NTcyMTUsImp0aSI6IjhiZTAyZTNkMGFhNTIzN2JiNjhlZTE1MGMyNzVkMTRlN2JhZmJmOWFmOGQ4MmM2NmY1MDBjNzgzZWZlYzc5NzZlOTlmYTIxODc0ODRmNDVhMDU5NjRmZWI1ZGY1YjM5OWEwNWE1OWU1OGU1MmU5OGZjYmE5NzViZjAwY2YwYTVlMWI4ODk5NGJiNDM1YjRhYmYzNTE4ZmFmNzc4MDg0MTc2NTNhOWE2OTFjOGU5NGJiYWVhNGIwODc0MzAyNjljMDFkYWUzMzcwNTA4MmZiODc1NTBjMzEyYWUzMGM1ZTFiNjdlZjIwMTQ0YjkzMDljZTgwNjYxMGM2MTVhNDM0NWEifQ.xvAw1Dw_cGnUUtB1fukV1bFwhUuzV2rtQQRfvJ3hVaI';
 
-class Tencent3rd extends React.Component {
+class Tencent3rd extends Component {
   state = {
     email: '',
     password: '',

@@ -20,6 +20,8 @@ export default {
     filters: {},
     query: null,
 
+    searchSuggests: null,
+
     // use translate search?
     useTranslateSearch: sysconfig.Search_DefaultTranslateSearch,
     translatedLanguage: 0, // 1 en to zh; 2 zh to en;

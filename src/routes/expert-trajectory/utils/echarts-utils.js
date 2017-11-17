@@ -42,7 +42,7 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       },
       subTextColor: {
         color: detailedStyle.subTextColor[skin],
-      }
+      },
     },
     tooltip: {
       trigger: 'item',
@@ -72,7 +72,7 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       center: [34.45, 31.3],
       zoom: 1,
       roam: true,
-      mapStyle: mapStyle, // mapStyle[skinType]
+      mapStyle, // mapStyle[skinType]
     },
     visualMap: {
       show: true,
@@ -131,7 +131,7 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
           shadowBlur: 10,
           shadowOffsetX: 0,
           shadowColor: 'rgba(0, 0, 0, 0.5)',
-        }
+        },
       },
       data: [],
       blendMode: detailedStyle.blendItemStlye[skin],
@@ -168,7 +168,6 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       blendMode: detailedStyle.blendLineStlye[skin],
     }],
   };
-  console.log("iii", skin, option.bmap.mapStyle)
   myChart.setOption(option);
   if (type === 'bmap') {
     setBMap(myChart);
@@ -200,7 +199,7 @@ const detailedStyle = {
   blendItemStlye: ['', 'lighter', '', '', 'lighter', '', ''],
   blendHeatStlye: ['', 'hard-light', '', '', '', '', ''],
   visualStyle: [['green', 'yellow', 'yellow', 'red'], ['#d2eafb', '#7ec2f3', '#49a9ee', '#108ee9', '#0c60aa', '#0c60aa'].reverse(), visual, visual, visual, visual, visual],
-}
+};
 
 const mapStyle = {
   styleJson: [{

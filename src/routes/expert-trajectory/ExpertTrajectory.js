@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'dva';
 import { loadScript } from 'utils/requirejs';
+import { Button, Modal, Tabs, Table } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import styles from './ExpertTrajectory.less';
 import { showChart, load } from './utils/echarts-utils';
 
@@ -9,6 +11,7 @@ let addValue = {};
 let addInfo = [];
 let myChart; // used for loadScript
 let trainterval;
+const { TabPane } = Tabs;
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
 class ExpertTrajectory extends React.Component {

@@ -4,13 +4,11 @@
 import React from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
-import { sysconfig } from 'systems';
 import { routerRedux } from 'dva/router';
 import { applyTheme } from 'themes';
-import { Layout, Button, Icon, Menu, Dropdown, Modal } from 'antd';
+import { Layout, Button, Icon, Menu, Dropdown } from 'antd';
 import { Layout as Page } from 'routes';
 import { FormattedMessage as FM } from 'react-intl';
-import { DomainSelector } from 'routes/expert-map';
 import styles from './ExpertTrajectoryPage.less';
 import { PersonListLittle } from '../../components/person';
 import ExpertTrajectory from './ExpertTrajectory';
@@ -82,28 +80,10 @@ class ExpertTrajectoryPage extends React.Component {
     this.setState({ themeKey: value.key });
   };
 
-  showModal = () => {
-    this.setState({
-      visible: true,
-    }, () => {});
-  };
-
   callSearchMap = (query) => {
     const offset = 0;
     const size = 20;
     this.props.dispatch({ type: 'expertTrajectory/searchPerson', payload: { query, offset, size } });
-  };
-
-  handleOk = () => {
-    this.setState({
-      visible: false,
-    });
-  };
-
-  handleCancel = () => {
-    this.setState({
-      visible: false,
-    });
   };
 
   render() {
@@ -131,7 +111,7 @@ class ExpertTrajectoryPage extends React.Component {
             <div className={styles.statics}>
               <Button onClick={this.showModal}>
                 <Icon type="line-chart" />
-                <FM defaultMessage="Statistic & Analysis" id="com.expertMap.headerLine.label.statistic" />
+                <FM defaultMessage="Trajectory Statistic" id="com.expertMap.headerLine.label.statistic" />
               </Button>
             </div>
             <div className={styles.yourSkin}>
@@ -158,22 +138,6 @@ class ExpertTrajectoryPage extends React.Component {
               </Content>
             </Layout>
           </Layout>
-        </div>
-        <div>
-          <Modal
-            title="Trajectory Statistics"
-            visible={this.state.visible}
-            onOk={this.handleOk}
-            onCancel={this.handleCancel}
-            footer={[
-              <Button key="submit" type="primary" size="large" onClick={this.handleOk}>
-                <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.ok" />
-              </Button>,
-            ]}
-            width="700px"
-          >
-            <div>sdsdsd</div>
-          </Modal>
         </div>
       </Page>
     );

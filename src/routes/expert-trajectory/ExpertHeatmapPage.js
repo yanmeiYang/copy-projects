@@ -64,7 +64,7 @@ class ExpertHeatmapPage extends React.Component {
   }
 
   componentDidMount() {
-    //this.searchTrajByQuery(this.state.query);
+
   }
 
   componentWillReceiveProps(np) {
@@ -145,7 +145,6 @@ class ExpertHeatmapPage extends React.Component {
         })}
       </Menu>
     );
-    console.log(domainId);
     return (
       <Page contentClass={tc(['ExpertHeatmapPage'])} onSearch={this.onSearch}
             query={query}>

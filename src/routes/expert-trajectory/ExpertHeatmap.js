@@ -59,9 +59,9 @@ class ExpertHeatmap extends React.Component {
 
   initChart = () => {
     load((echarts) => {
-      const myChart = getMyChart(echarts);
+      const chart = getMyChart(echarts);
       const skinType = 0;
-      showChart(myChart, 'bmap', skinType);
+      showChart(chart, 'bmap', skinType);
           if (typeof (this.props.data.data) === 'undefined') {
         console.log('Try to click one person!');
       } else { //为以后将ExpertTrajectory做组件使用
@@ -113,7 +113,6 @@ class ExpertHeatmap extends React.Component {
         let startPlace = ''; //一次迁徙中开始的位置
         let currentPlace = ''; //当前位置
         let currentYear; //当前年份
-        console.log(trj);
         for (const t of trj[key]) {
           //第一部分，生成作者当年所在位置信息
           if (currentPlace !== '') { //第一年

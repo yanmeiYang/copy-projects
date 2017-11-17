@@ -1,9 +1,7 @@
 @import "~themes/vars";
 
 .hide() { display: none }
-.longLanguage {
-  display: none!important;
-}
+
 .headerInfoZone {
   min-width: 128px;
 
@@ -17,10 +15,12 @@
       margin-right: 0px;
     }
   }
-
-   .simpleLanguage{
-     display: inline;
-   }
+  .longLanguage {
+    display: none;
+  }
+  .simpleLanguage {
+    display: inline;
+  }
 
   .headerAvatar {
     img {
@@ -70,12 +70,13 @@
 @media (min-width: 860px) {
   .headerInfoZone {
     .additional { display: inline }
-  }
-  .simpleLanguage{
-    display: none!important;
-  }
-  .longLanguage{
-    display: inline!important;
+    .simpleLanguage {
+      display: none !important;
+    }
+
+    .longLanguage {
+      display: inline !important;
+    }
   }
 }
 

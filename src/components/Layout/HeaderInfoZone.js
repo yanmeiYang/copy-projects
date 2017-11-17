@@ -20,7 +20,6 @@ import styles from './HeaderInfoZone.less';
 export default class HeaderInfoZone extends PureComponent {
   state = {
     logoutLoading: false,
-    language: 'EN',
   };
 
   onChangeLocale = (locale) => {
@@ -81,19 +80,13 @@ export default class HeaderInfoZone extends PureComponent {
           {sysconfig.EnableLocalLocale &&
           <Menu.Item key="/language">
             <Dropdown overlay={menu} placement="bottomLeft">
-              <a className={classnames('ant-dropdown-link', styles.longLanguage)}>
+              <a className={classnames('ant-dropdown-link')}>
+                <span className={styles.longLanguage}>
                 <FM id="system.lang.show" defaultMessage="system.lang.show" />&nbsp;
-                <Icon type="down" />
-              </a>
-            </Dropdown>
-          </Menu.Item>
-          }
-
-          {sysconfig.EnableLocalLocale &&
-          <Menu.Item key="/languageNew">
-            <Dropdown overlay={menu} placement="bottomLeft">
-              <a className={classnames('ant-dropdown-link', styles.simpleLanguage)}>
-                <FM id="system.lang.simple" defaultMessage="system.lang.simple" />&nbsp;
+                </span>
+                <span className={styles.simpleLanguage}>
+                  <FM id="system.lang.simple" defaultMessage="system.lang.simple" />&nbsp;
+                </span>
                 <Icon type="down" />
               </a>
             </Dropdown>

@@ -142,14 +142,17 @@ export default {
       if (useTranslateSearch) {
         const { query } = payload;
         if (query) {
-          const { data } = yield call(translateService.translateTerm, query);
-          console.log('||translateSearch', payload, '>>', data);
-          if (data && data.status) {
-            const q = query.trim().toLowerCase();
-            const en = data.en && data.en.trim().toLowerCase();
-            if (q !== en) {
-              yield put({ type: 'translateSearchSuccess', payload: { data } });
+          try {
+            const { data } = yield call(translateService.translateTerm, query);
+            if (data && data.status) {
+              const q = query.trim().toLowerCase();
+              const en = data.en && data.en.trim().toLowerCase();
+              if (q !== en) {
+                yield put({ type: 'translateSearchSuccess', payload: { data } });
+              }
             }
+          } catch (err) {
+            console.log(err);
           }
         }
       }

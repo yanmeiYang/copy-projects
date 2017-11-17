@@ -24,6 +24,7 @@ const CurrentSystemConfig = {
   acmfellow: require('./acmfellow/config'),
   DataAnnotation: require('./DataAnnotation/config'),
   thurcb: require('./thurcb/config'),
+  yocsef: require('./yocsef/config'),
 };
 
 // 默认配置
@@ -92,6 +93,7 @@ const getDefaultSystemConfigs = (system, source) => {
 
     // > Search related
     HeaderSearch_TextNavi: defaults.IN_APP_DEFAULT, // use default settings in component.
+    HeaderSearch_DropDown: false, // 默认没有下拉选择
     SearchFilterExclude: '', // 'Gender',
     UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // deprecated! Don't use this.
 

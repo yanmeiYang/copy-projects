@@ -61,7 +61,7 @@ class ExpertHeatmap extends React.Component {
       const myChart = getMyChart(echarts);
       const skinType = 0;
       showChart(myChart, 'bmap', skinType);
-      if (typeof (this.props.data.data) === 'undefined') {
+          if (typeof (this.props.data.data) === 'undefined') {
         console.log('Try to click one person!');
       } else { //为以后将ExpertTrajectory做组件使用
         this.processData(this.props.data);

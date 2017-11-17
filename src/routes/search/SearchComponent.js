@@ -246,8 +246,8 @@ export default class SearchComponent extends Component {
               doTranslateSearch={this.doTranslateSearch}
             />}
 
-            {/*/!*/!* Search Help *!/*!/*/}
-            {/*<SearchHelp />*/}
+            {/* Search Help */}
+            <SearchHelp />
 
             {/* ---- Filter ---- */}
 

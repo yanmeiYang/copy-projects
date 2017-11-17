@@ -29,7 +29,7 @@ export default {
       yield put({ type: 'createUserSuccess', payload: data });
       if (data.status) {
         const { uid } = data;
-        yield call(authService.invoke, uid, sysconfig.SOURCE);
+        yield call(authService.invoke, uid, source);
         if (sysconfig.ShowRegisteredRole) {
           const arr = role.split('_');
           if (arr.length === 2) {

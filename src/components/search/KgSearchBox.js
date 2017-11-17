@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Input, Button, message, Form } from 'antd';
+import { Input, Button, message, Form, Icon } from 'antd';
 import * as strings from 'utils/strings';
 import Autosuggest from 'react-autosuggest';
 import { defineMessages, injectIntl } from 'react-intl';
@@ -383,7 +383,6 @@ class KgSearchBox extends PureComponent {
             inputProps={inputProps}
             size={btnSize}
           />
-
           {this.advanced &&
           <FormItem>
             {getFieldDecorator('name', {
@@ -405,7 +404,8 @@ class KgSearchBox extends PureComponent {
           <Button
             className={styles.searchBtn} style={searchBtnStyle} htmlType="submit"
             type="primary" size={btnSize} onClick={this.handleSubmit.bind(this, this.advanced)}
-          >{btnText || intl.formatMessage(messages.searchBtn)}
+          ><span className={styles.searchBtnText}>{btnText || intl.formatMessage(messages.searchBtn)}</span>
+            <span className={styles.searchBtnIcon}><Icon type="search" /></span>
           </Button>
 
           {shouldShowSiwtchBtn &&

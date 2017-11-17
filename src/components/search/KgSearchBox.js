@@ -404,7 +404,10 @@ class KgSearchBox extends PureComponent {
           <Button
             className={styles.searchBtn} style={searchBtnStyle} htmlType="submit"
             type="primary" size={btnSize} onClick={this.handleSubmit.bind(this, this.advanced)}
-          ><span className={styles.searchBtnText}>{btnText || intl.formatMessage(messages.searchBtn)}</span>
+          >
+            <span className={styles.searchBtnText}>
+              {btnText || intl.formatMessage(messages.searchBtn)}
+            </span>
             <span className={styles.searchBtnIcon}><Icon type="search" /></span>
           </Button>
 

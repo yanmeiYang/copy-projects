@@ -2,7 +2,7 @@ const baseURL = 'https://api.aminer.org/api';
 const apiDomain = 'https://api.aminer.org';
 const nextAPIURLLocalhost = 'http://localhost:4005';
 const nextAPIURLOnlineBeta = 'http://e30c17034d854ef4b1dac3d7b5874d3b-cn-beijing.alicloudapi.com';
-const nextAPIURLOnlineProduction = 'https://apiv2.aminer.org';
+const nextAPIURLOnlineProduction = 'https://apiv2-beta.aminer.org';
 const nextAPIURL = process.env.NODE_ENV !== 'production' ?
   nextAPIURLOnlineProduction
   // nextAPIURLLocalhost
@@ -216,6 +216,7 @@ module.exports = {
     // getToBProfile: `${baseURL}/api/2b/profile/:src/:id`,
     getTrajectoryInfo: `${baseURL}/person/geo/trajectory/:id/year/:lo/:hi`,
     getHeatInfo: `${baseURL}/person/geo/trajectory/roster/:rid/year/:lo/:hi/size/:size`,
+    getHeatByQuery: `${baseURL}/search/person/advanced/trajectory?name=:name&offset=:offset&org=:org&term=:term&size=:size`,
 
     // Knowledge Graph
     kgFind: {

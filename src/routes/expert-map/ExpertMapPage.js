@@ -19,7 +19,7 @@ import { loadECharts } from 'utils/requirejs';
 import ExpertGoogleMap from './expert-googlemap.js';
 import ExpertMap from './expert-map.js';
 import styles from './ExpertMapPage.less';
-import { showSta } from './utils/sta-utils';
+import { showSta, sortByBigArea, sortByCountries } from './utils/sta-utils';
 
 const tc = applyTheme(styles);
 const [ButtonGroup, TabPane] = [Button.Group, Tabs.TabPane];
@@ -85,7 +85,6 @@ export default class ExpertMapPage extends React.Component {
     }
   }
 
-  // TODO use did update ?
   shouldComponentUpdate(np, ns) { // nextProps, nextState
     if (ns.domainId && ns.domainId !== this.state.domainId && ns.domainId !== 'aminer') {
       this.searchMapByDomain(ns.domainId);
@@ -99,6 +98,9 @@ export default class ExpertMapPage extends React.Component {
       return true;
     }
     if (ns.visible !== this.state.visible) {
+      return true;
+    }
+    if (np.expertMap.geoData !== this.props.expertMap.geoData) {
       return true;
     }
     return false;
@@ -193,15 +195,13 @@ export default class ExpertMapPage extends React.Component {
     });
   };
 
-  handleOk = (e) => {
-    console.log(e);
+  handleOk = () => {
     this.setState({
       visible: false,
     });
   };
 
-  handleCancel = (e) => {
-    console.log(e);
+  handleCancel = () => {
     this.setState({
       visible: false,
     });
@@ -227,6 +227,37 @@ export default class ExpertMapPage extends React.Component {
     }, 100);
   };
 
+  handleDownload = () => {
+    const downloadinterval = setInterval(() => {
+      const data = this.props.expertMap.geoData;
+      if (typeof (data.results) !== 'undefined' && data.results !== 'undefined') {
+        clearInterval(downloadinterval);
+        this.downloadSta(data);
+      }
+    }, 100);
+  };
+
+  downloadSta = (data) => {
+    let str = '';
+    const d1 = sortByCountries(data);
+    const d2 = sortByBigArea(data);
+    str = '1.Statistics according to the states are as follows:\n\n';
+    str += 'names,values\n';
+    for (const dd of d1.result) {
+      str += `${dd.name},${dd.value}\n`;
+    }
+    str += '\n\n\n\n2.Statistics by regions are as follows:\n\n';
+    str += 'names,values\n';
+    for (const ddd of d2.result) {
+      str += `${ddd.name},${ddd.value}\n`;
+    }
+    const bom = '\uFEFF';
+    str = encodeURI(str);
+    const link = window.document.createElement('a');
+    link.setAttribute('href', `data:text/csv;charset=utf-8,${bom}${str}`);
+    link.setAttribute('download', 'statistics.csv');
+    link.click();
+  };
 
   render() {
     const { mapType, query, domainId } = this.state;
@@ -243,7 +274,10 @@ export default class ExpertMapPage extends React.Component {
         <div id="bigArea" className={styles.chart1} />
       </div>
     );
-
+    //const hdType = 'selector';
+    const hdType = sysconfig.HotDomains_Type;
+    const hdFlag = (hdType === 'filter');
+    const dp = hdFlag ? 'none' : '';
     return (
       <Layout
         contentClass={tc(['expertMapPage'])}
@@ -251,13 +285,16 @@ export default class ExpertMapPage extends React.Component {
         onSearch={this.onSearch}
         disableAdvancedSearch
       >
-        <DomainSelector
-          domains={sysconfig.Map_HotDomains}
-          domainsLabel={sysconfig.Map_HotDomainsLabel}
-          currentDomain={domainId}
-          onChange={this.onDomainChange}
-          time={Math.random()}
-        />
+        {
+          hdFlag && <DomainSelector
+            domains={sysconfig.Map_HotDomains}
+            domainsLabel={sysconfig.Map_HotDomainsLabel}
+            currentDomain={domainId}
+            onChange={this.onDomainChange}
+            time={Math.random()}
+            type={hdType}
+          />
+        }
         <MapFilter
           onRangeChange={this.onRangeChange}
           onHindexRangeChange={this.onHindexRangeChange}
@@ -265,6 +302,18 @@ export default class ExpertMapPage extends React.Component {
         />
 
         <div className={styles.headerLine}>
+          <div style={{ display: dp }}>
+            {
+              !hdFlag && <DomainSelector
+                domains={sysconfig.Map_HotDomains}
+                domainsLabel={sysconfig.Map_HotDomainsLabel}
+                currentDomain={domainId}
+                onChange={this.onDomainChange}
+                time={Math.random()}
+                type={hdType}
+              />
+            }
+          </div>
           <div className={styles.left}>
             <div className={styles.level}>
               <span>
@@ -274,13 +323,9 @@ export default class ExpertMapPage extends React.Component {
               <ButtonGroup id="sType" className={styles.sType}>
                 {this.typeConfig.map((conf) => {
                   return !conf.disabled && (
-                      <Button
-                        key={conf.key}
-                        onClick={this.onTypeChange.bind(this, conf.key)}
-                        type={this.state.type === conf.key ? 'primary' : ''}
-                      >
-                        {conf.label}
-                      </Button>
+                    <Button key={conf.key} onClick={this.onTypeChange.bind(this, conf.key)} onKeyDown={() => {}} type={this.state.type === conf.key ? 'primary' : ''}>
+                      {conf.label}
+                    </Button>
                     );
                 })}
               </ButtonGroup>
@@ -300,7 +345,7 @@ export default class ExpertMapPage extends React.Component {
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
                 footer={[
-                  <Button key="back" size="large" onClick={this.handleCancel}>
+                  <Button key="back" size="large" onClick={this.handleDownload.bind(this)}>
                     <Icon type="download" />
                     <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.download" />
                   </Button>,

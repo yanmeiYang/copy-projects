@@ -298,27 +298,6 @@ function getById(id) {
   return document.getElementById(id);
 }
 
-// function waitforBMap(tryTimes, interval, success, failed) {
-//   let n = 0;
-//   const mapInterval = setInterval(() => {
-//     if (typeof (BMap) === 'undefined') {
-//       // console.log('wait for BMap');
-//       n += 1;
-//       if (n >= tryTimes) {
-//         clearInterval(mapInterval);
-//         if (failed) {
-//           failed();
-//         }
-//       }
-//     } else {
-//       clearInterval(mapInterval);
-//       if (success) {
-//         success(window.BMap);
-//       }
-//     }
-//   }, interval);
-// }
-
 function insertAfter(newElement, targetElement) {
   const parent = targetElement.parentNode;
   if (parent.lastChild === targetElement) {
@@ -328,27 +307,7 @@ function insertAfter(newElement, targetElement) {
   }
 }
 
-// function waitforBMapLib(tryTimes, interval, success, failed) {
-//   let n = 0;
-//   const mapLibInterval = setInterval(() => {
-//     if (typeof (BMapLib) === 'undefined') {
-//       n += 1;
-//       if (n >= tryTimes) {
-//         clearInterval(mapLibInterval);
-//         if (failed) {
-//           failed();
-//         }
-//       }
-//     } else {
-//       clearInterval(mapLibInterval);
-//       if (success) {
-//         success(window.BMapLib);
-//       }
-//     }
-//   }, interval);
-// }
-
-function showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch, infoIds, callback) {
+const showTopImageDiv = (e, map, maindom, inputids, onLeave, type, ids, dispatch, infoIds, callback) => {
   const ishere = getById('panel');
   if (ishere != null) {
     detachCluster(ishere);
@@ -382,7 +341,7 @@ function showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch
     imgdiv.setAttribute('name', 'scholarimg');
     imgdiv.setAttribute('style', cstyle);
     imgdiv.setAttribute('class', 'imgWrapper');
-    imgdiv.setAttribute('title', ids[i]);
+    imgdiv.setAttribute('data-id', ids[i]);
     imgdiv.innerHTML = '';
     insertAfter(imgdiv, thisNode);
     thisNode.appendChild(imgdiv);
@@ -414,7 +373,7 @@ function showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch
   if (typeof (callback) === 'function') {
     callback();
   }
-}
+};
 
 const ifNotImgShowName = (personInfo) => { //当作者的头像是空的时候，显示名字
   let name;
@@ -529,7 +488,7 @@ function showTopImages(ids, imgwidth, blankAvatar, imgdivs) {
   }
 }
 
-function addImageListener(map, ids, getInfoWindow, event, imgwidth, type, projection, infowindow, callback) {
+const addImageListener = (map, ids, getInfoWindow, event, imgwidth, type, projection, infowindow, callback) => {
   // get current point.
   const apos = getById('allmap').getBoundingClientRect();
   const cpos = event.target.getBoundingClientRect();
@@ -560,7 +519,7 @@ function addImageListener(map, ids, getInfoWindow, event, imgwidth, type, projec
       if (event.target.firstChild) { //图片还没有加载出来的时候
         num = event.target.firstChild.name;
       } else {
-        num = event.target.title;
+        num = event.target.getAttribute('data-id');
       }
     } else if (event.target.tagName.toUpperCase() === 'IMG') {
       num = event.target.name;
@@ -588,15 +547,9 @@ function addImageListener(map, ids, getInfoWindow, event, imgwidth, type, projec
     ).catch((error) => {
       console.error(error);
     });
-  } else {
-    if (typeof (callback) === 'function') {
+  } else if (typeof (callback) === 'function') {
       callback(personInfo);
-    }
   }
-}
-
-const onLoadPersonCard = (dispatch, personId) => { //请求单个人的数据
-  dispatch({ type: 'expertMap/getPersonInfo', payload: { personId } });
 };
 
 function toggleRightInfo(type, id, dispatch, infoIds) { // update one person's info.

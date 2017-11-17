@@ -31,25 +31,35 @@ class PersonListLittle extends React.PureComponent {
   render() {
     const { persons } = this.props;
     return (
-      <div className={styles.personList}>
-        {
-          persons && persons.map((person) => {
-            const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
-            const indices = person.indices.h_index;
-            const pos = profileUtils.displayPosition(person.pos);
-            const aff = profileUtils.displayAff(person);
+      <div className={styles.page}>
+        <div className={styles.aaa}>
+          <div className={styles.headline}>
+            <h2 className={styles.h2}>
+              <i className="fa fa-user" />
+              <span className={styles.word}> Experts  </span>
+            </h2>
+          </div>
+        </div>
 
-            return (
-              <div key={person.id} role="presentation" className="item" onClick={this.onClick.bind(this, person)}>
-                <div className="avatar_zone">
-                  <img
-                    src={profileUtils.getAvatar(person.avatar, '', 90)}
-                    className="avatar"
-                    alt={name}
-                    title={name}
-                  />
-                </div>
-                <div>{name &&
+        <div className={styles.personList}>
+          {
+            persons && persons.map((person) => {
+              const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
+              const indices = person.indices.h_index;
+              const pos = profileUtils.displayPosition(person.pos);
+              const aff = profileUtils.displayAff(person);
+
+              return (
+                <div key={person.id} role="presentation" className="item" onClick={this.onClick.bind(this, person)}>
+                  <div className="avatar_zone">
+                    <img
+                      src={profileUtils.getAvatar(person.avatar, '', 90)}
+                      className="avatar"
+                      alt={name}
+                      title={name}
+                    />
+                  </div>
+                  <div>{name &&
                   <div>
                     <h2 className="section_header">
                       <Icon type="user" />
@@ -58,20 +68,22 @@ class PersonListLittle extends React.PureComponent {
                     </h2>
                     {this.personLabel && this.personLabel(person)}
                   </div>}
-                  <div className="zone">
-                    <div className="contact_zone">
-                      <h3><Icon type="solution" /> h_index: {indices}</h3>
+                    <div className="zone">
+                      <div className="contact_zone">
+                        <h3><Icon type="solution" /> h_index: {indices}</h3>
+                      </div>
                     </div>
+                    {pos && <span><i className="fa fa-briefcase fa-fw" /> {pos}</span>}
+                    {pos && <br />}
+                    {aff && <span><i className="fa fa-institution fa-fw" /> {aff}</span>}
                   </div>
-                  {pos && <span><i className="fa fa-briefcase fa-fw" /> {pos}</span>}
-                  {pos && <br />}
-                  {aff && <span><i className="fa fa-institution fa-fw" /> {aff}</span>}
                 </div>
-              </div>
-            );
-          })
-        }
+              );
+            })
+          }
+        </div>
       </div>
+
     );
   }
 }

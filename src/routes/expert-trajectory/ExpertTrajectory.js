@@ -1,12 +1,17 @@
 import React from 'react';
 import { connect } from 'dva';
 import { loadScript } from 'utils/requirejs';
+import { Button, Modal, Tabs, Table } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import styles from './ExpertTrajectory.less';
 import { showChart, load } from './utils/echarts-utils';
 
 let address = [];
 let addValue = {};
+let addInfo = [];
 let myChart; // used for loadScript
+let trainterval;
+const { TabPane } = Tabs;
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
 class ExpertTrajectory extends React.Component {
@@ -20,7 +25,10 @@ class ExpertTrajectory extends React.Component {
   };
 
   componentDidMount() {
-    this.initChart();
+    this.initChart(this.props.person);
+    window.onresize = () => {
+      this.initChart(this.props.person);
+    };
   }
 
   shouldComponentUpdate(nextProps, nextState) { // 状态改变时判断要不要刷新
@@ -28,50 +36,54 @@ class ExpertTrajectory extends React.Component {
       this.callSearchMap(nextState.query);
       return true;
     }
-    if (nextProps.expertTrajectory && nextProps.expertTrajectory.trajData) {
-      if (nextProps.expertTrajectory.trajData !== this.props.expertTrajectory.trajData) {
-        load((echarts) => {
-          this.calculateData(nextProps.expertTrajectory.trajData); // 用新的来代替
-        });
-      }
+    if (nextProps.expertTrajectory.trajData !== this.props.expertTrajectory.trajData) {
+      this.calculateData(nextProps.expertTrajectory.trajData); // 用新的来代替
     }
-    console.log(this.props.person.name);
-    console.log(nextProps.person.name);
-    console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+    if (nextProps.person !== this.props.person) {
+      this.initChart(nextProps.person);
+      return true;
+    }
+    if (this.props.themeKey !== nextProps.themeKey) {
+      showChart(myChart, 'bmap', nextProps.themeKey);
+      this.showTrajectory(this.props.expertTrajectory.trajData);
+    }
     return false;
   }
 
   componentWillUpdate() {
-
   }
 
   componentDidUpdate() {
-    console.log('###########################################');
-    console.log(this.props.person);
-    this.initChart();
   }
 
-  initChart = () => {
+  initChart = (person) => {
     const divId = 'chart';
     load((echarts) => {
       myChart = echarts.init(document.getElementById(divId));
-      showChart(myChart, 'bmap');
-      if (this.props.person === '') {
-        console.log('Try to click one person!');
-      } else { //为以后将ExpertTrajectory做组件使用
-        const personId = this.props.person.id;
-        const start = 0;
-        const end = 2017;
-        console.log(this.props.person.name);
-        this.props.dispatch({
-          type: 'expertTrajectory/findTrajById',
-          payload: { personId, start, end },
-        });
-      }
+      const skinType = this.props.themeKey;
+      showChart(myChart, 'bmap', skinType);
+      this.findPersonTraj(person);
     });
   };
 
+  findPersonTraj = (person) => {
+    if (person === '') {
+      console.log('Try to click one person!');
+    } else { //为以后将ExpertTrajectory做组件使用
+      const personId = person.id;
+      const start = 0;
+      const end = 2017;
+      this.props.dispatch({
+        type: 'expertTrajectory/findTrajById',
+        payload: { personId, start, end },
+      });
+    }
+  };
+
   showTrajectory = (data) => {
+    if (!data || !data.data) {
+      return false;
+    }
     const points = [];
     const trajData = [];
     for (const key in data.data.trajectories) {
@@ -88,32 +100,53 @@ class ExpertTrajectory extends React.Component {
         }
       }
     }
-
-    for (const key in address) {
+    let dup = '';
+    for (let i = 0; i < addInfo.length; i += 1) {
       if (address) {
-        points.push({
-          name: address[key].name + addValue[key][0], //可加入城市信息
-          value: [address[key].geo.lng, address[key].geo.lat],
-          symbolSize: (addValue[key][1] / 2) + 3,
-          itemStyle: {
-            normal: {
-              color: '#f56a00',
-              borderColor: '#d75000',
-            },
-          },
-        });
+        const key = addInfo[i];
+        const latlng = [address[key].geo.lng, address[key].geo.lat].join(',');
+        if (dup.indexOf(latlng) === -1) {
+          dup = [dup, latlng].join('+');
+          points.push({
+            name: address[key].name + addValue[key][0], //可加入城市信息
+            value: [address[key].geo.lng, address[key].geo.lat],
+            symbolSize: (addValue[key][1] / 2) + 3,
+          });
+        } else {
+          points.push({
+            name: address[key].name + addValue[key][0], //可加入城市信息
+          });
+        }
       }
     }
-    const option = myChart.getOption();
-    option.series[1].data = points;
-    option.series[2].data = trajData;
-    console.log(trajData);
-    myChart.setOption(option);
+    let lineData;
+    let pointData;
+    myChart.setOption({ title: { text: `学者${this.props.person.name_zh}迁徙图` } });
+    const { centerZoom } = this.props;
+    if (centerZoom) {
+      myChart.setOption({ bmap: { center: points[0].value } });
+    }
+
+    let length = 0;
+    if (trainterval) {
+      clearInterval(trainterval);
+    }
+    trainterval = setInterval(() => {
+      if (length < (trajData.length + 1)) {
+        length += 1;
+        lineData = trajData.slice(0, length);
+        pointData = points.slice(0, length);
+        myChart.setOption({ series: [{}, { data: pointData }, { data: lineData }] });
+      } else {
+        clearInterval(trainterval);
+      }
+    }, 500);
   };
 
   calculateData = (data) => {
     address = [];
     addValue = {};
+    addInfo = [];
     for (const key in data.data.addresses) {
       if (data.data.addresses) {
         address[key] = data.data.addresses[key];
@@ -127,6 +160,7 @@ class ExpertTrajectory extends React.Component {
         let previous = '';
         for (const d of data.data.trajectories[key]) {
           if (previous !== d[1] && previous !== '') {
+            addInfo.push(d[1]);
             endYear = parseInt(d[0], 10);
             addValue[previous][0] = `${addValue[previous][0]}${start}-${d[0]},`;
             addValue[previous][1] = ((addValue[previous][1] + endYear) - startYear) + 1;
@@ -146,21 +180,29 @@ class ExpertTrajectory extends React.Component {
             addValue[d[1]][1] = 0;
             [start] = d;
             startYear = parseInt(d[0], 10);
+            addInfo.push(d[1]);
           }
           [, previous] = d;
         }
-        addValue[previous][0] = `${addValue[previous][0]}${start}-now,`;
-        addValue[previous][1] = ((addValue[previous][1] + 2017) - startYear) + 1;
+        if (addValue[previous] !== undefined) {
+          addInfo.push(previous);
+          addValue[previous][0] = `${addValue[previous][0]}${start}-now,`;
+          addValue[previous][1] = ((addValue[previous][1] + 2017) - startYear) + 1;
+        }
       }
     }
     this.showTrajectory(data);
   };
 
   render() {
-    const wid = document.body.clientHeight - 190;
+    let wid = document.body.clientHeight - 210;
+    const { centerZoom } = this.props;
+    if (centerZoom) {
+      wid = 500;
+    }
     return (
       <div>
-        <div className={styles.wor} id="chart" style={{ height: wid }} />
+        <div className={styles.map} id="chart" style={{ height: wid }} />
       </div>
     );
   }

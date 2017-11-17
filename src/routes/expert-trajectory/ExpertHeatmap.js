@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Slider, InputNumber, Row, Col, Button } from 'antd';
+import { Spinner } from 'components';
 import { request, queryURL } from 'utils';
 import styles from './ExpertHeatmap.less';
 import {
@@ -9,8 +10,18 @@ import {
 } from './utils/echarts-utils';
 
 let myChart;
+
+function getMyChart(echarts) {
+  const divId = 'chart';
+  if (!myChart) {
+    myChart = echarts.init(document.getElementById(divId));
+  }
+  return myChart;
+}
+
 const heatData = []; //热力信息[[lng,lat,num],..,]
 let years = []; //年份
+const pointsData = [];
 const trajData = []; //{coords:[[lng,lat],[lng,lat]],...,coords:[[lng,lat],[lng,lat]]}每年的迁徙
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
@@ -20,9 +31,7 @@ class ExpertHeatmap extends React.Component {
     this.dispatch = this.props.dispatch;
   }
 
-  state = {
-
-  };
+  state = {};
 
   componentWillMount() {
     this.initChart();
@@ -36,17 +45,24 @@ class ExpertHeatmap extends React.Component {
     if (nextProps.expertTrajectory.heatData &&
       nextProps.expertTrajectory.heatData !== this.props.expertTrajectory.heatData) {
       this.processData(nextProps.expertTrajectory.heatData);
+      load((echarts) => {
+        getMyChart(echarts);
+        this.loadHeat(2000);
+      });
+    }
+    if (this.props.themeKey !== nextProps.themeKey) {
+      showChart(myChart, 'bmap', nextProps.themeKey);
       this.loadHeat(2000);
     }
     return true;
   }
 
   initChart = () => {
-    const divId = 'chart';
     load((echarts) => {
-      myChart = echarts.init(document.getElementById(divId));
-      showChart(myChart, 'bmap');
-      if (typeof (this.props.data.data) === 'undefined') {
+      const chart = getMyChart(echarts);
+      const skinType = 0;
+      showChart(chart, 'bmap', skinType);
+          if (typeof (this.props.data.data) === 'undefined') {
         console.log('Try to click one person!');
       } else { //为以后将ExpertTrajectory做组件使用
         this.processData(this.props.data);
@@ -89,6 +105,7 @@ class ExpertHeatmap extends React.Component {
       yearTrj[i] = []; //按年份初始化迁徙地址
       trajData[i] = []; //按年份初始化迁徙经纬度
       yearPlace[i] = []; //每年，各个位置出现次数二维数组初始化
+      pointsData[i] = []; //每年，各个地址信息
     }
     for (const key in trj) { //生成迁徙图和作者当年所在位置信息
       if (key) {
@@ -149,6 +166,11 @@ class ExpertHeatmap extends React.Component {
           if (place) {
             const num = yearPlace[year][place];
             heatData[year].push([address[place].geo.lng, address[place].geo.lat, num]);
+            pointsData[year].push({
+              //name: address[key].name + addValue[key][0], //可加入城市信息
+              value: [address[place].geo.lng, address[place].geo.lat],
+              symbolSize: (num / 2) + 3,
+            });
           }
         }
       }
@@ -157,7 +179,11 @@ class ExpertHeatmap extends React.Component {
 
   loadHeat = (year) => {
     const option = myChart.getOption();
+    if (heatData.length === 0 || pointsData.length === 0 || trajData.length === 0) {
+      return;
+    }
     option.series[0].data = heatData[year];
+    option.series[1].data = pointsData[year];
     option.series[2].data = trajData[year];
     myChart.setOption(option);
   };
@@ -171,7 +197,13 @@ class ExpertHeatmap extends React.Component {
     }
     return (
       <div>
-        <div className={styles.heatmap} id="chart" />
+        <div className={styles.whole}>
+          <Spinner loading={this.props.loading.models.expertTrajectory} />
+          <div className={styles.heatmap} id="chart" />
+          <div className={styles.info}>
+            ddd
+          </div>
+        </div>
         <div className={styles.dinner}>
           <Button className={styles.play} icon={ifPlay} onClick={this.onClick} />
           <Row className={styles.slide}>

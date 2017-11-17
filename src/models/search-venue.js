@@ -20,7 +20,7 @@ export default {
     * getVenuesByQuery({ payload }, { call, put }) {
       try {
         const { query } = payload;
-        const { data } = yield call(venueService.getSearchVenue, query, 0, 5);
+        const { data } = yield call(venueService.getSearchVenue, query, 0, 100);
         yield put({ type: 'getTopicByMentionSuccess', payload: { data } });
       } catch (err) {
         console.error(err);
@@ -31,7 +31,7 @@ export default {
 
   reducers: {
     getTopicByMentionSuccess(state, { payload: { data } }) {
-      return { ...state, venues: data };
+      return { ...state, venues: data.data.slice(0, 8) };
     },
   },
 };

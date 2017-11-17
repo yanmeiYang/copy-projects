@@ -15,6 +15,12 @@
       margin-right: 0px;
     }
   }
+  .longLanguage {
+    display: none;
+  }
+  .simpleLanguage {
+    display: inline;
+  }
 
   .headerAvatar {
     img {
@@ -64,6 +70,13 @@
 @media (min-width: 860px) {
   .headerInfoZone {
     .additional { display: inline }
+    .simpleLanguage {
+      display: none !important;
+    }
+
+    .longLanguage {
+      display: inline !important;
+    }
   }
 }
 

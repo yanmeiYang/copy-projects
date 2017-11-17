@@ -5,6 +5,7 @@ export default {
   'header.label.help': '帮助文档',
   'header.login': '登录',
   'header.exit_login': '退出登录',
+  'system.lang.simple': 'ZH',
   'system.lang.show': '语言',
   'system.lang.option_en': 'English',
   'system.lang.option_zh': '简体中文',
@@ -83,6 +84,13 @@ export default {
   'com.expertMap.headerLine.label.statistic': '统计分析报告',
   'com.expertMap.headerLine.label.download': '导出Excel表',
   'com.expertMap.headerLine.label.ok': '确定',
+  'com.expertTrajectory.theme.label.0': '常规',
+  'com.expertTrajectory.theme.label.1': '商务',
+  'com.expertTrajectory.theme.label.2': '黑暗',
+  'com.expertTrajectory.theme.label.3': '抹茶绿',
+  'com.expertTrajectory.theme.label.4': '牛皮纸',
+  'com.expertTrajectory.theme.label.5': '航海家',
+  'com.expertTrajectory.theme.label.6': '简约风',
 
   'com.ExpertBase.Button.Add': '添加',
   'com.ExpertBase.Button.Remove': '删除',
@@ -92,6 +100,9 @@ export default {
   'com.bole.PersonComment': '添加评论',
   'com.bole.Remove': '删除',
   'com.bole.AddButton': '添加',
+
+  // search venue
+  'com.SearchVenue.title': '期刊(会议)排名',
 
   // Expert Base
   'page.ExpertBaseExpertsPage.MyExperts': '我的专家库',

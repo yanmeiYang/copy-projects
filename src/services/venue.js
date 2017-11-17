@@ -8,9 +8,7 @@ const { searchVenue } = api;
 
 export async function getSearchVenue(query, offset, size) {
   const data = { query, offset, size };
-  console.log(searchVenue, data);
-  return request({
-    url: searchVenue,
+  return request(searchVenue, {
     method: 'get',
     data,
   });

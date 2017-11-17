@@ -67,12 +67,17 @@ export default class ExpertMap extends PureComponent {
   };
 
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch, expertMap } = this.props;
     resetRightInfoToGlobal(dispatch);
     const pro = this.props;
-    this.showMap(pro.expertMap.geoData, pro.type, pro.range, pro.hindexRange);
+    this.showMap(expertMap.geoData, pro.type, pro.range, pro.hindexRange);
     window.onresize = () => { // 改变窗口大小的时候重新加载地图，防止出现错位问题
-      this.showMap(pro.expertMap.geoData, pro.type, pro.range, pro.hindexRange);
+      this.showMap(
+        this.props.expertMap.geoData,
+        this.props.type,
+        this.props.range,
+        this.props.hindexRange,
+      );
     };
   }
 
@@ -113,7 +118,6 @@ export default class ExpertMap extends PureComponent {
   listPersonDone = (map, ids) => {
     const imgwidth = 45;
     const type = 'baidu';
-    const model = this.props && this.props.expertMap;
 
     const imgdivs = document.getElementsByName('scholarimg');
     if (imgdivs !== null && imgdivs.length !== 0) {
@@ -183,7 +187,10 @@ export default class ExpertMap extends PureComponent {
       map1 = this.map; // 地图刷新前，用于存储上次浏览的地点
 
       if (!place || !place.results) { //为空的时候不显示地图
-        that.hideLoading();
+        if (this.props.query === '' || this.props.query === '-' || this.props.query === 'undefined'
+          || typeof (this.props.query) === 'undefined') {
+          that.hideLoading();
+        }
         return;
       }
 
@@ -249,9 +256,7 @@ export default class ExpertMap extends PureComponent {
           }
 
           if (include) {
-            const marker = new BMap.Marker(
-              new BMap.Point(newplace[1], newplace[0]), // 这里经度和纬度是反着的
-            );
+            const marker = new BMap.Marker(new BMap.Point(newplace[1], newplace[0])); // 这里经度和纬度是反着的
             marker.setLabel(label);
             marker.setTop();
             marker.setIcon(new BMap.Icon(
@@ -346,7 +351,7 @@ export default class ExpertMap extends PureComponent {
 
     const rightInfos = {
       global: () => (<RightInfoZoneAll persons={results} />),
-      person: () => (<RightInfoZonePerson person={person} />),
+      person: () => (<RightInfoZonePerson person={person} showBut="true" />),
       cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),
     };
 

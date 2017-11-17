@@ -10,7 +10,7 @@ import { Spinner } from 'components';
 import { PersonList, ExportExperts } from 'components/person';
 import {
   SearchFilter, SearchSorts, KgSearchBox,
-  SearchKnowledge, TranslateSearchMessage,
+  SearchKnowledge, TranslateSearchMessage, SearchVenue,
 } from 'components/search';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
@@ -22,6 +22,10 @@ import SearchHelp from '../SearchHelp/SearchHelp';
 
 // TODO Extract Search Filter into new Component.
 // TODO Combine search and uniSearch into one.
+
+const DefaultRightZoneFuncs = [
+  param => <SearchKnowledge query={param.query} key="1" />,
+];
 
 @connect(({ app, search, loading }) => ({ app, search, loading }))
 @withRouter
@@ -37,6 +41,7 @@ export default class SearchComponent extends Component {
     disableFilter: PropTypes.bool,
     disableExpertBaseFilter: PropTypes.bool,
     disableSearchKnowledge: PropTypes.bool,
+    disableSmartSuggest: PropTypes.bool,
     sorts: PropTypes.array, // pass through
     defaultSortType: PropTypes.string,
     onSearchBarSearch: PropTypes.func,
@@ -194,7 +199,7 @@ export default class SearchComponent extends Component {
   };
 
   render() {
-    const { disableExpertBaseFilter, disableFilter, disableSearchKnowledge } = this.props;
+    const { disableExpertBaseFilter, disableFilter, disableSearchKnowledge, rightZoneFuncs, disableSmartSuggest } = this.props;
     const { className, sorts, expertBaseId } = this.props;
     const { sortKey } = this.props.search;
     const sortType = sortKey;
@@ -294,8 +299,18 @@ export default class SearchComponent extends Component {
               />
 
               {/* ---- Search Knowledge ---- */}
-              {!disableSearchKnowledge &&
-              <SearchKnowledge className={styles.searchKgContent} query={query} />}
+              {/*{!disableSearchKnowledge &&*/}
+              {/*<div className={styles.searchKgContent}>*/}
+              {/*<SearchKnowledge query={query} />*/}
+              {/*<SearchVenue query={query} />*/}
+              {/*</div>*/}
+              {/*}*/}
+              {hole.fillFuncs(
+                rightZoneFuncs, // theme from config.
+                DefaultRightZoneFuncs, // default block.
+                { query }, // parameters passed to block.
+                { containerClass: styles.searchKgContent }, // configs.
+              )}
             </div>
 
             <div className={styles.paginationWrap}>

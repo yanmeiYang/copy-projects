@@ -24,6 +24,7 @@ const CurrentSystemConfig = {
   acmfellow: require('./acmfellow/config'),
   DataAnnotation: require('./DataAnnotation/config'),
   thurcb: require('./thurcb/config'),
+  yocsef: require('./yocsef/config'),
 };
 
 // 默认配置
@@ -80,18 +81,20 @@ const getDefaultSystemConfigs = (system, source) => {
     Search_EnablePin: false, // TODO bad：Huawei PIN
     Search_EnableCCFPin: false, // TODO bad：CCF PIN
     Search_EnableTranslateSearch: true, // 启用翻译搜索，显示提示信息;
+    Search_EnableSmartSuggest: true, // 启用智能提示;
     Search_DefaultTranslateSearch: true, // 默认使用翻译搜索;
     Search_EnableKnowledgeGraphHelper: true,
     Search_FixedExpertBase: null,
 
     Search_DisableFilter: false,
     Search_DisableExpertBaseFilter: false,
-    Search_DisableSearchKnowledge: false,
+    // Search_DisableSearchKnowledge: false,
 
     Search_SortOptions: defaults.IN_APP_DEFAULT,
 
     // > Search related
     HeaderSearch_TextNavi: defaults.IN_APP_DEFAULT, // use default settings in component.
+    HeaderSearch_DropDown: false, // 默认没有下拉选择
     SearchFilterExclude: '', // 'Gender',
     UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // deprecated! Don't use this.
 

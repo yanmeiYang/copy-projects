@@ -3,10 +3,10 @@ import axios from 'axios';
 import qs from 'qs';
 import jsonp from 'jsonp';
 import { cloneDeep } from 'lodash';
+import { AES } from 'crypto-js';
 import pathToRegexp from 'path-to-regexp';
 import { getLocalToken } from 'utils/auth';
 import { escapeURLBracket, unescapeURLBracket } from 'utils/strings';
-
 import { apiDomain, nextAPIURL, YQL, CORS, JSONP, strict } from './config';
 import * as debug from './debug';
 
@@ -98,7 +98,7 @@ const fetch = (options) => {
     body, // This is a fix.
   } = options;
 
-  // translate body back into data:
+  // backward-compatibility: translate body back into data:
   if (body) {
     try {
       data = JSON.parse(body);
@@ -185,6 +185,16 @@ const fetch = (options) => {
     url = `http://query.yahooapis.com/v1/public/yql?q=select * from json where url='${options.url}?${encodeURIComponent(qs.stringify(options.data))}'&format=json`;
     data = null;
   }
+
+  // TODO temp: test something:
+  if (options.nextapi) {
+    const text = JSON.stringify(cloneData);
+    const key = '==typeof o?(r=o,o={}):o=o||{}:(r=o,o=a||{},a=void 0))';
+    const ciphertext = AES.encrypt(text, key);
+    console.log('crypto:', text);
+    console.log('crypto:', ciphertext.toString());
+  }
+
 
   let result;
   switch (method.toLowerCase()) {

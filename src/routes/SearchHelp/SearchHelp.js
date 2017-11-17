@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import {routerRedux} from 'dva/router';
-import {connect} from 'dva';
-import {sysconfig} from 'systems';
-import {Checkbox, Row, Col} from 'antd';
+import React, { Component } from 'react';
+import { routerRedux } from 'dva/router';
+import { connect } from 'dva';
+import { sysconfig } from 'systems';
+import { Checkbox, Row, Col } from 'antd';
 import styles from './SearchHelp.less';
 
 const CheckboxGroup = Checkbox.Group;
@@ -19,22 +19,22 @@ export default class SearchHelp extends Component {
         id: 1,
         expansion: 'Artificial Intelligence',
         translated: '人工智能',
-        superordinateWord: [{label: 'S1'}, {label: 'S2'}],
-        subordinateWord: [{label: 'D1'}, {label: 'd2'}, {label: 'd2'}],
+        superordinateWord: [{ label: 'S1' }, { label: 'S2' }],
+        subordinateWord: [{ label: 'D1' }, { label: 'd2' }, { label: 'd2' }],
       },
       {
         id: 2,
         expansion: 'check2',
         translated: '柴可2',
-        superordinateWord: [{label: 'Sff1'}, {label: 'Sff2'}],
-        subordinateWord: [{label: 'D31'}, {label: 'd34'}, {label: 'd32'}],
+        superordinateWord: [{ label: 'Sff1' }, { label: 'Sff2' }],
+        subordinateWord: [{ label: 'D31' }, { label: 'd34' }, { label: 'd32' }],
       },
       {
         id: 3,
         expansion: 'check3',
         translated: '柴可3',
-        superordinateWord: [{label: 'S1'}, {label: 'S2'}],
-        subordinateWord: [{label: 'D1'}, {label: 'd2'}, {label: 'd2'}, {label: 'Dx1'}, {label: 'dx2'}, {label: 'dx2'}],
+        superordinateWord: [{ label: 'S1' }, { label: 'S2' }],
+        subordinateWord: [{ label: 'D1' }, { label: 'd2' }, { label: 'd2' }, { label: 'Dx1' }, { label: 'dx2' }, { label: 'dx2' }],
       },
     ],
     ///
@@ -93,7 +93,7 @@ export default class SearchHelp extends Component {
     // super&sub
     const curr = labels.filter(item => item.id === (defaultExpansionChecked || currentExpansionChecked));
     const superOW = curr && curr.length > 0 && curr[0];
-    const {superordinateWord, subordinateWord} = superOW;
+    const { superordinateWord, subordinateWord } = superOW;
 
     const hasExpansion = labels.find(label => label.expansion) !== undefined;
 
@@ -118,9 +118,9 @@ export default class SearchHelp extends Component {
                 <div>
                   <span className={styles.rightbox}>
                     <Checkbox
-                  checked={item.id === defaultExpansionChecked || currentExpansionChecked === item.id}
-                  onChange={this.onExpandedTermChange.bind(this, item.id)}
-                >{item.expansion}
+                      checked={item.id === defaultExpansionChecked || currentExpansionChecked === item.id}
+                      onChange={this.onExpandedTermChange.bind(this, item.id)}
+                    >{item.expansion}
                     </Checkbox>
                   </span>
                 </div>
@@ -143,7 +143,7 @@ export default class SearchHelp extends Component {
           <Checkbox
             onChange={this.onCheckAllChange}
             indeterminate={indeterminate}
-            checked={checkAll}/>
+            checked={checkAll} />
           <Checkbox.Group onChange={this.onKGChange}>
             {superordinateWord && superordinateWord.map((opt, index) => {
               const key = `${opt.label}_${index}`;
@@ -152,8 +152,9 @@ export default class SearchHelp extends Component {
             {subordinateWord && subordinateWord.map((opt, index) => {
               const key = `${opt.label}_${index}`;
               return <Checkbox key={key} value={opt.label}><span
-                className={styles.subordinateWord}>{ opt.label}
-                </span></Checkbox>;
+                className={styles.subordinateWord}>{opt.label}
+                </span>
+              </Checkbox>;
             })}
           </Checkbox.Group>
         </div>

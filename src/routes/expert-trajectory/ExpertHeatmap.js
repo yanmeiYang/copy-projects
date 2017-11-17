@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Slider, InputNumber, Row, Col, Button } from 'antd';
+import { Spinner } from 'components';
 import { request, queryURL } from 'utils';
 import styles from './ExpertHeatmap.less';
 import {
@@ -20,7 +21,7 @@ function getMyChart(echarts) {
 
 const heatData = []; //热力信息[[lng,lat,num],..,]
 let years = []; //年份
-let pointsData = [];
+const pointsData = [];
 const trajData = []; //{coords:[[lng,lat],[lng,lat]],...,coords:[[lng,lat],[lng,lat]]}每年的迁徙
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
@@ -112,6 +113,7 @@ class ExpertHeatmap extends React.Component {
         let startPlace = ''; //一次迁徙中开始的位置
         let currentPlace = ''; //当前位置
         let currentYear; //当前年份
+        console.log(trj);
         for (const t of trj[key]) {
           //第一部分，生成作者当年所在位置信息
           if (currentPlace !== '') { //第一年
@@ -197,6 +199,7 @@ class ExpertHeatmap extends React.Component {
     return (
       <div>
         <div className={styles.whole}>
+          <Spinner loading={this.props.loading.models.expertTrajectory} />
           <div className={styles.heatmap} id="chart" />
           <div className={styles.info}>
             ddd

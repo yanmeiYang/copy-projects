@@ -7,7 +7,7 @@ import classnames from 'classnames';
 import { sysconfig } from 'systems';
 import { routerRedux } from 'dva/router';
 import { applyTheme } from 'themes';
-import { Layout, Button, Icon, Menu, Dropdown, } from 'antd';
+import { Layout, Button, Icon, Menu, Dropdown, Modal } from 'antd';
 import { Layout as Page } from 'routes';
 import { FormattedMessage as FM } from 'react-intl';
 import { DomainSelector } from 'routes/expert-map';
@@ -39,6 +39,7 @@ class ExpertTrajectoryPage extends React.Component {
     query: '', //查询窗口中的默认值
     cperson: '', //当前选择的人
     themeKey: '0',
+    visible: false,
   };
 
   componentWillMount() {
@@ -77,14 +78,32 @@ class ExpertTrajectoryPage extends React.Component {
     this.setState({ cperson: person });
   };
 
+  onSkinClick = (value) => {
+    this.setState({ themeKey: value.key });
+  };
+
+  showModal = () => {
+    this.setState({
+      visible: true,
+    }, () => {});
+  };
+
   callSearchMap = (query) => {
     const offset = 0;
     const size = 20;
     this.props.dispatch({ type: 'expertTrajectory/searchPerson', payload: { query, offset, size } });
   };
 
-  onSkinClick = (value) => {
-    this.setState({ themeKey: value.key });
+  handleOk = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleCancel = () => {
+    this.setState({
+      visible: false,
+    });
   };
 
   render() {
@@ -95,7 +114,7 @@ class ExpertTrajectoryPage extends React.Component {
     const wid = document.body.clientHeight - 210;
     const menu = (
       <Menu onClick={this.onSkinClick}>
-        {themes && themes.map((theme)=>{
+        {themes && themes.map((theme) => {
         return (
           <Menu.Item key={theme.key}>{themeKey === theme.key && <Icon type="check" />}
             <FM defaultMessage={theme.label} id={`com.expertTrajectory.theme.label.${theme.key}`} />
@@ -117,7 +136,7 @@ class ExpertTrajectoryPage extends React.Component {
             </div>
             <div className={styles.yourSkin}>
               <Dropdown overlay={menu} className={styles.skin}>
-                <a className="ant-dropdown-link" href="#">
+                <a className="ant-dropdown-link" href="#theme">
                   <Icon type="skin" />
                   {currentTheme && currentTheme.length > 0 &&
                   <FM defaultMessage={currentTheme[0].label} id={`com.expertTrajectory.theme.label.${currentTheme[0].key}`} />
@@ -139,6 +158,22 @@ class ExpertTrajectoryPage extends React.Component {
               </Content>
             </Layout>
           </Layout>
+        </div>
+        <div>
+          <Modal
+            title="Trajectory Statistics"
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+            footer={[
+              <Button key="submit" type="primary" size="large" onClick={this.handleOk}>
+                <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.ok" />
+              </Button>,
+            ]}
+            width="700px"
+          >
+            <div>sdsdsd</div>
+          </Modal>
         </div>
       </Page>
     );

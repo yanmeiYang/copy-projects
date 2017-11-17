@@ -9,8 +9,6 @@ let addValue = {};
 let addInfo = [];
 let myChart; // used for loadScript
 let trainterval;
-let aaa = 0;
-let play = false;
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
 class ExpertTrajectory extends React.Component {
@@ -36,7 +34,6 @@ class ExpertTrajectory extends React.Component {
       return true;
     }
     if (nextProps.expertTrajectory.trajData !== this.props.expertTrajectory.trajData) {
-      console.log("bianle",this.props.expertTrajectory.trajData, nextProps.expertTrajectory.trajData)
       this.calculateData(nextProps.expertTrajectory.trajData); // 用新的来代替
     }
     if (nextProps.person !== this.props.person) {
@@ -44,7 +41,6 @@ class ExpertTrajectory extends React.Component {
       return true;
     }
     if (this.props.themeKey !== nextProps.themeKey) {
-      console.log("themKey",this.props.themeKey, nextProps.themeKey)
       showChart(myChart, 'bmap', nextProps.themeKey);
       this.showTrajectory(this.props.expertTrajectory.trajData);
     }
@@ -61,7 +57,7 @@ class ExpertTrajectory extends React.Component {
     const divId = 'chart';
     load((echarts) => {
       myChart = echarts.init(document.getElementById(divId));
-      const skinType = this.props.themeKey
+      const skinType = this.props.themeKey;
       showChart(myChart, 'bmap', skinType);
       this.findPersonTraj(person);
     });
@@ -82,12 +78,9 @@ class ExpertTrajectory extends React.Component {
   };
 
   showTrajectory = (data) => {
-    aaa += 1;
-    console.log("aaa",aaa)
-    if(!data || !data.data){
+    if (!data || !data.data) {
       return false;
     }
-    console.log("data", data)
     const points = [];
     const trajData = [];
     for (const key in data.data.trajectories) {
@@ -134,25 +127,20 @@ class ExpertTrajectory extends React.Component {
     let length = 0;
     if (trainterval) {
       clearInterval(trainterval);
-      console.log("------------==========",trainterval)
     }
     trainterval = setInterval(() => {
       if (length < (trajData.length + 1)) {
-        console.log("huaxianle", length)
         length += 1;
         lineData = trajData.slice(0, length);
         pointData = points.slice(0, length);
         myChart.setOption({ series: [{}, { data: pointData }, { data: lineData }] });
       } else {
-        console.log("huawanle")
         clearInterval(trainterval);
       }
     }, 500);
-
   };
 
   calculateData = (data) => {
-    console.log("data1",data)
     address = [];
     addValue = {};
     addInfo = [];

@@ -51,10 +51,15 @@ class ExpertHeatmapPage extends React.Component {
       query: q,
     });
     if (domain) {
+      this.setState({ domainId: domain });
       this.searchTrajByDomain(domain);
     } else if (q) {
       this.searchTrajByQuery(q);
       this.setState({ domainId: 'aminer' });
+    } else {
+      this.props.dispatch(routerRedux.push({
+        pathname: '/expert-heatmap',
+      }));
     }
   }
 
@@ -75,11 +80,9 @@ class ExpertHeatmapPage extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) { // 状态改变时判断要不要刷新
     if (nextState.query && nextState.query !== this.state.query) {
-      console.log(nextState.query);
       this.searchTrajByQuery(nextState.query);
     }
     if (nextState.domainId && nextState.domainId !== this.state.domainId) {
-      console.log(nextState.domainId);
       this.searchTrajByDomain(nextState.domainId);
     }
     return true;
@@ -128,24 +131,21 @@ class ExpertHeatmapPage extends React.Component {
 
   render() {
     const data = this.props.expertTrajectory.heatData;
-    console.log(data);
     const { query, themeKey, domainId } = this.state;
-    const currentTheme = themes.filter(theme => theme.key === themeKey);
+    const currentTheme = themes.filter(skin => skin.key === themeKey);
 
     const menu = (
       <Menu onClick={this.onSkinClick}>
-        {themes && themes.map((theme)=>{
+        {themes && themes.map((skin) => {
           return (
-            <Menu.Item key={theme.key}>{themeKey === theme.key && <Icon type="check" />}
-              <FM defaultMessage={theme.label} id={`com.expertTrajectory.theme.label.${theme.key}`} />
+            <Menu.Item key={skin.key}>{themeKey === skin.key && <Icon type="check" />}
+              <FM defaultMessage={skin.label} id={`com.expertTrajectory.theme.label.${skin.key}`} />
             </Menu.Item>
           );
         })}
       </Menu>
     );
-
-    const load = this.props.loading.models.expertTrajectory;
-    this.state.rightType = this.props.expertTrajectory.infoZoneIds;
+    console.log(domainId);
     return (
       <Page contentClass={tc(['ExpertHeatmapPage'])} onSearch={this.onSearch}
             query={query}>
@@ -169,7 +169,7 @@ class ExpertHeatmapPage extends React.Component {
             </div>
             <div className={styles.yourSkin}>
               <Dropdown overlay={menu} className={styles.skin}>
-                <a className="ant-dropdown-link" href="#">
+                <a className="ant-dropdown-link" href="#theme">
                   <Icon type="skin" />
                   {currentTheme && currentTheme.length > 0 &&
                   <FM defaultMessage={currentTheme[0].label} id={`com.expertTrajectory.theme.label.${currentTheme[0].key}`} />

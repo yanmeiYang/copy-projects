@@ -41,6 +41,7 @@ export default class SearchComponent extends Component {
     disableFilter: PropTypes.bool,
     disableExpertBaseFilter: PropTypes.bool,
     disableSearchKnowledge: PropTypes.bool,
+    disableSmartSuggest: PropTypes.bool,
     sorts: PropTypes.array, // pass through
     defaultSortType: PropTypes.string,
     onSearchBarSearch: PropTypes.func,
@@ -198,7 +199,7 @@ export default class SearchComponent extends Component {
   };
 
   render() {
-    const { disableExpertBaseFilter, disableFilter, disableSearchKnowledge, rightZoneFuncs } = this.props;
+    const { disableExpertBaseFilter, disableFilter, disableSearchKnowledge, rightZoneFuncs, disableSmartSuggest } = this.props;
     const { className, sorts, expertBaseId } = this.props;
     const { sortKey } = this.props.search;
     const sortType = sortKey;
@@ -251,7 +252,7 @@ export default class SearchComponent extends Component {
             />}
 
             {/* Search Help */}
-            <SearchHelp />
+            {disableSmartSuggest && <SearchHelp />}
 
             {/* ---- Filter ---- */}
 
@@ -300,8 +301,8 @@ export default class SearchComponent extends Component {
               {/* ---- Search Knowledge ---- */}
               {/*{!disableSearchKnowledge &&*/}
               {/*<div className={styles.searchKgContent}>*/}
-                {/*<SearchKnowledge query={query} />*/}
-                {/*<SearchVenue query={query} />*/}
+              {/*<SearchKnowledge query={query} />*/}
+              {/*<SearchVenue query={query} />*/}
               {/*</div>*/}
               {/*}*/}
               {hole.fillFuncs(

@@ -69,6 +69,7 @@ export default class SearchPage extends Component {
           showSearchBox={false}
           disableFilter={sysconfig.Search_DisableFilter}
           disableExpertBaseFilter={sysconfig.Search_DisableExpertBaseFilter}
+          disableSmartSuggest={!sysconfig.Search_EnableSmartSuggest}
           // disableSearchKnowledge={sysconfig.Search_DisableSearchKnowledge}
           rightZoneFuncs={theme.SearchComponent_RightZone}
           fixedExpertBase={sysconfig.Search_FixedExpertBase}

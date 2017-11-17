@@ -41,6 +41,7 @@ const routes = [
   user.Retrieve,
   user.UserInfo,
 
+  // expert base
   expertBase.ExpertBase,
   expertBase.ExpertBaseExpertsPage,
   expertBase.ExpertBaseExpertsPageWithPager,

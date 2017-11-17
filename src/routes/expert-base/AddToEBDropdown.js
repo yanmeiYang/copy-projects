@@ -1,3 +1,6 @@
+/**
+ * Created by yangyanmei on 17/11/17.
+ */
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Button, Modal, message } from 'antd';
@@ -6,7 +9,7 @@ import { routerRedux } from 'dva/router';
 import styles from './AddToEBButton.less';
 
 @connect(({ expertBase, loading }) => ({ expertBase, loading }))
-export default class AddToEBButton extends PureComponent {
+export default class AddToEBDropdown extends PureComponent {
   constructor(props) {
     super(props);
     const { person, targetExpertBase, expertBaseId } = props;
@@ -77,7 +80,7 @@ export default class AddToEBButton extends PureComponent {
   };
 
   render() {
-    const { person, expertBaseId, targetExpertBase } = this.props;
+    const { person } = this.props;
     if (!person) {
       return null;
     }

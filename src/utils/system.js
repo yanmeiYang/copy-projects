@@ -19,13 +19,14 @@ const AvailableSystems = [
   'acmfellow',
   'DataAnnotation',
   'thurcb',
+  'yocsef',
 ];
 
 let System;
 // System = 'aminer';
 // System = 'ccf';
 // System = 'ccftest';
-System = 'huawei';
+// System = 'huawei';
 // System = 'alibaba';
 // System = 'tencent';
 // System = 'cie';
@@ -33,9 +34,10 @@ System = 'huawei';
 // System = 'demo';
 // System = 'cietest';
 // System = 'bole';
-// System = 'acmfellow';
+System = 'acmfellow';
 // System = 'DataAnnotation';
 // System = 'thurcb';
+// System = 'yocsef';
 
 let Source = System; // AppID, Used in UniversalConfig.
 

@@ -23,6 +23,7 @@ const heatData = []; //热力信息[[lng,lat,num],..,]
 let years = []; //年份
 const pointsData = [];
 const trajData = []; //{coords:[[lng,lat],[lng,lat]],...,coords:[[lng,lat],[lng,lat]]}每年的迁徙
+let trajInterval;
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
 class ExpertHeatmap extends React.Component {
@@ -66,10 +67,15 @@ class ExpertHeatmap extends React.Component {
       ifPlay: icon,
     });
     if (icon === 'pause') {
-      let [start, end] = years;
-      const trajInterval = setInterval(() => {
+      const [, end] = years;
+      let start = this.state.inputValue;
+      if (start === end) { //已经到最后了就从头开始播放
+        [start] = years;
+      }
+      trajInterval = setInterval(() => {
         this.setState({ inputValue: start }, () => {
           this.loadHeat(start);
+          console.log(trajInterval);
           if (start < end) {
             start += 1;
           } else {
@@ -80,6 +86,8 @@ class ExpertHeatmap extends React.Component {
           }
         });
       }, 1000);
+    } else if (trajInterval) {
+      clearInterval(trajInterval);
     }
   };
 

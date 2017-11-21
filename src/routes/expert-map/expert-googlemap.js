@@ -201,6 +201,7 @@ export default class ExpertGoogleMap extends React.Component {
             backgroundColor: 'transparent',
             fontWeight: 'bold',
             fontStyle: 'italic',
+            id: place.results[i].id, //id是自己设置的一个属性，用来放id的
           },
           icon: {
             url: '/images/map/marker_blue_sprite.png',
@@ -208,7 +209,7 @@ export default class ExpertGoogleMap extends React.Component {
             origin: new gmaps.Point(0, 0),
             anchor: new gmaps.Point(0, 25),
           },
-          title: place.results[i].id,
+          title: place.results[i].name,
         });
       });
 

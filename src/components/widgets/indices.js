@@ -69,7 +69,7 @@ const defaultIndices = ['activity-ranking-contrib', 'h_index', 'activity', 'risi
  * @param indices - indices node from person.
  * showItems - TODO use this to config which indices to show.
  */
-const Indices = ({ indices, activity_indices, showIndices }) => {
+const Indices = ({ indices, activity_indices, showIndices, indicesType }) => {
   if (!indices) return false;
   let indicesKeys = defaultIndices;
   if (showIndices && showIndices.length > 0) {
@@ -84,16 +84,20 @@ const Indices = ({ indices, activity_indices, showIndices }) => {
         if (!ic) {
           return '';
         }
-        return (
-          <Tooltip key={ic.key} placement="top" title={ic.tooltip}>
+        if (indicesType === 'text') {
+          return (<div>sdfsdf</div>);
+        } else {
+          return (
+            <Tooltip key={ic.key} placement="top" title={ic.tooltip}>
             <span className={classnames(styles.score, styles[ic.color])}>
               <span className={styles.l}>{ic.letter}</span>
               <span className={styles.r}>
                 {ic.render ? ic.render(indices, activity_indices) : indices[ic.key]}
               </span>
             </span>
-          </Tooltip>
-        );
+            </Tooltip>
+          );
+        }
       })}
     </div>
   );

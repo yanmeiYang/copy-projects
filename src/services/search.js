@@ -268,7 +268,7 @@ function prepareParametersGlobal(query, offset, size, filters, sort, useTranslat
 function addAdditionParameterToData(data, sort, range) {
   const newData = data;
 
-  // 置顶acm fellow和高校top100
+  // 置顶huawei项目中的acm fellow和高校top100
   if (sysconfig.Search_EnablePin) {
     if (!sort || sort === 'relevance') {
       newData.pin = 1;

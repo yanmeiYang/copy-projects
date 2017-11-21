@@ -23,7 +23,7 @@ module.exports = {
 
   // Functionality
   Enable_Export: true,
-  Search_EnablePin: true,
+  Search_EnablePin: false,
   // 地图中心点
   CentralPosition: { lat: 37.09024, lng: -95.712891 },
   Map_FilterRange: false,

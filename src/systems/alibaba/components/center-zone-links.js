@@ -3,7 +3,6 @@ export default [
     name: 'Data Mining', name_zh: '数据挖掘',
     child: [
       { name: 'Data Analytics', name_zh: '数据分析' },
-      { name: 'Drug Discovery', name_zh: '药物发现' },
       { name: 'Behavioral Informatics', name_zh: '行为信息学' },
       { name: 'Data Warehose', name_zh: '数据仓库' },
       { name: 'Exploratory Data Analyis', name_zh: '探索性数据分析（EDA）' },

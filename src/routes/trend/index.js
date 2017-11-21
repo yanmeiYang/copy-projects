@@ -22,7 +22,7 @@ export default class TrendPredictionPage extends Component {
 
   componentWillMount() {
     let { query } = queryString.parse(this.props.location.search);
-    query = query || 'artificial intelligence';
+    query = query || '';
     if (query) {
       this.setState({ query });
     }

@@ -214,6 +214,7 @@ export default class TrendPrediction extends React.PureComponent {
   updateTrend = (query) => {
     const cleanedQuery = strings.cleanQuery(query);
     if (!cleanedQuery || cleanedQuery === '-') {
+      this.setState({ loadingFlag: false, errorFlag: true });
       return;
     }
 
@@ -801,6 +802,9 @@ export default class TrendPrediction extends React.PureComponent {
       showFlag = 'inline';
       showFlag1 = 'none';
       tipinfo = `${query}技术领域不存在或者您的输入错误，请检查重试`;
+      if (query === '' || query === '-') {
+        tipinfo = '请您输入一个领域关键词查询分析';
+      }
     } else {
       if (this.state.loadingFlag) {
         showFlag = 'inline';

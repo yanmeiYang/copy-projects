@@ -106,7 +106,7 @@ const hasValue = (check) => {
 };
 
 const loadBMap = (cb) => {
-  loadScript('BMap', { check: 'BMap' }, cb);
+  loadScript('BMapLib', { check: 'BMap' }, cb);
 };
 
 const loadBMapForECharts = (cb) => {

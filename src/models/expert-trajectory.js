@@ -61,15 +61,15 @@ export default {
     },
 
     findTrajByIdSuccess(state, { payload: { data } }) {
-      return { ...state, trajData: data };
+      return { ...state, trajData: data, loading: false };
     },
 
 
     findTrajsByRosterIdSuccess(state, { payload: { data } }) {
-      return { ...state, heatData: data };
+      return { ...state, heatData: data, loading: false };
     },
 
-    searchPersonSuccess(state, { payload: { data } }) { // state?
+    searchPersonSuccess(state, { payload: { data } }) {
       const { result } = data;
       return {
         ...state,
@@ -78,7 +78,7 @@ export default {
       };
     },
 
-    findTrajsHeatAdvanceSuccess(state, { payload: { data } }) { // state?
+    findTrajsHeatAdvanceSuccess(state, { payload: { data } }) {
       return {
         ...state,
         heatData: data,

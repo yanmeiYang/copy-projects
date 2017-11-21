@@ -39,6 +39,7 @@ export default class DomainSelector extends PureComponent {
       return null;
     }
     const hdFlag = (type === 'filter');
+    const cdomain = currentDomain ? currentDomain : undefined;
     return (
       <div>
         {
@@ -75,8 +76,9 @@ export default class DomainSelector extends PureComponent {
             className={styles.treeSelect}
             style={{ width: 280 }}
             dropdownStyle={{ maxHeight: 425, overflow: 'auto' }}
-            placeholder={<b style={{ color: '#08c' }}>Domains</b>}
+            placeholder={<b style={{ color: '#000000' }}>Choose Domain</b>}
             onChange={this.domainChanged}
+            value={cdomain}
             treeDefaultExpandAll
           >
             <TreeNode value="parent 1-0" title="Theory" key="1-0">

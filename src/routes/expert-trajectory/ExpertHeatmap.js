@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Slider, InputNumber, Row, Col, Button } from 'antd';
+import { Spinner } from 'components';
 import { request, queryURL } from 'utils';
 import styles from './ExpertHeatmap.less';
 import {
@@ -20,8 +21,9 @@ function getMyChart(echarts) {
 
 const heatData = []; //热力信息[[lng,lat,num],..,]
 let years = []; //年份
-let pointsData = [];
+const pointsData = [];
 const trajData = []; //{coords:[[lng,lat],[lng,lat]],...,coords:[[lng,lat],[lng,lat]]}每年的迁徙
+let trajInterval;
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
 class ExpertHeatmap extends React.Component {
@@ -30,7 +32,10 @@ class ExpertHeatmap extends React.Component {
     this.dispatch = this.props.dispatch;
   }
 
-  state = {};
+  state = {
+    inputValue: 0,
+    ifPlay: 'play-circle',
+  };
 
   componentWillMount() {
     this.initChart();
@@ -56,12 +61,49 @@ class ExpertHeatmap extends React.Component {
     return true;
   }
 
+  onClick = () => {
+    const icon = this.state.ifPlay === 'play-circle' ? 'pause' : 'play-circle';
+    this.setState({
+      ifPlay: icon,
+    });
+    if (icon === 'pause') {
+      const [, end] = years;
+      let start = this.state.inputValue;
+      if (start === end) { //已经到最后了就从头开始播放
+        [start] = years;
+      }
+      trajInterval = setInterval(() => {
+        this.setState({ inputValue: start }, () => {
+          this.loadHeat(start);
+          console.log(trajInterval);
+          if (start < end) {
+            start += 1;
+          } else {
+            this.setState({
+              ifPlay: 'play-circle',
+            });
+            clearInterval(trajInterval);
+          }
+        });
+      }, 1000);
+    } else if (trajInterval) {
+      clearInterval(trajInterval);
+    }
+  };
+
+  onChange = (value) => {
+    this.setState({
+      inputValue: value,
+    });
+    this.loadHeat(value);
+  };
+
   initChart = () => {
     load((echarts) => {
-      const myChart = getMyChart(echarts);
+      const chart = getMyChart(echarts);
       const skinType = 0;
-      showChart(myChart, 'bmap', skinType);
-          if (typeof (this.props.data.data) === 'undefined') {
+      showChart(chart, 'bmap', skinType);
+      if (typeof (this.props.data.data) === 'undefined') {
         console.log('Try to click one person!');
       } else { //为以后将ExpertTrajectory做组件使用
         this.processData(this.props.data);
@@ -188,15 +230,25 @@ class ExpertHeatmap extends React.Component {
   };
 
   render() {
-    const ifPlay = 'play-circle';
+    const { ifPlay } = this.state;
     let startYear = 0;
     let endYear = 2017;
+    let marks = { 0: 0, 2017: 2017 };
     if (years.length > 0) {
+      marks = {};
       [startYear, endYear] = years;
+      for (let i = startYear; i <= endYear; i += 1) {
+        if (i % 2 === 0) {
+          marks[i] = '';
+        } else {
+          marks[i] = i;
+        }
+      }
     }
     return (
       <div>
         <div className={styles.whole}>
+          <Spinner loading={this.props.loading.models.expertTrajectory} />
           <div className={styles.heatmap} id="chart" />
           <div className={styles.info}>
             ddd
@@ -207,15 +259,15 @@ class ExpertHeatmap extends React.Component {
           <Row className={styles.slide}>
             <Col span={22}>
               <Slider min={startYear} max={endYear} onChange={this.onChange}
-                      onAfterChange={this.onAfterChange} value={this.state.inputValue} />
+                      marks={marks} value={this.state.inputValue} />
             </Col>
             <Col span={1}>
               <InputNumber
                 min={startYear}
                 max={endYear}
                 style={{ marginLeft: 0 }}
-                value="2017"
-                onChange={this.onInputNum}
+                value={this.state.inputValue}
+                onChange={this.onChange}
               />
             </Col>
           </Row>

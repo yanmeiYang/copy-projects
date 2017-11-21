@@ -241,12 +241,12 @@ export default class ExpertMapPage extends React.Component {
     let str = '';
     const d1 = sortByCountries(data);
     const d2 = sortByBigArea(data);
-    str = '1.Statistics according to the state are as follows:\n\n';
+    str = '1.Statistics according to the states are as follows:\n\n';
     str += 'names,values\n';
     for (const dd of d1.result) {
       str += `${dd.name},${dd.value}\n`;
     }
-    str += '\n\n\n\n2.Statistics by region are as follows:\n\n';
+    str += '\n\n\n\n2.Statistics by regions are as follows:\n\n';
     str += 'names,values\n';
     for (const ddd of d2.result) {
       str += `${ddd.name},${ddd.value}\n`;

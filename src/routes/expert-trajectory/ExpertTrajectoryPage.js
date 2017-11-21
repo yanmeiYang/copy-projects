@@ -4,13 +4,11 @@
 import React from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
-import { sysconfig } from 'systems';
 import { routerRedux } from 'dva/router';
 import { applyTheme } from 'themes';
-import { Layout, Button, Icon, Menu, Dropdown, } from 'antd';
+import { Layout, Button, Icon, Menu, Dropdown } from 'antd';
 import { Layout as Page } from 'routes';
 import { FormattedMessage as FM } from 'react-intl';
-import { DomainSelector } from 'routes/expert-map';
 import styles from './ExpertTrajectoryPage.less';
 import { PersonListLittle } from '../../components/person';
 import ExpertTrajectory from './ExpertTrajectory';
@@ -39,6 +37,7 @@ class ExpertTrajectoryPage extends React.Component {
     query: '', //查询窗口中的默认值
     cperson: '', //当前选择的人
     themeKey: '0',
+    visible: false,
   };
 
   componentWillMount() {
@@ -77,14 +76,14 @@ class ExpertTrajectoryPage extends React.Component {
     this.setState({ cperson: person });
   };
 
+  onSkinClick = (value) => {
+    this.setState({ themeKey: value.key });
+  };
+
   callSearchMap = (query) => {
     const offset = 0;
     const size = 20;
     this.props.dispatch({ type: 'expertTrajectory/searchPerson', payload: { query, offset, size } });
-  };
-
-  onSkinClick = (value) => {
-    this.setState({ themeKey: value.key });
   };
 
   render() {
@@ -95,7 +94,7 @@ class ExpertTrajectoryPage extends React.Component {
     const wid = document.body.clientHeight - 210;
     const menu = (
       <Menu onClick={this.onSkinClick}>
-        {themes && themes.map((theme)=>{
+        {themes && themes.map((theme) => {
         return (
           <Menu.Item key={theme.key}>{themeKey === theme.key && <Icon type="check" />}
             <FM defaultMessage={theme.label} id={`com.expertTrajectory.theme.label.${theme.key}`} />
@@ -112,12 +111,12 @@ class ExpertTrajectoryPage extends React.Component {
             <div className={styles.statics}>
               <Button onClick={this.showModal}>
                 <Icon type="line-chart" />
-                <FM defaultMessage="Statistic & Analysis" id="com.expertMap.headerLine.label.statistic" />
+                <FM defaultMessage="Trajectory Statistic" id="com.expertMap.headerLine.label.statistic" />
               </Button>
             </div>
             <div className={styles.yourSkin}>
               <Dropdown overlay={menu} className={styles.skin}>
-                <a className="ant-dropdown-link" href="#">
+                <a className="ant-dropdown-link" href="#theme">
                   <Icon type="skin" />
                   {currentTheme && currentTheme.length > 0 &&
                   <FM defaultMessage={currentTheme[0].label} id={`com.expertTrajectory.theme.label.${currentTheme[0].key}`} />

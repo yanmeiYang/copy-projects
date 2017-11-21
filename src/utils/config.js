@@ -118,6 +118,8 @@ module.exports = {
 
     // topic
     getTopicByMention: '/topic/summary/m/:mention',
+    getTopicOnSkills: '/topic/person/topics/up/:id/toffset/:toffset/tsize/:tsize/uoffset/:uoffset/usize/:usize',
+
 
     // Recommendation APIs
     getAllOrgs: '/reviewer/orgs/get/all/:offset/:size',

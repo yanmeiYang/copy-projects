@@ -12,6 +12,20 @@ export async function getPerson(id) {
   });
 }
 
+export async function getPersonSkills(params) {
+  //this is used in the new aminer PersonPage--Tabzone--Skills
+  const { personId, toffset, tsize, uoffset, usize } = params;
+  return request(
+    api.getTopicOnSkills
+      .replace(':id', personId)
+      .replace(':tsize', tsize)
+      .replace(':toffset', toffset)
+      .replace(':usize', usize)
+      .replace(':uoffset', uoffset)
+    , { method: 'GET' },
+  );
+}
+
 export async function listPersonByIds(ids) {
   return request(api.listPersonByIds, {
     method: 'POST',

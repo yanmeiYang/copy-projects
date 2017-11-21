@@ -1,33 +1,3 @@
-:global {
-  .icon1 {
-    background-image: url('/sys/aminer/ckcest.png');
-  }
-  .icon2 {
-    background-image: url('/sys/aminer/aminer_logo.png');
-  }
-}
-
-.logoZones {
-  display: flex; flex-direction: row; //align-items:center;
-  height: 66px;
-  line-height: 66px;
-  .header_logo1 {
-    width: 72px;
-    background-size: 72px auto;
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-  .header_logo2 {
-    width: 110px;
-    background-size: 110px auto;
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-  .line {
-    font-size: 45px; font-weight:lighter; color: grey;
-    background-position: center;
-  }
-}
 
 .sec_header {
   border-bottom: solid 1px #ddd;
@@ -44,3 +14,18 @@
     .score { width: 40px; text-align: right; padding: 0 4px }
   }
 }
+
+.Overrides(){
+  .global{
+    .fa {
+      width: 20px;
+    }
+    .section_header{
+      color: #428bca; font-size: 13px;
+      flex-direction: row;
+      justify-content:space-between;
+    }
+  }
+}
+
+.Overrides() !important;

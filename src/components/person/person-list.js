@@ -29,11 +29,17 @@ export default class PersonList extends Component {
     type: PropTypes.string,
     persons: PropTypes.array,
     expertBaseId: PropTypes.string,
+    indicesType: PropTypes.string, // ["", text]
+    showIndices: PropTypes.array,
     titleRightBlock: PropTypes.func, // A list of function
     rightZoneFuncs: PropTypes.array,
     didMountHooks: PropTypes.array,
     UpdateHooks: PropTypes.array,
     tagsLinkFuncs: PropTypes.func,
+  };
+
+  static defaultProps = {
+    showIndices: sysconfig.PersonList_ShowIndices,
   };
 
   constructor(props) {
@@ -74,7 +80,7 @@ export default class PersonList extends Component {
   };
 
   render() {
-    const { persons, expertBaseId, className, type } = this.props;
+    const { persons, expertBaseId, className, type, indicesType, showIndices } = this.props;
     const { rightZoneFuncs, titleRightBlock, bottomZoneFuncs, afterTitleBlock, tagsLinkFuncs } = this.props;
 
     const showPrivacy = false;
@@ -138,7 +144,8 @@ export default class PersonList extends Component {
                         <Indices
                           indices={indices}
                           activity_indices={activity_indices}
-                          showIndices={sysconfig.PersonList_ShowIndices}
+                          showIndices={showIndices}
+                          indicesType={indicesType}
                         />
                         {pos && <span><i className="fa fa-briefcase fa-fw" /> {pos}</span>}
                         {aff && <span><i className="fa fa-institution fa-fw" /> {aff}</span>}

@@ -146,6 +146,7 @@ const getDefaultSystemConfigs = (system, source) => {
     Map_HotDomainsLabel: 'Most Influential Scholars:', // 地图领域的描述
     HotDomains_Type: 'filter', // filter or selector
     Map_FilterRange: true, // 地图range默认显示
+    Map_ShowTrajectory: false, //地图上是否显示迁徙地图
 
     Charts_Type: 'bmap', //bmap or geo
 

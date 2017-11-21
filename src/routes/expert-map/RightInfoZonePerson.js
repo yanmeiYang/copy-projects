@@ -53,6 +53,8 @@ class RightInfoZonePerson extends React.PureComponent {
       return <div />;
     }
 
+    const showTraj = sysconfig.Map_ShowTrajectory;
+    showBut = showTraj; //根据开关将其关掉
     const centerZoom = true;
     // used in person popup info
     let url = '/images/blank_avatar.jpg';

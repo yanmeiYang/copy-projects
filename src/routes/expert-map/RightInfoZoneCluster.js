@@ -125,6 +125,8 @@ class RightInfoZoneCluster extends React.Component {
       return <div />;
     }
 
+    const showTraj = sysconfig.Map_ShowTrajectory;
+    const title = showTraj ? "Information & Trajectory" : "Expert Information";
     const centerZoom = true; //个性化设置Trajectory地图聚焦到第一个位置
     let hindexSum = 0;
     const interests = {};
@@ -259,7 +261,7 @@ class RightInfoZoneCluster extends React.Component {
         </div>
         <div className={styles.showInfo}>
           <Modal
-            title="Information & Trajectory"
+            title={title}
             visible={this.state.visible}
             onOk={this.handleOk}
             onCancel={this.handleCancel}
@@ -270,14 +272,19 @@ class RightInfoZoneCluster extends React.Component {
             ]}
             width="600px"
           >
-            <Tabs defaultActiveKey="1" onChange={this.changeStatistic}>
-              <TabPane tab="Detailed Information" key="1">{infoJsx && infoJsx}</TabPane>
-              <TabPane tab="Trajectory" key="2">
-                <div className={styles.traj}>
-                  <ExpertTrajectory person={this.state.cperson} centerZoom={centerZoom} />
-                </div>
-              </TabPane>
-            </Tabs>
+            {
+              showTraj && <Tabs defaultActiveKey="1" onChange={this.changeStatistic}>
+                <TabPane tab="Detailed Information" key="1">{infoJsx && infoJsx}</TabPane>
+                <TabPane tab="Trajectory" key="2">
+                  <div className={styles.traj}>
+                    <ExpertTrajectory person={this.state.cperson} centerZoom={centerZoom} />
+                  </div>
+                </TabPane>
+              </Tabs>
+            }
+            {
+              !showTraj && <div>{infoJsx && infoJsx}</div>
+            }
           </Modal>
         </div>
         <div className={styles.showResearch}>

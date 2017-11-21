@@ -213,6 +213,7 @@ export default {
           total: null,
         };
         newState.pagination.pageSize = size;
+        newState.translatedText = '';
       }
       return newState;
     },

@@ -1,4 +1,5 @@
 /* eslint-disable no-extend-native */
+import { isEqual } from 'lodash';
 import classnames from 'classnames';
 import { cloneDeep } from 'lodash';
 import config from './config';
@@ -33,4 +34,18 @@ const compare = (props1, props2, ...rest) => {
   return false;
 };
 
-module.exports = { ReactHelper, compare };
+const compareDeep = (props1, props2, ...rest) => {
+  if (props1 && props2 && rest && rest.length > 0) {
+    for (let i = 0; i < rest.length; i += 1) {
+      const key = rest[i];
+      const item1 = props1[key];
+      const item2 = props2[key];
+      if (!isEqual(item1, item2)) {
+        return true;
+      }
+    }
+  }
+  return false;
+};
+
+module.exports = { ReactHelper, compare, compareDeep };

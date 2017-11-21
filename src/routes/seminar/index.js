@@ -218,7 +218,6 @@ export default class Seminar extends React.Component {
       showTip = '暂无数据';
     }
     const { organizer, category, tag, orgType, sortType } = this.state;
-    console.log('=============== organizer ==========', organizer);
     const compare = (property) => {
       return (a, b) => {
         let val1 = a[property];

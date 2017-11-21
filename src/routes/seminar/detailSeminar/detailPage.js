@@ -138,10 +138,10 @@ const DetailPage = ({ dispatch, seminar, app, pad }) => {
               </div>
             </div>
           </Col>
-          {summaryById.id === '5a0960fb9ed5dba12da60e4c' &&
+          {summaryById.link &&
           <Col className={styles.join_button}>
             <Button type="primary" size="large">
-              <a href="https://jinshuju.net/f/gWJNP1" target="_blank">
+              <a href={summaryById.link} rel="noopener noreferrer" target="_blank">
                 我要报名
               </a>
             </Button>

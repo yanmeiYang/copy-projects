@@ -4,6 +4,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Modal, Cascader, Input, Row, Col, Button, Tag } from 'antd';
+import { compareDeep } from '../../../utils/compare';
 import { contactByJoint, getValueByJoint } from '../../../services/seminar';
 import styles from './index.less';
 
@@ -15,6 +16,12 @@ class AddCoOrgModal extends React.Component {
       this.setState({ tags: this.props.coOrg, currentOrg: this.props.coOrg });
     }
   }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (compareDeep(nextProps, this.props, 'coOrg')) {
+      this.setState({ tags: nextProps.coOrg, currentOrg: nextProps.coOrg });
+    }
+  };
 
   onOrgChange = (value) => {
     if (value[1]) {
@@ -76,11 +83,11 @@ class AddCoOrgModal extends React.Component {
   };
 
   render() {
-    const { orgList } = this.props;
+    const { orgList, label } = this.props;
     const { modalVisible, tags, manual } = this.state;
     return (
       <div>
-        {tags.map((org, index) => {
+        {tags && tags.map((org, index) => {
           return (
             <Tag key={org} color="#2db7f5" closable
                  onClose={this.deleteTag.bind(this, org, index)}>
@@ -92,7 +99,7 @@ class AddCoOrgModal extends React.Component {
         <Button onClick={this.showAddCoOrgModal} size="small">添加</Button>
         <Modal
           className={styles.title}
-          title="添加协办单位"
+          title={`添加${label}`}
           visible={modalVisible}
           width={640}
           footer={null}
@@ -103,17 +110,21 @@ class AddCoOrgModal extends React.Component {
           <div>
             <Row style={{ maxHeight: '555vh' }}>
               <Col span={4} className={styles.label}>
-                选择协办单位:
+                {`选择${label}`}:
               </Col>
               <Col span={20}>
-                <Cascader options={orgList} onChange={this.onOrgChange} ref="cascader"
-                          showSearch placeholder="请键入搜索协办单位" popupClassName={styles.addAssistMenu}
-                          style={{ width: '100%' }}/>
+                <Cascader
+                  options={orgList} onChange={this.onOrgChange} showSearch
+                  placeholder={`请键入搜索${label}`}
+                  popupClassName={styles.addAssistMenu}
+                  style={{ width: '100%' }} />
               </Col>
             </Row>
             <Row style={{ marginTop: '10px' }}>
               <Col span={4} className={styles.label}>手动填写:</Col>
-              <Col span={20}> <Input onBlur={this.addOrg} ref="manualValue"/></Col>
+              <Col span={20}>
+                <Input onBlur={this.addOrg} ref="manualValue" />
+              </Col>
               <Col span={24} className={styles.action}>
                 <Button type="primary" onClick={this.handleOk}>提交</Button>
               </Col>

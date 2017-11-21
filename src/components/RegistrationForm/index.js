@@ -48,10 +48,11 @@ class RegistrationForm extends React.Component {
     editTheTalk: {},
     editTheTalkIndex: -1,
     editStatus: false, // 是否是编辑状态
-    organizer: '',
+    organizer: [],
     previewVisible: false,
     image: null,
     currentOrg: [],
+    hostOrg: [],
     addCoOrgModalVisible: false,
     // suggestSpeakers: [],
     // speakerInfo: {},
@@ -95,6 +96,7 @@ class RegistrationForm extends React.Component {
     }
     if (nextProps.seminar.summaryById.title) {
       const currentSeminar = nextProps.seminar.summaryById;
+      console.log('-------------', currentSeminar.host_org);
       this.setState({
         talkStartValue: currentSeminar.time.from,
         talkEndValue: currentSeminar.time.to,
@@ -103,8 +105,9 @@ class RegistrationForm extends React.Component {
         tags: currentSeminar.tags,
         talks: currentSeminar.talk,
         editStatus: true,
-        organizer: currentSeminar.organizer[0].split(OrgJoiner),
-        currentOrg: currentSeminar.organizer.slice(1),
+        hostOrg: currentSeminar.host_org || [],
+        organizer: currentSeminar.organizer || [],
+        currentOrg: currentSeminar.co_org || [],
         image: currentSeminar.img || '',
       });
     }
@@ -153,16 +156,17 @@ class RegistrationForm extends React.Component {
             data.time.to = typeof state.endValue === 'string' ? state.endValue : state.endValue;
           }
           data.tags = state.tags;
-          data.organizer = data.organizer.join(OrgJoiner);
-          // data.organizer.shift();
-          if (state.currentOrg !== undefined && state.currentOrg.length > 0) {
-            data.organizer = [data.organizer].concat(state.currentOrg);
-          } else {
-            data.organizer = [data.organizer];
-          }
-          delete data.co_org;
+          // data.organizer = data.organizer.join(OrgJoiner);
+          // // data.organizer.shift();
+          // if (state.currentOrg !== undefined && state.currentOrg.length > 0) {
+          //   data.organizer = [data.organizer].concat(state.currentOrg);
+          // } else {
+          //   data.organizer = [data.organizer];
+          // }
+          // delete data.co_org;
           // 获取登录用户的uid
           data.uid = this.props.uid;
+
           if (state.editStatus) {
             data.id = this.props.seminarId;
             this.props.dispatch({ type: 'seminar/updateSeminarActivity', payload: data });
@@ -251,6 +255,7 @@ class RegistrationForm extends React.Component {
         city: currentSeminar.location.city || '',
         address: currentSeminar.location.address || '',
         abstract: currentSeminar.abstract,
+        link: currentSeminar.link || '',
       };
       this.expertExtendAddress = currentSeminar.location.address || '';
       this.props.form.setFieldsValue(data);
@@ -264,6 +269,16 @@ class RegistrationForm extends React.Component {
     this.setState({ image: '' });
   };
   /* 更新删除海报结束 */
+
+  // 存储主办单位
+  addNewHostOrg = (value) => {
+    this.setState({ hostOrg: value });
+  };
+
+  // 存储承办单位
+  addNewOrg = (value) => {
+    this.setState({ organizer: value });
+  };
 
   // 存储协办单位
   addNewCoOrg = (value) => {
@@ -289,8 +304,9 @@ class RegistrationForm extends React.Component {
     } = this.props.seminar;
     const {
       addNewTalk, talks, startValue, endValue, editTheTalk, image, currentOrg,
-      editStatus, organizer, tags,
+      editStatus, organizer, tags, hostOrg,
     } = this.state;
+
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -354,22 +370,40 @@ class RegistrationForm extends React.Component {
               )}
             </FormItem>
 
+            <FormItem {...formItemLayout} label="主办单位">
+              {getFieldDecorator('host_org', {
+                  initialValue: hostOrg,
+                  // rules: [{ required: true, message: '请选择主办单位' }],
+                },
+              )(
+                <AddCoOrgModal
+                  label="主办单位"
+                  orgList={psActivity} dispatch={this.props.dispatch}
+                  callbackParent={this.addNewHostOrg} coOrg={hostOrg} />,
+              )}
+            </FormItem>
             <FormItem {...formItemLayout} label="承办单位">
               {getFieldDecorator('organizer', {
                   initialValue: organizer,
                   rules: [{ required: true, message: '请选择承办单位' }],
                 },
               )(
-                <Cascader options={psOrganizer} showSearch placeholder="键入搜索承办单位"
-                          popupClassName={styles.menu} />,
+                <AddCoOrgModal
+                  label="承办单位"
+                  orgList={psActivity} dispatch={this.props.dispatch}
+                  callbackParent={this.addNewOrg} coOrg={organizer} />,
+                { /*<Cascader options={psOrganizer} showSearch placeholder="键入搜索承办单位"*/ }
+                // popupClassName={styles.menu} />,
               )}
             </FormItem>
 
             <FormItem {...formItemLayout} label="协办单位">
-              {getFieldDecorator('co_org', {},
+              {getFieldDecorator('co_org', { initialValue: currentOrg },
               )(
-                <AddCoOrgModal orgList={psActivity} dispatch={this.props.dispatch}
-                               callbackParent={this.addNewCoOrg} coOrg={currentOrg} />,
+                <AddCoOrgModal
+                  label="协办单位"
+                  orgList={psActivity} dispatch={this.props.dispatch}
+                  callbackParent={this.addNewCoOrg} coOrg={currentOrg} />,
               )}
             </FormItem>
 
@@ -486,54 +520,30 @@ class RegistrationForm extends React.Component {
               {...formItemLayout}
               label="活动标签"
             >
-              {getFieldDecorator('activityTags', {})(<AddTags callbackParent={this.onTagsChanged}
-                                                              tags={tags} />)}
-
+              {getFieldDecorator('activityTags', {})(
+                <AddTags callbackParent={this.onTagsChanged} tags={tags} />)}
             </FormItem>
-            {/* <FormItem */}
-            {/* {...formItemLayout} */}
-            {/* label="贡献类别" */}
-            {/* > */}
-            {/* {getFieldDecorator('state', {})( */}
-            {/* <Select */}
-            {/* showSearch */}
-            {/* style={{ width: 200 }} */}
-            {/* placeholder="请选择贡献类别" */}
-            {/* optionFilterProp="children" */}
-            {/* onChange={this.activityTypeChange} */}
-            {/* filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0} */}
-            {/* > */}
-            {/* { */}
-            {/* Object.keys(activity_type_options).map((item) => { */}
-            {/* return (<Option key={item} */}
-            {/* value={item + '#' + activity_type_options[item]}>{item}</Option>) */}
-            {/* }) */}
-            {/* } */}
-            {/* </Select> */}
-            {/* )} */}
-            {/* </FormItem> */}
-          </Col>
 
-          {/* seminar */}
-          {/* {selectedType === '0' ? */}
-          {/* <Col className={styles.thumbnail} md={24} lg={{ span: 16, offset: 4 }}> */}
-          {/* <div> */}
-          {/* <FormItem> */}
-          {/* <Col><label>专家信息</label></Col> */}
-          {/* <ExpertBasicInformation integral={integral} callbackParent={this.onExpertInfoChanged}/> */}
-          {/* </FormItem> */}
-          {/* </div> */}
-          {/* </Col> : ''} */}
-          {/* workshop */}
+            <FormItem
+              {...formItemLayout}
+              label="报名链接"
+              hasFeedback
+            >
+              {getFieldDecorator('link', {})(
+                <Input placeholder="请输入报名的链接" autoComplete="off" />,
+              )}
+            </FormItem>
+          </Col>
 
           <Col className={styles.thumbnail}>
             {talks.length > 0 && <div>
               {talks.map((talk, index) => {
                 return (
                   <div key={Math.random()}>
-                    <ShowExpertList talk={talk} index={index} getImg={this.getImg}
-                                    delTheExpert={this.delTheExpert}
-                                    editTheExpert={this.editTheExpert} />
+                    <ShowExpertList
+                      talk={talk} index={index} getImg={this.getImg}
+                      delTheExpert={this.delTheExpert}
+                      editTheExpert={this.editTheExpert} />
                   </div>
                 );
               })}
@@ -543,11 +553,12 @@ class RegistrationForm extends React.Component {
             </div>
 
             {addNewTalk &&
-            <AddExpertModal editTheTalk={editTheTalk} parentProps={this.props}
-                            startValue={this.state.startValue} endValue={this.state.endValue}
-                            address={this.expertExtendAddress}
-                            callbackParent={this.addTheNewTalk}
-                            callbackParentSetAddNewTalk={this.setAddNewTalk} />}
+            <AddExpertModal
+              editTheTalk={editTheTalk} parentProps={this.props}
+              startValue={this.state.startValue} endValue={this.state.endValue}
+              address={this.expertExtendAddress}
+              callbackParent={this.addTheNewTalk}
+              callbackParentSetAddNewTalk={this.setAddNewTalk} />}
           </Col>
 
           <Col className={styles.formFooter}>
@@ -566,4 +577,8 @@ class RegistrationForm extends React.Component {
 
 const WrappedRegistrationForm = Form.create()(RegistrationForm);
 
-export default connect(({ seminar, person, loading }) => ({ seminar, person, loading }))(WrappedRegistrationForm);
+export default connect(({ seminar, person, loading }) => ({
+  seminar,
+  person,
+  loading
+}))(WrappedRegistrationForm);

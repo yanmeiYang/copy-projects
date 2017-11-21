@@ -27,12 +27,29 @@ class ActivityInfo extends React.PureComponent {
           <strong>活动类型: </strong>
           <span>&nbsp;{summaryById.category}</span>
         </p>
+        {summaryById.host_org && summaryById.host_org.length > 0 &&
+        <p>
+          <strong>主办单位: &nbsp;</strong>
+          {summaryById.host_org.map((item, index) => {
+            const key = `${item}_${index}`;
+            return <span key={key}>{seminarService.getValueByJoint(item)} &nbsp;</span>;
+          })}
+        </p>}
         <p>
           <strong>承办单位: &nbsp;</strong>
-          {summaryById.organizer.map((item) => {
-            return <span key={`${item}_${Math.random()}`}>{seminarService.getValueByJoint(item)} &nbsp;</span>;
+          {summaryById.organizer.map((item, index) => {
+            const key = `${item}_${index}`;
+            return <span key={key}>{seminarService.getValueByJoint(item)} &nbsp;</span>;
           })}
         </p>
+        {summaryById.co_org && summaryById.co_org.length > 0 &&
+        <p>
+          <strong>协办单位: &nbsp;</strong>
+          {summaryById.co_org.map((item, index) => {
+            const key = `${item}_${index}`;
+            return <span key={key}>{seminarService.getValueByJoint(item)} &nbsp;</span>;
+          })}
+        </p>}
         <p>
           <strong>活动地点: </strong>
           {summaryById.location &&

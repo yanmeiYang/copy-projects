@@ -252,7 +252,7 @@ export default class SearchComponent extends Component {
             />}
 
             {/* Search Help */}
-            {disableSmartSuggest && <SearchHelp />}
+            <SearchHelp />
 
             {/* ---- Filter ---- */}
 

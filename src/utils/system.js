@@ -26,7 +26,7 @@ let System;
 // System = 'aminer';
 // System = 'ccf';
 // System = 'ccftest';
-System = 'huawei';
+// System = 'huawei';
 // System = 'alibaba';
 // System = 'tencent';
 // System = 'cie';
@@ -36,7 +36,7 @@ System = 'huawei';
 // System = 'bole';
 // System = 'acmfellow';
 // System = 'DataAnnotation';
-// System = 'thurcb';
+System = 'thurcb';
 // System = 'yocsef';
 
 let Source = System; // AppID, Used in UniversalConfig.

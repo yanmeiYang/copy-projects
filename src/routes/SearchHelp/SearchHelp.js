@@ -17,24 +17,87 @@ export default class SearchHelp extends Component {
     labels: [
       {
         id: 1,
-        expansion: 'Artificial Intelligence',
-        translated: '人工智能',
+        expansion: 'Artificial Intelligencesdfdsfsd',
+        translated: '人工智能dfsfsfsf',
         superordinateWord: [{ label: 'S1' }, { label: 'S2' }],
         subordinateWord: [{ label: 'D1' }, { label: 'd2' }, { label: 'd2' }],
       },
       {
         id: 2,
-        expansion: 'check2',
+        expansion: 'check2dsfsdfsdf',
         translated: '柴可2',
         superordinateWord: [{ label: 'Sff1' }, { label: 'Sff2' }],
         subordinateWord: [{ label: 'D31' }, { label: 'd34' }, { label: 'd32' }],
       },
       {
         id: 3,
+        expansion: 'check3dfsddsfsffsfsfs',
+        translated: '柴可3fsdfdsf',
+        superordinateWord: [{ label: 'S1' }, { label: 'S2' }],
+        subordinateWord: [{ label: 'D1' }, { label: 'd2' }, { label: 'd2' }, { label: 'Dx1' }, { label: 'dx2' }, { label: 'dx2' }],
+      },
+      {
+        id: 4,
+        expansion: 'Artificial Intelligence',
+        translated: '人工智能',
+        superordinateWord: [{ label: 'S1' }, { label: 'S2' }],
+        subordinateWord: [{ label: 'D1' }, { label: 'd2' }, { label: 'd2' }],
+      },
+      {
+        id: 5,
+        expansion: 'check2',
+        translated: '柴可2',
+        superordinateWord: [{ label: 'Sff1' }, { label: 'Sff2' }],
+        subordinateWord: [{ label: 'D31' }, { label: 'd34' }, { label: 'd32' }],
+      },
+      {
+        id: 6,
+        expansion: 'check3sfdsfgrfsdfsewwer',
+        translated: '柴可3',
+        superordinateWord: [{ label: 'S1' }, { label: 'S2' }],
+        subordinateWord: [{ label: 'D1' }, { label: 'd2' }, { label: 'd2' }, { label: 'Dx1' }, { label: 'dx2' }, { label: 'dx2' }],
+      },
+      {
+        id: 7,
+        expansion: 'Artificial Intelligence',
+        translated: '人工智能',
+        superordinateWord: [{ label: 'S1' }, { label: 'S2' }],
+        subordinateWord: [{ label: 'D1' }, { label: 'd2' }, { label: 'd2' }],
+      },
+      {
+        id: 8,
+        expansion: 'check2',
+        translated: '柴可2',
+        superordinateWord: [{ label: 'Sff1' }, { label: 'Sff2' }],
+        subordinateWord: [{ label: 'D31' }, { label: 'd34' }, { label: 'd32' }, { label: 'd34' }, { label: 'd32' }, { label: 'd34' }, { label: 'd32' }, { label: 'd34' }, { label: 'd32' }],
+      },
+      {
+        id: 9,
         expansion: 'check3',
         translated: '柴可3',
         superordinateWord: [{ label: 'S1' }, { label: 'S2' }],
         subordinateWord: [{ label: 'D1' }, { label: 'd2' }, { label: 'd2' }, { label: 'Dx1' }, { label: 'dx2' }, { label: 'dx2' }],
+      },
+      {
+        id: 10,
+        expansion: 'Artificial Intelligence',
+        translated: '人工智能',
+        superordinateWord: [{ label: 'S1' }, { label: 'S2' }],
+        subordinateWord: [{ label: 'D1' }, { label: 'd2' }, { label: 'd2' }],
+      },
+      {
+        id: 11,
+        expansion: 'check2',
+        translated: '柴可2',
+        superordinateWord: [{ label: 'Sff1' }, { label: 'Sff2' }],
+        subordinateWord: [{ label: 'D31' }, { label: 'd34' }, { label: 'd32' }, { label: 'd34' }, { label: 'd32' }, { label: 'd34' }, { label: 'd32' }, { label: 'd34' }, { label: 'd32' }],
+      },
+      {
+        id: 12,
+        expansion: 'Artificial Intelligence',
+        translated: '人工智能',
+        superordinateWord: [{ label: 'S1' }, { label: 'S2' }],
+        subordinateWord: [{ label: 'D1' }, { label: 'd2' }, { label: 'd2' }],
       },
     ],
     ///
@@ -73,11 +136,13 @@ export default class SearchHelp extends Component {
 
   onCheckAllChange = (e) => {
     this.setState({
-      checkedList: e.target.checked ? plainOptions : [],
+      checkedList: e.target.checked ? this.state.labels : [],
       indeterminate: false,
       checkAll: e.target.checked,
     });
   };
+  onToggleClick = (e) => {
+  }
 
   setDefaultOptions = () => {
     // TODO
@@ -104,17 +169,17 @@ export default class SearchHelp extends Component {
 
     return (
       <div className={styles.searchHelp}>
-        <div className={styles.leftBox}>
-          <div className={styles.width}>
+        <div className={styles.box}>
+          <div className={styles.w}>
             {hasExpansion &&
-            <div className={styles.leftText}>We automatically expanded it to</div>
+            <div className={styles.w} >We automatically expanded it to</div>
             }
-            <div className={styles.leftText}>We also search for</div>
+            <div className={styles.w}>We also search for</div>
           </div>
 
           <div className={styles.leftBox}>
             {hasExpansion && labels.map(item => (
-              <div key={item.id} className={styles.rightBox}>
+              <div key={item.id}>
                 <div>
                   <span className={styles.rightbox}>
                     <Checkbox
@@ -136,22 +201,30 @@ export default class SearchHelp extends Component {
               </div>
             ))}
           </div>
+          <div onClick={this.onToggleClick} >more</div>
         </div>
 
-        <div>
-          <span className={styles.width}>Expand by knowledge graph</span>
-          <Checkbox
-            onChange={this.onCheckAllChange}
-            indeterminate={indeterminate}
-            checked={checkAll} />
+        <div className={styles.box1}>
+          <div className={styles.ww}>
+            <span>Expand by knowledge graph</span>
+            <span className={styles.paddingLeft}>
+            <Checkbox
+              onChange={this.onCheckAllChange}
+              indeterminate={indeterminate}
+              checked={checkAll} />
+          </span>
+          </div>
           <Checkbox.Group onChange={this.onKGChange}>
             {superordinateWord && superordinateWord.map((opt, index) => {
               const key = `${opt.label}_${index}`;
-              return <Checkbox key={key} value={opt.label}><span className={styles.suporordinateWord}>{opt.label}</span></Checkbox>;
+              return <Checkbox key={key} value={opt.label}>
+                <span className={styles.suporordinateWord}>{opt.label}</span>
+              </Checkbox>;
             })}
             {subordinateWord && subordinateWord.map((opt, index) => {
               const key = `${opt.label}_${index}`;
-              return <Checkbox key={key} value={opt.label}><span
+              return <Checkbox key={key} value={opt.label}>
+                <span
                 className={styles.subordinateWord}>{opt.label}
                 </span>
               </Checkbox>;

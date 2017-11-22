@@ -3,22 +3,48 @@
 .searchHelp {
   display: flex;
   flex-direction: column;
-  border: 1px solid grey;
+  //border: 1px solid grey;
   margin: 5px;
   padding: 5px;
-  font-size: 14px;
-  height: 100px;
-  .leftBox {
+  //font-size: 14px;
+  //height: 100px;
+  .box{
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
-    .rightBox {
+    .leftBox {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      .rightBox {
+        display: flex;
+        flex-direction: column;
+      }
+      .width {
+        width: 290px;
+      }
+      .Box{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+      }
     }
-    .width {
-      width: 240px;
-    }
+  }
+  .w{
+    width: 200px;
+  }
+  .ww{
+    display: inline-block;
+    width: 200px;
+    display: flex;
+    flex-direction: row;
+  }
+  .box1{
+    display: flex;
+    flex-direction: row;
+  }
+  .paddingLeft{
+    padding-left: 17px;
   }
   .suporordinateWord {
     color: red;

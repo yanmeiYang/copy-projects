@@ -152,13 +152,13 @@ class RightInfoZoneCluster extends React.Component {
         const { indices } = person;
         // sum hindex
         if (indices) {
-          hindexSum += indices.h_index;
+          hindexSum += indices.hindex;
         }
         persons.sort((a, b) => {
-          if ((b.indices.h_index - a.indices.h_index) === 0) {
+          if ((b.indices.hindex - a.indices.hindex) === 0) {
             return (b.name > a.name);
           } else {
-            return (b.indices.h_index - a.indices.h_index);
+            return (b.indices.hindex - a.indices.hindex);
           }
         });
         // interests
@@ -205,7 +205,12 @@ class RightInfoZoneCluster extends React.Component {
 
     const infoJsx = (
       <div className={styles.charts}>
-        <RightInfoZonePerson person={this.state.cperson} />
+        {/*<RightInfoZonePerson person={this.state.cperson} />*/}
+        <PersonList
+          className={styles.personList}
+          persons={[this.state.cperson]}
+          user={this.props.app.user}
+        />
       </div>
     );
     const tagJsx = (
@@ -245,7 +250,7 @@ class RightInfoZoneCluster extends React.Component {
             const tooltip = (
               <div className={styles.tooltip}>
                 {person.name}<br />
-                Hindex: {person.indices && person.indices.h_index}
+                Hindex: {person.indices && person.indices.hindex}
               </div>);
             return (
               <div key={person.id} className={styles.imgOuter}>
@@ -266,7 +271,7 @@ class RightInfoZoneCluster extends React.Component {
             const tooltip = (
               <div className={styles.tooltip}>
                 {person.name}<br />
-                Hindex: {person.indices && person.indices.h_index}
+                Hindex: {person.indices && person.indices.hindex}
               </div>);
             return (
               <div key={person.id} className={styles.imgOuter}>

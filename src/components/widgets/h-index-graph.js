@@ -36,7 +36,7 @@ class HindexGraph extends React.PureComponent {
     const groupNumTemp = [0, 0, 0, 0, 0];
     persons && persons.map((person) => {
       if (person.indices) {
-        const g = group(person.indices.h_index);
+        const g = group(person.indices.hindex);
         groupNumTemp[g] += 1;
       } else {
         const g = group(person.hindex);

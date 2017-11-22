@@ -45,7 +45,8 @@ const getInfoWindow = () => {
   if (!globalInfoWindow) {
     const sContent = "<div id='author_info' class='popup'></div>";
     globalInfoWindow = new window.BMap.InfoWindow(sContent);
-    globalInfoWindow.disableAutoPan();
+    //globalInfoWindow.disableAutoPan();
+    globalInfoWindow.enableAutoPan(); //开启打开信息窗口时地图自动平移
   }
   return globalInfoWindow;
 };
@@ -258,12 +259,13 @@ export default class ExpertMap extends PureComponent {
           if (include) {
             const marker = new BMap.Marker(new BMap.Point(newplace[1], newplace[0])); // 这里经度和纬度是反着的
             marker.setLabel(label);
-            marker.setTop();
+            marker.setTop(true); //置于顶层
             marker.setIcon(new BMap.Icon(
-              '/images/map/marker_blue_sprite1.png',
+              '/images/map/marker_blue_sprite.png',
               new BMap.Size(19, 50), {
                 offset: new BMap.Size(0, 0), // 指定定位位置
                 imageOffset: new BMap.Size(0, 0), // 设置图片偏移
+                infoWindowAnchor: new BMap.Size(19, 0), //信息窗口开启位置相对于图标左上角的偏移值
               },
             ));
             pId[counts] = pr.id;

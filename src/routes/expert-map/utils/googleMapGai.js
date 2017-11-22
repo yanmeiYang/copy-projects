@@ -1108,7 +1108,7 @@ function GetGoogleMapLib(showTop) {
 
           const markers = that.cluster_.getMarkers();
           for (var i = 0; i < that.cluster_.getSize(); i++) {
-            const userinfo = markers[i].getTitle();
+            const userinfo = markers[i].getLabel().id;
             userids[i] = userinfo;
             if (ids.indexOf(userinfo) == -1) {
               ids += `${userinfo},`;

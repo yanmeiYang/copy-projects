@@ -123,20 +123,20 @@ export default class Layout extends Component {
           {/*href="https://cdn.rawgit.com/novus/nvd3/v1.8.1/build/nv.d3.css" />*/}
           {/*}*/}
 
-          {/*{(href.indexOf('/expert-map') > 0) &&*/}
-          {/*<script*/}
-          {/*type="text/javascript"*/}
-          {/*src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />}*/}
+          {(href.indexOf('/expert-map') > 0) &&
+          <script
+          type="text/javascript"
+          src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />}
 
-          {/*{(href.indexOf('/expert-map') > 0) &&*/}
-          {/*<script*/}
-          {/*src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1"*/}
-          {/*charSet="utf-8" async defer />}*/}
+          {(href.indexOf('/expert-map') > 0) &&
+          <script
+          src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1"
+          charSet="utf-8" async defer />}
 
-          {/*{href.indexOf('/expert-map') > 0 &&*/}
-          {/*<script*/}
-          {/*src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlzpf4YyjOBGYOhfUaNvQZENXEWBgDkS0"*/}
-          {/*async defer />}*/}
+          {href.indexOf('/expert-map') > 0 &&
+          <script
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlzpf4YyjOBGYOhfUaNvQZENXEWBgDkS0"
+          async defer />}
 
           {/*{false && href.indexOf('/expert-heatmap') > 0 &&*/}
           {/*<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/3.7.1/echarts.js" />}*/}

@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "aminer2b",
-  "version": "1.0.6",
+  "version": "1.0.9",
   "dependencies": {
     "antd": "^2.13.10",
     "axios": "^0.17.1",

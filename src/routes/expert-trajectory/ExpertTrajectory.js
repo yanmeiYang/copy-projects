@@ -60,7 +60,10 @@ class ExpertTrajectory extends React.Component {
     const divId = 'chart';
     load((echarts) => {
       myChart = echarts.init(document.getElementById(divId));
-      const skinType = this.props.themeKey;
+      let skinType = this.props.themeKey;
+      if (typeof (skinType) === 'undefined') {
+        skinType = '2'; //假设默认为dark
+      }
       showChart(myChart, 'bmap', skinType);
       this.findPersonTraj(person);
     });

@@ -1,7 +1,3 @@
-/**
- *  Created by BoGao on 2017-06-07;
- *  Refactor on 2017-10-26;
- */
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
@@ -155,6 +151,9 @@ export default class ExpertMapPage extends React.Component {
   };
 
   searchMapByQuery = (query) => { //models里面重新查询数据
+    if (query === '' || query === '-') {
+      return;
+    }
     this.props.dispatch({
       type: 'expertMap/searchMap',
       payload: { query: strings.firstNonEmptyQuery(query) },

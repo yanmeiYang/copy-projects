@@ -53,6 +53,8 @@ class RightInfoZonePerson extends React.PureComponent {
       return <div />;
     }
 
+    const showTraj = sysconfig.Map_ShowTrajectory;
+    showBut = showTraj; //根据开关将其关掉
     const centerZoom = true;
     // used in person popup info
     let url = '/images/blank_avatar.jpg';
@@ -107,7 +109,7 @@ class RightInfoZonePerson extends React.PureComponent {
               tags.map((tag) => {
                 return (
                   <Link to={`/${sysconfig.SearchPagePrefix}/${tag.t}/0/${sysconfig.MainListSize}`}
-                        key={Math.random()}>
+                        key={Math.random()} className={styles.link} target = '_blank'>
                     <Tag className="tag">{tag.t}</Tag>
                   </Link>
                 );

@@ -35,7 +35,7 @@ module.exports = {
   // Functionality
   Enable_Export: false,
   // Enable_Export: true,
-  Search_EnablePin: true,
+  Search_EnablePin: false,
 
   // > Search related
   // HeaderSearch_TextNavi: ['ACMFellowExpertBase', 'ACM_ExpertSearch'],

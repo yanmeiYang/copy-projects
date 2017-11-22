@@ -2,7 +2,7 @@ import loadScriptJs from 'load-script';
 
 // Load script
 const scripts = {
-  BMap: 'https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20171031174121',
+  BMap: 'https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1&services=&t=20171031174121',
   BMapLib: 'https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1',
   // BMap: 'https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1',
   GoogleMap: 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBlzpf4YyjOBGYOhfUaNvQZENXEWBgDkS0',
@@ -106,7 +106,7 @@ const hasValue = (check) => {
 };
 
 const loadBMap = (cb) => {
-  loadScript('BMap', { check: 'BMap' }, cb);
+  loadScript('BMapLib', { check: 'BMap' }, cb);
 };
 
 const loadBMapForECharts = (cb) => {

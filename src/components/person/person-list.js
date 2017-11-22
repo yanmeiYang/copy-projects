@@ -82,7 +82,6 @@ export default class PersonList extends Component {
   render() {
     const { persons, expertBaseId, className, type, indicesType, showIndices } = this.props;
     const { rightZoneFuncs, titleRightBlock, bottomZoneFuncs, afterTitleBlock, tagsLinkFuncs } = this.props;
-
     const showPrivacy = false;
 
     return (
@@ -112,6 +111,9 @@ export default class PersonList extends Component {
           // const tags = profileUtils.findTopNTags(person, 8);
 
           const personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
+          if (this.props.PersonList_PersonLink_NewTab === true) {
+            personLinkParams.target = '_blank';
+          }
           if (sysconfig.PersonList_PersonLink_NewTab) {
             personLinkParams.target = '_blank';
           }

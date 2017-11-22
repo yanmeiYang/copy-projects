@@ -13,7 +13,10 @@ const { api } = config;
      sort = relevance, h_index, a_index, activity, diversity, rising_star, n_citation, n_pubs,
    智库无缓存查询：
  */
-export async function searchPerson(query, offset, size, filters, sort, useTranslateSearch) {
+export async function searchPerson(params) {
+  const { query, offset, size, filters, sort, intelligenceSearchMeta } = params;
+  const { useTranslateSearch } = params; // TODO remove
+
   // if query is null, and eb is not aminer, use expertbase list api.
   if (!query && filters && filters.eb && filters.eb.id && filters.eb.id !== 'aminer') {
     if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH) {
@@ -44,6 +47,8 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
   if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH && Sort !== 'activity-ranking-contrib') {
     const ebs = sysconfig.ExpertBases;
     const defaultHaves = ebs && ebs.length > 0 && ebs.map(eb => eb.id);
+    const enTrans = sysconfig.Search_EnableTranslateSearch && !sysconfig.Search_EnableSmartSuggest;
+    console.log('-------------------------------- disable is ', enTrans );
 
     const nextapi = apiBuilder.query(F.queries.search, 'search')
       .param({ query, offset, size })
@@ -52,8 +57,11 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
         aggregation: ['gender', 'h_index', 'location', 'language'],
         haves: { eb: defaultHaves },
       })
-      .param({ switches: ['loc_search_all'] }, { when: useTranslateSearch })
-      .param({ switches: ['loc_translate_all'] }, { when: !useTranslateSearch })
+      .addParam({ switches: ['loc_search_all'] }, { when: useTranslateSearch })
+      .addParam({ switches: ['loc_translate_all'] }, { when: enTrans && !useTranslateSearch })
+      .addParam({ switches: ['intell_search'] }, { when: sysconfig.Search_EnableSmartSuggest })
+      .addParam({ switches: ['lang_zh'] }, { when: sysconfig.Locale === 'zh' })
+
       .schema({ person: F.fields.person_in_PersonList })
       .addSchema({ person: ['tags_translated_zh'] }, { when: sysconfig.Locale === 'zh' });
 

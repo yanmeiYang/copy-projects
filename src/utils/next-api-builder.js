@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { mergeWith, isArray } from 'lodash';
 
 /**
@@ -20,6 +21,55 @@ function apiMerge(obj, source) {
   });
 }
 
+// basic chains
+const createBasicChains = (api) => {
+  const chains = {
+    api,
+    param: (params, config) => {
+      if (!config || config.when) {
+        if (params) {
+          if (!api.parameters) {
+            api.parameters = {};
+          }
+          Object.keys(params).map((key) => {
+            api.parameters[key] = params[key];
+            return false;
+          });
+        }
+      }
+      return chains;
+    },
+    addParam: (params, config) => {
+      if (!config || config.when) {
+        if (!api.parameters) {
+          api.parameters = {};
+        }
+        apiMerge(api.parameters, params);
+      }
+      return chains;
+    },
+    schema: (schema, config) => {
+      if (!config || config.when) {
+        if (!api.schema) {
+          api.schema = {};
+        }
+        api.schema = schema;
+      }
+      return chains;
+    },
+    addSchema: (schema, config) => {
+      if (!config || config.when) {
+        if (!api.schema) {
+          api.schema = {};
+        }
+        apiMerge(api.schema, schema);
+      }
+      return chains;
+    },
+  };
+  return chains;
+};
+
 // Query api-builder.
 const query = (action, eventName) => {
   if (!action) {
@@ -31,104 +81,21 @@ const query = (action, eventName) => {
     eventName,
   };
 
-  const chains = {
-    api,
-    param: (params, config) => {
-      if (!config || config.when) {
-        if (params) {
-          if (!api.parameters) {
-            api.parameters = {};
-          }
-          Object.keys(params).map((key) => {
-            api.parameters[key] = params[key];
-            return false;
-          });
-        }
-      }
-      return chains;
-    },
-    addParam: (params) => {
-      if (!api.parameters) {
-        api.parameters = {};
-      }
-      apiMerge(api.parameters, params);
-      return chains;
-    },
-    schema: (schema, config) => {
-      if (!config || config.when) {
-        if (!api.schema) {
-          api.schema = {};
-        }
-        api.schema = schema;
-      }
-      return chains;
-    },
-    addSchema: (schema) => {
-      if (!api.schema) {
-        api.schema = {};
-      }
-      apiMerge(api.schema, schema);
-      return chains;
-    },
-  };
+  const chains = createBasicChains(api);
   return chains;
 };
 
 // Alter api-builder.
-const alter = (action) => {
+const alter = (action, eventName) => {
   if (!action) {
     throw new ParamError('Parameter action can\'t be empty.');
   }
-
-  const api = {
-    action,
-  };
-
-  const chains = {
-    api,
-    param: (params, config) => {
-      if (!config || config.when) {
-        if (params) {
-          if (!api.parameters) {
-            api.parameters = {};
-          }
-          Object.keys(params).map((key) => {
-            api.parameters[key] = params[key];
-            return false;
-          });
-        }
-      }
-      return chains;
-    },
-    addParam: (params) => {
-      if (!api.parameters) {
-        api.parameters = {};
-      }
-      apiMerge(api.parameters, params);
-      return chains;
-    },
-    schema: (schema, config) => {
-      if (!config || config.when) {
-        if (!api.schema) {
-          api.schema = {};
-        }
-        api.schema = schema;
-      }
-      return chains;
-    },
-    addSchema: (schema) => {
-      if (!api.schema) {
-        api.schema = {};
-      }
-      apiMerge(api.schema, schema);
-      return chains;
-    },
-  };
-  return chains;
+  return createBasicChains({ action, eventName });
 };
 
-// TODO alter, run.
-
+/**
+ * NEXT-API Query Builder
+ */
 const apiBuilder = {
   //
   // Query
@@ -141,7 +108,9 @@ const apiBuilder = {
   // run: () => {},
 };
 
-// Builtin Fields.
+
+// ------------------ Builtin Fields --------------------------
+
 const fseg = {
   indices_all: ['hindex', 'gindex', 'pubs',
     'citations', 'newStar', 'risingStar', 'activity', 'diversity', 'sociability'],
@@ -170,13 +139,15 @@ const F = {
   },
 
   // alter related
-  alters: { alter: 'alter' }, // alter actions.
+  alters: { alter: 'alter', dims: 'dims', }, // alter actions.
   alterop: { upsert: 'upsert', update: 'update', delete: 'delete' }, // alter operations
 
   Entities: { Person: 'person', Publication: 'pub', Venue: 'venue' },
 };
 
-// functions
+
+// ------------------ Helper Functions --------------------------
+
 const applyPlugin = (nextapi, pluginConfig) => {
   if (!nextapi || !pluginConfig) {
     return false;

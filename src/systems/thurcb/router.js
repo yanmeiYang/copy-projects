@@ -55,9 +55,6 @@ const routes = [
   router2bprofile.TobProfile,
   router2bprofile.Addition,
 
-  tencent.ThirdLogin,
-  crossHeat.Cross,
-
   // System Default.
   core.Error404, // must be last one.
 ];

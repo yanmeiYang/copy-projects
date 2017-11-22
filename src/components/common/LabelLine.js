@@ -34,7 +34,6 @@ export default class LabelLine extends Component {
     if (compareDeep(nextProps, this.props, 'tags')) {
       this.setState({ tags: nextProps.tags });
     }
-    console.log('-----------',nextProps.loading, this.props.loading );
     if (compare(nextProps, this.props, 'loading')) {
       this.setState({ inputVisible: nextProps.loading });
     } else if (nextProps.loading === this.props.loading && this.props.loading === false) {

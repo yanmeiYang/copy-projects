@@ -53,6 +53,7 @@ export default class SearchComponent extends Component {
     disableFilter: false,
     disableExpertBaseFilter: false,
     defaultSortType: 'relevance',
+    disableSmartSuggest: true,
   };
 
 
@@ -245,14 +246,14 @@ export default class SearchComponent extends Component {
 
             {/* Translate Search */}
 
-            {sysconfig.Search_EnableTranslateSearch &&
+            {sysconfig.Search_EnableTranslateSearch && !sysconfig.Search_EnableSmartSuggest &&
             <TranslateSearchMessage
               {...transMsgProps}
               doTranslateSearch={this.doTranslateSearch}
             />}
 
             {/* Search Help */}
-            {disableSmartSuggest && <SearchHelp />}
+            {!disableSmartSuggest && <SearchHelp />}
 
             {/* ---- Filter ---- */}
 

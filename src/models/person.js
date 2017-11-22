@@ -65,7 +65,6 @@ export default {
     /* update person profile info. */
     // TODO handel error.
     getPersonSuccess(state, { payload: { data } }) {
-      // console.log('reducers:getPersonSuccess', data.data);
       return { ...state, profile: data.data };
     },
 

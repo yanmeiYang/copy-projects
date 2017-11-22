@@ -307,7 +307,7 @@ class AddExperModal extends Component {
     ];
 
     return (
-      <div className={styles.add}>
+      <div className={styles.addExpertModal}>
         <div className={styles.addNewExpert}>
           <Button onClick={this.addTalkTest.bind(this, this.state.addNewTalk)}>新增主席</Button>
           <Button onClick={this.addTalkData.bind(this, this.state.addNewTalk)}>新增专家</Button>

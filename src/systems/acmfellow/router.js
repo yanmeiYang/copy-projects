@@ -73,10 +73,8 @@ const routes = [
 
   // expert map
   // map.ExpertMap,
-  // map.ExpertMapGoogle,
   // map.ExpertTrajectoryPage,
   // map.ExpertHeatmapPage,
-  // map.ExpertMapDispatch,
 
   // Relation-Graph, KnowledgeGraph, TrendPrediction, etc...
   // core.RelationGraphPage, // TODO BUG

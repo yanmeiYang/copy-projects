@@ -5,13 +5,13 @@ import { routerRedux, Link, withRouter } from 'dva/router';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 import { hole, createURL } from 'utils';
+// import { query } from 'services/user';
 import * as strings from 'utils/strings';
 import { Auth } from 'hoc';
 import { Layout } from 'routes';
 import { FormattedMessage as FM } from 'react-intl';
 import SearchComponent from 'routes/search/SearchComponent';
 import styles from './ExpertBaseExpertsPage.less';
-import { query } from 'services/user';
 
 const tc = applyTheme(styles);
 
@@ -35,7 +35,7 @@ export default class ExpertBaseExpertsPage extends Component {
     // Set query to null, and set eb to the only eb. TODO bugs
     dispatch({
       type: 'search/updateFiltersAndQuery', payload: {
-        query, filters: { eb: { id: sysconfig.ExpertBase, name: '我的专家库' } },
+        query, filters: { eb: { id, name: '我的专家库' } },
       },
     });
   }
@@ -58,7 +58,8 @@ export default class ExpertBaseExpertsPage extends Component {
   ebSorts = ['time', 'h_index', 'activity', 'rising_star', 'n_citation', 'n_pubs'];
 
   render() {
-    const { query, pagination, sortKey } = this.props.search;
+    const { query, pagination, sortKey, filters } = this.props.search;
+    const { id } = this.props.match.params;
     let seeAllURL = '';
     if (query) {
       const { match } = this.props;
@@ -69,11 +70,11 @@ export default class ExpertBaseExpertsPage extends Component {
 
     const total = pagination && (pagination.total || 0);
     const { term, name, org } = strings.destructQueryString(query);
-    const zoneData = { total, term, name, org };
+    const zoneData = { total, term, name, org, id };
 
     return (
       <Layout contentClass={tc(['expertBase'])} onSearch={this.onSearchBarSearch}
-              query={query} advancedSearch>
+              query={query} fixAdvancedSearch>
 
         {theme.ExpertBaseExpertsPage_TitleZone && theme.ExpertBaseExpertsPage_TitleZone.length > 0 &&
         <h1 className={styles.pageTitle}>
@@ -122,8 +123,11 @@ export default class ExpertBaseExpertsPage extends Component {
           sorts={query ? null : this.ebSorts}
           defaultSortType={sortKey}
           onSearchBarSearch={this.onSearchBarSearch}
-          expertBaseId={sysconfig.ExpertBase}
+          expertBaseId={id}
+          PersonList_BottomZone={theme.PersonList_BottomZone}
           // showSearchBox={this.props.app.headerSearchBox ? false : true}
+          PersonList_UpdateHooks={sysconfig.PersonList_UpdateHooks}
+          rightZoneFuncs={[]}
           showSearchBox={false}
           disableFilter={!query}
           disableExpertBaseFilter

@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Icon } from 'antd';
 import { config, compare, classnames } from 'utils';
+import * as strings from 'utils/strings';
 import TopicBarChart from 'components/topicBarChart';
 import styles from './SearchKnowledge.less';
 
@@ -30,7 +31,9 @@ export default class SearchKnowledge extends Component {
     if (!query) {
       return null;
     }
-    dispatch({ type: 'search/getTopicByMention', payload: { mention: query } });
+    const { term, name, org } = strings.destructQueryString(query);
+    const fne = strings.firstNonEmpty(term, name, org);
+    dispatch({ type: 'search/getTopicByMention', payload: { mention: fne } });
   };
 
   render() {

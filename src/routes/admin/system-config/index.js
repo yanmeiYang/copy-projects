@@ -5,10 +5,11 @@ import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Tabs } from 'antd';
-import styles from './index.less';
+import { Layout } from 'routes';
+import { sysconfig } from 'systems';
+import { RequireAdmin } from 'hoc';
 import UniversalConfig from '../../common/universal-config';
-import { sysconfig } from '../../../systems';
-import { RequireAdmin } from '../../../hoc';
+import styles from './index.less';
 
 const TabPane = Tabs.TabPane;
 const { SysconfigDefaultCategory, SysConfigTabs, ShowConfigTab } = sysconfig;

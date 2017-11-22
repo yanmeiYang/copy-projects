@@ -15,7 +15,7 @@ module.exports = {
    * Layout related
    */
   Layout_HasSideBar: false, // 是否显示左侧菜单
-  Header_UserPageURL: '', // 用户头像点击之后去的页面.
+  Header_UserPageURL: '/user-info',
   ShowHelpDoc: false, // 显示帮助文档
 
   //
@@ -28,7 +28,7 @@ module.exports = {
   Search_EnablePin: false,
   Search_EnableKnowledgeGraphHelper: true,
 
-  UserAuthSystem: 'aminer', // aminer 或者是 system.config
+  // UserAuthSystem: System, // aminer 或者是 system.config
   UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签, 目前没用到
 
   Auth_AllowAnonymousAccess: false,
@@ -38,7 +38,6 @@ module.exports = {
   SHOW_ExpertBase: true, // 是否需要有按智库的Filter。
 
   // > Search related
-  SearchBarInHeader: true,
   // 是否显示创建新用户btn
   ApplyUserBtn: false,
 
@@ -60,5 +59,10 @@ module.exports = {
     },
   ],
 
+  // Map Related,2 is recommended!
+  Map_Preload: 2, // 0的时候不缓存，1的时候缓存信息，2的时候缓存信息和90头像，3的时候缓存信息和90、160头像
+  CentralPosition: { lat: 37.09024, lng: -95.712891 },
+  Map_HotDomains: TopExpertBase.RandomTop100InDomainAminer, // 地图领域
+  HotDomains_Type: 'filter', // filter or selector
 
 };

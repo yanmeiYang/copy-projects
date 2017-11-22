@@ -4,6 +4,8 @@
 import React from 'react';
 import { Table, Input, Button, Tabs } from 'antd';
 import { connect } from 'dva';
+import { Layout } from 'routes';
+import { applyTheme } from 'themes';
 import ExpertsList from './experts-list';
 import CommitteeList from './committee-list';
 import styles from './index.less';
@@ -11,6 +13,7 @@ import { getTwoDecimal } from '../../utils';
 import { displayNameCNFirst } from '../../utils/profile-utils';
 import { Auth } from '../../hoc';
 
+const tc = applyTheme(styles);
 const TabPane = Tabs.TabPane;
 const tabData = [
   {
@@ -127,65 +130,65 @@ export default class Statistics extends React.Component {
     //   division = this.props.statistics.activity;
     // }
     return (
-      <div style={{ marginTop: 10, minWidth: '1120px', overflow: 'scroll' }}>
-        <div className="content-inner">
-          {tabData &&
-          <div>
-            <Button key="submit" type="default"
-                    style={{ float: 'right', marginBottom: -28, zIndex: 100 }}>
-              <a onClick={this.clickDownload.bind(this)} download="data.csv" href="#">导出</a>
-            </Button>
-            <Tabs
-              defaultActiveKey={activityList.category}
-              type="card"
-              style={{ clear: 'both', paddingTop: 0 }}
-              className={styles.tabs}
-              onChange={this.onTabChange}
-            >
-              {/* {tabData.map((item) => { */}
-              {/* return ( */}
-              {/* <TabPane */}
-              {/* key={item.category} */}
-              {/* style={{ display: item.isShow }} */}
-              {/* tab={item.label} */}
-              {/* className={styles.tabContent} */}
-              {/* > */}
-              {/* {item.container} */}
-              {/* </TabPane> */}
-              {/* ); */}
-              {/* })} */}
-              <TabPane
-                key={activityList.category}
-                tab={activityList.label}
+      <Layout contentClass={tc(['statistics'])} searchZone={[]}>
+        <div style={{ minWidth: '1120px', overflow: 'scroll' }}>
+          <div className="content-inner">
+            {tabData &&
+            <div>
+              <Button key="submit" type="default"
+                      style={{ float: 'right', marginBottom: -28, zIndex: 100 }}>
+                <a onClick={this.clickDownload.bind(this)} download="data.csv" href="#">导出</a>
+              </Button>
+              <Tabs
+                defaultActiveKey={activityList.category}
+                type="card"
+                style={{ clear: 'both', paddingTop: 0 }}
+                className={styles.tabs}
+                onChange={this.onTabChange}
               >
-                <CommitteeList activity={this.props.statistics.activity} />
-              </TabPane>
+                {/* {tabData.map((item) => { */}
+                {/* return ( */}
+                {/* <TabPane */}
+                {/* key={item.category} */}
+                {/* style={{ display: item.isShow }} */}
+                {/* tab={item.label} */}
+                {/* className={styles.tabContent} */}
+                {/* > */}
+                {/* {item.container} */}
+                {/* </TabPane> */}
+                {/* ); */}
+                {/* })} */}
+                <TabPane
+                  key={activityList.category}
+                  tab={activityList.label}
+                >
+                  <CommitteeList activity={this.props.statistics.activity} />
+                </TabPane>
 
-              {/* {(roles.admin || !roles.role.includes('专委')) && */}
-              {/* <TabPane */}
-              {/* key={activity_detail.category} */}
-              {/* style={{ display: activity_detail.isShow }} */}
-              {/* tab={activity_detail.label} */}
-              {/* className={styles.tabContent} */}
-              {/* > */}
-              {/* <CommitteeList activity={division} /> */}
-              {/* </TabPane> */}
-              {/* } */}
-              <TabPane
-                key={expertsList.category}
-                style={{ display: expertsList.isShow }}
-                tab={expertsList.label}
-                className={styles.tabContent}
-              >
-
-                <ExpertsList author={this.props.statistics.author} />
-              </TabPane>
-
-            </Tabs>
+                {/* {(roles.admin || !roles.role.includes('专委')) && */}
+                {/* <TabPane */}
+                {/* key={activity_detail.category} */}
+                {/* style={{ display: activity_detail.isShow }} */}
+                {/* tab={activity_detail.label} */}
+                {/* className={styles.tabContent} */}
+                {/* > */}
+                {/* <CommitteeList activity={division} /> */}
+                {/* </TabPane> */}
+                {/* } */}
+                <TabPane
+                  key={expertsList.category}
+                  style={{ display: expertsList.isShow }}
+                  tab={expertsList.label}
+                  className={styles.tabContent}
+                >
+                  <ExpertsList author={this.props.statistics.author} />
+                </TabPane>
+              </Tabs>
+            </div>
+            }
           </div>
-          }
         </div>
-      </div>
+      </Layout>
     );
   }
 }

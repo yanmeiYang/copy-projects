@@ -1,6 +1,5 @@
-import { request, config } from '../utils';
-import { wget } from '../utils/request';
-import { sysconfig } from '../systems';
+import { request, config } from 'utils';
+import { sysconfig } from 'systems';
 
 const { api } = config;
 
@@ -67,33 +66,37 @@ export async function personEmailStr(id) {
 const LSKEY_INTERESTS = 'INTERESTS_I18N';
 
 export function getInterestsI18N(callback) {
-  let interestsData;
+  // If cached.
+  if (window.interestsData) {
+    if (callback) {
+      callback(window.interestsData);
+    }
+    return;
+  }
+
   const obj = localStorage.getItem(LSKEY_INTERESTS);
   if (obj) {
     try {
-      interestsData = JSON.parse(obj);
+      window.interestsData = JSON.parse(obj);
+      if (callback) {
+        callback(window.interestsData);
+      }
     } catch (err) {
       console.error(err);
     }
   }
-  if (!interestsData) {
-    const pms = wget('/lab/interest_i18n.json');
-    pms.then((data) => {
-      interestsData = keyToLowerCase(data);
-      localStorage.setItem(LSKEY_INTERESTS, JSON.stringify(interestsData));
+  if (!window.interestsData) {
+    request('/lab/interest_i18n.json').then((data) => {
+      window.interestsData = keyToLowerCase(data);
+      localStorage.setItem(LSKEY_INTERESTS, JSON.stringify(window.interestsData));
       if (callback) {
-        callback(interestsData);
+        callback(window.interestsData);
       }
-      return interestsData;
     }).catch((error) => {
+      console.log('ERROR Reading interest_i18n.json:', error);
       localStorage.removeItem(LSKEY_INTERESTS);
-      return undefined;
     });
   }
-  if (callback) {
-    callback(interestsData);
-  }
-  return interestsData;
 }
 
 function keyToLowerCase(data) {
@@ -107,8 +110,8 @@ function keyToLowerCase(data) {
 
 export function returnKeyByLanguage(interestsData, key) {
   const tag = { en: key, zh: '' };
-  if (interestsData && sysconfig.Locale === 'zh') {
-    tag.zh = interestsData[key.toLowerCase()] ? interestsData[key.toLowerCase()] : '';
+  if (interestsData && interestsData.data && sysconfig.Locale === 'zh') {
+    tag.zh = interestsData.data[key.toLowerCase()] ? interestsData.data[key.toLowerCase()] : '';
     return tag;
   } else {
     return tag;

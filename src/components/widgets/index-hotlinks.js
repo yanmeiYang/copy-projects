@@ -7,13 +7,13 @@ import { sysconfig } from 'systems';
 import { classnames } from 'utils/index';
 import styles from './index-hotlinks.less';
 
-const IndexHotLinks = ({ links, urlFunc, withComma}) => {
+const IndexHotLinks = ({ links, urlFunc, withComma }) => {
 
   const Links = links || [];
 
   return (
     <div className={styles.keywords}>
-      <div className={classnames(styles.inner, 'keywords_inner')}>
+      <div className={classnames(styles.inner, 'keywords_innerxxx')}>
         {Links.map((item, index) => {
           let query = '';
           if (sysconfig.Locale === 'zh') {
@@ -25,7 +25,7 @@ const IndexHotLinks = ({ links, urlFunc, withComma}) => {
           return (
             <div key={key}>
               <Link to={urlFunc && urlFunc(query)}>{query}</Link>
-              {withComma && index !== Links.length-1 && ','}
+              {withComma && index !== Links.length - 1 && ','}
             </div>
           );
         })}

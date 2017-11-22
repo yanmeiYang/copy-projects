@@ -2,19 +2,17 @@
  *  Created by BoGao on 2017-06-15;
  */
 /* eslint-disable camelcase */
-import React, { Component, PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Link } from 'dva/router';
-import { Tag, Tooltip } from 'antd';
 import classnames from 'classnames';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import * as personService from 'services/person';
-import { PersonComment } from 'systems/bole/components';
 import { sysconfig } from 'systems';
-import { config, compare } from 'utils';
+import { config, compare, hole } from 'utils';
 import * as display from 'utils/display';
-import * as profileUtils from 'utils/profile-utils';
+import PersonTags from 'components/person/PersonTags';
+// import { PersonTags } from 'components/person'; // this is bad.
 import { Indices } from 'components/widgets';
 import ViewExpertInfo from './view-expert-info';
 import styles from './person-list.less';
@@ -22,9 +20,6 @@ import styles from './person-list.less';
 const DefaultRightZoneFuncs = [
   param => <ViewExpertInfo person={param.person} key="1" />,
 ];
-
-// FIXME 呵呵哒，personComment并不是默认的functions.
-const DefaultBottomZoneFuncs = [];
 
 @connect()
 export default class PersonList extends Component {
@@ -34,23 +29,23 @@ export default class PersonList extends Component {
     type: PropTypes.string,
     persons: PropTypes.array,
     expertBaseId: PropTypes.string,
+    indicesType: PropTypes.string, // ["", text]
+    showIndices: PropTypes.array,
     titleRightBlock: PropTypes.func, // A list of function
     rightZoneFuncs: PropTypes.array,
     didMountHooks: PropTypes.array,
     UpdateHooks: PropTypes.array,
+    tagsLinkFuncs: PropTypes.func,
   };
 
+  static defaultProps = {
+    showIndices: sysconfig.PersonList_ShowIndices,
+  };
 
   constructor(props) {
     super(props);
-    // TODO 临时措施，国际化Interest应该从server端入手。
-    personService.getInterestsI18N((result) => {
-      this.interestsI18n = result;
-    });
     this.persons = this.props.persons;
   }
-
-  state = {};
 
   // 暂时没用到
   componentDidMount() {
@@ -79,17 +74,27 @@ export default class PersonList extends Component {
     }
   }
 
-  render() {
-    const { persons, expertBaseId, className, type } = this.props;
-    const { rightZoneFuncs, titleRightBlock, bottomZoneFuncs, afterTitleBlock } = this.props;
+  selectedThePerson = (person, e) => {
+    console.log('111111111', person);
+    console.log(`checked = ${e.target.checked}`);
+  };
 
+  render() {
+    const { persons, expertBaseId, className, type, indicesType, showIndices } = this.props;
+    const { rightZoneFuncs, titleRightBlock, bottomZoneFuncs, afterTitleBlock, tagsLinkFuncs } = this.props;
     const showPrivacy = false;
-    const RightZoneFuncs = rightZoneFuncs || DefaultRightZoneFuncs;
-    const BottomZoneFuncs = bottomZoneFuncs || DefaultBottomZoneFuncs;
 
     return (
       <div className={classnames(styles.personList, className, styles[type])}>
-        {persons && persons.length === 0 && <div className={styles.empty}>No Results</div>}
+        {!persons &&
+        <div className={styles.empty}>
+          <FM id="com.KgSearchBox.placeholder" defaultMessage="请输入姓名或者搜索词" />
+        </div>}
+        {persons && persons.length === 0 &&
+        <div className={styles.empty}>
+          No Results
+          <FM id="com.PersonList.message.noResults" defaultMessage="No Results" />
+        </div>}
 
         {persons && persons.map((person) => {
           const profile = person.profile || {};
@@ -106,6 +111,9 @@ export default class PersonList extends Component {
           // const tags = profileUtils.findTopNTags(person, 8);
 
           const personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
+          if (this.props.PersonList_PersonLink_NewTab === true) {
+            personLinkParams.target = '_blank';
+          }
           if (sysconfig.PersonList_PersonLink_NewTab) {
             personLinkParams.target = '_blank';
           }
@@ -119,24 +127,27 @@ export default class PersonList extends Component {
                 </div>
                 <div className={styles.info_zone}>
                   <div className={styles.info_zone_detail}>
-                    {name &&
-                    <div className={styles.title}>
-                      <h2 className="section_headerxxx">
-                        <a {...personLinkParams}>{name}</a>
-                        {false && <span className={styles.rank}>会士</span>}
-                      </h2>
-                      {afterTitleBlock && afterTitleBlock({ param: { person, expertBaseId } })}
-                    </div>}
+                    <div className={styles.title_zone}>
+                      {name &&
+                      <div className={styles.title}>
+                        <h2 className="section_headerxxx">
+                          <a {...personLinkParams}>{name}</a>
+                          {false && <span className={styles.rank}>会士</span>}
+                        </h2>
+                        {afterTitleBlock && afterTitleBlock({ param: { person, expertBaseId } })}
+                      </div>}
 
-                    {/* ---- TitleRightBlock ---- */}
-                    {titleRightBlock && titleRightBlock({ param: { person, expertBaseId } })}
+                      {/* ---- TitleRightBlock ---- */}
+                      {titleRightBlock && titleRightBlock({ param: { person, expertBaseId } })}
+                    </div>
                     {/*{this.personRightButton && this.personRightButton(person)}*/}
                     <div className={classnames(styles.zone, styles.interestColumn)}>
                       <div className={styles.contact_zone}>
                         <Indices
                           indices={indices}
                           activity_indices={activity_indices}
-                          showIndices={sysconfig.PersonList_ShowIndices}
+                          showIndices={showIndices}
+                          indicesType={indicesType}
                         />
                         {pos && <span><i className="fa fa-briefcase fa-fw" /> {pos}</span>}
                         {aff && <span><i className="fa fa-institution fa-fw" /> {aff}</span>}
@@ -154,64 +165,40 @@ export default class PersonList extends Component {
 
                         {false && person.num_viewed > 0 &&
                         <span className={styles.views}><i
-                          className="fa fa-eye fa-fw" />{person.num_viewed} <FM
-                          id="com.PersonList.label.views" defaultMessage="views" /></span>}
+                          className="fa fa-eye fa-fw" />{person.num_viewed}
+                          <FM id="com.PersonList.label.views" defaultMessage="views" />
+                        </span>}
 
                       </div>
 
-                      {person.tags &&
-                      <div className={styles.tag_zone}>
-                        <div>
-                          <h4><i className="fa fa-area-chart fa-fw" /> 研究兴趣:</h4>
-                          <div className={styles.tagWrap}>
-                            {person.tags.slice(0, 8).map((item, idx) => {
-                              if (item.t === null || item.t === 'Null') {
-                                return false;
-                              }
-                              // const tag = personService.returnKeyByLanguage(this.interestsI18n, item.t);
-                              const tag = { en: item };
-                              const showTag = tag.zh ? tag.zh : tag.en;
-                              const key = `${showTag}_${idx}`;
-                              return (
-                                <Tooltip key={key} placement="top" title={tag.en}>
-                                  <Tag className={styles.tag}>
-                                    <Link
-                                      to={`/${sysconfig.SearchPagePrefix}/${showTag}/0/${sysconfig.MainListSize}`}>
-                                      {showTag}
-                                    </Link>
-                                  </Tag>
-                                </Tooltip>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      </div>
-                      }
+                      {/* ---- Tags ---- */}
+                      <PersonTags
+                        className={styles.tagZone}
+                        tags={person.tags}
+                        tagsTranslated={person.tags_translated_zh}
+                        tagsLinkFuncs={tagsLinkFuncs}
+                        hideBorder
+                      />
 
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* ---- Right Zone ---- */}
-              {RightZoneFuncs && RightZoneFuncs.length > 0 &&
-              <div className={styles.person_right_zone}>
-                {RightZoneFuncs.map((blockFunc) => {
-                  const param = { person, expertBaseId };
-                  return blockFunc ? blockFunc({ param }) : false;
-                })}
+                {/* ---- Right Zone ---- */}
+                {hole.fillFuncs(
+                  rightZoneFuncs, // theme from config.
+                  DefaultRightZoneFuncs, // default block.
+                  { person, expertBaseId }, // parameters passed to block.
+                  { containerClass: styles.person_right_zone }, // configs.
+                )}
               </div>
-              }
 
               {/*---- Bottom Zone ---- */}
-              {BottomZoneFuncs && BottomZoneFuncs.length > 0 &&
-              <div className={styles.personComment}>
-                {BottomZoneFuncs.map((bottomBlockFunc) => {
-                  const param = { person, expertBaseId, user: this.props.user };
-                  return bottomBlockFunc ? bottomBlockFunc(param) : false;
-                })}
-              </div>
-              }
+              {hole.fillFuncs(
+                bottomZoneFuncs, [],
+                { person, expertBaseId, user: this.props.user },
+                { containerClass: styles.personComment }, // TODO change name.
+              )}
             </div>
           );
         })

@@ -1,147 +1,223 @@
-/**
- * Created by yutao on 2017/5/25.
- */
-import fetch from 'dva/fetch';
-import { baseURL, nextAPIURL } from './config';
-import * as auth from './auth';
+/* eslint-disable no-param-reassign,prefer-destructuring */
+import axios from 'axios';
+import qs from 'qs';
+import jsonp from 'jsonp';
+import { cloneDeep } from 'lodash';
+import { AES } from 'crypto-js';
+import pathToRegexp from 'path-to-regexp';
+import { getLocalToken } from 'utils/auth';
+import { escapeURLBracket, unescapeURLBracket } from 'utils/strings';
+import { apiDomain, nextAPIURL, YQL, CORS, JSONP, strict } from './config';
 import * as debug from './debug';
 
-function checkStatus(response) {
-  if (response.status >= 200 && response.status < 300) {
-    return response;
+export default function request(url, options) {
+  // 为了兼容之前的调用方法。
+  options = options || {};
+  options.method = options.method || 'get';
+  if (url) {
+    options.url = url;
+  }
+  // options.url = encodeURI(options.url);
+
+  if (process.env.NODE_ENV !== 'production') {
+    debug.logRequest(
+      '❯ Request',
+      options.method,
+      options.url && options.url.replace(apiDomain, ''),
+      options,
+    );
+  }
+  if (options.url && options.url.indexOf('//') > -1) {
+    const origin = `${options.url.split('//')[0]}//${options.url.split('//')[1].split('/')[0]}`;
+    if (window.location.origin !== origin) {
+      if (JSONP && JSONP.indexOf(origin) > -1) {
+        options.fetchType = 'JSONP';
+      } else if (YQL && YQL.indexOf(origin) > -1) {
+        options.fetchType = 'YQL';
+      } else {
+        options.fetchType = 'CORS';
+      }
+    }
   }
 
-  // TODO move out, don't process auth here.
-  if (response.status === 401) {
-    // console.log('xxxxxxxxxx', response);
-    // throw error;
-    // auth.removeLocalAuth();
-    // location.href = '/';
-  }
+  return fetch(options).then((response) => {
+    const { statusText, status } = response;
+    const data = options.fetchType === 'YQL' ? response.data.query.results.json : response.data;
+    // if (data instanceof Array) {
+    //   data = {
+    //     list: data,
+    //   };
+    // }
+    const result = {
+      success: true,
+      message: statusText,
+      statusCode: status,
+      data, // ...data
+    };
+    if (process.env.NODE_ENV !== 'production') {
+      debug.logRequestResult(
+        '❯❯ Response:',
+        options.method,
+        options.url && options.url.replace(apiDomain, ''), '\n>',
+        result,
+      );
+    }
 
-  if (response.status >= 404 && response.statusText === 'Not Found') {
-    throw error;
-  }
+    // this is a fix; if only one query, return result. if many TODO;
+    if (options.nextapi && data && data.data && data.data) {
+      if (data.data.length === 1) {
+        result.data = data.data[0];
+      } else if (data.data.length > 1) {
+        // return as result.
+      }
+    }
 
-  // Special case: for knowledge graph, query not found will return
-  // {"status":false,"message":"data.not_found"} // code 404
-
-  const error = new Error(response.statusText);
-  error.response = response;
-  // try {
-  //   throw error;
-  // } catch (e) {
-  //   console.error('---- Catch Error: ---- ', e);
-  // }
+    return Promise.resolve(result);
+  }).catch((error) => {
+    const { response } = error;
+    let msg;
+    let statusCode;
+    if (response && response instanceof Object) {
+      const { data, statusText } = response;
+      statusCode = response.status;
+      msg = data.message || statusText;
+    } else {
+      statusCode = 600;
+      msg = error.message || 'Network Error';
+    }
+    return Promise.reject({ success: false, statusCode, message: msg });
+  });
 }
 
-/**
- * Requests a URL, returning a promise.
- *
- * @param  {string} url       The URL we want to request
- * @param  {object} [options] The options we want to pass to "fetch"
- * @param  {boolean} withToken True if request with token.
- * @return {object}           An object containing either "data" or "err"
- */
-export default async function request(url, options) {
-  if (process.env.NODE_ENV !== 'production') {
-    debug.logRequest('@@request ', url, options);
+const fetch = (options) => {
+  let {
+    method = 'get',
+    data = {},
+    fetchType,
+    url,
+    body, // This is a fix.
+  } = options;
+
+  // backward-compatibility: translate body back into data:
+  if (body) {
+    try {
+      data = JSON.parse(body);
+    } catch (err) {
+      console.error('::::::::::::', err);
+    }
   }
 
-  let base = baseURL;
-  if (options && options.baseURL !== undefined) {
-    base = options.baseURL;
-  }
-  let newUrl = base + url;
+  const cloneData = cloneDeep(data);
 
-  // process !post mode data.
-  if (options &&
-    !(options.method && options.method.toUpperCase() === 'POST')
-    && options.data) {
-    const queryList = Object.keys(options.data).map(k => `${k}=${options.data[k]}`);
-    const queryString = queryList.join('&');
-    newUrl = `${newUrl}?${queryString}`;
+  try {
+    let domain = '';
+    let escapedUrl = escapeURLBracket(url);
+    if (escapedUrl.match(/[a-zA-z]+:\/\/[^/]*/)) {
+      domain = escapedUrl.match(/[a-zA-z]+:\/\/[^/]*/)[0];
+      escapedUrl = escapedUrl.slice(domain.length);
+    }
+    const match = pathToRegexp.parse(escapedUrl);
+    escapedUrl = pathToRegexp.compile(escapedUrl)(data);
+
+    for (const item of match) {
+      if (item instanceof Object && item.name in cloneData) {
+        delete cloneData[item.name];
+      }
+    }
+    url = domain + unescapeURLBracket(escapedUrl);
+
+    // process !post mode data.
+    // let newUrl = '';
+    // if (options &&
+    //   !(options.method && options.method.toUpperCase() === 'POST')
+    //   && options.data) {
+    //   const queryList = Object.keys(options.data).map(k => `${k}=${options.data[k]}`);
+    //   const queryString = queryList.join('&');
+    //   newUrl = `${newUrl}?${queryString}`;
+    // }
+    // console.log('> TODO 没用的newUrl', newUrl);
+  } catch (e) {
+    console.error('======================新的错误=======================');
+    throw (e.message);
+    // message.error(e.message);
   }
 
-  const headers = new Headers();
+
+  // process headers
+  const headers = {};
   if (options && options.specialContentType) {
-    headers.append('Accept', 'application/json');
+    headers.Accept = 'application/json';
     // headers.append('Content-Type', 'text/plain');
   } else if (options && (options.data || options.body)) {
     // Fix a bug
     if (options.method && options.method !== 'FETCH') {
-      headers.append('Accept', 'application/json');
-      headers.append('Content-Type', 'application/json');
+      headers.Accept = 'application/json';
+      headers['Content-Type'] = 'application/json';
     }
   }
 
-  const token = (options && options.token) || localStorage.getItem('token');
+  const token = (options && options.token) || getLocalToken();
   if (token) {
-    headers.append('Authorization', token);
+    headers.Authorization = token;
   }
 
-  const newOption = { ...options, headers };
-  const response = await fetch(newUrl, newOption);
-
-  checkStatus(response);
-
-  const data = await response.json();
-
-  const ret = { data, headers: {} };
-  // if (response.headers.get('x-total-count')) {
-  //   ret.headers['x-total-count'] = response.headers.get('x-total-count');
-  // }
-  return ret;
-}
-
-// TODO merge to request, use options.baseURL instead.
-export async function externalRequest(url, options) {
-  let newUrl = url;
-  if (options && !(options.method && options.method.toUpperCase() === 'POST') && options.data) {
-    const queryList = Object.keys(options.data).map(k => `${k}=${options.data[k]}`);
-    const queryString = queryList.join('&');
-    newUrl = `${newUrl}?${queryString}`;
+  // enable debug in next api.
+  if (process.env.NODE_ENV !== 'production') {
+    // headers.debug = 1;
   }
-  const headers = new Headers();
 
-  if (options) {
-    if (options.data || options.body) {
-      headers.append('Accept', 'application/json');
-      headers.append('Content-Type', 'application/json');
-    }
+  // real call
+
+  if (fetchType === 'JSONP') {
+    return new Promise((resolve, reject) => {
+      jsonp(url, {
+        param: `${qs.stringify(data)}&callback`,
+        name: `jsonp_${new Date().getTime()}`,
+        timeout: 16000,
+      }, (error, result) => {
+        if (error) {
+          reject(error);
+        }
+        resolve({ statusText: 'OK', status: 200, data: result });
+      });
+    });
+  } else if (fetchType === 'YQL') {
+    url = `http://query.yahooapis.com/v1/public/yql?q=select * from json where url='${options.url}?${encodeURIComponent(qs.stringify(options.data))}'&format=json`;
+    data = null;
   }
-  const newOption = { ...options, headers };
-  const response = await fetch(newUrl, newOption);
-  checkStatus(response);
-  const data = await response.json();
-  const ret = {
-    data,
-    headers: {},
-  };
-  // if (response.headers.get('x-total-count')) {
-  //   ret.headers['x-total-count'] = response.headers.get('x-total-count');
-  // }
 
-  return ret;
-}
-
-
-export async function wget(url) {
-  const token = localStorage.getItem('token');
-  const headers = new Headers();
-  headers.append('Accept', 'application/json');
-  headers.append('Content-Type', 'application/json');
-  if (token) {
-    headers.append('Authorization', token);
+  // TODO temp: test something:
+  if (options.nextapi) {
+    const text = JSON.stringify(cloneData);
+    const key = '==typeof o?(r=o,o={}):o=o||{}:(r=o,o=a||{},a=void 0))';
+    const ciphertext = AES.encrypt(text, key);
+    console.log('crypto:', text);
+    console.log('crypto:', ciphertext.toString());
   }
-  const newOption = { headers };
-  const response = await fetch(url, newOption);
 
-  checkStatus(response);
 
-  const data = await response.json();
-  return data;
-}
+  let result;
+  switch (method.toLowerCase()) {
+    case 'get':
+      result = axios.get(encodeURI(url), { params: cloneData, headers });
+      break;
+    case 'delete':
+      result = axios.delete(url, { data: cloneData, headers });
+      break;
+    case 'post': // ??? is this work?
+      result = axios.post(url, cloneData, { headers });
+      break;
+    case 'put':
+      result = axios.put(url, cloneData, { headers });
+      break;
+    case 'patch':
+      result = axios.patch(url, cloneData, { headers });
+      break;
+    default:
+      result = axios(options);
+  }
+  return result;
+};
 
 /**
  * Requests a URL, returning a promise.
@@ -152,85 +228,17 @@ export async function wget(url) {
  *  "schema":{"a":"c"}
  *  }
  */
-export async function queryAPI(payload) {
-  // method is nextAPI's method.
-  const { method, parameters, schema, RequestMethod, ...options } = payload;
-
-  if (process.env.NODE_ENV !== 'production') {
-    debug.logRequest('@@next-request ', method, parameters, schema, options);
+// TODO Support Multiple queries.
+export async function nextAPI(payload) {
+  if (!payload) {
+    console.error('Error! parameters can\'t be null when call nextApi');
   }
-
-  const headers = new Headers();
-  headers.append('Accept', 'application/json');
-  headers.append('Content-Type', 'application/json');
-  if (process.env.NODE_ENV !== 'production') {
-    // headers.append('Debug', 1);
-  }
-
-  const token = (options && options.token) || localStorage.getItem('token');
-  if (token) {
-    headers.append('Authorization', token);
-  }
-
-  options.method = RequestMethod || 'POST'; // next api process is always POST.
-  options.body = JSON.stringify([{
-    method,
-    parameters,
-    schema,
-  }]);
-
-  const newOption = { ...options, headers };
-  const response = await fetch(nextAPIURL, newOption);
-  // checkQueryStatus(response);
-
-  const data = await response.json();
-
-  // error handling
-  if (data && data.errs) {
-    data.errs.map((err) => {
-      if (process.env.NODE_ENV !== 'production') {
-        console.error('NEXT-API-ERROR:', err);
-      }
-      return false;
-    });
-  }
-
-  console.log('))))))))***', data);
-  const ret = (data && data.data && data.data && data.data.length > 0 && data.data[0]) || {};
-  console.log('))))))))***', ret);
-
-  // const ret = { data, headers: {} };
-  // if (response.headers.get('x-total-count')) {
-  //   ret.headers['x-total-count'] = response.headers.get('x-total-count');
-  // }
-  return ret;
-}
-
-function checkQueryStatus(response) {
-  if (response.status >= 200 && response.status < 300) {
-    return response;
-  }
-
-  // TODO move out, don't process auth here.
-  if (response.status === 401) {
-    // console.log('xxxxxxxxxx', response);
-    // throw error;
-    // auth.removeLocalAuth();
-    // location.href = '/';
-  }
-
-  if (response.status >= 404 && response.statusText === 'Not Found') {
-    throw error;
-  }
-
-  // Special case: for knowledge graph, query not found will return
-  // {"status":false,"message":"data.not_found"} // code 404
-
-  const error = new Error(response.statusText);
-  error.response = response;
-  // try {
-  //   throw error;
-  // } catch (e) {
-  //   console.error('---- Catch Error: ---- ', e);
-  // }
+  const { method, type, ...options } = payload;
+  options.method = method || 'post';
+  options.nextapi = true;
+  const actions = options.data && options.data.map(query => `${query.action}+${query.eventName}`);
+  const action = actions && actions.join(',');
+  const url = `${nextAPIURL}/${type || 'query'}?action=${action}`;
+  const result = request(url, options);
+  return result;
 }

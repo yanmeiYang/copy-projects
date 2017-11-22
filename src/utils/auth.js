@@ -1,9 +1,13 @@
 /* eslint-disable no-extend-native */
 import { routerRedux } from 'dva/router';
-import { sysconfig } from '../systems';
+import AES from 'crypto-js/aes';
+import { sysconfig } from 'systems';
 import { queryURL } from './index';
 
 // import config from './config';
+const AES_KEY = 'deng-dili-dengleng-dideng';
+const LS_TOKEN_KEY = `token_${sysconfig.SYSTEM}`;
+const LS_USER_KEY = `user_${sysconfig.SYSTEM}`;
 
 /**
  * user in app model.
@@ -18,11 +22,15 @@ function isLogin(user) {
 
 // get token from localStorage.
 function getLocalToken() {
-  return localStorage.getItem('token');
+  return localStorage.getItem(LS_TOKEN_KEY);
 }
 
 function saveLocalToken(token) {
-  localStorage.setItem('token', token);
+  localStorage.setItem(LS_TOKEN_KEY, token);
+}
+
+function saveLocalTokenSystem(system, token) {
+  localStorage.setItem(`token_${system}`, token);
 }
 
 /**
@@ -34,10 +42,14 @@ function dispatchToLogin(dispatch) {
   if (process.env.NODE_ENV !== 'production') {
     console.log('Dispatch to Login Page from ', from);
   }
-  dispatch(routerRedux.push({
-    pathname: sysconfig.Auth_LoginPage,
-    query: { from },
-  }));
+  if (sysconfig.AuthLoginUsingThird) {
+    window.location.href = sysconfig.AuthLoginUsingThirdPage;
+  } else {
+    dispatch(routerRedux.push({
+      pathname: sysconfig.Auth_LoginPage,
+      query: { from },
+    }));
+  }
 }
 
 function dispatchAfterLogin(put) {
@@ -60,10 +72,9 @@ function redirectToLogin() {
   window.location = `${location.origin}${sysconfig.Auth_LoginPage}?from=${from}`;
 }
 
-const USER_LOCAL_KEY = 'user';
 const getLocalUser = () => {
   // 过期时间为7天
-  const key = USER_LOCAL_KEY;
+  const key = LS_USER_KEY;
   const exp = 1000 * 60 * 60 * 24 * 7;
   const data = localStorage.getItem(key);
   if (data) {
@@ -80,7 +91,7 @@ const getLocalUser = () => {
 };
 
 const saveLocalAuth = (value, roles) => {
-  const key = USER_LOCAL_KEY;
+  const key = LS_USER_KEY;
   const curTime = new Date().getTime();
   localStorage.setItem(key, JSON.stringify({ data: value, roles, time: curTime }));
 };
@@ -172,8 +183,8 @@ function hasPrivilegeOfSystem(roles, role) {
 }
 
 function removeLocalAuth() {
-  localStorage.removeItem('user');
-  localStorage.removeItem('token');
+  localStorage.removeItem(LS_USER_KEY);
+  localStorage.removeItem(LS_TOKEN_KEY);
 }
 
 function ensureUserAuthFromAppModel(dispatch) {
@@ -251,6 +262,7 @@ module.exports = {
   getLocalUser,
   saveLocalAuth,
   saveLocalToken,
+  saveLocalTokenSystem,
   removeLocalAuth,
   parseRoles,
 

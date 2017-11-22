@@ -35,7 +35,7 @@ export default {
           const personId = decodeURIComponent(match[1]);
           // console.log('personId is :', personId);
           dispatch({ type: 'getPerson', payload: { personId } });
-          dispatch({ type: 'getActivityAvgScoresByPersonId', payload: { id: personId } })
+          dispatch({ type: 'getActivityAvgScoresByPersonId', payload: { id: personId } });
           // dispatch({ type: 'setParams', payload: { personId } });
         }
       });
@@ -65,7 +65,6 @@ export default {
     /* update person profile info. */
     // TODO handel error.
     getPersonSuccess(state, { payload: { data } }) {
-      // console.log('reducers:getPersonSuccess', data.data);
       return { ...state, profile: data.data };
     },
 

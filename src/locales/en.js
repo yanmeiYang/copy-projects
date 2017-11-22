@@ -5,9 +5,16 @@ export default {
   'header.label.help': 'HELP',
   'header.login': 'Login',
   'header.exit_login': 'Exit Login',
+  'system.lang.simple': 'EN',
   'system.lang.show': 'Language',
   'system.lang.option_en': 'English',
   'system.lang.option_zh': '简体中文',
+
+  // login
+  'login.header': 'Login',
+  'login.loginBtn': 'Login',
+  'login.forgetPw': 'Forget Password?',
+  'login.newUserApplication': 'New User Application',
 
   // Index
   'index.title': 'Expert Search',
@@ -31,12 +38,14 @@ export default {
   'com.search.filter.label.nationality': 'Location',
   'com.search.filter.label.location': 'Location',
   'com.search.filter.label.gender': 'Gender',
+  'com.search.filter.label.dims.systag': 'Tags',
 
   'com.search.filter.label2.h_index': 'H-Index',
   'com.search.filter.label2.language': 'Language',
   'com.search.filter.label2.location': 'Location',
   'com.search.filter.label2.gender': 'Gender',
   'com.search.filter.label2.nationality': 'Location',
+  'com.search.filter.label2.dims.systag': 'Tags',
 
   'com.search.filter.value.gender.male': 'Male',
   'com.search.filter.value.gender.female': 'Female',
@@ -64,12 +73,24 @@ export default {
   'com.PersonList.label.homepage': 'Homepage',
   'com.PersonList.label.sendEmail': 'Send Email',
   'com.PersonList.label.qrcode': 'QR Code',
+  'com.PersonList.label.feedback': 'Feedback',
+  'com.PersonList.message.noResults': 'No Results',
 
   'com.expertMap.headerLine.label.field': 'Field:',
   'com.expertMap.headerLine.label.selectField': 'Choose the field',
   'com.expertMap.headerLine.label.baiduMap': 'Baidu Map',
   'com.expertMap.headerLine.label.googleMap': 'Google Map',
   'com.expertMap.headerLine.label.level': 'Level：',
+  'com.expertMap.headerLine.label.statistic': 'Statistic & Analysis',
+  'com.expertMap.headerLine.label.download': 'Export Excel',
+  'com.expertMap.headerLine.label.ok': 'OK',
+  'com.expertTrajectory.theme.label.0': 'Regular',
+  'com.expertTrajectory.theme.label.1': 'Business',
+  'com.expertTrajectory.theme.label.2': 'Dark',
+  'com.expertTrajectory.theme.label.3': 'Matcha Green',
+  'com.expertTrajectory.theme.label.4': 'Kraft Paper',
+  'com.expertTrajectory.theme.label.5': 'Navigator',
+  'com.expertTrajectory.theme.label.6': 'Minimalism',
 
   'com.ExpertBase.Button.Add': '添加',
   'com.ExpertBase.Button.Remove': '删除',
@@ -77,10 +98,39 @@ export default {
   // bole avatar
   'com.bole.ExpertPhoto': 'No Avatar',
   'com.bole.PersonComment': 'Comments',
+  'com.bole.Remove': 'Remove',
+  'com.bole.AddButton': 'Add',
+
+  // search venue
+  'com.SearchVenue.title': 'Conference Rank',
 
   // Expert Base
   'page.ExpertBaseExpertsPage.MyExperts': 'My Experts',
   'page.ExpertBaseExpertsPage.SeeAllExperts': 'See All',
+
+  // ExportExperts
+  'com.exportExpert.label.export': 'Export',
+  'com.exportExpert.label.exportCurrentPage': 'Export Current Page',
+  'com.exportExpert.label.exportEB': 'Export All Experts',
+  'com.exportExpert.modal.exportExperts': 'Export Experts',
+  'com.exportExpert.modal.exportNumber': 'Export Number:',
+  'com.exportExpert.modal.exportFields': 'Fields:',
+  'com.exportExpert.modal.export': 'Export',
+
+  // ExportExperts::Fields
+  'com.exportExpert.fields.name': 'Name',
+  'com.exportExpert.fields.gender': 'Gender',
+  'com.exportExpert.fields.pos': 'Position',
+  'com.exportExpert.fields.aff': 'Affiliation',
+  'com.exportExpert.fields.h_index': 'h-index',
+  'com.exportExpert.fields.activity': 'Activity',
+  'com.exportExpert.fields.new_star': 'New Star',
+  'com.exportExpert.fields.num_citation': 'Citation',
+  'com.exportExpert.fields.num_pubs': 'Publications',
+  'com.exportExpert.fields.male': 'Male',
+  'com.exportExpert.fields.female': 'Female',
+  'com.exportExpert.fields.translate': 'Translate',
+  'com.exportExpert.fields.interest': 'Research Interest',
 
   // Recommendation
   'rcd.home.pageTitle': 'Organization List',
@@ -98,4 +148,8 @@ export default {
   'rcd.taskTable.header.progress': 'Progress',
   'rcd.taskTable.header.status': 'Status',
   'rcd.taskTable.header.actions': 'Actions',
+
+  // Merge
+  'com.profileMerge.button.merge': 'Merge',
+  'com.profileMerge.label.pending': 'In pending',
 };

@@ -1,5 +1,6 @@
-import { request, queryAPI, config } from 'utils';
+import { request, nextAPI, config } from 'utils';
 import * as bridge from 'utils/next-bridge';
+import { apiBuilder, F, H } from 'utils/next-api-builder';
 import { sysconfig } from 'systems';
 import * as strings from 'utils/strings';
 
@@ -12,10 +13,17 @@ const { api } = config;
      sort = relevance, h_index, a_index, activity, diversity, rising_star, n_citation, n_pubs,
    智库无缓存查询：
  */
-export async function searchPerson(query, offset, size, filters, sort, useTranslateSearch) {
+export async function searchPerson(params) {
+  const { query, offset, size, filters, sort, intelligenceSearchMeta } = params;
+  const { useTranslateSearch } = params; // TODO remove
+
   // if query is null, and eb is not aminer, use expertbase list api.
   if (!query && filters && filters.eb && filters.eb.id && filters.eb.id !== 'aminer') {
-    return listPersonInEB({ ebid: filters.eb.id, sort, offset, size });
+    if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH) {
+      return listPersonInEBNextAPI({ ebid: filters.eb.id, sort, offset, size });
+    } else {
+      return listPersonInEB({ ebid: filters.eb.id, sort, offset, size });
+    }
   }
 
   // if search in global experts, jump to another function;
@@ -28,11 +36,6 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
   }
 
   //
-  // if ((!filters || !filters.eb) && sysconfig.DEFAULT_EXPERT_BASE === 'aminer') {
-  //   return searchPersonGlobal(query, offset, size, filters, sort, useTranslateSearch);
-  // }
-
-  //
   // Search in ExpertBase.
   //
 
@@ -42,61 +45,41 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
   // 2. query
   // ------------------------------------------------------------------------------------------
   if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH && Sort !== 'activity-ranking-contrib') {
+    const ebs = sysconfig.ExpertBases;
+    const defaultHaves = ebs && ebs.length > 0 && ebs.map(eb => eb.id);
+    const enTrans = sysconfig.Search_EnableTranslateSearch && !sysconfig.Search_EnableSmartSuggest;
+    console.log('-------------------------------- disable is ', enTrans );
 
-    const nextapi = {
-      RequestMethod: 'POST',
-      method: 'search',
-      parameters: {
-        query, offset, size,
-        searchType: 'allb', // all
-        // sorts: [Sort],
-        filters: { terms: {} },
+    const nextapi = apiBuilder.query(F.queries.search, 'search')
+      .param({ query, offset, size })
+      .param({
+        searchType: F.searchType.allb,
         aggregation: ['gender', 'h_index', 'location', 'language'],
-        haves: { labels: ['CCF_MEMBER_高级会员', 'CCF_MEMBER_会士', 'CCF_MEMBER_杰出会员', /*'CCF_DEPT_*'*/] },
-        switches: ['translate'],
-      },
-      schema: {
-        person: [
-          'id', 'name', 'name_zh', 'tags', // 'tags_zh', 'tags_trans_zh'
-          {
-            profile: [
-              'position', 'affiliation',
-              // 'org', 'org_zh', 'bio', 'email', 'edu' ', phone'
-            ],
-          },
-          { indices: ['hindex', 'gindex', 'numpubs', 'citation', 'newStar', 'risingStar', 'activity', 'diversity', 'sociability'] },
-        ],
-      },
-    };
+        haves: { eb: defaultHaves },
+      })
+      .addParam({ switches: ['loc_search_all'] }, { when: useTranslateSearch })
+      .addParam({ switches: ['loc_translate_all'] }, { when: enTrans && !useTranslateSearch })
+      .addParam({ switches: ['intell_search'] }, { when: sysconfig.Search_EnableSmartSuggest })
+      .addParam({ switches: ['lang_zh'] }, { when: sysconfig.Locale === 'zh' })
+
+      .schema({ person: F.fields.person_in_PersonList })
+      .addSchema({ person: ['tags_translated_zh'] }, { when: sysconfig.Locale === 'zh' });
 
     // filters
-    Object.keys(filters).map((key) => {
-      const filter = filters[key];
-      if (key === 'eb') {
-        const ebLabel = bridge.toNextCCFLabelFromEBID(filters.eb.id);
-        nextapi.parameters.filters.terms.labels = [ebLabel]; // TODO transfer EB.
-      } else if (key === 'h_index') {
-        console.log('TODO filter by h_index 这里暂时是用解析的方式获取数据的。');
-        const splits = filter.split('-');
-        if (splits && splits.length === 2) {
-          const from = parseInt(splits[0]);
-          const to = parseInt(splits[1]);
-          nextapi.parameters.filters.ranges = {
-            h_index: [isNaN(from) ? '' : from.toString(), isNaN(to) ? '' : to.toString()],
-          };
-        }
-      } else {
-        nextapi.parameters.filters.terms[key] = [filters[key]];
-      }
-      return false;
-    });
+    H.filtersToQuery(nextapi, filters);
 
     // sort
     if (Sort && Sort !== 'relevance') {
-      nextapi.parameters.sorts = [Sort];
+      nextapi.param({ sorts: [Sort] });
     }
 
-    return queryAPI(nextapi);
+    // Apply Plugins.
+    H.applyPlugin(nextapi, sysconfig.APIPlugin_ExpertSearch);
+
+    // console.log('DEBUG---------------------\n', nextapi.api);
+    // console.log('DEBUG---------------------\n', JSON.stringify(nextapi.api));
+
+    return nextAPI({ data: [nextapi.api] });
 
     // ------------------------------------------------------------------------------------------
   } else {
@@ -142,11 +125,40 @@ export async function listPersonInEB(payload) {
   // );
 }
 
+export async function listPersonInEBNextAPI(payload) {
+  const { sort, ebid, offset, size } = payload;
+
+  // const ebs = sysconfig.ExpertBases;
+  // const defaultHaves = ebs && ebs.length > 0 && ebs.map(eb => eb.id);
+  const nextapi = apiBuilder.query(F.queries.search, 'list-in-EB')
+    .param({
+      offset, size,
+      searchType: F.searchType.allb,
+      aggregation: F.params.default_aggregation,
+      // haves: { eb: defaultHaves },
+    })
+    .schema({ person: F.fields.person_in_PersonList })
+    .addSchema({ person: ['tags_translated_zh'] }, { when: sysconfig.Locale === 'zh' });
+
+  H.filterByEBs(nextapi, [ebid]);
+  if (sort && sort !== 'relevance' && sort !== 'time') {
+    nextapi.param({ sorts: [sort] });
+  }
+
+  H.applyPlugin(nextapi, sysconfig.APIPlugin_ExpertSearch);
+
+  // console.log('DEBUG---------------------\n', nextapi.api);
+  // console.log('DEBUG---------------------\n', JSON.stringify(nextapi.api));
+
+  return nextAPI({ data: [nextapi.api] });
+}
+
 // Search Global.
 export async function searchPersonGlobal(query, offset, size, filters, sort, useTranslateSearch) {
   const data = prepareParametersGlobal(query, offset, size, filters, sort, useTranslateSearch);
-  // console.log('data', data);
-  return request(api.searchPerson, { method: 'GET', data });
+  const { term, name, org, isAdvancedSearch } = strings.destructQueryString(query);
+  const apiURL = isAdvancedSearch ? api.searchPersonAdvanced : api.searchPerson;
+  return request(apiURL, { method: 'GET', data });
 }
 
 //
@@ -178,7 +190,9 @@ export async function searchPersonAgg(query, offset, size, filters, useTranslate
 
 export async function searchPersonAggGlobal(query, offset, size, filters, useTranslateSearch) {
   const data = prepareParametersGlobal(query, offset, size, filters, '', useTranslateSearch);
-  return request(api.searchPersonAgg, { method: 'GET', data });
+  const { term, name, org, isAdvancedSearch } = strings.destructQueryString(query);
+  const apiURL = isAdvancedSearch ? api.searchPersonAdvancedAgg : api.searchPersonAgg;
+  return request(apiURL, { method: 'GET', data });
 }
 
 function prepareParameters(query, offset, size, filters, sort, useTranslateSearch) {
@@ -199,7 +213,8 @@ function prepareParameters(query, offset, size, filters, sort, useTranslateSearc
   }
   const { term, name, org } = strings.destructQueryString(query);
   if (term) {
-    const cleanedTerm = encodeURIComponent(strings.cleanQuery(term));
+    // const cleanedTerm = encodeURIComponent(strings.cleanQuery(term));
+    const cleanedTerm = strings.cleanQuery(term);
     data.term = useTranslateSearch ? `cross:${cleanedTerm}` : cleanedTerm;
   }
   if (name) {
@@ -208,7 +223,6 @@ function prepareParameters(query, offset, size, filters, sort, useTranslateSearc
   if (org) {
     data.org = strings.cleanQuery(org);
   }
-  // data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY]= query,
 
   data = addAdditionParameterToData(data, sort, 'eb');
   // if (useTranslateSearch && data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY]) {
@@ -231,15 +245,30 @@ function prepareParametersGlobal(query, offset, size, filters, sort, useTranslat
     });
   }
 
-  // add query
-  const { term, name, org } = strings.destructQueryString(query);
-  const newQuery = strings.firstNonEmpty(term, name, org);
-  data.query = encodeURIComponent(newQuery);
+  // add query // TODO Use Advanced Search?????
+  const { term, name, org, isAdvancedSearch } = strings.destructQueryString(query);
+  if (isAdvancedSearch) {
+    if (term) {
+      const cleanedTerm = strings.cleanQuery(term);//encodeURIComponent(strings.cleanQuery(term));
+      data.term = useTranslateSearch ? `cross:${cleanedTerm}` : cleanedTerm;
+    }
+    if (name) {
+      data.name = name;
+    }
+    if (org) {
+      data.org = strings.cleanQuery(org);
+    }
+  } else {
+    const newQuery = strings.firstNonEmpty(term, name, org); // use new query?
+    data.query = useTranslateSearch ? `cross:${newQuery}` : newQuery;
+  }
+
+  // data.query = encodeURIComponent(newQuery);
   data = addAdditionParameterToData(data, sort, 'global');
 
-  if (useTranslateSearch && data.query) {
-    data.query = `cross:${data.query}`;
-  }
+  // if (useTranslateSearch && data.query) {
+  //   data.query = `cross:${data.query}`;
+  // }
   return data;
 }
 
@@ -247,7 +276,7 @@ function prepareParametersGlobal(query, offset, size, filters, sort, useTranslat
 function addAdditionParameterToData(data, sort, range) {
   const newData = data;
 
-  // 置顶acm fellow和高校top100
+  // 置顶huawei项目中的acm fellow和高校top100
   if (sysconfig.Search_EnablePin) {
     if (!sort || sort === 'relevance') {
       newData.pin = 1;
@@ -278,3 +307,10 @@ export async function relationGraph(data) {
 export async function searchPublications(params) {
   return request(api.searchPubs, { method: 'GET', data: params });
 }
+
+export async function getActivityScoresByPersonIds(ids) {
+  return request(api.batchGetActivityCompareScoresByPersonId.replace(':ids', ids), {
+    method: 'GET',
+  });
+}
+

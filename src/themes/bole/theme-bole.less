@@ -5,7 +5,7 @@
   height: 66px; line-height: 66px;
 
   .header_logo {
-    width: 66px;
+    width: 66px; min-width: 66px;
     //background-position: -68px -47px;
     background-image: url('/sys/acmfellow/header_logo.png');
     background-size: cover;
@@ -22,6 +22,17 @@
 .Overrides() {
   .header {
     //background-color: black;
+  }
+  :global {
+    .keywords_inner {
+      div {
+        border: none; border-radius: 32px;
+        padding: 0px 10px; margin: 4px 5px;
+        background-color: rgba(0, 0, 0, 0.4);
+        a { color: #ffffff; font-size: @font-size-lg; }
+      }
+      div:hover { background-color: rgba(0, 0, 0, 0.6); }
+    }
   }
 }
 

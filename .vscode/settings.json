@@ -1,0 +1,9 @@
+{
+  "sync.gist": "62a8d53b0388b3999a17805e7636d587",
+  "editor.tabSize": 2,
+  "html.suggest.angular1": false,
+  "html.suggest.ionic": false,
+  "eslint.options": {
+    "configFile": ".eslintrc"
+  }
+}

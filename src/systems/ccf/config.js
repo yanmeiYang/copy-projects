@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import Footer from '../../components/Footers/ccf';
+import { ExpertBaseID2NameMap } from 'utils/expert-base';
 
 module.exports = {
   /**
@@ -21,19 +22,8 @@ module.exports = {
   PageTitle: 'CCF 专家库',
   // Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
   Header_LogoWidth: 213,
-  Header_LogoStyle: {
-    width: '60px',
-    height: '38px',
-    backgroundPosition: '8px 2px',
-    backgroundSize: ' auto 36px',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor: 'white',
-  },
-  Header_SubTextLogo: 'CCF 专家库',
-  Header_SubTextStyle: { marginLeft: 12 },
   Header_UserPageURL: '', // 用户头像点击之后去的页面.
   Footer_Content: <Footer />,
-  ShowFooter: true,
 
   /**
    * Functionality
@@ -57,6 +47,13 @@ module.exports = {
   // Auth_AllowAnonymousAccess: false,
   // Auth_LoginPage: '/login',
 
+  // NextAPI-QueryHooks: // TODO should not enabled.
+  APIPlugin_ExpertSearch: {
+    // parameters: {
+    //   aggregation: ['dims.systag'],
+    //   haves: { systag: [] },
+    // },
+  },
 
   // /////////////////////////////////
 
@@ -79,10 +76,6 @@ module.exports = {
   ],
 
   PersonList_ShowIndices: ['activityRankingContrib', 'h_index', 'activity', 'rising_star'],
-
-
-  // > Search related
-  SearchBarInHeader: false,
 
   // > Admin Users
   Admin_Users_ShowAdmin: false,
@@ -129,8 +122,12 @@ module.exports = {
     //   nperson: 610,
     // },
   ],
-
-
+  ExpertBases_ID2NameMap: {
+    // '5949c2f99ed5dbc2147fd854':'CCF会员'
+    '592f8af69ed5db8bb68d713b': '会士',
+    '58ddbc229ed5db001ceac2a4': '杰出会员',
+    '592f6d219ed5dbf59c1b76d4': '高级会员',
+  },
   // 特殊配置，这里是System的自己的配置
 
   CCF_activityTypes: ['专委活动', 'CNCC', 'ADL78', 'CCF@U100(走进高校)', 'YOCSEF', '论坛', '报告会', 'NOI讲座', '分部活动', '精英大会', '女性大会', 'TF',],
@@ -168,5 +165,6 @@ module.exports = {
 
   // 临时属性，需要删除
   USE_NEXT_EXPERT_BASE_SEARCH: true,
-
+  // 测试修改活动是否使用新的编辑
+  SeminarNewEditor: true,
 };

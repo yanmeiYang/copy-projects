@@ -14,10 +14,8 @@ module.exports = {
 
   // Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
   Header_UserPageURL: '', // 用户头像点击之后去的页面.
-  ShowFooter: true,
 
   // > Search related
-  SearchBarInHeader: false,
   ApplyUserBtn: false, // 是否显示创建新用户btn
   ShowRating: false, // 显示评分
   showMenustatistics: false, // 显示活动统计

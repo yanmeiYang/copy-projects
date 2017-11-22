@@ -6,8 +6,10 @@ import { Link } from 'dva/router';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
 import * as hole from 'utils/hole';
+import AddToEBButton from 'routes/expert-base/AddToEBButton';
 import { FormattedMessage as FM } from 'react-intl';
 import { IndexHotLinks } from 'components/widgets';
+import { ExportExperts } from 'components/person';
 import styles from './theme-acmfellow.less';
 // import * as Const from './const-acmfellow';
 
@@ -29,11 +31,13 @@ module.exports = {
   infoZone: [
     <Link to={`/eb/${sysconfig.ExpertBase}/-/0/20`}
           className={classnames(styles.header_info)} key="0">
-      My Experts
+      All ACM Fellows
     </Link>,
   ],
 
+  //
   // Index page
+  //
 
   index_centerZone: [
     <IndexHotLinks
@@ -45,8 +49,23 @@ module.exports = {
     />,
   ],
 
-  // Expert Page
+  //
+  // Person List Component
+  //
+  PersonList_TitleRightBlock: ({ param }) => (
+    <div key="1">
+      <AddToEBButton
+        person={param.person}
+        expertBaseId={param.expertBaseId}
+        targetExpertBase={sysconfig.ExpertBase}
+      />
+    </div>),
+  PersonList_RightZone: hole.EMPTY_ZONE_FUNC,
+  PersonList_BottomZone: hole.IN_COMPONENT_DEFAULT,
 
+  //
+  // Expert Page
+  //
   ExpertBaseExpertsPage_TitleZone: [
     // <span>ACM Fellows</span>,
   ],
@@ -56,4 +75,20 @@ module.exports = {
   ExpertBaseExpertsPage_MessageZone: [
     hole.DEFAULT_PLACEHOLDER,
   ],
+
+  //
+  // Search Page
+  //
+  SearchSorts_RightZone: [
+    (params) => {
+      const { expertBaseId, query, pageSize, current, filters, sortType } = params;
+      return () => // 这里是一个二级Function调用.
+        (<ExportExperts
+            key="0" expertBaseId={expertBaseId}
+            query={query} pageSize={pageSize} current={current} filters={filters} sort={sortType}
+          />
+        );
+    },
+  ],
+
 };

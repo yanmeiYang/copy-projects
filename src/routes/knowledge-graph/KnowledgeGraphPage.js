@@ -43,7 +43,7 @@ export default class KnowledgeGraphPage extends React.PureComponent {
 
   componentWillMount() {
     let { query } = queryString.parse(location.search);
-    query = query || 'data mining';
+    query = query || '-';
     this.setState({ query });
     // if (query) {
     //   this.setState({ query });
@@ -128,7 +128,6 @@ export default class KnowledgeGraphPage extends React.PureComponent {
     // const href = window.location.href.split('?query=')[0] + '?query=' + query;
     // window.location.href = href;
 
-    this.props.dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query } });
     // pathname, query: { ...location.query, query },
     this.props.dispatch(routerRedux.push({
       pathname,

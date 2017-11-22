@@ -5,6 +5,7 @@ import React from 'react';
 import fetch from 'dva/fetch';
 import { Input, Col, Radio, Button, Modal, Tag, Icon, } from 'antd';
 import { routerRedux, Link } from 'dva/router';
+import { getLocalToken } from 'utils/auth';
 import { request, config } from '../../../utils';
 import { sysconfig } from '../../systems';
 import defaultImg from '../../../assets/people/default.jpg';
@@ -75,9 +76,9 @@ class ExpertBasicInformation extends React.Component {
     fetch(config.baseURL + config.api.speakerSuggest, {
       method: 'POST',
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': localStorage.getItem('token')
+        Authorization: getLocalToken(),
       },
       body: JSON.stringify(payload),
     }).then(function (response) {

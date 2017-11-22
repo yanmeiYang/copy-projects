@@ -1,138 +1,17 @@
-{
-
-  "id": "53f4ae26dabfaee0d9c771a0",
-  "score": 171.53761467889905,
-  "name": "John Mylopoulos",
-  "name_zh": "",
-  //  ------------------------
-
-
-  "aff": {
-    "desc": "Department of Computer Science  University of Toronto",
-    "id": ""
-  },
-
-  "num_viewed": 224,
-  "avatar": "//static.aminer.org/upload/avatar/665/2020/388/53f4ae26dabfaee0d9c771a0.jpeg",
-
-  "indices": {
-    "num_pubs": 673,
-    "num_patents": 0,
-    "sociability": 6.6267,
-    "h_index": 90,
-    "num_citation": 36703,
-    "as": 0,
-    "diversity": 4.4731,
-    "new_star": 16.3385,
-    "num_ret_pubs": 0,
-    "activity": 55.0867,
-    "g_index": 179
-  },
-
-  "is_following": false,
-  "is_downvoted": false,
-  "revised": {
-    "cname": "",
-    "mid": "58bf3cde0a3ac5d610e4ff45",
-    "mtime": "2017-04-23 16:12:52",
-    "cid": "",
-    "mname": "",
-    "ctime": "1970-01-01 00:00:00"
-  },
-
-  "is_upvoted": false,
-  "locks": {},
-  "tags": [
-    {
-      "t": "Software Engineering",
-      "w": 62
-    },
-    {
-      "t": "Information System",
-      "w": 58
-    },
-    {
-      "t": "Software Systems",
-      "w": 55
-    },
-    {
-      "t": "Requirement Engineering",
-      "w": 53
-    },
-    {
-      "t": "Software Development",
-      "w": 36
-    },
-    {
-      "t": "Requirements Engineering",
-      "w": 36
-    },
-    {
-      "t": "Formal Specification",
-      "w": 34
-    },
-    {
-      "t": "Requirement Analysis",
-      "w": 32
-    },
-    {
-      "t": "Systems Analysis",
-      "w": 26
-    },
-    {
-      "t": "Conceptual Model",
-      "w": 26
+[
+  {
+    "action": "search",
+    "parameters": {
+      "switches": [
+        "translate_all"
+      ],
+      "filters": {
+        "dims": {
+          "eb": [
+            "5949c2f99ed5dbc2147fd854"
+          ]
+        }
+      }
     }
-  ],
-  "pos": [
-    {
-      "i": "",
-      "n": "Professor"
-    }
-  ],
-  "hidden": false,
-  "award": [],
-  "bind": false,
-  "contact": {
-    "affiliation": "Department of Computer Science  University of Toronto",
-    "has_email_cr": true,
-    "work": "in 1970, the year he joined the faculty of the University of Toronto.",
-    "bio": "John Mylopoulos received his BEng degree from Brown University in 1966 and his PhD degree from Princeton in 1970, the year he joined the faculty of the University of Toronto. His research interests include information modelling techniques, covering notations, implementation techniques and applications, knowledge based systems, semantic data models, information system design and requirements engineering. \n\nMylopoulos is the recipient of the first Outstanding Services Award given by the Canadian AI Society (CSCSI), a co-recipient of the best-paper award of the 1994 International Conference on Software Engineering, a fellow of the American Association for AI (AAAI) and the elected president of the VLDB Endowment (1998-01, re-elected for the period 2002-05). He is co-editor of the Requirements Engineering Journal, published by Springer-Verlag. He has also contributed to the organization of major international conferences, including program co-chair of the International Joint Conference of AI (1991), general chair of the Entity-Relationship conference (1994), program chair of the International IEEE Symposium of Requirements Engineering (1997), and general chair of the 30th VLDB Conference (2004). He has served on the editorial board of several international journals.\n\nHe has served on the editorial board of several international journals.\n\nHe is currently leading a number of research projects and is principal investigator of both a national and a provincial Centre of Excellence. In particular, he leads a project on software reengineering (funded by NSERC, IBM Canada and Bell University Laboratories), a project on Knowledge Management (funded by Bell University Laboratories, PRECARN and Techne Knowledge Systems) , as well as a project on Peer-to-Peer Data Management (funded by CITO, NSERC, and Bell University Laboratories.)",
-    "edu": "John Mylopoulos received his BEng degree from Brown University in 1966 and his PhD degree from Princeton in 1970",
-    "fax": "416-978-4765",
-    "homepage": "http://www.cs.toronto.edu/~jm/",
-    "address": "40 St.George St. \nBahen Building Rm.7266 \nUniversity of Toronto \nToronto, Ontario \nM5S 2E4 ",
-    "has_email": true,
-    "phone": "416-978-5180"
-  },
-  "work": [],
-  "user_tags": [],
-  "links": [
-    {
-      "type": "oid",
-      "url": "",
-      "id": "537077"
-    }
-  ],
-  "edu": [],
-  "is_holding": false,
-  "num_upvoted": 0,
-  "src": [],
-  "attr": {
-    "gender": "male",
-    "nation": "Canada",
-    "ethnic": "English",
-    "lang": "English"
-  },
-  "activity_indices": {
-    "compre": 0,
-    "content": 0,
-    "contrib": 0,
-    "integrated": 0,
-    "level": 0
-  },
-  "tags_zh": [],
-  "intr": [],
-  "num_followed": 2,
-  "honor": []
-}
+  }
+]

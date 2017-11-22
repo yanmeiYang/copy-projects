@@ -1,13 +1,40 @@
-:global {
-  .headerAvatar img {
-    -webkit-border-radius: 50%; -moz-border-radius: 50%; border-radius: 50%;
-    width: 38px; height: 38px; vertical-align: middle; margin-top: -2px;
-    border: solid 1px orange; padding: 1px;
-  }
-  .headerAvatar:hover img { box-shadow: 0 0 1px 1px orange; }
-}
+@import "~themes/vars";
+
+.hide() { display: none }
 
 .headerInfoZone {
+  min-width: 128px;
+
+  :global {
+    .ant-menu { display: flex; }
+    .ant-menu .ant-menu-item { padding: 0 8px; }
+    .ant-menu .ant-menu-item span { padding: 0 8px; }
+
+    .ant-menu-item .anticon,
+    .ant-menu-submenu-title .anticon {
+      margin-right: 0px;
+    }
+  }
+  .longLanguage {
+    display: none;
+  }
+  .simpleLanguage {
+    display: inline;
+  }
+
+  .headerAvatar {
+    img {
+      -webkit-border-radius: 50%; -moz-border-radius: 50%; border-radius: 50%;
+      width: 38px; height: 38px; vertical-align: middle; margin-top: -2px;
+      border: solid 1px orange; padding: 1px; display: inline-block;
+      overflow: hidden;
+    }
+    .userName { padding: 0 0 0 6px !important; .hide() }
+  }
+  .headerAvatar:hover img { box-shadow: 0 0 1px 1px orange; }
+
+  .additional { .hide() }
+
   .emptyMenuStyle {
     border: 0px !important;
     padding-left: 0px !important;
@@ -21,15 +48,43 @@
     //display: block; // disabled
   }
 
-  :global {
-    .ant-menu .ant-menu-item { padding: 0 8px; }
-    .ant-menu .ant-menu-item span { padding: 0 8px; }
+  .logoutBtn {
+    span { .hide() }
+  }
 
-    .ant-menu-item .anticon,
-    .ant-menu-submenu-title .anticon {
-      margin-right: 0px;
+}
+
+// Responsive
+
+@media (min-width: 568px) {
+}
+
+@media (min-width: 767px) {
+  .headerInfoZone {
+    .headerAvatar {
+      .userName { display: inline }
+    }
+  }
+}
+
+@media (min-width: 860px) {
+  .headerInfoZone {
+    .additional { display: inline }
+    .simpleLanguage {
+      display: none !important;
     }
 
+    .longLanguage {
+      display: inline !important;
+    }
+  }
+}
+
+@media (min-width: 980px) {
+  .headerInfoZone {
+    .logoutBtn {
+      span { display: inline }
+    }
   }
 }
 

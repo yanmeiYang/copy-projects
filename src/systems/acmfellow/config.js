@@ -2,13 +2,11 @@
  * Created by BoGao on 2017/10/6.
  */
 import React from 'react';
-import { Link } from 'dva/router';
-import AddToEBButton from 'routes/expert-base/AddToEBButton';
+// import { Link } from 'dva/router';
 import { authenticateExpertBase } from 'hooks';
 import defaults from '../utils';
-import { PersonComment } from './components';
-import { GetComments } from './person-comment-hooks';
-
+// import { PersonComment } from './components';
+// import { GetComments } from './person-comment-hooks';
 
 const ExpertBase = '59d7bb7e9ed5dbe450e6b275';
 
@@ -30,23 +28,22 @@ module.exports = {
   // UserAuthSystem: 'aminer', // aminer 或者是 system.config; 默认当前系统
   // UserAuthSystem_AddSysTagAuto: true, // 登录时自动添加system的标签
 
+  // google analytics
+  googleAnalytics: 'UA-107003102-6',
+
   // IndexPage_QuickSearchList:[], // use default.
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
-  Header_SubTextLogo: '伯乐系统',
-  Header_SubTextStyle: { width: 90, left: -54, marginLeft: -80 },
-  Header_LogoWidth: 118,
   Header_UserPageURL: '/user-info',
 
   // ShowHelpDoc: true,
 
   // Functionality
-  Enable_Export: false,
-  // Enable_Export: true,
-  Search_EnablePin: true,
+  Enable_Export: true,
+  Enable_Export_EB_IF_EXIST: true,
+  Search_EnablePin: false,
 
   // > Search related
-  SearchBarInHeader: true,
   HeaderSearch_TextNavi: ['ACMFellowExpertBase', 'ACM_ExpertSearch'],
   // HeaderSearch_TextNavi: [],
 
@@ -54,41 +51,14 @@ module.exports = {
   Search_DisableExpertBaseFilter: true,
   // Search_DisableSearchKnowledge: false,
   Search_FixedExpertBase: { id: 'aminer', name: '全球专家' },
-  // DEFAULT_EXPERT_SEARCH_KEY: 'name', // default is term
-
-  // SearchFilterExclude: 'Gender',
-  // UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // deprecated! Don't use this.
 
   /**
    * Page specified config.
    */
 
   /**
-   * PersonList
+   * Person List
    */
-  // PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
-  // PersonList_PersonLink_NewTab: true,
-  // param: [person, eb{id,name}]
-  PersonList_AfterTitleBlock:
-    ({ param }) => (
-      <div key="2">
-        <AddToEBButton
-          person={param.person}
-          expertBaseId={param.expertBaseId}
-          targetExpertBase={ExpertBase}
-        />
-      </div>),
-
-  PersonList_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
-
-  // PersonList_BottomZone: [
-  //   param => (
-  //     <PersonComment
-  //       person={param.person} user={param.user} key="1"
-  //       ExpertBase={ExpertBase}
-  //     />),
-  // ],
-
   // PersonList_DidMountHooks: [],
 
   // PersonList_UpdateHooks: [
@@ -102,18 +72,16 @@ module.exports = {
 
   Search_CheckEB: true, // Check ExpertBase.
 
+  // NextAPI-QueryHooks:
+  APIPlugin_ExpertSearch: {
+    parameters: {
+      aggregation: ['dims.systag'],
+      haves: { systag: [] },
+    },
+  },
+
   // 地图中心点
   // CentralPosition: { lat: 37.09024, lng: -95.712891 },
-
-  // TODO: use default.
-  // IndexPage_QuickSearchList: [
-  //   { name: 'Medical Robotics', name_zh: '' },
-  //   { name: 'Surgical Robots', name_zh: '' },
-  //   { name: 'Robot Kinematics', name_zh: '' },
-  //   { name: 'Computer Assisted Surgery', name_zh: '' },
-  //   { name: 'Surgical Navigation', name_zh: '' },
-  //   { name: 'Minimally Invasive Surgery', name_zh: '' },
-  // ],
 
   ExpertBases: [
     {
@@ -126,5 +94,7 @@ module.exports = {
   // acmfellow 系统
   ExpertBase,
 
+  // 临时属性，需要删除
+  USE_NEXT_EXPERT_BASE_SEARCH: true,
 
 };

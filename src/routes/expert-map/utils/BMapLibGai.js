@@ -606,7 +606,6 @@ function GetBMapLib(showTop) {
             newids += `${newarray[i]},`;
           }
           ids = newids;
-          document.getElementById('currentIds').value = ids;
 
           const onLeave = () => {
             me.target = null;

@@ -1,25 +1,19 @@
-/*
- * created by Xinyi Xu on 2017-8-16.
- */
 import React from 'react';
-import echarts from 'echarts/lib/echarts'; // 必须
-import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/legend';
-import 'echarts/lib/component/geo';
-import 'echarts/lib/chart/map'; // 引入地图
-import 'echarts/lib/chart/lines';
-import 'echarts/lib/chart/effectScatter';
-import 'echarts/map/js/china'; // 引入中国地图//
-import 'echarts/map/js/world';
-import { Button } from 'antd';
+import { connect } from 'dva';
+import { loadScript } from 'utils/requirejs';
+import { Button, Modal, Tabs, Table } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import styles from './ExpertTrajectory.less';
-import mapData from '../../../external-docs/expert-trajectory/testData.json';
+import { showChart, load } from './utils/echarts-utils';
 
-const address2 = mapData.addresses;
-const trajectory = mapData.trajectory;
-let option = {};
-let ifDraw = 0;
+let address = [];
+let addValue = {};
+let addInfo = [];
+let myChart; // used for loadScript
+let trainterval;
+const { TabPane } = Tabs;
 
+@connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
 class ExpertTrajectory extends React.Component {
   constructor(props) {
     super(props);
@@ -28,307 +22,190 @@ class ExpertTrajectory extends React.Component {
 
   state = {
     query: '',
-    mapType: 'google', // [baidu|google]
-    view: {},
   };
 
   componentDidMount() {
-    this.myChart = echarts.init(document.getElementById('world'));
-    this.showTrajectory();
+    this.initChart(this.props.person);
+    window.onresize = () => {
+      this.initChart(this.props.person);
+    };
   }
 
   shouldComponentUpdate(nextProps, nextState) { // 状态改变时判断要不要刷新
     if (nextState.query && nextState.query !== this.state.query) {
       this.callSearchMap(nextState.query);
+      return true;
     }
-    return true;
+    if (nextProps.expertTrajectory.trajData !== this.props.expertTrajectory.trajData) {
+      this.calculateData(nextProps.expertTrajectory.trajData); // 用新的来代替
+    }
+    if (nextProps.person !== this.props.person) {
+      this.initChart(nextProps.person);
+      return true;
+    }
+    if (this.props.themeKey !== nextProps.themeKey) {
+      showChart(myChart, 'bmap', nextProps.themeKey);
+      this.showTrajectory(this.props.expertTrajectory.trajData);
+    }
+    return false;
   }
 
-  onPersonClick = (personId) => {
-    alert(personId);
+  componentWillUpdate() {
   }
 
-  getTrajRecord =() => { // 整理接口给的数据
-    const record = [];
-    let lastYear;
-    let lastArea;
-    let beginYear;
-    let counter1 = 0;
-    for (const temp of trajectory) { // 得到每个地点的ID，起始年份和终止年份
-      let theYear = [];
-      let theArea = [];
-      if (counter1 === 0) {
-        beginYear = temp[0];
-        lastYear = temp[0];
-        lastArea = temp[1];
-        if (counter1 === trajectory.length - 1) {
-          theYear.push(beginYear);
-          theYear.push(lastYear);
-          theArea.push(lastArea);
-          theArea.push(theYear);
-          record.push(theArea);
-        }
-      } else if (lastArea === temp[1]) {
-        lastYear = temp[0];
-        if (counter1 === trajectory.length - 1) {
-          theYear = [];
-          theArea = [];
-          theYear.push(beginYear);
-          theYear.push(lastYear);
-          theArea.push(lastArea);
-          theArea.push(theYear);
-          record.push(theArea);
-        }
-      } else {
-        theYear.push(beginYear);
-        theYear.push(lastYear);
-        theArea.push(lastArea);
-        theArea.push(theYear);
-        beginYear = temp[0];
-        lastYear = temp[0];
-        lastArea = temp[1];
-        record.push(theArea);
-        if (counter1 === trajectory.length - 1) {
-          theYear = [];
-          theArea = [];
-          theYear.push(beginYear);
-          theYear.push(lastYear);
-          theArea.push(lastArea);
-          theArea.push(theYear);
-          record.push(theArea);
-        }
-      }
-      counter1 += 1;
-    }
-    return record;
+  componentDidUpdate() {
   }
 
-  getTrajSeries = (geoCoordMap, data, record, i) => { // 设置点和线的参数
-    function formtGCData(geoData, data1, count) { // 画线
-      const tGeoDt = [];
-      let index;
-      if (data1[count + 1] === undefined) {
-        index = count;
-      } else {
-        index = count + 1;
+  initChart = (person) => {
+    const divId = 'chart';
+    load((echarts) => {
+      myChart = echarts.init(document.getElementById(divId));
+      let skinType = this.props.themeKey;
+      if (typeof (skinType) === 'undefined') {
+        skinType = '2'; //假设默认为dark
       }
-      for (let j = 0; j < index; j += 1) {
-        tGeoDt.push({
-          coords: [geoData[data1[j].name], geoData[data1[j + 1].name]],
-        });
-      }
-      return tGeoDt;
-    }
+      showChart(myChart, 'bmap', skinType);
+      this.findPersonTraj(person);
+    });
+  };
 
-    function formtVData(geoData, data1, srcNam, count) { // 画点
-      const tGeoDt = [];
-      let index;
-      if (data1[count + 1] === undefined) {
-        index = count + 1;
-      } else {
-        index = count + 2;
+  findPersonTraj = (person) => {
+    if (person === '') {
+      console.log('Try to click one person!');
+    } else { //为以后将ExpertTrajectory做组件使用
+      const personId = person.id;
+      const start = 0;
+      const end = 2017;
+      this.props.dispatch({
+        type: 'expertTrajectory/findTrajById',
+        payload: { personId, start, end },
+      });
+    }
+  };
+
+  showTrajectory = (data) => {
+    if (!data || !data.data) {
+      return false;
+    }
+    const points = [];
+    const trajData = [];
+    for (const key in data.data.trajectories) {
+      if (data.data.trajectories) {
+        let previous = '';
+        for (const d of data.data.trajectories[key]) {
+          if (previous !== d[1] && previous !== '') {
+            trajData.push({
+              coords: [[address[previous].geo.lng, address[previous].geo.lat],
+                [address[d[1]].geo.lng, address[d[1]].geo.lat]],
+            });
+          }
+          [, previous] = d;
+        }
       }
-      for (let j = 0; j < index; j += 1) {
-        const tNam = data1[j].name;
-        if (srcNam !== tNam) {
-          tGeoDt.push({
-            name: tNam.concat(` ${record[j][1][0].toString()}`),
-            value: geoData[tNam].concat(`${record[j][1][0].toString()} - ${record[j][1][1].toString()}`),
-            symbolSize: data[j].value,
-            itemStyle: {
-              normal: {
-                color: '#f56a00',
-                borderColor: '#d75000',
-              },
-            },
+    }
+    let dup = '';
+    for (let i = 0; i < addInfo.length; i += 1) {
+      if (address) {
+        const key = addInfo[i];
+        const latlng = [address[key].geo.lng, address[key].geo.lat].join(',');
+        if (dup.indexOf(latlng) === -1) {
+          dup = [dup, latlng].join('+');
+          points.push({
+            name: address[key].name + addValue[key][0], //可加入城市信息
+            value: [address[key].geo.lng, address[key].geo.lat],
+            symbolSize: (addValue[key][1] / 2) + 3,
+          });
+        } else {
+          points.push({
+            name: address[key].name + addValue[key][0], //可加入城市信息
           });
         }
       }
-      return tGeoDt;
     }
-    const planePath = 'arrow';
-    const series = [ // 设置地图参数
-      {
-        // type: 'effectScatter',
-        type: 'scatter',
-        coordinateSystem: 'geo',
-        zlevel: 5,
-        rippleEffect: {
-          period: 4,
-          scale: 2,
-          brushType: 'stroke',
-        },
-        label: {
-          normal: {
-            show: true,
-            position: 'right',
-            formatter: '{b}',
-          },
-          emphasis: {
-            show: true,
-          },
-        },
-        symbolSize: 5,
-        itemStyle: {
-          normal: {
-            color: '#fff',
-            borderColor: 'gold',
-          },
-        },
-        data: formtVData(geoCoordMap, data, data, i),
-      },
-      {
-        type: 'lines',
-        zlevel: 2,
-        effect: {
-          show: true,
-          period: 6,
-          trailLength: 0.1,
-          color: '#f78e3d',
-          symbol: planePath,
-          symbolSize: 5,
-          animation: true,
-        },
-        lineStyle: {
-          normal: {
-            color: '#f78e3d',
-            width: 1.5,
-            opacity: 0.4,
-            curveness: 0.2,
-          },
-        },
-        data: formtGCData(geoCoordMap, data, i),
-      }];
-    return series;
-  }
-
-  getTrajData =(record) => { // 在各个地点的时间，存于data
-    const data = []; // data = [{name: tsinghua university, value : 6(years)}]
-    for (const onerecord of record) {
-      const years = (onerecord[1][1] - onerecord[1][0]) + 1;
-      const onewhere = { name: address2[onerecord[0]].addr, value: years * 3 }; // 正式使用时3应删掉
-      data.push(onewhere);
+    let lineData;
+    let pointData;
+    myChart.setOption({ title: { text: `学者${this.props.person.name_zh}迁徙图` } });
+    const { centerZoom } = this.props;
+    if (centerZoom) {
+      myChart.setOption({ bmap: { center: points[0].value } });
     }
-    return data;
-  }
 
-  doTrajGeoMap =(record) => { // 得到经纬度数据
-    const geoCoordMap = {}; // geoCoordMap = {tsinghua unversity : [120,40] }
-    for (const onerecord of record) {
-      const onenode = [address2[onerecord[0]].lat, address2[onerecord[0]].lng];
-      geoCoordMap[address2[onerecord[0]].addr] = onenode;
+    let length = 0;
+    if (trainterval) {
+      clearInterval(trainterval);
     }
-    return geoCoordMap;
-  }
+    trainterval = setInterval(() => {
+      if (length < (trajData.length + 1)) {
+        length += 1;
+        lineData = trajData.slice(0, length);
+        pointData = points.slice(0, length);
+        myChart.setOption({ series: [{}, { data: pointData }, { data: lineData }] });
+      } else {
+        clearInterval(trainterval);
+      }
+    }, 500);
+  };
 
-  quickLine =() => { // 停止动画立刻画出路线
-    // const temp = option.geo.zoom;
-    ifDraw = 1;
-    // console.log("temp1",temp);
-    const record = this.getTrajRecord();
-    const geoCoordMap = this.doTrajGeoMap(record); // geoCoordMap = {tsinghua unversity : [120,40] }
-    const data = this.getTrajData(record); // data = [{name: tsinghua university, value : 6(years)}]
-    option = this.drawTrajMap();
-    option.series = this.getTrajSeries(geoCoordMap, data, record, (data.length - 2));
-    // console.log("temp2",temp);
-    // option.geo.zoom = temp;
-    this.myChart.setOption(option);
-  }
-
-  drawTrajMap =() => { // 画地图
-    option = { // 设置地图参数
-      backgroundColor: '#abc1db',
-      title: {
-        text: '学者迁移图',
-        subtext: 'data from aminer',
-        left: 'center',
-        textStyle: {
-          color: '#404040',
-        },
-        subtextStyle: {
-          color: '#5a5a5a',
-        },
-      },
-      tooltip: {
-        trigger: 'item',
-      },
-      legend: {
-        orient: 'vertical',
-        y: 'bottom',
-        x: 'right',
-        data: ['location'],
-        textStyle: {
-          color: '#fff',
-        },
-      },
-      geo: {
-        zoom: 1,
-        name: 'trajectory',
-        type: 'map',
-        map: 'world',
-        roam: true,
-        label: {
-          emphasis: {
-            show: false,
-          },
-        },
-        itemStyle: {
-          normal: {
-            areaColor: '#f5f3f0',
-            borderColor: '#91a0ae',
-          },
-          emphasis: {
-            areaColor: '#bcbab8',
-          },
-        },
-      },
-    };
-    return option;
-  }
-
-  showTrajectory = () => { // 功能起始函数
-    const record = this.getTrajRecord();
-    const geoCoordMap = this.doTrajGeoMap(record); // geoCoordMap = {tsinghua unversity : [120,40] }
-    const data = this.getTrajData(record); // data = [{name: tsinghua university, value : 6(years)}]
-    option = this.drawTrajMap();
-    this.myChart.setOption(option);
-    for (const i of _.range(data.length)) { // 每隔0.2秒画一条线
-      setTimeout(() => {
-        if (ifDraw === 0) {
-          option.series = this.getTrajSeries(geoCoordMap, data, record, i);
-          this.myChart.setOption(option);
-        } else {
-          clearTimeout();
+  calculateData = (data) => {
+    address = [];
+    addValue = {};
+    addInfo = [];
+    for (const key in data.data.addresses) {
+      if (data.data.addresses) {
+        address[key] = data.data.addresses[key];
+      }
+    }
+    for (const key in data.data.trajectories) {
+      if (data.data.trajectories) {
+        let startYear;
+        let endYear;
+        let start;
+        let previous = '';
+        for (const d of data.data.trajectories[key]) {
+          if (previous !== d[1] && previous !== '') {
+            addInfo.push(d[1]);
+            endYear = parseInt(d[0], 10);
+            addValue[previous][0] = `${addValue[previous][0]}${start}-${d[0]},`;
+            addValue[previous][1] = ((addValue[previous][1] + endYear) - startYear) + 1;
+            startYear = parseInt(d[0], 10);
+            [start] = d;
+            if (!addValue[d[1]]) {
+              addValue[d[1]] = [];
+              addValue[d[1]][0] = '';
+              addValue[d[1]][1] = 0;
+            }
+          } else if (previous === d[1]) {
+            endYear = parseInt(d[0], 10);
+          }
+          if (previous === '') {
+            addValue[d[1]] = [];
+            addValue[d[1]][0] = '';
+            addValue[d[1]][1] = 0;
+            [start] = d;
+            startYear = parseInt(d[0], 10);
+            addInfo.push(d[1]);
+          }
+          [, previous] = d;
         }
-      }, i * 200);
+        if (addValue[previous] !== undefined) {
+          addInfo.push(previous);
+          addValue[previous][0] = `${addValue[previous][0]}${start}-now,`;
+          addValue[previous][1] = ((addValue[previous][1] + 2017) - startYear) + 1;
+        }
+      }
     }
-  }
-
-  plusTrajZoom = () => {
-    option.geo.zoom += 0.1;
-    this.myChart.setOption(option);
-  }
-
-  minusTrajZoom = () => {
-    if (option.geo.zoom > 0.8) {
-      option.geo.zoom -= 0.1;
-      this.myChart.setOption(option);
-    }
-  }
+    this.showTrajectory(data);
+  };
 
   render() {
+    let wid = document.body.clientHeight - 210;
+    const { centerZoom } = this.props;
+    if (centerZoom) {
+      wid = 500;
+    }
     return (
       <div>
-        <div className={styles.wor} id="world" style={{ height: '600px', width: '1200px', padding: '0px' }} />
-        <div>
-          <Button className={styles.path} type="primary" ghost onClick={this.quickLine} >Show Path</Button>
-        </div>
-        <div>
-          <Button className={styles.plus} type="primary" ghost icon="plus" onClick={this.plusTrajZoom} />
-        </div>
-        <div>
-          <Button className={styles.minus} type="primary" ghost icon="minus" onClick={this.minusTrajZoom} />
-        </div>
+        <div className={styles.map} id="chart" style={{ height: wid }} />
       </div>
     );
   }

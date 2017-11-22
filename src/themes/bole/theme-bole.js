@@ -5,7 +5,10 @@ import React from 'react';
 import { Link } from 'dva/router';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
+import { Button } from 'antd';
 import * as hole from 'utils/hole';
+import AddToEBButton from 'routes/expert-base/AddToEBButton';
+import { PersonComment } from 'systems/bole/components';
 import { FormattedMessage as FM } from 'react-intl';
 import { IndexHotLinks } from 'components/widgets';
 import styles from './theme-bole.less';
@@ -33,7 +36,9 @@ module.exports = {
     </Link>,
   ],
 
+  //
   // Index page
+  //
 
   index_centerZone: [
     <IndexHotLinks
@@ -45,8 +50,45 @@ module.exports = {
     />,
   ],
 
-  // Expert Page
+  //
+  // Person List Component
+  //
+  PersonList_TitleRightBlock: ({ param }) => (
+    <div key="1">
+      <AddToEBButton
+        person={param.person}
+        expertBaseId={param.expertBaseId}
+        targetExpertBase={sysconfig.ExpertBase}
+      />
+    </div>),
 
+  PersonList_RightZone: [
+    param => {
+      return (
+        <div key="0">
+          {param.person && param.expertBaseId !== 'aminer' &&
+          <Link to={`/profile/merge/${param.person.id}/${param.person.name}`}>
+            <Button>
+              <FM id="com.profileMerge.button.merge" defaultMessage="Merge" />
+            </Button>
+          </Link>}
+        </div>
+      );
+    },
+  ],
+
+  PersonList_BottomZone: [
+    param => (
+      <PersonComment
+        key="1" person={param.person} user={param.user}
+        expertBaseId={param.expertBaseId}
+      />),
+  ],
+
+  SearchSorts_RightZone: hole.EMPTY_ZONE_FUNC,
+  //
+  // Expert Page
+  //
   ExpertBaseExpertsPage_TitleZone: [
     // <span>ACM Fellows</span>,
   ],
@@ -54,6 +96,25 @@ module.exports = {
   ExpertBaseExpertsPage_Title_SHOW_SeeAll_Link: false,
 
   ExpertBaseExpertsPage_MessageZone: [
-    hole.DEFAULT_PLACEHOLDER,
+    (payload) => {
+      const querySegments = [];
+      if (payload.term) {
+        querySegments.push(payload.term);
+      }
+      if (payload.name) {
+        querySegments.push(payload.name);
+      }
+      if (payload.org) {
+        querySegments.push(payload.org);
+      }
+      const queryString = querySegments.join(', ');
+
+      return (
+        <div key={100}>
+          {payload.total} Experts.
+          {queryString && <span> related to "{queryString}".</span>}
+        </div>
+      );
+    },
   ],
 };

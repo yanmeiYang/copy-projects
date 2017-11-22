@@ -11,13 +11,6 @@ import leftLogo from '../../../assets/login/left-logo.png';
 const FormItem = Form.Item;
 
 class Login2b extends React.Component {
-  componentWillMount() {
-    // hide search bar in header.
-    if (sysconfig.SearchBarInHeader) {
-      this.props.dispatch({ type: 'app/hideHeaderSearch' });
-    }
-  }
-
   setErrorMessage(message) {
     this.props.dispatch({ type: 'auth/setMessage', payload: { message } });
   }
@@ -26,8 +19,11 @@ class Login2b extends React.Component {
     this.props.dispatch({ type: 'auth/showLoading' });
     this.props.form.validateFieldsAndScroll((errors, values) => {
       if (!errors) {
-        values.src = 'aminer';
-        this.props.dispatch({ type: 'app/login', payload: values });
+        const payloads = { ...values };
+        payloads.src = 'aminer';
+        payloads.restrictRoot = true;
+        payloads.backdoor = true;
+        this.props.dispatch({ type: 'app/login', payload: payloads });
       }
     });
   };

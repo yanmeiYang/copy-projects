@@ -25,9 +25,6 @@ module.exports = {
   // IndexPage_QuickSearchList:[], // use default.
 
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
-  //Header_SubTextLogo: '伯乐系统',
-  //Header_SubTextStyle: { width: 90, left: -54, marginLeft: -80 },
-  //Header_LogoWidth: 118,
 
   Header_UserPageURL: '/user-info',
   //Header_RightZone: [() => <Link key="0" to={`/eb/${ExpertBase}/-/0/20`}>我的专家库</Link>], // TODO make this a Component.
@@ -38,10 +35,9 @@ module.exports = {
   // Functionality
   Enable_Export: false,
   // Enable_Export: true,
-  Search_EnablePin: true,
+  Search_EnablePin: false,
 
   // > Search related
-  SearchBarInHeader: true,
   // HeaderSearch_TextNavi: ['ACMFellowExpertBase', 'ACM_ExpertSearch'],
   // HeaderSearch_TextNavi: [],
 
@@ -49,10 +45,6 @@ module.exports = {
   Search_DisableExpertBaseFilter: true,
   // Search_DisableSearchKnowledge: false,
   Search_FixedExpertBase: { id: 'aminer', name: '全球专家' },
-  // DEFAULT_EXPERT_SEARCH_KEY: 'name', // default is term
-
-  // SearchFilterExclude: 'Gender',
-  // UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // deprecated! Don't use this.
 
   /**
    * Page specified config.
@@ -67,19 +59,6 @@ module.exports = {
   PersonList_RightZone: defaults.IN_APP_DEFAULT, // [()=><COMP>]
   PersonList_BottomZone: defaults.IN_APP_DEFAULT,
   //param: [person, eb{id,name}]
-
-
-
-  //PersonList_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
-  //PersonList_BottomZone: [
-  //  param => (
-  //    <PersonComment
-  //      person={param.person} user={param.user} key="1"
-  //      ExpertBase={ExpertBase}
-  //    />),
-  //],
-  // PersonList_DidMountHooks: [],
-
 
   Search_CheckEB: true, // Check ExpertBase.
 

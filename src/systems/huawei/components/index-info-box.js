@@ -21,7 +21,7 @@ class IndexInfoBox extends PureComponent {
             </span>
           </div>
         </Link>
-        <Link to="/dispatch-expert-map">
+        <Link to="/expert-map">
           <div className={styles.blockItem}>
             <div className={styles.blockImg}>
               <img src="/sys/huawei/expert-map.png" alt="" />

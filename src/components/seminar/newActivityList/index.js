@@ -61,29 +61,31 @@ class NewActivityList extends React.Component {
             <p>活动类型：{result.category}</p>
             <p>活动时间：{timeFrom.format('yyyy年MM月dd日')}
               {timeFrom.getDate() < timeTo.getDate() &&
-              <span>~ {timeTo.getDate()}日</span>}
+              <span> ~ {timeTo.getDate()}日</span>}
             </p>
             <p>活动地点：{result.location.city} {result.location.address}</p>
-            {result.talk.filter(item => item.speaker.role && item.speaker.role.includes('president'))
-              .map((talk) => {
-                return <div key={talk.speaker.name + talk.speaker.aid}
-                            className={styles.seminar_expert_president}>
-                  <Tooltip title={talk.speaker.name}>
-                    <img src={profileUtils.getAvatar(talk.speaker.img, talk.speaker.aid, 80)}
-                         alt={talk.speaker.name} />
-                  </Tooltip>
-                </div>;
-              })}
-            {result.talk.filter(item => item.speaker.role && !item.speaker.role.includes('president'))
-              .map((talk) => {
-                return <div key={talk.speaker.name + talk.speaker.aid}
-                            className={styles.seminar_expert_common}>
-                  <Tooltip title={talk.speaker.name}>
-                    <img src={profileUtils.getAvatar(talk.speaker.img, talk.speaker.aid, 80)}
-                         alt={talk.speaker.name} />
-                  </Tooltip>
-                </div>;
-              })}
+            <div className={styles.expert_avatar}>
+              {result.talk.filter(item => item.speaker.role && item.speaker.role.includes('president'))
+                .map((talk) => {
+                  return <div key={talk.speaker.name + talk.speaker.aid}
+                              className={styles.seminar_expert_president}>
+                    <Tooltip title={talk.speaker.name}>
+                      <img src={profileUtils.getAvatar(talk.speaker.img, talk.speaker.aid, 80)}
+                           alt={talk.speaker.name} />
+                    </Tooltip>
+                  </div>;
+                })}
+              {result.talk.filter(item => item.speaker.role && !item.speaker.role.includes('president'))
+                .map((talk) => {
+                  return <div key={talk.speaker.name + talk.speaker.aid}
+                              className={styles.seminar_expert_common}>
+                    <Tooltip title={talk.speaker.name}>
+                      <img src={profileUtils.getAvatar(talk.speaker.img, talk.speaker.aid, 80)}
+                           alt={talk.speaker.name} />
+                    </Tooltip>
+                  </div>;
+                })}
+            </div>
           </div>
           <div>
             <div className={styles.seminar_orgAndTag}>

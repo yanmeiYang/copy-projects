@@ -1,6 +1,7 @@
 /**
  *  Created by BoGao on 2017-06-15;
  */
+import PersonTags from './PersonTags';
 import ProfileInfo from './profile-info';
 import AminerProfileInfo from './AminerProfileInfo';
 import PersonList from './person-list';

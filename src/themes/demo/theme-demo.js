@@ -26,7 +26,7 @@ module.exports = {
     <Link to="/" href="/" className={classnames(styles.logoZones)} key="0">
       <div className={classnames(styles.header_logo, 'icon')} />
       <div className={classnames(styles.header_subTitle, 'font-page-title')}>
-        AMiner Demo
+        科技情报深度洞察
       </div>
     </Link>,
   ],

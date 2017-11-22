@@ -14,15 +14,25 @@ const TopExpertBase = {
     },
   ],
   TuringAward: [{ id: '58997b589ed5db58de40a152', name: '图灵奖' }],
-  CAS:         [{ id: '55ebd8b945cea17ff0c53d5a', name: '中国科学院' }],
-  NAS:         [{ id: '590fcaa59ed5db67cf85a129', name: '美国科学院' }],
-  CAE:         [{ id: '55e6573845ce9da5c99535a9', name: '中国工程院' }],
-  NAE:         [{ id: '58997c889ed5db58de40a171', name: '美国工程院' }],
-  TR35:             [{ name: 'TR35', id: '591fa8cb9ed5db409e22a8eb.591fa7999ed5db409e22a8e2.5927b06c9ed5db8c189f16e7' }],
+  CAS: [{ id: '55ebd8b945cea17ff0c53d5a', name: '中国科学院' }],
+  NAS: [{ id: '590fcaa59ed5db67cf85a129', name: '美国科学院' }],
+  CAE: [{ id: '55e6573845ce9da5c99535a9', name: '中国工程院' }],
+  NAE: [{ id: '58997c889ed5db58de40a171', name: '美国工程院' }],
+  Nobel: [{ id: '59781f4e9ed5db8bf017c748', name: '诺贝尔' }],
+  TR35: [{
+    name: 'TR35',
+    id: '591fa8cb9ed5db409e22a8eb.591fa7999ed5db409e22a8e2.5927b06c9ed5db8c189f16e7'
+  }],
   ChangJiangXueZhe: [{ name: '长江学者', id: '58e5e2d99ed5db076b9b8cb2' }],
-  JieQing:          [{ name: '杰青', id: '57a837809ed5dba7786c3f9f.59267feb9ed5db8c189eefea' }],
-  QingNianQianRen:  [{ name: '青年千人', id: '577afb029ed5db2cefd14110.58dc96a79ed5db7f4ee661c9.573e6b9876d9113b9d9aaa5d.58b8f04f9ed5dbe5bbb4124c.58cba2509ed5dbd455abcd39' }],
-  YouQing:          [{ name: '优青', id: '58d86b749ed5db79c99c06b1.5943cfd69ed5db38b4b514f6.592259589ed5db409e230cf9.59225f829ed5db409e2310ee.58cb97559ed5dbd455abcb42' }],
+  JieQing: [{ name: '杰青', id: '57a837809ed5dba7786c3f9f.59267feb9ed5db8c189eefea' }],
+  QingNianQianRen: [{
+    name: '青年千人',
+    id: '577afb029ed5db2cefd14110.58dc96a79ed5db7f4ee661c9.573e6b9876d9113b9d9aaa5d.58b8f04f9ed5dbe5bbb4124c.58cba2509ed5dbd455abcd39'
+  }],
+  YouQing: [{
+    name: '优青',
+    id: '58d86b749ed5db79c99c06b1.5943cfd69ed5db38b4b514f6.592259589ed5db409e230cf9.59225f829ed5db409e2310ee.58cb97559ed5dbd455abcb42'
+  }],
 
   TopUniversity2015: [
     { index: 1, name: 'Massachusetts Institute of Technology', id: '58f4b0ab9ed5dbe8d7c85803', abbr: 'MIT' },
@@ -76,6 +86,8 @@ const TopExpertBase = {
     // where is 49?
     { index: 50, name: 'University of Washington', id: '590948709ed5dbd227279fcc', abbr: '' },
   ],
+
+  // this is used in alibaba
   RandomTop100InDomain: [
     { id: '59a77b719ed5db1ed202dd39', name: '数据库' },
     { id: '59a69fb99ed5db1ed2021e12', name: '机器学习' },
@@ -110,7 +122,6 @@ const TopExpertBase = {
     { id: '57a57c630a3ac5e5b97e6f98', name: 'Computer Graphics' },
     { id: '57a57c660a3ac5e5b97e6f9f', name: 'Computer Vision' },
     { id: '587834730a3ac5b5de65f60d', name: 'Web and Information Retrieval' },
-
   ],
 
 };
@@ -126,7 +137,10 @@ TopExpertBase.TopUniversity2015.map((eb) => {
   return null;
 });
 
+//
 // tools.
+//
+
 function toIDDotString(...ebs) {
   const ids = [];
   if (ebs && ebs.length > 0) {
@@ -141,7 +155,23 @@ function toIDDotString(...ebs) {
 
 function TopNUniversity2015(n) {
   return TopExpertBase.TopUniversity2015.filter(u => u.index <= n);
-};
+}
+
+function ExpertBaseID2NameMap(ExpertBases) {
+  const map = {};
+  for (const item of ExpertBases) {
+    map[item.id] = item.name;
+  }
+  return map;
+}
+
+function ExpertBaseID2NameMapCCF(ExpertBases) {
+  const map = {};
+  for (const item of ExpertBases) {
+    map[item.id] = item.name;
+  }
+  return map;
+}
 
 module.exports = {
   TopExpertBase,
@@ -149,4 +179,6 @@ module.exports = {
   TopUnivExpertBaseIndex,
   toIDDotString,
   TopNUniversity2015,
+  ExpertBaseID2NameMap,
+  ExpertBaseID2NameMapCCF,
 };

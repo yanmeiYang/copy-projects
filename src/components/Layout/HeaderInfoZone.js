@@ -3,7 +3,9 @@
  */
 import React, { PureComponent } from 'react';
 import { sysconfig } from 'systems';
-import { Menu, Icon, Dropdown } from 'antd';
+import classnames from 'classnames';
+import { theme } from 'themes';
+import { Menu, Icon, Dropdown, Button } from 'antd';
 import { Link } from 'dva/router';
 import { FormattedMessage as FM } from 'react-intl';
 import { TobButton, DevMenu } from 'components/2b';
@@ -58,6 +60,10 @@ export default class HeaderInfoZone extends PureComponent {
         })}
       </Menu>
     );
+
+    const additionFunc = theme.Header_UserAdditionalInfoBlock;
+    const AdditionalJSX = additionFunc && additionFunc({ user, roles });
+
     return (
       <div className={styles.headerInfoZone}>
         <Menu selectedKeys={[location.pathname]} mode="horizontal" theme="light">
@@ -70,48 +76,47 @@ export default class HeaderInfoZone extends PureComponent {
             </Link>
           </Menu.Item>}
 
-          {/* 语言 */}
+          {/*语言 */}
           {sysconfig.EnableLocalLocale &&
-          <Menu.Item>
+          <Menu.Item key="/language">
             <Dropdown overlay={menu} placement="bottomLeft">
-              <a className="ant-dropdown-link">
+              <a className={classnames('ant-dropdown-link')}>
+                <span className={styles.longLanguage}>
                 <FM id="system.lang.show" defaultMessage="system.lang.show" />&nbsp;
+                </span>
+                <span className={styles.simpleLanguage}>
+                  <FM id="system.lang.simple" defaultMessage="system.lang.simple" />&nbsp;
+                </span>
                 <Icon type="down" />
               </a>
             </Dropdown>
           </Menu.Item>
           }
 
-          {/* 头像&用户名 */}
+          {/* ---- 头像 & 用户名 ---- */}
           {isAuthed(roles) &&
           <Menu.Item key="/account">
-            <Link to={sysconfig.Header_UserPageURL} title={user.display_name}
-                  className="headerAvatar">
-              <img src={profileUtils.getAvatar(user.avatar, user.id, 30)}
-                   alt={user.display_name} />
+            {sysconfig.Header_UserPageURL ?
+              <Link to={sysconfig.Header_UserPageURL} title={user.display_name}
+                    className={styles.headerAvatar}>
+                <img src={profileUtils.getAvatar(user.avatar, user.id, 30)} />
 
-              {/* 用户名 */}
-              {UserNameBlock && <span>{UserNameBlock}</span>}
+                {/* 用户名 */}
+                {UserNameBlock && <span className={styles.userName}>{UserNameBlock}</span>}
 
-              {/* <Icon type="frown-circle"/>个人账号 */}
-            </Link>
+                {/* <Icon type="frown-circle"/>个人账号 */}
+              </Link>
+              :
+              <div className={styles.headerAvatar}>
+                <img src={profileUtils.getAvatar(user.avatar, user.id, 30)} />
+                {UserNameBlock && <span className={styles.userName}>{UserNameBlock}</span>}
+              </div>
+            }
           </Menu.Item>
           }
 
-
-          {/*/!* TODO 不确定是否其他系统也需要显示角色 TODO ccf specified. *!/*/}
-          {/*{sysconfig.SYSTEM === 'ccf' && roles && isAuthed(roles) &&*/}
-          {/*<Menu.Item key="role" className={styles.emptyMenuStyle}>*/}
-          {/*<p className={roles.authority[0] !== undefined ? styles.isAuthority : ''}>*/}
-          {/*<span>{roles.role[0]}</span>*/}
-          {/*{roles.authority[0] !== undefined &&*/}
-          {/*<br />*/}
-          {/*<span>{seminarService.getValueByJoint(roles.authority[0])}</span>*/}
-          {/*</span>}*/}
-          {/*</p>*/}
-          {/*</Menu.Item>*/}
-          {/*}*/}
-
+          {AdditionalJSX &&
+          <Menu.Item key="/additional" className={styles.additional}>{AdditionalJSX}</Menu.Item>}
 
           {isGod(roles) && false && // ----------------------- TODO
           <Menu.Item key="/devMenu">
@@ -127,7 +132,7 @@ export default class HeaderInfoZone extends PureComponent {
           {isAuthed(roles) &&
           <Menu.Item key="/logout">
             {/*className={styles.logoutText}*/}
-            <div onClick={this.logoutAuth}>
+            <div className={styles.logoutBtn} onClick={this.logoutAuth}>
               {this.state.logoutLoading ?
                 <Icon type="loading" /> :
                 <Icon type="logout" />

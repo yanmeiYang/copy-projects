@@ -3,8 +3,9 @@
  */
 // Note: can't import any utils. Make sure this file load first.
 
-// 所有可选系统
+// 所有可选系统，保留关键字：global.
 const AvailableSystems = [
+  'aminer',
   'ccf',
   'ccftest',
   'huawei',
@@ -16,10 +17,13 @@ const AvailableSystems = [
   'cietest',
   'bole',
   'acmfellow',
+  'DataAnnotation',
+  'thurcb',
+  'yocsef',
 ];
 
 let System;
-System = 'aminer';
+// System = 'aminer';
 // System = 'ccf';
 // System = 'ccftest';
 // System = 'huawei';
@@ -29,12 +33,16 @@ System = 'aminer';
 // System = 'cipsc';
 // System = 'demo';
 // System = 'cietest';
-// System = 'bole';
+System = 'bole';
 // System = 'acmfellow';
+// System = 'DataAnnotation';
+// System = 'thurcb';
+// System = 'yocsef';
 
 let Source = System; // AppID, Used in UniversalConfig.
 
 const SavedSystemKey = 'IJFEOVSLKDFJ';
+const LS_USER_KEY = `user_${System}`;
 
 function loadSavedSystem() {
   const savedSystem = localStorage.getItem(SavedSystemKey);
@@ -43,8 +51,7 @@ function loadSavedSystem() {
     return;
   }
   // validate auth
-  const USER_LOCAL_KEY = 'user';
-  const data = localStorage.getItem(USER_LOCAL_KEY);
+  const data = localStorage.getItem(LS_USER_KEY);
   if (data) {
     const dataObj = JSON.parse(data);
     // console.log('userInSession', dataObj);
@@ -66,8 +73,12 @@ function loadSavedSystem() {
 loadSavedSystem();
 
 function saveSystem(system, user) {
-  localStorage.setItem(SavedSystemKey,
-    JSON.stringify({ user: user.email, system }));
+  if (user) {
+    localStorage.setItem(
+      SavedSystemKey,
+      JSON.stringify({ user: user.email, system }),
+    );
+  }
 }
 
 module.exports = {

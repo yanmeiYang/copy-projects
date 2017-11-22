@@ -5,9 +5,10 @@ import { Tag, Tabs } from 'antd';
 import classnames from 'classnames';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { compare } from 'utils/compare';
+import { hole } from 'utils';
 import styles from './SearchSorts.less';
 
-const TabPane = Tabs.TabPane;
+const { TabPane } = Tabs;
 
 const defaultSorts = ['relevance', 'h_index', 'activity', 'rising_star', 'n_citation', 'n_pubs'];
 
@@ -18,7 +19,7 @@ export default class SearchSorts extends PureComponent {
   static propTypes = {
     sorts: PropTypes.array,
     sortType: PropTypes.string.isRequired,
-    rightZone: PropTypes.array,
+    rightZone: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
     onOrderChange: PropTypes.func,
   };
 
@@ -38,6 +39,7 @@ export default class SearchSorts extends PureComponent {
     }
   };
 
+
   render() {
     const { rightZone, sortType } = this.props;
     const sorts = this.props.sorts || defaultSorts;
@@ -47,7 +49,7 @@ export default class SearchSorts extends PureComponent {
 
     // render rightZone
     const rightZoneJSX = rightZone && rightZone.length > 0 &&
-      <div>
+      <div className={styles.exportButtonZone}>
         {rightZone && rightZone.length > 0 && rightZone.map((block) => {
           return block && block({ sortType });
         })}

@@ -139,7 +139,7 @@ const F = {
   },
 
   // alter related
-  alters: { alter: 'alter' }, // alter actions.
+  alters: { alter: 'alter', dims: 'dims', }, // alter actions.
   alterop: { upsert: 'upsert', update: 'update', delete: 'delete' }, // alter operations
 
   Entities: { Person: 'person', Publication: 'pub', Venue: 'venue' },

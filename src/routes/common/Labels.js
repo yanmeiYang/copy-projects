@@ -92,8 +92,6 @@ export default class Labels extends Component {
   render() {
     const { tags, addStatus } = this.state;
     const load = this.props.loading.effects['commonLabels/add'];
-    // const { commonLabels } = this.props;
-    console.log('add tag ', addStatus);
     return (
       <LabelLine tags={tags} loading={load} onTagChange={this.onTagChange} canRemove canAdd
                  confirmOnClose />

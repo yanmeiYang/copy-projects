@@ -25,7 +25,7 @@ export async function addLabelToEntity(payload) {
 
 export async function removeLabelFromEntity(payload) {
   const { targetId, tag, entity } = payload;
-  const nextapi = apiBuilder.alter(F.alters.alter, 'removeLabelFromEntity')
+  const nextapi = apiBuilder.alter(F.alters.dims, 'removeLabelFromEntity')
     .param({
       ids: [targetId],
       type: entity,

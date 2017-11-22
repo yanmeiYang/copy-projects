@@ -141,7 +141,7 @@ export default class ExportExperts extends Component {
         str = encodeURI(str);
         const link = window.document.createElement('a');
         link.setAttribute('href', `data:text/csv;charset=utf-8,${bom}${str}`);
-        link.setAttribute('download', 'statistics.csv');
+        link.setAttribute('download', 'export.csv');
         link.click();
         this.setState({ loading: false });
       }

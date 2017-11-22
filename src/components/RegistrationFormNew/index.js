@@ -26,7 +26,7 @@ class RegistrationForNew extends React.Component {
     endValue: null,
     talkStartValue: null,
     talkEndValue: null,
-    tags: ['new'],
+    tags: [],
     talks: [],
     newRole: false,
     editTheTalk: {},

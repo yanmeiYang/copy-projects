@@ -4,6 +4,8 @@
 import React from 'react';
 import { toIDDotString, TopExpertBase } from 'utils/expert-base';
 
+import defaults from '../utils';
+
 module.exports = {
 
   // 通用配置。所有System的配置文件必须全部包含这部分的值
@@ -17,6 +19,8 @@ module.exports = {
   UserAuthSystem_AddSysTagAuto: true, // 登录时自动添加system的标签
 
   Header_UserPageURL: '/user-info',
+
+  ShowHelpDoc: true,
 
   // > Search related
   HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertMap'],

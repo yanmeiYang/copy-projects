@@ -3,6 +3,7 @@
  */
 import { sysconfig } from 'systems';
 import * as searchService from 'services/search';
+import bridge from 'utils/next-bridge';
 
 export default {
 
@@ -25,7 +26,8 @@ export default {
         if (top.data && top.data.succeed) {
           searchResults = searchResults.concat(top.data.items);
         } else if (top.data && top.data.result) {
-          searchResults = searchResults.concat(top.data.result);
+          const nextResult = bridge.toNextPersons(top.data.result);
+          searchResults = searchResults.concat(nextResult);
         }
       }
       if (searchResults.length > 0) {

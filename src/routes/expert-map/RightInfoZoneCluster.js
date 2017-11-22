@@ -36,7 +36,19 @@ class RightInfoZoneCluster extends React.Component {
     if (nextState.cperson && nextState.cperson !== this.state.cperson) {
       return true;
     }
-    return true;
+    if (nextState.visible !== this.state.visible) {
+      return true;
+    }
+    if (nextState.visible1 !== this.state.visible1) {
+      return true;
+    }
+    if (nextState.cpersons && nextState.cpersons !== this.state.cpersons) {
+      return true;
+    }
+    if (nextProps.persons && nextProps.persons !== this.props.persons) {
+      return true;
+    }
+    return false;
   }
 
   onPersonClick = (person) => {
@@ -141,7 +153,13 @@ class RightInfoZoneCluster extends React.Component {
         if (indices) {
           hindexSum += indices.h_index;
         }
-        persons.sort((a, b) => b.indices.h_index - a.indices.h_index);
+        persons.sort((a, b) => {
+          if ((b.indices.h_index - a.indices.h_index) === 0) {
+            return b.name - a.name;
+          } else {
+            return (b.indices.h_index - a.indices.h_index);
+          }
+        });
         // interests
         if (person.tags && person.tags.length > 0) {
           person.tags.map((tag) => {

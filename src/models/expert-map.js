@@ -78,8 +78,6 @@ export default {
     },
 
     listPersonByIdsSuccess(state, { payload: { data } }) {
-      console.log('************************');
-      console.log(data);
       return { ...state, clusterPersons: data };
     },
 
@@ -92,8 +90,6 @@ export default {
     },
 
     setClusterInfo(state, { payload: { data } }) {
-      console.log('@@@@@!!!!!!!!!!!!!!!!111');
-      console.log(data);
       return { ...state, clusterPersons: data };
     },
 

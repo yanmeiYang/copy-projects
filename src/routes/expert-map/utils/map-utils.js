@@ -378,13 +378,13 @@ const showTopImageDiv = (e, map, maindom, inputids, onLeave, type, ids, dispatch
 const ifNotImgShowName = (personInfo) => { //当作者的头像是空的时候，显示名字
   let name;
   if (personInfo) {
-    if (personInfo.name_zh) {
-      const str = personInfo.name_zh.substr(1, 2);
-      name = str;
-    } else {
+    // if (personInfo.name_zh) {
+    //   const str = personInfo.name_zh.substr(1, 2);
+    //   name = str;
+    // } else {
       const tmp = personInfo.name.split(' ', 5);
       name = (tmp[tmp.length - 1] === '') ? personInfo.name : tmp[tmp.length - 1];
-    }
+    // }
   } else {
     const tmp = personInfo.name.split(' ', 5);
     name = (tmp[tmp.length - 1] === '') ? personInfo.name : tmp[tmp.length - 1];

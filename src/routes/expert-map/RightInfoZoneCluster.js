@@ -134,7 +134,7 @@ class RightInfoZoneCluster extends React.Component {
     const centerZoom = true; //个性化设置Trajectory地图聚焦到第一个位置
     let hindexSum = 0;
     const interests = {};
-    persons.map((person) => {
+    persons & persons.map((person) => {
       const { indices } = person;
       // sum hindex
       if (indices) {

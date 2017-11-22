@@ -12,11 +12,12 @@ import RightInfoZonePerson from './RightInfoZonePerson';
 import ExpertTrajectory from '../expert-trajectory/ExpertTrajectory';
 import * as profileUtils from '../../utils/profile-utils';
 import { HindexGraph } from '../../components/widgets';
-import { PersonListLittle } from '../../components/person';
+import { PersonList } from '../../components/person';
 
 let flag = false;
 const { TabPane } = Tabs;
 
+@connect(({ app, search, loading }) => ({ app, search, loading }))
 class RightInfoZoneCluster extends React.Component {
   state = {
     visible: false,
@@ -86,7 +87,7 @@ class RightInfoZoneCluster extends React.Component {
     for (const p of this.props.persons) {
       if (p.tags_zh && p.tags_zh.length > 0) {
         p.tags_zh.map((t) => {
-          if (t.t === tag) {
+          if (t === tag) {
             cp.add(p);
           }
           return true;
@@ -94,7 +95,7 @@ class RightInfoZoneCluster extends React.Component {
       }
       if (p.tags && p.tags.length > 0) {
         p.tags.map((t) => {
-          if (t.t === tag) {
+          if (t === tag) {
             cp.add(p);
           }
           return true;
@@ -155,7 +156,7 @@ class RightInfoZoneCluster extends React.Component {
         }
         persons.sort((a, b) => {
           if ((b.indices.h_index - a.indices.h_index) === 0) {
-            return b.name - a.name;
+            return (b.name > a.name);
           } else {
             return (b.indices.h_index - a.indices.h_index);
           }
@@ -163,22 +164,22 @@ class RightInfoZoneCluster extends React.Component {
         // interests
         if (person.tags && person.tags.length > 0) {
           person.tags.map((tag) => {
-            const count = interests[tag.t] || 0;
-            interests[tag.t] = count + 1;
+            const count = interests[tag] || 0;
+            interests[tag] = count + 1;
             return null;
           });
         }
         if (person.tags_zh && person.tags_zh.length > 0) {
           person.tags.map((tag) => {
-            const count = interests[tag.t] || 0;
-            interests[tag.t] = count + 1;
+            const count = interests[tag] || 0;
+            interests[tag] = count + 1;
             return null;
           });
         }
         if (person.tags_zh && person.tags_zh && person.tags_zh.length > 0) {
           person.tags.map((tag) => {
-            const count = interests[tag.t] || 0;
-            interests[tag.t] = count - 1;
+            const count = interests[tag] || 0;
+            interests[tag] = count - 1;
             return null;
           });
         }
@@ -191,7 +192,13 @@ class RightInfoZoneCluster extends React.Component {
     let sortedInterest = Object.keys(interests).map((tag) => {
       return { key: tag, count: interests[tag] };
     });
-    sortedInterest = sortedInterest.sort((a, b) => b.count - a.count);
+    sortedInterest = sortedInterest.sort((a, b) => {
+      if (b.count === a.count) {
+        return (b.key > a.key);
+      } else {
+        return (b.key - a.key);
+      }
+    });
     // TODO 人头按Hindex排序。
     // TODO 显示Hindex分段.
     const avg = (hindexSum / persons.length).toFixed(0);
@@ -203,7 +210,13 @@ class RightInfoZoneCluster extends React.Component {
     );
     const tagJsx = (
       <div className={styles.charts}>
-        <PersonListLittle persons={this.state.cpersons} onClick={this.onPersonClick} />
+        {/*<PersonListLittle persons={this.state.cpersons} onClick={this.onPersonClick} />*/}
+        <PersonList
+          className={styles.personList}
+          persons={this.state.cpersons}
+          user={this.props.app.user}
+          rightZoneFuncs={[]}
+        />
       </div>
     );
     return (

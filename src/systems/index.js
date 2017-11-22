@@ -80,11 +80,15 @@ const getDefaultSystemConfigs = (system, source) => {
     SearchPagePrefix: 'uniSearch', // search - 普通搜索(deleted); uniSearch - 多合一搜索.
     Search_EnablePin: false, // TODO bad：Huawei PIN
     Search_EnableCCFPin: false, // TODO bad：CCF PIN
-    Search_EnableTranslateSearch: true, // 启用翻译搜索，显示提示信息;
-    Search_EnableSmartSuggest: true, // 启用智能提示;
+    Search_EnableTranslateSearch: true, // 启用翻译搜索，显示提示信息;/
     Search_DefaultTranslateSearch: true, // 默认使用翻译搜索;
     Search_EnableKnowledgeGraphHelper: true,
     Search_FixedExpertBase: null,
+    Search_EnableSmartSuggest: false, // 启用智能提示;  启用后，禁用translateSearch
+    Search_SmartSuggest_EnableExpand: true, // TODO
+    Search_SmartSuggest_EnableTranslate: true, // TODO
+    Search_SmartSuggest_EnableKG: true, // TODO
+
 
     Search_DisableFilter: false,
     Search_DisableExpertBaseFilter: false,

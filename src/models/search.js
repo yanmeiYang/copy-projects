@@ -22,11 +22,16 @@ export default {
 
     searchSuggests: null,
 
-    // use translate search?
-    useTranslateSearch: sysconfig.Search_DefaultTranslateSearch,
+    // use translate search? TODO replace with Intelligence Search.
+    useTranslateSearch: sysconfig.Search_EnableTranslateSearch && !sysconfig.Search_EnableSmartSuggest && sysconfig.Search_DefaultTranslateSearch,
     translatedLanguage: 0, // 1 en to zh; 2 zh to en;
     translatedText: '',
 
+    // Intelligence search.
+    intelligenceSearchMeta: {}, // {expand:<word>, translated:<word>, kg:[<word>,...]}
+    intelligenceSuggest: null,
+
+    // pager
     offset: 0,
     sortKey: '',
     pagination: {
@@ -87,16 +92,19 @@ export default {
       // fix sort key
       const Sort = fixSortKey(sort, query); // Fix default sort key.
 
+      // TODO replace this.
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
+      const intelligenceSearchMeta = yield select(state => state.search.intelligenceSearchMeta);
 
       // 分界线
       yield put({ type: 'updateSortKey', payload: { key: Sort } });
       yield put({ type: 'updateFilters', payload: { filters } });
 
-      const data = yield call(
-        searchService.searchPerson,
-        query, offset, size, noTotalFilters, Sort, useTranslateSearch,
-      );
+      const params = {
+        query, offset, size, filters: noTotalFilters, sort: Sort, intelligenceSearchMeta,
+        useTranslateSearch, // TODO remove
+      };
+      const data = yield call(searchService.searchPerson, params);
 
       if (process.env.NODE_ENV !== 'production') {
         console.log('data:::', data);
@@ -111,6 +119,7 @@ export default {
 
       if (data.data && data.data.succeed) {
         // console.log('>>>>>> ---==== to next API');
+        // TODO 这些东西不应该放这里。。。。。。。。。。。。。。。。。
         const personIds = data.data.items && data.data.items.map(item => item && item.id);
         if (personIds) {
           const activityScores = yield call(

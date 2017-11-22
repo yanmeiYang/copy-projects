@@ -161,7 +161,8 @@ const getDefaultSystemConfigs = (system, source) => {
 
     // 临时属性，过度属性
     USE_NEXT_EXPERT_BASE_SEARCH: false, // 是否使用新的后端来搜索新的结果。
-
+    // 测试修改活动是否使用新的编辑
+    SeminarNewEditor: false,
   };
 };
 

@@ -81,9 +81,11 @@ const RouterRegistry = [
   seminar.Statistic,
   seminar.StatisticDetail,
   seminar.SeminarByEdit,
+  seminar.SeminarPostNew,
 
   // expert map
   map.ExpertMap,
+  map.ExpertMapGoogle,
   map.ExpertTrajectoryPage,
   map.ExpertHeatmapPage,
 

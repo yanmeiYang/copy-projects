@@ -37,6 +37,15 @@ export default {
     component: () => import('./addSeminar'),
   },
 
+  SeminarPostNew: {
+    path: '/seminar-new',
+    models: () => [
+      import('models/person'),
+      import('models/seminar'),
+    ],
+    component: () => import('./addSeminarNew'),
+  },
+
   SeminarByEdit: {
     path: '/seminar-edit/:id',
     models: () => [

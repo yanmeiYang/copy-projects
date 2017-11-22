@@ -119,6 +119,10 @@ class RightInfoZoneCluster extends React.Component {
     });
   };
 
+  handleErr = (e) => {
+    e.target.src='/images/blank_avatar.jpg';
+  };
+
   render() {
     const { persons } = this.props;
     if (!persons || persons.length <= 0) {
@@ -202,7 +206,7 @@ class RightInfoZoneCluster extends React.Component {
         </div>
         <div className={styles.images}>
           {persons && persons.slice(0, 20).map((person) => {
-            const avatarUrl = profileUtils.getAvatar(person.avatar, person.id, 50);
+            const avatarUrl = profileUtils.getAvatar(person.avatar, person.id, 90);
 
             const tooltip = (
               <div className={styles.tooltip}>
@@ -213,7 +217,8 @@ class RightInfoZoneCluster extends React.Component {
               <div key={person.id} className={styles.imgOuter}>
                 <div className={styles.imgBox}>
                   <Tooltip title={tooltip}>
-                    <img src={avatarUrl} alt="" onClick={this.showPersonelInfo.bind(this, person)} />
+                    <img src={avatarUrl} alt="" onKeyDown={() => {}} onError={this.handleErr}
+                         onClick={this.showPersonelInfo.bind(this, person)} />
                   </Tooltip>
                 </div>
               </div>
@@ -222,7 +227,7 @@ class RightInfoZoneCluster extends React.Component {
         </div>
         <div className={styles.images} id="images" style={{ display: 'none' }}>
           {persons && persons.slice(20, persons.length).map((person) => {
-            const avatarUrl = profileUtils.getAvatar(person.avatar, person.id, 50);
+            const avatarUrl = profileUtils.getAvatar(person.avatar, person.id, 90);
 
             const tooltip = (
               <div className={styles.tooltip}>
@@ -233,7 +238,8 @@ class RightInfoZoneCluster extends React.Component {
               <div key={person.id} className={styles.imgOuter}>
                 <div className={styles.imgBox}>
                   <Tooltip title={tooltip}>
-                    <img src={avatarUrl} alt="" onKeyDown={() => {}} onClick={this.showPersonelInfo.bind(this, person)} />
+                    <img src={avatarUrl} alt="" onKeyDown={() => {}}  onError={this.handleErr}
+                         onClick={this.showPersonelInfo.bind(this, person)} />
                   </Tooltip>
                 </div>
               </div>

@@ -13,7 +13,7 @@ const { TabPane } = Tabs;
 @RequireGod
 export default class UserList extends Component {
   state = {
-    tab: 'aminer',
+    tab: 'ccf',
   };
 
   componentDidMount() {
@@ -61,7 +61,11 @@ export default class UserList extends Component {
           >
             {system.AvailableSystems &&
             system.AvailableSystems.map((sys) => {
-              return <TabPane tab={sys} key={sys} />;
+              if (sys === 'aminer') {
+                return <TabPane tab="" key={sys} />;
+              } else {
+                return <TabPane tab={sys} key={sys} />;
+              }
             })
             }
           </Tabs>

@@ -134,37 +134,40 @@ class RightInfoZoneCluster extends React.Component {
     const centerZoom = true; //个性化设置Trajectory地图聚焦到第一个位置
     let hindexSum = 0;
     const interests = {};
-    persons & persons.map((person) => {
-      const { indices } = person;
-      // sum hindex
-      if (indices) {
-        hindexSum += indices.h_index;
-      }
-      persons.sort((a, b) => b.indices.h_index - a.indices.h_index);
-      // interests
-      if (person.tags && person.tags.length > 0) {
-        person.tags.map((tag) => {
-          const count = interests[tag.t] || 0;
-          interests[tag.t] = count + 1;
-          return null;
-        });
-      }
-      if (person.tags_zh && person.tags_zh.length > 0) {
-        person.tags.map((tag) => {
-          const count = interests[tag.t] || 0;
-          interests[tag.t] = count + 1;
-          return null;
-        });
-      }
-      if (person.tags_zh && person.tags_zh && person.tags_zh.length > 0) {
-        person.tags.map((tag) => {
-          const count = interests[tag.t] || 0;
-          interests[tag.t] = count - 1;
-          return null;
-        });
-      }
-      return null;
-    });
+    if (persons) {
+      persons & persons.map((person) => {
+        const { indices } = person;
+        // sum hindex
+        if (indices) {
+          hindexSum += indices.h_index;
+        }
+        persons.sort((a, b) => b.indices.h_index - a.indices.h_index);
+        // interests
+        if (person.tags && person.tags.length > 0) {
+          person.tags.map((tag) => {
+            const count = interests[tag.t] || 0;
+            interests[tag.t] = count + 1;
+            return null;
+          });
+        }
+        if (person.tags_zh && person.tags_zh.length > 0) {
+          person.tags.map((tag) => {
+            const count = interests[tag.t] || 0;
+            interests[tag.t] = count + 1;
+            return null;
+          });
+        }
+        if (person.tags_zh && person.tags_zh && person.tags_zh.length > 0) {
+          person.tags.map((tag) => {
+            const count = interests[tag.t] || 0;
+            interests[tag.t] = count - 1;
+            return null;
+          });
+        }
+        return null;
+      });
+    }
+
 
     // sort interests.
     let sortedInterest = Object.keys(interests).map((tag) => {

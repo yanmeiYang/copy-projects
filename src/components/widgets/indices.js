@@ -13,6 +13,7 @@ const indicesConfig = {
     key: 'hindex',
     letter: 'H',
     tooltip: '学术成就H-index（H）',
+    texttip: '学术成就',
     color: 'h_index',
     render: (indices) => {
       return indices.hindex || indices.h_index;
@@ -40,12 +41,14 @@ const indicesConfig = {
     key: 'citations',
     letter: 'c',
     tooltip: '引用数（c）',
+    texttip: '引用数',
     color: 'num_citation',
   },
   num_pubs: {
     key: 'pubs',
     letter: 'P',
     tooltip: '论文数（P）',
+    texttip: '论文数',
     color: 'num_pubs',
   },
   activityRankingContrib: {// special for ccf.
@@ -85,7 +88,14 @@ const Indices = ({ indices, activity_indices, showIndices, indicesType }) => {
           return '';
         }
         if (indicesType === 'text') {
-          return (<div>sdfsdf</div>);
+          return (<div key={ic.letter}>
+            <span className={styles.text}>
+              <span>{ic.texttip} :</span>
+              <span className={styles.textNum}>
+                {ic.render ? ic.render(indices, activity_indices) : indices[ic.key]}
+              </span>
+            </span>
+          </div>);
         } else {
           return (
             <Tooltip key={ic.key} placement="top" title={ic.tooltip}>

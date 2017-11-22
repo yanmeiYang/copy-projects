@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
 import { Spinner } from 'components';
-import { listPersonByIds } from 'services/person';
+//import { listPersonByIds } from 'services/person';
 import { compare, loadScript } from 'utils';
 import * as profileUtils from 'utils/profile-utils';
 import GetBMapLib from './utils/BMapLibGai.js';

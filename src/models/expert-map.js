@@ -57,11 +57,11 @@ export default {
         for (let i = 0; i < ids.length; i += 100) {
           const cids = ids.slice(i, i + 100);
           const data1 = yield call(personService.listPersonByIds, cids);
-          cache[ids] = data1;
           for (const d of data1.data.persons) {
             data.push(d);
           }
         }
+        cache[ids] = data;
       }
       yield put({ type: 'listPersonByIdsSuccess', payload: { data } });
     },
@@ -78,6 +78,8 @@ export default {
     },
 
     listPersonByIdsSuccess(state, { payload: { data } }) {
+      console.log('************************');
+      console.log(data);
       return { ...state, clusterPersons: data };
     },
 
@@ -90,6 +92,8 @@ export default {
     },
 
     setClusterInfo(state, { payload: { data } }) {
+      console.log('@@@@@!!!!!!!!!!!!!!!!111');
+      console.log(data);
       return { ...state, clusterPersons: data };
     },
 

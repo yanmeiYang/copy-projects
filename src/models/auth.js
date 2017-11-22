@@ -115,7 +115,9 @@ export default {
     },
 
     * checkEmail({ payload }, { call, put }) {
-      const { data } = yield call(authService.checkEmail, sysconfig.SOURCE, payload.email);
+      const { email, source } = payload;
+      const src = source || sysconfig.SOURCE;
+      const { data } = yield call(authService.checkEmail, src, email);
       yield put({ type: 'checkEmailSuccess', payload: data.status });
     },
 
@@ -149,8 +151,8 @@ export default {
     },
     // 获取注册用户列表
     * getCategoryByUserRoles({ payload }, { call, put }) {
-      const { category } = payload;
-      const data = yield call(uconfigService.listByCategory, category);
+      const { category, source } = payload;
+      const data = yield call(uconfigService.listByCategory, category, source);
       yield put({ type: 'setData', payload: { data } });
     },
   },

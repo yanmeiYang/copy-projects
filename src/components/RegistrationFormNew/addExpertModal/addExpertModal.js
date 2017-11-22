@@ -5,7 +5,7 @@ import { PersonList } from 'components/person';
 import { Button, Input, Form, Col, Radio, Spin, Select, Upload } from 'antd';
 import CanlendarInForm from '../../seminar/calendar';
 import { config } from '../../../utils';
-import styles from './addExperModal.less';
+import styles from './addExpertModal.less';
 import defaultImg from '../../../assets/people/default.jpg';
 
 const FormItem = Form.Item;
@@ -13,7 +13,7 @@ const { Option } = Select;
 const RadioGroup = Radio.Group;
 
 @connect(({ loading }) => ({ loading }))
-class AddExperModal extends Component {
+class AddExpertModal extends Component {
   state = {
     talkStartValue: null,
     talkEndValue: null,
@@ -529,4 +529,4 @@ class AddExperModal extends Component {
   }
 }
 
-export default connect(({ seminar }) => ({ seminar }))(Form.create()(AddExperModal));
+export default connect(({ seminar }) => ({ seminar }))(Form.create()(AddExpertModal));

@@ -25,7 +25,7 @@ const aminerPerson = ({ dispatch, aminerPerson, publications }) => {
         <div style={{ marginTop: 30 }} />
 
         <div>
-          <TabZone profile={profile} publications={publications} skillsUp={skillsUp} skillsDown={skillsDown} skillsModal={ skillsModal} />
+          <TabZone profile={profile} publications={publications} skillsUp={skillsUp} skillsDown={skillsDown} skillsModal={skillsModal} />
         </div>
       </div>
     </Layout>

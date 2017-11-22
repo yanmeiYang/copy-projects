@@ -7,13 +7,13 @@ import PersonList from './person-list';
 import PersonListTiny from './person-list-tiny';
 import PersonListLittle from './person-list-little';
 import ExportPersonBtn from './export-person';
-import Information from './Information';
-import Education from './Education';
-import Experience from './Experience';
-import Skills from './Skills';
-import Bio from './Bio';
-import TabZone from './Tabzone';
-import Citations from './Citations';
+import Information from './PersonInfo';
+import Education from './PersonEducation';
+import Experience from './PersonExperience';
+import Skills from './PersonSkills';
+import Bio from './PersonBio';
+import TabZone from './PersonTabzone';
+import AcmCitations from './ACM_Citations';
 
 module.exports = {
   ProfileInfo,
@@ -26,5 +26,5 @@ module.exports = {
   Skills,
   Bio,
   TabZone,
-  Citations,
+  AcmCitations,
 };

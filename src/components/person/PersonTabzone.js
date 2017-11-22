@@ -8,12 +8,12 @@ import { Icon, Tabs, Spin } from 'antd';
 import * as personService from '../../services/person';
 import PersonFeaturedPapers from '../../routes/person/person-featured-papers';
 import styles from './Tabzone.less';
-import Information from './Information';
-import Education from './Education';
-import Experience from './Experience';
-import Skills from './Skills';
-import Bio from './Bio';
-import Citations from './Citations';
+import Information from './PersonInfo';
+import Education from './PersonEducation';
+import Experience from './PersonExperience';
+import Skills from './PersonSkills';
+import Bio from './PersonBio';
+import AcmCitations from './ACM_Citations';
 
 const { TabPane } = Tabs;
 
@@ -51,7 +51,7 @@ class TabZone extends React.Component {
         <div className={styles.left_region}>
           <div><Information profile={profile} /></div>
           <div style={{ marginTop: 20 }} />
-          <div><Citations profile={profile} /></div>
+          <div><AcmCitations profile={profile} /></div>
           <div style={{ marginTop: 20 }} />
           <div><Education profile={profile} /></div>
           <div style={{ marginTop: 20 }} />

@@ -83,21 +83,41 @@ class Skills extends React.Component {
     const statusModal = skillsModal.status;
     Modal.info({
       title: 'Endorsers',
-      okText: 'cancel',
+      okText: 'Cancel',
+      iconType: null,
+      maskClosable: true,
+      width: 658,
       content: (
         <div>
+          <div className={styles.spliterModal} />
+          <div style={{ marginTop: 20 }} />
           {statusModal && topicsModal &&
           <div>
             { topicsModal.map((item) => {
               if (item.topic.label === key) {
                 return <div>
                   {item.voters.map((voter) => {
-                    return <div className={styles.areaModal}>
-                      <img
-                      src={personAvatar(voter.avatar, voter.id, 160)} className={styles.avatarModal}
-                      alt={voter.avatar} title={voter.name}
-                    />
-                      <p className={styles.text}>{voter.name}</p>
+                    return <div>
+                      <div className={styles.areaModal}>
+                        <img
+                        src={personAvatar(voter.avatar, voter.id, 160)} className={styles.avatarModal}
+                        alt={voter.avatar} title={voter.name}
+                        />
+                        <span className={styles.text}>
+                          <p className={styles.head}>{voter.name}</p>
+                          <div style={{ marginTop: 10 }} />
+                          {voter.profile.aff && <i className="fa fa-map-marker fa-fw" />}
+                          <div style={{ marginTop: 10 }} />
+                          {voter.profile.pos && voter.profile.pos.map((pos) => {
+                            return <p><i className="fa fa-briefcase fa-fw" />{pos.n}</p>;
+                          })}
+                          <div style={{ marginTop: 10 }} />
+                          {voter.profile.tags && voter.profile.tags.map((tag) => {
+                            return <Button size="small" className={styles.tag}>{tag.t}</Button>;
+                          })}
+                        </span>
+                      </div>
+                      <div className={styles.spliterModal} />
                     </div>
                   })}
                 </div>;
@@ -116,7 +136,7 @@ class Skills extends React.Component {
     const topicsDown = skillsDown.topics;
     const statusDown = skillsDown.status;
   return (
-    <div className={classnames(styles.profile_info, 'container-wrong')}>
+    <div className={classnames(styles.skills_info, 'container-wrong')}>
       <div className={styles.info_zone}>
         <div className={styles.title}><h2><i className="fa fa-flask fa-fw" /> Skills</h2>
         </div>

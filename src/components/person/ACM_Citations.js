@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import * as profileUtils from '../../utils/profile-utils';
 import styles from './information.less';
 
-class Citations extends React.Component {
+class AcmCitations extends React.Component {
   state={};
   render() {
     const profile = this.props.profile;
@@ -26,4 +26,4 @@ class Citations extends React.Component {
   );
  }
 }
-export default Citations;
+export default AcmCitations;

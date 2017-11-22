@@ -2,12 +2,13 @@
   display: flex; flex-direction: row; justify-content: flex-start; align-items: flex-start;
   padding: 4px; border: dotted 0px #aaaaaa;
 
-  .avatar_zone { padding: 6px; }
-  .avatar {
-    width: 160px;
-    -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, .2);
-    -moz-box-shadow: 0 0 4px rgba(0, 0, 0, .2);
-    box-shadow: 0 0 4px rgba(0, 0, 0, .2);
+  .avatar_zone { padding: 6px;
+    .avatar {
+      width: 160px;
+      -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, .2);
+      -moz-box-shadow: 0 0 4px rgba(0, 0, 0, .2);
+      box-shadow: 0 0 4px rgba(0, 0, 0, .2);
+    }
   }
 
   .info_zone {
@@ -38,7 +39,6 @@
       }
 
     }
-
     .spliter {
       border-bottom: solid 1px rgb(216, 216, 216);
       margin: 8px 0 4px 0;
@@ -47,25 +47,24 @@
     :global .emailImg {
       margin-left: -11px; height: 20px;
     }
-    .expert_basic_info { display: flex; flex-direction: row ;line-height: 200%;}
-    .expert_basic_info .expert_basic_info_left {
-      flex: 2;
-      flex-direction: row;
-
+    .expert_basic_info {
+      display: flex; flex-direction: row ;line-height: 200%;
+      .expert_basic_info_left {
+        flex: 2;
+        flex-direction: row;
+      }
+      .linksZone{
+        display: flex; flex-direction: row ; justify-content: flex-start;
+        font-size: 18px;
+      }
+      .sec_header {
+        display: flex;
+        border-bottom: solid 1px #ddd;
+        margin-bottom: 8px;
+        font-size: 13px;
+        flex-direction: row;
+        justify-content:space-between;
+      }
     }
-    .linksZone{
-      display: flex; flex-direction: row ; justify-content: flex-start;
-      font-size: 18px;
-    }
-    .sec_header {
-      display: flex;
-      border-bottom: solid 1px #ddd;
-      margin-bottom: 8px;
-      font-size: 13px;
-      flex-direction: row;
-      justify-content:space-between;
-    }
-
   }
-
 }

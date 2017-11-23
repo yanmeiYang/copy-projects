@@ -7,7 +7,7 @@ import AminerProfileInfo from './AminerProfileInfo';
 import PersonList from './person-list';
 import PersonListTiny from './person-list-tiny';
 import PersonListLittle from './person-list-little';
-import ExportPersonBtn from './export-person';
+// import ExportPersonBtn from './export-person';
 import Information from './PersonInfo';
 import Education from './PersonEducation';
 import Experience from './PersonExperience';
@@ -21,7 +21,7 @@ module.exports = {
   AminerProfileInfo,
   PersonList, PersonListLittle,
   Information,
-  ExportPersonBtn,
+  // ExportPersonBtn,
   Education,
   Experience,
   Skills,

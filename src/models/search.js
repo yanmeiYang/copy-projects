@@ -227,12 +227,12 @@ export default {
       return newState;
     },
 
-    updateFilters(state, { payload: { filters } }) {
-      return { ...state, filters };
-    },
-
     updateFiltersAndQuery(state, { payload: { query, filters } }) {
       return { ...state, query, filters };
+    },
+
+    updateFilters(state, { payload: { filters } }) {
+      return { ...state, filters };
     },
 
     updateSortKey(state, { payload: { key } }) {

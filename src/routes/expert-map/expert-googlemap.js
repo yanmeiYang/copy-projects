@@ -152,6 +152,7 @@ export default class ExpertGoogleMap extends React.Component {
         gestureHandling: 'greedy',
         minZoom: conf.minscale,
         maxZoom: conf.maxscale,
+        fullscreenControl: false,
       });
       this.map = map; // set to global,以便全局取用
       map1 = this.map; // 地图刷新前，用于存储上次浏览的地点

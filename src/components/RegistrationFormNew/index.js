@@ -11,7 +11,7 @@ import ShowExpertList from 'routes/seminar/addSeminarNew/workshop/showExpertList
 import { compare } from 'utils/compare';
 import defaultImg from '../../assets/people/default.jpg';
 import styles from './index.less';
-import AddExperModal from './addExpertModal/addExperModal';
+import AddExpertModal from './addExpertModal/addExpertModal';
 
 const { Dragger } = Upload;
 const FormItem = Form.Item;
@@ -491,7 +491,7 @@ class RegistrationForNew extends React.Component {
               );
             })}
           </div>}
-          <AddExperModal editTheTalk={editTheTalk}
+          <AddExpertModal editTheTalk={editTheTalk}
                          talkStartTime={this.state.startValue}
                          talkEndTime={this.state.endValue}
                          newRole={this.state.newRole}

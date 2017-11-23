@@ -3,15 +3,29 @@
  */
 import PersonTags from './PersonTags';
 import ProfileInfo from './profile-info';
+import AminerProfileInfo from './AminerProfileInfo';
 import PersonList from './person-list';
-import PersonListLittle from './person-list-little'; // TODO
-import ExportExperts from './ExportExperts';
+import PersonListTiny from './person-list-tiny';
+import PersonListLittle from './person-list-little';
+import ExportPersonBtn from './export-person';
+import Information from './PersonInfo';
+import Education from './PersonEducation';
+import Experience from './PersonExperience';
+import Skills from './PersonSkills';
+import Bio from './PersonBio';
+import TabZone from './PersonTabzone';
+import AcmCitations from './ACM_Citations';
 
 module.exports = {
   ProfileInfo,
-  PersonTags,
-
+  AminerProfileInfo,
   PersonList, PersonListLittle,
-
-  ExportExperts,
+  Information,
+  ExportPersonBtn,
+  Education,
+  Experience,
+  Skills,
+  Bio,
+  TabZone,
+  AcmCitations,
 };

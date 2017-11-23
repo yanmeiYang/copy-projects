@@ -17,11 +17,10 @@ export default {
   PersonPage: {
     path: '/p/:id',
     models: () => [
-      import('models/seminar'),
-      import('models/person'),
+      import('models/aminer-person'),
       import('models/publications'),
       import('models/vis/vis-research-interest'),
     ],
-    component: () => import('./'),
+    component: () => import('./PersonPage'),
   },
 };

@@ -24,7 +24,7 @@ const AvailableSystems = [
 
 let System;
 // System = 'aminer';
-// System = 'ccf';
+System = 'ccf';
 // System = 'ccftest';
 // System = 'huawei';
 // System = 'alibaba';

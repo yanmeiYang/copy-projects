@@ -1,14 +1,15 @@
 import React from 'react';
 import classnames from 'classnames';
-import styles from './profile-info.less';
+import styles from './AminerProfileInfo.less';
 import { Indices } from '../../components/widgets';
+import { Button } from 'antd';
 import * as profileUtils from '../../utils/profile-utils';
 import * as personService from '../../services/person';
 import { VisResearchInterest } from '../../routes/vis';
 import { sysconfig } from '../../systems';
 import ViewExpertInfo from '../../components/person/view-expert-info';
 
-class ProfileInfo extends React.Component {
+class AminerProfileInfo extends React.Component {
   state = {};
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -22,12 +23,13 @@ class ProfileInfo extends React.Component {
 
   render() {
     const profile = this.props.profile;
-    const name = profileUtils.displayNameCNFirst(profile.name, profile.name_zh);
+    const name = profileUtils.displayNameCNFirst(profile.name_zh, profile.name);
     const pos = profileUtils.displayPosition(profile.pos);
     const aff = profileUtils.displayAff(profile);
     const phone = profile.contact && profile.contact.phone;
     const email = profileUtils.displayEmailSrc(profile);
     const homepage = profile.contact && profile.contact.homepage;
+    const links = profile.links;
 
     return (
       <div className={classnames(styles.profile_info, 'container-wrong')}>
@@ -41,17 +43,12 @@ class ProfileInfo extends React.Component {
         <div className={styles.info_zone}>
           {name &&
           <div className={styles.title}>
-            <h1>{name}</h1>
-            {false && <span className={styles.rank}>会士</span>}
-            {true &&
-            <a
-              href={personService.getAMinerProfileUrl(profile.name, profile.id)}
-              target="_blank" rel="noopener noreferrer"
-            >
-              <span className={styles.rank}>
-                更多 <i className="fa fa-share" aria-hidden="true"></i>
-              </span>
-            </a>}
+            <h1>{name}<i className="fa fa-check-circle-o fa-fw" /></h1>
+            <span className={styles.rank}>
+              <Button type="primary">
+                <i className="fa fa-user-plus" /> Follow
+              </Button>
+            </span>
           </div>}
           {name && <div className={styles.spliter} />}
           <div className={styles.expert_basic_info}>
@@ -67,7 +64,7 @@ class ProfileInfo extends React.Component {
               {email &&
               <p>
                 <i className="fa fa-envelope fa-fw" />
-                <img className="emailImg" src={`${email}`} alt="email"
+                <img className="emailImg" src={`https://api.aminer.org/api/${email}`} alt="email"
                      style={{ verticalAlign: 'middle' }} />
               </p>}
               {homepage &&
@@ -77,12 +74,45 @@ class ProfileInfo extends React.Component {
                 </a>
               </p>
               }
-              <span style={{ marginTop: 16 }} />
-              <p className="section_header"> <i className="fa fa-area-chart fa-fw" /> 研究兴趣</p>
+              <div className={styles.sec_header}>
+                <span> <i className="fa fa-external-link-square fa-fw" />External Links</span>
+                <span>
+                  <Button size="small">
+                    <i className="fa fa-edit fa-fw" /> Update
+                  </Button>
+                </span>
+              </div>
+              <div className={styles.linksZone}>
+                {links && links.map((item) => {
+                  if (item.url) {
+                    switch (item.type) {
+                      case 'gs':
+                        return <span>
+                          <a href={item.url} target="_blank" rel="noopener noreferrer">
+                          <span className="fa-stack">
+                            <i className="fa fa-circle fa-stack-2x" />
+                            <i className="fa fa-graduation-cap fa-stack-1x fa-inverse" />
+                          </span>
+                          </a>
+                        </span>;
+                      case 'vl':
+                        return <span>
+                          <a href={item.url} target="_blank" rel="noopener noreferrer">
+                          <span className="fa-stack">
+                               <i className="fa fa-circle fa-stack-2x" />
+                               <i className="fa fa-youtube-play fa-stack-1x fa-inverse" />
+                          </span>
+                          </a>
+                        </span>;
+                      default:
+                        return <span />;
+                    }
+                  }
+                })}
+              </div>
+              <div style={{ marginTop: 10 }} />
+              <p className="section_header"> <i className="fa fa-area-chart fa-fw" /> Research Interests</p>
               <VisResearchInterest personId={profile.id} disable_vis_chart={true} />
-            </div>
-            <div>
-              <ViewExpertInfo person={profile} />
             </div>
           </div>
           {/* TODO 这里放一个可以手工添加修改的tabs. */}
@@ -100,4 +130,4 @@ class ProfileInfo extends React.Component {
   }
 }
 
-export default ProfileInfo;
+export default AminerProfileInfo;

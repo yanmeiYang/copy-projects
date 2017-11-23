@@ -33,4 +33,5 @@ const IndexHotLinks = ({ links, urlFunc, withComma }) => {
     </div>
   );
 };
+
 export default IndexHotLinks;

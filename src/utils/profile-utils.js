@@ -24,6 +24,21 @@ const displayPosition = (pos) => {
   return position;
 };
 
+const displayCitation = (acmCitation) => {
+  const citation = acmCitation && acmCitation[acmCitation.length - 1] && acmCitation[acmCitation.length - 1].citation ? acmCitation[acmCitation.length - 1].citation : '';
+  return citation;
+};
+
+const displayCountry = (acmCitation) => {
+  const country = acmCitation && acmCitation[acmCitation.length - 1] && acmCitation[acmCitation.length - 1].country ? acmCitation[acmCitation.length - 1].country : '';
+  return country;
+};
+
+const displayYear = (acmCitation) => {
+  const year = acmCitation && acmCitation[acmCitation.length - 1] && acmCitation[acmCitation.length - 1].year ? acmCitation[acmCitation.length - 1].year : '';
+  return year;
+};
+
 // deprecated
 // const displayPositionFirst = (pos) => {
 //   return pos && pos.length > 0 && pos[0].n;
@@ -113,4 +128,7 @@ module.exports = {
   displayEmailSrc,
   displayEmailSrc2,
   findTopNTags,
+  displayCitation,
+  displayCountry,
+  displayYear,
 };

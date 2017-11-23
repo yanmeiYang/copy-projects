@@ -148,19 +148,19 @@ class RightInfoZoneCluster extends React.Component {
     let hindexSum = 0;
     const interests = {};
     if (persons) {
-      persons & persons.map((person) => {
+      persons.sort((a, b) => {
+        if ((b.indices.hindex - a.indices.hindex) === 0) {
+          return (b.name > a.name) ? -1 : 1;
+        } else {
+          return (b.indices.hindex - a.indices.hindex);
+        }
+      });
+      persons.map((person) => {
         const { indices } = person;
         // sum hindex
         if (indices) {
           hindexSum += indices.hindex;
         }
-        persons.sort((a, b) => {
-          if ((b.indices.hindex - a.indices.hindex) === 0) {
-            return (b.name > a.name);
-          } else {
-            return (b.indices.hindex - a.indices.hindex);
-          }
-        });
         // interests
         if (person.tags && person.tags.length > 0) {
           person.tags.map((tag) => {
@@ -194,9 +194,9 @@ class RightInfoZoneCluster extends React.Component {
     });
     sortedInterest = sortedInterest.sort((a, b) => {
       if (b.count === a.count) {
-        return (b.key > a.key);
+        return (b.key > a.key) ? -1 : 1;
       } else {
-        return (b.key - a.key);
+        return (b.count - a.count);
       }
     });
     // TODO 人头按Hindex排序。
@@ -210,6 +210,7 @@ class RightInfoZoneCluster extends React.Component {
           className={styles.personList}
           persons={[this.state.cperson]}
           user={this.props.app.user}
+          rightZoneFuncs={[]}
         />
       </div>
     );
@@ -295,7 +296,7 @@ class RightInfoZoneCluster extends React.Component {
           研究领域
         </div>
         <div className={styles.keywords}>
-          {sortedInterest && sortedInterest.slice(0, 20).map((interest) => {
+          {sortedInterest && sortedInterest.map((interest) => {
             return (
               <div key={interest.key} role="presentation" onKeyDown={() => {}}
                    onClick={this.showTagPersons.bind(this, interest.key)} className={styles.tag}>

@@ -310,15 +310,17 @@ function insertAfter(newElement, targetElement) {
 const showTopImageDiv = (e, map, maindom, inputids, onLeave, type, ids, dispatch, infoIds, callback) => {
   const ishere = getById('panel');
   if (ishere != null) {
-    detachCluster(ishere);
+    detachCluster(ishere); //先删除已经存在的
   }
   const width = 180;
   let ostyle = '';
+  //两者的偏移计算不同
   if (type === 'baidu') { //baidu map
     const pixel = map.pointToOverlayPixel(e.currentTarget.getPosition()); // 中心点的位置
     ostyle = `height:${width}px;width:${width}px;left: ${pixel.x - (width / 2)}px;top: ${pixel.y - (width / 2)}px;`;
   } else { //google map
-    ostyle = `height:${width}px;width:${width}px;left: ${(e.x + 27) - (width / 2)}px;top: ${(e.y + 27) - (width / 2)}px;`;
+    const imgWidth = parseInt(maindom.style.height,10);
+    ostyle = `height:${width}px;width:${width}px;left: ${(e.x + imgWidth / 2) - (width / 2)}px;top: ${(e.y + imgWidth / 2) - (width / 2)}px;`;
   }
   // 可得中心点到图像中心点的半径为：width/2-imgwidth/2,圆形的方程为(X-pixel.x)^2+(Y-pixel.y)^2=width/2
   const imgwidth = 45;
@@ -367,7 +369,7 @@ const showTopImageDiv = (e, map, maindom, inputids, onLeave, type, ids, dispatch
       if (onLeave) {
         onLeave();
       }
-      detachCluster(thisNode);
+      detachCluster(thisNode); //删除创建的node
     });
   }
   if (typeof (callback) === 'function') {
@@ -456,6 +458,7 @@ const showImagesInDiv = (ids, imgwidth, blankAvatar, imgdivs) => {
       if (img.src.includes('default.jpg') || img.src.includes('blank_avatar.jpg')) {
         cimg.innerHTML = `<img id='${personInfo.id}' style='${showinfo.style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='' alt='${showinfo.name}'>`;
       } else {
+        cimg.innerHTML = '';
         cimg.appendChild(image);
       }
     }
@@ -537,7 +540,7 @@ const addImageListener = (map, ids, getInfoWindow, event, imgwidth, type, projec
           dataCache[p.id] = p;
         }
         personInfo = dataCache[num];
-        if (typeof (callback) === 'function') {
+        if (typeof (callback) === 'function' && personInfo) {
           callback(personInfo);
         }
       },

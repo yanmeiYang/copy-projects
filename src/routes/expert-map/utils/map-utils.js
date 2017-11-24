@@ -1,6 +1,7 @@
 import continentscountries from 'public/lab/expert-map/continentscountries.json';
 import { listPersonByIds } from 'services/person';
 import * as profileUtils from 'utils/profile-utils';
+import { sysconfig } from 'systems';
 import {
   ifAllInCache,
   dataCache,
@@ -379,14 +380,16 @@ const showTopImageDiv = (e, map, maindom, inputids, onLeave, type, ids, dispatch
 
 const ifNotImgShowName = (personInfo) => { //当作者的头像是空的时候，显示名字
   let name;
+  let flag = false;
   if (personInfo) {
-    // if (personInfo.name_zh) {
-    //   const str = personInfo.name_zh.substr(1, 2);
-    //   name = str;
-    // } else {
+    if ((sysconfig.Locale === 'zh') && personInfo.name_zh) {
+      let str = personInfo.name_zh.replace(/(^\s*)|(\s*$)/g, '');
+      flag = true;
+      name = str;
+    } else {
       const tmp = personInfo.name.split(' ', 5);
       name = (tmp[tmp.length - 1] === '') ? personInfo.name : tmp[tmp.length - 1];
-    // }
+    }
   } else {
     const tmp = personInfo.name.split(' ', 5);
     name = (tmp[tmp.length - 1] === '') ? personInfo.name : tmp[tmp.length - 1];
@@ -398,7 +401,7 @@ const ifNotImgShowName = (personInfo) => { //当作者的头像是空的时候�
     if (name.length === 6) {
       name = ' '.concat(name);
     }
-    if (name.length <= 5) {
+    if (name.length <= 5 && !flag) {
       name = '&nbsp;'.concat(name);
     }
   } else {
@@ -423,8 +426,10 @@ const ifNotImgShowName = (personInfo) => { //当作者的头像是空的时候�
       return true;
     });
     name = arr.join('');
-    name = `&nbsp;&nbsp;${name}`;
-    style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:10px;word-wrap:break-word;font-size:10px;';
+    if (!flag) {
+      name = `&nbsp;&nbsp;${name}`;
+    }
+    style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:10px;word-break:break-all;white-space:pre-wrap;word-wrap:break-word;font-size:10px;';
   }
   return { name, style };
 };

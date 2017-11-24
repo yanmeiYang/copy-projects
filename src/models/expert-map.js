@@ -2,7 +2,6 @@
 import * as strings from 'utils/strings';
 import * as personService from 'services/person';
 import * as mapService from 'services/expert-map-service';
-import bridge from 'utils/next-bridge';
 
 const cache = {};
 
@@ -79,7 +78,7 @@ export default {
     },
 
     listPersonByIdsSuccess(state, { payload: { data } }) {
-      return { ...state, clusterPersons: bridge.toNextPersons(data) };
+      return { ...state, clusterPersons: data };
     },
 
     setRightInfoZoneIds(state, { payload: { idString } }) {
@@ -91,7 +90,7 @@ export default {
     },
 
     setClusterInfo(state, { payload: { data } }) {
-      return { ...state, clusterPersons: bridge.toNextPersons(data) };
+      return { ...state, clusterPersons: data };
     },
 
     searchMapSuccess(state, { payload: { data } }) {

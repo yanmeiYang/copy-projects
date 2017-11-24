@@ -353,7 +353,7 @@ export default class ExpertMap extends PureComponent {
 
     const rightInfos = {
       global: () => (<RightInfoZoneAll persons={results} />),
-      person: () => (<RightInfoZonePerson person={person} showBut="true" />),
+      person: () => (<RightInfoZonePerson person={person} />),
       cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),
     };
 

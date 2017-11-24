@@ -45,16 +45,11 @@ class RightInfoZonePerson extends React.PureComponent {
 
   render() {
     const { person } = this.props;
-    let showBut = false;
-    if (this.props.showBut) {
-      showBut = true;
-    }
     if (!person) {
       return <div />;
     }
 
     const showTraj = sysconfig.Map_ShowTrajectory;
-    showBut = showTraj; //根据开关将其关掉
     const centerZoom = true;
     // used in person popup info
     let url = '/images/blank_avatar.jpg';
@@ -86,7 +81,7 @@ class RightInfoZonePerson extends React.PureComponent {
         <a {...personLinkParams} className="img"><img src={url} alt="IMG" /></a>
 
         <div className="info bg">
-          {showBut &&
+          {showTraj &&
           <span>
             <Button onClick={this.showTraj.bind(this, person)}>Show Trajectory</Button>
           </span>}

@@ -7,6 +7,7 @@ import { Button, Tooltip, Icon, Modal, Tabs, Tag } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
+import bridge from 'utils/next-bridge';
 import styles from './RightInfoZoneCluster.less';
 import RightInfoZonePerson from './RightInfoZonePerson';
 import ExpertTrajectory from '../expert-trajectory/ExpertTrajectory';
@@ -84,7 +85,8 @@ class RightInfoZoneCluster extends React.Component {
   showTagPersons = (tag) => {
     const cp = new Set();
     const cpersons = [];
-    for (const p of this.props.persons) {
+    const persons = bridge.toNextPersons(this.props.persons);
+    for (const p of persons) {
       if (p.tags_zh && p.tags_zh.length > 0) {
         p.tags_zh.map((t) => {
           if (t === tag) {
@@ -137,7 +139,7 @@ class RightInfoZoneCluster extends React.Component {
   };
 
   render() {
-    const { persons } = this.props;
+    const persons = bridge.toNextPersons(this.props.persons);
     if (!persons || persons.length <= 0) {
       return <div />;
     }
@@ -202,13 +204,15 @@ class RightInfoZoneCluster extends React.Component {
     // TODO 人头按Hindex排序。
     // TODO 显示Hindex分段.
     const avg = (hindexSum / persons.length).toFixed(0);
+    const cpersonsList = this.state.cpersons;
+    const cpersonList = this.state.cperson;
 
     const infoJsx = (
       <div className={styles.charts}>
         {/*<RightInfoZonePerson person={this.state.cperson} />*/}
         <PersonList
           className={styles.personList}
-          persons={[this.state.cperson]}
+          persons={[cpersonList]}
           user={this.props.app.user}
           rightZoneFuncs={[]}
         />
@@ -219,7 +223,7 @@ class RightInfoZoneCluster extends React.Component {
         {/*<PersonListLittle persons={this.state.cpersons} onClick={this.onPersonClick} />*/}
         <PersonList
           className={styles.personList}
-          persons={this.state.cpersons}
+          persons={cpersonsList}
           user={this.props.app.user}
           rightZoneFuncs={[]}
         />

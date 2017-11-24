@@ -5,31 +5,30 @@
     height: 580px;
     width: 100%;
     overflow: scroll;
+    :global {
+      .spinnerMask {
+        width: 770px;
+        height: 95%;
+      }
+      .ant-tabs-nav-wrap {
+        float: right;
+        margin-right: 25px;
+      }
+      .ant-tabs-extra-content {
+        float: left !important;
+      }
+      .ant-modal-close {
+        top: 12px;
+      }
+      .ant-tag {
+        margin-top: 1px !important;
+      }
+    }
   }
   .pagination {
     text-align: center;
     margin-top: 10px;
     margin-bottom: 10px;
-  }
-}
-
-:global {
-  .spinnerMask {
-    width: 770px;
-    height: 95%;
-  }
-  .ant-tabs-nav-wrap {
-    float: right;
-    margin-right: 25px;
-  }
-  .ant-tabs-extra-content {
-    float: left !important;
-  }
-  .ant-modal-close {
-    top: 12px;
-  }
-  .ant-tag {
-    margin-top: 1px !important;
   }
 }
 

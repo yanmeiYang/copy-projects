@@ -120,21 +120,25 @@ export default {
       if (data.data && data.data.succeed) {
         // console.log('>>>>>> ---==== to next API');
         // TODO 这些东西不应该放这里。。。。。。。。。。。。。。。。。
-        const personIds = data.data.items && data.data.items.map(item => item && item.id);
-        if (personIds) {
-          const activityScores = yield call(
-            searchService.getActivityScoresByPersonIds,
-            personIds.join('.'),
-          );
-          if (activityScores.success && activityScores.data && activityScores.data.indices &&
-            activityScores.data.indices.length > 0) {
-            data.data.items && data.data.items.map((item, index) => {
-              const activityRankingContrib =
-                activityScores.data.indices[index].filter(scores => scores.key === 'contrib');
-              data.data.items[index].indices.activityRankingContrib =
-                activityRankingContrib.length > 0 ? activityRankingContrib[0].score : 0;
-              return '';
-            });
+        if (sysconfig.SOURCE === 'ccf') {
+          const personIds = data.data.items && data.data.items.map(item => item && item.id);
+          if (personIds) {
+            const activityScores = yield call(
+              searchService.getActivityScoresByPersonIds,
+              personIds.join('.'),
+            );
+            if (activityScores.success && activityScores.data && activityScores.data.indices &&
+              activityScores.data.indices.length > 0) {
+              data.data.items && data.data.items.map((item, index) => {
+                const activityRankingContrib =
+                  activityScores.data.indices[index].filter(scores => scores.key === 'contrib');
+                if (data.data.items[index].indices) {
+                  data.data.items[index].indices.activityRankingContrib =
+                    activityRankingContrib.length > 0 ? activityRankingContrib[0].score : 0;
+                }
+                return '';
+              });
+            }
           }
         }
         yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data, query } });

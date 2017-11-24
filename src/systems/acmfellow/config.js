@@ -14,6 +14,7 @@ module.exports = {
 
   Use_CDN: true,
   EnableLocalLocale: true,
+  GLOBAL_ENABLE_FEEDBACK: true,
 
   // 通用配置。所有System的配置文件必须全部包含这部分的值
   PageTitle: 'ACM Fellow',

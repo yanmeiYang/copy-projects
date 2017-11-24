@@ -142,8 +142,8 @@ module.exports = {
     listConfigsByCategoryList: `${baseURL}/2b/config/:source/by-category`,
 
     // topic
-    getTopicByMention: '/topic/summary/m/:mention',
-    getTopicOnSkills: '/topic/person/topics/up/:id/toffset/:toffset/tsize/:tsize/uoffset/:uoffset/usize/:usize',
+    getTopicByMention: `${baseURL}/topic/summary/m/:mention`,
+    getTopicOnSkills: `${baseURL}/topic/person/topics/up/:id/toffset/:toffset/tsize/:tsize/uoffset/:uoffset/usize/:usize`,
 
 
     // Recommendation APIs

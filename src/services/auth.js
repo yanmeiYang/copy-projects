@@ -1,7 +1,8 @@
 /**
  * Created by yangyanmei on 17/6/29.
  */
-import { request, config } from '../utils';
+import { request, config, nextAPI } from 'utils';
+import { apiBuilder, F, H } from 'utils/next-api-builder';
 import { sysconfig } from '../systems';
 
 const { api } = config;
@@ -132,4 +133,10 @@ export async function updateProfile(id, name) {
     method: 'PATCH',
     body: JSON.stringify(data),
   });
+}
+export async function setFeedback(params) {
+  const { subject, body } = params;
+  const nextapi = apiBuilder.notify(F.notify.feedback, 'feedback')
+    .param({ subject, body });
+  return nextAPI({ type: 'notify', data: [nextapi.api] });
 }

@@ -8,11 +8,11 @@ import { connect } from 'dva';
 import { Helmet } from 'react-helmet';
 import ReactGA from 'react-ga';
 import NProgress from 'nprogress';
-import { Layout as LayoutComponent } from 'antd';
+import { Layout as LayoutComponent, Affix, Button, Popover } from 'antd';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 import { hole, classnames, config } from 'utils';
-import { Header, Navigator } from 'components/Layout';
+import { Header, Navigator, Feedback } from 'components/Layout';
 import { ErrorBoundary } from 'components';
 import styles from './Layout.less';
 
@@ -45,6 +45,7 @@ export default class Layout extends Component {
     showHeader: PropTypes.bool,
     showNavigator: PropTypes.bool,
     showSidebar: PropTypes.bool,
+    showFeedback: PropTypes.bool,
 
     fixAdvancedSearch: PropTypes.bool, // 是否固定是三个框的高级搜索
     disableAdvancedSearch: PropTypes.bool, // 禁止高级搜索
@@ -61,6 +62,7 @@ export default class Layout extends Component {
     sidebar: theme.sidebar,
     footer: theme.footer,
     fixAdvancedSearch: false, // TODO use localStorage to cache user habits.
+    showFeedback: sysconfig.GLOBAL_ENABLE_FEEDBACK,
   };
 
   componentDidMount() {
@@ -77,7 +79,7 @@ export default class Layout extends Component {
   render() {
     // console.count('>>>>>>>>>> App Render'); // TODO performance
     const { sidebar, footer } = this.props;
-    const { contentClass, showHeader, showNavigator, showSidebar } = this.props;
+    const { contentClass, showHeader, showNavigator, showSidebar, showFeedback } = this.props;
     const { dispatch, app, loading } = this.props;
     const { user, roles } = app;
 
@@ -181,6 +183,8 @@ export default class Layout extends Component {
         <Footer className={tc(['footer'])}>
           {footer}
         </Footer>
+
+        {showFeedback && <Feedback />}
 
       </LayoutComponent>
     );

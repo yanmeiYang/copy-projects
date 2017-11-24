@@ -12,6 +12,7 @@ import * as searchService from 'services/search';
 import * as personService from 'services/person';
 import { getTwoDecimal } from 'utils';
 import { baseURL } from 'utils/config';
+import bridge from 'utils/next-bridge';
 import * as profileUtils from 'utils/profile-utils';
 import styles from './ExportExperts.less';
 
@@ -85,11 +86,33 @@ export default class ExportExperts extends Component {
     // if (sysconfig.Locale === 'zh') {
     //   selected.push('translate');
     // }
-    // TODO Change to multi download, change to use effects takeAll.
-    this.props.dispatch({
-      type: 'exportExperts/searchPerson',
-      payload: { query, filters, sort, exportSize: this.state.exportSize },
-    }).then((res) => {
+    const maxLoop = 10;
+    const fetchData = (data, size, offset, i) => {
+      const NewSize = Math.min(size - offset, 100);
+      this.props.dispatch({
+        type: 'search/searchPerson',
+        payload: { query, filters, sort, size: NewSize, offset, ghost: true },
+      }).then((res) => {
+        // TODO res拼到data
+        if (res.total < size) {
+          size = res.total
+        }
+        if (res && res.result) {
+          res = bridge.toNextPersons(res.result)
+        } else {
+          res = res.items
+        }
+        res && data.concat(res);
+        if (offset + 100 < size && i < maxLoop) {
+          fetchData(data.concat(res), size, offset + 100, i + 1);
+        } else {
+          exportData(data.concat(res))
+        }
+      });
+    };
+    const results = [];
+    fetchData(results, this.state.exportSize, 0, 0);
+    const exportData = (res) => {
       const selectedItem = selected;
       let expertPersonInfo = '';
       if (res.length > 0) {
@@ -114,7 +137,6 @@ export default class ExportExperts extends Component {
                 return showTag;
               }).join(';') : ' ',
           };
-
           selectedItem.map((item) => {
             let value = basic[item];
             if (typeof value === 'string') {
@@ -130,11 +152,7 @@ export default class ExportExperts extends Component {
           expertPersonInfo += '\n';
           return true;
         });
-
         let temp = selectedItem;
-        // if (sysconfig.Locale === 'zh') {
-        //   temp = temp.map(item => keyValue[item]);
-        // }
         const firstRow = temp.join(',');
         let str = `${firstRow}\n${expertPersonInfo}`;
         const bom = '\uFEFF';
@@ -145,9 +163,8 @@ export default class ExportExperts extends Component {
         link.click();
         this.setState({ loading: false });
       }
-    }).catch((err) => {
-      console.log(err);
-    });
+    }
+    // TODO Change to multi download, change to use effects takeAll.
   };
 
   render() {

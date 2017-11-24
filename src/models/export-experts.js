@@ -23,7 +23,7 @@ export default {
       for (let i = 0; i < exportSize; i += 100) {
         const params = { query, offset: i, size: 100, filters, sort };
         const top = yield call(searchService.searchPerson, params);
-        if (top.data && top.data.succeed) {
+        if (top.data && top.data.succeed && top.data.items) {
           searchResults = searchResults.concat(top.data.items);
         } else if (top.data && top.data.result) {
           const nextResult = bridge.toNextPersons(top.data.result);

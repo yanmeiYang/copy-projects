@@ -23,4 +23,10 @@ export default {
     models: () => [import('models/cross-heat')],
     component: () => import('routes/cross-heat/startTask'),
   },
+
+  CrossReportExport: {
+    path: '/cross/reportExport/:id',
+    models: () => [import('models/cross-heat')],
+    component: () => import('routes/cross-heat/reportExport'),
+  },
 };

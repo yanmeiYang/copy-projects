@@ -107,6 +107,7 @@ const RouterRegistry = [
   crossHeat.CrossTaskList,
   crossHeat.CrossIndex,
   crossHeat.CrossStartTask,
+  crossHeat.CrossReportExport,
 
   // Data Annotation
   dataAnnotation.AnnotatePersonProfile,

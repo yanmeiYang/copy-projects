@@ -13,9 +13,9 @@ import styles from './index.less';
 const tc = applyTheme(styles);
 
 
-const dataTitle = ['科研趋势分析', '交叉热点挖掘', '学者关系探测', '专家地图分布']
+const dataTitle = ['科研趋势分析', '交叉热点挖掘', '学者关系探测', '专家地图分布'];
 const dataSrc = ['/funcs/cross-heat/trend.png', '/funcs/cross-heat/cross.jpeg', '/funcs/cross-heat/xuezhe.jpeg', '/funcs/cross-heat/map.jpeg']
-const dataEn = ['Trend', 'Cross', 'Relations', 'Maps']
+const dataEn = ['Trend', 'Cross', 'Relations', 'Maps'];
 
 const dataList = {
   title: '科技情报深度洞察',
@@ -73,7 +73,7 @@ export default class CrossIndex extends React.Component {
               </div>
             </a>
 
-            <a href="/cross/report/5a0155a89ed5db9353752534" target="_blank">
+            <a href="/cross/report/5a17c4e59ed5db2b8cf8402a" target="_blank">
               <div className={styles.item}
               >
                 <div className={styles.img}>

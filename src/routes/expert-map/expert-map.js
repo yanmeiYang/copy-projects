@@ -21,6 +21,8 @@ import {
   showTopImages,
   addImageListener,
   syncInfoWindow,
+  waitforBMap,
+  waitforBMapLib,
   //findMapFilterRangesByKey,
   findMapFilterHindexRangesByKey,
   bigAreaConfig,
@@ -170,7 +172,7 @@ export default class ExpertMap extends PureComponent {
     // TODO load script for baidumap.
 
 
-    loadScript('BMap', { check: 'BMap' }, (BMap) => {
+    waitforBMap(200, 100,() => {
       this.showOverLay();
 
       const conf = this.mapConfig[mapType] || this.mapConfig[0];// init map instance.
@@ -275,15 +277,26 @@ export default class ExpertMap extends PureComponent {
         }
       }
 
-      const markerClusterer = new window.BMapLib.MarkerClusterer(map, {});
-      markerClusterer.addMarkers(markers);
-      for (let m = 0; m < markers.length; m += 1) {
-        this.addMouseoverHandler(markers[m], pId[m]);
-      }
+      waitforBMapLib(200, 100, () => {
+        const markerClusterer = new window.BMapLib.MarkerClusterer(map, {});
+        markerClusterer.addMarkers(markers);
+        for (let m = 0; m < markers.length; m += 1) {
+          this.addMouseoverHandler(markers[m], pId[m]);
+        }
 
-      that.hideLoading();
-      //cache image
-      checkCacheLevel(sysconfig.Map_Preload, ids);
+        //cache image
+        checkCacheLevel(sysconfig.Map_Preload, ids);
+        that.hideLoading();
+        console.log(map);
+        console.log(markerClusterer);
+        console.log(markerClusterer.getMarkers());
+        console.log(markerClusterer.getStyles);
+        console.log(markerClusterer.getClustersCount());
+        console.log(markerClusterer.getStyles());
+        console.log(markerClusterer.getClusters());
+        console.log(markerClusterer.getClusters()[0]);
+        console.log(markerClusterer.getClusters()[0]._markers);
+      });
     }, showLoadErrorMessage);
   };
 

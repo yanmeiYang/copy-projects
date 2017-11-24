@@ -1,5 +1,6 @@
-/* eslint-disable prefer-destructuring */
+/* eslint-disable prefer-destructuring,no-unused-expressions */
 import { sysconfig } from 'systems';
+import { notification } from 'antd';
 import pathToRegexp from 'path-to-regexp';
 import queryString from 'query-string';
 import * as searchService from 'services/search';
@@ -13,18 +14,24 @@ export default {
   namespace: 'search',
 
   state: {
-    results: [],
+    results: null,
     topic: null, // search 右边的 topic
     aggs: [],
     filters: {},
     query: null,
 
-    // use translate search?
-    useTranslateSearch: sysconfig.Search_DefaultTranslateSearch,
-    translatedQuery: '',
+    searchSuggests: null,
+
+    // use translate search? TODO replace with Intelligence Search.
+    useTranslateSearch: sysconfig.Search_EnableTranslateSearch && !sysconfig.Search_EnableSmartSuggest && sysconfig.Search_DefaultTranslateSearch,
     translatedLanguage: 0, // 1 en to zh; 2 zh to en;
     translatedText: '',
 
+    // Intelligence search.
+    intelligenceSearchMeta: {}, // {expand:<word>, translated:<word>, kg:[<word>,...]}
+    intelligenceSuggest: null,
+
+    // pager
     offset: 0,
     sortKey: '',
     pagination: {
@@ -44,9 +51,7 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen(({ pathname, search }) => {
-        // const query = queryString.parse(search);
-        // console.log('0998', query);
-
+        // TODO dont't use this method to get query, use in component method.
         let match = pathToRegexp('/(uni)?search/:query/:offset/:size').exec(pathname);
         if (match) {
           const keyword = decodeURIComponent(match[2]);
@@ -54,7 +59,6 @@ export default {
           const size = parseInt(match[4], 10);
           // dispatch({ type: 'emptyResults' });
           dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
-          // dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: keyword } });
         }
 
         //
@@ -65,7 +69,6 @@ export default {
           const offset = parseInt(match[3], 10);
           const size = parseInt(match[4], 10);
           dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
-          // dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: keyword } });
         }
 
       });
@@ -87,21 +90,36 @@ export default {
       }
 
       // fix sort key
-      const Sort = fixSortKey(sort, query);
+      const Sort = fixSortKey(sort, query); // Fix default sort key.
 
+      // TODO replace this.
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
+      const intelligenceSearchMeta = yield select(state => state.search.intelligenceSearchMeta);
 
       // 分界线
       yield put({ type: 'updateSortKey', payload: { key: Sort } });
       yield put({ type: 'updateFilters', payload: { filters } });
 
-      const data = yield call(
-        searchService.searchPerson,
-        query, offset, size, noTotalFilters, Sort, useTranslateSearch,
-      );
+      const params = {
+        query, offset, size, filters: noTotalFilters, sort: Sort, intelligenceSearchMeta,
+        useTranslateSearch, // TODO remove
+      };
+      const data = yield call(searchService.searchPerson, params);
+
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('data:::', data);
+        if (data && data.data && data.data.queryEscaped) {
+          console.warn('DEVELOPMENT ONLY MESSAGE: Query中有非法字符，已经过滤。详情：宋驰没告诉我!',);
+          notification.open({
+            message: 'DEVELOPMENT ONLY MESSAGE',
+            description: 'Query中有非法字符，已经过滤。详情：宋驰没告诉我!',
+          });
+        }
+      }
 
       if (data.data && data.data.succeed) {
         // console.log('>>>>>> ---==== to next API');
+        // TODO 这些东西不应该放这里。。。。。。。。。。。。。。。。。
         const personIds = data.data.items && data.data.items.map(item => item && item.id);
         if (personIds) {
           const activityScores = yield call(
@@ -119,7 +137,7 @@ export default {
             });
           }
         }
-        yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data } });
+        yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data, query } });
       } else if (data.data && data.data.result) {
         yield put({ type: 'searchPersonSuccess', payload: { data: data.data, query, total } });
       } else {
@@ -130,17 +148,20 @@ export default {
     * translateSearch({ payload }, { call, put, select }) {
       // yield put({ type: 'clearTranslateSearch' });
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
-      // console.log("==================", useTranslateSearch);
       if (useTranslateSearch) {
         const { query } = payload;
-        const { data } = yield call(translateService.translateTerm, query);
-        console.log('||translateSearch', payload, '>>', data);
-        if (data && data.status) {
-          const q = query.trim().toLowerCase();
-          const en = data.en && data.en.trim().toLowerCase();
-          // console.log('>>>> query', q, ' == ', en);
-          if (q !== en) {
-            yield put({ type: 'translateSearchSuccess', payload: { data } });
+        if (query) {
+          try {
+            const { data } = yield call(translateService.translateTerm, query);
+            if (data && data.status) {
+              const q = query.trim().toLowerCase();
+              const en = data.en && data.en.trim().toLowerCase();
+              if (q !== en) {
+                yield put({ type: 'translateSearchSuccess', payload: { data } });
+              }
+            }
+          } catch (err) {
+            console.log(err);
           }
         }
       }
@@ -201,23 +222,24 @@ export default {
           total: null,
         };
         newState.pagination.pageSize = size;
+        newState.translatedText = '';
       }
       return newState;
-    },
-
-    updateFilters(state, { payload: { filters } }) {
-      return { ...state, filters };
     },
 
     updateFiltersAndQuery(state, { payload: { query, filters } }) {
       return { ...state, query, filters };
     },
 
+    updateFilters(state, { payload: { filters } }) {
+      return { ...state, filters };
+    },
+
     updateSortKey(state, { payload: { key } }) {
       return { ...state, sortKey: key };
     },
 
-    searchPersonSuccess(state, { payload: { data, total } }) {
+    searchPersonSuccess(state, { payload: { data, query, total } }) {
       if (!data) {
         return state;
       }
@@ -227,12 +249,12 @@ export default {
       // console.log('::', toNextPersons(result));
       return {
         ...state,
-        results: bridge.toNextPersons(result),
+        results: query === '-' ? null : bridge.toNextPersons(result),
         pagination: { pageSize: state.pagination.pageSize, total: currentTotal, current },
       };
     },
 
-    nextSearchPersonSuccess(state, { payload: { data } }) {
+    nextSearchPersonSuccess(state, { payload: { data, query } }) {
       if (!data) {
         return state;
       }
@@ -244,7 +266,7 @@ export default {
       const { translatedLanguage, translatedText } = data;
       const newState = {
         ...state,
-        results: items,
+        results: query === '-' ? null : items,
         pagination: { pageSize: state.pagination.pageSize, total, current },
         aggs: aggregation,
         translatedLanguage,
@@ -281,7 +303,7 @@ export default {
     },
 
     translateSearchSuccess(state, { payload: { data } }) {
-      return { ...state, translatedQuery: data.en };
+      return { ...state, translatedText: data.en || data.zh };
     },
 
     setTranslateSearch(state, { payload: { useTranslate } }) {
@@ -289,7 +311,7 @@ export default {
     },
 
     clearTranslateSearch(state) {
-      return { ...state, useTranslateSearch: true, translatedQuery: '' };
+      return { ...state, useTranslateSearch: true, translatedText: '' };
     },
 
     getTopicByMentionSuccess(state, { payload: { data } }) {

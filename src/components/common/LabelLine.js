@@ -36,6 +36,8 @@ export default class LabelLine extends Component {
     }
     if (compare(nextProps, this.props, 'loading')) {
       this.setState({ inputVisible: nextProps.loading });
+    } else if (nextProps.loading === this.props.loading && this.props.loading === false) {
+      this.setState({ inputVisible: nextProps.loading });
     }
   };
 
@@ -53,11 +55,13 @@ export default class LabelLine extends Component {
 
   handleInputConfirm = (e) => {
     const newTag = e.target.value;
-    this.setState({
-      inputDisabled: true,
-    });
-    if (this.props.onTagChange) {
-      this.props.onTagChange(op.ADD, newTag);
+    if (newTag !== '' && newTag) {
+      this.setState({
+        inputDisabled: true,
+      });
+      if (this.props.onTagChange) {
+        this.props.onTagChange(op.ADD, newTag);
+      }
     }
   };
 

@@ -28,12 +28,12 @@ module.exports = {
   // UserAuthSystem: 'aminer', // aminer 或者是 system.config; 默认当前系统
   // UserAuthSystem_AddSysTagAuto: true, // 登录时自动添加system的标签
 
+  // google analytics
+  googleAnalytics: 'UA-107003102-6',
+
   // IndexPage_QuickSearchList:[], // use default.
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
-  Header_SubTextLogo: '伯乐系统',
-  Header_SubTextStyle: { width: 90, left: -54, marginLeft: -80 },
-  Header_LogoWidth: 118,
   Header_UserPageURL: '/user-info',
 
   // ShowHelpDoc: true,
@@ -41,7 +41,7 @@ module.exports = {
   // Functionality
   Enable_Export: true,
   Enable_Export_EB_IF_EXIST: true,
-  Search_EnablePin: true,
+  Search_EnablePin: false,
 
   // > Search related
   HeaderSearch_TextNavi: ['ACMFellowExpertBase', 'ACM_ExpertSearch'],
@@ -71,6 +71,14 @@ module.exports = {
   // ],
 
   Search_CheckEB: true, // Check ExpertBase.
+
+  // NextAPI-QueryHooks:
+  APIPlugin_ExpertSearch: {
+    parameters: {
+      aggregation: ['dims.systag'],
+      haves: { systag: [] },
+    },
+  },
 
   // 地图中心点
   // CentralPosition: { lat: 37.09024, lng: -95.712891 },

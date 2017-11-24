@@ -27,7 +27,7 @@ export default class RelationGraphPage extends React.Component {
 
   componentWillMount() {
     let { query } = queryString.parse(location.search);
-    query = query || ' ';
+    query = query || '-';
     // const query = this.getQueryFromURL(this.props) || 'data mining';
     // this.dispatch({
     //   type: 'app/layout',
@@ -65,7 +65,6 @@ export default class RelationGraphPage extends React.Component {
     const { dispatch } = this.props;
     this.setState({ query });
     dispatch(routerRedux.push({ pathname: '/relation-graph-page', search: `?query=${query}` }));
-    dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query } });
   };
 
   getQueryFromURL = (props) => {

@@ -1,6 +1,7 @@
 import continentscountries from 'public/lab/expert-map/continentscountries.json';
 import { listPersonByIds } from 'services/person';
 import * as profileUtils from 'utils/profile-utils';
+import { sysconfig } from 'systems';
 import {
   ifAllInCache,
   dataCache,
@@ -298,27 +299,6 @@ function getById(id) {
   return document.getElementById(id);
 }
 
-function waitforBMap(tryTimes, interval, success, failed) {
-  let n = 0;
-  const mapInterval = setInterval(() => {
-    if (typeof (BMap) === 'undefined') {
-      // console.log('wait for BMap');
-      n += 1;
-      if (n >= tryTimes) {
-        clearInterval(mapInterval);
-        if (failed) {
-          failed();
-        }
-      }
-    } else {
-      clearInterval(mapInterval);
-      if (success) {
-        success(window.BMap);
-      }
-    }
-  }, interval);
-}
-
 function insertAfter(newElement, targetElement) {
   const parent = targetElement.parentNode;
   if (parent.lastChild === targetElement) {
@@ -328,38 +308,20 @@ function insertAfter(newElement, targetElement) {
   }
 }
 
-function waitforBMapLib(tryTimes, interval, success, failed) {
-  let n = 0;
-  const mapLibInterval = setInterval(() => {
-    if (typeof (BMapLib) === 'undefined') {
-      n += 1;
-      if (n >= tryTimes) {
-        clearInterval(mapLibInterval);
-        if (failed) {
-          failed();
-        }
-      }
-    } else {
-      clearInterval(mapLibInterval);
-      if (success) {
-        success(window.BMapLib);
-      }
-    }
-  }, interval);
-}
-
-function showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch, infoIds, callback) {
+const showTopImageDiv = (e, map, maindom, inputids, onLeave, type, ids, dispatch, infoIds, callback) => {
   const ishere = getById('panel');
   if (ishere != null) {
-    detachCluster(ishere);
+    detachCluster(ishere); //先删除已经存在的
   }
   const width = 180;
   let ostyle = '';
+  //两者的偏移计算不同
   if (type === 'baidu') { //baidu map
     const pixel = map.pointToOverlayPixel(e.currentTarget.getPosition()); // 中心点的位置
     ostyle = `height:${width}px;width:${width}px;left: ${pixel.x - (width / 2)}px;top: ${pixel.y - (width / 2)}px;`;
   } else { //google map
-    ostyle = `height:${width}px;width:${width}px;left: ${(e.x + 27) - (width / 2)}px;top: ${(e.y + 27) - (width / 2)}px;`;
+    const imgWidth = parseInt(maindom.style.height,10);
+    ostyle = `height:${width}px;width:${width}px;left: ${(e.x + imgWidth / 2) - (width / 2)}px;top: ${(e.y + imgWidth / 2) - (width / 2)}px;`;
   }
   // 可得中心点到图像中心点的半径为：width/2-imgwidth/2,圆形的方程为(X-pixel.x)^2+(Y-pixel.y)^2=width/2
   const imgwidth = 45;
@@ -382,7 +344,7 @@ function showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch
     imgdiv.setAttribute('name', 'scholarimg');
     imgdiv.setAttribute('style', cstyle);
     imgdiv.setAttribute('class', 'imgWrapper');
-    imgdiv.setAttribute('title', ids[i]);
+    imgdiv.setAttribute('data-id', ids[i]);
     imgdiv.innerHTML = '';
     insertAfter(imgdiv, thisNode);
     thisNode.appendChild(imgdiv);
@@ -408,19 +370,21 @@ function showTopImageDiv(e, map, maindom, inputids, onLeave, type, ids, dispatch
       if (onLeave) {
         onLeave();
       }
-      detachCluster(thisNode);
+      detachCluster(thisNode); //删除创建的node
     });
   }
   if (typeof (callback) === 'function') {
     callback();
   }
-}
+};
 
 const ifNotImgShowName = (personInfo) => { //当作者的头像是空的时候，显示名字
   let name;
+  let flag = false;
   if (personInfo) {
-    if (personInfo.name_zh) {
-      const str = personInfo.name_zh.substr(1, 2);
+    if ((sysconfig.Locale === 'zh') && personInfo.name_zh) {
+      let str = personInfo.name_zh.replace(/(^\s*)|(\s*$)/g, '');
+      flag = true;
       name = str;
     } else {
       const tmp = personInfo.name.split(' ', 5);
@@ -437,7 +401,7 @@ const ifNotImgShowName = (personInfo) => { //当作者的头像是空的时候�
     if (name.length === 6) {
       name = ' '.concat(name);
     }
-    if (name.length <= 5) {
+    if (name.length <= 5 && !flag) {
       name = '&nbsp;'.concat(name);
     }
   } else {
@@ -462,8 +426,10 @@ const ifNotImgShowName = (personInfo) => { //当作者的头像是空的时候�
       return true;
     });
     name = arr.join('');
-    name = `&nbsp;&nbsp;${name}`;
-    style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:10px;word-wrap:break-word;font-size:10px;';
+    if (!flag) {
+      name = `&nbsp;&nbsp;${name}`;
+    }
+    style = 'background-color:transparent;font-family:monospace;text-align: center;line-height:10px;word-break:break-all;white-space:pre-wrap;word-wrap:break-word;font-size:10px;';
   }
   return { name, style };
 };
@@ -497,6 +463,7 @@ const showImagesInDiv = (ids, imgwidth, blankAvatar, imgdivs) => {
       if (img.src.includes('default.jpg') || img.src.includes('blank_avatar.jpg')) {
         cimg.innerHTML = `<img id='${personInfo.id}' style='${showinfo.style}' data='@@@@@@@${i}@@@@@@@' width='${imgwidth}' src='' alt='${showinfo.name}'>`;
       } else {
+        cimg.innerHTML = '';
         cimg.appendChild(image);
       }
     }
@@ -529,7 +496,7 @@ function showTopImages(ids, imgwidth, blankAvatar, imgdivs) {
   }
 }
 
-function addImageListener(map, ids, getInfoWindow, event, imgwidth, type, projection, infowindow, callback) {
+const addImageListener = (map, ids, getInfoWindow, event, imgwidth, type, projection, infowindow, callback) => {
   // get current point.
   const apos = getById('allmap').getBoundingClientRect();
   const cpos = event.target.getBoundingClientRect();
@@ -560,7 +527,7 @@ function addImageListener(map, ids, getInfoWindow, event, imgwidth, type, projec
       if (event.target.firstChild) { //图片还没有加载出来的时候
         num = event.target.firstChild.name;
       } else {
-        num = event.target.title;
+        num = event.target.getAttribute('data-id');
       }
     } else if (event.target.tagName.toUpperCase() === 'IMG') {
       num = event.target.name;
@@ -578,7 +545,7 @@ function addImageListener(map, ids, getInfoWindow, event, imgwidth, type, projec
           dataCache[p.id] = p;
         }
         personInfo = dataCache[num];
-        if (typeof (callback) === 'function') {
+        if (typeof (callback) === 'function' && personInfo) {
           callback(personInfo);
         }
       },
@@ -588,15 +555,9 @@ function addImageListener(map, ids, getInfoWindow, event, imgwidth, type, projec
     ).catch((error) => {
       console.error(error);
     });
-  } else {
-    if (typeof (callback) === 'function') {
+  } else if (typeof (callback) === 'function') {
       callback(personInfo);
-    }
   }
-}
-
-const onLoadPersonCard = (dispatch, personId) => { //请求单个人的数据
-  dispatch({ type: 'expertMap/getPersonInfo', payload: { personId } });
 };
 
 function toggleRightInfo(type, id, dispatch, infoIds) { // update one person's info.
@@ -711,7 +672,7 @@ const bigAreaConfig = [
 
 
 module.exports = {
-  findPosition, getById, waitforBMap, waitforBMapLib,
+  findPosition, getById,
   insertAfter, resetRightInfoToGlobal,
   onResetPersonCard, detachCluster,
   showTopImageDiv, toggleRightInfo, showTopImages,

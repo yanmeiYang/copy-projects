@@ -3,6 +3,7 @@
 import DropOption from './DropOption';
 import Iconfont from './Iconfont';
 import SearchBox from './SearchBox';
+import SearchHelp from './SearchHelp';
 // import Editor from './Editor';
 import FilterItem from './FilterItem';
 import * as Layout from './Layout/index.js';

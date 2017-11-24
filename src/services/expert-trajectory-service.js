@@ -32,14 +32,29 @@ export async function findTrajPerson(id, start, end) {
     );
 }
 
-export async function findHeatMap(rid) {
-  return request(api.getHeatInfo
-      .replace(':rid', rid)
-      .replace(':lo', 1988)
-      .replace(':hi', 2012)
-      .replace(':size', 344)
-    , { method: 'GET' });
+export async function findTrajsHeat(rosterId, start, end, size) {
+  return request(
+    api.getHeatInfo
+      .replace(':rid', rosterId)
+      .replace(':lo', start)
+      .replace(':hi', end)
+      .replace(':size', size)
+    , { method: 'GET' },
+    );
 }
+
+export async function findTrajsHeatAdvance(name, offset, org, term, size) {
+  return request(
+    api.getHeatByQuery
+      .replace(':name', name)
+      .replace(':offset', offset)
+      .replace(':org', org)
+      .replace(':term', term)
+      .replace(':size', size)
+    , { method: 'GET' },
+  );
+}
+
 
 export async function findTop10000Data() {
   return request('/lab/trajectory/heatData40.json');

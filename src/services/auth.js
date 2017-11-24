@@ -47,7 +47,8 @@ export async function getCurrentUserInfo(params) {
 }
 
 // TODO should in use service.
-export async function createUser(email, first_name, gender, last_name, position, sub, password) {
+export async function createUser(email, first_name, gender, last_name, position, sub, password, source) {
+  const src = source || sysconfig.SOURCE;
   const user = {
     email,
     first_name,
@@ -55,7 +56,7 @@ export async function createUser(email, first_name, gender, last_name, position,
     last_name,
     position,
     sub,
-    src: sysconfig.SOURCE,
+    src,
   };
   if (password) {
     user.password = password;
@@ -102,8 +103,9 @@ export async function revoke(uid, label) {
   });
 }
 
-export async function listUsersByRole(offset, size) {
-  return request(api.listUsersByRole.replace(':role', sysconfig.SOURCE).replace(':offset', offset).replace(':size', size), {
+export async function listUsersByRole(offset, size, source) {
+  const src = source || sysconfig.SOURCE;
+  return request(api.listUsersByRole.replace(':role', src).replace(':offset', offset).replace(':size', size), {
     method: 'GET',
   });
 }

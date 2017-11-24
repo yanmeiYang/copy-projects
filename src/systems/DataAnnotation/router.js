@@ -74,7 +74,6 @@ const routes = [
 
   // expert map
   // map.ExpertMap,
-  // map.ExpertMapGoogle,
   // map.ExpertTrajectoryPage,
   // map.ExpertHeatmapPage,
 

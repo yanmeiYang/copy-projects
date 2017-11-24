@@ -9,7 +9,7 @@ import classnames from 'classnames';
 import { routerRedux } from 'dva/router';
 import { sysconfig } from 'systems';
 import { Spinner } from 'components';
-import { compare } from 'utils';
+import { compare, loadScript } from 'utils';
 import styles from './expert-googlemap.less';
 
 import { listPersonByIds } from '../../services/person';
@@ -78,13 +78,13 @@ export default class ExpertGoogleMap extends React.Component {
     syncInfoWindow();
   }
 
-  addMouseoverHandler = (map, marker, personId) => {
+  addMouseoverHandler = (gmaps, map, marker, personId) => {
     const { dispatch } = this.props;
     const that = this;
-    const infoWindow = new window.google.maps.InfoWindow({
+    const infoWindow = new gmaps.InfoWindow({
       content: "<div id='author_info' class='popup'></div>",
     });
-    window.google.maps.event.addListener(marker, 'mouseover', () => {
+    gmaps.event.addListener(marker, 'mouseover', () => {
       onResetPersonCard(dispatch);
       infoWindow.open(map, marker);
       const ids = [];
@@ -102,11 +102,11 @@ export default class ExpertGoogleMap extends React.Component {
       });
     });
 
-    window.google.maps.event.addListener(marker, 'mouseout', () => {
+    gmaps.event.addListener(marker, 'mouseout', () => {
       infoWindow.close(map, marker);
     });
 
-    window.google.maps.event.addListener(marker, 'click', () => {
+    gmaps.event.addListener(marker, 'click', () => {
       toggleRightInfo('person', personId, dispatch, this.props.expertMap.infoZoneIds);
     });
   };
@@ -126,135 +126,128 @@ export default class ExpertGoogleMap extends React.Component {
     const that = this;
     const filterRange = range || 'all';
     const mapType = type || '0';
-
     if (!place || !place.results) {
-      that.hideLoading();
+      if (this.props.query === '' || this.props.query === '-') {
+        that.hideLoading();
+      }
       return;
     }
-    that.showOverLay();
-    const mapinterval = setInterval(() => {
-      if (typeof (window.google) === 'undefined') {
-        console.log('wait for Google');
-        counter += 1;
-        if (counter > 200) {
-          clearInterval(mapinterval);
-          that.hideLoading();
-          document.getElementById('allmap').innerHTML = 'Cannot connect to Google Map! Please check the network state!';
-        }
-      } else {
-        clearInterval(mapinterval);
-        if (!map1) {
-          map1 = new window.google.maps.Map(document.getElementById('allmap'), {
-            center: { lat: sysconfig.CentralPosition.lat, lng: sysconfig.CentralPosition.lng },
-          });
-        }
-        const mapCenter = {
-          lat: map1 ? map1.getCenter().lat() : sysconfig.CentralPosition.lat,
-          lng: map1 ? map1.getCenter().lng() : sysconfig.CentralPosition.lng,
-        };
-        const conf = this.mapConfig[mapType] || this.mapConfig[0]; //根据地图的类型选择地图的尺寸
-        const map = new window.google.maps.Map(document.getElementById('allmap'), {
-          center: mapCenter,
-          zoom: conf.scale,
-          gestureHandling: 'greedy',
-          minZoom: conf.minscale,
-          maxZoom: conf.maxscale,
+
+    loadScript('GoogleMap', { check: ['google', 'maps'] }, (gmaps) => {
+
+      that.showOverLay();
+      if (!map1) {
+        map1 = new gmaps.Map(document.getElementById('allmap'), {
+          center: { lat: sysconfig.CentralPosition.lat, lng: sysconfig.CentralPosition.lng },
         });
-        this.map = map; // set to global,以便全局取用
-        map1 = this.map; // 地图刷新前，用于存储上次浏览的地点
-        if (place.results !== 'undefined' && typeof (place.results) !== 'undefined') {
-          place.results.sort((a, b) => b.hindex - a.hindex);
-        } else {
-          return true; //往下执行没有必要了
-        }
+      }
+      const mapCenter = {
+        lat: map1 ? map1.getCenter().lat() : sysconfig.CentralPosition.lat,
+        lng: map1 ? map1.getCenter().lng() : sysconfig.CentralPosition.lng,
+      };
+      const conf = this.mapConfig[mapType] || this.mapConfig[0]; //根据地图的类型选择地图的尺寸
+      const map = new gmaps.Map(document.getElementById('allmap'), {
+        center: mapCenter,
+        zoom: conf.scale,
+        gestureHandling: 'greedy',
+        minZoom: conf.minscale,
+        maxZoom: conf.maxscale,
+        fullscreenControl: false,
+      });
+      this.map = map; // set to global,以便全局取用
+      map1 = this.map; // 地图刷新前，用于存储上次浏览的地点
+      if (place.results !== 'undefined' && typeof (place.results) !== 'undefined') {
+        place.results.sort((a, b) => b.hindex - a.hindex);
+      } else {
+        return true; //往下执行没有必要了
+      }
 
-        const locations = [];
-        let j = 0;
-        const ids = [];
-        for (const pr of place.results) {
-          ids.push(pr.id);
-          dataMap[pr.id] = pr;
-          const newplace = findPosition(mapType, pr);
-          const onepoint = { lat: newplace[0], lng: newplace[1] };
+      const locations = [];
+      let j = 0;
+      const ids = [];
+      for (const pr of place.results) {
+        ids.push(pr.id);
+        dataMap[pr.id] = pr;
+        const newplace = findPosition(mapType, pr);
+        const onepoint = { lat: newplace[0], lng: newplace[1] };
 
-          if (newplace && newplace[1] && (newplace[1] !== 0 && newplace[1] !== 0)) {
-            let include = false;
-            switch (filterRange) {
-              case 'all':
-                include = true;
-                break;
-              case 'acm':
-              case 'ieee':
-                include = pr.fellows.indexOf(range) >= 0;
-                break;
-              case 'chinese':
-                include = pr.is_ch;
-                break;
-              default:
-            }
-            if (include) { //只有是选定的时候才加入
-              locations[j] = onepoint;
-              j += 1;
-            }
+        if (newplace && newplace[1] && (newplace[1] !== 0 && newplace[1] !== 0)) {
+          let include = false;
+          switch (filterRange) {
+            case 'all':
+              include = true;
+              break;
+            case 'acm':
+            case 'ieee':
+              include = pr.fellows.indexOf(range) >= 0;
+              break;
+            case 'chinese':
+              include = pr.is_ch;
+              break;
+            default:
+          }
+          if (include) { //只有是选定的时候才加入
+            locations[j] = onepoint;
+            j += 1;
           }
         }
-        let markers = locations.map((location, i) => {
-          return new window.google.maps.Marker({
-            position: location,
+      }
+      let markers = locations.map((location, i) => {
+        return new gmaps.Marker({
+          position: location,
+          label: {
+            text: place.results[i].name,
+            color: '#000000',
+            fontSize: '12px',
+            backgroundColor: 'transparent',
+            fontWeight: 'bold',
+            fontStyle: 'italic',
+            id: place.results[i].id, //id是自己设置的一个属性，用来放id的
+          },
+          icon: {
+            url: '/images/map/marker_blue_sprite.png',
+            size: new gmaps.Size(20, 70),
+            origin: new gmaps.Point(0, 0),
+            anchor: new gmaps.Point(0, 25),
+          },
+          title: place.results[i].name,
+        });
+      });
+
+      const number = hindexRange;
+      if (number === 'top200') {
+        markers = markers.slice(0, 200);
+      } else if (number === 'top50') {
+        markers = markers.slice(0, 50);
+      } else if (number === 'top100') {
+        markers = markers.slice(0, 100);
+      } else if (number === 'top500') {
+        markers = markers.slice(0, 500);
+      }
+
+      if (mapType === '1') {
+        bigAreaConfig.map((ac) => {
+          return new gmaps.Marker({
+            position: { lat: ac[1] - 6, lng: ac[2] },
             label: {
-              text: place.results[i].name,
-              color: '#000000',
+              text: ac[0],
               fontSize: '12px',
-              backgroundColor: 'transparent',
-              fontWeight: 'bold',
               fontStyle: 'italic',
+              fontWeight: 'bold',
             },
-            icon: {
-              url: '/images/map/marker_blue_sprite.png',
-              size: new window.google.maps.Size(20, 70),
-              origin: new window.google.maps.Point(0, 0),
-              anchor: new window.google.maps.Point(0, 25),
-            },
-            title: place.results[i].id,
+            icon: { url: '/images/map/blank.png' },
+            map,
           });
         });
-
-        const number = hindexRange;
-        if (number === 'top200') {
-          markers = markers.slice(0, 200);
-        } else if (number === 'top50') {
-          markers = markers.slice(0, 50);
-        } else if (number === 'top100') {
-          markers = markers.slice(0, 100);
-        } else if (number === 'top500') {
-          markers = markers.slice(0, 500);
-        }
-
-        if (mapType === '1') {
-          bigAreaConfig.map((ac) => {
-            return new window.google.maps.Marker({
-              position: { lat: ac[1] - 6, lng: ac[2] },
-              label: {
-                text: ac[0],
-                fontSize: '12px',
-                fontStyle: 'italic',
-                fontWeight: 'bold'
-              },
-              icon: { url: '/images/map/blank.png' },
-              map,
-            });
-          });
-        }
-        const markerClusterer = new window.googleMap.MarkerClusterer(map, {});
-        markerClusterer.addMarkers(markers);
-        for (let m = 0; m < markers.length; m += 1) {
-          that.addMouseoverHandler(map, markers[m], place.results[m].id);
-        }
-        that.hideLoading();
-        //cache image
-        checkCacheLevel(sysconfig.Map_Preload, ids);
       }
-    }, 100);
+      const markerClusterer = new window.googleMap.MarkerClusterer(map, {});
+      markerClusterer.addMarkers(markers);
+      for (let m = 0; m < markers.length; m += 1) {
+        that.addMouseoverHandler(gmaps, map, markers[m], place.results[m].id);
+      }
+      that.hideLoading();
+      checkCacheLevel(sysconfig.Map_Preload, ids);
+    });
   };
 
   showLoading = () => {

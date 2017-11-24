@@ -5,6 +5,7 @@ export default {
   'header.label.help': 'HELP',
   'header.login': 'Login',
   'header.exit_login': 'Exit Login',
+  'system.lang.simple': 'EN',
   'system.lang.show': 'Language',
   'system.lang.option_en': 'English',
   'system.lang.option_zh': '简体中文',
@@ -73,6 +74,7 @@ export default {
   'com.PersonList.label.sendEmail': 'Send Email',
   'com.PersonList.label.qrcode': 'QR Code',
   'com.PersonList.label.feedback': 'Feedback',
+  'com.PersonList.message.noResults': 'No Results',
 
   'com.expertMap.headerLine.label.field': 'Field:',
   'com.expertMap.headerLine.label.selectField': 'Choose the field',
@@ -82,6 +84,13 @@ export default {
   'com.expertMap.headerLine.label.statistic': 'Statistic & Analysis',
   'com.expertMap.headerLine.label.download': 'Export Excel',
   'com.expertMap.headerLine.label.ok': 'OK',
+  'com.expertTrajectory.theme.label.0': 'Regular',
+  'com.expertTrajectory.theme.label.1': 'Business',
+  'com.expertTrajectory.theme.label.2': 'Dark',
+  'com.expertTrajectory.theme.label.3': 'Matcha Green',
+  'com.expertTrajectory.theme.label.4': 'Kraft Paper',
+  'com.expertTrajectory.theme.label.5': 'Navigator',
+  'com.expertTrajectory.theme.label.6': 'Minimalism',
 
   'com.ExpertBase.Button.Add': '添加',
   'com.ExpertBase.Button.Remove': '删除',
@@ -91,6 +100,9 @@ export default {
   'com.bole.PersonComment': 'Comments',
   'com.bole.Remove': 'Remove',
   'com.bole.AddButton': 'Add',
+
+  // search venue
+  'com.SearchVenue.title': 'Conference Rank',
 
   // Expert Base
   'page.ExpertBaseExpertsPage.MyExperts': 'My Experts',

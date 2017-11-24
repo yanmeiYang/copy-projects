@@ -27,9 +27,6 @@ module.exports = {
   // IndexPage_QuickSearchList:[], // use default.
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
-  Header_SubTextLogo: '伯乐系统',
-  Header_SubTextStyle: { width: 90, left: -54, marginLeft: -80 },
-  Header_LogoWidth: 118,
   Header_UserPageURL: '/user-info',
 
   // ShowHelpDoc: true,
@@ -37,7 +34,7 @@ module.exports = {
   // Functionality
   Enable_Export: true,
   Enable_Export_EB_IF_EXIST: true,
-  Search_EnablePin: true,
+  Search_EnablePin: false,
 
   // > Search related
   HeaderSearch_TextNavi: ['ACMFellowExpertBase', 'ACM_ExpertSearch'],

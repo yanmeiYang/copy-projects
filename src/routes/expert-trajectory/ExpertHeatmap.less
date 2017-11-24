@@ -1,83 +1,21 @@
-.picture{
-  display: block;
-  z-index: 100;
-  overflow: visible;
-  height: 0px;
-  width: 41px;
+.whole {
+  display: flex;
+  flex-direction: row;
 
-  .onePic{
-    position: relative;
-    z-index: 100;
-    display: block;
-    width: 41px;
-
-    .url{
-      width: 41px;
-    }
-  }
-}
-
-.button{
-  display: block;
-  z-index: 100;
-  overflow: visible;
-  height: 0px;
-
-  .plus{
-    fontSize: 6;
-    color: #08c;
-    position: relative;
-    left: 1px;
-    top: 2px;
-    z-index: 100;
-    display: block;
+  .heatmap{
+    flex: 2;
+    height: 700px;
+    left: 0px;
+    padding: 0px;
   }
 
-  .minus{
-    fontSize: 6;
-    color: #08c;
-    position: relative;
-    left: 1px;
-    top: 3px;
-    z-index: 100;
-    display: block;
+  .info{
+    width: 50px;
   }
-
-  .light{
-    fontSize: 6;
-    color: #08c;
-    position: relative;
-    left: 2px;
-    top: 1px;
-    z-index: 100;
-    // display: block;
-  }
-
-  .dark{
-    fontSize: 6;
-    color: #08c;
-    position: relative;
-    left: 1px;
-    top: 1px;
-    z-index: 100;
-  }
-}
-
-
-
-.two{
-    opacity: 0.2;
-    position: absolute;
-    //left: 340px;
-    //top: 1000px;
-  left: 3640px;
-  top: 1760px;
-    color: #f5f3f0;
-    //fontSize: 400px;
-    // font-weight: 600;
 }
 
 .dinner{
+  margin: 20px 0 0 20px;
   display: block;
   overflow: visible;
   display: flex;
@@ -101,7 +39,11 @@
     left: 0px;
   }
 }
-
+:global {
+  .anchorBL {
+    display: none;
+  }
+}
 
 
 

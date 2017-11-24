@@ -77,7 +77,7 @@ export default class AddToEBButton extends PureComponent {
   };
 
   render() {
-    const { person } = this.props;
+    const { person, expertBaseId, targetExpertBase } = this.props;
     if (!person) {
       return null;
     }

@@ -3,6 +3,7 @@
  */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Menu, Dropdown, Icon } from 'antd';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { sysconfig } from 'systems';
@@ -86,7 +87,23 @@ if (process.env.NODE_ENV !== 'production') {
   defaultNavis.push('ExpertTrajectory');
 }
 
-const defaultQuery = ' ';
+const defaultQuery = '-';
+
+const menu = (
+  <Menu style={{ height: '280px', overflow: 'scroll' }}>
+    {sysconfig.MyExpert_List &&
+    sysconfig.MyExpert_List.map((expertBase) => {
+      return (
+        <Menu.Item key={expertBase.id}>
+          <a rel="noopener noreferrer"
+             href={`/eb/${expertBase.id}/${defaultQuery}/0/20`}>
+            {expertBase.title}
+          </a>
+        </Menu.Item>
+      );
+    })}
+  </Menu>
+);
 
 @connect()
 export default class Navigator extends Component {
@@ -129,12 +146,21 @@ export default class Navigator extends Component {
 
   render() {
     // const { logoZone, searchZone, infoZone } = this.props;
+    const path = window.location.pathname;
 
     return (
       <Layout.Header className={tc(['navigator'])}>
+        {sysconfig.HeaderSearch_DropDown &&
+        <Dropdown overlay={menu} className={styles.myExpert}>
+          <a className={tc(['ant-dropdown-link', 'navi'], [path.indexOf('eb/') >= 0 ? 'current' : ''])}
+             href="#" style={{ color: 'white', fontSize: '16px' }}>
+            我的专家库 <Icon type="down" />
+          </a>
+        </Dropdown>}
+
         {this.navis.map((naviKey) => {
           const c = NaviConfig[naviKey];
-          const path = window.location.pathname;
+          // const path = window.location.pathname;
           let currentClass = path.indexOf(c.pageSignature) >= 0 ? 'current' : '';
           if (path.indexOf('expert-googlemap') >= 0 && naviKey === 'ExpertMap') {
             currentClass = 'current';

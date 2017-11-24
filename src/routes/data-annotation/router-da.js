@@ -7,7 +7,7 @@ export default {
   AnnotatePersonProfile: {
     path: '/data-annotation/profile/:id',
     models: () => [
-      // import('models/search'),
+       import('models/person'),
     ],
     component: () => import('routes/data-annotation/AnnotatePersonProfile'),
   },

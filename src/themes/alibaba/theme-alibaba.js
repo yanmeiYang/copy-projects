@@ -8,6 +8,9 @@ import { sysconfig } from 'systems';
 import * as hole from 'utils/hole';
 import { FormattedMessage as FM } from 'react-intl';
 import { IndexHotLinks } from 'components/widgets';
+import { SearchVenue } from 'components/search';
+import { IndexCenterZone } from '../../systems/alibaba/components';
+import centerZoneLinks from '../../systems/alibaba/components/center-zone-links';
 import styles from './theme-alibaba.less';
 // import * as Const from './const-acmfellow';
 
@@ -30,7 +33,7 @@ module.exports = {
   index_bannerZone: [
     <div key="0" className={styles.index_bannerZone}>
       {/*<div className={classnames(styles.logo)}>*/}
-        {/*<span alt="" className="icon" />*/}
+      {/*<span alt="" className="icon" />*/}
       {/*</div>*/}
       <h1 className={styles.text}>
         <FM id="index.title" defaultMessage="Expert Search" />
@@ -38,15 +41,23 @@ module.exports = {
     </div>,
   ],
 
+  SearchComponent_RightZone: [
+    hole.DEFAULT_PLACEHOLDER,
+    param => {
+      return (
+        <div key="0">
+          <SearchVenue query={param.query} />
+        </div>
+      );
+    },
+  ],
+
   // Expert Page
   index_centerZone: [
-    <IndexHotLinks
+    <IndexCenterZone
       key={0}
-      links={sysconfig.IndexPage_QuickSearchList}
-      lang={sysconfig.Locale}
-      urlFunc={query => `/${sysconfig.SearchPagePrefix}/${query}/0/${sysconfig.MainListSize}`}
-      // urlFunc={query => `/eb/${sysconfig.ExpertBase}/${query}/0/${sysconfig.MainListSize}`}
-    />,
+      links={centerZoneLinks}
+      urlFunc={query => `/${sysconfig.SearchPagePrefix}/${query}/0/${sysconfig.MainListSize}`} />,
   ],
 
 

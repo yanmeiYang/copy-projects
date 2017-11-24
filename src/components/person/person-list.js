@@ -29,11 +29,17 @@ export default class PersonList extends Component {
     type: PropTypes.string,
     persons: PropTypes.array,
     expertBaseId: PropTypes.string,
+    indicesType: PropTypes.string, // ["", text]
+    showIndices: PropTypes.array,
     titleRightBlock: PropTypes.func, // A list of function
     rightZoneFuncs: PropTypes.array,
     didMountHooks: PropTypes.array,
     UpdateHooks: PropTypes.array,
     tagsLinkFuncs: PropTypes.func,
+  };
+
+  static defaultProps = {
+    showIndices: sysconfig.PersonList_ShowIndices,
   };
 
   constructor(props) {
@@ -74,14 +80,21 @@ export default class PersonList extends Component {
   };
 
   render() {
-    const { persons, expertBaseId, className, type } = this.props;
+    const { persons, expertBaseId, className, type, indicesType, showIndices } = this.props;
     const { rightZoneFuncs, titleRightBlock, bottomZoneFuncs, afterTitleBlock, tagsLinkFuncs } = this.props;
-
     const showPrivacy = false;
 
     return (
       <div className={classnames(styles.personList, className, styles[type])}>
-        {persons && persons.length === 0 && <div className={styles.empty}>No Results</div>}
+        {!persons &&
+        <div className={styles.empty}>
+          <FM id="com.KgSearchBox.placeholder" defaultMessage="请输入姓名或者搜索词" />
+        </div>}
+        {persons && persons.length === 0 &&
+        <div className={styles.empty}>
+          No Results
+          <FM id="com.PersonList.message.noResults" defaultMessage="No Results" />
+        </div>}
 
         {persons && persons.map((person) => {
           const profile = person.profile || {};
@@ -98,6 +111,9 @@ export default class PersonList extends Component {
           // const tags = profileUtils.findTopNTags(person, 8);
 
           const personLinkParams = { href: sysconfig.PersonList_PersonLink(person.id) };
+          if (this.props.PersonList_PersonLink_NewTab === true) {
+            personLinkParams.target = '_blank';
+          }
           if (sysconfig.PersonList_PersonLink_NewTab) {
             personLinkParams.target = '_blank';
           }
@@ -130,7 +146,8 @@ export default class PersonList extends Component {
                         <Indices
                           indices={indices}
                           activity_indices={activity_indices}
-                          showIndices={sysconfig.PersonList_ShowIndices}
+                          showIndices={showIndices}
+                          indicesType={indicesType}
                         />
                         {pos && <span><i className="fa fa-briefcase fa-fw" /> {pos}</span>}
                         {aff && <span><i className="fa fa-institution fa-fw" /> {aff}</span>}
@@ -148,8 +165,9 @@ export default class PersonList extends Component {
 
                         {false && person.num_viewed > 0 &&
                         <span className={styles.views}><i
-                          className="fa fa-eye fa-fw" />{person.num_viewed} <FM
-                          id="com.PersonList.label.views" defaultMessage="views" /></span>}
+                          className="fa fa-eye fa-fw" />{person.num_viewed}
+                          <FM id="com.PersonList.label.views" defaultMessage="views" />
+                        </span>}
 
                       </div>
 
@@ -157,7 +175,7 @@ export default class PersonList extends Component {
                       <PersonTags
                         className={styles.tagZone}
                         tags={person.tags}
-                        tagsTranslated={person.tags_translated}
+                        tagsTranslated={person.tags_translated_zh}
                         tagsLinkFuncs={tagsLinkFuncs}
                         hideBorder
                       />

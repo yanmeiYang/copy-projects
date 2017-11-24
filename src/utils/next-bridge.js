@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+/* eslint-disable no-param-reassign,camelcase */
 /**
  *  Created by BoGao on 2017-08-14;
  *
@@ -35,20 +35,7 @@ const toNextPerson = (person) => {
         phone: '', // TODO phone
       },
 
-      // h_index, g_index, num_pubs, citation, activity, diversity, new_star, rising_star, sociability,
-      // 'hindex', 'gindex', 'numpubs', 'citation', 'newStar', 'risingStar', 'activity', 'diversity', 'sociability'
-      indices: {
-        hindex: person.indices.h_index,
-        gindex: person.indices.g_index,
-        numpubs: person.indices.num_pubs,
-        citation: person.indices.num_citation,
-        newStar: person.indices.new_star,
-        risingStar: person.indices.risingStar,
-        activity: person.indices.activity,
-        diversity: person.indices.diversity,
-        sociability: person.indices.sociability,
-        activityRankingContrib: person.activity_indices ? person.activity_indices.contrib : '',
-      },
+      indices: toNextIndices(person.indices, person.activity_indices),
 
       tags: person.tags && person.tags.map(tag => tag.t),
       tags_zh: person.tags_zh && person.tags_zh.map(tag => tag.t),
@@ -72,6 +59,21 @@ const toNextPerson = (person) => {
     };
   }
   return null;
+};
+
+const toNextIndices = (indices, activity_indices) => {
+  return {
+    hindex: indices.h_index,
+    gindex: indices.g_index,
+    pubs: indices.num_pubs, // pubs, old numpubs
+    citations: indices.num_citation, // citations, old citation
+    newStar: indices.new_star,
+    risingStar: indices.risingStar,
+    activity: indices.activity,
+    diversity: indices.diversity,
+    sociability: indices.sociability,
+    activityRankingContrib: activity_indices ? activity_indices.contrib : '',
+  };
 };
 
 const toNextAggregation = (aggs) => {
@@ -111,4 +113,5 @@ module.exports = {
   toNextPersons,
   toNextAggregation,
   toNextCCFLabelFromEBID,
+  toNextIndices,
 };

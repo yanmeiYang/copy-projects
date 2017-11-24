@@ -3,7 +3,10 @@ const apiDomain = 'https://api.aminer.org';
 const nextAPIURLLocalhost = 'http://localhost:4005';
 const nextAPIURLOnlineBeta = 'http://e30c17034d854ef4b1dac3d7b5874d3b-cn-beijing.alicloudapi.com';
 const nextAPIURLOnlineProduction = 'https://apiv2.aminer.org';
-const nextAPIURL = process.env.NODE_ENV !== 'production' ? nextAPIURLLocalhost :
+const nextAPIURL = process.env.NODE_ENV !== 'production' ?
+  nextAPIURLOnlineProduction
+  // nextAPIURLLocalhost
+  :
   // nextAPIURLOnlineBeta;
   nextAPIURLOnlineProduction;
 
@@ -67,6 +70,8 @@ module.exports = {
     allPersonInBaseWithSort: `${baseURL}/roster/:ebid/order-by/:sort/offset/:offset/size/:size`,
     allPersonInBaseAgg: `${baseURL}/roster/:ebid/agg?offset=&order=h_index&size=20`,
     // TODO agg
+
+    searchVenue: `${baseURL}/search/venue`,
 
     searchMap: `${baseURL}/search/person/geo`, // ?query=:search
     searchExpertBaseMap: `${baseURL}/roster/:id/geo/offset/:offset/size/:size`,
@@ -137,7 +142,9 @@ module.exports = {
     listConfigsByCategoryList: `${baseURL}/2b/config/:source/by-category`,
 
     // topic
-    getTopicByMention: `${baseURL}/topic/summary/m/:mention`,
+    getTopicByMention: '/topic/summary/m/:mention',
+    getTopicOnSkills: '/topic/person/topics/up/:id/toffset/:toffset/tsize/:tsize/uoffset/:uoffset/usize/:usize',
+
 
     // Recommendation APIs
     getAllOrgs: `${baseURL}/reviewer/orgs/get/all/:offset/:size`,
@@ -219,6 +226,7 @@ module.exports = {
     // getToBProfile: `${baseURL}/api/2b/profile/:src/:id`,
     getTrajectoryInfo: `${baseURL}/person/geo/trajectory/:id/year/:lo/:hi`,
     getHeatInfo: `${baseURL}/person/geo/trajectory/roster/:rid/year/:lo/:hi/size/:size`,
+    getHeatByQuery: `${baseURL}/search/person/advanced/trajectory?name=:name&offset=:offset&org=:org&term=:term&size=:size`,
 
     // Knowledge Graph
     kgFind: {

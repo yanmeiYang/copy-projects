@@ -82,12 +82,6 @@ export default class ProjectPage extends React.Component {
     });
   }
 
-
-  // componentWillUnmount() {
-  //   this.dispatch({ type: 'app/layout', payload: { showFooter: true } });
-  // }
-  //
-
   onSearch = (data) => {
     if (data.query) {
       return;
@@ -95,7 +89,6 @@ export default class ProjectPage extends React.Component {
     const { dispatch } = this.props;
     this.setState({ query: data.query });
     dispatch(routerRedux.push({ pathname: '/rcd', query: { query: data.query } }));
-    dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: data.query } });
   };
 
   render() {

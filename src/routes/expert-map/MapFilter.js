@@ -45,10 +45,12 @@ export default class MapFilter extends PureComponent {
 
   render() {
     const { current, currentHindex } = this.state;
+    const { MapFilterRange } = this.props;
 
     return (
       <div className={styles.filterWrap}>
         <div className={styles.filter}>
+          {MapFilterRange &&
           <div className={styles.filterRow}>
             <span className={styles.filterTitle}>
               <span>Range:</span>
@@ -65,7 +67,7 @@ export default class MapFilter extends PureComponent {
                 </CheckableTag>
               ))}
             </ul>
-          </div>
+          </div>}
           <div className={styles.filterRow}>
             <span className={styles.filterTitle}>
               <span>H-index:</span>

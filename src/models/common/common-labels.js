@@ -48,7 +48,6 @@ export default {
       const newPayload = payload;
       const { success, data } = yield call(labelService.fetchLabelsByIds, newPayload);
       if (success && data) {
-        console.log('****>>>>', data);
         let tagsMap = Map();
         if (data && data.items && data.items.length > 0) {
           tagsMap = tagsMap.withMutations((map) => {

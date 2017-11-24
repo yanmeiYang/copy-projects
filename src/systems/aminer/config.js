@@ -25,9 +25,6 @@ module.exports = {
   // IndexPage_QuickSearchList:[], // use default.
 
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
-  //Header_SubTextLogo: '伯乐系统',
-  //Header_SubTextStyle: { width: 90, left: -54, marginLeft: -80 },
-  //Header_LogoWidth: 118,
 
   Header_UserPageURL: '/user-info',
   //Header_RightZone: [() => <Link key="0" to={`/eb/${ExpertBase}/-/0/20`}>我的专家库</Link>], // TODO make this a Component.
@@ -38,7 +35,7 @@ module.exports = {
   // Functionality
   Enable_Export: false,
   // Enable_Export: true,
-  Search_EnablePin: true,
+  Search_EnablePin: false,
 
   // > Search related
   // HeaderSearch_TextNavi: ['ACMFellowExpertBase', 'ACM_ExpertSearch'],
@@ -57,8 +54,11 @@ module.exports = {
    * PersonList
    */
   PersonList_PersonLink: personId => `/p/${personId}`,
-  // PersonList_PersonLink_NewTab: true,
-  // param: [person, eb{id,name}]
+  PersonList_PersonLink_NewTab: true,
+  PersonList_TitleRightBlock: defaults.EMPTY_BLOCK_FUNC, // profile => 'jsx',
+  PersonList_RightZone: defaults.IN_APP_DEFAULT, // [()=><COMP>]
+  PersonList_BottomZone: defaults.IN_APP_DEFAULT,
+  //param: [person, eb{id,name}]
 
   Search_CheckEB: true, // Check ExpertBase.
 

@@ -21,8 +21,8 @@ const plainOptions = ['name', 'gender', 'pos', 'aff', 'h_index', 'activity', 'ne
 
 const defaultCheckedList = plainOptions; // ['name', 'pos', 'aff', 'h_index'];
 
-const mapStateToProps = ({ app, search, loading, exportExperts }) =>
-  ({ app, search, loading, exportExperts });
+const mapStateToProps = ({ app, exportExperts }) =>
+  ({ app: { user: app.user, roles: app.roles }, exportExperts });
 
 @connect(mapStateToProps)
 @Auth
@@ -34,7 +34,7 @@ export default class ExportExperts extends Component {
     checkedList: defaultCheckedList,
     indeterminate: true,
     checkAll: false,
-    exportSize: 500,
+    exportSize: 100,
     maxExportSize: 500,
     interestsI18n: {},
   };
@@ -85,7 +85,6 @@ export default class ExportExperts extends Component {
     // if (sysconfig.Locale === 'zh') {
     //   selected.push('translate');
     // }
-
     // TODO Change to multi download, change to use effects takeAll.
     this.props.dispatch({
       type: 'exportExperts/searchPerson',
@@ -100,20 +99,20 @@ export default class ExportExperts extends Component {
           const basic = {
             name: profileUtils.displayNameCNFirst(person.name, person.name_zh),
             gender: (person.attr && person.attr.gender) ? personService.returnGender(person.attr.gender) : ' ',
-            pos: profileUtils.displayPosition(person.pos),
-            aff: profileUtils.displayAff(person),
-            h_index: person.indices.h_index ? person.indices.h_index : ' ',
+            pos: (person.profile && person.profile.position) ? person.profile.position : '',
+            aff: (person.profile && person.profile.affiliation) ? person.profile.affiliation : '',
+            h_index: person.indices.hindex ? person.indices.hindex : ' ',
             activity: person.indices.activity ? getTwoDecimal(parseFloat(person.indices.activity), 2) : ' ',
-            new_star: person.indices.new_star ? getTwoDecimal(parseFloat(person.indices.new_star), 2) : ' ',
-            num_citation: person.indices.num_citation ? getTwoDecimal(parseFloat(person.indices.num_citation), 2) : ' ',
-            num_pubs: person.indices.num_pubs ? getTwoDecimal(parseFloat(person.indices.num_pubs), 2) : ' ',
-            interest: (person.tags && person.tags.length > 0) ? person.tags.slice(0, 8).map(item => item.t).join(';') : ' ',
+            new_star: person.indices.newStar ? getTwoDecimal(parseFloat(person.indices.newStar), 2) : ' ',
+            num_citation: person.indices.citations ? getTwoDecimal(parseFloat(person.indices.citations), 2) : ' ',
+            num_pubs: person.indices.pubs ? getTwoDecimal(parseFloat(person.indices.pubs), 2) : ' ',
+            interest: (person.tags && person.tags.length > 0) ? person.tags.slice(0, 8).map(item => item).join(';') : ' ',
             translate: (person.tags && person.tags.length > 0) ?
               person.tags.slice(0, 8).map((item) => {
-              const tag = personService.returnKeyByLanguage(this.state.interestsI18n, item.t);
-              const showTag = tag.zh !== '' ? tag.zh : tag.en;
-              return showTag;
-            }).join(';') : ' ',
+                const tag = personService.returnKeyByLanguage(this.state.interestsI18n, item);
+                const showTag = tag.zh !== '' ? tag.zh : tag.en;
+                return showTag;
+              }).join(';') : ' ',
           };
 
           selectedItem.map((item) => {
@@ -140,7 +139,10 @@ export default class ExportExperts extends Component {
         let str = `${firstRow}\n${expertPersonInfo}`;
         const bom = '\uFEFF';
         str = encodeURI(str);
-        location.href = `data:text/csv;charset=utf-8,${bom}${str}`;
+        const link = window.document.createElement('a');
+        link.setAttribute('href', `data:text/csv;charset=utf-8,${bom}${str}`);
+        link.setAttribute('download', 'export.csv');
+        link.click();
         this.setState({ loading: false });
       }
     }).catch((err) => {
@@ -218,7 +220,6 @@ export default class ExportExperts extends Component {
               </a>
             </Button>
           </div>
-
         </Modal>
       </div>
     );

@@ -11,12 +11,16 @@ class CrossContrast extends React.Component {
   render() {
     const info = this.props.compareData;
     const title = ['中国', '美国', '其他'];
+    const { USA, China, OtherNation } = info;
     const comPer = {
       title,
-      num: [info.ChinaAuthorSize, info.USAAuthorSize, info.otherAuthorSize],
+      num: [China.authorsCount, USA.authorsCount, OtherNation.authorsCount],
     };
-    const comPub = { title, num: [info.ChinaPubSize, info.USAPubSize, info.otherPubSize] };
-    const comCit = { title, num: [info.ChinaCitationCount, info.USACitationCount, 0] };
+    const comPub = { title, num: [China.pubsCount, USA.pubsCount, OtherNation.pubsCount] };
+    const comCit = {
+      title,
+      num: [China.heat.toFixed(0), USA.heat.toFixed(0), OtherNation.heat.toFixed(0)],
+    };
 
     return (
       <div className={styles.modalContent}>
@@ -32,15 +36,15 @@ class CrossContrast extends React.Component {
           <h4>中美论文影响对比</h4>
           <BarChart id="citation" compareVal={comCit} />
         </div>
-        { info.nationCitationList.length > 0 &&
+        { info.nations.length > 0 &&
         <div>
           <h4>全球前10个国家</h4>
           <div>
-            {info.nationCitationList.slice(0, 10).map((item, index) => {
+            {info.nations.slice(0, 10).map((item, index) => {
               return (
-                <Tooltip key={index} placement="top" title={item.nation}>
+                <Tooltip key={index} placement="top" title={item._1}>
                   <a href="#">
-                    <Tag className={styles.antTag}>{item.nation}</Tag>
+                    <Tag className={styles.antTag}>{item._1}</Tag>
                   </a>
                 </Tooltip>
               );
@@ -48,16 +52,16 @@ class CrossContrast extends React.Component {
           </div>
         </div>
         }
-        { info.orgCitationList.length > 0 &&
+        { info.orgs.length > 0 &&
         <div>
           <h4>全球前20个机构</h4>
           <div>
-            {info.orgCitationList.slice(0, 20).map((item, index) => {
+            {info.orgs.slice(0, 20).map((item, index) => {
               return (
-                <Tooltip key={index} placement="top" title={item.org}>
-                  <a href="#">
+                <Tooltip key={index} placement="top" title={item._1} >
+                  <a href="#" className={styles.tooltip}>
                     <Tag key={index} className={styles.antTag}>
-                      {item.org.length > 110 ? `${item.org.slice(0, 110)}...` : item.org}
+                      {item._1.length > 110 ? `${item._1.slice(0, 110)}...` : item._1}
                     </Tag>
                   </a>
                 </Tooltip>

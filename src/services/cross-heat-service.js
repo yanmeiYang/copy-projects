@@ -83,20 +83,13 @@ export async function getDomainExpert(ids) {
   });
 }
 
-export async function getDomainPub(id) {
-  return request(api.getPubById
-    .replace(':id', id), {
-    method: 'GET',
+export async function getDomainPub(ids) {
+  return request(api.getPubByIds, {
+    method: 'POST',
+    body: JSON.stringify(ids),
   });
 }
 
-export async function getTaskList(offset, size) {
-  return request(api.getTaskList
-    .replace(':offset', offset)
-    .replace(':size', size), {
-    method: 'GET',
-  });
-}
 
 export async function delTaskList(id) {
   return request(api.delTaskList
@@ -109,5 +102,37 @@ export async function getSuggest(query) {
   return request(api.getSuggest
     .replace(':query', query), {
     method: 'GET',
+  });
+}
+
+
+export async function addCrossField(params) {
+  return request(api.addCrossField, {
+    method: 'PUT',
+    body: JSON.stringify(params),
+  });
+}
+
+export async function getCrossFieldById(id) {
+  return request(api.getCrossFieldById
+    .replace(':id', id), {
+    method: 'GET',
+  });
+}
+
+export async function getTaskList(offset, size) {
+  return request(api.getCrossFieldList
+    .replace(':offset', offset)
+    .replace(':size', size), {
+    method: 'GET',
+  });
+}
+
+export async function getAggregate(params) {
+  const { method,dt } = params;
+  return request(api.getAggregate
+    .replace(':method', method), {
+    method: 'POST',
+    body: JSON.stringify(dt),
   });
 }

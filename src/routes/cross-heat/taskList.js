@@ -38,11 +38,11 @@ class CrossTaskList extends React.Component {
     this.tabData = [];
     const statusVal = ['计算中', '已完成'];
     taskList.map((item) => {
-      const title = item.queryTree1.name + " & " + item.queryTree2.name;
-      const isOk = item.total === item.calculated ? 1 : 0;
+      const title = item._1.name + " & " + item._2.name;
+      const isOk = item.total === item.completed ? 1 : 0;
       const status = statusVal[isOk];
       const id = item._id;
-      this.tabData.push({ title, status, date: item.timestamp, id });
+      this.tabData.push({ title, status, date: item.date, id });
       return true;
     });
     this.tabData.reverse();
@@ -76,8 +76,8 @@ class CrossTaskList extends React.Component {
   }
 
   formatRelative = (text, record) => {
-    const date = new Date(text * 1000);
-    const formatDate = date.format('yyyy-MM-dd hh:mm:ss');
+    const date = new Date(text);
+    const formatDate = date.format('yyyy-MM-dd hh:mm');
     return formatDate;
   }
 
@@ -117,8 +117,8 @@ class CrossTaskList extends React.Component {
         </div>
         <Spinner loading={loading} size="large" />
         {this.tabData.length > 0 &&
-        <Table columns={columns} dataSource={this.tabData} onChange={this.handleChange} />
-
+        <Table columns={columns} dataSource={this.tabData} onChange={this.handleChange}
+               rowKey={record => record.id} />
         }
 
       </Layout>

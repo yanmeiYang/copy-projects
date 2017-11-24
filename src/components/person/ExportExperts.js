@@ -159,7 +159,6 @@ export default class ExportExperts extends Component {
       link.setAttribute('download', 'export.csv');
       link.click();
       this.setState({ loading: false });
-      // }
     }
     // TODO Change to multi download, change to use effects takeAll.
   };

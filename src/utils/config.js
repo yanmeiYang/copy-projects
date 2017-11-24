@@ -142,8 +142,8 @@ module.exports = {
     listConfigsByCategoryList: `${baseURL}/2b/config/:source/by-category`,
 
     // topic
-    getTopicByMention: '/topic/summary/m/:mention',
-    getTopicOnSkills: '/topic/person/topics/up/:id/toffset/:toffset/tsize/:tsize/uoffset/:uoffset/usize/:usize',
+    getTopicByMention: `${baseURL}/topic/summary/m/:mention`,
+    getTopicOnSkills: `${baseURL}/topic/person/topics/up/:id/toffset/:toffset/tsize/:tsize/uoffset/:uoffset/usize/:usize`,
 
 
     // Recommendation APIs
@@ -156,14 +156,22 @@ module.exports = {
     createDiscipline: `${baseURL}/cross-domain/query`,
     getTaskList: `${baseURL}/cross-domain/query/offset/:offset/size/:size`,
     getCrossTree: `${baseURL}/cross-domain/query/:id`,
-    delTaskList: `${baseURL}/cross-domain/query/:id`,
+
     getDomainInfo: `${baseURL}/cross-domain/records/:beginYear/:endYear/:pubSkip/:pubLimit/:authorSkip/:authorLimit`,
     // getDomainAllInfo: 'http://166.111.7.173:15000/record/:domain1/:domain2/:begin/:end',
     getCrossModalInfo: `${baseURL}/cross-domain/record/:domain1/:domain2/:beginYear/:endYear/:summary/:pubSkip/:pubLimit/:authorSkip/:authorLimit`,
     getExpertByIds: `${baseURL}/person/batch-list`,
-    getPubById: `${baseURL}/pub/:id`,
+    getPubByIds: `${baseURL}/pub/batch-list`,
     getSuggest: `${baseURL}/search/suggest/gen/:query`,
     getCrossPredict: `${baseURL}/cross-domain/predict`,
+
+    addCrossField: `${baseURL}/crossing-field/query`,
+    getCrossFieldById: `${baseURL}/crossing-field/query/:id`,
+    getCrossFieldList: `${baseURL}/crossing-field/queries/:offset/:size`,
+    delTaskList: `${baseURL}/crossing-field/query/:id`,
+
+    getAggregate: `${baseURL}/crossing-field/aggregate/:method`,
+
 
     // getProjects: API_BASE+"reviewer/projects/get/:offset/:size"
     // addProject: API_BASE+"reviewer/project/add"

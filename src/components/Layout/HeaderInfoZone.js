@@ -125,7 +125,7 @@ export default class HeaderInfoZone extends PureComponent {
 
           {isGod(roles) &&
           <Menu.Item key="/2bbtn">
-            <Link to="/2b"><TobButton /></Link>
+            <TobButton />
           </Menu.Item>}
 
 

@@ -12,6 +12,7 @@ import * as searchService from 'services/search';
 import * as personService from 'services/person';
 import { getTwoDecimal } from 'utils';
 import { baseURL } from 'utils/config';
+import bridge from 'utils/next-bridge';
 import * as profileUtils from 'utils/profile-utils';
 import styles from './ExportExperts.less';
 
@@ -76,7 +77,7 @@ export default class ExportExperts extends Component {
     e.preventDefault();
     const { query, pageSize, current, filters, sort } = this.props;
     const offset = pageSize * (current - 1);
-    const size = this.state.exportSize + 10;
+    const size = this.state.exportSize + offset;
     const selected = plainOptions.filter((x) => {
       return this.state.checkedList.includes(x);
     });
@@ -85,69 +86,81 @@ export default class ExportExperts extends Component {
     // if (sysconfig.Locale === 'zh') {
     //   selected.push('translate');
     // }
-    // TODO Change to multi download, change to use effects takeAll.
-    this.props.dispatch({
-      type: 'exportExperts/searchPerson',
-      payload: { query, filters, sort, exportSize: this.state.exportSize },
-    }).then((res) => {
+    const maxLoop = 10;
+    const fetchData = (data, size, offset, i) => {
+      const NewSize = Math.min(size - offset, 100);
+      this.props.dispatch({
+        type: 'search/searchPerson',
+        payload: { query, filters, sort, size: NewSize, offset, ghost: true },
+      }).then((res) => {
+        // TODO res拼到data
+        size = Math.min(res.total, size);
+        if (res && res.result) {
+          res = bridge.toNextPersons(res.result)
+        } else if (res && res.items) {
+          res = res.items
+        } else {
+          console.log('Error')
+        }
+        if (offset + 100 < size && i < maxLoop) {
+          fetchData(data.concat(res), size, offset + 100, i + 1);
+        } else {
+          exportData(data.concat(res))
+        }
+      });
+    };
+    const results = [];
+    fetchData(results, size, offset, 0);
+    const exportData = (res) => {
       const selectedItem = selected;
       let expertPersonInfo = '';
-      if (res.length > 0) {
-        const results = res.slice(0, this.state.exportSize);
-        results.map((person) => {
-          const personInfo = [];
-          const basic = {
-            name: profileUtils.displayNameCNFirst(person.name, person.name_zh),
-            gender: (person.attr && person.attr.gender) ? personService.returnGender(person.attr.gender) : ' ',
-            pos: (person.profile && person.profile.position) ? person.profile.position : '',
-            aff: (person.profile && person.profile.affiliation) ? person.profile.affiliation : '',
-            h_index: person.indices.hindex ? person.indices.hindex : ' ',
-            activity: person.indices.activity ? getTwoDecimal(parseFloat(person.indices.activity), 2) : ' ',
-            new_star: person.indices.newStar ? getTwoDecimal(parseFloat(person.indices.newStar), 2) : ' ',
-            num_citation: person.indices.citations ? getTwoDecimal(parseFloat(person.indices.citations), 2) : ' ',
-            num_pubs: person.indices.pubs ? getTwoDecimal(parseFloat(person.indices.pubs), 2) : ' ',
-            interest: (person.tags && person.tags.length > 0) ? person.tags.slice(0, 8).map(item => item).join(';') : ' ',
-            translate: (person.tags && person.tags.length > 0) ?
-              person.tags.slice(0, 8).map((item) => {
-                const tag = personService.returnKeyByLanguage(this.state.interestsI18n, item);
-                const showTag = tag.zh !== '' ? tag.zh : tag.en;
-                return showTag;
-              }).join(';') : ' ',
-          };
-
-          selectedItem.map((item) => {
-            let value = basic[item];
-            if (typeof value === 'string') {
-              value = value.replace(/\n|\r/g, ' ');
-              if (value.indexOf(',') !== -1) {
-                value = `"${value}"`;
-              }
+      res.length > 0 && res.map((person) => {
+        const personInfo = [];
+        const basic = {
+          name: profileUtils.displayNameCNFirst(person.name, person.name_zh),
+          gender: (person.attr && person.attr.gender) ? personService.returnGender(person.attr.gender) : ' ',
+          pos: (person.profile && person.profile.position) ? person.profile.position : '',
+          aff: (person.profile && person.profile.affiliation) ? person.profile.affiliation : '',
+          h_index: person.indices.hindex ? person.indices.hindex : ' ',
+          activity: person.indices.activity ? getTwoDecimal(parseFloat(person.indices.activity), 2) : ' ',
+          new_star: person.indices.newStar ? getTwoDecimal(parseFloat(person.indices.newStar), 2) : ' ',
+          num_citation: person.indices.citations ? getTwoDecimal(parseFloat(person.indices.citations), 2) : ' ',
+          num_pubs: person.indices.pubs ? getTwoDecimal(parseFloat(person.indices.pubs), 2) : ' ',
+          interest: (person.tags && person.tags.length > 0) ? person.tags.slice(0, 8).map(item => item).join(';') : ' ',
+          translate: (person.tags && person.tags.length > 0) ?
+            person.tags.slice(0, 8).map((item) => {
+              const tag = personService.returnKeyByLanguage(this.state.interestsI18n, item);
+              const showTag = tag.zh !== '' ? tag.zh : tag.en;
+              return showTag;
+            }).join(';') : ' ',
+        };
+        selectedItem.map((item) => {
+          let value = basic[item];
+          if (typeof value === 'string') {
+            value = value.replace(/\n|\r/g, ' ');
+            if (value.indexOf(',') !== -1) {
+              value = `"${value}"`;
             }
-            personInfo.push(value);
-            return true;
-          });
-          expertPersonInfo += personInfo.join(',');
-          expertPersonInfo += '\n';
+          }
+          personInfo.push(value);
           return true;
         });
-
-        let temp = selectedItem;
-        // if (sysconfig.Locale === 'zh') {
-        //   temp = temp.map(item => keyValue[item]);
-        // }
-        const firstRow = temp.join(',');
-        let str = `${firstRow}\n${expertPersonInfo}`;
-        const bom = '\uFEFF';
-        str = encodeURI(str);
-        const link = window.document.createElement('a');
-        link.setAttribute('href', `data:text/csv;charset=utf-8,${bom}${str}`);
-        link.setAttribute('download', 'export.csv');
-        link.click();
-        this.setState({ loading: false });
-      }
-    }).catch((err) => {
-      console.log(err);
-    });
+        expertPersonInfo += personInfo.join(',');
+        expertPersonInfo += '\n';
+        return true;
+      });
+      let temp = selectedItem;
+      const firstRow = temp.join(',');
+      let str = `${firstRow}\n${expertPersonInfo}`;
+      const bom = '\uFEFF';
+      str = encodeURI(str);
+      const link = window.document.createElement('a');
+      link.setAttribute('href', `data:text/csv;charset=utf-8,${bom}${str}`);
+      link.setAttribute('download', 'export.csv');
+      link.click();
+      this.setState({ loading: false });
+    }
+    // TODO Change to multi download, change to use effects takeAll.
   };
 
   render() {

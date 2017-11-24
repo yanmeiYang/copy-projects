@@ -40,6 +40,7 @@ const getDefaultSystemConfigs = (system, source) => {
     EnableLocalLocale: false, // 将Locale存储到localStorage
     GLOBAL_ENABLE_HOC: true,
     Use_CDN: true,
+    GLOBAL_ENABLE_FEEDBACK: false, // 是否显示feedback
 
     // google analysis
     googleAnalytics: defaults.IN_APP_DEFAULT,

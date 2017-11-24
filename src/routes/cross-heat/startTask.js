@@ -43,6 +43,8 @@ class StartTask extends React.Component {
   }
   oneInputChange = false;
   twoInputChange = false;
+  inputValueOne = '';
+  inputValueTwo = '';
   suggestions = [];
 
   componentWillMount() {
@@ -53,12 +55,20 @@ class StartTask extends React.Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    const suggestion = nextProps.crossHeat.suggest;
-    if (this.props.crossHeat.suggest !== suggestion) {
-      this.suggestions = suggestion;
+    const { suggest, } = this.props.crossHeat;
+    if (nextProps.crossHeat.suggest !== suggest) {
+      this.suggestions = nextProps.crossHeat.suggest;
     }
   }
 
+
+  changeCadidate = (candidate, queryData) => {
+    // const temp=[];
+    const key = this.getNodeName(candidate, []);
+    const tree = this.getNodeName(queryData, []);
+    const differenceABSet = key.filter(x => ![...tree].find(n => n === x));
+    return differenceABSet.slice(0, 40);
+  }
   changeCurrent = (size) => {
     const current = this.state.queryOne !== '' ? size : 1;
     this.setState({ current });
@@ -70,7 +80,6 @@ class StartTask extends React.Component {
   // auto message
   onSuggestionsFetchRequested = ({ value }) => {
   };
-
   onSuggestionsClearRequested = () => {
     this.suggestions = [];
   };
@@ -84,9 +93,10 @@ class StartTask extends React.Component {
       this.setState({ queryTwo: newValue });
     }
 
+    this.inputValue = newValue;
     if (newValue.trim() !== '') {
       const params = { query: newValue };
-      this.props.dispatch({ type: 'crossHeat/getSuggest', payload: params })
+      this.props.dispatch({ type: 'crossHeat/getSuggest', payload: params });
     }
   };
 
@@ -97,16 +107,26 @@ class StartTask extends React.Component {
   }
 
   next = () => {
-    const current = this.state.current + 1;
-    const one = (current === 2 && this.state.queryOne === '');
-    const two = (current === 4 && this.state.queryTwo === '');
+    const { queryOne, queryTwo, current } = this.state;
+    const cur = current + 1;
+    const one = (cur === 2 && queryOne === '');
+    const two = (cur === 4 && queryTwo === '');
     let isChange = true;
     if (one || two) {
       message.error('领域值不能为空或者特殊字符');
       isChange = false;
     }
-    if (current === 3 || current === 5) {
-      const id = current === 3 ? 'queryOne' : 'queryTwo';
+
+    if (!one && (this.inputValueOne !== queryOne)) {
+      this.inputValueOne = queryOne;
+      this.getCandidate(queryOne, 'candidateOne');
+    }
+    if (!two && (this.inputValueTwo !== queryTwo)) {
+      this.inputValueTwo = queryTwo;
+      this.getCandidate(queryTwo, 'candidateTwo');
+    }
+    if (cur === 3 || cur === 5) {
+      const id = cur === 3 ? 'queryOne' : 'queryTwo';
       const children = this.getNodeChildren(this.props.crossHeat[id], []);
       if (children.length < 3) {
         message.error(errorInfo[0]);
@@ -118,7 +138,7 @@ class StartTask extends React.Component {
       }
     }
     if (isChange) {
-      this.changeCurrent(current);
+      this.changeCurrent(cur);
     }
   };
   back = () => {
@@ -138,6 +158,19 @@ class StartTask extends React.Component {
     }
     return children;
   }
+  // getNde
+  getNodeName = (tree, temp) => {
+    if (tree && tree.name) {
+      temp.push(tree.name);
+    }
+    if (tree && tree.children && tree.children.length > 1) {
+      tree.children.map((item) => {
+        this.getNodeName(item, temp);
+        return true;
+      });
+    }
+    return temp;
+  }
 
   // 对生成的树进行格式化
   formatTree = (tree) => {
@@ -154,16 +187,30 @@ class StartTask extends React.Component {
     return tree;
   }
 
+// 对生成的树进行格式化
+  delTreeId = (tree) => {
+    delete tree.id;
+    if (tree.children.length > 1) {
+      tree.children.map((item) => {
+        if (item.children) {
+          this.delTreeId(item);
+        }
+        return true;
+      });
+    }
+    return tree;
+  }
+
   analysis = () => {
     this.setState({ loading: true });
-    const one = this.props.crossHeat.queryOne;
-    const two = this.props.crossHeat.queryTwo;
+    const one = this.formatTree(this.props.crossHeat.queryOne);
+    const two = this.formatTree(this.props.crossHeat.queryTwo);
     const params = {
-      queryTree1: this.formatTree(one),
-      queryTree2: this.formatTree(two),
+      _1: this.delTreeId(one),
+      _2: this.delTreeId(two),
     };
     const that = this;
-    this.props.dispatch({ type: 'crossHeat/createDiscipline', payload: params })
+    this.props.dispatch({ type: 'crossHeat/addCrossField', payload: params })
       .then(() => { //页面跳转到 热力图页面
         const decareID = this.props.crossHeat.decareID;
         that.setState({ loading: false });
@@ -173,6 +220,11 @@ class StartTask extends React.Component {
       });
   }
 
+  getCandidate = (key, id) => {
+    const area = key.replace(/ /g, '_');
+    const params = { id, area, k: 5, depth: 4 };
+    this.props.dispatch({ type: 'crossHeat/getDiscipline', payload: params });
+  }
 
   renderSuggestionsContainer = ({ containerProps, children }) => (
     <div {...containerProps}>
@@ -180,15 +232,36 @@ class StartTask extends React.Component {
     </div>
   );
 
+
+  dragStart = (event) => {
+    event.dataTransfer.setData('Text', event.target.id);
+  }
+
+  drop = (event) => {
+    event.preventDefault();
+  }
+
+
   render() {
     const { current, queryOne, queryTwo } = this.state;
-    console.count(current);
+    const { candidateOne, candidateTwo } = this.props.crossHeat;
+    const treeOne = this.props.crossHeat.queryOne;
+    const treeTwo = this.props.crossHeat.queryTwo;
     const inputProps = {
       placeholder: current === 1 ? descripts[0] : descripts[1],
       value: current === 1 ? queryOne : queryTwo,
       onChange: this.onChangeQuery,
       onKeyUp: this.onKeyPress,
     };
+
+    const oneList = [];
+    const twoList = [];
+    if (queryOne && candidateOne) {
+      oneList.push(...this.changeCadidate(candidateOne, treeOne));
+    }
+    if (queryTwo && candidateTwo) {
+      twoList.push(...this.changeCadidate(candidateTwo, treeTwo));
+    }
     return (
       <Layout searchZone={[]} contentClass={tc(['startTask'])} showNavigator={false}>
         <div className={styles.step}>
@@ -216,6 +289,19 @@ class StartTask extends React.Component {
         { current === 2 &&
         <div className={styles.contentTree}>
           <DisciplineTree id="queryOne" isSearch={this.oneInputChange} query={queryOne} isEdit />
+          <div draggable className={styles.drag}>
+            {oneList && oneList.map((item, index) => {
+              return (
+                <div key={index} className={styles.drapItem}>
+                  <span draggable
+                        onDrop={this.drop}
+                        onDragStart={this.dragStart}
+                        id={item}>{item}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
         </div>
         }
         { current === 3 &&
@@ -234,6 +320,19 @@ class StartTask extends React.Component {
         { current === 4 &&
         <div className={styles.contentTree}>
           <DisciplineTree id="queryTwo" isSearch={this.twoInputChange} query={queryTwo} isEdit />
+          <div className={styles.drag}>
+            {twoList && twoList.map((item, index) => {
+              return (
+                <div draggable key={index} className={styles.drapItem}>
+                  <span draggable
+                        onDrop={this.drop}
+                        onDragStart={this.dragStart}
+                        id={item}>{item}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
         </div>
         }
         { current === 5 &&
@@ -245,7 +344,8 @@ class StartTask extends React.Component {
           <div className={styles.btnDiv}>
             <Button type="default" size="large" onClick={this.back}>上一步</Button>
             <Button type="primary" size="large" loading={this.state.loading}
-                    onClick={this.analysis}>交叉创新笛卡尔智能分析</Button>
+                    onClick={this.analysis}>交叉创新笛卡尔智能分析
+            </Button>
           </div>
           <div className={styles.alert}>
             <Alert message="温馨提示" description={crossTooltip} type="info" showIcon />

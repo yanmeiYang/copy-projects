@@ -77,6 +77,7 @@ const query = (action, eventName) => {
   }
 
   const api = {
+    type: 'query',
     action,
     eventName,
   };
@@ -90,9 +91,15 @@ const alter = (action, eventName) => {
   if (!action) {
     throw new ParamError('Parameter action can\'t be empty.');
   }
-  return createBasicChains({ action, eventName });
+  return createBasicChains({ type: 'alter', action, eventName });
 };
 
+const notify = (action, eventName) => {
+  if (!action) {
+    throw new ParamError('Parameter action can\'t be empty.');
+  }
+  return createBasicChains({ type: 'notify', action, eventName });
+};
 /**
  * NEXT-API Query Builder
  */
@@ -103,6 +110,8 @@ const apiBuilder = {
   query,
 
   alter,
+
+  notify,
 
   // alter: () => {},
   // run: () => {},
@@ -123,6 +132,9 @@ const F = {
 
   // query related
   queries: { search: 'search' }, // query actions.
+  alter: {},
+  notify: { feedback: 'feedback' },
+
   searchType: { all: 'all', allb: 'allb' },
   params: {
     default_aggregation: ['gender', 'h_index', 'location', 'language'],

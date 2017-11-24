@@ -23,7 +23,6 @@ export default {
       import('models/person-comments'),
       import('models/common/common-labels'),
       import('models/search-suggest'),
-      import('models/export-experts'),
       import('models/search-venue'),
     ],
     component: () => import('routes/search/SearchPage'),

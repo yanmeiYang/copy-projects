@@ -309,7 +309,7 @@ export default class SearchComponent extends Component {
               {hole.fillFuncs(
                 rightZoneFuncs, // theme from config.
                 DefaultRightZoneFuncs, // default block.
-                { query }, // parameters passed to block.
+                { query, topic }, // parameters passed to block.
                 { containerClass: styles.searchKgContent }, // configs.
               )}
             </div>

@@ -23,6 +23,7 @@ export default {
     token: auth.getLocalToken(),
     roles: auth.createEmptyRoles(), // { admin: false, ccf_user: false, role: [], authority: [] },
     loading: false, // TODO what's this?
+    feedbackStatus: null,
 
     isAdvancedSearch: false,
 
@@ -154,6 +155,23 @@ export default {
         yield put({ type: 'handleNavbar', payload: isNavbar });
       }
     },
+
+    * setFeedback({ payload }, { call, put }) {
+      const { email, content, user, url } = payload;
+      console.log('', email, content, user);
+      const subject = `[${sysconfig.SOURCE}] ${content.slice(0, 50)}`;
+      const body = `<div>${content}
+<br><br>Email:&nbsp;&nbsp;&nbsp;${email || ''}<br>URL:&nbsp;&nbsp;&nbsp;${url}<br>System:&nbsp;&nbsp;&nbsp;${sysconfig.SOURCE}
+<br>userID:&nbsp;&nbsp;&nbsp;${user.id}<br>userName:&nbsp;&nbsp;${user.display_name}<br>userEmail:&nbsp;&nbsp;${user.email}
+<br>userRole:&nbsp;&nbsp;${user.role}<br>time:&nbsp;&nbsp;&nbsp;${new Date()}</div>`;
+
+      const data = yield call(authService.setFeedback, {
+        subject: subject.replace(/[\r\n]/g, ' '),
+        body,
+      });
+
+      yield put({ type: 'feedbackSuccess', payload: data });
+    },
   },
 
   reducers: {
@@ -242,5 +260,8 @@ export default {
       return { ...state, loading: false };
     },
 
+    feedbackSuccess(state, { payload }) {
+      return { ...state, feedbackStatus: payload.success };
+    },
   },
 };

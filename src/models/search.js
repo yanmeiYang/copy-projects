@@ -78,7 +78,7 @@ export default {
   effects: {
     // 搜索全球专家时，使用old service。
     // 使用智库搜索，并且排序算法不是contribute的时候，使用新的搜索API。
-    searchPerson: [function*({ payload }, { call, put, select }) {
+    searchPerson: [function* ({ payload }, { call, put, select }) {
       const { query, offset, size, filters, sort, total, ghost } = payload;
       const noTotalFilters = {};
       for (const [key, item] of Object.entries(filters)) {
@@ -225,10 +225,10 @@ export default {
         }
 
         newState.pagination = newState.pagination || {
-            current: 1,
-            pageSize: sysconfig.MainListSize,
-            total: null,
-          };
+          current: 1,
+          pageSize: sysconfig.MainListSize,
+          total: null,
+        };
         newState.pagination.pageSize = size;
         newState.translatedText = '';
       }

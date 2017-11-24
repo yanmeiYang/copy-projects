@@ -105,7 +105,7 @@ class RightInfoZonePerson extends React.PureComponent {
                 return (
                   <Link to={`/${sysconfig.SearchPagePrefix}/${tag}/0/${sysconfig.MainListSize}`}
                         key={Math.random()} className={styles.link} target = '_blank'>
-                    <Tag className="tag">{tag}</Tag>
+                    <Tag className="tag">{tag.t}</Tag>
                   </Link>
                 );
               })

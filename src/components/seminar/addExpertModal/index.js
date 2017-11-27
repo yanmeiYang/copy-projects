@@ -98,9 +98,10 @@ class AddExpertModal extends React.Component {
     this.speakerInformation.bio = selectedExpert.bio;
     this.speakerInformation.phone = selectedExpert.phone;
     this.speakerInformation.email = selectedExpert.email;
+    // this.speakerInformation.gender = selectedExpert.email;
     if (typeof selectedExpert.role === 'string') {
       this.speakerInformation.role = [selectedExpert.role];
-    } else if (selectedExpert.role && selectedExpert.role.length > 0 ) {
+    } else if (selectedExpert.role && selectedExpert.role.length > 0) {
       this.speakerInformation.role = selectedExpert.role;
     }
     ReactDOM.findDOMNode(this.refs.speakerBio).value = selectedExpert.bio;
@@ -202,12 +203,10 @@ class AddExpertModal extends React.Component {
     };
     talk.title = this.refs.talkTitle.refs.input.value;
     talk.speaker = state.speakerInfo;
-    if (typeof state.speakerInfo.gender !== 'number') {
-      if (typeof state.speakerInfo.gender === 'object') {
-        talk.speaker.gender = parseInt(state.speakerInfo.gender.i);
-      } else {
-        talk.speaker.gender = 1;
-      }
+    if (typeof state.speakerInfo.gender === 'object') {
+      talk.speaker.gender = parseInt(state.speakerInfo.gender.i);
+    } else {
+      talk.speaker.gender = parseInt(state.speakerInfo.gender) || 0;
     }
     if (state.talkStartValue || state.talkEndValue) {
       talk.time = {};
@@ -314,6 +313,12 @@ class AddExpertModal extends React.Component {
     const { parentProps, editTheTalk } = this.props;
     const { speakerSuggests, loading, contribution_type } = parentProps.seminar;
     const { getFieldDecorator } = parentProps.form;
+    let genderValue = 0;
+    if (typeof speakerInfo.gender === 'object') {
+      genderValue = `${speakerInfo.gender.i }`;
+    } else {
+      genderValue = speakerInfo.gender || 0;
+    }
     return (
       <Modal
         title="添加专家"
@@ -335,7 +340,7 @@ class AddExpertModal extends React.Component {
                 onChange={this.expertRoleChange}
               >
                 <Option value="president">会议主席</Option>
-                <Option value="talker">特邀讲者</Option>
+                <Option value="talker">特邀讲者/评审专家</Option>
               </Select>)}
           </FormItem>
           {this.speakerInformation.role !== 'president' &&
@@ -558,9 +563,12 @@ class AddExpertModal extends React.Component {
             <div className="ant-form-item" style={{ paddingBottom: '20px' }}>
               <label className="ant-col-3">性别: </label>
               <div className="ant-col-21">
-                <RadioGroup defaultValue="1" onChange={this.saveExpertInfo.bind(this, 'gender')}>
+                <RadioGroup
+                  value={genderValue}
+                  onChange={this.saveExpertInfo.bind(this, 'gender')}>
                   <Radio value="1" name="gender">男</Radio>
                   <Radio value="2" name="gender">女</Radio>
+                  <Radio value="0" name="gender">不详</Radio>
                 </RadioGroup>
               </div>
             </div>

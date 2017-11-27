@@ -278,6 +278,7 @@ class RegistrationForm extends React.Component {
   // 存储承办单位
   addNewOrg = (value) => {
     this.setState({ organizer: value });
+    this.props.form.setFieldsValue({ organizer: value });
   };
 
   // 存储协办单位

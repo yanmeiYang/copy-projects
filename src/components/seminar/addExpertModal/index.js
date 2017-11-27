@@ -339,8 +339,8 @@ class AddExpertModal extends React.Component {
                 placeholder="请选择专家角色"
                 onChange={this.expertRoleChange}
               >
-                <Option value="president">会议主席</Option>
-                <Option value="talker">特邀讲者/评审专家</Option>
+                <Option value="president">主席</Option>
+                <Option value="talker">一般参与者</Option>
               </Select>)}
           </FormItem>
           {this.speakerInformation.role !== 'president' &&

@@ -392,6 +392,14 @@ function GetBMapLib(showTop) {
       };
 
       /**
+       * ShaoZhou新添加，获取每个聚类的各个元素值
+       * @return {Array<IconStyle>} 聚合的样式风格集合
+       */
+      MarkerClusterer.prototype.getClusters = function () {
+        return this._clusters;
+      };
+
+      /**
        * 获取单个聚合的最小数量。
        * @return {Number} 单个聚合的最小数量。
        */
@@ -613,15 +621,6 @@ function GetBMapLib(showTop) {
           // call function in component.
           showTop(userids, event, map, maindom, ids, onLeave);
         });
-
-        // this._clusterMarker.addEventListener('mouseover', (event) => {
-        //   if (this.target === event.target) {
-        //     console.log('match');
-        //   } else {
-        //     this.target = event.target;
-        //     console.log('event:', event);
-        //   }
-        // });
       };
 
       /**

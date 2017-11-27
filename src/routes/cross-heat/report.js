@@ -35,8 +35,11 @@ const rectTooltip = {
   expert: '领域专家',
   pub: '领域论文',
   zero: '无交叉信息',
-  minus: '正在计算...',
+  minus: '正在计算热点...',
 };
+const localDate = new Date();
+const dateYear = localDate.getFullYear();
+const sYear = dateYear - 10;
 
 @withRouter
 @Auth
@@ -47,8 +50,10 @@ class CrossReport extends React.Component {
     defaultTab: 'expert',
     nullBtn: true,
     isHistory: true,
+    isAuto: true,
     yHeight: 0, // 图的高
     xWidth: 0, // 图的宽
+    yearBuring: [],// 时间段
   };
   heatNum = []; // 热力值数组
   barNum = []; //bar值数组
@@ -59,29 +64,36 @@ class CrossReport extends React.Component {
   domain2 = '';
   first10Authors = [];
   first10Pubs = [];
-  nodeData = [];
   expertList = [];
   pubList = [];
+  countYear = 0;
+  timer = 0;
+
+  crossInfo = null;
+  nodeData = null;
+
 
   /** 在Component被加载的时候调用的。 */
   componentDidMount() {
     const { id } = this.props.match.params;
     this.props.dispatch({
-      type: 'crossHeat/getCrossTree',
+      type: 'crossHeat/getCrossFieldById',
       payload: { id },
     });
   }
 
   componentWillUpdate(nextProps, nextState) {
+    const { isAuto } = this.state;
     this.barNum = [];
     this.heatNum = [];
     let xNode = [];
     let yNode = [];
-    const { crossTree, crossInfo, domainMinInfo, experts, pubs, predict, modalInfo } = this.props.crossHeat;
+    const { crossTree, crossInfo, experts, pubs, predict, modalInfo, autoDomainInfo } = this.props.crossHeat;
     const nCrossTree = nextProps.crossHeat.crossTree;
     if (nCrossTree !== null) {
       xNode = this.getNodeChildren(nCrossTree.queryTree2, []);
       yNode = this.getNodeChildren(nCrossTree.queryTree1, []);
+      this.nodeData = this.getCrossFieldNode(xNode, yNode);
       this.title = `${nCrossTree.queryTree1.name} & ${nCrossTree.queryTree2.name}`;
     }
     if (nCrossTree !== crossTree) { // 树
@@ -89,11 +101,12 @@ class CrossReport extends React.Component {
     }
     const nDate = nextState.dateDuring;
     const sDate = this.state.dateDuring;
-    if (sDate && (nDate[0] !== sDate[0] || nDate[1] !== sDate[1])) { // 时间发生改变
+    if (isAuto && sDate && (nDate[0] !== sDate[0] || nDate[1] !== sDate[1])) { // 时间发生改变
       this.getDomainInfo(nCrossTree.queryTree1, nCrossTree.queryTree2, nextState.dateDuring);
     }
     if (crossInfo !== nextProps.crossHeat.crossInfo) { // 热力值改变
-      this.createRect(nextProps.crossHeat.crossInfo.dataList, yNode.length);
+      this.crossInfo = nextProps.crossHeat.crossInfo;
+      this.createRect(this.crossInfo.data, yNode.length);
     }
     if (experts !== nextProps.crossHeat.experts) { // 获取专家
       this.expertList = nextProps.crossHeat.experts;
@@ -101,17 +114,26 @@ class CrossReport extends React.Component {
     if (pubs !== nextProps.crossHeat.pubs) { // 获取论文
       this.pubList = nextProps.crossHeat.pubs;
     }
-    if (domainMinInfo !== this.props.crossHeat.domainMinInfo) { // 分页
-      this.getPubPerson(this.modalType, domainMinInfo.authors, domainMinInfo.pubs);
-    }
+    // if (domainMinInfo !== this.props.crossHeat.domainMinInfo) { // 分页
+    //   this.getPubPerson(this.modalType, domainMinInfo.authors, domainMinInfo.pubs);
+    // }
     if (predict !== nextProps.crossHeat.predict) { // 预测
-      this.createRect(this.changePredictData(nextProps.crossHeat.predict), yNode.length);
+      this.createRect(nextProps.crossHeat.predict, yNode.length);
     }
     if (modalInfo !== nextProps.crossHeat.modalInfo) { // modal info
-      this.modalInit(this.modalType, nextProps.crossHeat.modalInfo);
+      const info = nextProps.crossHeat.modalInfo;
+      this.first10Authors = info.authors.top10;
+      this.first10Pubs = info.pubs.top10;
+      this.getPubPerson(this.modalType, this.first10Authors, this.first10Pubs);
     }
-  }
+    const nAutoDomainInfo = nextProps.crossHeat.autoDomainInfo;
+    if (autoDomainInfo !== nAutoDomainInfo && nAutoDomainInfo.length > 0) { // autoDomainInfo
+      this.startAutoShow(nAutoDomainInfo, yNode);
+    }
+  };
 
+  // 获取时间段，通过时间轴
+  getLocalYear = date => this.setState({ dateDuring: date });
   // 重新创建原图
   createBasic = (yTree, xTree, xNode, yNode) => { // 删除原来当图
     d3.select('#heat').selectAll('g').remove();
@@ -122,7 +144,7 @@ class CrossReport extends React.Component {
     this.setState({ yHeight, xWidth });
     this.createYTree(yTree, yHeight);
     this.createXTree(xTree, yHeight, xWidth);
-  }
+  };
 // 绘制rect 图
   createRect = (domainList, yLength) => {
     if (domainList) {
@@ -134,27 +156,27 @@ class CrossReport extends React.Component {
     }
   };
 
-
 //  domain 数据转换成d3需要的格式
   domainChange = (domainList, yLength) => {
+    const { nodeData } = this.getXYNode();
     const heatNum = [];
     const barNum = [];
     const heatInfo = [];
     const barInfo = [];
     domainList.map((domain, num) => { // 将json 转换成d3格式
-      const first = this.nodeData[num].first;
-      const second = this.nodeData[num].second;
+      const first = nodeData[num]._1;
+      const second = nodeData[num]._2;
       num += 1;
       const x = Math.ceil(num / yLength); // 第几行
       const y = num - (yLength * (x - 1));// 第几列
 
-      const temPower = domain ? domain.power : -1; //热力值
-      const temPersonCount = domain ? domain.personCount : 0;// 默认专家
-      const temPubCount = domain ? domain.pubCount : 0;// 默认论文
+      const temPower = domain ? domain.heat : -1; //热力值
+      const temPersonCount = domain ? domain.authorsCount : 0;// 默认专家
+      const temPubCount = domain ? domain.pubsCount : 0;// 默认论文
       // 获取 两个节点
       heatNum.push(temPower);
       barNum.push(temPersonCount, temPubCount);
-      heatInfo.push({ x, y, key: 'heat', power: temPower, first, second }); // 格式heat json 数据
+      heatInfo.push({ x, y, key: 'heat', heat: temPower, first, second }); // 格式heat json 数据
       const startY = (y - 1) * 2;
       barInfo.push( // 格式bar json 数据
         { x, y: startY + 1, h: temPersonCount, key: 'expert', first, second },
@@ -163,57 +185,44 @@ class CrossReport extends React.Component {
       return true;
     });
     return { heatNum, barNum, heatInfo, barInfo };
-  }
-
-
+  };
 // 获取 DomainInfo
-  getDomainInfo = (yTree, xTree, date) => {
+  getDomainInfo = (yTree, xTree, dateDuring) => {
     const yNode = this.getNodeChildren(yTree, []);
     const xNode = this.getNodeChildren(xTree, []);
-    this.nodeData = this.getCrossNode(xNode, yNode);
-    const pubSkip = 0;
-    const pubLimit = 10;
-    const authorSkip = 0;
-    const authorLimit = 10;
-
-    this.props.dispatch({
-      type: 'crossHeat/getDomainInfo',
-      payload: {
-        beginYear: date[0],
-        endYear: date[1],
-        pubSkip,
-        pubLimit,
-        authorSkip,
-        authorLimit,
-        dt: this.nodeData,
-      },
-    });
+    const crossingFields = this.getCrossFieldNode(xNode, yNode);
+    const years = [];
+    for (let i = dateDuring[0] + 1; i < dateDuring[1] + 1; i++) {
+      years.push(i);
+    }
+    const op = 'meta';
+    const method = 'overview';
+    const withCache = false;
+    const dt = { years, crossingFields, withCache, op };
+    this.getAggregate(method, dt);
   };
-// 对两数组交叉  返回矩阵
-  getCrossNode = (xNode, yNode) => {
+
+  // 对两数组交叉  返回矩阵
+  getCrossFieldNode = (xNode, yNode) => {
     const crossList = [];
     xNode.map((xVal) => {
       yNode.map((yVal) => {
-        crossList.push({ first: xVal, second: yVal });
+        crossList.push({ _1: yVal, _2: xVal, });
         return true;
       });
       return true;
     });
     return crossList;
-  }
-
+  };
 // 获取所有节点 扁平化
   getNodeChildren = (tree, children) => {
     if (tree.children && tree.children.length > 0) {
-      tree.children.map((item) => {
-        this.getNodeChildren(item, children);
-        return true;
-      });
+      tree.children.map(item => this.getNodeChildren(item, children));
     } else {
       children.push(tree.name);
     }
     return children;
-  }
+  };
 // 绘制 rect 和bar
   createAxis = (heatVal, barInfo) => {
     const maxHeatNum = d3.max(this.heatNum);
@@ -232,20 +241,20 @@ class CrossReport extends React.Component {
         .append('rect')
         .attr('width', cellSize)
         .attr('height', cellSize)
-        .style('cursor', d => (d.power > 0 ? 'pointer' : 'default'))
+        .style('cursor', d => ((d.heat > 0 && this.state.isHistory) ? 'pointer' : 'default'))
         .attr('x', d => d.x * cellSize)
         .attr('y', d => d.y * cellSize)
         .attr('fill', (d) => {
-          if (d.power > 0) { // 大于-1 表示计划完成
-            const formatPower = d.power / maxHeatNum;
+          if (d.heat > 0) { // 大于-1 表示计划完成
+            const formatPower = d.heat / maxHeatNum;
             const hv = formatPower.toFixed(1);
             const h = formatPower < 0.1 ? 0.1 : hv;
             return compute(h);
           }
-          if (d.power === 0) {
+          if (d.heat === 0) {
             return '#fff';
           }
-          if (d.power === -1) {
+          if (d.heat === -1) {
             return '#f8f8f8';
           }
         })
@@ -274,7 +283,7 @@ class CrossReport extends React.Component {
             return fWidth > 58 ? 58 : fWidth;// 设置bar 默认宽度
           }
         })
-        .style('cursor', 'pointer')
+        .style('cursor', () => (this.state.isHistory ? 'pointer' : 'default'))
         .attr('height', barVar)
         .attr('x', d => d.x * cellSize)
         .attr('y', (d) => {
@@ -291,8 +300,6 @@ class CrossReport extends React.Component {
 
       // 添加文字
       svg.append('g')
-      // .attr('fill', 'none')
-      // .attr('stroke', '#ff0000')
         .selectAll('text')
         .data(barInfo)
         .enter()
@@ -309,78 +316,15 @@ class CrossReport extends React.Component {
           return tempNum + startX + 2;
         })
         .attr('dy', '.75em')
-        .style('cursor', 'pointer')
+        .style('cursor', () => (this.state.isHistory ? 'pointer' : 'default'))
         .text(d => (d.h > 0 ? d.h : ''))
         .attr('transform', d => `translate(0,${d.y * barVar})`)
         .on('mouseover', d => this.showTooltip(d))
         .on('mousedown', d => this.showModal(d))
         .on('mouseleave', () => d3.select('#tooltip').selectAll('div').remove());
     }
-  }
+  };
 
-// 展示tooltip
-  showTooltip = (d) => {
-    if (d.power === -1 || d.power > 0 || d.h > 0) {
-      let tooltipVal = rectTooltip.minus;
-      if (d.power > 0 || d.h > 0) {
-        tooltipVal = rectTooltip[d.key];
-      }
-      const toolTipTop = event.pageY + 20;
-      const toolTipLeft = event.pageX + 15;
-      // y 用d3画图
-      d3.select('#tooltip').selectAll('div').remove();
-      d3.selectAll('#tooltip')
-        .append('div')
-        .attr('class', styles.tooltipDis)
-        .style('top', `${toolTipTop}px`)
-        .style('left', `${toolTipLeft}px`)
-        .text(tooltipVal);
-    }
-  }
-
-// 用户点击bar rect text事件
-  showModal = (d) => {
-    if (this.state.isHistory) {
-      this.domain1 = d.first;
-      this.domain2 = d.second;
-      const beginYear = this.state.dateDuring[0];
-      const endYear = this.state.dateDuring[1];
-      const summary = true;
-      const pubSkip = 0;
-      const pubLimit = 0;
-      const authorSkip = 0;
-      const authorLimit = 0;
-      const modalType = d.key;// modal 展示类容类型
-      const show = !(modalType === 'heat' && d.power < 1); // modal是否展示
-      if (show) {
-        this.modalType = modalType;
-        this.setState({ visibleModal: true, defaultTab: modalType });
-        this.expertList = [];
-        this.pubList = [];
-        const params = {
-          domain1: this.domain1,
-          domain2: this.domain2,
-          beginYear,
-          endYear,
-          summary,
-          pubSkip,
-          pubLimit,
-          authorSkip,
-          authorLimit,
-        };
-        this.props.dispatch({
-          type: 'crossHeat/getModalInfo',
-          payload: params,
-        });
-      }
-    }
-  }
-  // modal 初始化
-  modalInit = (type, info) => {
-    this.first10Authors = info.first10Authors;
-    this.first10Pubs = info.first10Pubs;
-    this.getPubPerson(type, this.first10Authors, this.first10Pubs);
-  }
   createYTree = (yData, yHeight) => {
     const height = yHeight;
     // 创建画板
@@ -389,13 +333,9 @@ class CrossReport extends React.Component {
       .attr('transform', 'translate(20,0)');
     //========yTree==================
     const yTree = d3.cluster().size([height, 316])
-      .separation((a, b) => {
-        return 1;
-      });
+      .separation(() => 1);
 
-    const rootY = d3.hierarchy(yData, (d) => {
-      return d.children;
-    });
+    const rootY = d3.hierarchy(yData, d => d.children);
     rootY.x0 = height;
     rootY.y0 = 0;
     const yTreeData = yTree(rootY);
@@ -437,11 +377,10 @@ class CrossReport extends React.Component {
       .attr('dx', -20)
       .style('text-anchor', 'end')
       .style('cursor', 'pointer')
-      .attr('class','test')
-      .style("background-color", "black")
+      .attr('class', 'test')
       .text(d => d.data.name)
       .on('mousedown', (node) => {
-        this.leafNodeClick('x', [node.data.name]);
+        this.leafNodeClick('y', [node.data.name]);
       });
 
     // 非叶子节点
@@ -451,7 +390,7 @@ class CrossReport extends React.Component {
       .style('text-anchor', d => (d.parent ? 'middle' : 'start'))
       .text(d => d.data.name);
     // 叶子节点点击事件
-  }
+  };
 //=====xstree===================
   createXTree = (xData, yHeight, xWidth) => {
     const svg = d3.selectAll('#xTree')
@@ -522,53 +461,89 @@ class CrossReport extends React.Component {
       .style('text-anchor', ' start')
       .attr('writing-mode', () => 'tb')
       .text(d => d.data.name);
-  }
+  };
+
+// 展示tooltip
+  showTooltip = (d) => {
+    if (d.power === -1 || d.power > 0 || d.h > 0) {
+      let tooltipVal = rectTooltip.minus;
+      if (d.power > 0 || d.h > 0) {
+        tooltipVal = rectTooltip[d.key];
+      }
+      const toolTipTop = event.pageY + 20;
+      const toolTipLeft = event.pageX + 15;
+      // y 用d3画图
+      d3.select('#tooltip').selectAll('div').remove();
+      d3.selectAll('#tooltip')
+        .append('div')
+        .attr('class', styles.tooltipDis)
+        .style('top', `${toolTipTop}px`)
+        .style('left', `${toolTipLeft}px`)
+        .text(tooltipVal);
+    }
+  };
+
+// 用户点击bar rect text事件
+  showModal = (d) => {
+    clearInterval(this.timer);
+    if (this.state.isHistory) {
+      this.domain1 = d.first;
+      this.domain2 = d.second;
+      const modalType = d.key;// modal 展示类容类型
+      const show = !(modalType === 'heat' && d.heat < 1); // modal是否展示
+      if (show) {
+        this.modalType = modalType;
+        this.setState({ visibleModal: true, defaultTab: modalType });
+        this.expertList = [];
+        this.pubList = [];
+        const yearDuring = this.state.dateDuring;
+        const years = [];
+        for (let i = yearDuring[0] + 1; i < yearDuring[1] + 1; i++) {
+          years.push(i);
+        }
+        const crossingFields = [{ _1: d.first, _2: d.second }];
+        const method = 'detail';
+        const withCache = true;
+        const dt = { years, crossingFields, withCache };
+        this.getAggregate(method, dt);
+      }
+    }
+  };
 
   leafNodeClick = (type, node) => {
-    const { crossTree} = this.props.crossHeat;
+    const { crossTree } = this.props.crossHeat;
     const yNode = this.getNodeChildren(crossTree.queryTree1, []);
-    let nodelist = this.getCrossNode(node, yNode);
-    if (type === 'y') {  // y轴
-      const xNode = this.getNodeChildren(crossTree.queryTree2, []);
-      nodelist = this.getCrossNode(node, xNode);
-    }
+    let crossingFields = this.getCrossFieldNode(node, yNode);
     this.domain1 = node;
     this.domain2 = '';
-    this.modalType = 'expert';
-    this.setState({ visibleModal: true, defaultTab: this.modalType });
+    if (type === 'y') {  // y轴
+      const xNode = this.getNodeChildren(crossTree.queryTree2, []);
+      crossingFields = this.getCrossFieldNode(xNode, node);
+    }
+
+    this.setState({ visibleModal: true, defaultTab: 'heat' });
     this.expertList = [];
     this.pubList = [];
-    const pubSkip = 0;
-    const pubLimit = 10;
-    const authorSkip = 0;
-    const authorLimit = 10;
-    const beginYear = this.state.dateDuring[0];
-    const endYear = this.state.dateDuring[1];
-    this.props.dispatch({
-      type: 'crossHeat/getTreeModalInfo',
-      payload: {
-        beginYear,
-        endYear,
-        pubSkip,
-        pubLimit,
-        authorSkip,
-        authorLimit,
-        dt: nodelist,
-      },
-    });
-  }
+    const yearDuring = this.state.dateDuring;
+    const years = [];
+    for (let i = yearDuring[0] + 1; i < yearDuring[1] + 1; i++) {
+      years.push(i);
+    }
+    const method = 'detail';
+    const withCache = true;
+    const dt = { years, crossingFields, withCache };
+    this.getAggregate(method, dt);
+  };
 
 // modal 消失
   hideModal = () => {
     this.expertList = [];
     this.pubList = [];
     this.setState({ visibleModal: false, defaultTab: 'expert' });
-  }
-// 获取时间段，通过时间轴
-  getLocalYear = date => this.setState({ dateDuring: date });
+  };
 
 //分页
-  onChangePage = (page, pageSize) => {
+  onChangePage = (page, pageSize) => { //todo 分页
     const beginYear = this.state.dateDuring[0];
     const endYear = this.state.dateDuring[1];
     const summary = false;
@@ -576,104 +551,89 @@ class CrossReport extends React.Component {
     const pubLimit = this.modalType === 'pub' ? page * pageSize : 0;
     const authorSkip = this.modalType === 'expert' ? (page - 1) * pageSize : 0;
     const authorLimit = this.modalType === 'expert' ? page * pageSize : 0;
-    const params = {
-      domain1: this.domain1,
-      domain2: this.domain2,
-      beginYear,
-      endYear,
-      summary,
-      pubSkip,
-      pubLimit,
-      authorSkip,
-      authorLimit,
-    };
-    this.props.dispatch({
-      type: 'crossHeat/getDomainMinInfo',
-      payload: params,
-    });
-  }
-  goBack = () => {
-    this.props.dispatch(routerRedux.push({
-      pathname: '/cross/index',
-    }));
-  }
+  };
 
   modalTab = (type) => {
     this.modalType = type;
     this.setState({ defaultTab: type });
     this.getPubPerson(type, this.first10Authors, this.first10Pubs);
   }
-  getPubPerson = (type, authorsIds, pubsIds) => {
-    if (type === 'expert') {
-      this.props.dispatch({
-        type: 'crossHeat/getDomainExpert',
-        payload: { ids: authorsIds },
-      });
-    }
-    if (type === 'pub') {
-      this.props.dispatch({
-        type: 'crossHeat/getDomainPub',
-        payload: { ids: pubsIds },
-      });
-    }
-  }
-
   heatChange = (isHistory) => {
-    this.setState({ isHistory: !isHistory });
-    // 先判断预测值是否已经存在
-    const { predict, crossTree } = this.props.crossHeat;
-    const yNode = this.getNodeChildren(crossTree.queryTree1, []);
-    if (isHistory && predict) {
-      this.createRect(this.changePredictData(predict), yNode.length);
-    }
-    if (isHistory && predict === null) {
-      this.props.dispatch({
-        type: 'crossHeat/getCrossPredict',
-        payload: { dt: this.nodeData },
-      });
-    }
-    if (!isHistory) {
-      this.createRect(this.props.crossHeat.crossInfo.dataList, yNode.length);
+    const { xTree, yTree, xNode, yNode, nodeData } = this.getXYNode();
+    const { predict, crossInfo } = this.props.crossHeat;
+    clearInterval(this.timer);
+    const yearBuring = [sYear, dateYear];
+    this.setState({ isHistory: !isHistory, isAuto: true, nullBtn: true, yearBuring });
+    if (isHistory) {
+      if (predict) { // 先判断预测值是否已经存在
+        this.createBasic(yTree, xTree, xNode, yNode);
+        this.createRect(predict, yNode.length);
+      } else {
+        const crossingFields = nodeData;
+        const years = [2018];
+        const op = 'meta';
+        const method = 'predict';
+        const withCache = true;
+        const dt = { years, crossingFields, withCache, op };
+        this.getAggregate(method, dt);
+      }
+    } else {
+      this.createBasic(yTree, xTree, xNode, yNode);
+      this.createRect(crossInfo.data, yNode.length);
     }
   };
   nullChange = (nullBtn) => {
-    this.setState({ nullBtn: !nullBtn });
-    d3.select('#heat').selectAll('g').remove(); // 删除原来当图
-    d3.select('#xTree').selectAll('g').remove();
-    d3.select('#yTree').selectAll('g').remove();
-    const { crossTree, crossInfo } = this.props.crossHeat;
-    const { queryTree1, queryTree2 } = crossTree;
-    const yNodeOld = this.getNodeChildren(queryTree1, []);
-    const xNodeOld = this.getNodeChildren(queryTree2, []);
+    clearInterval(this.timer);
+    this.setState({ nullBtn: !nullBtn, isAuto: true });
+    const { xTree, yTree, xNode, yNode } = this.getXYNode();
     if (nullBtn) {
-      const filterXNode = this.filterXNode(crossInfo.dataList, xNodeOld.length, yNodeOld.length);
-      const xDomainList = JSON.parse(JSON.stringify(filterXNode.domainList));
-      const filterYNode = this.filterYNode(xDomainList, xNodeOld.length - filterXNode.xVal.length, yNodeOld.length);
-      const xNodeList = this.filterNode(filterXNode.xVal, xNodeOld);
-      const yNodeList = this.filterNode(filterYNode.yVal, yNodeOld);
-      let filterXTree = queryTree2;
-      for (let i = 0; i < xNodeList.length; i++) {
-        filterXTree = this.delTree(JSON.parse(JSON.stringify(filterXTree)), xNodeList[i]); // todo map
-      }
-      let filterYTree = queryTree1;
-      for (let i = 0; i < xNodeList.length; i++) {
-        filterYTree = this.delTree(JSON.parse(JSON.stringify(filterYTree)), yNodeList[i]); // todo map
-      }
-      const yNodeNew = this.getNodeChildren(filterYTree, []);
-      const xNodeNew = this.getNodeChildren(filterXTree, []);
-      // console.log(filterYTree, filterXTree, xNodeNew, yNodeNew);
-      // // yTree, xTree, xNode, yNode
-      this.createBasic(filterYTree, filterXTree, xNodeNew, yNodeNew);
-      this.createRect(filterYNode.domainList, yNodeNew.length);
-
-      // console.log('filterXTree', filterXTree);
-      // this.createBasic(queryTree1, filterXTree, xNodeNew, yNodeOld);
-      // this.createRect(filterXNode.domainList, yNodeOld.length);
+      this.getNullData(this.crossInfo);
     } else {
-      this.createBasic(queryTree1, queryTree2, xNodeOld, yNodeOld);
-      this.createRect(crossInfo.dataList, yNodeOld.length);
+      this.createBasic(yTree, xTree, xNode, yNode);
+      this.createRect(this.crossInfo.data, yNode.length);
     }
   };
+  autoChange = (isAuto) => {
+    const { autoDomainInfo } = this.props.crossHeat;
+    this.setState({ isAuto: !isAuto, nullBtn: true });
+    if (isAuto) {
+      if (autoDomainInfo.length === 0) {
+        const tmp = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        const yearList = [];
+        tmp.map((item) => {
+          yearList.push([sYear + item]);
+          return true;
+        })
+        this.getAutoDomainInfo(yearList); // 获取自动演示数据
+      } else {
+        this.startAutoShow(autoDomainInfo);
+      }
+    } else {
+      clearInterval(this.timer);
+    }
+  };
+
+  getNullData = (crossInfo) => {
+    const { xTree, yTree, xNode, yNode, } = this.getXYNode();
+    const filterXNode = this.filterXNode(crossInfo.data, xNode.length, yNode.length);
+    const xDomainList = JSON.parse(JSON.stringify(filterXNode.domainList));
+    const filterYNode = this.filterYNode(xDomainList, xNode.length - filterXNode.xVal.length, yNode.length);
+    const xNodeList = this.filterNode(filterXNode.xVal, xNode);
+    const yNodeList = this.filterNode(filterYNode.yVal, yNode);
+    let filterXTree = xTree;
+    for (let i = 0; i < xNodeList.length; i++) {
+      filterXTree = this.delTree(JSON.parse(JSON.stringify(filterXTree)), xNodeList[i]);
+    }
+    let filterYTree = yTree;
+    for (let i = 0; i < yNodeList.length; i++) {
+      filterYTree = this.delTree(JSON.parse(JSON.stringify(filterYTree)), yNodeList[i]);
+    }
+    const yNew = this.getNodeChildren(filterYTree, []);
+    const xNew = this.getNodeChildren(filterXTree, []);
+    const dataList = filterYNode.domainList;
+    this.createBasic(filterYTree, filterXTree, xNew, yNew);
+    this.createRect(dataList, yNew.length);
+  }
 
   filterNode = (list, node) => {
     const tempNode = [];
@@ -698,7 +658,7 @@ class CrossReport extends React.Component {
       });
     }
     return dt;
-  }
+  };
   // 隐藏空白行
   filterXNode = (domainList, xLength, yLength) => {
     const xVal = [];
@@ -706,7 +666,7 @@ class CrossReport extends React.Component {
     for (let i = 0; i < xLength; i++) {
       let isNull = false;
       for (let j = i * yLength; j < (i + 1) * yLength; j++) {
-        if (domainList[j].power !== 0) {
+        if (domainList[j].heat !== 0) {
           isNull = true;
           break;
         }
@@ -720,7 +680,6 @@ class CrossReport extends React.Component {
     }
     return { domainList: tempList, xVal };
   };
-
   // 隐藏空白列
   filterYNode = (domainList, xLength, yLength) => {
     const yVal = [];
@@ -729,7 +688,7 @@ class CrossReport extends React.Component {
       let isNull = false;
       for (let j = 0; j < xLength; j++) {
         const n = i + (j * yLength);
-        if (domainList[n].power !== 0) {
+        if (domainList[n].heat !== 0) {
           isNull = true;
         }
       }
@@ -749,27 +708,75 @@ class CrossReport extends React.Component {
       return true;
     })
     return { domainList: endList, yVal };
-  }
-
-  autoChange = () => {
-
   };
 
-  barWidth = (hindexData) => {
-    const indexList = [hindexData['1'], hindexData['2'], hindexData['3'], hindexData['4'], hindexData['5']];
-    const maxIndex = Math.max.apply(null, indexList);
-    const tmp = 180 / maxIndex;
-    const widthList = [tmp * hindexData['1'], tmp * hindexData['2'], tmp * hindexData['3'], tmp * hindexData['4'], tmp * hindexData['5']];
-    return widthList;
-  }
+  // 自动演示方法
+  startAutoShow = (autoInfo) => {
+    const { xTree, yTree, xNode, yNode } = this.getXYNode();
+    this.timer = setInterval(() => {
+      this.crossInfo = autoInfo[this.countYear];
+      this.setState({ yearBuring: [sYear + this.countYear, sYear + this.countYear + 1] });
+      this.createBasic(yTree, xTree, xNode, yNode);
+      this.createRect(autoInfo[this.countYear].data, yNode.length);
+      this.countYear += 1;
+      if (this.countYear === 10) {
+        this.countYear = 0;
+      }
+    }, 1000);
+  };
 
-  changePredictData = (data) => {
-    const predict = [];
-    data.map((item) => {
-      predict.push(item[0])
+  // 获得node
+  getXYNode = () => {
+    const { crossTree } = this.props.crossHeat;
+    const { queryTree2, queryTree1 } = crossTree;
+    const yNode = this.getNodeChildren(queryTree1, []);
+    const xNode = this.getNodeChildren(queryTree2, []);
+    const nodeData = this.getCrossFieldNode(xNode, yNode);
+    return { xTree: queryTree2, yTree: queryTree1, xNode, yNode, nodeData };
+  };
+
+
+  // 获取自动演示数据
+  getAutoDomainInfo = (yearList) => {
+    const { nodeData } = this.getXYNode();
+    const yearDomainInfo = [];
+    yearList.map((item) => {
+      const years = item;
+      const op = 'meta';
+      const method = 'overview';
+      const withCache = true;
+      yearDomainInfo.push({ method, dt: { years, crossingFields: nodeData, withCache, op } });
       return true;
-    })
-    return predict;
+    });
+    this.props.dispatch({
+      type: 'crossHeat/getAutoDomainInfo',
+      payload: { yearDomainInfo },
+    });
+  };
+
+  // 执行 getAggregate 方法
+  getAggregate = (method, dt) => {
+    this.props.dispatch({
+      type: 'crossHeat/getAggregate',
+      payload: {
+        method,
+        dt,
+      },
+    });
+  };
+  getPubPerson = (type, authorsIds, pubsIds) => {
+    if (type === 'expert') {
+      this.props.dispatch({
+        type: 'crossHeat/getDomainExpert',
+        payload: { ids: authorsIds },
+      });
+    }
+    if (type === 'pub') {
+      this.props.dispatch({
+        type: 'crossHeat/getDomainPub',
+        payload: { ids: pubsIds },
+      });
+    }
   };
 
   goCreate = () => {
@@ -778,44 +785,59 @@ class CrossReport extends React.Component {
     }));
   };
 
+  goBack = () => {
+    this.props.dispatch(routerRedux.push({
+      pathname: '/cross/index',
+    }));
+  };
+
   render() {
-    const loadPredict = this.props.loading.effects['crossHeat/getCrossPredict'];
     const loadPub = this.props.loading.effects['crossHeat/getDomainPub'];
     const loadExpert = this.props.loading.effects['crossHeat/getDomainExpert'];
-    const loadDomain = this.props.loading.effects['crossHeat/getDomainAllInfo'];
-    const loadTreeModal = this.props.loading.effects['crossHeat/getTreeModalInfo'];
     const loadTree = this.props.loading.effects['crossHeat/getCrossTree'];
-    const loadDomainInfo = this.props.loading.effects['crossHeat/getDomainInfo'];
-    const { crossInfo, modalInfo } = this.props.crossHeat;
-
-    let tabTitle = this.domain2 + " & " + this.domain1;
+    const loadAggregate = this.props.loading.effects['crossHeat/getAggregate'];
+    const loadAutoDomainInfo = this.props.loading.effects['crossHeat/getAutoDomainInfo'];
+    const { modalInfo } = this.props.crossHeat;
+    const { nullBtn, isHistory, xWidth, yHeight, isAuto, yearBuring } = this.state;
+    let tabTitle = this.domain1 + " & " + this.domain2;
     if (this.domain1 === '' || this.domain2 === '') {
       tabTitle = this.domain2 + this.domain1;
     }
+    let tempYearBuring = yearBuring;
+    if (yearBuring.length === 0) {
+      tempYearBuring = [sYear, dateYear];
+    }
     const operations = <span>{tabTitle}</span>;
-    const { nullBtn, isHistory, xWidth, yHeight } = this.state;
     const heatInfo = isHistory ? '查看未来趋势' : '查看历史热点';
     const nullInfo = nullBtn ? '隐藏空白行列' : '展示空白行列';
+    const autoInfo = isAuto ? '自动演示' : '暂停演示';
     return (
       <Layout searchZone={[]} contentClass={tc(['heat'])} showNavigator={false}>
         <div >
-          <Spinner loading={loadTree || loadDomainInfo || loadPredict} size="large" />
+          <Spinner loading={loadTree || loadAggregate || loadAutoDomainInfo}
+                   size="large" />
           <div className={styles.actionBar}>
             <div>
               <span className={styles.title}>{this.title}</span>
               <Button type="default"
                       onClick={this.heatChange.bind(this, isHistory)}>{heatInfo}</Button>
+              { isHistory &&
               <Button type="default"
                       onClick={this.nullChange.bind(this, nullBtn)}>{nullInfo}</Button>
-              <Button type="default" onClick={this.autoChange}>自动演示</Button>
+              }
+              { isHistory &&
+              <Button type="default"
+                      onClick={this.autoChange.bind(this, isAuto)}>{autoInfo}</Button>
+              }
             </div>
             <div>
               <Button type="default" onClick={this.goCreate}>挖掘热点</Button>
               <Button type="default" onClick={this.goBack}>返回首页</Button>
             </div>
           </div>
-          {crossInfo &&
-          <CrossStatistics statisticsInfo={crossInfo}></CrossStatistics>
+          {this.crossInfo && isHistory &&
+          <CrossStatistics cross={this.crossInfo} nodeData={this.nodeData}
+                           showModal={this.showModal}></CrossStatistics>
           }
           <div id="tooltip" />
           <div id="d3Content"
@@ -823,7 +845,7 @@ class CrossReport extends React.Component {
                style={{ minWidth: xWidth + 400 }}>
             {xWidth > 0 && isHistory &&
             <Brush getLocalYear={this.getLocalYear}
-                   xWidth={xWidth} />
+                   xWidth={xWidth} yearBuring={tempYearBuring} isAuto />
             }
 
             <div className={styles.yTreeHeat}>
@@ -845,34 +867,36 @@ class CrossReport extends React.Component {
                   className={styles.tabs}
                   onChange={this.modalTab}>
               <TabPane tab="专家" key="expert">
-                <Spinner loading={loadTreeModal || loadDomain || loadExpert}></Spinner>
+                <Spinner loading={loadAggregate || loadExpert}></Spinner>
                 { modalInfo &&
                 <div className={styles.modalContent}>
                   <PersonList persons={bridge.toNextPersons(this.expertList)} />
-                  { this.expertList.length > 0 &&
+                  { this.expertList && this.expertList.length > 0 &&
                   <Pagination className={styles.pagination}
                               onChange={this.onChangePage}
                               defaultCurrent={1} defaultPageSize={10}
-                              total={modalInfo.authorSize || 0} />
+                              total={modalInfo.authorsCount || 0} />
                   }
                 </div>
                 }
               </TabPane>
               <TabPane tab="论文" key="pub">
-                <Spinner loading={loadTreeModal || loadDomain || loadPub}></Spinner>
+                <Spinner loading={loadAggregate || loadPub}></Spinner>
                 {modalInfo &&
                 <div className={styles.modalContent}>
                   <PublicationList pubs={this.pubList} showLabels={false} />
                   <Pagination className={styles.pagination} onChange={this.onChangePage}
                               defaultCurrent={1} defaultPageSize={10}
-                              total={modalInfo.pubSize || 0} />
+                              total={modalInfo.pubsCount || 0} />
                 </div>
                 }
               </TabPane>
               <TabPane tab="统计" key="heat">
-                <Spinner loading={loadTreeModal || loadDomain}></Spinner>
+                <Spinner loading={loadAggregate}></Spinner>
                 {modalInfo &&
-                <CrossContrast compareData={modalInfo} />
+                <div className={styles.modalContent}>
+                  <CrossContrast compareData={modalInfo} />
+                </div>
                 }
               </TabPane>
             </Tabs>
@@ -887,4 +911,3 @@ export default connect(({ crossHeat, app, loading }) => ({
   app,
   loading,
 }))(CrossReport);
-

@@ -82,7 +82,7 @@ class DisciplineTree extends React.Component {
     const links = treeData.descendants().slice(1);
 
     nodes.forEach((d) => {
-      d.y = d.depth * 120;
+      d.y = d.depth * 150;
     });
     // 添加线
     svg.selectAll('.link')
@@ -122,17 +122,30 @@ class DisciplineTree extends React.Component {
 
     // 添加鼠标事件
     svg.selectAll('circle')
+      .on('dragover', () => event.preventDefault())
+      .on('drop', (node) => {
+        event.preventDefault();
+        const name = event.dataTransfer.getData('Text');
+        this.drop(node, name);
+      })
       .on('mouseover', (node) => {
         mouserOver(this, node);
       });
 
     // 添加鼠标事件
     svg.selectAll('text')
+      .on('dragover', () => event.preventDefault())
+      .on('drop', (node) => {
+        event.preventDefault();
+        const name = event.dataTransfer.getData('Text');
+        this.drop(node, name);
+      })
       .on('mouseover', (node) => {
         mouserOver(this, node);
       });
-    function mouserOver(that, node) {
 
+
+    function mouserOver(that, node) {
       if (that.props.isEdit) {
         // 圈变成背景色
         svg.selectAll('circle').data(nodes)
@@ -144,12 +157,34 @@ class DisciplineTree extends React.Component {
         // 判断是不是说子节点
         const sWidth = (document.body.offsetWidth - width - 40) / 2;
         that.tooltipTop = node.x + 110;
-        that.tooltipLeft = sWidth + node.y + 120;
+        that.tooltipLeft = node.y + 120;
+        // that.tooltipLeft = event.clientX - 5;
         const name = node.data.name;
         that.setState({ showTooltip: true, node, name });
       }
     }
   }
+
+  drop = (node, name) => {
+    const data = this.props.crossHeat[this.props.id];
+    console.log("drop===========");
+    console.log(this.getTreeLevel(data, node, 0, []));
+    event.target.appendChild(document.getElementById(name));
+    const aData = this.addData(data, node, name);
+    this.createD3(aData);
+  }
+
+
+  getTreeLevel = (tree, node, num, list) => {
+    num += 1;
+    if (tree.id === node.data.id) {
+      list.push(num);
+    } else if (tree.children) {
+      tree.children.map(item => this.getTreeLevel(item, node, num, list));
+    }
+    return list;
+  }
+
 
   // 递归删除 节点
   delData = (dt, node) => {
@@ -171,6 +206,7 @@ class DisciplineTree extends React.Component {
       onOk() {
         const data = that.props.crossHeat[that.props.id];
         const dData = that.delData(data, that.state.node);
+
         that.createD3(dData);
       },
       onCancel() {
@@ -182,16 +218,16 @@ class DisciplineTree extends React.Component {
   addNode = () => {
     this.setState({ showTooltip: false });
     const data = this.props.crossHeat[this.props.id];
-    const aData = this.addData(data, this.state.node);
+    const aData = this.addData(data, this.state.node, '新节点');
     this.createD3(aData);
   }
-  addData = (data, node) => {
+  addData = (data, node, name) => {
     const dt = data;
     if (dt.id === node.data.id) {
       dt.children = dt.children || [];
-      dt.children.push({ name: '新节点', id: this.guid(), children: [] });
+      dt.children.push({ name, id: this.guid(), children: [] });
     } else if (dt.children) {
-      dt.children.map(item => this.addData(item, node));
+      dt.children.map(item => this.addData(item, node, name));
     }
     return dt;
   }
@@ -218,7 +254,7 @@ class DisciplineTree extends React.Component {
         this.createD3(this.initData);
         this.setState({ showTooltip: this.mouseOut });
       }
-    }, 100);
+    }, 50);
   }
   onMouseOver = () => {
     this.mouseOut = false;
@@ -254,6 +290,7 @@ class DisciplineTree extends React.Component {
           <Input
             onMouseOver={this.onMouseOver}
             onMouseOut={this.onMouseOut}
+            autoFocus
             addonBefore={this.state.node.depth > 0 && addonBefore}
             addonAfter={addonAfter}
             value={inputVal}

@@ -1,7 +1,3 @@
-/**
- * Created by Administrator on 2017/7/26.
- */
-import { findPosition } from './map-utils';
 function GetGoogleMapLib(showTop) {
   return function showOverLay() {
     let me = {};
@@ -294,6 +290,17 @@ function GetGoogleMapLib(showTop) {
 
 
       /**
+       * ShaoZhou新添加，获取每个聚类的各个元素值
+       * @return {Array<Clusters>} 聚合的样式风格集合
+       */
+      MarkerClusterer.prototype.getClusters = function () {
+        console.log(this.clusters_);
+        console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+        return this.clusters_;
+      };
+
+
+      /**
        * Whether zoom on click is set.
        *
        * @return {boolean} True if zoomOnClick_ is set.
@@ -546,6 +553,7 @@ function GetGoogleMapLib(showTop) {
        * @return {number} The number of clusters.
        */
       MarkerClusterer.prototype.getTotalClusters = function() {
+        console.log(this.clusters_);
         return this.clusters_.length;
       };
 

@@ -9,36 +9,34 @@ import * as d3 from 'd3';
 import styles from './index.less';
 
 class TimeBrush extends React.Component {
-
   state = {
     date: [],
   };
 
   componentDidMount() {
-    const { xWidth } = this.props;
-    this.createBrush(xWidth);
+    const { xWidth, yearBuring, isAuto } = this.props;
+    this.createBrush(xWidth, yearBuring, isAuto);
   }
 
   componentWillUpdate(nextProps, nextState) {
-    if (this.state.date !== nextState.date) {
+    const { yearBuring, isAuto, xWidth } = this.props;
+    const { date } = this.state;
+    if (date !== nextState.date) {
       this.props.getLocalYear(nextState.date);
     }
-    if (this.props.xWidth !== nextProps.xWidth) {
-      this.createBrush(nextProps.xWidth,);
+    if (xWidth !== nextProps.xWidth) {
+      this.createBrush(nextProps.xWidth, date, isAuto);
+    }
+    if (yearBuring[1] !== nextProps.yearBuring[1]) {
+      this.createBrush(nextProps.xWidth, nextProps.yearBuring, isAuto);
+      console.log(yearBuring);
     }
   }
 
 
-  createBrush = (xWidth) => {
-
+  createBrush = (xWidth, yearBuring, isAuto) => {
     const localDate = new Date();
     const dateYear = localDate.getFullYear();
-    let sY = dateYear - 10;
-    let eY = dateYear;
-    if (this.state.date.length > 0) {
-      sY = this.state.date[0];
-      eY = this.state.date[1];
-    }
     let timeAxis = [0, 0];
     const margin = { top: 9, right: 50, bottom: 214, left: 50 };
     const width = xWidth > 806 ? xWidth : 806;
@@ -47,7 +45,7 @@ class TimeBrush extends React.Component {
     const svg = d3.selectAll('#brush').append('g')
       .attr('transform', `translate(340,${margin.top})`);
     const beginYear = new Date(dateYear - 10, 0, 1);
-    const endYear = new Date(dateYear, 0, 1)
+    const endYear = new Date(dateYear, 0, 1);
     const x = d3.scaleTime().domain([beginYear, endYear]).range([0, width]);
     const brush = d3.brushX()
       .extent([[0, 0], [width, height + 1]])
@@ -90,8 +88,8 @@ class TimeBrush extends React.Component {
           return i ? Math.PI : -Math.PI;
         }));
 
-    // todo 初始化默认区间
-    gBrush.call(brush.move, [new Date(sY, 0, 1), new Date(eY, 0, 1)].map(x));
+    // 初始化默认区间
+    gBrush.call(brush.move, [new Date(yearBuring[0], 0, 1), new Date(yearBuring[1], 0, 1)].map(x));
 
     function brushEnd() {
       const s = timeAxis;
@@ -108,7 +106,10 @@ class TimeBrush extends React.Component {
       }
       d3.selectAll('.overlay').attr('fill', '#ccc').attr('cursor', 'pointer');
       d3.selectAll('.selection').attr('fill', '#00FF23');
-      const yDate = [sYear, eYear];
+      let yDate = [sYear, eYear];
+      if (!isAuto) {
+        yDate = yearBuring;
+      }
       that.setState({ date: yDate });
       const brush = d3.brushX()
         .extent([[0, 0], [width, height]])

@@ -7,6 +7,8 @@ export default {
 
   namespace: 'crossHeat',
   state: {
+    candidateOne: null,
+    candidateTwo: null,
     queryOne: null,
     queryTwo: null,
     mostScholars: null,
@@ -22,6 +24,10 @@ export default {
     taskList: [],
     suggest: [],
     predict: null,
+    autoDomainInfo: [],
+    exportList: [],
+    exportPubsList: [],
+    exportAuthorsList: [],
   },
 
   effects: {
@@ -30,48 +36,33 @@ export default {
       const data = yield call(crossHeatService.getDiscipline, area, k, depth);
       yield put({ type: 'getDisciplineSuccess', payload: { data, id } });
     },
-    *createDiscipline({ payload }, { call, put }) {
-      const data = yield call(crossHeatService.createDiscipline, payload);
-      yield put({ type: 'createDisciplineSuccess', payload: { data } });
-    },
-    *getCrossTree({ payload }, { call, put }) {
-      const { id } = payload;
-      const data = yield call(crossHeatService.getCrossTree, id);
-      yield put({ type: 'getCrossTreeSuccess', payload: { data } });
-    },
-    *getDomainInfo({ payload }, { call, put }) {
-      const data = yield call(crossHeatService.getDomainiInfo, payload);
-      yield put({ type: 'getDomainInfoSuccess', payload: { data } });
-    },
     *getCrossPredict({ payload }, { call, put }) {
       const data = yield call(crossHeatService.getCrossPredict, payload);
       yield put({ type: 'getCrossPredictSuccess', payload: { data } });
     },
-    *getTreeModalInfo({ payload }, { call, put }) { // heat 点击树的叶子节点
-      const data = yield call(crossHeatService.getDomainiInfo, payload);
-      yield put({ type: 'getTreeModalInfoSuccess', payload: { data } });
-    },
-    *getModalInfo({ payload }, { call, put }) { // heat 点击bar
-      const data = yield call(crossHeatService.getCrossModalInfo, payload);
-      yield put({ type: 'getModalInfoSuccess', payload: { data } });
-    },
-    *getDomainMinInfo({ payload }, { call, put }) {
-      yield put({ type: 'delExpPubSuccess', payload: { data } });
-      const data = yield call(crossHeatService.getDomainAllInfo, payload);
-      yield put({ type: 'getDomainMinInfoSuccess', payload: { data } });
-    },
     *getDomainPub({ payload }, { call, put }) {
-      const { ids } = payload;
-      const data = [];
-      for (const id of ids) {
-        const dt = yield call(crossHeatService.getDomainPub, id);
-        data.push(dt.data);
-      }
+      const data = yield call(crossHeatService.getDomainPub, payload);
       yield put({ type: 'getDomainPubSuccess', payload: { data } });
     },
     *getDomainExpert({ payload }, { call, put }) {
       const data = yield call(crossHeatService.getDomainExpert, payload);
       yield put({ type: 'getDomainExpertSuccess', payload: { data } });
+    },
+    *getSuggest({ payload }, { call, put }) {
+      const { query } = payload;
+      const data = yield call(crossHeatService.getSuggest, query);
+      yield put({ type: 'getSuggestSuccess', payload: { data } });
+    },
+
+    *addCrossField({ payload }, { call, put }) {
+      const data = yield call(crossHeatService.addCrossField, payload);
+      yield put({ type: 'addCrossFieldSuccess', payload: { data } });
+    },
+
+    *getCrossFieldById({ payload }, { call, put }) {
+      const { id } = payload;
+      const data = yield call(crossHeatService.getCrossFieldById, id);
+      yield put({ type: 'getCrossTreeSuccess', payload: { data } });
     },
     *getTaskList({ payload }, { call, put }) {
       const { offset, size } = payload;
@@ -83,41 +74,100 @@ export default {
       const data = yield call(crossHeatService.delTaskList, id);
       yield put({ type: 'delTaskListSuccess', payload: { data, id } });
     },
-    *getSuggest({ payload }, { call, put }) {
-      const { query } = payload;
-      const data = yield call(crossHeatService.getSuggest, query);
-      yield put({ type: 'getSuggestSuccess', payload: { data } });
+    *getAggregate({ payload }, { call, put }) {
+      const { method } = payload;
+      const data = yield call(crossHeatService.getAggregate, payload);
+      yield put({ type: 'getAggregateSuccess', payload: { method, data } });
     },
+
+    *getAutoDomainInfo({ payload }, { call, put, all }) {
+      const { yearDomainInfo } = payload;
+      const autoDomainInfo = yield all(yearDomainInfo.map((item) => {
+        return call(crossHeatService.getAggregate, item);
+      }));
+      yield put({ type: 'getAutoDomainInfoSuccess', payload: { autoDomainInfo } });
+    },
+
+    *getExportInfo({ payload }, { call, put, all }) {
+      const { exportList } = payload;
+      const exportInfo = yield all(exportList.map((item) => {
+        return call(crossHeatService.getAggregate, item);
+      }));
+      yield put({ type: 'getExportInfoSuccess', payload: { exportInfo } });
+    },
+
+    *getPubListInfo({ payload }, { call, put, all }) {
+      const { idInfo } = payload;
+      const pubInfo = yield all(idInfo.map((item) => {
+        return call(crossHeatService.getDomainPub, item);
+      }));
+      yield put({ type: 'getPubInfoSuccess', payload: { pubInfo } });
+    },
+
+    *getAuthorListInfo({ payload }, { call, put, all }) {
+      const { idInfo } = payload;
+      const authorInfo = yield all(idInfo.map((item) => {
+        return call(crossHeatService.getDomainExpert, item);
+      }));
+      yield put({ type: 'getAuthorInfoSuccess', payload: { authorInfo } });
+    },
+
   },
 
   reducers: {
-    getDisciplineSuccess(state, { payload: { data, id } }) {
-      if (id === 'queryOne') {
-        return { ...state, queryOne: data.data };
-      } else {
-        return { ...state, queryTwo: data.data };
-      }
+
+    getPubInfoSuccess(state, { payload: { pubInfo } }) {
+      const exportPubsList = {};
+      pubInfo.map((info) => {
+        info.data.pubs.map((item) => {
+          exportPubsList[item.id] = item;
+          return true;
+        });
+        return true;
+      });
+      return { ...state, exportPubsList };
     },
-    createDisciplineSuccess(state, { payload: { data } }) {
+    getAuthorInfoSuccess(state, { payload: { authorInfo } }) {
+      const exportAuthorsList = {};
+      authorInfo.map((info) => {
+        info.data.persons.map((item) => {
+          exportAuthorsList[item.id] = item;
+          return true;
+        });
+        return true;
+      });
+      return { ...state, exportAuthorsList };
+    },
+    getExportInfoSuccess(state, { payload: { exportInfo } }) {
+      const exportList = [];
+      exportInfo.map((item) => {
+        exportList.push(item.data);
+        return true;
+      });
+      return { ...state, exportList };
+    },
+
+    getAggregateSuccess(state, { payload: { method, data } }) {
+      if (method === 'overview') {
+        return { ...state, crossInfo: data.data };
+      }
+      if (method === 'detail') {
+        return { ...state, modalInfo: data.data, experts: [], pubs: [] };
+      }
+      if (method === 'predict') {
+        return { ...state, predict: data.data };
+      }
+
+      return { ...state };
+    },
+    addCrossFieldSuccess(state, { payload: { data } }) {
       return { ...state, decareID: data.data._id };
     },
+
     getCrossTreeSuccess(state, { payload: { data } }) {
-      return { ...state, crossTree: data.data };
-    },
-    getDomainInfoSuccess(state, { payload: { data } }) {
-      return { ...state, crossInfo: data.data, experts: null, pubs: [] };
-    },
-    getDomainExpertSuccess(state, { payload: { data } }) {
-      return { ...state, experts: data.data.persons };
-    },
-    getModalInfoSuccess(state, { payload: { data } }) {
-      return { ...state, modalInfo: data.data };
-    },
-    getDomainMinInfoSuccess(state, { payload: { data } }) {
-      return { ...state, domainMinInfo: data.data };
-    },
-    getDomainPubSuccess(state, { payload: { data } }) {
-      return { ...state, pubs: data };
+      const queryTree2 = data.data._2;
+      const queryTree1 = data.data._1;
+      return { ...state, crossTree: { queryTree1, queryTree2 } };
     },
     getTaskListSuccess(state, { payload: { data } }) {
       return { ...state, taskList: data.data };
@@ -132,18 +182,48 @@ export default {
         return { ...state };
       }
     },
-    getSuggestSuccess(state, { payload: { data } }){
-      return { ...state, suggest: data.data.phrase };
+    getDisciplineSuccess(state, { payload: { data, id } }) {
+      if (id === 'queryOne') {
+        return { ...state, queryOne: data.data };
+      }
+      if (id === 'queryTwo') {
+        return { ...state, queryTwo: data.data };
+      }
+      if (id === 'candidateOne') {
+        return { ...state, candidateOne: data.data };
+      }
+      if (id === 'candidateTwo') {
+        return { ...state, candidateTwo: data.data };
+      }
     },
-    delExpPubSuccess(state, { payload: { data } }){
-      return { ...state, experts: [], pubs: [] };
+    createDisciplineSuccess(state, { payload: { data } }) {
+      return { ...state, decareID: data.data._id };
     },
 
-    getCrossPredictSuccess(state, { payload: { data } }){
+    getDomainInfoSuccess(state, { payload: { data } }) {
+      return { ...state, crossInfo: data.data, experts: null, pubs: [] };
+    },
+    getDomainExpertSuccess(state, { payload: { data } }) {
+      return { ...state, experts: data.data.persons };
+    },
+    getDomainPubSuccess(state, { payload: { data } }) {
+      return { ...state, pubs: data.data.pubs };
+    },
+    getSuggestSuccess(state, { payload: { data } }) {
+      return { ...state, suggest: data.data.phrase };
+    },
+    getCrossPredictSuccess(state, { payload: { data } }) {
       return { ...state, predict: data.data };
     },
-    getTreeModalInfoSuccess(state, { payload: { data } }){
-      return { ...state, modalInfo: data.data };
+    getAutoDomainInfoSuccess(state, { payload: { autoDomainInfo } }) {
+      const autoList = [];
+      autoDomainInfo.map((item) => {
+        autoList.push(item.data);
+        return true;
+      });
+      return { ...state, autoDomainInfo: autoList };
     },
+
+
   },
 };

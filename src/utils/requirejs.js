@@ -31,6 +31,7 @@ const Libraries = {
   ],
   d3v3: [<script key="d3v3" type="text/javascript" src="/lib/d3.v3.js" async defer />],
   d3: [<script key="d3v3" type="text/javascript" src="/lib/d3.v4.js" async defer />],
+  echarts: [<script key="echarts" type="text/javascript" src="/lib/echarts.js" async defer />],
 
 };
 

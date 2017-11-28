@@ -313,18 +313,24 @@ const showTopImageDiv = (e, map, maindom, inputids, onLeave, type, ids, dispatch
   if (ishere != null) {
     detachCluster(ishere); //先删除已经存在的
   }
-  const width = 180;
+  let width = 180;
+  const height = 180;
+  const imgwidth = 45;
+  if (ids.length === 2) {
+    width = imgwidth;
+  }
+
   let ostyle = '';
   //两者的偏移计算不同
   if (type === 'baidu') { //baidu map
     const pixel = map.pointToOverlayPixel(e.currentTarget.getPosition()); // 中心点的位置
-    ostyle = `height:${width}px;width:${width}px;left: ${pixel.x - (width / 2)}px;top: ${pixel.y - (width / 2)}px;`;
+    ostyle = `height:${height}px;width:${width}px;left: ${pixel.x - (width / 2)}px;top: ${pixel.y - (height / 2)}px;`;
   } else { //google map
     const imgWidth = parseInt(maindom.style.height,10);
-    ostyle = `height:${width}px;width:${width}px;left: ${(e.x + imgWidth / 2) - (width / 2)}px;top: ${(e.y + imgWidth / 2) - (width / 2)}px;`;
+    ostyle = `height:${height}px;width:${height}px;left: ${(e.x + imgWidth / 2) - (width / 2)}px;top: ${(e.y + imgWidth / 2) - (height / 2)}px;`;
   }
-  // 可得中心点到图像中心点的半径为：width/2-imgwidth/2,圆形的方程为(X-pixel.x)^2+(Y-pixel.y)^2=width/2
-  const imgwidth = 45;
+
+  // 可得中心点到图像中心点的半径为：height/2-imgwidth/2,圆形的方程为(X-pixel.x)^2+(Y-pixel.y)^2=height/2
   const oDiv = document.createElement('div');
   oDiv.setAttribute('id', 'panel');
   oDiv.setAttribute('style', ostyle);
@@ -335,12 +341,15 @@ const showTopImageDiv = (e, map, maindom, inputids, onLeave, type, ids, dispatch
   // 开始显示图片,按照hindex排序
   const fenshu = (2 * Math.PI) / ids.length;// 共有多少份，每份的夹角
   for (let i = 0; i < ids.length; i += 1) { //从12点方向开始
-    const centerX = (Math.cos((fenshu * i) - (Math.PI / 2)) * ((width / 2) - (imgwidth / 2)))
-      + (width / 2);
-    const centerY = (Math.sin((fenshu * i) - (Math.PI / 2)) * ((width / 2) - (imgwidth / 2)))
-      + (width / 2);
+    const centerX = (Math.cos((fenshu * i) - (Math.PI / 2)) * ((height / 2) - (imgwidth / 2)))
+      + (height / 2);
+    const centerY = (Math.sin((fenshu * i) - (Math.PI / 2)) * ((height / 2) - (imgwidth / 2)))
+      + (height / 2);
     const imgdiv = document.createElement('div');
-    const cstyle = `height:${imgwidth}px;width:${imgwidth}px;left:${centerX - (imgwidth / 2)}px;top:${centerY - (imgwidth / 2)}px;`;
+    let cstyle = `height:${imgwidth}px;width:${imgwidth}px;left:${centerX - (imgwidth / 2)}px;top:${centerY - (imgwidth / 2)}px;`;
+    if (ids.length === 2) {
+      cstyle = `height:${imgwidth}px;width:${imgwidth}px;left:0px;top:${centerY - (imgwidth / 2)}px;`;
+    }
     imgdiv.setAttribute('name', 'scholarimg');
     imgdiv.setAttribute('style', cstyle);
     imgdiv.setAttribute('class', 'imgWrapper');
@@ -353,8 +362,9 @@ const showTopImageDiv = (e, map, maindom, inputids, onLeave, type, ids, dispatch
   // 再在其中间添加一个图像
   const wh = imgwidth + 40;
   const left = (width / 2) - (wh / 2);
+  const top = (height / 2) - (wh / 2);
   const imgdiv = document.createElement('div');
-  const cstyle = `opacity:0;height:${wh}px;width:${wh}px;left:${left}px;top:${left}px;`;
+  const cstyle = `opacity:0;height:${wh}px;width:${wh}px;left:${left}px;top:${top}px;`;
   imgdiv.setAttribute('name', 'center');// 中心的一个图片
   imgdiv.setAttribute('style', cstyle);
   imgdiv.setAttribute('class', 'imgWrapper');
@@ -366,7 +376,7 @@ const showTopImageDiv = (e, map, maindom, inputids, onLeave, type, ids, dispatch
 
   if (thisNode != null) { // 准备绑定事件
     const pthisNode = thisNode.parentNode;
-    pthisNode.addEventListener('mouseleave', () => {
+    thisNode.addEventListener('mouseleave', () => {
       if (onLeave) {
         onLeave();
       }

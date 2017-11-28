@@ -267,6 +267,7 @@ export default class ExpertGoogleMap extends React.Component {
 
         const count = markerClusterer.getTotalClusters();
         const clusters = markerClusterer.getClusters();
+        console.log(clusters);
         //console.log(JSON.stringify(clusters));
         //console.log(JSON.parse(JSON.stringify(clusters)));
         // var originalLog = console.log

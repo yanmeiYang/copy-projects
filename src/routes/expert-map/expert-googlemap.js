@@ -126,12 +126,6 @@ export default class ExpertGoogleMap extends React.Component {
     const that = this;
     const filterRange = range || 'all';
     const mapType = type || 0;
-    if (!place || !place.results) {
-      if (this.props.query === '' || this.props.query === '-') {
-        that.hideLoading();
-      }
-      return;
-    }
 
     const mapinterval = setInterval(() => {
       if (typeof (window.google) === 'undefined') {
@@ -165,6 +159,14 @@ export default class ExpertGoogleMap extends React.Component {
         });
         this.map = map; // set to global,以便全局取用
         map1 = this.map; // 地图刷新前，用于存储上次浏览的地点
+
+        if (!place || !place.results) {
+          if (this.props.query === '' || this.props.query === '-') {
+            that.hideLoading();
+          }
+          return;
+        }
+
         if (place.results !== 'undefined' && typeof (place.results) !== 'undefined') {
           place.results.sort((a, b) => b.hindex - a.hindex);
         } else {
@@ -267,10 +269,10 @@ export default class ExpertGoogleMap extends React.Component {
         const clusters = markerClusterer.getClusters();
         console.log(JSON.stringify(clusters));
         console.log(JSON.parse(JSON.stringify(clusters)));
-        var originalLog = console.log
-        console.log=function(obj){
-          originalLog(JSON.parse(JSON.stringify(clusters)))
-        }
+        // var originalLog = console.log
+        // console.log=function(obj){
+        //   originalLog(JSON.parse(JSON.stringify(clusters)))
+        // }
         // const clusterInterval = window.setInterval(() => {
         //   console.log('$$$$$$$$$$$$$$$$$$');
         //   if (count !== 0) {

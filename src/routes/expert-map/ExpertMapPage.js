@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Layout } from 'routes';
 import { sysconfig } from 'systems';
-import { Button, Modal, Icon, Tabs } from 'antd';
+import { Button, Modal, Icon, Tabs, message, notification, Alert } from 'antd';
 import { applyTheme } from 'themes';
 import { FormattedMessage as FM } from 'react-intl';
 import queryString from 'query-string';
@@ -63,6 +63,10 @@ export default class ExpertMapPage extends React.Component {
   componentDidMount() {
     loadECharts((ret) => {
       echarts = ret;
+      if ((this.state.query === '' || this.state.query === '-') &&
+        (this.state.domainId === '' || this.state.domainId === 'aminer') ) {
+        this.openNotification();
+      }
     });
   }
 
@@ -101,6 +105,17 @@ export default class ExpertMapPage extends React.Component {
     }
     return false;
   }
+
+  openNotification = () => {
+    let [message, description] = ['', ''];
+    sysconfig.Locale === 'en' ? [message, description] = ['Attention Please!','You have an invalid keyword!Please select a domain keyword or type a keyword to see what you want!'] : [message, description] = ['请注意！','您当前的搜索词为空，请您输入选择一个搜索词或者领域进行搜索！'];
+    notification.open({
+      message: message,
+      description: description,
+      duration: 8,
+      icon: <Icon type="smile-circle" style={{ color: '#108ee9' }} />,
+    });
+  };
 
   onDomainChange = (domain) => { //修改url,shouldComponentUpdate更新
     const { dispatch } = this.props;
@@ -257,6 +272,7 @@ export default class ExpertMapPage extends React.Component {
     link.setAttribute('download', 'statistics.csv');
     link.click();
   };
+
 
   render() {
     const { mapType, query, domainId } = this.state;

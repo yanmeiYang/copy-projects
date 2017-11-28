@@ -262,7 +262,7 @@ export default class SearchComponent extends Component {
               title={Math.random()}
               filters={filters}
               aggs={aggs}
-              roles={this.props.app.roles.role}
+              roles={this.props.app.roles && this.props.app.roles.role}
               onFilterChange={this.onFilterChange}
               onExpertBaseChange={this.onExpertBaseChange}
               disableExpertBaseFilter={disableExpertBaseFilter}

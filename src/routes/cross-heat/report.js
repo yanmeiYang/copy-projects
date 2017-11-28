@@ -5,13 +5,13 @@ import React from 'react';
 import { connect } from 'dva';
 import { Modal, Button, Icon, Switch, Tabs, Pagination, Tag, Tooltip } from 'antd';
 import { routerRedux, withRouter } from 'dva/router';
-import * as d3 from 'd3';
 import { sysconfig } from 'systems';
 import { PersonList } from 'components/person';
 import { Spinner } from 'components';
 import { Layout } from 'routes';
 import { applyTheme } from 'themes';
-import { Auth } from 'hoc';
+import { Auth, RequireRes } from 'hoc';
+import { ensure } from 'utils';
 import bridge from 'utils/next-bridge';
 import { PublicationList } from '../../components/publication/index';
 import Brush from './time-brush/index';
@@ -43,6 +43,7 @@ const sYear = dateYear - 10;
 
 @withRouter
 @Auth
+@RequireRes('d3')
 class CrossReport extends React.Component {
   state = {
     visibleModal: false,

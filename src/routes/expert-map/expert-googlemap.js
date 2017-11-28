@@ -6,10 +6,10 @@ import { connect } from 'dva';
 import { Button, Tag } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import classnames from 'classnames';
-import { routerRedux } from 'dva/router';
+import { RequireRes } from 'hoc';
 import { sysconfig } from 'systems';
 import { Spinner } from 'components';
-import { compare, loadScript } from 'utils';
+import { compare, ensure } from 'utils';
 import styles from './expert-googlemap.less';
 
 import { listPersonByIds } from '../../services/person';
@@ -79,35 +79,37 @@ export default class ExpertGoogleMap extends React.Component {
   }
 
   addMouseoverHandler = (map, marker, personId) => {
-    const { dispatch } = this.props;
-    const that = this;
-    const infoWindow = new window.google.maps.InfoWindow({
-      content: "<div id='author_info' class='popup'></div>",
-    });
-    window.google.maps.event.addListener(marker, 'mouseover', () => {
-      onResetPersonCard(dispatch);
-      infoWindow.open(map, marker);
-      const ids = [];
-      ids.push(personId);
-      requestDataNow(ids, () => { //获取完信息之后再回调
-        if (that.currentPersonId !== personId) {
-          this.setState({ cperson: personId }, syncInfoWindow());//回调函数里面改写
-        } else {
-          infoWindow.open(map, marker);
-          syncInfoWindow();
-        }
-        //使用中等大小的图标，将图片拷贝过去，和cluster中的一样,一定注意其逻辑顺序啊！
-        copyImage(`${personId}`, `Mid${personId}`, 90);
-        that.currentPersonId = personId;
+    ensure('google', (google) => {
+      const { dispatch } = this.props;
+      const that = this;
+      const infoWindow = new google.maps.InfoWindow({
+        content: "<div id='author_info' class='popup'></div>",
       });
-    });
+      google.maps.event.addListener(marker, 'mouseover', () => {
+        onResetPersonCard(dispatch);
+        infoWindow.open(map, marker);
+        const ids = [];
+        ids.push(personId);
+        requestDataNow(ids, () => { //获取完信息之后再回调
+          if (that.currentPersonId !== personId) {
+            this.setState({ cperson: personId }, syncInfoWindow());//回调函数里面改写
+          } else {
+            infoWindow.open(map, marker);
+            syncInfoWindow();
+          }
+          //使用中等大小的图标，将图片拷贝过去，和cluster中的一样,一定注意其逻辑顺序啊！
+          copyImage(`${personId}`, `Mid${personId}`, 90);
+          that.currentPersonId = personId;
+        });
+      });
 
-    window.google.maps.event.addListener(marker, 'mouseout', () => {
-      infoWindow.close(map, marker);
-    });
+      google.maps.event.addListener(marker, 'mouseout', () => {
+        infoWindow.close(map, marker);
+      });
 
-    window.google.maps.event.addListener(marker, 'click', () => {
-      toggleRightInfo('person', personId, dispatch, this.props.expertMap.infoZoneIds);
+      google.maps.event.addListener(marker, 'click', () => {
+        toggleRightInfo('person', personId, dispatch, this.props.expertMap.infoZoneIds);
+      });
     });
   };
 
@@ -127,164 +129,164 @@ export default class ExpertGoogleMap extends React.Component {
     const filterRange = range || 'all';
     const mapType = type || 0;
 
-    const mapinterval = setInterval(() => {
-      if (typeof (window.google) === 'undefined') {
-        console.log('wait for Google');
-        counter += 1;
-        if (counter > 200) {
-          clearInterval(mapinterval);
-          document.getElementById('allmap').innerHTML = 'Cannot connect to Google Map! Please check the network state!';
-        }
-      } else {
-        clearInterval(mapinterval);
+    ensure('google', (google) => {
+      // const mapinterval = setInterval(() => {
+      // if (typeof (window.google) === 'undefined') {
+      //   console.log('wait for Google');
+      //   counter += 1;
+      //   if (counter > 200) {
+      //     clearInterval(mapinterval);
+      //     document.getElementById('allmap').innerHTML = 'Cannot connect to Google Map! Please check the network state!';
+      //   }
+      // } else {
+      //   clearInterval(mapinterval);
 
-        that.showOverLay();
-        if (!map1) {
-          map1 = new window.google.maps.Map(document.getElementById('allmap'), {
-            center: {lat: sysconfig.CentralPosition.lat, lng: sysconfig.CentralPosition.lng},
-          });
-        }
-        const mapCenter = {
-          lat: map1 ? map1.getCenter().lat() : sysconfig.CentralPosition.lat,
-          lng: map1 ? map1.getCenter().lng() : sysconfig.CentralPosition.lng,
-        };
-        const conf = this.mapConfig[mapType] || this.mapConfig[0]; //根据地图的类型选择地图的尺寸
-        const map = new window.google.maps.Map(document.getElementById('allmap'), {
-          center: mapCenter,
-          zoom: conf.scale,
-          gestureHandling: 'greedy',
-          minZoom: conf.minscale,
-          maxZoom: conf.maxscale,
-          fullscreenControl: false,
+      that.showOverLay();
+      if (!map1) {
+        map1 = new google.maps.Map(document.getElementById('allmap'), {
+          center: { lat: sysconfig.CentralPosition.lat, lng: sysconfig.CentralPosition.lng },
         });
-        this.map = map; // set to global,以便全局取用
-        map1 = this.map; // 地图刷新前，用于存储上次浏览的地点
-
-        if (!place || !place.results) {
-          if (this.props.query === '' || this.props.query === '-') {
-            that.hideLoading();
-          }
-          return;
-        }
-
-        if (place.results !== 'undefined' && typeof (place.results) !== 'undefined') {
-          place.results.sort((a, b) => b.hindex - a.hindex);
-        } else {
-          return true; //往下执行没有必要了
-        }
-
-        const locations = [];
-        let j = 0;
-        const ids = [];
-        for (const pr of place.results) {
-          ids.push(pr.id);
-          dataMap[pr.id] = pr;
-          const newplace = findPosition(mapType, pr);
-          const onepoint = {lat: newplace[0], lng: newplace[1]};
-
-          if (newplace && newplace[1] && (newplace[1] !== 0 && newplace[1] !== 0)) {
-            let include = false;
-            switch (filterRange) {
-              case 'all':
-                include = true;
-                break;
-              case 'acm':
-              case 'ieee':
-                include = pr.fellows.indexOf(range) >= 0;
-                break;
-              case 'chinese':
-                include = pr.is_ch;
-                break;
-              default:
-            }
-            if (include) { //只有是选定的时候才加入
-              locations[j] = onepoint;
-              j += 1;
-            }
-          }
-        }
-        let markers = locations.map((location, i) => {
-          return new window.google.maps.Marker({
-            position: location,
-            label: {
-              text: place.results[i].name,
-              color: '#000000',
-              fontSize: '12px',
-              backgroundColor: 'transparent',
-              fontWeight: 'bold',
-              fontStyle: 'italic',
-              id: place.results[i].id, //id是自己设置的一个属性，用来放id的
-            },
-            icon: {
-              url: '/images/map/marker_blue_sprite.png',
-              size: new window.google.maps.Size(20, 70),
-              origin: new window.google.maps.Point(0, 0),
-              anchor: new window.google.maps.Point(0, 25),
-            },
-            title: place.results[i].name,
-          });
-        });
-
-        const number = hindexRange;
-        if (number === 'top200') {
-          markers = markers.slice(0, 200);
-        } else if (number === 'top50') {
-          markers = markers.slice(0, 50);
-        } else if (number === 'top100') {
-          markers = markers.slice(0, 100);
-        } else if (number === 'top500') {
-          markers = markers.slice(0, 500);
-        }
-
-        if (mapType === '1') {
-          bigAreaConfig.map((ac) => {
-            console.log(ac);
-            return new window.google.maps.Marker({
-              position: {lat: ac.y + 1.2, lng: ac.x + 2.5},
-              label: {
-                text: ac.label,
-                fontSize: '12px',
-                fontStyle: 'italic',
-                fontWeight: 'bold',
-                color: 'red',
-              },
-              icon: {url: '/images/map/blank.png'},
-              map,
-            });
-          });
-        }
-        const markerClusterer = new window.googleMap.MarkerClusterer(map, {});
-        markerClusterer.addMarkers(markers);
-        for (let m = 0; m < markers.length; m += 1) {
-          that.addMouseoverHandler(map, markers[m], place.results[m].id);
-        }
-        checkCacheLevel(sysconfig.Map_Preload, ids);
-        for (let i = 0;i < 1000000; i += 1) {
-
-        }
-        console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-        that.hideLoading();
-
-        const count = markerClusterer.getTotalClusters();
-        const clusters = markerClusterer.getClusters();
-        console.log(clusters);
-        //console.log(JSON.stringify(clusters));
-        //console.log(JSON.parse(JSON.stringify(clusters)));
-        // var originalLog = console.log
-        // console.log=function(obj){
-        //   originalLog(JSON.parse(JSON.stringify(clusters)))
-        // }
-        // const clusterInterval = window.setInterval(() => {
-        //   console.log('$$$$$$$$$$$$$$$$$$');
-        //   if (count !== 0) {
-        //     console.log(count);
-        //     window.clearInterval(clusterInterval);
-        //   }
-        // },200);
-        // console.log(markerClusterer.getStyles());
-        // console.log(markerClusterer.getTotalClusters());
-        // console.log(markerClusterer.getClusters());
       }
+      const mapCenter = {
+        lat: map1 ? map1.getCenter().lat() : sysconfig.CentralPosition.lat,
+        lng: map1 ? map1.getCenter().lng() : sysconfig.CentralPosition.lng,
+      };
+      const conf = this.mapConfig[mapType] || this.mapConfig[0]; //根据地图的类型选择地图的尺寸
+      const map = new google.maps.Map(document.getElementById('allmap'), {
+        center: mapCenter,
+        zoom: conf.scale,
+        gestureHandling: 'greedy',
+        minZoom: conf.minscale,
+        maxZoom: conf.maxscale,
+        fullscreenControl: false,
+      });
+      this.map = map; // set to global,以便全局取用
+      map1 = this.map; // 地图刷新前，用于存储上次浏览的地点
+
+      if (!place || !place.results) {
+        if (this.props.query === '' || this.props.query === '-') {
+          that.hideLoading();
+        }
+        return;
+      }
+
+      if (place.results !== 'undefined' && typeof (place.results) !== 'undefined') {
+        place.results.sort((a, b) => b.hindex - a.hindex);
+      } else {
+        return true; //往下执行没有必要了
+      }
+
+      const locations = [];
+      let j = 0;
+      const ids = [];
+      for (const pr of place.results) {
+        ids.push(pr.id);
+        dataMap[pr.id] = pr;
+        const newplace = findPosition(mapType, pr);
+        const onepoint = { lat: newplace[0], lng: newplace[1] };
+
+        if (newplace && newplace[1] && (newplace[1] !== 0 && newplace[1] !== 0)) {
+          let include = false;
+          switch (filterRange) {
+            case 'all':
+              include = true;
+              break;
+            case 'acm':
+            case 'ieee':
+              include = pr.fellows.indexOf(range) >= 0;
+              break;
+            case 'chinese':
+              include = pr.is_ch;
+              break;
+            default:
+          }
+          if (include) { //只有是选定的时候才加入
+            locations[j] = onepoint;
+            j += 1;
+          }
+        }
+      }
+      let markers = locations.map((location, i) => {
+        return new google.maps.Marker({
+          position: location,
+          label: {
+            text: place.results[i].name,
+            color: '#000000',
+            fontSize: '12px',
+            backgroundColor: 'transparent',
+            fontWeight: 'bold',
+            fontStyle: 'italic',
+            id: place.results[i].id, //id是自己设置的一个属性，用来放id的
+          },
+          icon: {
+            url: '/images/map/marker_blue_sprite.png',
+            size: new google.maps.Size(20, 70),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(0, 25),
+          },
+          title: place.results[i].name,
+        });
+      });
+
+      const number = hindexRange;
+      if (number === 'top200') {
+        markers = markers.slice(0, 200);
+      } else if (number === 'top50') {
+        markers = markers.slice(0, 50);
+      } else if (number === 'top100') {
+        markers = markers.slice(0, 100);
+      } else if (number === 'top500') {
+        markers = markers.slice(0, 500);
+      }
+
+      if (mapType === '1') {
+        bigAreaConfig.map((ac) => {
+          console.log(ac);
+          return new google.maps.Marker({
+            position: { lat: ac.y + 1.2, lng: ac.x + 2.5 },
+            label: {
+              text: ac.label,
+              fontSize: '12px',
+              fontStyle: 'italic',
+              fontWeight: 'bold',
+              color: 'red',
+            },
+            icon: { url: '/images/map/blank.png' },
+            map,
+          });
+        });
+      }
+      const markerClusterer = new window.googleMap.MarkerClusterer(map, {});
+      markerClusterer.addMarkers(markers);
+      for (let m = 0; m < markers.length; m += 1) {
+        that.addMouseoverHandler(map, markers[m], place.results[m].id);
+      }
+      checkCacheLevel(sysconfig.Map_Preload, ids);
+      // for (let i = 0; i < 1000000; i += 1) { // WTF
+      //
+      // }
+      console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+      that.hideLoading();
+
+      const count = markerClusterer.getTotalClusters();
+      const clusters = markerClusterer.getClusters();
+      console.log(clusters);
+      // console.log(JSON.stringify(clusters));
+      // console.log(JSON.parse(JSON.stringify(clusters)));
+      // var originalLog = console.log
+      // console.log=function(obj){
+      //   originalLog(JSON.parse(JSON.stringify(clusters)))
+      // }
+      // const clusterInterval = window.setInterval(() => {
+      //   console.log('$$$$$$$$$$$$$$$$$$');
+      //   if (count !== 0) {
+      //     console.log(count);
+      //     window.clearInterval(clusterInterval);
+      //   }
+      // },200);
+      // console.log(markerClusterer.getStyles());
+      // console.log(markerClusterer.getTotalClusters());
+      // console.log(markerClusterer.getClusters());
     });
   };
 

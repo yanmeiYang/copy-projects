@@ -5,10 +5,10 @@
 import React from 'react';
 import { connect } from 'dva';
 import { sysconfig } from 'systems';
-import { Auth } from 'hoc';
+import { Auth, RequireRes } from 'hoc';
 import { Checkbox, Select, Progress, message, Button } from 'antd';
 import { RgSearchNameBox } from 'components/relation-graph';
-import { loadD3 } from 'utils/requirejs';
+import { ensure } from 'utils';
 import { getAvatar } from 'utils/profile-utils';
 import { classnames } from 'utils/index';
 import styles from './RelationGraph.less';
@@ -25,6 +25,7 @@ let d3;
  */
 @connect(({ app }) => ({ app: { user: app.user, roles: app.roles } }))
 @Auth
+@RequireRes('d3')
 export default class RelationGraph extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -79,7 +80,8 @@ export default class RelationGraph extends React.PureComponent {
 
   componentDidMount() {
     const { query } = this.props;
-    loadD3((ret) => {
+    ensure('d3', (ret) => {
+      // loadD3((ret) => {
       d3 = ret;
 
       this.showVis(this);
@@ -108,7 +110,7 @@ export default class RelationGraph extends React.PureComponent {
   };
 
   redraw = (type) => {
-    loadD3((ret) => {
+    ensure('d3', (ret) => {
       d3 = ret;
 
       this.count = 0;

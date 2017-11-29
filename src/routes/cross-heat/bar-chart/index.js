@@ -3,25 +3,32 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import * as d3 from 'd3';
+// import * as d3 from 'd3';
+import { RequireRes } from 'hoc';
+import { ensure } from 'utils';
 import styles from './index.less';
 
 
+@RequireRes('d3')
 class BarChart extends React.Component {
 
   componentDidMount() {
     if (this.props.compareVal.title) {
-      this.createBar(this.props.compareVal);
+      ensure('d3', (d3) => {
+        this.createBar(this.props.compareVal, d3);
+      });
     }
   }
 
   componentWillUpdate(nextProps) {
     if (this.props.compareVal !== nextProps.compareVal) {
-      this.createBar(nextProps.compareVal);
+      ensure('d3', (d3) => {
+        this.createBar(nextProps.compareVal, d3);
+      });
     }
   }
 
-  createBar = (barInfo) => {
+  createBar = (barInfo, d3) => {
     d3.selectAll('#' + this.props.id).selectAll("g").remove();
     const svg = d3.selectAll('#' + this.props.id);
     const width = 200;

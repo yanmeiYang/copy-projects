@@ -21,10 +21,6 @@ import styles from './report.less';
 
 const tc = applyTheme(styles);
 const TabPane = Tabs.TabPane;
-
-const a = d3.rgb(255, 255, 255); //红色
-const b = d3.rgb(255, 127, 80); //绿色
-const compute = d3.interpolate(a, b);
 const barColor = {
   pub: '#92D1FF',
   expert: '#8EC267',
@@ -54,7 +50,7 @@ class CrossReport extends React.Component {
     isAuto: true,
     yHeight: 0, // 图的高
     xWidth: 0, // 图的宽
-    yearBuring: [],// 时间段
+    yearBuring: [], // 时间段
     pubCurrent: 1,
     personCurrent: 1,
   }
@@ -141,29 +137,33 @@ class CrossReport extends React.Component {
       this.startAutoShow(nAutoDomainInfo, yNode);
     }
   }
-  ;
+
 
 // 获取时间段，通过时间轴
   getLocalYear = date => this.setState({ dateDuring: date });
 // 重新创建原图
   createBasic = (yTree, xTree, xNode, yNode) => { // 删除原来当图
-    d3.select('#heat').selectAll('g').remove();
-    d3.select('#xTree').selectAll('g').remove();
-    d3.select('#yTree').selectAll('g').remove();
-    const yHeight = yNode.length * 62;
-    const xWidth = xNode.length * 62;
-    this.setState({ yHeight, xWidth });
-    this.createYTree(yTree, yHeight);
-    this.createXTree(xTree, yHeight, xWidth);
+    ensure('d3', (d3) => {
+      d3.select('#heat').selectAll('g').remove();
+      d3.select('#xTree').selectAll('g').remove();
+      d3.select('#yTree').selectAll('g').remove();
+      const yHeight = yNode.length * 62;
+      const xWidth = xNode.length * 62;
+      this.setState({ yHeight, xWidth });
+      this.createYTree(yTree, yHeight, d3);
+      this.createXTree(xTree, yHeight, xWidth, d3);
+    });
   };
 // 绘制rect 图
   createRect = (domainList, yLength) => {
     if (domainList) {
-      d3.select('#heat').selectAll('g').remove();
-      const changeData = this.domainChange(domainList, yLength);
-      this.heatNum = changeData.heatNum;
-      this.barNum = changeData.barNum;
-      this.createAxis(changeData.heatInfo, changeData.barInfo);
+      ensure('d3', (d3) => {
+        d3.select('#heat').selectAll('g').remove();
+        const changeData = this.domainChange(domainList, yLength);
+        this.heatNum = changeData.heatNum;
+        this.barNum = changeData.barNum;
+        this.createAxis(changeData.heatInfo, changeData.barInfo, d3);
+      });
     }
   };
 
@@ -218,7 +218,7 @@ class CrossReport extends React.Component {
     const crossList = [];
     xNode.map((xVal) => {
       yNode.map((yVal) => {
-        crossList.push({ _1: yVal, _2: xVal, });
+        crossList.push({ _1: yVal, _2: xVal });
         return true;
       });
       return true;
@@ -235,7 +235,10 @@ class CrossReport extends React.Component {
     return children;
   };
 // 绘制 rect 和bar
-  createAxis = (heatVal, barInfo) => {
+  createAxis = (heatVal, barInfo, d3) => {
+    const a = d3.rgb(255, 255, 255); //红色
+    const b = d3.rgb(255, 127, 80); //绿色
+    const compute = d3.interpolate(a, b);
     const maxHeatNum = d3.max(this.heatNum);
     const svg = d3.selectAll('#heat')
       .append('g')
@@ -336,7 +339,7 @@ class CrossReport extends React.Component {
     }
   };
 
-  createYTree = (yData, yHeight) => {
+  createYTree = (yData, yHeight, d3) => {
     const height = yHeight;
     // 创建画板
     const svg = d3.selectAll('#yTree')
@@ -403,7 +406,7 @@ class CrossReport extends React.Component {
     // 叶子节点点击事件
   };
 //=====xstree===================
-  createXTree = (xData, yHeight, xWidth) => {
+  createXTree = (xData, yHeight, xWidth, d3) => {
     const svg = d3.selectAll('#xTree')
       .append('g')
       .attr('transform', `translate(340,-${yHeight - 186})`);
@@ -484,13 +487,15 @@ class CrossReport extends React.Component {
       const toolTipTop = event.pageY + 20;
       const toolTipLeft = event.pageX + 15;
       // y 用d3画图
-      d3.select('#tooltip').selectAll('div').remove();
-      d3.selectAll('#tooltip')
-        .append('div')
-        .attr('class', styles.tooltipDis)
-        .style('top', `${toolTipTop}px`)
-        .style('left', `${toolTipLeft}px`)
-        .text(tooltipVal);
+      ensure('d3', (d3) => {
+        d3.select('#tooltip').selectAll('div').remove();
+        d3.selectAll('#tooltip')
+          .append('div')
+          .attr('class', styles.tooltipDis)
+          .style('top', `${toolTipTop}px`)
+          .style('left', `${toolTipLeft}px`)
+          .text(tooltipVal);
+      });
     }
   };
 
@@ -534,7 +539,7 @@ class CrossReport extends React.Component {
     let crossingFields = this.getCrossFieldNode(node, yNode);
     this.domain1 = node;
     this.domain2 = '';
-    if (type === 'y') {  // y轴
+    if (type === 'y') { // y轴
       const xNode = this.getNodeChildren(crossTree.queryTree2, []);
       crossingFields = this.getCrossFieldNode(xNode, node);
     }
@@ -649,7 +654,7 @@ class CrossReport extends React.Component {
         tmp.map((item) => {
           yearList.push([sYear + item]);
           return true;
-        })
+        });
         this.getAutoDomainInfo(yearList); // 获取自动演示数据
       } else {
         this.startAutoShow(autoDomainInfo);
@@ -660,7 +665,7 @@ class CrossReport extends React.Component {
   };
 
   getNullData = (crossInfo) => {
-    const { xTree, yTree, xNode, yNode, } = this.getXYNode();
+    const { xTree, yTree, xNode, yNode } = this.getXYNode();
     const filterXNode = this.filterXNode(crossInfo.data, xNode.length, yNode.length);
     const xDomainList = JSON.parse(JSON.stringify(filterXNode.domainList));
     const filterYNode = this.filterYNode(xDomainList, xNode.length - filterXNode.xVal.length, yNode.length);
@@ -708,7 +713,7 @@ class CrossReport extends React.Component {
 // 隐藏空白行
   filterXNode = (domainList, xLength, yLength) => {
     const xVal = [];
-    const tempList = []
+    const tempList = [];
     for (let i = 0; i < xLength; i++) {
       let isNull = false;
       for (let j = i * yLength; j < (i + 1) * yLength; j++) {
@@ -752,7 +757,7 @@ class CrossReport extends React.Component {
         endList.push(item);
       }
       return true;
-    })
+    });
     return { domainList: endList, yVal };
   };
 
@@ -846,7 +851,7 @@ class CrossReport extends React.Component {
     const loadAutoDomainInfo = this.props.loading.effects['crossHeat/getAutoDomainInfo'];
     const { modalInfo } = this.props.crossHeat;
     const { nullBtn, isHistory, xWidth, yHeight, isAuto, yearBuring, pubCurrent, personCurrent } = this.state;
-    let tabTitle = this.domain1 + " & " + this.domain2;
+    let tabTitle = `${this.domain1} & ${this.domain2}`;
     if (this.domain1 === '' || this.domain2 === '') {
       tabTitle = this.domain2 + this.domain1;
     }
@@ -867,14 +872,17 @@ class CrossReport extends React.Component {
             <div>
               <span className={styles.title}>{this.title}</span>
               <Button type="default"
-                      onClick={this.heatChange.bind(this, isHistory)}>{heatInfo}</Button>
+                      onClick={this.heatChange.bind(this, isHistory)}>{heatInfo}
+              </Button>
               { isHistory &&
               <Button type="default"
-                      onClick={this.nullChange.bind(this, nullBtn)}>{nullInfo}</Button>
+                      onClick={this.nullChange.bind(this, nullBtn)}>{nullInfo}
+              </Button>
               }
               { isHistory &&
               <Button type="default"
-                      onClick={this.autoChange.bind(this, isAuto)}>{autoInfo}</Button>
+                      onClick={this.autoChange.bind(this, isAuto)}>{autoInfo}
+              </Button>
               }
             </div>
             <div>
@@ -888,7 +896,7 @@ class CrossReport extends React.Component {
           </div>
           {this.crossInfo && isHistory &&
           <CrossStatistics cross={this.crossInfo} nodeData={this.nodeData}
-                           showModal={this.showModal}></CrossStatistics>
+                           showModal={this.showModal} />
           }
           <div id="tooltip" />
           <div id="d3Content"
@@ -900,8 +908,8 @@ class CrossReport extends React.Component {
             }
 
             <div className={styles.yTreeHeat}>
-              <svg id="yTree" width={340} height={yHeight}></svg>
-              <svg id="heat" width={xWidth} height={yHeight}></svg>
+              <svg id="yTree" width={340} height={yHeight} />
+              <svg id="heat" width={xWidth} height={yHeight} />
             </div>
             <svg className={styles.xTree} id="xTree" width={xWidth + 340} />
           </div>
@@ -918,7 +926,7 @@ class CrossReport extends React.Component {
                   className={styles.tabs}
                   onChange={this.modalTab}>
               <TabPane tab="专家" key="expert">
-                <Spinner loading={loadPage || loadAggregate || loadExpert}></Spinner>
+                <Spinner loading={loadPage || loadAggregate || loadExpert} />
                 { modalInfo &&
                 <div className={styles.modalContent}>
                   <PersonList persons={bridge.toNextPersons(this.expertList)}
@@ -935,7 +943,7 @@ class CrossReport extends React.Component {
                 }
               </TabPane>
               <TabPane tab="论文" key="pub">
-                <Spinner loading={loadPage || loadAggregate || loadPub}></Spinner>
+                <Spinner loading={loadPage || loadAggregate || loadPub} />
                 {modalInfo &&
                 <div className={styles.modalContent}>
                   <PublicationList pubs={this.pubList} pubLinkTargle showLabels={false} />
@@ -949,7 +957,7 @@ class CrossReport extends React.Component {
                 }
               </TabPane>
               <TabPane tab="统计" key="heat">
-                <Spinner loading={loadAggregate}></Spinner>
+                <Spinner loading={loadAggregate} />
                 {modalInfo &&
                 <div className={styles.modalContent}>
                   <CrossContrast compareData={modalInfo} />

@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Icon, message, Input, Modal } from 'antd';
-import * as d3 from 'd3';
+import { RequireRes } from 'hoc';
+import { ensure } from 'utils';
+// import * as d3 from 'd3';
 import { Spinner } from 'components';
 import styles from './index.less';
 
 const errorInfo = ['学科树的深度不能超过3层', '学科数量必须在3～20之间，请删减后再添加', '同一学科不能有两个相同的学科'];
-const maxNodeNum = 20;
+@RequireRes('d3')
 class DisciplineTree extends React.Component {
   state = {
     showTooltip: false,
@@ -35,13 +37,11 @@ class DisciplineTree extends React.Component {
   getDiscipline = () => {
     const id = this.props.id;
     const data = this.props.crossHeat[id];
-    const query = this.props.query;
-    const isSearch = this.props.isSearch;
-    if (!isSearch && data) {
+    if (!this.props.isSearch && data) {
       this.initData = this.addId(data);
       this.createD3(this.initData);
     } else {
-      const area = query.replace(/ /g, '_');
+      const area = this.props.query.replace(/ /g, '_');
       const params = { id, area, k: 4, depth: 2 };
       this.props.dispatch({ type: 'crossHeat/getDiscipline', payload: params });
     }
@@ -89,108 +89,110 @@ class DisciplineTree extends React.Component {
     return (S4() + S4() + S4());
   }
   createD3 = (iData) => {
-    const height = 500;
-    const width = this.props.isEdit ? 800 : 600;
-    // 创建画板
-    d3.select(`#${this.props.id}`).selectAll('svg').remove();
-    const svg = d3.select(`#${this.props.id}`).append('svg')
-      .attr('width', width)
-      .attr('height', height)
-      .append('g')
-      .attr('transform', 'translate(120,0)');
+    ensure('d3', (d3) => {
+      const height = 500;
+      const width = this.props.isEdit ? 800 : 600;
+      // 创建画板
+      d3.select(`#${this.props.id}`).selectAll('svg').remove();
+      const svg = d3.select(`#${this.props.id}`).append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .append('g')
+        .attr('transform', 'translate(120,0)');
 
-    const treemap = d3.tree().size([height, width]);
-    const root = d3.hierarchy(iData, d => d.children);
-    root.x0 = height / 2;
-    root.y0 = 0;
+      const treemap = d3.tree().size([height, width]);
+      const root = d3.hierarchy(iData, d => d.children);
+      root.x0 = height / 2;
+      root.y0 = 0;
 
-    // 数据格式化
-    const treeData = treemap(root);
-    const nodes = treeData.descendants();
-    const links = treeData.descendants().slice(1);
+      // 数据格式化
+      const treeData = treemap(root);
+      const nodes = treeData.descendants();
+      const links = treeData.descendants().slice(1);
 
-    nodes.forEach((d) => {
-      d.y = d.depth * 150;
-    });
-    // 添加线
-    svg.selectAll('.link')
-      .data(links)
-      .enter()
-      .append('path')
-      .attr('class', styles.link)
-      .attr('d', d => diagonal(d, d.parent));
+      nodes.forEach((d) => {
+        d.y = d.depth * 150;
+      });
+      // 添加线
+      svg.selectAll('.link')
+        .data(links)
+        .enter()
+        .append('path')
+        .attr('class', styles.link)
+        .attr('d', d => diagonal(d, d.parent));
 
-    // 创建节点
-    const node = svg.selectAll('.node')
-      .data(nodes)
-      .enter()
-      .append('g')
-      .attr('class', styles.node)
-      .attr('transform', d => `translate(${d.y},${d.x})`);
+      // 创建节点
+      const node = svg.selectAll('.node')
+        .data(nodes)
+        .enter()
+        .append('g')
+        .attr('class', styles.node)
+        .attr('transform', d => `translate(${d.y},${d.x})`);
 
-    // 给节点添加圆
-    node.append('circle')
-      .attr('r', 4.5)
-      .style('stroke', 'steelblue');
-    // 给节点添加文本
-    node.append('text')
-      .attr('dx', 8)
-      .attr('dy', 3)
-      .style('text-anchor', 'start')
-      .text(d => d.data.name);
-    // 对角线函数
-    function diagonal(s, d) {
-      const path =
-        `M ${s.y} ${s.x}
+      // 给节点添加圆
+      node.append('circle')
+        .attr('r', 4.5)
+        .style('stroke', 'steelblue');
+      // 给节点添加文本
+      node.append('text')
+        .attr('dx', 8)
+        .attr('dy', 3)
+        .style('text-anchor', 'start')
+        .text(d => d.data.name);
+      // 对角线函数
+      function diagonal(s, d) {
+        const path =
+          `M ${s.y} ${s.x}
            C ${(s.y + d.y) / 2} ${s.x},
              ${(s.y + d.y) / 2} ${d.x},
              ${d.y} ${d.x}`;
-      return path;
-    }
-
-    // 添加鼠标事件
-    svg.selectAll('circle')
-      .on('dragover', () => event.preventDefault())
-      .on('drop', (node) => {
-        event.preventDefault();
-        const name = event.dataTransfer.getData('Text');
-        this.drop(node, name);
-      })
-      .on('mouseover', (node) => {
-        mouserOver(this, node);
-      });
-
-    // 添加鼠标事件
-    svg.selectAll('text')
-      .on('dragover', () => event.preventDefault())
-      .on('drop', (node) => {
-        event.preventDefault();
-        const name = event.dataTransfer.getData('Text');
-        this.drop(node, name);
-      })
-      .on('mouseover', (node) => {
-        mouserOver(this, node);
-      });
-
-
-    function mouserOver(that, node) {
-      if (that.props.isEdit) {
-        // 圈变成背景色
-        svg.selectAll('circle').data(nodes)
-          .style('stroke', item => (node.data.id === item.data.id ? '#fff' : 'steelblue'));
-        // 字体变成背景色
-        svg.selectAll('text').data(nodes)
-          .style('fill', item => (node.data.id === item.data.id ? '#fff' : '#000'))
-          .attr('opacity', item => (node.data.id === item.data.id ? 0 : 1))
-        // 判断是不是说子节点
-        const sWidth = (document.body.offsetWidth - width - 40) / 2;
-        that.tooltipTop = node.x + 110;
-        that.tooltipLeft = node.y + 120;
-        // that.tooltipLeft = event.clientX - 5;
-        const name = node.data.name;
-        that.setState({ showTooltip: true, node, name });
+        return path;
       }
-    }
+
+      // 添加鼠标事件
+      svg.selectAll('circle')
+        .on('dragover', () => event.preventDefault())
+        .on('drop', (node) => {
+          event.preventDefault();
+          const name = event.dataTransfer.getData('Text');
+          this.drop(node, name);
+        })
+        .on('mouseover', (node) => {
+          mouserOver(this, node);
+        });
+
+      // 添加鼠标事件
+      svg.selectAll('text')
+        .on('dragover', () => event.preventDefault())
+        .on('drop', (node) => {
+          event.preventDefault();
+          const name = event.dataTransfer.getData('Text');
+          this.drop(node, name);
+        })
+        .on('mouseover', (node) => {
+          mouserOver(this, node);
+        });
+
+
+      function mouserOver(that, node) {
+        if (that.props.isEdit) {
+          // 圈变成背景色
+          svg.selectAll('circle').data(nodes)
+            .style('stroke', item => (node.data.id === item.data.id ? '#fff' : 'steelblue'));
+          // 字体变成背景色
+          svg.selectAll('text').data(nodes)
+            .style('fill', item => (node.data.id === item.data.id ? '#fff' : '#000'))
+            .attr('opacity', item => (node.data.id === item.data.id ? 0 : 1))
+          // 判断是不是说子节点
+          // const sWidth = (document.body.offsetWidth - width - 40) / 2;
+          that.tooltipTop = node.x + 110;
+          that.tooltipLeft = node.y + 120;
+          // that.tooltipLeft = event.clientX - 5;
+          const name = node.data.name;
+          that.setState({ showTooltip: true, node, name });
+        }
+      }
+    });
   }
 
   drop = (node, name) => {

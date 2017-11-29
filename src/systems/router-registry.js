@@ -24,6 +24,7 @@ import seminar from 'routes/seminar/router-seminar';
 import tencent from 'routes/third-login/router';
 import router2bprofile from 'routes/2b-profile/router-2bprofile';
 import crossHeat from 'routes/cross-heat/router-ch';
+import topicRelation from 'routes/topic-relation/router-relation';
 
 
 const { ConnectedRouter } = routerRedux;
@@ -100,6 +101,8 @@ const RouterRegistry = [
 
   tencent.ThirdLogin,
   crossHeat.Cross,
+
+  topicRelation.RelationPage,
 
   // System Default.
   core.Error404, // must be last one.

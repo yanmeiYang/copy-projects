@@ -97,6 +97,10 @@ export default class TrendPrediction extends React.PureComponent {
   }
 
   onChange = (key) => {
+    if (key === '4') {
+      this.showTopicRelation();
+      return;
+    }
     d3.select('.active').classed('active', false);
     d3.select(this.parentNode).classed('active', true);
     d3.selectAll('.term').remove();
@@ -533,6 +537,20 @@ export default class TrendPrediction extends React.PureComponent {
       .attr('transform', (d, i) => {
         return `translate(${((i * width) / trendData.timeSlides.length)},${0})`;// 需调整参数，点离左边空白处
       });
+/*
+    axis.append('rect').attr('class', 'co-occur').attr('x', '15px').attr('rx', 2).attr('ry', 2)
+      .style('width', '75px')
+      .style('height', '18px')
+      .style('fill', '#FFFFFF')
+      .style('fill-opacity', 0)
+      .style('stroke-width', 2)
+      .style('stroke', '#909090')
+      .on('click', (d, i) => {
+      this.showTopicRelation(i);
+      });
+    axis.append('text').attr('x', '15px').attr('y', '13px')
+      .style('font-size', '14px')
+      .text('子领域分析');*/
 
     axisWidth = width / trendData.timeSlides.length;
     // 年代坐标轴，x1、y1为起点坐标，x2、y2为终点坐标
@@ -784,6 +802,10 @@ export default class TrendPrediction extends React.PureComponent {
     document.getElementById(id).style = 'display:none';
   };
 
+  showTopicRelation = () => {
+    window.location.href = `/topic-relation?query=${this.props.query}`;
+  }
+
   showTip = (id) => {
     const e = event || window.event;
     const scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
@@ -800,6 +822,8 @@ export default class TrendPrediction extends React.PureComponent {
       info = '按照关键词在该领域所有发表论文中出现的频率排序';
     } else if (id === 2) {
       info = '按照关键词在该领域整个时间轴上前一半年份发表文章中出现的频率进行排序';
+    } else if (id === 3) {
+      info = '展示该领域关键词在一定时间跨度内的共现网络';
     }
     document.getElementById('tip').innerHTML = info;
   };
@@ -891,6 +915,7 @@ export default class TrendPrediction extends React.PureComponent {
               <TabPane tab={<span onMouseEnter={this.showTip.bind(that, 0)} onMouseLeave={this.hideTip}>近期热度</span>} key="1" id="recent-trend" />
               <TabPane tab={<span onMouseEnter={this.showTip.bind(that, 1)} onMouseLeave={this.hideTip}>全局热度</span>} key="2" id="overall-trend" />
               <TabPane tab={<span onMouseEnter={this.showTip.bind(that, 2)} onMouseLeave={this.hideTip}>技术源头</span>} key="3" id="origin-trend" />
+              <TabPane tab={<span onMouseEnter={this.showTip.bind(that, 3)} onMouseLeave={this.hideTip}>领域关联</span>} key="4" id="topic-relation" />
             </Tabs>
             <div id="hist-chart" className={styles.rightbox} />
           </div>

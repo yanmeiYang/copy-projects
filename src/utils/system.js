@@ -20,24 +20,26 @@ const AvailableSystems = [
   'DataAnnotation',
   'thurcb',
   'yocsef',
+  'med_topic_trend',
 ];
 
 let System;
 // System = 'aminer';
-// System = 'ccf';
+System = 'ccf';
 // System = 'ccftest';
 // System = 'huawei';
 // System = 'alibaba';
 // System = 'tencent';
 // System = 'cie';
 // System = 'cipsc';
-System = 'demo';
+// System = 'demo';
 // System = 'cietest';
 // System = 'bole';
 // System = 'acmfellow';
 // System = 'DataAnnotation';
 // System = 'thurcb';
 // System = 'yocsef';
+// System = 'med_topic_trend';
 
 let Source = System; // AppID, Used in UniversalConfig.
 

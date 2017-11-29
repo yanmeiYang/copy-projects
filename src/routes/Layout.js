@@ -56,7 +56,7 @@ export default class Layout extends Component {
   };
 
   static defaultProps = {
-    showHeader: true,
+    showHeader: sysconfig.Layout_ShowHeader,
     showNavigator: sysconfig.Layout_HasNavigator,
     showSidebar: sysconfig.Layout_HasSideBar,
     sidebar: theme.sidebar,

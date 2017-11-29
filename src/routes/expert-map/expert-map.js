@@ -14,7 +14,6 @@ import RightInfoZonePerson from './RightInfoZonePerson';
 import RightInfoZoneAll from './RightInfoZoneAll';
 import styles from './expert-map.less';
 import {
-  findPosition,
   getById,
   toggleRightInfo,
   onResetPersonCard,
@@ -25,8 +24,8 @@ import {
   syncInfoWindow,
   //findMapFilterRangesByKey,
   findMapFilterHindexRangesByKey,
-  bigAreaConfig,
 } from './utils/map-utils';
+import {findPosition, bigAreaConfig,} from './utils/bigArea-utils';
 import {
   dataCache,
   copyImage,

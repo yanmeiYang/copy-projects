@@ -20,6 +20,7 @@ const AvailableSystems = [
   'DataAnnotation',
   'thurcb',
   'yocsef',
+  'med_topic_trend',
 ];
 
 let System;
@@ -38,6 +39,7 @@ System = 'demo';
 // System = 'DataAnnotation';
 // System = 'thurcb';
 // System = 'yocsef';
+// System = 'med_topic_trend';
 
 let Source = System; // AppID, Used in UniversalConfig.
 

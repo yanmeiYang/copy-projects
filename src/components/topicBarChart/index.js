@@ -3,9 +3,11 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { loadECharts } from 'utils/requirejs';
+import { RequireRes } from 'hoc';
+import { ensure } from 'utils';
 
 @connect()
+@RequireRes('echarts')
 export default class TopicBarChart extends React.Component {
 
   componentDidMount() {
@@ -21,7 +23,7 @@ export default class TopicBarChart extends React.Component {
   }
 
   initBarChar = (topic) => {
-    loadECharts((echarts) => {
+    ensure('echarts', (echarts) => {
       this.getMyCharts(echarts);
 
       if (topic.label) {

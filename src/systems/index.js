@@ -25,6 +25,7 @@ const CurrentSystemConfig = {
   DataAnnotation: require('./DataAnnotation/config'),
   thurcb: require('./thurcb/config'),
   yocsef: require('./yocsef/config'),
+  med_topic_trend: require('./med_topic_trend/config'),
 };
 
 // 默认配置
@@ -38,7 +39,7 @@ const getDefaultSystemConfigs = (system, source) => {
     //
     Locale: 'en', // en, zh
     EnableLocalLocale: false, // 将Locale存储到localStorage
-    GLOBAL_ENABLE_HOC: true,
+    GLOBAL_ENABLE_HOC: true, // 是否启用权限验证HOC.
     Use_CDN: true,
     GLOBAL_ENABLE_FEEDBACK: false, // 是否显示feedback
 
@@ -53,6 +54,7 @@ const getDefaultSystemConfigs = (system, source) => {
     PageTitle: 'Aminer Business',
     Layout_HasSideBar: false, // 是否显示左侧菜单
     Layout_HasNavigator: true,
+    Layout_ShowHeader: true, // 是否显示header
 
     // header
     Header_UserPageURL: defaults.IN_APP_DEFAULT, // 用户头像点击之后去的页面.

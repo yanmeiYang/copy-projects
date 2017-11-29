@@ -1,0 +1,41 @@
+import React from 'react';
+import { authenticateExpertBase } from 'hooks';
+import defaults from '../utils';
+
+const ExpertBase = '59d7bb7e9ed5dbe450e6b275';
+
+module.exports = {
+
+  Use_CDN: true,
+  EnableLocalLocale: true,
+  GLOBAL_ENABLE_FEEDBACK: false,
+
+  // 通用配置。所有System的配置文件必须全部包含这部分的值
+  PageTitle: 'MedTopicTrend',
+  SearchPagePrefix: 'uniSearch', // search, uniSearch
+  ShowRegisteredRole: false,
+  Register_AddPrivilegesToExpertBaseIDs: [ExpertBase],
+  IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
+  Header_UserPageURL: '/user-info',
+  // Functionality
+  Enable_Export: true,
+  Enable_Export_EB_IF_EXIST: true,
+  Search_EnablePin: false,
+  // > Search related
+  HeaderSearch_TextNavi: ['ACMFellowExpertBase','TrendPrediction'],
+
+  ExpertBases: [
+    {
+      id: '55ebd8b945cea17ff0c53d5a',
+      name: '中国科学院院士',
+      nperson: 287,
+    },
+  ],
+  ExpertBase,
+  // 不显示Filter,sort,header,footer,login
+  Search_SortOptions:[],
+  Search_DisableFilter: true,
+  Layout_ShowHeader: false,
+  GLOBAL_ENABLE_HOC: false,
+
+};

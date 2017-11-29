@@ -10,7 +10,15 @@ import * as reflect from './reflect';
 import * as system from './system';
 import * as hole from './hole';
 import { compare } from './compare';
-import { loadD3, loadD3v3, loadScript, loadECharts, loadBMap, loadGoogleMap } from './requirejs';
+import {
+  loadD3,
+  loadD3v3,
+  loadScript,
+  loadECharts,
+  loadBMap,
+  loadGoogleMap,
+  ensure,
+} from './requirejs';
 
 // 连字符转驼峰
 String.prototype.hyphenToHump = function () {
@@ -103,6 +111,7 @@ module.exports = {
   request, nextAPI,
   apiBuilder,
   loadD3, loadD3v3, loadScript, loadECharts, loadBMap, loadGoogleMap,
+  ensure,
   color,
   queryURL,
   getTwoDecimal,

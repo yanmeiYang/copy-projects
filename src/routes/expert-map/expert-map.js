@@ -3,8 +3,10 @@ import { connect } from 'dva';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
 import { Spinner } from 'components';
-//import { listPersonByIds } from 'services/person';
-import { compare, loadScript } from 'utils';
+import { RequireRes } from 'hoc';
+//import { listPersonByIds } from 'services/person'
+import { Helmet } from 'react-helmet';
+import { compare, loadScript, ensure } from 'utils';
 import * as profileUtils from 'utils/profile-utils';
 import GetBMapLib from './utils/BMapLibGai.js';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
@@ -12,7 +14,6 @@ import RightInfoZonePerson from './RightInfoZonePerson';
 import RightInfoZoneAll from './RightInfoZoneAll';
 import styles from './expert-map.less';
 import {
-  findPosition,
   getById,
   toggleRightInfo,
   onResetPersonCard,
@@ -21,12 +22,12 @@ import {
   showTopImages,
   addImageListener,
   syncInfoWindow,
-  waitforBMap,
-  waitforBMapLib,
+  isIn,
+  ifIn,
   //findMapFilterRangesByKey,
   findMapFilterHindexRangesByKey,
-  bigAreaConfig,
 } from './utils/map-utils';
+import {findPosition, bigAreaConfig,} from './utils/bigArea-utils';
 import {
   dataCache,
   copyImage,
@@ -57,6 +58,7 @@ const getInfoWindow = () => {
  * -------------------------------------------------------------------
  */
 @connect(({ expertMap, loading }) => ({ expertMap, loading }))
+@RequireRes('BMap')
 export default class ExpertMap extends PureComponent {
   constructor(props) {
     super(props);
@@ -68,6 +70,10 @@ export default class ExpertMap extends PureComponent {
     loadingFlag: false,
     cperson: '', //当前显示的作者的id
   };
+
+  // componentWillMount = () => {
+  //   this.props.dispatch({ type: 'app/requireResource', res: ['BMap'] });
+  // };
 
   componentDidMount() {
     const { dispatch, expertMap } = this.props;
@@ -129,6 +135,8 @@ export default class ExpertMap extends PureComponent {
     for (let j = 0; j < imgdivs.length; j += 1) {
       const cimg = imgdivs[j];
       cimg.addEventListener('mouseenter', (event) => {
+        ifIn.pop();
+        ifIn.push(true);
         addImageListener(map, ids, getInfoWindow, event, imgwidth, type, '', '', (data) => {
           const pId = data.id;
           const idx = [];
@@ -141,7 +149,16 @@ export default class ExpertMap extends PureComponent {
         });
       });
       cimg.addEventListener('mouseleave', () => {
-        map.closeInfoWindow();
+        ifIn.pop();
+        ifIn.push(false);
+        const imgInterval = setInterval(() => {
+          const flag1 = isIn[isIn.length - 1];
+          const flag2 = ifIn[ifIn.length - 1];
+          if (!flag1 && !flag2) {
+            map.closeInfoWindow();
+            clearInterval(imgInterval);
+          }
+        }, 1000);
       });
     }
   };
@@ -171,8 +188,7 @@ export default class ExpertMap extends PureComponent {
 
     // TODO load script for baidumap.
 
-
-    waitforBMap(200, 100,() => {
+    ensure('BMap', (BMap) => {
       this.showOverLay();
 
       const conf = this.mapConfig[mapType] || this.mapConfig[0];// init map instance.
@@ -277,8 +293,8 @@ export default class ExpertMap extends PureComponent {
         }
       }
 
-      waitforBMapLib(200, 100, () => {
-        const markerClusterer = new window.BMapLib.MarkerClusterer(map, {});
+      ensure('BMapLib', (BMapLib) => {
+        const markerClusterer = new BMapLib.MarkerClusterer(map, {});
         markerClusterer.addMarkers(markers);
         for (let m = 0; m < markers.length; m += 1) {
           this.addMouseoverHandler(markers[m], pId[m]);
@@ -287,15 +303,15 @@ export default class ExpertMap extends PureComponent {
         //cache image
         checkCacheLevel(sysconfig.Map_Preload, ids);
         that.hideLoading();
-        console.log(map);
-        console.log(markerClusterer);
-        console.log(markerClusterer.getMarkers());
-        console.log(markerClusterer.getStyles);
-        console.log(markerClusterer.getClustersCount());
-        console.log(markerClusterer.getStyles());
-        console.log(markerClusterer.getClusters());
-        console.log(markerClusterer.getClusters()[0]);
-        console.log(markerClusterer.getClusters()[0]._markers);
+        // console.log(map);
+        // console.log(markerClusterer);
+        // console.log(markerClusterer.getMarkers());
+        // console.log(markerClusterer.getStyles);
+        // console.log(markerClusterer.getClustersCount());
+        // console.log(markerClusterer.getStyles());
+        // console.log(markerClusterer.getClusters());
+        // console.log(markerClusterer.getClusters()[0]);
+        // console.log(markerClusterer.getClusters()[0]._markers);
       });
     }, showLoadErrorMessage);
   };
@@ -312,6 +328,8 @@ export default class ExpertMap extends PureComponent {
     const { dispatch } = this.props;
     const infoWindow = getInfoWindow();
     marker.addEventListener('mouseover', (e) => {
+      ifIn.pop();
+      ifIn.push(true);
       onResetPersonCard(dispatch); // TODO Load default name,重置其信息
       e.target.openInfoWindow(infoWindow);
       const ids = [];
@@ -329,7 +347,16 @@ export default class ExpertMap extends PureComponent {
       });
     });
     marker.addEventListener('mouseout', (e) => {
-      e.target.closeInfoWindow(infoWindow);
+      ifIn.pop();
+      ifIn.push(false);
+      const markerInterval = setInterval(() => {
+        const flag1 = isIn[isIn.length - 1];
+        const flag2 = ifIn[ifIn.length - 1];
+        if (!flag1 && !flag2) {
+          e.target.closeInfoWindow(infoWindow);
+          clearInterval(markerInterval);
+        }
+      }, 1000);
     });
     marker.addEventListener('click', () => {
       toggleRightInfo('person', personId, dispatch, this.props.expertMap.infoZoneIds);
@@ -372,7 +399,6 @@ export default class ExpertMap extends PureComponent {
 
     return (
       <div className={styles.expertMap} id="currentMain">
-
         <div className={styles.map}>
           <Spinner loading={this.state.loadingFlag} />
           <div id="allmap" />

@@ -3,19 +3,18 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Layout } from 'routes';
 import { sysconfig } from 'systems';
-import { Button, Modal, Icon, Tabs } from 'antd';
+import { Button, Modal, Icon, Tabs, message, notification, Alert } from 'antd';
 import { applyTheme } from 'themes';
 import { FormattedMessage as FM } from 'react-intl';
 import queryString from 'query-string';
-import { Auth } from 'hoc';
-import { detectSavedMapType, compare } from 'utils';
+import { Auth, RequireRes } from 'hoc';
+import { detectSavedMapType, compare, ensure } from 'utils';
 import { DomainSelector, MapFilter } from 'routes/expert-map';
 import * as strings from 'utils/strings';
-import { loadECharts } from 'utils/requirejs';
 import ExpertGoogleMap from './expert-googlemap.js';
 import ExpertMap from './expert-map.js';
 import styles from './ExpertMapPage.less';
-import { showSta, sortByBigArea, sortByCountries } from './utils/sta-utils';
+import { showSta, sortByBigArea, sortByCountries, } from './utils/sta-utils';
 
 const tc = applyTheme(styles);
 const [ButtonGroup, TabPane] = [Button.Group, Tabs.TabPane];
@@ -25,6 +24,7 @@ const MAP_DISPATCH_KEY = 'map-dispatch';
 
 @connect(({ app, expertMap }) => ({ app: { user: app.user, roles: app.roles }, expertMap }))
 @Auth
+@RequireRes('echarts')
 export default class ExpertMapPage extends React.Component {
   constructor(props) {
     super(props);
@@ -61,8 +61,12 @@ export default class ExpertMapPage extends React.Component {
   }
 
   componentDidMount() {
-    loadECharts((ret) => {
+    ensure('echarts', (ret) => {
       echarts = ret;
+      const { query, domainId } = this.state;
+      if ((query === '' || query === '-') && (domainId === '' || domainId === 'aminer')) {
+        this.openNotification();
+      }
     });
   }
 
@@ -101,6 +105,17 @@ export default class ExpertMapPage extends React.Component {
     }
     return false;
   }
+
+  openNotification = () => {
+    let [message, description] = ['', ''];
+    sysconfig.Locale === 'en' ? [message, description] = ['Attention Please!', 'You have an invalid keyword!Please select a domain keyword or type a keyword to see what you want!'] : [message, description] = ['请注意！', '您当前的搜索词为空，请您输入选择一个搜索词或者领域进行搜索！'];
+    notification.open({
+      message: message,
+      description: description,
+      duration: 8,
+      icon: <Icon type="smile-circle" style={{ color: '#108ee9' }} />,
+    });
+  };
 
   onDomainChange = (domain) => { //修改url,shouldComponentUpdate更新
     const { dispatch } = this.props;
@@ -258,6 +273,7 @@ export default class ExpertMapPage extends React.Component {
     link.click();
   };
 
+
   render() {
     const { mapType, query, domainId } = this.state;
     const options = { ...this.state, title: this.titleBlock };//以便传入到组件里面
@@ -322,10 +338,12 @@ export default class ExpertMapPage extends React.Component {
               <ButtonGroup id="sType" className={styles.sType}>
                 {this.typeConfig.map((conf) => {
                   return !conf.disabled && (
-                    <Button key={conf.key} onClick={this.onTypeChange.bind(this, conf.key)} onKeyDown={() => {}} type={this.state.type === conf.key ? 'primary' : ''}>
+                    <Button key={conf.key} onClick={this.onTypeChange.bind(this, conf.key)}
+                            onKeyDown={() => {
+                            }} type={this.state.type === conf.key ? 'primary' : ''}>
                       {conf.label}
                     </Button>
-                    );
+                  );
                 })}
               </ButtonGroup>
             </div>

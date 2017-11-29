@@ -20,6 +20,7 @@ const { iconFontJS, iconFontCSS, logo } = config;
 const { Sider, Content, Footer } = LayoutComponent;
 
 const tc = applyTheme(styles);
+let lastHref;
 
 require(`themes/theme-${theme.themeName}.less`); // basic themes，:global css only
 
@@ -56,7 +57,7 @@ export default class Layout extends Component {
   };
 
   static defaultProps = {
-    showHeader: true,
+    showHeader: sysconfig.Layout_ShowHeader,
     showNavigator: sysconfig.Layout_HasNavigator,
     showSidebar: sysconfig.Layout_HasSideBar,
     sidebar: theme.sidebar,
@@ -64,6 +65,10 @@ export default class Layout extends Component {
     fixAdvancedSearch: false, // TODO use localStorage to cache user habits.
     showFeedback: sysconfig.GLOBAL_ENABLE_FEEDBACK,
   };
+
+  // state: {
+  //   headerResources: [],
+  // };
 
   componentDidMount() {
     // TODO 这个统计有问题呀 ????
@@ -76,16 +81,28 @@ export default class Layout extends Component {
     }
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    const { headerResources } = nextProps.app;
+    if (
+      (headerResources !== this.props.app.headerResources) ||
+      (headerResources && !this.headerResourcesArray)
+    ) {
+      this.headerResourcesArray = [];
+      if (headerResources) {
+        headerResources.forEach((k, v) => {
+          this.headerResourcesArray.push(...k);
+        });
+      }
+    }
+  };
+
   render() {
     // console.count('>>>>>>>>>> App Render'); // TODO performance
     const { sidebar, footer } = this.props;
     const { contentClass, showHeader, showNavigator, showSidebar, showFeedback } = this.props;
     const { dispatch, app, loading } = this.props;
-    const { user, roles } = app;
 
-    const href = window.location.href;
-
-    let lastHref;
+    const { href } = window.location;
     if (lastHref !== href) {
       NProgress.start();
       if (!loading.global) {
@@ -93,6 +110,7 @@ export default class Layout extends Component {
         lastHref = href;
       }
     }
+
     const { logoZone, searchZone, infoZone, fixAdvancedSearch, disableAdvancedSearch } = this.props;
     const { pageTitle, pageSubTitle } = this.props;
     const { query, onSearch } = this.props;
@@ -109,7 +127,6 @@ export default class Layout extends Component {
 
     return (
       <LayoutComponent className={tc(['layout'])}>
-
         <Helmet>
           <title>{title}</title>
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -120,38 +137,44 @@ export default class Layout extends Component {
 
           <link rel="stylesheet" href="/fa/css/font-awesome.min.css" />
 
+          {this.headerResourcesArray && this.headerResourcesArray.length > 0 &&
+          this.headerResourcesArray.map((item) => {
+            console.log('|||  ', item);
+            return item;
+          })}
+
           {/*{href.indexOf('/lab/knowledge-graph-widget') > 0 &&*/}
           {/*<link rel="stylesheet"*/}
           {/*href="https://cdn.rawgit.com/novus/nvd3/v1.8.1/build/nv.d3.css" />*/}
           {/*}*/}
 
-          {(href.indexOf('/expert-map') > 0) &&
-          <script
-          type="text/javascript"
-          src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />}
+          {/*{(href.indexOf('/expert-map') > 0) &&*/}
+          {/*<script*/}
+          {/*type="text/javascript"*/}
+          {/*src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />}*/}
 
-          {(href.indexOf('/expert-map') > 0) &&
-          <script
-          src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1"
-          charSet="utf-8" async defer />}
+          {/*{(href.indexOf('/expert-map') > 0) &&*/}
+          {/*<script*/}
+          {/*src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1"*/}
+          {/*charSet="utf-8" async defer />}*/}
 
-          {href.indexOf('/expert-map') > 0 &&
-          <script
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlzpf4YyjOBGYOhfUaNvQZENXEWBgDkS0"
-          async defer />}
+          {/*{href.indexOf('/expert-map') > 0 &&*/}
+          {/*<script*/}
+          {/*src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlzpf4YyjOBGYOhfUaNvQZENXEWBgDkS0"*/}
+          {/*async defer />}*/}
 
           {/*{false && href.indexOf('/expert-heatmap') > 0 &&*/}
           {/*<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/3.7.1/echarts.js" />}*/}
 
-          {(href.indexOf('/expert-trajectory') > 0) &&
-          <script
-            type="text/javascript"
-            src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />}
+          {/*{(href.indexOf('/expert-trajectory') > 0) &&*/}
+          {/*<script*/}
+          {/*type="text/javascript"*/}
+          {/*src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />}*/}
 
-          {(href.indexOf('/expert-trajectory') > 0) &&
-          <script
-            src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1"
-            charSet="utf-8" async defer />}
+          {/*{(href.indexOf('/expert-trajectory') > 0) &&*/}
+          {/*<script*/}
+          {/*src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1"*/}
+          {/*charSet="utf-8" async defer />}*/}
 
         </Helmet>
 

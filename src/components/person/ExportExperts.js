@@ -96,16 +96,16 @@ export default class ExportExperts extends Component {
         // TODO res拼到data
         size = Math.min(res.total, size);
         if (res && res.result) {
-          res = bridge.toNextPersons(res.result)
+          res = bridge.toNextPersons(res.result);
         } else if (res && res.items) {
-          res = res.items
+          res = res.items;
         } else {
-          console.log('Error')
+          console.log('Error');
         }
         if (offset + 100 < size && i < maxLoop) {
           fetchData(data.concat(res), size, offset + 100, i + 1);
         } else {
-          exportData(data.concat(res))
+          exportData(data.concat(res));
         }
       });
     };

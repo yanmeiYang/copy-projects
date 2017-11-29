@@ -588,7 +588,7 @@ function GetBMapLib(showTop) {
         });
 
         const that = this;
-        this._clusterMarker.addEventListener('mouseover', (event) => {
+        this._clusterMarker.addEventListener('mouseenter', (event) => {
           if (me.target === event.target) {
             // console.log('match, pass', me.target._text);
             return;

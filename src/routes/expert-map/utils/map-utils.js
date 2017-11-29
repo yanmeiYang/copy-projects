@@ -370,29 +370,6 @@ function waitforBMapLib(tryTimes, interval, success, failed) {
   }, interval);
 };
 
-const ifMouseIn = () => {
-  const isInInterval = setInterval(() => {
-    const dom = getById('panel');
-    if (dom) {
-      const top = dom.getBoundingClientRect().top;
-      const right = dom.getBoundingClientRect().right;
-      const bottom = dom.getBoundingClientRect().bottom;
-      const left = dom.getBoundingClientRect().left;
-      console.log(top);
-      console.log(right);
-      console.log(bottom);
-      console.log(left);
-
-      // console.log(window.event);
-      // if(dom.contains(window.event.srcElement)) {
-      //   console.log('@@@@@@@@');
-      // } else {
-      //   console.log('$$$$$$$$$$$$$$$$$$');
-      // }
-    }
-  }, 1000);
-};
-
 // -----------------------------------
 const resetRightInfoToGlobal = (dispatch) => {
   dispatch({
@@ -439,7 +416,7 @@ const findMapFilterHindexRangesByKey = (key) => {
 
 module.exports = {
   getById, insertAfter, resetRightInfoToGlobal,
-  onResetPersonCard, detachCluster, ifMouseIn,
+  onResetPersonCard, detachCluster,
   showTopImageDiv, toggleRightInfo, showTopImages,
   addImageListener, syncInfoWindow, waitforBMap, waitforBMapLib,
   MapFilterRanges, MapFilterHindexRange,

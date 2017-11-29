@@ -44,25 +44,21 @@ class Feedback extends React.Component {
   };
   closePopover = () => {
     this.setState({
-      visible: false
-    })
+      visible: false,
+    });
   };
   openPopover = () => {
     this.setState({
-      visible: true
-    })
+      visible: true,
+    });
   };
   mouseLeave = () => {
-    let values = this.props.form.getFieldsValue()
-    console.log('dddddd00000000', values, values.email)
+    let values = this.props.form.getFieldsValue();
     if (!values.email && !values.content) {
       this.setState({
         visible: false,
       })
-    } else {
-      console.log('right')
     }
-
   };
 
   render() {
@@ -79,7 +75,7 @@ class Feedback extends React.Component {
           {getFieldDecorator('email', {
             rules: [{ type: 'email', message: '邮箱格式错误!' }],
           })(
-            <Input placeholder="请输入您的email !" className={styles.inputBox} />,
+            <Input placeholder="请输入您的email!" className={styles.inputBox} />,
           )}
         </FormItem>
         <FormItem
@@ -104,7 +100,7 @@ class Feedback extends React.Component {
     const title = (
       <div className={styles.titleBox}>
         <span>Feedback</span>
-        <i class="fa fa-times" onClick={this.closePopover}> </i>
+        <i class="fa fa-times" onClick={this.closePopover} />
       </div>
     );
     return (

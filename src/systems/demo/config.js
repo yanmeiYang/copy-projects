@@ -8,6 +8,7 @@ module.exports = {
 
   Locale: 'en', // en, zh
   EnableLocalLocale: false,
+  GLOBAL_ENABLE_FEEDBACK: true,
 
   // PersonList_ShowIndices: ['activityRankingContrib', 'h_index', 'activity'],
 

@@ -79,7 +79,7 @@ export default {
     // 搜索全球专家时，使用old service。
     // 使用智库搜索，并且排序算法不是contribute的时候，使用新的搜索API。
     searchPerson: [function* ({ payload }, { call, put, select }) {
-      const { query, offset, size, filters, sort, total } = payload;
+      const { query, offset, size, filters, sort, total, ghost } = payload;
       const noTotalFilters = {};
       for (const [key, item] of Object.entries(filters)) {
         if (typeof item === 'string') {
@@ -120,26 +120,38 @@ export default {
       if (data.data && data.data.succeed) {
         // console.log('>>>>>> ---==== to next API');
         // TODO 这些东西不应该放这里。。。。。。。。。。。。。。。。。
-        const personIds = data.data.items && data.data.items.map(item => item && item.id);
-        if (personIds) {
-          const activityScores = yield call(
-            searchService.getActivityScoresByPersonIds,
-            personIds.join('.'),
-          );
-          if (activityScores.success && activityScores.data && activityScores.data.indices &&
-            activityScores.data.indices.length > 0) {
-            data.data.items && data.data.items.map((item, index) => {
-              const activityRankingContrib =
-                activityScores.data.indices[index].filter(scores => scores.key === 'contrib');
-              data.data.items[index].indices.activityRankingContrib =
-                activityRankingContrib.length > 0 ? activityRankingContrib[0].score : 0;
-              return '';
-            });
+        if (sysconfig.SOURCE === 'ccf') {
+          const personIds = data.data.items && data.data.items.map(item => item && item.id);
+          if (personIds) {
+            const activityScores = yield call(
+              searchService.getActivityScoresByPersonIds,
+              personIds.join('.'),
+            );
+            if (activityScores.success && activityScores.data && activityScores.data.indices &&
+              activityScores.data.indices.length > 0) {
+              data.data.items && data.data.items.map((item, index) => {
+                const activityRankingContrib =
+                  activityScores.data.indices[index].filter(scores => scores.key === 'contrib');
+                if (data.data.items[index].indices) {
+                  data.data.items[index].indices.activityRankingContrib =
+                    activityRankingContrib.length > 0 ? activityRankingContrib[0].score : 0;
+                }
+                return '';
+              });
+            }
           }
         }
-        yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data, query } });
+        if (!ghost) {
+          yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data, query } });
+        } else {
+          return data.data;
+        }
       } else if (data.data && data.data.result) {
-        yield put({ type: 'searchPersonSuccess', payload: { data: data.data, query, total } });
+        if (!ghost) {
+          yield put({ type: 'searchPersonSuccess', payload: { data: data.data, query, total } });
+        } else {
+          return data.data;
+        }
       } else {
         throw new Error('Result Not Available');
       }

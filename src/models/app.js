@@ -1,7 +1,9 @@
 import { parse } from 'qs';
 import { message as antdMessage } from 'antd';
+import { Map } from 'immutable';
 import { routerRedux } from 'dva/router';
 import { config, queryURL } from 'utils';
+import { mergeLibs } from 'utils/requirejs';
 import * as auth from 'utils/auth';
 import * as authService from 'services/auth';
 import { sysconfig } from 'systems';
@@ -16,16 +18,21 @@ const messages = defineMessages({
   },
 });
 
+// TODO use immutablejs to speedup this file.
 export default {
   namespace: 'app',
+
   state: {
-    user: {},
     token: auth.getLocalToken(),
+    user: {}, // TODO immutable user and roles.
     roles: auth.createEmptyRoles(), // { admin: false, ccf_user: false, role: [], authority: [] },
-    loading: false, // TODO what's this?
+    feedbackStatus: null,
 
     isAdvancedSearch: false,
 
+    headerResources: null, // { key: [<helmet_component>] }
+
+    // loading: false, // TODO what's this?
     // Layout related, not used. TODO remove them.
     menuPopoverVisible: false,
     siderFold: localStorage.getItem(`${prefix}siderFold`) === 'true',
@@ -154,6 +161,23 @@ export default {
         yield put({ type: 'handleNavbar', payload: isNavbar });
       }
     },
+
+    * setFeedback({ payload }, { call, put }) {
+      const { email, content, user, url } = payload;
+      console.log('', email, content, user);
+      const subject = `[${sysconfig.SOURCE}] ${content.slice(0, 50)}`;
+      const body = `<div>${content}
+<br><br>Email:&nbsp;&nbsp;&nbsp;${email || ''}<br>URL:&nbsp;&nbsp;&nbsp;${url}<br>System:&nbsp;&nbsp;&nbsp;${sysconfig.SOURCE}
+<br>userID:&nbsp;&nbsp;&nbsp;${user.id}<br>userName:&nbsp;&nbsp;${user.display_name}<br>userEmail:&nbsp;&nbsp;${user.email}
+<br>userRole:&nbsp;&nbsp;${user.role}<br>time:&nbsp;&nbsp;&nbsp;${new Date()}</div>`;
+
+      const data = yield call(authService.setFeedback, {
+        subject: subject.replace(/[\r\n]/g, ' '),
+        body,
+      });
+
+      yield put({ type: 'feedbackSuccess', payload: data });
+    },
   },
 
   reducers: {
@@ -174,6 +198,14 @@ export default {
 
     alreadyLoggedIn(state, { user, roles }) {
       return { ...state, user, roles };
+    },
+
+    requireResource(state, { res }) {
+      // TODO other resource not in res.
+      const { changed, res: headerResources } = mergeLibs(state.headerResources, res);
+      return changed
+        ? { ...state, headerResources }
+        : state;
     },
 
     toggleAdvancedSearch(state) {
@@ -242,5 +274,8 @@ export default {
       return { ...state, loading: false };
     },
 
+    feedbackSuccess(state, { payload }) {
+      return { ...state, feedbackStatus: payload.success };
+    },
   },
 };

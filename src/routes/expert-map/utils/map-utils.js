@@ -15,8 +15,8 @@ const findPosition = (type, results) => {
     place = [results.location.lat, results.location.lng];
   } else if (type === '1') {
     const continent = findcontinent(results.country.name);
-    if (continent === 'Asia') { // 以中国（成都）返回,先经度，后纬度
-      place = [31.0051649, 103.6075308];
+    if (continent === 'Asia') { // 以巴基斯坦返回,先经度，后纬度
+      place = [33, 73];
     } else if (continent === 'Europe') { // 以德国返回
       place = [48.7468939, 9.0805141];
     } else if (continent === 'Africa') { // 以中非返回
@@ -603,6 +603,48 @@ const syncInfoWindow = () => {
   }
 };
 
+function waitforBMap(tryTimes, interval, success, failed) {
+  let n = 0;
+  const mapInterval = setInterval(() => {
+    if (typeof (BMap) === 'undefined') {
+      // console.log('wait for BMap');
+      n += 1;
+      if (n >= tryTimes) {
+        clearInterval(mapInterval);
+        if (failed) {
+          failed();
+        }
+      }
+    } else {
+      clearInterval(mapInterval);
+      if (success) {
+        success(BMap);
+      }
+    }
+  }, interval);
+};
+
+function waitforBMapLib(tryTimes, interval, success, failed) {
+  let n = 0;
+  const mapLibInterval = setInterval(() => {
+    if (typeof (BMapLib) === 'undefined') {
+      // console.log('wait for BMapLib');
+      n += 1;
+      if (n >= tryTimes) {
+        clearInterval(mapLibInterval);
+        if (failed) {
+          failed();
+        }
+      }
+    } else {
+      clearInterval(mapLibInterval);
+      if (success) {
+        success(BMapLib);
+      }
+    }
+  }, interval);
+};
+
 // -----------------------------------
 const resetRightInfoToGlobal = (dispatch) => {
   dispatch({
@@ -647,8 +689,9 @@ const findMapFilterHindexRangesByKey = (key) => {
 };
 
 const bigAreaConfig = [
-  { label: '中国', x: 102, y: 38 },
+  { label: '中国', x: 114, y: 34 },
   { label: '日本', x: 136, y: 32 },
+  { label: '亚洲其他', x: 71, y: 31 },
   { label: '韩国', x: 125, y: 33 },
   { label: '印度', x: 76.5, y: 16 },
   { label: '香港', x: 114, y: 22 },
@@ -666,8 +709,8 @@ const bigAreaConfig = [
   { label: '拉丁美洲', x: -60, y: -10 },
   { label: '加拿大', x: -108.5, y: 56.5 },
   { label: '美国西部', x: -126, y: 33.5 },
-  { label: '东部', x: -79.5, y: 34 },
-  { label: '中部', x: -107.5, y: 34.5 },
+  { label: '美国东部', x: -79.5, y: 34 },
+  { label: '美国中部', x: -107.5, y: 34.5 },
 ];
 
 
@@ -676,7 +719,7 @@ module.exports = {
   insertAfter, resetRightInfoToGlobal,
   onResetPersonCard, detachCluster,
   showTopImageDiv, toggleRightInfo, showTopImages,
-  addImageListener, syncInfoWindow, findhuaweidistrict,
+  addImageListener, syncInfoWindow, findhuaweidistrict, waitforBMap, waitforBMapLib,
   bigAreaConfig,
   MapFilterRanges, MapFilterHindexRange,
   findMapFilterRangesByKey, findMapFilterHindexRangesByKey,

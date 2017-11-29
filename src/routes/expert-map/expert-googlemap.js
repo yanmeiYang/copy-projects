@@ -27,6 +27,7 @@ import {
   showTopImages,
   addImageListener,
   syncInfoWindow,
+  backGlobal,
   isIn,
   ifIn,
   //findMapFilterRangesByKey,
@@ -365,6 +366,7 @@ export default class ExpertGoogleMap extends React.Component {
 
 
   render() {
+    const { dispatch } = this.props;
     const model = this.props && this.props.expertMap;
     const persons = model.geoData.results;
     let checkState = 0;
@@ -424,6 +426,11 @@ export default class ExpertGoogleMap extends React.Component {
       cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),
     };
 
+    let isGlobal = false;
+    if (model.rightInfoType === 'global') {
+      isGlobal = true;
+    }
+
     return (
       <div className={styles.expertMap} id="currentMain">
         <div className={styles.map}>
@@ -450,6 +457,17 @@ export default class ExpertGoogleMap extends React.Component {
                 <div className={styles.item5}>多</div>
               </div>
             </div>
+
+            {
+              !isGlobal && <div className={styles.backwell}>
+                <div className={styles.back}>
+                  <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.overview" />:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <Button size="small" onClick={backGlobal.bind(this, dispatch, model)}>
+                    <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.goback" />
+                  </Button>
+                </div>
+              </div>
+            }
 
             <div className={styles.scrollable}>
               <div className={styles.border}>

@@ -85,6 +85,8 @@ export default {
   'com.expertMap.headerLine.label.statistic': '统计分析报告',
   'com.expertMap.headerLine.label.download': '导出Excel表',
   'com.expertMap.headerLine.label.ok': '确定',
+  'com.expertMap.headerLine.label.overview':'返回全局总览',
+  'com.expertMap.headerLine.label.goback':'点击返回',
   'com.expertTrajectory.theme.label.0': '常规',
   'com.expertTrajectory.theme.label.1': '商务',
   'com.expertTrajectory.theme.label.2': '黑暗',

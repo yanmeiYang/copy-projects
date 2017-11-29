@@ -7,6 +7,8 @@ import { RequireRes } from 'hoc';
 //import { listPersonByIds } from 'services/person'
 import { Helmet } from 'react-helmet';
 import { compare, loadScript, ensure } from 'utils';
+import { Button } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import * as profileUtils from 'utils/profile-utils';
 import GetBMapLib from './utils/BMapLibGai.js';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
@@ -22,6 +24,7 @@ import {
   showTopImages,
   addImageListener,
   syncInfoWindow,
+  backGlobal,
   isIn,
   ifIn,
   //findMapFilterRangesByKey,
@@ -71,10 +74,6 @@ export default class ExpertMap extends PureComponent {
     cperson: '', //当前显示的作者的id
   };
 
-  // componentWillMount = () => {
-  //   this.props.dispatch({ type: 'app/requireResource', res: ['BMap'] });
-  // };
-
   componentDidMount() {
     const { dispatch, expertMap } = this.props;
     resetRightInfoToGlobal(dispatch);
@@ -106,7 +105,6 @@ export default class ExpertMap extends PureComponent {
   // EVENTS ---------------------------------------------------------------
 
   // TOOLS ---------------------------------------------------------------
-
   showTop = (usersIds, e, map, maindom, inputids, onLeave) => {
     const { dispatch } = this.props;
     const type = 'baidu';
@@ -365,6 +363,7 @@ export default class ExpertMap extends PureComponent {
 
 
   render() {
+    const { dispatch } = this.props;
     const model = this.props && this.props.expertMap;
     const { results } = model.geoData;
     let personPopupJsx;
@@ -397,6 +396,11 @@ export default class ExpertMap extends PureComponent {
       cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),
     };
 
+    let isGlobal = false;
+    if (model.rightInfoType === 'global') {
+      isGlobal = true;
+    }
+
     return (
       <div className={styles.expertMap} id="currentMain">
         <div className={styles.map}>
@@ -424,6 +428,16 @@ export default class ExpertMap extends PureComponent {
                 <div className={styles.item5}>多</div>
               </div>
             </div>
+            {
+              !isGlobal && <div className={styles.backwell}>
+                <div className={styles.back}>
+                  <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.overview" />:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <Button size="small" onClick={backGlobal.bind(this, dispatch, model)}>
+                    <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.goback" />
+                  </Button>
+                </div>
+              </div>
+            }
 
             <div className={styles.scrollable}>
               <div className={styles.border}>

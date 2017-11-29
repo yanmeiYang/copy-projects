@@ -85,6 +85,8 @@ export default {
   'com.expertMap.headerLine.label.statistic': 'Statistic & Analysis',
   'com.expertMap.headerLine.label.download': 'Export Excel',
   'com.expertMap.headerLine.label.ok': 'OK',
+  'com.expertMap.headerLine.label.overview':'Back To OverView',
+  'com.expertMap.headerLine.label.goback':'Go Back',
   'com.expertTrajectory.theme.label.0': 'Regular',
   'com.expertTrajectory.theme.label.1': 'Business',
   'com.expertTrajectory.theme.label.2': 'Dark',

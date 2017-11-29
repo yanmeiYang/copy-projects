@@ -32,7 +32,6 @@ class Feedback extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      console.log('d>>>>>>>>>>>>', values)
       if (!err) {
         const data = values;
         this.props.dispatch({

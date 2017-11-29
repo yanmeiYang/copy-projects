@@ -1100,7 +1100,7 @@ function GetGoogleMapLib(showTop) {
           }
         });
         var that = this;
-        google.maps.event.addDomListener(this.div_, 'mouseover', function(event) {
+        google.maps.event.addDomListener(this.div_, 'mouseenter', function(event) {
           const projection = that.getProjection();
           const newPixel = new google.maps.Point(25,25);
           const as =projection.fromDivPixelToLatLng(newPixel);

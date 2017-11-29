@@ -49,8 +49,6 @@ class RightInfoZoneAll extends React.PureComponent {
       avg = (hIndexSum / count).toFixed(0);
     }
 
-    console.log(persons);
-    console.log(flag);
     return (
       <div className={styles.rizAll}>
         {

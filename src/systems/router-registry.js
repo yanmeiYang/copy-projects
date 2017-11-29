@@ -50,6 +50,7 @@ const RouterRegistry = [
   user.ResetPassword,
   user.Retrieve,
   user.UserInfo,
+  user.BatchRegister,
 
   expertBase.ExpertBase,
   expertBase.ExpertBaseExpertsPage,

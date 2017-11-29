@@ -341,8 +341,6 @@ export default class ExpertMap extends PureComponent {
 
 
   render() {
-    console.log('|||||||||||||||||||||||||||||||||||||||| test render map;---------------')
-
     const model = this.props && this.props.expertMap;
     const { results } = model.geoData;
     let personPopupJsx;

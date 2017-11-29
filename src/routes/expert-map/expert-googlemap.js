@@ -30,7 +30,7 @@ import {
   //findMapFilterRangesByKey,
   findMapFilterHindexRangesByKey,
 } from './utils/map-utils';
-import {findPosition, bigAreaConfig,} from './utils/bigArea-utils';
+import { findPosition, bigAreaConfig } from './utils/bigArea-utils';
 import {
   dataCache,
   copyImage,
@@ -46,6 +46,7 @@ const blankAvatar = '/images/blank_avatar.jpg';
  * -------------------------------------------------------------------
  */
 @connect(({ expertMap, loading }) => ({ expertMap, loading }))
+@RequireRes('GoogleMap')
 export default class ExpertGoogleMap extends React.Component {
   constructor(props) {
     super(props);
@@ -264,7 +265,7 @@ export default class ExpertGoogleMap extends React.Component {
       // for (let i = 0; i < 1000000; i += 1) { // WTF
       //
       // }
-      console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+      // console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
       that.hideLoading();
 
       const count = markerClusterer.getTotalClusters();

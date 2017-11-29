@@ -135,6 +135,10 @@ export default {
   'com.exportExpert.fields.translate': '翻译',
   'com.exportExpert.fields.interest': '研究兴趣',
 
+  // feedback
+  'com.feedback.ok.account_created': '成功',
+  'com.feedback.user.exists': '用户已经存在',
+
   // Recommendation
   'rcd.home.pageTitle': '机构列表',
   'rcd.projectTable.header.projectName': '项目名称',

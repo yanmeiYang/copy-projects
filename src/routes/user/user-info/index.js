@@ -7,6 +7,7 @@ import { Link } from 'dva/router';
 import { Button } from 'antd';
 import { Layout } from 'routes';
 import { theme, applyTheme } from 'themes';
+import { sysconfig } from 'systems';
 import * as auth from 'utils/auth';
 import styles from './index.less';
 
@@ -24,6 +25,11 @@ class UserInfo extends React.Component {
         {auth.isSuperAdmin(roles) &&
         <div style={{ marginTop: 20 }}>
           <h3>您是系统管理员
+            {sysconfig.UserInfo_Batch_Signup &&
+            <Button type="primary" style={{ marginLeft: 10 }}>
+              <Link to="/registered/batch">批量创建用户</Link>
+            </Button>
+            }
             <Button type="primary" style={{ marginLeft: 10 }}>
               <Link to="/registered">创建用户</Link>
             </Button>

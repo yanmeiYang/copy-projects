@@ -69,6 +69,7 @@ const getDefaultSystemConfigs = (system, source) => {
     Enable_Export_EB_IF_EXIST: false,
     ShowRegisteredRole: true, // 注册页面是否显示角色配置
     Signup_Password: false, // 注册页面password
+    UserInfo_Batch_Signup: false, // 批量创建用户 目前只有huawei在用
 
     /**
      * > Search

@@ -135,6 +135,10 @@ export default {
   'com.exportExpert.fields.translate': 'Translate',
   'com.exportExpert.fields.interest': 'Research Interest',
 
+  // feedback
+  'com.feedback.ok.account_created': 'Success',
+  'com.feedback.user.exists': 'User already exists',
+
   // Recommendation
   'rcd.home.pageTitle': 'Organization List',
   'rcd.projectTable.header.projectName': 'Project Name',

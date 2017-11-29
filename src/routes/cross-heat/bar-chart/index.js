@@ -27,7 +27,7 @@ class BarChart extends React.Component {
     const width = 200;
     const height = 100;
     const titleList = barInfo.title;
-    const numList = barInfo.num;
+    const numList = barInfo.num.map(item => item * 1);
 
     const x = d3.scaleBand().rangeRound([0, width]).padding(0.3);
     const y = d3.scaleLinear().rangeRound([height, 0]);

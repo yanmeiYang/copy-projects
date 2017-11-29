@@ -171,6 +171,7 @@ module.exports = {
     delTaskList: `${baseURL}/crossing-field/query/:id`,
 
     getAggregate: `${baseURL}/crossing-field/aggregate/:method`,
+    // getExportCrossInfo: `${baseURL}/crossing-field/batch/aggregate`,
 
 
     // getProjects: API_BASE+"reviewer/projects/get/:offset/:size"

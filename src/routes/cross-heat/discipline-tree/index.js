@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Icon, Button, Input, Modal } from 'antd';
+import { Icon, message, Input, Modal } from 'antd';
 import * as d3 from 'd3';
 import { Spinner } from 'components';
 import styles from './index.less';
 
+const errorInfo = ['学科树的深度不能超过3层', '学科数量必须在3～20之间，请删减后再添加', '同一学科不能有两个相同的学科'];
+const maxNodeNum = 20;
 class DisciplineTree extends React.Component {
   state = {
     showTooltip: false,
@@ -52,7 +54,33 @@ class DisciplineTree extends React.Component {
     }
     return iData;
   }
-  // todo 唯一id
+
+  // delMoreNode = (data) => {
+  //   const ids = [];
+  //   const listNode = this.getNode(data, []);
+  //   if (listNode.length > maxNodeNum) {
+  //     ids.push(listNode.id);
+  //   }
+  //   if (ids.length > 20) {
+  //     ids.slice(20, ids.length).map((item) => {
+  //       this.delNodeById(data, item.id);
+  //       return true;
+  //     });
+  //   }
+  //   return data;
+  // }
+  //
+  // delNodeById = (dt, id) => {
+  //   if (dt.children) {
+  //     dt.children.map((item, i) => {
+  //       item.id === id ? dt.children.splice(i, 1) : this.delNodeById(item, id);
+  //       return true;
+  //     });
+  //   }
+  //   return dt;
+  // }
+
+
   guid = () => {
     function S4() {
       return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
@@ -167,25 +195,51 @@ class DisciplineTree extends React.Component {
 
   drop = (node, name) => {
     const data = this.props.crossHeat[this.props.id];
-    console.log("drop===========");
-    console.log(this.getTreeLevel(data, node, 0, []));
-    event.target.appendChild(document.getElementById(name));
-    const aData = this.addData(data, node, name);
-    this.createD3(aData);
+    if (this.isAllow(node)) {
+      event.target.appendChild(document.getElementById(name));
+      const aData = this.addData(data, node, name);
+      this.createD3(aData);
+    }
+  }
+
+  // 判断是否让添加
+  isAllow = (node) => {
+    let isOk = true;
+    const data = this.props.crossHeat[this.props.id];
+    const level = this.getTreeLevel(data, node, 0, []);
+    const noedeNum = this.getNode(data, []).length;
+    if (level[0] > 2) { // 树的深度
+      message.error(errorInfo[0]);
+      isOk = false;
+    }
+    if (noedeNum > 20) { // 节点树
+      message.error(errorInfo[1]);
+      isOk = false;
+    }
+    return isOk;
   }
 
 
+  getNode = (tree, list) => {
+    if (tree && tree.name) {
+      list.push({ id: tree.id, name: tree.name });
+    }
+    if (tree && tree.children && tree.children.length > 0) {
+      tree.children.map(item => this.getNode(item, list));
+    }
+    return list;
+  }
+
   getTreeLevel = (tree, node, num, list) => {
     num += 1;
-    if (tree.id === node.data.id) {
+    const isTrue = ((node.data && tree.id === node.data.id) || tree.id === node.id);
+    if (isTrue) {
       list.push(num);
     } else if (tree.children) {
       tree.children.map(item => this.getTreeLevel(item, node, num, list));
     }
     return list;
   }
-
-
   // 递归删除 节点
   delData = (dt, node) => {
     if (dt.children) {
@@ -205,8 +259,8 @@ class DisciplineTree extends React.Component {
       content: '您确定删除吗？',
       onOk() {
         const data = that.props.crossHeat[that.props.id];
+        that.props.delTreeNode();
         const dData = that.delData(data, that.state.node);
-
         that.createD3(dData);
       },
       onCancel() {
@@ -218,8 +272,10 @@ class DisciplineTree extends React.Component {
   addNode = () => {
     this.setState({ showTooltip: false });
     const data = this.props.crossHeat[this.props.id];
-    const aData = this.addData(data, this.state.node, '新节点');
-    this.createD3(aData);
+    if (this.isAllow(data)) {
+      const aData = this.addData(data, this.state.node, '新节点');
+      this.createD3(aData);
+    }
   }
   addData = (data, node, name) => {
     const dt = data;
@@ -280,7 +336,6 @@ class DisciplineTree extends React.Component {
     );
     return (
       <div className={styles.disciplineTree}>
-        <div id="edit"></div>
         {this.state.showTooltip &&
         <div className={styles.tooltipDis}
              style={{
@@ -292,14 +347,14 @@ class DisciplineTree extends React.Component {
             onMouseOut={this.onMouseOut}
             autoFocus
             addonBefore={this.state.node.depth > 0 && addonBefore}
-            addonAfter={addonAfter}
+            addonAfter={this.state.node.depth < 2 && addonAfter}
             value={inputVal}
             onChange={this.onChangeName}
             ref="edit" />
         </div>
         }
         <Spinner className={styles.heatSpinner} loading={loadTree} size="large" />
-        <div id={this.props.id} onClick={this.onCancel} />
+        <div id={this.props.id} />
       </div>);
   }
 }

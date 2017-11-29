@@ -385,6 +385,15 @@ function waitforBMapLib(tryTimes, interval, success, failed) {
   }, interval);
 };
 
+const backGlobal = (dispatch, model) => {
+  const type = 'global';
+  const id = model.infoZoneIds;
+  dispatch({
+    type: 'expertMap/setRightInfo',
+    payload: { idString: id, rightInfoType: type },
+  });
+};
+
 // -----------------------------------
 const resetRightInfoToGlobal = (dispatch) => {
   dispatch({
@@ -430,7 +439,7 @@ const findMapFilterHindexRangesByKey = (key) => {
 
 module.exports = {
   getById, insertAfter, resetRightInfoToGlobal,
-  onResetPersonCard, detachCluster,
+  onResetPersonCard, detachCluster, backGlobal,
   showTopImageDiv, toggleRightInfo, showTopImages,
   addImageListener, syncInfoWindow, waitforBMap, waitforBMapLib,
   MapFilterRanges, MapFilterHindexRange, isIn, ifIn,

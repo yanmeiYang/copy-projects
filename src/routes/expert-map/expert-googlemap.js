@@ -27,6 +27,7 @@ import {
   showTopImages,
   addImageListener,
   syncInfoWindow,
+  isIn,
   //findMapFilterRangesByKey,
   findMapFilterHindexRangesByKey,
 } from './utils/map-utils';
@@ -41,6 +42,7 @@ import {
 let map1;
 const dataMap = {};
 const blankAvatar = '/images/blank_avatar.jpg';
+const ifIn = [false];
 
 /**
  * -------------------------------------------------------------------
@@ -86,6 +88,8 @@ export default class ExpertGoogleMap extends React.Component {
         content: "<div id='author_info' class='popup'></div>",
       });
       google.maps.event.addListener(marker, 'mouseover', () => {
+        ifIn.pop();
+        ifIn.push(true);
         onResetPersonCard(dispatch);
         infoWindow.open(map, marker);
         const ids = [];
@@ -104,7 +108,16 @@ export default class ExpertGoogleMap extends React.Component {
       });
 
       google.maps.event.addListener(marker, 'mouseout', () => {
-        infoWindow.close(map, marker);
+        ifIn.pop();
+        ifIn.push(false);
+        const markerInterval = setInterval(() => {
+          const flag1 = isIn[isIn.length - 1];
+          const flag2 = ifIn[ifIn.length - 1];
+          if (!flag1 && !flag2) {
+            infoWindow.close(map, marker);
+            clearInterval(markerInterval);
+          }
+        }, 2000);
       });
 
       google.maps.event.addListener(marker, 'click', () => {

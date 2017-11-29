@@ -22,6 +22,7 @@ import {
   showTopImages,
   addImageListener,
   syncInfoWindow,
+  isIn,
   //findMapFilterRangesByKey,
   findMapFilterHindexRangesByKey,
 } from './utils/map-utils';
@@ -36,6 +37,7 @@ import {
 let map1; // 地图刷新前，用于存储上次浏览的地点
 const dataMap = {}; // 数据的索引，建议可以放到reducers.
 const blankAvatar = '/images/blank_avatar.jpg';
+const ifIn = [false];
 
 const showLoadErrorMessage = () => { //Popup window.
   getById('allmap').innerHTML = 'Cannot connect to Baidu Map! Please check the network state!';
@@ -315,6 +317,8 @@ export default class ExpertMap extends PureComponent {
     const { dispatch } = this.props;
     const infoWindow = getInfoWindow();
     marker.addEventListener('mouseover', (e) => {
+      ifIn.pop();
+      ifIn.push(true);
       onResetPersonCard(dispatch); // TODO Load default name,重置其信息
       e.target.openInfoWindow(infoWindow);
       const ids = [];
@@ -332,7 +336,16 @@ export default class ExpertMap extends PureComponent {
       });
     });
     marker.addEventListener('mouseout', (e) => {
-      e.target.closeInfoWindow(infoWindow);
+      ifIn.pop();
+      ifIn.push(false);
+      const markerInterval = setInterval(() => {
+        const flag1 = isIn[isIn.length - 1];
+        const flag2 = ifIn[ifIn.length - 1];
+        if (!flag1 && !flag2) {
+          e.target.closeInfoWindow(infoWindow);
+          clearInterval(markerInterval);
+        }
+      }, 2000);
     });
     marker.addEventListener('click', () => {
       toggleRightInfo('person', personId, dispatch, this.props.expertMap.infoZoneIds);

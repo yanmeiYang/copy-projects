@@ -8,7 +8,7 @@ import {
   indexCache,
 } from './cache-utils.js';
 
-
+const isIn = [false];
 
 function getById(id) {
   return document.getElementById(id);
@@ -325,6 +325,14 @@ const syncInfoWindow = () => {
   const pi = getById('personInfo');
   if (ai && pi) {
     ai.innerHTML = pi.innerHTML;
+    ai.addEventListener('mouseenter', () => {
+      isIn.pop();
+      isIn.push(true);
+    },false);
+    ai.addEventListener('mouseleave', () => {
+      isIn.pop();
+      isIn.push(false);
+    },false);
   }
 };
 
@@ -413,13 +421,12 @@ const findMapFilterHindexRangesByKey = (key) => {
   }
 };
 
-
 module.exports = {
   getById, insertAfter, resetRightInfoToGlobal,
   onResetPersonCard, detachCluster,
   showTopImageDiv, toggleRightInfo, showTopImages,
   addImageListener, syncInfoWindow, waitforBMap, waitforBMapLib,
-  MapFilterRanges, MapFilterHindexRange,
+  MapFilterRanges, MapFilterHindexRange, isIn,
   findMapFilterRangesByKey, findMapFilterHindexRangesByKey,
 };
 

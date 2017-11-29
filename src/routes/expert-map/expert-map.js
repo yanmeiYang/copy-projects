@@ -23,6 +23,7 @@ import {
   addImageListener,
   syncInfoWindow,
   isIn,
+  ifIn,
   //findMapFilterRangesByKey,
   findMapFilterHindexRangesByKey,
 } from './utils/map-utils';
@@ -37,7 +38,6 @@ import {
 let map1; // 地图刷新前，用于存储上次浏览的地点
 const dataMap = {}; // 数据的索引，建议可以放到reducers.
 const blankAvatar = '/images/blank_avatar.jpg';
-const ifIn = [false];
 
 const showLoadErrorMessage = () => { //Popup window.
   getById('allmap').innerHTML = 'Cannot connect to Baidu Map! Please check the network state!';
@@ -135,6 +135,8 @@ export default class ExpertMap extends PureComponent {
     for (let j = 0; j < imgdivs.length; j += 1) {
       const cimg = imgdivs[j];
       cimg.addEventListener('mouseenter', (event) => {
+        ifIn.pop();
+        ifIn.push(true);
         addImageListener(map, ids, getInfoWindow, event, imgwidth, type, '', '', (data) => {
           const pId = data.id;
           const idx = [];
@@ -147,7 +149,16 @@ export default class ExpertMap extends PureComponent {
         });
       });
       cimg.addEventListener('mouseleave', () => {
-        map.closeInfoWindow();
+        ifIn.pop();
+        ifIn.push(false);
+        const imgInterval = setInterval(() => {
+          const flag1 = isIn[isIn.length - 1];
+          const flag2 = ifIn[ifIn.length - 1];
+          if (!flag1 && !flag2) {
+            map.closeInfoWindow();
+            clearInterval(imgInterval);
+          }
+        }, 1000);
       });
     }
   };
@@ -345,7 +356,7 @@ export default class ExpertMap extends PureComponent {
           e.target.closeInfoWindow(infoWindow);
           clearInterval(markerInterval);
         }
-      }, 2000);
+      }, 1000);
     });
     marker.addEventListener('click', () => {
       toggleRightInfo('person', personId, dispatch, this.props.expertMap.infoZoneIds);

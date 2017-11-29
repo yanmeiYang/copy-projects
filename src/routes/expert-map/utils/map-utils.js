@@ -8,7 +8,8 @@ import {
   indexCache,
 } from './cache-utils.js';
 
-const isIn = [false];
+const isIn = [false]; //是否在信息框中
+const ifIn = [false]; //是否在marker上或者image上
 
 function getById(id) {
   return document.getElementById(id);
@@ -90,12 +91,18 @@ const showTopImageDiv = (e, map, maindom, inputids, onLeave, type, ids, dispatch
   });
 
   if (thisNode != null) { // 准备绑定事件
-    const pthisNode = thisNode.parentNode;
     thisNode.addEventListener('mouseleave', () => {
       if (onLeave) {
         onLeave();
       }
-      detachCluster(thisNode); //删除创建的node
+      const clusterInterval = setInterval(() => {
+        const flag1 = isIn[isIn.length - 1];
+        const flag2 = ifIn[ifIn.length - 1];
+        if (!flag1 && !flag2) {
+          detachCluster(thisNode); //删除创建的node
+          clearInterval(clusterInterval);
+        }
+      }, 1000);
     });
   }
   if (typeof (callback) === 'function') {
@@ -426,7 +433,7 @@ module.exports = {
   onResetPersonCard, detachCluster,
   showTopImageDiv, toggleRightInfo, showTopImages,
   addImageListener, syncInfoWindow, waitforBMap, waitforBMapLib,
-  MapFilterRanges, MapFilterHindexRange, isIn,
+  MapFilterRanges, MapFilterHindexRange, isIn, ifIn,
   findMapFilterRangesByKey, findMapFilterHindexRangesByKey,
 };
 

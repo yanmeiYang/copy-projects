@@ -19,7 +19,6 @@ import RightInfoZonePerson from './RightInfoZonePerson';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
 import RightInfoZoneAll from './RightInfoZoneAll';
 import {
-  findPosition,
   getById,
   toggleRightInfo,
   onResetPersonCard,
@@ -30,8 +29,8 @@ import {
   syncInfoWindow,
   //findMapFilterRangesByKey,
   findMapFilterHindexRangesByKey,
-  bigAreaConfig,
 } from './utils/map-utils';
+import {findPosition, bigAreaConfig,} from './utils/bigArea-utils';
 import {
   dataCache,
   copyImage,

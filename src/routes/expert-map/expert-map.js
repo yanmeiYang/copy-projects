@@ -3,8 +3,10 @@ import { connect } from 'dva';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
 import { Spinner } from 'components';
-//import { listPersonByIds } from 'services/person';
-import { compare, loadScript } from 'utils';
+import { RequireRes } from 'hoc';
+//import { listPersonByIds } from 'services/person'
+import { Helmet } from 'react-helmet';
+import { compare, loadScript, ensure } from 'utils';
 import * as profileUtils from 'utils/profile-utils';
 import GetBMapLib from './utils/BMapLibGai.js';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
@@ -21,8 +23,6 @@ import {
   showTopImages,
   addImageListener,
   syncInfoWindow,
-  waitforBMap,
-  waitforBMapLib,
   //findMapFilterRangesByKey,
   findMapFilterHindexRangesByKey,
   bigAreaConfig,
@@ -57,6 +57,7 @@ const getInfoWindow = () => {
  * -------------------------------------------------------------------
  */
 @connect(({ expertMap, loading }) => ({ expertMap, loading }))
+@RequireRes('BMap')
 export default class ExpertMap extends PureComponent {
   constructor(props) {
     super(props);
@@ -68,6 +69,10 @@ export default class ExpertMap extends PureComponent {
     loadingFlag: false,
     cperson: '', //当前显示的作者的id
   };
+
+  // componentWillMount = () => {
+  //   this.props.dispatch({ type: 'app/requireResource', res: ['BMap'] });
+  // };
 
   componentDidMount() {
     const { dispatch, expertMap } = this.props;
@@ -171,8 +176,7 @@ export default class ExpertMap extends PureComponent {
 
     // TODO load script for baidumap.
 
-
-    waitforBMap(200, 100,() => {
+    ensure('BMap', (BMap) => {
       this.showOverLay();
 
       const conf = this.mapConfig[mapType] || this.mapConfig[0];// init map instance.
@@ -277,8 +281,8 @@ export default class ExpertMap extends PureComponent {
         }
       }
 
-      waitforBMapLib(200, 100, () => {
-        const markerClusterer = new window.BMapLib.MarkerClusterer(map, {});
+      ensure('BMapLib', (BMapLib) => {
+        const markerClusterer = new BMapLib.MarkerClusterer(map, {});
         markerClusterer.addMarkers(markers);
         for (let m = 0; m < markers.length; m += 1) {
           this.addMouseoverHandler(markers[m], pId[m]);
@@ -287,15 +291,15 @@ export default class ExpertMap extends PureComponent {
         //cache image
         checkCacheLevel(sysconfig.Map_Preload, ids);
         that.hideLoading();
-        console.log(map);
-        console.log(markerClusterer);
-        console.log(markerClusterer.getMarkers());
-        console.log(markerClusterer.getStyles);
-        console.log(markerClusterer.getClustersCount());
-        console.log(markerClusterer.getStyles());
-        console.log(markerClusterer.getClusters());
-        console.log(markerClusterer.getClusters()[0]);
-        console.log(markerClusterer.getClusters()[0]._markers);
+        // console.log(map);
+        // console.log(markerClusterer);
+        // console.log(markerClusterer.getMarkers());
+        // console.log(markerClusterer.getStyles);
+        // console.log(markerClusterer.getClustersCount());
+        // console.log(markerClusterer.getStyles());
+        // console.log(markerClusterer.getClusters());
+        // console.log(markerClusterer.getClusters()[0]);
+        // console.log(markerClusterer.getClusters()[0]._markers);
       });
     }, showLoadErrorMessage);
   };
@@ -338,6 +342,8 @@ export default class ExpertMap extends PureComponent {
 
 
   render() {
+    console.log('|||||||||||||||||||||||||||||||||||||||| test render map;---------------')
+
     const model = this.props && this.props.expertMap;
     const { results } = model.geoData;
     let personPopupJsx;
@@ -372,7 +378,6 @@ export default class ExpertMap extends PureComponent {
 
     return (
       <div className={styles.expertMap} id="currentMain">
-
         <div className={styles.map}>
           <Spinner loading={this.state.loadingFlag} />
           <div id="allmap" />

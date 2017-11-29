@@ -24,11 +24,10 @@ function Auth(ComponentClass) {
       }
 
       if (process.env.NODE_ENV !== 'production') {
+        const name = ComponentClass.displayName || ComponentClass.name ||
+          reflect.GetComponentName(ComponentClass);
         if (debug.LogHOC) {
-          console.log(
-            '%c@@HOC: @Auth on %s', 'color:orange',
-            reflect.GetComponentName(ComponentClass),
-          );
+          console.log('%c@@HOC: @Auth on %s', 'color:orange', name);
         }
       }
 

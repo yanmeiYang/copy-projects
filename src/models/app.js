@@ -1,7 +1,9 @@
 import { parse } from 'qs';
 import { message as antdMessage } from 'antd';
+import { Map } from 'immutable';
 import { routerRedux } from 'dva/router';
 import { config, queryURL } from 'utils';
+import { mergeLibs } from 'utils/requirejs';
 import * as auth from 'utils/auth';
 import * as authService from 'services/auth';
 import { sysconfig } from 'systems';
@@ -16,17 +18,21 @@ const messages = defineMessages({
   },
 });
 
+// TODO use immutablejs to speedup this file.
 export default {
   namespace: 'app',
+
   state: {
-    user: {},
     token: auth.getLocalToken(),
+    user: {}, // TODO immutable user and roles.
     roles: auth.createEmptyRoles(), // { admin: false, ccf_user: false, role: [], authority: [] },
-    loading: false, // TODO what's this?
     feedbackStatus: null,
 
     isAdvancedSearch: false,
 
+    headerResources: null, // { key: [<helmet_component>] }
+
+    // loading: false, // TODO what's this?
     // Layout related, not used. TODO remove them.
     menuPopoverVisible: false,
     siderFold: localStorage.getItem(`${prefix}siderFold`) === 'true',
@@ -192,6 +198,14 @@ export default {
 
     alreadyLoggedIn(state, { user, roles }) {
       return { ...state, user, roles };
+    },
+
+    requireResource(state, { res }) {
+      // TODO other resource not in res.
+      const { changed, res: headerResources } = mergeLibs(state.headerResources, res);
+      return changed
+        ? { ...state, headerResources }
+        : state;
     },
 
     toggleAdvancedSearch(state) {

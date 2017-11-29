@@ -65,6 +65,10 @@ export default class Layout extends Component {
     showFeedback: sysconfig.GLOBAL_ENABLE_FEEDBACK,
   };
 
+  // state: {
+  //   headerResources: [],
+  // };
+
   componentDidMount() {
     // TODO 这个统计有问题呀 ????
     if (sysconfig.googleAnalytics) {
@@ -76,12 +80,25 @@ export default class Layout extends Component {
     }
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.app.headerResources !== this.props.app.headerResources) {
+      console.log('|||0099 >>> generate headerResourceArrays', nextProps.app.headerResources);
+      this.headerResourcesArray = [];
+      if (nextProps.app.headerResources) {
+        nextProps.app.headerResources.forEach((k, v) => {
+          this.headerResourcesArray.push(...k);
+        });
+      }
+    }
+  };
+
   render() {
     // console.count('>>>>>>>>>> App Render'); // TODO performance
     const { sidebar, footer } = this.props;
     const { contentClass, showHeader, showNavigator, showSidebar, showFeedback } = this.props;
     const { dispatch, app, loading } = this.props;
-    const { user, roles } = app;
+    const { user, roles, headerResources } = app;
+
 
     const href = window.location.href;
 
@@ -109,36 +126,43 @@ export default class Layout extends Component {
 
     return (
       <LayoutComponent className={tc(['layout'])}>
-
         <Helmet>
           <title>{title}</title>
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <link rel="icon" href={`/sys/${sysconfig.SYSTEM}/favicon.ico`} type="image/x-icon" />
+
+          {console.log('|||||||||||||||||||||||||||||||||||||||| test helmet;', headerResources)}
 
           {iconFontJS && <script src={iconFontJS} />}
           {iconFontCSS && <link rel="stylesheet" href={iconFontCSS} />}
 
           <link rel="stylesheet" href="/fa/css/font-awesome.min.css" />
 
+          {this.headerResourcesArray && this.headerResourcesArray.length > 0 &&
+          this.headerResourcesArray.map((item) => {
+            console.log('|||  ', item);
+            return item;
+          })}
+
           {/*{href.indexOf('/lab/knowledge-graph-widget') > 0 &&*/}
           {/*<link rel="stylesheet"*/}
           {/*href="https://cdn.rawgit.com/novus/nvd3/v1.8.1/build/nv.d3.css" />*/}
           {/*}*/}
 
-          {(href.indexOf('/expert-map') > 0) &&
-          <script
-          type="text/javascript"
-          src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />}
+          {/*{(href.indexOf('/expert-map') > 0) &&*/}
+          {/*<script*/}
+          {/*type="text/javascript"*/}
+          {/*src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />}*/}
 
-          {(href.indexOf('/expert-map') > 0) &&
-          <script
-          src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1"
-          charSet="utf-8" async defer />}
+          {/*{(href.indexOf('/expert-map') > 0) &&*/}
+          {/*<script*/}
+          {/*src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1"*/}
+          {/*charSet="utf-8" async defer />}*/}
 
-          {href.indexOf('/expert-map') > 0 &&
-          <script
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlzpf4YyjOBGYOhfUaNvQZENXEWBgDkS0"
-          async defer />}
+          {/*{href.indexOf('/expert-map') > 0 &&*/}
+          {/*<script*/}
+          {/*src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlzpf4YyjOBGYOhfUaNvQZENXEWBgDkS0"*/}
+          {/*async defer />}*/}
 
           {/*{false && href.indexOf('/expert-heatmap') > 0 &&*/}
           {/*<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/3.7.1/echarts.js" />}*/}

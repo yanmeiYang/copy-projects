@@ -222,7 +222,7 @@ class StartTask extends React.Component {
 
   getCandidate = (key, id) => {
     const area = key.replace(/ /g, '_');
-    const params = { id, area, k: 5, depth: 4 };
+    const params = { id, area, k: 5, depth: 2 };
     this.props.dispatch({ type: 'crossHeat/getDiscipline', payload: params });
   }
 
@@ -241,8 +241,8 @@ class StartTask extends React.Component {
     event.preventDefault();
   }
 
+  // todo
   delTreeNode=()=>{
-    console.log("heiheiheihe");
     console.log("================");
   }
 

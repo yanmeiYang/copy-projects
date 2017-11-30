@@ -101,13 +101,15 @@ const ensure = (libs, success, failed) => {
       return;
     }
     n += 1;
+    if (n === 10) {
+      console.warn('Warning! Loading script slow. ', libs);
+    }
     if (n >= ensureConfig.tryTimes) {
       clearInterval(mapInterval);
+      console.error('Error! Loading script failed. ', libs);
       if (failed) {
         failed();
       }
-    } else {
-      console.log('Error! Loading script failed. ', libs);
     }
   }, ensureConfig.interval);
 };

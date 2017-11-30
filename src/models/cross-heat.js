@@ -19,6 +19,7 @@ export default {
     domainAllInfo: null,
     staticInfo: null,
     domainMinInfo: null,
+    pageInfo: null,
     experts: [],
     pubs: [],
     taskList: [],
@@ -80,6 +81,12 @@ export default {
       yield put({ type: 'getAggregateSuccess', payload: { method, data } });
     },
 
+    *getPageInfo({ payload }, { call, put }) {
+      const { method } = payload;
+      const data = yield call(crossHeatService.getAggregate, payload);
+      yield put({ type: 'getPageInfoSuccess', payload: { method, data } });
+    },
+
     *getAutoDomainInfo({ payload }, { call, put, all }) {
       const { yearDomainInfo } = payload;
       const autoDomainInfo = yield all(yearDomainInfo.map((item) => {
@@ -115,7 +122,11 @@ export default {
   },
 
   reducers: {
+    getPageInfoSuccess(state, { payload: { data } }){
+      console.log(data);
+      return { ...state, pageInfo: data.data };
 
+    },
     getPubInfoSuccess(state, { payload: { pubInfo } }) {
       const exportPubsList = {};
       pubInfo.map((info) => {

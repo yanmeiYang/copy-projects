@@ -11,17 +11,35 @@ class CrossContrast extends React.Component {
   render() {
     const info = this.props.compareData;
     const title = ['中国', '美国', '其他'];
-    const { USA, China, OtherNation } = info;
-    const comPer = {
-      title,
-      num: [China.authorsCount, USA.authorsCount, OtherNation.authorsCount],
-    };
-    const comPub = { title, num: [China.pubsCount, USA.pubsCount, OtherNation.pubsCount] };
-    const comCit = {
-      title,
-      num: [China.heat.toFixed(0), USA.heat.toFixed(0), OtherNation.heat.toFixed(0)],
-    };
+    const { USA, China, OtherNation, authorsCount, EmptyNation, NationBoost } = info;
 
+    const tAuthorsCount = Number(authorsCount) - Number(EmptyNation.authorsCount);
+    let aBoost = 1;
+    if (tAuthorsCount) {
+      aBoost = Number(EmptyNation.authorsCount) / tAuthorsCount;
+    }
+    const cAuthors = (China.authorsCount * aBoost).toFixed(0);
+    const uAuthors = (USA.authorsCount * aBoost).toFixed(0);
+    const oAuthors = Number(authorsCount) - (Number(cAuthors) + Number(uAuthors));
+    const comPer = { title, num: [cAuthors, uAuthors, oAuthors] };
+    let cPubs = China.pubsCount;
+    let uPubs = USA.pubsCount;
+    let oPubs = OtherNation.pubsCount;
+
+    let cCit = China.heat;
+    let uCit = USA.heat;
+    let oCit = OtherNation.heat;
+
+    if (NationBoost) {
+      cPubs = (China.pubsCount * NationBoost).toFixed(0);
+      uPubs = (USA.pubsCount * NationBoost).toFixed(0);
+      oPubs = (OtherNation.pubsCount * NationBoost).toFixed(0);
+      cCit = (China.heat * NationBoost).toFixed(0);
+      uCit = (USA.heat * NationBoost).toFixed(0);
+      oCit = (OtherNation.heat * NationBoost).toFixed(0);
+    }
+    const comPub = { title, num: [cPubs, uPubs, oPubs] };
+    const comCit = { title, num: [cCit, uCit, oCit] };
     return (
       <div className={styles.modalContent}>
         <div>
@@ -58,12 +76,14 @@ class CrossContrast extends React.Component {
           <div>
             {info.orgs.slice(0, 20).map((item, index) => {
               return (
-                <Tooltip key={index} placement="top" title={item._1} >
-                  <a href="#" className={styles.tooltip}>
-                    <Tag key={index} className={styles.antTag}>
-                      {item._1.length > 110 ? `${item._1.slice(0, 110)}...` : item._1}
-                    </Tag>
-                  </a>
+                <Tooltip key={index} placement="top" title={item._1}>
+                  <div>
+                    <a href="javascript:void(0)" className={styles.tooltip}>
+                      <Tag key={index} className={styles.antTag}>
+                        {item._1.length > 110 ? `${item._1.slice(0, 120)}...` : item._1}
+                      </Tag>
+                    </a>
+                  </div>
                 </Tooltip>
               );
             })}

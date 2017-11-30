@@ -136,3 +136,12 @@ export async function getAggregate(params) {
     body: JSON.stringify(dt),
   });
 }
+
+// export async function getAggregate(params) {
+//   const { method,dt } = params;
+//   return request(api.getAggregate, {
+//     method: 'POST',
+//     body: JSON.stringify(dt),
+//   });
+// }
+

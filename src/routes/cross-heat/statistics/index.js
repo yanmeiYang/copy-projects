@@ -22,7 +22,6 @@ class CrossStatistics extends React.Component {
     const param = { first: title[0].trim(), second: title[1].trim(), key: 'expert', heat: 1 };
     // todo modal show
     this.props.showModal(param);
-    console.log(param);
   }
 
   getTop = (infoList, nodeData) => {
@@ -70,6 +69,7 @@ class CrossStatistics extends React.Component {
     if (data) {
       top5 = this.getTop(data, nodeData);
     }
+    const boost = detail.EmptyNation.authorsCount / (detail.authorsCount - detail.EmptyNation.authorsCount);
     return (
       <div className={styles.statistics}>
         <div>
@@ -90,7 +90,7 @@ class CrossStatistics extends React.Component {
             </div>
             <div>
               <span>华人：</span>
-              <span className={styles.num}>{detail.China.authorsCount}</span>
+              <span className={styles.num}>{(detail.China.authorsCount * boost).toFixed(0)}</span>
               <span>人</span>
             </div>
             <div>
@@ -201,7 +201,7 @@ class CrossStatistics extends React.Component {
                 <div key={index} className={styles.tooltip}
                      onClick={this.onTagChange.bind(this, item)}>
                   <Tooltip placement="top" title={item}>
-                    <a href="#">
+                    <a href="javascript:void(0)">
                       <Tag key={index} className={styles.antTag}>
                         {index + 1}. {item}
                       </Tag>

@@ -134,7 +134,7 @@ export default class ReportDemo extends React.Component {
         <div>
           {exportList.length > 0 && pubKey.length > 0 && authorKey.length > 0 &&
           <div>
-            <div className={styles.printTab}><Button type="primary" size="large">打印</Button></div>
+            <div className={styles.printTab}><Button type="primary" size="large">导出</Button></div>
             <div style={{ color: 'rgb(68,114,196)', fontSize: 27 }}>5. 交叉研究热点详细信息</div>
             {
               exportList.map((item, index) => {

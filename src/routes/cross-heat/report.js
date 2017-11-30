@@ -21,10 +21,6 @@ import styles from './report.less';
 
 const tc = applyTheme(styles);
 const TabPane = Tabs.TabPane;
-
-const a = d3.rgb(255, 255, 255); //红色
-const b = d3.rgb(255, 127, 80); //绿色
-const compute = d3.interpolate(a, b);
 const barColor = {
   pub: '#92D1FF',
   expert: '#8EC267',
@@ -32,10 +28,10 @@ const barColor = {
 
 const rectTooltip = {
   heat: '中美对比',
-  expert: '领域专家',
-  pub: '领域论文',
+  expert: '学科专家',
+  pub: '学科论文',
   zero: '无交叉信息',
-  minus: '正在计算热点...',
+  minus: '正在分析...',
 };
 const localDate = new Date();
 const dateYear = localDate.getFullYear();
@@ -54,8 +50,11 @@ class CrossReport extends React.Component {
     isAuto: true,
     yHeight: 0, // 图的高
     xWidth: 0, // 图的宽
-    yearBuring: [],// 时间段
-  };
+    yearBuring: [], // 时间段
+    pubCurrent: 1,
+    personCurrent: 1,
+  }
+
   heatNum = []; // 热力值数组
   barNum = []; //bar值数组
   title = '';
@@ -70,8 +69,11 @@ class CrossReport extends React.Component {
   countYear = 0;
   timer = 0;
 
+
   crossInfo = null;
   nodeData = null;
+  crossingFields = [];
+  years = [];
 
 
   /** 在Component被加载的时候调用的。 */
@@ -89,7 +91,7 @@ class CrossReport extends React.Component {
     this.heatNum = [];
     let xNode = [];
     let yNode = [];
-    const { crossTree, crossInfo, experts, pubs, predict, modalInfo, autoDomainInfo } = this.props.crossHeat;
+    const { crossTree, crossInfo, experts, pubs, predict, modalInfo, autoDomainInfo, pageInfo } = this.props.crossHeat;
     const nCrossTree = nextProps.crossHeat.crossTree;
     if (nCrossTree !== null) {
       xNode = this.getNodeChildren(nCrossTree.queryTree2, []);
@@ -115,9 +117,12 @@ class CrossReport extends React.Component {
     if (pubs !== nextProps.crossHeat.pubs) { // 获取论文
       this.pubList = nextProps.crossHeat.pubs;
     }
-    // if (domainMinInfo !== this.props.crossHeat.domainMinInfo) { // 分页
-    //   this.getPubPerson(this.modalType, domainMinInfo.authors, domainMinInfo.pubs);
-    // }
+    if (pageInfo !== nextProps.crossHeat.pageInfo) { // 分页
+      const info = nextProps.crossHeat.pageInfo;
+      this.first10Authors = info.authors;
+      this.first10Pubs = info.pubs;
+      this.getPubPerson(this.modalType, this.first10Authors, this.first10Pubs);
+    }
     if (predict !== nextProps.crossHeat.predict) { // 预测
       this.createRect(nextProps.crossHeat.predict, yNode.length);
     }
@@ -131,29 +136,34 @@ class CrossReport extends React.Component {
     if (autoDomainInfo !== nAutoDomainInfo && nAutoDomainInfo.length > 0) { // autoDomainInfo
       this.startAutoShow(nAutoDomainInfo, yNode);
     }
-  };
+  }
 
-  // 获取时间段，通过时间轴
+
+// 获取时间段，通过时间轴
   getLocalYear = date => this.setState({ dateDuring: date });
-  // 重新创建原图
+// 重新创建原图
   createBasic = (yTree, xTree, xNode, yNode) => { // 删除原来当图
-    d3.select('#heat').selectAll('g').remove();
-    d3.select('#xTree').selectAll('g').remove();
-    d3.select('#yTree').selectAll('g').remove();
-    const yHeight = yNode.length * 62;
-    const xWidth = xNode.length * 62;
-    this.setState({ yHeight, xWidth });
-    this.createYTree(yTree, yHeight);
-    this.createXTree(xTree, yHeight, xWidth);
+    ensure('d3', (d3) => {
+      d3.select('#heat').selectAll('g').remove();
+      d3.select('#xTree').selectAll('g').remove();
+      d3.select('#yTree').selectAll('g').remove();
+      const yHeight = yNode.length * 62;
+      const xWidth = xNode.length * 62;
+      this.setState({ yHeight, xWidth });
+      this.createYTree(yTree, yHeight, d3);
+      this.createXTree(xTree, yHeight, xWidth, d3);
+    });
   };
 // 绘制rect 图
   createRect = (domainList, yLength) => {
     if (domainList) {
-      d3.select('#heat').selectAll('g').remove();
-      const changeData = this.domainChange(domainList, yLength);
-      this.heatNum = changeData.heatNum;
-      this.barNum = changeData.barNum;
-      this.createAxis(changeData.heatInfo, changeData.barInfo);
+      ensure('d3', (d3) => {
+        d3.select('#heat').selectAll('g').remove();
+        const changeData = this.domainChange(domainList, yLength);
+        this.heatNum = changeData.heatNum;
+        this.barNum = changeData.barNum;
+        this.createAxis(changeData.heatInfo, changeData.barInfo, d3);
+      });
     }
   };
 
@@ -203,12 +213,12 @@ class CrossReport extends React.Component {
     this.getAggregate(method, dt);
   };
 
-  // 对两数组交叉  返回矩阵
+// 对两数组交叉  返回矩阵
   getCrossFieldNode = (xNode, yNode) => {
     const crossList = [];
     xNode.map((xVal) => {
       yNode.map((yVal) => {
-        crossList.push({ _1: yVal, _2: xVal, });
+        crossList.push({ _1: yVal, _2: xVal });
         return true;
       });
       return true;
@@ -225,7 +235,10 @@ class CrossReport extends React.Component {
     return children;
   };
 // 绘制 rect 和bar
-  createAxis = (heatVal, barInfo) => {
+  createAxis = (heatVal, barInfo, d3) => {
+    const a = d3.rgb(255, 255, 255); //红色
+    const b = d3.rgb(255, 127, 80); //绿色
+    const compute = d3.interpolate(a, b);
     const maxHeatNum = d3.max(this.heatNum);
     const svg = d3.selectAll('#heat')
       .append('g')
@@ -326,7 +339,7 @@ class CrossReport extends React.Component {
     }
   };
 
-  createYTree = (yData, yHeight) => {
+  createYTree = (yData, yHeight, d3) => {
     const height = yHeight;
     // 创建画板
     const svg = d3.selectAll('#yTree')
@@ -393,7 +406,7 @@ class CrossReport extends React.Component {
     // 叶子节点点击事件
   };
 //=====xstree===================
-  createXTree = (xData, yHeight, xWidth) => {
+  createXTree = (xData, yHeight, xWidth, d3) => {
     const svg = d3.selectAll('#xTree')
       .append('g')
       .attr('transform', `translate(340,-${yHeight - 186})`);
@@ -474,13 +487,15 @@ class CrossReport extends React.Component {
       const toolTipTop = event.pageY + 20;
       const toolTipLeft = event.pageX + 15;
       // y 用d3画图
-      d3.select('#tooltip').selectAll('div').remove();
-      d3.selectAll('#tooltip')
-        .append('div')
-        .attr('class', styles.tooltipDis)
-        .style('top', `${toolTipTop}px`)
-        .style('left', `${toolTipLeft}px`)
-        .text(tooltipVal);
+      ensure('d3', (d3) => {
+        d3.select('#tooltip').selectAll('div').remove();
+        d3.selectAll('#tooltip')
+          .append('div')
+          .attr('class', styles.tooltipDis)
+          .style('top', `${toolTipTop}px`)
+          .style('left', `${toolTipLeft}px`)
+          .text(tooltipVal);
+      });
     }
   };
 
@@ -491,10 +506,15 @@ class CrossReport extends React.Component {
       this.domain1 = d.first;
       this.domain2 = d.second;
       const modalType = d.key;// modal 展示类容类型
-      const show = !(modalType === 'heat' && d.heat < 1); // modal是否展示
+      const show = !(modalType === 'heat' && d.heat === 0); // modal是否展示
       if (show) {
         this.modalType = modalType;
-        this.setState({ visibleModal: true, defaultTab: modalType });
+        this.setState({
+          visibleModal: true,
+          defaultTab: modalType,
+          pubCurrent: 1,
+          personCurrent: 1,
+        });
         this.expertList = [];
         this.pubList = [];
         const yearDuring = this.state.dateDuring;
@@ -503,6 +523,8 @@ class CrossReport extends React.Component {
           years.push(i);
         }
         const crossingFields = [{ _1: d.first, _2: d.second }];
+        this.crossingFields = crossingFields;
+        this.years = years;
         const method = 'detail';
         const withCache = true;
         const dt = { years, crossingFields, withCache };
@@ -517,11 +539,11 @@ class CrossReport extends React.Component {
     let crossingFields = this.getCrossFieldNode(node, yNode);
     this.domain1 = node;
     this.domain2 = '';
-    if (type === 'y') {  // y轴
+    if (type === 'y') { // y轴
       const xNode = this.getNodeChildren(crossTree.queryTree2, []);
       crossingFields = this.getCrossFieldNode(xNode, node);
     }
-
+    this.crossingFields = crossingFields;
     this.setState({ visibleModal: true, defaultTab: 'heat' });
     this.expertList = [];
     this.pubList = [];
@@ -530,6 +552,7 @@ class CrossReport extends React.Component {
     for (let i = yearDuring[0] + 1; i < yearDuring[1] + 1; i++) {
       years.push(i);
     }
+    this.years = years;
     const method = 'detail';
     const withCache = true;
     const dt = { years, crossingFields, withCache };
@@ -545,14 +568,41 @@ class CrossReport extends React.Component {
 
 //分页
   onChangePage = (page, pageSize) => { //todo 分页
-    const beginYear = this.state.dateDuring[0];
-    const endYear = this.state.dateDuring[1];
-    const summary = false;
-    const pubSkip = this.modalType === 'pub' ? (page - 1) * pageSize : 0;
-    const pubLimit = this.modalType === 'pub' ? page * pageSize : 0;
-    const authorSkip = this.modalType === 'expert' ? (page - 1) * pageSize : 0;
-    const authorLimit = this.modalType === 'expert' ? page * pageSize : 0;
+    const skip = (page - 1) * pageSize;
+    const method = 'slice';
+    const withCache = true;
+    let pubs = null;
+    let authors = null;
+    if (this.modalType === 'pub') {
+      this.setState({ pubCurrent: page });
+      pubs = { skip, limit: 10 };
+      authors = { skip: 0, limit: 10 };
+    }
+    if (this.modalType === 'expert') {
+      pubs = { skip: 0, limit: 10 };
+      authors = { skip, limit: 10 };
+      this.setState({ personCurrent: page });
+    }
+    const dt = {
+      years: this.years,
+      crossingFields: this.crossingFields,
+      withCache,
+      pubs,
+      authors,
+    };
+    this.getPageInfo(method, dt);
   };
+
+  getPageInfo = (method, dt) => {
+    this.props.dispatch({
+      type: 'crossHeat/getPageInfo',
+      payload: {
+        method,
+        dt,
+      },
+    });
+  }
+
 
   modalTab = (type) => {
     this.modalType = type;
@@ -571,7 +621,7 @@ class CrossReport extends React.Component {
         this.createRect(predict, yNode.length);
       } else {
         const crossingFields = nodeData;
-        const years = [2018];
+        const years = [dateYear];
         const op = 'meta';
         const method = 'predict';
         const withCache = true;
@@ -604,7 +654,7 @@ class CrossReport extends React.Component {
         tmp.map((item) => {
           yearList.push([sYear + item]);
           return true;
-        })
+        });
         this.getAutoDomainInfo(yearList); // 获取自动演示数据
       } else {
         this.startAutoShow(autoDomainInfo);
@@ -615,7 +665,7 @@ class CrossReport extends React.Component {
   };
 
   getNullData = (crossInfo) => {
-    const { xTree, yTree, xNode, yNode, } = this.getXYNode();
+    const { xTree, yTree, xNode, yNode } = this.getXYNode();
     const filterXNode = this.filterXNode(crossInfo.data, xNode.length, yNode.length);
     const xDomainList = JSON.parse(JSON.stringify(filterXNode.domainList));
     const filterYNode = this.filterYNode(xDomainList, xNode.length - filterXNode.xVal.length, yNode.length);
@@ -644,7 +694,7 @@ class CrossReport extends React.Component {
     });
     return tempNode;
   };
-  // 删除数的节点
+// 删除数的节点
   delTree = (dt, node) => {
     if (dt.children) {
       dt.children.map((item, i) => {
@@ -660,10 +710,10 @@ class CrossReport extends React.Component {
     }
     return dt;
   };
-  // 隐藏空白行
+// 隐藏空白行
   filterXNode = (domainList, xLength, yLength) => {
     const xVal = [];
-    const tempList = []
+    const tempList = [];
     for (let i = 0; i < xLength; i++) {
       let isNull = false;
       for (let j = i * yLength; j < (i + 1) * yLength; j++) {
@@ -681,7 +731,7 @@ class CrossReport extends React.Component {
     }
     return { domainList: tempList, xVal };
   };
-  // 隐藏空白列
+// 隐藏空白列
   filterYNode = (domainList, xLength, yLength) => {
     const yVal = [];
     const tempList = domainList.slice(0, domainList.length);
@@ -707,11 +757,11 @@ class CrossReport extends React.Component {
         endList.push(item);
       }
       return true;
-    })
+    });
     return { domainList: endList, yVal };
   };
 
-  // 自动演示方法
+// 自动演示方法
   startAutoShow = (autoInfo) => {
     const { xTree, yTree, xNode, yNode } = this.getXYNode();
     this.timer = setInterval(() => {
@@ -726,7 +776,7 @@ class CrossReport extends React.Component {
     }, 1000);
   };
 
-  // 获得node
+// 获得node
   getXYNode = () => {
     const { crossTree } = this.props.crossHeat;
     const { queryTree2, queryTree1 } = crossTree;
@@ -737,7 +787,7 @@ class CrossReport extends React.Component {
   };
 
 
-  // 获取自动演示数据
+// 获取自动演示数据
   getAutoDomainInfo = (yearList) => {
     const { nodeData } = this.getXYNode();
     const yearDomainInfo = [];
@@ -755,7 +805,7 @@ class CrossReport extends React.Component {
     });
   };
 
-  // 执行 getAggregate 方法
+// 执行 getAggregate 方法
   getAggregate = (method, dt) => {
     this.props.dispatch({
       type: 'crossHeat/getAggregate',
@@ -793,14 +843,15 @@ class CrossReport extends React.Component {
   };
 
   render() {
+    const loadPage = this.props.loading.effects['crossHeat/getPageInfo'];
     const loadPub = this.props.loading.effects['crossHeat/getDomainPub'];
     const loadExpert = this.props.loading.effects['crossHeat/getDomainExpert'];
     const loadTree = this.props.loading.effects['crossHeat/getCrossTree'];
     const loadAggregate = this.props.loading.effects['crossHeat/getAggregate'];
     const loadAutoDomainInfo = this.props.loading.effects['crossHeat/getAutoDomainInfo'];
     const { modalInfo } = this.props.crossHeat;
-    const { nullBtn, isHistory, xWidth, yHeight, isAuto, yearBuring } = this.state;
-    let tabTitle = this.domain1 + " & " + this.domain2;
+    const { nullBtn, isHistory, xWidth, yHeight, isAuto, yearBuring, pubCurrent, personCurrent } = this.state;
+    let tabTitle = `${this.domain1} & ${this.domain2}`;
     if (this.domain1 === '' || this.domain2 === '') {
       tabTitle = this.domain2 + this.domain1;
     }
@@ -821,24 +872,31 @@ class CrossReport extends React.Component {
             <div>
               <span className={styles.title}>{this.title}</span>
               <Button type="default"
-                      onClick={this.heatChange.bind(this, isHistory)}>{heatInfo}</Button>
+                      onClick={this.heatChange.bind(this, isHistory)}>{heatInfo}
+              </Button>
               { isHistory &&
               <Button type="default"
-                      onClick={this.nullChange.bind(this, nullBtn)}>{nullInfo}</Button>
+                      onClick={this.nullChange.bind(this, nullBtn)}>{nullInfo}
+              </Button>
               }
               { isHistory &&
               <Button type="default"
-                      onClick={this.autoChange.bind(this, isAuto)}>{autoInfo}</Button>
+                      onClick={this.autoChange.bind(this, isAuto)}>{autoInfo}
+              </Button>
               }
             </div>
             <div>
-              <Button type="default" onClick={this.goCreate}>挖掘热点</Button>
-              <Button type="default" onClick={this.goBack}>返回首页</Button>
+              <a href="/cross/startTask">
+                <Button type="default" onClick={this.goCreate}>挖掘热点</Button>
+              </a>
+              <a href="/cross/index">
+                <Button type="default" onClick={this.goBack}>返回首页</Button>
+              </a>
             </div>
           </div>
           {this.crossInfo && isHistory &&
           <CrossStatistics cross={this.crossInfo} nodeData={this.nodeData}
-                           showModal={this.showModal}></CrossStatistics>
+                           showModal={this.showModal} />
           }
           <div id="tooltip" />
           <div id="d3Content"
@@ -850,8 +908,8 @@ class CrossReport extends React.Component {
             }
 
             <div className={styles.yTreeHeat}>
-              <svg id="yTree" width={340} height={yHeight}></svg>
-              <svg id="heat" width={xWidth} height={yHeight}></svg>
+              <svg id="yTree" width={340} height={yHeight} />
+              <svg id="heat" width={xWidth} height={yHeight} />
             </div>
             <svg className={styles.xTree} id="xTree" width={xWidth + 340} />
           </div>
@@ -868,32 +926,38 @@ class CrossReport extends React.Component {
                   className={styles.tabs}
                   onChange={this.modalTab}>
               <TabPane tab="专家" key="expert">
-                <Spinner loading={loadAggregate || loadExpert}></Spinner>
+                <Spinner loading={loadPage || loadAggregate || loadExpert} />
                 { modalInfo &&
                 <div className={styles.modalContent}>
-                  <PersonList persons={bridge.toNextPersons(this.expertList)} />
+                  <PersonList persons={bridge.toNextPersons(this.expertList)}
+                              PersonList_PersonLink_NewTab />
                   { this.expertList && this.expertList.length > 0 &&
                   <Pagination className={styles.pagination}
                               onChange={this.onChangePage}
-                              defaultCurrent={1} defaultPageSize={10}
+                              defaultPageSize={10}
+                              defaultCurrent={1}
+                              current={personCurrent}
                               total={modalInfo.authorsCount || 0} />
                   }
                 </div>
                 }
               </TabPane>
               <TabPane tab="论文" key="pub">
-                <Spinner loading={loadAggregate || loadPub}></Spinner>
+                <Spinner loading={loadPage || loadAggregate || loadPub} />
                 {modalInfo &&
                 <div className={styles.modalContent}>
-                  <PublicationList pubs={this.pubList} showLabels={false} />
-                  <Pagination className={styles.pagination} onChange={this.onChangePage}
-                              defaultCurrent={1} defaultPageSize={10}
+                  <PublicationList pubs={this.pubList} pubLinkTargle showLabels={false} />
+                  <Pagination className={styles.pagination}
+                              onChange={this.onChangePage}
+                              defaultCurrent={1}
+                              defaultPageSize={10}
+                              current={pubCurrent}
                               total={modalInfo.pubsCount || 0} />
                 </div>
                 }
               </TabPane>
               <TabPane tab="统计" key="heat">
-                <Spinner loading={loadAggregate}></Spinner>
+                <Spinner loading={loadAggregate} />
                 {modalInfo &&
                 <div className={styles.modalContent}>
                   <CrossContrast compareData={modalInfo} />

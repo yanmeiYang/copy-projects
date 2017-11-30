@@ -585,5 +585,5 @@ const WrappedRegistrationForm = Form.create()(RegistrationForm);
 export default connect(({ seminar, person, loading }) => ({
   seminar,
   person,
-  loading
+  loading,
 }))(WrappedRegistrationForm);

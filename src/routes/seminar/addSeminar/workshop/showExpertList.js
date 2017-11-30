@@ -6,6 +6,9 @@ import { Button, Icon } from 'antd';
 import styles from './showExpertList.less';
 
 class ShowExpertList extends React.Component {
+  createMarkup = (data) => {
+    return { __html: data.replace(/\n/g, '<br />') };
+  };
   render() {
     const { talk, index, getImg, delTheExpert, editTheExpert } = this.props;
     let timeFrom = '';
@@ -50,25 +53,25 @@ class ShowExpertList extends React.Component {
                 {talk.speaker.affiliation && <span>{talk.speaker.affiliation}</span>}
               </td>
             </tr>
-            <tr>
-              <td>专家电话：</td>
-              <td style={{ verticalAlign: 'top' }}>
-                {talk.speaker.phone && <span>{talk.speaker.phone}</span>}
-              </td>
-              <td>专家邮箱：</td>
-              <td style={{}}>
-                {talk.speaker.email && <span>{talk.speaker.email}</span>}
-              </td>
-            </tr>
+            {/*<tr>*/}
+              {/*<td>专家电话：</td>*/}
+              {/*<td style={{ verticalAlign: 'top' }}>*/}
+                {/*{talk.speaker.phone && <span>{talk.speaker.phone}</span>}*/}
+              {/*</td>*/}
+              {/*<td>专家邮箱：</td>*/}
+              {/*<td style={{}}>*/}
+                {/*{talk.speaker.email && <span>{talk.speaker.email}</span>}*/}
+              {/*</td>*/}
+            {/*</tr>*/}
           </table>
           <div className={styles.specialInfo}>
             <span>专家简介：</span>
-            <span>{talk.speaker.bio}</span>
+            <span dangerouslySetInnerHTML={this.createMarkup(talk.speaker.bio)} />
           </div>
           {(!talk.speaker.role || !talk.speaker.role.includes('president')) &&
           <div className={styles.specialInfo}>
             <span>演讲摘要：</span>
-            <span>{talk.abstract}</span>
+            <span dangerouslySetInnerHTML={this.createMarkup(talk.abstract)} />
           </div>}
         </div>
         <a style={{ fontSize: '16px' }} onClick={editTheExpert.bind(this, index)}>

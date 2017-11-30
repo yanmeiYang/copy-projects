@@ -30,7 +30,7 @@ class CanlendarInForm extends React.Component {
     if (nextProps.startValue !== this.props.startValue && nextProps.startValue) {
       this.setState({ startValue: new Date(nextProps.startValue).format(dFormat) });
     }
-    if (nextProps.endValue !== this.props.endValue && nextProps.endValue ) {
+    if (nextProps.endValue !== this.props.endValue && nextProps.endValue) {
       this.setState({ endValue: new Date(nextProps.endValue).format(dFormat) });
     }
   };
@@ -61,6 +61,7 @@ class CanlendarInForm extends React.Component {
           onChange={this.onChange}
           onOk={this.onOk}
           allowClear={false}
+          style={{ width: '100%' }}
         />
         }
       </div>

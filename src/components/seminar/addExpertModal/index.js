@@ -75,8 +75,8 @@ class AddExpertModal extends React.Component {
       ReactDOM.findDOMNode(this.refs.speakerName).value = editTheTalk.speaker.name;
       ReactDOM.findDOMNode(this.refs.speakerPos).value = editTheTalk.speaker.position;
       ReactDOM.findDOMNode(this.refs.speakerAff).value = editTheTalk.speaker.affiliation;
-      ReactDOM.findDOMNode(this.refs.speakerIphone).value = editTheTalk.speaker.phone;
-      ReactDOM.findDOMNode(this.refs.speakerEmail).value = editTheTalk.speaker.email;
+      // ReactDOM.findDOMNode(this.refs.speakerIphone).value = editTheTalk.speaker.phone;
+      // ReactDOM.findDOMNode(this.refs.speakerEmail).value = editTheTalk.speaker.email;
       ReactDOM.findDOMNode(this.refs.speakerBio).value = editTheTalk.speaker.bio;
       ReactDOM.findDOMNode(this.refs.speakerImg).src = editTheTalk.speaker.img;
     }
@@ -105,8 +105,8 @@ class AddExpertModal extends React.Component {
       this.speakerInformation.role = selectedExpert.role;
     }
     ReactDOM.findDOMNode(this.refs.speakerBio).value = selectedExpert.bio;
-    ReactDOM.findDOMNode(this.refs.speakerIphone).value = selectedExpert.phone;
-    ReactDOM.findDOMNode(this.refs.speakerEmail).value = selectedExpert.email;
+    // ReactDOM.findDOMNode(this.refs.speakerIphone).value = selectedExpert.phone;
+    // ReactDOM.findDOMNode(this.refs.speakerEmail).value = selectedExpert.email;
     this.setState({
       speakerInfo: this.speakerInformation,
     });
@@ -332,15 +332,15 @@ class AddExpertModal extends React.Component {
         <div className={!step2 && !step3 ? styles.showStep4 : styles.hideStep4}>
           <FormItem
             {...formItemLayout}
-            label={(<span>专家角色</span>)}>
+            label="专家角色">
             {getFieldDecorator('role', { initialValue: 'talker' })(
               <Select
-                style={{ width: 200 }}
+                style={{ width: '100%' }}
                 placeholder="请选择专家角色"
                 onChange={this.expertRoleChange}
               >
-                <Option value="president">主席</Option>
-                <Option value="talker">一般参与者</Option>
+                <Option value="president">主席（包括主持人/主编等）</Option>
+                <Option value="talker">特邀嘉宾（包括报告人/评审人/评奖人等）</Option>
               </Select>)}
           </FormItem>
           {this.speakerInformation.role !== 'president' &&
@@ -382,7 +382,7 @@ class AddExpertModal extends React.Component {
             })(
               <Select
                 showSearch
-                style={{ width: 200 }}
+                style={{ width: '100%' }}
                 placeholder="请选择贡献类别"
                 optionFilterProp="children"
                 onChange={this.activityTypeChange}
@@ -586,20 +586,20 @@ class AddExpertModal extends React.Component {
                        onChange={this.saveExpertInfo.bind(this, 'affiliation')} />
               </div>
             </div>
-            <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
-              <label className="ant-col-3">电话: </label>
-              <div className="ant-col-21">
-                <Input size="large" placeholder="电话" ref="speakerIphone"
-                       onChange={this.saveExpertInfo.bind(this, 'phone')} />
-              </div>
-            </div>
-            <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
-              <label className="ant-col-3">邮箱: </label>
-              <div className="ant-col-21">
-                <Input size="large" placeholder="邮箱" ref="speakerEmail"
-                       onChange={this.saveExpertInfo.bind(this, 'email')} />
-              </div>
-            </div>
+            {/*<div className="ant-form-item" style={{ paddingBottom: '15px' }}>*/}
+              {/*<label className="ant-col-3">电话: </label>*/}
+              {/*<div className="ant-col-21">*/}
+                {/*<Input size="large" placeholder="电话" ref="speakerIphone"*/}
+                       {/*onChange={this.saveExpertInfo.bind(this, 'phone')} />*/}
+              {/*</div>*/}
+            {/*</div>*/}
+            {/*<div className="ant-form-item" style={{ paddingBottom: '15px' }}>*/}
+              {/*<label className="ant-col-3">邮箱: </label>*/}
+              {/*<div className="ant-col-21">*/}
+                {/*<Input size="large" placeholder="邮箱" ref="speakerEmail"*/}
+                       {/*onChange={this.saveExpertInfo.bind(this, 'email')} />*/}
+              {/*</div>*/}
+            {/*</div>*/}
           </Col>
           <Col span={24}>
             <label className="ant-col-3">专家简介: </label>

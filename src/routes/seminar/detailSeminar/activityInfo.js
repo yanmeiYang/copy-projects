@@ -17,7 +17,8 @@ class ActivityInfo extends React.PureComponent {
           </strong>
         </h4>
         <h5>
-          {new Date(summaryById.time.from).format('yyyy年MM月dd日')}
+          {new Date(summaryById.time.from).format('yyyy年MM月dd日')} ~&nbsp;
+          {new Date(summaryById.time.to).format('yyyy年MM月dd日')}
         </h5>
         {summaryById.img &&
         <div style={{ textAlign: 'center' }}>

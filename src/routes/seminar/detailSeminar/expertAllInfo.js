@@ -86,26 +86,26 @@ class ExpertAllInfo extends React.PureComponent {
                           </li>
                         </div>}
                       </span>
-                      <span>
-                        {aTalk.speaker.phone &&
-                        <li>
-                          <p>
-                            <Icon type="phone" />
-                            <strong>电话:&nbsp;</strong>
-                            <span>{aTalk.speaker.phone}</span>
-                          </p>
-                        </li>}
-                      </span>
-                      <span>
-                        {aTalk.speaker.email &&
-                        <li>
-                          <p>
-                            <Icon type="mail" />
-                            <strong>邮箱:&nbsp;</strong>
-                            <span>{aTalk.speaker.email}</span>
-                          </p>
-                        </li>}
-                      </span>
+                      {/*<span>*/}
+                        {/*{aTalk.speaker.phone &&*/}
+                        {/*<li>*/}
+                          {/*<p>*/}
+                            {/*<Icon type="phone" />*/}
+                            {/*<strong>电话:&nbsp;</strong>*/}
+                            {/*<span>{aTalk.speaker.phone}</span>*/}
+                          {/*</p>*/}
+                        {/*</li>}*/}
+                      {/*</span>*/}
+                      {/*<span>*/}
+                        {/*{aTalk.speaker.email &&*/}
+                        {/*<li>*/}
+                          {/*<p>*/}
+                            {/*<Icon type="mail" />*/}
+                            {/*<strong>邮箱:&nbsp;</strong>*/}
+                            {/*<span>{aTalk.speaker.email}</span>*/}
+                          {/*</p>*/}
+                        {/*</li>}*/}
+                      {/*</span>*/}
                     </ul>
                     <div className={styles.bio}>
                       {aTalk.speaker.bio ? <div>

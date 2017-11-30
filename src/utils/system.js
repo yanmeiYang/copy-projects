@@ -20,13 +20,14 @@ const AvailableSystems = [
   'DataAnnotation',
   'thurcb',
   'yocsef',
+  'med_topic_trend',
 ];
 
 let System;
 // System = 'aminer';
 // System = 'ccf';
 // System = 'ccftest';
-// System = 'huawei';
+System = 'huawei';
 // System = 'alibaba';
 // System = 'tencent';
 // System = 'cie';
@@ -38,6 +39,7 @@ System = 'demo';
 // System = 'DataAnnotation';
 // System = 'thurcb';
 // System = 'yocsef';
+// System = 'med_topic_trend';
 
 let Source = System; // AppID, Used in UniversalConfig.
 
@@ -58,11 +60,12 @@ function loadSavedSystem() {
     // only god can switch system.
     if (dataObj && dataObj.roles && dataObj.roles.god
       && dataObj.data && dataObj.data.email === ss.user) {
-      if (process.env.NODE_ENV !== 'production') {
-        console.log('%cSystem Override to [%s]. (original is %s)',
-          'color:red;background-color:rgb(255,251,130)',
-          ss.system, System);
-      }
+
+      console.log(
+        '%cSystem Override to [%s]. (original is %s)',
+        'color:red;background-color:rgb(255,251,130)',
+        ss.system, System,
+      );
       System = ss.system;
       Source = ss.system;
     }
@@ -70,7 +73,10 @@ function loadSavedSystem() {
 }
 
 // Override system settings from localStorage.
-loadSavedSystem();
+// 只有开发环境或者线上的demo系统可以切换。
+if (process.env.NODE_ENV !== 'production' || System === 'demo') {
+  loadSavedSystem();
+}
 
 function saveSystem(system, user) {
   if (user) {

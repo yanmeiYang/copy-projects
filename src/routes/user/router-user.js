@@ -13,6 +13,15 @@ export default {
     component: () => import('./signup'),
   },
 
+  BatchRegister: {
+    path: '/registered/batch',
+    models: () => [
+      import('models/common/universal-config'),
+      import('models/auth'),
+    ],
+    component: () => import('./BatchCreateUser'),
+  },
+
   User: {
     path: '/user/:id',
     models: () => [import('models/user/detail')],

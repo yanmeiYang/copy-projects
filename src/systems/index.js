@@ -25,6 +25,7 @@ const CurrentSystemConfig = {
   DataAnnotation: require('./DataAnnotation/config'),
   thurcb: require('./thurcb/config'),
   yocsef: require('./yocsef/config'),
+  med_topic_trend: require('./med_topic_trend/config'),
 };
 
 // 默认配置
@@ -53,6 +54,7 @@ const getDefaultSystemConfigs = (system, source) => {
     PageTitle: 'Aminer Business',
     Layout_HasSideBar: false, // 是否显示左侧菜单
     Layout_HasNavigator: true,
+    Layout_ShowHeader: true, // 是否显示header
 
     // header
     Header_UserPageURL: defaults.IN_APP_DEFAULT, // 用户头像点击之后去的页面.
@@ -67,6 +69,7 @@ const getDefaultSystemConfigs = (system, source) => {
     Enable_Export_EB_IF_EXIST: false,
     ShowRegisteredRole: true, // 注册页面是否显示角色配置
     Signup_Password: false, // 注册页面password
+    UserInfo_Batch_Signup: false, // 批量创建用户 目前只有huawei在用
 
     /**
      * > Search

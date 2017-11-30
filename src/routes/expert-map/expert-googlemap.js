@@ -19,7 +19,6 @@ import RightInfoZonePerson from './RightInfoZonePerson';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
 import RightInfoZoneAll from './RightInfoZoneAll';
 import {
-  findPosition,
   getById,
   toggleRightInfo,
   onResetPersonCard,
@@ -28,10 +27,13 @@ import {
   showTopImages,
   addImageListener,
   syncInfoWindow,
+  backGlobal,
+  isIn,
+  ifIn,
   //findMapFilterRangesByKey,
   findMapFilterHindexRangesByKey,
-  bigAreaConfig,
 } from './utils/map-utils';
+import { findPosition, bigAreaConfig } from './utils/bigArea-utils';
 import {
   dataCache,
   copyImage,
@@ -43,10 +45,21 @@ let map1;
 const dataMap = {};
 const blankAvatar = '/images/blank_avatar.jpg';
 
+let globalInfoWindow;
+const getInfoWindow = () => {
+  if (!globalInfoWindow) {
+    globalInfoWindow = new window.google.maps.InfoWindow({
+      content: "<div id='author_info' class='popup'></div>",
+    });
+  }
+  return globalInfoWindow;
+};
+
 /**
  * -------------------------------------------------------------------
  */
 @connect(({ expertMap, loading }) => ({ expertMap, loading }))
+@RequireRes('GoogleMap')
 export default class ExpertGoogleMap extends React.Component {
   constructor(props) {
     super(props);
@@ -82,11 +95,12 @@ export default class ExpertGoogleMap extends React.Component {
     ensure('google', (google) => {
       const { dispatch } = this.props;
       const that = this;
-      const infoWindow = new google.maps.InfoWindow({
-        content: "<div id='author_info' class='popup'></div>",
-      });
+      const infoWindow = getInfoWindow();
       google.maps.event.addListener(marker, 'mouseover', () => {
+        ifIn.pop();
+        ifIn.push(true);
         onResetPersonCard(dispatch);
+        //infoWindow.setContent("<div id='author_info' class='popup'></div>");
         infoWindow.open(map, marker);
         const ids = [];
         ids.push(personId);
@@ -94,6 +108,7 @@ export default class ExpertGoogleMap extends React.Component {
           if (that.currentPersonId !== personId) {
             this.setState({ cperson: personId }, syncInfoWindow());//回调函数里面改写
           } else {
+            infoWindow.close();
             infoWindow.open(map, marker);
             syncInfoWindow();
           }
@@ -104,7 +119,16 @@ export default class ExpertGoogleMap extends React.Component {
       });
 
       google.maps.event.addListener(marker, 'mouseout', () => {
-        infoWindow.close(map, marker);
+        ifIn.pop();
+        ifIn.push(false);
+        const markerInterval = setInterval(() => {
+          const flag1 = isIn[isIn.length - 1];
+          const flag2 = ifIn[ifIn.length - 1];
+          if (!flag1 && !flag2) {
+            infoWindow.close(map, marker);
+            clearInterval(markerInterval);
+          }
+        }, 1000);
       });
 
       google.maps.event.addListener(marker, 'click', () => {
@@ -130,17 +154,6 @@ export default class ExpertGoogleMap extends React.Component {
     const mapType = type || 0;
 
     ensure('google', (google) => {
-      // const mapinterval = setInterval(() => {
-      // if (typeof (window.google) === 'undefined') {
-      //   console.log('wait for Google');
-      //   counter += 1;
-      //   if (counter > 200) {
-      //     clearInterval(mapinterval);
-      //     document.getElementById('allmap').innerHTML = 'Cannot connect to Google Map! Please check the network state!';
-      //   }
-      // } else {
-      //   clearInterval(mapinterval);
-
       that.showOverLay();
       if (!map1) {
         map1 = new google.maps.Map(document.getElementById('allmap'), {
@@ -262,10 +275,6 @@ export default class ExpertGoogleMap extends React.Component {
         that.addMouseoverHandler(map, markers[m], place.results[m].id);
       }
       checkCacheLevel(sysconfig.Map_Preload, ids);
-      // for (let i = 0; i < 1000000; i += 1) { // WTF
-      //
-      // }
-      console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
       that.hideLoading();
 
       const count = markerClusterer.getTotalClusters();
@@ -320,10 +329,6 @@ export default class ExpertGoogleMap extends React.Component {
     const type = 'google';
     const model = this.props && this.props.expertMap;
 
-    const infowindow = new window.google.maps.InfoWindow({
-      content: "<div id='author_info' class='popup'></div>",
-    });
-
     const imgdivs = document.getElementsByName('scholarimg');
     if (imgdivs !== null && imgdivs.length !== 0) {
       showTopImages(ids, imgwidth, blankAvatar, imgdivs);
@@ -331,7 +336,9 @@ export default class ExpertGoogleMap extends React.Component {
     for (let j = 0; j < imgdivs.length; j += 1) {
       const cimg = imgdivs[j];
       cimg.addEventListener('mouseenter', (event) => {
-        addImageListener(map, ids, '', event, imgwidth, type, projection, infowindow, (data) => {
+        ifIn.pop();
+        ifIn.push(true);
+        addImageListener(map, ids, '', event, imgwidth, type, projection, globalInfoWindow, (data) => {
           const pId = data.id;
           const idx = [];
           idx.push(pId);
@@ -343,13 +350,23 @@ export default class ExpertGoogleMap extends React.Component {
         });
       });
       cimg.addEventListener('mouseleave', () => {
-        infowindow.close();
+        ifIn.pop();
+        ifIn.push(false);
+        const imgInterval = setInterval(() => {
+          const flag1 = isIn[isIn.length - 1];
+          const flag2 = ifIn[ifIn.length - 1];
+          if (!flag1 && !flag2) {
+            globalInfoWindow.close();
+            clearInterval(imgInterval);
+          }
+        }, 1000);
       });
     }
   };
 
 
   render() {
+    const { dispatch } = this.props;
     const model = this.props && this.props.expertMap;
     const persons = model.geoData.results;
     let checkState = 0;
@@ -409,6 +426,11 @@ export default class ExpertGoogleMap extends React.Component {
       cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),
     };
 
+    let isGlobal = false;
+    if (model.rightInfoType === 'global') {
+      isGlobal = true;
+    }
+
     return (
       <div className={styles.expertMap} id="currentMain">
         <div className={styles.map}>
@@ -435,6 +457,17 @@ export default class ExpertGoogleMap extends React.Component {
                 <div className={styles.item5}>多</div>
               </div>
             </div>
+
+            {
+              !isGlobal && <div className={styles.backwell}>
+                <div className={styles.back}>
+                  <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.overview" />:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <Button size="small" onClick={backGlobal.bind(this, dispatch, model)}>
+                    <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.goback" />
+                  </Button>
+                </div>
+              </div>
+            }
 
             <div className={styles.scrollable}>
               <div className={styles.border}>

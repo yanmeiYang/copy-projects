@@ -20,6 +20,7 @@ const { iconFontJS, iconFontCSS, logo } = config;
 const { Sider, Content, Footer } = LayoutComponent;
 
 const tc = applyTheme(styles);
+let lastHref;
 
 require(`themes/theme-${theme.themeName}.less`); // basic themes，:global css only
 
@@ -56,7 +57,7 @@ export default class Layout extends Component {
   };
 
   static defaultProps = {
-    showHeader: true,
+    showHeader: sysconfig.Layout_ShowHeader,
     showNavigator: sysconfig.Layout_HasNavigator,
     showSidebar: sysconfig.Layout_HasSideBar,
     sidebar: theme.sidebar,
@@ -86,8 +87,8 @@ export default class Layout extends Component {
       (nextProps.app.headerResources && !this.headerResourcesArray)
     ) {
       this.headerResourcesArray = [];
-      if (nextProps.app.headerResources) {
-        nextProps.app.headerResources.forEach((k, v) => {
+      if (headerResources) {
+        headerResources.forEach((k, v) => {
           this.headerResourcesArray.push(...k);
         });
       }
@@ -99,12 +100,8 @@ export default class Layout extends Component {
     const { sidebar, footer } = this.props;
     const { contentClass, showHeader, showNavigator, showSidebar, showFeedback } = this.props;
     const { dispatch, app, loading } = this.props;
-    const { user, roles, headerResources } = app;
 
-
-    const href = window.location.href;
-
-    let lastHref;
+    const { href } = window.location;
     if (lastHref !== href) {
       NProgress.start();
       if (!loading.global) {
@@ -112,6 +109,7 @@ export default class Layout extends Component {
         lastHref = href;
       }
     }
+
     const { logoZone, searchZone, infoZone, fixAdvancedSearch, disableAdvancedSearch } = this.props;
     const { pageTitle, pageSubTitle } = this.props;
     const { query, onSearch } = this.props;
@@ -132,8 +130,6 @@ export default class Layout extends Component {
           <title>{title}</title>
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <link rel="icon" href={`/sys/${sysconfig.SYSTEM}/favicon.ico`} type="image/x-icon" />
-
-          {console.log('|||||||||||||||||||||||||||||||||||||||| test helmet;', headerResources)}
 
           {iconFontJS && <script src={iconFontJS} />}
           {iconFontCSS && <link rel="stylesheet" href={iconFontCSS} />}
@@ -169,15 +165,15 @@ export default class Layout extends Component {
           {/*{false && href.indexOf('/expert-heatmap') > 0 &&*/}
           {/*<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/3.7.1/echarts.js" />}*/}
 
-          {(href.indexOf('/expert-trajectory') > 0) &&
-          <script
-            type="text/javascript"
-            src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />}
+          {/*{(href.indexOf('/expert-trajectory') > 0) &&*/}
+          {/*<script*/}
+          {/*type="text/javascript"*/}
+          {/*src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />}*/}
 
-          {(href.indexOf('/expert-trajectory') > 0) &&
-          <script
-            src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1"
-            charSet="utf-8" async defer />}
+          {/*{(href.indexOf('/expert-trajectory') > 0) &&*/}
+          {/*<script*/}
+          {/*src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1"*/}
+          {/*charSet="utf-8" async defer />}*/}
 
         </Helmet>
 

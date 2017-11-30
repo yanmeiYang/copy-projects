@@ -14,7 +14,7 @@ import * as strings from 'utils/strings';
 import ExpertGoogleMap from './expert-googlemap.js';
 import ExpertMap from './expert-map.js';
 import styles from './ExpertMapPage.less';
-import { showSta, sortByBigArea, sortByCountries } from './utils/sta-utils';
+import { showSta, sortByBigArea, sortByCountries, } from './utils/sta-utils';
 
 const tc = applyTheme(styles);
 const [ButtonGroup, TabPane] = [Button.Group, Tabs.TabPane];

@@ -22,7 +22,6 @@ module.exports = {
   ShowHelpDoc: true,
 
   Signup_Password: true,
-  UserInfo_Batch_Signup: true,
 
   // google analytics
   googleAnalytics: 'UA-107003102-4',

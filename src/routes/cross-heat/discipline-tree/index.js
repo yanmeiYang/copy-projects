@@ -3,7 +3,6 @@ import { connect } from 'dva';
 import { Icon, message, Input, Modal } from 'antd';
 import { RequireRes } from 'hoc';
 import { ensure } from 'utils';
-// import * as d3 from 'd3';
 import { Spinner } from 'components';
 import styles from './index.less';
 
@@ -261,7 +260,7 @@ class DisciplineTree extends React.Component {
       content: '您确定删除吗？',
       onOk() {
         const data = that.props.crossHeat[that.props.id];
-        that.props.delTreeNode();
+        // that.props.delTreeNode();
         const dData = that.delData(data, that.state.node);
         that.createD3(dData);
       },

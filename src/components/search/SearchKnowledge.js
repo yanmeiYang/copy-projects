@@ -10,24 +10,37 @@ import TopicBarChart from 'components/topicBarChart';
 import styles from './SearchKnowledge.less';
 
 // TODO change names.
-@connect(({ search }) => ({ /*query: search.query,*/ topic: search.topic }))
+@connect(({ search }) => ({
+  /*query: search.query,*/ topic: search.topic,
+  translatedLanguage: search.translatedLanguage,
+  translatedText: search.translatedText,
+}))
 export default class SearchKnowledge extends Component {
+  state = { query: '' };
+
   componentWillMount() {
-    this.fetchData();
+    this.fetchData(this.props.query);
   }
-
-  shouldComponentUpdate(nextProps) {
-    return compare(this.props, nextProps, 'topic', 'query');
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.query !== this.props.query) {
-      this.fetchData();
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.translatedLanguage === 2) {
+      this.setState({ query: nextProps.translatedText });
+    } else {
+      this.setState({ query: nextProps.query });
     }
   }
 
-  fetchData = () => {
-    const { dispatch, query } = this.props;
+  shouldComponentUpdate(nextProps) {
+    return compare(this.props, nextProps, 'topic', 'query', 'translatedLanguage', 'translatedText');
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    if (nextState.query !== this.state.query) {
+      this.fetchData(nextState.query);
+    }
+  }
+
+  fetchData = (query) => {
+    const { dispatch } = this.props;
     if (!query) {
       return null;
     }

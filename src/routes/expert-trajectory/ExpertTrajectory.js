@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'dva';
-import { loadScript } from 'utils/requirejs';
 import { Button, Modal, Tabs, Table } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import styles from './ExpertTrajectory.less';

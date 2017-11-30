@@ -7,6 +7,8 @@ import { RequireRes } from 'hoc';
 //import { listPersonByIds } from 'services/person'
 import { Helmet } from 'react-helmet';
 import { compare, loadScript, ensure } from 'utils';
+import { Button } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import * as profileUtils from 'utils/profile-utils';
 import GetBMapLib from './utils/BMapLibGai.js';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
@@ -14,7 +16,6 @@ import RightInfoZonePerson from './RightInfoZonePerson';
 import RightInfoZoneAll from './RightInfoZoneAll';
 import styles from './expert-map.less';
 import {
-  findPosition,
   getById,
   toggleRightInfo,
   onResetPersonCard,
@@ -23,10 +24,13 @@ import {
   showTopImages,
   addImageListener,
   syncInfoWindow,
+  backGlobal,
+  isIn,
+  ifIn,
   //findMapFilterRangesByKey,
   findMapFilterHindexRangesByKey,
-  bigAreaConfig,
 } from './utils/map-utils';
+import {findPosition, bigAreaConfig,} from './utils/bigArea-utils';
 import {
   dataCache,
   copyImage,
@@ -70,10 +74,6 @@ export default class ExpertMap extends PureComponent {
     cperson: '', //当前显示的作者的id
   };
 
-  // componentWillMount = () => {
-  //   this.props.dispatch({ type: 'app/requireResource', res: ['BMap'] });
-  // };
-
   componentDidMount() {
     const { dispatch, expertMap } = this.props;
     resetRightInfoToGlobal(dispatch);
@@ -105,7 +105,6 @@ export default class ExpertMap extends PureComponent {
   // EVENTS ---------------------------------------------------------------
 
   // TOOLS ---------------------------------------------------------------
-
   showTop = (usersIds, e, map, maindom, inputids, onLeave) => {
     const { dispatch } = this.props;
     const type = 'baidu';
@@ -134,6 +133,8 @@ export default class ExpertMap extends PureComponent {
     for (let j = 0; j < imgdivs.length; j += 1) {
       const cimg = imgdivs[j];
       cimg.addEventListener('mouseenter', (event) => {
+        ifIn.pop();
+        ifIn.push(true);
         addImageListener(map, ids, getInfoWindow, event, imgwidth, type, '', '', (data) => {
           const pId = data.id;
           const idx = [];
@@ -146,7 +147,16 @@ export default class ExpertMap extends PureComponent {
         });
       });
       cimg.addEventListener('mouseleave', () => {
-        map.closeInfoWindow();
+        ifIn.pop();
+        ifIn.push(false);
+        const imgInterval = setInterval(() => {
+          const flag1 = isIn[isIn.length - 1];
+          const flag2 = ifIn[ifIn.length - 1];
+          if (!flag1 && !flag2) {
+            map.closeInfoWindow();
+            clearInterval(imgInterval);
+          }
+        }, 1000);
       });
     }
   };
@@ -316,6 +326,8 @@ export default class ExpertMap extends PureComponent {
     const { dispatch } = this.props;
     const infoWindow = getInfoWindow();
     marker.addEventListener('mouseover', (e) => {
+      ifIn.pop();
+      ifIn.push(true);
       onResetPersonCard(dispatch); // TODO Load default name,重置其信息
       e.target.openInfoWindow(infoWindow);
       const ids = [];
@@ -333,7 +345,16 @@ export default class ExpertMap extends PureComponent {
       });
     });
     marker.addEventListener('mouseout', (e) => {
-      e.target.closeInfoWindow(infoWindow);
+      ifIn.pop();
+      ifIn.push(false);
+      const markerInterval = setInterval(() => {
+        const flag1 = isIn[isIn.length - 1];
+        const flag2 = ifIn[ifIn.length - 1];
+        if (!flag1 && !flag2) {
+          e.target.closeInfoWindow(infoWindow);
+          clearInterval(markerInterval);
+        }
+      }, 1000);
     });
     marker.addEventListener('click', () => {
       toggleRightInfo('person', personId, dispatch, this.props.expertMap.infoZoneIds);
@@ -342,8 +363,7 @@ export default class ExpertMap extends PureComponent {
 
 
   render() {
-    console.log('|||||||||||||||||||||||||||||||||||||||| test render map;---------------')
-
+    const { dispatch } = this.props;
     const model = this.props && this.props.expertMap;
     const { results } = model.geoData;
     let personPopupJsx;
@@ -376,6 +396,11 @@ export default class ExpertMap extends PureComponent {
       cluster: () => (<RightInfoZoneCluster persons={model.clusterPersons} />),
     };
 
+    let isGlobal = false;
+    if (model.rightInfoType === 'global') {
+      isGlobal = true;
+    }
+
     return (
       <div className={styles.expertMap} id="currentMain">
         <div className={styles.map}>
@@ -403,6 +428,16 @@ export default class ExpertMap extends PureComponent {
                 <div className={styles.item5}>多</div>
               </div>
             </div>
+            {
+              !isGlobal && <div className={styles.backwell}>
+                <div className={styles.back}>
+                  <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.overview" />:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <Button size="small" onClick={backGlobal.bind(this, dispatch, model)}>
+                    <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.goback" />
+                  </Button>
+                </div>
+              </div>
+            }
 
             <div className={styles.scrollable}>
               <div className={styles.border}>

@@ -85,6 +85,8 @@ export default {
   'com.expertMap.headerLine.label.statistic': 'Statistic & Analysis',
   'com.expertMap.headerLine.label.download': 'Export Excel',
   'com.expertMap.headerLine.label.ok': 'OK',
+  'com.expertMap.headerLine.label.overview':'Back To OverView',
+  'com.expertMap.headerLine.label.goback':'Go Back',
   'com.expertTrajectory.theme.label.0': 'Regular',
   'com.expertTrajectory.theme.label.1': 'Business',
   'com.expertTrajectory.theme.label.2': 'Dark',
@@ -132,6 +134,11 @@ export default {
   'com.exportExpert.fields.female': 'Female',
   'com.exportExpert.fields.translate': 'Translate',
   'com.exportExpert.fields.interest': 'Research Interest',
+
+  // feedback
+  'com.feedback.ok.account_created': 'Success',
+  'com.feedback.ok.check_your_mailbox': 'Success, please check email',
+  'com.feedback.user.exists': 'User already exists',
 
   // Recommendation
   'rcd.home.pageTitle': 'Organization List',

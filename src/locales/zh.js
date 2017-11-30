@@ -85,6 +85,8 @@ export default {
   'com.expertMap.headerLine.label.statistic': '统计分析报告',
   'com.expertMap.headerLine.label.download': '导出Excel表',
   'com.expertMap.headerLine.label.ok': '确定',
+  'com.expertMap.headerLine.label.overview':'返回全局总览',
+  'com.expertMap.headerLine.label.goback':'点击返回',
   'com.expertTrajectory.theme.label.0': '常规',
   'com.expertTrajectory.theme.label.1': '商务',
   'com.expertTrajectory.theme.label.2': '黑暗',
@@ -132,6 +134,11 @@ export default {
   'com.exportExpert.fields.female': '女',
   'com.exportExpert.fields.translate': '翻译',
   'com.exportExpert.fields.interest': '研究兴趣',
+
+  // feedback
+  'com.feedback.ok.account_created': '成功',
+  'com.feedback.user.exists': '用户已经存在',
+  'com.feedback.ok.check_your_mailbox': '创建成功，请查收邮件',
 
   // Recommendation
   'rcd.home.pageTitle': '机构列表',

@@ -22,8 +22,11 @@ const plainOptions = ['name', 'gender', 'pos', 'aff', 'h_index', 'activity', 'ne
 
 const defaultCheckedList = plainOptions; // ['name', 'pos', 'aff', 'h_index'];
 
-const mapStateToProps = ({ app, exportExperts }) =>
-  ({ app: { user: app.user, roles: app.roles }, exportExperts });
+const mapStateToProps = ({ app, exportExperts }) => (
+  {
+    app: { user: app.user, roles: app.roles },
+    exportExperts,
+  });
 
 @connect(mapStateToProps)
 @Auth
@@ -96,16 +99,16 @@ export default class ExportExperts extends Component {
         // TODO res拼到data
         size = Math.min(res.total, size);
         if (res && res.result) {
-          res = bridge.toNextPersons(res.result)
+          res = bridge.toNextPersons(res.result);
         } else if (res && res.items) {
-          res = res.items
+          res = res.items;
         } else {
-          console.log('Error')
+          console.log('Error');
         }
         if (offset + 100 < size && i < maxLoop) {
           fetchData(data.concat(res), size, offset + 100, i + 1);
         } else {
-          exportData(data.concat(res))
+          exportData(data.concat(res));
         }
       });
     };
@@ -222,7 +225,6 @@ export default class ExportExperts extends Component {
                   </Checkbox>
                 </Col>
               ))}
-
             </Row>
           </CheckboxGroup>
           <div style={{ height: 20 }}>

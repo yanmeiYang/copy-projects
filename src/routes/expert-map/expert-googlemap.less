@@ -80,6 +80,19 @@
         }
       }
 
+      .backwell {
+        display: flex; flex-direction: column; flex: 0 auto;
+        background-color: #fefefe;
+        word-wrap: break-word; word-break: break-all;
+        border-bottom: #666; padding: 8px 16px 8px 8px;
+        overflow: hidden;
+        .back {
+          display: flex;
+          font-size: @font-size-lg;
+          color: #999999;
+        }
+      }
+
       .scrollable {
         display: flex; flex: 1;height: 50px;
         overflow-y: visible; overflow-x: hidden; overflow-y: scroll;

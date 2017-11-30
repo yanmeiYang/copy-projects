@@ -120,7 +120,7 @@ export default class ExpertBaseExpertsPage extends Component {
 
         <SearchComponent // Example: include all props.
           className={styles.SearchBorder} // additional className
-          sorts={query ? null : this.ebSorts}
+          sorts={sysconfig.Search_SortOptions || (query ? null : this.ebSorts)}
           defaultSortType={sortKey}
           onSearchBarSearch={this.onSearchBarSearch}
           expertBaseId={id}
@@ -129,7 +129,7 @@ export default class ExpertBaseExpertsPage extends Component {
           PersonList_UpdateHooks={sysconfig.PersonList_UpdateHooks}
           rightZoneFuncs={[]}
           showSearchBox={false}
-          disableFilter={!query}
+          disableFilter={sysconfig.Search_DisableFilter || !query}
           disableExpertBaseFilter
           disableSearchKnowledge
         />

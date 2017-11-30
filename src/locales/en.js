@@ -137,6 +137,7 @@ export default {
 
   // feedback
   'com.feedback.ok.account_created': 'Success',
+  'com.feedback.ok.check_your_mailbox': 'Success, please check email',
   'com.feedback.user.exists': 'User already exists',
 
   // Recommendation

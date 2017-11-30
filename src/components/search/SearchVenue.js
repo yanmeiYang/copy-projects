@@ -4,26 +4,44 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Table } from 'antd';
-import { classnames } from 'utils';
+import { classnames, compare } from 'utils';
 import * as strings from 'utils/strings';
-import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
+import { FormattedMessage as FM } from 'react-intl';
 import styles from './SearchVenue.less';
 
 const { Column } = Table;
-@connect(({ searchVenue }) => ({ searchVenue }))
+@connect(({ searchVenue, search }) => ({
+  venues: searchVenue.venues,
+  translatedLanguage: search.translatedLanguage,
+  translatedText: search.translatedText,
+}))
 export default class SearchVenue extends Component {
+  state = { query: '' };
+
   componentWillMount() {
-    this.fetchData();
+    this.fetchData(this.props.query);
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.query !== this.props.query) {
-      this.fetchData();
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.translatedLanguage === 2) {
+      this.setState({ query: nextProps.translatedText });
+    } else {
+      this.setState({ query: nextProps.query });
     }
   }
 
-  fetchData = () => {
-    const { dispatch, query } = this.props;
+  shouldComponentUpdate(nextProps) {
+    return compare(this.props, nextProps, 'venues', 'query', 'translatedLanguage', 'translatedText');
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    if (nextState.query !== this.state.query) {
+      this.fetchData(nextState.query);
+    }
+  }
+
+  fetchData = (query) => {
+    const { dispatch } = this.props;
     if (!query) {
       return null;
     }
@@ -34,14 +52,13 @@ export default class SearchVenue extends Component {
 
   render() {
     const { className } = this.props;
-    const { venues } = this.props.searchVenue;
     return (
       <div className={classnames(styles.searchVenue, className)}>
         <h1>
           <FM id="com.SearchVenue.title" defaultMessage="Conference Rank" />
         </h1>
         <Table bordered size="small" pagination={false}
-               dataSource={venues}>
+               dataSource={this.props.venues}>
           <Column
             dataIndex="name" key="name" title="Short Name"
             className={styles.venueName}
@@ -53,7 +70,7 @@ export default class SearchVenue extends Component {
               return <span dangerouslySetInnerHTML={{ __html: data.info.name }} />;
             }} />
           <Column
-            dataIndex="" key="position" title="H5_Index"
+            dataIndex="" key="h5_index" title="H5_Index"
             render={(data) => {
               return <span>{data.indices.h5_index}</span>;
             }} />

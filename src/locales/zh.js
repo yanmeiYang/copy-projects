@@ -138,6 +138,7 @@ export default {
   // feedback
   'com.feedback.ok.account_created': '成功',
   'com.feedback.user.exists': '用户已经存在',
+  'com.feedback.ok.check_your_mailbox': '创建成功，请查收邮件',
 
   // Recommendation
   'rcd.home.pageTitle': '机构列表',

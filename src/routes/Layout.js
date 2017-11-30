@@ -66,10 +66,6 @@ export default class Layout extends Component {
     showFeedback: sysconfig.GLOBAL_ENABLE_FEEDBACK,
   };
 
-  // state: {
-  //   headerResources: [],
-  // };
-
   componentDidMount() {
     // TODO 这个统计有问题呀 ????
     if (sysconfig.googleAnalytics) {

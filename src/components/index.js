@@ -1,5 +1,5 @@
 // TODO remove unused.
-
+import Hole from './core/Hole';
 import DropOption from './DropOption';
 import Iconfont from './Iconfont';
 import SearchBox from './SearchBox';
@@ -15,8 +15,10 @@ import layer from './layer';
 import Spinner from './Spinner';
 
 export {
-  Layout, ErrorBoundary,
+  Hole,
 
+
+  Layout, ErrorBoundary,
   DropOption,
   Iconfont,
   SearchBox,

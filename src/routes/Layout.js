@@ -82,9 +82,10 @@ export default class Layout extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
+    const { headerResources } = nextProps.app;
     if (
-      (nextProps.app.headerResources !== this.props.app.headerResources) ||
-      (nextProps.app.headerResources && !this.headerResourcesArray)
+      (headerResources !== this.props.app.headerResources) ||
+      (headerResources && !this.headerResourcesArray)
     ) {
       this.headerResourcesArray = [];
       if (headerResources) {

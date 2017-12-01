@@ -1,4 +1,3 @@
-/** Created by Bo Gao on 2017-06-07 */
 import pathToRegexp from 'path-to-regexp';
 import * as pubsService from 'services/publication';
 import * as personService from 'services/person';
@@ -22,7 +21,7 @@ export default {
     * searchPerson({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
       const { query, offset, size } = payload;
-      const { data } = yield call(searchService.searchPerson, query, offset, size);
+      const { data } = yield call(searchService.searchPerson, payload);
       yield put({ type: 'searchPersonSuccess', payload: { data, query } });
     },
 

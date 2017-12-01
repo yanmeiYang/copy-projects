@@ -87,6 +87,9 @@ export default {
   'com.expertMap.headerLine.label.ok': 'OK',
   'com.expertMap.headerLine.label.overview':'Back To OverView',
   'com.expertMap.headerLine.label.goback':'Go Back',
+
+  'com.expertTrajectory.trajectory.title': 'The Query Result Are As Fellows：',
+  'com.expertTrajectory.trajectory.showTraj': 'Show Trajectory',
   'com.expertTrajectory.theme.label.0': 'Regular',
   'com.expertTrajectory.theme.label.1': 'Business',
   'com.expertTrajectory.theme.label.2': 'Dark',

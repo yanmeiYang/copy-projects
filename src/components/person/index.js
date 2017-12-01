@@ -5,7 +5,6 @@ import PersonTags from './PersonTags';
 import ProfileInfo from './profile-info';
 import AminerProfileInfo from './AminerProfileInfo';
 import PersonList from './person-list';
-import PersonListTiny from './person-list-tiny';
 import PersonListLittle from './person-list-little';
 import ExportExperts from './ExportExperts';
 import Information from './PersonInfo';

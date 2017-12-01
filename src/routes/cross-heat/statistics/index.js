@@ -239,7 +239,7 @@ class CrossStatistics extends React.Component {
               <div className={styles.pColor} />
             </div>
             <div className={styles.legend}>
-              <div className={styles.label}>正在计算：</div>
+              <div className={styles.label}>正在分析：</div>
               <div className={styles.lColor} />
             </div>
           </div>

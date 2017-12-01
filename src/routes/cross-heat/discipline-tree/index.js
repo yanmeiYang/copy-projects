@@ -54,32 +54,6 @@ class DisciplineTree extends React.Component {
     return iData;
   }
 
-  // delMoreNode = (data) => {
-  //   const ids = [];
-  //   const listNode = this.getNode(data, []);
-  //   if (listNode.length > maxNodeNum) {
-  //     ids.push(listNode.id);
-  //   }
-  //   if (ids.length > 20) {
-  //     ids.slice(20, ids.length).map((item) => {
-  //       this.delNodeById(data, item.id);
-  //       return true;
-  //     });
-  //   }
-  //   return data;
-  // }
-  //
-  // delNodeById = (dt, id) => {
-  //   if (dt.children) {
-  //     dt.children.map((item, i) => {
-  //       item.id === id ? dt.children.splice(i, 1) : this.delNodeById(item, id);
-  //       return true;
-  //     });
-  //   }
-  //   return dt;
-  // }
-
-
   guid = () => {
     function S4() {
       return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
@@ -213,7 +187,7 @@ class DisciplineTree extends React.Component {
       message.error(errorInfo[0]);
       isOk = false;
     }
-    if (noedeNum > 20) { // 节点树
+    if (noedeNum > 21) { // 节点树
       message.error(errorInfo[1]);
       isOk = false;
     }

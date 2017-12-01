@@ -6,7 +6,6 @@ import ProfileInfo from './profile-info';
 import AminerProfileInfo from './AminerProfileInfo';
 import PersonList from './person-list';
 import PersonListTiny from './person-list-tiny';
-import PersonListLittle from './person-list-little';
 import ExportExperts from './ExportExperts';
 import Information from './PersonInfo';
 import Education from './PersonEducation';
@@ -19,7 +18,7 @@ import AcmCitations from './ACM_Citations';
 module.exports = {
   ProfileInfo,
   AminerProfileInfo,
-  PersonList, PersonListLittle,
+  PersonList,
   Information,
   ExportExperts,
   Education,

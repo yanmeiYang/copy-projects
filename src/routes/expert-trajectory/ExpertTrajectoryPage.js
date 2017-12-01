@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
+import { sysconfig } from 'systems';
 import { routerRedux } from 'dva/router';
-import { Layout, Button, Icon, Menu, Dropdown, Modal } from 'antd';
+import { Layout, Button, Icon, Menu, Dropdown, Modal, notification } from 'antd';
 import { Layout as Page } from 'routes';
 import { FormattedMessage as FM } from 'react-intl';
 import bridge from 'utils/next-bridge';
 import styles from './ExpertTrajectoryPage.less';
-import { PersonListLittle } from '../../components/person';
 import { PersonList } from '../../components/person';
 import { theme, applyTheme } from 'themes';
 import ExpertTrajectory from './ExpertTrajectory';
@@ -41,14 +41,17 @@ class ExpertTrajectoryPage extends React.Component {
 
   componentWillMount() {
     const { query } = this.state;
-    const q = query || '唐杰'; //设置一个默认值
+    const q = query || ''; //设置一个默认值
     this.setState({
       query: q,
     });
   }
 
   componentDidMount() {
-    //this.callSearchMap(this.state.query);
+    const { query } = this.state;
+    if ((query === '' || query === '-')) {
+      this.openNotification();
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) { // 状态改变时判断要不要刷新
@@ -89,13 +92,13 @@ class ExpertTrajectoryPage extends React.Component {
       visible: true,
     }, () => {
       const chartsinterval = setInterval(() => {
-        const divId = document.getElementById('bycountries');
-        const data = this.props.expertTrajectory.results;
+        const divId = document.getElementById('statistic');
+        const data = this.state.cperson;
         console.log(data);
         if ((typeof (divId) !== 'undefined' && divId !== 'undefined'
-          && typeof (data.results) !== 'undefined' && data.results !== 'undefined')
-        || (this.state.visible === false)) {
+          && data !== '') || (this.state.visible === false)) {
           clearInterval(chartsinterval);
+          console.log('######################################');
           //showSta(echarts, divId, data, 'country');
         }
       }, 100);
@@ -117,6 +120,19 @@ class ExpertTrajectoryPage extends React.Component {
     const personId = person.id;
     this.props.dispatch({ type: 'expertTrajectory/findTrajById', payload: { personId, start, end } });
     this.setState({ cperson: person });
+  };
+
+  openNotification = () => {
+    let [message, description] = ['', ''];
+    sysconfig.Locale === 'en' ? [message, description] = ['Attention Please!', 'You have an invalid keyword!Please select a domain keyword or type a keyword to see what you want!'] : [message, description] = ['请注意！', '您当前的搜索词为空，请您输入选择一个搜索词或者领域进行搜索！'];
+    console.log(message);
+    console.log(description);
+    // notification.open({
+    //   message: message,
+    //   description: description,
+    //   duration: 8,
+    //   icon: <Icon type="smile-circle" style={{ color: '#108ee9' }} />,
+    // });
   };
 
   onSkinClick = (value) => {
@@ -218,7 +234,7 @@ class ExpertTrajectoryPage extends React.Component {
                   ]}
                   width="700px"
                 >
-                  <div>dddddddddddddd</div>
+                  <div id="statistic">dddddddddddddd</div>
                 </Modal>
               </div>
               <div className={styles.play}>

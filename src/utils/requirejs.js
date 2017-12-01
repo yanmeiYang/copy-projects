@@ -228,6 +228,7 @@ const hasValue = (check) => {
   }
 };
 
+// TODO deprecated.
 const loadBMap = (cb) => {
   loadScript('BMapLib', { check: 'BMap' }, cb);
 };

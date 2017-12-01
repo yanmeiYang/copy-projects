@@ -56,6 +56,7 @@ export default class SearchSorts extends PureComponent {
         })}
       </div>;
 
+    // TODO but div???
     const rightZoneJSX = <Hole fill={rightZone} param={{ sortType }} />;
 
     return (

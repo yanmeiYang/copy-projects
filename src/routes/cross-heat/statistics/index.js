@@ -69,7 +69,10 @@ class CrossStatistics extends React.Component {
     if (data) {
       top5 = this.getTop(data, nodeData);
     }
-    const boost = detail.EmptyNation.authorsCount / (detail.authorsCount - detail.EmptyNation.authorsCount);
+    let boost = detail.authorsCount - detail.EmptyNation.authorsCount;
+    if (boost) {
+      boost = detail.EmptyNation.authorsCount / boost;
+    }
     return (
       <div className={styles.statistics}>
         <div>

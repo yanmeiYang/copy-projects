@@ -1,84 +1,110 @@
 .page {
-
-}
-
-.header {
-  display: flex;
-  flex-direction: row;
-  -webkit-box-pack: justify;
-  justify-content: space-between;
-  margin: -15px 0px 0px 0px;
-
-  .setting {
-    display: -webkit-box;
-    display: flex;
-    flex: 2;
-    -webkit-box-align: baseline;
-    align-items: baseline;
-    align-self: center;
-    -webkit-box-pack: justify;
-    justify-content: flex-end;
-
-    .yourSkin {
-      margin: 5px 0px 10px 120px;
-      :global {
-        a.ant-dropdown-link{
-          padding: 5px 10px;
-          font-size: 14px;
-          font-family: inherit;
-          border: solid 1px #3e9bc9;
-          font-weight: 500;
-          text-align: center;
-          line-height: 1.15;
-          height: 28px;
-          display: inline-block;
-          touch-action: manipulation;
-          cursor: pointer;
-          white-space: nowrap;
-          user-select: none;
-          transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-          position: relative;
-          color: #1d2129;
-          background-color: #fff;
+  .leftPart {
+    min-height: 600px;
+    float: left;
+    .title {
+      width: 400px;
+      border-top: solid 1px #ddd;
+      border-left: solid 1px #ddd;
+      border-right: solid 1px #ddd;
+      -webkit-box-shadow: 0 2px 6px rgba(200, 200, 200, 0.4);
+      border-radius: 2px;
+      background: #fff;
+      max-width: 700px !important;
+      flex: 0 0 400px !important;
+      .innerTitle {
+        padding: 5px 15px 5px 15px;
+        font-weight: 500;
+        line-height: 35px;
+        font-size: 16px;
+        color: #333;
+      }
+    }
+    .hrStyle {
+      width: 380px;
+      margin: 0 10px;
+    }
+    .experts {
+      .left{
+        width: 100%;
+        overflow: auto;
+        border-bottom: solid 1px #ddd;
+        border-left: solid 1px #ddd;
+        border-right: solid 1px #ddd;
+        background: #fff;
+        max-width: 700px !important;
+        flex: 0 0 400px !important;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        a {
+          word-wrap: break-word;
         }
       }
-
     }
-
-    .statics {
-      margin: 5px 0px 10px 0px;
+  }
+  .rightPart {
+    min-height: 600px;
+    float: right;
+    .header {
+      float: right;
+      width: 100%;
+      .statics {
+        margin: 5px 50px 0px 50px;
+        float: right;
+      }
+      .yourSkin {
+        margin: 5px 10px 10px 50px;
+        float: right;
+        :global {
+          a.ant-dropdown-link{
+            padding: 5px 10px;
+            font-size: 14px;
+            font-family: inherit;
+            border: solid 1px #3e9bc9;
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.15;
+            height: 28px;
+            display: inline-block;
+            touch-action: manipulation;
+            cursor: pointer;
+            white-space: nowrap;
+            user-select: none;
+            transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+            position: relative;
+            color: #1d2129;
+            background-color: #fff;
+          }
+        }
+      }
+      .play {
+        margin: 5px 50px 10px 50px;
+        float: right;
+      }
     }
-
+    .trajShow {
+      float: right;
+      .right{
+        .content{
+          background: #fff;
+        }
+      }
+    }
   }
 }
 
-.experts {
-  .left{
-    display: flex;
-    flex: 3;
-    overflow: scroll;
-    border-top: solid 1px #ddd;
-    border-bottom: solid 1px #ddd;
-    box-shadow: 0 0 18px rgba(2, 2, 2, 0.1) inset;
-    background: #fff;
-    border: 1px red !important;
-    max-width: 400px !important;
-    flex: 0 0 320px !important;
-    padding-top: 8px;
-    padding-bottom: 8px;
+.clickTraj {
+  border-top: none;
+  -webkit-box-shadow: 2px 6px rgba(200, 200, 200, 0.4);
+  box-shadow: 0 2px 6px rgba(200, 200, 200, 0.4);
+  border-radius: 2px;
+  margin-top: -17px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  .innerClickTraj {
+    padding: 15px 15px 15px 15px;
+    .but {
+      border: dashed 1px #bbe920;
+    }
   }
 }
-
-.right{
-  width: 900px;
-  padding: 0px;
-
-  .content{
-    padding: 0px;
-    background: #fff;
-    margin: 0px;
-  }
-}
-
-
-

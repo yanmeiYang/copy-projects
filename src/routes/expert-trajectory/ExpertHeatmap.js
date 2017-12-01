@@ -3,7 +3,10 @@ import { connect } from 'dva';
 import { Slider, InputNumber, Row, Col, Button } from 'antd';
 import { Spinner } from 'components';
 import { request, queryURL } from 'utils';
+import { Auth, RequireRes } from 'hoc';
+import { detectSavedMapType, compare, ensure } from 'utils';
 import styles from './ExpertHeatmap.less';
+
 import {
   showChart,
   load,
@@ -26,6 +29,7 @@ const trajData = []; //{coords:[[lng,lat],[lng,lat]],...,coords:[[lng,lat],[lng,
 let trajInterval;
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
+@RequireRes('BMap')
 class ExpertHeatmap extends React.Component {
   constructor(props) {
     super(props);
@@ -99,16 +103,18 @@ class ExpertHeatmap extends React.Component {
   };
 
   initChart = () => {
-    load((echarts) => {
-      const chart = getMyChart(echarts);
-      const skinType = 0;
-      showChart(chart, 'bmap', skinType);
-      if (typeof (this.props.data.data) === 'undefined') {
-        console.log('Try to click one person!');
-      } else { //为以后将ExpertTrajectory做组件使用
-        this.processData(this.props.data);
-        this.loadHeat(2000);
-      }
+    ensure('BMap', (BMap) => {
+      load((echarts) => {
+        const chart = getMyChart(echarts);
+        const skinType = 0;
+        showChart(chart, 'bmap', skinType);
+        if (typeof (this.props.data.data) === 'undefined') {
+          console.log('Try to click one person!');
+        } else { //为以后将ExpertTrajectory做组件使用
+          this.processData(this.props.data);
+          this.loadHeat(2000);
+        }
+      });
     });
   };
 

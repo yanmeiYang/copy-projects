@@ -22,6 +22,7 @@ export default class TranslateSearchMessage extends PureComponent {
   onOrderChange = (e) => {
     if (this.props.onOrderChange) {
       this.props.onOrderChange(e);
+      console.log('=====', e);
     }
   };
 
@@ -29,6 +30,7 @@ export default class TranslateSearchMessage extends PureComponent {
     const { doTranslateSearch } = this.props;
     if (doTranslateSearch) {
       doTranslateSearch(useTranslate);
+      console.log('====', useTranslate);
     }
   };
 

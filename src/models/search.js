@@ -23,13 +23,15 @@ export default {
     searchSuggests: null,
 
     // use translate search? TODO replace with Intelligence Search.
-    useTranslateSearch: sysconfig.Search_EnableTranslateSearch && !sysconfig.Search_EnableSmartSuggest && sysconfig.Search_DefaultTranslateSearch,
+    useTranslateSearch: sysconfig.Search_EnableTranslateSearch &&
+    !sysconfig.Search_EnableSmartSuggest && sysconfig.Search_DefaultTranslateSearch,
     translatedLanguage: 0, // 1 en to zh; 2 zh to en;
     translatedText: '',
 
     // Intelligence search.
     intelligenceSearchMeta: {}, // {expand:<word>, translated:<word>, kg:[<word>,...]}
     intelligenceSuggest: null,
+    kg: null,
 
     // pager
     offset: 0,
@@ -105,11 +107,9 @@ export default {
         useTranslateSearch, // TODO remove
       };
       const data = yield call(searchService.searchPerson, params);
-
       if (process.env.NODE_ENV !== 'production') {
-        console.log('data:::', data);
         if (data && data.data && data.data.queryEscaped) {
-          console.warn('DEVELOPMENT ONLY MESSAGE: Query中有非法字符，已经过滤。详情：宋驰没告诉我!',);
+          console.warn('DEVELOPMENT ONLY MESSAGE: Query中有非法字符，已经过滤。详情：宋驰没告诉我!');
           notification.open({
             message: 'DEVELOPMENT ONLY MESSAGE',
             description: 'Query中有非法字符，已经过滤。详情：宋驰没告诉我!',
@@ -141,11 +141,20 @@ export default {
             }
           }
         }
+<<<<<<< Updated upstream
         if (!ghost) {
           yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data, query } });
         } else {
           return data.data;
         }
+=======
+        yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data, query } });
+        yield put({
+          type: 'getIntellResultsSuccess',
+          payload: { data: data.data.intellResults },
+        });
+        yield put({ type: 'getKgSuccess', payload: { data: data.data.intellResults } });
+>>>>>>> Stashed changes
       } else if (data.data && data.data.result) {
         if (!ghost) {
           yield put({ type: 'searchPersonSuccess', payload: { data: data.data, query, total } });
@@ -178,7 +187,6 @@ export default {
         }
       }
     },
-
     * searchPersonAgg({ payload }, { call, put, select }) {
       const { query, offset, size, filters, sort } = payload;
       const noTotalFilters = {};
@@ -213,7 +221,6 @@ export default {
         console.error(err);
       }
     },
-
   },
 
   reducers: {
@@ -258,14 +265,12 @@ export default {
       const { result } = data;
       const currentTotal = total || data.total;
       const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
-      // console.log('::', toNextPersons(result));
       return {
         ...state,
         results: query === '-' ? null : bridge.toNextPersons(result),
         pagination: { pageSize: state.pagination.pageSize, total: currentTotal, current },
       };
     },
-
     nextSearchPersonSuccess(state, { payload: { data, query } }) {
       if (!data) {
         return state;
@@ -305,7 +310,6 @@ export default {
       if (!data) {
         return state;
       }
-      console.log('**************', data);
       const aggs = bridge.toNextAggregation(data.aggs);
       return { ...state, aggs };
     },
@@ -327,6 +331,12 @@ export default {
     setTranslateSearch(state, { payload: { useTranslate } }) {
       return { ...state, useTranslateSearch: useTranslate };
     },
+    setIntelligenceSearch(state, { payload: { intelligenceSearchMeta } }) {
+      return {
+        ...state,
+        intelligenceSearchMeta,
+      };
+    },
 
     clearTranslateSearch(state) {
       return { ...state, useTranslateSearch: true, translatedText: '' };
@@ -335,7 +345,9 @@ export default {
     getTopicByMentionSuccess(state, { payload: { data } }) {
       return { ...state, topic: data.data };
     },
-
+    getIntellResultsSuccess(state, { payload: { data } }) {
+      return { ...state, intelligenceSuggest: data };
+    },
   },
 };
 

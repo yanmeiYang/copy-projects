@@ -1,16 +1,15 @@
-/*
- * created by Xinyi Xu on 2017-8-16.
- */
 import React from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
 import { routerRedux } from 'dva/router';
-import { applyTheme } from 'themes';
 import { Layout, Button, Icon, Menu, Dropdown } from 'antd';
 import { Layout as Page } from 'routes';
 import { FormattedMessage as FM } from 'react-intl';
+import bridge from 'utils/next-bridge';
 import styles from './ExpertTrajectoryPage.less';
 import { PersonListLittle } from '../../components/person';
+import { PersonList } from '../../components/person';
+import { theme, applyTheme } from 'themes';
 import ExpertTrajectory from './ExpertTrajectory';
 
 const { Content, Sider } = Layout;
@@ -26,7 +25,7 @@ const themes = [
 ];
 
 
-@connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
+@connect(({ expertTrajectory, loading, app }) => ({ expertTrajectory, loading, app }))
 class ExpertTrajectoryPage extends React.Component {
   constructor(props) {
     super(props);
@@ -49,17 +48,21 @@ class ExpertTrajectoryPage extends React.Component {
   }
 
   componentDidMount() {
-    this.callSearchMap(this.state.query);
+    //this.callSearchMap(this.state.query);
   }
 
   shouldComponentUpdate(nextProps, nextState) { // 状态改变时判断要不要刷新
     if (nextState.query && nextState.query !== this.state.query) {
       this.callSearchMap(nextState.query);
     }
+    if (nextProps.expertTrajectory.results && nextProps.expertTrajectory.results !== this.props.expertTrajectory.results) {
+      return true;
+    }
     return true;
   }
 
   onSearch = (data) => {
+    this.callSearchMap(data.query);
     if (data.query) {
       this.setState({ query: data.query });
       this.props.dispatch(routerRedux.push({
@@ -88,10 +91,12 @@ class ExpertTrajectoryPage extends React.Component {
 
   render() {
     const persons = this.props.expertTrajectory.results;
+    const results = bridge.toNextPersons(persons);
     const { query, themeKey } = this.state;
     const currentTheme = themes.filter(theme => theme.key === themeKey);
 
-    const wid = document.body.clientHeight - 210;
+    const divHeight = document.body.clientHeight - 210;
+    const divWidth = document.body.clientWidth;
     const menu = (
       <Menu onClick={this.onSkinClick}>
         {themes && themes.map((theme) => {
@@ -103,41 +108,70 @@ class ExpertTrajectoryPage extends React.Component {
         })}
       </Menu>
     );
+    const PersonList_BottomZone = [
+      param => (
+        <div key={param.person.id} className={styles.clickTraj}>
+          <div className={styles.innerClickTraj}>
+            <Button type="dashed" className={styles.but}>
+              <FM defaultMessage="Show Trajectory" id="com.expertMap.headerLine.label.showTraj" />
+            </Button>
+          </div>
+        </div>),
+    ];
+    const personShowIndices = ['h_index', 'citations', 'activity'];
     return (
       <Page contentClass={tc(['ExpertTrajectoryPage'])} onSearch={this.onSearch}
             query={query}>
-        <div className={styles.header}>
-          <div className={styles.setting}>
-            <div className={styles.statics}>
-              <Button onClick={this.showModal}>
-                <Icon type="line-chart" />
-                <FM defaultMessage="Trajectory Statistic" id="com.expertMap.headerLine.label.statistic" />
-              </Button>
+        <div className={styles.page}>
+          <div className={styles.leftPart}>
+            <div className={styles.title}>
+              <div className={styles.innerTitle}>
+                <FM defaultMessage="Query Result" id="com.expertTrajectory.trajectory.title" />
+              </div>
             </div>
-            <div className={styles.yourSkin}>
-              <Dropdown overlay={menu} className={styles.skin}>
-                <a className="ant-dropdown-link" href="#theme">
-                  <Icon type="skin" />
-                  {currentTheme && currentTheme.length > 0 &&
-                  <FM defaultMessage={currentTheme[0].label} id={`com.expertTrajectory.theme.label.${currentTheme[0].key}`} />
-                  }
-                </a>
-              </Dropdown>
+            <hr className={styles.hrStyle}/>
+              <Layout className={styles.experts}>
+                <Sider className={styles.left} style={{ height: divHeight }}>
+                  <PersonList
+                    className={styles.personList}
+                    persons={results}
+                    user={this.props.app.user}
+                    rightZoneFuncs={[]}
+                    bottomZoneFuncs={PersonList_BottomZone}
+                    type="tiny"
+                    showIndices={personShowIndices}
+                  />
+                </Sider>
+              </Layout>
+          </div>
+          <div className={styles.rightPart} style={{width: divWidth - 600}}>
+            <div className={styles.header}>
+              <div className={styles.yourSkin}>
+                <Dropdown overlay={menu} className={styles.skin}>
+                  <a className="ant-dropdown-link" href="#theme">
+                    <Icon type="skin" />
+                    {currentTheme && currentTheme.length > 0 &&
+                    <FM defaultMessage={currentTheme[0].label} id={`com.expertTrajectory.theme.label.${currentTheme[0].key}`} />
+                    }
+                  </a>
+                </Dropdown>
+              </div>
+              <div className={styles.statics}>
+                <Button onClick={this.showModal}>
+                  <Icon type="line-chart" />
+                  <FM defaultMessage="Trajectory Statistic" id="com.expertMap.headerLine.label.statistic" />
+                </Button>
+              </div>
+
+            </div>
+            <div className={styles.trajShow}>
+              <Layout className={styles.right} style={{width: divWidth - 600}}>
+                <Content className={styles.content}>
+                  <ExpertTrajectory person={this.state.cperson} themeKey={themeKey} />
+                </Content>
+              </Layout>
             </div>
           </div>
-        </div>
-        <div className={classnames('content-inner', styles.page)}>
-          <Layout className={styles.experts}>
-            <Sider className={styles.left} style={{ height: wid }}>
-              <PersonListLittle persons={persons}
-                                onClick={this.onPersonClick.bind(this, 1900, 2017)} />
-            </Sider>
-            <Layout className={styles.right}>
-              <Content className={styles.content}>
-                <ExpertTrajectory person={this.state.cperson} themeKey={themeKey} />
-              </Content>
-            </Layout>
-          </Layout>
         </div>
       </Page>
     );

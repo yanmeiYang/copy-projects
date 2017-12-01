@@ -1,6 +1,3 @@
-/*
- * created by ???? on 2017-??-??.
- */
 import React from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';

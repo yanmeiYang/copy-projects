@@ -112,7 +112,7 @@ class ExpertTrajectoryPage extends React.Component {
       param => (
         <div key={param.person.id} className={styles.clickTraj}>
           <div className={styles.innerClickTraj}>
-            <Button type="dashed" className={styles.but}>
+            <Button type="dashed" className={styles.but} onClick={this.onPersonClick.bind(this,1900,2017, param.person)}>
               <FM defaultMessage="Show Trajectory" id="com.expertMap.headerLine.label.showTraj" />
             </Button>
           </div>
@@ -144,7 +144,7 @@ class ExpertTrajectoryPage extends React.Component {
                 </Sider>
               </Layout>
           </div>
-          <div className={styles.rightPart} style={{width: divWidth - 600}}>
+          <div className={styles.rightPart} style={{width: divWidth - 450}}>
             <div className={styles.header}>
               <div className={styles.yourSkin}>
                 <Dropdown overlay={menu} className={styles.skin}>
@@ -165,7 +165,7 @@ class ExpertTrajectoryPage extends React.Component {
 
             </div>
             <div className={styles.trajShow}>
-              <Layout className={styles.right} style={{width: divWidth - 600}}>
+              <Layout className={styles.right} style={{width: divWidth - 450}}>
                 <Content className={styles.content}>
                   <ExpertTrajectory person={this.state.cperson} themeKey={themeKey} />
                 </Content>

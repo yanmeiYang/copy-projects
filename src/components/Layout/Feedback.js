@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { Affix, Button, Popover, Form, Input } from 'antd';
+import classnames from 'classnames';
 import { connect } from 'dva';
 import { compare } from 'utils/compare';
 import styles from './Feedback.less';
@@ -13,6 +14,7 @@ const { TextArea } = Input;
 class Feedback extends React.Component {
   state = {
     visible: false,
+    formFocus: false,
   };
 
 // componentDidUpdate(prevProps) {
@@ -42,39 +44,48 @@ class Feedback extends React.Component {
     });
   };
   closePopover = () => {
-    this.setState({
-      visible: false,
-    });
+    this.setState({ visible: false });
   };
   openPopover = () => {
-    this.setState({
-      visible: true,
-    });
+    this.setState({ visible: true, formFocus: false });
   };
   mouseLeave = () => {
-    let values = this.props.form.getFieldsValue();
+    const values = this.props.form.getFieldsValue();
     if (!values.email && !values.content) {
-      this.setState({
-        visible: false,
-      })
+      this.setState({ visible: false });
     }
   };
+  setFormMouseOUt = () => {
+    this.setState({ formFocus: true });
+  };
+  feedbackBtn = () => {
+    setTimeout(() => {
+      if (this.state.formFocus) {
+        this.setState({ visible: true });
+      } else {
+        this.setState({ visible: false });
+      }
+    }, 200);
+
+  };
+
 
   render() {
     const { getFieldDecorator, validateFieldsAndScroll } = this.props.form;
 
+    const { formFocus } = this.state;
     const load = this.props.loading.effects['app/setFeedback'];
 
     const content = (
       <Form onSubmit={this.handleSubmit} className={styles.feedbackForm}
-            onMouseLeave={this.mouseLeave}>
+            onMouseLeave={this.mouseLeave} onMouseOver={this.setFormMouseOUt}>
         <span>请输入您的email和问题或建议,我们会及时的处理你的宝贵意见：</span>
         <FormItem
         >
           {getFieldDecorator('email', {
             rules: [{ type: 'email', message: '邮箱格式错误!' }],
           })(
-            <Input placeholder="请输入您的email!" className={styles.inputBox} />,
+            <Input placeholder="请输入您的email!" className={styles.inputBox} autoComplete="off" />,
           )}
         </FormItem>
         <FormItem
@@ -99,15 +110,15 @@ class Feedback extends React.Component {
     const title = (
       <div className={styles.titleBox}>
         <span>Feedback</span>
-        <i class="fa fa-times" onClick={this.closePopover} />
+        <i className={classnames(styles.deleteBtn, 'fa', 'fa-times')} onClick={this.closePopover} />
       </div>
     );
     return (
-      <Affix offsetBottom={20} className={styles.affixFeedback}>
-        <Popover placement="topRight" content={content}
+      <Affix offsetBottom={25} className={styles.affixFeedback}>
+        <Popover placement="topLeft" content={content}
                  title={title} visible={this.state.visible}>
-          <Button icon="fa-smile-o" type="primary" loading={load} size="large"
-                  onMouseOver={this.openPopover}>
+          <Button icon="fa-smile-o" type="primary" loading={load} size="large" className={styles.fdBtn}
+                  onMouseOver={this.openPopover} onMouseOut={this.feedbackBtn}>
             {!load &&
             <span>
               <i className="fa fa-smile-o" style={{ fontWeight: 'bold' }} /> &nbsp;

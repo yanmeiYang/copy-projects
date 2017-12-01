@@ -66,10 +66,6 @@ export default class Layout extends Component {
     showFeedback: sysconfig.GLOBAL_ENABLE_FEEDBACK,
   };
 
-  // state: {
-  //   headerResources: [],
-  // };
-
   componentDidMount() {
     // TODO 这个统计有问题呀 ????
     if (sysconfig.googleAnalytics) {
@@ -138,10 +134,7 @@ export default class Layout extends Component {
           <link rel="stylesheet" href="/fa/css/font-awesome.min.css" />
 
           {this.headerResourcesArray && this.headerResourcesArray.length > 0 &&
-          this.headerResourcesArray.map((item) => {
-            console.log('|||  ', item);
-            return item;
-          })}
+          this.headerResourcesArray}
 
           {/*{href.indexOf('/lab/knowledge-graph-widget') > 0 &&*/}
           {/*<link rel="stylesheet"*/}

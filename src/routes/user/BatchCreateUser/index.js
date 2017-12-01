@@ -38,15 +38,18 @@ class BatchCreateUser extends React.Component {
       if (!err) {
         const tempUsers = (values.data && values.data.trim().split('\n')) || [];
         const users = (values.data && values.data.trim().split('\n')) || [];
-        const payload = { gender: 3, position: 8, sub: true, last_name: '', ghost: true };
+        const payload = {
+          gender: 3, position: 8,
+          last_name: '', password: '',
+          sub: true, ghost: true,
+        };
 
         // 循环创建用户
         const fetchData = (data, i, overallLength, results) => {
           const currentUser = data[0].split(/[;；]/g);
-          if (currentUser.length > 2) {
+          if (currentUser.length > 1) {
             payload.first_name = currentUser[0].trim();
             payload.email = currentUser[1].trim();
-            payload.password = currentUser[2].trim();
           }
           that.setState({ loading: true });
           this.props.dispatch({ type: 'auth/createUser', payload: { ...payload } })
@@ -86,10 +89,10 @@ class BatchCreateUser extends React.Component {
         </div>
         <div className={styles.note}>
           <span>
-            每个用户必须有name、email、password三个值，并且之间用半圆角分号分隔；多用户之间用回车分隔。例如：
+            每个用户必须有name、email两个值，并且之间用半圆角分号分隔；多用户之间用回车分隔。例如：
           </span>
-          <p>name;email;password</p>
-          <p>name1;email1;password1</p>
+          <p>name;email</p>
+          <p>name1;email1</p>
         </div>
 
         <Form onSubmit={this.registered}>
@@ -101,7 +104,7 @@ class BatchCreateUser extends React.Component {
             }
           </FormItem>
           <FormItem className={styles.footerBtn}>
-            <Button type="primary" loading={loading} onClick={this.registered} >
+            <Button type="primary" loading={loading} onClick={this.registered}>
               批量创建用户
             </Button>
           </FormItem>

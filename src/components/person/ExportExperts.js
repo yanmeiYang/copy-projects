@@ -22,8 +22,11 @@ const plainOptions = ['name', 'gender', 'pos', 'aff', 'h_index', 'activity', 'ne
 
 const defaultCheckedList = plainOptions; // ['name', 'pos', 'aff', 'h_index'];
 
-const mapStateToProps = ({ app, exportExperts }) =>
-  ({ app: { user: app.user, roles: app.roles }, exportExperts });
+const mapStateToProps = ({ app, exportExperts }) => (
+  {
+    app: { user: app.user, roles: app.roles },
+    exportExperts,
+  });
 
 @connect(mapStateToProps)
 @Auth
@@ -222,7 +225,6 @@ export default class ExportExperts extends Component {
                   </Checkbox>
                 </Col>
               ))}
-
             </Row>
           </CheckboxGroup>
           <div style={{ height: 20 }}>

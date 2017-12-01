@@ -1,13 +1,29 @@
 .feedbackForm {
   width: 360px;
   .submitBtn {
-    text-align: right;
     margin-bottom: 10px;
+    text-align: right;
+  }
+  .inputBox {
+    margin-top: 7px;
   }
 }
 
 .affixFeedback {
-  text-align: right;
   height: 0px;
-  margin-right: 20px;
+  position: fixed;
+  right: 20px;
+  bottom: -10px;
+}
+
+:global {
+  .ant-popover-title {
+    font-size: 14px;
+  }
+}
+
+.titleBox {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

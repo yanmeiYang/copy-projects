@@ -11,6 +11,12 @@ class PublicationList extends React.Component {
     const pubs = this.props.pubs;
     const MaxAuthorNumber = 10;
 
+    let pubLinkTargle = '';
+    if (this.props.pubLinkTargle === true) {
+      pubLinkTargle = '_blank';
+    }
+
+
     return (
       <div className={styles.publist}>
         <ul>{pubs && pubs.map((item, pubindex) => {
@@ -58,7 +64,8 @@ class PublicationList extends React.Component {
                     return (
                       <span key={authorUniqueKey}>
                         {author.id &&
-                        <a href={personService.getProfileUrl(author.name, author.id)}>
+                        <a href={personService.getProfileUrl(author.name, author.id)}
+                           target={pubLinkTargle}>
                           {author.name}
                         </a>
                         }

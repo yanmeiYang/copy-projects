@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Tag, Tabs } from 'antd';
 import classnames from 'classnames';
+import { Hole } from 'components';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { compare } from 'utils/compare';
 import { hole } from 'utils';
@@ -48,12 +49,14 @@ export default class SearchSorts extends PureComponent {
     }
 
     // render rightZone
-    const rightZoneJSX = rightZone && rightZone.length > 0 &&
+    const rightZoneJSXs = rightZone && rightZone.length > 0 &&
       <div className={styles.exportButtonZone}>
         {rightZone && rightZone.length > 0 && rightZone.map((block) => {
           return block && block({ sortType });
         })}
       </div>;
+
+    const rightZoneJSX = <Hole fill={rightZone} param={{ sortType }} />;
 
     return (
       <Tabs

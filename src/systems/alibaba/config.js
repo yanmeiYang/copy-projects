@@ -28,6 +28,7 @@ module.exports = {
   //
   Enable_Export: true,
   ShowRegisteredRole: false, // 注册页面是否显示角色配置
+  UserInfo_Batch_Signup: true,
 
   // SearchPagePrefix: 'uniSearch', // search - 普通搜索(deleted); uniSearch - 多合一搜索.
   Search_EnablePin: false,

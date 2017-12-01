@@ -77,7 +77,7 @@ const mergeLibs = (resources, keys) => {
 // TODO non-liner interval check.
 const ensureConfig = {
   tryTimes: 200,
-  interval: 100,
+  interval: 80,
 };
 
 const ensure = (libs, success, failed) => {
@@ -92,7 +92,7 @@ const ensure = (libs, success, failed) => {
   // set interval check.
   let n = 0;
   const mapInterval = setInterval(() => {
-    console.log('check...', libs, n);
+    // console.log('check...', libs, n);
     if (checkWindow(libs)) {
       clearInterval(mapInterval);
       if (success) {
@@ -101,8 +101,12 @@ const ensure = (libs, success, failed) => {
       return;
     }
     n += 1;
+    if (n === 10) {
+      console.warn('Warning! Loading script slow. ', libs);
+    }
     if (n >= ensureConfig.tryTimes) {
       clearInterval(mapInterval);
+      console.error('Error! Loading script failed. ', libs);
       if (failed) {
         failed();
       }

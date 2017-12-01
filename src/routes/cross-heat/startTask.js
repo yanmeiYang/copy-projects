@@ -27,7 +27,7 @@ const descripts = [
   '请输入领域一生成知识图谱，例如：artificial intelligence',
   '请输入领域一生成知识图谱，例如：health care',
 ];
-const errorInfo = ['学科数量必须在3～20之间，请您手动添加学科', '学科数量必须在3～20之间，请您手动删除学科'];
+const errorInfo = ['学科数量必须在3～20之间，请添加子领域或返回上一步重新输入', '学科数量必须在3～20之间，请删减后提交', '领域值不能为空或者特殊字符，请输入正确领域名称后再提交'];
 const crossTooltip = '请注意笛卡尔智能分析是对两个领域的各个子领域进行交叉分析，耗时根据领域知识图谱的大小而定，时长可能达到几到几十小时，请耐心等待。';
 const getSuggestionValue = suggestion => suggestion.phrase;
 const renderSuggestion = suggestion => suggestion.phrase;
@@ -113,7 +113,7 @@ class StartTask extends React.Component {
     const two = (cur === 4 && queryTwo === '');
     let isChange = true;
     if (one || two) {
-      message.error('领域值不能为空或者特殊字符');
+      message.error(errorInfo[2]);
       isChange = false;
     }
 
@@ -222,7 +222,7 @@ class StartTask extends React.Component {
 
   getCandidate = (key, id) => {
     const area = key.replace(/ /g, '_');
-    const params = { id, area, k: 5, depth: 4 };
+    const params = { id, area, k: 5, depth: 2 };
     this.props.dispatch({ type: 'crossHeat/getDiscipline', payload: params });
   }
 
@@ -239,6 +239,11 @@ class StartTask extends React.Component {
 
   drop = (event) => {
     event.preventDefault();
+  }
+
+  // todo
+  delTreeNode=()=>{
+    console.log("================");
   }
 
 
@@ -288,15 +293,16 @@ class StartTask extends React.Component {
         }
         { current === 2 &&
         <div className={styles.contentTree}>
-          <DisciplineTree id="queryOne" isSearch={this.oneInputChange} query={queryOne} isEdit />
+          <DisciplineTree id="queryOne" delTreeNode={this.delTreeNode} isSearch={this.oneInputChange} query={queryOne} isEdit />
           <div draggable className={styles.drag}>
             {oneList && oneList.map((item, index) => {
               return (
-                <div key={index} className={styles.drapItem}>
-                  <span draggable
-                        onDrop={this.drop}
-                        onDragStart={this.dragStart}
-                        id={item}>{item}
+                <div draggable key={index} className={styles.drapItem}>
+                  <span
+                    draggable
+                    onDrop={this.drop}
+                    onDragStart={this.dragStart}
+                    id={item}>{item}
                   </span>
                 </div>
               );

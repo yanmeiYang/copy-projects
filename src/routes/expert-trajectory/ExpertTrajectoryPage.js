@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 import classnames from 'classnames';
 import { routerRedux } from 'dva/router';
-import { Layout, Button, Icon, Menu, Dropdown } from 'antd';
+import { Layout, Button, Icon, Menu, Dropdown, Modal } from 'antd';
 import { Layout as Page } from 'routes';
 import { FormattedMessage as FM } from 'react-intl';
 import bridge from 'utils/next-bridge';
@@ -72,6 +72,46 @@ class ExpertTrajectoryPage extends React.Component {
     }
   };
 
+  handleOk = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleCancel = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+
+  showModal = () => {
+    this.setState({
+      visible: true,
+    }, () => {
+      const chartsinterval = setInterval(() => {
+        const divId = document.getElementById('bycountries');
+        const data = this.props.expertTrajectory.results;
+        console.log(data);
+        if ((typeof (divId) !== 'undefined' && divId !== 'undefined'
+          && typeof (data.results) !== 'undefined' && data.results !== 'undefined')
+        || (this.state.visible === false)) {
+          clearInterval(chartsinterval);
+          //showSta(echarts, divId, data, 'country');
+        }
+      }, 100);
+    });
+  };
+
+  handleDownload = () => {
+    const downloadinterval = setInterval(() => {
+      const data = this.props.expertTrajectory.results;
+      if (typeof (data.results) !== 'undefined' && data.results !== 'undefined') {
+        clearInterval(downloadinterval);
+        this.downloadSta(data);
+      }
+    }, 100);
+  };
+
   onPersonClick = (start, end, person) => {
     //这里的参数的名字要和model里面的一致
     const personId = person.id;
@@ -113,6 +153,7 @@ class ExpertTrajectoryPage extends React.Component {
         <div key={param.person.id} className={styles.clickTraj}>
           <div className={styles.innerClickTraj}>
             <Button type="dashed" className={styles.but} onClick={this.onPersonClick.bind(this,1900,2017, param.person)}>
+              <Icon type="global" style={{ color: '#bbe920' }} />
               <FM defaultMessage="Show Trajectory" id="com.expertMap.headerLine.label.showTraj" />
             </Button>
           </div>
@@ -161,8 +202,31 @@ class ExpertTrajectoryPage extends React.Component {
                   <Icon type="line-chart" />
                   <FM defaultMessage="Trajectory Statistic" id="com.expertMap.headerLine.label.statistic" />
                 </Button>
+                <Modal
+                  title="Statistics & Analyses"
+                  visible={this.state.visible}
+                  onOk={this.handleOk}
+                  onCancel={this.handleCancel}
+                  footer={[
+                    <Button key="back" size="large" onClick={this.handleDownload.bind(this)}>
+                      <Icon type="download" />
+                      <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.download" />
+                    </Button>,
+                    <Button key="submit" type="primary" size="large" onClick={this.handleOk}>
+                      <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.ok" />
+                    </Button>,
+                  ]}
+                  width="700px"
+                >
+                  <div>dddddddddddddd</div>
+                </Modal>
               </div>
-
+              <div className={styles.play}>
+                <Button>
+                  <Icon type="desktop" />
+                  <FM defaultMessage="Play" id="com.expertMap.headerLine.label.play" />
+                </Button>
+              </div>
             </div>
             <div className={styles.trajShow}>
               <Layout className={styles.right} style={{width: divWidth - 450}}>

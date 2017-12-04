@@ -132,7 +132,7 @@ class StartTask extends React.Component {
         message.error(errorInfo[0]);
         isChange = false;
       }
-      if (children.length > 20) {
+      if (children.length > 21) {
         message.error(errorInfo[1]);
         isChange = false;
       }
@@ -222,7 +222,7 @@ class StartTask extends React.Component {
 
   getCandidate = (key, id) => {
     const area = key.replace(/ /g, '_');
-    const params = { id, area, k: 5, depth: 2 };
+    const params = { id, area, k: 5, depth: 4 };
     this.props.dispatch({ type: 'crossHeat/getDiscipline', payload: params });
   }
 

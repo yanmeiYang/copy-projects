@@ -141,20 +141,17 @@ export default {
             }
           }
         }
-<<<<<<< Updated upstream
         if (!ghost) {
           yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data, query } });
         } else {
           return data.data;
         }
-=======
         yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data, query } });
         yield put({
           type: 'getIntellResultsSuccess',
           payload: { data: data.data.intellResults },
         });
         yield put({ type: 'getKgSuccess', payload: { data: data.data.intellResults } });
->>>>>>> Stashed changes
       } else if (data.data && data.data.result) {
         if (!ghost) {
           yield put({ type: 'searchPersonSuccess', payload: { data: data.data, query, total } });

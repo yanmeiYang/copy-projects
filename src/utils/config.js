@@ -2,11 +2,7 @@ const baseURL = 'https://api.aminer.org/api';
 const apiDomain = 'https://api.aminer.org';
 const nextAPIURLLocalhost = 'http://localhost:4005';
 const nextAPIURLOnlineBeta = 'http://e30c17034d854ef4b1dac3d7b5874d3b-cn-beijing.alicloudapi.com';
-<<<<<<< Updated upstream
 const nextAPIURLOnlineProduction = 'https://apiv2.aminer.org';
-=======
-const nextAPIURLOnlineProduction = 'https://apiv2.aminer.org/';
->>>>>>> Stashed changes
 const nextAPIURL = process.env.NODE_ENV !== 'production' ?
   nextAPIURLOnlineProduction
   // nextAPIURLLocalhost

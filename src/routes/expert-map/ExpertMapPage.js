@@ -341,7 +341,7 @@ export default class ExpertMapPage extends React.Component {
                     <Button key={conf.key} onClick={this.onTypeChange.bind(this, conf.key)}
                             onKeyDown={() => {
                             }} type={this.state.type === conf.key ? 'primary' : ''}>
-                      {conf.label}
+                      <FM defaultMessage={conf.label} id={`com.expertMap.scalelevel.label.${conf.key}`} />
                     </Button>
                   );
                 })}

@@ -8,6 +8,7 @@ import { sysconfig } from 'systems';
 import { Auth, RequireRes } from 'hoc';
 import { Checkbox, Select, Progress, message, Button } from 'antd';
 import { RgSearchNameBox } from 'components/relation-graph';
+import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { ensure } from 'utils';
 import { getAvatar } from 'utils/profile-utils';
 import { classnames } from 'utils/index';
@@ -1742,15 +1743,21 @@ export default class RelationGraph extends React.PureComponent {
           <div className={styles.statAndAction}>
             {/* 搜索结果 */}
             <div className={styles.statistics}>
-              共
-              <span className={styles.statCount}>{describeNodes1}</span>
-              位专家，
-              <span className={styles.statCount}>{describeNodes2}</span>
-              个关系
+              {/*共*/}
+              {/*<span className={styles.statCount}>{describeNodes1}</span>*/}
+              {/*位专家，*/}
+              {/*<span className={styles.statCount}>{describeNodes2}</span>*/}
+              {/*个关系*/}
+              <FM defaultMessage="'{statistics}' experts, " className={styles.statCount}
+                  id="com.relationGraph.statistics.expert"
+                  values={{ statistics: describeNodes1 }} />
+              <FM defaultMessage="'{statistics}' relations" className={styles.statCount}
+                  id="com.relationGraph.statistics.relation"
+                  values={{ statistics: describeNodes2 }} />
             </div>
             {/*style={{ width: EgoWidth }}*/}
             <div className={styles.action}>
-              <label>相关操作：</label>
+              <label className={styles.marginRight}><FM id="com.relationGraph.header.action" defaultMessage="相关操作：" /></label>
               {/* <Checkbox checked={subnet_selection} onChange={this.changeModle1}>子网选取</Checkbox> */}
               <Button className={classnames({
                 active: suspension_adjustment,
@@ -1758,7 +1765,7 @@ export default class RelationGraph extends React.PureComponent {
               })}
                       onClick={this.changeModle2}>
                 <span className={classnames('icon', styles.stop_drag_icon)} />
-                暂停调整
+                <FM id="com.relationGraph.header.action.pauseAdjustment" defaultMessage="暂停调整" />
               </Button>
               <Button className={classnames(styles.two_paths, {
                 active: two_paths,
@@ -1766,7 +1773,7 @@ export default class RelationGraph extends React.PureComponent {
               })}
                       onClick={this.changeModle3}>
                 <span className={classnames('icon', styles.two_paths_icon)} />
-                两点路径
+                <FM id="com.relationGraph.header.action.two-pointPath" defaultMessage="两点路径" />
               </Button>
               {/*<Button onChange={this.changeModle4}>*/}
               {/*<span className={classnames('icon', styles.continue_paths_icon)} />*/}
@@ -1780,12 +1787,14 @@ export default class RelationGraph extends React.PureComponent {
               })}
                       onClick={this.changeModle5}>
                 <span className={classnames('icon', styles.single_extension_icon)} />
-                单点扩展
+                <FM id="com.relationGraph.header.action.one-pointExtension" defaultMessage="单点扩展" />
               </Button>
             </div>
           </div>
           <div className={styles.filterBlock}>
-            <label>H-指数：</label>
+            <label>
+              <FM id="com.relationGraph.header.h-index" defaultMessage="H-指数" />：
+            </label>
             <Select defaultValue="h-Index>0" style={{ width: 120, marginRight: 10 }}
                     onChange={this.IndexChange}>
               {this.activities.map((act) => {

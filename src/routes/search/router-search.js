@@ -2,7 +2,9 @@
  *  Created by BoGao on 2017-07-14;
  *  Refactored by BoGao on 2017-09-07; dva@2.0 react-router-4
  */
-export default {
+import { applyPluginModules } from 'themes';
+
+const routerConfig = {
 
   // Deprecated
   ExpertSearch: {
@@ -20,8 +22,6 @@ export default {
     models: () => [
       import('models/search'),
       import('models/expert-base/expert-base'),
-      import('models/person-comments'),
-      import('models/common/common-labels'),
       import('models/search-suggest'),
       import('models/search-venue'),
     ],
@@ -29,3 +29,7 @@ export default {
   },
 
 };
+
+// export default routerConfig;
+export default applyPluginModules('search', routerConfig);
+

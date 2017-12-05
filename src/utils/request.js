@@ -191,8 +191,8 @@ const fetch = (options) => {
     const text = JSON.stringify(cloneData);
     const key = '==typeof o?(r=o,o={}):o=o||{}:(r=o,o=a||{},a=void 0))';
     const ciphertext = AES.encrypt(text, key);
-    console.log('crypto:', text);
-    console.log('crypto:', ciphertext.toString());
+    // console.log('crypto:', text);
+    // console.log('crypto:', ciphertext.toString());
   }
 
 

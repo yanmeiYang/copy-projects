@@ -1,68 +1,28 @@
-[
-  {
-    "type": "query",
-    "action": "search",
-    "eventName": "search",
-    "parameters": {
-      "query": "jian gong",
-      "offset": 0,
-      "size": 20,
-      "searchType": "allb",
-      "aggregation": [
-        "gender",
-        "h_index",
-        "location",
-        "language"
-      ],
-      "haves": {
-        "eb": [
-          "5949c2f99ed5dbc2147fd854",
-          "592f8af69ed5db8bb68d713b",
-          "58ddbc229ed5db001ceac2a4",
-          "592f6d219ed5dbf59c1b76d4",
-          "aminer"
-        ]
-      },
-      "switches": [
-        "loc_search_all",
-        "lang_zh"
-      ],
-      "filters": {
-        "dims": {
-          "eb": [
-            "5949c2f99ed5dbc2147fd854"
-          ]
-        }
-      }
-    },
-    "schema": {
-      "person": [
-        "id",
-        "name",
-        "name_zh",
-        "avatar",
-        "tags",
-        {
-          "profile": [
-            "position",
-            "affiliation"
-          ]
-        },
-        {
-          "indices": [
-            "hindex",
-            "gindex",
-            "pubs",
-            "citations",
-            "newStar",
-            "risingStar",
-            "activity",
-            "diversity",
-            "sociability"
-          ]
-        },
-        "tags_translated_zh"
-      ]
-    }
+{
+  "private": true,
+  "name": "aminer2b",
+  "version": "1.2.0",
+  "dependencies": {
+
+
+  },
+  "devDependencies": {
+
+
+  },
+  "optionalDependencies": {
+    "fsevents": "^1.1.3"
+  },
+  "pre-commit": [
+    "lint"
+  ],
+  "scripts": {
+    "dev": "cross-env BROWSER=none HOST=0.0.0.0 roadhog server",
+    "lint": "eslint --fix --ext .js src",
+    "build": "roadhog build",
+    "build:a": "roadhog build --analyze",
+    "build:ab": "node --max_old_space_size=4096 node_modules/roadhog/lib/build.js --analyze",
+    "build:dll": "roadhog buildDll",
+    "build:new": "node version && roadhog build"
   }
-]
+}

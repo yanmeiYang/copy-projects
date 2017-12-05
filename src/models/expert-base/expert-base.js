@@ -1,7 +1,9 @@
 /**
  * Created by zhanglimin on 17/9/1.
  */
-import * as expertBaseService from '../../services/expert-base';
+import * as expertBaseService from 'services/expert-base';
+
+console.log('---------------------------------------- import module expertBase');
 
 export default {
   namespace: 'expertBase',

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Tag, Tabs } from 'antd';
 import classnames from 'classnames';
-import { Hole } from 'components';
+import { Hole } from 'components/core';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { compare } from 'utils/compare';
 import { hole } from 'utils';

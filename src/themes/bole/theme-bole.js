@@ -7,6 +7,7 @@ import classnames from 'classnames';
 import { sysconfig } from 'systems';
 import { Button } from 'antd';
 import * as hole from 'utils/hole';
+import PersonCommentPlugin from 'plugins/PersonCommentsPlugin';
 import AddToEBButton from 'routes/expert-base/AddToEBButton';
 import { PersonComment } from 'systems/bole/components';
 import { FormattedMessage as FM } from 'react-intl';
@@ -17,6 +18,7 @@ import styles from './theme-bole.less';
 module.exports = {
   themeName: 'common-white',
   styles,
+  plugins: [PersonCommentPlugin()],
 
   // Layout
 

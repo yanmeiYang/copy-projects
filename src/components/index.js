@@ -1,5 +1,5 @@
 // TODO remove unused.
-import Hole from './core/Hole';
+// TODO use sublevel index.js, don't use import 'components' directly.
 import DropOption from './DropOption';
 import Iconfont from './Iconfont';
 import SearchBox from './SearchBox';
@@ -15,9 +15,6 @@ import layer from './layer';
 import Spinner from './Spinner';
 
 export {
-  Hole,
-
-
   Layout, ErrorBoundary,
   DropOption,
   Iconfont,

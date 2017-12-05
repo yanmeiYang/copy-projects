@@ -2,7 +2,7 @@ import * as expertBaseService from 'services/expert-base';
 import * as tobProfileService from 'services/2b-profile';
 
 const JOINBYDOT = '.';
-
+console.log('---------------------------------------- import module person-comments.js', );
 export default {
 
   namespace: 'personComments',

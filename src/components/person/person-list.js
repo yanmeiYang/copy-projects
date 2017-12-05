@@ -6,15 +6,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import classnames from 'classnames';
-import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
-import * as personService from 'services/person';
+import { FormattedMessage as FM } from 'react-intl';
 import { sysconfig } from 'systems';
-import { config, compare, hole } from 'utils';
+import { config, compare } from 'utils';
 import * as display from 'utils/display';
-import { Hole } from 'components';
+import { Hole } from 'components/core';
 import { Indices } from 'components/widgets';
+// import { PersonTags } from 'components/person'; // TODO this is bad. WHY
 import PersonTags from 'components/person/PersonTags';
-// import { PersonTags } from 'components/person'; // this is bad.
 import ViewExpertInfo from './view-expert-info';
 import styles from './person-list.less';
 

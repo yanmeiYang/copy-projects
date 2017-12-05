@@ -30,6 +30,14 @@ const CurrentSystemConfig = {
 
 // 默认配置
 const getDefaultSystemConfigs = (system, source) => {
+  if (!system || !source) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.error('Error! System must be defined! please modify utils/system.js');
+    } else {
+      console.error('System error occurred!');
+    }
+    return;
+  }
   return {
     SYSTEM: system,
     SOURCE: source,

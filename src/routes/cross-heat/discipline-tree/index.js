@@ -3,7 +3,6 @@ import { connect } from 'dva';
 import { Icon, message, Input, Modal } from 'antd';
 import { RequireRes } from 'hoc';
 import { ensure } from 'utils';
-// import * as d3 from 'd3';
 import { Spinner } from 'components';
 import styles from './index.less';
 
@@ -54,32 +53,6 @@ class DisciplineTree extends React.Component {
     }
     return iData;
   }
-
-  // delMoreNode = (data) => {
-  //   const ids = [];
-  //   const listNode = this.getNode(data, []);
-  //   if (listNode.length > maxNodeNum) {
-  //     ids.push(listNode.id);
-  //   }
-  //   if (ids.length > 20) {
-  //     ids.slice(20, ids.length).map((item) => {
-  //       this.delNodeById(data, item.id);
-  //       return true;
-  //     });
-  //   }
-  //   return data;
-  // }
-  //
-  // delNodeById = (dt, id) => {
-  //   if (dt.children) {
-  //     dt.children.map((item, i) => {
-  //       item.id === id ? dt.children.splice(i, 1) : this.delNodeById(item, id);
-  //       return true;
-  //     });
-  //   }
-  //   return dt;
-  // }
-
 
   guid = () => {
     function S4() {
@@ -214,7 +187,7 @@ class DisciplineTree extends React.Component {
       message.error(errorInfo[0]);
       isOk = false;
     }
-    if (noedeNum > 20) { // 节点树
+    if (noedeNum > 21) { // 节点树
       message.error(errorInfo[1]);
       isOk = false;
     }
@@ -261,7 +234,7 @@ class DisciplineTree extends React.Component {
       content: '您确定删除吗？',
       onOk() {
         const data = that.props.crossHeat[that.props.id];
-        that.props.delTreeNode();
+        // that.props.delTreeNode();
         const dData = that.delData(data, that.state.node);
         that.createD3(dData);
       },

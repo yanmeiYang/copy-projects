@@ -1,6 +1,6 @@
 import {
   findhuaweidistrict,
-} from './map-utils.js';
+} from './bigArea-utils';
 
 
 const showSta = (echarts, divId, data, type) => {

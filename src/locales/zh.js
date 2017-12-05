@@ -83,6 +83,7 @@ export default {
   'com.expertMap.headerLine.label.level': '层级：',
   'com.expertMap.headerLine.label.tipMessage': '没有键入正确的关键词、选择领域或者系统没有搜索到结果！',
   'com.expertMap.headerLine.label.statistic': '统计分析报告',
+  'com.expertMap.headerLine.label.play': '播放迁徙工程',
   'com.expertMap.headerLine.label.download': '导出Excel表',
   'com.expertMap.headerLine.label.ok': '确定',
   'com.expertMap.headerLine.label.overview': '返回全局总览',

@@ -1,7 +1,8 @@
 .feedbackForm {
   width: 360px;
+  padding-bottom: 20px;
   .submitBtn {
-    margin-bottom: 10px;
+    margin-bottom: 0px;
     text-align: right;
   }
   .inputBox {
@@ -13,17 +14,23 @@
   height: 0px;
   position: fixed;
   right: 20px;
-  bottom: -10px;
+  bottom: 25px;
+  width: 105px;
+  //text-align: right;
+  //height: 0px;
+  //margin-right: 20px;
 }
 
 :global {
-  .ant-popover-title {
-    font-size: 14px;
-  }
+  .ant-popover-title { font-size: 14px; }
+  .ant-popover-inner-content { padding-top: 0px; padding-bottom: 0px; }
 }
 
 .titleBox {
-  display: flex;
-  flex-direction: row;
+  display: flex; flex-direction: row;
   justify-content: space-between;
 }
+
+.deleteBtn { cursor: pointer; }
+
+.fdBtn { padding: 0 5px; }

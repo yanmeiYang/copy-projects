@@ -122,10 +122,9 @@ export default {
   },
 
   reducers: {
-    getPageInfoSuccess(state, { payload: { data } }){
+    getPageInfoSuccess(state, { payload: { data } }) {
       console.log(data);
       return { ...state, pageInfo: data.data };
-
     },
     getPubInfoSuccess(state, { payload: { pubInfo } }) {
       const exportPubsList = {};
@@ -178,7 +177,8 @@ export default {
     getCrossTreeSuccess(state, { payload: { data } }) {
       const queryTree2 = data.data._2;
       const queryTree1 = data.data._1;
-      return { ...state, crossTree: { queryTree1, queryTree2 } };
+      const completeStatus = data.data.completed === data.data.total;
+      return { ...state, crossTree: { queryTree1, queryTree2, completeStatus } };
     },
     getTaskListSuccess(state, { payload: { data } }) {
       return { ...state, taskList: data.data };

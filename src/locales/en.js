@@ -83,6 +83,7 @@ export default {
   'com.expertMap.headerLine.label.level': 'Level：',
   'com.expertMap.headerLine.label.tipMessage': 'No keywords typed, domain selected or nothing found!',
   'com.expertMap.headerLine.label.statistic': 'Statistic & Analysis',
+  'com.expertMap.headerLine.label.play': 'Play Trajectories',
   'com.expertMap.headerLine.label.download': 'Export Excel',
   'com.expertMap.headerLine.label.ok': 'OK',
   'com.expertMap.headerLine.label.overview': 'Back To OverView',

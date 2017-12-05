@@ -11,9 +11,10 @@ import * as personService from 'services/person';
 import { sysconfig } from 'systems';
 import { config, compare, hole } from 'utils';
 import * as display from 'utils/display';
+import { Hole } from 'components';
+import { Indices } from 'components/widgets';
 import PersonTags from 'components/person/PersonTags';
 // import { PersonTags } from 'components/person'; // this is bad.
-import { Indices } from 'components/widgets';
 import ViewExpertInfo from './view-expert-info';
 import styles from './person-list.less';
 
@@ -184,21 +185,36 @@ export default class PersonList extends Component {
                   </div>
                 </div>
 
-                {/* ---- Right Zone ---- */}
+                {/* ---- Right Zone ----
                 {hole.fillFuncs(
                   rightZoneFuncs, // theme from config.
                   DefaultRightZoneFuncs, // default block.
                   { person, expertBaseId }, // parameters passed to block.
                   { containerClass: styles.person_right_zone }, // configs.
                 )}
+                */}
+
+                <Hole
+                  fill={rightZoneFuncs}
+                  defaults={DefaultRightZoneFuncs}
+                  param={{ person, expertBaseId }}
+                  config={{ containerClass: styles.person_right_zone }}
+                />
+
               </div>
 
               {/*---- Bottom Zone ---- */}
-              {hole.fillFuncs(
-                bottomZoneFuncs, [],
-                { person, expertBaseId, user: this.props.user },
-                { containerClass: styles.personComment }, // TODO change name.
-              )}
+              <Hole
+                fill={bottomZoneFuncs}
+                param={{ person, expertBaseId, user: this.props.user }}
+                config={{ containerClass: styles.personComment }}
+              />
+
+              {/*{hole.fillFuncs(*/}
+              {/*bottomZoneFuncs, [],*/}
+              {/*{ person, expertBaseId, user: this.props.user },*/}
+              {/*{ containerClass: styles.personComment }, // TODO change name.*/}
+              {/*)}*/}
             </div>
           );
         })

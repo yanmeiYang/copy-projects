@@ -132,7 +132,7 @@ class StartTask extends React.Component {
         message.error(errorInfo[0]);
         isChange = false;
       }
-      if (children.length > 20) {
+      if (children.length > 21) {
         message.error(errorInfo[1]);
         isChange = false;
       }
@@ -241,8 +241,8 @@ class StartTask extends React.Component {
     event.preventDefault();
   }
 
+  // todo
   delTreeNode=()=>{
-    console.log("heiheiheihe");
     console.log("================");
   }
 

@@ -10,11 +10,12 @@
       .statCount { color: #f1742f; font-size: 15px }
     }
     .action {
-      margin-left: 50px;
+      margin-left: 40px;
       label { font-size: @font-size-lg }
       .two_paths_icon, .continue_paths_icon, .stop_drag_icon, .single_extension_icon {
         width: 18px; height: 15px; z-index: 10000; float: left;
       }
+      .marginRight{ margin-right: 10px; }
       button {
         .stop_drag_icon { background-position: -172px -394px; }
         .two_paths_icon { background-position: -240px -394px; }
@@ -28,13 +29,14 @@
         .continue_paths_icon { background-position: -341px -394px; }
         .single_extension_icon { background-position: -341px -394px; }
       }
-      .two_paths { margin-left: 10px; }
+      .two_paths { margin-left: 5px; }
     }
   }
   .filterBlock {
     label { font-size: @font-size-lg; }
   }
 }
+
 .twoExpertPathBySearch {
   margin-top: 15px;
   button { height: 27px; }
@@ -126,4 +128,5 @@
     color: #fff;
     padding: 2px 5px;
   }
+  .ant-btn{  padding: 0px 5px; }
 }

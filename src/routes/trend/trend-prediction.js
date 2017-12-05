@@ -12,6 +12,8 @@ import { getPerson } from '../../services/person';
 import { searchPubById } from '../../services/trend-prediction-service';
 import { sysconfig } from '../../systems';
 import { Spinner } from '../../components';
+import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
+
 
 const humps = require('humps');
 
@@ -747,11 +749,11 @@ export default class TrendPrediction extends React.PureComponent {
     document.getElementById('tip').setAttribute('style', `position:absolute;left:${xPosition}px;top:${yPosition}px;display:block;`);
     let info = '';
     if (id === 0) {
-      info = '按照关键词在该领域最近5年中所发表论文中出现的频率进行排序';
+      info = 'Sort by how often the keyword appears in the papers published in the field in the last 5 years';
     } else if (id === 1) {
-      info = '按照关键词在该领域所有发表论文中出现的频率排序';
+      info = 'Sorted by the frequency of occurrence of the keyword in all papers in this field';
     } else if (id === 2) {
-      info = '按照关键词在该领域整个时间轴上前一半年份发表文章中出现的频率进行排序';
+      info = 'Sorted by the frequency of occurrence of the keyword published in the former half time of the timeline in this field';
     }
     document.getElementById('tip').innerHTML = info;
   };
@@ -813,7 +815,7 @@ export default class TrendPrediction extends React.PureComponent {
         showFlag = 'none';
         showFlag1 = 'inline';
       }
-      tipinfo = `${query}技术趋势正在分析中，请稍后...`;
+      // tipinfo = `${query}技术趋势正在分析中，请稍后...`;
     }
     let showDivWidth = document.body.clientWidth - 400;
     showDivWidth = showDivWidth > 1024 ? showDivWidth : 1024;//取其大者
@@ -839,7 +841,9 @@ export default class TrendPrediction extends React.PureComponent {
         <div className={styles.loading1}>
           <div className={styles.loading} id="loading"
                style={{ display: showFlag, textAlign: 'center' }}>
-            {tipinfo}
+            <FM defaultMessage="Technology prediction about '{tip}' is analyzing. Please wait."
+                id="com.topTrend.info"
+                values={{ tip: query }} />
           </div>
         </div>
         <div id="showchart" style={{ display: showFlag1 }}>
@@ -847,13 +851,19 @@ export default class TrendPrediction extends React.PureComponent {
             <Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange}
                   className={styles.tabs}>
               <TabPane
-                tab={<span onMouseEnter={this.showTip.bind(that, 0)} onMouseLeave={this.hideTip}>近期热度</span>}
+                tab={<span onMouseEnter={this.showTip.bind(that, 0)} onMouseLeave={this.hideTip}>
+                  <FM id="com.topTrend.header.tab.recentHeat" defaultMessage="近期热度" />
+                  </span>}
                 key="1" id="recent-trend" />
               <TabPane
-                tab={<span onMouseEnter={this.showTip.bind(that, 1)} onMouseLeave={this.hideTip}>全局热度</span>}
+                tab={<span onMouseEnter={this.showTip.bind(that, 1)} onMouseLeave={this.hideTip}>
+                  <FM id="com.topTrend.header.tab.globalHeat" defaultMessage="全局热度" />
+                  </span>}
                 key="2" id="overall-trend" />
               <TabPane
-                tab={<span onMouseEnter={this.showTip.bind(that, 2)} onMouseLeave={this.hideTip}>技术源头</span>}
+                tab={<span onMouseEnter={this.showTip.bind(that, 2)} onMouseLeave={this.hideTip}>
+                  <FM id="com.topTrend.header.tab.technologySources" defaultMessage="技术源头" />
+                  </span>}
                 key="3" id="origin-trend" />
             </Tabs>
             <div id="hist-chart" className={styles.rightbox} />

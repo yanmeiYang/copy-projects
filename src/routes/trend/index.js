@@ -5,6 +5,8 @@ import { Auth } from 'hoc';
 import { Layout } from 'routes';
 import queryString from 'query-string';
 import { compare } from 'utils';
+import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
+
 // import styles from './index.less';
 import TrendPrediction from './trend-prediction.js';
 
@@ -52,7 +54,9 @@ export default class TrendPredictionPage extends Component {
     return (
       <Layout query={this.state.query} onSearch={this.onSearch}>
         <div className="content-inner">
-          <h1>技术趋势预测:</h1>
+          <h1>
+            <FM id="com.topTrend.header" defaultMessage="技术趋势预测" />:
+          </h1>
           <TrendPrediction query={this.state.query} />
         </div>
       </Layout>

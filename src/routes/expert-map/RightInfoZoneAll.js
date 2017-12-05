@@ -63,12 +63,12 @@ class RightInfoZoneAll extends React.PureComponent {
             <div className={styles.name}>
               {/*<h2 className={styles.section_header}>Show {count} experts in map.</h2>*/}
               <span alt="" className={classnames('icon', styles.titleIcon)} />
-              H-index分布
+              <FM id="com.expertMap.explanation.legend.h-indexDistribution" defaultMessage="H-index分布" />
             </div>
             <div className={styles.statistics}>
               {/*总值：*/}
               {/*<span className={styles.count}>{count * avg}</span>*/}
-              平均值：
+              <FM id="com.expertMap.explanation.legend.average" defaultMessage="平均值" />：
               {avg && avg !== 'NaN' && <span className={styles.count}>{avg}</span>}
             </div>
 
@@ -77,10 +77,13 @@ class RightInfoZoneAll extends React.PureComponent {
             </div>
 
             <div className={styles.statistics}>
-              专家：<span className={styles.count}>{count}</span>
+              <FM id="com.expertMap.explanation.legend.expert" defaultMessage="专家" />
+              ：<span className={styles.count}>{count}</span>
               <br />ACM Fellow:<span className={styles.count}>{isACMFellowNumber}</span>
               <br />IEEE Fellow:<span className={styles.count}>{isIeeeFellowNumber}</span>
-              <br />华人:<span className={styles.count}>{isChNumber}</span>
+              <br />
+              <FM id="com.expertMap.explanation.legend.ethnicChinese" defaultMessage="华人" />
+              :<span className={styles.count}>{isChNumber}</span>
             </div>
           </div>
         }

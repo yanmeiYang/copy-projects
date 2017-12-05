@@ -67,6 +67,7 @@ export default {
   reducers: {
     createUserSuccess(state) {
       // TODO 注册成功以后的提示信息
+      console.log('ggggggggggggg', ...state);
       return { ...state };
     },
     getListUserByRoleSuccess(state, { payload: { data } }) {
@@ -85,5 +86,6 @@ export default {
       }
       return { ...state, listUsers: data, loading: false };
     },
+
   },
 };

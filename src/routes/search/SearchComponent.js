@@ -47,15 +47,15 @@ export default class SearchComponent extends Component {
     onSearchBarSearch: PropTypes.func,
     showSearchBox: PropTypes.bool, // has search box?
     fixedExpertBase: PropTypes.object,
+    helps: PropTypes.object, // smartSearch data
   };
 
   static defaultProps = {
     disableFilter: false,
     disableExpertBaseFilter: false,
     defaultSortType: 'relevance',
-    disableSmartSuggest: true,
+    disableSmartSuggest: false, //TODO back to true
   };
-
 
   constructor(props) {
     super(props);
@@ -84,6 +84,7 @@ export default class SearchComponent extends Component {
   // }
 
   // URL改变引起的props变化，在这里刷新搜索。其余的action导致的数据更新都在action后面调用了search方法。
+
   componentDidUpdate(prevProps, prevState) {
     const { search } = this.props;
     const prevSearch = prevProps.search;
@@ -156,9 +157,23 @@ export default class SearchComponent extends Component {
     this.doSearchUseProps();
   };
 
+  onIntelligenceSearchMetaChange = (intelligenceMeta) => {
+    const { query } = this.props.search;
+    const intelligenceSearchMeta = {
+      expansion: [intelligenceMeta.expansion],
+      translated: [intelligenceMeta.translated],
+      KG: [intelligenceMeta.KG],
+      query,
+    };
+    this.dispatch({
+      type: 'search/setIntelligenceSearch',
+      payload: { intelligenceSearchMeta },
+    });
+    this.doSearchUseProps();
+  };
+
   doSearch = (query, offset, size, filters, sort, dontRefreshUrl) => {
     const { dispatch, fixedExpertBase } = this.props;
-
     // 如果是fixed，那么限制EB为指定值。
     if (fixedExpertBase && fixedExpertBase.id) {
       filters.eb = fixedExpertBase; // eslint-disable-line no-param-reassign
@@ -200,13 +215,16 @@ export default class SearchComponent extends Component {
   };
 
   render() {
-    const { disableExpertBaseFilter, disableFilter, disableSearchKnowledge, rightZoneFuncs, disableSmartSuggest } = this.props;
+    const { disableExpertBaseFilter, disableFilter, disableSearchKnowledge,
+      rightZoneFuncs, disableSmartSuggest } = this.props;
     const { className, sorts, expertBaseId } = this.props;
+    const intelligenceSuggests = this.props.search.intelligenceSuggest;
     const { sortKey } = this.props.search;
     const sortType = sortKey;
 
     // .........
-    const { results, pagination, query, aggs, filters, topic } = this.props.search;
+    const { results, pagination, query, aggs, filters, topic, intelligenceSearchMeta } =
+      this.props.search;
     const { pageSize, total, current } = pagination;
     const load = this.props.loading.effects['search/searchPerson'];
 
@@ -253,7 +271,10 @@ export default class SearchComponent extends Component {
             />}
 
             {/* Search Help */}
-            {!disableSmartSuggest && <SearchHelp />}
+            {!disableSmartSuggest &&
+            <SearchHelp intelligenceSuggests={intelligenceSuggests}
+                        onIntelligenceSearchMetaChange={this.onIntelligenceSearchMetaChange}
+            />}
 
             {/* ---- Filter ---- */}
 

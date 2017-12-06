@@ -341,7 +341,8 @@ export default class ExpertMapPage extends React.Component {
                     <Button key={conf.key} onClick={this.onTypeChange.bind(this, conf.key)}
                             onKeyDown={() => {
                             }} type={this.state.type === conf.key ? 'primary' : ''}>
-                      <FM defaultMessage={conf.label} id={`com.expertMap.scalelevel.label.${conf.key}`} />
+                      <FM defaultMessage={conf.label}
+                          id={`com.expertMap.scalelevel.label.${conf.key}`} />
                     </Button>
                   );
                 })}
@@ -351,11 +352,15 @@ export default class ExpertMapPage extends React.Component {
 
           <div className={styles.scopes}>
             <div className={styles.analysis}>
-              {process.env.NODE_ENV !== 'production' &&
+
+              {(process.env.NODE_ENV !== 'production' || sysconfig.System === 'demo') &&
               <Button onClick={this.showModal}>
                 <Icon type="line-chart" />
-                <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.statistic" />
-              </Button>}
+                <FM id="com.expertMap.headerLine.label.statistic"
+                    defaultMessage="Statistic & Analysis" />
+              </Button>
+              }
+
               <Modal
                 title="Statistics & Analyses"
                 visible={this.state.visible}

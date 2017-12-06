@@ -77,7 +77,7 @@ const query = (action, eventName) => {
   }
 
   const api = {
-    type: 'query',
+    // type: 'query',
     action,
     eventName,
   };
@@ -91,15 +91,16 @@ const alter = (action, eventName) => {
   if (!action) {
     throw new ParamError('Parameter action can\'t be empty.');
   }
-  return createBasicChains({ type: 'alter', action, eventName });
+  return createBasicChains({ action, eventName });
 };
 
 const notify = (action, eventName) => {
   if (!action) {
     throw new ParamError('Parameter action can\'t be empty.');
   }
-  return createBasicChains({ type: 'notify', action, eventName });
+  return createBasicChains({ action, eventName });
 };
+
 /**
  * NEXT-API Query Builder
  */
@@ -119,7 +120,6 @@ const apiBuilder = {
 
 
 // ------------------ Builtin Fields --------------------------
-
 const fseg = {
   indices_all: ['hindex', 'gindex', 'pubs',
     'citations', 'newStar', 'risingStar', 'activity', 'diversity', 'sociability'],
@@ -128,7 +128,15 @@ const fseg = {
 };
 
 const F = {
+  // Helper Options.
+
   Type: { Query: 'query', Alter: 'alter' },
+
+  // all available entities in system.
+  Entities: { Person: 'person', Publication: 'pub', Venue: 'venue' },
+
+  // available person's tags.
+  Tags: { systag: 'systag' },
 
   // query related
   queries: { search: 'search' }, // query actions.
@@ -139,6 +147,17 @@ const F = {
   params: {
     default_aggregation: ['gender', 'h_index', 'location', 'language'],
   },
+
+  // all available alter operations.
+  opts: { upsert: 'upsert', update: 'update', delete: 'delete' },
+  // alter operations, TODO this will be replaced by opts.
+  alterop: { upsert: 'upsert', update: 'update', delete: 'delete' },
+
+  alters: { alter: 'alter', dims: 'dims', }, // alter actions.
+
+
+  // Available Fields
+
   fields: {
     person: {
       indices_all: fseg.indices_all,
@@ -149,12 +168,6 @@ const F = {
       { indices: fseg.indices_all },
     ],
   },
-
-  // alter related
-  alters: { alter: 'alter', dims: 'dims', }, // alter actions.
-  alterop: { upsert: 'upsert', update: 'update', delete: 'delete' }, // alter operations
-
-  Entities: { Person: 'person', Publication: 'pub', Venue: 'venue' },
 };
 
 

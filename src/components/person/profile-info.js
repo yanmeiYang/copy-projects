@@ -61,13 +61,13 @@ class ProfileInfo extends React.Component {
                        showIndices={sysconfig.PersonList_ShowIndices} />
               }
 
-              {pos && <p><i className="fa fa-briefcase fa-fw" /> {pos}</p>}
-              {aff && <p><i className="fa fa-institution fa-fw" /> {aff}</p>}
-              {phone && <p><i className="fa fa-phone fa-fw" /> {phone}</p>}
+              {pos && <p> <i className="fa fa-briefcase fa-fw" /> {pos}</p>}
+              {aff && <p> <i className="fa fa-institution fa-fw" /> {aff}</p>}
+              {phone && <p> <i className="fa fa-phone fa-fw" /> {phone}</p>}
               {email &&
               <p>
                 <i className="fa fa-envelope fa-fw" />
-                <img className="emailImg" src={`https://api.aminer.org/api/${email}`} alt="email"
+                <img className="emailImg" src={`${email}`} alt="email"
                      style={{ verticalAlign: 'middle' }} />
               </p>}
               {homepage &&
@@ -78,7 +78,7 @@ class ProfileInfo extends React.Component {
               </p>
               }
               <span style={{ marginTop: 16 }} />
-              <p className="section_header"><i className="fa fa-area-chart fa-fw" /> 研究兴趣</p>
+              <p className="section_header"> <i className="fa fa-area-chart fa-fw" /> 研究兴趣</p>
               <VisResearchInterest personId={profile.id} disable_vis_chart={true} />
             </div>
             <div>

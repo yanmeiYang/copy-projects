@@ -3,8 +3,10 @@ import React from 'react';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import { Layout } from 'routes';
+import { FormattedMessage as FM } from 'react-intl';
 import { Button, Modal, Row, Form, Input, Icon } from 'antd';
-import { sysconfig, applyTheme } from 'systems';
+import { sysconfig } from 'systems';
+import { theme, applyTheme } from 'themes';
 import { classnames, config } from 'utils';
 import styles from './index.less';
 
@@ -12,18 +14,13 @@ const tc = applyTheme(styles);
 const FormItem = Form.Item;
 
 class Login extends React.Component {
-  componentWillMount() {
-    // hide search bar in header.
-    if (sysconfig.SearchBarInHeader) {
-      this.props.dispatch({ type: 'app/hideHeaderSearch' });
-    }
-  }
 
   setErrorMessage(message) {
     this.props.dispatch({ type: 'auth/setMessage', payload: { message } });
   }
 
   handleOk = () => {
+    console.log("deng lu ap --------");
     this.props.dispatch({ type: 'auth/showLoading' });
     this.props.form.validateFieldsAndScroll((errors, values) => {
       if (!errors) {
@@ -65,10 +62,21 @@ class Login extends React.Component {
     };
 
     return (
-      <Layout searchZone={[]} showHeader={false} showNavigator={false} contentClass={tc(['loginPage'])}>
+      <Layout
+        searchZone={[]} contentClass={tc(['loginPage'])}
+        showHeader={false} showNavigator={false} showSidebar={false}
+      >
         <Form layout={'vertical'}>
           <Row className={styles.formHeader}>
-            <h1>登录</h1>
+            <h1>
+              <FM id="login.header" defaultMessage="Login" />
+              {process.env.NODE_ENV !== 'production' &&
+              <span className={styles.loginSource}>
+                {sysconfig.PageTitle}
+              </span>
+              }
+            </h1>
+
           </Row>
           <Row className={styles.formContent}>
             <FormItem hasFeedback>
@@ -97,14 +105,19 @@ class Login extends React.Component {
                 {errorMessage.status}用户名或密码错误
               </div>}
               <Button type="primary" size="large" onClick={this.handleOk}
-                      loading={loading} className={styles.loginBtn}> 登录
+                      loading={loading} className={styles.loginBtn}>
+                <FM id="login.loginBtn" defaultMessage="Login" />
               </Button>
             </FormItem>
             <FormItem>
               <div className={styles.forgetpw}>
-                <a href="/forgot-password" className={styles.forgotpwbtn}>忘记密码?</a>
+                <a href="/forgot-password" className={styles.forgotpwbtn}>
+                  <FM id="login.forgetPw" defaultMessage="Forget Password?" />
+                </a>
                 {sysconfig.ApplyUserBtn &&
-                <span className={styles.applyUserbtn} onClick={this.applyUser}>新用户申请</span>
+                <span className={styles.applyUserbtn} onClick={this.applyUser}>
+                  <FM id="login.newUserApplication" defaultMessage="New user application" />
+                </span>
                 }
               </div>
             </FormItem>

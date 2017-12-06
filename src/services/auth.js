@@ -1,7 +1,8 @@
 /**
  * Created by yangyanmei on 17/6/29.
  */
-import { request, config } from '../utils';
+import { request, config, nextAPI } from 'utils';
+import { apiBuilder, F, H } from 'utils/next-api-builder';
 import { sysconfig } from '../systems';
 
 const { api } = config;
@@ -14,13 +15,17 @@ const { api } = config;
 // }
 
 export async function login(data) {
+  const { src, ...newData } = data;
+  newData.src = src || sysconfig.UserAuthSystem;
+  newData.persist = true;
   return request(api.userLogin, {
     method: 'post',
-    body: JSON.stringify({
-      ...data,
-      persist: true,
-      src: data.src || sysconfig.UserAuthSystem,
-    }),
+    data: newData,
+    // body: JSON.stringify({
+    //   ...data,
+    //   persist: true,
+    //   src: data.src || sysconfig.UserAuthSystem,
+    // }),
   });
 }
 
@@ -34,14 +39,17 @@ export async function logout(optionalToken) {
 }
 
 export async function getCurrentUserInfo(params) {
-  return request(api.currentUser, {
-    method: 'get',
-    data: params,
-  });
+  const { token, ...data } = params;
+  const options = { method: 'get', data };
+  if (token) {
+    options.token = token;
+  }
+  return request(api.currentUser, options);
 }
 
 // TODO should in use service.
-export async function createUser(email, first_name, gender, last_name, position, sub, password) {
+export async function createUser(email, first_name, gender, last_name, position, sub, password, source) {
+  const src = source || sysconfig.SOURCE;
   const user = {
     email,
     first_name,
@@ -49,7 +57,7 @@ export async function createUser(email, first_name, gender, last_name, position,
     last_name,
     position,
     sub,
-    src: sysconfig.SOURCE,
+    src,
   };
   if (password) {
     user.password = password;
@@ -96,8 +104,9 @@ export async function revoke(uid, label) {
   });
 }
 
-export async function listUsersByRole(offset, size) {
-  return request(api.listUsersByRole.replace(':role', sysconfig.SOURCE).replace(':offset', offset).replace(':size', size), {
+export async function listUsersByRole(offset, size, source) {
+  const src = source || sysconfig.SOURCE;
+  return request(api.listUsersByRole.replace(':role', src).replace(':offset', offset).replace(':size', size), {
     method: 'GET',
   });
 }
@@ -124,4 +133,10 @@ export async function updateProfile(id, name) {
     method: 'PATCH',
     body: JSON.stringify(data),
   });
+}
+export async function setFeedback(params) {
+  const { subject, body } = params;
+  const nextapi = apiBuilder.notify(F.notify.feedback, 'feedback')
+    .param({ subject, body });
+  return nextAPI({ type: 'notify', data: [nextapi.api] });
 }

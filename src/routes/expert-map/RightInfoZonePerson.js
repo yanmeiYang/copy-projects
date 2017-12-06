@@ -4,25 +4,56 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
-import { Tag } from 'antd';
+import { Button, Modal, Tag } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import { sysconfig } from 'systems';
+import bridge from 'utils/next-bridge';
 import { Indices } from 'components/widgets';
 import * as profileUtils from 'utils/profile-utils';
 import styles from './RightInfoZonePerson.less';
-
+import ExpertTrajectory from '../expert-trajectory/ExpertTrajectory';
 
 class RightInfoZonePerson extends React.PureComponent {
+  state = {
+    visible: false,
+    cperson: '',
+  };
+
   componentDidMount() {
   }
 
+  handleOk = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleCancel = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+
+  showTraj = (person) => {
+    this.setState({
+      visible: true,
+      cperson: person,
+    }, () => {
+
+    });
+  };
+
   render() {
-    const person = this.props.person;
+    const { person } = this.props;
     if (!person) {
       return <div />;
     }
 
+    const showTraj = sysconfig.Map_ShowTrajectory;
+    const centerZoom = true;
     // used in person popup info
-    const url = profileUtils.getAvatar(person.avatar, person.id, 160);
+    let url = '/images/blank_avatar.jpg';
+    url = profileUtils.getAvatar(person.avatar, person.id, 160);
     const name = profileUtils.displayNameCNFirst(person.name, person.name_zh);
     const pos = profileUtils.displayPosition(person.pos);
     const aff = profileUtils.displayAff(person);
@@ -34,7 +65,7 @@ class RightInfoZonePerson extends React.PureComponent {
     }
     const tags = profileUtils.findTopNTags(person, 8);
 
-    const personShowIndices = ['h_index', 'citation', 'activity'];
+    const personShowIndices = ['h_index', 'citations', 'activity'];
 
     return (
       <div className="rizPersonInfo">
@@ -47,16 +78,20 @@ class RightInfoZonePerson extends React.PureComponent {
         </div>
         }
 
-        <a {...personLinkParams} className="img" ><img src={url} alt="IMG" /></a>
+        <a {...personLinkParams} className="img"><img src={url} alt="IMG" /></a>
 
         <div className="info bg">
+          {showTraj &&
+          <span>
+            <Button onClick={this.showTraj.bind(this, person)}>Show Trajectory</Button>
+          </span>}
           {pos && <span><i className="fa fa-briefcase fa-fw" />{pos}</span>}
           {aff && <span><i className="fa fa-institution fa-fw" />{aff}</span>}
         </div>
 
         <div className="info indicesInfo bg">
           <Indices
-            indices={person.indices}
+            indices={bridge.toNextIndices(person.indices)}
             activity_indices={person.activity_indices}
             showIndices={personShowIndices}
           />
@@ -69,7 +104,7 @@ class RightInfoZonePerson extends React.PureComponent {
               tags.map((tag) => {
                 return (
                   <Link to={`/${sysconfig.SearchPagePrefix}/${tag.t}/0/${sysconfig.MainListSize}`}
-                        key={Math.random()}>
+                        key={Math.random()} className={styles.link} target = '_blank'>
                     <Tag className="tag">{tag.t}</Tag>
                   </Link>
                 );
@@ -77,7 +112,24 @@ class RightInfoZonePerson extends React.PureComponent {
             }
           </div>
         </div>
-
+        <div className={styles.showTraj}>
+          <Modal
+            title="Trajectory"
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+            footer={[
+              <Button key="submit" type="primary" size="large" onClick={this.handleOk}>
+                <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.ok" />
+              </Button>,
+            ]}
+            width="600px"
+          >
+            <div className={styles.traj}>
+              <ExpertTrajectory person={this.state.cperson} centerZoom={centerZoom} />
+            </div>
+          </Modal>
+        </div>
       </div>
     );
   }

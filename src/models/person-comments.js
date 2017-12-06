@@ -2,7 +2,7 @@ import * as expertBaseService from 'services/expert-base';
 import * as tobProfileService from 'services/2b-profile';
 
 const JOINBYDOT = '.';
-
+console.log('---------------------------------------- import module person-comments.js', );
 export default {
 
   namespace: 'personComments',
@@ -14,6 +14,7 @@ export default {
   subscriptions: {},
 
   effects: {
+
     * getTobProfileList({ payload }, { call, put }) {
       const { persons } = payload;
       const ids = [];
@@ -80,7 +81,7 @@ export default {
       if (tbp && tbp.id) {
         const existComments = (tbp.extra && tbp.extra.comments) || [];
         const newComments = existComments.splice(index, 1);
-        const newExtra = { ...(tbp.extra || {}), comments: newComments };
+        const newExtra = { ...(tbp.extra || {}), comments: existComments };
         const updateFeedBack = yield call(expertBaseService.updateToBProfileExtra, tbp.id, newExtra);
         if (updateFeedBack.data.status) {
           yield put({

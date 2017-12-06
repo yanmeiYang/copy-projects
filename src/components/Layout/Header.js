@@ -1,68 +1,86 @@
 /**
  * Created by BoGao on 2017/9/14.
  */
-import React, { PureComponent, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { sysconfig, applyTheme } from 'systems';
+import { theme, applyTheme } from 'themes';
 import { Layout } from 'antd';
 import { KgSearchBox } from 'components/search';
 import HeaderInfoZone from 'components/Layout/HeaderInfoZone';
+import { hole, compare } from 'utils';
 import styles from './Header.less';
 
-const { theme } = sysconfig;
 const tc = applyTheme(styles);
 
-// import { Menu, Icon, Dropdown } from 'antd';
-// import { Link } from 'dva/router';
-// import { FormattedMessage as FM } from 'react-intl';
-// import { isEqual } from 'lodash';
-// import * as profileUtils from '../../utils/profile-utils';
-// import { sysconfig } from '../../systems';
-// import { KgSearchBox, SearchTypeWidgets } from '../../components/search';
-// import { isLogin, isGod, isAuthed } from '../../utils/auth';
-// import { TobButton, DevMenu } from '../../components/2b';
-// import locales from '../../locales';
-// import { saveLocale } from '../../utils/locale';
-// import defaults from '../../systems/utils';
+function mapStateToPropsFactory(initialState, ownProps) {
+  // a closure for ownProps is created
+  console.log('****** mapStateToPropsFactory',);
+  return function mapStateToProps(state) {
+    // console.log('****** mapStateToProps',); // TODO Performance
+    return ({
+      app: {
+        user: state.app.user,
+        roles: state.app.roles,
+        // isAdvancedSearch: state.app.isAdvancedSearch,
+      },
+    });
+  };
+}
 
-@connect(({ app }) => ({ app }))
-export default class Header extends PureComponent {
+const mapStateToProps = (state) => {
+  // console.log('****** mapStateToProps',); // TODO Performance
+  return ({
+    app: {
+      user: state.app.user,
+      roles: state.app.roles,
+    },
+  });
+};
+
+@connect(mapStateToPropsFactory)
+export default class Header extends Component {
   static displayName = 'Header';
 
   static propTypes = {
     logoZone: PropTypes.array,
     searchZone: PropTypes.array,
     infoZone: PropTypes.array,
+    rightZone: PropTypes.array,
 
-    headerSearchBox: PropTypes.object,
+    fixAdvancedSearch: PropTypes.bool,
+    disableAdvancedSearch: PropTypes.bool,
   };
 
   static defaultProps = {
     logoZone: theme.logoZone,
     searchZone: theme.searchZone,
     infoZone: theme.infoZone,
+    fixAdvancedSearch: false,
   };
 
-  state = {
-    query: '',
-    // logoutLoading: false,
-  };
-
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.query !== this.props.query) {
-      this.setQuery(nextProps.query);
-    }
-  };
-
-  // onChangeLocale = (locale) => {
-  //   saveLocale(sysconfig.SYSTEM, locale);
-  //   window.location.reload();
+  // state = {
+  //   query: '',
   // };
-  //
-  setQuery = (query) => {
-    this.setState({ query });
-  };
-  //
+
+  // componentWillReceiveProps = (nextProps) => {
+  //   if (nextProps.query !== this.props.query) {
+  //     this.setQuery(nextProps.query);
+  //   }
+  // };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (compare(this.props, nextProps,
+        'app', 'logoZone', 'searchZone', 'infoZone', 'rightZone', 'fixAdvancedSearch',
+      )) {
+      return true;
+    }
+    if (compare(this.state, nextState, 'query')) {
+      return true;
+    }
+    return false;
+  }
+
   // logoutAuth = () => {
   //   this.setState({ logoutLoading: true });
   //   // this.forceUpdate(() => console.log('forceUpdate Done!'));
@@ -77,87 +95,40 @@ export default class Header extends PureComponent {
   // };
 
   render() {
-    const { logoZone, searchZone, infoZone } = this.props;
-    const { headerSearchBox } = this.props.app;
-    const { onSearch } = this.props;
-    let { query } = this.props;
-    query = query;
-    // console.log('>>>>>>>', logoZone, searchZone, infoZone);
+    // console.log('>>>>>>>HEADER');
 
-    // if (headerSearchBox) {
-    //   const oldSearchHandler = headerSearchBox.onSearch;
-    //   headerSearchBox.onSearch = (query) => {
-    //     this.setState({ query: query.query });
-    //     if (oldSearchHandler) {
-    //       oldSearchHandler(query);
-    //     }
-    //   };
-    // }
-
-    const SearchZone = searchZone || [
-      <KgSearchBox key={0} size="large" query={query} onSearch={onSearch}
-                   className={styles.searchBox} style={{ height: 36, marginTop: 15 }}
-      />,
-      ];
-
-    const InfoZone = infoZone || [
-      <HeaderInfoZone key={0} app={this.props.app} logout={this.props.logout} />,
-      ];
-
-    // const { headerSearchBox, user, roles } = this.props.app;
-    //
-    // // Use default search if not supplied.
-    // if (headerSearchBox) {
-    //   const oldSearchHandler = headerSearchBox.onSearch;
-    //   headerSearchBox.onSearch = (query) => {
-    //     this.setState({ query: query.query });
-    //     if (oldSearchHandler) {
-    //       oldSearchHandler(query);
-    //     }
-    //   };
-    // }
-    //
-    // if (process.env.NODE_ENV !== 'production' && false) {
-    //   const { app } = this.props;
-    //   console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-    //   console.log('app.user:', app.user);
-    //   // console.log('app.token:', app.token ? app.token.slice(0, 10) : app.token);
-    //   console.log('app.roles:', app.roles);
-    //   console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-    // }
-    //
-    // const menu = (
-    //   <Menu style={{ boxShadow: '0 0 1px' }} selectedKeys={[sysconfig.Locale]}>
-    //     {locales && locales.map((local) => {
-    //       return (
-    //         <Menu.Item key={local}>
-    //           <span onClick={this.onChangeLocale.bind(this, local)}>
-    //             <FM id={`system.lang.option_${local}`}
-    //                 defaultMessage={`system.lang.option_${local}`} />
-    //           </span>
-    //         </Menu.Item>
-    //       );
-    //     })}
-    //   </Menu>
-    // );
-    //
-    // const UserNameBlock = isAuthed(roles)
-    //   ? sysconfig.Header_UserNameBlock === defaults.IN_APP_DEFAULT
-    //     ? <span>{user.display_name}</span>
-    //     : sysconfig.Header_UserNameBlock
-    //   : defaults.EMPTY_BLOCK;
+    const { logoZone, searchZone, infoZone, rightZone } = this.props;
+    const { onSearch, fixAdvancedSearch, disableAdvancedSearch, query, app } = this.props;
 
     return (
       <Layout.Header className={tc(['header'])}>
+
         <div className={tc(['logoZone'])}>
-          {logoZone && logoZone.length > 0 && logoZone.map(elm => elm)}
+          {hole.fill(logoZone)}
         </div>
+
         <div className={tc(['searchZone'])}>
-          {SearchZone && SearchZone.length > 0 && SearchZone.map(elm => elm)}
+          {hole.fill(searchZone, [
+            <KgSearchBox
+              key={100} size="large"
+              className={styles.searchBox} style={{ height: 36, marginTop: 15 }}
+              query={query} onSearch={onSearch}
+              fixAdvancedSearch={fixAdvancedSearch}
+              disableAdvancedSearch={disableAdvancedSearch}
+            />,
+          ])}
         </div>
+
         <div className={tc(['infoZone'])}>
-          {InfoZone && InfoZone.length > 0 && InfoZone.map(elm => elm)}
+          {hole.fill(infoZone)}
         </div>
+
+        <div className={tc(['rightZone'])}>
+          {hole.fill(rightZone, [
+            <HeaderInfoZone key={100} app={this.props.app} logout={this.props.logout} />,
+          ])}
+        </div>
+
       </Layout.Header>
     );
   }

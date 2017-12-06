@@ -33,6 +33,7 @@ const routes = [
   user.ResetPassword,
   user.Retrieve,
   user.UserInfo,
+  user.BatchRegister,
 
   // expertBase.ExpertBase,
   // expertBase.ExpertBaseExpertsPage,
@@ -67,17 +68,15 @@ const routes = [
 
   // expert map
   map.ExpertMap,
-  map.ExpertMapGoogle,
   map.ExpertTrajectoryPage,
   map.ExpertHeatmapPage,
-  map.ExpertMapDispatch,
 
   // Relation-Graph, KnowledgeGraph, TrendPrediction, etc...
   // core.RelationGraphPage, // TODO BUG
   // core.KnowledgeGraph, // TODO BUG
   // core.RanksHelp,
 
-  trend.TrendPredictionPage,
+  // trend.TrendPredictionPage,
 
   // 2b profile
   // core.TobProfile(app),

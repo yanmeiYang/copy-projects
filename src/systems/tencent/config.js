@@ -14,23 +14,15 @@ module.exports = {
   googleAnalytics: 'UA-107003102-1',
 
   EnableLocalLocale: true,
+  Layout_HasNavigator: false,
 
-  Header_LogoWidth: 212,
-  Header_LogoStyle: {
-    width: 185,
-    backgroundPosition: '8px 2px',
-    backgroundSize: 'auto 40px',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor: 'white',
-  },
-  Header_SubTextLogo: '人才智库',
-  Header_SubTextStyle: { paddingLeft: 12 },
   Header_UserPageURL: '',
-  Footer_Content: '',
 
   // > Search related
-  SearchBarInHeader: true,
-  HeaderSearch_TextNavi: [],
+  HeaderSearch_TextNavi: [], // 'ExpertSearch', 'ExpertMap'
+
+  AuthLoginUsingThird: true,
+  AuthLoginUsingThirdPage: 'http://ucircle.oa.com/auth/aminer',
 
   ExpertBases: [
     {
@@ -42,6 +34,7 @@ module.exports = {
       id: '595efbda9ed5db252c2b9349',
       name: '腾讯合作者',
       nperson: 0,
+      show: roles => roles.indexOf('管理员') >= 0 || roles.indexOf('超级管理员') >= 0,
     },
     /*
     高级专家人才
@@ -90,7 +83,6 @@ module.exports = {
     },
   ],
 
-  SearchFilterExclude: '',
   UniSearch_Tabs: ['list', 'map'],
 
 };

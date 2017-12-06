@@ -1,7 +1,9 @@
 /**
  * Created by zhanglimin on 17/9/1.
  */
-import * as expertBaseService from '../../services/expert-base';
+import * as expertBaseService from 'services/expert-base';
+
+console.log('---------------------------------------- import module expertBase');
 
 export default {
   namespace: 'expertBase',
@@ -10,7 +12,7 @@ export default {
     results: [],
     detailResults: [],
     addStatus: {},
-    deleteIsSuccess: null,
+    // deleteIsSuccess: null,
     currentPersonId: '',
   },
 
@@ -72,29 +74,29 @@ export default {
       }
     },
 
-    * searchExpertItem({ payload }, { call, put }) {
-      const { data } = yield call(expertBaseService.searchExpert, { payload });
-      yield put({
-        type: 'searchExpertSuccess', payload: { data },
-      })
-      ;
-    },
+    // * searchExpertItem({ payload }, { call, put }) {
+    //   const { data } = yield call(expertBaseService.searchExpert, { payload });
+    //   yield put({
+    //     type: 'searchExpertSuccess', payload: { data },
+    //   })
+    //   ;
+    // },
 
     * invokeRoster({ payload }, { call, put }) {
       const { data } = yield call(expertBaseService.rosterManage, { payload });
       yield put({ type: 'invokeRosterSuccess', payload: { data } });
     },
 
-    * removeExpertItem({ payload }, { call, put }) {
+    * removeExpertFromEB({ payload }, { call, put }) { // removeExpertItem
       const { pid, rid } = payload;
-      const { data } = yield call(expertBaseService.removeByPid, { pid, rid });
-      // TODO status改成detach
+      const { data } = yield call(expertBaseService.removeExpertsFromEBByPid, { pid, rid });
       if (data.status) {
-        yield put({ type: 'search/delPersonFromResultsById', pid });
+        // yield put({ type: 'search/removePersonFromSearchResultsById', pid }); // Moved outside.
+        //   yield put({ type: 'removeExpertFromEBSuccess', data });
       }
-      yield put({ type: 'removeSuccess', data });
     },
   },
+
   reducers: {
     getExpertSuccess(state, { payload: { data } }) {
       return { ...state, results: data };
@@ -111,17 +113,18 @@ export default {
     addExpertSuccess(state, { payload: { data } }) {
       return { ...state, };
     },
-    removeSuccess(state, { data }) {
-      return { ...state, deleteIsSuccess: data.status };
+
+    removeExpertFromEBSuccess(state, { data }) {
+      return { ...state };
     },
 
     addExpertToEBSuccess(state, { payload: { data } }) {
       return { ...state, addStatus: data, currentPersonId: '' };
     },
 
-    searchExpertSuccess(state, { payload: { data } }) {
-      return { ...state, detailResults: data };
-    },
+    // searchExpertSuccess(state, { payload: { data } }) {
+    //   return { ...state, detailResults: data };
+    // },
 
     setCurrentPersonId(state, { payload }) {
       return { ...state, currentPersonId: payload.id };

@@ -4,7 +4,7 @@
 import React from 'react';
 import { Link } from 'dva/router';
 import classnames from 'classnames';
-import * as defaults from 'utils/defaults';
+import * as hole from 'utils/hole';
 import { FormattedMessage as FM } from 'react-intl';
 
 import styles from './theme-tencent.less';
@@ -22,8 +22,8 @@ module.exports = {
     </Link>,
   ],
 
-  searchZone: defaults.IN_COMPONENT_DEFAULT,
-  infoZone: defaults.IN_COMPONENT_DEFAULT,
+  searchZone: hole.IN_COMPONENT_DEFAULT,
+  infoZone: hole.IN_COMPONENT_DEFAULT,
 
   // footer: (
   //   <div className={styles.footerText}>

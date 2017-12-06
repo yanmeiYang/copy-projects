@@ -1,7 +1,3 @@
-/**
- * Created by Administrator on 2017/7/26.
- */
-import { findPosition } from './map-utils';
 function GetGoogleMapLib(showTop) {
   return function showOverLay() {
     let me = {};
@@ -294,6 +290,17 @@ function GetGoogleMapLib(showTop) {
 
 
       /**
+       * ShaoZhou新添加，获取每个聚类的各个元素值
+       * @return {Array<Clusters>} 聚合的样式风格集合
+       */
+      MarkerClusterer.prototype.getClusters = function () {
+        console.log(this.clusters_);
+        console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+        return this.clusters_;
+      };
+
+
+      /**
        * Whether zoom on click is set.
        *
        * @return {boolean} True if zoomOnClick_ is set.
@@ -546,6 +553,7 @@ function GetGoogleMapLib(showTop) {
        * @return {number} The number of clusters.
        */
       MarkerClusterer.prototype.getTotalClusters = function() {
+        console.log(this.clusters_);
         return this.clusters_.length;
       };
 
@@ -1092,7 +1100,7 @@ function GetGoogleMapLib(showTop) {
           }
         });
         var that = this;
-        google.maps.event.addDomListener(this.div_, 'mouseover', function(event) {
+        google.maps.event.addDomListener(this.div_, 'mouseenter', function(event) {
           const projection = that.getProjection();
           const newPixel = new google.maps.Point(25,25);
           const as =projection.fromDivPixelToLatLng(newPixel);
@@ -1108,7 +1116,7 @@ function GetGoogleMapLib(showTop) {
 
           const markers = that.cluster_.getMarkers();
           for (var i = 0; i < that.cluster_.getSize(); i++) {
-            const userinfo = markers[i].getTitle();
+            const userinfo = markers[i].getLabel().id;
             userids[i] = userinfo;
             if (ids.indexOf(userinfo) == -1) {
               ids += `${userinfo},`;
@@ -1121,7 +1129,6 @@ function GetGoogleMapLib(showTop) {
             newids += `${newarray[i]},`;
           }
           ids = newids;
-          document.getElementById('currentIds').value = ids;
           const onLeave = () => {
             me.target = null;
           };

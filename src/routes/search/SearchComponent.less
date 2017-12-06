@@ -2,7 +2,24 @@
 
 .searchComponent {
   display: flex; flex-direction: column; // min-width: 800px;
+
+  .searchContent {
+    //max-width: @max-width-page;
+    display: flex; flex-direction: column;
+    //flex-wrap: wrap-reverse;
+    .leftRight {
+      display: flex; flex-direction: row; justify-content: space-between;
+      .personList { flex: 2; }
+      .searchKgContent { flex: 1; margin-left: 1% }
+    }
+
+    .paginationWrap {
+      display: flex; justify-content: center; flex: 1;
+      padding: 15px;
+    }
+  }
 }
+
 //
 //.topZone {
 //  display: flex; flex-direction: row; justify-content: flex-start;
@@ -38,10 +55,7 @@
 //  }
 //}
 //
-//.paginationWrap {
-//  display: flex; justify-content: center; flex: 1;
-//  padding: 15px;
-//}
+
 //
 //.spinWrap {
 //  text-align: center;
@@ -56,15 +70,6 @@
 //  max-width: @max-width-page;
 //}
 //
-.personAndKg {
-  //max-width: @max-width-page;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap-reverse;
-  .personListWidth {
-    width: 69%;
-  }
-}
 
 //
 //@media (min-width: 767px) {

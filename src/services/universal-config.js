@@ -1,6 +1,5 @@
 import { request, config } from '../utils';
 import { sysconfig } from '../systems';
-// console.log('>>>>>>>>>>>>>>>>>>>>>>>>>', sysconfig);
 
 const { api } = config;
 

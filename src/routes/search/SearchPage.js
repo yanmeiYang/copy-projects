@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { routerRedux, withRouter } from 'dva/router';
 import { connect } from 'dva';
-import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
+import * as strings from 'utils/strings';
 import { Layout } from 'routes';
-import { sysconfig, applyTheme } from 'systems';
+import { sysconfig } from 'systems';
+import { theme, applyTheme } from 'themes';
 import classnames from 'classnames';
 import { Auth } from 'hoc';
 import SearchComponent from 'routes/search/SearchComponent';
 import styles from './SearchPage.less';
 
-const { theme } = sysconfig;
 const tc = applyTheme(styles);
 
 // TODO Combine search and uniSearch into one.
@@ -35,20 +35,6 @@ export default class SearchPage extends Component {
     sortType: 'relevance',
   };
 
-  // componentWillMount() {
-  //   const { dispatch } = this.props;
-  //   const { query } = this.props.search;
-  //   if (sysconfig.SearchBarInHeader) {
-  //     dispatch({
-  //       type: 'app/layout',
-  //       payload: {
-  //         headerSearchBox: { query, onSearch: this.onSearchBarSearch },
-  //       },
-  //     });
-  //   }
-  //   // console.log('nnmn^O^ $ ^O^nMn...... ');
-  // }
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.search.query !== this.props.search.query) {
       console.log('COMPARE:', nextProps.search.query, this.props.search.query);
@@ -60,9 +46,11 @@ export default class SearchPage extends Component {
     console.log('Enter query is ', data);
     const newOffset = data.offset || 0;
     const newSize = data.size || sysconfig.MainListSize;
-    this.dispatch(routerRedux.push({
-      pathname: `/${sysconfig.SearchPagePrefix}/${data.query}/${newOffset}/${newSize}?`, // eb=${filters.eb}TODO
-    }));
+    const encodedQuery = strings.encodeAdvancedQuery(data.query) || '-';
+    const pathname = `/${sysconfig.SearchPagePrefix}/${encodedQuery}/${newOffset}/${newSize}`;
+    console.log('=========== encode query is: ', pathname);
+    this.dispatch(routerRedux.push({ pathname }));
+    // ?eb=${filters.eb}TODO
     // this.doSearchUseProps(); // another approach;
   };
 
@@ -81,7 +69,9 @@ export default class SearchPage extends Component {
           showSearchBox={false}
           disableFilter={sysconfig.Search_DisableFilter}
           disableExpertBaseFilter={sysconfig.Search_DisableExpertBaseFilter}
-          disableSearchKnowledge={sysconfig.Search_DisableSearchKnowledge}
+          disableSmartSuggest={!sysconfig.Search_EnableSmartSuggest}
+          // disableSearchKnowledge={sysconfig.Search_DisableSearchKnowledge}
+          rightZoneFuncs={theme.SearchComponent_RightZone}
           fixedExpertBase={sysconfig.Search_FixedExpertBase}
         />
       </Layout>

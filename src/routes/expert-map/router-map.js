@@ -2,17 +2,16 @@
  *  Created by BoGao on 2017-07-14;
  *  Refactored by BoGao on 2017-09-07; dva@2.0 react-router-4
  */
-export default {
+import { applyPluginModules } from 'themes';
+
+const routerConfig = {
   ExpertMap: {
     path: '/expert-map',
-    models: () => [import('models/expert-map')],
+    models: () => [
+      import('models/expert-map'),
+      import('models/expert-trajectory'),
+    ],
     component: () => import('./ExpertMapPage'),
-  },
-
-  ExpertMapGoogle: {
-    path: '/expert-googlemap',
-    models: () => [import('models/expert-map')],
-    component: () => import('./ExpertGoogleMapPage'),
   },
 
   ExpertTrajectoryPage: {
@@ -27,9 +26,8 @@ export default {
     component: () => import('routes/expert-trajectory/ExpertHeatmapPage'),
   },
 
-  ExpertMapDispatch: {
-    path: '/dispatch-expert-map',
-    models: () => [import('models/expert-map')],
-    component: () => import('./expert-map-dispatch'),
-  },
 };
+
+
+export default routerConfig;
+// export default applyPluginModules(routerConfig);

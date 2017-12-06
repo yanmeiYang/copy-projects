@@ -5,10 +5,12 @@
 export default {
   IndexPage2b: {
     path: '/2b',
-    models: () => [import('models/auth')],
+    models: () => [
+      import('models/auth'),
+      import('models/2b/user'),
+    ],
     component: () => import('routes/2b/2bIndex'),
   },
-
   Login2b: {
     path: '/2b/login',
     models: () => [import('models/auth')],
@@ -21,5 +23,14 @@ export default {
     component: () => import('routes/2b/emailTemplate'),
   },
 
+  UserCreate: {
+    path: '/2b/users/create',
+    models: () => [
+      import('models/2b/user'),
+      import('models/auth'),
+      import('models/common/universal-config'),
+    ],
+    component: () => import('routes/2b/user/UserCreate'),
+  },
 };
 

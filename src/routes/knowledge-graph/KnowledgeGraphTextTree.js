@@ -130,10 +130,10 @@ class KnowledgeGraphTextTree extends React.PureComponent {
       <div className={styles.kgContainer}>
         {/* Search for: {query} */}
 
-        {!tops && <div>
+        {!tops &&
+        <div>
           <span className={styles.emptyBlock}>Please input a keyword above</span>
-        </div>
-        }
+        </div>}
 
         {tops && tops.map((node) => {
           return <div key={node.id}> {this.showNode(node, 0)} </div>;

@@ -1,7 +1,6 @@
-/**
- * Created by zhanglimin on 17/9/1.
- */
-export default {
+import { applyPluginModules } from 'themes';
+
+const routerConfig = {
   ExpertBase: {
     path: '/eb',
     models: () => [import('models/expert-base/expert-base')],
@@ -13,7 +12,6 @@ export default {
     models: () => [
       import('models/search'),
       import('models/expert-base/expert-base'),
-      import('models/person-comments'),
     ],
     component: () => import('./ExpertBaseExpertsPage'),
   },
@@ -23,16 +21,19 @@ export default {
     models: () => [
       import('models/search'),
       import('models/expert-base/expert-base'),
-      import('models/person-comments'),
     ],
     component: () => import('./ExpertBaseExpertsPage'),
   },
 
   AddExpertBase: {
     path: '/add-expert-base', // TODO /eb/add
-    models: () => [import('models/expert-base/expert-base')],
+    models: () => {
+      console.log('...........................in model',);
+      return [import('models/expert-base/expert-base')];
+    },
     component: () => import('routes/expert-base/add-expert-base'),
   },
+
   AddExpertDetail: {
     path: '/add-expert-detail/:id', // TODO /eb/add-detail/:id
     models: () => [import('models/expert-base/expert-base')],
@@ -40,3 +41,6 @@ export default {
   },
 };
 
+
+// export default routerConfig;
+export default applyPluginModules('eb', routerConfig);

@@ -7,7 +7,6 @@ import { Button, Modal } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import styles from './AddToEBButton.less';
 
-
 class PersonRemoveButton extends React.PureComponent {
   state = {};
   removeItem = (pid) => {

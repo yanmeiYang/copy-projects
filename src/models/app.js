@@ -1,31 +1,45 @@
 import { parse } from 'qs';
+import { message as antdMessage } from 'antd';
+import { Map } from 'immutable';
 import { routerRedux } from 'dva/router';
-import { config, queryURL } from '../utils';
-import * as auth from '../utils/auth';
-import * as authService from '../services/auth';
-import { sysconfig } from '../systems';
+import { config, queryURL } from 'utils';
+import { mergeLibs } from 'utils/requirejs';
+import * as auth from 'utils/auth';
+import * as authService from 'services/auth';
+import { sysconfig } from 'systems';
+import { defineMessages, injectIntl } from 'react-intl';
 
 const { prefix } = config;
-// TODO remove unnecessary.
+
+const messages = defineMessages({
+  errorMessage401: {
+    id: 'message.error.login.401',
+    defaultMessage: 'User name or password not match!',
+  },
+});
+
+// TODO use immutablejs to speedup this file.
 export default {
   namespace: 'app',
+
   state: {
-    // User/auth token related. TODO move to auth module.
-    user: {},
     token: auth.getLocalToken(),
+    user: {}, // TODO immutable user and roles.
     roles: auth.createEmptyRoles(), // { admin: false, ccf_user: false, role: [], authority: [] },
-    loading: false,
+    feedbackStatus: null,
 
-    // layout switches.
-    headerSearchBox: null, // Header search box parameters.
-    showFooter: true,
+    isAdvancedSearch: false,
 
+    headerResources: null, // { key: [<helmet_component>] }
+
+    // loading: false, // TODO what's this?
     // Layout related, not used. TODO remove them.
     menuPopoverVisible: false,
     siderFold: localStorage.getItem(`${prefix}siderFold`) === 'true',
     darkTheme: localStorage.getItem(`${prefix}darkTheme`) === 'true',
     isNavbar: false, // document.body.clientWidth < 769,
     navOpenKeys: JSON.parse(localStorage.getItem(`${prefix}navOpenKeys`)) || [],
+
   },
 
   subscriptions: {
@@ -47,20 +61,59 @@ export default {
   effects: {
     // make sure app.user is filled.
     * getMe({ payload }, { call, put }) {
-      const { data } = yield call(authService.getCurrentUserInfo, parse(payload));
-      if (data) {
+      const { success, data } = yield call(authService.getCurrentUserInfo, parse(payload));
+      if (success && data) {
         yield put({ type: 'getMeSuccess', payload: data });
       }
     },
 
+    // params: src, restrictRoot, backdoor.
     * login({ payload }, { put, call }) {
-      const { data } = yield call(authService.login, payload);
-      if (data.status) {
-        auth.saveLocalToken(data.token);
+      // first call login.
+      const { restrictRoot, backdoor, ...params } = payload;
+      const { src, role } = params;
+      let authData;
+      try {
+        const { success, data } = yield call(authService.login, params);
+        authData = data;
+      } catch (err) {
+        const { success, statusCode, message } = err;
+        if (!success && statusCode > 400 && statusCode < 500) {
+          antdMessage.error('用户名或密码错误'); // TODO
+          yield put({ type: 'auth/loginError', data: message });
+        } else {
+          throw err;
+        }
+      }
+
+      // then get me.
+      if (authData && authData.status) {
+        if (src) {
+          auth.saveLocalTokenSystem(src, authData.token);
+        }
+        auth.saveLocalToken(authData.token);
+
+        const getMeParam = {};
+        if (backdoor) {
+          getMeParam.token = authData.token;
+        }
+
+        // TODO if(restrictRoot){ ... }
         // update me info.
-        const getMeData = yield call(authService.getCurrentUserInfo);
+        let getMeData;
+        try {
+          getMeData = yield call(authService.getCurrentUserInfo, getMeParam);
+        } catch (err) {
+          const { success, statusCode, message } = err;
+          if (!success && statusCode > 400 && statusCode < 500) {
+            antdMessage.error('认证失败!'); // TODO
+            yield put({ type: 'auth/loginError', data: message });
+          } else {
+            throw err;
+          }
+        }
         if (getMeData && getMeData.data) {
-          yield put({ type: 'getMeSuccess', payload: getMeData.data });
+          yield put({ type: 'getMeSuccess', payload: getMeData.data, role });
           yield put({ type: 'auth/hideLoading' });
           // yield auth.dispatchAfterLogin(put);
           const from = queryURL('from') || '/';
@@ -68,13 +121,10 @@ export default {
             console.log('Login Success, Dispatch to ', decodeURIComponent(from));
           }
           yield put(routerRedux.push({ pathname: decodeURIComponent(from) }));
-
-          console.log('--------------------------------------- done');
-          // yield put(routerRedux.push({ pathname: '/' }));// temp
         }
       } else {
-        console.error('Login error:', data);
-        yield put({ type: 'auth/loginError', data });
+        console.error('Login error:', authData);
+        yield put({ type: 'auth/loginError', authData });
       }
     },
 
@@ -84,10 +134,14 @@ export default {
       yield put({ type: 'logoutSuccess' });
       // yield auth.dispatchToLogin(put); // don't work
 
-      yield put(routerRedux.push({
-        pathname: sysconfig.Auth_LoginPage,
-        query: { from: auth.getLoginFromURL() },
-      }));
+      if (sysconfig.AuthLoginUsingThird) {
+        window.location.href = sysconfig.AuthLoginUsingThirdPage;
+      } else {
+        yield put(routerRedux.push({
+          pathname: sysconfig.Auth_LoginPage,
+          query: { from: auth.getLoginFromURL() },
+        }));
+      }
 
       // last call api.
       const data = yield call(authService.logout, token);
@@ -107,11 +161,33 @@ export default {
         yield put({ type: 'handleNavbar', payload: isNavbar });
       }
     },
+
+    * setFeedback({ payload }, { call, put }) {
+      const { email, content, user, url } = payload;
+      console.log('', email, content, user);
+      const subject = `[${sysconfig.SOURCE}] ${content.slice(0, 50)}`;
+      const body = `<div>${content}
+<br><br>Email:&nbsp;&nbsp;&nbsp;${email || ''}<br>URL:&nbsp;&nbsp;&nbsp;${url}<br>System:&nbsp;&nbsp;&nbsp;${sysconfig.SOURCE}
+<br>userID:&nbsp;&nbsp;&nbsp;${user.id}<br>userName:&nbsp;&nbsp;${user.display_name}<br>userEmail:&nbsp;&nbsp;${user.email}
+<br>userRole:&nbsp;&nbsp;${user.role}<br>time:&nbsp;&nbsp;&nbsp;${new Date()}</div>`;
+
+      const data = yield call(authService.setFeedback, {
+        subject: subject.replace(/[\r\n]/g, ' '),
+        body,
+      });
+
+      yield put({ type: 'feedbackSuccess', payload: data });
+    },
   },
 
   reducers: {
-    getMeSuccess(state, { payload: user }) {
+    getMeSuccess(state, { payload: user, role }) {
       const roles = auth.parseRoles(user);
+      if (role) { // tencent在用
+        if (roles.role.length > 0 && !roles.role.includes(role)) {
+          roles.role[0] = role;
+        }
+      }
       auth.saveLocalAuth(user, roles);
       return { ...state, user, roles };
     },
@@ -122,6 +198,26 @@ export default {
 
     alreadyLoggedIn(state, { user, roles }) {
       return { ...state, user, roles };
+    },
+
+    requireResource(state, { res }) {
+      // TODO other resource not in res.
+      const { changed, res: headerResources } = mergeLibs(state.headerResources, res);
+      return changed
+        ? { ...state, headerResources }
+        : state;
+    },
+
+    toggleAdvancedSearch(state) {
+      return { ...state, isAdvancedSearch: !state.isAdvancedSearch };
+    },
+
+    changeToAdvancedSearch(state) {
+      return { ...state, isAdvancedSearch: true };
+    },
+
+    changeToSimpleSearch(state) {
+      return { ...state, isAdvancedSearch: false };
     },
 
     switchSider(state) {
@@ -165,31 +261,6 @@ export default {
       return { ...state, ...payload };
     },
 
-    hideHeaderSearch(state) {
-      return { ...state, headerSearchBox: undefined };
-    },
-
-    setQueryInHeaderIfExist(state, { payload }) {
-      const { query } = payload;
-      if (state.headerSearchBox) {
-        const newState = state;
-        newState.headerSearchBox.query = query;
-        return newState;
-      } else {
-        return state;
-      }
-    },
-
-    clearQueryInHeaderIfExist(state) {
-      if (state.headerSearchBox) {
-        const newState = state;
-        newState.headerSearchBox.query = ' ';
-        return newState;
-      } else {
-        return state;
-      }
-    },
-
     logoutSuccess(state) {
       auth.removeLocalAuth();
       return { ...state, user: {}, token: null, roles: auth.createEmptyRoles() };
@@ -203,5 +274,8 @@ export default {
       return { ...state, loading: false };
     },
 
+    feedbackSuccess(state, { payload }) {
+      return { ...state, feedbackStatus: payload.success };
+    },
   },
 };

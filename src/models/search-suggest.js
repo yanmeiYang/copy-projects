@@ -1,42 +1,41 @@
-import pathToRegexp from 'path-to-regexp';
-import * as searchService from '../services/search';
-import { sysconfig } from '../systems';
+/*
+   Used in kgSearchBox.
+ */
+import * as suggestService from 'services/search-suggest';
+import { takeLatest } from './helper';
 
 export default {
-
   namespace: 'searchSuggest',
 
-  state: {
-    test: 'sdf',
-  },
+  state: {},
 
   subscriptions: {
-    setup({ dispatch, history }) {
-      history.listen((location, query) => {
-      });
-    },
+    // setup({ dispatch, history }) {
+    //   history.listen((location, query) => {
+    //   });
+    // },
   },
 
   effects: {
-    *searchPerson({ payload }, { call, put }) {
-      yield put({ type: 'showLoading' });
-      const { query, offset, size, filters, sort } = payload;
-      const { data } = yield call(searchService.searchPerson, query, offset, size, filters, sort);
-      yield put({ type: 'searchPersonSuccess', payload: { data } });
-    },
+    suggest: [function* ({ payload }, { call, put }) {
+      const { query } = payload;
+      const data = yield call(suggestService.suggest, query);
+      // yield put({ type: 'searchPersonSuccess', payload: { data } });
+      return data;
+    }, takeLatest],
   },
 
   reducers: {
-    searchPersonSuccess(state, { payload: { data } }) {
-      const { result, total } = data;
-      const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
-      return {
-        ...state,
-        results: result,
-        pagination: { pageSize: state.pagination.pageSize, total, current },
-        loading: false,
-      };
-    },
+    // searchPersonSuccess(state, { payload: { data } }) {
+    //   const { result, total } = data;
+    //   const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
+    //   return {
+    //     ...state,
+    //     results: result,
+    //     pagination: { pageSize: state.pagination.pageSize, total, current },
+    //     loading: false,
+    //   };
+    // },
   },
 
 };

@@ -18,30 +18,22 @@ module.exports = {
   UserAuthSystem: 'huawei', // aminer 或者是 system.config
   UserAuthSystem_AddSysTagAuto: true, // 登录时自动添加system的标签
 
-  Header_SubTextLogo: '知识洞察系统',
-  Header_SubTextStyle: { width: 128 },
-  Header_LogoStyle: {
-    top: '-10px',
-    width: '60px',
-    height: '36px',
-    backgroundSize: 'auto 56px',
-    backgroundPosition: '0px -10px',
-  },
-  Header_LogoWidth: 199,
   Header_UserPageURL: '/user-info',
-  // Footer_Content: '',
   ShowHelpDoc: true,
 
   Signup_Password: true,
+
+  // google analytics
+  googleAnalytics: 'UA-107003102-4',
+
+  // > Search related
+  HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertMap', 'Relation', 'TrendPrediction'],
 
   // Functionality
   Enable_Export: true,
   Search_EnablePin: true,
   // 地图中心点
   CentralPosition: { lat: 37.09024, lng: -95.712891 },
-
-  PersonList_TitleRightBlock: defaults.EMPTY_BLOCK_FUNC,
-  PersonList_AfterTitleBlock: ({ param }) => <PersonLabel person={param.person} />,
 
   ExpertBases: [
     {

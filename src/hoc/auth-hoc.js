@@ -1,11 +1,14 @@
 /* eslint-disable react/no-multi-comp */
-import React, { Component, PureComponent, PropTypes } from 'react';
-import { sysconfig } from '../systems';
-import * as authUtil from '../utils/auth';
-import { reflect } from '../utils';
-import debug from '../utils/debug';
+import React, { Component, PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import { sysconfig } from 'systems';
+import * as authUtil from 'utils/auth';
+import { reflect } from 'utils';
+import debug from 'utils/debug';
 
 const ENABLED = sysconfig.GLOBAL_ENABLE_HOC;
+
+const hasAuthInfo = props => props && props.app && props.app.user && props.app.roles;
 
 /**
  * 会根据 sysconfig.Auth_AllowAnonymousAccess 的值来判断是否进行登录权限判断。
@@ -21,14 +24,15 @@ function Auth(ComponentClass) {
       }
 
       if (process.env.NODE_ENV !== 'production') {
+        const name = ComponentClass.displayName || ComponentClass.name ||
+          reflect.GetComponentName(ComponentClass);
         if (debug.LogHOC) {
-          console.log('%c@@HOC: @Auth on %s', 'color:orange',
-            reflect.GetComponentName(ComponentClass));
+          console.log('%c@@HOC: @Auth on %s', 'color:orange', name);
         }
       }
 
       if (!sysconfig.Auth_AllowAnonymousAccess) { // 当不允许匿名登录时
-        if (!this.props.app) {
+        if (!hasAuthInfo(this.props)) {
           console.warn('Must connect `app` models when use @Auth! in component: ',
             reflect.GetComponentName(ComponentClass));
           console.error(ComponentClass);

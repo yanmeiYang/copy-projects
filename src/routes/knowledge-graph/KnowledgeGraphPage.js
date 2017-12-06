@@ -7,23 +7,24 @@ import classnames from 'classnames';
 import { FormattedMessage as FM } from 'react-intl';
 import queryString from 'query-string';
 import { routerRedux } from 'dva/router';
+import * as bridge from 'utils/next-bridge';
 import { Radio, Tabs, message } from 'antd';
 import { Layout } from 'routes';
 import { Spinner } from 'components';
 import { Message } from 'components/ui';
 import { PublicationList } from 'components/publication/index';
-import { PersonListTiny } from 'components/person/index';
-import { sysconfig, applyTheme } from 'systems';
+import { PersonList } from 'components/person';
+import { sysconfig } from 'systems';
+import { theme, applyTheme } from 'themes';
 import { Auth } from 'hoc';
 
 import styles from './KnowledgeGraphPage.less';
 import { KnowledgeGraphTextTree } from './index';
 
-const { theme } = sysconfig;
 const tc = applyTheme(styles);
 
 const RadioGroup = Radio.Group;
-const TabPane = Tabs.TabPane;
+const { TabPane } = Tabs;
 
 @connect(({ app, knowledgeGraph, loading }) => ({ app, knowledgeGraph, loading }))
 @Auth
@@ -42,7 +43,7 @@ export default class KnowledgeGraphPage extends React.PureComponent {
 
   componentWillMount() {
     let { query } = queryString.parse(location.search);
-    query = query || 'data mining';
+    query = query || '-';
     this.setState({ query });
     // if (query) {
     //   this.setState({ query });
@@ -127,7 +128,6 @@ export default class KnowledgeGraphPage extends React.PureComponent {
     // const href = window.location.href.split('?query=')[0] + '?query=' + query;
     // window.location.href = href;
 
-    this.props.dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query } });
     // pathname, query: { ...location.query, query },
     this.props.dispatch(routerRedux.push({
       pathname,
@@ -165,7 +165,7 @@ export default class KnowledgeGraphPage extends React.PureComponent {
       }
     }
     // console.log('Search : >>> ', query, 'escaped:', encodeURI(query));
-    query = encodeURIComponent(query);
+    // query = encodeURIComponent(query);
     return query;
   };
 
@@ -272,7 +272,10 @@ export default class KnowledgeGraphPage extends React.PureComponent {
                 <TabPane tab="EXPERTS" key="experts">
                   <Spinner loading={load} />
                   {kg.experts
-                    ? <PersonListTiny persons={kg.experts} />
+                    ? <PersonList
+                      persons={bridge.toNextPersons(kg.experts)}
+                      type="tiny"
+                    />
                     : this.EmptyBlock
                   }
 

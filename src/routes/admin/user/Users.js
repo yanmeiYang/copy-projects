@@ -7,7 +7,8 @@ import { Table, Tabs, Spin, Modal, Input, Radio, Button } from 'antd';
 import { connect } from 'dva';
 import { Layout } from 'routes';
 import { RequireAdmin } from 'hoc';
-import { sysconfig, applyTheme } from 'systems';
+import { sysconfig } from 'systems';
+import { theme, applyTheme } from 'themes';
 import { contactByJoint, getValueByJoint } from 'services/seminar';
 import styles from './Users.less';
 

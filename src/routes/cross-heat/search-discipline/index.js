@@ -8,7 +8,7 @@ import styles from './index.less';
 
 class SearchDiscipline extends React.Component {
   search = () => {
-    const query = ReactDOM.findDOMNode(this.refs.query).value ? ReactDOM.findDOMNode(this.refs.query).value : '';
+    const query = ReactDOM.findDOMNode(this.refs.query).value ? ReactDOM.findDOMNode(this.refs.query).value : null;
     this.props.onSearch(query);
   };
 
@@ -19,7 +19,8 @@ class SearchDiscipline extends React.Component {
   render() {
     return (
       <div className={styles.searchWrap}>
-        <Input placeholder="请输入领域, 例如：AI" ref="query" onPressEnter={this.handlesearch} />
+        <Input placeholder={this.props.placeValue} ref="query"
+               onPressEnter={this.handlesearch} />
         <Button type="primary" onClick={this.search}>智能生成</Button>
       </div>
     );

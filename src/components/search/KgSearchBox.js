@@ -1,18 +1,34 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Input, Button } from 'antd';
+import { Input, Button, message, Form, Icon } from 'antd';
+import * as strings from 'utils/strings';
 import Autosuggest from 'react-autosuggest';
 import { defineMessages, injectIntl } from 'react-intl';
 import classnames from 'classnames';
+import { sysconfig } from 'systems';
+import * as kgService from 'services/knoledge-graph-service';
+import * as suggestService from 'services/search-suggest';
 import styles from './KgSearchBox.less';
-import * as kgService from '../../services/knoledge-graph-service';
-import * as suggestService from '../../services/search-suggest';
-import { sysconfig } from '../../systems';
+
+const FormItem = Form.Item;
 
 const messages = defineMessages({
   placeholder: {
     id: 'com.KgSearchBox.placeholder',
     defaultMessage: 'Input expert name or query',
+  },
+  placeholderTerm: {
+    id: 'com.KgSearchBox.placeholderTerm',
+    defaultMessage: 'Term',
+  },
+  placeholderName: {
+    id: 'com.KgSearchBox.placeholderName',
+    defaultMessage: 'Name',
+  },
+  placeholderOrg: {
+    id: 'com.KgSearchBox.placeholderOrg',
+    defaultMessage: 'Org',
   },
   searchBtn: {
     id: 'com.KgSearchBox.searchBtn',
@@ -28,8 +44,7 @@ const getSuggestions = (value) => {
   const inputLength = inputValue.length;
 
   return inputLength === 0 ? [] : languages.filter(lang =>
-    lang.name.toLowerCase().slice(0, inputLength) === inputValue,
-  );
+    lang.name.toLowerCase().slice(0, inputLength) === inputValue);
 };
 
 // When suggestion is clicked, Autosuggest needs to populate the input
@@ -63,36 +78,57 @@ const getSectionSuggestions = (section) => {
   return section.suggestions;
 };
 
-@connect()
-@injectIntl
-export default class KgSearchBox extends React.PureComponent {
-  constructor() {
-    super();
+// ==================================================================================
 
+class KgSearchBox extends PureComponent {
+  static propTypes = {
+    // logoZone: PropTypes.array,
+  };
+
+  constructor(props) {
+    super(props);
+    this.advanced = this.getRealAdvancedSearchStatus(props);
     // Auto suggest is a controlled component.
     // This means that you need to provide an input value
     // and an onChange handler that updates this value (see below).
     // Suggestions also need to be provided to the Autosuggest,
     // and they are initially empty because the Autosuggest is closed.
     this.state = {
-      value: '', // current query
+      value: '', // current query, term in advanced.
       suggestions: [],
-      isLoading: false,
     };
 
-    this.lastRequestId = null;
+    this.lastRequestId = null; // 记录最后一次请求的ID，其余的都清除掉。
+    this.latestT = 1;
   }
 
   componentWillMount = () => {
-    this.setState({ value: this.props.query || '' });
+    const { query } = this.props;
+    const { term, name, org } = strings.destructDecodedQueryString(query);
+    const newQuery = this.advanced ? term : strings.firstNonEmpty(term, name, org);
+    this.setState({ value: newQuery || '' });
   };
+
+  componentDidMount() {
+    const { form, query } = this.props;
+    if (this.advanced) {
+      const { _, name, org } = strings.destructDecodedQueryString(query);
+      form.setFieldsValue({ name, org });
+    }
+  }
 
   componentWillReceiveProps = (nextProps) => {
-    if (nextProps.query !== this.state.value) {
-      this.setState({ value: nextProps.query || '' });
+    const { form, query } = this.props;
+    this.advanced = this.getRealAdvancedSearchStatus(nextProps);
+    if (nextProps.query !== query) {
+      const { term, name, org } = strings.destructDecodedQueryString(nextProps.query);
+      const newQuery = this.advanced ? term : strings.firstNonEmpty(term, name, org);
+      this.setState({ value: newQuery || '' });
+      if (this.advanced) {
+        form.setFieldsValue({ name, org });
+      }
     }
   };
-
 
   onChange = (event, { newValue, method }) => {
     this.setState({ value: newValue });
@@ -100,36 +136,45 @@ export default class KgSearchBox extends React.PureComponent {
 
   // Autosuggest will call this function every time you need to update suggestions.
   onSuggestionsFetchRequested = ({ value, reason }) => {
+    const { dispatch } = this.props;
     // Cancel the previous request
     if (this.lastRequestId !== null) {
       clearTimeout(this.lastRequestId);
     }
 
-    this.setState({ isLoading: true });
-
     // 延时200毫秒再去请求服务器。
     this.lastRequestId = setTimeout(() => {
-      const t = new Date().getTime();
-      this.latestT = t;
-
-      // TODO first call suggest search function.
-      const suggestPromise = suggestService.suggest(value);
-      suggestPromise.then(
-        (data) => {
-          if (t < this.latestT) {
-            return false; // out of date, canceled;
-          }
-          // console.log('suggest find data: ', data);
-          if (data.data && data.data.topic && data.data.topic.length > 0) {
-            this.makeSuggestion(data.data.topic);
-          }
-        },
-        (err) => {
-          console.log('failed', err);
-        },
-      ).catch((error) => {
-        console.error(error);
-      });
+      const newMethod = true; // use new method to do suggest.
+      if (newMethod) {
+        // TODO How to abort a promise outside? Or use saga to do this.
+        // TODO first call suggest search function.
+        const t = new Date().getTime();
+        this.latestT = t;
+        const suggestPromise = suggestService.suggest(value);
+        suggestPromise.then(
+          (data) => {
+            if (this.latestT && t >= this.latestT) {
+              if (data.data && data.data.topic && data.data.topic.length > 0) {
+                this.makeSuggestion(data.data.topic);
+              }
+            }
+          },
+          (err) => {
+            console.log('Request failed:', err);
+          },
+        ).catch((error) => {
+          console.error(error);
+        });
+      } else {
+        // replace with takeLatest effect.
+        dispatch({ type: 'searchSuggest/suggest', payload: { query: value } })
+          .then((data) => { //页面跳转到 热力图页面
+            console.log('0==================slkdjf', data);
+            if (data.data && data.data.topic && data.data.topic.length > 0) {
+              this.makeSuggestion(data.data.topic);
+            }
+          });
+      }
     }, 200);
   };
 
@@ -138,55 +183,6 @@ export default class KgSearchBox extends React.PureComponent {
   onSuggestionsClearRequested = () => {
     // console.log('onSuggestionsClearRequested');
     this.setState({ suggestions: [] });
-  };
-
-  // deprecated
-  makeSuggestion = (topics, selectedTopic) => {
-    // console.log('suggest find data: ', topics);
-    if (!topics && topics.length <= 0) {
-      return false;
-    }
-
-    const querySuggests = [];
-    topics.map((topic) => {
-      return querySuggests.push({
-        name: topic.text,
-        zh: topic.text,
-        type: 'suggest',
-      });
-    });
-
-    const topicGraph = topics[0];
-    if (topicGraph && topicGraph.graph && topicGraph.graph.hits) {
-      //   const parents = [];
-      //   topicGraph.graph.hits.map((hit) => {
-      //     parents.push(hit.parent);
-      //     if (hit.child_nodes && hit.child_nodes) {
-      //       childs.push(...hit.child_nodes);
-      //     }
-      //     return false;
-      //   });
-      //
-      //   console.log(parents, childs);
-      // TODO generate kg suggestions json.
-      const suggestion = this.kgDataTransferToSuggest(topicGraph.graph);
-
-      // Finally generate suggest json.
-      const suggestions = [
-        {
-          title: 'Related Topics:',
-          suggestions: querySuggests,
-        },
-        {
-          title: 'Knowledge Graph Suggestions:',
-          suggestions: suggestion,
-        },
-      ];
-      this.setState({
-        isLoading: false,
-        suggestions,
-      });
-    }
   };
 
   // TODO sort parents and childs.
@@ -256,58 +252,125 @@ export default class KgSearchBox extends React.PureComponent {
     });
   };
 
-  // handleSearch = () => {
-  //   // 这个不好
-  //   const kgs = document.getElementsByClassName('kgsuggest');
-  //   const data = {};
-  //   if (kgs && kgs.length > 0) {
-  //     data.query = kgs[0].firstChild.firstChild.value;
-  //   }
-  //   // const data = {
-  //   //   query: ReactDOM.findDOMNode('.findDOMNode').value,
-  //   // };
-  //   if (this.props.select) {
-  //     data.field = this.state.selectValue;
-  //   }
-  //   if (this.props.onSearch) this.props.onSearch(data);
-  // };
-  // onSuggestionSelected=(event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method })=>{
-  //   console.log(method);
-  //   if (method==='enter'){
-  //     this.props.onSearch({query:suggestionValue});
-  //   }
-  // };
+  getRealAdvancedSearchStatus = (props) => {
+    const { fixAdvancedSearch, isAdvancedSearch, disableAdvancedSearch } = props;
+    return disableAdvancedSearch ? false : fixAdvancedSearch ? true : isAdvancedSearch;
+  };
 
-  handleSubmit = (event) => {
-    event.preventDefault();
-    if (this.props.onSearch) {
-      this.props.onSearch({ query: this.state.value });
+  makeSuggestion = (topics, selectedTopic) => {
+    // console.log('suggest find data: ', topics);
+    if (!topics && topics.length <= 0) {
+      return false;
     }
+
+    const querySuggests = [];
+    topics.map((topic) => {
+      return querySuggests.push({
+        name: topic.text,
+        zh: topic.text,
+        type: 'suggest',
+      });
+    });
+
+    const topicGraph = topics[0];
+    if (topicGraph && topicGraph.graph && topicGraph.graph.hits) {
+      //   const parents = [];
+      //   topicGraph.graph.hits.map((hit) => {
+      //     parents.push(hit.parent);
+      //     if (hit.child_nodes && hit.child_nodes) {
+      //       childs.push(...hit.child_nodes);
+      //     }
+      //     return false;
+      //   });
+      //
+      //   console.log(parents, childs);
+      // TODO generate kg suggestions json.
+      const suggestion = this.kgDataTransferToSuggest(topicGraph.graph);
+
+      // Finally generate suggest json.
+      const suggestions = [
+        {
+          title: 'Related Topics:',
+          suggestions: querySuggests,
+        },
+        {
+          title: 'Knowledge Graph Suggestions:',
+          suggestions: suggestion,
+        },
+      ];
+      this.setState({ suggestions });
+    }
+  };
+
+  /**
+   * Handle Submit
+   * @param event
+   */
+  handleSubmit = (advanced, event) => {
+    event.preventDefault();
+
+    // pin query
+    const { form } = this.props;
+    let query = this.state.value; // term
+    if (advanced) {
+      const name = form.getFieldValue('name');
+      const org = form.getFieldValue('org');
+      query = strings.constructQueryString(this.state.value, name, org);
+    }
+    query = query || '-';
+
+    if (this.props.onSearch) {
+      this.props.onSearch({ advanced, query });
+    }
+
+    // 阻止搜索后再弹出窗口。
+    if (this.lastRequestId !== null) {
+      clearTimeout(this.lastRequestId);
+    }
+    this.latestT = 0;
+  };
+
+  switchAdvanced = () => {
+    this.props.dispatch({ type: 'app/toggleAdvancedSearch' });
   };
 
   render() {
     const { value, suggestions } = this.state;
     const { intl } = this.props;
-    const {
-      size, className, style, btnText, searchPlaceholder,
-      searchBtnStyle, indexPageStyle
-    } = this.props;
+    const { size, className, style, btnText, searchPlaceholder, searchBtnStyle } = this.props;
+    const { getFieldDecorator } = this.props.form;
+    const { fixAdvancedSearch, disableAdvancedSearch } = this.props;
+    const shouldShowSiwtchBtn = !fixAdvancedSearch && !disableAdvancedSearch;
+    // const { isAdvancedSearch } = this.props; // from app model.
+    // fixAdvancedSearch ? true : isAdvancedSearch;
+
     // Auto suggest will pass through all these props to the input.
     const inputProps = {
-      placeholder: searchPlaceholder || intl.formatMessage(messages.placeholder),
+      placeholder: this.advanced
+        ? intl.formatMessage(messages.placeholderTerm)
+        : searchPlaceholder || intl.formatMessage(messages.placeholder),
       value, // : query || '',
       onChange: this.onChange,
     };
+    const btnSize = size === 'huge' ? 'large' : size;
 
     // Finally, render it!
     return (
-      <form className={classnames(styles.kgSearchBox, className)} onSubmit={this.handleSubmit}>
+      <Form
+        className={classnames(
+          styles.kgSearchBox,
+          className,
+          styles[size],
+          this.advanced ? styles.adv : '',
+        )}
+        onSubmit={this.handleSubmit.bind(this, this.advanced)}>
+
         <Input.Group
-          compact size={size} style={style}
+          compact size={btnSize} style={style}
           className={classnames(styles.search, 'kgsuggest')}
         >
           <Autosuggest
-            id={indexPageStyle || 'kgsuggest'}
+            id="kgsuggest"
             suggestions={suggestions}
             multiSection
             onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
@@ -317,20 +380,48 @@ export default class KgSearchBox extends React.PureComponent {
             renderSectionTitle={renderSectionTitle}
             getSectionSuggestions={getSectionSuggestions}
             inputProps={inputProps}
-            size={size}
+            size={btnSize}
           />
+          {this.advanced &&
+          <FormItem>
+            {getFieldDecorator('name', {
+              // rules: [{ required: true, message: 'Please input your username!' }],
+            })(<Input className={classnames(styles.inputBox, styles.name)}
+                      placeholder={intl.formatMessage(messages.placeholderName)} />)}
+          </FormItem>
+          }
+
+          {this.advanced &&
+          <FormItem className={styles.orgFormItem}>
+            {getFieldDecorator('org', {
+              // rules: [{ required: true, message: 'Please input your username!' }],
+            })(<Input className={classnames(styles.inputBox, styles.org)}
+                      placeholder={intl.formatMessage(messages.placeholderOrg)} />)}
+          </FormItem>
+          }
 
           <Button
-            className={styles.searchBtn}
-            style={searchBtnStyle}
-            size={size}
-            type="primary"
-            onClick={this.handleSubmit}
-          >{btnText || intl.formatMessage(messages.searchBtn)}</Button>
+            className={styles.searchBtn} style={searchBtnStyle} htmlType="submit"
+            type="primary" size={btnSize} onClick={this.handleSubmit.bind(this, this.advanced)}
+          >
+            <span className={styles.searchBtnText}>
+              {btnText || intl.formatMessage(messages.searchBtn)}
+            </span>
+            <span className={styles.searchBtnIcon}><Icon type="search" /></span>
+          </Button>
 
+          {shouldShowSiwtchBtn &&
+          <Button
+            className={styles.switchBtn} style={searchBtnStyle}
+            type="primary" size={btnSize} onClick={this.switchAdvanced.bind(this, this.advanced)}
+          ><i className="fa fa-fw fa-retweet fa-md" />
+          </Button>
+          }
         </Input.Group>
-      </form>
+      </Form>
     );
   }
 }
 
+const mapStateToProps = state => ({ isAdvancedSearch: state.app.isAdvancedSearch });
+export default injectIntl(connect(mapStateToProps)(Form.create()(KgSearchBox)));

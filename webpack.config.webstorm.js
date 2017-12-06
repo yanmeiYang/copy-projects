@@ -12,16 +12,19 @@ module.exports = {
   resolve: {
     // Copied from webpack.config.js
     alias: {
+      hoc: `${__dirname}/src/hoc`,
+      public: `${__dirname}/src/public`,
       components: `${__dirname}/src/components`,
+      plugins: `${__dirname}/src/plugins`,
+      routes: `${__dirname}/src/routes`,
+      models: `${__dirname}/src/models`,
+      services: `${__dirname}/src/services`,
       utils: `${__dirname}/src/utils`,
       config: `${__dirname}/src/utils/config`,
-      enums: `${__dirname}/src/utils/enums`,
-      services: `${__dirname}/src/services`,
-      models: `${__dirname}/src/models`,
-      routes: `${__dirname}/src/routes`,
-      themes: `${__dirname}/src/themes`,
       systems: `${__dirname}/src/systems`,
-      hoc: `${__dirname}/src/hoc`,
+      themes: `${__dirname}/src/themes`,
+      hooks: `${__dirname}/src/hooks`,
+      enums: `${__dirname}/src/utils/enums`,
     },
   },
 };

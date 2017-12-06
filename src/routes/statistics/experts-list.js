@@ -94,6 +94,8 @@ class ExpertsList extends React.Component {
       };
     };
     this.props.author.sort(compare('contrib'));
+
+    const pagination = { total: this.props.author.length, pageSize: 30 };
     return (
       <div>
         {/* <div className={styles.top}>*/}
@@ -121,7 +123,7 @@ class ExpertsList extends React.Component {
         {/* /!*</span>*!/*/}
         {/* </div>*/}
         {/* rowSelection={rowSelection}*/}
-        <Table bordered size="small" pagination={false} columns={columns}
+        <Table bordered size="small" columns={columns} pagination={ pagination }
                dataSource={this.props.author} className={styles.expertList}
                style={{ marginTop: 10 }} />
       </div>

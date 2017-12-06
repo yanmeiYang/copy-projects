@@ -1,25 +1,39 @@
+/* eslint-disable prefer-destructuring,no-unused-expressions */
 import { sysconfig } from 'systems';
+import { notification } from 'antd';
 import pathToRegexp from 'path-to-regexp';
 import queryString from 'query-string';
 import * as searchService from 'services/search';
 import * as translateService from 'services/translate';
 import * as topicService from 'services/topic';
+import bridge from 'utils/next-bridge';
+import { takeLatest } from './helper';
 
 export default {
 
   namespace: 'search',
 
   state: {
-    results: [],
-    topic: {},
+    results: null,
+    topic: null, // search 右边的 topic
     aggs: [],
     filters: {},
     query: null,
 
-    // use translate search?
-    useTranslateSearch: sysconfig.Search_DefaultTranslateSearch,
-    translatedQuery: '',
+    searchSuggests: null,
 
+    // use translate search? TODO replace with Intelligence Search.
+    useTranslateSearch: sysconfig.Search_EnableTranslateSearch &&
+    !sysconfig.Search_EnableSmartSuggest && sysconfig.Search_DefaultTranslateSearch,
+    translatedLanguage: 0, // 1 en to zh; 2 zh to en;
+    translatedText: '',
+
+    // Intelligence search.
+    intelligenceSearchMeta: {}, // {expand:<word>, translated:<word>, kg:[<word>,...]}
+    intelligenceSuggest: null,
+    kg: null,
+
+    // pager
     offset: 0,
     sortKey: '',
     pagination: {
@@ -27,7 +41,7 @@ export default {
       showQuickJumper: true,
       showTotal: total => `共 ${total} 条`,
       current: 1,
-      pageSize: 20,
+      pageSize: sysconfig.MainListSize,
       total: null,
     },
 
@@ -39,9 +53,7 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen(({ pathname, search }) => {
-        // const query = queryString.parse(search);
-        // console.log('0998', query);
-
+        // TODO dont't use this method to get query, use in component method.
         let match = pathToRegexp('/(uni)?search/:query/:offset/:size').exec(pathname);
         if (match) {
           const keyword = decodeURIComponent(match[2]);
@@ -49,7 +61,6 @@ export default {
           const size = parseInt(match[4], 10);
           // dispatch({ type: 'emptyResults' });
           dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
-          dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: keyword } });
         }
 
         //
@@ -60,7 +71,6 @@ export default {
           const offset = parseInt(match[3], 10);
           const size = parseInt(match[4], 10);
           dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
-          dispatch({ type: 'app/setQueryInHeaderIfExist', payload: { query: keyword } });
         }
 
       });
@@ -68,8 +78,10 @@ export default {
   },
 
   effects: {
-    * searchPerson({ payload }, { call, put, select }) {
-      const { query, offset, size, filters, sort, total } = payload;
+    // 搜索全球专家时，使用old service。
+    // 使用智库搜索，并且排序算法不是contribute的时候，使用新的搜索API。
+    searchPerson: [function*({ payload }, { call, put, select }) {
+      const { query, offset, size, filters, sort, total, ghost } = payload;
       const noTotalFilters = {};
       for (const [key, item] of Object.entries(filters)) {
         if (typeof item === 'string') {
@@ -78,43 +90,102 @@ export default {
           noTotalFilters[key] = item;
         }
       }
+
+      // fix sort key
+      const Sort = fixSortKey(sort, query); // Fix default sort key.
+
+      // TODO replace this.
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
-      yield put({ type: 'updateSortKey', payload: { key: sort } });
-      yield put({ type: 'updateFilters', payload: { filters } });
-      const sr = yield call(searchService.searchPerson,
-        query, offset, size, noTotalFilters, sort, useTranslateSearch);
-      const data = (sr && sr.data) || {};
-      console.log('--------------', data);
+      const intelligenceSearchMeta = yield select(state => state.search.intelligenceSearchMeta);
+
       // 分界线
-      if (data.search) {
-        // NEW
-        yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.search } });
-      } else if (data.result) {
-        yield put({ type: 'searchPersonSuccess', payload: { data, query, total } });
+      yield put({ type: 'updateSortKey', payload: { key: Sort } });
+      yield put({ type: 'updateFilters', payload: { filters } });
+
+      const params = {
+        query, offset, size, filters: noTotalFilters, sort: Sort, intelligenceSearchMeta,
+        useTranslateSearch, // TODO remove
+      };
+      const data = yield call(searchService.searchPerson, params);
+      if (process.env.NODE_ENV !== 'production') {
+        if (data && data.data && data.data.queryEscaped) {
+          console.warn('DEVELOPMENT ONLY MESSAGE: Query中有非法字符，已经过滤。详情：宋驰没告诉我!');
+          notification.open({
+            message: 'DEVELOPMENT ONLY MESSAGE',
+            description: 'Query中有非法字符，已经过滤。详情：宋驰没告诉我!',
+          });
+        }
       }
-    },
+
+      if (data.data && data.data.succeed) {
+        // console.log('>>>>>> ---==== to next API');
+        // TODO 这些东西不应该放这里。。。。。。。。。。。。。。。。。
+        if (sysconfig.SOURCE === 'ccf') {
+          const personIds = data.data.items && data.data.items.map(item => item && item.id);
+          if (personIds) {
+            const activityScores = yield call(
+              searchService.getActivityScoresByPersonIds,
+              personIds.join('.'),
+            );
+            if (activityScores.success && activityScores.data && activityScores.data.indices &&
+              activityScores.data.indices.length > 0) {
+              data.data.items && data.data.items.map((item, index) => {
+                const activityRankingContrib =
+                  activityScores.data.indices[index].filter(scores => scores.key === 'contrib');
+                if (data.data.items[index].indices) {
+                  data.data.items[index].indices.activityRankingContrib =
+                    activityRankingContrib.length > 0 ? activityRankingContrib[0].score : 0;
+                }
+                return '';
+              });
+            }
+          }
+        }
+        if (!ghost) {
+          yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data, query } });
+        } else {
+          return data.data;
+        }
+        yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data, query } });
+        yield put({
+          type: 'getIntellResultsSuccess',
+          payload: { data: data.data.intellResults },
+        });
+        yield put({ type: 'getKgSuccess', payload: { data: data.data.intellResults } });
+      } else if (data.data && data.data.result) {
+        if (!ghost) {
+          yield put({ type: 'searchPersonSuccess', payload: { data: data.data, query, total } });
+        } else {
+          return data.data;
+        }
+      } else {
+        throw new Error('Result Not Available');
+      }
+    }, takeLatest],
 
     * translateSearch({ payload }, { call, put, select }) {
       // yield put({ type: 'clearTranslateSearch' });
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
-      // console.log("==================", useTranslateSearch);
       if (useTranslateSearch) {
         const { query } = payload;
-        const { data } = yield call(translateService.translateTerm, query);
-        console.log('||translateSearch', payload, '>>', data);
-        if (data && data.status) {
-          const q = query.trim().toLowerCase();
-          const en = data.en && data.en.trim().toLowerCase();
-          // console.log('>>>> query', q, ' == ', en);
-          if (q !== en) {
-            yield put({ type: 'translateSearchSuccess', payload: { data } });
+        if (query) {
+          try {
+            const { data } = yield call(translateService.translateTerm, query);
+            if (data && data.status) {
+              const q = query.trim().toLowerCase();
+              const en = data.en && data.en.trim().toLowerCase();
+              if (q !== en) {
+                yield put({ type: 'translateSearchSuccess', payload: { data } });
+              }
+            }
+          } catch (err) {
+            console.log(err);
           }
         }
       }
     },
-
     * searchPersonAgg({ payload }, { call, put, select }) {
-      const { query, offset, size, filters } = payload;
+      const { query, offset, size, filters, sort } = payload;
       const noTotalFilters = {};
       for (const [key, item] of Object.entries(filters)) {
         if (typeof item === 'string') {
@@ -124,7 +195,8 @@ export default {
         }
       }
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
-      const sr = yield call(searchService.searchPersonAgg, query, offset, size, noTotalFilters, useTranslateSearch);
+      const sr = yield call(searchService.searchPersonAgg,
+        query, offset, size, noTotalFilters, useTranslateSearch, sort);
       if (sr) {
         const { data } = sr;
         yield put({ type: 'searchPersonAggSuccess', payload: { data } });
@@ -138,43 +210,52 @@ export default {
     },
 
     * getTopicByMention({ payload }, { call, put }) {
-      const { mention } = payload;
-      const { data } = yield call(topicService.getTopicByMention, mention);
-      yield put({ type: 'getTopicByMentionSuccess', payload: { data } });
+      try {
+        const { mention } = payload;
+        const { data } = yield call(topicService.getTopicByMention, mention);
+        yield put({ type: 'getTopicByMentionSuccess', payload: { data } });
+      } catch (err) {
+        console.error(err);
+      }
     },
-
   },
 
   reducers: {
     updateUrlParams(state, { payload: { query, offset, size } }) {
+      const newState = { ...state, query, offset };
       if (state.query !== query) {
-        const filters = state.filters.eb
-          ? { eb: state.filters.eb }
-          : {
-            eb: {
-              id: sysconfig.DEFAULT_EXPERT_BASE,
-              name: sysconfig.DEFAULT_EXPERT_BASE_NAME,
-            },
+        newState.filters = newState.filters || {};
+        if (!newState.filters.eb) {
+          newState.filters.eb = {
+            id: sysconfig.DEFAULT_EXPERT_BASE,
+            name: sysconfig.DEFAULT_EXPERT_BASE_NAME,
           };
-        return { ...state, query, offset, filters, pagination: { pageSize: size } };
-      }
-      return { ...state, query, offset, pagination: { pageSize: size } };
-    },
+        }
 
-    updateFilters(state, { payload: { filters } }) {
-      return { ...state, filters };
+        newState.pagination = newState.pagination || {
+            current: 1,
+            pageSize: sysconfig.MainListSize,
+            total: null,
+          };
+        newState.pagination.pageSize = size;
+        newState.translatedText = '';
+      }
+      return newState;
     },
 
     updateFiltersAndQuery(state, { payload: { query, filters } }) {
       return { ...state, query, filters };
     },
 
-    updateSortKey(state, { payload: { key } }) {
-      // console.log('reducers, update sort key : ', key);
-      return { ...state, sortKey: key || '' };
+    updateFilters(state, { payload: { filters } }) {
+      return { ...state, filters };
     },
 
-    searchPersonSuccess(state, { payload: { data, total } }) {
+    updateSortKey(state, { payload: { key } }) {
+      return { ...state, sortKey: key };
+    },
+
+    searchPersonSuccess(state, { payload: { data, query, total } }) {
       if (!data) {
         return state;
       }
@@ -183,32 +264,36 @@ export default {
       const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
       return {
         ...state,
-        results: result,
+        results: query === '-' ? null : bridge.toNextPersons(result),
         pagination: { pageSize: state.pagination.pageSize, total: currentTotal, current },
       };
     },
-
-    nextSearchPersonSuccess(state, { payload: { data } }) {
+    nextSearchPersonSuccess(state, { payload: { data, query } }) {
       if (!data) {
         return state;
       }
-      const { succeed, message, total, result, aggregation } = data;
+      const { succeed, message, total, offset, size, items, aggregation } = data;
       if (!succeed) {
         throw new Error(message);
       }
       const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
-      return {
+      const { translatedLanguage, translatedText } = data;
+      const newState = {
         ...state,
-        results: result,
+        results: query === '-' ? null : items,
         pagination: { pageSize: state.pagination.pageSize, total, current },
+        aggs: aggregation,
+        translatedLanguage,
+        translatedText,
       };
+      return newState;
     },
 
     emptyResults(state) {
       return { ...state, results: [] };
     },
 
-    delPersonFromResultsById(state, { pid }) {
+    removePersonFromSearchResultsById(state, { payload: { pid } }) {
       const originalResults = [];
       for (const value of state.results) {
         if (value.id !== pid) {
@@ -222,7 +307,7 @@ export default {
       if (!data) {
         return state;
       }
-      const { aggs } = data;
+      const aggs = bridge.toNextAggregation(data.aggs);
       return { ...state, aggs };
     },
 
@@ -231,21 +316,49 @@ export default {
     },
 
     translateSearchSuccess(state, { payload: { data } }) {
-      return { ...state, translatedQuery: data.en };
+      let translatedLanguage = 0;
+      if (data.en) {
+        translatedLanguage = 2;
+      } else if (data.zh) {
+        translatedLanguage = 1;
+      }
+      return { ...state, translatedText: data.en || data.zh, translatedLanguage };
     },
 
     setTranslateSearch(state, { payload: { useTranslate } }) {
       return { ...state, useTranslateSearch: useTranslate };
     },
+    setIntelligenceSearch(state, { payload: { intelligenceSearchMeta } }) {
+      return {
+        ...state,
+        intelligenceSearchMeta,
+      };
+    },
 
     clearTranslateSearch(state) {
-      return { ...state, useTranslateSearch: true, translatedQuery: '' };
+      return { ...state, useTranslateSearch: true, translatedText: '' };
     },
 
     getTopicByMentionSuccess(state, { payload: { data } }) {
       return { ...state, topic: data.data };
     },
-
+    getIntellResultsSuccess(state, { payload: { data } }) {
+      return { ...state, intelligenceSuggest: data };
+    },
   },
-
 };
+
+function fixSortKey(sort, query) {
+  if (query) {
+    // search, default is relevance;
+    if (!sort || sort === 'time') {
+      return 'relevance';
+    }
+  } else {
+    // List all experts in query. use time as default sort.
+    if (!sort || sort === 'relevance') {
+      return 'time';
+    }
+  }
+  return sort;
+}

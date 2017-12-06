@@ -8,9 +8,9 @@ import { IntlProvider, addLocaleData } from 'react-intl';
 import { createLogger } from 'redux-logger';
 import { message } from 'antd';
 import createLoading from 'dva-loading';
-import { ApolloClient, createNetworkInterface, ApolloProvider } from 'react-apollo';
+// import { ApolloClient, createNetworkInterface, ApolloProvider } from 'react-apollo';
 import { sysconfig } from './systems';
-import { config } from './utils';
+//import { config } from './utils';
 import { ReduxLoggerEnabled } from './utils/debug';
 
 // const log = ::console.log;
@@ -20,10 +20,6 @@ const ERROR_MSG_DURATION = 3; // 3 秒
 
 configAntd();
 
-if (ENABLE_PERF) { // eslint-disable-line no-undef
-  window.Perf = require('react-addons-perf');
-}
-
 /** ----------------------------------------------------------------------------
  *
  * ----------------------------------------------------------------------------*/
@@ -32,8 +28,18 @@ if (ENABLE_PERF) { // eslint-disable-line no-undef
 const app = dva({
   history: createHistory(),
   onError(error) {
-    logErr('Global Error:', error);
-    message.error(error.message, ERROR_MSG_DURATION);
+    if (process.env.NODE_ENV !== 'production') {
+      logErr(
+        '===============================================',
+        '\n这回真的错的不行了！！！\n',
+        error,
+        '\n===============================================',
+      );
+      message.error(error.message, ERROR_MSG_DURATION);
+    } else {
+      logErr('= Global Error:', error);
+      message.error(error.message, ERROR_MSG_DURATION);
+    }
   },
 });
 
@@ -47,6 +53,9 @@ if (process.env.NODE_ENV !== 'production') {
 
 // 2. Model
 app.model(require('./models/app'));
+// app.model(require('./models/auth')); // TODO use this model in hoc. or auto hoc.
+// app.use(require('./ssrMiddleware'));
+// app.disable('x-powered-by');
 
 // 3. Router
 app.router(require('./systems/' + sysconfig.SYSTEM + '/router'));
@@ -57,19 +66,37 @@ const messages = require('./locales/' + sysconfig.Locale);
 addLocaleData(require('react-intl/locale-data/' + sysconfig.Locale));
 
 // Graphql
-const client = new ApolloClient({
-  networkInterface: createNetworkInterface({
-    uri: config.graphqlAPI,
-  }),
-});
+// const client = new ApolloClient({
+//   networkInterface: createNetworkInterface({
+//     uri: config.graphqlAPI,
+//   }),
+// });
+
+const areIntlLocalesSupported = require('intl-locales-supported');
+
+const localesMyAppSupports = ['en', 'zh'];
+
+if (global.Intl) {
+  // Determine if the built-in `Intl` has the locale data we need.
+  if (!areIntlLocalesSupported(localesMyAppSupports)) {
+    // `Intl` exists, but it doesn't have the data we need, so load the
+    // polyfill and replace the constructors with need with the polyfill's.
+    const IntlPolyfill = require('intl');
+    Intl.NumberFormat = IntlPolyfill.NumberFormat;
+    Intl.DateTimeFormat = IntlPolyfill.DateTimeFormat;
+  }
+} else {
+  // No `Intl`, so use and load the polyfill.
+  global.Intl = require('intl');
+}
 
 const App = app.start();
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <IntlProvider locale={sysconfig.Locale} messages={messages}>
-      <App />
-    </IntlProvider>
-  </ApolloProvider>,
+  // <ApolloProvider client={client}>
+  <IntlProvider locale={sysconfig.Locale} messages={messages}>
+    <App />
+  </IntlProvider>,
+  // </ApolloProvider>,
   document.getElementById('root'),
 );
 

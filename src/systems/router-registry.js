@@ -23,6 +23,7 @@ import trend_new from 'routes/trend/router-trend';
 import seminar from 'routes/seminar/router-seminar';
 import tencent from 'routes/third-login/router';
 import router2bprofile from 'routes/2b-profile/router-2bprofile';
+import profile from 'routes/profile/router-profile';
 import crossHeat from 'routes/cross-heat/router-ch';
 import dataAnnotation from 'routes/data-annotation/router-da';
 import topicRelation from 'routes/topic-relation/router-relation';
@@ -41,6 +42,7 @@ const RouterRegistry = [
 
   // person
   person.Person,
+  person.PersonPage,
 
   // user & auth.
   auth.Login,
@@ -50,6 +52,7 @@ const RouterRegistry = [
   user.ResetPassword,
   user.Retrieve,
   user.UserInfo,
+  user.BatchRegister,
 
   expertBase.ExpertBase,
   expertBase.ExpertBaseExpertsPage,
@@ -81,13 +84,12 @@ const RouterRegistry = [
   seminar.Statistic,
   seminar.StatisticDetail,
   seminar.SeminarByEdit,
+  seminar.SeminarPostNew,
 
   // expert map
   map.ExpertMap,
-  map.ExpertMapGoogle,
   map.ExpertTrajectoryPage,
   map.ExpertHeatmapPage,
-  map.ExpertMapDispatch,
 
   // Relation-Graph, KnowledgeGraph, TrendPrediction, etc...
   core.RelationGraphPage, // TODO BUG
@@ -100,8 +102,18 @@ const RouterRegistry = [
   router2bprofile.TobProfile,
   router2bprofile.Addition,
 
+  // profile
+  profile.ProfileMerge,
+
   tencent.ThirdLogin,
-  crossHeat.Cross,
+  crossHeat.CrossReport,
+  crossHeat.CrossTaskList,
+  crossHeat.CrossIndex,
+  crossHeat.CrossStartTask,
+  crossHeat.CrossReportExport,
+
+  // Data Annotation
+  dataAnnotation.AnnotatePersonProfile,
 
   topicRelation.RelationPage,
 
@@ -114,6 +126,7 @@ const RouterRegistry2b = [
   route2b.IndexPage2b,
   route2b.Login2b,
   route2b.EmailTemplate,
+  route2b.UserCreate,
 ];
 
 const RouterJSXFunc = (history, app, routes, RootComponent) => {
@@ -128,7 +141,12 @@ const RouterJSXFunc = (history, app, routes, RootComponent) => {
       {/*<RootComponent>*/}
       <Switch>
         {/* <Route exact path="/" render={() => (<Redirect to="/dashboard" />)} /> */}
-        {routes.map(({ path, noExact, ...dynamics }, index) => {
+        {routes.map((route, index) => {
+          if (!route) {
+            console.log('Error: route #%d is null!', index);
+            return false;
+          }
+          const { path, noExact, ...dynamics } = route;
           const dupKey = `${index}_`;
 
           if (false && process.env.NODE_ENV !== 'production') {

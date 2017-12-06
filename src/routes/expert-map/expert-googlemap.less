@@ -57,8 +57,8 @@
         .t {
           display: flex; flex-direction: row; align-items: center;
           margin-bottom: 15px; margin-top: 20px;
-          span { width: 25px; height: 25px; margin-left: 10px; }
-          .tExperts { margin-left: 50px; }
+          span { width: 25px; height: 25px; }
+          .tExperts { margin-left: 25px; }
           .expertIcon1 { background-position: -67px -453px; }
           .expertIcon2 { background-position: -105px -453px; }
         }
@@ -70,13 +70,26 @@
             width: 32px; height: 18px; color: #008cff;
             border-right: white; text-align: center;
           }
-          .label { color: #333333; margin-right: 15px; }
+          .label { color: #333333; margin-right: 10px; }
           .text { color: #333333 }
           .item1 { background-color: #72bf43; color: #333333; }
           .item2 { background-color: #849804; color: #849804; }
           .item3 { background-color: #f37902; color: #f37902; }
           .item4 { background-color: #ff4800; color: #ff4800; }
           .item5 { background-color: #f30022; color: #333333; }
+        }
+      }
+
+      .backwell {
+        display: flex; flex-direction: column; flex: 0 auto;
+        background-color: #fefefe;
+        word-wrap: break-word; word-break: break-all;
+        border-bottom: #666; padding: 8px 16px 8px 8px;
+        overflow: hidden;
+        .back {
+          display: flex;
+          font-size: @font-size-lg;
+          color: #999999;
         }
       }
 
@@ -132,18 +145,14 @@
 
   .roundImgContainer {
     // box-shadow: 0px 0px 5px blue;
-    cursor: pointer; z-index: 10000; position: absolute; border-radius: 50%;
+    cursor: pointer; z-index: 10000; position: absolute;
 
     .imgWrapper {
-      z-index: 10001; border: 1px solid white; position: absolute;
+      z-index: 10001; border: 1px solid white; position: absolute; border-radius: 50%;
       border-radius: 50%; overflow: hidden;
       box-shadow: 0px 0px 5px #333, 0 0 5px #333 inset;
 
       img { background: white; }
-    }
-    .imgWrapper1 {
-      z-index: 10001; border: 1px solid white; position: relative;
-      box-shadow: 0px 0px 5px #333;
     }
   }
 

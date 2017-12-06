@@ -2,6 +2,7 @@ import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import { sysconfig } from '../../systems';
+import { theme } from 'themes';
 import { PersonList } from '../../components/person';
 import styles from './ExpertCard.less';
 
@@ -29,7 +30,7 @@ class ExpertCard extends React.PureComponent {
     const orgs = this.props.orgs;
     return (
       <div className={styles.content}>
-        <PersonList persons={orgs} titleRightBlock={sysconfig.PersonList_TitleRightBlock}/>
+        <PersonList persons={orgs} titleRightBlock={theme.PersonList_TitleRightBlock} />
       </div>
 
     );

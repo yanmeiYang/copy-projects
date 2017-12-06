@@ -3,11 +3,12 @@
  */
 import { routerRedux } from 'dva/router';
 import pathToRegexp from 'path-to-regexp';
-import { sysconfig } from '../systems';
+import { sysconfig } from 'systems';
 // import { config } from '../utils';
-import * as seminarService from '../services/seminar';
-import * as uconfigService from '../services/universal-config';
-import * as personService from '../services/person';
+import * as seminarService from 'services/seminar';
+import * as uconfigService from 'services/universal-config';
+import * as personService from 'services/person';
+import { takeLatest } from './helper';
 
 export default {
   namespace: 'seminar',
@@ -63,12 +64,12 @@ export default {
   },
 
   effects: {
-    * getSeminar({ payload }, { call, put }) {
+    getSeminar: [function* ({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
       const { offset, size, filter } = payload;
       const { data } = yield call(seminarService.getSeminar, offset, size, filter);
       yield put({ type: 'getSeminarsSuccess', payload: { data, offset, size } });
-    },
+    }, takeLatest],
     * getSeminarByID({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
       yield put({ type: 'clearState' });
@@ -101,6 +102,11 @@ export default {
       const data = yield call(uconfigService.listByCategory, category);
       yield put({ type: 'getCategorySuccess', payload: { data, category } });
     },
+    getOrgList: [function* ({ payload }, { call, put }) {
+      const { category } = payload;
+      const data = yield call(uconfigService.listByCategory, category);
+      yield put({ type: 'getCategorySuccess', payload: { data, category } });
+    }, takeLatest],
     * addKeyAndValue({ payload }, { call, put }) {
       const { key, val } = payload;
       const data = yield call(uconfigService.setByKey, 'activity_organizer_options', decodeURI(key), val);
@@ -235,10 +241,12 @@ export default {
 
     getSeminarsSuccess(state, { payload: { data, offset, size } }) {
       let newData = [];
-      if (state.results.length >= size) {
+      if (state.results.length >= size && offset !== 0) {
         newData = state.results.concat(data);
-      } else {
+      } else if (offset === 0) {
         newData = data;
+      } else {
+        newData = state.results;
       }
       return { ...state, results: newData, loading: false, offset: offset + state.sizePerPage };
     },

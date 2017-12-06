@@ -1,12 +1,19 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { routerRedux, Link, withRouter } from 'dva/router';
 import { sysconfig } from 'systems';
+import { theme, applyTheme } from 'themes';
+import { hole, createURL } from 'utils';
+// import { query } from 'services/user';
+import * as strings from 'utils/strings';
 import { Auth } from 'hoc';
-import classnames from 'classnames';
-import { createURL } from 'utils';
+import { Layout } from 'routes';
+import { FormattedMessage as FM } from 'react-intl';
 import SearchComponent from 'routes/search/SearchComponent';
 import styles from './ExpertBaseExpertsPage.less';
+
+const tc = applyTheme(styles);
 
 @connect(({ app, search, expertBase, loading }) => ({ app, search, expertBase, loading }))
 @withRouter
@@ -20,31 +27,15 @@ export default class ExpertBaseExpertsPage extends Component {
   componentWillMount() {
     const { dispatch, match } = this.props;
     const { offset, size, id } = match.params;
-    let query = match.params.query;
+    let { query } = match.params;
     query = query === '-' ? '' : query;
 
-    console.log('000', { query, offset, size, id });
+    console.log('000000--', { query, offset, size, id });
 
-    // this.props.dispatch({
-    //   type: 'expertBase/getExpertDetailList',
-    //   payload: { id: this.TheOnlyExpertBaseID, offset: 0, size: 200 },
-    // });
-    dispatch({
-      type: 'app/layout',
-      payload: {
-        headerSearchBox: {
-          query,
-          onSearch: this.onSearch,
-          btnText: 'Search expert base',
-          searchPlaceholder: 'Input expert name',
-        },
-        // showFooter: false,
-      },
-    });
     // Set query to null, and set eb to the only eb. TODO bugs
     dispatch({
       type: 'search/updateFiltersAndQuery', payload: {
-        query, filters: { eb: { id: sysconfig.ExpertBase, name: '我的专家库' } },
+        query, filters: { eb: { id, name: '我的专家库' } },
       },
     });
   }
@@ -54,7 +45,7 @@ export default class ExpertBaseExpertsPage extends Component {
   //   this.props.dispatch(routerRedux.push({ pathname: `/add-expert-detail/${id}` })); // TODO
   // };
 
-  onSearch = (data) => {
+  onSearchBarSearch = (data) => {
     const { match, dispatch } = this.props;
     const pathname = createURL(match.path, match.params, {
       query: data.query || '-',
@@ -64,27 +55,11 @@ export default class ExpertBaseExpertsPage extends Component {
     dispatch(routerRedux.push({ pathname }));
   };
 
-  // Not used
-  searchExpertByName = (value) => {
-    this.setState({ flag: true });
-    const id = this.TheOnlyExpertBaseID;
-    if (value) {
-      this.props.dispatch({
-        type: 'expertBase/searchExpertItem',
-        payload: { id, name: value },
-      });
-    } else {
-      this.props.dispatch({
-        type: 'expertBase/getExpertDetailList',
-        payload: { id, offset: 0, size: 100 },
-      });
-    }
-  };
-
   ebSorts = ['time', 'h_index', 'activity', 'rising_star', 'n_citation', 'n_pubs'];
 
   render() {
-    const { query } = this.props.search;
+    const { query, pagination, sortKey, filters } = this.props.search;
+    const { id } = this.props.match.params;
     let seeAllURL = '';
     if (query) {
       const { match } = this.props;
@@ -93,28 +68,72 @@ export default class ExpertBaseExpertsPage extends Component {
       });
     }
 
+    const total = pagination && (pagination.total || 0);
+    const { term, name, org } = strings.destructQueryString(query);
+    const zoneData = { total, term, name, org, id };
+
     return (
-      <div className={classnames('content-inner', styles.page)}>
+      <Layout contentClass={tc(['expertBase'])} onSearch={this.onSearchBarSearch}
+              query={query} fixAdvancedSearch>
+
+        {theme.ExpertBaseExpertsPage_TitleZone && theme.ExpertBaseExpertsPage_TitleZone.length > 0 &&
         <h1 className={styles.pageTitle}>
-          我的专家库
-          {seeAllURL &&
+
+          {hole.fill(theme.ExpertBaseExpertsPage_TitleZone, [
+            <FM key={10} defaultMessage="我的专家库" id="page.ExpertBaseExpertsPage.MyExperts" />,
+          ])}
+
+          {theme.ExpertBaseExpertsPage_Title_SHOW_SeeAll_Link && seeAllURL &&
           <div className={styles.seeAll}>
-            <Link to={seeAllURL}>查看全部专家</Link>
+            <Link to={seeAllURL}>
+              <FM key={10} defaultMessage="查看全部专家"
+                  id="page.ExpertBaseExpertsPage.SeeAllExperts" />
+            </Link>
           </div>
           }
-        </h1>
+        </h1>}
+
+        <div className={styles.message}>
+          {hole.fillFuncs(theme.ExpertBaseExpertsPage_MessageZone, [
+            (payload) => {
+              const querySegments = [];
+              if (payload.term) {
+                querySegments.push(payload.term);
+              }
+              if (payload.name) {
+                querySegments.push(payload.name);
+              }
+              if (payload.org) {
+                querySegments.push(payload.org);
+              }
+              const queryString = querySegments.join(', ');
+
+              return (
+                <div key={100}>
+                  {payload.total} Experts in ACM Fellow.
+                  {queryString && <span> related to "{queryString}".</span>}
+                </div>
+              );
+            },
+          ], zoneData)}
+        </div>
+
         <SearchComponent // Example: include all props.
           className={styles.SearchBorder} // additional className
-          sorts={query ? null : this.ebSorts}
-          defaultSortType="time"
+          sorts={sysconfig.Search_SortOptions || (query ? null : this.ebSorts)}
+          defaultSortType={sortKey}
           onSearchBarSearch={this.onSearchBarSearch}
-          showSearchBox={this.props.app.headerSearchBox ? false : true}
-          disableFilter={!query}
+          expertBaseId={id}
+          PersonList_BottomZone={theme.PersonList_BottomZone}
+          // showSearchBox={this.props.app.headerSearchBox ? false : true}
+          PersonList_UpdateHooks={sysconfig.PersonList_UpdateHooks}
+          rightZoneFuncs={[]}
+          showSearchBox={false}
+          disableFilter={sysconfig.Search_DisableFilter || !query}
           disableExpertBaseFilter
           disableSearchKnowledge
         />
-      </div>
-
+      </Layout>
     );
   }
 }

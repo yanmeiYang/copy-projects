@@ -1,34 +1,11 @@
 import { config } from '../utils';
 import { sysconfig } from '../systems';
+import { personAvatar } from './display';
 
 const { api } = config;
 
-/**
- * Created by BoGao on 2017/5/31.
- */
-
-const cdnDomain = 'am-cdn-s0.b0.upaiyun.com';
-/**
- * Get person avatar image address.
- * @param src
- * @param profileId
- * @param size - width in px.
- * @returns string - picture url of person avatar.
- */
 const getAvatar = (src, profileId, size) => {
-  const imgSize = size || 160;
-  const imgSrc = src || '//static.aminer.org/default/default.jpg';
-
-  // const scopeSessionId = Math.random(); // 'todo-replace-scope-session-id';
-  if (imgSrc.indexOf('static.aminer.org') >= 0) {
-    // 其他域名下CDN图片读取不出来。
-    return `${imgSrc.replace('static.aminer.org', cdnDomain)}!${imgSize}`;
-    // ?ran=${scopeSessionId}`;
-    // return `${imgSrc}?ran=${scopeSessionId}`;
-  } else {
-    // return `${imgSrc}?ran=${scopeSessionId}`;
-    return imgSrc;
-  }
+  return personAvatar(src, profileId, size);
 };
 
 /**
@@ -45,6 +22,21 @@ const displayPosition = (pos) => {
     position = pos && pos[pos.length - 1] && pos[pos.length - 1].n ? pos[pos.length - 1].n : '';
   }
   return position;
+};
+
+const displayCitation = (acmCitation) => {
+  const citation = acmCitation && acmCitation[acmCitation.length - 1] && acmCitation[acmCitation.length - 1].citation ? acmCitation[acmCitation.length - 1].citation : '';
+  return citation;
+};
+
+const displayCountry = (acmCitation) => {
+  const country = acmCitation && acmCitation[acmCitation.length - 1] && acmCitation[acmCitation.length - 1].country ? acmCitation[acmCitation.length - 1].country : '';
+  return country;
+};
+
+const displayYear = (acmCitation) => {
+  const year = acmCitation && acmCitation[acmCitation.length - 1] && acmCitation[acmCitation.length - 1].year ? acmCitation[acmCitation.length - 1].year : '';
+  return year;
 };
 
 // deprecated
@@ -136,4 +128,7 @@ module.exports = {
   displayEmailSrc,
   displayEmailSrc2,
   findTopNTags,
+  displayCitation,
+  displayCountry,
+  displayYear,
 };

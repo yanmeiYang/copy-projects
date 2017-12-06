@@ -1,35 +1,38 @@
-import React, { PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Tag, Tabs } from 'antd';
 import classnames from 'classnames';
+import { Hole } from 'components/core';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { compare } from 'utils/compare';
+import { hole } from 'utils';
 import styles from './SearchSorts.less';
 
-const TabPane = Tabs.TabPane;
+const { TabPane } = Tabs;
 
 const defaultSorts = ['relevance', 'h_index', 'activity', 'rising_star', 'n_citation', 'n_pubs'];
 
 @connect()
-export default class SearchSorts extends React.PureComponent {
+export default class SearchSorts extends PureComponent {
   static displayName = 'SearchSorts';
 
   static propTypes = {
     sorts: PropTypes.array,
     sortType: PropTypes.string.isRequired,
-    rightZone: PropTypes.array,
+    rightZone: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
     onOrderChange: PropTypes.func,
   };
 
   static defaultProps = {
     // Note: default value只在使用component时不传参数时生效。传空进来并不能生效。
-    sortType: 'relevance',
+    sortType: '',
     rightZone: [],
   };
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return compare(this.props, nextProps, 'sortType', 'sorts');// TODO sorts not work.
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return compare(this.props, nextProps, 'sortType', 'sorts');// TODO sorts not work.
+  // }
 
   onOrderChange = (e) => {
     if (this.props.onOrderChange) {
@@ -37,21 +40,24 @@ export default class SearchSorts extends React.PureComponent {
     }
   };
 
+
   render() {
-    const { rightZone } = this.props;
-    const sortType = this.props.sortType || 'relevance';
+    const { rightZone, sortType } = this.props;
     const sorts = this.props.sorts || defaultSorts;
     if (!sorts || sorts.length <= 0) {
       return false;
     }
 
     // render rightZone
-    const rightZoneJSX = rightZone && rightZone.length > 0 &&
-      <div>
+    const rightZoneJSXs = rightZone && rightZone.length > 0 &&
+      <div className={styles.exportButtonZone}>
         {rightZone && rightZone.length > 0 && rightZone.map((block) => {
           return block && block({ sortType });
         })}
       </div>;
+
+    // TODO but div???
+    const rightZoneJSX = <Hole fill={rightZone} param={{ sortType }} />;
 
     return (
       <Tabs

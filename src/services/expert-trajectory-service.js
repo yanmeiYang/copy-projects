@@ -1,4 +1,5 @@
-import { request, config } from '../utils';
+import { request, config } from 'utils';
+
 const { api } = config;
 
 
@@ -18,30 +19,47 @@ export async function dataFind2(id) {
 }
 
 export async function eventFind(year) { // 有query
-  return require('../../external-docs/expert-trajectory/eventTop10000.json');
+  return request('/lab/trajectory/eventTop10000.json');
 }
 
-export async function findTrajPerson(id) {
-  return request(api.getTrajectoryInfo
+export async function findTrajPerson(id, start, end) {
+  return request(
+    api.getTrajectoryInfo
       .replace(':id', id)
-      .replace(':lo', 1988)
-      .replace(':hi', 2012)
-    , { method: 'GET' });
+      .replace(':lo', start)
+      .replace(':hi', end)
+    , { method: 'GET' },
+    );
 }
 
-export async function findHeatMap(rid) {
-  return request(api.getHeatInfo
-      .replace(':rid', rid)
-      .replace(':lo', 1988)
-      .replace(':hi', 2012)
-      .replace(':size', 344)
-    , { method: 'GET' });
+export async function findTrajsHeat(rosterId, start, end, size) {
+  return request(
+    api.getHeatInfo
+      .replace(':rid', rosterId)
+      .replace(':lo', start)
+      .replace(':hi', end)
+      .replace(':size', size)
+    , { method: 'GET' },
+    );
 }
+
+export async function findTrajsHeatAdvance(name, offset, org, term, size) {
+  return request(
+    api.getHeatByQuery
+      .replace(':name', name)
+      .replace(':offset', offset)
+      .replace(':org', org)
+      .replace(':term', term)
+      .replace(':size', size)
+    , { method: 'GET' },
+  );
+}
+
 
 export async function findTop10000Data() {
-  return require('../../public/lab/heatData40.json');
+  return request('/lab/trajectory/heatData40.json');
 }
 
 export async function eventTop10000Find() {
-  return require('../../external-docs/expert-trajectory/eventTop10000.json');
+  return request('/lab/trajectory/eventTop10000.json');
 }

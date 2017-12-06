@@ -1,11 +1,12 @@
+/* eslint-disable camelcase */
 /**
  * Created by BoGao on 2018-08-13.
  */
 import { routerRedux } from 'dva/router';
-import { config } from '../utils';
-import { sysconfig } from '../systems';
-import * as authService from '../services/auth';
-import * as uconfigService from '../services/universal-config';
+import { sysconfig } from 'systems';
+import * as authService from 'services/auth';
+import * as uconfigService from 'services/universal-config';
+import * as expertBaseService from 'services/expert-base';
 
 export default {
   namespace: 'auth',
@@ -19,25 +20,61 @@ export default {
     userRoles: [],
     errorMessage: '',
   },
+
   subscriptions: {},
+
   effects: {
     * createUser({ payload }, { call, put }) {
-      const { email, first_name, gender, last_name, position, sub, password, role } = payload;
-      const { data } = yield call(authService.createUser, email, first_name, gender,
-        last_name, position, sub, password);
-      yield put({ type: 'createUserSuccess', payload: data });
-      if (data.status) {
-        const uid = data.uid;
-        yield call(authService.invoke, uid, sysconfig.SOURCE);
-        if (sysconfig.ShowRegisteredRole) {
-          const arr = role.split('_');
-          if (arr.length === 2) {
-            yield call(authService.invoke, uid, `${arr[0]}`);
-            yield call(authService.invoke, uid, `authority_${arr[1]}`);
-          } else if (arr.length === 1) {
-            yield call(authService.invoke, uid, `${arr[0]}`);
+      const { email, first_name, gender, last_name, position, sub, password, role, ghost } = payload;
+      try {
+        const { data } = yield call(authService.createUser, email, first_name, gender,
+          last_name, position, sub, password);
+        if (data.status) {
+          const uid = data.uid;
+          yield call(authService.invoke, uid, sysconfig.SOURCE);
+          if (sysconfig.ShowRegisteredRole) {
+            const arr = role.split('_');
+            if (arr.length === 2) {
+              yield call(authService.invoke, uid, `${arr[0]}`);
+              yield call(authService.invoke, uid, `authority_${arr[1]}`);
+            } else if (arr.length === 1) {
+              yield call(authService.invoke, uid, `${arr[0]}`);
+            }
+          }
+
+          // Add Hooks.
+          // const hooks = sysconfig.RegisterUserHooks || [];
+          // for (const hook of hooks) {
+          //   if (hook) {
+          //     hook();
+          //   }
+          // }
+          const ids = sysconfig.Register_AddPrivilegesToExpertBaseIDs;
+          if (ids && ids.length > 0) {
+            for (const id of ids) {
+              console.log('================================ dAdd privileges to eb: ', id, first_name);
+              const { data } = yield call(
+                expertBaseService.rosterManage,
+                {
+                  payload: {
+                    id,
+                    name: `${first_name} ${last_name}`,
+                    email: `${email}@${sysconfig.SOURCE}`,
+                    perm: 3,
+                  },
+                },
+              );
+            }
+          }
+
+          if (!ghost) {
+            yield put({ type: 'createUserSuccess', payload: data });
+          } else {
+            return data;
           }
         }
+      } catch (err) {
+        return err;
       }
       // for (const value of role) {
       //   yield call(authService.invoke, uid, value.id);
@@ -85,7 +122,9 @@ export default {
     },
 
     * checkEmail({ payload }, { call, put }) {
-      const { data } = yield call(authService.checkEmail, sysconfig.SOURCE, payload.email);
+      const { email, source } = payload;
+      const src = source || sysconfig.SOURCE;
+      const { data } = yield call(authService.checkEmail, src, email);
       yield put({ type: 'checkEmailSuccess', payload: data.status });
     },
 
@@ -119,8 +158,8 @@ export default {
     },
     // 获取注册用户列表
     * getCategoryByUserRoles({ payload }, { call, put }) {
-      const { category } = payload;
-      const data = yield call(uconfigService.listByCategory, category);
+      const { category, source } = payload;
+      const data = yield call(uconfigService.listByCategory, category, source);
       yield put({ type: 'setData', payload: { data } });
     },
   },

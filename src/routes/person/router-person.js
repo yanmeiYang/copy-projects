@@ -13,4 +13,14 @@ export default {
     ],
     component: () => import('./'),
   },
+
+  PersonPage: {
+    path: '/p/:id',
+    models: () => [
+      import('models/aminer-person'),
+      import('models/publications'),
+      import('models/vis/vis-research-interest'),
+    ],
+    component: () => import('./PersonPage'),
+  },
 };

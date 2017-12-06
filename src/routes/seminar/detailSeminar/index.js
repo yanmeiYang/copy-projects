@@ -4,6 +4,7 @@
 import React from 'react';
 import { Button } from 'antd';
 import { connect } from 'dva';
+import { Layout } from 'routes';
 import PosterPage from './posterPage';
 import DetailPage from './detailPage';
 import styles from './index.less';
@@ -30,20 +31,22 @@ class DetailSeminar extends React.PureComponent {
   render() {
     const { showPosterType } = this.state;
     return (
-      <div className={styles.setMaxWidth}>
-        {/*TODO 海报格式先隐藏*/}
-        {/*{this.props.app.token &&*/}
-        {/*<div style={{ textAlign: 'center' }}>*/}
-          {/*{showPosterType ?*/}
-            {/*<Button type="primary" style={{ width: '50%' }}*/}
-                    {/*onClick={this.changeTab.bind(this, showPosterType)}>查看全部信息</Button>*/}
-            {/*: <Button type="primary" style={{ width: '50%' }}*/}
-                      {/*onClick={this.changeTab.bind(this, showPosterType)}>查看简单版</Button>}*/}
-        {/*</div>}*/}
-        {/*{ showPosterType ?*/}
-          {/*<PosterPage pad={this.pad} /> : <DetailPage pad={this.pad} /> }*/}
-        <DetailPage pad={this.pad} />
-      </div>
+      <Layout searchZone={[]}>
+        <div className={styles.setMaxWidth}>
+          {/*TODO 海报格式先隐藏*/}
+          {/*{this.props.app.token &&*/}
+          {/*<div style={{ textAlign: 'center' }}>*/}
+            {/*{showPosterType ?*/}
+              {/*<Button type="primary" style={{ width: '50%' }}*/}
+                      {/*onClick={this.changeTab.bind(this, showPosterType)}>查看全部信息</Button>*/}
+              {/*: <Button type="primary" style={{ width: '50%' }}*/}
+                        {/*onClick={this.changeTab.bind(this, showPosterType)}>查看简单版</Button>}*/}
+          {/*</div>}*/}
+          {/*{ showPosterType ?*/}
+            {/*<PosterPage pad={this.pad} /> : <DetailPage pad={this.pad} /> }*/}
+          <DetailPage pad={this.pad} />
+        </div>
+      </Layout>
     );
   }
 }

@@ -1,6 +1,15 @@
 # Aminer2b
 
-## Development Environment
+
+## Documentation Draft
+
+Build内存溢出可以用下面方式build.
+```javascript
+node --max_old_space_size=4096 node_modules/roadhog/lib/build.js --analyze  
+```
+
+
+## Development Environment / IDE Setup
 
 IDE：WebStorm Latest version.
 
@@ -14,7 +23,7 @@ IDE：WebStorm Latest version.
 ### DVA2.0 Updates
 
 ###### Use Absolute Path to `import` packages. (Webpack alias)
-```javascript 1.8
+```javascript
 // old
 import { PersonList } from '../../component/person';
 
@@ -65,6 +74,9 @@ webpackConfig.resolve.alias = {
 ##### JSX
 + Never use Math.random() as key in JXS loop.
 + Don't use <span></span> to include multiline jsx, indentation not work in webstorm with multiline span.
+
+
+
 
 
 #### Coding Conventions / 编码规范
@@ -154,6 +166,15 @@ export default class SearchComponent extends Component {
 }
 ```
 
+##### Effects takeLatest
+```javascript
+const takeLatest = { type: 'takeLatest' };
+searchPerson: [function* ({ payload }, { call, put, select }) {
+  yield put({ type: 'updateFilters', payload: { filters } });
+  // ....
+}, takeLatest],
+```
+
 ## 挖坑
 
 ### systems/index.js
@@ -197,13 +218,21 @@ PersonList_RightZone: defaults.IN_APP_DEFAULT, // [()=><COMP>]
     const RightZoneFuncs = rightZoneFuncs || DefaultRightZoneFuncs;
     ```
 
-### component不引入systems配置文件，一律从最外层通过参数形式传入component中
-```javascript
+### Component原则上不引入sysconfig配置文件，需要从上层通过参数(props)的形式传入Component中
+```html
 <PersonList persons={orgs} titleRightBlock={sysconfig.PersonList_TitleRightBlock}
 personRemove={sysconfig.Person_PersonRemoveButton} />
 ```
 
-##### Formater of ternary expression (? expression)
+
+
+
+#### 编发风格规范（Code Style）
+
+
+
+
+##### Code Style of ternary expression (? expression)
 
 ```javascript
 // If the expression can in one line.
@@ -216,4 +245,14 @@ const A = hasValue ? 'has value' : 'no';
     : <Loading/>
   )}
 </Bundle>
-···
+```
+
+
+## Refactoring TODO
+#### Remove the Occurrence.
+  showFooter
+  let { query } = queryString.parse(location.search);
+  INTERESTS_I18N
+  import * as hole from 'utils/hole';
+  classnames
+

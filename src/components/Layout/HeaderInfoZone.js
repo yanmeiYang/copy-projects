@@ -3,7 +3,9 @@
  */
 import React, { PureComponent } from 'react';
 import { sysconfig } from 'systems';
-import { Menu, Icon, Dropdown } from 'antd';
+import classnames from 'classnames';
+import { theme } from 'themes';
+import { Menu, Icon, Dropdown, Button } from 'antd';
 import { Link } from 'dva/router';
 import { FormattedMessage as FM } from 'react-intl';
 import { TobButton, DevMenu } from 'components/2b';
@@ -35,7 +37,7 @@ export default class HeaderInfoZone extends PureComponent {
       ? `/login?from=${location.pathname}`
       : '/login';
   };
-  
+
   render() {
     const { user, roles } = this.props.app;
     const UserNameBlock = isAuthed(roles)
@@ -58,17 +60,15 @@ export default class HeaderInfoZone extends PureComponent {
         })}
       </Menu>
     );
+
+    const additionFunc = theme.Header_UserAdditionalInfoBlock;
+    const AdditionalJSX = additionFunc && additionFunc({ user, roles });
+
     return (
       <div className={styles.headerInfoZone}>
-        {/*className={styles.menu}*/}
-        <Menu selectedKeys={[location.pathname]}
-              mode="horizontal" theme="light">
-          {/*className={styles.menu}*/}
+        <Menu selectedKeys={[location.pathname]} mode="horizontal" theme="light">
 
-          {/* <Menu.Item key="/users"> */}
-          {/* <Link to="/"><Icon type="bars" />语言切换</Link> */}
-          {/* </Menu.Item> */}
-
+          {/* 帮助 */}
           {isLogin(user) && sysconfig.ShowHelpDoc &&
           <Menu.Item key="/help">
             <Link to="/help">
@@ -76,63 +76,63 @@ export default class HeaderInfoZone extends PureComponent {
             </Link>
           </Menu.Item>}
 
+          {/*语言 */}
           {sysconfig.EnableLocalLocale &&
-          <Menu.Item>
+          <Menu.Item key="/language">
             <Dropdown overlay={menu} placement="bottomLeft">
-              <a className="ant-dropdown-link">
+              <a className={classnames('ant-dropdown-link')}>
+                <span className={styles.longLanguage}>
                 <FM id="system.lang.show" defaultMessage="system.lang.show" />&nbsp;
+                </span>
+                <span className={styles.simpleLanguage}>
+                  <FM id="system.lang.simple" defaultMessage="system.lang.simple" />&nbsp;
+                </span>
                 <Icon type="down" />
               </a>
             </Dropdown>
           </Menu.Item>
           }
 
+          {/* ---- 头像 & 用户名 ---- */}
           {isAuthed(roles) &&
           <Menu.Item key="/account">
-            <Link to={sysconfig.Header_UserPageURL} title={user.display_name}
-                  className="headerAvatar">
-              <img src={profileUtils.getAvatar(user.avatar, user.id, 30)}
-                   alt={user.display_name} />
-              {/* <Icon type="frown-circle"/>个人账号 */}
-            </Link>
+            {sysconfig.Header_UserPageURL ?
+              <Link to={sysconfig.Header_UserPageURL} title={user.display_name}
+                    className={styles.headerAvatar}>
+                <img src={profileUtils.getAvatar(user.avatar, user.id, 30)} />
+
+                {/* 用户名 */}
+                {UserNameBlock && <span className={styles.userName}>{UserNameBlock}</span>}
+
+                {/* <Icon type="frown-circle"/>个人账号 */}
+              </Link>
+              :
+              <div className={styles.headerAvatar}>
+                <img src={profileUtils.getAvatar(user.avatar, user.id, 30)} />
+                {UserNameBlock && <span className={styles.userName}>{UserNameBlock}</span>}
+              </div>
+            }
           </Menu.Item>
           }
 
-          {UserNameBlock &&
-          <Menu.Item key="/name" className={styles.emptyMenuStyle}>
-            {UserNameBlock}
-          </Menu.Item>
-          }
+          {AdditionalJSX &&
+          <Menu.Item key="/additional" className={styles.additional}>{AdditionalJSX}</Menu.Item>}
 
-          {/*/!* TODO 不确定是否其他系统也需要显示角色 TODO ccf specified. *!/*/}
-          {/*{sysconfig.SYSTEM === 'ccf' && roles && isAuthed(roles) &&*/}
-          {/*<Menu.Item key="role" className={styles.emptyMenuStyle}>*/}
-          {/*<p className={roles.authority[0] !== undefined ? styles.isAuthority : ''}>*/}
-          {/*<span>{roles.role[0]}</span>*/}
-          {/*{roles.authority[0] !== undefined &&*/}
-          {/*<br />*/}
-          {/*<span>{seminarService.getValueByJoint(roles.authority[0])}</span>*/}
-          {/*</span>}*/}
-          {/*</p>*/}
-          {/*</Menu.Item>*/}
-          {/*}*/}
-
-
-          {isGod(roles) &&
+          {isGod(roles) && false && // ----------------------- TODO
           <Menu.Item key="/devMenu">
             <DevMenu />
           </Menu.Item>}
 
           {isGod(roles) &&
           <Menu.Item key="/2bbtn">
-            <Link to="/2b"><TobButton /></Link>
+            <TobButton />
           </Menu.Item>}
 
 
           {isAuthed(roles) &&
           <Menu.Item key="/logout">
             {/*className={styles.logoutText}*/}
-            <div onClick={this.logoutAuth}>
+            <div className={styles.logoutBtn} onClick={this.logoutAuth}>
               {this.state.logoutLoading ?
                 <Icon type="loading" /> :
                 <Icon type="logout" />
@@ -145,7 +145,8 @@ export default class HeaderInfoZone extends PureComponent {
           {(!isLogin(user) || !isAuthed(roles)) &&
           <Menu.Item key="/login">
             <Link to={this.loginPageUrl()}>
-              <Icon type="user" /> 登录
+              <Icon type="user" />
+              <FM id="header.login" defaultMessage="登录" />
             </Link>
           </Menu.Item>
           }

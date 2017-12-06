@@ -6,7 +6,7 @@ import { Tag } from 'antd';
 import styles from './person-label.less';
 import { ACMFellowExpertBaseIndex, TopUnivExpertBaseIndex } from '../../../utils/expert-base';
 
-class PersonLabel extends React.PureComponent {
+class PersonLabel extends React.Component {
   shouldComponentUpdate(nextProps) {
     return this.props.person !== nextProps.person;
   }

@@ -2,13 +2,24 @@
 import classnames from 'classnames';
 import config from './config';
 import { getMenusByUser } from './menu';
-import request from './request';
+import request, { nextAPI } from './request';
+import apiBuilder from './next-api-builder';
 import { color } from './theme';
 import * as TopExpertBase from './expert-base';
 import * as reflect from './reflect';
 import * as system from './system';
-import * as defaults from './defaults';
+import * as hole from './hole';
 import { compare } from './compare';
+import {
+  loadD3,
+  loadD3v3,
+  loadScript,
+  loadECharts,
+  loadBMap,
+  loadGoogleMap,
+  ensure,
+} from './requirejs';
+
 // 连字符转驼峰
 String.prototype.hyphenToHump = function () {
   return this.replace(/-(\w)/g, (...args) => {
@@ -44,16 +55,26 @@ Date.prototype.format = function (format) {
   return format;
 };
 
+const detectSavedMapType = (key) => { //判断该使用什么类型的地图
+  key = 'map-dispatch';
+  let type = localStorage.getItem(key);
+  if (type) {
+    if (type === 'google') {
+      return 'google';
+    } else {
+      return 'baidu';
+    }
+  } else {
+    type = navigator.language === 'zh-CN' ? 'baidu' : 'google';
+  }
+  return type;
+};
+
 // 保留小数位
 const getTwoDecimal = (text, num) => {
   const decimal = Math.pow(10, num);
   return Math.floor(text * decimal) / decimal;
 };
-
-/**
- * @param   {String}
- * @return  {String}
- */
 
 const queryURL = (name) => {
   const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`, 'i');
@@ -74,31 +95,28 @@ const createURL = (path, params, newParams) => {
   return url;
 };
 
-// const applyElements = (elements) => {
-//   if (elements) {
-//   return
-//   }
-// };
-
 module.exports = {
   config,
   system,
-  defaults,
-
-  // menu,
-  getMenusByUser,
-  request,
-  color,
+  hole,
   classnames,
+
+  // library
+  reflect,
+  compare,
+  createURL,
+  detectSavedMapType,
+
+  getMenusByUser,
+  request, nextAPI,
+  apiBuilder,
+  loadD3, loadD3v3, loadScript, loadECharts, loadBMap, loadGoogleMap,
+  ensure,
+  color,
   queryURL,
   getTwoDecimal,
 
   TopExpertBase,
 
-  // library
-  reflect,
 
-  compare,
-  createURL,
-}
-;
+};

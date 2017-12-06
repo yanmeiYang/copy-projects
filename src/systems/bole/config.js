@@ -3,9 +3,9 @@
  */
 import React from 'react';
 import { Link } from 'dva/router';
+import { FormattedMessage as FM } from 'react-intl';
 import defaults from '../utils';
-import { AddToEBButton, PersonRemoveButton, PersonComment } from './components';
-import { GetComments } from './person-comment-hooks';
+import { GetComments, FetchPersonLabels } from './hooks';
 
 import { createRoster } from '../../hooks';
 
@@ -16,22 +16,14 @@ module.exports = {
   SearchPagePrefix: 'uniSearch', // search, uniSearch
   ShowRegisteredRole: false,
 
+  Locale: 'zh',
+
   // UserAuthSystem: 'aminer', // aminer 或者是 system.config; 默认当前系统
   // UserAuthSystem_AddSysTagAuto: true, // 登录时自动添加system的标签
 
   // IndexPage_QuickSearchList:[], // use default.
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
-  Header_SubTextLogo: '伯乐系统',
-  Header_SubTextStyle: { width: 90, left: -54, marginLeft: -80 },
-  // Header_LogoStyle: {
-  //   top: '-10px',
-  //   width: '60px',
-  //   height: '36px',
-  //   backgroundSize: 'auto 56px',
-  //   backgroundPosition: '0px -10px',
-  // },
-  Header_LogoWidth: 118,
   Header_UserPageURL: '/user-info',
   Header_RightZone: [() => <Link key="0" to="/eb/59a8e5879ed5db1fc4b762ad/-/0/20">我的专家库</Link>], // TODO make this a Component.
   // Header_RightZone: [
@@ -46,19 +38,29 @@ module.exports = {
   // Enable_Export: true,
   // Search_EnablePin: true,
 
+  // google analytics
+  googleAnalytics: 'UA-107003102-5',
+
+  /**
+   * > Search
+   */
+  // expert base
+
   // > Search related
-  SearchBarInHeader: true,
-  // HeaderSearch_TextNavi: ['ExpertSearch', 'ExpertBase'], // ExpertBase bole专有
-  HeaderSearch_TextNavi: [],
+  HeaderSearch_TextNavi: ['ExpertBase', 'ACM_ExpertSearch', 'ExpertMap'],
 
   // Search_DisableFilter: false,
   Search_DisableExpertBaseFilter: true,
   // Search_DisableSearchKnowledge: false,
   Search_FixedExpertBase: { id: 'aminer', name: '全球专家' },
-  DEFAULT_EXPERT_SEARCH_KEY: 'name',
 
-  // SearchFilterExclude: 'Gender',
-  // UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // deprecated! Don't use this.
+  // NextAPI-QueryHooks:
+  APIPlugin_ExpertSearch: {
+    parameters: {
+      aggregation: ['dims.systag'],
+      haves: { systag: [] },
+    },
+  },
 
   /**
    * Page specified config.
@@ -67,29 +69,10 @@ module.exports = {
   /**
    * PersonList
    */
-  // PersonList_PersonLink: personId => `https://cn.aminer.org/profile/-/${personId}`,
-  // PersonList_PersonLink_NewTab: true,
-  // param: [person, eb{id,name}]
-  PersonList_TitleRightBlock:
-    ({ param }) => (
-      <AddToEBButton
-        person={param.person} key="2"
-        expertBaseId={param.expertBaseId}
-        targetExpertBase="59a8e5879ed5db1fc4b762ad"
-      />),
-
-  PersonList_RightZone: defaults.EMPTY_BLOCK_FUNC_LIST,
-  PersonList_BottomZone: [
-    param => (
-      <PersonComment
-        person={param.person} user={param.user} key="1"
-
-        ExpertBase="59a8e5879ed5db1fc4b762ad"
-      />),
-  ],
   // PersonList_DidMountHooks: [],
   PersonList_UpdateHooks: [
     param => GetComments(param),
+    param => FetchPersonLabels(param),
   ],
 
   Search_CheckEB: true, // Check ExpertBase.
@@ -119,11 +102,15 @@ module.exports = {
     // },
   ],
 
+  Map_Preload: 0, // 0的时候不缓存，1的时候缓存信息，2的时候缓存信息和90头像，3的时候缓存信息和90、160头像
+  Map_HotDomains: [
+    { id: '59a8e5879ed5db1fc4b762ad', name: '我的专家库' },
+    { id: 'aminer', name: '全球专家' },
+  ], // 地图领域
+  Map_HotDomainsLabel: '',
+  Map_FilterRange: false,
+
   // bole系统独有设置
   ExpertBase: '59a8e5879ed5db1fc4b762ad',
 
-  // bole 智库权限设置 TODO param => xxx
-  HOOK: [
-    (dispatch, id, email, name, perm) => createRoster(dispatch, id, email, name, perm),
-  ],
 };

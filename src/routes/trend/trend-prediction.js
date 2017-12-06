@@ -1,17 +1,19 @@
+/* eslint-disable prefer-destructuring */
 import React from 'react';
-import { Tabs } from 'antd';
+import { Tabs, message } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import d3 from '../../../public/lib/d3.v3';
-import d3sankey from './utils/sankey';
+import { Auth } from 'hoc';
+import { request, loadScript, loadD3v3 } from 'utils';
+import strings from 'utils/strings';
+import * as profileUtils from 'utils/profile-utils';
 import styles from './trend-prediction.less';
-import { Auth } from '../../hoc';
-import { wget } from '../../utils/request';
-import * as profileUtils from '../../utils/profile-utils';
 import { getPerson } from '../../services/person';
 import { searchPubById } from '../../services/trend-prediction-service';
 import { sysconfig } from '../../systems';
 import { Spinner } from '../../components';
+import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
+
 
 const humps = require('humps');
 
@@ -59,9 +61,12 @@ const yearToXOffset = (year) => {
   return binWidth * binOffset;
 };
 
-const TabPane = Tabs.TabPane;
+const { TabPane } = Tabs;
 
 const HOT_TERMS = ['Answer Machine', 'Artificial Intelligence', 'Autopilot', 'BlockChain', 'Computer Vision', 'Data Mining', 'Data Modeling', 'Deep Learning', 'Graph Databases', 'Internet of Things', 'Machine Learning', 'Robotics', 'Networks', 'Natural Language Processing', 'Neural Network'];
+
+let d3;
+
 /**
  * Component
  * @param id
@@ -82,7 +87,6 @@ export default class TrendPrediction extends React.PureComponent {
   };
 
   componentDidMount() {
-    d3sankey();
     this.updateTrend(this.props.query);
     window.onresize = () => {
       this.updateTrend(this.props.query);
@@ -91,7 +95,6 @@ export default class TrendPrediction extends React.PureComponent {
 
   componentDidUpdate(prevProps) {
     if (prevProps.query && prevProps.query !== this.props.query) {
-      d3sankey();
       this.updateTrend(this.props.query);
     }
   }
@@ -185,6 +188,7 @@ export default class TrendPrediction extends React.PureComponent {
     format = (d) => { // 格式化为整数，点出现的次数
       return `${formatNumber(d)} Times`;
     };
+    console.log('-----------------------', d3);
     color = d3.scale.category10();// d3图的配色样式
 
     idToAuthor = {};
@@ -214,24 +218,44 @@ export default class TrendPrediction extends React.PureComponent {
   };
 
   updateTrend = (query) => {
-    d3.select('#tooltip').classed('hidden', true).style('visibility', 'hidden');//最开始的时候都将它们设置为不可见
-    d3.select('#tooltip1').classed('hidden', true).style('visibility', 'hidden');
-    const term = (query === '') ? this.props.query : query;
+    const cleanedQuery = strings.cleanQuery(query);
+    if (!cleanedQuery || cleanedQuery === '-') {
+      this.setState({ loadingFlag: false, errorFlag: true });
+      return;
+    }
 
-    this.setState({ errorFlag: false, loadingFlag: true });
-    const dd = wget(`https://dc_api.aminer.org/trend/${term}`);
-    const that = this;
-    dd.then((data) => {
-      console.log(data);
-      if (data.terms.length === 0 || data.time_slides.length === 0) {
-        that.setState({ errorFlag: true, loadingFlag: false });
-      } else {
-        trendData = humps.camelizeKeys(data, (key, convert) => {
-          return key.includes(' ') && !key.includes('_') ? key : convert(key);
+    loadD3v3((ret) => {
+      d3 = ret;
+
+      loadScript('/lib/sankey-modified.js', { check: ['d3', 'sankey'] }, () => {
+        // 最开始的时候都将它们设置为不可见
+        d3.select('#tooltip').classed('hidden', true).style('visibility', 'hidden');
+        d3.select('#tooltip1').classed('hidden', true).style('visibility', 'hidden');
+        const term = (query === '') ? this.props.query : query;
+
+        if (term === ' ' || !term) {
+          this.setState({ loadingFlag: false, errorFlag: true });
+          return;
+        }
+        this.setState({ errorFlag: false, loadingFlag: true });
+        const url = `https://dc_api.aminer.org/trend/${term}`;
+        // const dd = wget(`https://dc_api.aminer.org/trend/${term}`);
+        const that = this;
+        request(url).then(({ success, data }) => {
+          if (success && data &&
+            (data.terms.length === 0 || data.time_slides.length === 0)) {
+            that.setState({ errorFlag: true, loadingFlag: false });
+          } else {
+            trendData = humps.camelizeKeys(data, (key, convert) => {
+              return key.includes(' ') && !key.includes('_') ? key : convert(key);
+            });
+            that.setState({ loadingFlag: false });
+            this.initChart(term);
+          }
+        }).catch((err) => {
+          throw err;
         });
-        that.setState({ loadingFlag: false });
-        this.initChart(term);
-      }
+      });
     });
   };
 
@@ -555,8 +579,8 @@ export default class TrendPrediction extends React.PureComponent {
     axisWidth = width / trendData.timeSlides.length;
     // 年代坐标轴，x1、y1为起点坐标，x2、y2为终点坐标
     axis.append('line').attr('x1', () => {
-        return axisWidth;
-      })
+      return axisWidth;
+    })
       .attr('x2', () => {
         return axisWidth;
       })
@@ -874,6 +898,9 @@ export default class TrendPrediction extends React.PureComponent {
       showFlag = 'inline';
       showFlag1 = 'none';
       tipinfo = `${query}技术领域不存在或者您的输入错误，请检查重试`;
+      if (query === '' || query === '-') {
+        tipinfo = '请您输入一个领域关键词查询分析';
+      }
     } else {
       if (this.state.loadingFlag) {
         showFlag = 'inline';
@@ -882,7 +909,7 @@ export default class TrendPrediction extends React.PureComponent {
         showFlag = 'none';
         showFlag1 = 'inline';
       }
-      tipinfo = `${query}技术趋势正在分析中，请稍后...`;
+      // tipinfo = `${query}技术趋势正在分析中，请稍后...`;
     }
     let showDivWidth = document.body.clientWidth - 400;
     showDivWidth = showDivWidth > 1024 ? showDivWidth : 1024;//取其大者
@@ -897,7 +924,8 @@ export default class TrendPrediction extends React.PureComponent {
                 i += 1;
                 return (
                   <div key={i}>
-                    <a role="presentation" key={i} onClick={that.onKeywordClick.bind(that, hw)}>{hw}</a>
+                    <a role="presentation" key={i}
+                       onClick={that.onKeywordClick.bind(that, hw)}>{hw}</a>
                   </div>
                 );
               })
@@ -905,18 +933,15 @@ export default class TrendPrediction extends React.PureComponent {
           </div>
         </div>
         <div className={styles.loading1}>
-          <div className={styles.loading} id="loading" style={{ display: showFlag, textAlign: 'center' }}>
-            {tipinfo}
+          <div className={styles.loading} id="loading"
+               style={{ display: showFlag, textAlign: 'center' }}>
+            <FM defaultMessage="Technology prediction about '{tip}' is analyzing. Please wait."
+                id="com.topTrend.info"
+                values={{ tip: query }} />
           </div>
         </div>
         <div id="showchart" style={{ display: showFlag1 }}>
           <div className={styles.nav}>
-            <Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange} className={styles.tabs}>
-              <TabPane tab={<span onMouseEnter={this.showTip.bind(that, 0)} onMouseLeave={this.hideTip}>近期热度</span>} key="1" id="recent-trend" />
-              <TabPane tab={<span onMouseEnter={this.showTip.bind(that, 1)} onMouseLeave={this.hideTip}>全局热度</span>} key="2" id="overall-trend" />
-              <TabPane tab={<span onMouseEnter={this.showTip.bind(that, 2)} onMouseLeave={this.hideTip}>技术源头</span>} key="3" id="origin-trend" />
-              <TabPane tab={<span onMouseEnter={this.showTip.bind(that, 3)} onMouseLeave={this.hideTip}>领域关联</span>} key="4" id="topic-relation" />
-            </Tabs>
             <Tabs defaultActiveKey="1" type="card" onTabClick={this.onChange}
                   className={styles.tabs}>
               <TabPane
@@ -959,20 +984,24 @@ export default class TrendPrediction extends React.PureComponent {
               {name &&
               <div className="name bg">
                 <h2 className="section_header">
-                  <span className={styles.detail}><a {...personLinkParams}>{name} </a></span><br />
+                  <span
+                    className={styles.detail}><a {...personLinkParams}>{name} </a></span><br />
                 </h2>
               </div>
               }
               <div className="img"><img src={url} alt={url} /></div>
               <div className="info">
-                {pos && <span className={styles.detail}><i className="fa fa-briefcase fa-fw" />{pos}</span>}<br />
-                {aff && <span className={styles.detail}><i className="fa fa-institution fa-fw" />{aff}</span>}
+                {pos && <span className={styles.detail}><i
+                  className="fa fa-briefcase fa-fw" />{pos}</span>}<br />
+                {aff && <span className={styles.detail}><i
+                  className="fa fa-institution fa-fw" />{aff}</span>}
               </div>
               <strong id="value1" />
               <div>
                 {
                   thepaper &&
-                  <span className={styles.detail}><i className="fa fa-file-pdf-o" /><a {...paperLinkParams}>{quote}</a></span>
+                  <span className={styles.detail}><i
+                    className="fa fa-file-pdf-o" /><a {...paperLinkParams}>{quote}</a></span>
                 }
               </div>
             </div>

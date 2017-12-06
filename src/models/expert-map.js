@@ -1,8 +1,10 @@
 /** Created by Bo Gao on 2017-06-07 */
-import * as personService from '../services/person';
-import * as mapService from '../services/expert-map-service';
+import * as strings from 'utils/strings';
+import * as personService from 'services/person';
+import * as mapService from 'services/expert-map-service';
 
 const cache = {};
+console.log('---------------------------------------- import expertmap module.js',);
 
 export default {
 
@@ -18,14 +20,18 @@ export default {
     clusterPersons: [],
   },
 
-
   subscriptions: {},
 
   effects: {
     * searchMap({ payload }, { call, put }) {
-      const { query } = payload;
-      const data = yield call(mapService.searchMap, query);
-      yield put({ type: 'searchMapSuccess', payload: { data } });
+      let { query } = payload;
+      query = strings.cleanQuery(query);
+      if (query) {
+        const data = yield call(mapService.searchMap, query);
+        yield put({ type: 'searchMapSuccess', payload: { data } });
+      } else {
+
+      }
     },
 
     * searchExpertBaseMap({ payload }, { call, put }) {
@@ -48,7 +54,14 @@ export default {
       const { ids } = payload;
       let data = cache[ids];
       if (!data) {
-        data = yield call(personService.listPersonByIds, ids);
+        data = [];
+        for (let i = 0; i < ids.length; i += 100) {
+          const cids = ids.slice(i, i + 100);
+          const data1 = yield call(personService.listPersonByIds, cids);
+          for (const d of data1.data.persons) {
+            data.push(d);
+          }
+        }
         cache[ids] = data;
       }
       yield put({ type: 'listPersonByIdsSuccess', payload: { data } });
@@ -66,7 +79,7 @@ export default {
     },
 
     listPersonByIdsSuccess(state, { payload: { data } }) {
-      return { ...state, clusterPersons: data.data.persons };
+      return { ...state, clusterPersons: data };
     },
 
     setRightInfoZoneIds(state, { payload: { idString } }) {
@@ -75,6 +88,10 @@ export default {
 
     setRightInfo(state, { payload: { idString, rightInfoType } }) {
       return { ...state, infoZoneIds: idString, rightInfoType };
+    },
+
+    setClusterInfo(state, { payload: { data } }) {
+      return { ...state, clusterPersons: data };
     },
 
     searchMapSuccess(state, { payload: { data } }) {
@@ -121,7 +138,6 @@ export default {
           return null;
         });
       }
-      // console.log('-----------------------------------', geoSearchData);
       return { ...state, geoData: { results: geoSearchData } };
     },
 

@@ -4,6 +4,14 @@
 import Indices from './indices';
 import HindexGraph from './h-index-graph';
 import SearchSelectBox from './searchSelectBox';
+import IndexHotLinks from './index-hotlinks';
+import PersonLabels from './PersonLabels';
 
-module.exports = { Indices, HindexGraph, SearchSelectBox };
+module.exports = {
+  Indices,
+  HindexGraph,
+  SearchSelectBox,
+  IndexHotLinks,
+  PersonLabels,
+};
 

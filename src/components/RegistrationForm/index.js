@@ -15,15 +15,17 @@ import {
   Icon,
 } from 'antd';
 import { connect } from 'dva';
-import { config } from '../../utils';
-import { sysconfig } from '../../systems';
-import styles from './index.less';
+import { getLocalToken, saveLocalToken } from 'utils/auth';
+import { config } from 'utils';
+import { sysconfig } from 'systems';
+import CanlendarInForm from 'components/seminar/calendar';
+import { SampleLabelLine } from 'components/common';
+import AddCoOrgModal from 'components/seminar/addCoOrgModal';
+import AddExpertModal from 'components/seminar/addExpertModal';
+import ShowExpertList from 'routes/seminar/addSeminar/workshop/showExpertList';
+import { compare } from 'utils/compare';
 import defaultImg from '../../assets/people/default.jpg';
-import CanlendarInForm from '../../components/seminar/calendar';
-import AddTags from '../../components/seminar/addTags';
-import AddCoOrgModal from '../../components/seminar/addCoOrgModal';
-import AddExpertModal from '../../components/seminar/addExpertModal';
-import ShowExpertList from '../../routes/seminar/addSeminar/workshop/showExpertList';
+import styles from './index.less';
 
 const Dragger = Upload.Dragger;
 const FormItem = Form.Item;
@@ -87,6 +89,9 @@ class RegistrationForm extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.seminar.tags !== this.props.seminar.tags) {
+      this.setState({ tags: nextProps.seminar.tags });
+    }
     if (nextProps.seminar.summaryById === this.props.seminar.summaryById) {
       return false;
     }
@@ -274,7 +279,7 @@ class RegistrationForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const {
-      activity_organizer_options, postSeminarOrganizer, activity_type, summaryById
+      activity_organizer_options, postSeminarOrganizer, activity_type, summaryById,
     } = this.props.seminar;
     const {
       addNewTalk, talks, startValue, endValue, editTheTalk, image, currentOrg,
@@ -300,7 +305,7 @@ class RegistrationForm extends React.Component {
       // listType: 'text',
       headers: {
         // 获得登录用户的token
-        Authorization: localStorage.getItem('token'),
+        Authorization: getLocalToken(),
       },
       onChange(info) {
         const status = info.file.status;
@@ -472,8 +477,9 @@ class RegistrationForm extends React.Component {
               {...formItemLayout}
               label="活动标签"
             >
-              {getFieldDecorator('activityTags', {})(<AddTags callbackParent={this.onTagsChanged}
-                                                              tags={tags} />)}
+              {getFieldDecorator('activityTags', {})(
+                <SampleLabelLine onTagChange={this.onTagsChanged} tags={tags} canAdd canRemove />
+              )}
 
             </FormItem>
             {/* <FormItem */}

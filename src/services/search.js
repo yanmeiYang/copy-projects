@@ -1,5 +1,8 @@
-import { request, config } from '../utils';
-import { sysconfig } from '../systems';
+import { request, nextAPI, config } from 'utils';
+import * as bridge from 'utils/next-bridge';
+import { apiBuilder, F, H } from 'utils/next-api-builder';
+import { sysconfig } from 'systems';
+import * as strings from 'utils/strings';
 
 const { api } = config;
 
@@ -9,32 +12,80 @@ const { api } = config;
      /api/search/roster/59..08/experts/advanced?name=&offset=0&org=&size=20&sort=n_citation&term=jie
      sort = relevance, h_index, a_index, activity, diversity, rising_star, n_citation, n_pubs,
    智库无缓存查询：
-
  */
-export async function searchPerson(query, offset, size, filters, sort, useTranslateSearch) {
+export async function searchPerson(params) {
+  const { query, offset, size, filters, sort, intelligenceSearchMeta } = params;
+  const { useTranslateSearch } = params; // TODO remove
+
   // if query is null, and eb is not aminer, use expertbase list api.
   if (!query && filters && filters.eb && filters.eb.id && filters.eb.id !== 'aminer') {
-    return searchListPersonInEB({ ebid: filters.eb.id, sort, offset, size });
+    if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH) {
+      return listPersonInEBNextAPI({ ebid: filters.eb.id, sort, offset, size });
+    } else {
+      return listPersonInEB({ ebid: filters.eb.id, sort, offset, size });
+    }
   }
 
   // if search in global experts, jump to another function;
-  if (filters && filters.eb && filters.eb.id === 'aminer') {
-    return searchPersonGlobal(query, offset, size, filters, sort, useTranslateSearch);
-  }
   // Fix bugs when default search area is 'aminer'
-  if ((!filters || !filters.eb) && sysconfig.DEFAULT_EXPERT_BASE === 'aminer') {
+  if (
+    (filters && filters.eb && filters.eb.id === 'aminer') ||
+    ((!filters || !filters.eb) && sysconfig.DEFAULT_EXPERT_BASE === 'aminer')
+  ) {
     return searchPersonGlobal(query, offset, size, filters, sort, useTranslateSearch);
   }
 
+  //
   // Search in ExpertBase.
-  if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH) {
-    // TODO 我需要替换成新的API
-    console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^ 注意注意，我这里变成了取新的API。');
-    const data = require('../../external-docs/next-api/test-search-result.json');
-    console.log('data is >>> ', data);
-    return data;
+  //
+
+  // 1. prepare parameters.
+  const Sort = sort || 'relevance'; // TODO or '_sort';
+
+  // 2. query
+  // ------------------------------------------------------------------------------------------
+  if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH && Sort !== 'activity-ranking-contrib') {
+    const ebs = sysconfig.ExpertBases;
+    const defaultHaves = ebs && ebs.length > 0 && ebs.map(eb => eb.id);
+    const enTrans = sysconfig.Search_EnableTranslateSearch && !sysconfig.Search_EnableSmartSuggest;
+    console.log('-------------------------------- disable is ', enTrans);
+
+    const nextapi = apiBuilder.query(F.queries.search, 'search')
+      .param({ query, offset, size })
+      .param({
+        searchType: F.searchType.allb,
+        aggregation: ['gender', 'h_index', 'location', 'language'],
+        haves: { eb: defaultHaves },
+      })
+      .addParam({ switches: ['loc_search_all'] }, { when: useTranslateSearch })
+      .addParam({ switches: ['loc_translate_all'] }, { when: enTrans && !useTranslateSearch })
+      .addParam({ switches: ['intell_search'] }, { when: sysconfig.Search_EnableSmartSuggest })
+      .addParam({ switches: ['lang_zh'] }, { when: sysconfig.Locale === 'zh' })
+
+      .schema({ person: F.fields.person_in_PersonList })
+      .addSchema({ person: ['tags_translated_zh'] }, { when: sysconfig.Locale === 'zh' });
+
+    // filters
+    H.filtersToQuery(nextapi, filters);
+
+    // sort
+    if (Sort && Sort !== 'relevance') {
+      nextapi.param({ sorts: [Sort] });
+    }
+
+    // Apply Plugins.
+    H.applyPlugin(nextapi, sysconfig.APIPlugin_ExpertSearch);
+
+    // console.log('DEBUG---------------------\n', nextapi.api);
+    // console.log('DEBUG---------------------\n', JSON.stringify(nextapi.api));
+
+    return nextAPI({ data: [nextapi.api] });
+
+    // ------------------------------------------------------------------------------------------
   } else {
-    const { expertBase, data } = prepareParameters(query, offset, size, filters, sort, useTranslateSearch);
+    // old method.
+    const { expertBase, data } =
+      prepareParameters(query, offset, size, filters, sort, useTranslateSearch);
     return request(
       api.searchPersonInBase.replace(':ebid', expertBase),
       { method: 'GET', data },
@@ -42,7 +93,7 @@ export async function searchPerson(query, offset, size, filters, sort, useTransl
   }
 }
 
-export async function searchListPersonInEB(payload) {
+export async function listPersonInEB(payload) {
   const { sort, ebid, offset, size } = payload;
   if (!sort || sort === 'time') {
     return request(
@@ -62,26 +113,58 @@ export async function searchListPersonInEB(payload) {
       { method: 'GET' /*, data: { rev: 0 } */ },
     );
   }
-  const rosterAPI = sort === 'time' ? api.allPersonInBase : api.allPersonInBaseWithSort;
+  // const rosterAPI = sort === 'time' ? api.allPersonInBase : api.allPersonInBaseWithSort;
+  //
+  // const data = {};
+  // if (sort === 'time') {
+  //   data.rev = 1;
+  // }
+  // return request(
+  //   rosterAPI.replace(':ebid', ebid),
+  //   { method: 'GET', data },
+  // );
+}
 
-  const data = {};
-  if (sort === 'time') {
-    data.rev = 1;
+export async function listPersonInEBNextAPI(payload) {
+  const { sort, ebid, offset, size } = payload;
+
+  // const ebs = sysconfig.ExpertBases;
+  // const defaultHaves = ebs && ebs.length > 0 && ebs.map(eb => eb.id);
+  const nextapi = apiBuilder.query(F.queries.search, 'list-in-EB')
+    .param({
+      offset, size,
+      searchType: F.searchType.allb,
+      aggregation: F.params.default_aggregation,
+      // haves: { eb: defaultHaves },
+    })
+    .schema({ person: F.fields.person_in_PersonList })
+    .addSchema({ person: ['tags_translated_zh'] }, { when: sysconfig.Locale === 'zh' });
+
+  H.filterByEBs(nextapi, [ebid]);
+  if (sort && sort !== 'relevance' && sort !== 'time') {
+    nextapi.param({ sorts: [sort] });
   }
-  return request(
-    rosterAPI.replace(':ebid', ebid),
-    { method: 'GET', data },
-  );
+
+  H.applyPlugin(nextapi, sysconfig.APIPlugin_ExpertSearch);
+
+  // console.log('DEBUG---------------------\n', nextapi.api);
+  // console.log('DEBUG---------------------\n', JSON.stringify(nextapi.api));
+
+  return nextAPI({ data: [nextapi.api] });
 }
 
 // Search Global.
 export async function searchPersonGlobal(query, offset, size, filters, sort, useTranslateSearch) {
   const data = prepareParametersGlobal(query, offset, size, filters, sort, useTranslateSearch);
-  // console.log('data', data);
-  return request(api.searchPerson, { method: 'GET', data });
+  const { term, name, org, isAdvancedSearch } = strings.destructQueryString(query);
+  const apiURL = isAdvancedSearch ? api.searchPersonAdvanced : api.searchPerson;
+  return request(apiURL, { method: 'GET', data });
 }
 
-export async function searchPersonAgg(query, offset, size, filters, useTranslateSearch) {
+//
+// Search Aggregation!
+//
+export async function searchPersonAgg(query, offset, size, filters, useTranslateSearch, sort) {
   // if search in global experts, jump to another function;
   if (filters && filters.eb && filters.eb.id === 'aminer') {
     return searchPersonAggGlobal(query, offset, size, filters, useTranslateSearch);
@@ -91,11 +174,13 @@ export async function searchPersonAgg(query, offset, size, filters, useTranslate
     return searchPersonAggGlobal(query, offset, size, filters, useTranslateSearch);
   }
 
-  if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH) {
+  if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH && sort !== 'activity-ranking-contrib') {
     // TODO 我需要替换成新的API
-    console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^ 注意注意，我这里变成了取新的API。');
+    console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^ 注意注意，我这里变成了取新的API。所以agg什么都不做了!!');
   } else {
     const { expertBase, data } = prepareParameters(query, offset, size, filters, '', useTranslateSearch);
+    console.log('------------', data);
+
     return request(
       api.searchPersonInBaseAgg.replace(':ebid', expertBase),
       { method: 'GET', data },
@@ -105,57 +190,85 @@ export async function searchPersonAgg(query, offset, size, filters, useTranslate
 
 export async function searchPersonAggGlobal(query, offset, size, filters, useTranslateSearch) {
   const data = prepareParametersGlobal(query, offset, size, filters, '', useTranslateSearch);
-  return request(api.searchPersonAgg, { method: 'GET', data });
+  const { term, name, org, isAdvancedSearch } = strings.destructQueryString(query);
+  const apiURL = isAdvancedSearch ? api.searchPersonAdvancedAgg : api.searchPersonAgg;
+  return request(apiURL, { method: 'GET', data });
 }
 
 function prepareParameters(query, offset, size, filters, sort, useTranslateSearch) {
   let expertBase = sysconfig.DEFAULT_EXPERT_BASE;
-  let data = { [sysconfig.DEFAULT_EXPERT_SEARCH_KEY]: query, offset, size, sort };
+  let data = { offset, size, sort: sort || '' };
+
   if (filters) {
-    const newFilters = {};
+    // const newFilters = {};
     Object.keys(filters).forEach((k) => {
       if (k === 'eb') {
         expertBase = filters[k].id;
       } else {
         const newKey = `as_${k.toLowerCase().replace(' ', '_').replace('-', '_')}`;
-        newFilters[newKey] = filters[k];
+        data[newKey] = filters[k];
       }
     });
-    data = {
-      ...newFilters,
-      [sysconfig.DEFAULT_EXPERT_SEARCH_KEY]: query,
-      offset,
-      size,
-      sort: sort || ''
-    };
+    // data = { ...data, ...newFilters };
   }
+  const { term, name, org } = strings.destructQueryString(query);
+  if (term) {
+    // const cleanedTerm = encodeURIComponent(strings.cleanQuery(term));
+    const cleanedTerm = strings.cleanQuery(term);
+    data.term = useTranslateSearch ? `cross:${cleanedTerm}` : cleanedTerm;
+  }
+  if (name) {
+    data.name = name;
+  }
+  if (org) {
+    data.org = strings.cleanQuery(org);
+  }
+
   data = addAdditionParameterToData(data, sort, 'eb');
-  if (useTranslateSearch && data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY]) {
-    data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY] = `cross:${data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY]}`;
-  }
+  // if (useTranslateSearch && data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY]) {
+  //   data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY] = `cross:${data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY]}`;
+  // }
   return { expertBase, data };
 }
 
 function prepareParametersGlobal(query, offset, size, filters, sort, useTranslateSearch) {
   let data = { query, offset, size, sort };
+  data = { offset, size, sort: sort || '' };
+
+  // add filters
   if (filters) {
-    const newFilters = {};
     Object.keys(filters).forEach((k) => {
-      if (k === 'eb') {
-        // ignore;
-      } else {
+      if (k !== 'eb') { // ignore eb;
         const newKey = `as_${k.toLowerCase().replace(' ', '_').replace('-', '_')}`;
-        // newFilters[newKey] = filters[k].toLowerCase().replace(' ', '_');
-        newFilters[newKey] = filters[k];
+        data[newKey] = filters[k];
       }
     });
-    // console.log('=====================',newFilters );
-    data = { ...newFilters, query, offset, size, sort: sort || '' };
   }
+
+  // add query // TODO Use Advanced Search?????
+  const { term, name, org, isAdvancedSearch } = strings.destructQueryString(query);
+  if (isAdvancedSearch) {
+    if (term) {
+      const cleanedTerm = strings.cleanQuery(term);//encodeURIComponent(strings.cleanQuery(term));
+      data.term = useTranslateSearch ? `cross:${cleanedTerm}` : cleanedTerm;
+    }
+    if (name) {
+      data.name = name;
+    }
+    if (org) {
+      data.org = strings.cleanQuery(org);
+    }
+  } else {
+    const newQuery = strings.firstNonEmpty(term, name, org); // use new query?
+    data.query = useTranslateSearch ? `cross:${newQuery}` : newQuery;
+  }
+
+  // data.query = encodeURIComponent(newQuery);
   data = addAdditionParameterToData(data, sort, 'global');
-  if (useTranslateSearch && data.query) {
-    data.query = `cross:${data.query}`;
-  }
+
+  // if (useTranslateSearch && data.query) {
+  //   data.query = `cross:${data.query}`;
+  // }
   return data;
 }
 
@@ -163,7 +276,7 @@ function prepareParametersGlobal(query, offset, size, filters, sort, useTranslat
 function addAdditionParameterToData(data, sort, range) {
   const newData = data;
 
-  // 置顶acm fellow和高校top100
+  // 置顶huawei项目中的acm fellow和高校top100
   if (sysconfig.Search_EnablePin) {
     if (!sort || sort === 'relevance') {
       newData.pin = 1;
@@ -194,3 +307,10 @@ export async function relationGraph(data) {
 export async function searchPublications(params) {
   return request(api.searchPubs, { method: 'GET', data: params });
 }
+
+export async function getActivityScoresByPersonIds(ids) {
+  return request(api.batchGetActivityCompareScoresByPersonId.replace(':ids', ids), {
+    method: 'GET',
+  });
+}
+

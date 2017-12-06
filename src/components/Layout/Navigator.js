@@ -1,19 +1,21 @@
 /**
  * Created by BoGao on 2017/9/14.
  */
-import React, { PureComponent, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Menu, Dropdown, Icon } from 'antd';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { sysconfig, applyTheme } from 'systems';
+import { sysconfig } from 'systems';
+import { theme, applyTheme } from 'themes';
+
 import { Layout } from 'antd';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { compare } from 'utils/compare';
 
 import styles from './Navigator.less';
 
-const { theme } = sysconfig;
 const tc = applyTheme(styles);
-
 
 const NaviConfig = {
   ExpertSearch: {
@@ -60,23 +62,51 @@ const NaviConfig = {
   ExpertBase: { // bole 专有
     key: 'ExpertBase',
     label: '我的专家库',
-    url: '/eb/59a8e5879ed5db1fc4b762ad',
+    url: `/eb/${sysconfig.ExpertBase}/:query/0/20`,
     // data: 'query',
     pageSignature: 'eb/',
   },
+
+  ACMFellowExpertBase: { // acmfellow 专有
+    key: 'ACMFellowExpertBase',
+    label: 'ACM Fellow',
+    url: `/eb/${sysconfig.ExpertBase}/:query/0/20`,
+    pageSignature: 'eb/',
+  },
+  ACM_ExpertSearch: {
+    key: 'ACM_ExpertSearch',
+    label: '全球专家',
+    url: `/uniSearch/:query/0/${sysconfig.MainListSize}`,
+    pageSignature: 'uniSearch',
+  },
 };
 
-const defaultNavis = ['ExpertSearch', 'ExpertMap', 'Relation', 'TrendPrediction'];
+const defaultNavis = ['ExpertSearch', 'ExpertMap', 'Relation', 'KnowledgeGraph', 'TrendPrediction'];
 // Function in development.
 if (process.env.NODE_ENV !== 'production') {
-  defaultNavis.push('KnowledgeGraph');
   defaultNavis.push('ExpertTrajectory');
 }
 
-const defaultQuery = 'data mining';
+const defaultQuery = '-';
+
+const menu = (
+  <Menu style={{ height: '280px', overflow: 'scroll' }}>
+    {sysconfig.MyExpert_List &&
+    sysconfig.MyExpert_List.map((expertBase) => {
+      return (
+        <Menu.Item key={expertBase.id}>
+          <a rel="noopener noreferrer"
+             href={`/eb/${expertBase.id}/${defaultQuery}/0/20`}>
+            {expertBase.title}
+          </a>
+        </Menu.Item>
+      );
+    })}
+  </Menu>
+);
 
 @connect()
-export default class Navigator extends PureComponent {
+export default class Navigator extends Component {
   static displayName = 'Navigator';
 
   static propTypes = {
@@ -93,6 +123,8 @@ export default class Navigator extends PureComponent {
 
   componentWillMount() {
     this.navis = this.props.navis || defaultNavis;
+    // console.log('this.props.navis', this.props.navis);
+    // console.log('defaultNavis', defaultNavis);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -106,7 +138,7 @@ export default class Navigator extends PureComponent {
     if (conf && conf.data) {
       const query = {};
       query[conf.data] = theQuery;
-      dispatch(routerRedux.push({ pathname: conf.url, search: `?query=${theQuery}`}));
+      dispatch(routerRedux.push({ pathname: conf.url, search: `?query=${theQuery}` }));
     } else {
       dispatch(routerRedux.push({ pathname: conf.url.replace(':query', theQuery) }));
     }
@@ -114,12 +146,21 @@ export default class Navigator extends PureComponent {
 
   render() {
     // const { logoZone, searchZone, infoZone } = this.props;
+    const path = window.location.pathname;
 
     return (
       <Layout.Header className={tc(['navigator'])}>
+        {sysconfig.HeaderSearch_DropDown &&
+        <Dropdown overlay={menu} className={styles.myExpert}>
+          <a className={tc(['ant-dropdown-link', 'navi'], [path.indexOf('eb/') >= 0 ? 'current' : ''])}
+             href="#" style={{ color: 'white', fontSize: '16px' }}>
+            我的专家库 <Icon type="down" />
+          </a>
+        </Dropdown>}
+
         {this.navis.map((naviKey) => {
           const c = NaviConfig[naviKey];
-          const path = window.location.pathname;
+          // const path = window.location.pathname;
           let currentClass = path.indexOf(c.pageSignature) >= 0 ? 'current' : '';
           if (path.indexOf('expert-googlemap') >= 0 && naviKey === 'ExpertMap') {
             currentClass = 'current';

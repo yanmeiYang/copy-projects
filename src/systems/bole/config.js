@@ -25,11 +25,6 @@ module.exports = {
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
   Header_UserPageURL: '/user-info',
-  Header_RightZone: [() => <Link key="0" to="/eb/59a8e5879ed5db1fc4b762ad/-/0/20">我的专家库</Link>], // TODO make this a Component.
-  // Header_RightZone: [
-  //   () => <a key="0" href="/eb/59a8e5879ed5db1fc4b762ad" target="_blank">我的专家库</a>,
-  // ],
-
   // Footer_Content: '',
   // ShowHelpDoc: true,
 

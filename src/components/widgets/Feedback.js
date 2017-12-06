@@ -43,21 +43,26 @@ class Feedback extends React.Component {
       }
     });
   };
+
   closePopover = () => {
     this.setState({ visible: false });
   };
+
   openPopover = () => {
     this.setState({ visible: true, formFocus: false });
   };
+
   mouseLeave = () => {
     const values = this.props.form.getFieldsValue();
     if (!values.email && !values.content) {
       this.setState({ visible: false });
     }
   };
+
   setFormMouseOUt = () => {
     this.setState({ formFocus: true });
   };
+
   feedbackBtn = () => {
     setTimeout(() => {
       if (this.state.formFocus) {
@@ -110,20 +115,27 @@ class Feedback extends React.Component {
     const title = (
       <div className={styles.titleBox}>
         <span>Feedback</span>
-        <i className={classnames(styles.deleteBtn, 'fa', 'fa-times')} onClick={this.closePopover} />
+        <i className={classnames(styles.deleteBtn, 'fa', 'fa-times')}
+           onClick={this.closePopover} />
       </div>
     );
     return (
       <Affix offsetBottom={25} className={styles.affixFeedback}>
-        <Popover placement="topLeft" content={content}
-                 title={title} visible={this.state.visible}>
-          <Button icon="fa-smile-o" type="primary" loading={load} size="large" className={styles.fdBtn}
-                  onMouseOver={this.openPopover} onMouseOut={this.feedbackBtn}>
+        <Popover
+          placement="topLeft" content={content}
+          title={title} visible={this.state.visible}
+        >
+          <Button
+            icon="fa-smile-o" type="primary" loading={load} size="large"
+            className={styles.fdBtn}
+            onMouseOver={this.openPopover} onMouseOut={this.feedbackBtn}
+          >
             {!load &&
             <span>
               <i className="fa fa-smile-o" style={{ fontWeight: 'bold' }} /> &nbsp;
-            </span>}
-            Feedback
+            </span>
+            }
+            <span style={{ marginRight: 10 }}>Feedback</span>
           </Button>
         </Popover>
       </Affix>

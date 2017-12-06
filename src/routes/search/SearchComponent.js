@@ -215,8 +215,10 @@ export default class SearchComponent extends Component {
   };
 
   render() {
-    const { disableExpertBaseFilter, disableFilter, disableSearchKnowledge,
-      rightZoneFuncs, disableSmartSuggest } = this.props;
+    const {
+      disableExpertBaseFilter, disableFilter, disableSearchKnowledge,
+      rightZoneFuncs, disableSmartSuggest
+    } = this.props;
     const { className, sorts, expertBaseId } = this.props;
     const intelligenceSuggests = this.props.search.intelligenceSuggest;
     const { sortKey } = this.props.search;
@@ -231,15 +233,16 @@ export default class SearchComponent extends Component {
     // const expertBase = (filters && filters.eb && filters.eb.id) || 'aminer';
 
     const zoneData = { expertBaseId, query, pageSize, current, filters, sortType };
-    const SearchSortsRightZone = hole.fillFuncs(theme.SearchSorts_RightZone, [
-      () => () => (
-        <ExportExperts
-          key="0" expertBaseId={expertBaseId}
-          query={query} pageSize={pageSize} current={current} filters={filters} sort={sortType}
-        />
-      ),
-    ], zoneData);
-    // const SearchSortsRightZone = !sysconfig.Enable_Export ? [] : [];
+
+    const SearchSortsRightZone = !sysconfig.Enable_Export ? null :
+      hole.fillFuncs(theme.SearchSorts_RightZone, [
+        () => () => (
+          <ExportExperts
+            key="0" expertBaseId={expertBaseId}
+            query={query} pageSize={pageSize} current={current} filters={filters} sort={sortType}
+          />
+        ),
+      ], zoneData);
 
     // TODO move translate search out.
     const { useTranslateSearch, translatedLanguage, translatedText } = this.props.search;

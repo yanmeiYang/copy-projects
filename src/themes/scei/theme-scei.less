@@ -1,0 +1,87 @@
+/**
+ * Created by BoGao on 2017/9/13.
+ * 每个Component必须有一个root class，这个root class可以和component重名，理论上应该全局唯一。
+ * 这个文件中，以每个component的root class为第一级。 不建议嵌套。
+ * 这个文件是对每个component的样式的覆盖.
+ */
+@import "~themes/vars";
+
+.logoZones {
+  display: flex; flex-direction: row;
+  height: 48px;
+  line-height: 48px;
+  margin-top: 10px;
+  .header_logo {
+    width: 328px;
+    height: 48px;
+    min-width: 328px;
+    background: url("/sys/scei/header_logo.png") 0px 2px / auto 46px no-repeat white;
+  }
+  .header_subTitle {
+    font-size: 20px;
+    color: #4b4f56 !important;
+    height: 40px;
+    line-height: 50px;
+  }
+}
+
+.feedback {
+  margin-top: 10px;
+  a {
+    color: #101010;
+  }
+}
+
+//.footerText {
+//  display: flex; flex-direction: row; justify-content: flex-end;
+//  line-height: 25px; margin-top: 10px; margin-right: 10px;
+//  .aminerLogo{ height: 25px; }
+//}
+
+.index_bannerZone {
+  width: 100%; text-align: center;
+  margin-top: 65px;
+  .text {
+    font-size: 20px; font-weight: bold; color: #333333;
+    margin-top: 40px; margin-bottom: 30px;
+    span {
+      font-size: 40px;
+      text-shadow: 5px 5px 5px #ddd;
+    }
+  }
+}
+
+.Overrides() {
+  .layout {
+    border: solid 0px green;
+    .sider {
+      border: solid 1px orange;
+      .text { color: orange }
+    }
+
+    .content {
+    }
+  }
+  .loginPage {
+    background-image: url('/sys/huawei/bg-loginpage.png');
+    background-size: auto 100%;
+    background-origin: content-box;
+  }
+  :global {
+    .keywords_inner {
+      div {
+        border: none; border-radius: 32px;
+        padding: 0px 10px; margin: 4px 5px;
+        background-color: rgba(62, 155, 201, 1);
+        a { color: #ffffff; font-size: @font-size-lg; }
+      }
+      div:hover { background-color: rgba(0, 122, 175, 1); }
+    }
+    .ant-menu {
+      border-bottom: 0px;
+    }
+  }
+
+}
+
+.Overrides() !important;

@@ -3,7 +3,7 @@
   "name": "aminer2b",
   "version": "1.2.2",
   "dependencies": {
-    "antd": "^2.13.11",
+    "antd": "^3.0.0",
     "dva": "^2.1.0",
     "dva-loading": "^1.0.4",
     "prop-types": "^15.6.0",

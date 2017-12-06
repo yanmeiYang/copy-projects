@@ -26,7 +26,8 @@ const mapStateToProps = ({ app, exportExperts }) => (
   {
     app: { user: app.user, roles: app.roles },
     exportExperts,
-  });
+  }
+);
 
 @connect(mapStateToProps)
 @Auth

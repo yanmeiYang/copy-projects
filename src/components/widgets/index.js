@@ -6,6 +6,7 @@ import HindexGraph from './h-index-graph';
 import SearchSelectBox from './searchSelectBox';
 import IndexHotLinks from './index-hotlinks';
 import PersonLabels from './PersonLabels';
+import Feedback from './Feedback';
 
 module.exports = {
   Indices,
@@ -13,5 +14,6 @@ module.exports = {
   SearchSelectBox,
   IndexHotLinks,
   PersonLabels,
+  Feedback,
 };
 

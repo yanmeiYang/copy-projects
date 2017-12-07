@@ -174,24 +174,23 @@ class CrossReport extends React.Component {
     const barNum = [];
     const heatInfo = [];
     const barInfo = [];
+    const status = this.props.crossHeat.crossTree.completeStatus;
     domainList.map((domain, num) => { // 将json 转换成d3格式
       const first = nodeData[num]._1;
       const second = nodeData[num]._2;
       num += 1;
       const x = Math.ceil(num / yLength); // 第几行
       const y = num - (yLength * (x - 1));// 第几列
-
-      const temPower = domain ? domain.heat : -1; //热力值
-      const temPersonCount = domain ? domain.authorsCount : 0;// 默认专家
-      const temPubCount = domain ? domain.pubsCount : 0;// 默认论文
+      const { heat, authorsCount, pubsCount } = domain;
+      const temPower = status ? heat : (heat > 0 ? heat : -1); //热力值
       // 获取 两个节点
       heatNum.push(temPower);
-      barNum.push(temPersonCount, temPubCount);
+      barNum.push(authorsCount, pubsCount);
       heatInfo.push({ x, y, key: 'heat', heat: temPower, first, second }); // 格式heat json 数据
       const startY = (y - 1) * 2;
       barInfo.push( // 格式bar json 数据
-        { x, y: startY + 1, h: temPersonCount, key: 'expert', first, second },
-        { x, y: startY + 2, h: temPubCount, key: 'pub', first, second },
+        { x, y: startY + 1, h: authorsCount, key: 'expert', first, second },
+        { x, y: startY + 2, h: pubsCount, key: 'pub', first, second },
       );
       return true;
     });
@@ -506,7 +505,7 @@ class CrossReport extends React.Component {
       this.domain1 = d.first;
       this.domain2 = d.second;
       const modalType = d.key;// modal 展示类容类型
-      const show = !(modalType === 'heat' && d.heat === 0); // modal是否展示
+      const show = !(modalType === 'heat' && d.heat <= 0); // modal是否展示
       if (show) {
         this.modalType = modalType;
         this.setState({

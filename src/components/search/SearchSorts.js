@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Tag, Tabs } from 'antd';
 import classnames from 'classnames';
-import { Hole } from 'components';
+import { Hole } from 'components/core';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { compare } from 'utils/compare';
 import { hole } from 'utils';
@@ -56,7 +56,7 @@ export default class SearchSorts extends PureComponent {
         })}
       </div>;
 
-    // TODO but div???
+    // TODO but div ???
     const rightZoneJSX = <Hole fill={rightZone} param={{ sortType }} />;
 
     return (
@@ -66,7 +66,7 @@ export default class SearchSorts extends PureComponent {
         activeKey={sortType}
         size="small"
         onChange={this.onOrderChange}
-        tabBarExtraContent={rightZoneJSX}
+        tabBarExtraContent={rightZoneJSXs}
       >
         {sorts.map((sortItem) => {
           const icon = sortItem === sortType ? <i className="fa fa-sort-amount-desc" /> : '';

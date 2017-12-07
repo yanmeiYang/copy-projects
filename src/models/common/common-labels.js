@@ -6,11 +6,11 @@ import { config } from 'utils';
 import * as bridge from 'utils/next-bridge';
 import * as labelService from 'services/label-service';
 
+console.log('--------------- import models person-comments.',);
 export default {
   namespace: 'commonLabels',
 
   state: {
-
     tagsMap: null, // {aid : [tags]}
   },
 

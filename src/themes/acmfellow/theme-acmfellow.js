@@ -7,7 +7,7 @@ import classnames from 'classnames';
 import { sysconfig } from 'systems';
 import * as hole from 'utils/hole';
 import AddToEBButton from 'routes/expert-base/AddToEBButton';
-import { FormattedMessage as FM } from 'react-intl';
+// import { FormattedMessage as FM } from 'react-intl';
 import { IndexHotLinks } from 'components/widgets';
 import { ExportExperts } from 'components/person';
 import styles from './theme-acmfellow.less';

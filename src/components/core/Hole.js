@@ -7,7 +7,7 @@ import * as hole from 'utils/hole';
 export default class Hole extends Component {
 
   static propTypes = {
-    fill: PropTypes.array,
+    fill: PropTypes.oneOfType([PropTypes.bool, PropTypes.array]),
     defaults: PropTypes.array,
     param: PropTypes.object,
     config: PropTypes.object,

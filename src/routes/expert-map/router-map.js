@@ -2,11 +2,15 @@
  *  Created by BoGao on 2017-07-14;
  *  Refactored by BoGao on 2017-09-07; dva@2.0 react-router-4
  */
-export default {
+import { applyPluginModules } from 'themes';
+
+const routerConfig = {
   ExpertMap: {
     path: '/expert-map',
-    models: () => [import('models/expert-map'),
-      import('models/expert-trajectory')],
+    models: () => [
+      import('models/expert-map'),
+      import('models/expert-trajectory'),
+    ],
     component: () => import('./ExpertMapPage'),
   },
 
@@ -23,3 +27,7 @@ export default {
   },
 
 };
+
+
+export default routerConfig;
+// export default applyPluginModules(routerConfig);

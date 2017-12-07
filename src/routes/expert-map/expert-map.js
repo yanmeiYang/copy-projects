@@ -8,7 +8,8 @@ import { RequireRes } from 'hoc';
 import { Helmet } from 'react-helmet';
 import { compare, loadScript, ensure } from 'utils';
 import { Button } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
+// import { FormattedMessage as FM } from 'react-intl';
+import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import * as profileUtils from 'utils/profile-utils';
 import GetBMapLib from './utils/BMapLibGai.js';
 import RightInfoZoneCluster from './RightInfoZoneCluster';
@@ -420,7 +421,7 @@ export default class ExpertMap extends PureComponent {
                 <span alt="" className={classnames('icon', styles.expertIcon2)} />
               </div>
               <div className={styles.container}>
-                <div className={styles.label}>人数：</div>
+                <div className={styles.label}>人数</div>
                 <div className={styles.item1}>少</div>
                 <div className={styles.item2}> 2</div>
                 <div className={styles.item3}> 3</div>

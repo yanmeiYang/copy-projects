@@ -440,28 +440,39 @@ export default class ExpertGoogleMap extends React.Component {
             <div className={styles.legend}>
               <div className={styles.title}>
                 <span alt="" className={classnames('icon', styles.titleIcon)} />
-                图例
+                <FM id="com.expertMap.explanation.legend" defaultMessage="图例" />
               </div>
               <div className={styles.t}>
-                <div className={styles.div}>专家：</div>
+                <div className={styles.div}><FM defaultMessage="专家"
+                                                id="com.expertMap.explanation.legend.expert"
+                />
+                </div>
                 <span alt="" className={classnames('icon', styles.expertIcon1)} />
-                <div className={styles.tExperts}>一组专家：</div>
+                <div className={styles.tExperts}><FM defaultMessage="一组专家"
+                                                     id="com.expertMap.explanation.legend.experts"
+                />
+                </div>
                 <span alt="" className={classnames('icon', styles.expertIcon2)} />
               </div>
               <div className={styles.container}>
-                <div className={styles.label}>人数：</div>
-                <div className={styles.item1}>少</div>
+                <div className={styles.label}>
+                  <FM id="com.expertMap.explanation.legend.quantity" defaultMessage="人数" />
+                </div>
+                <div className={styles.item1}><FM id="com.expertMap.explanation.legend.small" defaultMessage="少" />
+                </div>
                 <div className={styles.item2}> 2</div>
                 <div className={styles.item3}> 3</div>
                 <div className={styles.item4}> 4</div>
-                <div className={styles.item5}>多</div>
+                <div className={styles.item5}><FM id="com.expertMap.explanation.legend.large" defaultMessage="多" />
+                </div>
               </div>
             </div>
 
             {
               !isGlobal && <div className={styles.backwell}>
                 <div className={styles.back}>
-                  <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.overview" />:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <FM defaultMessage="Baidu Map"
+                      id="com.expertMap.headerLine.label.overview" />:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <Button size="small" onClick={backGlobal.bind(this, dispatch, model)}>
                     <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.goback" />
                   </Button>

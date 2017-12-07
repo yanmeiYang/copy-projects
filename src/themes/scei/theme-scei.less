@@ -6,44 +6,48 @@
  */
 @import "~themes/vars";
 
-:global {
-  .icon {
-    background-image: url('/sys/huawei/icon.png');
-  }
-}
-
 .logoZones {
   display: flex; flex-direction: row;
-  height: 66px;
-  line-height: 66px;
+  height: 48px;
+  line-height: 48px;
+  margin-top: 10px;
   .header_logo {
-    width: 50px; min-width: 50px;
-    background-position: -68px -47px;
+    width: 328px;
+    height: 48px;
+    min-width: 328px;
+    background: url("/sys/scei/header_logo.png") 0px 2px / auto 46px no-repeat white;
   }
   .header_subTitle {
-    margin-left: 10px;
+    font-size: 20px;
+    color: #4b4f56 !important;
+    height: 40px;
+    line-height: 50px;
   }
 }
 
-.footerText {
-  display: flex; flex-direction: row; justify-content: flex-end;
-  line-height: 25px; margin-top: 10px; margin-right: 10px;
-  .aminerLogo { height: 25px; }
+.feedback {
+  margin-top: 10px;
+  a {
+    color: #101010;
+  }
 }
+
+//.footerText {
+//  display: flex; flex-direction: row; justify-content: flex-end;
+//  line-height: 25px; margin-top: 10px; margin-right: 10px;
+//  .aminerLogo{ height: 25px; }
+//}
 
 .index_bannerZone {
   width: 100%; text-align: center;
   margin-top: 65px;
-  .logo {
-    display: flex; flex-direction: row; justify-content: center;
-    span {
-      display: flex; background-position: -171px -10px;
-      width: 100px; height: 100px; z-index: 10000; border: none;
-    }
-  }
   .text {
-    font-size: 20px; font-weight: bold; color: white;
+    font-size: 20px; font-weight: bold; color: #333333;
     margin-top: 40px; margin-bottom: 30px;
+    span {
+      font-size: 40px;
+      text-shadow: 5px 5px 5px #ddd;
+    }
   }
 }
 
@@ -58,17 +62,11 @@
     .content {
     }
   }
-  .indexPage {
-    background-image: url('/sys/huawei/bg-homepage.jpg');
-    background-size: auto 100%;
-    background-origin: content-box;
-  }
   .loginPage {
     background-image: url('/sys/huawei/bg-loginpage.png');
     background-size: auto 100%;
     background-origin: content-box;
   }
-
   :global {
     .keywords_inner {
       div {

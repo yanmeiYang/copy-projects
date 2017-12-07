@@ -12,12 +12,18 @@
     background-color: @btn-bg-color;
     border-color: @btn-bg-color;
   }
+
   .ant-btn:hover, .ant-btn.active {
     background-color: @btn-bg-color;
     border-color: @btn-bg-color;
     color: #ffffff;
+    opacity: 0.8;
   }
   .ant-btn:focus { color: #1d2129 }
+  .ant-btn-primary:hover, .ant-btn-primary:focus {
+    background-color: @btn-bg-color;
+  }
+
   .ant-menu {
     line-height: 64px;
     .ant-menu-item { padding: 0 10px; }
@@ -57,7 +63,7 @@
       margin-bottom: 6px;
       padding-bottom: 2px;
       color: #3E9BC9;
-      a{
+      a {
         font-size: @font-size-huge;
         color: #3E9BC9;
       }

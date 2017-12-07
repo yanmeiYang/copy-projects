@@ -21,18 +21,19 @@ const AvailableSystems = [
   'thurcb',
   'yocsef',
   'med_topic_trend',
+  'scei', // 中国科协：深度智库
 ];
 
 let System;
 // System = 'aminer';
 // System = 'ccf';
 // System = 'ccftest';
-System = 'huawei';
+// System = 'huawei';
 // System = 'alibaba';
 // System = 'tencent';
 // System = 'cie';
 // System = 'cipsc';
-System = 'demo';
+// System = 'demo';
 // System = 'cietest';
 // System = 'bole';
 // System = 'acmfellow';
@@ -40,6 +41,7 @@ System = 'demo';
 // System = 'thurcb';
 // System = 'yocsef';
 // System = 'med_topic_trend';
+System = 'scei';
 
 let Source = System; // AppID, Used in UniversalConfig.
 

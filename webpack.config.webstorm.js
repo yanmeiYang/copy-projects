@@ -15,6 +15,7 @@ module.exports = {
       hoc: `${__dirname}/src/hoc`,
       public: `${__dirname}/src/public`,
       components: `${__dirname}/src/components`,
+      plugins: `${__dirname}/src/plugins`,
       routes: `${__dirname}/src/routes`,
       models: `${__dirname}/src/models`,
       services: `${__dirname}/src/services`,

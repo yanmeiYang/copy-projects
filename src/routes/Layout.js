@@ -12,8 +12,9 @@ import { Layout as LayoutComponent, Affix, Button, Popover } from 'antd';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 import { hole, classnames, config } from 'utils';
-import { Header, Navigator, Feedback } from 'components/Layout';
-import { ErrorBoundary } from 'components';
+import { Header, Navigator } from 'components/Layout';
+import { Feedback } from 'components/widgets';
+import { ErrorBoundary } from 'components/core';
 import styles from './Layout.less';
 
 const { iconFontJS, iconFontCSS, logo } = config;

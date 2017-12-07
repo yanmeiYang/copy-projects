@@ -63,8 +63,15 @@ export default function request(url, options) {
       );
     }
 
-    // this is a fix; if only one query, return result. if many TODO;
-    if (options.nextapi && data && data.data && data.data) {
+    if (options.nextapi && data && data.data && data.data.length > 0) {
+      // dev: print warn messages.
+      for (const d of data.data) {
+        if (process.env.NODE_ENV !== 'production' && d.warn) {
+          console.warn('API Warning:', d.warn);
+        }
+      }
+
+      // this is a fix; if only one query, return result. if many TODO;
       if (data.data.length === 1) {
         result.data = data.data[0];
       } else if (data.data.length > 1) {
@@ -191,8 +198,8 @@ const fetch = (options) => {
     const text = JSON.stringify(cloneData);
     const key = '==typeof o?(r=o,o={}):o=o||{}:(r=o,o=a||{},a=void 0))';
     const ciphertext = AES.encrypt(text, key);
-    console.log('crypto:', text);
-    console.log('crypto:', ciphertext.toString());
+    // console.log('crypto:', text);
+    // console.log('crypto:', ciphertext.toString());
   }
 
 
@@ -236,9 +243,17 @@ export async function nextAPI(payload) {
   const { method, type, ...options } = payload;
   options.method = method || 'post';
   options.nextapi = true;
-  const actions = options.data && options.data.map(query => `${query.action}+${query.eventName}`);
-  const action = actions && actions.join(',');
-  const url = `${nextAPIURL}/${type || 'query'}?action=${action}`;
+  const actions = [];
+  if (options.data) {
+    for (const query of options.data) {
+      actions.push(`${query.action}+${query.eventName}`);
+      delete query.eventName;
+    }
+  }
+  // const actions = options.data && options.data.map(query => `${query.action}+${query.eventName}`);
+  const actionName = actions && actions.join(',');
+
+  const url = `${nextAPIURL}/${type || 'query'}?a=${actionName}`;
   const result = request(url, options);
   return result;
 }

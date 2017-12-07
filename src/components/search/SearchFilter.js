@@ -98,7 +98,7 @@ export default class SearchFilter extends Component {
 
           {/* ------ 搜索范围 / Expert Base ------ */}
 
-          {!disableExpertBaseFilter && expertBases &&
+          {!disableExpertBaseFilter && expertBases && expertBases.length > 0 &&
           <div className={classnames(styles.filterRow, styles.range)}>
             <span className={styles.filterTitle}>
               <FM id="com.search.filter.searchRange" defaultMessage="Search Range:" />

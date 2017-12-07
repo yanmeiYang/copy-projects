@@ -144,7 +144,7 @@ export default class SearchHelp extends Component {
                 <div><span className={styles.rightbox}>
                   <Checkbox
                     checked={currentTranslationChecked === index + 1 ? index + 1 : 0}
-                    onChange={this.onTranslationChange.bind(this)}
+                    onChange={this.onTranslationChange.bind(this, index)}
                   >{item.word_zh}
                   </Checkbox>
                 </span>

@@ -48,7 +48,7 @@ export async function searchPerson(params) {
     const ebs = sysconfig.ExpertBases;
     const defaultHaves = ebs && ebs.length > 0 && ebs.map(eb => eb.id);
     const enTrans = sysconfig.Search_EnableTranslateSearch && !sysconfig.Search_EnableSmartSuggest;
-    console.log('-------------------------------- disable is ', enTrans );
+    console.log('-------------------------------- disable is ', enTrans);
 
     const nextapi = apiBuilder.query(F.queries.search, 'search')
       .param({ query, offset, size })

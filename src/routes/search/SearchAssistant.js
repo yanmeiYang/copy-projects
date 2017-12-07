@@ -63,13 +63,20 @@ export default class SearchAssistant extends Component {
 
   onCheckAllChange = (e) => {
     const kgHyponymArray = [];
+    const kgHypernymArray = [];
     const { assistantData, onAssistantChanged } = this.props;
     const kgHyponym = assistantData && assistantData.kgHyponym;
+    const kgHypernym = assistantData && assistantData.kgHypernym;
     kgHyponymArray.push(kgHyponym.map((item) => {
       return item.word;
     }));
+    kgHypernymArray.push(kgHypernym.map((item) => {
+      return item.word;
+    }));
+    const checkedList = kgHyponymArray[0].concat(kgHypernymArray[0]);
     this.setState({
-      checkedList: e.target.checked ? kgHyponymArray[0] : [],
+      checkedList: e.target.checked ? checkedList : [],
+      // checkedList: e.target.checked ? kgHypernymArray[0] : [],
       indeterminate: false,
       checkAll: e.target.checked,
     });
@@ -173,8 +180,7 @@ export default class SearchAssistant extends Component {
           <Checkbox.Group onChange={this.onKGChange} value={this.state.checkedList}>
             {kgHypernym && kgHypernym.map((opt, index) => {
               const key = `${opt.word}_${index}`;
-              return (<Checkbox key={key} value={this.state.checkedList}
-                                checked={checkAll} onChange={this.onKGChange}>
+              return (<Checkbox key={key} value={opt.word} checked={checkAll}>
                 <span className={styles.suporordinateWord}>{opt.word}</span>
               </Checkbox>);
             })}

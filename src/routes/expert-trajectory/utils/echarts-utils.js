@@ -100,9 +100,11 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       blurSize: 6,
       blendMode: detailedStyle.blendHeatStlye[skin],
     }, {
-      type: 'scatter',
+      name: 'place',
+      type: 'effectScatter',
       coordinateSystem: type,
-      zlevel: 5,
+      hoverAnimation: true,
+      //zlevel: 5,
       rippleEffect: {
         period: 4,
         scale: 2,
@@ -138,14 +140,14 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
     }, {
       type: 'lines',
       animation: false,
-      zlevel: 2,
+      //zlevel: 10000000000,
       coordinateSystem: type,
+      //symbol:'arrow',
       effect: {
         show: true,
         period: 6,
         trailLength: 0.1,
         color: detailedStyle.lineNormalStyle[skin],
-        // color: '#f78e3d',
         symbol: 'arrow',
         symbolSize: 5,
         animation: true,

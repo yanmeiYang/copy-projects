@@ -1,15 +1,14 @@
 import React from 'react';
 import { connect } from 'dva';
-import classnames from 'classnames';
 import { sysconfig } from 'systems';
 import { routerRedux } from 'dva/router';
 import { Layout, Button, Icon, Menu, Dropdown, Modal, notification } from 'antd';
 import { Layout as Page } from 'routes';
 import { FormattedMessage as FM } from 'react-intl';
 import bridge from 'utils/next-bridge';
+import { applyTheme } from 'themes';
 import styles from './ExpertTrajectoryPage.less';
 import { PersonList } from '../../components/person';
-import { theme, applyTheme } from 'themes';
 import ExpertTrajectory from './ExpertTrajectory';
 
 const { Content, Sider } = Layout;
@@ -49,8 +48,12 @@ class ExpertTrajectoryPage extends React.Component {
 
   componentDidMount() {
     const { query } = this.state;
+    console.log(query);
     if ((query === '' || query === '-')) {
       this.openNotification();
+    } else { //后面需要去掉
+      const data = { query };
+      this.onSearch(data);
     }
   }
 
@@ -58,7 +61,8 @@ class ExpertTrajectoryPage extends React.Component {
     if (nextState.query && nextState.query !== this.state.query) {
       this.callSearchMap(nextState.query);
     }
-    if (nextProps.expertTrajectory.results && nextProps.expertTrajectory.results !== this.props.expertTrajectory.results) {
+    if (nextProps.expertTrajectory.results &&
+      nextProps.expertTrajectory.results !== this.props.expertTrajectory.results) {
       return true;
     }
     return true;
@@ -73,6 +77,17 @@ class ExpertTrajectoryPage extends React.Component {
         query: { query: data.query },
       }));
     }
+  };
+
+  onSkinClick = (value) => {
+    this.setState({ themeKey: value.key });
+  };
+
+  onPersonClick = (start, end, person) => {
+    //这里的参数的名字要和model里面的一致
+    const personId = person.id;
+    this.props.dispatch({ type: 'expertTrajectory/findTrajById', payload: { personId, start, end } });
+    this.setState({ cperson: person });
   };
 
   handleOk = () => {
@@ -115,28 +130,22 @@ class ExpertTrajectoryPage extends React.Component {
     }, 100);
   };
 
-  onPersonClick = (start, end, person) => {
-    //这里的参数的名字要和model里面的一致
-    const personId = person.id;
-    this.props.dispatch({ type: 'expertTrajectory/findTrajById', payload: { personId, start, end } });
-    this.setState({ cperson: person });
-  };
-
   openNotification = () => {
     let [message, description] = ['', ''];
-    sysconfig.Locale === 'en' ? [message, description] = ['Attention Please!', 'You have an invalid keyword!Please select a domain keyword or type a keyword to see what you want!'] : [message, description] = ['请注意！', '您当前的搜索词为空，请您输入选择一个搜索词或者领域进行搜索！'];
+    if (sysconfig.Locale === 'en') {
+      [message, description] = ['Attention Please!', 'You have an invalid keyword!Please select a domain keyword or type a keyword to see what you want!'];
+    } else {
+      [message, description] = ['请注意！', '您当前的搜索词为空，请您输入选择一个搜索词或者领域进行搜索！'];
+    }
     console.log(message);
     console.log(description);
+    console.log(typeof (message));
     // notification.open({
-    //   message: message,
-    //   description: description,
+    //   message,
+    //   description,
     //   duration: 8,
     //   icon: <Icon type="smile-circle" style={{ color: '#108ee9' }} />,
     // });
-  };
-
-  onSkinClick = (value) => {
-    this.setState({ themeKey: value.key });
   };
 
   callSearchMap = (query) => {
@@ -164,11 +173,14 @@ class ExpertTrajectoryPage extends React.Component {
         })}
       </Menu>
     );
-    const PersonList_BottomZone = [
+    const start = 0;
+    const date = new Date();
+    const end = date.getFullYear();
+    const PersonListBottomZone = [
       param => (
         <div key={param.person.id} className={styles.clickTraj}>
           <div className={styles.innerClickTraj}>
-            <Button type="dashed" className={styles.but} onClick={this.onPersonClick.bind(this,1900,2017, param.person)}>
+            <Button type="dashed" className={styles.but} onClick={this.onPersonClick.bind(this, start, end, param.person)}>
               <Icon type="global" style={{ color: '#bbe920' }} />
               <FM defaultMessage="Show Trajectory" id="com.expertMap.headerLine.label.showTraj" />
             </Button>
@@ -183,25 +195,26 @@ class ExpertTrajectoryPage extends React.Component {
           <div className={styles.leftPart}>
             <div className={styles.title}>
               <div className={styles.innerTitle}>
+                <Icon type="exception" style={{ color: '#108ee9' }} />
                 <FM defaultMessage="Query Result" id="com.expertTrajectory.trajectory.title" />
               </div>
             </div>
-            <hr className={styles.hrStyle}/>
-              <Layout className={styles.experts}>
-                <Sider className={styles.left} style={{ height: divHeight }}>
-                  <PersonList
-                    className={styles.personList}
-                    persons={results}
-                    user={this.props.app.user}
-                    rightZoneFuncs={[]}
-                    bottomZoneFuncs={PersonList_BottomZone}
-                    type="tiny"
-                    showIndices={personShowIndices}
-                  />
-                </Sider>
-              </Layout>
+            <hr className={styles.hrStyle} />
+            <Layout className={styles.experts}>
+              <Sider className={styles.left} style={{ height: divHeight }}>
+                <PersonList
+                  className={styles.personList}
+                  persons={results}
+                  user={this.props.app.user}
+                  rightZoneFuncs={[]}
+                  bottomZoneFuncs={PersonListBottomZone}
+                  type="tiny"
+                  showIndices={personShowIndices}
+                />
+              </Sider>
+            </Layout>
           </div>
-          <div className={styles.rightPart} style={{width: divWidth - 450}}>
+          <div className={styles.rightPart} style={{ width: divWidth - 450 }}>
             <div className={styles.header}>
               <div className={styles.yourSkin}>
                 <Dropdown overlay={menu} className={styles.skin}>
@@ -245,7 +258,7 @@ class ExpertTrajectoryPage extends React.Component {
               </div>
             </div>
             <div className={styles.trajShow}>
-              <Layout className={styles.right} style={{width: divWidth - 450}}>
+              <Layout className={styles.right} style={{ width: divWidth - 450 }}>
                 <Content className={styles.content}>
                   <ExpertTrajectory person={this.state.cperson} themeKey={themeKey} />
                 </Content>

@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { sysconfig } from 'systems';
 import { routerRedux } from 'dva/router';
+import { Spinner } from 'components';
 import { Layout, Button, Icon, Menu, Dropdown, Modal, Tabs, notification } from 'antd';
 import { Layout as Page } from 'routes';
 import { FormattedMessage as FM } from 'react-intl';
@@ -10,7 +11,7 @@ import { applyTheme } from 'themes';
 import { Auth, RequireRes } from 'hoc';
 import { ensure } from 'utils';
 import styles from './ExpertTrajectoryPage.less';
-import { showPersonStatistic } from './utils/sta-utils';
+import { showPersonStatistic, downloadData } from './utils/sta-utils';
 import { PersonList } from '../../components/person';
 import ExpertTrajectory from './ExpertTrajectory';
 
@@ -55,9 +56,7 @@ class ExpertTrajectoryPage extends React.Component {
   }
 
   componentDidMount() {
-    console.log('$$$$$$$$$');
     ensure('echarts', (ret) => {
-      console.log('**************', ret);
       echarts = ret;
       const { query } = this.state;
       if ((query === '' || query === '-')) {
@@ -151,13 +150,19 @@ class ExpertTrajectoryPage extends React.Component {
   };
 
   handleDownload = () => {
-    const downloadinterval = setInterval(() => {
-      const data = this.props.expertTrajectory.results;
-      if (typeof (data.results) !== 'undefined' && data.results !== 'undefined') {
-        clearInterval(downloadinterval);
-        this.downloadSta(data);
-      }
-    }, 100);
+    const data = this.props.expertTrajectory.trajData;
+    if (typeof (data.staData) !== 'undefined' && data.staData !== 'undefined') {
+      let str = downloadData(data);
+      const bom = '\uFEFF';
+      str = encodeURI(str);
+      const { name } = this.state.cperson;
+      const link = window.document.createElement('a');
+      link.setAttribute('href', `data:text/csv;charset=utf-8,${bom}${str}`);
+      link.setAttribute('download', `statistics-${name}.csv`);
+      link.click();
+    } else {
+      //给个提示？
+    }
   };
 
   openNotification = () => {
@@ -237,6 +242,7 @@ class ExpertTrajectoryPage extends React.Component {
     return (
       <Page contentClass={tc(['ExpertTrajectoryPage'])} onSearch={this.onSearch}
             query={query}>
+        <Spinner loading={this.props.expertTrajectory.loading} />
         <div className={styles.page}>
           <div className={styles.leftPart}>
             <div className={styles.title}>

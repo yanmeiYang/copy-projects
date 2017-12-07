@@ -115,6 +115,7 @@ export default {
                   name: pCityName,
                   start: pYear,
                   end: cYear,
+                  cityId: pCityId,
                 });
                 let newStep;
                 if (cCityId in cityIn) { //当前的点在不在，在的话push一个step
@@ -159,6 +160,7 @@ export default {
             name: lastCityName,
             start: lastYear,
             end,
+            cityId: lastCityId,
           });
           if (lastCityId in cityIn) { //同样判断是已经存在
             const point = cityIn[lastCityId]; //更新点的信息

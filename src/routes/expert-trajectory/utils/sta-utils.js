@@ -1,6 +1,5 @@
 
 const showPersonStatistic = (echarts, divId, data, type) => {
-  console.log(data);
   if (typeof (data.staData) === 'undefined') {
     document.getElementById(type).innerHTML = 'No Data!';
   } else {
@@ -222,6 +221,25 @@ const migrateHistorySta = (data) => {
   return option;
 };
 
+const downloadData = (data) => {
+  let all;
+  const title = 'time, city name, nation\n';
+  all = title;
+  console.log(data);
+  for (const t of data.staData.timeToTime) {
+    const { cityId } = t;
+    console.log(cityId);
+    let nationId = cityId;
+    while (typeof (data.staData.cities[nationId].parent_id) !== 'undefined') {
+      nationId = data.staData.cities[nationId].parent_id;
+    }
+    const country = data.staData.cities[nationId].name;
+    all += `${t.start},${t.name},${country}\n`;
+  }
+  console.log(all);
+  return all;
+};
+
 module.exports = {
-  showPersonStatistic,
+  showPersonStatistic, downloadData,
 };

@@ -358,7 +358,7 @@ export default class ExpertMapPage extends React.Component {
           <div className={styles.scopes}>
             <div className={styles.analysis}>
 
-              {(process.env.NODE_ENV !== 'production' || sysconfig.System === 'demo') &&
+              {(process.env.NODE_ENV !== 'production' || sysconfig.SYSTEM === 'demo') &&
               <Button onClick={this.showModal}>
                 <Icon type="line-chart" />
                 <FM id="com.expertMap.headerLine.label.statistic"

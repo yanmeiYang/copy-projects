@@ -33,7 +33,7 @@ let System;
 // System = 'tencent';
 // System = 'cie';
 // System = 'cipsc';
-// System = 'demo';
+System = 'demo';
 // System = 'cietest';
 // System = 'bole';
 // System = 'acmfellow';
@@ -41,7 +41,7 @@ let System;
 // System = 'thurcb';
 // System = 'yocsef';
 // System = 'med_topic_trend';
-System = 'scei';
+// System = 'scei';
 
 let Source = System; // AppID, Used in UniversalConfig.
 

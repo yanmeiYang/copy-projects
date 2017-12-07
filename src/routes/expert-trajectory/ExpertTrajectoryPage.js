@@ -2,16 +2,20 @@ import React from 'react';
 import { connect } from 'dva';
 import { sysconfig } from 'systems';
 import { routerRedux } from 'dva/router';
-import { Layout, Button, Icon, Menu, Dropdown, Modal, notification } from 'antd';
+import { Layout, Button, Icon, Menu, Dropdown, Modal, Tabs, notification } from 'antd';
 import { Layout as Page } from 'routes';
 import { FormattedMessage as FM } from 'react-intl';
 import bridge from 'utils/next-bridge';
 import { applyTheme } from 'themes';
+import { Auth, RequireRes } from 'hoc';
+import { ensure } from 'utils';
 import styles from './ExpertTrajectoryPage.less';
+import { showPersonStatistic } from './utils/sta-utils';
 import { PersonList } from '../../components/person';
 import ExpertTrajectory from './ExpertTrajectory';
 
 const { Content, Sider } = Layout;
+const { TabPane } = Tabs;
 const tc = applyTheme(styles);
 const themes = [
   { label: '常规', key: '0' },
@@ -22,9 +26,12 @@ const themes = [
   { label: '航海家', key: '5' },
   { label: '简约风', key: '6' },
 ];
+let echarts;
 
 
 @connect(({ expertTrajectory, loading, app }) => ({ expertTrajectory, loading, app }))
+@Auth
+@RequireRes('echarts')
 class ExpertTrajectoryPage extends React.Component {
   constructor(props) {
     super(props);
@@ -36,25 +43,30 @@ class ExpertTrajectoryPage extends React.Component {
     cperson: '', //当前选择的人
     themeKey: '0',
     visible: false,
+    play: false,
   };
 
   componentWillMount() {
     const { query } = this.state;
-    const q = query || ''; //设置一个默认值
+    const q = query || '唐杰'; //设置一个默认值
     this.setState({
       query: q,
     });
   }
 
   componentDidMount() {
-    const { query } = this.state;
-    console.log(query);
-    if ((query === '' || query === '-')) {
-      this.openNotification();
-    } else { //后面需要去掉
-      const data = { query };
-      this.onSearch(data);
-    }
+    console.log('$$$$$$$$$');
+    ensure('echarts', (ret) => {
+      console.log('**************', ret);
+      echarts = ret;
+      const { query } = this.state;
+      if ((query === '' || query === '-')) {
+        this.openNotification();
+      } else { //后面需要去掉
+        const data = { query };
+        this.onSearch(data);
+      }
+    });
   }
 
   shouldComponentUpdate(nextProps, nextState) { // 状态改变时判断要不要刷新
@@ -107,17 +119,35 @@ class ExpertTrajectoryPage extends React.Component {
       visible: true,
     }, () => {
       const chartsinterval = setInterval(() => {
-        const divId = document.getElementById('statistic');
-        const data = this.state.cperson;
-        console.log(data);
+        const divId = document.getElementById('timeDistribution');
+        const data = this.props.expertTrajectory.trajData;
+        const type = 'timeDistribution';
         if ((typeof (divId) !== 'undefined' && divId !== 'undefined'
           && data !== '') || (this.state.visible === false)) {
           clearInterval(chartsinterval);
-          console.log('######################################');
-          //showSta(echarts, divId, data, 'country');
+          showPersonStatistic(echarts, divId, data, type);
         }
       }, 100);
     });
+  };
+
+  changeStatistic = (key) => {
+    const chartsinterval = setInterval(() => {
+      let divId;
+      let type;
+      if (key === 1) {
+        divId = document.getElementById('timeDistribution');
+        type = 'timeDistribution';
+      } else {
+        divId = document.getElementById('migrateHistory');
+        type = 'migrateHistory';
+      }
+      const data = this.props.expertTrajectory.trajData;
+      if (typeof (divId) !== 'undefined' && divId !== 'undefined') {
+        clearInterval(chartsinterval);
+        showPersonStatistic(echarts, divId, data, type);
+      }
+    }, 100);
   };
 
   handleDownload = () => {
@@ -154,6 +184,11 @@ class ExpertTrajectoryPage extends React.Component {
     this.props.dispatch({ type: 'expertTrajectory/searchPerson', payload: { query, offset, size } });
   };
 
+  play = () => {
+    const cPlay = this.state.play;
+    this.setState({ play: !cPlay });
+  };
+
   render() {
     const persons = this.props.expertTrajectory.results;
     const results = bridge.toNextPersons(persons);
@@ -187,7 +222,18 @@ class ExpertTrajectoryPage extends React.Component {
           </div>
         </div>),
     ];
-    const personShowIndices = ['h_index', 'citations', 'activity'];
+    const personShowIndices = ['h_index', 'citations', 'activity']; //指数只取这几个
+    const staJsx = (
+      <div className={styles.charts}>
+        <div id="timeDistribution" className={styles.chart1} />
+      </div>
+    );
+
+    const staJsx1 = (
+      <div className={styles.charts}>
+        <div id="migrateHistory" className={styles.chart1} />
+      </div>
+    );
     return (
       <Page contentClass={tc(['ExpertTrajectoryPage'])} onSearch={this.onSearch}
             query={query}>
@@ -247,11 +293,14 @@ class ExpertTrajectoryPage extends React.Component {
                   ]}
                   width="700px"
                 >
-                  <div id="statistic">dddddddddddddd</div>
+                  <Tabs defaultActiveKey="1" onChange={this.changeStatistic}>
+                    <TabPane tab="时间分布" key="1">{staJsx && staJsx}</TabPane>
+                    <TabPane tab="迁徙历史" key="2">{staJsx1 && staJsx1}</TabPane>
+                  </Tabs>
                 </Modal>
               </div>
               <div className={styles.play}>
-                <Button>
+                <Button onClick={this.play}>
                   <Icon type="desktop" />
                   <FM defaultMessage="Play" id="com.expertMap.headerLine.label.play" />
                 </Button>
@@ -260,7 +309,8 @@ class ExpertTrajectoryPage extends React.Component {
             <div className={styles.trajShow}>
               <Layout className={styles.right} style={{ width: divWidth - 450 }}>
                 <Content className={styles.content}>
-                  <ExpertTrajectory person={this.state.cperson} themeKey={themeKey} />
+                  <ExpertTrajectory person={this.state.cperson} themeKey={themeKey}
+                                    play={this.state.play} />
                 </Content>
               </Layout>
             </div>

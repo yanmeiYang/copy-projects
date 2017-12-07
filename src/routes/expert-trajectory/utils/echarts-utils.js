@@ -170,6 +170,9 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       blendMode: detailedStyle.blendLineStlye[skin],
     }],
   };
+  console.log(JSON.stringify(option));
+  console.log(option);
+  console.log('就这一句喜欢报错！');
   myChart.setOption(option);
   if (type === 'bmap') {
     setBMap(myChart);

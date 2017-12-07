@@ -60,6 +60,8 @@ export default {
       const lineData = []; //线的数据
       const step = []; //播放的步骤
       let staData = {}; //统计数据
+      const cityIn = []; //在哪个城市
+      const timeToTime = []; //每个点呆的具体的时间序列
 
       const cities = [];
       const addresses = [];
@@ -72,15 +74,9 @@ export default {
           addresses[key] = data.data.addresses[key];
         }
       }
-      /**
-       * 这里为了方便统计数据的改动，将数据传过去，再在后面进行整理
-       * @type {{cities: Array, addresses: Array, trajectories: *}}
-       */
-      staData = { cities, addresses, trajectories: data.data.trajectories };
       for (const key in data.data.trajectories) {
         if (data.data.trajectories) {
           let previousD = [];
-          const cityIn = []; //在哪个城市
           for (const d of data.data.trajectories[key]) {
             const [cYear, cPlaceId] = d; //年份和所在位置id
             const cCityId = addresses[cPlaceId].city_id;
@@ -115,6 +111,11 @@ export default {
                */
               if (pCityId !== cCityId) { //地址不一样的情况,此处使用的是城市不一致
                 lineData.push(line);
+                timeToTime.push({
+                  name: pCityName,
+                  start: pYear,
+                  end: cYear,
+                });
                 let newStep;
                 if (cCityId in cityIn) { //当前的点在不在，在的话push一个step
                   newStep = step.length === 0 ? 2 : step[step.length - 1]; //还是原来的点
@@ -154,6 +155,11 @@ export default {
           const lastCityName = cities[lastCityId].name;
           const lastLat = addresses[lastPlaceId].geo.lat.toFixed(2); //保留两位小数
           const lastLng = addresses[lastPlaceId].geo.lng.toFixed(2);
+          timeToTime.push({
+            name: lastCityName,
+            start: lastYear,
+            end,
+          });
           if (lastCityId in cityIn) { //同样判断是已经存在
             const point = cityIn[lastCityId]; //更新点的信息
             point.symbolSize += (end - lastYear); //end是我们查询的年份
@@ -173,13 +179,17 @@ export default {
           }
         }
       }
-      const trajData = { lineData, pointData, step, staData };
+      /**
+       * 这里为了方便统计数据的改动，将数据传过去，再在后面进行整理
+       * @type {{cities: Array, addresses: Array, trajectories: *}}
+       */
+      staData = { cities, addresses, timeToTime };
+      const trajData = { lineData, pointData, step, staData, cityIn };
       return { ...state, trajData, loading: false };
     },
 
 
     findTrajsByRosterIdSuccess(state, { payload: { data } }) {
-      console.log(data);
       return { ...state, heatData: data, loading: false };
     },
 

@@ -6,54 +6,80 @@ const showPersonStatistic = (echarts, divId, data, type) => {
   } else {
     let option;
     if (type === 'timeDistribution') {
-      option = timeDistributionSta();
+      option = timeDistributionSta(data);
     } else {
-      option = migrateHistorySta();
+      option = migrateHistorySta(data);
     }
     const myChart = echarts.init(document.getElementById(type));
-    console.log(option);
-    console.log(myChart);
     myChart.setOption(option);
   }
 };
 
-const timeDistributionSta = () => {
+const timeDistributionSta = (data) => {
+  const allPlacesData = []; //所有的地区，包括国家和地区字符串数组
+  const nationData = []; //每一个对象为：{value:335, name:'直达', selected:true},
+  const cityData = []; //每一个对象为：{value:335, name:'直达'},
+  const cityNationYear = [];
+  for (const key in data.cityIn) { //这里的key就是cityId
+    if (key) {
+      const cityName = data.staData.cities[key].name;
+      cityData.push({ value: data.cityIn[key].symbolSize, name: cityName });
+      let nationId = key;
+      while (typeof (data.staData.cities[nationId].parent_id) !== 'undefined') {
+        nationId = data.staData.cities[nationId].parent_id;
+      }
+      if (data.staData.cities[nationId].id in cityNationYear) {
+        const d = cityNationYear[data.staData.cities[nationId].id];
+        d.value += data.cityIn[key].symbolSize;
+      } else {
+        cityNationYear[data.staData.cities[nationId].id] = {
+          value: data.cityIn[key].symbolSize,
+          name: data.staData.cities[nationId].name,
+        };
+      }
+    }
+  }
+  for (const key in cityNationYear) {
+    if (key) {
+      nationData.push(cityNationYear[key]);
+      allPlacesData.push(cityNationYear[key].name);
+    }
+  }
+  for (const c of cityData) {
+    allPlacesData.push(c.name);
+  }
+
   const option = {
     tooltip: {
       trigger: 'item',
-      //formatter: "{a} <br/>{b}: {c} ({d}%)"
+      formatter: '{a} <br/>{b}: {c} ({d}%)',
     },
     legend: {
       orient: 'vertical',
       x: 'left',
-      data:['直达','营销广告','搜索引擎','邮件营销','联盟广告','视频广告','百度','谷歌','必应','其他']
+      data: allPlacesData,
     },
     series: [
       {
-        name:'访问来源',
-        type:'pie',
+        name: '所在地址',
+        type: 'pie',
         selectedMode: 'single',
         radius: [0, '30%'],
-
         label: {
           normal: {
-            position: 'inner'
-          }
+            position: 'inner',
+          },
         },
         labelLine: {
           normal: {
-            show: false
-          }
+            show: false,
+          },
         },
-        data:[
-          {value:335, name:'直达', selected:true},
-          {value:679, name:'营销广告'},
-          {value:1548, name:'搜索引擎'}
-        ]
+        data: nationData,
       },
       {
-        name:'访问来源',
-        type:'pie',
+        name: '所在地址',
+        type: 'pie',
         radius: ['40%', '55%'],
         label: {
           normal: {
@@ -71,7 +97,7 @@ const timeDistributionSta = () => {
               a: {
                 color: '#999',
                 lineHeight: 22,
-                align: 'center'
+                align: 'center',
               },
               // abg: {
               //     backgroundColor: '#333',
@@ -84,98 +110,114 @@ const timeDistributionSta = () => {
                 borderColor: '#aaa',
                 width: '100%',
                 borderWidth: 0.5,
-                height: 0
+                height: 0,
               },
               b: {
                 fontSize: 16,
-                lineHeight: 33
+                lineHeight: 33,
               },
               per: {
                 color: '#eee',
                 backgroundColor: '#334455',
                 padding: [2, 4],
-                borderRadius: 2
-              }
-            }
-          }
+                borderRadius: 2,
+              },
+            },
+          },
         },
-        data:[
-          {value:335, name:'直达'},
-          {value:310, name:'邮件营销'},
-          {value:234, name:'联盟广告'},
-          {value:135, name:'视频广告'},
-          {value:1048, name:'百度'},
-          {value:251, name:'谷歌'},
-          {value:147, name:'必应'},
-          {value:102, name:'其他'}
-        ]
-      }
-    ]
+        data: cityData,
+      },
+    ],
   };
   return option;
 };
 
-const migrateHistorySta = () => {
+const migrateHistorySta = (data) => {
+  const startYears = [];
+  const stayYears = [];
+  const names = [];
+  let begin = 3000;
+  let finish = 0;
+
+  for (const t of data.staData.timeToTime) {
+    if (t.start < begin) {
+      begin = t.start;
+    }
+    if (t.end > finish) {
+      finish = t.end;
+    }
+    names.push(t.name);
+    startYears.push(t.start);
+    const year = (t.end - t.start) === 0 ? 1 : (t.end - t.start);
+    stayYears.push(year);
+  }
   const option = {
     title: {
-      text: '深圳月最低生活费组成（单位:元）',
-      subtext: 'From ExcelHome',
-      sublink: 'http://e.weibo.com/1341556070/AjQH99che'
+      text: '学者迁徙历史',
+      subtext: 'From Aminer',
+      sublink: 'https://www.aminer.cn/',
     },
-    tooltip : {
+    tooltip: {
       trigger: 'axis',
-      axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+        type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
       },
-      formatter: function (params) {
-        var tar = params[1];
-        return tar.name + '<br/>' + tar.seriesName + ' : ' + tar.value;
-      }
+      formatter: (params) => {
+        const tar = params[1];
+        return `${tar.name}<br/>${tar.seriesName}： ${tar.value}年`;
+      },
     },
     grid: {
       left: '3%',
       right: '4%',
       bottom: '3%',
-      containLabel: true
+      containLabel: true,
     },
     xAxis: {
-      type : 'category',
-      splitLine: {show:false},
-      data : ['总费用','房租','水电费','交通费','伙食费','日用品数']
+      type: 'category',
+      splitLine: { show: true },
+      data: names,
     },
     yAxis: {
-      type : 'value'
+      type: 'value',
+      min: begin,
+      max: finish,
     },
     series: [
       {
         name: '辅助',
         type: 'bar',
-        stack:  '总量',
+        stack: '总量',
         itemStyle: {
           normal: {
             barBorderColor: 'rgba(0,0,0,0)',
-            color: 'rgba(0,0,0,0)'
+            color: 'rgba(0,0,0,0)',
           },
           emphasis: {
             barBorderColor: 'rgba(0,0,0,0)',
-            color: 'rgba(0,0,0,0)'
-          }
+            color: 'rgba(0,0,0,0)',
+          },
         },
-        data: [0, 1700, 1400, 1200, 300, 0]
+        data: startYears, //开始的值
       },
       {
-        name: '生活费',
+        name: '所呆总时间',
         type: 'bar',
         stack: '总量',
+        itemStyle: {
+          normal: {
+            color: '#3e9bc9',
+          },
+        },
         label: {
           normal: {
             show: true,
-            position: 'inside'
-          }
+            position: 'inside',
+          },
         },
-        data:[2900, 1200, 300, 200, 900, 300]
-      }
-    ]
+        data: stayYears, //总值
+      },
+    ],
   };
   return option;
 };

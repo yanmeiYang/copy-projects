@@ -63,9 +63,7 @@ class ExpertTrajectory extends React.Component {
     const divId = 'chart';
     ensure('BMap', () => {
       load((echarts) => {
-        console.log('@@@@@@@@', echarts);
         myChart = echarts.init(document.getElementById(divId));
-        console.log('!!!!!!111', myChart);
         let skinType = this.props.themeKey;
         if (typeof (skinType) === 'undefined') {
           skinType = '2'; //假设默认为dark

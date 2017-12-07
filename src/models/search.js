@@ -16,7 +16,7 @@ export default {
   state: {
     results: null,
     topic: null, // search 右边的 topic
-    aggs: [],
+    aggs: [], // Aggregation
     filters: {},
     query: null,
 
@@ -28,10 +28,11 @@ export default {
     translatedLanguage: 0, // 1 en to zh; 2 zh to en;
     translatedText: '',
 
-    // Intelligence search.
+    // Intelligence search assistants. TODO change to assistantMeta, assistantData
     intelligenceSearchMeta: {}, // {expand:<word>, translated:<word>, kg:[<word>,...]}
-    intelligenceSuggest: null,
-    kg: null,
+    assistantDataMeta: {}, // {expand:<word>, translated:<word>, kg:[<word>,...]}
+    assistantData: null, // TODO old is intelligenceSuggest
+    kg: null, // ??????????????????
 
     // pager
     offset: 0,
@@ -80,7 +81,7 @@ export default {
   effects: {
     // 搜索全球专家时，使用old service。
     // 使用智库搜索，并且排序算法不是contribute的时候，使用新的搜索API。
-    searchPerson: [function*({ payload }, { call, put, select }) {
+    searchPerson: [function* ({ payload }, { call, put, select }) {
       const { query, offset, size, filters, sort, total, ghost } = payload;
       const noTotalFilters = {};
       for (const [key, item] of Object.entries(filters)) {
@@ -148,7 +149,7 @@ export default {
         }
         yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data, query } });
         yield put({
-          type: 'getIntellResultsSuccess',
+          type: 'getAssistantDataSuccess',
           payload: { data: data.data.intellResults },
         });
         yield put({ type: 'getKgSuccess', payload: { data: data.data.intellResults } });
@@ -233,10 +234,10 @@ export default {
         }
 
         newState.pagination = newState.pagination || {
-            current: 1,
-            pageSize: sysconfig.MainListSize,
-            total: null,
-          };
+          current: 1,
+          pageSize: sysconfig.MainListSize,
+          total: null,
+        };
         newState.pagination.pageSize = size;
         newState.translatedText = '';
       }
@@ -342,8 +343,9 @@ export default {
     getTopicByMentionSuccess(state, { payload: { data } }) {
       return { ...state, topic: data.data };
     },
-    getIntellResultsSuccess(state, { payload: { data } }) {
-      return { ...state, intelligenceSuggest: data };
+
+    getAssistantDataSuccess(state, { payload: { data } }) {
+      return { ...state, assistantData: data };
     },
   },
 };

@@ -40,7 +40,6 @@ export default class SearchSorts extends PureComponent {
     }
   };
 
-
   render() {
     const { rightZone, sortType } = this.props;
     const sorts = this.props.sorts || defaultSorts;

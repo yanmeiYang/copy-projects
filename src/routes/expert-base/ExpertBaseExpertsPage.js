@@ -24,6 +24,7 @@ export default class ExpertBaseExpertsPage extends Component {
     this.TheOnlyExpertBaseID = sysconfig.ExpertBase;
   }
 
+  // TODO @alice i18n this.
   componentWillMount() {
     const { dispatch, match } = this.props;
     const { offset, size, id } = match.params;
@@ -70,7 +71,33 @@ export default class ExpertBaseExpertsPage extends Component {
 
     const total = pagination && (pagination.total || 0);
     const { term, name, org } = strings.destructQueryString(query);
+
+    // search message
     const zoneData = { total, term, name, org, id };
+    const searchMessageZone = hole.fillFuncs(theme.ExpertBaseExpertsPage_MessageZone, [
+      (payload) => {
+        const querySegments = [];
+        if (payload.term) {
+          querySegments.push(payload.term);
+        }
+        if (payload.name) {
+          querySegments.push(payload.name);
+        }
+        if (payload.org) {
+          querySegments.push(payload.org);
+        }
+        const queryString = querySegments.join(', ');
+
+        // TODO @alice: i18n this.
+        // TODO @xiaobei: delete this line to test.
+        return (
+          <div key={100}>
+            {payload.total} Experts in ACM Fellow.
+            {queryString && <span> related to "{queryString}".</span>}
+          </div>
+        );
+      },
+    ], zoneData);
 
     return (
       <Layout contentClass={tc(['expertBase'])} onSearch={this.onSearchBarSearch}
@@ -93,31 +120,6 @@ export default class ExpertBaseExpertsPage extends Component {
           }
         </h1>}
 
-        <div className={styles.message}>
-          {hole.fillFuncs(theme.ExpertBaseExpertsPage_MessageZone, [
-            (payload) => {
-              const querySegments = [];
-              if (payload.term) {
-                querySegments.push(payload.term);
-              }
-              if (payload.name) {
-                querySegments.push(payload.name);
-              }
-              if (payload.org) {
-                querySegments.push(payload.org);
-              }
-              const queryString = querySegments.join(', ');
-
-              return (
-                <div key={100}>
-                  {payload.total} Experts in ACM Fellow.
-                  {queryString && <span> related to "{queryString}".</span>}
-                </div>
-              );
-            },
-          ], zoneData)}
-        </div>
-
         <SearchComponent // Example: include all props.
           className={styles.SearchBorder} // additional className
           sorts={sysconfig.Search_SortOptions || (query ? null : this.ebSorts)}
@@ -128,6 +130,7 @@ export default class ExpertBaseExpertsPage extends Component {
           // showSearchBox={this.props.app.headerSearchBox ? false : true}
           PersonList_UpdateHooks={sysconfig.PersonList_UpdateHooks}
           rightZoneFuncs={[]}
+          searchMessagesZone={searchMessageZone}
           showSearchBox={false}
           disableFilter={sysconfig.Search_DisableFilter || !query}
           disableExpertBaseFilter

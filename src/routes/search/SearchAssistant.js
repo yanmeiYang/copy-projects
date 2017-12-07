@@ -1,27 +1,30 @@
 import React, { Component } from 'react';
-import { routerRedux } from 'dva/router';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { sysconfig } from 'systems';
-import { Checkbox, Row, Col } from 'antd';
-import { Button } from 'antd';
-import styles from './SearchHelp.less';
+import { Checkbox, Button } from 'antd';
+import styles from './SearchAssistant.less';
 
-const CheckboxGroup = Checkbox.Group;
+const SEARCH_ON_CLICK = true;
 
-export default class SearchHelp extends Component {
+@connect(({ search }) => ({
+  assistantData: search.assistantData,
+  assistantDataMeta: search.assistantDataMeta,
+}))
+export default class SearchAssistant extends Component {
+  static propTypes = {
+    // disableSmartSuggest: PropTypes.bool,
+  };
+
+  static defaultProps = {};
+
   state = {
     defaultExpansionChecked: 1,
     currentExpansionChecked: 0,
     currentTranslationChecked: 0,
-    //
+
     indeterminate: true,
     checkAll: false,
     checkedList: [],
-
-    // to delete
-    knowledgeGraphId: 0,
-    KG: [],
   };
 
   onExpandedTermChange = (index) => {
@@ -30,12 +33,8 @@ export default class SearchHelp extends Component {
       currentTranslationChecked: this.state.currentTranslationChecked === 0 ? 0 : index + 1,
       defaultExpansionChecked: null,
     });
-    const { intelligenceSuggests } = this.props;
-    if (this.props.onIntelligenceSearchMetaChange) {
-      this.props.onIntelligenceSearchMetaChange({
-        // expansion: intelligenceSuggests.expandedTexts[index],
-        // translated: this.state.currentTranslationChecked === 0 ? '' : intelligenceSuggests.expandedTexts_zh[index],
-      });
+    if (SEARCH_ON_CLICK) {
+      this.callSearch();
     }
   };
 
@@ -44,29 +43,29 @@ export default class SearchHelp extends Component {
       currentTranslationChecked: this.state.currentTranslationChecked === index + 1 ? 0 : index + 1,
       currentExpansionChecked: index + 1,
     });
-    const { intelligenceSuggests } = this.props.intelligenceSuggests;
-    if (this.props.onIntelligenceSearchMetaChange) {
-      this.props.onIntelligenceSearchMetaChange({
-        // expansion: this.state.currentExpansionChecked === 0 ? '' : intelligenceSuggests.expandedTexts[index],
-        // translated: intelligenceSuggests.expandedTexts_zh[index],
-      });
+    if (SEARCH_ON_CLICK) {
+      this.callSearch();
     }
   };
 
   onKGChange = (checkedList) => {
-    const { intelligenceSuggests } = this.props;
-    const len = intelligenceSuggests.kgHyponym && intelligenceSuggests.kgHyponym.length;
+    const { assistantData } = this.props;
+    const len = assistantData.kgHyponym && assistantData.kgHyponym.length;
     this.setState({
       checkedList,
       indeterminate: !!checkedList.length && (checkedList.length < len),
       checkAll: checkedList.length === len,
     });
+    if (SEARCH_ON_CLICK) {
+      this.callSearch();
+    }
   };
 
   onCheckAllChange = (e) => {
     const kgHyponymArray = [];
-    const { intelligenceSuggests } = this.props;
-    kgHyponymArray.push(intelligenceSuggests.kgHyponym.map((item) => {
+    const { assistantData, onAssistantChanged } = this.props;
+    const kgHyponym = assistantData && assistantData.kgHyponym;
+    kgHyponymArray.push(kgHyponym.map((item) => {
       return item.word;
     }));
     this.setState({
@@ -74,21 +73,26 @@ export default class SearchHelp extends Component {
       indeterminate: false,
       checkAll: e.target.checked,
     });
-    if (this.props.onIntelligenceSearchMetaChange) {
-      this.props.onIntelligenceSearchMetaChange({
-        expansion: this.state.currentExpansionChecked === 0 ? '' : intelligenceSuggests.expandedTexts[index],
-        translated: this.state.currentTranslationChecked === 0 ? '' : intelligenceSuggests.expandedTexts_zh[index],
-        KG: kgHyponymArray,
+    // if (onAssistantChanged) {
+    //   onAssistantChanged({
+    //     expansion: this.state.currentExpansionChecked === 0 ? '' : assistantData.expandedTexts[index],
+    //     translated: this.state.currentTranslationChecked === 0 ? '' : assistantData.expandedTexts_zh[index],
+    //     KG: kgHyponymArray,
+    //   });
+    // }
+  };
+
+  // intelligenceSuggests
+  callSearch() {
+    const { assistantData, onAssistantChanged } = this.props;
+    if (onAssistantChanged) {
+      onAssistantChanged({
+        // expansion: intelligenceSuggests.expandedTexts[index],
+        // translated: this.state.currentTranslationChecked === 0 ? '' : intelligenceSuggests.expandedTexts_zh[index],
       });
     }
-  };
-  //
-  // onToggleClick = (e) => {
-  // };
 
-  setDefaultOptions = () => {
-    // TODO
-  };
+  }
 
   render() {
     const {
@@ -96,26 +100,21 @@ export default class SearchHelp extends Component {
       defaultExpansionChecked, checkedList,
     } = this.state;
 
-    const { intelligenceSuggests } = this.props;
-    if (!intelligenceSuggests) {
+    const { assistantData } = this.props;
+    if (!assistantData) {
       return false;
     }
-    const { expandedTexts, expandedTexts_zh, expands } = intelligenceSuggests;
+    const { expandedTexts, expandedTexts_zh, expands } = assistantData;
+    const { kgHypernym, kgHyponym } = assistantData;
+
     const hasExpansion = expandedTexts && expandedTexts.length > 0;
     const hasTranslation = expandedTexts_zh && expandedTexts_zh.length > 0;
+    const hasKG = kgHypernym && kgHypernym.length > 0 && kgHyponym && kgHyponym.length > 0;
 
-    const { kgHypernym, kgHyponym } = intelligenceSuggests;
-    const hasKG = kgHypernym && kgHypernym.length && kgHyponym && kgHyponym.length > 0;
-
-    // -----------------------------
-    const { knowledgeGraphId } = this.state;
-    const { indeterminate } = this.state;
-    const { checkAll } = this.state;
-
-    // const hasKG = this.state.KG && this.state.KG.length > 0;
+    const { checkAll, indeterminate, knowledgeGraphId } = this.state;
 
     return (
-      <div className={styles.searchHelp}>
+      <div className={styles.searchAssistant}>
         <div className={styles.box}>
           <div className={styles.w}>
             {hasExpansion &&
@@ -172,26 +171,22 @@ export default class SearchHelp extends Component {
             </span>
           </div>
           <Checkbox.Group onChange={this.onKGChange} value={this.state.checkedList}>
-          {kgHypernym && kgHypernym.map((opt, index) => {
-            const key = `${opt.word}_${index}`;
-            return (<Checkbox key={key} value={this.state.checkedList}
-                              checked={checkAll} onChange={this.onKGChange}>
-              <span className={styles.suporordinateWord}>{opt.word}</span>
-            </Checkbox>);
-          })}
-          {kgHyponym && kgHyponym.map((opt, index) => {
-            const key = `${opt.word}_${index}`;
-            return (<Checkbox key={key} value={opt.word} checked={checkAll}>
-              <span className={styles.subordinateWord}>{opt.word}</span>
-            </Checkbox>);
-          })}
+            {kgHypernym && kgHypernym.map((opt, index) => {
+              const key = `${opt.word}_${index}`;
+              return (<Checkbox key={key} value={this.state.checkedList}
+                                checked={checkAll} onChange={this.onKGChange}>
+                <span className={styles.suporordinateWord}>{opt.word}</span>
+              </Checkbox>);
+            })}
+            {kgHyponym && kgHyponym.map((opt, index) => {
+              const key = `${opt.word}_${index}`;
+              return (<Checkbox key={key} value={opt.word} checked={checkAll}>
+                <span className={styles.subordinateWord}>{opt.word}</span>
+              </Checkbox>);
+            })}
           </Checkbox.Group>
         </div>
       </div>
     );
   }
 }
-SearchHelp.propTypes = {
-  // labels: PropTypes.object.isRequired,
-  disableSmartSuggest: PropTypes.bool,
-};

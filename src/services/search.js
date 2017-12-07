@@ -46,17 +46,18 @@ export async function searchPerson(params) {
   // ------------------------------------------------------------------------------------------
   if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH && Sort !== 'activity-ranking-contrib') {
     const ebs = sysconfig.ExpertBases;
-    const defaultHaves = ebs && ebs.length > 0 && ebs.map(eb => eb.id);
+    const defaultHaves = ebs && ebs.length > 0 && ebs.filter(eb => eb.id !== 'aminer').map(eb => eb.id);
+
+
     const enTrans = sysconfig.Search_EnableTranslateSearch && !sysconfig.Search_EnableSmartSuggest;
-    console.log('-------------------------------- disable is ', enTrans);
 
     const nextapi = apiBuilder.query(F.queries.search, 'search')
       .param({ query, offset, size })
       .param({
         searchType: F.searchType.allb,
         aggregation: ['gender', 'h_index', 'location', 'language'],
-        haves: { eb: defaultHaves },
       })
+      .addParam({ haves: { eb: defaultHaves }, }, { when: defaultHaves && defaultHaves.length > 0 })
       .addParam({ switches: ['loc_search_all'] }, { when: useTranslateSearch })
       .addParam({ switches: ['loc_translate_all'] }, { when: enTrans && !useTranslateSearch })
       .addParam({ switches: ['intell_search'] }, { when: sysconfig.Search_EnableSmartSuggest })

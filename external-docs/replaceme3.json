@@ -1,177 +1,62 @@
 [
   {
-    "type": "alter",
-    // delete
-    "action": "alter",
-    // actio : dims
-    "eventName": "addLabelToEntity",
-    // delete.
-    "parameters": {
-      "ids": [
-        "54410a12dabfae7d84bd76c2"
-      ],
-      "opts": [
-        {
-          "operator": "upsert",
-          "fields": [
-            {
-              "field": "systag",
-              "value": "Computed Tomography"
-            }
-          ]
-        }
-      ]
-    }
-  }
-]
-[
-  {
-    "action": "dims",
-    "parameters": {
-      "ids": [
-        "54410a12dabfae7d84bd76c2"
-      ],
-      "opts": [
-        {
-          "operator": "delete",
-          "fields": [
-            {
-              "field": "systag",
-              "value": "sdf"
-            }
-          ]
-        }
-      ]
-    }
-  }
-]
-
-
-[
-  {
-    "action": "dims",
-    "parameters": {
-      "ids": [
-        "54410a12dabfae7d84bd76c2"
-      ],
-      "opts": [
-        {
-          "operator": "upsert",
-          "fields": [
-            {
-              "field": "systag",
-              "value": "sdf"
-            }
-          ]
-        }
-      ]
-    }
-  }
-]
-
-
-[
-  {
-    "action": "dims",
-    "parameters": {
-      "ids": [
-        "54410a12dabfae7d84bd76c2"
-      ],
-      "opts": [
-        {
-          "operator": "delete",
-          "fields": [
-            {
-              "field": "systag",
-              "value": "Robot"
-            }
-          ]
-        }
-      ]
-    }
-  }
-]
-[
-  {
-    "type": "alter",
-    "action": "dims",
-    "parameters": {
-      "ids": [
-        "54410a12dabfae7d84bd76c2"
-      ],
-      "opts": [
-        {
-          "operator": "delete",
-          "fields": [
-            {
-              "field": "systag",
-              "value": "Medical Robot"
-            }
-          ]
-        }
-      ]
-    }
-  }
-]
-
-[
-  {
     "action": "search",
     "parameters": {
-      "ids": [
-        "54410a12dabfae7d84bd76c2",
-        "5448371bdabfae87b7de9b92",
-        "5434f124dabfaebba5882a59",
-        "53f431fcdabfaee0d9b37556",
-        "5485b125dabfaed7b5fa2471",
-        "54883c4bdabfae8a11fb4161",
-        "5406a2aadabfae8faa615ee7",
-        "54303741dabfaeca69bd7add",
-        "5487f931dabfae8a11fb3f92",
-        "54483905dabfae87b7dec266",
-        "53f45bf8dabfaee2a1d88928",
-        "53f437b8dabfaee0d9b710e0",
-        "54860c66dabfaed7b5fa2717",
-        "5434d54adabfaebba586e6ff",
-        "560621dc45ce1e595e94946e",
-        "53f46f6edabfaeecd6a2f9cb",
-        "543036cfdabfaeca69bd7791",
-        "548d8c6adabfae8a11fb5085",
-        "53f3aab8dabfae4b34af564e",
-        "5406bcb8dabfae44f0855ef9"
+      "query": "DM",
+      "offset": 0,
+      "size": 20,
+      "searchType": "allb",
+      "aggregation": [
+        "gender",
+        "h_index",
+        "location",
+        "language",
+        "dims.systag"
       ],
       "haves": {
+        "eb": [
+          "aminer"
+        ],
         "systag": []
       },
       "switches": [
-        "master"
-      ]
+        "intell_search"
+      ],
+      "filters": {
+        "dims": {
+          "eb": [
+            "59d7bb7e9ed5dbe450e6b275"
+          ]
+        }
+      }
     },
     "schema": {
       "person": [
-        "id"
+        "id",
+        "name",
+        "name_zh",
+        "avatar",
+        "tags",
+        {
+          "profile": [
+            "position",
+            "affiliation"
+          ]
+        },
+        {
+          "indices": [
+            "hindex",
+            "gindex",
+            "pubs",
+            "citations",
+            "newStar",
+            "risingStar",
+            "activity",
+            "diversity",
+            "sociability"
+          ]
+        }
       ]
     }
   }
 ]
-
-//alter api做了重构。
-//旧的
-{
-  "dims": {
-    "systag": {
-      "op": "upsert",
-      "value": "kjkj333kjk"
-    }
-  }
-}
-//新的
-{
-  "opts": [
-    {
-      "operator": "upsert",
-      "field": "systag",
-      "value": "kjkj333kjk"
-    }
-  ]
-}

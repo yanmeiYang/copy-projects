@@ -269,13 +269,15 @@ export default class Users extends React.Component {
       <Layout searchZone={[]} contentClass={tc(['userList'])} showNavigator={false}>
         <div className="content-inner" style={{ maxWidth: '1228px' }}>
           <div className="toolsArea">
-            <Button type="primary" size="large" style={{}} onClick={this.goCreateUser}>创建用户</Button>
+            <Button type="primary" size="large" style={{}}
+                    onClick={this.goCreateUser}>创建用户</Button>
           </div>
           <h2 className={styles.pageTitle}>用户管理</h2>
           {sysconfig.UserAuthSystem === 'aminer' &&
           <div>也可以使用AMiner账号登录</div>
           }
-          <Tabs defaultActiveKey={this.state.defaultTabKey} type="card" onChange={this.onTabChange}>
+          <Tabs defaultActiveKey={this.state.defaultTabKey} type="card"
+                onChange={this.onTabChange}>
             <TabPane tab="活动用户" key="active" />
             <TabPane tab="禁用用户" key="forbid" />
           </Tabs>

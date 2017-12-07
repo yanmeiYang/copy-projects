@@ -80,7 +80,9 @@ const getDefaultSystemConfigs = (system, source) => {
     UserInfo_Batch_Signup: false, // 批量创建用户 目前只有huawei在用
 
     // Login system.
-    AuthLoginUsingThird: false,
+    Auth_AllowAnonymousAccess: false,
+    Auth_LoginPage: '/login',
+    AuthLoginUsingThird: false, // 使用第三方登录界面，目前只有tencent在用
     AuthLoginUsingThirdPage: null,
 
     // export
@@ -100,6 +102,8 @@ const getDefaultSystemConfigs = (system, source) => {
     SearchPagePrefix: 'uniSearch', // search - 普通搜索(deleted); uniSearch - 多合一搜索.
     Search_EnablePin: false, // TODO bad：Huawei PIN
     Search_EnableCCFPin: false, // TODO bad：CCF PIN
+
+    // AI search helper translation/expand/kg
     Search_EnableTranslateSearch: false, // 启用翻译搜索，显示提示信息;/
     Search_DefaultTranslateSearch: false, // 默认使用翻译搜索;
     Search_EnableKnowledgeGraphHelper: true,
@@ -128,9 +132,6 @@ const getDefaultSystemConfigs = (system, source) => {
     UserAuthSystem: system, // aminer 或者是 system.config
     UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签, 目前没用到
 
-    Auth_AllowAnonymousAccess: false,
-    AuthLoginUsingThird: false, // 使用第三方登录界面，目前只有tencent在用
-    Auth_LoginPage: '/login',
 
     /**
      * Page specified config.

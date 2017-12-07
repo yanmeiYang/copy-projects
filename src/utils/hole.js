@@ -46,11 +46,13 @@ function fillFuncs(holeList, defaultHoleList, payload, config) {
   if (holes && holes && holes.length > 0) {
     const newHoles = [];
     holes.map((elm) => {
-      if (elm === default_placeholder && defaultHoleList && defaultHoleList.length > 0) {
-        defaultHoleList.map((hole) => {
-          newHoles.push(hole(payload));
-          return false;
-        });
+      if (elm === default_placeholder) {
+        if (defaultHoleList && defaultHoleList.length > 0) {
+          defaultHoleList.map((hole) => {
+            newHoles.push(hole(payload));
+            return false;
+          });
+        }
       } else {
         newHoles.push(elm(payload));
       }

@@ -36,7 +36,7 @@ let System;
 System = 'demo';
 // System = 'cietest';
 // System = 'bole';
-// System = 'acmfellow';
+System = 'acmfellow';
 // System = 'DataAnnotation';
 // System = 'thurcb';
 // System = 'yocsef';
@@ -74,12 +74,6 @@ function loadSavedSystem() {
   }
 }
 
-// Override system settings from localStorage.
-// 只有开发环境或者线上的demo系统可以切换。
-if (process.env.NODE_ENV !== 'production' || System === 'demo') {
-  loadSavedSystem();
-}
-
 function saveSystem(system, user) {
   if (user) {
     localStorage.setItem(
@@ -87,6 +81,12 @@ function saveSystem(system, user) {
       JSON.stringify({ user: user.email, system }),
     );
   }
+}
+
+// Override system settings from localStorage.
+// 只有开发环境或者线上的demo系统可以切换。
+if (process.env.NODE_ENV !== 'production' || System === 'demo') {
+  loadSavedSystem();
 }
 
 module.exports = {

@@ -1,7 +1,18 @@
-@import "../../themes/vars.less";
+@import "~themes/vars";
 
 .searchComponent {
   display: flex; flex-direction: column; // min-width: 800px;
+
+  .topZone {
+    //display: flex; flex-direction: row; justify-content: flex-start;
+    //max-width: @max-width-page;
+    //.searchZone { width: 100%; }
+    //.rightZone { }
+    .message {
+      margin: 0 8px 8px 8px;
+      color: #3e3e3e;
+    }
+  }
 
   .searchContent {
     //max-width: @max-width-page;
@@ -21,12 +32,6 @@
 }
 
 //
-//.topZone {
-//  display: flex; flex-direction: row; justify-content: flex-start;
-//  max-width: @max-width-page;
-//  .searchZone { width: 100%; }
-//  .rightZone { }
-//}
 //
 //.top {
 //  display: flex; flex-direction: row; justify-content: space-between; align-items: center;

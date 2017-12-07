@@ -7,17 +7,17 @@ import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import classnames from 'classnames';
 import { Pagination } from 'antd';
 import { Spinner } from 'components';
+import { Hole } from 'components/core';
 import { PersonList, ExportExperts } from 'components/person';
-import {
-  SearchFilter, SearchSorts, KgSearchBox,
-  SearchKnowledge, TranslateSearchMessage, SearchVenue,
-} from 'components/search';
+import { SearchFilter, SearchSorts, KgSearchBox } from 'components/search';
+import { SearchKnowledge, TranslateSearchMessage, SearchVenue } from 'components/search';
+
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 import { createURL, hole } from 'utils';
 import { Auth } from 'hoc';
+import SearchAssistant from './SearchAssistant';
 import styles from './SearchComponent.less';
-import SearchHelp from '../SearchHelp/SearchHelp';
 
 
 // TODO Extract Search Filter into new Component.
@@ -47,7 +47,9 @@ export default class SearchComponent extends Component {
     onSearchBarSearch: PropTypes.func,
     showSearchBox: PropTypes.bool, // has search box?
     fixedExpertBase: PropTypes.object,
-    helps: PropTypes.object, // smartSearch data
+    // zones
+    searchMessagesZone: PropTypes.array,
+    rightZoneFuncs: PropTypes.array,
   };
 
   static defaultProps = {
@@ -157,7 +159,7 @@ export default class SearchComponent extends Component {
     this.doSearchUseProps();
   };
 
-  onIntelligenceSearchMetaChange = (intelligenceMeta) => {
+  onAssistantChanged = (intelligenceMeta) => {
     const { query } = this.props.search;
     const intelligenceSearchMeta = {
       expansion: [intelligenceMeta.expansion],
@@ -217,22 +219,19 @@ export default class SearchComponent extends Component {
   render() {
     const {
       disableExpertBaseFilter, disableFilter, disableSearchKnowledge,
-      rightZoneFuncs, disableSmartSuggest
+      rightZoneFuncs, disableSmartSuggest, searchMessagesZone,
     } = this.props;
+
+    const { search, loading } = this.props;
+
     const { className, sorts, expertBaseId } = this.props;
-    const intelligenceSuggests = this.props.search.intelligenceSuggest;
-    const { sortKey } = this.props.search;
-    const sortType = sortKey;
-
-    // .........
-    const { results, pagination, query, aggs, filters, topic, intelligenceSearchMeta } =
-      this.props.search;
+    const { results, pagination, query, aggs, filters, topic, sortKey: sortType } = search;
     const { pageSize, total, current } = pagination;
-    const load = this.props.loading.effects['search/searchPerson'];
 
+    const load = loading.effects['search/searchPerson'];
     // const expertBase = (filters && filters.eb && filters.eb.id) || 'aminer';
 
-    const zoneData = { expertBaseId, query, pageSize, current, filters, sortType };
+    const rightZoneData = { expertBaseId, query, pageSize, current, filters, sortType };
 
     const SearchSortsRightZone = !sysconfig.Enable_Export ? null :
       hole.fillFuncs(theme.SearchSorts_RightZone, [
@@ -242,11 +241,14 @@ export default class SearchComponent extends Component {
             query={query} pageSize={pageSize} current={current} filters={filters} sort={sortType}
           />
         ),
-      ], zoneData);
+      ], rightZoneData);
 
-    // TODO move translate search out.
-    const { useTranslateSearch, translatedLanguage, translatedText } = this.props.search;
+    // Search Assistant // TODO move translate search out.
+    const { useTranslateSearch, translatedLanguage, translatedText } = search;
     const transMsgProps = { query, useTranslateSearch, translatedLanguage, translatedText };
+
+    const { assistantData } = search; // TODO old is intelligenceSuggests
+
     return (
       <div className={classnames(styles.searchComponent, className)}>
 
@@ -265,7 +267,7 @@ export default class SearchComponent extends Component {
             </div>
             }
 
-            {/* Translate Search */}
+            {/* Translate Search // old translate message. */}
 
             {sysconfig.Search_EnableTranslateSearch && !sysconfig.Search_EnableSmartSuggest &&
             <TranslateSearchMessage
@@ -275,9 +277,15 @@ export default class SearchComponent extends Component {
 
             {/* Search Help */}
             {!disableSmartSuggest &&
-            <SearchHelp intelligenceSuggests={intelligenceSuggests}
-                        onIntelligenceSearchMetaChange={this.onIntelligenceSearchMetaChange}
-            />}
+            <SearchAssistant onAssistantChanged={this.onAssistantChanged} />}
+
+            {/* Search Message Zone TODO not good.*/}
+            {/*<Hole fill={searchMessagesZone} />;*/}
+            {searchMessagesZone && searchMessagesZone.length > 0 &&
+            <div className={styles.message}>
+              {searchMessagesZone}
+            </div>
+            }
 
             {/* ---- Filter ---- */}
 

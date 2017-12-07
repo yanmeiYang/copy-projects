@@ -14,7 +14,7 @@ const { api } = config;
    智库无缓存查询：
  */
 export async function searchPerson(params) {
-  const { query, offset, size, filters, sort, intelligenceSearchMeta } = params;
+  const { query, offset, size, filters, sort, assistantDataMeta } = params;
   const { useTranslateSearch } = params; // TODO remove
 
   // if query is null, and eb is not aminer, use expertbase list api.
@@ -48,7 +48,6 @@ export async function searchPerson(params) {
     const ebs = sysconfig.ExpertBases;
     const defaultHaves = ebs && ebs.length > 0 && ebs.filter(eb => eb.id !== 'aminer').map(eb => eb.id);
 
-
     const enTrans = sysconfig.Search_EnableTranslateSearch && !sysconfig.Search_EnableSmartSuggest;
 
     const nextapi = apiBuilder.query(F.queries.search, 'search')
@@ -76,6 +75,11 @@ export async function searchPerson(params) {
 
     // Apply Plugins.
     H.applyPlugin(nextapi, sysconfig.APIPlugin_ExpertSearch);
+
+    // apply SearchAssistant
+    if (assistantDataMeta) {
+      nextapi.param(assistantDataMeta);
+    }
 
     // console.log('DEBUG---------------------\n', nextapi.api);
     // console.log('DEBUG---------------------\n', JSON.stringify(nextapi.api));

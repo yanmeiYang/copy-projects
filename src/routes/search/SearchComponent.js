@@ -19,10 +19,6 @@ import { Auth } from 'hoc';
 import SearchAssistant from './SearchAssistant';
 import styles from './SearchComponent.less';
 
-
-// TODO Extract Search Filter into new Component.
-// TODO Combine search and uniSearch into one.
-
 const DefaultRightZoneFuncs = [
   param => <SearchKnowledge query={param.query} key="1" />,
 ];
@@ -159,18 +155,9 @@ export default class SearchComponent extends Component {
     this.doSearchUseProps();
   };
 
-  onAssistantChanged = (intelligenceMeta) => {
+  onAssistantChanged = (texts) => {
     const { query } = this.props.search;
-    const intelligenceSearchMeta = {
-      expansion: [intelligenceMeta.expansion],
-      translated: [intelligenceMeta.translated],
-      KG: [intelligenceMeta.KG],
-      query,
-    };
-    this.dispatch({
-      type: 'search/setIntelligenceSearch',
-      payload: { intelligenceSearchMeta },
-    });
+    this.dispatch({ type: 'search/setAssistantDataMeta', payload: { texts } });
     this.doSearchUseProps();
   };
 

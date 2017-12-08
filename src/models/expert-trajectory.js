@@ -1,5 +1,8 @@
 import * as searchService from 'services/search';
 import * as traDataFindService from 'services/expert-trajectory-service';
+import * as personService from 'services/person';
+
+const cache = {}; //缓存人的数据
 
 export default {
 
@@ -15,27 +18,41 @@ export default {
   subscriptions: {},
 
   effects: {
-    * searchPerson({ payload }, { call, put }) {
+    * searchPerson({ payload }, { call, put }) { //根据名字查询人
       yield put({ type: 'showLoading' });
       const { data } = yield call(searchService.searchPerson, payload);
       yield put({ type: 'searchPersonSuccess', payload: { data } });
     },
 
-    * findTrajById({ payload }, { call, put }) {
+    * findTrajById({ payload }, { call, put }) { //根据人的id获取其迁徙路径
       yield put({ type: 'showLoading' });
       const { personId, start, end } = payload; //注意是两边的名字要一致，否则错误
       const data = yield call(traDataFindService.findTrajPerson, personId, start, end);
       yield put({ type: 'findTrajByIdSuccess', payload: { data, end } });
     },
 
-    * findTrajsByRosterId({ payload }, { call, put }) {
+    * findTrajsByRosterId({ payload }, { call, put }) { //根据智库的id获得迁徙路径
       yield put({ type: 'showLoading' });
       const { rosterId, start, end, size } = payload;
       const data = yield call(traDataFindService.findTrajsHeat, rosterId, start, end, size);
-      yield put({ type: 'findTrajsByRosterIdSuccess', payload: { data } });
+
+      /**
+       * 找所对应的人的信息
+       */
+      const ids = Object.keys(data.data.trajectories);
+      const personsInfo = []; //先不做缓存，只是全部读进来
+      for (let i = 0; i < ids.length; i += 100) {
+        const cids = ids.slice(i, i + 100);
+        const data1 = yield call(personService.listPersonByIds, cids);
+        for (const d of data1.data.persons) {
+          personsInfo[d.id] = d;
+          cache[d.id] = d;
+        }
+      }
+      yield put({ type: 'findTrajsByRosterIdSuccess', payload: { data, personsInfo } });
     },
 
-    * findTrajsHeatAdvance({ payload }, { call, put }) {
+    * findTrajsHeatAdvance({ payload }, { call, put }) { //根据搜索领域获得迁徙路径
       yield put({ type: 'showLoading' });
       const { name, offset, org, term, size } = payload;
       const data = yield call(
@@ -126,6 +143,9 @@ export default {
                 step.push(newStep);
                 if (pCityId in cityIn) { //上一个已经点存在的情况
                   const point = cityIn[pCityId]; //更新点的信息
+                  /**
+                   * 改变这个内存地址的时候，pointData的数据也跟着改变了
+                   */
                   point.symbolSize += (cYear - pYear);
                   const names = point.name.split('\n');
                   if (names.length > 2) { //防止名字太长
@@ -135,8 +155,11 @@ export default {
                   }
                 } else { //上一个点不存在的情况，添加上一个点
                   cityIn[pCityId] = [];
-                  const weight = (cYear - pYear) + 1; //多加一年，否则为空
+                  const weight = (cYear === pYear) ? 1 : (cYear - pYear); //多加一年，否则为空
                   const name = `${pCityName}\n${pYear}-${cYear}\n`; //上一个点
+                  /**
+                   * 注意，这里是一个唯一的内存地址
+                   */
                   const point = { name, value: [pLng, pLat], symbolSize: weight };
                   cityIn[pCityId] = point;
                   pointData.push(point); //push新加入的点
@@ -167,14 +190,14 @@ export default {
             point.symbolSize += (end - lastYear); //end是我们查询的年份
             const names = point.name.split('\n');
             if (names.length > 2) { //防止名字太长
-              point.name = `${names[0]}\n${names[1]}\n ... ${end}-${lastYear}\n`;
+              point.name = `${names[0]}\n${names[1]}\n ... ${lastYear}-${end}\n`;
             } else {
-              point.name = `${names[0]}\n${names[1]}\n ${end}-${lastYear}\n`;
+              point.name = `${names[0]}\n${names[1]}\n ${lastYear}-${end}\n`;
             }
           } else {
             cityIn[lastCityId] = [];
-            const weight = (end - lastYear) + 1; //多加一年，否则为空
-            const name = `${lastCityName}\n${end}-${lastYear}\n`; //上一个点
+            const weight = (end === lastYear) ? 1 : (end - lastYear); //如果在同一年则加1
+            const name = `${lastCityName}\n${lastYear}-${end}\n`; //上一个点
             const point = { name, value: [lastLng, lastLat], symbolSize: weight };
             cityIn[lastCityId] = point;
             pointData.push(point); //push新加入的点
@@ -191,8 +214,135 @@ export default {
     },
 
 
-    findTrajsByRosterIdSuccess(state, { payload: { data } }) {
-      return { ...state, heatData: data, loading: false };
+    findTrajsByRosterIdSuccess(state, { payload: { data, personsInfo } }) {
+      /**
+       * 注意：这里定义的数据和上面定义的数据是有不一样的，
+       * 它们多一层，为每年的数据
+       */
+      const yearPointData = [];
+      const yearLineData = [];
+      const yearHeatData = [];
+
+      const yearCityIn = []; //每一年中在哪个城市
+      let startEnd = []; //存放时间的开始和结束
+      const cities = [];
+      const addresses = [];
+
+
+      for (const c of data.data.cities) {
+        cities[c.id] = c;
+      }
+      for (const key in data.data.addresses) {
+        if (data.data.addresses) {
+          addresses[key] = data.data.addresses[key];
+        }
+      }
+      for (const key in data.data.trajectories) {
+        if (data.data.trajectories[key].length > 0) {
+          let previousD = [];
+          for (const d of data.data.trajectories[key]) {
+            const [cYear, cPlaceId] = d; //年份和所在位置id
+            const cy = parseInt(cYear, 10);
+            const cCityId = addresses[cPlaceId].city_id;
+            const cCityName = cities[cCityId].name;
+            const cLat = addresses[cPlaceId].geo.lat.toFixed(2); //保留两位小数
+            const cLng = addresses[cPlaceId].geo.lng.toFixed(2);
+
+
+            //当前年的地址是否存在，不存在的话加入，存在的话改变
+            //根据previousD判断是否加入之前的点，以及加入新的线
+            if (!(cYear in yearCityIn)) {
+              yearCityIn[cYear] = [];
+            }
+
+            if (cCityId in yearCityIn[cYear]) { //该城市在当年已经出现过
+              const point = yearCityIn[cYear][cCityId];
+              point.symbolSize += 1;
+              point.heat += personsInfo[key].indices.h_index + 10;
+            } else { //该城市在当年是第一次出现
+              const weight = 1; //按人来，此处有一个人
+              const num = personsInfo[key].indices.h_index + (weight * 10);
+              const point = { name: cCityName, value: [cLng, cLat], symbolSize: weight, heat: num };
+              yearCityIn[cYear][cCityId] = point;
+            }
+
+            if (previousD.length !== 0) { //是第一个点的时候什么都不做
+              const [pYear, pPlaceId] = previousD; //年份和所在位置id
+              const py = parseInt(pYear, 10);
+              const pCityId = addresses[pPlaceId].city_id;
+              const pCityName = cities[pCityId].name;
+              const pLat = addresses[pPlaceId].geo.lat.toFixed(2); //保留两位小数
+              const pLng = addresses[pPlaceId].geo.lng.toFixed(2);
+
+              for (let y = py; y < cy; y += 1) {
+                if (!(y in yearCityIn)) {
+                  yearCityIn[y] = [];
+                }
+                if (pCityId in yearCityIn[y]) {
+                  const point = yearCityIn[y][pCityId];
+                  point.symbolSize += 1;
+                  point.heat += personsInfo[key].indices.h_index + 10;
+                } else {
+                  const weight = 1; //按人来，此处有一个人
+                  const num = personsInfo[key].indices.h_index + (weight * 10);
+                  const point = { name: pCityName, value: [pLng, pLat],
+                    symbolSize: weight, heat: num };
+                  yearCityIn[y][pCityId] = point;
+                }
+
+                if ((cy - py) === 1 && pCityId !== cCityId) { //迁徙的路线
+                  if (!(y in yearLineData)) {
+                    yearLineData[y] = [];
+                  }
+                  const curveness = 0.15 + (Math.random() * 0.1);
+                  const personName = personsInfo[key].name;
+                  const line = { coords: [[pLng, pLat], [cLng, cLat]], tooltip: {
+                    confine: true,
+                    formatter: () => {
+                      return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">Year: ${cYear}.<br />${personName}<br />From ${pCityName} to ${cCityName}</div>`;
+                    },
+                  }, lineStyle: {
+                    normal: { curveness },
+                  } };
+                  yearLineData[y].push(line);
+                }
+              }
+            }
+            previousD = d;
+          }
+        }
+      }
+      let [start, end] = [3000, 0];
+      for (const key in yearCityIn) {
+        if (parseInt(key, 10) > end) {
+          end = parseInt(key, 10);
+        }
+        if (parseInt(key, 10) < start) {
+          start = parseInt(key, 10);
+        }
+        if (!(key in yearPointData)) {
+          yearPointData[key] = [];
+        }
+        if (!(key in yearHeatData)) {
+          yearHeatData[key] = [];
+        }
+        for (const k in yearCityIn[key]) {
+          if (k) {
+            const p = yearCityIn[key][k];
+            yearPointData[key].push({ name: p.name, value: p.value, symbolSize: p.symbolSize });
+            yearHeatData[key].push([...p.value, p.heat]);
+          }
+        }
+      }
+      startEnd = [start, end];
+      console.log('######################################################');
+      console.log(data);
+      console.log(yearCityIn);
+      console.log(yearLineData);
+      console.log(yearPointData);
+      console.log(yearHeatData);
+      const heatData = { yearLineData, yearPointData, yearHeatData, startEnd };
+      return { ...state, heatData, loading: false };
     },
 
     searchPersonSuccess(state, { payload: { data } }) {

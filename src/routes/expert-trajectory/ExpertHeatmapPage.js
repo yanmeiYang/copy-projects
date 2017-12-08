@@ -9,13 +9,15 @@ import { DomainSelector } from 'routes/expert-map';
 import { FormattedMessage as FM } from 'react-intl';
 import { applyTheme, theme } from 'themes';
 import { Layout as Page } from 'routes';
-import { Layout, Tabs, Button, Icon, TreeSelect, Menu, Dropdown, message  } from 'antd';
+import { Layout, Tabs, Button, Icon, TreeSelect, Menu, Dropdown, Checkbox, message  } from 'antd';
 import styles from './ExpertHeatmapPage.less';
 import ExpertHeatmap from './ExpertHeatmap';
 
 
 const { Content, Sider } = Layout;
 const { TabPane } = Tabs;
+const CheckboxGroup = Checkbox.Group;
+const plainOptions = ['All', 'Heat', 'Trajectory'];
 const tc = applyTheme(styles);
 const themes = [
   { label: '常规', key: '0' },
@@ -126,6 +128,11 @@ class ExpertHeatmapPage extends React.Component {
     dispatch({ type: 'expertTrajectory/findTrajsHeatAdvance', payload: { name, offset, org, term, size } });
   };
 
+  onChange = (checkedValues) => {
+    console.log('checked = ', checkedValues);
+  };
+
+
   render() {
     const data = this.props.expertTrajectory.heatData;
     const { query, themeKey, domainId } = this.state;
@@ -157,6 +164,9 @@ class ExpertHeatmapPage extends React.Component {
             />
           </div>
           <div className={styles.setting}>
+            <div className={styles.options}>
+              <CheckboxGroup options={plainOptions} defaultValue={['Apple']} onChange={this.onChange} />
+            </div>
             <div className={styles.statics}>
               <Button onClick={this.showModal}>
                 <Icon type="line-chart" />

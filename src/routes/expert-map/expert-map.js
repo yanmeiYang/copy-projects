@@ -6,7 +6,7 @@ import { Spinner } from 'components';
 import { RequireRes } from 'hoc';
 //import { listPersonByIds } from 'services/person'
 import { Helmet } from 'react-helmet';
-import { compare, loadScript, ensure } from 'utils';
+import { compare, loadScript, ensure, loadBMap } from 'utils';
 import { Button } from 'antd';
 // import { FormattedMessage as FM } from 'react-intl';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
@@ -31,7 +31,7 @@ import {
   //findMapFilterRangesByKey,
   findMapFilterHindexRangesByKey,
 } from './utils/map-utils';
-import {findPosition, bigAreaConfig,} from './utils/bigArea-utils';
+import { findPosition, bigAreaConfig, } from './utils/bigArea-utils';
 import {
   dataCache,
   copyImage,
@@ -62,7 +62,7 @@ const getInfoWindow = () => {
  * -------------------------------------------------------------------
  */
 @connect(({ expertMap, loading }) => ({ expertMap, loading }))
-@RequireRes('BMap')
+// @RequireRes('BMap') // TODO shawjoe: use loadBMap()
 export default class ExpertMap extends PureComponent {
   constructor(props) {
     super(props);
@@ -187,7 +187,7 @@ export default class ExpertMap extends PureComponent {
 
     // TODO load script for baidumap.
 
-    ensure('BMap', (BMap) => {
+    loadBMap((BMap) => {
       this.showOverLay();
 
       const conf = this.mapConfig[mapType] || this.mapConfig[0];// init map instance.
@@ -432,7 +432,8 @@ export default class ExpertMap extends PureComponent {
             {
               !isGlobal && <div className={styles.backwell}>
                 <div className={styles.back}>
-                  <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.overview" />:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <FM defaultMessage="Baidu Map"
+                      id="com.expertMap.headerLine.label.overview" />:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <Button size="small" onClick={backGlobal.bind(this, dispatch, model)}>
                     <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.goback" />
                   </Button>

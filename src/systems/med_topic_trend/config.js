@@ -2,7 +2,7 @@ import React from 'react';
 import { authenticateExpertBase } from 'hooks';
 import defaults from '../utils';
 
-const ExpertBase = '59d7bb7e9ed5dbe450e6b275';
+const ExpertBase = '5a24b1389ed5db4a6289ae85';
 
 module.exports = {
 
@@ -22,18 +22,18 @@ module.exports = {
   Enable_Export_EB_IF_EXIST: true,
   Search_EnablePin: false,
   // > Search related
-  HeaderSearch_TextNavi: ['ACMFellowExpertBase','TrendPrediction'],
+  HeaderSearch_TextNavi: ['ACMFellowExpertBase', 'TrendPrediction'],
 
   ExpertBases: [
     {
-      id: '55ebd8b945cea17ff0c53d5a',
-      name: '中国科学院院士',
-      nperson: 287,
+      id: '5a24b1389ed5db4a6289ae85',
+      name: '医药卫生领域专家',
+      nperson: 1822,
     },
   ],
   ExpertBase,
   // 不显示Filter,sort,header,footer,login
-  Search_SortOptions:[],
+  Search_SortOptions: [],
   Search_DisableFilter: true,
   Layout_ShowHeader: false,
   GLOBAL_ENABLE_HOC: false,

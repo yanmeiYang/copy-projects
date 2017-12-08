@@ -59,6 +59,9 @@ export default {
       const pointData = []; //点的数据，其实和热度的数据是一样的
       const lineData = []; //线的数据
       const step = []; //播放的步骤
+      let staData = {}; //统计数据
+      const cityIn = []; //在哪个城市
+      const timeToTime = []; //每个点呆的具体的时间序列
 
       const cities = [];
       const addresses = [];
@@ -74,10 +77,10 @@ export default {
       for (const key in data.data.trajectories) {
         if (data.data.trajectories) {
           let previousD = [];
-          const cityIn = []; //在哪个城市
           for (const d of data.data.trajectories[key]) {
             const [cYear, cPlaceId] = d; //年份和所在位置id
             const cCityId = addresses[cPlaceId].city_id;
+            const cCityName = cities[cCityId].name;
             const cLat = addresses[cPlaceId].geo.lat.toFixed(2); //保留两位小数
             const cLng = addresses[cPlaceId].geo.lng.toFixed(2);
             /**
@@ -89,7 +92,15 @@ export default {
               const pCityName = cities[pCityId].name;
               const pLat = addresses[pPlaceId].geo.lat.toFixed(2); //保留两位小数
               const pLng = addresses[pPlaceId].geo.lng.toFixed(2);
-              const line = { coords: [[pLng, pLat], [cLng, cLat]] };
+              const curveness = 0.15 + (Math.random() * 0.1);
+              const line = { coords: [[pLng, pLat], [cLng, cLat]], tooltip: {
+                confine: true,
+                formatter: () => {
+                  return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">When ${cYear}.<br />From ${pCityName} to ${cCityName}</div>`;
+                },
+              }, lineStyle: {
+                normal: { curveness },
+              } };
               /**
                * 更新点的时候有这样几种情况：
                * 1. 该点和上一个点一样（不管是机构、城市还是经纬度坐标一样）则不管，继续循环
@@ -100,6 +111,12 @@ export default {
                */
               if (pCityId !== cCityId) { //地址不一样的情况,此处使用的是城市不一致
                 lineData.push(line);
+                timeToTime.push({
+                  name: pCityName,
+                  start: pYear,
+                  end: cYear,
+                  cityId: pCityId,
+                });
                 let newStep;
                 if (cCityId in cityIn) { //当前的点在不在，在的话push一个step
                   newStep = step.length === 0 ? 2 : step[step.length - 1]; //还是原来的点
@@ -118,7 +135,7 @@ export default {
                   }
                 } else { //上一个点不存在的情况，添加上一个点
                   cityIn[pCityId] = [];
-                  const weight = cYear - pYear;
+                  const weight = (cYear - pYear) + 1; //多加一年，否则为空
                   const name = `${pCityName}\n${pYear}-${cYear}\n`; //上一个点
                   const point = { name, value: [pLng, pLat], symbolSize: weight };
                   cityIn[pCityId] = point;
@@ -139,6 +156,12 @@ export default {
           const lastCityName = cities[lastCityId].name;
           const lastLat = addresses[lastPlaceId].geo.lat.toFixed(2); //保留两位小数
           const lastLng = addresses[lastPlaceId].geo.lng.toFixed(2);
+          timeToTime.push({
+            name: lastCityName,
+            start: lastYear,
+            end,
+            cityId: lastCityId,
+          });
           if (lastCityId in cityIn) { //同样判断是已经存在
             const point = cityIn[lastCityId]; //更新点的信息
             point.symbolSize += (end - lastYear); //end是我们查询的年份
@@ -150,7 +173,7 @@ export default {
             }
           } else {
             cityIn[lastCityId] = [];
-            const weight = end - lastYear;
+            const weight = (end - lastYear) + 1; //多加一年，否则为空
             const name = `${lastCityName}\n${end}-${lastYear}\n`; //上一个点
             const point = { name, value: [lastLng, lastLat], symbolSize: weight };
             cityIn[lastCityId] = point;
@@ -158,16 +181,17 @@ export default {
           }
         }
       }
-      console.log(lineData);
-      console.log(pointData);
-      console.log(step);
-      const trajData = { lineData, pointData, step };
+      /**
+       * 这里为了方便统计数据的改动，将数据传过去，再在后面进行整理
+       * @type {{cities: Array, addresses: Array, trajectories: *}}
+       */
+      staData = { cities, addresses, timeToTime };
+      const trajData = { lineData, pointData, step, staData, cityIn };
       return { ...state, trajData, loading: false };
     },
 
 
     findTrajsByRosterIdSuccess(state, { payload: { data } }) {
-      console.log(data);
       return { ...state, heatData: data, loading: false };
     },
 

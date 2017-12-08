@@ -29,10 +29,8 @@ export default {
     translatedText: '',
 
     // Intelligence search assistants. TODO change to assistantMeta, assistantData
-    intelligenceSearchMeta: {}, // {expand:<word>, translated:<word>, kg:[<word>,...]}
-    assistantDataMeta: {}, // {expand:<word>, translated:<word>, kg:[<word>,...]}
-    assistantData: null, // TODO old is intelligenceSuggest
-    kg: null, // ??????????????????
+    assistantDataMeta: {}, // advquery
+    assistantData: null,
 
     // pager
     offset: 0,
@@ -98,6 +96,7 @@ export default {
       // TODO replace this.
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
       const intelligenceSearchMeta = yield select(state => state.search.intelligenceSearchMeta);
+      const assistantDataMeta = yield select(state => state.search.assistantDataMeta);
 
       // 分界线
       yield put({ type: 'updateSortKey', payload: { key: Sort } });
@@ -106,6 +105,7 @@ export default {
       const params = {
         query, offset, size, filters: noTotalFilters, sort: Sort, intelligenceSearchMeta,
         useTranslateSearch, // TODO remove
+        assistantDataMeta,
       };
       const data = yield call(searchService.searchPerson, params);
       if (process.env.NODE_ENV !== 'production') {
@@ -329,11 +329,9 @@ export default {
     setTranslateSearch(state, { payload: { useTranslate } }) {
       return { ...state, useTranslateSearch: useTranslate };
     },
-    setIntelligenceSearch(state, { payload: { intelligenceSearchMeta } }) {
-      return {
-        ...state,
-        intelligenceSearchMeta,
-      };
+
+    setAssistantDataMeta(state, { payload: { texts } }) {
+      return { ...state, assistantDataMeta: { advquery: { texts } } };
     },
 
     clearTranslateSearch(state) {

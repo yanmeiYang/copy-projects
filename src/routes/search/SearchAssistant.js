@@ -18,8 +18,7 @@ export default class SearchAssistant extends Component {
   static defaultProps = {};
 
   state = {
-    defaultExpansionChecked: 1,
-    currentExpansionChecked: 0,
+    currentExpansionChecked: 1,
     currentTranslationChecked: 0,
 
     indeterminate: true,
@@ -31,7 +30,6 @@ export default class SearchAssistant extends Component {
     this.setState({
       currentExpansionChecked: index + 1,
       currentTranslationChecked: this.state.currentTranslationChecked === 0 ? 0 : index + 1,
-      defaultExpansionChecked: null,
     });
     if (SEARCH_ON_CLICK) {
       this.callSearch();
@@ -139,8 +137,7 @@ export default class SearchAssistant extends Component {
                 <div>
                   <span className={styles.rightbox}>
                     <Checkbox
-                      checked={defaultExpansionChecked === index + 1 ||
-                      currentExpansionChecked === index + 1}
+                      checked={currentExpansionChecked === index + 1}
                       onChange={this.onExpandedTermChange.bind(this, index)}
                     >{item.word}
                     </Checkbox>
@@ -166,7 +163,7 @@ export default class SearchAssistant extends Component {
           </div>
           }
         </div>
-
+        {hasKG &&
         <div className={styles.box1}>
           <div className={styles.ww}>
             <span>Expand by knowledge graph</span>
@@ -192,6 +189,7 @@ export default class SearchAssistant extends Component {
             })}
           </Checkbox.Group>
         </div>
+        }
       </div>
     );
   }

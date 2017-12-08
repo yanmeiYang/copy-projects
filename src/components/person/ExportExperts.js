@@ -175,7 +175,7 @@ export default class ExportExperts extends Component {
 
         {expanded && sysconfig.Enable_Export_EB_IF_EXIST && expertBaseId &&
         <a href={`${baseURL}/roster/${expertBaseId}/export/d/offset/0/size/2000/data.csv`}
-           target="_blank" type="primary" className={styles.button}
+           target="_blank" type="primary" className={styles.buttonMarginRight}
           // onClick={this.exportEB}
         >
           <FM id="com.exportExpert.label.exportEB" defaultMessage="导出专家库" />
@@ -183,11 +183,10 @@ export default class ExportExperts extends Component {
         }
 
         {expanded &&
-        <Button
-          type="primary" className={styles.button}
+        <a type="primary" className={styles.buttonMarginRight1}
           onClick={this.exportSearchResult.bind()}>
           <FM id="com.exportExpert.label.exportCurrentPage" defaultMessage="导出当前结果" />
-        </Button>
+        </a>
         }
 
         <Button

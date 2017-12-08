@@ -90,7 +90,7 @@ const getDefaultSystemConfigs = (system, source) => {
     Enable_Export_EB_IF_EXIST: false,
 
     /**
-     * > Search
+     * > Search/
      */
     // expert base
     SHOW_ExpertBase: true, // 是否需要有按智库的Filter。

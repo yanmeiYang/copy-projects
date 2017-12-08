@@ -8,7 +8,7 @@ import { RouterRegistry, RouterRegistry2b, RouterJSXFunc } from '../router-regis
 
 const routes = [
   ...RouterRegistry2b,
-//首页,uniSearch页路由,当前状态关闭
+  //首页,uniSearch页路由,当前状态关闭
   // core.IndexPage,
   // search.UniSearch,
   expertBase.ExpertBase,

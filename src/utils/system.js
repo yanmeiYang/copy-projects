@@ -21,7 +21,7 @@ const AvailableSystems = [
   'thurcb',
   'yocsef',
   'med_topic_trend',
-  'scei', // 中国科协：深度智库
+  'scei', // 中国科协：深度智库a
 ];
 
 let System;
@@ -29,11 +29,11 @@ let System;
 // System = 'ccf';
 // System = 'ccftest';
 // System = 'huawei';
-// System = 'alibaba';
+System = 'alibaba';
 // System = 'tencent';
 // System = 'cie';
 // System = 'cipsc';
-System = 'demo';
+// System = 'demo';
 // System = 'cietest';
 // System = 'bole';
 // System = 'acmfellow';
@@ -42,6 +42,8 @@ System = 'demo';
 // System = 'yocsef';
 // System = 'med_topic_trend';
 // System = 'scei';
+
+// SPECIAL: USED_IN_ONLINE_DEPLOY; DON'T DELETE THIS LINE.
 
 let Source = System; // AppID, Used in UniversalConfig.
 

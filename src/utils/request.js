@@ -20,11 +20,8 @@ export default function request(url, options) {
   // options.url = encodeURI(options.url);
 
   if (process.env.NODE_ENV !== 'production') {
-    debug.logRequest(
-      '❯ Request',
-      options.method,
-      options.url && options.url.replace(apiDomain, ''),
-      options,
+    debug.logRequest('❯ Request',
+      options.method, options.url && options.url.replace(apiDomain, ''), options,
     );
   }
   if (options.url && options.url.indexOf('//') > -1) {
@@ -55,11 +52,8 @@ export default function request(url, options) {
       data, // ...data
     };
     if (process.env.NODE_ENV !== 'production') {
-      debug.logRequestResult(
-        '❯❯ Response:',
-        options.method,
-        options.url && options.url.replace(apiDomain, ''), '\n>',
-        result,
+      debug.logRequestResult('❯❯ Response:',
+        options.method, options.url && options.url.replace(apiDomain, ''), '\n>', result,
       );
     }
 
@@ -88,6 +82,9 @@ export default function request(url, options) {
       const { data, statusText } = response;
       statusCode = response.status;
       msg = data.message || statusText;
+
+      printNEXTAPIDebugLog(data);
+
     } else {
       statusCode = 600;
       msg = error.message || 'Network Error';
@@ -96,6 +93,18 @@ export default function request(url, options) {
   });
 }
 
+const printNEXTAPIDebugLog = (data) => {
+  if (data.errs && data.errs.length > 0) {
+    for (const err of data.errs) {
+      console.error('NEXT_API_ERROR: ', err.Error);
+      if (err.Details) {
+        for (const msg of err.Details) {
+          console.log('\t', msg);
+        }
+      }
+    }
+  }
+};
 const fetch = (options) => {
   let {
     method = 'get',
@@ -169,8 +178,8 @@ const fetch = (options) => {
   }
 
   // enable debug in next api.
-  if (process.env.NODE_ENV !== 'production') {
-    // headers.debug = 1;
+  if (process.env.NODE_ENV !== 'production' && options.nextapi) {
+    headers.debug = 1;
   }
 
   // real call

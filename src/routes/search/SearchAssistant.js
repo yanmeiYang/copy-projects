@@ -4,8 +4,6 @@ import { connect } from 'dva';
 import { Checkbox, Button } from 'antd';
 import styles from './SearchAssistant.less';
 
-const SEARCH_ON_CLICK = true;
-
 @connect(({ search }) => ({
   assistantData: search.assistantData,
   assistantDataMeta: search.assistantDataMeta,
@@ -33,9 +31,7 @@ export default class SearchAssistant extends Component {
       currentTranslationChecked: this.state.currentTranslationChecked === 0 ? 0 : index + 1,
       defaultExpansionChecked: null,
     });
-    if (SEARCH_ON_CLICK) {
-      this.callSearch();
-    }
+    this.callSearch();
   };
 
   onTranslationChange = (index) => {
@@ -43,9 +39,7 @@ export default class SearchAssistant extends Component {
       currentTranslationChecked: this.state.currentTranslationChecked === index + 1 ? 0 : index + 1,
       currentExpansionChecked: index + 1,
     });
-    if (SEARCH_ON_CLICK) {
-      this.callSearch();
-    }
+    this.callSearch();
   };
 
   onKGChange = (checkedList) => {
@@ -56,9 +50,6 @@ export default class SearchAssistant extends Component {
       indeterminate: !!checkedList.length && (checkedList.length < len),
       checkAll: checkedList.length === len,
     });
-    if (SEARCH_ON_CLICK) {
-      this.callSearch();
-    }
   };
 
   onCheckAllChange = (e) => {
@@ -80,26 +71,47 @@ export default class SearchAssistant extends Component {
       indeterminate: false,
       checkAll: e.target.checked,
     });
-    // if (onAssistantChanged) {
-    //   onAssistantChanged({
-    //     expansion: this.state.currentExpansionChecked === 0 ? '' : assistantData.expandedTexts[index],
-    //     translated: this.state.currentTranslationChecked === 0 ? '' : assistantData.expandedTexts_zh[index],
-    //     KG: kgHyponymArray,
-    //   });
-    // }
   };
 
   // intelligenceSuggests
-  callSearch() {
+  callSearch = () => {
     const { assistantData, onAssistantChanged } = this.props;
-    if (onAssistantChanged) {
-      onAssistantChanged({
-        // expansion: intelligenceSuggests.expandedTexts[index],
-        // translated: this.state.currentTranslationChecked === 0 ? '' : intelligenceSuggests.expandedTexts_zh[index],
-      });
-    }
+    const texts = [];
+    const { currentExpansionChecked, currentTranslationChecked, checkedList } = this.state;
+    const { expands, kgHypernym, kgHyponym } = assistantData;
 
-  }
+    if (currentExpansionChecked > 0 && expands && expands.length >= currentExpansionChecked) {
+      const exp = expands[currentExpansionChecked - 1];
+      if (exp) {
+        texts.push({ text: exp.word, source: 'expands', });
+      }
+    }
+    if (currentTranslationChecked > 0 && expands && expands.length >= currentTranslationChecked) {
+      const exp = expands[currentTranslationChecked - 1];
+      if (exp) {
+        texts.push({ text: exp.word_zh, source: 'translated' });
+      }
+    }
+    if (checkedList && checkedList.length > 0) {
+      for (const kg of checkedList) {
+        if (kgHypernym) {
+          const found = kgHypernym.find(word => word.word === kg);
+          if (found) {
+            texts.push({ text: found.word, source: 'kgHypernym', id: '0' });
+          }
+        }
+        if (kgHyponym) {
+          const found = kgHyponym.find(word => word.word === kg);
+          if (found) {
+            texts.push({ text: found.word, source: 'kgHyponym', id: '0' });
+          }
+        }
+      }
+    }
+    if (onAssistantChanged) {
+      onAssistantChanged(texts);
+    }
+  };
 
   render() {
     const {
@@ -123,6 +135,7 @@ export default class SearchAssistant extends Component {
     return (
       <div className={styles.searchAssistant}>
         <div className={styles.box}>
+
           <div className={styles.w}>
             {hasExpansion &&
             <div className={styles.w}>We automatically expanded it to</div>
@@ -192,6 +205,13 @@ export default class SearchAssistant extends Component {
             })}
           </Checkbox.Group>
         </div>
+
+        <div className={styles.boxButton}>
+          <Button size="small" type="ghost" onClick={this.callSearch}>
+            Search with Knowledge Graph
+          </Button>
+        </div>
+
       </div>
     );
   }

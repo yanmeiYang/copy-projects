@@ -343,9 +343,11 @@ export default class ExpertMapPage extends React.Component {
               <ButtonGroup id="sType" className={styles.sType}>
                 {this.typeConfig.map((conf) => {
                   return !conf.disabled && (
-                    <Button key={conf.key} onClick={this.onTypeChange.bind(this, conf.key)}
-                            onKeyDown={() => {
-                            }} type={this.state.type === conf.key ? 'primary' : ''}>
+                    <Button
+                      key={conf.key} onClick={this.onTypeChange.bind(this, conf.key)}
+                      type={this.state.type === conf.key ? 'primary' : ''}
+                      size="small"
+                    >
                       <FM defaultMessage={conf.label}
                           id={`com.expertMap.scalelevel.label.${conf.key}`} />
                     </Button>
@@ -358,8 +360,8 @@ export default class ExpertMapPage extends React.Component {
           <div className={styles.scopes}>
             <div className={styles.analysis}>
 
-              {(process.env.NODE_ENV !== 'production' || sysconfig.System === 'demo') &&
-              <Button onClick={this.showModal}>
+              {(process.env.NODE_ENV !== 'production' || sysconfig.SYSTEM === 'demo') &&
+              <Button onClick={this.showModal} size="small">
                 <Icon type="line-chart" />
                 <FM id="com.expertMap.headerLine.label.statistic"
                     defaultMessage="Statistic & Analysis" />
@@ -393,6 +395,7 @@ export default class ExpertMapPage extends React.Component {
                 <Button
                   type={this.state.mapType === 'baidu' ? 'primary' : ''}
                   onClick={this.onMapTypeChange.bind(this, 'baidu')}
+                  size="small"
                 >
                   <FM defaultMessage="Baidu Map"
                       id="com.expertMap.headerLine.label.baiduMap" />
@@ -400,8 +403,9 @@ export default class ExpertMapPage extends React.Component {
                 <Button
                   type={this.state.mapType === 'google' ? 'primary' : ''}
                   onClick={this.onMapTypeChange.bind(this, 'google')}
+                  size="small"
                 >
-                  <FM defaultMessage="Baidu Map"
+                  <FM defaultMessage="Google Map"
                       id="com.expertMap.headerLine.label.googleMap" />
                 </Button>
               </ButtonGroup>

@@ -103,7 +103,8 @@ export default class ExpertBaseExpertsPage extends Component {
       <Layout contentClass={tc(['expertBase'])} onSearch={this.onSearchBarSearch}
               query={query} fixAdvancedSearch>
 
-        {theme.ExpertBaseExpertsPage_TitleZone && theme.ExpertBaseExpertsPage_TitleZone.length > 0 &&
+        {theme.ExpertBaseExpertsPage_TitleZone &&
+        theme.ExpertBaseExpertsPage_TitleZone.length > 0 &&
         <h1 className={styles.pageTitle}>
 
           {hole.fill(theme.ExpertBaseExpertsPage_TitleZone, [

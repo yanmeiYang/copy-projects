@@ -12,59 +12,40 @@
   //height: 100px;
 
   .box {
-    display: flex;
-    flex-direction: row;
+    display: flex; flex-direction: row;
+
     .leftBox {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-start;
-      flex-wrap: wrap;
-      .rightBox {
-        display: flex;
-        flex-direction: column;
-      }
-      .width {
-        width: 290px;
-      }
-      .Box {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-      }
+      display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: wrap;
+
+      .rightBox { display: flex; flex-direction: column; }
+
+      .width { width: 290px; }
+
+      .Box { display: flex; flex-direction: row; justify-content: flex-start; }
     }
   }
-  .w {
-    width: 200px;
-  }
-  .ww {
-    display: inline-block;
-    width: 200px;
-    display: flex;
-    flex-direction: row;
-  }
-  .box1 {
-    display: flex;
-    flex-direction: row;
-  }
-  .paddingLeft {
-    padding-left: 17px;
-  }
-  .suporordinateWord {
-    color: red;
-  }
-  .subordinateWord {
-    color: #3e9bc9;
-  }
-  .kk {
-    display: flex;
-    flex-direction: column;
-  }
-  .ll {
-    display: flex;
-    flex-direction: row;
-  }
-  .paddingLeftButton {
-    padding-left: 10px;
-  }
 
+  .w { width: 200px; }
+
+  .ww { display: inline-block; width: 200px; display: flex; flex-direction: row; }
+
+  .box1 { display: flex; flex-direction: row; }
+
+  .paddingLeft { padding-left: 17px; }
+
+  .suporordinateWord { color: red; }
+
+  .subordinateWord { color: #3e9bc9; }
+
+  .kk { display: flex; flex-direction: column; }
+
+  .ll { display: flex; flex-direction: row; }
+
+  .paddingLeftButton { padding-left: 10px; }
+
+  .boxButton {
+    margin-left: 200px;margin-top: 8px;
+
+    :global .ant-btn {padding: 0 18px 0 18px;}
+  }
 }

@@ -126,11 +126,19 @@ export default class SearchAssistant extends Component {
     const { expandedTexts, expandedTexts_zh, expands } = assistantData;
     const { kgHypernym, kgHyponym } = assistantData;
 
+    // if has value.
     const hasExpansion = expandedTexts && expandedTexts.length > 0;
     const hasTranslation = expandedTexts_zh && expandedTexts_zh.length > 0;
     const hasKG = kgHypernym && kgHypernym.length > 0 && kgHyponym && kgHyponym.length > 0;
 
-    const { checkAll, indeterminate, knowledgeGraphId } = this.state;
+    const { checkAll, indeterminate } = this.state;
+
+    // merge kg into one.
+    // const kglist = [];
+    // if (kgHypernym && kgHypernym.length > 0) {
+    //   kgHypernym.
+    // }
+
 
     return (
       <div className={styles.searchAssistant}>

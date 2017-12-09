@@ -6,22 +6,22 @@
 // 所有可选系统，保留关键字：global.
 const AvailableSystems = [
   'aminer',
+  'demo',
+  'DataAnnotation',
+  'alibaba',
+  'acmfellow',
+  'bole',
   'ccf',
   'ccftest',
-  'huawei',
-  'alibaba',
-  'tencent',
   'cie',
-  'cipsc',
-  'demo',
   'cietest',
-  'bole',
-  'acmfellow',
-  'DataAnnotation',
+  'cipsc',
+  'huawei',
+  'med_topic_trend',
+  'scei', // 中国科协：深度智库
+  'tencent',
   'thurcb',
   'yocsef',
-  'med_topic_trend',
-  'scei', // 中国科协：深度智库a
 ];
 
 let System;
@@ -32,16 +32,14 @@ System = 'ccf';
 // System = 'alibaba';
 // System = 'tencent';
 // System = 'cie';
-// System = 'cipsc';
-// System = 'demo';
 // System = 'cietest';
-// System = 'bole';
-// System = 'acmfellow';
-// System = 'DataAnnotation';
-// System = 'thurcb';
-// System = 'yocsef';
+// System = 'cipsc';
+// System = 'huawei';
 // System = 'med_topic_trend';
 // System = 'scei';
+// System = 'tencent';/
+// System = 'thurcb';
+// System = 'yocsef';
 
 // SPECIAL: USED_IN_ONLINE_DEPLOY; DON'T DELETE THIS LINE.
 

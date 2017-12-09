@@ -86,7 +86,10 @@ export default class SystemConfig extends React.Component {
               <Link to="/rcd">Recommendation</Link>
             </li>
           </ul>
+
           <SystemInfo />
+
+          {/* // TODO @xiaobei Move this to another page. linked to homepage. */}
           <UserLists />
           TODO quick choose system.<br />
           TODO on error redirect.<br />

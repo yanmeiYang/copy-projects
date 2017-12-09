@@ -34,7 +34,6 @@ class CommitteeList extends React.Component {
   getSeminarsByCategory = (v, type, e) => {
     const data = JSON.parse(e.target && e.target.getAttribute('data'));
     let params = `?organizer=${data.organizer}`;
-    console.log('====', params);
     if (type === 'category') {
       params += `&category=${v.key}`;
     }
@@ -81,11 +80,28 @@ class CommitteeList extends React.Component {
     };
 
     this.props.activity.sort(compare('total'));
+    const data = this.props.activity;
+    let sum = 0;
+    let cate = [];
+    let cate1 = {};
+    data.map((item) => {
+      sum += item.total;
+      cate.push(item.category);
+      return true;
+    });
+     data.splice(0, 0, { organizer: '合计', total: sum, category: {} });
+    cate.forEach((item) => {
+      if (cate1.hasOwnProperty(Object.keys(item))) {
+        cate1[Object.keys(item)] += parseInt(Object.values(item), '10');
+      } else {
+        cate1[Object.keys(item)] = parseInt(Object.values(item), '10');
+      }
+    });
     return (
       <div>
         {/* rowSelection={rowSelection}*/}
         {orgcategory.data &&
-        <Table bordered size="small" pagination={false} dataSource={this.props.activity}
+        <Table bordered size="small" pagination={false} dataSource={data}
                className={styles.committee}>
           <Column title="承办单位" dataIndex="organizer" key="display_name"
                   sorter={(a, b) => this.organizerSorter(a.organizer, b.organizer)}

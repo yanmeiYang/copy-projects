@@ -46,9 +46,7 @@ module.exports = {
     <Menu key={0} {...menusProps} />,
     // <div key={1}>sadfasdfa</div>,
   ],
-  footer: [
-    <Footer />,
-  ],
+  footer: <Footer />,
   //
   // Person List Component
   //

@@ -23,7 +23,6 @@ module.exports = {
   // Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
   Header_LogoWidth: 213,
   Header_UserPageURL: '', // 用户头像点击之后去的页面.
-  Footer_Content: <Footer/>,
 
   /**
    * Functionality

@@ -5,6 +5,7 @@ import { routerRedux } from 'dva/router';
 import pathToRegexp from 'path-to-regexp';
 import { config } from '../../utils';
 import * as seminarService from '../../services/seminar';
+import { sysconfig } from 'systems';
 
 export default {
   namespace: 'statistics',

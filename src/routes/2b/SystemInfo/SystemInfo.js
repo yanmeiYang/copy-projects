@@ -6,6 +6,7 @@ import { getDefaultSystemConfigs, CurrentSystemConfig } from 'systems';
 import { system } from 'utils';
 import styles from './SystemInfo.less';
 
+// TODO @xiaobei 在第一行添加一个按钮，Clear Saved System, 意思是清空已经保存的system. 使用配置文件中的system.
 @connect(({ app }) => ({ app }))
 @RequireGod
 export default class SystemInfo extends PureComponent {

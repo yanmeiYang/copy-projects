@@ -126,6 +126,15 @@ const DetailPage = ({ dispatch, seminar, app, pad }) => {
               </div>
             </div>
           </Col>
+          {summaryById.link &&
+          <Col className={styles.join_button}>
+            <Button type="primary" size="large">
+              <a href={summaryById.link} rel="noopener noreferrer" target="_blank">
+                我要报名
+              </a>
+            </Button>
+          </Col>
+          }
           <CommentsByActivity activityId={summaryById.id} currentUser={currentUser} />
         </Row> : <div style={{ minHeight: 300 }} />}
       </Spin>

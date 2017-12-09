@@ -23,7 +23,7 @@ module.exports = {
   // Header_Logo: 'COMMENT: image in /public/{system}/header_logo.png',
   Header_LogoWidth: 213,
   Header_UserPageURL: '', // 用户头像点击之后去的页面.
-  Footer_Content: <Footer />,
+  Footer_Content: <Footer/>,
 
   /**
    * Functionality
@@ -107,7 +107,7 @@ module.exports = {
     },
     {
       id: 'aminer',
-      name: <span><i className="fa fa-globe fa-fw" />全球专家</span>,
+      name: <span><i className="fa fa-globe fa-fw"/>全球专家</span>,
       nperson: 2871,
     },
     // 数据标注未找到的人的库。
@@ -167,4 +167,6 @@ module.exports = {
   USE_NEXT_EXPERT_BASE_SEARCH: true,
   // 测试修改活动是否使用新的编辑
   SeminarNewEditor: true,
+  // ccf activity 专家评分是否显示
+  ShowRating: true,
 };

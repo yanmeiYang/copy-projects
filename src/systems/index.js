@@ -189,6 +189,8 @@ const getDefaultSystemConfigs = (system, source) => {
     USE_NEXT_EXPERT_BASE_SEARCH: false, // 是否使用新的后端来搜索新的结果。
     // 测试修改活动是否使用新的编辑
     SeminarNewEditor: false,
+    // ccf activity 专家评分是否显示
+    ShowRating: false,
   };
 };
 

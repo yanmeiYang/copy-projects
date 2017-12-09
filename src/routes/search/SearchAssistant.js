@@ -179,11 +179,11 @@ export default class SearchAssistant extends Component {
           </div>
           }
         </div>
-
+        {hasKG &&
         <div className={styles.box1}>
           <div className={styles.ww}>
-            <span>Expand by knowledge graph</span>
-            <span className={styles.paddingLeft}>
+            <span className={styles.paddingRight}>Expand by knowledge graph</span>
+            <span>
               <Checkbox
                 onChange={this.onCheckAllChange}
                 indeterminate={indeterminate}
@@ -205,6 +205,7 @@ export default class SearchAssistant extends Component {
             })}
           </Checkbox.Group>
         </div>
+        }
 
         <div className={styles.boxButton}>
           <Button size="small" type="ghost" onClick={this.callSearch}>

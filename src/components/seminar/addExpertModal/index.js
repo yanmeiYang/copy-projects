@@ -91,9 +91,9 @@ class AddExpertModal extends React.Component {
       return false;
     }
     const selectedExpert = nextProps.parentProps.seminar.selectedSuggestSpeaker;
-    this.speakerInformation.name = this.refs.speakerName.refs.input.value = profileUtils.displayNameCNFirst(selectedExpert.payload.name, selectedExpert.payload.name_zh);
-    this.speakerInformation.affiliation = this.refs.speakerAff.refs.input.value = selectedExpert.payload.org;
-    selectedExpert.pos.length > 0 && selectedExpert.pos[0].n ? this.speakerInformation.position = this.refs.speakerPos.refs.input.value = selectedExpert.pos[0].n : this.speakerInformation.position = this.refs.speakerPos.refs.input.value = '';
+    this.speakerInformation.name = this.refs.speakerName.input.value = profileUtils.displayNameCNFirst(selectedExpert.payload.name, selectedExpert.payload.name_zh);
+    this.speakerInformation.affiliation = this.refs.speakerAff.input.value = selectedExpert.payload.org;
+    selectedExpert.pos.length > 0 && selectedExpert.pos[0].n ? this.speakerInformation.position = this.refs.speakerPos.input.value = selectedExpert.pos[0].n : this.speakerInformation.position = this.refs.speakerPos.input.value = '';
     this.speakerInformation.aid = this.refs.speakerAid.value = selectedExpert.payload.id;
     this.speakerInformation.img = this.refs.speakerImg.src = selectedExpert.img;
     this.speakerInformation.bio = selectedExpert.bio;
@@ -190,7 +190,7 @@ class AddExpertModal extends React.Component {
       location: { city: '', address: '' },
       abstract: '',
     };
-    talk.title = this.refs.talkTitle.refs.input.value;
+    talk.title = this.refs.talkTitle.input.value;
     talk.speaker = state.speakerInfo;
     if (typeof state.speakerInfo.gender !== 'number') {
       if (typeof state.speakerInfo.gender === 'object') {
@@ -209,7 +209,7 @@ class AddExpertModal extends React.Component {
     if (state.talkEndValue) {
       talk.time.to = typeof state.talkStartValue === 'string' ? state.talkEndValue : state.talkEndValue.toJSON();
     }
-    talk.location.address = this.refs.talkLocation.refs.input.value;
+    talk.location.address = this.refs.talkLocation.input.value;
     talk.abstract = ReactDOM.findDOMNode(this.refs.talkAbstract).value;
     this.props.callbackParent(talk, state.isEdit);
     this.setState({ modalVisible: false });
@@ -218,13 +218,13 @@ class AddExpertModal extends React.Component {
   suggestExpert(type) {
     let data = {};
     data = {
-      name: this.refs.name.refs.input.value,
-      position: this.refs.pos.refs.input.value,
-      affiliation: this.refs.aff.refs.input.value,
+      name: this.refs.name.input.value,
+      position: this.refs.pos.input.value,
+      affiliation: this.refs.aff.input.value,
       title: '',
     };
     if (type === 0) {
-      if (this.state.name !== this.refs.name.refs.input.value || this.state.position !== this.refs.pos.refs.input.value || this.state.affiliation !== this.refs.aff.refs.input.value) {
+      if (this.state.name !== this.refs.name.input.value || this.state.position !== this.refs.pos.input.value || this.state.affiliation !== this.refs.aff.input.value) {
         this.props.parentProps.dispatch({ type: 'seminar/getSpeakerSuggest', payload: data });
       }
     } else {
@@ -234,9 +234,9 @@ class AddExpertModal extends React.Component {
       this.props.editTheTalk.speaker = {};
     }
     this.setState({
-      name: this.refs.name.refs.input.value,
-      position: this.refs.pos.refs.input.value,
-      affiliation: this.refs.aff.refs.input.value,
+      name: this.refs.name.input.value,
+      position: this.refs.pos.input.value,
+      affiliation: this.refs.aff.input.value,
       isSearched: true,
       speakerInfo: {},
     });
@@ -317,12 +317,13 @@ class AddExpertModal extends React.Component {
             label={(<span>专家角色</span>)}>
             {getFieldDecorator('role', { initialValue: 'talker' })(
               <Select
+                className={styles.inputBox}
                 style={{ width: 200 }}
                 placeholder="请选择专家角色"
                 onChange={this.expertRoleChange}
               >
-                <Option value="president">会议主席</Option>
-                <Option value="talker">特邀讲者</Option>
+                <Option value="president">主席(包括主持人/主编等)</Option>
+                <Option value="talker">特邀嘉宾(包括报告人/评审人/评奖人等)</Option>
               </Select>)}
           </FormItem>
           {this.speakerInformation.role !== 'president' &&
@@ -363,6 +364,7 @@ class AddExpertModal extends React.Component {
               }],
             })(
               <Select
+                className={styles.inputBox}
                 showSearch
                 style={{ width: 200 }}
                 placeholder="请选择贡献类别"
@@ -547,6 +549,7 @@ class AddExpertModal extends React.Component {
                 <RadioGroup defaultValue="1" onChange={this.saveExpertInfo.bind(this, 'gender')}>
                   <Radio value="1" name="gender">男</Radio>
                   <Radio value="2" name="gender">女</Radio>
+                  <Radio value="0" name="gender">不详</Radio>
                 </RadioGroup>
               </div>
             </div>

@@ -54,6 +54,7 @@ class RegistrationForm extends React.Component {
     previewVisible: false,
     image: null,
     currentOrg: [],
+    hostOrg: [],
     addCoOrgModalVisible: false,
     // suggestSpeakers: [],
     // speakerInfo: {},
@@ -105,6 +106,8 @@ class RegistrationForm extends React.Component {
         tags: currentSeminar.tags,
         talks: currentSeminar.talk,
         editStatus: true,
+        hostOrg: currentSeminar.host_org || [],
+        // organizer: currentSeminar.organizer || [],
         organizer: currentSeminar.organizer[0].split(OrgJoiner),
         currentOrg: currentSeminar.organizer.slice(1),
         image: currentSeminar.img || '',
@@ -266,6 +269,17 @@ class RegistrationForm extends React.Component {
   };
   /* 更新删除海报结束 */
 
+  // 存储主办单位
+  addNewHostOrg = (value) => {
+    this.setState({ hostOrg: value });
+  };
+
+  // 存储承办单位
+  addNewOrg = (value) => {
+    this.setState({ organizer: value });
+    this.props.form.setFieldsValue({ organizer: value });
+  };
+
   // 存储协办单位
   addNewCoOrg = (value) => {
     this.setState({ currentOrg: value });
@@ -283,7 +297,7 @@ class RegistrationForm extends React.Component {
     } = this.props.seminar;
     const {
       addNewTalk, talks, startValue, endValue, editTheTalk, image, currentOrg,
-      editStatus, organizer, tags,
+      editStatus, organizer, tags, hostOrg,
     } = this.state;
     const formItemLayout = {
       labelCol: {
@@ -348,22 +362,40 @@ class RegistrationForm extends React.Component {
               )}
             </FormItem>
 
+            <FormItem {...formItemLayout} label="主办单位">
+              {getFieldDecorator('host_org', {
+                  initialValue: hostOrg,
+                  // rules: [{ required: true, message: '请选择主办单位' }],
+                },
+              )(
+                <AddCoOrgModal
+                  label="主办单位"
+                  orgList={psActivity} dispatch={this.props.dispatch}
+                  callbackParent={this.addNewHostOrg} coOrg={hostOrg} />,
+              )}
+            </FormItem>
             <FormItem {...formItemLayout} label="承办单位">
               {getFieldDecorator('organizer', {
                   initialValue: organizer,
                   rules: [{ required: true, message: '请选择承办单位' }],
                 },
               )(
-                <Cascader options={psOrganizer} showSearch placeholder="键入搜索承办单位"
-                          popupClassName={styles.menu} />,
+                <AddCoOrgModal
+                  label="承办单位"
+                  orgList={psActivity} dispatch={this.props.dispatch}
+                  callbackParent={this.addNewOrg} coOrg={organizer} />,
+                { /*<Cascader options={psOrganizer} showSearch placeholder="键入搜索承办单位"*/ }
+                // popupClassName={styles.menu} />,
               )}
             </FormItem>
 
             <FormItem {...formItemLayout} label="协办单位">
-              {getFieldDecorator('co_org', {},
+              {getFieldDecorator('co_org', { initialValue: currentOrg },
               )(
-                <AddCoOrgModal orgList={psActivity} dispatch={this.props.dispatch}
-                               callbackParent={this.addNewCoOrg} coOrg={currentOrg} />,
+                <AddCoOrgModal
+                  label="协办单位"
+                  orgList={psActivity} dispatch={this.props.dispatch}
+                  callbackParent={this.addNewCoOrg} coOrg={currentOrg} />,
               )}
             </FormItem>
 

@@ -106,6 +106,13 @@ export default class SearchFilter extends Component {
             <ul className={styles.filterItems}>
               {expertBases.map((eb) => {
                 let isShowEb = false;
+                // TODO 此处鉴别方式需要修改
+                if ((eb.id === 'aminer' &&
+                    (sysconfig.SYSTEM === 'ccf' || sysconfig.SYSTEM === 'ccftest') &&
+                    (roles[0] !== '超级管理员'))) {
+                  console.log('00000000',roles[0])
+                  isShowEb = true;
+                }
                 if (eb.show) {
                   isShowEb = !eb.show(roles);
                 }

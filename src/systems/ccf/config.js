@@ -166,7 +166,7 @@ module.exports = {
   // 临时属性，需要删除
   USE_NEXT_EXPERT_BASE_SEARCH: true,
   // 测试修改活动是否使用新的编辑
-  SeminarNewEditor: true,
+  SeminarNewEditor: false,
   // ccf activity 专家评分是否显示
   ShowRating: true,
 };

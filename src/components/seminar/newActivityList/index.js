@@ -70,8 +70,11 @@ class NewActivityList extends React.Component {
                   return <div key={talk.speaker.name + talk.speaker.aid}
                               className={styles.seminar_expert_president}>
                     <Tooltip title={talk.speaker.name}>
-                      <img src={profileUtils.getAvatar(talk.speaker.img, talk.speaker.aid, 80)}
-                           alt={talk.speaker.name} />
+                      {talk.speaker.aid ? <a href={`/person/${talk.speaker.aid}`} target="_blank">
+                          <img src={profileUtils.getAvatar(talk.speaker.img, talk.speaker.aid, 80)}
+                               alt={talk.speaker.name} /></a> :
+                        <img src={profileUtils.getAvatar(talk.speaker.img, talk.speaker.aid, 80)}
+                             alt={talk.speaker.name} />}
                     </Tooltip>
                   </div>;
                 })}
@@ -80,8 +83,11 @@ class NewActivityList extends React.Component {
                   return <div key={talk.speaker.name + talk.speaker.aid}
                               className={styles.seminar_expert_common}>
                     <Tooltip title={talk.speaker.name}>
-                      <img src={profileUtils.getAvatar(talk.speaker.img, talk.speaker.aid, 80)}
-                           alt={talk.speaker.name} />
+                      {talk.speaker.aid ? <a href={`/person/${talk.speaker.aid}`} target="_blank">
+                        <img src={profileUtils.getAvatar(talk.speaker.img, talk.speaker.aid, 80)}
+                             alt={talk.speaker.name} /></a> :
+                        <img src={profileUtils.getAvatar(talk.speaker.img, talk.speaker.aid, 80)}
+                             alt={talk.speaker.name} />}
                     </Tooltip>
                   </div>;
                 })}

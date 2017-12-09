@@ -11,6 +11,7 @@ import { isLogin, isGod, isAuthed } from 'utils/auth';
 import * as seminarService from 'services/seminar';
 import Menu from './components/Menu';
 import styles from './theme-ccf.less';
+import Footer from '../../components/Footers/ccf.js';
 
 const menusProps = {
   // menu,
@@ -45,7 +46,9 @@ module.exports = {
     <Menu key={0} {...menusProps} />,
     // <div key={1}>sadfasdfa</div>,
   ],
-
+  footer: [
+    <Footer />,
+  ],
   //
   // Person List Component
   //

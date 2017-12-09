@@ -2,10 +2,12 @@
  * Created by BoGao on 2017/6/20.
  */
 /* eslint-disable prefer-template,import/no-dynamic-require */
+import React from 'react';
 import { addLocaleData } from 'react-intl';
 import { loadSavedLocale } from 'utils/locale';
 import { System, Source } from 'utils/system';
 import { TopExpertBase } from 'utils/expert-base';
+import Footer from '../components/Footers/default';
 import defaults from './utils'; // Warning: no zhuo no die.
 
 // All available systems.

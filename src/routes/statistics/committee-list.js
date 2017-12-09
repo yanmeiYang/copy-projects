@@ -34,6 +34,7 @@ class CommitteeList extends React.Component {
   getSeminarsByCategory = (v, type, e) => {
     const data = JSON.parse(e.target && e.target.getAttribute('data'));
     let params = `?organizer=${data.organizer}`;
+    console.log('====', params);
     if (type === 'category') {
       params += `&category=${v.key}`;
     }

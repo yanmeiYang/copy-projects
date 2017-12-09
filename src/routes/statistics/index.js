@@ -90,7 +90,6 @@ export default class Statistics extends React.Component {
         return true;
       });
     }
-
     if (this.state.defaultTabKey === 'experts_list') {
       title = '专家,总功效度,审稿次数,撰稿次数,总贡献度,演讲内容,演讲水平,综合评价,';
       title += '\n';
@@ -106,7 +105,7 @@ export default class Statistics extends React.Component {
         return true;
       });
     }
-
+    console.log('====3', info);
     let str = title + info;
     const bom = '\uFEFF';
     str = encodeURIComponent(str);

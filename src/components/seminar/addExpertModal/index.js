@@ -288,7 +288,7 @@ class AddExpertModal extends React.Component {
     const outerThis = this;
     const changeExpertAvatar = {
       name: 'file',
-      action: config.baseURL + config.api.uploadActivityPosterImgFile,
+      action: config.api.uploadActivityPosterImgFile,
       headers: {
         Authorization: getLocalToken(),
       },

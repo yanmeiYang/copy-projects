@@ -15,26 +15,21 @@ import { sysconfig } from 'systems';
 import styles from './index.less';
 import PersonFeaturedPapers from './person-featured-papers';
 // import ActivityList from '../../components/seminar/activityList';
-
-
 const TabPane = Tabs.TabPane;
-
 const Person = ({ dispatch, person, seminar, publications }) => {
   const { profile, avgScores } = person;
   const { results } = seminar;
   const totalPubs = profile.indices && profile.indices.num_pubs;
-
   const contrib = avgScores.filter(score => score.key === 'contrib')[0];
   const integrated = avgScores.filter(score => score.key === 'integrated')[0];
   const activity_indices = { contrib: contrib === undefined ? 0 : contrib.score };
-
   const profileTabs = [{
     isShow: sysconfig.ShowRating,
     title: '专家评分',
     desc: 'expert-rating',
     content: <div>
       {false && profile && profile.indices &&
-      <Indices indices={profile.indices}/>
+      <Indices indices={profile.indices} />
       }
       <table style={{ marginBottom: 10 }} className="scoreTable">
         {contrib &&
@@ -53,9 +48,9 @@ const Person = ({ dispatch, person, seminar, publications }) => {
             <tr>
               <td>演讲内容:</td>
               <td>
-                <Rate disabled defaultValue={score.score}/>
+                <Rate disabled defaultValue={score.score} />
                 <input type="text" className="score" value={getTwoDecimal(score.score, 2)}
-                       disabled/>
+                       disabled />
               </td>
             </tr>
             }
@@ -63,9 +58,9 @@ const Person = ({ dispatch, person, seminar, publications }) => {
             <tr>
               <td>演讲水平:</td>
               <td>
-                <Rate disabled defaultValue={score.score}/>
+                <Rate disabled defaultValue={score.score} />
                 <input type="text" className="score" value={getTwoDecimal(score.score, 2)}
-                       disabled/>
+                       disabled />
               </td>
             </tr>
             }
@@ -76,9 +71,9 @@ const Person = ({ dispatch, person, seminar, publications }) => {
         <tr>
           <td>综合评价:</td>
           <td>
-            <Rate disabled defaultValue={integrated.score}/>
+            <Rate disabled defaultValue={integrated.score} />
             <input type="text" className="score" value={getTwoDecimal(integrated.score, 2)}
-                   disabled/>
+                   disabled />
           </td>
         </tr>
         }
@@ -93,7 +88,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
           <div key={activity.id + Math.random()}>
             {/* <ActivityList result={activity} /> */}
             <NewActivityList result={activity} hidetExpertRating="true"
-                             style={{ marginTop: 20, maxWidth: 1000 }}/>
+                             style={{ marginTop: 20, maxWidth: 1000 }} />
           </div>
         );
       })}</div> : <div style={{ minHeight: 150, textAlign: 'center' }}><span
@@ -109,10 +104,10 @@ const Person = ({ dispatch, person, seminar, publications }) => {
             href={personService.getAMinerProfileUrl(profile.name, profile.id)}
             target="_blank" rel="noopener noreferrer"
           >
-            查看全部 {totalPubs} 篇论文<Icon type="right"/>
+            查看全部 {totalPubs} 篇论文<Icon type="right" />
           </a>
         </div>
-        <PersonFeaturedPapers personId={profile.id} totalPubs={totalPubs}/>
+        <PersonFeaturedPapers personId={profile.id} totalPubs={totalPubs} />
       </div>
     </Spin>,
   }];
@@ -138,7 +133,11 @@ const Person = ({ dispatch, person, seminar, publications }) => {
               {dispatch({ type: 'seminar/clearState' })}
               {dispatch({
                 type: 'seminar/getSeminar',
-                payload: { offset: 0, size: 5, filter: { src: sysconfig.SYSTEM, aid: profile.id } },
+                payload: {
+                  offset: 0,
+                  size: 5,
+                  filter: { src: sysconfig.SYSTEM, aid: profile.id }
+                },
               })}</div>
           );
         }
@@ -166,8 +165,8 @@ const Person = ({ dispatch, person, seminar, publications }) => {
     <Layout searchZone={[]}>
       <div className="content-inner">
         <ProfileInfo profile={profile} activity_indices={activity_indices}
-                     rightZoneFuncs={sysconfig.PersonList_RightZone}/>
-        <div style={{ marginTop: 30 }}/>
+                     rightZoneFuncs={sysconfig.PersonList_RightZone} />
+        <div style={{ marginTop: 30 }} />
 
         <div>
           <Tabs defaultActiveKey="0" onTabClick={callback}>

@@ -69,10 +69,10 @@ class NewActivityList extends React.Component {
                 .map((talk) => {
                   return <div key={talk.speaker.name + talk.speaker.aid}
                               className={styles.seminar_expert_president}>
-                    <Tooltip title={talk.speaker.name}>
+                    <Tooltip title={`主席： ${talk.speaker.name}`}>
                       {talk.speaker.aid ? <a href={`/person/${talk.speaker.aid}`} target="_blank">
                           <img src={profileUtils.getAvatar(talk.speaker.img, talk.speaker.aid, 80)}
-                               alt={talk.speaker.name} /></a> :
+                            alt={talk.speaker.name} /></a> :
                         <img src={profileUtils.getAvatar(talk.speaker.img, talk.speaker.aid, 80)}
                              alt={talk.speaker.name} />}
                     </Tooltip>

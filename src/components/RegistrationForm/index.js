@@ -50,7 +50,7 @@ class RegistrationForm extends React.Component {
     editTheTalk: {},
     editTheTalkIndex: -1,
     editStatus: false, // 是否是编辑状态
-    organizer: '',
+    organizer: [],
     previewVisible: false,
     image: null,
     currentOrg: [],
@@ -106,10 +106,9 @@ class RegistrationForm extends React.Component {
         tags: currentSeminar.tags,
         talks: currentSeminar.talk,
         editStatus: true,
-        hostOrg: currentSeminar.host_org || [],
-        // organizer: currentSeminar.organizer || [],
-        organizer: currentSeminar.organizer[0].split(OrgJoiner),
-        currentOrg: currentSeminar.organizer.slice(1),
+        hostOrg: currentSeminar.host_org || ['cccc'],
+        organizer: currentSeminar.organizer || ['ccccc'],
+        currentOrg: currentSeminar.co_org || ['cccccc'],
         image: currentSeminar.img || '',
       });
     }
@@ -158,14 +157,14 @@ class RegistrationForm extends React.Component {
             data.time.to = typeof state.endValue === 'string' ? state.endValue : state.endValue;
           }
           data.tags = state.tags;
-          data.organizer = data.organizer.join(OrgJoiner);
-          // data.organizer.shift();
-          if (state.currentOrg !== undefined && state.currentOrg.length > 0) {
-            data.organizer = [data.organizer].concat(state.currentOrg);
-          } else {
-            data.organizer = [data.organizer];
-          }
-          delete data.co_org;
+          // data.organizer = data.organizer.join(OrgJoiner);
+          // // data.organizer.shift();
+          // if (state.currentOrg !== undefined && state.currentOrg.length > 0) {
+          //   data.organizer = [data.organizer].concat(state.currentOrg);
+          // } else {
+          //   data.organizer = [data.organizer];
+          // }
+          // delete data.co_org;
           // 获取登录用户的uid
           data.uid = this.props.uid;
           if (state.editStatus) {
@@ -256,7 +255,9 @@ class RegistrationForm extends React.Component {
         city: currentSeminar.location.city || '',
         address: currentSeminar.location.address || '',
         abstract: currentSeminar.abstract,
+        link: currentSeminar.link || '',
       };
+      this.expertExtendAddress = currentSeminar.location.address || '';
       this.props.form.setFieldsValue(data);
     }
   };
@@ -289,7 +290,11 @@ class RegistrationForm extends React.Component {
   saveAddress = (e) => {
     this.expertExtendAddress = e.target.value;
   };
-
+  // 活动简介字数提示
+  countChar = (maxLength, textareaName, spanName) => {
+    document.getElementById(spanName).innerHTML =
+      `${maxLength - document.getElementById(textareaName).value.length} / ${maxLength}`;
+  };
   render() {
     const { getFieldDecorator } = this.props.form;
     const {
@@ -319,7 +324,7 @@ class RegistrationForm extends React.Component {
       // listType: 'text',
       headers: {
         // 获得登录用户的token
-        Authorization: getLocalToken(),
+        Authorization: localStorage.getItem('token'),
       },
       onChange(info) {
         const status = info.file.status;
@@ -479,7 +484,9 @@ class RegistrationForm extends React.Component {
                 }, { type: 'string', max: 150, message: '最多150个字符' }],
               })(
                 <Input type="textarea" rows={4} placeholder="请输入活动简介"
-                       onBlur={this.getKeywords} />,
+                       onBlur={this.getKeywords}
+                       onKeyDown={this.countChar.bind(this, 1500, 'abstract', 'counter')}
+                       onKeyUp={this.countChar.bind(this, 1500, 'abstract', 'counter')} />,
               )}
             </FormItem>
             <FormItem
@@ -513,6 +520,15 @@ class RegistrationForm extends React.Component {
                 <SampleLabelLine onTagChange={this.onTagsChanged} tags={tags} canAdd canRemove />
               )}
 
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="报名链接"
+              hasFeedback
+            >
+              {getFieldDecorator('link', {})(
+                <Input placeholder="请输入报名的链接" autoComplete="off" />,
+              )}
             </FormItem>
             {/* <FormItem */}
             {/* {...formItemLayout} */}

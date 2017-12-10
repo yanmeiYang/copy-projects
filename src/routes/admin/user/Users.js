@@ -201,11 +201,11 @@ export default class Users extends React.Component {
           {/*<a onClick={this.onEdit.bind(this, 'info')} data={JSON.stringify(text)}>修改信息</a>*/}
           {/*<span className="ant-divider" />*/}
           {sysconfig.ShowRegisteredRole &&
-          <sapn>
+          <sapn className={styles.paddingRight}>
             <a onClick={this.onEdit.bind(this, 'role')} data={JSON.stringify(text)}>修改角色</a>
             <span className="ant-divider" />
           </sapn>}
-          <a onClick={this.onForbidUser.bind(this)} data={JSON.stringify(text)}>禁用</a>
+          <a onClick={this.onForbidUser.bind(this)} data={JSON.stringify(text)} className={styles.paddingLeft}>禁用</a>
         </span>
         }
         {this.state.defaultTabKey === 'forbid' &&

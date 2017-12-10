@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions,no-param-reassign */
 /**
  * Created by yangyanmei on 17/5/27.
  */
@@ -143,7 +144,7 @@ class RegistrationForm extends React.Component {
           data.time = { from: '', to: '' };
           data.type = 1;
           data.talk = state.talks;
-          data.talk.map((item) => {
+          data.talk && data.talk.map((item) => {
             item.speaker.gender = item.speaker.gender.i || 0;
             // item.speaker.gender = item.speaker.gender.i || (item.speaker.gender || 0);
             return item.speaker.gender;
@@ -353,7 +354,8 @@ class RegistrationForm extends React.Component {
       ? activity_organizer_options : [];
     return (
       <Row className={styles.add_seminar_block}>
-        <Form horizontal onSubmit={this.handleSubmit} className={styles.add_seminar_form}>
+        <Form layout="horizontal" onSubmit={this.handleSubmit}
+              className={styles.add_seminar_form}>
           <Col className={styles.thumbnail}>
             <FormItem {...formItemLayout} label="活动类型" hasFeedback>
               {getFieldDecorator('category', {
@@ -361,14 +363,12 @@ class RegistrationForm extends React.Component {
                 },
               )(
                 <Select placeholder="请选择活动类型">
-                  {
-                    activityType.map((item) => {
-                      return (
-                        <Option key={`activity_${Math.random()}`}
-                                value={item.key}>{item.key}</Option>
-                      );
-                    })
-                  }
+                  {activityType && activityType.map((item) => {
+                    return (
+                      <Option key={`activity_${Math.random()}`}
+                              value={item.key}>{item.key}</Option>
+                    );
+                  })}
                 </Select>,
               )}
             </FormItem>
@@ -487,10 +487,11 @@ class RegistrationForm extends React.Component {
                 rules: [{
                   required: true,
                   message: '请输入活动简介',
-                }, { type: 'string', max: 150, message: '最多150个字符' }],
+                }, { type: 'string', max: 1500, message: '最多150个字符' }],
               })(
-                <Input type="textarea" rows={4} placeholder="请输入活动简介"
-                       onBlur={this.getKeywords} />,
+                <Input.TextArea
+                  rows={4} placeholder="请输入活动简介"
+                  onBlur={this.getKeywords} />,
               )}
             </FormItem>
             <FormItem
@@ -571,7 +572,7 @@ class RegistrationForm extends React.Component {
           {/* workshop */}
 
           <Col className={styles.thumbnail}>
-            {talks.length > 0 && <div>
+            {talks && talks.length > 0 && <div>
               {talks.map((talk, index) => {
                 return (
                   <div key={Math.random()}>

@@ -103,25 +103,27 @@ class ExpertRatingPage extends React.Component {
         <Row>
           <Col md={24} lg={{ span: 20, offset: 2 }} className={styles.thumbnail}>
             <div className={styles.caption}>
-              <h4>
+
+              <h2>为专家评分：</h2>
+              <h2>
                 <strong>
                   {summaryById.title}
                 </strong>
-              </h4>
+              </h2>
 
               <div style={{ marginTop: 20 }} className={styles.workshopTetail}>
                 {summaryById.organizer && <div>
-                  <h6><strong>承办单位：</strong></h6>
+                  <h3><strong>承办单位：</strong></h3>
                   <span>{summaryById.organizer.map((item) => {
                     return <span key={Math.random()}>{item} </span>;
                   })}</span>
                 </div>}
                 {summaryById.location && <div>
-                  <h6><strong>活动地点：</strong></h6>
+                  <h3><strong>活动地点：</strong></h3>
                   <span>{summaryById.location.address}</span>
                 </div>}
                 {summaryById.time && <div>
-                  <h6><strong>活动时间：</strong></h6>
+                  <h3><strong>活动时间：</strong></h3>
                   <span>{new Date(summaryById.time.from).format('yyyy年MM月dd日')}</span>
                 </div>}
               </div>

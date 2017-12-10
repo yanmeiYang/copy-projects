@@ -187,7 +187,11 @@ class RegistrationForm extends React.Component {
     }
   };
   addTalkData = (state) => {
-    this.setState({ editTheTalk: [], addNewTalk: !state });
+    this.props.form.validateFieldsAndScroll((err) => {
+      if (!err) {
+        this.setState({ editTheTalk: [], addNewTalk: !state });
+      }
+    });
   };
   setAddNewTalk = () => {
     this.setState({ addNewTalk: false });
@@ -290,11 +294,11 @@ class RegistrationForm extends React.Component {
   saveAddress = (e) => {
     this.expertExtendAddress = e.target.value;
   };
-  // 活动简介字数提示
-  countChar = (maxLength, textareaName, spanName) => {
-    document.getElementById(spanName).innerHTML =
-      `${maxLength - document.getElementById(textareaName).value.length} / ${maxLength}`;
-  };
+  // // 活动简介字数提示
+  // countChar = (maxLength, textareaName, spanName) => {
+  //   document.getElementById(spanName).innerHTML =
+  //     `${maxLength - document.getElementById(textareaName).value.length} / ${maxLength}`;
+  // };
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -321,7 +325,7 @@ class RegistrationForm extends React.Component {
       multiple: false,
       showUploadList: false,
       accept: 'image/jpeg,image/png,image/bmp',
-      action: config.baseURL + config.api.uploadActivityPosterImgFile,
+      action: config.api.uploadActivityPosterImgFile,
       // listType: 'text',
       headers: {
         // 获得登录用户的token
@@ -485,9 +489,7 @@ class RegistrationForm extends React.Component {
                 }, { type: 'string', max: 150, message: '最多150个字符' }],
               })(
                 <Input type="textarea" rows={4} placeholder="请输入活动简介"
-                       onBlur={this.getKeywords}
-                       onKeyDown={this.countChar.bind(this, 1500, 'abstract', 'counter')}
-                       onKeyUp={this.countChar.bind(this, 1500, 'abstract', 'counter')} />,
+                       onBlur={this.getKeywords} />,
               )}
             </FormItem>
             <FormItem

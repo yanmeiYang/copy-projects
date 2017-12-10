@@ -1,7 +1,8 @@
-@import "../../themes/vars.less";
+@import "~themes/vars";
 
 /* ------------------------ Override antd ------------------------ */
 
+// TODO @alice: don't apply theme level styles here, do it in theme-huawei-blue.
 :global {
   .ant-btn .anticon { font-weight: bold; }
   .ant-btn {
@@ -46,6 +47,8 @@
 .header_info {
   margin: 0 12px 0 20px; height: 66px; line-height: 66px;
 }
+
+// Overrides
 
 .Overrides() {
   .header {

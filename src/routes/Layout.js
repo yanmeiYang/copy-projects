@@ -2,13 +2,13 @@
 /**
  * Created by bogao on 2017/09/13.
  */
-import React, { PureComponent, Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Helmet } from 'react-helmet';
 import ReactGA from 'react-ga';
 import NProgress from 'nprogress';
-import { Layout as LayoutComponent, Affix, Button, Popover } from 'antd';
+import { Layout as LayoutComponent } from 'antd';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 import { hole, classnames, config } from 'utils';

@@ -10,6 +10,7 @@ import styles from './committee-list.less';
 
 
 const { Column } = Table;
+
 class CommitteeList extends React.Component {
   state = {
     selectedRowKeys: [],  // Check here to configure the default column
@@ -31,6 +32,7 @@ class CommitteeList extends React.Component {
       return e;
     }
   };
+
   getSeminarsByCategory = (v, type, e) => {
     const data = JSON.parse(e.target && e.target.getAttribute('data'));
     let params = `?organizer=${data.organizer}`;
@@ -94,8 +96,11 @@ class CommitteeList extends React.Component {
           />
           <Column title="活动总数" dataIndex="total" key="position" className={styles.comTotal}
                   sorter={(a, b) => this.activitySorter(a.total, b.total)}
-                  render={(total, organizer) => <a data={JSON.stringify(organizer)}
-                                                   onClick={this.getSeminarsByCategory.bind(this, total, 'organizer')}> {total} </a>} />
+                  render={(total, organizer) => (
+                    <a data={JSON.stringify(organizer)}
+                       onClick={this.getSeminarsByCategory.bind(this, total, 'organizer')}
+                    > {total} </a>
+                  )} />
           {Object.values(activity_type.data).map((category) => {
             // if (category.key === '撰稿活动' || category.key === '审稿活动') {
             //   return '';
@@ -108,8 +113,11 @@ class CommitteeList extends React.Component {
                         if (count === undefined) {
                           return '';
                         } else {
-                          return <a target="_blank" data={JSON.stringify(text)}
-                                    onClick={this.getSeminarsByCategory.bind(this, category, 'category')}> {count} </a>;
+                          return (
+                            <a target="_blank" data={JSON.stringify(text)}
+                               onClick={this.getSeminarsByCategory.bind(this, category, 'category')}
+                            > {count} </a>
+                          );
                         }
                       }} />
             );

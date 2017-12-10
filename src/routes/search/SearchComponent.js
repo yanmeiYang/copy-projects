@@ -10,7 +10,7 @@ import { Spinner } from 'components';
 import { Hole } from 'components/core';
 import { PersonList, ExportExperts } from 'components/person';
 import { SearchFilter, SearchSorts, KgSearchBox } from 'components/search';
-import { SearchKnowledge, TranslateSearchMessage, SearchVenue } from 'components/search';
+import { SearchKnowledge, TranslateSearchMessage } from 'components/search';
 
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
@@ -214,7 +214,7 @@ export default class SearchComponent extends Component {
     const { className, sorts, expertBaseId } = this.props;
     const { results, pagination, query, aggs, filters, topic, sortKey: sortType } = search;
     const { pageSize, total, current } = pagination;
-
+    console.log('>>>---', query);
     const load = loading.effects['search/searchPerson'];
     // const expertBase = (filters && filters.eb && filters.eb.id) || 'aminer';
 
@@ -318,19 +318,19 @@ export default class SearchComponent extends Component {
                 tagsLinkFuncs={this.props.onSearchBarSearch}
               />
 
-              {/* ---- Search Knowledge ---- */}
-              {/*{!disableSearchKnowledge &&*/}
-              {/*<div className={styles.searchKgContent}>*/}
-              {/*<SearchKnowledge query={query} />*/}
-              {/*<SearchVenue query={query} />*/}
-              {/*</div>*/}
-              {/*}*/}
-              {hole.fillFuncs(
-                rightZoneFuncs, // theme from config.
-                DefaultRightZoneFuncs, // default block.
-                { query, topic }, // parameters passed to block.
-                { containerClass: styles.searchKgContent }, // configs.
-              )}
+              <Hole
+                fill={rightZoneFuncs}
+                defaults={DefaultRightZoneFuncs}
+                param={{ query, topic }}
+                config={{ containerClass: styles.searchKgContent }}
+              />
+
+              {/*{hole.fillFuncs(*/}
+              {/*rightZoneFuncs, // theme from config.*/}
+              {/*DefaultRightZoneFuncs, // default block.*/}
+              {/*{ query, topic }, // parameters passed to block.*/}
+              {/*{ containerClass: styles.searchKgContent }, // configs.*/}
+              {/*)}*/}
             </div>
 
             <div className={styles.paginationWrap}>

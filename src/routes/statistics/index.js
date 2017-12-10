@@ -138,7 +138,7 @@ export default class Statistics extends React.Component {
             <div>
               <Button key="submit" type="default"
                       style={{ float: 'right', marginBottom: -28, zIndex: 100 }}>
-                <a onClick={this.clickDownload.bind(this)} download="data.csv" href="#">导出</a>
+                <a onClick={this.clickDownload.bind(this)} download="statistic.csv" href="#">导出</a>
               </Button>
               <Tabs
                 defaultActiveKey={activityList.category}

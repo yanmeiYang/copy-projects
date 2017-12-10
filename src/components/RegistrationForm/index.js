@@ -106,9 +106,9 @@ class RegistrationForm extends React.Component {
         tags: currentSeminar.tags,
         talks: currentSeminar.talk,
         editStatus: true,
-        hostOrg: currentSeminar.host_org || ['cccc'],
-        organizer: currentSeminar.organizer || ['ccccc'],
-        currentOrg: currentSeminar.co_org || ['cccccc'],
+        hostOrg: currentSeminar.host_org,
+        organizer: currentSeminar.organizer,
+        currentOrg: currentSeminar.co_org,
         image: currentSeminar.img || '',
       });
     }
@@ -295,6 +295,7 @@ class RegistrationForm extends React.Component {
     document.getElementById(spanName).innerHTML =
       `${maxLength - document.getElementById(textareaName).value.length} / ${maxLength}`;
   };
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const {

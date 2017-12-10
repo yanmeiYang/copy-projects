@@ -34,7 +34,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
     desc: 'expert-rating',
     content: <div>
       {false && profile && profile.indices &&
-      <Indices indices={profile.indices} />
+      <Indices indices={profile.indices}/>
       }
       <table style={{ marginBottom: 10 }} className="scoreTable">
         {contrib &&
@@ -53,9 +53,9 @@ const Person = ({ dispatch, person, seminar, publications }) => {
             <tr>
               <td>演讲内容:</td>
               <td>
-                <Rate disabled defaultValue={score.score} />
+                <Rate disabled defaultValue={score.score}/>
                 <input type="text" className="score" value={getTwoDecimal(score.score, 2)}
-                       disabled />
+                       disabled/>
               </td>
             </tr>
             }
@@ -63,9 +63,9 @@ const Person = ({ dispatch, person, seminar, publications }) => {
             <tr>
               <td>演讲水平:</td>
               <td>
-                <Rate disabled defaultValue={score.score} />
+                <Rate disabled defaultValue={score.score}/>
                 <input type="text" className="score" value={getTwoDecimal(score.score, 2)}
-                       disabled />
+                       disabled/>
               </td>
             </tr>
             }
@@ -76,9 +76,9 @@ const Person = ({ dispatch, person, seminar, publications }) => {
         <tr>
           <td>综合评价:</td>
           <td>
-            <Rate disabled defaultValue={integrated.score} />
+            <Rate disabled defaultValue={integrated.score}/>
             <input type="text" className="score" value={getTwoDecimal(integrated.score, 2)}
-                   disabled />
+                   disabled/>
           </td>
         </tr>
         }
@@ -93,7 +93,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
           <div key={activity.id + Math.random()}>
             {/* <ActivityList result={activity} /> */}
             <NewActivityList result={activity} hidetExpertRating="true"
-                             style={{ marginTop: 20, maxWidth: 1000 }} />
+                             style={{ marginTop: 20, maxWidth: 1000 }}/>
           </div>
         );
       })}</div> : <div style={{ minHeight: 150, textAlign: 'center' }}><span
@@ -109,14 +109,13 @@ const Person = ({ dispatch, person, seminar, publications }) => {
             href={personService.getAMinerProfileUrl(profile.name, profile.id)}
             target="_blank" rel="noopener noreferrer"
           >
-            查看全部 {totalPubs} 篇论文<Icon type="right" />
+            查看全部 {totalPubs} 篇论文<Icon type="right"/>
           </a>
         </div>
-        <PersonFeaturedPapers personId={profile.id} totalPubs={totalPubs} />
+        <PersonFeaturedPapers personId={profile.id} totalPubs={totalPubs}/>
       </div>
     </Spin>,
   }];
-
 
   function getMoreSeminar(e) {
     e.target.style.display = 'none';
@@ -162,14 +161,13 @@ const Person = ({ dispatch, person, seminar, publications }) => {
     }
   }
 
-
   // console.log('|||||||||||| PersonIndex:', person);
   return (
     <Layout searchZone={[]}>
       <div className="content-inner">
         <ProfileInfo profile={profile} activity_indices={activity_indices}
-                     rightZoneFuncs={sysconfig.PersonList_RightZone} />
-        <div style={{ marginTop: 30 }} />
+                     rightZoneFuncs={sysconfig.PersonList_RightZone}/>
+        <div style={{ marginTop: 30 }}/>
 
         <div>
           <Tabs defaultActiveKey="0" onTabClick={callback}>
@@ -194,9 +192,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
     </Layout>
   );
 };
-
 // export default connect()(Person);
-
 export default connect(({ person, loading, seminar, publications }) => ({
   person,
   loading,

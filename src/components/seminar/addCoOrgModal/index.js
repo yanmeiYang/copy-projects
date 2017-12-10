@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { compareDeep } from '../../../utils/compare';
 import { Modal, Cascader, Input, Row, Col, Button, Tag } from 'antd';
 import { contactByJoint, getValueByJoint } from '../../../services/seminar';
 import styles from './index.less';
@@ -15,7 +16,11 @@ class AddCoOrgModal extends React.Component {
       this.setState({ tags: this.props.coOrg, currentOrg: this.props.coOrg });
     }
   }
-
+  componentWillReceiveProps = (nextProps) => {
+    if (compareDeep(nextProps, this.props, 'coOrg')) {
+      this.setState({ tags: nextProps.coOrg, currentOrg: nextProps.coOrg });
+    }
+  };
   onOrgChange = (value) => {
     if (value[1]) {
       const data = contactByJoint(value[0], value[1]);

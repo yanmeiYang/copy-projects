@@ -110,7 +110,6 @@ export default class SearchFilter extends Component {
                 if ((eb.id === 'aminer' &&
                     (sysconfig.SYSTEM === 'ccf' || sysconfig.SYSTEM === 'ccftest') &&
                     (roles[0] !== '超级管理员'))) {
-                  console.log('00000000',roles[0])
                   isShowEb = true;
                 }
                 if (eb.show) {

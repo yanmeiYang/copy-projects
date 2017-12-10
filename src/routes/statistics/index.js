@@ -105,7 +105,6 @@ export default class Statistics extends React.Component {
         return true;
       });
     }
-    console.log('====3', info);
     let str = title + info;
     const bom = '\uFEFF';
     str = encodeURIComponent(str);
@@ -141,7 +140,7 @@ export default class Statistics extends React.Component {
               <Tabs
                 defaultActiveKey={activityList.category}
                 type="card"
-                style={{ clear: 'both', paddingTop: 0 }}
+                style={{ clear: 'both', paddingTop: 0, overflow: 'scroll' }}
                 className={styles.tabs}
                 onChange={this.onTabChange}
               >

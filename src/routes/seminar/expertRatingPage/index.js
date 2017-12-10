@@ -7,6 +7,7 @@ import { InputNumber, Rate, Button, Row, Col, Table, Modal } from 'antd';
 import { Link } from 'dva/router';
 import * as profileUtils from '../../../utils/profile-utils';
 import styles from './index.less';
+import { Layout } from 'routes';
 
 const { Column } = Table;
 
@@ -98,7 +99,7 @@ class ExpertRatingPage extends React.Component {
 
 
     return (
-      <div className={styles.detailSeminar}>
+      <Layout className={styles.detailSeminar}>
         <Row>
           <Col md={24} lg={{ span: 20, offset: 2 }} className={styles.thumbnail}>
             <div className={styles.caption}>
@@ -258,7 +259,7 @@ class ExpertRatingPage extends React.Component {
             </div >
           </Col >
         </Row >
-      </div >
+      </Layout >
     );
   }
 }

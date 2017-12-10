@@ -70,6 +70,9 @@ export default class Statistics extends React.Component {
       title = '承办单位	,活动总数,分部,NOI,ADL,CCCF,年度报告,CSP,走进高校,TF,	CCD,女工作者会议,精英大会,未来教育峰会,专委,YOCSEF,';
       title += '\n';
       this.props.statistics.activity.map((item) => {
+        if (item.organizer.indexOf('---') > 0) {
+          item.organizer = item.organizer.replace('---', '-');
+        }
         info += item.organizer ? (`${item.organizer.replace(/,/g, ';')},`) : ',';
         info += item.total ? (`${item.total},`) : ',';
         info += item.category['分部'] ? (`${item.category['分部']},`) : ',';

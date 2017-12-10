@@ -346,10 +346,10 @@ class RegistrationForm extends React.Component {
     && ((editStatus && summaryById.category) || !editStatus)
       ? activity_type.data : [];
     const psOrganizer = postSeminarOrganizer.length > 0
-    && ((editStatus && organizer.length > 0) || !editStatus)
+    && ((editStatus && (organizer && organizer.length > 0)) || !editStatus)
       ? postSeminarOrganizer : [];
     const psActivity = activity_organizer_options.length > 0
-    && ((editStatus && currentOrg.length > 0) || !editStatus)
+    && ((editStatus && (currentOrg && currentOrg.length > 0)) || !editStatus)
       ? activity_organizer_options : [];
     return (
       <Row className={styles.add_seminar_block}>

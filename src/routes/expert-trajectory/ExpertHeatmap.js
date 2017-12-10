@@ -40,12 +40,21 @@ class ExpertHeatmap extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps.expertTrajectory.heatData &&
       nextProps.expertTrajectory.heatData !== this.props.expertTrajectory.heatData) {
+      showChart(myChart, 'bmap', this.props.themeKey);
       this.loadHeat(nextProps.expertTrajectory.heatData, this.state.currentYear);
       return true;
     }
-    if (this.props.themeKey !== nextProps.themeKey) {
+    if (nextProps.themeKey && this.props.themeKey !== nextProps.themeKey) {
       showChart(myChart, 'bmap', nextProps.themeKey);
       this.loadHeat(nextProps.expertTrajectory.heatData, this.state.currentYear);
+      return true;
+    }
+    if (nextProps.checkType && this.props.checkType !== nextProps.checkType) {
+      showChart(myChart, 'bmap', this.props.themeKey);
+      this.loadHeat(
+        nextProps.expertTrajectory.heatData,
+        this.state.currentYear, nextProps.checkType,
+      );
       return true;
     }
     if (nextState && nextState !== this.state) {
@@ -110,7 +119,7 @@ class ExpertHeatmap extends React.Component {
     });
   };
 
-  loadHeat = (data, year) => {
+  loadHeat = (data, year, checkType) => {
     const option = myChart.getOption();
     const heatData = data.yearHeatData;
     const pointsData = data.yearPointData;
@@ -126,6 +135,19 @@ class ExpertHeatmap extends React.Component {
     option.series[0].data = heatData[year];
     option.series[1].data = pointsData[year];
     option.series[2].data = trajData[year];
+
+    if (typeof (checkType) !== 'undefined') { //!undefined的值为true
+      if (!checkType.includes('Heat')) {
+        option.series[0].data = [];
+      }
+      if (!checkType.includes('Location')) {
+        option.series[1].data = [];
+      }
+      if (!checkType.includes('Trajectory')) {
+        console.log('##############################');
+        option.series[2].data = [];
+      }
+    }
     myChart.setOption(option);
   };
 
@@ -165,14 +187,14 @@ class ExpertHeatmap extends React.Component {
           <Row className={styles.slide}>
             <Col span={22}>
               <Slider min={startYear} max={endYear} onChange={this.onChange}
-                      marks={marks} value={this.state.inputValue} />
+                      marks={marks} value={this.state.currentYear} />
             </Col>
             <Col span={1}>
               <InputNumber
                 min={startYear}
                 max={endYear}
                 style={{ marginLeft: 0 }}
-                value={this.state.inputValue}
+                value={this.state.currentYear}
                 onChange={this.onChange}
               />
             </Col>

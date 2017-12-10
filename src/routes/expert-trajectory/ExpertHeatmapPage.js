@@ -17,7 +17,8 @@ import ExpertHeatmap from './ExpertHeatmap';
 const { Content, Sider } = Layout;
 const { TabPane } = Tabs;
 const CheckboxGroup = Checkbox.Group;
-const plainOptions = ['All', 'Heat', 'Trajectory'];
+const plainOptions = ['Location', 'Heat', 'Trajectory'];
+const defaultCheckedList = ['Location', 'Heat', 'Trajectory'];
 const tc = applyTheme(styles);
 const themes = [
   { label: '常规', key: '0' },
@@ -40,6 +41,9 @@ class ExpertHeatmapPage extends React.Component {
     query: '', //查询窗口中的默认值
     domainId: '', //领域id
     themeKey: '1', //皮肤的I
+    checkedList: defaultCheckedList,
+    indeterminate: true,
+    checkAll: true,
   };
 
   componentWillMount() {
@@ -113,6 +117,22 @@ class ExpertHeatmapPage extends React.Component {
     this.setState({ themeKey: value.key });
   };
 
+  onChange = (checkedList) => {
+    this.setState({
+      checkedList,
+      indeterminate: !!checkedList.length && (checkedList.length < plainOptions.length),
+      checkAll: checkedList.length === plainOptions.length,
+    });
+  };
+
+  onCheckAllChange = (e) => {
+    this.setState({
+      checkedList: e.target.checked ? plainOptions : [],
+      indeterminate: false,
+      checkAll: e.target.checked,
+    });
+  };
+
   searchTrajByDomain = (domainEBID) => { //models里面重新查询数据
     const { dispatch } = this.props;
     const rosterId = domainEBID;
@@ -127,11 +147,6 @@ class ExpertHeatmapPage extends React.Component {
     const [name, offset, org, term, size] = ['', 0, '', query, 1000];
     dispatch({ type: 'expertTrajectory/findTrajsHeatAdvance', payload: { name, offset, org, term, size } });
   };
-
-  onChange = (checkedValues) => {
-    console.log('checked = ', checkedValues);
-  };
-
 
   render() {
     const data = this.props.expertTrajectory.heatData;
@@ -165,7 +180,19 @@ class ExpertHeatmapPage extends React.Component {
           </div>
           <div className={styles.setting}>
             <div className={styles.options}>
-              <CheckboxGroup options={plainOptions} defaultValue={['Apple']} onChange={this.onChange} />
+              <div className={styles.checkAll}>
+                <Checkbox
+                  indeterminate={this.state.indeterminate}
+                  onChange={this.onCheckAllChange}
+                  checked={this.state.checkAll}
+                >
+                  All
+                </Checkbox>
+              </div>
+              <div className={styles.group}>
+                <CheckboxGroup options={plainOptions}
+                               value={this.state.checkedList} onChange={this.onChange} />
+              </div>
             </div>
             <div className={styles.statics}>
               <Button onClick={this.showModal}>
@@ -186,7 +213,7 @@ class ExpertHeatmapPage extends React.Component {
           </div>
         </div>
         <div className={classnames('content-inner', styles.page)}>
-          <ExpertHeatmap data={data} themeKey={themeKey} />
+          <ExpertHeatmap data={data} themeKey={themeKey} checkType={this.state.checkedList} />
         </div>
       </Page>
     );

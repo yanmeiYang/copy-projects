@@ -143,8 +143,10 @@ class RegistrationForm extends React.Component {
           data.time = { from: '', to: '' };
           data.type = 1;
           data.talk = state.talks;
+          console.log('xingbiewenti>>>>',data.talk)
           data.talk.map((item) => {
-            item.speaker.gender = item.speaker.gender.i || (item.speaker.gender || 0);
+            item.speaker.gender = item.speaker.gender.i || 0;
+            // item.speaker.gender = item.speaker.gender.i || (item.speaker.gender || 0);
             return item.speaker.gender;
           });
           data.img = state.image;

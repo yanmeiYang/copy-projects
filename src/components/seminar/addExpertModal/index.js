@@ -68,9 +68,10 @@ class AddExpertModal extends React.Component {
       });
       this.speakerInformation = this.props.editTheTalk.speaker;
     }
-    if (this.props.address) {
-      ReactDOM.findDOMNode(this.refs.talkLocation).value = this.props.address;
-    }
+    //TODO 地点携带问题,在这里取不到refs
+      // if (this.props.address) {
+      //   ReactDOM.findDOMNode(this.refs.talkLocation).value = this.props.address;
+      // }
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -115,6 +116,9 @@ class AddExpertModal extends React.Component {
       ReactDOM.findDOMNode(this.refs.speakerEmail).value = editTheTalk.speaker.email;
       ReactDOM.findDOMNode(this.refs.speakerBio).value = editTheTalk.speaker.bio;
       ReactDOM.findDOMNode(this.refs.speakerImg).src = editTheTalk.speaker.img;
+      if (this.props.address) {
+        ReactDOM.findDOMNode(this.refs.talkLocation).value = this.props.address;
+      }
     }
   }
 

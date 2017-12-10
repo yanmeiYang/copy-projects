@@ -105,23 +105,23 @@ class ExpertRatingPage extends React.Component {
             <div className={styles.caption}>
               <h4>
                 <strong>
-                  { summaryById.title }
+                  {summaryById.title}
                 </strong>
               </h4>
 
               <div style={{ marginTop: 20 }} className={styles.workshopTetail}>
                 {summaryById.organizer && <div>
-                  <h7><strong>承办单位：</strong></h7>
+                  <h6><strong>承办单位：</strong></h6>
                   <span>{summaryById.organizer.map((item) => {
                     return <span key={Math.random()}>{item} </span>;
                   })}</span>
                 </div>}
                 {summaryById.location && <div>
-                  <h7><strong>活动地点：</strong></h7>
+                  <h6><strong>活动地点：</strong></h6>
                   <span>{summaryById.location.address}</span>
                 </div>}
                 {summaryById.time && <div>
-                  <h7><strong>活动时间：</strong></h7>
+                  <h6><strong>活动时间：</strong></h6>
                   <span>{new Date(summaryById.time.from).format('yyyy年MM月dd日')}</span>
                 </div>}
               </div>
@@ -135,7 +135,7 @@ class ExpertRatingPage extends React.Component {
                 bordered
                 size="small"
                 pagination={false}
-                rowKey="key"
+                rowKey={key => Math.random() + key}
               >
                 <Column
                   title="专家信息"
@@ -217,7 +217,7 @@ class ExpertRatingPage extends React.Component {
                           onOk={this.handleOk}
                           onCancel={this.handleCancel}
                         >
-                          <table >
+                          <table>
                             <tbody>
                             <tr>
                               <td><span style={{ marginRight: 5 }}>演讲水平:</span></td>
@@ -256,13 +256,13 @@ class ExpertRatingPage extends React.Component {
                 />
               </Table>
 
-            </div >
-          </Col >
-        </Row >
-      </Layout >
+            </div>
+          </Col>
+        </Row>
+      </Layout>
     );
   }
 }
-export default
-connect(({ seminar, app }) => ({ seminar, app }))(ExpertRatingPage);
+
+export default connect(({ seminar, app }) => ({ seminar, app }))(ExpertRatingPage);
 

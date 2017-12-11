@@ -67,7 +67,7 @@ export default class Statistics extends React.Component {
     let info = '';
     let title = '';
     if (this.state.defaultTabKey === 'activity_lists') {
-      title = '承办单位	,活动总数,分部,NOI,ADL,CCCF,年度报告,CSP,走进高校,TF,CCD,女工作者会议,精英大会,未来教育峰会,审稿次数,撰稿次数,专委,YOCSEF,';
+      title = '承办单位,活动总数,NOI,CNCC,YOCSEF,ADL,CCCF,专委,年度报告,分部,评奖、评审,CSP,走进高校,TF,CCD,女工作者会议,精英大会,未来教育峰会,撰稿活动,审稿活动,';
       title += '\n';
       this.props.statistics.activity.map((item) => {
         if (item.organizer.indexOf('---') > 0) {
@@ -75,11 +75,15 @@ export default class Statistics extends React.Component {
         }
         info += item.organizer ? (`${item.organizer.replace(/,/g, ';')},`) : ',';
         info += item.total ? (`${item.total},`) : ',';
-        info += item.category['分部'] ? (`${item.category['分部']},`) : ',';
         info += item.category.NOI ? (`${item.category.NOI},`) : ',';
+        info += item.category.CNCC ? (`${item.category.CNCC},`) : ',';
+        info += item.category.YOCSEF ? (`${item.category.YOCSEF},`) : ',';
         info += item.category.ADL ? (`${item.category.ADL},`) : ',';
         info += item.category.CCCF ? (`${item.category.CCCF},`) : ',';
+        info += item.category['专委'] ? (`${item.category['专委']},`) : ',';
         info += item.category['年度报告'] ? (`${item.category['年度报告']},`) : ',';
+        info += item.category['分部'] ? (`${item.category['分部']},`) : ',';
+        info += item.category['评奖、评审'] ? (`${item.category['评奖、评审']},`) : ',';
         info += item.category.CSP ? (`${item.category.CSP},`) : ',';
         info += item.category['走进高校'] ? (`${item.category['走进高校']},`) : ',';
         info += item.category.TF ? (`${item.category.TF},`) : ',';
@@ -89,8 +93,6 @@ export default class Statistics extends React.Component {
         info += item.category['未来教育峰会'] ? (`${item.category['未来教育峰会']},`) : ',';
         info += item.category['撰稿活动'] ? (`${item.category['撰稿活动']},`) : ',';
         info += item.category['审稿活动'] ? (`${item.category['审稿活动']},`) : ',';
-        info += item.category['专委'] ? (`${item.category['专委']},`) : ',';
-        info += item.category.YOCSEF ? (`${item.category.YOCSEF},`) : ',';
         info += '\n';
         return true;
       });

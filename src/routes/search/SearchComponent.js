@@ -183,7 +183,7 @@ export default class SearchComponent extends Component {
     });
 
     // TODO remove later. 新的方式获取api的时候，这个方法啥也不干。
-    if (!sysconfig.USE_NEXT_EXPERT_BASE_SEARCH || sort === 'activity-ranking-contrib') {
+    if (!sysconfig.USE_NEXT_EXPERT_BASE_SEARCH || (filters && filters.eb.id === 'aminer')) {
       dispatch({ type: 'search/translateSearch', payload: { query } });
       dispatch({
         type: 'search/searchPersonAgg',

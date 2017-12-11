@@ -143,6 +143,12 @@ export default class SearchComponent extends Component {
     this.onFilterChange('eb', { id, name }, true);// Special Filter;
   };
 
+  onAssistantChanged = (texts) => {
+    const { query } = this.props.search;
+    this.dispatch({ type: 'search/setAssistantDataMeta', payload: { texts } });
+    this.doSearchUseProps();
+  };
+
   // keep every thing, just call search;
   doSearchUseProps = () => {
     const { query, offset, pagination, filters, sortKey } = this.props.search;
@@ -152,12 +158,6 @@ export default class SearchComponent extends Component {
 
   doTranslateSearch = (useTranslate) => {
     this.dispatch({ type: 'search/setTranslateSearch', payload: { useTranslate } });
-    this.doSearchUseProps();
-  };
-
-  onAssistantChanged = (texts) => {
-    const { query } = this.props.search;
-    this.dispatch({ type: 'search/setAssistantDataMeta', payload: { texts } });
     this.doSearchUseProps();
   };
 
@@ -233,8 +233,6 @@ export default class SearchComponent extends Component {
     // Search Assistant // TODO move translate search out.
     const { useTranslateSearch, translatedLanguage, translatedText } = search;
     const transMsgProps = { query, useTranslateSearch, translatedLanguage, translatedText };
-
-    const { assistantData } = search; // TODO old is intelligenceSuggests
 
     return (
       <div className={classnames(styles.searchComponent, className)}>

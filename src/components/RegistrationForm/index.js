@@ -354,7 +354,7 @@ class RegistrationForm extends React.Component {
       ? activity_organizer_options : [];
     return (
       <Row className={styles.add_seminar_block}>
-        <Form layout="horizontal" onSubmit={this.handleSubmit}
+        <Form onSubmit={this.handleSubmit}
               className={styles.add_seminar_form}>
           <Col className={styles.thumbnail}>
             <FormItem {...formItemLayout} label="活动类型" hasFeedback>

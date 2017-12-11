@@ -1,7 +1,9 @@
+/* eslint-disable no-param-reassign,camelcase */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Checkbox, Button } from 'antd';
+import { Checkbox, Button, Tooltip } from 'antd';
+import { sysconfig } from 'systems';
 import styles from './SearchAssistant.less';
 
 @connect(({ search }) => ({
@@ -25,13 +27,22 @@ export default class SearchAssistant extends Component {
     checkedList: [],
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.currentExpansionChecked !== this.state.currentExpansionChecked ||
+      prevState.currentTranslationChecked !== this.state.currentTranslationChecked
+    ) {
+      this.callSearch();
+    }
+  }
+
   onExpandedTermChange = (index) => {
     this.setState({
       currentExpansionChecked: index + 1,
       currentTranslationChecked: this.state.currentTranslationChecked === 0 ? 0 : index + 1,
       defaultExpansionChecked: null,
     });
-    this.callSearch();
+    // this.callSearch(); call in did update.
   };
 
   onTranslationChange = (index) => {
@@ -39,7 +50,7 @@ export default class SearchAssistant extends Component {
       currentTranslationChecked: this.state.currentTranslationChecked === index + 1 ? 0 : index + 1,
       currentExpansionChecked: index + 1,
     });
-    this.callSearch();
+    // this.callSearch(); call in did update.
   };
 
   onKGChange = (checkedList) => {
@@ -113,6 +124,30 @@ export default class SearchAssistant extends Component {
     }
   };
 
+  combineKG = () => {
+    const { kgHypernym, kgHyponym } = this.props.assistantData;
+    // merge kg into one.
+    const kgData = [];
+    if (kgHypernym && kgHypernym.length > 0) {
+      for (const term of kgHypernym) {
+        if (term) {
+          term.type = 'hypernym';
+        }
+        kgData.push(term);
+      }
+    }
+    if (kgHyponym && kgHyponym.length > 0) {
+      for (const term of kgHyponym) {
+        if (term) {
+          term.type = 'hyponym';
+        }
+        kgData.push(term);
+      }
+    }
+    const hasKG = kgData && kgData.length > 0;
+    return { kgData, hasKG };
+  };
+
   render() {
     const {
       currentExpansionChecked, currentTranslationChecked,
@@ -124,21 +159,13 @@ export default class SearchAssistant extends Component {
       return false;
     }
     const { expandedTexts, expandedTexts_zh, expands } = assistantData;
-    const { kgHypernym, kgHyponym } = assistantData;
 
     // if has value.
     const hasExpansion = expandedTexts && expandedTexts.length > 0;
     const hasTranslation = expandedTexts_zh && expandedTexts_zh.length > 0;
-    const hasKG = kgHypernym && kgHypernym.length > 0 && kgHyponym && kgHyponym.length > 0;
+    const { hasKG, kgData } = this.combineKG();
 
     const { checkAll, indeterminate } = this.state;
-
-    // merge kg into one.
-    // const kglist = [];
-    // if (kgHypernym && kgHypernym.length > 0) {
-    //   kgHypernym.
-    // }
-
 
     return (
       <div className={styles.searchAssistant}>
@@ -156,37 +183,42 @@ export default class SearchAssistant extends Component {
           <div className={styles.leftBox}>
             {hasExpansion && expands.map((item, index) => {
               const key = `${item}_${index}`;
-              return <div key={key}>
-                <div>
-                  <span className={styles.rightbox}>
-                    <Checkbox
-                      checked={defaultExpansionChecked === index + 1 ||
-                      currentExpansionChecked === index + 1}
-                      onChange={this.onExpandedTermChange.bind(this, index)}
-                    >{item.word}
-                    </Checkbox>
-                  </span>
+              return (
+                <div key={key}>
+                  <div>
+                    <span className={styles.rightbox}>
+                      <Checkbox
+                        checked={defaultExpansionChecked === index + 1 ||
+                        currentExpansionChecked === index + 1}
+                        onChange={this.onExpandedTermChange.bind(this, index)}
+                      >{item.word}
+                      </Checkbox>
+                    </span>
+                  </div>
+                  {hasTranslation &&
+                  <div>
+                    <span className={styles.rightbox}>
+                      <Checkbox
+                        checked={currentTranslationChecked === index + 1 ? index + 1 : 0}
+                        onChange={this.onTranslationChange.bind(this, index)}
+                      >{item.word_zh}
+                      </Checkbox>
+                    </span>
+                  </div>
+                  }
                 </div>
-                {hasTranslation &&
-                <div><span className={styles.rightbox}>
-                  <Checkbox
-                    checked={currentTranslationChecked === index + 1 ? index + 1 : 0}
-                    onChange={this.onTranslationChange.bind(this, index)}
-                  >{item.word_zh}
-                  </Checkbox>
-                </span>
-                </div>
-                }
-              </div>
+              );
             })}
           </div>
-          {hasExpansion &&
+
+          {hasExpansion && false && // TODO temp disable more button.
           <div onClick={this.onToggleClick} className={styles.paddingLeftButton}>
-            <Button type="primary" size="small">More
-            </Button>
+            <Button type="primary" size="small">More</Button>
           </div>
           }
+
         </div>
+
         {hasKG &&
         <div className={styles.box1}>
           <div className={styles.ww}>
@@ -199,27 +231,30 @@ export default class SearchAssistant extends Component {
             </span>
           </div>
           <Checkbox.Group onChange={this.onKGChange} value={this.state.checkedList}>
-            {kgHypernym && kgHypernym.map((opt, index) => {
-              const key = `${opt.word}_${index}`;
-              return (<Checkbox key={key} value={opt.word} checked={checkAll}>
-                <span className={styles.suporordinateWord}>{opt.word}</span>
-              </Checkbox>);
-            })}
-            {kgHyponym && kgHyponym.map((opt, index) => {
-              const key = `${opt.word}_${index}`;
-              return (<Checkbox key={key} value={opt.word} checked={checkAll}>
-                <span className={styles.subordinateWord}>{opt.word}</span>
-              </Checkbox>);
+            {kgData && kgData.map((term, index) => {
+              const key = `${term.word}_${index}`;
+              const checkbox = (
+                <Checkbox key={key} value={term.word} checked={checkAll}>
+                  <span className={styles[term.type]}>{term.word}</span>
+                </Checkbox>
+              );
+              return (term.word_zh && sysconfig.Locale === 'zh')
+                ? <Tooltip placement="top" title={term.word_zh} key={key}>
+                  {checkbox}
+                </Tooltip>
+                : checkbox;
             })}
           </Checkbox.Group>
         </div>
         }
 
+        {hasKG &&
         <div className={styles.boxButton}>
           <Button size="small" type="ghost" onClick={this.callSearch}>
             Search with Knowledge Graph
           </Button>
         </div>
+        }
 
       </div>
     );

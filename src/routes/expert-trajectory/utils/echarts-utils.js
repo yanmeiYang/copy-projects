@@ -69,7 +69,7 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       },
     },
     bmap: {
-      center: [34.45, 31.3],
+      center: [4.45, 31.3],
       zoom: 1,
       roam: true,
       mapStyle, // mapStyle[skinType]

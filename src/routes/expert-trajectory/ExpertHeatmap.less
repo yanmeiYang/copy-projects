@@ -10,7 +10,57 @@
   }
 
   .info{
-    width: 50px;
+    width: 150px;
+    border: 1px solid white;
+    //background-color: #044161;
+    height: 700px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    .imgBox {
+      margin: 0px 40px 0px 30px;
+      background-color: white;
+      overflow: hidden;
+      border: 2px solid white;
+      width: 90px;
+      height: 126px;
+      cursor: pointer;
+      img {
+        width: 90px;
+        height: 126px;
+      }
+    }
+
+    .nameBox {
+      width: 100%;
+      font-weight: 600;
+      margin: 10px 0px 30px 0px;
+      .name {
+        margin: 0px 40px 0px 30px;
+        border: 2px solid white;
+        width: 90px;
+        background-color: white;
+        text-align:center;
+        word-break: break-all;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+      }
+    }
+  }
+
+  .paper {
+    width: 250px;
+    height: 150px;
+    border: 1px solid white;
+    position: absolute;
+    top: 700px;
+    left: 30px;
+    color: white;
+    font-weight: 600;
+    padding: 20px;
+    word-break: break-all;
+    word-wrap: break-word;
+    white-space: pre-wrap;
   }
 }
 

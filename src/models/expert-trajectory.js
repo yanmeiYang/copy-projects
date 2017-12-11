@@ -341,7 +341,7 @@ export default {
       console.log(yearLineData);
       console.log(yearPointData);
       console.log(yearHeatData);
-      const heatData = { yearLineData, yearPointData, yearHeatData, startEnd };
+      const heatData = { yearLineData, yearPointData, yearHeatData, startEnd, personsInfo };
       return { ...state, heatData, loading: false };
     },
 

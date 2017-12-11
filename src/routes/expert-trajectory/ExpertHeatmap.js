@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Slider, InputNumber, Row, Col, Button } from 'antd';
+import { Slider, InputNumber, Row, Col, Button, Icon } from 'antd';
+import { routerRedux, Link } from 'dva/router';
 import { Spinner } from 'components';
 import { request, queryURL } from 'utils';
 import { Auth, RequireRes } from 'hoc';
@@ -144,22 +145,26 @@ class ExpertHeatmap extends React.Component {
         option.series[1].data = [];
       }
       if (!checkType.includes('Trajectory')) {
-        console.log('##############################');
         option.series[2].data = [];
       }
     }
     myChart.setOption(option);
   };
 
+  handleErr = (e) => {
+    e.target.src = '/images/blank_avatar.jpg';
+  };
+
   render() {
     const { ifPlay } = this.state;
+    const { personsInfo, startEnd } = this.props.expertTrajectory.heatData;
     let startYear = 0;
     let endYear = 2017;
     let marks = { 0: 0, 2017: 2017 };
-    if (typeof (this.props.expertTrajectory.heatData.startEnd) !== 'undefined') {
-      if (this.props.expertTrajectory.heatData.startEnd.length > 0) {
+    if (typeof (startEnd) !== 'undefined') {
+      if (startEnd.length > 0) {
         marks = {};
-        [startYear, endYear] = this.props.expertTrajectory.heatData.startEnd;
+        [startYear, endYear] = startEnd;
         const step = parseInt(((endYear - startYear) / 20), 10);
         for (let i = startYear; i <= endYear; i += 1) {
           if (i % step !== 0) {
@@ -173,13 +178,40 @@ class ExpertHeatmap extends React.Component {
     //const loading = this.props.loading.models.expertTrajectory;用这个？
     const { loading } = this.props.expertTrajectory;
 
+    const bgcolor = ['#AAC2DD', '#044161', '#404a59', '#80cbc4', '#b28759', '#4e6c8d', '#d1d1d1'];
+    const color = bgcolor[this.props.themeKey];
+    const persons = [];
+    for (const p in personsInfo) {
+      if (p) {
+        persons.push(personsInfo[p]);
+      }
+    }
+
     return (
       <div>
         <Spinner loading={loading} />
         <div className={styles.whole}>
           <div className={styles.heatmap} id="chart" />
-          <div className={styles.info}>
-            ddd
+          <div className={styles.info} style={{ backgroundColor: color }}>
+            {persons && persons.slice(0, 20).map((person) => {
+              return (
+                <div key={person.id}>
+                  <div className={styles.imgBox}>
+                    <img src={person.avatar} alt="" onKeyDown={() => {}} onError={this.handleErr} onClick={() => {}} />
+                  </div>
+                  <div className={styles.nameBox}>
+                    <div className={styles.name} style={{ color }}>
+                      {person.name}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div className={styles.paper}>
+            Eric, Mihail, Manning, Christopher D. A Copy-Augmented Sequence-to-Sequence Architecture Gives Good Performance on Task-Oriented Dialogue[J]. 2017:468-473.
+            <br />
+            <a href={`https://www.aminer.cn/archive/58d82fd2d649053542fd76c7`} target="_blank"><Icon type="file" />查看文章</a>
           </div>
         </div>
         <div className={styles.dinner}>

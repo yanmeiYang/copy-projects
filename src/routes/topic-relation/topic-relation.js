@@ -5,18 +5,20 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import * as d3 from 'd3';
 import { Select, Progress, message, Button } from 'antd';
-import { RgSearchTermBox } from '../../components/topic-relation';
-import { classnames } from '../../utils/index';
-import styles from './topic-relation.less';
-import { Auth } from '../../hoc';
+import { Auth } from 'hoc';
 import { FormattedMessage as FM } from 'react-intl';
+import { loadD3 } from "utils";
+import { RgSearchTermBox } from 'components/topic-relation';
+import { classnames } from 'utils/index';
+import styles from './topic-relation.less';
 
 const Option = Select.Option;
 const controlDivId = 'rgvis';
 const EgoHeight = document.body.scrollHeight - 180;
 const EgoWidth = document.body.scrollWidth - (24 * 2);
+
+let d3; // global d3
 
 /*
  * @params: lang: [en|cn]
@@ -70,9 +72,12 @@ export default class TopicRelation extends React.PureComponent {
   };
 
   componentDidMount() {
-    this.showVis(this);
-    this.query = this.props.query || 'data mining';
-    this.redraw();
+    loadD3((ret) => {
+      d3 = ret;
+      this.showVis(this);
+      this.query = this.props.query || 'data mining';
+      this.redraw();
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -376,7 +381,11 @@ export default class TopicRelation extends React.PureComponent {
         node,
         nodes_text,
         final_text;
-      this.setState({ describeNodes1: _nodeSum, describeNodes2: _occurSum, describeNodes3: _edges.length });
+      this.setState({
+        describeNodes1: _nodeSum,
+        describeNodes2: _occurSum,
+        describeNodes3: _edges.length
+      });
       link = svg.append('g').attr('class', 'links').selectAll('line').data(_edges).enter().append('line')
         .style('stroke', this.lineColor)
         .style('stroke-width', (d) => {
@@ -528,15 +537,27 @@ export default class TopicRelation extends React.PureComponent {
           let ind = -1;
           const j = edges.length - 1;
           if (j >= 0 && edges[j].node1 === edge.t1 && edges[j].node2 === edge.t2) {
-              ind = j;
+            ind = j;
           }
           if (ind === -1) {
             ind = edges.length;
-            edges.push({ index: ind, node1: edge.t1, node2: edge.t2, source: nodes[edge.t1], target: nodes[edge.t2], count: 0, pubs: [] });
+            edges.push({
+              index: ind,
+              node1: edge.t1,
+              node2: edge.t2,
+              source: nodes[edge.t1],
+              target: nodes[edge.t2],
+              count: 0,
+              pubs: []
+            });
           }
           edges[ind].count += 1;
           maxCount = Math.max(maxCount, edges[ind].count);
-          edges[ind].pubs.push({ href: `https://www.aminer.cn/archive/${pubs[edge.pub].id['$oid']}`, id: pubs[edge.pub].id['$oid'], title: 'loading...' });
+          edges[ind].pubs.push({
+            href: `https://www.aminer.cn/archive/${pubs[edge.pub].id['$oid']}`,
+            id: pubs[edge.pub].id['$oid'],
+            title: 'loading...'
+          });
           nodes[edge.t1].degree += 1;
           nodes[edge.t2].degree += 1;
         }
@@ -739,7 +760,8 @@ export default class TopicRelation extends React.PureComponent {
                 <FM id="com.topicRelation.header.pauseAction" defaultMessage="暂停调整" />
               </Button>
               &nbsp;&nbsp;&nbsp;
-              <label><FM id="com.topicRelation.header.coOccurenceNum" defaultMessage="共现次数>" /></label>
+              <label><FM id="com.topicRelation.header.coOccurenceNum"
+                         defaultMessage="共现次数>" /></label>
               <Select defaultValue="0" style={{ width: 70, marginRight: 10 }} id="co-occur-select"
                       onChange={this.occursChange}>
                 {this.activities.map((act) => {
@@ -754,7 +776,8 @@ export default class TopicRelation extends React.PureComponent {
           </div>
           <div className={styles.filterBlock}>
             <label><FM id="com.topicRelation.header.startYear" defaultMessage="起始年份：" /></label>
-            <Select defaultValue="No limit" style={{ width: 100, marginRight: 10 }} onChange={this.startYearChange}>
+            <Select defaultValue="No limit" style={{ width: 100, marginRight: 10 }}
+                    onChange={this.startYearChange}>
               {this.startYearSet.map((act) => {
                 return (
                   <Option key={act} value={act}>{act}</Option>
@@ -762,7 +785,8 @@ export default class TopicRelation extends React.PureComponent {
               })}
             </Select>
             <label><FM id="com.topicRelation.header.endYear" defaultMessage="结束年份：" /></label>
-            <Select defaultValue="No limit" style={{ width: 100, marginRight: 10 }} onChange={this.endYearChange}>
+            <Select defaultValue="No limit" style={{ width: 100, marginRight: 10 }}
+                    onChange={this.endYearChange}>
               {this.endYearSet.map((act) => {
                 return (
                   <Option key={act} value={act}>{act}</Option>
@@ -790,12 +814,16 @@ export default class TopicRelation extends React.PureComponent {
               <br />
               <span>Top {Math.min(currentNode.occursRec.length, 3)} co-occur terms:</span>
               <br />
-              {currentNode.occursRec.length > 0 && <div>{currentNode.occursRec[0].label}: {currentNode.occursRec[0].count}</div>}
-              {currentNode.occursRec.length > 1 && <div>{currentNode.occursRec[1].label}: {currentNode.occursRec[1].count}</div>}
-              {currentNode.occursRec.length > 2 && <div>{currentNode.occursRec[2].label}: {currentNode.occursRec[2].count}</div>}
+              {currentNode.occursRec.length > 0 &&
+              <div>{currentNode.occursRec[0].label}: {currentNode.occursRec[0].count}</div>}
+              {currentNode.occursRec.length > 1 &&
+              <div>{currentNode.occursRec[1].label}: {currentNode.occursRec[1].count}</div>}
+              {currentNode.occursRec.length > 2 &&
+              <div>{currentNode.occursRec[2].label}: {currentNode.occursRec[2].count}</div>}
             </div>
           </div>
-          <div className={styles.delCurrent} style={{ color: '#a90329' }} onClick={this.cancelSelected}>
+          <div className={styles.delCurrent} style={{ color: '#a90329' }}
+               onClick={this.cancelSelected}>
             <i className="fa fa-ban" aria-hidden="true" />
           </div>
         </div>}
@@ -804,7 +832,8 @@ export default class TopicRelation extends React.PureComponent {
         {currentEdge !== null && currentEdge &&
         <div id="leftInfoZone" className={styles.leftInfoZone}>
           <div>
-            <div className={styles.title}>{currentEdge.source.label} - {currentEdge.target.label}</div>
+            <div
+              className={styles.title}>{currentEdge.source.label} - {currentEdge.target.label}</div>
             <hr />
             <div className={styles.content}>
               <span>weight:</span>
@@ -812,14 +841,21 @@ export default class TopicRelation extends React.PureComponent {
               <br />
               <span>Relative papers:</span>
               <br />
-              {currentEdge.pubs.length > 0 && <a className={styles.paperLink} id="paperLink0" href={currentEdge.pubs[0].href} target="_blank">{currentEdge.pubs[0].title}</a>}
+              {currentEdge.pubs.length > 0 &&
+              <a className={styles.paperLink} id="paperLink0" href={currentEdge.pubs[0].href}
+                 target="_blank">{currentEdge.pubs[0].title}</a>}
               <br />
-              {currentEdge.pubs.length > 1 && <a className={styles.paperLink} id="paperLink1" href={currentEdge.pubs[1].href} target="_blank">{currentEdge.pubs[1].title}</a>}
+              {currentEdge.pubs.length > 1 &&
+              <a className={styles.paperLink} id="paperLink1" href={currentEdge.pubs[1].href}
+                 target="_blank">{currentEdge.pubs[1].title}</a>}
               <br />
-              {currentEdge.pubs.length > 2 && <a className={styles.paperLink} id="paperLink2" href={currentEdge.pubs[2].href} target="_blank">{currentEdge.pubs[2].title}</a>}
+              {currentEdge.pubs.length > 2 &&
+              <a className={styles.paperLink} id="paperLink2" href={currentEdge.pubs[2].href}
+                 target="_blank">{currentEdge.pubs[2].title}</a>}
             </div>
           </div>
-          <div className={styles.delCurrent} style={{ color: '#a90329' }} onClick={this.cancelSelected}>
+          <div className={styles.delCurrent} style={{ color: '#a90329' }}
+               onClick={this.cancelSelected}>
             <i className="fa fa-ban" aria-hidden="true" />
           </div>
         </div>}

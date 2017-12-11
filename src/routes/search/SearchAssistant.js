@@ -5,8 +5,10 @@ import { connect } from 'dva';
 import { Checkbox, Button, Tooltip } from 'antd';
 import { sysconfig } from 'systems';
 import styles from './SearchAssistant.less';
+import { compare } from "utils";
 
 @connect(({ search }) => ({
+  query: search.query,
   assistantData: search.assistantData,
   assistantDataMeta: search.assistantDataMeta,
 }))
@@ -26,6 +28,12 @@ export default class SearchAssistant extends Component {
     checkAll: false,
     checkedList: [],
   };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.query !== this.props.query) {
+      this.setState({ currentExpansionChecked: 0, currentTranslationChecked: 0 });
+    }
+  }
 
   componentDidUpdate(prevProps, prevState) {
     if (

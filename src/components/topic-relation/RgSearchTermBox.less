@@ -2,7 +2,7 @@
   display: flex;
   //width: 100%;
   position: relative;
-  margin-left: 20px;
+  top: -7px;
 
   :global {
     .anticon-cross {
@@ -27,7 +27,11 @@
     .ant-input {
       flex-shrink: 1;
       flex-grow: 1;
-      height: 30px;
+      height: 32px;
+    }
+
+    .ant-btn {
+      height: 32px;
     }
   }
   :global {
@@ -39,12 +43,14 @@
       position: relative;
       display: flex !important;
       flex-direction: row; flex: 2 auto;
+      float: left;
+      width: 230px;
     }
 
     .react-autosuggest__input {
       display: flex; flex: 2 auto;
       padding-left: 8px;
-      height: 28px;
+      height: 32px;
       border: 1px solid #b9b7b9;
     }
 

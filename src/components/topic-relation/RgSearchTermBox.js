@@ -18,7 +18,7 @@ function renderSuggestion(suggestion) {
 const messages = defineMessages({
   placeholder: {
     id: 'com.RgSearchTermBox.placeholder',
-    defaultMessage: 'Input terms',
+    defaultMessage: 'Input term',
   },
   searchBtn: {
     id: 'com.KgSearchBox.searchBtn',

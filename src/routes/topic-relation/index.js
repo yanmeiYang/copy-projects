@@ -8,7 +8,7 @@ import { connect } from 'dva';
 import classnames from 'classnames';
 import { Layout } from 'routes';
 import queryString from 'query-string';
-import { applyTheme } from 'systems';
+import { applyTheme } from 'themes';
 import { routerRedux } from 'dva/router';
 import styles from './index.less';
 import TopicRelation from './topic-relation';

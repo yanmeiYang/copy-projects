@@ -130,6 +130,7 @@ export default class RgSearchNameBox extends React.Component {
             type="primary"
             onClick={this.handleSubmit}
             icon="search"
+            float="left"
           />
           }
         </Input.Group>

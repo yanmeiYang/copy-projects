@@ -11,6 +11,7 @@ import { RgSearchTermBox } from '../../components/topic-relation';
 import { classnames } from '../../utils/index';
 import styles from './topic-relation.less';
 import { Auth } from '../../hoc';
+import { FormattedMessage as FM } from 'react-intl';
 
 const Option = Select.Option;
 const controlDivId = 'rgvis';
@@ -43,7 +44,7 @@ export default class TopicRelation extends React.PureComponent {
     this.lineColor = '#9ecae1';
 
     this.query = '';
-    this.activities = ['co-occurs>0', 'co-occurs>5', 'co-occurs>10', 'co-occurs>20'];
+    this.activities = ['0'];
     this.startYearSet = ['No limit'];
     this.endYearSet = ['No limit'];
     this.startYear = 0;
@@ -56,6 +57,7 @@ export default class TopicRelation extends React.PureComponent {
     pgLength: 0,
     describeNodes1: 0,
     describeNodes2: 0,
+    describeNodes3: 0,
     subnet_selection: false,
     suspension_adjustment: false,
     two_paths: false,
@@ -325,7 +327,7 @@ export default class TopicRelation extends React.PureComponent {
     };
 
     const nodeOrEdgeClick = (d, type, isSearch = false) => {
-      if (type === '' || type === 'node' && _onclicknode === d.index && !isSearch || type === 'edge' && _onclickedge === d.index) {
+      if (type === '' || type === 'node' && !isSearch && _onclicknode === d.index || type === 'edge' && _onclickedge === d.index) {
         this.currentModle1 = false;
         this.setState({ currentNode: null, currentEdge: null });
         _onclicknode = -1;
@@ -333,6 +335,9 @@ export default class TopicRelation extends React.PureComponent {
         svg.selectAll('circle').data(_nodes).style('stroke', '#000').style('opacity', 1);
         svg.selectAll('line').data(_edges).style('stroke', this.lineColor).style('opacity', 1);
       } else if (type === 'node' || type === 'edge') {
+        if (!d) {
+          return;
+        }
         svg.selectAll('circle').data(_nodes).style('stroke', '#fff').style('opacity', 0.5);
         svg.selectAll('line').data(_edges).style('stroke', this.lineColor).style('opacity', 0.3);
         if (type === 'node') {
@@ -515,6 +520,7 @@ export default class TopicRelation extends React.PureComponent {
         nodes.push({ index: i, label: terms[i], degree: 0, rank: 0, occursRec: [], maxOccur: 0 });
       }
       const edges = [];
+      let maxCount = 0;
       for (let i = 0; i < coOccurs.length; i++) {
         const edge = coOccurs[i];
         const year = pubs[edge.pub].year;
@@ -529,10 +535,16 @@ export default class TopicRelation extends React.PureComponent {
             edges.push({ index: ind, node1: edge.t1, node2: edge.t2, source: nodes[edge.t1], target: nodes[edge.t2], count: 0, pubs: [] });
           }
           edges[ind].count += 1;
+          maxCount = Math.max(maxCount, edges[ind].count);
           edges[ind].pubs.push({ href: `https://www.aminer.cn/archive/${pubs[edge.pub].id['$oid']}`, id: pubs[edge.pub].id['$oid'], title: 'loading...' });
           nodes[edge.t1].degree += 1;
           nodes[edge.t2].degree += 1;
         }
+      }
+      maxCount = Math.min(30, maxCount);
+      this.activities = [];
+      for (let i = 0; i < maxCount; i++) {
+        this.activities.push(i.toString());
       }
       _occurSum = 0;
       for (let i = 0; i < edges.length; i++) {
@@ -644,15 +656,7 @@ export default class TopicRelation extends React.PureComponent {
     };
 
     this.occursChange = (e) => {
-      if (e === 'co-occurs>0') {
-        occursShow = 0;
-      } else if (e === 'co-occurs>5') {
-        occursShow = 5;
-      } else if (e === 'co-occurs>10') {
-        occursShow = 10;
-      } else {
-        occursShow = 20;
-      }
+      occursShow = parseInt(e, 10);
       this.wholeLayout();
     };
 
@@ -716,51 +720,49 @@ export default class TopicRelation extends React.PureComponent {
       <div>
         <div className={styles.relationHeader}>
           <div className={styles.statAndAction}>
-            {/* 搜索结果 */}
             <div className={styles.statistics}>
-              共
               <span className={styles.statCount}>{describeNodes1}</span>
-              个关键词，
+              <FM id="com.topicRelation.statistics.keywordsNum" defaultMessage="个关键词 " />
               <span className={styles.statCount}>{describeNodes2}</span>
-              对共现关系，
+              <FM id="com.topicRelation.statistics.coOccurenceNum" defaultMessage="对共现关系 " />
               <span className={styles.statCount}>{describeNodes3}</span>
-              条边
+              <FM id="com.topicRelation.statistics.edgeNum" defaultMessage="条边 " />
             </div>
-            {/*style={{ width: EgoWidth }}*/}
             <div className={styles.action}>
-              <label>相关操作：</label>
+              <label><FM id="com.topicRelation.header.relativeOperation" defaultMessage="相关操作：" /></label>
               <Button className={classnames({
                 active: suspension_adjustment,
                 [styles.selected]: suspension_adjustment,
               })}
                       onClick={this.changeModle2}>
                 <span className={classnames('icon', styles.stop_drag_icon)} />
-                暂停调整
+                <FM id="com.topicRelation.header.pauseAction" defaultMessage="暂停调整" />
               </Button>
-              <RgSearchTermBox size="default" style={{ width: 230 }} onSearch={this.onSearch}
+              &nbsp;&nbsp;&nbsp;
+              <label><FM id="com.topicRelation.header.coOccurenceNum" defaultMessage="共现次数>" /></label>
+              <Select defaultValue="0" style={{ width: 70, marginRight: 10 }} id="co-occur-select"
+                      onChange={this.occursChange}>
+                {this.activities.map((act) => {
+                  return (
+                    <Option key={act} value={act}>{act}</Option>
+                  );
+                })}
+              </Select>
+              <RgSearchTermBox size="default" style={{ width: 270 }} onSearch={this.onSearch}
                                suggesition={this.state.allNodes} />
             </div>
           </div>
           <div className={styles.filterBlock}>
-            <label>共现次数：</label>
-            <Select defaultValue="co-occurs>0" style={{ width: 120, marginRight: 10 }} id="co-occur-select"
-                    onChange={this.occursChange}>
-              {this.activities.map((act) => {
-                return (
-                  <Option key={act} value={act}>{act}</Option>
-                );
-              })}
-            </Select>
-            <label>起始年份：</label>
-            <Select defaultValue="No limit" style={{ width: 80, marginRight: 10 }} onChange={this.startYearChange}>
+            <label><FM id="com.topicRelation.header.startYear" defaultMessage="起始年份：" /></label>
+            <Select defaultValue="No limit" style={{ width: 100, marginRight: 10 }} onChange={this.startYearChange}>
               {this.startYearSet.map((act) => {
                 return (
                   <Option key={act} value={act}>{act}</Option>
                 );
               })}
             </Select>
-            <label>结束年份：</label>
-            <Select defaultValue="No limit" style={{ width: 80, marginRight: 10 }} onChange={this.endYearChange}>
+            <label><FM id="com.topicRelation.header.endYear" defaultMessage="结束年份：" /></label>
+            <Select defaultValue="No limit" style={{ width: 100, marginRight: 10 }} onChange={this.endYearChange}>
               {this.endYearSet.map((act) => {
                 return (
                   <Option key={act} value={act}>{act}</Option>
@@ -781,16 +783,16 @@ export default class TopicRelation extends React.PureComponent {
             <hr />
             <div className={styles.content}>
               <span>degree:</span>
-              <span style={{ color: 'orange' }}> {currentNode.degree}</span>&nbsp;
+              <span style={{ color: 'black' }}> {currentNode.degree}</span>&nbsp;
               |&nbsp;
               <span>max-co-occur:</span>
-              <span style={{ color: 'orange' }}> {currentNode.maxOccur}</span>
+              <span style={{ color: 'black' }}> {currentNode.maxOccur}</span>
               <br />
               <span>Top {Math.min(currentNode.occursRec.length, 3)} co-occur terms:</span>
               <br />
-              {currentNode.occursRec.length > 0 && <div>{currentNode.occursRec[0].label} :{currentNode.occursRec[0].count}</div>}
-              {currentNode.occursRec.length > 1 && <div>{currentNode.occursRec[1].label} :{currentNode.occursRec[1].count}</div>}
-              {currentNode.occursRec.length > 2 && <div>{currentNode.occursRec[2].label} :{currentNode.occursRec[2].count}</div>}
+              {currentNode.occursRec.length > 0 && <div>{currentNode.occursRec[0].label}: {currentNode.occursRec[0].count}</div>}
+              {currentNode.occursRec.length > 1 && <div>{currentNode.occursRec[1].label}: {currentNode.occursRec[1].count}</div>}
+              {currentNode.occursRec.length > 2 && <div>{currentNode.occursRec[2].label}: {currentNode.occursRec[2].count}</div>}
             </div>
           </div>
           <div className={styles.delCurrent} style={{ color: '#a90329' }} onClick={this.cancelSelected}>
@@ -806,7 +808,7 @@ export default class TopicRelation extends React.PureComponent {
             <hr />
             <div className={styles.content}>
               <span>weight:</span>
-              <span style={{ color: 'orange' }}> {currentEdge.count}</span>
+              <span style={{ color: 'black' }}> {currentEdge.count}</span>
               <br />
               <span>Relative papers:</span>
               <br />

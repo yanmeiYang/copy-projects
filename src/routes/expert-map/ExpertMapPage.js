@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Layout } from 'routes';
 import { sysconfig } from 'systems';
-import { Button, Modal, Icon, Tabs, message, notification, Alert } from 'antd';
+import { Button, Modal, Icon, Tabs, notification } from 'antd';
 import { applyTheme } from 'themes';
 import { FormattedMessage as FM } from 'react-intl';
 import queryString from 'query-string';
@@ -14,7 +14,7 @@ import * as strings from 'utils/strings';
 import ExpertGoogleMap from './expert-googlemap.js';
 import ExpertMap from './expert-map.js';
 import styles from './ExpertMapPage.less';
-import { showSta, sortByBigArea, sortByCountries, } from './utils/sta-utils';
+import { showSta, sortByBigArea, sortByCountries } from './utils/sta-utils';
 
 const tc = applyTheme(styles);
 const [ButtonGroup, TabPane] = [Button.Group, Tabs.TabPane];
@@ -64,7 +64,8 @@ export default class ExpertMapPage extends React.Component {
     ensure('echarts', (ret) => {
       echarts = ret;
       const { query, domainId } = this.state;
-      if ((query === '' || query === '-') && (domainId === '' || domainId === 'aminer')) {
+      if ((query === '' || query === '-' || query === 'undefined' || typeof (query) === 'undefined')
+        && (domainId === '' || domainId === 'aminer')) {
         this.openNotification();
       }
     });
@@ -106,15 +107,16 @@ export default class ExpertMapPage extends React.Component {
     return false;
   }
 
-  openNotification = () => {
-    let [message, description] = ['', ''];
-    sysconfig.Locale === 'en' ? [message, description] = ['Attention Please!', 'You have an invalid keyword!Please select a domain keyword or type a keyword to see what you want!'] : [message, description] = ['请注意！', '您当前的搜索词为空，请您输入选择一个搜索词或者领域进行搜索！'];
-    notification.open({
-      message: message,
-      description: description,
-      duration: 8,
-      icon: <Icon type="smile-circle" style={{ color: '#108ee9' }} />,
-    });
+  onMapTypeChange = (mapType) => {
+    localStorage.setItem(MAP_DISPATCH_KEY, mapType);
+    this.setState({ mapType });
+  };
+
+  // Tips: 不会根据state变化的jsx block放到外面。这样多次渲染的时候不会多次初始化;
+  // titleBlock = <h1>专家地图:</h1>;
+
+  onTypeChange = (type) => {
+    this.setState({ type });
   };
 
   onDomainChange = (domain) => { //修改url,shouldComponentUpdate更新
@@ -145,18 +147,6 @@ export default class ExpertMapPage extends React.Component {
         search: `?query=${data.query}`,
       }));
     }
-  };
-
-  // Tips: 不会根据state变化的jsx block放到外面。这样多次渲染的时候不会多次初始化;
-  // titleBlock = <h1>专家地图:</h1>;
-
-  onTypeChange = (type) => {
-    this.setState({ type });
-  };
-
-  onMapTypeChange = (mapType) => {
-    localStorage.setItem(MAP_DISPATCH_KEY, mapType);
-    this.setState({ mapType });
   };
 
   searchMapByDomain = (domainEBID) => { //models里面重新查询数据
@@ -192,6 +182,21 @@ export default class ExpertMapPage extends React.Component {
     { key: '4', label: '城市' },
     { key: '5', label: '机构' },
   ];
+
+  openNotification = () => {
+    let [message, description] = ['', ''];
+    if (sysconfig.Locale === 'en') {
+      [message, description] = ['Attention Please!', 'You have an invalid keyword!Please select a domain keyword or type a keyword to see what you want!'];
+    } else {
+      [message, description] = ['请注意！', '您当前的搜索词为空，请您输入选择一个搜索词或者领域进行搜索！'];
+    }
+    notification.open({
+      message,
+      description,
+      duration: 8,
+      icon: <Icon type="smile-circle" style={{ color: '#108ee9' }} />,
+    });
+  };
 
   showModal = () => {
     this.setState({
@@ -338,10 +343,13 @@ export default class ExpertMapPage extends React.Component {
               <ButtonGroup id="sType" className={styles.sType}>
                 {this.typeConfig.map((conf) => {
                   return !conf.disabled && (
-                    <Button key={conf.key} onClick={this.onTypeChange.bind(this, conf.key)}
-                            onKeyDown={() => {
-                            }} type={this.state.type === conf.key ? 'primary' : ''}>
-                      <FM defaultMessage={conf.label} id={`com.expertMap.scalelevel.label.${conf.key}`} />
+                    <Button
+                      key={conf.key} onClick={this.onTypeChange.bind(this, conf.key)}
+                      type={this.state.type === conf.key ? 'primary' : ''}
+                      size="small"
+                    >
+                      <FM defaultMessage={conf.label}
+                          id={`com.expertMap.scalelevel.label.${conf.key}`} />
                     </Button>
                   );
                 })}
@@ -351,11 +359,15 @@ export default class ExpertMapPage extends React.Component {
 
           <div className={styles.scopes}>
             <div className={styles.analysis}>
-              {process.env.NODE_ENV !== 'production' &&
-              <Button onClick={this.showModal}>
+
+              {(process.env.NODE_ENV !== 'production' || sysconfig.SYSTEM === 'demo') &&
+              <Button onClick={this.showModal} size="small">
                 <Icon type="line-chart" />
-                <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.statistic" />
-              </Button>}
+                <FM id="com.expertMap.headerLine.label.statistic"
+                    defaultMessage="Statistic & Analysis" />
+              </Button>
+              }
+
               <Modal
                 title="Statistics & Analyses"
                 visible={this.state.visible}
@@ -383,6 +395,7 @@ export default class ExpertMapPage extends React.Component {
                 <Button
                   type={this.state.mapType === 'baidu' ? 'primary' : ''}
                   onClick={this.onMapTypeChange.bind(this, 'baidu')}
+                  size="small"
                 >
                   <FM defaultMessage="Baidu Map"
                       id="com.expertMap.headerLine.label.baiduMap" />
@@ -390,8 +403,9 @@ export default class ExpertMapPage extends React.Component {
                 <Button
                   type={this.state.mapType === 'google' ? 'primary' : ''}
                   onClick={this.onMapTypeChange.bind(this, 'google')}
+                  size="small"
                 >
-                  <FM defaultMessage="Baidu Map"
+                  <FM defaultMessage="Google Map"
                       id="com.expertMap.headerLine.label.googleMap" />
                 </Button>
               </ButtonGroup>

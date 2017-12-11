@@ -70,7 +70,7 @@ export default class SampleLabelLine extends Component {
   render() {
     const { tags, inputVisible } = this.state;
     const { canRemove, canAdd } = this.props;
-    console.log(' -- sample label render ------', tags);
+    // console.log(' -- sample label render ------', tags);
     return (
       <div>
         {tags && tags.map((tag, index) => {

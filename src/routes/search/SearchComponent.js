@@ -7,21 +7,17 @@ import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import classnames from 'classnames';
 import { Pagination } from 'antd';
 import { Spinner } from 'components';
+import { Hole } from 'components/core';
 import { PersonList, ExportExperts } from 'components/person';
-import {
-  SearchFilter, SearchSorts, KgSearchBox,
-  SearchKnowledge, TranslateSearchMessage, SearchVenue,
-} from 'components/search';
+import { SearchFilter, SearchSorts, KgSearchBox } from 'components/search';
+import { SearchKnowledge, TranslateSearchMessage } from 'components/search';
+
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 import { createURL, hole } from 'utils';
 import { Auth } from 'hoc';
+import SearchAssistant from './SearchAssistant';
 import styles from './SearchComponent.less';
-import SearchHelp from '../SearchHelp/SearchHelp';
-
-
-// TODO Extract Search Filter into new Component.
-// TODO Combine search and uniSearch into one.
 
 const DefaultRightZoneFuncs = [
   param => <SearchKnowledge query={param.query} key="1" />,
@@ -47,7 +43,9 @@ export default class SearchComponent extends Component {
     onSearchBarSearch: PropTypes.func,
     showSearchBox: PropTypes.bool, // has search box?
     fixedExpertBase: PropTypes.object,
-    helps: PropTypes.object, // smartSearch data
+    // zones
+    searchMessagesZone: PropTypes.array,
+    rightZoneFuncs: PropTypes.array,
   };
 
   static defaultProps = {
@@ -145,6 +143,12 @@ export default class SearchComponent extends Component {
     this.onFilterChange('eb', { id, name }, true);// Special Filter;
   };
 
+  onAssistantChanged = (texts) => {
+    const { query } = this.props.search;
+    this.dispatch({ type: 'search/setAssistantDataMeta', payload: { texts } });
+    this.doSearchUseProps();
+  };
+
   // keep every thing, just call search;
   doSearchUseProps = () => {
     const { query, offset, pagination, filters, sortKey } = this.props.search;
@@ -154,21 +158,6 @@ export default class SearchComponent extends Component {
 
   doTranslateSearch = (useTranslate) => {
     this.dispatch({ type: 'search/setTranslateSearch', payload: { useTranslate } });
-    this.doSearchUseProps();
-  };
-
-  onIntelligenceSearchMetaChange = (intelligenceMeta) => {
-    const { query } = this.props.search;
-    const intelligenceSearchMeta = {
-      expansion: [intelligenceMeta.expansion],
-      translated: [intelligenceMeta.translated],
-      KG: [intelligenceMeta.KG],
-      query,
-    };
-    this.dispatch({
-      type: 'search/setIntelligenceSearch',
-      payload: { intelligenceSearchMeta },
-    });
     this.doSearchUseProps();
   };
 
@@ -194,7 +183,7 @@ export default class SearchComponent extends Component {
     });
 
     // TODO remove later. 新的方式获取api的时候，这个方法啥也不干。
-    if (!sysconfig.USE_NEXT_EXPERT_BASE_SEARCH || sort === 'activity-ranking-contrib') {
+    if (!sysconfig.USE_NEXT_EXPERT_BASE_SEARCH || (filters && filters.eb.id === 'aminer')) {
       dispatch({ type: 'search/translateSearch', payload: { query } });
       dispatch({
         type: 'search/searchPersonAgg',
@@ -215,35 +204,36 @@ export default class SearchComponent extends Component {
   };
 
   render() {
-    const { disableExpertBaseFilter, disableFilter, disableSearchKnowledge,
-      rightZoneFuncs, disableSmartSuggest } = this.props;
+    const {
+      disableExpertBaseFilter, disableFilter, disableSearchKnowledge,
+      rightZoneFuncs, disableSmartSuggest, searchMessagesZone,
+    } = this.props;
+
+    const { search, loading } = this.props;
+
     const { className, sorts, expertBaseId } = this.props;
-    const intelligenceSuggests = this.props.search.intelligenceSuggest;
-    const { sortKey } = this.props.search;
-    const sortType = sortKey;
-
-    // .........
-    const { results, pagination, query, aggs, filters, topic, intelligenceSearchMeta } =
-      this.props.search;
+    const { results, pagination, query, aggs, filters, topic, sortKey: sortType } = search;
     const { pageSize, total, current } = pagination;
-    const load = this.props.loading.effects['search/searchPerson'];
-
+    console.log('>>>---', query);
+    const load = loading.effects['search/searchPerson'];
     // const expertBase = (filters && filters.eb && filters.eb.id) || 'aminer';
 
-    const zoneData = { expertBaseId, query, pageSize, current, filters, sortType };
-    const SearchSortsRightZone = hole.fillFuncs(theme.SearchSorts_RightZone, [
-      () => () => (
-        <ExportExperts
-          key="0" expertBaseId={expertBaseId}
-          query={query} pageSize={pageSize} current={current} filters={filters} sort={sortType}
-        />
-      ),
-    ], zoneData);
-    // const SearchSortsRightZone = !sysconfig.Enable_Export ? [] : [];
+    const rightZoneData = { expertBaseId, query, pageSize, current, filters, sortType };
 
-    // TODO move translate search out.
-    const { useTranslateSearch, translatedLanguage, translatedText } = this.props.search;
+    const SearchSortsRightZone = !sysconfig.Enable_Export ? null :
+      hole.fillFuncs(theme.SearchSorts_RightZone, [
+        () => () => (
+          <ExportExperts
+            key="0" expertBaseId={expertBaseId}
+            query={query} pageSize={pageSize} current={current} filters={filters} sort={sortType}
+          />
+        ),
+      ], rightZoneData);
+
+    // Search Assistant // TODO move translate search out.
+    const { useTranslateSearch, translatedLanguage, translatedText } = search;
     const transMsgProps = { query, useTranslateSearch, translatedLanguage, translatedText };
+
     return (
       <div className={classnames(styles.searchComponent, className)}>
 
@@ -262,7 +252,7 @@ export default class SearchComponent extends Component {
             </div>
             }
 
-            {/* Translate Search */}
+            {/* Translate Search // old translate message. */}
 
             {sysconfig.Search_EnableTranslateSearch && !sysconfig.Search_EnableSmartSuggest &&
             <TranslateSearchMessage
@@ -272,9 +262,15 @@ export default class SearchComponent extends Component {
 
             {/* Search Help */}
             {!disableSmartSuggest &&
-            <SearchHelp intelligenceSuggests={intelligenceSuggests}
-                        onIntelligenceSearchMetaChange={this.onIntelligenceSearchMetaChange}
-            />}
+            <SearchAssistant onAssistantChanged={this.onAssistantChanged} />}
+
+            {/* Search Message Zone TODO not good.*/}
+            {/*<Hole fill={searchMessagesZone} />;*/}
+            {searchMessagesZone && searchMessagesZone.length > 0 &&
+            <div className={styles.message}>
+              {searchMessagesZone}
+            </div>
+            }
 
             {/* ---- Filter ---- */}
 
@@ -320,19 +316,19 @@ export default class SearchComponent extends Component {
                 tagsLinkFuncs={this.props.onSearchBarSearch}
               />
 
-              {/* ---- Search Knowledge ---- */}
-              {/*{!disableSearchKnowledge &&*/}
-              {/*<div className={styles.searchKgContent}>*/}
-              {/*<SearchKnowledge query={query} />*/}
-              {/*<SearchVenue query={query} />*/}
-              {/*</div>*/}
-              {/*}*/}
-              {hole.fillFuncs(
-                rightZoneFuncs, // theme from config.
-                DefaultRightZoneFuncs, // default block.
-                { query, topic }, // parameters passed to block.
-                { containerClass: styles.searchKgContent }, // configs.
-              )}
+              <Hole
+                fill={rightZoneFuncs}
+                defaults={DefaultRightZoneFuncs}
+                param={{ query, topic }}
+                config={{ containerClass: styles.searchKgContent }}
+              />
+
+              {/*{hole.fillFuncs(*/}
+              {/*rightZoneFuncs, // theme from config.*/}
+              {/*DefaultRightZoneFuncs, // default block.*/}
+              {/*{ query, topic }, // parameters passed to block.*/}
+              {/*{ containerClass: styles.searchKgContent }, // configs.*/}
+              {/*)}*/}
             </div>
 
             <div className={styles.paginationWrap}>

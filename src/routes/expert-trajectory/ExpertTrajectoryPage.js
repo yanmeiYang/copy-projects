@@ -1,18 +1,22 @@
 import React from 'react';
 import { connect } from 'dva';
-import classnames from 'classnames';
 import { sysconfig } from 'systems';
 import { routerRedux } from 'dva/router';
-import { Layout, Button, Icon, Menu, Dropdown, Modal, notification } from 'antd';
+import { Spinner } from 'components';
+import { Layout, Button, Icon, Menu, Dropdown, Modal, Tabs, notification } from 'antd';
 import { Layout as Page } from 'routes';
 import { FormattedMessage as FM } from 'react-intl';
 import bridge from 'utils/next-bridge';
+import { applyTheme } from 'themes';
+import { Auth, RequireRes } from 'hoc';
+import { ensure } from 'utils';
 import styles from './ExpertTrajectoryPage.less';
+import { showPersonStatistic, downloadData } from './utils/sta-utils';
 import { PersonList } from '../../components/person';
-import { theme, applyTheme } from 'themes';
 import ExpertTrajectory from './ExpertTrajectory';
 
 const { Content, Sider } = Layout;
+const { TabPane } = Tabs;
 const tc = applyTheme(styles);
 const themes = [
   { label: '常规', key: '0' },
@@ -23,9 +27,12 @@ const themes = [
   { label: '航海家', key: '5' },
   { label: '简约风', key: '6' },
 ];
+let echarts;
 
 
 @connect(({ expertTrajectory, loading, app }) => ({ expertTrajectory, loading, app }))
+@Auth
+@RequireRes('echarts')
 class ExpertTrajectoryPage extends React.Component {
   constructor(props) {
     super(props);
@@ -37,28 +44,36 @@ class ExpertTrajectoryPage extends React.Component {
     cperson: '', //当前选择的人
     themeKey: '0',
     visible: false,
+    play: false,
   };
 
   componentWillMount() {
     const { query } = this.state;
-    const q = query || ''; //设置一个默认值
+    const q = query || '唐杰'; //设置一个默认值
     this.setState({
       query: q,
     });
   }
 
   componentDidMount() {
-    const { query } = this.state;
-    if ((query === '' || query === '-')) {
-      this.openNotification();
-    }
+    ensure('echarts', (ret) => {
+      echarts = ret;
+      const { query } = this.state;
+      if ((query === '' || query === '-')) {
+        this.openNotification();
+      } else { //后面需要去掉
+        const data = { query };
+        this.onSearch(data);
+      }
+    });
   }
 
   shouldComponentUpdate(nextProps, nextState) { // 状态改变时判断要不要刷新
     if (nextState.query && nextState.query !== this.state.query) {
       this.callSearchMap(nextState.query);
     }
-    if (nextProps.expertTrajectory.results && nextProps.expertTrajectory.results !== this.props.expertTrajectory.results) {
+    if (nextProps.expertTrajectory.results &&
+      nextProps.expertTrajectory.results !== this.props.expertTrajectory.results) {
       return true;
     }
     return true;
@@ -73,6 +88,17 @@ class ExpertTrajectoryPage extends React.Component {
         query: { query: data.query },
       }));
     }
+  };
+
+  onSkinClick = (value) => {
+    this.setState({ themeKey: value.key });
+  };
+
+  onPersonClick = (start, end, person) => {
+    //这里的参数的名字要和model里面的一致
+    const personId = person.id;
+    this.props.dispatch({ type: 'expertTrajectory/findTrajById', payload: { personId, start, end } });
+    this.setState({ cperson: person });
   };
 
   handleOk = () => {
@@ -92,57 +118,80 @@ class ExpertTrajectoryPage extends React.Component {
       visible: true,
     }, () => {
       const chartsinterval = setInterval(() => {
-        const divId = document.getElementById('statistic');
-        const data = this.state.cperson;
-        console.log(data);
+        const divId = document.getElementById('timeDistribution');
+        const data = this.props.expertTrajectory.trajData;
+        const type = 'timeDistribution';
         if ((typeof (divId) !== 'undefined' && divId !== 'undefined'
           && data !== '') || (this.state.visible === false)) {
           clearInterval(chartsinterval);
-          console.log('######################################');
-          //showSta(echarts, divId, data, 'country');
+          showPersonStatistic(echarts, divId, data, type);
         }
       }, 100);
     });
   };
 
-  handleDownload = () => {
-    const downloadinterval = setInterval(() => {
-      const data = this.props.expertTrajectory.results;
-      if (typeof (data.results) !== 'undefined' && data.results !== 'undefined') {
-        clearInterval(downloadinterval);
-        this.downloadSta(data);
+  changeStatistic = (key) => {
+    const chartsinterval = setInterval(() => {
+      let divId;
+      let type;
+      if (key === 1) {
+        divId = document.getElementById('timeDistribution');
+        type = 'timeDistribution';
+      } else {
+        divId = document.getElementById('migrateHistory');
+        type = 'migrateHistory';
+      }
+      const data = this.props.expertTrajectory.trajData;
+      if (typeof (divId) !== 'undefined' && divId !== 'undefined') {
+        clearInterval(chartsinterval);
+        showPersonStatistic(echarts, divId, data, type);
       }
     }, 100);
   };
 
-  onPersonClick = (start, end, person) => {
-    //这里的参数的名字要和model里面的一致
-    const personId = person.id;
-    this.props.dispatch({ type: 'expertTrajectory/findTrajById', payload: { personId, start, end } });
-    this.setState({ cperson: person });
+  handleDownload = () => {
+    const data = this.props.expertTrajectory.trajData;
+    if (typeof (data.staData) !== 'undefined' && data.staData !== 'undefined') {
+      let str = downloadData(data);
+      const bom = '\uFEFF';
+      str = encodeURI(str);
+      const { name } = this.state.cperson;
+      const link = window.document.createElement('a');
+      link.setAttribute('href', `data:text/csv;charset=utf-8,${bom}${str}`);
+      link.setAttribute('download', `statistics-${name}.csv`);
+      link.click();
+    } else {
+      //给个提示？
+    }
   };
 
   openNotification = () => {
     let [message, description] = ['', ''];
-    sysconfig.Locale === 'en' ? [message, description] = ['Attention Please!', 'You have an invalid keyword!Please select a domain keyword or type a keyword to see what you want!'] : [message, description] = ['请注意！', '您当前的搜索词为空，请您输入选择一个搜索词或者领域进行搜索！'];
+    if (sysconfig.Locale === 'en') {
+      [message, description] = ['Attention Please!', 'You have an invalid keyword!Please select a domain keyword or type a keyword to see what you want!'];
+    } else {
+      [message, description] = ['请注意！', '您当前的搜索词为空，请您输入选择一个搜索词或者领域进行搜索！'];
+    }
     console.log(message);
     console.log(description);
+    console.log(typeof (message));
     // notification.open({
-    //   message: message,
-    //   description: description,
+    //   message,
+    //   description,
     //   duration: 8,
     //   icon: <Icon type="smile-circle" style={{ color: '#108ee9' }} />,
     // });
-  };
-
-  onSkinClick = (value) => {
-    this.setState({ themeKey: value.key });
   };
 
   callSearchMap = (query) => {
     const offset = 0;
     const size = 20;
     this.props.dispatch({ type: 'expertTrajectory/searchPerson', payload: { query, offset, size } });
+  };
+
+  play = () => {
+    const cPlay = this.state.play;
+    this.setState({ play: !cPlay });
   };
 
   render() {
@@ -164,44 +213,60 @@ class ExpertTrajectoryPage extends React.Component {
         })}
       </Menu>
     );
-    const PersonList_BottomZone = [
+    const start = 0;
+    const date = new Date();
+    const end = date.getFullYear();
+    const PersonListBottomZone = [
       param => (
         <div key={param.person.id} className={styles.clickTraj}>
           <div className={styles.innerClickTraj}>
-            <Button type="dashed" className={styles.but} onClick={this.onPersonClick.bind(this,1900,2017, param.person)}>
+            <Button type="dashed" className={styles.but} onClick={this.onPersonClick.bind(this, start, end, param.person)}>
               <Icon type="global" style={{ color: '#bbe920' }} />
               <FM defaultMessage="Show Trajectory" id="com.expertMap.headerLine.label.showTraj" />
             </Button>
           </div>
         </div>),
     ];
-    const personShowIndices = ['h_index', 'citations', 'activity'];
+    const personShowIndices = ['h_index', 'citations', 'activity']; //指数只取这几个
+    const staJsx = (
+      <div className={styles.charts}>
+        <div id="timeDistribution" className={styles.chart1} />
+      </div>
+    );
+
+    const staJsx1 = (
+      <div className={styles.charts}>
+        <div id="migrateHistory" className={styles.chart1} />
+      </div>
+    );
     return (
       <Page contentClass={tc(['ExpertTrajectoryPage'])} onSearch={this.onSearch}
             query={query}>
+        <Spinner loading={this.props.expertTrajectory.loading} />
         <div className={styles.page}>
           <div className={styles.leftPart}>
             <div className={styles.title}>
               <div className={styles.innerTitle}>
+                <Icon type="exception" style={{ color: '#108ee9' }} />
                 <FM defaultMessage="Query Result" id="com.expertTrajectory.trajectory.title" />
               </div>
             </div>
-            <hr className={styles.hrStyle}/>
-              <Layout className={styles.experts}>
-                <Sider className={styles.left} style={{ height: divHeight }}>
-                  <PersonList
-                    className={styles.personList}
-                    persons={results}
-                    user={this.props.app.user}
-                    rightZoneFuncs={[]}
-                    bottomZoneFuncs={PersonList_BottomZone}
-                    type="tiny"
-                    showIndices={personShowIndices}
-                  />
-                </Sider>
-              </Layout>
+            <hr className={styles.hrStyle} />
+            <Layout className={styles.experts}>
+              <Sider className={styles.left} style={{ height: divHeight }}>
+                <PersonList
+                  className={styles.personList}
+                  persons={results}
+                  user={this.props.app.user}
+                  rightZoneFuncs={[]}
+                  bottomZoneFuncs={PersonListBottomZone}
+                  type="tiny"
+                  showIndices={personShowIndices}
+                />
+              </Sider>
+            </Layout>
           </div>
-          <div className={styles.rightPart} style={{width: divWidth - 450}}>
+          <div className={styles.rightPart} style={{ width: divWidth - 450 }}>
             <div className={styles.header}>
               <div className={styles.yourSkin}>
                 <Dropdown overlay={menu} className={styles.skin}>
@@ -234,20 +299,24 @@ class ExpertTrajectoryPage extends React.Component {
                   ]}
                   width="700px"
                 >
-                  <div id="statistic">dddddddddddddd</div>
+                  <Tabs defaultActiveKey="1" onChange={this.changeStatistic}>
+                    <TabPane tab="时间分布" key="1">{staJsx && staJsx}</TabPane>
+                    <TabPane tab="迁徙历史" key="2">{staJsx1 && staJsx1}</TabPane>
+                  </Tabs>
                 </Modal>
               </div>
               <div className={styles.play}>
-                <Button>
+                <Button onClick={this.play}>
                   <Icon type="desktop" />
                   <FM defaultMessage="Play" id="com.expertMap.headerLine.label.play" />
                 </Button>
               </div>
             </div>
             <div className={styles.trajShow}>
-              <Layout className={styles.right} style={{width: divWidth - 450}}>
+              <Layout className={styles.right} style={{ width: divWidth - 450 }}>
                 <Content className={styles.content}>
-                  <ExpertTrajectory person={this.state.cperson} themeKey={themeKey} />
+                  <ExpertTrajectory person={this.state.cperson} themeKey={themeKey}
+                                    play={this.state.play} />
                 </Content>
               </Layout>
             </div>

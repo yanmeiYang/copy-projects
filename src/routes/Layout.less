@@ -1,25 +1,29 @@
-@import "../themes/vars.less";
+@import "~themes/vars";
 
 .layout {
   display: flex; flex-direction: column;
   height: 100%;
   //min-width: 1024px;
   min-height: 568px;
-
-  .sider {
-    //border: solid 1px yellow;
-    background-color: white;
-  }
-
-  .content {
-    display: flex; flex-direction: column;
-    background-color: @bg-color-content;
-    padding: @padding-outer-v @padding-outer-h;
-  }
-
-  .footer {
-    height: 44px; font-size: @font-size-lg;
-    text-align: center; padding: 0;
-    background-color: @bg-color-footer;
-  }
+  //min-height: 812px;//TO ccf emergency
 }
+
+// Trick: 放在外面是为了让其css不是 .layout .content, 这样外面的class就可以直接覆盖。
+.content {
+  display: flex; flex-direction: column;
+  background-color: @bg-color-content;
+  padding: @padding-outer-v @padding-outer-h;
+}
+
+.sider {
+  //border: solid 1px yellow;
+  background-color: white;
+}
+
+.footer {
+  height: 44px; font-size: @font-size-lg;
+  text-align: center; padding: 0;
+  background-color: @bg-color-footer;
+}
+
+// TODO 加上media

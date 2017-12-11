@@ -10,13 +10,14 @@ import styles from './committee-list.less';
 
 
 const { Column } = Table;
+
 class CommitteeList extends React.Component {
   state = {
     selectedRowKeys: [],  // Check here to configure the default column
   };
 
   componentWillMount = () => {
-    this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'orgcategory' } });
+    this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'activity_type' } });
   };
   onSelectChange = (selectedRowKeys) => {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
@@ -31,6 +32,7 @@ class CommitteeList extends React.Component {
       return e;
     }
   };
+
   getSeminarsByCategory = (v, type, e) => {
     const data = JSON.parse(e.target && e.target.getAttribute('data'));
     let params = `?organizer=${data.organizer}`;
@@ -56,7 +58,7 @@ class CommitteeList extends React.Component {
   };
 
   render() {
-    const { orgcategory } = this.props.seminar;
+    const { activity_type } = this.props.seminar;
     let activity_type_options_data = {};
     // if (activity_type.data) {
     //   activity_type_options_data = activity_type.data;
@@ -83,7 +85,7 @@ class CommitteeList extends React.Component {
     return (
       <div>
         {/* rowSelection={rowSelection}*/}
-        {orgcategory.data &&
+        {activity_type.data &&
         <Table bordered size="small" pagination={false} dataSource={this.props.activity}
                className={styles.committee}>
           <Column title="承办单位" dataIndex="organizer" key="display_name"
@@ -94,12 +96,15 @@ class CommitteeList extends React.Component {
           />
           <Column title="活动总数" dataIndex="total" key="position" className={styles.comTotal}
                   sorter={(a, b) => this.activitySorter(a.total, b.total)}
-                  render={(total, organizer) => <a data={JSON.stringify(organizer)}
-                                                   onClick={this.getSeminarsByCategory.bind(this, total, 'organizer')}> {total} </a>} />
-          {Object.values(orgcategory.data).map((category) => {
-            if (category.key === '撰稿活动' || category.key === '审稿活动') {
-              return '';
-            }
+                  render={(total, organizer) => (
+                    <a data={JSON.stringify(organizer)}
+                       onClick={this.getSeminarsByCategory.bind(this, total, 'organizer')}
+                    > {total} </a>
+                  )} />
+          {Object.values(activity_type.data).map((category) => {
+            // if (category.key === '撰稿活动' || category.key === '审稿活动') {
+            //   return '';
+            // }
             const categoryIndex = `category.${category.key}`;
             return (
               <Column title={category.key} dataIndex={categoryIndex} key={category.id}
@@ -108,8 +113,11 @@ class CommitteeList extends React.Component {
                         if (count === undefined) {
                           return '';
                         } else {
-                          return <a target="_blank" data={JSON.stringify(text)}
-                                    onClick={this.getSeminarsByCategory.bind(this, category, 'category')}> {count} </a>;
+                          return (
+                            <a target="_blank" data={JSON.stringify(text)}
+                               onClick={this.getSeminarsByCategory.bind(this, category, 'category')}
+                            > {count} </a>
+                          );
                         }
                       }} />
             );

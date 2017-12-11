@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'dva';
 import PropTypes from 'prop-types';
 import { Tag } from 'antd';
 import { classnames } from 'utils';
@@ -41,6 +42,8 @@ const AggConfig = {
   'dims.systag': {}, // first used in bole's tag system.
 };
 
+@connect(({ app }) => ({ app }))
+
 /**
  * SearchFilter Component
  */
@@ -60,8 +63,19 @@ export default class SearchFilter extends Component {
 
   render() {
     // console.log('====================================');
-    const { filters, aggs, disableExpertBaseFilter, roles } = this.props;
+    const { filters, aggs, disableExpertBaseFilter, roles, app, result } = this.props;
     const keys = this.keys;
+
+    let expertRating;
+    { // TODO ccfemergency
+      if (app.roles.god || app.roles.admin) {
+        expertRating = true;
+      } else if (app.roles.role[0] && app.roles.role[0].includes('超级管理员')) {
+        expertRating = true;
+      } else {
+        expertRating = false;
+      }
+    }
 
     return (
       <div className={styles.searchFilter}>
@@ -98,7 +112,7 @@ export default class SearchFilter extends Component {
 
           {/* ------ 搜索范围 / Expert Base ------ */}
 
-          {!disableExpertBaseFilter && expertBases &&
+          {!disableExpertBaseFilter && expertBases && expertBases.length > 0 &&
           <div className={classnames(styles.filterRow, styles.range)}>
             <span className={styles.filterTitle}>
               <FM id="com.search.filter.searchRange" defaultMessage="Search Range:" />
@@ -106,6 +120,12 @@ export default class SearchFilter extends Component {
             <ul className={styles.filterItems}>
               {expertBases.map((eb) => {
                 let isShowEb = false;
+                // TODO ccfemergency 此处鉴别方式需要修改
+                if ((eb.id === 'aminer' &&
+                    (sysconfig.SYSTEM === 'ccf' || sysconfig.SYSTEM === 'ccftest') &&
+                    !expertRating)) {
+                  isShowEb = true;
+                }
                 if (eb.show) {
                   isShowEb = !eb.show(roles);
                 }

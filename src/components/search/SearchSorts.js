@@ -40,7 +40,6 @@ export default class SearchSorts extends PureComponent {
     }
   };
 
-
   render() {
     const { rightZone, sortType } = this.props;
     const sorts = this.props.sorts || defaultSorts;
@@ -56,7 +55,7 @@ export default class SearchSorts extends PureComponent {
         })}
       </div>;
 
-    // TODO but div???
+    // TODO but div ???
     const rightZoneJSX = <Hole fill={rightZone} param={{ sortType }} />;
 
     return (
@@ -66,7 +65,7 @@ export default class SearchSorts extends PureComponent {
         activeKey={sortType}
         size="small"
         onChange={this.onOrderChange}
-        tabBarExtraContent={rightZoneJSX}
+        tabBarExtraContent={rightZoneJSXs}
       >
         {sorts.map((sortItem) => {
           const icon = sortItem === sortType ? <i className="fa fa-sort-amount-desc" /> : '';

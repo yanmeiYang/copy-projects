@@ -8,7 +8,7 @@ import { Layout } from 'routes';
 import PosterPage from './posterPage';
 import DetailPage from './detailPage';
 import styles from './index.less';
-
+import queryString from 'query-string';
 
 class DetailSeminar extends React.PureComponent {
   state = {
@@ -30,24 +30,31 @@ class DetailSeminar extends React.PureComponent {
 
   render() {
     const { showPosterType } = this.state;
-    return (
-      <Layout searchZone={[]}>
-        <div className={styles.setMaxWidth}>
-          {/*TODO 海报格式先隐藏*/}
-          {/*{this.props.app.token &&*/}
-          {/*<div style={{ textAlign: 'center' }}>*/}
+    const { location } = this.props;
+    const { poster } = queryString.parse(location.search);
+    if (poster === '1') {
+      return <DetailPage pad={this.pad} isPoster />;
+    } else {
+      return (
+        <Layout searchZone={[]}>
+          <div className={styles.setMaxWidth}>
+            {/*TODO 海报格式先隐藏*/}
+            {/*{this.props.app.token &&*/}
+            {/*<div style={{ textAlign: 'center' }}>*/}
             {/*{showPosterType ?*/}
-              {/*<Button type="primary" style={{ width: '50%' }}*/}
-                      {/*onClick={this.changeTab.bind(this, showPosterType)}>查看全部信息</Button>*/}
-              {/*: <Button type="primary" style={{ width: '50%' }}*/}
-                        {/*onClick={this.changeTab.bind(this, showPosterType)}>查看简单版</Button>}*/}
-          {/*</div>}*/}
-          {/*{ showPosterType ?*/}
+            {/*<Button type="primary" style={{ width: '50%' }}*/}
+            {/*onClick={this.changeTab.bind(this, showPosterType)}>查看全部信息</Button>*/}
+            {/*: <Button type="primary" style={{ width: '50%' }}*/}
+            {/*onClick={this.changeTab.bind(this, showPosterType)}>查看简单版</Button>}*/}
+            {/*</div>}*/}
+            {/*{ showPosterType ?*/}
             {/*<PosterPage pad={this.pad} /> : <DetailPage pad={this.pad} /> }*/}
-          <DetailPage pad={this.pad} />
-        </div>
-      </Layout>
-    );
+            <DetailPage pad={this.pad} />
+          </div>
+        </Layout>
+      );
+    }
   }
 }
+
 export default connect(({ app }) => ({ app }))(DetailSeminar);

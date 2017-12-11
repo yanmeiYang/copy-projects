@@ -28,6 +28,7 @@ class ShowExpertList extends React.Component {
             </span>
           </div>}
           <table>
+            <tbody>
             {!talk.speaker.role.includes('president') &&
             <tr>
               <td>演讲时间：</td>
@@ -60,6 +61,7 @@ class ShowExpertList extends React.Component {
                 {talk.speaker.email && <span>{talk.speaker.email}</span>}
               </td>
             </tr>
+            </tbody>
           </table>
           <div className={styles.specialInfo}>
             <span>专家简介：</span>

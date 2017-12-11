@@ -6,40 +6,43 @@
 // 所有可选系统，保留关键字：global.
 const AvailableSystems = [
   'aminer',
+  'demo',
+  'DataAnnotation',
+  'alibaba',
+  'acmfellow',
+  'bole',
   'ccf',
   'ccftest',
-  'huawei',
-  'alibaba',
-  'tencent',
   'cie',
-  'cipsc',
-  'demo',
   'cietest',
-  'bole',
-  'acmfellow',
-  'DataAnnotation',
+  'cipsc',
+  'huawei',
+  'med_topic_trend',
+  'scei', // 中国科协：深度智库
+  'tencent',
   'thurcb',
   'yocsef',
-  'med_topic_trend',
 ];
 
 let System;
 // System = 'aminer';
 // System = 'ccf';
 // System = 'ccftest';
-System = 'huawei';
+// System = 'huawei';
 // System = 'alibaba';
 // System = 'tencent';
 // System = 'cie';
-// System = 'cipsc';
-// System = 'demo';
 // System = 'cietest';
-// System = 'bole';
-// System = 'acmfellow';
-// System = 'DataAnnotation';
+// System = 'cipsc';
+// System = 'huawei';
+// System = 'med_topic_trend';
+// System = 'scei';
+// System = 'tencent';/
 // System = 'thurcb';
 // System = 'yocsef';
-// System = 'med_topic_trend';
+  System = 'demo';
+
+// SPECIAL: USED_IN_ONLINE_DEPLOY; DON'T DELETE THIS LINE.
 
 let Source = System; // AppID, Used in UniversalConfig.
 
@@ -72,12 +75,6 @@ function loadSavedSystem() {
   }
 }
 
-// Override system settings from localStorage.
-// 只有开发环境或者线上的demo系统可以切换。
-if (process.env.NODE_ENV !== 'production' || System === 'demo') {
-  loadSavedSystem();
-}
-
 function saveSystem(system, user) {
   if (user) {
     localStorage.setItem(
@@ -85,6 +82,12 @@ function saveSystem(system, user) {
       JSON.stringify({ user: user.email, system }),
     );
   }
+}
+
+// Override system settings from localStorage.
+// 只有开发环境或者线上的demo系统可以切换。
+if (process.env.NODE_ENV !== 'production' || System === 'demo') {
+  loadSavedSystem();
 }
 
 module.exports = {

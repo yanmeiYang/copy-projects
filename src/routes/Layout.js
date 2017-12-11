@@ -2,18 +2,19 @@
 /**
  * Created by bogao on 2017/09/13.
  */
-import React, { PureComponent, Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Helmet } from 'react-helmet';
 import ReactGA from 'react-ga';
 import NProgress from 'nprogress';
-import { Layout as LayoutComponent, Affix, Button, Popover } from 'antd';
+import { Layout as LayoutComponent } from 'antd';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 import { hole, classnames, config } from 'utils';
-import { Header, Navigator, Feedback } from 'components/Layout';
-import { ErrorBoundary } from 'components';
+import { Header, Navigator } from 'components/Layout';
+import { Feedback } from 'components/widgets';
+import { ErrorBoundary } from 'components/core';
 import styles from './Layout.less';
 
 const { iconFontJS, iconFontCSS, logo } = config;
@@ -133,7 +134,8 @@ export default class Layout extends Component {
 
           <link rel="stylesheet" href="/fa/css/font-awesome.min.css" />
 
-          {this.headerResourcesArray && this.headerResourcesArray.length > 0 && this.headerResourcesArray}
+          {this.headerResourcesArray && this.headerResourcesArray.length > 0
+          && this.headerResourcesArray}
 
           {/*{href.indexOf('/lab/knowledge-graph-widget') > 0 &&*/}
           {/*<link rel="stylesheet"*/}

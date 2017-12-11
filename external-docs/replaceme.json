@@ -1,17 +1,36 @@
-[
-  {
-    "action": "search",
-    "parameters": {
-      "switches": [
-        "translate_all"
-      ],
-      "filters": {
-        "dims": {
-          "eb": [
-            "5949c2f99ed5dbc2147fd854"
-          ]
-        }
-      }
-    }
-  }
-]
+{
+  "data": {
+    "first_name": "vivo",
+    "avatar": "//static.aminer.org/upload/avatar/126/1677/302/5405d5bedabfae450f3d7dcc.jpeg",
+    "email": "elivoa@gmail.com",
+    "role": [
+      "root"
+    ],
+    "tags": [],
+    "display_name": "vivo",
+    "social": {},
+    "reg_ip": "127.0.0.1",
+    "id": "54365cc445ce51fb1bd1213a",
+    "profile": "5405d5bedabfae450f3d7dcc",
+    "last_name": "",
+    "status": true,
+    "src": "aminer",
+    "addr": "",
+    "position": "",
+    "sub": false,
+    "reg_time": "1970-01-01T00:00:00Z",
+    "org": "Tsinghua University",
+    "is_social": false,
+    "gender": "unknown"
+  },
+  "roles": {
+    "god": true,
+    "admin": true,
+    "authed": false,
+    "systems": [],
+    "role": [],
+    "authority": [],
+    "forbid": false
+  },
+  "time": 1512724643358
+}

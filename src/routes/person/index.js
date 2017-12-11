@@ -15,19 +15,14 @@ import { sysconfig } from 'systems';
 import styles from './index.less';
 import PersonFeaturedPapers from './person-featured-papers';
 // import ActivityList from '../../components/seminar/activityList';
-
-
 const TabPane = Tabs.TabPane;
-
 const Person = ({ dispatch, person, seminar, publications }) => {
   const { profile, avgScores } = person;
   const { results } = seminar;
   const totalPubs = profile.indices && profile.indices.num_pubs;
-
   const contrib = avgScores.filter(score => score.key === 'contrib')[0];
   const integrated = avgScores.filter(score => score.key === 'integrated')[0];
   const activity_indices = { contrib: contrib === undefined ? 0 : contrib.score };
-
   const profileTabs = [{
     isShow: sysconfig.ShowRating,
     title: '专家评分',
@@ -117,7 +112,6 @@ const Person = ({ dispatch, person, seminar, publications }) => {
     </Spin>,
   }];
 
-
   function getMoreSeminar(e) {
     e.target.style.display = 'none';
     dispatch({
@@ -139,7 +133,11 @@ const Person = ({ dispatch, person, seminar, publications }) => {
               {dispatch({ type: 'seminar/clearState' })}
               {dispatch({
                 type: 'seminar/getSeminar',
-                payload: { offset: 0, size: 5, filter: { src: sysconfig.SYSTEM, aid: profile.id } },
+                payload: {
+                  offset: 0,
+                  size: 5,
+                  filter: { src: sysconfig.SYSTEM, aid: profile.id }
+                },
               })}</div>
           );
         }
@@ -161,7 +159,6 @@ const Person = ({ dispatch, person, seminar, publications }) => {
         return false;
     }
   }
-
 
   // console.log('|||||||||||| PersonIndex:', person);
   return (
@@ -194,9 +191,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
     </Layout>
   );
 };
-
 // export default connect()(Person);
-
 export default connect(({ person, loading, seminar, publications }) => ({
   person,
   loading,

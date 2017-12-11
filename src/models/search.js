@@ -16,7 +16,7 @@ export default {
   state: {
     results: null,
     topic: null, // search 右边的 topic
-    aggs: [],
+    aggs: [], // Aggregation
     filters: {},
     query: null,
 
@@ -28,10 +28,9 @@ export default {
     translatedLanguage: 0, // 1 en to zh; 2 zh to en;
     translatedText: '',
 
-    // Intelligence search.
-    intelligenceSearchMeta: {}, // {expand:<word>, translated:<word>, kg:[<word>,...]}
-    intelligenceSuggest: null,
-    kg: null,
+    // Intelligence search assistants. TODO change to assistantMeta, assistantData
+    assistantDataMeta: {}, // advquery
+    assistantData: null,
 
     // pager
     offset: 0,
@@ -80,7 +79,7 @@ export default {
   effects: {
     // 搜索全球专家时，使用old service。
     // 使用智库搜索，并且排序算法不是contribute的时候，使用新的搜索API。
-    searchPerson: [function*({ payload }, { call, put, select }) {
+    searchPerson: [function* ({ payload }, { call, put, select }) {
       const { query, offset, size, filters, sort, total, ghost } = payload;
       const noTotalFilters = {};
       for (const [key, item] of Object.entries(filters)) {
@@ -97,6 +96,7 @@ export default {
       // TODO replace this.
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
       const intelligenceSearchMeta = yield select(state => state.search.intelligenceSearchMeta);
+      const assistantDataMeta = yield select(state => state.search.assistantDataMeta);
 
       // 分界线
       yield put({ type: 'updateSortKey', payload: { key: Sort } });
@@ -105,6 +105,7 @@ export default {
       const params = {
         query, offset, size, filters: noTotalFilters, sort: Sort, intelligenceSearchMeta,
         useTranslateSearch, // TODO remove
+        assistantDataMeta,
       };
       const data = yield call(searchService.searchPerson, params);
       if (process.env.NODE_ENV !== 'production') {
@@ -148,7 +149,7 @@ export default {
         }
         yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data, query } });
         yield put({
-          type: 'getIntellResultsSuccess',
+          type: 'getAssistantDataSuccess',
           payload: { data: data.data.intellResults },
         });
         yield put({ type: 'getKgSuccess', payload: { data: data.data.intellResults } });
@@ -233,10 +234,10 @@ export default {
         }
 
         newState.pagination = newState.pagination || {
-            current: 1,
-            pageSize: sysconfig.MainListSize,
-            total: null,
-          };
+          current: 1,
+          pageSize: sysconfig.MainListSize,
+          total: null,
+        };
         newState.pagination.pageSize = size;
         newState.translatedText = '';
       }
@@ -328,11 +329,9 @@ export default {
     setTranslateSearch(state, { payload: { useTranslate } }) {
       return { ...state, useTranslateSearch: useTranslate };
     },
-    setIntelligenceSearch(state, { payload: { intelligenceSearchMeta } }) {
-      return {
-        ...state,
-        intelligenceSearchMeta,
-      };
+
+    setAssistantDataMeta(state, { payload: { texts } }) {
+      return { ...state, assistantDataMeta: { advquery: { texts } } };
     },
 
     clearTranslateSearch(state) {
@@ -342,8 +341,9 @@ export default {
     getTopicByMentionSuccess(state, { payload: { data } }) {
       return { ...state, topic: data.data };
     },
-    getIntellResultsSuccess(state, { payload: { data } }) {
-      return { ...state, intelligenceSuggest: data };
+
+    getAssistantDataSuccess(state, { payload: { data } }) {
+      return { ...state, assistantData: data };
     },
   },
 };

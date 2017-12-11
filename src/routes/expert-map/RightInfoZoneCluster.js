@@ -135,7 +135,7 @@ class RightInfoZoneCluster extends React.Component {
   };
 
   handleErr = (e) => {
-    e.target.src='/images/blank_avatar.jpg';
+    e.target.src = '/images/blank_avatar.jpg';
   };
 
   render() {

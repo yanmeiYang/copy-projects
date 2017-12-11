@@ -11,6 +11,7 @@ import { isLogin, isGod, isAuthed } from 'utils/auth';
 import * as seminarService from 'services/seminar';
 import Menu from './components/Menu';
 import styles from './theme-ccf.less';
+import Footer from '../../components/Footers/ccf.js';
 
 const menusProps = {
   // menu,
@@ -44,6 +45,16 @@ module.exports = {
   sidebar: [
     <Menu key={0} {...menusProps} />,
     // <div key={1}>sadfasdfa</div>,
+  ],
+
+  footer: <Footer />,
+
+  //
+  // Index page
+  //
+
+  index_bannerZone: [
+    <div key="0" style={{ height: '20vh' }} />,
   ],
 
   //

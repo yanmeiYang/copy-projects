@@ -5,12 +5,20 @@ const setBMap = (myChart) => {
   const navigationControl = new window.BMap.NavigationControl({ // 添加带有定位的导航控件
     anchor: 'BMAP_ANCHOR_TOP_LEFT', // 靠左上角位置
     type: 'BMAP_NAVIGATION_CONTROL_LARGE', // LARGE类型
-    enableGeolocation: true, // 启用显示定位
+    enableGeolocation: false, // 启用显示定位
   });
   map.addControl(navigationControl);
 };
 
-const showChart = (myChart, type, skinType) => { // 功能起始函数
+const showChart = (myChart, type, skinType, showType) => { // 功能起始函数
+  let [showLabel, dotType] = [true, 'effectScatter'];
+  if (typeof (showType) !== 'undefined') {
+    if (showType === 'heatmap') {
+      [showLabel, dotType] = [false, 'scatter'];
+    } else if (showType === 'trajectory') {
+      [showLabel, dotType] = [true, 'effectScatter'];
+    }
+  }
   const skin = parseInt(skinType, 10);
   let color = '';
   if (type === 'geo') {
@@ -69,7 +77,7 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       },
     },
     bmap: {
-      center: [34.45, 31.3],
+      center: [4.45, 31.3],
       zoom: 1,
       roam: true,
       mapStyle, // mapStyle[skinType]
@@ -100,9 +108,11 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       blurSize: 6,
       blendMode: detailedStyle.blendHeatStlye[skin],
     }, {
-      type: 'scatter',
+      name: 'place',
+      type: dotType, //effectScatter
       coordinateSystem: type,
-      zlevel: 5,
+      hoverAnimation: true,
+      //zlevel: 5,
       rippleEffect: {
         period: 4,
         scale: 2,
@@ -110,7 +120,7 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       },
       label: {
         normal: {
-          show: true,
+          show: showLabel,
           position: 'right',
           formatter: '{b}',
         },
@@ -138,14 +148,14 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
     }, {
       type: 'lines',
       animation: false,
-      zlevel: 2,
+      //zlevel: 10000000000,
       coordinateSystem: type,
+      //symbol:'arrow',
       effect: {
         show: true,
         period: 6,
         trailLength: 0.1,
         color: detailedStyle.lineNormalStyle[skin],
-        // color: '#f78e3d',
         symbol: 'arrow',
         symbolSize: 5,
         animation: true,
@@ -168,6 +178,9 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       blendMode: detailedStyle.blendLineStlye[skin],
     }],
   };
+  console.log(JSON.stringify(option));
+  console.log(option);
+  console.log('就这一句喜欢报错！');
   myChart.setOption(option);
   if (type === 'bmap') {
     setBMap(myChart);

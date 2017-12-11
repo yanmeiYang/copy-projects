@@ -16,37 +16,42 @@ import styles from './SearchKnowledge.less';
   translatedText: search.translatedText,
 }))
 export default class SearchKnowledge extends Component {
-  state = { query: '' };
 
   componentWillMount() {
-    this.fetchData(this.props.query);
-  }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.translatedLanguage === 2) {
-      this.setState({ query: nextProps.translatedText });
-    } else {
-      this.setState({ query: nextProps.query });
-    }
+    this.fetchData();
   }
 
   shouldComponentUpdate(nextProps) {
     return compare(this.props, nextProps, 'topic', 'query', 'translatedLanguage', 'translatedText');
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    if (nextState.query !== this.state.query) {
-      this.fetchData(nextState.query);
+  componentDidUpdate(prevProps) {
+    // console.log('NOT>>> >>>>   ', this.props.translatedLanguage, this.props.translatedText);
+    if (
+      (prevProps.query !== this.props.query) ||
+      (prevProps.translatedText !== this.props.translatedText
+        && this.props.translatedLanguage === 1)
+    ) {
+      this.fetchData();
     }
   }
 
-  fetchData = (query) => {
-    const { dispatch } = this.props;
-    if (!query) {
+  fetchData = () => {
+    const { dispatch, query } = this.props;
+    if (!strings.cleanQuery(query)) {
       return null;
     }
-    const { term, name, org } = strings.destructQueryString(query);
-    const fne = strings.firstNonEmpty(term, name, org);
-    dispatch({ type: 'search/getTopicByMention', payload: { mention: fne } });
+    // if is translated results, use translated english to fetch.
+    const { translatedLanguage, translatedText } = this.props;
+    // console.log('NOT>>>', translatedLanguage, translatedText, this.props.topic);
+    // (!this.props.topic || !this.props.topic.categories)
+    let mention;
+    if (translatedLanguage === 1 && translatedText) {
+      mention = translatedText;
+    } else {
+      mention = strings.firstNonEmptyQuery(query);
+    }
+    dispatch({ type: 'search/getTopicByMention', payload: { mention } });
   };
 
   render() {

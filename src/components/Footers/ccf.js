@@ -41,15 +41,7 @@ const Footer = () => {
                   电话：
                 </span>
               </div>
-              <p> (+86)10 6256 2503</p>
-            </div>
-            <div className={styles.heading_contact_content}>
-              <div className={styles.margin_right_10}>
-                <span>
-                  邮件：
-                </span>
-              </div>
-              <p>ccf@ccf.org.cn<br />suggest@ccf.org.cn</p>
+              <p> (+86) 10 6256 2503</p>
             </div>
           </div>
         </div>

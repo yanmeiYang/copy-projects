@@ -27,7 +27,6 @@ module.exports = {
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
   Header_UserPageURL: '/user-info',
-  //Header_RightZone: [() => <Link key="0" to={`/eb/${ExpertBase}/-/0/20`}>我的专家库</Link>], // TODO make this a Component.
 
   // Footer_Content: '',
   SHOW_ExpertBase: true,

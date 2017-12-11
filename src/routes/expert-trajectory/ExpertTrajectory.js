@@ -46,7 +46,7 @@ class ExpertTrajectory extends React.Component {
       return true;
     }
     if (this.props.themeKey !== nextProps.themeKey) {
-      showChart(myChart, 'bmap', nextProps.themeKey);
+      showChart(myChart, 'bmap', nextProps.themeKey, 'trajectory');
       this.showTrajectory(this.props.expertTrajectory.trajData);
       return true;
     }
@@ -68,7 +68,7 @@ class ExpertTrajectory extends React.Component {
         if (typeof (skinType) === 'undefined') {
           skinType = '2'; //假设默认为dark
         }
-        showChart(myChart, 'bmap', skinType);
+        showChart(myChart, 'bmap', skinType, 'trajectory');
         this.findPersonTraj(person);
       });
     });

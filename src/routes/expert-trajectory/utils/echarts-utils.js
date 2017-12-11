@@ -10,7 +10,15 @@ const setBMap = (myChart) => {
   map.addControl(navigationControl);
 };
 
-const showChart = (myChart, type, skinType) => { // 功能起始函数
+const showChart = (myChart, type, skinType, showType) => { // 功能起始函数
+  let [showLabel, dotType] = [true, 'effectScatter'];
+  if (typeof (showType) !== 'undefined') {
+    if (showType === 'heatmap') {
+      [showLabel, dotType] = [false, 'scatter'];
+    } else if (showType === 'trajectory') {
+      [showLabel, dotType] = [true, 'effectScatter'];
+    }
+  }
   const skin = parseInt(skinType, 10);
   let color = '';
   if (type === 'geo') {
@@ -101,7 +109,7 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       blendMode: detailedStyle.blendHeatStlye[skin],
     }, {
       name: 'place',
-      type: 'effectScatter',
+      type: dotType, //effectScatter
       coordinateSystem: type,
       hoverAnimation: true,
       //zlevel: 5,
@@ -112,7 +120,7 @@ const showChart = (myChart, type, skinType) => { // 功能起始函数
       },
       label: {
         normal: {
-          show: true,
+          show: showLabel,
           position: 'right',
           formatter: '{b}',
         },

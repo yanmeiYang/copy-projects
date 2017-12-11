@@ -41,17 +41,17 @@ class ExpertHeatmap extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps.expertTrajectory.heatData &&
       nextProps.expertTrajectory.heatData !== this.props.expertTrajectory.heatData) {
-      showChart(myChart, 'bmap', this.props.themeKey);
+      showChart(myChart, 'bmap', this.props.themeKey, 'heatmap');
       this.loadHeat(nextProps.expertTrajectory.heatData, this.state.currentYear);
       return true;
     }
     if (nextProps.themeKey && this.props.themeKey !== nextProps.themeKey) {
-      showChart(myChart, 'bmap', nextProps.themeKey);
+      showChart(myChart, 'bmap', nextProps.themeKey, 'heatmap');
       this.loadHeat(nextProps.expertTrajectory.heatData, this.state.currentYear);
       return true;
     }
     if (nextProps.checkType && this.props.checkType !== nextProps.checkType) {
-      showChart(myChart, 'bmap', this.props.themeKey);
+      showChart(myChart, 'bmap', this.props.themeKey, 'heatmap');
       this.loadHeat(
         nextProps.expertTrajectory.heatData,
         this.state.currentYear, nextProps.checkType,
@@ -115,7 +115,7 @@ class ExpertHeatmap extends React.Component {
           myChart = echarts.init(document.getElementById(divId));
         }
         const skinType = 0;
-        showChart(myChart, 'bmap', skinType);
+        showChart(myChart, 'bmap', skinType, 'heatmap');
       });
     });
   };
@@ -209,6 +209,7 @@ class ExpertHeatmap extends React.Component {
             })}
           </div>
           <div className={styles.paper}>
+            <div className={styles.year}>2014:</div>
             Eric, Mihail, Manning, Christopher D. A Copy-Augmented Sequence-to-Sequence Architecture Gives Good Performance on Task-Oriented Dialogue[J]. 2017:468-473.
             <br />
             <a href={`https://www.aminer.cn/archive/58d82fd2d649053542fd76c7`} target="_blank"><Icon type="file" />查看文章</a>

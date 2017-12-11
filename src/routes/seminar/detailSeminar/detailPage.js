@@ -12,8 +12,7 @@ import CommentsByActivity from './comments';
 import * as profileUtils from '../../../utils/profile-utils';
 import styles from './index.less';
 
-
-const DetailPage = ({ dispatch, seminar, app, pad }) => {
+const DetailPage = ({ dispatch, seminar, app, pad, location, isPoster }) => {
   const { summaryById, loading } = seminar;
   const currentUser = app;
   // share
@@ -75,10 +74,16 @@ const DetailPage = ({ dispatch, seminar, app, pad }) => {
   }
   guestSpeakers = timeTalk.concat(noTimeTalk);
 
+  const QRURL = isPoster
+    ? window.location.href
+    : `${window.location.href}?poster=1`;
+
   return (
     <div className={styles.detailSeminar}>
       <Spin spinning={loading}>
         {summaryById.title ? <Row>
+
+          {!isPoster &&
           <Col className={styles.seminar_action}>
             <div>
               {(app.roles.authority.includes(summaryById.organizer[0]) || app.roles.admin)
@@ -100,11 +105,13 @@ const DetailPage = ({ dispatch, seminar, app, pad }) => {
               </span>}
             </div>
           </Col>
+          }
+
           <Col className={styles.thumbnail}>
             <div className={styles.caption}>
               <div className={styles.qrcode}>
                 <div>
-                  <QRCode value={window.location.href} size={90} />
+                  <QRCode value={QRURL} size={90} />
                 </div>
               </div>
               {/* type=workshop*/}
@@ -135,10 +142,20 @@ const DetailPage = ({ dispatch, seminar, app, pad }) => {
             </Button>
           </Col>
           }
+
+          {!isPoster &&
           <CommentsByActivity activityId={summaryById.id} currentUser={currentUser} />
+          }
+
         </Row> : <div style={{ minHeight: 300 }} />}
       </Spin>
     </div>
   );
 };
-export default connect(({ seminar, loading, app }) => ({ seminar, loading, app }))(DetailPage);
+
+export default connect(({ seminar, loading, app, location }) => ({
+  seminar,
+  loading,
+  app,
+  location
+}))(DetailPage);

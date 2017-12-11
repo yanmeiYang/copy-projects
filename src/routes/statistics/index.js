@@ -67,9 +67,12 @@ export default class Statistics extends React.Component {
     let info = '';
     let title = '';
     if (this.state.defaultTabKey === 'activity_lists') {
-      title = '承办单位	,活动总数,分部,NOI,ADL,CCCF,年度报告,CSP,走进高校,TF,	CCD,女工作者会议,精英大会,未来教育峰会,专委,YOCSEF,';
+      title = '承办单位	,活动总数,分部,NOI,ADL,CCCF,年度报告,CSP,走进高校,TF,CCD,女工作者会议,精英大会,未来教育峰会,审稿次数,撰稿次数,专委,YOCSEF,';
       title += '\n';
       this.props.statistics.activity.map((item) => {
+        if (item.organizer.indexOf('---') > 0) {
+          item.organizer = item.organizer.replace('---', '-');
+        }
         info += item.organizer ? (`${item.organizer.replace(/,/g, ';')},`) : ',';
         info += item.total ? (`${item.total},`) : ',';
         info += item.category['分部'] ? (`${item.category['分部']},`) : ',';
@@ -84,6 +87,8 @@ export default class Statistics extends React.Component {
         info += item.category['女工作者会议'] ? (`${item.category['女工作者会议']},`) : ',';
         info += item.category['精英大会'] ? (`${item.category['精英大会']},`) : ',';
         info += item.category['未来教育峰会'] ? (`${item.category['未来教育峰会']},`) : ',';
+        info += item.category['撰稿活动'] ? (`${item.category['撰稿活动']},`) : ',';
+        info += item.category['审稿活动'] ? (`${item.category['审稿活动']},`) : ',';
         info += item.category['专委'] ? (`${item.category['专委']},`) : ',';
         info += item.category.YOCSEF ? (`${item.category.YOCSEF},`) : ',';
         info += '\n';
@@ -91,13 +96,11 @@ export default class Statistics extends React.Component {
       });
     }
     if (this.state.defaultTabKey === 'experts_list') {
-      title = '专家,总功效度,审稿次数,撰稿次数,总贡献度,演讲内容,演讲水平,综合评价,';
+      title = '专家,总贡献度,演讲内容,演讲水平,综合评价,';
       title += '\n';
       this.props.statistics.author.map((item) => {
         info += `${displayNameCNFirst(item.n, item.n_zh).replace(/,/g, ';')},`;
         info += item.contrib ? `${getTwoDecimal(parseFloat(item.contrib), 2)},` : ',';
-        info += item['审稿活动'] ? (`${item['审稿活动']},`) : ',';
-        info += item['撰稿活动'] ? (`${item['撰稿活动']},`) : ',';
         info += item.content ? `${getTwoDecimal(parseFloat(item.content), 2)},` : ',';
         info += item.level ? `${getTwoDecimal(parseFloat(item.level), 2)},` : ',';
         info += item.integrated ? `${getTwoDecimal(parseFloat(item.integrated), 2)},` : ',';
@@ -105,7 +108,6 @@ export default class Statistics extends React.Component {
         return true;
       });
     }
-    console.log('====3', info);
     let str = title + info;
     const bom = '\uFEFF';
     str = encodeURIComponent(str);
@@ -136,12 +138,12 @@ export default class Statistics extends React.Component {
             <div>
               <Button key="submit" type="default"
                       style={{ float: 'right', marginBottom: -28, zIndex: 100 }}>
-                <a onClick={this.clickDownload.bind(this)} download="data.csv" href="#">导出</a>
+                <a onClick={this.clickDownload.bind(this)} download="statistic.csv" href="#">导出</a>
               </Button>
               <Tabs
                 defaultActiveKey={activityList.category}
                 type="card"
-                style={{ clear: 'both', paddingTop: 0 }}
+                style={{ clear: 'both', paddingTop: 0, overflow: 'scroll' }}
                 className={styles.tabs}
                 onChange={this.onTabChange}
               >

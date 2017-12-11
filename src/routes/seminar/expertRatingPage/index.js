@@ -7,6 +7,7 @@ import { InputNumber, Rate, Button, Row, Col, Table, Modal } from 'antd';
 import { Link } from 'dva/router';
 import * as profileUtils from '../../../utils/profile-utils';
 import styles from './index.less';
+import { Layout } from 'routes';
 
 const { Column } = Table;
 
@@ -98,29 +99,31 @@ class ExpertRatingPage extends React.Component {
 
 
     return (
-      <div className={styles.detailSeminar}>
+      <Layout className={styles.detailSeminar}>
         <Row>
           <Col md={24} lg={{ span: 20, offset: 2 }} className={styles.thumbnail}>
             <div className={styles.caption}>
-              <h4>
+
+              <h2>为专家评分：</h2>
+              <h2>
                 <strong>
-                  { summaryById.title }
+                  {summaryById.title}
                 </strong>
-              </h4>
+              </h2>
 
               <div style={{ marginTop: 20 }} className={styles.workshopTetail}>
                 {summaryById.organizer && <div>
-                  <h7><strong>承办单位：</strong></h7>
+                  <h3><strong>承办单位：</strong></h3>
                   <span>{summaryById.organizer.map((item) => {
                     return <span key={Math.random()}>{item} </span>;
                   })}</span>
                 </div>}
                 {summaryById.location && <div>
-                  <h7><strong>活动地点：</strong></h7>
+                  <h3><strong>活动地点：</strong></h3>
                   <span>{summaryById.location.address}</span>
                 </div>}
                 {summaryById.time && <div>
-                  <h7><strong>活动时间：</strong></h7>
+                  <h3><strong>活动时间：</strong></h3>
                   <span>{new Date(summaryById.time.from).format('yyyy年MM月dd日')}</span>
                 </div>}
               </div>
@@ -134,7 +137,7 @@ class ExpertRatingPage extends React.Component {
                 bordered
                 size="small"
                 pagination={false}
-                rowKey="key"
+                rowKey={key => Math.random() + key}
               >
                 <Column
                   title="专家信息"
@@ -216,7 +219,7 @@ class ExpertRatingPage extends React.Component {
                           onOk={this.handleOk}
                           onCancel={this.handleCancel}
                         >
-                          <table >
+                          <table>
                             <tbody>
                             <tr>
                               <td><span style={{ marginRight: 5 }}>演讲水平:</span></td>
@@ -255,13 +258,13 @@ class ExpertRatingPage extends React.Component {
                 />
               </Table>
 
-            </div >
-          </Col >
-        </Row >
-      </div >
+            </div>
+          </Col>
+        </Row>
+      </Layout>
     );
   }
 }
-export default
-connect(({ seminar, app }) => ({ seminar, app }))(ExpertRatingPage);
+
+export default connect(({ seminar, app }) => ({ seminar, app }))(ExpertRatingPage);
 

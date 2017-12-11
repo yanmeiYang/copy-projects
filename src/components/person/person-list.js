@@ -75,7 +75,6 @@ export default class PersonList extends Component {
   }
 
   selectedThePerson = (person, e) => {
-    console.log('111111111', person);
     console.log(`checked = ${e.target.checked}`);
   };
 

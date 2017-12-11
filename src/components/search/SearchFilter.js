@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'dva';
 import PropTypes from 'prop-types';
 import { Tag } from 'antd';
 import { classnames } from 'utils';
@@ -41,6 +42,8 @@ const AggConfig = {
   'dims.systag': {}, // first used in bole's tag system.
 };
 
+@connect(({ app }) => ({ app }))
+
 /**
  * SearchFilter Component
  */
@@ -60,9 +63,16 @@ export default class SearchFilter extends Component {
 
   render() {
     // console.log('====================================');
-    const { filters, aggs, disableExpertBaseFilter, roles } = this.props;
+    const { filters, aggs, disableExpertBaseFilter, roles, app, result } = this.props;
     const keys = this.keys;
-
+    let expertRating;
+    if (app.roles.god || app.roles.admin) {
+      expertRating = true;
+    } else if (app.roles.role[0] && app.roles.role[0].includes('超级管理员')) {
+      expertRating = true;
+    } else {
+      expertRating = false;
+    }
     return (
       <div className={styles.searchFilter}>
         <div className={styles.filter}>
@@ -109,8 +119,7 @@ export default class SearchFilter extends Component {
                 // TODO 此处鉴别方式需要修改
                 if ((eb.id === 'aminer' &&
                     (sysconfig.SYSTEM === 'ccf' || sysconfig.SYSTEM === 'ccftest') &&
-                    (roles[0] !== '超级管理员'))) {
-                  console.log('00000000',roles[0])
+                    !expertRating)) {
                   isShowEb = true;
                 }
                 if (eb.show) {

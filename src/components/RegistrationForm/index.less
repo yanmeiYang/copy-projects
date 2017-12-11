@@ -1,3 +1,16 @@
+.add_seminar_block {
+  display: flex;
+  justify-content: flex-start;
+  flex-shrink: 1;
+  .add_seminar_form {
+    max-width: 1000px;
+    width: 100%;
+  }
+
+  :global .ant-form-item {margin-bottom: 18px;}
+
+}
+
 .marginTop10 {
   margin-top: 10px;
 }
@@ -6,15 +19,7 @@
   background: rgba(189, 187, 187, 0.21);
   box-shadow: 0 1px 4px 0 #A9B6BE;
 }
-.add_seminar_block{
-  display: flex;
-  justify-content: flex-start;
-  flex-shrink: 1;
-  .add_seminar_form{
-    max-width: 1000px;
-    width: 100%;
-  }
-}
+
 .thumbnail {
   .marginTop10;
   display: block;
@@ -147,31 +152,33 @@
   margin-bottom: 10px;
   padding: 10px;
 }
-.uploadImgSuccess{
+
+.uploadImgSuccess {
   display: flex;
   justify-content: flex-start;
-  span{
-    height: 35px!important;
+  span {
+    height: 35px !important;
     align-self: flex-end;
   }
-  button{
+  button {
     width: 76px;
-    height: 35px!important;
+    height: 35px !important;
     padding: 0 8px;
     font-size: 15px;
     background: #F1F1F1;
-    border:1px solid #f04134;
+    border: 1px solid #f04134;
     margin-left: 10px;
     align-self: flex-end;
   }
 }
-.menu{
+
+.menu {
   :global {
-    .ant-cascader-menu{
+    .ant-cascader-menu {
       min-width: 200px;
       height: 400px;
     }
-    }
+  }
 }
 
 

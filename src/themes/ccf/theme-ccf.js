@@ -46,7 +46,17 @@ module.exports = {
     <Menu key={0} {...menusProps} />,
     // <div key={1}>sadfasdfa</div>,
   ],
+
   footer: <Footer />,
+
+  //
+  // Index page
+  //
+
+  index_bannerZone: [
+    <div key="0" style={{ height: '20vh' }} />,
+  ],
+
   //
   // Person List Component
   //

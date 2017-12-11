@@ -1,3 +1,5 @@
+@import "~themes/vars";
+
 .logoZones {
   display: flex; flex-direction: row;
   height: 66px; line-height: 66px;
@@ -23,3 +25,14 @@
   line-height: 18px;
   margin-top: 7px;
 }
+
+.Overrides() {
+  .layout {
+    .content {
+      min-height: ~"calc(100vh - 68px)";
+      justify-content: flex-start;
+    }
+  }
+}
+
+.Overrides() !important;

@@ -4,8 +4,11 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Spin, Button } from 'antd';
-import { queryURL } from '../../../utils';
+import { Layout } from 'routes';
+import { queryURL } from 'utils';
 import NewActivityList from '../../../components/seminar/newActivityList';
+import styles from './index.less';
+
 // import ActivityList from '../../../components/seminar/activityList';
 
 
@@ -45,7 +48,8 @@ class StatisticsDetail extends React.Component {
   render() {
     const { loading, seminarsByOrgAndCat, sizePerPage } = this.props.statistics;
     return (
-      <div style={{ width: '100%' }}>
+      <Layout contentClass={styles.statisticsDetail} searchZone={[]}>
+
         <h3>
           {queryURL('category') &&
           <span><strong>活动类型：</strong> {queryURL('category')}</span>}
@@ -70,7 +74,7 @@ class StatisticsDetail extends React.Component {
                     onClick={this.getMoreSeminar.bind()}>More</Button>}
           </div>
         </Spin>
-      </div>
+      </Layout>
     );
   }
 }

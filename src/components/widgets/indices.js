@@ -16,7 +16,7 @@ const indicesConfig = {
     texttip: '学术成就',
     color: 'h_index',
     render: (indices) => {
-      return indices.hindex || indices.h_index;
+      return indices.hindex || indices.h_index || 0;
     },
   },
   activity: {

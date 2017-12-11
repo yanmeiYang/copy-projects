@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { compareDeep } from '../../../utils/compare';
 import { Modal, Cascader, Input, Row, Col, Button, Tag } from 'antd';
 import { contactByJoint, getValueByJoint } from '../../../services/seminar';
 import styles from './index.less';
@@ -16,6 +17,11 @@ class AddCoOrgModal extends React.Component {
     }
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    if (compareDeep(nextProps, this.props, 'coOrg')) {
+      this.setState({ tags: nextProps.coOrg, currentOrg: nextProps.coOrg });
+    }
+  };
   onOrgChange = (value) => {
     if (value[1]) {
       const data = contactByJoint(value[0], value[1]);
@@ -80,7 +86,7 @@ class AddCoOrgModal extends React.Component {
     const { modalVisible, tags, manual } = this.state;
     return (
       <div>
-        {tags.map((org, index) => {
+        {tags && tags.map((org, index) => {
           return (
             <Tag key={org} color="#2db7f5" closable
                  onClose={this.deleteTag.bind(this, org, index)}>
@@ -108,12 +114,12 @@ class AddCoOrgModal extends React.Component {
               <Col span={20}>
                 <Cascader options={orgList} onChange={this.onOrgChange} ref="cascader"
                           showSearch placeholder="请键入搜索协办单位" popupClassName={styles.addAssistMenu}
-                          style={{ width: '100%' }}/>
+                          style={{ width: '100%' }} />
               </Col>
             </Row>
             <Row style={{ marginTop: '10px' }}>
               <Col span={4} className={styles.label}>手动填写:</Col>
-              <Col span={20}> <Input onBlur={this.addOrg} ref="manualValue"/></Col>
+              <Col span={20}> <Input onBlur={this.addOrg} ref="manualValue" /></Col>
               <Col span={24} className={styles.action}>
                 <Button type="primary" onClick={this.handleOk}>提交</Button>
               </Col>

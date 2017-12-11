@@ -26,7 +26,7 @@ const AvailableSystems = [
 
 let System;
 // System = 'aminer';
-// System = 'ccf';
+System = 'ccf';
 // System = 'ccftest';
 // System = 'huawei';
 // System = 'alibaba';
@@ -40,7 +40,7 @@ let System;
 // System = 'tencent';/
 // System = 'thurcb';
 // System = 'yocsef';
-   System = 'demo';
+//    System = 'demo';
 
 // SPECIAL: USED_IN_ONLINE_DEPLOY; DON'T DELETE THIS LINE.
 

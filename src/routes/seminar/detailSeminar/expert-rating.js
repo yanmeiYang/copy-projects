@@ -15,7 +15,7 @@ class ExpertRating extends React.Component {
   componentWillMount = () => {
     const { expertRating } = this.props;
     expertRating.map((value) => {
-      if (value.aid===this.props.aid){
+      if (value.aid === this.props.aid) {
         this.setState({ [value.key]: parseInt(value.score) })
       }
 
@@ -45,30 +45,30 @@ class ExpertRating extends React.Component {
     return (
       <div style={{ marginTop: '20px' }}>
         {/*<span style={{ fontWeight: 'bold' }}>专家评分：</span>*/}
-        <table >
+        <table>
           <tbody>
           <tr>
             <td>演讲内容:</td>
             <td>
-              <Rate value={content} onChange={this.onChange.bind(this, 'content')}/>
+              <Rate value={content} onChange={this.onChange.bind(this, 'content')} />
               <InputNumber min={0} max={5} step={1} value={content} defaultValue={content}
-                           onChange={this.onChange.bind(this, 'content')}/>
+                           onChange={this.onChange.bind(this, 'content')} />
             </td>
           </tr>
           <tr>
             <td>演讲水平:</td>
             <td>
-              <Rate value={level} onChange={this.onChange.bind(this, 'level')}/>
+              <Rate value={level} onChange={this.onChange.bind(this, 'level')} />
               <InputNumber min={0} max={5} step={1} value={level}
-                           onChange={this.onChange.bind(this, 'level')}/>
+                           onChange={this.onChange.bind(this, 'level')} />
             </td>
           </tr>
           <tr>
             <td>综合评价:</td>
             <td>
-              <Rate value={integrated} onChange={this.onChange.bind(this, 'integrated')}/>
+              <Rate value={integrated} onChange={this.onChange.bind(this, 'integrated')} />
               <InputNumber min={0} max={5} step={1} value={integrated}
-                           onChange={this.onChange.bind(this, 'integrated')}/>
+                           onChange={this.onChange.bind(this, 'integrated')} />
             </td>
           </tr>
           </tbody>

@@ -30,6 +30,7 @@ export default {
   'com.KgSearchBox.searchBtn': '搜索',
 
   'com.RgSearchNameBox.placeholder': '请输入姓名',
+  'com.RgSearchTermBox.placeholder': '请输入关键词',
 
   'com.search.filter.searchRange': '范围:',
   'com.search.filter.Filters': '过滤条件:',
@@ -113,10 +114,20 @@ export default {
   'com.relationGraph.header.action.one-pointExtension': '单点扩展',
   'com.relationGraph.header.h-index': 'H-指数',
 
+  'com.topicRelation.statistics.keywordsNum': '个关键词 ',
+  'com.topicRelation.statistics.coOccurenceNum': '对共现关系 ',
+  'com.topicRelation.statistics.edgeNum': '条边',
+  'com.topicRelation.header.relativeOperation': '相关操作：',
+  'com.topicRelation.header.pauseAction': '暂停调整',
+  'com.topicRelation.header.coOccurenceNum': '共现次数>',
+  'com.topicRelation.header.startYear': '起始年份：',
+  'com.topicRelation.header.endYear': '结束年份：',
+
   'com.topTrend.header': '技术趋势预测',
   'com.topTrend.header.tab.recentHeat': '近期热度',
   'com.topTrend.header.tab.globalHeat': '全局热度',
   'com.topTrend.header.tab.technologySources': '技术源头',
+  'com.topTrend.header.tab.domainAssociation': '领域关联',
   'com.topTrend.info': '"{tip}"技术趋势正在分析中，请稍候',
 
   'com.expertTrajectory.theme.label.0': '常规',

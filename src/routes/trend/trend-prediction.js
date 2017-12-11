@@ -100,6 +100,10 @@ export default class TrendPrediction extends React.PureComponent {
   }
 
   onChange = (key) => {
+    if (key === '4') {
+      this.showTopicRelation();
+      return;
+    }
     d3.select('.active').classed('active', false);
     d3.select(this.parentNode).classed('active', true);
     d3.selectAll('.term').remove();
@@ -123,7 +127,7 @@ export default class TrendPrediction extends React.PureComponent {
 
     this.renderHist();
     this.renderTermTrend(trendData.terms[0]);
-    this.renderTrend();
+    this.renderTrend(true);
   };
 
   onKeywordClick = (query) => {
@@ -209,7 +213,7 @@ export default class TrendPrediction extends React.PureComponent {
     // 显示整个界面的方法，sankey为技术发展图
     this.renderAxis();
     this.renderHist();
-    this.renderTrend(term, 1, 1000);
+    this.renderTrend(true);
     this.renderTermTrend(selectedTerm);
   };
 
@@ -302,6 +306,12 @@ export default class TrendPrediction extends React.PureComponent {
       })
       .on('click', (d) => {
         this.renderTermTrend(d);
+      })
+      .on('mouseover', (d, i) => {
+        d3.select(`#select-${i}`).style('opacity', 1);
+      })
+      .on('mouseout', (d, i) => {
+        d3.select(`#select-${i}`).style('opacity', 0);
       });
 
     // 页面左侧统计模块的直方图
@@ -327,6 +337,43 @@ export default class TrendPrediction extends React.PureComponent {
       .text((d) => { // 左侧图字体大小
         return trendData.termToLabel[d.t];
       });
+
+    // 选中后呈现的圆
+    histGraph.append('circle').attr('id', (d, i) => {
+      return `circle-${i}`;
+    })
+      .attr('cx', histItemHeight / 2 - 1)
+      .attr('cy', histItemHeight / 2 - 1)
+      .attr('r', (histItemHeight - 12) / 2) // 位于多选按钮的中心
+      .style('fill', '#CC0000')
+      .style('opacity', (d, i) => { // 默认选中前12个
+        if (i < 12) return 1;
+        else return 0;
+      });
+
+    // 多选按钮，选择技术发展图绘制的关键词
+    histGraph.append('rect').attr('x', 0).attr('y', 0) // 多选按钮位于直方图的左侧
+      .attr('id', (d, i) => {
+        return `select-${i}`;
+      })
+      .attr('rx', 3)
+      .attr('ry', 3)
+      .attr('height', histItemHeight - 2)
+      .attr('width', histItemHeight - 2)
+      .attr('stroke', '#505050')
+      .attr('stroke-opacity', 0.3) // 按钮只有边框有颜色
+      .attr('stroke-width', 1)
+      .style('fill', '#FFFFFF')
+      .style('fill-opacity', 0)
+      .style('opacity', 0)
+      .on('click', (d, i) => {
+        const cir = d3.select(`#circle-${i}`);
+        const v = 1 - cir.style('opacity');
+        trendData.terms[i].selected = (v !== 0);
+        cir.style('opacity', v);
+        this.renderTrend(false);
+        event.stopPropagation();
+      });
   };
 
   // 绘制技术趋势图，data对应1个term，趋势由data.year.d的大小反映
@@ -346,7 +393,8 @@ export default class TrendPrediction extends React.PureComponent {
       });
     // 技术趋势图（右下方）的两条包络线,做了减小梯度的处理
     d3.select('.strong').remove();
-    d3.select(`#term-${data.t.replace(/\s+/g, '')}`).append('rect').attr('class', 'strong').attr('x', '0px')
+    d3.select(`#term-${data.t.replace(/\s+/g, '')}`).append('rect').attr('class', 'strong')
+      .attr('x', histItemHeight)
       .attr('y', () => {
         return -1.8125;
       })
@@ -513,6 +561,20 @@ export default class TrendPrediction extends React.PureComponent {
       .attr('transform', (d, i) => {
         return `translate(${((i * width) / trendData.timeSlides.length)},${0})`;// 需调整参数，点离左边空白处
       });
+/*
+    axis.append('rect').attr('class', 'co-occur').attr('x', '15px').attr('rx', 2).attr('ry', 2)
+      .style('width', '75px')
+      .style('height', '18px')
+      .style('fill', '#FFFFFF')
+      .style('fill-opacity', 0)
+      .style('stroke-width', 2)
+      .style('stroke', '#909090')
+      .on('click', (d, i) => {
+      this.showTopicRelation(i);
+      });
+    axis.append('text').attr('x', '15px').attr('y', '13px')
+      .style('font-size', '14px')
+      .text('子领域分析');*/
 
     axisWidth = width / trendData.timeSlides.length;
     // 年代坐标轴，x1、y1为起点坐标，x2、y2为终点坐标
@@ -545,7 +607,7 @@ export default class TrendPrediction extends React.PureComponent {
       .style('font-weight', 'bold');
   };
 
-  renderTrend = (q, start, end) => {
+  renderTrend = (isInit) => {
     chart.append('linearGradient').attr('id');
     chart.append('line')
       .attr('x1', 0)
@@ -574,16 +636,23 @@ export default class TrendPrediction extends React.PureComponent {
     const termToIndex = {};
     const selectedTerms = {};
     const addedTerms = {};
-    let cnt = 0;
     // const topTerms = Object.keys(trendData.termFreq)
     //   .sort((a, b) => trendData.termFreq[b] - trendData.termFreq[a]);
-    for (const term of trendData.terms) {
-      termToIndex[term.t] = cnt;
-      selectedTerms[term.t] = true;
-      cnt += 1;
-      if (cnt > 12) {
-        break;
+    let cnt = 0;
+    if (isInit) {
+      for (const term of trendData.terms) {
+        if (cnt < 12) term.selected = true;
+        else term.selected = false;
+        cnt += 1;
       }
+    }
+    cnt = 0;
+    for (const term of trendData.terms) {
+      if (term.selected) {
+        termToIndex[term.t] = cnt;
+        selectedTerms[term.t] = true;
+      }
+      cnt += 1;
     }
     const slideToYear = {};
     for (const y in trendData.yearToSlide) {
@@ -594,6 +663,8 @@ export default class TrendPrediction extends React.PureComponent {
         slideToYear[slide] = [y];
       }
     }
+    const groups = [];
+    let groupNum = 0;
     for (let i = 0; i < trendData.termFreqBySlide.length; i += 1) {
       let pubCount = 5;
       for (const y of slideToYear[i]) {
@@ -619,18 +690,27 @@ export default class TrendPrediction extends React.PureComponent {
           }
           nodeToIndex[`${key}-${i}`] = nodes.length;
           nodes.push(n);
+          let group = -1;
+          const preIndex = nodeToIndex[`${key}-${i - 1}`];
+          if (preIndex !== undefined) {
+            group = groups[preIndex];
+          } else {
+            groupNum += 1;
+            group = groupNum;
+          }
+          groups.push(group);
           if (i > 0 && preNode !== undefined) {
             links.push({
               source: nodeToIndex[`${key}-${i - 1}`],
               target: nodeToIndex[`${key}-${i}`],
               w1: preNode.w,
               w2: n.w,
+              groupID: group,
             });
           }
         }
       }
     }
-
     console.log(trendData);
     // 技术发展图（右上方），用的sankey画图框架
     sankey.nodes(nodes).links(links)
@@ -645,6 +725,9 @@ export default class TrendPrediction extends React.PureComponent {
       })
       .attr('transform', `translate(${axisWidth},${0})`)
       .attr('d', path)
+      .attr('groupID', (d) => {
+        return d.groupID;
+      })
       .style('stroke-width', () => {
         return 20;
       })
@@ -680,11 +763,16 @@ export default class TrendPrediction extends React.PureComponent {
       })
       .on('mouseover', function () {
         d3.select(this).attr('opacity', 0.6);
+        const tar = d3.select(this);
+        d3.selectAll('.link')
+          .filter((d) => {
+            return d.groupID === parseInt(tar.attr('groupID'), 10);
+          })
+          .attr('opacity', 0.6);
+        tar.attr('opacity', 0.4);
       })
       .on('mouseout', function () {
-        d3.select(this).transition().duration(250).attr('opacity', () => {
-          return 1;
-        });
+        d3.selectAll('.link').attr('opacity', 1);
       });
     link.append('title').text((d) => {
       return `${d.source.name} → ${d.target.name}`;//`${d.source.name} → ${d.target.name}${d.source_index}`箭头
@@ -738,6 +826,10 @@ export default class TrendPrediction extends React.PureComponent {
     document.getElementById(id).style = 'display:none';
   };
 
+  showTopicRelation = () => {
+    window.location.href = `/topic-relation?query=${this.props.query}`;
+  }
+
   showTip = (id) => {
     const e = event || window.event;
     const scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
@@ -754,6 +846,8 @@ export default class TrendPrediction extends React.PureComponent {
       info = 'Sorted by the frequency of occurrence of the keyword in all papers in this field';
     } else if (id === 2) {
       info = 'Sorted by the frequency of occurrence of the keyword published in the former half time of the timeline in this field';
+    } else if (id === 3) {
+      info = 'Show the keyword co-occurence network in this field';
     }
     document.getElementById('tip').innerHTML = info;
   };
@@ -865,6 +959,11 @@ export default class TrendPrediction extends React.PureComponent {
                   <FM id="com.topTrend.header.tab.technologySources" defaultMessage="技术源头" />
                   </span>}
                 key="3" id="origin-trend" />
+              <TabPane
+                tab={<span onMouseEnter={this.showTip.bind(that, 3)} onMouseLeave={this.hideTip}>
+                  <FM id="com.topTrend.header.tab.domainAssociation" defaultMessage="领域关联" />
+                  </span>}
+                key="4" id="origin-trend" />
             </Tabs>
             <div id="hist-chart" className={styles.rightbox} />
           </div>

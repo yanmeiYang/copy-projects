@@ -2,7 +2,7 @@ import React from 'react';
 import { Input, Button } from 'antd';
 import { defineMessages, injectIntl } from 'react-intl';
 import Autosuggest from 'react-autosuggest';
-import styles from './RgSearchNameBox.less';
+import styles from './RgSearchTermBox.less';
 
 // https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
 function escapeRegexCharacters(str) {
@@ -11,14 +11,14 @@ function escapeRegexCharacters(str) {
 
 function renderSuggestion(suggestion) {
   return (
-    <span>{suggestion.name.n.en}</span>
+    <span>{suggestion.label}</span>
   );
 }
 
 const messages = defineMessages({
   placeholder: {
-    id: 'com.RgSearchNameBox.placeholder',
-    defaultMessage: 'Input expert name',
+    id: 'com.RgSearchTermBox.placeholder',
+    defaultMessage: 'Input term',
   },
   searchBtn: {
     id: 'com.KgSearchBox.searchBtn',
@@ -27,7 +27,7 @@ const messages = defineMessages({
 });
 
 @injectIntl
-export default class RgSearchNameBox extends React.Component {
+export default class RgSearchTermBox extends React.Component {
   constructor() {
     super();
 
@@ -44,25 +44,7 @@ export default class RgSearchNameBox extends React.Component {
     }
   };
 
-  getSuggestionValue = (suggestion) => {
-    this.setState({ finalNode: suggestion });
-    return suggestion.name.n.en;
-  };
-
-  getSuggestions = (value) => {
-    const suggestions = [];
-    const inputValue = value.toLowerCase().trim();
-    const inputLength = inputValue.length;
-    for (const node of this.props.suggesition) {
-      suggestions.push(node);
-    }
-
-    return inputLength === 0 ? [] : suggestions.filter(lang =>
-      lang.name.n.en.toLowerCase().trim().includes(inputValue),
-    );
-  };
-
-  onChange = (event, { newValue, method }) => {
+  onChange = (event, { newValue }) => {
     this.setState({
       value: newValue,
     });
@@ -80,19 +62,37 @@ export default class RgSearchNameBox extends React.Component {
     });
   };
 
+  getSuggestionValue = (suggestion) => {
+    this.setState({ finalNode: suggestion });
+    return suggestion.label;
+  };
+
+  getSuggestions = (value) => {
+    const suggestions = [];
+    const inputValue = value.toLowerCase().trim();
+    const inputLength = inputValue.length;
+    for (const node of this.props.suggesition) {
+      suggestions.push(node);
+    }
+
+    return inputLength === 0 ? [] : suggestions.filter(lang =>
+      lang.label.toLowerCase().trim().includes(inputValue),
+    );
+  };
+
   handleSubmit = (event) => {
     event.preventDefault();
-    let searchExpert = null;
+    let searchTerm = null;
     if (this.props.onSearch) {
-      if (this.state.finalNode.name && this.state.finalNode.name.n.en === this.state.value) {
-        searchExpert = this.state.finalNode;
+      if (this.state.finalNode.label && this.state.finalNode.label === this.state.value) {
+        searchTerm = this.state.finalNode;
       } else {
         const value = this.state.suggestions.filter(lang =>
-          lang.name.n.en.toLowerCase().trim().includes(this.state.value.toLowerCase().trim()),
+          lang.label.toLowerCase().trim().includes(this.state.value.toLowerCase().trim()),
         );
-        searchExpert = value[0];
+        searchTerm = value[0];
       }
-      this.props.onSearch(searchExpert);
+      this.props.onSearch(searchTerm);
     }
   };
 
@@ -130,7 +130,6 @@ export default class RgSearchNameBox extends React.Component {
             type="primary"
             onClick={this.handleSubmit}
             icon="search"
-            float="left"
           />
           }
         </Input.Group>

@@ -9,7 +9,7 @@ import { DomainSelector } from 'routes/expert-map';
 import { FormattedMessage as FM } from 'react-intl';
 import { applyTheme, theme } from 'themes';
 import { Layout as Page } from 'routes';
-import { Layout, Tabs, Button, Icon, TreeSelect, Menu, Dropdown, Checkbox, message  } from 'antd';
+import { Layout, Tabs, Button, Icon, TreeSelect, Menu, Dropdown, Checkbox, message, Modal } from 'antd';
 import styles from './ExpertHeatmapPage.less';
 import ExpertHeatmap from './ExpertHeatmap';
 
@@ -148,6 +148,70 @@ class ExpertHeatmapPage extends React.Component {
     dispatch({ type: 'expertTrajectory/findTrajsHeatAdvance', payload: { name, offset, org, term, size } });
   };
 
+  handleOk = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleCancel = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+
+  showModal = () => {
+    this.setState({
+      visible: true,
+    }, () => {
+      const chartsinterval = setInterval(() => {
+        const divId = document.getElementById('timeDistribution');
+        const data = this.props.expertTrajectory.heatData;
+        const type = 'timeDistribution';
+        if ((typeof (divId) !== 'undefined' && divId !== 'undefined'
+            && data !== '') || (this.state.visible === false)) {
+          clearInterval(chartsinterval);
+          //showPersonStatistic(echarts, divId, data, type);
+        }
+      }, 100);
+    });
+  };
+
+  changeStatistic = (key) => {
+    const chartsinterval = setInterval(() => {
+      let divId;
+      let type;
+      if (key === 1) {
+        divId = document.getElementById('timeDistribution');
+        type = 'timeDistribution';
+      } else {
+        divId = document.getElementById('migrateHistory');
+        type = 'migrateHistory';
+      }
+      const data = this.props.expertTrajectory.heatData;
+      if (typeof (divId) !== 'undefined' && divId !== 'undefined') {
+        clearInterval(chartsinterval);
+        //showPersonStatistic(echarts, divId, data, type);
+      }
+    }, 100);
+  };
+
+  handleDownload = () => {
+    const data = this.props.expertTrajectory.heatData;
+    if (typeof (data.staData) !== 'undefined' && data.staData !== 'undefined') {
+      let str = '';
+      const bom = '\uFEFF';
+      str = encodeURI(str);
+      const { name } = this.state.cperson;
+      const link = window.document.createElement('a');
+      link.setAttribute('href', `data:text/csv;charset=utf-8,${bom}${str}`);
+      link.setAttribute('download', `statistics-${name}.csv`);
+      link.click();
+    } else {
+      //给个提示？
+    }
+  };
+
   render() {
     const data = this.props.expertTrajectory.heatData;
     const { query, themeKey, domainId } = this.state;
@@ -164,6 +228,19 @@ class ExpertHeatmapPage extends React.Component {
         })}
       </Menu>
     );
+
+    const staJsx = (
+      <div className={styles.charts}>
+        <div id="timeDistribution" className={styles.chart1} />
+      </div>
+    );
+
+    const staJsx1 = (
+      <div className={styles.charts}>
+        <div id="migrateHistory" className={styles.chart1} />
+      </div>
+    );
+
     return (
       <Page contentClass={tc(['ExpertHeatmapPage'])} onSearch={this.onSearch}
             query={query}>
@@ -199,6 +276,27 @@ class ExpertHeatmapPage extends React.Component {
                 <Icon type="line-chart" />
                 <FM defaultMessage="Statistic & Analysis" id="com.expertMap.headerLine.label.statistic" />
               </Button>
+              <Modal
+                title="Statistics & Analyses"
+                visible={this.state.visible}
+                onOk={this.handleOk}
+                onCancel={this.handleCancel}
+                footer={[
+                  <Button key="back" size="large" onClick={this.handleDownload.bind(this)}>
+                    <Icon type="download" />
+                    <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.download" />
+                  </Button>,
+                  <Button key="submit" type="primary" size="large" onClick={this.handleOk}>
+                    <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.ok" />
+                  </Button>,
+                ]}
+                width="700px"
+              >
+                <Tabs defaultActiveKey="1" onChange={this.changeStatistic}>
+                  <TabPane tab="时间分布" key="1">{staJsx && staJsx}</TabPane>
+                  <TabPane tab="迁徙历史" key="2">{staJsx1 && staJsx1}</TabPane>
+                </Tabs>
+              </Modal>
             </div>
             <div className={styles.yourSkin}>
               <Dropdown overlay={menu} className={styles.skin}>

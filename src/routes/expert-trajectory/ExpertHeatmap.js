@@ -33,7 +33,6 @@ class ExpertHeatmap extends React.Component {
   };
 
   componentWillMount() {
-    console.log('>>>>>>>>>>>>>>>>', this.props);
     this.initChart();
   }
 
@@ -45,25 +44,31 @@ class ExpertHeatmap extends React.Component {
     if (nextProps.expertTrajectory.heatData &&
       nextProps.expertTrajectory.heatData !== this.props.expertTrajectory.heatData) {
       const themeKey = typeof (this.props.themeKey) === 'undefined' ? 0 : this.props.themeKey;
+      const checkType = typeof (this.props.checkType) === 'undefined' ? [] : this.props.checkType;
       showChart(myChart, 'bmap', themeKey, 'heatmap');
-      this.loadHeat(nextProps.expertTrajectory.heatData, this.state.currentYear);
+      this.loadHeat(nextProps.expertTrajectory.heatData, this.state.currentYear, checkType);
       return true;
     }
     if (nextProps.themeKey && this.props.themeKey !== nextProps.themeKey) {
       showChart(myChart, 'bmap', nextProps.themeKey, 'heatmap');
-      this.loadHeat(nextProps.expertTrajectory.heatData, this.state.currentYear);
+      const checkType = typeof (this.props.checkType) === 'undefined' ? [] : this.props.checkType;
+      this.loadHeat(nextProps.expertTrajectory.heatData, this.state.currentYear, checkType);
       return true;
     }
     if (nextProps.checkType && this.props.checkType !== nextProps.checkType) {
       const themeKey = typeof (this.props.themeKey) === 'undefined' ? 0 : this.props.themeKey;
+      const checkType = typeof (nextProps.checkType) === 'undefined' ? [] : nextProps.checkType;
       showChart(myChart, 'bmap', themeKey, 'heatmap');
       this.loadHeat(
         nextProps.expertTrajectory.heatData,
-        this.state.currentYear, nextProps.checkType,
+        this.state.currentYear, checkType,
       );
       return true;
     }
     if (nextState && nextState !== this.state) {
+      return true;
+    }
+    if (nextProps.loading && nextProps.loading !== this.props.loading) {
       return true;
     }
     return false;
@@ -86,7 +91,8 @@ class ExpertHeatmap extends React.Component {
       }
       trajInterval = setInterval(() => {
         this.setState({ currentYear: start }, () => {
-          this.loadHeat(this.props.expertTrajectory.heatData, start);
+          const checkType = typeof (this.props.checkType) === 'undefined' ? [] : this.props.checkType;
+          this.loadHeat(this.props.expertTrajectory.heatData, start, checkType);
           if (start < end) {
             start += 1;
           } else {
@@ -112,7 +118,8 @@ class ExpertHeatmap extends React.Component {
     this.setState({
       currentYear: value,
     });
-    this.loadHeat(this.props.expertTrajectory.heatData, value);
+    const checkType = typeof (this.props.checkType) === 'undefined' ? [] : this.props.checkType;
+    this.loadHeat(this.props.expertTrajectory.heatData, value, checkType);
   };
 
   initChart = () => {
@@ -201,8 +208,8 @@ class ExpertHeatmap extends React.Component {
         }
       }
     }
-    //const loading = this.props.loading.models.expertTrajectory;用这个？
-    const { loading } = this.props.expertTrajectory;
+    // const loading = this.props.loading.global;
+    //const { loading } = this.props.expertTrajectory;
 
     const bgcolor = ['#AAC2DD', '#044161', '#404a59', '#80cbc4', '#b28759', '#4e6c8d', '#d1d1d1'];
     const themeKey = typeof (this.props.themeKey) === 'undefined' ? 0 : this.props.themeKey;
@@ -216,7 +223,7 @@ class ExpertHeatmap extends React.Component {
 
     return (
       <div>
-        <Spinner loading={loading} />
+        {/*<Spinner loading={loading} />*/}
         <div className={styles.whole}>
           <div className={styles.heatmap} id="chart" />
           <div className={styles.info} style={{ backgroundColor: color }}>

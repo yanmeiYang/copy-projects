@@ -88,6 +88,9 @@ class ExpertHeatmapPage extends React.Component {
     if (nextState.domainId && nextState.domainId !== this.state.domainId) {
       this.searchTrajByDomain(nextState.domainId);
     }
+    if (nextProps.loading && nextProps.loading !== this.props.loading) {
+      return true;
+    }
     return true;
   }
 
@@ -240,10 +243,12 @@ class ExpertHeatmapPage extends React.Component {
         <div id="migrateHistory" className={styles.chart1} />
       </div>
     );
+    const loading = this.props.loading.global;
 
     return (
       <Page contentClass={tc(['ExpertHeatmapPage'])} onSearch={this.onSearch}
             query={query}>
+        <Spinner loading={loading} />
         <div className={styles.header}>
           <div className={styles.domain}>
             <DomainSelector

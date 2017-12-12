@@ -18,8 +18,8 @@ module.exports = {
   PageTitle: 'ACM Fellow',
 
   // AI search helper translation/expand/kg
-  Search_EnableTranslateSearch: false, // 启用翻译搜索，显示提示信息;/
-  Search_DefaultTranslateSearch: false, // 默认使用翻译搜索;
+  Search_EnableTranslateSearch: true, // 启用翻译搜索，显示提示信息;/
+  Search_DefaultTranslateSearch: true, // 默认使用翻译搜索;
   Search_EnableSmartSuggest: true, // 启用智能提示;  启用后，禁用translateSearch
   Search_SmartSuggest_EnableExpand: true, // TODO
   Search_SmartSuggest_EnableTranslate: true, // TODO

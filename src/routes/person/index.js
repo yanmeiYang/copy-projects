@@ -5,6 +5,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Icon, InputNumber, Rate, Tabs, Spin } from 'antd';
+import { Button } from 'antd';
 import { Layout } from 'routes';
 import { getTwoDecimal } from 'utils';
 import { ProfileInfo } from 'components/person';
@@ -23,6 +24,10 @@ const Person = ({ dispatch, person, seminar, publications }) => {
   const contrib = avgScores.filter(score => score.key === 'contrib')[0];
   const integrated = avgScores.filter(score => score.key === 'integrated')[0];
   const activity_indices = { contrib: contrib === undefined ? 0 : contrib.score };
+
+const recomputeContribution = () => {
+  console.log('6666666')
+}
   const profileTabs = [{
     isShow: sysconfig.ShowRating,
     title: '专家评分',
@@ -32,15 +37,18 @@ const Person = ({ dispatch, person, seminar, publications }) => {
       <Indices indices={profile.indices} />
       }
       <table style={{ marginBottom: 10 }} className="scoreTable">
+        <thead>
         {contrib &&
         <tr>
           <td>贡献度:</td>
           <td>
             {/* <Rate disabled defaultValue={contrib.score}/> */}
-            <span>{contrib.score}</span>
+            <span style={{ marginRight: 72 }}>{contrib.score}</span>
+            <Button type="primary" size="small" onClick={this.recomputeContribution.bind(this)}>重新计算贡献度</Button>
           </td>
         </tr>
         }
+        </thead>
         {avgScores.map((score) => {
           return (
             <tbody key={score.key}>
@@ -67,6 +75,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
             </tbody>
           );
         })}
+        <tfoot>
         {integrated &&
         <tr>
           <td>综合评价:</td>
@@ -77,6 +86,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
           </td>
         </tr>
         }
+        </tfoot>
       </table>
     </div>,
   }, {
@@ -159,6 +169,8 @@ const Person = ({ dispatch, person, seminar, publications }) => {
         return false;
     }
   }
+
+
 
   // console.log('|||||||||||| PersonIndex:', person);
   return (

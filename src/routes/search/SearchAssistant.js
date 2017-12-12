@@ -20,7 +20,6 @@ export default class SearchAssistant extends Component {
   static defaultProps = {};
 
   state = {
-    defaultExpansionChecked: 1,
     currentExpansionChecked: 0,
     currentTranslationChecked: 0,
 
@@ -48,7 +47,6 @@ export default class SearchAssistant extends Component {
     this.setState({
       currentExpansionChecked: index + 1,
       currentTranslationChecked: this.state.currentTranslationChecked === 0 ? 0 : index + 1,
-      defaultExpansionChecked: null,
     });
     // this.callSearch(); call in did update.
   };
@@ -196,8 +194,7 @@ export default class SearchAssistant extends Component {
                   <div>
                     <span className={styles.rightbox}>
                       <Checkbox
-                        checked={defaultExpansionChecked === index + 1 ||
-                        currentExpansionChecked === index + 1}
+                        checked={currentExpansionChecked === index + 1}
                         onChange={this.onExpandedTermChange.bind(this, index)}
                       >{item.word}
                       </Checkbox>

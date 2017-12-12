@@ -762,7 +762,7 @@ export default class TopicRelation extends React.PureComponent {
               &nbsp;&nbsp;&nbsp;
               <label><FM id="com.topicRelation.header.coOccurenceNum"
                          defaultMessage="共现次数>" /></label>
-              <Select defaultValue="0" style={{ width: 70, marginRight: 10 }} id="co-occur-select"
+              <Select defaultValue="0" style={{ width: 60, marginRight: 10 }} id="co-occur-select"
                       onChange={this.occursChange}>
                 {this.activities.map((act) => {
                   return (
@@ -770,7 +770,7 @@ export default class TopicRelation extends React.PureComponent {
                   );
                 })}
               </Select>
-              <RgSearchTermBox size="default" style={{ width: 270 }} onSearch={this.onSearch}
+              <RgSearchTermBox size="default" style={{ width: 230 }} onSearch={this.onSearch}
                                suggesition={this.state.allNodes} />
             </div>
           </div>

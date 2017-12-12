@@ -49,7 +49,9 @@ export default class TopicRelationPage extends React.Component {
   render() {
     console.log('>>> |||', this.state.query);
     return (
-      <TopicRelation query={this.state.query} title={this.titleBlock} />
+      <Layout contentClass={tc(['relationGraph'])} query={this.state.query} onSearch={this.onSearch}>
+       <TopicRelation query={this.state.query} title={this.titleBlock} />
+      </Layout>
     );
   }
 }

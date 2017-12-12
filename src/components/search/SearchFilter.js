@@ -65,14 +65,18 @@ export default class SearchFilter extends Component {
     // console.log('====================================');
     const { filters, aggs, disableExpertBaseFilter, roles, app, result } = this.props;
     const keys = this.keys;
+
     let expertRating;
-    if (app.roles.god || app.roles.admin) {
-      expertRating = true;
-    } else if (app.roles.role[0] && app.roles.role[0].includes('超级管理员')) {
-      expertRating = true;
-    } else {
-      expertRating = false;
+    { // TODO ccfemergency
+      if (app.roles.god || app.roles.admin) {
+        expertRating = true;
+      } else if (app.roles.role[0] && app.roles.role[0].includes('超级管理员')) {
+        expertRating = true;
+      } else {
+        expertRating = false;
+      }
     }
+
     return (
       <div className={styles.searchFilter}>
         <div className={styles.filter}>
@@ -116,7 +120,7 @@ export default class SearchFilter extends Component {
             <ul className={styles.filterItems}>
               {expertBases.map((eb) => {
                 let isShowEb = false;
-                // TODO 此处鉴别方式需要修改
+                // TODO ccfemergency 此处鉴别方式需要修改
                 if ((eb.id === 'aminer' &&
                     (sysconfig.SYSTEM === 'ccf' || sysconfig.SYSTEM === 'ccftest') &&
                     !expertRating)) {

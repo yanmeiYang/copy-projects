@@ -30,6 +30,7 @@ export default {
   'com.KgSearchBox.searchBtn': 'Search',
 
   'com.RgSearchNameBox.placeholder': 'Input expert name',
+  'com.RgSearchTermBox.placeholder': 'Input term',
 
   'com.search.filter.searchRange': 'Range:',
   'com.search.filter.Filters': 'Filters:',
@@ -113,11 +114,21 @@ export default {
   'com.relationGraph.header.action.one-pointExtension': 'One-point Extension',
   'com.relationGraph.header.h-index': 'H-index',
 
+  'com.topicRelation.statistics.keywordsNum': 'keywords ',
+  'com.topicRelation.statistics.coOccurenceNum': 'co-occurences ',
+  'com.topicRelation.statistics.edgeNum': 'edges',
+  'com.topicRelation.header.relativeOperation': 'operation: ',
+  'com.topicRelation.header.pauseAction': 'pause',
+  'com.topicRelation.header.coOccurenceNum': 'co-occur> ',
+  'com.topicRelation.header.startYear': 'start year: ',
+  'com.topicRelation.header.endYear': 'end year: ',
+
 
   'com.topTrend.header': 'Technical Trend Prediction',
   'com.topTrend.header.tab.recentHeat': 'Recent Heat',
   'com.topTrend.header.tab.globalHeat': 'Global Heat',
   'com.topTrend.header.tab.technologySources': 'Technology Sources',
+  'com.topTrend.header.tab.domainAssociation': 'Domain Association',
   'com.topTrend.info': 'Technology prediction about "{tip}" is analyzing. Please wait.',
 
   'com.expertTrajectory.theme.label.0': 'Regular',

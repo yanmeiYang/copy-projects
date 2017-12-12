@@ -26,6 +26,8 @@ import router2bprofile from 'routes/2b-profile/router-2bprofile';
 import profile from 'routes/profile/router-profile';
 import crossHeat from 'routes/cross-heat/router-ch';
 import dataAnnotation from 'routes/data-annotation/router-da';
+import topicRelation from 'routes/topic-relation/router-relation';
+
 
 const { ConnectedRouter } = routerRedux;
 
@@ -112,6 +114,8 @@ const RouterRegistry = [
 
   // Data Annotation
   dataAnnotation.AnnotatePersonProfile,
+
+  topicRelation.RelationPage,
 
   // System Default.
   core.Error404, // must be last one.

@@ -2,10 +2,10 @@
 
 .searchAssistant {
   display: flex; flex-direction: column;
-  margin: 5px; padding: 8px 12px;
+  margin: 5px 2px; padding: 8px 12px;
   border: 1px solid rgb(230, 230, 230);
   border-radius: 2px;
-  background-color: rgb(249, 249, 249);
+  background-color: @background-color-gray; //rgb(249, 249, 249);
   color: #555;
 
   //font-size: 14px;
@@ -29,13 +29,29 @@
 
   .ww { display: block; width: 200px; display: flex; flex-direction: row; flex-shrink: 0; }
 
-  .box1 { display: flex; flex-direction: row; }
+  .box1 {
+    display: flex; flex-direction: row;
+
+    .hypernym { color: red; }
+
+    .hyponym {color: #3e9bc9;}
+  }
+
+  .box1, .leftBox {
+    :global {
+      .ant-checkbox-wrapper {
+        margin-left: 0;margin-right: 8px;
+        padding-left: 4px;
+        padding-bottom: 1px;
+      }
+      .ant-checkbox-wrapper:hover {
+        border-radius: 2px;
+        background-color: #eee;
+      }
+    }
+  }
 
   .paddingRight { padding-right: 15px; }
-
-  .suporordinateWord { color: red; }
-
-  .subordinateWord { color: #3e9bc9; }
 
   .kk { display: flex; flex-direction: column; }
 

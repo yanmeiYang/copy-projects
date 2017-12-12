@@ -51,7 +51,8 @@ export default class TobButton extends PureComponent {
       <div>
         <Dropdown overlay={menu}>
           <Link to="/2b"><Icon type="appstore-o" className="noTextIcon"
-                               style={{ fontSize: 16 }} /></Link>
+                               style={{ fontSize: 16, padding: '15px 8px' }} />
+          </Link>
         </Dropdown>
       </div>
     );

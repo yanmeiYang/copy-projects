@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import PropTypes from 'prop-types';
 import { Tag } from 'antd';
 import { classnames } from 'utils';
+import { compareDeep, compare } from 'utils/compare';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { sysconfig } from 'systems';
 import styles from './SearchFilter.less';
@@ -42,11 +43,10 @@ const AggConfig = {
   'dims.systag': {}, // first used in bole's tag system.
 };
 
-@connect(({ app }) => ({ app }))
-
 /**
  * SearchFilter Component
  */
+@connect(({ app }) => ({ roles: app.roles }))
 export default class SearchFilter extends Component {
   constructor(props) {
     super(props);
@@ -57,20 +57,26 @@ export default class SearchFilter extends Component {
     this.keys = ['h_index', 'gender', 'location', 'language', 'dims.systag'];
   }
 
-  // shouldComponentUpdate(nextProps) {
-  //   return true;
-  // }
+  shouldComponentUpdate(nextProps) {
+    if (compareDeep(nextProps, this.props, 'filters')) {
+      return true;
+    }
+    if (compareDeep(nextProps, this.props, 'aggs')) {
+      return true;
+    }
+    return true;
+  }
 
   render() {
     // console.log('====================================');
-    const { filters, aggs, disableExpertBaseFilter, roles, app, result } = this.props;
+    const { filters, aggs, disableExpertBaseFilter, roles } = this.props;
     const keys = this.keys;
 
     let expertRating;
     { // TODO ccfemergency
-      if (app.roles.god || app.roles.admin) {
+      if (roles.god || roles.admin) {
         expertRating = true;
-      } else if (app.roles.role[0] && app.roles.role[0].includes('超级管理员')) {
+      } else if (roles.role[0] && roles.role[0].includes('超级管理员')) {
         expertRating = true;
       } else {
         expertRating = false;
@@ -127,7 +133,7 @@ export default class SearchFilter extends Component {
                   isShowEb = true;
                 }
                 if (eb.show) {
-                  isShowEb = !eb.show(roles);
+                  isShowEb = !eb.show(roles && roles.role);
                 }
                 const props = {
                   key: eb.id,

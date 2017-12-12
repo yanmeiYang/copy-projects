@@ -7,10 +7,11 @@ import { sysconfig } from 'systems';
 import styles from './SearchAssistant.less';
 import { compare } from "utils";
 
-@connect(({ search }) => ({
+@connect(({ search, loading }) => ({
   query: search.query,
   assistantData: search.assistantData,
   assistantDataMeta: search.assistantDataMeta,
+  loading,
 }))
 export default class SearchAssistant extends Component {
   static propTypes = {
@@ -20,7 +21,6 @@ export default class SearchAssistant extends Component {
   static defaultProps = {};
 
   state = {
-    defaultExpansionChecked: 1,
     currentExpansionChecked: 0,
     currentTranslationChecked: 0,
 
@@ -48,7 +48,6 @@ export default class SearchAssistant extends Component {
     this.setState({
       currentExpansionChecked: index + 1,
       currentTranslationChecked: this.state.currentTranslationChecked === 0 ? 0 : index + 1,
-      defaultExpansionChecked: null,
     });
     // this.callSearch(); call in did update.
   };
@@ -95,6 +94,10 @@ export default class SearchAssistant extends Component {
   // intelligenceSuggests
   callSearch = () => {
     const { assistantData, onAssistantChanged } = this.props;
+    if (!assistantData) {
+      return;
+    }
+
     const texts = [];
     const { currentExpansionChecked, currentTranslationChecked, checkedList } = this.state;
     const { expands, kgHypernym, kgHyponym } = assistantData;
@@ -102,7 +105,7 @@ export default class SearchAssistant extends Component {
     if (currentExpansionChecked > 0 && expands && expands.length >= currentExpansionChecked) {
       const exp = expands[currentExpansionChecked - 1];
       if (exp) {
-        texts.push({ text: exp.word, source: 'expands', });
+        texts.push({ text: exp.word, source: 'expands' });
       }
     }
     if (currentTranslationChecked > 0 && expands && expands.length >= currentTranslationChecked) {
@@ -161,6 +164,7 @@ export default class SearchAssistant extends Component {
       currentExpansionChecked, currentTranslationChecked,
       defaultExpansionChecked, checkedList,
     } = this.state;
+    const assistantLoading = this.props.loading.effects['search/searchPerson']; // when is new api.
 
     const { assistantData } = this.props;
     if (!assistantData) {
@@ -196,14 +200,13 @@ export default class SearchAssistant extends Component {
                   <div>
                     <span className={styles.rightbox}>
                       <Checkbox
-                        checked={defaultExpansionChecked === index + 1 ||
-                        currentExpansionChecked === index + 1}
+                        checked={currentExpansionChecked === index + 1}
                         onChange={this.onExpandedTermChange.bind(this, index)}
                       >{item.word}
                       </Checkbox>
                     </span>
                   </div>
-                  {hasTranslation &&
+                  {hasTranslation && item.word_zh &&
                   <div>
                     <span className={styles.rightbox}>
                       <Checkbox
@@ -226,6 +229,8 @@ export default class SearchAssistant extends Component {
           }
 
         </div>
+
+        {hasExpansion && hasKG && <div className={styles.spliter} />}
 
         {hasKG &&
         <div className={styles.box1}>

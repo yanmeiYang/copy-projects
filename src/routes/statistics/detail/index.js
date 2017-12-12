@@ -58,7 +58,7 @@ class StatisticsDetail extends React.Component {
             <strong>承办单位：</strong> {queryURL('organizer')} </span>}
         </h3>
         <Spin spinning={loading}>
-          <div className="seminar" style={{ minHeight: '350px', marginTop: 20 }}>
+          <div className="seminar" style={{ minHeight: '350px', marginTop: 20, flexDirection: 'column' }}>
             {
               seminarsByOrgAndCat.map((result) => {
                 return (

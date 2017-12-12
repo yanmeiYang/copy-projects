@@ -102,7 +102,7 @@ class AddExpertModal extends React.Component {
       const editTheTalk = this.props.editTheTalk;
       const setFormFieldsVale = this.props.parentProps.form;
       this.props.parentProps.seminar.speakerSuggests = [];
-      this.speakerInformation = this.props.editTheTalk.speaker;
+      this.speakerInformation = this.props.editTheTalk.speaker;Ø
       ReactDOM.findDOMNode(this.refs.talkTitle).value = editTheTalk.title;
       ReactDOM.findDOMNode(this.refs.talkLocation).value = editTheTalk.location ? editTheTalk.location.address : '';
       ReactDOM.findDOMNode(this.refs.talkAbstract).value = editTheTalk.abstract;

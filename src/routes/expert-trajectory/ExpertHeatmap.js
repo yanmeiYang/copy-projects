@@ -33,6 +33,7 @@ class ExpertHeatmap extends React.Component {
   };
 
   componentWillMount() {
+    console.log('>>>>>>>>>>>>>>>>', this.props);
     this.initChart();
   }
 
@@ -223,7 +224,9 @@ class ExpertHeatmap extends React.Component {
               return (
                 <div key={person.id}>
                   <div className={styles.imgBox}>
-                    <img src={person.avatar} alt="" onKeyDown={() => {}} onError={this.handleErr} onClick={() => {}} />
+                    <img src={person.avatar} alt="" onKeyDown={() => {
+                    }} onError={this.handleErr} onClick={() => {
+                    }} />
                   </div>
                   <div className={styles.nameBox}>
                     <div className={styles.name} style={{ color }}>
@@ -236,9 +239,11 @@ class ExpertHeatmap extends React.Component {
           </div>
           <div className={styles.paper}>
             <div className={styles.year}>2014:</div>
-            Eric, Mihail, Manning, Christopher D. A Copy-Augmented Sequence-to-Sequence Architecture Gives Good Performance on Task-Oriented Dialogue[J]. 2017:468-473.
+            Eric, Mihail, Manning, Christopher D. A Copy-Augmented Sequence-to-Sequence
+            Architecture Gives Good Performance on Task-Oriented Dialogue[J]. 2017:468-473.
             <br />
-            <a href={`https://www.aminer.cn/archive/58d82fd2d649053542fd76c7`} target="_blank"><Icon type="file" />查看文章</a>
+            <a href={`https://www.aminer.cn/archive/58d82fd2d649053542fd76c7`}
+               target="_blank"><Icon type="file" />查看文章</a>
           </div>
         </div>
         <div className={styles.dinner}>

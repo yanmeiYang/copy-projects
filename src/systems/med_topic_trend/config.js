@@ -38,4 +38,20 @@ module.exports = {
   Layout_ShowHeader: false,
   GLOBAL_ENABLE_HOC: false,
 
+  // Topic Trend
+  TopicTrend_HotTopics: [
+    { term: 'Mobile Health', term_zh: '移动健康' },
+    { term: 'Tumor epidemiology', term_zh: '肿瘤流行病学' },
+    { term: 'Synthetic biology technology', term_zh: '合成生物学技术' },
+    { term: 'Genome of esophageal cancer', term_zh: '食管癌基因组' },
+    { term: 'Environmental health', term_zh: '环境健康' },
+    { term: 'Cardiovascular', term_zh: '心血管' },
+    { term: 'Targeted poverty alleviation', term_zh: '精准扶贫' },
+    { term: 'Healthcare reform', term_zh: '医疗改革' },
+    { term: 'Grading diagnosis and treatment', term_zh: '分级诊疗' },
+    { term: 'Medical Biotechnology', term_zh: '医药生物技术' },
+    { term: 'Diabetes', term_zh: '糖尿病' },
+    { term: 'Oncology/tumor/cancer', term_zh: '肿瘤' },
+  ],
+
 };

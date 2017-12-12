@@ -71,7 +71,7 @@ const encodeAdvancedQuery = (query) => {
 };
 
 const cleanQuery = (query) => {
-  return query.replace(/-/g, ' ').trim();
+  return query && query.replace(/-/g, ' ').trim();
 };
 
 const escapeURLBracket = (url) => {

@@ -15,7 +15,7 @@ const tc = applyTheme(styles);
 
 function mapStateToPropsFactory(initialState, ownProps) {
   // a closure for ownProps is created
-  console.log('****** mapStateToPropsFactory',);
+  // console.log('****** mapStateToPropsFactory',);
   return function mapStateToProps(state) {
     // console.log('****** mapStateToProps',); // TODO Performance
     return ({

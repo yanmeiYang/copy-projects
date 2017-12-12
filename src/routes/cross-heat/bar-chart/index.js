@@ -3,7 +3,6 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-// import * as d3 from 'd3';
 import { RequireRes } from 'hoc';
 import { ensure } from 'utils';
 import styles from './index.less';

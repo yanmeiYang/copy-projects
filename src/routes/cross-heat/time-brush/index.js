@@ -5,8 +5,10 @@ import React from 'react';
 import { connect } from 'dva';
 import { Icon, Input, Modal } from 'antd';
 import ReactDOM from 'react-dom';
-import * as d3 from 'd3';
+import { loadD3 } from "utils";
 import styles from './index.less';
+
+let d3;
 
 class TimeBrush extends React.Component {
   state = {
@@ -14,8 +16,11 @@ class TimeBrush extends React.Component {
   };
 
   componentDidMount() {
-    const { xWidth, yearBuring, isAuto } = this.props;
-    this.createBrush(xWidth, yearBuring, isAuto);
+    loadD3((ret) => {
+      d3 = ret;
+      const { xWidth, yearBuring, isAuto } = this.props;
+      this.createBrush(xWidth, yearBuring, isAuto);
+    });
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -25,11 +30,17 @@ class TimeBrush extends React.Component {
       this.props.getLocalYear(nextState.date);
     }
     if (xWidth !== nextProps.xWidth) {
-      this.createBrush(nextProps.xWidth, date, isAuto);
+      loadD3((ret) => {
+        d3 = ret;
+        this.createBrush(nextProps.xWidth, date, isAuto);
+      });
     }
     if (yearBuring[1] !== nextProps.yearBuring[1]) {
-      this.createBrush(nextProps.xWidth, nextProps.yearBuring, isAuto);
-      console.log(yearBuring);
+      loadD3((ret) => {
+        d3 = ret;
+        this.createBrush(nextProps.xWidth, nextProps.yearBuring, isAuto);
+        console.log(yearBuring);
+      });
     }
   }
 
@@ -135,5 +146,6 @@ class TimeBrush extends React.Component {
       </div>);
   }
 }
+
 export default connect(({ crossHeat, loading }) => ({ crossHeat, loading }))(TimeBrush);
 

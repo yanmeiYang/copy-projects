@@ -80,7 +80,6 @@ class CommitteeList extends React.Component {
         return val2 - val1;
       };
     };
-
     this.props.activity.sort(compare('total'));
     return (
       <div>

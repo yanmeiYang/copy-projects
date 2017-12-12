@@ -63,8 +63,6 @@ const yearToXOffset = (year) => {
 
 const { TabPane } = Tabs;
 
-const HOT_TERMS = ['Answer Machine', 'Artificial Intelligence', 'Autopilot', 'BlockChain', 'Computer Vision', 'Data Mining', 'Data Modeling', 'Deep Learning', 'Graph Databases', 'Internet of Things', 'Machine Learning', 'Robotics', 'Networks', 'Natural Language Processing', 'Neural Network'];
-
 let d3;
 
 /**
@@ -561,20 +559,20 @@ export default class TrendPrediction extends React.PureComponent {
       .attr('transform', (d, i) => {
         return `translate(${((i * width) / trendData.timeSlides.length)},${0})`;// 需调整参数，点离左边空白处
       });
-/*
-    axis.append('rect').attr('class', 'co-occur').attr('x', '15px').attr('rx', 2).attr('ry', 2)
-      .style('width', '75px')
-      .style('height', '18px')
-      .style('fill', '#FFFFFF')
-      .style('fill-opacity', 0)
-      .style('stroke-width', 2)
-      .style('stroke', '#909090')
-      .on('click', (d, i) => {
-      this.showTopicRelation(i);
-      });
-    axis.append('text').attr('x', '15px').attr('y', '13px')
-      .style('font-size', '14px')
-      .text('子领域分析');*/
+    /*
+        axis.append('rect').attr('class', 'co-occur').attr('x', '15px').attr('rx', 2).attr('ry', 2)
+          .style('width', '75px')
+          .style('height', '18px')
+          .style('fill', '#FFFFFF')
+          .style('fill-opacity', 0)
+          .style('stroke-width', 2)
+          .style('stroke', '#909090')
+          .on('click', (d, i) => {
+          this.showTopicRelation(i);
+          });
+        axis.append('text').attr('x', '15px').attr('y', '13px')
+          .style('font-size', '14px')
+          .text('子领域分析');*/
 
     axisWidth = width / trendData.timeSlides.length;
     // 年代坐标轴，x1、y1为起点坐标，x2、y2为终点坐标
@@ -919,17 +917,17 @@ export default class TrendPrediction extends React.PureComponent {
         <Spinner loading={this.state.loadingFlag} />
         <div className={styles.keywords}>
           <div className={styles.inner}>
-            {
-              HOT_TERMS.map((hw) => {
-                i += 1;
-                return (
-                  <div key={i}>
-                    <a role="presentation" key={i}
-                       onClick={that.onKeywordClick.bind(that, hw)}>{hw}</a>
-                  </div>
-                );
-              })
-            }
+            {sysconfig.TopicTrend_HotTopics && sysconfig.TopicTrend_HotTopics.map((hw) => {
+              console.log('......', hw, typeof hw);
+              const term = typeof hw === 'string' ? hw : hw.term;
+              return (
+                <div key={term}>
+                  <a role="presentation" onClick={that.onKeywordClick.bind(that, term)}>
+                    {term}
+                  </a>
+                </div>
+              );
+            })}
           </div>
         </div>
         <div className={styles.loading1}>

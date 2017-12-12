@@ -12,6 +12,7 @@ import { Layout as Page } from 'routes';
 import { Layout, Tabs, Button, Icon, TreeSelect, Menu, Dropdown, Checkbox, message, Modal } from 'antd';
 import styles from './ExpertHeatmapPage.less';
 import ExpertHeatmap from './ExpertHeatmap';
+import { showBulkTraj } from './utils/sta-utils';
 
 
 const { Content, Sider } = Layout;
@@ -87,6 +88,9 @@ class ExpertHeatmapPage extends React.Component {
     }
     if (nextState.domainId && nextState.domainId !== this.state.domainId) {
       this.searchTrajByDomain(nextState.domainId);
+    }
+    if (nextProps.loading && nextProps.loading !== this.props.loading) {
+      return true;
     }
     return true;
   }
@@ -184,14 +188,17 @@ class ExpertHeatmapPage extends React.Component {
       if (key === 1) {
         divId = document.getElementById('timeDistribution');
         type = 'timeDistribution';
-      } else {
+      } else if (key === 2){
         divId = document.getElementById('migrateHistory');
         type = 'migrateHistory';
+      } else {
+        divId = document.getElementById('migrateCompare');
+        type = 'migrateCompare';
       }
       const data = this.props.expertTrajectory.heatData;
       if (typeof (divId) !== 'undefined' && divId !== 'undefined') {
         clearInterval(chartsinterval);
-        //showPersonStatistic(echarts, divId, data, type);
+        showBulkTraj(divId, data, type);
       }
     }, 100);
   };
@@ -241,9 +248,17 @@ class ExpertHeatmapPage extends React.Component {
       </div>
     );
 
+    const staJsx2 = (
+      <div className={styles.charts}>
+        <div id="migrateCompare" className={styles.chart1} />
+      </div>
+    );
+    const loading = this.props.loading.global;
+
     return (
       <Page contentClass={tc(['ExpertHeatmapPage'])} onSearch={this.onSearch}
             query={query}>
+        <Spinner loading={loading} />
         <div className={styles.header}>
           <div className={styles.domain}>
             <DomainSelector
@@ -295,6 +310,7 @@ class ExpertHeatmapPage extends React.Component {
                 <Tabs defaultActiveKey="1" onChange={this.changeStatistic}>
                   <TabPane tab="时间分布" key="1">{staJsx && staJsx}</TabPane>
                   <TabPane tab="迁徙历史" key="2">{staJsx1 && staJsx1}</TabPane>
+                  <TabPane tab="迁徙对比" key="3">{staJsx2 && staJsx2}</TabPane>
                 </Tabs>
               </Modal>
             </div>

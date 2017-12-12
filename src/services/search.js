@@ -6,6 +6,17 @@ import * as strings from 'utils/strings';
 
 const { api } = config;
 
+export function getBools(filters) {
+  const filterByGlobal = filters && filters.eb && filters.eb.id === 'aminer';
+  const filterBySomeEB = filters && filters.eb && filters.eb.id !== 'aminer';
+  const filterByDefaultGlobal = (!filters || !filters.eb) && sysconfig.DEFAULT_EXPERT_BASE === 'aminer';
+  const filterByDefaultSomeEB = (!filters || !filters.eb) && sysconfig.DEFAULT_EXPERT_BASE !== 'aminer';
+
+  const searchInGlobalExperts = filterByGlobal || filterByDefaultGlobal;
+  const searchInSomeExpertBase = filterBySomeEB || filterByDefaultSomeEB;
+  return { searchInGlobalExperts, searchInSomeExpertBase }
+}
+
 /* 目前搜索的各种坑
    全局搜索：
    智库高级搜索：
@@ -15,10 +26,15 @@ const { api } = config;
  */
 export async function searchPerson(params) {
   const { query, offset, size, filters, sort, assistantDataMeta } = params;
-  const { useTranslateSearch } = params; // TODO remove
+  const { useTranslateSearch, assistantQuery } = params; // TODO remove
+
+  // some conditions
+  const { searchInGlobalExperts, searchInSomeExpertBase } = getBools(filters);
+
+  // BRANCH: list in EB.
 
   // if query is null, and eb is not aminer, use expertbase list api.
-  if (!query && filters && filters.eb && filters.eb.id && filters.eb.id !== 'aminer') {
+  if (searchInSomeExpertBase && !query) {
     if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH) {
       return listPersonInEBNextAPI({ ebid: filters.eb.id, sort, offset, size });
     } else {
@@ -26,17 +42,17 @@ export async function searchPerson(params) {
     }
   }
 
+  const finalQuery = assistantQuery || query;
+  // BRANCH: search in Global
+
   // if search in global experts, jump to another function;
   // Fix bugs when default search area is 'aminer'
-  if (
-    (filters && filters.eb && filters.eb.id === 'aminer') ||
-    ((!filters || !filters.eb) && sysconfig.DEFAULT_EXPERT_BASE === 'aminer')
-  ) {
-    return searchPersonGlobal(query, offset, size, filters, sort, useTranslateSearch);
+  if (searchInGlobalExperts) {
+    return searchPersonGlobal(finalQuery, offset, size, filters, sort, useTranslateSearch);
   }
 
   //
-  // Search in ExpertBase.
+  // BRANCH: search in EB new/old.
   //
 
   // 1. prepare parameters.
@@ -90,12 +106,26 @@ export async function searchPerson(params) {
   } else {
     // old method.
     const { expertBase, data } =
-      prepareParameters(query, offset, size, filters, sort, useTranslateSearch);
+      prepareParameters(finalQuery, offset, size, filters, sort, useTranslateSearch);
     return request(
       api.searchPersonInBase.replace(':ebid', expertBase),
       { method: 'GET', data },
     );
   }
+}
+
+export async function onlySearchAssistant(params) {
+  const { query, assistantDataMeta } = params;
+  const nextapi = apiBuilder.query(F.queries.search, 'searchAssistant')
+    .param({ query, offset: 0, size: 0, searchType: 'all' })
+    .addParam({ switches: ['intell_search'] }, { when: sysconfig.Search_EnableSmartSuggest })
+    .addParam({ switches: ['lang_zh'] }, { when: sysconfig.Locale === 'zh' })
+    .schema({ person: [] });
+  // apply SearchAssistant
+  if (assistantDataMeta) {
+    nextapi.param(assistantDataMeta);
+  }
+  return nextAPI({ data: [nextapi.api] });
 }
 
 export async function listPersonInEB(payload) {

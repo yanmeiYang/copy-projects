@@ -102,7 +102,7 @@ class AddExpertModal extends React.Component {
       const editTheTalk = this.props.editTheTalk;
       const setFormFieldsVale = this.props.parentProps.form;
       this.props.parentProps.seminar.speakerSuggests = [];
-      this.speakerInformation = this.props.editTheTalk.speaker;Ø
+      this.speakerInformation = this.props.editTheTalk.speaker;
       ReactDOM.findDOMNode(this.refs.talkTitle).value = editTheTalk.title;
       ReactDOM.findDOMNode(this.refs.talkLocation).value = editTheTalk.location ? editTheTalk.location.address : '';
       ReactDOM.findDOMNode(this.refs.talkAbstract).value = editTheTalk.abstract;
@@ -319,294 +319,297 @@ class AddExpertModal extends React.Component {
         wrapClassName={styles.addExpertModal}
         onCancel={this.setModalVisible.bind(this)}
       >
-        <div className={!step2 && !step3 ? styles.showStep4 : styles.hideStep4}>
-          <FormItem
-            {...formItemLayout}
-            label={(<span>专家角色</span>)}>
-            {getFieldDecorator('role', { initialValue: 'talker' })(
-              <Select
-                className={styles.inputBox}
-                style={{ width: 200 }}
-                placeholder="请选择专家角色"
-                onChange={this.expertRoleChange}
-              >
-                <Option value="president">主席(包括主持人/主编等)</Option>
-                <Option value="talker">特邀嘉宾(包括报告人/评审人/评奖人等)</Option>
-              </Select>)}
-          </FormItem>
-          {this.speakerInformation.role !== 'president' &&
-          <div>
+        <div id="area">
+          <div className={!step2 && !step3 ? styles.showStep4 : styles.hideStep4}>
             <FormItem
               {...formItemLayout}
-              label="演讲标题"
+              label={(<span>专家角色</span>)}>
+              {getFieldDecorator('role', { initialValue: 'talker' })(
+                <Select
+                  className={styles.inputBox}
+                  style={{ width: 200 }}
+                  placeholder="请选择专家角色"
+                  onChange={this.expertRoleChange}
+                >
+                  <Option value="president">主席(包括主持人/主编等)</Option>
+                  <Option value="talker">特邀嘉宾(包括报告人/评审人/评奖人等)</Option>
+                </Select>)}
+            </FormItem>
+            {this.speakerInformation.role !== 'president' &&
+            <div>
+              <FormItem
+                {...formItemLayout}
+                label="演讲标题"
+              >
+                <Input placeholder="请输入演讲标题" ref="talkTitle"/>
+              </FormItem>
+              <FormItem
+                {...formItemLayout}
+                label={(<span>活动时间</span>)}
+                hasFeedback>
+                <CanlendarInForm callbackParent={this.onChildTalkChanged} forbidCallback={true}
+                                 startValue={this.state.talkStartValue}
+                                 endValue={this.state.talkEndValue}/>
+              </FormItem>
+              <FormItem
+                {...formItemLayout}
+                label={(<span>演讲地点</span>)}>
+                <Input placeholder="请输入活动地点" ref="talkLocation"/>
+              </FormItem>
+              <FormItem
+                {...formItemLayout}
+                label={(<span>演讲摘要</span>)}>
+                <Input type="textarea" rows={4} placeholder="请输入演讲摘要" ref="talkAbstract"
+                       onBlur={this.setTalkAbstrack}/>
+              </FormItem>
+            </div>}
+            {contribution_type.data && <FormItem
+              {...formItemLayout}
+              label="贡献类别"
             >
-              <Input placeholder="请输入演讲标题" ref="talkTitle"/>
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label={(<span>活动时间</span>)}
-              hasFeedback>
-              <CanlendarInForm callbackParent={this.onChildTalkChanged} forbidCallback={true}
-                               startValue={this.state.talkStartValue}
-                               endValue={this.state.talkEndValue}/>
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label={(<span>演讲地点</span>)}>
-              <Input placeholder="请输入活动地点" ref="talkLocation"/>
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label={(<span>演讲摘要</span>)}>
-              <Input type="textarea" rows={4} placeholder="请输入演讲摘要" ref="talkAbstract"
-                     onBlur={this.setTalkAbstrack}/>
-            </FormItem>
-          </div>}
-          {contribution_type.data && <FormItem
-            {...formItemLayout}
-            label="贡献类别"
-          >
-            {getFieldDecorator('contrib', {
-              rules: [{
-                required: true, message: '请选择贡献类别',
-              }],
-            })(
-              <Select
-                className={styles.inputBox}
-                showSearch
-                style={{ width: 200 }}
-                placeholder="请选择贡献类别"
-                optionFilterProp="children"
-                onChange={this.activityTypeChange}
-                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-              >
-                {
-                  Object.values(contribution_type.data).map((item) => {
-                    return (<Option key={item.id}
-                                    value={`${item.key}#${item.value}`}>{item.key}</Option>);
-                  })
-                }
-              </Select>,
-            )}
-          </FormItem>}
-          <div style={{ height: 20 }}>
-            <Button key="submit" type="primary" size="large" style={{ float: 'right' }}
-                    onClick={this.jumpToStep2.bind()}>
-              下一步
-            </Button>
-          </div>
-        </div>
-        <div
-          className={`ant-form-item ${step2 && !step3 ? styles.showStep4 : styles.hideStep4}`}>
-          <Col><label>专家信息</label></Col>
-          <div className={styles.searchExpertBtn}>
-            <div className="ant-col-7">
-              <Input size="large" placeholder="专家姓名" ref="name"
-                     onPressEnter={this.suggestExpert.bind(this, 0)}
-                     onBlur={this.suggestExpert.bind(this, 0)}/>
-            </div>
-            <div className="ant-col-7">
-              <Input size="large" placeholder="专家职称" ref="pos"
-                     onPressEnter={this.suggestExpert.bind(this, 0)}
-                     onBlur={this.suggestExpert.bind(this, 0)}/>
-            </div>
-            <div className="ant-col-7">
-              <Input size="large" placeholder="专家单位" ref="aff"
-                     onPressEnter={this.suggestExpert.bind(this, 0)}
-                     onBlur={this.suggestExpert.bind(this, 0)}/>
-            </div>
-            <div className="ant-col-2">
-              <Button type="primary" size="large"
-                      onClick={this.suggestExpert.bind(this, 1)}>推荐</Button>
+              {getFieldDecorator('contrib', {
+                rules: [{
+                  required: true, message: '请选择贡献类别',
+                }],
+              })(
+                <Select
+                  className={styles.inputBox}
+                  showSearch
+                  style={{ width: 200 }}
+                  placeholder="请选择贡献类别"
+                  optionFilterProp="children"
+                  getPopupContainer={() => document.getElementById('area')}
+                  onChange={this.activityTypeChange}
+                  filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                >
+                  {
+                    Object.values(contribution_type.data).map((item) => {
+                      return (<Option key={item.id}
+                                      value={`${item.key}#${item.value}`}>{item.key}</Option>);
+                    })
+                  }
+                </Select>,
+              )}
+            </FormItem>}
+            <div style={{ height: 20 }}>
+              <Button key="submit" type="primary" size="large" style={{ float: 'right' }}
+                      onClick={this.jumpToStep2.bind()}>
+                下一步
+              </Button>
             </div>
           </div>
-          <div className={styles.personWrap}>
-            <Spin spinning={loading} style={{ marginTop: 30 }}>
-              {speakerSuggests.length > 0 ?
-                <div>
-                  {speakerSuggests.map((speaker) => {
-                    const position = profileUtils.displayPosition(speaker.pos);
-                    const aff = speaker.payload.aff ? speaker.payload.aff : null;
-                    const name = profileUtils.displayNameCNFirst(speaker.payload.name, speaker.payload.name_zh);
-                    return (
-                      <li key={speaker.payload.id} className={styles.person}>
-                        <div className={styles.left}>
-                          <img src={this.getImg(speaker.img)} alt="头像"/>
-                        </div>
-                        <div className={styles.right}>
-                          <div className={styles.nameWrap}>
-                            <h3>{name}</h3>
+          <div
+            className={`ant-form-item ${step2 && !step3 ? styles.showStep4 : styles.hideStep4}`}>
+            <Col><label>专家信息</label></Col>
+            <div className={styles.searchExpertBtn}>
+              <div className="ant-col-7">
+                <Input size="large" placeholder="专家姓名" ref="name"
+                       onPressEnter={this.suggestExpert.bind(this, 0)}
+                       onBlur={this.suggestExpert.bind(this, 0)}/>
+              </div>
+              <div className="ant-col-7">
+                <Input size="large" placeholder="专家职称" ref="pos"
+                       onPressEnter={this.suggestExpert.bind(this, 0)}
+                       onBlur={this.suggestExpert.bind(this, 0)}/>
+              </div>
+              <div className="ant-col-7">
+                <Input size="large" placeholder="专家单位" ref="aff"
+                       onPressEnter={this.suggestExpert.bind(this, 0)}
+                       onBlur={this.suggestExpert.bind(this, 0)}/>
+              </div>
+              <div className="ant-col-2">
+                <Button type="primary" size="large"
+                        onClick={this.suggestExpert.bind(this, 1)}>推荐</Button>
+              </div>
+            </div>
+            <div className={styles.personWrap}>
+              <Spin spinning={loading} style={{ marginTop: 30 }}>
+                {speakerSuggests.length > 0 ?
+                  <div>
+                    {speakerSuggests.map((speaker) => {
+                      const position = profileUtils.displayPosition(speaker.pos);
+                      const aff = speaker.payload.aff ? speaker.payload.aff : null;
+                      const name = profileUtils.displayNameCNFirst(speaker.payload.name, speaker.payload.name_zh);
+                      return (
+                        <li key={speaker.payload.id} className={styles.person}>
+                          <div className={styles.left}>
+                            <img src={this.getImg(speaker.img)} alt="头像"/>
                           </div>
-                          <div className={styles.statWrap}>
-                            <div className={styles.item}>
-                              <span className={styles.label}>h-index:</span>
-                              <span>{speaker.payload.h_index}</span>
+                          <div className={styles.right}>
+                            <div className={styles.nameWrap}>
+                              <h3>{name}</h3>
                             </div>
-                            <span className={styles.split}>|</span>
-                            <div className={styles.item}>
-                              <span className={styles.label}>论文数:</span>
-                              <span>{speaker.payload.n_pubs}</span>
+                            <div className={styles.statWrap}>
+                              <div className={styles.item}>
+                                <span className={styles.label}>h-index:</span>
+                                <span>{speaker.payload.h_index}</span>
+                              </div>
+                              <span className={styles.split}>|</span>
+                              <div className={styles.item}>
+                                <span className={styles.label}>论文数:</span>
+                                <span>{speaker.payload.n_pubs}</span>
+                              </div>
+                              <span className={styles.split}>|</span>
+                              <div className={styles.item}>
+                                <span className={styles.label}>引用数:</span>
+                                <span>{speaker.payload.n_citation}</span>
+                              </div>
                             </div>
-                            <span className={styles.split}>|</span>
-                            <div className={styles.item}>
-                              <span className={styles.label}>引用数:</span>
-                              <span>{speaker.payload.n_citation}</span>
+                            <div className={styles.infoWrap}>
+                              <p>
+                                {position &&
+                                <span className={styles.infoItem}>
+                                  <Icon type="idcard"/>{position}
+                                </span>}
+                              </p>
+
+                              <p>{aff && <span className={styles.infoItem}>
+                                <Icon type="home"/>
+                                {aff}
+                              </span>}</p>
+                            </div>
+                            <div className={styles.tagWrap}>
+                              {speaker.tags && speaker.tags.slice(0, 5).map((tag, index) => {
+                                if (tag === 'Null') {
+                                  return '';
+                                }
+                                return (
+                                  <Tag key={`${tag.t}_${index}`}
+                                       className={styles.tag}>{tag.t}</Tag>
+                                );
+                              })}
                             </div>
                           </div>
-                          <div className={styles.infoWrap}>
-                            <p>
-                              {position &&
-                              <span className={styles.infoItem}>
-                                <Icon type="idcard"/>{position}
-                              </span>}
-                            </p>
-
-                            <p>{aff && <span className={styles.infoItem}>
-                              <Icon type="home"/>
-                              {aff}
-                            </span>}</p>
+                          <div>
+                            <Button type="primary"
+                                    onClick={this.selectedExpert.bind(this, speaker)}>添加此人</Button>
                           </div>
-                          <div className={styles.tagWrap}>
-                            {speaker.tags && speaker.tags.slice(0, 5).map((tag, index) => {
-                              if (tag === 'Null') {
-                                return '';
-                              }
-                              return (
-                                <Tag key={`${tag.t}_${index}`}
-                                     className={styles.tag}>{tag.t}</Tag>
-                              );
-                            })}
-                          </div>
-                        </div>
-                        <div>
-                          <Button type="primary"
-                                  onClick={this.selectedExpert.bind(this, speaker)}>添加此人</Button>
-                        </div>
-                      </li>
-                    );
-                  })}
-                </div> :
-                <div>
-                  {isSearched &&
-                  <div className={styles.noExpertsRecomm}><span>没有推荐专家</span></div>}
-                </div>
-              }
-            </Spin>
-            {/* 活动页面点编辑展示的内容 */}
-            {isEdit && editTheTalk.speaker !== undefined && editTheTalk.speaker.name !== undefined &&
-            <ExpertBasicInfo currentExpert={editTheTalk.speaker}/>
-            }
-            {/* 非活动详情页面编辑 */}
-            {speakerSuggests.length === 0 && !isEdit && speakerInfo.name &&
-            <ExpertBasicInfo currentExpert={speakerInfo}/>
-            }
-          </div>
-          <div style={{ height: 20 }}>
-            {!isSearched && speakerInfo.name !== undefined && speakerInfo.name !== '' &&
-            <Button key="" type="primary" size="large"
-                    style={{ float: 'right', marginTop: 10, marginLeft: 10 }}
-                    onClick={() => this.setStep('step3', true)}>
-              下一步
-            </Button>}
-            <Button key="submit" type="primary" size="large"
-                    style={{ float: 'right', marginTop: 10 }}
-                    onClick={() => this.notFoundSuggestExpert()}>
-              未找到，手工填写信息
-            </Button>
-            <Button type="default" size="large" style={{ marginTop: 10 }}
-                    onClick={() => this.setStep('step2', false)}>
-              上一步
-            </Button>
-          </div>
-        </div>
-
-        <div className={`${step3 ? styles.showStep4 : styles.hideStep4}`}
-             style={{ minHeight: 392, maxHeight: 800 }}>
-          <Col><label>专家信息</label></Col>
-
-          <Col span={6}>
-            <section>
-              <div className="people">
-                <div className="no-padding shadow-10">
-                  <div className={styles.crop}>
-                    <span className="helper"/>
-                    <img src={this.getImg()} ref="speakerImg" alt=""/>
-                    <input ref="speakerAid" style={{ display: 'none' }}/>
+                        </li>
+                      );
+                    })}
+                  </div> :
+                  <div>
+                    {isSearched &&
+                    <div className={styles.noExpertsRecomm}><span>没有推荐专家</span></div>}
                   </div>
-                  <Upload {...changeExpertAvatar}>
-                    <button type="button" className="ant-btn ant-btn-ghost">
-                      <i className="anticon anticon-upload"/> 修改头像
-                    </button>
-                  </Upload>
+                }
+              </Spin>
+              {/* 活动页面点编辑展示的内容 */}
+              {isEdit && editTheTalk.speaker !== undefined && editTheTalk.speaker.name !== undefined &&
+              <ExpertBasicInfo currentExpert={editTheTalk.speaker}/>
+              }
+              {/* 非活动详情页面编辑 */}
+              {speakerSuggests.length === 0 && !isEdit && speakerInfo.name &&
+              <ExpertBasicInfo currentExpert={speakerInfo}/>
+              }
+            </div>
+            <div style={{ height: 20 }}>
+              {!isSearched && speakerInfo.name !== undefined && speakerInfo.name !== '' &&
+              <Button key="" type="primary" size="large"
+                      style={{ float: 'right', marginTop: 10, marginLeft: 10 }}
+                      onClick={() => this.setStep('step3', true)}>
+                下一步
+              </Button>}
+              <Button key="submit" type="primary" size="large"
+                      style={{ float: 'right', marginTop: 10 }}
+                      onClick={() => this.notFoundSuggestExpert()}>
+                未找到，手工填写信息
+              </Button>
+              <Button type="default" size="large" style={{ marginTop: 10 }}
+                      onClick={() => this.setStep('step2', false)}>
+                上一步
+              </Button>
+            </div>
+          </div>
+
+          <div className={`${step3 ? styles.showStep4 : styles.hideStep4}`}
+               style={{ minHeight: 392, maxHeight: 800 }}>
+            <Col><label>专家信息</label></Col>
+
+            <Col span={6}>
+              <section>
+                <div className="people">
+                  <div className="no-padding shadow-10">
+                    <div className={styles.crop}>
+                      <span className="helper"/>
+                      <img src={this.getImg()} ref="speakerImg" alt=""/>
+                      <input ref="speakerAid" style={{ display: 'none' }}/>
+                    </div>
+                    <Upload {...changeExpertAvatar}>
+                      <button type="button" className="ant-btn ant-btn-ghost">
+                        <i className="anticon anticon-upload"/> 修改头像
+                      </button>
+                    </Upload>
+                  </div>
+                </div>
+              </section>
+            </Col>
+            <Col span={18} className={styles.expertProfile}>
+              <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
+                <label className="ant-col-3">姓名: </label>
+                <div className="ant-col-21">
+                  <Input size="large" placeholder="专家姓名" ref="speakerName"
+                         onBlur={this.saveExpertInfo.bind(this, 'name')}/>
                 </div>
               </div>
-            </section>
-          </Col>
-          <Col span={18} className={styles.expertProfile}>
-            <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
-              <label className="ant-col-3">姓名: </label>
-              <div className="ant-col-21">
-                <Input size="large" placeholder="专家姓名" ref="speakerName"
-                       onBlur={this.saveExpertInfo.bind(this, 'name')}/>
-              </div>
-            </div>
 
-            <div className="ant-form-item" style={{ paddingBottom: '20px' }}>
-              <label className="ant-col-3">性别: </label>
-              <div className="ant-col-21">
-                <RadioGroup defaultValue="1" onChange={this.saveExpertInfo.bind(this, 'gender')}>
-                  <Radio value="1" name="gender">男</Radio>
-                  <Radio value="2" name="gender">女</Radio>
-                  <Radio value="0" name="gender">不详</Radio>
-                </RadioGroup>
+              <div className="ant-form-item" style={{ paddingBottom: '20px' }}>
+                <label className="ant-col-3">性别: </label>
+                <div className="ant-col-21">
+                  <RadioGroup defaultValue="1" onChange={this.saveExpertInfo.bind(this, 'gender')}>
+                    <Radio value="1" name="gender">男</Radio>
+                    <Radio value="2" name="gender">女</Radio>
+                    <Radio value="0" name="gender">不详</Radio>
+                  </RadioGroup>
+                </div>
               </div>
-            </div>
-            <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
-              <label className="ant-col-3">职称: </label>
-              <div className="ant-col-21">
-                <Input size="large" placeholder="专家职称" ref="speakerPos"
-                       onBlur={this.saveExpertInfo.bind(this, 'position')}/>
+              <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
+                <label className="ant-col-3">职称: </label>
+                <div className="ant-col-21">
+                  <Input size="large" placeholder="专家职称" ref="speakerPos"
+                         onBlur={this.saveExpertInfo.bind(this, 'position')}/>
+                </div>
               </div>
-            </div>
-            <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
-              <label className="ant-col-3">单位: </label>
-              <div className="ant-col-21">
-                <Input size="large" placeholder="专家单位" ref="speakerAff"
-                       onBlur={this.saveExpertInfo.bind(this, 'affiliation')}/>
+              <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
+                <label className="ant-col-3">单位: </label>
+                <div className="ant-col-21">
+                  <Input size="large" placeholder="专家单位" ref="speakerAff"
+                         onBlur={this.saveExpertInfo.bind(this, 'affiliation')}/>
+                </div>
               </div>
-            </div>
-            <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
-              <label className="ant-col-3">电话: </label>
-              <div className="ant-col-21">
-                <Input size="large" placeholder="电话" ref="speakerIphone"
-                       onBlur={this.saveExpertInfo.bind(this, 'phone')}/>
+              <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
+                <label className="ant-col-3">电话: </label>
+                <div className="ant-col-21">
+                  <Input size="large" placeholder="电话" ref="speakerIphone"
+                         onBlur={this.saveExpertInfo.bind(this, 'phone')}/>
+                </div>
               </div>
-            </div>
-            <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
-              <label className="ant-col-3">邮箱: </label>
-              <div className="ant-col-21">
-                <Input size="large" placeholder="邮箱" ref="speakerEmail"
-                       onBlur={this.saveExpertInfo.bind(this, 'email')}/>
+              <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
+                <label className="ant-col-3">邮箱: </label>
+                <div className="ant-col-21">
+                  <Input size="large" placeholder="邮箱" ref="speakerEmail"
+                         onBlur={this.saveExpertInfo.bind(this, 'email')}/>
+                </div>
               </div>
-            </div>
-          </Col>
-          <Col span={24}>
-            <label className="ant-col-3">专家简介: </label>
-            <div className="ant-col-21">
-              <Input type="textarea" rows={4} size="large" placeholder="专家简介" ref="speakerBio"
-                     onBlur={this.saveExpertInfo.bind(this, 'bio')}/>
-            </div>
-          </Col>
+            </Col>
+            <Col span={24}>
+              <label className="ant-col-3">专家简介: </label>
+              <div className="ant-col-21">
+                <Input type="textarea" rows={4} size="large" placeholder="专家简介" ref="speakerBio"
+                       onBlur={this.saveExpertInfo.bind(this, 'bio')}/>
+              </div>
+            </Col>
 
-          <Col span={24} style={{ marginTop: 25 }}>
-            <Button key="submit" type="primary" size="large" style={{ float: 'right' }}
-                    onClick={this.saveTalkData}>
-              提交
-            </Button>
-            <Button type="default" size="large" onClick={this.cancelCurrentPerson}>
-              上一步
-            </Button>
-          </Col>
+            <Col span={24} style={{ marginTop: 25 }}>
+              <Button key="submit" type="primary" size="large" style={{ float: 'right' }}
+                      onClick={this.saveTalkData}>
+                提交
+              </Button>
+              <Button type="default" size="large" onClick={this.cancelCurrentPerson}>
+                上一步
+              </Button>
+            </Col>
+          </div>
         </div>
       </Modal>
     );

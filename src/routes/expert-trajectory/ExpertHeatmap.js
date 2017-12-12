@@ -1,5 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
+import queryString from 'query-string';
+import { sysconfig } from 'systems';
 import { Slider, InputNumber, Row, Col, Button, Icon } from 'antd';
 import { routerRedux, Link, withRouter } from 'dva/router';
 import { Spinner } from 'components';
@@ -26,13 +28,11 @@ class ExpertHeatmap extends React.Component {
   }
 
   state = {
-    inputValue: 0,
     ifPlay: 'play-circle',
     currentYear: 2000,
   };
 
   componentWillMount() {
-    console.log('>>>>>>>>>>>>>>>>', this.props);
     this.initChart();
   }
 
@@ -44,25 +44,31 @@ class ExpertHeatmap extends React.Component {
     if (nextProps.expertTrajectory.heatData &&
       nextProps.expertTrajectory.heatData !== this.props.expertTrajectory.heatData) {
       const themeKey = typeof (this.props.themeKey) === 'undefined' ? 0 : this.props.themeKey;
+      const checkType = typeof (this.props.checkType) === 'undefined' ? [] : this.props.checkType;
       showChart(myChart, 'bmap', themeKey, 'heatmap');
-      this.loadHeat(nextProps.expertTrajectory.heatData, this.state.currentYear);
+      this.loadHeat(nextProps.expertTrajectory.heatData, this.state.currentYear, checkType);
       return true;
     }
     if (nextProps.themeKey && this.props.themeKey !== nextProps.themeKey) {
       showChart(myChart, 'bmap', nextProps.themeKey, 'heatmap');
-      this.loadHeat(nextProps.expertTrajectory.heatData, this.state.currentYear);
+      const checkType = typeof (this.props.checkType) === 'undefined' ? [] : this.props.checkType;
+      this.loadHeat(nextProps.expertTrajectory.heatData, this.state.currentYear, checkType);
       return true;
     }
     if (nextProps.checkType && this.props.checkType !== nextProps.checkType) {
       const themeKey = typeof (this.props.themeKey) === 'undefined' ? 0 : this.props.themeKey;
+      const checkType = typeof (nextProps.checkType) === 'undefined' ? [] : nextProps.checkType;
       showChart(myChart, 'bmap', themeKey, 'heatmap');
       this.loadHeat(
         nextProps.expertTrajectory.heatData,
-        this.state.currentYear, nextProps.checkType,
+        this.state.currentYear, checkType,
       );
       return true;
     }
     if (nextState && nextState !== this.state) {
+      return true;
+    }
+    if (nextProps.loading && nextProps.loading !== this.props.loading) {
       return true;
     }
     return false;
@@ -79,13 +85,14 @@ class ExpertHeatmap extends React.Component {
         return;
       }
       const [, end] = startEnd;
-      let start = this.state.inputValue;
+      let start = this.state.currentYear;
       if (start === end) { //已经到最后了就从头开始播放
         [start] = startEnd;
       }
       trajInterval = setInterval(() => {
-        this.setState({ inputValue: start }, () => {
-          this.loadHeat(this.props.expertTrajectory.heatData, start);
+        this.setState({ currentYear: start }, () => {
+          const checkType = typeof (this.props.checkType) === 'undefined' ? [] : this.props.checkType;
+          this.loadHeat(this.props.expertTrajectory.heatData, start, checkType);
           if (start < end) {
             start += 1;
           } else {
@@ -95,7 +102,7 @@ class ExpertHeatmap extends React.Component {
             clearInterval(trajInterval);
           }
         });
-      }, 1000);
+      }, 3000);
     } else if (trajInterval) {
       clearInterval(trajInterval);
     }
@@ -109,9 +116,10 @@ class ExpertHeatmap extends React.Component {
       });
     }
     this.setState({
-      inputValue: value,
+      currentYear: value,
     });
-    this.loadHeat(this.props.expertTrajectory.heatData, value);
+    const checkType = typeof (this.props.checkType) === 'undefined' ? [] : this.props.checkType;
+    this.loadHeat(this.props.expertTrajectory.heatData, value, checkType);
   };
 
   initChart = () => {
@@ -156,6 +164,24 @@ class ExpertHeatmap extends React.Component {
       }
     }
     myChart.setOption(option);
+    let field;
+    const { location } = this.props;
+    const { query, domain } = queryString.parse(location.search);
+    if (typeof (query) !== 'undefined') {
+      field = `${query}领域`;
+    } else if (typeof (domain) !== 'undefined') {
+      const lib = sysconfig.Map_HotDomains;
+      lib.map((lb) => {
+        if (lb.id === domain) {
+          field = `${lb.name}智库`;
+        }
+        return true;
+      });
+    }
+    if (typeof (field) === 'undefined') {
+      field = '';
+    }
+    myChart.setOption({ title: { text: `${this.state.currentYear}年 ${field} 学者迁徙图` } });
   };
 
   handleErr = (e) => {
@@ -182,8 +208,8 @@ class ExpertHeatmap extends React.Component {
         }
       }
     }
-    //const loading = this.props.loading.models.expertTrajectory;用这个？
-    const { loading } = this.props.expertTrajectory;
+    // const loading = this.props.loading.global;
+    //const { loading } = this.props.expertTrajectory;
 
     const bgcolor = ['#AAC2DD', '#044161', '#404a59', '#80cbc4', '#b28759', '#4e6c8d', '#d1d1d1'];
     const themeKey = typeof (this.props.themeKey) === 'undefined' ? 0 : this.props.themeKey;
@@ -197,7 +223,7 @@ class ExpertHeatmap extends React.Component {
 
     return (
       <div>
-        <Spinner loading={loading} />
+        {/*<Spinner loading={loading} />*/}
         <div className={styles.whole}>
           <div className={styles.heatmap} id="chart" />
           <div className={styles.info} style={{ backgroundColor: color }}>

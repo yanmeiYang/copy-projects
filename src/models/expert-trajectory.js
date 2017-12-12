@@ -49,7 +49,7 @@ export default {
           cache[d.id] = d;
         }
       }
-      yield put({ type: 'findTrajsByRosterIdSuccess', payload: { data, personsInfo } });
+      yield put({ type: 'findTrajsSuccess', payload: { data, personsInfo } });
     },
 
     * findTrajsHeatAdvance({ payload }, { call, put }) { //根据搜索领域获得迁徙路径
@@ -59,7 +59,21 @@ export default {
         traDataFindService.findTrajsHeatAdvance,
         name, offset, org, term, size,
       );
-      yield put({ type: 'findTrajsHeatAdvanceSuccess', payload: { data } });
+
+      /**
+       * 找所对应的人的信息
+       */
+      const ids = Object.keys(data.data.trajectories);
+      const personsInfo = []; //先不做缓存，只是全部读进来
+      for (let i = 0; i < ids.length; i += 100) {
+        const cids = ids.slice(i, i + 100);
+        const data1 = yield call(personService.listPersonByIds, cids);
+        for (const d of data1.data.persons) {
+          personsInfo[d.id] = d;
+          cache[d.id] = d;
+        }
+      }
+      yield put({ type: 'findTrajsSuccess', payload: { data, personsInfo } });
     },
 
   },
@@ -214,7 +228,7 @@ export default {
     },
 
 
-    findTrajsByRosterIdSuccess(state, { payload: { data, personsInfo } }) {
+    findTrajsSuccess(state, { payload: { data, personsInfo } }) {
       /**
        * 注意：这里定义的数据和上面定义的数据是有不一样的，
        * 它们多一层，为每年的数据
@@ -274,41 +288,47 @@ export default {
               const pLat = addresses[pPlaceId].geo.lat.toFixed(2); //保留两位小数
               const pLng = addresses[pPlaceId].geo.lng.toFixed(2);
 
-              for (let y = py; y < cy; y += 1) {
-                if (!(y in yearCityIn)) {
-                  yearCityIn[y] = [];
-                }
-                if (pCityId in yearCityIn[y]) {
-                  const point = yearCityIn[y][pCityId];
-                  point.symbolSize += 1;
-                  point.heat += personsInfo[key].indices.h_index + 10;
-                } else {
-                  const weight = 1; //按人来，此处有一个人
-                  const num = personsInfo[key].indices.h_index + (weight * 10);
-                  const point = { name: pCityName, value: [pLng, pLat],
-                    symbolSize: weight, heat: num };
-                  yearCityIn[y][pCityId] = point;
-                }
-
-                if ((cy - py) === 1 && pCityId !== cCityId) { //迁徙的路线
-                  if (!(y in yearLineData)) {
-                    yearLineData[y] = [];
+              if (pCityId !== cCityId) { //不相同的时候才加入节点
+                for (let y = py; y <= cy; y += 1) { //插入两者之间的点
+                  if (!(y in yearCityIn)) {
+                    yearCityIn[y] = [];
                   }
-                  const curveness = 0.15 + (Math.random() * 0.1);
-                  const personName = personsInfo[key].name;
-                  const line = { coords: [[pLng, pLat], [cLng, cLat]], tooltip: {
-                    confine: true,
-                    formatter: () => {
-                      return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">Year: ${cYear}.<br />${personName}<br />From ${pCityName} to ${cCityName}</div>`;
-                    },
-                  }, lineStyle: {
-                    normal: { curveness },
-                  } };
-                  yearLineData[y].push(line);
+                  if (y !== py) { //之前已经加了一次了，不能再加了
+                    if (pCityId in yearCityIn[y]) {
+                      const point = yearCityIn[y][pCityId];
+                      point.symbolSize += 1;
+                      point.heat += personsInfo[key].indices.h_index + 10;
+                    } else {
+                      const weight = 1; //按人来，此处有一个人
+                      const num = personsInfo[key].indices.h_index + (weight * 10);
+                      const point = { name: pCityName, value: [pLng, pLat],
+                        symbolSize: weight, heat: num };
+                      yearCityIn[y][pCityId] = point;
+                    }
+                  }
+
+                  if (cy === y) { //迁徙的路线
+                    if (!(y in yearLineData)) {
+                      yearLineData[y] = [];
+                    }
+                    const curveness = 0.05 + (Math.random() * 0.4);
+                    const personName = personsInfo[key].name;
+                    const line = { coords: [[pLng, pLat], [cLng, cLat]], tooltip: {
+                      confine: true,
+                      formatter: () => {
+                        return `<div font-size: 11px;padding-bottom: 7px;margin-bottom: 7px">Year: ${cYear}.<br />${personName}<br />From ${pCityName} to ${cCityName}</div>`;
+                      },
+                    }, lineStyle: {
+                      normal: { curveness },
+                    } };
+                    yearLineData[y].push(line);
+                  }
                 }
-              }
+                previousD = d; //与上一个点的位置不一样的时候，变成新的前一个点
+              } //相同的ID的时候也不记录
+            } else {
+              previousD = d;
             }
-            previousD = d;
           }
         }
       }
@@ -335,12 +355,6 @@ export default {
         }
       }
       startEnd = [start, end];
-      console.log('######################################################');
-      console.log(data);
-      console.log(yearCityIn);
-      console.log(yearLineData);
-      console.log(yearPointData);
-      console.log(yearHeatData);
       const heatData = { yearLineData, yearPointData, yearHeatData, startEnd, personsInfo };
       return { ...state, heatData, loading: false };
     },
@@ -350,14 +364,6 @@ export default {
       return {
         ...state,
         results: result,
-        loading: false,
-      };
-    },
-
-    findTrajsHeatAdvanceSuccess(state, { payload: { data } }) {
-      return {
-        ...state,
-        heatData: data,
         loading: false,
       };
     },

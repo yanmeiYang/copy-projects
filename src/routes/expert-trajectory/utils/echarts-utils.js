@@ -47,6 +47,8 @@ const showChart = (myChart, type, skinType, showType) => { // 功能起始函数
       left: 'center',
       textStyle: {
         color: detailedStyle.textColor[skin],
+        fontWeight: 200,
+        fontSize: 24,
       },
       subTextColor: {
         color: detailedStyle.subTextColor[skin],
@@ -154,7 +156,7 @@ const showChart = (myChart, type, skinType, showType) => { // 功能起始函数
       effect: {
         show: true,
         period: 6,
-        trailLength: 0.1,
+        trailLength: 0.7,
         color: detailedStyle.lineNormalStyle[skin],
         symbol: 'arrow',
         symbolSize: 5,
@@ -163,8 +165,7 @@ const showChart = (myChart, type, skinType, showType) => { // 功能起始函数
       lineStyle: {
         normal: {
           color: detailedStyle.lineNormalStyle[skin],
-          // color: '#f78e3d',
-          width: 0.8,
+          width: 0.1, //线的宽度0.8
           opacity: 1,
           curveness: 0.2,
         },

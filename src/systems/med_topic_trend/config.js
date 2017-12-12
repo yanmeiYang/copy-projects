@@ -22,7 +22,7 @@ module.exports = {
   Enable_Export_EB_IF_EXIST: true,
   Search_EnablePin: false,
   // > Search related
-  HeaderSearch_TextNavi: ['ACMFellowExpertBase', 'TrendPrediction'],
+  HeaderSearch_TextNavi: ['ExpertBase', 'TrendPrediction'],
 
   ExpertBases: [
     {

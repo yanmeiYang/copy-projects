@@ -8,6 +8,8 @@ import * as translateService from 'services/translate';
 import * as topicService from 'services/topic';
 import bridge from 'utils/next-bridge';
 import { takeLatest } from './helper';
+import { apiBuilder, F, H } from "utils/next-api-builder";
+import { nextAPI } from "utils";
 
 export default {
 
@@ -31,6 +33,9 @@ export default {
     // Intelligence search assistants. TODO change to assistantMeta, assistantData
     assistantDataMeta: {}, // advquery
     assistantData: null,
+
+    // flags
+    isNewAPI: false,
 
     // pager
     offset: 0,
@@ -104,11 +109,47 @@ export default {
       yield put({ type: 'updateSortKey', payload: { key: Sort } });
       yield put({ type: 'updateFilters', payload: { filters } });
 
+      const { searchInGlobalExperts, searchInSomeExpertBase } = searchService.getBools(filters);
+
+      // TODO call additional search for assistant service.
+      let assistantQuery = '';
+      if (sysconfig.Search_EnableSmartSuggest && !ghost &&
+        (searchInGlobalExperts ||
+          (searchInSomeExpertBase && !sysconfig.USE_NEXT_EXPERT_BASE_SEARCH))
+      ) {
+        // TODO 第一次搜索出现的bug。
+        if (assistantDataMeta && assistantDataMeta.advquery && assistantDataMeta.advquery.texts) {
+          const queries = assistantDataMeta.advquery.texts.map(term => term && `(| ${term.text})`);
+          queries.push(`(| ${query})`);
+          assistantQuery = queries.join(' ');
+          console.log('Note: expand query is:', assistantQuery);
+
+          // 不是第一次使用辅助系统，调用非阻塞的assistant。
+          yield put({ type: 'onlySearchAssistant', payload: { query, assistantDataMeta } });
+        } else {
+          // 第一次query，需要默认带上第一个query.
+          const data = yield call(searchService.onlySearchAssistant, {
+            query,
+            assistantDataMeta,
+          });
+          if (data.data && data.data.succeed) {
+            const { intellResults } = data.data;
+            yield put({ type: 'getAssistantDataSuccess', payload: { data: intellResults } });
+            if (intellResults && intellResults.expandedTexts &&
+              intellResults.expandedTexts.length > 0) {
+              assistantQuery = `(| ${query}) (| ${intellResults.expandedTexts[0]})`;
+            }
+            console.log('Note: first expand query is:', assistantQuery);
+          }
+        }
+      }
+
       const params = {
         query, offset, size, filters: noTotalFilters, sort: Sort, intelligenceSearchMeta,
         useTranslateSearch, // TODO remove
-        assistantDataMeta,
+        assistantDataMeta, assistantQuery,
       };
+
       const data = yield call(searchService.searchPerson, params);
       if (process.env.NODE_ENV !== 'production') {
         if (data && data.data && data.data.queryEscaped) {
@@ -148,24 +189,28 @@ export default {
         if (ghost) { // called by others. export.
           return data.data;
         }
-
+        const { intellResults } = data.data;
         yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data, query } });
-        yield put({
-          type: 'getAssistantDataSuccess',
-          payload: { data: data.data.intellResults },
-        });
-        yield put({ type: 'getKgSuccess', payload: { data: data.data.intellResults } });
+        yield put({ type: 'getAssistantDataSuccess', payload: { data: intellResults } });
       } else if (data.data && data.data.result) {
         if (ghost) {
           return data.data;
         } else {
           yield put({ type: 'searchPersonSuccess', payload: { data: data.data, query, total } });
-          // TODO call additional search for assistant service.
         }
       } else {
         throw new Error('Result Not Available');
       }
     }, takeLatest],
+
+    * onlySearchAssistant({ payload }, { call, put }) {
+      const { query, assistantDataMeta } = payload;
+      const data = yield call(searchService.onlySearchAssistant, { query, assistantDataMeta });
+      if (data.data && data.data.succeed) {
+        const { intellResults } = data.data;
+        yield put({ type: 'getAssistantDataSuccess', payload: { data: intellResults } });
+      }
+    },
 
     * translateSearch({ payload }, { call, put, select }) {
       // yield put({ type: 'clearTranslateSearch' });
@@ -188,6 +233,7 @@ export default {
         }
       }
     },
+
 
     * searchPersonAgg({ payload }, { call, put, select }) {
       const { query, offset, size, filters, sort } = payload;

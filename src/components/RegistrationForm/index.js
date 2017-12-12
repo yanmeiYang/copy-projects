@@ -305,7 +305,7 @@ class RegistrationForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const {
-      activity_organizer_options, postSeminarOrganizer, activity_type, summaryById,
+      activity_organizer_options, activity_type, summaryById,
     } = this.props.seminar;
     const {
       addNewTalk, talks, startValue, endValue, editTheTalk, image, currentOrg,
@@ -346,11 +346,7 @@ class RegistrationForm extends React.Component {
     const activityType = activity_type.data
     && ((editStatus && summaryById.category) || !editStatus)
       ? activity_type.data : [];
-    const psOrganizer = postSeminarOrganizer.length > 0
-    && ((editStatus && (organizer && organizer.length > 0)) || !editStatus)
-      ? postSeminarOrganizer : [];
     const psActivity = activity_organizer_options.length > 0
-    && ((editStatus && (currentOrg && currentOrg.length > 0)) || !editStatus)
       ? activity_organizer_options : [];
     return (
       <Row className={styles.add_seminar_block}>

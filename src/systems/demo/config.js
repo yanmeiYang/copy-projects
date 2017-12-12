@@ -30,12 +30,12 @@ module.exports = {
   Search_EnableKnowledgeGraphHelper: true,
 
   // AI search helper translation/expand/kg
-  Search_EnableTranslateSearch: true, // 启用翻译搜索，显示提示信息;/
-  Search_DefaultTranslateSearch: true, // 默认使用翻译搜索;
-  Search_EnableSmartSuggest: false, // 启用智能提示;  启用后，禁用translateSearch
-  Search_SmartSuggest_EnableExpand: false, // TODO
-  Search_SmartSuggest_EnableTranslate: false, // TODO
-  Search_SmartSuggest_EnableKG: false, // TODO
+  Search_EnableTranslateSearch: false, // 启用翻译搜索，显示提示信息;/
+  Search_DefaultTranslateSearch: false, // 默认使用翻译搜索;
+  Search_EnableSmartSuggest: true, // 启用智能提示;  启用后，禁用translateSearch
+  Search_SmartSuggest_EnableExpand: true, // TODO
+  Search_SmartSuggest_EnableTranslate: true, // TODO
+  Search_SmartSuggest_EnableKG: true, // TODO
 
 
   // UserAuthSystem: System, // aminer 或者是 system.config

@@ -21,7 +21,7 @@ export default class SearchAssistant extends Component {
   static defaultProps = {};
 
   state = {
-    currentExpansionChecked: 0,
+    currentExpansionChecked: 1,
     currentTranslationChecked: 0,
 
     indeterminate: true,
@@ -160,10 +160,7 @@ export default class SearchAssistant extends Component {
   };
 
   render() {
-    const {
-      currentExpansionChecked, currentTranslationChecked,
-      defaultExpansionChecked, checkedList,
-    } = this.state;
+    const { currentExpansionChecked, currentTranslationChecked } = this.state;
     const assistantLoading = this.props.loading.effects['search/searchPerson']; // when is new api.
 
     const { assistantData } = this.props;

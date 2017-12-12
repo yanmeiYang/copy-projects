@@ -1,39 +1,80 @@
-{
-  "data": {
-    "first_name": "yang1",
-    "avatar": "//cdn.v2ex.com/gravatar/fa1aaeacbfc8b3cb52e5e7d6a44d2b79.png?s=80&r=g&d=retro",
-    "email": "hd_yangym@sina.com",
-    "role": [
-      "",
-      "ccf_超级管理员"
-    ],
-    "tags": [],
-    "display_name": "yang1",
-    "social": {},
-    "reg_ip": "114.241.197.98",
-    "id": "597594c39ed5db1cf6d7f492",
-    "profile": "",
-    "last_name": "yanmei",
-    "status": true,
-    "src": "ccf",
-    "addr": "",
-    "position": "Other",
-    "sub": true,
-    "reg_time": "2017-07-24T06:33:39Z",
-    "org": "",
-    "is_social": false,
-    "gender": "female"
-  },
-  "roles": {
-    "god": true,
-    "admin": true,
-    "authed": true,
-    "systems": [],
-    "role": [
-      "超级管理员"
-    ],
-    "authority": [],
-    "forbid": false
-  },
-  "time": 1512973659804
-}
+[
+  {
+    "action": "search",
+    "parameters": {
+      "query": "Artificial intelligence",
+      "offset": 0,
+      "size": 0,
+      "searchType": "all",
+      "switches": [
+        "intell_search",
+        "lang_zh"
+      ]
+    },
+    "schema": {
+      "person": "id"
+    }
+  }
+]
+
+[
+  {
+    "action": "search",
+    "parameters": {
+      "query": "Artificial intelligence",
+      "offset": 0,
+      "size": 20,
+      "searchType": "allb",
+      "aggregation": [
+        "gender",
+        "h_index",
+        "location",
+        "language",
+        "dims.systag"
+      ],
+      "switches": [
+        "intell_search",
+        "lang_zh"
+      ],
+      "filters": {
+        "dims": {
+          "eb": [
+            "59d7bb7e9ed5dbe450e6b275"
+          ]
+        }
+      },
+      "haves": {
+        "systag": []
+      }
+    },
+    "schema": {
+      "person": [
+        "id",
+        "name",
+        "name_zh",
+        "avatar",
+        "tags",
+        {
+          "profile": [
+            "position",
+            "affiliation"
+          ]
+        },
+        {
+          "indices": [
+            "hindex",
+            "gindex",
+            "pubs",
+            "citations",
+            "newStar",
+            "risingStar",
+            "activity",
+            "diversity",
+            "sociability"
+          ]
+        },
+        "tags_translated_zh"
+      ]
+    }
+  }
+]

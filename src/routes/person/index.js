@@ -25,9 +25,9 @@ const Person = ({ dispatch, person, seminar, publications }) => {
   const integrated = avgScores.filter(score => score.key === 'integrated')[0];
   const activity_indices = { contrib: contrib === undefined ? 0 : contrib.score };
 
-const recomputeContribution = () => {
-  console.log('6666666')
-}
+// const recomputeContribution = () => {
+//   console.log('6666666')
+// }
   const profileTabs = [{
     isShow: sysconfig.ShowRating,
     title: '专家评分',
@@ -44,7 +44,7 @@ const recomputeContribution = () => {
           <td>
             {/* <Rate disabled defaultValue={contrib.score}/> */}
             <span style={{ marginRight: 72 }}>{contrib.score}</span>
-            <Button type="primary" size="small" onClick={this.recomputeContribution.bind(this)}>重新计算贡献度</Button>
+            <Button type="primary" size="small">重新计算贡献度</Button>
           </td>
         </tr>
         }
@@ -170,9 +170,6 @@ const recomputeContribution = () => {
     }
   }
 
-
-
-  // console.log('|||||||||||| PersonIndex:', person);
   return (
     <Layout searchZone={[]}>
       <div className="content-inner">

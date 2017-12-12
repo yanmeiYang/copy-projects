@@ -43,7 +43,9 @@ class ShowExpertList extends React.Component {
             <tr>
               <td>专家姓名：</td>
               <td style={{ verticalAlign: 'top' }}>
-                <span>{talk.speaker.name}</span>
+                {talk.speaker.aid ?
+                  <a href={`/person/${talk.speaker.aid}`} target="view-window" >{talk.speaker.name}</a> :
+                  <span>{talk.speaker.name}</span>}
                 {talk.speaker.position && <span> {talk.speaker.position}</span>}
               </td>
               <td>专家单位：</td>

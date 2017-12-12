@@ -41,7 +41,8 @@ class ExpertHeatmap extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps.expertTrajectory.heatData &&
       nextProps.expertTrajectory.heatData !== this.props.expertTrajectory.heatData) {
-      showChart(myChart, 'bmap', this.props.themeKey, 'heatmap');
+      const themeKey = typeof (this.props.themeKey) === 'undefined' ? 0 : this.props.themeKey;
+      showChart(myChart, 'bmap', themeKey, 'heatmap');
       this.loadHeat(nextProps.expertTrajectory.heatData, this.state.currentYear);
       return true;
     }
@@ -51,7 +52,8 @@ class ExpertHeatmap extends React.Component {
       return true;
     }
     if (nextProps.checkType && this.props.checkType !== nextProps.checkType) {
-      showChart(myChart, 'bmap', this.props.themeKey, 'heatmap');
+      const themeKey = typeof (this.props.themeKey) === 'undefined' ? 0 : this.props.themeKey;
+      showChart(myChart, 'bmap', themeKey, 'heatmap');
       this.loadHeat(
         nextProps.expertTrajectory.heatData,
         this.state.currentYear, nextProps.checkType,
@@ -69,12 +71,15 @@ class ExpertHeatmap extends React.Component {
     this.setState({
       ifPlay: icon,
     });
-    console.log(icon);
     if (icon === 'pause') {
-      const [, end] = this.props.expertTrajectory.heatData.startEnd;
+      const { startEnd } = this.props.expertTrajectory.heatData;
+      if (typeof (startEnd) === 'undefined') {
+        return;
+      }
+      const [, end] = startEnd;
       let start = this.state.inputValue;
       if (start === end) { //已经到最后了就从头开始播放
-        [start] = this.props.expertTrajectory.heatData.startEnd;
+        [start] = startEnd;
       }
       trajInterval = setInterval(() => {
         this.setState({ inputValue: start }, () => {
@@ -114,8 +119,8 @@ class ExpertHeatmap extends React.Component {
         if (!myChart) {
           myChart = echarts.init(document.getElementById(divId));
         }
-        const skinType = 0;
-        showChart(myChart, 'bmap', skinType, 'heatmap');
+        const themeKey = typeof (this.props.themeKey) === 'undefined' ? 0 : this.props.themeKey;
+        showChart(myChart, 'bmap', themeKey, 'heatmap');
       });
     });
   };
@@ -179,7 +184,8 @@ class ExpertHeatmap extends React.Component {
     const { loading } = this.props.expertTrajectory;
 
     const bgcolor = ['#AAC2DD', '#044161', '#404a59', '#80cbc4', '#b28759', '#4e6c8d', '#d1d1d1'];
-    const color = bgcolor[this.props.themeKey];
+    const themeKey = typeof (this.props.themeKey) === 'undefined' ? 0 : this.props.themeKey;
+    const color = bgcolor[themeKey];
     const persons = [];
     for (const p in personsInfo) {
       if (p) {

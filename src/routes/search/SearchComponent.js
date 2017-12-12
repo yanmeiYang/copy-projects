@@ -214,7 +214,7 @@ export default class SearchComponent extends Component {
     const { className, sorts, expertBaseId } = this.props;
     const { results, pagination, query, aggs, filters, topic, sortKey: sortType } = search;
     const { pageSize, total, current } = pagination;
-    console.log('>>>---', query);
+    // console.log('>>>---', query);
     const load = loading.effects['search/searchPerson'];
     // const expertBase = (filters && filters.eb && filters.eb.id) || 'aminer';
 
@@ -279,7 +279,6 @@ export default class SearchComponent extends Component {
               title={Math.random()}
               filters={filters}
               aggs={aggs}
-              roles={this.props.app.roles && this.props.app.roles.role}
               onFilterChange={this.onFilterChange}
               onExpertBaseChange={this.onExpertBaseChange}
               disableExpertBaseFilter={disableExpertBaseFilter}

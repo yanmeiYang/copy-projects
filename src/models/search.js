@@ -60,6 +60,7 @@ export default {
           const size = parseInt(match[4], 10);
           // dispatch({ type: 'emptyResults' });
           dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
+          dispatch({ type: 'clearSearchAssistant' });
         }
 
         //
@@ -70,6 +71,7 @@ export default {
           const offset = parseInt(match[3], 10);
           const size = parseInt(match[4], 10);
           dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
+          dispatch({ type: 'clearSearchAssistant' });
         }
 
       });
@@ -120,7 +122,7 @@ export default {
 
       if (data.data && data.data.succeed) {
         // console.log('>>>>>> ---==== to next API');
-        // TODO 这些东西不应该放这里。。。。。。。。。。。。。。。。。
+        // TODO 修复新API下没有CCF 贡献度值这样的东西。但是：这些东西不应该放这里。。。。。。。
         if (sysconfig.SOURCE === 'ccf') {
           const personIds = data.data.items && data.data.items.map(item => item && item.id);
           if (personIds) {
@@ -142,11 +144,11 @@ export default {
             }
           }
         }
-        if (!ghost) {
-          yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data, query } });
-        } else {
+
+        if (ghost) { // called by others. export.
           return data.data;
         }
+
         yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data, query } });
         yield put({
           type: 'getAssistantDataSuccess',
@@ -154,10 +156,11 @@ export default {
         });
         yield put({ type: 'getKgSuccess', payload: { data: data.data.intellResults } });
       } else if (data.data && data.data.result) {
-        if (!ghost) {
-          yield put({ type: 'searchPersonSuccess', payload: { data: data.data, query, total } });
-        } else {
+        if (ghost) {
           return data.data;
+        } else {
+          yield put({ type: 'searchPersonSuccess', payload: { data: data.data, query, total } });
+          // TODO call additional search for assistant service.
         }
       } else {
         throw new Error('Result Not Available');
@@ -185,6 +188,7 @@ export default {
         }
       }
     },
+
     * searchPersonAgg({ payload }, { call, put, select }) {
       const { query, offset, size, filters, sort } = payload;
       const noTotalFilters = {};
@@ -292,6 +296,10 @@ export default {
 
     emptyResults(state) {
       return { ...state, results: [] };
+    },
+
+    clearSearchAssistant(state) {
+      return { ...state, assistantDataMeta: null, assistantData: null };
     },
 
     removePersonFromSearchResultsById(state, { payload: { pid } }) {

@@ -14,16 +14,15 @@ const { Column } = Table;
 class CommitteeList extends React.Component {
   state = {
     selectedRowKeys: [],  // Check here to configure the default column
-  };
-
+  }
   componentWillMount = () => {
     this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'activity_type' } });
-  };
+  }
+
   onSelectChange = (selectedRowKeys) => {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.setState({ selectedRowKeys });
   };
-
 
   setCategory = (d, e) => {
     if (d === undefined) {
@@ -81,11 +80,59 @@ class CommitteeList extends React.Component {
       };
     };
     this.props.activity.sort(compare('total'));
+
+    const data = this.props.activity;
+    let sum = 0;
+    let cate = [];
+    let cate1 = {};
+    data.map((item) => {
+      sum += item.total;
+      cate.push(item.category);
+      return true;
+    });
+    cate.forEach((item) => {
+      if (cate1.hasOwnProperty(Object.keys(item))) {
+        cate1[Object.keys(item)] += parseInt(Object.values(item), '10');
+      } else {
+        cate1[Object.keys(item)] = parseInt(Object.values(item), '10');
+      }
+    });
+    let allData = {};
+    let allData1 = {};
+    let organizedData = {};
+    for (let key in cate1) {
+      if (key.includes(',')) {
+        let splitedKey = key.split(',');
+        splitedKey.forEach((item) => {
+          allData[item] = cate1[key];
+        });
+      } else {
+        allData1[key] = cate1[key];
+      }
+    }
+    for (let key in allData1) {
+      for (let anotherKey in allData) {
+        if (key === anotherKey) {
+          allData1[key] += allData[anotherKey];
+        } else {
+          organizedData[anotherKey] = allData[anotherKey];
+        }
+      }
+    }
+    for (let key in organizedData) {
+      for (let key1 in allData1) {
+        if (key !== key1) {
+          organizedData[key1] = allData1[key1];
+        }
+      }
+    }
+    data.splice(0, 0, { organizer: '合计', total: sum, category: organizedData });
+
     return (
       <div>
         {/* rowSelection={rowSelection}*/}
         {activity_type.data &&
-        <Table bordered size="small" pagination={false} dataSource={this.props.activity}
+        <Table bordered size="small" pagination={false} dataSource={data}
                className={styles.committee}>
           <Column title="承办单位" dataIndex="organizer" key="display_name"
                   sorter={(a, b) => this.organizerSorter(a.organizer, b.organizer)}

@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
+import queryString from 'query-string';
+import { sysconfig } from 'systems';
 import { Slider, InputNumber, Row, Col, Button, Icon } from 'antd';
-import { routerRedux, Link } from 'dva/router';
+import { routerRedux, Link, withRouter } from 'dva/router';
 import { Spinner } from 'components';
 import { request, queryURL } from 'utils';
 import { Auth, RequireRes } from 'hoc';
@@ -17,6 +19,7 @@ let trajInterval;
 
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
+@withRouter
 @RequireRes('BMap')
 class ExpertHeatmap extends React.Component {
   constructor(props) {
@@ -25,7 +28,6 @@ class ExpertHeatmap extends React.Component {
   }
 
   state = {
-    inputValue: 0,
     ifPlay: 'play-circle',
     currentYear: 2000,
   };
@@ -77,12 +79,12 @@ class ExpertHeatmap extends React.Component {
         return;
       }
       const [, end] = startEnd;
-      let start = this.state.inputValue;
+      let start = this.state.currentYear;
       if (start === end) { //已经到最后了就从头开始播放
         [start] = startEnd;
       }
       trajInterval = setInterval(() => {
-        this.setState({ inputValue: start }, () => {
+        this.setState({ currentYear: start }, () => {
           this.loadHeat(this.props.expertTrajectory.heatData, start);
           if (start < end) {
             start += 1;
@@ -93,7 +95,7 @@ class ExpertHeatmap extends React.Component {
             clearInterval(trajInterval);
           }
         });
-      }, 1000);
+      }, 3000);
     } else if (trajInterval) {
       clearInterval(trajInterval);
     }
@@ -107,7 +109,7 @@ class ExpertHeatmap extends React.Component {
       });
     }
     this.setState({
-      inputValue: value,
+      currentYear: value,
     });
     this.loadHeat(this.props.expertTrajectory.heatData, value);
   };
@@ -154,6 +156,24 @@ class ExpertHeatmap extends React.Component {
       }
     }
     myChart.setOption(option);
+    let field;
+    const { location } = this.props;
+    const { query, domain } = queryString.parse(location.search);
+    if (typeof (query) !== 'undefined') {
+      field = `${query}领域`;
+    } else if (typeof (domain) !== 'undefined') {
+      const lib = sysconfig.Map_HotDomains;
+      lib.map((lb) => {
+        if (lb.id === domain) {
+          field = `${lb.name}智库`;
+        }
+        return true;
+      });
+    }
+    if (typeof (field) === 'undefined') {
+      field = '';
+    }
+    myChart.setOption({ title: { text: `${this.state.currentYear}年 ${field} 学者迁徙图` } });
   };
 
   handleErr = (e) => {

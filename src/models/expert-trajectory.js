@@ -294,7 +294,7 @@ export default {
                   if (!(y in yearLineData)) {
                     yearLineData[y] = [];
                   }
-                  const curveness = 0.15 + (Math.random() * 0.1);
+                  const curveness = 0.05 + (Math.random() * 0.4);
                   const personName = personsInfo[key].name;
                   const line = { coords: [[pLng, pLat], [cLng, cLat]], tooltip: {
                     confine: true,

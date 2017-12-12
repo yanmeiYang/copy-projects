@@ -47,6 +47,8 @@ const showChart = (myChart, type, skinType, showType) => { // 功能起始函数
       left: 'center',
       textStyle: {
         color: detailedStyle.textColor[skin],
+        fontWeight: 200,
+        fontSize: 24,
       },
       subTextColor: {
         color: detailedStyle.subTextColor[skin],

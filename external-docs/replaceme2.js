@@ -1,6 +1,6 @@
 const data = [
-  'jiawei han',
-  'jie tang'
+  'Jiawei Han',
+  'Jie Tang'
 ]
 
 const data2 = [
@@ -13,7 +13,7 @@ const data2 = [
   }
 ]
 
-const index= {
+const index = {
   'jiawei han': 0,
   'jiaweihan': 0,
   'han jiawei': 0
@@ -22,3 +22,5 @@ const index= {
 const exactIndex = {
   'jiawei han': 0
 }
+
+index[name]

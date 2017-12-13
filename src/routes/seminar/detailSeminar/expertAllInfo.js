@@ -52,56 +52,50 @@ class ExpertAllInfo extends React.PureComponent {
                   </div>
                   <div>
                     <ul className={styles.messages}>
-                      <span>
-                        {aTalk.speaker &&
-                        <div>
-                          {aTalk.speaker.name &&
-                          <li>
-                            <p>
-                              <Icon type="user" />
-                              <strong>姓名:&nbsp;</strong>
-                              {aTalk.speaker.aid ?
-                                <Link to={`/person/${aTalk.speaker.aid}`}>
-                                  <span>{aTalk.speaker.name}</span>
-                                </Link> : <span>{aTalk.speaker.name}</span>}
-                            </p>
-                          </li>}
-                          <li>
-                            {aTalk.speaker.position && aTalk.speaker.position !== ' ' &&
-                            <p><Icon type="medicine-box" />
-                              <strong>职称:&nbsp;</strong>
-                              <span>{aTalk.speaker.position}</span></p>}
-                          </li>
-                          <li>
-                            {aTalk.speaker.affiliation &&
-                            <p>
-                              <Icon type="environment-o" />
-                              <strong>单位:&nbsp;</strong>
-                              <span>{aTalk.speaker.affiliation}</span>
-                            </p>}
-                          </li>
-                        </div>}
-                      </span>
-                      <span>
-                        {aTalk.speaker.phone &&
+                      {aTalk.speaker &&
+                      <div>
+                        {aTalk.speaker.name &&
                         <li>
                           <p>
-                            <Icon type="phone" />
-                            <strong>电话:&nbsp;</strong>
-                            <span>{aTalk.speaker.phone}</span>
+                            <Icon type="user" />
+                            <strong>姓名:&nbsp;</strong>
+                            {aTalk.speaker.aid ?
+                              <Link to={`/person/${aTalk.speaker.aid}`}>
+                                <span>{aTalk.speaker.name}</span>
+                              </Link> : <span>{aTalk.speaker.name}</span>}
                           </p>
                         </li>}
-                      </span>
-                      <span>
-                        {aTalk.speaker.email &&
                         <li>
+                          {aTalk.speaker.position && aTalk.speaker.position !== ' ' &&
+                          <p><Icon type="medicine-box" />
+                            <strong>职称:&nbsp;</strong>
+                            <span>{aTalk.speaker.position}</span></p>}
+                        </li>
+                        <li>
+                          {aTalk.speaker.affiliation &&
                           <p>
-                            <Icon type="mail" />
-                            <strong>邮箱:&nbsp;</strong>
-                            <span>{aTalk.speaker.email}</span>
-                          </p>
-                        </li>}
-                      </span>
+                            <Icon type="environment-o" />
+                            <strong>单位:&nbsp;</strong>
+                            <span>{aTalk.speaker.affiliation}</span>
+                          </p>}
+                        </li>
+                      </div>}
+                      {aTalk.speaker.phone &&
+                      <li>
+                        <p>
+                          <Icon type="phone" />
+                          <strong>电话:&nbsp;</strong>
+                          <span>{aTalk.speaker.phone}</span>
+                        </p>
+                      </li>}
+                      {aTalk.speaker.email &&
+                      <li>
+                        <p>
+                          <Icon type="mail" />
+                          <strong>邮箱:&nbsp;</strong>
+                          <span>{aTalk.speaker.email}</span>
+                        </p>
+                      </li>}
                     </ul>
                     <div className={styles.bio}>
                       {aTalk.speaker.bio ? <div>

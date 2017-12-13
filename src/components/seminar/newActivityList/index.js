@@ -94,6 +94,22 @@ class NewActivityList extends React.Component {
             </div>
           </div>
           <div>
+            {result.host_org && result.host_org.length > 0 &&
+            <div className={styles.seminar_orgAndTag}>
+              <div>主办单位：</div>
+              <div>
+                {
+                  result.host_org.map((item) => {
+                    return (
+                      <p key={Math.random()}>
+                        <span>{seminarService.getValueByJoint(item)}</span>
+                      </p>
+                    );
+                  })
+                }
+              </div>
+            </div>}
+            {result.organizer && result.organizer.length > 0 &&
             <div className={styles.seminar_orgAndTag}>
               <div>承办单位：</div>
               <div>
@@ -107,7 +123,22 @@ class NewActivityList extends React.Component {
                   })
                 }
               </div>
-            </div>
+            </div>}
+            {result.co_org && result.co_org.length > 0 &&
+            <div className={styles.seminar_orgAndTag}>
+              <div>协办单位：</div>
+              <div>
+                {
+                  result.co_org.map((item) => {
+                    return (
+                      <p key={Math.random()}>
+                        <span>{seminarService.getValueByJoint(item)}</span>
+                      </p>
+                    );
+                  })
+                }
+              </div>
+            </div>}
             {result.tags.length > 0 &&
             <div className={styles.seminar_orgAndTag}>
               <div>活动标签：</div>

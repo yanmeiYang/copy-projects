@@ -169,7 +169,6 @@ class KgSearchBox extends PureComponent {
         // replace with takeLatest effect.
         dispatch({ type: 'searchSuggest/suggest', payload: { query: value } })
           .then((data) => { //页面跳转到 热力图页面
-            console.log('0==================slkdjf', data);
             if (data.data && data.data.topic && data.data.topic.length > 0) {
               this.makeSuggestion(data.data.topic);
             }

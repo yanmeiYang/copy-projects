@@ -46,21 +46,33 @@ const columns = [
     dataIndex: 'content',
     sorter: (a, b) => a.content - b.content,
     render(text, record) {
-      return getTwoDecimal(parseFloat(record.content), 2);
+      if (record.content === 0) {
+        return '';
+      } else {
+        return getTwoDecimal(parseFloat(record.content), 2);
+      }
     },
   }, {
     title: '演讲水平',
     dataIndex: 'level',
     sorter: (a, b) => a.level - b.level,
     render(text, record) {
-      return getTwoDecimal(parseFloat(record.level), 2);
+      if (record.content === 0) {
+        return '';
+      } else {
+        return getTwoDecimal(parseFloat(record.level), 2);
+      }
     },
   }, {
     title: '综合评价',
     dataIndex: 'integrated',
     sorter: (a, b) => a.integrated - b.integrated,
     render(text, record) {
-      return getTwoDecimal(parseFloat(record.integrated), 2);
+      if (record.content === 0) {
+        return '';
+      } else {
+        return getTwoDecimal(parseFloat(record.integrated), 2);
+      }
     },
   }];
 

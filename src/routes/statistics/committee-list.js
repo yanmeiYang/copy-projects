@@ -59,7 +59,35 @@ class CommitteeList extends React.Component {
 
   render() {
     const { activity_type } = this.props.seminar;
-    let activity_type_options_data = {};
+    const { activity } = this.props;
+
+    // 存储org为"总计"时对应的category
+    const tempCategory = {};
+    // 活动类型push到承办单位为"总计"的条目中
+    activity_type && activity_type.data && activity_type.data.map((item) => {
+      // 初始值设置为0, 方便后续的++
+      tempCategory[item.key] = 0;
+      // 循环活动统计数据，得到对应的category
+      activity && activity.map(act => {
+        // 承办单位对应总数求和
+        Object.keys(act.category).map((key) => {
+          if (item.key === key) {
+            tempCategory[item.key] += act.category[key];
+          }
+          return tempCategory;
+        });
+        return;
+      });
+      return;
+    });
+
+    if (activity) {
+      let tempTotal = 0;
+      activity.map(act => tempTotal += act.total);
+      activity.push({ organizer: '总计', total: tempTotal, category: tempCategory });
+    }
+
+    // let activity_type_options_data = {};
     // if (activity_type.data) {
     //   activity_type_options_data = activity_type.data;
     // }
@@ -80,45 +108,49 @@ class CommitteeList extends React.Component {
         return val2 - val1;
       };
     };
-    this.props.activity.sort(compare('total'));
+    activity && activity.sort(compare('total'));
     return (
       <div>
         {/* rowSelection={rowSelection}*/}
         {activity_type.data &&
-        <Table bordered size="small" pagination={false} dataSource={this.props.activity}
-               className={styles.committee}>
-          <Column title="承办单位" dataIndex="organizer" key="display_name"
-                  sorter={(a, b) => this.organizerSorter(a.organizer, b.organizer)}
-                  render={(organizer) => {
-                    return seminarService.getValueByJoint(organizer);
-                  }}
+        <Table
+          bordered size="small" pagination={false}
+          dataSource={this.props.activity} className={styles.committee}>
+          <Column
+            title="承办单位" dataIndex="organizer" key="display_name"
+            sorter={(a, b) => this.organizerSorter(a.organizer, b.organizer)}
+            render={(organizer) => {
+              return seminarService.getValueByJoint(organizer);
+            }}
           />
-          <Column title="活动总数" dataIndex="total" key="position" className={styles.comTotal}
-                  sorter={(a, b) => this.activitySorter(a.total, b.total)}
-                  render={(total, organizer) => (
-                    <a data={JSON.stringify(organizer)}
-                       onClick={this.getSeminarsByCategory.bind(this, total, 'organizer')}
-                    > {total} </a>
-                  )} />
+          <Column
+            title="活动总数" dataIndex="total" key="position" className={styles.comTotal}
+            sorter={(a, b) => this.activitySorter(a.total, b.total)}
+            render={(total, organizer) => (
+              <a data={JSON.stringify(organizer)}
+                 onClick={this.getSeminarsByCategory.bind(this, total, 'organizer')}
+              > {total} </a>
+            )} />
           {Object.values(activity_type.data).map((category) => {
             // if (category.key === '撰稿活动' || category.key === '审稿活动') {
             //   return '';
             // }
             const categoryIndex = `category.${category.key}`;
             return (
-              <Column title={category.key} dataIndex={categoryIndex} key={category.id}
-                      sorter={(a, b) => this.activitySorter(a.category[category.key], b.category[category.key])}
-                      render={(count, text) => {
-                        if (count === undefined) {
-                          return '';
-                        } else {
-                          return (
-                            <a target="_blank" data={JSON.stringify(text)}
-                               onClick={this.getSeminarsByCategory.bind(this, category, 'category')}
-                            > {count} </a>
-                          );
-                        }
-                      }} />
+              <Column
+                title={category.key} dataIndex={categoryIndex} key={category.id}
+                sorter={(a, b) => this.activitySorter(a.category[category.key], b.category[category.key])}
+                render={(count, text) => {
+                  if (count === undefined) {
+                    return '';
+                  } else {
+                    return (
+                      <a target="_blank" data={JSON.stringify(text)}
+                         onClick={this.getSeminarsByCategory.bind(this, category, 'category')}
+                      > {count} </a>
+                    );
+                  }
+                }} />
             );
           })}
         </Table>}

@@ -224,11 +224,22 @@ const migrateHistorySta = (data) => {
 
 const showBulkTraj = (divId, data1, type) => {
   loadECharts((echarts) => {
+    if (myChart !== null && myChart !== '' && myChart !== undefined) {
+      myChart.dispose();
+    }
     const myChart = echarts.init(document.getElementById(type));
     const data = [];
     const dataCount = 10;
-    const startTime = +new Date();
-    const categories = ['categoryA', 'categoryB', 'categoryC'];
+    //const startTime = +new Date();
+    const startYear = 2000;
+    const categories = ['categoryA', 'categoryB', 'categoryC']; //
+    var getRandomColor = function(){ //随机生成颜色
+      return '#'+Math.floor(Math.random()*16777215).toString(16);
+    };
+    console.log(getRandomColor());
+    //做一个数组，  不够的再去自动生成
+    var color = ['#ff0000','#eb4310','#f6941d','#fbb417','#ffff00','#cdd541','#99cc33','#3f9337','#219167','#239676','#24998d','#1f9baa','#0080ff','#3366cc','#333399','#003366','#800080','#a1488e','#c71585','#bd2158'];
+
     const types = [
       { name: 'JS Heap', color: '#7b9ce1' },
       { name: 'Documents', color: '#bd6d6c' },
@@ -237,13 +248,14 @@ const showBulkTraj = (divId, data1, type) => {
       { name: 'GPU Memory', color: '#dc77dc' },
       { name: 'GPU', color: '#72b362' },
     ];
+    const place = [];
 
 // Generate mock data
     echarts.util.each(categories, (category, index) => {
-      let baseTime = startTime;
+      let baseTime = startYear;
       for (let i = 0; i < dataCount; i += 1) {
         const typeItem = types[Math.round(Math.random() * (types.length - 1))];
-        const duration = Math.round(Math.random() * 10000);
+        const duration = Math.round(Math.random() * 10);
         data.push({
           name: typeItem.name,
           value: [
@@ -258,11 +270,14 @@ const showBulkTraj = (divId, data1, type) => {
             },
           },
         });
-        baseTime += Math.round(Math.random() * 2000);
+        //baseTime += Math.round(Math.random() * 2000);
       }
+      console.log(data);
     });
 
     function renderItem(params, api) {
+      //console.log(params);
+      //console.log(api);
       const categoryIndex = api.value(0);
       const start = api.coord([api.value(1), categoryIndex]);
       const end = api.coord([api.value(2), categoryIndex]);
@@ -270,7 +285,7 @@ const showBulkTraj = (divId, data1, type) => {
 
       return {
         type: 'rect',
-        shape: echarts.graphic.clipRectByRect({
+        shape: echarts.graphic.clipRectByRect({ //输入一组点，和一个矩形，返回被矩形截取过的点
           x: start[0],
           y: start[1] - (height / 2),
           width: end[0] - start[0],
@@ -289,7 +304,7 @@ const showBulkTraj = (divId, data1, type) => {
     const option = {
       tooltip: {
         formatter: (params) => {
-          return `${params.marker} ${params.name}:  ${params.value[3]} ms`;
+          return `${params.marker} ${params.name}:  ${params.value[3]} 年`;
         },
       },
       title: {
@@ -324,11 +339,11 @@ const showBulkTraj = (divId, data1, type) => {
         height: 300,
       },
       xAxis: {
-        min: startTime,
+        min: startYear,
         scale: true,
         axisLabel: {
           formatter: (val) => {
-            return `${Math.max(0, val - startTime)} ms`;
+            return `${Math.max(0, val)} 年`;
           },
         },
       },

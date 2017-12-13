@@ -60,6 +60,9 @@ class ExpertTrajectory extends React.Component {
   initChart = (person) => {
     const divId = 'chart';
     load((echarts) => {
+      if (myChart !== null && myChart !== '' && myChart !== undefined) {
+        myChart.dispose();
+      }
       myChart = echarts.init(document.getElementById(divId));
       let skinType = this.props.themeKey;
       if (typeof (skinType) === 'undefined') {

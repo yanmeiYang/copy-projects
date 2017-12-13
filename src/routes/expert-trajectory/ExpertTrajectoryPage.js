@@ -56,6 +56,9 @@ class ExpertTrajectoryPage extends React.Component {
 
   componentDidMount() {
     loadECharts((ret) => {
+      if (echarts !== null && echarts !== '' && echarts !== undefined) {
+        echarts.dispose();
+      }
       echarts = ret;
       const { query } = this.state;
       if ((query === '' || query === '-')) {

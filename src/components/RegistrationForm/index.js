@@ -331,7 +331,7 @@ class RegistrationForm extends React.Component {
       // listType: 'text',
       headers: {
         // 获得登录用户的token
-        Authorization: localStorage.getItem('token'),
+        Authorization: getLocalToken(),
       },
       onChange(info) {
         const status = info.file.status;
@@ -508,9 +508,12 @@ class RegistrationForm extends React.Component {
                            style={{
                              width: '76',
                              border: '1px solid #428bca',
+                             marginTop: '-16px',
                            }}>
                     <p className="ant-upload-text">更换图片</p>
-                  </Dragger> <Button onClick={this.delCurrentImg}>删除图片</Button></div>}
+                  </Dragger>
+                  <Button onClick={this.delCurrentImg}>删除图片</Button>
+                </div>}
             </FormItem>
 
             <FormItem
@@ -572,9 +575,10 @@ class RegistrationForm extends React.Component {
               {talks.map((talk, index) => {
                 return (
                   <div key={Math.random()}>
-                    <ShowExpertList talk={talk} index={index} getImg={this.getImg}
-                                    delTheExpert={this.delTheExpert}
-                                    editTheExpert={this.editTheExpert} />
+                    <ShowExpertList
+                      talk={talk} index={index} getImg={this.getImg}
+                      delTheExpert={this.delTheExpert}
+                      editTheExpert={this.editTheExpert} />
                   </div>
                 );
               })}
@@ -592,10 +596,11 @@ class RegistrationForm extends React.Component {
           </Col>
 
           <Col className={styles.formFooter}>
-            <FormItem
-              wrapperCol={{ span: 12, offset: 6 }} style={{ marginBottom: 6 }}>
+            <FormItem wrapperCol={{ span: 12, offset: 6 }} style={{ marginBottom: 10 }}>
               <Button type="primary" onClick={this.handleSubmit}
-                      style={{ width: '50%', height: 40 }}>确定</Button>
+                      style={{ width: '50%', height: 40 }}>
+                确定
+              </Button>
             </FormItem>
           </Col>
         </Form>

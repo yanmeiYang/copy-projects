@@ -236,7 +236,7 @@ const loadBMap = (cb) => {
 };
 
 const loadBMapForECharts = (cb) => {
-  loadScript('BMapForECharts', { check: 'BMap' }, cb);
+  loadScript('BMapForECharts', { check: 'BMapForECharts' }, cb);
 };
 
 const loadGoogleMap = (cb) => {

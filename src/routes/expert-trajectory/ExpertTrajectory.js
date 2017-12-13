@@ -106,7 +106,7 @@ class ExpertTrajectory extends React.Component {
       } else {
         clearInterval(trainterval);
       }
-    }, 2000);
+    }, 3000);
   };
 
   render() {

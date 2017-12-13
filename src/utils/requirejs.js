@@ -11,7 +11,6 @@ const scripts = {
   d3v3: '/lib/d3.v3.js',
   d3: '/lib/d3.v4.js',
   echarts: '/lib/echarts.js',
-  BMapForECharts: '/lib/echarts-trajectory/bmap.min.js',
 };
 
 // deprecated
@@ -235,10 +234,6 @@ const loadBMap = (cb) => {
   });
 };
 
-const loadBMapForECharts = (cb) => {
-  loadScript('BMapForECharts', { check: 'BMapForECharts' }, cb);
-};
-
 const loadGoogleMap = (cb) => {
   loadScript('GoogleMap', { check: ['google', 'maps'] }, cb);
 };
@@ -262,7 +257,6 @@ module.exports = {
   loadECharts,
   loadBMap,
   loadGoogleMap,
-  loadBMapForECharts,
 
 
   mergeLibs,

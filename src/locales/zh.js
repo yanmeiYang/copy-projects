@@ -69,6 +69,7 @@ export default {
   'com.searchTypeWidget.label.ExpertBase': '我的专家库',
 
   'com.searchTypeWidget.label.ACM_ExpertSearch': '全球专家',
+  'com.searchTypeWidget.label.ACMFellowExpertBase': 'ACM Fellow',
 
   'com.PersonList.label.views': '次查看',
   'com.PersonList.label.homepage': '个人主页',

@@ -69,6 +69,8 @@ export default {
   'com.searchTypeWidget.label.ExpertBase': 'My Experts',
 
   'com.searchTypeWidget.label.ACM_ExpertSearch': 'Global Experts',
+  'com.searchTypeWidget.label.ACMFellowExpertBase': 'ACM Fellow',
+
 
   'com.PersonList.label.views': 'views',
   'com.PersonList.label.homepage': 'Homepage',

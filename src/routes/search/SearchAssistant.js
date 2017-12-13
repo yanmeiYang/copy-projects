@@ -379,7 +379,7 @@ export default class SearchAssistant extends Component {
 
         {hasKG && !kgLoading &&
         <div className={styles.boxButton}>
-          <Button size="small" ghost onClick={this.callSearch}>
+          <Button size="small" onClick={this.callSearch}>
             Search with Knowledge Graph
           </Button>
         </div>

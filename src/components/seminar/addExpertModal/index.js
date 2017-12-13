@@ -69,9 +69,9 @@ class AddExpertModal extends React.Component {
       this.speakerInformation = this.props.editTheTalk.speaker;
     }
     //TODO 地点携带问题,在这里取不到refs
-      // if (this.props.address) {
-      //   ReactDOM.findDOMNode(this.refs.talkLocation).value = this.props.address;
-      // }
+    // if (this.props.address) {
+    //   ReactDOM.findDOMNode(this.refs.talkLocation).value = this.props.address;
+    // }
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -341,7 +341,7 @@ class AddExpertModal extends React.Component {
                 {...formItemLayout}
                 label="演讲标题"
               >
-                <Input placeholder="请输入演讲标题" ref="talkTitle"/>
+                <Input placeholder="请输入演讲标题" ref="talkTitle" />
               </FormItem>
               <FormItem
                 {...formItemLayout}
@@ -349,18 +349,18 @@ class AddExpertModal extends React.Component {
                 hasFeedback>
                 <CanlendarInForm callbackParent={this.onChildTalkChanged} forbidCallback={true}
                                  startValue={this.state.talkStartValue}
-                                 endValue={this.state.talkEndValue}/>
+                                 endValue={this.state.talkEndValue} />
               </FormItem>
               <FormItem
                 {...formItemLayout}
                 label={(<span>演讲地点</span>)}>
-                <Input placeholder="请输入活动地点" ref="talkLocation"/>
+                <Input placeholder="请输入活动地点" ref="talkLocation" />
               </FormItem>
               <FormItem
                 {...formItemLayout}
                 label={(<span>演讲摘要</span>)}>
                 <Input type="textarea" rows={4} placeholder="请输入演讲摘要" ref="talkAbstract"
-                       onBlur={this.setTalkAbstrack}/>
+                       onBlur={this.setTalkAbstrack} />
               </FormItem>
             </div>}
             {contribution_type.data && <FormItem
@@ -403,23 +403,24 @@ class AddExpertModal extends React.Component {
             <Col><label>专家信息</label></Col>
             <div className={styles.searchExpertBtn}>
               <div className="ant-col-7">
-                <Input size="large" placeholder="专家姓名" ref="name"
+                <Input placeholder="专家姓名" ref="name"
                        onPressEnter={this.suggestExpert.bind(this, 0)}
-                       onBlur={this.suggestExpert.bind(this, 0)}/>
+                       onBlur={this.suggestExpert.bind(this, 0)} />
               </div>
               <div className="ant-col-7">
-                <Input size="large" placeholder="专家职称" ref="pos"
+                <Input placeholder="专家职称" ref="pos"
                        onPressEnter={this.suggestExpert.bind(this, 0)}
-                       onBlur={this.suggestExpert.bind(this, 0)}/>
+                       onBlur={this.suggestExpert.bind(this, 0)} />
               </div>
               <div className="ant-col-7">
-                <Input size="large" placeholder="专家单位" ref="aff"
+                <Input placeholder="专家单位" ref="aff"
                        onPressEnter={this.suggestExpert.bind(this, 0)}
-                       onBlur={this.suggestExpert.bind(this, 0)}/>
+                       onBlur={this.suggestExpert.bind(this, 0)} />
               </div>
               <div className="ant-col-2">
-                <Button type="primary" size="large"
-                        onClick={this.suggestExpert.bind(this, 1)}>推荐</Button>
+                <Button type="primary" onClick={this.suggestExpert.bind(this, 1)}>
+                  推荐
+                </Button>
               </div>
             </div>
             <div className={styles.personWrap}>
@@ -433,7 +434,7 @@ class AddExpertModal extends React.Component {
                       return (
                         <li key={speaker.payload.id} className={styles.person}>
                           <div className={styles.left}>
-                            <img src={this.getImg(speaker.img)} alt="头像"/>
+                            <img src={this.getImg(speaker.img)} alt="头像" />
                           </div>
                           <div className={styles.right}>
                             <div className={styles.nameWrap}>
@@ -459,12 +460,12 @@ class AddExpertModal extends React.Component {
                               <p>
                                 {position &&
                                 <span className={styles.infoItem}>
-                                  <Icon type="idcard"/>{position}
+                                  <Icon type="idcard" />{position}
                                 </span>}
                               </p>
 
                               <p>{aff && <span className={styles.infoItem}>
-                                <Icon type="home"/>
+                                <Icon type="home" />
                                 {aff}
                               </span>}</p>
                             </div>
@@ -496,26 +497,26 @@ class AddExpertModal extends React.Component {
               </Spin>
               {/* 活动页面点编辑展示的内容 */}
               {isEdit && editTheTalk.speaker !== undefined && editTheTalk.speaker.name !== undefined &&
-              <ExpertBasicInfo currentExpert={editTheTalk.speaker}/>
+              <ExpertBasicInfo currentExpert={editTheTalk.speaker} />
               }
               {/* 非活动详情页面编辑 */}
               {speakerSuggests.length === 0 && !isEdit && speakerInfo.name &&
-              <ExpertBasicInfo currentExpert={speakerInfo}/>
+              <ExpertBasicInfo currentExpert={speakerInfo} />
               }
             </div>
             <div style={{ height: 20 }}>
               {!isSearched && speakerInfo.name !== undefined && speakerInfo.name !== '' &&
-              <Button key="" type="primary" size="large"
+              <Button key="" type="primary"
                       style={{ float: 'right', marginTop: 10, marginLeft: 10 }}
                       onClick={() => this.setStep('step3', true)}>
                 下一步
               </Button>}
-              <Button key="submit" type="primary" size="large"
+              <Button key="submit" type="primary"
                       style={{ float: 'right', marginTop: 10 }}
                       onClick={() => this.notFoundSuggestExpert()}>
                 未找到，手工填写信息
               </Button>
-              <Button type="default" size="large" style={{ marginTop: 10 }}
+              <Button type="default" style={{ marginTop: 10 }}
                       onClick={() => this.setStep('step2', false)}>
                 上一步
               </Button>
@@ -531,13 +532,13 @@ class AddExpertModal extends React.Component {
                 <div className="people">
                   <div className="no-padding shadow-10">
                     <div className={styles.crop}>
-                      <span className="helper"/>
-                      <img src={this.getImg()} ref="speakerImg" alt=""/>
-                      <input ref="speakerAid" style={{ display: 'none' }}/>
+                      <span className="helper" />
+                      <img src={this.getImg()} ref="speakerImg" alt="" />
+                      <input ref="speakerAid" style={{ display: 'none' }} />
                     </div>
                     <Upload {...changeExpertAvatar}>
                       <button type="button" className="ant-btn ant-btn-ghost">
-                        <i className="anticon anticon-upload"/> 修改头像
+                        <i className="anticon anticon-upload" /> 修改头像
                       </button>
                     </Upload>
                   </div>
@@ -548,15 +549,16 @@ class AddExpertModal extends React.Component {
               <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
                 <label className="ant-col-3">姓名: </label>
                 <div className="ant-col-21">
-                  <Input size="large" placeholder="专家姓名" ref="speakerName"
-                         onBlur={this.saveExpertInfo.bind(this, 'name')}/>
+                  <Input placeholder="专家姓名" ref="speakerName"
+                         onBlur={this.saveExpertInfo.bind(this, 'name')} />
                 </div>
               </div>
 
               <div className="ant-form-item" style={{ paddingBottom: '20px' }}>
                 <label className="ant-col-3">性别: </label>
                 <div className="ant-col-21">
-                  <RadioGroup defaultValue="1" onChange={this.saveExpertInfo.bind(this, 'gender')}>
+                  <RadioGroup defaultValue="1"
+                              onChange={this.saveExpertInfo.bind(this, 'gender')}>
                     <Radio value="1" name="gender">男</Radio>
                     <Radio value="2" name="gender">女</Radio>
                     <Radio value="0" name="gender">不详</Radio>
@@ -566,46 +568,48 @@ class AddExpertModal extends React.Component {
               <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
                 <label className="ant-col-3">职称: </label>
                 <div className="ant-col-21">
-                  <Input size="large" placeholder="专家职称" ref="speakerPos"
-                         onBlur={this.saveExpertInfo.bind(this, 'position')}/>
+                  <Input placeholder="专家职称" ref="speakerPos"
+                         onBlur={this.saveExpertInfo.bind(this, 'position')} />
                 </div>
               </div>
               <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
                 <label className="ant-col-3">单位: </label>
                 <div className="ant-col-21">
-                  <Input size="large" placeholder="专家单位" ref="speakerAff"
-                         onBlur={this.saveExpertInfo.bind(this, 'affiliation')}/>
+                  <Input placeholder="专家单位" ref="speakerAff"
+                         onBlur={this.saveExpertInfo.bind(this, 'affiliation')} />
                 </div>
               </div>
               <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
                 <label className="ant-col-3">电话: </label>
                 <div className="ant-col-21">
-                  <Input size="large" placeholder="电话" ref="speakerIphone"
-                         onBlur={this.saveExpertInfo.bind(this, 'phone')}/>
+                  <Input placeholder="电话" ref="speakerIphone"
+                         onBlur={this.saveExpertInfo.bind(this, 'phone')} />
                 </div>
               </div>
               <div className="ant-form-item" style={{ paddingBottom: '15px' }}>
                 <label className="ant-col-3">邮箱: </label>
                 <div className="ant-col-21">
-                  <Input size="large" placeholder="邮箱" ref="speakerEmail"
-                         onBlur={this.saveExpertInfo.bind(this, 'email')}/>
+                  <Input placeholder="邮箱" ref="speakerEmail"
+                         onBlur={this.saveExpertInfo.bind(this, 'email')} />
                 </div>
               </div>
             </Col>
             <Col span={24}>
               <label className="ant-col-3">专家简介: </label>
               <div className="ant-col-21">
-                <Input type="textarea" rows={4} size="large" placeholder="专家简介" ref="speakerBio"
-                       onBlur={this.saveExpertInfo.bind(this, 'bio')}/>
+                <Input.TextArea rows={4} size="large" placeholder="专家简介" ref="speakerBio"
+                                onBlur={this.saveExpertInfo.bind(this, 'bio')}/>
+                {/*<Input type="textarea" rows={4} size="large" placeholder="专家简介" ref="speakerBio"*/}
+                       {/*onBlur={this.saveExpertInfo.bind(this, 'bio')}/>*/}
               </div>
             </Col>
 
             <Col span={24} style={{ marginTop: 25 }}>
-              <Button key="submit" type="primary" size="large" style={{ float: 'right' }}
+              <Button key="submit" type="primary" style={{ float: 'right' }}
                       onClick={this.saveTalkData}>
                 提交
               </Button>
-              <Button type="default" size="large" onClick={this.cancelCurrentPerson}>
+              <Button type="default" onClick={this.cancelCurrentPerson}>
                 上一步
               </Button>
             </Col>

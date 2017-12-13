@@ -417,7 +417,7 @@ class AddExpertModal extends Component {
                           rules: [{
                             required: true, message: '请输入专家姓名',
                           }],
-                        })(<Input size="large" placeholder="专家姓名"
+                        })(<Input placeholder="专家姓名"
                                   onPressEnter={this.suggestExpert.bind(this, 0)}
                                   onChange={this.saveExpertInfo.bind(this, 'name')}
                                   onBlur={this.suggestExpert.bind(this, 0)} />)}
@@ -440,7 +440,7 @@ class AddExpertModal extends Component {
                           rules: [{
                             required: true, message: '请输入专家职称',
                           }],
-                        })(<Input size="large" placeholder="专家职称" className={styles.inputSize}
+                        })(<Input placeholder="专家职称" className={styles.inputSize}
                                   onChange={this.saveExpertInfo.bind(this, 'professionalTitle')}
                                   onBlur={this.suggestExpert.bind(this, 0)} />)}
                       </div>
@@ -453,7 +453,7 @@ class AddExpertModal extends Component {
                             rules: [{
                               required: true, message: '请输入专家单位',
                             }],
-                          })(<Input size="large" placeholder="专家单位"
+                          })(<Input placeholder="专家单位"
                                     onChange={this.saveExpertInfo.bind(this, 'affiliation')}
                                     onBlur={this.suggestExpert.bind(this, 0)} />)}
                         </div>
@@ -467,7 +467,7 @@ class AddExpertModal extends Component {
                             rules: [{
                               required: true, message: '请输入专家电话',
                             }],
-                          })(<Input size="large" placeholder="电话" className={styles.inputSize}
+                          })(<Input placeholder="电话" className={styles.inputSize}
                                     onBlur={this.saveExpertInfo.bind(this, 'phone')} />)}
                         </div>
                       </FormItem>
@@ -480,7 +480,7 @@ class AddExpertModal extends Component {
                             rules: [{
                               required: true, message: '请输入专家邮箱',
                             }],
-                          })(<Input size="large" placeholder="邮箱" className={styles.inputSize}
+                          })(<Input placeholder="邮箱" className={styles.inputSize}
                                     onBlur={this.saveExpertInfo.bind(this, 'email')} />)}
                         </div>
                       </FormItem>
@@ -494,13 +494,13 @@ class AddExpertModal extends Component {
                           rules: [{
                             required: true, message: '请输入专家简介',
                           }],
-                        })(<Input type="textarea" rows={4} size="large" placeholder="专家简介"
+                        })(<Input type="textarea" rows={4} placeholder="专家简介"
                                   onBlur={this.saveExpertInfo.bind(this, 'bio')} />)}
                       </div>
                     </FormItem>
                   </Col>
                 </div>
-                <Button key="submit" htmlType="submit" type="primary" size="large"
+                <Button key="submit" htmlType="submit" type="primary"
                         className={styles.sumbBtn}>提交
                 </Button>
               </Col>

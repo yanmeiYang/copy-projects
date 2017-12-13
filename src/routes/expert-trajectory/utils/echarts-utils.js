@@ -1,4 +1,4 @@
-import { loadECharts, loadBMap, loadBMapForECharts } from 'utils/requirejs';
+import { loadECharts, loadBMap } from 'utils/requirejs';
 
 const setBMap = (myChart) => {
   const map = myChart.getModel().getComponent('bmap').getBMap();
@@ -150,12 +150,12 @@ const showChart = (myChart, type, skinType, showType) => { // 功能起始函数
     }, {
       type: 'lines',
       animation: false,
-      //zlevel: 10000000000,
+      zlevel: 3,
       coordinateSystem: type,
       //symbol:'arrow',
       effect: {
         show: true,
-        period: 6,
+        period: 3,
         trailLength: 0.7,
         color: detailedStyle.lineNormalStyle[skin],
         symbol: 'arrow',
@@ -179,9 +179,6 @@ const showChart = (myChart, type, skinType, showType) => { // 功能起始函数
       blendMode: detailedStyle.blendLineStlye[skin],
     }],
   };
-  console.log(JSON.stringify(option));
-  console.log(option);
-  console.log('就这一句喜欢报错！');
   myChart.setOption(option);
   if (type === 'bmap') {
     setBMap(myChart);
@@ -350,11 +347,9 @@ const mapStyle = {
 const load = (cb) => {
   loadBMap(() => {
     loadECharts((echarts) => {
-      loadBMapForECharts(() => {
-        if (cb) {
-          cb(echarts);
-        }
-      });
+      if (cb) {
+        cb(echarts);
+      }
     });
   });
 };

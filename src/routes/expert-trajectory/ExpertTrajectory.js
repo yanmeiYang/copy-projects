@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'dva';
 //import { Button, Modal, Tabs, Table } from 'antd';
 import { RequireRes } from 'hoc';
-import { ensure } from 'utils';
 //import { FormattedMessage as FM } from 'react-intl';
 import styles from './ExpertTrajectory.less';
 import { showChart, load } from './utils/echarts-utils';
@@ -11,7 +10,6 @@ let myChart; // used for loadScript
 let trainterval;
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
-@RequireRes('BMap')
 class ExpertTrajectory extends React.Component {
   constructor(props) {
     super(props);
@@ -61,16 +59,14 @@ class ExpertTrajectory extends React.Component {
 
   initChart = (person) => {
     const divId = 'chart';
-    ensure('BMap', () => {
-      load((echarts) => {
-        myChart = echarts.init(document.getElementById(divId));
-        let skinType = this.props.themeKey;
-        if (typeof (skinType) === 'undefined') {
-          skinType = '2'; //假设默认为dark
-        }
-        showChart(myChart, 'bmap', skinType, 'trajectory');
-        this.findPersonTraj(person);
-      });
+    load((echarts) => {
+      myChart = echarts.init(document.getElementById(divId));
+      let skinType = this.props.themeKey;
+      if (typeof (skinType) === 'undefined') {
+        skinType = '2'; //假设默认为dark
+      }
+      showChart(myChart, 'bmap', skinType, 'trajectory');
+      this.findPersonTraj(person);
     });
   };
 
@@ -106,7 +102,7 @@ class ExpertTrajectory extends React.Component {
       } else {
         clearInterval(trainterval);
       }
-    }, 2000);
+    }, 3000);
   };
 
   render() {

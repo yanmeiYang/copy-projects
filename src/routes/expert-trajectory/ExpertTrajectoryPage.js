@@ -8,8 +8,8 @@ import { Layout as Page } from 'routes';
 import { FormattedMessage as FM } from 'react-intl';
 import bridge from 'utils/next-bridge';
 import { applyTheme } from 'themes';
-import { Auth, RequireRes } from 'hoc';
-import { ensure } from 'utils';
+import { Auth } from 'hoc';
+import { loadECharts } from 'utils/requirejs';
 import styles from './ExpertTrajectoryPage.less';
 import { showPersonStatistic, downloadData } from './utils/sta-utils';
 import { PersonList } from '../../components/person';
@@ -32,7 +32,6 @@ let echarts;
 
 @connect(({ expertTrajectory, loading, app }) => ({ expertTrajectory, loading, app }))
 @Auth
-@RequireRes('echarts')
 class ExpertTrajectoryPage extends React.Component {
   constructor(props) {
     super(props);
@@ -56,7 +55,7 @@ class ExpertTrajectoryPage extends React.Component {
   }
 
   componentDidMount() {
-    ensure('echarts', (ret) => {
+    loadECharts((ret) => {
       echarts = ret;
       const { query } = this.state;
       if ((query === '' || query === '-')) {

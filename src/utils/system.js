@@ -26,10 +26,10 @@ const AvailableSystems = [
 
 let System;
 // System = 'aminer';
-// System = 'demo';
+System = 'demo';
 // System = 'DataAnnotation';
 
-System = 'ccf';
+// System = 'ccf';
 // System = 'ccftest';
 // System = 'huawei';
 // System = 'alibaba';
@@ -41,7 +41,7 @@ System = 'ccf';
 // System = 'huawei';
 // System = 'med_topic_trend';
 // System = 'scei';
-// System = 'tencent';/
+// System = 'tencent';
 // System = 'thurcb';
 // System = 'yocsef';
 

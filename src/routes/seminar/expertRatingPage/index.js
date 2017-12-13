@@ -19,26 +19,25 @@ class ExpertRatingPage extends React.Component {
     actId: '',
 
   };
-  // 闭包
-  showModal = (text) => {
-    return (e) => {
-      this.setState({
-        visible: true,
-        score: text.score,
-        speaker: text.speaker,
-        actId: text.actId,
 
-      });
-    };
+  showModal = (text) => {
+    this.setState({
+      visible: true,
+      score: text.score,
+      speaker: text.speaker,
+      actId: text.actId,
+    });
   };
 
 
   onChange = (index, value) => {
-    const score = this.state.score;
-    score[index] = value;
-    this.setState({
-      score,
-    });
+    if (typeof value === 'number') {
+      const score = this.state.score;
+      score[index] = value;
+      this.setState({
+        score,
+      });
+    }
   }
 
   handleOk = (e) => {
@@ -106,24 +105,25 @@ class ExpertRatingPage extends React.Component {
 
               <h2>为专家评分：</h2>
               <h2>
-                <strong>
-                  {summaryById.title}
-                </strong>
+                <strong>{summaryById.title}</strong>
               </h2>
 
               <div style={{ marginTop: 20 }} className={styles.workshopTetail}>
-                {summaryById.organizer && <div>
-                  <h3><strong>承办单位：</strong></h3>
-                  <span>{summaryById.organizer.map((item) => {
+                {summaryById.organizer &&
+                <div>
+                  <h7><strong>承办单位：</strong></h7>
+                  <span>
+                    {summaryById.organizer.map((item) => {
                     return <span key={Math.random()}>{item} </span>;
-                  })}</span>
+                  })}
+                  </span>
                 </div>}
                 {summaryById.location && <div>
-                  <h3><strong>活动地点：</strong></h3>
+                  <h7><strong>活动地点：</strong></h7>
                   <span>{summaryById.location.address}</span>
                 </div>}
                 {summaryById.time && <div>
-                  <h3><strong>活动时间：</strong></h3>
+                  <h7><strong>活动时间：</strong></h7>
                   <span>{new Date(summaryById.time.from).format('yyyy年MM月dd日')}</span>
                 </div>}
               </div>
@@ -149,7 +149,7 @@ class ExpertRatingPage extends React.Component {
                     const pos = person.position;
                     const aff = person.affiliation;
                     return (
-                      <div key={person.aid + person.name} className="item">
+                      <div key={person.aid + person.name} className="expertInfoInRating">
                         <div className="avatar_zone">
                           <img
                             src={profileUtils.getAvatar(person.img, '', 90)}
@@ -189,15 +189,24 @@ class ExpertRatingPage extends React.Component {
                       <div>
                         {score &&
                         <div>
-                          <div>演讲水平:&nbsp;&nbsp;<Rate disabled defaultValue={score[0]}
-                                                      value={score[0]} />
-                            <span className="ant-rate-text">{score[0]} 分</span></div>
-                          <div>演讲内容:&nbsp;&nbsp;<Rate disabled defaultValue={score[1]}
-                                                      value={score[1]} />
-                            <span className="ant-rate-text">{score[1]} 分</span></div>
-                          <div>综合评价:&nbsp;&nbsp;<Rate disabled defaultValue={score[2]}
-                                                      value={score[2]} />
-                            <span className="ant-rate-text">{score[2]} 分</span></div>
+                          <div>演讲水平:&nbsp;&nbsp;
+                            <Rate disabled defaultValue={score[0]} value={score[0]} />
+                            {score[0] > 0 ?
+                              <span className="ant-rate-text">{score[0]} 分</span>
+                              : <span className={styles.placeholder} />}
+                          </div>
+                          <div>演讲内容:&nbsp;&nbsp;
+                            <Rate disabled defaultValue={score[1]} value={score[1]} />
+                            {score[1] > 0 ?
+                              <span className="ant-rate-text">{score[1]} 分</span>
+                              : <span className={styles.placeholder} />}
+                          </div>
+                          <div>综合评价:&nbsp;&nbsp;
+                            <Rate disabled defaultValue={score[2]} value={score[2]} />
+                            {score[2] > 0 ?
+                            <span className="ant-rate-text">{score[2]} 分</span>
+                              : <span className={styles.placeholder} />}
+                          </div>
                         </div>
                         }
                       </div>
@@ -211,8 +220,10 @@ class ExpertRatingPage extends React.Component {
                     return (
                       <div>
                         {(roles.admin || roles.authority.includes(summaryById.organizer[0])) &&
-                        <Button type="primary" onClick={this.showModal(text)}
-                                data={JSON.stringify(text)}>评分</Button>}
+                        <Button type="primary" onClick={this.showModal.bind(this, text)}
+                                data={JSON.stringify(text)}>
+                          评分
+                        </Button>}
                         <Modal
                           title={this.state.speaker.name}
                           visible={this.state.visible}

@@ -43,8 +43,27 @@ export default class SearchAssistant extends Component {
       this.setState({ currentExpansionChecked: 1, currentTranslationChecked: 0 });
     }
     if (nextProps.assistantData !== this.props.assistantData) {
-      this.setState({ kgLoading: false });
-      //   console.log('=============== set kgLoading to false', nextProps.assistantData, this.props.assistantData);
+      // TODO 刷新一下kg.
+      const { kgHypernym, kgHyponym } = nextProps.assistantData || [];
+      const newCheckedList = [];
+      const { checkedList } = this.state;
+      if (kgHypernym && kgHypernym.length > 0) {
+        for (const term of kgHypernym) {
+          const found = checkedList.find(checked => checked === term.word);
+          if (found && found.length > 0) {
+            newCheckedList.push(term.word);
+          }
+        }
+      }
+      if (kgHyponym && kgHyponym.length > 0) {
+        for (const term of kgHyponym) {
+          const found = checkedList.find(checked => checked === term.word);
+          if (found && found.length > 0) {
+            newCheckedList.push(term.word);
+          }
+        }
+      }
+      this.setState({ kgLoading: false, checkedList: newCheckedList });
     }
   }
 
@@ -72,6 +91,7 @@ export default class SearchAssistant extends Component {
       currentExpansionChecked: index + 1,
       currentTranslationChecked: this.state.currentTranslationChecked === 0 ? 0 : index + 1,
       kgLoading: true,
+      checkedList: [],
     });
     // console.log('=============== set kgLoading to true',);
   };
@@ -102,24 +122,34 @@ export default class SearchAssistant extends Component {
   };
 
   onCheckAllChange = (e) => {
-    const kgHyponymArray = [];
-    const kgHypernymArray = [];
-    const { assistantData, onAssistantChanged } = this.props;
-    const kgHyponym = assistantData && assistantData.kgHyponym;
-    const kgHypernym = assistantData && assistantData.kgHypernym;
-    kgHyponymArray.push(kgHyponym.map((item) => {
-      return item.word;
-    }));
-    kgHypernymArray.push(kgHypernym.map((item) => {
-      return item.word;
-    }));
-    const checkedList = kgHyponymArray[0].concat(kgHypernymArray[0]);
-    this.setState({
-      checkedList: e.target.checked ? checkedList : [],
-      // checkedList: e.target.checked ? kgHypernymArray[0] : [],
-      indeterminate: false,
-      checkAll: e.target.checked,
-    });
+    const { hasKG, kgData } = this.combineKG();
+    const { checkedList, indeterminate, checkAll } = this.state;
+    if (checkAll) {
+      this.setState({ checkedList: [], indeterminate: false, checkAll: false });
+    } else if (!checkAll) {
+      const newCheckedList = kgData && kgData.map(term => term.word);
+      this.setState({ checkedList: newCheckedList, indeterminate: false, checkAll: true });
+    }
+    //
+    //
+    // const kgHyponymArray = [];
+    // const kgHypernymArray = [];
+    // const { assistantData, onAssistantChanged } = this.props;
+    // const kgHyponym = assistantData && assistantData.kgHyponym;
+    // const kgHypernym = assistantData && assistantData.kgHypernym;
+    // kgHyponymArray.push(kgHyponym.map((item) => {
+    //   return item.word;
+    // }));
+    // kgHypernymArray.push(kgHypernym.map((item) => {
+    //   return item.word;
+    // }));
+    // const checkedList = kgHyponymArray[0].concat(kgHypernymArray[0]);
+    // this.setState({
+    //   checkedList: e.target.checked ? checkedList : [],
+    //   // checkedList: e.target.checked ? kgHypernymArray[0] : [],
+    //   indeterminate: false,
+    //   checkAll: e.target.checked,
+    // });
   };
 
   // intelligenceSuggests
@@ -148,7 +178,7 @@ export default class SearchAssistant extends Component {
       // 添加扩展词翻译
       if (currentTranslationChecked > 0 && expands && expands.length >= currentTranslationChecked) {
         const exp = expands[currentTranslationChecked - 1];
-        if (exp) {
+        if (exp && exp.word_zh) {
           texts.push({ text: exp.word_zh, source: 'translated' });
         }
       }
@@ -216,11 +246,10 @@ export default class SearchAssistant extends Component {
     // const { expandedTexts, expandedTexts_zh, expands } = assistantData;
     const { expands, transText, transLang } = assistantData;
 
-    console.log('9999999:::: ------------------------------------------- ',);
-    console.log('9999999::::  ', currentExpansionChecked, currentTranslationChecked, keywordTranslationChecked);
-    console.log('9999999:::: assistantData ', assistantData);
-    console.log('9999999:::: assistantDataMeta ', assistantDataMeta);
-
+    // console.log('9999999:::: ------------------------------------------- ',);
+    // console.log('9999999::::  ', currentExpansionChecked, currentTranslationChecked, keywordTranslationChecked);
+    // console.log('9999999:::: assistantData ', assistantData);
+    // console.log('9999999:::: assistantDataMeta ', assistantDataMeta);
 
     // if has value.
     const hasExpansion = expands && expands.length > 0;
@@ -361,37 +390,38 @@ export default class SearchAssistant extends Component {
   }
 }
 
+const smartClear = ({ prevTexts, texts, dispatch, assistantData }) => {
+  if (!assistantData) {
+    console.error('Error! assistantData Can not be null.');
+    return;
+  }
+  if (!prevTexts) {
+    // can't be null.
+  }
+  if (!texts || texts.length <= 0) {
+    // TODO no results?
+  }
+  const expandWordItem = texts && texts.find(term => term.source === 'expands');
+  const expandWord = expandWordItem && expandWordItem.text;
+  if (expandWord) {
+    let prevExpandWord;
+    const prevExpandWordItem = prevTexts && prevTexts.find(term => term.source === 'expands');
+    if (!prevExpandWordItem) {
+      prevExpandWord = assistantData.expands && assistantData.expands.length > 0
+        && assistantData.expands[0].word;
+    } else {
+      prevExpandWord = prevExpandWordItem && prevExpandWordItem.text;
+    }
+    if (expandWord !== prevExpandWord) {
+      // here we clear kg data.
+      if (dispatch) {
+        // TODO don;t call this. just hide.
+        dispatch({ type: 'search/clearSearchAssistantKG' });
+      }
+    }
+  }
+};
+
 export const AssistantUtils = {
-  smartClear: ({ prevTexts, texts, dispatch, assistantData }) => {
-    if (!assistantData) {
-      console.error('Error! assistantData Can not be null.');
-      return;
-    }
-    if (!prevTexts) {
-      // can't be null.
-    }
-    if (!texts || texts.length <= 0) {
-      // TODO no results?
-    }
-    const expandWordItem = texts && texts.find(term => term.source === 'expands');
-    const expandWord = expandWordItem && expandWordItem.text;
-    if (expandWord) {
-      let prevExpandWord;
-      const prevExpandWordItem = prevTexts && prevTexts.find(term => term.source === 'expands');
-      if (!prevExpandWordItem) {
-        prevExpandWord = assistantData.expands && assistantData.expands.length > 0
-          && assistantData.expands[0].word;
-      } else {
-        prevExpandWord = prevExpandWordItem && prevExpandWordItem.text;
-      }
-      console.log('====== ExpandWord is ', expandWord, prevExpandWord);
-      if (expandWord !== prevExpandWord) {
-        // here we clear kg data.
-        if (dispatch) {
-          // TODO don;t call this. just hide.
-          dispatch({ type: 'search/clearSearchAssistantKG' });
-        }
-      }
-    }
-  },
+  smartClear,
 };

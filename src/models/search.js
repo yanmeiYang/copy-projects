@@ -104,7 +104,7 @@ export default {
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
       const intelligenceSearchMeta = yield select(state => state.search.intelligenceSearchMeta);
       const assistantDataMeta = yield select(state => state.search.assistantDataMeta);
-
+      console.log('*****************2', assistantDataMeta);
       // 分界线
       yield put({ type: 'updateSortKey', payload: { key: Sort } });
       yield put({ type: 'updateFilters', payload: { filters } });

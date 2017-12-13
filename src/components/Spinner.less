@@ -4,14 +4,28 @@
 :global {
   .spinnerMask {
     background-color: rgba(255, 255, 255, 0.6);
-    //background: transparent;
-    position: absolute; width: 100%; height: 100%; z-index: 999;
-    //border: solid 1px red;
+    position: absolute;width: 95%;z-index: 999;
+    // height: 100%;
   }
   .mshow { display: block }
   .mhide { display: none }
 
-  .filterBlur { filter: blur(1.1px) brightness(103%); }
+  .parentSpinner_blur {
+    filter: blur(1.1px) brightness(103%) !important;
+  }
+
+  .parentSpinner_dark {
+    filter: blur(0.5px) brightness(103%) !important;
+  }
+
+  .spinnerMask.type_blur {
+  }
+
+  .spinnerMask.type_dark {
+  }
+
+  .spinnerMask.type_light {
+  }
 }
 
 .spinner {

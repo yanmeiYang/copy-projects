@@ -6,9 +6,17 @@
   padding: 0 0 0 8px;
   border-radius: 1px;
   margin: 0 0 4px 8px;
+
   :global .ant-tag {
     margin-bottom: 1px; background-color: @background-color-gray;
+    max-width: 280px;
+    //text-overflow: ellipsis;
+    overflow: hidden;
+    .ant-tag-text {
+      //max-width: 90px;
+    }
   }
+
   h4 {
     border-bottom: solid 1px #ddd;
     width: 94%; color: @dark-gray;

@@ -31,7 +31,7 @@ export default {
     translatedText: '',
 
     // Intelligence search assistants. TODO change to assistantMeta, assistantData
-    assistantDataMeta: {}, // advquery
+    assistantDataMeta: {}, // {advquery: texts: [...]}
     assistantData: null,
 
     // flags
@@ -65,7 +65,7 @@ export default {
           const size = parseInt(match[4], 10);
           // dispatch({ type: 'emptyResults' });
           dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
-          dispatch({ type: 'clearSearchAssistant' });
+          // dispatch({ type: 'clearSearchAssistant' });
         }
 
         //
@@ -76,7 +76,7 @@ export default {
           const offset = parseInt(match[3], 10);
           const size = parseInt(match[4], 10);
           dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
-          dispatch({ type: 'clearSearchAssistant' });
+          // dispatch({ type: 'clearSearchAssistant' });
         }
 
       });
@@ -127,7 +127,7 @@ export default {
           // 不是第一次使用辅助系统，调用非阻塞的assistant。
           yield put({ type: 'onlySearchAssistant', payload: { query, assistantDataMeta } });
         } else {
-          // 第一次query，需要默认带上第一个query.
+          // 第一次query使用辅助系统，老API需要默认带上第一个query，所以这里阻塞，先等结果回来再搜索。
           const data = yield call(searchService.onlySearchAssistant, {
             query,
             assistantDataMeta,
@@ -344,10 +344,6 @@ export default {
       return { ...state, results: [] };
     },
 
-    clearSearchAssistant(state) {
-      return { ...state, assistantDataMeta: null, assistantData: null };
-    },
-
     removePersonFromSearchResultsById(state, { payload: { pid } }) {
       const originalResults = [];
       for (const value of state.results) {
@@ -384,10 +380,6 @@ export default {
       return { ...state, useTranslateSearch: useTranslate };
     },
 
-    setAssistantDataMeta(state, { payload: { texts } }) {
-      return { ...state, assistantDataMeta: { advquery: { texts } } };
-    },
-
     clearTranslateSearch(state) {
       return { ...state, useTranslateSearch: true, translatedText: '' };
     },
@@ -396,9 +388,31 @@ export default {
       return { ...state, topic: data.data };
     },
 
+    /*
+     * Search Assistant related reducers.
+     */
+
+    setAssistantDataMeta(state, { payload: { texts } }) {
+      return { ...state, assistantDataMeta: { advquery: { texts } } };
+    },
+
+    clearAssistantDataMeta(state) {
+      return { ...state, assistantDataMeta: {} };
+    },
+
     getAssistantDataSuccess(state, { payload: { data } }) {
       return { ...state, assistantData: data };
     },
+
+    clearSearchAssistant(state) {
+      return { ...state, assistantDataMeta: null, assistantData: null };
+    },
+
+    // clearSearchAssistantKG(state) {
+    //   const { kgHypernym, kgHyponym, ...assistantData } = state.assistantData;
+    //   return { ...state, assistantData };
+    // },
+
   },
 };
 

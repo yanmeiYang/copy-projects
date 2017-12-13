@@ -16,8 +16,11 @@ import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 import { createURL, hole } from 'utils';
 import { Auth } from 'hoc';
-import SearchAssistant from './SearchAssistant';
+import SearchAssistant, { AssistantUtils } from './SearchAssistant';
 import styles from './SearchComponent.less';
+
+console.log('AssistantUtils::', AssistantUtils);
+// console.log('AssistantUtils::', AssistantUtils);
 
 const DefaultRightZoneFuncs = [
   param => <SearchKnowledge query={param.query} key="1" />,
@@ -144,7 +147,14 @@ export default class SearchComponent extends Component {
   };
 
   onAssistantChanged = (texts) => {
-    const { query } = this.props.search;
+    // NOTE: query keep unchanged. Change type: [nothing|expansion|kg]
+    // advanced clear assistant value.
+    const { dispatch } = this.props;
+    const { query, assistantDataMeta, assistantData } = this.props.search;
+    const prevTexts = assistantDataMeta && assistantDataMeta.advquery && assistantDataMeta.advquery.texts;
+    // on expansion change, only clear kg data.
+    AssistantUtils.smartClear({ assistantData, prevTexts, texts, dispatch });
+
     this.dispatch({ type: 'search/setAssistantDataMeta', payload: { texts } });
     this.doSearchUseProps();
   };
@@ -262,7 +272,9 @@ export default class SearchComponent extends Component {
 
             {/* Search Help */}
             {!disableSmartSuggest &&
-            <SearchAssistant onAssistantChanged={this.onAssistantChanged} />}
+            <SearchAssistant
+              onAssistantChanged={this.onAssistantChanged}
+            />}
 
             {/* Search Message Zone TODO not good.*/}
             {/*<Hole fill={searchMessagesZone} />;*/}

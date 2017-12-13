@@ -7,6 +7,7 @@ import { Layout } from 'routes';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 import { classnames } from 'utils/index';
+import { Spinner } from 'components';
 import { KgSearchBox } from 'components/search';
 import { IndexHotLinks } from 'components/widgets';
 import { Auth } from 'hoc';
@@ -50,6 +51,8 @@ export default class IndexPage extends Component {
 
         <div className={styles.search}>
           {/*// TODO use localStorage to search.*/}
+          {/*<Spinner loading={true} type="dark" />*/}
+
           <KgSearchBox size="huge" className={styles.searchBox} onSearch={this.onSearch} />
         </div>
 

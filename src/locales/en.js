@@ -62,7 +62,9 @@ export default {
 
   'com.search.searchAssistant.hintInfo.expansion': 'We automatically expanded it to',
   'com.search.searchAssistant.hintInfo.translation': 'We also search for',
-  'com.search.searchAssistant.hintInfo.KG': 'Expanded by knowledge graph',
+  'com.search.searchAssistant.hintInfo.KG': 'Expanded by knowledge graph:',
+  'com.search.searchAssistant.hintInfo.KG.kgHypernym': 'hypernym: black',
+  'com.search.searchAssistant.hintInfo.KG.kgHyponym': 'hyponym: blue',
   'com.search.searchAssistant.hintInfo.KGButton': 'Search with Knowledge Graph',
   'com.search.searchAssistant.hintInfo.loading': 'Loading...',
 

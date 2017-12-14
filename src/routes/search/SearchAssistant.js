@@ -123,7 +123,9 @@ export default class SearchAssistant extends Component {
 
   onKGChange = (checkedList) => {
     const { assistantData } = this.props;
-    const len = assistantData.kgHyponym && assistantData.kgHyponym.length;
+    const lenkgHyponym = assistantData.kgHyponym && assistantData.kgHyponym.length;
+    const lenkgHypernym = assistantData.kgHypernym && assistantData.kgHypernym.length;
+    const len = lenkgHyponym + lenkgHypernym;
     this.setState({
       checkedList,
       indeterminate: !!checkedList.length && (checkedList.length < len),
@@ -370,6 +372,10 @@ export default class SearchAssistant extends Component {
             <span className={styles.paddingRight}>
               <FM defaultMessage="Expanded by knowledge graph"
                   id="com.search.searchAssistant.hintInfo.KG" />
+              <FM defaultMessage="hypernym: black"
+                  id="com.search.searchAssistant.hintInfo.KG.kgHypernym" />
+              <FM defaultMessage="hyponym: blue"
+                        id="com.search.searchAssistant.hintInfo.KG.kgHyponym" />
               </span>
             <span>
               <Checkbox

@@ -54,6 +54,12 @@ export default {
       const { data } = yield call(personService.getActivityAvgScoresByPersonId, id);
       yield put({ type: 'getActivityAvgScoresByPersonIdSuccess', payload: { data } });
     },
+    *getContributionRecalculatedByPersonId({ payload }, { call, put }) {
+      const { id } = payload;
+      console.log('=============333', id);
+      const { data } = yield call(personService.getContributionRecalculatedByPersonId, id);
+      yield put({ type: 'getContributionRecalculatedSuccess', payload: { data } });
+    },
   },
 
   reducers: {
@@ -69,6 +75,10 @@ export default {
     },
 
     getActivityAvgScoresByPersonIdSuccess(state, { payload: { data } }) {
+      return { ...state, avgScores: data.indices };
+    },
+
+    getContributionRecalculatedSuccess(state, { payload: { data } }) {
       return { ...state, avgScores: data.indices };
     },
   },

@@ -12,7 +12,6 @@ const randomColor = (num) => { //选择不重复的颜色
   let frequency = 0;
   while (color.length <= num) {
     if (color1.length >= frequency) {
-      console.log(color1[frequency]);
       color.push(color1[frequency]);
     }
     if (color2.length >= frequency) {

@@ -11,7 +11,7 @@ import { applyTheme } from 'themes';
 import { Auth } from 'hoc';
 import { loadECharts } from 'utils/requirejs';
 import styles from './ExpertTrajectoryPage.less';
-import { showPersonStatistic, downloadData } from './utils/sta-utils';
+import { showPersonStatistic, downloadData } from './utils/trajectory-statistic';
 import { PersonList } from '../../components/person';
 import ExpertTrajectory from './ExpertTrajectory';
 

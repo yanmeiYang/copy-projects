@@ -12,7 +12,7 @@ import { Layout as Page } from 'routes';
 import { Layout, Tabs, Button, Icon, TreeSelect, Menu, Dropdown, Checkbox, message, Modal } from 'antd';
 import styles from './ExpertHeatmapPage.less';
 import ExpertHeatmap from './ExpertHeatmap';
-import { showBulkTraj } from './utils/sta-utils';
+import { showBulkTraj } from './utils/heatmap-statistic';
 
 
 const { Content, Sider } = Layout;

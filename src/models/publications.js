@@ -73,11 +73,8 @@ export default {
         } else if (citedTab === 'top' || !citedTab) { // default
           data = yield call(pubsService.getPubsMostPo, { personId, offset, size });
         } else {
-          const splits = citedTab.split('-');
-          if (splits.length === 3) {
-            const nc_lo = splits[0];
-            const nc_hi = splits[1];
-            const size = splits[2];
+          if (citedTab) {
+            const { nc_lo, nc_hi, size } = citedTab;
             data = yield call(pubsService.getPubsByCite, { personId, offset, nc_lo, nc_hi, size });
           } else {
             console.log('ERROR parsing citedTab', citedTab);
@@ -94,6 +91,7 @@ export default {
     },
 
     getPublicationSuccess(state, { payload: { orderBy, data } }) {
+      console.log('getPublicationSuccess');
       if (orderBy === 'byYear') {
         return { ...state, resultsByYear: data.data, loading: false };
       } else if (orderBy === 'byCitation') {

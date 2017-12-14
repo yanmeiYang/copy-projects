@@ -284,18 +284,14 @@ export default class SearchAssistant extends Component {
 
         <div className={styles.box}>
 
-          <div className={styles.w}>
+          <div className={classnames({ [styles.w]: true, [styles.zh]: sysconfig.Locale === 'zh' })}>
             {hasExpansion &&
-            <div className={styles.w}>
               <FM defaultMessage="We automatically expanded it to"
                   id="com.search.searchAssistant.hintInfo.expansion" />
-            </div>
             }
             {hasTranslation &&
-            <div className={styles.w}>
               <FM defaultMessage="We also search for"
                   id="com.search.searchAssistant.hintInfo.translation" />
-            </div>
             }
           </div>
 

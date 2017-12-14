@@ -48,8 +48,8 @@ export default {
   'com.search.filter.label2.nation': '地区',
   'com.search.filter.label2.dims.systag': '标签',
 
-  'com.search.filter.value.gender.male': '男',
-  'com.search.filter.value.gender.female': '女',
+  'com.search.filter.value.gender.Male': '男',
+  'com.search.filter.value.gender.Female': '女',
 
   'com.search.sort.label.relevance': '综合',
   'com.search.sort.label.h_index': 'h指数',

@@ -48,8 +48,8 @@ export default {
   'com.search.filter.label2.nation': 'Location',
   'com.search.filter.label2.dims.systag': 'Tags',
 
-  'com.search.filter.value.gender.male': 'Male',
-  'com.search.filter.value.gender.female': 'Female',
+  'com.search.filter.value.gender.Male': 'Male',
+  'com.search.filter.value.gender.Female': 'Female',
 
   'com.search.sort.label.relevance': 'Relevance',
   'com.search.sort.label.h_index': 'H-Index',

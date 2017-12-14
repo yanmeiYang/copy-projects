@@ -206,20 +206,26 @@ export async function searchPersonGlobal(query, offset, size, filters, sort, use
 //
 // Search Aggregation!
 //
-export async function searchPersonAgg(query, offset, size, filters, useTranslateSearch, sort) {
+export async function searchPersonAgg(params) {
+  const { query, offset, size, filters, sort } = params;
+  const { useTranslateSearch, assistantQuery } = params;
+
+  // some conditions
+  const finalQuery = assistantQuery || query;
+
   // if search in global experts, jump to another function;
   if (filters && filters.eb && filters.eb.id === 'aminer') {
-    return searchPersonAggGlobal(query, offset, size, filters, useTranslateSearch);
+    return searchPersonAggGlobal(finalQuery, offset, size, filters, useTranslateSearch);
   }
   // Fix bugs when default search area is 'aminer'
   if ((!filters || !filters.eb) && sysconfig.DEFAULT_EXPERT_BASE === 'aminer') {
-    return searchPersonAggGlobal(query, offset, size, filters, useTranslateSearch);
+    return searchPersonAggGlobal(finalQuery, offset, size, filters, useTranslateSearch);
   }
 
   if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH && sort !== 'activity-ranking-contrib') {
     // TODO 注意注意，agg从新的api中获取，所以这里什么都不做!
   } else {
-    const { expertBase, data } = prepareParameters(query, offset, size, filters, '', useTranslateSearch);
+    const { expertBase, data } = prepareParameters(finalQuery, offset, size, filters, '', useTranslateSearch);
     return request(
       api.searchPersonInBaseAgg.replace(':ebid', expertBase),
       { method: 'GET', data },

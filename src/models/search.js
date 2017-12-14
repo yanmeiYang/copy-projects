@@ -106,7 +106,6 @@ export default {
       const intelligenceSearchMeta = yield select(state => state.search.intelligenceSearchMeta);
       const assistantDataMeta = yield select(state => state.search.assistantDataMeta);
       const isNotAffactedByAssistant = yield select(state => state.search.isNotAffactedByAssistant);
-      console.log('*****************2', isNotAffactedByAssistant);
 
       // 分界线
       yield put({ type: 'updateSortKey', payload: { key: Sort } });
@@ -166,6 +165,7 @@ export default {
       };
 
       const data = yield call(searchService.searchPerson, params);
+
       if (process.env.NODE_ENV !== 'production') {
         if (data && data.data && data.data.queryEscaped) {
           console.warn('DEVELOPMENT ONLY MESSAGE: Query中有非法字符，已经过滤。详情：宋驰没告诉我!');
@@ -249,8 +249,7 @@ export default {
       }
     },
 
-
-    * searchPersonAgg({ payload }, { call, put, select }) {
+    searchPersonAgg: [function* ({ payload }, { call, put, select }) {
       const { query, offset, size, filters, sort } = payload;
       const noTotalFilters = {};
       for (const [key, item] of Object.entries(filters)) {
@@ -261,13 +260,23 @@ export default {
         }
       }
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
-      const sr = yield call(searchService.searchPersonAgg,
-        query, offset, size, noTotalFilters, useTranslateSearch, sort);
+      const intelligenceSearchMeta = yield select(state => state.search.intelligenceSearchMeta);
+      const assistantDataMeta = yield select(state => state.search.assistantDataMeta);
+      const isNotAffactedByAssistant = yield select(state => state.search.isNotAffactedByAssistant);
+
+      const assistantQuery = findAssistantQuery({ ghost: false, filters, assistantDataMeta });
+
+      const params = {
+        query, offset, size, filters: noTotalFilters, sort,
+        assistantDataMeta, assistantQuery, useTranslateSearch, // TODO remove
+      };
+      const sr = yield call(searchService.searchPersonAgg, params);
       if (sr) {
         const { data } = sr;
         yield put({ type: 'searchPersonAggSuccess', payload: { data } });
       }
-    },
+    }, takeLatest],
+
 
     * getSeminars({ payload }, { call, put }) {
       const { offset, size } = payload;
@@ -448,4 +457,28 @@ function fixSortKey(sort, query) {
     }
   }
   return sort;
+}
+
+function findAssistantQuery(params) {
+  const { ghost, filters, assistantDataMeta } = params;
+  const { searchInGlobalExperts, searchInSomeExpertBase } = searchService.getBools(filters);
+
+  // TODO call standalone assistant search for old api.
+  let assistantQuery = '';
+  if (sysconfig.Search_EnableSmartSuggest && !ghost &&
+    (searchInGlobalExperts ||
+      (searchInSomeExpertBase && !sysconfig.USE_NEXT_EXPERT_BASE_SEARCH))
+  ) {
+    // TODO 第一次搜索出现的bug。
+    if (assistantDataMeta && assistantDataMeta.advquery && assistantDataMeta.advquery.texts
+      && assistantDataMeta.advquery.texts.length > 0) {
+      const queries = assistantDataMeta.advquery.texts.map(term => term && `(| ${term.text})`);
+      queries.push(`(| ${query})`);
+      assistantQuery = queries.join(' ');
+      console.log('Note: expand query is:', assistantQuery);
+    } else {
+      // FIXME: here is a bug.
+    }
+  }
+  return assistantQuery;
 }

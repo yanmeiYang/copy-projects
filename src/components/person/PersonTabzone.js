@@ -4,14 +4,14 @@
  */
 import React from 'react';
 import { Link } from 'dva/router';
-import { Icon, Tabs, Spin } from 'antd';
+import { Icon, Tabs, Spin, Button } from 'antd';
 import * as personService from '../../services/person';
-import PersonFeaturedPapers from '../../routes/person/person-featured-papers';
+import AminerPublications from '../../routes/person/aminer-publications';
 import styles from './Tabzone.less';
 import Information from './PersonInfo';
 import Education from './PersonEducation';
 import Experience from './PersonExperience';
-import Skills from './PersonSkills';
+import Skills from './PersonSkills'
 import Bio from './PersonBio';
 import AcmCitations from './ACM_Citations';
 
@@ -25,7 +25,6 @@ const panes = [
   { title: 'Merge', key: '4' },
   { title: 'Upload', key: '5' },
 ];
-
 
 class TabZone extends React.Component {
   constructor(props) {
@@ -58,7 +57,7 @@ class TabZone extends React.Component {
           <div><Experience /></div>
         </div>
         <div className={styles.right_region}>
-          <div><Skills profile={profile} skillsUp={skillsUp} skillsDown={skillsDown} skillsModal={skillsModal} /></div>
+          <div><Skills profile={profile} /></div>
           <div style={{ marginTop: 20 }} />
           <div><Bio profile={profile} /></div>
         </div>
@@ -66,21 +65,7 @@ class TabZone extends React.Component {
     },
       {
         key: '2',
-        content: <div>
-          <Spin spinning={publications.loading}>
-            <div>
-              <div style={{ float: 'right', marginTop: '-36px', position: 'relative' }}>
-                <a
-                  href={personService.getAMinerProfileUrl(profile.name, profile.id)}
-                  target="_blank" rel="noopener noreferrer"
-                >
-                  查看全部 {totalPubs} 篇论文<Icon type="right" />
-                </a>
-              </div>
-              <PersonFeaturedPapers personId={profile.id} totalPubs={totalPubs} />
-            </div>
-          </Spin>
-        </div>,
+        content: <AminerPublications personId={profile.id} totalPubs={totalPubs} />,
       },
       {
         key: '3',

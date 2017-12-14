@@ -66,6 +66,19 @@
     .skillsZone{
       color: #ccc;
       size:12px;
+      a.unclicked{
+        color:lightgrey;
+        background: transparent;
+        &:hover { color: orange; }
+        &:active { color: blue; }
+      }
+      a.clicked{
+        color:#428bca;
+        background: transparent;
+        &:hover { color: orange; }
+        &:active { color: blue; }
+      }
+
       .upArea{
         display:flex;
         flex-direction:row;

@@ -64,7 +64,8 @@ class AminerProfileInfo extends React.Component {
               {email &&
               <p>
                 <i className="fa fa-envelope fa-fw" />
-                <img className="emailImg" src={`https://api.aminer.org/api/${email}`} alt="email"
+                <img className="emailImg"
+                     src={`${email}`} alt="email"
                      style={{ verticalAlign: 'middle' }} />
               </p>}
               {homepage &&

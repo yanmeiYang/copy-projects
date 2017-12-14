@@ -119,6 +119,13 @@ class ExpertTrajectoryPage extends React.Component {
           && data !== '') || (this.state.visible === false)) {
           clearInterval(chartsinterval);
           showPersonStatistic(data, type);
+          //防止在其他tab的时候信息没有被刷新
+          if (document.getElementById('migrateHistory') !== null) {
+            showPersonStatistic(data, 'migrateHistory');
+          }
+          if (document.getElementById('regionDistribute') !== null) {
+            showPersonStatistic(data, 'regionDistribute');
+          }
         }
       }, 100);
     });

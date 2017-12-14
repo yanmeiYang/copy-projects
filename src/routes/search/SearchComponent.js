@@ -227,7 +227,6 @@ export default class SearchComponent extends Component {
     // console.log('>>>---', query);
     const load = loading.effects['search/searchPerson'];
     const isPagination = !load;
-    console.log('=============', load);
     // const expertBase = (filters && filters.eb && filters.eb.id) || 'aminer';
 
     const rightZoneData = { expertBaseId, query, pageSize, current, filters, sortType };

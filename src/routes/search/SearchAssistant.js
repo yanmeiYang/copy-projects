@@ -88,12 +88,14 @@ export default class SearchAssistant extends Component {
   }
 
   onExpandedTermChange = (index) => {
-    this.setState({
-      currentExpansionChecked: index + 1,
-      currentTranslationChecked: this.state.currentTranslationChecked === 0 ? 0 : index + 1,
-      kgLoading: true,
-      checkedList: [],
-    });
+    if (index + 1 !== this.state.currentExpansionChecked) {
+      this.setState({
+        currentExpansionChecked: index + 1,
+        currentTranslationChecked: this.state.currentTranslationChecked === 0 ? 0 : index + 1,
+        kgLoading: true,
+        checkedList: [],
+      });
+    }
     // console.log('=============== set kgLoading to true',);
   };
 
@@ -107,8 +109,15 @@ export default class SearchAssistant extends Component {
   onTranslationChange = (index) => {
     this.setState({
       currentTranslationChecked: this.state.currentTranslationChecked === index + 1 ? 0 : index + 1,
-      currentExpansionChecked: index + 1,
     });
+
+    if (index + 1 !== this.state.currentExpansionChecked) {
+      this.setState({
+        currentExpansionChecked: index + 1,
+        kgLoading: true,
+        checkedList: [],
+      });
+    }
     // this.callSearch(); call in did update.
   };
 
@@ -169,11 +178,13 @@ export default class SearchAssistant extends Component {
       } = this.state;
       const { expands, kgHypernym, kgHyponym, transText, transLang } = assistantData;
 
+      let hasExpand = false;
       // 添加扩展词
       if (currentExpansionChecked > 0 && expands && expands.length >= currentExpansionChecked) {
         const exp = expands[currentExpansionChecked - 1];
         if (exp) {
           texts.push({ text: exp.word, source: 'expands' });
+          hasExpand = true;
         }
       }
       // 添加扩展词翻译
@@ -184,7 +195,7 @@ export default class SearchAssistant extends Component {
         }
       }
       // 添加搜索词翻译
-      if (keywordTranslationChecked > 0 && transText) {
+      if (!hasExpand && keywordTranslationChecked > 0 && transText) {
         texts.push({ text: transText, source: 'translated' });
       }
       // 添加KG

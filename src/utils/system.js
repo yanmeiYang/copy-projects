@@ -25,13 +25,13 @@ const AvailableSystems = [
 ];
 
 let System;
-System = 'aminer';
+// System = 'aminer';
 // System = 'demo';
 // System = 'DataAnnotation';
 
 // System = 'ccf';
 // System = 'ccftest';
-// System = 'huawei';
+System = 'huawei';
 // System = 'alibaba';
 // System = 'acmfellow';
 // System = 'tencent';

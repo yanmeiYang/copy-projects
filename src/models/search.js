@@ -264,7 +264,7 @@ export default {
       const assistantDataMeta = yield select(state => state.search.assistantDataMeta);
       const isNotAffactedByAssistant = yield select(state => state.search.isNotAffactedByAssistant);
 
-      const assistantQuery = findAssistantQuery({ ghost: false, filters, assistantDataMeta });
+      const assistantQuery = findAssistantQuery({ ghost: false, filters, assistantDataMeta, query});
 
       const params = {
         query, offset, size, filters: noTotalFilters, sort,
@@ -460,7 +460,7 @@ function fixSortKey(sort, query) {
 }
 
 function findAssistantQuery(params) {
-  const { ghost, filters, assistantDataMeta } = params;
+  const { ghost, filters, assistantDataMeta, query } = params;
   const { searchInGlobalExperts, searchInSomeExpertBase } = searchService.getBools(filters);
 
   // TODO call standalone assistant search for old api.

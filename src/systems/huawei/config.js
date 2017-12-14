@@ -18,6 +18,14 @@ module.exports = {
   UserAuthSystem: 'huawei', // aminer 或者是 system.config
   UserAuthSystem_AddSysTagAuto: true, // 登录时自动添加system的标签
 
+  // AI search helper translation/expand/kg
+  Search_EnableTranslateSearch: false, // 启用翻译搜索，显示提示信息;/
+  Search_DefaultTranslateSearch: false, // 默认使用翻译搜索;
+  Search_EnableSmartSuggest: true, // 启用智能提示;  启用后，禁用translateSearch
+  Search_SmartSuggest_EnableExpand: true, // TODO
+  Search_SmartSuggest_EnableTranslate: true, // TODO
+  Search_SmartSuggest_EnableKG: true, // TODO
+
   Header_UserPageURL: '/user-info',
   ShowHelpDoc: true,
 

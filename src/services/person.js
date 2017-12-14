@@ -25,6 +25,43 @@ export async function getPersonSkills(params) {
   );
 }
 
+export async function getTopicOfModal(params) {
+  //this is used in the new aminer PersonPage--Tabzone--Skills
+  const { personId, tid, offset, usize } = params;
+  return request(
+    api.getTopicOfModal
+      .replace(':id', personId)
+      .replace(':tid', tid)
+      .replace(':offset', offset)
+      .replace(':usize', usize)
+    , { method: 'GET' },
+  );
+}
+
+export async function votePersonInSomeTopicById(params) {
+  //this is used in the new aminer PersonPage--Tabzone--Skills
+  const { aid, oper, tid } = params;
+  return request(
+    api.votePersonInSomeTopicById
+      .replace(':oper', oper)
+      .replace(':aid', aid)
+      .replace(':tid', tid)
+    , { method: 'PUT' },
+  );
+}
+
+export async function unvotePersonInSomeTopicById(params) {
+  //this is used in the new aminer PersonPage--Tabzone--Skills
+  const { aid, tid } = params;
+  return request(
+    api.unvotePersonInSomeTopicById
+      .replace(':aid', aid)
+      .replace(':tid', tid)
+    , { method: 'DELETE' },
+  );
+}
+
+
 export async function listPersonByIds(ids) {
   return request(api.listPersonByIds, {
     method: 'POST',

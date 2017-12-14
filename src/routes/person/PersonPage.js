@@ -12,7 +12,7 @@ import { Layout } from '../../routes';
 
   // console.log('|||||||||||| PersonIndex:', person);
 const aminerPerson = ({ dispatch, aminerPerson, publications }) => {
-  const { profile, avgScores, skillsUp, skillsDown, skillsModal } = aminerPerson;
+  const { profile, avgScores } = aminerPerson;
   const contrib = avgScores.filter(score => score.key === 'contrib')[0];
   const activity_indices = { contrib: contrib === undefined ? 0 : contrib.score };
   return (
@@ -25,7 +25,7 @@ const aminerPerson = ({ dispatch, aminerPerson, publications }) => {
         <div style={{ marginTop: 30 }} />
 
         <div>
-          <TabZone profile={profile} publications={publications} skillsUp={skillsUp} skillsDown={skillsDown} skillsModal={skillsModal} />
+          <TabZone profile={profile} publications={publications} />
         </div>
       </div>
     </Layout>

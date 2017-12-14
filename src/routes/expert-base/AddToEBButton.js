@@ -85,11 +85,11 @@ export default class AddToEBButton extends PureComponent {
     return (
       <div className={styles.buttonArea}>
         {this.state.isInThisEB ? (
-          <Button onClick={this.removeExpert.bind(this, person.id)}>
+          <Button onClick={this.removeExpert.bind(this, person.id)} className="thin">
             <FM id="com.bole.Remove" defaultMessage="Remove" />
           </Button>
         ) : (
-          <Button onClick={this.add.bind(this, person.id)} loading={load}>
+          <Button onClick={this.add.bind(this, person.id)} loading={load} className="thin">
             <FM id="com.bole.AddButton" defaultMessage="Add" />
           </Button>
         )}

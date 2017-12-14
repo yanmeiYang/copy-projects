@@ -35,21 +35,21 @@ export default {
   'com.search.filter.searchRange': 'Range:',
   'com.search.filter.Filters': 'Filters:',
   'com.search.filter.label.h_index': 'H-Index',
-  'com.search.filter.label.language': 'Language',
-  'com.search.filter.label.nationality': 'Location',
+  'com.search.filter.label.lang': 'Language',
+  'com.search.filter.label.nation': 'Location', // 神奇
   'com.search.filter.label.location': 'Location',
   'com.search.filter.label.gender': 'Gender',
   'com.search.filter.label.dims.systag': 'Tags',
 
   'com.search.filter.label2.h_index': 'H-Index',
-  'com.search.filter.label2.language': 'Language',
+  'com.search.filter.label2.lang': 'Language',
   'com.search.filter.label2.location': 'Location',
   'com.search.filter.label2.gender': 'Gender',
-  'com.search.filter.label2.nationality': 'Location',
+  'com.search.filter.label2.nation': 'Location',
   'com.search.filter.label2.dims.systag': 'Tags',
 
-  'com.search.filter.value.gender.male': 'Male',
-  'com.search.filter.value.gender.female': 'Female',
+  'com.search.filter.value.gender.Male': 'Male',
+  'com.search.filter.value.gender.Female': 'Female',
 
   'com.search.sort.label.relevance': 'Relevance',
   'com.search.sort.label.h_index': 'H-Index',
@@ -60,6 +60,12 @@ export default {
   'com.search.sort.label.activity-ranking-contrib': 'Contrib',
   'com.search.sort.label.time': 'Time',
 
+  'com.search.searchAssistant.hintInfo.expansion': 'We automatically expanded it to',
+  'com.search.searchAssistant.hintInfo.translation': 'We also search for',
+  'com.search.searchAssistant.hintInfo.KG': 'Expanded by knowledge graph',
+  'com.search.searchAssistant.hintInfo.KGButton': 'Search with Knowledge Graph',
+  'com.search.searchAssistant.hintInfo.loading': 'Loading...',
+
   'com.searchTypeWidget.label.ExpertSearch': 'Experts',
   'com.searchTypeWidget.label.ExpertMap': 'Maps',
   'com.searchTypeWidget.label.Relation': 'Relations',
@@ -69,6 +75,8 @@ export default {
   'com.searchTypeWidget.label.ExpertBase': 'My Experts',
 
   'com.searchTypeWidget.label.ACM_ExpertSearch': 'Global Experts',
+  'com.searchTypeWidget.label.ACMFellowExpertBase': 'ACM Fellow',
+
 
   'com.PersonList.label.views': 'views',
   'com.PersonList.label.homepage': 'Homepage',

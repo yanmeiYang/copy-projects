@@ -35,21 +35,21 @@ export default {
   'com.search.filter.searchRange': '范围:',
   'com.search.filter.Filters': '过滤条件:',
   'com.search.filter.label.h_index': 'h指数',
-  'com.search.filter.label.language': '语言',
-  'com.search.filter.label.nationality': '地区',
+  'com.search.filter.label.lang': '语言',
+  'com.search.filter.label.nation': '地区',
   'com.search.filter.label.location': '地区',
   'com.search.filter.label.gender': '性别',
   'com.search.filter.label.dims.systag': '标签',
 
   'com.search.filter.label2.h_index': 'H指数',
-  'com.search.filter.label2.language': '语言',
+  'com.search.filter.label2.lang': '语言',
   'com.search.filter.label2.location': '地区',
   'com.search.filter.label2.gender': '性别',
-  'com.search.filter.label2.nationality': '地区',
+  'com.search.filter.label2.nation': '地区',
   'com.search.filter.label2.dims.systag': '标签',
 
-  'com.search.filter.value.gender.male': '男',
-  'com.search.filter.value.gender.female': '女',
+  'com.search.filter.value.gender.Male': '男',
+  'com.search.filter.value.gender.Female': '女',
 
   'com.search.sort.label.relevance': '综合',
   'com.search.sort.label.h_index': 'h指数',
@@ -60,6 +60,12 @@ export default {
   'com.search.sort.label.activity-ranking-contrib': '学会贡献', // CCF Only
   'com.search.sort.label.time': '最新添加',
 
+  'com.search.searchAssistant.hintInfo.expansion': '我们将您搜索的词扩展为：',
+  'com.search.searchAssistant.hintInfo.translation': '并且同时为您搜索：',
+  'com.search.searchAssistant.hintInfo.KG': '知识图谱将其扩展为：',
+  'com.search.searchAssistant.hintInfo.KGButton': '使用知识图谱进行搜索',
+  'com.search.searchAssistant.hintInfo.loading': '加载中...',
+
   'com.searchTypeWidget.label.ExpertSearch': '专家',
   'com.searchTypeWidget.label.ExpertMap': '人才地图',
   'com.searchTypeWidget.label.Relation': '学者关系',
@@ -69,6 +75,7 @@ export default {
   'com.searchTypeWidget.label.ExpertBase': '我的专家库',
 
   'com.searchTypeWidget.label.ACM_ExpertSearch': '全球专家',
+  'com.searchTypeWidget.label.ACMFellowExpertBase': 'ACM Fellow',
 
   'com.PersonList.label.views': '次查看',
   'com.PersonList.label.homepage': '个人主页',

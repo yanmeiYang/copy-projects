@@ -25,8 +25,8 @@ const AvailableSystems = [
 ];
 
 let System;
-// System = 'aminer';
-System = 'demo';
+System = 'aminer';
+// System = 'demo';
 // System = 'DataAnnotation';
 
 // System = 'ccf';

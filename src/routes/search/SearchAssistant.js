@@ -7,6 +7,7 @@ import { sysconfig } from 'systems';
 import { Spinner } from 'components';
 import styles from './SearchAssistant.less';
 import { compare } from "utils";
+import { FormattedMessage as FM } from 'react-intl';
 
 @connect(({ search, loading }) => ({
   query: search.query,
@@ -24,7 +25,7 @@ export default class SearchAssistant extends Component {
   state = {
     currentExpansionChecked: 1,
     currentTranslationChecked: 0,
-    keywordTranslationChecked: 0, // 不是扩展的选择，而是单词翻译的状态.
+    keywordTranslationChecked: 1, // 不是扩展的选择，而是单词翻译的状态.
 
     indeterminate: false,
     checkAll: false,
@@ -243,7 +244,6 @@ export default class SearchAssistant extends Component {
     if (!assistantData) {
       return false;
     }
-    // const { expandedTexts, expandedTexts_zh, expands } = assistantData;
     const { expands, transText, transLang } = assistantData;
 
     // console.log('9999999:::: ------------------------------------------- ',);
@@ -272,10 +272,16 @@ export default class SearchAssistant extends Component {
 
           <div className={styles.w}>
             {hasExpansion &&
-            <div className={styles.w}>We automatically expanded it to</div>
+            <div className={styles.w}>
+              <FM defaultMessage="We automatically expanded it to"
+                  id="com.search.searchAssistant.hintInfo.expansion" />
+            </div>
             }
             {hasTranslation &&
-            <div className={styles.w}>We also search for</div>
+            <div className={styles.w}>
+              <FM defaultMessage="We also search for"
+                  id="com.search.searchAssistant.hintInfo.translation" />
+            </div>
             }
           </div>
 
@@ -320,7 +326,11 @@ export default class SearchAssistant extends Component {
         {!expands && hasTermTranslation &&
         <div className={styles.box}>
           <div className={styles.w}>
-            {hasTermTranslation && <div className={styles.w}>We also search for</div>}
+            {hasTermTranslation &&
+            <div className={styles.w}>
+              <FM defaultMessage="We also search for"
+                  id="com.search.searchAssistant.hintInfo.translation" />
+            </div>}
           </div>
           <div className={styles.leftBox}>
             <div>
@@ -346,7 +356,10 @@ export default class SearchAssistant extends Component {
         {(hasKG || kgLoading) &&
         <div className={styles.box1}>
           <div className={styles.ww}>
-            <span className={styles.paddingRight}>Expand by knowledge graph</span>
+            <span className={styles.paddingRight}>
+              <FM defaultMessage="Expanded by knowledge graph"
+                  id="com.search.searchAssistant.hintInfo.KG" />
+              </span>
             <span>
               <Checkbox
                 onChange={this.onCheckAllChange}
@@ -355,7 +368,10 @@ export default class SearchAssistant extends Component {
             </span>
           </div>
 
-          {kgLoading && <div style={{ marginLeft: 8 }}> Loading... </div>}
+          {kgLoading && <div style={{ marginLeft: 8 }}>
+            <FM defaultMessage="Loading..."
+                id="com.search.searchAssistant.hintInfo.loading" />
+          </div>}
           {hasKG && !kgLoading &&
           <Checkbox.Group onChange={this.onKGChange} value={this.state.checkedList}>
             {kgData && kgData.map((term, index) => {
@@ -379,8 +395,9 @@ export default class SearchAssistant extends Component {
 
         {hasKG && !kgLoading &&
         <div className={styles.boxButton}>
-          <Button size="small" ghost onClick={this.callSearch}>
-            Search with Knowledge Graph
+          <Button size="small" onClick={this.callSearch}>
+            <FM defaultMessage="Search with Knowledge Graph"
+                id="com.search.searchAssistant.hintInfo.KGButton" />
           </Button>
         </div>
         }

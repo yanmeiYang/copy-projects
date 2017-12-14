@@ -12,6 +12,7 @@ const { CheckableTag } = Tag;
 
 const expertBases = sysconfig.ExpertBases;
 
+// aggregation config， 使用最新的来用。
 const AggConfig = {
   gender: {
     render: (item) => {
@@ -38,8 +39,8 @@ const AggConfig = {
       return item.term;
     },
   },
-  location: {},
-  language: {},
+  nation: {},
+  lang: {},
   'dims.systag': {}, // first used in bole's tag system.
 };
 
@@ -54,17 +55,17 @@ export default class SearchFilter extends Component {
     this.onFilterChange = this.props.onFilterChange;
     this.onExpertBaseChange = this.props.onExpertBaseChange;
     // 这里先写全所有的filters，靠返回值中有无相应结果来控制是否显示。
-    this.keys = ['h_index', 'gender', 'location', 'language', 'dims.systag'];
+    this.keys = ['h_index', 'gender', 'nation', 'lang', 'dims.systag'];
   }
 
   shouldComponentUpdate(nextProps) {
     if (compareDeep(nextProps, this.props, 'filters')) {
-      return true;
+      return false;
     }
     if (compareDeep(nextProps, this.props, 'aggs')) {
       return true;
     }
-    return true;
+    return false;
   }
 
   render() {
@@ -74,9 +75,9 @@ export default class SearchFilter extends Component {
 
     let expertRating;
     { // TODO ccfemergency
-      if (roles.god || roles.admin) {
+      if (roles && (roles.god || roles.admin)) {
         expertRating = true;
-      } else if (roles.role[0] && roles.role[0].includes('超级管理员')) {
+      } else if (roles && roles.role[0] && roles.role[0].includes('超级管理员')) {
         expertRating = true;
       } else {
         expertRating = false;
@@ -105,8 +106,8 @@ export default class SearchFilter extends Component {
                       {key === 'eb' && filters[key].name}
                       {key !== 'eb' &&
                       <span>
-                        <FM id={`com.search.filter.label.${key}`} defaultMessage={key} />:
-                        {filters[key].split('#')[0]}
+                        <FM id={`com.search.filter.label.${key}`} defaultMessage={key} />
+                        : {filters[key].split('#')[0]}
                       </span>
                       }
                     </Tag>

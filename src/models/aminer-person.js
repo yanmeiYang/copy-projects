@@ -7,10 +7,10 @@ export default {
 
   state: {
     personId: '',
+    skillsModal: {},
     profile: {},
     skillsUp: {},
     skillsDown: {},
-    skillsModal: {},
     results: [],
     avgScores: [],
     hideActivityMoreBtn: false,
@@ -56,14 +56,23 @@ export default {
     },
     //this is used in the new aminer PersonPage--Tabzone--Skills
     *getPersonSkillsByParams({ payload }, { call, put, all }) {
-      const { paramsUp, paramsDown, paramsModal } = payload;
-      const [dataUp, dataDown, dataModal] = yield all([
+      const { paramsUp, paramsDown } = payload;
+      const [dataUp, dataDown] = yield all([
         call(personService.getPersonSkills, paramsUp),
         call(personService.getPersonSkills, paramsDown),
-        call(personService.getPersonSkills, paramsModal),
       ]);
-      const data = { dataUp, dataDown, dataModal };
+      const data = { dataUp, dataDown };
       yield put({ type: 'getPersonSkillsByParamsSuccess', payload: { data } });
+    },
+    *votePersonInSomeTopicById({ params }, { call }) {
+      yield call(personService.votePersonInSomeTopicById, params);
+    },
+    *unvotePersonInSomeTopicById({ params }, { call }) {
+      yield call(personService.unvotePersonInSomeTopicById, params);
+    },
+    *getTopicOfModal({ payload }, { call, put }) {
+      const { data } = yield call(personService.getTopicOfModal, payload);
+      yield put({ type: 'getTopicOfModalSuccess', payload: { data } });
     },
   },
 
@@ -85,9 +94,14 @@ export default {
     },
 
     getPersonSkillsByParamsSuccess(state, { payload: { data } }) {
-      console.log('getSkillssuccess');
-      const { dataUp, dataDown, dataModal } = data;
-      return { ...state, skillsUp: dataUp.data, skillsDown: dataDown.data, skillsModal: dataModal.data };
+      console.log('getSkillsSuccess');
+      const { dataUp, dataDown } = data;
+      return { ...state, skillsUp: dataUp.data, skillsDown: dataDown.data };
+    },
+
+    getTopicOfModalSuccess(state, { payload: { data } }) {
+      console.log('getModalSuccess', data);
+      return { ...state, skillsModal: data };
     },
   },
 

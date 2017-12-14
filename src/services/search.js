@@ -26,7 +26,7 @@ export function getBools(filters) {
  */
 export async function searchPerson(params) {
   const { query, offset, size, filters, sort, assistantDataMeta } = params;
-  const { useTranslateSearch, assistantQuery } = params; // TODO remove
+  const { useTranslateSearch, assistantQuery, isNotAffactedByAssistant } = params;
 
   // some conditions
   const { searchInGlobalExperts, searchInSomeExpertBase } = getBools(filters);
@@ -70,12 +70,19 @@ export async function searchPerson(params) {
       .param({ query, offset, size })
       .param({
         searchType: F.searchType.allb,
-        aggregation: ['gender', 'h_index', 'location', 'language'],
+        aggregation: F.params.default_aggregation,
       })
-      .addParam({ haves: { eb: defaultHaves }, }, { when: defaultHaves && defaultHaves.length > 0 })
-      .addParam({ switches: ['loc_search_all'] }, { when: useTranslateSearch })
-      .addParam({ switches: ['loc_translate_all'] }, { when: enTrans && !useTranslateSearch })
-      .addParam({ switches: ['intell_search'] }, { when: sysconfig.Search_EnableSmartSuggest })
+      .addParam({ haves: { eb: defaultHaves } }, { when: defaultHaves && defaultHaves.length > 0 })
+      // .addParam({ switches: ['loc_search_all'] }, { when: useTranslateSearch })
+      // .addParam({ switches: ['loc_translate_all'] }, { when: enTrans && !useTranslateSearch })
+      .addParam(
+        { switches: ['intell_search'] },
+        { when: sysconfig.Search_EnableSmartSuggest && isNotAffactedByAssistant },
+      )
+      .addParam(
+        { switches: ['intell_expand'] },
+        { when: sysconfig.Search_EnableSmartSuggest && !isNotAffactedByAssistant },
+      )
       .addParam({ switches: ['lang_zh'] }, { when: sysconfig.Locale === 'zh' })
 
       .schema({ person: F.fields.person_in_PersonList })
@@ -199,23 +206,26 @@ export async function searchPersonGlobal(query, offset, size, filters, sort, use
 //
 // Search Aggregation!
 //
-export async function searchPersonAgg(query, offset, size, filters, useTranslateSearch, sort) {
+export async function searchPersonAgg(params) {
+  const { query, offset, size, filters, sort } = params;
+  const { useTranslateSearch, assistantQuery } = params;
+
+  // some conditions
+  const finalQuery = assistantQuery || query;
+
   // if search in global experts, jump to another function;
   if (filters && filters.eb && filters.eb.id === 'aminer') {
-    return searchPersonAggGlobal(query, offset, size, filters, useTranslateSearch);
+    return searchPersonAggGlobal(finalQuery, offset, size, filters, useTranslateSearch);
   }
   // Fix bugs when default search area is 'aminer'
   if ((!filters || !filters.eb) && sysconfig.DEFAULT_EXPERT_BASE === 'aminer') {
-    return searchPersonAggGlobal(query, offset, size, filters, useTranslateSearch);
+    return searchPersonAggGlobal(finalQuery, offset, size, filters, useTranslateSearch);
   }
 
   if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH && sort !== 'activity-ranking-contrib') {
-    // TODO 我需要替换成新的API
-    console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^ 注意注意，我这里变成了取新的API。所以agg什么都不做了!!');
+    // TODO 注意注意，agg从新的api中获取，所以这里什么都不做!
   } else {
-    const { expertBase, data } = prepareParameters(query, offset, size, filters, '', useTranslateSearch);
-    console.log('------------', data);
-
+    const { expertBase, data } = prepareParameters(finalQuery, offset, size, filters, '', useTranslateSearch);
     return request(
       api.searchPersonInBaseAgg.replace(':ebid', expertBase),
       { method: 'GET', data },
@@ -266,6 +276,16 @@ function prepareParameters(query, offset, size, filters, sort, useTranslateSearc
   return { expertBase, data };
 }
 
+const new2oldAggQueryKeyMap = {
+  as_nation: 'as_nationality',
+  as_lang: 'as_language',
+};
+
+const new2oldFilterValueMap = {
+  as_nation: 'as_nationality',
+  as_lang: 'as_language',
+};
+
 function prepareParametersGlobal(query, offset, size, filters, sort, useTranslateSearch) {
   let data = { query, offset, size, sort };
   data = { offset, size, sort: sort || '' };
@@ -275,7 +295,25 @@ function prepareParametersGlobal(query, offset, size, filters, sort, useTranslat
     Object.keys(filters).forEach((k) => {
       if (k !== 'eb') { // ignore eb;
         const newKey = `as_${k.toLowerCase().replace(' ', '_').replace('-', '_')}`;
-        data[newKey] = filters[k];
+        const newMappedKey = new2oldAggQueryKeyMap[newKey];
+        let value = k === 'gender'
+          ? filters[k] && filters[k].toLowerCase()
+          : filters[k];
+
+        // quick fix for nation, used when switch from new to old.
+        const mappedValue = new2oldFilterValueMap[value && value.toLowerCase()];
+        value = mappedValue || value;
+        // if (k === 'nation') {
+        //   if (value && value.toLowerCase() === 'usa') {
+        //     value = 'USA';
+        //   } else if (value && value.toLowerCase() === 'unitedkingdom') {
+        //     value = 'United Kingdom';
+        //   } else if (value && value.toLowerCase() === 'hongkong') {
+        //     value = 'Hong Kong';
+        //   }
+        // }
+
+        data[newMappedKey || newKey] = value;
       }
     });
   }

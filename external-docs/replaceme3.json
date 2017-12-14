@@ -1,80 +1,1662 @@
-[
-  {
-    "action": "search",
-    "parameters": {
-      "query": "Artificial intelligence",
-      "offset": 0,
-      "size": 0,
-      "searchType": "all",
-      "switches": [
-        "intell_search",
-        "lang_zh"
+{
+  "querytype": "term",
+  "time1": 3.0,
+  "total": 1000,
+  "status": true,
+  "aggs": [
+    {
+      "type": "h_index",
+      "label": "H-Index",
+      "item": [
+        {
+          "value": ">=60",
+          "count": 3,
+          "label": ">=60"
+        },
+        {
+          "value": "50-59",
+          "count": 2,
+          "label": "50-59"
+        },
+        {
+          "value": "40-49",
+          "count": 10,
+          "label": "40-49"
+        },
+        {
+          "value": "30-39",
+          "count": 14,
+          "label": "30-39"
+        },
+        {
+          "value": "20-29",
+          "count": 36,
+          "label": "20-29"
+        },
+        {
+          "value": "10-19",
+          "count": 153,
+          "label": "10-19"
+        },
+        {
+          "value": "<10",
+          "count": 782,
+          "label": "<10"
+        }
       ]
     },
-    "schema": {
-      "person": "id"
+    {
+      "type": "gender",
+      "label": "Gender",
+      "item": [
+        {
+          "value": "male",
+          "count": 982,
+          "label": "Male"
+        },
+        {
+          "value": "female",
+          "count": 18,
+          "label": "Female"
+        }
+      ]
+    },
+    {
+      "type": "language",
+      "label": "Language",
+      "item": [
+        {
+          "value": "Chinese",
+          "count": 934,
+          "label": "Chinese"
+        },
+        {
+          "value": "Korean",
+          "count": 1,
+          "label": "Korean"
+        },
+        {
+          "value": "English",
+          "count": 1,
+          "label": "English"
+        }
+      ]
+    },
+    {
+      "type": "nationality",
+      "label": "Location",
+      "item": [
+        {
+          "value": "China",
+          "count": 778,
+          "label": "China"
+        },
+        {
+          "value": "USA",
+          "count": 10,
+          "label": "USA"
+        },
+        {
+          "value": "Australia",
+          "count": 2,
+          "label": "Australia"
+        },
+        {
+          "value": "United Kingdom",
+          "count": 2,
+          "label": "United Kingdom"
+        },
+        {
+          "value": "Germany",
+          "count": 1,
+          "label": "Germany"
+        },
+        {
+          "value": "Italy",
+          "count": 1,
+          "label": "Italy"
+        }
+      ]
     }
-  }
-]
+  ],
+  "time2": 42.0
+}
 
-[
-  {
-    "action": "search",
-    "parameters": {
-      "query": "Artificial intelligence",
-      "offset": 0,
-      "size": 20,
-      "searchType": "allb",
+
+
+
+{
+  "data": [
+    {
       "aggregation": [
-        "gender",
-        "h_index",
-        "location",
-        "language",
-        "dims.systag"
+        {
+          "items": [
+            {
+              "count": 19,
+              "term": "*-10.0",
+              "to": 10
+            },
+            {
+              "count": 14,
+              "from": 10,
+              "term": "10.0-20.0",
+              "to": 20
+            },
+            {
+              "count": 15,
+              "from": 20,
+              "term": "20.0-30.0",
+              "to": 30
+            },
+            {
+              "count": 25,
+              "from": 30,
+              "term": "30.0-40.0",
+              "to": 40
+            },
+            {
+              "count": 36,
+              "from": 40,
+              "term": "40.0-50.0",
+              "to": 50
+            },
+            {
+              "count": 38,
+              "from": 50,
+              "term": "50.0-60.0",
+              "to": 60
+            },
+            {
+              "count": 101,
+              "from": 60,
+              "term": "60.0-*"
+            }
+          ],
+          "name": "h_index"
+        },
+        {
+          "items": [
+            {
+              "count": 230,
+              "term": "male"
+            },
+            {
+              "count": 18,
+              "term": "female"
+            }
+          ],
+          "name": "gender"
+        }
       ],
-      "switches": [
-        "intell_search",
-        "lang_zh"
-      ],
-      "filters": {
-        "dims": {
-          "eb": [
-            "59d7bb7e9ed5dbe450e6b275"
+      "context": "D6F3D8EC",
+      "duration": "537.261312ms",
+      "intellResults": {
+        "kgHypernym": [
+          {
+            "word": "Computer Science",
+            "word_zh": "计算机科学"
+          },
+          {
+            "word": "Cybernetics",
+            "word_zh": "控制论"
+          },
+          {
+            "word": "Cognitive Science",
+            "word_zh": "认知科学"
+          },
+          {
+            "word": "Area Of Computer Science"
+          },
+          {
+            "word": "Futurology",
+            "word_zh": "未来学"
+          }
+        ],
+        "kgHyponym": [
+          {
+            "word": "Machine Learning",
+            "word_zh": "机器学习"
+          },
+          {
+            "word": "Computational Linguistics",
+            "word_zh": "计算语言学"
+          },
+          {
+            "word": "Knowledge Representation",
+            "word_zh": "知识表达"
+          },
+          {
+            "word": "Artificial Life",
+            "word_zh": "人工生命"
+          },
+          {
+            "word": "System Science",
+            "word_zh": "系统科学"
+          }
+        ],
+        "transLang": 1,
+        "transText": "artificial intelligence"
+      },
+      "items": [
+        {
+          "avatar": "//static.aminer.org/upload/avatar/1430/101/1961/5484eef6dabfae8a11fb24bb.jpeg",
+          "dims": {
+            "eb": [
+              "59d7bb7e9ed5dbe450e6b275"
+            ]
+          },
+          "id": "5484eef6dabfae8a11fb24bb",
+          "indices": {
+            "activity": 0.8138,
+            "citations": 126032,
+            "gindex": 67,
+            "hindex": 21,
+            "newStar": 0,
+            "pubs": 67,
+            "risingStar": 0,
+            "sociability": 3.9702
+          },
+          "name": "Peter Norvig",
+          "name_zh": "",
+          "profile": {
+            "position": "Director of Research at Google Inc"
+          },
+          "score": 1.4899156,
+          "sourcetype": "person",
+          "tags": [
+            "Artificial Intelligence",
+            "Knowledge Representation",
+            "Machine Learning",
+            "Data Science",
+            "Data Analysis",
+            "Natural Language",
+            "Functional Programming",
+            "Intelligent Agent",
+            "Knowledge Interchange Format",
+            "Network Theory",
+            "Intelligent Systems",
+            "Language Understanding",
+            "Case Studies",
+            "Translation System",
+            "Semantic Interpretation",
+            "Online Learning",
+            "Virtual Database",
+            "Unified Theory",
+            "Common Lisp",
+            "Online Courses"
+          ],
+          "tags_translated_zh": [
+            "人工智能",
+            "知识表达",
+            "机器学习",
+            "数据科学",
+            "数据分析",
+            "自然语言",
+            "函数式程序设计",
+            "智能代理",
+            "知识交换格式",
+            "网络理论",
+            "智能系统",
+            "语言理解",
+            "案例研究",
+            "翻译系统",
+            "语义解释",
+            "在线学习",
+            "虚拟数据库",
+            "统一理论",
+            "commonlisp语言",
+            "网络课程"
+          ]
+        },
+        {
+          "avatar": "//static.aminer.org/upload/avatar/461/1854/2029/53f437a3dabfaee2a1cf1c62.gif",
+          "dims": {
+            "eb": [
+              "59d7bb7e9ed5dbe450e6b275"
+            ]
+          },
+          "id": "53f437a3dabfaee2a1cf1c62",
+          "indices": {
+            "activity": 0.0273,
+            "citations": 19625,
+            "gindex": 139,
+            "hindex": 48,
+            "newStar": 0,
+            "pubs": 286,
+            "risingStar": 0,
+            "sociability": 6.0867
+          },
+          "name": "Rodney A. Brooks",
+          "name_zh": "",
+          "profile": {
+            "affiliation": "MIT",
+            "position": "Professor"
+          },
+          "score": 1.2048794,
+          "sourcetype": "person",
+          "tags": [
+            "Artificial Intelligence",
+            "Robots",
+            "Computed Tomography",
+            "Robotics",
+            "Artificial Intelligent",
+            "Mobile Robot",
+            "Humanoid Robot",
+            "Mobile Robots",
+            "Relaxometry",
+            "Central Nervous System",
+            "Relaxation Time",
+            "Vision",
+            "Cognitive Science",
+            "Motion",
+            "Common Lisp",
+            "Mobile",
+            "Iron",
+            "Beta Decay",
+            "Visual Perception",
+            "Three Dimensional"
+          ],
+          "tags_translated_zh": [
+            "人工智能",
+            "机器人",
+            "计算机x线断层照相术",
+            "机器人",
+            "人工智能",
+            "移动机器人",
+            "仿人机器人",
+            "移动机器人",
+            "弛豫过程",
+            "中枢神经系统",
+            "弛豫时间",
+            "视觉",
+            "认知科学",
+            "运动",
+            "commonlisp语言",
+            "轰击",
+            "铁",
+            "β衰变",
+            "视知觉",
+            "三维"
+          ]
+        },
+        {
+          "avatar": "//static.aminer.org/upload/avatar/1665/1829/871/53f46e42dabfaedf43664803.jpeg",
+          "dims": {
+            "eb": [
+              "59d7bb7e9ed5dbe450e6b275"
+            ]
+          },
+          "id": "53f46e42dabfaedf43664803",
+          "indices": {
+            "activity": 28.3059,
+            "citations": 79496,
+            "gindex": 169,
+            "hindex": 51,
+            "newStar": 0,
+            "pubs": 169,
+            "risingStar": 0,
+            "sociability": 5.3033
+          },
+          "name": "Stuart J. Russell",
+          "name_zh": "",
+          "profile": {
+            "affiliation": "Computer Science Division,University of California",
+            "position": "Professor"
+          },
+          "score": 0.91632736,
+          "sourcetype": "person",
+          "tags": [
+            "Reinforcement Learning",
+            "Probabilistic Model",
+            "Artificial Intelligent",
+            "Real Time",
+            "First Order",
+            "Bayesian Network",
+            "Markov Chain Monte Carlo",
+            "Probability Distribution",
+            "Probability Theory",
+            "Electron Beam",
+            "State Space",
+            "Prior Knowledge",
+            "Dynamic Probabilistic Network",
+            "Search Algorithm",
+            "Markov Decision Process",
+            "Online Algorithm",
+            "Random Variable",
+            "Search Space",
+            "Markov Chain",
+            "Tree Structure"
+          ],
+          "tags_translated_zh": [
+            "强化学习",
+            "概率模型",
+            "人工智能",
+            "实时",
+            "一阶",
+            "贝叶斯网络",
+            "马尔科夫链蒙特卡罗抽样",
+            "概率分布",
+            "概率论",
+            "电子束",
+            "状态空间",
+            "先验知识",
+            "",
+            "搜索算法",
+            "马尔可夫决策过程",
+            "在线算法",
+            "随机变量",
+            "搜索空间",
+            "马尔可夫链",
+            "树结构"
+          ]
+        },
+        {
+          "avatar": "//static.aminer.org/upload/avatar/153/1825/535/53f63ba9dabfae9f2b1b3a95.jpeg",
+          "dims": {
+            "eb": [
+              "59d7bb7e9ed5dbe450e6b275"
+            ]
+          },
+          "id": "53f63ba9dabfae9f2b1b3a95",
+          "indices": {
+            "activity": 0,
+            "citations": 6909,
+            "gindex": 83,
+            "hindex": 33,
+            "newStar": 0,
+            "pubs": 118,
+            "risingStar": 0,
+            "sociability": 4.9767
+          },
+          "name": "Edward A. Feigenbaum",
+          "name_zh": "",
+          "profile": {
+            "affiliation": "Air Force Office of Scientific Research",
+            "position": "Professor"
+          },
+          "score": 0.6797049,
+          "sourcetype": "person",
+          "tags": [
+            "Artificial Intelligence",
+            "Artificial Intelligent",
+            "Expert System",
+            "Mass Spectra",
+            "Knowledge Based System",
+            "Expert Systems",
+            "Organic Chemistry",
+            "Molecular Structure",
+            "Algorithms",
+            "Computer Science",
+            "Computer Architecture",
+            "Computer Programming",
+            "Knowledge Engineering",
+            "Low Resolution",
+            "Automatic Control",
+            "Case Study",
+            "Information Retrieval",
+            "Heuristic Programming",
+            "Computer Program",
+            "Mass Spectroscopy"
+          ],
+          "tags_translated_zh": [
+            "人工智能",
+            "人工智能",
+            "专家系统",
+            "质谱",
+            "知识系统",
+            "专家系统",
+            "有机化学",
+            "分子结构",
+            "算法",
+            "计算机科学",
+            "计算机结构",
+            "计算机程序设计",
+            "知识工程",
+            "低分辨率",
+            "自动控制",
+            "案例研究",
+            "信息检索",
+            "启发式编程",
+            "计算机程序",
+            "质谱"
+          ]
+        },
+        {
+          "avatar": "//static.aminer.org/upload/avatar/791/62/1376/56300a2f45cedb33998dc583.jpeg",
+          "dims": {
+            "eb": [
+              "59d7bb7e9ed5dbe450e6b275"
+            ]
+          },
+          "id": "56300a2f45cedb33998dc583",
+          "indices": {
+            "activity": 0,
+            "citations": 246307,
+            "gindex": 303,
+            "hindex": 111,
+            "newStar": 0,
+            "pubs": 303,
+            "risingStar": 0,
+            "sociability": 5.1984
+          },
+          "name": "Herbert Alexander Simon",
+          "profile": {
+            "affiliation": "School of Computer Science and Psychology,Carnegie-Mellon University",
+            "position": "Professor"
+          },
+          "score": 0.5597594,
+          "sourcetype": "person",
+          "tags": [
+            "Artificial Intelligent",
+            "Information Process",
+            "Cognitive Process",
+            "Computer Simulation",
+            "Cognition",
+            "Simulation",
+            "Memory",
+            "Scientific Discovery",
+            "Cognitive Psychology",
+            "Expert System",
+            "Cognitive Science",
+            "Long Term Memory",
+            "Computer Model",
+            "Empirical Evidence",
+            "Complex System",
+            "Production System",
+            "Reasoning",
+            "Theory",
+            "Learning Theories",
+            "Task Analysis"
+          ],
+          "tags_translated_zh": [
+            "人工智能",
+            "信息处理",
+            "认知过程",
+            "计算机模拟",
+            "认知",
+            "模拟",
+            "记忆",
+            "科学发现",
+            "认知心理学",
+            "专家系统",
+            "认知科学",
+            "长时记忆",
+            "计算机模型",
+            "经验证据",
+            "复杂系统",
+            "产生式系统",
+            "推理",
+            "自动机理论",
+            "学习理论",
+            "任务分析"
+          ]
+        },
+        {
+          "avatar": "//static.aminer.org/upload/avatar/549/1484/1178/54055700dabfae92b41c6090.jpeg",
+          "dims": {
+            "eb": [
+              "59d7bb7e9ed5dbe450e6b275"
+            ]
+          },
+          "id": "54055700dabfae92b41c6090",
+          "indices": {
+            "activity": 109.0792,
+            "citations": 16766,
+            "gindex": 126,
+            "hindex": 56,
+            "newStar": 8.9191,
+            "pubs": 365,
+            "risingStar": 0,
+            "sociability": 5.9914
+          },
+          "name": "Kenneth D. Forbus",
+          "name_zh": "",
+          "profile": {
+            "affiliation": "Northwestern University",
+            "position": "Head"
+          },
+          "score": 0.5526407,
+          "sourcetype": "person",
+          "tags": [
+            "Qualitative Reasoning",
+            "Artificial Intelligence",
+            "Reasoning",
+            "Analogy",
+            "Spatial Reasoning",
+            "Computer Model",
+            "Cognition",
+            "Natural Language",
+            "Structure Mapping Engine",
+            "Knowledge Base",
+            "Knowledge Based Systems",
+            "Simulation",
+            "Thermodynamics",
+            "Cognitive Science",
+            "Knowledge Representation",
+            "Algorithms",
+            "Common Sense Reasoning",
+            "Cognitive Architecture",
+            "Cognitive Model",
+            "Computational Model"
+          ],
+          "tags_translated_zh": [
+            "定性推理",
+            "人工智能",
+            "推理",
+            "类比",
+            "空间推理",
+            "计算机模型",
+            "认知",
+            "自然语言",
+            "",
+            "知识库",
+            "知识系统",
+            "模拟",
+            "热力学",
+            "认知科学",
+            "知识表达",
+            "算法",
+            "常识推理",
+            "认知体系结构",
+            "认知模型",
+            "计算模型"
+          ]
+        },
+        {
+          "avatar": "//static.aminer.org/picture/02469/John_McCarthy_1382538989047.gif",
+          "dims": {
+            "eb": [
+              "59d7bb7e9ed5dbe450e6b275"
+            ]
+          },
+          "id": "53f43402dabfaeecd6947e36",
+          "indices": {
+            "activity": 0,
+            "citations": 26648,
+            "gindex": 60,
+            "hindex": 32,
+            "newStar": 0,
+            "pubs": 60,
+            "risingStar": 0,
+            "sociability": 4.4773
+          },
+          "name": "John Mccarthy",
+          "name_zh": "",
+          "profile": {
+            "affiliation": "MIT,Stanford University",
+            "position": "Professor"
+          },
+          "score": 0.5050326,
+          "sourcetype": "person",
+          "tags": [
+            "Artificial Intelligence",
+            "Artificial Intelligent",
+            "Mathematical Logic",
+            "Time Sharing",
+            "Logic",
+            "Nonmonotonic Reasoning",
+            "Programming Language",
+            "Knowledge Representation",
+            "Ai Program",
+            "Pdp-1 Computer",
+            "Introducing Context",
+            "Recursive Function",
+            "Human Reasoning",
+            "Computer Programming",
+            "Class Object",
+            "Formalizing Context",
+            "Three Dimensional",
+            "Basic Relation",
+            "Data Structure",
+            "Technological Forecasting"
+          ],
+          "tags_translated_zh": [
+            "人工智能",
+            "人工智能",
+            "数理逻辑",
+            "分时",
+            "逻辑",
+            "非单调推理",
+            "程序语言",
+            "知识表达",
+            "",
+            "",
+            "",
+            "递归函数",
+            "推理理论",
+            "计算机程序设计",
+            "类和对象",
+            "",
+            "三维",
+            "",
+            "数据结构",
+            "技术预测"
+          ]
+        },
+        {
+          "avatar": "//static.aminer.org/upload/avatar/523/884/784/543414cddabfaebba583e4c2.jpeg",
+          "dims": {
+            "eb": [
+              "59d7bb7e9ed5dbe450e6b275"
+            ]
+          },
+          "id": "543414cddabfaebba583e4c2",
+          "indices": {
+            "activity": 0,
+            "citations": 9454,
+            "gindex": 42,
+            "hindex": 17,
+            "newStar": 0,
+            "pubs": 42,
+            "risingStar": 0,
+            "sociability": 3.8918
+          },
+          "name": "Peter E. Hart",
+          "name_zh": "",
+          "profile": {
+            "position": "researcher"
+          },
+          "score": 0.3315616,
+          "sourcetype": "person",
+          "tags": [
+            "Information Retrieval",
+            "Expert Systems",
+            "Qualitative Reasoning",
+            "Pattern Classification",
+            "Semantic Network",
+            "Artificial Intelligence",
+            "Bayesian Methods",
+            "Functional Approach",
+            "Functional Language",
+            "Context Analysis",
+            "Digital Information",
+            "Hough Transform",
+            "Sri International",
+            "Personal Document",
+            "Molecular Cloning",
+            "Financial Risk",
+            "in Memoriam",
+            "Part Ii",
+            "in Progress",
+            "Modern Day"
+          ],
+          "tags_translated_zh": [
+            "信息检索",
+            "专家系统",
+            "定性推理",
+            "模式分类",
+            "语义网络",
+            "人工智能",
+            "bayes方法",
+            "功能主义",
+            "函数式语言",
+            "语境分析",
+            "数字信息",
+            "hough变换",
+            "美国斯坦福国际咨询研究所",
+            "",
+            "分子克隆",
+            "金融风险",
+            "悼念集",
+            "教父续集",
+            "现在进行时",
+            ""
+          ]
+        },
+        {
+          "avatar": "//static.aminer.org/upload/avatar/1638/642/752/53f439b3dabfaedd74dbf393.jpeg",
+          "dims": {
+            "eb": [
+              "59d7bb7e9ed5dbe450e6b275"
+            ]
+          },
+          "id": "53f439b3dabfaedd74dbf393",
+          "indices": {
+            "activity": 0.0142,
+            "citations": 2414,
+            "gindex": 49,
+            "hindex": 19,
+            "newStar": 0,
+            "pubs": 101,
+            "risingStar": 0,
+            "sociability": 5.1179
+          },
+          "name": "David L. Waltz",
+          "name_zh": "",
+          "profile": {
+            "affiliation": "NEC Research Institute",
+            "position": "Director"
+          },
+          "score": 0.27525002,
+          "sourcetype": "person",
+          "tags": [
+            "Artificial Intelligent",
+            "Natural Language",
+            "Information Retrieval",
+            "Natural Language Processing",
+            "Working Paper",
+            "Machine Learning",
+            "Comprehension",
+            "Linguistics",
+            "Memory-Based Reasoning",
+            "Information Processing",
+            "Neural Network",
+            "Parallel Processing",
+            "Case Base Reasoning",
+            "Intelligent Machine",
+            "Natural Language Understanding",
+            "Data Base",
+            "Electron Beam",
+            "Indexation",
+            "Learning Artificial Intelligence",
+            "Semantics"
+          ],
+          "tags_translated_zh": [
+            "人工智能",
+            "自然语言",
+            "信息检索",
+            "自然语言处理",
+            "工作底稿",
+            "机器学习",
+            "理解",
+            "语言学",
+            "",
+            "信息处理",
+            "神经网络",
+            "并行处理",
+            "案例推理",
+            "智能机器",
+            "自然语言理解",
+            "数据库",
+            "电子束",
+            "指数化",
+            "",
+            "语义"
+          ]
+        },
+        {
+          "avatar": "//static.aminer.org/upload/avatar/1268/51/535/53f59124dabfaede0bf8045b.png",
+          "dims": {
+            "eb": [
+              "59d7bb7e9ed5dbe450e6b275"
+            ]
+          },
+          "id": "53f59124dabfaede0bf8045b",
+          "indices": {
+            "activity": 4.0291,
+            "citations": 10220,
+            "gindex": 100,
+            "hindex": 38,
+            "newStar": 1.675,
+            "pubs": 146,
+            "risingStar": 0,
+            "sociability": 4.7874
+          },
+          "name": "John E. Laird",
+          "name_zh": "",
+          "profile": {
+            "position": "Professor"
+          },
+          "score": 0.2700592,
+          "sourcetype": "person",
+          "tags": [
+            "Cognitive Architecture",
+            "Reinforcement Learning",
+            "Intelligent Agents",
+            "Knowledge Acquisition",
+            "Computational Model",
+            "Cognitive Model",
+            "Cognitive Architectures",
+            "Procedural Knowledge",
+            "Domain Knowledge",
+            "Spatial Reasoning",
+            "Machine Learning",
+            "Artificial Intelligence",
+            "Natural Language",
+            "Human Behavior",
+            "Cognitive Control",
+            "Memory Retrieval",
+            "Knowledge Integration",
+            "Inductive Logic Programming",
+            "Decision Making",
+            "Working Memory"
+          ],
+          "tags_translated_zh": [
+            "认知体系结构",
+            "强化学习",
+            "智能代理",
+            "知识获取",
+            "计算模型",
+            "认知模型",
+            "认知体系",
+            "程序性知识",
+            "领域知识",
+            "空间推理",
+            "机器学习",
+            "人工智能",
+            "自然语言",
+            "人类行为",
+            "认知控制",
+            "记忆提取",
+            "知识集成",
+            "归纳逻辑程序设计",
+            "决策",
+            "工作记忆"
+          ]
+        },
+        {
+          "avatar": "//static.aminer.org/upload/avatar/466/378/636/53f48046dabfae963d259326.bmp",
+          "dims": {
+            "eb": [
+              "59d7bb7e9ed5dbe450e6b275"
+            ]
+          },
+          "id": "53f48046dabfae963d259326",
+          "indices": {
+            "activity": 136.6822,
+            "citations": 117901,
+            "gindex": 339,
+            "hindex": 141,
+            "newStar": 50.0098,
+            "pubs": 652,
+            "risingStar": 0,
+            "sociability": 6.6411
+          },
+          "name": "Anil K. Jain",
+          "name_zh": "",
+          "profile": {
+            "position": "Distinguished Professor"
+          },
+          "score": 0.26709494,
+          "sourcetype": "person",
+          "tags": [
+            "Feature Extraction",
+            "Image Matching",
+            "Image Segmentation",
+            "Image Processing",
+            "Image Retrieval",
+            "Object Detection",
+            "Face Recognition",
+            "Computer Vision",
+            "Unsupervised Learning",
+            "Artificial Neural Networks",
+            "Exploratory Data Analysis",
+            "Dimensionality Reduction",
+            "Information Extraction",
+            "Data Clustering",
+            "Object Recognition",
+            "Digital Image Processing",
+            "Pattern Recognition",
+            "Similarity Measure",
+            "Robot Navigation",
+            "Parameter Estimation"
+          ],
+          "tags_translated_zh": [
+            "特征提取",
+            "图象匹配",
+            "图像分割",
+            "图像处理",
+            "图像检索",
+            "对象检测",
+            "人脸识别",
+            "计算机视觉",
+            "无监督学习",
+            "人工神经网络",
+            "探索性数据分析",
+            "降维",
+            "信息提取",
+            "数据聚类",
+            "对象识别",
+            "数字图象处理",
+            "模式识别",
+            "相似性度量",
+            "机器人导航",
+            "参数估计"
+          ]
+        },
+        {
+          "avatar": "//static.aminer.org/upload/avatar/247/34/1480/54068d8cdabfae8faa60ed4c.jpeg",
+          "dims": {
+            "eb": [
+              "59d7bb7e9ed5dbe450e6b275"
+            ]
+          },
+          "id": "54068d8cdabfae8faa60ed4c",
+          "indices": {
+            "activity": 41.938,
+            "citations": 6697,
+            "gindex": 74,
+            "hindex": 37,
+            "newStar": 23.3156,
+            "pubs": 259,
+            "risingStar": 0,
+            "sociability": 5.6131
+          },
+          "name": "Alan Bundy",
+          "name_zh": "",
+          "profile": {
+            "affiliation": "School of Informatics,University of Edinburgh",
+            "position": "Professor"
+          },
+          "score": 0.24734586,
+          "sourcetype": "person",
+          "tags": [
+            "Theorem Proving",
+            "Theorem Prover",
+            "Proof Plan",
+            "Automated Reasoning",
+            "Formal Method",
+            "Automated Theorem Proving",
+            "Decision Procedure",
+            "Expert System",
+            "Inductive Proof",
+            "Mathematical Reasoning",
+            "Artificial Intelligence",
+            "Functional Program",
+            "Planning",
+            "First Order",
+            "Incidence Calculus",
+            "Informatics",
+            "Higher-Order Logic",
+            "Rippling",
+            "Logic",
+            "Semantic Web"
+          ],
+          "tags_translated_zh": [
+            "定理证明",
+            "定理证明器",
+            "",
+            "自动推理",
+            "形式化方法",
+            "自动定理证明",
+            "决策程序",
+            "专家系统",
+            "归纳证明",
+            "数学推理",
+            "人工智能",
+            "函数型程序",
+            "规划",
+            "一阶",
+            "发生率计算",
+            "情报学",
+            "高阶逻辑",
+            "",
+            "逻辑",
+            "语义网"
+          ]
+        },
+        {
+          "avatar": "//static.aminer.org/upload/avatar/1644/773/213/53f48f28dabfaee1c0bacf2c.png",
+          "dims": {
+            "eb": [
+              "59d7bb7e9ed5dbe450e6b275"
+            ]
+          },
+          "id": "53f48f28dabfaee1c0bacf2c",
+          "indices": {
+            "activity": 68.1521,
+            "citations": 22601,
+            "gindex": 150,
+            "hindex": 67,
+            "newStar": 22.8658,
+            "pubs": 256,
+            "risingStar": 0,
+            "sociability": 5.4806
+          },
+          "name": "Bart Selman",
+          "profile": {
+            "affiliation": "Dept. of Computer Science,Cornell University",
+            "position": "Professor"
+          },
+          "score": 0.24734586,
+          "sourcetype": "person",
+          "tags": [
+            "Satisfiability",
+            "Local Search",
+            "Phase Transition",
+            "Artificial Intelligent",
+            "Search Space",
+            "Boolean Satisfiability",
+            "Sat Solver",
+            "Analytic Solution",
+            "Statistical Physics",
+            "Model Count",
+            "Heavy Tail",
+            "Constraint Satisfaction Problem",
+            "Challenge Problem",
+            "Nature",
+            "Knowledge Base",
+            "Search Algorithm",
+            "Satisfiability Testing",
+            "Default Logic",
+            "Boolean Formula",
+            "Belief Propagation"
+          ],
+          "tags_translated_zh": [
+            "可满足性",
+            "局部搜索",
+            "相变",
+            "人工智能",
+            "搜索空间",
+            "布尔可满足性",
+            "sat求解器",
+            "解析解",
+            "统计物理",
+            "",
+            "重尾",
+            "约束满足问题",
+            "",
+            "自然",
+            "知识库",
+            "搜索算法",
+            "",
+            "缺省逻辑",
+            "布尔公式",
+            "置信传播"
+          ]
+        },
+        {
+          "avatar": "//static.aminer.org/upload/avatar/1338/198/1030/53f43a34dabfaee43ec537f3.jpeg",
+          "dims": {
+            "eb": [
+              "59d7bb7e9ed5dbe450e6b275"
+            ]
+          },
+          "id": "53f43a34dabfaee43ec537f3",
+          "indices": {
+            "activity": 0,
+            "citations": 19027,
+            "gindex": 137,
+            "hindex": 65,
+            "newStar": 0,
+            "pubs": 209,
+            "risingStar": 0,
+            "sociability": 7.2626
+          },
+          "name": "Michael J. Kearns",
+          "name_zh": "",
+          "profile": {
+            "affiliation": "Professor of Computer and Information Science,University of Pennsylvania",
+            "position": "Professor and National Center Chair"
+          },
+          "score": 0.24636301,
+          "sourcetype": "person",
+          "tags": [
+            "Reinforcement Learning",
+            "Machine Learning",
+            "Game Theory",
+            "Social Network",
+            "Computational Learning Theory",
+            "Polynomial Time",
+            "Markov Decision Process",
+            "Nash Equilibrium",
+            "Boolean Function",
+            "Probably Approximately Correct",
+            "Electronic Commerce",
+            "Financial Market",
+            "Vc Dimension",
+            "Finite Automata",
+            "Artificial Intelligent",
+            "Efficient Algorithm",
+            "Pac Learning",
+            "Decision Tree",
+            "Probability",
+            "Efficient Distribution-Free"
+          ],
+          "tags_translated_zh": [
+            "强化学习",
+            "机器学习",
+            "对策论",
+            "社会网络",
+            "计算学习理论",
+            "多项式时间",
+            "马尔可夫决策过程",
+            "nash平衡",
+            "布尔函数",
+            "可能近似正确模型",
+            "电子商务",
+            "金融市场",
+            "vc维",
+            "有限自动机",
+            "人工智能",
+            "有效算法",
+            "pac学习",
+            "决策树",
+            "概率",
+            ""
+          ]
+        },
+        {
+          "avatar": "//static.aminer.org/upload/avatar/1411/214/5/548c9c6ddabfae9b40135346.jpeg",
+          "dims": {
+            "eb": [
+              "59d7bb7e9ed5dbe450e6b275"
+            ]
+          },
+          "id": "548c9c6ddabfae9b40135346",
+          "indices": {
+            "activity": 156.8112,
+            "citations": 17707,
+            "gindex": 125,
+            "hindex": 61,
+            "newStar": 80.7683,
+            "pubs": 402,
+            "risingStar": 0,
+            "sociability": 6.3026
+          },
+          "name": "Sarit Kraus",
+          "profile": {
+            "affiliation": "Bar-Ilan University",
+            "position": "Professor"
+          },
+          "score": 0.24624929,
+          "sourcetype": "person",
+          "tags": [
+            "Autonomous Agent",
+            "Multi Agent System",
+            "Game Theory",
+            "Automated Agent",
+            "Incomplete Information",
+            "Multiagent System",
+            "Satisfiability",
+            "Artificial Intelligent",
+            "Bounded Rationality",
+            "Negotiation",
+            "Expected Utility",
+            "Computational Complexity",
+            "Algorithm",
+            "Computer Science",
+            "Negotiation Process",
+            "Stackelberg Game",
+            "Automated Negotiator",
+            "Multi-Agent Environment",
+            "Teamwork",
+            "Software Agent"
+          ],
+          "tags_translated_zh": [
+            "自治代理",
+            "多agent系统",
+            "对策论",
+            "自动化代理",
+            "不完全信息",
+            "多agent系统",
+            "可满足性",
+            "人工智能",
+            "有限理性",
+            "谈判",
+            "期望效用",
+            "计算复杂性",
+            "算法",
+            "计算机科学",
+            "协商过程",
+            "主从对策",
+            "",
+            "多主体环境",
+            "配合",
+            "软件代理"
+          ]
+        },
+        {
+          "avatar": "//static.aminer.org/upload/avatar/1823/1299/151/53f5b5f2dabfae4b5bf8045b.jpeg",
+          "dims": {
+            "eb": [
+              "59d7bb7e9ed5dbe450e6b275"
+            ]
+          },
+          "id": "53f5b5f2dabfae4b5bf8045b",
+          "indices": {
+            "activity": 52.2584,
+            "citations": 50631,
+            "gindex": 224,
+            "hindex": 78,
+            "newStar": 5.8266,
+            "pubs": 378,
+            "risingStar": 0,
+            "sociability": 6.2672
+          },
+          "name": "James Hendler",
+          "name_zh": "",
+          "profile": {
+            "affiliation": "Rensselaer Polytechnic Institute, United States",
+            "position": "Professor"
+          },
+          "score": 0.24189673,
+          "sourcetype": "person",
+          "tags": [
+            "Semantic Web",
+            "Artificial Intelligent",
+            "Internet",
+            "Web Service",
+            "Social Network",
+            "Ontology",
+            "Knowledge Representation",
+            "World Wide Web",
+            "Technical Report",
+            "Link Data",
+            "Semantics",
+            "Intelligent Systems",
+            "Description Logic",
+            "Intelligent Agent",
+            "Planning",
+            "Algorithms",
+            "Expert System",
+            "Robots",
+            "Natural Language",
+            "Web Page"
+          ],
+          "tags_translated_zh": [
+            "语义网",
+            "人工智能",
+            "网际网",
+            "web服务",
+            "社会网络",
+            "本体论",
+            "知识表达",
+            "万维网",
+            "技术报告",
+            "链接数据",
+            "语义",
+            "智能系统",
+            "描述逻辑",
+            "智能代理",
+            "规划",
+            "算法",
+            "专家系统",
+            "机器人",
+            "自然语言",
+            "网页"
+          ]
+        },
+        {
+          "avatar": "//static.aminer.org/0188/0006/0000/53afdb44dabfae456ed6c90e.jpg",
+          "dims": {
+            "eb": [
+              "59d7bb7e9ed5dbe450e6b275"
+            ]
+          },
+          "id": "53f48cc1dabfaea7cd1d0079",
+          "indices": {
+            "activity": 9.1036,
+            "citations": 19417,
+            "gindex": 138,
+            "hindex": 65,
+            "newStar": 0.4556,
+            "pubs": 231,
+            "risingStar": 0,
+            "sociability": 6.0426
+          },
+          "name": "Pierre Baldi",
+          "profile": {
+            "affiliation": "University of California--Irvine",
+            "position": "Professor"
+          },
+          "score": 0.22708558,
+          "sourcetype": "person",
+          "tags": [
+            "Genome",
+            "Machine Learning",
+            "Hidden Markov Model",
+            "Recurrent Neural Network",
+            "Bioinformatics",
+            "Neural Network",
+            "Algorithm",
+            "Secondary Structure",
+            "Protein Structure",
+            "Human Genome",
+            "Protein Structure Prediction",
+            "Amino Acid",
+            "Support Vector Machine",
+            "Bayesian Network",
+            "Source Code",
+            "Sensor Network",
+            "Recursive Neural Network",
+            "Escherichia Coli",
+            "Data Mining",
+            "High Throughput"
+          ],
+          "tags_translated_zh": [
+            "基因组",
+            "机器学习",
+            "隐马尔可夫模型",
+            "递归神经网络",
+            "生物信息学",
+            "神经网络",
+            "算法",
+            "二级结构",
+            "蛋白质结构",
+            "人类基因组",
+            "蛋白质结构预测",
+            "氨基酸",
+            "支持向量机",
+            "贝叶斯网络",
+            "信源编码",
+            "传感器网络",
+            "",
+            "大肠杆菌",
+            "数据挖掘",
+            "高通量"
+          ]
+        },
+        {
+          "avatar": "//static.aminer.org/0763/0000/0000/53afc43fdabfae456ec00fbd.gif",
+          "dims": {
+            "eb": [
+              "59d7bb7e9ed5dbe450e6b275"
+            ]
+          },
+          "id": "53f4c9c5dabfaee9c4f80a47",
+          "indices": {
+            "activity": 86.3416,
+            "citations": 18505,
+            "gindex": 129,
+            "hindex": 71,
+            "newStar": 24.4094,
+            "pubs": 355,
+            "risingStar": 0,
+            "sociability": 5.9914
+          },
+          "name": "Georg Gottlob",
+          "name_zh": "",
+          "profile": {
+            "affiliation": "Computer Science at TU Wien\r\nComputing Science at Oxford University",
+            "position": "Professor"
+          },
+          "score": 0.22708558,
+          "sourcetype": "person",
+          "tags": [
+            "Conjunctive Query",
+            "Expressive Power",
+            "Polynomial Time",
+            "Computational Complexity",
+            "Complexity",
+            "Query Answering",
+            "Query Language",
+            "Semantic Web",
+            "Web Page",
+            "Bounded Treewidth",
+            "Relational Database",
+            "Complexity Class",
+            "Model Checking",
+            "Decision Problem",
+            "Logic Program",
+            "Data Integrity",
+            "Constraint Satisfaction Problem",
+            "Hypertree Decomposition",
+            "Satisfiability",
+            "Default Logic"
+          ],
+          "tags_translated_zh": [
+            "合取查询",
+            "表现力",
+            "多项式时间",
+            "计算复杂性",
+            "复杂性",
+            "查询回答",
+            "查询语言",
+            "语义网",
+            "网页",
+            "限制树宽",
+            "关系数据库",
+            "复杂性集类",
+            "模型检查",
+            "决策问题",
+            "逻辑程序",
+            "数据完整性",
+            "约束满足问题",
+            "",
+            "可满足性",
+            "缺省逻辑"
+          ]
+        },
+        {
+          "avatar": "//static.aminer.org/upload/avatar/1591/484/1158/5604819845cedb33963f1c08.jpeg",
+          "dims": {
+            "eb": [
+              "59d7bb7e9ed5dbe450e6b275"
+            ]
+          },
+          "id": "5604819845cedb33963f1c08",
+          "indices": {
+            "activity": 14.5597,
+            "citations": 24240,
+            "gindex": 144,
+            "hindex": 64,
+            "newStar": 0,
+            "pubs": 144,
+            "risingStar": 0,
+            "sociability": 5.2417
+          },
+          "name": "Henry A. Kautz",
+          "name_zh": "",
+          "profile": {
+            "affiliation": "AT\u0026T Labs",
+            "position": "Professor"
+          },
+          "score": 0.22517662,
+          "sourcetype": "person",
+          "tags": [
+            "Satisfiability",
+            "Activity Recognition",
+            "Local Search",
+            "Conditional Random Field",
+            "Artificial Intelligent",
+            "Human Behavior",
+            "Machine Learning",
+            "Efficient Inference",
+            "Sensor Data",
+            "Constraint Satisfaction",
+            "Knowledge Base",
+            "Satisfiability Testing",
+            "User Interface",
+            "Constraint Satisfaction Problem",
+            "Image Segmentation",
+            "Human Activity",
+            "Artificial Intelligence",
+            "Data Collection",
+            "Gps",
+            "Dynamic Bayesian Network"
+          ],
+          "tags_translated_zh": [
+            "可满足性",
+            "行为识别",
+            "局部搜索",
+            "条件随机域模型",
+            "人工智能",
+            "人类行为",
+            "机器学习",
+            "有效推理",
+            "传感器数据",
+            "约束满足",
+            "知识库",
+            "",
+            "用户界面",
+            "约束满足问题",
+            "图像分割",
+            "人类活动",
+            "人工智能",
+            "数据收集",
+            "全球定位系统",
+            "动态贝叶斯网络"
+          ]
+        },
+        {
+          "avatar": "//static.aminer.org/upload/avatar/1407/1943/1507/53f4a45fdabfaeb22f573dc0.jpeg",
+          "dims": {
+            "eb": [
+              "59d7bb7e9ed5dbe450e6b275"
+            ]
+          },
+          "id": "53f4a45fdabfaeb22f573dc0",
+          "indices": {
+            "activity": 49.2094,
+            "citations": 24766,
+            "gindex": 139,
+            "hindex": 73,
+            "newStar": 21.9989,
+            "pubs": 588,
+            "risingStar": 0,
+            "sociability": 6.4567
+          },
+          "name": "Manuela M. Veloso",
+          "name_zh": "",
+          "profile": {
+            "affiliation": "Department of  Electrical \u0026 Computer Engineering,Carnegie Mellon University",
+            "position": "Professor"
+          },
+          "score": 0.22096018,
+          "sourcetype": "person",
+          "tags": [
+            "Mobile Robot",
+            "Robot",
+            "Real-Time",
+            "Artificial Intelligent",
+            "Machine Learning",
+            "Multi Agent System",
+            "Humanoid Robot",
+            "Algorithms",
+            "Reinforcement Learning",
+            "Human-Robot Interaction",
+            "Case Base Reasoning",
+            "Object Recognition",
+            "Computer Science",
+            "Learning Artificial Intelligence",
+            "State Space",
+            "Action Selection",
+            "Robot Kinematics",
+            "Autonomous Agent",
+            "Motion Control",
+            "Planning"
+          ],
+          "tags_translated_zh": [
+            "移动机器人",
+            "机器人",
+            "实时",
+            "人工智能",
+            "机器学习",
+            "多agent系统",
+            "仿人机器人",
+            "算法",
+            "强化学习",
+            "人机交互",
+            "案例推理",
+            "对象识别",
+            "计算机科学",
+            "",
+            "状态空间",
+            "行为选择",
+            "机器人运动学",
+            "自治代理",
+            "运动控制",
+            "规划"
           ]
         }
-      },
-      "haves": {
-        "systag": []
-      }
-    },
-    "schema": {
-      "person": [
-        "id",
-        "name",
-        "name_zh",
-        "avatar",
-        "tags",
-        {
-          "profile": [
-            "position",
-            "affiliation"
-          ]
-        },
-        {
-          "indices": [
-            "hindex",
-            "gindex",
-            "pubs",
-            "citations",
-            "newStar",
-            "risingStar",
-            "activity",
-            "diversity",
-            "sociability"
-          ]
-        },
-        "tags_translated_zh"
-      ]
+      ],
+      "offset": 0,
+      "size": 20,
+      "succeed": true,
+      "total": 248
     }
-  }
-]
+  ]
+}
+
+

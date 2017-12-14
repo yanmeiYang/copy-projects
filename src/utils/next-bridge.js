@@ -76,26 +76,53 @@ const toNextIndices = (indices, activity_indices) => {
   };
 };
 
+/*
+   TODO Add old and new format.
+   NEW request format: ['gender', 'h_index', 'location', 'lang'];
+   OLD request format: in-api, /agg.
+   NEW response format:
+     TODO...
+   OLD response format:
+   {
+     "aggs": [
+    { "type": "h_index", "label": "H-Index",
+      "item": [{
+          "value": "<10",
+          "count": 782,
+          "label": "<10"
+      }]
+    },
+    { "type": "gender", "label": "Gender", "items":...}
+    { "type": "language", "label": "Language", "items":...}
+    { "type": "nationality", "label": "Location", "items":...}
+
+
+ */
+const aggregationKeyMap = {
+  language: 'lang',
+  nationality: 'nation',
+};
+const aggregationItemKeyMap = {
+  male: 'Male',
+  female: 'Female',
+};
 const toNextAggregation = (aggs) => {
   // console.log('bridge before >>>>>>>>>>', aggs);
-  if (aggs && aggs.length > 0) {
-    aggs.map((agg) => {
-      agg.name = agg.type;
-      agg.items = agg.item && agg.item.map((i) => {
-        return {
-          term: i.value,
-          count: i.count,
-        };
-      });
-      // value,count,label, item, count
-      delete agg.item;
-      delete agg.type;
-      delete agg.label;
-      return false;
+  const newAggs = aggs && aggs.map((agg) => {
+    const newAgg = {};
+    const mappedName = aggregationKeyMap[agg.type];
+    newAgg.name = mappedName || agg.type;
+    newAgg.items = agg.item && agg.item.map((item) => {
+      const mappedKey = aggregationItemKeyMap[item.value];
+      return {
+        term: mappedKey || item.value,
+        count: item.count,
+      };
     });
-  }
-  // console.log('bridge after >>>>>>>>>>', aggs);
-  return aggs;
+    return newAgg;
+  });
+  // console.log('bridge after >>>>>>>>>>', newAggs);
+  return newAggs;
 };
 
 const ccfLabelMap = {

@@ -11,19 +11,16 @@ const ButtonGroup = Button.Group;
 class Skills extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      voter_number: 0,
-    };
   }
   componentDidMount() {
     this.getSkillsUseProps();
   }
   shouldComponentUpdate(nextProps, nextState) {
-    const nextnumVoted = nextState.voter_number;
-    const numVoted = this.state.voter_number;
+    //const nextnumVoted = nextState.voter_number;
+    //const numVoted = this.state.voter_number;
     if (nextProps.profile && this.props.profile) {
-      if ((nextProps.profile.id !== this.props.profile.id) || (nextnumVoted !== numVoted)) {
-        this.getSkillsUseProps();
+      if (nextProps.profile.id !== this.props.profile.id) {
+        //this.getSkillsUseProps();
         window.scrollTo(0, 0);
         return true;
       }
@@ -31,23 +28,22 @@ class Skills extends React.Component {
     return true;
   }
   componentDidUpdate(prevProps, prevState) {
-    const profile = this.props.profile;
+    const { aminerPerson } = this.props;
+    const { profile } = aminerPerson;
     const prevProfile = prevProps.profile;
-    const prevnumVoted = prevState.voter_number;
-    const numVoted = this.state.voter_number;
+    //const prevnumVoted = prevState.voter_number;
     if (profile && prevProfile) {
-      if ((profile.id !== prevProfile.id) || (prevnumVoted !== numVoted)) {
+      if (profile.id !== prevProfile.id) {
         this.getSkillsUseProps();
         window.scrollTo(0, 0); // go to
       }
     }
   }
   getSkillsUseProps = () => {
-    const profile = this.props.profile;
+    const { aminerPerson } = this.props;
+    const { profile } = aminerPerson;
     const personId = profile.id;
     const { dispatch } = this.props;
-    const { voter_number } = this.state;
-    console.log(voter_number);
     const paramsUp = {
       personId,
       toffset: 0,
@@ -62,25 +58,74 @@ class Skills extends React.Component {
       uoffset: 0,
       usize: 0,
     };
-    const paramsModal = {
-      personId,
-      toffset: 0,
-      tsize: 10,
-      uoffset: 0,
-      usize: voter_number,
-    };
-    const payload = { paramsUp, paramsDown, paramsModal };
+    const payload = { paramsUp, paramsDown };
     dispatch({
       type: 'aminerPerson/getPersonSkillsByParams',
       payload,
     });
   };
 
-  info = (key, num_voted) => {
-    this.setState({ voter_number: num_voted });
-    const { skillsModal } = this.props;
-    const topicsModal = skillsModal.topics;
+  voteUp = (tid, result) => {
+    const { aminerPerson } = this.props;
+    const { profile } = aminerPerson;
+    const aid = profile.id;
+    const { dispatch } = this.props;
+    if (result && (!result.is_upvoted)) {
+      const params = {
+        aid: aid,
+        oper: 'up',
+        tid: tid,
+      };
+      dispatch({
+        type: 'aminerPerson/votePersonInSomeTopicById',
+        params,
+      }).then(() => this.getSkillsUseProps());
+    } else if (result && (result.is_upvoted)) {
+      const params = {
+        aid: aid,
+        tid: tid,
+      };
+      dispatch({
+        type: 'aminerPerson/unvotePersonInSomeTopicById',
+        params,
+      }).then(() => this.getSkillsUseProps());
+    }
+  };
+
+  voteDown = (tid, result) => {
+    const { aminerPerson } = this.props;
+    const { profile } = aminerPerson;
+    const aid = profile.id;
+    const { dispatch } = this.props;
+    if (result && (!result.is_downvoted)) {
+      const params = {
+        aid: aid,
+        oper: 'down',
+        tid: tid,
+      };
+      dispatch({
+        type: 'aminerPerson/votePersonInSomeTopicById',
+        params,
+      }).then(() => this.getSkillsUseProps());
+    } else if (result && (result.is_downvoted)) {
+      const params = {
+        aid: aid,
+        tid: tid,
+      };
+      dispatch({
+        type: 'aminerPerson/unvotePersonInSomeTopicById',
+        params,
+      }).then(() => this.getSkillsUseProps());
+    }
+  };
+
+  modalDisplay = () => {
+    const { aminerPerson } = this.props;
+    console.log(this.props);
+    const { skillsModal } = aminerPerson;
+    console.log(skillsModal);
     const statusModal = skillsModal.status;
+    const votersModal = skillsModal.voters;
     Modal.info({
       title: 'Endorsers',
       okText: 'Cancel',
@@ -91,37 +136,32 @@ class Skills extends React.Component {
         <div>
           <div className={styles.spliterModal} />
           <div style={{ marginTop: 20 }} />
-          {statusModal && topicsModal &&
+          {statusModal && votersModal &&
           <div>
-            { topicsModal.map((item) => {
-              if (item.topic.label === key) {
-                return <div>
-                  {item.voters.map((voter) => {
-                    return <div>
-                      <div className={styles.areaModal}>
-                        <img
-                        src={personAvatar(voter.avatar, voter.id, 160)} className={styles.avatarModal}
-                        alt={voter.avatar} title={voter.name}
-                        />
-                        <span className={styles.text}>
-                          <p className={styles.head}>{voter.name}</p>
-                          <div style={{ marginTop: 10 }} />
-                          {voter.profile.aff && <i className="fa fa-map-marker fa-fw" />}
-                          <div style={{ marginTop: 10 }} />
-                          {voter.profile.pos && voter.profile.pos.map((pos) => {
-                            return <p><i className="fa fa-briefcase fa-fw" />{pos.n}</p>;
-                          })}
-                          <div style={{ marginTop: 10 }} />
-                          {voter.profile.tags && voter.profile.tags.map((tag) => {
-                            return <Button size="small" className={styles.tag}>{tag.t}</Button>;
-                          })}
-                        </span>
-                      </div>
-                      <div className={styles.spliterModal} />
-                    </div>
-                  })}
-                </div>;
-              }
+            { votersModal.map((voter) => {
+              return (
+                <div>
+                  <div className={styles.areaModal}>
+                    <img
+                      src={personAvatar(voter.avatar, voter.id, 160)} className={styles.avatarModal}
+                      alt={voter.avatar} title={voter.name}
+                    />
+                    <span className={styles.text}>
+                      <p className={styles.head}>{voter.name}</p>
+                      <div style={{ marginTop: 10 }} />
+                      {voter.profile.aff && <i className="fa fa-map-marker fa-fw" />}
+                      <div style={{ marginTop: 10 }} />
+                      {voter.profile.pos && voter.profile.pos.map((pos) => {
+                        return <p><i className="fa fa-briefcase fa-fw" />{pos.n}</p>;
+                      })}
+                      <div style={{ marginTop: 10 }} />
+                      {voter.profile.tags && voter.profile.tags.map((tag) => {
+                        return <Button size="small" className={styles.tag}>{tag.t}</Button>;
+                      })}
+                    </span>
+                  </div>
+                  <div className={styles.spliterModal} />
+                </div>);
             })}
           </div>
           }
@@ -129,8 +169,25 @@ class Skills extends React.Component {
       ),
     });
   };
+
+  info = (key, num_voted) => {
+    const { profile } = this.props;
+    const personId = profile.id;
+    const { dispatch } = this.props;
+    const payload = {
+      personId: personId,
+      tid: key,
+      offset: 0,
+      usize: num_voted,
+    };
+    dispatch({
+      type: 'aminerPerson/getTopicOfModal',
+      payload,
+    }).then(() => this.modalDisplay());
+  };
   render() {
-    const { profile, skillsUp, skillsDown } = this.props;
+    const { aminerPerson } = this.props;
+    const { skillsUp, skillsDown } = aminerPerson;
     const topicsUp = skillsUp.topics;
     const statusUp = skillsUp.status;
     const topicsDown = skillsDown.topics;
@@ -154,8 +211,18 @@ class Skills extends React.Component {
                   </ButtonGroup>
                 </span>
                 <span className={styles.lineContainer} >
-                  <i className="fa fa-thumbs-up fa-fw" />
-                  <i className="fa fa-thumbs-down fa-fw" />
+                  {(!item.is_upvoted) && <a className={styles.unclicked} onClick={this.voteUp.bind(this, item.topic.id, item)}>
+                    <i className="fa fa-thumbs-up fa-fw" />
+                  </a>}
+                  {item.is_upvoted && <a className={styles.clicked} onClick={this.voteUp.bind(this, item.topic.id, item)}>
+                    <i className="fa fa-thumbs-up fa-fw" />
+                  </a>}
+                  {(!item.is_downvoted) && <a className={styles.unclicked} onClick={this.voteDown.bind(this, item.topic.id, item)}>
+                    <i className="fa fa-thumbs-down fa-fw" />
+                  </a>}
+                  {item.is_downvoted && <a className={styles.clicked} onClick={this.voteDown.bind(this, item.topic.id, item)}>
+                    <i className="fa fa-thumbs-down fa-fw" />
+                  </a>}
                   <span className={styles.line} />
                 </span>
               </span>
@@ -166,9 +233,9 @@ class Skills extends React.Component {
                 />;
               })}
                 <span className={styles.modalArea} >
-                  <Button shape="circle" size="small" onClick={this.info.bind(this, item.topic.label, item.num_voted)} >
+                  <a onClick={this.info.bind(this, item.topic.id, item.num_voted)} >
                     <Icon className={styles.icon} type="caret-right" />
-                  </Button>
+                  </a>
                 </span>
               </span>
             </div>;
@@ -185,8 +252,18 @@ class Skills extends React.Component {
                   <Button className={styles.button}>{item.topic.label}</Button>
                 </ButtonGroup>
               </span>
-              <i className="fa fa-thumbs-up fa-fw" />
-              <i className="fa fa-thumbs-down fa-fw" />
+              {(!item.is_upvoted) && <a className={styles.unclicked} onClick={this.voteUp.bind(this, item.topic.id, item)}>
+                <i className="fa fa-thumbs-up fa-fw" />
+              </a>}
+              {item.is_upvoted && <a className={styles.clicked} onClick={this.voteUp.bind(this, item.topic.id, item)}>
+                <i className="fa fa-thumbs-up fa-fw" />
+              </a>}
+              {(!item.is_downvoted) && <a className={styles.unclicked} onClick={this.voteDown.bind(this, item.topic.id, item)}>
+                <i className="fa fa-thumbs-down fa-fw" />
+              </a>}
+              {item.is_downvoted && <a className={styles.clicked} onClick={this.voteDown.bind(this, item.topic.id, item)}>
+                <i className="fa fa-thumbs-down fa-fw" />
+              </a>}
             </span>;
           })}
             </div>

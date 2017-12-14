@@ -144,7 +144,11 @@ module.exports = {
     // topic
     getTopicByMention: `${baseURL}/topic/summary/m/:mention`,
     getTopicOnSkills: `${baseURL}/topic/person/topics/up/:id/toffset/:toffset/tsize/:tsize/uoffset/:uoffset/usize/:usize`,
+    getTopicOfModal: `${baseURL}/topic/person/voter/up/:id/id/:tid/offset/:offset/size/:usize`,
 
+    // vote
+    votePersonInSomeTopicById:`${baseURL}/topic/person/vote/:oper/:aid/id/:tid`,
+    unvotePersonInSomeTopicById: `${baseURL}/topic/person/vote/:aid/id/:tid`,
 
     // Recommendation APIs
     getAllOrgs: `${baseURL}/reviewer/orgs/get/all/:offset/:size`,

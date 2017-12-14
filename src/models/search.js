@@ -57,7 +57,7 @@ export default {
 
   subscriptions: {
     setup({ dispatch, history }) {
-      history.listen(({ pathname, search }) => {
+      history.listen(({ pathname, search, select }) => {
         // TODO dont't use this method to get query, use in component method.
         let match = pathToRegexp('/(uni)?search/:query/:offset/:size').exec(pathname);
         if (match) {
@@ -65,6 +65,7 @@ export default {
           const offset = parseInt(match[3], 10);
           const size = parseInt(match[4], 10);
           // dispatch({ type: 'emptyResults' });
+          dispatch({ type: 'smartClearAssistantMeta', payload: { query: keyword } });
           dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
           // dispatch({ type: 'clearSearchAssistant' });
         }
@@ -434,6 +435,13 @@ export default {
 
     clearSearchAssistant(state) {
       return { ...state, assistantDataMeta: null, assistantData: null };
+    },
+
+    smartClearAssistantMeta(state, { payload: { query } }) {
+      if (state.query !== query) {
+        return { ...state, assistantDataMeta: null, assistantData: null  };
+      }
+      return state;
     },
 
     // clearSearchAssistantKG(state) {

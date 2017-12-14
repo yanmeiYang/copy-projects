@@ -1,16 +1,24 @@
 import { loadECharts } from 'utils/requirejs';
 
-const showPersonStatistic = (echarts, divId, data, type) => {
+let myEChart;
+
+const showPersonStatistic = (data, type) => {
+  loadECharts((echarts) => {
+    myEChart = echarts;
+  });
+  console.log(type);
   if (typeof (data.staData) === 'undefined') {
     document.getElementById(type).innerHTML = 'No Data!';
   } else {
     let option;
     if (type === 'timeDistribution') {
       option = timeDistributionSta(data);
-    } else {
+    } else if (type === 'migrateHistory') {
+      option = migrateHistorySta(data);
+    } else if (type === 'regionDistribute') {
       option = migrateHistorySta(data);
     }
-    const myChart = echarts.init(document.getElementById(type));
+    const myChart = myEChart.init(document.getElementById(type));
     myChart.setOption(option);
   }
 };
@@ -226,10 +234,8 @@ const downloadData = (data) => {
   let all;
   const title = 'time, city name, nation\n';
   all = title;
-  console.log(data);
   for (const t of data.staData.timeToTime) {
     const { cityId } = t;
-    console.log(cityId);
     let nationId = cityId;
     while (typeof (data.staData.cities[nationId].parent_id) !== 'undefined') {
       nationId = data.staData.cities[nationId].parent_id;
@@ -237,7 +243,6 @@ const downloadData = (data) => {
     const country = data.staData.cities[nationId].name;
     all += `${t.start},${t.name},${country}\n`;
   }
-  console.log(all);
   return all;
 };
 

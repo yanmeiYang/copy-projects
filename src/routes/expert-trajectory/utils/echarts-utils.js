@@ -344,18 +344,7 @@ const mapStyle = {
   ],
 };
 
-const load = (cb) => {
-  loadBMap(() => {
-    loadECharts((echarts) => {
-      if (cb) {
-        cb(echarts);
-      }
-    });
-  });
-};
-
 module.exports = {
   showChart,
   setBMap,
-  load,
 };

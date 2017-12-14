@@ -27,7 +27,7 @@ const themes = [
   { label: '航海家', key: '5' },
   { label: '简约风', key: '6' },
 ];
-let echarts;
+//let echarts;
 
 
 @connect(({ expertTrajectory, loading, app }) => ({ expertTrajectory, loading, app }))
@@ -41,7 +41,7 @@ class ExpertTrajectoryPage extends React.Component {
   state = {
     query: '', //查询窗口中的默认值
     cperson: '', //当前选择的人
-    themeKey: '0',
+    themeKey: '1',
     visible: false,
     play: false,
   };
@@ -55,19 +55,13 @@ class ExpertTrajectoryPage extends React.Component {
   }
 
   componentDidMount() {
-    loadECharts((ret) => {
-      if (echarts !== null && echarts !== '' && echarts !== undefined) {
-        echarts.dispose();
-      }
-      echarts = ret;
-      const { query } = this.state;
-      if ((query === '' || query === '-')) {
-        this.openNotification();
-      } else { //后面需要去掉
-        const data = { query };
-        this.onSearch(data);
-      }
-    });
+    const { query } = this.state;
+    if ((query === '' || query === '-')) {
+      this.openNotification();
+    } else { //后面需要去掉
+      const data = { query };
+      this.onSearch(data);
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) { // 状态改变时判断要不要刷新
@@ -126,7 +120,7 @@ class ExpertTrajectoryPage extends React.Component {
         if ((typeof (divId) !== 'undefined' && divId !== 'undefined'
           && data !== '') || (this.state.visible === false)) {
           clearInterval(chartsinterval);
-          showPersonStatistic(echarts, divId, data, type);
+          showPersonStatistic(data, type);
         }
       }, 100);
     });
@@ -136,17 +130,23 @@ class ExpertTrajectoryPage extends React.Component {
     const chartsinterval = setInterval(() => {
       let divId;
       let type;
-      if (key === 1) {
+      if (key === '0') {
         divId = document.getElementById('timeDistribution');
         type = 'timeDistribution';
-      } else {
+      } else if (key === '1') {
         divId = document.getElementById('migrateHistory');
         type = 'migrateHistory';
+      } else if (key === '2') {
+        divId = document.getElementById('regionDistribute');
+        type = 'regionDistribute';
       }
       const data = this.props.expertTrajectory.trajData;
       if (typeof (divId) !== 'undefined' && divId !== 'undefined') {
         clearInterval(chartsinterval);
-        showPersonStatistic(echarts, divId, data, type);
+        showPersonStatistic(data, type);
+      }
+      if (!this.state.visible) {
+        clearInterval(chartsinterval);
       }
     }, 100);
   };
@@ -241,6 +241,13 @@ class ExpertTrajectoryPage extends React.Component {
         <div id="migrateHistory" className={styles.chart1} />
       </div>
     );
+
+    const staJsx2 = (
+      <div className={styles.charts}>
+        <div id="regionDistribute" className={styles.chart1} />
+      </div>
+    );
+
     return (
       <Page contentClass={tc(['ExpertTrajectoryPage'])} onSearch={this.onSearch}
             query={query}>
@@ -301,9 +308,10 @@ class ExpertTrajectoryPage extends React.Component {
                   ]}
                   width="700px"
                 >
-                  <Tabs defaultActiveKey="1" onChange={this.changeStatistic}>
-                    <TabPane tab="时间分布" key="1">{staJsx && staJsx}</TabPane>
-                    <TabPane tab="迁徙历史" key="2">{staJsx1 && staJsx1}</TabPane>
+                  <Tabs defaultActiveKey="0" onChange={this.changeStatistic}>
+                    <TabPane tab="时间分布" key="0">{staJsx && staJsx}</TabPane>
+                    <TabPane tab="迁徙历史" key="1">{staJsx1 && staJsx1}</TabPane>
+                    <TabPane tab="地区分布" key="2">{staJsx2 && staJsx2}</TabPane>
                   </Tabs>
                 </Modal>
               </div>

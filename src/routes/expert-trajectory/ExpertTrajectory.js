@@ -4,7 +4,8 @@ import { connect } from 'dva';
 import { RequireRes } from 'hoc';
 //import { FormattedMessage as FM } from 'react-intl';
 import styles from './ExpertTrajectory.less';
-import { showChart, load } from './utils/echarts-utils';
+import { showChart } from './utils/echarts-utils';
+import { loadEchartsWithBMap } from './utils/func-utils';
 
 let myChart; // used for loadScript
 let trainterval;
@@ -59,14 +60,14 @@ class ExpertTrajectory extends React.Component {
 
   initChart = (person) => {
     const divId = 'chart';
-    load((echarts) => {
+    loadEchartsWithBMap((echarts) => {
       if (myChart !== null && myChart !== '' && myChart !== undefined) {
         myChart.dispose();
       }
       myChart = echarts.init(document.getElementById(divId));
       let skinType = this.props.themeKey;
       if (typeof (skinType) === 'undefined') {
-        skinType = '2'; //假设默认为dark
+        skinType = '1'; //假设默认为bussiness
       }
       showChart(myChart, 'bmap', skinType, 'trajectory');
       this.findPersonTraj(person);

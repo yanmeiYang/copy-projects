@@ -41,7 +41,7 @@ System = 'demo';
 // System = 'huawei';
 // System = 'med_topic_trend';
 // System = 'scei';
-// System = 'tencent';
+System = 'tencent';
 // System = 'thurcb';
 // System = 'yocsef';
 

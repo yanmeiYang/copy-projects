@@ -60,6 +60,14 @@ export default {
   'com.search.sort.label.activity-ranking-contrib': 'Contrib',
   'com.search.sort.label.time': 'Time',
 
+
+
+  'com.search.searchAssistant.hintInfo.expansion': 'We automatically expanded it to',
+  'com.search.searchAssistant.hintInfo.translation': 'We also search for',
+  'com.search.searchAssistant.hintInfo.KG': 'Expanded by knowledge graph',
+  'com.search.searchAssistant.hintInfo.KGButton': 'Search with Knowledge Graph',
+  'com.search.searchAssistant.hintInfo.loading': 'Loading...',
+
   'com.searchTypeWidget.label.ExpertSearch': 'Experts',
   'com.searchTypeWidget.label.ExpertMap': 'Maps',
   'com.searchTypeWidget.label.Relation': 'Relations',

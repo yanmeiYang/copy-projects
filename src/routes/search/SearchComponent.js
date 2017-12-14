@@ -226,6 +226,8 @@ export default class SearchComponent extends Component {
     const { pageSize, total, current } = pagination;
     // console.log('>>>---', query);
     const load = loading.effects['search/searchPerson'];
+    const isPagination = !load;
+    console.log('=============', load);
     // const expertBase = (filters && filters.eb && filters.eb.id) || 'aminer';
 
     const rightZoneData = { expertBaseId, query, pageSize, current, filters, sortType };
@@ -341,7 +343,7 @@ export default class SearchComponent extends Component {
               {/*{ containerClass: styles.searchKgContent }, // configs.*/}
               {/*)}*/}
             </div>
-
+            {isPagination &&
             <div className={styles.paginationWrap}>
               <Pagination
                 showQuickJumper
@@ -352,8 +354,7 @@ export default class SearchComponent extends Component {
                 onChange={this.onPageChange}
               />
             </div>
-
-
+            }
           </div>
         </div>
 

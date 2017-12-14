@@ -60,6 +60,12 @@ export default {
   'com.search.sort.label.activity-ranking-contrib': '学会贡献', // CCF Only
   'com.search.sort.label.time': '最新添加',
 
+  'com.search.searchAssistant.hintInfo.expansion': '我们将您搜索的词扩展为：',
+  'com.search.searchAssistant.hintInfo.translation': '并且同时为您搜索：',
+  'com.search.searchAssistant.hintInfo.KG': '知识图谱将其扩展为：',
+  'com.search.searchAssistant.hintInfo.KGButton': '使用知识图谱进行搜索',
+  'com.search.searchAssistant.hintInfo.loading': '加载中...',
+
   'com.searchTypeWidget.label.ExpertSearch': '专家',
   'com.searchTypeWidget.label.ExpertMap': '人才地图',
   'com.searchTypeWidget.label.Relation': '学者关系',

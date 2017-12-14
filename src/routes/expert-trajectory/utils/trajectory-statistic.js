@@ -6,7 +6,6 @@ const showPersonStatistic = (data, type) => {
   loadECharts((echarts) => {
     myEChart = echarts;
   });
-  console.log(type);
   if (typeof (data.staData) === 'undefined') {
     document.getElementById(type).innerHTML = 'No Data!';
   } else {

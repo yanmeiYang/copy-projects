@@ -175,7 +175,10 @@ class ExpertHeatmapPage extends React.Component {
         if ((typeof (divId) !== 'undefined' && divId !== 'undefined'
             && data !== '') || (this.state.visible === false)) {
           clearInterval(chartsinterval);
-          //showPersonStatistic(echarts, divId, data, type);
+          showBulkTraj(data, type);
+        }
+        if (!this.state.visible) {
+          clearInterval(chartsinterval);
         }
       }, 100);
     });
@@ -185,20 +188,20 @@ class ExpertHeatmapPage extends React.Component {
     const chartsinterval = setInterval(() => {
       let divId;
       let type;
-      if (key === 1) {
+      if (key === '0') {
         divId = document.getElementById('timeDistribution');
         type = 'timeDistribution';
-      } else if (key === 2){
+      } else if (key === '1') {
         divId = document.getElementById('migrateHistory');
         type = 'migrateHistory';
-      } else {
+      } else if (key === '2') {
         divId = document.getElementById('migrateCompare');
         type = 'migrateCompare';
       }
       const data = this.props.expertTrajectory.heatData;
       if (typeof (divId) !== 'undefined' && divId !== 'undefined') {
         clearInterval(chartsinterval);
-        showBulkTraj(divId, data, type);
+        showBulkTraj(data, type);
       }
     }, 100);
   };
@@ -307,10 +310,10 @@ class ExpertHeatmapPage extends React.Component {
                 ]}
                 width="700px"
               >
-                <Tabs defaultActiveKey="1" onChange={this.changeStatistic}>
-                  <TabPane tab="时间分布" key="1">{staJsx && staJsx}</TabPane>
-                  <TabPane tab="迁徙历史" key="2">{staJsx1 && staJsx1}</TabPane>
-                  <TabPane tab="迁徙对比" key="3">{staJsx2 && staJsx2}</TabPane>
+                <Tabs defaultActiveKey="0" onChange={this.changeStatistic}>
+                  <TabPane tab="时间分布" key="0">{staJsx && staJsx}</TabPane>
+                  <TabPane tab="迁徙历史" key="1">{staJsx1 && staJsx1}</TabPane>
+                  <TabPane tab="迁徙对比" key="2">{staJsx2 && staJsx2}</TabPane>
                 </Tabs>
               </Modal>
             </div>

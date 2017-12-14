@@ -1,10 +1,8 @@
 import { loadECharts } from 'utils/requirejs';
 import { randomColor } from './func-utils';
 
-const showBulkTraj = (divId, data1, type) => {
+const showBulkTraj = (data1, type) => {
   const colorSet = randomColor(5);
-  console.log(colorSet);
-  console.log('$$$$$$$$$$$$$$$$$$$$$$$$');
   loadECharts((echarts) => {
     if (myChart !== null && myChart !== '' && myChart !== undefined) {
       myChart.dispose();

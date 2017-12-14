@@ -9,7 +9,6 @@ import { FormattedMessage as FM } from 'react-intl';
 import bridge from 'utils/next-bridge';
 import { applyTheme } from 'themes';
 import { Auth } from 'hoc';
-import { loadECharts } from 'utils/requirejs';
 import styles from './ExpertTrajectoryPage.less';
 import { showPersonStatistic, downloadData } from './utils/trajectory-statistic';
 import { PersonList } from '../../components/person';
@@ -27,7 +26,6 @@ const themes = [
   { label: '航海家', key: '5' },
   { label: '简约风', key: '6' },
 ];
-//let echarts;
 
 
 @connect(({ expertTrajectory, loading, app }) => ({ expertTrajectory, loading, app }))

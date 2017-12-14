@@ -4,15 +4,9 @@ import queryString from 'query-string';
 import { sysconfig } from 'systems';
 import { Slider, InputNumber, Row, Col, Button, Icon } from 'antd';
 import { routerRedux, Link, withRouter } from 'dva/router';
-import { Spinner } from 'components';
-import { request, queryURL } from 'utils';
-import { Auth, RequireRes } from 'hoc';
-import { detectSavedMapType, compare, ensure } from 'utils';
 import styles from './ExpertHeatmap.less';
-import {
-  showChart,
-  load,
-} from './utils/echarts-utils';
+import { showChart } from './utils/echarts-utils';
+import { loadEchartsWithBMap } from './utils/func-utils';
 
 let myChart;
 let trajInterval;
@@ -20,7 +14,6 @@ let trajInterval;
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
 @withRouter
-@RequireRes('BMap')
 class ExpertHeatmap extends React.Component {
   constructor(props) {
     super(props);
@@ -123,15 +116,13 @@ class ExpertHeatmap extends React.Component {
   };
 
   initChart = () => {
-    ensure('BMap', () => {
-      load((echarts) => {
-        const divId = 'chart';
-        if (!myChart) {
-          myChart = echarts.init(document.getElementById(divId));
-        }
-        const themeKey = typeof (this.props.themeKey) === 'undefined' ? 0 : this.props.themeKey;
-        showChart(myChart, 'bmap', themeKey, 'heatmap');
-      });
+    loadEchartsWithBMap((echarts) => {
+      const divId = 'chart';
+      if (!myChart) {
+        myChart = echarts.init(document.getElementById(divId));
+      }
+      const themeKey = typeof (this.props.themeKey) === 'undefined' ? 0 : this.props.themeKey;
+      showChart(myChart, 'bmap', themeKey, 'heatmap');
     });
   };
 

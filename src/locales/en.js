@@ -60,6 +60,14 @@ export default {
   'com.search.sort.label.activity-ranking-contrib': 'Contrib',
   'com.search.sort.label.time': 'Time',
 
+
+
+  'com.search.searchAssistant.hintInfo.expansion': 'We automatically expanded it to',
+  'com.search.searchAssistant.hintInfo.translation': 'We also search for',
+  'com.search.searchAssistant.hintInfo.KG': 'Expanded by knowledge graph',
+  'com.search.searchAssistant.hintInfo.KGButton': 'Search with Knowledge Graph',
+  'com.search.searchAssistant.hintInfo.loading': 'Loading...',
+
   'com.searchTypeWidget.label.ExpertSearch': 'Experts',
   'com.searchTypeWidget.label.ExpertMap': 'Maps',
   'com.searchTypeWidget.label.Relation': 'Relations',
@@ -69,6 +77,8 @@ export default {
   'com.searchTypeWidget.label.ExpertBase': 'My Experts',
 
   'com.searchTypeWidget.label.ACM_ExpertSearch': 'Global Experts',
+  'com.searchTypeWidget.label.ACMFellowExpertBase': 'ACM Fellow',
+
 
   'com.PersonList.label.views': 'views',
   'com.PersonList.label.homepage': 'Homepage',

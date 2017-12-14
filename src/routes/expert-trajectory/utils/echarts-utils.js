@@ -184,6 +184,357 @@ const showChart = (myChart, type, skinType, showType) => { // 功能起始函数
     setBMap(myChart);
   }
 };
+
+const showTrajectoryChart = (myChart, type, skinType, showType) => { // 功能起始函数
+  let [showLabel, dotType] = [true, 'effectScatter'];
+  if (typeof (showType) !== 'undefined') {
+    if (showType === 'heatmap') {
+      [showLabel, dotType] = [false, 'scatter'];
+    } else if (showType === 'trajectory') {
+      [showLabel, dotType] = [true, 'effectScatter'];
+    }
+  }
+  const skin = parseInt(skinType, 10);
+  let color = '';
+  if (type === 'geo') {
+    color = '#abc1db';
+  } else {
+    color = '#404a59';
+  }
+  mapStyle.styleJson[0].stylers.color = detailedStyle.waterStyle[skin];
+  mapStyle.styleJson[1].stylers.color = detailedStyle.landStyle[skin];
+  mapStyle.styleJson[2].stylers.color = detailedStyle.boundaryStyle[skin];
+  mapStyle.styleJson[3].stylers.color = detailedStyle.waterStyle[skin];
+  mapStyle.styleJson[5].stylers.color = detailedStyle.highwayStyle[skin];
+  mapStyle.styleJson[6].stylers.color = detailedStyle.highwayStyle2[skin];
+  mapStyle.styleJson[6].stylers.lightness = detailedStyle.highwaylightness[skin];
+  mapStyle.styleJson[7].stylers.color = detailedStyle.arterialStyle[skin];
+  mapStyle.styleJson[8].stylers.color = detailedStyle.arterialStyle2[skin];
+  mapStyle.styleJson[10].stylers.color = detailedStyle.greenStyle[skin];
+  mapStyle.styleJson[15].stylers.color = detailedStyle.boundaryStyle2[skin];
+  mapStyle.styleJson[16].stylers.color = detailedStyle.buildingStyle[skin];
+  const option = {
+    backgroundColor: color,
+    title: {
+      text: '学者迁移图',
+      subtext: 'data from aminer',
+      sublink: 'http://aminer.org/',
+      left: 'center',
+      textStyle: {
+        color: detailedStyle.textColor[skin],
+        fontWeight: 200,
+        fontSize: 24,
+      },
+      subTextColor: {
+        color: detailedStyle.subTextColor[skin],
+      },
+    },
+    tooltip: {
+      trigger: 'item',
+    },
+    geo: {
+      zoom: 1,
+      name: 'trajectory',
+      type: 'map',
+      map: 'world',
+      roam: true,
+      label: {
+        emphasis: {
+          show: false,
+        },
+      },
+      itemStyle: {
+        normal: {
+          areaColor: '#f5f3f0',
+          borderColor: '#91a0ae',
+        },
+        emphasis: {
+          areaColor: '#bcbab8',
+        },
+      },
+    },
+    bmap: {
+      center: [4.45, 31.3],
+      zoom: 1,
+      roam: true,
+      mapStyle, // mapStyle[skinType]
+    },
+    visualMap: {
+      show: true,
+      // top: 'top',
+      min: 0,
+      max: 10,
+      orient: 'horizontal',
+      right: 'right',
+      bottom: 'bottom',
+      seriesIndex: 0,
+      calculable: true,
+      inRange: {
+        color: detailedStyle.visualStyle[skin],
+        // color: ['green','red','yellow'],
+      },
+      textStyle: {
+        color: '#fff',
+      },
+    },
+    series: [{
+      type: 'heatmap',
+      coordinateSystem: 'bmap',
+      data: [],
+      pointSize: 5,
+      blurSize: 6,
+      blendMode: detailedStyle.blendHeatStlye[skin],
+    }, {
+      name: 'place',
+      type: dotType, //effectScatter
+      coordinateSystem: type,
+      hoverAnimation: true,
+      //zlevel: 5,
+      rippleEffect: {
+        period: 4,
+        scale: 2,
+        brushType: 'stroke',
+      },
+      label: {
+        normal: {
+          show: showLabel,
+          position: 'right',
+          formatter: '{b}',
+        },
+        emphasis: {
+          show: true,
+        },
+      },
+      symbolSize: 5,
+      itemStyle: {
+        normal: {
+          color: detailedStyle.itemNormalStyle[skin],
+          borderColor: detailedStyle.itemEmphasisStyle[skin],
+          opacity: 0.8,
+          shadowColor: 'rgba(198, 198, 198, 0.3)',
+          shadowBlur: 10,
+        },
+        emphasis: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)',
+        },
+      },
+      data: [],
+      blendMode: detailedStyle.blendItemStlye[skin],
+    }, {
+      type: 'lines',
+      animation: false,
+      zlevel: 3,
+      coordinateSystem: type,
+      //symbol:'arrow',
+      effect: {
+        show: true,
+        period: 3,
+        trailLength: 0.7,
+        color: detailedStyle.lineNormalStyle[skin],
+        symbol: 'arrow',
+        symbolSize: 5,
+        animation: true,
+      },
+      lineStyle: {
+        normal: {
+          color: detailedStyle.lineNormalStyle[skin],
+          width: 0.1, //线的宽度0.8
+          opacity: 1,
+          curveness: 0.2,
+        },
+        emphasis: {
+          color: detailedStyle.lineEmphasisStyle[skin],
+          shadowColor: 'rgba(0, 0, 0, 0.5)',
+          shadowBlur: 7,
+        },
+      },
+      data: [],
+      blendMode: detailedStyle.blendLineStlye[skin],
+    }],
+  };
+  myChart.setOption(option);
+  if (type === 'bmap') {
+    setBMap(myChart);
+  }
+};
+
+const showHeatmapChart = (myChart, type, skinType, showType) => { // 功能起始函数
+  let [showLabel, dotType] = [true, 'effectScatter'];
+  if (typeof (showType) !== 'undefined') {
+    if (showType === 'heatmap') {
+      [showLabel, dotType] = [false, 'scatter'];
+    } else if (showType === 'trajectory') {
+      [showLabel, dotType] = [true, 'effectScatter'];
+    }
+  }
+  const skin = parseInt(skinType, 10);
+  let color = '';
+  if (type === 'geo') {
+    color = '#abc1db';
+  } else {
+    color = '#404a59';
+  }
+  mapStyle.styleJson[0].stylers.color = detailedStyle.waterStyle[skin];
+  mapStyle.styleJson[1].stylers.color = detailedStyle.landStyle[skin];
+  mapStyle.styleJson[2].stylers.color = detailedStyle.boundaryStyle[skin];
+  mapStyle.styleJson[3].stylers.color = detailedStyle.waterStyle[skin];
+  mapStyle.styleJson[5].stylers.color = detailedStyle.highwayStyle[skin];
+  mapStyle.styleJson[6].stylers.color = detailedStyle.highwayStyle2[skin];
+  mapStyle.styleJson[6].stylers.lightness = detailedStyle.highwaylightness[skin];
+  mapStyle.styleJson[7].stylers.color = detailedStyle.arterialStyle[skin];
+  mapStyle.styleJson[8].stylers.color = detailedStyle.arterialStyle2[skin];
+  mapStyle.styleJson[10].stylers.color = detailedStyle.greenStyle[skin];
+  mapStyle.styleJson[15].stylers.color = detailedStyle.boundaryStyle2[skin];
+  mapStyle.styleJson[16].stylers.color = detailedStyle.buildingStyle[skin];
+  const option = {
+    backgroundColor: color,
+    title: {
+      text: '学者迁移图',
+      subtext: 'data from aminer',
+      sublink: 'http://aminer.org/',
+      left: 'center',
+      textStyle: {
+        color: detailedStyle.textColor[skin],
+        fontWeight: 200,
+        fontSize: 24,
+      },
+      subTextColor: {
+        color: detailedStyle.subTextColor[skin],
+      },
+    },
+    tooltip: {
+      trigger: 'item',
+    },
+    geo: {
+      zoom: 1,
+      name: 'trajectory',
+      type: 'map',
+      map: 'world',
+      roam: true,
+      label: {
+        emphasis: {
+          show: false,
+        },
+      },
+      itemStyle: {
+        normal: {
+          areaColor: '#f5f3f0',
+          borderColor: '#91a0ae',
+        },
+        emphasis: {
+          areaColor: '#bcbab8',
+        },
+      },
+    },
+    bmap: {
+      center: [4.45, 31.3],
+      zoom: 1,
+      roam: true,
+      mapStyle, // mapStyle[skinType]
+    },
+    visualMap: {
+      show: true,
+      // top: 'top',
+      min: 0,
+      max: 10,
+      orient: 'horizontal',
+      right: 'right',
+      bottom: 'bottom',
+      seriesIndex: 0,
+      calculable: true,
+      inRange: {
+        color: detailedStyle.visualStyle[skin],
+        // color: ['green','red','yellow'],
+      },
+      textStyle: {
+        color: '#fff',
+      },
+    },
+    series: [{
+      type: 'heatmap',
+      coordinateSystem: 'bmap',
+      data: [],
+      pointSize: 5,
+      blurSize: 6,
+      blendMode: detailedStyle.blendHeatStlye[skin],
+    }, {
+      name: 'place',
+      type: dotType, //effectScatter
+      coordinateSystem: type,
+      hoverAnimation: true,
+      //zlevel: 5,
+      rippleEffect: {
+        period: 4,
+        scale: 2,
+        brushType: 'stroke',
+      },
+      label: {
+        normal: {
+          show: showLabel,
+          position: 'right',
+          formatter: '{b}',
+        },
+        emphasis: {
+          show: true,
+        },
+      },
+      symbolSize: 5,
+      itemStyle: {
+        normal: {
+          color: detailedStyle.itemNormalStyle[skin],
+          borderColor: detailedStyle.itemEmphasisStyle[skin],
+          opacity: 0.8,
+          shadowColor: 'rgba(198, 198, 198, 0.3)',
+          shadowBlur: 10,
+        },
+        emphasis: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)',
+        },
+      },
+      data: [],
+      blendMode: detailedStyle.blendItemStlye[skin],
+    }, {
+      type: 'lines',
+      animation: false,
+      zlevel: 3,
+      coordinateSystem: type,
+      //symbol:'arrow',
+      effect: {
+        show: true,
+        period: 3,
+        trailLength: 0.7,
+        color: detailedStyle.lineNormalStyle[skin],
+        symbol: 'arrow',
+        symbolSize: 5,
+        animation: true,
+      },
+      lineStyle: {
+        normal: {
+          color: detailedStyle.lineNormalStyle[skin],
+          width: 0.1, //线的宽度0.8
+          opacity: 1,
+          curveness: 0.2,
+        },
+        emphasis: {
+          color: detailedStyle.lineEmphasisStyle[skin],
+          shadowColor: 'rgba(0, 0, 0, 0.5)',
+          shadowBlur: 7,
+        },
+      },
+      data: [],
+      blendMode: detailedStyle.blendLineStlye[skin],
+    }],
+  };
+  myChart.setOption(option);
+  if (type === 'bmap') {
+    setBMap(myChart);
+  }
+};
+
 const visual = ['green', 'yellow', 'yellow', 'red'];
 const detailedStyle = {
   textColor: ['#fff', '#fff', '#fff', '#fff', '#fff', '#fff', '#272727'],
@@ -346,5 +697,7 @@ const mapStyle = {
 
 module.exports = {
   showChart,
+  showTrajectoryChart,
+  showHeatmapChart,
   setBMap,
 };

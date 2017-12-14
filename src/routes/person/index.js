@@ -25,9 +25,12 @@ const Person = ({ dispatch, person, seminar, publications }) => {
   const integrated = avgScores.filter(score => score.key === 'integrated')[0];
   const activity_indices = { contrib: contrib === undefined ? 0 : contrib.score };
 
-  // const recomputeContribution = () => {
-  //   console.log('6666666')
-  // }
+  const recalculatedContribution = () => {
+    dispatch({
+      type: 'person/getContributionRecalculatedByPersonId',
+      payload: { id: profile.id },
+    });
+  }
   const profileTabs = [{
     isShow: sysconfig.ShowRating,
     title: '专家评分',
@@ -44,7 +47,9 @@ const Person = ({ dispatch, person, seminar, publications }) => {
           <td>
             {/* <Rate disabled defaultValue={contrib.score}/> */}
             <span style={{ marginRight: 72 }}>{contrib.score}</span>
-            {/*<Button type="primary" size="small" onClick={this.recomputeContribution.bind(this)}>重新计算贡献度</Button>*/}
+            <Button type="primary" size="small"
+                    onClick={recalculatedContribution.bind(this)}>重新计算贡献度
+            </Button>
           </td>
         </tr>
         }
@@ -169,8 +174,6 @@ const Person = ({ dispatch, person, seminar, publications }) => {
         return false;
     }
   }
-
-
 
   // console.log('|||||||||||| PersonIndex:', person);
   return (

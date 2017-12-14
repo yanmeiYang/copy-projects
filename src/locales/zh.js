@@ -63,8 +63,8 @@ export default {
   'com.search.searchAssistant.hintInfo.expansion': '我们将您搜索的词扩展为：',
   'com.search.searchAssistant.hintInfo.translation': '并且同时为您搜索：',
   'com.search.searchAssistant.hintInfo.KG': '知识图谱将其扩展为：',
-  'com.search.searchAssistant.hintInfo.KG.kgHypernym': '上位词：黑色',
-  'com.search.searchAssistant.hintInfo.KG.kgHyponym': '下位词：蓝色',
+  'com.search.searchAssistant.hintInfo.KG.kgHypernym': '上位词：蓝色',
+  'com.search.searchAssistant.hintInfo.KG.kgHyponym': '下位词：黑色',
   'com.search.searchAssistant.hintInfo.KGButton': '使用知识图谱进行搜索',
   'com.search.searchAssistant.hintInfo.loading': '加载中...',
 

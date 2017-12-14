@@ -144,8 +144,10 @@ const F = {
   notify: { feedback: 'feedback' },
 
   searchType: { all: 'all', allb: 'allb' },
+
+  // 预置的一些默认词
   params: {
-    default_aggregation: ['gender', 'h_index', 'location', 'language'],
+    default_aggregation: ['gender', 'h_index', 'nation', 'lang'],
   },
 
   // all available alter operations.
@@ -218,7 +220,9 @@ const filtersToQuery = (nextapi, searchFiltersFromAggregation) => {
       const newKey = key.replace(/^dims\./, '');
       nextapi.addParam({ filters: { dims: { [newKey]: [filters[key]] } } });
     } else {
-      nextapi.addParam({ filters: { terms: { [key]: [filters[key]] } } });
+      // NOTE 这里是传统的 aggregation，查询值需要是小写的。和es匹配，但是nation咋办？
+      const value = filters[key] && filters[key].toLowerCase();
+      nextapi.addParam({ filters: { terms: { [key]: [value] } } });
     }
     return false;
   });

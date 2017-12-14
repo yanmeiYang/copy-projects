@@ -25,7 +25,7 @@ export default class SearchAssistant extends Component {
   state = {
     currentExpansionChecked: 1,
     currentTranslationChecked: 0,
-    keywordTranslationChecked: 0, // 不是扩展的选择，而是单词翻译的状态.
+    keywordTranslationChecked: 1, // 不是扩展的选择，而是单词翻译的状态.
 
     indeterminate: false,
     checkAll: false,
@@ -244,7 +244,6 @@ export default class SearchAssistant extends Component {
     if (!assistantData) {
       return false;
     }
-    // const { expandedTexts, expandedTexts_zh, expands } = assistantData;
     const { expands, transText, transLang } = assistantData;
 
     // console.log('9999999:::: ------------------------------------------- ',);

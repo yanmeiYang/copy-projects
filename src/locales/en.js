@@ -35,17 +35,17 @@ export default {
   'com.search.filter.searchRange': 'Range:',
   'com.search.filter.Filters': 'Filters:',
   'com.search.filter.label.h_index': 'H-Index',
-  'com.search.filter.label.language': 'Language',
-  'com.search.filter.label.nationality': 'Location',
+  'com.search.filter.label.lang': 'Language',
+  'com.search.filter.label.nation': 'Location', // 神奇
   'com.search.filter.label.location': 'Location',
   'com.search.filter.label.gender': 'Gender',
   'com.search.filter.label.dims.systag': 'Tags',
 
   'com.search.filter.label2.h_index': 'H-Index',
-  'com.search.filter.label2.language': 'Language',
+  'com.search.filter.label2.lang': 'Language',
   'com.search.filter.label2.location': 'Location',
   'com.search.filter.label2.gender': 'Gender',
-  'com.search.filter.label2.nationality': 'Location',
+  'com.search.filter.label2.nation': 'Location',
   'com.search.filter.label2.dims.systag': 'Tags',
 
   'com.search.filter.value.gender.male': 'Male',
@@ -59,8 +59,6 @@ export default {
   'com.search.sort.label.n_pubs': '#Paper',
   'com.search.sort.label.activity-ranking-contrib': 'Contrib',
   'com.search.sort.label.time': 'Time',
-
-
 
   'com.search.searchAssistant.hintInfo.expansion': 'We automatically expanded it to',
   'com.search.searchAssistant.hintInfo.translation': 'We also search for',

@@ -33,6 +33,7 @@ export default {
     // Intelligence search assistants. TODO change to assistantMeta, assistantData
     assistantDataMeta: {}, // {advquery: texts: [...]}
     assistantData: null,
+    isNotAffactedByAssistant: true, // 标记没有点过翻译。点了就变成false了。碰过就不能用intell_search了。
 
     // flags
     isNewAPI: false,
@@ -104,21 +105,24 @@ export default {
       const useTranslateSearch = yield select(state => state.search.useTranslateSearch);
       const intelligenceSearchMeta = yield select(state => state.search.intelligenceSearchMeta);
       const assistantDataMeta = yield select(state => state.search.assistantDataMeta);
-      console.log('*****************2', assistantDataMeta);
+      const isNotAffactedByAssistant = yield select(state => state.search.isNotAffactedByAssistant);
+      console.log('*****************2', isNotAffactedByAssistant);
+
       // 分界线
       yield put({ type: 'updateSortKey', payload: { key: Sort } });
       yield put({ type: 'updateFilters', payload: { filters } });
 
       const { searchInGlobalExperts, searchInSomeExpertBase } = searchService.getBools(filters);
 
-      // TODO call additional search for assistant service.
+      // TODO call standalone assistant search for old api.
       let assistantQuery = '';
       if (sysconfig.Search_EnableSmartSuggest && !ghost &&
         (searchInGlobalExperts ||
           (searchInSomeExpertBase && !sysconfig.USE_NEXT_EXPERT_BASE_SEARCH))
       ) {
         // TODO 第一次搜索出现的bug。
-        if (assistantDataMeta && assistantDataMeta.advquery && assistantDataMeta.advquery.texts) {
+        if (assistantDataMeta && assistantDataMeta.advquery && assistantDataMeta.advquery.texts
+          && assistantDataMeta.advquery.texts.length > 0) {
           const queries = assistantDataMeta.advquery.texts.map(term => term && `(| ${term.text})`);
           queries.push(`(| ${query})`);
           assistantQuery = queries.join(' ');
@@ -135,19 +139,30 @@ export default {
           if (data.data && data.data.succeed) {
             const { intellResults } = data.data;
             yield put({ type: 'getAssistantDataSuccess', payload: { data: intellResults } });
-            if (intellResults && intellResults.expandedTexts &&
-              intellResults.expandedTexts.length > 0) {
-              assistantQuery = `(| ${query}) (| ${intellResults.expandedTexts[0]})`;
+            const queries = [query];
+            let hasExpands = false;
+            if (intellResults && intellResults.expands && intellResults.expands.length > 0) {
+              queries.push(intellResults.expands[0].word);
+              hasExpands = true;
+              // assistantQuery = `(| ${query}) (| ${intellResults.expands[0].word})`;
+            }
+            if (intellResults && intellResults.transText && isNotAffactedByAssistant && !hasExpands) {
+              queries.push(intellResults.transText);
+              // assistantQuery += ` (| ${intellResults.transText})`;
+            }
+            if (queries.length > 1) {
+              assistantQuery = queries.map(item => `(| ${item})`).join(' ');
             }
             console.log('Note: first expand query is:', assistantQuery);
           }
         }
       }
 
+      // 调用 搜索 .
       const params = {
         query, offset, size, filters: noTotalFilters, sort: Sort, intelligenceSearchMeta,
+        assistantDataMeta, assistantQuery, isNotAffactedByAssistant,
         useTranslateSearch, // TODO remove
-        assistantDataMeta, assistantQuery,
       };
 
       const data = yield call(searchService.searchPerson, params);
@@ -393,7 +408,11 @@ export default {
      */
 
     setAssistantDataMeta(state, { payload: { texts } }) {
-      return { ...state, assistantDataMeta: { advquery: { texts } } };
+      return {
+        ...state,
+        assistantDataMeta: { advquery: { texts } },
+        isNotAffactedByAssistant: false,
+      };
     },
 
     clearAssistantDataMeta(state) {

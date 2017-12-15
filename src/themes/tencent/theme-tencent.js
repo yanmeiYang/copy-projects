@@ -44,7 +44,7 @@ module.exports = {
         <div className={styles.feedback} key="0">
           <a href="http://ucircle.oa.com/aminer/requirement/create" target="_blank" rel="feedback">
             <i className="fa fa-exclamation-circle" />&nbsp;
-            <FM id="com.PersonList.label.feedback" defaultMessage="反馈需求" />
+            <FM id="com.PersonList.label.cooperationFeedback" defaultMessage="合作需求反馈" />
           </a>
         </div>
       );

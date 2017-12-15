@@ -182,7 +182,6 @@ const Person = ({ dispatch, person, seminar, publications }) => {
     }
   }
 
-  // console.log('|||||||||||| PersonIndex:', person);
   return (
     <Layout searchZone={[]}>
       <div className="content-inner">

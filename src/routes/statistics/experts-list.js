@@ -26,9 +26,13 @@ const columns = [
   {
     title: '总贡献度',
     dataIndex: 'contrib',
-    sorter: (a, b) => a.contrib - b.contrib,
+    sorter: (a, b) => a.compre - b.compre,
     render(text, record) {
-      return getTwoDecimal(parseFloat(record.contrib), 2);
+      if (record.compre !== 0) {
+        return getTwoDecimal(parseFloat(record.compre), 2);
+      } else {
+        return '未评分';
+      }
     },
   },
   // {

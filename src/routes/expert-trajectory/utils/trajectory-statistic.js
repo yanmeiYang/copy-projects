@@ -25,7 +25,7 @@ const showPersonStatistic = (data, type) => {
 
 const regionDistributeSta = (data) => {
   const colorSet = randomColor(data.staData.timeToTime.length * 2);
-  const categories = ['Countries', 'Cities'];
+  const categories = ['Cities', 'Countries'];
   const finalData = []; //包含name，color
   const selectedColor = [];
 
@@ -103,6 +103,18 @@ const regionDistributeSta = (data) => {
       lastYear = end;
       previousNation = nationId;
       count += 1; //用一次加一次
+    } else {
+      let item2;
+      for (let i = finalData.length - 1; i >= 0; i -= 1) {
+        if (finalData[i].value[0] === 1) {
+          item2 = finalData[i];
+          break;
+        }
+      }
+      item2.value[2] = end;
+      item2.value[3] = end - item2.value[1];
+      finalData.push(item2);
+      lastYear = end;
     }
     times += 1;
   }
@@ -120,7 +132,7 @@ const showMigrateCompare = (data) => {
       },
     },
     title: {
-      text: 'Profile',
+      text: '时间迁移历史',
       left: 'center',
     },
     legend: {

@@ -191,7 +191,7 @@ export default {
               activityScores.data.indices.length > 0) {
               data.data.items && data.data.items.map((item, index) => {
                 const activityRankingContrib =
-                  activityScores.data.indices[index].filter(scores => scores.key === 'contrib');
+                  activityScores.data.indices[index].filter(scores => scores.key === 'compre');
                 if (data.data.items[index].indices) {
                   data.data.items[index].indices.activityRankingContrib =
                     activityRankingContrib.length > 0 ? activityRankingContrib[0].score : 0;

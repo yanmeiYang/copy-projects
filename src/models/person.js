@@ -25,7 +25,7 @@ export default {
       pageSize: 30,
       total: null,
     },
-    hint: '',
+    loading: false,
   },
 
   subscriptions: {
@@ -44,18 +44,18 @@ export default {
   },
 
   effects: {
-    *getPerson({ payload }, { call, put }) {  // eslint-disable-line
+    * getPerson({ payload }, { call, put }) {  // eslint-disable-line
       // console.log('effects: getPerson', payload);
       const { personId } = payload;
       const data = yield call(personService.getPerson, personId);
       yield put({ type: 'getPersonSuccess', payload: { data } });
     },
-    *getActivityAvgScoresByPersonId({ payload }, { call, put }) {
+    * getActivityAvgScoresByPersonId({ payload }, { call, put }) {
       const { id } = payload;
       const { data } = yield call(personService.getActivityAvgScoresByPersonId, id);
       yield put({ type: 'getActivityAvgScoresByPersonIdSuccess', payload: { data } });
     },
-    *getContributionRecalculatedByPersonId({ payload }, { call, put }) {
+    * getContributionRecalculatedByPersonId({ payload }, { call, put }) {
       const { id } = payload;
       const { data } = yield call(personService.getContributionRecalculatedByPersonId, id);
       yield put({ type: 'getContributionRecalculatedSuccess', payload: { data } });
@@ -79,12 +79,7 @@ export default {
     },
 
     getContributionRecalculatedSuccess(state, { payload: { data } }) {
-      if (data.status === true) {
-        return { ...state, hint: '您已重新计算贡献度' };
-      } else {
-        return { ...state, hint: '重新计算贡献度失败' };
-      }
-      return { ...state, avgScores: data.indices };
+      return { ...state, avgScores: data.indices, loading: false };
     },
   },
 

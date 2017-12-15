@@ -331,7 +331,8 @@ class ExpertHeatmapPage extends React.Component {
         </div>
         <div className={classnames('content-inner', styles.page)}>
           {/*设置成除了data外，其他的参数，如themeKey、checkType都是可以缺失的*/}
-          <ExpertHeatmap data={data} themeKey={themeKey} checkType={this.state.checkedList} />
+          <ExpertHeatmap data={data} themeKey={themeKey} checkType={this.state.checkedList}
+                         domainId={this.state.domainId} />
         </div>
       </Page>
     );

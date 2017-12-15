@@ -6,7 +6,7 @@ import { Slider, InputNumber, Row, Col, Button, Icon } from 'antd';
 import { routerRedux, Link, withRouter } from 'dva/router';
 import styles from './ExpertHeatmap.less';
 import { showChart } from './utils/echarts-utils';
-import { loadEchartsWithBMap } from './utils/func-utils';
+import { loadEchartsWithBMap, cacheInfo, paperCache, infoCache, imageCache, } from './utils/func-utils';
 
 let myChart;
 let trajInterval;
@@ -23,6 +23,7 @@ class ExpertHeatmap extends React.Component {
   state = {
     ifPlay: 'play-circle',
     currentYear: 2000,
+    isCaching: false,
   };
 
   componentWillMount() {
@@ -30,16 +31,24 @@ class ExpertHeatmap extends React.Component {
   }
 
   componentDidMount() {
-
+    cacheInfo(this.props.domainId, () => {
+      console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+      this.setState({ isCaching: false });
+      console.log('****************************************');
+    });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps.expertTrajectory.heatData &&
       nextProps.expertTrajectory.heatData !== this.props.expertTrajectory.heatData) {
-      const themeKey = typeof (this.props.themeKey) === 'undefined' ? 0 : this.props.themeKey;
-      const checkType = typeof (this.props.checkType) === 'undefined' ? [] : this.props.checkType;
-      showChart(myChart, 'bmap', themeKey, 'heatmap');
-      this.loadHeat(nextProps.expertTrajectory.heatData, this.state.currentYear, checkType);
+      this.setState({ isCaching: true });
+      cacheInfo(this.props.domainId, () => {
+        const themeKey = typeof (this.props.themeKey) === 'undefined' ? 0 : this.props.themeKey;
+        const checkType = typeof (this.props.checkType) === 'undefined' ? [] : this.props.checkType;
+        showChart(myChart, 'bmap', themeKey, 'heatmap');
+        this.loadHeat(nextProps.expertTrajectory.heatData, this.state.currentYear, checkType);
+        this.setState({ isCaching: false });
+      });
       return true;
     }
     if (nextProps.themeKey && this.props.themeKey !== nextProps.themeKey) {
@@ -212,6 +221,21 @@ class ExpertHeatmap extends React.Component {
       }
     }
 
+    let info = '';
+    let paperId = '';
+    let paper = '';
+    if (this.state.currentYear in infoCache) {
+      info = infoCache[this.state.currentYear];
+      paperId = info.pid;
+      paper = paperCache[paperId];
+    }
+    console.log(imageCache);
+    console.log(paperCache);
+    console.log('##################', paper);
+    console.log(infoCache);
+    console.log(this.state.isCaching);
+
+
     return (
       <div>
         {/*<Spinner loading={loading} />*/}
@@ -236,11 +260,10 @@ class ExpertHeatmap extends React.Component {
             })}
           </div>
           <div className={styles.paper}>
-            <div className={styles.year}>2014:</div>
-            Eric, Mihail, Manning, Christopher D. A Copy-Augmented Sequence-to-Sequence
-            Architecture Gives Good Performance on Task-Oriented Dialogue[J]. 2017:468-473.
+            <div className={styles.year}>{this.state.currentYear}:</div>
+            {paper}
             <br />
-            <a href={`https://www.aminer.cn/archive/58d82fd2d649053542fd76c7`}
+            <a href={`https://www.aminer.cn/archive/${paperId}`}
                target="_blank"><Icon type="file" />查看文章</a>
           </div>
         </div>

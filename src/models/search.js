@@ -2,14 +2,11 @@
 import { sysconfig } from 'systems';
 import { notification } from 'antd';
 import pathToRegexp from 'path-to-regexp';
-import queryString from 'query-string';
 import * as searchService from 'services/search';
 import * as translateService from 'services/translate';
 import * as topicService from 'services/topic';
 import bridge from 'utils/next-bridge';
 import { takeLatest } from './helper';
-import { apiBuilder, F, H } from "utils/next-api-builder";
-import { nextAPI } from "utils";
 
 export default {
 

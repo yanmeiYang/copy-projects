@@ -13,14 +13,11 @@ import { SearchFilter, SearchSorts, KgSearchBox } from 'components/search';
 import { SearchKnowledge, TranslateSearchMessage } from 'components/search';
 
 import { sysconfig } from 'systems';
-import { theme, applyTheme } from 'themes';
+import { theme } from 'themes';
 import { createURL, hole } from 'utils';
 import { Auth } from 'hoc';
 import SearchAssistant, { AssistantUtils } from './SearchAssistant';
 import styles from './SearchComponent.less';
-
-console.log('AssistantUtils::', AssistantUtils);
-// console.log('AssistantUtils::', AssistantUtils);
 
 const DefaultRightZoneFuncs = [
   param => <SearchKnowledge query={param.query} key="1" />,

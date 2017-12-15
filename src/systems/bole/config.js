@@ -49,14 +49,6 @@ module.exports = {
   // Search_DisableSearchKnowledge: false,
   Search_FixedExpertBase: { id: 'aminer', name: '全球专家' },
 
-  // NextAPI-QueryHooks:
-  APIPlugin_ExpertSearch: {
-    parameters: {
-      aggregation: ['dims.systag'],
-      haves: { systag: [] },
-    },
-  },
-
   /**
    * Page specified config.
    */

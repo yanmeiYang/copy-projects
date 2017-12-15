@@ -98,6 +98,7 @@ module.exports = (webpackConfig, env) => {
 
   // Alias
   webpackConfig.resolve.alias = {
+    core: `${__dirname}/src/core`,
     hoc: `${__dirname}/src/hoc`,
     public: `${__dirname}/src/public`,
     components: `${__dirname}/src/components`,

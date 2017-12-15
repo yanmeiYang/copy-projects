@@ -1,8 +1,10 @@
 import { request, nextAPI, config } from 'utils';
-import * as bridge from 'utils/next-bridge';
 import { apiBuilder, F, H } from 'utils/next-api-builder';
 import { sysconfig } from 'systems';
+
 import * as strings from 'utils/strings';
+
+import plugins from 'core/plugins';
 
 const { api } = config;
 
@@ -14,7 +16,7 @@ export function getBools(filters) {
 
   const searchInGlobalExperts = filterByGlobal || filterByDefaultGlobal;
   const searchInSomeExpertBase = filterBySomeEB || filterByDefaultSomeEB;
-  return { searchInGlobalExperts, searchInSomeExpertBase }
+  return { searchInGlobalExperts, searchInSomeExpertBase };
 }
 
 /* 目前搜索的各种坑
@@ -73,8 +75,8 @@ export async function searchPerson(params) {
         aggregation: F.params.default_aggregation,
       })
       .addParam({ haves: { eb: defaultHaves } }, { when: defaultHaves && defaultHaves.length > 0 })
-      // .addParam({ switches: ['loc_search_all'] }, { when: useTranslateSearch })
-      // .addParam({ switches: ['loc_translate_all'] }, { when: enTrans && !useTranslateSearch })
+      .addParam({ switches: ['loc_search_all'] }, { when: useTranslateSearch }) // TODO remove this
+      .addParam({ switches: ['loc_translate_all'] }, { when: enTrans && !useTranslateSearch }) // TODO remove this
       .addParam(
         { switches: ['intell_search'] },
         { when: sysconfig.Search_EnableSmartSuggest && isNotAffactedByAssistant },
@@ -97,7 +99,7 @@ export async function searchPerson(params) {
     }
 
     // Apply Plugins.
-    H.applyPlugin(nextapi, sysconfig.APIPlugin_ExpertSearch);
+    plugins.applyPluginToAPI(nextapi, 'api_search');
 
     // apply SearchAssistant
     if (assistantDataMeta) {
@@ -187,7 +189,7 @@ export async function listPersonInEBNextAPI(payload) {
     nextapi.param({ sorts: [sort] });
   }
 
-  H.applyPlugin(nextapi, sysconfig.APIPlugin_ExpertSearch);
+  plugins.applyPluginToAPI(nextapi, 'api_search');
 
   // console.log('DEBUG---------------------\n', nextapi.api);
   // console.log('DEBUG---------------------\n', JSON.stringify(nextapi.api));

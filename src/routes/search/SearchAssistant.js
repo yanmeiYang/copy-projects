@@ -260,11 +260,6 @@ export default class SearchAssistant extends Component {
     }
     const { expands, transText, transLang } = assistantData;
 
-    // console.log('9999999:::: ------------------------------------------- ',);
-    // console.log('9999999::::  ', currentExpansionChecked, currentTranslationChecked, keywordTranslationChecked);
-    // console.log('9999999:::: assistantData ', assistantData);
-    // console.log('9999999:::: assistantDataMeta ', assistantDataMeta);
-
     // if has value.
     const hasExpansion = expands && expands.length > 0;
     const hasTranslation = expands && expands.filter(item => item.word_zh).length > 0;

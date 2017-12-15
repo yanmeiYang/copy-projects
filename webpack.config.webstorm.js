@@ -12,6 +12,7 @@ module.exports = {
   resolve: {
     // Copied from webpack.config.js
     alias: {
+      core: `${__dirname}/src/core`,
       hoc: `${__dirname}/src/hoc`,
       public: `${__dirname}/src/public`,
       components: `${__dirname}/src/components`,

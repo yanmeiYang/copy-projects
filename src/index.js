@@ -18,6 +18,7 @@ const logErr = ::console.error;
 
 const ERROR_MSG_DURATION = 3; // 3 秒
 
+
 configAntd();
 
 /** ----------------------------------------------------------------------------

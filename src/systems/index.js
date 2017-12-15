@@ -41,6 +41,7 @@ const getDefaultSystemConfigs = (system, source) => {
     }
     return;
   }
+
   return {
     SYSTEM: system,
     SOURCE: source,
@@ -128,9 +129,6 @@ const getDefaultSystemConfigs = (system, source) => {
     HeaderSearch_DropDown: false, // 默认没有下拉选择
     SearchFilterExclude: '', // 'Gender',
     UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // deprecated! Don't use this.
-
-    // NextAPI-QueryHooks:
-    APIPlugin_ExpertSearch: null,
 
     UserAuthSystem: system, // aminer 或者是 system.config
     UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签, 目前没用到

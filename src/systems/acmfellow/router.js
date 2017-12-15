@@ -1,6 +1,7 @@
 /**
  * Created by BoGao on 2017/10/6.
  */
+
 import core from 'routes/router-core';
 import search from 'routes/search/router-search';
 import expertBase from 'routes/expert-base/router-eb';
@@ -14,8 +15,9 @@ import admin from 'routes/admin/router-admin';
 // import seminar from 'routes/seminar/router-seminar';
 // import tencent from 'routes/third-login/router';
 import router2bprofile from 'routes/2b-profile/router-2bprofile';
+ew
+import { RouterRegistry, RouterRegistry2b, RouterJSXFunc } from 'systems/router-registry';
 
-import { RouterRegistry, RouterRegistry2b, RouterJSXFunc } from '../router-registry';
 
 const routes = [
   ...RouterRegistry2b,

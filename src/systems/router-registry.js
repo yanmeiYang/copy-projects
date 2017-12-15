@@ -4,6 +4,9 @@
  *
  *  提供Aminer2b系统全部可用的Routes.
  */
+
+import themes from 'themes'; // Must in first line.
+
 import React from 'react';
 import dynamic from 'dva/dynamic';
 import { Loader } from 'components/ui';
@@ -28,6 +31,9 @@ import crossHeat from 'routes/cross-heat/router-ch';
 import dataAnnotation from 'routes/data-annotation/router-da';
 import topicRelation from 'routes/topic-relation/router-relation';
 
+if (process.env.NODE_ENV !== 'production' && themes) {
+  console.log('Registered plugins: ', themes.plugins);
+}
 
 const { ConnectedRouter } = routerRedux;
 

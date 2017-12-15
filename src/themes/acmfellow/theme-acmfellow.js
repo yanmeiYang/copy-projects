@@ -10,12 +10,14 @@ import AddToEBButton from 'routes/expert-base/AddToEBButton';
 // import { FormattedMessage as FM } from 'react-intl';
 import { IndexHotLinks } from 'components/widgets';
 import { ExportExperts } from 'components/person';
+import PersonCommentPlugin from 'plugins/PersonCommentsPlugin';
 import styles from './theme-acmfellow.less';
 // import * as Const from './const-acmfellow';
 
 module.exports = {
   themeName: 'common-white',
   styles,
+  plugins: [PersonCommentPlugin()],
 
   // Layout
 

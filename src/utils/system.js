@@ -26,7 +26,7 @@ const AvailableSystems = [
 
 let System;
 // System = 'aminer';
-System = 'demo';
+// System = 'demo';
 // System = 'DataAnnotation';
 
 // System = 'ccf';
@@ -34,7 +34,7 @@ System = 'demo';
 // System = 'huawei';
 // System = 'alibaba';
 // System = 'acmfellow';
-// System = 'tencent';
+System = 'tencent';
 // System = 'cie';
 // System = 'cietest';
 // System = 'cipsc';
@@ -45,8 +45,18 @@ System = 'demo';
 // System = 'thurcb';
 // System = 'yocsef';
 
-
 // SPECIAL: USED_IN_ONLINE_DEPLOY; DON'T DELETE THIS LINE.
+// override system with system-override.js
+try {
+  const { OverrideSystem } = require('../../system-overridexx');
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('%cSystem Override to [%s] using OVERRIDE. (original is %s)',
+      'color:white;background-color:orange;padding:1px 4px;', OverrideSystem, System);
+  }
+} catch (err) {
+  console.log('%cWarning! No System Override found. use system[%s]',
+    'color:white;background-color:orange;padding:1px 4px;', System);
+}
 
 let Source = System; // AppID, Used in UniversalConfig.
 
@@ -54,6 +64,11 @@ const SavedSystemKey = 'IJFEOVSLKDFJ';
 const LS_USER_KEY = `user_${System}`;
 
 function loadSavedSystem() {
+  // 非浏览器环境直接退出
+  if (typeof window === 'undefined') {
+    return;
+  }
+
   const savedSystem = localStorage.getItem(SavedSystemKey);
   const ss = JSON.parse(savedSystem);
   if (!ss) {
@@ -68,11 +83,10 @@ function loadSavedSystem() {
     if (dataObj && dataObj.roles && dataObj.roles.god
       && dataObj.data && dataObj.data.email === ss.user) {
 
-      console.log(
-        '%cSystem Override to [%s]. (original is %s)',
-        'color:red;background-color:rgb(255,251,130)',
-        ss.system, System,
-      );
+      console.log('%cSystem Override to [%s]. (original is %s)',
+        'color:red;background-color:rgb(255,251,130);padding:1px 4px;',
+        ss.system, System);
+
       System = ss.system;
       Source = ss.system;
     }
@@ -81,10 +95,7 @@ function loadSavedSystem() {
 
 function saveSystem(system, user) {
   if (user) {
-    localStorage.setItem(
-      SavedSystemKey,
-      JSON.stringify({ user: user.email, system }),
-    );
+    localStorage.setItem(SavedSystemKey, JSON.stringify({ user: user.email, system }));
   }
 }
 

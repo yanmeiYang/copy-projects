@@ -24,6 +24,8 @@ module.exports = {
   AuthLoginUsingThird: true,
   AuthLoginUsingThirdPage: 'http://ucircle.oa.com/auth/aminer',
 
+  GLOBAL_ENABLE_FEEDBACK: true, // 是否显示feedback
+
   ExpertBases: [
     {
       id: 'aminer',

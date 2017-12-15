@@ -10,6 +10,9 @@ import { escapeURLBracket, unescapeURLBracket } from 'utils/strings';
 import { apiDomain, nextAPIURL, YQL, CORS, JSONP, strict } from './config';
 import * as debug from './debug';
 
+
+// TODO retrieve final buildings.
+
 export default function request(url, options) {
   // 为了兼容之前的调用方法。
   options = options || {};
@@ -105,6 +108,7 @@ const printNEXTAPIDebugLog = (data) => {
     }
   }
 };
+
 const fetch = (options) => {
   let {
     method = 'get',

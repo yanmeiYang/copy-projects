@@ -70,6 +70,11 @@ const SavedSystemKey = 'IJFEOVSLKDFJ';
 const LS_USER_KEY = `user_${System}`;
 
 function loadSavedSystem() {
+  // 非浏览器环境直接退出
+  if (typeof window === 'undefined') {
+    return;
+  }
+
   const savedSystem = localStorage.getItem(SavedSystemKey);
   const ss = JSON.parse(savedSystem);
   if (!ss) {

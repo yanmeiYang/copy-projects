@@ -84,7 +84,7 @@ export default {
   'com.PersonList.label.homepage': 'Homepage',
   'com.PersonList.label.sendEmail': 'Send Email',
   'com.PersonList.label.qrcode': 'QR Code',
-  'com.PersonList.label.feedback': 'Feedback',
+  'com.PersonList.label.cooperationFeedback': '合作需求反馈',
   'com.PersonList.message.noResults': 'No Results',
 
   'com.expertMap.headerLine.label.field': 'Field:',

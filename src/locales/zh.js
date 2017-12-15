@@ -83,7 +83,7 @@ export default {
   'com.PersonList.label.homepage': '个人主页',
   'com.PersonList.label.sendEmail': '发送邮件',
   'com.PersonList.label.qrcode': '二维码',
-  'com.PersonList.label.feedback': '反馈需求',
+  'com.PersonList.label.cooperationFeedback': '合作需求反馈',
   'com.PersonList.message.noResults': '没有结果',
 
   'com.expertMap.headerLine.label.field': '领域：',

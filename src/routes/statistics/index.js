@@ -102,7 +102,7 @@ export default class Statistics extends React.Component {
       title += '\n';
       this.props.statistics.author.map((item) => {
         info += `${displayNameCNFirst(item.n, item.n_zh).replace(/,/g, ';')},`;
-        info += item.contrib ? `${getTwoDecimal(parseFloat(item.contrib), 2)},` : ',';
+        info += item.compre ? `${getTwoDecimal(parseFloat(item.compre), 2)},` : ',';
         info += item.content ? `${getTwoDecimal(parseFloat(item.content), 2)},` : ',';
         info += item.level ? `${getTwoDecimal(parseFloat(item.level), 2)},` : ',';
         info += item.integrated ? `${getTwoDecimal(parseFloat(item.integrated), 2)},` : ',';

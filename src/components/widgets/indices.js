@@ -60,7 +60,7 @@ const indicesConfig = {
       if (activity.activityRankingContrib || activity.activityRankingContrib === 0) {
         return activity.activityRankingContrib;
       } else {
-        return activity_indices && activity_indices.contrib && activity_indices.contrib.toFixed(2);
+        return activity_indices && activity_indices.compre && activity_indices.compre.toFixed(2);
       }
     },
   },

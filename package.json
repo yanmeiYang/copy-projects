@@ -73,7 +73,9 @@
   "optionalDependencies": {
     "fsevents": "^1.1.3"
   },
-  "pre-commit": ["lint"],
+  "pre-commit": [
+    "lint"
+  ],
   "scripts": {
     "dev": "cross-env BROWSER=none HOST=0.0.0.0 roadhog server",
     "lint": "eslint --fix --ext .js src",
@@ -82,6 +84,7 @@
     "build:ab": "node --max_old_space_size=4096 node_modules/roadhog/lib/build.js --analyze",
     "build:dll": "roadhog buildDll",
     "build:new": "node version && roadhog build",
-    "build:deploy": "node bin/build.js -s ${system} && node version && roadhog build"
+    "build:deploy": "node bin/build.js -s ${system} && roadhog build"
+    "build:deployxxx": "node bin/build.js -s ${system} && node version && roadhog build"
   }
 }

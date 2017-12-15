@@ -30,7 +30,9 @@ const Person = ({ dispatch, person, seminar, publications }) => {
       type: 'person/getContributionRecalculatedByPersonId',
       payload: { id: profile.id },
     });
+    console.log('=================5555', person.hint);
   }
+  let hint = ' ';
   const profileTabs = [{
     isShow: sysconfig.ShowRating,
     title: '专家评分',
@@ -50,6 +52,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
             <Button type="primary" size="small"
                     onClick={recalculatedContribution.bind(this)}>重新计算贡献度
             </Button>
+            <span style={{ marginLeft: 30 }}>{person.hint}</span>
           </td>
         </tr>
         }

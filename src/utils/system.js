@@ -45,8 +45,24 @@ System = 'demo';
 // System = 'thurcb';
 // System = 'yocsef';
 
-
 // SPECIAL: USED_IN_ONLINE_DEPLOY; DON'T DELETE THIS LINE.
+// override system with system-override.js
+try {
+  const { OverrideSystem } = require('../../system-overridexx');
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(
+      '%cSystem Override to [%s] using OVERRIDE. (original is %s)',
+      'color:white;background-color:orange;padding:1px 4px;',
+      OverrideSystem, System,
+    );
+  }
+} catch (err) {
+  console.log(
+    '%cWarning! No System Override found. use system[%s]',
+    'color:white;background-color:orange;padding:1px 4px;',
+    System,
+  );
+}
 
 let Source = System; // AppID, Used in UniversalConfig.
 
@@ -70,7 +86,7 @@ function loadSavedSystem() {
 
       console.log(
         '%cSystem Override to [%s]. (original is %s)',
-        'color:red;background-color:rgb(255,251,130)',
+        'color:red;background-color:rgb(255,251,130);padding:1px 4px;',
         ss.system, System,
       );
       System = ss.system;

@@ -21,13 +21,16 @@ const Person = ({ dispatch, person, seminar, publications }) => {
   const { profile, avgScores } = person;
   const { results } = seminar;
   const totalPubs = profile.indices && profile.indices.num_pubs;
-  const contrib = avgScores.filter(score => score.key === 'contrib')[0];
+  const compre = avgScores.filter(score => score.key === 'compre')[0];
   const integrated = avgScores.filter(score => score.key === 'integrated')[0];
-  const activity_indices = { contrib: contrib === undefined ? 0 : contrib.score };
+  const activity_indices = { compre: compre === undefined ? 0 : compre.score };
 
-  // const recomputeContribution = () => {
-  //   console.log('6666666')
-  // }
+  const recalculatedContribution = () => {
+    dispatch({
+      type: 'person/getContributionRecalculatedByPersonId',
+      payload: { id: profile.id },
+    });
+  }
   const profileTabs = [{
     isShow: sysconfig.ShowRating,
     title: '专家评分',
@@ -38,13 +41,15 @@ const Person = ({ dispatch, person, seminar, publications }) => {
       }
       <table style={{ marginBottom: 10 }} className="scoreTable">
         <thead>
-        {contrib &&
+        {compre &&
         <tr>
           <td>贡献度:</td>
           <td>
             {/* <Rate disabled defaultValue={contrib.score}/> */}
-            <span style={{ marginRight: 72 }}>{contrib.score}</span>
-            {/*<Button type="primary" size="small" onClick={this.recomputeContribution.bind(this)}>重新计算贡献度</Button>*/}
+            <span style={{ marginRight: 72 }}>{compre.score}</span>
+            <Button type="primary" size="small"
+                    onClick={recalculatedContribution.bind(this)}>重新计算贡献度
+            </Button>
           </td>
         </tr>
         }
@@ -93,16 +98,22 @@ const Person = ({ dispatch, person, seminar, publications }) => {
     title: '参与的活动',
     desc: 'seminar',
     content: <Spin spinning={seminar.loading}>
-      {results.length > 0 ? <div style={{ minHeight: 150 }}>{results.map((activity) => {
-        return (
-          <div key={activity.id + Math.random()}>
-            {/* <ActivityList result={activity} /> */}
-            <NewActivityList result={activity} hidetExpertRating="true"
-                             style={{ marginTop: 20, maxWidth: 1000 }} />
-          </div>
-        );
-      })}</div> : <div style={{ minHeight: 150, textAlign: 'center' }}><span
-        style={{ fontSize: '32px', color: '#aaa' }}>没有数据</span></div>}
+      {results.length > 0 ?
+        <div style={{ minHeight: 150 }}>
+          {results.map((activity) => {
+            return (
+              <div key={activity.id + Math.random()}>
+                {/* <ActivityList result={activity} /> */}
+                <NewActivityList result={activity} hidetExpertRating="false"
+                                 style={{ marginTop: 20, maxWidth: 1000 }} />
+              </div>
+            );
+          })}
+        </div>
+      :
+        <div style={{ minHeight: 150, textAlign: 'center' }}>
+          <span style={{ fontSize: '32px', color: '#aaa' }}>没有数据</span>
+        </div>}
     </Spin>,
   }, {
     title: '代表性论文',
@@ -169,8 +180,6 @@ const Person = ({ dispatch, person, seminar, publications }) => {
         return false;
     }
   }
-
-
 
   // console.log('|||||||||||| PersonIndex:', person);
   return (

@@ -72,7 +72,7 @@ const toNextIndices = (indices, activity_indices) => {
     activity: indices.activity,
     diversity: indices.diversity,
     sociability: indices.sociability,
-    activityRankingContrib: activity_indices ? activity_indices.contrib : '',
+    activityRankingContrib: activity_indices ? activity_indices.compre : '',
   };
 };
 

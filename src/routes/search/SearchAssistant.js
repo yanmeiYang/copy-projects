@@ -1,10 +1,11 @@
 /* eslint-disable no-param-reassign,camelcase */
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Checkbox, Button, Tooltip } from 'antd';
 import { sysconfig } from 'systems';
 import { Spinner } from 'components';
+import classnames from 'classnames';
 import styles from './SearchAssistant.less';
 import { compare } from "utils";
 import { FormattedMessage as FM } from 'react-intl';
@@ -123,7 +124,9 @@ export default class SearchAssistant extends Component {
 
   onKGChange = (checkedList) => {
     const { assistantData } = this.props;
-    const len = assistantData.kgHyponym && assistantData.kgHyponym.length;
+    const lenkgHyponym = assistantData.kgHyponym && assistantData.kgHyponym.length;
+    const lenkgHypernym = assistantData.kgHypernym && assistantData.kgHypernym.length;
+    const len = lenkgHyponym + lenkgHypernym;
     this.setState({
       checkedList,
       indeterminate: !!checkedList.length && (checkedList.length < len),
@@ -281,18 +284,14 @@ export default class SearchAssistant extends Component {
 
         <div className={styles.box}>
 
-          <div className={styles.w}>
+          <div className={classnames({ [styles.w]: true, [styles.zh]: sysconfig.Locale === 'zh' })}>
             {hasExpansion &&
-            <div className={styles.w}>
               <FM defaultMessage="We automatically expanded it to"
                   id="com.search.searchAssistant.hintInfo.expansion" />
-            </div>
             }
             {hasTranslation &&
-            <div className={styles.w}>
               <FM defaultMessage="We also search for"
                   id="com.search.searchAssistant.hintInfo.translation" />
-            </div>
             }
           </div>
 
@@ -336,7 +335,8 @@ export default class SearchAssistant extends Component {
 
         {!expands && hasTermTranslation &&
         <div className={styles.box}>
-          <div className={styles.w}>
+          <div
+            className={classnames({ [styles.w]: true, [styles.zh]: sysconfig.Locale === 'zh' })}>
             {hasTermTranslation &&
             <div className={styles.w}>
               <FM defaultMessage="We also search for"
@@ -366,11 +366,20 @@ export default class SearchAssistant extends Component {
         {/*{!kgLoading && <div> not Loading </div>}*/}
         {(hasKG || kgLoading) &&
         <div className={styles.box1}>
-          <div className={styles.ww}>
+          <div
+            className={classnames({ [styles.ww]: true, [styles.zh]: sysconfig.Locale === 'zh' })}>
             <span className={styles.paddingRight}>
               <FM defaultMessage="Expanded by knowledge graph"
                   id="com.search.searchAssistant.hintInfo.KG" />
+              <span className={styles.kgNote}>
+                <FM defaultMessage="hypernym: black"
+                    id="com.search.searchAssistant.hintInfo.KG.kgHypernym" />
               </span>
+              <span className={styles.kgNote}>
+                <FM defaultMessage="hyponym: blue"
+                    id="com.search.searchAssistant.hintInfo.KG.kgHyponym" />
+              </span>
+            </span>
             <span>
               <Checkbox
                 onChange={this.onCheckAllChange}
@@ -379,37 +388,37 @@ export default class SearchAssistant extends Component {
             </span>
           </div>
 
-          {kgLoading && <div style={{ marginLeft: 8 }}>
+          {kgLoading &&
+          <div style={{ marginLeft: 8 }}>
             <FM defaultMessage="Loading..."
                 id="com.search.searchAssistant.hintInfo.loading" />
           </div>}
           {hasKG && !kgLoading &&
-          <Checkbox.Group onChange={this.onKGChange} value={this.state.checkedList}>
-            {kgData && kgData.map((term, index) => {
-              const key = `${term.word}_${index}`;
-              const checkbox = (
-                <Checkbox key={key} value={term.word} checked={checkAll}>
-                  <span className={styles[term.type]}>{term.word}</span>
-                </Checkbox>
-              );
-              return (term.word_zh && sysconfig.Locale === 'zh')
-                ? (
-                  <Tooltip placement="top" title={term.word_zh} key={key}>
-                    {checkbox}
-                  </Tooltip>)
-                : checkbox;
-            })}
-          </Checkbox.Group>
+          <div className={styles.kgDataAndBtn}>
+            <Checkbox.Group onChange={this.onKGChange} value={this.state.checkedList}>
+              {kgData && kgData.map((term, index) => {
+                const key = `${term.word}_${index}`;
+                const checkbox = (
+                  <Checkbox key={key} value={term.word} checked={checkAll}>
+                    <span className={styles[term.type]}>{term.word}</span>
+                  </Checkbox>
+                );
+                return (term.word_zh && sysconfig.Locale === 'zh')
+                  ? (
+                    <Tooltip placement="top" title={term.word_zh} key={key}>
+                      {checkbox}
+                    </Tooltip>)
+                  : checkbox;
+              })}
+            </Checkbox.Group>
+            <div className={styles.boxButton}>
+              <Button size="small" onClick={this.callSearch}>
+                <FM defaultMessage="Search with Knowledge Graph"
+                    id="com.search.searchAssistant.hintInfo.KGButton" />
+              </Button>
+            </div>
+          </div>
           }
-        </div>
-        }
-
-        {hasKG && !kgLoading &&
-        <div className={styles.boxButton}>
-          <Button size="small" onClick={this.callSearch}>
-            <FM defaultMessage="Search with Knowledge Graph"
-                id="com.search.searchAssistant.hintInfo.KGButton" />
-          </Button>
         </div>
         }
 

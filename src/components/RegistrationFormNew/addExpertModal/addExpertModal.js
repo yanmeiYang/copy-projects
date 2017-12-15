@@ -110,7 +110,7 @@ class AddExpertModal extends Component {
               label: this.speakerInformation.stype.label || values.label,
               score: this.speakerInformation.stype.score || 0,
             },
-            role: this.state.newRole,
+            role: typeof this.state.newRole === 'string' ? [this.state.newRole] : this.state.newRole,
             gender: this.speakerInformation.gender || 0,
             phone: values.phone,
             email: values.email,
@@ -318,10 +318,7 @@ class AddExpertModal extends Component {
             <Form onSubmit={this.handle}>
               <div className={styles.activeBox}>
                 {newRole[0] === 'talk' &&
-                <FormItem className={styles.info}
-                          {...formItemLayout}
-                          label="演讲标题"
-                >
+                <FormItem {...formItemLayout} className={styles.info} label="演讲标题">
                   {getFieldDecorator('title', {
                     rules: [{
                       required: true, message: '请输入演讲标题',
@@ -369,11 +366,11 @@ class AddExpertModal extends Component {
                     optionFilterProp="children"
                     onChange={this.activityTypeChange}
                     filterOption={(input, option) =>
-                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
+                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
                     {Object.values(contribution_type.data).map((item) => {
                       return (<Option key={item.id}
-                                        value={`${item.key}#${item.value}`}>{item.key}</Option>);
-                      })}
+                                      value={`${item.key}#${item.value}`}>{item.key}</Option>);
+                    })}
                   </Select>)}
                 </FormItem>}
                 {newRole[0] === 'talk' &&

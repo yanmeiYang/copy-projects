@@ -12,18 +12,10 @@ import styles from './committee-list.less';
 const { Column } = Table;
 
 class CommitteeList extends React.Component {
-  state = {
-    selectedRowKeys: [],  // Check here to configure the default column
-  };
 
   componentWillMount = () => {
     this.props.dispatch({ type: 'seminar/getCategory', payload: { category: 'activity_type' } });
   };
-  onSelectChange = (selectedRowKeys) => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
-    this.setState({ selectedRowKeys });
-  };
-
 
   setCategory = (d, e) => {
     if (d === undefined) {
@@ -64,41 +56,28 @@ class CommitteeList extends React.Component {
     // 存储org为"总计"时对应的category
     const tempCategory = {};
     // 活动类型push到承办单位为"总计"的条目中
-    activity_type && activity_type.data && activity_type.data.map((item) => {
-      // 初始值设置为0, 方便后续的++
-      tempCategory[item.key] = 0;
-      // 循环活动统计数据，得到对应的category
-      activity && activity.map(act => {
-        // 承办单位对应总数求和
-        Object.keys(act.category).map((key) => {
-          if (item.key === key) {
-            tempCategory[item.key] += act.category[key];
-          }
-          return tempCategory;
-        });
-        return;
-      });
-      return;
-    });
+    if (activity_type && activity_type.data && activity && activity.length > 0) {
+      for (const item of activity_type.data) {
+        // 初始值设置为0, 方便后续的++
+        tempCategory[item.key] = 0;
+        // 循环活动统计数据，得到对应的category
+        for (const act of activity) {
+          // 承办单位对应总数求和
+          Object.keys(act.category).map((key) => {
+            if (item.key === key) {
+              tempCategory[item.key] += act.category[key];
+            }
+            return tempCategory;
+          });
+        }
+      }
+    }
 
-    if (activity) {
+    if (activity && activity.length > 0) {
       let tempTotal = 0;
       activity.map(act => tempTotal += act.total);
       activity.push({ organizer: '总计', total: tempTotal, category: tempCategory });
     }
-
-    // let activity_type_options_data = {};
-    // if (activity_type.data) {
-    //   activity_type_options_data = activity_type.data;
-    // }
-
-
-    const { selectedRowKeys } = this.state;
-    // const rowSelection = {
-    //   selectedRowKeys,
-    //   onChange: this.onSelectChange,
-    //   onSelection: this.onSelection,
-    // };
 
     // 排序 dict 数组 可以抽出一个公用方法
     const compare = (property) => {

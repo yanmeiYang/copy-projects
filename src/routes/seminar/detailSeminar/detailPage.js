@@ -57,7 +57,7 @@ const DetailPage = ({ dispatch, seminar, app, pad, location, isPoster }) => {
     presidents = summaryById.talk.filter(item => item.speaker.role && item.speaker.role.includes('president'));
   }
 
-  let timeTalk = [];
+  const timeTalk = [];
   const noTimeTalk = [];
   if (guestSpeakers.length > 0) {
     guestSpeakers.map((item) => {
@@ -69,9 +69,9 @@ const DetailPage = ({ dispatch, seminar, app, pad, location, isPoster }) => {
       return true;
     });
   }
-  if (timeTalk.length > 0) {
-    timeTalk = timeTalk.sort(compare('time'));
-  }
+  // if (timeTalk.length > 0) {
+  //   timeTalk = timeTalk.sort(compare('time'));
+  // }
   guestSpeakers = timeTalk.concat(noTimeTalk);
 
   const QRURL = isPoster

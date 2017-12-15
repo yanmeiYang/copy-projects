@@ -10,6 +10,7 @@ const nextAPIURL = process.env.NODE_ENV !== 'production' ?
   // nextAPIURLOnlineBeta;
   nextAPIURLOnlineProduction;
 
+
 const param = (key, type, description) => {
   return { key, type, description };
 };
@@ -118,6 +119,7 @@ module.exports = {
     listPersonByIds: `${baseURL}/person/batch-list`,
     getActivityAvgScoresByPersonId: `${baseURL}/person/activity/:id/indices`,
     batchGetActivityCompareScoresByPersonId: `${baseURL}/person/activity/:ids/batch/indices`,
+    getContributionRecalculatedByPersonId: `${baseURL}/person/activity/:id/indices?update=1`,
 
     // merge
     tryToDoMerge: `${baseURL}/bifrost/person/merge/:mid`,

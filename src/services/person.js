@@ -96,6 +96,11 @@ export async function getActivityAvgScoresByPersonId(id) {
   return request(api.getActivityAvgScoresByPersonId.replace(':id', id));
 }
 
+export async function getContributionRecalculatedByPersonId(id) {
+  console.log('=============', id);
+  return request(api.getContributionRecalculatedByPersonId.replace(':id', id));
+}
+
 export async function personEmailStr(id) {
   return request(api.personEmailStr.replace(':id', id));
 }

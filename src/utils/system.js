@@ -95,10 +95,7 @@ function loadSavedSystem() {
 
 function saveSystem(system, user) {
   if (user) {
-    localStorage.setItem(
-      SavedSystemKey,
-      JSON.stringify({ user: user.email, system }),
-    );
+    localStorage.setItem(SavedSystemKey, JSON.stringify({ user: user.email, system }));
   }
 }
 

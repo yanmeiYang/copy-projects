@@ -26,7 +26,7 @@ const AvailableSystems = [
 
 let System;
 // System = 'aminer';
-// System = 'demo';
+System = 'demo';
 // System = 'DataAnnotation';
 
 // System = 'ccf';
@@ -34,7 +34,7 @@ let System;
 // System = 'huawei';
 // System = 'alibaba';
 // System = 'acmfellow';
-System = 'tencent';
+// System = 'tencent';
 // System = 'cie';
 // System = 'cietest';
 // System = 'cipsc';

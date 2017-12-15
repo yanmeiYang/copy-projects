@@ -32,23 +32,23 @@ class ExpertHeatmap extends React.Component {
 
   componentDidMount() {
     cacheInfo(this.props.domainId, () => {
-      console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
       this.setState({ isCaching: false });
-      console.log('****************************************');
     });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps.expertTrajectory.heatData &&
       nextProps.expertTrajectory.heatData !== this.props.expertTrajectory.heatData) {
-      this.setState({ isCaching: true });
-      cacheInfo(this.props.domainId, () => {
-        const themeKey = typeof (this.props.themeKey) === 'undefined' ? 0 : this.props.themeKey;
-        const checkType = typeof (this.props.checkType) === 'undefined' ? [] : this.props.checkType;
-        showChart(myChart, 'bmap', themeKey, 'heatmap');
-        this.loadHeat(nextProps.expertTrajectory.heatData, this.state.currentYear, checkType);
-        this.setState({ isCaching: false });
+      this.setState({ isCaching: true }, () => {
+        cacheInfo(this.props.domainId, () => {
+          const themeKey = typeof (this.props.themeKey) === 'undefined' ? 0 : this.props.themeKey;
+          const checkType = typeof (this.props.checkType) === 'undefined' ? [] : this.props.checkType;
+          showChart(myChart, 'bmap', themeKey, 'heatmap');
+          this.loadHeat(nextProps.expertTrajectory.heatData, this.state.currentYear, checkType);
+          this.setState({ isCaching: false });
+        });
       });
+
       return true;
     }
     if (nextProps.themeKey && this.props.themeKey !== nextProps.themeKey) {
@@ -182,6 +182,9 @@ class ExpertHeatmap extends React.Component {
       field = '';
     }
     myChart.setOption({ title: { text: `${this.state.currentYear}年 ${field} 学者迁徙图` } });
+
+    //加入具体的时间
+
   };
 
   handleErr = (e) => {
@@ -224,17 +227,21 @@ class ExpertHeatmap extends React.Component {
     let info = '';
     let paperId = '';
     let paper = '';
+    const authors = [];
     if (this.state.currentYear in infoCache) {
       info = infoCache[this.state.currentYear];
       paperId = info.pid;
       paper = paperCache[paperId];
+      for (let n = this.state.currentYear; n <= endYear; n += 1) {
+        authors.push(infoCache[n]);
+      }
+      for (let n = this.state.currentYear; n <= endYear; n += 1) {
+        authors.push(infoCache[n]);
+      }
+      // for (let n = this.state.currentYear; n <= 0; n -= 1) {
+      //   authors.push(infoCache[n]);
+      // }
     }
-    console.log(imageCache);
-    console.log(paperCache);
-    console.log('##################', paper);
-    console.log(infoCache);
-    console.log(this.state.isCaching);
-
 
     return (
       <div>

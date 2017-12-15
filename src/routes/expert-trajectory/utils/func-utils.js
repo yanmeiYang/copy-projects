@@ -19,9 +19,6 @@ const cacheInfo = (domainId, callback) => {
   if (domainId !== 'aminer' && domainId !== '') {
     const dd = wget(`lab/trajectory/thinktanks/${domainId}.json`);
     dd.then((data) => {
-      // infoCache = deepClone(data);
-      // console.log(infoCache);
-      //infoCache = [];
       for (const y in data) {
         if (y) {
           const paper = data[y].paperInfo;
@@ -33,16 +30,12 @@ const cacheInfo = (domainId, callback) => {
           img.onerror = () => {
             img.src = blankAvatar;
           };
-          const aid = data[y].aid;
-          const pid = data[y].pid;
+          const { aid, pid } = data[y];
           infoCache[y] = { aid, pid };
           imageCache[author.id] = img;
           paperCache[paper.id] = paper.title;
         }
       }
-      console.log(infoCache);
-      console.log(imageCache);
-      console.log(paperCache);
       callback();
     });
   }

@@ -78,7 +78,7 @@ class ExpertBasicInformation extends React.Component {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  (),
+        Authorization: getLocalToken(),
       },
       body: JSON.stringify(payload),
     }).then(function (response) {

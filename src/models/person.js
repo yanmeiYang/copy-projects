@@ -44,20 +44,19 @@ export default {
   },
 
   effects: {
-    * getPerson({ payload }, { call, put }) {  // eslint-disable-line
+    *getPerson({ payload }, { call, put }) {  // eslint-disable-line
       // console.log('effects: getPerson', payload);
       const { personId } = payload;
       const data = yield call(personService.getPerson, personId);
       yield put({ type: 'getPersonSuccess', payload: { data } });
     },
-    * getActivityAvgScoresByPersonId({ payload }, { call, put }) {
+    *getActivityAvgScoresByPersonId({ payload }, { call, put }) {
       const { id } = payload;
       const { data } = yield call(personService.getActivityAvgScoresByPersonId, id);
       yield put({ type: 'getActivityAvgScoresByPersonIdSuccess', payload: { data } });
     },
-    * getContributionRecalculatedByPersonId({ payload }, { call, put }) {
+    *getContributionRecalculatedByPersonId({ payload }, { call, put }) {
       const { id } = payload;
-      console.log('=============333', id);
       const { data } = yield call(personService.getContributionRecalculatedByPersonId, id);
       yield put({ type: 'getContributionRecalculatedSuccess', payload: { data } });
     },

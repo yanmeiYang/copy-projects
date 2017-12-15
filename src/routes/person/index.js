@@ -30,9 +30,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
       type: 'person/getContributionRecalculatedByPersonId',
       payload: { id: profile.id },
     });
-    console.log('=================5555', person.hint);
   }
-  let hint = ' ';
   const profileTabs = [{
     isShow: sysconfig.ShowRating,
     title: '专家评分',

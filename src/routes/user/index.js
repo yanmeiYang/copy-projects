@@ -17,13 +17,13 @@ const User = ({ location, dispatch, user, loading }) => {
     confirmLoading: loading.effects['user/update'],
     title: `${modalType === 'create' ? 'Create User' : 'Update User'}`,
     wrapClassName: 'vertical-center-modal',
-    onOk(data) {
+    onOk (data) {
       dispatch({
         type: `user/${modalType}`,
         payload: data,
       })
     },
-    onCancel() {
+    onCancel () {
       dispatch({
         type: 'user/hideModal',
       })
@@ -36,7 +36,7 @@ const User = ({ location, dispatch, user, loading }) => {
     pagination,
     location,
     isMotion,
-    onChange(page) {
+    onChange (page) {
       const { query, pathname } = location
       dispatch(routerRedux.push({
         pathname,
@@ -47,13 +47,13 @@ const User = ({ location, dispatch, user, loading }) => {
         },
       }))
     },
-    onDeleteItem(id) {
+    onDeleteItem (id) {
       dispatch({
         type: 'user/delete',
         payload: id,
       })
     },
-    onEditItem(item) {
+    onEditItem (item) {
       dispatch({
         type: 'user/showModal',
         payload: {
@@ -69,7 +69,7 @@ const User = ({ location, dispatch, user, loading }) => {
     filter: {
       ...location.query,
     },
-    onFilterChange(value) {
+    onFilterChange (value) {
       dispatch(routerRedux.push({
         pathname: location.pathname,
         query: {
@@ -79,7 +79,7 @@ const User = ({ location, dispatch, user, loading }) => {
         },
       }))
     },
-    onSearch(fieldsValue) {
+    onSearch (fieldsValue) {
       fieldsValue.keyword.length ? dispatch(routerRedux.push({
         pathname: '/user',
         query: {
@@ -90,7 +90,7 @@ const User = ({ location, dispatch, user, loading }) => {
         pathname: '/user',
       }))
     },
-    onAdd() {
+    onAdd () {
       dispatch({
         type: 'user/showModal',
         payload: {
@@ -98,7 +98,7 @@ const User = ({ location, dispatch, user, loading }) => {
         },
       })
     },
-    switchIsMotion() {
+    switchIsMotion () {
       dispatch({ type: 'user/switchIsMotion' })
     },
   }

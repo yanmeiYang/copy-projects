@@ -4,7 +4,7 @@ import { sysconfig } from 'systems';
 
 import * as strings from 'utils/strings';
 
-import plugins from 'core/plugins';
+import { plugins } from 'core';
 
 const { api } = config;
 

@@ -5,7 +5,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import { System } from 'core/system';
-import plugins from 'core/plugins';
+import { plugins } from 'core';
 
 const theme = require(`themes/${System}/theme-${System}.js`);
 

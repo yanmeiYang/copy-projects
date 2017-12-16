@@ -3,12 +3,13 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Button } from 'antd';
 import { routerRedux, Link } from 'dva/router';
+import { Button } from 'antd';
 import { Layout } from 'routes';
 import { sysconfig } from 'systems';
 import { RequireGod } from 'hoc';
-import { config, system } from 'utils';
+import { system } from 'core';
+import { config } from 'utils';
 import { saveLocale } from 'utils/locale';
 import styles from './2bIndex.less';
 import locales from '../../locales';

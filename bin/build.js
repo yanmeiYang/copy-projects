@@ -1,7 +1,7 @@
 /**
  *  Created by BoGao on 2017-12-15;
  */
-const { AvailableSystems } = require('../src/utils/system');
+const { AvailableSystems } = require('../src/core/system');
 const fs = require('fs');
 
 // console.log('AvailableSystems is: ', AvailableSystems);

@@ -4,7 +4,7 @@
 /* eslint-disable prefer-template,import/no-dynamic-require */
 import React from 'react';
 import classnames from 'classnames';
-import { System } from 'utils/system';
+import { System } from 'core/system';
 import plugins from 'core/plugins';
 
 const theme = require(`themes/${System}/theme-${System}.js`);

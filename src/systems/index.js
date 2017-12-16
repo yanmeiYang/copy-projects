@@ -5,42 +5,20 @@
 import React from 'react';
 import { addLocaleData } from 'react-intl';
 import { loadSavedLocale } from 'utils/locale';
-import { System, Source } from 'utils/system';
+import { System, Source, AvailableSystems } from 'core/system';
 import { TopExpertBase } from 'utils/expert-base';
-import Footer from '../components/Footers/default';
 import defaults from './utils'; // Warning: no zhuo no die.
 
-// All available systems.
-const CurrentSystemConfig = {
-  aminer: require('./aminer/config'),
-  ccf: require('./ccf/config'),
-  ccftest: require('./ccftest/config'),
-  huawei: require('./huawei/config'),
-  alibaba: require('./alibaba/config'),
-  tencent: require('./tencent/config'),
-  cie: require('./cie/config'),
-  cipsc: require('./cipsc/config'),
-  demo: require('./demo/config'),
-  cietest: require('./cietest/config'),
-  bole: require('./bole/config'),
-  acmfellow: require('./acmfellow/config'),
-  DataAnnotation: require('./DataAnnotation/config'),
-  thurcb: require('./thurcb/config'),
-  yocsef: require('./yocsef/config'),
-  med_topic_trend: require('./med_topic_trend/config'),
-  scei: require('./scei/config'),
-};
-
 // 默认配置
-const getDefaultSystemConfigs = (system, source) => {
-  if (!system || !source) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.error('Error! System must be defined! please modify utils/system.js');
-    } else {
-      console.error('System error occurred!');
-    }
-    return;
-  }
+const newDefaultSystemConfigs = (system, source) => {
+  // if (!system || !source) {
+  //   if (process.env.NODE_ENV !== 'production') {
+  //     console.error('Error! System must be defined! please modify utils/system.js');
+  //   } else {
+  //     console.error('System error occurred!');
+  //   }
+  //   return;
+  // }
 
   return {
     SYSTEM: system,
@@ -130,7 +108,7 @@ const getDefaultSystemConfigs = (system, source) => {
     SearchFilterExclude: '', // 'Gender',
     UniSearch_Tabs: null, //  ['list', 'map', 'relation'], // deprecated! Don't use this.
 
-    UserAuthSystem: system, // aminer 或者是 system.config
+    UserAuthSystem: system, // aminer 或者是 system.config; TODO 不要用system，用aminer或者2b.
     UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签, 目前没用到
 
 
@@ -198,23 +176,52 @@ const getDefaultSystemConfigs = (system, source) => {
 };
 
 /***************************************************
- * Combine
+ * Systems
  **************************************************/
-const sysconfig = getDefaultSystemConfigs(System, Source);
-const currentSystem = CurrentSystemConfig[System];
-if (!currentSystem) {
-  if (process.env.NODE_ENV !== 'production') {
-    throw new Error(`System Error! Config file not found! "systems/${System}/config.js"`);
-  } else {
-    throw new Error('System config not found!');
-  }
-}
 
-// override configs.
-Object.keys(currentSystem).map((key) => {
-  sysconfig[key] = currentSystem[key];
-  return null;
-});
+let defaultSystemConfig;
+let allSystemConfigs;
+
+const getDefaultSystemConfig = () => {
+  if (!defaultSystemConfig) {
+    defaultSystemConfig = newDefaultSystemConfigs(System, Source);
+  }
+  return defaultSystemConfig;
+};
+
+const getAllSystemConfigs = () => {
+  const defaultConfig = getDefaultSystemConfig(System, Source); // don't modify it's value.
+  if (!allSystemConfigs) {
+    allSystemConfigs = AvailableSystems && AvailableSystems.map(sys => ({
+      ...defaultConfig,
+      SYSTEM: sys,
+      SOURCE: sys,
+      UserAuthSystem: defaultConfig.UserAuthSystem === 'aminer' ? 'aminer' : sys,
+      ...require('./' + sys + '/config'),
+    }));
+  }
+  return allSystemConfigs;
+};
+
+const generateCurrentSystemConfig = () => {
+  const currentSystem = require('./' + System + '/config');
+  if (!currentSystem) {
+    if (process.env.NODE_ENV !== 'production') {
+      throw new Error(`System Error! Config file not found! "systems/${System}/config.js"`);
+    } else {
+      throw new Error('System config not found!');
+    }
+  }
+  const defaultConfig = getDefaultSystemConfig(System, Source); // don't modify it's value.
+
+  // simple override.
+  return { ...defaultConfig, ...currentSystem };
+};
+
+
+// Main
+
+const sysconfig = generateCurrentSystemConfig();
 
 /***************************************************
  * load & Override language from localStorage.
@@ -224,4 +231,8 @@ if (sysconfig.EnableLocalLocale) {
 }
 addLocaleData('react-intl/locale-data/' + sysconfig.Locale);
 
-module.exports = { sysconfig, getDefaultSystemConfigs, CurrentSystemConfig };
+module.exports = {
+  sysconfig,
+  getDefaultSystemConfig,
+  getAllSystemConfigs,
+};

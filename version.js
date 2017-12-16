@@ -1,3 +1,4 @@
+// NOTE: Need node 8.x
 const fs = require('fs');
 const path = require('path');
 const beautify = require('js-beautify').js_beautify;

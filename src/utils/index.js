@@ -7,7 +7,6 @@ import apiBuilder from './next-api-builder';
 import { color } from './theme';
 import * as TopExpertBase from './expert-base';
 import * as reflect from './reflect';
-import * as system from './system';
 import * as hole from './hole';
 import { compare } from './compare';
 import {
@@ -97,7 +96,6 @@ const createURL = (path, params, newParams) => {
 
 module.exports = {
   config,
-  system,
   hole,
   classnames,
 

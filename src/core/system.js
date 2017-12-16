@@ -60,6 +60,16 @@ try {
     'color:white;background-color:orange;padding:1px 4px;', System);
 }
 
+// check available
+if (AvailableSystems.indexOf(System) <= 0) {
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('%cSystem [%s] is invalid, available:%v',
+      'color:white;background-color:orange;padding:1px 4px;', System, AvailableSystems);
+  }
+  throw new Error('System [%s] is invalid! Please check your code.');
+}
+
+
 let Source = System; // AppID, Used in UniversalConfig.
 
 const SavedSystemKey = 'IJFEOVSLKDFJ';

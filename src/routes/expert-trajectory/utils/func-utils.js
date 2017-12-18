@@ -31,7 +31,7 @@ const cacheInfo = (domainId, callback) => {
             img.src = blankAvatar;
           };
           const { aid, pid } = data[y];
-          infoCache[y] = { aid, pid };
+          infoCache[y] = { aid, pid, year: y, name: author.name };
           imageCache[author.id] = img;
           paperCache[paper.id] = paper.title;
         }
@@ -62,31 +62,6 @@ const getType = (obj) => {
   return map[toString.call(obj)];
 };
 
-const deepClone = (data) => {
-  const type = getType(data);
-  let obj;
-  if (type === 'array') {
-    obj = [];
-  } else if (type === 'object') {
-    obj = {};
-  } else {
-    //不再具有下一层次
-    return data;
-  }
-  if (type === 'array') {
-    for (let i = 0, len = data.length; i < len; i += 1) {
-      obj.push(deepClone(data[i]));
-    }
-  } else if (type === 'object') {
-    for (const key in data) {
-      if (key) {
-        obj[key] = deepClone(data[key]);
-      }
-    }
-  }
-  return obj;
-};
-
 const deepCopyImage = (imageId, size) => { //图像深度拷贝
   let img = imageCache[imageId];
   const image = new Image(); //进行深拷贝,
@@ -98,6 +73,16 @@ const deepCopyImage = (imageId, size) => { //图像深度拷贝
   image.name = img.name;
   image.width = img.width;
   return image;
+};
+
+const copyImage = (imageId, divId, size) => {
+  const doc = document.getElementById(divId); //必定会有两个
+  if (!doc) {
+    return;
+  }
+  const image = deepCopyImage(imageId, size);
+  doc.innerHTML = '';
+  doc.appendChild(image);
 };
 
 const randomColor = (num) => { //选择不重复的颜色
@@ -146,6 +131,6 @@ const findBest = (id) => {
 };
 
 module.exports = {
-  randomColor, loadEchartsWithBMap, findBest, deepCopyImage, cacheInfo,
+  randomColor, loadEchartsWithBMap, findBest, deepCopyImage, cacheInfo, copyImage,
   paperCache, infoCache, imageCache,
 };

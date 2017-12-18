@@ -6,7 +6,7 @@ import { Slider, InputNumber, Row, Col, Button, Icon } from 'antd';
 import { routerRedux, Link, withRouter } from 'dva/router';
 import styles from './ExpertHeatmap.less';
 import { showChart } from './utils/echarts-utils';
-import { loadEchartsWithBMap, cacheInfo, paperCache, infoCache, imageCache, } from './utils/func-utils';
+import { loadEchartsWithBMap, cacheInfo, paperCache, infoCache, copyImage, } from './utils/func-utils';
 
 let myChart;
 let trajInterval;
@@ -74,6 +74,10 @@ class ExpertHeatmap extends React.Component {
       return true;
     }
     return false;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    this.showImage();
   }
 
   onClick = () => {
@@ -182,13 +186,36 @@ class ExpertHeatmap extends React.Component {
       field = '';
     }
     myChart.setOption({ title: { text: `${this.state.currentYear}年 ${field} 学者迁徙图` } });
-
-    //加入具体的时间
-
   };
 
   handleErr = (e) => {
     e.target.src = '/images/blank_avatar.jpg';
+  };
+
+  rearrangeData = (data, startEnd, cy) => {
+    if (!startEnd) {
+      return [];
+    }
+    const [startYear, endYear] = startEnd;
+    let authors = [];
+    for (let y = startYear; y <= endYear; y += 1) {
+      if (y in data) {
+        authors.push(data[y]);
+      } else {
+        authors.push({ aid: '', pid: '', year: y, name: '' });
+      }
+    }
+    authors = [].concat(authors.slice(cy - startYear), authors.slice(0, cy - startYear));
+    return authors;
+  };
+
+  showImage = () => {
+    for (const info in infoCache) {
+      if (info) {
+        const id = `year${infoCache[info].year}${infoCache[info].aid}`;
+        copyImage(infoCache[info].aid, id, 90);
+      }
+    }
   };
 
   render() {
@@ -227,20 +254,12 @@ class ExpertHeatmap extends React.Component {
     let info = '';
     let paperId = '';
     let paper = '';
-    const authors = [];
+    let authors = [];
     if (this.state.currentYear in infoCache) {
       info = infoCache[this.state.currentYear];
       paperId = info.pid;
       paper = paperCache[paperId];
-      for (let n = this.state.currentYear; n <= endYear; n += 1) {
-        authors.push(infoCache[n]);
-      }
-      for (let n = this.state.currentYear; n <= endYear; n += 1) {
-        authors.push(infoCache[n]);
-      }
-      // for (let n = this.state.currentYear; n <= 0; n -= 1) {
-      //   authors.push(infoCache[n]);
-      // }
+      authors = this.rearrangeData(infoCache, startEnd, this.state.currentYear);
     }
 
     return (
@@ -249,17 +268,20 @@ class ExpertHeatmap extends React.Component {
         <div className={styles.whole}>
           <div className={styles.heatmap} id="chart" />
           <div className={styles.info} style={{ backgroundColor: color }}>
-            {persons && persons.slice(0, 20).map((person) => {
+            {authors && authors.map((a) => {
+              const id = `year${a.year}${a.aid}`;
+              const border = (this.state.currentYear === parseInt(a.year, 10)) ? '2px solid yellow' : '2px solid white';
+              console.log(border);
               return (
-                <div key={person.id}>
-                  <div className={styles.imgBox}>
-                    <img src={person.avatar} alt="" onKeyDown={() => {
-                    }} onError={this.handleErr} onClick={() => {
-                    }} />
+                <div key={id} className={styles.allBox}>
+                  <div className={styles.imgBox} id={id} style={{ border }}>
+                    {/*<img src={person.avatar} alt="" onKeyDown={() => {*/}
+                    {/*}} onError={this.handleErr} onClick={() => {*/}
+                    {/*}} />*/}
                   </div>
                   <div className={styles.nameBox}>
-                    <div className={styles.name} style={{ color }}>
-                      {person.name}
+                    <div className={styles.name} style={{ color, border }}>
+                      {a.name}
                     </div>
                   </div>
                 </div>
@@ -270,8 +292,9 @@ class ExpertHeatmap extends React.Component {
             <div className={styles.year}>{this.state.currentYear}:</div>
             {paper}
             <br />
-            <a href={`https://www.aminer.cn/archive/${paperId}`}
-               target="_blank"><Icon type="file" />查看文章</a>
+            <a href={`https://www.aminer.cn/archive/${paperId}`} target="_blank">
+              <Icon type="file" />查看文章
+            </a>
           </div>
         </div>
         <div className={styles.dinner}>

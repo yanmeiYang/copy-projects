@@ -2,17 +2,20 @@ import React from 'react';
 import { connect } from 'dva';
 import queryString from 'query-string';
 import { sysconfig } from 'systems';
-import { Slider, InputNumber, Row, Col, Button, Icon } from 'antd';
+import { Slider, InputNumber, Row, Col, Button, Tooltip, Icon, Modal } from 'antd';
+import { FormattedMessage as FM } from 'react-intl';
 import { routerRedux, Link, withRouter } from 'dva/router';
+import bridge from 'utils/next-bridge';
 import styles from './ExpertHeatmap.less';
 import { showChart } from './utils/echarts-utils';
 import { loadEchartsWithBMap, cacheInfo, paperCache, infoCache, copyImage, } from './utils/func-utils';
+import { PersonList } from '../../components/person';
 
 let myChart;
 let trajInterval;
 
 
-@connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
+@connect(({ expertTrajectory, loading, app }) => ({ expertTrajectory, loading, app }))
 @withRouter
 class ExpertHeatmap extends React.Component {
   constructor(props) {
@@ -24,6 +27,8 @@ class ExpertHeatmap extends React.Component {
     ifPlay: 'play-circle',
     currentYear: 2000,
     isCaching: false,
+    visible: false,
+    cperson: '',
   };
 
   componentWillMount() {
@@ -218,6 +223,28 @@ class ExpertHeatmap extends React.Component {
     }
   };
 
+  showPersonelInfo = (id) => {
+    const person = this.props.expertTrajectory.heatData.personsInfo[id];
+    this.setState({
+      visible: true,
+      cperson: person,
+    }, () => {
+
+    });
+  };
+
+  handleOk = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleCancel = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+
   render() {
     const { ifPlay } = this.state;
     const { personsInfo, startEnd } = this.props.expertTrajectory.heatData;
@@ -259,8 +286,19 @@ class ExpertHeatmap extends React.Component {
       info = infoCache[this.state.currentYear];
       paperId = info.pid;
       paper = paperCache[paperId];
-      authors = this.rearrangeData(infoCache, startEnd, this.state.currentYear);
     }
+    authors = this.rearrangeData(infoCache, startEnd, this.state.currentYear);
+    const personInfo = bridge.toNextPersons([this.state.cperson]);
+    const authorJsx = (
+      <div className={styles.charts}>
+        <PersonList
+          className={styles.personList}
+          persons={personInfo}
+          user={this.props.app.user}
+          rightZoneFuncs={[]}
+        />
+      </div>
+    );
 
     return (
       <div>
@@ -271,16 +309,19 @@ class ExpertHeatmap extends React.Component {
             {authors && authors.map((a) => {
               const id = `year${a.year}${a.aid}`;
               const border = (this.state.currentYear === parseInt(a.year, 10)) ? '2px solid yellow' : '2px solid white';
-              console.log(border);
+              const tooltip = `Year ${a.year}`;
               return (
                 <div key={id} className={styles.allBox}>
-                  <div className={styles.imgBox} id={id} style={{ border }}>
-                    {/*<img src={person.avatar} alt="" onKeyDown={() => {*/}
-                    {/*}} onError={this.handleErr} onClick={() => {*/}
-                    {/*}} />*/}
-                  </div>
+                  <Tooltip title={tooltip}>
+                    <div className={styles.imgBox} id={id} style={{ border }}>
+                      {/*<img src={person.avatar} alt="" onKeyDown={() => {*/}
+                      {/*}} onError={this.handleErr} onClick={() => {*/}
+                      {/*}} />*/}
+                    </div>
+                  </Tooltip>
                   <div className={styles.nameBox}>
-                    <div className={styles.name} style={{ color, border }}>
+                    <div className={styles.name} style={{ color, border }} role="presentation"
+                         onKeyDown={() => {}} onClick={this.showPersonelInfo.bind(this, a.aid)}>
                       {a.name}
                     </div>
                   </div>
@@ -290,11 +331,18 @@ class ExpertHeatmap extends React.Component {
           </div>
           <div className={styles.paper}>
             <div className={styles.year}>{this.state.currentYear}:</div>
-            {paper}
-            <br />
-            <a href={`https://www.aminer.cn/archive/${paperId}`} target="_blank">
-              <Icon type="file" />查看文章
-            </a>
+            {paper && paper}
+            {paper &&
+            <div>
+              <br />
+              <a href={`https://www.aminer.cn/archive/${paperId}`} target="_blank">
+                <Icon type="file" />See Paper in Detail
+              </a>
+            </div>
+            }
+            {!paper &&
+            <div>No Paper Published!</div>
+            }
           </div>
         </div>
         <div className={styles.dinner}>
@@ -314,6 +362,22 @@ class ExpertHeatmap extends React.Component {
               />
             </Col>
           </Row>
+        </div>
+        <div className={styles.showInfo}>
+          <Modal
+            title="Information"
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+            footer={[
+              <Button key="submit" type="primary" size="large" onClick={this.handleOk}>
+                <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.ok" />
+              </Button>,
+            ]}
+            width="600px"
+          >
+            <div className={styles.authorInfo}>{authorJsx && authorJsx}</div>
+          </Modal>
         </div>
       </div>
     );

@@ -1,5 +1,6 @@
 import { loadECharts, loadBMap } from 'utils/requirejs';
 import { wget } from 'utils/request2';
+import { sysconfig } from 'systems';
 
 //----------------------------------------datas
 const color1 = ['#990033', '#CC6699', '#FF6699', '#FF3366', '#993366', '#CC0066', '#CC0033', '#FF0066', '#FF0033', '#CC3399', '#FF3399', '#FF9999', '#FF99CC', '#FF0099', '#CC3366', '#FF66CC', '#FF33CC', '#FFCCFF', '#FF99FF', '#FF00CC'];
@@ -33,33 +34,17 @@ const cacheInfo = (domainId, callback) => {
           const { aid, pid } = data[y];
           infoCache[y] = { aid, pid, year: y, name: author.name };
           imageCache[author.id] = img;
-          paperCache[paper.id] = paper.title;
+          let paperInfo = `${paper.title}. `;
+          for (const a of paper.authors) {
+            paperInfo += `${a.name},`;
+          }
+          paperInfo = `${paperInfo.slice(0, paperInfo.length - 1)}.(${paper.year})`
+          paperCache[paper.id] = paperInfo;
         }
       }
       callback();
     });
   }
-};
-
-const getType = (obj) => {
-  //tostring会返回对应不同的标签的构造函数
-  const { toString } = Object.prototype;
-  const map = {
-    '[object Boolean]': 'boolean',
-    '[object Number]': 'number',
-    '[object String]': 'string',
-    '[object Function]': 'function',
-    '[object Array]': 'array',
-    '[object Date]': 'date',
-    '[object RegExp]': 'regExp',
-    '[object Undefined]': 'undefined',
-    '[object Null]': 'null',
-    '[object Object]': 'object',
-  };
-  if (obj instanceof Element) {
-    return 'element';
-  }
-  return map[toString.call(obj)];
 };
 
 const deepCopyImage = (imageId, size) => { //图像深度拷贝
@@ -72,6 +57,10 @@ const deepCopyImage = (imageId, size) => { //图像深度拷贝
   image.src = img.src;
   image.name = img.name;
   image.width = img.width;
+  image.addEventListener('click', () => {
+    const personLinkParams = { href: sysconfig.PersonList_PersonLink(imageId) };
+    window.open(personLinkParams.href, '_blank');
+  });
   return image;
 };
 

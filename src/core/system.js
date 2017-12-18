@@ -29,7 +29,7 @@ let System;
 System = 'demo';
 // System = 'DataAnnotation';
 
-System = 'bole';
+// System = 'bole';
 // System = 'ccf';
 // System = 'ccftest';
 // System = 'huawei';

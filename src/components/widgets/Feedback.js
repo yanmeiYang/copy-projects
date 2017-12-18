@@ -15,6 +15,7 @@ class Feedback extends React.Component {
   state = {
     visible: false,
     formFocus: false,
+    focus: false,
   };
 
 // componentDidUpdate(prevProps) {
@@ -31,21 +32,31 @@ class Feedback extends React.Component {
     }
   }
 
+  onfocus = () => {
+    this.setState({ focus: true });
+  };
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        const data = values;
-        this.props.dispatch({
-          type: 'app/setFeedback',
-          payload: { ...data, user: this.props.user, url: window.location.href },
-        });
+        if (values.content) {
+          const data = values;
+          this.props.dispatch({
+            type: 'app/setFeedback',
+            payload: { ...data, user: this.props.user, url: window.location.href },
+          });
+        }
       }
     });
   };
 
   closePopover = () => {
-    this.setState({ visible: false });
+    this.props.form.setFieldsValue({
+      email: '',
+      content: '',
+    });
+    this.setState({ visible: false, focus: false, warn: false });
   };
 
   openPopover = () => {
@@ -54,8 +65,8 @@ class Feedback extends React.Component {
 
   mouseLeave = () => {
     const values = this.props.form.getFieldsValue();
-    if (!values.email && !values.content) {
-      this.setState({ visible: false });
+    if (!this.state.focus && !values.email && !values.content) {
+      this.setState({ visible: false, warn: false });
     }
   };
 
@@ -71,7 +82,6 @@ class Feedback extends React.Component {
         this.setState({ visible: false });
       }
     }, 200);
-
   };
 
 
@@ -90,15 +100,15 @@ class Feedback extends React.Component {
           {getFieldDecorator('email', {
             rules: [{ type: 'email', message: '邮箱格式错误!' }],
           })(
-            <Input placeholder="请输入您的email!" className={styles.inputBox} autoComplete="off" />,
+            <Input placeholder="请输入您的email!" onFocus={this.onfocus}
+                   className={styles.inputBox} autoComplete="off" />,
           )}
         </FormItem>
         <FormItem
         >
-          {getFieldDecorator('content', {
-            rules: [{ required: true, message: 'Please input your content' }],
-          })(
-            <TextArea rows={4} placeholder="请输入您的宝贵意见和建议!" />,
+          {getFieldDecorator('content', {})(
+            <TextArea rows={4} placeholder="请输入您的宝贵意见和建议!"
+                      onFocus={this.onfocus} required />,
           )}
         </FormItem>
         <FormItem className={styles.submitBtn}>

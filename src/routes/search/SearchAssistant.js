@@ -109,12 +109,12 @@ export default class SearchAssistant extends Component {
 
   onTranslationChange = (index) => {
     this.setState({
-      currentTranslationChecked: this.state.currentTranslationChecked === index + 1 ? 0 : index + 1,
+      currentTranslationChecked: this.state.currentTranslationChecked === index ? 0 : index,
     });
 
-    if (index + 1 !== this.state.currentExpansionChecked) {
+    if (index !== this.state.currentExpansionChecked) {
       this.setState({
-        currentExpansionChecked: index + 1,
+        currentExpansionChecked: index,
         kgLoading: true,
         checkedList: [],
       });
@@ -260,11 +260,6 @@ export default class SearchAssistant extends Component {
     }
     const { expands, transText, transLang } = assistantData;
 
-    // console.log('9999999:::: ------------------------------------------- ',);
-    // console.log('9999999::::  ', currentExpansionChecked, currentTranslationChecked, keywordTranslationChecked);
-    // console.log('9999999:::: assistantData ', assistantData);
-    // console.log('9999999:::: assistantDataMeta ', assistantDataMeta);
-
     // if has value.
     const hasExpansion = expands && expands.length > 0;
     const hasTranslation = expands && expands.filter(item => item.word_zh).length > 0;
@@ -284,45 +279,48 @@ export default class SearchAssistant extends Component {
 
         <div className={styles.box}>
 
-          <div className={classnames({ [styles.w]: true, [styles.zh]: sysconfig.Locale === 'zh' })}>
+          <div
+            className={classnames({ [styles.w]: true, [styles.zh]: sysconfig.Locale === 'zh' })}>
             {hasExpansion &&
-              <FM defaultMessage="We automatically expanded it to"
-                  id="com.search.searchAssistant.hintInfo.expansion" />
+            <FM defaultMessage="We automatically expanded it to"
+                id="com.search.searchAssistant.hintInfo.expansion" />
             }
             {hasTranslation &&
-              <FM defaultMessage="We also search for"
-                  id="com.search.searchAssistant.hintInfo.translation" />
+            <FM defaultMessage="We also search for"
+                id="com.search.searchAssistant.hintInfo.translation" />
             }
           </div>
 
           <div className={styles.leftBox}>
+            <div className={styles.expendWords}>
             {hasExpansion && expands.map((item, index) => {
               const key = `${item}_${index}`;
               return (
                 <div key={key}>
-                  <div>
-                    <span className={styles.rightbox}>
-                      <Checkbox
-                        checked={currentExpansionChecked === index + 1}
-                        onChange={this.onExpandedTermChange.bind(this, index)}
-                      >{item.word}
-                      </Checkbox>
-                    </span>
-                  </div>
-                  {hasTranslation && item.word_zh &&
-                  <div>
-                    <span className={styles.rightbox}>
-                      <Checkbox
-                        checked={currentTranslationChecked === index + 1 ? index + 1 : 0}
-                        onChange={this.onTranslationChange.bind(this, index)}
-                      >{item.word_zh}
-                      </Checkbox>
-                    </span>
-                  </div>
-                  }
+                  <span className={styles.rightbox}>
+                    <Checkbox
+                      checked={currentExpansionChecked === index + 1}
+                      onChange={this.onExpandedTermChange.bind(this, index)}
+                    >{item.word}
+                    </Checkbox>
+                  </span>
                 </div>
               );
             })}
+            </div>
+            {hasTranslation && expands.length > 0 &&
+            expands[this.state.currentExpansionChecked - 1] &&
+            expands[this.state.currentExpansionChecked - 1].word_zh &&
+            <div>
+              <span className={styles.rightbox}>
+                <Checkbox
+                  checked={currentTranslationChecked === this.state.currentExpansionChecked}
+                  onChange={this.onTranslationChange.bind(this, this.state.currentExpansionChecked)}
+                >{expands[this.state.currentExpansionChecked - 1].word_zh}
+                </Checkbox>
+              </span>
+            </div>
+            }
           </div>
 
           {hasExpansion && false && // TODO temp disable more button.

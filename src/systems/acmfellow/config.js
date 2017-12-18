@@ -78,14 +78,6 @@ module.exports = {
 
   Search_CheckEB: true, // Check ExpertBase.
 
-  // NextAPI-QueryHooks:
-  APIPlugin_ExpertSearch: {
-    parameters: {
-      aggregation: ['dims.systag'],
-      haves: { systag: [] },
-    },
-  },
-
   // 地图中心点
   // CentralPosition: { lat: 37.09024, lng: -95.712891 },
 

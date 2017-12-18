@@ -174,16 +174,16 @@ const F = {
 
 
 // ------------------ Helper Functions --------------------------
-
-const applyPlugin = (nextapi, pluginConfig) => {
-  if (!nextapi || !pluginConfig) {
-    return false;
-  }
-  nextapi.addParam(pluginConfig.parameters);
-  nextapi.addSchema(pluginConfig.schema);
-  // TODO ... merge filters, sorts, havings, etc...
-  return nextapi;
-};
+//
+// const applyPlugin = (nextapi, pluginConfig) => {
+//   if (!nextapi || !pluginConfig) {
+//     return false;
+//   }
+//   nextapi.addParam(pluginConfig.parameters);
+//   nextapi.addSchema(pluginConfig.schema);
+//   // TODO ... merge filters, sorts, havings, etc...
+//   return nextapi;
+// };
 
 
 const filterByEBs = (nextapi, ebs) => {
@@ -230,40 +230,5 @@ const filtersToQuery = (nextapi, searchFiltersFromAggregation) => {
 
 module.exports = {
   apiBuilder, F,
-  H: { applyPlugin, filtersToQuery, filterByEBs },
+  H: { filtersToQuery, filterByEBs },
 };
-
-//
-// // TEST
-//
-// const q = apiBuilder.query(F.action.search)
-//   .param({ query: 'data mining', offset: 0, size: 10 })
-//   .param({ searchType: F.searchType.allb })
-//   .param({ aggregation: ['gender', 'h_index', 'location', 'language'] })
-//   .schema({
-//     person: [
-//       'id', 'name', 'name_zh', 'tags', // 'tags_zh', 'tags_trans_zh'
-//       {
-//         profile: [
-//           'position', 'affiliation',
-//           // 'org', 'org_zh', 'bio', 'email', 'edu' ', phone'
-//         ],
-//       },
-//       { indices: F.fields.person.indices_all },
-//     ],
-//   });
-// // .filters(),
-//
-// q.param({
-//   filters: {
-//     dims: {
-//       title: ['sdfsdf'],
-//     },
-//   },
-// });
-//
-// q.mergeParam({ filters: { dims: { title: ['234234'] } } });
-//
-// console.log(q.api);
-// console.log('--------------------------');
-// console.log(JSON.stringify(q.api));

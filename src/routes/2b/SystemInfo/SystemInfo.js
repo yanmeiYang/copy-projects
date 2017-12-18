@@ -1,32 +1,23 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Table, Button } from 'antd';
+import { system } from 'core';
 import { RequireGod } from 'hoc';
-import { getDefaultSystemConfigs, CurrentSystemConfig } from 'systems';
-import { system } from 'utils';
+import { getAllSystemConfigs } from 'systems';
 import styles from './SystemInfo.less';
 
 // TODO @xiaobei 在第一行添加一个按钮，Clear Saved System, 意思是清空已经保存的system. 使用配置文件中的system.
-@connect(({ app }) => ({ app }))
+@connect(({ app }) => ({ app: { user: app.user, roles: app.roles } }))
 @RequireGod
 export default class SystemInfo extends PureComponent {
   onChangeSystem = (sys) => {
     const { user } = this.props.app;
-    console.log('on change sys', sys);
     system.saveSystem(sys, user);
     window.location.reload();
   };
 
   render() {
-    const sysconfigs = system.AvailableSystems.map((sys) => {
-      const conf = getDefaultSystemConfigs(sys, sys);
-      const currentSystem = CurrentSystemConfig[sys];
-      Object.keys(currentSystem).map((key) => {
-        conf[key] = currentSystem[key];
-        return null;
-      });
-      return conf;
-    });
+    const allSystemConfigs = getAllSystemConfigs();
 
     const columns = [
       {
@@ -70,7 +61,7 @@ export default class SystemInfo extends PureComponent {
       },
     ];
 
-    const data = sysconfigs.map((conf) => {
+    const data = allSystemConfigs.map((conf) => {
       return {
         key: conf.SYSTEM,
         logo: conf.SYSTEM,

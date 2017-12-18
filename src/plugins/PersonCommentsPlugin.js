@@ -14,11 +14,24 @@ const pluginsConfigs = [
   //   modules: [registerModules],
   // },
   {
+
+    // 这个plugin会应用在以下router中。
     router: [
       'eb.ExpertBaseExpertsPage', 'eb.ExpertBaseExpertsPageWithPager',
       'search.UniSearch',
     ],
+
+    // router中会自动加上下面的modules。
     modules: [registerModules],
+
+    // additional api search parameters.
+    api_search: {
+      parameters: {
+        aggregation: ['dims.systag'],
+        haves: { systag: [] },
+      },
+    },
+
     // TODO hook system.
     // TODO next-api plugins.
     // TODO Holes config.

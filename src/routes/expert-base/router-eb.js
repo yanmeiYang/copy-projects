@@ -1,4 +1,4 @@
-import { applyPluginModules } from 'themes';
+import { applyPluginModules } from 'core/plugins';
 
 const routerConfig = {
   ExpertBase: {

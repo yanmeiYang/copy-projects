@@ -4,8 +4,7 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Icon, InputNumber, Rate, Tabs, Spin } from 'antd';
-import { Button } from 'antd';
+import { Icon, InputNumber, Rate, Tabs, Spin, message, Button, Tooltip } from 'antd';
 import { Layout } from 'routes';
 import { getTwoDecimal } from 'utils';
 import { ProfileInfo } from 'components/person';
@@ -17,20 +16,26 @@ import styles from './index.less';
 import PersonFeaturedPapers from './person-featured-papers';
 // import ActivityList from '../../components/seminar/activityList';
 const TabPane = Tabs.TabPane;
-const Person = ({ dispatch, person, seminar, publications }) => {
+const Person = ({ dispatch, person, seminar, publications, loading }) => {
   const { profile, avgScores } = person;
   const { results } = seminar;
   const totalPubs = profile.indices && profile.indices.num_pubs;
   const compre = avgScores.filter(score => score.key === 'compre')[0];
   const integrated = avgScores.filter(score => score.key === 'integrated')[0];
   const activity_indices = { compre: compre === undefined ? 0 : compre.score };
-
+  const contributionLoading = loading.effects['person/getContributionRecalculatedByPersonId'];
   const recalculatedContribution = () => {
+      iconLoading = true;
     dispatch({
       type: 'person/getContributionRecalculatedByPersonId',
       payload: { id: profile.id },
+    }).then(() => {
+      if (!contributionLoading) {
+        message.success('重新计算贡献度成功');
+      }
     });
-  }
+  };
+  let iconLoading = false;
   const profileTabs = [{
     isShow: sysconfig.ShowRating,
     title: '专家评分',
@@ -46,10 +51,12 @@ const Person = ({ dispatch, person, seminar, publications }) => {
           <td>贡献度:</td>
           <td>
             {/* <Rate disabled defaultValue={contrib.score}/> */}
-            <span style={{ marginRight: 72 }}>{compre.score}</span>
-            <Button type="primary" size="small"
-                    onClick={recalculatedContribution.bind(this)}>重新计算贡献度
-            </Button>
+            <span style={{ marginRight: 20 }}>{compre.score}</span>
+            <Tooltip title="重新计算贡献度按钮">
+              <Button size="small" loading={iconLoading} icon="retweet"
+                      onClick={recalculatedContribution.bind(this)}>
+              </Button>
+            </Tooltip>
           </td>
         </tr>
         }
@@ -110,7 +117,7 @@ const Person = ({ dispatch, person, seminar, publications }) => {
             );
           })}
         </div>
-      :
+        :
         <div style={{ minHeight: 150, textAlign: 'center' }}>
           <span style={{ fontSize: '32px', color: '#aaa' }}>没有数据</span>
         </div>}
@@ -181,7 +188,6 @@ const Person = ({ dispatch, person, seminar, publications }) => {
     }
   }
 
-  // console.log('|||||||||||| PersonIndex:', person);
   return (
     <Layout searchZone={[]}>
       <div className="content-inner">

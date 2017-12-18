@@ -1,6 +1,8 @@
 /**
  * Created by BoGao on 2017/7/15.
  */
+console.log('============lalala', );
+import { RouterRegistry, RouterRegistry2b, RouterJSXFunc } from 'systems/router-registry';
 import core from 'routes/router-core';
 import search from 'routes/search/router-search';
 import expertBase from 'routes/expert-base/router-eb';
@@ -16,7 +18,6 @@ import map from 'routes/expert-map/router-map';
 import router2bprofile from 'routes/2b-profile/router-2bprofile';
 import profile from 'routes/profile/router-profile';
 
-import { RouterRegistry, RouterRegistry2b, RouterJSXFunc } from '../router-registry';
 
 const routes = [
   ...RouterRegistry2b,

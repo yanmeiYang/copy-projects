@@ -15,8 +15,12 @@
     display: flex; flex-direction: row;
 
     .leftBox {
-      display: flex; flex-direction: row; justify-content: flex-start; flex-wrap: wrap;
+      display: flex; flex-direction: column; justify-content: flex-start; flex-wrap: wrap;
 
+      .expendWords{
+        display: flex;
+        flex-direction: row;
+      }
       .rightBox { display: flex; flex-direction: column; }
 
       .width { width: 290px; }
@@ -79,9 +83,9 @@
   .boxButton {
     margin-top: 8px;
 
-    :global .ant-btn {
-      padding: 0 18px 0 18px; font-size: 12px; height: 24px;
-      //color: @btn-bg-color;
-    }
+    //:global .ant-btn {
+    //  padding: 0 18px 0 18px; font-size: 12px; height: 24px;
+    //  //color: @btn-bg-color;
+    //}
   }
 }

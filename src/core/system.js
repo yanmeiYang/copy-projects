@@ -29,6 +29,7 @@ let System;
 System = 'demo';
 // System = 'DataAnnotation';
 
+System = 'bole';
 // System = 'ccf';
 // System = 'ccftest';
 // System = 'huawei';
@@ -48,7 +49,8 @@ System = 'demo';
 // SPECIAL: USED_IN_ONLINE_DEPLOY; DON'T DELETE THIS LINE.
 // override system with system-override.js
 try {
-  const { OverrideSystem } = require('../../system-overridexx');
+  const { OverrideSystem } = require('../../system-override');
+  System = OverrideSystem;
   if (process.env.NODE_ENV !== 'production') {
     console.log('%cSystem Override to [%s] using OVERRIDE. (original is %s)',
       'color:white;background-color:orange;padding:1px 4px;', OverrideSystem, System);
@@ -57,6 +59,16 @@ try {
   console.log('%cWarning! No System Override found. use system[%s]',
     'color:white;background-color:orange;padding:1px 4px;', System);
 }
+
+// check available
+if (AvailableSystems.indexOf(System) <= 0) {
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('%cSystem [%s] is invalid, available:%v',
+      'color:white;background-color:orange;padding:1px 4px;', System, AvailableSystems);
+  }
+  throw new Error('System [%s] is invalid! Please check your code.');
+}
+
 
 let Source = System; // AppID, Used in UniversalConfig.
 

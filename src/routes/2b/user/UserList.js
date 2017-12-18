@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import { RequireGod } from 'hoc';
+import { system } from 'core';
 import { Table, Tabs, Tag, Button } from 'antd';
-import { system } from '../../../utils';
 import styles from './UserList.less';
 
 const { Column } = Table;

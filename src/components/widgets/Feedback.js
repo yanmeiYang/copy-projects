@@ -40,13 +40,11 @@ class Feedback extends React.Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        if (values.content) {
           const data = values;
           this.props.dispatch({
             type: 'app/setFeedback',
             payload: { ...data, user: this.props.user, url: window.location.href },
           });
-        }
       }
     });
   };
@@ -56,7 +54,7 @@ class Feedback extends React.Component {
       email: '',
       content: '',
     });
-    this.setState({ visible: false, focus: false, warn: false });
+    this.setState({ visible: false, focus: false });
   };
 
   openPopover = () => {
@@ -66,7 +64,7 @@ class Feedback extends React.Component {
   mouseLeave = () => {
     const values = this.props.form.getFieldsValue();
     if (!this.state.focus && !values.email && !values.content) {
-      this.setState({ visible: false, warn: false });
+      this.setState({ visible: false });
     }
   };
 

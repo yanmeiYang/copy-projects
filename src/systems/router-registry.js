@@ -30,6 +30,7 @@ import profile from 'routes/profile/router-profile';
 import crossHeat from 'routes/cross-heat/router-ch';
 import dataAnnotation from 'routes/data-annotation/router-da';
 import topicRelation from 'routes/topic-relation/router-relation';
+import toolsCompare from 'routes/tools-compare/router-toolscompare';
 
 if (process.env.NODE_ENV !== 'production' && themes) {
   console.log('Registered plugins: ', themes.plugins);
@@ -40,7 +41,8 @@ const { ConnectedRouter } = routerRedux;
 // Full Routers
 const RouterRegistry = [
   core.IndexPage,
-
+  // toolsCompare is goint to be added
+  toolsCompare.ComparePage,
   // search
   search.ExpertSearch,
   search.UniSearch,

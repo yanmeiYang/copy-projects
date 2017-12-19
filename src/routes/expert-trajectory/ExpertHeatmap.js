@@ -302,7 +302,6 @@ class ExpertHeatmap extends React.Component {
 
     return (
       <div>
-        {/*<Spinner loading={loading} />*/}
         <div className={styles.whole}>
           <div className={styles.heatmap} id="chart" />
           <div className={styles.info} style={{ backgroundColor: color }}>
@@ -313,11 +312,7 @@ class ExpertHeatmap extends React.Component {
               return (
                 <div key={id} className={styles.allBox}>
                   <Tooltip title={tooltip}>
-                    <div className={styles.imgBox} id={id} style={{ border }}>
-                      {/*<img src={person.avatar} alt="" onKeyDown={() => {*/}
-                      {/*}} onError={this.handleErr} onClick={() => {*/}
-                      {/*}} />*/}
-                    </div>
+                    <div className={styles.imgBox} id={id} style={{ border }} />
                   </Tooltip>
                   <div className={styles.nameBox}>
                     <div className={styles.name} style={{ color, border }} role="presentation"

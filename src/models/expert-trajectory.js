@@ -333,6 +333,7 @@ export default {
         }
       }
       let [start, end] = [3000, 0];
+      console.log(yearCityIn);
       for (const key in yearCityIn) {
         if (parseInt(key, 10) > end) {
           end = parseInt(key, 10);

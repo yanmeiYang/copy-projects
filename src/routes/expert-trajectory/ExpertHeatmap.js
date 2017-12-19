@@ -120,6 +120,11 @@ class ExpertHeatmap extends React.Component {
   };
 
   onChange = (value) => {
+    let v = parseInt(value, 10);
+    const { startEnd } = this.props.expertTrajectory.heatData;
+    const [startYear, endYear] = startEnd;
+    v = v > endYear ? endYear : v;
+    v = v < startYear ? startYear : v;
     if (typeof (trajInterval) !== 'undefined') {
       clearInterval(trajInterval);
       this.setState({
@@ -127,10 +132,10 @@ class ExpertHeatmap extends React.Component {
       });
     }
     this.setState({
-      currentYear: value,
+      currentYear: v,
     });
     const checkType = typeof (this.props.checkType) === 'undefined' ? [] : this.props.checkType;
-    this.loadHeat(this.props.expertTrajectory.heatData, value, checkType);
+    this.loadHeat(this.props.expertTrajectory.heatData, v, checkType);
   };
 
   initChart = () => {
@@ -343,12 +348,13 @@ class ExpertHeatmap extends React.Component {
         <div className={styles.dinner}>
           <Button className={styles.play} icon={ifPlay} onClick={this.onClick} />
           <Row className={styles.slide}>
-            <Col span={22}>
+            <Col span={22} className={styles.timeLine}>
               <Slider min={startYear} max={endYear} onChange={this.onChange}
                       marks={marks} value={this.state.currentYear} />
             </Col>
-            <Col span={1}>
+            <Col span={1} className={styles.inputNumber}>
               <InputNumber
+                formatter={value => parseInt(value, 10)}
                 min={startYear}
                 max={endYear}
                 style={{ marginLeft: 0 }}

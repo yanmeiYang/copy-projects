@@ -115,7 +115,7 @@ const ifNotImgShowName = (personInfo) => { //当作者的头像是空的时候�
   let flag = false;
   if (personInfo) {
     if ((sysconfig.Locale === 'zh') && personInfo.name_zh) {
-      let str = personInfo.name_zh.replace(/(^\s*)|(\s*$)/g, '');
+      const str = personInfo.name_zh.replace(/(^\s*)|(\s*$)/g, '');
       flag = true;
       name = str;
     } else {
@@ -335,11 +335,11 @@ const syncInfoWindow = () => {
     ai.addEventListener('mouseenter', () => {
       isIn.pop();
       isIn.push(true);
-    },false);
+    }, false);
     ai.addEventListener('mouseleave', () => {
       isIn.pop();
       isIn.push(false);
-    },false);
+    }, false);
   }
 };
 
@@ -358,11 +358,11 @@ function waitforBMap(tryTimes, interval, success, failed) {
     } else {
       clearInterval(mapInterval);
       if (success) {
-        success(BMap);
+        success(window.BMap);
       }
     }
   }, interval);
-};
+}
 
 function waitforBMapLib(tryTimes, interval, success, failed) {
   let n = 0;
@@ -379,11 +379,11 @@ function waitforBMapLib(tryTimes, interval, success, failed) {
     } else {
       clearInterval(mapLibInterval);
       if (success) {
-        success(BMapLib);
+        success(window.BMapLib);
       }
     }
   }, interval);
-};
+}
 
 const backGlobal = (dispatch, model) => {
   const type = 'global';

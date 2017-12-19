@@ -369,10 +369,11 @@ export default class ExpertMap extends PureComponent {
     const { results } = model.geoData;
     let personPopupJsx;
     const person = dataCache[this.state.cperson];
+    console.log(person);
     if (person) {
       const [divId, name] = [`Mid${person.id}`, person.name];
-      const pos = person && person.pos && person.pos[0] && person.pos[0].n;
-      const aff = person && person.aff && person.aff.desc;
+      const pos = person && person.pos && person.pos[0] && (person.pos[0].n || person.pos[0].n_zh);
+      const aff = person && person.aff && (person.aff.desc || person.aff.desc_zh);
       const hindex = person && person.indices && person.indices.h_index;
 
       personPopupJsx = (

@@ -5,7 +5,7 @@ import { Input, Button, message, Form, Icon } from 'antd';
 import * as strings from 'utils/strings';
 import Autosuggest from 'react-autosuggest';
 import { defineMessages, injectIntl } from 'react-intl';
-import classnames from 'classnames';
+import { classnames } from 'utils';
 import { sysconfig } from 'systems';
 import * as kgService from 'services/knoledge-graph-service';
 import * as suggestService from 'services/search-suggest';

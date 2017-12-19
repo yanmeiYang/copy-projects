@@ -253,7 +253,8 @@ function prepareParameters(query, offset, size, filters, sort, useTranslateSearc
         expertBase = filters[k].id;
       } else {
         const newKey = `as_${k.toLowerCase().replace(' ', '_').replace('-', '_')}`;
-        data[newKey] = filters[k];
+        const mappedKey = new2oldFilterValueMap[newKey] || newKey;
+        data[mappedKey] = filters[k];
       }
     });
     // data = { ...data, ...newFilters };

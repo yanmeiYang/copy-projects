@@ -14,6 +14,9 @@
 	cd 需要上线的系统的名称               //例如：cd ccf
 	rm -rf *                          // 删除ccf目录下的所有文件，注意：**一定要在当前系统目录下**
 	cp -r ../../aminer2b-next-api/dist/* .     //文件拷贝
+	------------	
+    // vi src/utils/system.js; npm run build 两行命令可以替换为下面一行命令
+    system=<sourceName> yarn run build:deploy
 	
 ##### aws上部署
 

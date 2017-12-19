@@ -7,6 +7,7 @@ import { connect } from 'dva';
 import { Icon, InputNumber, Rate, Tabs, Spin, message, Button, Tooltip } from 'antd';
 import { Layout } from 'routes';
 import { getTwoDecimal } from 'utils';
+import * as auth from 'utils/auth';
 import { ProfileInfo } from 'components/person';
 import { Indices } from 'components/widgets';
 import NewActivityList from 'components/seminar/newActivityList';
@@ -16,26 +17,28 @@ import styles from './index.less';
 import PersonFeaturedPapers from './person-featured-papers';
 // import ActivityList from '../../components/seminar/activityList';
 const TabPane = Tabs.TabPane;
-const Person = ({ dispatch, person, seminar, publications, loading }) => {
+const Person = ({ roles, dispatch, person, seminar, publications, loading }) => {
   const { profile, avgScores } = person;
   const { results } = seminar;
   const totalPubs = profile.indices && profile.indices.num_pubs;
   const compre = avgScores.filter(score => score.key === 'compre')[0];
   const integrated = avgScores.filter(score => score.key === 'integrated')[0];
   const activity_indices = { compre: compre === undefined ? 0 : compre.score };
+
   const contributionLoading = loading.effects['person/getContributionRecalculatedByPersonId'];
+
   const recalculatedContribution = () => {
-      iconLoading = true;
     dispatch({
       type: 'person/getContributionRecalculatedByPersonId',
       payload: { id: profile.id },
-    }).then(() => {
-      if (!contributionLoading) {
+    }).then((data) => {
+      if (data.status) {
+        dispatch({ type: 'person/getActivityAvgScoresByPersonIdSuccess', payload: { data } });
         message.success('重新计算贡献度成功');
       }
     });
   };
-  let iconLoading = false;
+
   const profileTabs = [{
     isShow: sysconfig.ShowRating,
     title: '专家评分',
@@ -52,11 +55,13 @@ const Person = ({ dispatch, person, seminar, publications, loading }) => {
           <td>
             {/* <Rate disabled defaultValue={contrib.score}/> */}
             <span style={{ marginRight: 20 }}>{compre.score}</span>
+            {auth.isSuperAdmin(roles) &&
             <Tooltip title="重新计算贡献度按钮">
-              <Button size="small" loading={iconLoading} icon="retweet"
-                      onClick={recalculatedContribution.bind(this)}>
+              <Button size="small" loading={contributionLoading}
+                      onClick={recalculatedContribution}>
+                <i className="fa fa-retweet" />
               </Button>
-            </Tooltip>
+            </Tooltip>}
           </td>
         </tr>
         }
@@ -219,7 +224,8 @@ const Person = ({ dispatch, person, seminar, publications, loading }) => {
   );
 };
 // export default connect()(Person);
-export default connect(({ person, loading, seminar, publications }) => ({
+export default connect(({ app, person, loading, seminar, publications }) => ({
+  roles: app.roles,
   person,
   loading,
   seminar,

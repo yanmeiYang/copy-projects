@@ -90,24 +90,44 @@ export default class Seminar extends React.Component {
     });
   };
 
-  getMoreSeminar = () => {
+  getMoreSeminar = (size, key) => {
     const { offset, query, sizePerPage } = this.props.seminar;
-    const { organizer, category } = this.state;
+    const { organizer, category, sortType } = this.state;
+
+    let finalOffset = 0;
+    if ((size && typeof size === 'number') || size === 0) {
+      finalOffset = size;
+    } else {
+      finalOffset = offset;
+    }
+
+    let sort = '';
+    if (key) {
+      sort = key === 'time' ? '' : key;
+    } else {
+      sort = sortType === 'time' ? '' : sortType;
+    }
     if (query || organizer || category) {
       const params = {
         query,
-        offset,
+        offset: finalOffset,
         size: sizePerPage,
         src: sysconfig.SOURCE,
         organizer,
         category,
+        sort,
       };
       this.props.dispatch({ type: 'seminar/searchActivity', payload: params });
     } else {
       const params = {
-        offset,
+        offset: finalOffset,
         size: sizePerPage,
-        filter: { src: sysconfig.SOURCE, organizer, category },
+        filter: {
+          src: sysconfig.SOURCE,
+          organizer,
+          category,
+          sort,
+        },
       };
       this.props.dispatch({ type: 'seminar/getSeminar', payload: params });
     }
@@ -209,6 +229,7 @@ export default class Seminar extends React.Component {
 
   onTabsChange = (key) => {
     this.setState({ sortType: key });
+    this.getMoreSeminar(0, key);
   };
 
   render() {
@@ -225,21 +246,20 @@ export default class Seminar extends React.Component {
       showTip = '暂无数据';
     }
     const { organizer, category, tag, orgType, sortType } = this.state;
-    console.log('=============== organizer ==========', organizer);
-    const compare = (property) => {
-      return (a, b) => {
-        let val1 = a[property];
-        let val2 = b[property];
-        if (property === 'time') {
-          val1 = a[property].from;
-          val2 = b[property].from;
-        }
-        return new Date(val2) - new Date(val1);
-      };
-    };
-    if (results && results.length > 0) {
-      results.sort(compare(sortType));
-    }
+    // const compare = (property) => {
+    //   return (a, b) => {
+    //     let val1 = a[property];
+    //     let val2 = b[property];
+    //     if (property === 'time') {
+    //       val1 = a[property].from;
+    //       val2 = b[property].from;
+    //     }
+    //     return new Date(val2) - new Date(val1);
+    //   };
+    // };
+    // if (results && results.length > 0) {
+    //   results.sort(compare(sortType));
+    // }
     return (
       <Layout contentClass={tc(['seminar'])} searchZone={[]}>
         <div className="content-inner">
@@ -373,7 +393,7 @@ export default class Seminar extends React.Component {
                       return (
                         <div key={result.id + Math.random()}>
                           {(app.roles.authority.indexOf(result.organizer[0]) >= 0
-                            || auth.isSuperAdmin(app.roles))
+                          || auth.isSuperAdmin(app.roles))
                           && <Button type="danger" icon="delete" size="small"
                                      className={styles.delSeminarBtn}
                                      onClick={this.delTheSeminar.bind(this, result, index)}>
@@ -387,7 +407,7 @@ export default class Seminar extends React.Component {
                   }
                   {!loading && results.length >= (offset - 2) &&
                   <Button type="primary" className="getMoreActivities"
-                          onClick={this.getMoreSeminar.bind()}>
+                          onClick={this.getMoreSeminar.bind(this)}>
                     More
                   </Button>}
                 </div>

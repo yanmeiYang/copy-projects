@@ -12,13 +12,7 @@ module.exports = {
   PageTitle: 'HUAWEI 知识洞察系统',
   SearchPagePrefix: 'uniSearch', // search, uniSearch
   ShowRegisteredRole: false,
-
-  Search_EnableTranslateSearch: false, // 启用翻译搜索，显示提示信息;/
-  Search_DefaultTranslateSearch: false, // 默认使用翻译搜索;
-  Search_EnableSmartSuggest: true, // 启用智能提示;  启用后，禁用translateSearch
-  Search_SmartSuggest_EnableExpand: true, // TODO
-  Search_SmartSuggest_EnableTranslate: true, // TODO
-  Search_SmartSuggest_EnableKG: true, // TODO
+  GLOBAL_ENABLE_FEEDBACK: true, // 是否显示feedback
 
   EnableLocalLocale: true,
 

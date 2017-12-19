@@ -209,7 +209,8 @@ class ExpertHeatmapPage extends React.Component {
   handleDownload = () => {
     const data = this.props.expertTrajectory.heatData;
     if (typeof (data.staData) !== 'undefined' && data.staData !== 'undefined') {
-      let str = '';
+      console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+      let str = 'wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww';
       const bom = '\uFEFF';
       str = encodeURI(str);
       const { name } = this.state.cperson;

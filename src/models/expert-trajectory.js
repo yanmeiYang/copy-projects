@@ -346,6 +346,7 @@ export default {
         if (!(key in yearHeatData)) {
           yearHeatData[key] = [];
         }
+
         for (const k in yearCityIn[key]) {
           if (k) {
             const p = yearCityIn[key][k];

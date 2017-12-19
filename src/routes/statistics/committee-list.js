@@ -5,6 +5,7 @@ import React from 'react';
 import { Table } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
+import { isEmpty } from 'lodash';
 import * as seminarService from '../../services/seminar';
 import styles from './committee-list.less';
 
@@ -73,7 +74,7 @@ class CommitteeList extends React.Component {
       }
     }
 
-    if (activity && activity.length > 0) {
+    if (activity && activity.length > 0 && !isEmpty(tempCategory)) {
       let tempTotal = 0;
       activity.map(act => tempTotal += act.total);
       activity.push({ organizer: '总计', total: tempTotal, category: tempCategory });

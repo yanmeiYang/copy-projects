@@ -25,7 +25,6 @@ export default {
       pageSize: 30,
       total: null,
     },
-    loading: false,
   },
 
   subscriptions: {
@@ -55,10 +54,12 @@ export default {
       const { data } = yield call(personService.getActivityAvgScoresByPersonId, id);
       yield put({ type: 'getActivityAvgScoresByPersonIdSuccess', payload: { data } });
     },
-    * getContributionRecalculatedByPersonId({ payload }, { call, put }) {
+    * getContributionRecalculatedByPersonId({ payload }, { call }) {
       const { id } = payload;
       const { data } = yield call(personService.getContributionRecalculatedByPersonId, id);
-      yield put({ type: 'getContributionRecalculatedSuccess', payload: { data } });
+      if (data) {
+        return data;
+      }
     },
   },
 
@@ -78,9 +79,6 @@ export default {
       return { ...state, avgScores: data.indices };
     },
 
-    getContributionRecalculatedSuccess(state, { payload: { data } }) {
-      return { ...state, avgScores: data.indices, loading: false };
-    },
   },
 
 };

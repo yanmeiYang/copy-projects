@@ -67,7 +67,7 @@ class NewActivityList extends React.Component {
             <div className={styles.expert_avatar}>
               {result.talk.filter(item => item.speaker.role && item.speaker.role.includes('president'))
                 .map((talk) => {
-                  return <div key={talk.speaker.name + talk.speaker.aid}
+                  return <div key={`${talk.speaker.name}#${talk.speaker.aid}`}
                               className={styles.seminar_expert_president}>
                     <Tooltip title={`主席： ${talk.speaker.name}`}>
                       {talk.speaker.aid ?
@@ -82,9 +82,9 @@ class NewActivityList extends React.Component {
                   </div>;
                 })}
               {result.talk.filter(item => item.speaker.role && !item.speaker.role.includes('president'))
-                .map((talk) => {
-                  return <div key={talk.speaker.name + talk.speaker.aid}
-                              className={styles.seminar_expert_common}>
+                .map((talk, index) => {
+                  const key = `${talk.speaker.name}##${talk.speaker.aid}##${index}`;
+                  return <div key={key} className={styles.seminar_expert_common}>
                     <Tooltip title={talk.speaker.name}>
                       {talk.speaker.aid ?
                         <a href={`/person/${talk.speaker.aid}`} target="_blank">

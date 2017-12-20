@@ -160,7 +160,9 @@ export default class SearchComponent extends Component {
   doSearchUseProps = () => {
     const { query, offset, pagination, filters, sortKey } = this.props.search;
     const { pageSize } = pagination;
-    this.doSearch(query, offset, pageSize, filters, sortKey, true);
+    if (query !== '-') {
+      this.doSearch(query, offset, pageSize, filters, sortKey, true);
+    }
   };
 
   doTranslateSearch = (useTranslate) => {

@@ -8,6 +8,7 @@ import { sysconfig } from 'systems';
 import * as hole from 'utils/hole';
 import { FormattedMessage as FM } from 'react-intl';
 import { IndexHotLinks } from 'components/widgets';
+import { IndexCenterZone } from '../../systems/demo/components';
 import styles from './theme-demo.less';
 // import * as Const from './const-acmfellow';
 
@@ -54,6 +55,8 @@ module.exports = {
       </h1>
     </div>,
   ],
+
+  index_centerZone: [hole.DEFAULT_PLACEHOLDER, <IndexCenterZone key={0} />],
 
   // Expert Page
 

@@ -75,6 +75,8 @@ export default {
   'com.searchTypeWidget.label.TrendPrediction': 'Topic Trend',
   'com.searchTypeWidget.label.ExpertTrajectory': 'DEV:Expert Trajectory',
   'com.searchTypeWidget.label.ExpertBase': 'My Experts',
+  'com.searchTypeWidget.label.crossSearch': 'Cross',
+  'com.searchTypeWidget.label.seminar': 'Seminar',
 
   'com.searchTypeWidget.label.ACM_ExpertSearch': 'Global Experts',
   'com.searchTypeWidget.label.ACMFellowExpertBase': 'ACM Fellow',

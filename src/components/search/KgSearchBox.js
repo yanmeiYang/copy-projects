@@ -44,7 +44,7 @@ const getSuggestions = (value) => {
   const inputLength = inputValue.length;
 
   return inputLength === 0 ? [] : languages.filter(lang =>
-    lang.name.toLowerCase().slice(0, inputLength) === inputValue);
+  lang.name.toLowerCase().slice(0, inputLength) === inputValue);
 };
 
 // When suggestion is clicked, Autosuggest needs to populate the input

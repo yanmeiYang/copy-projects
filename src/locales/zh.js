@@ -75,6 +75,8 @@ export default {
   'com.searchTypeWidget.label.TrendPrediction': '技术趋势',
   'com.searchTypeWidget.label.ExpertTrajectory': 'DEV:专家迁移',
   'com.searchTypeWidget.label.ExpertBase': '我的专家库',
+  'com.searchTypeWidget.label.crossSearch': '交叉搜索',
+  'com.searchTypeWidget.label.seminar': '学术活动',
 
   'com.searchTypeWidget.label.ACM_ExpertSearch': '全球专家',
   'com.searchTypeWidget.label.ACMFellowExpertBase': 'ACM Fellow',

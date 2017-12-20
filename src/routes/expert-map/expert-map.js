@@ -25,13 +25,9 @@ import {
   showTopImages,
   addImageListener,
   syncInfoWindow,
-<<<<<<< Updated upstream
   backGlobal,
   isIn,
   ifIn,
-=======
-  isIn,
->>>>>>> Stashed changes
   //findMapFilterRangesByKey,
   findMapFilterHindexRangesByKey,
 } from './utils/map-utils';
@@ -46,7 +42,6 @@ import {
 let map1; // 地图刷新前，用于存储上次浏览的地点
 const dataMap = {}; // 数据的索引，建议可以放到reducers.
 const blankAvatar = '/images/blank_avatar.jpg';
-const ifIn = [false];
 
 const showLoadErrorMessage = () => { //Popup window.
   getById('allmap').innerHTML = 'Cannot connect to Baidu Map! Please check the network state!';
@@ -360,11 +355,7 @@ export default class ExpertMap extends PureComponent {
           e.target.closeInfoWindow(infoWindow);
           clearInterval(markerInterval);
         }
-<<<<<<< Updated upstream
       }, 1000);
-=======
-      }, 2000);
->>>>>>> Stashed changes
     });
     marker.addEventListener('click', () => {
       toggleRightInfo('person', personId, dispatch, this.props.expertMap.infoZoneIds);
@@ -373,10 +364,7 @@ export default class ExpertMap extends PureComponent {
 
 
   render() {
-<<<<<<< Updated upstream
     const { dispatch } = this.props;
-=======
->>>>>>> Stashed changes
     const model = this.props && this.props.expertMap;
     const { results } = model.geoData;
     let personPopupJsx;

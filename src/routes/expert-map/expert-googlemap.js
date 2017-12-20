@@ -27,13 +27,9 @@ import {
   showTopImages,
   addImageListener,
   syncInfoWindow,
-<<<<<<< Updated upstream
   backGlobal,
   isIn,
   ifIn,
-=======
-  isIn,
->>>>>>> Stashed changes
   //findMapFilterRangesByKey,
   findMapFilterHindexRangesByKey,
 } from './utils/map-utils';
@@ -48,7 +44,6 @@ import {
 let map1;
 const dataMap = {};
 const blankAvatar = '/images/blank_avatar.jpg';
-const ifIn = [false];
 
 let globalInfoWindow;
 const getInfoWindow = () => {
@@ -133,11 +128,7 @@ export default class ExpertGoogleMap extends React.Component {
             infoWindow.close(map, marker);
             clearInterval(markerInterval);
           }
-<<<<<<< Updated upstream
         }, 1000);
-=======
-        }, 2000);
->>>>>>> Stashed changes
       });
 
       google.maps.event.addListener(marker, 'click', () => {

@@ -8,12 +8,8 @@ import {
   indexCache,
 } from './cache-utils.js';
 
-<<<<<<< Updated upstream
 const isIn = [false]; //是否在信息框中
 const ifIn = [false]; //是否在marker上或者image上
-=======
-const isIn = [false];
->>>>>>> Stashed changes
 
 function getById(id) {
   return document.getElementById(id);
@@ -292,7 +288,7 @@ const addImageListener = (map, ids, getInfoWindow, event, imgwidth, type, projec
       console.error(error);
     });
   } else if (typeof (callback) === 'function') {
-      callback(personInfo);
+    callback(personInfo);
   }
 };
 
@@ -339,19 +335,11 @@ const syncInfoWindow = () => {
     ai.addEventListener('mouseenter', () => {
       isIn.pop();
       isIn.push(true);
-<<<<<<< Updated upstream
     }, false);
     ai.addEventListener('mouseleave', () => {
       isIn.pop();
       isIn.push(false);
     }, false);
-=======
-    },false);
-    ai.addEventListener('mouseleave', () => {
-      isIn.pop();
-      isIn.push(false);
-    },false);
->>>>>>> Stashed changes
   }
 };
 
@@ -454,11 +442,7 @@ module.exports = {
   onResetPersonCard, detachCluster, backGlobal,
   showTopImageDiv, toggleRightInfo, showTopImages,
   addImageListener, syncInfoWindow, waitforBMap, waitforBMapLib,
-<<<<<<< Updated upstream
   MapFilterRanges, MapFilterHindexRange, isIn, ifIn,
-=======
-  MapFilterRanges, MapFilterHindexRange, isIn,
->>>>>>> Stashed changes
   findMapFilterRangesByKey, findMapFilterHindexRangesByKey,
 };
 

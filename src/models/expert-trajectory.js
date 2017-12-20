@@ -257,11 +257,11 @@ export default {
           for (const d of data.data.trajectories[key]) {
             const [cYear, cPlaceId] = d; //年份和所在位置id
             const cy = parseInt(cYear, 10);
-            if (typeof (addresses[cPlaceId].city_id) !== 'string') {
+            if (!(cPlaceId in addresses)) {
               console.log('后台又出错了');
-              console.log(typeof (addresses[cPlaceId].city_id))
-              console.log(addresses[cPlaceId].city_id);
-              return;
+              console.log(addresses[cPlaceId]);
+              console.log(typeof (addresses[cPlaceId]))
+              continue;
             }
             const cCityId = addresses[cPlaceId].city_id;
             const cCityName = cities[cCityId].name;
@@ -289,11 +289,11 @@ export default {
             if (previousD.length !== 0) { //是第一个点的时候什么都不做
               const [pYear, pPlaceId] = previousD; //年份和所在位置id
               const py = parseInt(pYear, 10);
-              if (typeof (addresses[cPlaceId].city_id) !== 'string') {
+              if (!(cPlaceId in addresses)) {
                 console.log('后台又出错了');
-                console.log(typeof (addresses[cPlaceId].city_id))
-                console.log(addresses[cPlaceId].city_id);
-                return;
+                console.log(addresses[cPlaceId]);
+                console.log(typeof (addresses[cPlaceId]))
+                continue;
               }
               const pCityId = addresses[pPlaceId].city_id;
               const pCityName = cities[pCityId].name;

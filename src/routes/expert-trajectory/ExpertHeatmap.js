@@ -4,6 +4,7 @@ import queryString from 'query-string';
 import { sysconfig } from 'systems';
 import { Slider, InputNumber, Row, Col, Button, Tooltip, Icon, Modal } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
+import { Spinner } from 'components';
 import { routerRedux, Link, withRouter } from 'dva/router';
 import bridge from 'utils/next-bridge';
 import styles from './ExpertHeatmap.less';
@@ -29,6 +30,10 @@ class ExpertHeatmap extends React.Component {
     isCaching: false,
     visible: false,
     cperson: '',
+    displayPaper: '',
+    displayImg: '',
+    showSetting: false,
+    circleTime: 3,
   };
 
   componentWillMount() {
@@ -113,7 +118,7 @@ class ExpertHeatmap extends React.Component {
             clearInterval(trajInterval);
           }
         });
-      }, 3000);
+      }, this.state.circleTime * 1000);
     } else if (trajInterval) {
       clearInterval(trajInterval);
     }
@@ -181,9 +186,11 @@ class ExpertHeatmap extends React.Component {
     let field;
     const { location } = this.props;
     const { query, domain } = queryString.parse(location.search);
-    if (typeof (query) !== 'undefined') {
+    if (typeof (query) !== 'undefined') { //输入的是某个领域
       field = `${query}领域`;
-    } else if (typeof (domain) !== 'undefined') {
+      this.setState({ displayPaper: 'none', displayImg: 'none' });
+    } else if (typeof (domain) !== 'undefined') { //选择的是某个智库
+      this.setState({ displayPaper: '', displayImg: '' });
       const lib = sysconfig.Map_HotDomains;
       lib.map((lb) => {
         if (lb.id === domain) {
@@ -250,6 +257,24 @@ class ExpertHeatmap extends React.Component {
     });
   };
 
+  showSettingPlay = () => {
+    this.setState({
+      showSetting: true,
+    });
+  };
+
+  handleOk1 = () => {
+    this.setState({
+      showSetting: false,
+    });
+  };
+
+  handleCancel1 = () => {
+    this.setState({
+      showSetting: false,
+    });
+  };
+
   render() {
     const { ifPlay } = this.state;
     const { personsInfo, startEnd } = this.props.expertTrajectory.heatData;
@@ -270,8 +295,14 @@ class ExpertHeatmap extends React.Component {
         }
       }
     }
-    // const loading = this.props.loading.global;
+    const loading = this.props.loading.global;
     //const { loading } = this.props.expertTrajectory;
+    let loading2 = false;
+    if (!loading) { //数据取回来了，正在caching的时候
+      if (this.state.isCaching) {
+        loading2 = true;
+      }
+    }
 
     const bgcolor = ['#AAC2DD', '#044161', '#404a59', '#80cbc4', '#b28759', '#4e6c8d', '#d1d1d1'];
     const themeKey = typeof (this.props.themeKey) === 'undefined' ? 0 : this.props.themeKey;
@@ -305,11 +336,17 @@ class ExpertHeatmap extends React.Component {
       </div>
     );
 
+    const settingJsx = (
+      <div>ddddd</div>
+    );
+
     return (
       <div>
+        <Spinner loading={loading2} />
         <div className={styles.whole}>
           <div className={styles.heatmap} id="chart" />
-          <div className={styles.info} style={{ backgroundColor: color, display: 'none' }}>
+          <div className={styles.info}
+               style={{ backgroundColor: color, display: this.state.displayImg }}>
             {authors && authors.map((a) => {
               const id = `year${a.year}${a.aid}`;
               const border = (this.state.currentYear === parseInt(a.year, 10)) ? '2px solid yellow' : '2px solid white';
@@ -332,9 +369,9 @@ class ExpertHeatmap extends React.Component {
               <div className={styles.noinfo}>Please Select a Domian or Input a Query!</div>
             }
           </div>
-          <div className={styles.paper} style={{ display: 'none' }}>
+          <div className={styles.paper} style={{ display: this.state.displayPaper }}>
             <div className={styles.year}>
-              {paper && `${this.state.currentYear}:`}
+              {paper && `Year ${this.state.currentYear}:`}
             </div>
             {paper && paper}
             {paper &&
@@ -360,7 +397,7 @@ class ExpertHeatmap extends React.Component {
               <Slider min={startYear} max={endYear} onChange={this.onChange}
                       marks={marks} value={this.state.currentYear} />
             </Col>
-            <Col span={1} className={styles.inputNumber}>
+            <Col span={1} className={styles.input}>
               <InputNumber
                 formatter={value => parseInt(value, 10)}
                 min={startYear}
@@ -368,7 +405,13 @@ class ExpertHeatmap extends React.Component {
                 style={{ marginLeft: 0 }}
                 value={this.state.currentYear}
                 onChange={this.onChange}
+                className={styles.inputNumber}
               />
+            </Col>
+            <Col span={1}>
+              <div className={styles.settingBut}>
+                <Button shape="circle" icon="setting" onClick={this.showSettingPlay} />
+              </div>
             </Col>
           </Row>
         </div>
@@ -386,6 +429,25 @@ class ExpertHeatmap extends React.Component {
             width="600px"
           >
             <div className={styles.authorInfo}>{authorJsx && authorJsx}</div>
+          </Modal>
+        </div>
+        <div className={styles.settingPlay}>
+          <Modal
+            title="Playback Settings"
+            visible={this.state.showSetting}
+            onOk={this.handleOk1}
+            onCancel={this.handleCancel1}
+            footer={[
+              <Button key="back" size="large" type="primary">
+                <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.save" />
+              </Button>,
+              <Button key="submit" size="large" onClick={this.handleOk1}>
+                <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.close" />
+              </Button>,
+            ]}
+            width="600px"
+          >
+            <div className={styles.authorInfo}>{settingJsx && settingJsx}</div>
           </Modal>
         </div>
       </div>

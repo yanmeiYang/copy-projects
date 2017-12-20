@@ -32,6 +32,7 @@
       background-color: white;
       overflow: hidden;
       border: 2px solid white;
+      border-radius: 5px;
       width: 90px;
       min-height: 90px;
       cursor: pointer;
@@ -48,6 +49,7 @@
       .name {
         margin: 0px 25px 0px 15px;
         border: 2px solid white;
+        border-radius: 5px;
         width: 90px;
         min-height: 22px;
         cursor: pointer !important;
@@ -64,6 +66,7 @@
     width: 280px;
     height: 150px;
     border: 1px solid white;
+    border-radius: 10px;
     position: absolute;
     top: 530px;
     left: 20px;
@@ -104,11 +107,20 @@
     position: relative;
     top: 0px;
     left: 0px;
+
     .timeLine{
       margin: 0 0px 0 0;
     }
-    .inputNumber{
-      margin: 5px 0px 0 10px;
+
+    .input{
+      padding: 5px 0px 0 10px;
+      .inputNumber{
+        width: 70px;
+      }
+    }
+
+    .settingBut{
+      float: right;
     }
   }
 }

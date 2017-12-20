@@ -96,6 +96,8 @@ export default {
   'com.expertMap.headerLine.label.play': '播放迁徙工程',
   'com.expertMap.headerLine.label.download': '导出Excel表',
   'com.expertMap.headerLine.label.ok': '确定',
+  'com.expertMap.headerLine.label.close': '关闭',
+  'com.expertMap.headerLine.label.save': '保存',
   'com.expertMap.headerLine.label.overview': '返回全局总览',
   'com.expertMap.headerLine.label.goback': '点击返回',
 

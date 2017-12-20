@@ -97,6 +97,8 @@ export default {
   'com.expertMap.headerLine.label.play': 'Play Trajectories',
   'com.expertMap.headerLine.label.download': 'Export Excel',
   'com.expertMap.headerLine.label.ok': 'OK',
+  'com.expertMap.headerLine.label.close': 'close',
+  'com.expertMap.headerLine.label.save': 'save',
   'com.expertMap.headerLine.label.overview': 'Back To OverView',
   'com.expertMap.headerLine.label.goback': 'Go Back',
 

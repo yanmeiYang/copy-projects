@@ -42,8 +42,8 @@ const showTopImageDiv = (e, map, maindom, inputids, onLeave, type, ids, dispatch
     const pixel = map.pointToOverlayPixel(e.currentTarget.getPosition()); // 中心点的位置
     ostyle = `height:${height}px;width:${width}px;left: ${pixel.x - (width / 2)}px;top: ${pixel.y - (height / 2)}px;`;
   } else { //google map
-    const imgWidth = parseInt(maindom.style.height,10);
-    ostyle = `height:${height}px;width:${height}px;left: ${(e.x + imgWidth / 2) - (width / 2)}px;top: ${(e.y + imgWidth / 2) - (height / 2)}px;`;
+    const imgWidth = parseInt(maindom.style.height, 10);
+    ostyle = `height:${height}px;width:${height}px;left: ${(e.x + (imgWidth / 2)) - (width / 2)}px;top: ${(e.y + (imgWidth / 2)) - (height / 2)}px;`;
   }
 
   // 可得中心点到图像中心点的半径为：height/2-imgwidth/2,圆形的方程为(X-pixel.x)^2+(Y-pixel.y)^2=height/2

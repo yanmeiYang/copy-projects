@@ -431,7 +431,8 @@ export default class ExpertMap extends PureComponent {
               </div>
             </div>
             {
-              !isGlobal && <div className={styles.backwell}>
+              !isGlobal &&
+              <div className={styles.backwell}>
                 <div className={styles.back}>
                   <FM defaultMessage="Baidu Map"
                       id="com.expertMap.headerLine.label.overview" />:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

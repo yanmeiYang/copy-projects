@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 import queryString from 'query-string';
 import { sysconfig } from 'systems';
-import { Slider, InputNumber, Row, Col, Button, Tooltip, Icon, Modal } from 'antd';
+import { Slider, InputNumber, Row, Col, Button, Tooltip, Icon, Modal, Select } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import { Spinner } from 'components';
 import { routerRedux, Link, withRouter } from 'dva/router';
@@ -14,7 +14,7 @@ import { PersonList } from '../../components/person';
 
 let myChart;
 let trajInterval;
-
+const Option = Select.Option;
 
 @connect(({ expertTrajectory, loading, app }) => ({ expertTrajectory, loading, app }))
 @withRouter
@@ -141,6 +141,10 @@ class ExpertHeatmap extends React.Component {
     });
     const checkType = typeof (this.props.checkType) === 'undefined' ? [] : this.props.checkType;
     this.loadHeat(this.props.expertTrajectory.heatData, v, checkType);
+  };
+
+  setPlayback = () => {
+
   };
 
   initChart = () => {
@@ -337,7 +341,39 @@ class ExpertHeatmap extends React.Component {
     );
 
     const settingJsx = (
-      <div>ddddd</div>
+      <div>
+        <div>
+          <Row>
+            <Col span={5}>Playback speed:</Col>
+            <Col span={19}>
+              <InputNumber
+                formatter={value => parseInt(value, 10)}
+                min={1}
+                max={10}
+                value={3}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col span={5}>Play Animation:</Col>
+            <Col span={19}>
+              <Select defaultValue="true" style={{ width: 120 }}>
+                <Option value="true">True</Option>
+                <Option value="false">False</Option>
+              </Select>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={5}>With Map:</Col>
+            <Col span={19}>
+              <Select defaultValue="true" style={{ width: 120 }}>
+                <Option value="true">True</Option>
+                <Option value="false">False</Option>
+              </Select>
+            </Col>
+          </Row>
+        </div>
+      </div>
     );
 
     return (
@@ -402,7 +438,6 @@ class ExpertHeatmap extends React.Component {
                 formatter={value => parseInt(value, 10)}
                 min={startYear}
                 max={endYear}
-                style={{ marginLeft: 0 }}
                 value={this.state.currentYear}
                 onChange={this.onChange}
                 className={styles.inputNumber}
@@ -438,7 +473,7 @@ class ExpertHeatmap extends React.Component {
             onOk={this.handleOk1}
             onCancel={this.handleCancel1}
             footer={[
-              <Button key="back" size="large" type="primary">
+              <Button key="back" size="large" type="primary" onClick={this.setPlayback}>
                 <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.save" />
               </Button>,
               <Button key="submit" size="large" onClick={this.handleOk1}>

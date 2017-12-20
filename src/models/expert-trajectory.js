@@ -257,6 +257,12 @@ export default {
           for (const d of data.data.trajectories[key]) {
             const [cYear, cPlaceId] = d; //年份和所在位置id
             const cy = parseInt(cYear, 10);
+            if (typeof (addresses[cPlaceId].city_id) !== 'string') {
+              console.log('后台又出错了');
+              console.log(typeof (addresses[cPlaceId].city_id))
+              console.log(addresses[cPlaceId].city_id);
+              return;
+            }
             const cCityId = addresses[cPlaceId].city_id;
             const cCityName = cities[cCityId].name;
             const cLat = addresses[cPlaceId].geo.lat.toFixed(2); //保留两位小数
@@ -283,6 +289,12 @@ export default {
             if (previousD.length !== 0) { //是第一个点的时候什么都不做
               const [pYear, pPlaceId] = previousD; //年份和所在位置id
               const py = parseInt(pYear, 10);
+              if (typeof (addresses[cPlaceId].city_id) !== 'string') {
+                console.log('后台又出错了');
+                console.log(typeof (addresses[cPlaceId].city_id))
+                console.log(addresses[cPlaceId].city_id);
+                return;
+              }
               const pCityId = addresses[pPlaceId].city_id;
               const pCityName = cities[pCityId].name;
               const pLat = addresses[pPlaceId].geo.lat.toFixed(2); //保留两位小数
@@ -333,7 +345,6 @@ export default {
         }
       }
       let [start, end] = [3000, 0];
-      console.log(yearCityIn);
       for (const key in yearCityIn) {
         if (parseInt(key, 10) > end) {
           end = parseInt(key, 10);

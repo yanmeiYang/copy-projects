@@ -309,7 +309,7 @@ class ExpertHeatmap extends React.Component {
       <div>
         <div className={styles.whole}>
           <div className={styles.heatmap} id="chart" />
-          <div className={styles.info} style={{ backgroundColor: color }}>
+          <div className={styles.info} style={{ backgroundColor: color, display: 'none' }}>
             {authors && authors.map((a) => {
               const id = `year${a.year}${a.aid}`;
               const border = (this.state.currentYear === parseInt(a.year, 10)) ? '2px solid yellow' : '2px solid white';
@@ -328,9 +328,14 @@ class ExpertHeatmap extends React.Component {
                 </div>
               );
             })}
+            {!personsInfo &&
+              <div className={styles.noinfo}>Please Select a Domian or Input a Query!</div>
+            }
           </div>
-          <div className={styles.paper}>
-            <div className={styles.year}>{this.state.currentYear}:</div>
+          <div className={styles.paper} style={{ display: 'none' }}>
+            <div className={styles.year}>
+              {paper && `${this.state.currentYear}:`}
+            </div>
             {paper && paper}
             {paper &&
             <div>
@@ -342,6 +347,9 @@ class ExpertHeatmap extends React.Component {
             }
             {!paper &&
             <div>No Paper Published!</div>
+            }
+            {!personsInfo &&
+            <div>Please Select a Domian or Input a Query!</div>
             }
           </div>
         </div>

@@ -44,6 +44,8 @@ const cacheInfo = (domainId, callback) => {
       }
       callback();
     });
+  } else {
+    callback();
   }
 };
 

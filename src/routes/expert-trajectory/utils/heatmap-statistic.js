@@ -8,7 +8,7 @@ const showBulkTraj = (data, type) => {
     myEChart = echarts;
   });
   console.log(data);
-  if (typeof (data.staData) === 'undefined##############################') {
+  if (typeof (data.staData) === 'undefined') {
     document.getElementById(type).innerHTML = 'No Data!';
   } else {
     let option;

@@ -9,7 +9,7 @@ const pluginsModelMap = new Map();
 // called on init.
 const initPlugins = (systemPlugins) => {
   plugins = systemPlugins;
-  console.log('==== initPlugins', systemPlugins);
+  // console.log('==== initPlugins', systemPlugins);
 
   // init pluginModelMap.
   if (plugins && plugins.length > 0) {
@@ -47,7 +47,6 @@ const initPlugins = (systemPlugins) => {
 
 
 const applyPluginModules = (namespace, routerConfig) => {
-  console.log('====applyPluginModules');
   const newRouterConfig = {};
   Object.keys(routerConfig).forEach((key) => {
     const value = routerConfig[key]; // value is router.

@@ -50,4 +50,4 @@ crashlytics-build.properties
 fabric.properties
 
 .DS_Store
-system-override.js
+src/system-override.js

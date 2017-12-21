@@ -1,5 +1,5 @@
 import { loadECharts, loadBMap } from 'utils/requirejs';
-import { wget } from 'utils/request2';
+import { wget } from 'utils';
 import { sysconfig } from 'systems';
 
 //----------------------------------------datas

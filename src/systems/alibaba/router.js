@@ -12,6 +12,16 @@ import seminar from 'routes/seminar/router-seminar';
 
 import { RouterRegistry, RouterRegistry2b, RouterJSXFunc } from '../router-registry';
 
+const AliRouter = {
+  AliACMForecast: {
+    path: '/a/acm-forecast',
+    models: () => [
+      import('models/lab/ACMFellowForecastModel'),
+    ],
+    component: () => import('routes/lab/ACMFellowForecast'),
+  },
+};
+
 const routes = [
   ...RouterRegistry2b,
   // ...RouterRegistry,
@@ -81,6 +91,9 @@ const routes = [
   // 2b profile
   // core.TobProfile(app),
   // core.Addition(app),
+
+  // System specified.
+  AliRouter.AliACMForecast,
 
   // System Default.
   core.Error404, // must be last one.

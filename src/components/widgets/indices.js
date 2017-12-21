@@ -72,7 +72,7 @@ const defaultIndices = ['activity-ranking-contrib', 'h_index', 'activity', 'risi
  * @param indices - indices node from person.
  * showItems - TODO use this to config which indices to show.
  */
-const Indices = ({ indices, activity_indices, showIndices, indicesType }) => {
+const Indices = ({ indices, style, activity_indices, showIndices, indicesType }) => {
   if (!indices) return false;
   let indicesKeys = defaultIndices;
   if (showIndices && showIndices.length > 0) {
@@ -80,7 +80,7 @@ const Indices = ({ indices, activity_indices, showIndices, indicesType }) => {
   }
 
   return (
-    <div className={styles.scoreLine}>
+    <div className={styles.scoreLine} style={style}>
       {indicesKeys && indicesKeys.length > 0 &&
       indicesKeys.map((key) => {
         const ic = indicesConfig[key];

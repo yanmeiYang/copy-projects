@@ -197,6 +197,19 @@ export async function listPersonInEBNextAPI(payload) {
   return nextAPI({ data: [nextapi.api] });
 }
 
+// used in acm fellow forecast
+export async function listAllPersonIdsInEBNextAPI(payload) {
+  const { ebid, offset, size } = payload;
+  const nextapi = apiBuilder.query(F.queries.search, 'list-all-ids-in-EB')
+    .param({
+      offset, size,
+      searchType: F.searchType.all,
+    })
+    .schema({ person: ['id'] });
+  H.filterByEBs(nextapi, [ebid]);
+  return nextAPI({ data: [nextapi.api] });
+}
+
 // Search Global.
 export async function searchPersonGlobal(query, offset, size, filters, sort, useTranslateSearch) {
   const data = prepareParametersGlobal(query, offset, size, filters, sort, useTranslateSearch);

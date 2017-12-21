@@ -71,6 +71,12 @@ export async function getPubsByYear(params) {
   );
 }
 
+export async function getPubsByIds(ids) {
+  return request(api.getPubByIds, {
+    method: 'POST',
+    body: JSON.stringify(ids),
+  });
+}
 
 /** getPubsByCite */
 export async function getPubsByCite(params) {

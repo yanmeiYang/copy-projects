@@ -18,7 +18,6 @@ import router2bprofile from 'routes/2b-profile/router-2bprofile';
 
 import { RouterRegistry, RouterRegistry2b, RouterJSXFunc } from 'systems/router-registry';
 
-
 const routes = [
   ...RouterRegistry2b,
   // ...RouterRegistry,

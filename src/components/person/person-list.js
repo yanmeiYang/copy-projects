@@ -31,15 +31,25 @@ export default class PersonList extends Component {
     expertBaseId: PropTypes.string,
     indicesType: PropTypes.string, // ["", text]
     showIndices: PropTypes.array,
+    emptyPlaceHolder: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+
+    // zones
     titleRightBlock: PropTypes.func, // A list of function
     rightZoneFuncs: PropTypes.array,
-    didMountHooks: PropTypes.array,
-    UpdateHooks: PropTypes.array,
+    // content: PropTypes.array, // TODO...
+    contentBottomZone: PropTypes.array,
+
+    // others:
     tagsLinkFuncs: PropTypes.func,
+    UpdateHooks: PropTypes.array,
+    didMountHooks: PropTypes.array,
   };
 
   static defaultProps = {
     showIndices: sysconfig.PersonList_ShowIndices,
+    emptyPlaceHolder: (
+      <FM id="com.KgSearchBox.placeholder" defaultMessage="请输入姓名或者搜索词" />
+    ),
   };
 
   constructor(props) {
@@ -78,16 +88,30 @@ export default class PersonList extends Component {
     console.log(`checked = ${e.target.checked}`);
   };
 
+  defaultZones = {
+    contentBottomZone: [({ person }) => (
+      <PersonTags
+        key={0}
+        className={styles.tagZone}
+        tags={person.tags}
+        tagsTranslated={person.tags_translated_zh}
+        tagsLinkFuncs={this.props.tagsLinkFuncs}
+        hideBorder
+      />
+    )],
+  };
+
   render() {
     const { persons, expertBaseId, className, type, indicesType, showIndices } = this.props;
     const { rightZoneFuncs, titleRightBlock, bottomZoneFuncs, afterTitleBlock, tagsLinkFuncs } = this.props;
+    const { contentBottomZone, emptyPlaceHolder } = this.props;
     const showPrivacy = false;
 
     return (
       <div className={classnames(styles.personList, className, styles[type])}>
         {!persons &&
         <div className={styles.empty}>
-          <FM id="com.KgSearchBox.placeholder" defaultMessage="请输入姓名或者搜索词" />
+          {emptyPlaceHolder}
         </div>}
         {persons && persons.length === 0 &&
         <div className={styles.empty}>
@@ -142,41 +166,53 @@ export default class PersonList extends Component {
                     {/*{this.personRightButton && this.personRightButton(person)}*/}
                     <div className={classnames(styles.zone, styles.interestColumn)}>
                       <div className={styles.contact_zone}>
+                        {/* Must Has order style! */}
                         <Indices
                           indices={indices}
                           activity_indices={activity_indices}
                           showIndices={showIndices}
                           indicesType={indicesType}
+                          style={{ order: 10 }}
                         />
-                        {pos && <span><i className="fa fa-briefcase fa-fw" /> {pos}</span>}
-                        {aff && <span><i className="fa fa-institution fa-fw" /> {aff}</span>}
+                        {pos &&
+                        <div style={{ order: 20 }}>
+                          <i className="fa fa-briefcase fa-fw" /> {pos}
+                        </div>}
+
+                        {aff &&
+                        <div style={{ order: 30 }}>
+                          <i className="fa fa-institution fa-fw" /> {aff}
+                        </div>}
 
                         {phone &&
-                        <span style={{ minWidth: '158px' }}><i
-                          className="fa fa-phone fa-fw" /> {phone}</span>
-                        }
+                        <div style={{ order: 40, minWidth: '158px' }}>
+                          <i className="fa fa-phone fa-fw" /> {phone}
+                        </div>}
 
                         {email &&
-                        <span style={{ backgroundImage: `url(${config.baseURL}${email})` }}
-                              className="email"><i className="fa fa-envelope fa-fw" />
-                        </span>
+                        <div className="email"
+                             style={{
+                               order: 50,
+                               backgroundImage: `url(${config.baseURL}${email})`
+                             }}
+                        ><i className="fa fa-envelope fa-fw" />
+                        </div>
                         }
 
                         {false && person.num_viewed > 0 &&
-                        <span className={styles.views}><i
+                        <div style={{ order: 60 }} className={styles.views}><i
                           className="fa fa-eye fa-fw" />{person.num_viewed}
                           <FM id="com.PersonList.label.views" defaultMessage="views" />
-                        </span>}
+                        </div>}
 
                       </div>
 
-                      {/* ---- Tags ---- */}
-                      <PersonTags
-                        className={styles.tagZone}
-                        tags={person.tags}
-                        tagsTranslated={person.tags_translated_zh}
-                        tagsLinkFuncs={tagsLinkFuncs}
-                        hideBorder
+                      {/* ---- Tags/others ---- */}
+                      <Hole
+                        fill={contentBottomZone}
+                        defaults={this.defaultZones.contentBottomZone}
+                        param={{ person, expertBaseId }}
+                        config={{ containerClass: '' }}
                       />
 
                     </div>

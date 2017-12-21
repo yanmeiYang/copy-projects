@@ -2,7 +2,7 @@
 import classnames from 'classnames';
 import config from './config';
 import { getMenusByUser } from './menu';
-import request, { nextAPI } from './request';
+import request, { nextAPI, wget } from './request';
 import apiBuilder from './next-api-builder';
 import { color } from './theme';
 import * as TopExpertBase from './expert-base';
@@ -106,7 +106,7 @@ module.exports = {
   detectSavedMapType,
 
   getMenusByUser,
-  request, nextAPI,
+  request, nextAPI, wget,
   apiBuilder,
   loadD3, loadD3v3, loadScript, loadECharts, loadBMap, loadGoogleMap,
   ensure,

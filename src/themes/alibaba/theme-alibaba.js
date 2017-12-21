@@ -43,7 +43,7 @@ module.exports = {
 
   SearchComponent_RightZone: [
     hole.DEFAULT_PLACEHOLDER,
-    param => {
+    (param) => {
       return (
         <div key="0">
           <SearchVenue query={param.query} />
@@ -54,10 +54,14 @@ module.exports = {
 
   // Expert Page
   index_centerZone: [
+    <Link key={5} className={styles.acmLink} to="/a/acm-forecast">
+      ACM Fellow Forecast/ACM Fellow预测
+    </Link>,
     <IndexCenterZone
-      key={0}
+      key={7}
       links={centerZoneLinks}
-      urlFunc={query => `/${sysconfig.SearchPagePrefix}/${query}/0/${sysconfig.MainListSize}`} />,
+      urlFunc={query => `/${sysconfig.SearchPagePrefix}/${query}/0/${sysconfig.MainListSize}`}
+    />,
   ],
 
 

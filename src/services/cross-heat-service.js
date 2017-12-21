@@ -6,6 +6,7 @@ import { request, config } from '../utils';
 import { externalRequest } from '../utils/request';
 
 const { api } = config;
+
 export async function getDiscipline(area, k, depth) {
   return request(api.getDiscipline.replace(':area', area).replace(':k', k).replace(':depth', depth), {
     method: 'GET',
@@ -45,6 +46,7 @@ export async function getDomainiInfo(params) {
     body: JSON.stringify(dt),
   });
 }
+
 export async function getCrossPredict(params) {
   const { dt } = params;
   return request(api.getCrossPredict, {
@@ -52,6 +54,7 @@ export async function getCrossPredict(params) {
     body: JSON.stringify(dt),
   });
 }
+
 export async function getCrossModalInfo(params) {
   const { domain1, domain2, beginYear, endYear, summary, pubSkip, pubLimit, authorSkip, authorLimit } = params;
   return request(api.getCrossModalInfo
@@ -89,7 +92,6 @@ export async function getDomainPub(ids) {
     body: JSON.stringify(ids),
   });
 }
-
 
 export async function delTaskList(id) {
   return request(api.delTaskList
@@ -129,7 +131,7 @@ export async function getTaskList(offset, size) {
 }
 
 export async function getAggregate(params) {
-  const { method,dt } = params;
+  const { method, dt } = params;
   return request(api.getAggregate
     .replace(':method', method), {
     method: 'POST',

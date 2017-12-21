@@ -270,3 +270,22 @@ export async function nextAPI(payload) {
   const result = request(url, options);
   return result;
 }
+
+export async function wget(url) {
+  const token = getLocalToken();
+  const headers = new Headers();
+  headers.append('Accept', 'application/json');
+  headers.append('Content-Type', 'application/json');
+  if (token) {
+    headers.append('Authorization', token);
+  }
+  const options = { url, headers };
+  const data = await fetch(options);
+  if (data && data.status >= 200 && data.status < 300) {
+    return data.data;
+  } else if (data.data) {
+    return data.data;
+  } else {
+    throw new Error(`WGET Error: ${data.status}: ${data.statusText}`);
+  }
+}

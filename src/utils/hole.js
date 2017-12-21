@@ -47,6 +47,7 @@ function fillFuncs(holeList, defaultHoleList, payload, config) {
     const newHoles = [];
     holes.map((elm) => {
       if (elm === default_placeholder) {
+        // apply defaults
         if (defaultHoleList && defaultHoleList.length > 0) {
           defaultHoleList.map((hole) => {
             newHoles.push(hole(payload));
@@ -54,7 +55,11 @@ function fillFuncs(holeList, defaultHoleList, payload, config) {
           });
         }
       } else {
-        newHoles.push(elm(payload));
+        const jsx = elm(payload);
+        // console.log('jsx:', jsx);
+        // jsx.props.style = { border: 'solid 1px red' };
+        // console.log('jsx:', jsx);
+        newHoles.push(jsx);
       }
       return false;
     });

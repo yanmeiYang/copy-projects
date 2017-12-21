@@ -5,7 +5,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const webpack = require('webpack');
 
-const debug = false;
+const debug = true;
+
+// TODO 分成3个不同的build， 一个是production模式，一个是dev模式，另一个是基础的。
 
 module.exports = (webpackConfig, env) => {
   const production = env === 'production';
@@ -22,6 +24,10 @@ module.exports = (webpackConfig, env) => {
   if (!buildDllMode) {
     webpackConfig.output.filename = '[name].[hash:8].js';
     webpackConfig.output.chunkFilename = '[name].[hash:8].js';
+  }
+
+  if (!production) {
+    // webpackConfig.devtool = 'inline-source-map';
   }
 
   if (production) {

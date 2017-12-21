@@ -25,7 +25,7 @@ if (AvailableSystems.indexOf(system) <= 0) {
 
 
 // create and override file.
-const path = 'system-override.js';
+const path = 'src/system-override.js';
 fs.writeFileSync(path, `module.exports = { OverrideSystem: '${system}' };`);
 
 console.log('system is [', system, '] start building...');

@@ -55,4 +55,8 @@ module.exports = {
 
   // methods
   log, logRequest, logRequestResult, logRequestError,
+
+  // other configs:
+  HighlightHoles: 'none', // ['none' | 'yes' | 'all']
+
 };

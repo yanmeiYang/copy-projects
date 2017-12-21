@@ -1,0 +1,30 @@
+@import '~themes/vars';
+
+.debugHoleBox {
+  border: solid 1px #00800070;
+  margin: 8px;padding: 0px 8px;
+
+  .debugTitle {
+    font-size: 11px; font-weight: bold;color: #008000;
+    background: white;border: solid 1px #00800070;
+    position: relative;top: -10px;
+    padding: 0 4px;overflow: hidden;
+    width: min-content;
+  }
+  .debugContent {
+    position: relative;top: -8px;margin: 0;
+  }
+}
+
+.debugHoleBox:hover {
+  background-color: #feffe8;
+  .debugTitle { background-color: #feffe8;}
+}
+
+.debugHoleBox.empty {
+  background-color: #eee;
+}
+
+.tip {
+  border: solid 1px red;
+}

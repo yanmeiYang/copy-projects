@@ -19,10 +19,6 @@ import { Auth } from 'hoc';
 import SearchAssistant, { AssistantUtils } from './SearchAssistant';
 import styles from './SearchComponent.less';
 
-const DefaultRightZoneFuncs = [
-  param => <SearchKnowledge query={param.query} key="1" />,
-];
-
 @connect(({ app, search, loading }) => ({ app, search, loading }))
 @withRouter
 @Auth
@@ -212,6 +208,14 @@ export default class SearchComponent extends Component {
     }
   };
 
+
+  defaultZone = {
+    rightZone: [
+      param => <SearchKnowledge key={1} query={param.query} />,
+    ],
+  };
+
+
   render() {
     const {
       disableExpertBaseFilter, disableFilter, disableSearchKnowledge,
@@ -328,8 +332,9 @@ export default class SearchComponent extends Component {
               />
 
               <Hole
+                name="search.rightZoneFuncs"
                 fill={rightZoneFuncs}
-                defaults={DefaultRightZoneFuncs}
+                defaults={this.defaultZone.rightZone}
                 param={{ query, topic }}
                 config={{ containerClass: styles.searchKgContent }}
               />

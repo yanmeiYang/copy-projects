@@ -41,12 +41,14 @@ export default class SearchKnowledge extends Component {
     if (!strings.cleanQuery(query)) {
       return null;
     }
+    // dispatch({ type: 'search/getTopicByMentionSuccess', payload: { data: { data: {} } } });
+
     // if is translated results, use translated english to fetch.
     const { translatedLanguage, translatedText } = this.props;
     // console.log('NOT>>>', translatedLanguage, translatedText, this.props.topic);
     // (!this.props.topic || !this.props.topic.categories)
     let mention;
-    if (translatedLanguage === 1 && translatedText) {
+    if (translatedLanguage === 2 && translatedText) {
       mention = translatedText;
     } else {
       mention = strings.firstNonEmptyQuery(query);

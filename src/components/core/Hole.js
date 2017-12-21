@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
+import { Tooltip } from 'antd';
+import { classnames } from 'utils';
 import * as hole from 'utils/hole';
+import styles from './Hole.less';
 
-// @connect()
+@connect(({ app }) => ({ debug: app.debug }))
 export default class Hole extends Component {
 
   static propTypes = {
+    name: PropTypes.string,
     fill: PropTypes.oneOfType([PropTypes.bool, PropTypes.array]),
     defaults: PropTypes.array,
     param: PropTypes.object,
@@ -14,16 +18,42 @@ export default class Hole extends Component {
     // other configs.
   };
 
-  static defaultProps = {};
+  static defaultProps = {
+    name: 'HOLE',
+  };
 
   render() {
-    const { fill, defaults, param, config, children } = this.props;
-    if (!param) {
-      // fill模式
-      return hole.fill(fill, defaults);
-    } else {
-      // fillFunc模式
-      return hole.fillFuncs(fill, defaults, param, config);
+    const { name, fill, defaults, param, config, children, debug } = this.props;
+
+    const holeContent = param
+      ? hole.fillFuncs(fill, defaults, param, config)
+      : hole.fill(fill, defaults);
+
+    // DEBUG ONLY
+    if (process.env.NODE_ENV !== 'production') {
+      switch (debug.HighlightHoles) {
+        case 'yes':
+          if (!holeContent) {
+            return false;
+          }
+        case 'all':
+          return (
+            <div className={classnames({
+              [styles.debugHoleBox]: true,
+              [styles.empty]: !holeContent,
+            })}>
+              <div className={styles.debugTitle}>{name}</div>
+              <div className={styles.debugContent}>
+                {holeContent}
+              </div>
+            </div>
+          );
+        case 'none':
+          return holeContent;
+        default:
+      }
     }
+
+    return holeContent;
   }
 }

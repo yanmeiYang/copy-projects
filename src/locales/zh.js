@@ -18,6 +18,7 @@ export default {
 
   // Index
   'index.title': '专家搜索',
+  'index.centerZone.forecast': 'ACM Fellow 预测',
   'search.translateSearchMessage.1': '同时搜索了 "{enQuery}"。',
   'search.translateSearchMessage.2': '您也可以只搜索 "{cnQuery}"。',
   'search.translateSearchMessage.reverse': '您可以同时搜索 "{enQuery}" 和 "{cnQuery}"。',
@@ -87,6 +88,7 @@ export default {
   'com.PersonList.label.qrcode': '二维码',
   'com.PersonList.label.cooperationFeedback': '合作需求反馈',
   'com.PersonList.message.noResults': '没有结果',
+  'com.PersonList.highCitedPaper': '高引用论文:',
 
   'com.expertMap.headerLine.label.field': '领域：',
   'com.expertMap.headerLine.label.selectField': '选择领域',

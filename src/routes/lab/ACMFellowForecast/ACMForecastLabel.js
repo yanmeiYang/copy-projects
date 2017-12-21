@@ -16,14 +16,17 @@ export default class ACMForecastLabel extends Component {
   render() {
     const { person, pubs } = this.props;
     return (
-      <div style={{ order: 10 }} className={styles.highCitedPaper}>
+      <div style={{ order: 10, paddingBottom: 10 }} className={styles.highCitedPaper}>
+        <i className="fa fa-book">&nbsp;</i>
         High Cited Papers:
         {pubs && pubs.map((pub) => {
           console.log('pub: ', pub);
           const title = pub && pub.title;
           return (
-            <div key={pub.id}>
-              {title}, {pub.year} (cited by: {pub.num_citation})
+            <div key={pub.id} style={{ paddingLeft: 15, fontSize: 12 }}>
+              <a href={pub.urls[0]} target="_blank" rel="noopener noreferrer" className={styles.a}>
+                {title}, {pub.year} (cited by: {pub.num_citation})
+              </a>
             </div>
           );
         })}

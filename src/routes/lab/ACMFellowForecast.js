@@ -13,9 +13,10 @@ import { Spinner } from 'components';
 import ACMForecastLabel from './ACMFellowForecast/ACMForecastLabel';
 import styles from './ACMFellowForecast.less';
 
-@connect(({ app, acmforecast }) => ({
+@connect(({ app, acmforecast, loading }) => ({
   app: { user: app.user, roles: app.roles },
   acmforecast,
+  loading,
 }))
 @Auth
 @withRouter
@@ -84,6 +85,7 @@ export default class ACMFellowForecast extends Component {
     const { acmforecast } = this.props;
     const { persons, total } = acmforecast;
     const { page, pageSize } = this.state;
+    const loading = this.props.loading.global;
 
     const contentBottomZone = [
       hole.DEFAULT_PLACEHOLDER,
@@ -95,6 +97,7 @@ export default class ACMFellowForecast extends Component {
 
     return (
       <Layout contentClass={styles.ACMFellowForecast} searchZone={[]}>
+        <Spinner loading={loading} />
         <h1>
           ACM Fellow预测
           {total && <span className={styles.small}> ({total})</span>}

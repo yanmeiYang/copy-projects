@@ -55,7 +55,7 @@ module.exports = {
   // Expert Page
   index_centerZone: [
     <Link key={5} className={styles.acmLink} to="/a/acm-forecast">
-      <FM defaultMessage="ACM Fellow Forecast" id="index.centerZone.forecast" />
+      <FM id="sys.ali.index.centerZone.forecast" defaultMessage="ACM Fellow Forecast" />
     </Link>,
     <IndexCenterZone
       key={7}

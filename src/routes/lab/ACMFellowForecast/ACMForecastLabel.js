@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, withRouter } from 'dva/router';
 import styles from './ACMForecastLabel.less';
-import * as pubService from '../../../services/publication';
+import * as pubService from 'services/publication';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 
 
@@ -18,22 +18,20 @@ import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 export default class ACMForecastLabel extends Component {
   render() {
     const { person, pubs } = this.props;
+
     return (
       <div style={{ order: 10 }} className={styles.ACMForecastLabel}>
         <i className="fa fa-book">&nbsp;</i>
-        <FM defaultMessage="High Cited Papers:"
-            id="com.PersonList.highCitedPaper" />
+        <FM id="com.ACMForecast.highCitedPaper" defaultMessage="High Cited Papers:" />
         {pubs && pubs.map((pub) => {
           if (!pub) {
             return false;
           }
-          const title = pub && pub.title;
-          const key = pub && pub.id;
           return (
-            <div key={key} className={styles.highCitedPaper}>
+            <div key={pub.id} className={styles.highCitedPaper}>
               <a href={pubService.getArchiveUrlByPub(pub)} className={styles.highCitedPaperTitle}
-                 target="_blank" rel="noopener noreferrer" >
-                {title}
+                 target="_blank" rel="noopener noreferrer">
+                {pub.title}
               </a>, {pub.year} (cited by: {pub.num_citation})
             </div>
           );

@@ -18,7 +18,6 @@ export default {
 
   // Index
   'index.title': 'Expert Search',
-  'index.centerZone.forecast': 'ACM Fellow Forecast',
   'search.translateSearchMessage.1': 'We also search "{enQuery}" for you.',
   'search.translateSearchMessage.2': 'Search "{cnQuery}" only.',
   'search.translateSearchMessage.reverse': 'You can also search with both "{enQuery}" and "{cnQuery}".',
@@ -88,7 +87,6 @@ export default {
   'com.PersonList.label.qrcode': 'QR Code',
   'com.PersonList.label.cooperationFeedback': '合作需求反馈',
   'com.PersonList.message.noResults': 'No Results',
-  'com.PersonList.highCitedPaper': 'High Cited Papers:',
 
   'com.expertMap.headerLine.label.field': 'Field:',
   'com.expertMap.headerLine.label.selectField': 'Choose the field',
@@ -199,6 +197,9 @@ export default {
   'com.feedback.ok.check_your_mailbox': 'Success, please check email',
   'com.feedback.user.exists': 'User already exists',
 
+  //ACMForecast
+  'com.ACMForecast.highCitedPaper': 'High Cited Papers:',
+
   // Recommendation
   'rcd.home.pageTitle': 'Organization List',
   'rcd.projectTable.header.projectName': 'Project Name',
@@ -219,4 +220,6 @@ export default {
   // Merge
   'com.profileMerge.button.merge': 'Merge',
   'com.profileMerge.label.pending': 'In pending',
+
+  'sys.ali.index.centerZone.forecast': 'ACM Fellow Forecast',
 };

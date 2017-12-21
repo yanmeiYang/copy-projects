@@ -18,6 +18,7 @@ export default {
 
   // Index
   'index.title': 'Expert Search',
+  'index.centerZone.forecast': 'ACM Fellow Forecast',
   'search.translateSearchMessage.1': 'We also search "{enQuery}" for you.',
   'search.translateSearchMessage.2': 'Search "{cnQuery}" only.',
   'search.translateSearchMessage.reverse': 'You can also search with both "{enQuery}" and "{cnQuery}".',
@@ -81,13 +82,13 @@ export default {
   'com.searchTypeWidget.label.ACM_ExpertSearch': 'Global Experts',
   'com.searchTypeWidget.label.ACMFellowExpertBase': 'ACM Fellow',
 
-
   'com.PersonList.label.views': 'views',
   'com.PersonList.label.homepage': 'Homepage',
   'com.PersonList.label.sendEmail': 'Send Email',
   'com.PersonList.label.qrcode': 'QR Code',
   'com.PersonList.label.cooperationFeedback': '合作需求反馈',
   'com.PersonList.message.noResults': 'No Results',
+  'com.PersonList.highCitedPaper': 'High Cited Papers:',
 
   'com.expertMap.headerLine.label.field': 'Field:',
   'com.expertMap.headerLine.label.selectField': 'Choose the field',

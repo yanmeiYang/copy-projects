@@ -136,7 +136,6 @@ export default {
   'com.topicRelation.header.startYear': 'start year: ',
   'com.topicRelation.header.endYear': 'end year: ',
 
-
   'com.topTrend.header': 'Technical Trend Prediction',
   'com.topTrend.header.tab.recentHeat': 'Recent Heat',
   'com.topTrend.header.tab.globalHeat': 'Global Heat',

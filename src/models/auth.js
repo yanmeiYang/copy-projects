@@ -96,6 +96,7 @@ export default {
         const uid = data.uid;
         yield call(authService.invoke, uid, sysconfig.SOURCE, token);
         yield call(authService.invoke, uid, role, token);
+        return true;
       }
     },
     * addForbidByUid({ payload }, { call, put }) {
@@ -126,6 +127,10 @@ export default {
       const src = source || sysconfig.SOURCE;
       const { data } = yield call(authService.checkEmail, src, email);
       yield put({ type: 'checkEmailSuccess', payload: data.status });
+      // return a value to support promise.
+      if (data && data.status) {
+        return true;
+      }
     },
 
     * listUsersByRole({ payload }, { call, put }) {
@@ -148,14 +153,17 @@ export default {
         throw data;
       }
     },
+
     * updateProfile({ payload }, { call, put }) {
       const { uid, name } = payload;
       const { data } = yield call(authService.updateProfile, uid, name);
     },
+
     * addOrgCategory({ payload }, { call, put }) {
       const { category, key, val } = payload;
       yield call(uconfigService.setByKey, category, key, val);
     },
+
     // 获取注册用户列表
     * getCategoryByUserRoles({ payload }, { call, put }) {
       const { category, source } = payload;
@@ -163,6 +171,7 @@ export default {
       yield put({ type: 'setData', payload: { data } });
     },
   },
+
   reducers: {
     createUserSuccess(state) {
       // TODO 注册成功以后的提示信息
@@ -181,6 +190,7 @@ export default {
       });
       return { ...state, listUsers };
     },
+
     addForbidSuccess(state, { payload }) {
       const { uid } = payload;
       const listUsers = [];
@@ -193,6 +203,7 @@ export default {
       });
       return { ...state, listUsers };
     },
+
     checkEmailSuccess(state, { payload }) {
       return { ...state, validEmail: payload };
     },

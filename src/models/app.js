@@ -86,7 +86,7 @@ export default {
       } catch (err) {
         const { success, statusCode, message } = err;
         if (!success && statusCode > 400 && statusCode < 500) {
-          antdMessage.error('用户名或密码错误'); // TODO
+          antdMessage.error('用户名或密码错误'); // TODO @alice i18n
           yield put({ type: 'auth/loginError', data: message });
         } else {
           throw err;
@@ -207,6 +207,12 @@ export default {
       return { ...state, user, roles };
     },
 
+    layout(state, { payload }) {
+      return { ...state, ...payload };
+    },
+
+    // ---------- below delete later -----------
+
     emptyAuthInfo(state) {
       return { ...state, user: undefined, roles: undefined, token: undefined };
     },
@@ -272,9 +278,6 @@ export default {
       };
     },
 
-    layout(state, { payload }) {
-      return { ...state, ...payload };
-    },
 
     logoutSuccess(state) {
       auth.removeLocalAuth();

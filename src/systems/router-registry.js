@@ -52,8 +52,11 @@ const RouterRegistry = [
   person.Person,
   person.PersonPage,
 
-  // user & auth.
+  // auth.
   auth.Login,
+  // auth.Simple3rdLogin, // disabled by default.
+
+  // user
   user.Register,
   user.User,
   user.ForgotPassword,

@@ -21,9 +21,9 @@ const Person = ({ roles, dispatch, person, seminar, publications, loading }) => 
   const { profile, avgScores } = person;
   const { results } = seminar;
   const totalPubs = profile.indices && profile.indices.num_pubs;
-  const compre = avgScores.filter(score => score.key === 'compre')[0];
+  const contrib = avgScores.filter(score => score.key === 'contrib')[0];
   const integrated = avgScores.filter(score => score.key === 'integrated')[0];
-  const activity_indices = { compre: compre === undefined ? 0 : compre.score };
+  const activity_indices = { contrib: contrib === undefined ? 0 : contrib.score };
 
   const contributionLoading = loading.effects['person/getContributionRecalculatedByPersonId'];
 
@@ -49,12 +49,12 @@ const Person = ({ roles, dispatch, person, seminar, publications, loading }) => 
       }
       <table style={{ marginBottom: 10 }} className="scoreTable">
         <thead>
-        {compre &&
+        {contrib &&
         <tr>
           <td>贡献度:</td>
           <td>
             {/* <Rate disabled defaultValue={contrib.score}/> */}
-            <span style={{ marginRight: 20 }}>{compre.score}</span>
+            <span style={{ marginRight: 20 }}>{contrib.score}</span>
             {auth.isSuperAdmin(roles) &&
             <Tooltip title="重新计算贡献度按钮">
               <Button size="small" loading={contributionLoading}

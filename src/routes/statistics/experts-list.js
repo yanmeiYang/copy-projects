@@ -26,10 +26,10 @@ const columns = [
   {
     title: '总贡献度',
     dataIndex: 'contrib',
-    sorter: (a, b) => a.compre - b.compre,
+    sorter: (a, b) => a.contrib - b.contrib,
     render(text, record) {
-      if (record.compre !== 0) {
-        return getTwoDecimal(parseFloat(record.compre), 2);
+      if (record.contrib !== 0) {
+        return getTwoDecimal(parseFloat(record.contrib), 2);
       } else {
         return '未评分';
       }

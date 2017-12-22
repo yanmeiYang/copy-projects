@@ -4,10 +4,12 @@
 import React from 'react';
 import { connect } from 'dva';
 import { InputNumber, Rate, Button, Row, Col, Table, Modal } from 'antd';
-import { Link } from 'dva/router';
+import { Link, routerRedux } from 'dva/router';
 import ExpertRatingModalContent from './expertRatingModalContent';
 import * as seminarService from 'services/seminar';
 import * as profileUtils from '../../../utils/profile-utils';
+import * as strings from 'utils/strings';
+import { sysconfig } from 'systems';
 import styles from './index.less';
 import { Layout } from 'routes';
 
@@ -66,7 +68,17 @@ class ExpertRatingPage extends React.Component {
     this.setState({
       visible: false,
     });
-  }
+  };
+
+  onSearchBarSearch = (data) => {
+    console.log('Enter query is ', data);
+    const newOffset = data.offset || 0;
+    const newSize = data.size || sysconfig.MainListSize;
+    const encodedQuery = strings.encodeAdvancedQuery(data.query) || '-';
+    const pathname = `/${sysconfig.SearchPagePrefix}/${encodedQuery}/${newOffset}/${newSize}`;
+    console.log('=========== encode query is: ', pathname);
+    this.props.dispatch(routerRedux.push({ pathname }));
+  };
 
   render() {
     const { summaryById, expertRating } = this.props.seminar;
@@ -100,7 +112,7 @@ class ExpertRatingPage extends React.Component {
 
 
     return (
-      <Layout className={styles.detailSeminar}>
+      <Layout className={styles.detailSeminar} onSearch={this.onSearchBarSearch}>
         <div className={styles.thumbnail}>
           <div className={styles.caption}>
 

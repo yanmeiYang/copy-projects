@@ -29,6 +29,8 @@ import router2bprofile from 'routes/2b-profile/router-2bprofile';
 import profile from 'routes/profile/router-profile';
 import crossHeat from 'routes/cross-heat/router-ch';
 import dataAnnotation from 'routes/data-annotation/router-da';
+// import reco from 'routes/reco/router-reco';
+import talentHr from 'routes/talentHR/router-talentHR';
 import topicRelation from 'routes/topic-relation/router-relation';
 import toolsCompare from 'routes/tools-compare/router-toolscompare';
 
@@ -51,6 +53,16 @@ const RouterRegistry = [
   // person
   person.Person,
   person.PersonPage,
+
+  // reco
+  // reco.Reports,
+  // reco.ProjectList,
+  // reco.ViewPerson,
+  // reco.CreateProject,
+
+  // talentHR
+  talentHr.TalentHr,
+  talentHr.TalentSearchPage,
 
   // auth.
   auth.Login,

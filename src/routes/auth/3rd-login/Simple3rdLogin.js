@@ -60,7 +60,12 @@ export default class Simple3rdLogin extends Component {
     }
 
     // [STEP 2] 验证是否被人串改
-    const checkPass = true; // TODO
+    let checkPass = true; // TODO
+    if (a && a.length > 3) {
+      checkPass = true;
+    } else {
+      checkPass = false;
+    }
     if (DEBUG_LOG) {
       console.log('[STEP 2] Checksum: Skip...');
     }
@@ -142,8 +147,17 @@ export default class Simple3rdLogin extends Component {
   passwdgen = id => `data${id}mining`;
 
   goLogin = (email, password, role) => {
-    this.props.dispatch({ type: 'app/login', payload: { email, password, role } });
-    return this.redirectSuccess();
+    this.props.dispatch({ type: 'app/login', payload: { email, password, role } })
+      .then((success) => {
+        if (success) {
+          this.redirectSuccess();
+        } else {
+          this.setState({ step: 'check_failed' });
+        }
+      })
+      .catch((err) => {
+        this.setState({ step: 'check_failed' });
+      });
   };
 
   redirectSuccess = () => {

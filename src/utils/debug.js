@@ -9,7 +9,7 @@ const LogRequest = true;
 const LogRequestResult = true;
 const LogHOC = false;
 
-// ReduxLoggerEnabled = true;
+ReduxLoggerEnabled = true;
 
 // Log common message.
 function log(...data) {

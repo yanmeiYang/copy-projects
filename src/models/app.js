@@ -128,6 +128,7 @@ export default {
             console.log('Login Success, Dispatch to ', decodeURIComponent(from));
           }
           yield put(routerRedux.push({ pathname: decodeURIComponent(from) }));
+          return true; // login success
         }
       } else {
         console.error('Login error:', authData);

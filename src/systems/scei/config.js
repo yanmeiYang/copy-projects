@@ -30,4 +30,8 @@ module.exports = {
   Search_EnableTranslateSearch: true, // 启用翻译搜索，显示提示信息;/
   Search_DefaultTranslateSearch: true, // 默认使用翻译搜索;
 
+  // special
+  // AuthLoginUsingThird: true,
+  // AuthLoginUsingThirdPage: 'http://ucircle.oa.com/auth/aminer',
+
 };

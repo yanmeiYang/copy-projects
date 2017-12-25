@@ -196,6 +196,9 @@ export default {
   'com.feedback.user.exists': '用户已经存在',
   'com.feedback.ok.check_your_mailbox': '创建成功，请查收邮件',
 
+  //ACMForecast
+  'com.ACMForecast.highCitedPaper': '高引用论文:',
+
   // Recommendation
   'rcd.home.pageTitle': '机构列表',
   'rcd.projectTable.header.projectName': '项目名称',
@@ -216,4 +219,6 @@ export default {
   // Merge
   'com.profileMerge.button.merge': '合并',
   'com.profileMerge.label.pending': '正在等待',
+
+  'sys.ali.index.centerZone.forecast': 'ACM Fellow 预测',
 };

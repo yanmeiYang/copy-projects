@@ -16,8 +16,18 @@ import tencent from 'routes/third-login/router';
 import router2bprofile from 'routes/2b-profile/router-2bprofile';
 import crossHeat from 'routes/cross-heat/router-ch';
 
-
 import { RouterRegistry, RouterRegistry2b, RouterJSXFunc } from '../router-registry';
+
+const ExtraRouters = {
+  // AliACMForecast: {
+  //   path: '/a/acm-forecast',
+  //   models: () => [
+  //     import('models/lab/ACMFellowForecastModel'),
+  //   ],
+  //   component: () => import('routes/lab/ACMFellowForecast'),
+  // },
+};
+
 
 const routes = [
   ...RouterRegistry2b,
@@ -32,8 +42,11 @@ const routes = [
   // person
   // person.Person,
 
-  // user & auth.
+  // userthis.props
   auth.Login,
+  auth.Simple3rdLogin,
+
+  // user
   user.Register,
   user.User,
   user.ForgotPassword,

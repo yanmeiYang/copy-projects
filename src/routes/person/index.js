@@ -21,15 +21,15 @@ const Person = ({ roles, dispatch, person, seminar, publications, loading }) => 
   const { profile, avgScores } = person;
   const { results } = seminar;
   const totalPubs = profile.indices && profile.indices.num_pubs;
-  let compre = { score: 0 };
+  let contrib = { score: 0 };
   let integrated = null;
   let level = null;
   let content = null;
 
   if (avgScores && avgScores.length > 0) {
     for (const item of avgScores) {
-      if (item.key === 'compre') {
-        compre = item;
+      if (item.key === 'contrib') {
+        contrib = item;
       } else if (item.key === 'integrated') {
         integrated = item;
       } else if (item.key === 'level') {
@@ -39,7 +39,7 @@ const Person = ({ roles, dispatch, person, seminar, publications, loading }) => 
       }
     }
   }
-  const activity_indices = { compre: compre === undefined ? 0 : compre.score };
+  const activity_indices = { contrib: contrib === undefined ? 0 : contrib.score };
 
   const contributionLoading = loading.effects['person/getContributionRecalculatedByPersonId'];
 

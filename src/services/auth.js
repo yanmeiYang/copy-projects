@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /**
  * Created by yangyanmei on 17/6/29.
  */
@@ -48,7 +49,8 @@ export async function getCurrentUserInfo(params) {
 }
 
 // TODO should in use service.
-export async function createUser(email, first_name, gender, last_name, position, sub, password, source) {
+export async function createUser(email, first_name, gender, last_name,
+                                 position, sub, password, source) {
   const src = source || sysconfig.SOURCE;
   const user = {
     email,
@@ -134,6 +136,7 @@ export async function updateProfile(id, name) {
     body: JSON.stringify(data),
   });
 }
+
 export async function setFeedback(params) {
   const { subject, body } = params;
   const nextapi = apiBuilder.notify(F.notify.feedback, 'feedback')

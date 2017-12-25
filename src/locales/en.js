@@ -81,7 +81,6 @@ export default {
   'com.searchTypeWidget.label.ACM_ExpertSearch': 'Global Experts',
   'com.searchTypeWidget.label.ACMFellowExpertBase': 'ACM Fellow',
 
-
   'com.PersonList.label.views': 'views',
   'com.PersonList.label.homepage': 'Homepage',
   'com.PersonList.label.sendEmail': 'Send Email',
@@ -136,7 +135,6 @@ export default {
   'com.topicRelation.header.coOccurenceNum': 'co-occur> ',
   'com.topicRelation.header.startYear': 'start year: ',
   'com.topicRelation.header.endYear': 'end year: ',
-
 
   'com.topTrend.header': 'Technical Trend Prediction',
   'com.topTrend.header.tab.recentHeat': 'Recent Heat',
@@ -198,6 +196,9 @@ export default {
   'com.feedback.ok.check_your_mailbox': 'Success, please check email',
   'com.feedback.user.exists': 'User already exists',
 
+  //ACMForecast
+  'com.ACMForecast.highCitedPaper': 'High Cited Papers:',
+
   // Recommendation
   'rcd.home.pageTitle': 'Organization List',
   'rcd.projectTable.header.projectName': 'Project Name',
@@ -218,4 +219,6 @@ export default {
   // Merge
   'com.profileMerge.button.merge': 'Merge',
   'com.profileMerge.label.pending': 'In pending',
+
+  'sys.ali.index.centerZone.forecast': 'ACM Fellow Forecast',
 };

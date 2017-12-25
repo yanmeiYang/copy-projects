@@ -12,7 +12,7 @@ import seminar from 'routes/seminar/router-seminar';
 
 import { RouterRegistry, RouterRegistry2b, RouterJSXFunc } from '../router-registry';
 
-const AliRouter = {
+const ExtraRouters = {
   AliACMForecast: {
     path: '/a/acm-forecast',
     models: () => [
@@ -93,7 +93,7 @@ const routes = [
   // core.Addition(app),
 
   // System specified.
-  AliRouter.AliACMForecast,
+  ExtraRouters.AliACMForecast,
 
   // System Default.
   core.Error404, // must be last one.

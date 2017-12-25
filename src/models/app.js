@@ -3,6 +3,7 @@ import { message as antdMessage } from 'antd';
 import { Map } from 'immutable';
 import { routerRedux } from 'dva/router';
 import { config, queryURL } from 'utils';
+import debug from 'utils/debug';
 import { mergeLibs } from 'utils/requirejs';
 import * as auth from 'utils/auth';
 import * as authService from 'services/auth';
@@ -28,6 +29,8 @@ export default {
     roles: auth.createEmptyRoles(), // { admin: false, ccf_user: false, role: [], authority: [] },
     feedbackStatus: null,
 
+    // ------------- organize this ---------------------
+
     isAdvancedSearch: false,
 
     headerResources: null, // { key: [<helmet_component>] }
@@ -47,14 +50,18 @@ export default {
       // 刷新页面第一次调用。
       auth.ensureUserAuthFromAppModel(dispatch);
 
+      // 这里的DEBUG内容，只有开发模式时才生效。
+      if (process.env.NODE_ENV !== 'production') {
+        dispatch({ type: 'set', payload: { debug } });
+      }
       // TODO remove this.
-      let tid;
-      window.onresize = () => {
-        clearTimeout(tid);
-        tid = setTimeout(() => {
-          dispatch({ type: 'changeNavbar' });
-        }, 300);
-      };
+      // let tid;
+      // window.onresize = () => {
+      //   clearTimeout(tid);
+      //   tid = setTimeout(() => {
+      //     dispatch({ type: 'changeNavbar' });
+      //   }, 300);
+      // };
     },
   },
 
@@ -79,7 +86,7 @@ export default {
       } catch (err) {
         const { success, statusCode, message } = err;
         if (!success && statusCode > 400 && statusCode < 500) {
-          antdMessage.error('用户名或密码错误'); // TODO
+          antdMessage.error('用户名或密码错误'); // TODO @alice i18n
           yield put({ type: 'auth/loginError', data: message });
         } else {
           throw err;
@@ -121,6 +128,7 @@ export default {
             console.log('Login Success, Dispatch to ', decodeURIComponent(from));
           }
           yield put(routerRedux.push({ pathname: decodeURIComponent(from) }));
+          return true; // login success
         }
       } else {
         console.error('Login error:', authData);
@@ -181,6 +189,14 @@ export default {
   },
 
   reducers: {
+    set(state, { payload }) {
+      return { ...state, ...payload };
+    },
+
+    setDebug(state, { payload }) {
+      return { ...state, debug: { ...state.debug, ...payload } };
+    },
+
     getMeSuccess(state, { payload: user, role }) {
       const roles = auth.parseRoles(user);
       if (role) { // tencent在用
@@ -191,6 +207,12 @@ export default {
       auth.saveLocalAuth(user, roles);
       return { ...state, user, roles };
     },
+
+    layout(state, { payload }) {
+      return { ...state, ...payload };
+    },
+
+    // ---------- below delete later -----------
 
     emptyAuthInfo(state) {
       return { ...state, user: undefined, roles: undefined, token: undefined };
@@ -257,9 +279,6 @@ export default {
       };
     },
 
-    layout(state, { payload }) {
-      return { ...state, ...payload };
-    },
 
     logoutSuccess(state) {
       auth.removeLocalAuth();

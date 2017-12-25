@@ -55,23 +55,23 @@ function fillFuncs(holeList, defaultHoleList, payload, config) {
           });
         }
       } else {
-        const jsx = elm(payload);
-        // console.log('jsx:', jsx);
-        // jsx.props.style = { border: 'solid 1px red' };
-        // console.log('jsx:', jsx);
-        newHoles.push(jsx);
+        newHoles.push(elm(payload));
       }
       return false;
     });
-    if (config && (config.withContainer || config.containerClass)) {
-      return (
-        <div className={config.containerClass}>
-          {newHoles}
-        </div>
-      );
-    } else {
-      return newHoles;
+
+    // 从Hole的设计上，没法做到当内容为空的时候连外边框都不显示。如果有边框的话。
+    // 但是可以做到隐藏其宽度。
+
+    // 没内容总是不输出。
+    if (!newHoles || newHoles.length === 0) {
+      return false;
     }
+    // 看看是不是要一个wrapper.
+    const withContainer = config && (config.withContainer || config.containerClass);
+    return withContainer
+      ? <div className={config.containerClass}>{newHoles}</div>
+      : newHoles;
   }
   return false;
 }

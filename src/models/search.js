@@ -67,6 +67,16 @@ export default {
           // dispatch({ type: 'clearSearchAssistant' });
         }
 
+        //临时增加,监听talentHr的search页面
+        match = pathToRegexp('/talent/search/:offset/:size').exec(pathname);
+        if (match) {
+          console.log('search>>>>>>>', search.substring(4), typeof search);
+          const keyword = search.substring(4);
+          const offset = parseInt(match[1], 10);
+          const size = parseInt(match[2], 10);
+          dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
+        }
+
         //
         match = pathToRegexp('/eb/:id/:query/:offset/:size').exec(pathname);
         if (match) {
@@ -188,7 +198,7 @@ export default {
               activityScores.data.indices.length > 0) {
               data.data.items && data.data.items.map((item, index) => {
                 const activityRankingContrib =
-                  activityScores.data.indices[index].filter(scores => scores.key === 'compre');
+                  activityScores.data.indices[index].filter(scores => scores.key === 'contrib');
                 if (data.data.items[index].indices) {
                   data.data.items[index].indices.activityRankingContrib =
                     activityRankingContrib.length > 0 ? activityRankingContrib[0].score : 0;
@@ -262,7 +272,12 @@ export default {
       const assistantDataMeta = yield select(state => state.search.assistantDataMeta);
       const isNotAffactedByAssistant = yield select(state => state.search.isNotAffactedByAssistant);
 
-      const assistantQuery = findAssistantQuery({ ghost: false, filters, assistantDataMeta, query});
+      const assistantQuery = findAssistantQuery({
+        ghost: false,
+        filters,
+        assistantDataMeta,
+        query
+      });
 
       const params = {
         query, offset, size, filters: noTotalFilters, sort,
@@ -436,7 +451,7 @@ export default {
 
     smartClearAssistantMeta(state, { payload: { query } }) {
       if (state.query !== query) {
-        return { ...state, assistantDataMeta: null, assistantData: null  };
+        return { ...state, assistantDataMeta: null, assistantData: null };
       }
       return state;
     },

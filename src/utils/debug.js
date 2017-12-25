@@ -9,7 +9,7 @@ const LogRequest = true;
 const LogRequestResult = true;
 const LogHOC = false;
 
-// ReduxLoggerEnabled = true;
+ReduxLoggerEnabled = true;
 
 // Log common message.
 function log(...data) {
@@ -55,4 +55,8 @@ module.exports = {
 
   // methods
   log, logRequest, logRequestResult, logRequestError,
+
+  // other configs:
+  HighlightHoles: 'none', // ['none' | 'yes' | 'all']
+
 };

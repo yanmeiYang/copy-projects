@@ -367,7 +367,7 @@ function addAdditionParameterToData(data, sort, range) {
 
   // 置顶huawei项目中的acm fellow和高校top100
   if (sysconfig.Search_EnablePin) {
-    if (!sort || sort === 'relevance') {
+    if (sort || sort === 'relevance') {
       newData.pin = 1;
     }
   }

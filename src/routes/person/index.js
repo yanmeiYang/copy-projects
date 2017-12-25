@@ -21,8 +21,24 @@ const Person = ({ roles, dispatch, person, seminar, publications, loading }) => 
   const { profile, avgScores } = person;
   const { results } = seminar;
   const totalPubs = profile.indices && profile.indices.num_pubs;
-  const compre = avgScores.filter(score => score.key === 'compre')[0];
-  const integrated = avgScores.filter(score => score.key === 'integrated')[0];
+  let compre = { score: 0 };
+  let integrated = null;
+  let level = null;
+  let content = null;
+
+  if (avgScores && avgScores.length > 0) {
+    for (const item of avgScores) {
+      if (item.key === 'compre') {
+        compre = item;
+      } else if (item.key === 'integrated') {
+        integrated = item;
+      } else if (item.key === 'level') {
+        level = item;
+      } else if (item.key === 'content') {
+        content = item;
+      }
+    }
+  }
   const activity_indices = { compre: compre === undefined ? 0 : compre.score };
 
   const contributionLoading = loading.effects['person/getContributionRecalculatedByPersonId'];
@@ -49,61 +65,50 @@ const Person = ({ roles, dispatch, person, seminar, publications, loading }) => 
       }
       <table style={{ marginBottom: 10 }} className="scoreTable">
         <thead>
-        {compre &&
-        <tr>
-          <td>贡献度:</td>
-          <td>
-            {/* <Rate disabled defaultValue={contrib.score}/> */}
-            <span style={{ marginRight: 20 }}>{compre.score}</span>
-            {auth.isSuperAdmin(roles) &&
-            <Tooltip title="重新计算贡献度按钮">
-              <Button size="small" loading={contributionLoading}
-                      onClick={recalculatedContribution}>
-                <i className="fa fa-retweet" />
-              </Button>
-            </Tooltip>}
-          </td>
-        </tr>
-        }
+          <tr>
+            <td>贡献度:</td>
+            <td>
+              {/* <Rate disabled defaultValue={contrib.score}/> */}
+              <span style={{ marginRight: 20 }}>{compre.score}</span>
+              {auth.isSuperAdmin(roles) &&
+              <Tooltip title="重新计算贡献度按钮">
+                <Button size="small" loading={contributionLoading}
+                        onClick={recalculatedContribution}>
+                  <i className="fa fa-retweet" />
+                </Button>
+              </Tooltip>}
+            </td>
+          </tr>
         </thead>
-        {avgScores.map((score) => {
-          return (
-            <tbody key={score.key}>
-            {score.key === 'level' &&
-            <tr>
-              <td>演讲内容:</td>
-              <td>
-                <Rate disabled defaultValue={score.score} />
-                <input type="text" className="score" value={getTwoDecimal(score.score, 2)}
-                       disabled />
-              </td>
-            </tr>
-            }
-            {score.key === 'content' &&
-            <tr>
-              <td>演讲水平:</td>
-              <td>
-                <Rate disabled defaultValue={score.score} />
-                <input type="text" className="score" value={getTwoDecimal(score.score, 2)}
-                       disabled />
-              </td>
-            </tr>
-            }
-            </tbody>
-          );
-        })}
-        <tfoot>
-        {integrated &&
-        <tr>
-          <td>综合评价:</td>
-          <td>
-            <Rate disabled defaultValue={integrated.score} />
-            <input type="text" className="score" value={getTwoDecimal(integrated.score, 2)}
-                   disabled />
-          </td>
-        </tr>
-        }
-        </tfoot>
+        <tbody key={level}>
+          {level && level.score &&
+          <tr>
+            <td>演讲水平:</td>
+            <td>
+              <Rate disabled defaultValue={level.score} />
+              <input type="text" className="score" value={getTwoDecimal(level.score, 2)}
+                     disabled />
+            </td>
+          </tr>}
+          {content && content.score &&
+          <tr>
+            <td>演讲内容:</td>
+            <td>
+              <Rate disabled defaultValue={content.score} />
+              <input type="text" className="score" value={getTwoDecimal(content.score, 2)}
+                     disabled />
+            </td>
+          </tr>}
+          {integrated && integrated.score &&
+          <tr>
+            <td>综合评价:</td>
+            <td>
+              <Rate disabled defaultValue={integrated.score} />
+              <input type="text" className="score" value={getTwoDecimal(integrated.score, 2)}
+                     disabled />
+            </td>
+          </tr>}
+        </tbody>
       </table>
     </div>,
   }, {

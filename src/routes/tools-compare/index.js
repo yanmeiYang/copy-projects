@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Row, Col, Input, Form } from 'antd';
-import { connect } from "dva";
+import { Layout } from 'routes';
 
 class ComparePage extends React.Component {
   state = {
@@ -178,49 +178,51 @@ class ComparePage extends React.Component {
     const FormItem = Form.Item;
     const { getFieldDecorator } = this.props.form;
     return (
-      <div>
-        <h1>请输入需要比较的文本</h1>
-        <Form onSubmit={this.onClicked}>
+      <Layout searchZone={[]} showNavigator={false}>
+        <div>
+          <h1>请输入需要比较的文本</h1>
+          <Form onSubmit={this.onClicked}>
+            <Row>
+              <Col span={12}>需要对比的文本a
+                <FormItem>
+                  {getFieldDecorator('leftInput', { rules: [{ required: true }] })(
+                    <Input.TextArea type="text" autosize={{ minRows: 15, maxRows: 15 }} />)}
+                </FormItem>
+              </Col>
+              <Col span={12}>需要对比的文本b
+                <FormItem>
+                  {getFieldDecorator('rightInput', { rules: [{ required: true }] })(
+                    <Input.TextArea type="text" autosize={{ minRows: 15, maxRows: 15 }} />)}
+                </FormItem>
+              </Col>
+            </Row>
+            <FormItem>
+              <Button onClick={this.onClicked} size="large" type="primary">
+                开始比较
+              </Button>
+            </FormItem>
+          </Form>
+          {this.state.isClicked &&
           <Row>
-            <Col span={12}>需要对比的文本a
-              <FormItem>
-                {getFieldDecorator('leftInput', { rules: [{ required: true }] })(
-                  <Input.TextArea type="text" autosize={{ minRows: 15, maxRows: 15 }} />)}
-              </FormItem>
+            <Col span={6}>左侧文本独有内容
+              <Input.TextArea value={this.state.leftUnmatchedList}
+                              autosize={{ minRows: 15, maxRows: 15 }} />
             </Col>
-            <Col span={12}>需要对比的文本b
-              <FormItem>
-                {getFieldDecorator('rightInput', { rules: [{ required: true }] })(
-                  <Input.TextArea type="text" autosize={{ minRows: 15, maxRows: 15 }} />)}
-              </FormItem>
+            <Col span={6}>右侧文本独有内容
+              <Input.TextArea value={this.state.rightUnmatchedList}
+                              autosize={{ minRows: 15, maxRows: 15 }} />
             </Col>
-          </Row>
-          <FormItem>
-            <Button onClick={this.onClicked} size="large" type="primary">
-              开始比较
-            </Button>
-          </FormItem>
-        </Form>
-        {this.state.isClicked &&
-        <Row>
-          <Col span={6}>左侧文本独有内容
-            <Input.TextArea value={this.state.leftUnmatchedList}
-                            autosize={{ minRows: 15, maxRows: 15 }} />
-          </Col>
-          <Col span={6}>右侧文本独有内容
-            <Input.TextArea value={this.state.rightUnmatchedList}
-                            autosize={{ minRows: 15, maxRows: 15 }} />
-          </Col>
-          <Col span={6}>两侧文本相同内容
-            <Input.TextArea value={this.state.matchedList}
-                            autosize={{ minRows: 15, maxRows: 15 }} />
-          </Col>
-          <Col span={6}>可能相关的内容
-            <Input.TextArea value={this.state.confusingList}
-                            autosize={{ minRows: 15, maxRows: 15 }} />
-          </Col>
-        </Row>}
-      </div>
+            <Col span={6}>两侧文本相同内容
+              <Input.TextArea value={this.state.matchedList}
+                              autosize={{ minRows: 15, maxRows: 15 }} />
+            </Col>
+            <Col span={6}>可能相关的内容
+              <Input.TextArea value={this.state.confusingList}
+                              autosize={{ minRows: 15, maxRows: 15 }} />
+            </Col>
+          </Row>}
+        </div>
+      </Layout>
     );
   }
 }

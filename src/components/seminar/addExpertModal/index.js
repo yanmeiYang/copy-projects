@@ -185,6 +185,7 @@ class AddExpertModal extends React.Component {
   };
   saveTalkData = () => {
     const state = this.state;
+    const { getFieldValue, setFieldsValue } = this.props.parentProps.form;
     const talk = {
       title: '',
       speaker: {
@@ -212,7 +213,13 @@ class AddExpertModal extends React.Component {
     if (state.talkStartValue || state.talkEndValue) {
       talk.time = {};
     }
-    talk.speaker.role = state.speakerInfo.role || [];
+    if (talk.speaker.stype && (!talk.speaker.stype.label || talk.speaker.stype.label === '')) {
+      talk.speaker.stype = {
+        label: getFieldValue('contrib').split('#')[0],
+        score: parseInt(getFieldValue('contrib').split('#')[1]),
+      };
+    }
+    talk.speaker.role = typeof getFieldValue('role') === 'string' ? [getFieldValue('role')] : [];
     if (state.talkStartValue) {
       talk.time.from = typeof state.talkStartValue === 'string' ? state.talkStartValue : state.talkStartValue.toJSON();
     }
@@ -223,6 +230,7 @@ class AddExpertModal extends React.Component {
     talk.abstract = ReactDOM.findDOMNode(this.refs.talkAbstract).value;
     this.props.callbackParent(talk, state.isEdit);
     this.setState({ modalVisible: false });
+    setFieldsValue({ role: 'talker' });
     this.speakerInformation = {
       name: '', position: '', affiliation: '', aid: '', img: '', bio: '', gender: '', email: '',
       phone: '', stype: {}, role: 'talker',
@@ -259,12 +267,12 @@ class AddExpertModal extends React.Component {
   activityTypeChange = (value) => {
     this.speakerInformation.stype.label = value.split('#')[0];
     this.speakerInformation.stype.score = parseInt(value.split('#')[1]);
-    this.speakerInformation.role = this.props.parentProps.form.getFieldValue('role');
+    // this.speakerInformation.role = this.props.parentProps.form.getFieldValue('role');
   };
   expertRoleChange = (value) => {
     this.speakerInformation.role = value;
     const setFormFieldsVale = this.props.parentProps.form;
-    setFormFieldsVale.setFieldsValue({ contrib: '' });
+    setFormFieldsVale.setFieldsValue({ contrib: '', role: value });
   };
   jumpToStep2 = () => {
     this.props.parentProps.form.validateFieldsAndScroll((err, values) => {
@@ -309,7 +317,8 @@ class AddExpertModal extends React.Component {
     const { parentProps, editTheTalk } = this.props;
     const { speakerSuggests, loading, contribution_type } = parentProps.seminar;
     const { getFieldDecorator, getFieldValue } = parentProps.form;
-    const isTalker = getFieldValue('role') ? getFieldValue('role') : 'talker';
+    const isTalker = getFieldValue('role') || 'talker';
+    const getPersonLoading = this.props.loading.effects['seminar/saveSuggestExpert'];
     return (
       <Modal
         title="添加专家"
@@ -608,7 +617,7 @@ class AddExpertModal extends React.Component {
 
             <Col span={24} style={{ marginTop: 25 }}>
               <Button key="submit" type="primary" style={{ float: 'right' }}
-                      onClick={this.saveTalkData}>
+                      loading={getPersonLoading} onClick={this.saveTalkData.bind()}>
                 提交
               </Button>
               <Button type="default" onClick={this.cancelCurrentPerson}>

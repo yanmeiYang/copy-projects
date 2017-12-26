@@ -14,7 +14,6 @@ import { Icon, Dropdown, Menu, Layout } from 'antd';
   app: {
     user: app.user,
     roles: app.roles,
-    setDebug: app.setDebug,
     HighlightHoles: (app.debug && app.debug.HighlightHoles) || 'none',
   }
 }))

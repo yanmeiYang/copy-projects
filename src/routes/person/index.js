@@ -52,9 +52,6 @@ const Person = ({ roles, dispatch, person, seminar, publications, loading }) => 
       if (data.status) {
         dispatch({ type: 'person/getActivityAvgScoresByPersonIdSuccess', payload: { data } });
         message.success('重新计算贡献度成功');
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
       }
     });
   };
@@ -89,7 +86,7 @@ const Person = ({ roles, dispatch, person, seminar, publications, loading }) => 
           <tr>
             <td>演讲水平:</td>
             <td>
-              <Rate disabled defaultValue={level.score} />
+              <Rate disabled value={level.score} />
               <input type="text" className="score" value={getTwoDecimal(level.score, 2)}
                      disabled />
             </td>
@@ -98,7 +95,7 @@ const Person = ({ roles, dispatch, person, seminar, publications, loading }) => 
           <tr>
             <td>演讲内容:</td>
             <td>
-              <Rate disabled defaultValue={content.score} />
+              <Rate disabled value={content.score} />
               <input type="text" className="score" value={getTwoDecimal(content.score, 2)}
                      disabled />
             </td>
@@ -107,7 +104,7 @@ const Person = ({ roles, dispatch, person, seminar, publications, loading }) => 
           <tr>
             <td>综合评价:</td>
             <td>
-              <Rate disabled defaultValue={integrated.score} />
+              <Rate disabled value={integrated.score} />
               <input type="text" className="score" value={getTwoDecimal(integrated.score, 2)}
                      disabled />
             </td>

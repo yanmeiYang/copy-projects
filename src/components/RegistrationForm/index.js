@@ -168,14 +168,13 @@ class RegistrationForm extends React.Component {
           // }
           // delete data.co_org;
           // 获取登录用户的uid
-          console.log('data=====', data);
-          // data.uid = this.props.uid;
-          // if (state.editStatus) {
-          //   data.id = this.props.seminarId;
-          //   this.props.dispatch({ type: 'seminar/updateSeminarActivity', payload: data });
-          // } else {
-          //   this.props.dispatch({ type: 'seminar/postSeminarActivity', payload: data });
-          // }
+          data.uid = this.props.uid;
+          if (state.editStatus) {
+            data.id = this.props.seminarId;
+            this.props.dispatch({ type: 'seminar/updateSeminarActivity', payload: data });
+          } else {
+            this.props.dispatch({ type: 'seminar/postSeminarActivity', payload: data });
+          }
         }
       }
     });

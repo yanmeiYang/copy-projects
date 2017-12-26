@@ -34,28 +34,6 @@ const columns = [
         return '未评分';
       }
     },
-  },
-  // {
-  //   title: '审稿次数',
-  //   dataIndex: '审稿活动',
-  //   sorter: (a, b) => a.审稿活动 - b.审稿活动,
-  // },
-  // {
-  //   title: '撰稿次数',
-  //   dataIndex: '撰稿活动',
-  //   sorter: (a, b) => a.撰稿活动 - b.撰稿活动,
-  // },
-  {
-    title: '演讲内容',
-    dataIndex: 'content',
-    sorter: (a, b) => a.content - b.content,
-    render(text, record) {
-      if (record.content === 0) {
-        return '';
-      } else {
-        return getTwoDecimal(parseFloat(record.content), 2);
-      }
-    },
   }, {
     title: '演讲水平',
     dataIndex: 'level',
@@ -65,6 +43,17 @@ const columns = [
         return '';
       } else {
         return getTwoDecimal(parseFloat(record.level), 2);
+      }
+    },
+  },{
+    title: '演讲内容',
+    dataIndex: 'content',
+    sorter: (a, b) => a.content - b.content,
+    render(text, record) {
+      if (record.content === 0) {
+        return '';
+      } else {
+        return getTwoDecimal(parseFloat(record.content), 2);
       }
     },
   }, {

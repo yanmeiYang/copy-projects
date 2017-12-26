@@ -126,6 +126,10 @@ class AddExpertModal extends React.Component {
 
   setModalVisible() {
     this.setState({ modalVisible: false });
+    this.speakerInformation = {
+      name: '', position: '', affiliation: '', aid: '', img: '', bio: '', gender: '', email: '',
+      phone: '', stype: {}, role: 'talker',
+    };
     this.props.callbackParentSetAddNewTalk();
   }
 

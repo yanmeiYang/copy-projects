@@ -52,6 +52,9 @@ const Person = ({ roles, dispatch, person, seminar, publications, loading }) => 
       if (data.status) {
         dispatch({ type: 'person/getActivityAvgScoresByPersonIdSuccess', payload: { data } });
         message.success('重新计算贡献度成功');
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       }
     });
   };

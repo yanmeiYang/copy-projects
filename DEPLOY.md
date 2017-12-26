@@ -3,7 +3,7 @@
 ### Aminer2b项目部署
 
 ##### aminer-cn上部署的步骤
-	ssh <yourName>@aminer.cn -p 23333   //链接aminer.cn服务器
+	ssh <yourName>@ssh.aminer.cn -p 23333   //链接aminer.cn服务器
 	sudo su aminer                     //切换到aminer
 	cd
 	cd proj/aminer2b-next-api         //进入目前在使用的项目

@@ -308,7 +308,7 @@ class ExpertHeatmap extends React.Component {
       }
     }
 
-    const bgcolor = ['#AAC2DD', '#044161', '#404a59', '#80cbc4', '#b28759', '#4e6c8d', '#d1d1d1'];
+    const bgcolor = ['#AAC2DD', '#042e4c', '#495463', '#80cbc4', '#b28759', '#4e6c8d', '#d1d1d1'];
     const themeKey = typeof (this.props.themeKey) === 'undefined' ? 0 : this.props.themeKey;
     const color = bgcolor[themeKey];
     const persons = [];
@@ -445,7 +445,8 @@ class ExpertHeatmap extends React.Component {
             </Col>
             <Col span={1}>
               <div className={styles.settingBut}>
-                <Button shape="circle" icon="setting" onClick={this.showSettingPlay} />
+                <Button shape="circle" icon="setting" onClick={this.showSettingPlay}
+                        style={{ display: 'none' }} />
               </div>
             </Col>
           </Row>

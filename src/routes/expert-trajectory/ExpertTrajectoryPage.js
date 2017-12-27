@@ -9,10 +9,12 @@ import { FormattedMessage as FM } from 'react-intl';
 import bridge from 'utils/next-bridge';
 import { applyTheme } from 'themes';
 import { Auth } from 'hoc';
+import queryString from 'query-string';
 import styles from './ExpertTrajectoryPage.less';
 import { showPersonStatistic, downloadData } from './utils/trajectory-statistic';
 import { PersonList } from '../../components/person';
 import ExpertTrajectory from './ExpertTrajectory';
+import { getPerson } from '../../services/person';
 
 const { Content, Sider } = Layout;
 const { TabPane } = Tabs;
@@ -29,7 +31,6 @@ const themes = [
 
 
 @connect(({ expertTrajectory, loading, app }) => ({ expertTrajectory, loading, app }))
-@Auth
 class ExpertTrajectoryPage extends React.Component {
   constructor(props) {
     super(props);
@@ -42,14 +43,23 @@ class ExpertTrajectoryPage extends React.Component {
     themeKey: '1',
     visible: false,
     play: false,
+    embeded: false,
   };
 
   componentWillMount() {
-    const { query } = this.state;
-    const q = query || '唐杰'; //设置一个默认值
-    this.setState({
-      query: q,
-    });
+    const { location } = this.props;
+    const { id, flag } = queryString.parse(location.search);
+    if (flag) { //undefined的非是true
+      this.setState({
+        embeded: true,
+      }, () => {
+        this.onIframeLoad(id);
+      });
+    } else {
+      this.setState({
+        embeded: false,
+      });
+    }
   }
 
   componentDidMount() {
@@ -57,8 +67,8 @@ class ExpertTrajectoryPage extends React.Component {
     if ((query === '' || query === '-')) {
       this.openNotification();
     } else { //后面需要去掉
-      const data = { query };
-      this.onSearch(data);
+      //const data = { query };
+      //this.onSearch(data);
     }
   }
 
@@ -79,7 +89,7 @@ class ExpertTrajectoryPage extends React.Component {
       this.setState({ query: data.query });
       this.props.dispatch(routerRedux.push({
         pathname: '/expert-trajectory',
-        query: { query: data.query },
+        search: `query=${data.query}`,
       }));
     }
   };
@@ -93,6 +103,29 @@ class ExpertTrajectoryPage extends React.Component {
     const personId = person.id;
     this.props.dispatch({ type: 'expertTrajectory/findTrajById', payload: { personId, start, end } });
     this.setState({ cperson: person });
+    this.props.dispatch(routerRedux.push({
+      pathname: '/expert-trajectory',
+      search: `?id=${personId}`,
+    }));
+  };
+
+  onIframeLoad = (personId) => {
+    const start = 0;
+    const date = new Date();
+    const end = date.getFullYear();
+    this.props.dispatch({ type: 'expertTrajectory/findTrajById', payload: { personId, start, end } });
+    const resultPromise = getPerson(personId);
+    resultPromise.then(
+      (data1) => {
+        const cperson = data1.data;
+        this.setState({ cperson });
+      },
+      () => {
+        console.log('failed');
+      },
+    ).catch((error) => {
+      console.error(error);
+    });
   };
 
   handleOk = () => {
@@ -207,8 +240,8 @@ class ExpertTrajectoryPage extends React.Component {
     const { query, themeKey } = this.state;
     const currentTheme = themes.filter(theme => theme.key === themeKey);
 
-    const divHeight = document.body.clientHeight - 210;
-    const divWidth = document.body.clientWidth;
+    const divHeight = document.body.clientHeight;
+    let divWidth = document.body.clientWidth;
     const menu = (
       <Menu onClick={this.onSkinClick}>
         {themes && themes.map((theme) => {
@@ -253,12 +286,15 @@ class ExpertTrajectoryPage extends React.Component {
       </div>
     );
 
-    return (
-      <Page contentClass={tc(['ExpertTrajectoryPage'])} onSearch={this.onSearch}
-            query={query}>
+    const showFlag = !this.state.embeded; //是去嵌入的时候不显示Layout
+    const showLeft = showFlag ? '' : 'none';
+    divWidth = showFlag ? divWidth : (divWidth + 450); //地图的大小要跟着改变
+
+    const content = (
+      <div>
         <Spinner loading={this.props.expertTrajectory.loading} />
         <div className={styles.page}>
-          <div className={styles.leftPart}>
+          <div className={styles.leftPart} style={{ display: `${showLeft}` }}>
             <div className={styles.title}>
               <div className={styles.innerTitle}>
                 <Icon type="exception" style={{ color: '#108ee9' }} />
@@ -280,7 +316,7 @@ class ExpertTrajectoryPage extends React.Component {
               </Sider>
             </Layout>
           </div>
-          <div className={styles.rightPart} style={{ width: divWidth - 450 }}>
+          <div className={styles.rightPart} style={{ width: divWidth - 450, height: divHeight }}>
             <div className={styles.header}>
               <div className={styles.yourSkin}>
                 <Dropdown overlay={menu} className={styles.skin}>
@@ -337,7 +373,23 @@ class ExpertTrajectoryPage extends React.Component {
             </div>
           </div>
         </div>
-      </Page>
+      </div>
+    );
+
+    return (
+      <div>
+        { showFlag &&
+        <Page contentClass={tc(['ExpertTrajectoryPage'])} onSearch={this.onSearch}
+              query={query}>
+          { content && content }
+        </Page>
+        }
+        { !showFlag &&
+        <div>
+          { content && content }
+        </div>
+        }
+      </div>
     );
   }
 }

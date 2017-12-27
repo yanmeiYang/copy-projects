@@ -45,11 +45,12 @@ class ExpertHeatmapPage extends React.Component {
     checkedList: defaultCheckedList,
     indeterminate: true,
     checkAll: true,
+    embeded: false,
   };
 
   componentWillMount() {
     const { location } = this.props;
-    const { query, domain } = queryString.parse(location.search);
+    const { query, domain, flag } = queryString.parse(location.search);
     const q = query || ''; //设置一个默认值
     this.setState({
       query: q,
@@ -64,6 +65,15 @@ class ExpertHeatmapPage extends React.Component {
       this.props.dispatch(routerRedux.push({
         pathname: '/expert-heatmap',
       }));
+    }
+    if (flag) { //undefined的非是true
+      this.setState({
+        embeded: true,
+      });
+    } else {
+      this.setState({
+        embeded: false,
+      });
     }
   }
 
@@ -259,12 +269,17 @@ class ExpertHeatmapPage extends React.Component {
     );
     const loading = this.props.loading.global;
 
-    return (
-      <Page contentClass={tc(['ExpertHeatmapPage'])} onSearch={this.onSearch}
-            query={query}>
+
+    const showFlag = !this.state.embeded; //是去嵌入的时候不显示Layout
+    const showLeft = showFlag ? '' : 'none';
+    const showMargin = showFlag ? '' : '20px 0 0 20px';
+    console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+
+    const content = (
+      <div>
         <Spinner loading={loading} />
         <div className={styles.header}>
-          <div className={styles.domain}>
+          <div className={styles.domain} style={{ display: `${showLeft}` }}>
             <DomainSelector
               domains={sysconfig.Map_HotDomains}
               domainsLabel={sysconfig.Map_HotDomainsLabel}
@@ -274,7 +289,7 @@ class ExpertHeatmapPage extends React.Component {
               type="selector"
             />
           </div>
-          <div className={styles.setting}>
+          <div className={styles.setting} style={{ margin: `${showMargin}` }}>
             <div className={styles.options}>
               <div className={styles.checkAll}>
                 <Checkbox
@@ -335,7 +350,22 @@ class ExpertHeatmapPage extends React.Component {
           <ExpertHeatmap data={data} themeKey={themeKey} checkType={this.state.checkedList}
                          domainId={this.state.domainId} />
         </div>
-      </Page>
+      </div>
+    );
+    return (
+      <div>
+        { showFlag &&
+        <Page contentClass={tc(['ExpertHeatmapPage'])} onSearch={this.onSearch}
+              query={query}>
+          { content && content }
+        </Page>
+        }
+        { !showFlag &&
+          <div>
+            { content && content }
+          </div>
+        }
+      </div>
     );
   }
 }

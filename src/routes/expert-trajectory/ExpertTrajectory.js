@@ -110,7 +110,7 @@ class ExpertTrajectory extends React.Component {
   };
 
   render() {
-    let wid = document.body.clientHeight - 210;
+    let wid = document.body.clientHeight;
     const { centerZoom } = this.props;
     if (centerZoom) {
       wid = 500;

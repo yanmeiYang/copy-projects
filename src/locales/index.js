@@ -1,1 +1,2 @@
-export default ['en', 'zh'];
+const locales = ['en', 'zh'];
+export default locales;

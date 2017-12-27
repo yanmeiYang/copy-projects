@@ -8,7 +8,7 @@ import { getMenusByUser } from 'utils/menu';
 import styles from './Menu.less';
 // TODO use <NavLink> instead; https://reacttraining.com/react-router/web/api/Link
 
-@connect(({ app }) => ({ app }))
+@connect(({ app, location }) => ({ app, location }))
 export default class Menus extends Component {
   // siderFold, location, handleClickNavMenu,
   //   navOpenKeys, changeOpenKeys,

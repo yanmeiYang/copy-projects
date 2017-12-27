@@ -40,10 +40,12 @@ export default class IndexCenterZone extends React.PureComponent {
                 } else {
                   query = item.name || item.name_zh;
                 }
-                return <Link to={urlFunc && urlFunc(query)}
-                             key={`${item.name}#${item.name_zh}`}>
-                  <Tag>{query}</Tag>
-                </Link>;
+                return (
+                  <Link to={urlFunc && urlFunc(query)}
+                        key={`${item.name}#${item.name_zh}`}>
+                    <Tag>{query}</Tag>
+                  </Link>
+                );
               });
             }} />
         </Table>

@@ -9,9 +9,9 @@ const Footer = () => {
     <div>
       <div className={styles.footer_main}>
         <div className={styles.footer_main_desc}>
-          <a href="javascript:void(0)">
-            <img src="/sys/ccf/footer-btm1.png" alt="" />
-          </a>
+
+          <img src="/sys/ccf/footer-btm1.png" alt="" />
+
           <div>
             <p>为计算机领域的专业人士服务</p>
             <p>Serving the professionals in computing</p>
@@ -60,7 +60,8 @@ const Footer = () => {
           2017 © 中国计算机学会.
           <span className={styles.footer_aminer_icp}>京ICP备13000930号-4</span>
           <span className={styles.footer_aminer_bpn}>京公网安备11010802017125号</span>
-          <div style={{ height: 20 }}><img src="/sys/ccf/foot-beian.png" alt="京公网安备" style={{ width: 20 }} /></div>
+          <div style={{ height: 20 }}><img src="/sys/ccf/foot-beian.png" alt="京公网安备"
+                                           style={{ width: 20 }} /></div>
         </div>
         <div>
           <img src="/aminer_logo.png" alt="AMiner logo" style={{ height: 46 }} />

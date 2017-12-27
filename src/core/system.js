@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 /**
  * Created by bogao on 2017/8/18.
  */
@@ -53,20 +54,24 @@ try {
   const { OverrideSystem } = require('../../src/system-override');
   System = OverrideSystem;
   if (process.env.NODE_ENV !== 'production') {
-    console.log('%cSystem Override to [%s] using OVERRIDE. (original is %s)',
-      'color:white;background-color:orange;padding:1px 4px;', OverrideSystem, System);
+    // eslint-disable-next-line function-paren-newline function-paren-newline
+    const msg = '%cSystem Override to [%s] using OVERRIDE. (original is %s)';
+    const style = 'color:white;background-color:orange;padding:1px 4px;';
+    console.log(msg, style, OverrideSystem, System);
   }
 } catch (err) {
-  console.log('%cWarning! No System Override found. use system[%s]',
-    'color:white;background-color:orange;padding:1px 4px;', System);
+  const msg = '%cWarning! No System Override found. use system[%s]';
+  const style = 'color:white;background-color:orange;padding:1px 4px;';
+  console.log(msg, style, System);
 }
 // }
 
 // check available
 if (AvailableSystems.indexOf(System) <= 0) {
   if (process.env.NODE_ENV !== 'production') {
-    console.log('%cSystem [%s] is invalid, available:%v',
-      'color:white;background-color:orange;padding:1px 4px;', System, AvailableSystems);
+    const msg = '%cSystem [%s] is invalid, available:%v';
+    const style = 'color:white;background-color:orange;padding:1px 4px;';
+    console.log(msg, style, System, AvailableSystems);
   }
   throw new Error('System [%s] is invalid! Please check your code.');
 }
@@ -96,10 +101,9 @@ function loadSavedSystem() {
     // only god can switch system.
     if (dataObj && dataObj.roles && dataObj.roles.god
       && dataObj.data && dataObj.data.email === ss.user) {
-
-      console.log('%cSystem Override to [%s]. (original is %s)',
-        'color:red;background-color:rgb(255,251,130);padding:1px 4px;',
-        ss.system, System);
+      const msg = '%cSystem Override to [%s]. (original is %s)';
+      const style = 'color:red;background-color:rgb(255,251,130);padding:1px 4px;';
+      console.log(msg, style, ss.system, System);
 
       System = ss.system;
       Source = ss.system;

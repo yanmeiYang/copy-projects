@@ -21,17 +21,17 @@ const TopExpertBase = {
   Nobel: [{ id: '59781f4e9ed5db8bf017c748', name: '诺贝尔' }],
   TR35: [{
     name: 'TR35',
-    id: '591fa8cb9ed5db409e22a8eb.591fa7999ed5db409e22a8e2.5927b06c9ed5db8c189f16e7'
+    id: '591fa8cb9ed5db409e22a8eb.591fa7999ed5db409e22a8e2.5927b06c9ed5db8c189f16e7',
   }],
   ChangJiangXueZhe: [{ name: '长江学者', id: '58e5e2d99ed5db076b9b8cb2' }],
   JieQing: [{ name: '杰青', id: '57a837809ed5dba7786c3f9f.59267feb9ed5db8c189eefea' }],
   QingNianQianRen: [{
     name: '青年千人',
-    id: '577afb029ed5db2cefd14110.58dc96a79ed5db7f4ee661c9.573e6b9876d9113b9d9aaa5d.58b8f04f9ed5dbe5bbb4124c.58cba2509ed5dbd455abcd39'
+    id: '577afb029ed5db2cefd14110.58dc96a79ed5db7f4ee661c9.573e6b9876d9113b9d9aaa5d.58b8f04f9ed5dbe5bbb4124c.58cba2509ed5dbd455abcd39',
   }],
   YouQing: [{
     name: '优青',
-    id: '58d86b749ed5db79c99c06b1.5943cfd69ed5db38b4b514f6.592259589ed5db409e230cf9.59225f829ed5db409e2310ee.58cb97559ed5dbd455abcb42'
+    id: '58d86b749ed5db79c99c06b1.5943cfd69ed5db38b4b514f6.592259589ed5db409e230cf9.59225f829ed5db409e2310ee.58cb97559ed5dbd455abcb42',
   }],
 
   TopUniversity2015: [

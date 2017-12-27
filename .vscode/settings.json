@@ -6,5 +6,9 @@
   "eslint.options": {
     "configFile": ".eslintrc"
   },
-  "editor.fontFamily": "Menlo, Monaco, 'Courier New', monospace"
+  "editor.fontFamily": "Menlo, Monaco, 'Courier New', monospace",
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true
+  }
 }

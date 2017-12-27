@@ -2,7 +2,6 @@
  * Created by ranyanchuan on 2017/8/18.
  */
 import React, { Component } from 'react';
-// import browserHistory from 'react-router/lib/browserHistory';
 import { connect } from 'dva';
 import CryptoJS from 'crypto-js';
 import * as authUtil from 'utils/auth';
@@ -99,7 +98,8 @@ class Tencent3rd extends Component {
   // 解密
   render() {
     if (authUtil.getLocalToken() && authUtil.getLocalUser().email === this.state.email) {
-      browserHistory.push('/');
+      window.location.href = '/';
+      // browserHistory.push('/');
     }
     // window.location.href = '/';
     return (<div />);

@@ -2,8 +2,6 @@
  * Created by BoGao on 2017/6/20.
  */
 import React from 'react';
-import Footer from '../../components/Footers/ccf';
-import { ExpertBaseID2NameMap } from 'utils/expert-base';
 
 module.exports = {
   /**
@@ -98,7 +96,7 @@ module.exports = {
     },
     {
       id: 'aminer',
-      name: <span><i className="fa fa-globe fa-fw"/>全球专家</span>,
+      name: <span><i className="fa fa-globe fa-fw" />全球专家</span>,
       nperson: 2871,
     },
     // 数据标注未找到的人的库。
@@ -121,7 +119,7 @@ module.exports = {
   },
   // 特殊配置，这里是System的自己的配置
 
-  CCF_activityTypes: ['专委活动', 'CNCC', 'ADL78', 'CCF@U100(走进高校)', 'YOCSEF', '论坛', '报告会', 'NOI讲座', '分部活动', '精英大会', '女性大会', 'TF',],
+  CCF_activityTypes: ['专委活动', 'CNCC', 'ADL78', 'CCF@U100(走进高校)', 'YOCSEF', '论坛', '报告会', 'NOI讲座', '分部活动', '精英大会', '女性大会', 'TF'],
 
   CCF_userPosition: [
     { name: '教授', value: '1' },

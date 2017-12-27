@@ -56,9 +56,11 @@ class IndexInfoBox extends PureComponent {
         <div className="naviItem" style={{ display: 'none' }}>
           2016最具影响力
           <a href="https://cn.aminer.org/mostinfluentialscholar"
-             target="_blank" rel="noopener noreferrer">学者</a>，
+             target="_blank" rel="noopener noreferrer">学者
+          </a>，
           <a href="https://cn.aminer.org/ranks/org"
-             target="_blank" rel="noopener noreferrer">机构排名</a>
+             target="_blank" rel="noopener noreferrer">机构排名
+          </a>
         </div>
 
       </div>

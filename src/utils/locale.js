@@ -1,6 +1,6 @@
-import locales from '../locales';
+const locales = ['en', 'zh'];
 
-function loadSavedLocale(system, defaultLocale) {
+const loadSavedLocale = (system, defaultLocale) => {
   const key = `${system}_locale`;
   const savedLocale = localStorage.getItem(key);
   const sl = JSON.parse(savedLocale);
@@ -18,11 +18,14 @@ function loadSavedLocale(system, defaultLocale) {
   } else {
     return defaultLocale;
   }
-}
+};
 
 function saveLocale(system, locale) {
   const key = `${system}_locale`;
   localStorage.setItem(key, JSON.stringify(locale));
 }
 
-module.exports = { loadSavedLocale, saveLocale };
+module.exports = {
+  loadSavedLocale,
+  saveLocale,
+};

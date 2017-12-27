@@ -4,22 +4,28 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const webpack = require('webpack');
+const buildrc = require('./.buildrc');
 
 const debug = true;
 
 // TODO 分成3个不同的build， 一个是production模式，一个是dev模式，另一个是基础的。
 
 module.exports = (webpackConfig, env) => {
+
   const production = env === 'production';
-  const buildDllMode = webpackConfig.module ? false : true;
   if (debug) {
-    console.log('-------------------------------------------');
-    console.log('>> env: ', env);
-    console.log('>> build:dll mode : ', buildDllMode);
-    console.log('>> config:\n', webpackConfig);
-    console.log('>> =====================:\n', webpackConfig.plugins[4]);
-    console.log('-------------------------------------------');
+    debugPrintConfig(webpackConfig, env);
   }
+
+  // Alias
+  webpackConfig.resolve.alias = buildrc.webpack.alias;
+
+  if (true) {
+    return webpackConfig;
+  }
+
+  const buildDllMode = webpackConfig.module ? false : true;
+
   // Filename Hash
   if (!buildDllMode) {
     webpackConfig.output.filename = '[name].[hash:8].js';
@@ -102,23 +108,6 @@ module.exports = (webpackConfig, env) => {
   //   }),
   // ]);
 
-  // Alias
-  webpackConfig.resolve.alias = {
-    core: `${__dirname}/src/core`,
-    hoc: `${__dirname}/src/hoc`,
-    public: `${__dirname}/src/public`,
-    components: `${__dirname}/src/components`,
-    plugins: `${__dirname}/src/plugins`,
-    routes: `${__dirname}/src/routes`,
-    models: `${__dirname}/src/models`,
-    services: `${__dirname}/src/services`,
-    utils: `${__dirname}/src/utils`,
-    config: `${__dirname}/src/utils/config`,
-    systems: `${__dirname}/src/systems`,
-    themes: `${__dirname}/src/themes`,
-    hooks: `${__dirname}/src/hooks`,
-    enums: `${__dirname}/src/utils/enums`,
-  };
 
   if (debug) {
     console.log('-------------------------------------------');
@@ -127,4 +116,42 @@ module.exports = (webpackConfig, env) => {
     console.log('-------------------------------------------');
   }
   return webpackConfig;
+};
+
+const debugPrintConfig = (webpackConfig, env) => {
+  console.log('-------------------- env is -----------------------');
+  console.log('>> env: ', env);
+  console.log('\n\n------------------- Webpack config is ------------------------\n\n');
+  console.log(webpackConfig);
+  console.log('\n\n------------------- config.modules.rules is ------------------------\n\n');
+  console.log('> rule:', webpackConfig.module && webpackConfig.module.rules);
+  let i = 0;
+  console.log('\n\n------------------- config.modules.rules details is ------------------------\n\n');
+  for (const rule of (webpackConfig.module && webpackConfig.module.rules) || []) {
+    i += 1;
+    console.log('\n> rule:', i, rule.test);
+    if (rule.include) {
+      console.log('  include:', rule.include);
+    }
+    if (rule.exclude) {
+      console.log('  exclude:', rule.exclude);
+    }
+    if (rule.enforce) {
+      console.log('  enforce:', rule.enforce);
+    }
+    console.log('  rule.use:');
+    for (const use of (rule && rule.use) || []) {
+      console.log('    use:', use);
+      if (use && use.options) {
+        // console.log('-------------------------------------------');
+        // console.log('    options is:', use.options);
+        // console.log('    options is:', Object.keys(use.options));
+        // console.log('-------------------------------------------');
+        Object.keys(use.options).forEach((key) => {
+          console.log('      -option:', key, use.options[key]);
+        });
+      }
+    }
+  }
+  console.log('-------------------------------------------');
 };

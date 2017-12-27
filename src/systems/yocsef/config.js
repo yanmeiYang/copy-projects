@@ -3,7 +3,6 @@
  */
 
 import React from 'react';
-import { toIDDotString, TopExpertBase as EB, TopNUniversity2015 } from '../../utils/expert-base';
 
 module.exports = {
 
@@ -66,4 +65,4 @@ module.exports = {
     { id: '59c86f5b9ed5db7081dffc16', title: 'YOCSEF 上海' },
     { id: '59c86f339ed5db7081dffbd7', title: 'YOCSEF 杭州' },
   ],
-}
+};

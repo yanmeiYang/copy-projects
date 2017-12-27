@@ -2,9 +2,7 @@
  * Created by BoGao on 2017/10/6.
  */
 import React from 'react';
-import { Link } from 'dva/router';
 import defaults from '../utils';
-
 
 const ExpertBase = '59d7bb7e9ed5dbe450e6b275';
 
@@ -63,11 +61,6 @@ module.exports = {
 
   // 地图中心点
   // CentralPosition: { lat: 37.09024, lng: -95.712891 },
-
-  // > IndexPage
-  // IndexPage_QuickSearchList: ['data mining','machine learning','social network','deep learning', 'healthcare',
-  //   'organic light-emitting diodes', 'Tim Berners-Lee', 'Jon Kleinberg', 'Jiawei Han','Geoffrey Hinton'
-
 
   IndexPage_QuickSearchList: [
     { name: 'data mining', name_zh: '' },

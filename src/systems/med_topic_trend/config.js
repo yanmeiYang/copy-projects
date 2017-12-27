@@ -1,5 +1,3 @@
-import React from 'react';
-import { authenticateExpertBase } from 'hooks';
 import defaults from '../utils';
 
 const ExpertBase = '5a24b1389ed5db4a6289ae85';

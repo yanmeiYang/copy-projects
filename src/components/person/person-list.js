@@ -1,7 +1,7 @@
 /**
  *  Created by BoGao on 2017-06-15;
  */
-/* eslint-disable camelcase */
+/* eslint-disable camelcase max-len camelcase */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
@@ -103,7 +103,7 @@ export default class PersonList extends Component {
 
   render() {
     const { persons, expertBaseId, className, type, indicesType, showIndices } = this.props;
-    const { rightZoneFuncs, titleRightBlock, bottomZoneFuncs, afterTitleBlock, tagsLinkFuncs } = this.props;
+    const { rightZoneFuncs, titleRightBlock, bottomZoneFuncs, afterTitleBlock } = this.props;
     const { contentBottomZone, emptyPlaceHolder } = this.props;
     const showPrivacy = false;
 
@@ -129,7 +129,7 @@ export default class PersonList extends Component {
           const email = showPrivacy && profile.email;
 
           // go into
-          const indices = person.indices;
+          const { indices } = person.indices;
           const activity_indices = {}; // TODO use
           // const tags = profileUtils.findTopNTags(person, 8);
 
@@ -193,7 +193,7 @@ export default class PersonList extends Component {
                         <div className="email"
                              style={{
                                order: 50,
-                               backgroundImage: `url(${config.baseURL}${email})`
+                               backgroundImage: `url(${config.baseURL}${email})`,
                              }}
                         ><i className="fa fa-envelope fa-fw" />
                         </div>

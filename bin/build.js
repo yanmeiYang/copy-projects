@@ -1,5 +1,9 @@
 /**
  *  Created by BoGao on 2017-12-15;
+ *
+ *  Used in CSR Build different system.
+ *
+ *  TODO BUILD TreeShake non target systems.
  */
 const { AvailableSystems } = require('../src/core/system');
 const fs = require('fs');

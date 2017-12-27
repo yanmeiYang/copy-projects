@@ -40,6 +40,7 @@ export default class Layout extends Component {
     infoZone: PropTypes.array,
 
     navigator: PropTypes.element,
+    navigatorItems: PropTypes.array,
     sidebar: PropTypes.array,
     footer: PropTypes.element,
 
@@ -60,6 +61,7 @@ export default class Layout extends Component {
   static defaultProps = {
     showHeader: sysconfig.Layout_ShowHeader,
     showNavigator: sysconfig.Layout_HasNavigator,
+    navigatorItems: sysconfig.HeaderSearch_TextNavi,
     showSidebar: sysconfig.Layout_HasSideBar,
     sidebar: theme.sidebar,
     footer: theme.footer,
@@ -95,7 +97,7 @@ export default class Layout extends Component {
 
   render() {
     // console.count('>>>>>>>>>> App Render'); // TODO performance
-    const { sidebar, footer } = this.props;
+    const { sidebar, footer, navigatorItems } = this.props;
     const { contentClass, showHeader, showNavigator, showSidebar, showFeedback } = this.props;
     const { dispatch, app, loading } = this.props;
 
@@ -118,7 +120,7 @@ export default class Layout extends Component {
         dispatch({ type: 'app/logout' });
       },
     };
-    const navigatorOptions = { query, navis: sysconfig.HeaderSearch_TextNavi };
+    const navigatorOptions = { query, navis: navigatorItems };
 
     const title = pageTitle || (pageSubTitle ? `${sysconfig.PageTitle} | ${pageSubTitle}` : sysconfig.PageTitle);
 

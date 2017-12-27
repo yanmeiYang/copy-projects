@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 /**
  * Created by BoGao on 2017/6/20.
  */
@@ -144,7 +145,12 @@ const newDefaultSystemConfigs = (system, source) => {
     IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
     // Topic Trend
-    TopicTrend_HotTopics: ['Answer Machine', 'Artificial Intelligence', 'Autopilot', 'BlockChain', 'Computer Vision', 'Data Mining', 'Data Modeling', 'Deep Learning', 'Graph Databases', 'Internet of Things', 'Machine Learning', 'Robotics', 'Networks', 'Natural Language Processing', 'Neural Network'],
+    TopicTrend_HotTopics: [
+      'Answer Machine', 'Artificial Intelligence', 'Autopilot', 'BlockChain',
+      'Computer Vision', 'Data Mining', 'Data Modeling', 'Deep Learning', 'Graph Databases',
+      'Internet of Things', 'Machine Learning', 'Robotics', 'Networks',
+      'Natural Language Processing', 'Neural Network',
+    ],
 
     // Map Related,2 is recommended!
     Map_Preload: 2, // 0的时候不缓存，1的时候缓存信息，2的时候缓存信息和90头像，3的时候缓存信息和90、160头像

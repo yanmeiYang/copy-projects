@@ -152,8 +152,9 @@ export default class Navigator extends Component {
       <Layout.Header className={tc(['navigator'])}>
         {sysconfig.HeaderSearch_DropDown &&
         <Dropdown overlay={menu} className={styles.myExpert}>
-          <a className={tc(['ant-dropdown-link', 'navi'], [path.indexOf('eb/') >= 0 ? 'current' : ''])}
-             href="#" style={{ color: 'white', fontSize: '16px' }}>
+          <a
+            className={tc(['ant-dropdown-link', 'navi'], [path.indexOf('eb/') >= 0 ? 'current' : ''])}
+            href="#" style={{ color: 'white', fontSize: '16px' }}>
             我的专家库 <Icon type="down" />
           </a>
         </Dropdown>}

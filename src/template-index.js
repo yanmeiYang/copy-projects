@@ -15,6 +15,7 @@ import { message } from 'antd';
 import createLoading from 'dva-loading';
 import { sysconfig } from 'systems';
 import { ReduxLoggerEnabled } from './utils/debug';
+import appModel from 'models/app';
 
 // TODO 使用babel编译通过这两个语句. // 暂时不用这两个，编译不通过。
 
@@ -99,7 +100,14 @@ const app = dva({
 
 initDVA(app);
 
+// Model的引入，一种写法是这样的
+import('models/app').then(model => {
+  app.model(model.default);
+});
+
+// app.model(appModel);
 // app.model(require('./models/app'));
+
 app.router(/* $$ require(ROUTER) */);
 
 const messages = fixIntl();

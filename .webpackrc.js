@@ -40,7 +40,8 @@ module.exports = {
   // },
 
   "extraBabelPlugins": [
-    // "@babel/plugin-transform-runtime",
+    // "add-module-exports", // 不好使呀这东西
+    "@babel/plugin-transform-runtime",
     // "eslint-disable",
     // "transform-decorators-legacy",
     ["import", { "libraryName": "antd", "style": true }]

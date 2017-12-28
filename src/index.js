@@ -2,7 +2,7 @@
 /**
  * Created by GaoBo on 2017/12/26.
  *
- * !!! This is generated automatically, don't modify !!! 
+ * !!! This is generated automatically, don't modify !!!
  */
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -15,6 +15,7 @@ import { message } from 'antd';
 import createLoading from 'dva-loading';
 import { sysconfig } from 'systems';
 import { ReduxLoggerEnabled } from './utils/debug';
+import appModel from 'models/app';
 
 // TODO 使用babel编译通过这两个语句. // 暂时不用这两个，编译不通过。
 
@@ -99,7 +100,17 @@ const app = dva({
 
 initDVA(app);
 
+// 一种写法是这样的
+import('models/app').then(model => {
+  app.model(model.default);
+});
+
+// const model = require('./models/app').default;
+// console.log('>>>>>>  ', appModel);
+
+// app.model(appModel);
 // app.model(require('./models/app'));
+
 app.router(require('./systems/minimalsys/router'));
 
 const messages = fixIntl();

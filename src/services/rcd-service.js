@@ -3,7 +3,7 @@
  *  TODO Add src to all services in this file. TODO yu.
  */
 import { request, config } from '../utils';
-import { sysconfig } from '../systems';
+import { sysconfig } from 'systems';
 
 const { api } = config;
 

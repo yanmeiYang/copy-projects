@@ -8,13 +8,14 @@ import queryString from 'query-string';
 import { Icon } from 'antd';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 // import { gql, graphql } from 'react-apollo';
-import { sysconfig } from '../../../systems';
+import { sysconfig } from 'systems';
 import { Spinner } from '../../../components';
 import { classnames } from '../../../utils';
 import styles from './ProjectTaskPage.less';
 import { Auth } from '../../../hoc';
 import { ProjectTaskTable } from '../../../components/recommendation';
 
+const location = window.location;
 // const gqlGetProjectByID = gql`
 //   query gqlGetProjectByID ($id:ID!) {
 //     rcdproject(id: $id) {

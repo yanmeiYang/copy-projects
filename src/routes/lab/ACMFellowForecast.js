@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, withRouter } from 'dva/router';
 import { Tag, Pagination } from 'antd';
-import { hole } from 'utils';
+import { hole } from 'core';
 import { Layout } from 'routes';
 import { Auth } from 'hoc';
 import { PersonList } from 'components/person';

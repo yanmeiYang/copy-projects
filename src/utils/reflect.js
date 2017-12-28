@@ -22,6 +22,6 @@ function GetComponentName(clzss) {
 }
 
 
-module.exports = {
+export {
   GetComponentName,
 };

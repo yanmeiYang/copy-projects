@@ -6,7 +6,7 @@ export default {
 
   IndexPage: {
     path: '/',
-    models: () => [import('models/search-suggest')],
+    // models: () => [import('models/search-suggest')],
     component: () => import('routes/IndexPage'),
   },
 
@@ -15,24 +15,24 @@ export default {
     component: () => import('routes/error'),
   },
 
-  // Other routes.
-
-  RelationGraphPage: {
-    path: '/relation-graph-page',
-    models: () => [import('models/vis/vis-research-interest')],
-    component: () => import('routes/relation-graph/RelationGraphPage'),
-  },
-
-  KnowledgeGraph: {
-    path: '/knowledge-graph',
-    models: () => [import('models/knowledge-graph')],
-    component: () => import('routes/knowledge-graph/KnowledgeGraphPage'),
-  },
-
-  RanksHelp: {
-    path: '/help',
-    component: () => import('./help'),
-  },
+  // // Other routes.
+  //
+  // RelationGraphPage: {
+  //   path: '/relation-graph-page',
+  //   // models: () => [import('models/vis/vis-research-interest')],
+  //   component: () => import('routes/relation-graph/RelationGraphPage'),
+  // },
+  //
+  // KnowledgeGraph: {
+  //   path: '/knowledge-graph',
+  //   // models: () => [import('models/knowledge-graph')],
+  //   component: () => import('routes/knowledge-graph/KnowledgeGraphPage'),
+  // },
+  //
+  // RanksHelp: {
+  //   path: '/help',
+  //   component: () => import('./help'),
+  // },
 
 };
 

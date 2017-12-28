@@ -7,7 +7,7 @@ import { Tag, Tooltip, Icon } from 'antd';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 
 import { Indices } from '../../components/widgets';
-import { sysconfig } from '../../systems';
+import { sysconfig } from 'systems';
 import * as personService from '../../services/person';
 import { config } from '../../utils';
 import styles from './RCDOrgList.less';

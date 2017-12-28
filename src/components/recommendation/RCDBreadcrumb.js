@@ -5,7 +5,7 @@ import React from 'react';
 import { Link } from 'dva/router';
 import { Breadcrumb } from 'antd';
 import { Indices } from '../../components/widgets';
-import { sysconfig } from '../../systems';
+import { sysconfig } from 'systems';
 import * as personService from '../../services/person';
 import { config } from '../../utils';
 import styles from './RCDOrgList.less';

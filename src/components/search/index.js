@@ -5,7 +5,7 @@ import SearchSorts from './SearchSorts';
 import TranslateSearchMessage from './TranslateSearchMessage';
 import SearchVenue from './SearchVenue';
 
-module.exports = {
+export {
   KgSearchBox,
   SearchFilter,
   SearchKnowledge,

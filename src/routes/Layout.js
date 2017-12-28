@@ -11,7 +11,8 @@ import NProgress from 'nprogress';
 import { Layout as LayoutComponent } from 'antd';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
-import { hole, classnames, config } from 'utils';
+import { classnames, config } from 'utils';
+import { hole } from 'core';
 import { Header, Navigator } from 'components/Layout';
 import { Feedback } from 'components/widgets';
 import { ErrorBoundary } from 'components/core';
@@ -22,8 +23,6 @@ const { Sider, Content, Footer } = LayoutComponent;
 
 const tc = applyTheme(styles);
 let lastHref;
-
-require(`themes/theme-${theme.themeName}.less`); // basic themes，:global css only
 
 @connect(({ app, loading }) => ({ app, loading }))
 export default class Layout extends Component {

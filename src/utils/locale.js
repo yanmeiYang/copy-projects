@@ -25,7 +25,7 @@ function saveLocale(system, locale) {
   localStorage.setItem(key, JSON.stringify(locale));
 }
 
-module.exports = {
+export {
   loadSavedLocale,
   saveLocale,
 };

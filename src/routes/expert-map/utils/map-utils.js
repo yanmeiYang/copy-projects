@@ -437,7 +437,7 @@ const findMapFilterHindexRangesByKey = (key) => {
   }
 };
 
-module.exports = {
+export {
   getById, insertAfter, resetRightInfoToGlobal,
   onResetPersonCard, detachCluster, backGlobal,
   showTopImageDiv, toggleRightInfo, showTopImages,

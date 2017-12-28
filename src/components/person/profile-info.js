@@ -5,7 +5,7 @@ import { Indices } from '../../components/widgets';
 import * as profileUtils from '../../utils/profile-utils';
 import * as personService from '../../services/person';
 import { VisResearchInterest } from '../../routes/vis';
-import { sysconfig } from '../../systems';
+import { sysconfig } from 'systems';
 import ViewExpertInfo from '../../components/person/view-expert-info';
 
 class ProfileInfo extends React.Component {

@@ -1,4 +1,4 @@
 import Layout from './Layout';
 
-module.exports = { Layout };
+export { Layout };
 

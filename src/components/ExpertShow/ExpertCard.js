@@ -1,7 +1,7 @@
 import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
-import { sysconfig } from '../../systems';
+import { sysconfig } from 'systems';
 import { theme } from 'themes';
 import { PersonList } from '../../components/person';
 import styles from './ExpertCard.less';

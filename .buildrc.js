@@ -3,13 +3,12 @@
  *
  * This file contains configs when developing and building the system.
  */
-const path = require('path');
-
 
 module.exports = {
-
   webpack: {
     alias: {
+      system: `${__dirname}/src/system`,
+      src: `${__dirname}/src`,
       core: `${__dirname}/src/core`,
       pages: `${__dirname}/src/pages`, // nextjs SSR
       components: `${__dirname}/src/components`,
@@ -26,12 +25,7 @@ module.exports = {
       hoc: `${__dirname}/src/hoc`,
       hooks: `${__dirname}/src/hooks`,
       enums: `${__dirname}/src/utils/enums`,
+      assets: `${__dirname}/src/assets`,
     },
   },
 };
-
-// package.json
-
-// git+https://github.com/elivoa/roadhog.git#2.0
-// "roadhog": "^2.0.0-rc.1",
-// /Users/bogao/develop/aminer/fork/roadhog

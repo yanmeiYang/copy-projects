@@ -3,8 +3,10 @@
  */
 import ErrorBoundary from './ErrorBoundary';
 import Hole from './Hole';
+import ConnectedRouter from './ConnectedRouter';
 
-module.exports = {
+export {
   ErrorBoundary,
   Hole,
+  ConnectedRouter,
 };

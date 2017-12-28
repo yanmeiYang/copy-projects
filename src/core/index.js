@@ -1,14 +1,8 @@
 /**
  *  Created by BoGao on 2017-12-16;
  */
-import plugins from './plugins';
-import system from './system';
-/*
+import * as plugins from './plugins';
+import * as system from './system';
+import * as hole from './hole';
 
-依赖关系
-plugins <- system <-
-
- */
-module.exports = {
-  plugins, system,
-};
+export { plugins, system, hole };

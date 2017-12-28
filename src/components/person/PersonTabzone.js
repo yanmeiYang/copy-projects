@@ -5,8 +5,8 @@
 import React from 'react';
 import { Link } from 'dva/router';
 import { Icon, Tabs, Spin, Button } from 'antd';
-import * as personService from '../../services/person';
-import AminerPublications from '../../routes/person/aminer-publications';
+import * as personService from 'services/person';
+import AminerPublications from 'routes/person/aminer-publications';
 import styles from './Tabzone.less';
 import Information from './PersonInfo';
 import Education from './PersonEducation';
@@ -30,7 +30,7 @@ class TabZone extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-     selected: 0,
+      selected: 0,
     };
   }
 
@@ -88,11 +88,11 @@ class TabZone extends React.Component {
       <div className={styles.tab_zone}>
         <div>
           <Tabs tabPosition="left"
-              defaultActiveKey="0"
-              onChange={this.callback}>
+                defaultActiveKey="0"
+                onChange={this.callback}>
             {panes.map((item) => {
               return <TabPane tab={item.title} key={item.key} />;
-          })}
+            })}
           </Tabs>
         </div>
         <div className={styles.content_zone}>

@@ -4,4 +4,4 @@
 import TobButton from './TobButton';
 import DevMenu from './DevMenu';
 
-module.exports = { TobButton, DevMenu };
+export { TobButton, DevMenu };

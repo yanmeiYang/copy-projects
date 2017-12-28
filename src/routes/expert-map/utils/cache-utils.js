@@ -228,7 +228,7 @@ const imageCache = [];
 const bigImageCache = [];
 const indexCache = [];
 
-module.exports = {
+export {
   dataCache,
   indexCache,
   imageCache,

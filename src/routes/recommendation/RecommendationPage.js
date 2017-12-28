@@ -7,12 +7,14 @@ import { routerRedux } from 'dva/router';
 import queryString from 'query-string';
 import { FormattedMessage as FM } from 'react-intl';
 // import { gql, graphql } from 'react-apollo';
-import { sysconfig } from '../../systems';
+import { sysconfig } from 'systems';
 import { Spinner } from '../../components';
 import { classnames } from '../../utils';
 import styles from './RecommendationPage.less';
 import { Auth } from '../../hoc';
 import { RCDOrgList } from '../../components/recommendation';
+
+const location = window.location;
 
 // const gqlAllOrgs = gql`
 //   query gqlAllOrgs {

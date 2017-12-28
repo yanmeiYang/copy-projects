@@ -20,7 +20,7 @@ class EmailTemplate extends React.Component {
         Modal.success({
           title: '邮箱模板定制成功',
           onOk() {
-            location.href = '/2b';
+            window.location.href = '/2b';
           },
         });
       }

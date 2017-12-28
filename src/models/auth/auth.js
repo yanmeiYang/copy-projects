@@ -3,7 +3,7 @@
 //  */
 // import { routerRedux } from 'dva/router';
 // import { config } from '../../utils';
-// import { sysconfig } from '../../systems';
+// import { sysconfig } from 'systems';
 // import * as authService from '../../services/auth';
 // import * as uconfigService from '../../services/universal-config';
 //

@@ -4,7 +4,7 @@
 // import KnowledgeGraphSearchHelper from './KnowledgeGraphSearchHelper';
 import KnowledgeGraphTextTree from './KnowledgeGraphTextTree';
 
-module.exports = {
+export {
   // KnowledgeGraphSearchHelper,
   KnowledgeGraphTextTree,
 };

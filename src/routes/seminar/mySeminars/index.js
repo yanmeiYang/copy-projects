@@ -4,6 +4,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Button, Spin, Tabs } from 'antd';
+import { sysconfig } from 'systems';
 // import ActivityList from '../../../components/seminar/activityList';
 import NewActivityList from '../../../components/seminar/newActivityList';
 import { config } from '../../../utils';

@@ -7,8 +7,11 @@ import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { system } from 'core';
 import { RequireGod } from 'hoc';
-import { sysconfig, getAllSystemConfigs } from 'systems';
+import { sysconfig } from 'systems';
+// import { sysconfig, getAllSystemConfigs } from 'systems';
 import { Icon, Dropdown, Menu, Layout } from 'antd';
+
+const getAllSystemConfigs = []; // TODO SSR...
 
 @connect(({ app }) => ({
   app: {

@@ -5,7 +5,7 @@ import { Tag, Tabs } from 'antd';
 import classnames from 'classnames';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { compare } from 'utils/compare';
-import { hole } from 'utils';
+import { hole } from 'core';
 import styles from './TranslateSearchMessage.less';
 
 @connect()

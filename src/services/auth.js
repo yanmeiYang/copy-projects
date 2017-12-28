@@ -4,7 +4,7 @@
  */
 import { request, config, nextAPI } from 'utils';
 import { apiBuilder, F, H } from 'utils/next-api-builder';
-import { sysconfig } from '../systems';
+import { sysconfig } from 'systems';
 
 const { api } = config;
 

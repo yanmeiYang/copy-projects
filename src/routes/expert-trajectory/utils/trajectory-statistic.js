@@ -438,6 +438,6 @@ const downloadData = (data) => {
   return all;
 };
 
-module.exports = {
+export {
   showPersonStatistic, downloadData,
 };

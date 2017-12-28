@@ -15,7 +15,7 @@ const param = (key, type, description) => {
   return { key, type, description };
 };
 
-module.exports = {
+export default {
   // URLs
   basePageURL: 'https://aminer.org',
   baseURL,
@@ -149,7 +149,7 @@ module.exports = {
     getTopicOfModal: `${baseURL}/topic/person/voter/up/:id/id/:tid/offset/:offset/size/:usize`,
 
     // vote
-    votePersonInSomeTopicById:`${baseURL}/topic/person/vote/:oper/:aid/id/:tid`,
+    votePersonInSomeTopicById: `${baseURL}/topic/person/vote/:oper/:aid/id/:tid`,
     unvotePersonInSomeTopicById: `${baseURL}/topic/person/vote/:aid/id/:tid`,
 
     // Recommendation APIs

@@ -6,7 +6,7 @@ import classnames from 'classnames';
 import { Hole } from 'components/core';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { compare } from 'utils/compare';
-import { hole } from 'utils';
+import { hole } from 'core';
 import styles from './SearchSorts.less';
 
 const { TabPane } = Tabs;

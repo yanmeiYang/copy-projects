@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import Tencent3rd from './tencent';
-import { sysconfig } from '../../systems';
+import { sysconfig } from 'systems';
 class ThirdLogin extends React.PureComponent {
   render() {
     return (

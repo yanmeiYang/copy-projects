@@ -2,13 +2,14 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
-import { Button, Modal, Row, Form, Input } from 'antd';
+import { sysconfig } from 'systems';
+import { classnames } from 'utils';
+import { Button, Row, Form, Input } from 'antd';
 import styles from './index.less';
-import { sysconfig } from '../../../systems';
-import { classnames } from '../../../utils';
-import leftLogo from '../../../assets/login/left-logo.png';
+import leftLogo from 'assets/login/left-logo.png';
 
 const FormItem = Form.Item;
+const location = window.location;
 
 class Login2b extends React.Component {
   setErrorMessage(message) {

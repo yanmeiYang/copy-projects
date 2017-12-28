@@ -25,6 +25,7 @@ const tc = applyTheme(styles);
 
 const RadioGroup = Radio.Group;
 const { TabPane } = Tabs;
+const location = window.location;
 
 @connect(({ app, knowledgeGraph, loading }) => ({ app, knowledgeGraph, loading }))
 @Auth

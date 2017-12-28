@@ -10,6 +10,7 @@ import { queryURL } from '../../../utils';
 import styles from './index.less';
 
 const FormItem = Form.Item;
+const location = window.location;
 
 class ResetPassword extends React.Component {
   state = {

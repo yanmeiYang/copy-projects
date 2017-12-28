@@ -27,7 +27,7 @@ export default class TopicRelationPage extends React.Component {
   };
 
   componentWillMount() {
-    let { query } = queryString.parse(location.search);
+    let { query } = queryString.parse(window.location.search);
     query = query || 'data mining';
     this.setState({ query });
   }

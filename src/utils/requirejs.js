@@ -250,7 +250,7 @@ const loadECharts = (cb) => {
   loadScript('echarts', { check: 'echarts' }, cb);
 };
 
-module.exports = {
+export {
   loadScript,
   loadD3v3,
   loadD3,

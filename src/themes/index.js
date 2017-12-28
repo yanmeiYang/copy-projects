@@ -1,13 +1,14 @@
 /**
  * Created by BoGao on 2017/10/10.
+ *
+ * !!! This is generated automatically, don't modify !!!  ${system}
  */
 /* eslint-disable prefer-template,import/no-dynamic-require */
 import React from 'react';
 import classnames from 'classnames';
-import { System } from 'core/system';
 import { plugins } from 'core';
-
-const theme = require(`themes/${System}/theme-${System}.js`);
+import theme from 'themes/minimalsys/theme-minimalsys';
+// const theme = require('themes/minimalsys/theme-minimalsys.js');
 
 // init something.
 plugins.initPlugins(theme.plugins);
@@ -40,4 +41,4 @@ const applyTheme = (styles) => {
   };
 };
 
-module.exports = { theme, applyTheme };
+export { theme, applyTheme };

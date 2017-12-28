@@ -1,4 +1,4 @@
-/* eslint-disable prefer-destructuring */
+/* eslint-disable prefer-destructuring,no-restricted-globals*/
 import React from 'react';
 import { Tabs, message } from 'antd';
 import { connect } from 'dva';
@@ -10,7 +10,7 @@ import * as profileUtils from 'utils/profile-utils';
 import styles from './trend-prediction.less';
 import { getPerson } from '../../services/person';
 import { searchPubById } from '../../services/trend-prediction-service';
-import { sysconfig } from '../../systems';
+import { sysconfig } from 'systems';
 import { Spinner } from '../../components';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 

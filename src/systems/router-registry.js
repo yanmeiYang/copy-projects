@@ -8,9 +8,6 @@
 import themes from 'themes'; // Must in first line.
 
 import React from 'react';
-import dynamic from 'dva/dynamic';
-import { Loader } from 'components/ui';
-import { Router, Switch, Route, Redirect, routerRedux } from 'dva/router';
 
 import route2b from 'routes/2b/router-2b';
 import core from 'routes/router-core';
@@ -37,8 +34,6 @@ import toolsCompare from 'routes/tools-compare/router-toolscompare';
 if (process.env.NODE_ENV !== 'production' && themes) {
   console.log('Registered plugins: ', themes.plugins);
 }
-
-const { ConnectedRouter } = routerRedux;
 
 // Full Routers
 const RouterRegistry = [
@@ -158,48 +153,7 @@ const RouterJSXFunc = (history, app, routes, RootComponent) => {
     // console.log('Load Routes: ', routes);
   }
 
-  return (
-    <ConnectedRouter history={history}>
-      {/* v2.0 不使用 RootComponent，在page中引入Root */}
-      {/*<RootComponent>*/}
-      <Switch>
-        {/* <Route exact path="/" render={() => (<Redirect to="/dashboard" />)} /> */}
-        {routes.map((route, index) => {
-          if (!route) {
-            console.log('Error: route #%d is null!', index);
-            return false;
-          }
-          const { path, noExact, ...dynamics } = route;
-          const dupKey = `${index}_`;
-
-          if (false && process.env.NODE_ENV !== 'production') {
-            console.log(
-              '%cRegister Routes: %s %s',
-              'color:red;background-color:rgb(255,251,130)',
-              !noExact ? '[exact]' : '', path);
-          }
-
-          // for Error404 <Route component={error} />
-          if (!path) {
-            return <Route key={dupKey} component={dynamic({ app, ...dynamics })} />;
-            // return <Route key={dupKey} component={error} />;
-          }
-
-          // common routes.
-          return (
-            <Route key={dupKey} exact={!noExact} path={path} component={dynamic({
-              app,
-              LoadingComponent: ({ productId }) => (<Loader spinning />), // TODO that this?
-              ...dynamics,
-            })} />
-          );
-        })}
-        {/*<Route component={error} />*/}
-      </Switch>
-      {/*</RootComponent>*/}
-    </ConnectedRouter>
-  );
 };
 
 
-module.exports = { RouterRegistry, RouterRegistry2b, RouterJSXFunc };
+export { RouterRegistry, RouterRegistry2b, RouterJSXFunc };

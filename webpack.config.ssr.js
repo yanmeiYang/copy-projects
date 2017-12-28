@@ -6,7 +6,7 @@ const autoprefixer = require('autoprefixer');
 
 const buildrc = require('./.buildrc');
 
-module.exports = {
+export {
 
   devtool: '#source-map',
 

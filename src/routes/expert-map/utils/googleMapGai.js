@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 function GetGoogleMapLib(showTop) {
   return function showOverLay() {
     let me = {};

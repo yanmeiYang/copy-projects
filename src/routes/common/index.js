@@ -1,5 +1,5 @@
 import Labels from './Labels';
 
-module.exports = {
+export {
   Labels,
 };

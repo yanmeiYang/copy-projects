@@ -29,7 +29,7 @@ class ForgotPassword extends React.Component {
         title: '成功',
         content: '请查看你的邮箱',
         onOk() {
-          location.href = '/';
+          window.location.href = '/';
         },
       })
       ;

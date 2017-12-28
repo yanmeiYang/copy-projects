@@ -3,6 +3,6 @@
  */
 import VisResearchInterest from './vis-research-interest';
 
-module.exports = {
+export {
   VisResearchInterest,
 }

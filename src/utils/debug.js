@@ -9,6 +9,8 @@ const LogRequest = true;
 const LogRequestResult = true;
 const LogHOC = false;
 
+const HighlightHoles = 'none'; // ['none' | 'yes' | 'all']
+
 ReduxLoggerEnabled = true;
 
 // Log common message.
@@ -49,7 +51,8 @@ function logRequestError(pattern, ...data) {
   );
 }
 
-module.exports = {
+
+export {
   // configs
   ReduxLoggerEnabled, DebugLogEnabled, LogRequest, LogRequestResult, LogHOC,
 
@@ -57,6 +60,5 @@ module.exports = {
   log, logRequest, logRequestResult, logRequestError,
 
   // other configs:
-  HighlightHoles: 'none', // ['none' | 'yes' | 'all']
-
+  HighlightHoles,
 };

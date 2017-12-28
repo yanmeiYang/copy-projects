@@ -1,8 +1,12 @@
 /* eslint-disable global-require */
+
 /**
  * Created by bogao on 2017/8/18.
+ *
+ * Note:
+ *   This file is also run in node environment.
+ *   Can't import any utils. Make sure this file load first.
  */
-// Note: can't import any utils. Make sure this file load first.
 
 // 所有可选系统，保留关键字：global.
 const AvailableSystems = [
@@ -19,64 +23,47 @@ const AvailableSystems = [
   'cipsc',
   'huawei',
   'med_topic_trend',
+  'minimalsys', // 用来调试的最小system集合
   'scei', // 中国科协：深度智库
   'tencent',
   'thurcb',
   'yocsef',
 ];
 
-let System;
-// System = 'aminer';
-// System = 'demo';
-// System = 'DataAnnotation';
-// System = 'bole';
-System = 'ccf';
-// System = 'ccftest';
-// System = 'huawei';
-// System = 'alibaba';
-// System = 'acmfellow';
-// System = 'tencent';
-// System = 'cie';
-// System = 'cietest';
-// System = 'cipsc';
-// System = 'huawei';
-// System = 'med_topic_trend';
-// System = 'scei';
-// System = 'tencent';
-// System = 'thurcb';
-// System = 'yocsef';
-
 // SPECIAL: USED_IN_ONLINE_DEPLOY; DON'T DELETE THIS LINE.
 // override system with system-override.js
 // if (process.env.NODE_ENV === 'production') {
-try {
-  // TODO here is a warning if file doesn't exist.
-  const { OverrideSystem } = require('../../src/system-override');
-  System = OverrideSystem;
-  if (process.env.NODE_ENV !== 'production') {
-    // eslint-disable-next-line function-paren-newline function-paren-newline
-    const msg = '%cSystem Override to [%s] using OVERRIDE. (original is %s)';
-    const style = 'color:white;background-color:orange;padding:1px 4px;';
-    console.log(msg, style, OverrideSystem, System);
-  }
-} catch (err) {
-  const msg = '%cWarning! No System Override found. use system[%s]';
-  const style = 'color:white;background-color:orange;padding:1px 4px;';
-  console.log(msg, style, System);
-}
+
+// try {
+//   // TODO here is a warning if file doesn't exist.
+//   const { OverrideSystem } = require('../../src/system-override');
+//   System = OverrideSystem;
+//   if (process.env.NODE_ENV !== 'production') {
+//     // eslint-disable-next-line function-paren-newline function-paren-newline
+//     const msg = '%cSystem Override to [%s] using OVERRIDE. (original is %s)';
+//     const style = 'color:white;background-color:orange;padding:1px 4px;';
+//     console.log(msg, style, OverrideSystem, System);
+//   }
+// } catch (err) {
+//   const msg = '%cWarning! No System Override found. use system[%s]';
+//   const style = 'color:white;background-color:orange;padding:1px 4px;';
+//   console.log(msg, style, System);
+// }
+
 // }
 
 // check available
-if (AvailableSystems.indexOf(System) <= 0) {
-  if (process.env.NODE_ENV !== 'production') {
-    const msg = '%cSystem [%s] is invalid, available:%v';
-    const style = 'color:white;background-color:orange;padding:1px 4px;';
-    console.log(msg, style, System, AvailableSystems);
-  }
-  throw new Error('System [%s] is invalid! Please check your code.');
-}
 
+// if (AvailableSystems.indexOf(System) <= 0) {
+//   if (process.env.NODE_ENV !== 'production') {
+//     const msg = '%cSystem [%s] is invalid, available:%v';
+//     const style = 'color:white;background-color:orange;padding:1px 4px;';
+//     console.log(msg, style, System, AvailableSystems);
+//   }
+//   throw new Error('System [%s] is invalid! Please check your code.');
+// }
 
+const System = '.....';
 let Source = System; // AppID, Used in UniversalConfig.
 
 const SavedSystemKey = 'IJFEOVSLKDFJ';
@@ -123,7 +110,7 @@ if (process.env.NODE_ENV !== 'production' || System === 'demo') {
   loadSavedSystem();
 }
 
-module.exports = {
+export {
   AvailableSystems,
   System,
   Source,

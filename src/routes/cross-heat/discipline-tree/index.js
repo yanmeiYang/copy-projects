@@ -1,3 +1,5 @@
+/* eslint-disable  no-restricted-globals */
+
 import React from 'react';
 import { connect } from 'dva';
 import { Icon, message, Input, Modal } from 'antd';

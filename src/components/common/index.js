@@ -1,7 +1,7 @@
 import LabelLine from './LabelLine';
 import SampleLabelLine from './SampleLabelLine';
 
-module.exports = {
+export {
   LabelLine,
   SampleLabelLine,
 };

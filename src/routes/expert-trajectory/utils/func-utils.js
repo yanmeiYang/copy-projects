@@ -121,7 +121,7 @@ const findBest = (id) => {
   });
 };
 
-module.exports = {
+export {
   randomColor, loadEchartsWithBMap, findBest, deepCopyImage, cacheInfo, copyImage,
   paperCache, infoCache, imageCache,
 };

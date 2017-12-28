@@ -7,7 +7,7 @@ import { routerRedux, Link } from 'dva/router';
 import { Button } from 'antd';
 import { connect } from 'dva';
 import styles from './index.less';
-import { sysconfig } from '../../../systems';
+import { sysconfig } from 'systems';
 import * as auth from '../../../utils/auth';
 import { Auth } from '../../../hoc';
 

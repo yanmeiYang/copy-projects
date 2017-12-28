@@ -14,14 +14,15 @@ import {
 } from 'components/search';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
-import { createURL, hole } from 'utils';
+import { createURL } from 'utils';
+import { hole } from 'core';;
 import { Auth } from 'hoc';
 import styles from './SearchComponent.less';
 // import SearchHelp from '../SearchHelp/SearchHelp';
 // TODO Extract Search Filter into new Component.
 // TODO Combine search and uniSearch into one.
 const DefaultRightZoneFuncs = [
-  param => <SearchKnowledge query={param.query} key="1"/>,
+  param => <SearchKnowledge query={param.query} key="1" />,
 ];
 @connect(({ app, search, loading }) => ({ app, search, loading }))
 @withRouter
@@ -256,7 +257,7 @@ export default class TalentSearchComponent extends Component {
             onOrderChange={this.onOrderChange}
           />
 
-          <Spinner loading={load}/>
+          <Spinner loading={load} />
           <div className={styles.searchContent}>
             <div className={styles.leftRight}>
               <PersonList

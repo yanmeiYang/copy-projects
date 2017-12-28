@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Input, Button, message, Form, Icon } from 'antd';
 import * as strings from 'utils/strings';
@@ -39,13 +39,13 @@ const messages = defineMessages({
 // TODO 这个文件调用了Service，应该移动到routes里面
 
 // Teach Autosuggest how to calculate suggestions for any given input value.
-const getSuggestions = (value) => {
-  const inputValue = value.trim().toLowerCase();
-  const inputLength = inputValue.length;
-
-  return inputLength === 0 ? [] : languages.filter(lang =>
-  lang.name.toLowerCase().slice(0, inputLength) === inputValue);
-};
+// const getSuggestions = (value) => {
+//   const inputValue = value.trim().toLowerCase();
+//   const inputLength = inputValue.length;
+//
+//   return inputLength === 0 ? [] : languages.filter(lang =>
+//   lang.name.toLowerCase().slice(0, inputLength) === inputValue);
+// };
 
 // When suggestion is clicked, Autosuggest needs to populate the input
 // based on the clicked suggestion. Teach Autosuggest how to calculate the

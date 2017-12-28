@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Tooltip } from 'antd';
 import { classnames } from 'utils';
-import * as hole from 'utils/hole';
+import { hole } from 'core';
 import styles from './Hole.less';
 
 @connect(({ app }) => ({ debug: app.debug }))

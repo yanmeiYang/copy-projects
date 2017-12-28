@@ -8,7 +8,8 @@ import { theme, applyTheme } from 'themes';
 import { Layout } from 'antd';
 import { KgSearchBox } from 'components/search';
 import HeaderInfoZone from 'components/Layout/HeaderInfoZone';
-import { hole, compare } from 'utils';
+import { compare } from 'utils';
+import { hole } from 'core';
 import styles from './Header.less';
 
 const tc = applyTheme(styles);

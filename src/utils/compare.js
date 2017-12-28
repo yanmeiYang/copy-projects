@@ -35,4 +35,4 @@ const compareDeep = (props1, props2, ...rest) => {
   return false;
 };
 
-module.exports = { compare, compareDeep };
+export { compare, compareDeep };

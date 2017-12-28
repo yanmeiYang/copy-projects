@@ -5,6 +5,6 @@ import RCDOrgList from './RCDOrgList';
 import ProjectTable from './ProjectTable';
 import ProjectTaskTable from './ProjectTaskTable';
 
-module.exports = {
+export {
   RCDOrgList, ProjectTable, ProjectTaskTable,
 }

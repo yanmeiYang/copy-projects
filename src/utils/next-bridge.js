@@ -136,7 +136,7 @@ const toNextCCFLabelFromEBID = (ebid) => {
   return `CCF_MEMBER_${ccfLabelMap[ebid]}`;
 };
 
-module.exports = {
+export {
   toNextPersons,
   toNextAggregation,
   toNextCCFLabelFromEBID,

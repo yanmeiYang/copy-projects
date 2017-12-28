@@ -123,6 +123,6 @@ const sortByValue = (result) => {
   return { names, values, result: vs };
 };
 
-module.exports = {
+export {
   showSta, sortByCountries, sortByBigArea,
 };

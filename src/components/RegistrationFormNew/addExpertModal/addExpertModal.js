@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { getLocalToken, saveLocalToken } from 'utils/auth';
 import { PersonList } from 'components/person';
+import defaultImg from 'assets/people/default.jpg';
 import { Button, Input, Form, Col, Radio, Spin, Select, Upload } from 'antd';
 import CanlendarInForm from '../../seminar/calendar';
-import { config } from '../../../utils';
+import { config } from 'utils';
 import styles from './addExpertModal.less';
-import defaultImg from '../../../assets/people/default.jpg';
 
 const FormItem = Form.Item;
 const { Option } = Select;

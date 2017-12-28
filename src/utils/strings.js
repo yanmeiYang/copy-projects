@@ -82,7 +82,7 @@ const unescapeURLBracket = (url) => {
   return url.replace(/%28/g, '(').replace(/%29/g, ')').trim();
 };
 
-module.exports = {
+export {
   constructQueryString, destructQueryString, destructDecodedQueryString,
   cleanQuery, encodeQuery, encodeAdvancedQuery,
   firstNonEmpty, firstNonEmptyQuery,

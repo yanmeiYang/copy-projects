@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { hole } from 'utils';
 import { Layout } from 'routes';
-import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
-import { classnames } from 'utils/index';
 import TalentSearch from './talentSearch/talentSearch'
 import styles from './index.less';
 

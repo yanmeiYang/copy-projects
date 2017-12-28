@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { cloneDeep } from 'lodash';
 import { routerRedux, withRouter } from 'dva/router';
 import { connect } from 'dva';
 import * as strings from 'utils/strings';
@@ -19,7 +20,8 @@ const tc = applyTheme(styles);
 export default class AnnotatePersonProfile extends Component {
   constructor(props) {
     super(props);
-    const raw = { name: 'Rodney Brooks',
+    const raw = {
+      name: 'Rodney Brooks',
       position: ['Professor', 'Director', 'Assistant Professor', 'President of United State'],
       phone: '+1-617-253-5223',
       fax: '+1-617-253-0039',
@@ -28,14 +30,16 @@ export default class AnnotatePersonProfile extends Component {
       address: ['America, California', 'China, Beijing', 'Mars, Human Colony', 'Galafrey'],
       photo: 'http://people.csail.mit.edu/brooks/all%20images/company%20images/Rod_Brooks_001.gif',
     };
-    const modified = { name: 'empty name',
+    const modified = {
+      name: 'empty name',
       position: 'empty position',
       phone: 'empty phone',
       fax: 'empty fax',
       email: 'empty email',
       affiliation: 'empty affiliation',
       address: 'empty address',
-      photo: '' };
+      photo: ''
+    };
     const isChanged = {
       name: <p />,
       position: <p />,
@@ -46,23 +50,26 @@ export default class AnnotatePersonProfile extends Component {
       address: <p />,
       photo: <p />,
     };
-    const origin = _.cloneDeep(modified);
+    const origin = cloneDeep(modified);
     this.state = { raw, modified, origin, isChanged };
   }
+
   componentWillMount() {
     const { dispatch, match } = this.props;
     const { id } = match.params;
     console.log('000000--', { id });
-    dispatch({ type: 'person/getPerson', payload: { personId:id } });
+    dispatch({ type: 'person/getPerson', payload: { personId: id } });
   }
+
   saveProfile() {
     alert('profile has been saved!');
   }
+
   render() {
     const { person } = this.props;
     const { profile } = person;
     return (
-      <Layout contentClass={tc(['.annotatePersonProfile'])} >
+      <Layout contentClass={tc(['.annotatePersonProfile'])}>
         <Display homepageURL="http://people.csail.mit.edu/brooks/"
                  raw={this.state.raw}
                  modified={this.state.modified}

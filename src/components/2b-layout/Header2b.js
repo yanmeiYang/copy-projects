@@ -1,16 +1,19 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Menu, Icon } from 'antd';
+import { sysconfig } from 'systems';
 import { Link } from 'dva/router';
 import styles from './Header2b.less';
 import * as profileUtils from '../../utils/profile-utils';
-import { sysconfig } from '../../systems';
 // import { SearchTypeWidgets } from '../../components/search';
 import { isLogin, isGod } from '../../utils/auth';
+
+const location = window.location;
 
 class Header2b extends React.PureComponent {
   state = {
     query: 'test',
+
   };
 
   // componentWillMount() {

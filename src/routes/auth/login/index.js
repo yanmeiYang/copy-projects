@@ -12,6 +12,7 @@ import styles from './index.less';
 
 const tc = applyTheme(styles);
 const FormItem = Form.Item;
+const location = window.location;
 
 class Login extends React.Component {
 

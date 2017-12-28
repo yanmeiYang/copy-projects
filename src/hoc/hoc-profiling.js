@@ -47,4 +47,4 @@ function Profiling(ComponentClass) {
   };
 }
 
-module.exports = { Profiling };
+export { Profiling };

@@ -65,6 +65,8 @@ function dispatchAfterLogin(put) {
  * @param dispatch
  */
 function redirectToLogin() {
+  // TODO no-server
+  const location = window.location;
   let from = location.pathname;
   if (location.pathname === '/') {
     from = '/';
@@ -244,6 +246,9 @@ function afterLogin(dispatch) {
 }
 
 function getLoginFromURL() {
+  // TODO no-server
+  const location = window.location;
+
   let from = location.pathname;
   if (from === '/' || from === sysconfig.Auth_LoginPage) {
     from = '';
@@ -251,7 +256,7 @@ function getLoginFromURL() {
   return from;
 }
 
-module.exports = {
+export {
   isLogin,
   createEmptyRoles,
   dispatchToLogin,

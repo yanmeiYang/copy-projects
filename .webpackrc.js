@@ -3,18 +3,18 @@
  *
  * Config files for roadhog@2.0 / af-webpack.
  */
-// TODO framework: use themes like this. system independent.
 const theme = require('./theme.config');
-const { version } = require('./package.json');
-const path = require('path');
+// const { version } = require('./package.json');
+// const path = require('path');
 
-console.log("*** Use .webpackrc.js");
+require('./bin/generate-system');
 
 // TODO debug mode  /  production mode
 
 // noinspection WebpackConfigHighlighting
 module.exports = {
   theme: theme(),
+
   // entry: 'src/index.js',
   // entry: {
   //   index: './src/index.js',
@@ -23,16 +23,16 @@ module.exports = {
   // publicPath: `/${version}/`,
   // outputPath: path.resolve(__dirname, `./dist/${version}`),
 
-  devtool: '#source-map',
+  // devtool: '#source-map',
 
 
-  // proxy: {
-  //   "/api": {
-  //     "target": "http://jsonplaceholder.typicode.com/",
-  //     "changeOrigin": true,
-  //     "pathRewrite": { "^/api": "" }
-  //   }
-  // },
+  proxy: {
+    "/api": {
+      "target": "http://jsonplaceholder.typicode.com/",
+      "changeOrigin": true,
+      "pathRewrite": { "^/api": "" }
+    }
+  },
 
   // "externals": {
   //   "react": "window.React",
@@ -40,8 +40,8 @@ module.exports = {
   // },
 
   "extraBabelPlugins": [
-    "@babel/plugin-transform-runtime",
-    "eslint-disable",
+    // "@babel/plugin-transform-runtime",
+    // "eslint-disable",
     // "transform-decorators-legacy",
     ["import", { "libraryName": "antd", "style": true }]
   ],
@@ -53,10 +53,3 @@ module.exports = {
     }
   }
 };
-
-
-//   "@primary-color": "#dc6aaA",
-//     "@link-color": "#dc6aac",
-//     "@border-radius-base": "2px",
-//     "@font-size-base": "16px",
-//     "@line-height-base": "1.2"

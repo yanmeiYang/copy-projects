@@ -1,5 +1,5 @@
 import { config } from '../utils';
-import { sysconfig } from '../systems';
+import { sysconfig } from 'systems';
 import { personAvatar } from './display';
 
 const { api } = config;
@@ -119,7 +119,7 @@ function findTopNTags(person, n) {
 /*
  ----------------------------- exports -------------------------
  */
-module.exports = {
+export {
   getAvatar,
   displayNameCNFirst,
   displayPosition,

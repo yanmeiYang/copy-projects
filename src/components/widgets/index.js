@@ -8,7 +8,7 @@ import IndexHotLinks from './index-hotlinks';
 import PersonLabels from './PersonLabels';
 import Feedback from './Feedback';
 
-module.exports = {
+export {
   Indices,
   HindexGraph,
   SearchSelectBox,

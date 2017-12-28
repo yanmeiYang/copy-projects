@@ -173,7 +173,7 @@ function ExpertBaseID2NameMapCCF(ExpertBases) {
   return map;
 }
 
-module.exports = {
+export {
   TopExpertBase,
   ACMFellowExpertBaseIndex,
   TopUnivExpertBaseIndex,

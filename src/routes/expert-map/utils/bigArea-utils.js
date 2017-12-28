@@ -311,6 +311,6 @@ const bigAreaConfig = [
   { label: '美国中部', x: -107.5, y: 34.5 },
 ];
 
-module.exports = {
+export {
   findPosition, findhuaweidistrict, bigAreaConfig,
 };

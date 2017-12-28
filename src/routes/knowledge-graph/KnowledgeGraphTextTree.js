@@ -6,7 +6,7 @@ import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { classnames } from 'utils/index';
 import styles from './KnowledgeGraphTextTree.less';
-import { sysconfig } from '../../systems';
+import { sysconfig } from 'systems';
 import * as kgService from '../../services/knoledge-graph-service';
 import { kgFetcher } from "../../services/knoledge-graph-service";
 

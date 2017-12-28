@@ -44,4 +44,4 @@ function RequireRes(resources) {
   }
 }
 
-module.exports = { RequireRes };
+export { RequireRes };

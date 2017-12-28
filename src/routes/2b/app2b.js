@@ -6,7 +6,7 @@ import { connect } from 'dva';
 import { Helmet } from 'react-helmet';
 import NProgress from 'nprogress';
 import { TobLayout } from '../../components/index';
-import { sysconfig } from '../../systems/index';
+import { sysconfig } from 'systems';
 import { classnames, config } from '../../utils/index';
 import '../../themes/index.less';
 import './app2b.less';

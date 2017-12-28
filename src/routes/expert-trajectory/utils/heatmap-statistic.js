@@ -173,6 +173,6 @@ const downloadData = (data) => {
   return data;
 };
 
-module.exports = {
+export {
   downloadData, showBulkTraj, showMigrateCompare,
 };

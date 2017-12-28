@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
 import { FormattedMessage as FM } from 'react-intl';
-import { hole } from 'utils';
+import { hole } from 'core';
 import { Layout } from 'routes';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';

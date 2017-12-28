@@ -353,7 +353,7 @@ const mapStyle = {
   ],
 };
 
-module.exports = {
+export {
   showChart,
   showTrajectoryChart,
   showHeatmapChart,

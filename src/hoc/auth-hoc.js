@@ -1,10 +1,10 @@
 /* eslint-disable react/no-multi-comp */
-import React, { Component, PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { sysconfig } from 'systems';
 import * as authUtil from 'utils/auth';
 import { reflect } from 'utils';
-import debug from 'utils/debug';
+import * as debug from 'utils/debug';
 
 const ENABLED = sysconfig.GLOBAL_ENABLE_HOC;
 
@@ -148,4 +148,4 @@ function RequireGod(ComponentClass) {
   };
 }
 
-module.exports = { Auth, RequireLogin, RequireAdmin, RequireGod };
+export { Auth, RequireLogin, RequireAdmin, RequireGod };

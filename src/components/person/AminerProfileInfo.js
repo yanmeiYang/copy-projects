@@ -1,13 +1,13 @@
 import React from 'react';
 import classnames from 'classnames';
-import styles from './AminerProfileInfo.less';
-import { Indices } from '../../components/widgets';
 import { Button } from 'antd';
-import * as profileUtils from '../../utils/profile-utils';
-import * as personService from '../../services/person';
-import { VisResearchInterest } from '../../routes/vis';
-import { sysconfig } from '../../systems';
-import ViewExpertInfo from '../../components/person/view-expert-info';
+import { Indices } from 'components/widgets';
+import ViewExpertInfo from 'components/person/view-expert-info';
+import * as personService from 'services/person';
+import * as profileUtils from 'utils/profile-utils';
+import { sysconfig } from 'systems';
+import { VisResearchInterest } from 'routes/vis';
+import styles from './AminerProfileInfo.less';
 
 class AminerProfileInfo extends React.Component {
   state = {};

@@ -8,7 +8,7 @@ import { connect } from 'dva';
 import styles from './index.less';
 import * as seminarService from '../../../services/seminar';
 import * as profileUtils from '../../../utils/profile-utils';
-import { sysconfig } from '../../../systems';
+import { sysconfig } from 'systems';
 
 
 const CommitteeColor = '3px outset #ff7f0e';

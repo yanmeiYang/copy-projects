@@ -14,7 +14,7 @@ import Bio from './PersonBio';
 import TabZone from './PersonTabzone';
 import AcmCitations from './ACM_Citations';
 
-module.exports = {
+export {
   ProfileInfo,
   AminerProfileInfo,
   PersonList,

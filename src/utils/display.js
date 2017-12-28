@@ -1,5 +1,5 @@
 import { api } from 'utils/config';
-import { sysconfig } from '../systems';
+import { sysconfig } from 'systems';
 
 const cdnDomain = 'am-cdn-s0.b0.upaiyun.com';
 
@@ -69,7 +69,7 @@ function returnFirstNonNil(persons) {
   return '';
 }
 
-module.exports = {
+export {
   personName,
   personAvatar,
   personEmailUrl,

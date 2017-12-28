@@ -69,7 +69,7 @@ const Person = ({ roles, dispatch, person, seminar, publications, loading }) => 
             <td>贡献度:</td>
             <td>
               {/* <Rate disabled defaultValue={contrib.score}/> */}
-              <span style={{ marginRight: 20 }}>{compre.score}</span>
+              <span style={{ marginRight: 20 }}>{contrib.score}</span>
               {auth.isSuperAdmin(roles) &&
               <Tooltip title="重新计算贡献度按钮">
                 <Button size="small" loading={contributionLoading}

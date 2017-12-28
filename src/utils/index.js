@@ -7,7 +7,6 @@ import apiBuilder from './next-api-builder';
 import { color } from './theme';
 import * as TopExpertBase from './expert-base';
 import * as reflect from './reflect';
-import * as hole from './hole';
 import { compare } from './compare';
 import {
   loadD3,
@@ -94,9 +93,8 @@ const createURL = (path, params, newParams) => {
   return url;
 };
 
-module.exports = {
+export {
   config,
-  hole,
   classnames,
 
   // library

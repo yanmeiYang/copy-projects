@@ -7,7 +7,7 @@ import { Input, Col, Radio, Button, Modal, Tag, Icon, } from 'antd';
 import { routerRedux, Link } from 'dva/router';
 import { getLocalToken } from 'utils/auth';
 import { request, config } from '../../../utils';
-import { sysconfig } from '../../systems';
+import { sysconfig } from 'systems';
 import defaultImg from '../../../assets/people/default.jpg';
 import styles from './expertBasicInformation.less';
 const RadioGroup = Radio.Group;

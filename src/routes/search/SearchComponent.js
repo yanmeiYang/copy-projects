@@ -14,7 +14,8 @@ import { SearchKnowledge, TranslateSearchMessage } from 'components/search';
 
 import { sysconfig } from 'systems';
 import { theme } from 'themes';
-import { createURL, hole } from 'utils';
+import { createURL } from 'utils';
+import { hole } from 'core';
 import { Auth } from 'hoc';
 import SearchAssistant, { AssistantUtils } from './SearchAssistant';
 import styles from './SearchComponent.less';

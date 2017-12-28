@@ -86,7 +86,7 @@ const applyPluginToAPI = (nextapi, api_plugin_key) => {
 };
 
 
-module.exports = {
+export {
   plugins,
   initPlugins,
   applyPluginToAPI,

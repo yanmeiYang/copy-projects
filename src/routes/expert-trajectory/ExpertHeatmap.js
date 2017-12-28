@@ -240,6 +240,11 @@ class ExpertHeatmap extends React.Component {
   };
 
   showPersonelInfo = (id) => {
+    const { location } = this.props;
+    const { flag } = queryString.parse(location.search);
+    if (flag) {
+      return; //如果是嵌入的话就不显示
+    }
     const person = this.props.expertTrajectory.heatData.personsInfo[id];
     this.setState({
       visible: true,

@@ -212,7 +212,7 @@ const detailedStyle = {
   boundaryStyle2: ['', '#029fd4', '#3F5991', '#004d40', '#fb8c00', '#ab485c', '#fefefe'],
   buildingStyle: ['', '#1a5787', '#2b2b2b', '#004d40', '#fb8c00', '#ab485c', '#d1d1d1'],
   lineNormalStyle: ['#f78e3d', '#2159b7', '#5D8CF7', '#00eec7', '#d7b088', '#daedf5', '#ed9c8e'],
-  lineEmphasisStyle: ['#f74300', '3d7ef7', '#F67E63', '#00eec7', '#d7b088', '#F67E63', '#ed401f'],
+  lineEmphasisStyle: ['#f74300', '#3d7ef7', '#F67E63', '#00eec7', '#d7b088', '#F67E63', '#ed401f'],
   itemNormalStyle: ['#f77a2b', '#5c95f7', '#5c95f7', '#68e4df', '#c4936e', '#2164f4', '#ed9c8e'],
   itemNormalBorderStyle: ['gold', '#3d7ef7', '#3d7ef7', '#68e4df', '', '#468ff4', '#ed9c8e'],
   itemEmphasisStyle: ['#f77325', '#3d7ef7', '#3d7ef7', '#68e4df', '#c4936e', '#2164f4', '#ed9c8e'],

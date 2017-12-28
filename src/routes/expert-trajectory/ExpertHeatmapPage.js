@@ -41,7 +41,7 @@ class ExpertHeatmapPage extends React.Component {
   state = {
     query: '', //查询窗口中的默认值
     domainId: '', //领域id
-    themeKey: '1', //皮肤的I
+    themeKey: '2', //皮肤的I
     checkedList: defaultCheckedList,
     indeterminate: true,
     checkAll: true,

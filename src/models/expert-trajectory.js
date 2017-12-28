@@ -254,11 +254,13 @@ export default {
       const yearPointData = [];
       const yearLineData = [];
       const yearHeatData = [];
+      let staData = {};
+      const personTrajData = {};
 
       const yearCityIn = []; //每一年中在哪个城市
       let startEnd = []; //存放时间的开始和结束
-      const cities = [];
-      const addresses = [];
+      const cities = []; //城市信息，存放原始数据address
+      const addresses = []; //地址信息，为当前作者所在的具体地址，如：清华大学
 
 
       for (const c of data.data.cities) {
@@ -310,7 +312,7 @@ export default {
               if (!(cPlaceId in addresses)) {
                 console.log('后台又出错了');
                 console.log(addresses[cPlaceId]);
-                console.log(typeof (addresses[cPlaceId]))
+                console.log(typeof (addresses[cPlaceId]));
                 continue;
               }
               const pCityId = addresses[pPlaceId].city_id;
@@ -352,6 +354,10 @@ export default {
                       normal: { curveness },
                     } };
                     yearLineData[y].push(line);
+                    if (!(key in personTrajData)) {
+                      personTrajData[key] = [];
+                    }
+                    personTrajData[key].push({ year: cYear, pCityId, cCityId, pPlaceId, cPlaceId });
                   }
                 }
                 previousD = d; //与上一个点的位置不一样的时候，变成新的前一个点
@@ -386,7 +392,9 @@ export default {
         }
       }
       startEnd = [start, end];
-      const heatData = { yearLineData, yearPointData, yearHeatData, startEnd, personsInfo };
+      staData = { personTrajData, cities, addresses };
+      const heatData = { yearLineData, yearPointData, yearHeatData,
+        startEnd, personsInfo, staData };
       return { ...state, heatData, loading: false };
     },
 

@@ -12,7 +12,7 @@ import { Layout as Page } from 'routes';
 import { Layout, Tabs, Button, Icon, TreeSelect, Menu, Dropdown, Checkbox, message, Modal } from 'antd';
 import styles from './ExpertHeatmapPage.less';
 import ExpertHeatmap from './ExpertHeatmap';
-import { showBulkTraj } from './utils/heatmap-statistic';
+import { showBulkTraj, downloadData } from './utils/heatmap-statistic';
 
 
 const { Content, Sider } = Layout;
@@ -151,7 +151,8 @@ class ExpertHeatmapPage extends React.Component {
     const { dispatch } = this.props;
     const rosterId = domainEBID;
     const start = 1960;
-    const end = 2017;
+    const date = new Date();
+    const end = date.getFullYear();
     const size = 100;
     dispatch({ type: 'expertTrajectory/findTrajsByRosterId', payload: { rosterId, start, end, size } });
   };
@@ -218,15 +219,18 @@ class ExpertHeatmapPage extends React.Component {
 
   handleDownload = () => {
     const data = this.props.expertTrajectory.heatData;
+    console.log(data);
     if (typeof (data.staData) !== 'undefined' && data.staData !== 'undefined') {
+      const date = new Date();
       console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
-      let str = 'wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww';
+      let str = downloadData(data);
       const bom = '\uFEFF';
       str = encodeURI(str);
-      const { name } = this.state.cperson;
       const link = window.document.createElement('a');
+      const timeString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-${date.getDate()}`;
+      console.log(timeString);
       link.setAttribute('href', `data:text/csv;charset=utf-8,${bom}${str}`);
-      link.setAttribute('download', `statistics-${name}.csv`);
+      link.setAttribute('download', `statistics-${timeString}.csv`);
       link.click();
     } else {
       //给个提示？
@@ -273,7 +277,6 @@ class ExpertHeatmapPage extends React.Component {
     const showFlag = !this.state.embeded; //是去嵌入的时候不显示Layout
     const showLeft = showFlag ? '' : 'none';
     const showMargin = showFlag ? '' : '20px 0 0 20px';
-    console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
 
     const content = (
       <div>

@@ -7,6 +7,11 @@ export default {
     models: () => [import('models/cross-heat')],
     component: () => import('routes/cross-heat/report'),
   },
+  CrossHeat: {
+    path: '/cross/heat/:id',
+    models: () => [import('models/cross-heat')],
+    component: () => import('routes/cross-heat/heat'),
+  },
   CrossTaskList: {
     path: '/cross/taskList',
     models: () => [import('models/cross-heat')],

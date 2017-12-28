@@ -6,15 +6,22 @@ import { request, config } from '../utils';
 import { externalRequest } from '../utils/request';
 
 const { api } = config;
-
-export async function getDiscipline(area, k, depth) {
+export async function getDiscipline(params) {
+  const { area, k, depth } = params;
   return request(api.getDiscipline.replace(':area', area).replace(':k', k).replace(':depth', depth), {
     method: 'GET',
   });
 }
 
-export async function delDiscipline(parents, children, postive) {
-  return request(api.delDiscipline.replace(':parents', parents).replace(':children', children).replace(':postive', postive), {
+export async function getACMDiscipline(params) {
+  const { entry, rich, dp, dc, ns, nc } = params;
+  return request(api.getACMDiscipline
+    .replace(':entry', entry)
+    .replace(':rich', rich)
+    .replace(':dp', dp)
+    .replace(':dc', dc)
+    .replace(':ns', ns)
+    .replace(':nc', nc), {
     method: 'GET',
   });
 }
@@ -33,20 +40,6 @@ export async function getCrossTree(id) {
   });
 }
 
-export async function getDomainiInfo(params) {
-  const { beginYear, endYear, pubSkip, pubLimit, authorSkip, authorLimit, dt } = params;
-  return request(api.getDomainInfo
-    .replace(':beginYear', beginYear)
-    .replace(':endYear', endYear)
-    .replace(':pubSkip', pubSkip)
-    .replace(':pubLimit', pubLimit)
-    .replace(':authorSkip', authorSkip)
-    .replace(':authorLimit', authorLimit), {
-    method: 'POST',
-    body: JSON.stringify(dt),
-  });
-}
-
 export async function getCrossPredict(params) {
   const { dt } = params;
   return request(api.getCrossPredict, {
@@ -54,31 +47,6 @@ export async function getCrossPredict(params) {
     body: JSON.stringify(dt),
   });
 }
-
-export async function getCrossModalInfo(params) {
-  const { domain1, domain2, beginYear, endYear, summary, pubSkip, pubLimit, authorSkip, authorLimit } = params;
-  return request(api.getCrossModalInfo
-    .replace(':domain1', domain1)
-    .replace(':domain2', domain2)
-    .replace(':beginYear', beginYear)
-    .replace(':endYear', endYear)
-    .replace(':summary', summary)
-    .replace(':pubSkip', pubSkip)
-    .replace(':pubLimit', pubLimit)
-    .replace(':authorSkip', authorSkip)
-    .replace(':authorLimit', authorLimit), {
-    method: 'GET',
-  });
-}
-
-export async function getDomainExpertPub(complete, id,) {
-  return request(api.getDomainInfo
-    .replace(':complete', complete)
-    .replace(':id', id), {
-    method: 'GET',
-  });
-}
-
 export async function getDomainExpert(ids) {
   return request(api.getExpertByIds, {
     method: 'POST',
@@ -92,6 +60,7 @@ export async function getDomainPub(ids) {
     body: JSON.stringify(ids),
   });
 }
+
 
 export async function delTaskList(id) {
   return request(api.delTaskList
@@ -138,12 +107,3 @@ export async function getAggregate(params) {
     body: JSON.stringify(dt),
   });
 }
-
-// export async function getAggregate(params) {
-//   const { method,dt } = params;
-//   return request(api.getAggregate, {
-//     method: 'POST',
-//     body: JSON.stringify(dt),
-//   });
-// }
-

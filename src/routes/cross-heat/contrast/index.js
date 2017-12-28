@@ -31,9 +31,9 @@ class CrossContrast extends React.Component {
     let oCit = OtherNation.heat;
 
     if (NationBoost) {
-      cPubs = (China.pubsCount * NationBoost).toFixed(0);
-      uPubs = (USA.pubsCount * NationBoost).toFixed(0);
-      oPubs = (OtherNation.pubsCount * NationBoost).toFixed(0);
+      cPubs = China.pubsCount.toFixed(0);
+      uPubs = USA.pubsCount.toFixed(0);
+      oPubs = (OtherNation.pubsCount).toFixed(0);
       cCit = (China.heat * NationBoost).toFixed(0);
       uCit = (USA.heat * NationBoost).toFixed(0);
       oCit = (OtherNation.heat * NationBoost).toFixed(0);

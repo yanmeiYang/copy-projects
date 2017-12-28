@@ -65,7 +65,7 @@ class CrossTaskList extends React.Component {
   };
   onCheck = (value) => {
     this.props.dispatch(routerRedux.push({
-      pathname: '/cross/report/' + value,
+      pathname: '/cross/heat/' + value,
     }));
   };
 

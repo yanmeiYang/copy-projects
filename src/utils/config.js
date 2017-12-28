@@ -164,7 +164,6 @@ module.exports = {
     getCrossTree: `${baseURL}/cross-domain/query/:id`,
 
     getDomainInfo: `${baseURL}/cross-domain/records/:beginYear/:endYear/:pubSkip/:pubLimit/:authorSkip/:authorLimit`,
-    // getDomainAllInfo: 'http://166.111.7.173:15000/record/:domain1/:domain2/:begin/:end',
     getCrossModalInfo: `${baseURL}/cross-domain/record/:domain1/:domain2/:beginYear/:endYear/:summary/:pubSkip/:pubLimit/:authorSkip/:authorLimit`,
     getExpertByIds: `${baseURL}/person/batch-list`,
     getPubByIds: `${baseURL}/pub/batch-list`,
@@ -177,6 +176,7 @@ module.exports = {
     delTaskList: `${baseURL}/crossing-field/query/:id`,
 
     getAggregate: `${baseURL}/crossing-field/aggregate/:method`,
+    getACMDiscipline: `${baseURL}/knowledge-graph/:entry?rich=:rich&dp=:dp&dc=:dc&ns=:ns&nc=:nc`,
     // getExportCrossInfo: `${baseURL}/crossing-field/batch/aggregate`,
 
 

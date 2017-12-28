@@ -130,6 +130,7 @@ const RouterRegistry = [
 
   tencent.ThirdLogin,
   crossHeat.CrossReport,
+  crossHeat.CrossHeat,
   crossHeat.CrossTaskList,
   crossHeat.CrossIndex,
   crossHeat.CrossStartTask,

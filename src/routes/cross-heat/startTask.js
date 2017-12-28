@@ -5,12 +5,14 @@
 import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
-import { Button, Input, Steps, message, Alert } from 'antd';
+import { Button, Radio, Input, Steps, message, Alert } from 'antd';
 import { Layout } from 'routes';
 import { Auth } from 'hoc';
 import Autosuggest from 'react-autosuggest';
 import { applyTheme } from 'themes';
+import { Spinner } from 'components';
 import DisciplineTree from './discipline-tree/index';
+import EditDomain from './edit-domain/index';
 import styles from './startTask.less';
 
 const tc = applyTheme(styles);
@@ -55,20 +57,12 @@ class StartTask extends React.Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    const { suggest, } = this.props.crossHeat;
+    const { suggest } = this.props.crossHeat;
     if (nextProps.crossHeat.suggest !== suggest) {
       this.suggestions = nextProps.crossHeat.suggest;
     }
   }
 
-
-  changeCadidate = (candidate, queryData) => {
-    // const temp=[];
-    const key = this.getNodeName(candidate, []);
-    const tree = this.getNodeName(queryData, []);
-    const differenceABSet = key.filter(x => ![...tree].find(n => n === x));
-    return differenceABSet.slice(0, 40);
-  }
   changeCurrent = (size) => {
     const current = this.state.queryOne !== '' ? size : 1;
     this.setState({ current });
@@ -119,11 +113,9 @@ class StartTask extends React.Component {
 
     if (!one && (this.inputValueOne !== queryOne)) {
       this.inputValueOne = queryOne;
-      this.getCandidate(queryOne, 'candidateOne');
     }
     if (!two && (this.inputValueTwo !== queryTwo)) {
       this.inputValueTwo = queryTwo;
-      this.getCandidate(queryTwo, 'candidateTwo');
     }
     if (cur === 3 || cur === 5) {
       const id = cur === 3 ? 'queryOne' : 'queryTwo';
@@ -212,18 +204,12 @@ class StartTask extends React.Component {
     const that = this;
     this.props.dispatch({ type: 'crossHeat/addCrossField', payload: params })
       .then(() => { //页面跳转到 热力图页面
-        const decareID = this.props.crossHeat.decareID;
+        const { decareID } = this.props.crossHeat;
         that.setState({ loading: false });
         that.props.dispatch(routerRedux.push({
-          pathname: '/cross/report/' + decareID,
+          pathname: `/cross/heat/${decareID}`,
         }));
       });
-  }
-
-  getCandidate = (key, id) => {
-    const area = key.replace(/ /g, '_');
-    const params = { id, area, k: 5, depth: 4 };
-    this.props.dispatch({ type: 'crossHeat/getDiscipline', payload: params });
   }
 
   renderSuggestionsContainer = ({ containerProps, children }) => (
@@ -233,46 +219,21 @@ class StartTask extends React.Component {
   );
 
 
-  dragStart = (event) => {
-    event.dataTransfer.setData('Text', event.target.id);
-  }
-
-  drop = (event) => {
-    event.preventDefault();
-  }
-
-  // todo
-  delTreeNode=()=>{
-    console.log("================");
-  }
-
-
   render() {
     const { current, queryOne, queryTwo } = this.state;
-    const { candidateOne, candidateTwo } = this.props.crossHeat;
-    const treeOne = this.props.crossHeat.queryOne;
-    const treeTwo = this.props.crossHeat.queryTwo;
+    const { sourceOne, sourceTwo } = this.props.crossHeat;
     const inputProps = {
       placeholder: current === 1 ? descripts[0] : descripts[1],
       value: current === 1 ? queryOne : queryTwo,
       onChange: this.onChangeQuery,
       onKeyUp: this.onKeyPress,
     };
-
-    const oneList = [];
-    const twoList = [];
-    if (queryOne && candidateOne) {
-      oneList.push(...this.changeCadidate(candidateOne, treeOne));
-    }
-    if (queryTwo && candidateTwo) {
-      twoList.push(...this.changeCadidate(candidateTwo, treeTwo));
-    }
     return (
       <Layout searchZone={[]} contentClass={tc(['startTask'])} showNavigator={false}>
         <div className={styles.step}>
           <Steps current={current - 1}>
             {steps.map((item, num) => (
-              <Step key={num} title={item.title} />
+              <Step key={num.toString()} title={item.title} />
             ))}
           </Steps>
         </div>
@@ -293,21 +254,8 @@ class StartTask extends React.Component {
         }
         { current === 2 &&
         <div className={styles.contentTree}>
-          <DisciplineTree id="queryOne" delTreeNode={this.delTreeNode} isSearch={this.oneInputChange} query={queryOne} isEdit />
-          <div draggable className={styles.drag}>
-            {oneList && oneList.map((item, index) => {
-              return (
-                <div draggable key={index} className={styles.drapItem}>
-                  <span
-                    draggable
-                    onDrop={this.drop}
-                    onDragStart={this.dragStart}
-                    id={item}>{item}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
+          <EditDomain query={queryOne} id="queryOne" source={sourceOne}
+                      isSearch={this.oneInputChange} />
         </div>
         }
         { current === 3 &&
@@ -325,20 +273,8 @@ class StartTask extends React.Component {
         }
         { current === 4 &&
         <div className={styles.contentTree}>
-          <DisciplineTree id="queryTwo" isSearch={this.twoInputChange} query={queryTwo} isEdit />
-          <div className={styles.drag}>
-            {twoList && twoList.map((item, index) => {
-              return (
-                <div draggable key={index} className={styles.drapItem}>
-                  <span draggable
-                        onDrop={this.drop}
-                        onDragStart={this.dragStart}
-                        id={item}>{item}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
+          <EditDomain query={queryTwo} id="queryTwo" source={sourceTwo}
+                      isSearch={this.twoInputChange} />
         </div>
         }
         { current === 5 &&

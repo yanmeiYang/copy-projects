@@ -73,7 +73,7 @@ export default class CrossIndex extends React.Component {
               </div>
             </a>
 
-            <a href="/cross/report/5a17c4e59ed5db2b8cf8402a" target="_blank">
+            <a href="/cross/heat/5a3251de9ed5db948cea80f9" target="_blank">
               <div className={styles.item}
               >
                 <div className={styles.img}>

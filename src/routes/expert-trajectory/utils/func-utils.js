@@ -121,7 +121,86 @@ const findBest = (id) => {
   });
 };
 
+const showCurrentLine = (data) => {
+  const line = {
+    type: 'lines',
+    //animation: false,
+    zlevel: 10001,
+    coordinateSystem: data.coordinateSystem,
+    //symbol:'arrow',
+    effect: {
+      show: true,
+      period: 3,
+      trailLength: 0,
+      color: 'red',
+      symbol: data.effect.symbol,
+      symbolSize: 12,
+      animation: true,
+    },
+    lineStyle: {
+      normal: {
+        color: 'red',
+        width: 1, //线的宽度0.8
+        opacity: 1,
+        curveness: 0.2,
+      },
+      emphasis: {
+        color: 'yellow',
+        //shadowColor: 'rgba(0, 0, 0, 0.5)',
+        //shadowBlur: 7,
+      },
+    },
+    data: [],
+    blendMode: data.lineStyle.blendMode,
+  };
+
+  return line;
+};
+
+const showCurrentPoint = (data) => {
+  const point = data;
+
+  return point;
+};
+
+const setBMap = (myChart) => {
+  const map = myChart.getModel().getComponent('bmap').getBMap();
+  const navigationControl = new window.BMap.NavigationControl({ // 添加带有定位的导航控件
+    anchor: 'BMAP_ANCHOR_TOP_LEFT', // 靠左上角位置
+    type: 'BMAP_NAVIGATION_CONTROL_LARGE', // LARGE类型
+    enableGeolocation: false, // 启用显示定位
+  });
+  map.addControl(navigationControl);
+};
+
+const addMarkers = (myChart, data, current) => {
+  const map = myChart.getModel().getComponent('bmap').getBMap();
+  const markersData = [];
+  const lastMarker = [];
+  for (let i = 0; i < current; i += 1) {
+    if (i === 0) {
+      markersData.push(data[i].coords[0]);
+    }
+    markersData.push(data[i].coords[1]);
+  }
+  for (let i = 0; i < markersData.length; i += 1) {
+    const point = new window.BMap.Point(markersData[i][0], markersData[i][1]);
+    const marker = new window.BMap.Marker(point);
+    const label = new window.BMap.Label((i + 1), {
+      offset: new window.BMap.Size(5, 4),
+    });
+    label.setStyle({
+      background: 'none',
+      color: '#fff',
+      border: 'none', //只要对label样式进行设置就可达到在标注图标上显示数字的效果
+    });
+    marker.setLabel(label);
+    map.addOverlay(marker);
+  }
+};
+
 module.exports = {
-  randomColor, loadEchartsWithBMap, findBest, deepCopyImage, cacheInfo, copyImage,
+  randomColor, loadEchartsWithBMap, findBest, deepCopyImage, cacheInfo, copyImage, showCurrentLine,
+  setBMap, addMarkers,
   paperCache, infoCache, imageCache,
 };

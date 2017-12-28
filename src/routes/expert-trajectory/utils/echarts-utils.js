@@ -1,23 +1,15 @@
 import { loadECharts, loadBMap } from 'utils/requirejs';
+import { setBMap } from './func-utils';
 
-const setBMap = (myChart) => {
-  const map = myChart.getModel().getComponent('bmap').getBMap();
-  const navigationControl = new window.BMap.NavigationControl({ // 添加带有定位的导航控件
-    anchor: 'BMAP_ANCHOR_TOP_LEFT', // 靠左上角位置
-    type: 'BMAP_NAVIGATION_CONTROL_LARGE', // LARGE类型
-    enableGeolocation: false, // 启用显示定位
-  });
-  map.addControl(navigationControl);
-};
 
 const planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
 const showChart = (myChart, type, skinType, showType) => { // 功能起始函数
-  let [showLabel, dotType] = [true, 'effectScatter'];
+  let [showLabel, dotType, showEffect] = [true, 'effectScatter', true]; //是否显示place名字，点的类型，是否显示特效
   if (typeof (showType) !== 'undefined') {
     if (showType === 'heatmap') {
-      [showLabel, dotType] = [false, 'scatter'];
+      [showLabel, dotType, showEffect] = [false, 'scatter', true];
     } else if (showType === 'trajectory') {
-      [showLabel, dotType] = [true, 'effectScatter'];
+      [showLabel, dotType, showEffect] = [true, 'effectScatter', false];
     }
   }
   const skin = parseInt(skinType, 10);
@@ -155,13 +147,13 @@ const showChart = (myChart, type, skinType, showType) => { // 功能起始函数
       coordinateSystem: type,
       //symbol:'arrow',
       effect: {
-        show: true,
+        show: showEffect,
         period: 3,
         trailLength: 0,
         color: detailedStyle.lineNormalStyle[skin],
         symbol: planePath,
         symbolSize: 12,
-        animation: true,
+        animation: showEffect,
       },
       lineStyle: {
         normal: {
@@ -184,14 +176,6 @@ const showChart = (myChart, type, skinType, showType) => { // 功能起始函数
   if (type === 'bmap') {
     setBMap(myChart);
   }
-};
-
-const showTrajectoryChart = (myChart, type, skinType, showType) => { // 功能起始函数
-
-};
-
-const showHeatmapChart = (myChart, type, skinType, showType) => { // 功能起始函数
-
 };
 
 const visual = ['green', 'yellow', 'yellow', 'red'];
@@ -359,7 +343,4 @@ const mapStyle = {
 
 module.exports = {
   showChart,
-  showTrajectoryChart,
-  showHeatmapChart,
-  setBMap,
 };

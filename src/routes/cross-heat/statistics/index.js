@@ -17,11 +17,11 @@ class CrossStatistics extends React.Component {
     return widthList;
   }
 
-  onTagChange = (item) => {
+  onTagChange = (item, result) => {
     const title = item.split('&');
-    const param = { first: title[0].trim(), second: title[1].trim(), key: 'expert', heat: 1 };
-    // todo modal show
-    this.props.showModal(param);
+    if (result.authors !== '#') {
+      this.props.getModalContent('history', title[1].trim(), title[0].trim());
+    }
   }
 
   getTop = (infoList, nodeData) => {
@@ -58,20 +58,40 @@ class CrossStatistics extends React.Component {
   render() {
     const { cross, nodeData } = this.props;
     const { data, detail } = cross;
-    const { authors, pubs } = detail;
-    let hIndexBarWidth = [];
-    let citationBarWidth = [];
-    if (detail) {
-      hIndexBarWidth = this.barWidth(authors.distribute);
-      citationBarWidth = this.barWidth(pubs.distribute);
-    }
     let top5 = [];
     if (data) {
       top5 = this.getTop(data, nodeData);
     }
-    let boost = detail.authorsCount - detail.EmptyNation.authorsCount;
-    if (boost) {
-      boost = detail.EmptyNation.authorsCount / boost;
+    let hIndexBarWidth = [0, 0, 0, 0, 0];
+    let citationBarWidth = [0, 0, 0, 0, 0];
+    const result = {
+      authors: '#', pubs: '#', aHIndex: '#', aCitation: '#', ChinaAuthors: '#',
+      autDis0: '#', autDis1: '#', autDis2: '#', autDis3: '#', autDis4: '#',
+      pubDis0: '#', pubDis1: '#', pubDis2: '#', pubDis3: '#', pubDis4: '#',
+    };
+    if (detail) {
+      const { authors, pubs } = detail;
+      hIndexBarWidth = this.barWidth(authors.distribute);
+      citationBarWidth = this.barWidth(pubs.distribute);
+      let boost = detail.authorsCount - detail.EmptyNation.authorsCount;
+      if (boost) {
+        boost = detail.EmptyNation.authorsCount / boost;
+      }
+      result.authors = detail.authorsCount;
+      result.pubs = detail.pubsCount;
+      result.aHIndex = detail.averageHIndex.toFixed(2);
+      result.aCitation = detail.pubsCount.toFixed(2);
+      result.ChinaAuthors = (detail.China.authorsCount * boost).toFixed(0);
+      result.autDis0 = authors.distribute['0'];
+      result.autDis1 = authors.distribute['1'];
+      result.autDis2 = authors.distribute['2'];
+      result.autDis3 = authors.distribute['3'];
+      result.autDis4 = authors.distribute['4'];
+      result.pubDis0 = pubs.distribute['0'];
+      result.pubDis1 = pubs.distribute['1'];
+      result.pubDis2 = pubs.distribute['2'];
+      result.pubDis3 = pubs.distribute['3'];
+      result.pubDis4 = pubs.distribute['4'];
     }
     return (
       <div className={styles.statistics}>
@@ -83,28 +103,29 @@ class CrossStatistics extends React.Component {
           <div className={styles.contentBasic}>
             <div>
               <span>专家：</span>
-              <span className={styles.num}>{detail.authorsCount}</span>
+              <span className={styles.num}>{result.authors || '#'}</span>
               <span>人</span>
             </div>
             <div>
               <span>论文：</span>
-              <span className={styles.num}>{detail.pubsCount}</span>
+              <span className={styles.num}>{result.pubs}</span>
               <span>篇</span>
             </div>
             <div>
               <span>华人：</span>
-              <span className={styles.num}>{(detail.China.authorsCount * boost).toFixed(0)}</span>
+              <span className={styles.num}>{result.ChinaAuthors}</span>
               <span>人</span>
             </div>
             <div>
               <span>H-index均值：</span>
-              <span className={styles.num}>{detail.averageHIndex.toFixed(2)}</span>
+              <span className={styles.num}>{result.aHIndex}</span>
             </div>
             <div>
               <span>Citation均值：</span>
-              <span className={styles.num}>{detail.averageCitation.toFixed(2)}</span>
+              <span className={styles.num}>{result.aCitation}</span>
             </div>
           </div>
+          <div className={styles.noData}></div>
         </div>
         <div className={styles.item}>
           <div className={styles.title}>
@@ -116,35 +137,35 @@ class CrossStatistics extends React.Component {
               <div className={styles.itemAxias}>&lt;10</div>
               <div className={styles.item1}
                    style={{ width: Math.ceil(hIndexBarWidth[0]) }}>
-                {authors.distribute['0']}
+                {result.autDis0}
               </div>
             </div>
             <div className={styles.hBar}>
               <div className={styles.itemAxias}>10~20</div>
               <div className={styles.item2}
                    style={{ width: Math.ceil(hIndexBarWidth[1]) }}>
-                {authors.distribute['1']}
+                {result.autDis1}
               </div>
             </div>
             <div className={styles.hBar}>
               <div className={styles.itemAxias}>20~40</div>
               <div className={styles.item3}
                    style={{ width: Math.ceil(hIndexBarWidth[2]) }}>
-                { authors.distribute['2']}
+                { result.autDis2}
               </div>
             </div>
             <div className={styles.hBar}>
               <div className={styles.itemAxias}>40~60</div>
               <div className={styles.item4}
                    style={{ width: Math.ceil(hIndexBarWidth[3]) }}>
-                {authors.distribute['3']}
+                {result.autDis3}
               </div>
             </div>
             <div className={styles.hBar}>
               <div className={styles.itemAxias}>&gt;60</div>
               <div className={styles.item5}
                    style={{ width: Math.ceil(hIndexBarWidth[4]) }}>
-                {authors.distribute['4']}
+                {result.autDis4}
               </div>
             </div>
           </div>
@@ -160,34 +181,34 @@ class CrossStatistics extends React.Component {
               <div className={styles.itemAxias}>0</div>
               <div className={styles.item1}
                    style={{ width: Math.ceil(citationBarWidth[0]) }}
-              >{pubs.distribute['0']}
+              >{result.pubDis0}
               </div>
             </div>
             <div className={styles.cBar}>
               <div className={styles.itemAxias}>1~10</div>
               <div className={styles.item2}
-                   style={{ width: Math.ceil(citationBarWidth[1]) }}>{pubs.distribute['1']}
+                   style={{ width: Math.ceil(citationBarWidth[1]) }}>{result.pubDis1}
               </div>
             </div>
             <div className={styles.cBar}>
               <div className={styles.itemAxias}>10~100</div>
               <div className={styles.item3}
                    style={{ width: Math.ceil(citationBarWidth[2]) }}>
-                { pubs.distribute['2']}
+                { result.pubDis2}
               </div>
             </div>
             <div className={styles.cBar}>
               <div className={styles.itemAxias}>100~200</div>
               <div className={styles.item4}
                    style={{ width: Math.ceil(citationBarWidth[3]) }}>
-                {pubs.distribute['3']}
+                {result.pubDis3}
               </div>
             </div>
             <div className={styles.cBar}>
               <div className={styles.itemAxias}>&gt;200</div>
               <div className={styles.item5}
                    style={{ width: Math.ceil(citationBarWidth[4]) }}>
-                {pubs.distribute['4']}
+                {result.pubDis4}
               </div>
             </div>
           </div>
@@ -201,11 +222,11 @@ class CrossStatistics extends React.Component {
           <div className={styles.content}>
             {top5.map((item, index) => {
               return (
-                <div key={index} className={styles.tooltip}
-                     onClick={this.onTagChange.bind(this, item)}>
+                <div key={index.toString()} className={styles.tooltip}
+                     onClick={this.onTagChange.bind(this, item, result)}>
                   <Tooltip placement="top" title={item}>
                     <a href="javascript:void(0)">
-                      <Tag key={index} className={styles.antTag}>
+                      <Tag key={index.toString()} className={styles.antTag}>
                         {index + 1}. {item}
                       </Tag>
                     </a>

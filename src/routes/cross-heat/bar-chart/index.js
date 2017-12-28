@@ -41,7 +41,7 @@ class BarChart extends React.Component {
     const g = svg.append('g')
       .attr('transform', 'translate(40,20)');
     const barData = titleList.map((item, i) => {
-      return { title: item, num: numList[i] };
+      return { title: item, num: numList[i].toFixed(0) };
     })
 
     x.domain(barData.map(d => d.title));

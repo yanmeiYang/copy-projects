@@ -203,11 +203,8 @@ class ExpertHeatmapPage extends React.Component {
         divId = document.getElementById('timeDistribution');
         type = 'timeDistribution';
       } else if (key === '1') {
-        divId = document.getElementById('migrateHistory');
-        type = 'migrateHistory';
-      } else if (key === '2') {
-        divId = document.getElementById('migrateCompare');
-        type = 'migrateCompare';
+        divId = document.getElementById('hotAreas');
+        type = 'hotAreas';
       }
       const data = this.props.expertTrajectory.heatData;
       if (typeof (divId) !== 'undefined' && divId !== 'undefined') {
@@ -219,16 +216,13 @@ class ExpertHeatmapPage extends React.Component {
 
   handleDownload = () => {
     const data = this.props.expertTrajectory.heatData;
-    console.log(data);
     if (typeof (data.staData) !== 'undefined' && data.staData !== 'undefined') {
       const date = new Date();
-      console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
       let str = downloadData(data);
       const bom = '\uFEFF';
       str = encodeURI(str);
       const link = window.document.createElement('a');
       const timeString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-${date.getDate()}`;
-      console.log(timeString);
       link.setAttribute('href', `data:text/csv;charset=utf-8,${bom}${str}`);
       link.setAttribute('download', `statistics-${timeString}.csv`);
       link.click();
@@ -262,15 +256,10 @@ class ExpertHeatmapPage extends React.Component {
 
     const staJsx1 = (
       <div className={styles.charts}>
-        <div id="migrateHistory" className={styles.chart1} />
+        <div id="hotAreas" className={styles.chart1} />
       </div>
     );
 
-    const staJsx2 = (
-      <div className={styles.charts}>
-        <div id="migrateCompare" className={styles.chart1} />
-      </div>
-    );
     const loading = this.props.loading.global;
 
 
@@ -330,9 +319,8 @@ class ExpertHeatmapPage extends React.Component {
                 width="700px"
               >
                 <Tabs defaultActiveKey="0" onChange={this.changeStatistic}>
-                  <TabPane tab="时间分布" key="0">{staJsx && staJsx}</TabPane>
-                  <TabPane tab="迁徙历史" key="1">{staJsx1 && staJsx1}</TabPane>
-                  <TabPane tab="迁徙对比" key="2">{staJsx2 && staJsx2}</TabPane>
+                  <TabPane tab="Time Distribution" key="0">{staJsx && staJsx}</TabPane>
+                  <TabPane tab="Hot Areas" key="1">{staJsx1 && staJsx1}</TabPane>
                 </Tabs>
               </Modal>
             </div>

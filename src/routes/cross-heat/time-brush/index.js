@@ -3,13 +3,16 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import * as d3 from 'd3';
 import styles from './index.less';
+import { RequireRes } from 'hoc';
+import { ensure } from 'utils';
+
 
 const localDate = new Date();
 const fYear = 2007;
 const tYear = localDate.getFullYear() + 1;
 const futureYear = ['未来3年'];
+@RequireRes('d3')
 class TimeBrush extends React.Component {
   state = {
     date: [fYear, tYear],
@@ -17,7 +20,9 @@ class TimeBrush extends React.Component {
 
   componentDidMount() {
     const { xWidth, yearBuring, isAuto } = this.props;
-    this.createBrush(xWidth, yearBuring, isAuto);
+    ensure('d3', (d3) => {
+      this.createBrush(xWidth, yearBuring, isAuto, d3);
+    });
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -27,15 +32,19 @@ class TimeBrush extends React.Component {
       this.props.getLocalYear(nextState.date);
     }
     if (xWidth !== nextProps.xWidth) {
-      this.createBrush(nextProps.xWidth, date, isAuto);
+      ensure('d3', (d3) => {
+        this.createBrush(nextProps.xWidth, date, isAuto, d3);
+      });
     }
     if (yearBuring[1] !== nextProps.yearBuring[1]) {
-      this.createBrush(nextProps.xWidth, nextProps.yearBuring, isAuto);
+      ensure('d3', (d3) => {
+        this.createBrush(nextProps.xWidth, nextProps.yearBuring, isAuto, d3);
+      });
     }
   }
 
 
-  createBrush = (xWidth, yearBuring, isAuto) => {
+  createBrush = (xWidth, yearBuring, isAuto, d3) => {
     const tmp = [];
     for (let i = fYear; i <= tYear + futureYear.length; i++) {
       tmp.push(i);

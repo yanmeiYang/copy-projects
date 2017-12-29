@@ -108,7 +108,7 @@ import('models/app').then(model => {
 // app.model(appModel);
 // app.model(require('./models/app'));
 
-app.router(require('./systems/minimalsys/router'));
+app.router(require('./systems/demo/router'));
 
 const messages = fixIntl();
 

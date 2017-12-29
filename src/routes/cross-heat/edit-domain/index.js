@@ -349,7 +349,8 @@ class EditDomain extends React.Component {
             className={styles.plus} />
     );
     return (
-      <div>
+      <div className={styles.editDomain}>
+        <Spinner loading={loadWiki || loadAcm} size="large" />
         <div className={styles.disciplineTree}>
           {showTooltip &&
           <div className={styles.tooltipDis}
@@ -369,7 +370,6 @@ class EditDomain extends React.Component {
           </div>
           }
         </div>
-        <Spinner loading={loadWiki || loadAcm} size="large" />
         <div>
           <ButtonGroup>
             <Button type={source === 'wiki' ? 'primary' : 'default'}

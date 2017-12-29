@@ -30,9 +30,6 @@ for (let i = sYear; i <= eYear; i++) {
   years.push(i);
 }
 const colorHeat = ['#FFFFFF', '#FFF2EE', '#FFE5DC', '#FFD9CB', '#FFD9CB', '#FFBFA8', '#FFB296', '#FFA585', '#FF9973', '#FF8C62', '#cc4c1eeb'];
-//
-// const colorHeat = ['rgb(255, 242, 238)'];
-
 @withRouter
 @Auth
 @RequireRes('d3')
@@ -161,10 +158,10 @@ class Heat extends React.Component {
     const arr = nodeArray.map((item) => {
       const temp = {};
       if (item) {
-        const { pubsCount, authorsCount, heat } = item;
+        const { pubsCount, authorsCount, heat, status } = item;
         const cPub = maxBar > 0 ? Math.log(pubsCount + 1) / Math.log(maxBar + 1) : 0;
         const cAuthor = maxBar > 0 ? Math.log(authorsCount + 1) / Math.log(maxBar + 1) : 0;
-        temp.cHeat = (maxHeat > 0 && heat > 0) ? this.getColor(heat, heatArray, top) : colorHeat[0];
+        temp.cHeat = (maxHeat > 0 && heat > 0) ? this.getColor(heat, heatArray, top) : status === 'sleep' ? '#E6E5E5' : colorHeat[0];
         temp.cPub = `${(cPub * 60).toFixed(0)}px`;
         temp.cAuthor = `${(cAuthor * 60).toFixed(0)}px`;
         temp.pubsCount = pubsCount;

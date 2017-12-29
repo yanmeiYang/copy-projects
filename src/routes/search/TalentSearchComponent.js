@@ -7,6 +7,8 @@ import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import classnames from 'classnames';
 import { Pagination } from 'antd';
 import { Spinner } from 'components';
+import { Auth } from 'hoc';
+import styles from './SearchComponent.less';
 import { PersonList, ExportExperts } from 'components/person';
 import {
   SearchFilter, SearchSorts, KgSearchBox,
@@ -15,9 +17,8 @@ import {
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 import { createURL } from 'utils';
-import { hole } from 'core';;
-import { Auth } from 'hoc';
-import styles from './SearchComponent.less';
+import { hole } from 'core';
+
 // import SearchHelp from '../SearchHelp/SearchHelp';
 // TODO Extract Search Filter into new Component.
 // TODO Combine search and uniSearch into one.

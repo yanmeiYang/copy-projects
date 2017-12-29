@@ -14,7 +14,7 @@ import core from 'routes/router-core';
 // import expertBase from 'routes/expert-base/router-eb';
 // import person from 'routes/person/router-person';
 // import user from 'routes/user/router-user';
-// import auth from 'routes/auth/router-auth';
+import auth from 'routes/auth/router-auth';
 // import admin from 'routes/admin/router-admin';
 // import rcd from 'routes/recommendation/router-rcd';
 // import map from 'routes/expert-map/router-map';
@@ -40,7 +40,7 @@ const routes = [
   // person.Person,
 
   // user & auth.
-  // auth.Login,
+  auth.Login,
   // user.Register,
   // user.User,
   // user.ForgotPassword,

@@ -2,7 +2,7 @@
 /**
  * Created by GaoBo on 2017/12/26.
  *
- * !!! This is generated automatically, don't modify !!!
+ * !!! This is generated automatically, don't modify !!! 
  */
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -100,13 +100,10 @@ const app = dva({
 
 initDVA(app);
 
-// 一种写法是这样的
+// Model的引入，一种写法是这样的
 import('models/app').then(model => {
   app.model(model.default);
 });
-
-// const model = require('./models/app').default;
-// console.log('>>>>>>  ', appModel);
 
 // app.model(appModel);
 // app.model(require('./models/app'));

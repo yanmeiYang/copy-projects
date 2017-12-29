@@ -15,12 +15,17 @@ const idx = args.indexOf('-s');
 if (args.length > idx) {
   system = args[idx + 1];
 } else {
-  console.error('No system found! Please specified -s <system>');
+  console.error('No system found! Please specify a system <system>');
   process.exit(-1);
 }
 
 if (AvailableSystems.indexOf(system) <= 0) {
   console.error('Error! System not available: ', system);
+
+  console.log("Available systems are:");
+  for (const sys of AvailableSystems) {
+    console.log("  ", sys);
+  }
   process.exit(-1);
 }
 

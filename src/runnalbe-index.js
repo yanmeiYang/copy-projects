@@ -2,7 +2,7 @@ import dva from 'dva';
 import createHistory from 'history/createBrowserHistory';
 import createLoading from 'dva-loading';
 import { message } from 'antd';
-import './___oldsystem/index.css';
+import './index.css';
 
 const ERROR_MSG_DURATION = 3; // 3 秒
 

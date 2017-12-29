@@ -1,0 +1,167 @@
+.margin-top-10 {
+  margin-top: 10px;
+}
+
+li {
+  list-style: none;
+}
+
+.time {
+  width: 60px;
+  height: 70px;
+  border-radius: 5px;
+  overflow: hidden;
+  text-align: center;
+  margin-right: 15px;
+  float: left;
+  em {
+    display: block;
+    line-height: 19px;
+    font-style: normal;
+    color: #fff;
+    background-color: #1677cb;
+  }
+  .bot {
+    border: 1px solid #ddd;
+    span {
+      display: block;
+      line-height: 1;
+      color: #1677cb;
+      font-size: 14px;
+      b {
+        font-weight: normal;
+        font-size: 24px;
+      }
+    }
+    strong {
+      display: block;
+      color: #9898a8;
+      font-size: 14px;
+      font-weight: normal;
+      line-height: 20px;
+    }
+  }
+  .strong {
+    display: block;
+    color: #9898a8;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 20px;
+  }
+
+}
+
+.con {
+  overflow: hidden;
+  h3 {
+    display: inline-block;
+  }
+  .viewTheActivityBtn {
+    top: -9px;
+    margin-left: 20px;
+    border: 1px solid #108ee9;
+    color: #108ee9
+  }
+  a {
+    font-size: 18px;
+    color: #2f3034;
+    line-height: 24px;
+    display: block;
+    /* height: 48px; */
+    margin-top: 0;
+    overflow: hidden;
+  }
+  .info {
+    font-size: 14px;
+    color: #2f3034;
+    line-height: 20px;
+    //.margin-top-10;
+    .type {
+      //width: 230px;
+      display: inline-block;
+      font-size: 14px;
+    }
+    P {
+      .margin-top-10;
+    }
+    //.location {
+    //  .margin-top-10;
+    //}
+  }
+}
+
+.seminar_item {
+  background: #FAFAFA;
+  padding: 15px;
+  margin-bottom: 20px;
+  -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, .5);
+  -moz-box-shadow: 0 0 3px rgba(0, 0, 0, .5);
+  box-shadow: 0 0 3px rgba(0, 0, 0, .5);
+  border-radius: 3px;
+  outline: 0;
+  .seminar_title {
+    display: flex;
+    justify-content: space-between;
+    //flex-wrap: wrap;
+    h2 {
+      font-weight: normal;
+      margin-bottom: 15px;
+    }
+  }
+  .seminar_message {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    .expert_avatar{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      flex-wrap: wrap;
+      .seminar_expert_president:nth-child(1) {
+         margin-right: 5px;
+       }//TO ccf emergency
+
+    }
+    .seminar_expert_president, .seminar_expert_common {
+      img {
+        height: 35px;
+        //height: auto;
+        border-radius: 5px;
+        box-shadow: 0 0 5px;
+        padding: 2px 2px;
+      }
+    }
+    .seminar_expert_president {
+      margin-right: 20px;
+      img { border: 1px solid rgb(100, 206, 80); }
+    }
+    .seminar_expert_common{
+      margin-right: 5px;
+      img { border: 1px solid rgb(153, 145, 239); }
+    }
+  }
+  .seminar_message > div {
+    flex-grow: 1;
+    width: 200px;
+    p {
+      margin-bottom: 10px;
+    }
+  }
+  .seminar_message > div:nth-child(2) {
+    border-left: 1px solid #e9e9e9;
+    margin-left: 10px;
+    padding-left: 10px;
+  }
+  .seminar_orgAndTag {
+    display: flex;
+    justify-content: flex-start;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .seminar_message > div:nth-child(2) {
+    border-left: 0 solid #e9e9e9 !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+  }
+}

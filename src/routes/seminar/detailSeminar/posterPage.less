@@ -1,0 +1,128 @@
+.hr {
+  padding-top: 0;
+  margin: 30px 0;
+  border: 0;
+  border-top: 1px solid #eee;
+}
+.workshop {
+  hr {
+    .hr;
+  }
+  .posterShow {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    hr {
+      .hr;
+    }
+    .expertAvatar {
+      text-align: center;
+      img {
+        width: 90px;
+      }
+    }
+    .expertMessage {
+      margin-left: 10px;
+      .expert_name_pos {
+        display: flex;
+        justify-content: flex-start;
+        margin-bottom: 10px;
+        h2 {
+          font-weight: normal;
+        }
+        span {
+          font-style: italic;
+          margin-left: 10px;
+          line-height: 2;
+        }
+      }
+      .expert_poster_info{
+        margin-top: 5px;
+        span:nth-child(2){
+          margin-left: 5px;
+          font-weight: 700;
+        }
+        p{
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+}
+
+
+
+.marginTop {
+  margin-top: 20px;
+}
+
+.marginLeft {
+  margin-left: 10px;
+}
+
+.detailSeminar {
+  font-size: 13px;
+  margin-top: 20px;
+  //display: flex;
+  //justify-content: flex-start;
+  //flex-shrink: 1;
+  h4 {
+    text-align: center;
+    font-size: 18px;
+    //font-weight: 300;
+  }
+  h5 {
+    line-height: 20px;
+    font-size: 17px;
+    font-weight: 300;
+    margin: 10px 0;
+  }
+}
+
+.thumbnail {
+  display: block;
+  padding: 4px;
+  margin-bottom: 20px;
+  line-height: 1.42857143;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  -webkit-transition: border .2s ease-in-out;
+  -o-transition: border .2s ease-in-out;
+  transition: border .2s ease-in-out;
+  .caption {
+    padding: 9px;
+    color: #333;
+  }
+}
+
+
+
+
+.workshopTetail {
+  h5 {
+    text-align: center;
+  }
+  img {
+    width: 100%;
+    //box-shadow: 0px 0px 10px #428bca;
+    margin-bottom: 20px;
+  }
+  hr {
+    .hr;
+  }
+  p {
+    margin-top: 10px;
+  }
+}
+
+
+.qrCode{
+  display: none;
+  z-index: 1;
+  position: absolute;
+}
+.show_QRCode:hover+.qrCode{
+  display: block !important;
+}
+

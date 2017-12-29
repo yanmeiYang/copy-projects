@@ -1,0 +1,136 @@
+.whole {
+  position:relative;
+  display: flex;
+  flex-direction: row;
+
+  .heatmap{
+    flex: 2;
+    height: 700px;
+    left: 0px;
+    padding: 0px;
+  }
+
+  .info{
+    width: 120px;
+    border: 1px solid white;
+    //background-color: #044161;
+    height: 700px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    .noinfo {
+      color: white;
+      font-weight: 600;
+      padding: 30px 5px;
+      word-break: break-all;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+    }
+
+    .imgBox {
+      margin: 10px 25px 0px 15px;
+      background-color: white;
+      overflow: hidden;
+      border: 2px solid white;
+      border-radius: 5px;
+      width: 90px;
+      min-height: 90px;
+      cursor: pointer;
+      img {
+        width: 90px;
+        min-height: 90px;
+      }
+    }
+
+    .nameBox {
+      width: 100%;
+      font-weight: 600;
+      margin: 10px 0px 20px 0px;
+      .name {
+        margin: 0px 25px 0px 15px;
+        border: 2px solid white;
+        border-radius: 5px;
+        width: 90px;
+        min-height: 22px;
+        cursor: pointer !important;
+        background-color: white;
+        text-align:center;
+        word-break: break-all;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+      }
+    }
+  }
+
+  .paper {
+    width: 280px;
+    height: 150px;
+    border: 1px solid white;
+    border-radius: 15px;
+    position: absolute;
+    top: 530px;
+    left: 20px;
+    color: white;
+    font-weight: 600;
+    padding: 10px 20px;
+    word-break: break-all;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    overflow-y: auto;
+    .year {
+      width: 100%;
+      padding: 0px 0px 5px 0px;
+    }
+  }
+}
+
+.dinner{
+  margin: 20px 0 0 5px;
+  display: block;
+  overflow: visible;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .play{
+    flex: 0;
+    fontSize: 16;
+    color: #08c;
+    position: relative;
+    top: 0px;
+    left: 0px;
+  }
+
+  .slide{
+    flex: 2;
+    margin-left: 18px;
+    position: relative;
+    top: 0px;
+    left: 0px;
+
+    .timeLine{
+      margin: 0 0px 0 0;
+    }
+
+    .input{
+      padding: 5px 0px 0 10px;
+      .inputNumber{
+        width: 70px;
+        marginLeft: 0;
+      }
+    }
+
+    .settingBut{
+      float: right;
+    }
+  }
+}
+:global {
+  .anchorBL {
+    display: none;
+  }
+}
+
+
+
+

@@ -1,0 +1,143 @@
+@import "~themes/vars";
+
+.startTask {
+  padding: 10px 30px;
+  min-width: 1200px;
+  .stepsAction {
+    margin-top: 24px;
+  }
+  .ant-steps-head:hover {
+    cursor: pointer !important;
+  }
+  .contentSearch {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    padding-top: 220px;
+    -webkit-box-shadow: 0 0 14px 2px rgba(99, 99, 99, 0.2) inset;
+    box-shadow: 0 0 14px 2px rgba(99, 99, 99, 0.2) inset;
+    border: 1px solid rgb(238, 238, 238);
+    background-color: #fafafa;
+    min-height: 500px;
+    min-width: 767px;
+    width: 100%;
+    :global {
+      .react-autosuggest__container {
+        input {
+          width: 400px;
+          border: solid 1px #b9b7b9;
+          padding-left: 8px;
+          border-top-left-radius: 2px;
+          border-bottom-left-radius: 2px;
+          height: 48px;
+          font-size: 14px;
+        }
+      }
+      .react-autosuggest__suggestions-container {
+        margin-top: -1px;
+        border-right: 1px solid #ccc;
+        border-left: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+      }
+      .react-autosuggest__suggestions-list {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+      }
+
+      .react-autosuggest__suggestion {
+        cursor: pointer;
+        padding: 10px 8px;
+      }
+
+      .react-autosuggest__suggestion--highlighted {
+        background-color: #ddd;
+      }
+    }
+    .btnSubmit {
+      background-color: #108ee9;
+      color: white;
+      height: 48px;
+      width: 110px;
+      text-align: center;
+      border-top-right-radius: 2px;
+      border-bottom-right-radius: 2px;
+      padding-top: 11px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .autoItem {
+      background-color: #03A9F4;
+      padding-left: 10px;
+    }
+
+  }
+  .contentTree {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 10px;
+    -webkit-box-shadow: 0 0 14px 2px rgba(99, 99, 99, 0.2) inset;
+    box-shadow: 0 0 14px 2px rgba(99, 99, 99, 0.2) inset;
+    border: 1px solid rgb(238, 238, 238);
+    background-color: #fafafa;
+    min-height: 500px;
+    min-width: 1200px;
+    width: 100%;
+    .keyword {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  .btnDiv {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    button {
+      margin: 5px 10px;
+    }
+  }
+
+  .alert {
+    margin-top: 20px;
+  }
+  .step {
+    padding-left: 40px;
+    padding-right: 40px;
+    span:hover {
+      cursor: pointer;
+    }
+  }
+  .drag {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+    flex-wrap: wrap;
+    .drapItem {
+      margin-right: 10px;
+      display: flex;
+      justify-content: flex-start;
+      span {
+        cursor: move;
+        border: 1px solid #03A9F4;
+        padding: 1px 10px;
+        border-radius: 1px;
+        white-space: nowrap;
+        margin-top: 3px;
+
+      }
+      span:hover {
+        background-color: #03A9F4;
+        color: #fff;
+        border-radius: 2px;
+        white-space: nowrap;
+      }
+    }
+
+  }
+
+}
+
+

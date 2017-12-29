@@ -1,0 +1,122 @@
+@import "~themes/vars";
+
+.knowledgeGraphPage {
+  display: flex; flex-direction: column; min-width: 800px;
+
+  .title {
+    display: flex; flex-direction: row; justify-content: space-between;
+    h1 { display: flex; }
+    :global {
+      .toolbox {
+        display: flex; align-self: center;
+      }
+    }
+  }
+}
+
+.meat {
+  display: flex; flex-direction: row; height: e("calc(100vh - 158px)");
+
+  .left {
+    display: flex; flex: 3;
+    overflow: scroll;
+    border-top: solid 1px #ddd;
+    border-bottom: solid 1px #ddd;
+    box-shadow: 0 0 18px rgba(2, 2, 2, 0.1) inset;
+  }
+  .right {
+    display: flex; flex: 2; flex-direction: column;
+    background-color: #fefefe;
+    border: 1px solid #999;
+    box-shadow: -7px 0 18px 0 rgba(50, 50, 50, .3);
+
+    :global {
+      .card {
+        margin-bottom: 24px; flex: 1;
+        .header {
+          border-bottom: solid 1px #2B3A42; background-color: #2B3A42;
+
+          h2 { color: white; padding: 2px 16px; font-size: @font-size-lg; }
+        }
+        .text {
+          padding: 8px; overflow: scroll; height: 100%
+        }
+      }
+    }
+  }
+}
+
+.emptyBlock {
+  display: flex; justify-content: center; align-items: center;
+  width: 100%; height: 80px;
+}
+
+:global {
+  .card-container {
+    padding: 0;
+
+    .ant-tabs-card {
+      height: 100%;
+
+      .ant-tabs-content {
+        //border: solid 1px red;
+        //height: 120px;
+        margin-top: -16px;
+        height: 100%;
+        overflow: scroll;
+
+        .ant-tabs-tabpane {
+          background: #fff;
+          padding: 16px;
+        }
+      }
+
+      > .ant-tabs-bar {
+        border-color: #fff;
+        padding: 4px 0 0 8px;
+        border-bottom: solid 1px #2B3A42; background-color: #2B3A42;
+        .ant-tabs-nav-container { height: 24px !important; }
+        .ant-tabs-tab {
+          border-color: transparent;
+          background: transparent;
+          color: #ddd;
+          //border: solid 1px red;
+          border-radius: 2px;
+          padding: 5px 10px 8px 10px;
+          font-size: 12px;
+          line-height: 12px;
+          font-weight: 600;
+        }
+
+        .ant-tabs-tab-active {
+          border-color: #fff;
+          background: #fff;
+          color: #108ee9;
+        }
+
+        .ant-tabs-tab:hover { color: white; }
+        .ant-tabs-tab-active:hover { color: #108ee9; }
+      }
+    }
+  }
+
+  .tabContent { // no use
+    padding: 8px; overflow: scroll; height: 100%;
+  }
+
+  .ant-tabs-extra-content {
+    line-height: 22px; padding-right: 8px;
+    a {
+      color: #ddd;
+      border-radius: 2px;
+      font-size: 12px;
+      line-height: 12px;
+      font-weight: 600;
+      .fa { padding-left: 2px; }
+    }
+    a:hover {
+      color: white;
+    }
+  }
+
+}

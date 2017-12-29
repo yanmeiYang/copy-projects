@@ -1,0 +1,184 @@
+.add_seminar_block {
+  display: flex;
+  justify-content: flex-start;
+  flex-shrink: 1;
+  .add_seminar_form {
+    max-width: 1000px;
+    width: 100%;
+  }
+
+  :global .ant-form-item {margin-bottom: 18px;}
+
+}
+
+.marginTop10 {
+  margin-top: 10px;
+}
+
+.backgroundColor {
+  background: rgba(189, 187, 187, 0.07);
+  box-shadow: 0 1px 4px 0 #A9B6BE;
+}
+
+.thumbnail {
+  .marginTop10;
+  display: block;
+  padding: 17px 44px 4px 4px;
+  margin-bottom: 20px;
+  line-height: 1.42857143;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  -webkit-transition: border .2s ease-in-out;
+  -o-transition: border .2s ease-in-out;
+  transition: border .2s ease-in-out;
+  .caption {
+    padding: 9px;
+    color: #333;
+  }
+  .backgroundColor;
+}
+
+.crop {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%;
+  img {
+    width: 100%;
+  }
+}
+
+.expertProfile {
+  padding-left: 15px;
+  .recommendation {
+    margin-bottom: 10px;
+    width: 300px;
+  }
+  input {
+    margin: 0 8px 8px 0;
+  }
+}
+
+.saveExpert {
+  float: right;
+}
+
+.formFooter {
+  .thumbnail;
+  text-align: center;
+  margin-bottom: 30px;
+  .ant-form-item {
+    margin-bottom: 10px !important;
+  }
+}
+
+.addNewExpert {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+//推荐专家
+.personWrap {
+  min-height: 100px;
+  .person {
+    border: 1px solid #e9e9e9;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+    padding: 10px;
+    .left {
+      width: 120px;
+      img {
+        width: 100px;
+        height: 100px;
+      }
+    }
+    .right {
+      flex: 1;
+      .nameWrap {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 5px;
+        h3 {
+          margin-right: 10px;
+        }
+        h4 {
+          color: darkgray;
+        }
+      }
+      .statWrap {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 10px;
+        .item {
+          //margin-right: 5px;
+          .label {
+            color: #B10000;
+            font-weight: bold;
+            margin-right: 5px;
+          }
+        }
+        .split {
+          margin: 0 10px;
+        }
+      }
+      .infoWrap {
+        margin-bottom: 10px;
+        .infoItem {
+          :global {
+            .anticon {
+              margin-right: 5px;
+            }
+          }
+        }
+      }
+      .tagWrap {
+        .tag {
+          margin-bottom: 5px;
+        }
+      }
+    }
+  }
+}
+
+.talks {
+  list-style: none;
+  border: 1px solid #e9e9e9;
+  background: #fff;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.uploadImgSuccess {
+  display: flex;
+  justify-content: flex-start;
+  span {
+    height: 35px !important;
+    align-self: flex-end;
+  }
+  button {
+    width: 76px;
+    height: 35px !important;
+    padding: 0 8px;
+    font-size: 15px;
+    background: #F1F1F1;
+    border: 1px solid #f04134;
+    margin-left: 10px;
+    align-self: flex-end;
+  }
+}
+
+.menu {
+  :global {
+    .ant-cascader-menu {
+      min-width: 200px;
+      height: 400px;
+    }
+  }
+}
+
+

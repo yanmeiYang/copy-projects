@@ -1,0 +1,55 @@
+.thumbnail {
+  display: none;
+  padding: 10px;
+  margin-bottom: 20px;
+  line-height: 1.42857143;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  -webkit-transition: border .2s ease-in-out;
+  -o-transition: border .2s ease-in-out;
+  transition: border .2s ease-in-out;
+  .caption {
+    padding: 9px;
+    color: #333;
+  }
+  .commentList {
+    img {
+      width: 50px;
+      display: inline-block;
+      float: left;
+      border-radius: 3px;
+    }
+    .message {
+      display: block;
+      margin-left: 65px;
+      .text {
+        margin-top: 5px;
+      }
+      .time {
+        color: #808080;
+      }
+    }
+    .delete {
+      cursor: pointer;
+      float: right;
+      color: #f04134;
+    }
+    .dividingLine {
+      border: 1px solid #eee;
+      margin: 10px 0 10px 0;
+    }
+  }
+}
+
+.comment {
+  margin-top: 20px;
+  Button {
+    float: right;
+    margin-top: 10px;
+  }
+}
+
+@media (min-width: 568px) {
+  .thumbnail { display: block; }
+}

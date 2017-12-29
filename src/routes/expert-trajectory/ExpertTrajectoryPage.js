@@ -350,9 +350,9 @@ class ExpertTrajectoryPage extends React.Component {
                   width="700px"
                 >
                   <Tabs defaultActiveKey="0" onChange={this.changeStatistic}>
-                    <TabPane tab="时间分布" key="0">{staJsx && staJsx}</TabPane>
-                    <TabPane tab="迁徙历史" key="1">{staJsx1 && staJsx1}</TabPane>
-                    <TabPane tab="地区分布" key="2">{staJsx2 && staJsx2}</TabPane>
+                    <TabPane tab="Time Distribution" key="0">{staJsx && staJsx}</TabPane>
+                    <TabPane tab="Migrate History" key="1">{staJsx1 && staJsx1}</TabPane>
+                    <TabPane tab="Areas Distribution" key="2">{staJsx2 && staJsx2}</TabPane>
                   </Tabs>
                 </Modal>
               </div>

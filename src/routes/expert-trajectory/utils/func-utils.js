@@ -38,7 +38,7 @@ const cacheInfo = (domainId, callback) => {
           for (const a of paper.authors) {
             paperInfo += `${a.name},`;
           }
-          paperInfo = `${paperInfo.slice(0, paperInfo.length - 1)}.(${paper.year})`
+          paperInfo = `${paperInfo.slice(0, paperInfo.length - 1)}.(${paper.year})`;
           paperCache[paper.id] = paperInfo;
         }
       }
@@ -183,7 +183,7 @@ const showCurrentPoint = (place, p) => {
     },
     label: {
       normal: {
-        show: p.label.normal.show,
+        show: true,
         position: 'right',
         formatter: '{b}',
       },
@@ -214,13 +214,22 @@ const showCurrentPoint = (place, p) => {
 
 const addMarkers = (myChart, data, current) => {
   const map = myChart.getModel().getComponent('bmap').getBMap();
+  const allOverlay = map.getOverlays();
+  const { lineData, staData, pointData } = data;
+
+  for (let u = 0; u < allOverlay.length - 1; u += 1) {
+    if (typeof (allOverlay[u].getTitle()) !== 'undefined') {
+      map.removeOverlay(allOverlay[u]);
+    }
+  }
+
   const markersData = [];
   const lastMarker = [];
-  for (let i = 0; i < current; i += 1) {
-    if (i === 0) {
-      markersData.push(data[i].coords[0]);
+  for (let j = 0; j < current; j += 1) {
+    if (j === 0) {
+      markersData.push(lineData[j].coords[0]);
     }
-    markersData.push(data[i].coords[1]);
+    markersData.push(lineData[j].coords[1]);
   }
   for (let i = 0; i < markersData.length; i += 1) {
     const point = new window.BMap.Point(markersData[i][0], markersData[i][1]);
@@ -234,6 +243,12 @@ const addMarkers = (myChart, data, current) => {
       border: 'none', //只要对label样式进行设置就可达到在标注图标上显示数字的效果
     });
     marker.setLabel(label);
+    for (const p of pointData) {
+      if (p.value[0] === markersData[i][0] && p.value[1] === markersData[i][1]) {
+        marker.setTitle(p.name);
+        break;
+      }
+    }
     map.addOverlay(marker);
   }
 };

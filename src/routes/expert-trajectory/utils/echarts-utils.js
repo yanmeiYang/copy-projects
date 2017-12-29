@@ -9,7 +9,7 @@ const showChart = (myChart, type, skinType, showType) => { // 功能起始函数
     if (showType === 'heatmap') {
       [showLabel, dotType, showEffect] = [false, 'scatter', true];
     } else if (showType === 'trajectory') {
-      [showLabel, dotType, showEffect] = [true, 'effectScatter', false];
+      [showLabel, dotType, showEffect] = [false, 'effectScatter', false];
     }
   }
   const skin = parseInt(skinType, 10);
@@ -34,8 +34,8 @@ const showChart = (myChart, type, skinType, showType) => { // 功能起始函数
   const option = {
     backgroundColor: color,
     title: {
-      text: '学者迁移图',
-      subtext: 'data from aminer',
+      text: 'Scholar\'s Trajectory',
+      subtext: 'from aminer',
       sublink: 'http://aminer.org/',
       left: 'center',
       textStyle: {
@@ -100,6 +100,7 @@ const showChart = (myChart, type, skinType, showType) => { // 功能起始函数
       coordinateSystem: 'bmap',
       data: [],
       pointSize: 5,
+      zlevel: 4,
       blurSize: 6,
       blendMode: detailedStyle.blendHeatStlye[skin],
     }, {
@@ -107,7 +108,7 @@ const showChart = (myChart, type, skinType, showType) => { // 功能起始函数
       type: dotType, //effectScatter
       coordinateSystem: type,
       hoverAnimation: true,
-      //zlevel: 5,
+      zlevel: 5,
       rippleEffect: {
         period: 4,
         scale: 2,

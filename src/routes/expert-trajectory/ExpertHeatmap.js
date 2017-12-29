@@ -176,19 +176,20 @@ class ExpertHeatmap extends React.Component {
     option.series[2].data = trajData[year];
     const personId = infoCache[this.state.currentYear.toString()].aid;
     const personTraj = data.staData.personTrajData[personId];
-    let currentPlaceId;
-    for (const p of personTraj) {
-      if (p.year === this.state.currentYear.toString()) {
-        currentPlaceId = p.cPlaceId;
-        break;
+    let currentPlaceId = '';
+    if (typeof (personTraj) !== 'undefined') {
+      for (const p of personTraj) {
+        if (p.year === this.state.currentYear.toString()) {
+          currentPlaceId = p.cPlaceId;
+          break;
+        }
       }
     }
-    if (!(currentPlaceId in data.staData.addresses)) {
-      return;
+    if (currentPlaceId in data.staData.addresses) {
+      const place = data.staData.addresses[currentPlaceId];
+      const currentPoint = showCurrentPoint(place, option.series[1]);
+      option.series[3] = currentPoint;
     }
-    const place = data.staData.addresses[currentPlaceId];
-    const currentPoint = showCurrentPoint(place, option.series[1]);
-    option.series[3] = currentPoint;
 
     if (typeof (checkType) !== 'undefined') { //!undefined的值为true
       if (!checkType.includes('Heat')) {
@@ -207,14 +208,14 @@ class ExpertHeatmap extends React.Component {
     const { location } = this.props;
     const { query, domain } = queryString.parse(location.search);
     if (typeof (query) !== 'undefined') { //输入的是某个领域
-      field = `${query}领域`;
+      field = `${query} Field`;
       this.setState({ displayPaper: 'none', displayImg: 'none' });
     } else if (typeof (domain) !== 'undefined') { //选择的是某个智库
       this.setState({ displayPaper: '', displayImg: '' });
       const lib = sysconfig.Map_HotDomains;
       lib.map((lb) => {
         if (lb.id === domain) {
-          field = `${lb.name}智库`;
+          field = `${lb.name} Think Tank`;
         }
         return true;
       });
@@ -222,7 +223,7 @@ class ExpertHeatmap extends React.Component {
     if (typeof (field) === 'undefined') {
       field = '';
     }
-    myChart.setOption({ title: { text: `${this.state.currentYear}年 ${field} 学者迁徙图` } });
+    myChart.setOption({ title: { text: `Year ${this.state.currentYear} ${field} Scholar\'s Trajectories` } });
   };
 
   handleErr = (e) => {
@@ -397,13 +398,18 @@ class ExpertHeatmap extends React.Component {
       </div>
     );
 
+    const { location } = this.props;
+    const { flag } = queryString.parse(location.search);
+    let height = flag ? document.body.clientHeight - 130 : document.body.clientHeight - 200;
+    const top = flag ? document.body.clientHeight - 320 : document.body.clientHeight - 400;
+
     return (
       <div>
         <Spinner loading={loading2} />
         <div className={styles.whole}>
-          <div className={styles.heatmap} id="chart" />
+          <div className={styles.heatmap} id="chart" style={{ height }} />
           <div className={styles.info}
-               style={{ backgroundColor: color, display: this.state.displayImg }}>
+               style={{ backgroundColor: color, height, display: this.state.displayImg }}>
             {authors && authors.map((a) => {
               const id = `year${a.year}${a.aid}`;
               const border = (this.state.currentYear === parseInt(a.year, 10)) ? '2px solid yellow' : '2px solid white';
@@ -426,7 +432,7 @@ class ExpertHeatmap extends React.Component {
               <div className={styles.noinfo}>Please Select a Domian or Input a Query!</div>
             }
           </div>
-          <div className={styles.paper} style={{ display: this.state.displayPaper }}>
+          <div className={styles.paper} style={{ display: this.state.displayPaper, top }}>
             <div className={styles.year}>
               {paper && `Year ${this.state.currentYear}:`}
             </div>

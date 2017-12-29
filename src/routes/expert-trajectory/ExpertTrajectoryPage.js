@@ -38,7 +38,7 @@ class ExpertTrajectoryPage extends React.Component {
   }
 
   state = {
-    query: '', //查询窗口中的默认值
+    query: '', //查询窗口中的默认值，需要设置为空
     cperson: '', //当前选择的人
     themeKey: '1',
     visible: false,
@@ -67,8 +67,8 @@ class ExpertTrajectoryPage extends React.Component {
     if ((query === '' || query === '-')) {
       this.openNotification();
     } else { //后面需要去掉
-      //const data = { query };
-      //this.onSearch(data);
+      // const data = { query };
+      // this.onSearch(data);
     }
   }
 

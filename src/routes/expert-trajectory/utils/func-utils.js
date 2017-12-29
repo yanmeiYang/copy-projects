@@ -10,9 +10,9 @@ const color4 = ['#FFFFCC', '#FFCC00', '#CC9909', '#663300', '#FF6600', '#663333'
 const color5 = ['#99FFFF', '#33CCCC', '#00CC99', '#99FF99', '#009966', '#33FF33', '#33FF00', '#99CC33', '#CCC333', '#66FFFF', '#66CCCC', '#66FFCC', '#66FF66', '#009933', '#00CC33', '#66FF00', '#336600', '#333000', '#33FFFF', '#339999', '#99FFCC', '#339933', '#33FF66', '#33CC33', '#99FF00', '#669900', '#666600', '#00FFFF', '#336666', '#00FF99', '#99CC99', '#00FF66', '#66FF33', '#66CC00', '#99CC00', '#999933', '#00CCCC', '#006666', '#339966', '#66FF99', '#CCFFCC', '#00FF00', '#00CC00', '#CCFF66', '#CCCC66', '#009999', '#003333', '#006633', '#33FF99', '#CCFF99', '#66CC33', '#33CC00', '#CCFF33', '#666633', '#669999', '#00FFCC', '#336633', '#33CC66', '#99FF66', '#006600', '#339900', '#CCFF00', '#999966', '#99CCCC', '#33FFCC', '#669966', '#00CC66', '#99FF33', '#003300', '#99CC66', '#999900', '#CCCC99', '#CCFFFF', '#33CC99', '#66CC66', '#66CC99', '#00FF33', '#009900', '#669900', '#669933', '#CCCC00'];
 const color6 = ['#CCCCCC', '#999999', '#666666', '#333333', '#000000'];
 
-const paperCache = [];
-const infoCache = [];
-const imageCache = [];
+const paperCache = []; //论文缓存
+const infoCache = []; //作者信息缓存
+const imageCache = []; //图像缓存
 const blankAvatar = '/images/blank_avatar.jpg';
 
 //-------------------------------------------functions
@@ -121,7 +121,125 @@ const findBest = (id) => {
   });
 };
 
+const showCurrentLine = (data) => {
+  const line = {
+    type: 'lines',
+    //animation: false,
+    zlevel: 10001,
+    coordinateSystem: data.coordinateSystem,
+    //symbol:'arrow',
+    effect: {
+      show: true,
+      period: 3,
+      trailLength: 0,
+      color: 'red',
+      symbol: data.effect.symbol,
+      symbolSize: 12,
+      animation: true,
+    },
+    lineStyle: {
+      normal: {
+        color: 'red',
+        width: 1, //线的宽度0.8
+        opacity: 1,
+        curveness: 0.2,
+      },
+      emphasis: {
+        color: 'yellow',
+        //shadowColor: 'rgba(0, 0, 0, 0.5)',
+        //shadowBlur: 7,
+      },
+    },
+    data: [],
+    blendMode: data.lineStyle.blendMode,
+  };
+
+  return line;
+};
+
+const setBMap = (myChart) => {
+  const map = myChart.getModel().getComponent('bmap').getBMap();
+  const navigationControl = new window.BMap.NavigationControl({ // 添加带有定位的导航控件
+    anchor: 'BMAP_ANCHOR_TOP_LEFT', // 靠左上角位置
+    type: 'BMAP_NAVIGATION_CONTROL_LARGE', // LARGE类型
+    enableGeolocation: false, // 启用显示定位
+  });
+  map.addControl(navigationControl);
+};
+
+const showCurrentPoint = (place, p) => {
+  console.log(place);
+  const d = [{ name: place.name, value: [place.geo.lng, place.geo.lat], symbolSize: 5 }];
+  const point = {
+    name: 'place',
+    type: p.type, //effectScatter
+    coordinateSystem: p.coordinateSystem,
+    hoverAnimation: true,
+    zlevel: 10001,
+    rippleEffect: {
+      period: 4,
+      scale: 2,
+      brushType: 'stroke',
+    },
+    label: {
+      normal: {
+        show: p.label.normal.show,
+        position: 'right',
+        formatter: '{b}',
+      },
+      emphasis: {
+        show: true,
+      },
+    },
+    symbolSize: 5,
+    itemStyle: {
+      normal: {
+        color: 'red',
+        borderColor: 'red',
+        opacity: 0.8,
+        shadowColor: 'rgba(198, 198, 198, 0.3)',
+        shadowBlur: 10,
+      },
+      emphasis: {
+        shadowBlur: 10,
+        shadowOffsetX: 0,
+        shadowColor: 'rgba(0, 0, 0, 0.5)',
+      },
+    },
+    data: d,
+    blendMode: p.blendMode,
+  };
+  return point;
+};
+
+const addMarkers = (myChart, data, current) => {
+  const map = myChart.getModel().getComponent('bmap').getBMap();
+  const markersData = [];
+  const lastMarker = [];
+  for (let i = 0; i < current; i += 1) {
+    if (i === 0) {
+      markersData.push(data[i].coords[0]);
+    }
+    markersData.push(data[i].coords[1]);
+  }
+  for (let i = 0; i < markersData.length; i += 1) {
+    const point = new window.BMap.Point(markersData[i][0], markersData[i][1]);
+    const marker = new window.BMap.Marker(point);
+    const label = new window.BMap.Label((i + 1), {
+      offset: new window.BMap.Size(5, 4),
+    });
+    label.setStyle({
+      background: 'none',
+      color: '#fff',
+      border: 'none', //只要对label样式进行设置就可达到在标注图标上显示数字的效果
+    });
+    marker.setLabel(label);
+    map.addOverlay(marker);
+  }
+};
+
 module.exports = {
-  randomColor, loadEchartsWithBMap, findBest, deepCopyImage, cacheInfo, copyImage,
+  randomColor, loadEchartsWithBMap, findBest, deepCopyImage, cacheInfo, copyImage, showCurrentLine,
+  setBMap, addMarkers, showCurrentPoint,
   paperCache, infoCache, imageCache,
 };

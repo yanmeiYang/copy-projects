@@ -9,7 +9,7 @@ import { routerRedux, Link, withRouter } from 'dva/router';
 import bridge from 'utils/next-bridge';
 import styles from './ExpertHeatmap.less';
 import { showChart } from './utils/echarts-utils';
-import { loadEchartsWithBMap, cacheInfo, paperCache, infoCache, copyImage, } from './utils/func-utils';
+import { loadEchartsWithBMap, cacheInfo, paperCache, infoCache, copyImage, showCurrentPoint, } from './utils/func-utils';
 import { PersonList } from '../../components/person';
 
 let myChart;
@@ -174,6 +174,21 @@ class ExpertHeatmap extends React.Component {
     option.series[0].data = heatData[year];
     option.series[1].data = pointsData[year];
     option.series[2].data = trajData[year];
+    const personId = infoCache[this.state.currentYear.toString()].aid;
+    const personTraj = data.staData.personTrajData[personId];
+    let currentPlaceId;
+    for (const p of personTraj) {
+      if (p.year === this.state.currentYear.toString()) {
+        currentPlaceId = p.cPlaceId;
+        break;
+      }
+    }
+    if (!(currentPlaceId in data.staData.addresses)) {
+      return;
+    }
+    const place = data.staData.addresses[currentPlaceId];
+    const currentPoint = showCurrentPoint(place, option.series[1]);
+    option.series[3] = currentPoint;
 
     if (typeof (checkType) !== 'undefined') { //!undefined的值为true
       if (!checkType.includes('Heat')) {
@@ -186,6 +201,7 @@ class ExpertHeatmap extends React.Component {
         option.series[2].data = [];
       }
     }
+
     myChart.setOption(option);
     let field;
     const { location } = this.props;

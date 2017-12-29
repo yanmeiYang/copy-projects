@@ -5,7 +5,7 @@ import { RequireRes } from 'hoc';
 //import { FormattedMessage as FM } from 'react-intl';
 import styles from './ExpertTrajectory.less';
 import { showChart } from './utils/echarts-utils';
-import { loadEchartsWithBMap } from './utils/func-utils';
+import { loadEchartsWithBMap, showCurrentLine, addMarkers } from './utils/func-utils';
 
 let myChart; // used for loadScript
 let trainterval;
@@ -100,10 +100,14 @@ class ExpertTrajectory extends React.Component {
     trainterval = setInterval(() => {
       if (length < data.step.length) {
         myChart.setOption({ title: { text: `学者 ${this.props.person.name_zh} 迁徙图` } });
+        const currentline = showCurrentLine(myChart.getOption().series[2]);
+        currentline.data = data.lineData.slice(length, (length + 1));
         myChart.setOption({ series: [{}, { data: data.pointData.slice(0, data.step[length]) },
-          { data: data.lineData.slice(0, (length + 1)) }] });
+          { data: data.lineData.slice(0, length) }, currentline] });
         length += 1;
+        addMarkers(myChart, data.lineData, length);
       } else {
+        //length = 0;
         clearInterval(trainterval);
       }
     }, 3000);

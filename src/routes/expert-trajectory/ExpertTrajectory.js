@@ -106,7 +106,6 @@ class ExpertTrajectory extends React.Component {
           { data: data.lineData.slice(0, length) }, currentline] });
         length += 1;
         addMarkers(myChart, data.lineData, length);
-        console.log(data.lineData);
       } else {
         //length = 0;
         clearInterval(trainterval);

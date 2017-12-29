@@ -20,15 +20,15 @@ export function getBools(filters) {
 }
 
 /* 目前搜索的各种坑
-   全局搜索：
-   智库高级搜索：
-     /api/search/roster/59..08/experts/advanced?name=&offset=0&org=&size=20&sort=n_citation&term=jie
-     sort = relevance, h_index, a_index, activity, diversity, rising_star, n_citation, n_pubs,
-   智库无缓存查询：
+ 全局搜索：
+ 智库高级搜索：
+ /api/search/roster/59..08/experts/advanced?name=&offset=0&org=&size=20&sort=n_citation&term=jie
+ sort = relevance, h_index, a_index, activity, diversity, rising_star, n_citation, n_pubs,
+ 智库无缓存查询：
  */
 export async function searchPerson(params) {
   const { query, offset, size, filters, sort, assistantDataMeta } = params;
-  const { useTranslateSearch, assistantQuery, isNotAffactedByAssistant } = params;
+  const { useTranslateSearch, assistantQuery, isNotAffactedByAssistant, isSearchAbbr } = params;
 
   // some conditions
   const { searchInGlobalExperts, searchInSomeExpertBase } = getBools(filters);
@@ -78,7 +78,11 @@ export async function searchPerson(params) {
       .addParam({ switches: ['loc_search_all'] }, { when: useTranslateSearch }) // TODO remove this
       .addParam({ switches: ['loc_translate_all'] }, { when: enTrans && !useTranslateSearch }) // TODO remove this
       .addParam(
-        { switches: ['intell_search'] },
+        { switches: ['intell_search_abbr'] },
+        { when: sysconfig.Search_EnableSmartSuggest && isNotAffactedByAssistant && isSearchAbbr },
+      )
+      .addParam(
+        { switches: ['intell_search_kg'] },
         { when: sysconfig.Search_EnableSmartSuggest && isNotAffactedByAssistant },
       )
       .addParam(
@@ -124,10 +128,14 @@ export async function searchPerson(params) {
 }
 
 export async function onlySearchAssistant(params) {
-  const { query, assistantDataMeta } = params;
+  const { query, assistantDataMeta, isSearchAbbr } = params;
   const nextapi = apiBuilder.query(F.queries.search, 'searchAssistant')
     .param({ query, offset: 0, size: 0, searchType: 'all' })
-    .addParam({ switches: ['intell_search'] }, { when: sysconfig.Search_EnableSmartSuggest })
+    .addParam(
+      { switches: ['intell_search_abbr'] },
+      { when: sysconfig.Search_EnableSmartSuggest && isSearchAbbr },
+    )
+    .addParam({ switches: ['intell_search_kg'] }, { when: sysconfig.Search_EnableSmartSuggest })
     .addParam({ switches: ['lang_zh'] }, { when: sysconfig.Locale === 'zh' })
     .schema({ person: [] });
   // apply SearchAssistant

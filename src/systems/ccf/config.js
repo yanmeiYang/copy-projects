@@ -24,6 +24,9 @@ module.exports = {
   Header_LogoWidth: 213,
   Header_UserPageURL: '', // 用户头像点击之后去的页面.
 
+  // google analytics
+  googleAnalytics: 'UA-107003102-2',
+
   /**
    * Functionality
    */

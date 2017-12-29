@@ -31,17 +31,13 @@
     height: 6px;
   }
 
-  .w, .ww { width: 220px; }
+  .w, .ww { width: 243px; }
   .w.zh, .ww.zh { width: 160px;}
   .w { display: flex; flex-direction: column;}
-  .ww { display: flex; flex-direction: row; flex-shrink: 0; justify-content: space-between; }
+  .ww { display: flex; flex-direction: column; flex-shrink: 0; justify-content: space-between; }
 
   .box1 {
     display: flex; flex-direction: row;
-
-    .hypernym { color: #3e9bc9; }
-
-    .hyponym { color: #000000; }
   }
 
   .box1, .leftBox {
@@ -83,5 +79,10 @@
       padding: 0 18px 0 18px; font-size: 12px; height: 24px;
       //color: @btn-bg-color;
     }
+  }
+
+  //
+  .randomWord{
+    color: #aaaaaa;
   }
 }

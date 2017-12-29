@@ -203,7 +203,7 @@ export default class SearchAssistant extends Component {
             <Checkbox key={key} value={term.word} checked={this.state.checkAllc}>
               {isRandomWord &&
               <Tooltip placement="top" title="随机词" key="随机词">
-                <i className="fa fa-random" /> &nbsp;&nbsp;
+                <i className={classnames('fa', 'fa-random', styles.randomIconColor)} />&nbsp;
               </Tooltip>}
               <span className={classnames(styles[type], { [styles.randomWord]: isRandomWord })}>
                 {term.word}
@@ -407,25 +407,25 @@ export default class SearchAssistant extends Component {
         {/*{!kgLoading && <div> not Loading </div>}*/}
         {(hasKG || kgLoading) &&
         <div className={styles.box1}>
-          <div
-            className={classnames({ [styles.ww]: true, [styles.zh]: sysconfig.Locale === 'zh' })}>
-            {kgHypernym && kgHypernym.length > 0 &&
-            <span className={styles.paddingRight}>
-              <FM defaultMessage="Hypernym expanded by knowledge graph"
-                  id="com.search.searchAssistant.hintInfo.hypernymKG" />
-            </span>}
-            {kgHyponym && kgHyponym.length > 0 &&
-            <span className={styles.paddingRight}>
-              <FM defaultMessage="Hyponym expanded by knowledge graph"
-                  id="com.search.searchAssistant.hintInfo.hyponymKG" />
-            </span>}
-            {/*<span>*/}
-            {/*<Checkbox*/}
-            {/*onChange={this.onCheckAllChange}*/}
-            {/*indeterminate={indeterminate}*/}
-            {/*checked={checkAll} />*/}
-            {/*</span>*/}
-          </div>
+          {/*<div*/}
+          {/*className={classnames({ [styles.ww]: true, [styles.zh]: sysconfig.Locale === 'zh' })}>*/}
+          {/*{kgHypernym && kgHypernym.length > 0 &&*/}
+          {/*<span className={styles.paddingRight}>*/}
+          {/*<FM defaultMessage="Hypernym expanded by knowledge graph"*/}
+          {/*id="com.search.searchAssistant.hintInfo.hypernymKG" />*/}
+          {/*</span>}*/}
+          {/*{kgHyponym && kgHyponym.length > 0 &&*/}
+          {/*<span className={styles.paddingRight}>*/}
+          {/*<FM defaultMessage="Hyponym expanded by knowledge graph"*/}
+          {/*id="com.search.searchAssistant.hintInfo.hyponymKG" />*/}
+          {/*</span>}*/}
+          {/*/!*<span>*!/*/}
+          {/*/!*<Checkbox*!/*/}
+          {/*/!*onChange={this.onCheckAllChange}*!/*/}
+          {/*/!*indeterminate={indeterminate}*!/*/}
+          {/*/!*checked={checkAll} />*!/*/}
+          {/*/!*</span>*!/*/}
+          {/*</div>*/}
 
           {kgLoading &&
           <div style={{ marginLeft: 8 }}>
@@ -435,8 +435,37 @@ export default class SearchAssistant extends Component {
           {hasKG && !kgLoading &&
           <div className={styles.kgDataAndBtn}>
             {/*分行展示上下位词*/}
-            {this.getKgDate(kgHypernym, 'hypernym')}
-            {this.getKgDate(kgHyponym, 'hyponym')}
+            <div className={styles.kgBlock}>
+              <div
+                className={classnames({
+                  [styles.ww]: true,
+                  [styles.zh]: sysconfig.Locale === 'zh',
+                })}>
+                {kgHypernym && kgHypernym.length > 0 &&
+                <span className={styles.paddingRight}>
+                  <FM defaultMessage="Hypernym expanded by knowledge graph"
+                      id="com.search.searchAssistant.hintInfo.hypernymKG" />
+                </span>}
+              </div>
+              {this.getKgDate(kgHypernym, 'hypernym')}
+            </div>
+            <div className={classnames(styles.kgBlock, styles.hyponymBlock)}>
+              <div
+                className={classnames({
+                  [styles.ww]: true,
+                  [styles.zh]: sysconfig.Locale === 'zh',
+                })}>
+                {kgHyponym && kgHyponym.length > 0 &&
+                <span className={styles.paddingRight}>
+                  <FM defaultMessage="Hyponym expanded by knowledge graph"
+                      id="com.search.searchAssistant.hintInfo.hyponymKG" />
+                </span>}
+              </div>
+              <div>
+                {this.getKgDate(kgHyponym, 'hyponym')}
+              </div>
+            </div>
+
 
             {/*<div className={styles.boxButton}>*/}
             {/*<Button size="small" onClick={this.callSearch}>*/}

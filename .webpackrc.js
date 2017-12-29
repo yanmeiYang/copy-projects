@@ -7,7 +7,7 @@ const theme = require('./theme.config');
 // const { version } = require('./package.json');
 // const path = require('path');
 
-require('./bin/generate-system');
+// require('./bin/generate-system'); // TODO SSR
 
 // TODO debug mode  /  production mode
 

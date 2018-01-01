@@ -1,95 +1,122 @@
 /* eslint-disable no-param-reassign */
 
-// const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 // const HtmlWebpackTemplate = require('html-webpack-template');
-// const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const webpack = require('webpack');
 const buildrc = require('./.buildrc');
 
-const debug = false;
+const debug = true;
 
 // TODO 分成3个不同的build， 一个是production模式，一个是dev模式，另一个是基础的。
 
 module.exports = (webpackConfig, env) => {
 
   const production = env === 'production';
-  if (debug) {
-    debugPrintConfig(webpackConfig, env);
-  }
 
   // Alias
   webpackConfig.resolve.alias = buildrc.webpack.alias;
 
-  if (true) {
-    return webpackConfig;
-  }
-  //
-  // const buildDllMode = webpackConfig.module ? false : true;
-  //
-  // // Filename Hash
-  // if (!buildDllMode) {
+  webpackConfig.devtool = 'inline-source-map';
+
   //   webpackConfig.output.filename = '[name].[hash:8].js';
   //   webpackConfig.output.chunkFilename = '[name].[hash:8].js';
-  // }
+
+  webpackConfig.plugins = webpackConfig.plugins.concat([
+    // 为了将public放到src下面
+    new CopyWebpackPlugin([{
+      from: 'src/public',
+      to: production ? '../' : webpackConfig.output.outputPath,
+    }]),
+    // 生成index.html
+    new HtmlWebpackPlugin({
+      template: `${__dirname}/src/entry.ejs`,
+      filename: production ? '../index.html' : 'index.html',
+      minify: production ? {
+        collapseWhitespace: true,
+      } : null,
+      hash: true,
+      // headScripts: production ? null : ['/roadhog.dll.js'], // 禁用了dll模式.
+    }),
+  ]);
+
+  // replace html loader
+  // if (webpackConfig.module) {
+  //   const newRules = [];
+  //   webpackConfig.module.rules.map((item) => {
+  //     const test = String(item.test);
+  //     if (test === '/\\.html$/') {
+  //     }
+  //     if (item.loader && item.loader.indexOf('/url-loader/index.js') !== -1) {
+  //     }
+  //     newRules.push(item);
   //
-  // if (!production) {
-  //   // webpackConfig.devtool = 'inline-source-map';
-  // }
-  //
-  // if (production) {
-  //   if (webpackConfig.module) {
-  //     // Class name Hash
-  //     webpackConfig.module.rules.map((item) => {
-  //       if (String(item.test) === '/\\.less$/' ||
-  //         String(item.test) === '/\\.css/') {
-  //         item.use.filter(iitem => iitem.loader === 'css')[0]
-  //           .options.localIdentName = '[hash:base64:5]';
+  //     // test ....
+  //     if (test === '/\\.html$/') {
+  //       if (item.loader) {
+  //         item.loader = 'htmsdfsdfsl';
   //       }
+  //     }
+  //     if (test) {
   //       return item;
-  //     });
-  //   }
-  //   webpackConfig.plugins.push(new webpack.LoaderOptionsPlugin({
-  //     minimize: true,
-  //     debug: false,
-  //   }));
+  //     }
+  //   });
+  //   webpackConfig.module.rules = newRules;
   // }
-  //
-  // if (!buildDllMode) {
-  //   webpackConfig.plugins = webpackConfig.plugins.concat([
-  //     new CopyWebpackPlugin([{
-  //       from: 'src/public',
-  //       to: production ? '../' : webpackConfig.output.outputPath,
-  //     }]),
-  //   ]);
-  // }
-  //
-  // webpackConfig.plugins = webpackConfig.plugins.concat([
-  //   // new CopyWebpackPlugin([
-  //   //   {
-  //   //     from: 'src/public',
-  //   //     to: production ? '../' : webpackConfig.output.outputPath,
-  //   //   },
-  //   // ]),
-  //   new HtmlWebpackPlugin({
-  //     template: `${__dirname}/src/entry.ejs`,
-  //     filename: production ? '../index.html' : 'index.html',
-  //     minify: production ? {
-  //       collapseWhitespace: true,
-  //     } : null,
-  //     hash: true,
-  //     headScripts: production ? null : ['/roadhog.dll.js'],
-  //   }),
-  // ]);
-  //
-  // return webpackConfig;
+
+  if (webpackConfig.module) {
+    // 必须使用html的loader。 TODO test 这个是必须的么？
+    webpackConfig.module.rules.map((item) => {
+      if (String(item.test) === '/\\.html/') {
+        if (item.loader) {
+          item.loader = 'html';
+        }
+      }
+      // ejs使用url-loader，不然会变成base64
+      if (item.loader && item.loader.indexOf('/url-loader/index.js') !== -1) {
+        item.exclude.push(/\.ejs$/);
+      }
+      return item;
+    });
+  }
+
+  if (production) {
+    if (webpackConfig.module) {
+      // Class name Hash
+      webpackConfig.module.rules.map((item) => {
+        const test = String(item.test);
+        if (test === '/\\.less$/' || test === '/\\.css/') {
+          item.use.filter(iitem => iitem.loader === 'css')[0]
+            .options.localIdentName = '[hash:base64:5]';
+        }
+        return item;
+      });
+    }
+
+    webpackConfig.plugins.push(new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      debug: false,
+    }));
+  }
+
+  if (debug) {
+    debugPrintConfig(webpackConfig, env);
+  }
+
+  return webpackConfig;
 };
 
+// TODO print all available values.
 const debugPrintConfig = (webpackConfig, env) => {
   console.log('-------------------- env is -----------------------');
-  console.log('>> env: ', env);
+  console.dir(env, { depth: null });
   console.log('\n\n------------------- Webpack config is ------------------------\n\n');
-  console.log(webpackConfig);
+  console.dir(webpackConfig, { depth: null });
+  if (true) {
+    return;
+  }
+
   console.log('\n\n------------------- config.modules.rules is ------------------------\n\n');
   console.log('> rule:', webpackConfig.module && webpackConfig.module.rules);
   let i = 0;

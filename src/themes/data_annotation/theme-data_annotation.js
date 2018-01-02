@@ -26,9 +26,9 @@ module.exports = {
   ],
 
   infoZone: [
-    <Link to={`/eb/${sysconfig.ExpertBase}/-/0/20`}
+    <Link to="/toolscompare"
           className={classnames(styles.header_info)} key="0">
-      All ACM Fellows
+      Tool Compare
     </Link>,
   ],
 

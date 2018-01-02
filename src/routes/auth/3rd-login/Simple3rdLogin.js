@@ -38,13 +38,11 @@ export default class Simple3rdLogin extends Component {
     // isRegister: false,
 
     step: '', // [empty | init, check_pass, failed, success ]
-    redirectUrl: '',
   };
 
   componentWillMount() {
     const { dispatch, location } = this.props;
     const { n, a, o, pos, p, id, role, c, src } = queryString.parse(location.search);
-    this.setState({ redirectUrl: src || '/' });
 
     // [STEP 1] 获取URL中的参数，接收到的用户. TODO 验证URL是否合法，是否被人串改.
     const receivedUser = {
@@ -90,7 +88,8 @@ export default class Simple3rdLogin extends Component {
       if (DEBUG_LOG) {
         console.log('[STEP 3.1] User matched!');
       }
-      return this.redirectSuccess();
+      const url = src || '/';
+      return this.redirectSuccess(url);
     } else {
       // TODO 删除登录信息，登出
     }
@@ -160,10 +159,9 @@ export default class Simple3rdLogin extends Component {
       });
   };
 
-  redirectSuccess = () => {
-    const { redirectUrl } = this.state;
-    console.log('+++ success login, redirect 88 ');
-    this.props.dispatch(routerRedux.push({ pathname: redirectUrl }));
+  redirectSuccess = (url) => {
+    console.log('+++ success login, redirect 88');
+    this.props.dispatch(routerRedux.push({ pathname: url }));
   };
 
   // componentWillUpdate(nextProps, nextState) {

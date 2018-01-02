@@ -1,6 +1,6 @@
 export default {
   ComparePage: {
     path: '/toolscompare',
-    component: () => import('./'),
+    component: () => import('routes/tools-compare'),
   },
 };

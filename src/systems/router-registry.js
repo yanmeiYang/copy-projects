@@ -28,7 +28,7 @@ import tencent from 'routes/third-login/router';
 import router2bprofile from 'routes/2b-profile/router-2bprofile';
 import profile from 'routes/profile/router-profile';
 import crossHeat from 'routes/cross-heat/router-ch';
-import dataAnnotation from 'routes/data-annotation/router-da';
+import data_annotation from 'routes/data-annotation/router-da';
 // import reco from 'routes/reco/router-reco';
 import talentHr from 'routes/talentHR/router-talentHR';
 import topicRelation from 'routes/topic-relation/router-relation';
@@ -137,7 +137,7 @@ const RouterRegistry = [
   crossHeat.CrossReportExport,
 
   // Data Annotation
-  dataAnnotation.AnnotatePersonProfile,
+  data_annotation.AnnotatePersonProfile,
 
   topicRelation.RelationPage,
 

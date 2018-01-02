@@ -255,8 +255,8 @@ class RegistrationForm extends React.Component {
     if (this.state.editStatus && currentSeminar.title) {
       const data = {
         category: currentSeminar.category,
-        organizer: currentSeminar.organizer[0].split(OrgJoiner),
-        co_org: currentSeminar.organizer.slice(1, currentSeminar.organizer.length),
+        organizer: currentSeminar.organizer,
+        co_org: currentSeminar.co_org,
         title: currentSeminar.title,
         city: currentSeminar.location.city || '',
         address: currentSeminar.location.address || '',

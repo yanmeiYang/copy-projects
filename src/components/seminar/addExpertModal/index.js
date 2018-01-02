@@ -256,9 +256,9 @@ class AddExpertModal extends React.Component {
     } else {
       this.props.parentProps.dispatch({ type: 'seminar/getSpeakerSuggest', payload: data });
     }
-    if (this.props.editTheTalk.speaker !== undefined) {
-      this.props.editTheTalk.speaker = {};
-    }
+    // if (this.props.editTheTalk.speaker !== undefined) {
+    //   this.props.editTheTalk.speaker = {};
+    // }
     this.setState({
       name: this.refs.name.input.value,
       position: this.refs.pos.input.value,

@@ -7,7 +7,7 @@
 const AvailableSystems = [
   'aminer',
   'demo',
-  'DataAnnotation',
+  'data_annotation',
   'alibaba',
   'acmfellow',
   'bole',
@@ -26,8 +26,8 @@ const AvailableSystems = [
 
 let System;
 // System = 'aminer';
-System = 'demo';
-// System = 'DataAnnotation';
+// System = 'demo';
+System = 'data_annotation';
 // System = 'bole';
 // System = 'ccf';
 // System = 'ccftest';

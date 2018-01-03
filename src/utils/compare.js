@@ -1,10 +1,5 @@
 /* eslint-disable no-extend-native */
 import { isEqual } from 'lodash';
-import classnames from 'classnames';
-import config from './config';
-import { getMenusByUser } from './menu';
-import request from './request';
-import { color } from './theme';
 
 // ShadowCompare: if any rest changes, return true; else return false;
 const compare = (props1, props2, ...rest) => {

@@ -3,9 +3,7 @@ import classnames from 'classnames';
 import * as config from './config';
 import { getMenusByUser } from './menu';
 import request, { nextAPI, wget } from './request';
-import apiBuilder from './next-api-builder';
 import { color } from './theme';
-import * as TopExpertBase from './expert-base';
 import * as reflect from './reflect';
 import { compare } from './compare';
 import {
@@ -105,14 +103,10 @@ export {
 
   getMenusByUser,
   request, nextAPI, wget,
-  apiBuilder,
   loadD3, loadD3v3, loadScript, loadECharts, loadBMap, loadGoogleMap,
   ensure,
   color,
   queryURL,
   getTwoDecimal,
-
-  TopExpertBase,
-
 
 };

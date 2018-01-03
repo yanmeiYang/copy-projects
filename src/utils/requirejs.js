@@ -257,8 +257,6 @@ export {
   loadECharts,
   loadBMap,
   loadGoogleMap,
-
-
   mergeLibs,
   ensure,
 };

@@ -1,6 +1,6 @@
 /* eslint-disable no-extend-native */
 import { routerRedux } from 'dva/router';
-import AES from 'crypto-js/aes';
+// import AES from 'crypto-js/aes';
 import { sysconfig } from 'systems';
 import { queryURL } from './index';
 

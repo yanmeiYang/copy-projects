@@ -88,5 +88,4 @@ export {
   firstNonEmpty, firstNonEmptyQuery,
 
   escapeURLBracket, unescapeURLBracket,
-}
-;
+};

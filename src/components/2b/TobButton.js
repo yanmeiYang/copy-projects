@@ -11,14 +11,14 @@ import { sysconfig } from 'systems';
 // import { sysconfig, getAllSystemConfigs } from 'systems';
 import { Icon, Dropdown, Menu, Layout } from 'antd';
 
-const getAllSystemConfigs = []; // TODO SSR...
+const getAllSystemConfigs = {}; // TODO SSR...
 
 @connect(({ app }) => ({
   app: {
     user: app.user,
     roles: app.roles,
     setDebug: app.setDebug,
-    HighlightHoles: app.debug.HighlightHoles,
+    HighlightHoles: app.debug && app.debug.HighlightHoles,
   }
 }))
 @RequireGod
@@ -49,7 +49,7 @@ export default class TobButton extends PureComponent {
   };
 
   render() {
-    const allSystemConfigs = getAllSystemConfigs();
+    const allSystemConfigs = null; // getAllSystemConfigs();
     const menu = (
       <div>
         <Layout style={{ height: '624px', background: '#fff', boxShadow: '0 0 1px' }}>
@@ -63,18 +63,18 @@ export default class TobButton extends PureComponent {
               </Menu.Item>
               <Menu.Divider />
               <Menu.Divider />
-              {allSystemConfigs && allSystemConfigs.map((src) => {
-                return (
-                  <Menu.Item key={src.SYSTEM}
-                             style={{ height: '30px', lineHeight: '30px', margin: '3px' }}>
-                    <div onClick={this.onclick.bind(this, src.SYSTEM)}>
-                      <img src={`/sys/${src.SYSTEM}/favicon.ico`}
-                           style={{ width: '10px', height: '10px' }} />
-                      <span style={{ marginLeft: '5px' }}>{src.SYSTEM}</span>
-                    </div>
-                  </Menu.Item>
-                );
-              })}
+              {/*{allSystemConfigs && allSystemConfigs.map((src) => {*/}
+              {/*return (*/}
+              {/*<Menu.Item key={src.SYSTEM}*/}
+              {/*style={{ height: '30px', lineHeight: '30px', margin: '3px' }}>*/}
+              {/*<div onClick={this.onclick.bind(this, src.SYSTEM)}>*/}
+              {/*<img src={`/sys/${src.SYSTEM}/favicon.ico`}*/}
+              {/*style={{ width: '10px', height: '10px' }} />*/}
+              {/*<span style={{ marginLeft: '5px' }}>{src.SYSTEM}</span>*/}
+              {/*</div>*/}
+              {/*</Menu.Item>*/}
+              {/*);*/}
+              {/*})}*/}
             </Menu>
           </Layout.Sider>
           <Layout.Content style={{ Height: '584px' }}>
@@ -99,7 +99,7 @@ export default class TobButton extends PureComponent {
               </Menu.Item>
               <Menu.Item>
                 <div onClick={this.setDebug.bind(this)}>
-                  Holes调试: {this.props.app.HighlightHoles}
+                  Holes调试: {this.props.HighlightHoles}
                 </div>
               </Menu.Item>
               <Menu.Item>

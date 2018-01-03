@@ -1,17 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { FormattedMessage as FM } from 'react-intl';
 import { hole } from 'core';
 import { Layout } from 'routes';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
-import { classnames } from 'utils/index';
-import { Spinner } from 'components';
 import { KgSearchBox } from 'components/search';
 import { IndexHotLinks } from 'components/widgets';
 import { Auth } from 'hoc';
 import styles from './index.less';
+
+// console.log('--------------------------------');
+// console.log(hole);
+// console.log(hole.fill);
+// console.log(sysconfig);
+// console.log(theme, applyTheme);
+// console.log(IndexHotLinks);
+// console.log(Auth);
+// console.log('--------------------------------');
+
 
 const tc = applyTheme(styles);
 
@@ -62,7 +69,7 @@ export default class IndexPage extends Component {
             links={sysconfig.IndexPage_QuickSearchList}
             urlFunc={query => `/${sysconfig.SearchPagePrefix}/${query}/0/${sysconfig.MainListSize}`}
           />,
-        ])}
+        ], { k: 124 })}
 
         {/*{centerZone && centerZone.length > 0 && centerZone.map(elm => elm)}*/}
 

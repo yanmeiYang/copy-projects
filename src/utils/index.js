@@ -1,6 +1,6 @@
 /* eslint-disable no-extend-native */
 import classnames from 'classnames';
-import config from './config';
+import * as config from './config';
 import { getMenusByUser } from './menu';
 import request, { nextAPI, wget } from './request';
 import apiBuilder from './next-api-builder';

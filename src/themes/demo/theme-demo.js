@@ -8,7 +8,7 @@ import { sysconfig } from 'systems';
 import { hole } from 'core';
 import { FormattedMessage as FM } from 'react-intl';
 import { IndexHotLinks } from 'components/widgets';
-import { IndexCenterZone } from '../../systems/demo/components';
+import { IndexCenterZone } from 'systems/demo/components';
 import styles from './theme-demo.less';
 // import * as Const from './const-acmfellow';
 
@@ -18,7 +18,7 @@ const infoZone = (
     My Experts
   </Link>);
 
-module.exports = {
+export default {
   themeName: 'common-white',
   styles,
 

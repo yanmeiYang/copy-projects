@@ -7,7 +7,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import dva from 'dva';
-import 'babel-polyfill';
+import '@babel/polyfill';
 import createHistory from 'history/createBrowserHistory';
 import { IntlProvider, addLocaleData } from 'react-intl';
 import { createLogger } from 'redux-logger';
@@ -15,7 +15,6 @@ import { message } from 'antd';
 import createLoading from 'dva-loading';
 import { sysconfig } from 'systems';
 import { ReduxLoggerEnabled } from './utils/debug';
-import appModel from 'models/app';
 
 // TODO 使用babel编译通过这两个语句. // 暂时不用这两个，编译不通过。
 

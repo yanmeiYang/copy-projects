@@ -30,7 +30,7 @@ export default class Hole extends Component {
 
     // DEBUG ONLY
     if (process.env.NODE_ENV !== 'production') {
-      switch (debug.HighlightHoles) {
+      switch (debug && debug.HighlightHoles) {
         case 'yes':
           if (!holeContent) {
             return false;

@@ -108,7 +108,6 @@ export default {
       // for papers.
       if (pdata && pdata.success) {
         const { pubs } = pdata.data;
-        console.log('+++++++++++++++', pubs);
         let pubsMap = Map();
         if (pubs && pubs.length > 0) {
           pubsMap = pubsMap.withMutations((map) => {
@@ -125,7 +124,6 @@ export default {
 
   reducers: {
     set(state, { payload }) {
-      console.log('+++++++++++++++>>>', { ...state, ...payload });
       return { ...state, ...payload };
     },
 

@@ -7,6 +7,7 @@
 module.exports = {
   webpack: {
     alias: {
+      public: `${__dirname}/public`,
       system: `${__dirname}/src/system`,
       src: `${__dirname}/src`,
       core: `${__dirname}/src/core`,
@@ -21,7 +22,6 @@ module.exports = {
       systems: `${__dirname}/src/systems`,
       themes: `${__dirname}/src/themes`,
       locales: `${__dirname}/src/locales`,
-      public: `${__dirname}/src/public`,
       hoc: `${__dirname}/src/hoc`,
       hooks: `${__dirname}/src/hooks`,
       enums: `${__dirname}/src/utils/enums`,

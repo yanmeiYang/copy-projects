@@ -7,7 +7,7 @@ import { Button, Tooltip, Icon, Modal, Tabs, Tag } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
-import bridge from 'utils/next-bridge';
+import * as bridge from 'utils/next-bridge';
 import styles from './RightInfoZoneCluster.less';
 import RightInfoZonePerson from './RightInfoZonePerson';
 import ExpertTrajectory from '../expert-trajectory/ExpertTrajectory';

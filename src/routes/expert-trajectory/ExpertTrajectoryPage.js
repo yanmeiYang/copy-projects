@@ -6,7 +6,7 @@ import { Spinner } from 'components';
 import { Layout, Button, Icon, Menu, Dropdown, Modal, Tabs, notification } from 'antd';
 import { Layout as Page } from 'routes';
 import { FormattedMessage as FM } from 'react-intl';
-import bridge from 'utils/next-bridge';
+import * as bridge from 'utils/next-bridge';
 import { applyTheme } from 'themes';
 import { Auth } from 'hoc';
 import styles from './ExpertTrajectoryPage.less';

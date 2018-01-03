@@ -10,7 +10,7 @@ import { Layout } from 'routes';
 import { applyTheme } from 'themes';
 import { PersonList } from 'components/person';
 import { PublicationList } from '../../components/publication/index';
-import bridge from 'utils/next-bridge';
+import * as bridge from 'utils/next-bridge';
 import CrossContrast from './contrast/index';
 import styles from './reportExport.less';
 

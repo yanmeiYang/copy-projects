@@ -95,10 +95,10 @@ export default class Layout extends Component {
   };
 
   render() {
-    // console.count('>>>>>>>>>> App Render'); // TODO performance
+    // console.log('>>>>>>>>>> App Render:', this.props); // TODO performance
     const { sidebar, footer, navigatorItems } = this.props;
     const { contentClass, showHeader, showNavigator, showSidebar, showFeedback } = this.props;
-    const { dispatch, app, loading } = this.props;
+    const { dispatch, loading } = this.props;
 
     const { href } = window.location;
     if (lastHref !== href) {
@@ -114,12 +114,13 @@ export default class Layout extends Component {
     const { query, onSearch } = this.props;
 
     const headerOptions = {
+      key: 'header',
       logoZone, searchZone, infoZone, query, onSearch, fixAdvancedSearch, disableAdvancedSearch,
       logout() {
         dispatch({ type: 'app/logout' });
       },
     };
-    const navigatorOptions = { query, navis: navigatorItems };
+    const navigatorOptions = { key: 'navigator', query, navis: navigatorItems };
 
     const title = pageTitle || (pageSubTitle ? `${sysconfig.PageTitle} | ${pageSubTitle}` : sysconfig.PageTitle);
 
@@ -135,41 +136,12 @@ export default class Layout extends Component {
 
           <link rel="stylesheet" href="/fa/css/font-awesome.min.css" />
 
-          {this.headerResourcesArray && this.headerResourcesArray.length > 0
-          && this.headerResourcesArray}
+          {this.headerResourcesArray || false}
 
           {/*{href.indexOf('/lab/knowledge-graph-widget') > 0 &&*/}
           {/*<link rel="stylesheet"*/}
           {/*href="https://cdn.rawgit.com/novus/nvd3/v1.8.1/build/nv.d3.css" />*/}
           {/*}*/}
-
-          {/*{(href.indexOf('/expert-map') > 0) &&*/}
-          {/*<script*/}
-          {/*type="text/javascript"*/}
-          {/*src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />}*/}
-
-          {/*{(href.indexOf('/expert-map') > 0) &&*/}
-          {/*<script*/}
-          {/*src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1"*/}
-          {/*charSet="utf-8" async defer />}*/}
-
-          {/*{href.indexOf('/expert-map') > 0 &&*/}
-          {/*<script*/}
-          {/*src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlzpf4YyjOBGYOhfUaNvQZENXEWBgDkS0"*/}
-          {/*async defer />}*/}
-
-          {/*{false && href.indexOf('/expert-heatmap') > 0 &&*/}
-          {/*<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/3.7.1/echarts.js" />}*/}
-
-          {/*{(href.indexOf('/expert-trajectory') > 0) &&*/}
-          {/*<script*/}
-          {/*type="text/javascript"*/}
-          {/*src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />}*/}
-
-          {/*{(href.indexOf('/expert-trajectory') > 0) &&*/}
-          {/*<script*/}
-          {/*src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1"*/}
-          {/*charSet="utf-8" async defer />}*/}
 
         </Helmet>
 

@@ -13,7 +13,7 @@ import { Layout } from 'routes';
 import { applyTheme } from 'themes';
 import { Auth, RequireRes } from 'hoc';
 import { ensure } from 'utils';
-import bridge from 'utils/next-bridge';
+import * as bridge from 'utils/next-bridge';
 import { PublicationList } from '../../components/publication/index';
 import Brush from './time-brush/index';
 import CrossStatistics from './statistics/index';

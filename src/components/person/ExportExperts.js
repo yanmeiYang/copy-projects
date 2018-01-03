@@ -12,7 +12,7 @@ import * as searchService from 'services/search';
 import * as personService from 'services/person';
 import { getTwoDecimal } from 'utils';
 import { baseURL } from 'utils/config';
-import bridge from 'utils/next-bridge';
+import * as bridge from 'utils/next-bridge';
 import * as profileUtils from 'utils/profile-utils';
 import styles from './ExportExperts.less';
 

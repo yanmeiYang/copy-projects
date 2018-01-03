@@ -5,7 +5,7 @@ import pathToRegexp from 'path-to-regexp';
 import * as searchService from 'services/search';
 import * as translateService from 'services/translate';
 import * as topicService from 'services/topic';
-import bridge from 'utils/next-bridge';
+import * as bridge from 'utils/next-bridge';
 import { takeLatest } from './helper';
 
 export default {

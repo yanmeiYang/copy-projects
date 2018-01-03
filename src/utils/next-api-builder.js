@@ -228,7 +228,6 @@ const filtersToQuery = (nextapi, searchFiltersFromAggregation) => {
   });
 };
 
-export default {
-  apiBuilder, F,
-  H: { filtersToQuery, filterByEBs },
-};
+const H = { filtersToQuery, filterByEBs };
+
+export { apiBuilder, F, H };

@@ -6,7 +6,7 @@ import { Slider, InputNumber, Row, Col, Button, Tooltip, Icon, Modal, Select } f
 import { FormattedMessage as FM } from 'react-intl';
 import { Spinner } from 'components';
 import { routerRedux, Link, withRouter } from 'dva/router';
-import bridge from 'utils/next-bridge';
+import * as bridge from 'utils/next-bridge';
 import styles from './ExpertHeatmap.less';
 import { showChart } from './utils/echarts-utils';
 import { loadEchartsWithBMap, cacheInfo, paperCache, infoCache, copyImage, } from './utils/func-utils';

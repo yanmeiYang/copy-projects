@@ -2,7 +2,7 @@
  * Created by yangyanmei on 17/10/17.
  */
 import { sysconfig } from 'systems';
-import bridge from 'utils/next-bridge';
+import * as bridge from 'utils/next-bridge';
 import * as personService from 'services/person';
 import * as mergeService from 'services/merge';
 

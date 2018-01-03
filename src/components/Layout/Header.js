@@ -60,16 +60,6 @@ export default class Header extends Component {
     fixAdvancedSearch: false,
   };
 
-  // state = {
-  //   query: '',
-  // };
-
-  // componentWillReceiveProps = (nextProps) => {
-  //   if (nextProps.query !== this.props.query) {
-  //     this.setQuery(nextProps.query);
-  //   }
-  // };
-
   shouldComponentUpdate(nextProps, nextState) {
     if (compare(this.props, nextProps,
         'app', 'logoZone', 'searchZone', 'infoZone', 'rightZone', 'fixAdvancedSearch',

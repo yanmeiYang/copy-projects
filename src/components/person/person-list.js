@@ -155,7 +155,6 @@ export default class PersonList extends Component {
                       <div className={styles.title}>
                         <h2 className="section_headerxxx">
                           <a {...personLinkParams}>{name}</a>
-                          {false && <span className={styles.rank}>会士</span>}
                         </h2>
                         {afterTitleBlock && afterTitleBlock({ param: { person, expertBaseId } })}
                       </div>}

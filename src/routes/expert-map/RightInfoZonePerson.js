@@ -7,7 +7,7 @@ import { Link } from 'dva/router';
 import { Button, Modal, Tag } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import { sysconfig } from 'systems';
-import bridge from 'utils/next-bridge';
+import * as bridge from 'utils/next-bridge';
 import { Indices } from 'components/widgets';
 import * as profileUtils from 'utils/profile-utils';
 import styles from './RightInfoZonePerson.less';

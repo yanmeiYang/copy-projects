@@ -4,19 +4,11 @@
 import React from 'react';
 import { Link } from 'dva/router';
 import classnames from 'classnames';
-import { sysconfig } from 'systems';
+// import { sysconfig } from 'systems';
 import { hole } from 'core';
 import { FormattedMessage as FM } from 'react-intl';
-import { IndexHotLinks } from 'components/widgets';
 import { IndexCenterZone } from 'systems/demo/components';
 import styles from './theme-demo.less';
-// import * as Const from './const-acmfellow';
-
-const infoZone = (
-  <Link to={`/eb/${sysconfig.ExpertBase}/-/0/20`}
-        className={classnames(styles.header_info)} key="0">
-    My Experts
-  </Link>);
 
 export default {
   themeName: 'common-white',

@@ -6,8 +6,6 @@
  */
 import * as profileUtils from 'utils/profile-utils';
 
-const nextBridge = '';
-
 const toNextPersons = (persons) => {
   if (persons) {
     return persons.map(person => toNextPerson(person));

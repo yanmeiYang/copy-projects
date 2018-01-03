@@ -4,8 +4,8 @@
 import React, { Component } from 'react';
 // import browserHistory from 'react-router/lib/browserHistory';
 import { connect } from 'dva';
-import { sysconfig } from 'systems';
-import * as authUtil from 'utils/auth';
+// import { sysconfig } from 'systems';
+// import * as authUtil from 'utils/auth';
 import queryString from 'query-string';
 import { routerRedux } from 'dva/router';
 
@@ -45,6 +45,9 @@ export default class Simple3rdLogin extends Component {
     const { dispatch, location } = this.props;
     const { n, a, o, pos, p, id, role, c, src } = queryString.parse(location.search);
     this.setState({ redirectUrl: src || '/' });
+    if (false) {
+      console.log(o, pos, p, id, c);
+    }
 
     // [STEP 1] 获取URL中的参数，接收到的用户. TODO 验证URL是否合法，是否被人串改.
     const receivedUser = {

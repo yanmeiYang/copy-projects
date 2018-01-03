@@ -161,7 +161,9 @@ export default class Layout extends Component {
 
           <Content className={tc(['content'], [contentClass])}>
             <ErrorBoundary>
-              {this.props.children}
+              {React.Children.map(this.props.children, (child) => {
+                return child;
+              }, {})}
             </ErrorBoundary>
           </Content>
 

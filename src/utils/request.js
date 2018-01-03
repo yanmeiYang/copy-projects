@@ -9,7 +9,6 @@ import { getLocalToken } from 'utils/auth';
 import { escapeURLBracket, unescapeURLBracket } from 'utils/strings';
 import { apiDomain, nextAPIURL, YQL, CORS, JSONP, strict } from './config';
 import * as debug from './debug';
-console.log('>>>> sldkfjsldjflsdkjflskjdf  ',apiDomain, nextAPIURL, YQL, CORS, JSONP, strict  );
 
 // TODO retrieve final buildings.
 

@@ -42,15 +42,17 @@ const onError = (error) => {
   }
 };
 
-const fixIntl = () => {
-  // TODO SSR....
-  // Locale
-  // const messages = require('./locales/' + sysconfig.Locale);
-  // const messages = import('./locales/' + sysconfig.Locale);
-  const messages = import('./locales/en');
-  addLocaleData(require('react-intl/locale-data/en'));
-  console.log('99999', messages);
+// const messages = import('./locales/' + sysconfig.Locale);
+// const messages = import('./locales/en');
 
+const fixIntl = () => {
+  console.log("sysconfig.Locale is: ", sysconfig.Locale);
+  // const messages = require(`./locales/${sysconfig.Locale}`);
+  const messages = require(`./locales/en`).default;
+  console.log('Messages: ', messages);
+
+
+  addLocaleData(require('react-intl/locale-data/en'));
   // fix intl bugs.
   const areIntlLocalesSupported = require('intl-locales-supported');
 

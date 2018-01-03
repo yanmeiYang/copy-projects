@@ -111,20 +111,20 @@ export function getPubLabels(pub) {
   const labels = [];
   if (pub.versions) {
     pub.versions.map((v) => {
-      if (!(v.src == 'mag' || v.src == 'msra')) {
-        if (v.src == 'dblp' || v.src == 'ei' || v.src == 'acm' || v.src == 'ieee') {
+      if (!(v.src === 'mag' || v.src === 'msra')) {
+        if (v.src === 'dblp' || v.src === 'ei' || v.src === 'acm' || v.src === 'ieee') {
           labels.push('EI');
         }
-        if (v.src == 'pubmed' || v.src == 'ieee' || v.src == 'sci' || v.src == 'nature' || v.src == 'science' || v.src == 'pnas' || v.src == 'scopus') {
+        if (v.src === 'pubmed' || v.src === 'ieee' || v.src === 'sci' || v.src === 'nature' || v.src === 'science' || v.src === 'pnas' || v.src === 'scopus') {
           labels.push('WOS');
         }
-        if (v.src == 'science' || v.src == 'nature' || v.src == 'scopus') {
+        if (v.src === 'science' || v.src === 'nature' || v.src === 'scopus') {
           labels.push(v.src.toUpperCase());
         }
-        if (v.src == 'esi_hot') {
+        if (v.src === 'esi_hot') {
           labels.push('Hot Paper');
         }
-        if (v.src == 'esi_highlycited') {
+        if (v.src === 'esi_highlycited') {
           labels.push('Highly Cited Paper');
         }
       }

@@ -25,7 +25,7 @@ module.exports = {
   publicPath: `/`,
   // outputPath: path.resolve(__dirname, `./dist/${version}`),
 
-  // devtool: '#source-map',
+  // devtool: '#cheap-source-map',
 
   html: {
     template: "./src/index.ejs",
@@ -70,6 +70,7 @@ module.exports = {
 
   env: {
     development: {
+      // devtool: 'cheap-source-map',
       extraBabelPlugins: [
         "dva-hmr"
       ]

@@ -15,11 +15,27 @@ export default class ErrorBoundary extends Component {
     console.error('ErrorBoundary:::', error, info);
   }
 
+  children = () => {
+    return React.Children.map(this.props.children, (child) => {
+      return child;
+    }, {})
+  };
+
   render() {
     if (this.state.hasError) {
       // You can render any custom fallback UI
-      return <h1>Something went wrong.</h1>;
+      return (
+        <div style={{
+          border: 'solid 1px red',
+          margin: 8,
+          padding: 8,
+        }}>
+          <h1>Something went wrong.</h1>
+          {this.children()}
+        </div>
+      );
     }
-    return this.props.children || false;
+
+    return this.children();
   }
 }

@@ -13,10 +13,11 @@
     src="https://as.alipayobjects.com/g/component/??console-polyfill/0.2.2/index.js,media-match/2.0.2/media.match.min.js"></script>
   <![endif]-->
 
+  <% const reactMode = process.env.NODE_ENV === 'production' ? 'production.min' : 'development' %>
   <script crossorigin
-          src="https://unpkg.com/react@16/umd/react.<%= process.env.NODE_ENV %>.js"></script>
+          src="https://unpkg.com/react@16/umd/react.<%= reactMode %>.js"></script>
   <script crossorigin
-          src="https://unpkg.com/react-dom@16/umd/react-dom.<%= process.env.NODE_ENV %>.js"></script>
+          src="https://unpkg.com/react-dom@16/umd/react-dom.<%= reactMode %>.js"></script>
 
   <% for (item of htmlWebpackPlugin.options.headScripts) { %>
   <script src="/<%= item %>"></script>
@@ -24,6 +25,9 @@
 </head>
 
 <body>
-<div id="root"></div>
+<div id="root">
+
+
+</div>
 </body>
 </html>

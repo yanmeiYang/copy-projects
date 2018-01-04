@@ -2,9 +2,10 @@ dist
 node_modules
 yarn.lock
 npm-debug.log
-src/index.js
-src/systems/index.js
-src/themes/index.js
+src/system-config.js
+xxxsrc/index.js
+xxxsrc/systems/index.js
+xxxsrc/themes/index.js
 
 .idea/
 ### JetBrains template

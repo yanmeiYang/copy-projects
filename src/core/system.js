@@ -7,8 +7,6 @@
  *   This file is also run in node environment.
  *   Can't import any utils. Make sure this file load first.
  */
-import SC from 'src/system-config';
-
 // 所有可选系统，保留关键字：global.
 const AvailableSystems = [
   'aminer',
@@ -31,14 +29,10 @@ const AvailableSystems = [
   'yocsef',
 ];
 
-const { system } = SC;
 let System = '';
-
-// SPECIAL: USED_IN_ONLINE_DEPLOY; DON'T DELETE THIS LINE.
-// override system with system-override.js
 try {
   // TODO here is a warning if file doesn't exist.
-  // const { OverrideSystem } = require('src/system-config');
+  const { system } = require('../system-config').default;
   System = system;
   if (process.env.NODE_ENV !== 'production') {
     // eslint-disable-next-line function-paren-newline function-paren-newline

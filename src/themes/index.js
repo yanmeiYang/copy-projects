@@ -2,14 +2,12 @@
  * Created by BoGao on 2017/10/10.
  */
 /* eslint-disable prefer-template,import/no-dynamic-require */
-import SC from 'src/system-config';
 import React from 'react';
 import classnames from 'classnames';
-import { plugins } from 'core';
+import { system, plugins } from 'core';
 
-const { system } = SC;
-const theme = require(`themes/${system}/theme-${system}.js`).default;
-// const theme = require('themes/demo/theme-demo.js');
+const { System } = system;
+const theme = require(`themes/${System}/theme-${System}`).default;
 
 // init something.
 plugins.initPlugins(theme.plugins);

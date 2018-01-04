@@ -37,7 +37,7 @@ const getAllSystemConfigs = () => {
   if (!allSystemConfigs) {
     allSystemConfigs = AvailableSystems && AvailableSystems.map(sys => ({
       ...createDefaultSysconfig(sys, sys),
-      ...require('./' + sys + '/config'),
+      ...require('systems/' + sys + '/config'),
     }));
   }
   return allSystemConfigs;

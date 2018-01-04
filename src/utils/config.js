@@ -10,7 +10,6 @@ const nextAPIURL = process.env.NODE_ENV !== 'production' ?
   // nextAPIURLOnlineBeta;
   nextAPIURLOnlineProduction;
 
-// TODO some better way lik module.exports.
 const param = (key, type, description) => {
   return { key, type, description };
 };

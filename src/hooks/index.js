@@ -9,6 +9,4 @@ function authenticateExpertBase(dispatch, id, name, email, perm) {
   });
 }
 
-module.exports = {
-  authenticateExpertBase,
-};
+export { authenticateExpertBase };

@@ -1,5 +1,1 @@
-const takeLatest = { type: 'takeLatest' };
-
-module.exports = {
-  takeLatest,
-};
+export const takeLatest = { type: 'takeLatest' };

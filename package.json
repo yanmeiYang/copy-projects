@@ -6,11 +6,10 @@
     "rhv": "roadhog --version",
     "dev": "roadhog --version && CLEAR_CONSOLE=none roadhog dev",
     "devm": "roadhog --version && node --max_old_space_size=4096 node_modules/roadhog/lib/scripts/dev.js",
-    "devold": "cross-env BROWSER=none HOST=0.0.0.0 roadhog dev",
     "lint": "eslint --fix --ext .js src",
     "build": "roadhog build",
     "build:a": "roadhog build --analyze",
-    "build:ab": "node --max_old_space_size=4096 node_modules/roadhog/lib/build.js --analyze"
+    "build:ab": "node --max_old_space_size=4096 node_modules/roadhog/lib/scripts/build.js"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0-beta.36",

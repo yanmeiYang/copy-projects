@@ -15,6 +15,10 @@ import createLoading from 'dva-loading';
 import { sysconfig } from 'systems';
 import { ReduxLoggerEnabled } from 'utils/debug';
 
+// locale, list all locales here.
+import en from 'react-intl/locale-data/en';
+import zh from 'react-intl/locale-data/zh';
+
 // TODO 使用babel编译通过这两个语句. 暂时不用这两个，编译不通过。
 // const log = ::console.log;
 // const logErr = ::console.error;
@@ -23,7 +27,7 @@ const { SYSTEM, Locale } = sysconfig;
 
 const ERROR_MSG_DURATION = 3; // 3 秒
 
-const configAntd = () => {
+const initANTD = () => {
   message.config({ duration: 4 });
 };
 
@@ -42,10 +46,7 @@ const onError = (error) => {
   }
 };
 
-const fixIntl = () => {
-  const messages = require(`./locales/${Locale}`).default;
-  addLocaleData(require(`react-intl/locale-data/${Locale}`));
-
+const initIntl = () => {
   // fix intl bugs.
   const areIntlLocalesSupported = require('intl-locales-supported');
   if (global.Intl) {
@@ -62,7 +63,11 @@ const fixIntl = () => {
     global.Intl = require('intl');
   }
 
-  return messages;
+  // 由于现在支持的语言比较少，只有en和zh，所以将资源都引入进来，避免下面这样会打包引太多的资源。
+  // addLocaleData(require(`react-intl/locale-data/${Locale}`));
+  addLocaleData([...en, ...zh]);
+
+  return require(`./locales/${Locale}`).default;
 };
 
 // TODO SSR best practice of create dva instance.
@@ -79,10 +84,6 @@ const initDVA = (app) => {
 /** ----------------------------------------------------------------------------
  * Start
  * ----------------------------------------------------------------------------*/
-
-// init others...
-configAntd();
-
 // create dva
 const app = dva({
   history: createHistory(),
@@ -90,19 +91,16 @@ const app = dva({
 });
 
 initDVA(app);
+initANTD();
 
-// Model的引入，一种写法是这样的
 app.model(require('models/app').default);
 
 app.router(require(`systems/${SYSTEM}/router`).default);
 
-const messages = fixIntl();
-
-// start dva
 const App = app.start();
 
 ReactDOM.render(
-  <IntlProvider locale={Locale} messages={messages}>
+  <IntlProvider locale={Locale} messages={initIntl()}>
     <App />
   </IntlProvider>,
   document.getElementById('root'),

@@ -14,15 +14,10 @@ module.exports = (webpackConfig, env) => {
 
   const production = env === 'production';
 
-  // Alias
-  // webpackConfig.resolve.alias = buildrc.webpack.alias;
-
-  // webpackConfig.devtool = 'inline-source-map';
-
   // webpackConfig.output.filename = '[name].[hash:8].js';
   // webpackConfig.output.chunkFilename = '[name].[hash:8].js';
 
-  webpackConfig.plugins = webpackConfig.plugins.concat([
+  // webpackConfig.plugins = webpackConfig.plugins.concat([
     // 为了将public放到src下面
     // new CopyWebpackPlugin([{
     //   from: 'src/public',
@@ -38,7 +33,7 @@ module.exports = (webpackConfig, env) => {
     //   hash: true,
     //   // headScripts: production ? null : ['/roadhog.dll.js'], // 禁用了dll模式.
     // }),
-  ]);
+  // ]);
 
   // replace html loader
   // if (webpackConfig.module) {

@@ -1,69 +1,111 @@
-// this is for SSR.
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const { join } = require('path');
+/* eslint-disable no-param-reassign */
+
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const HtmlWebpackTemplate = require('html-webpack-template');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
 const webpack = require('webpack');
-const autoprefixer = require('autoprefixer');
 
-const buildrc = require('./.buildrc');
+const debug = true;
 
-export {
+// TODO 分成3个不同的build， 一个是production模式，一个是dev模式，另一个是基础的。
 
-  devtool: '#source-map',
+module.exports = (webpackConfig, env) => {
 
-  entry: {
-    index: './client/index.js',
-  },
+  const production = env === 'production';
 
-  output: {
-    filename: '[name].js',
-    path: join(__dirname, './public'),
-    publicPath: '/',
-  },
+  // webpackConfig.output.filename = '[name].[hash:8].js';
+  // webpackConfig.output.chunkFilename = '[name].[hash:8].js';
 
-  module: {
-    loaders: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-      },
-      {
-        test: /\.css$/,
-        exclude: /node_modules/,
-        loader: ExtractTextPlugin.extract(
-          'css-loader?sourceMap&modules&localIdentName=[local]___[hash:base64:5]'
-        ),
-      },
-      {
-        test: /\.less$/,
-        exclude: /node_modules/,
-        loader: 'style-loader!css-loader!postcss-loader!less-loader',
-      },
-      {
-        test: /\.css$/,
-        include: /node_modules/,
-        loader: ExtractTextPlugin.extract(
-          'css-loader?sourceMap'
-        ),
-      },
-    ]
-  },
+  // webpackConfig.plugins = webpackConfig.plugins.concat([
+  // 为了将public放到src下面
+  // new CopyWebpackPlugin([{
+  //   from: 'src/public',
+  //   to: production ? '../' : webpackConfig.output.outputPath,
+  // }]),
+  // 生成index.html
+  // new HtmlWebpackPlugin({
+  //   template: `${__dirname}/src/entry.ejs`,
+  //   filename: production ? '../index.html' : 'index.html',
+  //   minify: production ? {
+  //     collapseWhitespace: true,
+  //   } : null,
+  //   hash: true,
+  //   // headScripts: production ? null : ['/roadhog.dll.js'], // 禁用了dll模式.
+  // }),
+  // ]);
 
-  // postcss: [autoprefixer()],
+  // replace html loader
+  // if (webpackConfig.module) {
+  //   const newRules = [];
+  //   webpackConfig.module.rules.map((item) => {
+  //     const test = String(item.test);
+  //     if (test === '/\\.html$/') {
+  //     }
+  //     if (item.loader && item.loader.indexOf('/url-loader/index.js') !== -1) {
+  //     }
+  //     newRules.push(item);
+  //
+  //     // test ....
+  //     if (test === '/\\.html$/') {
+  //       if (item.loader) {
+  //         item.loader = 'htmsdfsdfsl';
+  //       }
+  //     }
+  //     if (test) {
+  //       return item;
+  //     }
+  //   });
+  //   webpackConfig.module.rules = newRules;
+  // }
 
-  plugins: [
-    new ExtractTextPlugin('./[name].css', {
-      disable: false,
-      allChunks: true,
-    }),
-    // new webpack.optimize.UglifyJsPlugin({minimize: true}),
-    new webpack.DefinePlugin({
-      // 'process.env.NODE_ENV': '"production"'
-    }),
-  ],
+  // if (webpackConfig.module) {
+  // 必须使用html的loader。 TODO test 这个是必须的么？
+  // webpackConfig.module.rules.map((item) => {
+  // if (String(item.test) === '/\\.html/') {
+  //   if (item.loader) {
+  //     item.loader = 'html';
+  //   }
+  // }
+  // ejs使用url-loader，不然会变成base64
+  // if (item.loader && item.loader.indexOf('/url-loader/index.js') !== -1) {
+  //   item.exclude.push(/\.ejs$/);
+  // }
+  // return item;
+  // });
+  // }
 
-  // add by gb
-  resolve: {
-    alias: buildrc.webpack.alias,
-  },
+  if (production) {
+    if (webpackConfig.module) {
+      // Class name Hash
+      webpackConfig.module.rules.map((item) => {
+        const test = String(item.test);
+        if (test === '/\\.less$/' || test === '/\\.css/') {
+          item.use.filter(iitem => iitem.loader === 'css')[0]
+            .options.localIdentName = '[hash:base64:5]';
+        }
+        return item;
+      });
+    }
+
+    webpackConfig.plugins.push(new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      debug: false,
+    }));
+  }
+
+  if (debug) {
+    debugPrintConfig(webpackConfig, env);
+  }
+
+  return webpackConfig;
+};
+
+// TODO print all available values.
+const debugPrintConfig = (webpackConfig, env) => {
+  console.log('-------------------- env is -----------------------');
+  console.dir(env, { depth: null });
+  console.log('\n\n------------------- Webpack config is ------------------------\n\n');
+  console.dir(webpackConfig, { depth: null });
+  console.log('-------------------------------------------');
 };

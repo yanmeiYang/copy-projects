@@ -1,0 +1,61 @@
+@import "~themes/vars";
+
+.logoZones {
+  display: flex; flex-direction: row;
+  height: 66px; line-height: 66px;
+
+  .header_logo {
+    width: 150px; min-width: 150px; margin-top: 4px;
+    //background-position: -68px -47px; url('/sys/acmfellow/header_logo.png');
+    background: url('/sys/alibaba/header_logo.png') 0 -23px/auto 100px no-repeat #fff;
+    background-size: cover;
+  }
+
+  .header_subTitle { margin-left: 10px; color: black; }
+
+}
+
+.header_info {
+  margin: 0 12px 0 20px; height: 66px; line-height: 66px;
+}
+
+.acmLink { margin-bottom: 20px;align-self: center;}
+
+.index_bannerZone {
+  width: 100%; text-align: center;
+  margin-top: 65px;
+  .logo {
+    display: flex; flex-direction: row; justify-content: center;
+    span {
+      display: flex; background-position: -171px -10px;
+      width: 100px; height: 100px; z-index: 10000; border: none;
+    }
+  }
+  .text {
+    font-size: 50px;
+    font-weight: 200;
+    font-family: Georgia, sans-serif;
+    color: #838485;
+    margin: 20px;
+    letter-spacing: 10px;
+  }
+}
+
+.Overrides() {
+  .header {
+    //background-color: black;
+  }
+  :global {
+    .keywords_inner {
+      div {
+        border: none; border-radius: 32px;
+        padding: 0px 10px; margin: 4px 5px;
+        background-color: rgba(0, 0, 0, 0.4);
+        a { color: #ffffff; font-size: @font-size-lg; }
+      }
+      div:hover { background-color: rgba(0, 0, 0, 0.6); }
+    }
+  }
+}
+
+.Overrides() !important;

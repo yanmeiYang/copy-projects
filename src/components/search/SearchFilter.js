@@ -69,7 +69,6 @@ export default class SearchFilter extends Component {
   }
 
   render() {
-    // console.log('====================================');
     const { filters, aggs, disableExpertBaseFilter, roles } = this.props;
     const keys = this.keys;
 

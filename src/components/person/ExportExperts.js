@@ -7,7 +7,7 @@ import { connect } from 'dva';
 import { Auth } from 'hoc';
 import { sysconfig } from 'systems';
 import { Button, Modal, InputNumber, Checkbox, Row, Col } from 'antd';
-import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
+import { FormattedMessage as FM } from 'react-intl';
 import * as personService from 'services/person';
 import { getTwoDecimal } from 'utils';
 import { baseURL } from 'utils/config';
@@ -183,7 +183,7 @@ export default class ExportExperts extends Component {
 
         {expanded &&
         <a type="primary" className={styles.buttonMarginRight1}
-          onClick={this.exportSearchResult.bind()}>
+           onClick={this.exportSearchResult.bind()}>
           <FM id="com.exportExpert.label.exportCurrentPage" defaultMessage="导出当前结果" />
         </a>
         }

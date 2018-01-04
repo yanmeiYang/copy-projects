@@ -1,0 +1,66 @@
+[
+  {
+    "action": "search",
+    "parameters": {
+      "query": "数据挖掘",
+      "offset": 0,
+      "size": 20,
+      "searchType": "allb",
+      "aggregation": [
+        "gender",
+        "h_index",
+        "nation",
+        "lang",
+        "dims.systag"
+      ],
+      "switches": [
+        "intell_search",
+        "lang_zh"
+      ],
+      "filters": {
+        "dims": {
+          "eb": [
+            "59d7bb7e9ed5dbe450e6b275"
+          ]
+        },
+        "terms": {
+          "gender": [
+            "female"
+          ]
+        }
+      },
+      "haves": {
+        "systag": []
+      }
+    },
+    "schema": {
+      "person": [
+        "id",
+        "name",
+        "name_zh",
+        "avatar",
+        "tags",
+        {
+          "profile": [
+            "position",
+            "affiliation"
+          ]
+        },
+        {
+          "indices": [
+            "hindex",
+            "gindex",
+            "pubs",
+            "citations",
+            "newStar",
+            "risingStar",
+            "activity",
+            "diversity",
+            "sociability"
+          ]
+        },
+        "tags_translated_zh"
+      ]
+    }
+  }
+]

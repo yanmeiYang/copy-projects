@@ -80,7 +80,7 @@ export default {
   // placeholders
   IN_COMPONENT_DEFAULT: undefined,
   EMPTY_BLOCK_FUNC: () => null,
-  // EMPTY_BLOCK: '',
+  EMPTY_BLOCK: '',
   EMPTY_ZONE_FUNC: [],
   DEFAULT_PLACEHOLDER: default_placeholder,
 };

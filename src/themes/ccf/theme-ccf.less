@@ -1,0 +1,38 @@
+@import "~themes/vars";
+
+.logoZones {
+  display: flex; flex-direction: row;
+  height: 66px; line-height: 66px;
+
+  .header_logo {
+    width: 72px; min-width: 72px; height: 47px; margin-top: 10px;
+    //background-position: -68px -47px;
+    background-image: url('/sys/ccf/header_logo.png');
+    background-size: cover;
+  }
+
+  .header_subTitle { margin-left: 10px; color: black; }
+}
+
+.header_info {
+  margin: 0 12px 0 20px; height: 55px; line-height: 55px;
+}
+
+// small fragments.
+
+.isAuthority {
+  float: left;
+  line-height: 18px;
+  margin-top: 7px;
+}
+
+.Overrides() {
+  .layout {
+    .content {
+      min-height: ~"calc(100vh - 68px)";
+      justify-content: flex-start;
+    }
+  }
+}
+
+.Overrides() !important;

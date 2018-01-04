@@ -3,10 +3,10 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Tabs, Button, Modal } from 'antd';
+import { Tabs } from 'antd';
 import { system } from '../../../utils';
 import EmailContent from './emailCotent';
-import styles from './index.less';
+// import styles from './index.less';
 
 
 const TabPane = Tabs.TabPane;

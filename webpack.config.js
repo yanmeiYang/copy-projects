@@ -64,9 +64,9 @@ module.exports = (webpackConfig, env) => {
   //   webpackConfig.module.rules = newRules;
   // }
 
-  if (webpackConfig.module) {
+  // if (webpackConfig.module) {
     // 必须使用html的loader。 TODO test 这个是必须的么？
-    webpackConfig.module.rules.map((item) => {
+    // webpackConfig.module.rules.map((item) => {
       // if (String(item.test) === '/\\.html/') {
       //   if (item.loader) {
       //     item.loader = 'html';
@@ -76,9 +76,9 @@ module.exports = (webpackConfig, env) => {
       // if (item.loader && item.loader.indexOf('/url-loader/index.js') !== -1) {
       //   item.exclude.push(/\.ejs$/);
       // }
-      return item;
-    });
-  }
+      // return item;
+    // });
+  // }
 
   if (production) {
     if (webpackConfig.module) {

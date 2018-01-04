@@ -1,18 +1,18 @@
 /* eslint-disable prefer-destructuring,no-restricted-globals*/
 import React from 'react';
-import { Tabs, message } from 'antd';
+import { Tabs } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Auth } from 'hoc';
 import { request, loadScript, loadD3v3 } from 'utils';
-import strings from 'utils/strings';
+import * as strings from 'utils/strings';
 import * as profileUtils from 'utils/profile-utils';
 import styles from './trend-prediction.less';
-import { getPerson } from '../../services/person';
-import { searchPubById } from '../../services/trend-prediction-service';
+import { getPerson } from 'services/person';
+import { searchPubById } from 'services/trend-prediction-service';
 import { sysconfig } from 'systems';
-import { Spinner } from '../../components';
-import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
+import { Spinner } from 'components';
+import { FormattedMessage as FM } from 'react-intl';
 
 
 const humps = require('humps');
@@ -26,8 +26,8 @@ let height;
 let histHeight;
 let margin;
 let histWidth;
-//let renderTrend;
-let termByFreq;
+// let renderTrend;
+// let termByFreq;
 let histChart;
 let sortedStreamChart;
 let histItemHeight;
@@ -37,7 +37,7 @@ let axis;
 let basis;
 let termTrendStreamGraph;
 let link;
-let maxFreq;
+// let maxFreq;
 let maxSum;
 let node;
 let terms;
@@ -186,7 +186,6 @@ export default class TrendPrediction extends React.PureComponent {
     format = (d) => { // 格式化为整数，点出现的次数
       return `${formatNumber(d)} Times`;
     };
-    console.log('-----------------------', d3);
     color = d3.scale.category10();// d3图的配色样式
 
     idToAuthor = {};
@@ -918,7 +917,7 @@ export default class TrendPrediction extends React.PureComponent {
         <div className={styles.keywords}>
           <div className={styles.inner}>
             {sysconfig.TopicTrend_HotTopics && sysconfig.TopicTrend_HotTopics.map((hw) => {
-              console.log('......', hw, typeof hw);
+              // console.log('......', hw, typeof hw);
               const term = typeof hw === 'string' ? hw : hw.term;
               return (
                 <div key={term}>

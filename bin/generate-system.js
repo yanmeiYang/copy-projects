@@ -6,7 +6,9 @@
  *  TODO BUILD TreeShake non target systems.
  */
 const { AvailableSystems } = require('../src/core/system');
-const fs = require('fs');
+const { replaceFile, createFile } = require('../src/utils/node_tools');
+
+// get system from parameter.
 
 const args = process.argv.splice(2);
 
@@ -24,36 +26,40 @@ if (AvailableSystems.indexOf(system) <= 0) {
 
   console.log("Available systems are:");
   for (const sys of AvailableSystems) {
-    console.log("  ", sys);
+    console.log("  ... ", sys);
   }
   process.exit(-1);
 }
 
-console.log('system is [', system, '] start building...');
+console.log('System is [', system, '] start building...');
 
-const replaceFile = (template, target, mapping) => {
-  const templateFile = fs.readFileSync(template);
-  let out = templateFile.toString();
-  out = out.replace('$$ NOTE $$', `!!! This is generated automatically, don't modify !!! `);
-  for (const map of mapping) {
-    out = out.replace(new RegExp(map.pattern, 'g'), map.to);
-  }
-  fs.writeFileSync(target, out);
+// generate src/system_config.js
+createFile('./src/system-config.js', `
+// !!! This is generated automatically, don't modify !!! 
+export default {
+  system : '${system}',
 };
+`);
 
+//
+// replace files, not used any more.
+//
+const REPLACE_FILES = false;
+if (REPLACE_FILES) {
 
-replaceFile('./src/template-systems.js', './src/systems/index.js', [
-  { pattern: '##{system}##', to: system },
-]);
+  replaceFile('./src/template-systems.js', './src/systems/index.js', [
+    { pattern: '##{system}##', to: system },
+  ]);
 
-replaceFile('./src/template-index.js', './src/index.js', [
-  {
-    pattern: '/\\* \\$\\$ require\\(ROUTER\\) \\*/',
-    to: `require('./systems/${system}/router')`
-  },
-]);
+  replaceFile('./src/template-index.js', './src/index.js', [
+    {
+      pattern: '/\\* \\$\\$ require\\(ROUTER\\) \\*/',
+      to: `require('./systems/${system}/router').default`,
+    },
+  ]);
 
-replaceFile('./src/template-themes.js', './src/themes/index.js', [
-  { pattern: '##{system}##', to: system },
-]);
+  replaceFile('./src/template-themes.js', './src/themes/index.js', [
+    { pattern: '##{system}##', to: system },
+  ]);
+}
 

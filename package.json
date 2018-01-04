@@ -4,8 +4,8 @@
   "version": "1.4.5",
   "scripts": {
     "rhv": "roadhog --version",
-    "dev": "roadhog --version && roadhog dev",
-    "devm": "CLEAR_CONSOLE=none roadhog --version && node --max_old_space_size=4096 node_modules/roadhog/lib/scripts/dev.js",
+    "dev": "roadhog --version && CLEAR_CONSOLE=none roadhog dev",
+    "devm": "roadhog --version && node --max_old_space_size=4096 node_modules/roadhog/lib/scripts/dev.js",
     "devold": "cross-env BROWSER=none HOST=0.0.0.0 roadhog dev",
     "lint": "eslint --fix --ext .js src",
     "build": "roadhog build",

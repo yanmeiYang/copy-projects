@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { Router, Switch, Route, Redirect, routerRedux } from 'dva/router';
 import dynamic from 'dva/dynamic';
 import { Loader } from 'components/ui';
@@ -55,7 +55,7 @@ export default class Hole extends Component {
             return (
               <Route key={dupKey} exact={!noExact} path={path} component={dynamic({
                 app,
-                LoadingComponent: ({ productId }) => (<Loader spinning />), // TODO that this?
+                LoadingComponent: () => (<Loader spinning />),
                 ...dynamics,
               })} />
             );

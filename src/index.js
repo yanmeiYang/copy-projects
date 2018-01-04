@@ -1,8 +1,6 @@
 /* eslint-disable prefer-template,import/no-dynamic-require,global-require */
 /**
  * Created by GaoBo on 2017/12/26.
- *
- * !!! This is generated automatically, don't modify !!! 
  */
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -12,14 +10,16 @@ import createHistory from 'history/createBrowserHistory';
 import { IntlProvider, addLocaleData } from 'react-intl';
 import { createLogger } from 'redux-logger';
 import { message } from 'antd';
+import locales from 'locales';
 import createLoading from 'dva-loading';
 import { sysconfig } from 'systems';
-import { ReduxLoggerEnabled } from './utils/debug';
+import { ReduxLoggerEnabled } from 'utils/debug';
 
-// TODO 使用babel编译通过这两个语句. // 暂时不用这两个，编译不通过。
-
+// TODO 使用babel编译通过这两个语句. 暂时不用这两个，编译不通过。
 // const log = ::console.log;
 // const logErr = ::console.error;
+
+const { SYSTEM, Locale } = sysconfig;
 
 const ERROR_MSG_DURATION = 3; // 3 秒
 
@@ -42,25 +42,15 @@ const onError = (error) => {
   }
 };
 
-// const messages = import('./locales/' + sysconfig.Locale);
-// const messages = import('./locales/en');
-
 const fixIntl = () => {
-  console.log("sysconfig.Locale is: ", sysconfig.Locale);
-  // const messages = require(`./locales/${sysconfig.Locale}`);
-  const messages = require(`./locales/en`).default;
-  console.log('Messages: ', messages);
+  const messages = require(`./locales/${Locale}`).default;
+  addLocaleData(require(`react-intl/locale-data/${Locale}`));
 
-
-  addLocaleData(require('react-intl/locale-data/en'));
   // fix intl bugs.
   const areIntlLocalesSupported = require('intl-locales-supported');
-
-  const localesMyAppSupports = ['en', 'zh'];
-
   if (global.Intl) {
     // Determine if the built-in `Intl` has the locale data we need.
-    if (!areIntlLocalesSupported(localesMyAppSupports)) {
+    if (!areIntlLocalesSupported(locales)) {
       // `Intl` exists, but it doesn't have the data we need, so load the
       // polyfill and replace the constructors with need with the polyfill's.
       const IntlPolyfill = require('intl');
@@ -102,21 +92,17 @@ const app = dva({
 initDVA(app);
 
 // Model的引入，一种写法是这样的
-import('models/app').then(model => {
-  app.model(model.default);
-});
+app.model(require('models/app').default);
 
-// app.model(appModel);
-// app.model(require('./models/app'));
-
-app.router(require('./systems/demo/router'));
+app.router(require(`systems/${SYSTEM}/router`).default);
 
 const messages = fixIntl();
 
 // start dva
 const App = app.start();
+
 ReactDOM.render(
-  <IntlProvider locale={sysconfig.Locale} messages={messages}>
+  <IntlProvider locale={Locale} messages={messages}>
     <App />
   </IntlProvider>,
   document.getElementById('root'),

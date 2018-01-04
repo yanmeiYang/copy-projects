@@ -465,8 +465,6 @@
           return d.values;
         });
 
-      console.log("sankey");
-
       initializeNodeDepth();
       resolveCollisions();
       for (var alpha = 1; iterations > 0; --iterations) {

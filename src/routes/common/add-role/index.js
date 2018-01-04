@@ -2,14 +2,12 @@
  *  Created by BoGao on 2017-06-12;
  */
 import React from 'react';
-import { Tabs, Table, Spin, Input, Form, Button, Modal, Select } from 'antd';
+import { Table, Spin, Input, Form, Button, Modal, Select } from 'antd';
 import { connect } from 'dva';
 import styles from './index.less';
 
 const Option = Select.Option;
-const FormItem = Form.Item;
-const TabPane = Tabs.TabPane;
-const { ColumnGroup, Column } = Table;
+const { Column } = Table;
 
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -39,7 +37,8 @@ class AddUserRolesByOrg extends React.Component {
           payload: { category: props.universalConfig.category, key },
         });
       },
-      onCancel() {},
+      onCancel() {
+      },
     });
   };
 
@@ -123,6 +122,7 @@ class AddUserRolesByOrg extends React.Component {
   handleChange = (value) => {
     console.log(`selected ${value}`);
   }
+
   render() {
     // Form related.
     const { universalConfig } = this.props;
@@ -152,7 +152,7 @@ class AddUserRolesByOrg extends React.Component {
         >
           <div style={{ width: '100%' }}>
             <Form onSubmit={this.handleSubmit}>
-              <FormItem
+              <Form.Item
                 {...formItemLayout}
                 validateStatus={this.state.disabledKey ? '' : 'error'}
                 help={this.state.disabledKey ? '' : '禁止添加超级管理员'}
@@ -164,9 +164,9 @@ class AddUserRolesByOrg extends React.Component {
                 })(
                   <Input />,
                 )}
-              </FormItem>
+              </Form.Item>
 
-              <FormItem
+              <Form.Item
                 {...formItemLayout}
                 validateStatus={valueError ? 'error' : ''}
                 help={valueError || ''}
@@ -177,11 +177,12 @@ class AddUserRolesByOrg extends React.Component {
                 })(
                   <Select onChange={this.handleChange}>
                     {universalConfig.orgList.map((item) => {
-                      return <Option value={`${item.value.key}#${item.value.id}`} key={item.value.id}>{item.value.key}</Option>;
+                      return <Option value={`${item.value.key}#${item.value.id}`}
+                                     key={item.value.id}>{item.value.key}</Option>;
                     })}
                   </Select>,
                 )}
-              </FormItem>
+              </Form.Item>
             </Form>
           </div>
         </Modal>
@@ -197,14 +198,15 @@ class AddUserRolesByOrg extends React.Component {
           >
             <Column title="名称" dataIndex="value.key" key="key" />
             {!this.props.hideValue &&
-            <Column title="对应机构列表" dataIndex="value.value" key="value" render={(dataIndex, text) => {
-              if (typeof dataIndex !== 'object') {
-                return dataIndex;
-              } else if (typeof dataIndex === 'object') {
-                // return <Link to={`/admin/system-config/${text.value.value.id}`} data={JSON.stringify(text)} > {text.value.value.name} </Link>;
-                return text.value.value.name;
-              }
-            }} />
+            <Column title="对应机构列表" dataIndex="value.value" key="value"
+                    render={(dataIndex, text) => {
+                      if (typeof dataIndex !== 'object') {
+                        return dataIndex;
+                      } else if (typeof dataIndex === 'object') {
+                        // return <Link to={`/admin/system-config/${text.value.value.id}`} data={JSON.stringify(text)} > {text.value.value.name} </Link>;
+                        return text.value.value.name;
+                      }
+                    }} />
             }
             <Column
               title="操作"

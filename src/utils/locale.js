@@ -1,5 +1,6 @@
 const locales = ['en', 'zh'];
 
+// TODO move to
 const loadSavedLocale = (system, defaultLocale) => {
   const key = `${system}_locale`;
   const savedLocale = localStorage.getItem(key);

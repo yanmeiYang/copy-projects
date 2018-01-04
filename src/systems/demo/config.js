@@ -3,7 +3,7 @@ import { toIDDotString, TopExpertBase } from 'utils/expert-base';
 
 export default {
 
-  Locale: 'en', // en, zh
+  Locale: 'zh', // en, zh
   EnableLocalLocale: true,
   GLOBAL_ENABLE_FEEDBACK: true,
 

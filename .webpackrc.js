@@ -6,7 +6,7 @@
 const theme = require('./theme.config');
 const buildrc = require('./.buildrc');
 // const { version } = require('./package.json');
-// const path = require('path');
+const path = require('path');
 
 require('./bin/generate-system');
 
@@ -23,6 +23,7 @@ module.exports = {
 
   // publicPath: `/${version}/`,
   publicPath: `/`,
+  outputPath: path.resolve(__dirname, `./dist`),
   // outputPath: path.resolve(__dirname, `./dist/${version}`),
 
   // devtool: '#cheap-source-map',
@@ -53,7 +54,7 @@ module.exports = {
   //       return count >= pageCount * 0.5;
   //     },
   //   },
-  // ],
+  // ], 比较机灵，专业知识扎实，
 
   externals: {
     "react": "window.React",

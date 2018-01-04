@@ -13,7 +13,7 @@ import * as profileUtils from 'utils/profile-utils';
 import { saveLocale } from 'utils/locale';
 import { isLogin, isGod, isAuthed } from 'utils/auth';
 import defaults from 'core/hole';
-import locales from '../../locales';
+import locales from 'locales';
 import styles from './HeaderInfoZone.less';
 
 const location = window.location;

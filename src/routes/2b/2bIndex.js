@@ -11,8 +11,8 @@ import { RequireGod } from 'hoc';
 import { system } from 'core';
 import { config } from 'utils';
 import { saveLocale } from 'utils/locale';
+import locales from 'locales';
 import styles from './2bIndex.less';
-import locales from '../../locales';
 import SystemInfo from './SystemInfo/SystemInfo';
 import UserLists from './user/UserList';
 

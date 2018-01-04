@@ -68,8 +68,8 @@ class AddNewTask extends Component {
 
 // 编辑状态下加载所有的a和img标签
   queryImg = (data) => {
-    const hrefBox = data.template.match(/<a[^>]+?href=["']htt+?([^"']+)["']?[^>].*?<\/a>/g);
-    const imgBox = data.template.match(/<img.*?(?:>|\/>)/g);
+    const hrefBox = data.template.match(/<a[^>]+.*?href=["']htt+?([^"']+)["']?[^>](.|[\s\S])*?<\/a>/g);
+    const imgBox = data.template.match(/<img(.|[\s\S])*?(?:>|\/>)/g);
     const imgArray = [];
     for (const items of imgBox) {
       const item = items.match(/src=[\'\"]?([^\'\"]*)[\'\"]?/);
@@ -77,7 +77,7 @@ class AddNewTask extends Component {
     }
     const taskBox = [];
     for (const href of hrefBox) {
-      const content = href.match(/>(.*)<\/a>/);
+      const content = href.match(/>(.|[\s\S]*)<\/a>/);
       const url = href.match(/href=\"([^\"]+)/);
       const task = {
         name: content[1],

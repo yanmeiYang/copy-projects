@@ -1,26 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { routerRedux, Link } from 'dva/router';
+import { Link } from 'dva/router';
 import { Button, Table, Menu, Dropdown, Icon, Divider } from 'antd';
-import { sysconfig } from 'systems';
 import { Auth } from 'hoc';
 import { Layout } from 'routes';
-import { theme, applyTheme } from 'themes';
+import { applyTheme } from 'themes';
 import { classnames } from 'utils/index';
 import CreateProject from './createProject';
 import EditProject from './editProject';
 import styles from './projectList.less';
-import { isGod } from "utils/auth";
+import { isGod } from 'utils/auth';
 
 const tc = applyTheme(styles);
 @connect(({ app, recoModels }) => ({ app, recoModels }))
 @Auth
-
 export default class ProjectList extends Component {
   state = {
     filteredInfo: null,
     sortedInfo: null,
-    test: '',
     projdata: [],
   };
 
@@ -29,16 +26,24 @@ export default class ProjectList extends Component {
       type: 'reco/getProjectById',
       payload: {
         ids: [],
-        searchType: "reviewer_project",
+        searchType: 'reviewer_project',
         offset: 0,
         size: 100,
       },
     }).then((data) => {
       this.setState({ projdata: data });
-      console.log('data', data)
-    })
+      console.log('data', data);
+    });
   }
 
+  setAgeSort = () => {
+    this.setState({
+      sortedInfo: {
+        order: 'descend',
+        columnKey: 'age',
+      },
+    });
+  };
   handleMenuClick = (e) => {
     this.setState({
       filteredInfo: e.item.props.children,
@@ -54,14 +59,6 @@ export default class ProjectList extends Component {
     this.setState({
       filteredInfo: null,
       sortedInfo: null,
-    });
-  };
-  setAgeSort = () => {
-    this.setState({
-      sortedInfo: {
-        order: 'descend',
-        columnKey: 'age',
-      },
     });
   };
 // 所有操作按键处理方法
@@ -82,40 +79,40 @@ export default class ProjectList extends Component {
         {(isGod(roles) && newStatus !== 6) && <Divider type="vertical" />}
         {newStatus === 6 && <Link to={`/reports/${record.id}`}>报告</Link>}
       </div>
-    )
+    );
   };
   // 格式化时间
   resetTime = (time) => {
     if (time) {
-      const wrongTime = time.replace('T', ' ');
-      const createTime = wrongTime.split('.');
-      return createTime[0];
-    } else {
-      return '';
+      if (time.length > 10) {
+        const wrongTime = time.replace('T', ' ');
+        const createTime = wrongTime.split('.');
+        return createTime[0];
+      }
+
     }
   };
   // 处理状态显示
   resetStatus = (status) => {
-    const newStatus = status + 1
+    const newStatus = status + 1;
     if (newStatus) {
       if (newStatus === 1) {
-        return ' 创建完成'
+        return ' 创建完成';
       } else if (newStatus === 2) {
-        return '开始抓取'
+        return '开始抓取';
       } else if (newStatus === 3) {
-        return '抓取完成'
+        return '抓取完成';
       } else if (newStatus === 4) {
-        return '已发送测试邮件'
+        return '已发送测试邮件';
       } else if (newStatus === 5) {
-        return '模板确认'
+        return '模板确认';
       } else if (newStatus === 6) {
-        return '群发完成'
+        return '群发完成';
       }
     }
   };
 
   render() {
-    const { roles } = this.props.app;
     const { projdata } = this.state;
     let { filteredInfo } = this.state;
     filteredInfo = filteredInfo || {};
@@ -132,7 +129,7 @@ export default class ProjectList extends Component {
       dataIndex: 'organization',
       key: 'organization',
       filteredValue: filteredInfo.organization || null,
-      onFilter: (record) => record.organization.includes(),
+      onFilter: record => record.organization.includes(),
     }, {
       title: 'creator',
       dataIndex: 'creator',
@@ -169,7 +166,9 @@ export default class ProjectList extends Component {
         <div className={styles.projectList}>
           <div className={styles.navbar}>
             <div className={styles.tabBox}>
-              <Link to="/project"><Button>Project List</Button></Link>
+              <Link to="/project">
+                <Button>Project List</Button>
+              </Link>
               <Link to="/createproject"><Button>Create New Project</Button></Link>
             </div>
             <div>

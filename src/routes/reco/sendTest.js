@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Layout } from 'routes';
-import { routerRedux, Link } from 'dva/router';
-import { classnames } from 'utils'
-import { Steps, Icon, Button, message, Form, Input } from 'antd';
-import styles from './sendTest.less'
+import { Link } from 'dva/router';
+import { classnames } from 'utils';
+import { Steps, Button, message, Input } from 'antd';
+import styles from './sendTest.less';
 
 const { Step } = Steps;
 const { TextArea } = Input;
@@ -40,9 +40,9 @@ export default class SendTest extends Component {
           message.error('邮件模板中有错误，请修改为邮箱', 10)
         }
       }
-    })
+    });
   };
-  //  查看测试结果
+  // 查看测试结果
   sendConfirm = () => {
     const { id } = this.props.match.params;
     this.props.dispatch({
@@ -92,7 +92,6 @@ export default class SendTest extends Component {
 
   render() {
     const { current } = this.state;
-    const { id } = this.props.match.params;
     const steps = [{
       title: '发送测试邮件',
       content: <div className={styles.content}>

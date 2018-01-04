@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-wrap-multilines,comma-dangle */
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
@@ -13,13 +14,11 @@ import styles from './report.less';
 const tc = applyTheme(styles);
 @connect(({ app, reco }) => ({ app, reco }))
 @Auth
-
 export default class Reports extends Component {
   state = {
-
-    data: [],
-    projectInfo: [],
-    resultsOverview: [],
+    // data: [],
+    // projectInfo: [],
+    // resultsOverview: [],
     pushEffect: [],
     datas: [],
   };
@@ -35,25 +34,26 @@ export default class Reports extends Component {
       type: 'reco/getReport',
       payload: { projectId: [id] },
     }).then((data) => {
-      console.log('allalala',data)
+      console.log('allalala', data);
       this.setState({ pushEffect: data, datas: data[0].links });
     });
   };
   // 格式化时间
   resetTime = (time) => {
-    if(time) {
-      const wrongTime = time.replace('T', ' ');
-      const createTime = wrongTime.split('.');
-      return createTime[0];
+    if (time) {
+      if (time.length > 10) {
+        const wrongTime = time.replace('T', ' ');
+        const createTime = wrongTime.split('.');
+        return createTime[0];
+      }
     }
-
   };
   // 计算各种率
   computeRate = (a, b) => {
     if (a === 0 || b === 0) {
       return 0;
     } else {
-      const rate =Math.round((parseInt(a, 10) * 100) / parseInt(b, 10));
+      const rate = Math.round((parseInt(a, 10) * 100) / parseInt(b, 10));
       return `${rate}%`;
     }
   };
@@ -101,8 +101,10 @@ export default class Reports extends Component {
       dataIndex: 'statistic.unique_open_count',
     }, {
       title: '邮件打开率',
-      render: text => <Tooltip title="打开人数除以邮件发送数">
-        {this.computeRate(text.statistic.unique_open_count, text.statistic.success_send_count)}</Tooltip>,
+      render: text =>
+        <Tooltip title="打开人数除以邮件发送数">
+          {this.computeRate(text.statistic.unique_open_count, text.statistic.success_send_count)}
+        </Tooltip>,
     }, {
       title: '点击次数',
       dataIndex: 'statistic.all_click_count',
@@ -111,16 +113,20 @@ export default class Reports extends Component {
       dataIndex: 'statistic.unique_click_count',
     }, {
       title: '点击跳转率',
-      render: tasks => <Tooltip title="点击人数除以点击次数">
-        {this.computeRate(tasks.statistic.unique_click_count, tasks.statistic.unique_open_count)}</Tooltip>,
-    }
+      render: tasks =>
+        <Tooltip title="点击人数除以点击次数">
+          {this.computeRate(tasks.statistic.unique_click_count, tasks.statistic.unique_open_count)}
+        </Tooltip>,
+    },
     ];
     const pushEffect = [
       {
         title: '推送论文',
         key: '1',
-        render: tasks => <a href={`/${tasks.url}`}
-                            target="_blank"><span>{tasks.title}</span></a>,
+        render: tasks =>
+          <a href={`/${tasks.url}`}
+             target="_blank"><span>{tasks.title}</span>
+          </a>,
         width: 200,
       }, {
         title: '点击次数',
@@ -128,8 +134,10 @@ export default class Reports extends Component {
       }, {
         title: '点击人数',
         key: '2',
-        render: tasks => <Link
-          to={`/viewperson/${tasks.id}`}>{tasks.statistic.unique_click_count}</Link>,
+        render: tasks =>
+          <Link
+            to={`/viewperson/${tasks.id}`}>{tasks.statistic.unique_click_count}
+          </Link>,
       }, {
         title: '点击率',
         key: '3',
@@ -170,6 +178,6 @@ export default class Reports extends Component {
           </div>
         </div>
       </Layout>
-    )
+    );
   }
 }

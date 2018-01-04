@@ -30,7 +30,7 @@ let System;
 // System = 'demo';
 // System = 'data_annotation';
 // System = 'bole';
-// System = 'ccf';
+System = 'ccf';
 // System = 'ccftest';
 // System = 'huawei';
 // System = 'alibaba';
@@ -45,7 +45,7 @@ let System;
 // System = 'tencent';
 // System = 'thurcb';
 // System = 'yocsef';
-System = 'reco';
+// System = 'reco';
 
 // SPECIAL: USED_IN_ONLINE_DEPLOY; DON'T DELETE THIS LINE.
 // override system with system-override.js

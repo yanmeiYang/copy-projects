@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Layout } from 'routes';
-import { routerRedux, Link } from 'dva/router';
+import { Link } from 'dva/router';
 import { Input, Button, Form } from 'antd';
 
 // TODO @xiaobei: 临时添加,发送邮件页面
@@ -9,7 +9,6 @@ const { TextArea } = Input;
 const FormItem = Form.Item;
 
 @connect(({ app, reco }) => ({ app, reco }))
-
 class Email extends Component {
   state = {
     downloadUrl: '',
@@ -19,7 +18,7 @@ class Email extends Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       const { id } = this.props.match.params;
-      const personGroup = values.person.split("\n");
+      const personGroup = values.person.split('\n');
       this.props.dispatch({
         type: 'reco/catchEmail',
         payload: {
@@ -35,27 +34,26 @@ class Email extends Component {
               ids: [id],
               opts: [
                 {
-                  "operator": "update",
-                  "fields": []
-                }
-              ]
-            }
-          })
+                  'operator': 'update',
+                  'fields': [],
+                },
+              ],
+            },
+          });
         }
-
-      })
-    })
+      });
+    });
   };
 // 导出list
   export = () => {
     const { id } = this.props.match.params;
     const data = [
       {
-        "action": "ReviewerDownloadCSV",
-        "parameters": {
-          "ids": [id]
-        }
-      }
+        'action': 'ReviewerDownloadCSV',
+        'parameters': {
+          'ids': [id],
+        },
+      },
     ];
     const dataString = JSON.stringify(data)
     const dataBase = btoa(dataString);
@@ -65,15 +63,15 @@ class Email extends Component {
   savePersonEmail = (e) => {
     this.props.form.validateFields((err, values) => {
       const { id } = this.props.match.params;
-      const personEmailGroup = values.email.split("\n");
+      const personEmailGroup = values.email.split('\n');
       const value = [];
       personEmailGroup.map((person) => {
-        const personArray = person.split(/\s+/g)
+        const personArray = person.split(/\s+/g);
         const item = {
           expert_id: personArray[0],
-          email: personArray[1]
+          email: personArray[1],
         };
-        value.push(item)
+        value.push(item);
       });
       //TODO 根据具体格式调整
       this.props.dispatch({
@@ -82,8 +80,7 @@ class Email extends Component {
           ids: id,
           value: value,
         },
-      }).then((data) => {
-      })
+      });
     });
     e.preventDefault();
   };
@@ -104,8 +101,9 @@ class Email extends Component {
 
           <FormItem {...formItemLayout}>
             <Button onClick={this.catchEmail}>抓取邮件</Button>
-            <a href={this.state.downloadUrl} target="blank"><Button
-              onClick={this.export}> 导出 </Button></a>
+            <a href={this.state.downloadUrl} target="blank">
+              <Button onClick={this.export}> 导出 </Button>
+            </a>
           </FormItem>
 
           <FormItem {...formItemLayout} label="Person Email">

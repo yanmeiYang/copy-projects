@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { routerRedux, Link } from 'dva/router';
 import CreateProject from './createProject';
-import { Button } from 'antd';
 
 @connect(({ app }) => ({ app }))
 export default class EditProject extends Component {

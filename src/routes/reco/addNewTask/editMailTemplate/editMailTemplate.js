@@ -38,22 +38,28 @@ class EditMailTemplate extends Component {
           mailBody: values.mailBody,
           mailEditor: values.mailEditor,
         };
-        const hrefBox = data.mailBody.match(/<a[^>]+?href=["']htt+?([^"']+)["']?[^>].*?<\/a>/g);
-        const imgBox = data.mailBody.match(/<img.*?(?:>|\/>)/g);
+        const hrefBox =
+          data.mailBody.match(/<a[^>]+.*?href=["']htt+?([^"']+)["']?[^>](.|[\s\S])*?<\/a>/g);
+        const imgBox = data.mailBody.match(/<img(.|[\s\S])*?(?:>|\/>)/g);
         const imgArray = [];
-        for (const items of imgBox) {
-          const item = items.match(/src=[\'\"]?([^\'\"]*)[\'\"]?/);
-          imgArray.push(item[1]);
+        if (hrefBox) {
+          for (const items of imgBox) {
+            const item = items.match(/src=[\'\"]?([^\'\"]*)[\'\"]?/);
+            imgArray.push(item[1]);
+          }
         }
         const taskBox = [];
-        for (const href of hrefBox) {
-          const content = href.match(/>(.*)<\/a>/);
-          const url = href.match(/href=\"([^\"]+)/);
-          const task = {
-            name: content[1],
-            url: url[1],
-          };
-          taskBox.push(task);
+        if (imgBox) {
+          for (const href of hrefBox) {
+            const content = href.match(/>(.|[\s\S]*)<\/a>/);
+            console.log('href 1  wrong', content)
+            const url = href.match(/href=\"([^\"]+)/);
+            const task = {
+              name: content[1],
+              url: url[1],
+            };
+            taskBox.push(task);
+          }
         }
         this.props.callbackParent(taskBox, imgArray, data);
         this.setState({ visible: false });

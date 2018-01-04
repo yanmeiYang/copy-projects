@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Layout } from 'routes';
+import { routerRedux } from 'dva/router';
 import { Form, Radio, Button, Input } from 'antd';
 import { Auth } from 'hoc';
 import AddNewTask from './addNewTask';
@@ -13,7 +14,6 @@ const FormItem = Form.Item;
 @connect(({ app, reco }) => ({ app, reco }))
 @Auth
 class CreateProject extends Component {
-
   state = {
     orgInfo: [],
     taskInfo: [],
@@ -29,14 +29,14 @@ class CreateProject extends Component {
         type: 'reco/getProjectById',
         payload: {
           ids: [this.props.projId],
-          searchType: "reviewer_project",
+          searchType: 'reviewer_project',
           offset: 0,
           size: 100,
         },
       }).then((data) => {
         this.editProject(data[0]);
         this.setState({ taskInfo: data[0] });
-      })
+      });
     }
   }
 
@@ -45,7 +45,7 @@ class CreateProject extends Component {
     this.props.form.setFieldsValue({
       projectName: data.title,
       // radio-group: data.
-    })
+    });
   };
 
   // 创建组织callback
@@ -70,8 +70,15 @@ class CreateProject extends Component {
           data: this.state.taskInfo,
           title: projTitle,
         },
-      })
-    })
+      }).then((data) => {
+        if (data.succeed) {
+          this.props.dispatch(routerRedux.push({
+            pathname: '/project',
+          }));
+        }
+        console.log('fanhuilaitiaozhaun', data);
+      });
+    });
     // TODO @xiaobei: 增加isEdit属性，所有组件支持编辑模式
   };
 

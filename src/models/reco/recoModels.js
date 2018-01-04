@@ -63,6 +63,7 @@ export default {
         },
       };
       const wdata = yield call(reco.saveAll, pdata);
+      return wdata.data;
     },
     // 根据人的aid搜索出对应的邮件
     * catchEmail({ payload }, { call }) {

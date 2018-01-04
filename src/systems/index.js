@@ -34,13 +34,9 @@ if (sysconfig.EnableLocalLocale) {
 let allSystemConfigs; // a cache.
 
 const getAllSystemConfigs = () => {
-  const defaultConfig = createDefaultSysconfig('', '');
   if (!allSystemConfigs) {
     allSystemConfigs = AvailableSystems && AvailableSystems.map(sys => ({
-      ...defaultConfig,
-      SYSTEM: sys,
-      SOURCE: sys,
-      UserAuthSystem: defaultConfig.UserAuthSystem === 'aminer' ? 'aminer' : sys,
+      ...createDefaultSysconfig(sys, sys),
       ...require('./' + sys + '/config'),
     }));
   }

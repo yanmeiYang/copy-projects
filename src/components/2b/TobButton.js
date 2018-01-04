@@ -23,40 +23,43 @@ export default class TobButton extends PureComponent {
   state = {
     isVisible: false,
   };
+
   onclick = (sys) => {
     const { user } = this.props.app;
     system.saveSystem(sys, user);
     window.location.reload();
   };
 
-  setDebug = () => {
-    let HighlightHoles = 'none';
-    console.log('test:', this.props.app.HighlightHoles);
-    if (this.props.app.HighlightHoles === 'none') {
-      HighlightHoles = 'yes';
-    } else if (this.props.app.HighlightHoles === 'yes') {
-      HighlightHoles = 'all';
-    } else {
-      HighlightHoles = 'none';
-    }
-    this.props.dispatch({ type: 'app/setDebug', payload: { HighlightHoles } });
+  dfa = {
+    none: 'yes',
+    yes: 'all',
+    all: 'none',
   };
+
+  setDebug = () => {
+    const { dispatch, app } = this.props;
+    const { HighlightHoles = 'none' } = app || {};
+    dispatch({ type: 'app/setDebug', payload: { HighlightHoles: this.dfa[HighlightHoles] } });
+  };
+
   handleVisibleChange = (flag) => {
     this.setState({ isVisible: flag });
   };
 
   render() {
-    const allSystemConfigs = null; // getAllSystemConfigs();
+    // TODO @alice style ==> .less file.
+    // TODO @alice 并且菜单的高度为浏览器高的62%。
+    // TODO @alice 向下滚动时，始终显示在页面顶端。
+
+    const { HighlightHoles } = this.props && this.props.app;
+    const allSystemConfigs = getAllSystemConfigs();
     const menu = (
       <div>
         <Layout style={{ height: '624px', background: '#fff', boxShadow: '0 0 1px' }}>
           <Layout.Sider width={150} style={{ marginBottom: '20px' }}>
             <Menu selectedKeys={[sysconfig.SYSTEM]} style={{ width: '150px' }}>
-              <Menu.Item selectable={false}
-                         style={{ height: '30px', lineHeight: '30px', margin: '3px' }}>
-                <h3>
-                  快速切换系统
-                </h3>
+              <Menu.Item style={{ height: '30px', lineHeight: '30px', margin: '3px' }}>
+                <h3>快速切换系统</h3>
               </Menu.Item>
               <Menu.Divider />
               <Menu.Divider />
@@ -76,8 +79,7 @@ export default class TobButton extends PureComponent {
           </Layout.Sider>
           <Layout.Content style={{ Height: '584px' }}>
             <Menu style={{ width: '250px' }}>
-              <Menu.Item selectable={false}
-                         style={{ height: '30px', lineHeight: '30px', margin: '3px' }}>
+              <Menu.Item style={{ height: '30px', lineHeight: '30px', margin: '3px' }}>
                 <h3>
                   开发者工具
                 </h3>
@@ -96,7 +98,7 @@ export default class TobButton extends PureComponent {
               </Menu.Item>
               <Menu.Item>
                 <div onClick={this.setDebug.bind(this)}>
-                  Holes调试: {this.props.HighlightHoles}
+                  Holes调试: {HighlightHoles}
                 </div>
               </Menu.Item>
               <Menu.Item>

@@ -4,23 +4,25 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Tabs } from 'antd';
-import { system } from '../../../utils';
+// import { system } from '../../../utils';
+import { AvailableSystems } from 'core/system';
 import EmailContent from './emailCotent';
 // import styles from './index.less';
 
-
 const TabPane = Tabs.TabPane;
 
-class EmailTemplate extends React.Component {
+@connect(({ systemSetting }) => ({ systemSetting }))
+export default class EmailTemplate extends React.Component {
   state = { src: '' };
   componentWillMount = () => {
     this.props.dispatch({
       type: 'systemSetting/getTemplateContent',
-      payload: { src: system.AvailableSystems[0], type: 'welcome' },
+      payload: { src: AvailableSystems[0], type: 'welcome' },
     });
-    this.setState({ src: system.AvailableSystems[0], type: 'welcome' });
+    this.setState({ src: AvailableSystems[0], type: 'welcome' });
     this.props.dispatch({ type: 'app/handleNavbar', payload: true });
   };
+
   // componentWillReceiveProps = (nextProps) => {
   //   if (nextProps.systemSetting.status !== this.props.systemSetting.status) {
   //     if (!nextProps.systemSetting.status) {
@@ -34,6 +36,7 @@ class EmailTemplate extends React.Component {
   //     }
   //   }
   // };
+
   componentWillUnmount = () => {
     this.props.dispatch({ type: 'app/handleNavbar', payload: false });
   };
@@ -59,15 +62,14 @@ class EmailTemplate extends React.Component {
     const { src, type } = this.state;
     return (
       <div style={{ maxWidth: '1228px' }}>
-        <div>
-          <Tabs
-            defaultActiveKey="ccf"
-            tabPosition="left"
-            onChange={this.onTabChange}
-          >
-            {system.AvailableSystems &&
-            system.AvailableSystems.map((sys) => {
-              return <TabPane tab={sys} key={sys}>
+        <Tabs
+          defaultActiveKey="ccf"
+          tabPosition="left"
+          onChange={this.onTabChange}
+        >
+          {AvailableSystems && AvailableSystems.map((sys) => {
+            return (
+              <TabPane tab={sys} key={sys}>
                 <Tabs
                   defaultActiveKey="welcome"
                   tabPosition="top"
@@ -80,14 +82,11 @@ class EmailTemplate extends React.Component {
                     <EmailContent setFormValue={emailContent} source={src} type={type} />
                   </TabPane>
                 </Tabs>
-              </TabPane>;
-            })
-            }
-          </Tabs>
-        </div>
+              </TabPane>
+            );
+          })}
+        </Tabs>
       </div>
     );
   }
 }
-
-export default connect(({ systemSetting }) => ({ systemSetting }))(EmailTemplate);

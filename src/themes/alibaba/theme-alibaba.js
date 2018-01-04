@@ -5,12 +5,11 @@ import React from 'react';
 import { Link } from 'dva/router';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
-import { hole } from 'core';
+import hole from 'core/hole';
 import { FormattedMessage as FM } from 'react-intl';
-import { IndexHotLinks } from 'components/widgets';
 import { SearchVenue } from 'components/search';
-import { IndexCenterZone } from '../../systems/alibaba/components';
-import centerZoneLinks from '../../systems/alibaba/components/center-zone-links';
+import IndexCenterZone from 'systems/alibaba/components/IndexCenterZone';
+import centerZoneLinks from 'systems/alibaba/components/center-zone-links';
 import styles from './theme-alibaba.less';
 // import * as Const from './const-acmfellow';
 
@@ -94,3 +93,15 @@ export default {
     },
   ],
 };
+
+console.log('=====++++++', hole, [
+    hole.DEFAULT_PLACEHOLDER,
+    (param) => {
+      return (
+        <div key="0">
+          <SearchVenue query={param.query} />
+        </div>
+      );
+    },
+  ],
+);

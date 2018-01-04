@@ -5,7 +5,7 @@ import React from 'react';
 import { Link } from 'dva/router';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
-import { hole } from 'core';
+import hole from 'core/hole';
 import AddToEBButton from 'routes/expert-base/AddToEBButton';
 // import { FormattedMessage as FM } from 'react-intl';
 import { IndexHotLinks } from 'components/widgets';

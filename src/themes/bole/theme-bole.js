@@ -6,7 +6,7 @@ import { Link } from 'dva/router';
 import classnames from 'classnames';
 import { sysconfig } from 'systems';
 import { Button } from 'antd';
-import { hole } from 'core';
+import hole from 'core/hole';
 import PersonCommentPlugin from 'plugins/PersonCommentsPlugin';
 import AddToEBButton from 'routes/expert-base/AddToEBButton';
 import { PersonComment } from 'systems/bole/components';

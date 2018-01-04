@@ -1,6 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { sysconfig } from 'systems';
 import * as authUtil from 'utils/auth';
 import { reflect } from 'utils';
@@ -17,7 +17,7 @@ const hasAuthInfo = props => props && props.app && props.app.user && props.app.r
  * @constructor
  */
 function Auth(ComponentClass) {
-  return class AuthHoc extends Component {
+  class AuthHoc extends Component {
     componentWillMount = () => {
       if (!ENABLED) {
         return false;
@@ -35,7 +35,6 @@ function Auth(ComponentClass) {
         if (!hasAuthInfo(this.props)) {
           console.warn('Must connect `app` models when use @Auth! in component: ',
             reflect.GetComponentName(ComponentClass));
-          console.error(ComponentClass);
         } else {
           const { user, roles } = this.props.app;
           this.isLogin = authUtil.isLogin(user); // 必须是登录用户.
@@ -55,7 +54,8 @@ function Auth(ComponentClass) {
         return null;
       }
     }
-  };
+  }
+  return AuthHoc;
 }
 
 /**

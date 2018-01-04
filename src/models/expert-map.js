@@ -4,7 +4,6 @@ import * as personService from 'services/person';
 import * as mapService from 'services/expert-map-service';
 
 const cache = {};
-console.log('---------------------------------------- import expertmap module.js',);
 
 export default {
 

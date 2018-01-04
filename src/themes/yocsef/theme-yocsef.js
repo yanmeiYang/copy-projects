@@ -5,7 +5,7 @@ import React from 'react';
 import { Link } from 'dva/router';
 import classnames from 'classnames';
 import AddToEBDropdown from 'routes/expert-base/AddToEBDropdown';
-import { hole } from 'core';
+import hole from 'core/hole';
 import { FormattedMessage as FM } from 'react-intl';
 import { sysconfig } from 'systems';
 

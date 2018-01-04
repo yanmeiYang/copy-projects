@@ -32,7 +32,8 @@ const AvailableSystems = [
 let System = '';
 try {
   // TODO here is a warning if file doesn't exist.
-  const { system } = require('../system-config').default;
+  const { system } = require('../system-config');
+  // console.log('0000000', system);
   System = system;
   if (process.env.NODE_ENV !== 'production') {
     // eslint-disable-next-line function-paren-newline function-paren-newline
@@ -45,7 +46,6 @@ try {
   const style = 'color:white;background-color:orange;padding:1px 4px;';
   console.log(msg, style, System);
 }
-
 // check available
 if (AvailableSystems.indexOf(System) <= 0) {
   if (process.env.NODE_ENV !== 'production') {

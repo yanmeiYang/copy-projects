@@ -4,7 +4,7 @@
 import React from 'react';
 import { Link } from 'dva/router';
 import classnames from 'classnames';
-import { hole } from 'core';
+import hole from 'core/hole';
 import { FormattedMessage as FM } from 'react-intl';
 
 import styles from './theme-scei.less';

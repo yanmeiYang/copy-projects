@@ -4,7 +4,7 @@
 import React from 'react';
 import { Link } from 'dva/router';
 import classnames from 'classnames';
-import { hole } from 'core';
+import hole from 'core/hole';
 import { IndexHotLinks } from 'components/widgets';
 import { sysconfig } from 'systems';
 import { KgSearchBox } from 'components/search';

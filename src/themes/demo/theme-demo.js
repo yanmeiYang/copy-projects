@@ -5,7 +5,7 @@ import React from 'react';
 import { Link } from 'dva/router';
 import classnames from 'classnames';
 // import { sysconfig } from 'systems';
-import { hole } from 'core';
+import hole from 'core/hole';
 import { FormattedMessage as FM } from 'react-intl';
 import { IndexCenterZone } from 'systems/demo/components';
 import styles from './theme-demo.less';

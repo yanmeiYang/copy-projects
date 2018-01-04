@@ -10,6 +10,7 @@ import { KgSearchBox } from 'components/search';
 import HeaderInfoZone from 'components/Layout/HeaderInfoZone';
 import { compare } from 'utils';
 import { hole } from 'core';
+import { Hole } from 'components/core';
 import styles from './Header.less';
 
 const tc = applyTheme(styles);
@@ -86,20 +87,20 @@ export default class Header extends Component {
   // };
 
   render() {
-    // console.log('>>>>>>>HEADER');
 
     const { logoZone, searchZone, infoZone, rightZone } = this.props;
-    const { onSearch, fixAdvancedSearch, disableAdvancedSearch, query, app } = this.props;
+    const { onSearch, fixAdvancedSearch, disableAdvancedSearch, query } = this.props;
+    console.log('>>>>>>>HEADER', logoZone);
 
     return (
       <Layout.Header className={tc(['header'])}>
 
         <div className={tc(['logoZone'])}>
-          {hole.fill(logoZone)}
+          <Hole fill={logoZone} />
         </div>
 
         <div className={tc(['searchZone'])}>
-          {hole.fill(searchZone, [
+          <Hole fill={searchZone} defaults={[
             <KgSearchBox
               key={100} size="large"
               className={styles.searchBox} style={{ height: 36, marginTop: 15 }}
@@ -107,17 +108,17 @@ export default class Header extends Component {
               fixAdvancedSearch={fixAdvancedSearch}
               disableAdvancedSearch={disableAdvancedSearch}
             />,
-          ])}
+          ]} />
         </div>
 
         <div className={tc(['infoZone'])}>
-          {hole.fill(infoZone)}
+          <Hole fill={infoZone} />
         </div>
 
         <div className={tc(['rightZone'])}>
-          {hole.fill(rightZone, [
+          <Hole fill={rightZone} defaults={[
             <HeaderInfoZone key={100} app={this.props.app} logout={this.props.logout} />,
-          ])}
+          ]} />
         </div>
 
       </Layout.Header>

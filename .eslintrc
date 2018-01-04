@@ -43,15 +43,6 @@
     "no-unused-vars": [0],
     "indent": [0],
 
-    "react/jsx-wrap-multilines": ["error", {
-      "declaration": "parens-new-line",
-      "assignment": "parens-new-line",
-      "return": "parens-new-line",
-      "arrow": "parens-new-line",
-      "condition": "parens-new-line",
-      "logical": "parens-new-line",
-      "prop": "ignore"
-    }],
     "jsx-a11y/no-static-element-interactions": [0],
     "jsx-a11y/no-noninteractive-element-interactions": [0],
     "jsx-a11y/click-events-have-key-events": [0],

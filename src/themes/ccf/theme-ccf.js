@@ -6,7 +6,7 @@ import { Link } from 'dva/router';
 import classnames from 'classnames';
 import { PersonLabels } from 'components/widgets';
 import { sysconfig } from 'systems';
-import { hole } from 'core';
+import hole from 'core/hole';
 import { isLogin, isGod, isAuthed } from 'utils/auth';
 import * as seminarService from 'services/seminar';
 import Menu from './components/Menu';

@@ -36,9 +36,7 @@ console.log('System is [', system, '] start building...');
 // generate src/system_config.js
 createFile('./src/system-config.js', `
 // !!! This is generated automatically, don't modify !!! 
-export default {
-  system : '${system}',
-};
+export const system = '${system}';
 `);
 
 //

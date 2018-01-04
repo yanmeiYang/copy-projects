@@ -218,6 +218,7 @@ export default class SearchComponent extends Component {
 
 
   render() {
+    console.count('performance for SearchComponent');
     const {
       disableExpertBaseFilter, disableFilter, disableSearchKnowledge,
       rightZoneFuncs, disableSmartSuggest, searchMessagesZone,
@@ -247,7 +248,13 @@ export default class SearchComponent extends Component {
 
     // Search Assistant // TODO move translate search out.
     const { useTranslateSearch, translatedLanguage, translatedText } = search;
-    const transMsgProps = { query, useTranslateSearch, translatedLanguage, translatedText };
+    const transMsgProps = {
+      query,
+      useTranslateSearch,
+      translatedLanguage,
+      translatedText,
+      key: 9,
+    };
 
     return (
       <div className={classnames(styles.searchComponent, className)}>
@@ -256,16 +263,16 @@ export default class SearchComponent extends Component {
           <div className={styles.searchZone}>
 
             {/* 搜索框 */}
-            {this.props.showSearchBox &&
-            <div className={styles.top}>
-              <div className={styles.searchWrap}>
-                <KgSearchBox
-                  size="large" style={{ width: 500 }}
-                  query={query} onSearch={this.props.onSearchBarSearch}
-                />
+            {this.props.showSearchBox && (
+              <div className={styles.top}>
+                <div className={styles.searchWrap}>
+                  <KgSearchBox
+                    size="large" style={{ width: 500 }}
+                    query={query} onSearch={this.props.onSearchBarSearch}
+                  />
+                </div>
               </div>
-            </div>
-            }
+            )}
 
             {/* Translate Search // old translate message. */}
 
@@ -282,7 +289,6 @@ export default class SearchComponent extends Component {
             />}
 
             {/* Search Message Zone TODO not good.*/}
-            {/*<Hole fill={searchMessagesZone} />;*/}
             {searchMessagesZone && searchMessagesZone.length > 0 &&
             <div className={styles.message}>
               {searchMessagesZone}
@@ -340,12 +346,6 @@ export default class SearchComponent extends Component {
                 config={{ containerClass: styles.searchKgContent }}
               />
 
-              {/*{hole.fillFuncs(*/}
-              {/*rightZoneFuncs, // theme from config.*/}
-              {/*DefaultRightZoneFuncs, // default block.*/}
-              {/*{ query, topic }, // parameters passed to block.*/}
-              {/*{ containerClass: styles.searchKgContent }, // configs.*/}
-              {/*)}*/}
             </div>
             {isPagination &&
             <div className={styles.paginationWrap}>

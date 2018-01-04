@@ -22,12 +22,13 @@ const AvailableSystems = [
   'tencent',
   'thurcb',
   'yocsef',
+  'reco',
 ];
 
 let System;
 // System = 'aminer';
 // System = 'demo';
-System = 'data_annotation';
+// System = 'data_annotation';
 // System = 'bole';
 // System = 'ccf';
 // System = 'ccftest';
@@ -44,6 +45,7 @@ System = 'data_annotation';
 // System = 'tencent';
 // System = 'thurcb';
 // System = 'yocsef';
+System = 'reco';
 
 // SPECIAL: USED_IN_ONLINE_DEPLOY; DON'T DELETE THIS LINE.
 // override system with system-override.js

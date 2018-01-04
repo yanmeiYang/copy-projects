@@ -7,6 +7,7 @@
  *   This file is also run in node environment.
  *   Can't import any utils. Make sure this file load first.
  */
+import SC from 'src/system-config';
 
 // 所有可选系统，保留关键字：global.
 const AvailableSystems = [
@@ -30,40 +31,37 @@ const AvailableSystems = [
   'yocsef',
 ];
 
+const { system } = SC;
+let System = '';
+
 // SPECIAL: USED_IN_ONLINE_DEPLOY; DON'T DELETE THIS LINE.
 // override system with system-override.js
-// if (process.env.NODE_ENV === 'production') {
-
-// try {
-//   // TODO here is a warning if file doesn't exist.
-//   const { OverrideSystem } = require('../../src/system-override');
-//   System = OverrideSystem;
-//   if (process.env.NODE_ENV !== 'production') {
-//     // eslint-disable-next-line function-paren-newline function-paren-newline
-//     const msg = '%cSystem Override to [%s] using OVERRIDE. (original is %s)';
-//     const style = 'color:white;background-color:orange;padding:1px 4px;';
-//     console.log(msg, style, OverrideSystem, System);
-//   }
-// } catch (err) {
-//   const msg = '%cWarning! No System Override found. use system[%s]';
-//   const style = 'color:white;background-color:orange;padding:1px 4px;';
-//   console.log(msg, style, System);
-// }
-
-// }
+try {
+  // TODO here is a warning if file doesn't exist.
+  // const { OverrideSystem } = require('src/system-config');
+  System = system;
+  if (process.env.NODE_ENV !== 'production') {
+    // eslint-disable-next-line function-paren-newline function-paren-newline
+    const msg = '%cSystem Override to [%s] using OVERRIDE. (original is %s)';
+    const style = 'color:white;background-color:orange;padding:1px 4px;';
+    console.log(msg, style, system, System);
+  }
+} catch (err) {
+  const msg = '%cWarning! No System Override found. use system[%s]';
+  const style = 'color:white;background-color:orange;padding:1px 4px;';
+  console.log(msg, style, System);
+}
 
 // check available
+if (AvailableSystems.indexOf(System) <= 0) {
+  if (process.env.NODE_ENV !== 'production') {
+    const msg = '%cSystem [%s] is invalid, available:%v';
+    const style = 'color:white;background-color:orange;padding:1px 4px;';
+    console.log(msg, style, System, AvailableSystems);
+  }
+  throw new Error('System [%s] is invalid! Please check your code.');
+}
 
-// if (AvailableSystems.indexOf(System) <= 0) {
-//   if (process.env.NODE_ENV !== 'production') {
-//     const msg = '%cSystem [%s] is invalid, available:%v';
-//     const style = 'color:white;background-color:orange;padding:1px 4px;';
-//     console.log(msg, style, System, AvailableSystems);
-//   }
-//   throw new Error('System [%s] is invalid! Please check your code.');
-// }
-
-const System = '.....';
 let Source = System; // AppID, Used in UniversalConfig.
 
 const SavedSystemKey = 'IJFEOVSLKDFJ';

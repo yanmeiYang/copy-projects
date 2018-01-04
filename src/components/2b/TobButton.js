@@ -7,11 +7,8 @@ import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { system } from 'core';
 import { RequireGod } from 'hoc';
-import { sysconfig } from 'systems';
-// import { sysconfig, getAllSystemConfigs } from 'systems';
+import { sysconfig, getAllSystemConfigs } from 'systems';
 import { Icon, Dropdown, Menu, Layout } from 'antd';
-
-const getAllSystemConfigs = {}; // TODO SSR...
 
 @connect(({ app }) => ({
   app: {
@@ -19,7 +16,7 @@ const getAllSystemConfigs = {}; // TODO SSR...
     roles: app.roles,
     setDebug: app.setDebug,
     HighlightHoles: app.debug && app.debug.HighlightHoles,
-  }
+  },
 }))
 @RequireGod
 export default class TobButton extends PureComponent {
@@ -63,18 +60,18 @@ export default class TobButton extends PureComponent {
               </Menu.Item>
               <Menu.Divider />
               <Menu.Divider />
-              {/*{allSystemConfigs && allSystemConfigs.map((src) => {*/}
-              {/*return (*/}
-              {/*<Menu.Item key={src.SYSTEM}*/}
-              {/*style={{ height: '30px', lineHeight: '30px', margin: '3px' }}>*/}
-              {/*<div onClick={this.onclick.bind(this, src.SYSTEM)}>*/}
-              {/*<img src={`/sys/${src.SYSTEM}/favicon.ico`}*/}
-              {/*style={{ width: '10px', height: '10px' }} />*/}
-              {/*<span style={{ marginLeft: '5px' }}>{src.SYSTEM}</span>*/}
-              {/*</div>*/}
-              {/*</Menu.Item>*/}
-              {/*);*/}
-              {/*})}*/}
+              {allSystemConfigs && allSystemConfigs.map((src) => {
+                return (
+                  <Menu.Item key={src.SYSTEM}
+                             style={{ height: '30px', lineHeight: '30px', margin: '3px' }}>
+                    <div onClick={this.onclick.bind(this, src.SYSTEM)}>
+                      <img src={`/sys/${src.SYSTEM}/favicon.ico`}
+                           style={{ width: '10px', height: '10px' }} />
+                      <span style={{ marginLeft: '5px' }}>{src.SYSTEM}</span>
+                    </div>
+                  </Menu.Item>
+                );
+              })}
             </Menu>
           </Layout.Sider>
           <Layout.Content style={{ Height: '584px' }}>

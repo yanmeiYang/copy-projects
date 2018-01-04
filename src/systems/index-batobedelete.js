@@ -15,7 +15,7 @@ import defaults from './utils'; // Warning: no zhuo no die.
  **************************************************/
 
 let defaultSystemConfig;
-let allSystemConfigs;
+
 
 const getDefaultSystemConfig = () => {
   if (!defaultSystemConfig) {
@@ -24,19 +24,6 @@ const getDefaultSystemConfig = () => {
   return defaultSystemConfig;
 };
 
-const getAllSystemConfigs = () => {
-  const defaultConfig = getDefaultSystemConfig(System, Source); // don't modify it's value.
-  if (!allSystemConfigs) {
-    allSystemConfigs = AvailableSystems && AvailableSystems.map(sys => ({
-      ...defaultConfig,
-      SYSTEM: sys,
-      SOURCE: sys,
-      UserAuthSystem: defaultConfig.UserAuthSystem === 'aminer' ? 'aminer' : sys,
-      ...require('./' + sys + '/config'),
-    }));
-  }
-  return allSystemConfigs;
-};
 
 const generateCurrentSystemConfig = () => {
   console.log('sfadfasdf', System);

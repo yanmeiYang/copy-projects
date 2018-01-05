@@ -3,13 +3,12 @@
   "name": "aminer2b",
   "version": "1.4.5",
   "scripts": {
-    "rhv": "roadhog --version",
-    "dev": "roadhog --version && CLEAR_CONSOLE=none roadhog dev",
+    "dev": "cross-env CLEAR_CONSOLE=none roadhog dev",
     "devm": "roadhog --version && node --max_old_space_size=7096 node_modules/roadhog/lib/scripts/dev.js",
     "lint": "eslint --fix --ext .js src",
-    "build": "roadhog build",
+    "build": "cross-env LIMIT=4096 increase-memory-limit && roadhog build",
     "build:a": "roadhog build --analyze",
-    "build:ab": "node --max_old_space_size=4096 node_modules/roadhog/lib/scripts/build.js"
+    "build:ab": "node --max_old_space_size=7096 node_modules/roadhog/lib/scripts/build.js"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0-beta.36",
@@ -36,7 +35,7 @@
     "qrcode.react": "^0.7.1",
     "qs": "^6.5.1",
     "query-string": "^5.0.0",
-    "rc-tween-one": "^1.6.0",
+    "rc-tween-one": "^1.7.1",
     "react": "^16.2.0",
     "react-autosuggest": "^9.3.2",
     "react-countup": "^3.0.2",
@@ -51,7 +50,7 @@
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.36",
     "@babel/plugin-transform-runtime": "^7.0.0-beta.36",
-    "babel-eslint": "^8.1.12",
+    "babel-eslint": "^8.1.2",
     "babel-plugin-dev-expression": "^0.2.1",
     "babel-plugin-dva-hmr": "^0.4.1",
     "babel-plugin-eslint-disable": "^0.1.2",
@@ -73,8 +72,9 @@
     "html-webpack-plugin": "^2.29.0",
     "html-webpack-template": "^6.1.0",
     "husky": "^0.14.3",
+    "increase-memory-limit": "^1.0.6",
     "redbox-react": "^1.5.0",
-    "roadhog": "^2.0.1",
+    "roadhog": "^2.0.3",
     "webpack": "^3.10.0"
   },
   "optionalDependencies": {

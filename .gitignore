@@ -1,8 +1,11 @@
+.DS_Store
 dist
 node_modules
 yarn.lock
 npm-debug.log
 src/system-config.js
+yarn-error.log
+
 xxxsrc/index.js
 xxxsrc/systems/index.js
 xxxsrc/themes/index.js
@@ -53,5 +56,3 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-.DS_Store
-src/system-override.js

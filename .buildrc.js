@@ -6,8 +6,8 @@
 module.exports = {
   webpack: {
     alias: {
-      pages: `${__dirname}/pages`,
-      components: `${__dirname}/components`,
+      pages: `${__dirname}/src/pages`,
+      components: `${__dirname}/src/components`,
 
       // TODO umi 需要重新来
       public: `${__dirname}/public`,

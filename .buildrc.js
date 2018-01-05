@@ -3,15 +3,16 @@
  *
  * This file contains configs when developing and building the system.
  */
-
 module.exports = {
   webpack: {
     alias: {
+      pages: `${__dirname}/pages`,
+
+      // TODO umi 需要重新来
       public: `${__dirname}/public`,
       system: `${__dirname}/src/system`,
       src: `${__dirname}/src`,
       core: `${__dirname}/src/core`,
-      pages: `${__dirname}/src/pages`, // nextjs SSR
       components: `${__dirname}/src/components`,
       routes: `${__dirname}/src/routes`, // CSR ReactRouter routes.
       models: `${__dirname}/src/models`,

@@ -1,14 +1,19 @@
 {
-  "devDependencies": {
-    "umi": "^1.0.0-0"
-  },
+  "name": "aminer2c",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
     "start": "umi dev",
     "build": "umi build"
   },
   "dependencies": {
-    "dva": "^2.1.0",
     "dva-no-router": "^1.0.3",
     "umi-router": "^0.1.2"
+  },
+  "devDependencies": {
+    "umi": "^1.0.0-0"
+  },
+  "optionalDependencies": {
+    "fsevents": "^1.1.3"
   }
 }

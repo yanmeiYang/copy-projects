@@ -5,13 +5,16 @@
  */
 const theme = require('./theme.config');
 const buildrc = require('./.buildrc');
-// const { version } = require('./package.json');
 const path = require('path');
+// const { version } = require('./package.json');
 
+// do some other startup before webpack.
 require('./bin/generate-system');
 
 // TODO debug mode  /  production mode
 const production = (process.env.NODE_ENV === 'production');
+
+console.log('production:', production ? false : 'cheap-source-map',);
 
 // noinspection WebpackConfigHighlighting
 module.exports = {
@@ -26,7 +29,7 @@ module.exports = {
   outputPath: path.resolve(__dirname, `./dist`),
   // outputPath: path.resolve(__dirname, `./dist/${version}`),
 
-  // devtool: '#cheap-source-map',
+  devtool: false,
 
   html: {
     template: "./src/index.ejs",
@@ -62,21 +65,19 @@ module.exports = {
   },
 
   extraBabelPlugins: [
-    // "add-module-exports", // 不好使呀这东西
-    "@babel/plugin-transform-runtime",
-    // "eslint-disable",
+    // "@babel/plugin-transform-runtime",
     "transform-decorators-legacy",
-    ["import", { "libraryName": "antd", "style": true }]
+    ["import", { libraryName: "antd", style: true }]
   ],
 
   env: {
     development: {
-      // devtool: 'cheap-source-map',
-      extraBabelPlugins: [
-        "dva-hmr"
-      ]
+      devtool: 'cheap-source-map',
+      extraBabelPlugins: ["dva-hmr"]
     }
   },
+
+  ignoreMomentLocale: true,
 
   // copy: [],
 

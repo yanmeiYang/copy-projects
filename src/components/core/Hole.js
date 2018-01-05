@@ -24,9 +24,13 @@ export default class Hole extends Component {
   render() {
     const { name, fill, defaults, param, config, children, debug } = this.props;
 
-    const holeContent = param
+    let holeContent = param
       ? hole.fillFuncs(fill, defaults, param, config)
       : hole.fill(fill, defaults);
+
+    if (!holeContent) {
+      holeContent = false;
+    }
 
     // DEBUG ONLY
     if (process.env.NODE_ENV !== 'production') {
@@ -48,8 +52,8 @@ export default class Hole extends Component {
             </div>
           );
         case 'none':
-          return holeContent;
         default:
+          return holeContent;
       }
     }
 

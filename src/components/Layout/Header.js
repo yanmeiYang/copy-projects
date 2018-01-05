@@ -78,7 +78,7 @@ export default class Header extends Component {
   //   // this.forceUpdate(() => console.log('forceUpdate Done!'));
   //   this.props.logout();
   //   // this.setState({ logoutLoading: false });
-  // };
+  //
   //
   // loginPageUrl = () => {
   //   return location.pathname !== sysconfig.Auth_LoginPage
@@ -90,7 +90,7 @@ export default class Header extends Component {
 
     const { logoZone, searchZone, infoZone, rightZone } = this.props;
     const { onSearch, fixAdvancedSearch, disableAdvancedSearch, query } = this.props;
-    console.log('>>>>>>>HEADER', logoZone);
+    console.log('>>>>>>>HEADER', logoZone, searchZone, infoZone, rightZone);
 
     return (
       <Layout.Header className={tc(['header'])}>

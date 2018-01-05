@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-globals*/
+
 /**
  * Created by ranyanchuan on 2017/12/11.
  */

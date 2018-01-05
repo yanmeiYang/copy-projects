@@ -1,5 +1,5 @@
 import { loadECharts } from 'utils/requirejs';
-import bridge from 'utils/next-bridge';
+import * as bridge from 'utils/next-bridge';
 import { randomColor } from './func-utils';
 
 let myEChart;

@@ -3,8 +3,8 @@
  */
 import React from 'react';
 import { toIDDotString, TopExpertBase } from 'utils/expert-base';
-import { IndexInfoBox, PersonLabel } from './components';
-import defaults from 'core/hole';
+// import { IndexInfoBox, PersonLabel } from './components';
+// import defaults from 'core/hole';
 
 export default {
 

@@ -53,8 +53,8 @@ export default {
   PersonList_PersonLink: personId => `/p/${personId}`,
   PersonList_PersonLink_NewTab: true,
   PersonList_TitleRightBlock: defaults.EMPTY_BLOCK_FUNC, // profile => 'jsx',
-  PersonList_RightZone: defaults.IN_APP_DEFAULT, // [()=><COMP>]
-  PersonList_BottomZone: defaults.IN_APP_DEFAULT,
+  PersonList_RightZone: defaults.IN_COMPONENT_DEFAULT, // [()=><COMP>]
+  PersonList_BottomZone: defaults.IN_COMPONENT_DEFAULT,
   //param: [person, eb{id,name}]
 
   Search_CheckEB: true, // Check ExpertBase.

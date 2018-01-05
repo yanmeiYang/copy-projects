@@ -27,7 +27,7 @@ module.exports = {
   outputPath: path.resolve(__dirname, `./dist`),
   // outputPath: path.resolve(__dirname, `./dist/${version}`),
 
-  devtool: production ? 'cheap-module-source-map' : 'cheap-module-eval-source-map',
+  devtool: production ? false : 'cheap-module-eval-source-map',
 
   html: {
     template: "./src/index.ejs",

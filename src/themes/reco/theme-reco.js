@@ -4,17 +4,16 @@
 import React from 'react';
 import { Link } from 'dva/router';
 import classnames from 'classnames';
-import * as hole from 'utils/hole';
+import hole from 'core/hole';
 import { IndexHotLinks } from 'components/widgets';
 import { sysconfig } from 'systems';
-import { KgSearchBox } from 'components/search';
-//import { FormattedMessage as FM } from 'react-intl';
-//import { IndexInfoBox, PersonLabel, IndexCenterZone } from './components';
+// import { KgSearchBox } from 'components/search';
+// import { FormattedMessage as FM } from 'react-intl';
+// import { IndexInfoBox, PersonLabel, IndexCenterZone } from './components';
 import styles from './theme-reco.less';
 
-module.exports = {
+export default {
   themeName: 'common-white',
-
   styles,
 
   // Layout
@@ -57,8 +56,8 @@ module.exports = {
   index_bannerZone: [
     <div key="0" className={styles.index_bannerZone}>
       <h className={styles.text}>Data
-        <span className={styles.dot}></span> Knowledge
-        <span className={styles.dot}></span> Intelligence
+        <span className={styles.dot} /> Knowledge
+        <span className={styles.dot} /> Intelligence
       </h>
     </div>,
   ],

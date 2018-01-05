@@ -39,7 +39,7 @@ export default {
   Search_DefaultTranslateSearch: true, // 默认不使用翻译搜索;
 
   Search_EnableKnowledgeGraphHelper: false,
-  // Search_SortOptions: defaults.IN_APP_DEFAULT,
+  // Search_SortOptions: defaults.IN_COMPONENT_DEFAULT,
 
   // UserAuthSystem: System, // aminer 或者是 system.config
   // UserAuthSystem_AddSysTagAuto: false, // 登录时自动添加system的标签, 目前没用到

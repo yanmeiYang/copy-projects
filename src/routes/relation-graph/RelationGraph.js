@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* eslint-disable max-len,no-unused-vars */
 /**
  *  Created by BoGao on 2017-07-10;
  */

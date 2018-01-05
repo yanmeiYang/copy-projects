@@ -1,5 +1,5 @@
 /* eslint-disable quote-props */
-import * as reco from '../../services/recoService';
+import * as reco from 'services/recoService';
 
 export default {
   namespace: 'reco',
@@ -20,8 +20,8 @@ export default {
     // TODO @xiaobei: 根据taskID读取看过这篇文章的人数
     * getViewPerson({ payload }, { call }) {
       const { taskId } = payload;
-      const data = yield call(service, taskId);
-      return data.data;
+      // const data = yield call(service, taskId);
+      // return data.data;
     },
     // 创建proj，上传所有的信息
     * sendProjInfo({ payload }, { call }) {

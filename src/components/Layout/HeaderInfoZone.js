@@ -42,7 +42,7 @@ export default class HeaderInfoZone extends PureComponent {
   render() {
     const { user, roles } = this.props.app;
     const UserNameBlock = isAuthed(roles)
-      ? sysconfig.Header_UserNameBlock === defaults.IN_APP_DEFAULT
+      ? sysconfig.Header_UserNameBlock === defaults.IN_COMPONENT_DEFAULT
         ? <span>{user.display_name}</span>
         : sysconfig.Header_UserNameBlock
       : defaults.EMPTY_BLOCK;

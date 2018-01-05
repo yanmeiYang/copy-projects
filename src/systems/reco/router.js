@@ -1,6 +1,7 @@
-// import Routers from '../router-all';
-//
-// export default Routers;
+import React from 'react';
+import { ConnectedRouter } from 'components/core';
+import { RouterRegistry2b } from '../router-manager-registry';
+
 import core from 'routes/router-core';
 import person from 'routes/person/router-person';
 import user from 'routes/user/router-user';
@@ -8,8 +9,6 @@ import auth from 'routes/auth/router-auth';
 import admin from 'routes/admin/router-admin';
 import map from 'routes/expert-map/router-map';
 import reco from 'routes/reco/router-reco';
-
-import { RouterRegistry2b, RouterJSXFunc } from '../router-registry';
 
 const routes = [
   ...RouterRegistry2b,
@@ -34,7 +33,6 @@ const routes = [
   user.Retrieve,
   user.UserInfo,
 
-
   admin.AdminUsers,
 
   map.ExpertMap,
@@ -43,8 +41,7 @@ const routes = [
   core.Error404, // must be last one.
 ];
 
-const Routers = ({ history, app }) => {
-  return RouterJSXFunc(history, app, routes);
+export default ({ history, app }) => {
+  return <ConnectedRouter {...{ history, app, routes }} />;
 };
 
-export default Routers;

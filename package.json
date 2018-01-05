@@ -5,7 +5,7 @@
   "scripts": {
     "rhv": "roadhog --version",
     "dev": "roadhog --version && CLEAR_CONSOLE=none roadhog dev",
-    "devm": "roadhog --version && node --max_old_space_size=4096 node_modules/roadhog/lib/scripts/dev.js",
+    "devm": "roadhog --version && node --max_old_space_size=7096 node_modules/roadhog/lib/scripts/dev.js",
     "lint": "eslint --fix --ext .js src",
     "build": "roadhog build",
     "build:a": "roadhog build --analyze",

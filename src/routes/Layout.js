@@ -11,7 +11,7 @@ import NProgress from 'nprogress';
 import { Layout as LayoutComponent } from 'antd';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
-import { classnames, config } from 'utils';
+import { config } from 'utils';
 import { hole } from 'core';
 import { Header, Navigator } from 'components/Layout';
 import { Feedback } from 'components/widgets';
@@ -22,6 +22,7 @@ const { iconFontJS, iconFontCSS, logo } = config;
 const { Sider, Content, Footer } = LayoutComponent;
 
 const tc = applyTheme(styles);
+
 let lastHref;
 
 @connect(({ app, loading }) => ({ app, loading }))

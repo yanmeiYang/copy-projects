@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Form, Input, Button, Select, Modal } from 'antd';
 import { Layout } from 'routes';
-import { CurrentSystemConfig, sysconfig } from 'systems';
+import { sysconfig } from 'systems';
 import { applyTheme } from 'themes';
 import { contactByJoint } from 'services/seminar';
 import styles from './UserCreate.less';
@@ -26,9 +26,8 @@ class UserCreate extends Component {
   componentWillMount() {
     const source = queryURL('src');
     this.setState({ src: source });
-    const currentSystem = CurrentSystemConfig[source];
-    this.setState({ currentConfig: currentSystem.ShowRegisteredRole });
-    this.setState({ sigupPassword: currentSystem.Signup_Password || sysconfig.Signup_Password });
+    this.setState({ currentConfig: sysconfig.ShowRegisteredRole });
+    this.setState({ sigupPassword: sysconfig.Signup_Password });
   }
 
   componentDidMount() {

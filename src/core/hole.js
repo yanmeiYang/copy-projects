@@ -76,7 +76,7 @@ function fillFuncs(holeList, defaultHoleList, payload, config) {
   return false;
 }
 
-export default {
+const defaults = {
   // placeholders
   IN_COMPONENT_DEFAULT: undefined,
   EMPTY_BLOCK_FUNC: () => null,
@@ -85,4 +85,6 @@ export default {
   DEFAULT_PLACEHOLDER: default_placeholder,
 };
 
-export { fill, fillFuncs }
+export default defaults;
+
+export { defaults, fill, fillFuncs }

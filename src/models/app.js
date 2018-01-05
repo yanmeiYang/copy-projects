@@ -3,7 +3,7 @@ import { message as antdMessage } from 'antd';
 import { Map } from 'immutable';
 import { routerRedux } from 'dva/router';
 import { config, queryURL } from 'utils';
-import debug from 'utils/debug';
+import * as debug from 'utils/debug';
 import { mergeLibs } from 'utils/requirejs';
 import * as auth from 'utils/auth';
 import * as authService from 'services/auth';

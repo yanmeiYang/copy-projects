@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { sysconfig } from 'systems';
 import { reflect } from 'utils';
-import debug from 'utils/debug';
+import * as debug from 'utils/debug';
 
 const ENABLED = sysconfig.GLOBAL_ENABLE_HOC;
 const ENABLE_PROFILING = true;

@@ -9,6 +9,9 @@ import { system, plugins } from 'core';
 const { System } = system;
 const theme = require(`themes/${System}/theme-${System}`).default;
 
+// import global css themes，:global css only
+require(`themes/theme-${theme.themeName}.less`);
+
 // init something.
 plugins.initPlugins(theme.plugins);
 

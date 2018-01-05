@@ -14,8 +14,6 @@ require('./bin/generate-system');
 // TODO debug mode  /  production mode
 const production = (process.env.NODE_ENV === 'production');
 
-console.log('production:', production ? false : 'cheap-source-map',);
-
 // noinspection WebpackConfigHighlighting
 module.exports = {
 
@@ -29,7 +27,7 @@ module.exports = {
   outputPath: path.resolve(__dirname, `./dist`),
   // outputPath: path.resolve(__dirname, `./dist/${version}`),
 
-  devtool: false,
+  devtool: production ? 'cheap-module-source-map' : 'cheap-module-eval-source-map',
 
   html: {
     template: "./src/index.ejs",
@@ -72,7 +70,7 @@ module.exports = {
 
   env: {
     development: {
-      devtool: 'cheap-source-map',
+      // devtool: 'cheap-module-eval-source-map',
       extraBabelPlugins: ["dva-hmr"]
     }
   },

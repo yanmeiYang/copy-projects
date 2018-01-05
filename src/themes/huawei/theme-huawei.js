@@ -6,7 +6,7 @@ import { Link } from 'dva/router';
 import classnames from 'classnames';
 import hole from 'core/hole';
 import { FormattedMessage as FM } from 'react-intl';
-import { IndexInfoBox, PersonLabel, IndexCenterZone } from '../../systems/huawei/components';
+import { PersonLabel, IndexCenterZone } from 'systems/huawei/components';
 import styles from './theme-huawei.less';
 
 export default {

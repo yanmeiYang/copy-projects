@@ -5,4 +5,4 @@ import IndexInfoBox from './index-info-box';
 import PersonLabel from './person-label';
 import IndexCenterZone from './IndexCenterZone';
 
-export default { IndexInfoBox, PersonLabel, IndexCenterZone };
+export { IndexInfoBox, PersonLabel, IndexCenterZone };

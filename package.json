@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "dva": "^2.1.0",
-    "dva-no-router": "^1.0.3"
+    "dva-no-router": "^1.0.3",
+    "umi-router": "^0.1.2"
   }
 }

@@ -7,13 +7,14 @@ module.exports = {
   webpack: {
     alias: {
       pages: `${__dirname}/pages`,
+      components: `${__dirname}/components`,
 
       // TODO umi 需要重新来
       public: `${__dirname}/public`,
       system: `${__dirname}/src/system`,
       src: `${__dirname}/src`,
       core: `${__dirname}/src/core`,
-      components: `${__dirname}/src/components`,
+
       routes: `${__dirname}/src/routes`, // CSR ReactRouter routes.
       models: `${__dirname}/src/models`,
       services: `${__dirname}/src/services`,

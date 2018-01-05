@@ -11,7 +11,7 @@
 const AvailableSystems = [
   'aminer',
   'demo',
-  'DataAnnotation',
+  'data_annotation',
   'alibaba',
   'acmfellow',
   'bole',
@@ -27,6 +27,7 @@ const AvailableSystems = [
   'tencent',
   'thurcb',
   'yocsef',
+  'reco',
 ];
 
 let System = '';

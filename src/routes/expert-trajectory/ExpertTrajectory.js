@@ -2,15 +2,18 @@ import React from 'react';
 import { connect } from 'dva';
 //import { Button, Modal, Tabs, Table } from 'antd';
 import { RequireRes } from 'hoc';
+import queryString from 'query-string';
 //import { FormattedMessage as FM } from 'react-intl';
 import styles from './ExpertTrajectory.less';
+import { withRouter } from 'dva/router';
 import { showChart } from './utils/echarts-utils';
-import { loadEchartsWithBMap } from './utils/func-utils';
+import { loadEchartsWithBMap, showCurrentLine, addMarkers } from './utils/func-utils';
 
 let myChart; // used for loadScript
 let trainterval;
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
+@withRouter
 class ExpertTrajectory extends React.Component {
   constructor(props) {
     super(props);
@@ -99,18 +102,24 @@ class ExpertTrajectory extends React.Component {
     }
     trainterval = setInterval(() => {
       if (length < data.step.length) {
-        myChart.setOption({ title: { text: `学者 ${this.props.person.name_zh} 迁徙图` } });
+        myChart.setOption({ title: { text: `Trajectory of Scholar ${this.props.person.name}` } });
+        const currentline = showCurrentLine(myChart.getOption().series[2]);
+        currentline.data = data.lineData.slice(length, (length + 1));
         myChart.setOption({ series: [{}, { data: data.pointData.slice(0, data.step[length]) },
-          { data: data.lineData.slice(0, (length + 1)) }] });
+          { data: data.lineData.slice(0, length) }, currentline] });
         length += 1;
+        addMarkers(myChart, data, length);
       } else {
+        //length = 0;
         clearInterval(trainterval);
       }
     }, 3000);
   };
 
   render() {
-    let wid = document.body.clientHeight - 210;
+    const { location } = this.props;
+    const { flag } = queryString.parse(location.search);
+    let wid = flag ? document.body.clientHeight - 80 : document.body.clientHeight;
     const { centerZoom } = this.props;
     if (centerZoom) {
       wid = 500;

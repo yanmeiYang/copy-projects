@@ -1,72 +1,75 @@
-.ExpertHeatmapPage {
-  .header {
-    display: flex;
-    flex-direction: row;
-    -webkit-box-pack: justify;
-    justify-content: space-between;
-    margin: -15px 0px 0px 0px;
+.header {
+  display: flex;
+  flex-direction: row;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  margin: -15px 0px 0px 0px;
 
-    .domain {
-      margin: 5px 0px 5px 0px;
-    }
-
-    .setting {
-      display: -webkit-box;
-      display: flex;
-      -webkit-box-align: baseline;
-      align-items: baseline;
-      align-self: center;
-      -webkit-box-pack: justify;
-      justify-content: space-between;
-
-      .yourSkin {
-        margin: 5px 0px 10px 120px;
-        :global {
-          a.ant-dropdown-link{
-            padding: 5px 10px;
-            font-size: 14px;
-            font-family: inherit;
-            border: solid 1px #3e9bc9;
-            font-weight: 500;
-            text-align: center;
-            line-height: 1.15;
-            height: 28px;
-            display: inline-block;
-            touch-action: manipulation;
-            cursor: pointer;
-            white-space: nowrap;
-            user-select: none;
-            transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-            position: relative;
-            color: #1d2129;
-            background-color: #fff;
-          }
-        }
-
-      }
-
-      .statics {
-        margin: 5px 0px 5px 0px;
-      }
-
-      .options {
-        margin: 10px 40px 10px 0px;
-        .ant-checkbox-group {
-          float: left;
-        }
-        .group {
-          float: left;
-        }
-        .checkAll {
-          float: left;
-          margin-right: 30px;
-        }
-      }
-
-    }
+  .domain {
+    margin: 5px 0px 5px 0px;
   }
 
+  .setting {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-align: baseline;
+    align-items: baseline;
+    align-self: center;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    float: left;
+
+    .yourSkin {
+      margin: 5px 0px 10px 120px;
+      float: left;
+      :global {
+        a.ant-dropdown-link{
+          padding: 5px 10px;
+          font-size: 14px;
+          font-family: inherit;
+          border: solid 1px #3e9bc9;
+          font-weight: 500;
+          text-align: center;
+          line-height: 1.15;
+          height: 28px;
+          display: inline-block;
+          touch-action: manipulation;
+          cursor: pointer;
+          white-space: nowrap;
+          user-select: none;
+          transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+          position: relative;
+          color: #1d2129;
+          background-color: #fff;
+        }
+      }
+
+    }
+
+    .statics {
+      margin: 5px 0px 5px 0px;
+      float: left;
+    }
+
+    .options {
+      margin: 10px 40px 10px 0px;
+      float: left;
+      .ant-checkbox-group {
+        float: left;
+      }
+      .group {
+        float: left;
+      }
+      .checkAll {
+        float: left;
+        margin-right: 30px;
+      }
+    }
+
+  }
 }
+
+
 
 
 .page {
@@ -116,7 +119,7 @@
       padding: 0px;
       background: #fff;
       margin: 0px;
-      minHeight: 670px;
+      //minHeight: 670px;
     }
   }
 }

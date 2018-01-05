@@ -7,10 +7,12 @@ export default {
 
   namespace: 'crossHeat',
   state: {
-    candidateOne: null,
-    candidateTwo: null,
+    sourceOne: 'wiki',
+    sourceTwo: 'wiki',
     queryOne: null,
     queryTwo: null,
+    candidateOne: null,
+    candidateTwo: null,
     mostScholars: null,
     decareID: null,
     crossTree: null,
@@ -19,6 +21,7 @@ export default {
     domainAllInfo: null,
     staticInfo: null,
     domainMinInfo: null,
+    history: null,
     pageInfo: null,
     experts: [],
     pubs: [],
@@ -32,10 +35,19 @@ export default {
   },
 
   effects: {
-    *getDiscipline({ payload }, { call, put }) {
-      const { id, area, k, depth } = payload;
-      const data = yield call(crossHeatService.getDiscipline, area, k, depth);
-      yield put({ type: 'getDisciplineSuccess', payload: { data, id } });
+    *getDiscipline({ payload }, { call, put, all }) {
+      const { wiki, id, source, query } = payload;
+      const data = yield all(wiki.map((item) => {
+        return call(crossHeatService.getDiscipline, item);
+      }));
+      yield put({ type: 'getDisciplineSuccess', payload: { data, id, source, query } });
+    },
+    *getACMDiscipline({ payload }, { call, put, all }) {
+      const { acm, id, query, source } = payload;
+      const data = yield all(acm.map((item) => {
+        return call(crossHeatService.getACMDiscipline, item);
+      }));
+      yield put({ type: 'getACMDisciplineSuccess', payload: { data, id, query, source } });
     },
     *getCrossPredict({ payload }, { call, put }) {
       const data = yield call(crossHeatService.getCrossPredict, payload);
@@ -123,7 +135,6 @@ export default {
 
   reducers: {
     getPageInfoSuccess(state, { payload: { data } }) {
-      console.log(data);
       return { ...state, pageInfo: data.data };
     },
     getPubInfoSuccess(state, { payload: { pubInfo } }) {
@@ -167,7 +178,9 @@ export default {
       if (method === 'predict') {
         return { ...state, predict: data.data };
       }
-
+      if (method === 'meta') {
+        return { ...state, history: data.data };
+      }
       return { ...state };
     },
     addCrossFieldSuccess(state, { payload: { data } }) {
@@ -193,24 +206,43 @@ export default {
         return { ...state };
       }
     },
-    getDisciplineSuccess(state, { payload: { data, id } }) {
+    getDisciplineSuccess(state, { payload: { data, id, source, query } }) {
+      //  将数据打平
+      const nodeList = getNodeChildren(data[0].data, []);
+      const candidate = { name: query, children: getNodeChildren(data[1].data, []) };
+      const area = { name: query, children: nodeList.slice(1, 21) };
       if (id === 'queryOne') {
-        return { ...state, queryOne: data.data };
+        return { ...state, queryOne: area, candidateOne: candidate, sourceOne: source };
       }
       if (id === 'queryTwo') {
-        return { ...state, queryTwo: data.data };
+        return { ...state, queryTwo: area, candidateTwo: candidate, sourceTwo: source };
       }
-      if (id === 'candidateOne') {
-        return { ...state, candidateOne: data.data };
+    },
+
+    getACMDisciplineSuccess(state, { payload: { data, id, query, source } }) {
+      const tempList = [];
+      if (id === 'queryOne') {
+        data[1].data.ref.map((item) => {
+          tempList.push({ name: item.name, children: [] });
+          return true;
+        })
+        const queryOne = { name: query, children: tempList.slice(0, 20) };
+        const candidateOne = { name: query, children: tempList.slice(20, 40) };
+        return { ...state, queryOne, candidateOne, sourceOne: source };
       }
-      if (id === 'candidateTwo') {
-        return { ...state, candidateTwo: data.data };
+      if (id === 'queryTwo') {
+        data[1].data.ref.map((item) => {
+          tempList.push({ name: item.name, children: [] });
+          return true;
+        })
+        const queryTwo = { name: query, children: tempList.slice(0, 20) };
+        const candidateTwo = { name: query, children: tempList.slice(20, 40) };
+        return { ...state, queryTwo, candidateTwo, sourceTwo: source };
       }
     },
     createDisciplineSuccess(state, { payload: { data } }) {
       return { ...state, decareID: data.data._id };
     },
-
     getDomainInfoSuccess(state, { payload: { data } }) {
       return { ...state, crossInfo: data.data, experts: null, pubs: [] };
     },
@@ -234,7 +266,14 @@ export default {
       });
       return { ...state, autoDomainInfo: autoList };
     },
-
-
   },
 };
+
+function getNodeChildren(tree, children) {
+  children.push({ name: tree.name, children: [] });
+  if (tree.children && tree.children.length > 0) {
+    tree.children.map(item => getNodeChildren(item, children));
+  }
+  return children;
+}
+

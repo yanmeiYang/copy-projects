@@ -62,9 +62,8 @@ export default {
 
   'com.search.searchAssistant.hintInfo.expansion': '我们将您搜索的词扩展为：',
   'com.search.searchAssistant.hintInfo.translation': '并且同时为您搜索：',
-  'com.search.searchAssistant.hintInfo.KG': '知识图谱将其扩展为：',
-  'com.search.searchAssistant.hintInfo.KG.kgHypernym': '上位词：蓝色',
-  'com.search.searchAssistant.hintInfo.KG.kgHyponym': '下位词：黑色',
+  'com.search.searchAssistant.hintInfo.hypernymKG': '知识图谱将上位词扩展为：',
+  'com.search.searchAssistant.hintInfo.hyponymKG': '知识图谱将下位词扩展为：',
   'com.search.searchAssistant.hintInfo.KGButton': '使用知识图谱进行搜索',
   'com.search.searchAssistant.hintInfo.loading': '加载中...',
 
@@ -95,7 +94,7 @@ export default {
   'com.expertMap.headerLine.label.level': '层级：',
   'com.expertMap.headerLine.label.tipMessage': '没有键入正确的关键词、选择领域或者系统没有搜索到结果！',
   'com.expertMap.headerLine.label.statistic': '统计分析报告',
-  'com.expertMap.headerLine.label.play': '播放迁徙工程',
+  'com.expertMap.headerLine.label.play': '播放迁徙路线',
   'com.expertMap.headerLine.label.download': '导出Excel表',
   'com.expertMap.headerLine.label.ok': '确定',
   'com.expertMap.headerLine.label.close': '关闭',

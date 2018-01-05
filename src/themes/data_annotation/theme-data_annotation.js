@@ -8,7 +8,7 @@ import { sysconfig } from 'systems';
 import hole from 'core/hole';
 import { IndexHotLinks } from 'components/widgets';
 import { ExportExperts } from 'components/person';
-import styles from './theme-DataAnnotation.less';
+import styles from './theme-data_annotation.less';
 
 export default {
   themeName: 'common-white',
@@ -26,9 +26,9 @@ export default {
   ],
 
   infoZone: [
-    <Link to={`/eb/${sysconfig.ExpertBase}/-/0/20`}
+    <Link to="/toolscompare"
           className={classnames(styles.header_info)} key="0">
-      All ACM Fellows
+      Tool Compare
     </Link>,
   ],
 

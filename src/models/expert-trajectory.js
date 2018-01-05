@@ -110,6 +110,12 @@ export default {
           let previousD = [];
           for (const d of data.data.trajectories[key]) {
             const [cYear, cPlaceId] = d; //年份和所在位置id
+            if (!(cPlaceId in addresses)) {
+              console.log('后台又出错了');
+              console.log(addresses[cPlaceId]);
+              console.log(typeof (addresses[cPlaceId]))
+              continue;
+            }
             const cCityId = addresses[cPlaceId].city_id;
             const cCityName = cities[cCityId].name;
             const cLat = addresses[cPlaceId].geo.lat.toFixed(2); //保留两位小数
@@ -119,6 +125,12 @@ export default {
              */
             if (previousD.length !== 0) { //第一次的时候什么都不做，否则更新上一个点，push一条线
               const [pYear, pPlaceId] = previousD; //年份和所在位置id
+              if (!(pPlaceId in addresses)) {
+                console.log('后台又出错了');
+                console.log(addresses[pPlaceId]);
+                console.log(typeof (addresses[pPlaceId]))
+                continue;
+              }
               const pCityId = addresses[pPlaceId].city_id;
               const pCityName = cities[pCityId].name;
               const pLat = addresses[pPlaceId].geo.lat.toFixed(2); //保留两位小数
@@ -189,6 +201,12 @@ export default {
            * 最后一个点和当前的进行比较
            */
           const [lastYear, lastPlaceId] = previousD; //年份和所在位置id
+          if (!(lastPlaceId in addresses)) {
+            console.log('后台又出错了');
+            console.log(addresses[lastPlaceId]);
+            console.log(typeof (addresses[lastPlaceId]))
+            continue;
+          }
           const lastCityId = addresses[lastPlaceId].city_id;
           const lastCityName = cities[lastCityId].name;
           const lastLat = addresses[lastPlaceId].geo.lat.toFixed(2); //保留两位小数
@@ -236,11 +254,13 @@ export default {
       const yearPointData = [];
       const yearLineData = [];
       const yearHeatData = [];
+      let staData = {};
+      const personTrajData = {};
 
       const yearCityIn = []; //每一年中在哪个城市
       let startEnd = []; //存放时间的开始和结束
-      const cities = [];
-      const addresses = [];
+      const cities = []; //城市信息，存放原始数据address
+      const addresses = []; //地址信息，为当前作者所在的具体地址，如：清华大学
 
 
       for (const c of data.data.cities) {
@@ -292,7 +312,7 @@ export default {
               if (!(cPlaceId in addresses)) {
                 console.log('后台又出错了');
                 console.log(addresses[cPlaceId]);
-                console.log(typeof (addresses[cPlaceId]))
+                console.log(typeof (addresses[cPlaceId]));
                 continue;
               }
               const pCityId = addresses[pPlaceId].city_id;
@@ -334,6 +354,10 @@ export default {
                       normal: { curveness },
                     } };
                     yearLineData[y].push(line);
+                    if (!(key in personTrajData)) {
+                      personTrajData[key] = [];
+                    }
+                    personTrajData[key].push({ year: cYear, pCityId, cCityId, pPlaceId, cPlaceId });
                   }
                 }
                 previousD = d; //与上一个点的位置不一样的时候，变成新的前一个点
@@ -368,7 +392,9 @@ export default {
         }
       }
       startEnd = [start, end];
-      const heatData = { yearLineData, yearPointData, yearHeatData, startEnd, personsInfo };
+      staData = { personTrajData, cities, addresses };
+      const heatData = { yearLineData, yearPointData, yearHeatData,
+        startEnd, personsInfo, staData };
       return { ...state, heatData, loading: false };
     },
 

@@ -3,15 +3,16 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { InputNumber, Rate, Button, Row, Col, Table, Modal } from 'antd';
+import { InputNumber, Rate, Button, Row, Col, Table, Modal, Spin } from 'antd';
 import { Link, routerRedux } from 'dva/router';
-import ExpertRatingModalContent from './expertRatingModalContent';
 import * as seminarService from 'services/seminar';
-import * as profileUtils from '../../../utils/profile-utils';
+import { Spinner } from 'components';
 import * as strings from 'utils/strings';
 import { sysconfig } from 'systems';
-import styles from './index.less';
 import { Layout } from 'routes';
+import * as profileUtils from '../../../utils/profile-utils';
+import ExpertRatingModalContent from './expertRatingModalContent';
+import styles from './index.less';
 
 const { Column } = Table;
 
@@ -42,7 +43,7 @@ class ExpertRatingPage extends React.Component {
         score,
       });
     }
-  }
+  };
 
   handleOk = (e) => {
     this.setState({
@@ -83,6 +84,7 @@ class ExpertRatingPage extends React.Component {
   render() {
     const { summaryById, expertRating } = this.props.seminar;
     const { roles } = this.props;
+    const loading = this.props.loading.effects['seminar/getSeminarByID'];
     // 评分数据处理
     const expertData = [];
 
@@ -113,7 +115,8 @@ class ExpertRatingPage extends React.Component {
 
     return (
       <Layout className={styles.detailSeminar} onSearch={this.onSearchBarSearch}>
-        <div className={styles.thumbnail}>
+        <Spin spinning={loading}>
+          <div className={styles.thumbnail}>
           <div className={styles.caption}>
 
             <h2>
@@ -149,7 +152,7 @@ class ExpertRatingPage extends React.Component {
               {summaryById.location &&
               <div>
                 <strong>活动地点：</strong>
-                <span>{summaryById.location.address}</span>
+                <span>{summaryById.location.city} {summaryById.location.address}</span>
               </div>}
               {summaryById.time &&
               <div>
@@ -279,10 +282,11 @@ class ExpertRatingPage extends React.Component {
 
           </div>
         </div>
+        </Spin>
       </Layout>
     );
   }
 }
 
-export default connect(({ seminar, app }) => ({ seminar, roles: app.roles }))(ExpertRatingPage);
+export default connect(({ seminar, app, loading }) => ({ seminar, roles: app.roles, loading }))(ExpertRatingPage);
 

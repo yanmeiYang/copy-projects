@@ -255,8 +255,8 @@ class RegistrationForm extends React.Component {
     if (this.state.editStatus && currentSeminar.title) {
       const data = {
         category: currentSeminar.category,
-        organizer: currentSeminar.organizer[0].split(OrgJoiner),
-        co_org: currentSeminar.organizer.slice(1, currentSeminar.organizer.length),
+        organizer: currentSeminar.organizer,
+        co_org: currentSeminar.co_org,
         title: currentSeminar.title,
         city: currentSeminar.location.city || '',
         address: currentSeminar.location.address || '',
@@ -534,41 +534,7 @@ class RegistrationForm extends React.Component {
                 <Input placeholder="请输入报名的链接" autoComplete="off" />,
               )}
             </FormItem>
-            {/* <FormItem */}
-            {/* {...formItemLayout} */}
-            {/* label="贡献类别" */}
-            {/* > */}
-            {/* {getFieldDecorator('state', {})( */}
-            {/* <Select */}
-            {/* showSearch */}
-            {/* style={{ width: 200 }} */}
-            {/* placeholder="请选择贡献类别" */}
-            {/* optionFilterProp="children" */}
-            {/* onChange={this.activityTypeChange} */}
-            {/* filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0} */}
-            {/* > */}
-            {/* { */}
-            {/* Object.keys(activity_type_options).map((item) => { */}
-            {/* return (<Option key={item} */}
-            {/* value={item + '#' + activity_type_options[item]}>{item}</Option>) */}
-            {/* }) */}
-            {/* } */}
-            {/* </Select> */}
-            {/* )} */}
-            {/* </FormItem> */}
           </Col>
-
-          {/* seminar */}
-          {/* {selectedType === '0' ? */}
-          {/* <Col className={styles.thumbnail} md={24} lg={{ span: 16, offset: 4 }}> */}
-          {/* <div> */}
-          {/* <FormItem> */}
-          {/* <Col><label>专家信息</label></Col> */}
-          {/* <ExpertBasicInformation integral={integral} callbackParent={this.onExpertInfoChanged}/> */}
-          {/* </FormItem> */}
-          {/* </div> */}
-          {/* </Col> : ''} */}
-          {/* workshop */}
 
           <Col className={styles.thumbnail}>
             {talks && talks.length > 0 && <div>

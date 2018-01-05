@@ -3,8 +3,10 @@
  */
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { connect } from 'dva';
 import { Modal, Button, Input, Form, Col, Tag, Icon, Radio, Spin, Select, Upload } from 'antd';
 import { Link } from 'dva/router';
+import classnames from 'classnames';
 import { getLocalToken, saveLocalToken } from 'utils/auth';
 import CanlendarInForm from '../calendar';
 import defaultImg from '../../../assets/people/default.jpg';
@@ -87,7 +89,7 @@ class AddExpertModal extends React.Component {
     this.speakerInformation.bio = selectedExpert.bio;
     this.speakerInformation.phone = selectedExpert.phone;
     this.speakerInformation.email = selectedExpert.email;
-    this.speakerInformation.role = [selectedExpert.role];
+    this.speakerInformation.role = typeof selectedExpert.role === 'string' ? [selectedExpert.role] : selectedExpert.role;
     ReactDOM.findDOMNode(this.refs.speakerBio).value = selectedExpert.bio;
     ReactDOM.findDOMNode(this.refs.speakerIphone).value = selectedExpert.phone;
     ReactDOM.findDOMNode(this.refs.speakerEmail).value = selectedExpert.email;
@@ -124,6 +126,10 @@ class AddExpertModal extends React.Component {
 
   setModalVisible() {
     this.setState({ modalVisible: false });
+    this.speakerInformation = {
+      name: '', position: '', affiliation: '', aid: '', img: '', bio: '', gender: '', email: '',
+      phone: '', stype: {}, role: 'talker',
+    };
     this.props.callbackParentSetAddNewTalk();
   }
 
@@ -176,15 +182,14 @@ class AddExpertModal extends React.Component {
   // 修改当前专家信息
   saveExpertInfo = (type, e) => {
     this.speakerInformation[type] = e.target.value;
-    this.setState({
-      speakerInfo: this.speakerInformation,
-    });
+    this.setState({ speakerInfo: this.speakerInformation });
   };
   setTalkAbstrack = (e) => {
     this.setState({ talkAbstract: e.target.value });
   };
   saveTalkData = () => {
     const state = this.state;
+    const { getFieldValue, setFieldsValue } = this.props.parentProps.form;
     const talk = {
       title: '',
       speaker: {
@@ -212,7 +217,13 @@ class AddExpertModal extends React.Component {
     if (state.talkStartValue || state.talkEndValue) {
       talk.time = {};
     }
-    talk.speaker.role = state.speakerInfo.role || [];
+    if (talk.speaker.stype && (!talk.speaker.stype.label || talk.speaker.stype.label === '')) {
+      talk.speaker.stype = {
+        label: getFieldValue('contrib').split('#')[0],
+        score: parseInt(getFieldValue('contrib').split('#')[1]),
+      };
+    }
+    talk.speaker.role = typeof getFieldValue('role') === 'string' ? [getFieldValue('role')] : [];
     if (state.talkStartValue) {
       talk.time.from = typeof state.talkStartValue === 'string' ? state.talkStartValue : state.talkStartValue.toJSON();
     }
@@ -223,6 +234,11 @@ class AddExpertModal extends React.Component {
     talk.abstract = ReactDOM.findDOMNode(this.refs.talkAbstract).value;
     this.props.callbackParent(talk, state.isEdit);
     this.setState({ modalVisible: false });
+    setFieldsValue({ role: 'talker' });
+    this.speakerInformation = {
+      name: '', position: '', affiliation: '', aid: '', img: '', bio: '', gender: '', email: '',
+      phone: '', stype: {}, role: 'talker',
+    };
   };
 
   suggestExpert(type) {
@@ -240,9 +256,9 @@ class AddExpertModal extends React.Component {
     } else {
       this.props.parentProps.dispatch({ type: 'seminar/getSpeakerSuggest', payload: data });
     }
-    if (this.props.editTheTalk.speaker !== undefined) {
-      this.props.editTheTalk.speaker = {};
-    }
+    // if (this.props.editTheTalk.speaker !== undefined) {
+    //   this.props.editTheTalk.speaker = {};
+    // }
     this.setState({
       name: this.refs.name.input.value,
       position: this.refs.pos.input.value,
@@ -255,27 +271,23 @@ class AddExpertModal extends React.Component {
   activityTypeChange = (value) => {
     this.speakerInformation.stype.label = value.split('#')[0];
     this.speakerInformation.stype.score = parseInt(value.split('#')[1]);
+    // this.speakerInformation.role = this.props.parentProps.form.getFieldValue('role');
   };
   expertRoleChange = (value) => {
     this.speakerInformation.role = value;
+    const setFormFieldsVale = this.props.parentProps.form;
+    setFormFieldsVale.setFieldsValue({ contrib: '', role: value });
   };
   jumpToStep2 = () => {
-    this.setStep('step2', true);
-    // this.props.parentProps.form.validateFieldsAndScroll((err, values) => {
-    //   if (!err) {
-    //     this.setStep('step2', true);
-    //   }
-    // });
+    this.props.parentProps.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        this.setStep('step2', true);
+      }
+    });
   };
   cancelCurrentPerson = () => {
     this.props.parentProps.seminar.speakerSuggests = [];
     this.setState({ step2: true, step3: false, isSearched: false });
-    // this.refs.speakerName.refs.input.value = '';
-    // this.refs.speakerAff.refs.input.value = '';
-    // this.refs.speakerPos.refs.input.value = '';
-    // this.refs.speakerAid.value = '';
-    // this.refs.speakerImg.src = defaultImg;
-    // this.refs.speakerBio.refs.input.value = '';
   };
 
   render() {
@@ -308,7 +320,9 @@ class AddExpertModal extends React.Component {
     const { modalVisible, step2, step3, isEdit, speakerInfo, isSearched } = this.state;
     const { parentProps, editTheTalk } = this.props;
     const { speakerSuggests, loading, contribution_type } = parentProps.seminar;
-    const { getFieldDecorator } = parentProps.form;
+    const { getFieldDecorator, getFieldValue } = parentProps.form;
+    const isTalker = getFieldValue('role') || 'talker';
+    const getPersonLoading = this.props.loading.effects['seminar/saveSuggestExpert'];
     return (
       <Modal
         title="添加专家"
@@ -335,8 +349,8 @@ class AddExpertModal extends React.Component {
                   <Option value="talker">特邀嘉宾(包括报告人/评审人/评奖人等)</Option>
                 </Select>)}
             </FormItem>
-            {this.speakerInformation.role !== 'president' &&
-            <div>
+            <div
+              className={classnames({ [styles.isShowActivityDesc]: isTalker === 'president' })}>
               <FormItem
                 {...formItemLayout}
                 label="演讲标题"
@@ -362,7 +376,7 @@ class AddExpertModal extends React.Component {
                 <Input type="textarea" rows={4} placeholder="请输入演讲摘要" ref="talkAbstract"
                        onBlur={this.setTalkAbstrack} />
               </FormItem>
-            </div>}
+            </div>
             {contribution_type.data && <FormItem
               {...formItemLayout}
               label="贡献类别"
@@ -475,8 +489,9 @@ class AddExpertModal extends React.Component {
                                   return '';
                                 }
                                 return (
-                                  <Tag key={`${tag.t}_${index}`}
-                                       className={styles.tag}>{tag.t}</Tag>
+                                  <Tag key={`${tag.t}_${index}`} className={styles.tag}>
+                                    {tag.t}
+                                  </Tag>
                                 );
                               })}
                             </div>
@@ -598,15 +613,15 @@ class AddExpertModal extends React.Component {
               <label className="ant-col-3">专家简介: </label>
               <div className="ant-col-21">
                 <Input.TextArea rows={4} size="large" placeholder="专家简介" ref="speakerBio"
-                                onBlur={this.saveExpertInfo.bind(this, 'bio')}/>
+                                onBlur={this.saveExpertInfo.bind(this, 'bio')} />
                 {/*<Input type="textarea" rows={4} size="large" placeholder="专家简介" ref="speakerBio"*/}
-                       {/*onBlur={this.saveExpertInfo.bind(this, 'bio')}/>*/}
+                {/*onBlur={this.saveExpertInfo.bind(this, 'bio')}/>*/}
               </div>
             </Col>
 
             <Col span={24} style={{ marginTop: 25 }}>
               <Button key="submit" type="primary" style={{ float: 'right' }}
-                      onClick={this.saveTalkData}>
+                      loading={getPersonLoading} onClick={this.saveTalkData.bind()}>
                 提交
               </Button>
               <Button type="default" onClick={this.cancelCurrentPerson}>
@@ -620,4 +635,4 @@ class AddExpertModal extends React.Component {
   }
 }
 
-export default (AddExpertModal);
+export default connect(({ loading }) => ({ loading }))(AddExpertModal);

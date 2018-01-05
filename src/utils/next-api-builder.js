@@ -139,8 +139,20 @@ const F = {
   Tags: { systag: 'systag' },
 
   // query related
-  queries: { search: 'search' }, // query actions.
-  alter: {},
+  queries: { search: 'search',
+    RevieweRreport: 'RevieweRreport',
+    ReviewerQuery: 'ReviewerQuery',
+    ReviewerDownloadCSV: 'ReviewerDownloadCSV',
+  }, // query actions.
+  alter: {
+    alter: 'alter',
+    ReviewerProject: 'ReviewerProject',
+    ReviewerClickPersons: 'ReviewerClickPersons',
+    ReviewerSendTestMail: 'ReviewerSendTestMail',
+    ReviewerConfirmTestMail: 'ReviewerConfirmTestMail',
+    ReviewerSendMail: 'ReviewerSendMail',
+    ReviewerStartCrawl: 'ReviewerStartCrawl',
+  },
   notify: { feedback: 'feedback' },
 
   searchType: { all: 'all', allb: 'allb' },

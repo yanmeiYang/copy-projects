@@ -1,22 +1,15 @@
 import { loadECharts, loadBMap } from 'utils/requirejs';
+import { setBMap } from './func-utils';
 
-const setBMap = (myChart) => {
-  const map = myChart.getModel().getComponent('bmap').getBMap();
-  const navigationControl = new window.BMap.NavigationControl({ // 添加带有定位的导航控件
-    anchor: 'BMAP_ANCHOR_TOP_LEFT', // 靠左上角位置
-    type: 'BMAP_NAVIGATION_CONTROL_LARGE', // LARGE类型
-    enableGeolocation: false, // 启用显示定位
-  });
-  map.addControl(navigationControl);
-};
 
+const planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
 const showChart = (myChart, type, skinType, showType) => { // 功能起始函数
-  let [showLabel, dotType] = [true, 'effectScatter'];
+  let [showLabel, dotType, showEffect] = [true, 'effectScatter', true]; //是否显示place名字，点的类型，是否显示特效
   if (typeof (showType) !== 'undefined') {
     if (showType === 'heatmap') {
-      [showLabel, dotType] = [false, 'scatter'];
+      [showLabel, dotType, showEffect] = [false, 'scatter', true];
     } else if (showType === 'trajectory') {
-      [showLabel, dotType] = [true, 'effectScatter'];
+      [showLabel, dotType, showEffect] = [false, 'effectScatter', false];
     }
   }
   const skin = parseInt(skinType, 10);
@@ -41,8 +34,8 @@ const showChart = (myChart, type, skinType, showType) => { // 功能起始函数
   const option = {
     backgroundColor: color,
     title: {
-      text: '学者迁移图',
-      subtext: 'data from aminer',
+      text: 'Scholar\'s Trajectory',
+      subtext: 'from aminer',
       sublink: 'http://aminer.org/',
       left: 'center',
       textStyle: {
@@ -107,6 +100,7 @@ const showChart = (myChart, type, skinType, showType) => { // 功能起始函数
       coordinateSystem: 'bmap',
       data: [],
       pointSize: 5,
+      zlevel: 4,
       blurSize: 6,
       blendMode: detailedStyle.blendHeatStlye[skin],
     }, {
@@ -114,7 +108,7 @@ const showChart = (myChart, type, skinType, showType) => { // 功能起始函数
       type: dotType, //effectScatter
       coordinateSystem: type,
       hoverAnimation: true,
-      //zlevel: 5,
+      zlevel: 5,
       rippleEffect: {
         period: 4,
         scale: 2,
@@ -149,30 +143,30 @@ const showChart = (myChart, type, skinType, showType) => { // 功能起始函数
       blendMode: detailedStyle.blendItemStlye[skin],
     }, {
       type: 'lines',
-      animation: false,
-      zlevel: 3,
+      //animation: false,
+      zlevel: 10000,
       coordinateSystem: type,
       //symbol:'arrow',
       effect: {
-        show: true,
+        show: showEffect,
         period: 3,
-        trailLength: 0.7,
+        trailLength: 0,
         color: detailedStyle.lineNormalStyle[skin],
-        symbol: 'arrow',
-        symbolSize: 5,
-        animation: true,
+        symbol: planePath,
+        symbolSize: 12,
+        animation: showEffect,
       },
       lineStyle: {
         normal: {
           color: detailedStyle.lineNormalStyle[skin],
-          width: 0.1, //线的宽度0.8
+          width: 1, //线的宽度0.8
           opacity: 1,
           curveness: 0.2,
         },
         emphasis: {
           color: detailedStyle.lineEmphasisStyle[skin],
-          shadowColor: 'rgba(0, 0, 0, 0.5)',
-          shadowBlur: 7,
+          //shadowColor: 'rgba(0, 0, 0, 0.5)',
+          //shadowBlur: 7,
         },
       },
       data: [],
@@ -185,40 +179,35 @@ const showChart = (myChart, type, skinType, showType) => { // 功能起始函数
   }
 };
 
-const showTrajectoryChart = (myChart, type, skinType, showType) => { // 功能起始函数
-
-};
-
-const showHeatmapChart = (myChart, type, skinType, showType) => { // 功能起始函数
-
-};
-
 const visual = ['green', 'yellow', 'yellow', 'red'];
 const detailedStyle = {
   textColor: ['#fff', '#fff', '#fff', '#fff', '#fff', '#fff', '#272727'],
   textShadowColor: ['', '', '', '', '#ffab40', '', '#6a6a6a'],
   subTextShadowColor: ['', '', '', '', 'white', '', ''],
   subTextColor: ['', '', '', 'black', '#ff5f00', '#fff', ''],
-  waterStyle: ['', '#044161', '#404a59', '#80cbc4', '#b28759', '#4e6c8d', '#d1d1d1'],
+  waterStyle: ['', '#042e4c', '#495463', '#80cbc4', '#b28759', '#4e6c8d', '#d1d1d1'],
   landStyle: ['', '#004981', '#323c48', '#009688', '#a0522f', '#aedaf5', '#f3f3f3'],
-  boundaryStyle: ['', '#064f85', '#8b8787', '#004d40', '#fb8c00', '#ab485c', '#fefefe'],
+  boundaryStyle: ['', '#064f85', '#3F5991', '#2a846f', '#e97b00', '#ab485c', '#9e9e9e'],
   highwayStyle: ['', '#004981', '', '#004d40', '#fb8c00', '#ab485c', '#fdfdfd'],
   highwaylightness: ['', '1', '-42', '', '', '', ''],
   highwayStyle2: ['', '#005b96', '', '#004d40', '#fb8c00', '#ab485c', '#fdfdfd'],
   arterialStyle: ['', '#004981', '', '#004d40', '#fb8c00', '#ab485c', '#fefefe'],
   arterialStyle2: ['', '#00508b', '', '#004d40', '#fb8c00', '#ab485c', '#fefefe'],
   greenStyle: ['', '#056197', '#1b1b1b', '#004d40', '#fb8c00', '#ab485c', '#fefefe'],
-  boundaryStyle2: ['', '#029fd4', '#8b8787', '#004d40', '#fb8c00', '#ab485c', '#fefefe'],
+  boundaryStyle2: ['', '#029fd4', '#3F5991', '#004d40', '#fb8c00', '#ab485c', '#fefefe'],
   buildingStyle: ['', '#1a5787', '#2b2b2b', '#004d40', '#fb8c00', '#ab485c', '#d1d1d1'],
-  lineNormalStyle: ['#f78e3d', '#3d7ef7', '#e4ca61', '#00846d', '#77381e', '#aedaf5', '#7d28f5'],
-  lineEmphasisStyle: ['#f77325', '3d7ef7', '#e4ca61', '#00846d', '#77381e', '#aedaf5', '#7d28f5'],
-  itemNormalStyle: ['#f77a2b', '#5c95f7', '#f1d25a', '#68e4df', '#c4936e', '#2164f4', '#7d28f5'],
-  itemNormalBorderStyle: ['gold', '#3d7ef7', 'gold', '#68e4df', '', '#468ff4', '#7d28f5'],
-  itemEmphasisStyle: ['#f77325', '#3d7ef7', '#f1d25a', '#68e4df', '#c4936e', '#2164f4', '#7d28f5'],
-  blendLineStlye: ['', 'screen', '', 'screen', 'screen', 'screen', ''],
-  blendItemStlye: ['', 'lighter', '', '', 'lighter', '', ''],
+  lineNormalStyle: ['#f78e3d', '#2159b7', '#5D8CF7', '#00eec7', '#d7b088', '#daedf5', '#ed9c8e'],
+  lineEmphasisStyle: ['#f74300', '#3d7ef7', '#F67E63', '#00eec7', '#d7b088', '#F67E63', '#ed401f'],
+  itemNormalStyle: ['#f77a2b', '#5c95f7', '#5c95f7', '#68e4df', '#c4936e', '#2164f4', '#ed9c8e'],
+  itemNormalBorderStyle: ['gold', '#3d7ef7', '#3d7ef7', '#68e4df', '', '#468ff4', '#ed9c8e'],
+  itemEmphasisStyle: ['#f77325', '#3d7ef7', '#3d7ef7', '#68e4df', '#c4936e', '#2164f4', '#ed9c8e'],
+  blendLineStlye: ['', 'screen', 'screen', 'screen', 'screen', 'screen', ''],
+  blendItemStlye: ['', 'lighter', 'lighter', 'lighter', 'lighter', '', ''],
   blendHeatStlye: ['', 'hard-light', '', '', '', '', ''],
-  visualStyle: [['green', 'yellow', 'yellow', 'red'], ['#d2eafb', '#7ec2f3', '#49a9ee', '#108ee9', '#0c60aa', '#0c60aa'].reverse(), visual, visual, visual, visual, visual],
+  visualStyle: [['green', 'yellow', 'yellow', 'red'],
+    ['#d2eafb', '#7ec2f3', '#49a9ee', '#108ee9', '#0c60aa', '#0c60aa'].reverse(),
+    ['#d2eafb', '#7ec2f3', '#49a9ee', '#108ee9', '#0c60aa', '#0c60aa'].reverse(),
+    ['#004d3c', '#006d5c', '#009885', '#00cfb7', '#00f0d8', '#00ffe7'].reverse(), visual, visual, visual],
 };
 
 const mapStyle = {
@@ -355,7 +344,4 @@ const mapStyle = {
 
 export {
   showChart,
-  showTrajectoryChart,
-  showHeatmapChart,
-  setBMap,
 };

@@ -3,23 +3,25 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { Icon, Input, Modal } from 'antd';
-import ReactDOM from 'react-dom';
-import { loadD3 } from "utils";
 import styles from './index.less';
+import { RequireRes } from 'hoc';
+import { ensure } from 'utils';
 
-let d3;
 
+const localDate = new Date();
+const fYear = 2007;
+const tYear = localDate.getFullYear() + 1;
+const futureYear = ['未来3年'];
+@RequireRes('d3')
 class TimeBrush extends React.Component {
   state = {
-    date: [],
+    date: [fYear, tYear],
   };
 
   componentDidMount() {
-    loadD3((ret) => {
-      d3 = ret;
-      const { xWidth, yearBuring, isAuto } = this.props;
-      this.createBrush(xWidth, yearBuring, isAuto);
+    const { xWidth, yearBuring, isAuto } = this.props;
+    ensure('d3', (d3) => {
+      this.createBrush(xWidth, yearBuring, isAuto, d3);
     });
   }
 
@@ -30,47 +32,44 @@ class TimeBrush extends React.Component {
       this.props.getLocalYear(nextState.date);
     }
     if (xWidth !== nextProps.xWidth) {
-      loadD3((ret) => {
-        d3 = ret;
-        this.createBrush(nextProps.xWidth, date, isAuto);
+      ensure('d3', (d3) => {
+        this.createBrush(nextProps.xWidth, date, isAuto, d3);
       });
     }
     if (yearBuring[1] !== nextProps.yearBuring[1]) {
-      loadD3((ret) => {
-        d3 = ret;
-        this.createBrush(nextProps.xWidth, nextProps.yearBuring, isAuto);
-        console.log(yearBuring);
+      ensure('d3', (d3) => {
+        this.createBrush(nextProps.xWidth, nextProps.yearBuring, isAuto, d3);
       });
     }
   }
 
 
-  createBrush = (xWidth, yearBuring, isAuto) => {
-    const localDate = new Date();
-    const dateYear = localDate.getFullYear();
+  createBrush = (xWidth, yearBuring, isAuto, d3) => {
+    const tmp = [];
+    for (let i = fYear; i <= tYear + futureYear.length; i++) {
+      tmp.push(i);
+    }
     let timeAxis = [0, 0];
     const margin = { top: 9, right: 50, bottom: 214, left: 50 };
     const width = xWidth > 806 ? xWidth : 806;
     const height = 20;
     d3.select('#brush').selectAll('g').remove();
     const svg = d3.selectAll('#brush').append('g')
-      .attr('transform', `translate(340,${margin.top})`);
-    const beginYear = new Date(dateYear - 10, 0, 1);
-    const endYear = new Date(dateYear, 0, 1);
+      .attr('transform', `translate(210,${margin.top})`);
+    const beginYear = new Date(fYear, 0, 1);
+    const endYear = new Date(tYear + futureYear.length, 0, 1);
     const x = d3.scaleTime().domain([beginYear, endYear]).range([0, width]);
     const brush = d3.brushX()
       .extent([[0, 0], [width, height + 1]])
       .on('start brush', brushmoved)
       .on('end', brushEnd);
     const that = this;
-
-    const x3 = d3.scaleLinear().domain([0, 10]).range([0, width]);
-    const tmp = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    const rangeList = tmp.map(item => x3(item));
-    const domainList = tmp.map(item => (dateYear + item - 10));
+    const x3 = d3.scaleLinear().domain([0, tmp.length - 1]).range([0, width]);
+    const rangeList = tmp.map((item, index) => x3(index));
+    const domainList = tmp.slice(0, (tmp.length - futureYear.length));
+    domainList.push(...futureYear);
     const x2 = d3.scaleOrdinal().range(rangeList);
     const xScale2 = x2.domain(domainList);
-
     //刻度轴
     svg.append('g')
       .attr('class', 'xAxis')
@@ -84,8 +83,6 @@ class TimeBrush extends React.Component {
     const gBrush = svg.append('g')
       .attr('class', 'brush')
       .call(brush);
-
-
     const handle = gBrush.selectAll('.handle--custom')
       .data([{ type: 'w' }, { type: 'e' }])
       .enter().append('path')
@@ -93,27 +90,36 @@ class TimeBrush extends React.Component {
       .attr('class', styles.handleCircle)
       .attr('d', d3.arc()
         .innerRadius(0)
-        .outerRadius((height - 2) / 2)
+        .outerRadius((height / 2) - 2)
         .startAngle(0)
         .endAngle((d, i) => {
           return i ? Math.PI : -Math.PI;
         }));
-
     // 初始化默认区间
     gBrush.call(brush.move, [new Date(yearBuring[0], 0, 1), new Date(yearBuring[1], 0, 1)].map(x));
 
+
+    gBrush.selectAll('.handle--e')
+      .attr('fill', '#03A9F4');
+    gBrush.selectAll('.handle--w')
+      .attr('fill', '#03A9F4');
     function brushEnd() {
       const s = timeAxis;
-      let sYear = dateYear - 10;
-      let eYear = dateYear;
+      let sYear = fYear;
+      let eYear = tYear;
       if (s) {
         const sx = s.map(x.invert);
         sYear = sx[0].getFullYear();
         eYear = sx[1].getFullYear();
         // 对开始年和结束年相等进行处理
+
         if (sYear === eYear) {
-          eYear += 1;
+          eYear = sYear + 1;
+          eYear = eYear >= tYear + 1 ? tYear + 1 : eYear;
         }
+      }
+      if (eYear > tYear && fYear < eYear) { // 对预测处理
+        sYear = tYear;
       }
       d3.selectAll('.overlay').attr('fill', '#ccc').attr('cursor', 'pointer');
       d3.selectAll('.selection').attr('fill', '#00FF23');
@@ -121,11 +127,18 @@ class TimeBrush extends React.Component {
       if (!isAuto) {
         yDate = yearBuring;
       }
+
+
       that.setState({ date: yDate });
       const brush = d3.brushX()
         .extent([[0, 0], [width, height]])
         .on('start brush', brushmoved);
+
       gBrush.call(brush.move, [new Date(yDate[0], 0, 1), new Date(yDate[1], 0, 1)].map(x));
+      gBrush.selectAll('.handle--e')
+        .attr('fill', '#03A9F4');
+      gBrush.selectAll('.handle--w')
+        .attr('fill', '#03A9F4');
     }
 
     function brushmoved() {
@@ -138,6 +151,7 @@ class TimeBrush extends React.Component {
     }
   };
 
+
   render() {
     const width = this.props.xWidth > 806 ? this.props.xWidth : 806;
     return (
@@ -146,6 +160,5 @@ class TimeBrush extends React.Component {
       </div>);
   }
 }
-
 export default connect(({ crossHeat, loading }) => ({ crossHeat, loading }))(TimeBrush);
 

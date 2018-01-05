@@ -140,7 +140,7 @@ export default class SearchComponent extends Component {
     this.onFilterChange('eb', { id, name }, true);// Special Filter;
   };
 
-  onAssistantChanged = (texts) => {
+  onAssistantChanged = (texts, isNotAffactedByAssistant, isSearchAbbr) => {
     // NOTE: query keep unchanged. Change type: [nothing|expansion|kg]
     // advanced clear assistant value.
     const { dispatch } = this.props;
@@ -149,7 +149,11 @@ export default class SearchComponent extends Component {
     // on expansion change, only clear kg data.
     AssistantUtils.smartClear({ assistantData, prevTexts, texts, dispatch });
 
-    this.dispatch({ type: 'search/setAssistantDataMeta', payload: { texts } });
+    this.dispatch({
+      type: 'search/setAssistantDataMeta',
+      payload: { texts, isNotAffactedByAssistant, isSearchAbbr },
+    });
+
     this.doSearchUseProps();
   };
 

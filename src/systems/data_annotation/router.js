@@ -18,7 +18,8 @@ import admin from 'routes/admin/router-admin';
 // import seminar from 'routes/seminar/router-seminar';
 // import tencent from 'routes/third-login/router';
 import router2bprofile from 'routes/2b-profile/router-2bprofile';
-import dataAnnotation from 'routes/data-annotation/router-da';
+import data_annotation from 'routes/data-annotation/router-da';
+import toolsCompare from 'routes/tools-compare/router-toolscompare';
 
 const routes = [
   ...RouterRegistry2b,
@@ -91,7 +92,8 @@ const routes = [
   router2bprofile.Addition,
 
   // Data Annotation
-  dataAnnotation.AnnotatePersonProfile,
+  data_annotation.AnnotatePersonProfile,
+  toolsCompare.ComparePage,
 
   // tencent.ThirdLogin,
 

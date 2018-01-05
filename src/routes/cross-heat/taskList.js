@@ -5,7 +5,7 @@
 import React from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
-import { Button, Modal, Table, Icon, Input } from 'antd';
+import { Button, Modal, Table, Divider, Input } from 'antd';
 import { Layout } from 'routes';
 import { Auth } from 'hoc';
 import { applyTheme } from 'themes';
@@ -65,7 +65,7 @@ class CrossTaskList extends React.Component {
   };
   onCheck = (value) => {
     this.props.dispatch(routerRedux.push({
-      pathname: '/cross/report/' + value,
+      pathname: '/cross/heat/' + value,
     }));
   };
 
@@ -104,7 +104,8 @@ class CrossTaskList extends React.Component {
       render: (text, record) => (
         <span>
             <a href="#" onClick={this.onCheck.bind(this, text)}>查看</a>
-            <span className="ant-divider" />
+            <Divider type="vertical" />
+            {/*<span className="ant-divider" />*/}
             <a href="#" onClick={this.onDelete.bind(this, text, record)}>删除</a>
         </span>
       ),

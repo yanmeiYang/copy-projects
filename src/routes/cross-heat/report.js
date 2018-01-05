@@ -18,6 +18,7 @@ import { PublicationList } from '../../components/publication/index';
 import Brush from './time-brush/index';
 import CrossStatistics from './statistics/index';
 import CrossContrast from './contrast/index';
+import History from './line-chart/index';
 import styles from './report.less';
 
 const tc = applyTheme(styles);
@@ -828,6 +829,13 @@ class CrossReport extends React.Component {
         payload: { ids: pubsIds },
       });
     }
+    if (type === 'history') {
+      const method = 'meta';
+      const withCache = true;
+      const years = [2007, 2008, 2009, 2010, 2011, 2013, 2014, 2015, 2016, 2017];
+      const dt = { crossingFields: this.crossingFields, years, withCache };
+      this.getAggregate(method, dt);
+    }
   };
 
   goCreate = () => {
@@ -858,6 +866,33 @@ class CrossReport extends React.Component {
     let tempYearBuring = yearBuring;
     if (yearBuring.length === 0) {
       tempYearBuring = [sYear, dateYear];
+    }
+
+    const { history } = this.props.crossHeat;
+    let historyPub = {};
+    let historyExpert = {};
+    if (history && history.length > 0) {
+      const dataPub = [];
+      const dataExpert = [];
+      history[0].metaData.map((item) => {
+        dataExpert.push(item.authorsCount);
+        dataPub.push(item.pubsCount);
+        return true;
+      });
+      historyPub = {
+        id: 'publine',
+        xAxis: this.years,
+        data: dataPub,
+        title: '历史论文数据',
+        legend: ['历史论文数据'],
+      };
+      historyExpert = {
+        id: 'expertline',
+        xAxis: this.years,
+        data: dataExpert,
+        title: '历史专家数据',
+        legend: ['历史专家数据'],
+      };
     }
     const operations = <span>{tabTitle}</span>;
     const heatInfo = isHistory ? '查看未来趋势' : '查看历史热点';
@@ -961,6 +996,22 @@ class CrossReport extends React.Component {
                 {modalInfo &&
                 <div className={styles.modalContent}>
                   <CrossContrast compareData={modalInfo} />
+                </div>
+                }
+              </TabPane>
+
+              <TabPane tab="趋势" key="history">
+                <Spinner loading={loadAggregate} />
+                {modalInfo &&
+                <div className={styles.modalContent}>
+                  {/*<div>asdfasfsdf</div>*/}
+                  {/*<CrossContrast compareData={modalInfo} />*/}
+                  {history &&
+                  <div>
+                    <History param={historyPub} />
+                    <History param={historyExpert} />
+                  </div>
+                  }
                 </div>
                 }
               </TabPane>

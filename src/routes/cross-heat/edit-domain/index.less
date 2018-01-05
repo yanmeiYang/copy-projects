@@ -1,0 +1,88 @@
+
+.editDomain {
+  width: 100%;
+  .edit {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    .candidate {
+      margin-left: 40px;
+      width: 600px;
+    }
+    .drag {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      height: 500px;
+      flex-wrap: wrap;
+      .drapItem {
+        margin-right: 10px;
+        display: flex;
+        justify-content: flex-start;
+        span {
+          cursor: move;
+          border: 1px solid #03A9F4;
+          padding: 1px 10px;
+          border-radius: 1px;
+          white-space: nowrap;
+          margin-top: 3px;
+        }
+        span:hover {
+          background-color: #03A9F4;
+          color: #fff;
+          border-radius: 2px;
+          white-space: nowrap;
+        }
+      }
+
+    }
+  }
+  .node circle {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 2px;
+  }
+
+  .node text {
+    font: 13px sans-serif;
+  }
+
+  .link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 2px;
+  }
+
+  .disciplineTree {
+    .tooltipDis {
+      float: left;
+      position: absolute;
+      text-align: left;
+      span {
+        padding: 0px;
+      }
+      .close {
+        font-size: 12px;
+        color: red;
+        margin-left: 5px;
+        margin-right: 5px;
+      }
+      .input {
+        width: 80px;
+        overflow: hidden;
+      }
+      .plus {
+        font-size: 12px;
+        color: #08c;
+        margin-left: 5px;
+        margin-right: 5px;
+      }
+      .ok {
+        margin-left: 5px;
+      }
+    }
+
+  }
+
+}
+

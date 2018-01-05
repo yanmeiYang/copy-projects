@@ -34,28 +34,6 @@ const columns = [
         return '未评分';
       }
     },
-  },
-  // {
-  //   title: '审稿次数',
-  //   dataIndex: '审稿活动',
-  //   sorter: (a, b) => a.审稿活动 - b.审稿活动,
-  // },
-  // {
-  //   title: '撰稿次数',
-  //   dataIndex: '撰稿活动',
-  //   sorter: (a, b) => a.撰稿活动 - b.撰稿活动,
-  // },
-  {
-    title: '演讲内容',
-    dataIndex: 'content',
-    sorter: (a, b) => a.content - b.content,
-    render(text, record) {
-      if (record.content === 0) {
-        return '';
-      } else {
-        return getTwoDecimal(parseFloat(record.content), 2);
-      }
-    },
   }, {
     title: '演讲水平',
     dataIndex: 'level',
@@ -65,6 +43,17 @@ const columns = [
         return '';
       } else {
         return getTwoDecimal(parseFloat(record.level), 2);
+      }
+    },
+  },{
+    title: '演讲内容',
+    dataIndex: 'content',
+    sorter: (a, b) => a.content - b.content,
+    render(text, record) {
+      if (record.content === 0) {
+        return '';
+      } else {
+        return getTwoDecimal(parseFloat(record.content), 2);
       }
     },
   }, {
@@ -111,36 +100,11 @@ class ExpertsList extends React.Component {
         return val2 - val1;
       };
     };
-    this.props.author.sort(compare('contrib'));
+    // this.props.author.sort(compare('contrib'));
 
     const pagination = { total: this.props.author.length, pageSize: 30 };
     return (
       <div>
-        {/* <div className={styles.top}>*/}
-        {/* <div style={{ marginBottom: 5 }} className={styles.exportExperts}>*/}
-        {/* <Button*/}
-        {/* type="primary"*/}
-        {/* onClick={this.start}*/}
-        {/* disabled={!hasSelected}*/}
-        {/* size='large'*/}
-        {/* >*/}
-        {/* Export*/}
-        {/* </Button>*/}
-        {/* </div>*/}
-
-        {/* <InputGroup className={styles.filterByYear}>*/}
-        {/* <Input size='large' placeholder='输入年份'/>*/}
-        {/* <Button size='large' type='primary'>搜索</Button>*/}
-        {/* </InputGroup>*/}
-        {/* <Button type='default' size='large' className={styles.fixedTime}>去年</Button>*/}
-        {/* <Button type='default' size='large' className={styles.fixedTime}>前年</Button>*/}
-
-
-        {/* /!*<span style={{ marginLeft: 8 }}>*!/*/}
-        {/* /!*{hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}*!/*/}
-        {/* /!*</span>*!/*/}
-        {/* </div>*/}
-        {/* rowSelection={rowSelection}*/}
         <Table bordered size="small" columns={columns} pagination={ pagination }
                dataSource={this.props.author} className={styles.expertList}
                style={{ marginTop: 10 }} />

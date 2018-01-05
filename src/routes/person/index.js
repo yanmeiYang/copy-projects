@@ -25,11 +25,13 @@ const Person = ({ roles, dispatch, person, seminar, publications, loading }) => 
   let integrated = null;
   let level = null;
   let content = null;
+  let activity_indices = null;
 
   if (avgScores && avgScores.length > 0) {
     for (const item of avgScores) {
       if (item.key === 'contrib') {
         contrib = item;
+        activity_indices = { contrib: contrib.score };
       } else if (item.key === 'integrated') {
         integrated = item;
       } else if (item.key === 'level') {
@@ -39,7 +41,6 @@ const Person = ({ roles, dispatch, person, seminar, publications, loading }) => 
       }
     }
   }
-  const activity_indices = { contrib: contrib === undefined ? 0 : contrib.score };
 
   const contributionLoading = loading.effects['person/getContributionRecalculatedByPersonId'];
 
@@ -81,29 +82,29 @@ const Person = ({ roles, dispatch, person, seminar, publications, loading }) => 
           </tr>
         </thead>
         <tbody key={level}>
-          {level && level.score &&
+          {level && (level.score || level.score === 0) &&
           <tr>
             <td>演讲水平:</td>
             <td>
-              <Rate disabled defaultValue={level.score} />
+              <Rate disabled value={level.score} />
               <input type="text" className="score" value={getTwoDecimal(level.score, 2)}
                      disabled />
             </td>
           </tr>}
-          {content && content.score &&
+          {content && (content.score || content.score === 0) &&
           <tr>
             <td>演讲内容:</td>
             <td>
-              <Rate disabled defaultValue={content.score} />
+              <Rate disabled value={content.score} />
               <input type="text" className="score" value={getTwoDecimal(content.score, 2)}
                      disabled />
             </td>
           </tr>}
-          {integrated && integrated.score &&
+          {integrated && (integrated.score || integrated.score === 0) &&
           <tr>
             <td>综合评价:</td>
             <td>
-              <Rate disabled defaultValue={integrated.score} />
+              <Rate disabled value={integrated.score} />
               <input type="text" className="score" value={getTwoDecimal(integrated.score, 2)}
                      disabled />
             </td>
@@ -201,8 +202,10 @@ const Person = ({ roles, dispatch, person, seminar, publications, loading }) => 
   return (
     <Layout searchZone={[]}>
       <div className="content-inner">
+        {activity_indices && (activity_indices.contrib || activity_indices.contrib === 0) &&
         <ProfileInfo profile={profile} activity_indices={activity_indices}
                      rightZoneFuncs={sysconfig.PersonList_RightZone} />
+        }
         <div style={{ marginTop: 30 }} />
 
         <div>

@@ -2,19 +2,22 @@ import Link from 'umi/link';
 import Count from 'components/Count';
 import styles from './page.css';
 import { engine } from 'core';
+import Layout from 'components/Layout';
 
 engine.router(() => {
   return (
-    <div className={styles.normal}>
-      <h2>Index Page</h2>
-      <Count />
-      <br />
-      <div>
-        <Link to="/list">Go to list.html</Link>
+    <Layout>
+      <div className={styles.normal}>
+        <h2>Index Page</h2>
+        <Count />
         <br />
-        <Link to="/test/test-page">Go to Test</Link>
+        <div>
+          <Link to="/list">Go to list.html</Link>
+          <br />
+          <Link to="/test/test-page">Go to Test</Link>
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 });
 

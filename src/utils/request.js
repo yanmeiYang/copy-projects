@@ -3,7 +3,7 @@ import axios from 'axios';
 import qs from 'qs';
 import jsonp from 'jsonp';
 import { cloneDeep } from 'lodash';
-import { AES } from 'crypto-js';
+// import { AES } from 'crypto-js';
 import pathToRegexp from 'path-to-regexp';
 import { getLocalToken } from 'utils/auth';
 import { escapeURLBracket, unescapeURLBracket } from 'utils/strings';
@@ -210,7 +210,7 @@ const fetch = (options) => {
   if (options.nextapi) {
     const text = JSON.stringify(cloneData);
     const key = '==typeof o?(r=o,o={}):o=o||{}:(r=o,o=a||{},a=void 0))';
-    const ciphertext = AES.encrypt(text, key);
+    // const ciphertext = AES.encrypt(text, key);
     // console.log('crypto:', text);
     // console.log('crypto:', ciphertext.toString());
   }

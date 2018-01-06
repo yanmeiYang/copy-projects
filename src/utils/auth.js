@@ -1,6 +1,6 @@
 /* eslint-disable no-extend-native */
-import { routerRedux } from 'dva/router';
 // import AES from 'crypto-js/aes';
+import { router } from 'core';
 import { sysconfig } from 'systems';
 import { queryURL } from './index';
 
@@ -45,10 +45,12 @@ function dispatchToLogin(dispatch) {
   if (sysconfig.AuthLoginUsingThird) {
     window.location.href = sysconfig.AuthLoginUsingThirdPage;
   } else {
-    dispatch(routerRedux.push({
-      pathname: sysconfig.Auth_LoginPage,
-      query: { from },
-    }));
+    // TODO umi jump add parameter.
+    router.push(sysconfig.Auth_LoginPage);
+    // dispatch(router.push({
+    //   pathname: sysconfig.Auth_LoginPage,
+    //   query: { from },
+    // }));
   }
 }
 
@@ -57,7 +59,9 @@ function dispatchAfterLogin(put) {
   if (process.env.NODE_ENV !== 'production') {
     console.log('Login Success, Dispatch to ', decodeURIComponent(from));
   }
-  put(routerRedux.push({ pathname: decodeURIComponent(from) }));
+  // TODO umi jump add parameter.
+  router.push(decodeURIComponent(from));
+  // put(routerRedux.push({ pathname: decodeURIComponent(from) }));
 }
 
 /**

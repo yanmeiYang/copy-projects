@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'core';
 import { Helmet } from 'react-helmet';
 import ReactGA from 'react-ga';
-import NProgress from 'nprogress';
+// import NProgress from 'nprogress';
 import { Layout as LayoutComponent } from 'antd';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
@@ -101,14 +101,14 @@ export default class Layout extends Component {
     const { contentClass, showHeader, showNavigator, showSidebar, showFeedback } = this.props;
     const { dispatch, loading } = this.props;
 
-    const { href } = window.location;
-    if (lastHref !== href) {
-      NProgress.start();
-      if (!loading.global) {
-        NProgress.done();
-        lastHref = href;
-      }
-    }
+    // const { href } = window.location;
+    // if (lastHref !== href) {
+    //   NProgress.start();
+    //   if (!loading.global) {
+    //     NProgress.done();
+    //     lastHref = href;
+    //   }
+    // }
 
     const { logoZone, searchZone, infoZone, fixAdvancedSearch, disableAdvancedSearch } = this.props;
     const { pageTitle, pageSubTitle } = this.props;

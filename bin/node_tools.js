@@ -17,4 +17,4 @@ const createFile = (target, content) => {
   fs.writeFileSync(target, content);
 };
 
-export { createFile, replaceFile };
+module.exports = { createFile, replaceFile };

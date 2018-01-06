@@ -3,13 +3,13 @@
  *
  * Config files for roadhog@2.0 / af-webpack.
  */
-// const theme = require('./theme.config');
+const theme = require('./theme.config');
 const buildrc = require('./.buildrc');
 const path = require('path');
 // const { version } = require('./package.json');
 
 // do some other startup before webpack.
-// require('./bin/generate-system');
+require('./bin/generate-system');
 
 // TODO debug mode  /  production mode
 const production = (process.env.NODE_ENV === 'production');
@@ -19,7 +19,7 @@ module.exports = {
 
   // entry: 'src/index.js',
 
-  // theme: theme(),
+  theme: theme(),
   alias: buildrc.webpack.alias,
 
   // publicPath: `/${version}/`,
@@ -28,6 +28,19 @@ module.exports = {
   // outputPath: path.resolve(__dirname, `./dist/${version}`),
 
   // devtool: production ? false : 'cheap-module-eval-source-map',
+
+  extraBabelPlugins: [
+    "@babel/plugin-transform-runtime",
+    "transform-decorators-legacy",
+    ["import", { libraryName: "antd", style: true }]
+  ],
+
+  env: {
+    development: {
+      extraBabelPlugins: ["dva-hmr"]
+    }
+  },
+
 
   // html: {
   //   template: "./src/index.ejs",
@@ -55,26 +68,13 @@ module.exports = {
   //       return count >= pageCount * 0.5;
   //     },
   //   },
-  // ], 比较机灵，专业知识扎实，
+  // ],
 
   // externals: {
   //   "react": "window.React",
   //   "react-dom": "window.ReactDOM",
   // },
-  //
-  // extraBabelPlugins: [
-  //   // "@babel/plugin-transform-runtime",
-  //   "transform-decorators-legacy",
-  //   ["import", { libraryName: "antd", style: true }]
-  // ],
-  //
-  // env: {
-  //   development: {
-  //     // devtool: 'cheap-module-eval-source-map',
-  //     extraBabelPlugins: ["dva-hmr"]
-  //   }
-  // },
-  //
+
   // ignoreMomentLocale: true,
 
   // copy: [],

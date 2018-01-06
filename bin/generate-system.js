@@ -5,8 +5,8 @@
  *
  *  TODO BUILD TreeShake non target systems.
  */
-const { AvailableSystems } = require('../src/core/system');
-const { replaceFile, createFile } = require('../src/utils/node_tools');
+// const { AvailableSystems } = require('../src/core/system');
+const { replaceFile, createFile } = require('./node_tools');
 
 // get system from parameter.
 
@@ -21,15 +21,15 @@ if (args.length > idx) {
   process.exit(-1);
 }
 
-if (AvailableSystems.indexOf(system) <= 0) {
-  console.error('Error! System not available: ', system);
-
-  console.log("Available systems are:");
-  for (const sys of AvailableSystems) {
-    console.log("  ... ", sys);
-  }
-  process.exit(-1);
-}
+// if (AvailableSystems.indexOf(system) <= 0) {
+//   console.error('Error! System not available: ', system);
+//
+//   console.log("Available systems are:");
+//   for (const sys of AvailableSystems) {
+//     console.log("  ... ", sys);
+//   }
+//   process.exit(-1);
+// }
 
 console.log('System is [', system, '] start building...');
 

@@ -1,10 +1,11 @@
 .DS_Store
 dist
 node_modules
-yarn.lock
-npm-debug.log
-src/system-config.js
 yarn-error.log
+npm-debug.log
+____later____src/pages
+
+____src/system-config.js
 
 xxxsrc/index.js
 xxxsrc/systems/index.js

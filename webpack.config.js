@@ -13,26 +13,28 @@ const debug = true;
 module.exports = (webpackConfig, env) => {
 
   const production = env === 'production';
-
+  if (!production) {
+    return webpackConfig;
+  }
   // webpackConfig.output.filename = '[name].[hash:8].js';
   // webpackConfig.output.chunkFilename = '[name].[hash:8].js';
 
   // webpackConfig.plugins = webpackConfig.plugins.concat([
-    // 为了将public放到src下面
-    // new CopyWebpackPlugin([{
-    //   from: 'src/public',
-    //   to: production ? '../' : webpackConfig.output.outputPath,
-    // }]),
-    // 生成index.html
-    // new HtmlWebpackPlugin({
-    //   template: `${__dirname}/src/entry.ejs`,
-    //   filename: production ? '../index.html' : 'index.html',
-    //   minify: production ? {
-    //     collapseWhitespace: true,
-    //   } : null,
-    //   hash: true,
-    //   // headScripts: production ? null : ['/roadhog.dll.js'], // 禁用了dll模式.
-    // }),
+  // 为了将public放到src下面
+  // new CopyWebpackPlugin([{
+  //   from: 'src/public',
+  //   to: production ? '../' : webpackConfig.output.outputPath,
+  // }]),
+  // 生成index.html
+  // new HtmlWebpackPlugin({
+  //   template: `${__dirname}/src/entry.ejs`,
+  //   filename: production ? '../index.html' : 'index.html',
+  //   minify: production ? {
+  //     collapseWhitespace: true,
+  //   } : null,
+  //   hash: true,
+  //   // headScripts: production ? null : ['/roadhog.dll.js'], // 禁用了dll模式.
+  // }),
   // ]);
 
   // replace html loader
@@ -60,19 +62,19 @@ module.exports = (webpackConfig, env) => {
   // }
 
   // if (webpackConfig.module) {
-    // 必须使用html的loader。 TODO test 这个是必须的么？
-    // webpackConfig.module.rules.map((item) => {
-      // if (String(item.test) === '/\\.html/') {
-      //   if (item.loader) {
-      //     item.loader = 'html';
-      //   }
-      // }
-      // ejs使用url-loader，不然会变成base64
-      // if (item.loader && item.loader.indexOf('/url-loader/index.js') !== -1) {
-      //   item.exclude.push(/\.ejs$/);
-      // }
-      // return item;
-    // });
+  // 必须使用html的loader。 TODO test 这个是必须的么？
+  // webpackConfig.module.rules.map((item) => {
+  // if (String(item.test) === '/\\.html/') {
+  //   if (item.loader) {
+  //     item.loader = 'html';
+  //   }
+  // }
+  // ejs使用url-loader，不然会变成base64
+  // if (item.loader && item.loader.indexOf('/url-loader/index.js') !== -1) {
+  //   item.exclude.push(/\.ejs$/);
+  // }
+  // return item;
+  // });
   // }
 
   // if (production) {

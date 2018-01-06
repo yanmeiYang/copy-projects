@@ -3,10 +3,6 @@ import Count from 'components/Count';
 import styles from './page.css';
 import { engine } from 'core';
 
-engine.model(require('models/count').default);
-
-console.log("PAGE test-page 666666666666666666666666666666666666666666");
-
 engine.router(() => {
   return (
     <div className={styles.normal}>

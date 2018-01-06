@@ -1,0 +1,75 @@
+@import "./theme-base";
+
+/* ------------------------ Override antd ------------------------ */
+
+:global {
+  .ant-btn .anticon { font-weight: bold; }
+  .ant-btn {
+    border-color: @btn-bg-color;
+    //  padding: 0 10px; font-size: @font-size-lg; border-radius: 0px;
+  }
+  .ant-btn-primary {
+    background-color: @btn-bg-color;
+    border-color: @btn-bg-color;
+  }
+
+  .ant-btn:hover, .ant-btn.active {
+    background-color: @btn-bg-color;
+    border-color: @btn-bg-color;
+    color: #ffffff;
+    opacity: 0.8;
+  }
+  //.ant-btn:focus { color: #ffffff }
+  .ant-btn-primary:hover, .ant-btn-primary:focus {
+    background-color: @btn-bg-color;
+  }
+
+  .ant-menu {
+    line-height: 64px;
+    .ant-menu-item { padding: 0 10px; }
+  }
+
+  .ant-tag-checkable:hover { background: @btn-bg-color; }
+  .ant-tag-checkable:hover, .ant-tag-checkable:active, .ant-tag-checkable-checked {
+    background: @btn-bg-color;
+    color: white; }
+
+}
+
+/* ------------------------ Global Components ------------------------ */
+
+.Overrides() {
+  :global {
+    #root {
+      //height: 100%;
+      //border-top: solid 1px yellow;
+    }
+
+    /**
+     * Css Themes
+     */
+    .font-page-title { color: #333; }
+
+    .label-title { color: #999999; }
+    .label { }
+    .label-count { font-weight: normal; color: #f1742f }
+    .label:hover {
+      .label-count { font-weight: normal; color: white }
+    }
+
+    .section_header {
+      font-size: @font-size-huge;
+      border-bottom: solid 0px @border-color-base;
+      margin-bottom: 6px;
+      padding-bottom: 2px;
+      color: #3E9BC9;
+      a {
+        font-size: @font-size-huge;
+        color: #3E9BC9;
+      }
+    }
+
+  }
+}
+
+.Overrides() !important;

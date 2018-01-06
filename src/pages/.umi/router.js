@@ -14,8 +14,9 @@ export default function() {
 <Router history={window.g_history}>
   <Switch>
     <Route exact path="/index.html" component={require('../index/page.js').default}></Route>
+    <Route exact path="/index2.html" component={() => <div>Compiling...</div>}></Route>
     <Route exact path="/list.html" component={() => <div>Compiling...</div>}></Route>
-    <Route exact path="/test/test-page.html" component={require('../test/test-page.js').default}></Route>
+    <Route exact path="/test/test-page.html" component={() => <div>Compiling...</div>}></Route>
     <Route exact path="/" component={require('../index/page.js').default}></Route>
   </Switch>
 </Router>

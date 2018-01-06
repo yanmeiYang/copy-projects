@@ -6,13 +6,16 @@
 import dva from 'dva';
 
 const debug = require('debug')('aminer:engine');
+const pref = require('debug')('pref:aminer:engine');
 
 const app = dva();
+
+// TODO umi initialize DVA.
 
 const cache = {};
 
 const model = (m) => {
-  debug("Add model %o", m);
+  debug("Try add model %s.", m.namespace);
 
   // development check
   if (process.env.NODE_ENV !== 'production') {
@@ -34,13 +37,22 @@ const model = (m) => {
   cache[m.namespace] = true;
 };
 
-const start = () => {
-  debug("Engine start");
-  return app.start();
+const router = (router) => {
+  app.router(router);
 };
 
-const router = (router) => {
-  return app.router(router);
+let engineInstance;
+
+const start = () => {
+  if (!engineInstance) {
+    pref("Engine start.");
+
+    engineInstance = app.start();
+
+    pref("Engine start success.");
+    debug("Engine start success.");
+  }
+  return engineInstance;
 };
 
 export { model, router, start }

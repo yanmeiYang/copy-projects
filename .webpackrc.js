@@ -20,10 +20,7 @@ module.exports = {
   // entry: 'src/index.js',
 
   // theme: theme(),
-  alias: {
-    ...buildrc.webpack.alias,
-    dva: 'dva-no-router',
-  },
+  alias: buildrc.webpack.alias,
 
   // publicPath: `/${version}/`,
   // publicPath: `/`,

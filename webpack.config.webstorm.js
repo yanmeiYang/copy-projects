@@ -13,5 +13,6 @@ module.exports = {
   resolve: {
     alias: buildrc.webpack.alias,
   },
+  // TODO Framework add define to dismiss IDE warning. process.env.NODE_ENV
 };
 

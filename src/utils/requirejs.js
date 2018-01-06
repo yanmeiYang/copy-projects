@@ -35,16 +35,16 @@ const Libraries = {
 
 };
 
-const findLibs = (keys) => {
-  if (keys && keys.length > 0) {
-    const libs = {};
-    keys.map((key) => {
-      libs[key] = Libraries[key];
-      return false;
-    });
-    return libs;
-  }
-};
+// const findLibs = (keys) => {
+//   if (keys && keys.length > 0) {
+//     const libs = {};
+//     keys.map((key) => {
+//       libs[key] = Libraries[key];
+//       return false;
+//     });
+//     return libs;
+//   }
+// };
 
 // find each key in keys in Libraries, merge into final result.
 // if nothing changed, return the original state.
@@ -135,38 +135,38 @@ const getObjects = (libs) => {
   return libArray.map(lib => window[lib]);
 };
 
-const createLoader = (check) => {
-  return {
-    // wait: () => {
-    //   const tryTimes = 200;
-    //   let n = 0;
-    //   const interval = setInterval(() => {
-    //     const ret = hasValue(check);
-    //     if (!ret) {
-    //       n += 1;
-    //       if (n >= tryTimes) {
-    //         clearInterval(interval);
-    //         console.error('Loading script timeout!',);
-    //         // if (failed) {
-    //         //   failed();
-    //         // }
-    //       }
-    //     } else {
-    //       clearInterval(interval);
-    //
-    //       // if (success) {
-    //       //   success(window.BMap);
-    //       // }
-    //     }
-    //   }, interval);
-    // },
-    then: (callback) => {
-      if (callback) {
-        callback(0); // call when callback;
-      }
-    },
-  };
-};
+// const createLoader = (check) => {
+//   return {
+//     // wait: () => {
+//     //   const tryTimes = 200;
+//     //   let n = 0;
+//     //   const interval = setInterval(() => {
+//     //     const ret = hasValue(check);
+//     //     if (!ret) {
+//     //       n += 1;
+//     //       if (n >= tryTimes) {
+//     //         clearInterval(interval);
+//     //         console.error('Loading script timeout!',);
+//     //         // if (failed) {
+//     //         //   failed();
+//     //         // }
+//     //       }
+//     //     } else {
+//     //       clearInterval(interval);
+//     //
+//     //       // if (success) {
+//     //       //   success(window.BMap);
+//     //       // }
+//     //     }
+//     //   }, interval);
+//     // },
+//     then: (callback) => {
+//       if (callback) {
+//         callback(0); // call when callback;
+//       }
+//     },
+//   };
+// };
 
 // usages
 

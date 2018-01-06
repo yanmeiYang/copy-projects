@@ -22,7 +22,7 @@ export default class Hole extends Component {
   };
 
   render() {
-    const { name, fill, defaults, param, config, children, debug } = this.props;
+    const { name, fill, defaults, param, config, debug } = this.props;
 
     let holeContent = param
       ? hole.fillFuncs(fill, defaults, param, config)

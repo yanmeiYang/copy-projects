@@ -18,7 +18,7 @@ import { Feedback } from 'components/widgets';
 import { ErrorBoundary } from 'components/core';
 import styles from './Layout.less';
 
-const { iconFontJS, iconFontCSS, logo } = config;
+const { iconFontJS, iconFontCSS } = config;
 const { Sider, Content, Footer } = LayoutComponent;
 
 const tc = applyTheme(styles);

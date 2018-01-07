@@ -137,4 +137,9 @@ const router = (router) => {
   return start();
 };
 
-export { model, router, start, withIntl }
+const routerDirect = (router) => {
+  app.router(() => React.createElement(router));
+  return start();
+};
+
+export { model, router, routerDirect, start, withIntl }

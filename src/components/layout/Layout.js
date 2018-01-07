@@ -136,9 +136,9 @@ export default class Layout extends Component {
           <link href={`${resRoot}/sys/${sysconfig.SYSTEM}/favicon.ico`}
                 rel="icon" type="image/x-icon" />
 
-          <script src={`${resRoot}/iconfont.js`} />
-          <link rel="stylesheet" href={`${resRoot}/iconfont.css`} />
-          <link rel="stylesheet" href={`${resRoot}/fa/css/font-awesome.min.css`} />
+          <script src={`${resRoot}/lib/icon-font/iconfont.js`} />
+          <link rel="stylesheet" href={`${resRoot}/lib/icon-font/iconfont.css`} />
+          <link rel="stylesheet" href={`${resRoot}/lib/fa/css/font-awesome.min.css`} />
 
           {this.headerResourcesArray || false}
 

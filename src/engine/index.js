@@ -6,6 +6,7 @@ import { connect } from 'dva';
 import * as engine from './engine';
 import Link from 'umi/link';
 import router from 'umi/router';
+import { formCreate } from './engine-hoc';
 
 // safe parse children.
 const renderChildren = (children) => {
@@ -21,5 +22,7 @@ export {
   Link, router,
 
   renderChildren,
+
+  formCreate,
 };
 

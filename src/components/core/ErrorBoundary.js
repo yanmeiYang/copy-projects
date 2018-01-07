@@ -1,5 +1,6 @@
 /* eslint-disable react/no-find-dom-node */
 import React, { Component } from 'react';
+import { renderChildren } from 'engine';
 
 export default class ErrorBoundary extends Component {
   constructor(props) {
@@ -15,12 +16,6 @@ export default class ErrorBoundary extends Component {
     console.error('ErrorBoundary:::', error, info);
   }
 
-  children = () => {
-    return React.Children.map(this.props.children, (child) => {
-      return child;
-    }, {})
-  };
-
   render() {
     if (this.state.hasError) {
       // You can render any custom fallback UI
@@ -31,11 +26,11 @@ export default class ErrorBoundary extends Component {
           padding: 8,
         }}>
           <h1>Something went wrong.</h1>
-          {this.children()}
+          {renderChildren(this.props.children)}
         </div>
       );
     }
-
-    return this.children();
+    return renderChildren(this.props.children);
+    ;
   }
 }

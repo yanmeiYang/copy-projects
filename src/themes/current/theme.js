@@ -4,7 +4,7 @@
 import React from 'react';
 import classnames from 'classnames';
 // import { sysconfig } from 'systems';
-import { Link, router } from 'core';
+import { Link, router, resRoot } from 'core';
 import hole from 'core/hole';
 import { FormattedMessage as FM } from 'react-intl';
 import { IndexCenterZone } from 'systems/demo/components';
@@ -30,9 +30,9 @@ export default {
   footer: (
     <div className={styles.footerText}>
       <div>Powered by：</div>
-      <a href="https://aminer.org">
-        <img src="/aminer_logo.png" alt="AMiner logo" className={styles.aminerLogo} />
-      </a>
+      <Link to="/">
+        <img src={`${resRoot}/aminer_logo.png`} alt="AMiner logo" className={styles.aminerLogo} />
+      </Link>
     </div>
   ),
 

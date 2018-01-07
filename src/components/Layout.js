@@ -4,7 +4,8 @@
  */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'core';
+import { resRoot } from 'core';
+import { engine, connect, renderChildren } from 'engine';
 import { Helmet } from 'react-helmet';
 import ReactGA from 'react-ga';
 // import NProgress from 'nprogress';
@@ -13,19 +14,20 @@ import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 import { config } from 'utils';
 import { hole } from 'core';
-import { Header, Navigator } from 'components/Layout';
+import { Header, Navigator } from 'components/headers';
 import { Feedback } from 'components/widgets';
 import { ErrorBoundary } from 'components/core';
 import styles from './Layout.less';
 
-const { iconFontJS, iconFontCSS } = config;
 const { Sider, Content, Footer } = LayoutComponent;
 
 const tc = applyTheme(styles);
 
-let lastHref;
+engine.model(require('models/app').default);
 
-@connect(({ app, loading }) => ({ app, loading }))
+// let lastHref;
+
+@connect(({ app, loading }) => ({ app: { user: app.user, roles: app.roles }, loading }))
 export default class Layout extends Component {
   static displayName = 'Layout';
 
@@ -70,9 +72,9 @@ export default class Layout extends Component {
   };
 
   componentDidMount() {
-    // TODO 这个统计有问题呀 ????
+    // TODO 这个统计有问题呀 ???? 提取成单独的 Component
     if (sysconfig.googleAnalytics) {
-      const { user } = this.props.app;
+      const { user } = this.props.app || {};
       ReactGA.initialize(sysconfig.googleAnalytics, {
         gaOptions: { userId: (user && user.id) || '' },
       });
@@ -96,7 +98,7 @@ export default class Layout extends Component {
   };
 
   render() {
-    // console.log('>>>>>>>>>> App Render:', this.props); // TODO performance
+    console.log('>>>>>>>>>> App Render:', this.props); // TODO performance
     const { sidebar, footer, navigatorItems } = this.props;
     const { contentClass, showHeader, showNavigator, showSidebar, showFeedback } = this.props;
     const { dispatch, loading } = this.props;
@@ -130,12 +132,12 @@ export default class Layout extends Component {
         <Helmet>
           <title>{title}</title>
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <link rel="icon" href={`/sys/${sysconfig.SYSTEM}/favicon.ico`} type="image/x-icon" />
+          <link href={`${resRoot}/sys/${sysconfig.SYSTEM}/favicon.ico`}
+                rel="icon" type="image/x-icon" />
 
-          {iconFontJS && <script src={iconFontJS} />}
-          {iconFontCSS && <link rel="stylesheet" href={iconFontCSS} />}
-
-          <link rel="stylesheet" href="/fa/css/font-awesome.min.css" />
+          <script src={`${resRoot}/iconfont.js`} />
+          <link rel="stylesheet" href={`${resRoot}/iconfont.css`} />
+          <link rel="stylesheet" href={`${resRoot}/fa/css/font-awesome.min.css`} />
 
           {this.headerResourcesArray || false}
 
@@ -146,38 +148,37 @@ export default class Layout extends Component {
 
         </Helmet>
 
-        {showHeader && <Header {...headerOptions} />}
-        {showNavigator && <Navigator {...navigatorOptions} />}
+        {/*{showHeader && <Header {...headerOptions} />}*/}
+        {/*{showNavigator && <Navigator {...navigatorOptions} />}*/}
 
         <LayoutComponent>
 
           {/* -------- Left Side Bar -------- */}
 
-          {showSidebar &&
-          <Sider className={tc(['sider'])}>
-            {hole.fill(sidebar)}
-          </Sider>}
+          {/*{showSidebar &&*/}
+          {/*<Sider className={tc(['sider'])}>*/}
+          {/*{hole.fill(sidebar)}*/}
+          {/*</Sider>}*/}
 
           {/* -------- Main Content -------- */}
 
           <Content className={tc(['content'], [contentClass])}>
             <ErrorBoundary>
-              {React.Children.map(this.props.children, (child) => {
-                return child;
-              }, {})}
+              {renderChildren(this.props.children)}
             </ErrorBoundary>
           </Content>
 
           {/*<Sider>right sidebar</Sider>*/}
         </LayoutComponent>
 
+
         {/* -------- Footer -------- */}
 
-        <Footer className={tc(['footer'])}>
-          {footer}
-        </Footer>
+        {/*<Footer className={tc(['footer'])}>*/}
+        {/*{footer}*/}
+        {/*</Footer>*/}
 
-        {showFeedback && <Feedback />}
+        {/*{showFeedback && <Feedback />}*/}
 
       </LayoutComponent>
     );

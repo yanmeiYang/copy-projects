@@ -30,7 +30,6 @@ module.exports = {
   // devtool: production ? false : 'cheap-module-eval-source-map',
 
   extraBabelPlugins: [
-    "@babel/plugin-transform-runtime",
     "transform-decorators-legacy",
     ["import", { libraryName: "antd", style: true }]
   ],

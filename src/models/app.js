@@ -1,7 +1,7 @@
 import { parse } from 'qs';
 import { message as antdMessage } from 'antd';
 import { Map } from 'immutable';
-import { routerRedux } from 'dva/router';
+import { router } from 'core';
 import { config, queryURL } from 'utils';
 import * as debug from 'utils/debug';
 import { mergeLibs } from 'utils/requirejs';
@@ -25,9 +25,12 @@ export default {
 
   state: {
     token: auth.getLocalToken(),
-    user: {}, // TODO immutable user and roles.
-    roles: auth.createEmptyRoles(), // { admin: false, ccf_user: false, role: [], authority: [] },
-    feedbackStatus: null,
+    user: null, // immutable user.
+
+    // { admin: false, ccf_user: false, role: [], authority: [] },
+    roles: auth.createEmptyRoles(), // TODO immutable it
+
+    feedbackStatus: null, // TODO immutable TODO move out.
 
     // ------------- organize this ---------------------
 
@@ -54,6 +57,7 @@ export default {
       const { success, data } = yield call(authService.getCurrentUserInfo, parse(payload));
       if (success && data) {
         yield put({ type: 'getMeSuccess', payload: data });
+        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>', data);
       }
     },
 
@@ -110,7 +114,9 @@ export default {
           if (process.env.NODE_ENV !== 'production') {
             console.log('Login Success, Dispatch to ', decodeURIComponent(from));
           }
-          yield put(routerRedux.push({ pathname: decodeURIComponent(from) }));
+          // TODO umi router
+          router.push(decodeURIComponent(from));
+          // yield put(router.push({ pathname: decodeURIComponent(from) }));
           return true; // login success
         }
       } else {
@@ -128,10 +134,12 @@ export default {
       if (sysconfig.AuthLoginUsingThird) {
         window.location.href = sysconfig.AuthLoginUsingThirdPage;
       } else {
-        yield put(routerRedux.push({
-          pathname: sysconfig.Auth_LoginPage,
-          query: { from: auth.getLoginFromURL() },
-        }));
+        // TODO umi router.
+        router.push(sysconfig.Auth_LoginPage);
+        // yield put(routerRedux.push({
+        //   pathname: sysconfig.Auth_LoginPage,
+        //   query: { from: auth.getLoginFromURL() },
+        // }));
       }
 
       // last call api.
@@ -174,6 +182,7 @@ export default {
     },
 
     getMeSuccess(state, { payload: user, role }) {
+      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>', user, role);
       const roles = auth.parseRoles(user);
       if (role) { // tencent在用
         if (roles.role.length > 0 && !roles.role.includes(role)) {

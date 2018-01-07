@@ -10,6 +10,7 @@ module.exports = {
       components: `${__dirname}/src/components`,
       models: `${__dirname}/src/models`,
       core: `${__dirname}/src/core`,
+      engine: `${__dirname}/src/engine`,
       services: `${__dirname}/src/services`,
       plugins: `${__dirname}/src/plugins`,
       utils: `${__dirname}/src/utils`,

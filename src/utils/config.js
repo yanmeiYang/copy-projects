@@ -27,8 +27,6 @@ const CORS = [
 const YQL = [];
 const name = '专家搜索';
 const prefix = 'aminer';
-const iconFontCSS = '/iconfont.css';
-const iconFontJS = '/iconfont.js';
 
 const api = {
   // user system
@@ -261,7 +259,6 @@ export {
   openPages, JSONP, CORS, YQL,
 
   name, prefix,
-  iconFontCSS, iconFontJS,
 
   // AMiner restful API.
   api,

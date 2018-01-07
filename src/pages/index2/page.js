@@ -1,7 +1,7 @@
 import Link from 'umi/link';
 import Count from 'components/Count';
 import styles from './page.css';
-import { engine } from 'core';
+import { engine } from 'engine';
 
 engine.router(() => {
   return (

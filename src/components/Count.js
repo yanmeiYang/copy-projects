@@ -1,8 +1,6 @@
 import React from 'react';
 import { Button } from 'antd-mobile';
-import { engine, connect } from "core";
-
-console.log("COMPONENT COUNT 1111111111111111111111111111111111111111111111111");
+import { engine, connect } from "engine";
 
 engine.model(require('models/count').default);
 

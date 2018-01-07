@@ -1,0 +1,36 @@
+.feedbackForm {
+  width: 360px;
+  padding-bottom: 20px;
+  .submitBtn {
+    margin-bottom: 0px;
+    text-align: right;
+  }
+  .inputBox {
+    margin-top: 7px;
+  }
+}
+
+.affixFeedback {
+  height: 0px;
+  position: fixed;
+  right: 28px;
+  bottom: 25px;
+  width: 105px;
+  //text-align: right;
+  //height: 0px;
+  //margin-right: 20px;
+}
+
+:global { // this is bad.
+  .ant-popover-title { font-size: 14px; }
+  .ant-popover-inner-content { padding-top: 0px; padding-bottom: 0px; }
+}
+
+.titleBox {
+  display: flex; flex-direction: row;
+  justify-content: space-between;
+}
+
+.deleteBtn { cursor: pointer; color: red }
+
+.fdBtn { padding: 0!important; }

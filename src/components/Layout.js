@@ -16,13 +16,14 @@ import { config } from 'utils';
 import { hole } from 'core';
 import { Header, Navigator } from 'components/headers';
 import { Feedback } from 'components/widgets';
-import { ErrorBoundary } from 'components/core';
+import { Hole, ErrorBoundary } from 'components/core';
 import styles from './Layout.less';
 
 const { Sider, Content, Footer } = LayoutComponent;
 
 const tc = applyTheme(styles);
 
+// Register related modules.
 engine.model(require('models/app').default);
 
 // let lastHref;
@@ -98,7 +99,7 @@ export default class Layout extends Component {
   };
 
   render() {
-    // console.log('>>>>>>>>>> App Render:', this.props); // TODO performance
+    console.log('>>>>>>>>>> App Render:', this.props); // TODO performance
     const { sidebar, footer, navigatorItems } = this.props;
     const { contentClass, showHeader, showNavigator, showSidebar, showFeedback } = this.props;
     const { dispatch, loading } = this.props;
@@ -148,17 +149,17 @@ export default class Layout extends Component {
 
         </Helmet>
 
-        {/*{showHeader && <Header {...headerOptions} />}*/}
+        {showHeader && <Header {...headerOptions} />}
         {showNavigator && <Navigator {...navigatorOptions} />}
 
         <LayoutComponent>
 
           {/* -------- Left Side Bar -------- */}
 
-          {/*{showSidebar &&*/}
-          {/*<Sider className={tc(['sider'])}>*/}
-          {/*{hole.fill(sidebar)}*/}
-          {/*</Sider>}*/}
+          {showSidebar &&
+          <Sider className={tc(['sider'])}>
+            {hole.fill(sidebar)}
+          </Sider>}
 
           {/* -------- Main Content -------- */}
 
@@ -174,11 +175,11 @@ export default class Layout extends Component {
 
         {/* -------- Footer -------- */}
 
-        {/*<Footer className={tc(['footer'])}>*/}
-        {/*{footer}*/}
-        {/*</Footer>*/}
+        <Footer className={tc(['footer'])}>
+          {footer}
+        </Footer>
 
-        {/*{showFeedback && <Feedback />}*/}
+        {showFeedback && <Feedback />}
 
       </LayoutComponent>
     );

@@ -4,7 +4,8 @@
 import React from 'react';
 import classnames from 'classnames';
 // import { sysconfig } from 'systems';
-import { Link, router, resRoot } from 'core';
+import { resRoot } from 'core';
+import { Link, router } from 'engine';
 import hole from 'core/hole';
 import { FormattedMessage as FM } from 'react-intl';
 import { IndexCenterZone } from 'systems/demo/components';
@@ -17,12 +18,14 @@ export default {
   // Layout
   logoZone: [
     // TODO umi Router.
-    <Link to="/" href="/" className={classnames(styles.logoZones)} key="0">
-      <div className={classnames(styles.header_logo, 'icon')} />
+    <div className={classnames(styles.logoZones, 'header-logo')} key="0">
+      <Link to="index">
+        <div className={classnames(styles.header_logo, 'icon')} />
+      </Link>
       <div className={classnames(styles.header_subTitle, 'font-page-title')}>
-        科技情报深度洞察
+        <Link to="index">科技情报深度洞察</Link>
       </div>
-    </Link>,
+    </div>,
   ],
 
   infoZone: [],
@@ -30,7 +33,7 @@ export default {
   footer: (
     <div className={styles.footerText}>
       <div>Powered by：</div>
-      <Link to="/">
+      <Link to="index">
         <img src={`${resRoot}/aminer_logo.png`} alt="AMiner logo" className={styles.aminerLogo} />
       </Link>
     </div>

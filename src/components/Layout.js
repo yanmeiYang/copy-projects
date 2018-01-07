@@ -98,7 +98,7 @@ export default class Layout extends Component {
   };
 
   render() {
-    console.log('>>>>>>>>>> App Render:', this.props); // TODO performance
+    // console.log('>>>>>>>>>> App Render:', this.props); // TODO performance
     const { sidebar, footer, navigatorItems } = this.props;
     const { contentClass, showHeader, showNavigator, showSidebar, showFeedback } = this.props;
     const { dispatch, loading } = this.props;
@@ -127,7 +127,7 @@ export default class Layout extends Component {
 
     const title = pageTitle || (pageSubTitle ? `${sysconfig.PageTitle} | ${pageSubTitle}` : sysconfig.PageTitle);
 
-    return (
+    return engine.withIntl(
       <LayoutComponent className={tc(['layout'])}>
         <Helmet>
           <title>{title}</title>
@@ -149,7 +149,7 @@ export default class Layout extends Component {
         </Helmet>
 
         {/*{showHeader && <Header {...headerOptions} />}*/}
-        {/*{showNavigator && <Navigator {...navigatorOptions} />}*/}
+        {showNavigator && <Navigator {...navigatorOptions} />}
 
         <LayoutComponent>
 

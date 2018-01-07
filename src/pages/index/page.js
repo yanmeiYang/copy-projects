@@ -28,6 +28,7 @@
 
 // export default app.start();
 
+import React from 'react';
 import Link from 'umi/link';
 import Count from 'components/Count';
 import styles from './page.css';
@@ -38,7 +39,7 @@ import Layout from 'components/Layout';
 // engine.model(require('models/count').default);
 
 export default engine.router(() => {
-  return (
+  const result = (
     <Layout className={styles.normal}>
       <h2>Index Page</h2>
       <br />
@@ -50,6 +51,7 @@ export default engine.router(() => {
       </div>
     </Layout>
   );
+  return result;
 });
 
 // export default engine.start();

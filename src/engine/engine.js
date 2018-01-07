@@ -75,7 +75,7 @@ const initIntl = () => {
   // addLocaleData(require(`react-intl/locale-data/${Locale}`));
   addLocaleData([...en, ...zh]);
 
-  // return require(`./locales/${Locale}`).default;
+  return require(`locales/${Locale}`).default;
 };
 
 
@@ -116,29 +116,25 @@ const model = (m) => {
 };
 
 const start = () => {
-  debug("------------- CAll start()");
-
   if (!engineInstance) {
-
-// const App = app.start();
-// engineInstance = (
-//   <IntlProvider locale={Locale} messages={initIntl()}>
-//     <App />
-//   </IntlProvider>
-// );
-    debug("------------- Read CAll start()");
     engineInstance = app.start();
-    console.log('----', engineInstance);
-
     debug("Engine start success.");
   }
   return engineInstance;
 };
 
+const messages = initIntl();
+
+const withIntl = (Child) => {
+  return React.createElement(IntlProvider,
+    { locale: Locale, messages },
+    Child,
+  );
+};
+
 const router = (router) => {
-  debug("------------- router ", router);
   app.router(router);
   return start();
 };
 
-export { model, router, start }
+export { model, router, start, withIntl }

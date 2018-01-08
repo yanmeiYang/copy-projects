@@ -2,7 +2,7 @@
 /**
  * Created by bogao on 2017/09/13.
  */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { resRoot } from 'core';
 import { engine, connect, renderChildren } from 'engine';
@@ -20,16 +20,18 @@ import { Hole, ErrorBoundary } from 'components/core';
 import styles from './Layout.less';
 
 const { Sider, Content, Footer } = LayoutComponent;
-
 const tc = applyTheme(styles);
+const debug = require('debug')('aminer:engine');
 
 // Register related modules.
+debug('Debug start Layout ------------------------------');
+
 engine.model(require('models/app').default);
 
 // let lastHref;
 
-@connect(({ app, loading }) => ({ app: { user: app.user, roles: app.roles }, loading }))
-export default class Layout extends Component {
+@connect(({ app, loading }) => ({ app, loading }))
+export default class Layout extends PureComponent {
   static displayName = 'Layout';
 
   static propTypes = {
@@ -83,23 +85,23 @@ export default class Layout extends Component {
     }
   }
 
-  componentWillReceiveProps = (nextProps) => {
-    const { headerResources } = nextProps.app;
-    if (
-      (headerResources !== this.props.app.headerResources) ||
-      (headerResources && !this.headerResourcesArray)
-    ) {
-      this.headerResourcesArray = [];
-      if (headerResources) {
-        headerResources.forEach((k, v) => {
-          this.headerResourcesArray.push(...k);
-        });
-      }
-    }
-  };
+  // componentWillReceiveProps = (nextProps) => {
+  //   const { headerResources } = nextProps.app;
+  //   if (
+  //     (headerResources !== this.props.app.headerResources) ||
+  //     (headerResources && !this.headerResourcesArray)
+  //   ) {
+  //     this.headerResourcesArray = [];
+  //     if (headerResources) {
+  //       headerResources.forEach((k, v) => {
+  //         this.headerResourcesArray.push(...k);
+  //       });
+  //     }
+  //   }
+  // };
 
   render() {
-    console.log('>>>>>>>>>> App Render:', this.props); // TODO performance
+    // console.log('>>>>>>>>>> App Render:', this.props); // TODO performance
     const { sidebar, footer, navigatorItems } = this.props;
     const { contentClass, showHeader, showNavigator, showSidebar, showFeedback } = this.props;
     const { dispatch, loading } = this.props;

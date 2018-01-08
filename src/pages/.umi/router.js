@@ -13,12 +13,12 @@ export default function() {
   return (
 <Router history={window.g_history}>
   <Switch>
-    <Route exact path="/index.html" component={() => <div>Compiling...</div>}></Route>
-    <Route exact path="/index2.html" component={() => <div>Compiling...</div>}></Route>
+    <Route exact path="/index.html" component={require('../index/page.js').default}></Route>
     <Route exact path="/list.html" component={() => <div>Compiling...</div>}></Route>
     <Route exact path="/login.html" component={require('../login/page.js').default}></Route>
-    <Route exact path="/test/test-page.html" component={() => <div>Compiling...</div>}></Route>
-    <Route exact path="/" component={() => <div>Compiling...</div>}></Route>
+    <Route exact path="/test1.html" component={require('../test1/page.js').default}></Route>
+    <Route exact path="/test2.html" component={require('../test2/page.js').default}></Route>
+    <Route exact path="/" component={require('../index/page.js').default}></Route>
   </Switch>
 </Router>
   );

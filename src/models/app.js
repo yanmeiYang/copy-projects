@@ -1,16 +1,15 @@
 import { parse } from 'qs';
 import { message as antdMessage } from 'antd';
 import { Map } from 'immutable';
-import { router } from 'core';
-import { config, queryURL } from 'utils';
+import { router } from 'engine';
+import { queryURL } from 'utils';
 import * as debug from 'utils/debug';
-import { mergeLibs } from 'utils/requirejs';
 import * as auth from 'utils/auth';
 import * as authService from 'services/auth';
 import { sysconfig } from 'systems';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages } from 'react-intl';
 
-const { prefix } = config;
+// const { prefix } = config;
 
 const messages = defineMessages({
   errorMessage401: {
@@ -23,9 +22,9 @@ const messages = defineMessages({
 export default {
   namespace: 'app',
 
-  state: {
+  state: Map({
     token: auth.getLocalToken(),
-    user: null, // immutable user.
+    user: null,
 
     // { admin: false, ccf_user: false, role: [], authority: [] },
     roles: auth.createEmptyRoles(), // TODO immutable it
@@ -37,7 +36,7 @@ export default {
     isAdvancedSearch: false,
 
     headerResources: null, // { key: [<helmet_component>] }
-  },
+  }),
 
   subscriptions: {
     setup({ dispatch }) {
@@ -46,7 +45,7 @@ export default {
 
       // 这里的DEBUG内容，只有开发模式时才生效。
       if (process.env.NODE_ENV !== 'production') {
-        dispatch({ type: 'set', payload: { debug } });
+        dispatch({ type: 'initDebug', debug });
       }
     },
   },
@@ -57,7 +56,6 @@ export default {
       const { success, data } = yield call(authService.getCurrentUserInfo, parse(payload));
       if (success && data) {
         yield put({ type: 'getMeSuccess', payload: data });
-        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>', data);
       }
     },
 
@@ -110,12 +108,13 @@ export default {
           yield put({ type: 'getMeSuccess', payload: getMeData.data, role });
           yield put({ type: 'auth/hideLoading' });
           // yield auth.dispatchAfterLogin(put);
-          const from = queryURL('from') || '/';
+          const from = queryURL('from') || sysconfig.DefaultUrlAfterLogin;
+          const decodedFrom = auth.decodeFrom(from);
           if (process.env.NODE_ENV !== 'production') {
-            console.log('Login Success, Dispatch to ', decodeURIComponent(from));
+            console.log('Login Success, Dispatch to ', decodedFrom);
           }
-          // TODO umi router
-          router.push(decodeURIComponent(from));
+          router.push(decodedFrom);
+
           // yield put(router.push({ pathname: decodeURIComponent(from) }));
           return true; // login success
         }
@@ -134,12 +133,10 @@ export default {
       if (sysconfig.AuthLoginUsingThird) {
         window.location.href = sysconfig.AuthLoginUsingThirdPage;
       } else {
-        // TODO umi router.
-        router.push(sysconfig.Auth_LoginPage);
-        // yield put(routerRedux.push({
-        //   pathname: sysconfig.Auth_LoginPage,
-        //   query: { from: auth.getLoginFromURL() },
-        // }));
+        router.push({
+          pathname: sysconfig.Auth_LoginPage,
+          query: { from: auth.getLoginFromURL() },
+        });
       }
 
       // last call api.
@@ -177,12 +174,18 @@ export default {
       return { ...state, ...payload };
     },
 
-    setDebug(state, { payload }) {
-      return { ...state, debug: { ...state.debug, ...payload } };
+    initDebug(state, { debug }) {
+      return state.set('debug', debug);
     },
 
+    setDebug(state, { debug }) {
+      // TODO set debug options.
+      return state.set('debug', debug);
+    },
+
+    // 第二个参数Role是腾讯再用
     getMeSuccess(state, { payload: user, role }) {
-      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>', user, role);
+      // TODO special for tencent. make it not so special.
       const roles = auth.parseRoles(user);
       if (role) { // tencent在用
         if (roles.role.length > 0 && !roles.role.includes(role)) {
@@ -190,7 +193,22 @@ export default {
         }
       }
       auth.saveLocalAuth(user, roles);
-      return { ...state, user, roles };
+      console.log('+++++++++++++++', state);
+      return state.set('user', user).set('roles', roles);
+      // return { ...state, user, roles };
+    },
+
+    alreadyLoggedIn(state, { user, roles }) {
+      return state.set('user', user).set('roles', roles);
+    },
+
+    emptyAuthInfo(state) {
+      return state.deleteAll(['user', 'roles', 'token']);
+    },
+
+    logoutSuccess(state) {
+      auth.removeLocalAuth();
+      return state.deleteAll(['user', 'roles', 'token']);
     },
 
     layout(state, { payload }) {
@@ -198,14 +216,6 @@ export default {
     },
 
     // ---------- below delete later -----------
-
-    emptyAuthInfo(state) {
-      return { ...state, user: undefined, roles: undefined, token: undefined };
-    },
-
-    alreadyLoggedIn(state, { user, roles }) {
-      return { ...state, user, roles };
-    },
 
     toggleAdvancedSearch(state) {
       return { ...state, isAdvancedSearch: !state.isAdvancedSearch };
@@ -217,11 +227,6 @@ export default {
 
     changeToSimpleSearch(state) {
       return { ...state, isAdvancedSearch: false };
-    },
-
-    logoutSuccess(state) {
-      auth.removeLocalAuth();
-      return { ...state, user: {}, token: null, roles: auth.createEmptyRoles() };
     },
 
     feedbackSuccess(state, { payload }) {

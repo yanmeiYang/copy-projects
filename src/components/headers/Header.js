@@ -16,28 +16,10 @@ const tc = applyTheme(styles);
 
 function mapStateToPropsFactory(initialState, ownProps) {
   // a closure for ownProps is created
-  // console.log('****** mapStateToPropsFactory',);
   return function mapStateToProps(state) {
-    // console.log('****** mapStateToProps',); // TODO Performance
-    return ({
-      app: {
-        user: state.app.user,
-        roles: state.app.roles,
-        // isAdvancedSearch: state.app.isAdvancedSearch,
-      },
-    });
+    return ({ app: state.app });
   };
 }
-
-const mapStateToProps = (state) => {
-  // console.log('****** mapStateToProps',); // TODO Performance
-  return ({
-    app: {
-      user: state.app.user,
-      roles: state.app.roles,
-    },
-  });
-};
 
 @connect(mapStateToPropsFactory)
 export default class Header extends Component {

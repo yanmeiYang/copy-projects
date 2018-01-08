@@ -3,7 +3,7 @@
   "version": "0.1.2",
   "private": true,
   "scripts": {
-    "start": "cross-env DEBUG=aminer:*,perf:aminer:* umi dev",
+    "start": "cross-env DISABLE_ESLINT=1 DEBUG=aminer:* umi dev",
     "build": "umi build"
   },
   "dependencies": {
@@ -19,7 +19,7 @@
     "fastclick": "^1.0.6",
     "history": "^4.7.2",
     "humps": "^2.0.1",
-    "immutable": "^3.8.2",
+    "immutable": "^4.0.0-0",
     "intl": "^1.2.5",
     "intl-locales-supported": "^1.0.0",
     "js-beautify": "^1.7.5",
@@ -62,7 +62,6 @@
     "eslint-plugin-compat": "^2.1.0",
     "eslint-plugin-flowtype": "^2.40.1",
     "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.5.1",
     "less-vars-to-js": "^1.2.1",
     "umi": "^1.0.0-0"

@@ -40,11 +40,11 @@ class Feedback extends React.Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-          const data = values;
-          this.props.dispatch({
-            type: 'app/setFeedback',
-            payload: { ...data, user: this.props.user, url: window.location.href },
-          });
+        const data = values;
+        this.props.dispatch({
+          type: 'app/setFeedback',
+          payload: { ...data, user: this.props.user, url: window.location.href },
+        });
       }
     });
   };
@@ -152,5 +152,5 @@ class Feedback extends React.Component {
 }
 
 export default connect(({ app, loading }) => ({
-  user: app.user, feedbackStatus: app.feedbackStatus, loading,
+  user: app.get('user'), feedbackStatus: app.get('feedbackStatus'), loading,
 }))(Form.create()(Feedback));

@@ -33,26 +33,32 @@ import Link from 'umi/link';
 import Count from 'components/Count';
 import styles from './page.css';
 import { engine } from 'engine';
-import Layout from 'components/Layout';
-// import { Layout as LayoutComponent } from 'antd';
 
-// engine.model(require('models/count').default);
-
-export default engine.router(() => {
+const r = () => {
   const result = (
-    <Layout className={styles.normal}>
-      <h2>Index Page</h2>
+    <div className={styles.normal}>
+      <h2>Test1 Page</h2>
       <br />
       <Count />
       <div>
         <Link to="/list">Go to list.html</Link>
         <br />
-        <Link to="/test/test-page">Go to Test</Link>
+        <Link to="/index">Go Home</Link>
+        <br />
+        <Link to="/test1">Test1 Page</Link>
+        <br />
+        <Link to="/test2">Test2 Page</Link>
+        <br />
       </div>
-    </Layout>
+    </div>
   );
   return result;
-});
+};
+
+// engine.router(() => <div>替换掉了。。。。我的妈呀</div>);
+// const bb = engine.start();
+
+export default engine.router(r);
 
 // export default engine.start();
 

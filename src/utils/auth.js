@@ -1,8 +1,10 @@
 /* eslint-disable no-extend-native */
 // import AES from 'crypto-js/aes';
-import { router } from 'core';
+import { router } from 'engine';
 import { sysconfig } from 'systems';
 import { queryURL } from './index';
+
+const debug = require('debug')('aminer:engine');
 
 // import config from './config';
 const AES_KEY = 'deng-dili-dengleng-dideng';
@@ -38,30 +40,39 @@ function saveLocalTokenSystem(system, token) {
  * @param dispatch or put
  */
 function dispatchToLogin(dispatch) {
+  debug('AUTH :::: dispatchToLogin');
+
   const from = getLoginFromURL();
   if (process.env.NODE_ENV !== 'production') {
     console.log('Dispatch to Login Page from ', from);
   }
   if (sysconfig.AuthLoginUsingThird) {
+    debug('AUTH :::: redirect to 3rd page: %s', sysconfig.AuthLoginUsingThirdPage);
     window.location.href = sysconfig.AuthLoginUsingThirdPage;
   } else {
     // TODO umi jump add parameter.
-    router.push(sysconfig.Auth_LoginPage);
-    // dispatch(router.push({
-    //   pathname: sysconfig.Auth_LoginPage,
-    //   query: { from },
-    // }));
+    const path = { pathname: sysconfig.Auth_LoginPage };
+    if (from) {
+      path.query = { from };
+    }
+    debug('AUTH :::: redirect to %s', path);
+    router.push(path);
   }
 }
 
-function dispatchAfterLogin(put) {
-  const from = queryURL('from') || '/';
+function dispatchAfterLogin() {
+  const from = queryURL('from') || '/index';
+
+  debug('AUTH :::: dispatchAfterLogin to %s.', from);
+
   if (process.env.NODE_ENV !== 'production') {
     console.log('Login Success, Dispatch to ', decodeURIComponent(from));
   }
-  // TODO umi jump add parameter.
-  router.push(decodeURIComponent(from));
-  // put(routerRedux.push({ pathname: decodeURIComponent(from) }));
+  let redirect = decodeURIComponent(from);
+  if (redirect.endsWith('.html')) {
+    redirect = redirect.replace('.html', '');
+  }
+  router.push(redirect);
 }
 
 /**
@@ -260,6 +271,14 @@ function getLoginFromURL() {
   return from;
 }
 
+function decodeFrom(from) {
+  let redirect = decodeURIComponent(from);
+  if (redirect.endsWith('.html')) {
+    redirect = redirect.replace('.html', '');
+  }
+  return redirect;
+}
+
 export {
   isLogin,
   createEmptyRoles,
@@ -285,4 +304,5 @@ export {
 
   ensureUserAuthFromAppModel,
   getLoginFromURL,
+  decodeFrom,
 };

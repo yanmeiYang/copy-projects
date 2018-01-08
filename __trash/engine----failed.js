@@ -16,6 +16,7 @@ import { sysconfig } from 'systems';
 // locale, list all locales here.
 import en from 'react-intl/locale-data/en';
 import zh from 'react-intl/locale-data/zh';
+import { engine } from "engine/index";
 
 const { SYSTEM, Locale } = sysconfig;
 
@@ -49,17 +50,27 @@ const initDVA = (app) => {
       app.use({ onAction: createLogger() });
     }
   }
+  return app;
 };
 
-// Create DVA
-const app = dva({
-  // history: createHistory(),
-  onError,
-});
 
-initDVA(app);
+// 临时解决方案，解决dva不能重置router的问题。不能重新start的问题。
+// 因为同时只可能打开一个页面。所以dva实例每个页面一个吧。
+// TODO umi 暂时dva的state不能跨页面共享。
+// TODO 但是已经打开的页面保留state.
+// create engine on each page. register model on each page.
+let currentInstance; // The current instance.
 
-const cache = {};
+const create = () => {
+  debug("******* Create New Engine!!! Performance Issue.", window.location.href);
+
+  const instance = {
+    cache: { 'app': require('models/app').default },
+    app: initDVA(dva({ /* history: createHistory(), */      onError, })),
+  };
+  currentInstance = instance;
+  // return instance;
+};
 
 const model = (m) => {
   debug("Try add model %s.", m.namespace);
@@ -71,41 +82,56 @@ const model = (m) => {
       return;
     }
   }
-
+  const cache = currentInstance.cache;
   if (cache[m.namespace]) {
     // debug("Can't add model with the exist namespace %s.", m.namespace);
     return;
   }
 
+  // 将model添加到缓存，然后等router的时候一起初始化。
   // Add model to dva.
-  app.model(m);
+  // currentInstance.app.model(m);
 
   // Don't need to save model instance to avoid unnecessary memory-leak.
-  cache[m.namespace] = true;
+  cache[m.namespace] = m;
 };
 
 const start = () => {
-  return app.start();
+  return currentInstance.app.start();
 };
+// const createDVATest = () => {
+//   debug('Create a new DVA instance! Models do not share data');
+//   const app = dva({
+//     // history: createHistory(),
+//     onError,
+//   });
+//   initDVA(app);
+//   return app;
+// };
 
 const router = (router) => {
-  debug('Set Router: ', router);
+  debug('dva.router');
+  const app = currentInstance.app;
+  // TODO add module
+  Object.keys(currentInstance.cache).forEach((ns) => {
+    const m = currentInstance.cache[ns];
+    debug('add model %s', ns);
+    app.model(m);
+  });
   app.router(() => React.createElement(router));
   return app.start();
 };
 
+// const router_backup = (router) => {
+//   debug('Set Router: ', router);
+//   app.router(() => React.createElement(router));
+//   return start();
+// };
+
 const dvaRouter = (router) => {
-  debug('Set DvaRouter: ', router);
+  const app = currentInstance.app;
   app.router(router);
   return start();
-};
-
-// -------------------------------------------------
-// Decorator
-// -------------------------------------------------
-
-const Router = (Page) => {
-  return router(Page);
 };
 
 // -------------------------------------------------
@@ -162,7 +188,4 @@ initANTD();
 // -------------------------------------------------
 
 
-export {
-  model, router, dvaRouter, start,
-  Router, withIntl,
-}
+export { model, router, dvaRouter, start, withIntl, create }

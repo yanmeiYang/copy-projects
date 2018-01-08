@@ -24,6 +24,8 @@ export default (system, source) => ({
 
   MainListSize: 20,
 
+  DefaultUrlAfterLogin: '/index',
+
   /**
    * Layout related
    */

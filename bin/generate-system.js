@@ -5,12 +5,16 @@
  *
  *  TODO BUILD TreeShake non target systems.
  */
+const debug = require('debug')('aminer:engine');
+
 // const { AvailableSystems } = require('../src/core/system');
 const { replaceFile, createFile } = require('./node_tools');
 
 // get system from parameter.
 
 const args = process.argv.splice(2);
+
+debug('arguments is : %o', args);
 
 let system;
 const idx = args.indexOf('-s');

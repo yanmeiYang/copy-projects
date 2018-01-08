@@ -1,115 +1,67 @@
-// import Link from 'umi/link';
-// import dva from 'dva';
-// import Count from 'components/Count';
-// import styles from './page.css';
-// import { engine } from 'engine';
-// import Layout from 'components/Layout';
-//
-// const app = dva();
-// app.model(require('models/app').default);
-// app.model(require('models/count').default);
-//
-// console.log(">>>>> render page 1");
-//
-// app.router(() => {
-//   return (
-//     <Layout>
-//       <div className={styles.normal}>
-//         <h2>Index Page</h2>
-//         <Count />
-//         <br />
-//         <div>
-//           <Link to="/list">Go to list.html</Link>
-//         </div>
-//       </div>
-//     </Layout>
-//   );
-// });
+import React, { Component } from 'react';
+import { connect } from 'dva';
+import { engine, router, Router, Link } from 'engine';
+import { hole } from 'core';
+import { Layout } from 'components/layout';
+import { sysconfig } from 'systems';
+import { theme, applyTheme } from 'themes';
+// import { KgSearchBox } from 'components/search';
+import { IndexHotLinks } from 'components/widgets';
+import { Auth } from 'hoc';
+import styles from './page.less';
 
-// export default app.start();
+const tc = applyTheme(styles);
 
-import React from 'react';
-import Link from 'umi/link';
-import Count from 'components/Count';
-import styles from './page.css';
-import { engine } from 'engine';
-import Layout from 'components/Layout';
-// import { Layout as LayoutComponent } from 'antd';
+console.log('>>>>>>>>>>>>> IndexPageIndexPageIndexPageIndexPageIndexPage',);
 
-// engine.model(require('models/count').default);
+@connect(({ app }) => ({ app }))
+@Auth
+// @Router
+class IndexPage extends Component {
+  static displayName = 'IndexPage';
 
-export default engine.router(() => {
-  const result = (
-    <Layout className={styles.normal}>
-      <h2>Index Page</h2>
-      <br />
-      <Count />
-      <div>
-        <Link to="/list">Go to list.html</Link>
-        <br />
-        <Link to="/test/test-page">Go to Test</Link>
-      </div>
-    </Layout>
-  );
-  return result;
-});
+  constructor(props) {
+    super(props);
+  }
 
-// export default engine.start();
+  // componentWillUnmount() {
+  //   this.dispatch({ type: 'app/layout', payload: { showFooter: true } });
+  // };
 
+  onSearch = ({ query }) => {
+    if (query && query.trim() !== '') {
+      router.push(`/${sysconfig.SearchPagePrefix}/${query}/0/20`);
+    }
+  };
 
-// import Link from 'umi/link';
-// import dva from 'dva';
-// import Count from 'components/Count';
-// import styles from './page.css';
-// import { engine } from 'engine';
-// import { Layout as LayoutComponent } from 'antd';
-//
-// const app = dva();
-// app.model(require('models/count')
-//   .default);
-//
-// console.log(">>>>> render page 1");
-//
-// app.router(() => {
-//   return (
-//     <LayoutComponent className={styles.normal}>
-//       <h2>Index Page</h2>
-//       <Count />
-//       <br />
-//       <div>
-//         <Link to="/list">Go to list.html</Link>
-//       </div>
-//     </LayoutComponent>
-//   );
-// });
-//
-// export default app.start();
+  render() {
+    const bannerZone = theme.index_bannerZone;
 
+    return (
+      <Layout searchZone={[]} contentClass={tc(['indexPage'])} showNavigator={false}>
 
-// import Link from 'umi/link';
-// import Count from 'components/Count';
-// import styles from './page.css';
-// import { engine } from 'engine';
-// import { Layout as LayoutComponent } from 'antd';
-//
-//
-// engine.model(require('models/count').default);
-//
-// console.log(">>>>> render page 1");
-//
-// engine.router(() => {
-//   return (
-//     <LayoutComponent className={styles.normal}>
-//       <h2>Index Page</h2>
-//       <Count />
-//       <br />
-//       <div>
-//         <Link to="/list">Go to list.html</Link>
-//         <br />
-//         <Link to="/test/test-page">TEST---</Link>
-//       </div>
-//     </LayoutComponent>
-//   );
-// });
-//
-// export default engine.start();
+        {bannerZone && bannerZone.length > 0 && bannerZone.map(elm => elm)}
+
+        <div className={styles.search}>
+          {/*// TODO use localStorage to search.*/}
+          {/*<Spinner loading={true} type="dark" />*/}
+
+          {/*<KgSearchBox size="huge" className={styles.searchBox} onSearch={this.onSearch} />*/}
+        </div>
+
+        {hole.fill(theme.index_centerZone, [
+          <IndexHotLinks
+            key={100}
+            links={sysconfig.IndexPage_QuickSearchList}
+            urlFunc={query => `/${sysconfig.SearchPagePrefix}/${query}/0/${sysconfig.MainListSize}`}
+          />,
+        ], { k: 124 })}
+
+        {/*{centerZone && centerZone.length > 0 && centerZone.map(elm => elm)}*/}
+
+      </Layout>
+    );
+  }
+}
+
+export default engine.router(IndexPage);

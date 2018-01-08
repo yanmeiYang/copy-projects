@@ -844,9 +844,9 @@ address@1.0.3, address@^1.0.1, address@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/address/-/address-1.0.3.tgz#b5f50631f8d6cec8bd20c963963afb55e06cbce9"
 
-af-webpack@^0.13.14:
-  version "0.13.14"
-  resolved "https://registry.yarnpkg.com/af-webpack/-/af-webpack-0.13.14.tgz#34856986afde3a233768ccb56213bcc587281224"
+af-webpack@^0.13.17:
+  version "0.13.17"
+  resolved "https://registry.yarnpkg.com/af-webpack/-/af-webpack-0.13.17.tgz#af25098541a1d47e22fa0666714d9c5d5cb5b3d9"
   dependencies:
     "@babel/core" "7.0.0-beta.31"
     "@babel/plugin-transform-modules-commonjs" "7.0.0-beta.31"
@@ -859,7 +859,7 @@ af-webpack@^0.13.14:
     babel-loader "^8.0.0-beta.0"
     babel-plugin-add-module-exports "^0.2.1"
     babel-plugin-dynamic-import-node-sync "^1.0.1"
-    babel-preset-umi "^0.2.1"
+    babel-preset-umi "^0.2.2"
     case-sensitive-paths-webpack-plugin "^2.1.1"
     chalk "^2.1.0"
     chokidar "^1.7.0"
@@ -1211,8 +1211,8 @@ assert@^1.1.1, assert@^1.4.1:
     util "0.10.3"
 
 assertion-error@^1.0.1:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/assertion-error/-/assertion-error-1.0.2.tgz#13ca515d86206da0bac66e834dd397d87581094c"
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/assertion-error/-/assertion-error-1.1.0.tgz#e60b6b0e8f301bd97e5375215bda406c85118c0b"
 
 assign-symbols@^1.0.0:
   version "1.0.0"
@@ -1523,9 +1523,9 @@ babel-preset-jest@^22.0.1, babel-preset-jest@^22.0.3:
     babel-plugin-jest-hoist "^22.0.3"
     babel-plugin-syntax-object-rest-spread "^6.13.0"
 
-babel-preset-umi@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/babel-preset-umi/-/babel-preset-umi-0.2.1.tgz#aeaaa502f564e799a87c5c6dacbe6e09d9a21350"
+babel-preset-umi@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/babel-preset-umi/-/babel-preset-umi-0.2.2.tgz#0a0d88852293ad86c569185e39528481e4edf208"
   dependencies:
     "@babel/plugin-proposal-async-generator-functions" "7.0.0-beta.31"
     "@babel/plugin-proposal-class-properties" "7.0.0-beta.31"
@@ -1979,12 +1979,12 @@ caniuse-api@^1.5.2:
     lodash.uniq "^4.5.0"
 
 caniuse-db@^1.0.30000529, caniuse-db@^1.0.30000634, caniuse-db@^1.0.30000639, caniuse-db@^1.0.30000748:
-  version "1.0.30000788"
-  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000788.tgz#42e0d70e1974bf7429639169452f0c3ce6393305"
+  version "1.0.30000789"
+  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000789.tgz#5cf3fec75480041ab162ca06413153141e234325"
 
 caniuse-lite@^1.0.30000784:
-  version "1.0.30000788"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000788.tgz#b96920efca1960965c3b0e8690a06612db97e4df"
+  version "1.0.30000789"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000789.tgz#2e3d937b267133f63635ef7f441fac66360fc889"
 
 capture-stack-trace@^1.0.0:
   version "1.0.0"
@@ -3350,18 +3350,6 @@ eslint-plugin-jsx-a11y@^5.1.1:
     emoji-regex "^6.1.0"
     jsx-ast-utils "^1.4.0"
 
-eslint-plugin-jsx-a11y@^6.0.3:
-  version "6.0.3"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jsx-a11y/-/eslint-plugin-jsx-a11y-6.0.3.tgz#54583d1ae442483162e040e13cc31865465100e5"
-  dependencies:
-    aria-query "^0.7.0"
-    array-includes "^3.0.3"
-    ast-types-flow "0.0.7"
-    axobject-query "^0.1.0"
-    damerau-levenshtein "^1.0.0"
-    emoji-regex "^6.1.0"
-    jsx-ast-utils "^2.0.0"
-
 eslint-plugin-react@^7.1.0, eslint-plugin-react@^7.5.1:
   version "7.5.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.5.1.tgz#52e56e8d80c810de158859ef07b880d2f56ee30b"
@@ -4523,9 +4511,13 @@ immutability-helper@^2.1.2:
   dependencies:
     invariant "^2.2.0"
 
-immutable@^3.7.4, immutable@^3.8.2:
+immutable@^3.7.4:
   version "3.8.2"
   resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
+
+immutable@^4.0.0-0:
+  version "4.0.0-rc.9"
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-4.0.0-rc.9.tgz#1e6e0094e649013ec3742d2b5aeeca5eeda4f0bf"
 
 immutable@~3.7.4:
   version "3.7.6"
@@ -5940,8 +5932,8 @@ micromatch@^2.1.5, micromatch@^2.3.11:
     regex-cache "^0.4.2"
 
 micromatch@^3.0.3, micromatch@^3.1.4:
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/micromatch/-/micromatch-3.1.4.tgz#bb812e741a41f982c854e42b421a7eac458796f4"
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/micromatch/-/micromatch-3.1.5.tgz#d05e168c206472dfbca985bfef4f57797b4cd4ba"
   dependencies:
     arr-diff "^4.0.0"
     array-unique "^0.3.2"
@@ -5997,8 +5989,8 @@ min-document@^2.19.0:
     dom-walk "^0.1.0"
 
 mini-store@^1.0.2:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/mini-store/-/mini-store-1.0.3.tgz#190e90831be7a3862baa532168b579273b00d818"
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/mini-store/-/mini-store-1.0.4.tgz#a540fbfdbddd0415daf17a8b0cc8290c9f7d8bd6"
   dependencies:
     hoist-non-react-statics "^2.3.1"
     prop-types "^15.6.0"
@@ -6103,8 +6095,8 @@ nan@^2.3.0:
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.8.0.tgz#ed715f3fe9de02b57a5e6252d90a96675e1f085a"
 
 nanomatch@^1.2.5:
-  version "1.2.6"
-  resolved "https://registry.yarnpkg.com/nanomatch/-/nanomatch-1.2.6.tgz#f27233e97c34a8706b7e781a4bc611c957a81625"
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/nanomatch/-/nanomatch-1.2.7.tgz#53cd4aa109ff68b7f869591fdc9d10daeeea3e79"
   dependencies:
     arr-diff "^4.0.0"
     array-unique "^0.3.2"
@@ -9213,8 +9205,8 @@ tslint@^5.8.0:
     tsutils "^2.12.1"
 
 tsutils@^2.12.1:
-  version "2.15.0"
-  resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-2.15.0.tgz#90831e5908cca10b28cdaf83a56dcf8156aed7c6"
+  version "2.16.0"
+  resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-2.16.0.tgz#ad8e83f47bef4f7d24d173cc6cd180990c831105"
   dependencies:
     tslib "^1.8.1"
 
@@ -9270,8 +9262,8 @@ ua-parser-js@^0.7.9:
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.17.tgz#e9ec5f9498b9ec910e7ae3ac626a805c4d09ecac"
 
 uglify-js@3.3.x:
-  version "3.3.4"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.3.4.tgz#d8ebb76f201a3798ac2f0b6519642fcca4a99834"
+  version "3.3.5"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.3.5.tgz#4c4143dfe08e8825746675cc49a6874a933b543e"
   dependencies:
     commander "~2.12.1"
     source-map "~0.6.1"
@@ -9305,12 +9297,12 @@ ultron@~1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ultron/-/ultron-1.1.1.tgz#9fe1536a10a664a65266a1e3ccf85fd36302bc9c"
 
-umi-build-dev@^0.5.14:
-  version "0.5.14"
-  resolved "https://registry.yarnpkg.com/umi-build-dev/-/umi-build-dev-0.5.14.tgz#8ddc6d7deb57d11ee2cf2b9ad9b6ac62def75791"
+umi-build-dev@^0.5.18:
+  version "0.5.18"
+  resolved "https://registry.yarnpkg.com/umi-build-dev/-/umi-build-dev-0.5.18.tgz#44a7b8bf5026825443c710675dc4e10dbbf3a578"
   dependencies:
     address "^1.0.3"
-    af-webpack "^0.13.14"
+    af-webpack "^0.13.17"
     antd "^3.0.0"
     antd-mobile "^2.0.0"
     chalk "^2.1.0"
@@ -9328,6 +9320,7 @@ umi-build-dev@^0.5.14:
     react "^16.2.0"
     react-dom "^16.2.0"
     requireindex "^1.1.0"
+    resolve "^1.5.0"
     rimraf "^2.6.1"
     umi-plugin "^0.1.2"
 
@@ -9343,16 +9336,16 @@ umi-router@^0.1.2:
     prop-types "^15.5.10"
     query-string "^5.0.0"
 
-umi-test@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/umi-test/-/umi-test-0.2.2.tgz#ae746116def366340afc2147d0f3d8275cd338e4"
+umi-test@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/umi-test/-/umi-test-0.2.3.tgz#54a7dbcf4b70418cb9cc7d6b25c9c7193c65f6bf"
   dependencies:
     "@babel/core" "^7.0.0-beta.36"
     "@babel/polyfill" "^7.0.0-beta.36"
     babel-core "^7.0.0-bridge.0"
     babel-jest "^22.0.3"
     babel-plugin-module-resolver "^3.0.0-beta.5"
-    babel-preset-umi "^0.2.1"
+    babel-preset-umi "^0.2.2"
     debug "^3.1.0"
     enzyme "^3.3.0"
     enzyme-adapter-react-16 "^1.1.1"
@@ -9364,23 +9357,23 @@ umi-test@^0.2.2:
     typescript "^2.6.2"
 
 umi@^1.0.0-0:
-  version "1.0.0-beta.25"
-  resolved "https://registry.yarnpkg.com/umi/-/umi-1.0.0-beta.25.tgz#48b4cb1b9c21f78cae760dddf58d007b689fecce"
+  version "1.0.0-beta.29"
+  resolved "https://registry.yarnpkg.com/umi/-/umi-1.0.0-beta.29.tgz#24528037a508048184f34f659e1f8d41022f6ece"
   dependencies:
     "@babel/runtime" "7.0.0-beta.31"
     "@types/react" "^16.0.27"
     babel-plugin-import "^1.6.2"
     babel-plugin-module-resolver "^3.0.0-beta.5"
-    babel-preset-umi "^0.2.1"
+    babel-preset-umi "^0.2.2"
     chai "^4.1.2"
     cross-spawn "^5.1.0"
     ejs "^2.5.7"
     fastclick "^1.0.6"
     history "^4.7.2"
     query-string "^5.0.0"
-    umi-build-dev "^0.5.14"
+    umi-build-dev "^0.5.18"
     umi-router "^0.1.2"
-    umi-test "^0.2.2"
+    umi-test "^0.2.3"
     update-notifier "^2.3.0"
     uppercamelcase "^3.0.0"
     url "^0.11.0"

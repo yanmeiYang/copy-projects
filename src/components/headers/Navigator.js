@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import { Menu, Dropdown, Icon } from 'antd';
 import { connect } from 'dva';
-import { router } from 'core';
+import { router } from 'engine';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 

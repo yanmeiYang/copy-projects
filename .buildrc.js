@@ -19,6 +19,7 @@ module.exports = {
 
       systems: `${__dirname}/src/systems`,
       themes: `${__dirname}/src/themes`,
+      hoc: `${__dirname}/src/hoc`,
       '@': `${__dirname}/src`,
 
       'dva': 'dva-no-router',
@@ -28,10 +29,23 @@ module.exports = {
       //
       // routes: `${__dirname}/src/routes`, // CSR ReactRouter routes.
       // config: `${__dirname}/src/utils/config`,
-      // hoc: `${__dirname}/src/hoc`,
       // hooks: `${__dirname}/src/hooks`,
       // enums: `${__dirname}/src/utils/enums`,
       // assets: `${__dirname}/src/assets`,
     },
   },
 };
+
+//
+// "jsx-a11y/no-static-element-interactions": [0],
+//   "jsx-a11y/no-noninteractive-element-interactions": [0],
+//   "jsx-a11y/click-events-have-key-events": [0],
+//   "comma-dangle": ["error", {
+//   "arrays": "always-multiline",
+//   "objects": "always-multiline",
+//   "imports": "always-multiline",
+//   "exports": "always-multiline",
+//   "functions": "ignore"
+// }],
+//   "function-paren-newline": [0],
+//   "no-restricted-globals": [0],

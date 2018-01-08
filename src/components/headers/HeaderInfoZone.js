@@ -8,7 +8,7 @@ import { Link } from 'engine';
 import { theme } from 'themes';
 import { Menu, Icon, Dropdown } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
-// import { TobButton, DevMenu } from 'components/2b';
+import { TobButton, DevMenu } from 'components/2b';
 import * as profileUtils from 'utils/profile-utils';
 import { saveLocale } from 'utils/locale';
 import { isLogin, isGod, isAuthed } from 'utils/auth';
@@ -40,7 +40,10 @@ export default class HeaderInfoZone extends PureComponent {
   };
 
   render() {
-    const { user, roles } = this.props.app;
+    const { app } = this.props;
+    console.log('thislskdjflsjdfljsdlf', this.props, app);
+    const user = app.get('user');
+    const roles = app.get('roles');
     const UserNameBlock = isAuthed(roles)
       ? sysconfig.Header_UserNameBlock === defaults.IN_COMPONENT_DEFAULT
         ? <span>{user.display_name}</span>
@@ -97,42 +100,37 @@ export default class HeaderInfoZone extends PureComponent {
           {/* ---- 头像 & 用户名 ---- */}
           {isAuthed(roles) &&
           <Menu.Item key="/account">
-            <img src={profileUtils.getAvatar(user.avatar, user.id, 30)} />
+            {sysconfig.Header_UserPageURL ?
+              <div className={styles.headerAvatar}>
+                <Link to={sysconfig.Header_UserPageURL}>
+                  <img src={profileUtils.getAvatar(user.avatar, user.id, 30)}
+                       alt={user.display_name} />
+                </Link>
 
-            {UserNameBlock &&
-            <Link to={sysconfig.Header_UserPageURL}>{UserNameBlock}</Link>
+                {UserNameBlock &&
+                <Link to={sysconfig.Header_UserPageURL}>
+                  <span className={styles.userName}>{UserNameBlock}</span>
+                </Link>
+                }
+              </div>
+              :
+              <div className={styles.headerAvatar}>
+                <img src={profileUtils.getAvatar(user.avatar, user.id, 30)}
+                     alt={user.display_name} />
+                {UserNameBlock && <span className={styles.userName}>{UserNameBlock}</span>}
+              </div>
             }
-
-            {/*<span className={styles.userName}>{UserNameBlock}</span>*/}
-
-            {/*{sysconfig.Header_UserPageURL ?*/}
-            {/*<Link to={sysconfig.Header_UserPageURL} title={user.display_name}*/}
-            {/*className={styles.headerAvatar}>*/}
-            {/*<img src={profileUtils.getAvatar(user.avatar, user.id, 30)} />*/}
-
-            {/*/!* 用户名 *!/*/}
-            {/*{UserNameBlock && <span className={styles.userName}>{UserNameBlock}</span>}*/}
-
-            {/*/!* <Icon type="frown-circle"/>个人账号 *!/*/}
-            {/**/}
-            {/*</Link>*/}
-            {/*:*/}
-            {/*<div className={styles.headerAvatar}>*/}
-            {/*<img src={profileUtils.getAvatar(user.avatar, user.id, 30)} />*/}
-            {/*{UserNameBlock && <span className={styles.userName}>{UserNameBlock}</span>}*/}
-            {/*</div>*/}
-            {/*}*/}
           </Menu.Item>
           }
 
           {AdditionalJSX &&
           <Menu.Item key="/additional" className={styles.additional}>{AdditionalJSX}</Menu.Item>}
 
-          {/*{isGod(roles) && false && // ----------------------- TODO*/}
-          {/*<Menu.Item key="/devMenu"> <DevMenu /> </Menu.Item>}*/}
+          {isGod(roles) && false && // ----------------------- TODO
+          <Menu.Item key="/devMenu"> <DevMenu /> </Menu.Item>}
 
-          {/*{isGod(roles) &&*/}
-          {/*<Menu.Item key="/2bbtn"> <TobButton /> </Menu.Item>}*/}
+          {isGod(roles) &&
+          <Menu.Item key="/2bbtn"> <TobButton /> </Menu.Item>}
 
 
           {isAuthed(roles) &&

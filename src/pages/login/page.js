@@ -1,7 +1,5 @@
 import React from 'react';
-import { connect } from 'dva';
-// import { Link, routerRedux } from 'dva/router';
-import { engine, Link, router, formCreate } from 'engine';
+import { engine, connect, Link, router, formCreate } from 'engine';
 import { Layout } from 'components/layout';
 import { FormattedMessage as FM } from 'react-intl';
 import { Button, Modal, Row, Form, Input, Icon } from 'antd';
@@ -9,8 +7,10 @@ import { sysconfig } from 'systems';
 import { applyTheme } from 'themes';
 import styles from './page.less';
 
+const debug = require('debug')('aminer:engine');
+debug('Debug start Login ------------------------------');
+
 const tc = applyTheme(styles);
-const location = window.location;
 
 engine.model(require('models/auth').default);
 
@@ -22,12 +22,19 @@ class Login extends React.Component {
     this.props.dispatch({ type: 'auth/setMessage', payload: { message } });
   }
 
+  clearErrorMessage() {
+    const { auth, dispatch } = this.props;
+    if (auth && auth.errorMessage) {
+      dispatch({ type: 'auth/setMessage', payload: { message: "" } });
+    }
+  }
+
   handleOk = () => {
-    console.log("deng lu ap --------");
-    this.props.dispatch({ type: 'auth/showLoading' });
-    this.props.form.validateFieldsAndScroll((errors, values) => {
+    const { dispatch, form } = this.props;
+    dispatch({ type: 'auth/showLoading' });
+    form.validateFieldsAndScroll((errors, values) => {
       if (!errors) {
-        this.props.dispatch({ type: 'app/login', payload: values });
+        dispatch({ type: 'app/login', payload: values });
       }
     });
   };
@@ -46,23 +53,15 @@ class Login extends React.Component {
       },
     });
   };
+
   jumpToForgot = () => {
-    this.props.dispatch(router.push({
-      pathname: '/forgot-password',
-    }));
+    router.push('/forgot-password');
   };
 
   render() {
     const { dispatch, auth, form } = this.props;
     const { errorMessage, loading } = auth;
     const { getFieldDecorator, validateFieldsAndScroll } = form;
-
-    const headerProps = {
-      location,
-      logout() {
-        dispatch({ type: 'app/logout' });
-      },
-    };
 
     return (
       <Layout
@@ -89,7 +88,7 @@ class Login extends React.Component {
                 <Input prefix={<Icon type="user" style={{ fontSize: 13 }} />}
                        onPressEnter={this.handleOk}
                        placeholder="用户名" size="large"
-                       onChange={() => this.setErrorMessage('')}
+                       onChange={this.clearErrorMessage.bind(this)}
                 />)}
             </Form.Item>
             <Form.Item hasFeedback>
@@ -99,7 +98,7 @@ class Login extends React.Component {
                 <Input prefix={<Icon type="lock" style={{ fontSize: 13 }} />}
                        type="password" placeholder="密码不能为空"
                        size="large" onPressEnter={this.handleOk}
-                       onChange={() => this.setErrorMessage('')}
+                       onChange={this.clearErrorMessage.bind(this)}
                 />)}
             </Form.Item>
             <Form.Item>
@@ -131,7 +130,6 @@ class Login extends React.Component {
   }
 }
 
-export default engine.routerDirect(
-  // Login
+export default engine.router(
   connect(({ auth, login }) => ({ auth, login }))(Form.create()(Login))
 )

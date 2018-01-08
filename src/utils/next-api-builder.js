@@ -138,8 +138,9 @@ const F = {
   // available person's tags.
   Tags: { systag: 'systag' },
 
-  // query related
-  queries: { search: 'search',
+  // query related // TODO @xiaobei 这些都是啥呀？？？
+  queries: {
+    search: 'search',
     RevieweRreport: 'RevieweRreport',
     ReviewerQuery: 'ReviewerQuery',
     ReviewerDownloadCSV: 'ReviewerDownloadCSV',

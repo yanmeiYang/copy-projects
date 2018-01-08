@@ -5,7 +5,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { resRoot } from 'core';
-import { engine, connect, renderChildren } from 'engine';
+import { connect, Models, renderChildren, withIntl } from 'engine';
 import { Helmet } from 'react-helmet';
 import ReactGA from 'react-ga';
 // import NProgress from 'nprogress';
@@ -26,10 +26,8 @@ const debug = require('debug')('aminer:engine');
 // Register related modules.
 debug('Debug start Layout ------------------------------');
 
-engine.model(require('models/app').default);
-
 // let lastHref;
-
+@Models([require('models/app')])
 @connect(({ app, loading }) => ({ app, loading }))
 export default class Layout extends PureComponent {
   static displayName = 'Layout';
@@ -130,7 +128,7 @@ export default class Layout extends PureComponent {
 
     const title = pageTitle || (pageSubTitle ? `${sysconfig.PageTitle} | ${pageSubTitle}` : sysconfig.PageTitle);
 
-    return engine.withIntl(
+    return withIntl(
       <LayoutComponent className={tc(['layout'])}>
         <Helmet>
           <title>{title}</title>

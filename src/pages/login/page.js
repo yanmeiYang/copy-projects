@@ -1,5 +1,5 @@
 import React from 'react';
-import { engine, connect, Link, router, FormCreate, Page } from 'engine';
+import { connect, Page, router, } from 'engine';
 import { Layout } from 'components/layout';
 import { FormattedMessage as FM } from 'react-intl';
 import { Button, Modal, Row, Form, Input, Icon } from 'antd';
@@ -11,10 +11,13 @@ const debug = require('debug')('aminer:engine');
 debug('Debug start Login ------------------------------');
 
 const tc = applyTheme(styles);
-engine.model(require('models/auth').default);
 
-
-@Page({ form: true })
+@Page({
+  form: true,
+  models: [
+    require('models/auth'),
+  ],
+})
 @connect(({ auth, login }) => ({ auth, login }))
 export default class Login extends React.Component {
 
@@ -130,7 +133,6 @@ export default class Login extends React.Component {
   }
 }
 
-// export default Page(<div>lsdkjflsdjflsjd</div>);
 // export default Page(
 //   connect(({ auth, login }) => ({ auth, login }))(Form.create()(Login))
 // )

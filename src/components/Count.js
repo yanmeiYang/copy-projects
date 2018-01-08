@@ -1,12 +1,11 @@
 import React from 'react';
 import { Button } from 'antd-mobile';
-import { engine, connect } from "engine";
+import { connect, Models } from "engine";
 
 const debug = require('debug')('aminer:engine');
 debug('init Component Count ------------------------------');
 
-engine.model(require('models/count').default);
-
+Models([require('models/count')]);
 function Count({ dispatch, countModel }) {
 
   return (

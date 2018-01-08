@@ -64,25 +64,29 @@ const cache = {};
 
 const model = (m) => {
   debug("Try add model %s.", m.namespace);
+  let mm = m;
+  if (m.default) {
+    mm = m.default;
+  }
 
   // development check
   if (process.env.NODE_ENV !== 'production') {
-    if (!m || !m.namespace) {
-      console.error("Can't read namespace from model ", m);
+    if (!mm || !mm.namespace) {
+      console.error("Can't read namespace from model ", mm);
       return;
     }
   }
 
-  if (cache[m.namespace]) {
+  if (cache[mm.namespace]) {
     // debug("Can't add model with the exist namespace %s.", m.namespace);
     return;
   }
 
   // Add model to dva.
-  app.model(m);
+  app.model(mm);
 
   // Don't need to save model instance to avoid unnecessary memory-leak.
-  cache[m.namespace] = true;
+  cache[mm.namespace] = true;
 };
 
 const start = () => {
@@ -108,7 +112,14 @@ const dvaRouter = (router) => {
 // -------------------------------------------------
 
 const Page = (config) => {
-  const { form } = config || {};
+  const { form, models } = config || {};
+
+  if (models && models.length > 0) {
+    for (const m of models) {
+      model(m)
+    }
+  }
+
   return (page) => {
     let elm = page;
     if (form) {
@@ -122,6 +133,15 @@ const Page = (config) => {
     }
     return app.start();
   };
+};
+
+const Models = (models) => {
+  if (models && models.length > 0) {
+    for (const m of models) {
+      model(m)
+    }
+  }
+  return page => page;
 };
 
 // -------------------------------------------------
@@ -179,5 +199,5 @@ initANTD();
 
 export {
   model, router, dvaRouter, start,
-  Page, withIntl,
+  Page, Models, withIntl,
 }

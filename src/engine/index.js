@@ -3,10 +3,10 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import * as engine from './engine';
 import Link from 'umi/link';
 import router from 'umi/router';
 import { Form } from 'antd';
+import { Page, Models, withIntl } from './engine';
 
 const FormCreate = Form.create;
 
@@ -18,15 +18,13 @@ const renderChildren = (children) => {
   return c || false;
 };
 
-const Page = engine.Page;
-
 export {
-  engine, connect,
+  Page, Models,
 
-  Link, router,
+  Link, router, connect,
 
   renderChildren,
 
-  FormCreate, Page,
+  withIntl, FormCreate,
 };
 

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from 'dva';
-import { engine, router, Page, Link } from 'engine';
+import { Page, connect, router } from 'engine';
 import { hole } from 'core';
 import { Layout } from 'components/layout';
 import { sysconfig } from 'systems';
@@ -14,10 +13,10 @@ const tc = applyTheme(styles);
 
 console.log('>>>>>>>>>>>>> IndexPageIndexPageIndexPageIndexPageIndexPage',);
 
-// @Page
+@Page()
 @connect(({ app }) => ({ app }))
 @Auth
-class IndexPage extends Component {
+export default class IndexPage extends Component {
   static displayName = 'IndexPage';
 
   constructor(props) {
@@ -63,5 +62,3 @@ class IndexPage extends Component {
     );
   }
 }
-
-export default engine.router(IndexPage);

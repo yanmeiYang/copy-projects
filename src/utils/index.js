@@ -91,6 +91,14 @@ const createURL = (path, params, newParams) => {
   return url;
 };
 
+// 处理umi所有url后面都有一个.html的问题. 这个问题其实可以解决滴.
+const url = (url) => {
+  if (url && !url.trim().endsWith('.html')) {
+    return `${url.trim()}.html`;
+  }
+  return url;
+};
+
 export {
   config,
   classnames,
@@ -109,4 +117,5 @@ export {
   queryURL,
   getTwoDecimal,
 
+  url,
 };

@@ -37,7 +37,6 @@ function Auth(ComponentClass) {
         }
       }
 
-      console.log('>>>>>>>>>>>>>>>>>>> ', this.props);
       if (!sysconfig.Auth_AllowAnonymousAccess) { // 当不允许匿名登录时
         if (!hasAuthInfo(this.props)) {
           console.warn('Must connect `app` models when use @Auth! in component: ',
@@ -84,7 +83,9 @@ function RequireLogin(ComponentClass) {
         console.warn('Must connect `app` models when use @Auth! in component: ', ComponentClass.displayName);
         return false;
       }
-      const { user, roles } = this.props.app;
+      const { app } = this.props;
+      const user = app.get('user');
+      const roles = app.get('roles');
       this.isLogin = authUtil.isLogin(user); // 必须是登录用户.
       this.isAuthed = authUtil.isAuthed(roles); // 必须有当前系统的角色.
 
@@ -114,7 +115,9 @@ function RequireAdmin(ComponentClass) {
         console.warn('Must connect `app` models when use @Auth! in component: ', ComponentClass.displayName);
         return false;
       }
-      const { user, roles } = this.props.app;
+      const { app } = this.props;
+      const user = app.get('user');
+      const roles = app.get('roles');
       this.authenticated = authUtil.isLogin(user) && authUtil.isSuperAdmin(roles);
       if (!this.authenticated) {
         authUtil.dispatchToLogin(this.props.dispatch);
@@ -141,7 +144,9 @@ function RequireGod(ComponentClass) {
         console.warn('Must connect `app` models when use @Auth! in component: ', ComponentClass.displayName);
         return false;
       }
-      const { user, roles } = this.props.app;
+      const { app } = this.props;
+      const user = app.get('user');
+      const roles = app.get('roles');
       this.authenticated = authUtil.isLogin(user) && authUtil.isGod(roles);
       if (!this.authenticated) {
         authUtil.dispatchToLogin(this.props.dispatch);

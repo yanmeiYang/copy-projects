@@ -171,7 +171,14 @@ export default {
 
   reducers: {
     set(state, { payload }) {
-      return { ...state, ...payload };
+      if (payload) {
+        return state.withMutations((map) => {
+          Object.keys(payload).forEach(key => {
+            map.set(key, payload[key]);
+          });
+        });
+      }
+      return payload;
     },
 
     initDebug(state, { debug }) {
@@ -193,9 +200,7 @@ export default {
         }
       }
       auth.saveLocalAuth(user, roles);
-      console.log('+++++++++++++++', state);
       return state.set('user', user).set('roles', roles);
-      // return { ...state, user, roles };
     },
 
     alreadyLoggedIn(state, { user, roles }) {
@@ -212,7 +217,14 @@ export default {
     },
 
     layout(state, { payload }) {
-      return { ...state, ...payload };
+      if (payload) {
+        return state.withMutations((map) => {
+          Object.keys(payload).forEach(key => {
+            map.set(key, payload[key]);
+          });
+        });
+      }
+      return payload;
     },
 
     // ---------- below delete later -----------
@@ -230,7 +242,7 @@ export default {
     },
 
     feedbackSuccess(state, { payload }) {
-      return { ...state, feedbackStatus: payload.success };
+      return state.set('feedbackStatus', payload.success);
     },
   },
 };

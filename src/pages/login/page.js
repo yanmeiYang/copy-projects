@@ -1,5 +1,5 @@
 import React from 'react';
-import { engine, connect, Link, router, formCreate } from 'engine';
+import { engine, connect, Link, router, FormCreate, Page } from 'engine';
 import { Layout } from 'components/layout';
 import { FormattedMessage as FM } from 'react-intl';
 import { Button, Modal, Row, Form, Input, Icon } from 'antd';
@@ -11,12 +11,12 @@ const debug = require('debug')('aminer:engine');
 debug('Debug start Login ------------------------------');
 
 const tc = applyTheme(styles);
-
 engine.model(require('models/auth').default);
 
-// @formCreate
-// @connect(({ auth, login }) => ({ auth, login }))
-class Login extends React.Component {
+
+@Page({ form: true })
+@connect(({ auth, login }) => ({ auth, login }))
+export default class Login extends React.Component {
 
   setErrorMessage(message) {
     this.props.dispatch({ type: 'auth/setMessage', payload: { message } });
@@ -130,6 +130,7 @@ class Login extends React.Component {
   }
 }
 
-export default engine.router(
-  connect(({ auth, login }) => ({ auth, login }))(Form.create()(Login))
-)
+// export default Page(<div>lsdkjflsdjflsjd</div>);
+// export default Page(
+//   connect(({ auth, login }) => ({ auth, login }))(Form.create()(Login))
+// )

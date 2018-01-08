@@ -8,6 +8,7 @@ import React from 'react';
 import createLoading from 'dva-loading';
 import { ReduxLoggerEnabled } from 'utils/debug';
 import { createLogger } from 'redux-logger';
+import { Form } from 'antd';
 import locales from 'locales';
 import { IntlProvider, addLocaleData } from 'react-intl';
 import { message } from 'antd';
@@ -88,12 +89,14 @@ const start = () => {
   return app.start();
 };
 
+// TODO delete
 const router = (router) => {
   debug('Set Router: ', router);
   app.router(() => React.createElement(router));
   return app.start();
 };
 
+// TODO delete
 const dvaRouter = (router) => {
   debug('Set DvaRouter: ', router);
   app.router(router);
@@ -104,8 +107,21 @@ const dvaRouter = (router) => {
 // Decorator
 // -------------------------------------------------
 
-const Router = (Page) => {
-  return router(Page);
+const Page = (config) => {
+  const { form } = config || {};
+  return (page) => {
+    let elm = page;
+    if (form) {
+      elm = Form.create()(page);
+    }
+    if (page && typeof page === 'function') {
+      // act at page class.
+      app.router(() => React.createElement(elm));
+    } else {
+      app.router(() => elm);
+    }
+    return app.start();
+  };
 };
 
 // -------------------------------------------------
@@ -161,8 +177,7 @@ initANTD();
 // Export
 // -------------------------------------------------
 
-
 export {
   model, router, dvaRouter, start,
-  Router, withIntl,
+  Page, withIntl,
 }

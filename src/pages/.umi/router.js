@@ -16,8 +16,8 @@ export default function() {
     <Route exact path="/index.html" component={require('../index/page.js').default}></Route>
     <Route exact path="/list.html" component={() => <div>Compiling...</div>}></Route>
     <Route exact path="/login.html" component={require('../login/page.js').default}></Route>
-    <Route exact path="/test1.html" component={require('../test1/page.js').default}></Route>
-    <Route exact path="/test2.html" component={require('../test2/page.js').default}></Route>
+    <Route exact path="/test1.html" component={() => <div>Compiling...</div>}></Route>
+    <Route exact path="/test2.html" component={() => <div>Compiling...</div>}></Route>
     <Route exact path="/" component={require('../index/page.js').default}></Route>
   </Switch>
 </Router>

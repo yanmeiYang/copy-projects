@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { engine, router, Router, Link } from 'engine';
+import { engine, router, Page, Link } from 'engine';
 import { hole } from 'core';
 import { Layout } from 'components/layout';
 import { sysconfig } from 'systems';
@@ -14,9 +14,9 @@ const tc = applyTheme(styles);
 
 console.log('>>>>>>>>>>>>> IndexPageIndexPageIndexPageIndexPageIndexPage',);
 
+// @Page
 @connect(({ app }) => ({ app }))
 @Auth
-// @Router
 class IndexPage extends Component {
   static displayName = 'IndexPage';
 

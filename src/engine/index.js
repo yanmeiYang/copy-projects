@@ -6,7 +6,9 @@ import { connect } from 'dva';
 import * as engine from './engine';
 import Link from 'umi/link';
 import router from 'umi/router';
-import { formCreate } from './engine-hoc';
+import { Form } from 'antd';
+
+const FormCreate = Form.create;
 
 // safe parse children.
 const renderChildren = (children) => {
@@ -16,6 +18,8 @@ const renderChildren = (children) => {
   return c || false;
 };
 
+const Page = engine.Page;
+
 export {
   engine, connect,
 
@@ -23,6 +27,6 @@ export {
 
   renderChildren,
 
-  formCreate,
+  FormCreate, Page,
 };
 

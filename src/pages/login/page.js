@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, Page, router, } from 'engine';
+import { connect, Page, Link, router, } from 'engine';
 import { Layout } from 'components/layout';
 import { FormattedMessage as FM } from 'react-intl';
 import { Button, Modal, Row, Form, Input, Icon } from 'antd';
@@ -57,7 +57,7 @@ export default class Login extends React.Component {
   };
 
   render() {
-    const { dispatch, auth, form } = this.props;
+    const { auth, form } = this.props;
     const { errorMessage, loading } = auth;
     const { getFieldDecorator, validateFieldsAndScroll } = form;
 
@@ -111,12 +111,13 @@ export default class Login extends React.Component {
             </Form.Item>
             <Form.Item>
               <div className={styles.forgetpw}>
-                <a href="/forgot-password" className={styles.forgotpwbtn}>
-                  <FM id="login.forgetPw" defaultMessage="Forget Password?" />
-                </a>
+                <Link to="/auth/forgot-password" className={styles.forgotpwbtn}>
+                  <a><FM id="login.forgetPw" defaultMessage="Forget Password?" /></a>
+                </Link>
                 {sysconfig.ApplyUserBtn &&
                 <span className={styles.applyUserbtn} onClick={this.applyUser}>
-                  <FM id="login.newUserApplication" defaultMessage="New user application" />
+                  <a><FM id="login.newUserApplication"
+                         defaultMessage="New user application" /></a>
                 </span>
                 }
               </div>

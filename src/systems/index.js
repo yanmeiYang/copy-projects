@@ -3,7 +3,7 @@
  * Rewrite by GaoBo on 2018/01/04.
  */
 import createDefaultSysconfig from 'systems/default-config';
-import { loadSavedLocale } from "utils/locale";
+import { loadSavedLocale } from "locales";
 import { system } from 'core';
 
 const { System, Source, AvailableSystems } = system;

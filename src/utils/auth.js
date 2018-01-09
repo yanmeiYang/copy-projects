@@ -54,7 +54,7 @@ function dispatchToLogin(dispatch) {
     if (from) {
       path.query = { from };
     }
-    debug('AUTH :::: redirect to %s', path);
+    debug('AUTH :::: redirect to %o', path);
     router.push(path);
   }
 }

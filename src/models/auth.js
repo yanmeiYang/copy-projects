@@ -2,7 +2,6 @@
 /**
  * Created by BoGao on 2018-08-13.
  */
-import { router } from 'engine';
 import { sysconfig } from 'systems';
 import * as authService from 'services/auth';
 import * as uconfigService from 'services/universal-config';
@@ -15,7 +14,7 @@ export default {
     listUsers: [],
     loading: false,
     isUpdateForgotPw: false,
-    message: null,
+    message: null, // used in message.
     retrieve: {},
     userRoles: [],
     errorMessage: '',

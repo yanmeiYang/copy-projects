@@ -4,8 +4,9 @@
 
 .headerInfoZone {
   min-width: 128px;
-  li:nth-child(3){
-    padding: 0!important;
+
+  li:nth-child(3) {
+    padding: 0 !important;
   }
 
   :global {
@@ -18,12 +19,10 @@
       margin-right: 0px;
     }
   }
-  .longLanguage {
-    display: none;
-  }
-  .simpleLanguage {
-    display: inline;
-  }
+
+  .longLanguage {.hide() }
+
+  .simpleLanguage { display: inline; }
 
   .headerAvatar {
     img {
@@ -56,6 +55,8 @@
   }
 
 }
+
+.dropdownLang {min-width: 100px}
 
 // Responsive
 

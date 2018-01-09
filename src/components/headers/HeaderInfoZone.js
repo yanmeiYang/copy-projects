@@ -10,22 +10,17 @@ import { Menu, Icon, Dropdown } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import { TobButton, DevMenu } from 'components/2b';
 import * as profileUtils from 'utils/profile-utils';
-import { saveLocale } from 'utils/locale';
+import locales, { saveLocale } from 'locales';
 import { isLogin, isGod, isAuthed } from 'utils/auth';
 import defaults from 'core/hole';
-import locales from 'locales';
 import styles from './HeaderInfoZone.less';
+import { Maps } from "utils/immutablejs-helpers";
 
 const location = window.location;
 
 export default class HeaderInfoZone extends PureComponent {
   state = {
     logoutLoading: false,
-  };
-
-  onChangeLocale = (locale) => {
-    saveLocale(sysconfig.SYSTEM, locale);
-    window.location.reload();
   };
 
   logoutAuth = () => {
@@ -39,31 +34,31 @@ export default class HeaderInfoZone extends PureComponent {
       : '/login';
   };
 
+  onChangeLocale = ({ key }) => {
+    sysconfig.Locale = key;
+    saveLocale(sysconfig.SYSTEM, key);
+    window.location.reload();
+  };
+
+  langDropdownMenu = (
+    <Menu className={classnames(styles.dropdownLang, "am-dropdown")}
+          selectedKeys={[sysconfig.Locale]} onClick={this.onChangeLocale}>
+      {locales && locales.map((local) => (
+        <Menu.Item key={local}>
+          <FM id={`system.lang.option_${local}`} defaultMessage={`system.lang.option_${local}`} />
+        </Menu.Item>
+      ))}
+    </Menu>
+  );
+
   render() {
-    const { app } = this.props;
-    console.log('thislskdjflsjdfljsdlf', this.props, app);
-    const user = app.get('user');
-    const roles = app.get('roles');
+    const [user, roles] = Maps.getAll(this.props.app, 'user', 'roles');
+
     const UserNameBlock = isAuthed(roles)
       ? sysconfig.Header_UserNameBlock === defaults.IN_COMPONENT_DEFAULT
         ? <span>{user.display_name}</span>
         : sysconfig.Header_UserNameBlock
       : defaults.EMPTY_BLOCK;
-
-    const menu = (
-      <Menu style={{ boxShadow: '0 0 1px' }} selectedKeys={[sysconfig.Locale]}>
-        {locales && locales.map((local) => {
-          return (
-            <Menu.Item key={local}>
-              <span onClick={this.onChangeLocale.bind(this, local)}>
-                <FM id={`system.lang.option_${local}`}
-                    defaultMessage={`system.lang.option_${local}`} />
-              </span>
-            </Menu.Item>
-          );
-        })}
-      </Menu>
-    );
 
     const additionFunc = theme.Header_UserAdditionalInfoBlock;
     const AdditionalJSX = additionFunc && additionFunc({ user, roles });
@@ -83,14 +78,14 @@ export default class HeaderInfoZone extends PureComponent {
           {/* ---- 语言 ---- */}
           {sysconfig.EnableLocalLocale &&
           <Menu.Item key="/language">
-            <Dropdown overlay={menu} placement="bottomLeft">
+            <Dropdown overlay={this.langDropdownMenu} placement="bottomCenter">
               <a className={classnames('ant-dropdown-link')}>
-                <span className={styles.longLanguage}>
-                <FM id="system.lang.show" defaultMessage="system.lang.show" />&nbsp;
-                </span>
-                <span className={styles.simpleLanguage}>
+                <div className={styles.longLanguage}>
+                  <FM id="system.lang.show" defaultMessage="system.lang.show" />&nbsp;
+                </div>
+                <div className={styles.simpleLanguage}>
                   <FM id="system.lang.simple" defaultMessage="system.lang.simple" />&nbsp;
-                </span>
+                </div>
                 <Icon type="down" />
               </a>
             </Dropdown>
@@ -101,18 +96,15 @@ export default class HeaderInfoZone extends PureComponent {
           {isAuthed(roles) &&
           <Menu.Item key="/account">
             {sysconfig.Header_UserPageURL ?
-              <div className={styles.headerAvatar}>
-                <Link to={sysconfig.Header_UserPageURL}>
+              <Link to={sysconfig.Header_UserPageURL}>
+                <div className={styles.headerAvatar}>
                   <img src={profileUtils.getAvatar(user.avatar, user.id, 30)}
                        alt={user.display_name} />
-                </Link>
-
-                {UserNameBlock &&
-                <Link to={sysconfig.Header_UserPageURL}>
+                  {UserNameBlock &&
                   <span className={styles.userName}>{UserNameBlock}</span>
-                </Link>
-                }
-              </div>
+                  }
+                </div>
+              </Link>
               :
               <div className={styles.headerAvatar}>
                 <img src={profileUtils.getAvatar(user.avatar, user.id, 30)}
@@ -131,7 +123,6 @@ export default class HeaderInfoZone extends PureComponent {
 
           {isGod(roles) &&
           <Menu.Item key="/2bbtn"> <TobButton /> </Menu.Item>}
-
 
           {isAuthed(roles) &&
           <Menu.Item key="/logout">

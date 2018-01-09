@@ -9,13 +9,14 @@ import { Maps } from "utils/immutablejs-helpers";
 
 const ENABLED = sysconfig.GLOBAL_ENABLE_HOC;
 
-const hasAuthInfo = (props) => {
-  // return props && props.app && props.app.user && props.app.roles
-  if (props && props.app) {
-    return props.app.has('user') && props.app.has('roles');
-  }
-  return false;
-};
+const hasAuthInfo = (props) => !!(props && props.app);
+// {
+//   // return props && props.app && props.app.user && props.app.roles
+//   if (props && props.app) {
+//     return true; // props.app.has('user') && props.app.has('roles');
+//   }
+//   return false;
+// };
 
 /**
  * 会根据 sysconfig.Auth_AllowAnonymousAccess 的值来判断是否进行登录权限判断。

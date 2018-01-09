@@ -9,7 +9,27 @@ const debug = require('debug')('aminer:engine');
 
 // const { AvailableSystems } = require('../src/core/system');
 const { replaceFile, createFile } = require('./node_tools');
-
+const AvailableSystems = [
+  'aminer',
+  'demo',
+  'data_annotation',
+  'alibaba',
+  'acmfellow',
+  'bole',
+  'ccf',
+  'ccftest',
+  'cie',
+  'cietest',
+  'cipsc',
+  'huawei',
+  'med_topic_trend',
+  'minimalsys', // 用来调试的最小system集合
+  'scei', // 中国科协：深度智库
+  'tencent',
+  'thurcb',
+  'yocsef',
+  'reco',
+];
 // get system from parameter.
 
 const args = process.argv.splice(2);
@@ -25,15 +45,15 @@ if (args.length > idx) {
   process.exit(-1);
 }
 
-// if (AvailableSystems.indexOf(system) <= 0) {
-//   console.error('Error! System not available: ', system);
-//
-//   console.log("Available systems are:");
-//   for (const sys of AvailableSystems) {
-//     console.log("  ... ", sys);
-//   }
-//   process.exit(-1);
-// }
+if (AvailableSystems.indexOf(system) <= 0) {
+  console.error('Error! System not available: ', system);
+
+  console.log("Available systems are:");
+  for (const sys of AvailableSystems) {
+    console.log("  ... ", sys);
+  }
+  process.exit(-1);
+}
 
 console.log('System is [', system, '] start building...');
 

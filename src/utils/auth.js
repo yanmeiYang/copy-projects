@@ -41,7 +41,6 @@ function saveLocalTokenSystem(system, token) {
  */
 function dispatchToLogin(dispatch) {
   debug('AUTH :::: dispatchToLogin');
-throw new Error('.;;;;;;')
   const from = getLoginFromURL();
   if (process.env.NODE_ENV !== 'production') {
     console.log('Dispatch to Login Page from ', from);

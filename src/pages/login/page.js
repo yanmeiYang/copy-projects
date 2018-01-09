@@ -12,12 +12,7 @@ debug('Debug start Login ------------------------------');
 
 const tc = applyTheme(styles);
 
-@Page({
-  form: true,
-  models: [
-    require('models/auth'),
-  ],
-})
+@Page({ form: true, models: [require('models/auth')] })
 @connect(({ auth, login }) => ({ auth, login }))
 export default class Login extends React.Component {
 
@@ -132,7 +127,3 @@ export default class Login extends React.Component {
     );
   }
 }
-
-// export default Page(
-//   connect(({ auth, login }) => ({ auth, login }))(Form.create()(Login))
-// )

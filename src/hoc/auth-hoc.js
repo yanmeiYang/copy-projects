@@ -5,6 +5,7 @@ import { sysconfig } from 'systems';
 import * as authUtil from 'utils/auth';
 import { reflect } from 'utils';
 import * as debug from 'utils/debug';
+import { Maps } from "utils/immutablejs-helpers";
 
 const ENABLED = sysconfig.GLOBAL_ENABLE_HOC;
 
@@ -42,9 +43,7 @@ function Auth(ComponentClass) {
           console.warn('Must connect `app` models when use @Auth! in component: ',
             reflect.GetComponentName(ComponentClass));
         } else {
-          const { app } = this.props;
-          const user = app.get('user');
-          const roles = app.get('roles');
+          const [user, roles] = Maps.getAll(this.props.app, 'user', 'roles');
           this.isLogin = authUtil.isLogin(user); // 必须是登录用户.
           this.isAuthed = authUtil.isAuthed(roles); // 必须有当前系统的角色.
         }
@@ -83,9 +82,7 @@ function RequireLogin(ComponentClass) {
         console.warn('Must connect `app` models when use @Auth! in component: ', ComponentClass.displayName);
         return false;
       }
-      const { app } = this.props;
-      const user = app.get('user');
-      const roles = app.get('roles');
+      const [user, roles] = Maps.getAll(this.props.app, 'user', 'roles');
       this.isLogin = authUtil.isLogin(user); // 必须是登录用户.
       this.isAuthed = authUtil.isAuthed(roles); // 必须有当前系统的角色.
 
@@ -115,9 +112,7 @@ function RequireAdmin(ComponentClass) {
         console.warn('Must connect `app` models when use @Auth! in component: ', ComponentClass.displayName);
         return false;
       }
-      const { app } = this.props;
-      const user = app.get('user');
-      const roles = app.get('roles');
+      const [user, roles] = Maps.getAll(this.props.app, 'user', 'roles');
       this.authenticated = authUtil.isLogin(user) && authUtil.isSuperAdmin(roles);
       if (!this.authenticated) {
         authUtil.dispatchToLogin(this.props.dispatch);
@@ -144,9 +139,7 @@ function RequireGod(ComponentClass) {
         console.warn('Must connect `app` models when use @Auth! in component: ', ComponentClass.displayName);
         return false;
       }
-      const { app } = this.props;
-      const user = app.get('user');
-      const roles = app.get('roles');
+      const [user, roles] = Maps.getAll(this.props.app, 'user', 'roles');
       this.authenticated = authUtil.isLogin(user) && authUtil.isGod(roles);
       if (!this.authenticated) {
         authUtil.dispatchToLogin(this.props.dispatch);

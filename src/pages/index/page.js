@@ -20,14 +20,12 @@ export default class IndexPage extends Component {
   static displayName = 'IndexPage';
 
   constructor(props) {
-    props.dispatch({ type: 'app/layout', payload: { showFooter: true } });
-
     super(props);
   }
 
-  componentWillUnmount() {
-    this.props.dispatch({ type: 'app/layout', payload: { showFooter: true } });
-  };
+  // componentWillUnmount() {
+  //   this.props.dispatch({ type: 'app/layout', payload: { showFooter: true } });
+  // };
 
   onSearch = ({ query }) => {
     if (query && query.trim() !== '') {

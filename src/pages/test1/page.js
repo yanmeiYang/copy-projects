@@ -32,7 +32,7 @@ import React from 'react';
 import Link from 'umi/link';
 import Count from 'components/Count';
 import styles from './page.css';
-import { engine, Page } from 'engine';
+import { Page } from 'engine';
 
 const r = () => {
   const result = (
@@ -57,7 +57,7 @@ const r = () => {
 
 // engine.router(() => <div>替换掉了。。。。我的妈呀</div>);
 // const bb = engine.start();
-export default Page(r)
+export default Page()(r)
 
 // export default engine.start();
 

@@ -22,7 +22,7 @@ export default {
   Enable_Export: true,
   ShowRegisteredRole: true, // 注册页面是否显示角色配置
 
-  SearchPagePrefix: 'uniSearch', // search - 普通搜索(deleted); uniSearch - 多合一搜索.
+  SearchPagePrefix: 'search', // search - 普通搜索(deleted); uniSearch - 多合一搜索.
   Search_EnablePin: false,
   Search_EnableKnowledgeGraphHelper: true,
 

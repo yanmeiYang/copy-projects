@@ -1,9 +1,9 @@
 import Link from 'umi/link';
 import Count from 'components/Count';
 import styles from './page.css';
-import { engine } from 'engine';
+import { Page } from 'engine';
 
-engine.router(() => {
+const r = () => {
   return (
     <div className={styles.normal}>
       <h2>Test Page</h2>
@@ -21,6 +21,6 @@ engine.router(() => {
       </div>
     </div>
   );
-});
+};
 
-export default engine.start();
+export default Page()(r)

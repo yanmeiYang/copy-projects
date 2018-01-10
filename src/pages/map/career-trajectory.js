@@ -1,20 +1,21 @@
 import React from 'react';
-import { connect } from 'dva';
+import { connect, Papge, router } from 'dva';
 import { sysconfig } from 'systems';
-import { routerRedux } from 'dva/router';
 import { Spinner } from 'components';
-import { Layout, Button, Icon, Menu, Dropdown, Modal, Tabs, notification } from 'antd';
-import { Layout as Page } from 'routes';
+import { Layout, Button, Icon, Menu, Dropdown, Modal, Tabs } from 'antd';
+import { Layout as Page } from 'components/layout';
 import { FormattedMessage as FM } from 'react-intl';
 import * as bridge from 'utils/next-bridge';
 import { applyTheme } from 'themes';
-import { Auth } from 'hoc';
 import queryString from 'query-string';
-import styles from './ExpertTrajectoryPage.less';
-import { showPersonStatistic, downloadData } from './utils/trajectory-statistic';
-import { PersonList } from '../../components/person';
-import ExpertTrajectory from './ExpertTrajectory';
-import { getPerson } from '../../services/person';
+import styles from './career-trajectory.less';
+import {
+  showPersonStatistic,
+  downloadData
+} from 'components/career-trajectory/utils/trajectory-statistic';
+import { PersonList } from 'components/person';
+import { ExpertTrajectory } from 'components/career-trajectory';
+import { getPerson } from 'services/person';
 
 const { Content, Sider } = Layout;
 const { TabPane } = Tabs;
@@ -29,9 +30,9 @@ const themes = [
   { label: '简约风', key: '6' },
 ];
 
-
+@Page({ models: [require('models/expert-trajectory')] })
 @connect(({ expertTrajectory, loading, app }) => ({ expertTrajectory, loading, app }))
-class ExpertTrajectoryPage extends React.Component {
+export default class ExpertTrajectoryPage extends React.Component {
   constructor(props) {
     super(props);
     this.dispatch = this.props.dispatch;
@@ -87,10 +88,10 @@ class ExpertTrajectoryPage extends React.Component {
     this.callSearchMap(data.query);
     if (data.query) {
       this.setState({ query: data.query });
-      this.props.dispatch(routerRedux.push({
+      router.push({
         pathname: '/expert-trajectory',
         search: `query=${data.query}`,
-      }));
+      });
     }
   };
 
@@ -101,19 +102,25 @@ class ExpertTrajectoryPage extends React.Component {
   onPersonClick = (start, end, person) => {
     //这里的参数的名字要和model里面的一致
     const personId = person.id;
-    this.props.dispatch({ type: 'expertTrajectory/findTrajById', payload: { personId, start, end } });
+    this.props.dispatch({
+      type: 'expertTrajectory/findTrajById',
+      payload: { personId, start, end }
+    });
     this.setState({ cperson: person });
-    this.props.dispatch(routerRedux.push({
+    router.push({
       pathname: '/expert-trajectory',
       search: `?id=${personId}`,
-    }));
+    });
   };
 
   onIframeLoad = (personId) => {
     const start = 0;
     const date = new Date();
     const end = date.getFullYear();
-    this.props.dispatch({ type: 'expertTrajectory/findTrajById', payload: { personId, start, end } });
+    this.props.dispatch({
+      type: 'expertTrajectory/findTrajById',
+      payload: { personId, start, end }
+    });
     const resultPromise = getPerson(personId);
     resultPromise.then(
       (data1) => {
@@ -149,7 +156,7 @@ class ExpertTrajectoryPage extends React.Component {
         const data = this.props.expertTrajectory.trajData;
         const type = 'timeDistribution';
         if ((typeof (divId) !== 'undefined' && divId !== 'undefined'
-          && data !== '') || (this.state.visible === false)) {
+            && data !== '') || (this.state.visible === false)) {
           clearInterval(chartsinterval);
           showPersonStatistic(data, type);
           //防止在其他tab的时候信息没有被刷新
@@ -226,7 +233,10 @@ class ExpertTrajectoryPage extends React.Component {
   callSearchMap = (query) => {
     const offset = 0;
     const size = 20;
-    this.props.dispatch({ type: 'expertTrajectory/searchPerson', payload: { query, offset, size } });
+    this.props.dispatch({
+      type: 'expertTrajectory/searchPerson',
+      payload: { query, offset, size }
+    });
   };
 
   play = () => {
@@ -245,11 +255,12 @@ class ExpertTrajectoryPage extends React.Component {
     const menu = (
       <Menu onClick={this.onSkinClick}>
         {themes && themes.map((theme) => {
-        return (
-          <Menu.Item key={theme.key}>{themeKey === theme.key && <Icon type="check" />}
-            <FM defaultMessage={theme.label} id={`com.expertTrajectory.theme.label.${theme.key}`} />
-          </Menu.Item>
-        );
+          return (
+            <Menu.Item key={theme.key}>{themeKey === theme.key && <Icon type="check" />}
+              <FM defaultMessage={theme.label}
+                  id={`com.expertTrajectory.theme.label.${theme.key}`} />
+            </Menu.Item>
+          );
         })}
       </Menu>
     );
@@ -260,7 +271,8 @@ class ExpertTrajectoryPage extends React.Component {
       param => (
         <div key={param.person.id} className={styles.clickTraj}>
           <div className={styles.innerClickTraj}>
-            <Button type="dashed" className={styles.but} onClick={this.onPersonClick.bind(this, start, end, param.person)}>
+            <Button type="dashed" className={styles.but}
+                    onClick={this.onPersonClick.bind(this, start, end, param.person)}>
               <Icon type="global" style={{ color: '#bbe920' }} />
               <FM defaultMessage="Show Trajectory" id="com.expertMap.headerLine.label.showTraj" />
             </Button>
@@ -323,7 +335,8 @@ class ExpertTrajectoryPage extends React.Component {
                   <a className="ant-dropdown-link" href="#theme">
                     <Icon type="skin" />
                     {currentTheme && currentTheme.length > 0 &&
-                    <FM defaultMessage={currentTheme[0].label} id={`com.expertTrajectory.theme.label.${currentTheme[0].key}`} />
+                    <FM defaultMessage={currentTheme[0].label}
+                        id={`com.expertTrajectory.theme.label.${currentTheme[0].key}`} />
                     }
                   </a>
                 </Dropdown>
@@ -331,7 +344,8 @@ class ExpertTrajectoryPage extends React.Component {
               <div className={styles.statics}>
                 <Button onClick={this.showModal}>
                   <Icon type="line-chart" />
-                  <FM defaultMessage="Trajectory Statistic" id="com.expertMap.headerLine.label.statistic" />
+                  <FM defaultMessage="Trajectory Statistic"
+                      id="com.expertMap.headerLine.label.statistic" />
                 </Button>
                 <Modal
                   title="Statistics & Analyses"
@@ -341,7 +355,8 @@ class ExpertTrajectoryPage extends React.Component {
                   footer={[
                     <Button key="back" size="large" onClick={this.handleDownload.bind(this)}>
                       <Icon type="download" />
-                      <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.download" />
+                      <FM defaultMessage="Baidu Map"
+                          id="com.expertMap.headerLine.label.download" />
                     </Button>,
                     <Button key="submit" type="primary" size="large" onClick={this.handleOk}>
                       <FM defaultMessage="Baidu Map" id="com.expertMap.headerLine.label.ok" />
@@ -378,15 +393,15 @@ class ExpertTrajectoryPage extends React.Component {
 
     return (
       <div>
-        { showFlag &&
+        {showFlag &&
         <Page contentClass={tc(['ExpertTrajectoryPage'])} onSearch={this.onSearch}
               query={query}>
-          { content && content }
+          {content && content}
         </Page>
         }
-        { !showFlag &&
+        {!showFlag &&
         <div>
-          { content && content }
+          {content && content}
         </div>
         }
       </div>
@@ -394,5 +409,4 @@ class ExpertTrajectoryPage extends React.Component {
   }
 }
 
-export default connect(({ expertTrajectory }) => ({ expertTrajectory }))(ExpertTrajectoryPage);
 

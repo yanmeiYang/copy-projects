@@ -1,19 +1,17 @@
 import React from 'react';
-import { connect } from 'dva';
-import classnames from 'classnames';
+import { connect, Papge, router } from 'dva';
 import { sysconfig } from 'systems';
 import queryString from 'query-string';
-import { routerRedux } from 'dva/router';
+import { classnames } from 'utils';
 import { Spinner } from 'components';
-import { DomainSelector } from 'routes/expert-map';
+import { Layout as Page } from 'components/layout';
+import { DomainSelector } from 'components/expert-map';
+import { ExpertHeatmap } from 'components/career-trajectory';
 import { FormattedMessage as FM } from 'react-intl';
-import { applyTheme, theme } from 'themes';
-import { Layout as Page } from 'routes';
-import { Layout, Tabs, Button, Icon, TreeSelect, Menu, Dropdown, Checkbox, message, Modal } from 'antd';
-import styles from './ExpertHeatmapPage.less';
-import ExpertHeatmap from './ExpertHeatmap';
-import { showBulkTraj, downloadData } from './utils/heatmap-statistic';
-
+import { applyTheme } from 'themes';
+import { Layout, Tabs, Button, Icon, Menu, Dropdown, Checkbox, Modal } from 'antd';
+import { showBulkTraj, downloadData } from 'components/career-trajectory/utils/heatmap-statistic';
+import styles from './heatmap.less';
 
 const { Content, Sider } = Layout;
 const { TabPane } = Tabs;
@@ -31,11 +29,11 @@ const themes = [
   { label: '简约风', key: '6' },
 ];
 
+@Page({ models: [require('models/expert-trajectory')] })
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
-class ExpertHeatmapPage extends React.Component {
+export default class ExpertHeatmapPage extends React.Component {
   constructor(props) {
     super(props);
-    this.dispatch = this.props.dispatch;
   }
 
   state = {
@@ -62,9 +60,7 @@ class ExpertHeatmapPage extends React.Component {
       this.searchTrajByQuery(q);
       this.setState({ domainId: 'aminer' });
     } else {
-      this.props.dispatch(routerRedux.push({
-        pathname: '/expert-heatmap',
-      }));
+      router.push('/map/heatmap');
     }
     if (flag) { //undefined的非是true
       this.setState({
@@ -106,13 +102,12 @@ class ExpertHeatmapPage extends React.Component {
   }
 
   onSearch = (data) => {
-    const { dispatch } = this.props;
     if (data.query) {
       this.setState({ query: data.query });
-      dispatch(routerRedux.push({
-        pathname: '/expert-heatmap',
+      router.push({
+        pathname: '/map/heatmap',
         search: `?query=${data.query}`,
-      }));
+      });
     }
   };
 
@@ -120,7 +115,7 @@ class ExpertHeatmapPage extends React.Component {
     const { dispatch } = this.props;
     if (domain.id !== 'aminer') {
       this.setState({ query: '' });
-      dispatch(routerRedux.push({ pathname: '/expert-heatmap', search: `?domain=${domain.id}` }));
+      router.push({ pathname: '/map/heatmap', search: `?domain=${domain.id}` });
     } else {
       const data = { query: this.state.query || '-' };
       this.onSearch(data);
@@ -154,13 +149,19 @@ class ExpertHeatmapPage extends React.Component {
     const date = new Date();
     const end = date.getFullYear();
     const size = 100;
-    dispatch({ type: 'expertTrajectory/findTrajsByRosterId', payload: { rosterId, start, end, size } });
+    dispatch({
+      type: 'expertTrajectory/findTrajsByRosterId',
+      payload: { rosterId, start, end, size }
+    });
   };
 
   searchTrajByQuery = (query) => { //models里面重新查询数据
     const { dispatch } = this.props;
     const [name, offset, org, term, size] = ['', 0, '', query, 1000];
-    dispatch({ type: 'expertTrajectory/findTrajsHeatAdvance', payload: { name, offset, org, term, size } });
+    dispatch({
+      type: 'expertTrajectory/findTrajsHeatAdvance',
+      payload: { name, offset, org, term, size }
+    });
   };
 
   handleOk = () => {
@@ -241,7 +242,8 @@ class ExpertHeatmapPage extends React.Component {
         {themes && themes.map((skin) => {
           return (
             <Menu.Item key={skin.key}>{themeKey === skin.key && <Icon type="check" />}
-              <FM defaultMessage={skin.label} id={`com.expertTrajectory.theme.label.${skin.key}`} />
+              <FM defaultMessage={skin.label}
+                  id={`com.expertTrajectory.theme.label.${skin.key}`} />
             </Menu.Item>
           );
         })}
@@ -300,7 +302,8 @@ class ExpertHeatmapPage extends React.Component {
             <div className={styles.statics}>
               <Button onClick={this.showModal}>
                 <Icon type="line-chart" />
-                <FM defaultMessage="Statistic & Analysis" id="com.expertMap.headerLine.label.statistic" />
+                <FM defaultMessage="Statistic & Analysis"
+                    id="com.expertMap.headerLine.label.statistic" />
               </Button>
               <Modal
                 title="Statistics & Analyses"
@@ -329,7 +332,8 @@ class ExpertHeatmapPage extends React.Component {
                 <a className="ant-dropdown-link" href="#theme">
                   <Icon type="skin" />
                   {currentTheme && currentTheme.length > 0 &&
-                  <FM defaultMessage={currentTheme[0].label} id={`com.expertTrajectory.theme.label.${currentTheme[0].key}`} />
+                  <FM defaultMessage={currentTheme[0].label}
+                      id={`com.expertTrajectory.theme.label.${currentTheme[0].key}`} />
                   }
                 </a>
               </Dropdown>
@@ -345,21 +349,19 @@ class ExpertHeatmapPage extends React.Component {
     );
     return (
       <div>
-        { showFlag &&
+        {showFlag &&
         <Page contentClass={tc(['ExpertHeatmapPage'])} onSearch={this.onSearch}
               query={query}>
-          { content && content }
+          {content && content}
         </Page>
         }
-        { !showFlag &&
-          <div>
-            { content && content }
-          </div>
+        {!showFlag &&
+        <div>
+          {content && content}
+        </div>
         }
       </div>
     );
   }
 }
 
-export default connect(({ expertTrajectory, loading }) =>
-  ({ expertTrajectory, loading }))(ExpertHeatmapPage);

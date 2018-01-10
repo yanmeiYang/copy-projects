@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'dva/router';
+// import { withRouter } from 'dva/router';
 import { connect, Page, router } from 'engine';
 import { classnames } from 'utils';
 import * as strings from 'utils/strings'; // TODO merge into utils.
@@ -15,7 +15,7 @@ const tc = applyTheme(styles);
 @Page()
 @connect(({ app, search, loading }) => ({ app, search, loading }))
 @Auth
-@withRouter
+// @withRouter
 export default class SearchPage extends Component {
   constructor(props) {
     super(props);

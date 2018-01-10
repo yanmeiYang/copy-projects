@@ -2,7 +2,7 @@
  * Created by BoGao on 2017/7/15.
  */
 import React from 'react';
-import { Link } from 'dva/router';
+import { Link } from 'engine';
 import classnames from 'classnames';
 import { FormattedMessage as FM } from 'react-intl';
 import styles from './IndexCenterZone.less';

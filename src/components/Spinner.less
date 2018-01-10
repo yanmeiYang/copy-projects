@@ -1,0 +1,76 @@
+@offset: 126;
+@duration: 1.4s;
+
+:global {
+  .spinnerMask {
+    background-color: rgba(255, 255, 255, 0.6);
+    position: absolute;width: 95%;z-index: 99999;
+    // height: 100%;
+  }
+  .mshow { display: block }
+  .mhide { display: none }
+
+  .parentSpinner_blur {
+    filter: blur(1.1px) brightness(103%) !important;
+  }
+
+  .parentSpinner_dark {
+    filter: blur(0.5px) brightness(103%) !important;
+  }
+
+  .spinnerMask.type_blur {
+  }
+
+  .spinnerMask.type_dark {
+  }
+
+  .spinnerMask.type_light {
+  }
+}
+
+.spinner {
+  position: relative;
+  z-index: 99999;
+  right: 10px;
+  bottom: 10px;
+  opacity: 0;
+  transition: opacity .15s ease;
+  animation: rotator @duration linear infinite;
+  animation-play-state: paused;
+}
+
+.show {
+  opacity: 1;
+  animation-play-state: running;
+}
+
+.path {
+  stroke: #ff6600;
+  stroke-dasharray: @offset;
+  stroke-dashoffset: 0;
+  transform-origin: center;
+  animation: dash 1.4s ease-in-out infinite;
+}
+
+@keyframes rotator {
+  0% {
+    transform: scale(0.5) rotate(0deg);
+  }
+  100% {
+    transform: scale(0.5) rotate(270deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dashoffset: @offset;
+  }
+  50% {
+    stroke-dashoffset: (@offset/2);
+    transform: rotate(135deg);
+  }
+  100% {
+    stroke-dashoffset: @offset;
+    transform: rotate(450deg);
+  }
+}

@@ -1,6 +1,6 @@
 {
   "name": "aminer2c",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "start": "cross-env DISABLE_ESLINT=1 DEBUG=aminer:* umi dev",
@@ -64,7 +64,8 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-react": "^7.5.1",
     "less-vars-to-js": "^1.2.1",
-    "umi": "^1.0.0-0"
+    "react-perf-devtool": "^3.0.2",
+    "umi": "^1.0.0-beta.34"
   },
   "optionalDependencies": {
     "fsevents": "^1.1.3"

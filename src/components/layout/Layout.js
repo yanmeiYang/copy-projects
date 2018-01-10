@@ -172,7 +172,6 @@ export default class Layout extends PureComponent {
           {/*<Sider>right sidebar</Sider>*/}
         </LayoutComponent>
 
-
         {/* -------- Footer -------- */}
 
         <Footer className={tc(['footer'])}>

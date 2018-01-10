@@ -24,6 +24,12 @@ require('debug').enable('*,-sockjs*');
 const debug = require('debug')('aminer:engine');
 const perf = require('debug')('perf:aminer:engine');
 
+// A perf tool for react.
+if (process.env.NODE_ENV !== 'production') {
+  // var registerObserver = require('react-perf-devtool');
+  // registerObserver();
+}
+
 const ERROR_MSG_DURATION = 3; // 3 秒
 
 const onError = (error) => {

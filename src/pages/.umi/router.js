@@ -1,6 +1,9 @@
-import { Router, Route, Switch } from 'umi-router';
+import { Router as DefaultRouter, Route, Switch } from 'react-router-dom';
 import dynamic from 'umi/dynamic';
 import { default as event, Events } from 'umi/event';
+
+
+const Router = window.g_CustomRouter || DefaultRouter;
 
 export default function() {
 
@@ -23,7 +26,7 @@ export default function() {
     <Route exact path="/search.html" component={() => <div>Compiling...</div>}></Route>
     <Route exact path="/test1.html" component={() => <div>Compiling...</div>}></Route>
     <Route exact path="/test2.html" component={() => <div>Compiling...</div>}></Route>
-    <Route exact path="/user/info.html" component={() => <div>Compiling...</div>}></Route>
+    <Route exact path="/user/info.html" component={require('../user/info.js').default}></Route>
     <Route exact path="/" component={require('../index/page.js').default}></Route>
   </Switch>
 </Router>

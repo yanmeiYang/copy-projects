@@ -3,9 +3,16 @@ dist
 node_modules
 yarn-error.log
 npm-debug.log
-____later____src/pages
 
-____src/system-config.js
+### for umijs/umi framework ignores.
+
+src/system-config.js
+
+____later____src/pages
+src/pages/.umi-production
+src/systems/current
+src/themes/current
+
 
 xxxsrc/index.js
 xxxsrc/systems/index.js

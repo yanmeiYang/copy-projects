@@ -8,7 +8,7 @@
 const debug = require('debug')('aminer:engine');
 
 // const { AvailableSystems } = require('../src/core/system');
-const { replaceFile, createFile } = require('./node_tools');
+const { replaceFile, createFile, init } = require('./node_tools');
 const AvailableSystems = [
   'aminer',
   'demo',
@@ -55,7 +55,17 @@ if (AvailableSystems.indexOf(system) <= 0) {
   process.exit(-1);
 }
 
+// start doing things.
 console.log('System is [', system, '] start building...');
+
+// link or copy files used to start system.
+
+// init(system);
+// clearFolders(['./src/pages/', './src/systems/current', './src/themes/current']);
+// copyOrLink(`./src/seedsystems/${system}`, './src/systems/current');
+// copyOrLink(`./src/seedthemes/${system}`, './src/themes/current');
+
+
 
 // generate src/system_config.js
 createFile('./src/system-config.js', `

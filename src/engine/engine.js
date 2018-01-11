@@ -69,24 +69,23 @@ initDVA(app);
 const cache = {};
 
 const model = (m) => {
-  debug("Try add model %s.", m.namespace);
-  let mm = m;
-  if (m.default) {
-    mm = m.default;
-  }
+  // auto indent.
+  let mm = m && m.default && !m.namespace ? m.default : m;
 
   // development check
-  if (process.env.NODE_ENV !== 'production') {
-    if (!mm || !mm.namespace) {
+  if (!mm || !mm.namespace) {
+    if (process.env.NODE_ENV !== 'production') {
       console.error("Can't read namespace from model ", mm);
-      return;
     }
+    return;
   }
 
   if (cache[mm.namespace]) {
     // debug("Can't add model with the exist namespace %s.", m.namespace);
+    debug("add model [%s] Cached.", mm.namespace);
     return;
   }
+  debug("Add model [%s]", mm.namespace);
 
   // Add model to dva.
   app.model(mm);

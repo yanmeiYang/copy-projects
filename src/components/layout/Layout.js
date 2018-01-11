@@ -23,9 +23,6 @@ const { Sider, Content, Footer } = LayoutComponent;
 const tc = applyTheme(styles);
 const debug = require('debug')('aminer:engine');
 
-// Register related modules.
-debug('Debug start Layout ------------------------------');
-
 // let lastHref;
 @Models([require('models/app')])
 @connect(({ app, loading }) => ({ app, loading }))

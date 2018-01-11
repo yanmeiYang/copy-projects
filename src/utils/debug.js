@@ -8,6 +8,8 @@ const ReduxLoggerEnabled = false;
 const DebugLogEnabled = true;
 const LogRequest = true;
 const LogRequestResult = true;
+const LogRequestContent = false;
+
 const LogHOC = false;
 
 const HighlightHoles = 'none'; // ['none' | 'yes' | 'all']
@@ -43,18 +45,19 @@ function logRequestResult(pattern, ...data) {
   }
 }
 
-function logRequestError(pattern, ...data) {
+const logRequestError = (pattern, ...data) => {
   console.log(
     `%c${pattern}`,
     'background-color:red;color:white;padding:2px 8px;border-radius: 2px;',
     ...data,
   );
-}
+};
 
 
 export {
   // configs
-  ReduxLoggerEnabled, DebugLogEnabled, LogRequest, LogRequestResult, LogHOC,
+  ReduxLoggerEnabled, DebugLogEnabled, LogRequest, LogRequestResult, LogRequestContent,
+  LogHOC,
 
   // methods
   log, logRequest, logRequestResult, logRequestError,

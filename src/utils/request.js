@@ -24,7 +24,8 @@ export default function request(url, options) {
 
   if (process.env.NODE_ENV !== 'production') {
     debug.logRequest('❯ Request',
-      options.method, options.url && options.url.replace(apiDomain, ''), options,
+      options.method, options.url && options.url.replace(apiDomain, ''),
+      debug.LogRequestContent ? options : '',
     );
   }
   if (options.url && options.url.indexOf('//') > -1) {
@@ -55,9 +56,12 @@ export default function request(url, options) {
       data, // ...data
     };
     if (process.env.NODE_ENV !== 'production') {
-      debug.logRequestResult('❯❯ Response:',
-        options.method, options.url && options.url.replace(apiDomain, ''), '\n>', result,
-      );
+      const output = [options.method, options.url && options.url.replace(apiDomain, '')];
+      if (debug.LogRequestContent) {
+        output.push('\n>');
+        output.push(result);
+      }
+      debug.logRequestResult('❯❯ Response:', ...output);
     }
 
     if (options.nextapi && data && data.data && data.data.length > 0) {

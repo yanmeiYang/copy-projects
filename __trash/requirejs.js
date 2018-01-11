@@ -14,66 +14,33 @@ const scripts = {
   echarts: `${resRoot}/lib/echarts.js`,
 };
 
-// deprecated
-const Libraries = {
-  BMap: [
-    <script
-      key="bmap0" type="text/javascript"
-      src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />,
-
-    //    <script
-    //    key="bmap1" charSet="utf-8" async defer
-    //  src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1" />,
-  ],
-  GoogleMap: [
-    <script
-      key="googleMap" type="text/javascript" async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlzpf4YyjOBGYOhfUaNvQZENXEWBgDkS0" />,
-  ],
-  d3v3: [<script key="d3v3" type="text/javascript" src="/lib/d3.v3.js" async defer />],
-  d3: [<script key="d3v3" type="text/javascript" src="/lib/d3.v4.js" async defer />],
-  echarts: [<script key="echarts" type="text/javascript" src="/lib/echarts.js" async defer />],
-
-};
-
-// const findLibs = (keys) => {
+// // find each key in keys in Libraries, merge into final result.
+// // if nothing changed, return the original state.
+// const mergeLibs = (resources, keys) => {
+//   let changed = false;
+//   let res = resources || Map();
 //   if (keys && keys.length > 0) {
-//     const libs = {};
-//     keys.map((key) => {
-//       libs[key] = Libraries[key];
-//       return false;
+//     const libs = keys.map((key) => {
+//       const newRes = Libraries[key];
+//       if (!res.get(key) && newRes) {
+//         changed = true;
+//         return { key, newRes };
+//       }
+//       return null;
 //     });
-//     return libs;
+//     if (changed && libs && libs.length > 0) {
+//       res = res.withMutations((map) => {
+//         for (const lib of libs) {
+//           if (lib) {
+//             map.set(lib.key, lib.newRes);
+//           }
+//         }
+//       });
+//       return { changed, res };
+//     }
 //   }
+//   return { changed };
 // };
-
-// find each key in keys in Libraries, merge into final result.
-// if nothing changed, return the original state.
-const mergeLibs = (resources, keys) => {
-  let changed = false;
-  let res = resources || Map();
-  if (keys && keys.length > 0) {
-    const libs = keys.map((key) => {
-      const newRes = Libraries[key];
-      if (!res.get(key) && newRes) {
-        changed = true;
-        return { key, newRes };
-      }
-      return null;
-    });
-    if (changed && libs && libs.length > 0) {
-      res = res.withMutations((map) => {
-        for (const lib of libs) {
-          if (lib) {
-            map.set(lib.key, lib.newRes);
-          }
-        }
-      });
-      return { changed, res };
-    }
-  }
-  return { changed };
-};
 
 // TODO non-liner interval check.
 const ensureConfig = {
@@ -258,6 +225,6 @@ export {
   loadECharts,
   loadBMap,
   loadGoogleMap,
-  mergeLibs,
-  ensure,
+  // mergeLibs,
+  // ensure,
 };

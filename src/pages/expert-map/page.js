@@ -2,21 +2,24 @@ import React from 'react';
 import { connect, Page, router, withRouter } from 'engine';
 import { Layout } from 'components/layout';
 import { sysconfig } from 'systems';
-import { Button, Modal, Icon, Tabs, notification } from 'antd';
 import { applyTheme } from 'themes';
+import { Auth } from 'hoc';
+import { Button, Modal, Icon, Tabs, notification } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';
 import queryString from 'query-string';
-import { Auth, RequireRes } from 'hoc';
-import { detectSavedMapType, compare, ensure } from 'utils';
+import { detectSavedMapType, compare } from 'utils';
+import * as strings from 'utils/strings';
+import { loadECharts } from 'utils/requirejs';
 import { DomainSelector, MapFilter } from 'components/expert-map';
+import { showSta, sortByBigArea, sortByCountries } from 'components/expert-map/utils/sta-utils';
 import ExpertGoogleMap from 'components/expert-map/expert-googlemap.js';
 import ExpertMap from 'components/expert-map/expert-map.js';
-import * as strings from 'utils/strings';
 import styles from './page.less';
-import { showSta, sortByBigArea, sortByCountries } from 'components/expert-map/utils/sta-utils';
 
 const tc = applyTheme(styles);
 const [ButtonGroup, TabPane] = [Button.Group, Tabs.TabPane];
+
+// TODO eliminate
 let echarts;
 
 const MAP_DISPATCH_KEY = 'map-dispatch';
@@ -24,12 +27,7 @@ const MAP_DISPATCH_KEY = 'map-dispatch';
 @Page({ models: [require('models/expert-map')] })
 @connect(({ app, expertMap }) => ({ app, expertMap }))
 @Auth @withRouter
-@RequireRes('echarts')
 export default class ExpertMapPage extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   state = {
     mapType: '', // [baidu|google]
     query: '',
@@ -43,7 +41,8 @@ export default class ExpertMapPage extends React.Component {
   componentWillMount() {
     const { location } = this.props;
     const { query, type, domain } = queryString.parse(location.search);
-    const mapType = type || detectSavedMapType(MAP_DISPATCH_KEY); //判断该使用什么样的地图
+
+    const mapType = type || detectSavedMapType(MAP_DISPATCH_KEY); // 判断该使用什么样的地图
     const q = query || '-';
     this.setState({
       query: domain ? '' : q,
@@ -60,7 +59,7 @@ export default class ExpertMapPage extends React.Component {
   }
 
   componentDidMount() {
-    ensure('echarts', (ret) => {
+    loadECharts((ret) => {
       echarts = ret;
       const { query, domainId } = this.state;
       if ((query === '' || query === '-' || query === 'undefined' || typeof (query) === 'undefined')
@@ -72,6 +71,7 @@ export default class ExpertMapPage extends React.Component {
 
   componentWillReceiveProps(np) {
     const { location } = np;
+    console.log('np::  ', np, location.search);
     const { query, type, domain } = queryString.parse(location.search);
     if (this.state.type !== type) {
       const mapType = type || detectSavedMapType(MAP_DISPATCH_KEY);
@@ -118,10 +118,12 @@ export default class ExpertMapPage extends React.Component {
     this.setState({ type });
   };
 
-  onDomainChange = (domain) => { //修改url,shouldComponentUpdate更新
+  onDomainChange = (domain) => { // 修改url,shouldComponentUpdate更新
+    console.log('CD::', domain);
     if (domain.id !== 'aminer') {
       this.setState({ query: '' });
-      router.push({ pathname: '/expert-map', search: `?domain=${domain.id}` });
+      // BestPractise: route to new page using code.
+      router.push({ pathname: '/expert-map', query: { domain: domain.id } });
     } else {
       const data = { query: this.state.query || '-' };
       this.onSearch(data);
@@ -136,10 +138,10 @@ export default class ExpertMapPage extends React.Component {
     this.setState({ hindexRange: key });
   };
 
-  onSearch = (data) => { //修改url,shouldComponentUpdate更新
+  onSearch = (data) => { // 修改url,shouldComponentUpdate更新
     if (data.query) {
       this.setState({ query: data.query, domainId: 'aminer' });
-      router.push({ pathname: '/expert-map', search: `?query=${data.query}` });
+      router.push({ pathname: '/expert-map', query: { query: data.query } });
     }
   };
 
@@ -276,7 +278,7 @@ export default class ExpertMapPage extends React.Component {
   render() {
     const { mapType, query, domainId } = this.state;
     const options = { ...this.state, title: this.titleBlock };//以便传入到组件里面
-
+    console.log('>>>>>>>>..jdflsjdlfjslkdjflskjdflkj', domainId);
     const staJsx = (
       <div className={styles.charts}>
         <div id="bycountries" className={styles.chart1} />
@@ -299,16 +301,16 @@ export default class ExpertMapPage extends React.Component {
         onSearch={this.onSearch}
         disableAdvancedSearch
       >
-        {
-          hdFlag && <DomainSelector
+        {hdFlag && (
+          <DomainSelector
             domains={sysconfig.Map_HotDomains}
-            domainsLabel={sysconfig.Map_HotDomainsLabel}
+            domainsLabel={sysconfig.Map_HotDomainsLabel} // TODO i18n
             currentDomain={domainId}
-            onChange={this.onDomainChange}
+            onDomainSelect={this.onDomainChange}
             time={Math.random()}
             type={hdType}
-          />
-        }
+          />)}
+
         <MapFilter
           onRangeChange={this.onRangeChange}
           onHindexRangeChange={this.onHindexRangeChange}
@@ -322,7 +324,7 @@ export default class ExpertMapPage extends React.Component {
                 domains={sysconfig.Map_HotDomains}
                 domainsLabel={sysconfig.Map_HotDomainsLabel}
                 currentDomain={domainId}
-                onChange={this.onDomainChange}
+                onDomainSelect={this.onDomainChange}
                 time={Math.random()}
                 type={hdType}
               />

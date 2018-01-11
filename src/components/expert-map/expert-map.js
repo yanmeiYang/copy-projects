@@ -35,6 +35,7 @@ import {
   checkCacheLevel,
   requestDataNow,
 } from './utils/cache-utils';
+import { resRoot } from "core";
 
 let map1; // 地图刷新前，用于存储上次浏览的地点
 const dataMap = {}; // 数据的索引，建议可以放到reducers.
@@ -275,7 +276,7 @@ export default class ExpertMap extends PureComponent {
             marker.setLabel(label);
             marker.setTop(true); //置于顶层
             marker.setIcon(new BMap.Icon(
-              '/images/map/marker_blue_sprite.png',
+              `${resRoot}/images/map/marker_blue_sprite.png`,
               new BMap.Size(19, 50), {
                 offset: new BMap.Size(0, 0), // 指定定位位置
                 imageOffset: new BMap.Size(0, 0), // 设置图片偏移
@@ -366,7 +367,6 @@ export default class ExpertMap extends PureComponent {
     const { results } = model.geoData;
     let personPopupJsx;
     const person = dataCache[this.state.cperson];
-    console.log(person);
     if (person) {
       const [divId, name] = [`Mid${person.id}`, person.name];
       const pos = person && person.pos && person.pos[0] && (person.pos[0].n || person.pos[0].n_zh);

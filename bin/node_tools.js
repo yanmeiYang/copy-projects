@@ -37,52 +37,52 @@ const fileDisplay = (filePath) => {
     }
   });
 };
+//
+// const mkdir = (newsrc) => {
+//   // const newsrc = src.replace('systemseed', 'systems');
+//   debug('arguments is : %o', newsrc);
+//   fs.mkdirSync(newsrc)
+// };
+//
+// const link = (path) => {
+//   // const src = path.replace('systemseed', 'systems');
+//   fs.linkSync(path, src)
+// };
+//
+// const rmfile = (path) => {
+//   let files = [];
+//   if (fs.existsSync(path)) {
+//     files = fs.readdirSync(path);
+//     files.forEach(function (file, index) {
+//       const curPath = path + "/" + file;
+//       if (fs.statSync(curPath).isDirectory()) { // recurse
+//         rmfile(curPath);
+//       } else { // delete file
+//         fs.unlinkSync(curPath);
+//       }
+//     });
+//     fs.rmdirSync(path);
+//   }
+// };
+//
+// // 需要清空的文件夹
+//
+// // 需要建立连接的文件夹
+// const linkFileGroup = ['./src/seedpages/', './src/seedsystems/xxx'];
+//
+// const init = (system) => {
+//   // clear all linked content.
+//   for (let path of clearPathGroup) {
+//     rmfile(path);
+//     mkdir(path);
+//   }
+//
+//   const root = (`./src/seedsystems/${system}`);
+//   const filePath = path.resolve(root);
+//   debug('arguments is ddddd: %o', filePath);
+//   // rmfile('../src/aa')
+//   // mkdir(root);
+//   // fileDisplay(filePath);
+// };
 
-const mkdir = (newsrc) => {
-  // const newsrc = src.replace('systemseed', 'systems');
-  debug('arguments is : %o', newsrc);
-  fs.mkdirSync(newsrc)
-};
-
-const link = (path) => {
-  // const src = path.replace('systemseed', 'systems');
-  fs.linkSync(path, src)
-};
-
-const rmfile = (path) => {
-  let files = [];
-  if (fs.existsSync(path)) {
-    files = fs.readdirSync(path);
-    files.forEach(function (file, index) {
-      const curPath = path + "/" + file;
-      if (fs.statSync(curPath).isDirectory()) { // recurse
-        rmfile(curPath);
-      } else { // delete file
-        fs.unlinkSync(curPath);
-      }
-    });
-    fs.rmdirSync(path);
-  }
-};
-
-// 需要清空的文件夹
-
-// 需要建立连接的文件夹
-const linkFileGroup = ['./src/seedpages/', './src/seedsystems/xxx'];
-
-const init = (system) => {
-  // clear all linked content.
-  for (let path of clearPathGroup) {
-    rmfile(path);
-    mkdir(path);
-  }
-
-  const root = (`./src/seedsystems/${system}`);
-  const filePath = path.resolve(root);
-  debug('arguments is ddddd: %o', filePath);
-  // rmfile('../src/aa')
-  // mkdir(root);
-  // fileDisplay(filePath);
-};
-
-module.exports = { createFile, replaceFile, init };
+module.exports = { createFile, replaceFile };

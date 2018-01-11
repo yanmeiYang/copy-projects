@@ -3,6 +3,9 @@ import { Map } from 'immutable';
 import loadScriptJs from 'load-script';
 import { resRoot } from 'core';
 
+const info = require('debug')('aminer:requirejs');
+const debug = require('debug')('aminerdebug:requirejs');
+
 // Load script
 const scripts = {
   BMap: `${resRoot}/lib/BMap/bmap.js`,
@@ -15,26 +18,26 @@ const scripts = {
 };
 
 // deprecated
-const Libraries = {
-  BMap: [
-    <script
-      key="bmap0" type="text/javascript"
-      src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />,
-
-    //    <script
-    //    key="bmap1" charSet="utf-8" async defer
-    //  src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1" />,
-  ],
-  GoogleMap: [
-    <script
-      key="googleMap" type="text/javascript" async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlzpf4YyjOBGYOhfUaNvQZENXEWBgDkS0" />,
-  ],
-  d3v3: [<script key="d3v3" type="text/javascript" src="/lib/d3.v3.js" async defer />],
-  d3: [<script key="d3v3" type="text/javascript" src="/lib/d3.v4.js" async defer />],
-  echarts: [<script key="echarts" type="text/javascript" src="/lib/echarts.js" async defer />],
-
-};
+// const Libraries = {
+//   BMap: [
+//     <script
+//       key="bmap0" type="text/javascript"
+//       src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />,
+//
+//     //    <script
+//     //    key="bmap1" charSet="utf-8" async defer
+//     //  src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1" />,
+//   ],
+//   GoogleMap: [
+//     <script
+//       key="googleMap" type="text/javascript" async defer
+//       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlzpf4YyjOBGYOhfUaNvQZENXEWBgDkS0" />,
+//   ],
+//   d3v3: [<script key="d3v3" type="text/javascript" src="/lib/d3.v3.js" async defer />],
+//   d3: [<script key="d3v3" type="text/javascript" src="/lib/d3.v4.js" async defer />],
+//   echarts: [<script key="echarts" type="text/javascript" src="/lib/echarts.js" async defer />],
+//
+// };
 
 // const findLibs = (keys) => {
 //   if (keys && keys.length > 0) {
@@ -103,11 +106,11 @@ const ensure = (libs, success, failed) => {
     }
     n += 1;
     if (n === 10) {
-      console.warn('Warning! Loading script slow. ', libs);
+      info('Warning! Loading script slow. [%o] ', libs);
     }
     if (n >= ensureConfig.tryTimes) {
       clearInterval(mapInterval);
-      console.error('Error! Loading script failed. ', libs);
+      info('Error! Loading script failed. [%o] ', libs);
       if (failed) {
         failed();
       }
@@ -188,7 +191,7 @@ const loadScript = (url, opts, cb) => {
   const cachedResult = window.requireJsRegistry[url];
   if (cachedResult) {
     if (process.env.NODE_ENV !== 'production') {
-      console.log('[RequireJs] Cached ', url, cachedResult);
+      debug('Cached %s %o', url, cachedResult);
     }
     if (cb) {
       cb(cachedResult);
@@ -196,12 +199,12 @@ const loadScript = (url, opts, cb) => {
     return cachedResult;
   }
 
-  // not cached.
+  // if not cached.
   const { check, ...restOpts } = opts;
   const script = scripts[url] || url;
 
   if (process.env.NODE_ENV !== 'production') {
-    console.log('[RequireJs] load ', url);
+    debug('load %s', url);
   }
 
   loadScriptJs(script, restOpts, () => {
@@ -212,7 +215,7 @@ const loadScript = (url, opts, cb) => {
         cb(ret);
       }
     } else {
-      console.error('Error loading script: ', script);
+      info('Error loading script: %o', script);
     }
   });
 };

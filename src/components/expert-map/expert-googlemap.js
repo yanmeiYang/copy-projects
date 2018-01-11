@@ -9,7 +9,8 @@ import classnames from 'classnames';
 import { RequireRes } from 'hoc';
 import { sysconfig } from 'systems';
 import { Spinner } from 'components';
-import { compare, ensure } from 'utils';
+import { compare } from 'utils';
+import { loadGoogleMap } from 'utils/requirejs';
 import styles from './expert-googlemap.less';
 
 import GetGoogleMapLib from './utils/googleMapGai.js';
@@ -43,6 +44,7 @@ import {
   checkCacheLevel,
   requestDataNow,
 } from './utils/cache-utils';
+import { resRoot } from "core";
 
 let map1;
 const dataMap = {};
@@ -62,7 +64,7 @@ const getInfoWindow = () => {
  * -------------------------------------------------------------------
  */
 @connect(({ expertMap, loading }) => ({ expertMap, loading }))
-@RequireRes('GoogleMap')
+// @RequireRes('GoogleMap')
 export default class ExpertGoogleMap extends React.Component {
   constructor(props) {
     super(props);
@@ -95,7 +97,7 @@ export default class ExpertGoogleMap extends React.Component {
   }
 
   addMouseoverHandler = (map, marker, personId) => {
-    ensure('google', (google) => {
+    loadGoogleMap((google) => {
       const { dispatch } = this.props;
       const that = this;
       const infoWindow = getInfoWindow();
@@ -156,10 +158,10 @@ export default class ExpertGoogleMap extends React.Component {
     const filterRange = range || 'all';
     const mapType = type || 0;
 
-    ensure('google', (google) => {
+    loadGoogleMap((googleMaps) => {
       that.showOverLay();
       if (!map1) {
-        map1 = new google.maps.Map(document.getElementById('allmap'), {
+        map1 = new googleMaps.Map(document.getElementById('allmap'), {
           center: { lat: sysconfig.CentralPosition.lat, lng: sysconfig.CentralPosition.lng },
         });
       }
@@ -168,7 +170,7 @@ export default class ExpertGoogleMap extends React.Component {
         lng: map1 ? map1.getCenter().lng() : sysconfig.CentralPosition.lng,
       };
       const conf = this.mapConfig[mapType] || this.mapConfig[0]; //根据地图的类型选择地图的尺寸
-      const map = new google.maps.Map(document.getElementById('allmap'), {
+      const map = new googleMaps.Map(document.getElementById('allmap'), {
         center: mapCenter,
         zoom: conf.scale,
         gestureHandling: 'greedy',
@@ -223,7 +225,7 @@ export default class ExpertGoogleMap extends React.Component {
         }
       }
       let markers = locations.map((location, i) => {
-        return new google.maps.Marker({
+        return new googleMaps.Marker({
           position: location,
           label: {
             text: place.results[i].name,
@@ -235,10 +237,10 @@ export default class ExpertGoogleMap extends React.Component {
             id: place.results[i].id, //id是自己设置的一个属性，用来放id的
           },
           icon: {
-            url: '/images/map/marker_blue_sprite.png',
-            size: new google.maps.Size(20, 70),
-            origin: new google.maps.Point(0, 0),
-            anchor: new google.maps.Point(0, 25),
+            url: `${resRoot}/images/map/marker_blue_sprite.png`,
+            size: new googleMaps.Size(20, 70),
+            origin: new googleMaps.Point(0, 0),
+            anchor: new googleMaps.Point(0, 25),
           },
           title: place.results[i].name,
         });
@@ -258,7 +260,7 @@ export default class ExpertGoogleMap extends React.Component {
       if (mapType === '1') {
         bigAreaConfig.map((ac) => {
           console.log(ac);
-          return new google.maps.Marker({
+          return new googleMaps.Marker({
             position: { lat: ac.y + 1.2, lng: ac.x + 2.5 },
             label: {
               text: ac.label,
@@ -267,7 +269,7 @@ export default class ExpertGoogleMap extends React.Component {
               fontWeight: 'bold',
               color: 'red',
             },
-            icon: { url: '/images/map/blank.png' },
+            icon: { url: `${resRoot}/images/map/blank.png` },
             map,
           });
         });

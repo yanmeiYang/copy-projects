@@ -3,7 +3,7 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'engine';
+import { connect, Link } from 'engine';
 import { Tag, TreeSelect } from 'antd';
 import styles from './DomainSelector.less';
 
@@ -15,11 +15,11 @@ export default class DomainSelector extends PureComponent {
   static propTypes = {
     domains: PropTypes.array,
     currentDomain: PropTypes.string,
-    onChange: PropTypes.func,
+    onDomainSelect: PropTypes.func,
   };
 
-  domainChanged = (domain) => {
-    const { onChange } = this.props;
+  onDomainClicked = (domain) => {
+    const { onDomainSelect } = this.props;
     let cd = domain;
     if (typeof (domain) === 'string') {
       for (const d of this.props.domains) {
@@ -28,8 +28,8 @@ export default class DomainSelector extends PureComponent {
         }
       }
     }
-    if (onChange) {
-      onChange(cd);
+    if (onDomainSelect) {
+      onDomainSelect(cd);
     }
   };
 
@@ -42,6 +42,10 @@ export default class DomainSelector extends PureComponent {
     const cdomain = currentDomain ? currentDomain : undefined;
     return (
       <div>
+        <Link to={{
+          pathname: "/expert-map",
+          query: { domain: '57a57c640a3ac5e5b97e6f9b' }
+        }}>sldkfj</Link>
         {
           hdFlag &&
           <div className={styles.filterWrap}>
@@ -56,12 +60,10 @@ export default class DomainSelector extends PureComponent {
                         key={domain.id}
                         className={styles.filterItem}
                         checked={currentDomain === domain.id}
+                        onChange={this.onDomainClicked.bind(this, domain)}
                         value={domain.id}
                       >
-                        <span role="presentation" onKeyDown={() => {}}
-                              onClick={this.domainChanged.bind(this, domain)}>
-                          {domain.name}
-                        </span>
+                        {domain.name}
                       </CheckableTag>
                     );
                   })}
@@ -77,7 +79,7 @@ export default class DomainSelector extends PureComponent {
             style={{ width: 280 }}
             dropdownStyle={{ maxHeight: 425, overflow: 'auto' }}
             placeholder={<b style={{ color: '#000000' }}>Choose Domain</b>}
-            onChange={this.domainChanged}
+            onChange={this.onDomainClicked}
             value={cdomain}
             treeDefaultExpandAll
           >
@@ -87,7 +89,7 @@ export default class DomainSelector extends PureComponent {
                   || domain.name === 'Software Engineering' || domain.name === 'Computer Graphics') {
                   return (
                     <TreeNode value={domain.id}
-                              title={<span role="presentation" >{domain.name}</span>}
+                              title={<span role="presentation">{domain.name}</span>}
                               key={domain.id} />
                   );
                 }

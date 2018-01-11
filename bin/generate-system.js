@@ -8,7 +8,7 @@
 const debug = require('debug')('aminer:engine');
 
 // const { AvailableSystems } = require('../src/core/system');
-const { replaceFile, createFile, init } = require('./node_tools');
+const { replaceFile, createFile } = require('./node_tools');
 const AvailableSystems = [
   'aminer',
   'demo',

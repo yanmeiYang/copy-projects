@@ -278,7 +278,7 @@ export default class ExpertHeatmapPage extends React.Component {
               domains={sysconfig.Map_HotDomains}
               domainsLabel={sysconfig.Map_HotDomainsLabel}
               currentDomain={domainId}
-              onChange={this.onDomainChange}
+              onDomainSelect={this.onDomainChange}
               time={Math.random()}
               type="selector"
             />

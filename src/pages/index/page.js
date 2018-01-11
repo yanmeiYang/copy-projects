@@ -11,8 +11,6 @@ import styles from './page.less';
 
 const tc = applyTheme(styles);
 
-console.log('>>>>>>>>>>>>> IndexPageIndexPageIndexPageIndexPageIndexPage',);
-
 @Page()
 @connect(({ app }) => ({ app }))
 @Auth

@@ -20,9 +20,9 @@ import zh from 'react-intl/locale-data/zh';
 
 const { SYSTEM, Locale } = sysconfig;
 
-require('debug').enable('*,-sockjs*');
+require('debug').enable('*,-sockjs*,-aminerdebug:*');
 const debug = require('debug')('aminer:engine');
-const perf = require('debug')('perf:aminer:engine');
+// const perf = require('debug')('perf:aminer:engine');
 
 // A perf tool for react.
 if (process.env.NODE_ENV !== 'production') {

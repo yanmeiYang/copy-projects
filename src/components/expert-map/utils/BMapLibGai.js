@@ -1,5 +1,7 @@
 /* eslint-disable */
 
+import { resRoot } from "core";
+
 function GetBMapLib(showTop) {
   return function showOverLay() {
     let me = {};
@@ -1375,7 +1377,7 @@ function GetBMapLib(showTop) {
        * @type {String}
 
        */
-      const _IMAGE_PATH = '/images/map/m';
+      const _IMAGE_PATH = `${resRoot}/images/map/m`;
 
       /**
 

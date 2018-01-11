@@ -3,13 +3,13 @@
  */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'dva';
-import { theme, applyTheme } from 'themes';
+import { connect } from 'engine';
 import { Layout } from 'antd';
-// import { KgSearchBox } from 'components/search';
-import HeaderInfoZone from 'components/headers/HeaderInfoZone';
+import { theme, applyTheme } from 'themes';
 import { compare } from 'utils';
 import { Hole } from 'components/core';
+import { KgSearchBox } from 'components/search';
+import HeaderInfoZone from './HeaderInfoZone';
 import styles from './Header.less';
 
 const tc = applyTheme(styles);
@@ -71,7 +71,7 @@ export default class Header extends Component {
 
     const { logoZone, searchZone, infoZone, rightZone } = this.props;
     const { onSearch, fixAdvancedSearch, disableAdvancedSearch, query } = this.props;
-    console.log('>>>>>>>HEADER', logoZone, searchZone, infoZone, rightZone);
+    // console.log('>>>>>>>HEADER', logoZone, searchZone, infoZone, rightZone);
 
     return (
       <Layout.Header className={tc(['header'])}>
@@ -82,13 +82,13 @@ export default class Header extends Component {
 
         <div className={tc(['searchZone'])}>
           <Hole fill={searchZone} defaults={[
-            //            <KgSearchBox
-            //            key={100} size="large"
-            //          className={styles.searchBox} style={{ height: 36, marginTop: 15 }}
-            //        query={query} onSearch={onSearch}
-            //      fixAdvancedSearch={fixAdvancedSearch}
-            //    disableAdvancedSearch={disableAdvancedSearch}
-            // />,
+            <KgSearchBox
+              key={100} size="large"
+              className={styles.searchBox} style={{ height: 36, marginTop: 15 }}
+              query={query} onSearch={onSearch}
+              fixAdvancedSearch={fixAdvancedSearch}
+              disableAdvancedSearch={disableAdvancedSearch}
+            />,
           ]} />
         </div>
 

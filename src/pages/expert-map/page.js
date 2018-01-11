@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, Page, router } from 'engine';
+import { connect, Page, router, withRouter } from 'engine';
 import { Layout } from 'components/layout';
 import { sysconfig } from 'systems';
 import { Button, Modal, Icon, Tabs, notification } from 'antd';
@@ -9,9 +9,9 @@ import queryString from 'query-string';
 import { Auth, RequireRes } from 'hoc';
 import { detectSavedMapType, compare, ensure } from 'utils';
 import { DomainSelector, MapFilter } from 'components/expert-map';
-import * as strings from 'utils/strings';
 import ExpertGoogleMap from 'components/expert-map/expert-googlemap.js';
 import ExpertMap from 'components/expert-map/expert-map.js';
+import * as strings from 'utils/strings';
 import styles from './page.less';
 import { showSta, sortByBigArea, sortByCountries } from 'components/expert-map/utils/sta-utils';
 
@@ -23,7 +23,7 @@ const MAP_DISPATCH_KEY = 'map-dispatch';
 
 @Page({ models: [require('models/expert-map')] })
 @connect(({ app, expertMap }) => ({ app, expertMap }))
-@Auth
+@Auth @withRouter
 @RequireRes('echarts')
 export default class ExpertMapPage extends React.Component {
   constructor(props) {

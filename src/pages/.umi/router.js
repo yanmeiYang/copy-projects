@@ -17,7 +17,7 @@ export default function() {
 <Router history={window.g_history}>
   <Switch>
     <Route exact path="/auth/forgot-password.html" component={() => <div>Compiling...</div>}></Route>
-    <Route exact path="/expert-map.html" component={() => <div>Compiling...</div>}></Route>
+    <Route exact path="/expert-map.html" component={require('../expert-map/page.js').default}></Route>
     <Route exact path="/index.html" component={require('../index/page.js').default}></Route>
     <Route exact path="/list.html" component={() => <div>Compiling...</div>}></Route>
     <Route exact path="/login.html" component={() => <div>Compiling...</div>}></Route>
@@ -26,7 +26,7 @@ export default function() {
     <Route exact path="/search.html" component={() => <div>Compiling...</div>}></Route>
     <Route exact path="/test1.html" component={() => <div>Compiling...</div>}></Route>
     <Route exact path="/test2.html" component={() => <div>Compiling...</div>}></Route>
-    <Route exact path="/user/info.html" component={require('../user/info.js').default}></Route>
+    <Route exact path="/user/info.html" component={() => <div>Compiling...</div>}></Route>
     <Route exact path="/" component={require('../index/page.js').default}></Route>
   </Switch>
 </Router>

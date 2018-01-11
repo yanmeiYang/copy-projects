@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 // import PropTypes from 'prop-types';
-import { connect } from 'dva';
+import { connect, FormCreate, } from 'engine';
 import { Input, Button, message, Form, Icon } from 'antd';
 import * as strings from 'utils/strings';
 import Autosuggest from 'react-autosuggest';
@@ -79,8 +79,12 @@ const getSectionSuggestions = (section) => {
 };
 
 // ==================================================================================
+// const mapStateToProps = state => ({ isAdvancedSearch: state.app.isAdvancedSearch });
+// export default injectIntl(connect(mapStateToProps)(Form.create()(KgSearchBox)));
 
-class KgSearchBox extends PureComponent {
+@injectIntl @FormCreate()
+@connect(({ app }) => ({ isAdvancedSearch: app.get('isAdvancedSearch') }))
+export default class KgSearchBox extends PureComponent {
   static propTypes = {
     // logoZone: PropTypes.array,
   };
@@ -422,5 +426,3 @@ class KgSearchBox extends PureComponent {
   }
 }
 
-const mapStateToProps = state => ({ isAdvancedSearch: state.app.isAdvancedSearch });
-export default injectIntl(connect(mapStateToProps)(Form.create()(KgSearchBox)));

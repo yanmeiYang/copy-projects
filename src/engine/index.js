@@ -5,6 +5,7 @@ import React from 'react';
 import { connect } from 'dva';
 import Link from 'umi/link';
 import router from 'umi/router';
+import { withRouter } from 'react-router-dom';
 import { Form } from 'antd';
 import { Page, Models, withIntl } from './engine';
 
@@ -25,7 +26,7 @@ export {
 
   renderChildren,
 
-  withIntl, FormCreate,
+  withIntl, withRouter, FormCreate,
 
 
 };

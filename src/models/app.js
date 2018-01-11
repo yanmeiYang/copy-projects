@@ -227,18 +227,16 @@ export default {
       return payload;
     },
 
-    // ---------- below delete later -----------
-
     toggleAdvancedSearch(state) {
-      return { ...state, isAdvancedSearch: !state.isAdvancedSearch };
+      return state.set('isAdvancedSearch', !state.get('isAdvancedSearch'));
     },
 
     changeToAdvancedSearch(state) {
-      return { ...state, isAdvancedSearch: true };
+      return state.set('isAdvancedSearch', true);
     },
 
     changeToSimpleSearch(state) {
-      return { ...state, isAdvancedSearch: false };
+      return state.set('isAdvancedSearch', false);
     },
 
     feedbackSuccess(state, { payload }) {

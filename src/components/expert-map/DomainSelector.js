@@ -3,6 +3,7 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import queryString from 'query-string';
 import { connect, Link } from 'engine';
 import { Tag, TreeSelect } from 'antd';
 import styles from './DomainSelector.less';
@@ -44,7 +45,7 @@ export default class DomainSelector extends PureComponent {
       <div>
         <Link to={{
           pathname: "/expert-map",
-          query: { domain: '57a57c640a3ac5e5b97e6f9b' }
+          search: queryString.stringify({ domain: '57a57c640a3ac5e5b97e6f9b' })
         }}>sldkfj</Link>
         {
           hdFlag &&

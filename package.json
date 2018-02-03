@@ -45,7 +45,7 @@
     "react-router-dom": "^4.2.2",
     "redux-logger": "^3.0.6",
     "umi-router": "^0.1.2",
-    "zrender": "^3.7.4"
+    "zrender": "^4.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.36",
@@ -66,7 +66,7 @@
     "eslint-plugin-react": "^7.5.1",
     "less-vars-to-js": "^1.2.1",
     "react-perf-devtool": "^3.0.2",
-    "umi": "^1.0.0-beta.34"
+    "umi": "^1.0.0-0"
   },
   "optionalDependencies": {
     "fsevents": "^1.1.3"

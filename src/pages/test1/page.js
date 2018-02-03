@@ -33,6 +33,7 @@ import Link from 'umi/link';
 import Count from 'components/Count';
 import styles from './page.css';
 import { Page } from 'engine';
+import queryString from "query-string";
 
 const r = () => {
   const result = (
@@ -49,6 +50,10 @@ const r = () => {
         <br />
         <Link to="/test2">Test2 Page</Link>
         <br />
+        <Link to={{
+          pathname: "/expert-map",
+          search: queryString.stringify({ domain: '57a57c640a3ac5e5b97e6f9b' })
+        }}>GOTO TEST MAP</Link>
       </div>
     </div>
   );

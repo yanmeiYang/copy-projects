@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, Page, router, withRouter } from 'engine';
+import { connect, Page, router, withRouter, routerRedux } from 'engine';
 import { Layout } from 'components/layout';
 import { sysconfig } from 'systems';
 import { applyTheme } from 'themes';
@@ -119,11 +119,19 @@ export default class ExpertMapPage extends React.Component {
   };
 
   onDomainChange = (domain) => { // 修改url,shouldComponentUpdate更新
-    console.log('CD::', domain);
+    console.log('CD::', domain, this.props);
     if (domain.id !== 'aminer') {
       this.setState({ query: '' });
       // BestPractise: route to new page using code.
-      router.push({ pathname: '/expert-map', query: { domain: domain.id } });
+      router.push({
+        pathname: '/expert-map',
+        // query: { domain: domain.id } ,
+        search: queryString.stringify({ domain: domain.id })
+      });
+      // this.props.dispatch(routerRedux.push({
+      //   pathname: '/expert-map',
+      //   search: queryString.stringify({ domain: domain.id }),
+      // }));
     } else {
       const data = { query: this.state.query || '-' };
       this.onSearch(data);
@@ -277,8 +285,8 @@ export default class ExpertMapPage extends React.Component {
 
   render() {
     const { mapType, query, domainId } = this.state;
-    const options = { ...this.state, title: this.titleBlock };//以便传入到组件里面
-    console.log('>>>>>>>>..jdflsjdlfjslkdjflskjdflkj', domainId);
+    const options = { ...this.state, title: this.titleBlock };
+
     const staJsx = (
       <div className={styles.charts}>
         <div id="bycountries" className={styles.chart1} />

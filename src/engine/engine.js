@@ -7,6 +7,7 @@ import dva from 'dva';
 import React from 'react';
 import createLoading from 'dva-loading';
 import { ReduxLoggerEnabled } from 'utils/debug';
+// import createHistory from 'history/createBrowserHistory';
 import { createLogger } from 'redux-logger';
 import { Form } from 'antd';
 import locales from 'locales';

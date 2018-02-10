@@ -1,6 +1,7 @@
 {
   "parser": "babel-eslint",
   "extends": "af-react",
+  "extends": "eslint-config-umi",
   "plugins": ["compat"],
   "env": {
     "browser": true,

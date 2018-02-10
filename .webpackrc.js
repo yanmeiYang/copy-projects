@@ -14,7 +14,6 @@ require('./bin/generate-system');
 // TODO debug mode  /  production mode
 const production = (process.env.NODE_ENV === 'production');
 
-// TODO umi
 module.exports = {
 
   // entry: 'src/index.js',
@@ -28,6 +27,19 @@ module.exports = {
   // outputPath: path.resolve(__dirname, `./dist/${version}`),
 
   // devtool: production ? false : 'cheap-module-eval-source-map',
+
+  // commons: [
+  //   {
+  //     async: '__common',
+  //     children: true,
+  //     minChunks(module, count) {
+  //       if (pageCount <= 2) {
+  //         return count >= pageCount;
+  //       }
+  //       return count >= pageCount * 0.5;
+  //     },
+  //   },
+  // ],
 
   extraBabelPlugins: [
     "transform-decorators-legacy",
@@ -69,12 +81,12 @@ module.exports = {
   //   },
   // ],
 
-  // externals: {
-  //   "react": "window.React",
-  //   "react-dom": "window.ReactDOM",
-  // },
+  externals: {
+    "react": "window.React",
+    "react-dom": "window.ReactDOM",
+  },
 
-  // ignoreMomentLocale: true,
+  ignoreMomentLocale: true,
 
   // copy: [],
 

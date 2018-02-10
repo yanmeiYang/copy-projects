@@ -9,6 +9,7 @@ npm-debug.log
 src/system-config.js
 
 ____later____src/pages
+src/pages/.umi
 src/pages/.umi-production
 src/systems/current
 src/themes/current

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="format-detection" content="email=no" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+  <meta name="description" content="AMiner to Business.">
+  <title><%= context.title %></title>
+
+  <!--[if lte IE 10]>
+  <script
+    src="https://as.alipayobjects.com/g/component/??console-polyfill/0.2.2/index.js,media-match/2.0.2/media.match.min.js"></script>
+  <![endif]-->
+
+  <% const reactMode = process.env.NODE_ENV === 'production' ? 'production.min' : 'development' %>
+  <script crossorigin
+          src="https://unpkg.com/react@16/umd/react.<%= reactMode %>.js"></script>
+  <script crossorigin
+          src="https://unpkg.com/react-dom@16/umd/react-dom.<%= reactMode %>.js"></script>
+
+</head>
+<body>
+
+<divs id="root"></divs>
+
+</body>
+</html>

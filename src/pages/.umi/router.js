@@ -14,16 +14,16 @@ export default function() {
 <Router history={window.g_history}>
   <Layout><Switch>
     <Route exact path="/auth/forgot-password" component={() => <div>Compiling...</div>} />
-    <Route exact path="/expert-map" component={() => <div>Compiling...</div>} />
-    <Route exact path="/" component={() => <div>Compiling...</div>} />
+    <Route exact path="/expert-map" component={require('../expert-map/page.js').default} />
+    <Route exact path="/" component={require('../index/page.js').default} />
     <Route exact path="/list" component={() => <div>Compiling...</div>} />
-    <Route exact path="/login" component={require('../login/page.js').default} />
+    <Route exact path="/login" component={() => <div>Compiling...</div>} />
     <Route exact path="/map/career-trajectory" component={() => <div>Compiling...</div>} />
     <Route exact path="/map/heatmap" component={() => <div>Compiling...</div>} />
     <Route exact path="/search" component={() => <div>Compiling...</div>} />
     <Route exact path="/test1" component={() => <div>Compiling...</div>} />
     <Route exact path="/test2" component={() => <div>Compiling...</div>} />
-    <Route exact path="/user/info" component={() => <div>Compiling...</div>} />
+    <Route exact path="/user/info" component={require('../user/info.js').default} />
   </Switch></Layout>
 </Router>
   );

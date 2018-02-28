@@ -1,8 +1,23 @@
 import { message } from 'antd';
+import createHistory from 'history/createBrowserHistory';
+
+const ERROR_MSG_DURATION = 3; // 3 秒
 
 export default {
   onError(err) {
     err.preventDefault();
-    message.error(err.message);
+    if (process.env.NODE_ENV !== 'production') {
+      console.error(
+        '===============================================',
+        '\n这回真的错的不行了！！！\n',
+        err,
+        '\n===============================================',
+      );
+      message.error(err.message, ERROR_MSG_DURATION);
+    } else {
+      console.error('= Global Error:', err);
+      message.error(err.message, ERROR_MSG_DURATION);
+    }
   },
+  // history: createHistory(),
 };

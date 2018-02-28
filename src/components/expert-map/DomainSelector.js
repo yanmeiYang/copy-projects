@@ -43,10 +43,6 @@ export default class DomainSelector extends PureComponent {
     const cdomain = currentDomain ? currentDomain : undefined;
     return (
       <div>
-        <Link to={{
-          pathname: "/expert-map",
-          search: queryString.stringify({ domain: '57a57c640a3ac5e5b97e6f9b' })
-        }}>sldkfj</Link>
         {
           hdFlag &&
           <div className={styles.filterWrap}>

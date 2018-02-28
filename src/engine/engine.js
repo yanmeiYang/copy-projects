@@ -7,7 +7,6 @@ import dva from 'dva';
 import React from 'react';
 import createLoading from 'dva-loading';
 import { ReduxLoggerEnabled } from 'utils/debug';
-// import createHistory from 'history/createBrowserHistory';
 import { createLogger } from 'redux-logger';
 import { Form } from 'antd';
 import locales from 'locales';
@@ -31,22 +30,21 @@ if (process.env.NODE_ENV !== 'production') {
   // registerObserver();
 }
 
-const ERROR_MSG_DURATION = 3; // 3 秒
 
-const onError = (error) => {
-  if (process.env.NODE_ENV !== 'production') {
-    console.error(
-      '===============================================',
-      '\n这回真的错的不行了！！！\n',
-      error,
-      '\n===============================================',
-    );
-    message.error(error.message, ERROR_MSG_DURATION);
-  } else {
-    console.error('= Global Error:', error);
-    message.error(error.message, ERROR_MSG_DURATION);
-  }
-};
+// const onError = (error) => {
+//   if (process.env.NODE_ENV !== 'production') {
+//     console.error(
+//       '===============================================',
+//       '\n这回真的错的不行了！！！\n',
+//       error,
+//       '\n===============================================',
+//     );
+//     message.error(error.message, ERROR_MSG_DURATION);
+//   } else {
+//     console.error('= Global Error:', error);
+//     message.error(error.message, ERROR_MSG_DURATION);
+//   }
+// };
 
 // TODO SSR best practice of create dva instance.
 const initDVA = (app) => {
@@ -60,10 +58,10 @@ const initDVA = (app) => {
 };
 
 // Create DVA
-const app = dva({
+// const app = dva({
   // history: createHistory(),
-  onError,
-});
+  // onError,
+// });
 
 // initDVA(app);
 

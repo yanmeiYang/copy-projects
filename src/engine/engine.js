@@ -65,11 +65,14 @@ const app = dva({
   onError,
 });
 
-initDVA(app);
+// initDVA(app);
 
 const cache = {};
 
 const model = (m) => {
+};
+
+const model2 = (m) => {
   // auto indent.
   let mm = m && m.default && !m.namespace ? m.default : m;
 
@@ -106,7 +109,7 @@ const router = (router) => {
   return app.start();
 };
 
-// TODO delete
+// TODO delete..
 const dvaRouter = (router) => {
   debug('Set DvaRouter: ', router);
   app.router(router);
@@ -131,13 +134,15 @@ const Page = (config) => {
     if (form) {
       elm = Form.create()(page);
     }
-    if (page && typeof page === 'function') {
-      // act at page class.
-      app.router(() => React.createElement(elm));
-    } else {
-      app.router(() => elm);
-    }
-    return app.start();
+    // use umi-dva-plugin not my engine.
+    return elm
+    // if (page && typeof page === 'function') {
+    //   // act at page class.
+    //   app.router(() => React.createElement(elm));
+    // } else {
+    //   app.router(() => elm);
+    // }
+    // return app.start();
   };
 };
 
@@ -204,6 +209,6 @@ initANTD();
 // -------------------------------------------------
 
 export {
-  model, router, dvaRouter, start,
+  model, router, start,
   Page, Models, withIntl,
 }

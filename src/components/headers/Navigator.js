@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import { Menu, Dropdown, Icon } from 'antd';
 import { connect } from 'dva';
-import { router } from 'engine';
+import { routerRedux } from 'engine';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 
@@ -137,12 +137,9 @@ export default class Navigator extends Component {
     if (conf && conf.data) {
       const query = {};
       query[conf.data] = theQuery;
-      // TODO umi router. Link
-      router.push(conf.url)
-      // dispatch(routerRedux.push({ pathname: conf.url, search: `?query=${theQuery}` }));
+      dispatch(routerRedux.push({ pathname: conf.url, search: `?query=${theQuery}` }));
     } else {
-      router.push(conf.url)
-      // dispatch(routerRedux.push({ pathname: conf.url.replace(':query', theQuery) }));
+      dispatch(routerRedux.push({ pathname: conf.url.replace(':query', theQuery) }));
     }
   };
 

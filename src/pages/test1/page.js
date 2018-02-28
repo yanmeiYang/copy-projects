@@ -62,7 +62,7 @@ const r = () => {
 
 // engine.router(() => <div>替换掉了。。。。我的妈呀</div>);
 // const bb = engine.start();
-export default Page()(r)
+export default r
 
 // export default engine.start();
 

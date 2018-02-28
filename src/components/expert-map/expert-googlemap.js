@@ -48,7 +48,7 @@ import { resRoot } from "core";
 
 let map1;
 const dataMap = {};
-const blankAvatar = '/static/images/blank_avatar.jpg';
+const blankAvatar = '/images/blank_avatar.jpg';
 
 let globalInfoWindow;
 const getInfoWindow = () => {

@@ -6,7 +6,7 @@ import * as system from './system';
 import * as hole from './hole';
 
 // public resource path;
-const resRoot = '/static';
+const resRoot = ''; // /static
 
 export {
   plugins, system, hole,

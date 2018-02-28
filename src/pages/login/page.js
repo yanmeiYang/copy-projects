@@ -76,7 +76,6 @@ export default class Login extends React.Component {
               </span>
               }
             </h1>
-
           </Row>
           <Row className={styles.formContent}>
             <Form.Item hasFeedback>
@@ -112,12 +111,12 @@ export default class Login extends React.Component {
             <Form.Item>
               <div className={styles.forgetpw}>
                 <Link to="/auth/forgot-password" className={styles.forgotpwbtn}>
-                  <a><FM id="login.forgetPw" defaultMessage="Forget Password?" /></a>
+                  <FM id="login.forgetPw" defaultMessage="Forget Password?" />
                 </Link>
                 {sysconfig.ApplyUserBtn &&
                 <span className={styles.applyUserbtn} onClick={this.applyUser}>
-                  <a><FM id="login.newUserApplication"
-                         defaultMessage="New user application" /></a>
+                  <FM id="login.newUserApplication"
+                      defaultMessage="New user application" />
                 </span>
                 }
               </div>

@@ -3,8 +3,8 @@
  *
  *  Note: This util is disabled in production mode.
  */
-// const ReduxLoggerEnabled = true;
-const ReduxLoggerEnabled = false;
+const ReduxLoggerEnabled = true;
+// const ReduxLoggerEnabled = false;
 const DebugLogEnabled = true;
 const LogRequest = true;
 const LogRequestResult = true;

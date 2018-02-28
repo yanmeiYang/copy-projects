@@ -151,7 +151,7 @@ export default class ExpertMapPage extends React.Component {
     if (data.query) {
       this.setState({ query: data.query, domainId: 'aminer' });
       // router.push({ pathname: '/expert-map', query: { query: data.query } });
-      this.props.dispatch(routerZRedux.push({
+      this.props.dispatch(routerRedux.push({
         pathname: '/expert-map',
         query: { query: data.query }
       }));

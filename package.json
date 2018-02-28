@@ -9,13 +9,13 @@
   "dependencies": {
     "@babel/polyfill": "^7.0.0-beta.36",
     "antd": "^3.1.0",
-    "axios": "^0.17.1",
+    "axios": "^0.18.0",
     "camelcase-object": "^1.0.0",
     "classnames": "^2.2.5",
     "crypto-js": "^3.1.9-1",
     "debug": "^3.1.0",
     "dva-loading": "^1.0.4",
-    "dva-no-router": "^1.1.0-0",
+    "dva": "^2.1.0",
     "fastclick": "^1.0.6",
     "history": "^4.7.2",
     "humps": "^2.0.1",
@@ -30,7 +30,7 @@
     "nprogress": "^0.2.0",
     "path-to-regexp": "^2.1.0",
     "prop-types": "^15.6.0",
-    "qrcode.react": "^0.7.1",
+    "qrcode.react": "^0.8.0",
     "qs": "^6.5.1",
     "query-string": "^5.0.0",
     "rc-tween-one": "^1.7.1",
@@ -44,6 +44,8 @@
     "react-load-script": "0.0.6",
     "react-router-dom": "^4.2.2",
     "redux-logger": "^3.0.6",
+    "umi": "^1.0.1",
+    "umi-plugin-dva": "^0.1.6",
     "umi-router": "^0.1.2",
     "zrender": "^4.0.1"
   },
@@ -64,11 +66,10 @@
     "eslint-plugin-compat": "^2.1.0",
     "eslint-plugin-flowtype": "^2.43.0",
     "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.6.1",
     "less-vars-to-js": "^1.2.1",
-    "react-perf-devtool": "^3.0.2",
-    "umi": "^1.0.0-0"
+    "react-perf-devtool": "^3.0.2"
   },
   "optionalDependencies": {
     "fsevents": "^1.1.3"

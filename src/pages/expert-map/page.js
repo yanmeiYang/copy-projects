@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, Page, router, withRouter, routerRedux } from 'engine';
+import { connect, Page, withRouter, routerRedux } from 'engine';
 import { Layout } from 'components/layout';
 import { sysconfig } from 'systems';
 import { applyTheme } from 'themes';
@@ -123,15 +123,16 @@ export default class ExpertMapPage extends React.Component {
     if (domain.id !== 'aminer') {
       this.setState({ query: '' });
       // BestPractise: route to new page using code.
-      router.push({
-        pathname: '/expert-map',
-        // query: { domain: domain.id } ,
-        search: queryString.stringify({ domain: domain.id })
-      });
-      // this.props.dispatch(routerRedux.push({
+      // router.push({
       //   pathname: '/expert-map',
-      //   search: queryString.stringify({ domain: domain.id }),
-      // }));
+      //   // query: { domain: domain.id } ,
+      //   search: queryString.stringify({ domain: domain.id })
+      // });
+
+      this.props.dispatch(routerRedux.push({
+        pathname: '/expert-map',
+        search: queryString.stringify({ domain: domain.id }),
+      }));
     } else {
       const data = { query: this.state.query || '-' };
       this.onSearch(data);
@@ -149,7 +150,11 @@ export default class ExpertMapPage extends React.Component {
   onSearch = (data) => { // 修改url,shouldComponentUpdate更新
     if (data.query) {
       this.setState({ query: data.query, domainId: 'aminer' });
-      router.push({ pathname: '/expert-map', query: { query: data.query } });
+      // router.push({ pathname: '/expert-map', query: { query: data.query } });
+      this.props.dispatch(routerZRedux.push({
+        pathname: '/expert-map',
+        query: { query: data.query }
+      }));
     }
   };
 

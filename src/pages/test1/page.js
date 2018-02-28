@@ -44,7 +44,7 @@ const r = () => {
       <div>
         <Link to="/list">Go to list.html</Link>
         <br />
-        <Link to="/index">Go Home</Link>
+        <Link to="/">Go Home</Link>
         <br />
         <Link to="/test1">Test1 Page</Link>
         <br />

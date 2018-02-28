@@ -7,7 +7,7 @@ import { theme, applyTheme } from 'themes';
 import { KgSearchBox } from 'components/search';
 import { IndexHotLinks } from 'components/widgets';
 import { Auth } from 'hoc';
-import styles from './page.less';
+import styles from './index.less';
 
 const tc = applyTheme(styles);
 
@@ -16,14 +16,6 @@ const tc = applyTheme(styles);
 @Auth
 export default class IndexPage extends Component {
   static displayName = 'IndexPage';
-
-  constructor(props) {
-    super(props);
-  }
-
-  // componentWillUnmount() {
-  //   this.props.dispatch({ type: 'app/layout', payload: { showFooter: true } });
-  // };
 
   onSearch = ({ query }) => {
     if (query && query.trim() !== '') {

@@ -6,7 +6,7 @@ import * as searchService from 'services/search';
 import * as translateService from 'services/translate';
 import * as topicService from 'services/topic';
 import * as bridge from 'utils/next-bridge';
-import { takeLatest } from './helper';
+import { takeLatest } from 'utils/helper';
 
 export default {
 
@@ -129,7 +129,7 @@ export default {
       let assistantQuery = '';
       if (sysconfig.Search_EnableSmartSuggest && !ghost &&
         (searchInGlobalExperts ||
-        (searchInSomeExpertBase && !sysconfig.USE_NEXT_EXPERT_BASE_SEARCH))
+          (searchInSomeExpertBase && !sysconfig.USE_NEXT_EXPERT_BASE_SEARCH))
       ) {
         // TODO 第一次搜索出现的bug。
         if (assistantDataMeta && assistantDataMeta.advquery && assistantDataMeta.advquery.texts
@@ -531,7 +531,7 @@ function findAssistantQuery(params) {
   let assistantQuery = '';
   if (sysconfig.Search_EnableSmartSuggest && !ghost &&
     (searchInGlobalExperts ||
-    (searchInSomeExpertBase && !sysconfig.USE_NEXT_EXPERT_BASE_SEARCH))
+      (searchInSomeExpertBase && !sysconfig.USE_NEXT_EXPERT_BASE_SEARCH))
   ) {
     // TODO 第一次搜索出现的bug。
     if (assistantDataMeta && assistantDataMeta.advquery && assistantDataMeta.advquery.texts

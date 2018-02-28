@@ -19,11 +19,11 @@ export default {
   logoZone: [
     // TODO umi Router.
     <div className={classnames(styles.logoZones, 'header-logo')} key="0">
-      <Link to="/index">
+      <Link to="/">
         <div className={classnames(styles.header_logo, 'icon')} />
       </Link>
       <div className={classnames(styles.header_subTitle, 'font-page-title')}>
-        <Link to="/index">科技情报深度洞察</Link>
+        <Link to="/">科技情报深度洞察</Link>
       </div>
     </div>,
   ],

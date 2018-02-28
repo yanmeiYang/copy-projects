@@ -60,7 +60,7 @@ function dispatchToLogin(dispatch) {
 }
 
 function dispatchAfterLogin() {
-  const from = queryURL('from') || '/index';
+  const from = queryURL('from') || '/';
 
   debug('AUTH :::: dispatchAfterLogin to %s.', from);
 

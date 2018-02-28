@@ -4,8 +4,9 @@
 import React from 'react';
 import { connect } from 'dva';
 import Link from 'umi/link';
+import withRouter from 'umi/withRouter';
+import { routerRedux } from 'dva/router';
 import router from 'umi/router';
-import { withRouter } from 'react-router-dom';
 
 import { Form } from 'antd';
 import { Page, Models, withIntl } from './engine';
@@ -25,7 +26,7 @@ export {
 
   connect, renderChildren,
 
-  Link, router, withRouter,
+  Link, router, withRouter, routerRedux,
 
   withIntl, FormCreate,
 

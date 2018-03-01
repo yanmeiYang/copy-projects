@@ -1,13 +1,19 @@
 export default {
   plugins: ['umi-plugin-dva'],
+
+  context: {
+    title: 'Unnamed Page',
+  },
+
+  loading: './src/components/ui/Loader.js',
+  disableServiceWorker: false,
+  preact: false,
+
   // pages: {
   //   '/index': { context: { title: 'IndexPage' } },
   //   '/list':  { context: { title: 'ListPage' } },
   // },
-  context: {
-    title: 'Unnamed Page',
-  },
-  preact: false,
-  loading: './src/components/ui/Loader.js',
+  // "exportStatic": { htmlSuffix: true },
+
   // hd: false,
 };

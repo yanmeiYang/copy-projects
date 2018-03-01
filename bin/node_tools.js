@@ -1,5 +1,7 @@
 /**
  *  Created by BoGao on 2018-01-04;
+ *  TODO @xiaobei: 一个 linkFolder 方法，完全按照 ln 的参数执行硬链接操作。现在的版本太不general了，不是一个工具。
+ *  TODO @xiaobei: 系统启动时需要将systems和themes下面所有的系统的文件夹删除。
  */
 const fs = require('fs');
 const path = require('path');
@@ -58,7 +60,7 @@ const copyOrLink = (existingPath, newPath) => {
     if (filename === '.DS_Store') {
       return
     }
-    console.log('>> process file:', filename);
+    // console.log('>> process file:', filename);
     const filedir = path.join(existingPath, filename);
     const stats = fs.statSync(filedir);
     const isFile = stats.isFile();
@@ -78,14 +80,12 @@ const mkdir = (newsrc) => {
 };
 
 const link = (path) => {
-  console.log('>> like file: ', path);
   const newPath = path.replace(/src\/seedsystems/g, 'src/systems')
     .replace(/src\/seedthemes/g, 'src/themes')
     .replace('src/seedpages', 'src/pages');
   // const newPath = path.replace(/src\/seedsystems\/[0-9a-zA-Z_-]+\//g, 'src/systems/current/')
   //   .replace(/src\/seedthemes\/[0-9a-zA-Z_-]+\//g, 'src/themes/current/')
   //   .replace('src/seedpages', 'src/pages');
-  console.log('>>>>>>>>>>>>>>:', path, newPath);
   fs.linkSync(path, newPath);
 };
 

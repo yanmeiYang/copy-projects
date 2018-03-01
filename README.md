@@ -21,6 +21,7 @@ IDE：WebStorm Latest version.
 1. Under [Node.js and NPM] Enable Node.js Core library.
 1. Under "Code Quality Tools", Enable "ESLint".
 1. Open preference, search webpack, change configuration file to webpack.config.webstorm.js
+1. If you use umi framework, you need to uncheck settings in: Preference -> System Settings -> [Synchronization] -> Use "safe write"
 
 ### DVA2.0 Updates
 
@@ -282,4 +283,4 @@ const A = hasValue ? 'has value' : 'no';
 
 
 
-sdfsdfsdfsd
+=== THE END OF FILE ===

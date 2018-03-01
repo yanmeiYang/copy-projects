@@ -6,7 +6,8 @@ import * as system from './system';
 import * as hole from './hole';
 
 // public resource path;
-const resRoot = ''; // /static
+// const resRoot = process.env.NODE_ENV !== 'production' ? '/static' : '';
+const resRoot = '/static';
 
 export {
   plugins, system, hole,

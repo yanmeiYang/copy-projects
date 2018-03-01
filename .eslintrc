@@ -1,6 +1,6 @@
 {
   "parser": "babel-eslint",
-  "extends": "eslint-config-umi",
+  "extends": "umi",
   "plugins": ["compat"],
   "env": {
     "browser": true,

@@ -21,10 +21,8 @@ module.exports = {
   theme: theme(),
   alias: buildrc.webpack.alias,
 
+  publicPath: production ? `/static/` : '',
   // publicPath: `/${version}/`,
-  // publicPath: `/`,
-  // outputPath: path.resolve(__dirname, `./dist`),
-  // outputPath: path.resolve(__dirname, `./dist/${version}`),
 
   // devtool: production ? false : 'cheap-module-eval-source-map',
 
@@ -48,7 +46,13 @@ module.exports = {
 
   env: {
     development: {
-      extraBabelPlugins: ["dva-hmr"]
+      extraBabelPlugins: ["dva-hmr"],
+      copy: [
+        {
+          from: "public",
+          to: "static"
+        }
+      ]
     }
   },
 

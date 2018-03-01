@@ -52,31 +52,31 @@ const scripts = {
 
 // find each key in keys in Libraries, merge into final result.
 // if nothing changed, return the original state.
-const mergeLibs = (resources, keys) => {
-  let changed = false;
-  let res = resources || Map();
-  if (keys && keys.length > 0) {
-    const libs = keys.map((key) => {
-      const newRes = Libraries[key];
-      if (!res.get(key) && newRes) {
-        changed = true;
-        return { key, newRes };
-      }
-      return null;
-    });
-    if (changed && libs && libs.length > 0) {
-      res = res.withMutations((map) => {
-        for (const lib of libs) {
-          if (lib) {
-            map.set(lib.key, lib.newRes);
-          }
-        }
-      });
-      return { changed, res };
-    }
-  }
-  return { changed };
-};
+// const mergeLibs = (resources, keys) => {
+//   let changed = false;
+//   let res = resources || Map();
+//   if (keys && keys.length > 0) {
+//     const libs = keys.map((key) => {
+//       const newRes = Libraries[key];
+//       if (!res.get(key) && newRes) {
+//         changed = true;
+//         return { key, newRes };
+//       }
+//       return null;
+//     });
+//     if (changed && libs && libs.length > 0) {
+//       res = res.withMutations((map) => {
+//         for (const lib of libs) {
+//           if (lib) {
+//             map.set(lib.key, lib.newRes);
+//           }
+//         }
+//       });
+//       return { changed, res };
+//     }
+//   }
+//   return { changed };
+// };
 
 // TODO non-liner interval check.
 const ensureConfig = {
@@ -261,6 +261,6 @@ export {
   loadECharts,
   loadBMap,
   loadGoogleMap,
-  mergeLibs,
+  // mergeLibs,
   ensure,
 };

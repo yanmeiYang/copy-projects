@@ -19,11 +19,46 @@ const createFile = (target, content) => {
   fs.writeFileSync(target, content);
 };
 
+
+// // .....
+// const linkFolder = (fromPath, toPath) => {
+//   const linkit = () =>{
+//
+//   }
+//
+//   const stats = fs.statSync(fromPath);
+//   if (stats.isFile()) {
+//     // link this file.
+//     fs.linkSync(fromPath, fromPath.replace());
+//   } else {
+//     // is dir
+//     const files = fs.readdirSync(fromPath);
+//     files.forEach(function (filename) {
+//       if (filename === '.DS_Store') {
+//         return
+//       }
+//       console.log('>> process sub file:', filename);
+//       const filedir = path.join(fromPath, filename);
+//       linkFolder(fromPath, toPath);
+//
+//       if (isDir) {
+//         fs.mkdirSync(`${toPath}/${filename}`);
+//         linkFolder(filedir, toPath);
+//       }
+//     });
+//   }
+// };
+//
+
 // create link
 const copyOrLink = (existingPath, newPath) => {
   //根据文件路径读取文件，返回文件列表
   const files = fs.readdirSync(existingPath);
   files.forEach(function (filename) {
+    if (filename === '.DS_Store') {
+      return
+    }
+    console.log('>> process file:', filename);
     const filedir = path.join(existingPath, filename);
     const stats = fs.statSync(filedir);
     const isFile = stats.isFile();
@@ -43,15 +78,14 @@ const mkdir = (newsrc) => {
 };
 
 const link = (path) => {
-  let newPath = '';
-  if (path.includes('/src/seedsystems')) {
-    newPath = path.replace('seedsystems', 'systems');
-  } else if (path.includes('/src/seedthemes')) {
-    debug('arguments themeseplace: %o', newPath);
-    newPath = path.replace('seedthemes', 'themes');
-  } else if (path.includes('/src/seedpages')) {
-    newPath = path.replace('seedpages', 'pages');
-  }
+  console.log('>> like file: ', path);
+  const newPath = path.replace(/src\/seedsystems/g, 'src/systems')
+    .replace(/src\/seedthemes/g, 'src/themes')
+    .replace('src/seedpages', 'src/pages');
+  // const newPath = path.replace(/src\/seedsystems\/[0-9a-zA-Z_-]+\//g, 'src/systems/current/')
+  //   .replace(/src\/seedthemes\/[0-9a-zA-Z_-]+\//g, 'src/themes/current/')
+  //   .replace('src/seedpages', 'src/pages');
+  console.log('>>>>>>>>>>>>>>:', path, newPath);
   fs.linkSync(path, newPath);
 };
 
@@ -81,6 +115,7 @@ const clearFolders = (pathArray) => {
     mkdir(path);
   }
 };
+
 const mkdirsSync = (dirname) => {
   if (fs.existsSync(dirname)) {
     return true;
@@ -91,11 +126,12 @@ const mkdirsSync = (dirname) => {
     }
   }
 };
+
 const linkPagesByRoutes = (routes) => {
-  const files = fs.readdirSync('../src/seedpages');
+  const files = fs.readdirSync('src/seedpages');
   if (routes[0] === '*') {
-    const files = fs.readdirSync('../src/seedpages');
-    copyOrLink(`../src/seedpages`, `../src/pages`);
+    const files = fs.readdirSync('src/seedpages');
+    copyOrLink(`src/seedpages`, `src/pages`);
   } else {
     routes.forEach(function (route) {
       if (route.includes('/')) {

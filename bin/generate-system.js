@@ -57,11 +57,12 @@ if (AvailableSystems.indexOf(system) <= 0) {
 // start doing things.
 console.log('System is [', system, '] start building...');
 
-
 // link or copy files used to start system.
-clearFolders(['./src/systems/current']);
-copyOrLink(`./src/seedsystems/${system}`, './src/systems/current');
-copyOrLink(`./src/seedthemes/${system}`, './src/themes/current');
+clearFolders([`./src/systems/${system}`, `./src/themes/${system}`, './src/pages']);
+copyOrLink(`./src/seedsystems/${system}`, `./src/systems/${system}`);
+copyOrLink(`./src/seedthemes/${system}`, `./src/themes/${system}`);
+// copyOrLink(`./src/seedsystems/${system}`, './src/systems/current');
+// copyOrLink(`./src/seedthemes/${system}`, './src/themes/current');
 
 // link or copy pages.
 // TODO asset routes must exist.

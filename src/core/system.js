@@ -9,25 +9,25 @@
  */
 // 所有可选系统，保留关键字：global.
 const AvailableSystems = [
-  'aminer',
+  // 'aminer',
   'demo',
-  'data_annotation',
-  'alibaba',
-  'acmfellow',
-  'bole',
-  'ccf',
-  'ccftest',
-  'cie',
-  'cietest',
-  'cipsc',
-  'huawei',
-  'med_topic_trend',
-  'minimalsys', // 用来调试的最小system集合
-  'scei', // 中国科协：深度智库
-  'tencent',
-  'thurcb',
-  'yocsef',
-  'reco',
+  // 'data_annotation',
+  // 'alibaba',
+  // 'acmfellow',
+  // 'bole',
+  // 'ccf',
+  // 'ccftest',
+  // 'cie',
+  // 'cietest',
+  // 'cipsc',
+  // 'huawei',
+  // 'med_topic_trend',
+  // 'minimalsys', // 用来调试的最小system集合
+  // 'scei', // 中国科协：深度智库
+  // 'tencent',
+  // 'thurcb',
+  // 'yocsef',
+  // 'reco',
 ];
 
 let System = '';
@@ -47,7 +47,7 @@ try {
   console.log(msg, style, System);
 }
 // check available
-if (AvailableSystems.indexOf(System) <= 0) {
+if (AvailableSystems.indexOf(System) < 0) {
   if (process.env.NODE_ENV !== 'production') {
     const msg = '%cSystem [%s] is invalid, available:%v';
     const style = 'color:white;background-color:orange;padding:1px 4px;';

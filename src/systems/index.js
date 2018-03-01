@@ -8,8 +8,8 @@ import { system } from 'core';
 
 const { System, Source, AvailableSystems } = system;
 // TODO umi systems
-// const systemConfig = require(`systems/${System}/config`).default;
-const systemConfig = require(`systems/current/config`).default;
+const systemConfig = require(`systems/${System}/config`).default;
+// const systemConfig = require(`systems/current/config`).default;
 
 if (!systemConfig) {
   if (process.env.NODE_ENV !== 'production') {
@@ -41,8 +41,8 @@ const getAllSystemConfigs = () => {
     allSystemConfigs = AvailableSystems && AvailableSystems.map(sys => ({
       ...createDefaultSysconfig(sys, sys),
       // TODO umi systems
-      // ...require('systems/' + sys + '/config'),
-      ...require('systems/current/config'),
+      ...require('systems/' + sys + '/config'),
+      // ...require('systems/demo/config'),
     }));
   }
   return allSystemConfigs;

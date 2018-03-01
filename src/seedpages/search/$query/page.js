@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import { withRouter } from 'dva/router';
-import { connect, Page, router } from 'engine';
+import { connect, Page, routerRedux, withRouter } from 'engine';
 import { classnames } from 'utils';
 import * as strings from 'utils/strings'; // TODO merge into utils.
 import { Layout } from 'components/layout';
@@ -14,8 +14,7 @@ const tc = applyTheme(styles);
 
 @Page()
 @connect(({ app, search, loading }) => ({ app, search, loading }))
-@Auth
-// @withRouter
+@Auth @withRouter
 export default class SearchPage extends Component {
   constructor(props) {
     super(props);
@@ -34,11 +33,23 @@ export default class SearchPage extends Component {
     sortType: 'relevance',
   };
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (nextProps.search.query !== this.props.search.query) {
-  //     console.log('COMPARE:', nextProps.search.query, this.props.search.query);
-  //   }
-  // }
+  // Smart Search Assistant.
+  componentWillMount() {
+    this.props.dispatch({
+      type: 'search/setAssistantDataMeta',
+      payload: { isNotAffactedByAssistant: true, isSearchAbbr: true },
+    });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.search.query !== this.props.search.query) {
+      console.log('COMPARE:', nextProps.search.query, this.props.search.query);
+      this.props.dispatch({
+        type: 'search/setAssistantDataMeta',
+        payload: { isNotAffactedByAssistant: true, isSearchAbbr: true },
+      });
+    }
+  }
 
   // hook
   onSearchBarSearch = (data) => {
@@ -48,10 +59,7 @@ export default class SearchPage extends Component {
     const encodedQuery = strings.encodeAdvancedQuery(data.query) || '-';
     const pathname = `/${sysconfig.SearchPagePrefix}/${encodedQuery}/${newOffset}/${newSize}`;
     console.log('=========== encode query is: ', pathname);
-    router.push(pathname);
-    // this.dispatch(routerRedux.push({ pathname }));
-    // ?eb=${filters.eb}TODO
-    // this.doSearchUseProps(); // another approach;
+    this.dispatch(routerRedux.push(pathname));
   };
 
   render() {
@@ -61,19 +69,19 @@ export default class SearchPage extends Component {
     return (
       <Layout contentClass={tc(['searchPage'])} onSearch={this.onSearchBarSearch}
               query={query}>
-        sdfsdfsdfsdf
+        还没做完
         {/*<SearchComponent // Example: include all props.*/}
-          {/*className={styles.SearchBorder} // additional className*/}
-          {/*sorts={sysconfig.Search_SortOptions}*/}
-          {/*expertBaseId={expertBaseId}*/}
-          {/*onSearchBarSearch={this.onSearchBarSearch}*/}
-          {/*showSearchBox={false}*/}
-          {/*disableFilter={sysconfig.Search_DisableFilter}*/}
-          {/*disableExpertBaseFilter={sysconfig.Search_DisableExpertBaseFilter}*/}
-          {/*disableSmartSuggest={!sysconfig.Search_EnableSmartSuggest}*/}
-          {/*// disableSearchKnowledge={sysconfig.Search_DisableSearchKnowledge}*/}
-          {/*rightZoneFuncs={theme.SearchComponent_RightZone}*/}
-          {/*fixedExpertBase={sysconfig.Search_FixedExpertBase}*/}
+        {/*className={styles.SearchBorder} // additional className*/}
+        {/*sorts={sysconfig.Search_SortOptions}*/}
+        {/*expertBaseId={expertBaseId}*/}
+        {/*onSearchBarSearch={this.onSearchBarSearch}*/}
+        {/*showSearchBox={false}*/}
+        {/*disableFilter={sysconfig.Search_DisableFilter}*/}
+        {/*disableExpertBaseFilter={sysconfig.Search_DisableExpertBaseFilter}*/}
+        {/*disableSmartSuggest={!sysconfig.Search_EnableSmartSuggest}*/}
+        {/*// disableSearchKnowledge={sysconfig.Search_DisableSearchKnowledge}*/}
+        {/*rightZoneFuncs={theme.SearchComponent_RightZone}*/}
+        {/*fixedExpertBase={sysconfig.Search_FixedExpertBase}*/}
         {/*/>*/}
       </Layout>
     );

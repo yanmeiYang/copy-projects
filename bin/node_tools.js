@@ -22,36 +22,16 @@ const createFile = (target, content) => {
   fs.writeFileSync(target, content);
 };
 
-
-// // .....
-// const linkFolder = (fromPath, toPath) => {
-//   const linkit = () =>{
-//
-//   }
-//
-//   const stats = fs.statSync(fromPath);
-//   if (stats.isFile()) {
-//     // link this file.
-//     fs.linkSync(fromPath, fromPath.replace());
-//   } else {
-//     // is dir
-//     const files = fs.readdirSync(fromPath);
-//     files.forEach(function (filename) {
-//       if (filename === '.DS_Store') {
-//         return
-//       }
-//       console.log('>> process sub file:', filename);
-//       const filedir = path.join(fromPath, filename);
-//       linkFolder(fromPath, toPath);
-//
-//       if (isDir) {
-//         fs.mkdirSync(`${toPath}/${filename}`);
-//         linkFolder(filedir, toPath);
-//       }
-//     });
-//   }
-// };
-//
+const mkdirsSync = (dirname) => {
+  if (fs.existsSync(dirname)) {
+    return true;
+  } else {
+    if (mkdirsSync(path.dirname(dirname))) {
+      fs.mkdirSync(dirname);
+      return true;
+    }
+  }
+};
 
 // create link
 const copyOrLink = (existingPath, newPath) => {
@@ -117,36 +97,26 @@ const clearFolders = (pathArray) => {
   }
 };
 
-const mkdirsSync = (dirname) => {
-  if (fs.existsSync(dirname)) {
-    return true;
-  } else {
-    if (mkdirsSync(path.dirname(dirname))) {
-      fs.mkdirSync(dirname);
-      return true;
-    }
-  }
-};
 
 const linkPagesByRoutes = (routes) => {
   const files = fs.readdirSync('src/seedpages');
   if (routes[0] === '*') {
     const files = fs.readdirSync('src/seedpages');
-    copyOrLink(`src/seedpages`, `src/pages`);
+    linkFolder(`src/seedpages`, `src/pages`);
   } else {
     routes.forEach(function (route) {
       if (route.includes('/')) {
         const newRoute = route.substr(0, route.lastIndexOf('/'));
         const newPath = route.substr(route.lastIndexOf('/') + 1);
-        mkdirsSync(`./src/pages/${newRoute}`);
-        const files = fs.readdirSync(`./src/seedpages/${newRoute}`);
+        mkdirsSync(`src/pages/${newRoute}`);
+        const files = fs.readdirSync(`src/seedpages/${newRoute}`);
         files.forEach(function (file) {
           if (file.includes(newPath)) {
             if (file.includes('.')) {
-              link(`./src/seedpages/${newRoute}/${file}`)
+              link(`src/seedpages/${newRoute}/${file}`)
             } else {
-              mkdir(`./src/pages/${newRoute}/${file}`);
-              copyOrLink(`./src/seedpages/${newRoute}/${file}`, `./src/pages/${newRoute}/${file}`);
+              mkdir(`src/pages/${newRoute}/${file}`);
+              copyOrLink(`src/seedpages/${newRoute}/${file}`, `src/pages/${newRoute}/${file}`);
             }
           }
         })
@@ -154,10 +124,10 @@ const linkPagesByRoutes = (routes) => {
         files.forEach(function (file) {
           if (file.includes(route)) {
             if (file.includes('.')) {
-              link(`./src/seedpages/${file}`)
+              link(`src/seedpages/${file}`)
             } else {
-              mkdir(`./src/pages/${file}`);
-              copyOrLink(`./src/seedpages/${file}`, `./src/pages/${file}`);
+              mkdir(`src/pages/${file}`);
+              copyOrLink(`src/seedpages/${file}`, `src/pages/${file}`);
             }
           }
         })
@@ -167,4 +137,58 @@ const linkPagesByRoutes = (routes) => {
 };
 
 
-module.exports = { createFile, replaceFile, clearFolders, copyOrLink, linkPagesByRoutes };
+// ============================
+
+
+// link folder into dest
+// if is file, link file under dest folder.
+// if is folder, link all things under this folder into dest folder recusively.
+const linkFolder = (from, dest) => {
+  // console.log("move folder from %s to %s", from, dest);
+
+  // 递归
+  const linkit = (folder, file) => {
+    const filePath = path.join(folder, file);
+    const stats = fs.statSync(filePath);
+    if (stats.isFile()) {
+      const from2 = from.replace(/^.\//, '');
+      // console.log(" >> replace:", filePath, from2, dest);
+      const destPath = path.dirname(filePath.replace(from2, dest));
+      // console.log("  -  ", filePath);
+      // console.log("  =  ", destPath);
+      mkdirsSync(destPath);
+      fs.linkSync(filePath, path.join(destPath, file));
+    } else if (stats.isDirectory()) {
+      // console.log(" [+] ", filePath)
+      const files = fs.readdirSync(filePath);
+      files.forEach(function (filename) {
+        if (filename === '.DS_Store') {
+          return
+        }
+        linkit(filePath, filename);
+      });
+    } else {
+      console.log(" >> meet strange file: ", filePath, stats)
+    }
+  }
+
+  // start
+  const stats = fs.statSync(from);
+  if (stats.isDirectory()) {
+    linkit(path.dirname(from), path.basename(from))
+  } else if (stats.isFile()) {
+    // link file into dest dir.
+    mkdirsSync(dest)
+    fs.linkSync(from, path.join(dest, path.basename(from)));
+  }
+};
+
+
+module.exports = {
+  createFile,
+  replaceFile,
+  clearFolders,
+  copyOrLink,
+  linkPagesByRoutes,
+  linkFolder
+};

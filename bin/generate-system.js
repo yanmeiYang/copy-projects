@@ -7,7 +7,7 @@
  */
 const debug = require('debug')('aminer:engine');
 
-const { replaceFile, createFile, clearFolders, copyOrLink, linkPagesByRoutes } = require('./node_tools');
+const { linkFolder, createFile, clearFolders, linkPagesByRoutes } = require('./node_tools');
 // const { AvailableSystems } = require('../src/core/system');
 const AvailableSystems = [
   'aminer',
@@ -59,8 +59,8 @@ console.log('System is [', system, '] start building...');
 
 // link or copy files used to start system.
 clearFolders([`./src/systems/${system}`, `./src/themes/${system}`, './src/pages']);
-copyOrLink(`./src/seedsystems/${system}`, `./src/systems/${system}`);
-copyOrLink(`./src/seedthemes/${system}`, `./src/themes/${system}`);
+linkFolder(`./src/seedsystems/${system}`, `./src/systems/${system}`);
+linkFolder(`./src/seedthemes/${system}`, `./src/themes/${system}`);
 // copyOrLink(`./src/seedsystems/${system}`, './src/systems/current');
 // copyOrLink(`./src/seedthemes/${system}`, './src/themes/current');
 

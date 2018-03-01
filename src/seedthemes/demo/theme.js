@@ -33,7 +33,7 @@ export default {
   footer: (
     <div className={styles.footerText}>
       <div>Powered by：</div>
-      <Link to="index">
+      <Link to="/">
         <img src={`${resRoot}/aminer_logo.png`} alt="AMiner logo" className={styles.aminerLogo} />
       </Link>
     </div>

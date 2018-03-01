@@ -5,7 +5,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { resRoot } from 'core';
-import { connect, Models, renderChildren, withIntl } from 'engine';
+import { connect, Models, renderChildren } from 'engine';
 import { Helmet } from 'react-helmet';
 import ReactGA from 'react-ga';
 import NProgress from 'nprogress';
@@ -126,7 +126,7 @@ export default class Layout extends PureComponent {
 
     const title = pageTitle || (pageSubTitle ? `${sysconfig.PageTitle} | ${pageSubTitle}` : sysconfig.PageTitle);
 
-    return withIntl(
+    return (
       <LayoutComponent className={tc(['layout'])}>
         <Helmet>
           <title>{title}</title>

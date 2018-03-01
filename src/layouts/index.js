@@ -1,17 +1,8 @@
 import React from 'react';
-import styles from './index.css';
-import withRouter from 'umi/withRouter';
+import { withIntl } from 'engine';
 
 function Layout({ children, location }) {
-  return (
-    <div className={styles.normal}>
-      <div className={styles.content}>
-        <div className={styles.main}>
-          {children}
-        </div>
-      </div>
-    </div>
-  );
+  return withIntl(children);
 }
 
-export default withRouter(Layout);
+export default Layout;

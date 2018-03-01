@@ -1,5 +1,7 @@
 @import "~themes/vars";
 
+.hide() { display: none }
+
 .logoZones {
   display: flex; flex-direction: row;
   height: 66px; line-height: 66px;
@@ -46,3 +48,15 @@
 }
 
 .Overrides() !important;
+
+@media (max-width: 630px ) {
+  .header_subTitle { .hide() }
+}
+
+@media (max-width: 563px) {
+  .logoZones {
+    height: 33px; line-height: 33px;
+    width: 33px;
+    align-self: flex-end;
+  }
+}

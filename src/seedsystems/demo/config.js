@@ -1,3 +1,4 @@
+/** demo system config */
 import React from 'react';
 import { toIDDotString, TopExpertBase } from 'utils/expert-base';
 
@@ -22,7 +23,7 @@ export default {
   Enable_Export: true,
   ShowRegisteredRole: true, // 注册页面是否显示角色配置
 
-  SearchPagePrefix: 'search', // search - 普通搜索(deleted); uniSearch - 多合一搜索.
+  SearchPagePrefix: 'search',
   Search_EnablePin: false,
   Search_EnableKnowledgeGraphHelper: true,
 
@@ -71,4 +72,6 @@ export default {
   CentralPosition: { lat: 37.09024, lng: -95.712891 },
   Map_HotDomains: TopExpertBase.RandomTop100InDomainAminer, // 地图领域
   HotDomains_Type: 'filter', // filter or selector
+  InitialEmptyHint: true,
+
 };

@@ -1,7 +1,7 @@
 import { parse } from 'qs';
 import { message as antdMessage } from 'antd';
 import { Map } from 'immutable';
-import { router } from 'engine';
+import { routerRedux } from 'engine';
 import { queryURL } from 'utils';
 import * as debug from 'utils/debug';
 import * as auth from 'utils/auth';
@@ -113,9 +113,9 @@ export default {
           if (process.env.NODE_ENV !== 'production') {
             console.log('Login Success, Dispatch to ', decodedFrom);
           }
-          router.push(decodedFrom);
+          // yield put(router.push({ pathname: decodedFrom }));
+          yield put(routerRedux.push(decodedFrom));
 
-          // yield put(router.push({ pathname: decodeURIComponent(from) }));
           return true; // login success
         }
       } else {
@@ -133,10 +133,12 @@ export default {
       if (sysconfig.AuthLoginUsingThird) {
         window.location.href = sysconfig.AuthLoginUsingThirdPage;
       } else {
-        router.push({
+        const fromURL = auth.encodeURL(auth.getLoginFromURL());
+        console.log('\n\n------------------------Logout::::', auth.getLoginFromURL());
+        yield put(routerRedux.push({
           pathname: sysconfig.Auth_LoginPage,
-          query: { from: auth.getLoginFromURL() },
-        });
+          search: `?from=${fromURL}`,
+        }));
       }
 
       // last call api.

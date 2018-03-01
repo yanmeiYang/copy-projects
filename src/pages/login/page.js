@@ -52,9 +52,9 @@ export default class Login extends React.Component {
     });
   };
 
-  jumpToForgot = () => {
-    router.push('/forgot-password');
-  };
+  // jumpToForgot = () => {
+  //   router.push('/forgot-password');
+  // };
 
   render() {
     const { auth, form } = this.props;

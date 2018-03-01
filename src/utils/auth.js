@@ -1,6 +1,6 @@
 /* eslint-disable no-extend-native */
 // import AES from 'crypto-js/aes';
-import { router } from 'engine';
+import { router, routerRedux } from 'engine';
 import { sysconfig } from 'systems';
 import { queryURL } from './index';
 
@@ -51,14 +51,23 @@ function dispatchToLogin(dispatch) {
   } else {
     // TODO umi jump add parameter.
     const path = { pathname: sysconfig.Auth_LoginPage };
-    if (from) {
-      path.query = { from };
-    }
     debug('AUTH :::: redirect to %o', path);
-    router.push(path);
+    if (dispatch) { // 分为两种router来调用.
+      if (from) {
+        // path.query = { from };
+        path.search = `?from=${encodeURL(from)}`
+      }
+      dispatch(routerRedux.push(path))
+    } else {
+      if (from) {
+        path.query = { from };
+      }
+      router.push(path);
+    }
   }
 }
 
+// no one call this?
 function dispatchAfterLogin() {
   const from = queryURL('from') || '/';
 
@@ -71,6 +80,7 @@ function dispatchAfterLogin() {
   if (redirect.endsWith('.html')) {
     redirect = redirect.replace('.html', '');
   }
+  // dispatch ? dispatch(routerRedux.push({ pathname: path })) : router.push(path);
   router.push(redirect);
 }
 
@@ -259,19 +269,28 @@ function afterLogin(dispatch) {
   }
 }
 
+// 暂时不支持夸域名的login重定向。
 function getLoginFromURL() {
-  // TODO no-server
+  // NOTE can't used in node environment.
   const location = window.location;
 
   let from = location.pathname;
   if (from === '/' || from === sysconfig.Auth_LoginPage) {
     from = '';
+  } else {
+    from = `${location.pathname}${location.search}`;
   }
+
   return from;
+}
+
+function encodeURL(url) {
+  return encodeURIComponent(url)
 }
 
 function decodeFrom(from) {
   let redirect = decodeURIComponent(from);
+  // 这两句看起来现在没有用了。是老版本的umi的fix。
   if (redirect.endsWith('.html')) {
     redirect = redirect.replace('.html', '');
   }
@@ -303,5 +322,5 @@ export {
 
   ensureUserAuthFromAppModel,
   getLoginFromURL,
-  decodeFrom,
+  decodeFrom, encodeURL,
 };

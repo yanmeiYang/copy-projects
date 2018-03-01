@@ -6,7 +6,7 @@
 module.exports = {
   webpack: {
     alias: {
-      pages: `${__dirname}/src/pages`,
+      // pages: `${__dirname}/src/pages`, // 不能直接引用pages目录下的东西，都是生成的。
       components: `${__dirname}/src/components`,
       models: `${__dirname}/src/models`,
       core: `${__dirname}/src/core`,

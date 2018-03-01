@@ -17,7 +17,7 @@ export default function() {
     <Route exact path="/expert-map" component={require('../expert-map/page.js').default} />
     <Route exact path="/" component={require('../index/page.js').default} />
     <Route exact path="/list" component={() => <div>Compiling...</div>} />
-    <Route exact path="/login" component={require('../login/page.js').default} />
+    <Route exact path="/login" component={() => <div>Compiling...</div>} />
     <Route exact path="/map/career-trajectory" component={() => <div>Compiling...</div>} />
     <Route exact path="/map/heatmap" component={() => <div>Compiling...</div>} />
     <Route exact path="/search" component={() => <div>Compiling...</div>} />

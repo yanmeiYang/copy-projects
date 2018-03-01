@@ -7,8 +7,8 @@
  */
 const debug = require('debug')('aminer:engine');
 
+const { replaceFile, createFile, clearFolders, copyOrLink, linkPagesByRoutes } = require('./node_tools');
 // const { AvailableSystems } = require('../src/core/system');
-const { replaceFile, createFile } = require('./node_tools');
 const AvailableSystems = [
   'aminer',
   'demo',
@@ -30,10 +30,9 @@ const AvailableSystems = [
   'yocsef',
   'reco',
 ];
+
 // get system from parameter.
-
 const args = process.argv.splice(2);
-
 debug('arguments is : %o', args);
 
 let system;
@@ -58,14 +57,17 @@ if (AvailableSystems.indexOf(system) <= 0) {
 // start doing things.
 console.log('System is [', system, '] start building...');
 
+
 // link or copy files used to start system.
+clearFolders(['./src/systems/current']);
+copyOrLink(`./src/seedsystems/${system}`, './src/systems/current');
+copyOrLink(`./src/seedthemes/${system}`, './src/themes/current');
 
-// init(system);
-// clearFolders(['./src/pages/', './src/systems/current', './src/themes/current']);
-// copyOrLink(`./src/seedsystems/${system}`, './src/systems/current');
-// copyOrLink(`./src/seedthemes/${system}`, './src/themes/current');
-
-
+// link or copy pages.
+// TODO asset routes must exist.
+const { routes } = require(`../src/seedsystems/${system}/routes.js`);
+debug('arguments router : %o', routes);
+linkPagesByRoutes(routes);
 
 // generate src/system_config.js
 createFile('./src/system-config.js', `
@@ -76,22 +78,22 @@ export const system = '${system}';
 //
 // replace files, not used any more.
 //
-const REPLACE_FILES = false;
-if (REPLACE_FILES) {
-
-  replaceFile('./src/template-systems.js', './src/systems/index.js', [
-    { pattern: '##{system}##', to: system },
-  ]);
-
-  replaceFile('./src/template-index.js', './src/index.js', [
-    {
-      pattern: '/\\* \\$\\$ require\\(ROUTER\\) \\*/',
-      to: `require('./systems/${system}/router').default`,
-    },
-  ]);
-
-  replaceFile('./src/template-themes.js', './src/themes/index.js', [
-    { pattern: '##{system}##', to: system },
-  ]);
-}
+// const REPLACE_FILES = false;
+// if (REPLACE_FILES) {
+//
+//   replaceFile('./src/template-systems.js', './src/systems/index.js', [
+//     { pattern: '##{system}##', to: system },
+//   ]);
+//
+//   replaceFile('./src/template-index.js', './src/index.js', [
+//     {
+//       pattern: '/\\* \\$\\$ require\\(ROUTER\\) \\*/',
+//       to: `require('./systems/${system}/router').default`,
+//     },
+//   ]);
+//
+//   replaceFile('./src/template-themes.js', './src/themes/index.js', [
+//     { pattern: '##{system}##', to: system },
+//   ]);
+// }
 

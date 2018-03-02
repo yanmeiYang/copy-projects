@@ -1,5 +1,4 @@
 import { request, config } from '../utils';
-import { sysconfig } from 'systems';
 
 const { api } = config;
 

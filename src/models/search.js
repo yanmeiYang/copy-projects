@@ -97,7 +97,8 @@ export default {
     // 搜索全球专家时，使用old service。
     // 使用智库搜索，并且排序算法不是contribute的时候，使用新的搜索API。
     searchPerson: [function* ({ payload }, { call, put, select }) {
-      const { query, offset, size, filters, sort, total, ghost } = payload;
+      const { query, offset, size, filters, sort, total, ghost, typesTotals } = payload;
+      const { expertBaseId, expertBases } = payload;
       const noTotalFilters = {};
       for (const [key, item] of Object.entries(filters)) {
         if (typeof item === 'string') {
@@ -121,38 +122,49 @@ export default {
       yield put({ type: 'updateSortKey', payload: { key: Sort } });
       yield put({ type: 'updateFilters', payload: { filters } });
 
-      console.log('search person 上部分》》》》》', assistantDataMeta);
-
       const { searchInGlobalExperts, searchInSomeExpertBase } = searchService.getBools(filters);
 
       // TODO call standalone assistant search for old api.
       let assistantQuery = '';
-      if (sysconfig.Search_EnableSmartSuggest && !ghost &&
+      if (sysconfig.Search_EnableSmartSuggest &&
+        !ghost &&
         (searchInGlobalExperts ||
           (searchInSomeExpertBase && !sysconfig.USE_NEXT_EXPERT_BASE_SEARCH))
+        && (query && query !== '-' && query.trim() !== '') // 列出专家库所有人不进行下面
       ) {
         // TODO 第一次搜索出现的bug。
-        if (assistantDataMeta && assistantDataMeta.advquery && assistantDataMeta.advquery.texts
-          && assistantDataMeta.advquery.texts.length > 0) {
-          yield put({
-            type: 'onlySearchAssistant',
-            payload: { query, assistantDataMeta, isSearchAbbr },
-          });
-          // 旧的API 默认带上前三个下位词
+        // 点击more 或者 切换abbr
+        if (typesTotals || isNotAffactedByAssistant) {
           const data = yield call(searchService.onlySearchAssistant, {
-            query,
-            assistantDataMeta,
-            isSearchAbbr,
+            query, assistantDataMeta, isSearchAbbr, typesTotals, isNotAffactedByAssistant,
           });
-          if (data.data && data.data.succeed) {
-            const { intellResults } = data.data;
-            const { kgHyponym } = intellResults;
+          if (data.data) {
+            let intellResults;
+            if (data.data.succeed) {
+              intellResults = data.data.intellResults;
+            } else if (data.data.data && data.data.data.length > 0) {
+              intellResults = data.data.data[1].items[0];
+            }
+            const { kgHyponym, abbr, level } = intellResults;
             yield put({ type: 'getAssistantDataSuccess', payload: { data: intellResults } });
-            const queries = assistantDataMeta.advquery.texts.map(term => term && `${term.text}`);
-            queries.push(`${query}`);
-            if (kgHyponym && kgHyponym.length > 0 && assistantDataMeta.advquery.texts.length < 2) {
+            let queries;
+            if (assistantDataMeta && assistantDataMeta.advquery && assistantDataMeta.advquery.texts) {
+              queries = assistantDataMeta.advquery.texts.map(term => term && `${term.text}`);
+              queries.push(`${query}`);
+            } else {
+              queries = [query];
+              if (abbr && abbr.length > 0) {
+                queries.push(abbr[0].word);
+              }
+            }
+            if (isSearchAbbr && intellResults.transText) {
+              queries.push(intellResults.transText);
+            }
+            // typesTotals 点击more的操作
+            const defaultCheckedLength = level && level <= 1 ? 8 : 3;
+            if (kgHyponym && kgHyponym.length > 0 && !typesTotals) {
               for (let i = 0; i < kgHyponym.length; i += 1) {
-                if (i <= 2) {
+                if (i < defaultCheckedLength) {
                   queries.push(kgHyponym[i].word);
                 }
               }
@@ -161,101 +173,140 @@ export default {
               assistantQuery = queries.map(item => `(| ${item})`).join(' ');
             }
           }
-        } else {
-          // 第一次query使用辅助系统，老API需要默认带上第一个query，所以这里阻塞，先等结果回来再搜索。
-          const data = yield call(searchService.onlySearchAssistant, {
-            query,
-            assistantDataMeta,
-            isSearchAbbr,
-          });
-          if (data.data && data.data.succeed) {
-            const { intellResults } = data.data;
-            const { kgHyponym } = intellResults;
-            yield put({ type: 'getAssistantDataSuccess', payload: { data: intellResults } });
-            const queries = [query];
-            let hasExpands = false;
-            if (intellResults && intellResults.expands && intellResults.expands.length > 0) {
-              queries.push(intellResults.expands[0].word);
-              hasExpands = true;
-              // assistantQuery = `(| ${query}) (| ${intellResults.expands[0].word})`;
-            }
-            if (kgHyponym && kgHyponym.length > 0) {
-              for (let i = 0; i < kgHyponym.length; i += 1) {
-                if (i <= 2) {
-                  queries.push(kgHyponym[i].word);
-                }
-              }
-            }
-            if (intellResults && intellResults.transText && isNotAffactedByAssistant && !hasExpands) {
-              queries.push(intellResults.transText);
-              // assistantQuery += ` (| ${intellResults.transText})`;
-            }
-            if (queries.length > 1) {
-              assistantQuery = queries.map(item => `(| ${item})`).join(' ');
-            }
-            console.log('Note: first expand query is:', assistantQuery);
+        } else if (assistantDataMeta && assistantDataMeta.advquery) {
+          // 除了abbr 和 more 操作
+          const queries = assistantDataMeta.advquery.texts.map(term => term && `${term.text}`);
+          queries.push(`${query}`);
+          if (queries.length > 1) {
+            assistantQuery = queries.map(item => `(| ${item})`).join(' ');
           }
         }
       }
+
 
       // 调用 搜索 .
       const params = {
         query, offset, size, filters: noTotalFilters, sort: Sort, intelligenceSearchMeta,
         assistantDataMeta, assistantQuery, isNotAffactedByAssistant, isSearchAbbr,
-        useTranslateSearch, // TODO remove
+        useTranslateSearch, typesTotals, expertBaseId, expertBases, // TODO remove
       };
 
-      const data = yield call(searchService.searchPerson, params);
 
-      if (process.env.NODE_ENV !== 'production') {
-        if (data && data.data && data.data.queryEscaped) {
-          console.warn('DEVELOPMENT ONLY MESSAGE: Query中有非法字符，已经过滤。详情：宋驰没告诉我!');
-          notification.open({
-            message: 'DEVELOPMENT ONLY MESSAGE',
-            description: 'Query中有非法字符，已经过滤。详情：宋驰没告诉我!',
+      if (!typesTotals) {
+        const data = yield call(searchService.searchPerson, params);
+
+        if (!sysconfig.USE_NEXT_EXPERT_BASE_SEARCH || (filters && filters.eb.id === 'aminer')) {
+          // yield call(searchService.searchPersonAgg,
+          //   { query: assistantQuery || query, offset, size, filters: noTotalFilters, sort: Sort });
+
+          yield put({
+            type: 'searchPersonAgg',
+            payload: {
+              query: assistantQuery || query,
+              offset, size, filters: noTotalFilters, sort: Sort, expertBaseId
+            }
           });
         }
-      }
 
-      if (data.data && data.data.succeed) {
-        // console.log('>>>>>> ---==== to next API');
-        // TODO 修复新API下没有CCF 贡献度值这样的东西。但是：这些东西不应该放这里。。。。。。。
-        if (sysconfig.SOURCE === 'ccf') {
-          const personIds = data.data.items && data.data.items.map(item => item && item.id);
-          if (personIds) {
-            const activityScores = yield call(
-              searchService.getActivityScoresByPersonIds,
-              personIds.join('.'),
-            );
-            if (activityScores.success && activityScores.data && activityScores.data.indices &&
-              activityScores.data.indices.length > 0) {
-              data.data.items && data.data.items.map((item, index) => {
-                const activityRankingContrib =
-                  activityScores.data.indices[index].filter(scores => scores.key === 'contrib');
-                if (data.data.items[index].indices) {
-                  data.data.items[index].indices.activityRankingContrib =
-                    activityRankingContrib.length > 0 ? activityRankingContrib[0].score : 0;
-                }
-                return '';
-              });
-            }
+        if (process.env.NODE_ENV !== 'production') {
+          if (data && data.data && data.data.queryEscaped) {
+            console.warn('DEVELOPMENT ONLY MESSAGE: Query中有非法字符，已经过滤。详情：宋驰没告诉我!');
+            notification.open({
+              message: 'DEVELOPMENT ONLY MESSAGE',
+              description: 'Query中有非法字符，已经过滤。详情：宋驰没告诉我!',
+            });
           }
         }
 
-        if (ghost) { // called by others. export.
-          return data.data;
-        }
-        const { intellResults } = data.data;
-        yield put({ type: 'nextSearchPersonSuccess', payload: { data: data.data, query } });
-        yield put({ type: 'getAssistantDataSuccess', payload: { data: intellResults } });
-      } else if (data.data && data.data.result) {
-        if (ghost) {
-          return data.data;
+        const useNewApi = data.data.succeed || (assistantDataMeta && assistantDataMeta.advquery && !data.data.result) || (!typesTotals && !data.data.result);
+        if (data.data && useNewApi) {
+          let tempData;
+          let intellResults;
+          if (data.data.succeed) {
+            tempData = data.data;
+            intellResults = data.data.intellResults;
+          } else if (assistantDataMeta && assistantDataMeta.advquery) {
+            tempData = data.data.data[0];
+            intellResults = data.data.data[1].items[0];
+          }
+          // console.log('>>>>>> ---==== to next API');
+          // TODO 修复新API下没有CCF 贡献度值这样的东西。但是：这些东西不应该放这里。。。。。。。
+          if (sysconfig.SOURCE === 'ccf') {
+            const personIds = tempData.items && tempData.items.map(item => item && item.id);
+            if (personIds) {
+              const activityScores = yield call(
+                searchService.getActivityScoresByPersonIds,
+                personIds.join('.'),
+              );
+              if (activityScores.success && activityScores.data && activityScores.data.indices &&
+                activityScores.data.indices.length > 0) {
+                tempData.items && tempData.items.map((item, index) => {
+                  const activityRankingContrib =
+                    activityScores.data.indices[index].filter(scores => scores.key === 'contrib');
+                  if (tempData.items[index].indices) {
+                    tempData.items[index].indices.activityRankingContrib =
+                      activityRankingContrib.length > 0 ? activityRankingContrib[0].score : 0;
+                  }
+                  return '';
+                });
+              }
+            }
+          }
+          tempData.items && tempData.items.map((item, index) => {
+            item.locks = { roster: true };
+            return '';
+          });
+
+          if (ghost) { // called by others. export.
+            return tempData;
+          }
+          // const { intellResults } = tempData;
+          yield put({ type: 'nextSearchPersonSuccess', payload: { data: tempData, query } });
+          if (typesTotals || (assistantDataMeta && !assistantDataMeta.advquery) ||
+            isNotAffactedByAssistant) {
+            yield put({ type: 'getAssistantDataSuccess', payload: { data: intellResults } });
+          }
+        } else if (data.data && data.data.result) {
+          if (ghost) {
+            return data.data;
+          } else {
+            if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH) {
+              // 使用新API添加专家到智库，通过lk_roster是得不到结果的
+              const ids = data.data.result.map((item) => {
+                return item.id;
+              });
+              const personInEB = yield call(
+                searchService.getPersonIsExistInEB,
+                { ids, ebid: expertBaseId || sysconfig.ExpertBase, expertBases },
+              );
+              const idsInEB = personInEB.data && personInEB.data.items
+                && personInEB.data.items.length > 0
+                && personInEB.data.items.map((item) => {
+                  return item.id;
+                });
+              if (data.data.result.length > 0) {
+                data.data.result.map((item) => {
+                  if (idsInEB && idsInEB.length > 0 && idsInEB.includes(item.id)) {
+                    item.locks.roster = true;
+                    item.dims = {
+                      eb: personInEB.data.items[idsInEB.indexOf(item.id)].dims
+                      && personInEB.data.items[idsInEB.indexOf(item.id)].dims.eb
+                    };
+                  } else {
+                    item.locks.roster = false;
+                  }
+                  return item;
+                });
+              }
+            }
+            yield put({
+              type: 'searchPersonSuccess',
+              payload: { data: data.data, query, total }
+            });
+          }
         } else {
-          yield put({ type: 'searchPersonSuccess', payload: { data: data.data, query, total } });
+          throw new Error('Result Not Available');
         }
-      } else {
-        throw new Error('Result Not Available');
       }
     }, takeLatest],
 
@@ -281,8 +332,8 @@ export default {
           try {
             const { data } = yield call(translateService.translateTerm, query);
             if (data && data.status) {
-              const q = query.trim().toLowerCase();
-              const en = data.en && data.en.trim().toLowerCase();
+              const q = query && query.trim().toLowerCase();
+              const en = data && data.en && data.en.trim().toLowerCase();
               if (q !== en) {
                 yield put({ type: 'translateSearchSuccess', payload: { data } });
               }
@@ -295,7 +346,7 @@ export default {
     },
 
     searchPersonAgg: [function* ({ payload }, { call, put, select }) {
-      const { query, offset, size, filters, sort } = payload;
+      const { query, offset, size, filters, sort, expertBaseId } = payload;
       const noTotalFilters = {};
       for (const [key, item] of Object.entries(filters)) {
         if (typeof item === 'string') {
@@ -318,7 +369,7 @@ export default {
 
       const params = {
         query, offset, size, filters: noTotalFilters, sort,
-        assistantDataMeta, assistantQuery, useTranslateSearch, // TODO remove
+        assistantDataMeta, assistantQuery, useTranslateSearch, expertBaseId, // TODO remove
       };
       const sr = yield call(searchService.searchPersonAgg, params);
       if (sr) {
@@ -466,16 +517,18 @@ export default {
      * Search Assistant related reducers.
      */
 
-    setAssistantDataMeta(state, { payload: { texts, isNotAffactedByAssistant, isSearchAbbr } }) {
+    setAssistantDataMeta(state, { payload }) {
+      const { texts, isNotAffactedByAssistant, isSearchAbbr, typesTotals } = payload;
       let isNotAffacted;
       if (isNotAffactedByAssistant !== null) {
-        isNotAffacted = !isNotAffactedByAssistant;
+        isNotAffacted = isNotAffactedByAssistant;
       } else {
         isNotAffacted = state.isNotAffactedByAssistant;
       }
+      //assistantDataMeta isSearchAbbr为true代表切换abbr。typesTotals如果存在代码点击了more操作
       return {
         ...state,
-        assistantDataMeta: { advquery: { texts } },
+        assistantDataMeta: (isSearchAbbr || typesTotals) ? { advquery: { texts } } : {},
         isNotAffactedByAssistant: isNotAffacted,
         isSearchAbbr,
       };
@@ -500,11 +553,6 @@ export default {
       return state;
     },
 
-    // clearSearchAssistantKG(state) {
-    //   const { kgHypernym, kgHyponym, ...assistantData } = state.assistantData;
-    //   return { ...state, assistantData };
-    // },
-
   },
 };
 
@@ -517,7 +565,8 @@ function fixSortKey(sort, query) {
   } else {
     // List all experts in query. use time as default sort.
     if (!sort || sort === 'relevance') {
-      return 'time';
+      // return 'time'; // 智库显示顺序
+      return 'h_index';
     }
   }
   return sort;

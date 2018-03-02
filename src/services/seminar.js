@@ -92,9 +92,10 @@ export async function getActivityScore(uid, src, actid, aid, key) {
   });
 }
 
-export async function getStatsOfCcfActivities() {
+export async function getStatsOfCcfActivities(data) {
   return request(api.getStatsOfCcfActivities, {
     method: 'GET',
+    data,
   });
 }
 
@@ -108,6 +109,12 @@ export async function keywordExtraction(payload) {
 export async function getTopMentionedTags(src, num) {
   return request(api.getTopMentionedTags.replace(':src', src).replace(':num', num), {
     method: 'GET',
+  });
+}
+export async function listActivitiesStates(data) {
+  return request(api.listActivitiesStates, {
+    method: 'GET',
+    data,
   });
 }
 

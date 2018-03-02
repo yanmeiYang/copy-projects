@@ -1,5 +1,6 @@
+/* eslint-disable camelcase */
 import { request, nextAPI, config } from 'utils';
-import { apiBuilder, F, H } from 'utils/next-api-builder';
+import { apiBuilder, F, H, Action } from 'utils/next-api-builder';
 import { sysconfig } from 'systems';
 
 import * as strings from 'utils/strings';
@@ -27,7 +28,8 @@ export function getBools(filters) {
  智库无缓存查询：
  */
 export async function searchPerson(params) {
-  const { query, offset, size, filters, sort, assistantDataMeta } = params;
+  const { query, offset, size, filters, sort, assistantDataMeta, typesTotals } = params;
+  const { expertBaseId, expertBases } = params;
   const { useTranslateSearch, assistantQuery, isNotAffactedByAssistant, isSearchAbbr } = params;
 
   // some conditions
@@ -38,7 +40,7 @@ export async function searchPerson(params) {
   // if query is null, and eb is not aminer, use expertbase list api.
   if (searchInSomeExpertBase && !query) {
     if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH) {
-      return listPersonInEBNextAPI({ ebid: filters.eb.id, sort, offset, size });
+      return listPersonInEBNextAPI({ ebid: filters.eb.id, sort, offset, size, filters, expertBases });
     } else {
       return listPersonInEB({ ebid: filters.eb.id, sort, offset, size });
     }
@@ -50,7 +52,7 @@ export async function searchPerson(params) {
   // if search in global experts, jump to another function;
   // Fix bugs when default search area is 'aminer'
   if (searchInGlobalExperts) {
-    return searchPersonGlobal(finalQuery, offset, size, filters, sort, useTranslateSearch);
+    return searchPersonGlobal(finalQuery, offset, size, filters, sort, useTranslateSearch, expertBaseId);
   }
 
   //
@@ -63,12 +65,20 @@ export async function searchPerson(params) {
   // 2. query
   // ------------------------------------------------------------------------------------------
   if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH && Sort !== 'activity-ranking-contrib') {
-    const ebs = sysconfig.ExpertBases;
-    const defaultHaves = ebs && ebs.length > 0 && ebs.filter(eb => eb.id !== 'aminer').map(eb => eb.id);
+    // const ebs = expertBases || sysconfig.ExpertBases;
+    let defaultHaves;
+    if (expertBases) {
+      defaultHaves = expertBases.length > 0 && expertBases.map(eb => eb);
+    } else if (sysconfig.ExpertBases) {
+      const ebs = sysconfig.ExpertBases
+      defaultHaves = ebs.length > 0 && ebs.filter(eb => eb.id !== 'aminer').map(eb => eb.id);
+    }
+    // const defaultHaves = ebs && ebs.length > 0 && ebs.filter(eb => eb.id !== 'aminer').map(eb => eb.id);
 
     const enTrans = sysconfig.Search_EnableTranslateSearch && !sysconfig.Search_EnableSmartSuggest;
+    const isSearchAssistantAdvMode = (assistantDataMeta && assistantDataMeta.advquery) ? true : false;
 
-    const nextapi = apiBuilder.query(F.queries.search, 'search')
+    const nextapi = apiBuilder.create(Action.search.search, 'search')
       .param({ query, offset, size })
       .param({
         searchType: F.searchType.allb,
@@ -77,6 +87,14 @@ export async function searchPerson(params) {
       .addParam({ haves: { eb: defaultHaves } }, { when: defaultHaves && defaultHaves.length > 0 })
       .addParam({ switches: ['loc_search_all'] }, { when: useTranslateSearch }) // TODO remove this
       .addParam({ switches: ['loc_translate_all'] }, { when: enTrans && !useTranslateSearch }) // TODO remove this
+      // .addParam(
+      //   { switches: ['intell_expand'] },
+      //   { when: sysconfig.Search_EnableSmartSuggest && !isNotAffactedByAssistant },
+      // )
+      .addParam({ switches: ['lang_zh'] }, { when: sysconfig.Locale === 'zh' })
+
+      .schema({ person: F.fields.person_in_PersonList })
+      .addSchema({ person: ['tags_translated_zh'] }, { when: sysconfig.Locale === 'zh' })
       .addParam(
         { switches: ['intell_search_abbr'] },
         { when: sysconfig.Search_EnableSmartSuggest && isNotAffactedByAssistant && isSearchAbbr },
@@ -84,15 +102,8 @@ export async function searchPerson(params) {
       .addParam(
         { switches: ['intell_search_kg'] },
         { when: sysconfig.Search_EnableSmartSuggest && isNotAffactedByAssistant },
-      )
-      .addParam(
-        { switches: ['intell_expand'] },
-        { when: sysconfig.Search_EnableSmartSuggest && !isNotAffactedByAssistant },
-      )
-      .addParam({ switches: ['lang_zh'] }, { when: sysconfig.Locale === 'zh' })
+      );
 
-      .schema({ person: F.fields.person_in_PersonList })
-      .addSchema({ person: ['tags_translated_zh'] }, { when: sysconfig.Locale === 'zh' });
 
     // filters
     H.filtersToQuery(nextapi, filters);
@@ -106,14 +117,18 @@ export async function searchPerson(params) {
     plugins.applyPluginToAPI(nextapi, 'api_search');
 
     // apply SearchAssistant
-    if (assistantDataMeta) {
+    if (isSearchAssistantAdvMode) {
       nextapi.param(assistantDataMeta);
     }
 
     // console.log('DEBUG---------------------\n', nextapi.api);
     // console.log('DEBUG---------------------\n', JSON.stringify(nextapi.api));
 
-    return nextAPI({ data: [nextapi.api] });
+    const data = [nextapi.api];
+    if (isSearchAssistantAdvMode && typesTotals) {
+      data.push(create_dm_intellwords_expand(query, assistantDataMeta, typesTotals));
+    }
+    return nextAPI({ data });
 
     // ------------------------------------------------------------------------------------------
   } else {
@@ -127,22 +142,53 @@ export async function searchPerson(params) {
   }
 }
 
+function create_dm_intellwords_expand(query, assistantDataMeta, typesTotals) {
+  const { abbrTotal, kghypernymTotal, kghyponymTotal } = typesTotals;
+  const nextapi = apiBuilder.create(Action.dm_intellwords.expand, 'expand')
+    .param({ query, kgFromabbr: true, lang_zh: sysconfig.Locale === 'zh' })
+    .param({
+      types: [{
+        type: 'abbr',
+        total: abbrTotal,
+        random: 0,
+      }, {
+        type: 'kghypernym',
+        total: kghypernymTotal,
+        random: 0,
+      }, {
+        type: 'kghyponym',
+        total: kghyponymTotal,
+        random: 0,
+      }],
+    })
+    .param({
+      keeps: (assistantDataMeta.advquery && assistantDataMeta.advquery.texts) || [],
+    });
+
+  return nextapi.api;
+}
+
 export async function onlySearchAssistant(params) {
-  const { query, assistantDataMeta, isSearchAbbr } = params;
-  const nextapi = apiBuilder.query(F.queries.search, 'searchAssistant')
+  const { query, assistantDataMeta, isSearchAbbr, typesTotals, isNotAffactedByAssistant } = params;
+  const isSearchAssistantAdvMode = (assistantDataMeta && assistantDataMeta.advquery) ? true : false;
+  const nextapi = apiBuilder.create(Action.search.search, 'searchAssistant')
     .param({ query, offset: 0, size: 0, searchType: 'all' })
     .addParam(
       { switches: ['intell_search_abbr'] },
-      { when: sysconfig.Search_EnableSmartSuggest && isSearchAbbr },
+      { when: sysconfig.Search_EnableSmartSuggest && isNotAffactedByAssistant && isSearchAbbr },
     )
-    .addParam({ switches: ['intell_search_kg'] }, { when: sysconfig.Search_EnableSmartSuggest })
+    .addParam({ switches: ['intell_search_kg'] }, { when: sysconfig.Search_EnableSmartSuggest && isNotAffactedByAssistant })
     .addParam({ switches: ['lang_zh'] }, { when: sysconfig.Locale === 'zh' })
     .schema({ person: [] });
   // apply SearchAssistant
-  if (assistantDataMeta) {
+  if (isSearchAssistantAdvMode) {
     nextapi.param(assistantDataMeta);
   }
-  return nextAPI({ data: [nextapi.api] });
+  const data = [nextapi.api];
+  if (isSearchAssistantAdvMode && typesTotals) {
+    data.push(create_dm_intellwords_expand(query, assistantDataMeta, typesTotals));
+  }
+  return nextAPI({ data });
 }
 
 export async function listPersonInEB(payload) {
@@ -178,21 +224,23 @@ export async function listPersonInEB(payload) {
 }
 
 export async function listPersonInEBNextAPI(payload) {
-  const { sort, ebid, offset, size } = payload;
+  const { sort, ebid, offset, size, filters, expertBases } = payload;
 
   // const ebs = sysconfig.ExpertBases;
   // const defaultHaves = ebs && ebs.length > 0 && ebs.map(eb => eb.id);
-  const nextapi = apiBuilder.query(F.queries.search, 'list-in-EB')
+  const nextapi = apiBuilder.create(Action.search.search, 'list-in-EB')
     .param({
       offset, size,
       searchType: F.searchType.allb,
       aggregation: F.params.default_aggregation,
-      // haves: { eb: defaultHaves },
+      haves: { eb: expertBases },
     })
     .schema({ person: F.fields.person_in_PersonList })
     .addSchema({ person: ['tags_translated_zh'] }, { when: sysconfig.Locale === 'zh' });
 
-  H.filterByEBs(nextapi, [ebid]);
+  // H.filterByEBs(nextapi, [ebid], filters);
+  H.filtersToQuery(nextapi, filters);
+
   if (sort && sort !== 'relevance' && sort !== 'time') {
     nextapi.param({ sorts: [sort] });
   }
@@ -207,20 +255,21 @@ export async function listPersonInEBNextAPI(payload) {
 
 // used in acm fellow forecast
 export async function listAllPersonIdsInEBNextAPI(payload) {
-  const { ebid, offset, size } = payload;
-  const nextapi = apiBuilder.query(F.queries.search, 'list-all-ids-in-EB')
+  const { ebid, offset, size, filters } = payload;
+  const nextapi = apiBuilder.create(Action.search.search, 'list-all-ids-in-EB')
     .param({
       offset, size,
       searchType: F.searchType.all,
     })
     .schema({ person: ['id'] });
-  H.filterByEBs(nextapi, [ebid]);
+  // H.filterByEBs(nextapi, [ebid]);
+  H.filtersToQuery(nextapi, filters);
   return nextAPI({ data: [nextapi.api] });
 }
 
 // Search Global.
-export async function searchPersonGlobal(query, offset, size, filters, sort, useTranslateSearch) {
-  const data = prepareParametersGlobal(query, offset, size, filters, sort, useTranslateSearch);
+export async function searchPersonGlobal(query, offset, size, filters, sort, useTranslateSearch, expertBaseId) {
+  const data = prepareParametersGlobal(query, offset, size, filters, sort, useTranslateSearch, expertBaseId);
   const { term, name, org, isAdvancedSearch } = strings.destructQueryString(query);
   const apiURL = isAdvancedSearch ? api.searchPersonAdvanced : api.searchPerson;
   return request(apiURL, { method: 'GET', data });
@@ -230,25 +279,24 @@ export async function searchPersonGlobal(query, offset, size, filters, sort, use
 // Search Aggregation!
 //
 export async function searchPersonAgg(params) {
-  const { query, offset, size, filters, sort } = params;
+  const { query, offset, size, filters, sort, expertBaseId } = params;
   const { useTranslateSearch, assistantQuery } = params;
-
   // some conditions
   const finalQuery = assistantQuery || query;
 
   // if search in global experts, jump to another function;
   if (filters && filters.eb && filters.eb.id === 'aminer') {
-    return searchPersonAggGlobal(finalQuery, offset, size, filters, useTranslateSearch);
+    return searchPersonAggGlobal(finalQuery, offset, size, filters, useTranslateSearch, expertBaseId);
   }
   // Fix bugs when default search area is 'aminer'
   if ((!filters || !filters.eb) && sysconfig.DEFAULT_EXPERT_BASE === 'aminer') {
-    return searchPersonAggGlobal(finalQuery, offset, size, filters, useTranslateSearch);
+    return searchPersonAggGlobal(finalQuery, offset, size, filters, useTranslateSearch, expertBaseId);
   }
 
   if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH && sort !== 'activity-ranking-contrib') {
     // TODO 注意注意，agg从新的api中获取，所以这里什么都不做!
   } else {
-    const { expertBase, data } = prepareParameters(finalQuery, offset, size, filters, '', useTranslateSearch);
+    const { expertBase, data } = prepareParameters(finalQuery, offset, size, filters, '', useTranslateSearch, expertBaseId);
     return request(
       api.searchPersonInBaseAgg.replace(':ebid', expertBase),
       { method: 'GET', data },
@@ -256,14 +304,14 @@ export async function searchPersonAgg(params) {
   }
 }
 
-export async function searchPersonAggGlobal(query, offset, size, filters, useTranslateSearch) {
-  const data = prepareParametersGlobal(query, offset, size, filters, '', useTranslateSearch);
+export async function searchPersonAggGlobal(query, offset, size, filters, useTranslateSearch, expertBaseId) {
+  const data = prepareParametersGlobal(query, offset, size, filters, '', useTranslateSearch, expertBaseId);
   const { term, name, org, isAdvancedSearch } = strings.destructQueryString(query);
   const apiURL = isAdvancedSearch ? api.searchPersonAdvancedAgg : api.searchPersonAgg;
   return request(apiURL, { method: 'GET', data });
 }
 
-function prepareParameters(query, offset, size, filters, sort, useTranslateSearch) {
+function prepareParameters(query, offset, size, filters, sort, useTranslateSearch, expertBaseId) {
   let expertBase = sysconfig.DEFAULT_EXPERT_BASE;
   let data = { offset, size, sort: sort || '' };
 
@@ -293,7 +341,7 @@ function prepareParameters(query, offset, size, filters, sort, useTranslateSearc
     data.org = strings.cleanQuery(org);
   }
 
-  data = addAdditionParameterToData(data, sort, 'eb');
+  data = addAdditionParameterToData(data, sort, 'eb', expertBaseId);
   // if (useTranslateSearch && data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY]) {
   //   data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY] = `cross:${data[sysconfig.DEFAULT_EXPERT_SEARCH_KEY]}`;
   // }
@@ -310,7 +358,7 @@ const new2oldFilterValueMap = {
   as_lang: 'as_language',
 };
 
-function prepareParametersGlobal(query, offset, size, filters, sort, useTranslateSearch) {
+function prepareParametersGlobal(query, offset, size, filters, sort, useTranslateSearch, expertBaseId) {
   let data = { query, offset, size, sort };
   data = { offset, size, sort: sort || '' };
 
@@ -361,7 +409,7 @@ function prepareParametersGlobal(query, offset, size, filters, sort, useTranslat
   }
 
   // data.query = encodeURIComponent(newQuery);
-  data = addAdditionParameterToData(data, sort, 'global');
+  data = addAdditionParameterToData(data, sort, 'global', expertBaseId);
 
   // if (useTranslateSearch && data.query) {
   //   data.query = `cross:${data.query}`;
@@ -370,7 +418,7 @@ function prepareParametersGlobal(query, offset, size, filters, sort, useTranslat
 }
 
 // Additional parameters. range=[eb|global]
-function addAdditionParameterToData(data, sort, range) {
+function addAdditionParameterToData(data, sort, range, expertBaseId) {
   const newData = data;
 
   // 置顶huawei项目中的acm fellow和高校top100
@@ -381,8 +429,8 @@ function addAdditionParameterToData(data, sort, range) {
   }
 
   // with search in expert-base.
-  if (sysconfig.Search_CheckEB && range === 'global') {
-    newData.lk_roster = sysconfig.ExpertBase;
+  if ((sysconfig.Search_CheckEB && range === 'global') || sysconfig.Search_checkEB_Roster) {
+    newData.lk_roster = expertBaseId || sysconfig.ExpertBase;
   }
   return newData;
 }
@@ -393,9 +441,9 @@ export async function getSeminars(offset, size) {
   return request(api.getSeminars.replace(':offset', offset).replace(':size', size));
 }
 
-export async function relationGraph(data) {
-  return request(api.searchExpertNetWithDSL, {
-    method: 'GET', data,
+export async function relationGraph(id) {
+  return request(api.searchExpertNetWithDSL.replace(':id', id), {
+    method: 'GET',
   });
 }
 
@@ -411,3 +459,35 @@ export async function getActivityScoresByPersonIds(ids) {
   });
 }
 
+export async function getMoreIntellWords(params) {
+  const { query, text, type, total } = params;
+  const nextapi = apiBuilder.magic(F.magic.expand, 'expand')
+    .param({ query })
+    .param({ kgFromabbr: true })
+    .addParam({ switches: ['lang_zh'] }, { when: sysconfig.Locale === 'zh' })
+    .addParam({ types: [{ type: type.toLowerCase(), total, random: 0 }] })
+    .addParam({ keeps: [{ text, source: 'abbr', id: '0' }] });
+  return nextAPI({ data: [nextapi.api], type: 'magic' });
+}
+
+export async function getPersonIsExistInEB(payload) {
+  const { ids, ebid, expertBases } = payload;
+
+  let defaultHaves;
+  if (expertBases) {
+    defaultHaves = expertBases.length > 0 && expertBases.map(eb => eb);
+  } else if (sysconfig.ExpertBases) {
+    const ebs = sysconfig.ExpertBases
+    defaultHaves = ebs.length > 0 && ebs.filter(eb => eb.id !== 'aminer').map(eb => eb.id);
+  }
+
+  const nextapi = apiBuilder.create(Action.search.search, 'search')
+    .param({ offset: 0, size: 20, searchType: 'allb' })
+    .param({
+      ids,
+      filters: { dims: { eb: [ebid] } },
+    })
+    .addParam({ haves: { eb: defaultHaves } }, { when: defaultHaves && defaultHaves.length > 0 })
+    .schema({ person: ['id'] });
+  return nextAPI({ data: [nextapi.api] });
+}

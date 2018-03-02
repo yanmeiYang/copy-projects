@@ -56,7 +56,7 @@ export async function removeLabelFromEntity(payload) {
       //   [LabelDimension]: { op: F.alterop.delete, value: tag },
       // },
     });
-  return nextAPI({ type: F.Type.Alter, data: [nextapi.api] });
+  return nextAPI({ type: 'alter', data: [nextapi.api] });
 }
 
 export async function fetchLabelsByIds(payload) {
@@ -68,5 +68,5 @@ export async function fetchLabelsByIds(payload) {
       switches: ['master'],
     })
     .schema({ person: ['id'] });
-  return nextAPI({ data: [nextapi.api] });
+  return nextAPI({ data: [nextapi.api], type: 'query' });
 }

@@ -2,7 +2,7 @@
  * Created by yangyanmei on 17/8/21.
  */
 import { request, config } from '../utils';
-import { sysconfig } from 'systems';
+import { sysconfig } from '../systems';
 
 const { api } = config;
 

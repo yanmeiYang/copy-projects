@@ -92,13 +92,11 @@ export async function getInterestVisData(personId) {
   return request(api.interests.replace(':id', personId));
 }
 
-export async function getActivityAvgScoresByPersonId(id) {
-  return request(api.getActivityAvgScoresByPersonId.replace(':id', id));
-}
-
-export async function getContributionRecalculatedByPersonId(id) {
-  console.log('=============', id);
-  return request(api.getContributionRecalculatedByPersonId.replace(':id', id));
+export async function getActivityAvgScoresByPersonId(id, data) {
+  return request(api.getActivityAvgScoresByPersonId.replace(':id', id), {
+    method: 'GET',
+    data,
+  });
 }
 
 export async function personEmailStr(id) {

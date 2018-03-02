@@ -24,7 +24,7 @@ const loadSavedLocale = (system, defaultLocale) => {
 };
 
 function saveLocale(system, locale) {
-  console.log('===-=-=-0=0=0=-0=-0=-0=-',locale );
+  // console.log('===-=-=-0=0=0=-0=-0=-0=-',locale );
   if (locale) {
     const key = `${system}_locale`;
     localStorage.setItem(key, JSON.stringify(locale));

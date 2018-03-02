@@ -22,6 +22,9 @@ export default {
   'search.translateSearchMessage.2': '您也可以只搜索 "{cnQuery}"。',
   'search.translateSearchMessage.reverse': '您可以同时搜索 "{enQuery}" 和 "{cnQuery}"。',
 
+  'casic.index.news': '新闻',
+  'casic.index.projects': '项目搜索 TODO',
+
   // Components
   'com.KgSearchBox.placeholder': '请输入姓名或者搜索词',
   'com.KgSearchBox.placeholderTerm': '关键词',
@@ -31,6 +34,10 @@ export default {
 
   'com.RgSearchNameBox.placeholder': '请输入姓名',
   'com.RgSearchTermBox.placeholder': '请输入关键词',
+  'com.RgSearchConfBox.placeholder': '请输入期刊名称',
+  'com.RgSearchConfBox.startYear': '起始年份：',
+  'com.RgSearchConfBox.endYear': '结束年份：',
+  'com.RgSearchConfBox.conferences': '期刊选择：',
 
   'com.search.filter.searchRange': '范围:',
   'com.search.filter.Filters': '过滤条件:',
@@ -55,17 +62,20 @@ export default {
   'com.search.sort.label.h_index': 'h指数',
   'com.search.sort.label.activity': '学术活跃度',
   'com.search.sort.label.rising_star': '领域新星',
+  'com.search.sort.label.new_star': '领域新星',
   'com.search.sort.label.n_citation': '引用数',
   'com.search.sort.label.n_pubs': '论文数',
   'com.search.sort.label.activity-ranking-contrib': '学会贡献', // CCF Only
   'com.search.sort.label.time': '最新添加',
 
-  'com.search.searchAssistant.hintInfo.expansion': '我们将您搜索的词扩展为：',
-  'com.search.searchAssistant.hintInfo.translation': '并且同时为您搜索：',
-  'com.search.searchAssistant.hintInfo.hypernymKG': '知识图谱将上位词扩展为：',
-  'com.search.searchAssistant.hintInfo.hyponymKG': '知识图谱将下位词扩展为：',
+  'com.search.searchAssistant.hintInfo.expansion': '自动扩展：',
+  'com.search.searchAssistant.hintInfo.translation': '自动翻译：',
+  'com.search.searchAssistant.hintInfo.translation.level1': 'AMiner自动到"{query}"词义太广了，通过知识图谱进行了自动扩展。此外，我们自动进行了翻译搜索了中文"{transText}"',
+  'com.search.searchAssistant.hintInfo.hypernymKG': '上位词：',
+  'com.search.searchAssistant.hintInfo.hyponymKG': '下位词：',
   'com.search.searchAssistant.hintInfo.KGButton': '使用知识图谱进行搜索',
   'com.search.searchAssistant.hintInfo.loading': '加载中...',
+  'com.search.searchAssistant.hintInfo.desc': '扩展',
 
   'com.searchTypeWidget.label.ExpertSearch': '专家',
   'com.searchTypeWidget.label.ExpertMap': '人才地图',
@@ -76,6 +86,8 @@ export default {
   'com.searchTypeWidget.label.ExpertBase': '我的专家库',
   'com.searchTypeWidget.label.crossSearch': '交叉搜索',
   'com.searchTypeWidget.label.seminar': '学术活动',
+  'com.searchTypeWidget.label.Project': '项目搜索 TODO',
+  'com.searchTypeWidget.label.News': '新闻',
 
   'com.searchTypeWidget.label.ACM_ExpertSearch': '全球专家',
   'com.searchTypeWidget.label.ACMFellowExpertBase': 'ACM Fellow',
@@ -94,7 +106,9 @@ export default {
   'com.expertMap.headerLine.label.level': '层级：',
   'com.expertMap.headerLine.label.tipMessage': '没有键入正确的关键词、选择领域或者系统没有搜索到结果！',
   'com.expertMap.headerLine.label.statistic': '统计分析报告',
-  'com.expertMap.headerLine.label.play': '播放迁徙路线',
+  'com.expertMap.headerLine.label.play': '播放迁徙动画',
+  'com.expertMap.headerLine.label.setting': '设置',
+  'com.expertMap.headerLine.label.modify': '修改迁徙',
   'com.expertMap.headerLine.label.download': '导出Excel表',
   'com.expertMap.headerLine.label.ok': '确定',
   'com.expertMap.headerLine.label.close': '关闭',
@@ -134,6 +148,16 @@ export default {
   'com.topicRelation.header.coOccurenceNum': '共现次数>',
   'com.topicRelation.header.startYear': '起始年份：',
   'com.topicRelation.header.endYear': '结束年份：',
+  'com.topicRelation.header.selectConference': '选择期刊',
+  'com.topicRelation.header.topicRelationButton': '主题关系图',
+  'com.topicRelation.header.hierarchicalEdgeButton': '分层边缘图',
+
+  'com.searchConf.header.category': '期刊类型：',
+  'com.searchConf.header.selectConfList': '已选择期刊',
+  'com.searchConf.header.allConfList': '全部期刊',
+  'com.searchConf.header.startYear': '开始时间：',
+  'com.searchConf.header.endYear': '结束时间：',
+  'com.searchConf.header.search': '搜索',
 
   'com.topTrend.header': '技术趋势预测',
   'com.topTrend.header.tab.recentHeat': '近期热度',
@@ -141,6 +165,7 @@ export default {
   'com.topTrend.header.tab.technologySources': '技术源头',
   'com.topTrend.header.tab.domainAssociation': '领域关联',
   'com.topTrend.info': '"{tip}"技术趋势正在分析中，请稍候',
+  'com.topTrend.errInfo': '"{tip}"技术领域不存在或者您的输入错误，请检查重试',
 
   'com.expertTrajectory.theme.label.0': '常规',
   'com.expertTrajectory.theme.label.1': '商务',
@@ -197,6 +222,10 @@ export default {
 
   //ACMForecast
   'com.ACMForecast.highCitedPaper': '高引用论文:',
+
+  //Follow
+  'com.follow.hotField': '热门领域:',
+  'com.follow.trendingCrowd': '热搜人群:',
 
   // Recommendation
   'rcd.home.pageTitle': '机构列表',

@@ -60,7 +60,7 @@ export default class PersonTags extends PureComponent {
                     <a href="" onClick={tagsLinkFuncs.bind(this, { query: item })}>{item}</a>
                     :
                     <Link
-                      to={`/${sysconfig.SearchPagePrefix}/${item}/0/${sysconfig.MainListSize}`}>
+                      to={`/${sysconfig.SearchPagePrefix}/${item}`}>
                       {item}
                     </Link>
                   }

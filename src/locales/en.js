@@ -22,6 +22,9 @@ export default {
   'search.translateSearchMessage.2': 'Search "{cnQuery}" only.',
   'search.translateSearchMessage.reverse': 'You can also search with both "{enQuery}" and "{cnQuery}".',
 
+  'casic.index.news': 'News',
+  'casic.index.projects': 'Projects',
+
   // Components
   'com.KgSearchBox.placeholder': 'Input expert name or query',
   'com.KgSearchBox.placeholderTerm': 'Term',
@@ -31,6 +34,10 @@ export default {
 
   'com.RgSearchNameBox.placeholder': 'Input expert name',
   'com.RgSearchTermBox.placeholder': 'Input term',
+  'com.RgSearchConfBox.placeholder': 'Input conference name',
+  'com.RgSearchConfBox.startYear': 'start year: ',
+  'com.RgSearchConfBox.endYear': 'end year: ',
+  'com.RgSearchConfBox.conferences': 'selected conferences: ',
 
   'com.search.filter.searchRange': 'Range:',
   'com.search.filter.Filters': 'Filters:',
@@ -55,27 +62,32 @@ export default {
   'com.search.sort.label.h_index': 'H-Index',
   'com.search.sort.label.activity': 'Activity',
   'com.search.sort.label.rising_star': 'Rising Star',
+  'com.search.sort.label.new_star': 'Rising Star',
   'com.search.sort.label.n_citation': '#Citation',
   'com.search.sort.label.n_pubs': '#Paper',
   'com.search.sort.label.activity-ranking-contrib': 'Contrib',
   'com.search.sort.label.time': 'Time',
 
-  'com.search.searchAssistant.hintInfo.expansion': 'We automatically expanded it to:',
-  'com.search.searchAssistant.hintInfo.translation': 'We also search for:',
-  'com.search.searchAssistant.hintInfo.hypernymKG': 'Hypernym expanded by knowledge graph:',
-  'com.search.searchAssistant.hintInfo.hyponymKG': 'Hyponym expanded by knowledge graph:',
+  'com.search.searchAssistant.hintInfo.expansion': 'Abbreviation expansion:',
+  'com.search.searchAssistant.hintInfo.translation': 'Translation:',
+  'com.search.searchAssistant.hintInfo.hypernymKG': 'Super-concept:',
+  'com.search.searchAssistant.hintInfo.hyponymKG': 'Sub-concept:',
   'com.search.searchAssistant.hintInfo.KGButton': 'Search with Knowledge Graph',
   'com.search.searchAssistant.hintInfo.loading': 'Loading...',
+  'com.search.searchAssistant.hintInfo.desc': 'Expansion',
 
   'com.searchTypeWidget.label.ExpertSearch': 'Experts',
   'com.searchTypeWidget.label.ExpertMap': 'Maps',
   'com.searchTypeWidget.label.Relation': 'Relations',
   'com.searchTypeWidget.label.KnowledgeGraph': 'Knowledge Graph',
   'com.searchTypeWidget.label.TrendPrediction': 'Topic Trend',
-  'com.searchTypeWidget.label.ExpertTrajectory': 'DEV:Expert Trajectory',
+  'com.searchTypeWidget.label.SingleTrajectory': 'DEV:Single Trajectory',
+  'com.searchTypeWidget.label.GroupOverview': 'DEV:Group Trajectory',
   'com.searchTypeWidget.label.ExpertBase': 'My Experts',
   'com.searchTypeWidget.label.crossSearch': 'Cross',
   'com.searchTypeWidget.label.seminar': 'Seminar',
+  'com.searchTypeWidget.label.Project': 'Project',
+  'com.searchTypeWidget.label.News': 'News',
 
   'com.searchTypeWidget.label.ACM_ExpertSearch': 'Global Experts',
   'com.searchTypeWidget.label.ACMFellowExpertBase': 'ACM Fellow',
@@ -94,7 +106,9 @@ export default {
   'com.expertMap.headerLine.label.level': 'Level：',
   'com.expertMap.headerLine.label.tipMessage': 'No keywords typed, domain selected or nothing found!',
   'com.expertMap.headerLine.label.statistic': 'Statistic & Analysis',
-  'com.expertMap.headerLine.label.play': 'Play Trajectories',
+  'com.expertMap.headerLine.label.play': 'Play Animation',
+  'com.expertMap.headerLine.label.setting': 'Setting',
+  'com.expertMap.headerLine.label.modify': 'Modify Trajectory',
   'com.expertMap.headerLine.label.download': 'Export Excel',
   'com.expertMap.headerLine.label.ok': 'OK',
   'com.expertMap.headerLine.label.close': 'close',
@@ -134,6 +148,16 @@ export default {
   'com.topicRelation.header.coOccurenceNum': 'co-occur> ',
   'com.topicRelation.header.startYear': 'start year: ',
   'com.topicRelation.header.endYear': 'end year: ',
+  'com.topicRelation.header.selectConference': 'conferences',
+  'com.topicRelation.header.topicRelationButton': 'topic relation graph',
+  'com.topicRelation.header.hierarchicalEdgeButton': 'hierarchical edge bundling',
+
+  'com.searchConf.header.category': 'category: ',
+  'com.searchConf.header.selectConfList': 'selected conferences',
+  'com.searchConf.header.allConfList': 'all conferences',
+  'com.searchConf.header.startYear': 'start year: ',
+  'com.searchConf.header.endYear': 'end year: ',
+  'com.searchConf.header.search': 'search',
 
   'com.topTrend.header': 'Technical Trend Prediction',
   'com.topTrend.header.tab.recentHeat': 'Recent Heat',
@@ -141,6 +165,7 @@ export default {
   'com.topTrend.header.tab.technologySources': 'Technology Sources',
   'com.topTrend.header.tab.domainAssociation': 'Domain Association',
   'com.topTrend.info': 'Technology prediction about "{tip}" is analyzing. Please wait.',
+  'com.topTrend.errInfo': 'Technology prediction about "{tip}" does not exist or input error. Please check.',
 
   'com.expertTrajectory.theme.label.0': 'Regular',
   'com.expertTrajectory.theme.label.1': 'Business',
@@ -197,6 +222,10 @@ export default {
 
   //ACMForecast
   'com.ACMForecast.highCitedPaper': 'High Cited Papers:',
+
+  //Follow
+  'com.follow.hotField': 'Hot Fields:',
+  'com.follow.trendingCrowd': 'Trending Crowd:',
 
   // Recommendation
   'rcd.home.pageTitle': 'Organization List',

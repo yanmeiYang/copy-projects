@@ -15,7 +15,7 @@ import { SearchFilter, SearchSorts, KgSearchBox } from 'components/search';
 import { SearchKnowledge, TranslateSearchMessage } from 'components/search';
 import { sysconfig } from 'systems';
 import { theme } from 'themes';
-import { createURL } from 'utils';
+import { createURL, queryString } from 'utils';
 import { Auth } from 'hoc';
 import SearchAssistant, { AssistantUtils } from './SearchAssistant';
 import styles from './SearchComponent.less';
@@ -121,13 +121,14 @@ export default class SearchComponent extends Component {
   onPageChange = (page) => {
     const { match, dispatch, search } = this.props;
     const { query, pagination } = search;
+    // console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.', pagination, pagination.pageSize);
     const { pageSize } = pagination;
-    const pathname = createURL(match.path, match.params, {
-      query: query || '-',
+    const pathname = createURL(match.path, match.params, { query: query || '-' });
+    const params = queryString.stringify({
       offset: (page - 1) * pageSize,
       size: pageSize,
     });
-    dispatch(routerRedux.push({ pathname }));
+    dispatch(routerRedux.push({ pathname, search: `?${params}` }));
   };
 
   // ExpertBase filter 'eb' is a special filter.
@@ -219,12 +220,9 @@ export default class SearchComponent extends Component {
     // Change URL
     if (!dontRefreshUrl) {
       const { match } = this.props;
-      const pathname = createURL(match.path, match.params, {
-        query: query || '-',
-        offset: 0,
-        size,
-      });
-      dispatch(routerRedux.push({ pathname }));
+      const pathname = createURL(match.path, match.params, { query: query || '-' });
+      const params = queryString.stringify({ offset: 0, size });
+      dispatch(routerRedux.push({ pathname, search: `?${params}` }));
     }
   };
 

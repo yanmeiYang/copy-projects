@@ -7,6 +7,7 @@ import apiBuilder from './next-api-builder';
 import { color } from './theme';
 import * as reflect from './reflect';
 import { compare } from './compare';
+import queryString from 'query-string';
 import {
   loadD3,
   loadD3v3,
@@ -94,7 +95,10 @@ const createURL = (path, params, newParams) => {
 
 export {
   config,
+
+  // 3rd party tools.
   classnames,
+  queryString,
 
   // library
   reflect,

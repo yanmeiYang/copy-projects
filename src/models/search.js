@@ -5,6 +5,7 @@ import pathToRegexp from 'path-to-regexp';
 import * as searchService from 'services/search';
 import * as translateService from 'services/translate';
 import * as topicService from 'services/topic';
+import { queryString } from 'utils';
 import * as bridge from 'utils/next-bridge';
 import { takeLatest } from 'utils/helper';
 
@@ -56,17 +57,21 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen(({ pathname, search, select }) => {
-        // TODO dont't use this method to get query, use in component method.
-        let match = pathToRegexp('/(uni)?search/:query/:offset/:size').exec(pathname);
+
+        // TODO Later dont't use this method to get query, use in component method.
+
+        let match = pathToRegexp('/(uni)?search/:query').exec(pathname);
         if (match) {
           const keyword = decodeURIComponent(match[2]);
-          const offset = parseInt(match[3], 10);
-          const size = parseInt(match[4], 10);
+          let { offset, size } = queryString.parse(search);
+          offset = parseInt(offset, 10);
+          size = parseInt(size, 10);
           // dispatch({ type: 'emptyResults' });
           dispatch({ type: 'smartClearAssistantMeta', payload: { query: keyword } });
           dispatch({ type: 'updateUrlParams', payload: { query: keyword, offset, size } });
           // dispatch({ type: 'clearSearchAssistant' });
         }
+
 
         //临时增加,监听talentHr的search页面
         match = pathToRegexp('/talent/search/:offset/:size').exec(pathname);
@@ -398,7 +403,12 @@ export default {
 
   reducers: {
     updateUrlParams(state, { payload: { query, offset, size } }) {
-      const newState = { ...state, query, offset };
+      const newState = {
+        ...state,
+        query,
+        offset: offset || 0,
+        size: size || sysconfig.MainListSize
+      };
       if (state.query !== query) {
         newState.filters = newState.filters || {};
         if (!newState.filters.eb) {
@@ -413,7 +423,7 @@ export default {
           pageSize: sysconfig.MainListSize,
           total: null,
         };
-        newState.pagination.pageSize = size;
+        newState.pagination.pageSize = newState.size;
         newState.translatedText = '';
       }
       return newState;

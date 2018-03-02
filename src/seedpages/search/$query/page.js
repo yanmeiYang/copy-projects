@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import { withRouter } from 'dva/router';
 import { connect, Page, routerRedux, withRouter } from 'engine';
-import { classnames } from 'utils';
+import { classnames, queryString } from 'utils';
 import * as strings from 'utils/strings'; // TODO merge into utils.
 import { Layout } from 'components/layout';
 import { sysconfig } from 'systems';
@@ -57,8 +57,9 @@ export default class SearchPage extends Component {
     const newOffset = data.offset || 0;
     const newSize = data.size || sysconfig.MainListSize;
     const encodedQuery = strings.encodeAdvancedQuery(data.query) || '-';
-    const pathname = `/${sysconfig.SearchPagePrefix}/${encodedQuery}/${newOffset}/${newSize}`;
-    this.dispatch(routerRedux.push(pathname));
+    const pathname = `/${sysconfig.SearchPagePrefix}/${encodedQuery}`;
+    const search = queryString.stringify({ offset: newOffset, size: newSize });
+    this.props.dispatch(routerRedux.push({ pathname, search }));
   };
 
   render() {

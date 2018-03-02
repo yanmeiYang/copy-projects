@@ -19,7 +19,7 @@ export default class IndexPage extends Component {
 
   onSearch = ({ query }) => {
     if (query && query.trim() !== '') {
-      router.push(`/${sysconfig.SearchPagePrefix}/${query}/0/20`);
+      router.push(`/${sysconfig.SearchPagePrefix}/${query}`);
     }
   };
 
@@ -42,7 +42,7 @@ export default class IndexPage extends Component {
             <IndexHotLinks
               key={100}
               links={sysconfig.IndexPage_QuickSearchList}
-              urlFunc={query => `/${sysconfig.SearchPagePrefix}/${query}/0/${sysconfig.MainListSize}`}
+              urlFunc={query => `/${sysconfig.SearchPagePrefix}/${query}`}
             />,
           ]}
         />

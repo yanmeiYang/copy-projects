@@ -1,0 +1,87 @@
+@import "~themes/vars";
+
+.searchAssistant {
+  display: flex; flex-direction: column;
+  margin: 5px 2px; padding: 8px 12px;
+  border: 1px solid rgb(230, 230, 230);
+  border-radius: 2px;
+  background-color: #f0ffff; //rgb(249, 249, 249);
+  color: #555;
+
+  .columnBox { display: flex; flex-direction: column; }
+  .rowBox { display: flex; flex-direction: row; }
+
+  .rowBox .leftBox {
+    .rowBox; justify-content: flex-start; flex-wrap: wrap;
+  }
+
+  .spliter {
+    border-bottom: solid 1px #eee;
+    margin-bottom: 6px;
+    height: 6px;
+  }
+
+  .w, .ww { width: 100px; }
+  .w.zh, .ww.zh { width: 52px; }
+  .w { .columnBox }
+  .ww { .rowBox; flex-shrink: 0; justify-content: space-between; }
+
+  .kgBlock { .rowBox; margin-top: 5px; }
+
+  .randomWord, .randomIconColor { color: #aaaaaa; }
+
+  .paddingRight {
+    .columnBox; padding-right: 4px;
+    .kgNote { color: #999; }
+  }
+
+  .box1, .leftBox {
+    :global {
+      .ant-checkbox-wrapper {
+        margin-left: 0; margin-right: 8px;
+        padding-left: 4px;
+        padding-bottom: 1px;
+      }
+      .ant-checkbox-wrapper:hover {
+        border-radius: 2px;
+        background-color: #eee;
+      }
+    }
+  }
+
+  .paddingLeftButton { padding-left: 10px; }
+
+  .clearBtnStyle {
+    padding: 0 0px;
+    font-size: 12px;
+    border-radius: 0px;
+    height: 0px;
+    border: 0px;
+    color: #1890ff;
+  }
+
+  //.boxButton {
+  //  margin-top: 8px;
+  //
+  //  :global .ant-btn {
+  //    padding: 0 18px 0 18px; font-size: 12px; height: 24px;
+  //  }
+  //}
+
+
+}
+
+//@media (min-width: 375px) {
+//  .searchAssistant {
+//    flex-wrap: wrap;
+//    .box {
+//      flex-wrap: wrap;
+//    }
+//    .kgBlock {
+//      flex-wrap: wrap;
+//    }
+//    .leftBox {
+//      flex-wrap: wrap;
+//    }
+//  }
+//}

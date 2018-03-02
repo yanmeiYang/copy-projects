@@ -6,6 +6,8 @@
  */
 import * as profileUtils from 'utils/profile-utils';
 
+const nextBridge = '';
+
 const toNextPersons = (persons) => {
   if (persons) {
     return persons.map(person => toNextPerson(person));
@@ -48,6 +50,7 @@ const toNextPerson = (person) => {
       activity_indices: person.activity_indices, // TODO ccf 的麻烦
 
       labels: '', // TODO 旧数据没有。
+      dims: person.dims,
 
       // additional old data.
       pin: person.pin,

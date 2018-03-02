@@ -270,7 +270,7 @@ export async function nextAPI(payload) {
   // const actions = options.data && options.data.map(query => `${query.action}+${query.eventName}`);
   const actionName = actions && actions.join(',');
 
-  const url = `${nextAPIURL}/${type || 'query'}?a=${actionName}`;
+  const url = `${nextAPIURL}/${type || 'magic'}?a=${actionName}`;
   const result = request(url, options);
   return result;
 }

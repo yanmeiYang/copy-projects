@@ -41,40 +41,7 @@ export default class SearchSorts extends PureComponent {
   };
 
   render() {
-    const { rightZone, sortType } = this.props;
-    const sorts = this.props.sorts || defaultSorts;
-    if (!sorts || sorts.length <= 0) {
-      return false;
-    }
-
-    // render rightZone
-    const rightZoneJSXs = rightZone && rightZone.length > 0 &&
-      <div className={styles.exportButtonZone}>
-        {rightZone && rightZone.length > 0 && rightZone.map((block) => {
-          return block && block({ sortType });
-        })}
-      </div>;
-
-    // TODO but div ???
-    const rightZoneJSX = <Hole fill={rightZone} param={{ sortType }} />;
-
-    return (
-      <Tabs
-        className={classnames(styles.searchSorts)}
-        defaultActiveKey={sortType}
-        activeKey={sortType}
-        size="small"
-        onChange={this.onOrderChange}
-        tabBarExtraContent={rightZoneJSXs}
-      >
-        {sorts.map((sortItem) => {
-          const icon = sortItem === sortType ? <i className="fa fa-sort-amount-desc" /> : '';
-          const label =
-            <FM id={`com.search.sort.label.${sortItem}`} defaultMessage={sortItem} />;
-          return <TabPane tab={<span>{label} {icon}</span>} key={sortItem} />;
-        })}
-      </Tabs>
-    );
+    return ""
   }
 }
 

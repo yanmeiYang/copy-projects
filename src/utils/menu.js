@@ -36,9 +36,9 @@ const allMenus = [{ id: 1, icon: 'laptop', name: '专家搜索', router: '/' },
   },
 ];
 
-const getMenusByUser = (user, role) => {
+const getMenusByUser = (user, role, index) => {
   const menus = [];
-  const all = allMenus.slice();
+  const all = allMenus.slice(index);
   if (role && role.admin) {
     menus.push(all);
   } else if (role && role.admin === false && user.hasOwnProperty('first_name')) {
@@ -48,7 +48,12 @@ const getMenusByUser = (user, role) => {
   }
   // todo 通过配置文件完成
   if (System !== 'ccf') {
-    menus[0].splice(2, 1);
+    if (index === 0) {
+      menus[0].splice(2, 1);
+    } else {
+      menus[0].splice(1, 1);
+    }
+
   }
   return menus;
 };

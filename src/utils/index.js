@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import * as config from './config';
 import { getMenusByUser } from './menu';
 import request, { nextAPI, wget } from './request';
+import apiBuilder from './next-api-builder';
 import { color } from './theme';
 import * as reflect from './reflect';
 import { compare } from './compare';
@@ -91,14 +92,6 @@ const createURL = (path, params, newParams) => {
   return url;
 };
 
-// 处理umi所有url后面都有一个.html的问题. 这个问题其实可以解决滴.
-const url = (url) => {
-  if (url && !url.trim().endsWith('.html')) {
-    return `${url.trim()}.html`;
-  }
-  return url;
-};
-
 export {
   config,
   classnames,
@@ -111,11 +104,10 @@ export {
 
   getMenusByUser,
   request, nextAPI, wget,
+  apiBuilder,
   loadD3, loadD3v3, loadScript, loadECharts, loadBMap, loadGoogleMap,
   ensure,
   color,
   queryURL,
   getTwoDecimal,
-
-  url,
 };

@@ -101,6 +101,13 @@ const notify = (action, eventName) => {
   return createBasicChains({ action, eventName });
 };
 
+const create = (action, eventName) => {
+  if (!action) {
+    throw new ParamError('Parameter action can\'t be empty.');
+  }
+  return createBasicChains({ action, eventName });
+};
+
 /**
  * NEXT-API Query Builder
  */
@@ -113,6 +120,8 @@ const apiBuilder = {
   alter,
 
   notify,
+
+  create,
 
   // alter: () => {},
   // run: () => {},
@@ -130,7 +139,7 @@ const fseg = {
 const F = {
   // Helper Options.
 
-  Type: { Query: 'query', Alter: 'alter' },
+  // Type: { Query: 'query', Alter: 'alter', Magic: 'magic' },
 
   // all available entities in system.
   Entities: { Person: 'person', Publication: 'pub', Venue: 'venue' },
@@ -144,15 +153,11 @@ const F = {
     RevieweRreport: 'RevieweRreport',
     ReviewerQuery: 'ReviewerQuery',
     ReviewerDownloadCSV: 'ReviewerDownloadCSV',
+    ReviewerClickPersons: 'ReviewerClickPersons',
   }, // query actions.
   alter: {
     alter: 'alter',
     ReviewerProject: 'ReviewerProject',
-    ReviewerClickPersons: 'ReviewerClickPersons',
-    ReviewerSendTestMail: 'ReviewerSendTestMail',
-    ReviewerConfirmTestMail: 'ReviewerConfirmTestMail',
-    ReviewerSendMail: 'ReviewerSendMail',
-    ReviewerStartCrawl: 'ReviewerStartCrawl',
   },
   notify: { feedback: 'feedback' },
 
@@ -168,7 +173,7 @@ const F = {
   // alter operations, TODO this will be replaced by opts.
   alterop: { upsert: 'upsert', update: 'update', delete: 'delete' },
 
-  alters: { alter: 'alter', dims: 'dims', }, // alter actions.
+  alters: { alter: 'alter', dims: 'dims' }, // alter actions.
 
 
   // Available Fields
@@ -179,12 +184,60 @@ const F = {
     },
     person_in_PersonList: [
       'id', 'name', 'name_zh', 'avatar', 'tags',
-      { profile: ['position', 'affiliation'] },
+      { profile: ['position', 'affiliation', 'org'] },
       { indices: fseg.indices_all },
     ],
   },
 };
 
+const Action = {
+  search: {
+    search: 'search.search',
+  },
+  person_eb: {
+    alter: 'person_eb.alter',
+  },
+  dm_intellwords: {
+    expand: 'dm_intellwords.expand',
+  },
+  reviewer: {
+    ListProject: 'reviewer.ListProject',
+    GetProject: 'reviewer.GetProject',
+    CreateProject: 'reviewer.CreateProject',
+    UpdateProject: 'reviewer.UpdateProject',
+    DeleteProject: 'reviewer.DeleteProject',
+    UploadPDF: 'reviewer.UploadPDF',
+    GetReport: 'reviewer.GetReport',
+    GetClickPersons: 'reviewer.GetClickPersons',
+    DownloadCSV: 'reviewer.DownloadCSV',
+    RequestCrawlList: 'reviewer.RequestCrawlList',
+    ReviewerQuery: 'reviewer.ReviewerQuery',
+    SendTestMail: 'reviewer.SendTestMail',
+    ConfirmTestMail: 'reviewer.ConfirmTestMail',
+    SendMail: 'reviewer.SendMail',
+    RevieweOrg: 'reviewer.RevieweOrg',
+    StartCrawl: 'reviewer.StartCrawl',
+    CountProject: 'reviewer.CountProject',
+  },
+  organization: {
+    Search: 'search.Search',
+    Alter: 'organization.Alter',
+    Delete: 'organization.Delete',
+    search: 'search.search',
+
+  },
+  expertbase: {
+    Alter: 'expertbase.Alter',
+    Move: 'expertbase.Move',
+    Delete: 'expertbase.Delete',
+  },
+  tob: {
+    permission: 'tob.auth.functionpermission',
+    roles: 'tob.auth.roles',
+    Schema: 'tob.permission.Schema',
+    getRole: 'tob.permission.GetRole',
+  },
+};
 
 // ------------------ Helper Functions --------------------------
 //
@@ -243,4 +296,4 @@ const filtersToQuery = (nextapi, searchFiltersFromAggregation) => {
 
 const H = { filtersToQuery, filterByEBs };
 
-export { apiBuilder, F, H };
+export { apiBuilder, Action, F, H };

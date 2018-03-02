@@ -1,5 +1,6 @@
 const takeLatest = { type: 'takeLatest' };
 
-module.exports = {
-  takeLatest,
-};
+export { takeLatest }
+// module.exports = {
+//   takeLatest,
+// };

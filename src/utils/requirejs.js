@@ -15,9 +15,18 @@ const scripts = {
   d3v3: `${resRoot}/lib/d3.v3.js`,
   d3: `${resRoot}/lib/d3.v4.js`,
   echarts: `${resRoot}/lib/echarts.js`,
+  jQuery: `${resRoot}/lib/jquery.js`,
+  html2canvas: `${resRoot}/lib/html2canvas.js`,
+  saveAs: `${resRoot}/lib/saveAs.js`,
+  echarts4BMap: `${resRoot}/lib/echarts4.0/echarts.min.js`, //not original script,with BMap javascript
+  echarts4: `${resRoot}/lib/mapbox/echarts.min.js`, //original echarts script
+  mapboxgldev: `${resRoot}/lib/mapbox/mapbox-gl-dev.js`,
+  mapboxstyle: `${resRoot}/lib/mapbox/mapbox-gl.css`,
+  EchartsLayer: `${resRoot}/lib/mapbox/EchartsLayer.js`,
+  wordcloud: `${resRoot}/lib/echarts4.0/echarts-wordcloud.js`,
 };
 
-// deprecated
+// // deprecated
 // const Libraries = {
 //   BMap: [
 //     <script
@@ -36,9 +45,14 @@ const scripts = {
 //   d3v3: [<script key="d3v3" type="text/javascript" src="/lib/d3.v3.js" async defer />],
 //   d3: [<script key="d3v3" type="text/javascript" src="/lib/d3.v4.js" async defer />],
 //   echarts: [<script key="echarts" type="text/javascript" src="/lib/echarts.js" async defer />],
-//
+//   jquery: [<script key="jquery" type="text/javascript" src="/lib/jquery.js" async defer />],
+//   html2canvas: [<script key="html2canvas" type="text/javascript" src="/lib/html2canvas.js" async
+//                         defer />],
+//   saveAs: [<script key="saveAs" type="text/javascript" src="/lib/saveAs.js" async defer />],
+//   echarts4: [<script key="echarts" type="text/javascript" src="/lib/echarts4.0/echarts.min.js"
+//                      async defer />],
 // };
-
+//
 // const findLibs = (keys) => {
 //   if (keys && keys.length > 0) {
 //     const libs = {};
@@ -254,6 +268,48 @@ const loadECharts = (cb) => {
   loadScript('echarts', { check: 'echarts' }, cb);
 };
 
+const loadJquery = (cb) => {
+  loadScript('jQuery', { check: 'jQuery' }, cb);
+};
+
+const loadHtml2canvas = (cb) => {
+  loadScript('html2canvas', { check: 'html2canvas' }, cb);
+};
+
+const loadSaveAs = (cb) => {
+  loadScript('saveAs', { check: 'saveAs' }, cb);
+};
+
+const loadECharts4 = (cb) => {
+  loadScript('echarts4', { check: 'echarts' }, cb);
+};
+
+const loadEcharts4WithMapbox = (cb) => {
+  loadScript('echarts4', { check: 'echarts' }, () => {
+    loadScript('mapboxgldev', { check: 'echarts' }, () => {
+      loadScript('EchartsLayer', { check: 'echarts' }, cb);
+    });
+  });
+};
+
+const loadEcharts4WithBMap = (cb) => {
+  loadScript('BMap', { check: 'BMap_loadScriptTime' }, () => {
+    loadScript('BMap2', { check: 'BMap' }, () => {
+      loadScript('echarts4BMap', { check: 'echarts' }, cb);//this script is edited by Shaozhou
+    });
+  });
+};
+
+const loadEcharts4WithGeo = (cb) => {
+  loadScript('echarts4', { check: 'echarts' }, cb);
+};
+
+const loadEchartsWithWordcloud = (cb) => {
+  loadScript('echarts4', { check: 'echarts' }, () => {
+    loadScript('wordcloud', { check: 'echarts' }, cb);
+  });
+};
+
 export {
   loadScript,
   loadD3v3,
@@ -261,6 +317,14 @@ export {
   loadECharts,
   loadBMap,
   loadGoogleMap,
+  loadJquery,
+  loadHtml2canvas,
+  loadSaveAs,
+  loadECharts4,
   // mergeLibs,
   ensure,
+  loadEcharts4WithMapbox,
+  loadEcharts4WithBMap,
+  loadEcharts4WithGeo,
+  loadEchartsWithWordcloud,
 };

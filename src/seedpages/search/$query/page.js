@@ -7,13 +7,13 @@ import { Layout } from 'components/layout';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 import { Auth } from 'hoc';
-// import SearchComponent from 'routes/search/SearchComponent';
+import SearchComponent from 'components/searchpage/SearchComponent';
 import styles from './page.less';
 
 const tc = applyTheme(styles);
 
 @Page()
-@connect(({ app, search, loading }) => ({ app, search, loading }))
+@connect(({ app, search, loading, location }) => ({ app, search, loading, location }))
 @Auth @withRouter
 export default class SearchPage extends Component {
   constructor(props) {
@@ -58,7 +58,6 @@ export default class SearchPage extends Component {
     const newSize = data.size || sysconfig.MainListSize;
     const encodedQuery = strings.encodeAdvancedQuery(data.query) || '-';
     const pathname = `/${sysconfig.SearchPagePrefix}/${encodedQuery}/${newOffset}/${newSize}`;
-    console.log('=========== encode query is: ', pathname);
     this.dispatch(routerRedux.push(pathname));
   };
 
@@ -69,20 +68,20 @@ export default class SearchPage extends Component {
     return (
       <Layout contentClass={tc(['searchPage'])} onSearch={this.onSearchBarSearch}
               query={query}>
-        还没做完
-        {/*<SearchComponent // Example: include all props.*/}
-        {/*className={styles.SearchBorder} // additional className*/}
-        {/*sorts={sysconfig.Search_SortOptions}*/}
-        {/*expertBaseId={expertBaseId}*/}
-        {/*onSearchBarSearch={this.onSearchBarSearch}*/}
-        {/*showSearchBox={false}*/}
-        {/*disableFilter={sysconfig.Search_DisableFilter}*/}
-        {/*disableExpertBaseFilter={sysconfig.Search_DisableExpertBaseFilter}*/}
-        {/*disableSmartSuggest={!sysconfig.Search_EnableSmartSuggest}*/}
-        {/*// disableSearchKnowledge={sysconfig.Search_DisableSearchKnowledge}*/}
-        {/*rightZoneFuncs={theme.SearchComponent_RightZone}*/}
-        {/*fixedExpertBase={sysconfig.Search_FixedExpertBase}*/}
-        {/*/>*/}
+
+        <SearchComponent // Example: include all props.
+          className={styles.SearchBorder} // additional className
+          sorts={sysconfig.Search_SortOptions}
+          expertBaseId={expertBaseId}
+          onSearchBarSearch={this.onSearchBarSearch}
+          showSearchBox={false}
+          disableFilter={sysconfig.Search_DisableFilter}
+          disableExpertBaseFilter={sysconfig.Search_DisableExpertBaseFilter}
+          disableSmartSuggest={!sysconfig.Search_EnableSmartSuggest}
+          // disableSearchKnowledge={sysconfig.Search_DisableSearchKnowledge}
+          rightZoneFuncs={theme.SearchComponent_RightZone}
+          fixedExpertBase={sysconfig.Search_FixedExpertBase}
+        />
       </Layout>
     );
   }

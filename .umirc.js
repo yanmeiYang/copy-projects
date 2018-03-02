@@ -5,7 +5,7 @@ export default {
     title: 'Unnamed Page',
   },
 
-  loading: './src/components/ui/Loader.js',
+  // loading: './src/components/ui/Loader.js',
   disableServiceWorker: false,
   preact: false,
 

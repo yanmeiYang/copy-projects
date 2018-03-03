@@ -5,7 +5,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { resRoot } from 'core';
-import { connect, Models, renderChildren } from 'engine';
+import { connect, renderChildren } from 'engine';
 import { Helmet } from 'react-helmet';
 import ReactGA from 'react-ga';
 import NProgress from 'nprogress';
@@ -25,7 +25,7 @@ const debug = require('debug')('aminer:engine');
 
 let lastHref;
 
-@Models([require('models/app')])
+// @Models([require('models/app')])
 @connect(({ app, loading }) => ({ app, loading }))
 export default class Layout extends PureComponent {
   static displayName = 'Layout';

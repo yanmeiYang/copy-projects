@@ -12,7 +12,7 @@ export default class IndexCenterZone extends React.PureComponent {
     return (
       <div className={styles.bigNavi}>
         <div className={styles.inner}>
-          <Link to="/uniSearch/-/0/20" href="/uniSearch/-/0/20">
+          <Link to="/search/-" href="/search/-">
             <div className={styles.blockItem}>
               <div className={styles.outerBackground}>
                 <span alt="" className={classnames('icon', styles.expertSearch)} />

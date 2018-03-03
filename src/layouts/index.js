@@ -39,7 +39,7 @@ const messages = initIntl();
 
 const withIntl = (Child) => {
   return React.createElement(IntlProvider,
-    { locale: Locale, messages },
+    { locale: Locale, messages: {} }, // TODO to fix a bug of umi.
     Child,
   );
 };

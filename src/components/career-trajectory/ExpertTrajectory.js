@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, Models } from 'engine';
+import { connect } from 'engine';
 // import { withRouter } from 'dva/router';
 import queryString from 'query-string';
 import styles from './ExpertTrajectory.less';
@@ -9,7 +9,7 @@ import { loadEchartsWithBMap, showCurrentLine, addMarkers } from './utils/func-u
 let myChart; // used for loadScript
 let trainterval;
 
-Models([require('models/expert-trajectory')]);
+// Models([require('models/expert-trajectory')]);
 
 @connect(({ expertTrajectory, loading }) => ({ expertTrajectory, loading }))
 // @withRouter

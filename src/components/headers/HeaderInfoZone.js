@@ -45,7 +45,7 @@ export default class HeaderInfoZone extends PureComponent {
           selectedKeys={[sysconfig.Locale]} onClick={this.onChangeLocale}>
       {locales && locales.map((local) => (
         <Menu.Item key={local}>
-          <FM id={`system.lang.option_${local}`} defaultMessage={`system.lang.option_${local}`} />
+          <FM id={`system.lang.option_${local}`} defaultMessage={local} />
         </Menu.Item>
       ))}
     </Menu>
@@ -81,10 +81,10 @@ export default class HeaderInfoZone extends PureComponent {
             <Dropdown overlay={this.langDropdownMenu} placement="bottomCenter">
               <a className={classnames('ant-dropdown-link')}>
                 <div className={styles.longLanguage}>
-                  <FM id="system.lang.show" defaultMessage="system.lang.show" />&nbsp;
+                  <FM id="system.lang.show" defaultMessage="Lang" />&nbsp;
                 </div>
                 <div className={styles.simpleLanguage}>
-                  <FM id="system.lang.simple" defaultMessage="system.lang.simple" />&nbsp;
+                  <FM id="system.lang.simple" defaultMessage="Lang" />&nbsp;
                 </div>
                 <Icon type="down" />
               </a>

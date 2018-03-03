@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, Link, router, Models } from 'engine';
+import { connect, Link } from 'engine';
 import queryString from 'query-string';
 import { sysconfig } from 'systems';
 import { Slider, InputNumber, Row, Col, Button, Tooltip, Icon, Modal, Select } from 'antd';
@@ -23,7 +23,7 @@ let myChart;
 let trajInterval;
 const Option = Select.Option;
 
-Models([require('models/expert-trajectory')]);
+// Models([require('models/expert-trajectory')]);
 @connect(({ expertTrajectory, loading, app }) => ({ expertTrajectory, loading, app }))
 // @withRouter
 export default class ExpertHeatmap extends React.Component {

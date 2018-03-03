@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, Page, Link, router, } from 'engine';
+import { connect, Page, Link } from 'engine';
 import { Layout } from 'components/layout';
 import { FormattedMessage as FM } from 'react-intl';
 import { Button, Modal, Row, Form, Input, Icon } from 'antd';

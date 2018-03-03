@@ -9,7 +9,7 @@ import { routerRedux } from 'dva/router';
 import router from 'umi/router';
 
 import { Form } from 'antd';
-import { Page, Models, withIntl } from './engine';
+import { Page } from './engine';
 
 const FormCreate = Form.create;
 
@@ -22,13 +22,13 @@ const renderChildren = (children) => {
 };
 
 export {
-  Page, Models,
+  Page,
 
   connect, renderChildren,
 
   Link, router, withRouter, routerRedux,
 
-  withIntl, FormCreate,
+  FormCreate,
 
 };
 

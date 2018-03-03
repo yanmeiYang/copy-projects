@@ -1,5 +1,4 @@
 import { message } from 'antd';
-import createHistory from 'history/createBrowserHistory';
 
 const ERROR_MSG_DURATION = 3; // 3 秒
 
@@ -19,5 +18,4 @@ export default {
       message.error(err.message, ERROR_MSG_DURATION);
     }
   },
-  // history: createHistory(),
 };

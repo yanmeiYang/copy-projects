@@ -4,7 +4,7 @@
 import React, { PureComponent } from 'react';
 import { sysconfig } from 'systems';
 import classnames from 'classnames';
-import { Link } from 'engine';
+import Link from 'umi/link';
 import { theme } from 'themes';
 import { Menu, Icon, Dropdown } from 'antd';
 import { FormattedMessage as FM } from 'react-intl';

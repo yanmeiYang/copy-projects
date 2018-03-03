@@ -133,6 +133,25 @@ const ccfLabelMap = {
   '5949c2f99ed5dbc2147fd854': '会员',
 };
 
+const resultToArray = (data) => {
+  let newData;
+  const pdata = data.data;
+  if (pdata.data && Array.isArray(pdata.data)) {
+    newData = pdata.data;
+    return newData;
+  } else {
+    newData = [pdata];
+    return newData;
+  }
+};
+
+const ccfLabelMap = {
+  '592f6d219ed5dbf59c1b76d4': '高级会员',
+  '58ddbc229ed5db001ceac2a4': '杰出会员',
+  '592f8af69ed5db8bb68d713b': '会士',
+  '5949c2f99ed5dbc2147fd854': '会员',
+};
+
 const toNextCCFLabelFromEBID = (ebid) => {
   return `CCF_MEMBER_${ccfLabelMap[ebid]}`;
 };
@@ -142,4 +161,5 @@ export {
   toNextAggregation,
   toNextCCFLabelFromEBID,
   toNextIndices,
+  resultToArray
 };

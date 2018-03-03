@@ -4,12 +4,12 @@
 import React, { Component } from 'react';
 import { Menu, Dropdown, Icon } from 'antd';
 import { connect } from 'dva';
-import { routerRedux } from 'engine';
+import { routerRedux, Link } from 'dva/router';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 
 import { Layout } from 'antd';
-import { FormattedMessage as FM } from 'react-intl';
+import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { compare } from 'utils/compare';
 
 import styles from './Navigator.less';
@@ -51,12 +51,19 @@ const NaviConfig = {
     data: 'query',
     pageSignature: 'trend',
   },
-  ExpertTrajectory: {
-    key: 'ExpertTrajectory',
-    label: 'DEV:专家迁移',
-    url: '/expert-trajectory',
+  SingleTrajectory: {
+    key: 'SingleTrajectory',
+    label: 'DEV:专家个人迁移',
+    url: '/single-trajectory',
     data: 'query',
-    pageSignature: 'expert-trajectory',
+    pageSignature: 'single-trajectory',
+  },
+  GroupOverview: {
+    key: 'GroupOverview',
+    label: 'DEV:专家群体迁移',
+    url: '/group-overview',
+    data: 'query',
+    pageSignature: 'group-overview',
   },
   ExpertBase: { // bole 专有
     key: 'ExpertBase',
@@ -78,12 +85,58 @@ const NaviConfig = {
     url: `/uniSearch/:query/0/${sysconfig.MainListSize}`,
     pageSignature: 'uniSearch',
   },
+  News: {
+    key: 'News',
+    label: '新闻',
+    url: '/newsminer',
+    pageSignature: 'newsminer',
+  },
+  crossSearch: {
+    key: 'crossSearch',
+    label: '交叉搜索',
+    url: '/cross/crossformilitary',
+    pageSignature: 'cross',
+  },
+
+  Project: {
+    key: 'Project',
+    label: '项目搜索 TODO',
+    url: '',
+    pageSignature: 'project',
+  },
+  Seminar: {
+    key: 'Seminar',
+    label: '活动',
+    url: '/seminar',
+    pageSignature: 'seminar',
+  },
+  Nsfcai: {
+    key: 'Nsfcai',
+    label: '专家库',
+    url: '/',
+    pageSignature: ['/', '/hieb'],
+  },
+  Coi_thin: { // nsfcai 专有
+    key: 'Coi_thin',
+    label: 'COI检测(细)',
+    url: '/conflicts',
+    data: 'coyear',
+    pageSignature: 'conflicts',
+  },
+  Coi_rough: { // nsfcai 专有
+    key: 'Coi_rough',
+    label: 'COI检测(粗)',
+    url: '/conflictrough',
+    data: 'coyear',
+    pageSignature: 'conflictrough',
+  },
 };
 
 const defaultNavis = ['ExpertSearch', 'ExpertMap', 'Relation', 'KnowledgeGraph', 'TrendPrediction'];
 // Function in development.
 if (process.env.NODE_ENV !== 'production') {
-  defaultNavis.push('ExpertTrajectory');
+  defaultNavis.push('SingleTrajectory');
+  defaultNavis.push('GroupOverview');
 }
 
 const defaultQuery = '-';
@@ -135,9 +188,13 @@ export default class Navigator extends Component {
     const theQuery = this.props.query || defaultQuery;
     // this.setState({ current: conf.label });
     if (conf && conf.data) {
-      const query = {};
-      query[conf.data] = theQuery;
-      dispatch(routerRedux.push({ pathname: conf.url, search: `?query=${theQuery}` }));
+      if (conf.data === 'coyear') {
+        dispatch(routerRedux.push({ pathname: conf.url, search: '?coyear=5' }));
+      } else {
+        const query = {};
+        query[conf.data] = theQuery;
+        dispatch(routerRedux.push({ pathname: conf.url, search: `?query=${theQuery}` }));
+      }
     } else {
       dispatch(routerRedux.push({ pathname: conf.url.replace(':query', theQuery) }));
     }
@@ -161,7 +218,16 @@ export default class Navigator extends Component {
         {this.navis.map((naviKey) => {
           const c = NaviConfig[naviKey];
           // const path = window.location.pathname;
-          let currentClass = path.indexOf(c.pageSignature) >= 0 ? 'current' : '';
+          const sigs = typeof c.pageSignature === 'string' ? [c.pageSignature]: c.pageSignature;
+          let currentClass = null;
+          for (const sig of sigs) {
+            if (sig === '/' && path === '/') {
+              currentClass = 'current';
+            } else if (path !== '/') {
+              currentClass = path.indexOf(sig) >= 0 ? 'current' : '';
+            }
+          }
+
           if (path.indexOf('expert-googlemap') >= 0 && naviKey === 'ExpertMap') {
             currentClass = 'current';
           }

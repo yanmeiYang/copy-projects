@@ -89,7 +89,7 @@ export default class TobButton extends PureComponent {
                 <Link to="/cross"><Icon type="close" />交叉搜索</Link>
               </Menu.Item>
               <Menu.Item>
-                <Link to="/toolscompare">姓名比较工具</Link>
+                <Link to="/tools/compareperson">姓名比较工具</Link>
               </Menu.Item>
 
             </Menu>

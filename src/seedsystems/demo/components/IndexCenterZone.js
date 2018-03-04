@@ -32,7 +32,7 @@ export default class IndexCenterZone extends React.PureComponent {
               </div>
             </div>
           </Link>
-          <Link to="/relation-graph-page" href="/relation-graph-page">
+          <Link to="/relation-graph" href="/relation-graph">
             <div className={styles.blockItem}>
               <div className={styles.outerBackground}>
                 <span alt="" className={classnames('icon', styles.relations)} />

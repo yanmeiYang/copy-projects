@@ -33,9 +33,9 @@ const NaviConfig = {
   Relation: {
     key: 'Relation',
     label: '关系',
-    url: '/relation-graph-page',
+    url: '/relation-graph',
     data: 'query',
-    pageSignature: 'relation-graph-page',
+    pageSignature: 'relation-graph',
   },
   KnowledgeGraph: {
     key: 'KnowledgeGraph',

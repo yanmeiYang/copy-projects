@@ -1,0 +1,84 @@
+.kgContainer {
+  width: 100%;
+  .emptyBlock {
+    display: flex; justify-content: center; align-items: center;
+    width: 100%; height: 80px;
+  }
+  .node {
+    .level_0 { font-size: 15px;
+      .item { padding: 8px 8px 8px calc(18px * 0 + 8px); }
+    }
+    .level_1 { font-size: 15px;
+      .item { padding: 8px 8px 8px calc(18px * 1); }
+    }
+    .level_2 { font-size: 14px;
+      .item { padding: 8px 8px 8px calc(18px * 2); }
+    }
+    .level_3 { font-size: 13px;
+      .item { padding: 6px 8px 6px calc(18px * 3); }
+    }
+    .level_4 { font-size: 12px;
+      .item { padding: 4px 8px 4px calc(18px * 4); }
+    }
+    .level_5 { font-size: 12px;
+      .item { padding: 4px 8px 4px calc(18px * 5); }
+    }
+    .level_6 { font-size: 12px;
+      .item { padding: 2px 8px 2px calc(18px * 6); }
+    }
+    .level_7 { font-size: 11px;
+      .item { padding: 2px 8px 2px calc(18px * 7); }
+    }
+    .level_8 { font-size: 11px;
+      .item { padding: 2px 8px 2px calc(18px * 8); }
+    }
+
+    .search { font-size: 10px; margin-left: 24px; color: #333 }
+
+    .item {
+      border: solid 1px transparent;
+      .title { display: flex; justify-content: space-between;
+        a { color: #333 }
+        .level { color: #999 }
+      }
+      .orange { color: rgb(255, 127, 14) }
+    }
+    .item:hover {
+      background-color: #f0f0f0;
+      border-radius: 1px;
+      a { color: #222; }
+      :global {
+        i.fa { color: red; }
+      }
+    }
+    .item.current {
+      a { color: rgb(255, 127, 14) }
+    }
+    .item.select {
+      a { color: rgb(255, 127, 14); font-weight: bold; }
+
+      border: solid 1px rgba(255, 127, 14, 0.3); border-radius: 1px;
+      background-color: rgba(255, 127, 14, 0.1);
+      :global {
+        i.fa { color: red; }
+      }
+    }
+
+    .tools {
+      font-size: 12px; padding: 0 0 0 8px;
+      line-height: 12px;
+      .label { font-weight: normal; }
+      .tool {
+        color: green; font-weight: normal; padding: 2px 8px;
+        border: solid 0px #ddd; box-shadow: 0 0 0px #ddd;
+        font-size: 12px; min-width: 60px;
+        :global {
+          i { margin-right: 4px; }
+        }
+      }
+      .tool span:hover { text-decoration: underline; }
+    }
+
+  }
+  .active { color: #333 }
+}

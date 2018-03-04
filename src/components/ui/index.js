@@ -4,4 +4,4 @@
 import Message from './Message';
 import Loader from './Loader';
 
-module.exports = { Message, Loader };
+export { Message, Loader };

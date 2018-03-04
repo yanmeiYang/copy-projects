@@ -2,8 +2,7 @@
  * Created by ranyanchuan on 2017/9/12.
  */
 
-import { request, config } from '../utils';
-import { externalRequest } from '../utils/request';
+import { request, config } from 'utils';
 
 const { api } = config;
 export async function getDiscipline(params) {

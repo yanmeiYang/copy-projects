@@ -48,12 +48,13 @@ export default class IndexCenterZone extends React.PureComponent {
                 <span alt="" className={classnames('icon', styles.topicTrend)} />
               </div>
               <div className={styles.iconDesc}>
-                <FM id="com.searchTypeWidget.label.TrendPrediction" defaultMessage="Topic Trend" />
+                <FM id="com.searchTypeWidget.label.TrendPrediction"
+                    defaultMessage="Topic Trend" />
               </div>
             </div>
           </Link>
 
-          <Link to="/cross/index" href="/cross/index">
+          <Link to="/cross" href="/cross">
             <div className={styles.blockItem}>
               <div className={styles.outerBackground}>
                 <span alt="" className={classnames('icon', styles.crossSearch)} />
@@ -71,7 +72,7 @@ export default class IndexCenterZone extends React.PureComponent {
               </div>
               <div className={styles.iconDesc}>
                 <FM id="com.searchTypeWidget.label.seminar"
-                defaultMessage="Seminar" />
+                    defaultMessage="Seminar" />
               </div>
             </div>
           </a>

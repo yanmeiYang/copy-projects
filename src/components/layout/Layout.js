@@ -4,8 +4,8 @@
  */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { resRoot } from 'core';
 import { connect, renderChildren } from 'engine';
+import withIntl from 'engine/i18n';
 import { Helmet } from 'react-helmet';
 import ReactGA from 'react-ga';
 import NProgress from 'nprogress';
@@ -126,25 +126,11 @@ export default class Layout extends PureComponent {
 
     const title = pageTitle || (pageSubTitle ? `${sysconfig.PageTitle} | ${pageSubTitle}` : sysconfig.PageTitle);
 
-    return (
+    return withIntl(
       <LayoutComponent className={tc(['layout'])}>
         <Helmet>
           <title>{title}</title>
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <link href={`${resRoot}/sys/${sysconfig.SYSTEM}/favicon.ico`}
-                rel="icon" type="image/x-icon" />
-
-          <script src={`${resRoot}/lib/icon-font/iconfont.js`} />
-          <link rel="stylesheet" href={`${resRoot}/lib/icon-font/iconfont.css`} />
-          <link rel="stylesheet" href={`${resRoot}/lib/fa/css/font-awesome.min.css`} />
-
           {this.headerResourcesArray || false}
-
-          {/*{href.indexOf('/lab/knowledge-graph-widget') > 0 &&*/}
-          {/*<link rel="stylesheet"*/}
-          {/*href="https://cdn.rawgit.com/novus/nvd3/v1.8.1/build/nv.d3.css" />*/}
-          {/*}*/}
-
         </Helmet>
 
         {showHeader && <Header {...headerOptions} />}

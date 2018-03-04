@@ -263,6 +263,8 @@ const A = hasValue ? 'has value' : 'no';
 
 ## umijs 框架相关说明：
 
++ 注意开发pages时，修改文件内容
+
 ### 目录结构
 
 - src

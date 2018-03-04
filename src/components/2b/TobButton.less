@@ -1,0 +1,31 @@
+@import "~themes/vars";
+
+.menu {
+  height: 624px; background: #fff; box-shadow: 0 0 1px;
+
+  .headerMenuItem {
+    background-color: #666; color: white; font-size: @font-size-lg;cursor: auto;
+  }
+
+  :global {
+    .ant-layout-sider { margin-bottom: 20px; }
+    .ant-layout-content {
+      width: 250px;
+      .ant-menu {width: 250px}
+    }
+    .ant-menu {
+      width: 150px;
+
+      .ant-menu-item {
+        height: 30px; line-height: 30px; margin: 3px;
+      }
+
+    }
+  }
+
+  .syslogo {
+    img { width: 16px;height: 16px;vertical-align: sub;}
+    span {margin-left: 5px;}
+  }
+
+}

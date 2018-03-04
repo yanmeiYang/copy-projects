@@ -9,6 +9,7 @@ import { system } from 'core';
 import { RequireGod } from 'hoc';
 import { sysconfig, getAllSystemConfigs } from 'systems';
 import { Icon, Dropdown, Menu, Layout } from 'antd';
+import styles from './TobButton.less'
 
 @connect(({ app }) => ({ app }))
 @RequireGod
@@ -45,49 +46,40 @@ export default class TobButton extends PureComponent {
     // TODO @alice 向下滚动时，始终显示在页面顶端。
 
     const { HighlightHoles } = this.props && this.props.app;
-    const allSystemConfigs = getAllSystemConfigs();
+    const allSystemConfigs = getAllSystemConfigs(); // singleton
     const menu = (
       <div>
-        <Layout style={{ height: '624px', background: '#fff', boxShadow: '0 0 1px' }}>
-          <Layout.Sider width={150} style={{ marginBottom: '20px' }}>
-            <Menu selectedKeys={[sysconfig.SYSTEM]} style={{ width: '150px' }}>
-              <Menu.Item style={{ height: '30px', lineHeight: '30px', margin: '3px' }}>
-                <h3>快速切换系统</h3>
-              </Menu.Item>
+        <Layout className={styles.menu}>
+          <Layout.Sider width={150}>
+            <Menu selectedKeys={[sysconfig.SYSTEM]}>
+              <Menu.Item className={styles.headerMenuItem}>快速切换系统</Menu.Item>
               <Menu.Divider />
-              <Menu.Divider />
-              {allSystemConfigs && allSystemConfigs.map((src) => {
-                return (
-                  <Menu.Item key={src.SYSTEM}
-                             style={{ height: '30px', lineHeight: '30px', margin: '3px' }}>
-                    <div onClick={this.onclick.bind(this, src.SYSTEM)}>
-                      <img src={`/sys/${src.SYSTEM}/favicon.ico`}
-                           style={{ width: '10px', height: '10px' }} />
-                      <span style={{ marginLeft: '5px' }}>{src.SYSTEM}</span>
-                    </div>
-                  </Menu.Item>
-                );
-              })}
+
+              {allSystemConfigs && allSystemConfigs.map(src => (
+                <Menu.Item key={src.SYSTEM}>
+                  <div onClick={this.onclick.bind(this, src.SYSTEM)} className={styles.syslogo}>
+                    <img src={`/sys/${src.SYSTEM}/favicon.ico`} />
+                    <span>{src.SYSTEM}</span>
+                  </div>
+                </Menu.Item>
+              ))}
             </Menu>
           </Layout.Sider>
-          <Layout.Content style={{ Height: '584px' }}>
-            <Menu style={{ width: '250px' }}>
-              <Menu.Item style={{ height: '30px', lineHeight: '30px', margin: '3px' }}>
-                <h3>
-                  开发者工具
-                </h3>
-              </Menu.Item>
+
+          <Layout.Content>
+            <Menu>
+              <Menu.Item className={styles.headerMenuItem}>开发者工具</Menu.Item>
               <Menu.Divider />
-              <Menu.Divider />
+
               <Menu.Item>
-                <Link to="/2b">
-                  快速管理
-                </Link>
+                <Link to="/2b"><Icon type="home" />快速管理</Link>
+              </Menu.Item>
+
+              <Menu.Item>
+                <Link to="/cross"><Icon type="close" />交叉搜索</Link>
               </Menu.Item>
               <Menu.Item>
-                <Link to="/toolscompare">
-                  姓名比较工具
-                </Link>
+                <Link to="/toolscompare">姓名比较工具</Link>
               </Menu.Item>
               <Menu.Item>
                 <div onClick={this.setDebug.bind(this)}>

@@ -1,0 +1,145 @@
+//@import "../../themes/vars.less";
+.tabHeat {
+  .heatLayout {
+    display: flex;
+    justify-content: flex-start;
+    padding-top: 10px;
+    width: 100%;
+    text-transform: capitalize;
+
+    .yAxis {
+      width: 200px;
+      .yVal {
+        text-align: right;
+        height: 64px;
+        line-height: 64px;
+        margin-right: 3px;
+        .yTiltleDefault {
+          margin-left: 10px;
+          white-space: nowrap;
+        }
+        .yTiltle {
+          cursor: pointer;
+          margin-left: 10px;
+          white-space: nowrap;
+        }
+        .yTiltle:hover {
+          padding: 2px 10px;
+          border-radius: 5px;
+          border: 1px solid #108ee9;
+          color: #108ee9;
+        }
+      }
+
+    }
+    .heat {
+      .heatY {
+        display: flex;
+        justify-content: flex-start;
+      }
+      .heatYShadow {
+        display: flex;
+        justify-content: flex-start;
+        box-shadow: 0 0 10px 5px rgba(0, 0, 0, .35);
+        z-index: 10;
+      }
+
+      .heatX {
+        border: 1px solid #ccc;
+        height: 64px;
+        width: 64px;
+        cursor: pointer;
+      }
+      .heatXDefault {
+        border: 1px solid #ccc;
+        height: 64px;
+        width: 64px;
+      }
+
+      .author {
+        background-color: #8EC267;
+        margin-top: 14px;
+        text-align: center;
+        height: 16px;
+      }
+      .pub {
+        background-color: #92D1FF;
+        margin-top: 4px;
+        height: 16px;
+        text-align: center;
+      }
+      .heatX:hover {
+        box-shadow: 0 0 10px 5px rgba(0, 0, 0, .35);
+        z-index: 10;
+        .author:hover {
+          box-shadow: 0 0 5px 2px rgba(0, 0, 0, .35);
+        }
+        .pub:hover {
+          box-shadow: 0 0 5px 2px rgba(0, 0, 0, .35);
+        }
+      }
+      .xShadow {
+        border: 1px solid #ccc;
+        height: 64px;
+        width: 64px;
+        cursor: pointer;
+        box-shadow: -2px 0 5px #999, 0 -2px 1px #FFF, 0 2px 5px #000, 2px 0 5px #999;
+        z-index: 10;
+      }
+
+      .yShadow {
+        border: 1px solid #ccc;
+        height: 64px;
+        width: 64px;
+        cursor: pointer;
+        box-shadow: -2px 0 5px #FFF,0 -2px 5px #000, 0 2px 5px #000, 2px 0 5px rgba(255, 197, 37, 0.2);
+        z-index: 10;
+      }
+
+    }
+    .xAxis {
+      height: 150px;
+      width: 800px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      margin-bottom: 20px;
+      margin-top: 5px;
+      text-align: left;
+      .titleLayout {
+        width: 64px;
+        padding-left: 40px;
+        .xTitleDefault {
+          white-space: nowrap;
+          font-size: 12px;
+          -webkit-transform-origin: left top;
+          transform-origin: left top;
+          float: left;
+          transform: rotate(90deg);
+        }
+        .xTitle {
+          white-space: nowrap;
+          font-size: 12px;
+          -webkit-transform-origin: left top;
+          transform-origin: left top;
+          float: left;
+          transform: rotate(90deg);
+        }
+        .xTitle:hover {
+          padding: 1px 4px;
+          border-radius: 5px;
+          border: 1px solid #108ee9;
+          cursor: pointer;
+          color: #108ee9;
+        }
+      }
+
+    }
+
+  }
+  .footer{
+    text-align: center;
+    text-transform: capitalize;
+  }
+
+}

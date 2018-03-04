@@ -9,6 +9,7 @@ import { system } from 'core';
 import { RequireGod } from 'hoc';
 import { sysconfig, getAllSystemConfigs } from 'systems';
 import { Icon, Dropdown, Menu, Layout } from 'antd';
+import { classnames } from 'utils';
 import styles from './TobButton.less'
 
 @connect(({ app }) => ({ app }))
@@ -32,7 +33,8 @@ export default class TobButton extends PureComponent {
 
   setDebug = () => {
     const { dispatch, app } = this.props;
-    const { HighlightHoles = 'none' } = app || {};
+    const debug = app && app.get('debug');
+    const { HighlightHoles } = debug || {};
     dispatch({ type: 'app/setDebug', payload: { HighlightHoles: this.dfa[HighlightHoles] } });
   };
 
@@ -45,7 +47,8 @@ export default class TobButton extends PureComponent {
     // TODO @alice 并且菜单的高度为浏览器高的62%。
     // TODO @alice 向下滚动时，始终显示在页面顶端。
 
-    const { HighlightHoles } = this.props && this.props.app;
+    const { app } = this.props;
+    const { HighlightHoles } = app && app.get('debug') || {};
     const allSystemConfigs = getAllSystemConfigs(); // singleton
     const menu = (
       <div>
@@ -54,7 +57,6 @@ export default class TobButton extends PureComponent {
             <Menu selectedKeys={[sysconfig.SYSTEM]}>
               <Menu.Item className={styles.headerMenuItem}>快速切换系统</Menu.Item>
               <Menu.Divider />
-
               {allSystemConfigs && allSystemConfigs.map(src => (
                 <Menu.Item key={src.SYSTEM}>
                   <div onClick={this.onclick.bind(this, src.SYSTEM)} className={styles.syslogo}>
@@ -70,10 +72,18 @@ export default class TobButton extends PureComponent {
             <Menu>
               <Menu.Item className={styles.headerMenuItem}>开发者工具</Menu.Item>
               <Menu.Divider />
+              <Menu.Item>
+                <Link to="/2b"><Icon type="home" />后台管理</Link>
+              </Menu.Item>
+              <Menu.Divider />
 
               <Menu.Item>
-                <Link to="/2b"><Icon type="home" />快速管理</Link>
+                <div onClick={this.setDebug.bind(this)}>
+                  Holes调试: {HighlightHoles}
+                </div>
               </Menu.Item>
+
+              <Menu.Divider />
 
               <Menu.Item>
                 <Link to="/cross"><Icon type="close" />交叉搜索</Link>
@@ -81,35 +91,7 @@ export default class TobButton extends PureComponent {
               <Menu.Item>
                 <Link to="/toolscompare">姓名比较工具</Link>
               </Menu.Item>
-              <Menu.Item>
-                <div onClick={this.setDebug.bind(this)}>
-                  Holes调试: {HighlightHoles}
-                </div>
-              </Menu.Item>
-              <Menu.Item>
-                11111111
-              </Menu.Item>
-              <Menu.Item>
-                11111111
-              </Menu.Item>
-              <Menu.Item>
-                11111111
-              </Menu.Item>
-              <Menu.Item>
-                11111111
-              </Menu.Item>
-              <Menu.Item>
-                11111111
-              </Menu.Item>
-              <Menu.Item>
-                11111111
-              </Menu.Item>
-              <Menu.Item>
-                11111111
-              </Menu.Item>
-              <Menu.Item>
-                11111111
-              </Menu.Item>
+
             </Menu>
           </Layout.Content>
         </Layout>
@@ -119,8 +101,7 @@ export default class TobButton extends PureComponent {
       <div>
         <Dropdown overlay={menu} trigger={['click']} visible={this.state.isVisible}
                   onVisibleChange={this.handleVisibleChange}>
-          <Icon type="appstore-o" className="noTextIcon"
-                style={{ fontSize: 16, padding: '15px 8px' }} />
+          <Icon type="appstore-o" className={classnames(styles.icon, "noTextIcon")} />
         </Dropdown>
       </div>
     );

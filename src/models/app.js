@@ -187,9 +187,11 @@ export default {
       return state.set('debug', debug);
     },
 
-    setDebug(state, { debug }) {
-      // TODO set debug options.
-      return state.set('debug', debug);
+    setDebug(state, { payload }) {
+      // console.log('>>>>>>>>>>', payload);
+      let newDebug = { ...(state.get('debug') || {}), ...payload };
+      // console.log('>>>>>>>>>>', newDebug);
+      return state.set('debug', newDebug);
     },
 
     // 第二个参数Role是腾讯再用

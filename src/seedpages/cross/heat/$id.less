@@ -1,0 +1,82 @@
+@import "~themes/vars";
+
+.heatLayout {
+  width: auto;
+  overflow: scroll;
+  .actionBar {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 50px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    .title {
+      font-size: 18px;
+      font-family: "Microsoft Sans Serif";
+      margin-right: 40px;
+      text-transform: capitalize;
+    }
+    .tabBtn {
+      margin-left: 5px;
+    }
+  }
+  .mainBody {
+    border: 1px solid #e5e6e9;
+    border-radius: 3px;
+    -webkit-box-shadow: 0 2px 6px rgba(200, 200, 200, 0.4);
+    box-shadow: 0 2px 6px rgba(200, 200, 200, 0.4);
+    padding: 8px;
+    min-width: 1200px;
+    min-height: 400px;
+    .statistic {
+      margin-left: 50px;
+      margin-top: 10px;
+    }
+  }
+}
+
+.heatModal {
+  .tabs {
+    height: 650px;
+    font-size: 15px;
+  }
+  .tableFooter {
+    text-align: center;
+    margin-top: -15px;
+    font-size: 12px;
+    margin-bottom: 15px;
+    text-transform: capitalize;
+  }
+  .modalContent {
+    height: 580px;
+    width: 100%;
+    overflow: scroll;
+  }
+  .pagination {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .tabTitle {
+    text-transform: capitalize;
+  }
+  :global {
+    .spinnerMask, .mshow {
+      width: 770px;
+      height: 95%;
+      overflow: hidden;
+    }
+    .ant-tabs-nav-wrap {
+      float: right;
+      margin-right: 25px;
+    }
+    .ant-tabs-extra-content {
+      float: left !important;
+    }
+    .ant-modal-close {
+      top: 10px;
+    }
+    .ant-tag {
+      margin-top: 5px;
+    }
+  }
+}

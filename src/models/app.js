@@ -232,12 +232,16 @@ export default {
     },
 
     requireResource(state, { res }) {
-      console.log('>>>>>>>>>>>>>>>>>>||||||||', state);
+      const headerResources = state.get('headerResources');
       // TODO other resource not in res.
-      const { changed, res: headerResources } = mergeLibs(state.headerResources, res);
-      return changed
-        ? { ...state, headerResources }
+      const { changed, res: mergedHeaderResources } = mergeLibs(headerResources, res);
+      const newState = changed
+        ? state.set('headerResources', mergedHeaderResources)
         : state;
+
+      console.log('>>>>9999999', changed, mergedHeaderResources);
+      console.log('>>>>9999999', newState);
+      return newState
     },
 
     toggleAdvancedSearch(state) {

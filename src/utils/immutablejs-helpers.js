@@ -1,6 +1,7 @@
 import { Map } from 'immutable';
 
 const Maps = {
+
   getAll: (map, ...keys) => {
     if (!Map.isMap(map)) {
       throw new Error('map is not a immutable Map!' + map);
@@ -14,6 +15,7 @@ const Maps = {
   isSame: (map1, map2) => {
     return map1.equals(map2);
   },
+
 };
 
 

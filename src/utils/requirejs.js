@@ -28,16 +28,28 @@ const scripts = {
 
 // deprecated
 const Libraries = {
-  d3v3: [<script key="d3v3" type="text/javascript" src={`${resRoot}/lib/d3.v3.js`} async
-                 defer />],
-  d3: [<script key="d3v3" type="text/javascript" src={`${resRoot}/lib/d3.v4.js`} async defer />],
-  echarts: [<script key="echarts" type="text/javascript" src="/lib/echarts.js" async defer />],
+  d3v3: [
+    <script key="d3v3" type="text/javascript" src={`${resRoot}/lib/d3.v3.js`} async defer />
+  ],
+  d3: [
+    <script key="d3v3" type="text/javascript" src={`${resRoot}/lib/d3.v4.js`} async defer />
+  ],
+  echarts: [
+    <script key="echarts" type="text/javascript" src={`${resRoot}/lib/echarts.js`} async
+            defer />
+  ],
 
-  html2canvas: [<script key="html2canvas" type="text/javascript" src="/lib/html2canvas.js" async
-                        defer />],
-  saveAs: [<script key="saveAs" type="text/javascript" src="/lib/saveAs.js" async defer />],
-  echarts4: [<script key="echarts" type="text/javascript" src="/lib/echarts4.0/echarts.min.js"
-                     async defer />],
+  html2canvas: [
+    <script key="html2canvas" type="text/javascript" src={`${resRoot}/lib/html2canvas.js`} async
+            defer />
+  ],
+  saveAs: [
+    <script key="saveAs" type="text/javascript" src={`${resRoot}/lib/saveAs.js`} async defer />
+  ],
+  echarts4: [
+    <script key="echarts" type="text/javascript" src={`${resRoot}/lib/echarts4.0/echarts.min.js`}
+            async defer />
+  ],
 };
 
 const findLibs = (keys) => {

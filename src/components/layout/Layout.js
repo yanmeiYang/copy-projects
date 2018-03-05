@@ -12,7 +12,7 @@ import NProgress from 'nprogress';
 import { Layout as LayoutComponent } from 'antd';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
-import { config } from 'utils';
+import { imCompare } from 'utils/compare';
 import { hole } from 'core';
 import { Header, Navigator } from 'components/headers';
 import { Feedback } from 'components/widgets';
@@ -81,20 +81,22 @@ export default class Layout extends PureComponent {
     }
   }
 
-  // componentWillReceiveProps = (nextProps) => {
-  //   const { headerResources } = nextProps.app;
-  //   if (
-  //     (headerResources !== this.props.app.headerResources) ||
-  //     (headerResources && !this.headerResourcesArray)
-  //   ) {
-  //     this.headerResourcesArray = [];
-  //     if (headerResources) {
-  //       headerResources.forEach((k, v) => {
-  //         this.headerResourcesArray.push(...k);
-  //       });
-  //     }
-  //   }
-  // };
+  // deprecated methods to require resources.
+  componentWillReceiveProps = (nextProps) => {
+    console.log('===========', nextProps.app.get('headerResources'));
+    const headerResources = nextProps.app && nextProps.app.get('headerResources');
+    if (imCompare(this.props, nextProps, 'app', 'headerResources')
+      || (headerResources && !this.headerResourcesArray)) {
+      this.headerResourcesArray = [];
+      if (headerResources) {
+        console.log('>>>>>>-0-0-0-0-0-0-0-0-', headerResources);
+        headerResources.forEach((k, v) => {
+          this.headerResourcesArray.push(...k);
+        });
+      }
+
+    }
+  };
 
   render() {
     // console.log('>>>>>>>>>> App Render:', this.props); // TODO performance

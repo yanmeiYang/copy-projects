@@ -20,8 +20,8 @@ const NaviConfig = {
   ExpertSearch: {
     key: 'ExpertSearch',
     label: '专家',
-    url: `/uniSearch/:query/0/${sysconfig.MainListSize}`,
-    pageSignature: 'uniSearch',
+    url: `/search/:query`,
+    pageSignature: 'search',
   },
   ExpertMap: {
     key: 'ExpertMap',

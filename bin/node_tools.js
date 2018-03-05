@@ -33,29 +33,6 @@ const mkdirsSync = (dirname) => {
   }
 };
 
-// create link
-const copyOrLink = (existingPath, newPath) => {
-  //根据文件路径读取文件，返回文件列表
-  const files = fs.readdirSync(existingPath);
-  files.forEach(function (filename) {
-    if (filename === '.DS_Store') {
-      return
-    }
-    // console.log('>> process file:', filename);
-    const filedir = path.join(existingPath, filename);
-    const stats = fs.statSync(filedir);
-    const isFile = stats.isFile();
-    const isDir = stats.isDirectory();
-    if (isFile) {
-      link(filedir)
-    }
-    if (isDir) {
-      fs.mkdirSync(`${newPath}/${filename}`);
-      copyOrLink(filedir, newPath);
-    }
-  });
-};
-
 const mkdir = (newsrc) => {
   fs.mkdirSync(newsrc)
 };
@@ -86,17 +63,19 @@ const rmfile = (path) => {
   }
 };
 
-// 需要清空的文件夹
-
-// 需要建立连接的文件夹
-
 const clearFolders = (pathArray) => {
-  for (let path of pathArray) {
-    rmfile(path);
-    mkdir(path);
+  // TODO 只删除文件夹，不删除文件
+  for (let newPath of pathArray) {
+    const files = fs.readdirSync(newPath);
+    files.forEach((file)=>{
+      const filePath = path.join(newPath, file);
+      const stats = fs.statSync(filePath);
+      if(stats.isDirectory()){
+        rmfile(filePath)
+      }
+    })
   }
 };
-
 
 const linkPagesByRoutes = (routes) => {
   const files = fs.readdirSync('src/seedpages');
@@ -116,7 +95,7 @@ const linkPagesByRoutes = (routes) => {
               link(`src/seedpages/${newRoute}/${file}`)
             } else {
               mkdir(`src/pages/${newRoute}/${file}`);
-              copyOrLink(`src/seedpages/${newRoute}/${file}`, `src/pages/${newRoute}/${file}`);
+              linkFolder(`src/seedpages/${newRoute}/${file}`, `src/pages/${newRoute}/${file}`);
             }
           }
         })
@@ -127,7 +106,7 @@ const linkPagesByRoutes = (routes) => {
               link(`src/seedpages/${file}`)
             } else {
               mkdir(`src/pages/${file}`);
-              copyOrLink(`src/seedpages/${file}`, `src/pages/${file}`);
+              linkFolder(`src/seedpages/${file}`, `src/pages/${file}`);
             }
           }
         })
@@ -188,7 +167,6 @@ module.exports = {
   createFile,
   replaceFile,
   clearFolders,
-  copyOrLink,
   linkPagesByRoutes,
   linkFolder
 };

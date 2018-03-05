@@ -58,7 +58,7 @@ if (AvailableSystems.indexOf(system) <= 0) {
 console.log('System is [', system, '] start building...');
 
 // link or copy files used to start system.
-clearFolders([`./src/systems/${system}`, `./src/themes/${system}`, './src/pages']);
+clearFolders([`./src/systems`, `./src/themes`, './src/pages']);
 linkFolder(`./src/seedsystems/${system}`, `./src/systems/${system}`);
 linkFolder(`./src/seedthemes/${system}`, `./src/themes/${system}`);
 // copyOrLink(`./src/seedsystems/${system}`, './src/systems/current');

@@ -8,7 +8,7 @@ import * as auth from 'utils/auth';
 import * as authService from 'services/auth';
 import { sysconfig } from 'systems';
 import { defineMessages } from 'react-intl';
-
+import { mergeLibs } from 'utils/requirejs';
 // const { prefix } = config;
 
 const messages = defineMessages({
@@ -229,6 +229,15 @@ export default {
         });
       }
       return payload;
+    },
+
+    requireResource(state, { res }) {
+      console.log('>>>>>>>>>>>>>>>>>>||||||||', state);
+      // TODO other resource not in res.
+      const { changed, res: headerResources } = mergeLibs(state.headerResources, res);
+      return changed
+        ? { ...state, headerResources }
+        : state;
     },
 
     toggleAdvancedSearch(state) {

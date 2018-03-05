@@ -64,7 +64,6 @@ const getInfoWindow = () => {
  * -------------------------------------------------------------------
  */
 @connect(({ expertMap, loading }) => ({ expertMap, loading }))
-// @RequireRes('GoogleMap')
 export default class ExpertGoogleMap extends React.Component {
   constructor(props) {
     super(props);

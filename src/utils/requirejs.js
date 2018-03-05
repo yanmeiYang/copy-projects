@@ -26,71 +26,58 @@ const scripts = {
   wordcloud: `${resRoot}/lib/echarts4.0/echarts-wordcloud.js`,
 };
 
-// // deprecated
-// const Libraries = {
-//   BMap: [
-//     <script
-//       key="bmap0" type="text/javascript"
-//       src="https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&services=&t=20170713160001" />,
-//
-//     //    <script
-//     //    key="bmap1" charSet="utf-8" async defer
-//     //  src="https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1" />,
-//   ],
-//   GoogleMap: [
-//     <script
-//       key="googleMap" type="text/javascript" async defer
-//       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlzpf4YyjOBGYOhfUaNvQZENXEWBgDkS0" />,
-//   ],
-//   d3v3: [<script key="d3v3" type="text/javascript" src="/lib/d3.v3.js" async defer />],
-//   d3: [<script key="d3v3" type="text/javascript" src="/lib/d3.v4.js" async defer />],
-//   echarts: [<script key="echarts" type="text/javascript" src="/lib/echarts.js" async defer />],
-//   jquery: [<script key="jquery" type="text/javascript" src="/lib/jquery.js" async defer />],
-//   html2canvas: [<script key="html2canvas" type="text/javascript" src="/lib/html2canvas.js" async
-//                         defer />],
-//   saveAs: [<script key="saveAs" type="text/javascript" src="/lib/saveAs.js" async defer />],
-//   echarts4: [<script key="echarts" type="text/javascript" src="/lib/echarts4.0/echarts.min.js"
-//                      async defer />],
-// };
-//
-// const findLibs = (keys) => {
-//   if (keys && keys.length > 0) {
-//     const libs = {};
-//     keys.map((key) => {
-//       libs[key] = Libraries[key];
-//       return false;
-//     });
-//     return libs;
-//   }
-// };
+// deprecated
+const Libraries = {
+  d3v3: [<script key="d3v3" type="text/javascript" src={`${resRoot}/lib/d3.v3.js`} async
+                 defer />],
+  d3: [<script key="d3v3" type="text/javascript" src={`${resRoot}/lib/d3.v4.js`} async defer />],
+  echarts: [<script key="echarts" type="text/javascript" src="/lib/echarts.js" async defer />],
+
+  html2canvas: [<script key="html2canvas" type="text/javascript" src="/lib/html2canvas.js" async
+                        defer />],
+  saveAs: [<script key="saveAs" type="text/javascript" src="/lib/saveAs.js" async defer />],
+  echarts4: [<script key="echarts" type="text/javascript" src="/lib/echarts4.0/echarts.min.js"
+                     async defer />],
+};
+
+const findLibs = (keys) => {
+  if (keys && keys.length > 0) {
+    const libs = {};
+    keys.map((key) => {
+      libs[key] = Libraries[key];
+      return false;
+    });
+    return libs;
+  }
+};
 
 // find each key in keys in Libraries, merge into final result.
 // if nothing changed, return the original state.
-// const mergeLibs = (resources, keys) => {
-//   let changed = false;
-//   let res = resources || Map();
-//   if (keys && keys.length > 0) {
-//     const libs = keys.map((key) => {
-//       const newRes = Libraries[key];
-//       if (!res.get(key) && newRes) {
-//         changed = true;
-//         return { key, newRes };
-//       }
-//       return null;
-//     });
-//     if (changed && libs && libs.length > 0) {
-//       res = res.withMutations((map) => {
-//         for (const lib of libs) {
-//           if (lib) {
-//             map.set(lib.key, lib.newRes);
-//           }
-//         }
-//       });
-//       return { changed, res };
-//     }
-//   }
-//   return { changed };
-// };
+const mergeLibs = (resources, keys) => {
+  let changed = false;
+  let res = resources || Map();
+  if (keys && keys.length > 0) {
+    const libs = keys.map((key) => {
+      const newRes = Libraries[key];
+      if (!res.get(key) && newRes) {
+        changed = true;
+        return { key, newRes };
+      }
+      return null;
+    });
+    if (changed && libs && libs.length > 0) {
+      res = res.withMutations((map) => {
+        for (const lib of libs) {
+          if (lib) {
+            map.set(lib.key, lib.newRes);
+          }
+        }
+      });
+      return { changed, res };
+    }
+  }
+  return { changed };
+};
 
 // TODO non-liner interval check.
 const ensureConfig = {
@@ -321,7 +308,9 @@ export {
   loadHtml2canvas,
   loadSaveAs,
   loadECharts4,
-  // mergeLibs,
+
+  // second requirejs
+  mergeLibs,
   ensure,
   loadEcharts4WithMapbox,
   loadEcharts4WithBMap,

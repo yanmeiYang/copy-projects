@@ -60,7 +60,6 @@ const getInfoWindow = () => {
  * -------------------------------------------------------------------
  */
 @connect(({ expertMap, loading }) => ({ expertMap, loading }))
-// @RequireRes('BMap') // TODO shawjoe: use loadBMap()
 export default class ExpertMap extends PureComponent {
   constructor(props) {
     super(props);

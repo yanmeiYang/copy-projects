@@ -10,7 +10,7 @@ const LogRequest = true;
 const LogRequestResult = true;
 const LogRequestContent = false;
 
-const LogHOC = false;
+const LogHOC = true;
 
 const HighlightHoles = 'none'; // ['none' | 'yes' | 'all']
 

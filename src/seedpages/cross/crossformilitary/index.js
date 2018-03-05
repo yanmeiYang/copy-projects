@@ -2,15 +2,13 @@
  * Created by ranyanchuan on 2017/10/18.
  */
 import React from 'react';
-import { routerRedux } from 'dva/router';
-import { Link } from 'dva/router';
-import { connect } from 'dva';
+import { routerRedux, Link, connect } from 'engine';
 import { Button, Tag } from 'antd';
 import { Auth } from 'hoc';
 import { sysconfig } from 'systems';
-import { Layout } from 'routes';
+import { Layout } from 'components/layout';
 import { applyTheme } from 'themes';
-import styles from './CrossForMilitary.less';
+import styles from './index.less';
 
 const tc = applyTheme(styles);
 const keymap = [

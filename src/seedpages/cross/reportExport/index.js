@@ -5,7 +5,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { Button, Table } from 'antd';
 import { Auth } from 'hoc';
-import { Layout } from 'routes';
+import { Layout } from 'components/layout';
 import { applyTheme } from 'themes';
 import { PersonList } from 'components/person';
 import { PublicationList } from 'components/publication/index';
@@ -13,10 +13,10 @@ import { Spinner } from 'components';
 import { loadHtml2canvas, loadJquery, loadSaveAs } from 'utils/requirejs';
 import bridge from 'utils/next-bridge';
 
-import BarChart from './bar-chart/index';
-import HeatTable from './heat-table/index';
-import History from './line-chart/index';
-import styles from './reportExport.less';
+import BarChart from '../components/bar-chart/index';
+import HeatTable from '../components/heat-table/index';
+import History from '../components/line-chart/index';
+import styles from './index.less';
 
 const tc = applyTheme(styles);
 const objTxt = {

@@ -67,10 +67,10 @@ const clearFolders = (pathArray) => {
   // TODO 只删除文件夹，不删除文件
   for (let newPath of pathArray) {
     const files = fs.readdirSync(newPath);
-    files.forEach((file)=>{
+    files.forEach((file) => {
       const filePath = path.join(newPath, file);
       const stats = fs.statSync(filePath);
-      if(stats.isDirectory()){
+      if (stats.isDirectory()) {
         rmfile(filePath)
       }
     })
@@ -118,7 +118,6 @@ const linkPagesByRoutes = (routes) => {
 
 // ============================
 
-
 // link folder into dest
 // if is file, link file under dest folder.
 // if is folder, link all things under this folder into dest folder recusively.
@@ -130,6 +129,9 @@ const linkFolder = (from, dest) => {
     const filePath = path.join(folder, file);
     const stats = fs.statSync(filePath);
     if (stats.isFile()) {
+      if (file === '.DS_Store' || file === 'document.ejs') { // special skip files.
+        return
+      }
       const from2 = from.replace(/^.\//, '');
       // console.log(" >> replace:", filePath, from2, dest);
       const destPath = path.dirname(filePath.replace(from2, dest));
@@ -141,15 +143,12 @@ const linkFolder = (from, dest) => {
       // console.log(" [+] ", filePath)
       const files = fs.readdirSync(filePath);
       files.forEach(function (filename) {
-        if (filename === '.DS_Store') {
-          return
-        }
         linkit(filePath, filename);
       });
     } else {
       console.log(" >> meet strange file: ", filePath, stats)
     }
-  }
+  };
 
   // start
   const stats = fs.statSync(from);

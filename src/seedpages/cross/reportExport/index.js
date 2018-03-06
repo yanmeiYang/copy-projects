@@ -11,7 +11,7 @@ import { PersonList } from 'components/person';
 import { PublicationList } from 'components/publication/index';
 import { Spinner } from 'components';
 import { loadHtml2canvas, loadJquery, loadSaveAs } from 'utils/requirejs';
-import bridge from 'utils/next-bridge';
+import * as bridge from 'utils/next-bridge';
 
 import BarChart from '../components/bar-chart/index';
 import HeatTable from '../components/heat-table/index';

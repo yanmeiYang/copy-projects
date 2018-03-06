@@ -44,7 +44,7 @@
     "react-load-script": "0.0.6",
     "react-router-dom": "^4.2.2",
     "redux-logger": "^3.0.6",
-    "umi": "^1.0.3",
+    "umi": "^1.0.4",
     "umi-plugin-dva": "^0.2.0",
     "umi-router": "^0.1.2",
     "zrender": "^4.0.3"

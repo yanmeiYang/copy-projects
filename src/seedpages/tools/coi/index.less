@@ -1,0 +1,86 @@
+.conflicts {
+  display: flex;
+  flex-direction: column;
+  .testData {
+    width: 60px;
+    float: right;
+    margin-bottom: 10px;
+  }
+  .nsfcIndexPage {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    .formComponent {
+      width: 38vw;
+      height: 60vh;
+      padding: 15px 15px;
+      border: 1px solid #EEEEEE;
+      box-shadow: 0 0 14px 2px rgba(99, 99, 99, 0.2) inset;
+      overflow-y: auto;
+      :global {
+        .spinnerMask { width: 30vw !important; }
+      }
+      .addExpertBtn {
+        text-align: center;
+        margin-top: 25vh;
+      }
+    }
+    .compareBtn {
+      margin-top: 25vh;
+      font-size: 16px;
+      font-weight: bold;
+      border-color: #999;
+    }
+    .compareBtn:hover, .compareBtn:focus {
+      color: #40a9ff;
+      border-color: #40a9ff;
+    }
+  }
+  .showResultsBlock {
+    text-align: center;
+    .resultsShow {
+      margin: 0 auto;
+      padding-top: 20px;
+      //border: 1px solid red;
+      .relaitonResults {
+        display: inline-block;
+        min-width: 500px;
+      }
+      .relaitonResults:hover {
+        background-color: #e6f7ff;
+      }
+      .person {
+        font-size: 16px;
+        padding: 5px;
+        width: 168px;
+        text-align: center;
+        display: inline-block;
+      }
+      .coAuthorCount {
+        font-size: 16px;
+        padding: 5px;
+        width: 45px;
+        display: inline-block;
+      }
+
+    }
+  }
+  .addExpert {
+    margin-bottom: 10px;
+  }
+}
+
+.roughForm {
+  width: 100%;
+  .compareBtn {
+    display: block;
+    margin: 25vh auto;
+    font-size: 16px;
+    font-weight: bold;
+    border-color: #999;
+  }
+  .compareBtn:hover, .compareBtn:focus {
+    color: #40a9ff;
+    border-color: #40a9ff;
+  }
+}

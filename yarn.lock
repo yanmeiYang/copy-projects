@@ -695,9 +695,9 @@ address@1.0.3, address@^1.0.1, address@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/address/-/address-1.0.3.tgz#b5f50631f8d6cec8bd20c963963afb55e06cbce9"
 
-af-webpack@^0.17.2:
-  version "0.17.2"
-  resolved "https://registry.yarnpkg.com/af-webpack/-/af-webpack-0.17.2.tgz#c70bf7ecf17e09b5d3cb569c4da005b8d7998903"
+af-webpack@^0.17.3:
+  version "0.17.3"
+  resolved "https://registry.yarnpkg.com/af-webpack/-/af-webpack-0.17.3.tgz#e1935b67b5dcd89375d872a39692340c075bcf91"
   dependencies:
     "@babel/core" "^7.0.0-beta.31"
     "@babel/plugin-transform-modules-commonjs" "^7.0.0-beta.31"
@@ -9294,13 +9294,13 @@ uid-number@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/uid-number/-/uid-number-0.0.6.tgz#0ea10e8035e8eb5b8e4449f06da1c730663baa81"
 
-umi-build-dev@^0.10.6:
-  version "0.10.6"
-  resolved "https://registry.yarnpkg.com/umi-build-dev/-/umi-build-dev-0.10.6.tgz#cfb300a33af246153beb701b0004e6d83a37d3f3"
+umi-build-dev@^0.10.7:
+  version "0.10.7"
+  resolved "https://registry.yarnpkg.com/umi-build-dev/-/umi-build-dev-0.10.7.tgz#c71c4fb1dd1e38ec18ad992a56639b5bde2f16fb"
   dependencies:
     "@babel/runtime" "^7.0.0-beta.31"
     address "^1.0.3"
-    af-webpack "^0.17.2"
+    af-webpack "^0.17.3"
     antd "^3.0.0"
     antd-mobile "^2.0.0"
     body-parser "^1.18.2"
@@ -9375,9 +9375,9 @@ umi-test@^0.4.4:
     ts-jest-babel-7 "^22.0.6"
     typescript "^2.6.2"
 
-umi@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/umi/-/umi-1.0.3.tgz#628817dbf65e4624b42036be09d9b479bed20625"
+umi@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/umi/-/umi-1.0.4.tgz#f4c3edbf17e0394d5c4ab6854ebd01cdcbe2837e"
   dependencies:
     "@babel/runtime" "^7.0.0-beta.31"
     "@types/react" "^16.0.27"
@@ -9388,7 +9388,7 @@ umi@^1.0.3:
     cross-spawn "^5.1.0"
     ejs "^2.5.7"
     query-string "^5.0.0"
-    umi-build-dev "^0.10.6"
+    umi-build-dev "^0.10.7"
     umi-test "^0.4.4"
     update-notifier "^2.3.0"
     uppercamelcase "^3.0.0"

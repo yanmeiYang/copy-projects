@@ -48,4 +48,4 @@ const getAllSystemConfigs = () => {
   return allSystemConfigs;
 };
 
-export { sysconfig, getAllSystemConfigs }
+export { sysconfig, getAllSystemConfigs, AvailableSystems }

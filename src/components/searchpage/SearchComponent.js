@@ -6,7 +6,7 @@ import { isEqual } from 'lodash';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import classnames from 'classnames';
 import { Pagination, Button, Tag } from 'antd';
-import { hole } from 'core';
+import * as hole from 'core/hole';
 import { Spinner } from 'components';
 import { Hole } from 'components/core';
 import { PersonList } from 'components/person';

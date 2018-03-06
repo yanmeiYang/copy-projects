@@ -1,0 +1,36 @@
+.org_rightzone {
+  //position: absolute;
+  //right: 0px;
+  //top: 0px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: white;
+  border: 1px solid #ddd;
+  :global {
+    .fa-plus {
+      position: absolute;
+      left: 9px;
+      top: 9px;
+      color: #ddd;
+    }
+  }
+}
+
+.rightcontent {
+  display: flex;
+  flex-direction: column;
+  margin: 0px -16px;
+  padding-bottom: 3px;
+  padding-top: 3px;
+}
+
+:global {
+  .ant-popover {
+    z-index: 88;
+  }
+  //.ant-popover-arrow {
+  //  background: none;
+  //}
+}
+

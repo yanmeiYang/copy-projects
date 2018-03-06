@@ -16,6 +16,7 @@ import styles from './Navigator.less';
 
 const tc = applyTheme(styles);
 
+// TODO 设置到外面去。
 const NaviConfig = {
   ExpertSearch: {
     key: 'ExpertSearch',
@@ -82,8 +83,8 @@ const NaviConfig = {
   ACM_ExpertSearch: {
     key: 'ACM_ExpertSearch',
     label: '全球专家',
-    url: `/uniSearch/:query/0/${sysconfig.MainListSize}`,
-    pageSignature: 'uniSearch',
+    url: `/search/:query`,
+    pageSignature: 'search',
   },
   News: {
     key: 'News',
@@ -110,25 +111,26 @@ const NaviConfig = {
     url: '/seminar',
     pageSignature: 'seminar',
   },
+
   Nsfcai: {
     key: 'Nsfcai',
     label: '专家库',
     url: '/',
-    pageSignature: ['/', '/hieb'],
+    pageSignature: ['/', '/eb'],
   },
   Coi_thin: { // nsfcai 专有
     key: 'Coi_thin',
     label: 'COI检测(细)',
-    url: '/conflicts',
+    url: '/tools/coi/fine',
     data: 'coyear',
-    pageSignature: 'conflicts',
+    pageSignature: '/tools/coi/fine',
   },
   Coi_rough: { // nsfcai 专有
     key: 'Coi_rough',
     label: 'COI检测(粗)',
-    url: '/conflictrough',
+    url: '/tools/coi/rough',
     data: 'coyear',
-    pageSignature: 'conflictrough',
+    pageSignature: '/tools/coi/rough',
   },
 };
 
@@ -218,7 +220,7 @@ export default class Navigator extends Component {
         {this.navis.map((naviKey) => {
           const c = NaviConfig[naviKey];
           // const path = window.location.pathname;
-          const sigs = typeof c.pageSignature === 'string' ? [c.pageSignature]: c.pageSignature;
+          const sigs = typeof c.pageSignature === 'string' ? [c.pageSignature] : c.pageSignature;
           let currentClass = null;
           for (const sig of sigs) {
             if (sig === '/' && path === '/') {

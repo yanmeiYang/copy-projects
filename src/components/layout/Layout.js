@@ -83,13 +83,11 @@ export default class Layout extends PureComponent {
 
   // deprecated methods to require resources.
   componentWillReceiveProps = (nextProps) => {
-    console.log('===========', nextProps.app.get('headerResources'));
     const headerResources = nextProps.app && nextProps.app.get('headerResources');
     if (imCompare(this.props, nextProps, 'app', 'headerResources')
       || (headerResources && !this.headerResourcesArray)) {
       this.headerResourcesArray = [];
       if (headerResources) {
-        console.log('>>>>>>-0-0-0-0-0-0-0-0-', headerResources);
         headerResources.forEach((k, v) => {
           this.headerResourcesArray.push(...k);
         });
@@ -99,7 +97,6 @@ export default class Layout extends PureComponent {
   };
 
   render() {
-    // console.log('>>>>>>>>>> App Render:', this.props); // TODO performance
     const { sidebar, footer, navigatorItems } = this.props;
     const { contentClass, showHeader, showNavigator, showSidebar, showFeedback } = this.props;
     const { dispatch, loading } = this.props;

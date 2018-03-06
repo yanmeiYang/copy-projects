@@ -68,7 +68,7 @@ export default (system, source) => ({
   DEFAULT_EXPERT_BASE_NAME: '全球专家',
 
   // Search Page
-  SearchPagePrefix: 'uniSearch', // search - 普通搜索(deleted); uniSearch - 多合一搜索.
+  SearchPagePrefix: 'search', // search - 普通搜索(deleted); uniSearch - 多合一搜索.
   Search_EnablePin: false, // TODO bad：Huawei PIN
   Search_EnableCCFPin: false, // TODO bad：CCF PIN
 

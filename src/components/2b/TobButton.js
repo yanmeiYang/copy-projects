@@ -7,7 +7,7 @@ import { connect } from 'dva';
 import { Link } from 'engine';
 import { system } from 'core';
 import { RequireGod } from 'hoc';
-import { sysconfig, getAllSystemConfigs } from 'systems';
+import { sysconfig, getAllSystemConfigs, AvailableSystems } from 'systems';
 import { Icon, Dropdown, Menu, Layout } from 'antd';
 import { classnames } from 'utils';
 import styles from './TobButton.less'
@@ -49,7 +49,9 @@ export default class TobButton extends PureComponent {
 
     const { app } = this.props;
     const { HighlightHoles } = app && app.get('debug') || {};
-    const allSystemConfigs = getAllSystemConfigs(); // singleton
+    // const allSystemConfigs = getAllSystemConfigs(); // singleton
+    const allSystemConfigs = AvailableSystems;
+
     const menu = (
       <div>
         <Layout className={styles.menu}>
@@ -57,14 +59,25 @@ export default class TobButton extends PureComponent {
             <Menu selectedKeys={[sysconfig.SYSTEM]}>
               <Menu.Item className={styles.headerMenuItem}>快速切换系统</Menu.Item>
               <Menu.Divider />
-              {allSystemConfigs && allSystemConfigs.map(src => (
-                <Menu.Item key={src.SYSTEM}>
-                  <div onClick={this.onclick.bind(this, src.SYSTEM)} className={styles.syslogo}>
-                    <img src={`/sys/${src.SYSTEM}/favicon.ico`} />
-                    <span>{src.SYSTEM}</span>
+
+              {allSystemConfigs && allSystemConfigs.map(sys => (
+                <Menu.Item key={sys}>
+                  <div onClick={this.onclick.bind(this, sys)} className={styles.syslogo}>
+                    <img src={`/sys/${sys}/favicon.ico`} />
+                    <span>{sys}</span>
                   </div>
                 </Menu.Item>
               ))}
+
+              {/*{allSystemConfigs && allSystemConfigs.map(src => (*/}
+              {/*<Menu.Item key={src.SYSTEM}>*/}
+              {/*<div onClick={this.onclick.bind(this, src.SYSTEM)} className={styles.syslogo}>*/}
+              {/*<img src={`/sys/${src.SYSTEM}/favicon.ico`} />*/}
+              {/*<span>{src.SYSTEM}</span>*/}
+              {/*</div>*/}
+              {/*</Menu.Item>*/}
+              {/*))}*/}
+
             </Menu>
           </Layout.Sider>
 

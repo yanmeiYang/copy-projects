@@ -21,6 +21,7 @@ const AvailableSystems = [
   // 'cietest',
   // 'cipsc',
   // 'huawei',
+  'nsfcai',
   // 'med_topic_trend',
   // 'minimalsys', // 用来调试的最小system集合
   // 'scei', // 中国科协：深度智库

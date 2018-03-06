@@ -293,12 +293,10 @@ export default {
                 data.data.result.map((item) => {
                   if (idsInEB && idsInEB.length > 0 && idsInEB.includes(item.id)) {
                     item.locks.roster = true;
-                    const dims = personInEB.data.items[idsInEB.indexOf(item.id)].dims;
-                    if (dims && dims.eb && dims.eb.length > 0) {
-                      item.dims = { eb: dims.eb };
-                    }
-                    // item.dims = { eb: personInEB.data.items[idsInEB.indexOf(item.id)].dims
-                    // && personInEB.data.items[idsInEB.indexOf(item.id)].dims.eb };
+                    item.dims = {
+                      eb: personInEB.data.items[idsInEB.indexOf(item.id)].dims
+                      && personInEB.data.items[idsInEB.indexOf(item.id)].dims.eb
+                    };
                   } else {
                     item.locks.roster = false;
                   }

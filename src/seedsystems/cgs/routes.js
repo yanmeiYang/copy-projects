@@ -13,7 +13,7 @@ module.exports = {
     'managementOrg',
 
     // search
-    // 'search',
+    'search',
 
     // user & auth.
     'login',

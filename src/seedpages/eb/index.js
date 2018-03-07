@@ -11,10 +11,10 @@ import { Layout } from 'components/layout';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 import { classnames } from 'utils';
-import { Maps } from 'utils/immutablejs-helpers';
 import { createHiObj } from 'utils/hiobj';
+import { Maps } from 'utils/immutablejs-helpers';
 import ExpertBase from 'components/expert-base/ExpertBase';
-import ManagementOrg from '../managementOrg/index'; // TODO move
+import HierarchyTree from 'components/hierarchy/HierarchyTree';
 import styles from './index.less';
 import queryString from "query-string";
 
@@ -58,7 +58,7 @@ export default class HierarchyExpertBasePage extends Component {
   }
 
   getChildrenId = (id, dataSource) => {
-    const [initData] = Maps.getAll(dataSource, 'initData');
+    const initData = dataSource && dataSource.get('initData') || [];
     const data = createHiObj(initData);
     const items = data.get(id);
     this.matchData(items);
@@ -105,7 +105,9 @@ export default class HierarchyExpertBasePage extends Component {
         <div className={styles.nsfcIndexPage}>
           <div className={styles.treeBlock}>
             <Spinner loading={load} />
-            <ManagementOrg callbackParent={this.getSelectedNode} defaultSelectedKeys={id} />
+
+            <HierarchyTree callbackParent={this.getSelectedNode} defaultSelectedKeys={id} />
+
           </div>
           {showPersonList &&
           <div className={styles.rightBlock}>

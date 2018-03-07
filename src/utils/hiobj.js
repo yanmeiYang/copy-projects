@@ -10,12 +10,13 @@ const createHiObj = (objs) => {
   let data = List();
 
   const init = () => {
-    if (!objs || objs.length < 0) {
+    index = Map();
+
+    if (!objs || objs.length <= 0) {
       return false;
     }
 
     // step1
-    index = Map();
     index = index.withMutations((map) => {
       for (const obj of objs) {
         if (obj && obj.id) {

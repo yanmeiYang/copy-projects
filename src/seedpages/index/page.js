@@ -22,13 +22,19 @@ export default class IndexPage extends PureComponent {
     }
   };
 
-  render() {
-    const bannerZone = theme.index_bannerZone;
-
-    // 是否跳转
+  componentWillMount = () => {
     if (sysconfig.IndexPage_Redirect) {
       this.props.dispatch(routerRedux.push(sysconfig.IndexPage_Redirect));
     }
+  };
+
+  render() {
+    // 首页重定向
+    if (sysconfig.IndexPage_Redirect) {
+      return '';
+    }
+
+    const bannerZone = theme.index_bannerZone;
 
     return (
       <Layout searchZone={[]} contentClass={tc(['indexPage'])} showNavigator={false}

@@ -2,12 +2,11 @@
  * Created by yangyanmei on 18/2/7.
  */
 import React, { Component } from 'react';
-import { connect } from 'dva';
+import { connect, routerRedux, withRouter } from 'engine';
 import { Tabs } from 'antd';
-import { routerRedux, withRouter } from 'engine';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
-import { createURL } from 'utils';
+import { createURL, queryString } from 'utils';
 import * as strings from 'utils/strings';
 import hole, { fillFuncs } from 'core/hole';
 import { Auth } from 'hoc';
@@ -15,9 +14,6 @@ import { isEqual } from 'lodash';
 import { KgSearchBox } from 'components/search';
 import SearchComponent from 'components/searchpage/SearchComponent';
 import styles from './ExpertBase.less';
-
-const tc = applyTheme(styles);
-const TabPane = Tabs.TabPane;
 
 @connect(({ app, search, expertBase, loading }) => ({ app, search, expertBase, loading }))
 @withRouter
@@ -32,7 +28,6 @@ export default class ExpertBaseExpertsPage extends Component {
     // showAddExpertModal: false,
   };
 
-  // TODO @alice i18n this.
   componentWillMount() {
     const { expertBaseId, expertBaseName } = this.props;
     if (expertBaseId && expertBaseId.length > 0) {
@@ -107,7 +102,7 @@ export default class ExpertBaseExpertsPage extends Component {
   };
 
   doSearch = (query, offset, size, filters, sort, dontRefreshUrl, typesTotals, expertBases) => {
-    const { dispatch, fixedExpertBase, expertBaseId } = this.props;
+    const { dispatch, fixedExpertBase, expertBaseId, expertBaseName } = this.props;
     if (fixedExpertBase && fixedExpertBase.id) {
       filters.eb = fixedExpertBase; // eslint-disable-line no-param-reassign
     }
@@ -141,7 +136,12 @@ export default class ExpertBaseExpertsPage extends Component {
         offset: 0,
         size,
       });
-      dispatch(routerRedux.push({ pathname }));
+      const params = queryString.stringify({
+        id: expertBaseId, name: expertBaseName,
+        // offset: (page - 1) * pageSize,
+        // size: pageSize,
+      });
+      dispatch(routerRedux.push({ pathname, search: `?${params}` }));
     }
   };
 
@@ -261,10 +261,10 @@ export default class ExpertBaseExpertsPage extends Component {
         </div>
         <div>
           <Tabs defaultActiveKey="1" onChange={this.switchTab} activeKey={this.state.key}>
-            <TabPane tab="当前库" key="1" />
+            <Tabs.TabPane tab="当前库" key="1" />
             {currentBaseParentId &&
-            <TabPane tab="搜索更多专家" key="3" />}
-            <TabPane tab="全球专家" key="2" />
+            <Tabs.TabPane tab="搜索更多专家" key="3" />}
+            <Tabs.TabPane tab="全球专家" key="2" />
           </Tabs>
         </div>
         <SearchComponent // Example: include all props.

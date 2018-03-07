@@ -7,7 +7,7 @@ import { Auth } from 'hoc';
 import * as ConflictsService from 'services/coi-service';
 import { theme, applyTheme } from 'themes';
 import { Spinner } from 'components';
-import styles from './index.less';
+import styles from './fine.less';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;

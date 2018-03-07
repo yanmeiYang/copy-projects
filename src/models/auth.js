@@ -4,7 +4,7 @@
  */
 import { sysconfig } from 'systems';
 import * as authService from 'services/auth';
-import * as uconfigService from 'services/universal-config';
+import * as uconfigService from 'services/common/universal-config';
 import * as expertBaseService from 'services/expert-base';
 
 export default {

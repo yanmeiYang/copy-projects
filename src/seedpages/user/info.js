@@ -14,10 +14,13 @@ import styles from './info.less';
 
 const tc = applyTheme(styles);
 
+// TODO i18n.
+// TODO move styles out.
+
 @Page({ models: [require('models/auth')] })
 @connect(({ app }) => ({ app }))
 @Auth
-export default class UserInfo extends React.Component {
+export default class UserInfo extends React.PureComponent {
   render() {
     const [user, roles] = Maps.getAll(this.props.app, 'user', 'roles');
     return (
@@ -29,15 +32,18 @@ export default class UserInfo extends React.Component {
         </div>
         {auth.isSuperAdmin(roles) &&
         <div style={{ marginTop: 20 }}>
-          <h3>您是系统管理员
+          <h3>
+            您是系统管理员
             {sysconfig.UserInfo_Batch_Signup &&
             <Button type="primary" style={{ marginLeft: 10 }}>
-              <Link to="/registered/batch">批量创建用户</Link>
+              <Link to="/admin/user/batchcreate">批量创建用户</Link>
             </Button>
             }
+
             <Button type="primary" style={{ marginLeft: 10 }}>
-              <Link to="/registered">创建用户</Link>
+              <Link to="/user/signup">创建用户</Link>
             </Button>
+
             <Button type="primary" style={{ marginLeft: 10 }}>
               <Link to="/admin/users">用户列表</Link>
             </Button>

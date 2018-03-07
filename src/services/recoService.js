@@ -23,9 +23,9 @@ export async function updataProj(data) {
 }
 
 export async function getProjectList(payload) {
-  const { ids, searchType, offset, size } = payload;
+  const { ids, searchType, offset, size, filters } = payload;
   const nextapi = apiBuilder.create(Action.reviewer.ListProject, 'ListProject')
-    .param({ ids, searchType, offset, size });
+    .param({ ids, searchType, offset, size, filters });
   return nextAPI({ data: [nextapi.api] });
 }
 
@@ -66,7 +66,7 @@ export async function sendEmail(payload) {
 
 export async function startCrawl(payload) {
   const { ids, opts } = payload;
-  const nextapi = apiBuilder.create(Action.reviewer.RequestCrawlList, 'RequestCrawlList')
+  const nextapi = apiBuilder.create(Action.reviewer.StartCrawl, 'StartCrawl')
     .param({ ids, opts });
   return nextAPI({ data: [nextapi.api] });
 }
@@ -94,7 +94,8 @@ export async function deleteProjById(payload) {
 }
 
 export async function getProjectListConut(payload) {
+  const { filters } = payload;
   const nextapi = apiBuilder.create(Action.reviewer.CountProject, 'CountProject')
-    .param({});
+    .param({ filters });
   return nextAPI({ data: [nextapi.api] });
 }

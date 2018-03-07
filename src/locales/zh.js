@@ -166,6 +166,7 @@ export default {
   'com.topTrend.header.tab.domainAssociation': '领域关联',
   'com.topTrend.info': '"{tip}"技术趋势正在分析中，请稍候',
   'com.topTrend.errInfo': '"{tip}"技术领域不存在或者您的输入错误，请检查重试',
+  'com.topTrend.emptyInfo': '您没有输入任何的关键词查询或者选择任何的领域，请检查！',
 
   'com.expertTrajectory.theme.label.0': '常规',
   'com.expertTrajectory.theme.label.1': '商务',

@@ -17,6 +17,7 @@ module.exports = {
     // user & auth.
     'login',
     'user/info',
+    'tools/coi',
 
     // expertBase.ExpertBase,
     // expertBase.ExpertBaseExpertsPage,

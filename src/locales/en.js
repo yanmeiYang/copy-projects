@@ -166,6 +166,7 @@ export default {
   'com.topTrend.header.tab.domainAssociation': 'Domain Association',
   'com.topTrend.info': 'Technology prediction about "{tip}" is analyzing. Please wait.',
   'com.topTrend.errInfo': 'Technology prediction about "{tip}" does not exist or input error. Please check.',
+  'com.topTrend.emptyInfo': 'Empty query or nothing selected in trend, please check.',
 
   'com.expertTrajectory.theme.label.0': 'Regular',
   'com.expertTrajectory.theme.label.1': 'Business',

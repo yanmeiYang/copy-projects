@@ -5,6 +5,7 @@ import { resRoot } from "core";
 import { Helmet } from 'react-helmet';
 
 function Layout({ children, location }) {
+  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> laoyout withrouter', );
   return (
     <div>
       <Helmet>

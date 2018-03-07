@@ -24,6 +24,7 @@ export default class IndexPage extends PureComponent {
 
   componentWillMount = () => {
     if (sysconfig.IndexPage_Redirect) {
+      console.log('Redirect index to: ', sysconfig.IndexPage_Redirect);
       this.props.dispatch(routerRedux.push(sysconfig.IndexPage_Redirect));
     }
   };

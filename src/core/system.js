@@ -29,7 +29,7 @@ const AvailableSystems = [
   // 'tencent',
   // 'thurcb',
   // 'yocsef',
-  // 'reco',
+  'reco',
 ];
 
 let System = '';

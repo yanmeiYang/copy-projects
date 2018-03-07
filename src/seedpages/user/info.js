@@ -27,7 +27,7 @@ export default class UserInfo extends React.PureComponent {
       <Layout searchZone={[]} contentClass={tc(['userInfo'])} showNavigator={true}>
         <h1>账号信息:</h1>
         <div>
-          <h3>姓名: {user.display_name}</h3>
+          <h3>姓名: {user.display_name}   <Link to={"/reco?n=3"}>test.....</Link></h3>
           <h3>邮箱: {user.email}</h3>
         </div>
         {auth.isSuperAdmin(roles) &&

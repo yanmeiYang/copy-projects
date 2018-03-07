@@ -42,7 +42,7 @@ export default {
   // IndexPage_QuickSearchList:[], // use default.
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
-  Header_UserPageURL: '/user-info',
+  Header_UserPageURL: '/user/info',
 
   // ShowHelpDoc: true,
 

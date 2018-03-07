@@ -695,9 +695,9 @@ address@1.0.3, address@^1.0.1, address@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/address/-/address-1.0.3.tgz#b5f50631f8d6cec8bd20c963963afb55e06cbce9"
 
-af-webpack@^0.17.3:
-  version "0.17.3"
-  resolved "https://registry.yarnpkg.com/af-webpack/-/af-webpack-0.17.3.tgz#e1935b67b5dcd89375d872a39692340c075bcf91"
+af-webpack@^0.17.4:
+  version "0.17.4"
+  resolved "https://registry.yarnpkg.com/af-webpack/-/af-webpack-0.17.4.tgz#ab089617eb937349ca20e623084cfbd4bb1e0ce8"
   dependencies:
     "@babel/core" "^7.0.0-beta.31"
     "@babel/plugin-transform-modules-commonjs" "^7.0.0-beta.31"
@@ -9301,13 +9301,13 @@ uid-number@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/uid-number/-/uid-number-0.0.6.tgz#0ea10e8035e8eb5b8e4449f06da1c730663baa81"
 
-umi-build-dev@^0.10.7:
-  version "0.10.7"
-  resolved "https://registry.yarnpkg.com/umi-build-dev/-/umi-build-dev-0.10.7.tgz#c71c4fb1dd1e38ec18ad992a56639b5bde2f16fb"
+umi-build-dev@^0.10.8:
+  version "0.10.8"
+  resolved "https://registry.yarnpkg.com/umi-build-dev/-/umi-build-dev-0.10.8.tgz#e49fe3f167fca8f879cc7e65b113d69e63aeb338"
   dependencies:
     "@babel/runtime" "^7.0.0-beta.31"
     address "^1.0.3"
-    af-webpack "^0.17.3"
+    af-webpack "^0.17.4"
     antd "^3.0.0"
     antd-mobile "^2.0.0"
     body-parser "^1.18.2"
@@ -9345,13 +9345,14 @@ umi-history@^0.1.0:
     value-equal "^0.4.0"
     warning "^3.0.0"
 
-umi-plugin-dva@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/umi-plugin-dva/-/umi-plugin-dva-0.2.0.tgz#77e2b31554335f30250df16ba17e4c87ed5d29d1"
+umi-plugin-dva@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/umi-plugin-dva/-/umi-plugin-dva-0.3.0.tgz#5d9597dacea101242f02a4816ff16a498e839fa5"
   dependencies:
     dva "^2.1.0"
     dva-loading "^1.0.4"
     globby "^7.1.1"
+    lodash.uniq "^4.5.0"
 
 umi-router@^0.1.2:
   version "0.1.2"
@@ -9382,9 +9383,9 @@ umi-test@^0.4.4:
     ts-jest-babel-7 "^22.0.6"
     typescript "^2.6.2"
 
-umi@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/umi/-/umi-1.0.4.tgz#f4c3edbf17e0394d5c4ab6854ebd01cdcbe2837e"
+umi@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/umi/-/umi-1.0.5.tgz#c39b55f0ef67b6a5045c10b7599a0c2663cb6015"
   dependencies:
     "@babel/runtime" "^7.0.0-beta.31"
     "@types/react" "^16.0.27"
@@ -9395,7 +9396,7 @@ umi@^1.0.4:
     cross-spawn "^5.1.0"
     ejs "^2.5.7"
     query-string "^5.0.0"
-    umi-build-dev "^0.10.7"
+    umi-build-dev "^0.10.8"
     umi-test "^0.4.4"
     update-notifier "^2.3.0"
     uppercamelcase "^3.0.0"

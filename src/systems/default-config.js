@@ -117,6 +117,7 @@ export default (system, source) => ({
   /**
    * IndexPage
    */
+  IndexPage_Redirect: '', // 如果不为空，重定向到给定页面.
   IndexPage_QuickSearchList: [
     { name: 'Artificial intelligence', name_zh: '人工智能' },
     { name: 'Robotics', name_zh: '机器人' },

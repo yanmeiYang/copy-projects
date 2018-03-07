@@ -12,7 +12,7 @@ import { Spinner } from 'components';
 import UserModal from './userModal';
 import * as ConflictsService from 'services/coi-service';
 import NewPersonList from './components/NewPersonList';
-import styles from './index.less';
+import styles from './fine.less';
 
 const tc = applyTheme(styles);
 @connect(({ app, loading, conflicts }) => ({ app, loading, conflicts }))

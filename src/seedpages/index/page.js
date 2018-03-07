@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Page, connect, router } from 'engine';
+import React, { PureComponent } from 'react';
+import { connect, routerRedux } from 'engine';
 import { Hole } from 'components/core';
 import { Layout } from 'components/layout';
 import { sysconfig } from 'systems';
@@ -11,20 +11,24 @@ import styles from './page.less';
 
 const tc = applyTheme(styles);
 
-// @Page()
 @connect(({ app }) => ({ app }))
 @Auth
-export default class IndexPage extends Component {
+export default class IndexPage extends PureComponent {
   static displayName = 'IndexPage';
 
   onSearch = ({ query }) => {
     if (query && query.trim() !== '') {
-      router.push(`/${sysconfig.SearchPagePrefix}/${query}`);
+      this.props.dispatch(routerRedux.push(`/${sysconfig.SearchPagePrefix}/${query}`));
     }
   };
 
   render() {
     const bannerZone = theme.index_bannerZone;
+
+    // 是否跳转
+    if (sysconfig.IndexPage_Redirect) {
+      this.props.dispatch(routerRedux.push(sysconfig.IndexPage_Redirect));
+    }
 
     return (
       <Layout searchZone={[]} contentClass={tc(['indexPage'])} showNavigator={false}

@@ -33,6 +33,7 @@ export default {
   // google analytics
   googleAnalytics: 'UA-107003102-6',
 
+  IndexPage_Redirect: '/eb',
   // IndexPage_QuickSearchList:[], // use default.
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 

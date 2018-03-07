@@ -1,0 +1,75 @@
+@import "~themes/vars";
+
+/* ------------------------ Override antd ------------------------ */
+
+// TODO @alice: don't apply theme level styles here, do it in theme-huawei-blue.
+//:global {
+//  .ant-btn .anticon { font-weight: bold; }
+//  .ant-btn {
+//    padding: 0 10px; font-size: @font-size-lg; border-radius: 2px; border-color: @btn-bg-color;
+//  }
+//  .ant-btn-primary {
+//    background-color: @btn-bg-color; border-color: @btn-bg-color;
+//  }
+//
+//  .ant-btn:hover, .ant-btn.active {
+//    background-color: @btn-bg-color; border-color: @btn-bg-color; color: #ffffff; opacity: 0.8;
+//  }
+//  .ant-btn:focus { color: #ffffff }
+//  .ant-btn-primary:hover, .ant-btn-primary:focus { background-color: @btn-bg-color; }
+//
+//  .ant-menu {
+//    line-height: 64px;
+//    .ant-menu-item { padding: 0 10px; }
+//  }
+//
+//  .ant-tag-checkable:hover { background: @btn-bg-color; }
+//  .ant-tag-checkable:hover, .ant-tag-checkable:active, .ant-tag-checkable-checked {
+//    background: @btn-bg-color;
+//    color: white; }
+//}
+
+.logoZones {
+  display: flex; flex-direction: row;
+  height: 66px; line-height: 66px;
+
+  .header_logo {
+    width: 188px; min-width: 188px;
+    //background-position: -68px -47px;
+    background-image: url('/sys/cgs/header_logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position-y: 10px;
+  }
+
+  .header_subTitle { margin-left: 10px; color: black; }
+
+}
+.index_bannerZone {
+  width: 100%; text-align: center; margin-top: 0px;
+  //.logo {
+  //  display: flex; flex-direction: row; justify-content: center;
+  //  span {
+  //    display: flex; background-position: -171px -10px;
+  //    width: 100px; height: 100px; z-index: 10000; border: none;
+  //  }
+  //}
+  .text {
+    font-size: 28px; font-weight: bold;
+    margin-top: 40px; margin-bottom: 30px;
+  }
+}
+
+.header_info {
+  margin: 0 12px 0 20px; height: 66px; line-height: 66px;
+}
+
+// Overrides
+
+.Overrides() {
+  .header {
+    //background-color: black;
+  }
+}
+
+.Overrides() !important;

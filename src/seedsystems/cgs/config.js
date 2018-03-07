@@ -1,18 +1,22 @@
 /**
- * nsfcai Created by BoGao on 2017/10/6.
+ * Created by BoGao on 2017/10/6.
  */
 import React from 'react';
+// import { Link } from 'dva/router';
 import defaults from 'core/hole';
 
-const ExpertBase = '5a7d1aaed79726e1d4490aa4'; // TODO should change this?
-const ExpertBaseName = 'F06 人工智能'; // TODO should change this?
+// import { PersonComment } from './components';
+// import { GetComments } from './person-comment-hooks';
+
+const ExpertBase = '5a78376cd79726e1d440cdb0'; // TODO should change this?
+const ExpertBaseName = '中国图学会'; // TODO should change this?
 
 export default {
 
   EnableLocalLocale: false,
   GLOBAL_ENABLE_FEEDBACK: true,
 
-  PageTitle: 'NSFC AI',
+  PageTitle: 'cgs',
 
   // AI search helper translation/expand/kg
   Search_EnableTranslateSearch: false, // 启用翻译搜索，显示提示信息;/
@@ -32,13 +36,13 @@ export default {
   // UserAuthSystem_AddSysTagAuto: true, // 登录时自动添加system的标签
 
   // google analytics
-  googleAnalytics: 'UA-107003102-6',
+  // googleAnalytics: 'UA-107003102-6',
 
   IndexPage_Redirect: '/eb',
   // IndexPage_QuickSearchList:[], // use default.
   IndexPage_InfoBlocks: defaults.EMPTY_BLOCK,
 
-  Header_UserPageURL: '/user/info',
+  Header_UserPageURL: '/user-info',
 
   // ShowHelpDoc: true,
 
@@ -48,7 +52,7 @@ export default {
   Search_EnablePin: false,
 
   // > Search related
-  HeaderSearch_TextNavi: ['Nsfcai', 'Coi_rough', 'Coi_thin'],
+  HeaderSearch_TextNavi: [],
   // HeaderSearch_TextNavi: [],
 
   // Search_DisableFilter: false,

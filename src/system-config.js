@@ -1,3 +1,3 @@
 
 // !!! This is generated automatically, don't modify !!! 
-export const system = 'nsfcai';
+export const system = 'cgs';

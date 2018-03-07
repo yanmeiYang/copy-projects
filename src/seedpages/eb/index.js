@@ -8,6 +8,7 @@ import { Map } from 'immutable';
 import hole from 'core/hole';
 import { Spinner } from 'components';
 import { Layout } from 'components/layout';
+import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 import { classnames } from 'utils';
 import { Maps } from 'utils/immutablejs-helpers';
@@ -28,8 +29,8 @@ export default class HierarchyExpertBasePage extends Component {
   }
 
   state = {
-    id: '5a7d1aaed79726e1d4490aa4', // TODO 这里不通用。默认选中改成所有的第一个。
-    name: 'F06 人工智能', // TODO 使用id去获取。
+    id: sysconfig.ExpertBase, // TODO 这里不通用。默认选中改成所有的第一个。
+    name: sysconfig.ExpertBaseName, // 'F06 人工智能', // TODO 使用id去获取。
     childrenId: null, // TODO 改成从左边获取。
     parentId: null, // TODO 改成从左边获取。
     showPersonList: false, // ?

@@ -101,7 +101,7 @@ export default class HierarchyExpertBasePage extends Component {
     const { id, name, childrenId, showPersonList, parentId } = this.state;
 
     return (
-      <Layout searchZone={[]} contentClass={tc(['indexPage'])} showNavigator>
+      <Layout searchZone={[]} contentClass={tc(['indexPage'])} showNavigator={false}>
         <div className={styles.nsfcIndexPage}>
           <div className={styles.treeBlock}>
             <Spinner loading={load} />

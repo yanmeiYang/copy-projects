@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
-import { connect } from 'dva';
 import { Popover, Button, Icon } from 'antd';
-import AddOrg from './addOrg';
-import DeleteBtn from './deleteBtn';
-import MoveOrg from './moveOrg';
-import styles from './rightZone.less';
+import { AddExpertbase, DeleteBtn, MoveOrg } from './index';
+import styles from './OpPopup.less';
 
-export default class RightZone extends Component {
-  state = { fatherId: [], switch: true };
+export default class OpPopup extends Component {
 
-// TODO 传id 多了一层
+  state = {
+    fatherId: [],
+    switch: true
+  };
+
+  // TODO 传id 多了一层
   componentWillReceiveProps(nextProps) {
     if (nextProps.fatherId !== this.props.fatherId) {
       // console.log('fatherIdreciprops', this.props.fatherId, '\n', nextProps.fatherId);
@@ -30,9 +31,9 @@ export default class RightZone extends Component {
   render() {
 
     const content = (
-      <div className={styles.rightcontent}>
-        <AddOrg fatherId={this.props.fatherId} callbackParent={this.switch} name="新建" />
-        <AddOrg fatherId={this.props.fatherId} callbackParent={this.switch} name="编辑" />
+      <div className={styles.OpPopup}>
+        <AddExpertbase fatherId={this.props.fatherId} callbackParent={this.switch} name="新建" />
+        <AddExpertbase fatherId={this.props.fatherId} callbackParent={this.switch} name="编辑" />
         <MoveOrg fatherId={this.props.fatherId} callbackParent={this.switch} />
         <DeleteBtn fatherId={this.props.fatherId} callbackParent={this.switch} />
       </div>

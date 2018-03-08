@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
-import { connect } from 'dva';
+import { connect, FormCreate } from 'engine';
 import { Modal, Form, Input, Button, message, Icon, Radio } from 'antd';
 import { system } from 'core';
-import styles from './index.less';
+import styles from './popup.less';
+
+// TODO 需要可以配置创建的时候弹出的是哪个控件。
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 
-class Addorg extends Component {
+@FormCreate()
+@connect(({ magOrg }) => ({ magOrg }))
+export default class AddExpertbase extends Component {
   state = {
     fatherId: [],
     visible: false,
@@ -138,7 +142,7 @@ class Addorg extends Component {
       },
     };
     return (
-      <div className={styles.addOrg}>
+      <div className={styles.AddExpertbase}>
         <div onClick={this.changeVisible} className={styles.menuItem}>
           {name === '新建' &&
           <Icon type="plus-square-o" />
@@ -216,5 +220,3 @@ class Addorg extends Component {
     );
   }
 }
-
-export default connect(({ magOrg }) => ({ magOrg }))((Form.create())(Addorg));

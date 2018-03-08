@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
-import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
+import { connect, routerRedux } from 'engine';
 import { Tree, Icon } from 'antd';
-import { Link } from 'dva/router';
 import { system } from 'core';
-import RightZone from './rightZone';
-import styles from './index.less';
-import { Maps } from 'utils/immutablejs-helpers';
 import { queryString } from 'utils';
+import { Maps } from 'utils/immutablejs-helpers';
+import { OpPopup } from './oppopup';
+import styles from './HierarchyTree.less';
 
-const { TreeNode } = Tree;
+// 这个改名了。亲们去找components/hierarchy
+
 @connect(({ app, magOrg }) => ({ app, magOrg }))
-export default class ManagermentOrg extends Component {
+export default class HierarchyTree extends Component {
+
   state = {
     fatherId: [],
     showRightZone: '',
@@ -102,7 +102,7 @@ export default class ManagermentOrg extends Component {
     const { defaultSelectedKeys } = this.props;
     return orgs.map((org) => {
       return (
-        <TreeNode
+        <Tree.TreeNode
           key={org.id} dataRef={org}
           title={
             <div className={styles.treeTitle}
@@ -123,7 +123,7 @@ export default class ManagermentOrg extends Component {
               </div>
               <div className={styles.iconLeft}>
                 {showRightZone === org.id &&
-                <RightZone fatherId={[org.id]} changemenu={this.menuIsShow} />
+                <OpPopup fatherId={[org.id]} changemenu={this.menuIsShow} />
                 }
               </div>
             </div>
@@ -132,7 +132,7 @@ export default class ManagermentOrg extends Component {
           {
             org.childs && this.renderTreeNodes(org.childs.sort(this.sortNumber))
           }
-        </TreeNode>
+        </Tree.TreeNode>
       );
     });
   };

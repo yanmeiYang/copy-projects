@@ -5,8 +5,8 @@ const nextAPIURLOnlineBeta = 'https://apiv2-beta.aminer.org';
 const nextAPIURLOnlineProduction = 'https://apiv2.aminer.org';
 const nextAPIURL = process.env.NODE_ENV !== 'production' ?
   // nextAPIURLOnlineBeta
-  // nextAPIURLLocalhost
-  nextAPIURLOnlineProduction
+  nextAPIURLLocalhost
+  // nextAPIURLOnlineProduction
   :
   // nextAPIURLOnlineBeta;
   nextAPIURLOnlineProduction;

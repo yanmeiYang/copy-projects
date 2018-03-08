@@ -1,0 +1,119 @@
+@import "~themes/vars";
+
+.magOrgBlock {
+  ul:first-child {
+    padding-right: 24px !important;
+  }
+  :global {
+    .ant-tree li {
+      padding: 0px;
+      margin: 0px;
+      word-wrap: break-word !important;
+    }
+    .ant-tree .ant-tree-child-trees li {
+      padding-right: 24px;
+    }
+    .ant-tree-node-content-wrapper {
+      width: 100%;
+    }
+    .ant-tree li .ant-tree-node-selected {
+      background-color: #1890ff !important;
+      color: #fafafa !important;
+      height: auto !important;
+      line-height: normal !important;
+      .childrenNum {
+        color: #fafafa !important;
+      }
+
+    }
+
+    .ant-tree li .ant-tree-node-content-wrapper:hover {
+      background-color: #bae7ff;
+    }
+
+    .ant-tree li .ant-tree-node-content-wrapper {
+      height: auto !important;
+      line-height: normal !important;
+      word-break: normal;
+      display: inline-block;
+      white-space: pre-wrap;
+    }
+  }
+  a {
+    color: black;
+  }
+}
+
+
+.deleteBtn {
+  margin: 10px 5px;
+  background-color: #108ee9;
+  padding: 2px;
+  border-radius: 2px;
+  color: white;
+}
+
+.createOrg {
+  //border: 1px solid red;
+  input {
+    margin-bottom: 12px;
+  }
+}
+
+:global {
+  .orgtreemodal {
+    //border: 1px solid red;
+    z-index: 1031;
+    .ant-modal {
+      width: 600px !important;
+      .ant-form-item {
+        margin-bottom: 12px;
+      }
+    }
+  }
+  #orgdelBtn {
+    border-radius: 3px;
+    .ant-popover-inner-content {
+      padding-bottom: 1px;
+    }
+  }
+}
+
+
+.menuItem:hover {
+  background-color: #bae7ff !important;
+  color: #000;
+  cursor: pointer;
+}
+
+.treeTitle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .treeNode {
+    padding: 8px;
+    font-size: 13px;
+    .childrenNum {
+      color: darkgreen;
+    }
+    .childrenNumActive {
+      color: #fff;
+    }
+  }
+  .iconLeft {
+    width: 10px;
+    //margin-left: 20px;
+    margin-right: -18px;
+    text-align: right;
+    padding-right: 10px;
+    i {
+      font-size: 18px;
+      background-color: #fff;
+      color: #ddd;
+      border-radius: 50%;
+      padding-top: 5px;
+      margin-top: -5px;
+    }
+  }
+}

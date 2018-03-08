@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Popconfirm, message, Icon } from 'antd';
 import { system } from 'core';
-import styles from './index.less';
-
+import styles from './popup.less';
 
 @connect(({ app, magOrg }) => ({ app, magOrg }))
 export default class DeleteBtn extends Component {
-  state = { fatherId: [] };
+
+  state = {
+    fatherId: []
+  };
 
 
   // componentWillReceiveProps(nextProps) {

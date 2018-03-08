@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
-import { connect } from 'dva';
-import {
-  TreeSelect, Modal, Button, message, Icon,
-} from 'antd';
+import { connect } from 'engine';
+import { TreeSelect, Modal, message, Icon } from 'antd';
 import { system } from 'core';
 import { Maps } from 'utils/immutablejs-helpers';
-import styles from './index.less';
-
+import styles from './popup.less';
 
 const TreeNode = TreeSelect.TreeNode;
+
 @connect(({ app, magOrg }) => ({ app, magOrg }))
 export default class MoveOrg extends Component {
+
   state = {
     value: [],
     fatherId: [],

@@ -10,7 +10,7 @@ import styles from './SearchFilter.less';
 
 const { CheckableTag } = Tag;
 
-const expertBases = sysconfig.ExpertBases;
+// const expertBases = sysconfig.ExpertBases;
 
 // aggregation config， 使用最新的来用。
 const AggConfig = {
@@ -56,6 +56,7 @@ export default class SearchFilter extends Component {
     this.onExpertBaseChange = this.props.onExpertBaseChange;
     // 这里先写全所有的filters，靠返回值中有无相应结果来控制是否显示。
     this.keys = ['h_index', 'gender', 'nation', 'lang', 'dims.systag'];
+    this.expertBases = this.props.ExpertBases || sysconfig.ExpertBases;
   }
 
   shouldComponentUpdate(nextProps) {
@@ -118,7 +119,7 @@ export default class SearchFilter extends Component {
 
           {/* ------ 搜索范围 / Expert Base ------ */}
 
-          {!disableExpertBaseFilter && expertBases && expertBases.length > 0 &&
+          {!disableExpertBaseFilter && this.expertBases && this.expertBases.length > 0 &&
           <div className={classnames(styles.filterRow, styles.range)}>
             <span className={styles.filterTitle}>
               <FM id="com.search.filter.searchRange" defaultMessage="Search Range:" />

@@ -10,6 +10,7 @@
 // 所有可选系统，保留关键字：global.
 const AvailableSystems = [
   // 'aminer',
+  'ces', // 电工学会
   'cgs', // 中国图学会
   'demo',
   // 'data_annotation',

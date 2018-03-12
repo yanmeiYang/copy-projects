@@ -85,7 +85,9 @@ export default class HierarchyExpertBasePage extends Component {
       this.setState({ childrenId: null, showPersonList: true });
     }
     if (data && data.parents) {
-      this.setState({ childrenId: null, showPersonList: true, parentId: data.parents[0] });
+      this.setState({ parentId: data.parents[0] });
+    } else {
+      this.setState({ parentId: null });
     }
   };
 

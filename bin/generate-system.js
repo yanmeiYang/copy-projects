@@ -11,6 +11,7 @@ const { linkFolder, createFile, clearFolders, linkPagesByRoutes } = require('./n
 // const { AvailableSystems } = require('../src/core/system');
 const AvailableSystems = [
   'aminer',
+  'ces',
   'cgs',
   'demo',
   'data_annotation',

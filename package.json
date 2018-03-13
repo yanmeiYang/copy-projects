@@ -7,7 +7,6 @@
     "build": "cross-env ESLINT=none umi build"
   },
   "dependencies": {
-    "@antv/g2": "^3.0.5-beta.5",
     "@babel/polyfill": "^7.0.0-beta.36",
     "antd": "^3.2.2",
     "axios": "^0.18.0",

@@ -1,22 +1,22 @@
 /**
  * Created by ranyanchuan on 2018/3/13.
  */
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'engine';
 import { loadECharts } from 'utils/requirejs';
 import styles from './index.less';
 @connect(({loading}) => ({loading}))
 export default class EmailStatistics extends React.Component {
   componentDidMount() {
-    this.initBarChar();
+    this.initEchart();
   }
 
-  initBarChar = () => {
+  initEchart = () => {
     loadECharts((echarts) => {
       // 基于准备好的dom，初始化echarts实例
-      const {id,origin} = this.props;
-      const {date,data}=origin;
-      const myChart = echarts.init(document.getElementById(id));
+      const {id, origin} = this.props;
+      const {date, data} = origin;
+      const myChart = echarts.init(document.getElementById(id || 'myEchart'));
       const option = {
         tooltip: {
           trigger: 'axis'
@@ -33,12 +33,12 @@ export default class EmailStatistics extends React.Component {
         xAxis: {
           type: 'category',
           boundaryGap: false,
-          data:date,
+          data: date || [],
         },
         yAxis: {
           type: 'value'
         },
-        series: data
+        series: data || [],
       };
       myChart.setOption(option);
     });
@@ -48,7 +48,7 @@ export default class EmailStatistics extends React.Component {
     const {id} = this.props;
     return (
       <div className={styles.userEmailEchart}>
-        <div id={id} className={styles.echart}/>
+        <div id={id || 'myEchart'} className={styles.echart}/>
       </div>
     );
   }

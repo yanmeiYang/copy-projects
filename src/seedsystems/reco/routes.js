@@ -13,6 +13,7 @@ module.exports = {
     'login',
     'user',
     'admin/users',
+    'admin/email-group',
 
     '404',
   ],

@@ -26,7 +26,7 @@ export default class AddExpertbase extends Component {
 
   handleOk = (event) => {
     // TODO dispatch 提交数据
-    event.stopPropagation();
+    // event.stopPropagation();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const parent = this.state.fatherId;
@@ -73,7 +73,7 @@ export default class AddExpertbase extends Component {
   };
 
   updataInfo = (event) => {
-    event.stopPropagation();
+    // event.stopPropagation();
     this.props.dispatch({
       type: 'magOrg/getOrganizationByIDs',
       payload: {
@@ -91,7 +91,7 @@ export default class AddExpertbase extends Component {
   };
 
   handleCancel = (event) => {
-    event.stopPropagation();
+    // event.stopPropagation();
     this.props.form.resetFields();
     this.setState({
       fatherId: [],
@@ -100,7 +100,7 @@ export default class AddExpertbase extends Component {
   };
 
   changeVisible = (event) => {
-    event.stopPropagation();
+    // event.stopPropagation();
     this.setState({
       visible: true,
     });

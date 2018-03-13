@@ -128,7 +128,7 @@ export default class PersonList extends Component {
           const email = showPrivacy && profile.email;
 
           // go into
-          const { indices } = person.indices;
+          const indices = person.indices;
           const activity_indices = {}; // TODO use
           // const tags = profileUtils.findTopNTags(person, 8);
 

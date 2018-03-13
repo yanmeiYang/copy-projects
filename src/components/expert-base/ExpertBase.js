@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react';
 import { connect, routerRedux, withRouter } from 'engine';
-import { Tabs } from 'antd';
+import { Tabs, Button, Modal } from 'antd';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
 import { createURL, queryString } from 'utils';
@@ -25,7 +25,7 @@ export default class ExpertBaseExpertsPage extends Component {
 
   state = {
     key: '1',
-    // showAddExpertModal: false,
+    addExpertVisible: false,
   };
 
   componentWillMount() {
@@ -51,7 +51,7 @@ export default class ExpertBaseExpertsPage extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { search, currentBaseChildIds, expertBaseId, expertBaseName } = this.props;
+    const { search, currentBaseChildIds, expertBaseId, expertBaseName, currentBaseParentId } = this.props;
     const prevSearch = prevProps.search;
     let expertBases = [];
     if (currentBaseChildIds) {
@@ -62,7 +62,8 @@ export default class ExpertBaseExpertsPage extends Component {
     if (search.filters && search.filters.eb && search.filters.eb.id
       && prevSearch.filters && prevSearch.filters.eb && prevSearch.filters.eb.id
     ) {
-      if (search.filters.eb.id !== prevSearch.filters.eb.id && search.filters.eb.id !== 'aminer') {
+      if (search.filters.eb.id !== prevSearch.filters.eb.id && search.filters.eb.id !== 'aminer'
+        && search.filters.eb.id !== currentBaseParentId) {
         // TODO 以后是要删除的
         const finalId = this.getResultsIsNullById(expertBaseId);
         const filters = { eb: { id: finalId, name: expertBaseName } };
@@ -169,7 +170,7 @@ export default class ExpertBaseExpertsPage extends Component {
         });
       }
       const filters = { eb: { id: expertBaseId, name: expertBaseName } };
-      this.doSearch(search.query, finalOffset, size, filters, '', null, null, expertBases);
+      dispatch({ type: 'search/updateFilters', payload: { filters } });
     }
     if (key === '2') {
       const filters = { eb: { id: 'aminer', name: '全球专家' } };
@@ -187,6 +188,7 @@ export default class ExpertBaseExpertsPage extends Component {
         });
       }
       const filters = { eb: { id: currentBaseParentId, name: expertBaseName } };
+      dispatch({ type: 'search/updateFilters', payload: { filters } });
       this.doSearch(search.query, finalOffset, size, filters, '', null, null, expertBases);
     }
   };
@@ -201,17 +203,24 @@ export default class ExpertBaseExpertsPage extends Component {
     });
   };
 
-  // showAddExpertModal = () => {
-  //   this.setState({ showAddExpertModal: true });
-  //   this.switchTab('2', 0);
-  // };
+  showAddExpertModal = () => {
+    this.setState({ addExpertVisible: true });
+    this.props.dispatch({ type: 'search/updateFiltersAndQuery', payload: { query: '-' } });
+    this.switchTab('2');
+  };
+
+  hideAddExpertModal = () => {
+    this.setState({ addExpertVisible: false });
+    this.props.dispatch({ type: 'search/updateFiltersAndQuery', payload: { query: '' } });
+    this.switchTab('1');
+  };
 
   ebSorts = ['h_index', 'activity', 'rising_star', 'n_citation', 'n_pubs', 'time'];
 
   render() {
     const { query, pagination, sortKey } = this.props.search;
     const { expertBaseName, expertBaseId, currentBaseChildIds, currentBaseParentId } = this.props;
-    // const { showAddExpertModal } = this.state;
+    const { addExpertVisible } = this.state;
 
     // TODO 104 108 110的智库为空，使用父级智库
     const finalExpertBaseId = this.getResultsIsNullById(expertBaseId);
@@ -227,37 +236,42 @@ export default class ExpertBaseExpertsPage extends Component {
       <div>
         <div className={styles.currentRoster}>
           <span className={styles.currentRosterName}> {expertBaseName} </span>
-          {/*<Button type="primary" onClick={this.showAddExpertModal}>添加专家</Button>*/}
-          {/*<Modal*/}
-          {/*title="编辑专家列表"*/}
-          {/*visible={showAddExpertModal}*/}
-          {/*onOk={this.hideUserModal}*/}
-          {/*onCancel={this.hideUserModal}*/}
-          {/*footer={null}*/}
-          {/*bodyStyle={{ padding: '10px 20px 1px 20px' }}*/}
-          {/*>*/}
-          {/*<SearchComponent // Example: include all props.*/}
-          {/*className={styles.SearchBorder} // additional className*/}
-          {/*sorts={sysconfig.Search_SortOptions || (query ? null : this.ebSorts)}*/}
-          {/*defaultSortType={sortKey}*/}
-          {/*onSearchBarSearch={this.onSearchBarSearch}*/}
-          {/*expertBaseId={finalExpertBaseId}*/}
-          {/*currentBaseChildIds={currentBaseChildIds}*/}
-          {/*PersonList_BottomZone={theme.PersonList_BottomZone}*/}
-          {/*PersonList_UpdateHooks={sysconfig.PersonList_UpdateHooks}*/}
-          {/*rightZoneFuncs={[]}*/}
-          {/*searchMessagesZone={searchMessageZone}*/}
-          {/*disableFilter={sysconfig.Search_DisableFilter}*/}
-          {/*ExpertBases={[]}*/}
-          {/*disableExpertBaseFilter={false}*/}
-          {/*disableSearchKnowledge*/}
-          {/*hideLocationAndLanguageInFilter*/}
-          {/*onPageChange={this.onPageChange}*/}
-          {/*/>*/}
-          {/*</Modal>*/}
+          <Button type="primary" onClick={this.showAddExpertModal} size="small">添加专家</Button>
+          <Modal
+            title="添加专家"
+            visible={addExpertVisible}
+            onOk={this.hideAddExpertModal}
+            onCancel={this.hideAddExpertModal}
+            maskClosable={false}
+            footer={null}
+            width="78vw"
+            wrapClassName={styles.addExpertModal}
+            bodyStyle={{ padding: '10px 20px 1px 20px', height: '100vh', overflowY: 'scroll' }}
+            style={{ marginLeft: '21vw', height: '100vh', marginTop: '42px' }}
+          >
+            <KgSearchBox className={styles.searchBox} onSearch={this.onSearch} query={query} />
+            <SearchComponent // Example: include all props.
+              className={styles.SearchBorder} // additional className
+              sorts={sysconfig.Search_SortOptions || (query ? null : this.ebSorts)}
+              defaultSortType={sortKey}
+              onSearchBarSearch={this.onSearchBarSearch}
+              expertBaseId={finalExpertBaseId}
+              currentBaseChildIds={currentBaseChildIds}
+              PersonList_BottomZone={theme.PersonList_BottomZone}
+              PersonList_UpdateHooks={sysconfig.PersonList_UpdateHooks}
+              rightZoneFuncs={[]}
+              searchMessagesZone={searchMessageZone}
+              disableFilter={sysconfig.Search_DisableFilter}
+              ExpertBases={[]}
+              disableExpertBaseFilter={false}
+              disableSearchKnowledge
+              hideLocationAndLanguageInFilter
+              onPageChange={this.onPageChange}
+            />
+          </Modal>
         </div>
         <div className={styles.search}>
-          <KgSearchBox size="huge" className={styles.searchBox} onSearch={this.onSearch} />
+          <KgSearchBox className={styles.searchBox} onSearch={this.onSearch} query={query} />
         </div>
         <div>
           <Tabs defaultActiveKey="1" onChange={this.switchTab} activeKey={this.state.key}>

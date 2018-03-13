@@ -1,22 +1,18 @@
 /**
- * Created by BoGao on 2017/10/6.
+ * nsfcai Created by BoGao on 2017/10/6.
  */
 import React from 'react';
-// import { Link } from 'dva/router';
 import defaults from 'core/hole';
 
-// import { PersonComment } from './components';
-// import { GetComments } from './person-comment-hooks';
-
-const ExpertBase = '5a9f4de87e96b5460de11d00'; // TODO should change this?
-const ExpertBaseName = '中国图学学会会'; // TODO should change this?
+const ExpertBase = '5aa625f97e96b5460d5af181'; // TODO should change this?
+const ExpertBaseName = '电工学会'; // TODO should change this?
 
 export default {
 
   EnableLocalLocale: false,
   GLOBAL_ENABLE_FEEDBACK: true,
 
-  PageTitle: 'cgs',
+  PageTitle: 'CES',
 
   // AI search helper translation/expand/kg
   Search_EnableTranslateSearch: false, // 启用翻译搜索，显示提示信息;/
@@ -52,7 +48,7 @@ export default {
   Search_EnablePin: false,
 
   // > Search related
-  HeaderSearch_TextNavi: [],
+  HeaderSearch_TextNavi: ['Nsfcai'],
   // HeaderSearch_TextNavi: [],
 
   // Search_DisableFilter: false,

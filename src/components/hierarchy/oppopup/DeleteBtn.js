@@ -21,7 +21,7 @@ export default class DeleteBtn extends Component {
 
   // 删除确认的两个事件
   confirm = (event) => {
-    event.stopPropagation();
+    // event.stopPropagation();
     this.props.dispatch({
       type: 'magOrg/organizationDelete',
       payload: {
@@ -44,10 +44,10 @@ export default class DeleteBtn extends Component {
   };
   // TODO 这个方法还没写，有用么？
   cancel = (event) => {
-    event.stopPropagation();
+    // event.stopPropagation();
   };
   openswitch = (event) => {
-    event.stopPropagation();
+    // event.stopPropagation();
     this.props.callbackParent();
   };
 

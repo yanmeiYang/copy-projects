@@ -2,14 +2,18 @@
 
 .emailGroup {
   width: 100%; flex: auto; display: flex;
+
   .menu {
     width: 200px; flex: none;
+
     .createMenu {
       margin-bottom: 10px;
+
       button { width: 100%; }
     }
     .menuItems {
       width: 200px; border-right: 1px solid #e8e8e8;
+
       .item { padding: 10px 15px; }
       .item:hover { cursor: pointer; color: #1890ff; }
       .itemActive { padding: 10px 15px; background-color: #1890ff; color: #fff; }
@@ -18,17 +22,17 @@
   }
   .emailTable {
     margin-left: 15px;
+
     .static { display: flex; justify-content: space-around; }
     .groupAction {
       padding: 10px; display: flex; justify-content: space-between;
+
       .groupTitle { padding-top: 8px; }
       .icon { margin-left: 18px; color: #1890ff; }
       .icon:hover { cursor: pointer; }
       .uploadform {
         :global {
-          .ant-form-item {
-            margin-bottom: 0px !important;
-          }
+          .ant-form-item { margin-bottom: 0px !important; }
         }
       }
     }

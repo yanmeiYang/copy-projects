@@ -5,8 +5,10 @@ import React from 'react';
 import { connect } from 'engine';
 import { loadECharts } from 'utils/requirejs';
 import styles from './index.less';
+
 @connect(({loading}) => ({loading}))
 export default class EmailStatistics extends React.Component {
+
   componentDidMount() {
     this.initEchart();
   }
@@ -14,9 +16,9 @@ export default class EmailStatistics extends React.Component {
   initEchart = () => {
     loadECharts((echarts) => {
       // 基于准备好的dom，初始化echarts实例
-      const {id, origin} = this.props;
+      const {id = 'myEchart', origin} = this.props;
       const {date, data} = origin;
-      const myChart = echarts.init(document.getElementById(id || 'myEchart'));
+      const myChart = echarts.init(document.getElementById(id));
       const option = {
         tooltip: {
           trigger: 'axis'
@@ -45,10 +47,10 @@ export default class EmailStatistics extends React.Component {
   };
 
   render() {
-    const {id} = this.props;
+    const {id = 'myEchart'} = this.props;
     return (
       <div className={styles.userEmailEchart}>
-        <div id={id || 'myEchart'} className={styles.echart}/>
+        <div id={id} className={styles.echart}/>
       </div>
     );
   }

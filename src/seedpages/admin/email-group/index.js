@@ -12,7 +12,6 @@ import EmailStatistics from './components/statistics/index';
 import { menuData, weekSubscribeData, daySubscribeData, weekLineData, dayLineData, emailListData } from './fake-data'
 import styles from './index.less';
 
-
 @connect(({app}) => ({app}))
 @Auth
 class EmailGroupIndex extends Component {
@@ -28,14 +27,14 @@ class EmailGroupIndex extends Component {
     this.setState({menuActive: index,});
   };
 
-  onShowGroupModal = () => {
+  onGroupModalShow = () => {
     this.setState({createGroupVisible: true});
   };
-  onHideGroupModal = () => {
+  onGroupModalHide = () => {
     this.setState({createGroupVisible: false});
   };
 
-  onEditGroupName = () => {
+  onGroupNameEdit = () => {
     this.setState({editGroupFormVisible: true});
   };
 
@@ -58,29 +57,29 @@ class EmailGroupIndex extends Component {
     });
   };
 
-  onUpdateGroupSubmit = (e) => {
+  onGroupUpdate = (e) => {
     const values = this.props.form.getFieldsValue();
     if (values.editName) {
       this.setState({editGroupFormVisible: false, delEditIconVisible: false});
     }
   };
 
-  onMouseOverGroupName = () => {
+  onGroupNameMouseOver = () => {
     this.setState({delEditIconVisible: true});
   };
 
-  onMouseLeaveGroupName = () => {
+  onGroupNameMouseLeave = () => {
     this.setState({delEditIconVisible: false});
   };
 
-  getUploadNormFile = (e) => {
+  getNormFileUpload = (e) => {
     if (Array.isArray(e)) {
       return e;
     }
     return e && e.fileList;
   };
 
-  onConfirmDelGroup = () => {
+  onGroupDelConfirm = () => {
     message.info('Click on Yes.');
   };
 
@@ -139,7 +138,7 @@ class EmailGroupIndex extends Component {
         <div className={styles.emailGroup}>
           <div className={styles.menu}>
             <div className={styles.createMenu}>
-              <Button icon="plus" onClick={this.onShowGroupModal}>创建</Button>
+              <Button icon="plus" onClick={this.onGroupModalShow}>创建</Button>
             </div>
             <div className={styles.menuItems}>
               {menuData && menuData.map((item, index) => {
@@ -156,17 +155,17 @@ class EmailGroupIndex extends Component {
           <div style={{width: tableWidth}} className={styles.emailTable}>
             <div className={styles.groupAction}>
               <div className={styles.groupTitle}
-                   onMouseOver={this.onMouseOverGroupName}
-                   onMouseLeave={this.onMouseLeaveGroupName}
+                   onMouseOver={this.onGroupNameMouseOver}
+                   onMouseLeave={this.onGroupNameMouseLeave}
               >
                 {!editGroupFormVisible &&
                 <div>
                   <span className={styles.title}>{menuData[menuActive]}</span>
                   {delEditIconVisible &&
                   <span>
-                        <span onClick={this.onEditGroupName}><Icon type="edit" className={styles.icon}/></span>
+                        <span onClick={this.onGroupNameEdit}><Icon type="edit" className={styles.icon}/></span>
                         <Popconfirm placement="left" title="您确认删除这个邮件组吗?" okText="Yes" cancelText="No"
-                                    onConfirm={this.onConfirmDelGroup}>
+                                    onConfirm={this.onGroupDelConfirm}>
                           <Icon type="delete" className={styles.icon}/>
                         </Popconfirm>
                   </span>
@@ -184,7 +183,7 @@ class EmailGroupIndex extends Component {
                     )}
                   </Form.Item>
                   <Form.Item>
-                    <Button type="primary" onClick={this.onUpdateGroupSubmit}>提交</Button>
+                    <Button type="primary" onClick={this.onGroupUpdate}>提交</Button>
                   </Form.Item>
                 </Form>
                 }
@@ -194,7 +193,7 @@ class EmailGroupIndex extends Component {
                   <Form.Item>
                     {getFieldDecorator('upload', {
                       valuePropName: 'fileList',
-                      getValueFromEvent: this.getUploadNormFile,
+                      getValueFromEvent: this.getNormFileUpload,
                     })(
                       <Upload name="logo" action="/upload.do" listType="picture" className={styles.uploadBtn}>
                         <Button><Icon type="upload"/> 上传</Button>
@@ -226,7 +225,7 @@ class EmailGroupIndex extends Component {
         <Modal
           title="创建"
           visible={this.state.createGroupVisible}
-          onCancel={this.onHideGroupModal}
+          onCancel={this.onGroupModalHide}
           footer={null}
         >
           <Form layout="inline" onSubmit={this.onCreateGroupSubmit}>

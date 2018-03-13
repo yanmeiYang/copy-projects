@@ -25,7 +25,7 @@ class EmailGroupIndex extends Component {
   };
 
   onMenuSelect = (item, index) => {
-    this.setState({mActive: index,});
+    this.setState({menuActive: index,});
   };
 
   onShowGroupModal = () => {

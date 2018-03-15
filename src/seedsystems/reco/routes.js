@@ -15,6 +15,7 @@ module.exports = {
     'admin/users',
     'admin/email-group',
 
+    'subscription',
     '404',
   ],
 };

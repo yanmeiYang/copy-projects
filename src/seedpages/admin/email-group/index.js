@@ -162,13 +162,15 @@ class EmailGroupIndex extends Component {
                 <div>
                   <span className={styles.title}>{menuData[menuActive]}</span>
                   {delEditIconVisible &&
-                  <span>
-                        <span onClick={this.onGroupNameEdit}><Icon type="edit" className={styles.icon}/></span>
-                        <Popconfirm placement="left" title="您确认删除这个邮件组吗?" okText="Yes" cancelText="No"
-                                    onConfirm={this.onGroupDelConfirm}>
-                          <Icon type="delete" className={styles.icon}/>
-                        </Popconfirm>
-                  </span>
+                  (
+                    <span>
+                          <span onClick={this.onGroupNameEdit}><Icon type="edit" className={styles.icon}/></span>
+                          <Popconfirm placement="left" title="您确认删除这个邮件组吗?" okText="Yes" cancelText="No"
+                                      onConfirm={this.onGroupDelConfirm}>
+                            <Icon type="delete" className={styles.icon}/>
+                          </Popconfirm>
+                    </span>
+                  )
                   }
                 </div>
                 }

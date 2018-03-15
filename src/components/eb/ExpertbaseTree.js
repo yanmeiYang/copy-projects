@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect, routerRedux } from 'engine';
-import { system } from 'core';
-import { queryString } from 'utils';
-import { Maps } from 'utils/immutablejs-helpers';
-import AddEBMenuItem from './menuitem/AddEBMenuItem';
+import { connect } from 'engine';
+import { AddEBMenuItem, DeleteMenuItem } from './menuitem';
 import HierarchyTree from "components/hierarchy/HierarchyTree";
 
 @connect(({ app, expertbaseTree }) => ({ app, expertbaseTree }))
@@ -31,11 +28,7 @@ export default class ExpertbaseTree extends Component {
     },
     { key: "edit", label: "编辑", icon: "edit", component: AddEBMenuItem },
     { key: "move", label: "移动", icon: "select" },
-    {
-      key: "del", label: "删除", icon: "delete", onClick: () => {
-        console.log('newnewnew')
-      }
-    },
+    { key: "del", label: "删除", component: DeleteMenuItem },
   ];
 
   // //todo 增加org,禁止取消选择

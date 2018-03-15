@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { Tree, Icon, Popover } from 'antd';
 import styles from './ActionMenu.less';
 import PropTypes from "prop-types";
-import { AddExpertbase, DeleteBtn, MoveOrg } from './oppopup';
+import { MoveOrg } from './oppopup';
 import { compare } from "utils/compare";
 
 export default class ActionMenu extends Component {

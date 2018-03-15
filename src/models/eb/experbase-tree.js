@@ -23,6 +23,15 @@ export default {
       }
     },
 
+    * getExpertBases({ payload }, { call, put }) {
+      const { ids } = payload;
+      const data = yield call(ebService.getExpertBases, payload);
+      if (data.data.succeed) {
+        return data.data.items;
+      }
+      return null;
+    },
+
     //   * organizationCreate({ payload }, { call }) {
     //     // TODO 很多数据
     //     const { data } = payload;

@@ -22,10 +22,10 @@ export default class ExpertbaseTree extends Component {
     this.props.dispatch({ type: 'expertbaseTree/getTreeData' });
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log('>>>>>>>>', nextProps);
-    return true;
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   console.log('>>>>>>>>', nextProps);
+  //   return true;
+  // }
 
   componentDidUpdate(prevProps) {
     if (!imCompare(prevProps, this.props, "expertbaseTree", "treeData")) {
@@ -36,10 +36,7 @@ export default class ExpertbaseTree extends Component {
   }
 
   actionMenuConfig = [
-    {
-      key: "create", label: "新建", callbackParent: this.switch,
-      component: AddEBMenuItem,
-    },
+    { key: "create", label: "新建", callbackParent: this.switch, component: AddEBMenuItem },
     { key: "edit", label: "编辑", icon: "edit", component: AddEBMenuItem },
     { key: "move", label: "移动", icon: "select" },
     { key: "del", label: "删除", component: DeleteMenuItem },

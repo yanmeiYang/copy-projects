@@ -4,7 +4,7 @@
  */
 import React, { Component } from 'react';
 import { connect, routerRedux } from 'engine';
-import { Map } from 'immutable';
+import { Map, fromJS } from 'immutable';
 import { Spinner } from 'components';
 import { Layout } from 'components/layout';
 import { sysconfig } from 'systems';
@@ -14,17 +14,21 @@ import ExpertBase from 'components/expert-base/ExpertBase';
 import ExpertbaseTree from 'components/eb/ExpertbaseTree';
 import styles from './index.less';
 import helper from 'helper';
+import { Maps } from "utils/immutablejs-helpers";
 
-@connect(({ app, magOrg, loading }) => ({ app, magOrg, loading }))
+
+@connect(({ app, expertbaseTree, magOrg, loading }) => ({ app, expertbaseTree, magOrg, loading }))
 export default class HierarchyExpertBasePage extends Component {
 
   constructor(props) {
     super(props);
-    this.children = Map();
+    this.children = Map(); // TODO what's this?
   }
 
   state = {
     id: null, // sysconfig.ExpertBase, // 默认选中改成所有的第一个。
+    eb: null,
+
     childrenId: null, // TODO 改成从左边获取。
     parentId: null, // TODO 改成从左边获取。
   };
@@ -38,13 +42,18 @@ export default class HierarchyExpertBasePage extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { id } = helper.getSearchParams(nextProps);
-    if (id) {
-      this.setState({ id });
+    if (this.state.id !== id) {
+      if (id) {
+        this.setState({ id });
+        this.getEB(id);
+      } else {
+        this.setState({ id: null, eb: null })
+      }
     }
-    console.log('------------------------------------', id); // TODO ???????????
-    if (nextProps.magOrg.get('initData') !== null) {
-      this.getChildrenId(this.state.id, nextProps.magOrg);
-    }
+    // console.log('------------------------------------', id); // TODO ???????????
+    // if (nextProps.magOrg.get('initData') !== null) {
+    //   this.getChildrenId(this.state.id, nextProps.magOrg);
+    // }
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -53,10 +62,6 @@ export default class HierarchyExpertBasePage extends Component {
     }
     return true;
   }
-
-  onTreeReady = () => {
-    console.log('8889 onTreeReady',);
-  };
 
   getChildrenId = (id, dataSource) => {
     const initData = dataSource && dataSource.get('initData') || [];
@@ -99,18 +104,37 @@ export default class HierarchyExpertBasePage extends Component {
   };
 
   onTreeReady = (data) => {
-    const { dispatch } = this.props;
-    console.log('data is :', data);
+    this.getEB(this.state.id);
+  };
+
+  getEB = (id) => {
+    const { dispatch, expertbaseTree } = this.props;
+    if (expertbaseTree) {
+      const treeData = expertbaseTree.get('treeData');
+      let firstItem;
+      const ebid = id || treeData && treeData.size > 0 && treeData.get(0) && treeData.get(0).get('id');
+      if (ebid) {
+        dispatch({ type: 'expertbaseTree/getExpertBases', payload: { ids: [ebid] } })
+          .then((items) => {
+            if (items && items.length > 0) {
+              firstItem = fromJS(items[0]);
+              this.setState({ eb: firstItem })
+            }
+          });
+      }
+    }
   };
 
   render() {
-    const load = this.props.loading.effects['magOrg/getOrganizationByIDs'];
-    const { id, name, childrenId, parentId } = this.state;
+    const { expertbaseTree } = this.props;
+    const { id, eb, childrenId, parentId } = this.state;
+    console.log('eb is ', eb);
+    const [name, name_zh, desc, desc_zh] =
+      Maps.getAll(eb, "name", "name_zh", "desc", "desc_zh");
     return (
       <Layout searchZone={[]} contentClass={styles.ebIndex} showNavigator={false}>
-        <div className={styles.nsfcIndexPage}>
+        <div className={styles.container}>
           <div className={styles.treeBlock}>
-            <Spinner loading={load} />
 
             <ExpertbaseTree
               onItemClick={this.onItemClick}
@@ -121,8 +145,19 @@ export default class HierarchyExpertBasePage extends Component {
           </div>
 
           <div className={styles.rightBlock}>
-            <ExpertBase query="-" offset="0" size="20" expertBaseId={id} expertBaseName={name}
-                        currentBaseChildIds={childrenId} currentBaseParentId={parentId} />
+            <div className={styles.info}>
+              {eb && <>
+                <h1>
+                  {name}
+                  {name_zh && <span className={styles.subTitle}>（{name_zh}）</span>}
+                </h1>
+                <span className={styles.desc}>{desc}</span>
+                <span className={styles.desc}>{desc_zh}</span>
+              </>}
+            </div>
+            <ExpertBase query="-" offset="0" size="20" expertBaseId={id}
+                        currentBaseChildIds={childrenId}
+                        currentBaseParentId={parentId} />
           </div>
 
         </div>

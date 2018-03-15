@@ -17,6 +17,14 @@ export async function getExpertBaseTreeData(payload) {
   return nextAPI({ data: [nextapi.api] });
 }
 
+export async function getExpertBases(payload) {
+  const { ids } = payload;
+  const nextapi = apiBuilder.create(Action.search.search, 'getExpertBase')
+    .param({ ids, offset: 0, size: MaxTreeDataItems, searchType: 'all' })
+    .addFilter("terms", { system: [sysconfig.SYSTEM] })
+    .schema(F.fields.eb.full);
+  return nextAPI({ data: [nextapi.api] });
+}
 
 // .................... old methods ...............
 

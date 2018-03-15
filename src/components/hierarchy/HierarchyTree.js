@@ -42,7 +42,7 @@ export default class HierarchyTree extends Component {
   }
 
   componentWillReceiveProps = (nextProps) => {
-    console.log('[datadata]~~~~~~~~~~~~~~~~~~~~~~~', nextProps.selected);
+    // console.log('[datadata]~~~~~~~~~~~~~~~~~~~~~~~', nextProps.selected);
     if (compare(nextProps, this.props, 'data')) {
       this.setState({ selected: this.getSelectedID(nextProps) })
     }

@@ -38,7 +38,6 @@ export default class ActionMenu extends Component {
 
   render() {
     const { id, top, config } = this.props;
-    console.log('init ActionMenu', id, top, config);
     return (
       <div id={id} className={styles.actionMenu} ref="menu">
         <div className={styles.menu}>

@@ -3,6 +3,9 @@ import { Map } from 'immutable';
 const Maps = {
 
   getAll: (map, ...keys) => {
+    if (!map) {
+      return []
+    }
     if (!Map.isMap(map)) {
       throw new Error('map is not a immutable Map!' + map);
     }

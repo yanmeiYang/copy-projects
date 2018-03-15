@@ -1,12 +1,17 @@
 @import "~themes/vars";
 
 .ebIndex {
+  .container {
+    display: flex; flex-direction: row;
+
+    .treeBlock { width: 19vw; min-height: 50vh; min-width: 180px;margin-right: 26px; }
+
+    .rightBlock { width: 81vw; padding: 10px; border: 1px solid #EEEEEE; margin-left: 8px; }
+  }
+
+  .info {
+    .subTitle { font-size: 14px;margin-left: 12px;}
+    .desc {color: #333;}
+  }
 }
 
-.nsfcIndexPage {
-  display: flex; flex-direction: row;
-
-  .treeBlock { width: 19vw; min-height: 50vh; min-width: 180px;margin-right: 26px; }
-
-  .rightBlock { width: 81vw; padding: 10px; border: 1px solid #EEEEEE; margin-left: 8px; }
-}

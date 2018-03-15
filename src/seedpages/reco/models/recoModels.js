@@ -13,8 +13,15 @@ export default {
     },
     // 读取对应的project
     * getProjectList({ payload }, { call }) {
-      // const { projectId } = payload;
-      const data = yield call(reco.getProjectList, payload);
+      const { offset, and } = payload;
+      const newData = {
+        ids: [],
+        searchType: 'reviewer_project',
+        offset,
+        size: 10,
+        filters: { and },
+      };
+      const data = yield call(reco.getProjectList, newData);
       return data.data.items;
     },
     * getProjectById({ payload }, { call }) {
@@ -25,7 +32,8 @@ export default {
 
     // 创建proj，上传所有的信息
     * sendProjInfo({ payload }, { call }) {
-      const { projectId, data, title, orgList, orgId, trackOpenimg, link } = payload;
+      // 可能以后用到 orgList,
+      const { projectId, data, title, orgId } = payload;
       const search = JSON.stringify(data.search);
       const pdata = {
         'parameters': {
@@ -60,14 +68,6 @@ export default {
                 {
                   'field': 'content_from',
                   'value': data.content,
-                },
-                {
-                  'field': 'track_openimg',
-                  'value': trackOpenimg,
-                },
-                {
-                  'field': 'links',
-                  'value': link,
                 },
                 {
                   'field': 'recommend_object',
@@ -115,7 +115,7 @@ export default {
             },
           ],
         },
-      }
+      };
       const pdata = yield call(reco.updataProj, data);
       return pdata.data;
     },
@@ -197,7 +197,8 @@ export default {
       return pdata.data;
     },
     * updataProj({ payload }, { call }) {
-      const { projectId, data, title, orgList, orgId, trackOpenimg, link } = payload;
+      // 可能以后用到 orgList, orgId,
+      const { projectId, data, title} = payload;
       const search = JSON.stringify(data.search);
       const pdata = {
         'parameters': {
@@ -231,14 +232,6 @@ export default {
                   'value': data.content,
                 },
                 {
-                  'field': 'track_openimg',
-                  'value': trackOpenimg,
-                },
-                {
-                  'field': 'links',
-                  'value': link,
-                },
-                {
                   'field': 'recommend_object',
                   'value': data.Recommended,
                 },
@@ -269,6 +262,16 @@ export default {
     * getProjectListConut({ payload }, { call }) {
       const data = yield call(reco.getProjectListConut, payload);
       return data.data;
+    },
+    // 抓取邮件进度
+    * getCrawlProgress({ payload }, { call }) {
+      const { data } = yield call(reco.getCrawlProgress, payload);
+      return data;
+    },
+    // 复制proj
+    * copyProjById({ payload }, { call }) {
+      const { data } = yield call(reco.copyProjById, payload);
+      return data;
     },
   },
 };

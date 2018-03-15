@@ -135,9 +135,8 @@ export default class Reports extends Component {
         render: (record, tasks, index) => {
           const { id } = this.props.match.params;
           return (
-            <Link
-              to={`/viewperson/${id}/${index}`} target="_blank"
-              href={`/viewperson/${id}`}>{tasks.statistic.unique_click_count}
+            <Link to={`/reco/reports/view/${id}?n=${index}`} target="_blank">
+              {tasks.statistic.unique_click_count}
             </Link>
           );
         }

@@ -3,13 +3,14 @@ import { connect } from 'engine';
 import CreateProject from '../../components/CreateProject';
 
 @connect(({ app }) => ({ app }))
-export default class ViewProject extends Component {
-  state = { isView: true };
+export default class EditProject extends Component {
+  state = { isEdit: false,isCopy:true };
 
   render() {
     return (
       <div>
-        <CreateProject isView={this.state.isView} projId={this.props.match.params.id} />
+        <CreateProject isEdit={this.state.isEdit} projId={this.props.match.params.id}
+                       isCopy={this.state.isCopy} />
       </div>
     );
   }

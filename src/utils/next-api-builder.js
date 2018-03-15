@@ -48,6 +48,19 @@ const createBasicChains = (api) => {
       }
       return chains;
     },
+    addFilter: (filterType, params, config) => {
+      if (!config || config.when) {
+        if (!api.parameters) {
+          api.parameters = {};
+        }
+        api.parameters.filters = api.parameters.filters || {};
+        if (!api.parameters.filters[filterType]) {
+          api.parameters.filters[filterType] = {}
+        }
+        apiMerge(api.parameters.filters[filterType], params);
+      }
+      return chains;
+    },
     schema: (schema, config) => {
       if (!config || config.when) {
         if (!api.schema) {
@@ -150,7 +163,7 @@ const F = {
   // query related // TODO @xiaobei 这些都是啥呀？？？
   queries: {
     search: 'search',
-    RevieweRreport: 'RevieweRreport',
+    RevieweRreport: 'RevieweRreport', // TODO @xiaobei ?????????,
     ReviewerQuery: 'ReviewerQuery',
     ReviewerDownloadCSV: 'ReviewerDownloadCSV',
     ReviewerClickPersons: 'ReviewerClickPersons',
@@ -187,6 +200,15 @@ const F = {
       { profile: ['position', 'affiliation', 'org'] },
       { indices: fseg.indices_all },
     ],
+    eb: {
+      forTree: {
+        expertbase: ['name', 'name_zh', 'logo', 'type', 'stats', 'is_deleted', 'parents']
+      },
+      full: {
+        expertbase: ['name', 'name_zh', 'logo', 'desc', 'type', 'stats',
+          'created_time', 'updated_time', 'is_deleted', 'parents', 'system']
+      },
+    },
   },
 };
 
@@ -225,7 +247,7 @@ const Action = {
     Search: 'search.Search',
     Alter: 'organization.Alter',
     Delete: 'organization.Delete',
-    search: 'search.search',
+    search: 'search.search', // todo delete
 
   },
   expertbase: {

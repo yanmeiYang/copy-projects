@@ -1,7 +1,7 @@
 /**
  * Created by yangyanmei on 18/2/7.
  */
-import React, { Component } from 'react';
+import   React, { Component } from 'react';
 import { connect, routerRedux, withRouter } from 'engine';
 import { Tabs, Button, Modal } from 'antd';
 import { sysconfig } from 'systems';

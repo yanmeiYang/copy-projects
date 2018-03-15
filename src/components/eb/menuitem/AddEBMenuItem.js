@@ -2,17 +2,28 @@ import React, { Component } from 'react';
 import { connect, FormCreate } from 'engine';
 import { Modal, Form, Input, Button, message, Icon, Radio } from 'antd';
 import { system } from 'core';
-import styles from './popup.less';
+import styles from './AddEBMenuItem.less';
+import PropTypes from "prop-types";
 
 // TODO 需要可以配置创建的时候弹出的是哪个控件。
 
-const FormItem = Form.Item;
-const RadioGroup = Radio.Group;
-
 @FormCreate()
-@connect(({ magOrg }) => ({ magOrg }))
-export default class AddExpertbase extends Component {
-  state = {
+@connect(({ magOrg }) => ({ magOrg })) // TODO
+export default class AddEBMenuItem extends Component {
+
+  static propTypes = {
+    label: PropTypes.string,
+    className: PropTypes.string,
+    icon: PropTypes.string,
+    onGetData: PropTypes.func,
+  };
+
+  static defaultProps = {
+    label: 'Create',
+    icon: 'plus-square-o',
+  };
+
+  state = { // TODO
     fatherId: [],
     visible: false,
   };
@@ -24,9 +35,8 @@ export default class AddExpertbase extends Component {
     }
   }
 
-  handleOk = (event) => {
+  handleOk = () => {
     // TODO dispatch 提交数据
-    // event.stopPropagation();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const parent = this.state.fatherId;
@@ -38,16 +48,13 @@ export default class AddExpertbase extends Component {
           isPublic: values.isPublic === '1' ? true : false,
           // address: values.address || '',
         };
-        console.log('current status', data);
         if (this.props.name === '编辑') {
           const { fatherId } = this.state;
           this.props.dispatch({
             type: 'magOrg/updateOrganizationByID',
             payload: { fatherId, data },
           }).then((info) => {
-            if (info.succeed) {
-              this.updataInfo();
-            } else {
+            if (info) {
               message.error('更新失败');
             }
           });
@@ -71,9 +78,14 @@ export default class AddExpertbase extends Component {
       visible: false,
     });
   };
-
-  updataInfo = (event) => {
-    // event.stopPropagation();
+  // 假更新，直接添加到本地数据
+  addInfoToLocal = (data) => {
+    this.props.dispatch({
+      type: 'magOrg/addInfoToLocal',
+      payload: { data },
+    });
+  };
+  updataInfo = () => {
     this.props.dispatch({
       type: 'magOrg/getOrganizationByIDs',
       payload: {
@@ -100,6 +112,11 @@ export default class AddExpertbase extends Component {
   };
 
   changeVisible = (event) => {
+    // I get dat here.
+    const { onGetData } = this.props;
+    const data = onGetData && onGetData();
+    console.log('onGetData', onGetData, data);
+
     // event.stopPropagation();
     this.setState({
       visible: true,
@@ -124,10 +141,12 @@ export default class AddExpertbase extends Component {
         });
       });
     }
-    this.props.callbackParent();
+    this.props.callbackParent && this.props.callbackParent();
   };
 
   render() {
+    const { label, icon, className } = this.props;
+
     const { visible } = this.state;
     const { getFieldDecorator } = this.props.form;
     const { name } = this.props;
@@ -141,82 +160,76 @@ export default class AddExpertbase extends Component {
         sm: { span: 16 },
       },
     };
-    return (
-      <div className={styles.AddExpertbase}>
-        <div onClick={this.changeVisible} className={styles.menuItem}>
-          {name === '新建' &&
-          <Icon type="plus-square-o" />
-          }
-          {name === '编辑' &&
-          <Icon type="edit" />
-          }
-          <span>{name}</span>
-        </div>
-        <Modal visible={visible}
-               title={name}
-               style={{ top: 20 }}
-               wrapClassName="orgtreemodal"
-               onOk={this.handleOk}
-               onCancel={this.handleCancel}
-               maskClosable={false}
-               footer={[
-                 <Button key="back" onClick={this.handleCancel}>返回</Button>,
-                 <Button key="submit" type="primary" onClick={this.handleOk}>
-                   提交
-                 </Button>,
-               ]}>
-          <Form onSubmit={this.handleOk}>
-            <FormItem
-              {...formItemLayout}
-              label="英文名称:"
-            >
-              {getFieldDecorator('name', {
-                rules: [{ required: true, message: '请输入英文名称' }],
-              })(<Input />)}
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label="中文名称:"
-            >
-              {getFieldDecorator('name_zh', {
-                rules: [{ required: true, message: '请输入中文名称' }],
-              })(<Input />)}
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label="英文简介:"
-            >
-              {getFieldDecorator('desc', {
-                rules: [{ required: false, message: '请输入英文简介' }],
-              })(<Input />)}
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label="中文描述:"
-            >
-              {getFieldDecorator('desc_zh', {
-                rules: [{ required: false, message: '请输入中文描述' }],
-              })(<Input />)}
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label="是否公开:"
-            >
-              {getFieldDecorator('isPublic', {})(
-                <RadioGroup>
-                  <Radio value="1">公开</Radio>
-                  <Radio value="2">不公开</Radio>
-                </RadioGroup>)}
-            </FormItem>
-            {/*<FormItem*/}
-            {/*{...formItemLayout}*/}
-            {/*label="地址:"*/}
-            {/*>*/}
-            {/*{getFieldDecorator('address')(<Input />)}*/}
-            {/*</FormItem>*/}
-          </Form>
-        </Modal>
-      </div>
-    );
+
+    return [
+      <div key={0} className={className} onClick={this.changeVisible}>
+        <Icon type={icon} /><span>{label}</span>
+      </div>,
+      <Modal key={1}
+             visible={visible}
+             title={name}
+             style={{ top: 20 }}
+             wrapClassName="orgtreemodal"
+             onOk={this.handleOk}
+             onCancel={this.handleCancel}
+             maskClosable={false}
+             footer={[
+               <Button key="back" onClick={this.handleCancel}>返回</Button>,
+               <Button key="submit" type="primary" onClick={this.handleOk}>
+                 提交
+               </Button>,
+             ]}>
+        <Form onSubmit={this.handleOk}>
+          <Form.Item
+            {...formItemLayout}
+            label="英文名称:"
+          >
+            {getFieldDecorator('name', {
+              rules: [{ required: true, message: '请输入英文名称' }],
+            })(<Input />)}
+          </Form.Item>
+          <Form.Item
+            {...formItemLayout}
+            label="中文名称:"
+          >
+            {getFieldDecorator('name_zh', {
+              rules: [{ required: true, message: '请输入中文名称' }],
+            })(<Input />)}
+          </Form.Item>
+          <Form.Item
+            {...formItemLayout}
+            label="英文简介:"
+          >
+            {getFieldDecorator('desc', {
+              rules: [{ required: false, message: '请输入英文简介' }],
+            })(<Input />)}
+          </Form.Item>
+          <Form.Item
+            {...formItemLayout}
+            label="中文描述:"
+          >
+            {getFieldDecorator('desc_zh', {
+              rules: [{ required: false, message: '请输入中文描述' }],
+            })(<Input />)}
+          </Form.Item>
+          <Form.Item
+            {...formItemLayout}
+            label="是否公开:"
+          >
+            {getFieldDecorator('isPublic', {})(
+              <Radio.Group>
+                <Radio value="1">公开</Radio>
+                <Radio value="2">不公开</Radio>
+              </Radio.Group>)}
+          </Form.Item>
+          {/*<FormItem*/}
+          {/*{...formItemLayout}*/}
+          {/*label="地址:"*/}
+          {/*>*/}
+          {/*{getFieldDecorator('address')(<Input />)}*/}
+          {/*</FormItem>*/}
+        </Form>
+      </Modal>
+    ];
   }
 }

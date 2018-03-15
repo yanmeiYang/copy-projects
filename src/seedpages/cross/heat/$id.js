@@ -336,7 +336,7 @@ class Heat extends React.Component {
 
   render() {
 
-    const loadCrossField = this.props.loading.effects['  crossHeat/getCrossFieldById'];
+    const loadCrossField = this.props.loading.effects['crossHeat/getCrossFieldById'];
     const loadPage = this.props.loading.effects['crossHeat/getPageInfo'];
     const loadPub = this.props.loading.effects['crossHeat/getDomainPub'];
     const loadExpert = this.props.loading.effects['crossHeat/getDomainExpert'];
@@ -423,11 +423,11 @@ class Heat extends React.Component {
                 onChange={this.modalTab}>
             <TabPane tab="专家" key="author">
               <Spinner loading={loadPage || loadAggregate || loadExpert} />
-              {modalInfo &&
+              { modalInfo &&
               <div className={styles.modalContent}>
                 <PersonList persons={bridge.toNextPersons(this.expertList)}
                             PersonList_PersonLink_NewTab />
-                {this.expertList && this.expertList.length > 0 &&
+                { this.expertList && this.expertList.length > 0 &&
                 <Pagination className={styles.pagination}
                             onChange={this.onChangePage}
                             defaultPageSize={10}
@@ -477,9 +477,8 @@ class Heat extends React.Component {
             </TabPane>
           </Tabs>
         </Modal>
-      </Layout>
+      </Layout >
     );
   }
 }
-
 export default connect(({ crossHeat, app, loading }) => ({ crossHeat, app, loading }))(Heat);

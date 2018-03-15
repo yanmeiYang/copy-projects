@@ -6,6 +6,7 @@ npm-debug.log
 
 ### for umijs/umi framework ignores.
 
+## TODO remove this from git.
 src/system-config.js
 src/pages/
 src/pages/.umi

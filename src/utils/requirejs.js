@@ -8,6 +8,8 @@ const debug = require('debug')('aminerdebug:requirejs');
 
 // Load script
 const scripts = {
+  BingMap: 'https://www.bing.com/api/maps/mapcontrol?key=AiKx6ZkW6x8XlCrv8u8oCyRwABSJnVrnB2VNKNMjTuh-6tNRpv4G1HlP7l1q0M08',
+  BingMap2: 'https://www.bing.com/mapspreview/sdkrelease/mapcontrol?key=AiKx6ZkW6x8XlCrv8u8oCyRwABSJnVrnB2VNKNMjTuh-6tNRpv4G1HlP7l1q0M08',
   BMap: `${resRoot}/lib/BMap/bmap.js`,
   BMap2: 'https://api.map.baidu.com/getscript?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1&services=&t=20171031174121',
   BMapLib: 'https://api.map.baidu.com/api?v=2.0&ak=Uz8Fjrx11twtkLHltGTwZOBz6FHlccVo&s=1',
@@ -245,6 +247,12 @@ const hasValue = (check) => {
   }
 };
 
+const loadBingMap = (cb) => {
+  loadScript('BingMap', { check: 'Microsoft' }, () => {
+    loadScript('BingMap2', { check: 'Microsoft' }, cb);
+  });
+};
+
 const loadBMap = (cb) => {
   loadScript('BMap', 'BMap_loadScriptTime', () => {
     loadScript('BMap2', { check: 'BMap' }, cb);
@@ -314,6 +322,7 @@ export {
   loadD3v3,
   loadD3,
   loadECharts,
+  loadBingMap,
   loadBMap,
   loadGoogleMap,
   loadJquery,

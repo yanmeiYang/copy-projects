@@ -9,7 +9,7 @@ import defaults from 'core/hole';
 // import { GetComments } from './person-comment-hooks';
 
 const ExpertBase = '5a9f4de87e96b5460de11d00'; // TODO should change this?
-const ExpertBaseName = '中国图学学会会'; // TODO should change this?
+const ExpertBaseName = '删掉我'; // TODO should change this?
 
 export default {
 

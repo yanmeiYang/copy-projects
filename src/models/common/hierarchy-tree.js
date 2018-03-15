@@ -78,7 +78,7 @@ export default {
       return newdata.data;
     },
     // 这个是真的更新api
-    * updateOrganizationByID({ payload }, { call }) {
+    * updateOrganizationByID({ payload }, { select, call, put }) {
       const { fatherId, data } = payload;
       const newData = {
         // 'ids': fatherId,
@@ -113,7 +113,19 @@ export default {
         }],
       };
       const pdata = yield call(magOrg.UpdateOrganizationByID, newData);
-      return pdata.data;
+      if (pdata.data && pdata.data.succeed) {
+        const state = yield select(state => state.magOrg);
+        const initData = state.get('initData');
+        initData.forEach((item) => {
+          if (item.id === fatherId[0]) {
+            item.name = data.name;
+            item.name_zh = data.name_zh;
+          }
+        });
+        yield put({ type: 'getOrganizationByIDsSuccess', payload: initData });
+      } else {
+        return pdata.data;
+      }
     },
     * deleteInitDate({ payload }, { select, call, put }) {
       const { ids } = payload;
@@ -126,6 +138,13 @@ export default {
       });
       yield put({ type: 'getOrganizationByIDsSuccess', payload: initData });
     },
+    * addInfoToLocal({ payload }, { select, put }) {
+      const { data } = payload;
+      const state = yield select(state => state.magOrg);
+      const initData = state.get('initData');
+      initData.push(data);
+      yield put({ type: 'addInfoToLocalSuccess', payload: initData });
+    },
   },
   reducers: {
     getOrganizationByIDsSuccess(state, { payload }) {
@@ -133,6 +152,14 @@ export default {
       const newState = state.withMutations((map) => {
         map.set('allOrgs', data.getData());
         map.set('initData', payload);
+      });
+      return newState;
+    },
+    addInfoToLocalSuccess(state, { initData }) {
+      const data = createHiObj(initData);
+      const newState = state.withMutations((map) => {
+        map.set('allOrgs', data.getData());
+        map.set('initData', initData);
       });
       return newState;
     },

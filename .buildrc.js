@@ -14,6 +14,7 @@ module.exports = {
       services: `${__dirname}/src/services`,
       plugin: `${__dirname}/src/plugin`,
       utils: `${__dirname}/src/utils`,
+      helper: `${__dirname}/src/helper`,
       public: `${__dirname}/public`,
       locales: `${__dirname}/src/locales`,
 

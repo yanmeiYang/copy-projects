@@ -29,7 +29,7 @@ export default class OpPopup extends Component {
   };
 
   render() {
-
+    console.log('popup',);
     const content = (
       <div className={styles.OpPopup}>
         <AddExpertbase fatherId={this.props.fatherId} callbackParent={this.switch} name="新建" />

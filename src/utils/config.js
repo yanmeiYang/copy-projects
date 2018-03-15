@@ -1,8 +1,8 @@
-const baseURL = 'https://api.aminer.org/api';
-const apiDomain = 'https://api.aminer.org';
+const baseURL = 'https://api.aminer.cn/api';
+const apiDomain = 'https://api.aminer.cn';
 const nextAPIURLLocalhost = 'http://localhost:4005';
 const nextAPIURLOnlineBeta = 'https://apiv2-beta.aminer.org';
-const nextAPIURLOnlineProduction = 'https://apiv2.aminer.org';
+const nextAPIURLOnlineProduction = 'https://apiv2.aminer.cn';
 const nextAPIURL = process.env.NODE_ENV !== 'production' ?
   nextAPIURLOnlineBeta
   // nextAPIURLLocalhost

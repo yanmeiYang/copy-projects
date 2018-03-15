@@ -806,9 +806,9 @@ address@1.0.3, address@^1.0.1, address@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/address/-/address-1.0.3.tgz#b5f50631f8d6cec8bd20c963963afb55e06cbce9"
 
-af-webpack@^0.18.1:
-  version "0.18.1"
-  resolved "https://registry.yarnpkg.com/af-webpack/-/af-webpack-0.18.1.tgz#bcfb2d2c817aefe9cc08c5d3ae7ce0293a47361a"
+af-webpack@^0.18.2:
+  version "0.18.2"
+  resolved "https://registry.yarnpkg.com/af-webpack/-/af-webpack-0.18.2.tgz#84f510124a89b9e8491b75e746eadbd47c94912a"
   dependencies:
     "@babel/core" "^7.0.0-beta.31"
     "@babel/plugin-transform-modules-commonjs" "^7.0.0-beta.31"
@@ -821,7 +821,7 @@ af-webpack@^0.18.1:
     babel-loader "^8.0.0-beta.0"
     babel-plugin-add-module-exports "^0.2.1"
     babel-plugin-dynamic-import-node-sync "^1.0.1"
-    babel-preset-umi "^0.2.6"
+    babel-preset-umi "^0.2.7"
     case-sensitive-paths-webpack-plugin "^2.1.1"
     chalk "^2.1.0"
     chokidar "^1.7.0"
@@ -832,7 +832,7 @@ af-webpack@^0.18.1:
     detect-port "^1.2.1"
     didyoumean "^1.2.1"
     eslint "^4.7.1"
-    eslint-config-umi "^0.1.3"
+    eslint-config-umi "^0.1.4"
     eslint-loader "^1.9.0"
     eslint-plugin-flowtype "^2.34.1"
     eslint-plugin-import "^2.6.0"
@@ -1563,9 +1563,9 @@ babel-preset-jest@^22.0.1, babel-preset-jest@^22.4.1:
     babel-plugin-jest-hoist "^22.4.1"
     babel-plugin-syntax-object-rest-spread "^6.13.0"
 
-babel-preset-umi@^0.2.6:
-  version "0.2.6"
-  resolved "https://registry.yarnpkg.com/babel-preset-umi/-/babel-preset-umi-0.2.6.tgz#4ae6541680944a1fabe458a243ce1a3455f532ea"
+babel-preset-umi@^0.2.7:
+  version "0.2.7"
+  resolved "https://registry.yarnpkg.com/babel-preset-umi/-/babel-preset-umi-0.2.7.tgz#aa01eb11a5464a469b940cc7505840c680409353"
   dependencies:
     "@babel/plugin-proposal-async-generator-functions" "^7.0.0-beta.31"
     "@babel/plugin-proposal-class-properties" "^7.0.0-beta.31"
@@ -3361,9 +3361,9 @@ eslint-config-react-app@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/eslint-config-react-app/-/eslint-config-react-app-2.1.0.tgz#23c909f71cbaff76b945b831d2d814b8bde169eb"
 
-eslint-config-umi@^0.1.2, eslint-config-umi@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/eslint-config-umi/-/eslint-config-umi-0.1.3.tgz#5afcec8281ed07b76214dee2676623319229109b"
+eslint-config-umi@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/eslint-config-umi/-/eslint-config-umi-0.1.4.tgz#d3d332b25dfbf8a790dad14672e0597cd02b8b4b"
   dependencies:
     eslint-config-react-app "^2.0.0"
 
@@ -9529,13 +9529,13 @@ uid-number@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/uid-number/-/uid-number-0.0.6.tgz#0ea10e8035e8eb5b8e4449f06da1c730663baa81"
 
-umi-build-dev@^0.12.0:
-  version "0.12.0"
-  resolved "https://registry.yarnpkg.com/umi-build-dev/-/umi-build-dev-0.12.0.tgz#a47571d30d1569e0430445fe29fca5f28ac7c638"
+umi-build-dev@^0.12.1:
+  version "0.12.1"
+  resolved "https://registry.yarnpkg.com/umi-build-dev/-/umi-build-dev-0.12.1.tgz#e8adc71a5967a9772120c2444ec14a0cdb6cb8c7"
   dependencies:
     "@babel/runtime" "^7.0.0-beta.31"
     address "^1.0.3"
-    af-webpack "^0.18.1"
+    af-webpack "^0.18.2"
     antd "^3.0.0"
     antd-mobile "^2.0.0"
     body-parser "^1.18.2"
@@ -9573,9 +9573,9 @@ umi-history@^0.1.0:
     value-equal "^0.4.0"
     warning "^3.0.0"
 
-umi-plugin-dva@^0.3.3:
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/umi-plugin-dva/-/umi-plugin-dva-0.3.3.tgz#2f7d0cb52b8734e1583f009dc79989d503d4d0d3"
+umi-plugin-dva@^0.3.4:
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/umi-plugin-dva/-/umi-plugin-dva-0.3.4.tgz#872cf0a939159d0e2e59dea96ba4ac58ca52296b"
   dependencies:
     dva "^2.1.0"
     dva-loading "^1.0.4"
@@ -9590,16 +9590,16 @@ umi-router@^0.1.2:
     prop-types "^15.5.10"
     query-string "^5.0.0"
 
-umi-test@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/umi-test/-/umi-test-0.5.0.tgz#a5a21f3993fbe844ea3dc7a965aedec06c3e95d2"
+umi-test@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/umi-test/-/umi-test-0.5.1.tgz#85fa4745d6604ed2f3154ea0cc0ea685df5a3e1a"
   dependencies:
     "@babel/core" "^7.0.0-beta.36"
     "@babel/polyfill" "^7.0.0-beta.36"
     babel-core "^7.0.0-bridge.0"
     babel-jest "^22.0.3"
     babel-plugin-module-resolver "^3.0.0-beta.5"
-    babel-preset-umi "^0.2.6"
+    babel-preset-umi "^0.2.7"
     debug "^3.1.0"
     enzyme "^3.3.0"
     enzyme-adapter-react-16 "^1.1.1"
@@ -9611,21 +9611,21 @@ umi-test@^0.5.0:
     ts-jest-babel-7 "^22.0.6"
     typescript "^2.6.2"
 
-umi@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/umi/-/umi-1.0.7.tgz#7715a214a19533ea72d7d815f44e046a76c16683"
+umi@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/umi/-/umi-1.0.8.tgz#f715ddc631c76e72e4b0f02375558caea596a7be"
   dependencies:
     "@babel/runtime" "^7.0.0-beta.31"
     "@types/react" "^16.0.27"
     babel-plugin-import "^1.6.4"
     babel-plugin-module-resolver "^3.0.0-beta.5"
-    babel-preset-umi "^0.2.6"
+    babel-preset-umi "^0.2.7"
     chai "^4.1.2"
     cross-spawn "^5.1.0"
     ejs "^2.5.7"
     query-string "^5.0.0"
-    umi-build-dev "^0.12.0"
-    umi-test "^0.5.0"
+    umi-build-dev "^0.12.1"
+    umi-test "^0.5.1"
     update-notifier "^2.3.0"
     uppercamelcase "^3.0.0"
     url "^0.11.0"

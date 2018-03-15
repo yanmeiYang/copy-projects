@@ -5,22 +5,17 @@
 import React, { Component } from 'react';
 import { connect, routerRedux } from 'engine';
 import { Map } from 'immutable';
-import hole from 'core/hole';
 import { Spinner } from 'components';
 import { Layout } from 'components/layout';
 import { sysconfig } from 'systems';
-import { theme, applyTheme } from 'themes';
 import { classnames, queryString } from 'utils';
 import { createHiObj } from 'utils/hiobj';
-import { Maps } from 'utils/immutablejs-helpers';
 import ExpertBase from 'components/expert-base/ExpertBase';
 import ExpertbaseTree from 'components/eb/ExpertbaseTree';
 import styles from './index.less';
 import helper from 'helper';
 
-const tc = applyTheme(styles); // TODO 不用这个了.
-
-@connect(({ app, magOrg, loading, conflicts }) => ({ app, magOrg, loading, conflicts }))
+@connect(({ app, magOrg, loading }) => ({ app, magOrg, loading }))
 export default class HierarchyExpertBasePage extends Component {
 
   constructor(props) {
@@ -29,22 +24,24 @@ export default class HierarchyExpertBasePage extends Component {
   }
 
   state = {
-    id: sysconfig.ExpertBase, // TODO 这里不通用。默认选中改成所有的第一个。
-    name: sysconfig.ExpertBaseName, // 'F06 人工智能', // TODO 使用id去获取。
+    id: null, // sysconfig.ExpertBase, // 默认选中改成所有的第一个。
     childrenId: null, // TODO 改成从左边获取。
     parentId: null, // TODO 改成从左边获取。
   };
 
   componentWillMount() {
-    const { id, name } = helper.getSearchParams(this.props);
-
-    // const { id, name } = this.props.match.params;
-    if (id && name) {
-      this.setState({ id, name });
+    const { id } = helper.getSearchParams(this.props);
+    if (id) {
+      this.setState({ id });
     }
   }
 
   componentWillReceiveProps(nextProps) {
+    const { id } = helper.getSearchParams(nextProps);
+    if (id) {
+      this.setState({ id });
+    }
+    console.log('------------------------------------', id); // TODO ???????????
     if (nextProps.magOrg.get('initData') !== null) {
       this.getChildrenId(this.state.id, nextProps.magOrg);
     }
@@ -54,11 +51,12 @@ export default class HierarchyExpertBasePage extends Component {
     if ((this.props.magOrg.get('initData') !== null) && (this.state.id !== nextState.id)) {
       this.getChildrenId(nextState.id, nextProps.magOrg);
     }
+    return true;
   }
 
   onTreeReady = () => {
     console.log('8889 onTreeReady',);
-  }
+  };
 
   getChildrenId = (id, dataSource) => {
     const initData = dataSource && dataSource.get('initData') || [];
@@ -94,22 +92,20 @@ export default class HierarchyExpertBasePage extends Component {
     }
   };
 
-  getSelectedNode = (id, item) => {
+  onItemClick = (id, item) => {
     const { dispatch } = this.props;
-    // 应该么？
-    this.setState({
-      id: id,
-      name: `TODO name for ${id}`,
-    });
-
     const params = queryString.stringify({ id: id });
     dispatch(routerRedux.push({ pathname: '/eb', search: `?${params}` }));
+  };
+
+  onTreeReady = (data) => {
+    const { dispatch } = this.props;
+    console.log('data is :', data);
   };
 
   render() {
     const load = this.props.loading.effects['magOrg/getOrganizationByIDs'];
     const { id, name, childrenId, parentId } = this.state;
-
     return (
       <Layout searchZone={[]} contentClass={styles.ebIndex} showNavigator={false}>
         <div className={styles.nsfcIndexPage}>
@@ -117,10 +113,10 @@ export default class HierarchyExpertBasePage extends Component {
             <Spinner loading={load} />
 
             <ExpertbaseTree
-              onItemClick={this.getSelectedNode}
+              onItemClick={this.onItemClick}
               onReady={this.onTreeReady}
               selected={id}
-              defaultSelectedKeys={id} />
+            />
 
           </div>
 

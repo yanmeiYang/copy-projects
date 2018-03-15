@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'engine';
+import { compare, imCompare } from 'utils/compare';
 import { AddEBMenuItem, DeleteMenuItem } from './menuitem';
 import HierarchyTree from "components/hierarchy/HierarchyTree";
 
@@ -15,12 +16,23 @@ export default class ExpertbaseTree extends Component {
 
   static defaultProps = {};
 
-  state = {
-    fatherId: [],
-  };
+  state = {};
 
   componentDidMount() {
     this.props.dispatch({ type: 'expertbaseTree/getTreeData' });
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log('>>>>>>>>', nextProps);
+    return true;
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!imCompare(prevProps, this.props, "expertbaseTree", "treeData")) {
+      const { onReady, expertbaseTree } = this.props;
+      const data = expertbaseTree && expertbaseTree.get('treeData');
+      onReady && onReady(data);
+    }
   }
 
   actionMenuConfig = [
@@ -75,12 +87,13 @@ export default class ExpertbaseTree extends Component {
   // };
 
   render() {
-    console.log('8888 render ExpertbaseTree',);
-    const { onItemClick, expertbaseTree } = this.props;
+    const { onItemClick, onReady, selected, expertbaseTree } = this.props;
     const treeData = expertbaseTree && expertbaseTree.get('treeData');
+    console.log('[datadata] 8888 render ExpertbaseTree', selected, selected, selected);
     return (
       <HierarchyTree
         data={treeData}
+        selected={selected}
         onItemClick={onItemClick}
         menuConfig={this.actionMenuConfig}
       />

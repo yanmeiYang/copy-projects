@@ -69,7 +69,6 @@ const applyPluginModules = (namespace, routerConfig) => {
 // eslint-disable-next-line camelcase
 const applyPluginToAPI = (nextapi, api_plugin_key) => {
   if (plugins && plugins.length > 0) {
-    console.log('000000', plugins);
     plugins.forEach((plugin) => {
       if (plugin && plugin[api_plugin_key]) {
         const apiPlugin = plugin[api_plugin_key];

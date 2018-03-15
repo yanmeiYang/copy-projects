@@ -15,6 +15,17 @@ import ActionMenu from './ActionMenu';
 const ActionMenuID = 'ebActionMenu';
 
 export default class HierarchyTree extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      selected: this.getSelectedID(props),
+      fatherId: [],
+      menu: false,
+    };
+  }
+
   static propTypes = {
     // data: PropTypes.object.required, // allow null
     selected: PropTypes.string,
@@ -26,22 +37,20 @@ export default class HierarchyTree extends Component {
     menuConfig: {}
   };
 
-  state = {
-    fatherId: [],
-    // showRightZone: '',
-    menu: false,
-    // current: '', // for test;
-  };
-
   componentDidMount() {
     this.menu = actionMenu.init(ActionMenuID);
   }
 
   componentWillReceiveProps = (nextProps) => {
-    // console.log('77777777777788787878798798798789798', nextProps);
+    console.log('[datadata]~~~~~~~~~~~~~~~~~~~~~~~', nextProps.selected);
     if (compare(nextProps, this.props, 'data')) {
-      // console.log('77777777777788787878798798798789798');
+      this.setState({ selected: this.getSelectedID(nextProps) })
     }
+  };
+
+  getSelectedID = (props) => {
+    const { selected, data } = props;
+    return selected ? selected : data && data.size > 0 && data.get(0) && data.get(0).get('id');
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -135,8 +144,8 @@ export default class HierarchyTree extends Component {
 
   // 处理数据形成树
   renderTreeNodes = (orgs) => {
-    // const { showRightZone } = this.state;
-    const { defaultSelectedKeys } = this.props;
+    const { data } = this.props;
+    const { selected } = this.state;
 
     return orgs.map((org) => {
       const [id, childs] = Maps.getAll(org, 'id', 'childs');
@@ -144,7 +153,7 @@ export default class HierarchyTree extends Component {
       const nchilds = childs && childs.size;
 
       // 什么鬼。。。。👻 我的天哪。
-      const nchildsBlock = defaultSelectedKeys === id
+      const nchildsBlock = selected === id
         ? <span className={styles.childrenNumActive}>{nchilds}</span>
         : <span className={styles.childrenNum}>{nchilds}</span>;
       const afterTitle = childs && childs.size > 0 ? <span>({nchildsBlock})</span> : '';
@@ -171,8 +180,9 @@ export default class HierarchyTree extends Component {
   };
 
   render() {
-    console.log('8888 render HierarchyTree', );
     const { data, menuConfig } = this.props;
+    const { selected } = this.state;
+    console.log('8888 render HierarchyTree', selected);
     return (
       <div className={styles.hierarchyTree} id={`${ActionMenuID}_ROOT`}>
         {!data && <div> Loading ...</div>}
@@ -180,7 +190,7 @@ export default class HierarchyTree extends Component {
         {data && [
           <ActionMenu key={0} id={ActionMenuID} config={menuConfig} top={0} />,
           <Tree key={1} onSelect={this.onSelect}
-                defaultSelectedKeys={[this.props.defaultSelectedKeys]}
+                defaultSelectedKeys={[selected]}
                 showLine defaultExpandAll draggablexxxx>
             {this.renderTreeNodes(data)}
           </Tree>,

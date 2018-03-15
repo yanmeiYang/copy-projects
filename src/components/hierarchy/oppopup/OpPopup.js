@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Popover, Button, Icon } from 'antd';
-import { AddExpertbase, DeleteBtn, MoveOrg } from './index';
+import { MoveOrg } from './index';
 import styles from './OpPopup.less';
 
 export default class OpPopup extends Component {

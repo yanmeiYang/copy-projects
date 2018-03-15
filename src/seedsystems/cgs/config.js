@@ -16,7 +16,7 @@ export default {
   EnableLocalLocale: false,
   GLOBAL_ENABLE_FEEDBACK: true,
 
-  PageTitle: 'cgs',
+  PageTitle: '中国图学学会',
 
   // AI search helper translation/expand/kg
   Search_EnableTranslateSearch: false, // 启用翻译搜索，显示提示信息;/

@@ -1,27 +1,24 @@
+/**
+ * Created by GaoBo on 2018/03/14.
+ */
 import React, { Component } from 'react';
 import PropTypes from "prop-types";
-import { Tree, Icon, Popover } from 'antd';
-import { queryString } from 'utils';
+import { Tree, Icon } from 'antd';
 import { Maps } from 'utils/immutablejs-helpers';
 import actionMenu from 'helper/actionmenu';
-import { OpPopup } from './oppopup';
 import styles from './HierarchyTree.less';
-import { sysconfig } from "systems";
 import { compare } from "utils/compare";
 import ActionMenu from './ActionMenu';
 
-// TODO 纯组件，这是一个没有model绑定的组件。
 // 具体的某个组件需要在这个的基础上包装一层，加上自定义的部分。
 
 const ActionMenuID = 'ebActionMenu';
 
-// TODO 性能大问题，在鼠标hover的时候，修改state数据了。这样导致整个tree不断的render。
-// 需要想一个办法来禁止render整个树结构。
 export default class HierarchyTree extends Component {
   static propTypes = {
     // data: PropTypes.object.required, // allow null
     selected: PropTypes.string,
-    onClick: PropTypes.func,
+    onItemClick: PropTypes.func,
     menuConfig: PropTypes.arrayOf(PropTypes.object),
   };
 
@@ -61,13 +58,13 @@ export default class HierarchyTree extends Component {
   // TODO 禁止取消选择
   // 目前只取第一个元素
   onSelect = (selectedKeys, info) => {
-    const { onClick } = this.props;
+    const { onItemClick } = this.props;
     const firstID = selectedKeys && selectedKeys.length > 0 && selectedKeys[0];
     let firstItem = info && info.selectedNodes && info.selectedNodes.length > 0
       && info.selectedNodes[0];
 
-    if (onClick) {
-      onClick(firstID, firstItem); // TODO firstItem is bad.
+    if (onItemClick) {
+      onItemClick(firstID, firstItem); // TODO firstItem is bad.
     }
 
     // this.setState({ fatherId: selectedKeys });// TODO ??
@@ -174,11 +171,8 @@ export default class HierarchyTree extends Component {
   };
 
   render() {
+    console.log('8888 render HierarchyTree', );
     const { data, menuConfig } = this.props;
-    // console.log('>>>>>>>>***************** render HierarchyTree ', data);
-    // const { current } = this.state;
-    // console.log('current is ', current);
-    console.log('TODO 性能大问题，在鼠标hover的时候，修改state数据了。这样导致整个tree不断的render。');
     return (
       <div className={styles.hierarchyTree} id={`${ActionMenuID}_ROOT`}>
         {!data && <div> Loading ...</div>}
@@ -191,7 +185,6 @@ export default class HierarchyTree extends Component {
             {this.renderTreeNodes(data)}
           </Tree>,
         ]}
-
       </div>
     );
   }

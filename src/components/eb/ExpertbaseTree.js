@@ -8,7 +8,9 @@ import HierarchyTree from "components/hierarchy/HierarchyTree";
 export default class ExpertbaseTree extends Component {
 
   static propTypes = {
-    onClick: PropTypes.func,
+    onItemClick: PropTypes.func,
+    onReady: PropTypes.func,
+    selected: PropTypes.string,
   };
 
   static defaultProps = {};
@@ -73,12 +75,13 @@ export default class ExpertbaseTree extends Component {
   // };
 
   render() {
-    const { onClick, expertbaseTree } = this.props;
+    console.log('8888 render ExpertbaseTree',);
+    const { onItemClick, expertbaseTree } = this.props;
     const treeData = expertbaseTree && expertbaseTree.get('treeData');
     return (
       <HierarchyTree
         data={treeData}
-        onClick={onClick}
+        onItemClick={onItemClick}
         menuConfig={this.actionMenuConfig}
       />
     )

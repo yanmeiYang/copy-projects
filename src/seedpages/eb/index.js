@@ -56,6 +56,10 @@ export default class HierarchyExpertBasePage extends Component {
     }
   }
 
+  onTreeReady = () => {
+    console.log('8889 onTreeReady',);
+  }
+
   getChildrenId = (id, dataSource) => {
     const initData = dataSource && dataSource.get('initData') || [];
     const data = createHiObj(initData);
@@ -107,12 +111,16 @@ export default class HierarchyExpertBasePage extends Component {
     const { id, name, childrenId, parentId } = this.state;
 
     return (
-      <Layout searchZone={[]} contentClass={tc(['indexPage'])} showNavigator={false}>
+      <Layout searchZone={[]} contentClass={styles.ebIndex} showNavigator={false}>
         <div className={styles.nsfcIndexPage}>
           <div className={styles.treeBlock}>
             <Spinner loading={load} />
 
-            <ExpertbaseTree onClick={this.getSelectedNode} defaultSelectedKeys={id} />
+            <ExpertbaseTree
+              onItemClick={this.getSelectedNode}
+              onReady={this.onTreeReady}
+              selected={id}
+              defaultSelectedKeys={id} />
 
           </div>
 

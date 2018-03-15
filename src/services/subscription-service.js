@@ -2,7 +2,7 @@
  * Created by ranyanchuan on 2018/2/5.
  */
 
-import { request, config } from '../utils';
+import { request, config } from 'utils';
 
 const { api } = config;
 export async function getRegisterInfo(params) {
@@ -10,7 +10,7 @@ export async function getRegisterInfo(params) {
   if (email === 'xt20110702@163.com') {
     return true;
   } else {
-    return false;
+    return true;
   }
 }
 export async function getFollowInfo(params) {
@@ -28,6 +28,10 @@ export async function delFollowInfo(params) {
 }
 
 export async function addFollowInfo(params) {
-  const { email } = params;
-  return true;
+  const { email } = params.values;
+  if (email === 'xt20110702@163.com') {
+    return { status: true, isRegister: true };
+  } else {
+    return { status: true, isRegister: false };
+  }
 }

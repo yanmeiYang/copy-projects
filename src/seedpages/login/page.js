@@ -110,7 +110,7 @@ export default class Login extends React.Component {
             </Form.Item>
             <Form.Item>
               <div className={styles.forgetpw}>
-                <Link to="/auth/forgot-password" className={styles.forgotpwbtn}>
+                <Link to="/user/forgot-password" className={styles.forgotpwbtn}>
                   <FM id="login.forgetPw" defaultMessage="Forget Password?" />
                 </Link>
                 {sysconfig.ApplyUserBtn &&

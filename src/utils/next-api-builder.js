@@ -240,6 +240,8 @@ const Action = {
     RevieweOrg: 'reviewer.RevieweOrg',
     StartCrawl: 'reviewer.StartCrawl',
     CountProject: 'reviewer.CountProject',
+    GetCrawlProgress: 'reviewer.GetCrawlProgress',
+    CopyProject: 'reviewer.CopyProject',
   },
   organization: {
     Search: 'search.Search',

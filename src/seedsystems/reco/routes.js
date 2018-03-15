@@ -13,7 +13,9 @@ module.exports = {
     'login',
     'user',
     'admin/users',
+    'admin/email-group',
 
+    'subscription',
     '404',
   ],
 };

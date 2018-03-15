@@ -6,7 +6,6 @@ import CreateProject from '../../components/CreateProject';
 export default class ViewProject extends Component {
   state = { isView: true };
 
-  // TODO @xiaobei: 要携带projId
   render() {
     return (
       <div>

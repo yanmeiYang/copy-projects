@@ -103,7 +103,7 @@ export default class AddEBMenuItem extends Component {
   };
 
   handleCancel = (event) => {
-    event.stopPropagation();
+    // event.stopPropagation();
     this.props.form.resetFields();
     this.setState({
       fatherId: [],
@@ -112,13 +112,12 @@ export default class AddEBMenuItem extends Component {
   };
 
   changeVisible = (event) => {
-    event.stopPropagation();
-
     // I get dat here.
     const { onGetData } = this.props;
     const data = onGetData && onGetData();
     console.log('onGetData', onGetData, data);
 
+    // event.stopPropagation();
     this.setState({
       visible: true,
     });

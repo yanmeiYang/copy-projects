@@ -33,7 +33,7 @@ export default class MoveOrg extends Component {
     this.props.callbackParent();
   };
   handleOk = (event) => {
-    event.stopPropagation();
+    // event.stopPropagation();
     // TODO 发请求
     this.props.dispatch({
       type: 'magOrg/MoveOrganizationByID',
@@ -64,7 +64,7 @@ export default class MoveOrg extends Component {
     });
   };
   handleCancel = (event) => {
-    event.stopPropagation();
+    // event.stopPropagation();
     this.setState({
       visible: false,
     });

@@ -99,3 +99,17 @@ export async function getProjectListConut(payload) {
     .param({ filters });
   return nextAPI({ data: [nextapi.api] });
 }
+
+export async function copyProjById(payload) {
+  const { ids } = payload;
+  const nextapi = apiBuilder.create(Action.reviewer.CopyProject, 'CopyProject')
+    .param({ ids });
+  return nextAPI({ data: [nextapi.api] });
+}
+
+export async function getCrawlProgress(payload) {
+  const { ids } = payload;
+  const nextapi = apiBuilder.create(Action.reviewer.GetCrawlProgress, 'GetCrawlProgress')
+    .param({ ids });
+  return nextAPI({ data: [nextapi.api] });
+}

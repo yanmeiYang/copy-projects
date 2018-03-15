@@ -3,20 +3,20 @@
  * Refactor by bogao on 18/03/06.
  */
 import React, { Component } from 'react';
-import { connect } from 'engine';
+import { connect, routerRedux } from 'engine';
 import { Map } from 'immutable';
 import hole from 'core/hole';
 import { Spinner } from 'components';
 import { Layout } from 'components/layout';
 import { sysconfig } from 'systems';
 import { theme, applyTheme } from 'themes';
-import { classnames } from 'utils';
+import { classnames, queryString } from 'utils';
 import { createHiObj } from 'utils/hiobj';
 import { Maps } from 'utils/immutablejs-helpers';
 import ExpertBase from 'components/expert-base/ExpertBase';
-import HierarchyTree from 'components/hierarchy/HierarchyTree';
+import ExpertbaseTree from 'components/eb/ExpertbaseTree';
 import styles from './index.less';
-import queryString from "query-string";
+import helper from 'helper';
 
 const tc = applyTheme(styles); // TODO 不用这个了.
 
@@ -33,12 +33,11 @@ export default class HierarchyExpertBasePage extends Component {
     name: sysconfig.ExpertBaseName, // 'F06 人工智能', // TODO 使用id去获取。
     childrenId: null, // TODO 改成从左边获取。
     parentId: null, // TODO 改成从左边获取。
-    showPersonList: false, // ?
   };
 
   componentWillMount() {
-    const { location } = this.props;
-    const { id, name } = queryString.parse(location.search); // TODO remove name.
+    const { id, name } = helper.getSearchParams(this.props);
+
     // const { id, name } = this.props.match.params;
     if (id && name) {
       this.setState({ id, name });
@@ -80,25 +79,30 @@ export default class HierarchyExpertBasePage extends Component {
           }
         });
       });
-      this.setState({ childrenId: this.children, showPersonList: true });
+      this.setState({ childrenId: this.children });
     } else {
-      this.setState({ childrenId: null, showPersonList: true });
+      this.setState({ childrenId: null });
     }
     if (data && data.parents) {
-      this.setState({ childrenId: null, showPersonList: true, parentId: data.parents[0] });
+      this.setState({ childrenId: null, parentId: data.parents[0] });
     }
   };
 
-  getSelectedNode = (data) => {
+  getSelectedNode = (id, item) => {
+    const { dispatch } = this.props;
+    // 应该么？
     this.setState({
-      id: data.id,
-      name: data.name,
+      id: id,
+      name: `TODO name for ${id}`,
     });
+
+    const params = queryString.stringify({ id: id });
+    dispatch(routerRedux.push({ pathname: '/eb', search: `?${params}` }));
   };
 
   render() {
     const load = this.props.loading.effects['magOrg/getOrganizationByIDs'];
-    const { id, name, childrenId, showPersonList, parentId } = this.state;
+    const { id, name, childrenId, parentId } = this.state;
 
     return (
       <Layout searchZone={[]} contentClass={tc(['indexPage'])} showNavigator={false}>
@@ -106,15 +110,15 @@ export default class HierarchyExpertBasePage extends Component {
           <div className={styles.treeBlock}>
             <Spinner loading={load} />
 
-            <HierarchyTree callbackParent={this.getSelectedNode} defaultSelectedKeys={id} />
+            <ExpertbaseTree onClick={this.getSelectedNode} defaultSelectedKeys={id} />
 
           </div>
-          {showPersonList &&
+
           <div className={styles.rightBlock}>
             <ExpertBase query="-" offset="0" size="20" expertBaseId={id} expertBaseName={name}
                         currentBaseChildIds={childrenId} currentBaseParentId={parentId} />
           </div>
-          }
+
         </div>
       </Layout>
     );

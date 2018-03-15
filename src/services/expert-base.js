@@ -1,11 +1,25 @@
 /**
- * Created by zhanglimin on 17/9/1.
+ * Created by xxx on 17/9/1.
  */
 import { sysconfig } from 'systems';
 import { request, config, nextAPI } from 'utils';
 import { apiBuilder, F, H, Action } from 'utils/next-api-builder';
 
 const { api } = config;
+
+const MaxTreeDataItems = 300;
+
+export async function getExpertBaseTreeData(payload) {
+  const nextapi = apiBuilder.create(Action.search.search, 'ebTreeData')
+    .param({ ids: [], offset: 0, size: MaxTreeDataItems, searchType: 'all' })
+    .addFilter("terms", { system: [sysconfig.SYSTEM] })
+    .schema(F.fields.eb.forTree);
+  return nextAPI({ data: [nextapi.api] });
+}
+
+
+// .................... old methods ...............
+
 
 export async function getExpert(offset, size) {
   return request(api.getExpertBase

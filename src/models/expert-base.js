@@ -1,16 +1,18 @@
-import { createHiObj } from 'utils/hiobj';
+import hierarchy from 'helper/hierarchy';
 import * as expertBaseService from 'services/expert-base';
 
 export default {
   namespace: 'expertBase',
 
+  // TODO immutable this.
   state: {
+    expertBaseList: null, // 左侧属性结构数据。
+
     results: [],
     detailResults: [],
     addStatus: {},
     // deleteIsSuccess: null,
     currentPersonId: '',
-    expertBaseList: null,
   },
 
   subscriptions: {
@@ -138,8 +140,10 @@ export default {
     },
 
     getExpertBaseListSuccess(state, { payload: { data } }) {
-      return { ...state, expertBaseList: createHiObj(data).getData() };
+      const hi = hierarchy.init(data);
+      return { ...state, expertBaseList: hi.data };
     },
+
   },
 };
 

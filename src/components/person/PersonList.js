@@ -1,6 +1,7 @@
 /**
  *  Created by BoGao on 2017-06-15;
  */
+
 /* eslint-disable camelcase */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';

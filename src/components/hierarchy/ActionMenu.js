@@ -46,7 +46,6 @@ export default class ActionMenu extends Component {
         if (this.refs.menu) {
           this.refs.menu.firstElementChild.style.visibility = 'hidden';
         }
-        console.log('really hide this.',);
       }
     }, 200)
   };

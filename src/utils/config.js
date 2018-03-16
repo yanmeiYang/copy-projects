@@ -4,9 +4,9 @@ const nextAPIURLLocalhost = 'http://localhost:4005';
 const nextAPIURLOnlineBeta = 'https://apiv2-beta.aminer.org';
 const nextAPIURLOnlineProduction = 'https://apiv2.aminer.cn';
 const nextAPIURL = process.env.NODE_ENV !== 'production' ?
-  // nextAPIURLOnlineBeta
+  nextAPIURLOnlineBeta
   // nextAPIURLLocalhost
-  nextAPIURLOnlineProduction
+  // nextAPIURLOnlineProduction
   :
   // nextAPIURLOnlineBeta;
   nextAPIURLOnlineProduction;

@@ -56,7 +56,6 @@ module.exports = {
     }
   },
 
-
   // html: {
   //   template: "./src/index.ejs",
   //   // hash: production,
@@ -73,14 +72,22 @@ module.exports = {
   // },
 
   // commons: [
+  //   // {
+  //   //   async: 'most',
+  //   //   children: true,
+  //   //   minChunks: 2,
+  //   // },
   //   {
-  //     async: '__common',
-  //     children: true,
+  //     names: ['lodash', 'antd'],
+  //     async: 'lodash',
+  //     // children: true,
   //     minChunks(module, count) {
-  //       if (pageCount <= 2) {
-  //         return count >= pageCount;
-  //       }
-  //       return count >= pageCount * 0.5;
+  //       console.log('module is : ', module, count);
+  //       return 1;
+  //       // if (pageCount <= 2) {
+  //       //   return count >= pageCount;
+  //       // }
+  //       // return count >= pageCount * 0.5;
   //     },
   //   },
   // ],

@@ -26,6 +26,48 @@ export async function getExpertBases(payload) {
   return nextAPI({ data: [nextapi.api] });
 }
 
+export async function getExpertBaseById(payload) {
+  const { ids } = payload;
+  const nextapi = apiBuilder.create(Action.search.search, 'ebTreeData')
+    .param({ ids, offset: 0, size: MaxTreeDataItems, searchType: 'all' })
+    .addFilter("terms", { system: [sysconfig.SYSTEM] })
+    .schema(F.fields.eb.forTree);
+  return nextAPI({ data: [nextapi.api] });
+}
+
+export async function createExpertBase(payload) {
+  //TODO 很多数据
+  const { data } = payload;
+  const { parents, name, name_zh, desc, desc_zh, is_public } = data;
+  const opts = [{
+    'operator': 'upsert',
+    'fields': H.createFieldsArray({ parents, name, name_zh, desc, desc_zh, is_public })
+  }];
+  const nextapi = apiBuilder.create(Action.expertbase.Alter, 'Alter')
+    .param({ opts });
+  return nextAPI({ data: [nextapi.api] });
+}
+
+export async function UpdateExperBaseByID(payload) {
+  const { data } = payload;
+  const { id, name, name_zh, desc, desc_zh, is_public } = data;
+  const opts = [{
+    'operator': 'upsert',
+    'fields': H.createFieldsArray({ id, name, name_zh, desc, desc_zh, is_public })
+  }];
+  const nextapi = apiBuilder.create(Action.expertbase.Alter, 'Alter')
+    .param({ opts });
+  return nextAPI({ data: [nextapi.api] });
+}
+
+export async function DeleteExperBaseByID(payload) {
+  const { ids } = payload;
+  const real = false;
+  const nextapi = apiBuilder.create(Action.expertbase.Delete, 'Delete')
+    .param({ ids, real });
+  return nextAPI({ data: [nextapi.api] });
+}
+
 // .................... old methods ...............
 
 

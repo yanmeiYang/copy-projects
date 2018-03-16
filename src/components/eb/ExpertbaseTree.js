@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'engine';
-import { compare, imCompare } from 'utils/compare';
-import { AddEBMenuItem, DeleteMenuItem } from './menuitem';
+import { AddEBMenuItem, DeleteMenuItem, MoveEBMenuItem } from './menuitem';
 import HierarchyTree from "components/hierarchy/HierarchyTree";
 
 @connect(({ app, expertbaseTree }) => ({ app, expertbaseTree }))
@@ -38,7 +37,7 @@ export default class ExpertbaseTree extends Component {
   actionMenuConfig = [
     { key: "create", label: "新建", callbackParent: this.switch, component: AddEBMenuItem },
     { key: "edit", label: "编辑", icon: "edit", component: AddEBMenuItem },
-    { key: "move", label: "移动", icon: "select" },
+    { key: "move", label: "移动", icon: "select", component: MoveEBMenuItem },
     { key: "del", label: "删除", component: DeleteMenuItem },
   ];
 

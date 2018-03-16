@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Popconfirm, message, Icon } from 'antd';
-import styles from './DeleteMenuItem.less';
 import PropTypes from "prop-types";
 
 @connect(({ app, magOrg }) => ({ app, magOrg }))
@@ -22,40 +21,32 @@ export default class DeleteBtn extends Component {
   state = {};
 
   // 删除确认的两个事件
-  confirm = (event) => {
-    // event.stopPropagation();
+  confirm = () => {
+    const { onGetData } = this.props;
+    const data = onGetData && onGetData();
     this.props.dispatch({
-      type: 'magOrg/organizationDelete',
+      type: 'expertbaseTree/DeleteExperBaseByID',
       payload: {
-        ids: this.props.fatherId,
+        ids: [data.id] || [],
       },
     }).then((data) => {
       if (data.succeed) {
         message.success('删除成功');
-        // TODO 假删除，直接删除数据
-        this.props.dispatch({
-          type: 'magOrg/deleteInitDate',
-          payload: {
-            ids: this.props.fatherId,
-          },
-        });
       } else {
         message.error('删除失败');
       }
     });
   };
 
-  openSwitch = (event) => {
-    event.stopPropagation();
+  openSwitch = () => {
     this.props.callbackParent && this.props.callbackParent();
   };
 
   render() {
     const { label, icon, className } = this.props;
-
     return (
       <Popconfirm
-        title="你确定要删除么?" className="expertbase_delete_menuitem"
+        title="你确定要删除么?"
         onConfirm={this.confirm.bind(this)}
         okText="确定" cancelText="取消"
       >

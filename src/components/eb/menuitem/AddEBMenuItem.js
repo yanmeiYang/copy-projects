@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 // TODO 需要可以配置创建的时候弹出的是哪个控件。
 
 @FormCreate()
-@connect(({ magOrg }) => ({ magOrg })) // TODO
+@connect(({ expertbaseTree }) => ({ expertbaseTree })) // TODO
 export default class AddEBMenuItem extends Component {
 
   static propTypes = {
@@ -24,48 +24,50 @@ export default class AddEBMenuItem extends Component {
   };
 
   state = { // TODO
-    fatherId: [],
+    data: null,
     visible: false,
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.fatherId !== this.props.fatherId) {
-      const addId = this.props.fatherId.length > 0 ? this.props.fatherId : nextProps.fatherId;
-      this.setState({ fatherId: addId });
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.fatherId !== this.props.fatherId) {
+  //     const addId = this.props.fatherId.length > 0 ? this.props.fatherId : nextProps.fatherId;
+  //     this.setState({ fatherId: addId });
+  //   }
+  // }
 
   handleOk = () => {
     // TODO dispatch 提交数据
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        const parent = this.state.fatherId;
+        const parent = [this.state.data.id] || [];
         const data = {
           name: values.name || '',
           name_zh: values.name_zh || '',
           desc: values.desc || '',
           desc_zh: values.desc_zh || '',
-          isPublic: values.isPublic === '1' ? true : false,
+          is_public: values.isPublic === '1' ? true : false,
           // address: values.address || '',
         };
-        if (this.props.name === '编辑') {
-          const { fatherId } = this.state;
+        if (this.props.type === 'edit') {
+          data.id = [this.state.data.id] || [];
           this.props.dispatch({
-            type: 'magOrg/updateOrganizationByID',
-            payload: { fatherId, data },
+            type: 'expertbaseTree/UpdateExperBaseByID',
+            payload: { data },
           }).then((info) => {
-            if (info) {
+            if (info.succeed) {
+              message.success('更新成功');
+            } else {
               message.error('更新失败');
             }
           });
         } else {
           data.parents = parent || [];
           this.props.dispatch({
-            type: 'magOrg/organizationCreate',
+            type: 'expertbaseTree/createExpertBase',
             payload: { data },
           }).then((info) => {
             if (info.succeed) {
-              this.updataInfo();
+              message.success('添加成功');
             } else {
               message.error('添加失败');
             }
@@ -74,59 +76,52 @@ export default class AddEBMenuItem extends Component {
       }
     });
     this.setState({
-      fatherId: [],
       visible: false,
     });
   };
-  // 假更新，直接添加到本地数据
-  addInfoToLocal = (data) => {
-    this.props.dispatch({
-      type: 'magOrg/addInfoToLocal',
-      payload: { data },
-    });
-  };
-  updataInfo = () => {
-    this.props.dispatch({
-      type: 'magOrg/getOrganizationByIDs',
-      payload: {
-        ids: [],
-        query: '',
-        offset: 0,
-        size: 100,
-        searchType: 'all',
-        filters: { terms: { system: [system.System] } },
-        expertbase: ['name', 'name_zh',
-          'logo', 'desc', 'type', 'stats',
-          'created_time', 'updated_time', 'is_deleted', 'parents', 'system', 'is_public'],
-      },
-    });
-  };
+  // // 假更新，直接添加到本地数据
+  // addInfoToLocal = (data) => {
+  //   this.props.dispatch({
+  //     type: 'magOrg/addInfoToLocal',
+  //     payload: { data },
+  //   });
+  // };
+  // TODO 这里需要修改，暂时是调用api刷新，但是需要改成修改本地数据的形式
+  // updataInfo = () => {
+  //   this.props.dispatch({
+  //     type: 'magOrg/getOrganizationByIDs',
+  //     payload: {
+  //       ids: [],
+  //       query: '',
+  //       offset: 0,
+  //       size: 100,
+  //       searchType: 'all',
+  //       filters: { terms: { system: [system.System] } },
+  //       expertbase: ['name', 'name_zh',
+  //         'logo', 'desc', 'type', 'stats',
+  //         'created_time', 'updated_time', 'is_deleted', 'parents', 'system', 'is_public'],
+  //     },
+  //   });
+  // };
 
-  handleCancel = (event) => {
-    // event.stopPropagation();
+  handleCancel = () => {
     this.props.form.resetFields();
     this.setState({
-      fatherId: [],
       visible: false,
     });
   };
 
-  changeVisible = (event) => {
+  changeVisible = () => {
     // I get dat here.
     const { onGetData } = this.props;
     const data = onGetData && onGetData();
-    console.log('onGetData', onGetData, data);
-
-    // event.stopPropagation();
-    this.setState({
-      visible: true,
-    });
-    if (this.props.name === '编辑') {
+    this.setState({ visible: true, data });
+     // TODO 是否有必要设置state，是否可以每次调用 方法取data
+    if (this.props.type === 'edit') {
       this.props.dispatch({
-        type: 'magOrg/getOrgByID',
+        type: 'expertbaseTree/getExperBaseByID',
         payload: {
-          ids: this.props.fatherId,
-          expertbase: ['id', 'name', 'name_zh', 'desc', 'desc_zh', 'is_public'],
+          ids: [data.id] || [],
         },
       }).then((data) => {
         const name = data.name ? data.name.toString() : '';

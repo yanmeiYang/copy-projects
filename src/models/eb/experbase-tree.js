@@ -32,6 +32,27 @@ export default {
       return null;
     },
 
+    * createExpertBase({ payload }, { call }) {
+      // TODO 很多数据
+      console.log('data', payload)
+      const { data } = yield call(ebService.createExpertBase, payload);
+      return data;
+    },
+
+    * UpdateExperBaseByID({ payload }, { select, call, put }) {
+      const pdata = yield call(ebService.UpdateExperBaseByID, payload);
+      return pdata.data;
+    },
+
+    * DeleteExperBaseByID({ payload }, { call }) {
+      const { data } = yield call(ebService.DeleteExperBaseByID, payload);
+      return data;
+    },
+
+    * getExperBaseByID({ payload }, { call }) {
+      const { data } = yield call(ebService.getExpertBaseById, payload);
+      return data.items[0];
+    },
     //   * organizationCreate({ payload }, { call }) {
     //     // TODO 很多数据
     //     const { data } = payload;
@@ -74,11 +95,12 @@ export default {
     //     const data = yield call(magOrg.OrganizationDelete, ids);
     //     return data.data;
     //   },
+
+    //++++++++++++++++++++++++++++++++++  old  ++++++++++++++++++++++++++++++++++++++++
+
+
     //   // 其实和获取org是一个api，但是不能使用一个，会造成model的state改变，所以这里复制一个
-    //   * getOrgByID({ payload }, { call }) {
-    //     const data = yield call(magOrg.getOrganizationByIDs, payload);
-    //     return data.data.items[0];
-    //   },
+
     //   // 这个updata不是真的。是假装改父集的，后面会改
     //   * MoveOrganizationByID({ payload }, { call }) {
     //     const { ids, parentsId } = payload;
@@ -90,56 +112,7 @@ export default {
     //     return newdata.data;
     //   },
     //   // 这个是真的更新api
-    //   * updateOrganizationByID({ payload }, { select, call, put }) {
-    //     const { fatherId, data } = payload;
-    //     const newData = {
-    //       // 'ids': fatherId,
-    //       'opts': [{
-    //         'operator': 'upsert',
-    //         'fields': [
-    //           {
-    //             'field': 'id',
-    //             'value': fatherId[0],
-    //           },
-    //           {
-    //             'field': 'name',
-    //             'value': data.name,
-    //           },
-    //           {
-    //             'field': 'name_zh',
-    //             'value': data.name_zh,
-    //           },
-    //           {
-    //             'field': 'desc',
-    //             'value': data.desc,
-    //           },
-    //           {
-    //             'field': 'desc_zh',
-    //             'value': data.desc_zh,
-    //           },
-    //           {
-    //             'field': 'is_public',
-    //             'value': data.isPublic,
-    //           },
-    //         ],
-    //       }],
-    //     };
-    //     const pdata = yield call(magOrg.UpdateOrganizationByID, newData);
-    //     if (pdata.data && pdata.data.succeed) {
-    //       const state = yield select(state => state.magOrg);
-    //       const initData = state.get('initData');
-    //       console.log('initData', initData)
-    //       initData.forEach((item) => {
-    //         if (item.id === fatherId[0]) {
-    //           item.name = data.name;
-    //           item.name_zh = data.name_zh;
-    //         }
-    //       });
-    //       yield put({ type: 'getOrganizationByIDsSuccess', payload: initData });
-    //     } else {
-    //       return pdata.data;
-    //     }
-    //   },
+
     //   * deleteInitDate({ payload }, { select, call, put }) {
     //     const { ids } = payload;
     //     const state = yield select(state => state.magOrg);

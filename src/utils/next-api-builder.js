@@ -317,7 +317,12 @@ const filtersToQuery = (nextapi, searchFiltersFromAggregation) => {
     return false;
   });
 };
+const createFieldsArray = (data) => {
+ return Object.keys(data).map((field) => {
+    return { 'field': field, 'value': data[field] };
+  })
+};
 
-const H = { filtersToQuery, filterByEBs };
+const H = { filtersToQuery, filterByEBs, createFieldsArray };
 
 export { apiBuilder, Action, F, H };

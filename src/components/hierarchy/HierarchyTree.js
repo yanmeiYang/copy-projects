@@ -126,7 +126,6 @@ export default class HierarchyTree extends Component {
 
     return orgs.map((org) => {
       const [id, childs] = Maps.getAll(org, 'id', 'childs');
-      console.log('id>>>>>>>>>>>>>..', id, childs)
       const displayName = this.getName(org);
       const nchilds = childs && childs.size;
 

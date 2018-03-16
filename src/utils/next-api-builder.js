@@ -205,7 +205,7 @@ const F = {
         expertbase: ['name', 'name_zh', 'logo', 'type', 'stats', 'is_deleted', 'parents']
       },
       full: {
-        expertbase: ['name', 'name_zh', 'logo', 'desc', 'type', 'stats',
+        expertbase: ['name', 'name_zh', 'logo', 'desc', 'type', 'stats', 'desc_zh',
           'created_time', 'updated_time', 'is_deleted', 'parents', 'creator']
       },
     },

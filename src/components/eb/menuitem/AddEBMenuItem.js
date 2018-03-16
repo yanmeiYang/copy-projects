@@ -28,13 +28,6 @@ export default class AddEBMenuItem extends Component {
     visible: false,
   };
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (nextProps.fatherId !== this.props.fatherId) {
-  //     const addId = this.props.fatherId.length > 0 ? this.props.fatherId : nextProps.fatherId;
-  //     this.setState({ fatherId: addId });
-  //   }
-  // }
-
   handleOk = () => {
     // TODO dispatch 提交数据
     this.props.form.validateFields((err, values) => {
@@ -49,7 +42,7 @@ export default class AddEBMenuItem extends Component {
           // address: values.address || '',
         };
         if (this.props.type === 'edit') {
-          data.id = [this.state.data.id] || [];
+          data.id = this.state.data.id || '';
           this.props.dispatch({
             type: 'expertbaseTree/UpdateExperBaseByID',
             payload: { data },
@@ -79,30 +72,6 @@ export default class AddEBMenuItem extends Component {
       visible: false,
     });
   };
-  // // 假更新，直接添加到本地数据
-  // addInfoToLocal = (data) => {
-  //   this.props.dispatch({
-  //     type: 'magOrg/addInfoToLocal',
-  //     payload: { data },
-  //   });
-  // };
-  // TODO 这里需要修改，暂时是调用api刷新，但是需要改成修改本地数据的形式
-  // updataInfo = () => {
-  //   this.props.dispatch({
-  //     type: 'magOrg/getOrganizationByIDs',
-  //     payload: {
-  //       ids: [],
-  //       query: '',
-  //       offset: 0,
-  //       size: 100,
-  //       searchType: 'all',
-  //       filters: { terms: { system: [system.System] } },
-  //       expertbase: ['name', 'name_zh',
-  //         'logo', 'desc', 'type', 'stats',
-  //         'created_time', 'updated_time', 'is_deleted', 'parents', 'system', 'is_public'],
-  //     },
-  //   });
-  // };
 
   handleCancel = () => {
     this.props.form.resetFields();
@@ -112,11 +81,9 @@ export default class AddEBMenuItem extends Component {
   };
 
   changeVisible = () => {
-    // I get dat here.
     const { onGetData } = this.props;
     const data = onGetData && onGetData();
     this.setState({ visible: true, data });
-     // TODO 是否有必要设置state，是否可以每次调用 方法取data
     if (this.props.type === 'edit') {
       this.props.dispatch({
         type: 'expertbaseTree/getExperBaseByID',
@@ -128,7 +95,6 @@ export default class AddEBMenuItem extends Component {
         this.props.form.setFieldsValue({
           name,
           name_zh: data.name_zh || '',
-          // logo: data.logo || '',
           desc: data.desc || '',
           desc_zh: data.desc_zh || '',
           isPublic: data.is_public ? '1' : '2',

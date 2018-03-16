@@ -1,34 +1,52 @@
 import React, { Component } from 'react';
-import { connect } from 'dva';
-import {
-  TreeSelect, Modal, Button, message, Icon,
-} from 'antd';
-import { system } from 'core';
+import { connect } from 'engine';
+import { TreeSelect, Modal, Button, message, Icon } from 'antd';
+import { List, Map, toJSON } from 'immutable';
 import { Maps } from 'utils/immutablejs-helpers';
+import hierarchy from 'helper/hierarchy';
+import PropTypes from "prop-types";
 import styles from './MoveEBMenuItem.less';
 
 const TreeNode = TreeSelect.TreeNode;
-@connect(({ app, magOrg }) => ({ app, magOrg }))
-export default class MoveOrg extends Component {
+
+@connect(({ expertbaseTree }) => ({ expertbaseTree }))
+export default class MoveEBMenuItem extends Component {
+
+  static propTypes = {
+    label: PropTypes.string,
+    className: PropTypes.string,
+    icon: PropTypes.string,
+    onGetData: PropTypes.func,
+  };
+
+  static defaultProps = {
+    label: 'Move',
+    icon: 'select',
+  };
+
   state = {
-    value: [],
+    value: '',
   };
 
   onChange = (value) => {
-    this.setState({ value: [value] });
+    this.setState({ value: value });
   };
+
   showModal = () => {
     this.setState({
       visible: true,
     });
-    this.props.callbackParent();
+    this.props.callbackParent && this.props.callbackParent();
   };
-  handleOk = (event) => {
+
+  handleOk = () => {
+    const { onGetData } = this.props;
+    const data = onGetData && onGetData();
     this.props.dispatch({
-      type: 'magOrg/MoveOrganizationByID',
+      type: 'expertbaseTree/MoveExperBaseByID',
       payload: {
-        ids: this.state.fatherId, //ghjkghjkghjk
-        parentsId: this.state.value,
+        id: data.id || '',
+        parentsId: this.state.value || '',
       },
     }).then((data) => {
       if (data.succeed) {
@@ -38,12 +56,19 @@ export default class MoveOrg extends Component {
       }
     });
   };
-  handleCancel = (event) => {
-    event.stopPropagation();
+
+  handleCancel = () => {
     this.setState({
       visible: false,
     });
   };
+
+  ListToArray = (data, index) => {
+    let newData = hierarchy.fromData(index, data);
+    let orgs = newData.data && newData.data.toJS();
+    return this.renderTreeNodes(orgs)
+  };
+
   renderTreeNodes = (orgs) => {
     if (orgs) {
       return orgs.map((org) => {
@@ -59,17 +84,16 @@ export default class MoveOrg extends Component {
     }
   };
 
-// TODO 考虑性能，这些都暂时先不加载，得设置个触发条件，！！！暂时还没想好怎么加，哈哈
   render() {
-    const [allOrgs] = Maps.getAll(this.props.magOrg, 'allOrgs');
+    const [treeData, treeIndex] = Maps.getAll(this.props.expertbaseTree, 'treeData', 'treeIndex');
+    const { label, icon, className } = this.props;
     return (
       <div>
-        <div onClick={this.showModal} className={styles.menuItem}>
-          <Icon type="select" />
-          <span>移动</span>
+        <div onClick={this.showModal} className={className}>
+          <Icon type={icon} /><span>{label}</span>
         </div>
         <Modal
-          title="Basic Modal"
+          title={label}
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
@@ -83,9 +107,8 @@ export default class MoveOrg extends Component {
             allowClear
             treeDefaultExpandAll
             onChange={this.onChange.bind(this)}
-            onSelect={this.test}
           >
-            {this.renderTreeNodes(allOrgs)}
+            {this.ListToArray(treeData, treeIndex)}
           </TreeSelect>
 
         </Modal>

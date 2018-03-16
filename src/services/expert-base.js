@@ -26,15 +26,6 @@ export async function getExpertBases(payload) {
   return nextAPI({ data: [nextapi.api] });
 }
 
-export async function getExpertBaseById(payload) {
-  const { ids } = payload;
-  const nextapi = apiBuilder.create(Action.search.search, 'ebTreeData')
-    .param({ ids, offset: 0, size: MaxTreeDataItems, searchType: 'all' })
-    .addFilter("terms", { system: [sysconfig.SYSTEM] })
-    .schema(F.fields.eb.forTree);
-  return nextAPI({ data: [nextapi.api] });
-}
-
 export async function createExpertBase(payload) {
   //TODO 很多数据
   const { data } = payload;
@@ -67,6 +58,15 @@ export async function DeleteExperBaseByID(payload) {
     .param({ ids, real });
   return nextAPI({ data: [nextapi.api] });
 }
+
+export async function MoveExperBaseByID(payload) {
+  //TODO 此处为move的api ，以后会换一个新的。
+  const { id, to } = payload;
+  const nextapi = apiBuilder.create(Action.expertbase.Move, 'Move')
+    .param({ id, to });
+  return nextAPI({ data: [nextapi.api] });
+}
+
 
 // .................... old methods ...............
 

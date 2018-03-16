@@ -86,10 +86,10 @@ module.exports = {
   // ],
 
   // 有时候链接不好用，所以禁用这个。
-  // externals: {
-  //   "react": "window.React",
-  //   "react-dom": "window.ReactDOM",
-  // },
+  externals: {
+    "react": "window.React",
+    "react-dom": "window.ReactDOM",
+  },
 
   ignoreMomentLocale: true,
 

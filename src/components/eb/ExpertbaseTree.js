@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'engine';
 import { AddEBMenuItem, DeleteMenuItem, MoveEBMenuItem } from './menuitem';
 import HierarchyTree from "components/hierarchy/HierarchyTree";
+import { imCompare } from 'utils/compare';
 
 @connect(({ app, expertbaseTree }) => ({ app, expertbaseTree }))
 export default class ExpertbaseTree extends Component {

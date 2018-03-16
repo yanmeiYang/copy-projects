@@ -6,7 +6,7 @@ export default {
   },
 
   // loading: './src/components/ui/Loader.js',
-  disableServiceWorker: false,
+  // disableServiceWorker: false,
   preact: false,
 
   // pages: {

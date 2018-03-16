@@ -1,6 +1,6 @@
 import { message } from 'antd';
 
-const ERROR_MSG_DURATION = 3; // 3 秒
+const ERROR_MSG_DURATION = 6; // 3 秒
 
 export default {
   onError(err) {

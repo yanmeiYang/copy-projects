@@ -90,7 +90,10 @@ export default function request(url, options) {
       statusCode = response.status;
       msg = data.message || statusText;
 
-      printNEXTAPIDebugLog(data);
+      const reason = printNEXTAPIDebugLog(data);
+      if (reason) {
+        msg = `${msg}: ${reason}`;
+      }
 
     } else {
       statusCode = 600;
@@ -101,16 +104,23 @@ export default function request(url, options) {
 }
 
 const printNEXTAPIDebugLog = (data) => {
+  let reason = null;
   if (data.errs && data.errs.length > 0) {
     for (const err of data.errs) {
       console.error('NEXT_API_ERROR: ', err.Error);
       if (err.Details) {
         for (const msg of err.Details) {
           console.log('\t', msg);
+          // return reason
+          if (!reason) {
+            const match = msg.match(/panic:(.*)/)
+            reason = match && match.length > 0 && match[1]
+          }
         }
       }
     }
   }
+  return reason;
 };
 
 const fetch = (options) => {

@@ -206,7 +206,7 @@ const F = {
       },
       full: {
         expertbase: ['name', 'name_zh', 'logo', 'desc', 'type', 'stats',
-          'created_time', 'updated_time', 'is_deleted', 'parents', 'system']
+          'created_time', 'updated_time', 'is_deleted', 'parents', 'creator']
       },
     },
   },

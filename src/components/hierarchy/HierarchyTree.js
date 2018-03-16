@@ -71,43 +71,10 @@ export default class HierarchyTree extends Component {
     const firstID = selectedKeys && selectedKeys.length > 0 && selectedKeys[0];
     let firstItem = info && info.selectedNodes && info.selectedNodes.length > 0
       && info.selectedNodes[0];
-
     if (onItemClick) {
       onItemClick(firstID, firstItem); // TODO firstItem is bad.
     }
-
-    // this.setState({ fatherId: selectedKeys });// TODO ??
-
-    // if (selectedKeys.length > 0) {
-    //   if (info.selectedNodes[0] && info.selectedNodes[0].props) {
-    //     const selectedInfo = {
-    //       id: selectedKeys[0],
-    //       name: info.selectedNodes[0].props.dataRef.name_zh,
-    //     };
-    //     console.log('=====', this);
-    //
-    //   }
-    // }
   };
-
-  // // 控制rightzone是否显示
-  // menuIsShow = (data) => {
-  //   if (!data) {
-  //     this.setState({ showRightZone: '', menu: false });
-  //   } else {
-  //     this.setState({ menu: data });
-  //   }
-  // };
-
-  // showZone = (key) => {
-  //   this.setState({ showRightZone: key });
-  // };
-  //
-  // hiddenZone = () => {
-  //   if (!this.state.menu) {
-  //     this.setState({ showRightZone: '', menu: true });
-  //   }
-  // };
 
   sortNumber = (a, b) => {
     // 暂时按照字母顺序排序。
@@ -139,12 +106,22 @@ export default class HierarchyTree extends Component {
       console.error('error model is null',);
       return;
     }
+    // console.log('----------', this.refs.actionMenu);
+    // console.log('----------', this.refs.actionMenu.refs.menu);
+    if (this.refs.actionMenu) {
+      this.refs.actionMenu.cancelHide();
+    }
     this.menu && this.menu.show(e.target, model);
+  };
+
+  onActionMenuOut = () => {
+    if (this.refs.actionMenu) {
+      this.refs.actionMenu.tryHideMenu();
+    }
   };
 
   // 处理数据形成树
   renderTreeNodes = (orgs) => {
-    const { data } = this.props;
     const { selected } = this.state;
 
     return orgs.map((org) => {
@@ -165,7 +142,9 @@ export default class HierarchyTree extends Component {
           </div>
 
           <div className={styles.actionIcon}>
-            <Icon type="down" onMouseEnter={this.onActionMenuHover.bind(this, org)} />
+            <Icon type="down"
+                  onMouseEnter={this.onActionMenuHover.bind(this, org)}
+                  onMouseOut={this.onActionMenuOut} />
           </div>
 
         </div>
@@ -188,7 +167,7 @@ export default class HierarchyTree extends Component {
         {!data && <div> Loading ...</div>}
 
         {data && [
-          <ActionMenu key={0} id={ActionMenuID} config={menuConfig} top={0} />,
+          <ActionMenu key={0} id={ActionMenuID} config={menuConfig} top={0} ref="actionMenu" />,
           <Tree key={1} onSelect={this.onSelect}
                 defaultSelectedKeys={[selected]}
                 showLine defaultExpandAll draggablexxxx>

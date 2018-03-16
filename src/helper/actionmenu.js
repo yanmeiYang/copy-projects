@@ -12,7 +12,6 @@ const getRootTop = (menuID) => {
   return 0; // TODO 猜一个.
 };
 
-
 const getElementTop = (element) => {
   let actualTop = element.offsetTop;
   let current = element.offsetParent;
@@ -29,7 +28,7 @@ const createMenu = (menuID) => {
 
   const menuElm = document.getElementById(menuID);
   if (!menuElm) {
-    console.error(`can't find element ${menuID}`);
+    // console.error(`can't find element ${menuID}`);
   }
   return {
     menuElm, rootTop,

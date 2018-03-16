@@ -6,11 +6,11 @@
 // const ReduxLoggerEnabled = true;
 const ReduxLoggerEnabled = false;
 const DebugLogEnabled = true;
-const LogRequest = true;
-const LogRequestResult = true;
+const LogRequest = false;
+const LogRequestResult = false;
 const LogRequestContent = false;
 
-const LogHOC = true;
+const LogHOC = false;
 
 const HighlightHoles = 'none'; // ['none' | 'yes' | 'all']
 

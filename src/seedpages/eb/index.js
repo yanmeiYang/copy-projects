@@ -9,6 +9,7 @@ import { Spinner } from 'components';
 import { Layout } from 'components/layout';
 import { sysconfig } from 'systems';
 import { classnames, queryString } from 'utils';
+import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { createHiObj } from 'utils/hiobj';
 import ExpertBase from 'components/expert-base/ExpertBase';
 import ExpertbaseTree from 'components/eb/ExpertbaseTree';
@@ -126,11 +127,10 @@ export default class HierarchyExpertBasePage extends Component {
   };
 
   render() {
-    const { expertbaseTree } = this.props;
     const { id, eb, childrenId, parentId } = this.state;
-    console.log('eb is ', eb);
-    const [name, name_zh, desc, desc_zh] =
-      Maps.getAll(eb, "name", "name_zh", "desc", "desc_zh");
+    eb && console.log('eb is ', eb.toJS());
+    const [name, name_zh, desc, desc_zh, created_time] =
+      Maps.getAll(eb, "name", "name_zh", "desc", "desc_zh", "created_time");
     return (
       <Layout searchZone={[]} contentClass={styles.ebIndex} showNavigator={false}>
         <div className={styles.container}>
@@ -145,19 +145,28 @@ export default class HierarchyExpertBasePage extends Component {
           </div>
 
           <div className={styles.rightBlock}>
-            <div className={styles.info}>
+
+            <div className={styles.ebBasicInfo}>
               {eb && <>
                 <h1>
                   {name}
                   {name_zh && <span className={styles.subTitle}>（{name_zh}）</span>}
                 </h1>
-                <span className={styles.desc}>{desc}</span>
-                <span className={styles.desc}>{desc_zh}</span>
+                <div className={styles.infoLine}>
+                  <span>创建时间：
+                    {created_time && <FD value={created_time} />}
+                  </span>
+                  {eb.get("creator") && <span>创建者：{eb.get("creator")}</span>}
+                </div>
+                <div className={styles.desc}>{desc}</div>
+                <div className={styles.desc}>{desc_zh}</div>
               </>}
             </div>
-            <ExpertBase query="-" offset="0" size="20" expertBaseId={id}
-                        currentBaseChildIds={childrenId}
-                        currentBaseParentId={parentId} />
+
+            <ExpertBase
+              query="-" offset="0" size="20" expertBaseId={id}
+              currentBaseChildIds={childrenId}
+              currentBaseParentId={parentId} />
           </div>
 
         </div>

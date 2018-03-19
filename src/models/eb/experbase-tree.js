@@ -1,4 +1,4 @@
-import { fromJS, Map } from 'immutable';
+import { fromJS, Map, List } from 'immutable';
 import { createHiObj } from 'utils/hiobj';
 import * as magOrg from 'services/magOrg';
 import * as ebService from 'services/expert-base';
@@ -33,8 +33,6 @@ export default {
     },
 
     * createExpertBase({ payload }, { call }) {
-      // TODO 很多数据
-      console.log('data', payload)
       const { data } = yield call(ebService.createExpertBase, payload);
       return data;
     },
@@ -61,33 +59,7 @@ export default {
       return newData.data;
     },
 
-    //++++++++++++++++++++++++++++++++++  old  ++++++++++++++++++++++++++++++++++++++++
 
-
-    //   // 其实和获取org是一个api，但是不能使用一个，会造成model的state改变，所以这里复制一个
-
-    //   // 这个updata不是真的。是假装改父集的，后面会改
-    //
-    //   // 这个是真的更新api
-
-    //   * deleteInitDate({ payload }, { select, call, put }) {
-    //     const { ids } = payload;
-    //     const state = yield select(state => state.magOrg);
-    //     const initData = state.get('initData');
-    //     initData.forEach((item, index) => {
-    //       if (item.id === ids[0]) {
-    //         initData.splice(index, 1);
-    //       }
-    //     });
-    //     yield put({ type: 'getOrganizationByIDsSuccess', payload: initData });
-    //   },
-    //   * addInfoToLocal({ payload }, { select, put }) {
-    //     const { data } = payload;
-    //     const state = yield select(state => state.magOrg);
-    //     const initData = state.get('initData');
-    //     initData.push(data);
-    //     yield put({ type: 'addInfoToLocalSuccess', payload: initData });
-    //   },
   },
   reducers: {
     getTreeDataSuccess(state, { payload }) {
@@ -121,7 +93,41 @@ export default {
       });
     },
 
+    addNode(state, { payload }) {
+      const { node, id } = payload;
+      let path = hierarchy.findPath(state.get('treeData'), state.get('treeIndex'), id);
+      if (path == null) {
+        console.error('can\' find [%s] in tree.', node.id);
+        return state;
+      }
+      path = ['treeData', ...path, 'childs'];
+      // update values.
+      return state.withMutations((map) => {
+        map.updateIn(path, ((childs) => {
+          if(childs){
+            return  childs.push(fromJS(node))
+          } else {
+            childs = List();
+            return childs.push(fromJS(node))
+          }
 
+        }));
+      });
+    },
+
+    deleteNode(state, { payload }) {
+      const { id } = payload;
+      let path = hierarchy.findPath(state.get('treeData'), state.get('treeIndex'), id);
+      if (path == null) {
+        console.error('can\' find [%s] in tree.', id);
+        return state;
+      }
+      path = ['treeData', ...path];
+      // update values.
+      return state.withMutations((map) => {
+        map.removeIn(path);
+      });
+    },
     //   addInfoToLocalSuccess(state, { initData }) {
     //     const data = createHiObj(initData);
     //     const newState = state.withMutations((map) => {

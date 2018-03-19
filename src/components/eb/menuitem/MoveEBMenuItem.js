@@ -41,16 +41,22 @@ export default class MoveEBMenuItem extends Component {
 
   handleOk = () => {
     const { onGetData } = this.props;
-    const data = onGetData && onGetData();
+    const node = onGetData && onGetData();
     this.props.dispatch({
       type: 'expertbaseTree/MoveExperBaseByID',
       payload: {
-        id: data.id || '',
+        id: node.id || '',
         parentsId: this.state.value || '',
       },
     }).then((data) => {
       if (data.succeed) {
+        this.props.dispatch({ type: 'expertbaseTree/deleteNode', payload: { id: node.id } });
+        this.props.dispatch({
+          type: 'expertbaseTree/addNode',
+          payload: { node, id: this.state.value }
+        });
         message.success('移动成功');
+        this.handleCancel();
       } else {
         message.error('移动失败');
       }

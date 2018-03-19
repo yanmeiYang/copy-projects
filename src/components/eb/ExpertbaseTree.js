@@ -84,27 +84,23 @@ export default class ExpertbaseTree extends Component {
   //   });
   // };
 
-  testModify = () => {
-    // test node
-    const node = { id: '5a9f9c307e96b5460dc7e403', name: '测试改掉', name_zh: '测试改掉' };
-    this.props.dispatch({ type: 'expertbaseTree/updateNode', payload: { node } });
-  };
+  // testModify = () => {
+  //   // test node
+  //   const node = { id: '5a9f9c307e96b5460dc7e403', name: '测试改掉', name_zh: '测试改掉' };
+  //   this.props.dispatch({ type: 'expertbaseTree/updateNode', payload: { node } });
+  // };
 
   render() {
     const { onItemClick, selected, expertbaseTree } = this.props;
     const treeData = expertbaseTree && expertbaseTree.get('treeData');
     // console.log('[datadata] 8888 render ExpertbaseTree', selected, selected, selected);
     return (
-      <>
-        <button onClick={this.testModify}>TEST</button>
-
         <HierarchyTree
           data={treeData}
           selected={selected}
           onItemClick={onItemClick}
           menuConfig={this.actionMenuConfig}
         />
-      </>
     )
   }
 }

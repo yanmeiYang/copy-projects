@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { Popconfirm, message, Icon } from 'antd';
 import PropTypes from "prop-types";
 
-@connect(({ app, magOrg }) => ({ app, magOrg }))
+@connect(({ app, expertbaseTree }) => ({ app, expertbaseTree }))
 export default class DeleteBtn extends Component {
 
   static propTypes = {
@@ -29,8 +29,9 @@ export default class DeleteBtn extends Component {
       payload: {
         ids: [data.id] || [],
       },
-    }).then((data) => {
-      if (data.succeed) {
+    }).then((info) => {
+      if (info.succeed) {
+        this.props.dispatch({ type: 'expertbaseTree/deleteNode', payload: { id: data.id } });
         message.success('删除成功');
       } else {
         message.error('删除失败');

@@ -41,6 +41,7 @@ export default class AddEBMenuItem extends Component {
           is_public: values.isPublic === '1' ? true : false,
           // address: values.address || '',
         };
+        const node = data;
         if (this.props.type === 'edit') {
           data.id = this.state.data.id || '';
           this.props.dispatch({
@@ -48,6 +49,7 @@ export default class AddEBMenuItem extends Component {
             payload: { data },
           }).then((info) => {
             if (info.succeed) {
+              this.props.dispatch({ type: 'expertbaseTree/updateNode', payload: { node } });
               message.success('更新成功');
             } else {
               message.error('更新失败');
@@ -60,6 +62,11 @@ export default class AddEBMenuItem extends Component {
             payload: { data },
           }).then((info) => {
             if (info.succeed) {
+              node.id = info.items[0];
+              this.props.dispatch({
+                type: 'expertbaseTree/addNode',
+                payload: { node, id: this.state.data.id }
+              });
               message.success('添加成功');
             } else {
               message.error('添加失败');

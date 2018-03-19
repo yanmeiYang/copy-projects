@@ -84,5 +84,44 @@ const init = (objs) => {
   return hi;
 };
 
-export default { fromData, init };
+// --------------------------------------
+const findPath = (data, index, id) => {
+  if (null == data || index == null) {
+    return null;
+  }
+  const node = index.get(id);
+  if (!node) {
+    // console.log('ERROR FIND ID', id);
+    return null;
+  }
+
+  // prepare parents path;
+  let parents = node.get('parents');
+  parents = parents && parents.toJS() || [];
+  parents.reverse();
+  parents.push(id);
+  // console.log('>>>>>>>> node\'s parents is ', parents);
+
+  // generate path.
+  let currentList = data;
+  let result = [];
+  for (let i = 0; i < parents.length; i += 1) {
+    const path = parents[i];
+    const idx = currentList.findIndex(item => path === item.get('id'));
+    if (idx < 0) {
+      // console.log('>>>>>>>>>> error can\'find id ', path);
+      return null;
+    }
+
+    result.push(idx);
+    if (i < parents.length - 1) {
+      result.push('childs');
+      currentList = currentList.get(idx).get('childs');
+    }
+  }
+  return result
+};
+
+
+export default { fromData, init, findPath };
 

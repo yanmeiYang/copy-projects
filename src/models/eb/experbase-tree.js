@@ -99,6 +99,29 @@ export default {
         map.set('treeIndex', hi.index);
       });
     },
+
+    updateNode(state, { payload }) {
+      const { node } = payload;
+      let path = hierarchy.findPath(state.get('treeData'), state.get('treeIndex'), node.id);
+      if (path == null) {
+        console.error('can\' find [%s] in tree.', node.id);
+        return state;
+      }
+      path = ['treeData', ...path, '__replace_me__'];
+      const replaceIdx = path.length - 1;
+      // update values.
+      return state.withMutations((map) => {
+        Object.keys(node).map((key) => {
+          if (key !== 'id') {
+            path[replaceIdx] = key;
+            map.setIn(path, node[key]);
+          }
+          return null;
+        });
+      });
+    },
+
+
     //   addInfoToLocalSuccess(state, { initData }) {
     //     const data = createHiObj(initData);
     //     const newState = state.withMutations((map) => {

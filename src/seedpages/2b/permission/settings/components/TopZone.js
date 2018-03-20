@@ -10,7 +10,9 @@ import { routerRedux, Link, withRouter } from 'dva/router';
 export default class TobZone extends Component {
   state = {};
 
-
+  componentWillMount(){
+    this.currentKey = this.props.currentKey || 'all';
+  }
 
   onChangeSystem(key) {
     this.setState({ tab: key });
@@ -33,9 +35,9 @@ export default class TobZone extends Component {
 
     return (
       <Tabs
+        activeKey={this.currentKey}
         tabPosition="top"
         onTabClick={this.onChangeSystem.bind(this)}
-        defaultActiveKey="all"
       >
         <Tabs.TabPane tab="All" key="all" />
         <Tabs.TabPane tab="New System" key="newSystem" />

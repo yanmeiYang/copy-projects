@@ -7,8 +7,11 @@ import { Tabs } from 'antd';
 const TabPane = Tabs.TabPane;
 export default class LeftTabZone extends Component {
   state = {
-    tab: '设置',
+    tab: 'settings',
   };
+  componentWillMount(){
+    this.setState({tab: this.props.currentKey || 'settings'})
+  }
 
   onChangeSystem(key) {
     console.log('key', key)

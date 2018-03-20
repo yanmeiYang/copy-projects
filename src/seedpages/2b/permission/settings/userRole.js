@@ -7,20 +7,29 @@ import { Layout } from 'components/layout';
 import { sysconfig, getAllSystemConfigs, AvailableSystems } from 'systems';
 import { Tabs } from 'antd';
 import TobZone from './components/TopZone';
-import styles from './page.less';
+import LeftTabZone from '../components/LeftTabZone';
+import styles from './newSystem.less';
 
 const TabPane = Tabs.TabPane;
-export default class UserRoles extends Component {
+export default class newSystem extends Component {
   state = {};
+
+  componentWillMount = () => {
+    const location = window.location;
+  };
 
   render() {
 
     return (
-      <div>
-        <TobZone />
-        <h1> user roles </h1>
-      </div>
-
+      <Layout searchZone={[]} showNavigator={false}>
+        <div className={styles.userRole}>
+          <LeftTabZone currentKey="settings" />
+          <div className={styles.rightZone}>
+            <TobZone currentKey="userRole"/>
+            <h1> user role</h1>
+          </div>
+        </div>
+      </Layout>
     );
   }
 }

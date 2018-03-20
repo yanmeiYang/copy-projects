@@ -3,10 +3,11 @@ import { connect } from 'engine';
 import { Layout } from 'components/layout';
 import { sysconfig, getAllSystemConfigs, AvailableSystems } from 'systems';
 import { Tabs } from 'antd';
+import Settings from './settings/index';
 import styles from './page.less';
 
 const TabPane = Tabs.TabPane;
-AvailableSystems.splice(0, 1, '设置');
+// AvailableSystems.splice(0, 1, '设置');
 export default class Permission extends Component {
   state = {
     tab: 'ces',
@@ -27,6 +28,8 @@ export default class Permission extends Component {
           tabPosition="left"
           onTabClick={this.onChangeSystem.bind(this)}
         >
+          <TabPane tab="设置" key="settings" />
+
           {AvailableSystems &&
           AvailableSystems.map((sys) => {
             return <TabPane tab={sys === 'aminer' ? '' : sys} key={sys} />;

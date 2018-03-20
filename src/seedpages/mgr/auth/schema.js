@@ -72,12 +72,13 @@ export default class Schema extends Component {
       const title = item.title || item.title_zh;
       if (item.children) {
         return (
-          <TreeNode title={`${title} ${this.i18n(item)}`} key={item.title||item.title_zh} dataRef={item}>
+          <TreeNode title={`${title} ${this.i18n(item)}`} key={item.title || item.title_zh}
+                    dataRef={item}>
             {this.renderTreeNodes(item.children)}
           </TreeNode>
         );
       }
-      return <TreeNode title={`${title} ${this.i18n(item)}`} key={item.title||item.title_zh}  />;
+      return <TreeNode title={`${title} ${this.i18n(item)}`} key={item.title || item.title_zh} />;
     });
   };
 
@@ -99,28 +100,26 @@ export default class Schema extends Component {
     this.schemaOfFunction = schemaOfFunction;
     this.schemaOfScoped = schemaOfScoped;
     return (
-      <Layout searchZone={[]} showNavigator onSearch={this.onSearchBarSearch}>
-        <div key={Math.random()}>
-          <button className={styles.expandAll} onClick={this.onExpandAllClick}>Expand All</button>
-          <button onClick={this.onCollapseAllClick}>Collapse All</button>
-          {schemaOfFunction.length > 0 && <Tree
-            showLine
-            defaultExpandAll
-            expandedKeys={expandedKeys}
-            onSelect={this.onSelect}
-          >
-            {schemaOfFunction && this.renderTreeNodes(schemaOfFunction)}
-          </Tree>}
-          {schemaOfScoped.length > 0 && <Tree
-            showLine
-            defaultExpandAll
-            expandedKeys={expandedKeys}
-            onSelect={this.onSelect}
-          >
-            {schemaOfScoped && this.renderTreeNodes(schemaOfScoped)}
-          </Tree>}
-        </div>
-      </Layout>
+      <div key={Math.random()}>
+        <button className={styles.expandAll} onClick={this.onExpandAllClick}>Expand All</button>
+        <button onClick={this.onCollapseAllClick}>Collapse All</button>
+        {schemaOfFunction.length > 0 && <Tree
+          showLine
+          defaultExpandAll
+          expandedKeys={expandedKeys}
+          onSelect={this.onSelect}
+        >
+          {schemaOfFunction && this.renderTreeNodes(schemaOfFunction)}
+        </Tree>}
+        {schemaOfScoped.length > 0 && <Tree
+          showLine
+          defaultExpandAll
+          expandedKeys={expandedKeys}
+          onSelect={this.onSelect}
+        >
+          {schemaOfScoped && this.renderTreeNodes(schemaOfScoped)}
+        </Tree>}
+      </div>
     );
   }
 }

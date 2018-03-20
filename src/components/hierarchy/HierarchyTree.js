@@ -31,6 +31,7 @@ export default class HierarchyTree extends Component {
     selected: PropTypes.string,
     onItemClick: PropTypes.func,
     menuConfig: PropTypes.arrayOf(PropTypes.object),
+    topMenuConfig: PropTypes.arrayOf(PropTypes.object),
   };
 
   static defaultProps = {
@@ -159,11 +160,27 @@ export default class HierarchyTree extends Component {
   };
 
   render() {
-    const { data, menuConfig } = this.props;
+    const { data, menuConfig, topMenuConfig } = this.props;
     const { selected } = this.state;
-    console.log('8888 render HierarchyTree', selected);
+    // console.log('8888 render HierarchyTree', selected);
     return (
       <div className={styles.hierarchyTree} id={`${ActionMenuID}_ROOT`}>
+
+        <div className={styles.toolBox}>
+          {topMenuConfig && topMenuConfig.map((item) => {
+            if (item.component) {
+              const { component, ...props } = item;
+              const newProps = {
+                ...props,
+                className: styles.item,
+                onGetData: this.getData,
+              };
+              return React.createElement(component, newProps);
+            }
+            return null;
+          })}
+        </div>
+
         {!data && <div> Loading ...</div>}
 
         {data && [

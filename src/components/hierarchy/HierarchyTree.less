@@ -3,6 +3,38 @@
 .hierarchyTree {
   //border: solid 1px green;
 
+  .toolBox {
+    display: flex; flex-direction: row;justify-content: flex-end;
+    border: solid 0px #ddd;
+    margin: 4px -24px 4px 4px; padding: 4px 0 4px 4px;
+    border-radius: 2px;
+
+    .item {
+      padding: 2px 8px;
+      span { margin-left: 4px; }
+    }
+
+    .item:hover {
+      background-color: #bae7ff !important; color: #000; cursor: pointer;
+      border-radius: 2px;
+    }
+
+    .actionIcon {
+      visibility: hidden;
+      width: 10px; text-align: right;margin-right: 4px;
+
+      i {
+        font-size: 18px; color: orange;opacity: 0.8;
+        //border-radius: 50%;background-color: #fff;
+        padding-top: 5px; margin-top: -5px;
+      }
+    }
+    .actionIcon:hover {
+      //background-color: blue;
+      i {color: orange;opacity: 1;}
+    }
+  }
+
   .line {
     //border: solid 1px green;
     display: flex; justify-content: space-between; align-items: center;

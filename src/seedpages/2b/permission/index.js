@@ -1,41 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'engine';
 import { Layout } from 'components/layout';
-import { sysconfig, getAllSystemConfigs, AvailableSystems } from 'systems';
-import { Tabs } from 'antd';
-import Settings from './settings/index';
-import styles from './page.less';
+import LeftTabZone from './components/LeftTabZone'
+import styles from './index.less';
 
-const TabPane = Tabs.TabPane;
-// AvailableSystems.splice(0, 1, '设置');
 export default class Permission extends Component {
-  state = {
-    tab: 'ces',
-  };
-
-  onChangeSystem(key) {
-    console.log('key',key)
-    this.setState({ tab: key });
-    // this.props.switchSystem(key);
-  }
-
+  state = {};
+  
   render() {
 
     return (
       <Layout searchZone={[]} showNavigator={false}>
-        <Tabs
-          activeKey={this.state.tab}
-          tabPosition="left"
-          onTabClick={this.onChangeSystem.bind(this)}
-        >
-          <TabPane tab="设置" key="settings" />
-
-          {AvailableSystems &&
-          AvailableSystems.map((sys) => {
-            return <TabPane tab={sys === 'aminer' ? '' : sys} key={sys} />;
-          })
-          }
-        </Tabs>
+        <LeftTabZone />
       </Layout>
     );
   }

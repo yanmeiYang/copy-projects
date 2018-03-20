@@ -13,6 +13,7 @@ const ExpertBaseName = '删掉我'; // TODO should change this?
 
 export default {
 
+  Locale: 'zh', // en, zh
   EnableLocalLocale: false,
   GLOBAL_ENABLE_FEEDBACK: true,
 

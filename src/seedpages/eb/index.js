@@ -17,13 +17,12 @@ import styles from './index.less';
 import helper from 'helper';
 import { Maps } from "utils/immutablejs-helpers";
 
-
-@connect(({ app, expertbaseTree, magOrg, loading }) => ({ app, expertbaseTree, magOrg, loading }))
+@connect(({ app, expertbaseTree, loading }) => ({ app, expertbaseTree, loading }))
 export default class HierarchyExpertBasePage extends Component {
 
   constructor(props) {
     super(props);
-    this.children = Map(); // TODO what's this?
+    // this.children = Map(); // TODO what's this?
   }
 
   state = {
@@ -57,12 +56,12 @@ export default class HierarchyExpertBasePage extends Component {
     // }
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    if ((this.props.magOrg.get('initData') !== null) && (this.state.id !== nextState.id)) {
-      this.getChildrenId(nextState.id, nextProps.magOrg);
-    }
-    return true;
-  }
+  // componentWillUpdate(nextProps, nextState) {
+  //   if ((this.props.magOrg.get('initData') !== null) && (this.state.id !== nextState.id)) {
+  //     this.getChildrenId(nextState.id, nextProps.magOrg);
+  //   }
+  //   return true;
+  // }
 
   getChildrenId = (id, dataSource) => {
     const initData = dataSource && dataSource.get('initData') || [];
@@ -128,7 +127,7 @@ export default class HierarchyExpertBasePage extends Component {
 
   render() {
     const { id, eb, childrenId, parentId } = this.state;
-    eb && console.log('eb is ', eb.toJS());
+    // eb && console.log('eb is ', eb.toJS());
     const [name, name_zh, desc, desc_zh, created_time] =
       Maps.getAll(eb, "name", "name_zh", "desc", "desc_zh", "created_time");
     return (
@@ -147,11 +146,24 @@ export default class HierarchyExpertBasePage extends Component {
           <div className={styles.rightBlock}>
 
             <div className={styles.ebBasicInfo}>
+              {!eb && <div>Loading...</div>}
               {eb && <>
+                {sysconfig.Locale === 'zh' &&
                 <h1>
-                  {name}
-                  {name_zh && <span className={styles.subTitle}>（{name_zh}）</span>}
+                  {name_zh || name}
+                  {name_zh && name && name_zh !== name &&
+                  <span className={styles.subTitle}>（{name_zh}）</span>
+                  }
                 </h1>
+                }
+                {sysconfig.Locale !== 'zh' &&
+                <h1>
+                  {name || name_zh}
+                  {name && name_zh && name !== name_zh &&
+                  <span className={styles.subTitle}>（{name}）</span>
+                  }
+                </h1>
+                }
                 <div className={styles.infoLine}>
                   <span>创建时间：
                     {created_time && <FD value={created_time} />}
@@ -160,7 +172,8 @@ export default class HierarchyExpertBasePage extends Component {
                 </div>
                 <div className={styles.desc}>{desc}</div>
                 <div className={styles.desc}>{desc_zh}</div>
-              </>}
+              </>
+              }
             </div>
 
             <ExpertBase

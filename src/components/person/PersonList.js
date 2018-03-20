@@ -2,7 +2,6 @@
  *  Created by BoGao on 2017-06-15;
  */
 
-/* eslint-disable camelcase */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'engine';
@@ -13,7 +12,6 @@ import { config, compare } from 'utils';
 import * as display from 'utils/display';
 import { Hole } from 'components/core';
 import { Indices } from 'components/widgets';
-// import { PersonTags } from 'components/person'; // TODO this is bad. WHY
 import { PersonTags, ViewExpertInfo } from 'components/person/widgets';
 import styles from './PersonList.less';
 
@@ -84,10 +82,6 @@ export default class PersonList extends Component {
     }
   }
 
-  selectedThePerson = (person, e) => {
-    console.log(`checked = ${e.target.checked}`);
-  };
-
   defaultZones = {
     contentBottomZone: [({ person }) => (
       <PersonTags
@@ -112,12 +106,14 @@ export default class PersonList extends Component {
         {!persons &&
         <div className={styles.empty}>
           {emptyPlaceHolder}
-        </div>}
+        </div>
+        }
+
         {persons && persons.length === 0 &&
         <div className={styles.empty}>
-          No Results
           <FM id="com.PersonList.message.noResults" defaultMessage="No Results" />
-        </div>}
+        </div>
+        }
 
         {persons && persons.map((person) => {
           const profile = person.profile || {};

@@ -450,10 +450,11 @@ export default {
       const current = Math.floor(state.offset / state.pagination.pageSize) + 1;
       return {
         ...state,
-        results: query === '-' ? null : bridge.toNextPersons(result),
+        results: query === '-' ? null : bridge.toNextPersons(result) || [],
         pagination: { pageSize: state.pagination.pageSize, total: currentTotal, current },
       };
     },
+
     nextSearchPersonSuccess(state, { payload: { data, query } }) {
       if (!data) {
         return state;
@@ -466,7 +467,7 @@ export default {
       const { translatedLanguage, translatedText } = data;
       const newState = {
         ...state,
-        results: query === '-' ? null : items,
+        results: query === '-' ? null : items || [],
         pagination: { pageSize: state.pagination.pageSize, total, current },
         aggs: aggregation,
         translatedLanguage,

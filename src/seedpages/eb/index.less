@@ -4,20 +4,28 @@
   .container {
     display: flex; flex-direction: row;
 
-    .treeBlock { width: 19vw; min-height: 50vh; min-width: 180px;margin-right: 26px; }
+    .treeBlock {
+      width: 19vw; min-width: 180px;max-width: 400px;
+      min-height: 50vh;margin-right: 26px;
+    }
 
     .rightBlock { width: 81vw; padding: 10px; border: 0px solid #EEEEEE; margin-left: 8px; }
   }
 
   .ebBasicInfo {
-    border: solid 1px #eee;padding: 8px 16px;
+    padding: 12px 18px 24px 18px;
+    background-color: white;
+    border: solid 1px #e5e5e5;
+    margin-bottom: 5px;
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.05);
 
+    h1 {margin-bottom: 4px;}
     .subTitle { font-size: 14px;margin-left: 12px;}
     .infoLine {
       color: #999;
-      span {margin-left: 8px;}
+      span {margin-right: 8px;}
     }
-    .desc {color: #333;}
+    .desc { color: #333;margin-top: 12px; }
   }
 }
 

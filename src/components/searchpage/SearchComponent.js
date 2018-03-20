@@ -279,29 +279,29 @@ export default class SearchComponent extends Component {
 
             {/* Translate Search // old translate message. */}
 
-            {sysconfig.Search_EnableTranslateSearch && !sysconfig.Search_EnableSmartSuggest &&
-            <TranslateSearchMessage
-              {...transMsgProps}
-              doTranslateSearch={this.doTranslateSearch}
-            />}
+            {sysconfig.Search_EnableTranslateSearch && !sysconfig.Search_EnableSmartSuggest && (
+              <TranslateSearchMessage
+                {...transMsgProps}
+                doTranslateSearch={this.doTranslateSearch}
+              />
+            )}
 
             {/* Search Help */}
-            {!disableSmartSuggest &&
-            <SearchAssistant
-              onAssistantChanged={this.onAssistantChanged}
-            />}
+            {!disableSmartSuggest && (
+              <SearchAssistant onAssistantChanged={this.onAssistantChanged} />
+            )}
 
             {/* 搜索框 */}
-            {this.props.showSearchBox &&
-            <div className={styles.top}>
-              <div className={styles.searchWrap}>
-                <KgSearchBox
-                  size="large" style={{ width: 500 }}
-                  query={query} onSearch={this.props.onSearchBarSearch}
-                />
+            {this.props.showSearchBox && (
+              <div className={styles.top}>
+                <div className={styles.searchWrap}>
+                  <KgSearchBox
+                    size="large" style={{ width: 500 }}
+                    query={query} onSearch={this.props.onSearchBarSearch}
+                  />
+                </div>
               </div>
-            </div>
-            }
+            )}
 
             {/* Search Message Zone TODO not good.*/}
             {/*<Hole fill={searchMessagesZone} />;*/}
@@ -313,17 +313,19 @@ export default class SearchComponent extends Component {
 
             {/* ---- Filter ---- */}
 
-            {!disableFilter &&
-            <SearchFilter
-              title={Math.random()}
-              filters={filters}
-              aggs={aggs}
-              onFilterChange={this.onFilterChange}
-              onExpertBaseChange={this.onExpertBaseChange}
-              disableExpertBaseFilter={disableExpertBaseFilter}
-              ExpertBases={ExpertBases}
-              hideLocationAndLanguageInFilter={hideSomeFilter}
-            />}
+
+            {!disableFilter && results && results.length > 0 && (
+              <SearchFilter
+                title={Math.random()}
+                filters={filters}
+                aggs={aggs}
+                onFilterChange={this.onFilterChange}
+                onExpertBaseChange={this.onExpertBaseChange}
+                disableExpertBaseFilter={disableExpertBaseFilter}
+                ExpertBases={ExpertBases}
+                hideLocationAndLanguageInFilter={hideSomeFilter}
+              />
+            )}
 
           </div>
 
@@ -332,12 +334,14 @@ export default class SearchComponent extends Component {
         <div className={styles.view}>
 
           {/* Sort */}
-          <SearchSorts
-            sorts={sorts}
-            sortType={sortType}
-            rightZone={SearchSortsRightZone}
-            onOrderChange={this.onOrderChange}
-          />
+          {results && results.length > 0 && (
+            <SearchSorts
+              sorts={sorts}
+              sortType={sortType}
+              rightZone={SearchSortsRightZone}
+              onOrderChange={this.onOrderChange}
+            />
+          )}
 
           <Spinner loading={load} />
           <div className={styles.searchContent}>

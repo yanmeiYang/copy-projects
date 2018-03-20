@@ -12,6 +12,7 @@ import { classnames, queryString } from 'utils';
 import { FormattedMessage as FM, FormattedDate as FD } from 'react-intl';
 import { createHiObj } from 'utils/hiobj';
 import ExpertBase from 'components/expert-base/ExpertBase';
+import EBBasicInfo from 'components/eb/EBBasicInfo';
 import ExpertbaseTree from 'components/eb/ExpertbaseTree';
 import styles from './index.less';
 import helper from 'helper';
@@ -22,7 +23,6 @@ export default class HierarchyExpertBasePage extends Component {
 
   constructor(props) {
     super(props);
-    // this.children = Map(); // TODO what's this?
   }
 
   state = {
@@ -127,12 +127,11 @@ export default class HierarchyExpertBasePage extends Component {
 
   render() {
     const { id, eb, childrenId, parentId } = this.state;
-    // eb && console.log('eb is ', eb.toJS());
-    const [name, name_zh, desc, desc_zh, created_time] =
-      Maps.getAll(eb, "name", "name_zh", "desc", "desc_zh", "created_time");
+
     return (
       <Layout searchZone={[]} contentClass={styles.ebIndex} showNavigator={false}>
         <div className={styles.container}>
+
           <div className={styles.treeBlock}>
 
             <ExpertbaseTree
@@ -145,41 +144,14 @@ export default class HierarchyExpertBasePage extends Component {
 
           <div className={styles.rightBlock}>
 
-            <div className={styles.ebBasicInfo}>
-              {!eb && <div>Loading...</div>}
-              {eb && <>
-                {sysconfig.Locale === 'zh' &&
-                <h1>
-                  {name_zh || name}
-                  {name_zh && name && name_zh !== name &&
-                  <span className={styles.subTitle}>（{name_zh}）</span>
-                  }
-                </h1>
-                }
-                {sysconfig.Locale !== 'zh' &&
-                <h1>
-                  {name || name_zh}
-                  {name && name_zh && name !== name_zh &&
-                  <span className={styles.subTitle}>（{name}）</span>
-                  }
-                </h1>
-                }
-                <div className={styles.infoLine}>
-                  <span>创建时间：
-                    {created_time && <FD value={created_time} />}
-                  </span>
-                  {eb.get("creator") && <span>创建者：{eb.get("creator")}</span>}
-                </div>
-                <div className={styles.desc}>{desc}</div>
-                <div className={styles.desc}>{desc_zh}</div>
-              </>
-              }
-            </div>
+            <EBBasicInfo eb={eb} />
 
             <ExpertBase
               query="-" offset="0" size="20" expertBaseId={id}
               currentBaseChildIds={childrenId}
-              currentBaseParentId={parentId} />
+              currentBaseParentId={parentId}
+            />
+
           </div>
 
         </div>

@@ -1,7 +1,7 @@
 /**
  * Created by yangyanmei on 18/2/7.
  */
-import   React, { Component } from 'react';
+import React, { Component } from 'react';
 import { connect, routerRedux, withRouter } from 'engine';
 import { Tabs, Button, Modal } from 'antd';
 import { sysconfig } from 'systems';
@@ -234,9 +234,12 @@ export default class ExpertBaseExpertsPage extends Component {
 
     return (
       <div>
-        <div className={styles.currentRoster}>
-          <span className={styles.currentRosterName}> {expertBaseName} </span>
-          <Button type="primary" onClick={this.showAddExpertModal} size="small">添加专家</Button>
+        <div className={styles.eb}>
+
+          <div className={styles.tools}>
+            <span className={styles.btn} onClick={this.showAddExpertModal}>添加专家</span>
+          </div>
+
           <Modal
             title="添加专家"
             visible={addExpertVisible}
@@ -249,7 +252,9 @@ export default class ExpertBaseExpertsPage extends Component {
             bodyStyle={{ padding: '10px 20px 1px 20px', height: '100vh', overflowY: 'scroll' }}
             style={{ marginLeft: '21vw', height: '100vh', marginTop: '42px' }}
           >
+
             <KgSearchBox className={styles.searchBox} onSearch={this.onSearch} query={query} />
+
             <SearchComponent // Example: include all props.
               className={styles.SearchBorder} // additional className
               sorts={sysconfig.Search_SortOptions || (query ? null : this.ebSorts)}
@@ -269,6 +274,7 @@ export default class ExpertBaseExpertsPage extends Component {
               onPageChange={this.onPageChange}
             />
           </Modal>
+
         </div>
         <div className={styles.search}>
           <KgSearchBox className={styles.searchBox} onSearch={this.onSearch} query={query} />

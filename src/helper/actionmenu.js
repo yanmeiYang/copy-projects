@@ -36,10 +36,11 @@ const createMenu = (menuID) => {
     show: function (target, data) {
       this.rootTop = getRootTop(menuID);
       this.menuElm = document.getElementById(menuID);
-      const top = getElementTop(target) - this.rootTop;
+      const top = getElementTop(target) - this.rootTop - 28;
 
       // console.log('menu is ', this, target, getElementTop(target), this.rootTop, top);
       if (this.menuElm) {
+        console.log('top is ', top);
         this.menuElm.style.top = `${top}px`;
         this.menuElm.firstElementChild.style.visibility = 'visible';
         // console.log('this.menuElm.firstElementChild.style.visibility:',

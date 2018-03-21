@@ -34,7 +34,7 @@ export default class SelectiveAddAndRemove extends PureComponent {
 
   add = (id) => {
     const { currentBaseChildIds } = this.props;
-    if (currentBaseChildIds && !isEmpty(currentBaseChildIds)) {
+    if (currentBaseChildIds && currentBaseChildIds.length > 0) {
       this.setState({ addExpertVisible: true });
     } else {
       this.addExpertFunc(id);
@@ -125,9 +125,9 @@ export default class SelectiveAddAndRemove extends PureComponent {
     this.setState({ selectedAddIds: checkedAddValues });
   };
 
-  sortByString = (a, b) => {
-    return a[1].localeCompare(b[1]);
-  };
+  // sortByString = (a, b) => {
+  //   return a.id.localeCompare(b.id);
+  // };
 
   render() {
     const { person, expertBase, currentBaseChildIds } = this.props;
@@ -159,13 +159,16 @@ export default class SelectiveAddAndRemove extends PureComponent {
               {person.dims.eb.sort((a, b) => {
                 return a.localeCompare(b);
               }).map((item) => {
-                if (!currentBaseChildIds.get(item)) {
-                  return;
-                }
                 return (
                   <Col key={item}>
                     <Checkbox key={item} value={item}>
-                      {currentBaseChildIds.get(item)}
+                      {currentBaseChildIds.map((childs) => {
+                        if (childs.id === item) {
+                          return childs.name
+                        } else {
+                          return;
+                        }
+                      })}
                     </Checkbox>
                   </Col>
                 );
@@ -183,10 +186,10 @@ export default class SelectiveAddAndRemove extends PureComponent {
           {currentBaseChildIds &&
           <Checkbox.Group style={{ width: '100%' }} onChange={this.onAddModal}>
             <Row>
-              {Object.entries(currentBaseChildIds.toJSON()).sort(this.sortByString).map((item) => {
+              {currentBaseChildIds.map((item) => {
                 return (
-                  <Col key={item[0]}>
-                    <Checkbox value={item[0]}>{item[1]}</Checkbox>
+                  <Col key={item.id}>
+                    <Checkbox value={item.id}>{item.name}</Checkbox>
                   </Col>
                 );
               })}

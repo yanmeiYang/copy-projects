@@ -19,7 +19,7 @@ export async function getExpertBaseTreeData(payload) {
 
 export async function getExpertBases(payload) {
   const { ids } = payload;
-  const nextapi = apiBuilder.create(Action.search.search, 'getExpertBase')
+  const nextapi = apiBuilder.create(Action.search.search, 'getExpertBases')
     .param({ ids, offset: 0, size: MaxTreeDataItems, searchType: 'all', switches: ['master'] })
     .addFilter("terms", { system: [sysconfig.SYSTEM] })
     .schema(F.fields.eb.full);

@@ -96,7 +96,7 @@ export default class PersonList extends Component {
   };
 
   render() {
-    const { persons, expertBaseId, className, type, indicesType, showIndices } = this.props;
+    const { persons, currentBaseChildIds, expertBaseId, className, type, indicesType, showIndices } = this.props;
     const { rightZoneFuncs, titleRightBlock, bottomZoneFuncs, afterTitleBlock } = this.props;
     const { contentBottomZone, emptyPlaceHolder } = this.props;
     const showPrivacy = false;
@@ -156,7 +156,7 @@ export default class PersonList extends Component {
                       </div>}
 
                       {/* ---- TitleRightBlock ---- */}
-                      {titleRightBlock && titleRightBlock({ param: { person, expertBaseId } })}
+                      {titleRightBlock && titleRightBlock({ param: { person, expertBaseId, currentBaseChildIds } })}
                     </div>
                     {/*{this.personRightButton && this.personRightButton(person)}*/}
                     <div className={classnames(styles.zone, styles.interestColumn)}>

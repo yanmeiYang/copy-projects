@@ -45,6 +45,7 @@ export default class SearchComponent extends Component {
     // zones
     searchMessagesZone: PropTypes.array,
     rightZoneFuncs: PropTypes.array,
+    titleRightBlock: PropTypes.func,
   };
 
   static defaultProps = {
@@ -166,8 +167,8 @@ export default class SearchComponent extends Component {
     const { pageSize } = pagination;
     let expertBases = [];
     if (this.props.currentBaseChildIds) {
-      expertBases = Object.keys(this.props.currentBaseChildIds.toJSON()).map((item) => {
-        return item;
+      expertBases = this.props.currentBaseChildIds.map((item) => {
+        return item.id;
       });
     }
 

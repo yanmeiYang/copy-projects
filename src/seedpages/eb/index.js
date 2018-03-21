@@ -16,6 +16,7 @@ import EBBasicInfo from 'components/eb/EBBasicInfo';
 import ExpertbaseTree from 'components/eb/ExpertbaseTree';
 import styles from './index.less';
 import helper from 'helper';
+import hierarchy from 'helper/hierarchy';
 import { Maps } from "utils/immutablejs-helpers";
 
 @connect(({ app, expertbaseTree, loading }) => ({ app, expertbaseTree, loading }))
@@ -34,10 +35,18 @@ export default class HierarchyExpertBasePage extends Component {
   };
 
   componentWillMount() {
+    // TODO 首页url中没有参数，怎么办
     const { id } = helper.getSearchParams(this.props);
     if (id) {
       this.setState({ id });
+      this.getChilds(id, this.props);
+    } else {
+      this.setState({ id: sysconfig.ExpertBase });
+      this.getChilds(sysconfig.ExpertBase, this.props);
     }
+
+
+
   }
 
   componentWillReceiveProps(nextProps) {
@@ -46,22 +55,51 @@ export default class HierarchyExpertBasePage extends Component {
       if (id) {
         this.setState({ id });
         this.getEB(id);
+        this.getChilds(id, nextProps);
       } else {
+        // this.getChilds(this.state.id, nextProps);
         this.setState({ id: null, eb: null })
       }
+
     }
+    // this.getChilds(id, nextProps);
     // console.log('------------------------------------', id); // TODO ???????????
     // if (nextProps.magOrg.get('initData') !== null) {
     //   this.getChildrenId(this.state.id, nextProps.magOrg);
     // }
   }
 
-  // componentWillUpdate(nextProps, nextState) {
-  //   if ((this.props.magOrg.get('initData') !== null) && (this.state.id !== nextState.id)) {
-  //     this.getChildrenId(nextState.id, nextProps.magOrg);
-  //   }
-  //   return true;
-  // }
+  componentWillUpdate(nextProps, nextState) {
+    if (this.state.id !== nextState.id) {
+      this.setState({ id: nextState.id });
+      this.getChilds(nextState.id, nextProps);
+    }
+    return true;
+  }
+
+  getChilds = (id, props) => {
+    const testData = [];
+    const { expertbaseTree } = props;
+    if (expertbaseTree.get('treeData') !== null) {
+      let path = hierarchy.findPath(expertbaseTree.get('treeData'), expertbaseTree.get('treeIndex'), id);
+      path = ['treeData', ...path];
+      expertbaseTree.withMutations((map) => {
+        const firstLevel = map.getIn(path).get('childs');
+        if (firstLevel) {
+          firstLevel.toJS().forEach((item) => {
+            let path2 = hierarchy.findPath(expertbaseTree.get('treeData'), expertbaseTree.get('treeIndex'), item.id);
+            path2 = ['treeData', ...path2];
+            const secondLevel = map.getIn(path2).get('childs');
+            if (secondLevel) {
+              testData.push(...secondLevel.toJS())
+            }
+          });
+          testData.push(...firstLevel.toJS())
+        }
+        this.setState({ childrenId: testData });
+      });
+    }
+  };
 
   getChildrenId = (id, dataSource) => {
     const initData = dataSource && dataSource.get('initData') || [];
@@ -118,7 +156,12 @@ export default class HierarchyExpertBasePage extends Component {
           .then((items) => {
             if (items && items.length > 0) {
               firstItem = fromJS(items[0]);
-              this.setState({ eb: firstItem })
+              this.setState({ eb: firstItem });
+              if (items[0].parents && items[0].parents.length > 0) {
+                this.setState({ parentId: items[0].parents[0] });
+              } else {
+                this.setState({ parentId: null });
+              }
             }
           });
       }
@@ -147,7 +190,7 @@ export default class HierarchyExpertBasePage extends Component {
             <EBBasicInfo eb={eb} />
 
             <ExpertBase
-              query="-" offset="0" size="20" expertBaseId={id}
+              query="-" offset="0" size="20" expertBaseId={id} expertBaseName={eb && eb.get("name_zh")}
               currentBaseChildIds={childrenId}
               currentBaseParentId={parentId}
             />

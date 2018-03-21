@@ -55,15 +55,14 @@ export default class ExpertBaseExpertsPage extends Component {
     const prevSearch = prevProps.search;
     let expertBases = [];
     if (currentBaseChildIds) {
-      expertBases = Object.keys(currentBaseChildIds.toJSON()).map((item) => {
-        return item;
+      expertBases = currentBaseChildIds.map((item) => {
+        return item.id;
       });
     }
     if (search.filters && search.filters.eb && search.filters.eb.id
       && prevSearch.filters && prevSearch.filters.eb && prevSearch.filters.eb.id
     ) {
-      if (search.filters.eb.id !== prevSearch.filters.eb.id && search.filters.eb.id !== 'aminer'
-        && search.filters.eb.id !== currentBaseParentId) {
+      if (search.filters.eb.id !== prevSearch.filters.eb.id && search.filters.eb.id !== 'aminer') {
         // TODO 以后是要删除的
         const finalId = this.getResultsIsNullById(expertBaseId);
         const filters = { eb: { id: finalId, name: expertBaseName } };
@@ -165,11 +164,11 @@ export default class ExpertBaseExpertsPage extends Component {
     this.setState({ key });
     if (key === '1') {
       if (currentBaseChildIds) {
-        expertBases = Object.keys(currentBaseChildIds.toJSON()).map((item) => {
-          return item;
+        expertBases = currentBaseChildIds.map((item) => {
+          return item.id;
         });
       }
-      const filters = { eb: { id: expertBaseId, name: expertBaseName } };
+      const filters = { eb: { id: expertBaseId, name: '当前库' } };
       dispatch({ type: 'search/updateFilters', payload: { filters } });
     }
     if (key === '2') {
@@ -183,8 +182,8 @@ export default class ExpertBaseExpertsPage extends Component {
     }
     if (key === '3') {
       if (currentBaseChildIds) {
-        expertBases = Object.keys(currentBaseChildIds.toJSON()).map((item) => {
-          return item;
+        expertBases = currentBaseChildIds.map((item) => {
+          return item.id;
         });
       }
       const filters = { eb: { id: currentBaseParentId, name: expertBaseName } };
@@ -241,7 +240,7 @@ export default class ExpertBaseExpertsPage extends Component {
           </div>
 
           <Modal
-            title="添加专家"
+            title={expertBaseName?`添加专家到“${expertBaseName}”`:'添加专家'}
             visible={addExpertVisible}
             onOk={this.hideAddExpertModal}
             onCancel={this.hideAddExpertModal}
@@ -249,8 +248,8 @@ export default class ExpertBaseExpertsPage extends Component {
             footer={null}
             width="78vw"
             wrapClassName={styles.addExpertModal}
-            bodyStyle={{ padding: '10px 20px 1px 20px', height: '100vh', overflowY: 'scroll' }}
-            style={{ marginLeft: '21vw', height: '100vh', marginTop: '42px' }}
+            bodyStyle={{ padding: '10px 20px 1px 20px', height: '80vh', overflowY: 'scroll' }}
+            style={{height: '80vh', minHeight: '500px', marginTop: '42px' }}
           >
 
             <KgSearchBox className={styles.searchBox} onSearch={this.onSearch} query={query} />

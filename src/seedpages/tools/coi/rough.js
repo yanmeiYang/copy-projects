@@ -7,6 +7,7 @@ import { Auth } from 'hoc';
 import * as ConflictsService from 'services/coi-service';
 import { theme, applyTheme } from 'themes';
 import { Spinner } from 'components';
+import { Maps } from "utils/immutablejs-helpers";
 import styles from './fine.less';
 
 const FormItem = Form.Item;
@@ -41,6 +42,12 @@ class Rough extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.dispatch({
+      type: 'conflicts/clearConflicts',
+    });
+  }
+
   conflicts = () => {
     // TODO 首先获取数据，然后在请求，等人的请求回来以后再发这个
     const { coyear } = queryString.parse(this.props.location.search);
@@ -60,9 +67,22 @@ class Rough extends Component {
   };
   showCoauthor = (data) => {
     const { coyear } = queryString.parse(this.props.location.search);
-    if (data.length === 0) {
+    const { conflicts } = this.props;
+    const [personListLeft, personListRight] =
+      Maps.getAll(conflicts, 'personListLeft', 'personListRight');
+    const isNotNull = (personListLeft && personListLeft.length > 0) &&
+      (personListRight && personListRight.length > 0);
+    if (data.length === 0 && isNotNull) {
       return (
         <span>未检测出关系</span>
+      );
+    } else if (data[0] === 'init' && isNotNull) {
+      return (
+        <span>请等待，正在进行检测。</span>
+      );
+    } else if ((data.length === 0 || data[0] === 'init') && !isNotNull) {
+      return (
+        <span>请输入专家信息，并点击检测。</span>
       );
     }
     const relation = data.map((item) => {
@@ -145,7 +165,7 @@ class Rough extends Component {
     this.props.form.setFieldsValue({
       userNameLeft,
       userNameRight,
-    })
+    });
     dispatch({
       type: 'conflicts/getPersonInfo',
       payload: { userNameLeft, userNameRight, personListLeft, personListRight, coyear },

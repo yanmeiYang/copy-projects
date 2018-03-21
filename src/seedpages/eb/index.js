@@ -129,7 +129,7 @@ export default class HierarchyExpertBasePage extends Component {
     const { id, eb, childrenId, parentId } = this.state;
 
     return (
-      <Layout searchZone={[]} contentClass={styles.ebIndex} showNavigator={false}>
+      <Layout searchZone={[]} contentClass={styles.ebIndex} showNavigator={true}>
         <div className={styles.container}>
 
           <div className={styles.treeBlock}>

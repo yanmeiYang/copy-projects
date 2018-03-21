@@ -6,9 +6,10 @@ import styles from './AddEBMenuItem.less';
 import PropTypes from "prop-types";
 
 // TODO 需要可以配置创建的时候弹出的是哪个控件。
-
+const { TextArea } = Input;
 @FormCreate()
 @connect(({ expertbaseTree }) => ({ expertbaseTree })) // TODO
+
 export default class AddEBMenuItem extends Component {
 
   static propTypes = {
@@ -28,55 +29,74 @@ export default class AddEBMenuItem extends Component {
     visible: false,
   };
 
+  componentDidMount() {
+    this.props.form.setFieldsValue({
+      isPublic: "1",
+    })
+  }
+
   handleOk = () => {
     // TODO dispatch 提交数据
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        const parent = [this.state.data.id] || [];
+        const parent = this.state.data ? [this.state.data.id] : [];
         const data = {
           name: values.name || '',
           name_zh: values.name_zh || '',
           desc: values.desc || '',
           desc_zh: values.desc_zh || '',
-          is_public: values.isPublic === '1' ? true : false,
-          // address: values.address || '',
+          is_public: values.isPublic === '1' ? false : true,
         };
         const node = data;
-        if (this.props.type === 'edit') {
-          data.id = this.state.data.id || '';
-          this.props.dispatch({
-            type: 'expertbaseTree/UpdateExperBaseByID',
-            payload: { data },
-          }).then((info) => {
-            if (info.succeed) {
-              this.props.dispatch({ type: 'expertbaseTree/updateNode', payload: { node } });
-              message.success('更新成功');
-            } else {
-              message.error('更新失败');
-            }
-          });
+        if (data.name.length > 0 || data.name_zh.length > 0) {
+          if (this.props.type === 'edit') {
+            data.id = this.state.data.id || '';
+            this.props.dispatch({
+              type: 'expertbaseTree/UpdateExperBaseByID',
+              payload: { data },
+            }).then((info) => {
+              if (info.succeed) {
+                this.props.dispatch({ type: 'expertbaseTree/updateNode', payload: { node } });
+                message.success('更新成功');
+                this.setState({
+                  visible: false,
+                });
+              } else {
+                message.error('更新失败');
+              }
+            });
+          } else {
+            data.parents = parent || [];
+            this.props.dispatch({
+              type: 'expertbaseTree/createExpertBase',
+              payload: { data },
+            }).then((info) => {
+              if (info.succeed) {
+                node.id = info.items && info.items[0];
+                this.props.dispatch({
+                  type: 'expertbaseTree/getExperBaseByID',
+                  payload: {
+                    ids: [node.id] || [],
+                  },
+                }).then((data) => {
+                  this.props.dispatch({
+                    type: 'expertbaseTree/addNode',
+                    payload: { node: data, id: this.state.data ? this.state.data.id : '' }
+                  });
+                  message.success('添加成功');
+                  this.setState({
+                    visible: false,
+                  });
+                })
+              } else {
+                message.error('添加失败');
+              }
+            });
+          }
         } else {
-          data.parents = parent || [];
-          this.props.dispatch({
-            type: 'expertbaseTree/createExpertBase',
-            payload: { data },
-          }).then((info) => {
-            if (info.succeed) {
-              node.id = info.items[0];
-              this.props.dispatch({
-                type: 'expertbaseTree/addNode',
-                payload: { node, id: this.state.data.id }
-              });
-              message.success('添加成功');
-            } else {
-              message.error('添加失败');
-            }
-          });
+          message.error('请填写智库名称！');
         }
       }
-    });
-    this.setState({
-      visible: false,
     });
   };
 
@@ -114,8 +134,7 @@ export default class AddEBMenuItem extends Component {
 
   render() {
     const { label, icon, className } = this.props;
-
-    const { visible } = this.state;
+    const { visible, data } = this.state;
     const { getFieldDecorator } = this.props.form;
     const { name } = this.props;
     const formItemLayout = {
@@ -141,6 +160,7 @@ export default class AddEBMenuItem extends Component {
              onOk={this.handleOk}
              onCancel={this.handleCancel}
              maskClosable={false}
+             zIndex={1000}
              footer={[
                <Button key="back" onClick={this.handleCancel}>返回</Button>,
                <Button key="submit" type="primary" onClick={this.handleOk}>
@@ -150,10 +170,16 @@ export default class AddEBMenuItem extends Component {
         <Form onSubmit={this.handleOk}>
           <Form.Item
             {...formItemLayout}
+            label="创建的智库为:"
+          >
+            {data ? <h5>{data.name_zh || data.name} 子智库</h5> : <h5>根智库</h5>}
+          </Form.Item>
+          <Form.Item
+            {...formItemLayout}
             label="英文名称:"
           >
             {getFieldDecorator('name', {
-              rules: [{ required: true, message: '请输入英文名称' }],
+              rules: [{ required: false, message: '请输入英文名称' }],
             })(<Input />)}
           </Form.Item>
           <Form.Item
@@ -161,7 +187,7 @@ export default class AddEBMenuItem extends Component {
             label="中文名称:"
           >
             {getFieldDecorator('name_zh', {
-              rules: [{ required: true, message: '请输入中文名称' }],
+              rules: [{ required: false, message: '请输入中文名称' }],
             })(<Input />)}
           </Form.Item>
           <Form.Item
@@ -170,7 +196,7 @@ export default class AddEBMenuItem extends Component {
           >
             {getFieldDecorator('desc', {
               rules: [{ required: false, message: '请输入英文简介' }],
-            })(<Input />)}
+            })(<TextArea rows={4} />)}
           </Form.Item>
           <Form.Item
             {...formItemLayout}
@@ -178,7 +204,7 @@ export default class AddEBMenuItem extends Component {
           >
             {getFieldDecorator('desc_zh', {
               rules: [{ required: false, message: '请输入中文描述' }],
-            })(<Input />)}
+            })(<TextArea rows={4} />)}
           </Form.Item>
           <Form.Item
             {...formItemLayout}
@@ -186,16 +212,10 @@ export default class AddEBMenuItem extends Component {
           >
             {getFieldDecorator('isPublic', {})(
               <Radio.Group>
-                <Radio value="1">公开</Radio>
-                <Radio value="2">不公开</Radio>
+                <Radio value="1">不公开</Radio>
+                <Radio value="2">公开</Radio>
               </Radio.Group>)}
           </Form.Item>
-          {/*<FormItem*/}
-          {/*{...formItemLayout}*/}
-          {/*label="地址:"*/}
-          {/*>*/}
-          {/*{getFieldDecorator('address')(<Input />)}*/}
-          {/*</FormItem>*/}
         </Form>
       </Modal>
     ];

@@ -25,7 +25,7 @@ export default {
       pageSize: sysconfig.MainListSize,
       total: null,
     },
-    realtion: [], // 处理完的所有关系数组
+    relation: ['init'], // 处理完的所有关系数组
   }),
 
   subscriptions: {},
@@ -141,6 +141,7 @@ export default {
     // 粗查
     * getPersonInfo({ payload }, { select, call, put }) {
       const { userNameLeft, userNameRight, personListLeft, personListRight, coyear } = payload;
+      const year = coyear;
       let personInfoLeft;
       let personInfoRight;
       if (personListLeft.length > 0 && personListRight.length > 0) {
@@ -185,7 +186,7 @@ export default {
       });
       yield put({
         type: 'getRelation',
-        payload: { coyear },
+        payload: { year },
       });
     },
     * replacePerson({ payload }, { select, call }) {
@@ -345,6 +346,9 @@ export default {
         payload: { personListLeft, personListRight, personInfoLeft, personInfoRight },
       });
     },
+    * clearConflicts({ payload }, { put }) {
+      yield put({ type: 'clearConflictsSuccess' });
+    },
   },
   reducers: {
     fetchPersonInfoSuccess(state, {
@@ -463,7 +467,6 @@ export default {
 
     getRelationSuccess(state, { payload: { relationArray } }) {
       state.set('relation', relationArray);
-      console.log('newstate', state.get('originTextLeft'));
       return state.set('relation', relationArray);
     },
     getPersonInfoSuccess(state, {
@@ -494,6 +497,10 @@ export default {
         map.set(personInfoLeft);
         map.set(personInfoRight);
       });
+      return newState;
+    },
+    clearConflictsSuccess(state) {
+      const newState = state.set('relation', ['init']);
       return newState;
     },
   },

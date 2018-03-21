@@ -8,6 +8,7 @@ import queryString from 'query-string';
 import { Layout } from 'components/layout';
 import { theme, applyTheme } from 'themes';
 import { Auth } from 'hoc';
+import { Maps } from 'utils/immutablejs-helpers';
 import { Spinner } from 'components';
 import UserModal from './userModal';
 import * as ConflictsService from 'services/coi-service';
@@ -40,6 +41,12 @@ export default class Conflicts extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.dispatch({
+      type: 'conflicts/clearConflicts',
+    });
+  }
+
   getPersonInfo = (personList, cId) => {
     this.props.dispatch({
       type: 'conflicts/fetchPersonInfo',
@@ -56,9 +63,22 @@ export default class Conflicts extends Component {
 
   showCoauthor = (data) => {
     const { coyear } = queryString.parse(this.props.location.search);
-    if (data.length === 0) {
+    const { conflicts } = this.props;
+    const [personListLeft, personListRight] =
+      Maps.getAll(conflicts, 'personListLeft', 'personListRight');
+    const isNotNull = (personListLeft && personListLeft.length > 0) &&
+      (personListRight && personListRight.length > 0);
+    if (data.length === 0 && isNotNull) {
       return (
         <span>未检测出关系</span>
+      );
+    } else if (data[0] === 'init' && isNotNull) {
+      return (
+        <span>请点击检测。</span>
+      );
+    } else if ((data.length === 0 || data[0] === 'init') && !isNotNull) {
+      return (
+        <span>请输入专家信息，并点击检测。</span>
       );
     }
     const relation = data.map((item) => {

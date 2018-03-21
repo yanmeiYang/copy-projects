@@ -24,7 +24,6 @@ export default {
     },
 
     * getExpertBases({ payload }, { call, put }) {
-      const { ids } = payload;
       const data = yield call(ebService.getExpertBases, payload);
       if (data.data.succeed) {
         return data.data.items;
@@ -74,6 +73,7 @@ export default {
 
     updateNode(state, { payload }) {
       const { node } = payload;
+      console.log('childs', state.get('treeIndex').get(node.id))
       let path = hierarchy.findPath(state.get('treeData'), state.get('treeIndex'), node.id);
       if (path == null) {
         console.error('can\' find [%s] in tree.', node.id);
@@ -81,7 +81,6 @@ export default {
       }
       path = ['treeData', ...path, '__replace_me__'];
       const replaceIdx = path.length - 1;
-      // update values.
       return state.withMutations((map) => {
         Object.keys(node).map((key) => {
           if (key !== 'id') {
@@ -95,24 +94,30 @@ export default {
 
     addNode(state, { payload }) {
       const { node, id } = payload;
-      let path = hierarchy.findPath(state.get('treeData'), state.get('treeIndex'), id);
-      if (path == null) {
-        console.error('can\' find [%s] in tree.', node.id);
-        return state;
+      if (id.length > 0) {
+        let path = hierarchy.findPath(state.get('treeData'), state.get('treeIndex'), id);
+        if (path == null) {
+          console.error('can\' find [%s] in tree.', node.id);
+          return state;
+        }
+        path = ['treeData', ...path, 'childs'];
+        return state.withMutations((map) => {
+          map.updateIn(path, ((childs) => {
+            if (childs) {
+              return childs.push(fromJS(node));
+            } else {
+              childs = List();
+              return childs.push(fromJS(node));
+            }
+          }));
+          map.setIn(['treeIndex', node.id], fromJS(node));
+        });
+      } else {
+        return state.withMutations((map) => {
+          map.updateIn(['treeData'], value => value.push(fromJS(node)));
+          map.setIn(['treeIndex', node.id], fromJS(node));
+        });
       }
-      path = ['treeData', ...path, 'childs'];
-      // update values.
-      return state.withMutations((map) => {
-        map.updateIn(path, ((childs) => {
-          if(childs){
-            return  childs.push(fromJS(node))
-          } else {
-            childs = List();
-            return childs.push(fromJS(node))
-          }
-
-        }));
-      });
     },
 
     deleteNode(state, { payload }) {
@@ -123,18 +128,9 @@ export default {
         return state;
       }
       path = ['treeData', ...path];
-      // update values.
       return state.withMutations((map) => {
         map.removeIn(path);
       });
     },
-    //   addInfoToLocalSuccess(state, { initData }) {
-    //     const data = createHiObj(initData);
-    //     const newState = state.withMutations((map) => {
-    //       map.set('allOrgs', data.getData());
-    //       map.set('initData', initData);
-    //     });
-    //     return newState;
-    //   },
   },
 };

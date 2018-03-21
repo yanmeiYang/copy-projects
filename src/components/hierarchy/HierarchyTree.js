@@ -38,6 +38,9 @@ export default class HierarchyTree extends Component {
     menuConfig: {}
   };
 
+  firstID = '';
+  firstItem = '';
+
   componentDidMount() {
     this.menu = actionMenu.init(ActionMenuID);
   }
@@ -65,15 +68,16 @@ export default class HierarchyTree extends Component {
     return true;
   }
 
-  // TODO 禁止取消选择
+
+  // TODO 禁止取消选择F
   // 目前只取第一个元素
   onSelect = (selectedKeys, info) => {
     const { onItemClick } = this.props;
-    const firstID = selectedKeys && selectedKeys.length > 0 && selectedKeys[0];
-    let firstItem = info && info.selectedNodes && info.selectedNodes.length > 0
-      && info.selectedNodes[0];
+    this.firstID = selectedKeys && selectedKeys.length > 0 ? selectedKeys[0] : this.firstID;
+    this.firstItem = info && info.selectedNodes && info.selectedNodes.length > 0
+      ? info.selectedNodes[0] : this.firstItem;
     if (onItemClick) {
-      onItemClick(firstID, firstItem); // TODO firstItem is bad.
+      onItemClick(this.firstID, this.firstItem); // TODO firstItem is bad.
     }
   };
 

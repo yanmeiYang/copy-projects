@@ -31,7 +31,6 @@ export default class HierarchyExpertBasePage extends Component {
     eb: null,
 
     childrenId: null, // TODO 改成从左边获取。
-    parentId: null, // TODO 改成从左边获取。
   };
 
   componentWillMount() {
@@ -41,8 +40,8 @@ export default class HierarchyExpertBasePage extends Component {
       this.setState({ id });
       this.getChilds(id, this.props);
     } else {
-      this.setState({ id: sysconfig.ExpertBase });
-      this.getChilds(sysconfig.ExpertBase, this.props);
+      // this.setState({ id: sysconfig.ExpertBase });
+      // this.getChilds(sysconfig.ExpertBase, this.props);
     }
 
 
@@ -58,7 +57,7 @@ export default class HierarchyExpertBasePage extends Component {
         this.getChilds(id, nextProps);
       } else {
         // this.getChilds(this.state.id, nextProps);
-        this.setState({ id: null, eb: null })
+        this.setState({ id: null })
       }
 
     }
@@ -72,7 +71,7 @@ export default class HierarchyExpertBasePage extends Component {
   componentWillUpdate(nextProps, nextState) {
     if (this.state.id !== nextState.id) {
       this.setState({ id: nextState.id });
-      this.getChilds(nextState.id, nextProps);
+      // this.getChilds(nextState.id, nextProps);
     }
     return true;
   }
@@ -128,11 +127,6 @@ export default class HierarchyExpertBasePage extends Component {
     } else {
       this.setState({ childrenId: null });
     }
-    if (data && data.parents) {
-      this.setState({ parentId: data.parents[0] });
-    } else {
-      this.setState({ parentId: null });
-    }
   };
 
   onItemClick = (id, item) => {
@@ -142,6 +136,7 @@ export default class HierarchyExpertBasePage extends Component {
   };
 
   onTreeReady = (data) => {
+    console.log('on tree ready', );
     this.getEB(this.state.id);
   };
 
@@ -156,12 +151,8 @@ export default class HierarchyExpertBasePage extends Component {
           .then((items) => {
             if (items && items.length > 0) {
               firstItem = fromJS(items[0]);
-              this.setState({ eb: firstItem });
-              if (items[0].parents && items[0].parents.length > 0) {
-                this.setState({ parentId: items[0].parents[0] });
-              } else {
-                this.setState({ parentId: null });
-              }
+              this.setState({ eb: firstItem, id: ebid });
+              this.getChilds(ebid, this.props);
             }
           });
       }
@@ -169,8 +160,9 @@ export default class HierarchyExpertBasePage extends Component {
   };
 
   render() {
-    const { id, eb, childrenId, parentId } = this.state;
+    const { id, eb, childrenId } = this.state;
 
+    console.log('render -----------', eb);
     return (
       <Layout searchZone={[]} contentClass={styles.ebIndex} showNavigator={true}>
         <div className={styles.container}>
@@ -190,9 +182,10 @@ export default class HierarchyExpertBasePage extends Component {
             <EBBasicInfo eb={eb} />
 
             <ExpertBase
-              query="-" offset="0" size="20" expertBaseId={id} expertBaseName={eb && eb.get("name_zh")}
+              query="-" offset="0" size="20" expertBaseId={id}
               currentBaseChildIds={childrenId}
-              currentBaseParentId={parentId}
+              currentBaseParentId={eb && eb.get("parents") && eb.get("parents").get(0)}
+              expertBaseName={eb && eb.get("name_zh")}
             />
 
           </div>

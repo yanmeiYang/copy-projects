@@ -103,6 +103,9 @@ export default class ExpertBaseExpertsPage extends Component {
 
   doSearch = (query, offset, size, filters, sort, dontRefreshUrl, typesTotals, expertBases) => {
     const { dispatch, fixedExpertBase, expertBaseId, expertBaseName } = this.props;
+    if (expertBaseId === null || !expertBaseId) {
+      return;
+    }
     if (fixedExpertBase && fixedExpertBase.id) {
       filters.eb = fixedExpertBase; // eslint-disable-line no-param-reassign
     }
@@ -232,7 +235,7 @@ export default class ExpertBaseExpertsPage extends Component {
     const searchMessageZone = fillFuncs(theme.ExpertBaseExpertsPage_MessageZone, [], zoneData);
 
     return (
-      <div>
+      <div className={styles.expertBaseBlock}>
         <div className={styles.eb}>
 
           <div className={styles.tools}>
@@ -240,7 +243,7 @@ export default class ExpertBaseExpertsPage extends Component {
           </div>
 
           <Modal
-            title={expertBaseName?`添加专家到“${expertBaseName}”`:'添加专家'}
+            title={expertBaseName ? `添加专家到“${expertBaseName}”` : '添加专家'}
             visible={addExpertVisible}
             onOk={this.hideAddExpertModal}
             onCancel={this.hideAddExpertModal}
@@ -249,7 +252,7 @@ export default class ExpertBaseExpertsPage extends Component {
             width="78vw"
             wrapClassName={styles.addExpertModal}
             bodyStyle={{ padding: '10px 20px 1px 20px', height: '80vh', overflowY: 'scroll' }}
-            style={{height: '80vh', minHeight: '500px', marginTop: '42px' }}
+            style={{ height: '80vh', minHeight: '500px', marginTop: '42px' }}
           >
 
             <KgSearchBox className={styles.searchBox} onSearch={this.onSearch} query={query} />
@@ -275,16 +278,16 @@ export default class ExpertBaseExpertsPage extends Component {
           </Modal>
 
         </div>
-        <div className={styles.search}>
-          <KgSearchBox className={styles.searchBox} onSearch={this.onSearch} query={query} />
-        </div>
-        <div>
+
+        <div className={styles.tabAndSearch}>
           <Tabs defaultActiveKey="1" onChange={this.switchTab} activeKey={this.state.key}>
             <Tabs.TabPane tab="当前库" key="1" />
             {currentBaseParentId &&
             <Tabs.TabPane tab="搜索更多专家" key="3" />}
             <Tabs.TabPane tab="全球专家" key="2" />
           </Tabs>
+          <KgSearchBox className={styles.searchBox} onSearch={this.onSearch} query={query}
+                       showSearchIcon={true} />
         </div>
         <SearchComponent // Example: include all props.
           className={styles.SearchBorder} // additional className

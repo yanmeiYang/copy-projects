@@ -1,29 +1,41 @@
 @import "~themes/vars";
 
-.eb {
-  display: flex;
-  font-size: 16px; margin-bottom: 8px;
+.expertBaseBlock {
+  .eb {
+    display: flex;
+    font-size: 16px; margin-bottom: 8px;
 
-  .tools {
-    display: flex; flex-direction: row;justify-content: flex-end;flex: 1;
-    padding: 0 12px; margin: 8px auto;
-    background-color: white; border: solid 1px #e5e5e5;
-    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.05);
+    .tools {
+      display: flex; flex-direction: row; justify-content: flex-end; flex: 1;
+      padding: 0 12px; margin: 8px auto;
+      background-color: white; border: solid 1px #e5e5e5;
+      box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.05);
 
-    .btn {
-      font-size: 14px;padding: 6px 12px;cursor: pointer;
-      border-left: solid 1px #EEEEEE;
+      .btn {
+        font-size: 14px; padding: 6px 12px; cursor: pointer;
+        border-left: solid 1px #EEEEEE;
+      }
+      .btn:first-child {
+        border-left: none;
+      }
+      .btn:hover {
+        background-color: #1890ff; color: white;
+      }
     }
-    .btn:first-child {
-      border-left: none;
-    }
-    .btn:hover {
-      background-color: #1890ff;color: white;
+
+    :global .ant-tabs-bar {
+      margin-bottom: 0px;
     }
   }
 
-  :global .ant-tabs-bar {
-    margin-bottom: 0px;
+  .tabAndSearch {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .searchBox {
+    width: 38%;
   }
 
 }

@@ -32,7 +32,7 @@ export default class EBBasicInfo extends Component {
           <h1>
             {name_zh || name}
             {name_zh && name && name_zh !== name &&
-            <span className={styles.subTitle}>（{name_zh}）</span>
+            <span className={styles.subTitle}>（{name}）</span>
             }
           </h1>
           }
@@ -40,14 +40,14 @@ export default class EBBasicInfo extends Component {
           <h1>
             {name || name_zh}
             {name && name_zh && name !== name_zh &&
-            <span className={styles.subTitle}>（{name}）</span>
+            <span className={styles.subTitle}>（{name_zh}）</span>
             }
           </h1>
           }
           <div className={styles.infoLine}>
-                  <span>创建时间：
-                    {created_time && <FD value={created_time} />}
-                  </span>
+            <span>创建时间：
+              {created_time && <FD value={created_time} />}
+            </span>
             {eb.get("creator") && <span>创建者：{eb.get("creator")}</span>}
           </div>
           <div className={styles.desc}>{desc}</div>

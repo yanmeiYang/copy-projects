@@ -340,7 +340,7 @@ export default class KgSearchBox extends PureComponent {
   render() {
     const { value, suggestions } = this.state;
     const { intl } = this.props;
-    const { size, className, style, btnText, searchPlaceholder, searchBtnStyle } = this.props;
+    const { size, className, style, btnText, searchPlaceholder, searchBtnStyle, showSearchIcon } = this.props;
     const { getFieldDecorator } = this.props.form;
     const { fixAdvancedSearch, disableAdvancedSearch } = this.props;
     const shouldShowSiwtchBtn = !fixAdvancedSearch && !disableAdvancedSearch;
@@ -407,10 +407,19 @@ export default class KgSearchBox extends PureComponent {
             className={styles.searchBtn} style={searchBtnStyle} htmlType="submit"
             type="primary" size={btnSize} onClick={this.handleSubmit.bind(this, this.advanced)}
           >
-            <span className={styles.searchBtnText}>
-              {btnText || intl.formatMessage(messages.searchBtn)}
-            </span>
-            <span className={styles.searchBtnIcon}><Icon type="search" /></span>
+
+            {
+              showSearchIcon ?
+                <span><Icon type="search" /></span>
+                :
+                <span>
+                  <span className={styles.searchBtnText}>
+                    {btnText || intl.formatMessage(messages.searchBtn)}
+                  </span>
+                  <span className={styles.searchBtnIcon}><Icon type="search" /></span>
+                </span>
+            }
+
           </Button>
 
           {shouldShowSiwtchBtn &&

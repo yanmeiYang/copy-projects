@@ -222,7 +222,7 @@ export default class SearchComponent extends Component {
     if (!dontRefreshUrl) {
       const { match } = this.props;
       const pathname = createURL(match.path, match.params, { query: query || '-' });
-      const params = queryString.stringify({ offset: 0, size });
+      const params = queryString.stringify({...queryString.parse(window.location.search), offset: 0, size });
       dispatch(routerRedux.push({ pathname, search: `?${params}` }));
     }
   };

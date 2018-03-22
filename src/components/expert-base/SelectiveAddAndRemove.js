@@ -4,6 +4,7 @@
 import React, { PureComponent } from 'react';
 import { connect, routerRedux } from 'engine';
 import { Button, Modal, message, Checkbox, Col, Row } from 'antd';
+import { Maps } from 'utils/immutablejs-helpers';
 import { isEmpty } from 'lodash';
 import { FormattedMessage as FM } from 'react-intl';
 import styles from './SelectiveAddAndRemove.less';
@@ -129,6 +130,32 @@ export default class SelectiveAddAndRemove extends PureComponent {
   //   return a.id.localeCompare(b.id);
   // };
 
+  sortNumber = (a, b) => {
+    // 暂时按照字母顺序排序。
+    if (!a) {
+      return -1
+    }
+    if (!b) {
+      return 1
+    }
+    const aa = this.getName(a);
+    const bb = this.getName(b);
+    return aa.localeCompare(bb);
+  };
+
+  getName = (item) => {
+    // const lang = sysconfig.Locale;
+    const lang = 'zh';
+    const { name, name_zh } = item;
+    // here shows how to display a name in system
+    let displayName = lang === 'zh' ? name_zh : name;
+    if (!displayName) {
+      displayName = lang === 'zh' ? name : name_zh;
+    }
+    return displayName;
+  };
+
+
   render() {
     const { person, expertBase, currentBaseChildIds } = this.props;
     const { isInThisEB } = this.state;
@@ -162,7 +189,7 @@ export default class SelectiveAddAndRemove extends PureComponent {
                 return (
                   <Col key={item}>
                     <Checkbox key={item} value={item}>
-                      {currentBaseChildIds.map((childs) => {
+                      {currentBaseChildIds.sort(this.sortNumber).map((childs) => {
                         if (childs.id === item) {
                           return childs.name
                         } else {
@@ -186,7 +213,7 @@ export default class SelectiveAddAndRemove extends PureComponent {
           {currentBaseChildIds &&
           <Checkbox.Group style={{ width: '100%' }} onChange={this.onAddModal}>
             <Row>
-              {currentBaseChildIds.map((item) => {
+              {currentBaseChildIds.sort(this.sortNumber).map((item) => {
                 return (
                   <Col key={item.id}>
                     <Checkbox value={item.id}>{item.name}</Checkbox>

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Layout } from 'components/layout';
 import { AvailableSystems } from 'systems';
 import { Tabs } from 'antd';
 
@@ -14,8 +13,9 @@ export default class LeftTabZone extends Component {
   }
 
   onChangeSystem(key) {
-    console.log('key', key)
+    console.log('leftkey', key)
     this.setState({ tab: key });
+
   }
 
   render() {

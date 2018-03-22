@@ -201,13 +201,15 @@ export default class SearchComponent extends Component {
         filtersLength = item.split('#')[1];
       }
     }
-    dispatch({
-      type: 'search/searchPerson',
-      payload: {
-        query, offset, size, filters, sort,
-        total: parseInt(filtersLength), typesTotals, expertBaseId, expertBases,
-      },
-    });
+    if(expertBaseId){
+      dispatch({
+        type: 'search/searchPerson',
+        payload: {
+          query, offset, size, filters, sort,
+          total: parseInt(filtersLength), typesTotals, expertBaseId, expertBases,
+        },
+      });
+    }
 
     // TODO remove later. 新的方式获取api的时候，这个方法啥也不干。
     if (!sysconfig.USE_NEXT_EXPERT_BASE_SEARCH || (filters && filters.eb.id === 'aminer')) {

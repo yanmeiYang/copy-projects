@@ -62,7 +62,8 @@ export default class ExpertBaseExpertsPage extends Component {
     if (search.filters && search.filters.eb && search.filters.eb.id
       && prevSearch.filters && prevSearch.filters.eb && prevSearch.filters.eb.id
     ) {
-      if (search.filters.eb.id !== prevSearch.filters.eb.id && search.filters.eb.id !== 'aminer') {
+      if (search.filters.eb.id !== prevSearch.filters.eb.id && search.filters.eb.id !== 'aminer'
+        && search.filters.eb.id !== currentBaseParentId) {
         // TODO 以后是要删除的
         const finalId = this.getResultsIsNullById(expertBaseId);
         const filters = { eb: { id: finalId, name: expertBaseName } };

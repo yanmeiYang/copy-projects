@@ -6,7 +6,7 @@ import styles from './index.less';
 
 export default class Permission extends Component {
   state = {};
-  
+
   render() {
 
     return (

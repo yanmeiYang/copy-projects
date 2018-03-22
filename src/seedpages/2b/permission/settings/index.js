@@ -7,7 +7,6 @@ import { Layout } from 'components/layout';
 import { sysconfig, getAllSystemConfigs, AvailableSystems } from 'systems';
 import { Tabs } from 'antd';
 import All from './all.js';
-import styles from './page.less';
 
 const TabPane = Tabs.TabPane;
 export default class Settings extends Component {

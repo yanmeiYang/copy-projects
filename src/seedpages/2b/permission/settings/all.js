@@ -14,7 +14,6 @@ export default class All extends Component {
 
   componentWillMount = () => {
     const location = window.location;
-    console.log('----------', location.pathname);
   };
 
   render() {

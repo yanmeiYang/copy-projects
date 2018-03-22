@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'engine';
 import { Layout } from 'components/layout';
 import LeftTabZone from './components/LeftTabZone'
+import TobZone from './settings/components/TopZone'
+import Schema from '../../mgr/auth/schema.js';
 import styles from './index.less';
 
 export default class Permission extends Component {
@@ -11,7 +13,13 @@ export default class Permission extends Component {
 
     return (
       <Layout searchZone={[]} showNavigator={false}>
-        <LeftTabZone />
+        <div className={styles.all}>
+          <LeftTabZone currentKey="settings" />
+          <div>
+            <TobZone currentKey="all"/>
+            <Schema />
+          </div>
+        </div>
       </Layout>
     );
   }

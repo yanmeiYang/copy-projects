@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect, routerRedux, withRouter } from 'engine';
-import { Layout } from 'components/layout';
+import { Layout } from 'components/layout/index';
 import { sysconfig } from 'systems';
 import { Tree } from 'antd';
 import styles from './schema.less';

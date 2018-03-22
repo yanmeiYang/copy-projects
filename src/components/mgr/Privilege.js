@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { routerRedux, Link, connect } from 'engine';
-import { sysconfig } from 'systems';
+// import { sysconfig } from 'systems';
 // import { queryURL } from 'utils';
 // import { FormattedMessage as FM } from 'react-intl';
 import { Collapse, Table, Icon, Divider } from 'antd';
@@ -40,7 +40,6 @@ export default class Privilege extends Component {
       },
     ];
     const roles = this.props.app.get('roles').role;
-    console.log('roles', roles)
     return (
       <Collapse onChange={this.onRoleChange} className={styles.collapse}>
         {roles && roles.map((role) => {

@@ -17,16 +17,16 @@ export default class RightTabZone extends Component {
 
   onChangeSystem = (key) => {
     this.setState({ tab: key });
-    const location = window.location;
-    let pathname = null
-    const currentUrl = location.pathname.split('system/');
-    const currentSystem = currentUrl[1].split('/');
-    console.log('location', currentUrl)
-    pathname = `${currentUrl[0]}${currentSystem}/${key}`;
-    console.log('this.props', pathname)
-    this.props.dispatch(routerRedux.push({
-      pathname,
-    }));
+    const location = window.location && window.location.pathname;
+
+    const end = location.lastIndexOf('/');
+    const path = location.substring(0, end);
+    console.log('apth',location)
+    console.log('apth',path)
+    const currentUrl = `${path}/${key}`;
+    // this.props.dispatch(routerRedux.push({
+    //   pathname: currentUrl,
+    // }));
   };
 
   render() {
@@ -39,7 +39,7 @@ export default class RightTabZone extends Component {
       >
         {panes &&
         panes.map((pane) => {
-          return <TabPane tab={pane.title} key={pane.key}>dddddddd</TabPane>;
+          return <TabPane tab={pane.title} key={pane.key}></TabPane>;
         })
         }
       </Tabs>

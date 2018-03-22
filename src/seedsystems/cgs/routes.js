@@ -22,7 +22,6 @@ module.exports = {
     'admin/users',
 
     '404',
-    'mgr',
     '2b'
 
     // 2b profile

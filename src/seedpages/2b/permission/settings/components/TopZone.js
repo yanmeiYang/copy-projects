@@ -10,7 +10,7 @@ import { routerRedux, Link, withRouter } from 'dva/router';
 export default class TobZone extends Component {
   state = {};
 
-  componentWillMount(){
+  componentWillMount() {
     this.currentKey = this.props.currentKey || 'all';
   }
 
@@ -20,10 +20,12 @@ export default class TobZone extends Component {
     let pathname = null;
 
     const currentUrl = location.pathname.split('settings/');
-    if (currentUrl.length>1){
+    console.log('currentUrl', currentUrl)
+    console.log('location', location.pathname)
+    if (currentUrl.length > 1) {
       pathname = `${currentUrl[0]}settings/${key}`
     } else {
-      pathname = `${location.pathname}/${key}`
+      pathname = `${location.pathname}/settings/${key}`
     }
 
     this.props.dispatch(routerRedux.push({

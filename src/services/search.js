@@ -64,10 +64,12 @@ export async function searchPerson(params) {
 
   // 2. query
   // ------------------------------------------------------------------------------------------
+  console.log('11111111111111-----------', expertBases);
   if (sysconfig.USE_NEXT_EXPERT_BASE_SEARCH && Sort !== 'activity-ranking-contrib') {
     // const ebs = expertBases || sysconfig.ExpertBases;
     let defaultHaves;
     if (expertBases) {
+      console.log('services----------', expertBases);
       defaultHaves = expertBases.length > 0 && expertBases.map(eb => eb);
     } else if (sysconfig.ExpertBases) {
       const ebs = sysconfig.ExpertBases

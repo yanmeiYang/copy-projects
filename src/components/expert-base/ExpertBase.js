@@ -13,6 +13,7 @@ import { Auth } from 'hoc';
 import { isEqual } from 'lodash';
 import { KgSearchBox } from 'components/search';
 import SearchComponent from 'components/searchpage/SearchComponent';
+import SelectiveAddAndRemove from 'components/expert-base/SelectiveAddAndRemove';
 import styles from './ExpertBase.less';
 
 @connect(({ app, search, expertBase, loading }) => ({ app, search, expertBase, loading }))
@@ -220,6 +221,15 @@ export default class ExpertBaseExpertsPage extends Component {
 
   ebSorts = ['h_index', 'activity', 'rising_star', 'n_citation', 'n_pubs', 'time'];
 
+  addBtnFunc = ({ param }) => (
+    <div key="1">
+      <SelectiveAddAndRemove
+        person={param.person}
+        expertBaseId={param.expertBaseId}
+        currentBaseChildIds={this.props.currentBaseChildIds}
+      />
+    </div>);
+
   render() {
     const { query, pagination, sortKey } = this.props.search;
     const { expertBaseName, expertBaseId, currentBaseChildIds, currentBaseParentId } = this.props;
@@ -234,6 +244,9 @@ export default class ExpertBaseExpertsPage extends Component {
     // search message
     const zoneData = { total, term, name, org, id: expertBaseId, expertBaseName };
     const searchMessageZone = fillFuncs(theme.ExpertBaseExpertsPage_MessageZone, [], zoneData);
+
+    const kgSearchBox = <KgSearchBox className={styles.searchBox} onSearch={this.onSearch}
+                                     query={query} showSearchIcon={true}/>;
 
     return (
       <div className={styles.expertBaseBlock}>
@@ -275,20 +288,21 @@ export default class ExpertBaseExpertsPage extends Component {
               disableSearchKnowledge
               hideLocationAndLanguageInFilter
               onPageChange={this.onPageChange}
+              titleRightBlock={this.addBtnFunc}
             />
           </Modal>
 
         </div>
 
         <div className={styles.tabAndSearch}>
-          <Tabs defaultActiveKey="1" onChange={this.switchTab} activeKey={this.state.key}>
+          <Tabs defaultActiveKey="1" tabBarExtraContent={kgSearchBox}
+                onChange={this.switchTab} activeKey={this.state.key}>
             <Tabs.TabPane tab="当前库" key="1" />
             {currentBaseParentId &&
             <Tabs.TabPane tab="搜索更多专家" key="3" />}
             <Tabs.TabPane tab="全球专家" key="2" />
           </Tabs>
-          <KgSearchBox className={styles.searchBox} onSearch={this.onSearch} query={query}
-                       showSearchIcon={true} />
+
         </div>
         <SearchComponent // Example: include all props.
           className={styles.SearchBorder} // additional className
@@ -307,6 +321,7 @@ export default class ExpertBaseExpertsPage extends Component {
           disableSearchKnowledge
           hideLocationAndLanguageInFilter
           onPageChange={this.onPageChange}
+          titleRightBlock={this.addBtnFunc}
         />
       </div>
     );

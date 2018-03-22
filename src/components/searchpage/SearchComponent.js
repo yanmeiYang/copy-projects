@@ -53,6 +53,7 @@ export default class SearchComponent extends Component {
     disableExpertBaseFilter: false,
     defaultSortType: 'relevance',
     disableSmartSuggest: false, //TODO back to true
+    titleRightBlock: theme.PersonList_TitleRightBlock,
   };
 
   constructor(props) {
@@ -84,11 +85,12 @@ export default class SearchComponent extends Component {
   // URL改变引起的props变化，在这里刷新搜索。其余的action导致的数据更新都在action后面调用了search方法。
 
   componentDidUpdate(prevProps, prevState) {
-    const { search } = this.props;
+    const { search, currentBaseChildIds } = this.props;
     const prevSearch = prevProps.search;
     if (search.query !== prevSearch.query
       || search.offset !== prevSearch.offset
       || !isEqual(search.pagination.pageSize, prevSearch.pagination.pageSize)
+      || currentBaseChildIds !== prevProps.currentBaseChildIds
     ) {
       this.doSearchUseProps();
       window.scrollTo(0, 0); // go top
@@ -187,6 +189,8 @@ export default class SearchComponent extends Component {
   };
 
   doSearch = (query, offset, size, filters, sort, dontRefreshUrl, typesTotals, expertBases) => {
+
+    console.log('search component 11111111111111111----', expertBases);
     const { dispatch, fixedExpertBase, expertBaseId } = this.props;
     // 如果是fixed，那么限制EB为指定值。
     if (fixedExpertBase && fixedExpertBase.id) {
@@ -354,9 +358,8 @@ export default class SearchComponent extends Component {
                 persons={results}
                 user={this.props.app.user}
                 expertBaseId={expertBaseId}
-                currentBaseChildIds={currentBaseChildIds}
                 afterTitleBlock={theme.PersonList_AfterTitleBlock}
-                titleRightBlock={theme.PersonList_TitleRightBlock}
+                titleRightBlock={this.props.titleRightBlock}
                 rightZoneFuncs={theme.PersonList_RightZone}
                 bottomZoneFuncs={this.props.PersonList_BottomZone}
                 didMountHooks={sysconfig.PersonList_DidMountHooks}

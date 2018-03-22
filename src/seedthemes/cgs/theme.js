@@ -49,14 +49,14 @@ export default {
   //
   // Person List Component
   //
-  PersonList_TitleRightBlock: ({ param }) => (
-    <div key="1">
-      <SelectiveAddAndRemove
-        person={param.person}
-        expertBaseId={param.expertBaseId}
-        currentBaseChildIds={param.currentBaseChildIds}
-      />
-    </div>),
+  // PersonList_TitleRightBlock: ({ param }) => (
+  //   <div key="1">
+  //     <SelectiveAddAndRemove
+  //       person={param.person}
+  //       expertBaseId={param.expertBaseId}
+  //       currentBaseChildIds={param.currentBaseChildIds}
+  //     />
+  //   </div>),
   PersonList_RightZone: hole.EMPTY_ZONE_FUNC,
   PersonList_BottomZone: hole.IN_COMPONENT_DEFAULT,
 

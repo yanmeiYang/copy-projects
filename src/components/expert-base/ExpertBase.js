@@ -246,7 +246,7 @@ export default class ExpertBaseExpertsPage extends Component {
     const searchMessageZone = fillFuncs(theme.ExpertBaseExpertsPage_MessageZone, [], zoneData);
 
     const kgSearchBox = <KgSearchBox className={styles.searchBox} onSearch={this.onSearch}
-                                     query={query} showSearchIcon={true}/>;
+                                     query={query} showSearchIcon={true} />;
 
     return (
       <div className={styles.expertBaseBlock}>

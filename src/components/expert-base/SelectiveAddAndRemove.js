@@ -69,7 +69,7 @@ export default class SelectiveAddAndRemove extends PureComponent {
     const { currentBaseChildIds } = this.props;
     const { selectedDelIds, dataIdItem } = this.state;
 
-    if (currentBaseChildIds && currentBaseChildIds.length>0) {
+    if (currentBaseChildIds && currentBaseChildIds.length > 0) {
       this.setState({ visible: true });
     } else {
       this.removeExpertConfirmModal(pid);
@@ -189,12 +189,16 @@ export default class SelectiveAddAndRemove extends PureComponent {
                 return (
                   <Col key={item}>
                     <Checkbox key={item} value={item}>
-                      {item}
-                      {/*{currentBaseChildIds.sort(this.sortNumber).map((childs) => {*/}
-                        {/*if (childs.id === item) {*/}
-                          {/*return childs.name*/}
-                        {/*}*/}
-                      {/*})}*/}
+                      {currentBaseChildIds.sort(this.sortNumber).map((childs) => {
+                        const lang = 'zh';
+                        if (childs.id === item) {
+                          let displayName = lang === 'zh' ? childs.name_zh : childs.name;
+                          if (!displayName) {
+                            displayName = lang === 'zh' ? childs.name : childs.name_zh;
+                          }
+                          return displayName
+                        }
+                      })}
                     </Checkbox>
                   </Col>
                 );

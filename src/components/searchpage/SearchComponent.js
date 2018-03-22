@@ -189,9 +189,12 @@ export default class SearchComponent extends Component {
   };
 
   doSearch = (query, offset, size, filters, sort, dontRefreshUrl, typesTotals, expertBases) => {
-
-    console.log('search component 11111111111111111----', expertBases);
-    const { dispatch, fixedExpertBase, expertBaseId } = this.props;
+    const { dispatch, fixedExpertBase, expertBaseId, currentBaseChildIds } = this.props;
+    if (!expertBases && currentBaseChildIds) {
+      expertBases = currentBaseChildIds.map((item) => {
+        return item.id;
+      });
+    }
     // 如果是fixed，那么限制EB为指定值。
     if (fixedExpertBase && fixedExpertBase.id) {
       filters.eb = fixedExpertBase; // eslint-disable-line no-param-reassign
@@ -205,7 +208,7 @@ export default class SearchComponent extends Component {
         filtersLength = item.split('#')[1];
       }
     }
-    if(expertBaseId){
+    if (expertBaseId) {
       dispatch({
         type: 'search/searchPerson',
         payload: {
@@ -228,7 +231,11 @@ export default class SearchComponent extends Component {
     if (!dontRefreshUrl) {
       const { match } = this.props;
       const pathname = createURL(match.path, match.params, { query: query || '-' });
-      const params = queryString.stringify({...queryString.parse(window.location.search), offset: 0, size });
+      const params = queryString.stringify({
+        ...queryString.parse(window.location.search),
+        offset: 0,
+        size
+      });
       dispatch(routerRedux.push({ pathname, search: `?${params}` }));
     }
   };

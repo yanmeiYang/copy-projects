@@ -5,7 +5,7 @@
 // 以文件夹为单位，对应到pages下面的目录结构.
 module.exports = {
   routes: [
-    '*', // uncomment this when develop.
+    // '*', // uncomment this when develop.
 
     // TODO 2b page routes.`
 
@@ -18,6 +18,7 @@ module.exports = {
     'login',
     'user/info',
     'tools/coi',
+    'eb',
 
     // expertBase.ExpertBase,
     // expertBase.ExpertBaseExpertsPage,

@@ -43,9 +43,6 @@ export default class HierarchyExpertBasePage extends Component {
       // this.setState({ id: sysconfig.ExpertBase });
       // this.getChilds(sysconfig.ExpertBase, this.props);
     }
-
-
-
   }
 
   componentWillReceiveProps(nextProps) {
@@ -136,7 +133,6 @@ export default class HierarchyExpertBasePage extends Component {
   };
 
   onTreeReady = (data) => {
-    console.log('on tree ready', );
     this.getEB(this.state.id);
   };
 
@@ -162,7 +158,6 @@ export default class HierarchyExpertBasePage extends Component {
   render() {
     const { id, eb, childrenId } = this.state;
 
-    console.log('render -----------', eb);
     return (
       <Layout searchZone={[]} contentClass={styles.ebIndex} showNavigator={true}>
         <div className={styles.container}>
@@ -182,7 +177,7 @@ export default class HierarchyExpertBasePage extends Component {
             <EBBasicInfo eb={eb} />
 
             <ExpertBase
-              query="-" offset="0" size="20" expertBaseId={id}
+              query="-" offset="0" size="20" expertBaseId={eb && eb.get("id")}
               currentBaseChildIds={childrenId}
               currentBaseParentId={eb && eb.get("parents") && eb.get("parents").get(0)}
               expertBaseName={eb && eb.get("name_zh")}

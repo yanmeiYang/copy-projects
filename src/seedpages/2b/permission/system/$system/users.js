@@ -1,43 +1,33 @@
 import React, { Component } from 'react';
 import { connect, routerRedux } from 'engine';
-import { Tabs } from 'antd';
+import { Layout } from 'components/layout';
+import RightTabZone from './components/RightTabZone';
+import LeftTabZone from '../../components/LeftTabZone';
+import styles from './users.less';
 
-
-const TabPane = Tabs.TabPane;
-const panes = [
-  { title: 'SystemRole', key: 'privilege' },
-  { title: 'Roles', key: 'roles' },
-  { title: 'Users', key: 'users' },
-];
 @connect(({ app }) => ({ app }))
-export default class RightTabZone extends Component {
-  state = {
-    tab: 'users',
-  };
+export default class Users extends Component {
 
-  onChangeSystem = (key) => {
-    this.setState({ tab: key });
-    const location = window.location;
-    const currentUrl = `${location.pathname}/${key}`;
-    this.props.dispatch(routerRedux.push({
-      pathname: currentUrl,
-    }));
-  };
+  componentWillMount() {
+    const { match } = this.props;
+    const { system } = match.params;
+    this.leftCurrentKey = system;
+  }
 
   render() {
 
     return (
-      <Tabs
-        activeKey={this.state.tab}
-        tabPosition="top"
-        onTabClick={this.onChangeSystem.bind(this)}
-      >
-        {panes &&
-        panes.map((pane) => {
-          return <TabPane tab={pane.title} key={pane.key}>users</TabPane>;
-        })
-        }
-      </Tabs>
+      <Layout searchZone={[]} showNavigator={false}>
+        <div className={styles.usersBlock}>
+          <LeftTabZone currentKey={this.leftCurrentKey} />
+
+          <div className={styles.rightZone}>
+            <RightTabZone currentKey="users" />
+            <div> users</div>
+            {/*<Schema />*/}
+          </div>
+        </div>
+      </Layout>
     );
   }
 }

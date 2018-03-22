@@ -1,43 +1,37 @@
 import React, { Component } from 'react';
 import { connect, routerRedux } from 'engine';
 import { Tabs } from 'antd';
+import { createURL, queryString } from 'utils';
+import { withRouter } from 'dva/router';
+import { Layout } from 'components/layout';
+import LeftTabZone from '../../components/LeftTabZone';
+import RightTabZone from './components/RightTabZone';
+import styles from './roles.less';
 
-
-const TabPane = Tabs.TabPane;
-const panes = [
-  { title: 'SystemRole', key: 'privilege' },
-  { title: 'Roles', key: 'roles' },
-  { title: 'Users', key: 'users' },
-];
 @connect(({ app }) => ({ app }))
-export default class RightTabZone extends Component {
-  state = {
-    tab: 'roles',
-  };
+@withRouter
+export default class Roles extends Component {
 
-  onChangeSystem = (key) => {
-    this.setState({ tab: key });
-    const location = window.location;
-    const currentUrl = `${location.pathname}/${key}`;
-    this.props.dispatch(routerRedux.push({
-      pathname: currentUrl,
-    }));
-  };
+  componentWillMount() {
+    const { match } = this.props;
+    const { system } = match.params;
+    this.leftCurrentKey = system;
+  }
 
   render() {
 
     return (
-      <Tabs
-        activeKey={this.state.tab}
-        tabPosition="top"
-        onTabClick={this.onChangeSystem.bind(this)}
-      >
-        {panes &&
-        panes.map((pane) => {
-          return <TabPane tab={pane.title} key={pane.key}>roles</TabPane>;
-        })
-        }
-      </Tabs>
+      <Layout searchZone={[]} showNavigator={false}>
+        <div className={styles.rolesBlock}>
+          <LeftTabZone currentKey={this.leftCurrentKey} />
+
+          <div className={styles.rightZone}>
+            <RightTabZone currentKey="roles" />
+            <div> roles</div>
+            {/*<Schema />*/}
+          </div>
+        </div>
+      </Layout>
     );
   }
 }

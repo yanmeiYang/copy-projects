@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect, routerRedux } from 'engine';
 import { Tabs } from 'antd';
-
+import { withRouter } from 'dva/router';
+import { createURL, queryString } from 'utils';
 
 const TabPane = Tabs.TabPane;
 const panes = [
@@ -10,36 +11,47 @@ const panes = [
   { title: 'Users', key: 'users' },
 ];
 @connect(({ app }) => ({ app }))
+@withRouter
 export default class RightTabZone extends Component {
-  state = {
-    tab: 'privilege',
-  };
+
+  componentWillMount() {
+    this.currentKey = this.props.currentKey || 'privilege';
+  }
 
   onChangeSystem = (key) => {
-    this.setState({ tab: key });
-    const location = window.location && window.location.pathname;
+    const { match } = this.props;
+    // const currentUrl = createURL(match.path, match.params);
+    // console.log('match.path, match.params',match.path, match.params);
+    // // this.props.dispatch(routerRedux.push({
+    // //   pathname: `${currentUrl}${key}`,
+    // // }));
 
-    const end = location.lastIndexOf('/');
-    const path = location.substring(0, end);
-    console.log('apth',location)
-    console.log('apth',path)
-    const currentUrl = `${path}/${key}`;
-    // this.props.dispatch(routerRedux.push({
-    //   pathname: currentUrl,
-    // }));
+    let pathname = null;
+
+    const currentUrl = match.path.split(':system/');
+    // if (currentUrl.length > 1) {
+    //   pathname = `${currentUrl[0]}${match.params.system}/${key}`
+    // } else {
+    //   pathname = `${location.pathname}/settings/${key}`
+    // }
+    //
+    this.props.dispatch(routerRedux.push({
+      pathname: `${currentUrl[0]}${match.params.system}/${key}`,
+    }));
+
   };
 
   render() {
 
     return (
       <Tabs
-        activeKey={this.state.tab}
+        activeKey={this.currentKey}
         tabPosition="top"
         onTabClick={this.onChangeSystem.bind(this)}
       >
         {panes &&
         panes.map((pane) => {
-          return <TabPane tab={pane.title} key={pane.key}></TabPane>;
+          return <TabPane tab={pane.title} key={pane.key} />;
         })
         }
       </Tabs>

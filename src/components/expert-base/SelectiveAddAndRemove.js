@@ -190,13 +190,8 @@ export default class SelectiveAddAndRemove extends PureComponent {
                   <Col key={item}>
                     <Checkbox key={item} value={item}>
                       {currentBaseChildIds.sort(this.sortNumber).map((childs) => {
-                        const lang = 'zh';
                         if (childs.id === item) {
-                          let displayName = lang === 'zh' ? childs.name_zh : childs.name;
-                          if (!displayName) {
-                            displayName = lang === 'zh' ? childs.name : childs.name_zh;
-                          }
-                          return displayName
+                          return this.getName(childs);
                         }
                       })}
                     </Checkbox>
@@ -219,7 +214,7 @@ export default class SelectiveAddAndRemove extends PureComponent {
               {currentBaseChildIds.sort(this.sortNumber).map((item) => {
                 return (
                   <Col key={item.id}>
-                    <Checkbox value={item.id}>{item.name}</Checkbox>
+                    <Checkbox value={item.id}>{this.getName(item)}</Checkbox>
                   </Col>
                 );
               })}

@@ -8,7 +8,7 @@ import { sysconfig, getAllSystemConfigs, AvailableSystems } from 'systems';
 import { Tabs } from 'antd';
 import TobZone from './components/TopZone';
 import LeftTabZone from '../components/LeftTabZone';
-import styles from './newSystem.less';
+import styles from './userRole.less';
 
 const TabPane = Tabs.TabPane;
 export default class newSystem extends Component {

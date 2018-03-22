@@ -20,10 +20,11 @@ export default class TobZone extends Component {
     let pathname = null;
 
     const currentUrl = location.pathname.split('settings/');
-    console.log('currentUrl', currentUrl)
-    console.log('location', location.pathname)
+
     if (currentUrl.length > 1) {
       pathname = `${currentUrl[0]}settings/${key}`
+    } else if (location.pathname.includes('settings')) {
+      pathname = `${location.pathname}/${key}`
     } else {
       pathname = `${location.pathname}/settings/${key}`
     }

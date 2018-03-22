@@ -16,8 +16,7 @@ export default class LeftTabZone extends Component {
   }
 
   onChangeSystem(key) {
-    console.log('leftkey', key)
-    let pathname = `/2b/permission/system/:${key}`;
+    let pathname = `/2b/permission/system/${key}`;
 
     if (key === 'settings') {
       pathname = '/2b/permission/settings';
